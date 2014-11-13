@@ -1,0 +1,820 @@
+/********************************************************************
+ KWin - the KDE window manager
+ This file is part of the KDE project.
+
+Copyright (C) 2006-2007 Rivo Laks <rivolaks@hot.ee>
+Copyright (C) 2010, 2011 Martin Gräßlin <mgraesslin@kde.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************/
+
+#ifndef KWIN_GLUTILS_H
+#define KWIN_GLUTILS_H
+
+// kwin
+#include "kwinglutils_funcs.h"
+#include "kwingltexture.h"
+
+// Qt
+#include <QSize>
+#include <QStack>
+
+/** @addtogroup kwineffects */
+/** @{ */
+
+class QVector2D;
+class QVector3D;
+class QVector4D;
+class QMatrix4x4;
+
+template< class K, class V > class QHash;
+
+
+namespace KWin
+{
+
+class GLVertexBuffer;
+class GLVertexBufferPrivate;
+
+
+// Initializes GLX function pointers
+void KWIN_EXPORT initGLX();
+// Initializes OpenGL stuff. This includes resolving function pointers as
+//  well as checking for GL version and extensions
+//  Note that GL context has to be created by the time this function is called
+void KWIN_EXPORT initGL(OpenGLPlatformInterface platformInterface);
+// Initializes EGL function pointers
+void KWIN_EXPORT initEGL();
+// Cleans up all resources hold by the GL Context
+void KWIN_EXPORT cleanupGL();
+
+// Number of supported texture units
+extern KWIN_EXPORT int glTextureUnitsCount;
+
+
+bool KWIN_EXPORT hasGLVersion(int major, int minor, int release = 0);
+bool KWIN_EXPORT hasGLXVersion(int major, int minor, int release = 0);
+bool KWIN_EXPORT hasEGLVersion(int major, int minor, int release = 0);
+// use for both OpenGL and GLX extensions
+bool KWIN_EXPORT hasGLExtension(const QString& extension);
+
+// detect OpenGL error (add to various places in code to pinpoint the place)
+bool KWIN_EXPORT checkGLError(const char* txt);
+
+inline bool KWIN_EXPORT isPowerOfTwo(int x)
+{
+    return ((x & (x - 1)) == 0);
+}
+/**
+ * @return power of two integer _greater or equal to_ x.
+ *  E.g. nearestPowerOfTwo(513) = nearestPowerOfTwo(800) = 1024
+ **/
+int KWIN_EXPORT nearestPowerOfTwo(int x);
+
+/**
+ * Push a new matrix on the GL matrix stack.
+ * In GLES this method is a noop. This method should be preferred over glPushMatrix
+ * as it also handles GLES.
+ * @since 4.7
+ **/
+KWIN_EXPORT void pushMatrix();
+/**
+ * Multiplies current matrix on GL stack with @p matrix and pushes the result on the matrix stack.
+ * This method is the same as pushMatrix followed by multiplyMatrix.
+ * In GLES this method is a noop. This method should be preferred over glPushMatrix
+ * as it also handles GLES.
+ * @param matrix The matrix the current matrix on the stack should be multiplied with.
+ * @see pushMatrix
+ * @see multiplyMatrix
+ * @since 4.7
+ **/
+KWIN_EXPORT void pushMatrix(const QMatrix4x4 &matrix);
+/**
+ * Multiplies the current matrix on GL stack with @p matrix.
+ * In GLES this method is a noop. This method should be preferred over glMultMatrix
+ * as it also handles GLES.
+ * @param matrix The matrix the current matrix on the stack should be multiplied with.
+ * @since 4.7
+ **/
+KWIN_EXPORT void multiplyMatrix(const QMatrix4x4 &matrix);
+/**
+ * Replaces the current matrix on GL stack with @p matrix.
+ * In GLES this method is a no-op. This method should be preferred over glLoadMatrix
+ * as it also handles GLES.
+ * @param matrix The new matrix to replace the existing one on the GL stack.
+ * @since 4.7
+ **/
+KWIN_EXPORT void loadMatrix(const QMatrix4x4 &matrix);
+/**
+ * Pops the current matrix from the GL matrix stack.
+ * In GLES this method is a noop. This method should be preferred over glPopMatrix
+ * as it also handles GLES.
+ * @since 4.7
+ **/
+KWIN_EXPORT void popMatrix();
+
+class KWIN_EXPORT GLShader
+{
+public:
+    enum Flags {
+        NoFlags         = 0,
+        ExplicitLinking = (1 << 0)
+    };
+
+    GLShader(const QString &vertexfile, const QString &fragmentfile, unsigned int flags = NoFlags);
+    ~GLShader();
+
+    bool isValid() const  {
+        return mValid;
+    }
+
+    void bindAttributeLocation(const char *name, int index);
+    void bindFragDataLocation(const char *name, int index);
+
+    bool link();
+
+    int uniformLocation(const char* name);
+
+    bool setUniform(const char* name, float value);
+    bool setUniform(const char* name, int value);
+    bool setUniform(const char* name, const QVector2D& value);
+    bool setUniform(const char* name, const QVector3D& value);
+    bool setUniform(const char* name, const QVector4D& value);
+    bool setUniform(const char* name, const QMatrix4x4& value);
+    bool setUniform(const char* name, const QColor& color);
+
+    bool setUniform(int location, float value);
+    bool setUniform(int location, int value);
+    bool setUniform(int location, const QVector2D &value);
+    bool setUniform(int location, const QVector3D &value);
+    bool setUniform(int location, const QVector4D &value);
+    bool setUniform(int location, const QMatrix4x4 &value);
+    bool setUniform(int location, const QColor &value);
+
+    int attributeLocation(const char* name);
+    bool setAttribute(const char* name, float value);
+    /**
+     * @return The value of the uniform as a matrix
+     * @since 4.7
+     **/
+    QMatrix4x4 getUniformMatrix4x4(const char* name);
+
+    enum MatrixUniform {
+        TextureMatrix = 0,
+        ProjectionMatrix,
+        ModelViewMatrix,
+        WindowTransformation,
+        ScreenTransformation,
+        MatrixCount
+    };
+
+    enum Vec2Uniform {
+        Offset,
+        Vec2UniformCount
+    };
+
+    enum Vec4Uniform {
+        ModulationConstant,
+        Vec4UniformCount
+    };
+
+    enum FloatUniform {
+        Saturation,
+        FloatUniformCount
+    };
+
+    enum IntUniform {
+        AlphaToOne,     ///< @deprecated no longer used
+        ColorCorrectionLookupTextureUnit,
+        IntUniformCount
+    };
+
+    enum ColorUniform {
+        Color,
+        ColorUniformCount
+    };
+
+    bool setUniform(MatrixUniform uniform, const QMatrix4x4 &matrix);
+    bool setUniform(Vec2Uniform uniform,   const QVector2D &value);
+    bool setUniform(Vec4Uniform uniform,   const QVector4D &value);
+    bool setUniform(FloatUniform uniform,  float value);
+    bool setUniform(IntUniform uniform,    int value);
+    bool setUniform(ColorUniform uniform,  const QVector4D &value);
+    bool setUniform(ColorUniform uniform,  const QColor &value);
+
+protected:
+    GLShader(unsigned int flags = NoFlags);
+    bool loadFromFiles(const QString& vertexfile, const QString& fragmentfile);
+    bool load(const QByteArray &vertexSource, const QByteArray &fragmentSource);
+    const QByteArray prepareSource(GLenum shaderType, const QByteArray &sourceCode) const;
+    bool compile(GLuint program, GLenum shaderType, const QByteArray &sourceCode) const;
+    void bind();
+    void unbind();
+    void resolveLocations();
+
+private:
+    unsigned int mProgram;
+    bool mValid:1;
+    bool mLocationsResolved:1;
+    bool mExplicitLinking:1;
+    int mMatrixLocation[MatrixCount];
+    int mVec2Location[Vec2UniformCount];
+    int mVec4Location[Vec4UniformCount];
+    int mFloatLocation[FloatUniformCount];
+    int mIntLocation[IntUniformCount];
+    int mColorLocation[ColorUniformCount];
+
+    static bool sColorCorrect;
+
+    friend class ColorCorrection;
+    friend class ColorCorrectionPrivate;
+    friend class ShaderManager;
+};
+
+/**
+ * @short Manager for Shaders.
+ *
+ * This class provides some built-in shaders to be used by both compositing scene and effects.
+ * The ShaderManager provides methods to bind a built-in or a custom shader and keeps track of
+ * the shaders which have been bound. When a shader is unbound the previously bound shader
+ * will be rebound.
+ *
+ * @author Martin Gräßlin <mgraesslin@kde.org>
+ * @since 4.7
+ **/
+class KWIN_EXPORT ShaderManager
+{
+public:
+    /**
+     * Identifiers for built-in shaders available for effects and scene
+     **/
+    enum ShaderType {
+        /**
+         * An orthographic projection shader able to render textured geometries.
+         * Expects a @c vec2 uniform @c offset describing the offset from top-left corner
+         * and defaults to @c (0/0). Expects a @c vec2 uniform @c textureSize to calculate
+         * normalized texture coordinates. Defaults to @c (1.0/1.0). And expects a @c vec3
+         * uniform @c colorManiuplation, with @c x being opacity, @c y being brightness and
+         * @c z being saturation. All three values default to @c 1.0.
+         * The sampler uniform is @c sample and defaults to @c 0.
+         * The shader uses two vertex attributes @c vertex and @c texCoord.
+         **/
+        SimpleShader = 0,
+        /**
+         * A generic shader able to render transformed, textured geometries.
+         * This shader is mostly needed by the scene and not of much interest for effects.
+         * Effects can influence this shader through @link ScreenPaintData and @link WindowPaintData.
+         * The shader expects four @c mat4 uniforms @c projection, @c modelview,
+         * @c screenTransformation and @c windowTransformation. The fragment shader expect the
+         * same uniforms as the SimpleShader and the same vertex attributes are used.
+         **/
+        GenericShader,
+        /**
+         * An orthographic shader to render simple colored geometries without texturing.
+         * Expects a @c vec2 uniform @c offset describing the offset from top-left corner
+         * and defaults to @c (0/0). The fragment shader expects a single @c vec4 uniform
+         * @c geometryColor, which defaults to fully opaque black.
+         * The Shader uses one vertex attribute @c vertex.
+         **/
+        ColorShader
+    };
+
+    /**
+     * @return The currently bound shader or @c null if no shader is bound.
+     **/
+    GLShader *getBoundShader() const;
+
+    /**
+     * @return @c true if a shader is bound, @c false otherwise
+     **/
+    bool isShaderBound() const;
+    /**
+     * Allows to query whether Shaders are supported by the compositor, that is
+     * whether the Shaders compiled successfully.
+     *
+     * With OpenGL 1 compositing this method will always return @c false.
+     *
+     * Do not use this method to check whether the compositor uses OpenGL 1 or 2,
+     * use @link EffectsHandler::compositingType instead.
+     * @return @c true if the built-in shaders are valid, @c false otherwise
+     **/
+    bool isValid() const;
+    /**
+     * Is @c true if the environment variable KWIN_GL_DEBUG is set to 1.
+     * In that case shaders are compiled with KWIN_SHADER_DEBUG defined.
+     * @returns @c true if shaders are compiled with debug information
+     * @since 4.8
+     **/
+    bool isShaderDebug() const;
+
+    /**
+     * Binds the shader of specified @p type.
+     * To unbind the shader use @link popShader. A previous bound shader will be rebound.
+     * @param type The built-in shader to bind
+     * @param reset Whether all uniforms should be reset to their default values
+     * @return The bound shader or @c NULL if shaders are not valid
+     * @see popShader
+     **/
+    GLShader *pushShader(ShaderType type, bool reset = false);
+    /**
+     * Binds the @p shader.
+     * To unbind the shader use @link popShader. A previous bound shader will be rebound.
+     * To bind a built-in shader use the more specific method.
+     * @param shader The shader to be bound
+     * @see popShader
+     **/
+    void pushShader(GLShader *shader);
+
+    /**
+     * Unbinds the currently bound shader and rebinds a previous stored shader.
+     * If there is no previous shader, no shader will be rebound.
+     * It is not safe to call this method if there is no bound shader.
+     * @see pushShader
+     * @see getBoundShader
+     **/
+    void popShader();
+
+    /**
+     * Resets all shaders to the default uniform values.
+     * Only built in shaders are changed.
+     * @since 4.8
+     **/
+    void resetAllShaders();
+
+    /**
+     * Resets ShaderType @p type uniforms of a custom shader
+     * @since 4.11.1
+     */
+    void resetShader(GLShader *shader, ShaderType type);
+
+    /**
+     * Creates a GLShader with a built-in vertex shader and a custom fragment shader.
+     * @param vertex The generic vertex shader
+     * @param fragmentFile The path to the source code of the fragment shader
+     * @return The created shader
+     **/
+    GLShader *loadFragmentShader(ShaderType vertex, const QString &fragmentFile);
+    /**
+     * Creates a GLShader with a built-in fragment shader and a custom vertex shader.
+     * @param fragment The generic fragment shader
+     * @param vertexFile The path to the source code of the vertex shader
+     * @return The created shader
+     **/
+    GLShader *loadVertexShader(ShaderType fragment, const QString &vertexFile);
+    /**
+     * Creates a GLShader with the specified sources.
+     * The difference to GLShader is that it does not need to be loaded from files.
+     * @param vertexSource The source code of the vertex shader
+     * @param fragmentSource The source code of the fragment shader.
+     * @return The created shader
+     **/
+    GLShader *loadShaderFromCode(const QByteArray &vertexSource, const QByteArray &fragmentSource);
+
+    /**
+     * @return a pointer to the ShaderManager instance
+     **/
+    static ShaderManager *instance();
+    /**
+     * @brief Ensures that the ShaderManager is disabled.
+     *
+     * Used only by an OpenGL 1 Scene which does not use OpenGL 2 Shaders.
+     *
+     * @internal
+     * @since 4.10
+     **/
+    static void disable();
+
+    /**
+     * @internal
+     **/
+    static void cleanup();
+
+private:
+    ShaderManager();
+    ~ShaderManager();
+
+    void initShaders();
+    void resetShader(ShaderType type);
+    void bindFragDataLocations(GLShader *shader);
+    void bindAttributeLocations(GLShader *shader) const;
+
+    QStack<GLShader*> m_boundShaders;
+    GLShader *m_shader[3];
+    bool m_inited;
+    bool m_valid;
+    bool m_debug;
+    QByteArray m_shaderDir;
+    static ShaderManager *s_shaderManager;
+};
+
+/**
+ * An helper class to push a Shader on to ShaderManager's stack and ensuring that the Shader
+ * gets popped again from the stack automatically once the object goes out of life.
+ *
+ * How to use:
+ * @code
+ * {
+ * GLShader *myCustomShaderIWantToPush;
+ * ShaderBinder binder(myCustomShaderIWantToPush);
+ * // do stuff with the shader being pushed on the stack
+ * }
+ * // here the Shader is automatically popped as helper does no longer exist.
+ * @endcode
+ *
+ * This class takes care for the case that the Compositor uses OpenGL 1 and the ShaderManager is
+ * not valid. In that case the helper does not do anything. So this helper can be used to simplify
+ * the code to remove checks for OpenGL 1/2.
+ * @since 4.10
+ **/
+class KWIN_EXPORT ShaderBinder
+{
+public:
+    /**
+     * @brief Pushes the Shader of the given @p type to the ShaderManager's stack.
+     *
+     * @param type The built-in Shader type
+     * @param reset Whether all uniforms should be reset to their default values. Defaults to false.
+     * @see ShaderManager::pushShader
+     **/
+    explicit ShaderBinder(ShaderManager::ShaderType type, bool reset = false);
+    /**
+     * @brief Pushes the given @p shader to the ShaderManager's stack.
+     *
+     * @param shader The Shader to push on the stack
+     * @see ShaderManager::pushShader
+     **/
+    explicit ShaderBinder(GLShader *shader);
+    ~ShaderBinder();
+
+    /**
+     * @return The Shader pushed to the Stack. On OpenGL 1 this returns a @c null pointer.
+     **/
+    GLShader *shader();
+
+private:
+    GLShader *m_shader;
+};
+
+inline
+ShaderBinder::ShaderBinder(ShaderManager::ShaderType type, bool reset)
+    : m_shader(NULL)
+{
+#ifdef KWIN_HAVE_OPENGL_1
+    if (!ShaderManager::instance()->isValid()) {
+        return;
+    }
+#endif
+    m_shader = ShaderManager::instance()->pushShader(type, reset);
+}
+
+inline
+ShaderBinder::ShaderBinder(GLShader *shader)
+    : m_shader(shader)
+{
+#ifdef KWIN_HAVE_OPENGL_1
+    if (!ShaderManager::instance()->isValid()) {
+        return;
+    }
+#endif
+    ShaderManager::instance()->pushShader(shader);
+}
+
+inline
+ShaderBinder::~ShaderBinder()
+{
+#ifdef KWIN_HAVE_OPENGL_1
+    if (!ShaderManager::instance()->isValid()) {
+        return;
+    }
+#endif
+    ShaderManager::instance()->popShader();
+}
+
+inline
+GLShader* ShaderBinder::shader()
+{
+    return m_shader;
+}
+
+/**
+ * @short Render target object
+ *
+ * Render target object enables you to render onto a texture. This texture can
+ *  later be used to e.g. do post-processing of the scene.
+ *
+ * @author Rivo Laks <rivolaks@hot.ee>
+ **/
+class KWIN_EXPORT GLRenderTarget
+{
+public:
+    /**
+     * Constructs a GLRenderTarget
+     * @param color texture where the scene will be rendered onto
+     **/
+    explicit GLRenderTarget(const GLTexture& color);
+    ~GLRenderTarget();
+
+    /**
+     * Enables this render target.
+     * All OpenGL commands from now on affect this render target until the
+     *  @ref disable method is called
+     **/
+    bool enable();
+    /**
+     * Disables this render target, activating whichever target was active
+     *  when @ref enable was called.
+     **/
+    bool disable();
+
+    /**
+     * Sets the target texture
+     * @param target texture where the scene will be rendered on
+     * @since 4.8
+     **/
+    void attachTexture(const GLTexture& target);
+
+    bool valid() const  {
+        return mValid;
+    }
+
+    static void initStatic();
+    static bool supported()  {
+        return sSupported;
+    }
+    static void pushRenderTarget(GLRenderTarget *target);
+    static GLRenderTarget *popRenderTarget();
+    static bool isRenderTargetBound();
+    /**
+     * Whether the GL_EXT_framebuffer_blit extension is supported.
+     * This functionality is not available in OpenGL ES 2.0.
+     *
+     * @returns whether framebuffer blitting is supported.
+     * @since 4.8
+     **/
+    static bool blitSupported();
+
+    /**
+     * Blits the content of the current draw framebuffer into the texture attached to this FBO.
+     *
+     * Be aware that framebuffer blitting may not be supported on all hardware. Use @link blitSupported to check whether
+     * it is supported.
+     * @param source Geometry in screen coordinates which should be blitted, if not specified complete framebuffer is used
+     * @param destination Geometry in attached texture, if not specified complete texture is used as destination
+     * @param filter The filter to use if blitted content needs to be scaled.
+     * @see blitSupported
+     * @since 4.8
+     **/
+    void blitFromFramebuffer(const QRect &source = QRect(), const QRect &destination = QRect(), GLenum filter = GL_LINEAR);
+
+
+protected:
+    void initFBO();
+
+
+private:
+    static bool sSupported;
+    static bool s_blitSupported;
+    static QStack<GLRenderTarget*> s_renderTargets;
+
+    GLTexture mTexture;
+    bool mValid;
+
+    GLuint mFramebuffer;
+};
+
+enum VertexAttributeType {
+    VA_Position = 0,
+    VA_TexCoord = 1,
+    VertexAttributeCount = 2
+};
+
+/**
+ * Describes the format of a vertex attribute stored in a buffer object.
+ *
+ * The attribute format consists of the attribute index, the number of
+ * vector components, the data type, and the offset of the first element
+ * relative to the start of the vertex data.
+ */
+struct GLVertexAttrib
+{
+    int index;            /** The attribute index */
+    int size;             /** The number of components [1..4] */
+    GLenum type;          /** The type (e.g. GL_FLOAT) */
+    int relativeOffset;   /** The relative offset of the attribute */
+};
+
+/**
+ * @short Vertex Buffer Object
+ *
+ * This is a short helper class to use vertex buffer objects (VBO). A VBO can be used to buffer
+ * vertex data and to store them on graphics memory. It is the only allowed way to pass vertex
+ * data to the GPU in OpenGL ES 2 and OpenGL 3 with forward compatible mode.
+ *
+ * If VBOs are not supported on the used OpenGL profile this class falls back to legacy
+ * rendering using client arrays. Therefore this class should always be used for rendering geometries.
+ *
+ * @author Martin Gräßlin <mgraesslin@kde.org>
+ * @since 4.6
+ */
+class KWIN_EXPORT GLVertexBuffer
+{
+public:
+    /**
+     * Enum to define how often the vertex data in the buffer object changes.
+     */
+    enum UsageHint {
+        Dynamic, ///< frequent changes, but used several times for rendering
+        Static, ///< No changes to data
+        Stream ///< Data only used once for rendering, updated very frequently
+    };
+
+    explicit GLVertexBuffer(UsageHint hint);
+    ~GLVertexBuffer();
+
+    /**
+     * Specifies how interleaved vertex attributes are laid out in
+     * the buffer object.
+     *
+     * Note that the attributes and the stride should be 32 bit aligned
+     * or a performance penalty may be incurred.
+     *
+     * For some hardware the optimal stride is a multiple of 32 bytes.
+     *
+     * Example:
+     *
+     *     struct Vertex {
+     *         QVector3D position;
+     *         QVector2D texcoord;
+     *     };
+     *
+     *     const GLVertexAttrib attribs[] = {
+     *         { VA_Position, 3, GL_FLOAT, offsetof(Vertex, position) },
+     *         { VA_TexCoord, 2, GL_FLOAT, offsetof(Vertex, texcoord) }
+     *     };
+     *
+     *     Vertex vertices[6];
+     *     vbo->setAttribLayout(attribs, 2, sizeof(Vertex));
+     *     vbo->setData(vertices, sizeof(vertices));
+     */
+    void setAttribLayout(const GLVertexAttrib *attribs, int count, int stride);
+
+    /**
+     * Uploads data into the buffer object's data store.
+     */
+    void setData(const void *data, size_t sizeInBytes);
+
+    /**
+     * Sets the number of vertices that will be drawn by the render() method.
+     */
+    void setVertexCount(int count);
+
+    /**
+     * Sets the vertex data.
+     * @param numberVertices The number of vertices in the arrays
+     * @param dim The dimension of the vertices: 2 for x/y, 3 for x/y/z
+     * @param vertices The vertices, size must equal @a numberVertices * @a dim
+     * @param texcoords The texture coordinates for each vertex.
+     * Size must equal 2 * @a numberVertices.
+     */
+    void setData(int numberVertices, int dim, const float* vertices, const float* texcoords);
+
+    /**
+     * Maps an unused range of the data store into the client's address space.
+     *
+     * The data store will be reallocated if it is smaller than the given size.
+     *
+     * The buffer object is mapped for writing, not reading. Attempts to read from
+     * the mapped buffer range may result in system errors, including program
+     * termination. The data in the mapped region is undefined until it has been
+     * written to. If subsequent GL calls access unwritten memory, the results are
+     * undefined and system errors, including program termination, may occur.
+     *
+     * No GL calls that access the buffer object must be made while the buffer
+     * object is mapped. The returned pointer must not be passed as a parameter
+     * value to any GL function.
+     *
+     * It is assumed that the GL_ARRAY_BUFFER_BINDING will not be changed while
+     * the buffer object is mapped.
+     */
+    GLvoid *map(size_t size);
+
+    /**
+     * Flushes the mapped buffer range and unmaps the buffer.
+     */
+    void unmap();
+
+    /**
+     * Binds the vertex arrays to the context.
+     */
+    void bindArrays();
+
+    /**
+     * Disables the vertex arrays.
+     */
+    void unbindArrays();
+
+    /**
+     * Draws count vertices beginning with first.
+     */
+    void draw(GLenum primitiveMode, int first, int count);
+
+    /**
+     * Draws count vertices beginning with first.
+     */
+    void draw(const QRegion &region, GLenum primitiveMode, int first, int count, bool hardwareClipping = false);
+
+    /**
+     * Renders the vertex data in given @a primitiveMode.
+     * Please refer to OpenGL documentation of glDrawArrays or glDrawElements for allowed
+     * values for @a primitiveMode. Best is to use GL_TRIANGLES or similar to be future
+     * compatible.
+     */
+    void render(GLenum primitiveMode);
+    /**
+     * Same as above restricting painting to @a region if @a hardwareClipping is true.
+     * It's within the caller's responsibility to enable GL_SCISSOR_TEST.
+     */
+    void render(const QRegion& region, GLenum primitiveMode, bool hardwareClipping = false);
+    /**
+     * Sets the color the geometry will be rendered with.
+     * For legacy rendering glColor is used before rendering the geometry.
+     * For core shader a uniform "geometryColor" is expected and is set.
+     * @param color The color to render the geometry
+     * @param enableColor Whether the geometry should be rendered with a color or not
+     * @see setUseColor
+     * @see isUseColor
+     * @since 4.7
+     **/
+    void setColor(const QColor& color, bool enableColor = true);
+    /**
+     * @return @c true if geometry will be painted with a color, @c false otherwise
+     * @see setUseColor
+     * @see setColor
+     * @since 4.7
+     **/
+    bool isUseColor() const;
+    /**
+     * Enables/Disables rendering the geometry with a color.
+     * If no color is set an opaque, black color is used.
+     * @param enable Enable/Disable rendering with color
+     * @see isUseColor
+     * @see setColor
+     * @since 4.7
+     **/
+    void setUseColor(bool enable);
+
+    /**
+     * Resets the instance to default values.
+     * Useful for shared buffers.
+     * @since 4.7
+     **/
+    void reset();
+
+    /**
+     * @internal
+     */
+    static void initStatic();
+
+    /**
+     * @internal
+     */
+    static void cleanup();
+
+    /**
+     * Returns true if VBOs are supported, it is save to use this class even if VBOs are not
+     * supported.
+     * @returns true if vertex buffer objects are supported
+     */
+    static bool isSupported();
+
+    /**
+     * Returns true if indexed quad mode is supported, and false otherwise.
+     */
+    static bool supportsIndexedQuads();
+
+    /**
+     * @return A shared VBO for streaming data
+     * @since 4.7
+     **/
+    static GLVertexBuffer *streamingBuffer();
+
+private:
+    GLVertexBufferPrivate* const d;
+};
+
+} // namespace
+
+/** @} */
+
+#endif
