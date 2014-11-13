@@ -150,20 +150,6 @@ set_package_properties(PythonLibrary PROPERTIES DESCRIPTION "Python scripting la
                        PURPOSE "Needed to build plasma scriptengine for python."
                       )
 
-macro_optional_find_package(Soprano 2.7.56)
-set_package_properties(Soprano PROPERTIES DESCRIPTION "Semantic Desktop Storing"
-                       URL "http://soprano.sourceforge.net"
-                       TYPE OPTIONAL
-                       PURPOSE "Required to build Nepomuk features."
-                      )
-
-macro_optional_find_package(NepomukCore QUIET CONFIG)
-set_package_properties(NepomukCore PROPERTIES DESCRIPTION "Nepomuk Core Library"
-                       URL "https://projects.kde.org/nepomuk-core"
-                       TYPE OPTIONAL
-                       PURPOSE "Required to build Nepomuk features."
-                      )
-
 macro_optional_find_package(Boost 1.34.0 MODULE)
 set_package_properties(Boost PROPERTIES DESCRIPTION "Boost C++ Libraries"
                        URL "http://www.boost.org"
