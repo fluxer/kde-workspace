@@ -19,7 +19,6 @@
  */
 
 #include "calendartable.h"
-#include "config-calendartable.h"
 
 //Qt
 #include <QtCore/QDate>
@@ -43,11 +42,7 @@
 #include <Plasma/DataEngine>
 #include <Plasma/DataEngineManager>
 
-#ifdef HAVE_KDEPIMLIBS
-#include "ui_calendarHolidaysConfig.h"
-#else
 #include "ui_calendarConfig.h"
-#endif
 
 #include <cmath>
 
@@ -420,11 +415,7 @@ class CalendarTablePrivate
 
         QPointF lastSeenMousePos;
 
-#ifdef HAVE_KDEPIMLIBS
-        Ui::calendarHolidaysConfig calendarConfigUi;
-#else
         Ui::calendarConfig calendarConfigUi;
-#endif
 
         Plasma::Svg *svg;
         float opacity; //transparency for the inactive text
@@ -962,21 +953,6 @@ void CalendarTable::createConfigurationInterface(KConfigDialog *parent)
 
     d->calendarConfigUi.displayEvents->setChecked(d->displayEvents);
 
-#ifdef HAVE_KDEPIMLIBS
-    QHashIterator<QString, Plasma::DataEngine::Data> it(d->holidaysRegions);
-    while (it.hasNext()) {
-        it.next();
-        if (it.value().value("UseForDaysOff").toBool()) {
-            d->calendarConfigUi.holidayRegionWidget->setRegionUseFlags(it.key(), KHolidays::HolidayRegionSelector::UseDaysOff);
-        } else {
-            d->calendarConfigUi.holidayRegionWidget->setRegionUseFlags(it.key(), KHolidays::HolidayRegionSelector::UseInformationOnly);
-        }
-    }
-    d->calendarConfigUi.holidayRegionWidget->setDescriptionHidden(true);
-
-    connect(d->calendarConfigUi.holidayRegionWidget, SIGNAL(selectionChanged()), parent, SLOT(settingsModified()));
-#endif
-
     connect(d->calendarConfigUi.calendarComboBox, SIGNAL(activated(int)), parent, SLOT(settingsModified()));
     connect(d->calendarConfigUi.displayEvents, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
 }
@@ -985,24 +961,6 @@ void CalendarTable::configAccepted(KConfigGroup cg)
 {
     setCalendar(d->calendarConfigUi.calendarComboBox->itemData(d->calendarConfigUi.calendarComboBox->currentIndex()).toInt());
     setDisplayEvents(d->calendarConfigUi.displayEvents->isChecked());
-
-#ifdef HAVE_KDEPIMLIBS
-    clearHolidaysRegions();
-    QHash<QString, KHolidays::HolidayRegionSelector::RegionUseFlags> regions = d->calendarConfigUi.holidayRegionWidget->regionUseFlags();
-    QHashIterator<QString, KHolidays::HolidayRegionSelector::RegionUseFlags> it(regions);
-    bool displayHolidays = false;
-    while (it.hasNext()) {
-        it.next();
-        if (it.value() == KHolidays::HolidayRegionSelector::UseDaysOff) {
-            addHolidaysRegion(it.key(), true);
-            displayHolidays = true;
-        } else if (it.value() == KHolidays::HolidayRegionSelector::UseInformationOnly) {
-            addHolidaysRegion(it.key(), false);
-            displayHolidays = true;
-        }
-    }
-    setDisplayHolidays(displayHolidays);
-#endif
 
     writeConfiguration(cg);
 }
