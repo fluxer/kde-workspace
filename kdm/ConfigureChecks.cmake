@@ -1,16 +1,3 @@
-macro_optional_find_package(CkConnector)
-macro_bool_to_01(CKCONNECTOR_FOUND HAVE_CKCONNECTOR)
-if(CKCONNECTOR_FOUND)
-  # when building with libck-connector, we also need the low-level D-Bus API
-  find_package(DBus REQUIRED)
-endif(CKCONNECTOR_FOUND)
-
-set_package_properties(CKConnector PROPERTIES DESCRIPTION "The ConsoleKit connector library"
-                       URL "http://freedesktop.org/wiki/Software/ConsoleKit"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides ConsoleKit integration in KDM"
-                      )
-
 include(CheckCSourceRuns)
 include(CheckStructMember)
 

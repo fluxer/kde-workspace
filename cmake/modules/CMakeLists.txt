@@ -2,8 +2,7 @@
 
 # don't glob for the files, since we don't want to
 # install e.g. FindLibKNotification-1.cmake
-set(cmakeFiles FindCkConnector.cmake
-               FindDBus.cmake
+set(cmakeFiles FindDBus.cmake
                FindLibXKlavier.cmake
                FindOpenGLES.cmake
                FindPAM.cmake

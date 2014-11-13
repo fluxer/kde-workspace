@@ -79,10 +79,6 @@ extern int loginsuccess(const char *User, const char *Host, const char *Tty, cha
 /* for expiration */
 # include <time.h>
 #endif /* USE_PAM || _AIX */
-#ifdef HAVE_CKCONNECTOR
-# include <ck-connector.h>
-# include <dbus/dbus.h>
-#endif
 #ifdef HAVE_GETSPNAM
 # include <shadow.h>
 #endif
@@ -138,8 +134,7 @@ displayStr(int lv, const char *msg)
 
 #if (!defined(USE_PAM) && !defined(_AIX) \
      && (defined(HAVE_STRUCT_PASSWD_PW_EXPIRE) || defined(USESHADOW) \
-         || (defined(KERBEROS) && defined(AFS)))) \
-    || defined(HAVE_CKCONNECTOR)
+         || (defined(KERBEROS) && defined(AFS))))
 static void
 displayMsg(int lv, const char *msg, ...)
 {
@@ -1260,9 +1255,6 @@ static int removeAuth;
 static int removeSession;
 static int removeCreds;
 #endif
-#ifdef HAVE_CKCONNECTOR
-static CkConnector *ckConnector;
-#endif
 
 static GPipe ctlpipe;
 static GTalk ctltalk;
@@ -1312,17 +1304,6 @@ startClient(volatile int *pid)
     extern char **newenv; /* from libs.a, this is set up by setpenv */
 # endif
 #endif
-#ifdef HAVE_CKCONNECTOR
-    DBusError error;
-    int ckStatus;
-# ifdef XDMCP
-    char *remoteHostName = 0;
-    const char *spaceStr = "";
-# endif
-    char ckDeviceBuf[20] = "";
-    const char *ckDevice = ckDeviceBuf;
-    dbus_bool_t isLocal;
-#endif
     char *failsafeArgv[2];
     char *buf, *buf2;
     int i;
@@ -1343,65 +1324,6 @@ startClient(volatile int *pid)
 #endif
 
     strcpy(curuser, p->pw_name); /* Use normalized login name. */
-
-#ifdef HAVE_CKCONNECTOR
-    if (!(ckConnector = ck_connector_new())) {
-        logOutOfMem();
-        V_RET;
-    }
-    
-# ifdef HAVE_VTS
-    if (td->serverVT > 0)
-        sprintf(ckDeviceBuf, "/dev/tty%d", td->serverVT);
-# endif
-    isLocal = ((td->displayType & d_location) == dLocal);
-# ifdef XDMCP
-    if (!isLocal) {
-        int length, family;
-        CARD8 *data;
-        ARRAY8 addr;
-
-        family = convertAddr((char *)td->peer.data, &length, &data);
-        addr.data = (unsigned char *)data;
-        addr.length = length;
-
-        /* We are not simply using the addr part of td->name as it might be
-           numeric due to the SourceAddress settings */
-        remoteHostName = networkAddressToHostname(family, &addr);
-    }
-# endif
-
-    dbus_error_init(&error);
-    ckStatus = ck_connector_open_session_with_parameters(ckConnector, &error,
-            "unix-user", &p->pw_uid,
-            "x11-display-device", &ckDevice,
-            "x11-display", &td->name,
-            "is-local", &isLocal, /* meaning not entirely clear per doc */
-# ifdef XDMCP
-            "remote-host-name", remoteHostName ?
-                                   (const char **)&remoteHostName : &spaceStr,
-# endif
-            (char *)0);
-# ifdef XDMCP
-    free(remoteHostName);
-# endif
-    debug("ck status: %d\n", ckStatus);
-    if (!ckStatus) {
-        if (dbus_error_is_set(&error)) {
-            logError("Cannot open ConsoleKit session: %s\n", error.message);
-            displayMsg(V_MSG_ERR,
-                       "Warning: Cannot open ConsoleKit session: %s",
-                       error.message);
-            dbus_error_free(&error);
-        } else {
-            logError("Cannot open ConsoleKit session, likely OOM\n");
-            displayStr(V_MSG_ERR,
-                       "Warning: Cannot open ConsoleKit session.");
-        }
-        ck_connector_unref(ckConnector);
-        ckConnector = 0;
-    }
-#endif
 
 #ifndef USE_PAM
 # ifdef _AIX
@@ -1453,10 +1375,6 @@ startClient(volatile int *pid)
 #if !defined(USE_PAM) && !defined(_AIX) && defined(KERBEROS)
     if (krbtkfile[0] != '\0')
         env = setEnv(env, "KRBTKFILE", krbtkfile);
-#endif
-#ifdef HAVE_CKCONNECTOR
-    env = setEnv(env, "XDG_SESSION_COOKIE",
-                      ck_connector_get_cookie(ckConnector));
 #endif
     userEnviron = inheritEnv(env, envvars);
     env = systemEnv(0, curuser);
@@ -1882,9 +1800,6 @@ clientExited(void)
 #ifdef USE_PAM
     int pretc;
 #endif
-#ifdef HAVE_CKCONNECTOR
-    DBusError error;
-#endif
 
     if (removeAuth) {
         switch (source(systemEnviron, td->reset, td_setup)) {
@@ -1957,22 +1872,6 @@ clientExited(void)
         pam_end(pamh, PAM_SUCCESS);
         reInitErrorLog();
         pamh = 0;
-    }
-#endif
-
-#ifdef HAVE_CKCONNECTOR
-    if (ckConnector) {
-        dbus_error_init(&error);
-        if (!ck_connector_close_session(ckConnector, &error)) {
-            if (dbus_error_is_set(&error)) {
-                logError("Cannot close ConsoleKit session: %s\n", error.message);
-                dbus_error_free(&error);
-            } else {
-                logError("Cannot close ConsoleKit session, likely OOM\n");
-            }
-        }
-        ck_connector_unref(ckConnector);
-        ckConnector = 0;
     }
 #endif
 }
