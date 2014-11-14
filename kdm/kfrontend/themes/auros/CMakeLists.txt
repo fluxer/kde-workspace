@@ -1,11 +1,11 @@
 install(FILES
     KdmGreeterTheme.desktop
-    oxygen.xml
+    auros.xml
     background.svg
     system.png
     session.png
-    oxygen-box.svg
-    oxygen.svg
+    auros-box.svg
+    auros.svg
     branding-icon.png
     screenshot.png
-    DESTINATION ${DATA_INSTALL_DIR}/kdm/themes/oxygen)
+    DESTINATION ${DATA_INSTALL_DIR}/kdm/themes/auros)

@@ -31,39 +31,39 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 		<fixed>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="topleft"/>
+				<normal file="auros-box.svg" element="topleft"/>
 				<pos anchor="nw" x="0" y="0" width="11" height="11"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="top"/>
+				<normal file="auros-box.svg" element="top"/>
 				<pos anchor="n" x="50%" y="0" width="-21" height="11"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="topright"/>
+				<normal file="auros-box.svg" element="topright"/>
 				<pos anchor="ne" x="-0" y="0" width="11" height="11"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="left"/>
+				<normal file="auros-box.svg" element="left"/>
 				<pos anchor="w" x="0" y="50%" width="11" height="-21"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="center"/>
+				<normal file="auros-box.svg" element="center"/>
 				<pos anchor="c" x="50%" y="50%" width="-21" height="-21"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="right"/>
+				<normal file="auros-box.svg" element="right"/>
 				<pos anchor="e" x="-0" y="50%" width="11" height="-21"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="bottomleft"/>
+				<normal file="auros-box.svg" element="bottomleft"/>
 				<pos anchor="sw" x="0" y="-0" width="11" height="11"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="bottom"/>
+				<normal file="auros-box.svg" element="bottom"/>
 				<pos anchor="s" x="50%" y="-0" width="-21" height="11"/>
 			</item>
 			<item type="svg">
-				<normal file="oxygen-box.svg" element="bottomright"/>
+				<normal file="auros-box.svg" element="bottomright"/>
 				<pos anchor="se" x="-0" y="-0" width="11" height="11"/>
 			</item>
 		</fixed>
@@ -145,7 +145,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<pos x="-0" y="-75" min-width="50%" width="box" height="43" anchor="e"/>
 		<fixed>
 			<item type="svg">
-				<normal file="oxygen.svg" element="footer-background"/>
+				<normal file="auros.svg" element="footer-background"/>
 				<pos width="1980" height="43"/>
 			</item>
 		</fixed>
