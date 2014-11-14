@@ -36,7 +36,6 @@
 #include <kdebug.h>
 #include <kdialog.h>
 #include <kglobal.h>
-#include <k3listview.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmenu.h>
