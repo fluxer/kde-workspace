@@ -187,6 +187,7 @@ if(NOT WIN32)
    macro_optional_add_subdirectory( kcheckpass )
    macro_optional_add_subdirectory( kwin )
    macro_optional_add_subdirectory( ksmserver )
+   macro_optional_add_subdirectory( kdesu )
 
    find_package(JPEG REQUIRED)
    find_package(PNG REQUIRED)
