@@ -27,11 +27,7 @@ set(taskmanager_LIB_SRCS
 
 kde4_add_ui_files(taskmanager_LIB_SRCS launcherconfig.ui launcherproperties.ui)
 
-if(WIN32)
-    set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_win.cpp)
-else(WIN32)
-    set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
-endif(WIN32)
+set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 
 kde4_add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 

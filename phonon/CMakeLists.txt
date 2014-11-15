@@ -40,19 +40,17 @@ else(KDEBASE_DISABLE_MULTIMEDIA)
    if(ALSA_FOUND)
       include_directories(${ALSA_INCLUDES})
       alsa_version_string(ALSA_VERSION_STR)
-      if(ALSA_VERSION_STR AND NOT WIN32)
+      if(ALSA_VERSION_STR)
          if(ALSA_VERSION_STR MATCHES "^1\\.(0\\.(1[4-9]|[2-9][0-9]+)|[1-9][0-9]*\\.)")
             add_definitions(-DHAS_LIBASOUND_DEVICE_NAME_HINT)
             set(HAVE_CURRENT_ALSA TRUE)
          endif(ALSA_VERSION_STR MATCHES "^1\\.(0\\.(1[4-9]|[2-9][0-9]+)|[1-9][0-9]*\\.)")
-      endif(ALSA_VERSION_STR AND NOT WIN32)
+      endif(ALSA_VERSION_STR)
    endif(ALSA_FOUND)
-   if(NOT WIN32)
-      add_feature_info("Dmix and virtual device listing" HAVE_CURRENT_ALSA
-                       "The ALSA library (http://www.alsa-project.org) is needed for building
-                        some additional Phonon features"
-                      )
-   endif(NOT WIN32)
+   add_feature_info("Dmix and virtual device listing" HAVE_CURRENT_ALSA
+                    "The ALSA library (http://www.alsa-project.org) is needed for building
+                     some additional Phonon features"
+                   )
 
    add_subdirectory(kded-module)
    add_subdirectory(platform_kde)

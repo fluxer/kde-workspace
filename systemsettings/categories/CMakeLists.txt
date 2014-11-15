@@ -28,11 +28,8 @@ install( FILES
                settings-workspace-behavior.desktop
          DESTINATION  ${SERVICES_INSTALL_DIR} )
 
-if (NOT WIN32)
-    install( FILES 
+install( FILES 
          settings-bluetooth.desktop
          #settings-desktop.desktop
          settings-sharing.desktop
          DESTINATION  ${SERVICES_INSTALL_DIR} )
-endif (NOT WIN32)
-        

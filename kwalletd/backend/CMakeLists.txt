@@ -24,11 +24,6 @@ if(QGPGME_FOUND)
 target_link_libraries(kwalletbackend ${QGPGME_LIBRARIES} )
 endif(QGPGME_FOUND)
 
-# link with advapi32 on windows
-if(WIN32 AND NOT WINCE)
-   target_link_libraries(kwalletbackend advapi32)
-endif(WIN32 AND NOT WINCE)
-
 set_target_properties(kwalletbackend PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kwalletbackend ${INSTALL_TARGETS_DEFAULT_ARGS})
 

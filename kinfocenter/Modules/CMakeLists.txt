@@ -5,7 +5,6 @@ add_subdirectory( memory )
 add_subdirectory( devinfo )
 add_subdirectory( info )
 
-if(NOT WIN32)
 add_subdirectory( samba )
 add_subdirectory( nics )
 
@@ -37,7 +36,6 @@ set_package_properties(PCIUTILS PROPERTIES DESCRIPTION "PciUtils is a library fo
 if(NOT APPLE)
     add_subdirectory( pci )
 endif(NOT APPLE)
-endif(NOT WIN32)
 
 macro_optional_find_package(RAW1394)
 set_package_properties(RAW1394 PROPERTIES DESCRIPTION "library for direct access to IEEE 1394 bus"

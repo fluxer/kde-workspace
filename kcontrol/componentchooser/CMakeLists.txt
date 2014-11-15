@@ -14,10 +14,8 @@ set(kcm_componentchooser_SRCS
   kcm_componentchooser.cpp
 )
 
-if(NOT WIN32)
-  set(kcm_componentchooser_SRCS ${kcm_componentchooser_SRCS}
-    componentchooserterminal.cpp ktimerdialog.cpp)
-endif(NOT WIN32)
+set(kcm_componentchooser_SRCS ${kcm_componentchooser_SRCS}
+  componentchooserterminal.cpp ktimerdialog.cpp)
 
 if(Q_WS_X11)
   set(kcm_componentchooser_SRCS ${kcm_componentchooser_SRCS}
@@ -33,9 +31,7 @@ kde4_add_ui_files(kcm_componentchooser_SRCS
   componentconfig_ui.ui
 )
 
-if(NOT WIN32)
-  kde4_add_ui_files(kcm_componentchooser_SRCS terminalemulatorconfig_ui.ui wmconfig_ui.ui)
-endif(NOT WIN32)
+kde4_add_ui_files(kcm_componentchooser_SRCS terminalemulatorconfig_ui.ui wmconfig_ui.ui)
 
 kde4_add_plugin(kcm_componentchooser ${kcm_componentchooser_SRCS})
 

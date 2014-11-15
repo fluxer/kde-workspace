@@ -89,7 +89,6 @@ install(TARGETS textthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-if(NOT WINCE)
 set(htmlthumbnail_PART_SRCS htmlcreator.cpp)
 
 kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
@@ -97,11 +96,9 @@ kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
 target_link_libraries(htmlthumbnail ${KDE4_KDEWEBKIT_LIBS})
 
 install(TARGETS htmlthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
-endif(NOT WINCE)
 
 ########### next target ###############
 
-if(NOT WIN32)
 set(djvuthumbnail_PART_SRCS djvucreator.cpp)
 
 kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
@@ -109,7 +106,6 @@ kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
 target_link_libraries(djvuthumbnail ${KDE4_KIO_LIBS})
 
 install(TARGETS djvuthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
-endif(NOT WIN32)
 
 ########### next target ###############
 
@@ -152,13 +148,8 @@ endif(X11_Xcursor_FOUND)
 set ( windowsexethumbnail_SRCS windowsexecreator.cpp icoutils_common.cpp)
 set ( windowsimagethumbnail_SRCS windowsimagecreator.cpp icoutils_common.cpp)
 
-if(WIN32)
-    set ( windowsexethumbnail_SRCS ${windowsexethumbnail_SRCS} icoutils_win.cpp )
-    set ( windowsimagethumbnail_SRCS ${windowsimagethumbnail_SRCS} icoutils_win.cpp )
-else()
-    set ( windowsexethumbnail_SRCS ${windowsexethumbnail_SRCS} icoutils_wrestool.cpp )
-    set ( windowsimagethumbnail_SRCS ${windowsimagethumbnail_SRCS} icoutils_wrestool.cpp )
-endif()
+set ( windowsexethumbnail_SRCS ${windowsexethumbnail_SRCS} icoutils_wrestool.cpp )
+set ( windowsimagethumbnail_SRCS ${windowsimagethumbnail_SRCS} icoutils_wrestool.cpp )
 
 kde4_add_plugin ( windowsexethumbnail ${windowsexethumbnail_SRCS} )
 target_link_libraries ( windowsexethumbnail ${KDE4_KIO_LIBS} )

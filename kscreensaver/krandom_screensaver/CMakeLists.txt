@@ -9,11 +9,7 @@ set(krandom.kss_SRCS random.cpp)
 
 kde4_add_executable(krandom.kss ${krandom.kss_SRCS})
 
-if (WIN32)
-  target_link_libraries(krandom.kss ${KDE4_KDEUI_LIBS})
-else (WIN32)
-  target_link_libraries(krandom.kss ${KDE4_KDEUI_LIBS} m)
-endif (WIN32)
+target_link_libraries(krandom.kss ${KDE4_KDEUI_LIBS} m)
 
 if (Q_WS_X11)
   target_link_libraries(krandom.kss ${X11_X11_LIB})

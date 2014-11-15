@@ -8,11 +8,7 @@ set (trashcommon_PART_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/trashimpl.cpp
 
 ########### next target ###############
 
-if(WIN32)
-  set(kio_trash_PART_SRCS kio_trash_win.cpp kio_trash_win.h)
-else(WIN32)
-  set(kio_trash_PART_SRCS kio_trash.cpp ${trashcommon_PART_SRCS})
-endif(WIN32)
+set(kio_trash_PART_SRCS kio_trash.cpp ${trashcommon_PART_SRCS})
 
 if(NOT MINGW)
 kde4_add_plugin(kio_trash ${kio_trash_PART_SRCS})
@@ -35,14 +31,11 @@ install(TARGETS ktrash ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### next target ###############
 
-# currently not on win32, TODO!
-if(NOT WIN32)
-    set(kcm_trash_PART_SRCS kcmtrash.cpp ${trashcommon_PART_SRCS})
-    kde4_add_plugin(kcm_trash ${kcm_trash_PART_SRCS})
-    target_link_libraries(kcm_trash  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS})
+set(kcm_trash_PART_SRCS kcmtrash.cpp ${trashcommon_PART_SRCS})
+kde4_add_plugin(kcm_trash ${kcm_trash_PART_SRCS})
+target_link_libraries(kcm_trash  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS})
 
-    install(TARGETS kcm_trash DESTINATION ${PLUGIN_INSTALL_DIR})
-endif(NOT WIN32)
+install(TARGETS kcm_trash DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 

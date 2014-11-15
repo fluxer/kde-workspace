@@ -18,9 +18,7 @@ kde4_add_plugin(kcm_style ${kcm_style_PART_SRCS})
 
 target_link_libraries(kcm_style ${KDE4_KIO_LIBS} ${X11_LIBRARIES}
     ${KDE4_PLASMA_LIBS} ${KDE4_KNEWSTUFF3_LIBS})
-if(NOT WIN32)
-    target_link_libraries(kcm_style kdecorations)
-endif(NOT WIN32)
+target_link_libraries(kcm_style kdecorations)
 
 install(TARGETS kcm_style  DESTINATION ${PLUGIN_INSTALL_DIR})
 

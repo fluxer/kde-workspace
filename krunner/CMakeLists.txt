@@ -42,29 +42,20 @@ kde4_add_ui_files(krunner_SRCS interfaceOptions.ui)
 kde4_add_kcfg_files(krunner_SRCS ${krunner_KCFG_SRCS})
 
 qt4_add_dbus_adaptor(krunner_SRCS ${krunner_dbusAppXML} krunnerapp.h KRunnerApp)
-if(WIN32)
-	set(BIN_PREFIX bin)
-else(WIN32)
-	set(BIN_PREFIX ${CMAKE_INSTALL_PREFIX}/bin)
-endif(WIN32)
+set(BIN_PREFIX ${CMAKE_INSTALL_PREFIX}/bin)
 
 dbus_add_activation_service(dbus/org.kde.krunner.service.in)
 
-if(NOT WIN32)
 set(krunner_SRCS
     ${krunner_SRCS}
     ksystemactivitydialog.cpp
     startupid.cpp)
 
-endif(NOT WIN32)
-
 kde4_add_kdeinit_executable(krunner ${krunner_SRCS})
 
 target_link_libraries(kdeinit_krunner kworkspace  plasmagenericshell ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDEUI_LIBS}  ${KDE4_KCMUTILS_LIBS} )
 
-if(NOT WIN32)
-  target_link_libraries(kdeinit_krunner processui  ${X11_Xrender_LIB} ${X11_LIBRARIES})
-endif(NOT WIN32)
+target_link_libraries(kdeinit_krunner processui  ${X11_Xrender_LIB} ${X11_LIBRARIES})
 
 if(X11_Xss_LIB)
   target_link_libraries(kdeinit_krunner ${X11_Xss_LIB})

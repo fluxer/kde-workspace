@@ -26,11 +26,7 @@ if (MD5SUM_EXECUTABLE)
       set(CUT_ARG "-f 4")                            # for md5 the sum is in the 4th column
    endif ("${MD5SUM_EXECUTABLE}" MATCHES "md5sum")
 
-   if (WIN32)
-      set(FISH_GENERATOR "generate_fishcode.bat")
-   else (WIN32)
-      set(FISH_GENERATOR "generate_fishcode.sh")
-   endif (WIN32)
+   set(FISH_GENERATOR "generate_fishcode.sh")
    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/fishcode.h 
       COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/${FISH_GENERATOR} ARGS ${CMAKE_CURRENT_SOURCE_DIR}/fish.pl ${MD5SUM_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/fishcode.h "${CUT_ARG}"
       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/fish.pl

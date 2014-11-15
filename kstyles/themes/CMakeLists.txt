@@ -13,13 +13,6 @@ if (Q_WS_X11)
   )
 endif (Q_WS_X11)
 
-if (WIN32)
-  set( themes_RC ${themes_RC}
-      qtwindowsvista.themerc
-      qtwindowsxp.themerc
-  )
-endif (WIN32)
-
 if (APPLE)
   set( themes_RC ${themes_RC}
       qtmacintosh.themerc
