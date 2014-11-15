@@ -1,3 +1,3 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
 $XGETTEXT `find . -name "*.cpp" -o -name "*.cc" | grep -v "/tests"` -o $podir/kwalletd.pot

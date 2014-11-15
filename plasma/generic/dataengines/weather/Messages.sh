@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 for file in ions/data/*.dat
 do
   awk -F'|' '$0 ~ /\|/ {

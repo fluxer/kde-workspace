@@ -1,2 +1,2 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $XGETTEXT *.cpp themes/*/*.qml -o $podir/ksmserver.pot

@@ -1,2 +1,2 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $XGETTEXT `find . -name "*.cc" -o -name "*.cpp" -o -name "*.h"` -o $podir/kio_remote.pot

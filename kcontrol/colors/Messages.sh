@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $EXTRACTRC *.ui >> rc.cpp
 $XGETTEXT *.cpp -o $podir/kcmcolors.pot
 rm -f rc.cpp

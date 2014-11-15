@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $EXTRACTRC *.ui >> rc.cpp
 find . -type d | fgrep -v '.svn' | sed -e 's,$,/,' > dirs
 msh=`find . -name Messages.sh`

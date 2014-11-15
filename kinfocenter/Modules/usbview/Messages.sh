@@ -1,2 +1,2 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $XGETTEXT *.cpp *.i18n -o $podir/kcmusb.pot

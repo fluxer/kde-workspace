@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/bin/bash
 find . -type d | fgrep -v '.svn' | sed -e 's,$,/,' > dirs
 msh=`find . -name Messages.sh`
 for dir in $msh; do

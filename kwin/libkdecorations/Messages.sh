@@ -1,2 +1,2 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $XGETTEXT `find . -name \*.cpp` -o $podir/libkdecorations.pot

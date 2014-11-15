@@ -1,2 +1,2 @@
-#! /usr/bin/env bash
+#!/bin/bash
 $XGETTEXT *.cpp *.h -o $podir/libkscreensaver.pot 
