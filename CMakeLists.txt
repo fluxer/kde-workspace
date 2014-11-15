@@ -3,6 +3,11 @@ project(KDEBASE_WORKSPACE)
 # TODO: Remove when kdelibs >= 4.10 will be required
 cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
 
+include(CTest)
+include(CTestConfig.cmake)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+
 # Used e.g. in KDE4WorkspaceConfig.cmake, Alex
 set(KDE4WORKSPACE_VERSION_MAJOR 4)
 set(KDE4WORKSPACE_VERSION_MINOR 11)
@@ -15,7 +20,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_P
 #search packages used by KDE
 set(QT_MIN_VERSION "4.8.0")
 
-find_package(KDE4 4.9.4 REQUIRED)
+find_package(KDE4 4.9.95 REQUIRED)
 include(KDE4Defaults)
 
 option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
@@ -55,7 +60,7 @@ find_package(KDeclarative QUIET CONFIG)
 set_package_properties(KDeclarative PROPERTIES DESCRIPTION "KDE Declarative (QML) support from kdelibs"
                        URL "http://www.kde.org"
                        TYPE REQUIRED
-                       PURPOSE "Required for building ksmserver"
+                       PURPOSE "Required for building ksmserver and corebindingsplugin (org.kde.plasma.core)"
                       )
 
 macro_optional_find_package(OpenGL)
@@ -157,8 +162,38 @@ set_package_properties(QJSON PROPERTIES DESCRIPTION "Library to manage JSON obje
                        PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
                       )
 
+find_package(LibGcrypt 1.5.0 REQUIRED QUIET)
+set_package_properties(LibGcrypt PROPERTIES DESCRIPTION "Libgcrypt is a general purpose cryptographic library based on the code from GnuPG."
+                       URL "http://www.gnu.org/software/libgcrypt/"
+                       TYPE REQUIRED
+                       PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
+                      )
+
+macro_optional_find_package(SLP)
+set_package_properties(SLP PROPERTIES DESCRIPTION "SLP (Service Location Protocol) implementation"
+                       URL "http://www.openslp.org/"
+                       TYPE OPTIONAL
+                       PURPOSE "Provides SLP support in the network:/ kioslave."
+                      )
+
+find_package(LibAttica 0.1.4)
+set_package_properties(LibAttica PROPERTIES DESCRIPTION "A library to access Open Collaboration Service providers"
+                       URL "https://projects.kde.org/attica"
+                       TYPE REQUIRED
+                       PURPOSE "Attica is needed for the Get Hot New Stuff support"
+                      )
+
+macro_optional_find_package(QCA2 2.0.0)
+set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
+                       URL "http://delta.affinix.com/qca"
+                       TYPE OPTIONAL
+                      )
+
+check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
+check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
 include(ConfigureChecks.cmake)
+configure_file (config-runtime.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-runtime.h )
 if(NOT WIN32)
   configure_file(config-unix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-unix.h )
   configure_file(config-X11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-X11.h )
@@ -171,7 +206,7 @@ configure_file(config-workspace.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-works
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KACTIVITIES_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KACTIVITIES_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libs)
 
 # libs
 add_subdirectory(cmake)
@@ -187,7 +222,6 @@ if(NOT WIN32)
    macro_optional_add_subdirectory( kcheckpass )
    macro_optional_add_subdirectory( kwin )
    macro_optional_add_subdirectory( ksmserver )
-   macro_optional_add_subdirectory( kdesu )
 
    find_package(JPEG REQUIRED)
    find_package(PNG REQUIRED)
@@ -242,7 +276,61 @@ macro_optional_add_subdirectory(plasma)
 macro_optional_add_subdirectory(statusnotifierwatcher)
 macro_optional_add_subdirectory(kstyles)
 
+# imported from kde-runtime
+macro_optional_add_subdirectory(kdesu)
+macro_optional_add_subdirectory(phonon)
+macro_optional_add_subdirectory(menu)
+macro_optional_add_subdirectory(khelpcenter)
+macro_optional_add_subdirectory(kwalletd)
+macro_optional_add_subdirectory(knotify)
+macro_optional_add_subdirectory(kuiserver)
+macro_optional_add_subdirectory(soliduiserver)
+macro_optional_add_subdirectory(solidautoeject)
+macro_optional_add_subdirectory(solid-device-automounter)
+macro_optional_add_subdirectory(solid-networkstatus)
+macro_optional_add_subdirectory(kdebugdialog)
+macro_optional_add_subdirectory(kcmshell)
+macro_optional_add_subdirectory(kioslave)
+macro_optional_add_subdirectory(kurifilter-plugins)
+macro_optional_add_subdirectory(kimgio)
+macro_optional_add_subdirectory(renamedlgplugins)
+if (Q_WS_X11)
+  macro_optional_add_subdirectory(kstart)
+endif (Q_WS_X11)
+macro_optional_add_subdirectory(kquitapp)
+# Background processes
+macro_optional_add_subdirectory(kpasswdserver)
+macro_optional_add_subdirectory(kdontchangethehostname)
+macro_optional_add_subdirectory(kglobalaccel)
+macro_optional_add_subdirectory(ktimezoned)
+# Command-line tools (e.g. for shell scripts)
+if ( UNIX )
+   macro_optional_add_subdirectory(kdeeject)
+endif ( UNIX )
+macro_optional_add_subdirectory(kfile)
+macro_optional_add_subdirectory(kiconfinder)
+macro_optional_add_subdirectory(kioclient)
+macro_optional_add_subdirectory(kioexec)
+macro_optional_add_subdirectory(ktraderclient)
+macro_optional_add_subdirectory(kreadconfig)
+macro_optional_add_subdirectory(kmimetypefinder)
+# UI Helper applications
+macro_optional_add_subdirectory(drkonqi)
+macro_optional_add_subdirectory(khelpcenter)
+macro_optional_add_subdirectory(knetattach)
+macro_optional_add_subdirectory(knewstuff)
+macro_optional_add_subdirectory(keditfiletype)
+# Default settings, content and config
+macro_optional_add_subdirectory(l10n)
+macro_optional_add_subdirectory(localization)
+macro_optional_add_subdirectory(kde-menu)
+# KDE integration for attica
+if(LIBATTICA_FOUND)
+  macro_optional_add_subdirectory(attica)
+endif(LIBATTICA_FOUND)
+
 ########### install files ###############
+install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${BIN_INSTALL_DIR})
 if(NOT WIN32)
   install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/startkde DESTINATION ${BIN_INSTALL_DIR})
 endif(NOT WIN32)
