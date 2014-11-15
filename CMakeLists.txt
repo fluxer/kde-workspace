@@ -163,8 +163,7 @@ set_package_properties(QJSON PROPERTIES DESCRIPTION "Library to manage JSON obje
                       )
 
 find_package(LibGcrypt 1.5.0 REQUIRED QUIET)
-set_package_properties(LibGcrypt PROPERTIES DESCRIPTION "Libgcrypt is a general purpose cryptographic library based on the code from GnuPG."
-                       URL "http://www.gnu.org/software/libgcrypt/"
+set_package_properties(LibGcrypt PROPERTIES
                        TYPE REQUIRED
                        PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
                       )

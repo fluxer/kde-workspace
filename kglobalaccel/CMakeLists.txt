@@ -38,9 +38,6 @@ install( FILES kglobalaccel.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
 # KNotify configuration
 install( FILES kglobalaccel.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kglobalaccel )
 
-# Install some update file (not yet working)
-#install( FILES kconf/kdedglobalaccel_kde42.upd DESTINATION ${DATA_INSTALL_DIR}/kconf_update)
-
 ###
 ### KDE 4.2 > 4.3 Migration Start
 ###

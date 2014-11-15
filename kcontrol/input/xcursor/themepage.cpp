@@ -389,7 +389,7 @@ void ThemePage::load()
 void ThemePage::defaults()
 {
     view->selectionModel()->clear();
-    QModelIndex defaultIndex = proxy->findIndex("Oxygen_Black");
+    QModelIndex defaultIndex = proxy->findIndex("Oxygen_White");
     view->setCurrentIndex(defaultIndex);
     preferredSize = 0;
     updateSizeComboBox();
