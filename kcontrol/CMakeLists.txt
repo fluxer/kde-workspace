@@ -48,7 +48,6 @@ if ( NOT WINCE )
     add_subdirectory( spellchecking )
 endif ( NOT WINCE )
 
-
 # TODO needs porting
 #add_subdirectory( smartcard )
 
