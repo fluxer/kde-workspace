@@ -38,7 +38,6 @@ endif (LIBSSH_FOUND)
 
 add_subdirectory( floppy )
 add_subdirectory( finger )
-add_subdirectory( man )
 check_include_files(rpc/rpc.h HAVE_RPC_RPC_H)
 add_feature_info("NFS kioslave" HAVE_RPC_RPC_H "The RPC library is needed to build the NFS kioslave")
 if(HAVE_RPC_RPC_H)
