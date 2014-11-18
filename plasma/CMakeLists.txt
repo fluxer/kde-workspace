@@ -9,11 +9,8 @@ MACRO(installPackage dir component)
    install(FILES ${dir}/metadata.desktop DESTINATION ${SERVICES_INSTALL_DIR} RENAME plasma-applet-${component}.desktop)
 ENDMACRO(installPackage)
 
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-   add_subdirectory(desktop)
-   add_subdirectory(netbook)
-   add_subdirectory(screensaver)
-endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-
+add_subdirectory(desktop)
+add_subdirectory(netbook)
+add_subdirectory(screensaver)
 add_subdirectory(generic)
 

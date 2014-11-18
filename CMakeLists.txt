@@ -209,10 +209,8 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINA
 add_subdirectory(cmake)
 add_subdirectory(libs)
 
-# system settings (kcontrol replacement)
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-   macro_optional_add_subdirectory( systemsettings )
-endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+
+macro_optional_add_subdirectory( systemsettings )
 
 # core apps
 macro_optional_add_subdirectory( kcheckpass )
@@ -229,36 +227,34 @@ if (NOT CMAKE_SYSTEM_NAME MATCHES Darwin)
    macro_optional_add_subdirectory( ksysguard )
 endif (NOT CMAKE_SYSTEM_NAME MATCHES Darwin)
 
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-   macro_optional_add_subdirectory(kcontrol)
-   macro_optional_add_subdirectory(klipper)
-   macro_optional_add_subdirectory(kmenuedit)
-   macro_optional_add_subdirectory(krunner)
-   macro_optional_add_subdirectory(solid-actions-kcm)
-   macro_optional_add_subdirectory(kstartupconfig)
-   macro_optional_add_subdirectory(freespacenotifier)
-   macro_optional_add_subdirectory(kscreensaver)
-   macro_optional_add_subdirectory(kinfocenter)
+macro_optional_add_subdirectory(kcontrol)
+macro_optional_add_subdirectory(klipper)
+macro_optional_add_subdirectory(kmenuedit)
+macro_optional_add_subdirectory(krunner)
+macro_optional_add_subdirectory(solid-actions-kcm)
+macro_optional_add_subdirectory(kstartupconfig)
+macro_optional_add_subdirectory(freespacenotifier)
+macro_optional_add_subdirectory(kscreensaver)
+macro_optional_add_subdirectory(kinfocenter)
 
-   # data
-   macro_optional_add_subdirectory(doc)
+# data
+macro_optional_add_subdirectory(doc)
 
-   if (Q_WS_X11)
-      macro_optional_add_subdirectory(ktouchpadenabler)
-   endif (Q_WS_X11)
+if (Q_WS_X11)
+    macro_optional_add_subdirectory(ktouchpadenabler)
+endif (Q_WS_X11)
 
-   macro_optional_add_subdirectory(kcminit)
-   macro_optional_add_subdirectory(khotkeys)
-   macro_optional_add_subdirectory(kwrited)
-   macro_optional_add_subdirectory(ksystraycmd)
-   macro_optional_add_subdirectory(appmenu)
+macro_optional_add_subdirectory(kcminit)
+macro_optional_add_subdirectory(khotkeys)
+macro_optional_add_subdirectory(kwrited)
+macro_optional_add_subdirectory(ksystraycmd)
+macro_optional_add_subdirectory(appmenu)
 
-   if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-      macro_optional_add_subdirectory( kdm )
-   else(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-      message(STATUS "Xau lib or Xdmcp lib was missing. kdm will not compile")
-   endif(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
+    macro_optional_add_subdirectory( kdm )
+else(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
+    message(STATUS "Xau lib or Xdmcp lib was missing. kdm will not compile")
+endif(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
 
 # data
 macro_optional_add_subdirectory(cursors)

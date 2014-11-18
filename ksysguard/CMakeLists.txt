@@ -1,12 +1,10 @@
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-   add_subdirectory( gui )
-   add_subdirectory( pics )
-   add_subdirectory( example )
+add_subdirectory( gui )
+add_subdirectory( pics )
+add_subdirectory( example )
 
-   ########### install files ###############
+########### install files ###############
 
-   kde4_install_icons( ${ICON_INSTALL_DIR}  )
-endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
+kde4_install_icons( ${ICON_INSTALL_DIR}  )
 
 add_subdirectory( ksysguardd )
 

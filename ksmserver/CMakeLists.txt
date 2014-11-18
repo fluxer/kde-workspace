@@ -1,7 +1,5 @@
 
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
 add_subdirectory( kcm )
-endif(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
 
 include_directories(
    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
