@@ -7,3 +7,5 @@ endif(QT_QTWEBKIT_FOUND)
 if (PYTHONLIBRARY_FOUND)
     macro_optional_add_subdirectory(python)
 endif (PYTHONLIBRARY_FOUND)
+
+macro_optional_add_subdirectory(javascript)
