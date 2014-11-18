@@ -10,7 +10,6 @@ MACRO(installPackage dir component)
 ENDMACRO(installPackage)
 
 add_subdirectory(desktop)
-add_subdirectory(netbook)
 add_subdirectory(screensaver)
 add_subdirectory(generic)
 
