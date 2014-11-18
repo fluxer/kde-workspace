@@ -303,7 +303,6 @@ macro_optional_add_subdirectory(kreadconfig)
 macro_optional_add_subdirectory(kmimetypefinder)
 # UI Helper applications
 macro_optional_add_subdirectory(drkonqi)
-macro_optional_add_subdirectory(khelpcenter)
 macro_optional_add_subdirectory(knetattach)
 macro_optional_add_subdirectory(knewstuff)
 macro_optional_add_subdirectory(keditfiletype)
