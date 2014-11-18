@@ -71,7 +71,7 @@
 <!-- @deprecated, @todo remove KDE5     -->
     <method name="decorationSupportedColors">
       <arg type="ai" direction="out"/>
-      <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QList&lt;int>"/>
+      <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int>"/>
     </method>
     <method name="stopActivity">
       <arg type="s" direction="in"/>

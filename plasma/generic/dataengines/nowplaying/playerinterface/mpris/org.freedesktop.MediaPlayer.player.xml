@@ -26,12 +26,12 @@
 
     <method name="GetStatus">
         <arg type="(iiii)" direction="out"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="MprisDBusStatus" />
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="MprisDBusStatus" />
     </method>
 
     <method name="GetMetadata">
         <arg type="a{sv}" direction="out"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QVariantMap"/>
     </method>
 
     <method name="GetCaps">
@@ -56,12 +56,12 @@
 
     <signal name="TrackChange">
         <arg type="a{sv}"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="QVariantMap"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QVariantMap"/>
     </signal>
 
     <signal name="StatusChange">
         <arg type="(iiii)"/>
-        <annotation name="com.trolltech.QtDBus.QtTypeName.In0" value="MprisDBusStatus"/>
+        <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="MprisDBusStatus"/>
     </signal>
 
     <signal name="CapsChange">
