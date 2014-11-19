@@ -196,8 +196,6 @@ QString SystemInformation::fetchOSBasicInformation() const
     return QLatin1String("Solaris");
 #elif defined(Q_OS_CYGWIN)
     return QLatin1String("Cygwin");
-#elif defined(Q_OS_DARWIN)
-    return QLatin1String("OS X");
 #elif defined(Q_OS_WIN32)
     return QLatin1String("MS Windows");
 #else
