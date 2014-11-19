@@ -764,7 +764,6 @@ void MenuLauncherApplet::showMenu(bool pressed)
                 leavemodel->updateModel();
                 d->addModel(leavemodel, Leave, Kickoff::MenuView::MergeFirstLevel, Kickoff::MenuView::Name);
             } else {
-#ifndef Q_WS_WIN
                 QSet< Solid::PowerManagement::SleepState > spdMethods = Solid::PowerManagement::supportedSleepStates();
                 if (vtname == "Standby") {
                     if (spdMethods.contains(Solid::PowerManagement::StandbyState))
@@ -782,7 +781,6 @@ void MenuLauncherApplet::showMenu(bool pressed)
                     if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeHalt))
                         menuview->addAction(KIcon(d->viewIcon(Shutdown)), d->viewText(Shutdown))->setData(KUrl("leave:/shutdown"));
                 }
-#endif
             }
         }
     }

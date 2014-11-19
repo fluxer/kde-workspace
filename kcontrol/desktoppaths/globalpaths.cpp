@@ -151,13 +151,8 @@ void DesktopPathConfig::defaults()
 // the following method is copied from kdelibs/kdecore/config/kconfiggroup.cpp
 static bool cleanHomeDirPath( QString &path, const QString &homeDir )
 {
-#ifdef Q_WS_WIN //safer
-    if (!QDir::convertSeparators(path).startsWith(QDir::convertSeparators(homeDir)))
-        return false;
-#else
     if (!path.startsWith(homeDir))
         return false;
-#endif
 
     int len = homeDir.length();
     // replace by "$HOME" if possible

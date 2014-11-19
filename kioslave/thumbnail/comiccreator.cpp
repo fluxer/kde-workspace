@@ -280,22 +280,14 @@ int ComicCreator::startProcess(const QString& processPath, const QStringList& ar
     /// Run a process and store std::out, std::err data in their respective buffers.
     int ret = 0;
 
-#if defined(Q_OS_WIN)
-    m_process.reset(new QProcess(this));
-#else
     m_process.reset(new KPtyProcess(this));
     m_process->setOutputChannelMode(KProcess::SeparateChannels);
-#endif
 
     connect(m_process.data(), SIGNAL(readyReadStandardOutput()), SLOT(readProcessOut()));
     connect(m_process.data(), SIGNAL(readyReadStandardError()), SLOT(readProcessErr()));
     connect(m_process.data(), SIGNAL(finished(int, QProcess::ExitStatus)),
         SLOT(finishedProcess(int, QProcess::ExitStatus)));
 
-#if defined(Q_OS_WIN)
-    m_process->start(processPath, args, QIODevice::ReadWrite | QIODevice::Unbuffered);
-    ret = m_process->waitForFinished(-1) ? 0 : 1;
-#else
     m_process->setProgram(processPath, args);
     m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered);
     m_process->start();
@@ -303,7 +295,6 @@ int ComicCreator::startProcess(const QString& processPath, const QStringList& ar
     m_loop = &loop;
     ret = loop.exec(QEventLoop::WaitForMoreEvents);
     m_loop = 0;
-#endif
 
     return ret;
 }

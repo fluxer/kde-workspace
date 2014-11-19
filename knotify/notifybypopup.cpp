@@ -71,9 +71,6 @@ NotifyByPopup::NotifyByPopup(QObject *parent)
         if(!m_dbusServiceExists)
 	{
 		bool startfdo = false;
-#ifdef Q_WS_WIN
-		startfdo = true;
-#else
 		if (qgetenv("KDE_FULL_SESSION").isEmpty())
 		{
 			QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.DBus",
@@ -91,7 +88,6 @@ NotifyByPopup::NotifyByPopup(QObject *parent)
 				m_dbusServiceExists = true;
 			}
 		}
-#endif
 		if (startfdo)
 			QDBusConnection::sessionBus().interface()->startService(dbusServiceName);
 	}

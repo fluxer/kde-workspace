@@ -40,10 +40,6 @@
 #include "sha1.h"
 #include "cbc.h"
 
-#ifdef Q_OS_WIN 
-#include <windows.h>
-#include <wincrypt.h>
-#endif
 
 #define KWALLET_CIPHER_BLOWFISH_CBC 0
 #define KWALLET_CIPHER_3DES_CBC     1 // unsupported
@@ -57,26 +53,6 @@ namespace KWallet {
 
 static int getRandomBlock(QByteArray& randBlock) {
 
-#ifdef Q_OS_WIN //krazy:exclude=cpp
-
-    // Use windows crypto API to get randomness on win32
-    // HACK: this should be done using qca
-    HCRYPTPROV hProv;
-
-    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_FULL,
-        CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) return -1; // couldn't get random data
-
-    if (!CryptGenRandom(hProv, static_cast<DWORD>(randBlock.size()),
-        (BYTE*)randBlock.data())) {
-        return -3; // read error
-    }
-
-    // release the crypto context
-    CryptReleaseContext(hProv, 0);
-
-    return randBlock.size();
-
-#else
 
     // First try /dev/urandom
     if (QFile::exists("/dev/urandom")) {
@@ -136,7 +112,6 @@ static int getRandomBlock(QByteArray& randBlock) {
     // Couldn't get any random data!!
     return -1;
 
-#endif
 }
 
 

@@ -305,10 +305,6 @@ namespace Oxygen
         {
             widget->setAttribute( Qt::WA_TranslucentBackground );
 
-            #ifdef Q_WS_WIN
-            //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
-            widget->setWindowFlags( widget->windowFlags() | Qt::FramelessWindowHint );
-            #endif
         }
 
         if( QAbstractItemView *itemView = qobject_cast<QAbstractItemView*>( widget ) )
@@ -390,10 +386,6 @@ namespace Oxygen
             widget->setBackgroundRole( QPalette::NoRole );
             widget->setAttribute( Qt::WA_TranslucentBackground );
 
-            #ifdef Q_WS_WIN
-            //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
-            widget->setWindowFlags( widget->windowFlags() | Qt::FramelessWindowHint );
-            #endif
 
         } else if( qobject_cast<QScrollBar*>( widget ) ) {
 
@@ -431,19 +423,11 @@ namespace Oxygen
         } else if( qobject_cast<QMenu*>( widget ) ) {
 
             widget->setAttribute( Qt::WA_TranslucentBackground );
-            #ifdef Q_WS_WIN
-            //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
-            widget->setWindowFlags( widget->windowFlags() | Qt::FramelessWindowHint );
-            #endif
 
         } else if( widget->inherits( "QComboBoxPrivateContainer" ) ) {
 
             addEventFilter( widget );
             widget->setAttribute( Qt::WA_TranslucentBackground );
-            #ifdef Q_WS_WIN
-            //FramelessWindowHint is needed on windows to make WA_TranslucentBackground work properly
-            widget->setWindowFlags( widget->windowFlags() | Qt::FramelessWindowHint );
-            #endif
 
         } else if( qobject_cast<QFrame*>( widget ) && widget->parent() && widget->parent()->inherits( "KTitleWidget" ) ) {
 
@@ -1312,9 +1296,7 @@ namespace Oxygen
 
                     helper().renderWindowBackground( &painter, r, dockWidget, color );
 
-                    #ifndef Q_WS_WIN
                     helper().drawFloatFrame( &painter, r, color, !helper().compositingActive() );
-                    #endif
 
                 } else {
 
@@ -1481,10 +1463,8 @@ namespace Oxygen
 
                     }
 
-                    #ifndef Q_WS_WIN
                     if( helper().compositingActive() ) helper().drawFloatFrame( &painter, r.adjusted( -1, -1, 1, 1 ), color, false );
                     else helper().drawFloatFrame( &painter, r, color, true );
-                    #endif
 
                     // do not propagate
                     return true;

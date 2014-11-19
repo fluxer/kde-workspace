@@ -214,11 +214,6 @@ public:
 	WWinOwnDC		= 0x00000000,
 	WMacNoSheet             = 0x00000000,
         WMacDrawer              = 0x00000000,
-#elif defined(Q_WS_MAC)
-	WX11BypassWM		= 0x00000000,
-	WWinOwnDC		= 0x00000000,
-	WMacNoSheet             = 0x01000000,
-        WMacDrawer              = 0x20000000,
 #else
 	WX11BypassWM		= 0x00000000,
 	WWinOwnDC		= 0x01000000,
@@ -893,11 +888,7 @@ public:
 
     // "handle" type for system objects. Documented as \internal in
     // qapplication.cpp
-#if defined(Q_WS_MAC)
-    typedef void * HANDLE;
-#elif defined(Q_WS_WIN)
-    typedef void *HANDLE;
-#elif defined(Q_WS_X11)
+#if   defined(Q_WS_X11)
     typedef unsigned long HANDLE;
 #elif defined(Q_WS_QWS)
     typedef void * HANDLE;

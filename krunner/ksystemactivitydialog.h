@@ -19,7 +19,6 @@
 #ifndef KSYSTEMACTIVITYDIALOG__H
 #define KSYSTEMACTIVITYDIALOG__H
 
-#ifndef Q_WS_WIN
 
 #include <KDialog>
 
@@ -58,6 +57,5 @@ class KSystemActivityDialog : public KDialog
 
         KSysGuardProcessList m_processList;
 };
-#endif // not Q_WS_WIN
 
 #endif // KSYSTEMACTIVITYDIALOG__H

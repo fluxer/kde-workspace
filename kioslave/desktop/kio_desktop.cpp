@@ -64,7 +64,6 @@ DesktopProtocol::~DesktopProtocol()
 
 void DesktopProtocol::checkLocalInstall()
 {
-#ifndef Q_WS_WIN
     // We can't use KGlobalSettings::desktopPath() here, since it returns the home dir
     // if the desktop folder doesn't exist.
     QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
@@ -145,7 +144,6 @@ void DesktopProtocol::checkLocalInstall()
                 trash.desktopGroup().writeEntry("EmptyIcon", "user-trash");
         }
     }
-#endif
 }
 
 bool DesktopProtocol::rewriteUrl(const KUrl &url, KUrl &newUrl)

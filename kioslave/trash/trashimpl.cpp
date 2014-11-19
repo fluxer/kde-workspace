@@ -219,9 +219,7 @@ bool TrashImpl::createInfo( const QString& origPath, int& trashId, QString& file
          * off_t should be 64bit on Unix systems to have large file support
          * FIXME: on windows this gets disabled until trash gets integrated
          */
-#ifndef Q_OS_WIN
     char off_t_should_be_64bit[sizeof(off_t) >= 8 ? 1:-1]; (void)off_t_should_be_64bit;
-#endif
     KDE_struct_stat buff_src;
     if ( KDE_lstat( origPath_c.data(), &buff_src ) == -1 ) {
         if ( errno == EACCES )
@@ -308,11 +306,7 @@ QString TrashImpl::makeRelativePath( const QString& topdir, const QString& path 
 {
     const QString realPath = KStandardDirs::realFilePath( path );
     // topdir ends with '/'
-#ifndef Q_OS_WIN
     if ( realPath.startsWith( topdir ) ) {
-#else
-    if ( realPath.startsWith( topdir, Qt::CaseInsensitive ) ) {
-#endif
         const QString rel = realPath.mid( topdir.length() );
         Q_ASSERT( rel[0] != QLatin1Char('/') );
         return rel;

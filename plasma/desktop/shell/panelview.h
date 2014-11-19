@@ -32,10 +32,6 @@
 #include <fixx11h.h>
 #endif
 
-#ifdef Q_WS_WIN
-#include <windows.h>
-#include <shellapi.h>
-#endif
 
 class QWidget;
 class QTimeLine;
@@ -217,14 +213,6 @@ private:
     void positionSpacer(const QPoint pos);
     bool hasPopup();
 
-#ifdef Q_WS_WIN
-    bool registerAccessBar(bool fRegister);
-    void appBarQuerySetPos(LPRECT lprc);
-    void appBarCallback(WPARAM message, LPARAM lParam);
-    void appBarPosChanged();
-    bool winEvent(MSG *message, long *result);
-    APPBARDATA abd;
-#endif
 
 private Q_SLOTS:
     void immutabilityChanged(Plasma::ImmutabilityType immutability);

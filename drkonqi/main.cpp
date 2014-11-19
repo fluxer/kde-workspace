@@ -43,7 +43,6 @@ static const char description[] = I18N_NOOP("The KDE Crash Handler gives the use
 
 int main(int argc, char* argv[])
 {
-#ifndef Q_OS_WIN //krazy:exclude=cpp
 // TODO - Investigate and fix this, or work around it as follows...
 // #if !defined(Q_OS_WIN) && !defined(Q_OS_MAC)
 // When starting Dr Konqi via kdeinit4, Apple OS X aborts us unconditionally for
@@ -53,7 +52,6 @@ int main(int argc, char* argv[])
     if (setuid(getuid()) < 0 && geteuid() != getuid()) {
         exit(255);
     }
-#endif
 
     // Prevent KApplication from setting the crash handler. We will set it later...
     setenv("KDE_DEBUG", "true", 1);

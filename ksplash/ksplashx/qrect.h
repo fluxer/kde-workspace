@@ -145,17 +145,10 @@ private:
 #if defined(Q_WS_X11) || defined(Q_OS_TEMP)
     friend void qt_setCoords( QRect *r, int xp1, int yp1, int xp2, int yp2 );
 #endif
-#if defined(Q_WS_MAC)
-    QCOORD y1;
-    QCOORD x1;
-    QCOORD y2;
-    QCOORD x2;
-#else
     QCOORD x1;
     QCOORD y1;
     QCOORD x2;
     QCOORD y2;
-#endif
 };
 
 Q_EXPORT bool operator==( const QRect &, const QRect & );

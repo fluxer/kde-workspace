@@ -27,13 +27,11 @@
 
 #include <KDebug>
 
-#ifndef Q_OS_WIN
 extern "C"
 {
     /* let it still work, even someone installed a non-SuSE openslp */
     SLPEXP const char* SLPAPI SLPGetMDNSName( SLPHandle hSLP, const char* pcURL ) __attribute__ ((weak));
 }
-#endif
 
 namespace Mollet
 {

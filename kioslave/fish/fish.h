@@ -82,11 +82,7 @@ private: // Private attributes
   /** fd for reading and writing to the process */
   int childFd;
   /** buffer for data to be written */
-#ifndef Q_WS_WIN
   const char *outBuf;
-#else
-  QByteArray outBuf;
-#endif
   /** current write position in buffer */
   KIO::fileoffset_t outBufPos;
   /** length of buffer */
@@ -184,11 +180,7 @@ protected: // Protected attributes
   int fishCodeLen;
 protected: // Protected methods
   /** manages initial communication setup including password queries */
-#ifndef Q_WS_WIN
   int establishConnection(char *buffer, KIO::fileoffset_t buflen);
-#else
-  int establishConnection(const QByteArray &buffer);
-#endif
   int received(const char *buffer, KIO::fileoffset_t buflen);
   void sent();
   /** builds each FISH request and sets the error counter */
@@ -202,11 +194,7 @@ protected: // Protected methods
   /** creates the subprocess */
   bool connectionStart();
   /** writes one chunk of data to stdin of child process */
-#ifndef Q_WS_WIN
   void writeChild(const char *buf, KIO::fileoffset_t len);
-#else
-  void writeChild(const QByteArray &buf, KIO::fileoffset_t len);
-#endif
   /** parses response from server and acts accordingly */
   void manageConnection(const QString &line);
   /** writes to process */

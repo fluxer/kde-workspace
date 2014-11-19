@@ -45,10 +45,6 @@
 #include <assert.h>
 
 // quick fix to get random numbers on win32
-#ifdef Q_OS_WIN //krazy:exclude=cpp
-  #include <windows.h>
-  #include <wincrypt.h>
-#endif
 
 #define KWALLET_VERSION_MAJOR		0
 #define KWALLET_VERSION_MINOR		1

@@ -448,11 +448,9 @@ QString sftpProtocol::canonicalizePath(const QString &path) {
 sftpProtocol::sftpProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
              : SlaveBase("kio_sftp", pool_socket, app_socket),
                mConnected(false), mPort(-1), mSession(NULL), mSftp(NULL), mPublicKeyAuthInfo(0) {
-#ifndef Q_WS_WIN
   kDebug(KIO_SFTP_DB) << "pid = " << getpid();
 
   kDebug(KIO_SFTP_DB) << "debug = " << getenv("KIO_SFTP_LOG_VERBOSITY");
-#endif
 
   mCallbacks = (ssh_callbacks) malloc(sizeof(struct ssh_callbacks_struct));
   if (mCallbacks == NULL) {
@@ -493,9 +491,7 @@ sftpProtocol::sftpProtocol(const QByteArray &pool_socket, const QByteArray &app_
 }
 
 sftpProtocol::~sftpProtocol() {
-#ifndef Q_WS_WIN
   kDebug(KIO_SFTP_DB) << "pid = " << getpid();
-#endif
   closeConnection();
 
   delete mCallbacks;

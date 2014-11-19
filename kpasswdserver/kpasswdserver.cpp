@@ -574,11 +574,7 @@ KPasswdServer::processRequest()
                                            QStringList(), QString(), 0L,
                                            (KMessageBox::Notify | KMessageBox::NoExec));
 
-        #ifndef Q_WS_WIN
             KWindowSystem::setMainWindow(dlg, request->windowId);
-        #else
-            KWindowSystem::setMainWindow(dlg, (HWND)(long)request->windowId);
-        #endif
 
             kDebug(debugArea()) << "Calling open on retry dialog" << dlg;
             m_authRetryInProgress.insert(dlg, request.take());
@@ -847,11 +843,7 @@ void KPasswdServer::showPasswordDialog (KPasswdServer::Request* request)
         dialogFlags |= KPasswordDialog::ShowKeepPassword;
 
     // instantiate dialog
-#ifndef Q_WS_WIN
     kDebug(debugArea()) << "Widget for" << request->windowId << QWidget::find(request->windowId) << QApplication::activeWindow();
-#else
-    kDebug(debugArea()) << "Widget for" << request->windowId << QWidget::find((HWND)request->windowId) << QApplication::activeWindow();
-#endif
 
     KPasswordDialog* dlg = new KPasswordDialog(0, dialogFlags);
     connect(dlg, SIGNAL(finished(int)), this, SLOT(passwordDialogDone(int)));
@@ -884,11 +876,7 @@ void KPasswdServer::showPasswordDialog (KPasswdServer::Request* request)
     if (info.getExtraField(AUTHINFO_EXTRAFIELD_ANONYMOUS).isValid () && password.isEmpty() && username.isEmpty())
         dlg->setAnonymousMode(info.getExtraField(AUTHINFO_EXTRAFIELD_ANONYMOUS).toBool());
 
-#ifndef Q_WS_WIN
     KWindowSystem::setMainWindow(dlg, request->windowId);
-#else
-    KWindowSystem::setMainWindow(dlg, (HWND)request->windowId);
-#endif
 
     kDebug(debugArea()) << "Showing password dialog" << dlg << ", window-id=" << request->windowId;
     m_authInProgress.insert(dlg, request);

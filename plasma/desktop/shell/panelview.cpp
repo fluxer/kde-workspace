@@ -231,9 +231,6 @@ PanelView::PanelView(Plasma::Containment *panel, int id, QWidget *parent)
     pal.setBrush(backgroundRole(), Qt::transparent);
     setPalette(pal);
 
-#ifdef Q_WS_WIN
-    registerAccessBar(true);
-#endif
 
     KConfigGroup viewConfig = config();
     KConfigGroup sizes = KConfigGroup(&viewConfig, "Sizes");
@@ -283,9 +280,6 @@ PanelView::~PanelView()
 
     delete m_glowBar;
     destroyUnhideTrigger();
-#ifdef Q_WS_WIN
-    registerAccessBar(false);
-#endif
 }
 
 void PanelView::setContainment(Plasma::Containment *containment)
@@ -418,9 +412,6 @@ void PanelView::setLocation(Plasma::Location location)
     c->resize(panelWidth, panelHeight);
     c->setMinimumSize(min);
     c->setMaximumSize(max);
-#ifdef Q_WS_WIN
-    appBarPosChanged();
-#endif
     const QRect screenRect = PlasmaApp::self()->corona()->screenGeometry(c->screen());
     pinchContainment(screenRect);
     KWindowSystem::setOnAllDesktops(winId(), true);
@@ -1152,9 +1143,6 @@ void PanelView::resizeEvent(QResizeEvent *event)
     recreateUnhideTrigger();
     m_strutsTimer->stop();
     m_strutsTimer->start(STRUTSTIMERDELAY);
-#ifdef Q_WS_WIN
-    appBarPosChanged();
-#endif
 
     if (containment()) {
         foreach (Plasma::Applet *applet, containment()->applets()) {

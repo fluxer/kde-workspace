@@ -168,11 +168,7 @@ DebuggerManager *KCrashBackend::constructDebuggerManager()
 {
     QList<Debugger> internalDebuggers = Debugger::availableInternalDebuggers("KCrash");
     KConfigGroup config(KGlobal::config(), "DrKonqi");
-#ifndef Q_OS_WIN
     QString defaultDebuggerName = config.readEntry("Debugger", QString("gdb"));
-#else
-    QString defaultDebuggerName = config.readEntry("Debugger", QString("kdbgwin"));
-#endif
 
     Debugger firstKnownGoodDebugger, preferredDebugger;
     foreach (const Debugger & debugger, internalDebuggers) {

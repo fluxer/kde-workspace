@@ -168,13 +168,8 @@
   Global colors
  *****************************************************************************/
 
-#if defined(Q_WS_WIN)
-#define COLOR0_PIX 0x00ffffff
-#define COLOR1_PIX 0
-#else
 #define COLOR0_PIX 0
 #define COLOR1_PIX 1
-#endif
 
 static QColor stdcol[19];
 
@@ -913,13 +908,7 @@ uint QColor::pixel() const
     if ( isDirty() )
 	return ((QColor*)this)->alloc();
     else if ( colormodel == d8 )
-#ifdef Q_WS_WIN
-	// since d.d8.pix is uchar we have to use the PALETTEINDEX
-	// macro to get the respective palette entry index.
-	return (0x01000000 | (int)(short)(d.d8.pix));
-#else
 	return d.d8.pix;
-#endif
     else
 	return d.d32.pix;
 }

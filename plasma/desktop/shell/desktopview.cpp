@@ -45,12 +45,6 @@
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
 
-#ifdef Q_WS_WIN
-#include "windows.h"
-#include "windef.h"
-#include "wingdi.h"
-#include "winuser.h"
-#endif
 
 DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *parent)
     : Plasma::View(containment, id, parent),
@@ -71,14 +65,7 @@ DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *pare
      */
 
     //setFocusPolicy(Qt::NoFocus);
-#ifdef Q_WS_WIN
-    setWindowFlags(Qt::FramelessWindowHint);
-    SetWindowPos(winId(), HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-    HWND hwndDesktop = ::FindWindowW(L"Progman", NULL);
-    SetParent(winId(), hwndDesktop);
-#else
     setWindowFlags(windowFlags() | Qt::FramelessWindowHint);
-#endif
 
     checkDesktopAffiliation();
 
@@ -314,7 +301,6 @@ void DesktopView::toolBoxOpened(bool open)
         return;
     }
 
-#ifndef Q_WS_WIN
     NETRootInfo info(QX11Info::display(), NET::Supported);
     if (!info.isSupported(NET::WM2ShowingDesktop)) {
         return;
@@ -329,7 +315,6 @@ void DesktopView::toolBoxOpened(bool open)
     }
 
     info.setShowingDesktop(open);
-#endif
 }
 
 void DesktopView::showWidgetExplorer()

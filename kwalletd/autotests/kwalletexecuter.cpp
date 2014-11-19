@@ -35,9 +35,7 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 
-#ifndef Q_OS_WIN
 extern char **environ;
-#endif
 
 KWalletExecuter::KWalletExecuter(QObject* parent): QObject(parent)
 {

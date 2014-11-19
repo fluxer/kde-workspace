@@ -46,9 +46,6 @@
 
 #include <kworkspace/kworkspace.h>
 
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
 
 class EmptyGraphicsItem : public QGraphicsWidget
 {
@@ -806,13 +803,9 @@ void DesktopToolBox::lockScreen()
         return;
     }
 
-#ifndef Q_OS_WIN
     const QString interface("org.freedesktop.ScreenSaver");
     QDBusInterface screensaver(interface, "/ScreenSaver");
     screensaver.asyncCall("Lock");
-#else
-    LockWorkStation();
-#endif // !Q_OS_WIN
 }
 
 void DesktopToolBox::startLogout()

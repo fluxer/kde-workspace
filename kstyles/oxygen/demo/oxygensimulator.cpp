@@ -49,10 +49,6 @@
 #include <QtGui/QStyleOptionSlider>
 #include <QtGui/QToolButton>
 
-#ifdef Q_OS_WIN
-/* need windows.h include for Sleep function*/
-#include <windows.h>
-#endif
 
 #ifdef Q_OS_UNIX
 #include <ctime>
@@ -796,12 +792,8 @@ namespace Oxygen
             int ms( 10 );
 
             // sleep
-            #ifdef Q_OS_WIN
-            Sleep(uint(ms));
-            #else
             struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
             nanosleep(&ts, NULL);
-            #endif
 
         }
 

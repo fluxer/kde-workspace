@@ -20,13 +20,6 @@
 
 #include "plasmaapp.h"
 
-#ifdef Q_WS_WIN
-#ifdef _WIN32_WINNT
-#undef _WIN32_WINNT
-#endif
-#define _WIN32_WINNT 0x0500
-#include <windows.h>
-#endif
 
 #include <unistd.h>
 
@@ -239,15 +232,6 @@ PlasmaApp::PlasmaApp()
     len = sizeof(memorySize);
     sysctl(mib, 2, &memorySize, &len, NULL, 0);
     memorySize /= 1024;
-#endif
-#ifdef Q_WS_WIN
-    size_t memorySize;
-
-    MEMORYSTATUSEX statex;
-    statex.dwLength = sizeof (statex);
-    GlobalMemoryStatusEx (&statex);
-
-    memorySize = (statex.ullTotalPhys/1024) + (statex.ullTotalPageFile/1024);
 #endif
     // If you have no suitable sysconf() interface and are not FreeBSD,
     // then you are out of luck and get a compile error.

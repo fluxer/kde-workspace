@@ -16,7 +16,6 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef Q_WS_WIN
 
 #include "ksystemactivitydialog.h"
 
@@ -110,5 +109,4 @@ void KSystemActivityDialog::saveDialogSettings()
     KGlobal::config()->sync();
 }
 
-#endif // not Q_WS_WIN
 

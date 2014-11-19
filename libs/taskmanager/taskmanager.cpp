@@ -44,9 +44,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QX11Info>
 #endif
 
-#ifdef Q_WS_WIN
-#include <windows.h>
-#endif
 
 #include <KActivities/Consumer>
 
@@ -517,11 +514,9 @@ bool TaskManager::isOnTop(const Task *task) const
             continue;
         }
 
-#ifndef Q_WS_WIN
         if (!t->isIconified() && (t->isAlwaysOnTop() == task->isAlwaysOnTop())) {
             return false;
         }
-#endif
     }
 
     return false;

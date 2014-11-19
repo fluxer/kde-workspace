@@ -93,13 +93,8 @@ public:
 private:
     static void warningDivByZero();
 
-#if defined(Q_WS_MAC)
-    QCOORD yp;
-    QCOORD xp;
-#else
     QCOORD xp;
     QCOORD yp;
-#endif
 };
 
 

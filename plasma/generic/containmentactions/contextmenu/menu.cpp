@@ -39,10 +39,6 @@
 #include "krunner_interface.h"
 #include "screensaver_interface.h"
 
-#ifdef Q_OS_WIN
-#define _WIN32_WINNT 0x0500 // require NT 5.0 (win 2k pro)
-#include <windows.h>
-#endif // Q_OS_WIN
 
 ContextMenu::ContextMenu(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args),
@@ -208,16 +204,12 @@ void ContextMenu::lockScreen()
         return;
     }
 
-#ifndef Q_OS_WIN
     QString interface("org.freedesktop.ScreenSaver");
     org::freedesktop::ScreenSaver screensaver(interface, "/ScreenSaver",
                                               QDBusConnection::sessionBus());
     if (screensaver.isValid()) {
         screensaver.Lock();
     }
-#else
-    LockWorkStation();
-#endif // !Q_OS_WIN
 }
 
 void ContextMenu::startLogout()

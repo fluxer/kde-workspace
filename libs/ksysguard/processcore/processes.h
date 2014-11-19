@@ -50,11 +50,7 @@ namespace KSysGuard
      *
      * @author John Tapsell <tapsell@kde.org>
      */
-#ifdef Q_WS_WIN
-    class Processes : public QObject
-#else
     class KDE_EXPORT Processes : public QObject
-#endif
     {
         Q_OBJECT
 

@@ -364,12 +364,10 @@ int DialogProxy::windowFlags() const
     return (int)m_flags;
 }
 
-#ifndef Q_WS_WIN
 qulonglong DialogProxy::windowId() const
 {
     return m_dialog->winId();
 }
-#endif
 
 void DialogProxy::setWindowFlags(const int flags)
 {

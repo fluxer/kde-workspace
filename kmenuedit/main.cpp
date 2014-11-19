@@ -25,9 +25,7 @@
 #include <KAboutData>
 
 #include "kmenuedit.h"
-#ifndef Q_WS_WIN
 #include "khotkeys.h"
-#endif
 
 static const char description[] = I18N_NOOP("KDE menu editor");
 static const char version[] = "0.9";
@@ -38,9 +36,7 @@ class KMenuApplication : public KUniqueApplication
 {
 public:
    KMenuApplication() { }
-#ifndef Q_WS_WIN
    virtual ~KMenuApplication() { KHotKeys::cleanup(); }
-#endif
    virtual int newInstance()
    {
       KCmdLineArgs *args = KCmdLineArgs::parsedArgs();

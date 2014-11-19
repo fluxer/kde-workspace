@@ -37,11 +37,7 @@
 #include <QImage>
 #include <QtCore/QScopedPointer>
 
-#if defined(Q_OS_WIN)
-    #include <QtCore/QProcess>
-#else
     #include <kptyprocess.h>
-#endif
 
 class KArchiveDirectory;
 class QEventLoop;
@@ -81,11 +77,7 @@ class ComicCreator : public QObject, public ThumbCreator
         void finishedProcess(int exitCode, QProcess::ExitStatus exitStatus);
 
     private:
-#if defined(Q_OS_WIN)
-        QScopedPointer<QProcess> m_process;
-#else
         QScopedPointer<KPtyProcess> m_process;
-#endif
         QByteArray m_stdOut;
         QByteArray m_stdErr;
         QEventLoop* m_loop;

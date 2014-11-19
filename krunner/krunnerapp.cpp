@@ -84,10 +84,8 @@ void KRunnerApp::cleanUp()
     m_interface = 0;
     delete m_runnerManager;
     m_runnerManager = 0;
-#ifndef Q_WS_WIN
     delete m_tasks;
     m_tasks = 0;
-#endif
     KGlobal::config()->sync();
 }
 
@@ -233,7 +231,6 @@ void KRunnerApp::showTaskManager()
 
 void KRunnerApp::showTaskManagerWithFilter(const QString &filterText)
 {
-#ifndef Q_WS_WIN
     //kDebug(1204) << "Launching KSysGuard...";
     if (!m_tasks) {
         m_tasks = new KSystemActivityDialog;
@@ -247,7 +244,6 @@ void KRunnerApp::showTaskManagerWithFilter(const QString &filterText)
 
     m_tasks->run();
     m_tasks->setFilterText(filterText);
-#endif
 }
 
 void KRunnerApp::display()
@@ -348,10 +344,8 @@ void KRunnerApp::clearHistory()
 
 void KRunnerApp::taskDialogFinished()
 {
-#ifndef Q_WS_WIN
     m_tasks->deleteLater();
     m_tasks = 0;
-#endif
 }
 
 int KRunnerApp::newInstance()

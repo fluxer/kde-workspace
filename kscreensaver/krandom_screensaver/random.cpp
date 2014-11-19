@@ -96,11 +96,7 @@ int main(int argc, char *argv[])
 
 	if (args->isSet("window-id"))
 	{
-#ifdef Q_WS_WIN
-		windowId = (HWND) args->getOption("window-id").toULong();
-#else
 		windowId = args->getOption("window-id").toInt();
-#endif
 	}
 
 #ifdef Q_WS_X11
@@ -155,11 +151,7 @@ int main(int argc, char *argv[])
             cmd = service->exec();
 
     QHash<QChar, QString> keyMap;
-#ifdef Q_WS_WIN
-    keyMap.insert('w', QString::number((quintptr)windowId));
-#else
     keyMap.insert('w', QString::number(windowId));
-#endif
     const QStringList words = KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(cmd, keyMap));
     if (!words.isEmpty()) {
         QString exeFile = KStandardDirs::findExe(words.first());

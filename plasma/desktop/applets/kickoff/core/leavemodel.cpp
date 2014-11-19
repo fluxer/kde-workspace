@@ -151,7 +151,6 @@ void LeaveModel::updateModel()
     bool addSystemSession = false;
 
 //FIXME: the proper fix is to implement the KWorkSpace methods for Windows
-#ifndef Q_WS_WIN
     QSet< Solid::PowerManagement::SleepState > spdMethods = Solid::PowerManagement::supportedSleepStates();
     if (spdMethods.contains(Solid::PowerManagement::StandbyState)) {
         QStandardItem *standbyOption = createStandardItem("leave:/standby");
@@ -186,7 +185,6 @@ void LeaveModel::updateModel()
             addSystemSession = true;
         }
     }
-#endif
 
     appendRow(sessionOptions);
     if (addSystemSession) {

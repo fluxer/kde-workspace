@@ -143,13 +143,6 @@ public:
     static int  currentAllocContext();
     static void destroyAllocContext( int );
 
-#if defined(Q_WS_WIN)
-    static const QRgb* palette( int* numEntries = 0 );
-    static int setPaletteEntries( const QRgb* entries, int numEntries,
-				  int base = -1 );
-    static HPALETTE hPal()  { return hpal; }
-    static uint	realizePal( QWidget * );
-#endif
 
     static void initialize();
     static void cleanup();
@@ -170,9 +163,6 @@ private:
     static QColor* globalColors();
     static bool color_init;
     static bool globals_init;
-#if defined(Q_WS_WIN)
-    static HPALETTE hpal;
-#endif
     static enum ColorModel { d8, d32 } colormodel;
     union {
 	QRgb argb;
