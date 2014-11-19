@@ -260,12 +260,13 @@ macro_optional_add_subdirectory(plasma)
 macro_optional_add_subdirectory(statusnotifierwatcher)
 macro_optional_add_subdirectory(kstyles)
 
-# imported from kde-runtime
+# imported from kde-runtime and other sub-projects
 macro_optional_add_subdirectory(kdesu)
 macro_optional_add_subdirectory(phonon)
 macro_optional_add_subdirectory(menu)
 macro_optional_add_subdirectory(khelpcenter)
 macro_optional_add_subdirectory(kwalletd)
+macro_optional_add_subdirectory(kwalletmanager)
 macro_optional_add_subdirectory(knotify)
 macro_optional_add_subdirectory(kuiserver)
 macro_optional_add_subdirectory(soliduiserver)
