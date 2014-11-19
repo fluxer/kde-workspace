@@ -25,21 +25,8 @@
 /* needed for KDE_EXPORT macros */
 #include <kdemacros.h>
 
-#if defined _WIN32 || defined _WIN64
-
-#ifndef KFONTINST_EXPORT
-# if defined(MAKE_KFONTINST_LIB)
-#  define KFONTINST_EXPORT KDE_EXPORT
-# else
-#  define KFONTINST_EXPORT KDE_IMPORT
-# endif
-#endif
-
-
-#else /* UNIX */
 
 #define KFONTINST_EXPORT KDE_EXPORT
 
-#endif
 
 #endif // KFONTINST_EXPORT_H

@@ -38,11 +38,7 @@ DEALINGS IN THE SOFTWARE.
 #include <kshell.h>
 
 
-#if defined _WIN32 || defined _WIN64
-#define KPATH_SEPARATOR ';'
-#else
 #define KPATH_SEPARATOR ':'
-#endif
 
 static QString get_entry( QString* ll )
     {
