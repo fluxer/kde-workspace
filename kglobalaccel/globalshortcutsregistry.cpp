@@ -33,8 +33,6 @@
 #include "kglobalaccel_x11.h"
 #include <QX11Info>
 #include <QApplication>
-#elif defined(Q_WS_MACX)
-#include "kglobalaccel_mac.h"
 #else
 #include "kglobalaccel_qws.h"
 #endif
