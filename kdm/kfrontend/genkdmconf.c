@@ -2977,14 +2977,19 @@ static const char * const oldkdes[] = {
     KDE_CONFDIR,
     "/opt/kde4/share/config",
     "/usr/local/kde4/share/config",
+    "/local/kde4/share/config",
 
     "/opt/kde/share/config",
     "/usr/local/kde/share/config",
     "/usr/local/share/config",
     "/usr/share/config",
+    "/local/kde/share/config",
+    "/local/share/config",
+    "/share/config",
 
     "/opt/kde3/share/config",
     "/usr/local/kde3/share/config",
+    "/share/kde3/share/config",
 };
 
 static const char * const oldxdms[] = {
