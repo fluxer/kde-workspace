@@ -68,7 +68,7 @@ include_directories (
 set (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.cpp
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.cpp
     consumer.cpp
     controller.cpp
     info.cpp
@@ -78,7 +78,7 @@ set (
     )
 
 set_source_files_properties (
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.xml
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.xml
     PROPERTIES
     INCLUDE ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.h
     )
