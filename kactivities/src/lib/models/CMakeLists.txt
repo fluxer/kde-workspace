@@ -61,8 +61,6 @@ include_directories (
     ${QDBUS_INCLUDE_DIRS}
     ${KDE4_INCLUDES}
     ${KDE4_KIO_INCLUDES}
-    ${NEPOMUK_CORE_INCLUDE_DIR}
-    ${SOPRANO_INCLUDE_DIR}
     )
 
 set (
@@ -134,8 +132,6 @@ target_link_libraries (
     kactivities-models
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
-    ${NEPOMUK_CORE_LIBRARY}
-    ${SOPRANO_LIBRARIES}
     )
 
 target_link_libraries (
@@ -143,8 +139,6 @@ target_link_libraries (
     kactivities-models
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
-    ${NEPOMUK_CORE_LIBRARY}
-    ${SOPRANO_LIBRARIES}
     ${QT_QTDECLARATIVE_LIBRARY}
     )
 

@@ -8,29 +8,6 @@ set (KACTIVITIES_ONTOLOGIES_DIR ${CMAKE_INSTALL_PREFIX}/share/ontology/kde)
 
 add_definitions (-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
 
-# Checking for Nepomuk
-macro_optional_find_package (NepomukCore)
-macro_log_feature (
-    NepomukCore_FOUND
-    "Nepomuk Core" "Nepomuk Core" "https://projects.kde.org/nepomuk-core" FALSE ""
-    "STRONGLY_RECOMMENDED: Nepomuk is needed for some activity-related info"
-    )
-
-if (NepomukCore_FOUND)
-    find_package (Soprano)
-    macro_log_feature (
-        Soprano_FOUND
-        "Soprano" "Semantic Desktop Storing" "http://soprano.sourceforge.net" TRUE ""
-        "Soprano is needed to build and use the Nepomuk related functionalities"
-        )
-
-    include (SopranoAddOntology)
-endif ()
-
-if (NepomukCore_FOUND AND Soprano_FOUND)
-    set (HAVE_NEPOMUK 1)
-endif ()
-
 # Testing for C++0x/C++11 features
 
 include (CheckCxxFeatures)

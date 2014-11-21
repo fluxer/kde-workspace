@@ -11,12 +11,6 @@ if (CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG)
     set (ADDITIONAL_DEFINITIONS "-std=c++0x")
 endif ()
 
-if (NepomukCore_FOUND)
-    include_directories (${NEPOMUK_CORE_INCLUDE_DIR})
-    add_subdirectory (fileitemplugin)
-    add_subdirectory (kio)
-endif ()
-
 find_package (KDeclarative)
 
 macro_log_feature (
