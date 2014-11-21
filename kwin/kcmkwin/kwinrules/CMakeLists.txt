@@ -1,3 +1,5 @@
+include_directories( ${CMAKE_SOURCE_DIR}/kactivities/src/lib/core/includes )
+
 ADD_DEFINITIONS(-DKCMRULES)
 ########### next target ###############
 

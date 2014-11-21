@@ -7,9 +7,7 @@ set(plasmaextracomponents_SRCS
     fallbackcomponent.cpp
     )
 
-include_directories(
-        ${KACTIVITIES_INCLUDE_DIRS}
-)
+include_directories( ${CMAKE_SOURCE_DIR}/kactivities/src/lib/core/includes )
 
 qt4_automoc(${plasmaextracomponents_SRCS})
 
