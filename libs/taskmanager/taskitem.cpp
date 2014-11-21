@@ -25,7 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // Own
 #include "taskitem.h"
 
-#include <kactivities/info.h>
+#include <KActivities/Info>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KDebug>

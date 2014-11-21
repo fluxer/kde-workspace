@@ -256,8 +256,6 @@ macro_optional_add_subdirectory(kstyles)
 
 # imported from kde-runtime and other sub-projects
 macro_optional_add_subdirectory(kactivities)
-# FIXME: distribute the use of KACTIVITIES_INCLUDE_DIR
-include_directories(${INCLUDE_DIRECTORIES} ${KACTIVITIES_INCLUDE_DIR})
 macro_optional_add_subdirectory(kdesu)
 macro_optional_add_subdirectory(phonon)
 macro_optional_add_subdirectory(menu)

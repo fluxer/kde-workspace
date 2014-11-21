@@ -42,6 +42,8 @@ if (X11_Xcomposite_FOUND)
   target_link_libraries(taskmanager ${X11_Xcomposite_LIB})
 endif (X11_Xcomposite_FOUND)
 
+include_directories(${KACTIVITIES_INCLUDE_DIR})
+
 if (NOT KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal)
     target_link_libraries(taskmanager kephal)
