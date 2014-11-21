@@ -172,10 +172,8 @@ install (
     FILE KActivitiesLibraryTargets.cmake
     )
 
-if (NOT WIN32)
-    configure_file (${CMAKE_CURRENT_SOURCE_DIR}/libkactivities.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkactivities.pc)
-    install (FILES ${CMAKE_CURRENT_BINARY_DIR}/libkactivities.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
-endif ()
+configure_file (${CMAKE_CURRENT_SOURCE_DIR}/libkactivities.pc.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkactivities.pc)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/libkactivities.pc DESTINATION ${LIB_INSTALL_DIR}/pkgconfig )
 
 configure_file (KActivitiesConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/KActivitiesConfig.cmake @ONLY)
 macro_write_basic_cmake_version_file (
