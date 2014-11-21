@@ -86,28 +86,28 @@ set_source_files_properties (
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.xml
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.xml
     activities_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Resources.xml
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Resources.xml
     resources_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Features.xml
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Features.xml
     features_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.ResourcesLinking.xml
+    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.ResourcesLinking.xml
     resources_linking_interface
     )
 
