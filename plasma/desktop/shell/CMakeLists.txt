@@ -2,6 +2,7 @@ include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
                     ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/plasmagenericshell
                     ${KDEBASE_WORKSPACE_SOURCE_DIR}/plasma/desktop/shell/scripting
                     ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal
+                    ${KACTIVITIES_INCLUDE_DIR}
 )
 
 add_subdirectory(configupdates)
