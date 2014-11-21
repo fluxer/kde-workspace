@@ -1,11 +1,5 @@
 project(plasmaextracomponents)
 
-find_package(KActivities QUIET CONFIG)
-set_package_properties(KActivities PROPERTIES
-                       TYPE REQUIRED
-                       PURPOSE "Provides the ability to access activities from QML."
-                      )
-
 set(plasmaextracomponents_SRCS
     appbackgroundprovider.cpp
     resourceinstance.cpp
