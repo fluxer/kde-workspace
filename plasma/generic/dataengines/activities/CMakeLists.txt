@@ -1,5 +1,7 @@
 project(activityengine)
 
+include_directories( ${KACTIVITIES_INCLUDE_DIR} )
+
 set(activity_engine_SRCS
         ActivityData.cpp
         activityengine.cpp
