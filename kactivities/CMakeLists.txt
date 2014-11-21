@@ -8,6 +8,8 @@ include (MacroLibrary)
 include (MacroOptionalAddSubdirectory)
 include (FindPackageHandleStandardArgs)
 
+include_directories( ${PROJECT_SOURCE_DIR}/src )
+
 # Until this is set by FindQt, we are defining the
 # QT_NO_DEBUG_OUTPUT if this is not a debug build
 
