@@ -197,7 +197,7 @@ configure_file(config-workspace.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-works
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KACTIVITIES_INCLUDE_DIR} ${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
 
 # libs
 add_subdirectory(cmake)
@@ -256,6 +256,8 @@ macro_optional_add_subdirectory(kstyles)
 
 # imported from kde-runtime and other sub-projects
 macro_optional_add_subdirectory(kactivities)
+# FIXME: distribute the use of KACTIVITIES_INCLUDE_DIR
+include_directories(${INCLUDE_DIRECTORIES} ${KACTIVITIES_INCLUDE_DIR})
 macro_optional_add_subdirectory(kdesu)
 macro_optional_add_subdirectory(phonon)
 macro_optional_add_subdirectory(menu)
