@@ -1,5 +1,3 @@
-project (kactivities)
-
 find_package (Qt4 REQUIRED)
 find_package (KDE4 REQUIRED)
 include (KDE4Defaults)
@@ -42,10 +40,11 @@ set (KACTIVITIES_LIB_SO_AGE_VERSION "0")
 # Set env. variables accordinly.
 
 set (KACTIVITIES_INCLUDE_DIR
-    "${CMAKE_CURRENT_SOURCE_DIR}/.."
+    "${CMAKE_CURRENT_SOURCE_DIR}/includes/"
     "${CMAKE_CURRENT_SOURCE_DIR}/"
     CACHE STRING
     "Location of libkactivities headers" FORCE)
+message("KACTIVITIES_INCLUDE_DIR: "  ${KACTIVITIES_INCLUDE_DIR})
 set (KACTIVITIES_LIBS
     "kactivities"
     CACHE STRING
@@ -68,7 +67,7 @@ include_directories (
 set (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.cpp
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.cpp
     consumer.cpp
     controller.cpp
     info.cpp
@@ -78,36 +77,36 @@ set (
     )
 
 set_source_files_properties (
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.xml
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.xml
     PROPERTIES
-    INCLUDE ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.h
+    INCLUDE ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.h
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Activities.xml
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Activities.xml
     activities_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Resources.xml
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Resources.xml
     resources_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.Features.xml
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.Features.xml
     features_interface
     )
 
 qt4_add_dbus_interface (
     kactivities_LIB_SRCS
 
-    ${CMAKE_SOURCE_DIR}/kactivities/src/common/dbus/org.kde.ActivityManager.ResourcesLinking.xml
+    ${PROJECT_SOURCE_DIR}/src/common/dbus/org.kde.ActivityManager.ResourcesLinking.xml
     resources_linking_interface
     )
 

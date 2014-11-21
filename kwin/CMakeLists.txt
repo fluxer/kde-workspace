@@ -275,7 +275,7 @@ if(KWIN_BUILD_SCRIPTING)
 endif()
 
 if(KWIN_BUILD_ACTIVITIES)
-    set(kwin_KDE_LIBS ${kwin_KDE_LIBS} kactivities)
+    set(kwin_KDE_LIBS ${kwin_KDE_LIBS} ${KACTIVITIES_LIBS})
 endif()
 
 if(OPENGL_EGL_FOUND)

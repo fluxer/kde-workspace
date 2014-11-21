@@ -31,7 +31,7 @@ set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 
 kde4_add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 
-target_link_libraries(taskmanager processcore kactivities ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
+target_link_libraries(taskmanager processcore ${KACTIVITIES_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 if (X11_Xfixes_FOUND)
   target_link_libraries(taskmanager ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)

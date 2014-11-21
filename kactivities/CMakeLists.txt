@@ -1,4 +1,4 @@
-project (KACTIVITIES)
+project (kactivities)
 
 find_package (KDE4 REQUIRED)
 
