@@ -16,7 +16,7 @@ kde4_add_plugin(plasma_engine_activities ${activity_engine_SRCS})
 target_link_libraries(plasma_engine_activities
                       ${KDE4_KDECORE_LIBS}
                       ${KDE4_PLASMA_LIBS}
-                      ${KACTIVITIES_LIBRARY})
+                      kactivities)
 
 install(TARGETS plasma_engine_activities
         DESTINATION ${PLUGIN_INSTALL_DIR})

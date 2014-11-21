@@ -53,7 +53,7 @@ target_link_libraries(powerdevilcore
     ${KDE4_SOLID_LIBS}
     ${KDE4_KIDLETIME_LIBS}
     ${KDE4_PLASMA_LIBS}
-    ${KACTIVITIES_LIBRARY}
+    kactivities
     kworkspace
 )
 
