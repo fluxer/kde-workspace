@@ -57,7 +57,6 @@
 #include "core/systemmodel.h"
 
 #include "ui/itemdelegate.h"
-#include "ui/brandingbutton.h"
 #include "ui/contextmenufactory.h"
 #include "ui/urlitemview.h"
 #include "ui/flipscrollview.h"
@@ -569,17 +568,11 @@ void Launcher::init()
 
     d->userinfo = new QLabel(labelText);
 
-    QToolButton *branding = new BrandingButton(this);
-    branding->setAutoRaise(false);
-    branding->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    connect(branding, SIGNAL(clicked()), this, SIGNAL(aboutToHide()));
-
     QHBoxLayout *brandingLayout = new QHBoxLayout;
     brandingLayout->setMargin(3);
     brandingLayout->addSpacing(ItemDelegate::ITEM_LEFT_MARGIN - 3);
     brandingLayout->addWidget(d->userinfo);
     brandingLayout->addStretch(2);
-    brandingLayout->addWidget(branding);
     brandingLayout->addSpacing(rightHeaderMargin);
     d->footer->setLayout(brandingLayout);
 

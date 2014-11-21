@@ -37,7 +37,6 @@ install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
 # Kickoff Plasma Applet
 
 set(Applet_SRCS
-    ui/brandingbutton.cpp
     ui/contextmenufactory.cpp
     ui/flipscrollview.cpp
     ui/itemdelegate.cpp
