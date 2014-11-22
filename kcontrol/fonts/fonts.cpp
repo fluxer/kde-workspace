@@ -18,15 +18,13 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSpinBox>
-#include <qplatformdefs.h>
-
-//Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFormLayout>
+#include <qplatformdefs.h>
 
 #include <KFontDialog>
 #include <KAcceleratorManager>
@@ -212,9 +210,7 @@ void FontUseItem::applyFontDiff( const QFont &fnt, int fontDiffFlags )
     _font.setWeight( fnt.weight() );
     _font.setStyle( fnt.style() );
     _font.setUnderline( fnt.underline() );
-#if QT_VERSION >= 0x040800
     _font.setStyleName( fnt.styleName() );
-#endif
   }
 
   setFont( _font, isFixedOnly() );

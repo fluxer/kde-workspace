@@ -1053,11 +1053,9 @@ void CalendarTable::resizeEvent(QGraphicsSceneResizeEvent * event)
 
     d->dateFont = Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
 
-#if QT_VERSION >= 0x040800
     d->weekDayFont.setHintingPreference(QFont::PreferNoHinting);
     d->dateFontBold.setHintingPreference(QFont::PreferNoHinting);
     d->dateFont.setHintingPreference(QFont::PreferNoHinting);
-#endif
 
     QFontMetrics fm(d->weekDayFont);
 

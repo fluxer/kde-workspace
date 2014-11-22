@@ -18,9 +18,9 @@ set(KDE4WORKSPACE_VERSION ${KDE4WORKSPACE_VERSION_MAJOR}.${KDE4WORKSPACE_VERSION
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
 #search packages used by KDE
-set(QT_MIN_VERSION "4.8.0")
+set(QT_MIN_VERSION "4.8.2")
 
-find_package(KDE4 4.9.95 REQUIRED)
+find_package(KDE4 4.14.3 REQUIRED)
 include(KDE4Defaults)
 
 option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
