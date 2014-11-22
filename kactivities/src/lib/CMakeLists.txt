@@ -131,16 +131,6 @@ target_link_libraries (
 
 set (
     kactivities_LIB_HEADERS
-    consumer.h
-    controller.h
-    info.h
-    resourceinstance.h
-    version.h
-    kactivities_export.h
-    )
-
-set (
-    kactivities_LIB_PRETTY_HEADERS
     includes/KActivities/Consumer
     includes/KActivities/Controller
     includes/KActivities/Info
@@ -150,12 +140,6 @@ set (
 
 install (
     FILES ${kactivities_LIB_HEADERS}
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kactivities
-    COMPONENT Devel
-    )
-
-install (
-    FILES ${kactivities_LIB_PRETTY_HEADERS}
     DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/KActivities
     COMPONENT Devel
     )
