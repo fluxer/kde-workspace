@@ -276,6 +276,7 @@ endif()
 
 if(KWIN_BUILD_ACTIVITIES)
     set(kwin_KDE_LIBS ${kwin_KDE_LIBS} ${KACTIVITIES_LIBS})
+    include_directories(${KACTIVITIES_INCLUDE_DIR})
 endif()
 
 if(OPENGL_EGL_FOUND)
