@@ -1,5 +1,7 @@
 project(plasma-pager)
 
+include_directories(${KACTIVITIES_INCLUDE_DIR})
+
 set(pager_SRCS
     model.cpp
     pager.cpp)
