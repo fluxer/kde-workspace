@@ -14,7 +14,7 @@ qt4_automoc(${plasmaextracomponents_SRCS})
 
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 target_link_libraries(plasmaextracomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}
-                                                    ${QT_QTGUI_LIBRARY} ${KDE4_PLASMA_LIBS} ${${KACTIVITIES_LIBRARIES}} )
+                                                    ${QT_QTGUI_LIBRARY} ${KDE4_PLASMA_LIBS} ${KACTIVITIES_LIBRARIES} )
 
 install(TARGETS plasmaextracomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/extras)
 
