@@ -275,7 +275,7 @@ if(KWIN_BUILD_SCRIPTING)
 endif()
 
 if(KWIN_BUILD_ACTIVITIES)
-    set(kwin_KDE_LIBS ${kwin_KDE_LIBS} ${KACTIVITIES_LIBS})
+    set(kwin_KDE_LIBS ${kwin_KDE_LIBS} ${KACTIVITIES_LIBRARIES})
     include_directories(${KACTIVITIES_INCLUDE_DIR})
 endif()
 

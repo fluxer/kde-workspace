@@ -12,7 +12,7 @@ target_link_libraries(plasma_applet_pager
                       ${KDE4_KIO_LIBS}
                       ${KDE4_PLASMA_LIBS}
                       ${KDE4_KCMUTILS_LIBRARY}
-                      ${KACTIVITIES_LIBS}
+                      ${KACTIVITIES_LIBRARIES}
                       ${QT_QTDECLARATIVE_LIBRARY}
                       taskmanager)
 
