@@ -136,6 +136,7 @@ set (
     includes/KActivities/Info
     includes/KActivities/ResourceInstance
     includes/KActivities/Version
+    kactivities_export.h
     )
 
 install (
