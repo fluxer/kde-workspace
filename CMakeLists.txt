@@ -79,6 +79,13 @@ set_package_properties(Wayland PROPERTIES DESCRIPTION "The Wayland Client and Se
                        TYPE OPTIONAL
                        PURPOSE "Required for building KWin with Wayland support"
                       )
+
+find_package(KActivities 6.0.0 CONFIG)
+set_package_properties(KActivities PROPERTIES DESCRIPTION "Interface library for the activity manager"
+                       URL "https://projects.kde.org/kactivities"
+                       TYPE REQUIRED
+                      )
+                      
 if(Q_WS_X11)
   find_package(XCB REQUIRED)
   set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
@@ -197,7 +204,7 @@ configure_file(config-workspace.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-works
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${KACTIVITIES_INCLUDE_DIRS} ${CMAKE_SOURCE_DIR}/libs)
 
 # libs
 add_subdirectory(cmake)
