@@ -41,11 +41,6 @@ public:
 #define PAGE_CRASHINFORMATION_ID "BacktraceID"
 #define PAGE_AWARENESS_ID "AwarenessID"
 #define PAGE_CONCLUSIONS_ID "ConclusionsID"
-#define PAGE_BZLOGIN_ID "BugzillaLoginID"
-#define PAGE_BZDUPLICATES_ID "BugzillaDuplicatesID"
-#define PAGE_BZDETAILS_ID "BugzillaDetailsID"
-#define PAGE_BZPREVIEW_ID "BugzillaPreviewID"
-#define PAGE_BZSEND_ID "BugzillaSendID"
 
 #define PAGE_HELP_BEGIN_ID "Begin"
 

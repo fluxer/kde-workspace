@@ -31,7 +31,6 @@
 #include "drkonqi.h"
 #include "backtracewidget.h"
 #include "reportassistantdialog.h"
-#include "aboutbugreportingdialog.h"
 #include "crashedapplication.h"
 #include "debuggermanager.h"
 #include "debuggerlaunchers.h"
@@ -43,7 +42,6 @@ static const char DRKONQI_REPORT_BUG_URL[] =
 
 DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
         KDialog(parent),
-        m_aboutBugReportingDialog(0),
         m_backtraceWidget(0)
 {
     KGlobal::ref();
@@ -133,7 +131,6 @@ void DrKonqiDialog::buildIntroWidget()
                                         );
     }
     ui.infoLabel->setText(reportMessage);
-    connect(ui.infoLabel, SIGNAL(linkActivated(QString)), this, SLOT(linkActivated(QString)));
 
     ui.iconLabel->setPixmap(
                         QPixmap(KStandardDirs::locate("appdata", QLatin1String("pics/crash.png"))));
@@ -253,29 +250,6 @@ void DrKonqiDialog::startBugReportAssistant()
     ReportAssistantDialog * bugReportAssistant = new ReportAssistantDialog();
     close();
     bugReportAssistant->show();
-}
-
-void DrKonqiDialog::linkActivated(const QString& link)
-{
-    if (link == QLatin1String(ABOUT_BUG_REPORTING_URL)) {
-        showAboutBugReporting();
-    } else if (link == QLatin1String(DRKONQI_REPORT_BUG_URL)) {
-        KToolInvocation::invokeBrowser(link);
-    } else if (link.startsWith(QLatin1String("http"))) {
-        kWarning() << "unexpected link";
-        KToolInvocation::invokeBrowser(link);
-    }
-}
-
-void DrKonqiDialog::showAboutBugReporting()
-{
-    if (!m_aboutBugReportingDialog) {
-        m_aboutBugReportingDialog = new AboutBugReportingDialog();
-        connect(this, SIGNAL(destroyed(QObject*)), m_aboutBugReportingDialog, SLOT(close()));
-    }
-    m_aboutBugReportingDialog->show();
-    m_aboutBugReportingDialog->raise();
-    m_aboutBugReportingDialog->activateWindow();
 }
 
 void DrKonqiDialog::applicationRestarted(bool success)

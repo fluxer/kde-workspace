@@ -21,7 +21,6 @@ set(drkonqi_SRCS
     main.cpp
     drkonqidialog.cpp
     statuswidget.cpp
-    aboutbugreportingdialog.cpp
     reportassistantdialog.cpp
     reportassistantpage.cpp
     reportassistantpages_base.cpp

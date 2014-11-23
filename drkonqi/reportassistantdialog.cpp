@@ -30,13 +30,11 @@
 #include "backtracegenerator.h"
 
 #include "crashedapplication.h"
-#include "aboutbugreportingdialog.h"
 #include "reportassistantpages_base.h"
 #include "reportinterface.h"
 
 ReportAssistantDialog::ReportAssistantDialog(QWidget * parent) :
         KAssistantDialog(parent),
-        m_aboutBugReportingDialog(0),
         m_reportInterface(new ReportInterface(this)),
         m_canClose(false)
 {
@@ -140,13 +138,6 @@ void ReportAssistantDialog::currentPageChanged_slot(KPageWidgetItem * current , 
         enableNextButton(currentPage->isComplete());
         currentPage->aboutToShow();
     }
-
-    //If the current page is the last one, disable all the buttons until the bug is sent
-    if (current->name() == QLatin1String(PAGE_BZSEND_ID)) {
-        enableNextButton(false);
-        enableButton(KDialog::User3, false); //Back button
-        enableButton(KDialog::User1, false);
-    }
 }
 
 void ReportAssistantDialog::completeChanged(ReportAssistantPage* page, bool isComplete)
@@ -166,27 +157,6 @@ void ReportAssistantDialog::assistantFinished(bool showBack)
     enableButton(KDialog::Cancel, false);
 
     m_canClose = true;
-}
-
-void ReportAssistantDialog::loginFinished()
-{
-    //Bugzilla login finished, go to the next page
-    if (currentPage()->name() == QLatin1String(PAGE_BZLOGIN_ID)) {
-        next();
-    }
-}
-
-void ReportAssistantDialog::showHelp()
-{
-    //Show the bug reporting guide dialog
-    if (!m_aboutBugReportingDialog) {
-        m_aboutBugReportingDialog = new AboutBugReportingDialog();
-    }
-    m_aboutBugReportingDialog->show();
-    m_aboutBugReportingDialog->raise();
-    m_aboutBugReportingDialog->activateWindow();
-    m_aboutBugReportingDialog->showSection(QLatin1String(PAGE_HELP_BEGIN_ID));
-    m_aboutBugReportingDialog->showSection(currentPage()->name());
 }
 
 //Override KAssistantDialog "next" page implementation
@@ -216,20 +186,6 @@ void ReportAssistantDialog::next()
     } else if (name == QLatin1String(PAGE_CRASHINFORMATION_ID)){
         //Force save settings in current page
         page->aboutToHide();
-
-        //If the crash is worth reporting and it is BKO, skip the Conclusions page
-        if (m_reportInterface->isWorthReporting() &&
-            DrKonqi::crashedApplication()->bugReportAddress().isKdeBugzilla())
-        {
-            setCurrentPage(m_pageWidgetMap.value(QLatin1String(PAGE_BZLOGIN_ID)));
-            return;
-        }
-    } else if (name == QLatin1String(PAGE_BZDUPLICATES_ID)) {
-        //a duplicate has been found, yet the report is not being attached
-        if (m_reportInterface->duplicateId() && !m_reportInterface->attachToBugNumber()) {
-            setCurrentPage(m_pageWidgetMap.value(QLatin1String(PAGE_CONCLUSIONS_ID)));
-            return;
-        }
     }
 
     KAssistantDialog::next();
@@ -241,23 +197,9 @@ void ReportAssistantDialog::back()
  {
     if (currentPage()->name() == QLatin1String(PAGE_CONCLUSIONS_ID))
     {
-        if (m_reportInterface->duplicateId() && !m_reportInterface->attachToBugNumber()) {
-            setCurrentPage(m_pageWidgetMap.value(QLatin1String(PAGE_BZDUPLICATES_ID)));
-            return;
-        }
         if (!(m_reportInterface->isBugAwarenessPageDataUseful()))
         {
             setCurrentPage(m_pageWidgetMap.value(QLatin1String(PAGE_AWARENESS_ID)));
-            return;
-        }
-    }
-
-    if (currentPage()->name() == QLatin1String(PAGE_BZLOGIN_ID))
-    {
-        if (m_reportInterface->isWorthReporting() &&
-            DrKonqi::crashedApplication()->bugReportAddress().isKdeBugzilla())
-        {
-            setCurrentPage(m_pageWidgetMap.value(QLatin1String(PAGE_CRASHINFORMATION_ID)));
             return;
         }
     }

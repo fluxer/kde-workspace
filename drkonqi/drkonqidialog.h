@@ -42,7 +42,6 @@ public:
     ~DrKonqiDialog();
 
 private Q_SLOTS:
-    void linkActivated(const QString&);
     void startBugReportAssistant();
 
     void applicationRestarted(bool success);
@@ -58,8 +57,6 @@ private Q_SLOTS:
     void tabIndexChanged(int);
 
 private:
-    void showAboutBugReporting();
-
     KTabWidget *                        m_tabWidget;
 
     QPointer<AboutBugReportingDialog>   m_aboutBugReportingDialog;

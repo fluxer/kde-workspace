@@ -46,13 +46,9 @@ private Q_SLOTS:
 
     void completeChanged(ReportAssistantPage*, bool);
 
-    void loginFinished();
-
     void assistantFinished(bool);
 
     void enableNextButton(bool);
-
-    void showHelp();
 
     void next();
     void back();
