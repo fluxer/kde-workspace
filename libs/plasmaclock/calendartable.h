@@ -77,8 +77,6 @@ public:
 
     void clearHolidays();
     void addHoliday(Plasma::DataEngine::Data holidayData);
-    bool dateHasDetails(const QDate &date) const;
-    QStringList dateDetails(const QDate &date) const;
 
     void setAutomaticUpdateEnabled(bool enabled);
     bool isAutomaticUpdateEnabled() const;

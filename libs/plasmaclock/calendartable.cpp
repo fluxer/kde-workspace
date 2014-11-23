@@ -648,56 +648,6 @@ void CalendarTable::addHoliday(Plasma::DataEngine::Data holidayData)
     }
 }
 
-bool CalendarTable::dateHasDetails(const QDate &date) const
-{
-    int julian = date.toJulianDay();
-    return d->holidays.contains(julian) ||
-           d->events.contains(julian) ||
-           d->todos.contains(julian) ||
-           d->journals.contains(julian);
-}
-
-QStringList CalendarTable::dateDetails(const QDate &date) const
-{
-    QStringList details;
-    const int julian = date.toJulianDay();
-
-    if (d->holidays.contains(julian)) {
-        foreach (int holidayUid, d->holidays.values(julian)) {
-            Plasma::DataEngine::Data holidayData = d->holidayEvents.value(holidayUid);
-            QString region = holidayData.value("RegionCode").toString();
-
-            if (d->holidayIsDayOff(holidayData)) {
-                details << i18nc("Day off: Holiday name (holiday region)",
-                                 "<i>Holiday</i>: %1 (%2)",
-                                 holidayData.value("Name").toString(),
-                                 d->holidaysRegions.value(region).value("Name").toString());
-            } else {
-                QString region = holidayData.value("RegionCode").toString();
-                details << i18nc("Not day off: Holiday name (holiday region)",
-                                    "%1 (%2)",
-                                    holidayData.value("Name").toString(),
-                                    d->holidaysRegions.value(region).value("Name").toString());
-            }
-        }
-    }
-
-    if (d->events.contains(julian)) {
-        foreach (const Plasma::DataEngine::Data &occurrence, d->events.values(julian)) {
-            details << i18n("<i>Event</i>: %1", buildOccurrenceDescription(occurrence));
-        }
-    }
-
-    if (d->todos.contains(julian)) {
-        foreach (const Plasma::DataEngine::Data &occurrence, d->todos.values(julian)) {
-            //TODO add Status and Percentage Complete when strings not frozen
-            details << i18n("<i>Todo</i>: %1", buildOccurrenceDescription(occurrence));
-        }
-    }
-
-    return details;
-}
-
 QString CalendarTable::buildOccurrenceDescription(const Plasma::DataEngine::Data &occurrence) const
 {
     const QString uid = occurrence.value("OccurrenceUid").toString();
@@ -951,16 +901,12 @@ void CalendarTable::createConfigurationInterface(KConfigDialog *parent)
     }
     d->calendarConfigUi.calendarComboBox->setCurrentIndex( d->calendarConfigUi.calendarComboBox->findData( QVariant( d->calendarType ) ) );
 
-    d->calendarConfigUi.displayEvents->setChecked(d->displayEvents);
-
     connect(d->calendarConfigUi.calendarComboBox, SIGNAL(activated(int)), parent, SLOT(settingsModified()));
-    connect(d->calendarConfigUi.displayEvents, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void CalendarTable::configAccepted(KConfigGroup cg)
 {
     setCalendar(d->calendarConfigUi.calendarComboBox->itemData(d->calendarConfigUi.calendarComboBox->currentIndex()).toInt());
-    setDisplayEvents(d->calendarConfigUi.displayEvents->isChecked());
 
     writeConfiguration(cg);
 }

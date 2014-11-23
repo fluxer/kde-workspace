@@ -279,8 +279,7 @@ void ClockApplet::updateTipContent()
     tzs.append(data);
     bool highlightLocal = false;
 
-    const bool hasEvents = d->calendarWidget ? d->calendarWidget->dateHasDetails(localDate) : false;
-    tipData.setMainText(hasEvents ? i18n("Current Time and Events") : i18n("Current Time"));
+    tipData.setMainText(i18n("Current Time"));
 
     foreach (const QString &tz, d->selectedTimezones) {
         if (tz != "UTC") {
@@ -301,11 +300,6 @@ void ClockApplet::updateTipContent()
     }
 
     subText.append("</table>");
-
-    if (hasEvents) {
-        subText.append("<br /><br /><b>").append(i18n("Today's Events")).append("</b><br/>");
-        subText.append(d->calendarWidget->dateDetails(localDate).join("<br>"));
-    }
 
     tipData.setSubText(subText);
 

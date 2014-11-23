@@ -77,7 +77,6 @@ class CalendarPrivate
               forward(0),
               calendarTable(0),
               dateText(0),
-              eventsDisplay(0),
               jumpToday(0),
               monthMenu(0),
               weekSpinBox(0),
@@ -87,9 +86,7 @@ class CalendarPrivate
 
         void init(const QDate &date = QDate());
         void refreshWidgets();
-        bool addDateDetailsToDisplay(QString &html, const QDate &date, bool showNoEventsMsg = false);
         void popupMonthsMenu();
-        void displayEvents(const QDate &date = QDate());
         void updateSize();
 
         Calendar *q;
@@ -143,9 +140,6 @@ void CalendarPrivate::init(const QDate &initialDate)
     calendarTable->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QObject::connect(calendarTable, SIGNAL(dateChanged(QDate)), q, SLOT(dateUpdated()));
     QObject::connect(calendarTable, SIGNAL(dateHovered(QDate)), q, SIGNAL(dateHovered(QDate)));
-    QObject::connect(calendarTable, SIGNAL(dateSelected(QDate)), q, SLOT(displayEvents(QDate)));
-    QObject::connect(calendarTable, SIGNAL(eventsChanged()), q, SLOT(displayEvents()));
-    QObject::connect(q, SIGNAL(dateHovered(QDate)), q, SLOT(displayEvents(QDate)));
 
     back = new Plasma::ToolButton(q);
     back->setText("<");
@@ -209,7 +203,6 @@ void CalendarPrivate::init(const QDate &initialDate)
     layout->addItem(calendarLayout);
 
     q->setDate(initialDate);
-    displayEvents();
     updateSize();
 }
 
@@ -307,21 +300,6 @@ QStringList Calendar::holidaysRegions() const
     return calendarTable()->holidaysRegions();
 }
 
-bool Calendar::isDisplayingDateDetails() const
-{
-    return calendarTable()->displayHolidays() || calendarTable()->displayEvents();
-}
-
-bool Calendar::dateHasDetails(const QDate &date) const
-{
-    return calendarTable()->dateHasDetails(date);
-}
-
-QStringList Calendar::dateDetails(const QDate &date) const
-{
-    return calendarTable()->dateDetails(date);
-}
-
 void Calendar::setAutomaticUpdateEnabled(bool automatic)
 {
     calendarTable()->setAutomaticUpdateEnabled(automatic);
@@ -368,12 +346,6 @@ void CalendarPrivate::updateSize()
 {
     QSize minSize = QSize(200, 200);
     QSize prefSize = calendarTable ? calendarTable->size().toSize() : QSize(250, 250);
-    if (q->isDisplayingDateDetails()) {
-        // our seperator's width is the vertical line + space for the vertical scrollbar + spacing
-        const int sepWidth = (separator ? separator->size().width() : 6 ) + 24;
-        prefSize.setWidth(prefSize.width() * 2 + sepWidth * 2);
-        minSize.setWidth(minSize.width() * 2); // should be enough even for the separator
-    }
 
     q->setMinimumSize(minSize);
     q->setPreferredSize(prefSize);
@@ -383,7 +355,6 @@ void Calendar::applyConfiguration(KConfigGroup cg)
 {
     calendarTable()->applyConfiguration(cg);
     d->updateSize();
-    d->displayEvents();
 }
 
 void Calendar::manualDateChange()
@@ -401,75 +372,6 @@ void Calendar::dateUpdated()
     // Ignore the date passed in, only ever show the date to match the CalendarTable
     d->refreshWidgets();
     emit dateChanged(date());
-    d->displayEvents();
-}
-
-void CalendarPrivate::displayEvents(const QDate &date)
-{
-    if (!q->isDisplayingDateDetails()) {
-        if (eventsDisplay) {
-            kDebug() << "deleting events display!";
-            delete eventsDisplay;
-            eventsDisplay = 0;
-            delete separator;
-            separator = 0;
-        }
-        return;
-    } else if (!eventsDisplay) {
-        separator = new Plasma::Separator(q);
-        separator->setOrientation(Qt::Vertical);
-        layout->addItem(separator);
-
-        eventsDisplay = new Plasma::TextBrowser(q);
-        layout->addItem(eventsDisplay);
-    }
-
-    QString html;
-
-    if (!addDateDetailsToDisplay(html, date, date.isValid())) {
-        QDate dt = calendarTable->date();
-        QDate end = calendarTable->endDate();
-
-        if (dt.isValid() && end.isValid()) {
-            while (dt <= end) {
-                addDateDetailsToDisplay(html, dt);
-                dt = dt.addDays(1);
-            }
-        }
-    }
-
-    if (html.isEmpty()) {
-        html = "<div align=\"center\">";
-        html += i18nc("No events on the calendar starting from today",
-                      "No upcoming events.");
-        html += "</div>";
-    }
-
-    eventsDisplay->setText(html);
-}
-
-bool CalendarPrivate::addDateDetailsToDisplay(QString &html, const QDate &date, bool showNoEventsMsg)
-{
-    const bool hasEvents = calendarTable->dateHasDetails(date);
-    if (!hasEvents && !showNoEventsMsg) {
-        return false;
-    }
-
-    html += "<b>" + calendarTable->calendar()->formatDate(date, KLocale::LongDate) + "</b>";
-    html += "<ul style=\"-qt-list-indent: 0;\">";
-    if (hasEvents) {
-        const QStringList details = calendarTable->dateDetails(date);
-        foreach (const QString &detail, details) {
-            html += "<li style='margin-left: 0.5em;'>" + detail + "</li>";
-        }
-    } else {
-        html += "<li style='type: none; margin-left: 0.5em;'><i>";
-        html += i18nc("No events on the calendar", "No events for this date.");
-        html += "</i></li>";
-    }
-
-    html += "</ul>";
-    return hasEvents;
 }
 
 // Update the nav widgets to show the current date in the CalendarTable

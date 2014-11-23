@@ -61,8 +61,6 @@ public:
     QStringList holidaysRegions() const;
 
     bool isDisplayingDateDetails() const;
-    bool dateHasDetails(const QDate &date) const;
-    QStringList dateDetails(const QDate &date) const;
 
     void setAutomaticUpdateEnabled(bool automatic);
     bool isAutomaticUpdateEnabled() const;
@@ -103,7 +101,6 @@ private:
     CalendarPrivate* const d;
 
     Q_PRIVATE_SLOT(d, void popupMonthsMenu())
-    Q_PRIVATE_SLOT(d, void displayEvents(const QDate &date = QDate()))
 };
 
 }
