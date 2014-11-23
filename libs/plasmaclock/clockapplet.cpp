@@ -274,7 +274,6 @@ void ClockApplet::updateTipContent()
     QList<Plasma::DataEngine::Data> tzs;
     Plasma::DataEngine *engine = dataEngine("time");
     Plasma::DataEngine::Data data = engine->query("Local");
-    const QDate localDate = data["Date"].toDate();
     const QString localTz = data["Timezone"].toString();
     tzs.append(data);
     bool highlightLocal = false;
