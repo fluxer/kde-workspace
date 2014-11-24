@@ -887,7 +887,7 @@ QString Quicklaunch::defaultBrowserPath()
         return service->entryPath();
     }
 
-    service = KMimeTypeTrader::self()->preferredService("application/xml+xhtml");
+    service = KMimeTypeTrader::self()->preferredService("application/xhtml+xml");
     if (service && service->isValid()) {
         return service->entryPath();
     }
