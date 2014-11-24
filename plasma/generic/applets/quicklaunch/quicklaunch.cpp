@@ -881,13 +881,13 @@ QString Quicklaunch::defaultBrowserPath()
 
     // No global browser configured or configuration is invalid. Falling
     // back to MIME type association.
-    KService::Ptr service;
-    service = KMimeTypeTrader::self()->preferredService("text/html");
+    service = KMimeTypeTrader::self()->preferredService("application/xhtml+xml");
     if (service && service->isValid()) {
         return service->entryPath();
     }
 
-    service = KMimeTypeTrader::self()->preferredService("application/xhtml+xml");
+    KService::Ptr service;
+    service = KMimeTypeTrader::self()->preferredService("text/html");
     if (service && service->isValid()) {
         return service->entryPath();
     }
