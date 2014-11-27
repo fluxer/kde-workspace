@@ -107,11 +107,7 @@ bool KGlobalAccelImpl::grabKey( int keyQt, bool grab )
 		return false;
 	}
 
-#ifdef HAVE_XKB
-	keyCodeX = XkbKeycodeToKeysym( QX11Info::display(), keySymX, 0, 0 );
-#else
 	keyCodeX = XKeysymToKeycode( QX11Info::display(), keySymX );
-#endif
 	
 	// Check if shift needs to be added to the grab since KKeySequenceWidget
 	// can remove shift for some keys. (all the %&* and such)
