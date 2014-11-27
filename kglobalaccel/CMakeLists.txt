@@ -5,6 +5,14 @@ project(kglobalaccel)
 
 include_directories( ${KDE4_KDEUI_INCLUDES} )
 
+if (X11_Xkb_FOUND)
+    SET(HAVE_XKB TRUE)
+endif()
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/config-kglobalaccel.h.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/config-kglobalaccel.h
+)
+
 set(kglobalaccel_SRCS
     main.cpp
     kglobalacceld.cpp
