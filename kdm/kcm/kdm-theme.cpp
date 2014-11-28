@@ -161,7 +161,7 @@ void KDMThemeWidget::selectTheme(const QString &path)
 
 void KDMThemeWidget::load()
 {
-    selectTheme(config->group("X-*-Greeter").readEntry("Theme", QString(themeDir + "oxygen")));
+    selectTheme(config->group("X-*-Greeter").readEntry("Theme", QString(themeDir + "ariya")));
 }
 
 void KDMThemeWidget::save()
@@ -171,7 +171,7 @@ void KDMThemeWidget::save()
 
 void KDMThemeWidget::defaults()
 {
-    selectTheme(themeDir + "oxygen");
+    selectTheme(themeDir + "ariya");
 
     emit changed();
 }
