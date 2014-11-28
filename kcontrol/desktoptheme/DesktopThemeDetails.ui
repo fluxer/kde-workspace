@@ -129,7 +129,7 @@
        </widget>
       </item>
       <item row="3" column="0">
-       <layout class="QHBoxLayout" name="hlayout1">
+       <layout class="QHBoxLayout" name="hlayout2">
         <item>
          <widget class="QLabel" name="m_newThemeNameLabel">
           <property name="text">
@@ -202,7 +202,7 @@
        </layout>
       </item>
       <item row="4" column="0">
-       <layout class="QHBoxLayout" name="hlayout1">
+       <layout class="QHBoxLayout" name="hlayout3">
         <item>
          <widget class="QLabel" name="m_newThemeDescriptionLabel">
           <property name="text">
