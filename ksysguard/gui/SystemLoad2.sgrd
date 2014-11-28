@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE KSysGuardWorkSheet>
-<WorkSheet title="System Load" interval="0.5" locked="1" rows="3" columns="1" >
+<WorkSheet title="System Load" interval="1.0" locked="1" rows="3" columns="1" >
  <host port="-1" command="ksysguardd" shell="" name="localhost" />
  <display title="CPU History" svgBackground="widgets/plot-background" autoRange="0" class="FancyPlotter" column="0" row="0" version="1">
   <beam sensorType="float" hostName="localhost" regexpSensorName="cpu/cpu.*/TotalLoad" color="0xffff8000,0xffe20800" />
