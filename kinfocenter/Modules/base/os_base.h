@@ -332,7 +332,7 @@ static bool GetInfo_XServer_Generic(QTreeWidget *lBox) {
 /* Helper-function to read output from an external program */
 static int GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool WithEmptyLines = true) {
 	QProcess proc;
-	QTreeWidgetItem* olditem= NULL;
+	QTreeWidgetItem* olditem = NULL;
 	QString s;
 
 	proc.start(FileName, QIODevice::ReadOnly);
@@ -352,6 +352,8 @@ static int GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool Wi
 		olditem = new QTreeWidgetItem(tree, list);
 	}
 
+	// compiler warning
+	Q_UNUSED(olditem)
 	return tree->topLevelItemCount();
 }
 
