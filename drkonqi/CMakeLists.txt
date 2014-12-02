@@ -31,7 +31,6 @@ set(drkonqi_SRCS
     debugger.cpp
     debuggerlaunchers.cpp
     debuggermanager.cpp
-    applicationdetailsexamples.cpp
     gdbhighlighter.cpp
 )
 

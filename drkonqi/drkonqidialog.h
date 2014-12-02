@@ -54,8 +54,6 @@ private Q_SLOTS:
     void buildIntroWidget();
     void buildDialogButtons();
 
-    void tabIndexChanged(int);
-
 private:
     KTabWidget *                        m_tabWidget;
 

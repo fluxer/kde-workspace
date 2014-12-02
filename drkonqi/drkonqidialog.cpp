@@ -37,10 +37,9 @@
 #include "debuggermanager.h"
 #include "debuggerlaunchers.h"
 #include "drkonqi_globals.h"
+#include "systeminformation.h"
 
 static const char ABOUT_BUG_REPORTING_URL[] = "#aboutbugreporting";
-static const char DRKONQI_REPORT_BUG_URL[] =
-    KDE_BUGZILLA_URL "enter_bug.cgi?product=drkonqi&format=guided";
 
 DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
         KDialog(parent),
@@ -56,8 +55,6 @@ DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
     m_tabWidget = new KTabWidget(this);
     setMainWidget(m_tabWidget);
 
-    connect(m_tabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabIndexChanged(int)));
-
     buildIntroWidget();
     m_tabWidget->addTab(m_introWidget, i18nc("@title:tab general information", "&General"));
 
@@ -71,6 +68,8 @@ DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
     resize(minimumSize());
     KConfigGroup config(KGlobal::config(), "General");
     restoreDialogSize(config);
+
+    m_backtraceWidget->generateBacktrace();
 }
 
 DrKonqiDialog::~DrKonqiDialog()
@@ -79,13 +78,6 @@ DrKonqiDialog::~DrKonqiDialog()
     saveDialogSize(config);
 
     KGlobal::deref();
-}
-
-void DrKonqiDialog::tabIndexChanged(int index)
-{
-    if (index == m_tabWidget->indexOf(m_backtraceWidget)) {
-        m_backtraceWidget->generateBacktrace();
-    }
 }
 
 void DrKonqiDialog::buildIntroWidget()
@@ -108,7 +100,7 @@ void DrKonqiDialog::buildIntroWidget()
                                            "to the KDE bug tracking system. Do not forget to include "
                                            "the backtrace from the <interface>Developer Information</interface> "
                                            "tab.</para>",
-                                           QLatin1String(DRKONQI_REPORT_BUG_URL));
+                                           QLatin1String(BUG_REPORT_URL));
         } else if (KCmdLineArgs::parsedArgs()->isSet("safer")) {
             reportMessage = i18nc("@info", "<para>The reporting assistant is disabled because "
                                            "the crash handler dialog was started in safe mode."
@@ -243,11 +235,27 @@ void DrKonqiDialog::enableDebugMenu(bool debuggerRunning)
 
 void DrKonqiDialog::startBugReportAssistant()
 {
-    BacktraceGenerator *btGenerator = DrKonqi::debuggerManager()->backtraceGenerator();
-    QString query = QString(BUG_REPORT_URL) + "/new?title=&body=";
-    query += btGenerator->backtrace();
+    const CrashedApplication *crashedApp = DrKonqi::crashedApplication();
+    BugReportAddress appReportAddress = crashedApp->bugReportAddress();
+    SystemInformation *sysinfo = new SystemInformation(this);
+    QString query;
+    // KDE applications use the email address by default
+    if (appReportAddress == BUG_REPORT_EMAIL) {
+        query += QString(BUG_REPORT_URL) + "/new";
+        query += "?title=" + crashedApp->name();
+        query += " " + crashedApp->version();
+        query += " " + crashedApp->signalName();
+        query += "&body=********** Platform **********";
+        query += "\nOS: " + sysinfo->system();
+        query += "\nRelease: " + sysinfo->release();
+        query += "\nKDE: " + sysinfo->kdeVersion();
+        query += "\nQt: " + sysinfo->qtVersion();
+        query += "\n********** Report **********\n";
+    } else {
+        query += QString(appReportAddress);
+    }
 
-    KToolInvocation::invokeBrowser(KUrl(query).url());
+    KToolInvocation::invokeBrowser(query);
 }
 
 void DrKonqiDialog::applicationRestarted(bool success)
