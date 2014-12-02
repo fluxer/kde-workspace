@@ -27,10 +27,12 @@
 #include <KDebug>
 #include <KCmdLineArgs>
 #include <KToolInvocation>
+#include <kglobalsettings.h>
+#include <kurl.h>
 
 #include "drkonqi.h"
+#include "backtracegenerator.h"
 #include "backtracewidget.h"
-#include "reportassistantdialog.h"
 #include "crashedapplication.h"
 #include "debuggermanager.h"
 #include "debuggerlaunchers.h"
@@ -144,13 +146,7 @@ void DrKonqiDialog::buildIntroWidget()
                                              crashedApp->fakeExecutableBaseName(),
                                              crashedApp->pid(),
                                              crashedApp->signalName(),
-                                    #if defined(Q_OS_UNIX)
                                              crashedApp->signalNumber(),
-                                    #else
-                                             //windows uses weird big numbers for exception codes,
-                                             //so it doesn't make sense to display them in decimal
-                                             QString().sprintf("0x%8x", crashedApp->signalNumber()),
-                                    #endif
                                              KGlobal::locale()->formatDate(crashedApp->datetime().date(), KLocale::ShortDate),
 
                                              KGlobal::locale()->formatTime(crashedApp->datetime().time(), true)
@@ -247,9 +243,11 @@ void DrKonqiDialog::enableDebugMenu(bool debuggerRunning)
 
 void DrKonqiDialog::startBugReportAssistant()
 {
-    ReportAssistantDialog * bugReportAssistant = new ReportAssistantDialog();
-    close();
-    bugReportAssistant->show();
+    BacktraceGenerator *btGenerator = DrKonqi::debuggerManager()->backtraceGenerator();
+    QString query = QString(BUG_REPORT_URL) + "/new?title=&body=";
+    query += btGenerator->backtrace();
+
+    KToolInvocation::invokeBrowser(KUrl(query).url());
 }
 
 void DrKonqiDialog::applicationRestarted(bool success)

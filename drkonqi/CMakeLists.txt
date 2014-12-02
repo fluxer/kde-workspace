@@ -19,10 +19,6 @@ set(drkonqi_SRCS
     main.cpp
     drkonqidialog.cpp
     statuswidget.cpp
-    reportassistantdialog.cpp
-    reportassistantpage.cpp
-    reportassistantpages_base.cpp
-    reportinterface.cpp
     backtraceratingwidget.cpp
     backtracewidget.cpp
     backtracegenerator.cpp
@@ -42,10 +38,6 @@ set(drkonqi_SRCS
 kde4_add_ui_files(drkonqi_SRCS
     ui/maindialog.ui
     ui/backtracewidget.ui
-    ui/assistantpage_introduction.ui
-    ui/assistantpage_bugawareness.ui
-    ui/assistantpage_conclusions.ui
-    ui/assistantpage_conclusions_dialog.ui
 )
 
 # if BACKTRACE_PARSER_DEBUG is enabled, it will show both the
