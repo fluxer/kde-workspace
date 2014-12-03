@@ -127,8 +127,6 @@ public Q_SLOTS:
 
     void toggleActivityManager();
 
-    void addRemotePlasmoid(const QString &location);
-
     QString supportInformation() const;
 
 protected:
@@ -157,8 +155,6 @@ private Q_SLOTS:
     void configureContainment(Plasma::Containment*);
     void checkVirtualDesktopViews(int numDesktops);
     void setWmClass(WId id);
-    void remotePlasmoidAdded(Plasma::PackageMetadata metadata);
-    void plasmoidAccessFinished(Plasma::AccessAppletJob *job);
     void wallpaperCheckedIn();
     void wallpaperCheckInTimeout();
     void dashboardClosed();

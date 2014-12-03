@@ -59,7 +59,6 @@
 
 #include <Plasma/AbstractToolBox>
 #include <Plasma/AccessAppletJob>
-#include <Plasma/AccessManager>
 #include <Plasma/AuthorizationManager>
 #include <Plasma/Containment>
 #include <Plasma/Context>
@@ -254,17 +253,6 @@ PlasmaApp::PlasmaApp()
 
     KGlobal::setAllowQuit(true);
     KGlobal::ref();
-
-    connect(m_mapper, SIGNAL(mapped(QString)),
-            this, SLOT(addRemotePlasmoid(QString)));
-    connect(Plasma::AccessManager::self(),
-            SIGNAL(finished(Plasma::AccessAppletJob*)),
-            this, SLOT(plasmoidAccessFinished(Plasma::AccessAppletJob*)));
-    connect(Plasma::AccessManager::self(),
-            SIGNAL(remoteAppletAnnounced(Plasma::PackageMetadata)),
-            this, SLOT(remotePlasmoidAdded(Plasma::PackageMetadata)));
-
-    Plasma::AuthorizationManager::self()->setAuthorizationPolicy(Plasma::AuthorizationManager::PinPairing);
 
     QTimer::singleShot(0, this, SLOT(setupDesktop()));
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "plasma app ctor end" << "(line:" << __LINE__ << ")";
@@ -1378,71 +1366,12 @@ void PlasmaApp::panelRemoved(QObject *panel)
     m_panels.removeAll((PanelView *)panel);
 }
 
-void PlasmaApp::remotePlasmoidAdded(Plasma::PackageMetadata metadata)
-{
-    //kDebug();
-    if (m_desktops.isEmpty()) {
-        return;
-    }
-
-    if (m_corona->immutability() == Plasma::SystemImmutable) {
-        kDebug() << "Corona is system locked";
-        return;
-    }
-
-    // the notification ptr is automatically delete when the notification is closed
-    KNotification *notification = new KNotification("newplasmoid", m_desktops.at(0));
-    notification->setText(i18n("A new widget has become available on the network:<br><b>%1</b> - <i>%2</i>",
-                               metadata.name(), metadata.description()));
-
-    // setup widget icon
-    if (!metadata.icon().isEmpty()) {
-        notification->setPixmap(KIcon(metadata.icon()).pixmap(IconSize(KIconLoader::Desktop)));
-    }
-
-    // locked, but the user is able to unlock
-    if (m_corona->immutability() == Plasma::UserImmutable) {
-        m_unlockCorona = true;
-        notification->setActions(QStringList(i18n("Unlock and add to current activity")));
-    } else {
-        // immutability == Plasma::Mutable
-        notification->setActions(QStringList(i18n("Add to current activity")));
-    }
-
-    m_mapper->setMapping(notification, metadata.remoteLocation().prettyUrl());
-    connect(notification, SIGNAL(action1Activated()), m_mapper, SLOT(map()));
-
-    kDebug() << "firing notification";
-    notification->sendEvent();
-}
-
-void PlasmaApp::addRemotePlasmoid(const QString &location)
-{
-    if (m_unlockCorona) {
-        m_unlockCorona = false;
-        m_corona->setImmutability(Plasma::Mutable);
-    }
-
-    Plasma::AccessManager::self()->accessRemoteApplet(KUrl(location));
-}
 
 QString PlasmaApp::supportInformation() const
 {
     return SupportInformation::generateSupportInformation(m_corona);
 }
 
-void PlasmaApp::plasmoidAccessFinished(Plasma::AccessAppletJob *job)
-{
-    if (m_desktops.isEmpty()) {
-        return;
-    }
-
-    Plasma::Containment *c = m_desktops.at(0)->containment();
-    if (c) {
-        kDebug() << "adding applet";
-        c->addApplet(job->applet(), QPointF(-1, -1), false);
-    }
-}
 
 void PlasmaApp::createActivity(const QString &plugin)
 {
