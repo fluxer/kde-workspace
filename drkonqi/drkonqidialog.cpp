@@ -28,7 +28,6 @@
 #include <KCmdLineArgs>
 #include <KToolInvocation>
 #include <kglobalsettings.h>
-#include <kurl.h>
 
 #include "drkonqi.h"
 #include "backtracegenerator.h"
