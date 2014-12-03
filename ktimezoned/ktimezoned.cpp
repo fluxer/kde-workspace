@@ -189,13 +189,21 @@ void KTimeZoned::updateLocalZone()
  */
 bool KTimeZoned::findZoneTab(QFile& f)
 {
-#if defined(SOLARIS) || defined(USE_SOLARIS)
-    const QString ZONE_TAB_FILE = QLatin1String("/tab/zone_sun.tab");
-    const QString ZONE_INFO_DIR = QLatin1String("/usr/share/lib/zoneinfo");
-#else
-    const QString ZONE_TAB_FILE = QLatin1String("/zone.tab");
-    const QString ZONE_INFO_DIR = QLatin1String("/usr/share/zoneinfo");
-#endif
+    QString ZONE_TAB_FILE = "/zone.tab";
+    QString ZONE_INFO_DIR;
+
+    if (QDir("/usr/share/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/usr/share/zoneinfo";
+    } else if (QDir("/usr/lib/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/usr/lib/zoneinfo";
+    } else if (QDir("/share/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/share/zoneinfo";
+    } else if (QDir("/lib/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/lib/zoneinfo";
+    } else {
+        // /usr is kind of standard
+        ZONE_INFO_DIR = "/usr/share/zoneinfo";
+    }
 
     mZoneTabCache = NoCache;
 
@@ -204,16 +212,6 @@ bool KTimeZoned::findZoneTab(QFile& f)
     QDir dir;
     QString zoneinfoDir = ZONE_INFO_DIR;
     // make a note if the dir exists; whether it contains zone.tab or not
-    if (dir.exists(zoneinfoDir))
-    {
-        mZoneinfoDir = zoneinfoDir;
-        f.setFileName(zoneinfoDir + ZONE_TAB_FILE);
-        if (f.open(QIODevice::ReadOnly))
-            return true;
-        kDebug(1221) << "Can't open " << f.fileName();
-    }
-
-    zoneinfoDir = QLatin1String("/usr/lib/zoneinfo");
     if (dir.exists(zoneinfoDir))
     {
         mZoneinfoDir = zoneinfoDir;
@@ -233,69 +231,6 @@ bool KTimeZoned::findZoneTab(QFile& f)
         kDebug(1221) << "Can't open " << f.fileName();
     }
 
-    zoneinfoDir = QLatin1String("/usr/share/lib/zoneinfo");
-    if (dir.exists(zoneinfoDir + QLatin1String("/src")))
-    {
-        mZoneinfoDir = zoneinfoDir;
-        // Solaris support. Synthesise something that looks like a zone.tab,
-        // and cache it between sessions.
-        //
-        // grep -h ^Zone /usr/share/lib/zoneinfo/src/* | awk '{print "??\t+9999+99999\t" $2}'
-        //
-        // where the country code is set to "??" and the latitude/longitude
-        // values are dummies.
-        //
-        QDir d(mZoneinfoDir + QLatin1String("/src"));
-        d.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
-        QStringList fileList = d.entryList();
-
-        mZoneTab = KStandardDirs::locateLocal("cache", QLatin1String("zone.tab"));
-        f.setFileName(mZoneTab);
-        if (!f.open(QIODevice::WriteOnly))
-        {
-            kError(1221) << "Could not create zone.tab cache" << endl;
-            return false;
-        }
-
-        QFile zoneFile;
-        QList<QByteArray> tokens;
-        QByteArray line;
-        line.reserve(1024);
-        QTextStream tmpStream(&f);
-        qint64 r;
-        for (int i = 0, end = fileList.count();  i < end;  ++i)
-        {
-            zoneFile.setFileName(d.filePath(fileList[i].toLatin1()));
-            if (!zoneFile.open(QIODevice::ReadOnly))
-            {
-                kDebug(1221) << "Could not open file '" << zoneFile.fileName().toLatin1() \
-                         << "' for reading." << endl;
-                continue;
-            }
-            while (!zoneFile.atEnd())
-            {
-                if ((r = zoneFile.readLine(line.data(), 1023)) > 0
-                &&  line.startsWith("Zone"))
-                {
-                    line.replace('\t', ' ');    // change tabs to spaces
-                    tokens = line.split(' ');
-                    for (int j = 0, jend = tokens.count();  j < jend;  ++j)
-                        if (tokens[j].endsWith(' '))
-                            tokens[j].chop(1);
-                    tmpStream << "??\t+9999+99999\t" << tokens[1] << "\n";
-                }
-            }
-            zoneFile.close();
-        }
-        f.close();
-        if (!f.open(QIODevice::ReadOnly))
-        {
-            kError(1221) << "Could not reopen zone.tab cache file for reading." << endl;
-            return false;
-        }
-        mZoneTabCache = Solaris;
-        return true;
-    }
     return false;
 }
 
