@@ -64,12 +64,6 @@ class KTimeZoned : public KTimeZonedBase
             LocaltimeCopy = Localtime | File,
             LocaltimeLink = Localtime | Link
         };
-        // Type of zone.tab cache
-        enum CacheType
-        {
-            NoCache,        // zone.tab is the real thing, not a cached version
-            Solaris         // Solaris: compiled from files in /usr/share/lib/zoneinfo/src
-        };
         typedef QMap<QString, QString> MD5Map;    // zone name, checksum
 
         /** reimp */
@@ -104,7 +98,6 @@ class KTimeZoned : public KTimeZonedBase
         KDirWatch  *mZonetabWatch;      // watch for zone.tab file changes
         KDirWatch  *mDirWatch;          // watch for time zone definition file changes
         MD5Map      mMd5Sums;           // MD5 checksums of zoneinfo files
-        CacheType   mZoneTabCache;      // type of cached simulated zone.tab
         bool        mHaveCountryCodes;  // true if zone.tab contains any country codes
 };
 

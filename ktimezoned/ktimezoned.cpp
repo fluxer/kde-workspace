@@ -58,7 +58,6 @@ const int MAX_ZONE_TAB_LINE_LENGTH = 2000;
 // Config file entry names
 const char ZONEINFO_DIR[]   = "ZoneinfoDir";   // path to zoneinfo/ directory
 const char ZONE_TAB[]       = "Zonetab";       // path & name of zone.tab
-const char ZONE_TAB_CACHE[] = "ZonetabCache";  // type of cached simulated zone.tab
 const char LOCAL_ZONE[]     = "LocalZone";     // name of local time zone
 
 
@@ -101,8 +100,6 @@ void KTimeZoned::init(bool restart)
     mZoneinfoDir     = group.readEntry(ZONEINFO_DIR);
     mZoneTab         = group.readEntry(ZONE_TAB);
     mConfigLocalZone = group.readEntry(LOCAL_ZONE);
-    QString ztc      = group.readEntry(ZONE_TAB_CACHE, QString());
-    mZoneTabCache    = (ztc == "Solaris") ? Solaris : NoCache;
     if (mZoneinfoDir.length() > 1 && mZoneinfoDir.endsWith('/'))
         mZoneinfoDir.truncate(mZoneinfoDir.length() - 1);   // strip trailing '/'
 
@@ -110,21 +107,14 @@ void KTimeZoned::init(bool restart)
 
     QString oldZoneinfoDir = mZoneinfoDir;
     QString oldZoneTab     = mZoneTab;
-    CacheType oldCacheType = mZoneTabCache;
 
     // Open zone.tab if we already know where it is
     QFile f;
     if (!mZoneTab.isEmpty() && !mZoneinfoDir.isEmpty())
     {
         f.setFileName(mZoneTab);
-        if (!f.open(QIODevice::ReadOnly))
+        if (!f.open(QIODevice::ReadOnly)) {
             mZoneTab.clear();
-        else if (mZoneTabCache != NoCache)
-        {
-            // Check whether the cached zone.tab is still up to date
-#ifdef __GNUC__
-#warning Implement checking whether Solaris cached zone.tab is up to date
-#endif
         }
     }
 
@@ -136,19 +126,11 @@ void KTimeZoned::init(bool restart)
         mZoneTab = f.fileName();
 
         if (mZoneinfoDir != oldZoneinfoDir
-        ||  mZoneTab != oldZoneTab
-        ||  mZoneTabCache != oldCacheType)
+        ||  mZoneTab != oldZoneTab)
         {
             // Update config file and notify interested applications
             group.writeEntry(ZONEINFO_DIR, mZoneinfoDir);
             group.writeEntry(ZONE_TAB, mZoneTab);
-            QString ztc;
-            switch (mZoneTabCache)
-            {
-                case Solaris:  ztc = "Solaris";  break;
-                default:  break;
-            }
-            group.writeEntry(ZONE_TAB_CACHE, ztc);
             group.sync();
             QDBusMessage message = QDBusMessage::createSignal("/Daemon", "org.kde.KTimeZoned", "configChanged");
             QDBusConnection::sessionBus().send(message);
@@ -205,10 +187,7 @@ bool KTimeZoned::findZoneTab(QFile& f)
         ZONE_INFO_DIR = "/usr/share/zoneinfo";
     }
 
-    mZoneTabCache = NoCache;
-
     // Find and open zone.tab - it's all easy except knowing where to look.
-    // Try the LSB location first.
     QDir dir;
     QString zoneinfoDir = ZONE_INFO_DIR;
     // make a note if the dir exists; whether it contains zone.tab or not
