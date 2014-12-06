@@ -139,7 +139,8 @@ int ClockHelper::tz( const QString& selectedzone )
         }
         QString tz = ZONE_INFO_DIR + selectedzone;
 
-        if (!QFile::remove("/etc/localtime")) {
+        QFile f("/etc/localtime");
+        if (f.exists() && !f.remove()) {
           ret |= TimezoneError;
         }
         if (!QFile::link(tz, "/etc/localtime")) {

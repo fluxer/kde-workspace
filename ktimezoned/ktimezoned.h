@@ -45,28 +45,25 @@ class KTimeZoned : public KTimeZonedBase
         void  localChanged(const QString& path);
 
     private:
-        // How the local time zone is specified
-        enum LocalMethod
-        {
-            Utc,            // use UTC default: no local zone spec was found
-            EnvTz,          // specified in TZ environment variable
-            Localtime,      // specified in /etc/localtime
-        };
-
         /** reimp */
         void  init(bool restart);
-        bool  findZoneTab();
-        bool  readZoneTab();
+        bool  findZoneTab(QFile& f);
+        void  readZoneTab(QFile& f);
         void  findLocalZone();
-        bool  checkEnv(const char *envZone);
-        bool  checkLocaltime(const QString &path);
+        bool  checkTZ(const char *envZone);
+        bool  checkLocaltimeLink();
+        bool  checkLocaltimeFile();
+        bool  checkTimezone();
         void  updateLocalZone();
-        bool  setLocalZone(const QString &path);
+        bool  matchZoneFile(const QString &path);
+        bool  setLocalZone(const QString &zoneName);
 
         QString     mZoneinfoDir;       // path to zoneinfo directory
         QString     mZoneTab;           // path to zone.tab file
+        QByteArray  mSavedTZ;           // last value of TZ if it's used to set local zone
         KSystemTimeZoneSource *mSource;
         KTimeZones  mZones;             // time zones collection
+        QString     mLocalIdFile;       // file containing pointer to local time zone definition
         QString     mLocalZoneDataFile; // zoneinfo file containing local time zone definition
         KDirWatch  *mZonetabWatch;      // watch for zone.tab file changes
         KDirWatch  *mDirWatch;          // watch for time zone definition file changes
