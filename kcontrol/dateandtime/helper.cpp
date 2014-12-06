@@ -32,6 +32,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #include <kcomponentdata.h>
 #include <kconfig.h>
@@ -40,14 +41,6 @@
 #include <kprocess.h>
 #include <QFile>
 #include <QDir>
-#include <QDebug>
-
-#if defined(USE_SOLARIS)
-#include <ktemporaryfile.h>
-#include <sys/param.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#endif
 
 // We cannot rely on the $PATH environment variable, because D-Bus activation
 // clears it. So we have to use a reasonable default.
@@ -163,10 +156,10 @@ int ClockHelper::tz( const QString& selectedzone )
 
 int ClockHelper::tzreset()
 {
-//     unlink( "/etc/localtime" );
-// 
-//     setenv("TZ", "", 1);
-//     tzset();
+    unlink( "/etc/localtime" );
+
+    setenv("TZ", "", 1);
+    tzset();
     return 0;
 }
 

@@ -136,7 +136,7 @@ void KTimeZoned::init(bool restart)
 // Check if the local zone has been updated, and if so, notify interested parties.
 void KTimeZoned::updateLocalZone()
 {
-    qDebug() << "updating timezone" << mLocalZone;
+    kDebug(1221) << "updating timezone" << mLocalZone;
     KConfig config(QLatin1String("ktimezonedrc"));
     KConfigGroup group(&config, "TimeZones");
     mConfigLocalZone = mLocalZone;
@@ -201,7 +201,7 @@ bool KTimeZoned::findZoneTab(QFile& f)
 // Note that only data needed by this module is specified to KSystemTimeZone.
 void KTimeZoned::readZoneTab(QFile &f)
 {
-    qDebug() << "reading zone.tab";
+    kDebug(1221) << "reading zone.tab";
     // Parse the already open real or fake zone.tab.
     QRegExp lineSeparator("[ \t]");
     if (!mSource)
@@ -267,7 +267,7 @@ void KTimeZoned::findLocalZone()
     mDirWatch->addFile("/etc/localtime");
     if (!mLocalZoneDataFile.isEmpty())
         mDirWatch->addFile(mLocalZoneDataFile);
-        qDebug() << "watching" << mLocalZoneDataFile;
+        kDebug(1221) << "watching" << mLocalZoneDataFile;
     connect(mDirWatch, SIGNAL(dirty(const QString&)), SLOT(localChanged(const QString&)));
     connect(mDirWatch, SIGNAL(deleted(const QString&)), SLOT(localChanged(const QString&)));
     connect(mDirWatch, SIGNAL(created(const QString&)), SLOT(localChanged(const QString&)));
@@ -280,7 +280,7 @@ void KTimeZoned::findLocalZone()
 // Called when KDirWatch detects a change in zone.tab
 void KTimeZoned::zonetab_Changed(const QString& path)
 {
-    qDebug() << "zone.tab changed";
+    kDebug(1221) << "zone.tab changed";
     if (path != mZoneTab) {
         kError(1221) << "Wrong path (" << path << ") for zone.tab";
         return;
@@ -345,7 +345,7 @@ bool KTimeZoned::checkLocaltime(const QString &path)
     }
 
     if (mZoneinfoDir.isEmpty() && !path.indexOf(mZoneinfoDir)) {
-        qDebug() << "relative path passed to checkLocaltime()";
+        kDebug(1221) << "relative path passed to checkLocaltime()";
         return false;
     }
 
