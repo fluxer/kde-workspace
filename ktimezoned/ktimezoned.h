@@ -55,8 +55,8 @@ class KTimeZoned : public KTimeZonedBase
 
         /** reimp */
         void  init(bool restart);
-        bool  findZoneTab(QFile& f);
-        void  readZoneTab(QFile& f);
+        bool  findZoneTab();
+        bool  readZoneTab();
         void  findLocalZone();
         bool  checkEnv(const char *envZone);
         bool  checkLocaltime(const QString &path);

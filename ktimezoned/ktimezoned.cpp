@@ -57,7 +57,6 @@ const int MAX_ZONE_TAB_LINE_LENGTH = 2000;
 
 // Config file entry names
 const char ZONEINFO_DIR[]   = "ZoneinfoDir";   // path to zoneinfo/ directory
-const char ZONE_TAB[]       = "Zonetab";       // path & name of zone.tab
 const char LOCAL_ZONE[]     = "LocalZone";     // name of local time zone
 
 
@@ -98,20 +97,16 @@ void KTimeZoned::init(bool restart)
         config.reparseConfiguration();
     KConfigGroup group(&config, "TimeZones");
     mZoneinfoDir     = group.readEntry(ZONEINFO_DIR);
-    mZoneTab         = group.readEntry(ZONE_TAB);
     mConfigLocalZone = group.readEntry(LOCAL_ZONE);
     if (mZoneinfoDir.length() > 1 && mZoneinfoDir.endsWith('/'))
         mZoneinfoDir.truncate(mZoneinfoDir.length() - 1);   // strip trailing '/'
 
-    // Open zone.tab if we already know where it is
-    QFile f;
     // Search for zone.tab
-    if (!findZoneTab(f))
+    if (!findZoneTab())
         return;
-    mZoneTab = f.fileName();
 
     // Read zone.tab and create a collection of KTimeZone instances
-    readZoneTab(f);
+    readZoneTab();
 
     mZonetabWatch = new KDirWatch(this);
     mZonetabWatch->addFile(mZoneTab);
@@ -140,6 +135,7 @@ void KTimeZoned::updateLocalZone()
     KConfig config(QLatin1String("ktimezonedrc"));
     KConfigGroup group(&config, "TimeZones");
     mConfigLocalZone = mLocalZone;
+    group.writeEntry(ZONEINFO_DIR, mZoneinfoDir);
     group.writeEntry(LOCAL_ZONE, mConfigLocalZone);
     group.sync();
 
@@ -151,47 +147,49 @@ void KTimeZoned::updateLocalZone()
  * Find the location of the zoneinfo files and store in mZoneinfoDir.
  * Open or if necessary create zone.tab.
  */
-bool KTimeZoned::findZoneTab(QFile& f)
+bool KTimeZoned::findZoneTab()
 {
-    QString ZONE_TAB_FILE = "/zone.tab";
-    QString ZONE_INFO_DIR;
+    QString zonetabFile = "/zone.tab";
+    QString zoneinfoDir;
+
+    if (!mZoneinfoDir.isEmpty() && QDir(mZoneinfoDir).exists()) {
+        // It has most likely already been set by preferences in the config
+        zoneinfoDir = mZoneinfoDir;
+    }
 
     if (QDir("/usr/share/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/usr/share/zoneinfo";
+        zoneinfoDir = "/usr/share/zoneinfo";
     } else if (QDir("/usr/lib/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/usr/lib/zoneinfo";
+        zoneinfoDir = "/usr/lib/zoneinfo";
     } else if (QDir("/share/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/share/zoneinfo";
+        zoneinfoDir = "/share/zoneinfo";
     } else if (QDir("/lib/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/lib/zoneinfo";
+        zoneinfoDir = "/lib/zoneinfo";
     } else {
         // /usr is kind of standard
-        ZONE_INFO_DIR = "/usr/share/zoneinfo";
+        zoneinfoDir = "/usr/share/zoneinfo";
     }
 
     // Find and open zone.tab - it's all easy except knowing where to look.
     QDir dir;
-    QString zoneinfoDir = ZONE_INFO_DIR;
     // make a note if the dir exists; whether it contains zone.tab or not
     if (dir.exists(zoneinfoDir))
     {
         mZoneinfoDir = zoneinfoDir;
-        f.setFileName(zoneinfoDir + ZONE_TAB_FILE);
-        if (f.open(QIODevice::ReadOnly))
-            mZoneTab = zoneinfoDir + ZONE_TAB_FILE;
+        if (QFile(zoneinfoDir + zonetabFile).exists())
+            mZoneTab = zoneinfoDir + zonetabFile;
             return true;
-        kDebug(1221) << "Can't open " << f.fileName();
+        kDebug(1221) << "Can't find zone tab";
     }
 
     zoneinfoDir = ::getenv("TZDIR");
     if (!zoneinfoDir.isEmpty() && dir.exists(zoneinfoDir))
     {
         mZoneinfoDir = zoneinfoDir;
-        f.setFileName(zoneinfoDir + ZONE_TAB_FILE);
-        if (f.open(QIODevice::ReadOnly))
-            mZoneTab = zoneinfoDir + ZONE_TAB_FILE;
+        if (QFile(zoneinfoDir + zonetabFile).exists())
+            mZoneTab = zoneinfoDir + zonetabFile;
             return true;
-        kDebug(1221) << "Can't open " << f.fileName();
+        kDebug(1221) << "Can't find zone tab via TZDIR either";
     }
 
     return false;
@@ -199,11 +197,16 @@ bool KTimeZoned::findZoneTab(QFile& f)
 
 // Parse zone.tab and for each time zone, create a KSystemTimeZone instance.
 // Note that only data needed by this module is specified to KSystemTimeZone.
-void KTimeZoned::readZoneTab(QFile &f)
+bool KTimeZoned::readZoneTab()
 {
     kDebug(1221) << "reading zone.tab";
     // Parse the already open real or fake zone.tab.
     QRegExp lineSeparator("[ \t]");
+    QFile f(mZoneTab);
+    if (!f.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+    bool success = false;
     if (!mSource)
         mSource = new KSystemTimeZoneSource;
     mZones.clear();
@@ -231,6 +234,10 @@ void KTimeZoned::readZoneTab(QFile &f)
         mZones.add(KSystemTimeZone(mSource, tokens[2], tokens[0]));
     }
     f.close();
+    if (success) {
+        return true;
+    }
+    return false;
 }
 
 // Find the local time zone, starting from scratch.
@@ -294,12 +301,8 @@ void KTimeZoned::zonetab_Changed(const QString& path)
     // Reread zone.tab and recreate the collection of KTimeZone instances,
     // in case any zones have been created or deleted and one of them
     // subsequently becomes the local zone.
-    QFile f;
-    f.setFileName(mZoneTab);
-    if (!f.open(QIODevice::ReadOnly)) {
+    if (!readZoneTab()) {
         kError(1221) << "Could not open zone.tab (" << mZoneTab << ") to reread";
-    } else {
-        readZoneTab(f);
     }
 }
 
