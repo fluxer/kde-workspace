@@ -52,7 +52,7 @@ KclockModule::KclockModule(QWidget *parent, const QVariantList &)
   KAboutData *about =
   new KAboutData(I18N_NOOP("kcmclock"), 0, ki18n("KDE Clock Control Module"),
                   0, KLocalizedString(), KAboutData::License_GPL,
-                  ki18n("(c) 1996 - 2001 Luca Montecchiani",
+                  ki18n("(c) 1996 - 2001 Luca Montecchiani\n"
                       "(c) 2014 Ivailo Monev"));
 
   about->addAuthor(ki18n("Luca Montecchiani"), ki18n("Original author"), "m.luca@usa.net");
