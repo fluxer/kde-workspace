@@ -77,11 +77,11 @@ namespace Oxygen
 
         if( !accepted ) return false;
 
-        // make sure that the widget is not embedded into a KHTMLView
+        // make sure that the widget is not embedded into a KWebView
         QWidget* parent( widget->parentWidget() );
         while( parent && !parent->isTopLevel() )
         {
-            if( parent->inherits( "KHTMLView" ) ) return false;
+            if( parent->inherits( "KWebView" ) ) return false;
             parent = parent->parentWidget();
         }
 
