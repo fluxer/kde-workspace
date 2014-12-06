@@ -39,6 +39,7 @@
 #include <kstandarddirs.h>
 #include <kprocess.h>
 #include <QFile>
+#include <QDir>
 #include <QDebug>
 
 #if defined(USE_SOLARIS)
@@ -119,7 +120,6 @@ int ClockHelper::date( const QString& newdate, const QString& olddate )
     return 0;
 }
 
-// on non-Solaris systems which do not use /etc/timezone?
 int ClockHelper::tz( const QString& selectedzone )
 {
     int ret = 0;
@@ -129,92 +129,31 @@ int ClockHelper::tz( const QString& selectedzone )
     if (!QRegExp("[a-zA-Z0-9-_+/]*").exactMatch(selectedzone)) {
         return ret;
     }
+        // from ktimezoned
+        QString ZONE_INFO_DIR;
 
-#if defined(USE_SOLARIS)	// MARCO
-
-        KTemporaryFile tf;
-        tf.setPrefix("kde-tzone");
-        tf.open();
-        QTextStream ts(&tf);
-
-        QFile fTimezoneFile(INITFILE);
-        bool updatedFile = false;
-
-        if (fTimezoneFile.open(QIODevice::ReadOnly))
-        {
-            bool found = false;
-
-            QTextStream is(&fTimezoneFile);
-
-            for (QString line = is.readLine(); !line.isNull();
-                 line = is.readLine())
-            {
-                if (line.find("TZ=") == 0)
-                {
-                    ts << "TZ=" << selectedzone << endl;
-                    found = true;
-                }
-                else
-                {
-                    ts << line << endl;
-                }
-            }
-
-            if (!found)
-            {
-                ts << "TZ=" << selectedzone << endl;
-            }
-
-            updatedFile = true;
-            fTimezoneFile.close();
+        if (QDir("/usr/share/zoneinfo").exists()) {
+            ZONE_INFO_DIR = "/usr/share/zoneinfo/";
+        } else if (QDir("/usr/lib/zoneinfo").exists()) {
+            ZONE_INFO_DIR = "/usr/lib/zoneinfo/";
+        } else if (QDir("/share/zoneinfo").exists()) {
+            ZONE_INFO_DIR = "/share/zoneinfo/";
+        } else if (QDir("/lib/zoneinfo").exists()) {
+            ZONE_INFO_DIR = "/lib/zoneinfo/";
+        } else {
+            // /usr is kind of standard
+            ZONE_INFO_DIR = "/usr/share/zoneinfo/";
         }
+        QString tz = ZONE_INFO_DIR + selectedzone;
 
-        if (updatedFile)
-        {
-            ts.device()->reset();
-            fTimezoneFile.remove();
-
-            if (fTimezoneFile.open(QIODevice::WriteOnly | QIODevice::Truncate))
-            {
-                QTextStream os(&fTimezoneFile);
-
-                for (QString line = ts->readLine(); !line.isNull();
-                     line = ts->readLine())
-                {
-                    os << line << endl;
-                }
-
-                fchmod(fTimezoneFile.handle(),
-                       S_IXUSR | S_IRUSR | S_IRGRP | S_IXGRP |
-                       S_IROTH | S_IXOTH);
-                fTimezoneFile.close();
-            }
-        }
-
-
-        QString val = selectedzone;
-#else
-        QString tz = "/usr/share/zoneinfo/" + selectedzone;
-
-        QString zic = KStandardDirs::findExe("zic", exePath);
-        if (!zic.isEmpty()) {
-            KProcess::execute(zic, QStringList() << "-l" << selectedzone);
-        } else if (!QFile::remove("/etc/localtime")) {
-          ret |= TimezoneError;
-        } else if (!QFile::copy(tz, "/etc/localtime")) {
+        if (!QFile::remove("/etc/localtime")) {
           ret |= TimezoneError;
         }
-
-        QFile fTimezoneFile("/etc/timezone");
-
-        if (fTimezoneFile.exists() && fTimezoneFile.open(QIODevice::WriteOnly | QIODevice::Truncate) ) {
-            QTextStream t(&fTimezoneFile);
-            t << selectedzone;
-            fTimezoneFile.close();
+        if (!QFile::link(tz, "/etc/localtime")) {
+          ret |= TimezoneError;
         }
 
         QString val = ':' + tz;
-#endif // !USE_SOLARIS
 
         setenv("TZ", val.toAscii(), 1);
         tzset();
@@ -224,13 +163,10 @@ int ClockHelper::tz( const QString& selectedzone )
 
 int ClockHelper::tzreset()
 {
-#if !defined(USE_SOLARIS) // Do not update the System!
-        unlink( "/etc/timezone" );
-        unlink( "/etc/localtime" );
-
-        setenv("TZ", "", 1);
-        tzset();
-#endif // !USE SOLARIS
+//     unlink( "/etc/localtime" );
+// 
+//     setenv("TZ", "", 1);
+//     tzset();
     return 0;
 }
 
