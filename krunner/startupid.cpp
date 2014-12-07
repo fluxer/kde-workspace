@@ -30,7 +30,6 @@
 #include <kapplication.h>
 #include <QImage>
 #include <QBitmap>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QPainter>
 #include <kconfig.h>

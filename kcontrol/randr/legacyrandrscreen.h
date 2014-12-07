@@ -21,7 +21,6 @@
 #define __LEGACYRANDRSCREEN_H__
 
 #include <QObject>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <kcmodule.h>
