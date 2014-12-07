@@ -33,6 +33,7 @@
 #include <QtCore/QTimer>
 #include <QtCore/QTimerEvent>
 #include <QtCore/QStack>
+#include <QtCore/QUrl>
 #include <QSignalMapper>
 
 // KDE headers
@@ -60,7 +61,7 @@ struct Player
 		Phonon::createPath(media, output);
 	}
 
-	inline void play(const QString &file) { media->setCurrentSource(file); media->enqueue(Phonon::MediaSource()); media->play(); }
+	inline void play(const QString &file) { media->setCurrentSource(QUrl::fromLocalFile(file)); media->enqueue(Phonon::MediaSource()); media->play(); }
 	inline void stop() { media->stop(); }
 	inline void setVolume(float volume) { output->setVolume(volume); }
 

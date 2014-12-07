@@ -22,10 +22,9 @@
 
 #include <unistd.h>
 
-//Added by qt3to4:
 #include <QVBoxLayout>
-
 #include <QtDBus/QtDBus>
+
 #include <kaboutdata.h>
 #include <kapplication.h>
 #include <kdialog.h>
