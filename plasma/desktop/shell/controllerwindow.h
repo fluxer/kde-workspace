@@ -42,7 +42,6 @@ namespace Kephal
     class Screen;
 }
 
-class ActivityManager;
 class PanelShadows;
 
 class ControllerWindow : public QWidget
@@ -69,12 +68,10 @@ public:
     void setScreen(int screen);
 
     bool showingWidgetExplorer() const;
-    bool showingActivityManager() const;
 
 public Q_SLOTS:
     void activate();
     void showWidgetExplorer();
-    void showActivityManager();
     virtual void closeIfNotFocussed();
 
 protected:
@@ -98,7 +95,6 @@ private:
     QWeakPointer<Plasma::Containment> m_containment;
     int m_screen;
     QGraphicsView *m_view;
-    ActivityManager *m_activityManager;
     Plasma::WidgetExplorer *m_widgetExplorer;
     QGraphicsWidget *m_graphicsWidget;
     QTimer *m_adjustViewTimer;

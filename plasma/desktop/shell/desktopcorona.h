@@ -28,13 +28,6 @@
 class QMenu;
 class QAction;
 
-class Activity;
-
-namespace KActivities
-{
-    class Controller;
-} // namespace 
-
 namespace Plasma
 {
     class Applet;
@@ -78,28 +71,12 @@ public:
     bool loadDefaultLayoutScripts();
     void processUpdateScripts();
 
-    /**
-     * Ensures activities exist for the containments
-     */
-    void checkActivities();
-
-    /**
-     * @return the Activity object for the given activity id
-     */
-    Activity* activity(const QString &id);
-
-    KActivities::Controller *activityController();
-
 public Q_SLOTS:
     QRect availableScreenRect(int id) const;
     void addPanel();
     void addPanel(QAction *action);
     void addPanel(const QString &plugin);
     void populateAddPanelsMenu();
-    void activateNextActivity();
-    void activatePreviousActivity();
-    /** If there are more than 1 active activities, stop the current activity*/
-    void stopCurrentActivity();
     void evaluateScripts(const QStringList &scripts, bool isStartup = true);
 
 protected Q_SLOTS:
@@ -109,21 +86,15 @@ protected Q_SLOTS:
     void printScriptMessage(const QString &error);
     void updateImmutability(Plasma::ImmutabilityType immutability);
     void checkAddPanelAction(const QStringList &sycocaChanges = QStringList());
-    void currentActivityChanged(const QString &activity);
-    void activityAdded(const QString &id);
-    void activityRemoved(const QString &id);
 
 private:
     void init();
 
     Plasma::Applet *loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
-    void checkDesktop(Activity *activity, bool signalWhenExists, int screen, int desktop = -1);
 
     QAction *m_addPanelAction;
     QMenu *m_addPanelsMenu;
     QTimer *m_delayedUpdateTimer;
-    KActivities::Controller *m_activityController;
-    QHash<QString, Activity*> m_activities;
 };
 
 #endif

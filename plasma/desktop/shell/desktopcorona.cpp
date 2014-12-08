@@ -44,14 +44,10 @@
 #include <Plasma/DataEngineManager>
 #include <Plasma/Package>
 
-#include <KActivities/Controller>
-#include <KActivities/Info>
-
 #include <kephal/screens.h>
 
 #include <scripting/layouttemplatepackagestructure.h>
 
-#include "activity.h"
 #include "panelview.h"
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
@@ -63,8 +59,7 @@ DesktopCorona::DesktopCorona(QObject *parent)
     : Plasma::Corona(parent),
       m_addPanelAction(0),
       m_addPanelsMenu(0),
-      m_delayedUpdateTimer(new QTimer(this)),
-      m_activityController(new KActivities::Controller(this))
+      m_delayedUpdateTimer(new QTimer(this))
 {
     init();
 }
@@ -102,31 +97,9 @@ void DesktopCorona::init()
 
     //why do these actions belong to plasmaapp?
     //because it makes the keyboard shortcuts work.
-    KAction *action = new KAction(PlasmaApp::self());
-    action->setText(i18n("Next Activity"));
-    action->setObjectName( QLatin1String("Next Activity" )); // NO I18N
-    action->setGlobalShortcut(KShortcut(Qt::META + Qt::Key_Tab));
-    connect(action, SIGNAL(triggered()), this, SLOT(activateNextActivity()));
-
-    action = new KAction(PlasmaApp::self());
-    action->setText(i18n("Previous Activity"));
-    action->setObjectName( QLatin1String("Previous Activity" )); // NO I18N
-    action->setGlobalShortcut(KShortcut(Qt::META + Qt::SHIFT + Qt::Key_Tab));
-    connect(action, SIGNAL(triggered()), this, SLOT(activatePreviousActivity()));
-
-    action = new KAction(PlasmaApp::self());
-    action->setText(i18n("Stop Current Activity"));
-    action->setObjectName( QLatin1String("Stop Activity")); //no I18N
-    action->setGlobalShortcut(KShortcut(Qt::META + Qt::Key_S));
-    connect(action, SIGNAL(triggered()), this, SLOT(stopCurrentActivity()));
-
     connect(this, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)),
             this, SLOT(updateImmutability(Plasma::ImmutabilityType)));
     connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(checkAddPanelAction(QStringList)));
-
-    connect(m_activityController, SIGNAL(currentActivityChanged(QString)), this, SLOT(currentActivityChanged(QString)));
-    connect(m_activityController, SIGNAL(activityAdded(QString)), this, SLOT(activityAdded(QString)));
-    connect(m_activityController, SIGNAL(activityRemoved(QString)), this, SLOT(activityRemoved(QString)));
 
     // Everything will be repainted shortly after a screen resize was processed, but unfortunately that does not suffice:
     // When screen size is increased, parts of the newly uncovered area on the panel remain black for some reason. Also,
@@ -209,18 +182,6 @@ void DesktopCorona::checkScreen(int screen, bool signalWhenExists)
     //desktop views are created in response to containment's screenChanged signal instead, which is
     //buggy (sometimes the containment thinks it's already on the screen, so no view is created)
 
-    Activity *currentActivity = activity(m_activityController->currentActivity());
-    //ensure the desktop(s) have a containment and view
-    if (AppSettings::perVirtualDesktopViews()) {
-        int numDesktops = KWindowSystem::numberOfDesktops();
-
-        for (int j = 0; j < numDesktops; ++j) {
-            checkDesktop(currentActivity, signalWhenExists, screen, j);
-        }
-    } else {
-        checkDesktop(currentActivity, signalWhenExists, screen);
-    }
-
     //ensure the panels get views too
     if (signalWhenExists) {
         foreach (Plasma::Containment * c, containments()) {
@@ -234,23 +195,6 @@ void DesktopCorona::checkScreen(int screen, bool signalWhenExists)
                 emit containmentAdded(c);
             }
         }
-    }
-}
-
-void DesktopCorona::checkDesktop(Activity *activity, bool signalWhenExists, int screen, int desktop)
-{
-    Plasma::Containment *c = activity->containmentForScreen(screen, desktop);
-
-    if (!c) {
-        return;
-    }
-
-    c->setScreen(screen, desktop);
-    c->flushPendingConstraintsEvents();
-    requestConfigSync();
-
-    if (signalWhenExists) {
-        emit containmentAdded(c);
     }
 }
 
@@ -582,191 +526,6 @@ void DesktopCorona::addPanel(const QString &plugin)
     panel->setMaximumSize(w, h);
     panel->resize(w, h);
 }
-
-void DesktopCorona::checkActivities()
-{
-    kDebug() << "containments to start with" << containments().count();
-
-    KActivities::Consumer::ServiceStatus status = m_activityController->serviceStatus();
-    //kDebug() << "$%$%$#%$%$%Status:" << status;
-    if (status == KActivities::Consumer::NotRunning) {
-        //panic and give up - better than causing a mess
-        kDebug() << "No ActivityManager? Help, I've fallen and I can't get up!";
-        return;
-    }
-
-    QStringList existingActivities = m_activityController->listActivities();
-    foreach (const QString &id, existingActivities) {
-        activityAdded(id);
-    }
-
-    QStringList newActivities;
-    QString newCurrentActivity;
-    //migration checks:
-    //-containments with an invalid id are deleted.
-    //-containments that claim they were on a screen are kept together, and are preferred if we
-    //need to initialize the current activity.
-    //-containments that don't know where they were or who they were with just get made into their
-    //own activity.
-    foreach (Plasma::Containment *cont, containments()) {
-        if ((cont->containmentType() == Plasma::Containment::DesktopContainment ||
-             cont->containmentType() == Plasma::Containment::CustomContainment) &&
-            !offscreenWidgets().contains(cont)) {
-            Plasma::Context *context = cont->context();
-            const QString oldId = context->currentActivityId();
-            if (!oldId.isEmpty()) {
-                if (existingActivities.contains(oldId)) {
-                    continue; //it's already claimed
-                }
-                kDebug() << "invalid id" << oldId;
-                //byebye
-                cont->destroy(false);
-                continue;
-            }
-
-            if (cont->screen() > -1 && !newCurrentActivity.isEmpty()) {
-                //it belongs on the new current activity
-                context->setCurrentActivityId(newCurrentActivity);
-                continue;
-            }
-
-            //discourage blank names
-            if (context->currentActivity().isEmpty()) {
-                context->setCurrentActivity(i18nc("Default name for a new activity", "New Activity"));
-            }
-
-            //create a new activity for the containment
-            const QString id = m_activityController->addActivity(context->currentActivity());
-            context->setCurrentActivityId(id);
-            newActivities << id;
-            if (cont->screen() > -1) {
-                newCurrentActivity = id;
-            }
-            kDebug() << "migrated" << cont->id() << context->currentActivityId() << context->currentActivity();
-        }
-    }
-
-    kDebug() << "migrated?" << !newActivities.isEmpty() << containments().count();
-    if (!newActivities.isEmpty()) {
-        requestConfigSync();
-    }
-
-    //init the newbies
-    foreach (const QString &id, newActivities) {
-        activityAdded(id);
-    }
-
-    //ensure the current activity is initialized
-    if (m_activityController->currentActivity().isEmpty()) {
-        kDebug() << "guessing at current activity";
-        if (existingActivities.isEmpty()) {
-            if (newCurrentActivity.isEmpty()) {
-                if (newActivities.isEmpty()) {
-                    kDebug() << "no activities!?! Bad activitymanager, no cookie!";
-                    QString id = m_activityController->addActivity(i18nc("Default name for a new activity", "New Activity"));
-                    activityAdded(id);
-                    m_activityController->setCurrentActivity(id);
-                    kDebug() << "created emergency activity" << id;
-                } else {
-                    m_activityController->setCurrentActivity(newActivities.first());
-                }
-            } else {
-                m_activityController->setCurrentActivity(newCurrentActivity);
-            }
-        } else {
-            m_activityController->setCurrentActivity(existingActivities.first());
-        }
-    }
-}
-
-void DesktopCorona::currentActivityChanged(const QString &newActivity)
-{
-    kDebug() << newActivity;
-    Activity *act = activity(newActivity);
-    if (act) {
-        act->ensureActive();
-    }
-}
-
-Activity* DesktopCorona::activity(const QString &id)
-{
-    if (!m_activities.contains(id)) {
-        //the add signal comes late sometimes
-        activityAdded(id);
-    }
-    return m_activities.value(id);
-}
-
-KActivities::Controller *DesktopCorona::activityController()
-{
-    return m_activityController;
-}
-
-void DesktopCorona::activityAdded(const QString &id)
-{
-    //TODO more sanity checks
-    if (m_activities.contains(id)) {
-        kDebug() << "you're late." << id;
-        return;
-    }
-
-    Activity *a = new Activity(id, this);
-    if (a->isCurrent()) {
-        a->ensureActive();
-    }
-    m_activities.insert(id, a);
-}
-
-void DesktopCorona::activityRemoved(const QString &id)
-{
-    Activity *a = m_activities.take(id);
-    a->deleteLater();
-}
-
-void DesktopCorona::activateNextActivity()
-{
-    QStringList list = m_activityController->listActivities(KActivities::Info::Running);
-    if (list.isEmpty()) {
-        return;
-    }
-
-    //FIXME: if the current activity is in transition the "next" will be the first
-    int start = list.indexOf(m_activityController->currentActivity());
-    int i = (start + 1) % list.size();
-
-    m_activityController->setCurrentActivity(list.at(i));
-}
-
-void DesktopCorona::activatePreviousActivity()
-{
-    QStringList list = m_activityController->listActivities(KActivities::Info::Running);
-    if (list.isEmpty()) {
-        return;
-    }
-
-    //FIXME: if the current activity is in transition the "previous" will be the last
-    int start = list.indexOf(m_activityController->currentActivity());
-    //fun fact: in c++, (-1 % foo) == -1
-    int i = start - 1;
-    if (i < 0) {
-        i = list.size() - 1;
-    }
-
-    m_activityController->setCurrentActivity(list.at(i));
-}
-
-void DesktopCorona::stopCurrentActivity()
-{
-    QStringList list = m_activityController->listActivities(KActivities::Info::Running);
-    //if there are no other activities to switch to, do not stop the current activity.
-    if (list.size() <= 1) {
-        return;
-    }
-
-    QString currentActivity = m_activityController->currentActivity();
-    m_activityController->stopActivity(currentActivity);
-}
-
 
 #include "desktopcorona.moc"
 
