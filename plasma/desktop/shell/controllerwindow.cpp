@@ -165,6 +165,7 @@ void ControllerWindow::setGraphicsWidget(QGraphicsWidget *widget)
         if (m_graphicsWidget == m_widgetExplorer) {
             m_widgetExplorer->deleteLater();
             m_widgetExplorer = 0;
+        }
     }
 
     m_graphicsWidget = widget;
