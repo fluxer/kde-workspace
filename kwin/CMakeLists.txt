@@ -6,7 +6,6 @@ OPTION(KWIN_BUILD_OXYGEN "Enable building of default decoration Oxygen" ON)
 OPTION(KWIN_BUILD_KCMS "Enable building of KWin configuration modules." ON)
 OPTION(KWIN_BUILD_TABBOX "Enable building of KWin Tabbox functionality" ON)
 OPTION(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support" ON)
-OPTION(KWIN_BUILD_SCRIPTING "Enable building of KWin with scripting support" ON)
 OPTION(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 OPTION(KWIN_BUILD_XRENDER_COMPOSITING "Enable building of KWin with XRender Compositing support" ON)
 OPTION(KWIN_BUILD_OPENGL_1_COMPOSITING "Enable support for OpenGL 1.x, automatically disabled when building for OpenGL ES 2.0" ON)
@@ -23,7 +22,6 @@ if(KWIN_PLASMA_ACTIVE)
     set(KWIN_BUILD_DECORATIONS OFF)
     set(KWIN_BUILD_KCMS OFF)
     set(KWIN_BUILD_SCREENEDGES OFF)
-    set(KWIN_BUILD_SCRIPTING ON)
     set(KWIN_BUILD_XRENDER_COMPOSITING OFF)
     set(KWIN_MOBILE_EFFECTS ON)
     set(KWIN_BUILD_WITH_OPENGLES ON)
@@ -86,12 +84,8 @@ endif()
 add_subdirectory( data )
 
 add_subdirectory( effects )
-add_subdirectory( scripts )
 add_subdirectory( tabbox )
 
-if(KWIN_BUILD_SCRIPTING)
-    add_subdirectory(scripting)
-endif()
 
 ########### next target ###############
 
@@ -142,19 +136,6 @@ set(kwin_KDEINIT_SRCS
    virtualdesktops.cpp
    xcbutils.cpp
    )
-
-if(KWIN_BUILD_SCRIPTING)
-    set(
-        kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
-        scripting/scripting.cpp
-        scripting/workspace_wrapper.cpp
-        scripting/meta.cpp
-        scripting/scriptedeffect.cpp
-        scripting/scriptingutils.cpp
-        scripting/timer.cpp
-        scripting/scripting_model.cpp
-    )
-endif()
 
 if(KWIN_BUILD_TABBOX)
     set(
@@ -262,10 +243,6 @@ else()
     add_definitions(-DKWIN_NO_XF86VM)
 endif()
 
-if(KWIN_BUILD_SCRIPTING)
-    set(kwin_QT_LIBS ${kwin_QT_LIBS} ${QT_QTSCRIPT_LIBRARY})
-endif()
-
 if(OPENGL_EGL_FOUND)
     set(kwin_OPENGL_LIBS ${kwin_OPENGL_LIBS} ${OPENGLES_EGL_LIBRARY})
 endif()
@@ -323,11 +300,6 @@ endif()
 install( FILES kwin.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} RENAME ${KWIN_NAME}.kcfg )
 install( FILES kwin.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/${KWIN_NAME} RENAME ${KWIN_NAME}.notifyrc)
 install( FILES org.kde.KWin.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
-
-if( KWIN_BUILD_SCRIPTING )
-    # Install the KWin/WindowSwitcher service type
-    install( FILES scripting/kwinscript.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
-endif()
 
 kde4_install_icons( ${ICON_INSTALL_DIR} )
 
