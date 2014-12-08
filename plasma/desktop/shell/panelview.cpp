@@ -894,8 +894,7 @@ void PanelView::togglePanelController()
     }
 
     if (m_panelController->isVisible()) {
-        if (m_panelController->showingWidgetExplorer() ||
-            m_panelController->showingActivityManager()) {
+        if (m_panelController->showingWidgetExplorer()) {
             m_panelController->switchToController();
             m_panelController->move(m_panelController->positionForPanelGeometry(geometry()));
         } else {
