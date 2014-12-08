@@ -31,7 +31,7 @@ set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 
 kde4_add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 
-target_link_libraries(taskmanager processcore ${KACTIVITIES_LIBRARIES} ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
+target_link_libraries(taskmanager processcore ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 if (X11_Xfixes_FOUND)
   target_link_libraries(taskmanager ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
@@ -41,8 +41,6 @@ endif (X11_Xrender_FOUND)
 if (X11_Xcomposite_FOUND)
   target_link_libraries(taskmanager ${X11_Xcomposite_LIB})
 endif (X11_Xcomposite_FOUND)
-
-include_directories(${KACTIVITIES_INCLUDE_DIR})
 
 if (NOT KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal)

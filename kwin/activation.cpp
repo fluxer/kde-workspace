@@ -31,9 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "focuschain.h"
 #include "netinfo.h"
 #include "workspace.h"
-#ifdef KWIN_BUILD_ACTIVITIES
-#include "activities.h"
-#endif
 
 #include <fixx11h.h>
 #include <kxerrorhandler.h>
@@ -302,14 +299,6 @@ void Workspace::activateClient(Client* c, bool force)
         VirtualDesktopManager::self()->setCurrent(c->desktop());
         --block_focus;
     }
-#ifdef KWIN_BUILD_ACTIVITIES
-    if (!c->isOnCurrentActivity()) {
-        ++block_focus;
-        //DBUS!
-        Activities::self()->setCurrent(c->activities().first()); //first isn't necessarily best, but it's easiest
-        --block_focus;
-    }
-#endif
     if (c->isMinimized())
         c->unminimize();
 

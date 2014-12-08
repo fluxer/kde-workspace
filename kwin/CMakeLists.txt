@@ -10,7 +10,6 @@ OPTION(KWIN_BUILD_SCRIPTING "Enable building of KWin with scripting support" ON)
 OPTION(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 OPTION(KWIN_BUILD_XRENDER_COMPOSITING "Enable building of KWin with XRender Compositing support" ON)
 OPTION(KWIN_BUILD_OPENGL_1_COMPOSITING "Enable support for OpenGL 1.x, automatically disabled when building for OpenGL ES 2.0" ON)
-OPTION(KWIN_BUILD_ACTIVITIES "Enable building of KWin with kactivities support" ON)
 if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
    OPTION(KWIN_PLASMA_ACTIVE "Enable building KWin for Plasma Active." OFF)
 else()
@@ -184,13 +183,6 @@ if(KWIN_BUILD_KAPPMENU)
     )
 endif()
 
-if(KWIN_BUILD_ACTIVITIES)
-    set(
-        kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
-        activities.cpp
-    )
-endif()
-
 if(KWIN_HAVE_EGL)
     set(kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS} eglonxbackend.cpp)
 endif()
@@ -272,11 +264,6 @@ endif()
 
 if(KWIN_BUILD_SCRIPTING)
     set(kwin_QT_LIBS ${kwin_QT_LIBS} ${QT_QTSCRIPT_LIBRARY})
-endif()
-
-if(KWIN_BUILD_ACTIVITIES)
-    set(kwin_KDE_LIBS ${kwin_KDE_LIBS} ${KACTIVITIES_LIBRARIES})
-    include_directories(${KACTIVITIES_INCLUDE_DIR})
 endif()
 
 if(OPENGL_EGL_FOUND)

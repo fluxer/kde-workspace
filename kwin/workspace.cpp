@@ -24,9 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kdecorationfactory.h>
 #include <kwinglplatform.h>
 // kwin
-#ifdef KWIN_BUILD_ACTIVITIES
-#include "activities.h"
-#endif
 #ifdef KWIN_BUILD_KAPPMENU
 #include "appmenu.h"
 #endif
@@ -154,10 +151,6 @@ Workspace::Workspace(bool restore)
     // start the cursor support
     Cursor::create(this);
 
-#ifdef KWIN_BUILD_ACTIVITIES
-    Activities *activities = Activities::create(this);
-    connect(activities, SIGNAL(currentChanged(QString)), SLOT(updateCurrentActivity(QString)));
-#endif
 
     // PluginMgr needs access to the config file, so we need to wait for it for finishing
     reparseConfigFuture.waitForFinished();
@@ -296,9 +289,6 @@ void Workspace::init()
     }
     if (!VirtualDesktopManager::self()->setCurrent(initial_desktop))
         VirtualDesktopManager::self()->setCurrent(1);
-#ifdef KWIN_BUILD_ACTIVITIES
-    Activities::self()->update(false, true);
-#endif
 
     reconfigureTimer.setSingleShot(true);
     updateToolWindowsTimer.setSingleShot(true);
@@ -1032,95 +1022,7 @@ Client *Workspace::findClientToActivateOnDesktop(uint desktop)
 
 void Workspace::updateCurrentActivity(const QString &new_activity)
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    //closeActivePopup();
-    ++block_focus;
-    // TODO: Q_ASSERT( block_stacking_updates == 0 ); // Make sure stacking_order is up to date
-    StackingUpdatesBlocker blocker(this);
-
-    ++block_showing_desktop; //FIXME should I be using that?
-    // Optimized Desktop switching: unmapping done from back to front
-    // mapping done from front to back => less exposure events
-    //Notify::raise((Notify::Event) (Notify::DesktopChange+new_desktop));
-
-    ObscuringWindows obs_wins;
-
-    const QString &old_activity = Activities::self()->previous();
-
-    for (ToplevelList::ConstIterator it = stacking_order.constBegin();
-            it != stacking_order.constEnd();
-            ++it) {
-        Client *c = qobject_cast<Client*>(*it);
-        if (!c) {
-            continue;
-        }
-        if (!c->isOnActivity(new_activity) && c != movingClient && c->isOnCurrentDesktop()) {
-            if (c->isShown(true) && c->isOnActivity(old_activity) && !compositing())
-                obs_wins.create(c);
-            c->updateVisibility();
-        }
-    }
-
-    // Now propagate the change, after hiding, before showing
-    //rootInfo->setCurrentDesktop( currentDesktop() );
-
-    /* TODO someday enable dragging windows to other activities
-    if ( movingClient && !movingClient->isOnDesktop( new_desktop ))
-        {
-        movingClient->setDesktop( new_desktop );
-        */
-
-    for (int i = stacking_order.size() - 1; i >= 0 ; --i) {
-        Client *c = qobject_cast<Client*>(stacking_order.at(i));
-        if (!c) {
-            continue;
-        }
-        if (c->isOnActivity(new_activity))
-            c->updateVisibility();
-    }
-
-    --block_showing_desktop;
-    //FIXME not sure if I should do this either
-    if (showingDesktop())   // Do this only after desktop change to avoid flicker
-        resetShowingDesktop(false);
-
-    // Restore the focus on this desktop
-    --block_focus;
-    Client* c = 0;
-
-    //FIXME below here is a lot of focuschain stuff, probably all wrong now
-    if (options->focusPolicyIsReasonable()) {
-        // Search in focus chain
-        c = FocusChain::self()->getForActivation(VirtualDesktopManager::self()->current());
-    }
-    // If "unreasonable focus policy" and active_client is on_all_desktops and
-    // under mouse (Hence == old_active_client), conserve focus.
-    // (Thanks to Volker Schatz <V.Schatz at thphys.uni-heidelberg.de>)
-    else if (active_client && active_client->isShown(true) && active_client->isOnCurrentDesktop() && active_client->isOnCurrentActivity())
-        c = active_client;
-
-    if (c == NULL && !desktops.isEmpty())
-        c = findDesktop(true, VirtualDesktopManager::self()->current());
-
-    if (c != active_client)
-        setActiveClient(NULL);
-
-    if (c)
-        requestFocus(c);
-    else if (!desktops.isEmpty())
-        requestFocus(findDesktop(true, VirtualDesktopManager::self()->current()));
-    else
-        focusToNull();
-
-    // Not for the very first time, only if something changed and there are more than 1 desktops
-
-    //if ( effects != NULL && old_desktop != 0 && old_desktop != new_desktop )
-    //    static_cast<EffectsHandlerImpl*>( effects )->desktopChanged( old_desktop );
-    if (compositing() && m_compositor)
-        m_compositor->addRepaintFull();
-#else
     Q_UNUSED(new_activity)
-#endif
 }
 
 void Workspace::moveClientsFromRemovedDesktops()

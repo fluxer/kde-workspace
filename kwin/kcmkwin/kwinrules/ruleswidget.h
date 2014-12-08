@@ -60,9 +60,6 @@ private slots:
     void updateEnablesize();
     void updateEnabledesktop();
     void updateEnablescreen();
-#ifdef KWIN_BUILD_ACTIVITIES
-    void updateEnableactivity();
-#endif
     void updateEnablemaximizehoriz();
     void updateEnablemaximizevert();
     void updateEnableminimize();
@@ -98,10 +95,6 @@ private slots:
 private:
     int desktopToCombo(int d) const;
     int comboToDesktop(int val) const;
-#ifdef KWIN_BUILD_ACTIVITIES
-    int activityToCombo(QString d) const;
-    QString comboToActivity(int val) const;
-#endif
     int comboToTiling(int val) const;
     int inc(int i) const { return i+1; }
     int dec(int i) const { return i-1; }

@@ -1,7 +1,5 @@
 project(plasma-pager)
 
-include_directories(${KACTIVITIES_INCLUDE_DIR})
-
 set(pager_SRCS
     model.cpp
     pager.cpp)
@@ -12,7 +10,6 @@ target_link_libraries(plasma_applet_pager
                       ${KDE4_KIO_LIBS}
                       ${KDE4_PLASMA_LIBS}
                       ${KDE4_KCMUTILS_LIBRARY}
-                      ${KACTIVITIES_LIBRARIES}
                       ${QT_QTDECLARATIVE_LIBRARY}
                       taskmanager)
 

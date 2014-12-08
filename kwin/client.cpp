@@ -21,9 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // own
 #include "client.h"
 // kwin
-#ifdef KWIN_BUILD_ACTIVITIES
-#include "activities.h"
-#endif
 #ifdef KWIN_BUILD_KAPPMENU
 #include "appmenu.h"
 #endif
@@ -1501,22 +1498,8 @@ void Client::setDesktop(int desktop)
  */
 void Client::setOnActivity(const QString &activity, bool enable)
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    QStringList newActivitiesList = activities();
-    if (newActivitiesList.contains(activity) == enable)   //nothing to do
-        return;
-    if (enable) {
-        QStringList allActivities = Activities::self()->all();
-        if (!allActivities.contains(activity))   //bogus ID
-            return;
-        newActivitiesList.append(activity);
-    } else
-        newActivitiesList.removeOne(activity);
-    setOnActivities(newActivitiesList);
-#else
     Q_UNUSED(activity)
     Q_UNUSED(enable)
-#endif
 }
 
 /**
@@ -1524,33 +1507,7 @@ void Client::setOnActivity(const QString &activity, bool enable)
  */
 void Client::setOnActivities(QStringList newActivitiesList)
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    QString joinedActivitiesList = newActivitiesList.join(",");
-    joinedActivitiesList = rules()->checkActivity(joinedActivitiesList, false);
-    newActivitiesList = joinedActivitiesList.split(',', QString::SkipEmptyParts);
-
-    QStringList allActivities = Activities::self()->all();
-    if ( newActivitiesList.isEmpty() ||
-        (newActivitiesList.count() > 1 && newActivitiesList.count() == allActivities.count()) ||
-        (newActivitiesList.count() == 1 && newActivitiesList.at(0) == Activities::nullUuid())) {
-        activityList.clear();
-        const QByteArray nullUuid = Activities::nullUuid().toUtf8();
-        XChangeProperty(display(), window(), atoms->activities, XA_STRING, 8,
-                        PropModeReplace, (const unsigned char *)nullUuid.constData(), nullUuid.length());
-
-    } else {
-        QByteArray joined = joinedActivitiesList.toAscii();
-        char *data = joined.data();
-        activityList = newActivitiesList;
-        XChangeProperty(display(), window(), atoms->activities, XA_STRING, 8,
-                    PropModeReplace, (unsigned char *)data, joined.size());
-
-    }
-
-    updateActivities(false);
-#else
     Q_UNUSED(newActivitiesList)
-#endif
 }
 
 void Client::blockActivityUpdates(bool b)
@@ -1633,16 +1590,6 @@ void Client::setOnAllDesktops(bool b)
  */
 void Client::setOnAllActivities(bool on)
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    if (on == isOnAllActivities())
-        return;
-    if (on) {
-        setOnActivities(QStringList());
-
-    } else {
-        setOnActivity(Activities::self()->current(), true);
-    }
-#endif
 }
 
 /**
@@ -2377,47 +2324,6 @@ QPixmap* kwin_get_menu_pix_hack()
 
 void Client::checkActivities()
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    QStringList newActivitiesList;
-    QByteArray prop = getStringProperty(window(), atoms->activities);
-    activitiesDefined = !prop.isEmpty();
-    if (prop == Activities::nullUuid()) {
-        //copied from setOnAllActivities to avoid a redundant XChangeProperty.
-        if (!activityList.isEmpty()) {
-            activityList.clear();
-            updateActivities(true);
-        }
-        return;
-    }
-    if (prop.isEmpty()) {
-        //note: this makes it *act* like it's on all activities but doesn't set the property to 'ALL'
-        if (!activityList.isEmpty()) {
-            activityList.clear();
-            updateActivities(true);
-        }
-        return;
-    }
-
-    newActivitiesList = QString(prop).split(',');
-
-    if (newActivitiesList == activityList)
-        return; //expected change, it's ok.
-
-    //otherwise, somebody else changed it. we need to validate before reacting
-    QStringList allActivities = Activities::self()->all();
-    if (allActivities.isEmpty()) {
-        kDebug() << "no activities!?!?";
-        //don't touch anything, there's probably something bad going on and we don't wanna make it worse
-        return;
-    }
-    for (int i = 0; i < newActivitiesList.size(); ++i) {
-        if (! allActivities.contains(newActivitiesList.at(i))) {
-            kDebug() << "invalid:" << newActivitiesList.at(i);
-            newActivitiesList.removeAt(i--);
-        }
-    }
-    setOnActivities(newActivitiesList);
-#endif
 }
 
 void Client::setSessionInteract(bool needed)

@@ -44,10 +44,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scripting/scripting.h"
 #endif
 
-#ifdef KWIN_BUILD_ACTIVITIES
-#include "activities.h"
-#include <KActivities/Info>
-#endif
 
 #include <KDE/KKeySequenceWidget>
 #include <KDE/KProcess>
@@ -426,9 +422,6 @@ void UserActionsMenu::menuAboutToShow()
     } else {
         initScreenPopup();
     }
-#ifdef KWIN_BUILD_ACTIVITIES
-    Activities::self()->update(true, false, this, "showHideActivityMenu");
-#endif
 
     m_resizeOperation->setEnabled(m_client.data()->isResizable());
     m_moveOperation->setEnabled(m_client.data()->isMovableAcrossScreens());
@@ -476,16 +469,6 @@ void UserActionsMenu::menuAboutToShow()
 
 void UserActionsMenu::showHideActivityMenu()
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    const QStringList &openActivities_ = Activities::self()->running();
-    kDebug() << "activities:" << openActivities_.size();
-    if (openActivities_.size() < 2) {
-        delete m_activityMenu;
-        m_activityMenu = 0;
-    } else {
-        initActivityPopup();
-    }
-#endif
 }
 
 void UserActionsMenu::selectPopupClientTab(QAction* action)
@@ -712,43 +695,6 @@ void UserActionsMenu::activityPopupAboutToShow()
     if (!m_activityMenu)
         return;
 
-#ifdef KWIN_BUILD_ACTIVITIES
-    m_activityMenu->clear();
-    QAction *action = m_activityMenu->addAction(i18n("&All Activities"));
-    action->setData(QString());
-    action->setCheckable(true);
-    static QPointer<QActionGroup> allActivitiesGroup;
-    if (!allActivitiesGroup) {
-        allActivitiesGroup = new QActionGroup(m_activityMenu);
-    }
-    allActivitiesGroup->addAction(action);
-
-    if (!m_client.isNull() && m_client.data()->isOnAllActivities())
-        action->setChecked(true);
-    m_activityMenu->addSeparator();
-
-    foreach (const QString &id, Activities::self()->running()) {
-        KActivities::Info activity(id);
-        QString name = activity.name();
-        name.replace('&', "&&");
-        QWidgetAction *action = new QWidgetAction(m_activityMenu);
-        QCheckBox *box = new QCheckBox(name, m_activityMenu);
-        action->setDefaultWidget(box);
-        const QString icon = activity.icon();
-        if (!icon.isEmpty())
-            box->setIcon(KIcon(icon));
-        box->setBackgroundRole(m_activityMenu->backgroundRole());
-        box->setForegroundRole(m_activityMenu->foregroundRole());
-        box->setPalette(m_activityMenu->palette());
-        connect (box, SIGNAL(clicked(bool)), action, SIGNAL(triggered(bool)));
-        m_activityMenu->addAction(action);
-        action->setData(id);
-
-        if (!m_client.isNull() &&
-                !m_client.data()->isOnAllActivities() && m_client.data()->isOnActivity(id))
-            box->setChecked(true);
-    }
-#endif
 }
 
 void UserActionsMenu::slotWindowOperation(QAction *action)
@@ -815,34 +761,6 @@ void UserActionsMenu::slotSendToScreen(QAction *action)
 
 void UserActionsMenu::slotToggleOnActivity(QAction *action)
 {
-#ifdef KWIN_BUILD_ACTIVITIES
-    QString activity = action->data().toString();
-    if (m_client.isNull())
-        return;
-    if (activity.isEmpty()) {
-        // the 'on_all_activities' menu entry
-        m_client.data()->setOnAllActivities(!m_client.data()->isOnAllActivities());
-        return;
-    }
-
-    Activities::self()->toggleClientOnActivity(m_client.data(), activity, false);
-    if (m_activityMenu && m_activityMenu->isVisible() && m_activityMenu->actions().count()) {
-        const bool isOnAll = m_client.data()->isOnAllActivities();
-        m_activityMenu->actions().at(0)->setChecked(isOnAll);
-        if (isOnAll) {
-            // toggleClientOnActivity interprets "on all" as "on none" and
-            // susequent toggling ("off") would move the client to only that activity.
-            // bug #330838 -> set all but "on all" off to "force proper usage"
-            for (int i = 1; i < m_activityMenu->actions().count(); ++i) {
-                if (QWidgetAction *qwa = qobject_cast<QWidgetAction*>(m_activityMenu->actions().at(i))) {
-                    if (QCheckBox *qcb = qobject_cast<QCheckBox*>(qwa->defaultWidget())) {
-                        qcb->setChecked(false);
-                    }
-                }
-            }
-        }
-    }
-#endif
 }
 
 //****************************************

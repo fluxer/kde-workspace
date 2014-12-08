@@ -28,9 +28,6 @@
 #include <KDE/KLocalizedString>
 #include <QRegExp>
 
-#ifdef KWIN_BUILD_ACTIVITIES
-#include <KActivities/Consumer>
-#endif
 
 #include <assert.h>
 #include <kmessagebox.h>
@@ -89,9 +86,6 @@ RulesWidget::RulesWidget(QWidget* parent)
     SETUP(size, set);
     SETUP(desktop, set);
     SETUP(screen, set);
-#ifdef KWIN_BUILD_ACTIVITIES
-    SETUP(activity, set);
-#endif
     SETUP(maximizehoriz, set);
     SETUP(maximizevert, set);
     SETUP(minimize, set);
@@ -130,11 +124,9 @@ RulesWidget::RulesWidget(QWidget* parent)
     edit_reg_title->hide();
     edit_reg_machine->hide();
 
-#ifndef KWIN_BUILD_ACTIVITIES
     rule_activity->hide();
     enable_activity->hide();
     activity->hide();
-#endif
     int i;
     for (i = 1;
             i <= KWindowSystem::numberOfDesktops();
@@ -142,16 +134,6 @@ RulesWidget::RulesWidget(QWidget* parent)
         desktop->addItem(QString::number(i).rightJustified(2) + ':' + KWindowSystem::desktopName(i));
     desktop->addItem(i18n("All Desktops"));
 
-#ifdef KWIN_BUILD_ACTIVITIES
-    static KActivities::Consumer activities;
-    foreach (const QString & activityId, activities.listActivities()) {
-        activity->addItem(KActivities::Info::name(activityId), activityId);
-    }
-    // cloned from kactivities/src/lib/core/consumer.cpp
-    #define NULL_UUID "00000000-0000-0000-0000-000000000000"
-    activity->addItem(i18n("All Activities"), QString::fromLatin1(NULL_UUID));
-    #undef NULL_UUID
-#endif
 }
 
 #undef SETUP
@@ -168,9 +150,6 @@ UPDATE_ENABLE_SLOT(position)
 UPDATE_ENABLE_SLOT(size)
 UPDATE_ENABLE_SLOT(desktop)
 UPDATE_ENABLE_SLOT(screen)
-#ifdef KWIN_BUILD_ACTIVITIES
-UPDATE_ENABLE_SLOT(activity)
-#endif
 UPDATE_ENABLE_SLOT(maximizehoriz)
 UPDATE_ENABLE_SLOT(maximizevert)
 UPDATE_ENABLE_SLOT(minimize)
@@ -288,28 +267,6 @@ int RulesWidget::comboToDesktop(int val) const
         return NET::OnAllDesktops;
     return val + 1;
 }
-#ifdef KWIN_BUILD_ACTIVITIES
-int RulesWidget::activityToCombo(QString d) const
-{
-    // TODO: ivan - do a multiselection list
-    for (int i = 0; i < activity->count(); i++) {
-        if (activity->itemData(i).toString() == d) {
-            return i;
-        }
-    }
-
-    return activity->count() - 1; // on all activities
-}
-
-QString RulesWidget::comboToActivity(int val) const
-{
-    // TODO: ivan - do a multiselection list
-    if (val < 0 || val >= activity->count())
-        return QString();
-
-    return activity->itemData(val).toString();
-}
-#endif
 static int placementToCombo(Placement::Policy placement)
 {
     static const int conv[] = {
@@ -444,9 +401,6 @@ void RulesWidget::setRules(Rules* rules)
     LINEEDIT_SET_RULE(size, sizeToStr);
     COMBOBOX_SET_RULE(desktop, desktopToCombo);
     SPINBOX_SET_RULE(screen, inc);
-#ifdef KWIN_BUILD_ACTIVITIES
-    COMBOBOX_SET_RULE(activity, activityToCombo);
-#endif
     CHECKBOX_SET_RULE(maximizehoriz,);
     CHECKBOX_SET_RULE(maximizevert,);
     CHECKBOX_SET_RULE(minimize,);
@@ -543,9 +497,6 @@ Rules* RulesWidget::rules() const
     LINEEDIT_SET_RULE(size, strToSize);
     COMBOBOX_SET_RULE(desktop, comboToDesktop);
     SPINBOX_SET_RULE(screen, dec);
-#ifdef KWIN_BUILD_ACTIVITIES
-    COMBOBOX_SET_RULE(activity, comboToActivity);
-#endif
     CHECKBOX_SET_RULE(maximizehoriz,);
     CHECKBOX_SET_RULE(maximizevert,);
     CHECKBOX_SET_RULE(minimize,);

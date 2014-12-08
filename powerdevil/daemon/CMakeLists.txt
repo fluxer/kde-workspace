@@ -1,6 +1,5 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
-                    ${CMAKE_CURRENT_BINARY_DIR}
-                    ${KACTIVITIES_INCLUDE_DIR})
+                    ${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(actions)
 
@@ -54,7 +53,6 @@ target_link_libraries(powerdevilcore
     ${KDE4_SOLID_LIBS}
     ${KDE4_KIDLETIME_LIBS}
     ${KDE4_PLASMA_LIBS}
-    ${KACTIVITIES_LIBRARIES}
     kworkspace
 )
 
