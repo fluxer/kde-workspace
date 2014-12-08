@@ -96,7 +96,6 @@ class Pager : public Plasma::Applet
 
         void configAccepted();
         void currentDesktopChanged(int desktop);
-        void currentActivityChanged(const QString &activity);
         void desktopsSizeChanged();
         void numberOfDesktopsChanged(int num);
         void desktopNamesChanged();
@@ -146,7 +145,6 @@ class Pager : public Plasma::Applet
         int m_columns;
         int m_desktopCount;
         int m_currentDesktop;
-        QString m_currentActivity;
         qreal m_widthScaleFactor;
         qreal m_heightScaleFactor;
         QSizeF m_size;

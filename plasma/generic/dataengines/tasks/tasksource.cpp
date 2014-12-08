@@ -98,8 +98,6 @@ void TaskSource::updateTask(::TaskManager::TaskChanges taskChanges)
             setData("onCurrentDesktop", taskPtr->isOnCurrentDesktop());
             setData("onAllDesktops", taskPtr->isOnAllDesktops());
             setData("desktop", taskPtr->desktop());
-            setData("onCurrentActivity", taskPtr->isOnCurrentActivity());
-            setData("onAllActivities", taskPtr->isOnAllActivities());
             setData("activities", taskPtr->activities());
             setData("icon", taskPtr->icon());
             setData("actionMinimize", taskPtr->info().actionSupported(NET::ActionMinimize));
@@ -135,10 +133,6 @@ void TaskSource::updateTask(::TaskManager::TaskChanges taskChanges)
             setData("onAllDesktops", taskPtr->isOnAllDesktops());
             setData("desktop", taskPtr->desktop());
             break;
-        case TaskManager::ActivitiesChanged:
-            setData("onCurrentActivity", taskPtr->isOnCurrentActivity());
-            setData("onAllActivities", taskPtr->isOnAllActivities());
-            setData("activities", taskPtr->activities());
         case TaskManager::ActionsChanged:
             setData("actionMinimize", taskPtr->info().actionSupported(NET::ActionMinimize));
             setData("actionMaximize", taskPtr->info().actionSupported(NET::ActionMax));
@@ -168,17 +162,5 @@ void TaskSource::updateDesktop()
     }
 }
 
-void TaskSource::updateActivity()
-{
-    if (!m_task) {
-        return;
-    }
-
-    const bool onCurrentActivity = m_task.data()->isOnCurrentActivity();
-    if (data()["onCurrentActivity"].toBool() != onCurrentActivity) {
-        setData("onCurrentActivity", onCurrentActivity);
-        checkForUpdate();
-    }
-}
 
 #include "tasksource.moc"

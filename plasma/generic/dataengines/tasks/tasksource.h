@@ -49,7 +49,6 @@ class TaskSource : public Plasma::DataContainer
         void updateStartup(::TaskManager::TaskChanges startupChanges);
         void updateTask(::TaskManager::TaskChanges taskChanges);
         void updateDesktop();
-        void updateActivity();
 
     private:
         QWeakPointer< ::TaskManager::Startup > m_startup;

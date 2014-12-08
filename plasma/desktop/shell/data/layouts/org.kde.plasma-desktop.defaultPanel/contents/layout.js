@@ -27,7 +27,6 @@ if (freeEdges["bottom"] == true) {
 
 panel.height = screenGeometry(panel.screen).height > 1024 ? 35 : 27
 panel.addWidget("launcher")
-panel.addWidget("org.kde.showActivityManager")
 pager = panel.addWidget("pager")
 pager.writeConfig("hideWhenSingleDesktop", "true")
 tasks = panel.addWidget("tasks")

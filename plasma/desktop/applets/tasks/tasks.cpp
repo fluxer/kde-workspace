@@ -399,13 +399,6 @@ void Tasks::configChanged()
         changed = true;
     }
 
-    const bool showOnlyCurrentActivity = cg.readEntry("showOnlyCurrentActivity", true);
-    if (showOnlyCurrentActivity != m_groupManager->showOnlyCurrentActivity()) {
-        m_groupManager->setShowOnlyCurrentActivity(showOnlyCurrentActivity);
-        m_declarativeWidget->rootObject()->setProperty("showOnlyCurrentActivity", showOnlyCurrentActivity);
-        changed = true;
-    }
-
     const bool showOnlyCurrentScreen = cg.readEntry("showOnlyCurrentScreen", false);
     if (showOnlyCurrentScreen != m_groupManager->showOnlyCurrentScreen()) {
         m_groupManager->setShowOnlyCurrentScreen(showOnlyCurrentScreen);
@@ -500,7 +493,6 @@ void Tasks::createConfigurationInterface(KConfigDialog *parent)
     m_ui.showTooltip->setChecked(m_declarativeWidget->rootObject()->property("showToolTip").toBool());
     m_ui.highlightWindows->setChecked(m_highlightWindows);
     m_ui.showOnlyCurrentDesktop->setChecked(m_groupManager->showOnlyCurrentDesktop());
-    m_ui.showOnlyCurrentActivity->setChecked(m_groupManager->showOnlyCurrentActivity());
     m_ui.showOnlyCurrentScreen->setChecked(m_groupManager->showOnlyCurrentScreen());
     m_ui.showOnlyMinimized->setChecked(m_groupManager->showOnlyMinimized());
     m_ui.fillRows->setChecked(m_declarativeWidget->rootObject()->property("forceStripes").toBool());
@@ -567,7 +559,6 @@ void Tasks::createConfigurationInterface(KConfigDialog *parent)
     connect(m_ui.sortingStrategy, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     connect(m_ui.showOnlyCurrentScreen, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(m_ui.showOnlyCurrentDesktop, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
-    connect(m_ui.showOnlyCurrentActivity, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(m_ui.showOnlyMinimized, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
 }
 
@@ -581,7 +572,6 @@ void Tasks::configAccepted()
     KConfigGroup cg = config();
 
     cg.writeEntry("showOnlyCurrentDesktop", m_ui.showOnlyCurrentDesktop->isChecked());
-    cg.writeEntry("showOnlyCurrentActivity", m_ui.showOnlyCurrentActivity->isChecked());
     cg.writeEntry("showOnlyCurrentScreen", m_ui.showOnlyCurrentScreen->isChecked());
     cg.writeEntry("showOnlyMinimized", m_ui.showOnlyMinimized->isChecked());
 

@@ -48,8 +48,6 @@
 #include <Plasma/DeclarativeWidget>
 #include <Plasma/Package>
 
-#include <KActivities/Consumer>
-
 #include <taskmanager/task.h>
 
 const int FAST_UPDATE_DELAY = 100;
@@ -133,10 +131,6 @@ void Pager::init()
     recalculateGridSizes(m_rows);
 
     setCurrentDesktop(KWindowSystem::currentDesktop());
-
-    KActivities::Consumer *act = new KActivities::Consumer(this);
-    connect(act, SIGNAL(currentActivityChanged(QString)), this, SLOT(currentActivityChanged(QString)));
-    m_currentActivity = act->currentActivity();
 }
 
 void Pager::updatePagerStyle()
@@ -576,17 +570,6 @@ void Pager::recalculateWindowRects()
             continue;
         }
 
-        //check activity
-        unsigned long properties[] = { 0, NET::WM2Activities };
-        NETWinInfo netInfo(QX11Info::display(), window, QX11Info::appRootWindow(), properties, 2);
-        QString result(netInfo.activities());
-        if (!result.isEmpty() && result != "00000000-0000-0000-0000-000000000000") {
-            QStringList activities = result.split(',');
-            if (!activities.contains(m_currentActivity)) {
-                continue;
-            }
-        }
-
         for (int i = 0; i < m_desktopCount; i++) {
             if (!info.isOnDesktop(i+1)) {
                 continue;
@@ -656,12 +639,6 @@ void Pager::currentDesktopChanged(int desktop)
 
     setCurrentDesktop(desktop);
     m_desktopDown = false;
-    startTimerFast();
-}
-
-void Pager::currentActivityChanged(const QString &activity)
-{
-    m_currentActivity = activity;
     startTimerFast();
 }
 

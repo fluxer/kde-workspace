@@ -37,7 +37,6 @@ Item {
     property int maxStripes: 2
     property bool forceStripes: false
     property bool showOnlyCurrentDesktop: false
-    property bool showOnlyCurrentActivity: false
     property bool showOnlyMinimized: false
     property bool showToolTip: true
     property bool highlightWindows: false
@@ -111,21 +110,6 @@ Item {
 
             if (!tasks.showOnlyCurrentDesktop) {
                 subTextEntries.push(i18n("On %1", task.DesktopName));
-            }
-
-            if (task.OnAllActivities) {
-                subTextEntries.push(i18nc("Which virtual desktop a window is currently on",
-                    "Available on all activities"));
-            } else if (tasks.showOnlyCurrentActivity) {
-                if (task.OtherActivityNames.length > 0) {
-                    subTextEntries.push(i18nc("Activities a window is currently on (apart from the current one)",
-                                              "Also available on %1",
-                                              task.OtherActivityNames.join(", ")));
-                }
-            } else if (task.ActivityNames.length > 0) {
-                subTextEntries.push(i18nc("Which activities a window is currently on",
-                                          "Available on %1",
-                                           task.ActivityNames.join(", ")));
             }
 
             return subTextEntries.join("<br />");
