@@ -160,13 +160,9 @@ void UserActionsMenu::show(const QRect &pos, const QWeakPointer<Client> &cl)
     int x = pos.left();
     int y = pos.bottom();
     if (y == pos.top()) {
-        m_client.data()->blockActivityUpdates(true);
         m_menu->exec(QPoint(x, y));
-        if (!m_client.isNull())
-            m_client.data()->blockActivityUpdates(false);
     }
     else {
-        m_client.data()->blockActivityUpdates(true);
         QRect area = ws->clientArea(ScreenArea, QPoint(x, y), VirtualDesktopManager::self()->current());
         menuAboutToShow(); // needed for sizeHint() to be correct :-/
         int popupHeight = m_menu->sizeHint().height();
@@ -174,8 +170,6 @@ void UserActionsMenu::show(const QRect &pos, const QWeakPointer<Client> &cl)
             m_menu->exec(QPoint(x, y));
         else
             m_menu->exec(QPoint(x, pos.top() - popupHeight));
-        if (!m_client.isNull())
-            m_client.data()->blockActivityUpdates(true);
     }
 }
 
@@ -1158,7 +1152,7 @@ bool Client::performMouseCommand(Options::MouseCommand command, const QPoint &gl
                 Client *c = qobject_cast<Client*>(*it);
                 if (!c || (c->keepAbove() && !keepAbove()) || (keepBelow() && !c->keepBelow()))
                     continue; // can never raise above "it"
-                mustReplay = !(c->isOnCurrentDesktop() && c->isOnCurrentActivity() && c->geometry().intersects(geometry()));
+                mustReplay = !(c->isOnCurrentDesktop() && c->geometry().intersects(geometry()));
             }
         }
         workspace()->takeActivity(this, ActivityFocus | ActivityRaise, handled && replay);
@@ -1652,7 +1646,7 @@ void Workspace::switchWindow(Direction direction)
             continue;
         }
         if (client->wantsTabFocus() && *i != c &&
-                client->desktop() == d && !client->isMinimized() && (*i)->isOnCurrentActivity()) {
+                client->desktop() == d && !client->isMinimized()) {
             // Centre of the other window
             QPoint other(client->pos().x() + client->geometry().width() / 2,
                          client->pos().y() + client->geometry().height() / 2);

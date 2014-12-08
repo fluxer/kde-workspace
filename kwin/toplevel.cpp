@@ -446,11 +446,6 @@ bool Toplevel::isDeleted() const
     return false;
 }
 
-bool Toplevel::isOnCurrentActivity() const
-{
-    return true;
-}
-
 void Toplevel::elevate(bool elevate)
 {
     if (!effectWindow()) {

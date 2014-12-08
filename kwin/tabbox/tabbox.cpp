@@ -166,20 +166,6 @@ bool TabBoxHandlerImpl::checkDesktop(TabBoxClient* client, int desktop) const
     }
 }
 
-bool TabBoxHandlerImpl::checkActivity(TabBoxClient* client) const
-{
-    Client* current = (static_cast< TabBoxClientImpl* >(client))->client();
-
-    switch (config().clientActivitiesMode()) {
-    case TabBoxConfig::AllActivitiesClients:
-        return true;
-    case TabBoxConfig::ExcludeCurrentActivityClients:
-        return !current->isOnCurrentActivity();
-    default:       // TabBoxConfig::OnlyCurrentActivityClients
-        return current->isOnCurrentActivity();
-    }
-}
-
 bool TabBoxHandlerImpl::checkApplications(TabBoxClient* client) const
 {
     Client* current = (static_cast< TabBoxClientImpl* >(client))->client();
@@ -253,7 +239,6 @@ QWeakPointer<TabBoxClient> TabBoxHandlerImpl::clientToAddToList(TabBoxClient* cl
     Client* current = (static_cast< TabBoxClientImpl* >(client))->client();
 
     bool addClient = checkDesktop(client, desktop)
-                  && checkActivity(client)
                   && checkApplications(client)
                   && checkMinimized(client)
                   && checkMultiScreen(client);
@@ -1253,7 +1238,7 @@ void TabBox::CDEWalkThroughWindows(bool forward)
             i >= 0 ;
             --i) {
         Client* it = qobject_cast<Client*>(Workspace::self()->stackingOrder().at(i));
-        if (it && it->isOnCurrentActivity() && it->isOnCurrentDesktop() && !it->isSpecialWindow()
+        if (it && it->isOnCurrentDesktop() && !it->isSpecialWindow()
                 && it->isShown(false) && it->wantsTabFocus()
                 && !it->keepAbove() && !it->keepBelow()) {
             c = it;
@@ -1281,7 +1266,7 @@ void TabBox::CDEWalkThroughWindows(bool forward)
         }
     } while (nc && nc != c &&
             ((!options_traverse_all && !nc->isOnDesktop(currentDesktop())) ||
-             nc->isMinimized() || !nc->wantsTabFocus() || nc->keepAbove() || nc->keepBelow() || !nc->isOnCurrentActivity()));
+             nc->isMinimized() || !nc->wantsTabFocus() || nc->keepAbove() || nc->keepBelow()));
     if (nc) {
         if (c && c != nc)
             Workspace::self()->lowerClient(c);

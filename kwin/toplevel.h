@@ -149,7 +149,6 @@ class Toplevel
      * See http://standards.freedesktop.org/wm-spec/wm-spec-latest.html .
      */
     Q_PROPERTY(int windowType READ windowType)
-    Q_PROPERTY(QStringList activities READ activities NOTIFY activitiesChanged)
     /**
      * Whether this Toplevel is managed by KWin (it has control over its placement and other
      * aspects, as opposed to override-redirect windows that are entirely handled by the application).
@@ -213,13 +212,9 @@ public:
     bool isDNDIcon() const;
 
     virtual int desktop() const = 0;
-    virtual QStringList activities() const = 0;
     bool isOnDesktop(int d) const;
-    bool isOnActivity(const QString &activity) const;
     bool isOnCurrentDesktop() const;
-    bool isOnCurrentActivity() const;
     bool isOnAllDesktops() const;
-    bool isOnAllActivities() const;
 
     QByteArray windowRole() const;
     QByteArray sessionId() const;
@@ -335,7 +330,6 @@ signals:
      * schedule a repaint of the scene.
      **/
     void needsRepaint();
-    void activitiesChanged(KWin::Toplevel* toplevel);
     /**
      * Emitted whenever the Toplevel's screen changes. This can happen either in consequence to
      * a screen being removed/added or if the Toplevel's geometry changes.
@@ -613,19 +607,9 @@ inline bool Toplevel::isOnAllDesktops() const
     return desktop() == NET::OnAllDesktops;
 }
 
-inline bool Toplevel::isOnAllActivities() const
-{
-    return activities().isEmpty();
-}
-
 inline bool Toplevel::isOnDesktop(int d) const
 {
     return desktop() == d || /*desk == 0 ||*/ isOnAllDesktops();
-}
-
-inline bool Toplevel::isOnActivity(const QString &activity) const
-{
-    return activities().isEmpty() || activities().contains(activity);
 }
 
 inline bool Toplevel::isOnCurrentDesktop() const

@@ -717,8 +717,6 @@ bool Scene::Window::isVisible() const
         return false;
     if (!toplevel->isOnCurrentDesktop())
         return false;
-    if (!toplevel->isOnCurrentActivity())
-        return false;
     if (toplevel->isClient())
         return (static_cast< Client *>(toplevel))->isShown(true);
     return true; // Unmanaged is always visible
@@ -747,8 +745,6 @@ void Scene::Window::resetPaintingEnabled()
         if (!toplevel->isOnCurrentDesktop())
             disable_painting |= PAINT_DISABLED_BY_DESKTOP;
     }
-    if (!toplevel->isOnCurrentActivity())
-        disable_painting |= PAINT_DISABLED_BY_ACTIVITY;
     if (toplevel->isClient()) {
         Client *c = static_cast<Client*>(toplevel);
         if (c->isMinimized())

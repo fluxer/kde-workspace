@@ -157,14 +157,11 @@ bool Client::manage(xcb_window_t w, bool isMapped)
     init_minimize = rules()->checkMinimize(init_minimize, !isMapped);
     noborder = rules()->checkNoBorder(noborder, !isMapped);
 
-    checkActivities();
-
     // Initial desktop placement
     if (session) {
         desk = session->desktop;
         if (session->onAllDesktops)
             desk = NET::OnAllDesktops;
-        setOnActivities(session->activities);
     } else {
         // If this window is transient, ensure that it is opened on the
         // same window as its parent.  this is necessary when an application
@@ -192,9 +189,6 @@ bool Client::manage(xcb_window_t w, bool isMapped)
                 desk = VirtualDesktopManager::self()->current();
             else if (maincl != NULL)
                 desk = maincl->desktop();
-
-            if (maincl)
-                setOnActivities(maincl->activities());
         }
         if (info->desktop())
             desk = info->desktop(); // Window had the initial desktop property, force it
@@ -210,11 +204,6 @@ bool Client::manage(xcb_window_t w, bool isMapped)
     info->setDesktop(desk);
     workspace()->updateOnAllDesktopsOfTransients(this);   // SELI TODO
     //onAllDesktopsChange(); // Decoration doesn't exist here yet
-
-    QString activitiesList;
-    activitiesList = rules()->checkActivity(activitiesList, !isMapped);
-    if (!activitiesList.isEmpty())
-        setOnActivities(activitiesList.split(','));
 
     QRect geom(attr.x, attr.y, attr.width, attr.height);
     bool placementDone = false;
@@ -319,7 +308,7 @@ bool Client::manage(xcb_window_t w, bool isMapped)
             foreach (Client *other, workspace()->clientList()) {
                 if (other->maximizeMode() != MaximizeFull &&
                     geom == QRect(other->pos(), other->clientSize()) &&
-                    desk == other->desktop() && activities() == other->activities()) {
+                    desk == other->desktop()) {
 
                     tabBehind(other, autogroupInFg);
                     break;
@@ -567,9 +556,6 @@ bool Client::manage(xcb_window_t w, bool isMapped)
                 if (!isOnCurrentDesktop() && options->focusPolicyIsReasonable()) {
                     VirtualDesktopManager::self()->setCurrent(desktop());
                 }
-                /*if (!isOnCurrentActivity()) {
-                    workspace()->setCurrentActivity( activities().first() );
-                } FIXME no such method*/
             }
         }
 
@@ -715,8 +701,6 @@ Client* Client::findAutogroupCandidate() const
     QString wGId = rules()->checkAutogroupById(QString());
     if (!wGId.isEmpty()) {
         foreach (Client *c, workspace()->clientList()) {
-            if (activities() != c->activities())
-                continue; // don't cross activities
             if (wGId == c->rules()->checkAutogroupById(QString())) {
                 if (found && found->tabGroup() != c->tabGroup()) { // We've found two, ignore both
                     found = NULL;
@@ -737,7 +721,7 @@ Client* Client::findAutogroupCandidate() const
     if (rules()->checkAutogrouping(options->isAutogroupSimilarWindows())) {
         QByteArray wRole = truncatedWindowRole(windowRole());
         foreach (Client *c, workspace()->clientList()) {
-            if (desktop() != c->desktop() || activities() != c->activities())
+            if (desktop() != c->desktop())
                 continue;
             QByteArray wRoleB = truncatedWindowRole(c->windowRole());
             if (resourceClass() == c->resourceClass() &&  // Same resource class

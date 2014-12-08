@@ -476,8 +476,6 @@ QPoint Workspace::adjustClientPosition(Client* c, QPoint pos, bool unrestricted,
                     continue; // is not active tab
                 if (!((*l)->isOnDesktop(c->desktop()) || c->isOnDesktop((*l)->desktop())))
                     continue; // wrong virtual desktop
-                if (!(*l)->isOnCurrentActivity())
-                    continue; // wrong activity
                 if ((*l)->isDesktop() || (*l)->isSplash())
                     continue;
 

@@ -149,7 +149,6 @@ void Workspace::storeClient(KConfigGroup &cg, int num, Client *c)
     cg.writeEntry(QString("stackingOrder") + n, unconstrained_stacking_order.indexOf(c));
     // KConfig doesn't support long so we need to live with less precision on 64-bit systems
     cg.writeEntry(QString("tabGroup") + n, static_cast<int>(reinterpret_cast<long>(c->tabGroup())));
-    cg.writeEntry(QString("activities") + n, c->activities());
 }
 
 void Workspace::storeSubSession(const QString &name, QSet<QByteArray> sessionIds)
@@ -229,7 +228,6 @@ void Workspace::addSessionInfo(KConfigGroup &cg)
         info->stackingOrder = cg.readEntry(QString("stackingOrder") + n, -1);
         info->tabGroup = cg.readEntry(QString("tabGroup") + n, 0);
         info->tabGroupClient = NULL;
-        info->activities = cg.readEntry(QString("activities") + n, QStringList());
     }
 }
 

@@ -719,8 +719,6 @@ void Client::propertyNotifyEvent(XPropertyEvent* e)
             getMotifHints();
         else if (e->atom == atoms->net_wm_sync_request_counter)
             getSyncCounter();
-        else if (e->atom == atoms->activities)
-            checkActivities();
         else if (e->atom == atoms->kde_net_wm_block_compositing)
             updateCompositeBlocking(true);
         else if (e->atom == atoms->kde_first_in_window_list)

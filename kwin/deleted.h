@@ -40,7 +40,6 @@ public:
     void unrefWindow();
     void discard();
     virtual int desktop() const;
-    virtual QStringList activities() const;
     virtual QPoint clientPos() const;
     virtual QSize clientSize() const;
     virtual QRect transparentRect() const;
@@ -81,7 +80,6 @@ private:
     int delete_refcount;
     double window_opacity;
     int desk;
-    QStringList activityList;
     QRect contentsRect; // for clientPos()/clientSize()
     QRect transparent_rect;
 

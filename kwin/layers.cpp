@@ -251,7 +251,7 @@ Client* Workspace::topClientOnDesktop(int desktop, int screen, bool unconstraine
         if (!c) {
             continue;
         }
-        if (c->isOnDesktop(desktop) && c->isShown(false) && c->isOnCurrentActivity()) {
+        if (c->isOnDesktop(desktop) && c->isShown(false)) {
             if (screen != -1 && c->screen() != screen)
                 continue;
             if (!only_normal)
@@ -382,7 +382,6 @@ void Workspace::raiseClient(Client* c, bool nogroup)
 
     if (!c->isSpecialWindow()) {
         most_recently_raised = c;
-        pending_take_activity = NULL;
     }
 }
 
@@ -743,7 +742,7 @@ void Client::restackWindow(xcb_window_t above, int detail, NET::RequestSource sr
             Client *c = qobject_cast<Client*>(*it);
 
             if (!c || !(  (*it)->isNormalWindow() && c->isShown(true) &&
-                    (*it)->isOnCurrentDesktop() && (*it)->isOnCurrentActivity() && (*it)->isOnScreen(screen()) ))
+                    (*it)->isOnCurrentDesktop() && (*it)->isOnScreen(screen()) ))
                 continue; // irrelevant clients
 
             if (*(it - 1) == other)

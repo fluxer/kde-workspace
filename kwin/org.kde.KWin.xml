@@ -73,14 +73,6 @@
       <arg type="ai" direction="out"/>
       <annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="QList&lt;int>"/>
     </method>
-    <method name="stopActivity">
-      <arg type="s" direction="in"/>
-      <arg type="b" direction="out"/>
-    </method>
-    <method name="startActivity">
-      <arg type="s" direction="in"/>
-      <arg type="b" direction="out"/>
-    </method>
     <method name="activeEffects">
       <arg type="as" direction="out"/>
     </method>

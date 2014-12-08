@@ -74,7 +74,6 @@ void Deleted::copyToDeleted(Toplevel* c)
     assert(dynamic_cast< Deleted* >(c) == NULL);
     Toplevel::copyToDeleted(c);
     desk = c->desktop();
-    activityList = c->activities();
     contentsRect = QRect(c->clientPos(), c->clientSize());
     transparent_rect = c->transparentRect();
     m_layer = c->layer();
@@ -123,11 +122,6 @@ void Deleted::unrefWindow()
 int Deleted::desktop() const
 {
     return desk;
-}
-
-QStringList Deleted::activities() const
-{
-    return activityList;
 }
 
 QPoint Deleted::clientPos() const

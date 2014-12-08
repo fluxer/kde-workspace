@@ -348,13 +348,6 @@ public:
 
     void sendToScreen(int screen);
 
-    virtual QStringList activities() const;
-    void setOnActivity(const QString &activity, bool enable);
-    void setOnAllActivities(bool set);
-    void setOnActivities(QStringList newActivitiesList);
-    void updateActivities(bool includeTransients);
-    void blockActivityUpdates(bool b = true);
-
     /// Is not minimized and not hidden. I.e. normally visible on some virtual desktop.
     bool isShown(bool shaded_is_shown) const;
     bool isHiddenInternal() const; // For compositing
@@ -841,9 +834,6 @@ private:
     KDecoration* decoration;
     Bridge* bridge;
     int desk;
-    QStringList activityList;
-    int m_activityUpdatesBlocked;
-    bool m_blockedActivityUpdatesRequireTransients;
     bool buttonDown;
     bool moveResizeMode;
     Xcb::Window m_moveResizeGrabWindow;
@@ -983,9 +973,6 @@ private:
     QuickTileMode electricMode;
 
     friend bool performTransiencyCheck();
-
-    void checkActivities();
-    bool activitiesDefined; //whether the x property was actually set
 
     bool needsSessionInteract;
     bool needsXWindowMove;

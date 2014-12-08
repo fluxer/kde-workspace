@@ -400,7 +400,7 @@ void Workspace::handleTakeActivity(KWin::Client *c, xcb_timestamp_t /*timestamp*
  */
 void Workspace::clientHidden(Client* c)
 {
-    assert(!c->isShown(true) || !c->isOnCurrentDesktop() || !c->isOnCurrentActivity());
+    assert(!c->isShown(true) || !c->isOnCurrentDesktop());
     activateNextClient(c);
 }
 
@@ -416,7 +416,7 @@ Client *Workspace::clientUnderMouse(int screen) const
         // rule out clients which are not really visible.
         // the screen test is rather superfluous for xrandr & twinview since the geometry would differ -> TODO: might be dropped
         if (!(client->isShown(false) && client->isOnCurrentDesktop() &&
-                client->isOnCurrentActivity() && client->isOnScreen(screen)))
+                client->isOnScreen(screen)))
             continue;
 
         if (client->geometry().contains(Cursor::pos())) {

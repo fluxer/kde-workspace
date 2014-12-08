@@ -178,8 +178,6 @@ static inline bool isIrrelevant(const Client *client, const Client *regarding, i
         return true;
     if (!client->isOnDesktop(desktop))
         return true;
-    if (!client->isOnCurrentActivity())
-        return true;
     if (client->isDesktop())
         return true;
     return false;

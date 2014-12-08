@@ -930,7 +930,7 @@ void Workspace::updateClientVisibilityOnDesktopChange(uint oldDesktop, uint newD
         if (!c) {
             continue;
         }
-        if (!c->isOnDesktop(newDesktop) && c != movingClient && c->isOnCurrentActivity()) {
+        if (!c->isOnDesktop(newDesktop) && c != movingClient) {
             if (c->isShown(true) && c->isOnDesktop(oldDesktop) && !compositing())
                 obs_wins.create(c);
             (c)->updateVisibility();
@@ -948,7 +948,7 @@ void Workspace::updateClientVisibilityOnDesktopChange(uint oldDesktop, uint newD
         if (!c) {
             continue;
         }
-        if (c->isOnDesktop(newDesktop) && c->isOnCurrentActivity())
+        if (c->isOnDesktop(newDesktop))
             c->updateVisibility();
     }
     --block_showing_desktop;
@@ -999,8 +999,7 @@ Client *Workspace::findClientToActivateOnDesktop(uint desktop)
                 continue;
             }
 
-            if (!(client->isShown(false) && client->isOnDesktop(desktop) &&
-                client->isOnCurrentActivity() && client->isOnActiveScreen()))
+            if (!(client->isShown(false) && client->isOnDesktop(desktop)))
                 continue;
 
             if (client->geometry().contains(Cursor::pos())) {
@@ -1011,18 +1010,6 @@ Client *Workspace::findClientToActivateOnDesktop(uint desktop)
         }
     }
     return FocusChain::self()->getForActivation(desktop);
-}
-
-/**
- * Updates the current activity when it changes
- * do *not* call this directly; it does not set the activity.
- *
- * Shows/Hides windows according to the stacking order
- */
-
-void Workspace::updateCurrentActivity(const QString &new_activity)
-{
-    Q_UNUSED(new_activity)
 }
 
 void Workspace::moveClientsFromRemovedDesktops()
@@ -1127,12 +1114,6 @@ void Workspace::sendPingToWindow(xcb_window_t window, xcb_timestamp_t timestamp)
     rootInfo()->sendPing(window, timestamp);
 }
 
-void Workspace::sendTakeActivity(KWin::Client *c, xcb_timestamp_t timestamp, long int flags)
-{
-    rootInfo()->takeActivity(c->window(), timestamp, flags);
-    pending_take_activity = c;
-}
-
 /**
  * Delayed focus functions
  */
@@ -1172,6 +1153,12 @@ void Workspace::focusToNull()
     m_nullFocus->focus();
 }
 
+void Workspace::sendTakeActivity(KWin::Client *c, xcb_timestamp_t timestamp, long int flags)
+{
+    rootInfo()->takeActivity(c->window(), timestamp, flags);
+    pending_take_activity = c;
+}
+
 void Workspace::setShowingDesktop(bool showing)
 {
     rootInfo()->setShowingDesktop(showing);
@@ -1190,7 +1177,7 @@ void Workspace::setShowingDesktop(bool showing)
             if (!c) {
                 continue;
             }
-            if (c->isOnCurrentActivity() && c->isOnCurrentDesktop() && c->isShown(true) && !c->isSpecialWindow())
+            if (c->isOnCurrentDesktop() && c->isShown(true) && !c->isSpecialWindow())
                 showing_desktop_clients.prepend(c);   // Topmost first to reduce flicker
         }
         for (ClientList::ConstIterator it = showing_desktop_clients.constBegin();

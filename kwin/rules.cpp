@@ -470,12 +470,6 @@ bool Rules::update(Client* c, int selection)
         updated = updated || screen != c->screen();
         screen = c->screen();
     }
-    if NOW_REMEMBER(Activity, activity) {
-        // TODO: ivan - multiple activities support
-        const QString & joinedActivities = c->activities().join(",");
-        updated = updated || activity != joinedActivities;
-        activity = joinedActivities;
-    }
     if NOW_REMEMBER(MaximizeVert, maximizevert) {
         updated = updated || maximizevert != bool(c->maximizeMode() & MaximizeVertical);
         maximizevert = c->maximizeMode() & MaximizeVertical;
@@ -860,7 +854,6 @@ void Client::applyWindowRules()
     // IgnoreGeometry
     setDesktop(desktop());
     workspace()->sendClientToScreen(this, screen());
-    setOnActivities(activities());
     // Type
     maximize(maximizeMode());
     // Minimize : functions don't check, and there are two functions

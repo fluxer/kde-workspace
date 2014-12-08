@@ -78,8 +78,6 @@ public Q_SLOTS: // METHODS
      * @deprecated
      **/
     void showWindowMenuAt(qlonglong winId, int x, int y);
-    bool startActivity(const QString &in0);
-    bool stopActivity(const QString &in0);
     QString supportInformation();
     Q_NOREPLY void unclutterDesktop();
     // from compositor

@@ -599,7 +599,6 @@ class KWIN_EXPORT EffectsHandler : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(int currentDesktop READ currentDesktop WRITE setCurrentDesktop NOTIFY desktopChanged)
-    Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY currentActivityChanged)
     Q_PROPERTY(KWin::EffectWindow *activeWindow READ activeWindow WRITE activateWindow NOTIFY windowActivated)
     Q_PROPERTY(QSize desktopGridSize READ desktopGridSize)
     Q_PROPERTY(int desktopGridWidth READ desktopGridWidth)
@@ -698,12 +697,6 @@ public:
     Q_SCRIPTABLE virtual void windowToScreen(KWin::EffectWindow* w, int screen) = 0;
     virtual void setShowingDesktop(bool showing) = 0;
 
-
-    // Activities
-    /**
-     * @returns The ID of the current activity.
-     */
-    virtual QString currentActivity() const = 0;
     // Desktops
     /**
      * @returns The ID of the current desktop.
@@ -1182,26 +1175,6 @@ Q_SIGNALS:
     void screenGeometryChanged(const QSize &size);
 
     /**
-     * This signal is emitted when the global
-     * activity is changed
-     * @param id id of the new current activity
-     * @since 4.9
-     **/
-    void currentActivityChanged(const QString &id);
-    /**
-     * This signal is emitted when a new activity is added
-     * @param id id of the new activity
-     * @since 4.9
-     */
-    void activityAdded(const QString &id);
-    /**
-     * This signal is emitted when the activity
-     * is removed
-     * @param id id of the removed activity
-     * @since 4.9
-     */
-    void activityRemoved(const QString &id);
-    /**
      * This signal is emitted when the screen got locked or unlocked.
      * @param locked @c true if the screen is now locked, @c false if it is now unlocked
      * @since 4.11
@@ -1422,9 +1395,6 @@ class KWIN_EXPORT EffectWindow : public QObject
      */
     Q_PROPERTY(QRect decorationInnerRect READ decorationInnerRect)
     Q_PROPERTY(bool hasDecoration READ hasDecoration)
-    Q_PROPERTY(QStringList activities READ activities)
-    Q_PROPERTY(bool onCurrentActivity READ isOnCurrentActivity)
-    Q_PROPERTY(bool onAllActivities READ isOnAllActivities)
     /**
      * Whether the decoration currently uses an alpha channel.
      * @since 4.10
@@ -1435,7 +1405,6 @@ class KWIN_EXPORT EffectWindow : public QObject
      * <ul>
      * <li>Not minimized</li>
      * <li>On current desktop</li>
-     * <li>On current activity</li>
      * </ul>
      * @since 4.11
      **/
@@ -1460,8 +1429,6 @@ public:
         PAINT_DISABLED_BY_MINIMIZE     = 1 << 3,
         /**  Window will not be painted because it is not the active window in a client group  */
         PAINT_DISABLED_BY_TAB_GROUP = 1 << 4,
-        /**  Window will not be painted because it's not on the current activity  */
-        PAINT_DISABLED_BY_ACTIVITY     = 1 << 5
     };
 
     explicit EffectWindow(QObject *parent = NULL);
@@ -1483,11 +1450,6 @@ public:
     bool isMinimized() const;
     double opacity() const;
     bool hasAlpha() const;
-
-    bool isOnCurrentActivity() const;
-    Q_SCRIPTABLE bool isOnActivity(QString id) const;
-    bool isOnAllActivities() const;
-    QStringList activities() const;
 
     bool isOnDesktop(int d) const;
     bool isOnCurrentDesktop() const;

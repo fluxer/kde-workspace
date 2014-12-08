@@ -381,7 +381,6 @@ private slots:
     void delayFocus();
     void slotBlockShortcuts(int data);
     void slotReloadConfig();
-    void updateCurrentActivity(const QString &new_activity);
     // virtual desktop handling
     void moveClientsFromRemovedDesktops();
     void slotDesktopCountChanged(uint previousCount, uint newCount);

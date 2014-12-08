@@ -90,8 +90,6 @@ Client::Client()
     , m_wrapper()
     , decoration(NULL)
     , bridge(new Bridge(this))
-    , m_activityUpdatesBlocked(false)
-    , m_blockedActivityUpdatesRequireTransients(false)
     , m_moveResizeGrabWindow()
     , move_resize_has_keyboard_grab(false)
     , m_managed(false)
@@ -130,7 +128,6 @@ Client::Client()
     , paintRedirector(0)
     , m_firstInTabBox(false)
     , electricMaximizing(false)
-    , activitiesDefined(false)
     , needsSessionInteract(false)
     , needsXWindowMove(false)
 #ifdef KWIN_BUILD_KAPPMENU
@@ -1093,13 +1090,6 @@ void Client::updateVisibility()
             internalHide();
         return;
     }
-    if (!isOnCurrentActivity()) {
-        if (compositing() && options->hiddenPreviews() != HiddenPreviewsNever)
-            internalKeep();
-        else
-            internalHide();
-        return;
-    }
     if (isManaged())
         resetShowingDesktop(true);
     internalShow();
@@ -1490,59 +1480,6 @@ void Client::setDesktop(int desktop)
 }
 
 /**
- * Sets whether the client is on @p activity.
- * If you remove it from its last activity, then it's on all activities.
- *
- * Note: If it was on all activities and you try to remove it from one, nothing will happen;
- * I don't think that's an important enough use case to handle here.
- */
-void Client::setOnActivity(const QString &activity, bool enable)
-{
-    Q_UNUSED(activity)
-    Q_UNUSED(enable)
-}
-
-/**
- * set exactly which activities this client is on
- */
-void Client::setOnActivities(QStringList newActivitiesList)
-{
-    Q_UNUSED(newActivitiesList)
-}
-
-void Client::blockActivityUpdates(bool b)
-{
-    if (b) {
-        ++m_activityUpdatesBlocked;
-    } else {
-        Q_ASSERT(m_activityUpdatesBlocked);
-        --m_activityUpdatesBlocked;
-        if (!m_activityUpdatesBlocked)
-            updateActivities(m_blockedActivityUpdatesRequireTransients);
-    }
-}
-
-/**
- * update after activities changed
- */
-void Client::updateActivities(bool includeTransients)
-{
-    if (m_activityUpdatesBlocked) {
-        m_blockedActivityUpdatesRequireTransients |= includeTransients;
-        return;
-    }
-    emit activitiesChanged(this);
-    m_blockedActivityUpdatesRequireTransients = false; // reset
-    FocusChain::self()->update(this, FocusChain::MakeFirst);
-    updateVisibility();
-    updateWindowRules(Rules::Activity);
-
-    // Update states of all other windows in this group
-    if (tabGroup())
-        tabGroup()->updateStates(this, TabGroup::Activity);
-}
-
-/**
  * Returns the virtual desktop within the workspace() the client window
  * is located in, 0 if it isn't located on any special desktop (not mapped yet),
  * or NET::OnAllDesktops. Do not use desktop() directly, use
@@ -1554,19 +1491,6 @@ int Client::desktop() const
         return NET::OnAllDesktops;
     }
     return desk;
-}
-
-/**
- * Returns the list of activities the client window is on.
- * if it's on all activities, the list will be empty.
- * Don't use this, use isOnActivity() and friends (from class Toplevel)
- */
-QStringList Client::activities() const
-{
-    if (needsSessionInteract) {
-        return QStringList();
-    }
-    return activityList;
 }
 
 void Client::setOnAllDesktops(bool b)
@@ -1582,14 +1506,6 @@ void Client::setOnAllDesktops(bool b)
     // Update states of all other windows in this group
     if (tabGroup())
         tabGroup()->updateStates(this, TabGroup::Desktop);
-}
-
-/**
- * if @p on is true, sets on all activities.
- * if it's false, sets it to only be on the current activity
- */
-void Client::setOnAllActivities(bool on)
-{
 }
 
 /**
@@ -2064,10 +1980,10 @@ void Client::getWindowProtocols()
                 Pdeletewindow = 1;
             else if (p[i] == atoms->wm_take_focus)
                 Ptakefocus = 1;
-            else if (p[i] == atoms->net_wm_take_activity)
-                Ptakeactivity = 1;
             else if (p[i] == atoms->net_wm_context_help)
                 Pcontexthelp = 1;
+            else if (p[i] == atoms->net_wm_take_activity)
+                Ptakeactivity = 1;
             else if (p[i] == atoms->net_wm_ping)
                 Pping = 1;
         }
@@ -2320,10 +2236,6 @@ QPixmap* kwin_get_menu_pix_hack()
     if (p.isNull())
         p = SmallIcon("bx2");
     return &p;
-}
-
-void Client::checkActivities()
-{
 }
 
 void Client::setSessionInteract(bool needed)

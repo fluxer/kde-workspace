@@ -709,7 +709,6 @@ WINDOW_HELPER(bool, isManaged, "managed")
 WINDOW_HELPER(bool, isDeleted, "deleted")
 WINDOW_HELPER(bool, hasOwnShape, "shaped")
 WINDOW_HELPER(QString, windowRole, "windowRole")
-WINDOW_HELPER(QStringList, activities, "activities")
 WINDOW_HELPER(bool, skipsCloseAnimation, "skipsCloseAnimation")
 
 QString EffectWindow::windowClass() const
@@ -725,17 +724,6 @@ QRect EffectWindow::contentsRect() const
 NET::WindowType EffectWindow::windowType() const
 {
     return static_cast<NET::WindowType>(parent()->property("windowType").toInt());
-}
-
-bool EffectWindow::isOnActivity(QString activity) const
-{
-    const QStringList activities = parent()->property("activities").toStringList();
-    return activities.isEmpty() || activities.contains(activity);
-}
-
-bool EffectWindow::isOnAllActivities() const
-{
-    return parent()->property("activities").toStringList().isEmpty();
 }
 
 #undef WINDOW_HELPER
@@ -822,10 +810,6 @@ void EffectWindow::addLayerRepaint(const QRect &r)
     QMetaObject::invokeMethod(parent(), "addLayerRepaint", Q_ARG(const QRect&, r));
 }
 
-bool EffectWindow::isOnCurrentActivity() const
-{
-    return isOnActivity(effects->currentActivity());
-}
 
 bool EffectWindow::isOnCurrentDesktop() const
 {
@@ -849,9 +833,7 @@ bool EffectWindow::hasDecoration() const
 
 bool EffectWindow::isVisible() const
 {
-    return !isMinimized()
-           && isOnCurrentDesktop()
-           && isOnCurrentActivity();
+    return !isMinimized() && isOnCurrentDesktop();
 }
 
 

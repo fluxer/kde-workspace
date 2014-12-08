@@ -338,9 +338,6 @@ void TabGroup::updateStates(Client* main, States states, Client* only)
                 if (c->desktop() != main->desktop())
                     c->setDesktop(main->desktop());
             }
-            if ((states & Activity) && c->activities() != main->activities()) {
-                c->setOnActivities(main->activities());
-            }
             if (states & Layer) {
                 if (c->keepAbove() != main->keepAbove())
                     c->setKeepAbove(main->keepAbove());

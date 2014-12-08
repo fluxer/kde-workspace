@@ -70,15 +70,6 @@ Client *FocusChain::getForActivation(uint desktop, int screen) const
     if (it == m_desktopFocusChains.constEnd()) {
         return NULL;
     }
-    const QList<Client*> &chain = it.value();
-    for (int i = chain.size() - 1; i >= 0; --i) {
-        Client *tmp = chain.at(i);
-        // TODO: move the check into Client
-        if (tmp->isShown(false) && tmp->isOnCurrentActivity()
-            && ( !m_separateScreenFocus || tmp->screen() == screen)) {
-            return tmp;
-        }
-    }
     return NULL;
 }
 
@@ -212,7 +203,7 @@ Client *FocusChain::nextMostRecentlyUsed(Client *reference) const
 bool FocusChain::isUsableFocusCandidate(Client *c, Client *prev) const
 {
     return c != prev &&
-           c->isShown(false) && c->isOnCurrentDesktop() && c->isOnCurrentActivity() &&
+           c->isShown(false) && c->isOnCurrentDesktop() &&
            (!m_separateScreenFocus || c->isOnScreen(prev ? prev->screen() : screens()->current()));
 }
 

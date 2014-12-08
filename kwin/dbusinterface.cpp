@@ -126,16 +126,6 @@ WRAP(bool, waitForCompositingSetup)
 
 #undef WRAP
 
-bool DBusInterface::startActivity(const QString &in0)
-{
-    return false;
-}
-
-bool DBusInterface::stopActivity(const QString &in0)
-{
-    return false;
-}
-
 void DBusInterface::doNotManage(const QString &name)
 {
     Q_UNUSED(name)

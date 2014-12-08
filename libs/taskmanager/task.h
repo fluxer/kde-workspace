@@ -257,16 +257,6 @@ public:
     QRect geometry() const;
 
     /**
-     * Returns true if the task's window is on the current activity.
-     */
-    bool isOnCurrentActivity() const;
-
-    /**
-     * Returns true if the task's window is on all activities
-     */
-    bool isOnAllActivities() const;
-
-    /**
      * Returns the activities on which this task's window resides.
      */
     QStringList activities() const;
