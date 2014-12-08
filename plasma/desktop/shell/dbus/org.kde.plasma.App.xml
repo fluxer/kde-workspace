@@ -34,8 +34,6 @@
     </method>
     <method name="createWaitingDesktops">
     </method>
-    <method name="toggleActivityManager">
-    </method>
     <method name="supportInformation">
       <arg type="s" direction="out"/>
     </method>
