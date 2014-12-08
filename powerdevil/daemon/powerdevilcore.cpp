@@ -42,8 +42,6 @@
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
 
-#include <KActivities/Consumer>
-
 #include <QtCore/QTimer>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusConnectionInterface>
@@ -56,7 +54,6 @@ Core::Core(QObject* parent, const KComponentData &componentData)
     , m_backend(0)
     , m_applicationData(componentData)
     , m_criticalBatteryTimer(new QTimer(this))
-    , m_activityConsumer(new KActivities::Consumer(this))
     , m_pendingWakeupEvent(true)
 {
 }
@@ -130,8 +127,6 @@ void Core::onBackendReady()
             this, SLOT(onKIdleTimeoutReached(int,int)));
     connect(KIdleTime::instance(), SIGNAL(resumingFromIdle()),
             this, SLOT(onResumingFromIdle()));
-    connect(m_activityConsumer, SIGNAL(currentActivityChanged(QString)),
-            this, SLOT(loadProfile()));
 
     // Set up the policy agent
     PowerDevil::PolicyAgent::instance()->init();
@@ -239,86 +234,31 @@ void Core::loadProfile(bool force)
 
     KConfigGroup config;
 
-    // Check the activity in which we are in
-    QString activity = m_activityConsumer->currentActivity();
-    if (activity.isEmpty()) {
-        activity = "default";
-    }
-    kDebug() << "We are now into activity " << activity;
-    KConfigGroup activitiesConfig(m_profilesConfig, "Activities");
-    kDebug() << activitiesConfig.groupList() << activitiesConfig.keyList();
-
-    // Are we mirroring an activity?
-    if (activitiesConfig.group(activity).readEntry("mode", "None") == "ActLike" &&
-        activitiesConfig.group(activity).readEntry("actLike", QString()) != "AC" &&
-        activitiesConfig.group(activity).readEntry("actLike", QString()) != "Battery" &&
-        activitiesConfig.group(activity).readEntry("actLike", QString()) != "LowBattery") {
-        // Yes, let's use that then
-        activity = activitiesConfig.group(activity).readEntry("actLike", QString());
-        kDebug() << "Activity is a mirror";
-    }
-
-    KConfigGroup activityConfig = activitiesConfig.group(activity);
-    kDebug() << activityConfig.groupList() << activityConfig.keyList();
-
-    // See if this activity has priority
-    if (activityConfig.readEntry("mode", "None") == "SeparateSettings") {
-        // Prioritize this profile over anything
-        config = activityConfig.group("SeparateSettings");
-        kDebug() << "Activity is enforcing a different profile";
-        profileId = activity;
-    } else if (activityConfig.readEntry("mode", "None") == "ActLike") {
-        if (activityConfig.readEntry("actLike", QString()) == "AC" ||
-            activityConfig.readEntry("actLike", QString()) == "Battery" ||
-            activityConfig.readEntry("actLike", QString()) == "LowBattery") {
-            // Same as above, but with an existing profile
-            config = m_profilesConfig.data()->group(activityConfig.readEntry("actLike", QString()));
-            profileId = activityConfig.readEntry("actLike", QString());
-            kDebug() << "Activity is mirroring a different profile";
-        }
+    // Let's load the current state's profile
+    if (m_loadedBatteriesUdi.isEmpty()) {
+        kDebug() << "No batteries found, loading AC";
+        profileId = "AC";
     } else {
-        // It doesn't, let's load the current state's profile
-        if (m_loadedBatteriesUdi.isEmpty()) {
-            kDebug() << "No batteries found, loading AC";
+        // Compute the previous and current global percentage
+        int percent = 0;
+        for (QHash<QString,int>::const_iterator i = m_batteriesPercent.constBegin();
+                i != m_batteriesPercent.constEnd(); ++i) {
+            percent += i.value();
+        }
+
+        if (backend()->acAdapterState() == BackendInterface::Plugged) {
             profileId = "AC";
+            kDebug() << "Loading profile for plugged AC";
+        } else if (percent <= PowerDevilSettings::batteryLowLevel()) {
+            profileId = "LowBattery";
+            kDebug() << "Loading profile for low battery";
         } else {
-            // Compute the previous and current global percentage
-            int percent = 0;
-            for (QHash<QString,int>::const_iterator i = m_batteriesPercent.constBegin();
-                 i != m_batteriesPercent.constEnd(); ++i) {
-                percent += i.value();
-            }
-
-            if (backend()->acAdapterState() == BackendInterface::Plugged) {
-                profileId = "AC";
-                kDebug() << "Loading profile for plugged AC";
-            } else if (percent <= PowerDevilSettings::batteryLowLevel()) {
-                profileId = "LowBattery";
-                kDebug() << "Loading profile for low battery";
-            } else {
-                profileId = "Battery";
-                kDebug() << "Loading profile for unplugged AC";
-            }
-        }
-
-        config = m_profilesConfig.data()->group(profileId);
-        kDebug() << "Activity is not forcing a profile";
-    }
-
-    // Release any special inhibitions
-    {
-        QHash<QString,int>::iterator i = m_sessionActivityInhibit.begin();
-        while (i != m_sessionActivityInhibit.end()) {
-            PolicyAgent::instance()->ReleaseInhibition(i.value());
-            i = m_sessionActivityInhibit.erase(i);
-        }
-
-        i = m_screenActivityInhibit.begin();
-        while (i != m_screenActivityInhibit.end()) {
-            PolicyAgent::instance()->ReleaseInhibition(i.value());
-            i = m_screenActivityInhibit.erase(i);
+            profileId = "Battery";
+            kDebug() << "Loading profile for unplugged AC";
         }
     }
+
+    config = m_profilesConfig.data()->group(profileId);
 
     if (!config.isValid()) {
         emitNotification("powerdevilerror", i18n("The profile \"%1\" has been selected, "
@@ -368,41 +308,6 @@ void Core::loadProfile(bool force)
         // We are now on a different profile
         m_currentProfile = profileId;
         emit profileChanged(m_currentProfile);
-    }
-
-    // Now... any special behaviors we'd like to consider?
-    if (activityConfig.readEntry("mode", "None") == "SpecialBehavior") {
-        kDebug() << "Activity has special behaviors";
-        KConfigGroup behaviorGroup = activityConfig.group("SpecialBehavior");
-        if (behaviorGroup.readEntry("performAction", false)) {
-            // Let's override the configuration for this action at all times
-            ActionPool::instance()->loadAction("SuspendSession", behaviorGroup.group("ActionConfig"), this);
-            kDebug() << "Activity overrides suspend session action";
-        }
-
-        if (behaviorGroup.readEntry("noSuspend", false)) {
-            kDebug() << "Activity triggers a suspend inhibition";
-            // Trigger a special inhibition - if we don't have one yet
-            if (!m_sessionActivityInhibit.contains(activity)) {
-                int cookie =
-                PolicyAgent::instance()->AddInhibition(PolicyAgent::InterruptSession, i18n("Activity Manager"),
-                                                       i18n("This activity's policies prevent the system from suspending"));
-
-                m_sessionActivityInhibit.insert(activity, cookie);
-            }
-        }
-
-        if (behaviorGroup.readEntry("noScreenManagement", false)) {
-            kDebug() << "Activity triggers a screen management inhibition";
-            // Trigger a special inhibition - if we don't have one yet
-            if (!m_screenActivityInhibit.contains(activity)) {
-                int cookie =
-                PolicyAgent::instance()->AddInhibition(PolicyAgent::ChangeScreenSettings, i18n("Activity Manager"),
-                                                       i18n("This activity's policies prevent screen power management"));
-
-                m_screenActivityInhibit.insert(activity, cookie);
-            }
-        }
     }
 
     // If the lid is closed, retrigger the lid close signal
