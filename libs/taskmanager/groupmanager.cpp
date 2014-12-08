@@ -41,7 +41,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "taskitem.h"
 #include "taskgroup.h"
 #include "taskmanager.h"
-#include "strategies/activitysortingstrategy.h"
 #include "strategies/alphasortingstrategy.h"
 #include "strategies/desktopsortingstrategy.h"
 #include "strategies/programgroupingstrategy.h"
@@ -66,7 +65,6 @@ public:
           currentScreen(-1),
           groupIsFullLimit(0),
           showOnlyCurrentDesktop(false),
-          showOnlyCurrentActivity(false),
           showOnlyCurrentScreen(false),
           showOnlyMinimized(false),
           onlyGroupWhenFull(false),
@@ -155,7 +153,8 @@ GroupManager::GroupManager(QObject *parent)
     connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(sycocaChanged(const QStringList &)));
 
     d->currentDesktop = TaskManager::self()->currentDesktop();
-    d->currentActivity = TaskManager::self()->currentActivity();
+#warning "activities cleanup"
+    d->currentActivity = "desktop";
 
     d->rootGroups[d->currentActivity][d->currentDesktop] = new TaskGroup(this, "RootGroup");
 
@@ -274,12 +273,6 @@ bool GroupManagerPrivate::addTask(::TaskManager::Task *task)
         if (showOnlyCurrentDesktop && !task->isOnCurrentDesktop()) {
             /* kDebug() << "Not on this desktop and showOnlyCurrentDesktop"
                      << KWindowSystem::currentDesktop() << task->desktop(); */
-            skip = true;
-        }
-
-        if (showOnlyCurrentActivity && !task->isOnCurrentActivity()) {
-            /* kDebug() << "Not on this desktop and showOnlyCurrentActivity"
-                     << KWindowSystem::currentActivity() << task->desktop(); */
             skip = true;
         }
 
@@ -443,43 +436,6 @@ GroupPtr GroupManager::rootGroup() const
     return d->currentRootGroup();
 }
 
-void GroupManagerPrivate::currentActivityChanged(QString newActivity)
-{
-    if (!showOnlyCurrentActivity || currentActivity == newActivity) {
-        return;
-    }
-
-    if (!rootGroups.contains(newActivity) || !rootGroups.value(newActivity).contains(currentDesktop)) {
-        kDebug() << "created new desk group";
-        rootGroups[newActivity][currentDesktop] = new TaskGroup(q, "RootGroup");
-        if (abstractSortingStrategy) {
-            abstractSortingStrategy->handleGroup(rootGroups[newActivity][currentDesktop]);
-        }
-    }
-
-    if (onlyGroupWhenFull) {
-        QObject::disconnect(currentRootGroup(), SIGNAL(itemAdded(AbstractGroupableItem*)), q, SLOT(checkIfFull()));
-        QObject::disconnect(currentRootGroup(), SIGNAL(itemRemoved(AbstractGroupableItem*)), q, SLOT(checkIfFull()));
-    }
-
-    currentActivity = newActivity;
-
-    foreach (LauncherItem * item, launchers) {
-        if (item->shouldShow(q)) {
-            rootGroups[currentActivity][currentDesktop]->add(item);
-        } else {
-            rootGroups[currentActivity][currentDesktop]->remove(item);
-        }
-    }
-
-    if (onlyGroupWhenFull) {
-        QObject::connect(currentRootGroup(), SIGNAL(itemAdded(AbstractGroupableItem*)), q, SLOT(checkIfFull()));
-        QObject::connect(currentRootGroup(), SIGNAL(itemRemoved(AbstractGroupableItem*)), q, SLOT(checkIfFull()));
-    }
-
-    actuallyReloadTasks();
-}
-
 void GroupManagerPrivate::currentDesktopChanged(int newDesktop)
 {
     //kDebug();
@@ -536,12 +492,6 @@ void GroupManagerPrivate::taskChanged(::TaskManager::Task *task, ::TaskManager::
     if (showOnlyCurrentDesktop && changes & ::TaskManager::DesktopChanged) {
         takeAction = true;
         show = task->isOnCurrentDesktop();
-        //kDebug() << task->visibleName() << "on" << TaskManager::self()->currentDesktop();
-    }
-
-    if (showOnlyCurrentActivity && changes & ::TaskManager::ActivitiesChanged) {
-        takeAction = true;
-        show = task->isOnCurrentActivity();
         //kDebug() << task->visibleName() << "on" << TaskManager::self()->currentDesktop();
     }
 
@@ -1257,17 +1207,6 @@ void GroupManager::setShowOnlyCurrentDesktop(bool showOnlyCurrentDesktop)
     reconnect();
 }
 
-bool GroupManager::showOnlyCurrentActivity() const
-{
-    return d->showOnlyCurrentActivity;
-}
-
-void GroupManager::setShowOnlyCurrentActivity(bool showOnlyCurrentActivity)
-{
-    d->showOnlyCurrentActivity = showOnlyCurrentActivity;
-    reconnect();
-}
-
 bool GroupManager::showOnlyMinimized() const
 {
     return d->showOnlyMinimized;
@@ -1313,10 +1252,6 @@ void GroupManager::setSortingStrategy(TaskSortingStrategy sortOrder)
 
     case DesktopSorting:
         d->abstractSortingStrategy = new DesktopSortingStrategy(this);
-        break;
-
-    case ActivitySorting:
-        d->abstractSortingStrategy = new ActivitySortingStrategy(this);
         break;
 
     case NoSorting: //manual and no grouping result both in non automatic grouping

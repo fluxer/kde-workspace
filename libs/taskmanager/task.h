@@ -68,8 +68,6 @@ class TASKMANAGER_EXPORT Task : public QObject
     Q_PROPERTY(bool modified READ isModified)
     Q_PROPERTY(bool demandsAttention READ demandsAttention)
     Q_PROPERTY(int desktop READ desktop)
-    Q_PROPERTY(bool onCurrentActivity READ isOnCurrentActivity)
-    Q_PROPERTY(bool onAllActivities READ isOnAllActivities)
     Q_PROPERTY(QStringList activities READ activities)
 
 public:

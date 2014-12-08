@@ -80,7 +80,6 @@ class TASKMANAGER_EXPORT TaskManager : public QObject
     Q_OBJECT
     Q_PROPERTY(int currentDesktop READ currentDesktop)
     Q_PROPERTY(int numberOfDesktops READ numberOfDesktops)
-    Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY activityChanged)
 
 public:
     static TaskManager* self();
@@ -122,11 +121,6 @@ public:
      * Returns the number of the current desktop.
      */
     int currentDesktop() const;
-
-    /**
-     * Returns the number of the current desktop.
-     */
-    QString currentActivity() const;
 
     /**
      * Returns true if the specified task is on top.
@@ -177,11 +171,6 @@ Q_SIGNALS:
      * Emitted when the current desktop changes.
      */
     void desktopChanged(int desktop);
-
-    /**
-     * Emitted when the current activity changes.
-     */
-    void activityChanged(const QString &activity);
 
     /**
      * Emitted when a window changes desktop.

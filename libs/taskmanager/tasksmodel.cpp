@@ -113,39 +113,6 @@ QVariant TasksModel::data(const QModelIndex &index, int role) const
         return item->desktop();
     } else if (role == TasksModel::DesktopName) {
         return KWindowSystem::desktopName(item->desktop());
-    } else if (role == TasksModel::OnAllActivities) {
-        // FIXME: 2ac45a07d6 should have put isOnAllActivities() & co
-        // into AbstractGroupableItem to avoid this scaffolding; make
-        // that happen.
-        if (item->itemType() == TaskItemType) {
-            TaskItem *taskItem = static_cast<TaskItem *>(item);
-
-            if (taskItem->task()) {
-                return taskItem->task()->isOnAllActivities();
-            }
-        }
-
-        return false;
-    } else if (role == TasksModel::ActivityNames) {
-        QVariantList activities;
-
-        if (item->itemType() == TaskItemType) {
-            foreach(const QString &activity, static_cast<TaskItem *>(item)->activityNames()) {
-                activities << activity;
-            }
-        }
-
-        return activities;
-    } else if (role == TasksModel::OtherActivityNames) {
-        QVariantList activities;
-
-        if (item->itemType() == TaskItemType) {
-            foreach(const QString &activity, static_cast<TaskItem *>(item)->activityNames(false)) {
-                activities << activity;
-            }
-        }
-
-        return activities;
     } else if (role == TasksModel::Shaded) {
         return item->isShaded();
     } else if (role == TasksModel::Maximized) {

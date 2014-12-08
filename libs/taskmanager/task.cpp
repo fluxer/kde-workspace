@@ -700,16 +700,6 @@ WId Task::idFromMimeData(const QMimeData *mimeData, bool *ok)
     return id;
 }
 
-bool Task::isOnCurrentActivity() const
-{
-    return d->activities.isEmpty() || d->activities.contains(TaskManager::self()->currentActivity());
-}
-
-bool Task::isOnAllActivities() const
-{
-    return d->activities.isEmpty();
-}
-
 QStringList Task::activities() const
 {
     return d->activities;

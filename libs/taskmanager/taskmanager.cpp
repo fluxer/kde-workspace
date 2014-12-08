@@ -44,9 +44,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QX11Info>
 #endif
 
-
-#include <KActivities/Consumer>
-
 namespace TaskManager
 {
 
@@ -97,7 +94,6 @@ public:
     QList<Startup *> startups;
     WindowList skiptaskbarWindows;
     QSet<QUuid> trackGeometryTokens;
-    KActivities::Consumer activityConsumer;
 };
 
 TaskManager::TaskManager()
@@ -115,13 +111,9 @@ TaskManager::TaskManager()
             this,       SLOT(currentDesktopChanged(int)));
     connect(KWindowSystem::self(), SIGNAL(windowChanged(WId, const ulong*)),
             this,       SLOT(windowChanged(WId, const ulong*)));
-    connect(&d->activityConsumer, SIGNAL(currentActivityChanged(QString)),
-            this,       SIGNAL(activityChanged(QString)));
     if (QCoreApplication::instance()) {
         connect(QCoreApplication::instance(), SIGNAL(aboutToQuit()), this, SLOT(onAppExitCleanup()));
     }
-
-    emit activityChanged(d->activityConsumer.currentActivity());
 
     // register existing windows
     const QList<WId> windows = KWindowSystem::windows();
@@ -559,11 +551,6 @@ bool TaskManager::isOnScreen(int screen, const WId wid)
 int TaskManager::currentDesktop() const
 {
     return KWindowSystem::currentDesktop();
-}
-
-QString TaskManager::currentActivity() const
-{
-    return d->activityConsumer.currentActivity();
 }
 
 } // TaskManager namespace
