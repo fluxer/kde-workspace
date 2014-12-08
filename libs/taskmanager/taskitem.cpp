@@ -25,7 +25,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // Own
 #include "taskitem.h"
 
-#include <KActivities/Info>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KDebug>
@@ -205,38 +204,6 @@ QString TaskItem::taskName() const
     }
 
     return d->taskName;
-}
-
-QStringList TaskItem::activities() const
-{
-    if (!task()) {
-        return QStringList();
-    }
-
-    return task()->activities();
-}
-
-QStringList TaskItem::activityNames(bool includeCurrent) const
-{
-    if (!task()) {
-        return QStringList();
-    }
-
-    QStringList names;
-
-    QStringList activities = task()->activities();
-    if (!includeCurrent) {
-        activities.removeOne(TaskManager::self()->currentActivity());
-    }
-
-    Q_FOREACH(QString activity, activities) {
-        KActivities::Info info(activity);
-        if (info.state() != KActivities::Info::Invalid) {
-            names << info.name();
-        }
-    }
-
-    return names;
 }
 
 ItemType TaskItem::itemType() const

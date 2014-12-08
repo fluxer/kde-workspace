@@ -65,9 +65,6 @@ public:
     QString name() const;
     QString taskName() const;
 
-    QStringList activities() const;
-    QStringList activityNames(bool includeCurrent = true) const;
-
     bool isStartupItem() const;
     bool isOnCurrentDesktop() const;
     bool isOnAllDesktops() const;
