@@ -2,7 +2,6 @@ project(plasmaextracomponents)
 
 set(plasmaextracomponents_SRCS
     appbackgroundprovider.cpp
-    resourceinstance.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
     )
