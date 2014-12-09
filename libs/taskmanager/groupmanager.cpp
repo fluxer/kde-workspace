@@ -84,7 +84,6 @@ public:
     * Keep track of changes in Taskmanager
     */
     void currentDesktopChanged(int);
-    void currentActivityChanged(QString);
     void taskChanged(::TaskManager::Task *, ::TaskManager::TaskChanges);
     void checkScreenChange();
     void taskDestroyed(QObject *item);
@@ -575,7 +574,6 @@ void GroupManager::reconnect()
 {
     //kDebug();
     disconnect(TaskManager::self(), SIGNAL(desktopChanged(int)), this, SLOT(currentDesktopChanged(int)));
-    disconnect(TaskManager::self(), SIGNAL(activityChanged(QString)), this, SLOT(currentActivityChanged(QString)));
     disconnect(TaskManager::self(), SIGNAL(windowChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)),
                this, SLOT(taskChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)));
 
@@ -584,10 +582,6 @@ void GroupManager::reconnect()
         if (d->showOnlyCurrentDesktop) {
             connect(TaskManager::self(), SIGNAL(desktopChanged(int)),
                     this, SLOT(currentDesktopChanged(int)));
-        }
-        if (d->showOnlyCurrentActivity) {
-            connect(TaskManager::self(), SIGNAL(activityChanged(QString)),
-                    this, SLOT(currentActivityChanged(QString)));
         }
 
         connect(TaskManager::self(), SIGNAL(windowChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)),

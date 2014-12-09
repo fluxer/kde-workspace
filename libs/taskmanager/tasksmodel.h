@@ -53,20 +53,18 @@ public:
         Desktop = Qt::UserRole + 6,
         DesktopName = Qt::UserRole + 7,
         OnAllActivities = Qt::UserRole + 8,
-        ActivityNames = Qt::UserRole + 9,
-        OtherActivityNames = Qt::UserRole + 10,
-        Shaded = Qt::UserRole + 11,
-        Maximized = Qt::UserRole + 12,
-        Minimized = Qt::UserRole + 13,
-        FullScreen = Qt::UserRole + 14,
-        BelowOthers = Qt::UserRole + 15,
-        AlwaysOnTop = Qt::UserRole + 16,
-        Active = Qt::UserRole + 17,
-        DemandsAttention = Qt::UserRole + 18,
-        LauncherUrl = Qt::UserRole + 19,
-        WindowList = Qt::UserRole + 20,
-        MimeType = Qt::UserRole + 21,
-        MimeData = Qt::UserRole + 22
+        Shaded = Qt::UserRole + 9,
+        Maximized = Qt::UserRole + 10,
+        Minimized = Qt::UserRole + 11,
+        FullScreen = Qt::UserRole + 12,
+        BelowOthers = Qt::UserRole + 13,
+        AlwaysOnTop = Qt::UserRole + 14,
+        Active = Qt::UserRole + 15,
+        DemandsAttention = Qt::UserRole + 16,
+        LauncherUrl = Qt::UserRole + 17,
+        WindowList = Qt::UserRole + 18,
+        MimeType = Qt::UserRole + 19,
+        MimeData = Qt::UserRole + 20
     };
 
     explicit TasksModel(GroupManager *groupManager, QObject *parent = 0);
