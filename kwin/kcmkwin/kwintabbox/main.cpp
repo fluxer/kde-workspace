@@ -123,10 +123,6 @@ KWinTabBoxConfig::KWinTabBoxConfig(QWidget* parent, const QVariantList& args)
         connect(ui[i]->currentDesktop, SIGNAL(clicked(bool)), SLOT(changed()));
         connect(ui[i]->otherDesktops, SIGNAL(clicked(bool)), SLOT(changed()));
 
-        connect(ui[i]->filterActivities, SIGNAL(clicked(bool)), SLOT(changed()));
-        connect(ui[i]->currentActivity, SIGNAL(clicked(bool)), SLOT(changed()));
-        connect(ui[i]->otherActivities, SIGNAL(clicked(bool)), SLOT(changed()));
-
         connect(ui[i]->filterScreens, SIGNAL(clicked(bool)), SLOT(changed()));
         if (QApplication::desktop()->screenCount() < 2) {
             ui[i]->filterScreens->hide();
@@ -348,9 +344,6 @@ void KWinTabBoxConfig::defaults()
         CONFIGURE(filterDesktops, Desktop, !=, AllDesktopsClients);
         CONFIGURE(currentDesktop, Desktop, ==, OnlyCurrentDesktopClients);
         CONFIGURE(otherDesktops, Desktop, ==, ExcludeCurrentDesktopClients);
-        CONFIGURE(filterActivities, Activities, !=, AllActivitiesClients);
-        CONFIGURE(currentActivity, Activities, ==, OnlyCurrentActivityClients);
-        CONFIGURE(otherActivities, Activities, ==, ExcludeCurrentActivityClients);
         CONFIGURE(filterScreens, MultiScreen, !=, IgnoreMultiScreen);
         CONFIGURE(currentScreen, MultiScreen, ==, OnlyCurrentScreenClients);
         CONFIGURE(otherScreens, MultiScreen, ==, ExcludeCurrentScreenClients);
@@ -404,9 +397,6 @@ void KWinTabBoxConfig::updateUiFromConfig(KWinTabBoxConfigForm* ui, const KWin::
     CONFIGURE(filterDesktops, clientDesktop, !=, AllDesktopsClients);
     CONFIGURE(currentDesktop, clientDesktop, ==, OnlyCurrentDesktopClients);
     CONFIGURE(otherDesktops, clientDesktop, ==, ExcludeCurrentDesktopClients);
-    CONFIGURE(filterActivities, clientActivities, !=, AllActivitiesClients);
-    CONFIGURE(currentActivity, clientActivities, ==, OnlyCurrentActivityClients);
-    CONFIGURE(otherActivities, clientActivities, ==, ExcludeCurrentActivityClients);
     CONFIGURE(filterScreens, clientMultiScreen, !=, IgnoreMultiScreen);
     CONFIGURE(currentScreen, clientMultiScreen, ==, OnlyCurrentScreenClients);
     CONFIGURE(otherScreens, clientMultiScreen, ==, ExcludeCurrentScreenClients);
@@ -431,10 +421,6 @@ void KWinTabBoxConfig::updateConfigFromUi(const KWin::KWinTabBoxConfigForm* ui, 
         config.setClientDesktopMode(ui->currentDesktop->isChecked() ? TabBoxConfig::OnlyCurrentDesktopClients : TabBoxConfig::ExcludeCurrentDesktopClients);
     else
         config.setClientDesktopMode(TabBoxConfig::AllDesktopsClients);
-    if (ui->filterActivities->isChecked())
-        config.setClientActivitiesMode(ui->currentActivity->isChecked() ? TabBoxConfig::OnlyCurrentActivityClients : TabBoxConfig::ExcludeCurrentActivityClients);
-    else
-        config.setClientActivitiesMode(TabBoxConfig::AllActivitiesClients);
     if (ui->filterScreens->isChecked())
         config.setClientMultiScreenMode(ui->currentScreen->isChecked() ? TabBoxConfig::OnlyCurrentScreenClients : TabBoxConfig::ExcludeCurrentScreenClients);
     else

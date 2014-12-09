@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>630</width>
-    <height>418</height>
+    <height>351</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,2">
@@ -160,16 +160,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="filterActivities">
-          <property name="text">
-           <string>Activities</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QWidget" name="activityFilter" native="true">
           <property name="enabled">
            <bool>false</bool>
@@ -178,36 +168,6 @@
            <property name="margin">
             <number>0</number>
            </property>
-           <item>
-            <spacer name="horizontalSpacer_7">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Fixed</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>24</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="currentActivity">
-             <property name="text">
-              <string>Current activity</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QRadioButton" name="otherActivities">
-             <property name="text">
-              <string>All other activities</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
@@ -600,9 +560,6 @@
   <tabstop>filterDesktops</tabstop>
   <tabstop>currentDesktop</tabstop>
   <tabstop>otherDesktops</tabstop>
-  <tabstop>filterActivities</tabstop>
-  <tabstop>currentActivity</tabstop>
-  <tabstop>otherActivities</tabstop>
   <tabstop>filterScreens</tabstop>
   <tabstop>currentScreen</tabstop>
   <tabstop>otherScreens</tabstop>
@@ -625,22 +582,6 @@
     <hint type="destinationlabel">
      <x>701</x>
      <y>197</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>filterActivities</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>activityFilter</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>543</x>
-     <y>222</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>701</x>
-     <y>247</y>
     </hint>
    </hints>
   </connection>

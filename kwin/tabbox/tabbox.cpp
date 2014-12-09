@@ -412,7 +412,6 @@ TabBox::TabBox(QObject *parent)
     m_defaultConfig = TabBoxConfig();
     m_defaultConfig.setTabBoxMode(TabBoxConfig::ClientTabBox);
     m_defaultConfig.setClientDesktopMode(TabBoxConfig::OnlyCurrentDesktopClients);
-    m_defaultConfig.setClientActivitiesMode(TabBoxConfig::OnlyCurrentActivityClients);
     m_defaultConfig.setClientApplicationsMode(TabBoxConfig::AllWindowsAllApplications);
     m_defaultConfig.setClientMinimizedMode(TabBoxConfig::IgnoreMinimizedStatus);
     m_defaultConfig.setShowDesktopMode(TabBoxConfig::DoNotShowDesktopClient);
@@ -422,7 +421,6 @@ TabBox::TabBox(QObject *parent)
     m_alternativeConfig = TabBoxConfig();
     m_alternativeConfig.setTabBoxMode(TabBoxConfig::ClientTabBox);
     m_alternativeConfig.setClientDesktopMode(TabBoxConfig::AllDesktopsClients);
-    m_alternativeConfig.setClientActivitiesMode(TabBoxConfig::OnlyCurrentActivityClients);
     m_alternativeConfig.setClientApplicationsMode(TabBoxConfig::AllWindowsAllApplications);
     m_alternativeConfig.setClientMinimizedMode(TabBoxConfig::IgnoreMinimizedStatus);
     m_alternativeConfig.setShowDesktopMode(TabBoxConfig::DoNotShowDesktopClient);
@@ -738,8 +736,6 @@ void TabBox::loadConfig(const KConfigGroup& config, TabBoxConfig& tabBoxConfig)
 {
     tabBoxConfig.setClientDesktopMode(TabBoxConfig::ClientDesktopMode(
                                        config.readEntry<int>("DesktopMode", TabBoxConfig::defaultDesktopMode())));
-    tabBoxConfig.setClientActivitiesMode(TabBoxConfig::ClientActivitiesMode(
-                                       config.readEntry<int>("ActivitiesMode", TabBoxConfig::defaultActivitiesMode())));
     tabBoxConfig.setClientApplicationsMode(TabBoxConfig::ClientApplicationsMode(
                                        config.readEntry<int>("ApplicationsMode", TabBoxConfig::defaultApplicationsMode())));
     tabBoxConfig.setClientMinimizedMode(TabBoxConfig::ClientMinimizedMode(

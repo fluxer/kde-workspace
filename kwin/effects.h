@@ -85,7 +85,6 @@ public:
     virtual void windowToScreen(EffectWindow* w, int screen);
     virtual void setShowingDesktop(bool showing);
 
-    virtual QString currentActivity() const;
     virtual int currentDesktop() const;
     virtual int numberOfDesktops() const;
     virtual void setCurrentDesktop(int desktop);

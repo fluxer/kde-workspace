@@ -911,11 +911,6 @@ void EffectsHandlerImpl::setShowingDesktop(bool showing)
     Workspace::self()->setShowingDesktop(showing);
 }
 
-QString EffectsHandlerImpl::currentActivity() const
-{
-    return QString();
-}
-
 int EffectsHandlerImpl::currentDesktop() const
 {
     return VirtualDesktopManager::self()->current();
