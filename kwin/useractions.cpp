@@ -88,7 +88,6 @@ UserActionsMenu::UserActionsMenu(QObject *parent)
     , m_menu(NULL)
     , m_desktopMenu(NULL)
     , m_screenMenu(NULL)
-    , m_activityMenu(NULL)
     , m_addTabsMenu(NULL)
     , m_switchToTabMenu(NULL)
 #ifdef KWIN_BUILD_SCRIPTING
@@ -391,7 +390,6 @@ void UserActionsMenu::discard()
     m_menu = NULL;
     m_desktopMenu = NULL;
     m_screenMenu = NULL;
-    m_activityMenu = NULL;
     m_switchToTabMenu = NULL;
     m_addTabsMenu = NULL;
 #ifdef KWIN_BUILD_SCRIPTING
@@ -459,10 +457,6 @@ void UserActionsMenu::menuAboutToShow()
         m_scriptsMenu = NULL;
     }
 #endif
-}
-
-void UserActionsMenu::showHideActivityMenu()
-{
 }
 
 void UserActionsMenu::selectPopupClientTab(QAction* action)
@@ -598,26 +592,8 @@ void UserActionsMenu::initScreenPopup()
 
     QAction *action = m_screenMenu->menuAction();
     // set it as the first item after desktop
-    m_menu->insertAction(m_activityMenu ? m_activityMenu->menuAction() : m_minimizeOperation, action);
-    action->setText(i18n("Move To &Screen"));
-}
-
-void UserActionsMenu::initActivityPopup()
-{
-    if (m_activityMenu)
-        return;
-
-    m_activityMenu = new QMenu(m_menu);
-    m_activityMenu->setFont(KGlobalSettings::menuFont());
-    connect(m_activityMenu, SIGNAL(triggered(QAction*)),
-            this, SLOT(slotToggleOnActivity(QAction*)));
-    connect(m_activityMenu, SIGNAL(aboutToShow()),
-            this, SLOT(activityPopupAboutToShow()));
-
-    QAction *action = m_activityMenu->menuAction();
-    // set it as the first item
     m_menu->insertAction(m_minimizeOperation, action);
-    action->setText(i18n("Ac&tivities"));   //FIXME is that a good string?
+    action->setText(i18n("Move To &Screen"));
 }
 
 void UserActionsMenu::desktopPopupAboutToShow()
@@ -684,13 +660,6 @@ void UserActionsMenu::screenPopupAboutToShow()
     }
 }
 
-void UserActionsMenu::activityPopupAboutToShow()
-{
-    if (!m_activityMenu)
-        return;
-
-}
-
 void UserActionsMenu::slotWindowOperation(QAction *action)
 {
     if (!action->data().isValid())
@@ -751,10 +720,6 @@ void UserActionsMenu::slotSendToScreen(QAction *action)
     }
 
     Workspace::self()->sendClientToScreen(m_client.data(), screen);
-}
-
-void UserActionsMenu::slotToggleOnActivity(QAction *action)
-{
 }
 
 //****************************************

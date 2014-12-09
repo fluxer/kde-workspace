@@ -95,18 +95,6 @@ public:
      **/
     void show(const QRect &pos, const QWeakPointer<Client> &client);
 
-public slots:
-    /**
-     * Delayed initialization of the activity menu.
-     *
-     * The call to retrieve the current list of activities is performed in a thread and this
-     * slot is invoked once the list has been fetched. Only task of this method is to decide
-     * whether to show the activity menu and to invoke the initialization of it.
-     *
-     * @see initActivityPopup
-     **/
-    void showHideActivityMenu();
-
 private slots:
     /**
      * The menu will become visible soon.
@@ -145,11 +133,6 @@ private slots:
      **/
     void screenPopupAboutToShow();
     /**
-     * Adjusts the activity popup to the current values and the location of
-     * the Client.
-     **/
-    void activityPopupAboutToShow();
-    /**
      * Sends the client to desktop \a desk
      *
      * @param action Invoked Action containing the Desktop as data element
@@ -161,12 +144,6 @@ private slots:
      * @param action Invoked Action containing the Screen as data element
      **/
     void slotSendToScreen(QAction *action);
-    /**
-     * Toggles whether the Client is on the \a activity
-     *
-     * @param action Invoked Action containing the Id of the Activity to toggle the Client on
-     **/
-    void slotToggleOnActivity(QAction *action);
     /**
      * Performs a window operation.
      *
@@ -192,12 +169,6 @@ private:
      **/
     void initScreenPopup();
     /**
-     * Creates activity popup.
-     * I'm going with checkable ones instead of "copy to" and "move to" menus; I *think* it's an easier way.
-     * Oh, and an 'all' option too of course
-     **/
-    void initActivityPopup();
-    /**
      * Creates the Window Tabbing related menus.
      **/
     void initTabbingPopups();
@@ -220,10 +191,6 @@ private:
      * The move to screen sub menu.
      **/
     QMenu* m_screenMenu;
-    /**
-     * The activities sub menu.
-     **/
-    QMenu* m_activityMenu;
     /**
      * Menu to add the group to other group.
      **/
