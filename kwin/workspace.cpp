@@ -46,9 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "screenedge.h"
 #endif
 #include "screens.h"
-#ifdef KWIN_BUILD_SCRIPTING
-#include "scripting/scripting.h"
-#endif
 #ifdef KWIN_BUILD_TABBOX
 #include "tabbox.h"
 #endif
@@ -386,9 +383,6 @@ void Workspace::init()
         activateClient(new_active_client);
 
 
-#ifdef KWIN_BUILD_SCRIPTING
-    Scripting::create(this);
-#endif
 
     // SELI TODO: This won't work with unreasonable focus policies,
     // and maybe in rare cases also if the selected client doesn't

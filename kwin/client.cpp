@@ -46,10 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Qt
 #include <QApplication>
 #include <QProcess>
-#ifdef KWIN_BUILD_SCRIPTING
-#include <QScriptEngine>
-#include <QScriptProgram>
-#endif
 #include <QWhatsThis>
 // X
 #ifdef HAVE_XSYNC
@@ -1628,30 +1624,6 @@ void Client::setCaption(const QString& _s, bool force)
         if (!s[i].isPrint())
             s[i] = QChar(' ');
     cap_normal = s;
-#ifdef KWIN_BUILD_SCRIPTING
-    if (options->condensedTitle()) {
-        static QScriptEngine engine;
-        static QScriptProgram stripTitle;
-        static QScriptValue script;
-        if (stripTitle.isNull()) {
-            const QString scriptFile = KStandardDirs::locate("data", QLatin1String(KWIN_NAME) + "/stripTitle.js");
-            if (!scriptFile.isEmpty()) {
-                QFile f(scriptFile);
-                if (f.open(QIODevice::ReadOnly|QIODevice::Text)) {
-                    f.reset();
-                    stripTitle = QScriptProgram(QString::fromLocal8Bit(f.readAll()), "stripTitle.js");
-                    f.close();
-                }
-            }
-            if (stripTitle.isNull())
-                stripTitle = QScriptProgram("(function(title, wm_name, wm_class){ return title ; })", "stripTitle.js");
-            script = engine.evaluate(stripTitle);
-        }
-        QScriptValueList args;
-        args << _s << QString(resourceName()) << QString(resourceClass());
-        s = script.call(QScriptValue(), args).toString();
-    }
-#endif
     if (!force && s == cap_deco)
         return;
     cap_deco = s;

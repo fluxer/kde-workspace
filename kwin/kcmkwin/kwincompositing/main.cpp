@@ -89,7 +89,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     QDBusConnection::sessionBus().registerObject("/CompositorSettings", this);
     new MainAdaptor(this);
     KGlobal::locale()->insertCatalog("kwin_effects");
-    KGlobal::locale()->insertCatalog("kwin_scripting");
     ui.setupUi(this);
     layout()->setMargin(0);
     layout()->activate();

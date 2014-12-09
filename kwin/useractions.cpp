@@ -40,9 +40,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "screens.h"
 #include "virtualdesktops.h"
 
-#ifdef KWIN_BUILD_SCRIPTING
-#include "scripting/scripting.h"
-#endif
 
 
 #include <KDE/KKeySequenceWidget>
@@ -90,9 +87,6 @@ UserActionsMenu::UserActionsMenu(QObject *parent)
     , m_screenMenu(NULL)
     , m_addTabsMenu(NULL)
     , m_switchToTabMenu(NULL)
-#ifdef KWIN_BUILD_SCRIPTING
-    , m_scriptsMenu(NULL)
-#endif
     , m_resizeOperation(NULL)
     , m_moveOperation(NULL)
     , m_maximizeOperation(NULL)
@@ -231,9 +225,6 @@ QStringList configModules(bool controlCenter)
 #endif
 #ifdef KWIN_BUILD_SCREENEDGES
              << "kwinscreenedges"
-#endif
-#ifdef KWIN_BUILD_SCRIPTING
-             << "kwinscripts"
 #endif
              ;
     return args;
@@ -392,9 +383,6 @@ void UserActionsMenu::discard()
     m_screenMenu = NULL;
     m_switchToTabMenu = NULL;
     m_addTabsMenu = NULL;
-#ifdef KWIN_BUILD_SCRIPTING
-    m_scriptsMenu = NULL;
-#endif
 }
 
 void UserActionsMenu::menuAboutToShow()
@@ -437,26 +425,6 @@ void UserActionsMenu::menuAboutToShow()
         m_addTabsMenu = 0;
     }
 
-#ifdef KWIN_BUILD_SCRIPTING
-    // drop the existing scripts menu
-    delete m_scriptsMenu;
-    m_scriptsMenu = NULL;
-    // ask scripts whether they want to add entries for the given Client
-    m_scriptsMenu = new QMenu(m_menu);
-    QList<QAction*> scriptActions = Scripting::self()->actionsForUserActionMenu(m_client.data(), m_scriptsMenu);
-    if (!scriptActions.isEmpty()) {
-        m_scriptsMenu->setFont(KGlobalSettings::menuFont());
-        m_scriptsMenu->addActions(scriptActions);
-
-        QAction *action = m_scriptsMenu->menuAction();
-        // set it as the first item after desktop
-        m_menu->insertAction(m_closeOperation, action);
-        action->setText(i18n("&Extensions"));
-    } else {
-        delete m_scriptsMenu;
-        m_scriptsMenu = NULL;
-    }
-#endif
 }
 
 void UserActionsMenu::selectPopupClientTab(QAction* action)
