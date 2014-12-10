@@ -96,19 +96,6 @@ if( NOT KWIN_MOBILE_EFFECTS )
 endif()
 set( kwin4_effect_include_directories )
 
-# scripted effects
-add_subdirectory( dialogparent )
-add_subdirectory( fade )
-add_subdirectory( login )
-
-# scripted effects only relevant to desktop
-if( NOT KWIN_MOBILE_EFFECTS )
-    add_subdirectory( fadedesktop )
-    add_subdirectory( maximize )
-    add_subdirectory( scalein )
-    add_subdirectory( translucency )
-endif()
-
 ###############################################################################
 # Built-in effects go here
 
