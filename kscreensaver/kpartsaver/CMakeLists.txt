@@ -9,7 +9,7 @@ kde4_add_ui_files(kpartsaver.kss_SRCS configwidget.ui )
 
 kde4_add_executable(kpartsaver.kss ${kpartsaver.kss_SRCS})
 
-target_link_libraries(kpartsaver.kss  ${KDE4_KPARTS_LIBS} ${KDE4WORKSPACE_KSCREENSAVER_LIBRARY})
+target_link_libraries(kpartsaver.kss  ${KDE4_KPARTS_LIBS} kscreensaver)
 
 install(TARGETS kpartsaver.kss  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
