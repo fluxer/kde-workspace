@@ -25,7 +25,6 @@
 #include <qdialog.h>
 #include <qtimer.h>
 #include <qstring.h>
-#include <q3valuelist.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qspinbox.h>
