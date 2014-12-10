@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE kcfg SYSTEM "http://www.kde.org/standards/kcfg/1.0/kcfg.dtd">
+<kcfg>
+	<kcfgfile name="asciiquariumrc"/>
+	<group name="Settings">
+		<entry name="fishCount" type="Int">
+			<label>Number of fish to have in the sea.</label>
+			<default>20</default>
+			<whatsthis>You can use this value to select the number of fish that will be on screen at a given time.</whatsthis>
+		</entry>
+	</group>
+</kcfg>
+<!-- vim: set noet ts=4: -->

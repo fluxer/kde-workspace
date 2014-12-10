@@ -1,0 +1,25 @@
+[Desktop Entry]
+Exec=@NAME@
+Icon=kscreensaver
+Type=Service
+X-KDE-ServiceTypes=ScreenSaver
+TryExec=xscreensaver
+Actions=InWindow;Root;Setup;
+@GL1@
+@GL2@
+Name=@LABEL@
+
+[Desktop Action Setup]
+Exec=kxsconfig @NAME@
+Name=Setup...
+
+[Desktop Action InWindow]
+Exec=kxsrun @NAME@ -- -window-id %w
+Name=Display in Specified Window
+NoDisplay=true
+
+[Desktop Action Root]
+Exec=kxsrun @NAME@ -- -root
+Name=Display in Root Window
+NoDisplay=true
+

@@ -1,0 +1,4 @@
+File=asciiquarium.kcfg
+ClassName=AASaverConfig
+Singleton=true
+Mutators=true
