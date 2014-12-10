@@ -1211,17 +1211,6 @@ bool PlasmaApp::perVirtualDesktopViews() const
 void PlasmaApp::checkVirtualDesktopViews(int numDesktops)
 {
     kDebug() << numDesktops;
-    if (AppSettings::perVirtualDesktopViews()) {
-        QMutableListIterator<DesktopView *> it(m_desktops);
-        while (it.hasNext()) {
-            DesktopView *view = it.next();
-            if (!view->containment() || view->desktop() < 0 || view->desktop() >= numDesktops)  {
-                delete view;
-                it.remove();
-            }
-        }
-    }
-
     m_corona->checkScreens(true);
 }
 
