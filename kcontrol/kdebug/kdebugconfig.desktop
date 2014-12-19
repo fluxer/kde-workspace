@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kdebugconfig
+Icon=applications-development
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kdebugconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=system-administration
+X-KDE-System-Settings-Parent-Category-V2=system-administration
+X-DocPath=kcontrol/debugdetails/index.html
+Categories=Qt;KDE;X-KDE-settings-system-administration;
+
+Name=Debug
+Comment=Change debug options
+X-KDE-Keywords=Debug

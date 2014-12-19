@@ -19,15 +19,19 @@
 #ifndef _KDEBUGDIALOG
 #define _KDEBUGDIALOG
 
-#include "kabstractdebugdialog.h"
+#include <kcmodule.h>
 
-#include "ui_kdebugdialog.h"
+#include "ui_kdebug.h"
 
 class QLineEdit;
 class QComboBox;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
+class QVBoxLayout;
+
+class KConfig;
+class KPushButton;
 
 /**
  * Control debug/warning/error/fatal output of KDE applications
@@ -36,31 +40,36 @@ class QCheckBox;
  *
  * @author Kalle Dalheimer (kalle@kde.org)
  */
-class KDebugDialog : public KAbstractDebugDialog, public Ui_KDebugDialog
+class KCMDebug : public KCModule, public Ui_KDebugDialog
 {
     Q_OBJECT
 
 public:
-    explicit KDebugDialog(const AreaMap& areaMap, QWidget *parent = 0);
-    virtual ~KDebugDialog();
+    KCMDebug( QWidget* parent, const QVariantList& );
+    ~KCMDebug();
 
-    void doLoad() {}
-    void doSave();
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
 
 protected Q_SLOTS:
+    void slotDisableAllChanged();
     void slotDebugAreaChanged(QTreeWidgetItem*);
     void slotDestinationChanged();
-    void disableAllClicked();
+    void slotAbortFatalChanged();
+    void slotApply();
 
 private:
     void showArea(const QString& areaName);
+    void readAreas();
 
     QString mCurrentDebugArea;
 
-private:
-    // Disallow assignment and copy-construction
-    KDebugDialog( const KDebugDialog& );
-    KDebugDialog& operator= ( const KDebugDialog& );
+    QMap<QString /*area name*/, QString /*description*/> mAreaMap;
+
+protected:
+    KConfig* pConfig;
+    QCheckBox* m_disableAll;
 };
 
 #endif

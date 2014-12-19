@@ -44,17 +44,15 @@ add_subdirectory( dnssd )
 add_subdirectory( emoticons )
 add_subdirectory( spellchecking )
 
+add_subdirectory( kdebug )
+
 # TODO needs porting
 #add_subdirectory( smartcard )
 
 add_subdirectory( hardware )
 add_subdirectory( desktoppaths )
 
-if( FREETYPE_FOUND )
-    if( FONTCONFIG_FOUND )
-        add_subdirectory( fonts )
-    endif( FONTCONFIG_FOUND )
-endif( FREETYPE_FOUND )
 if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
     add_subdirectory( kfontinst )
+    add_subdirectory( fonts )
 endif(FONTCONFIG_FOUND AND FREETYPE_FOUND)
