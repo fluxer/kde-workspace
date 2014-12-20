@@ -11,4 +11,4 @@ target_link_libraries(kcm_kdebugconfig  ${KDE4_KDEUI_LIBS} ${KDE4_KCMUTILS_LIBRA
 
 install(TARGETS kcm_kdebugconfig DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kdebugconfig.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kcm_kdebugconfig.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )

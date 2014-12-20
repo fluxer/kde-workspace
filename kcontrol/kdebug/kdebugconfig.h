@@ -21,7 +21,7 @@
 
 #include <kcmodule.h>
 
-#include "ui_kdebug.h"
+#include "ui_kdebugconfig.h"
 
 class QLineEdit;
 class QComboBox;
