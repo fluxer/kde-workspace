@@ -46,7 +46,7 @@ static bool getCatalystVersion(int *first, int *second)
 }
 
 // Return 0 if we can use a direct context, 1 otherwise
-int main(int argc, char *argv[])
+int main()
 {
     Display *dpy = XOpenDisplay(0);
 
