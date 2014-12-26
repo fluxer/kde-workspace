@@ -38,8 +38,8 @@
 # define HALT_CMD	"/usr/sbin/shutdown -h now"
 # define REBOOT_CMD	"/usr/sbin/shutdown -r now"
 #elif defined(__linux__)
-# define HALT_CMD	"/sbin/shutdown -h -P now"
-# define REBOOT_CMD	"/sbin/shutdown -r now"
+# define HALT_CMD	"/sbin/poweroff"
+# define REBOOT_CMD	"/sbin/reboot"
 #elif defined(BSD)
 # define HALT_CMD	"/sbin/shutdown -p now"
 # define REBOOT_CMD	"/sbin/shutdown -r now"
