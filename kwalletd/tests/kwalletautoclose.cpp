@@ -44,6 +44,7 @@ void KWalletAutoClose::openWallet()
 	_out << "Opening wallet synchronously" << endl;
 	Wallet *wallet = Wallet::openWallet(Wallet::NetworkWallet(), 0, Wallet::Synchronous);
 	_out << "Exiting without closing. The wallet should autoclose." << endl;
+        Q_UNUSED(wallet);
 	kapp->exit(0);
 }
 
