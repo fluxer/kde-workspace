@@ -145,6 +145,8 @@ void ModelTest::nonDestructiveBasicTest()
     model->sibling ( 0, 0, QModelIndex() );
     model->span ( QModelIndex() );
     model->supportedDropActions();
+
+    Q_UNUSED(flags);
 }
 
 /*!
@@ -216,6 +218,8 @@ void ModelTest::hasIndex()
 
     // hasIndex() is tested more extensively in checkChildren(),
     // but this catches the big mistakes
+
+    Q_UNUSED(columns);
 }
 
 /*!
@@ -246,6 +250,8 @@ void ModelTest::index()
 
     // index() is tested more extensively in checkChildren(),
     // but this catches the big mistakes
+
+    Q_UNUSED(columns);
 }
 
 /*!
@@ -444,6 +450,7 @@ void ModelTest::data()
     if ( textAlignmentVariant.isValid() ) {
         int alignment = textAlignmentVariant.toInt();
         Q_ASSERT ( alignment == ( alignment & ( Qt::AlignHorizontal_Mask | Qt::AlignVertical_Mask ) ) );
+        Q_UNUSED(alignment);
     }
 
     // General Purpose roles that should return a QColor
@@ -464,6 +471,7 @@ void ModelTest::data()
         Q_ASSERT ( state == Qt::Unchecked ||
                    state == Qt::PartiallyChecked ||
                    state == Qt::Checked );
+        Q_UNUSED(state);
     }
 }
 
@@ -515,6 +523,10 @@ void ModelTest::rowsInserted ( const QModelIndex & parent, int start, int end )
     }
 
     Q_ASSERT ( c.next == model->data ( model->index ( end + 1, 0, c.parent ) ) );
+
+    Q_UNUSED(parent);
+    Q_UNUSED(start);
+    Q_UNUSED(end);
 }
 
 void ModelTest::layoutAboutToBeChanged()
