@@ -17,8 +17,6 @@ install(TARGETS kcmdatetimehelper DESTINATION ${LIBEXEC_INSTALL_DIR})
 
 kde4_install_auth_helper_files(kcmdatetimehelper org.kde.kcontrol.kcmclock root)
 
-kde4_install_auth_actions(org.kde.kcontrol.kcmclock kcmclock_actions.actions)
-
 ########### install files ###############
 
 install( FILES clock.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )

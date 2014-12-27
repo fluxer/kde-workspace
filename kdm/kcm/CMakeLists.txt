@@ -44,8 +44,6 @@ install(TARGETS kcmkdmhelper DESTINATION ${LIBEXEC_INSTALL_DIR})
 
 kde4_install_auth_helper_files(kcmkdmhelper org.kde.kcontrol.kcmkdm root)
 
-kde4_install_auth_actions(org.kde.kcontrol.kcmkdm kcmkdm_actions.actions)
-
 ########### install files ###############
 
 install( FILES kdm.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )

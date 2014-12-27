@@ -42,7 +42,6 @@ target_link_libraries(ksysguardprocesslist_helper ${KDE4_KDECORE_LIBS})
 install(TARGETS ksysguardprocesslist_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 
 kde4_install_auth_helper_files(ksysguardprocesslist_helper org.kde.ksysguard.processlisthelper root)
-kde4_install_auth_actions(org.kde.ksysguard.processlisthelper actions.actions)
 
 set_target_properties(ksysguardprocesslist_helper PROPERTIES COMPILE_FLAGS "-Wall -ggdb")
 

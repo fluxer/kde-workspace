@@ -29,4 +29,3 @@ configure_file(org.kde.fontinst.service.cmake ${CMAKE_CURRENT_BINARY_DIR}/sessio
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/session/org.kde.fontinst.service DESTINATION ${DBUS_SERVICES_INSTALL_DIR} )
 
 kde4_install_auth_helper_files(fontinst_helper org.kde.fontinst root)
-kde4_install_auth_actions(org.kde.fontinst fontinst.actions)

@@ -46,7 +46,6 @@ if (UDEV_FOUND)
     target_link_libraries(backlighthelper ${KDE4_KDECORE_LIBS})
     install(TARGETS backlighthelper DESTINATION ${LIBEXEC_INSTALL_DIR})
     kde4_install_auth_helper_files(backlighthelper org.kde.powerdevil.backlighthelper root)
-    kde4_install_auth_actions(org.kde.powerdevil.backlighthelper ${CMAKE_CURRENT_SOURCE_DIR}/backends/upower/backlight_helper_actions.actions)
 endif (UDEV_FOUND)
 
 ########################## Daemon variables ################################
