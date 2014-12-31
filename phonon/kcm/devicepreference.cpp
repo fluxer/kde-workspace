@@ -21,7 +21,6 @@
 
 #include "devicepreference.h"
 
-#include <QtCore/QUrl>
 #include <QtCore/QList>
 #include <QtCore/QPointer>
 #include <QtDBus/QDBusConnection>
@@ -53,6 +52,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <kurl.h>
 
 #ifndef METATYPE_QLIST_INT_DEFINED
 #define METATYPE_QLIST_INT_DEFINED
@@ -899,7 +899,7 @@ void DevicePreference::on_testPlaybackButton_toggled(bool down)
 
             createPath(m_media, m_audioOutput);
 
-            m_media->setCurrentSource(QUrl::fromLocalFile(KStandardDirs::locate("sound", "KDE-Sys-Log-In.ogg")));
+            m_media->setCurrentSource(KUrl(KStandardDirs::locate("sound", "KDE-Sys-Log-In.ogg")));
             connect(m_media, SIGNAL(finished()), testPlaybackButton, SLOT(toggle()));
 
             break;

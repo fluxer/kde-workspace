@@ -3,7 +3,6 @@
 
 #include <QTimer>
 #include <QPainter>
-#include <QUrl>
 #include <QLabel>
 #include <QtGui/QDesktopWidget>
 #include <QGroupBox>
@@ -19,6 +18,7 @@
 #include <KConfig>
 #include <KGlobal>
 #include <KLocale>
+#include <KUrl>
 #include <netwm.h>
 #include <KShortcut>
 #include <kwindowsystem.h>
@@ -477,7 +477,7 @@ void KAccessApp::xkbBellNotify(XkbBellNotifyEvent *event)
     if (!_player) { // as creating the player is expensive, delay the creation
       _player = Phonon::createPlayer(Phonon::AccessibilityCategory);
       _player->setParent(this);
-      _player->setCurrentSource(QUrl::fromLocalFile(_currentPlayerSource));
+      _player->setCurrentSource(KUrl(_currentPlayerSource));
     }
     _player->play();
   }
