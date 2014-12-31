@@ -18,13 +18,8 @@
 #include <kglobal.h>
 #include "fountain.h"
 #include "fountain.moc"
-#ifdef Q_WS_MACX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
 #include <GL/glu.h>
 #include <GL/gl.h>
-#endif
 #include <qimage.h>
 #include <kdebug.h>
 #include <qpainter.h>

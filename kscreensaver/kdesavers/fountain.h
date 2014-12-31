@@ -17,13 +17,8 @@
 #include <QDebug>
 #include <qdialog.h>
 #include <qgl.h>
-#ifdef Q_WS_MACX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
 #include <GL/glu.h>
 #include <GL/gl.h>
-#endif
 #include <kscreensaver.h>
 #include <qtimer.h>
 #include <qimage.h>

@@ -36,11 +36,7 @@
 #include <math.h>
 #include <time.h>
 
-#ifdef Q_WS_MACX
-#include <OpenGL/glu.h>
-#else
 #include <GL/glu.h>
-#endif
 
 #define NUMCONSTS   8
 #define PIx2        6.28318530718f

@@ -16,13 +16,8 @@
 
 #include <kdialog.h>
 #include <qgl.h>
-#ifdef Q_WS_MACX
-#include <OpenGL/glu.h>
-#include <OpenGL/gl.h>
-#else
 #include <GL/glu.h>
 #include <GL/gl.h>
-#endif
 #include <kscreensaver.h>
 #include <qtimer.h>
 #include <qimage.h>

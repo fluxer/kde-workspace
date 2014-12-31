@@ -17,13 +17,8 @@
 #include <kcolorbutton.h>
 #include "gravity.h"
 #include "gravity.moc"
-#ifdef Q_WS_MACX
-#include <OpenGL/glu.h>
-#include <OpenGL/gl.h>
-#else
 #include <GL/glu.h>
 #include <GL/gl.h>
-#endif
 #include <qimage.h>
 #include <kdebug.h>
 #include <qpainter.h>
