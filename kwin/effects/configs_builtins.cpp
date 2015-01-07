@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dashboard/dashboard_config.h"
 #include "desktopgrid/desktopgrid_config.h"
 #include "diminactive/diminactive_config.h"
-#include "magiclamp/magiclamp_config.h"
 #include "presentwindows/presentwindows_config.h"
 #include "resize/resize_config.h"
 #include "showfps/showfps_config.h"
@@ -34,9 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "zoom/zoom_config.h"
 
 #include "blur/blur_config.h"
-#include "coverswitch/coverswitch_config.h"
-#include "cube/cube_config.h"
-#include "cube/cubeslide_config.h"
 #include "flipswitch/flipswitch_config.h"
 #include "glide/glide_config.h"
 #include "invert/invert_config.h"
@@ -58,7 +54,6 @@ KWIN_EFFECT_CONFIG_MULTIPLE(builtins,
                             KWIN_EFFECT_CONFIG_SINGLE(dashboard, DashboardEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(desktopgrid, DesktopGridEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(diminactive, DimInactiveEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(magiclamp, MagicLampEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(presentwindows, PresentWindowsEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(resize, ResizeEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(showfps, ShowFpsEffectConfig)
@@ -67,9 +62,6 @@ KWIN_EFFECT_CONFIG_MULTIPLE(builtins,
                             KWIN_EFFECT_CONFIG_SINGLE(zoom, ZoomEffectConfig)
 
                             KWIN_EFFECT_CONFIG_SINGLE(blur, BlurEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(coverswitch, CoverSwitchEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(cube, CubeEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(cubeslide, CubeSlideEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(flipswitch, FlipSwitchEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(glide, GlideEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(invert, InvertEffectConfig)
