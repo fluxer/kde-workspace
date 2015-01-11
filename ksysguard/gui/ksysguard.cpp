@@ -155,8 +155,6 @@ void TopLevel::retranslateUi()
   mTabExportAction->setText( i18n( "Save Tab &As..." ) );
   mTabRemoveAction->setText( i18n( "&Close Tab" ) );
   mMonitorRemoteAction->setText( i18n( "Monitor &Remote Machine..." ) );
-  mHotNewWorksheetAction->setText( i18n( "&Download New Tabs..." ) );
-  mHotNewWorksheetUploadAction->setText( i18n( "&Upload Current Tab..." ) );
 
   mConfigureSheetAction->setText( i18n( "Tab &Properties" ) );
   if(mQuitAction) {
@@ -181,7 +179,6 @@ void TopLevel::currentTabChanged(int index)
   bool locked = !sheet || sheet->isLocked();
   mTabRemoveAction->setVisible(!locked);
   mTabExportAction->setVisible(!locked);
-  mHotNewWorksheetUploadAction->setVisible(!locked);
   mMonitorRemoteAction->setVisible(!locked);
 
   //only show refresh option is update interval is 0 (manual)
