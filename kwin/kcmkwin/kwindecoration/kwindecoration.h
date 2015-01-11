@@ -113,7 +113,6 @@ protected slots:
     // Allows us to turn "save" on
     void slotSelectionChanged();
     void slotConfigureButtons();
-    void slotGHNSClicked();
     void slotConfigureDecoration();
 
 private:

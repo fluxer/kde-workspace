@@ -19,7 +19,6 @@
 #include <QFormLayout>
 #include <QSlider>
 #include <QGroupBox>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QGridLayout>
 #include <QBoxLayout>

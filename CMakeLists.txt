@@ -170,19 +170,6 @@ set_package_properties(SLP PROPERTIES DESCRIPTION "SLP (Service Location Protoco
                        PURPOSE "Provides SLP support in the network:/ kioslave."
                       )
 
-find_package(LibAttica 0.1.4)
-set_package_properties(LibAttica PROPERTIES DESCRIPTION "A library to access Open Collaboration Service providers"
-                       URL "https://projects.kde.org/attica"
-                       TYPE REQUIRED
-                       PURPOSE "Attica is needed for the Get Hot New Stuff support"
-                      )
-
-macro_optional_find_package(QCA2 2.0.0)
-set_package_properties(QCA2 PROPERTIES DESCRIPTION "Support for remote plasma widgets"
-                       URL "http://delta.affinix.com/qca"
-                       TYPE OPTIONAL
-                      )
-
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
@@ -218,9 +205,7 @@ macro_optional_add_subdirectory( ksplash )
 
 macro_optional_add_subdirectory( powerdevil )
 macro_optional_add_subdirectory( qguiplatformplugin_kde )
-if (NOT CMAKE_SYSTEM_NAME MATCHES Darwin)
-   macro_optional_add_subdirectory( ksysguard )
-endif (NOT CMAKE_SYSTEM_NAME MATCHES Darwin)
+macro_optional_add_subdirectory( ksysguard )
 
 macro_optional_add_subdirectory(kcontrol)
 macro_optional_add_subdirectory(klipper)
@@ -296,16 +281,11 @@ macro_optional_add_subdirectory(kmimetypefinder)
 # UI Helper applications
 macro_optional_add_subdirectory(drkonqi)
 macro_optional_add_subdirectory(knetattach)
-macro_optional_add_subdirectory(knewstuff)
 macro_optional_add_subdirectory(keditfiletype)
 # Default settings, content and config
 macro_optional_add_subdirectory(l10n)
 macro_optional_add_subdirectory(localization)
 macro_optional_add_subdirectory(kde-menu)
-# KDE integration for attica
-if(LIBATTICA_FOUND)
-  macro_optional_add_subdirectory(attica)
-endif(LIBATTICA_FOUND)
 
 ########### install files ###############
 # install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${BIN_INSTALL_DIR})

@@ -33,7 +33,6 @@
 #include <kaboutdata.h>
 #include <kautostart.h>
 #include <KStandardDirs>
-#include <knewstuff3/downloaddialog.h>
 
 #include <Plasma/Theme>
 
@@ -144,17 +143,6 @@ void KCMDesktopTheme::setDesktopThemeDirty()
 {
     m_bDesktopThemeDirty = true;
     emit changed(true);
-}
-
-void KCMDesktopTheme::getNewThemes()
-{
-    KNS3::DownloadDialog dialog("plasma-themes.knsrc", this);
-    dialog.exec();
-    KNS3::Entry::List entries = dialog.changedEntries();
-
-    if (entries.size() > 0) {
-        loadDesktopTheme();
-    }
 }
 
 void KCMDesktopTheme::loadDesktopTheme()

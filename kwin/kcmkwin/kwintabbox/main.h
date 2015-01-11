@@ -66,7 +66,6 @@ private slots:
     void configureEffectClicked();
     void tabBoxToggled(bool on);
     void shortcutChanged(const QKeySequence &seq);
-    void slotGHNS();
 private:
     void updateUiFromConfig(KWinTabBoxConfigForm* ui, const TabBox::TabBoxConfig& config);
     void updateConfigFromUi(const KWinTabBoxConfigForm* ui, TabBox::TabBoxConfig& config);

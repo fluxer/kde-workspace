@@ -86,7 +86,6 @@ private slots:
     void updateStatusUI(bool compositingIsPossible);
     void showDetailedEffectLoadingInformation();
     void blockFutureWarnings();
-    void slotGHNS();
 
 private:
     bool effectEnabled(const QString& effect, const KConfigGroup& cfg) const;

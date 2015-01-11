@@ -43,8 +43,6 @@
 #include <KPluginFactory>
 #include <KStandardDirs>
 #include <kio/netaccess.h>
-#include <knewstuff3/downloaddialog.h>
-#include <knewstuff3/uploaddialog.h>
 
 K_PLUGIN_FACTORY( KolorFactory, registerPlugin<KColorCm>(); )
 K_EXPORT_PLUGIN( KolorFactory("kcmcolors") )
@@ -392,45 +390,6 @@ void KColorCm::on_schemeImportButton_clicked()
             // save it
             saveScheme(url.fileName());
         }
-    }
-}
-
-void KColorCm::on_schemeKnsButton_clicked()
-{
-    KNS3::DownloadDialog dialog("colorschemes.knsrc", this);
-    dialog.exec();
-    if ( ! dialog.changedEntries().isEmpty() )
-    {
-        populateSchemeList();
-    }
-}
-
-void KColorCm::on_schemeKnsUploadButton_clicked()
-{
-    if (schemeList->currentItem() != NULL)
-    {
-        // check if the currently loaded scheme has unsaved changes
-        if (m_loadedSchemeHasUnsavedChanges)
-        {
-            KMessageBox::sorry(this, i18n("Please save the color scheme before uploading it."),
-                               i18n("Please save"));
-            return;
-        }
-
-        // find path
-        const QString basename = schemeList->currentItem()->data(Qt::UserRole).toString();
-        const QString path = KGlobal::dirs()->findResource("data",
-            "color-schemes/" + basename + ".colors");
-        if (path.isEmpty() ) // if the color scheme file wasn't found
-        {
-            kDebug() << "path for color scheme " << basename << " couldn't be found";
-            return;
-        }
-
-        // upload
-        KNS3::UploadDialog dialog("colorschemes.knsrc", this);
-        dialog.setUploadFile(KUrl(path) );
-        dialog.exec();
     }
 }
 

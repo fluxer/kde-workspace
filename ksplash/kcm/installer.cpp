@@ -38,7 +38,6 @@
 #include <ktar.h>
 #include <kservicetypetrader.h>
 #include <kio/netaccess.h>
-#include <knewstuff3/downloaddialog.h>
 
 ThemeListBox::ThemeListBox(QWidget *parent)
   : KListWidget(parent)
@@ -476,15 +475,6 @@ void SplashInstaller::slotSetTheme(int id)
     }
   }
   mBtnRemove->setEnabled( !path.isEmpty() && QFileInfo(path).isWritable());
-}
-
-//-----------------------------------------------------------------------------
-void SplashInstaller::slotNew()
-{
-  KNS3::DownloadDialog dialog("ksplash.knsrc", this);
-  dialog.exec();
-  if (!dialog.changedEntries().isEmpty())
-    readThemesList();
 }
 
 //-----------------------------------------------------------------------------

@@ -29,9 +29,6 @@
 #include <KIO/Job>
 #include <KIO/DeleteJob>
 #include <KIO/NetAccess>
-#include <knewstuff3/downloaddialog.h>
-
-
 #include <KTar>
 
 #include <klauncher_iface.h>
@@ -103,7 +100,6 @@ ThemePage::ThemePage(QWidget *parent)
             installKnsButton->setEnabled(false);
     }
 
-    connect(installKnsButton, SIGNAL(clicked()), SLOT(getNewClicked()));
     connect(installButton, SIGNAL(clicked()), SLOT(installClicked()));
     connect(removeButton,  SIGNAL(clicked()), SLOT(removeClicked()));
 }
@@ -426,16 +422,6 @@ void ThemePage::preferredSizeChanged()
         preferredSize = sizeComboBox->itemData(index, Qt::UserRole).toInt();
     else
         preferredSize = 0;
-}
-
-void ThemePage::getNewClicked()
-{
-    KNS3::DownloadDialog dialog("xcursor.knsrc", this);
-    if (dialog.exec()) {
-        KNS3::Entry::List list = dialog.changedEntries();
-        if (list.count() > 0)
-            model->refreshList();
-    }
 }
 
 void ThemePage::installClicked()

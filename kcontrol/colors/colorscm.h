@@ -78,12 +78,6 @@ private slots:
     /** slot called when the import button is clicked */
     void on_schemeImportButton_clicked();
 
-    /** slot called when the get new schemes button is clicked */
-    void on_schemeKnsButton_clicked();
-    
-    /** slot called when the upload scheme button is clicked */
-    void on_schemeKnsUploadButton_clicked();
-
     /** null slot to emit changed(true) */
     void emitChanged();
 

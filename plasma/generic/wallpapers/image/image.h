@@ -57,7 +57,6 @@ class Image : public Plasma::Wallpaper
         void positioningChanged(int index);
         void addDir();
         void removeDir();
-        void getNewWallpaper();
         void colorChanged(const QColor& color);
         void pictureChanged(const QModelIndex &);
         void wallpaperBrowseCompleted();

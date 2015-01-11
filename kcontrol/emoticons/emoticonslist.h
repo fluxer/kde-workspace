@@ -65,7 +65,6 @@ private slots:
     void addEmoticon();
     void editEmoticon();
     void newTheme();
-    void getNewStuff();
     void updateButton();
     void somethingChanged();
 private:

@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kservice.h>
 #include <ktitlewidget.h>
 #include <knotification.h>
-#include <KNS3/DownloadDialog>
 
 #include <QtDBus/QtDBus>
 #include <QPainter>
@@ -178,7 +177,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     connect(ui.glColorCorrection, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(m_showDetailedErrors, SIGNAL(triggered(bool)), SLOT(showDetailedEffectLoadingInformation()));
     connect(m_dontShowAgain, SIGNAL(triggered(bool)), SLOT(blockFutureWarnings()));
-    connect(ui.ghns, SIGNAL(clicked(bool)), SLOT(slotGHNS()));
 
     // Open the temporary config file
     // Temporary conf file is used to synchronize effect checkboxes with effect
@@ -896,17 +894,6 @@ void KWinCompositingConfig::defaults()
 QString KWinCompositingConfig::quickHelp() const
 {
     return i18n("<h1>Desktop Effects</h1>");
-}
-
-void KWinCompositingConfig::slotGHNS()
-{
-    QPointer<KNS3::DownloadDialog> downloadDialog = new KNS3::DownloadDialog("kwineffect.knsrc", this);
-    if (downloadDialog->exec() == KDialog::Accepted) {
-        if (!downloadDialog->changedEntries().isEmpty()) {
-            initEffectSelector();
-        }
-    }
-    delete downloadDialog;
 }
 
 } // namespace

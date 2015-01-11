@@ -37,7 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KServiceTypeTrader>
 #include <KShortcutsEditor>
 #include <KStandardDirs>
-#include <KNS3/DownloadDialog>
 
 // own
 #include "tabboxconfig.h"
@@ -517,17 +516,6 @@ void KWinTabBoxConfig::shortcutChanged(const QKeySequence &seq)
     if (KAction *a = qobject_cast<KAction*>(m_actionCollection->action(action)))
         a->setGlobalShortcut(KShortcut(seq), KAction::ActiveShortcut, KAction::NoAutoloading);
     m_actionCollection->writeSettings();
-}
-
-void KWinTabBoxConfig::slotGHNS()
-{
-    QPointer<KNS3::DownloadDialog> downloadDialog = new KNS3::DownloadDialog("kwinswitcher.knsrc", this);
-    if (downloadDialog->exec() == KDialog::Accepted) {
-        if (!downloadDialog->changedEntries().isEmpty()) {
-            initLayoutLists();
-        }
-    }
-    delete downloadDialog;
 }
 
 } // namespace

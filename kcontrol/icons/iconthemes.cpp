@@ -25,7 +25,6 @@
 
 #include <QFileInfo>
 #include <QLabel>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QFrame>
@@ -44,7 +43,6 @@
 #include <kstandarddirs.h>
 #include <kservice.h>
 #include <kconfig.h>
-#include <knewstuff3/downloaddialog.h>
 
 #undef Unsorted
 
@@ -313,38 +311,6 @@ QStringList IconThemesConfig::findThemeDirs(const QString &archiveName)
 
   archive.close();
   return foundThemes;
-}
-
-void IconThemesConfig::getNewTheme()
-{
-  KNS3::DownloadDialog dialog("icons.knsrc", this);
-  dialog.exec();
-  if (!dialog.changedEntries().isEmpty()) {
-    for(int i = 0; i < dialog.changedEntries().size(); i ++) {
-      if(dialog.changedEntries().at(i).status() == KNS3::Entry::Installed
-         && !dialog.changedEntries().at(i).installedFiles().isEmpty()) {
-          const QString themeTmpFile = dialog.changedEntries().at(i).installedFiles().at(0);
-          const QString name = dialog.changedEntries().at(i).installedFiles().at(0).section('/', -2, -2);
-          kDebug()<<"IconThemesConfig::getNewTheme() themeTmpFile="<<themeTmpFile<<"name="<<name;
-          QStringList themeNames = findThemeDirs(themeTmpFile);
-          if (themeNames.isEmpty()) {
-              //dialog.changedEntries().at(i)->setStatus(KNS3::Entry::Invalid);
-          }
-          else if (! installThemes(themeNames, themeTmpFile)) {
-              //dialog.changedEntries().at(i)->setStatus(KNS3::Entry::Invalid);
-          }
-      }
-    }
-
-    // reload the display icontheme items
-    KIconLoader::global()->newIconLoader();
-    loadThemes();
-    QTreeWidgetItem *item=iconThemeItem(KIconTheme::current());
-    if (item)
-        m_iconThemes->setCurrentItem(item);
-    updateRemoveButton();
-    load();
-  }
 }
 
 void IconThemesConfig::removeSelectedTheme()

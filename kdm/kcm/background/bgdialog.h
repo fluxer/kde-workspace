@@ -78,7 +78,6 @@ protected Q_SLOTS:
     void slotImageDropped(const QString &uri);
     void slotPreviewDone(int screen);
     void slotAdvanced();
-    void slotGetNewStuff();
     void slotBlendMode(int mode);
     void slotBlendBalance(int value);
     void slotBlendReverse(bool b);

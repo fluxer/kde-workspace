@@ -27,7 +27,6 @@
 #include <KStandardDirs>
 #include <KIO/Job>
 #include <krun.h>
-#include <knewstuff3/downloaddialog.h>
 
 #include <Plasma/Theme>
 #include "backgroundlistmodel.h"
@@ -187,9 +186,6 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
         m_uiImage.m_color->setEnabled(resizeMethodHint() == MaxpectResize || resizeMethodHint() == CenteredResize);
         connect(m_uiImage.m_color, SIGNAL(changed(QColor)), this, SLOT(colorChanged(QColor)));
 
-        m_uiImage.m_newStuff->setIcon(KIcon("get-hot-new-stuff"));
-        connect(m_uiImage.m_newStuff, SIGNAL(clicked()), this, SLOT(getNewWallpaper()));
-
         connect(m_uiImage.m_color, SIGNAL(changed(QColor)), this, SLOT(modified()));
         connect(m_uiImage.m_resizeMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(modified()));
         connect(m_uiImage.m_view, SIGNAL(clicked(QModelIndex)), this, SLOT(modified()));
@@ -246,7 +242,6 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
         //Color button is useless with some resize methods
         m_uiSlideshow.m_color->setEnabled(resizeMethodHint() == MaxpectResize || resizeMethodHint() == CenteredResize);
         connect(m_uiSlideshow.m_color, SIGNAL(changed(QColor)), this, SLOT(colorChanged(QColor)));
-        connect(m_uiSlideshow.m_newStuff, SIGNAL(clicked()), this, SLOT(getNewWallpaper()));
 
         connect(m_uiSlideshow.m_systemCheckBox, SIGNAL(toggled(bool)),
                 this, SLOT(systemCheckBoxToggled(bool)));
@@ -613,15 +608,6 @@ void Image::updateWallpaperActions()
     if (m_openImageAction) {
         m_openImageAction->setEnabled(!m_slideshowBackgrounds.isEmpty());
     }
-}
-
-void Image::getNewWallpaper()
-{
-    if (!m_newStuffDialog) {
-        m_newStuffDialog = new KNS3::DownloadDialog( "wallpaper.knsrc", m_configWidget );
-        connect(m_newStuffDialog.data(), SIGNAL(accepted()), SLOT(newStuffFinished()));
-    }
-    m_newStuffDialog.data()->show();
 }
 
 void Image::newStuffFinished()

@@ -33,7 +33,6 @@
 #include <KUrlRequester>
 #include <KUrlRequesterDialog>
 #include <KTempDir>
-#include <knewstuff3/downloaddialog.h>
 #include <KDebug>
 #include <KIO/Job>
 #include <KIO/DeleteJob>
@@ -130,14 +129,9 @@ KDMThemeWidget::KDMThemeWidget(QWidget *parent)
 
     ml->addWidget(bRemoveTheme, 2, 1);
 
-    bGetNewThemes = new QPushButton(i18nc("@action:button", "&Get New Themes"), this);
-
-    ml->addWidget(bGetNewThemes, 2, 2);
-
     connect(themeWidget, SIGNAL(itemSelectionChanged()), SLOT(themeSelected()));
     connect(bInstallTheme, SIGNAL(clicked()), SLOT(installNewTheme()));
     connect(bRemoveTheme, SIGNAL(clicked()), SLOT(removeSelectedThemes()));
-    connect(bGetNewThemes, SIGNAL(clicked()), SLOT(getNewStuff()));
 
     themeDir = KStandardDirs::installPath("data") + "kdm/themes/";
     defaultTheme = 0;
@@ -384,26 +378,6 @@ void KDMThemeWidget::removeSelectedThemes()
     for (int i = 0; i < delList.size(); ++i)
         if (delList.at(i).isEmpty())
             themeWidget->takeTopLevelItem(themeWidget->indexOfTopLevelItem(themes.at(i)));
-}
-
-void KDMThemeWidget::getNewStuff()
-{
-    KNS3::DownloadDialog dialog("kdm.knsrc", this);
-    dialog.exec();
-    KNS3::Entry::List entries = dialog.changedEntries();
-    for (int i = 0; i < entries.size(); i ++) {
-        if (entries.at(i).status() == KNS3::Entry::Installed) {
-            if (!entries.at(i).installedFiles().isEmpty()) {
-                QString name = entries.at(i).installedFiles().at(0).section('/', -2, -2);
-                insertTheme(themeDir + name);
-            }
-        } else if (entries.at(i).status() == KNS3::Entry::Deleted) {
-            if (!entries.at(i).uninstalledFiles().isEmpty()) {
-                QString name = entries.at(i).uninstalledFiles().at(0).section('/', -2, -2);
-                removeTheme(themeDir + name);
-            }
-        }
-    }
 }
 
 #include "kdm-theme.moc"

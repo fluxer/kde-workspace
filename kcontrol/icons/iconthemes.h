@@ -22,7 +22,6 @@
 #define KDE3_SUPPORT
 #include <kcmodule.h>
 #undef KDE3_SUPPORT
-//Added by qt3to4:
 #include <QLabel>
 
 class KPushButton;
@@ -54,7 +53,6 @@ public:
 protected Q_SLOTS:
   void themeSelected(QTreeWidgetItem *item);
   void installNewTheme();
-  void getNewTheme();
   void removeSelectedTheme();
 
 private:

@@ -51,8 +51,6 @@ protected Q_SLOTS:
 
     void setDesktopThemeDirty();
 
-    void getNewThemes();
-
     void detailChanged();
 private:
     static QString toolbarButtonText(int index);

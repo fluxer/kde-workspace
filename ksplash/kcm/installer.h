@@ -42,7 +42,6 @@ Q_SIGNALS:
   void changed( bool state );
 
 protected Q_SLOTS:
-  virtual void slotNew();
   virtual void slotAdd();
   virtual void slotRemove();
   virtual void slotTest();

@@ -83,7 +83,6 @@ class CKCmFontInst : public KCModule
     void    disableGroup();
     void    changeText();
     void    duplicateFonts();
-    void    downloadFonts();
     void    print();
     void    printGroup();
     void    listingPercent(int p);

@@ -52,7 +52,6 @@ if(UNIX AND Q_WS_X11)
 endif(UNIX AND Q_WS_X11)
 
 target_link_libraries(kdeinit_plasma-desktop kephal)
-target_link_libraries(kdeinit_plasma-desktop ${KDE4_KNEWSTUFF3_LIBS})
 
 install(TARGETS kdeinit_plasma-desktop DESTINATION ${LIB_INSTALL_DIR})
 install(TARGETS plasma-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
