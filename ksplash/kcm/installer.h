@@ -13,7 +13,6 @@
 
 #include <QMap>
 #include <QPoint>
-//Added by qt3to4:
 #include <QDragEnterEvent>
 #include <QMouseEvent>
 #include <QLabel>
@@ -60,7 +59,7 @@ private:
   bool mGui;
   ThemeListBox *mThemesList;
   QString mEngineOfSelected;
-  QPushButton *mBtnNew, *mBtnAdd, *mBtnRemove, *mBtnTest;
+  QPushButton *mBtnAdd, *mBtnRemove, *mBtnTest;
   QTextEdit *mText;
   QLabel *mPreview;
 };

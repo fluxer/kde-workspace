@@ -77,7 +77,6 @@ class Image : public Plasma::Wallpaper
         void setWallpaper(const QString &path);
         void setWallpaperRetrieved(KJob *job);
         void addWallpaperRetrieved(KJob *job);
-        void newStuffFinished();
         void setConfigurationInterfaceModel();
         void updateDirs();
         void updateDirWatch(const QStringList &newDirs);
@@ -131,7 +130,6 @@ class Image : public Plasma::Wallpaper
         KFileDialog *m_dialog;
         QSize m_size;
         QString m_img;
-        QWeakPointer<KNS3::DownloadDialog> m_newStuffDialog;
         QString m_findToken;
 
         QAction* m_nextWallpaperAction;

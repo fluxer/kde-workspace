@@ -59,7 +59,6 @@ ThemePage::ThemePage(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    installKnsButton->setIcon(KIcon("get-hot-new-stuff"));
     installButton->setIcon(KIcon("document-import"));
     removeButton->setIcon(KIcon("edit-delete"));
 
@@ -97,7 +96,6 @@ ThemePage::ThemePage(QWidget *parent)
     // or Xcursor isn't set up to look for cursor themes there.
     if (!model->searchPaths().contains(QDir::homePath() + "/.icons") || !iconsIsWritable()) {
             installButton->setEnabled(false);
-            installKnsButton->setEnabled(false);
     }
 
     connect(installButton, SIGNAL(clicked()), SLOT(installClicked()));

@@ -107,7 +107,6 @@ KWinTabBoxConfig::KWinTabBoxConfig(QWidget* parent, const QVariantList& args)
     KWinTabBoxConfigForm *ui[2] = { m_primaryTabBoxUi, m_alternativeTabBoxUi };
     for (int i = 0; i < 2; ++i) {
         ui[i]->effectConfigButton->setIcon(KIcon("view-preview"));
-        ui[i]->ghns->setIcon(KIcon("get-hot-new-stuff"));
 
         connect(ui[i]->highlightWindowCheck, SIGNAL(clicked(bool)), SLOT(changed()));
         connect(ui[i]->showTabBox, SIGNAL(clicked(bool)), SLOT(tabBoxToggled(bool)));
@@ -135,7 +134,6 @@ KWinTabBoxConfig::KWinTabBoxConfig(QWidget* parent, const QVariantList& args)
         connect(ui[i]->filterMinimization, SIGNAL(clicked(bool)), SLOT(changed()));
         connect(ui[i]->visibleWindows, SIGNAL(clicked(bool)), SLOT(changed()));
         connect(ui[i]->hiddenWindows, SIGNAL(clicked(bool)), SLOT(changed()));
-        connect(ui[i]->ghns, SIGNAL(clicked(bool)), SLOT(slotGHNS()));
     }
 
     // check focus policy - we don't offer configs for unreasonable focus policies

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>541</width>
+    <width>606</width>
     <height>360</height>
    </rect>
   </property>
@@ -47,16 +47,6 @@
      </property>
      <property name="verticalScrollMode">
       <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="2">
-    <widget class="KPushButton" name="installKnsButton">
-     <property name="toolTip">
-      <string>Get new color schemes from the Internet</string>
-     </property>
-     <property name="text">
-      <string>Get New Theme...</string>
      </property>
     </widget>
    </item>

@@ -89,8 +89,6 @@ KColorCm::KColorCm(QWidget *parent, const QVariantList &)
     m_config = KSharedConfig::openConfig("kdeglobals");
 
     setupUi(this);
-    schemeKnsButton->setIcon( KIcon("get-hot-new-stuff") );
-    schemeKnsUploadButton->setIcon( KIcon("get-hot-new-stuff") );
     connect(colorSet, SIGNAL(currentIndexChanged(int)), this, SLOT(updateColorTable()));
     connect(schemeList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
             this, SLOT(loadScheme(QListWidgetItem*,QListWidgetItem*)));
@@ -265,7 +263,6 @@ void KColorCm::loadScheme(QListWidgetItem *currentItem, QListWidgetItem *previou
         if (name == i18nc("Default color scheme", "Default"))
         {
             schemeRemoveButton->setEnabled(false);
-            schemeKnsUploadButton->setEnabled(false);
 
             KSharedConfigPtr config = m_config;
             config->setReadDefaults(true);
@@ -277,7 +274,6 @@ void KColorCm::loadScheme(QListWidgetItem *currentItem, QListWidgetItem *previou
         else if (name == i18nc("Current color scheme", "Current"))
         {
             schemeRemoveButton->setEnabled(false);
-            schemeKnsUploadButton->setEnabled(false);
             loadInternal(false);
         }
         else
@@ -289,7 +285,6 @@ void KColorCm::loadScheme(QListWidgetItem *currentItem, QListWidgetItem *previou
             const bool canWrite = (permissions & QFile::WriteUser);
             kDebug() << "checking permissions of " << path;
             schemeRemoveButton->setEnabled(canWrite);
-            schemeKnsUploadButton->setEnabled(true);
 
             KSharedConfigPtr config = KSharedConfig::openConfig(path);
             loadScheme(config);
@@ -1057,7 +1052,6 @@ void KColorCm::changeColor(int row, const QColor &newColor)
     KConfigGroup group(m_config, "General");
     group.writeEntry("ColorScheme", m_currentColorScheme);
     schemeRemoveButton->setEnabled(false);
-    schemeKnsUploadButton->setEnabled(false);
     schemeList->blockSignals(true); // don't emit changed signals
     schemeList->setCurrentRow(0);
     schemeList->blockSignals(false);

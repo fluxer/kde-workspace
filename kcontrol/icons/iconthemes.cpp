@@ -95,19 +95,13 @@ IconThemesConfig::IconThemesConfig(const KComponentData &inst, QWidget *parent)
   m_iconThemes->setSortingEnabled(true);
   m_iconThemes->sortByColumn(0, Qt::AscendingOrder);
   connect(m_iconThemes,SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
-		SLOT(themeSelected(QTreeWidgetItem *)));
+    SLOT(themeSelected(QTreeWidgetItem *)));
 
   KPushButton *installButton=new KPushButton( KIcon("document-import"), i18n("Install Theme File..."), this);
   installButton->setObjectName( QLatin1String("InstallNewTheme" ));
   installButton->setToolTip(i18n("Install a theme archive file you already have locally"));
   installButton->setWhatsThis(i18n("If you already have a theme archive locally, this button will unpack it and make it available for KDE applications"));
   connect(installButton,SIGNAL(clicked()),SLOT(installNewTheme()));
-
-  KPushButton *newButton=new KPushButton( KIcon("get-hot-new-stuff"), i18n("Get New Themes..."), this);
-  newButton->setObjectName( QLatin1String("GetNewTheme" ));
-  newButton->setToolTip(i18n("Get new themes from the Internet"));
-  newButton->setWhatsThis(i18n("You need to be connected to the Internet to use this action. A dialog will display a list of themes from the http://www.kde.org website. Clicking the Install button associated with a theme will install this theme locally."));
-  connect(newButton,SIGNAL(clicked()),SLOT(getNewTheme()));
 
   m_removeButton=new KPushButton( KIcon("edit-delete"), i18n("Remove Theme"), this);
   m_removeButton->setObjectName( QLatin1String("RemoveTheme" ));
@@ -120,7 +114,6 @@ IconThemesConfig::IconThemesConfig(const KComponentData &inst, QWidget *parent)
   topLayout->addWidget(m_preview);
   topLayout->addWidget(m_iconThemes);
   QHBoxLayout *lg = new QHBoxLayout();
-  lg->addWidget(newButton);
   lg->addStretch(0);
   lg->addWidget(installButton);
   lg->addWidget(m_removeButton);

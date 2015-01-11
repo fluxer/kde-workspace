@@ -24,7 +24,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -465,30 +465,6 @@
            </property>
           </widget>
          </item>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_6">
-           <item>
-            <widget class="KPushButton" name="ghns">
-             <property name="text">
-              <string>Get New Effects ...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_4">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
         </layout>
        </item>
       </layout>
@@ -924,11 +900,6 @@ p, li { white-space: pre-wrap; }
    <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
-   <class>KPushButton</class>
-   <extends>QPushButton</extends>
-   <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
    <class>KTitleWidget</class>
    <extends>QWidget</extends>
    <header>ktitlewidget.h</header>
@@ -956,7 +927,6 @@ p, li { white-space: pre-wrap; }
   <tabstop>desktopSwitchingCombo</tabstop>
   <tabstop>animationSpeedCombo</tabstop>
   <tabstop>effectSelector</tabstop>
-  <tabstop>ghns</tabstop>
   <tabstop>compositingType</tabstop>
   <tabstop>graphicsSystem</tabstop>
   <tabstop>windowThumbnails</tabstop>

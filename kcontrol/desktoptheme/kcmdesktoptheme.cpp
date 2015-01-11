@@ -73,8 +73,6 @@ KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
     about->addAuthor(ki18n("Ralf Nolden"), KLocalizedString(), "nolden@kde.org");
     setAboutData( about );
 
-    m_newThemeButton->setIcon(KIcon("get-hot-new-stuff"));
-
     m_themeModel = new ThemeModel(this);
     m_theme->setModel(m_themeModel);
     m_theme->setItemDelegate(new ThemeDelegate(m_theme));
@@ -84,7 +82,6 @@ KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
 
     connect(m_theme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
             this, SLOT(setDesktopThemeDirty()));
-    connect(m_newThemeButton, SIGNAL(clicked()), this, SLOT(getNewThemes()));
 }
 
 

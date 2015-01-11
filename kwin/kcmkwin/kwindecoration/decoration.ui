@@ -66,13 +66,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="KPushButton" name="ghnsButton">
-       <property name="text">
-        <string>Get New Decorations...</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>
@@ -99,7 +92,6 @@
   <tabstop>decorationList</tabstop>
   <tabstop>configureDecorationButton</tabstop>
   <tabstop>configureButtonsButton</tabstop>
-  <tabstop>ghnsButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

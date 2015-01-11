@@ -123,12 +123,6 @@ SplashInstaller::SplashInstaller (QWidget *aParent, const char *aName, bool aIni
   connect(mThemesList, SIGNAL(filesDropped(KUrl::List)), SLOT(slotFilesDropped(KUrl::List)));
   leftbox->addWidget(mThemesList);
 
-  mBtnNew = new KPushButton( KIcon("get-hot-new-stuff"), i18n("Get New Themes..."), this );
-  mBtnNew->setToolTip(i18n("Get new themes from the Internet"));
-  mBtnNew->setWhatsThis(i18n("You need to be connected to the Internet to use this action. A dialog will display a list of themes from the http://www.kde.org website. Clicking the Install button associated with a theme will install this theme locally."));
-  leftbox->addWidget( mBtnNew );
-  connect(mBtnNew, SIGNAL(clicked()), SLOT(slotNew()));
-
   mBtnAdd = new KPushButton( KIcon("document-import"), i18n("Install Theme File..."), this );
   mBtnAdd->setToolTip(i18n("Install a theme archive file you already have locally"));
   mBtnAdd->setWhatsThis(i18n("If you already have a theme archive locally, this button will unpack it and make it available for KDE applications"));

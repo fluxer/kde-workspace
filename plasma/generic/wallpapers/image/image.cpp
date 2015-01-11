@@ -192,7 +192,6 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
 
     } else {
         m_uiSlideshow.setupUi(m_configWidget);
-        m_uiSlideshow.m_newStuff->setIcon(KIcon("get-hot-new-stuff"));
         m_uiSlideshow.m_dirlist->clear();
         m_uiSlideshow.m_systemCheckBox->setChecked(false);
         m_uiSlideshow.m_downloadedCheckBox->setChecked(false);
@@ -607,13 +606,6 @@ void Image::updateWallpaperActions()
 
     if (m_openImageAction) {
         m_openImageAction->setEnabled(!m_slideshowBackgrounds.isEmpty());
-    }
-}
-
-void Image::newStuffFinished()
-{
-    if (m_model && (!m_newStuffDialog || m_newStuffDialog.data()->changedEntries().size() > 0)) {
-        m_model->reload();
     }
 }
 

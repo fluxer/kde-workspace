@@ -122,7 +122,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
         warn(message, details, dontAgainKey);
     } else
         ui.messageBox->setVisible(false);
-    ui.ghns->setIcon(KIcon("get-hot-new-stuff"));
 
     // For future use
     (void) I18N_NOOP("Use GLSL shaders");

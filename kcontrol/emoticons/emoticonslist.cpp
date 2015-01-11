@@ -112,7 +112,6 @@ EmoticonList::EmoticonList(QWidget *parent, const QVariantList &args)
     btEdit->setIcon(KIcon("edit-rename"));
     btRemoveEmoticon->setIcon(KIcon("edit-delete"));
     btNew->setIcon(KIcon("document-new"));
-    btGetNew->setIcon(KIcon("get-hot-new-stuff"));
     btInstall->setIcon(KIcon("document-import"));
     btRemoveTheme->setIcon(KIcon("edit-delete"));
 
@@ -121,7 +120,6 @@ EmoticonList::EmoticonList(QWidget *parent, const QVariantList &args)
     connect(btRemoveTheme, SIGNAL(clicked()), this, SLOT(btRemoveThemeClicked()));
     connect(btInstall, SIGNAL(clicked()), this, SLOT(installEmoticonTheme()));
     connect(btNew, SIGNAL(clicked()), this, SLOT(newTheme()));
-    connect(btGetNew, SIGNAL(clicked()), this, SLOT(getNewStuff()));
     connect(cbStrict, SIGNAL(clicked()), this, SLOT(somethingChanged()));
 
     connect(btAdd, SIGNAL(clicked()), this, SLOT(addEmoticon()));
