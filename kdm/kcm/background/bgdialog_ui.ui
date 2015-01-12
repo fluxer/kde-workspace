@@ -173,22 +173,6 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="m_buttonGetNew">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="whatsThis">
-            <string>Click this button to give you a list of new wallpapers to download from the Internet.</string>
-           </property>
-           <property name="text">
-            <string>Get New Wallpapers</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <spacer name="spacer811">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -571,7 +555,7 @@
    </item>
   </layout>
  </widget>
-  <customwidgets>
+ <customwidgets>
   <customwidget>
    <class>KButtonGroup</class>
    <extends>QGroupBox</extends>

@@ -163,20 +163,13 @@
      </item>
     </layout>
    </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="m_newStuff">
-     <property name="text">
-      <string>Get New Wallpapers...</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ItemsView</class>
-   <extends>QListView</extends>
-   <header>itemsview.h</header>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
   </customwidget>
   <customwidget>
    <class>KPushButton</class>
@@ -184,9 +177,9 @@
    <header>kpushbutton.h</header>
   </customwidget>
   <customwidget>
-   <class>KColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kcolorbutton.h</header>
+   <class>ItemsView</class>
+   <extends>QListView</extends>
+   <header>itemsview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
