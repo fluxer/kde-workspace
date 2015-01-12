@@ -41,9 +41,10 @@
 #include "cbc.h"
 
 
-#define KWALLET_CIPHER_BLOWFISH_CBC 0
+#define KWALLET_CIPHER_BLOWFISH_ECB 0 // this was the old KWALLET_CIPHER_BLOWFISH_CBC
 #define KWALLET_CIPHER_3DES_CBC     1 // unsupported
 #define KWALLET_CIPHER_GPG          2
+#define KWALLET_CIPHER_BLOWFISH_CBC 3
 
 #define KWALLET_HASH_SHA1       0
 #define KWALLET_HASH_MD5        1 // unsupported
@@ -139,13 +140,18 @@ BackendPersistHandler *BackendPersistHandler::getPersistHandler(BackendCipherTyp
             return 0;
     }
 }
-    
+
 BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[12])
 {
-    if (magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC && 
+    if ((magicBuf[2] == KWALLET_CIPHER_BLOWFISH_ECB || magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC) &&
         (magicBuf[3] == KWALLET_HASH_SHA1 || magicBuf[3] == KWALLET_HASH_PBKDF2_SHA512)) {
-        if (0 == blowfishHandler)
-            blowfishHandler = new BlowfishPersistHandler;
+        if (0 == blowfishHandler) {
+            bool useECBforReading = magicBuf[2] == KWALLET_CIPHER_BLOWFISH_ECB;
+            if (useECBforReading) {
+                qDebug() << "this wallet uses ECB encryption. It'll be converted to CBC on next save.";
+            }
+            blowfishHandler = new BlowfishPersistHandler(useECBforReading);
+        }
         return blowfishHandler;
     }
 #ifdef HAVE_QGPGME
@@ -158,10 +164,15 @@ BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[12
 #endif // HAVE_QGPGME
     return 0;    // unknown cipher or hash
 }
-  
+
 int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WId)
 {
     assert(wb->_cipherType == BACKEND_CIPHER_BLOWFISH);
+
+    if (_useECBforReading) {
+        qDebug() << "This wallet used ECB and is now saved using CBC";
+        _useECBforReading = false;
+    }
 
     version[2] = KWALLET_CIPHER_BLOWFISH_CBC;
     if(!wb->_useNewHash) {
@@ -333,7 +344,7 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
     assert(encrypted.size() < db.size());
 
     BlowFish _bf;
-    CipherBlockChain bf(&_bf);
+    CipherBlockChain bf(&_bf, _useECBforReading);
     int blksz = bf.blockSize();
     if ((encrypted.size() % blksz) != 0) {
         return -5;     // invalid file structure
@@ -477,7 +488,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
         sf.abort();
         return -5;
     }
-    
+
     boost::shared_ptr< GpgME::Context > ctx( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
     if (0 == ctx) {
         kDebug() << "Cannot setup OpenPGP context!";
@@ -486,7 +497,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
     }
 
     assert(wb->_cipherType == BACKEND_CIPHER_GPG);
-    
+
     QByteArray hashes;
     QDataStream hashStream(&hashes, QIODevice::WriteOnly);
     KMD5 md5;
@@ -524,7 +535,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
     dataStream << keyID;
     dataStream << hashes;
     dataStream << values;
-    
+
     GpgME::Data decryptedData(dataBuffer.data(), dataBuffer.size(), false);
     GpgME::Data encryptedData;
     std::vector< GpgME::Key > keys;
@@ -549,7 +560,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
             return -4; // write error
         }
     }
-    
+
     return 0;
 }
 
@@ -571,7 +582,7 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
     while (bytes = sf.read(buffer, sizeof(buffer)/sizeof(buffer[0]))){
         encryptedData.write(buffer, bytes);
     }
-    
+
   retry_label:
     boost::shared_ptr< GpgME::Context > ctx( GpgME::Context::createForProtocol(GpgME::OpenPGP) );
     if (0 == ctx) {
@@ -595,13 +606,13 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
         }
         return -1;
     }
-    
+
     decryptedData.seek(0, SEEK_SET);
     QByteArray dataBuffer;
     while (bytes = decryptedData.read(buffer, sizeof(buffer)/sizeof(buffer[0]))){
         dataBuffer.append(buffer, bytes);
     }
-    
+
     // load the wallet from the decrypted data
     QDataStream dataStream(dataBuffer);
     QString keyID;
@@ -636,10 +647,10 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
         return -1;
     }
 
-    
+
     QDataStream hashStream(hashes);
     QDataStream valueStream(values);
-    
+
     quint32 hashCount;
     hashStream >> hashCount;
     if (hashCount > 0xFFFF) {
@@ -650,10 +661,10 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
     while (hashCount--){
         KMD5::Digest d;
         hashStream.readRawData(reinterpret_cast<char *>(d), 16);
-        
+
         quint32 folderSize;
         hashStream >> folderSize;
-        
+
         MD5Digest ba = MD5Digest(reinterpret_cast<char *>(d));
         QMap<MD5Digest, QList<MD5Digest> >::iterator it = wb->_hashes.insert(ba, QList<MD5Digest>());
         while (folderSize--){
@@ -663,27 +674,27 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
             (*it).append(ba);
         }
     }
-    
+
     while (folderCount--){
         QString folder;
         valueStream >> folder;
-        
+
         quint32 entryCount;
         valueStream >> entryCount;
-        
+
         wb->_entries[folder].clear();
-        
+
         while (entryCount--){
             KWallet::Wallet::EntryType et = KWallet::Wallet::Unknown;
             Entry *e = new Entry;
-            
+
             QString key;
             valueStream >> key;
-            
+
             qint32 x =0; // necessary to read properly
             valueStream >> x;
             et = static_cast<KWallet::Wallet::EntryType>(x);
-            
+
             switch (et) {
             case KWallet::Wallet::Password:
             case KWallet::Wallet::Stream:
@@ -693,7 +704,7 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
                 delete e;
                 continue;
             }
-            
+
             QByteArray a;
             valueStream >> a;
             e->setValue(a);
@@ -702,7 +713,7 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
             wb->_entries[folder][key] = e;
         }
     }
-    
+
     wb->_open = true;
 
     return 0;
