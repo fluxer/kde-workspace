@@ -138,9 +138,6 @@ BGDialog::BGDialog(QWidget *parent, const KSharedConfigPtr &_config)
     connect(m_buttonAdvanced, SIGNAL(clicked()),
             SLOT(slotAdvanced()));
 
-    connect(m_buttonGetNew, SIGNAL(clicked()),
-            SLOT(slotGetNewStuff()));
-
     // renderers
     if (m_numScreens > 1) {
         // Setup the merged-screen renderer
@@ -233,7 +230,6 @@ void BGDialog::makeReadOnly()
     m_sliderBlend->setEnabled(false);
     m_cbBlendReverse->setEnabled(false);
     m_buttonAdvanced->setEnabled(false);
-    m_buttonGetNew->setEnabled(false);
 }
 
 void BGDialog::load()
