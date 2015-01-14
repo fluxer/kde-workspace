@@ -249,30 +249,7 @@ QList <QObject *>  WidgetExplorer::widgetsMenuActions()
 {
     QList <QObject *> actionList;
 
-    QSignalMapper *mapper = new QSignalMapper(this);
-    QObject::connect(mapper, SIGNAL(mapped(QString)), this, SLOT(downloadWidgets(QString)));
-
-    WidgetAction *action = new WidgetAction(KIcon("applications-internet"),
-                                  i18n("Download New Plasma Widgets"), this);
-    QObject::connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
-    mapper->setMapping(action, QString());
-    actionList << action;
-
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure");
-    foreach (const KService::Ptr &service, offers) {
-        //kDebug() << service->property("X-Plasma-ProvidesWidgetBrowser");
-        if (service->property("X-Plasma-ProvidesWidgetBrowser").toBool()) {
-            WidgetAction *action = new WidgetAction(KIcon("applications-internet"),
-                                          i18nc("%1 is a type of widgets, as defined by "
-                                                "e.g. some plasma-packagestructure-*.desktop files",
-                                                "Download New %1", service->name()), this);
-            QObject::connect(action, SIGNAL(triggered(bool)), mapper, SLOT(map()));
-            mapper->setMapping(action, service->property("X-KDE-PluginInfo-Name").toString());
-            actionList << action;
-        }
-    }
-
-    action = new WidgetAction(this);
+    WidgetAction *action = new WidgetAction(this);
     action->setSeparator(true);
     actionList << action;
 
@@ -487,34 +464,6 @@ bool WidgetExplorer::event(QEvent *event)
 void WidgetExplorer::focusInEvent(QFocusEvent* event)
 {
     Q_UNUSED(event);
-}
-
-void WidgetExplorer::downloadWidgets(const QString &type)
-{
-    Plasma::PackageStructure *installer = 0;
-
-    if (!type.isEmpty()) {
-        QString constraint = QString("'%1' == [X-KDE-PluginInfo-Name]").arg(type);
-        KService::List offers = KServiceTypeTrader::self()->query("Plasma/PackageStructure",
-                                                                  constraint);
-        if (offers.isEmpty()) {
-            kDebug() << "could not find requested PackageStructure plugin" << type;
-        } else {
-            KService::Ptr service = offers.first();
-            QString error;
-            installer = service->createInstance<Plasma::PackageStructure>(topLevelWidget(),
-                                                                          QVariantList(), &error);
-            if (installer) {
-                connect(installer, SIGNAL(newWidgetBrowserFinished()),
-                        installer, SLOT(deleteLater()));
-            } else {
-                kDebug() << "found, but could not load requested PackageStructure plugin" << type
-                         << "; reported error was" << error;
-            }
-        }
-    }
-
-    emit closeClicked();
 }
 
 void WidgetExplorer::openWidgetFile()
