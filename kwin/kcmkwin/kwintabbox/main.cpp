@@ -156,11 +156,7 @@ void KWinTabBoxConfig::initLayoutLists()
     // TODO: way to recognize if a effect is not found
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
     KService::List services;
-    QString coverswitch;
     QString flipswitch;
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_coverswitch'");
-    if (!services.isEmpty())
-        coverswitch = services.first()->name();
     services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_flipswitch'");
     if (!services.isEmpty())
         flipswitch = services.first()->name();
@@ -191,7 +187,6 @@ void KWinTabBoxConfig::initLayoutLists()
         int index = ui[i]->effectCombo->currentIndex();
         QVariant data = ui[i]->effectCombo->itemData(index);
         ui[i]->effectCombo->clear();
-        ui[i]->effectCombo->addItem(coverswitch);
         ui[i]->effectCombo->addItem(flipswitch);
         for (int j = 0; j < layoutNames.count(); ++j) {
             ui[i]->effectCombo->addItem(layoutNames[j], layoutPlugins[j]);
@@ -220,9 +215,7 @@ void KWinTabBoxConfig::load()
         updateUiFromConfig(ui[i], *(tabBoxConfig[i]));
 
         KConfigGroup effectconfig(m_config, "Plugins");
-        if (effectEnabled("coverswitch", effectconfig) && KConfigGroup(m_config, "Effect-CoverSwitch").readEntry(group[i], false))
-            ui[i]->effectCombo->setCurrentIndex(CoverSwitch);
-        else if (effectEnabled("flipswitch", effectconfig) && KConfigGroup(m_config, "Effect-FlipSwitch").readEntry(group[i], false))
+        if (effectEnabled("flipswitch", effectconfig) && KConfigGroup(m_config, "Effect-FlipSwitch").readEntry(group[i], false))
             ui[i]->effectCombo->setCurrentIndex(FlipSwitch);
 
         QString action;
@@ -297,28 +290,18 @@ void KWinTabBoxConfig::save()
     // effects
     bool highlightWindows = m_primaryTabBoxUi->highlightWindowCheck->isChecked() ||
                             m_alternativeTabBoxUi->highlightWindowCheck->isChecked();
-    const bool coverSwitch = m_primaryTabBoxUi->showTabBox->isChecked() &&
-                             m_primaryTabBoxUi->effectCombo->currentIndex() == CoverSwitch;
     const bool flipSwitch = m_primaryTabBoxUi->showTabBox->isChecked() &&
                             m_primaryTabBoxUi->effectCombo->currentIndex() == FlipSwitch;
-    const bool coverSwitchAlternative = m_alternativeTabBoxUi->showTabBox->isChecked() &&
-                                        m_alternativeTabBoxUi->effectCombo->currentIndex() == CoverSwitch;
     const bool flipSwitchAlternative = m_alternativeTabBoxUi->showTabBox->isChecked() &&
                                        m_alternativeTabBoxUi->effectCombo->currentIndex() == FlipSwitch;
 
     // activate effects if not active
     KConfigGroup effectconfig(m_config, "Plugins");
-    if (coverSwitch || coverSwitchAlternative)
-        effectconfig.writeEntry("kwin4_effect_coverswitchEnabled", true);
     if (flipSwitch || flipSwitchAlternative)
         effectconfig.writeEntry("kwin4_effect_flipswitchEnabled", true);
     if (highlightWindows)
         effectconfig.writeEntry("kwin4_effect_highlightwindowEnabled", true);
     effectconfig.sync();
-    KConfigGroup coverswitchconfig(m_config, "Effect-CoverSwitch");
-    coverswitchconfig.writeEntry("TabBox", coverSwitch);
-    coverswitchconfig.writeEntry("TabBoxAlternative", coverSwitchAlternative);
-    coverswitchconfig.sync();
     KConfigGroup flipswitchconfig(m_config, "Effect-FlipSwitch");
     flipswitchconfig.writeEntry("TabBox", flipSwitch);
     flipswitchconfig.writeEntry("TabBoxAlternative", flipSwitchAlternative);
@@ -485,7 +468,7 @@ void KWinTabBoxConfig::configureEffectClicked()
         QPointer< KDialog > configDialog = new KDialog(this);
         configDialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
         configDialog->setWindowTitle(ui->effectCombo->currentText());
-        KCModuleProxy* proxy = new KCModuleProxy(effect == CoverSwitch ? "coverswitch_config" : "flipswitch_config");
+        KCModuleProxy* proxy = new KCModuleProxy("flipswitch_config");
         connect(configDialog, SIGNAL(defaultClicked()), proxy, SLOT(defaults()));
 
         QWidget *showWidget = new QWidget(configDialog);
