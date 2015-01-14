@@ -155,11 +155,6 @@ void KWinTabBoxConfig::initLayoutLists()
     // search the effect names
     // TODO: way to recognize if a effect is not found
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
-    KService::List services;
-    QString flipswitch;
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_flipswitch'");
-    if (!services.isEmpty())
-        flipswitch = services.first()->name();
 
     KService::List offers = trader->query("KWin/WindowSwitcher");
     QStringList layoutNames, layoutPlugins, layoutPaths;
@@ -187,7 +182,6 @@ void KWinTabBoxConfig::initLayoutLists()
         int index = ui[i]->effectCombo->currentIndex();
         QVariant data = ui[i]->effectCombo->itemData(index);
         ui[i]->effectCombo->clear();
-        ui[i]->effectCombo->addItem(flipswitch);
         for (int j = 0; j < layoutNames.count(); ++j) {
             ui[i]->effectCombo->addItem(layoutNames[j], layoutPlugins[j]);
             ui[i]->effectCombo->setItemData(ui[i]->effectCombo->count() - 1, layoutPaths[j], Qt::UserRole+1);
@@ -213,10 +207,6 @@ void KWinTabBoxConfig::load()
         loadConfig(config, *(tabBoxConfig[i]));
 
         updateUiFromConfig(ui[i], *(tabBoxConfig[i]));
-
-        KConfigGroup effectconfig(m_config, "Plugins");
-        if (effectEnabled("flipswitch", effectconfig) && KConfigGroup(m_config, "Effect-FlipSwitch").readEntry(group[i], false))
-            ui[i]->effectCombo->setCurrentIndex(FlipSwitch);
 
         QString action;
 #define LOAD_SHORTCUT(_BTN_)\
@@ -290,22 +280,12 @@ void KWinTabBoxConfig::save()
     // effects
     bool highlightWindows = m_primaryTabBoxUi->highlightWindowCheck->isChecked() ||
                             m_alternativeTabBoxUi->highlightWindowCheck->isChecked();
-    const bool flipSwitch = m_primaryTabBoxUi->showTabBox->isChecked() &&
-                            m_primaryTabBoxUi->effectCombo->currentIndex() == FlipSwitch;
-    const bool flipSwitchAlternative = m_alternativeTabBoxUi->showTabBox->isChecked() &&
-                                       m_alternativeTabBoxUi->effectCombo->currentIndex() == FlipSwitch;
 
     // activate effects if not active
     KConfigGroup effectconfig(m_config, "Plugins");
-    if (flipSwitch || flipSwitchAlternative)
-        effectconfig.writeEntry("kwin4_effect_flipswitchEnabled", true);
     if (highlightWindows)
         effectconfig.writeEntry("kwin4_effect_highlightwindowEnabled", true);
     effectconfig.sync();
-    KConfigGroup flipswitchconfig(m_config, "Effect-FlipSwitch");
-    flipswitchconfig.writeEntry("TabBox", flipSwitch);
-    flipswitchconfig.writeEntry("TabBoxAlternative", flipSwitchAlternative);
-    flipswitchconfig.sync();
 
     // Reload KWin.
     QDBusMessage message = QDBusMessage::createSignal("/KWin", "org.kde.KWin", "reloadConfig");
@@ -456,35 +436,13 @@ void KWinTabBoxConfig::configureEffectClicked()
     CHECK_CURRENT_TABBOX_UI
 
     const int effect = ui->effectCombo->currentIndex();
-    if (effect >= Layout) {
-        if (!m_layoutPreview) {
-            m_layoutPreview = new LayoutPreview(this);
-            m_layoutPreview->setWindowTitle(i18n("Tabbox layout preview"));
-            m_layoutPreview->setWindowFlags(Qt::Dialog);
-        }
-        m_layoutPreview->setLayout(ui->effectCombo->itemData(effect, Qt::UserRole+1).toString(), ui->effectCombo->itemText(effect));
-        m_layoutPreview->show();
-    } else {
-        QPointer< KDialog > configDialog = new KDialog(this);
-        configDialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
-        configDialog->setWindowTitle(ui->effectCombo->currentText());
-        KCModuleProxy* proxy = new KCModuleProxy("flipswitch_config");
-        connect(configDialog, SIGNAL(defaultClicked()), proxy, SLOT(defaults()));
-
-        QWidget *showWidget = new QWidget(configDialog);
-        QVBoxLayout *layout = new QVBoxLayout;
-        showWidget->setLayout(layout);
-        layout->addWidget(proxy);
-        layout->insertSpacing(-1, KDialog::marginHint());
-        configDialog->setMainWidget(showWidget);
-
-        if (configDialog->exec() == QDialog::Accepted) {
-            proxy->save();
-        } else {
-            proxy->load();
-        }
-        delete configDialog;
+    if (!m_layoutPreview) {
+        m_layoutPreview = new LayoutPreview(this);
+        m_layoutPreview->setWindowTitle(i18n("Tabbox layout preview"));
+        m_layoutPreview->setWindowFlags(Qt::Dialog);
     }
+    m_layoutPreview->setLayout(ui->effectCombo->itemData(effect, Qt::UserRole+1).toString(), ui->effectCombo->itemText(effect));
+    m_layoutPreview->show();
 }
 
 void KWinTabBoxConfig::shortcutChanged(const QKeySequence &seq)

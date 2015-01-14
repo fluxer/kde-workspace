@@ -130,7 +130,6 @@ include( blur/CMakeLists.txt )
 include( screenshot/CMakeLists.txt )
 # OpenGL-specific effects for desktop
 if( NOT KWIN_MOBILE_EFFECTS )
-    include( flipswitch/CMakeLists.txt )
     include( glide/CMakeLists.txt )
     include( invert/CMakeLists.txt )
     include( lookingglass/CMakeLists.txt )

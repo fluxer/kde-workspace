@@ -33,7 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "zoom/zoom_config.h"
 
 #include "blur/blur_config.h"
-#include "flipswitch/flipswitch_config.h"
 #include "glide/glide_config.h"
 #include "invert/invert_config.h"
 #include "lookingglass/lookingglass_config.h"
@@ -62,7 +61,6 @@ KWIN_EFFECT_CONFIG_MULTIPLE(builtins,
                             KWIN_EFFECT_CONFIG_SINGLE(zoom, ZoomEffectConfig)
 
                             KWIN_EFFECT_CONFIG_SINGLE(blur, BlurEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(flipswitch, FlipSwitchEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(glide, GlideEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(invert, InvertEffectConfig)
                             KWIN_EFFECT_CONFIG_SINGLE(lookingglass, LookingGlassEffectConfig)
