@@ -54,7 +54,8 @@ private:
 	int xkbOpcode;
 };
 
-struct XkbConfig {
+class XkbConfig {
+public:
 	QString keyboardModel;
 	QStringList layouts;
 	QStringList variants;
@@ -64,7 +65,8 @@ struct XkbConfig {
 };
 
 
-struct LayoutUnit {
+class LayoutUnit {
+public:
 	static const int MAX_LABEL_LENGTH;
 
 	//TODO: move these to private?
@@ -106,7 +108,8 @@ private:
 	QKeySequence shortcut;
 };
 
-struct LayoutSet {
+class LayoutSet {
+public:
 	QList<LayoutUnit> layouts;
 	LayoutUnit currentLayout;
 

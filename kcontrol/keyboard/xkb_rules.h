@@ -85,7 +85,8 @@ struct OptionGroupInfo: public ConfigItem {
     }
 };
 
-struct Rules {
+class Rules {
+public:
     enum ExtrasFlag { NO_EXTRAS, READ_EXTRAS };
 
 	static const char XKB_OPTION_GROUP_SEPARATOR;
