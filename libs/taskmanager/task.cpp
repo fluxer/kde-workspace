@@ -50,7 +50,6 @@ Task::Task(WId w, QObject *parent, const char *name)
 
     // try to load icon via net_wm
     refreshIcon();
-    refreshActivities();
 }
 
 Task::~Task()
@@ -151,11 +150,6 @@ void Task::refreshIcon()
 
     if (dirty.netWindowInfoProperties & NET::WMIcon) {
         refreshIcon();
-    }
-
-    if (dirty.netWindowInfoProperties2 & NET::WM2Activities) {
-        refreshActivities();
-        changes |= ActivitiesChanged;
     }
 
     if (changes != TaskUnchanged) {

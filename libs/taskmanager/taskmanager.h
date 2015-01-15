@@ -51,8 +51,7 @@ enum TaskChange { TaskUnchanged = 0,
                   ActionsChanged = 256,
                   TransientsChanged = 512,
                   IconChanged = 1024,
-                  ActivitiesChanged = 4096,
-                  AttentionChanged = 8192,
+                  AttentionChanged = 4096,
                   ClassChanged = 0x4000,
                   EverythingChanged = 0xffff
                 };

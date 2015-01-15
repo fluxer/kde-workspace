@@ -671,8 +671,7 @@ void Pager::windowChanged(WId id, const unsigned long* dirty)
 {
     Q_UNUSED(id)
 
-    if (dirty[NETWinInfo::PROTOCOLS] & (NET::WMGeometry | NET::WMDesktop) ||
-        dirty[NETWinInfo::PROTOCOLS2] & NET::WM2Activities) {
+    if (dirty[NETWinInfo::PROTOCOLS] & (NET::WMGeometry | NET::WMDesktop)) {
         startTimer();
     }
 }

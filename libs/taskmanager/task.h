@@ -428,7 +428,6 @@ protected:
     void timerEvent(QTimerEvent *event);
     //* @internal */
     void refreshIcon();
-    void refreshActivities();
 
 private:
     class Private;
