@@ -8,8 +8,8 @@ X-DocPath=kcontrol/windowspecific/index.html
 X-KDE-Library=kcm_kwinrules
 X-KDE-ParentApp=kcontrol
 
-X-KDE-System-Settings-Parent-Category=window-behaviour
-X-KDE-Weight=120
+X-KDE-System-Settings-Parent-Category=workspace-behavior
+X-KDE-Weight=130
 
 Name=Window Rules
 Name[ar]=قواعد النوافذ

@@ -7,8 +7,8 @@ X-DocPath=kcontrol/emoticons/index.html
 X-KDE-ServiceTypes=KCModule
 X-KDE-Library=kcm_emoticons
 X-KDE-ParentApp=kcontrol
-X-KDE-System-Settings-Parent-Category=application-appearance
-X-KDE-Weight=110
+X-KDE-System-Settings-Parent-Category=desktop-appearance
+X-KDE-Weight=210
 
 Name=Emoticons
 Name[af]=Emotikons

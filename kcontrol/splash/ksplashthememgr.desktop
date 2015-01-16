@@ -10,7 +10,7 @@ X-KDE-Library=kcm_ksplashthemes
 X-KDE-ParentApp=kcontrol
 
 X-KDE-System-Settings-Parent-Category=desktop-appearance
-X-KDE-Weight=100
+X-KDE-Weight=200
 
 Name=Splash Screen
 Name[af]=Spat Skerm
