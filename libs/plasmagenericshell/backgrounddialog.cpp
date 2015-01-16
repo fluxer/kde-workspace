@@ -25,7 +25,6 @@
 #include <KStandardDirs>
 
 #include <Plasma/Containment>
-#include <Plasma/Context>
 #include <Plasma/Corona>
 #include <Plasma/FrameSvg>
 #include <Plasma/Package>
