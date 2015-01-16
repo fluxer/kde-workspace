@@ -123,10 +123,9 @@ public:
     int groupIsFullLimit;
     QUuid configToken;
 
-    QHash<QString, QHash<int, TaskGroup*> > rootGroups; //container for groups
+    QHash<int, TaskGroup*> rootGroups; //container for groups
     QList<LauncherItem *> launchers;
     int currentDesktop;
-    QString currentActivity;
 
     bool showOnlyCurrentDesktop : 1;
     bool showOnlyCurrentScreen : 1;
@@ -151,10 +150,8 @@ GroupManager::GroupManager(QObject *parent)
     connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(sycocaChanged(const QStringList &)));
 
     d->currentDesktop = TaskManager::self()->currentDesktop();
-#warning "activities cleanup"
-    d->currentActivity = "desktop";
 
-    d->rootGroups[d->currentActivity][d->currentDesktop] = new TaskGroup(this, "RootGroup");
+    d->rootGroups[d->currentDesktop] = new TaskGroup(this, "RootGroup");
 
     d->reloadTimer.setSingleShot(true);
     d->reloadTimer.setInterval(0);
@@ -179,7 +176,7 @@ GroupManager::~GroupManager()
 
 TaskGroup *GroupManagerPrivate::currentRootGroup()
 {
-    return rootGroups[currentActivity][currentDesktop];
+    return rootGroups[currentDesktop];
 }
 
 void GroupManagerPrivate::reloadTasks()
@@ -445,11 +442,11 @@ void GroupManagerPrivate::currentDesktopChanged(int newDesktop)
         return;
     }
 
-    if (!rootGroups[currentActivity].contains(newDesktop)) {
+    if (!rootGroups.contains(newDesktop)) {
         kDebug() << "created new desk group";
-        rootGroups[currentActivity][newDesktop] = new TaskGroup(q, "RootGroup");
+        rootGroups[newDesktop] = new TaskGroup(q, "RootGroup");
         if (abstractSortingStrategy) {
-            abstractSortingStrategy->handleGroup(rootGroups[currentActivity][newDesktop]);
+            abstractSortingStrategy->handleGroup(rootGroups[newDesktop]);
         }
     }
 
@@ -462,9 +459,9 @@ void GroupManagerPrivate::currentDesktopChanged(int newDesktop)
 
     foreach (LauncherItem * item, launchers) {
         if (item->shouldShow(q)) {
-            rootGroups[currentActivity][currentDesktop]->add(item);
+            rootGroups[currentDesktop]->add(item);
         } else {
-            rootGroups[currentActivity][currentDesktop]->remove(item);
+            rootGroups[currentDesktop]->remove(item);
         }
     }
 
@@ -660,7 +657,7 @@ bool GroupManager::addLauncher(const KUrl &url, const QIcon &icon, const QString
 
         if (!d->separateLaunchers && d->abstractSortingStrategy && ManualSorting == d->abstractSortingStrategy->type()) {
             // Ensure item is placed where launcher would be...
-            foreach (AbstractGroupableItem * item, d->rootGroups[d->currentActivity][d->currentDesktop]->members()) {
+            foreach (AbstractGroupableItem * item, d->rootGroups[d->currentDesktop]->members()) {
                 if (LauncherItemType != item->itemType() && item->launcherUrl() == url) {
                     manualSortingRequest(item, launcherIndex(url));
                     break;
@@ -713,11 +710,8 @@ void GroupManager::removeLauncher(const KUrl &url)
     d->launchers.removeAt(index);
     d->saveLauncherConfig();
 
-    typedef QHash<int, TaskGroup*> Metagroup;
-    foreach (Metagroup metagroup, d->rootGroups) {
-        foreach (TaskGroup * rootGroup, metagroup) {
-            rootGroup->remove(launcher);
-        }
+    foreach (TaskGroup * rootGroup, d->rootGroups) {
+        rootGroup->remove(launcher);
     }
 
     d->unsaveLauncher(launcher);
@@ -725,7 +719,7 @@ void GroupManager::removeLauncher(const KUrl &url)
 
     if (!d->separateLaunchers && d->abstractSortingStrategy && ManualSorting == d->abstractSortingStrategy->type()) {
         // Ensure item is placed at end of launchers...
-        foreach (AbstractGroupableItem * item, d->rootGroups[d->currentActivity][d->currentDesktop]->members()) {
+        foreach (AbstractGroupableItem * item, d->rootGroups[d->currentDesktop]->members()) {
             if (LauncherItemType != item->itemType() && item->launcherUrl() == url) {
                 manualSortingRequest(item, d->launchers.count());
                 break;
@@ -767,9 +761,9 @@ void GroupManagerPrivate::checkLauncherVisibility(LauncherItem *launcher)
     }
 
     if (launcher->shouldShow(q)) {
-        rootGroups[currentActivity][currentDesktop]->add(launcher);
+        rootGroups[currentDesktop]->add(launcher);
     } else {
-        rootGroups[currentActivity][currentDesktop]->remove(launcher);
+        rootGroups[currentDesktop]->remove(launcher);
     }
 }
 
@@ -1254,11 +1248,8 @@ void GroupManager::setSortingStrategy(TaskSortingStrategy sortOrder)
         kDebug() << "Invalid Strategy";
     }
     if (d->abstractSortingStrategy) {
-        typedef QHash<int, TaskGroup*> Metagroup;
-        foreach (Metagroup metagroup, d->rootGroups) {
-            foreach (TaskGroup * group, metagroup) {
-                d->abstractSortingStrategy->handleGroup(group);
-            }
+        foreach (TaskGroup * group, d->rootGroups) {
+            d->abstractSortingStrategy->handleGroup(group);
         }
     }
 
