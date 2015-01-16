@@ -119,9 +119,6 @@ void SwitchWindow::makeMenu()
             //kDebug() << "skipped fake task" << source;
             continue;
         }
-        if (!window.value("onCurrentActivity").toBool()) {
-            continue;
-        }
 
         QString name = window.value("visibleNameWithState").toString();
         if (name.isEmpty()) {
