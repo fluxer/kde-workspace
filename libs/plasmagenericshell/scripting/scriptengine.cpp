@@ -74,40 +74,6 @@ ScriptEngine::~ScriptEngine()
 {
 }
 
-QScriptValue ScriptEngine::activityById(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() == 0) {
-        return context->throwError(i18n("activityById requires an id"));
-    }
-
-    const uint id = context->argument(0).toInt32();
-    ScriptEngine *env = envFor(engine);
-    foreach (Plasma::Containment *c, env->m_corona->containments()) {
-        if (c->id() == id && !isPanel(c)) {
-            return env->wrap(c);
-        }
-    }
-
-    return engine->undefinedValue();
-}
-
-QScriptValue ScriptEngine::activityForScreen(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() == 0) {
-        return context->throwError(i18n("activityForScreen requires a screen id"));
-    }
-
-    const uint screen = context->argument(0).toInt32();
-    const uint desktop = context->argumentCount() > 1 ? context->argument(1).toInt32() : -1;
-    ScriptEngine *env = envFor(engine);
-    return env->wrap(env->m_corona->containmentForScreen(screen, desktop));
-}
-
-QScriptValue ScriptEngine::newActivity(QScriptContext *context, QScriptEngine *engine)
-{
-    return createContainment("desktop", "desktop", context, engine);
-}
-
 QScriptValue ScriptEngine::newPanel(QScriptContext *context, QScriptEngine *engine)
 {
     return createContainment("panel", "panel", context, engine);
@@ -198,7 +164,7 @@ ScriptEngine *ScriptEngine::envFor(QScriptEngine *engine)
 QScriptValue ScriptEngine::panelById(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() == 0) {
-        return context->throwError(i18n("activityById requires an id"));
+        return context->throwError(i18n("panelById requires an id"));
     }
 
     const uint id = context->argument(0).toInt32();
@@ -598,11 +564,7 @@ void ScriptEngine::setupEngine()
     }
 
     m_scriptSelf.setProperty("QRectF", constructQRectFClass(this));
-    m_scriptSelf.setProperty("Activity", newFunction(ScriptEngine::newActivity));
     m_scriptSelf.setProperty("Panel", newFunction(ScriptEngine::newPanel));
-    m_scriptSelf.setProperty("activities", newFunction(ScriptEngine::activities));
-    m_scriptSelf.setProperty("activityById", newFunction(ScriptEngine::activityById));
-    m_scriptSelf.setProperty("activityForScreen", newFunction(ScriptEngine::activityForScreen));
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
@@ -625,25 +587,6 @@ bool ScriptEngine::isPanel(const Plasma::Containment *c)
 
     return c->containmentType() == Plasma::Containment::PanelContainment ||
            c->containmentType() == Plasma::Containment::CustomPanelContainment;
-}
-
-QScriptValue ScriptEngine::activities(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(context)
-
-    QScriptValue containments = engine->newArray();
-    ScriptEngine *env = envFor(engine);
-    int count = 0;
-
-    foreach (Plasma::Containment *c, env->corona()->containments()) {
-        if (!isPanel(c)) {
-            containments.setProperty(count, env->wrap(c));
-            ++count;
-        }
-    }
-
-    containments.setProperty("length", count);
-    return containments;
 }
 
 Plasma::Corona *ScriptEngine::corona() const

@@ -200,7 +200,6 @@ Task *TaskManager::findTask(int desktop, const QPoint& p)
         if (!t->isOnAllDesktops() && t->desktop() != desktop) {
             continue;
         }
-        //FIXME activities?
 
         if (t->isIconified() || t->isShaded()) {
             continue;

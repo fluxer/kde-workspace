@@ -69,11 +69,7 @@ private:
 
     // containment accessors
     static QStringList availableContainments(const QString &type);
-    static QScriptValue newActivity(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue newPanel(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue activities(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue activityById(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue activityForScreen(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue panelById(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue panels(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue fileExists(QScriptContext *context, QScriptEngine *engine);

@@ -57,8 +57,6 @@ AppletInterface::AppletInterface(AbstractJsAppletScript *parent)
             this, SIGNAL(formFactorChanged()));
     connect(m_appletScriptEngine, SIGNAL(locationChanged()),
             this, SIGNAL(locationChanged()));
-    connect(m_appletScriptEngine, SIGNAL(contextChanged()),
-            this, SIGNAL(contextChanged()));
 }
 
 AppletInterface::~AppletInterface()
@@ -84,11 +82,6 @@ AppletInterface::FormFactor AppletInterface::formFactor() const
 AppletInterface::Location AppletInterface::location() const
 {
     return static_cast<Location>(applet()->location());
-}
-
-QString AppletInterface::currentActivity() const
-{
-    return applet()->context()->currentActivity();
 }
 
 AppletInterface::AspectRatioMode AppletInterface::aspectRatioMode() const
@@ -605,9 +598,6 @@ ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
 
     connect(containment(), SIGNAL(screenChanged(int, int, Plasma::Containment*)), this, SIGNAL(screenChanged()));
 
-    connect(containment()->context(), SIGNAL(activityChanged(Plasma::Context *)), this, SIGNAL(activityNameChanged()));
-    connect(containment()->context(), SIGNAL(changed(Plasma::Context *)), this, SIGNAL(activityIdChanged()));
-
      if (containment()->corona()) {
          connect(containment()->corona(), SIGNAL(availableScreenRegionChanged()),
                  this, SIGNAL(availableScreenRegionChanged()));
@@ -716,16 +706,6 @@ void ContainmentInterface::setMovableApplets(bool movable)
 bool ContainmentInterface::hasMovableApplets() const
 {
     return m_movableApplets;
-}
-
-QString ContainmentInterface::activityName() const
-{
-    return containment()->context()->currentActivity();
-}
-
-QString ContainmentInterface::activityId() const
-{
-    return containment()->context()->currentActivityId();
 }
 
 ToolBoxProxy* ContainmentInterface::toolBox()

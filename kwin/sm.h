@@ -69,7 +69,6 @@ struct SessionInfo {
     int tabGroup; // Unique identifier for the client group that this window is in
 
     Client* tabGroupClient; // The first client created that has an identical identifier
-    QStringList activities;
 };
 
 

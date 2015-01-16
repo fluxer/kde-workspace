@@ -208,10 +208,6 @@ QSize DesktopToolBox::fullWidth() const
     adjustBackgroundBorders();
 
     int extraSpace = 0;
-    if (!m_containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(m_containment->activity()+'x');
-    }
-
     return QSize(size() + left + right + extraSpace, size() + bottom);
 }
 
@@ -223,10 +219,6 @@ QSize DesktopToolBox::fullHeight() const
     adjustBackgroundBorders();
 
     int extraSpace = 0;
-    if (!m_containment->activity().isNull()) {
-        extraSpace = Plasma::Theme::defaultTheme()->fontMetrics().width(m_containment->activity()+'x');
-    }
-
     return QSize(size() + left, size() + top + bottom + extraSpace);
 }
 
@@ -253,12 +245,6 @@ QRectF DesktopToolBox::boundingRect() const
 {
     int extraSpace = size();
     adjustBackgroundBorders();
-
-    //keep space for the label and a character more
-    if (!m_containment->activity().isNull()) {
-        extraSpace = iconSize().width()
-            + Plasma::Theme::defaultTheme()->fontMetrics().width(m_containment->activity()+'x');
-    }
 
     qreal left, top, right, bottom;
     m_background->getMargins(left, top, right, bottom);
@@ -328,10 +314,6 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QString activityName;
 
     QSize textSize;
-    if (cornerElement.isNull()) {
-        activityName = m_containment->activity();
-        textSize =  Plasma::Theme::defaultTheme()->fontMetrics().size(Qt::TextSingleLine, activityName+'x');
-    }
 
     adjustBackgroundBorders();
     m_background->resizeFrame(rect.size());

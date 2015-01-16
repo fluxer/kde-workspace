@@ -45,7 +45,6 @@ class PLASMAGENERICSHELL_EXPORT Containment : public Applet
     Q_PROPERTY(QStringList globalConfigKeys READ globalConfigKeys)
     Q_PROPERTY(QStringList globalConfigGroups READ globalConfigGroups)
     Q_PROPERTY(QStringList currentConfigGroup WRITE setCurrentConfigGroup READ currentConfigGroup)
-    Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QString wallpaperPlugin READ wallpaperPlugin WRITE setWallpaperPlugin)
     Q_PROPERTY(QString wallpaperMode READ wallpaperMode WRITE setWallpaperMode)
     Q_PROPERTY(bool locked READ locked WRITE setLocked)
@@ -64,9 +63,6 @@ public:
     QString type() const;
     QString formFactor() const;
     QList<int> widgetIds() const;
-
-    QString name() const;
-    void setName(const QString &name);
 
     int desktop() const;
     void setDesktop(int desktop);

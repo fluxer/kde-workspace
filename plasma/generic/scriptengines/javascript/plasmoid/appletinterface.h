@@ -70,7 +70,6 @@ class AppletInterface : public QObject
     Q_PROPERTY(AspectRatioMode aspectRatioMode READ aspectRatioMode WRITE setAspectRatioMode)
     Q_PROPERTY(FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
     Q_PROPERTY(Location location READ location NOTIFY locationChanged)
-    Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
     Q_PROPERTY(bool shouldConserveResources READ shouldConserveResources)
     Q_PROPERTY(QString activeConfig WRITE setActiveConfig READ activeConfig)
     Q_PROPERTY(bool busy WRITE setBusy READ isBusy)
@@ -243,7 +242,6 @@ enum IntervalAlignment {
     Q_INVOKABLE FormFactor formFactor() const;
 
     Location location() const;
-    QString currentActivity() const;
     bool shouldConserveResources() const;
 
     Q_INVOKABLE AspectRatioMode aspectRatioMode() const;
@@ -325,7 +323,6 @@ Q_SIGNALS:
 
     void formFactorChanged();
     void locationChanged();
-    void contextChanged();
     void immutableChanged();
     void statusChanged();
 
@@ -418,8 +415,6 @@ class ContainmentInterface : public APPLETSUPERCLASS
     Q_PROPERTY(Type containmentType READ containmentType WRITE setContainmentType)
     Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
     Q_PROPERTY(bool movableApplets READ hasMovableApplets WRITE setMovableApplets)
-    Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
-    Q_PROPERTY(QString activityId READ activityId NOTIFY activityIdChanged)
     Q_PROPERTY(ToolBoxProxy* toolBox READ toolBox CONSTANT)
     Q_ENUMS(Type)
 
@@ -447,9 +442,6 @@ public:
     void setMovableApplets(bool movable);
     bool hasMovableApplets() const;
 
-    QString activityName() const;
-    QString activityId() const;
-
     ToolBoxProxy* toolBox();
 
     Q_INVOKABLE QScriptValue screenGeometry(int id) const;
@@ -459,8 +451,6 @@ Q_SIGNALS:
     void appletAdded(QGraphicsWidget *applet, const QPointF &pos);
     void appletRemoved(QGraphicsWidget *applet);
     void screenChanged();
-    void activityNameChanged();
-    void activityIdChanged();
     void availableScreenRegionChanged();
 
 protected Q_SLOTS:

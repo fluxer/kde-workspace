@@ -98,7 +98,6 @@ void TaskSource::updateTask(::TaskManager::TaskChanges taskChanges)
             setData("onCurrentDesktop", taskPtr->isOnCurrentDesktop());
             setData("onAllDesktops", taskPtr->isOnAllDesktops());
             setData("desktop", taskPtr->desktop());
-            setData("activities", taskPtr->activities());
             setData("icon", taskPtr->icon());
             setData("actionMinimize", taskPtr->info().actionSupported(NET::ActionMinimize));
             setData("actionMaximize", taskPtr->info().actionSupported(NET::ActionMax));

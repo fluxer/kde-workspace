@@ -68,7 +68,6 @@ class TASKMANAGER_EXPORT Task : public QObject
     Q_PROPERTY(bool modified READ isModified)
     Q_PROPERTY(bool demandsAttention READ demandsAttention)
     Q_PROPERTY(int desktop READ desktop)
-    Q_PROPERTY(QStringList activities READ activities)
 
 public:
 
@@ -255,11 +254,6 @@ public:
      * Returns the geometry for this window
      */
     QRect geometry() const;
-
-    /**
-     * Returns the activities on which this task's window resides.
-     */
-    QStringList activities() const;
 
     // internal
 

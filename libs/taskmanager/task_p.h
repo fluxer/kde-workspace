@@ -59,7 +59,6 @@ public:
     KWindowInfo info;
     WindowList transients;
     WindowList transientsDemandingAttention;
-    QStringList activities;
 
     int lastWidth;
     int lastHeight;
