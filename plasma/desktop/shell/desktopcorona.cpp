@@ -40,7 +40,6 @@
 #include <Plasma/AbstractToolBox>
 #include <Plasma/Containment>
 #include <plasma/containmentactionspluginsconfig.h>
-#include <Plasma/Context>
 #include <Plasma/DataEngineManager>
 #include <Plasma/Package>
 

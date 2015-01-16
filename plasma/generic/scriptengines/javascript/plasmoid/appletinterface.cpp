@@ -38,7 +38,6 @@
 #include <Plasma/Plasma>
 #include <Plasma/Applet>
 #include <Plasma/Corona>
-#include <Plasma/Context>
 #include <Plasma/Package>
 #include <Plasma/ToolTipManager>
 

@@ -59,7 +59,6 @@
 
 #include <Plasma/AbstractToolBox>
 #include <Plasma/Containment>
-#include <Plasma/Context>
 #include <Plasma/Dialog>
 #include <Plasma/Theme>
 #include <Plasma/Wallpaper>
