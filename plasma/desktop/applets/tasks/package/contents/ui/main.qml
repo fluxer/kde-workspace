@@ -36,7 +36,7 @@ Item {
     property bool horizontal: false
     property int maxStripes: 2
     property bool forceStripes: false
-    property bool showOnlyCurrentDesktop: false
+    property bool showOnlyCurrentDesktop: true
     property bool showOnlyMinimized: false
     property bool showToolTip: true
     property bool highlightWindows: false

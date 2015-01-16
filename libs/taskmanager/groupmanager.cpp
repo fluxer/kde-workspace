@@ -64,7 +64,7 @@ public:
           abstractSortingStrategy(0),
           currentScreen(-1),
           groupIsFullLimit(0),
-          showOnlyCurrentDesktop(false),
+          showOnlyCurrentDesktop(true),
           showOnlyCurrentScreen(false),
           showOnlyMinimized(false),
           onlyGroupWhenFull(false),
@@ -129,7 +129,6 @@ public:
     QString currentActivity;
 
     bool showOnlyCurrentDesktop : 1;
-    bool showOnlyCurrentActivity : 1;
     bool showOnlyCurrentScreen : 1;
     bool showOnlyMinimized : 1;
     bool onlyGroupWhenFull : 1;
@@ -577,7 +576,7 @@ void GroupManager::reconnect()
     disconnect(TaskManager::self(), SIGNAL(windowChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)),
                this, SLOT(taskChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)));
 
-    if (d->showOnlyCurrentDesktop || d->showOnlyMinimized || d->showOnlyCurrentScreen || d->showOnlyCurrentActivity) {
+    if (d->showOnlyCurrentDesktop || d->showOnlyMinimized || d->showOnlyCurrentScreen) {
         // listen to the relevant task manager signals
         if (d->showOnlyCurrentDesktop) {
             connect(TaskManager::self(), SIGNAL(desktopChanged(int)),

@@ -392,7 +392,7 @@ void Tasks::configChanged()
 
     // only update these if they have actually changed, because they make the
     // group manager reload its tasks list
-    const bool showOnlyCurrentDesktop = cg.readEntry("showOnlyCurrentDesktop", false);
+    const bool showOnlyCurrentDesktop = cg.readEntry("showOnlyCurrentDesktop", true);
     if (showOnlyCurrentDesktop != m_groupManager->showOnlyCurrentDesktop()) {
         m_groupManager->setShowOnlyCurrentDesktop(showOnlyCurrentDesktop);
         m_declarativeWidget->rootObject()->setProperty("showOnlyCurrentDesktop", showOnlyCurrentDesktop);
