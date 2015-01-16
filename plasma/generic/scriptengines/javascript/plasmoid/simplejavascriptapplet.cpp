@@ -269,12 +269,6 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
         }
     }
 
-    if (constraints & Plasma::ContextConstraint) {
-        if (!env->callEventListeners("currentActivityChanged")) {
-            callPlasmoidFunction("currentActivityChanged", QScriptValueList(), env);
-        }
-    }
-
     if (constraints & Plasma::SizeConstraint) {
         if (!env || !env->callEventListeners("sizeChanged")) {
             callPlasmoidFunction("sizeChanged", QScriptValueList(), env);

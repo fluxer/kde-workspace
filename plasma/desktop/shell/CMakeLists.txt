@@ -4,8 +4,6 @@ include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
                     ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal
 )
 
-add_subdirectory(configupdates)
-
 set(plasma_SRCS
     accessibility/accessiblefactory.cpp
     accessibility/accessibleplasmaview.cpp

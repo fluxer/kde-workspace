@@ -74,6 +74,11 @@ ScriptEngine::~ScriptEngine()
 {
 }
 
+QScriptValue ScriptEngine::newActivity(QScriptContext *context, QScriptEngine *engine)
+{
+   return createContainment("desktop", "desktop", context, engine);
+}
+
 QScriptValue ScriptEngine::newPanel(QScriptContext *context, QScriptEngine *engine)
 {
     return createContainment("panel", "panel", context, engine);
@@ -564,6 +569,7 @@ void ScriptEngine::setupEngine()
     }
 
     m_scriptSelf.setProperty("QRectF", constructQRectFClass(this));
+    m_scriptSelf.setProperty("Activity", newFunction(ScriptEngine::newActivity));
     m_scriptSelf.setProperty("Panel", newFunction(ScriptEngine::newPanel));
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));

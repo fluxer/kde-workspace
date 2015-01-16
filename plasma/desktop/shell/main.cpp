@@ -123,7 +123,7 @@ KDE_EXPORT int kdemain(int argc, char **argv)
     QAccessible::installFactory(Plasma::accessibleInterfaceFactory);
 #endif
 
-    int rc = app->exec();    
+    int rc = app->exec();
     delete app;
     return rc;
 }
