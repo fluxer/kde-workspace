@@ -58,7 +58,6 @@ private:
 
     static QScriptValue print(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue fileExists(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue loadTemplate(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue theme(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue widgets(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addWidget(QScriptContext *context, QScriptEngine *engine);
