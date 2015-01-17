@@ -80,7 +80,7 @@ namespace HardwareDatabase
             const int isAdvanced;
 
         private:
-            friend struct HardwareDatabasePrivate;
+            friend class HardwareDatabasePrivate;
             friend Entry entryFor(const QString &);
             inline Entry(const QString &_name, const QString &_iconName, int _initialPreference, int _isAdvanced)
                 : name(_name), iconName(_iconName), initialPreference(_initialPreference), isAdvanced(_isAdvanced) {}
