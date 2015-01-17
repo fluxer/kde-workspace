@@ -45,7 +45,6 @@ namespace KWin {
 static const int LUT_GRID_POINTS = 64;
 static const size_t CLUT_ELEMENT_SIZE = sizeof(quint16);
 static const uint CLUT_ELEMENT_COUNT = LUT_GRID_POINTS * LUT_GRID_POINTS * LUT_GRID_POINTS * 3;
-static const size_t CLUT_DATA_SIZE = CLUT_ELEMENT_COUNT * CLUT_ELEMENT_SIZE;
 
 inline static void buildDummyClut(Clut &c)
 {
