@@ -15,30 +15,6 @@ zvalue=0
 [Containments][1][ActionPlugins]
 RightButton;NoModifier=contextmenu
 
-[Containments][1][Applets][10]
-geometry=76,3,32,32
-immutability=1
-plugin=icon
-zvalue=0
-
-[Containments][1][Applets][10][Configuration]
-Url=file:///share/applications/kde4/konqbrowser.desktop
-
-[Containments][1][Applets][10][LayoutInformation]
-Order=3
-
-[Containments][1][Applets][11]
-geometry=36,3,32,32
-immutability=1
-plugin=icon
-zvalue=0
-
-[Containments][1][Applets][11][Configuration]
-Url=file:///share/applications/kde4/konsole.desktop
-
-[Containments][1][Applets][11][LayoutInformation]
-Order=1
-
 [Containments][1][Applets][23]
 geometry=0,3,32,32
 immutability=1
@@ -83,10 +59,6 @@ showOnlyCurrentScreen=false
 showOnlyMinimized=false
 showToolTip=true
 sortingStrategy=2
-
-[Containments][1][Applets][4][Configuration][Launchers]
-Items=preferred://filemanager?wmClass=%20
-filemanager=preferred://filemanager, , ,\s
 
 [Containments][1][Applets][4][LayoutInformation]
 Order=4
