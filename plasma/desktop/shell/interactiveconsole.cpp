@@ -50,7 +50,6 @@
 
 #include "plasmaapp.h"
 #include "scripting/desktopscriptengine.h"
-#include "scripting/layouttemplatepackagestructure.h"
 
 //TODO:
 // use text editor KPart for syntax highlighting?
@@ -337,67 +336,6 @@ void InteractiveConsole::loadScriptFromUrl(const KUrl &url)
         m_job = KIO::get(url, KIO::Reload, KIO::HideProgressInfo);
         connect(m_job.data(), SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(scriptFileDataRecvd(KIO::Job*,QByteArray)));
         connect(m_job.data(), SIGNAL(result(KJob*)), this, SLOT(reenableEditor(KJob*)));
-    }
-}
-
-void InteractiveConsole::populateTemplatesMenu()
-{
-    m_snippetsMenu->clear();
-
-    QMap<QString, KService::Ptr> sorted;
-    const QString constraint = QString("[X-Plasma-Shell] == '%1'")
-                                      .arg(KGlobal::mainComponent().componentName());
-    KService::List templates = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
-    foreach (const KService::Ptr &service, templates) {
-        sorted.insert(service->name(), service);
-    }
-
-    QMapIterator<QString, KService::Ptr> it(sorted);
-    Plasma::PackageStructure::Ptr templateStructure(new WorkspaceScripting::LayoutTemplatePackageStructure);
-    while (it.hasNext()) {
-        it.next();
-        KPluginInfo info(it.value());
-        const QString path = KStandardDirs::locate("data", templateStructure->defaultPackageRoot() + '/' + info.pluginName() + '/');
-        if (!path.isEmpty()) {
-            Plasma::Package package(path, templateStructure);
-            const QString scriptFile = package.filePath("mainscript");
-            if (!scriptFile.isEmpty()) {
-                QAction *action = m_snippetsMenu->addAction(info.name());
-                action->setData(info.pluginName());
-            }
-        }
-    }
-}
-
-void InteractiveConsole::loadTemplate(QAction *action)
-{
-    Plasma::PackageStructure::Ptr templateStructure(new WorkspaceScripting::LayoutTemplatePackageStructure);
-    const QString pluginName = action->data().toString();
-    const QString path = KStandardDirs::locate("data", templateStructure->defaultPackageRoot() + '/' + pluginName + '/');
-    if (!path.isEmpty()) {
-        Plasma::Package package(path, templateStructure);
-        const QString scriptFile = package.filePath("mainscript");
-        if (!scriptFile.isEmpty()) {
-            loadScriptFromUrl(KUrl(scriptFile));
-        }
-    }
-}
-
-void InteractiveConsole::useTemplate(QAction *action)
-{
-    QString code("var template = loadTemplate('" + action->data().toString() + "')");
-    if (m_editorPart) {
-        const QList<KTextEditor::View *> views = m_editorPart->views();
-        if (views.isEmpty()) {
-            m_editorPart->insertLines(m_editorPart->lines(), QStringList() << code);
-        } else {
-            KTextEditor::Cursor cursor = views.at(0)->cursorPosition();
-            m_editorPart->insertLines(cursor.line(), QStringList() << code);
-            cursor.setLine(cursor.line() + 1);
-            views.at(0)->setCursorPosition(cursor);
-        }
-    } else {
-        m_editor->insertPlainText(code);
     }
 }
 

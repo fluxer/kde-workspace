@@ -83,9 +83,6 @@ private Q_SLOTS:
     void saveScriptUrlSelected(int result);
     void openScriptUrlSelected(int result);
     void loadScriptFromUrl(const KUrl &url);
-    void populateTemplatesMenu();
-    void loadTemplate(QAction *);
-    void useTemplate(QAction *);
     void modeChanged();
 
 private:

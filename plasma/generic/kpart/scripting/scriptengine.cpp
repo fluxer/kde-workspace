@@ -35,7 +35,6 @@
 #include <Plasma/Theme>
 
 #include "widget.h"
-#include "layouttemplatepackagestructure.h"
 
 QScriptValue constructQRectFClass(QScriptEngine *engine);
 

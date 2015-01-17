@@ -1,6 +1,5 @@
 
 set(plasma_kpartscripting_SRCS
-   scripting/layouttemplatepackagestructure.cpp
    scripting/rect.cpp
    scripting/scriptengine.cpp
    scripting/widget.cpp

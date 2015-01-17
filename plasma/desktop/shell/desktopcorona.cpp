@@ -45,14 +45,10 @@
 
 #include <kephal/screens.h>
 
-#include <scripting/layouttemplatepackagestructure.h>
-
 #include "panelview.h"
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
 #include "scripting/desktopscriptengine.h"
-
-static const QString s_panelTemplatesPath("plasma-layout-templates/panels/*");
 
 DesktopCorona::DesktopCorona(QObject *parent)
     : Plasma::Corona(parent),
@@ -129,9 +125,8 @@ void DesktopCorona::checkAddPanelAction(const QStringList &sycocaChanges)
     KPluginInfo::List panelContainmentPlugins = Plasma::Containment::listContainmentsOfType("panel");
     const QString constraint = QString("[X-Plasma-Shell] == '%1' and 'panel' ~in [X-Plasma-ContainmentCategories]")
                                       .arg(KGlobal::mainComponent().componentName());
-    KService::List templates = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
 
-    if (panelContainmentPlugins.count() + templates.count() == 1) {
+    if (panelContainmentPlugins.count() == 1) {
         m_addPanelAction = new QAction(i18n("Add Panel"), this);
         m_addPanelAction->setData(Plasma::AbstractToolBox::AddTool);
         connect(m_addPanelAction, SIGNAL(triggered(bool)), this, SLOT(addPanel()));
@@ -405,15 +400,7 @@ void DesktopCorona::populateAddPanelsMenu()
         }
     }
 
-    const QString constraint = QString("[X-Plasma-Shell] == '%1' and 'panel' in [X-Plasma-ContainmentCategories]")
-                                      .arg(KGlobal::mainComponent().componentName());
-    KService::List templates = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
-    foreach (const KService::Ptr &service, templates) {
-        sorted.insert(service->name(), qMakePair(emptyInfo, service));
-    }
-
     QMapIterator<QString, QPair<KPluginInfo, KService::Ptr> > it(sorted);
-    Plasma::PackageStructure::Ptr templateStructure(new WorkspaceScripting::LayoutTemplatePackageStructure);
     while (it.hasNext()) {
         it.next();
         QPair<KPluginInfo, KService::Ptr> pair = it.value();
@@ -425,18 +412,6 @@ void DesktopCorona::populateAddPanelsMenu()
             }
 
             action->setData(plugin.pluginName());
-        } else {
-            //FIXME: proper names
-            KPluginInfo info(pair.second);
-            const QString path = KStandardDirs::locate("data", templateStructure->defaultPackageRoot() + '/' + info.pluginName() + '/');
-            if (!path.isEmpty()) {
-                Plasma::Package package(path, templateStructure);
-                const QString scriptFile = package.filePath("mainscript");
-                if (!scriptFile.isEmpty()) {
-                    QAction *action = m_addPanelsMenu->addAction(info.name());
-                    action->setData(QString::fromLatin1("plasma-desktop-template:%1").arg(scriptFile));
-                }
-            }
         }
     }
 }
@@ -453,9 +428,7 @@ void DesktopCorona::addPanel()
 void DesktopCorona::addPanel(QAction *action)
 {
     const QString plugin = action->data().toString();
-    if (plugin.startsWith("plasma-desktop-template:")) {
-        evaluateScripts(QStringList() << plugin.right(plugin.length() - qstrlen("plasma-desktop-template:")), false);
-    } else if (!plugin.isEmpty()) {
+    if (!plugin.isEmpty()) {
         addPanel(plugin);
     }
 }
