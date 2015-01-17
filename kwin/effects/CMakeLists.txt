@@ -127,7 +127,6 @@ endif()
 
 # OpenGL-specific effects
 include( blur/CMakeLists.txt )
-include( screenshot/CMakeLists.txt )
 # OpenGL-specific effects for desktop
 if( NOT KWIN_MOBILE_EFFECTS )
     include( glide/CMakeLists.txt )
