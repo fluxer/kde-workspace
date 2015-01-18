@@ -162,5 +162,5 @@ X-KDE-PluginInfo-EnabledByDefault=true
 [Wallpaper]
 defaultWallpaperTheme=Ariya
 defaultFileSuffix=.png
-defaultWidth=2560
-defaultHeight=1600
+defaultWidth=1024
+defaultHeight=768
