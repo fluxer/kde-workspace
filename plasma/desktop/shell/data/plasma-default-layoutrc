@@ -3,7 +3,6 @@ activity=
 activityId=
 desktop=-1
 formfactor=2
-geometry=0,-41,1024,35
 immutability=1
 lastDesktop=-1
 lastScreen=0
@@ -110,10 +109,6 @@ timezone=Local
 [Containments][1][Applets][6][LayoutInformation]
 Order=6
 
-[Containments][1][Configuration]
-maximumSize=1024,35
-minimumSize=1024,35
-
 [Containments][20]
 ActionPluginsSource=Global
 activity=
@@ -137,7 +132,6 @@ activity=Desktop
 activityId=
 desktop=-1
 formfactor=0
-geometry=0,0,1024,768
 immutability=1
 lastDesktop=-1
 lastScreen=0
