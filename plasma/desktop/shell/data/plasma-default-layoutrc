@@ -156,14 +156,5 @@ wallpaper=/share/wallpapers/Ariya/
 wallpapercolor=0,0,0
 wallpaperposition=0
 
-[Containments][7][Wallpaper][org.kde.wallpaper-qml]
-color=0,0,0,0
-packageName=org.kde.haenau
-
-[Containments][7][Wallpaper][pattern]
-BackgroundColor=0,0,0
-ForegroundColor=255,255,255
-Pattern=lineage.png
-
 [General]
 immutability=1
