@@ -148,13 +148,5 @@ wallpaperplugin=image
 wallpaperpluginmode=SingleImage
 zvalue=0
 
-[Containments][7][Wallpaper][image]
-slideTimer=10
-slidepaths=
-userswallpapers=
-wallpaper=/share/wallpapers/Ariya/
-wallpapercolor=0,0,0
-wallpaperposition=0
-
 [General]
 immutability=1
