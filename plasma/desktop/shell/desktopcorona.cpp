@@ -355,15 +355,7 @@ void DesktopCorona::loadDefaultLayout()
 
 void DesktopCorona::saveDefaultSetup()
 {
-    KConfigGroup plasmaConfig = KConfigGroup(KGlobal::config(), "Containments");
-
-    foreach (Plasma::Containment *containment, containments()) {
-        containment->save(plasmaConfig);
-        foreach (Plasma::Applet* applet, containment->applets()) {
-            applet->save(plasmaConfig);
-        }
-    }
-
+    saveLayout(KStandardDirs::locateLocal("config", "plasma-desktoprc"));
     requestConfigSync();
 }
 
