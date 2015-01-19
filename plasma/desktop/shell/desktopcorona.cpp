@@ -342,7 +342,7 @@ void DesktopCorona::loadDefaultLayout()
 {
     evaluateScripts(WorkspaceScripting::ScriptEngine::defaultLayoutScripts());
     if (containments().isEmpty()) {
-        QString defaultConfig = KStandardDirs::locate("appdata", "plasma-default-layoutrc");
+        QString defaultConfig = KStandardDirs::locate("config", "plasma-desktoprc");
         if (!defaultConfig.isEmpty()) {
             kDebug() << "attempting to load the default layout from:" << defaultConfig;
             loadLayout(defaultConfig);
@@ -355,13 +355,12 @@ void DesktopCorona::loadDefaultLayout()
 
 void DesktopCorona::saveDefaultSetup()
 {
-    // a "null" KConfigGroup is used to force a save into the config file
-    KConfigGroup invalidConfig;
+    KConfigGroup plasmaConfig = KConfigGroup(KGlobal::config(), "Containments");
 
     foreach (Plasma::Containment *containment, containments()) {
-        containment->save(invalidConfig);
+        containment->save(plasmaConfig);
         foreach (Plasma::Applet* applet, containment->applets()) {
-            applet->save(invalidConfig);
+            applet->save(plasmaConfig);
         }
     }
 
