@@ -672,10 +672,8 @@ ToplevelList Workspace::xStackingOrder() const
     XQueryTree(display(), rootWindow(), &dummy, &dummy, &windows, &count);
     // use our own stacking order, not the X one, as they may differ
     foreach (Toplevel * c, stacking_order)
-    x_stacking.append(c);
-    for (unsigned int i = 0;
-            i < count;
-            ++i) {
+        x_stacking.append(c);
+    for (unsigned int i = 0; i < count; ++i) {
         if (Unmanaged* c = findUnmanaged(WindowMatchPredicate(windows[ i ])))
             x_stacking.append(c);
     }
