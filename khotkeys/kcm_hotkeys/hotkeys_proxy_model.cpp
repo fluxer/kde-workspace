@@ -21,8 +21,9 @@
 #include "hotkeys_model.h"
 
 
-struct KHotkeysProxyModelPrivate
+class KHotkeysProxyModelPrivate
     {
+public:
     KHotkeysProxyModelPrivate( KHotkeysProxyModel *host );
 
     //! Our host
