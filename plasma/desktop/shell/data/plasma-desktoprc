@@ -1,6 +1,4 @@
 [Containments][1]
-activity=
-activityId=
 desktop=-1
 formfactor=2
 immutability=1
@@ -111,8 +109,6 @@ Order=6
 
 [Containments][20]
 ActionPluginsSource=Global
-activity=
-activityId=
 desktop=-1
 formfactor=0
 geometry=-16777215,-16777215,800,600
@@ -128,8 +124,6 @@ zvalue=0
 
 [Containments][7]
 ActionPluginsSource=Global
-activity=Desktop
-activityId=
 desktop=-1
 formfactor=0
 immutability=1
