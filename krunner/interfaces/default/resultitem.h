@@ -38,8 +38,9 @@ namespace Plasma
     class RunnerManager;
 } // namespace Plasma
 
-struct SharedResultData
+class SharedResultData
 {
+public:
     bool processHoverEvents;
     bool mouseHovering;
     Plasma::RunnerManager *runnerManager;
