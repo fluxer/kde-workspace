@@ -138,7 +138,7 @@ private:
 //  QRadioButton *leftHanded, *rightHanded;
 //  QCheckBox *doubleClick;
 //  QCheckBox *cbAutoSelect;
-  QLabel *lDelay;
+//  QLabel *lDelay;
 //  QSlider *slAutoSelect;
 //  QCheckBox *cbVisualActivate;
 //  QCheckBox *cbCursor;
