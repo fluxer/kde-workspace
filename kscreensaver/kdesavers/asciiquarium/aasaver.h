@@ -35,38 +35,6 @@ class Screen;
 class Sprite;
 
 /**
- * \mainpage Asciiquarium.
- *
- * \section intro Introduction
- *
- * Asciiquarium is a KDE screensaver to draw an ASCII art aquarium.  This is the
- * documentation of the API used in the program to generate the effect.  It should
- * be fairly simple, but basically:
- *
- * class AASaver is the main class, which handles outside events.  All of the
- * processing happens in the Screen class however, which manages a list of
- * Sprites, updating them and drawing them as needed.  When AASaver receives a
- * paintEvent(), it forwards it on to Screen to handle it.
- *
- * Each Sprite is composed of 1 or more Frames.  When a Screen wants a Sprite
- * to draw itself, the Sprite forwards the request to its currently shown Frame.
- *
- * The Frame is rectangular, and created from textual ASCII art, with a ASCII
- * art shape and color mask.  The mask is optional.  See aasaver.cpp for
- * examples for creating a Frame.
- *
- * The Frame supports transparency and colors, and will convert the textual data
- * into a QPixmap representation on demand in order to reduce CPU load (at the
- * expense of a slight memory usage increase for each sprite).
- *
- * Screen handles the timing for the project, and at each timeout will call
- * Sprite::tickUpdate() from Screen::doAnimate().
- *
- * This whole program was inspired/copied from Kirk Baucom's asciiquarium
- * program, from http://www.robobunny.com/projects/asciiquarium/
- */
-
-/**
  * The main class for the Asciiquarium screensaver.
  */
 class AASaver: public KScreenSaver
