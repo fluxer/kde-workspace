@@ -18,7 +18,6 @@ if(X11_Xkb_FOUND)
     add_subdirectory( keyboard )
 endif(X11_Xkb_FOUND)
 
-add_subdirectory( bell )
 add_subdirectory( input )
 add_subdirectory( access )
 add_subdirectory( screensaver )
