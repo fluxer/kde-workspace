@@ -18,7 +18,14 @@ if(X11_Xkb_FOUND)
     add_subdirectory( keyboard )
 endif(X11_Xkb_FOUND)
 
-add_subdirectory( input )
+add_subdirectory( display )
+add_subdirectory( mouse )
+
+if (CMAKE_SYSTEM_NAME MATCHES Linux)
+   # this one doesn't seem to be very portable, Alex
+   add_subdirectory( joystick ) 
+endif (CMAKE_SYSTEM_NAME MATCHES Linux)
+
 add_subdirectory( access )
 add_subdirectory( screensaver )
 add_subdirectory( dateandtime )
@@ -49,7 +56,6 @@ add_subdirectory( kdebug )
 # TODO needs porting
 #add_subdirectory( smartcard )
 
-add_subdirectory( hardware )
 add_subdirectory( desktoppaths )
 
 if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
