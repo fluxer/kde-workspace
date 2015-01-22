@@ -41,8 +41,6 @@
 
 #include "ui_playersettings.h"
 
-static const int COL_FILENAME = 1;
-
 K_PLUGIN_FACTORY( NotifyFactory, registerPlugin<KCMKNotify>(); )
 K_EXPORT_PLUGIN( NotifyFactory("kcmnotify") )
 
