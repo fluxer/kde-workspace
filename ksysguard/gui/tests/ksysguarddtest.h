@@ -40,8 +40,9 @@ struct Answer {
     QList<QByteArray> answer;
     bool isSensorLost;
 };
-struct SensorClientTest : public KSGRD::SensorClient
+class SensorClientTest : public KSGRD::SensorClient
 {
+public:
     SensorClientTest() {
         isSensorLost = false;
         haveAnswer = false;
