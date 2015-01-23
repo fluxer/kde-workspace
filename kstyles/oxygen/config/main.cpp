@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         "oxygen-settings",
         "kstyle_config",
         ki18n( "Oxygen Settings" ),
-        WORKSPACE_VERSION_STRING,
+        KDE_VERSION_STRING,
         ki18n( "Oxygen expert configuration tool" ),
         KAboutData::License_GPL_V2,
         ki18n( "(c) 2010, Hugo Pereira Da Costa" ));

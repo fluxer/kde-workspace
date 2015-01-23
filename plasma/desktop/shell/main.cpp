@@ -49,7 +49,7 @@ extern "C"
 KDE_EXPORT int kdemain(int argc, char **argv)
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "START" << "(line:" << __LINE__ << ")";
-  
+
     plasmaLocale = KLocale("libplasma").language();
     // dual head support
     int associatedScreen = 0;
@@ -104,7 +104,7 @@ KDE_EXPORT int kdemain(int argc, char **argv)
     }
 
     KAboutData aboutData(appName, 0, ki18n("Plasma Desktop Shell"),
-                         WORKSPACE_VERSION_STRING, ki18n(description), KAboutData::License_GPL,
+                         KDE_VERSION_STRING, ki18n(description), KAboutData::License_GPL,
                          ki18n("Copyright 2006-2009, The KDE Team"));
     aboutData.addAuthor(ki18n("Aaron J. Seigo"),
                         ki18n("Author and maintainer"),

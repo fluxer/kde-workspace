@@ -28,6 +28,7 @@
 #include <knotification.h>
 #include <klocalizedstring.h>
 #include <kaboutdata.h>
+#include <kdeversion.h>
 #include <config-workspace.h>
 
 #if defined(BUILD_AS_EXECUTABLE)
@@ -43,7 +44,7 @@
 
 static inline KAboutData aboutData()
 {
-    return KAboutData("kwrited", 0, ki18n("kwrited"), WORKSPACE_VERSION_STRING);
+    return KAboutData("kwrited", 0, ki18n("kwrited"), KDE_VERSION_STRING);
 }
 
 #if defined(BUILD_AS_EXECUTABLE)

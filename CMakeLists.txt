@@ -8,12 +8,6 @@ include(CTestConfig.cmake)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 
-# Used e.g. in KDE4WorkspaceConfig.cmake, Alex
-set(KDE4WORKSPACE_VERSION_MAJOR 4)
-set(KDE4WORKSPACE_VERSION_MINOR 11)
-set(KDE4WORKSPACE_VERSION_PATCH 14)
-set(KDE4WORKSPACE_VERSION ${KDE4WORKSPACE_VERSION_MAJOR}.${KDE4WORKSPACE_VERSION_MINOR}.${KDE4WORKSPACE_VERSION_PATCH} )
-
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
 
@@ -342,9 +336,6 @@ set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace__)
 
 configure_file(KDE4WorkspaceConfig.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake" @ONLY)
 
-# this file will be installed too and will be used by cmake when searching for the Config.cmake file to check the version of kdepimlibs, Alex
-macro_write_basic_cmake_version_file(${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake 
-                                     ${KDE4WORKSPACE_VERSION_MAJOR} ${KDE4WORKSPACE_VERSION_MINOR} ${KDE4WORKSPACE_VERSION_PATCH})
 
 set(_KDE4WorkspaceConfig_INSTALL_DIR ${LIB_INSTALL_DIR}/KDE4Workspace/cmake)
 # places where find_package() looks for FooConfig.cmake files:
@@ -356,7 +347,6 @@ if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
 endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake
         DESTINATION ${_KDE4WorkspaceConfig_INSTALL_DIR})
 
 install(EXPORT kdeworkspaceLibraryTargets 

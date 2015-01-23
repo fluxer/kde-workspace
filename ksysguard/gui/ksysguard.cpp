@@ -512,7 +512,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char** argv )
 #endif
 
   KAboutData aboutData( "ksysguard", 0, ki18n( "System Monitor" ),
-                        WORKSPACE_VERSION_STRING, ki18n(Description), KAboutData::License_GPL,
+                        KDE_VERSION_STRING, ki18n(Description), KAboutData::License_GPL,
                         ki18n( "(c) 1996-2008 The KDE System Monitor Developers" ) );
   aboutData.addAuthor( ki18n("John Tapsell"), ki18n("Current Maintainer"), "john.tapsell@kde.org" );
   aboutData.addAuthor( ki18n("Chris Schlaeger"), ki18n("Previous Maintainer"), "cs@kde.org" );
