@@ -194,9 +194,11 @@ void SettingsBase::initMenuList(MenuItem * parent)
     for (int i = 0; i < categories.size(); ++i) {
         const KService::Ptr entry = categories.at(i);
         const QString parentCategory = entry->property("X-KDE-System-Settings-Parent-Category").toString();
-        if ( parentCategory == parent->category() ) {
-            MenuItem * categoryItem = new MenuItem(true, parent);
-            MenuItem * menuItem = new MenuItem(true, categoryItem);
+        const QString parentCategory2 = entry->property("X-KDE-System-Settings-Parent-Category-V2").toString();
+        if ( parentCategory == parent->category() ||
+             // V2 entries must not be empty if they want to become a proper category.
+             ( !parentCategory2.isEmpty() && parentCategory2 == parent->category() ) ) {
+            MenuItem * menuItem = new MenuItem(true, parent);
             menuItem->setService( entry );
             if( menuItem->category() == "lost-and-found" ) {
                 lostFound = menuItem;
@@ -212,7 +214,8 @@ void SettingsBase::initMenuList(MenuItem * parent)
     for (int i = 0; i < modules.size(); ++i) {
         const KService::Ptr entry = modules.at(i);
         const QString category = entry->property("X-KDE-System-Settings-Parent-Category").toString();
-        if( !parent->category().isEmpty() && category == parent->category() ) {
+        const QString category2 = entry->property("X-KDE-System-Settings-Parent-Category-V2").toString();
+        if( !parent->category().isEmpty() && (category == parent->category() || category2 == parent->category()) ) {
             // Add the module info to the menu
             MenuItem * infoItem = new MenuItem(false, parent);
             infoItem->setService( entry );

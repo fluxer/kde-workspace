@@ -58,6 +58,8 @@ private:
     KComboBox *m_appCombo;
     KNotifyConfigWidget *m_notifyWidget;
     PlayerSettingsDialog *m_playerSettings;
+    QPushButton *m_psb;
+
 };
 
 class PlayerSettingsDialog : public QWidget
