@@ -19,8 +19,10 @@
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
 #include <kglobal.h>
-#include "blankscrn.h"
 #include <kaboutdata.h>
+#include <kdeversion.h>
+
+#include "blankscrn.h"
 #include <config-workspace.h>
 #include "blankscrn.moc"
 
@@ -31,7 +33,7 @@ public:
     virtual KAboutData* aboutData()
     {
         return new KAboutData( "kblankscrn.kss", "kblankscrn", ki18n( "KBlankScreen" ),
-                               WORKSPACE_VERSION_STRING, ki18n( "Blank Screen Saver" ) );
+                               KDE_VERSION_STRING, ki18n( "Blank Screen Saver" ) );
     }
 
     virtual KScreenSaver* create( WId id )

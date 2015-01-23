@@ -17,7 +17,6 @@
 #include <QLayout>
 #include <QCheckBox>
 #include <QWidget>
-//Added by qt3to4:
 #include <QGridLayout>
 
 #include <kapplication.h>
@@ -68,7 +67,7 @@ static QString exeFromActionGroup(const QList<KServiceAction>& actions, const ch
 int main(int argc, char *argv[])
 {
 	KCmdLineArgs::init(argc, argv, appName, "kscreensaver", ki18n("Random screen saver"), 
-                WORKSPACE_VERSION_STRING, ki18n(description));
+                KDE_VERSION_STRING, ki18n(description));
 
 
 	KCmdLineOptions options;
