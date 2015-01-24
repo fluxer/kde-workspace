@@ -38,7 +38,7 @@ target_link_libraries(kwineffects
     ${kwineffects_XLIB_LIBS}
     ${kwineffects_XCB_LIBS}
 )
-set_target_properties(kwineffects PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+set_target_properties(kwineffects PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 set_target_properties(kwineffects PROPERTIES OUTPUT_NAME ${KWIN_NAME}effects)
 
 install(TARGETS kwineffects EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
@@ -62,7 +62,7 @@ macro( KWIN4_ADD_GLUTILS_BACKEND name glinclude )
     if(OPENGL_EGL_FOUND)
         target_link_libraries(${name} ${OPENGLES_EGL_LIBRARY})
     endif()
-    set_target_properties(${name} PROPERTIES VERSION 1.0.0 SOVERSION 1 )
+    set_target_properties(${name} PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
     target_link_libraries(${name} ${ARGN})
     target_link_libraries(${name} LINK_INTERFACE_LIBRARIES ${ARGN})
 

@@ -3,11 +3,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
 
 add_subdirectory(actions)
 
-set(POWERDEVIL_CORE_VERSION_MAJOR 0)
-set(POWERDEVIL_CORE_VERSION_MINOR 1)
-set(POWERDEVIL_CORE_VERSION_MICRO 0)
-set(POWERDEVIL_CORE_VERSION_STRING ${POWERDEVIL_CORE_VERSION_MAJOR}.${POWERDEVIL_CORE_VERSION_MINOR}.${POWERDEVIL_CORE_VERSION_MICRO})
-
 # Add bundled actions
 set(powerdevil_bundled_actions_SRCS
     actions/bundled/suspendsession.cpp
@@ -46,7 +41,8 @@ qt4_add_dbus_adaptor(powerdevilcore_SRCS actions/bundled/org.kde.Solid.PowerMana
                      actions/bundled/suspendsession.h PowerDevil::BundledActions::SuspendSession)
 
 kde4_add_library(powerdevilcore SHARED ${powerdevilcore_SRCS} ${powerdevil_bundled_actions_SRCS})
-set_target_properties(powerdevilcore PROPERTIES VERSION ${POWERDEVIL_CORE_VERSION_STRING} SOVERSION ${POWERDEVIL_CORE_VERSION_MAJOR})
+
+set_target_properties(powerdevilcore PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 target_link_libraries(powerdevilcore
     ${KDE4_KDECORE_LIBS}
