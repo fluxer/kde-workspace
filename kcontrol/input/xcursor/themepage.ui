@@ -6,18 +6,11 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>606</width>
+    <width>610</width>
     <height>360</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Select the cursor theme you want to use (hover preview to test cursor):</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0" rowspan="3" colspan="2">
     <widget class="PreviewWidget" name="preview" native="true">
      <property name="sizePolicy">
@@ -34,33 +27,10 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" rowspan="5" colspan="2">
-    <widget class="QListView" name="view">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="verticalScrollMode">
-      <enum>QAbstractItemView::ScrollPerPixel</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="2">
-    <widget class="KPushButton" name="installButton">
+   <item row="0" column="0" colspan="2">
+    <widget class="QLabel" name="label">
      <property name="text">
-      <string>Install From File...</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="2">
-    <widget class="KPushButton" name="removeButton">
-     <property name="text">
-      <string>Remove Theme</string>
+      <string>Select the cursor theme you want to use (hover preview to test cursor):</string>
      </property>
     </widget>
    </item>
@@ -87,6 +57,36 @@
     <widget class="QLabel" name="sizeLabel">
      <property name="text">
       <string comment="@label:listbox cursor size">Size:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" rowspan="4" colspan="3">
+    <widget class="QListView" name="view">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>1</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <property name="verticalScrollMode">
+      <enum>QAbstractItemView::ScrollPerPixel</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="2">
+    <widget class="KPushButton" name="removeButton">
+     <property name="text">
+      <string>Remove Theme</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="KPushButton" name="installButton">
+     <property name="text">
+      <string>Install From File...</string>
      </property>
     </widget>
    </item>
