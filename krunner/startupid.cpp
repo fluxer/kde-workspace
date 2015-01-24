@@ -281,8 +281,6 @@ void StartupId::start_startupid( const QString& icon_P )
 
 namespace
 {
-const int X_DIFF = 15;
-const int Y_DIFF = 15;
 const int color_to_pixmap[] = { 0, 1, 2, 3, 2, 1 };
 const int frame_to_yoffset[] =
   {
