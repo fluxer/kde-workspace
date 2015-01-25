@@ -32,6 +32,7 @@
 #include "drkonqi.h"
 #include "backtracegenerator.h"
 #include "backtracewidget.h"
+#include "parser/backtraceparser.h"
 #include "crashedapplication.h"
 #include "debuggermanager.h"
 #include "debuggerlaunchers.h"
@@ -237,19 +238,24 @@ void DrKonqiDialog::startBugReportAssistant()
     const CrashedApplication *crashedApp = DrKonqi::crashedApplication();
     BugReportAddress appReportAddress = crashedApp->bugReportAddress();
     SystemInformation *sysinfo = new SystemInformation(this);
+    QString backtrace = DrKonqi::debuggerManager()->backtraceGenerator()->parser()->parsedBacktrace();
     QString query;
     // KDE applications use the email address by default
     if (appReportAddress == BUG_REPORT_EMAIL) {
+        // black magic - report is done in Markdown syntax with new lines preserved
         query += QString(BUG_REPORT_URL) + "/new";
         query += "?title=" + crashedApp->name();
         query += " " + crashedApp->version();
         query += " " + crashedApp->signalName();
-        query += "&body=********** Platform **********";
+        query += "&body=" + QUrl::toPercentEncoding("## Platform");
         query += "\nOS: " + sysinfo->system();
         query += "\nRelease: " + sysinfo->release();
         query += "\nKDE: " + sysinfo->kdeVersion();
-        query += "\nQt: " + sysinfo->qtVersion();
-        query += "\n********** Report **********\n";
+        query += "\nQt: " + sysinfo->qtVersion() + "\n";
+        query += QUrl::toPercentEncoding("\n## Backtrace\n", "\n");
+        query += QUrl::toPercentEncoding("```\n" + backtrace + "```\n", "\n");
+        query += QUrl::toPercentEncoding("\n## Additional information", "\n");
+        query += "\nPlease, provide any other information that you find useful here\n";
     } else {
         query += QString(appReportAddress);
     }
