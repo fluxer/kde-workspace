@@ -35,7 +35,7 @@ class QMenu;
 class QAction;
 
 class ClipAction;
-struct ClipCommand;
+class ClipCommand;
 typedef QList<ClipAction*> ActionList;
 
 class URLGrabber : public QObject
@@ -102,8 +102,9 @@ Q_SIGNALS:
 };
 
 
-struct ClipCommand
+class ClipCommand
 {
+public:
     /**
      * What to do with output of command
      */
