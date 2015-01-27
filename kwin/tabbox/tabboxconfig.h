@@ -61,15 +61,6 @@ public:
         ExcludeCurrentDesktopClients ///< Exclude TabBoxClients on current desktop
     };
     /**
-    * ClientActivitiesMode defines whether windows from the current activity or from all
-    * activities are included in the TabBoxClient List in the TabBoxClientModel
-    */
-    enum ClientActivitiesMode {
-        AllActivitiesClients, ///< TabBoxClients from all Activities are included.
-        OnlyCurrentActivityClients, ///< Only TabBoxClients on current activity are included
-        ExcludeCurrentActivityClients ///< Exclude TabBoxClients on current activity
-    };
-    /**
     * ClientApplicationsMode defines which windows from the current application or from all
     * applications are included in the TabBoxClient List in the TabBoxClientModel
     */
@@ -160,13 +151,6 @@ public:
     */
     ClientDesktopMode clientDesktopMode() const;
     /**
-    * @return The current ClientActivitiesMode
-    * This option only applies for TabBoxMode ClientTabBox.
-    * @see setClientActivitiesMode
-    * @see defaultActivitiesMode
-    */
-    ClientActivitiesMode clientActivitiesMode() const;
-    /**
     * @return The current ClientApplicationsMode
     * This option only applies for TabBoxMode ClientTabBox.
     * @see setClientApplicationsMode
@@ -238,12 +222,6 @@ public:
     */
     void setClientDesktopMode(ClientDesktopMode desktopMode);
     /**
-    * @param activitiesMode The new ClientActivitiesMode to be used.
-    * This option only applies for TabBoxMode ClientTabBox.
-    * @see clientActivitiesMode
-    */
-    void setClientActivitiesMode(ClientActivitiesMode activitiesMode);
-    /**
     * @param applicationsMode The new ClientApplicationsMode to be used.
     * This option only applies for TabBoxMode ClientTabBox.
     * @see clientApplicationsMode
@@ -288,9 +266,6 @@ public:
     // some static methods to access default values
     static ClientDesktopMode defaultDesktopMode() {
         return OnlyCurrentDesktopClients;
-    }
-    static ClientActivitiesMode defaultActivitiesMode() {
-        return OnlyCurrentActivityClients;
     }
     static ClientApplicationsMode defaultApplicationsMode() {
         return AllWindowsAllApplications;

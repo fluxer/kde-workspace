@@ -227,8 +227,6 @@ void KWinTabBoxConfig::loadConfig(const KConfigGroup& config, KWin::TabBox::TabB
 {
     tabBoxConfig.setClientDesktopMode(TabBoxConfig::ClientDesktopMode(
                                        config.readEntry<int>("DesktopMode", TabBoxConfig::defaultDesktopMode())));
-    tabBoxConfig.setClientActivitiesMode(TabBoxConfig::ClientActivitiesMode(
-                                       config.readEntry<int>("ActivitiesMode", TabBoxConfig::defaultActivitiesMode())));
     tabBoxConfig.setClientApplicationsMode(TabBoxConfig::ClientApplicationsMode(
                                        config.readEntry<int>("ApplicationsMode", TabBoxConfig::defaultApplicationsMode())));
     tabBoxConfig.setClientMinimizedMode(TabBoxConfig::ClientMinimizedMode(
@@ -250,7 +248,6 @@ void KWinTabBoxConfig::saveConfig(KConfigGroup& config, const KWin::TabBox::TabB
 {
     // combo boxes
     config.writeEntry("DesktopMode",        int(tabBoxConfig.clientDesktopMode()));
-    config.writeEntry("ActivitiesMode",     int(tabBoxConfig.clientActivitiesMode()));
     config.writeEntry("ApplicationsMode",   int(tabBoxConfig.clientApplicationsMode()));
     config.writeEntry("MinimizedMode",      int(tabBoxConfig.clientMinimizedMode()));
     config.writeEntry("ShowDesktopMode",    int(tabBoxConfig.showDesktopMode()));
