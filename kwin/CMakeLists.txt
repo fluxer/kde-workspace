@@ -50,10 +50,6 @@ endif()
 
 include_directories(${XCB_INCLUDE_DIR})
 
-if(WAYLAND_FOUND AND KWIN_HAVE_EGL)
-    include_directories(${WAYLAND_INCLUDE_DIR})
-endif()
-
 # for things that are also used by kwin libraries
 configure_file(libkwineffects/kwinconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkwineffects/kwinconfig.h )
 # for kwin internal things
@@ -168,10 +164,6 @@ if(KWIN_HAVE_EGL)
     set(kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS} eglonxbackend.cpp)
 endif()
 
-if(WAYLAND_FOUND AND KWIN_HAVE_EGL)
-    set(kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS} egl_wayland_backend.cpp)
-endif()
-
 kde4_add_kcfg_files(kwin_KDEINIT_SRCS settings.kcfgc)
 
 qt4_add_dbus_adaptor( kwin_KDEINIT_SRCS org.kde.KWin.xml dbusinterface.h KWin::DBusInterface )
@@ -227,13 +219,6 @@ set(kwin_XCB_LIBS
     ${XCB_KEYSYMS_LIBRARIES}
 )
 
-set(kwin_WAYLAND_LIBS
-    ${WAYLAND_CLIENT_LIBRARIES}
-    ${WAYLAND_EGL_LIBRARIES}
-    ${XCB_SHM_LIBRARIES}
-    ${XCB_XTEST_LIBRARIES}
-)
-
 set(kwin_OPENGL_LIBS )
 
 find_library(XF86VM_LIBRARY Xxf86vm)
@@ -255,10 +240,6 @@ set(kwinLibs
     ${kwin_XCB_LIBS}
     ${kwin_OPENGL_LIBS}
 )
-
-if(WAYLAND_FOUND  AND KWIN_HAVE_EGL)
-    set(kwinLibs ${kwinLibs} ${kwin_WAYLAND_LIBS})
-endif()
 
 kde4_add_kdeinit_executable( kwin ${kwin_KDEINIT_SRCS})
 
