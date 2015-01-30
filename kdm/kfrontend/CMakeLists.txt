@@ -5,7 +5,6 @@ add_subdirectory( pics )
 add_subdirectory( sessions )
 
 include_directories(
-	${CMAKE_CURRENT_SOURCE_DIR}/../kcm/background
 	${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kdm
 	${QIMAGEBLITZ_INCLUDES}
 )
@@ -87,11 +86,6 @@ macro_add_compile_flags(kdm_config -U_REENTRANT)
 target_link_libraries(kdm_config ${SOCKET_LIBRARIES} ${RESOLV_LIBRARIES} ${POSIX4_LIBRARIES})
 add_dependencies(kdm_config ConfigCi)
 install(TARGETS kdm_config DESTINATION ${LIBEXEC_INSTALL_DIR})
-
-set(krootimage_SRCS krootimage.cpp krootimage.h ${backgroundlib_SRCS})
-kde4_add_executable(krootimage ${krootimage_SRCS})
-target_link_libraries(krootimage ${KDE4_KDEUI_LIBS} ${X11_X11_LIB} ${QIMAGEBLITZ_LIBRARIES})
-install(TARGETS krootimage DESTINATION ${LIBEXEC_INSTALL_DIR})
 
 set(genkdmconf_SRCS genkdmconf.c)
 macro_add_file_dependencies(genkdmconf.c ${confci})

@@ -25,9 +25,7 @@
 
 #include <config-workspace.h>
 
-#include "background.h"
 #include "kdm-gen.h"
-#include "kdm-dlg.h"
 #include "kdm-users.h"
 #include "kdm-shut.h"
 #include "kdm-conv.h"
@@ -133,10 +131,6 @@ KDModule::KDModule(QWidget *parent, const QVariantList &)
         "the Login Manager's look, and which language it should use. "
         "The language settings made here have no influence on "
         "the user's language settings."
-        "<h2>Dialog</h2>Here you can configure the look of the \"classical\" "
-        "dialog based mode if you have chosen to use it. "
-        "<h2>Background</h2>If you want to set a special background for the dialog-based "
-        "login screen, this is where to do it."
         "<h2>Themes</h2> Here you can specify the theme to be used by the Login Manager."
         "<h2>Shutdown</h2> Here you can specify who is allowed to shutdown/reboot the machine "
         "and whether a boot manager should be used."
@@ -211,38 +205,9 @@ KDModule::KDModule(QWidget *parent, const QVariantList &)
     general = new KDMGeneralWidget(this);
     tab->addTab(general, i18n("&General"));
     connect(general, SIGNAL(changed()), SLOT(changed()));
-    connect(general, SIGNAL(useThemeChanged(bool)),
-            SLOT(slotUseThemeChanged(bool)));
-
-    dialog_stack = new QStackedWidget(this);
-    tab->addTab(dialog_stack, i18n("&Dialog"));
-    dialog = new KDMDialogWidget(dialog_stack);
-    dialog_stack->addWidget(dialog);
-    connect(dialog, SIGNAL(changed()), SLOT(changed()));
-    QLabel *lbl = new QLabel(
-        i18n("There is no login dialog window in themed mode."),
-        dialog_stack);
-    lbl->setAlignment(Qt::AlignCenter);
-    dialog_stack->addWidget(lbl);
-
-    background_stack = new QStackedWidget(this);
-    tab->addTab(background_stack, i18n("&Background"));
-    background = new KBackground(createBackgroundTempConfig(), background_stack);
-    background_stack->addWidget(background);
-    connect(background, SIGNAL(changed()), SLOT(changed()));
-    lbl = new QLabel(
-        i18n("The background cannot be configured separately in themed mode."),
-        background_stack);
-    lbl->setAlignment(Qt::AlignCenter);
-    background_stack->addWidget(lbl);
 
     theme_stack = new QStackedWidget(this);
     tab->addTab(theme_stack, i18n("&Theme"));
-    lbl = new QLabel(
-        i18n("Themed mode is disabled. See \"General\" tab."),
-        theme_stack);
-    lbl->setAlignment(Qt::AlignCenter);
-    theme_stack->addWidget(lbl);
     theme = new KDMThemeWidget(theme_stack);
     theme_stack->addWidget(theme);
     connect(theme, SIGNAL(changed()), SLOT(changed()));
@@ -293,39 +258,15 @@ KConfig *KDModule::createTempConfig()
     return pTempConfig;
 }
 
-KSharedConfigPtr KDModule::createBackgroundTempConfig()
-{
-    pBackgroundTempConfigFile = new KTemporaryFile;
-    pBackgroundTempConfigFile->open();
-    QString tempBackgroundConfigName = pBackgroundTempConfigFile->fileName();
-
-    QString systemBackgroundConfigName =
-        config->group("X-*-Greeter").readEntry(
-            "BackgroundCfg", KDE_CONFDIR "/kdm/backgroundrc");
-
-    KConfig systemBackgroundConfig(systemBackgroundConfigName, KConfig::SimpleConfig);
-    KSharedConfigPtr pTempConfig = KSharedConfig::openConfig(tempBackgroundConfigName);
-    systemBackgroundConfig.copyTo(tempBackgroundConfigName, pTempConfig.data());
-    pTempConfig->sync();
-
-    QFile::setPermissions(tempBackgroundConfigName,
-                          pBackgroundTempConfigFile->permissions() | QFile::ReadOther);
-
-    return pTempConfig;
-}
-
 KDModule::~KDModule()
 {
     delete config;
-    delete pBackgroundTempConfigFile;
     delete pTempConfigFile;
 }
 
 void KDModule::load()
 {
     general->load();
-    dialog->load();
-    background->load();
     theme->load();
     users->load();
     sessions->load();
@@ -339,8 +280,6 @@ void KDModule::load()
 void KDModule::save()
 {
     general->save();
-    dialog->save();
-    background->save();
     theme->save();
     users->save();
     sessions->save();
@@ -349,7 +288,6 @@ void KDModule::save()
 
     QVariantMap helperargs;
     helperargs["tempkdmrcfile"] = config->name();
-    helperargs["tempbackgroundrcfile"] = pBackgroundTempConfigFile->fileName();
 
     KAuth::Action *pAction = authAction();
     pAction->setArguments(helperargs);
@@ -361,17 +299,6 @@ void KDModule::save()
             i18n("Unable to install new kdmrc file from\n%1",
                  config->name()));
         break;
-    case Helper::BackgroundrcInstallError:
-        KMessageBox::error(this,
-            i18n("Unable to install new backgroundrc file from\n%1",
-                 pBackgroundTempConfigFile->fileName()));
-        break;
-    case Helper::KdmrcInstallError | Helper::BackgroundrcInstallError:
-        KMessageBox::error(this,
-            i18n("Unable to install new kdmrc file from\n%1"
-                 "\nand new backgroundrc file from\n%2",
-                 config->name(), pBackgroundTempConfigFile->fileName()));
-        break;
     }
 
     emit changed(false);
@@ -380,8 +307,6 @@ void KDModule::save()
 void KDModule::defaults()
 {
     general->defaults();
-    dialog->defaults();
-    background->defaults();
     theme->defaults();
     users->defaults();
     sessions->defaults();
@@ -452,13 +377,6 @@ void KDModule::slotMinMaxUID(int min, int max)
     }
     minshowuid = min;
     maxshowuid = max;
-}
-
-void KDModule::slotUseThemeChanged(bool use)
-{
-    dialog_stack->setCurrentIndex(use);
-    background_stack->setCurrentIndex(use);
-    theme_stack->setCurrentIndex(use);
 }
 
 #include "main.moc"

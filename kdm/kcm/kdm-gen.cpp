@@ -67,15 +67,6 @@ KDMGeneralWidget::KDMGeneralWidget(QWidget *parent)
 
     fl = new QFormLayout(box);
 
-    useThemeCheck = new QCheckBox(i18n("&Use themed greeter\n(Warning: poor accessibility)"), box);
-    connect(useThemeCheck, SIGNAL(toggled(bool)), SLOT(slotUseThemeChanged()));
-    useThemeCheck->setWhatsThis(i18n(
-        "Enable this if you would like to use a themed Login Manager.<br>"
-        "Note that the themed greeter is challenged accessibility-wise (keyboard usage), "
-        "and themes may lack support for features like a user list or alternative "
-        "authentication methods."));
-    fl->addRow(useThemeCheck);
-
     guicombo = new KBackedComboBox(box);
     guicombo->insertItem("", i18n("<placeholder>default</placeholder>"));
     loadGuiStyles(guicombo);
@@ -182,7 +173,6 @@ void KDMGeneralWidget::save()
 {
     KConfigGroup configGrp = config->group("X-*-Greeter");
 
-    configGrp.writeEntry("UseTheme", useThemeCheck->isChecked());
     configGrp.writeEntry("GUIStyle", guicombo->currentId());
     configGrp.writeEntry("ColorScheme", colcombo->currentId());
     configGrp.writeEntry("Language", langcombo->current());
@@ -198,8 +188,6 @@ void KDMGeneralWidget::load()
     set_def();
 
     KConfigGroup configGrp = config->group("X-*-Greeter");
-
-    useThemeCheck->setChecked(configGrp.readEntry("UseTheme", false));
 
     // Check the GUI type
     guicombo->setCurrentId(configGrp.readEntry("GUIStyle"));
@@ -224,7 +212,6 @@ void KDMGeneralWidget::load()
 
 void KDMGeneralWidget::defaults()
 {
-    useThemeCheck->setChecked(true);
     guicombo->setCurrentId("");
     colcombo->setCurrentId("");
     langcombo->setCurrentItem("en_US");
@@ -232,13 +219,5 @@ void KDMGeneralWidget::defaults()
     aacb->setChecked(false);
 }
 
-void KDMGeneralWidget::slotUseThemeChanged()
-{
-    bool en = useThemeCheck->isChecked();
-    failFontChooser->setEnabled(!en);
-    greetingFontChooser->setEnabled(!en);
-    emit useThemeChanged(en);
-    emit changed();
-}
 
 #include "kdm-gen.moc"

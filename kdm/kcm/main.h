@@ -30,12 +30,10 @@
 #include <QMap>
 
 class KDMGeneralWidget;
-class KDMDialogWidget;
 class KDMThemeWidget;
 class KDMSessionsWidget;
 class KDMUsersWidget;
 class KDMConvenienceWidget;
-class KBackground;
 class KConfig;
 class KTemporaryFile;
 
@@ -55,7 +53,6 @@ class KDModule : public KCModule {
 
   public Q_SLOTS:
     void slotMinMaxUID(int min, int max);
-    void slotUseThemeChanged(bool use);
 
   Q_SIGNALS:
     void clearUsers();
@@ -66,14 +63,10 @@ class KDModule : public KCModule {
     QTabWidget *tab;
 
     KDMGeneralWidget *general;
-    KDMDialogWidget *dialog;
-    KBackground *background;
     KDMThemeWidget *theme;
     KDMSessionsWidget *sessions;
     KDMUsersWidget *users;
     KDMConvenienceWidget *convenience;
-    QStackedWidget *dialog_stack;
-    QStackedWidget *background_stack;
     QStackedWidget *theme_stack;
 
     QMap<QString, QPair<int, QStringList> > usermap;
@@ -84,10 +77,8 @@ class KDModule : public KCModule {
     void propagateUsers();
 
     KTemporaryFile *pTempConfigFile;
-    KTemporaryFile *pBackgroundTempConfigFile;
 
     KConfig *createTempConfig();
-    KSharedConfigPtr createBackgroundTempConfig();
 };
 
 #endif

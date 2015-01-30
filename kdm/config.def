@@ -489,9 +489,8 @@ from an automatic login; otherwise, no arguments are passed to them.
 <para>
 The <filename>Xsetup</filename> program is run after the &X-Server; is
 started or reset, but before the greeter is offered.
-This is the place to change the root background (if
-<option>UseBackground</option> is disabled) or bring up other windows that
-should appear on the screen along with the greeter. Resources for this
+This is the place to change the root background (if bring up other windows
+that should appear on the screen along with the greeter. Resources for this
 program can be put into the file named by <option>Resources</option>.
 </para>
 
@@ -2412,33 +2411,6 @@ Description:
  If this is true, the entered password is echoed as bullets. Otherwise,
  no feedback is given at all.
 
-Key: UseBackground
-Type: bool
-Default: true
-User: greeter
-Instance: #*/!
-Comment:
- If true, krootimage will be automatically started by &kdm;; otherwise, the
- Setup script should be used to setup the background.
-Description:
- If enabled, &kdm; will automatically start the <command>krootimage</command>
- program to set up the background; otherwise, the <option>Setup</option>
- program is responsible for the background.
-
-Key: BackgroundCfg
-Type: string
-Default: *KDMCONF "/backgroundrc"
-User: greeter-c
-Instance: #*/""
-Update: handleBgCfg
-Comment:
- The configuration file to be used by krootimage.
-Description:
- The configuration file to be used by <command>krootimage</command>.
- It contains a section named <literal>[Desktop0]</literal> like
- <filename>kdesktoprc</filename> does. Its options are not described
- herein; guess their meanings or use the control center.
-
 Key: GrabInput
 Type: enum
  Never/GRAB_NEVER: never grab
@@ -2476,10 +2448,6 @@ Description:
  for the duration of the name/password reading. When disabled, the &X-Server;
  is ungrabbed after the input grabs succeed; otherwise, the &X-Server; is
  grabbed until just before the session begins.
- </para>
- <note><para>Enabling this option disables <option>UseBackground</option> and
- <option>Setup</option>.</para></note>
- <para>
 
 Key: GrabTimeout
 Type: int

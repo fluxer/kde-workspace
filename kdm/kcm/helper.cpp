@@ -129,18 +129,13 @@ ActionReply Helper::createReply(int code, const QVariantMap *returnData)
 ActionReply Helper::save(const QVariantMap &args)
 {
     QString tempConfigName = args.value("tempkdmrcfile").toString();
-    QString tempBackgroundConfigName = args.value("tempbackgroundrcfile").toString();
 
     QString systemConfigName = QString::fromLatin1(KDE_CONFDIR "/kdm/kdmrc");
-    QString systemBackgroundConfigName = KConfig(systemConfigName, KConfig::SimpleConfig)
-            .group("X-*-Greeter").readEntry("BackgroundCfg", KDE_CONFDIR "/kdm/backgroundrc");
 
     int code = 0;
 
     if (!secureCopy(tempConfigName, systemConfigName))
         code |= KdmrcInstallError;
-    if (!secureCopy(tempBackgroundConfigName, systemBackgroundConfigName))
-        code |= BackgroundrcInstallError;
 
     return createReply(code);
 }

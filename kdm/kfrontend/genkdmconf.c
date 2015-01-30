@@ -788,26 +788,6 @@ static const char def_session2[] =
 "esac\n"
 "exec xmessage -center -buttons OK:0 -default OK \"Sorry, cannot execute $session. Check $DESKTOP_SESSION.desktop.\"\n";
 
-static const char def_background[] =
-"[Desktop0]\n"
-"BackgroundMode=Flat\n"
-"BlendBalance=100\n"
-"BlendMode=NoBlending\n"
-"ChangeInterval=60\n"
-"Color1=0,0,200\n"
-"Color2=192,192,192\n"
-"CurrentWallpaper=0\n"
-"LastChange=0\n"
-"MinOptimizationDepth=1\n"
-"MultiWallpaperMode=NoMulti\n"
-"Pattern=fish\n"
-"Program=\n"
-"ReverseBlending=false\n"
-"UseSHM=false\n"
-"Wallpaper=stripes.png\n"
-"WallpaperList=\n"
-"WallpaperMode=Scaled\n";
-
 /* Create a copy of a file under KDMCONF and fill it */
 static void
 writeCopy(const char *fn, int mode, time_t stamp, const char *buf, size_t len)
@@ -1094,25 +1074,6 @@ writeFile(const char *tname, int mode, const char *cont)
     fputs_(cont, f);
     fclose_(f);
     addedFile(tname);
-}
-
-
-static void
-handleBgCfg(Entry *ce, Section *cs)
-{
-    if (!ce->active) { /* can be only the X-*-Greeter one */
-        writeFile(def_BackgroundCfg, 0644, def_background);
-#if 0 /* risk of kcontrol clobbering the original file */
-    } else if (old_confs) {
-        linkFile(ce);
-#endif
-    } else {
-        if (!copyFile(ce, 0644, 0)) {
-            if (!strcmp(cs->name, "X-*-Greeter"))
-                writeFile(def_BackgroundCfg, 0644, def_background);
-            ce->active = False;
-        }
-    }
 }
 
 
@@ -1788,11 +1749,6 @@ delstr(File *fil, const char *pat)
     return False;
 }
 
-/* XXX
-   the UseBackground voodoo will horribly fail, if multiple sections link
-   to the same Xsetup file
-*/
-
 static int mod_usebg;
 
 static int
@@ -1813,7 +1769,6 @@ edit_setup(File *file)
                "kdmdesktop\t&\n") |
         delstr(file, "\n"
                "kdmdesktop\n");
-    putVal("UseBackground", chg ? "true" : "false");
     return chg;
 }
 
@@ -1822,8 +1777,6 @@ mk_setup(Entry *ce, Section *cs)
 {
     setSect(reSect(cs->name, "Greeter"));
     if (old_scripts || mixed_scripts) {
-        if (mod_usebg && *ce->value)
-            putVal("UseBackground", "false");
         linkFile(ce);
     } else {
         if (ce->active && inNewDir(ce->value)) {
@@ -2591,12 +2544,6 @@ applyDefs(FDefs *chgdef, int ndefs, const char *path)
         }
 }
 
-static int
-if_usebg (void)
-{
-    return isTrue(getFqVal("X-*-Greeter", "UseBackground", "true"));
-}
-
 static FDefs kdmdefs_all[] = {
 #ifdef XDMCP
 { "Xdmcp", "Xaccess", "%s/kdm/Xaccess", 0 },
@@ -2606,7 +2553,6 @@ static FDefs kdmdefs_all[] = {
 { "X-*-Core", "Startup", "", 0 },
 { "X-*-Core", "Reset", "", 0 },
 { "X-*-Core", "Session", XBINDIR "/xterm -ls -T", 0 },
-{ "X-*-Greeter", "BackgroundCfg", "%s/kdm/backgroundrc", if_usebg },
 };
 
 typedef struct KUpdEnt {

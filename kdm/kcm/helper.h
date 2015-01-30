@@ -31,13 +31,12 @@ class Helper : public QObject {
 public:
     enum {
         KdmrcInstallError          = 1 << 0,
-        BackgroundrcInstallError   = 1 << 1,
-        CreateFacesDirError        = 1 << 2,
-        RemoveFaceError            = 1 << 3,
-        InstallFaceError           = 1 << 4,
-        CreateThemesDirError       = 1 << 5,
-        RemoveThemesError          = 1 << 6,
-        InstallThemesError         = 1 << 7
+        CreateFacesDirError        = 1 << 1,
+        RemoveFaceError            = 1 << 2,
+        InstallFaceError           = 1 << 3,
+        CreateThemesDirError       = 1 << 4,
+        RemoveThemesError          = 1 << 5,
+        InstallThemesError         = 1 << 6
     };
 
     enum { CreateFacesDir, RemoveFace, InstallFace };

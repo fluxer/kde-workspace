@@ -1,23 +1,7 @@
-add_subdirectory( background )
-
 include_directories( ${QIMAGEBLITZ_INCLUDES} )
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/background/  )
 
-set(kcmbackgroundlib_SRCS
-    background/bgdialog.cpp
-    background/bgadvanced.cpp
-    background/bgmonitor.cpp
-    background/bgwallpaper.cpp
-)
-kde4_add_ui_files(kcmbackgroundlib_SRCS
-    background/bgwallpaper_ui.ui
-    background/bgdialog_ui.ui
-    background/bgadvanced_ui.ui)
-
-set(kcm_kdm_PART_SRCS ${kcmbackgroundlib_SRCS} ${backgroundlib_SRCS}
-   background.cpp
+set(kcm_kdm_PART_SRCS
    kdm-gen.cpp
-   kdm-dlg.cpp
    kdm-theme.cpp
    kdm-shut.cpp
    kdm-users.cpp

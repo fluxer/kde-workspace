@@ -372,7 +372,7 @@ main(int argc ATTR_UNUSED, char **argv)
     }
 
     KdmThemer *themer;
-    if (_useTheme && !_theme.isEmpty()) {
+    if (!_theme.isEmpty()) {
         QMap<QString, bool> showTypes;
         // "config" not implemented
 #ifdef XDMCP
@@ -399,12 +399,6 @@ main(int argc ATTR_UNUSED, char **argv)
     secureDisplay(dpy);
     KProcess *proc = 0;
     if (!_grabServer) {
-        if (_useBackground && !themer) {
-            proc = new KProcess;
-            *proc << QByteArray(argv[0], strrchr(argv[0], '/') - argv[0] + 1) + "krootimage";
-            *proc << _backgroundCfg;
-            proc->start();
-        }
         gSendInt(G_SetupDpy);
         gRecvInt();
     }
