@@ -144,8 +144,6 @@ KDModule::KDModule(QWidget *parent, const QVariantList &)
 
     setlocale(LC_COLLATE, "C");
 
-    KGlobal::locale()->insertCatalog("kcmbackground");
-
     QStringList sl;
     QMap<gid_t, QStringList> tgmap;
     QMap<gid_t, QStringList>::Iterator tgmapi;
