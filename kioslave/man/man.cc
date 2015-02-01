@@ -60,7 +60,7 @@ void ManProtocol::get( const KUrl& url )
        return;
     };
 
-    // some people write info://autoconf instead of info:/autoconf
+    // some people write man://autoconf instead of man:/autoconf
     if (!url.host().isEmpty()) {
         KUrl newURl(url);
         newURl.setPath(url.host()+url.path());
@@ -162,12 +162,16 @@ void ManProtocol::decodePath( QString path )
 {
     kDebug( 7107 ) << "ManProtocol::decodePath(-" <<path<<"-)";
 
-    m_page = "dir";  //default
+    m_page = "man";  // default
 
     // remove leading slash
     if ('/' == path[0]) {
       path = path.mid( 1 );
     }
+
+    // remove trailing section and compression
+    path.replace(QRegExp(".[1-9](.gz|.bz2|.xz)?$"), "");
+
     kDebug( 7107 ) << "Path: " << path;
 
     int slashPos = path.indexOf( "/" );

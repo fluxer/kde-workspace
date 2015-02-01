@@ -2,16 +2,33 @@
 
 if [ -z "$1" ];then
     exit 1
-elif ! type -p zcat || ! type -groff ;then
+elif ! type -p zcat &>/dev/null || ! type -p groff &>/dev/null;then
     exit 2
 fi
 
-# FIXME: strip sectoion (e.g. .1) and extension (e.g. .gz)
+header='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta name="generator" content="kde-man2html">
+<meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
+<meta name="Content-Style" content="text/css">
+<style type="text/css">
+       p       { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       pre     { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       table   { margin-top: 0; margin-bottom: 0; vertical-align: top }
+       h1      { text-align: center }
+</style>
+<title>KDE-MAN2HTML</title>
+
+</head>
+<body>
+'
 base="$(basename "$1")"
-page="$(man -w "${base}")"
+page="$(man -w "$base" 2>/dev/null)"
 
 if [ -z "$page" ];then
-    # FIXME: print nice message that it is not found
+    echo "$header <p>Manual page for <b>$base</b> not found."
     exit 3
 fi
 
