@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ -z "$1" ];then
+    exit 1
+elif ! type -p zcat || ! type -groff ;then
+    exit 2
+fi
+
+# FIXME: strip sectoion (e.g. .1) and extension (e.g. .gz)
+base="$(basename "$1")"
+page="$(man -w "${base}")"
+
+if [ -z "$page" ];then
+    # FIXME: print nice message that it is not found
+    exit 3
+fi
+
+zcat "$page" | groff -mandoc -c -Thtml 2>/dev/null
+
+exit 0;

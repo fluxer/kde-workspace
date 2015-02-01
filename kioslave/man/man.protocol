@@ -1,0 +1,11 @@
+[Protocol]
+exec=kio_man
+protocol=man
+input=none
+output=filesystem
+reading=true
+defaultMimetype=text/html
+determineMimetypeFromExtension=false
+X-DocPath=kioslave/man/index.html
+Icon=help-contents
+Class=:local
