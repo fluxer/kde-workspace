@@ -80,7 +80,6 @@ class KWinbindGreeter : public QObject, public KGreeterPlugin {
     KComboBox *domainCombo;
     KLineEdit *loginEdit;
     KLineEdit *passwdEdit, *passwd1Edit, *passwd2Edit;
-    KSimpleConfig *stsFile;
     QString fixedDomain, fixedUser, curUser;
     QStringList allUsers;
     KProcess* m_domainLister;
