@@ -154,4 +154,5 @@ int main( int argc, char* argv[] )
         for (int i = 1; i < number_of_screens; i++)
             kill(cpid[i], SIGTERM);
         }
+    free(cpid);
     }

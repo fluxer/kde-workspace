@@ -50,7 +50,7 @@ SplashApp::SplashApp(Display * display, int &argc, char ** argv)
     if (m_testing) {
         m_timer.start(TEST_STEP_INTERVAL, this);
     }
-    
+
     connect(m_desktop, SIGNAL(screenCountChanged(int)), this, SLOT(screenGeometryChanged(int)));
     connect(m_desktop, SIGNAL(workAreaResized(int)), this, SLOT(screenGeometryChanged(int)));
 }
@@ -78,11 +78,10 @@ void SplashApp::timerEvent(QTimerEvent * event)
 
 bool SplashApp::x11EventFilter(XEvent * xe)
 {
-    char * message;
     switch (xe->type) {
         case ClientMessage:
             if (xe->xclient.message_type == m_kde_splash_progress) {
-                message = xe->xclient.data.b;
+                char * message = xe->xclient.data.b;
 
                 int stage = -1;
 
