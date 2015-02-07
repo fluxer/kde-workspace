@@ -14,7 +14,6 @@ install(FILES
 	blackbox.desktop
 	cde.desktop
 	ctwm.desktop
-	cwwm.desktop
 	e16.desktop
     enlightenment.desktop
 	evilwm.desktop
