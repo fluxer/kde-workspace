@@ -9,7 +9,6 @@ install(FILES
 	aewm++.desktop
 	aewm.desktop
 	afterstep.desktop
-	amaterus.desktop
 	amiwm.desktop
 	asclassic.desktop
 	blackbox.desktop
