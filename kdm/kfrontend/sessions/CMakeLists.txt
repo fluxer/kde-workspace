@@ -17,7 +17,7 @@ install(FILES
 	ctwm.desktop
 	cwwm.desktop
 	e16.desktop
-        enlightenment.desktop
+    enlightenment.desktop
 	evilwm.desktop
 	fluxbox.desktop
 	flwm.desktop
@@ -35,7 +35,6 @@ install(FILES
 	olwm.desktop
 	openbox.desktop
 	oroborus.desktop
-	phluid.desktop
 	pwm.desktop
 	qvwm.desktop
 	ratpoison.desktop
