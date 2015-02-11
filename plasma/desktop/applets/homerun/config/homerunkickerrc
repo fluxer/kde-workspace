@@ -23,4 +23,4 @@ sourceId=FavoriteApps
 
 [Tab0][Source5]
 sourceId=Runner
-whitelist=bookmarks,nepomuksearch
+whitelist=bookmarks
