@@ -1,0 +1,695 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Yuri Chornoivan <yurchor@ukr.net>, 2012, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_applet_org.kde.homerun\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2014-04-26 01:50+0000\n"
+"PO-Revision-Date: 2014-04-26 09:07+0300\n"
+"Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
+"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Lokalize 1.5\n"
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Юрій Чорноіван"
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "yurchor@ukr.net"
+
+#: components/qml/ActionMenu.qml:75
+msgid "(Empty)"
+msgstr "(Порожньо)"
+
+#: components/sourceregistry.cpp:252
+#, kde-format
+msgid "Runner: %1"
+msgstr "Засіб запуску: %1"
+
+#: components/sourceregistry.cpp:274
+msgid "Installed Applications"
+msgstr "Встановлені програми"
+
+#: components/sourceregistry.cpp:275
+msgid "Browse installed applications by categories"
+msgstr "Перегляд встановлених програма за категоріями"
+
+#: components/sourceregistry.cpp:278
+msgid "All Installed Applications"
+msgstr "Всі встановлені програми"
+
+#: components/sourceregistry.cpp:279
+msgid "List all installed applications in a flat list, grouped by categories"
+msgstr ""
+"Показати звичайний список всіх встановлених програм, згрупований за "
+"категоріями"
+
+#: components/sourceregistry.cpp:282
+msgid "All Installed Applications With Filters"
+msgstr "Всі встановлені програми з фільтруванням"
+
+#: components/sourceregistry.cpp:283
+msgid "List all installed applications and filter via the sidebar"
+msgstr ""
+"Показати звичайний список всіх встановлених програм з фільтруванням за "
+"допомогою бічної панелі"
+
+#: components/sourceregistry.cpp:286
+#: components/sources/recentapps/recentappsmodel.cpp:290
+msgid "Recent Applications"
+msgstr "Недавні програми"
+
+#: components/sourceregistry.cpp:287
+msgid "List the most recently launched applications"
+msgstr "Список останніх запущених програм"
+
+#: components/sourceregistry.cpp:290
+msgid "Folder"
+msgstr "Тека"
+
+#: components/sourceregistry.cpp:291
+msgid "List the content of a folder and let you browse into sub-folders"
+msgstr "Показати вміст теки з можливістю перегляду вмісту підтек"
+
+#: components/sourceregistry.cpp:294
+#: components/sources/favorites/favoriteplacesmodel.cpp:139
+msgid "Favorite Places"
+msgstr "Улюблені місця"
+
+#: components/sourceregistry.cpp:295
+msgid "Browse the content of your favorite places"
+msgstr "Переглянути вміст вибраних місць"
+
+#: components/sourceregistry.cpp:298
+#: components/sources/favorites/favoriteappsmodel.cpp:234
+msgid "Favorite Applications"
+msgstr "Улюблені програми"
+
+#: components/sourceregistry.cpp:299
+msgid "List applications marked as favorite"
+msgstr "Показати список улюблених програм"
+
+#: components/sourceregistry.cpp:302
+msgid "Power Management"
+msgstr "Керування живленням"
+
+#: components/sourceregistry.cpp:303
+msgid "Provide buttons to suspend, hibernate, reboot or halt your computer"
+msgstr ""
+"Кнопки для призупинення роботи, присипляння, перезавантаження та вимикання "
+"вашого комп’ютера"
+
+#: components/sourceregistry.cpp:306
+#: components/sources/session/sessionmodel.cpp:98
+msgid "Session"
+msgstr "Сеанс"
+
+#: components/sourceregistry.cpp:307
+msgid "Provide buttons to lock the screen, log out, or switch to another user"
+msgstr ""
+"Кнопки для блокування екрана, виходу з облікового запису або перемикання на "
+"обліковий запис іншого користувача"
+
+#: components/sourceregistry.cpp:310
+#: components/sources/session/openedsessionsmodel.cpp:67
+msgid "Opened Sessions"
+msgstr "Відкриті сеанси"
+
+#: components/sourceregistry.cpp:311
+msgid "Provide buttons to switch to opened sessions"
+msgstr "Кнопки для перемикання на відкриті сеанси"
+
+#: components/sourceregistry.cpp:314
+#: components/sources/power/combinedpowersessionmodel.cpp:307
+msgid "Power / Session"
+msgstr "Живлення/Сеанс"
+
+#: components/sourceregistry.cpp:315
+msgid ""
+"Provide buttons to manage your workspace session and the power state of your "
+"computer"
+msgstr ""
+"Надає кнопки для керування сеансом робочого простору та стану живлення "
+"вашого комп’ютера"
+
+#: components/sourceregistry.cpp:318
+msgid "KRunner"
+msgstr "KRunner"
+
+#: components/sourceregistry.cpp:319
+msgid "Perform searchs using a selection of runners"
+msgstr "Виконати пошук за допомогою вибраних засобів"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: components/sources/dir/dirconfigurationwidget.ui:32
+msgid "Folder to show:"
+msgstr "Показана тека:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/dir/dirconfigurationwidget.ui:52
+msgid "Title:"
+msgstr "Заголовок:"
+
+#. i18n: ectx: property (text), widget (QLabel, titleHelpLabel)
+#: components/sources/dir/dirconfigurationwidget.ui:68
+msgid "If title is left empty, the folder name will be used"
+msgstr "Якщо заголовок не буде вказано, буде використано назву теки."
+
+#: components/sources/favorites/fileplacesmodel.cpp:124
+msgctxt "KFile System Bookmarks"
+msgid "Home"
+msgstr "Домівка"
+
+#: components/sources/favorites/fileplacesmodel.cpp:127
+msgctxt "KFile System Bookmarks"
+msgid "Network"
+msgstr "Мережа"
+
+#: components/sources/favorites/fileplacesmodel.cpp:139
+msgctxt "KFile System Bookmarks"
+msgid "Root"
+msgstr "Корінь"
+
+#: components/sources/favorites/fileplacesmodel.cpp:143
+msgctxt "KFile System Bookmarks"
+msgid "Trash"
+msgstr "Смітник"
+
+#: components/sources/favorites/fileplacesmodel.cpp:758
+#, kde-format
+msgid "&Release '%1'"
+msgstr "&Роз’єднати «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:760
+#, kde-format
+msgid "&Safely Remove '%1'"
+msgstr "&Безпечно вилучити «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:763
+#, kde-format
+msgid "&Unmount '%1'"
+msgstr "Демон&тувати «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:784
+#, kde-format
+msgid "&Eject '%1'"
+msgstr "Ви&штовхнути «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:818
+#, kde-format
+msgid "The device '%1' is not a disk and cannot be ejected."
+msgstr "Пристрій «%1» не є дисковим, його не можна виштовхнути."
+
+#: components/sources/favorites/fileplacesmodel.cpp:854
+#, kde-format
+msgid "An error occurred while accessing '%1', the system responded: %2"
+msgstr ""
+"Під час спроби доступу до «%1» трапилася помилка, повідомлення системи: %2"
+
+#: components/sources/favorites/fileplacesmodel.cpp:858
+#, kde-format
+msgid "An error occurred while accessing '%1'"
+msgstr "Під час спроби доступу до «%1» сталася помилка"
+
+#: components/sources/installedapps/installedappsconfigurationwidget.cpp:133
+#: components/sources/installedapps/installedappsmodel.cpp:332
+msgid "All Applications"
+msgstr "Всі програми"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/installedapps/installedappsconfigurationwidget.ui:17
+msgid "Pick the application folder to display:"
+msgstr "Вкажіть теку програм, вміст якої слід показати:"
+
+#: components/sources/installedapps/installedappsmodel.cpp:258
+#: components/sources/installedapps/installedappsmodel.cpp:269
+#: components/sources/recentapps/recentappsmodel.cpp:121
+#: components/sources/recentapps/recentappsmodel.cpp:132
+msgid "Add to Desktop"
+msgstr "Додати на стільницю"
+
+#: components/sources/installedapps/installedappsmodel.cpp:262
+#: components/sources/installedapps/installedappsmodel.cpp:273
+#: components/sources/recentapps/recentappsmodel.cpp:125
+#: components/sources/recentapps/recentappsmodel.cpp:136
+msgid "Add to Panel"
+msgstr "Додати на панель"
+
+#: components/sources/installedapps/installedappsmodel.cpp:293
+#: components/sources/recentapps/recentappsmodel.cpp:154
+msgid "Add as Launcher"
+msgstr "Додати як кнопку запуску"
+
+#: components/sources/installedapps/installedappsmodel.cpp:437
+msgid "Applications"
+msgstr "Програми"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:241
+msgid "Remove from Sidebar"
+msgstr "Вилучити з бічної панелі"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:245
+msgid "Add to Sidebar"
+msgstr "Додати на бічну панель"
+
+#: components/sources/power/powermodel.cpp:43
+msgid "Power"
+msgstr "Живлення"
+
+#: components/sources/power/powermodel.cpp:47
+msgctxt "an action"
+msgid "Suspend"
+msgstr "Призупинити"
+
+#: components/sources/power/powermodel.cpp:53
+msgctxt "an action"
+msgid "Hibernate"
+msgstr "Приспати"
+
+#: components/sources/power/powermodel.cpp:59
+msgctxt "an action"
+msgid "Restart"
+msgstr "Перезапустити"
+
+#: components/sources/power/powermodel.cpp:64
+msgctxt "an action"
+msgid "Shutdown"
+msgstr "Вимкнути"
+
+#: components/sources/recentapps/recentappsmodel.cpp:112
+msgid "Forget Application"
+msgstr "Забути про програму"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/runners/runnerconfigurationwidget.ui:17
+msgid "Pick the runners you would like to use in this source:"
+msgstr "Виберіть кнопки запуску, які слід використати у цьому джерелі:"
+
+#: components/sources/session/sessionmodel.cpp:50
+msgctxt "an action"
+msgid "Lock"
+msgstr "Заблокувати"
+
+#: components/sources/session/sessionmodel.cpp:65
+msgctxt "an action"
+msgid "New Session"
+msgstr "Новий сеанс"
+
+#: components/sources/session/sessionmodel.cpp:85
+msgctxt "an action"
+msgid "Logout"
+msgstr "Вийти"
+
+#: devdoc/helloworld/helloworld.cpp:47
+msgid "Hello"
+msgstr "Привіт"
+
+#: devdoc/helloworld/helloworld.cpp:52
+msgid "World"
+msgstr "Світ"
+
+#: devdoc/helloworld/helloworld.cpp:67
+msgid "Hello World"
+msgstr "Привіт, світе"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/applet/generalconfigpage.ui:17
+msgid "Icon:"
+msgstr "Піктограма:"
+
+#: fullscreen/applet/homerunlauncher.cpp:60
+#: kicker/package/contents/ui/main.qml:571
+msgid "Edit Applications..."
+msgstr "Змінити список програм…"
+
+#: fullscreen/applet/homerunlauncher.cpp:143
+msgid "General"
+msgstr "Загальне"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/package/contents/ui/config.ui:17
+msgid "Text Color:"
+msgstr "Колір тексту:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: fullscreen/package/contents/ui/config.ui:30
+msgid "Text Shadow:"
+msgstr "Тінь тексту:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeNone)
+#: fullscreen/package/contents/ui/config.ui:40
+msgid "None"
+msgstr "Немає"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeAuto)
+#: fullscreen/package/contents/ui/config.ui:47
+msgid "Automatic"
+msgstr "Автоматично"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeCustom)
+#: fullscreen/package/contents/ui/config.ui:56
+msgid "Custom:"
+msgstr "Нетипове:"
+
+#: fullscreen/package/contents/ui/main.qml:101
+msgid "Go to previous tab"
+msgstr "Перейти до попередньої вкладки"
+
+#: fullscreen/package/contents/ui/main.qml:107
+msgid "Go to next tab"
+msgstr "Перейти до наступної вкладки"
+
+#: fullscreen/package/contents/ui/main.qml:113
+msgid "Focus search field"
+msgstr "Фокусувати поле пошуку"
+
+#: fullscreen/package/contents/ui/main.qml:119
+msgid "Go back"
+msgstr "Повернутися"
+
+#: fullscreen/package/contents/ui/main.qml:125
+msgid "Go forward"
+msgstr "Перейти вперед"
+
+#: fullscreen/package/contents/ui/main.qml:131
+msgid "Go up"
+msgstr "Перейти вгору"
+
+#: fullscreen/package/contents/ui/main.qml:156
+msgctxt "Used for tabs which have no name"
+msgid "<Untitled>"
+msgstr "<Без назви>"
+
+#: fullscreen/package/contents/ui/main.qml:241
+msgctxt "Button to leave configure mode"
+msgid "Done"
+msgstr "Виконано"
+
+#: fullscreen/package/contents/ui/main.qml:263
+msgid "Search in current tab..."
+msgstr "Шукати на поточній вкладці…"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "End Configure Tabs"
+msgstr "Завершити налаштовування"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "Configure Tabs"
+msgstr "Налаштувати вкладки"
+
+#: fullscreen/package/contents/ui/main.qml:308
+msgid "Configure Shortcuts..."
+msgstr "Налаштувати скорочення…"
+
+#: fullscreen/package/contents/ui/main.qml:312
+msgid "Show Action List Buttons"
+msgstr "Показувати кнопки у списку дій"
+
+#: fullscreen/package/contents/ui/main.qml:321
+msgid "Show Desktop Tool Box"
+msgstr "Показати кнопку керування стільницею"
+
+#: fullscreen/package/contents/ui/main.qml:332
+msgid "Restore Tabs to Default"
+msgstr "Відновлення типового стану вкладок"
+
+#: fullscreen/package/contents/ui/main.qml:335
+msgid ""
+"Are you sure you want to restore tabs?\n"
+"Restoring tabs will reset your configuration to the default Homerun tabs.\n"
+"Your lists of favorite applications and places will remain untouched."
+msgstr ""
+"Ви справді хочете відновити типовий стан вкладок.?\n"
+"Відновлення типового стану призведе до повернення до типових вкладок "
+"Homerun.\n"
+"Ваші списки улюблених програм і місць залишаться незмінними."
+
+#: fullscreen/package/contents/ui/main.qml:336
+#: fullscreen/package/contents/ui/main.qml:337
+msgid "Restore Tabs"
+msgstr "Відновити вкладки"
+
+#: fullscreen/package/contents/ui/main.qml:350
+#, kde-format
+msgid "About %1"
+msgstr "Про %1"
+
+#: fullscreen/package/contents/ui/Result.qml:149
+msgid "Drag to reorder; release to show menu"
+msgstr "Перетягніть, щоб змінити порядок. Відпустіть, щоб переглянути меню."
+
+#: fullscreen/package/contents/ui/Result.qml:151
+msgid "Release to show menu"
+msgstr "Відпустіть, щоб переглянути меню"
+
+#: fullscreen/package/contents/ui/Result.qml:153
+msgid "Drag to reorder"
+msgstr "Перетягніть, щоб змінити порядок"
+
+#: fullscreen/package/contents/ui/Result.qml:156
+msgid "This item has no menu and cannot be dragged"
+msgstr "У цього пункту немає меню, його не можна перетягувати."
+
+#: fullscreen/package/contents/ui/ResultsView.qml:192
+#: kicker/package/contents/ui/ItemListDelegate.qml:268
+#: kicker/package/contents/ui/SidebarItem.qml:122
+msgid "Remove from Favorites"
+msgstr "Вилучити з улюблених"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:196
+#: kicker/package/contents/ui/ItemListDelegate.qml:272
+#: kicker/package/contents/ui/SidebarItem.qml:126
+msgid "Add to Favorites"
+msgstr "Додати до улюблених"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:367
+#, kde-format
+msgid "%1 has been added to your favorites"
+msgstr "%1 було додано до списку улюблених"
+
+#: fullscreen/package/contents/ui/SourceItem.qml:55
+#, kde-format
+msgid "Broken source '%1'"
+msgstr "Помилкове джерело «%1»"
+
+#: fullscreen/package/contents/ui/TabContent.qml:86
+msgid "Tab Icon:"
+msgstr "Піктограма вкладки:"
+
+#: fullscreen/package/contents/ui/TabContent.qml:105
+msgid "Tab Label:"
+msgstr "Мітка вкладки:"
+
+#: fullscreen/viewer/main.cpp:41
+#, kde-format
+msgid ""
+"<p><b>Sorry, Homerun failed to load</b></p><p>Do you want to report this "
+"error?</p><p>If you decide to report it, please copy and paste the following "
+"output in your report:</p><pre>%1</pre>"
+msgstr ""
+"<p><b>Вибачте, не вдалося завантажити Homerun</b></p><p>Хочете повідомити "
+"розробникам про цю помилку?</p><p>Якщо ви вважаєте за потрібне створити "
+"відповідний звіт, будь ласка, скопіюйте і вставте до вашого звіту наведені "
+"нижче дані:</p><pre>%1</pre>"
+
+#: fullscreen/viewer/main.cpp:48
+msgid "Report Error"
+msgstr "Звітувати про помилку"
+
+#: fullscreen/viewer/main.cpp:65
+msgid "Log focused item (for debug purposes)"
+msgstr "Записати до журналу фокусований об’єкт (для діагностики)"
+
+#: fullscreen/viewer/main.cpp:66
+msgid "Use a plain window (for debug purposes)"
+msgstr "Використовувати звичайне вікно (для діагностики)"
+
+#: internal/aboutdata.cpp:41
+msgctxt "Program name"
+msgid "Homerun"
+msgstr "Homerun"
+
+#: internal/aboutdata.cpp:44
+msgid "(C) 2012-2014 Blue Systems"
+msgstr "© Blue Systems, 2012–2014"
+
+#: internal/aboutdata.cpp:47
+msgid "Shaun Reich"
+msgstr "Shaun Reich"
+
+#: internal/aboutdata.cpp:47 internal/aboutdata.cpp:48
+#: internal/aboutdata.cpp:49
+msgid "Developer"
+msgstr "Розробник"
+
+#: internal/aboutdata.cpp:48
+msgid "Aurélien Gâteau"
+msgstr "Aurélien Gâteau"
+
+#: internal/aboutdata.cpp:49
+msgid "Eike Hein"
+msgstr "Eike Hein"
+
+#: internal/i18nconfig.cpp:30
+msgctxt "Tab title"
+msgid "Home"
+msgstr "Домівка"
+
+#: internal/i18nconfig.cpp:31
+msgctxt "Tab title"
+msgid "Files"
+msgstr "Файли"
+
+#: internal/i18nconfig.cpp:32
+msgctxt "Tab title"
+msgid "Applications"
+msgstr "Програми"
+
+#: internal/i18nconfig.cpp:33
+msgctxt "Tab title"
+msgid "Power"
+msgstr "Живлення"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: kicker/package/contents/ui/config.ui:26
+msgid "Behavior"
+msgstr "Поведінка"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kicker/package/contents/ui/config.ui:33
+msgid "Search bookmarks and files:"
+msgstr "Пошук закладок та файлів:"
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_runnerSupport)
+#: kicker/package/contents/ui/config.ui:46
+msgid ""
+"If this option is enabled, search may display additional columns with search "
+"results powered by certain Plasma runner plugins, such as \"Bookmarks\" and "
+"\"Desktop Search\"."
+msgstr ""
+"Якщо позначено цей пункт, у результатах пошуку може бути показано додаткові "
+"стовпчики з даними, отриманими за допомогою додатків запуску Плазми, зокрема "
+"додатків «Закладки» та «Стільничний пошук»."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kicker/package/contents/ui/config.ui:62
+msgid "Appearance"
+msgstr "Вигляд"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kicker/package/contents/ui/config.ui:69
+msgid "Custom button image:"
+msgstr "Нетипове зображення на кнопці:"
+
+#. i18n: ectx: property (filter), widget (KUrlRequester, kcfg_buttonImage)
+#: kicker/package/contents/ui/config.ui:94
+msgid "*.jpg *.png *.xpm *.gif *.webp"
+msgstr "*.jpg *.png *.xpm *.gif *.webp"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kicker/package/contents/ui/config.ui:103
+msgid "Align contents to bottom:"
+msgstr "Вирівнювати вміст вниз:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kicker/package/contents/ui/config.ui:123
+msgid "Show applications as:"
+msgstr "Показ програм:"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:143
+msgid "Name only"
+msgstr "лише назви"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:148
+msgid "Description only"
+msgstr "лише описи"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:153
+msgid "Name (Description)"
+msgstr "назва (опис)"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:158
+msgid "Description (Name)"
+msgstr "опис (назва)"
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:191
+#, kde-format
+msgctxt "App name (Generic name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:193
+#, kde-format
+msgctxt "Generic Name (App name)"
+msgid "%1 (%2)"
+msgstr "%1 (%2)"
+
+#: kicker/package/contents/ui/main.qml:304
+msgid "Search..."
+msgstr "Шукати…"
+
+#: kicker/package/contents/ui/main.qml:504
+#: plugins/recentdocuments/recentdocuments.cpp:130
+msgid "Recent Documents"
+msgstr "Недавні документи"
+
+#: kicker/package/contents/ui/main.qml:567
+msgid "Homerun Kicker"
+msgstr "Меню Homerun"
+
+#: kicker/package/contents/ui/main.qml:568
+msgid "Launch applications and manage your desktop."
+msgstr "Запуск програм і керування вашою стільницею."
+
+#: lib/actionlist.cpp:75
+msgctxt "@action:inmenu"
+msgid "Empty Trash"
+msgstr "Спорожнити смітник"
+
+#: lib/actionlist.cpp:93
+msgid "Open with:"
+msgstr "Відкрити за допомогою:"
+
+#: lib/actionlist.cpp:105
+msgid "Properties"
+msgstr "Властивості"
+
+#: plugins/recentdocuments/recentdocuments.cpp:152
+msgid "Forget Document"
+msgstr "Забути документ"
+
+#~ msgid "Use Plasma runners for additional search results"
+#~ msgstr ""
+#~ "Використовувати засоби запуску Плазми для розширення кола результатів"
+
+#~ msgid "Show on screen <screen>"
+#~ msgstr "Показати на екрані <screen>"
+
+#~ msgid "Nightly build using source from: %1"
+#~ msgstr "Щоденна збірка з кодом з: %1"
+
+#~ msgctxt "an action"
+#~ msgid "Switch User"
+#~ msgstr "Перемкнути користувача"
+
+#~ msgid "Open"
+#~ msgstr "Відкрити"
+
+#~ msgid "Open folder in file manager"
+#~ msgstr "Відкрити теку у програмі для керування файлами"
+
+#~ msgid "Form"
+#~ msgstr "Форма"

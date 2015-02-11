@@ -1,0 +1,690 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Αντώνης Γέραλης <capoiosct@gmail.com>, 2012, 2013.
+# Dimitrios Glentadakis <dglent@gmail.com>, 2012.
+# Stelios <<sstavra@gmail.com>>, 2013.
+# Antonis Geralis <gaantonio@civil.auth.gr>, 2013, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2014-04-26 01:50+0000\n"
+"PO-Revision-Date: 2014-02-03 02:00+0200\n"
+"Last-Translator: Antonis Geralis <gaantonio@civil.auth.gr>\n"
+"Language-Team: Greek <kde-i18n-doc@kde.org>\n"
+"Language: el\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Αντώνης Γέραλης"
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "capoiosct@gmail.com"
+
+#: components/qml/ActionMenu.qml:75
+msgid "(Empty)"
+msgstr "(Άδειο)"
+
+#: components/sourceregistry.cpp:252
+#, kde-format
+msgid "Runner: %1"
+msgstr "Εκτελεστής: %1"
+
+#: components/sourceregistry.cpp:274
+msgid "Installed Applications"
+msgstr "Εγκατεστημένες εφαρμογές"
+
+#: components/sourceregistry.cpp:275
+msgid "Browse installed applications by categories"
+msgstr "Περιηγηθείτε στις εγκατεστημένες εφαρμογές με βάση τις κατηγορίες"
+
+#: components/sourceregistry.cpp:278
+msgid "All Installed Applications"
+msgstr "Όλες οι εγκατεστημένες εφαρμογές"
+
+#: components/sourceregistry.cpp:279
+msgid "List all installed applications in a flat list, grouped by categories"
+msgstr ""
+"Εμφανίζει όλες τις εγκατεστημένες εφαρμογές σε μια επίπεδη λίστα, "
+"ομαδοποιημένες σε κατηγορίες"
+
+#: components/sourceregistry.cpp:282
+msgid "All Installed Applications With Filters"
+msgstr "Όλες οι εγκατεστημένες εφαρμογές με φίλτρο"
+
+#: components/sourceregistry.cpp:283
+msgid "List all installed applications and filter via the sidebar"
+msgstr ""
+"Εμφανίζει όλες τις εγκατεστημένες εφαρμογές και επιτρέπει το φιλτράρισμα "
+"τους μέσω της πλευρικής γραμμής"
+
+#: components/sourceregistry.cpp:286
+#: components/sources/recentapps/recentappsmodel.cpp:290
+msgid "Recent Applications"
+msgstr "Πρόσφατες εφαρμογές"
+
+#: components/sourceregistry.cpp:287
+msgid "List the most recently launched applications"
+msgstr "Εμφανίζει τις εφαρμογές που ξεκίνησαν πρόσφατα"
+
+#: components/sourceregistry.cpp:290
+msgid "Folder"
+msgstr "Φάκελος"
+
+#: components/sourceregistry.cpp:291
+msgid "List the content of a folder and let you browse into sub-folders"
+msgstr ""
+"Εμφανίζει το περιεχόμενο ενός φακέλου και σας επιτρέπει να περιηγηθείτε "
+"στους υποφακέλους"
+
+#: components/sourceregistry.cpp:294
+#: components/sources/favorites/favoriteplacesmodel.cpp:139
+msgid "Favorite Places"
+msgstr "Αγαπημένες τοποθεσίες"
+
+#: components/sourceregistry.cpp:295
+msgid "Browse the content of your favorite places"
+msgstr "Περιηγηθείτε στο περιεχόμενο των αγαπημένων τοποθεσιών σας"
+
+#: components/sourceregistry.cpp:298
+#: components/sources/favorites/favoriteappsmodel.cpp:234
+msgid "Favorite Applications"
+msgstr "Αγαπημένες εφαρμογές"
+
+#: components/sourceregistry.cpp:299
+msgid "List applications marked as favorite"
+msgstr "Εμφανίζει τις εφαρμογές που είναι σημειωμένες ως αγαπημένες"
+
+#: components/sourceregistry.cpp:302
+msgid "Power Management"
+msgstr "Διαχείριση ενέργειας"
+
+#: components/sourceregistry.cpp:303
+msgid "Provide buttons to suspend, hibernate, reboot or halt your computer"
+msgstr ""
+"Παρέχει κουμπιά για αναστολή, νάρκη, επανεκκίνηση ή τερματισμό του "
+"υπολογιστή σας"
+
+#: components/sourceregistry.cpp:306
+#: components/sources/session/sessionmodel.cpp:98
+msgid "Session"
+msgstr "Συνεδρία"
+
+#: components/sourceregistry.cpp:307
+msgid "Provide buttons to lock the screen, log out, or switch to another user"
+msgstr ""
+"Παρέχει κουμπιά για κλείδωμα της οθόνης, αποσύνδεση ή αλλαγή σε άλλο χρήστη"
+
+#: components/sourceregistry.cpp:310
+#: components/sources/session/openedsessionsmodel.cpp:67
+msgid "Opened Sessions"
+msgstr "Ανοιγμένες συνεδρίες"
+
+#: components/sourceregistry.cpp:311
+msgid "Provide buttons to switch to opened sessions"
+msgstr "Παρέχει κουμπιά για την εναλλαγή των ανοιγμένων συνεδριών"
+
+#: components/sourceregistry.cpp:314
+#: components/sources/power/combinedpowersessionmodel.cpp:307
+msgid "Power / Session"
+msgstr "Ενέργεια / Συνεδρία"
+
+#: components/sourceregistry.cpp:315
+msgid ""
+"Provide buttons to manage your workspace session and the power state of your "
+"computer"
+msgstr ""
+"Παρέχει κουμπιά για την διαχείριση της συνεδρίας εργασίας και της κατάστασης "
+"ενέργειας του υπολογιστή σας"
+
+#: components/sourceregistry.cpp:318
+msgid "KRunner"
+msgstr "KRunner"
+
+#: components/sourceregistry.cpp:319
+msgid "Perform searchs using a selection of runners"
+msgstr "Εκτελεί αναζητήσεις με μια συλλογή από εκτελεστές"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: components/sources/dir/dirconfigurationwidget.ui:32
+msgid "Folder to show:"
+msgstr "Φάκελος προς εμφάνιση:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/dir/dirconfigurationwidget.ui:52
+msgid "Title:"
+msgstr "Τίτλος:"
+
+#. i18n: ectx: property (text), widget (QLabel, titleHelpLabel)
+#: components/sources/dir/dirconfigurationwidget.ui:68
+msgid "If title is left empty, the folder name will be used"
+msgstr "Αν ο τίτλος αφεθεί κενός, θα χρησιμοποιηθεί το όνομα του φακέλου."
+
+#: components/sources/favorites/fileplacesmodel.cpp:124
+msgctxt "KFile System Bookmarks"
+msgid "Home"
+msgstr "Αρχική"
+
+#: components/sources/favorites/fileplacesmodel.cpp:127
+msgctxt "KFile System Bookmarks"
+msgid "Network"
+msgstr "Δίκτυο"
+
+#: components/sources/favorites/fileplacesmodel.cpp:139
+msgctxt "KFile System Bookmarks"
+msgid "Root"
+msgstr "Root"
+
+#: components/sources/favorites/fileplacesmodel.cpp:143
+msgctxt "KFile System Bookmarks"
+msgid "Trash"
+msgstr "Απορρίμματα"
+
+#: components/sources/favorites/fileplacesmodel.cpp:758
+#, kde-format
+msgid "&Release '%1'"
+msgstr "Απο&δέσμευση του '%1'"
+
+#: components/sources/favorites/fileplacesmodel.cpp:760
+#, kde-format
+msgid "&Safely Remove '%1'"
+msgstr "&Ασφαλής αφαίρεση του '%1'"
+
+#: components/sources/favorites/fileplacesmodel.cpp:763
+#, kde-format
+msgid "&Unmount '%1'"
+msgstr "Α&ποπροσάρτηση του '%1'"
+
+#: components/sources/favorites/fileplacesmodel.cpp:784
+#, kde-format
+msgid "&Eject '%1'"
+msgstr "Ε&ξαγωγή του '%1'"
+
+#: components/sources/favorites/fileplacesmodel.cpp:818
+#, kde-format
+msgid "The device '%1' is not a disk and cannot be ejected."
+msgstr "Η συσκευή '%1' δεν είναι δίσκος και δεν γίνεται να εξαχθεί."
+
+#: components/sources/favorites/fileplacesmodel.cpp:854
+#, kde-format
+msgid "An error occurred while accessing '%1', the system responded: %2"
+msgstr ""
+"Ένα σφάλμα παρουσιάστηκε κατά την πρόσβαση στο '%1', το σύστημα "
+"ανταποκρίθηκε: %2"
+
+#: components/sources/favorites/fileplacesmodel.cpp:858
+#, kde-format
+msgid "An error occurred while accessing '%1'"
+msgstr "Ένα σφάλμα παρουσιάστηκε κατά την πρόσβαση στο '%1'"
+
+#: components/sources/installedapps/installedappsconfigurationwidget.cpp:133
+#: components/sources/installedapps/installedappsmodel.cpp:332
+msgid "All Applications"
+msgstr "Όλες οι εφαρμογές"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/installedapps/installedappsconfigurationwidget.ui:17
+msgid "Pick the application folder to display:"
+msgstr "Διαλέξτε το φάκελο της εφαρμογής για να εμφανιστεί:"
+
+#: components/sources/installedapps/installedappsmodel.cpp:258
+#: components/sources/installedapps/installedappsmodel.cpp:269
+#: components/sources/recentapps/recentappsmodel.cpp:121
+#: components/sources/recentapps/recentappsmodel.cpp:132
+msgid "Add to Desktop"
+msgstr "Προσθήκη στην επιφάνεια εργασίας"
+
+#: components/sources/installedapps/installedappsmodel.cpp:262
+#: components/sources/installedapps/installedappsmodel.cpp:273
+#: components/sources/recentapps/recentappsmodel.cpp:125
+#: components/sources/recentapps/recentappsmodel.cpp:136
+msgid "Add to Panel"
+msgstr "Προσθήκη στον πίνακα"
+
+#: components/sources/installedapps/installedappsmodel.cpp:293
+#: components/sources/recentapps/recentappsmodel.cpp:154
+msgid "Add as Launcher"
+msgstr "Προσθήκη ως εκτελεστής"
+
+#: components/sources/installedapps/installedappsmodel.cpp:437
+msgid "Applications"
+msgstr "Εφαρμογές"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:241
+msgid "Remove from Sidebar"
+msgstr "Αφαίρεση από την πλευρική γραμμή"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:245
+msgid "Add to Sidebar"
+msgstr "Προσθήκη στην πλευρική γραμμή"
+
+#: components/sources/power/powermodel.cpp:43
+msgid "Power"
+msgstr "Έξοδος"
+
+#: components/sources/power/powermodel.cpp:47
+msgctxt "an action"
+msgid "Suspend"
+msgstr "Αναστολή"
+
+#: components/sources/power/powermodel.cpp:53
+msgctxt "an action"
+msgid "Hibernate"
+msgstr "Νάρκη"
+
+#: components/sources/power/powermodel.cpp:59
+msgctxt "an action"
+msgid "Restart"
+msgstr "Επανεκκίνηση"
+
+#: components/sources/power/powermodel.cpp:64
+msgctxt "an action"
+msgid "Shutdown"
+msgstr "Τερματισμός"
+
+#: components/sources/recentapps/recentappsmodel.cpp:112
+msgid "Forget Application"
+msgstr "Αγνόησή της εφαρμογής"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/runners/runnerconfigurationwidget.ui:17
+msgid "Pick the runners you would like to use in this source:"
+msgstr ""
+"Διαλέξτε τους εκτελεστές που θα θέλατε να χρησιμοποιήσετε σε αυτή την πηγή:"
+
+#: components/sources/session/sessionmodel.cpp:50
+msgctxt "an action"
+msgid "Lock"
+msgstr "Κλείδωμα"
+
+#: components/sources/session/sessionmodel.cpp:65
+msgctxt "an action"
+msgid "New Session"
+msgstr "Νέα συνεδρία"
+
+#: components/sources/session/sessionmodel.cpp:85
+msgctxt "an action"
+msgid "Logout"
+msgstr "Αποσύνδεση"
+
+#: devdoc/helloworld/helloworld.cpp:47
+msgid "Hello"
+msgstr "Γεια σου"
+
+#: devdoc/helloworld/helloworld.cpp:52
+msgid "World"
+msgstr "κόσμε"
+
+#: devdoc/helloworld/helloworld.cpp:67
+msgid "Hello World"
+msgstr "Γεια σου κόσμε"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/applet/generalconfigpage.ui:17
+msgid "Icon:"
+msgstr "Εικονίδιο:"
+
+#: fullscreen/applet/homerunlauncher.cpp:60
+#: kicker/package/contents/ui/main.qml:571
+msgid "Edit Applications..."
+msgstr "Επεξεργασία εφαρμογών..."
+
+#: fullscreen/applet/homerunlauncher.cpp:143
+msgid "General"
+msgstr "Γενικά"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/package/contents/ui/config.ui:17
+msgid "Text Color:"
+msgstr "Χρώμα κειμένου:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: fullscreen/package/contents/ui/config.ui:30
+msgid "Text Shadow:"
+msgstr "Σκιά κειμένου:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeNone)
+#: fullscreen/package/contents/ui/config.ui:40
+msgid "None"
+msgstr "Κανένα"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeAuto)
+#: fullscreen/package/contents/ui/config.ui:47
+msgid "Automatic"
+msgstr "Αυτόματο"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeCustom)
+#: fullscreen/package/contents/ui/config.ui:56
+msgid "Custom:"
+msgstr "Προσαρμοσμένο:"
+
+#: fullscreen/package/contents/ui/main.qml:101
+msgid "Go to previous tab"
+msgstr "Μετάβαση στην προηγούμενη καρτέλα"
+
+#: fullscreen/package/contents/ui/main.qml:107
+msgid "Go to next tab"
+msgstr "Μετάβαση στην επόμενη καρτέλα"
+
+#: fullscreen/package/contents/ui/main.qml:113
+msgid "Focus search field"
+msgstr "Εστίαση στο πεδίο αναζήτησης"
+
+#: fullscreen/package/contents/ui/main.qml:119
+msgid "Go back"
+msgstr "Μετάβαση πίσω"
+
+#: fullscreen/package/contents/ui/main.qml:125
+msgid "Go forward"
+msgstr "Μετάβαση εμπρός"
+
+#: fullscreen/package/contents/ui/main.qml:131
+msgid "Go up"
+msgstr "Μετάβαση πάνω"
+
+#: fullscreen/package/contents/ui/main.qml:156
+msgctxt "Used for tabs which have no name"
+msgid "<Untitled>"
+msgstr "<Χωρίς τίτλο>"
+
+#: fullscreen/package/contents/ui/main.qml:241
+msgctxt "Button to leave configure mode"
+msgid "Done"
+msgstr "Ολοκλήρωση"
+
+#: fullscreen/package/contents/ui/main.qml:263
+msgid "Search in current tab..."
+msgstr "Αναζήτηση στην τρέχουσα καρτέλα..."
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "End Configure Tabs"
+msgstr "Τέλος διαμόρφωσης καρτελών"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "Configure Tabs"
+msgstr "Διαμόρφωση καρτελών"
+
+#: fullscreen/package/contents/ui/main.qml:308
+msgid "Configure Shortcuts..."
+msgstr "Διαμόρφωση συντομεύσεων..."
+
+#: fullscreen/package/contents/ui/main.qml:312
+msgid "Show Action List Buttons"
+msgstr "Εμφάνιση κουμπιών για τη λίστα ενεργειών"
+
+#: fullscreen/package/contents/ui/main.qml:321
+msgid "Show Desktop Tool Box"
+msgstr "Εμφάνιση εργαλειοθήκης επιφάνειας εργασίας"
+
+#: fullscreen/package/contents/ui/main.qml:332
+msgid "Restore Tabs to Default"
+msgstr "Επαναφορά καρτελών στις προκαθορισμένες"
+
+#: fullscreen/package/contents/ui/main.qml:335
+msgid ""
+"Are you sure you want to restore tabs?\n"
+"Restoring tabs will reset your configuration to the default Homerun tabs.\n"
+"Your lists of favorite applications and places will remain untouched."
+msgstr ""
+"Είστε βέβαιοι ότι θέλετε να επαναφέρετε τις καρτέλες;\n"
+"Η διαμόρφωση σας θα επανέλθει στις προκαθορισμένες καρτέλες.\n"
+"Οι λίστες των αγαπημένων σας εφαρμογών και τοποθεσιών θα παραμείνουν άθικτες."
+
+#: fullscreen/package/contents/ui/main.qml:336
+#: fullscreen/package/contents/ui/main.qml:337
+msgid "Restore Tabs"
+msgstr "Επαναφορά καρτελών"
+
+#: fullscreen/package/contents/ui/main.qml:350
+#, kde-format
+msgid "About %1"
+msgstr "Σχετικά με το %1"
+
+#: fullscreen/package/contents/ui/Result.qml:149
+msgid "Drag to reorder; release to show menu"
+msgstr "Σύρετε για αναταξινόμηση, ελευθερώστε για εμφάνιση του μενού"
+
+#: fullscreen/package/contents/ui/Result.qml:151
+msgid "Release to show menu"
+msgstr "Ελευθερώστε για εμφάνιση του μενού"
+
+#: fullscreen/package/contents/ui/Result.qml:153
+msgid "Drag to reorder"
+msgstr "Σύρετε για αναταξινόμηση"
+
+#: fullscreen/package/contents/ui/Result.qml:156
+msgid "This item has no menu and cannot be dragged"
+msgstr "Αυτό το αντικείμενο δεν διαθέτει μενού και δεν μπορεί να μετακινηθεί"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:192
+#: kicker/package/contents/ui/ItemListDelegate.qml:268
+#: kicker/package/contents/ui/SidebarItem.qml:122
+msgid "Remove from Favorites"
+msgstr "Αφαίρεση από τις αγαπημένες"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:196
+#: kicker/package/contents/ui/ItemListDelegate.qml:272
+#: kicker/package/contents/ui/SidebarItem.qml:126
+msgid "Add to Favorites"
+msgstr "Προσθήκη στις αγαπημένες"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:367
+#, kde-format
+msgid "%1 has been added to your favorites"
+msgstr "Το %1 προστέθηκε στις αγαπημένες σας"
+
+#: fullscreen/package/contents/ui/SourceItem.qml:55
+#, kde-format
+msgid "Broken source '%1'"
+msgstr "Προβληματική πηγή '%1'"
+
+#: fullscreen/package/contents/ui/TabContent.qml:86
+msgid "Tab Icon:"
+msgstr "Εικονίδιο καρτέλας:"
+
+#: fullscreen/package/contents/ui/TabContent.qml:105
+msgid "Tab Label:"
+msgstr "Ετικέτα καρτέλας:"
+
+#: fullscreen/viewer/main.cpp:41
+#, kde-format
+msgid ""
+"<p><b>Sorry, Homerun failed to load</b></p><p>Do you want to report this "
+"error?</p><p>If you decide to report it, please copy and paste the following "
+"output in your report:</p><pre>%1</pre>"
+msgstr ""
+"<p><b>Δυστυχώς, το Homerun απέτυχε να φορτωθεί</b></p><p>Θέλετε να αναφέρετε "
+"αυτό το σφάλμα;</p><p>Εάν αποφασίσετε να το αναφέρετε, παρακαλώ αντιγράψτε "
+"και επικολλήστε την ακόλουθη έξοδο στην αναφορά σας:</p><pre>%1</pre>"
+
+#: fullscreen/viewer/main.cpp:48
+msgid "Report Error"
+msgstr "Αναφορά σφάλματος"
+
+#: fullscreen/viewer/main.cpp:65
+msgid "Log focused item (for debug purposes)"
+msgstr "Καταγραφή εστιασμένου στοιχείου (για σκοπούς αποσφαλμάτωσης)"
+
+#: fullscreen/viewer/main.cpp:66
+msgid "Use a plain window (for debug purposes)"
+msgstr "Χρήση απλού παραθύρου (για σκοπούς αποσφαλμάτωσης)"
+
+#: internal/aboutdata.cpp:41
+msgctxt "Program name"
+msgid "Homerun"
+msgstr "Homerun"
+
+#: internal/aboutdata.cpp:44
+msgid "(C) 2012-2014 Blue Systems"
+msgstr "(C) 2012-2014 Blue Systems"
+
+#: internal/aboutdata.cpp:47
+msgid "Shaun Reich"
+msgstr "Shaun Reich"
+
+#: internal/aboutdata.cpp:47 internal/aboutdata.cpp:48
+#: internal/aboutdata.cpp:49
+msgid "Developer"
+msgstr "Προγραμματιστής"
+
+#: internal/aboutdata.cpp:48
+msgid "Aurélien Gâteau"
+msgstr "Aurélien Gâteau"
+
+#: internal/aboutdata.cpp:49
+msgid "Eike Hein"
+msgstr "Eike Hein"
+
+#: internal/i18nconfig.cpp:30
+msgctxt "Tab title"
+msgid "Home"
+msgstr "Αρχική"
+
+#: internal/i18nconfig.cpp:31
+msgctxt "Tab title"
+msgid "Files"
+msgstr "Αρχεία"
+
+#: internal/i18nconfig.cpp:32
+msgctxt "Tab title"
+msgid "Applications"
+msgstr "Εφαρμογές"
+
+#: internal/i18nconfig.cpp:33
+msgctxt "Tab title"
+msgid "Power"
+msgstr "Έξοδος"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: kicker/package/contents/ui/config.ui:26
+msgid "Behavior"
+msgstr "Συμπεριφορά"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kicker/package/contents/ui/config.ui:33
+msgid "Search bookmarks and files:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_runnerSupport)
+#: kicker/package/contents/ui/config.ui:46
+msgid ""
+"If this option is enabled, search may display additional columns with search "
+"results powered by certain Plasma runner plugins, such as \"Bookmarks\" and "
+"\"Desktop Search\"."
+msgstr ""
+"Εάν αυτή η επιλογή είναι ενεργοποιημένη στην αναζήτηση μπορεί να εμφανιστούν "
+"επιπλέον στήλες με αποτελέσματα αναζήτησης που προέρχονται από ορισμένα "
+"πρόσθετα Plasma runner, όπως τα \"Σελιδοδείκτες\" και \"Αναζήτηση επιφάνειας "
+"εργασίας\"."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kicker/package/contents/ui/config.ui:62
+msgid "Appearance"
+msgstr "Εμφάνιση"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kicker/package/contents/ui/config.ui:69
+msgid "Custom button image:"
+msgstr "Προσαρμοσμένη εικόνα κουμπιού:"
+
+#. i18n: ectx: property (filter), widget (KUrlRequester, kcfg_buttonImage)
+#: kicker/package/contents/ui/config.ui:94
+msgid "*.jpg *.png *.xpm *.gif *.webp"
+msgstr "*.jpg *.png *.xpm *.gif *.webp"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kicker/package/contents/ui/config.ui:103
+#, fuzzy
+#| msgid "Align contents to bottom"
+msgid "Align contents to bottom:"
+msgstr "Στοίχιση περιεχόμενου στη βάση"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kicker/package/contents/ui/config.ui:123
+#, fuzzy
+#| msgid "Applications"
+msgid "Show applications as:"
+msgstr "Εφαρμογές"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:143
+msgid "Name only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:148
+msgid "Description only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:153
+msgid "Name (Description)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:158
+msgid "Description (Name)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:191
+#, kde-format
+msgctxt "App name (Generic name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:193
+#, kde-format
+msgctxt "Generic Name (App name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/main.qml:304
+msgid "Search..."
+msgstr "Αναζήτηση..."
+
+#: kicker/package/contents/ui/main.qml:504
+#: plugins/recentdocuments/recentdocuments.cpp:130
+msgid "Recent Documents"
+msgstr "Πρόσφατα έγγραφα"
+
+#: kicker/package/contents/ui/main.qml:567
+msgid "Homerun Kicker"
+msgstr "Homerun Kicker"
+
+#: kicker/package/contents/ui/main.qml:568
+msgid "Launch applications and manage your desktop."
+msgstr "Εκκινήστε εφαρμογές και διαχειριστείτε την επιφάνεια εργασίας."
+
+#: lib/actionlist.cpp:75
+msgctxt "@action:inmenu"
+msgid "Empty Trash"
+msgstr "Άδειασμα απορριμμάτων"
+
+#: lib/actionlist.cpp:93
+msgid "Open with:"
+msgstr "Άνοιγμα με:"
+
+#: lib/actionlist.cpp:105
+msgid "Properties"
+msgstr "Ιδιότητες"
+
+#: plugins/recentdocuments/recentdocuments.cpp:152
+msgid "Forget Document"
+msgstr "Αγνόησή του εγγράφου"
+
+#~ msgid "Use Plasma runners for additional search results"
+#~ msgstr ""
+#~ "Χρησιμοποίηση εκτελεστών Plasma για επιπλέον αποτελέσματα αναζήτησης"
+
+#~ msgid "Show on screen <screen>"
+#~ msgstr "Εμφάνιση στην οθόνη <screen>"
+
+#~ msgid "Nightly build using source from: %1"
+#~ msgstr "Νυχτερινή κατασκευή με χρήση πηγής από το: %1"

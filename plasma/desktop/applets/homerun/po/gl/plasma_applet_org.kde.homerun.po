@@ -1,0 +1,704 @@
+# Copyright (C) YEAR This_file_is_part_of_KDE
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Marce Villarino <mvillarino@kde-espana.es>, 2013.
+# Miguel Branco <mgl.branco@gmail.com>, 2013.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2014-04-26 01:50+0000\n"
+"PO-Revision-Date: 2013-11-03 22:58+0100\n"
+"Last-Translator: Marce Villarino <mvillarino@kde-espana.org>\n"
+"Language-Team: Galician <proxecto@trasno.net>\n"
+"Language: gl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+"X-Environment: kde\n"
+"X-Accelerator-Marker: &\n"
+"X-Text-Markup: kde4\n"
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Marce Villarino, Miguel Branco, Adrián Chaves Fernández"
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr ""
+"mvillarino@users.sourceforge.net, mgl.branco@gmail.com, adriyetichaves@gmail."
+"com"
+
+#: components/qml/ActionMenu.qml:75
+msgid "(Empty)"
+msgstr "(baleiro)"
+
+#: components/sourceregistry.cpp:252
+#, kde-format
+msgid "Runner: %1"
+msgstr "Executor: %1"
+
+#: components/sourceregistry.cpp:274
+msgid "Installed Applications"
+msgstr "Programas instalados"
+
+#: components/sourceregistry.cpp:275
+msgid "Browse installed applications by categories"
+msgstr "Explorar por categorías os programas instalados"
+
+#: components/sourceregistry.cpp:278
+msgid "All Installed Applications"
+msgstr "Todos os programas instalados"
+
+#: components/sourceregistry.cpp:279
+msgid "List all installed applications in a flat list, grouped by categories"
+msgstr ""
+"Listar todos os programas instalados nunha lista simple, agrupados por "
+"categorías"
+
+#: components/sourceregistry.cpp:282
+msgid "All Installed Applications With Filters"
+msgstr "Todos os programas instalados e filtrados"
+
+#: components/sourceregistry.cpp:283
+msgid "List all installed applications and filter via the sidebar"
+msgstr "Listar todos os programas instalados e fíltraos coa barra lateral"
+
+#: components/sourceregistry.cpp:286
+#: components/sources/recentapps/recentappsmodel.cpp:290
+#, fuzzy
+#| msgid "Applications"
+msgid "Recent Applications"
+msgstr "Programas"
+
+#: components/sourceregistry.cpp:287
+msgid "List the most recently launched applications"
+msgstr ""
+
+#: components/sourceregistry.cpp:290
+msgid "Folder"
+msgstr "Cartafol"
+
+#: components/sourceregistry.cpp:291
+msgid "List the content of a folder and let you browse into sub-folders"
+msgstr ""
+"Listar todo o contido dun cartafol e permitir a navegación de subcartafoles"
+
+#: components/sourceregistry.cpp:294
+#: components/sources/favorites/favoriteplacesmodel.cpp:139
+msgid "Favorite Places"
+msgstr "Lugares favoritos"
+
+#: components/sourceregistry.cpp:295
+msgid "Browse the content of your favorite places"
+msgstr "Explorar o contido dos teus lugares favoritos"
+
+#: components/sourceregistry.cpp:298
+#: components/sources/favorites/favoriteappsmodel.cpp:234
+msgid "Favorite Applications"
+msgstr "Programas favoritos"
+
+#: components/sourceregistry.cpp:299
+msgid "List applications marked as favorite"
+msgstr "Listar os programas marcados como favoritos"
+
+#: components/sourceregistry.cpp:302
+msgid "Power Management"
+msgstr "Xestión da enerxía"
+
+#: components/sourceregistry.cpp:303
+msgid "Provide buttons to suspend, hibernate, reboot or halt your computer"
+msgstr ""
+"Fornecer os botóns de suspender, hibernar, reiniciar a bloquear o teu "
+"ordenador"
+
+#: components/sourceregistry.cpp:306
+#: components/sources/session/sessionmodel.cpp:98
+msgid "Session"
+msgstr "Sesión"
+
+#: components/sourceregistry.cpp:307
+msgid "Provide buttons to lock the screen, log out, or switch to another user"
+msgstr ""
+"Fornecer os botóns para bloquear a pantalla, saír ou cambiar de usuario"
+
+#: components/sourceregistry.cpp:310
+#: components/sources/session/openedsessionsmodel.cpp:67
+msgid "Opened Sessions"
+msgstr "Sesións abertas"
+
+#: components/sourceregistry.cpp:311
+msgid "Provide buttons to switch to opened sessions"
+msgstr "Fornecer botóns para moverse entre as sesións abertas."
+
+#: components/sourceregistry.cpp:314
+#: components/sources/power/combinedpowersessionmodel.cpp:307
+#, fuzzy
+#| msgctxt "an action"
+#| msgid "New Session"
+msgid "Power / Session"
+msgstr "Nova sesión"
+
+#: components/sourceregistry.cpp:315
+#, fuzzy
+#| msgid "Provide buttons to suspend, hibernate, reboot or halt your computer"
+msgid ""
+"Provide buttons to manage your workspace session and the power state of your "
+"computer"
+msgstr ""
+"Fornecer os botóns de suspender, hibernar, reiniciar a bloquear o teu "
+"ordenador"
+
+#: components/sourceregistry.cpp:318
+msgid "KRunner"
+msgstr "KRunner"
+
+#: components/sourceregistry.cpp:319
+msgid "Perform searchs using a selection of runners"
+msgstr "Realiza as buscas usando unha escolma de executores"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: components/sources/dir/dirconfigurationwidget.ui:32
+msgid "Folder to show:"
+msgstr "Cartafol para mostrar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/dir/dirconfigurationwidget.ui:52
+msgid "Title:"
+msgstr "Título:"
+
+#. i18n: ectx: property (text), widget (QLabel, titleHelpLabel)
+#: components/sources/dir/dirconfigurationwidget.ui:68
+msgid "If title is left empty, the folder name will be used"
+msgstr "Se o título está baleiro empregarase o nome do cartafol"
+
+#: components/sources/favorites/fileplacesmodel.cpp:124
+msgctxt "KFile System Bookmarks"
+msgid "Home"
+msgstr "Inicio"
+
+#: components/sources/favorites/fileplacesmodel.cpp:127
+msgctxt "KFile System Bookmarks"
+msgid "Network"
+msgstr "Rede"
+
+#: components/sources/favorites/fileplacesmodel.cpp:139
+msgctxt "KFile System Bookmarks"
+msgid "Root"
+msgstr "Raíz"
+
+#: components/sources/favorites/fileplacesmodel.cpp:143
+msgctxt "KFile System Bookmarks"
+msgid "Trash"
+msgstr "Lixo"
+
+#: components/sources/favorites/fileplacesmodel.cpp:758
+#, kde-format
+msgid "&Release '%1'"
+msgstr "&Liberar «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:760
+#, kde-format
+msgid "&Safely Remove '%1'"
+msgstr "Eliminar con &seguranza «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:763
+#, kde-format
+msgid "&Unmount '%1'"
+msgstr "&Desmontar «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:784
+#, kde-format
+msgid "&Eject '%1'"
+msgstr "&Expulsar «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:818
+#, kde-format
+msgid "The device '%1' is not a disk and cannot be ejected."
+msgstr "O dispositivo «%1» non é un disco, polo que non é posíbel expulsalo."
+
+#: components/sources/favorites/fileplacesmodel.cpp:854
+#, kde-format
+msgid "An error occurred while accessing '%1', the system responded: %2"
+msgstr "Produciuse un erro ao acceder a «%1»; o sistema respondeu: %2"
+
+#: components/sources/favorites/fileplacesmodel.cpp:858
+#, kde-format
+msgid "An error occurred while accessing '%1'"
+msgstr "Produciuse un erro ao acceder a «%1»"
+
+#: components/sources/installedapps/installedappsconfigurationwidget.cpp:133
+#: components/sources/installedapps/installedappsmodel.cpp:332
+msgid "All Applications"
+msgstr "Todos os programas"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/installedapps/installedappsconfigurationwidget.ui:17
+msgid "Pick the application folder to display:"
+msgstr "Selecciona o cartafol de programas para mostrar:"
+
+#: components/sources/installedapps/installedappsmodel.cpp:258
+#: components/sources/installedapps/installedappsmodel.cpp:269
+#: components/sources/recentapps/recentappsmodel.cpp:121
+#: components/sources/recentapps/recentappsmodel.cpp:132
+msgid "Add to Desktop"
+msgstr "Engadir ao escritorio"
+
+#: components/sources/installedapps/installedappsmodel.cpp:262
+#: components/sources/installedapps/installedappsmodel.cpp:273
+#: components/sources/recentapps/recentappsmodel.cpp:125
+#: components/sources/recentapps/recentappsmodel.cpp:136
+msgid "Add to Panel"
+msgstr "Engadir ao panel"
+
+#: components/sources/installedapps/installedappsmodel.cpp:293
+#: components/sources/recentapps/recentappsmodel.cpp:154
+msgid "Add as Launcher"
+msgstr ""
+
+#: components/sources/installedapps/installedappsmodel.cpp:437
+msgid "Applications"
+msgstr "Programas"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:241
+#, fuzzy
+#| msgid "Remove from Favorites"
+msgid "Remove from Sidebar"
+msgstr "Retirar dos favoritos"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:245
+#, fuzzy
+#| msgid "Add to Panel"
+msgid "Add to Sidebar"
+msgstr "Engadir ao panel"
+
+#: components/sources/power/powermodel.cpp:43
+msgid "Power"
+msgstr "Potencia"
+
+#: components/sources/power/powermodel.cpp:47
+msgctxt "an action"
+msgid "Suspend"
+msgstr "Suspender"
+
+#: components/sources/power/powermodel.cpp:53
+msgctxt "an action"
+msgid "Hibernate"
+msgstr "Hibernar"
+
+#: components/sources/power/powermodel.cpp:59
+msgctxt "an action"
+msgid "Restart"
+msgstr "Reiniciar"
+
+#: components/sources/power/powermodel.cpp:64
+msgctxt "an action"
+msgid "Shutdown"
+msgstr "Apagar"
+
+#: components/sources/recentapps/recentappsmodel.cpp:112
+#, fuzzy
+#| msgid "Favorite Applications"
+msgid "Forget Application"
+msgstr "Programas favoritos"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/runners/runnerconfigurationwidget.ui:17
+msgid "Pick the runners you would like to use in this source:"
+msgstr "Escolle os executores que queres usar para esta fonte:"
+
+#: components/sources/session/sessionmodel.cpp:50
+msgctxt "an action"
+msgid "Lock"
+msgstr "Trancar"
+
+#: components/sources/session/sessionmodel.cpp:65
+msgctxt "an action"
+msgid "New Session"
+msgstr "Nova sesión"
+
+#: components/sources/session/sessionmodel.cpp:85
+msgctxt "an action"
+msgid "Logout"
+msgstr "Saír"
+
+#: devdoc/helloworld/helloworld.cpp:47
+msgid "Hello"
+msgstr "Ola"
+
+#: devdoc/helloworld/helloworld.cpp:52
+msgid "World"
+msgstr "Universo"
+
+#: devdoc/helloworld/helloworld.cpp:67
+msgid "Hello World"
+msgstr "Ola mundo"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/applet/generalconfigpage.ui:17
+msgid "Icon:"
+msgstr "Icona:"
+
+#: fullscreen/applet/homerunlauncher.cpp:60
+#: kicker/package/contents/ui/main.qml:571
+#, fuzzy
+#| msgid "Applications"
+msgid "Edit Applications..."
+msgstr "Programas"
+
+#: fullscreen/applet/homerunlauncher.cpp:143
+msgid "General"
+msgstr "Xeral"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/package/contents/ui/config.ui:17
+msgid "Text Color:"
+msgstr "Cor do texto"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: fullscreen/package/contents/ui/config.ui:30
+msgid "Text Shadow:"
+msgstr "Sombra de texto:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeNone)
+#: fullscreen/package/contents/ui/config.ui:40
+msgid "None"
+msgstr "Ningún"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeAuto)
+#: fullscreen/package/contents/ui/config.ui:47
+msgid "Automatic"
+msgstr "Automática"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeCustom)
+#: fullscreen/package/contents/ui/config.ui:56
+msgid "Custom:"
+msgstr "Personalizado:"
+
+#: fullscreen/package/contents/ui/main.qml:101
+msgid "Go to previous tab"
+msgstr "Ir á lapela anterior"
+
+#: fullscreen/package/contents/ui/main.qml:107
+msgid "Go to next tab"
+msgstr "Ir á seguinte lapela "
+
+#: fullscreen/package/contents/ui/main.qml:113
+msgid "Focus search field"
+msgstr "Enfocar o campo de busca"
+
+#: fullscreen/package/contents/ui/main.qml:119
+msgid "Go back"
+msgstr "Atrás"
+
+#: fullscreen/package/contents/ui/main.qml:125
+msgid "Go forward"
+msgstr "Adiante"
+
+#: fullscreen/package/contents/ui/main.qml:131
+msgid "Go up"
+msgstr "Subir"
+
+#: fullscreen/package/contents/ui/main.qml:156
+msgctxt "Used for tabs which have no name"
+msgid "<Untitled>"
+msgstr "<Untitled>"
+
+#: fullscreen/package/contents/ui/main.qml:241
+msgctxt "Button to leave configure mode"
+msgid "Done"
+msgstr "Feito"
+
+#: fullscreen/package/contents/ui/main.qml:263
+msgid "Search in current tab..."
+msgstr "Buscar na lapela actual…"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "End Configure Tabs"
+msgstr "Rematar a configuración das lapelas"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "Configure Tabs"
+msgstr "Configurar as lapelas"
+
+#: fullscreen/package/contents/ui/main.qml:308
+msgid "Configure Shortcuts..."
+msgstr "Configurar os atallos…"
+
+#: fullscreen/package/contents/ui/main.qml:312
+msgid "Show Action List Buttons"
+msgstr "Mostrar os botóns da lista de accións"
+
+#: fullscreen/package/contents/ui/main.qml:321
+msgid "Show Desktop Tool Box"
+msgstr ""
+
+#: fullscreen/package/contents/ui/main.qml:332
+msgid "Restore Tabs to Default"
+msgstr "Restaurar as lapelas predeterminadas"
+
+#: fullscreen/package/contents/ui/main.qml:335
+msgid ""
+"Are you sure you want to restore tabs?\n"
+"Restoring tabs will reset your configuration to the default Homerun tabs.\n"
+"Your lists of favorite applications and places will remain untouched."
+msgstr ""
+"Está seguro de que quere restaurar as lapelas?\n"
+"Ao facelo perderase a configuración de lapelas actual en favor da "
+"configuración predeterminada de Homerun.\n"
+"As listas de programas e lugares favoritos non se verán afectadas."
+
+#: fullscreen/package/contents/ui/main.qml:336
+#: fullscreen/package/contents/ui/main.qml:337
+msgid "Restore Tabs"
+msgstr "Restaurar as lapelas"
+
+#: fullscreen/package/contents/ui/main.qml:350
+#, kde-format
+msgid "About %1"
+msgstr "Acerca de %1"
+
+#: fullscreen/package/contents/ui/Result.qml:149
+msgid "Drag to reorder; release to show menu"
+msgstr "Arrastrar para reordenar, soltar para mostrar o menú."
+
+#: fullscreen/package/contents/ui/Result.qml:151
+msgid "Release to show menu"
+msgstr "Soltar para mostrar o menú"
+
+#: fullscreen/package/contents/ui/Result.qml:153
+msgid "Drag to reorder"
+msgstr "Arrastrar para reordenar"
+
+#: fullscreen/package/contents/ui/Result.qml:156
+msgid "This item has no menu and cannot be dragged"
+msgstr "O elemento carece de menú e non pode arrastrarse."
+
+#: fullscreen/package/contents/ui/ResultsView.qml:192
+#: kicker/package/contents/ui/ItemListDelegate.qml:268
+#: kicker/package/contents/ui/SidebarItem.qml:122
+msgid "Remove from Favorites"
+msgstr "Retirar dos favoritos"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:196
+#: kicker/package/contents/ui/ItemListDelegate.qml:272
+#: kicker/package/contents/ui/SidebarItem.qml:126
+msgid "Add to Favorites"
+msgstr "Engadir aos favoritos"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:367
+#, kde-format
+msgid "%1 has been added to your favorites"
+msgstr "«%1» engadiuse aos favoritos."
+
+#: fullscreen/package/contents/ui/SourceItem.qml:55
+#, kde-format
+msgid "Broken source '%1'"
+msgstr "A fonte «%1» está danada."
+
+#: fullscreen/package/contents/ui/TabContent.qml:86
+msgid "Tab Icon:"
+msgstr "Icona da lapela:"
+
+#: fullscreen/package/contents/ui/TabContent.qml:105
+msgid "Tab Label:"
+msgstr "Etiqueta da lapela:"
+
+#: fullscreen/viewer/main.cpp:41
+#, kde-format
+msgid ""
+"<p><b>Sorry, Homerun failed to load</b></p><p>Do you want to report this "
+"error?</p><p>If you decide to report it, please copy and paste the following "
+"output in your report:</p><pre>%1</pre>"
+msgstr ""
+"<p><b>Homerun fallou ao se iniciar</b></p><p>Queres informar deste erro?</"
+"p><p>Se o fas, copia e pega, por favor, a seguinte saída no informe de erro:"
+"</p><pre>%1</pre>"
+
+#: fullscreen/viewer/main.cpp:48
+msgid "Report Error"
+msgstr "Informar sobre do erro"
+
+#: fullscreen/viewer/main.cpp:65
+msgid "Log focused item (for debug purposes)"
+msgstr "Elemento no que centrar o rexistro (con fins de depuración)"
+
+#: fullscreen/viewer/main.cpp:66
+msgid "Use a plain window (for debug purposes)"
+msgstr "Usar unha xanela sinxela (con fins de depuración)"
+
+#: internal/aboutdata.cpp:41
+msgctxt "Program name"
+msgid "Homerun"
+msgstr "Homerun"
+
+#: internal/aboutdata.cpp:44
+#, fuzzy
+#| msgid "(C) 2012-2013 Blue Systems"
+msgid "(C) 2012-2014 Blue Systems"
+msgstr "© 2012-2013, Blue Systems"
+
+#: internal/aboutdata.cpp:47
+msgid "Shaun Reich"
+msgstr "Shaun Reich"
+
+#: internal/aboutdata.cpp:47 internal/aboutdata.cpp:48
+#: internal/aboutdata.cpp:49
+msgid "Developer"
+msgstr "Desenvolvedor"
+
+#: internal/aboutdata.cpp:48
+msgid "Aurélien Gâteau"
+msgstr "Aurélien Gâteau"
+
+#: internal/aboutdata.cpp:49
+msgid "Eike Hein"
+msgstr ""
+
+#: internal/i18nconfig.cpp:30
+msgctxt "Tab title"
+msgid "Home"
+msgstr "Inicio"
+
+#: internal/i18nconfig.cpp:31
+msgctxt "Tab title"
+msgid "Files"
+msgstr "Ficheiros"
+
+#: internal/i18nconfig.cpp:32
+msgctxt "Tab title"
+msgid "Applications"
+msgstr "Programas"
+
+#: internal/i18nconfig.cpp:33
+msgctxt "Tab title"
+msgid "Power"
+msgstr "Enerxía"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: kicker/package/contents/ui/config.ui:26
+msgid "Behavior"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kicker/package/contents/ui/config.ui:33
+msgid "Search bookmarks and files:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_runnerSupport)
+#: kicker/package/contents/ui/config.ui:46
+msgid ""
+"If this option is enabled, search may display additional columns with search "
+"results powered by certain Plasma runner plugins, such as \"Bookmarks\" and "
+"\"Desktop Search\"."
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kicker/package/contents/ui/config.ui:62
+msgid "Appearance"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kicker/package/contents/ui/config.ui:69
+msgid "Custom button image:"
+msgstr ""
+
+#. i18n: ectx: property (filter), widget (KUrlRequester, kcfg_buttonImage)
+#: kicker/package/contents/ui/config.ui:94
+msgid "*.jpg *.png *.xpm *.gif *.webp"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kicker/package/contents/ui/config.ui:103
+msgid "Align contents to bottom:"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kicker/package/contents/ui/config.ui:123
+#, fuzzy
+#| msgid "Applications"
+msgid "Show applications as:"
+msgstr "Programas"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:143
+msgid "Name only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:148
+msgid "Description only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:153
+msgid "Name (Description)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:158
+msgid "Description (Name)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:191
+#, kde-format
+msgctxt "App name (Generic name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:193
+#, kde-format
+msgctxt "Generic Name (App name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/main.qml:304
+#, fuzzy
+#| msgid "Type to search..."
+msgid "Search..."
+msgstr "Escriba o que buscar..."
+
+#: kicker/package/contents/ui/main.qml:504
+#: plugins/recentdocuments/recentdocuments.cpp:130
+msgid "Recent Documents"
+msgstr "Documentos recentes"
+
+#: kicker/package/contents/ui/main.qml:567
+#, fuzzy
+#| msgctxt "Program name"
+#| msgid "Homerun"
+msgid "Homerun Kicker"
+msgstr "Homerun"
+
+#: kicker/package/contents/ui/main.qml:568
+msgid "Launch applications and manage your desktop."
+msgstr ""
+
+#: lib/actionlist.cpp:75
+msgctxt "@action:inmenu"
+msgid "Empty Trash"
+msgstr "Baleirar o lixo"
+
+#: lib/actionlist.cpp:93
+msgid "Open with:"
+msgstr "Abrir con:"
+
+#: lib/actionlist.cpp:105
+msgid "Properties"
+msgstr "Propiedades"
+
+#: plugins/recentdocuments/recentdocuments.cpp:152
+msgid "Forget Document"
+msgstr "Esquecer o documento"
+
+#~ msgid "Show on screen <screen>"
+#~ msgstr "Mostrar na pantalla <screen>"
+
+#~ msgid "Nightly build using source from: %1"
+#~ msgstr "Compilación nocturna usando as fontes de: %1"
+
+#~ msgctxt "an action"
+#~ msgid "Switch User"
+#~ msgstr "Trocar de usuario"

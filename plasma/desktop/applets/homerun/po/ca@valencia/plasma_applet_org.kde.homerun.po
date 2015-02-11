@@ -1,0 +1,679 @@
+# Translation of plasma_applet_org.kde.homerun.po to Catalan
+# Copyright (C) 2014 This_file_is_part_of_KDE
+# This file is distributed under the license LGPL version 2.1 or
+# version 3 or later versions approved by the membership of KDE e.V.
+#
+# Antoni Bella Pérez <antonibella5@orange.es>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma_applet_org.kde.homerun\n"
+"Report-Msgid-Bugs-To: http://bugs.kde.org\n"
+"POT-Creation-Date: 2014-04-26 01:50+0000\n"
+"PO-Revision-Date: 2014-03-13 21:02+0100\n"
+"Last-Translator: Antoni Bella Pérez <antonibella5@orange.es>\n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca@valencia\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 1.5\n"
+
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Antoni Bella Pérez"
+
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "antonibella5@orange.es"
+
+#: components/qml/ActionMenu.qml:75
+msgid "(Empty)"
+msgstr "(Buit)"
+
+#: components/sourceregistry.cpp:252
+#, kde-format
+msgid "Runner: %1"
+msgstr "Executor: %1"
+
+#: components/sourceregistry.cpp:274
+msgid "Installed Applications"
+msgstr "Aplicacions instal·lades"
+
+#: components/sourceregistry.cpp:275
+msgid "Browse installed applications by categories"
+msgstr "Explora les aplicacions instal·lades per categories"
+
+#: components/sourceregistry.cpp:278
+msgid "All Installed Applications"
+msgstr "Totes les aplicacions instal·lades"
+
+#: components/sourceregistry.cpp:279
+msgid "List all installed applications in a flat list, grouped by categories"
+msgstr ""
+"Llista totes les aplicacions instal·lades en una llista plana, agrupades per "
+"categories"
+
+#: components/sourceregistry.cpp:282
+msgid "All Installed Applications With Filters"
+msgstr "Totes les aplicacions instal·lades i filtrades"
+
+#: components/sourceregistry.cpp:283
+msgid "List all installed applications and filter via the sidebar"
+msgstr ""
+"Llista totes les aplicacions instal·lades i les filtra mitjançant la barra "
+"lateral"
+
+#: components/sourceregistry.cpp:286
+#: components/sources/recentapps/recentappsmodel.cpp:290
+msgid "Recent Applications"
+msgstr "Aplicacions recents"
+
+#: components/sourceregistry.cpp:287
+msgid "List the most recently launched applications"
+msgstr "Llista les aplicacions llançades més recentment"
+
+#: components/sourceregistry.cpp:290
+msgid "Folder"
+msgstr "Carpeta"
+
+#: components/sourceregistry.cpp:291
+msgid "List the content of a folder and let you browse into sub-folders"
+msgstr "Llista el contingut d'una carpeta i permet navegar en les subcarpetes"
+
+#: components/sourceregistry.cpp:294
+#: components/sources/favorites/favoriteplacesmodel.cpp:139
+msgid "Favorite Places"
+msgstr "Llocs preferits"
+
+#: components/sourceregistry.cpp:295
+msgid "Browse the content of your favorite places"
+msgstr "Navega pel contingut dels vostres llocs preferits"
+
+#: components/sourceregistry.cpp:298
+#: components/sources/favorites/favoriteappsmodel.cpp:234
+msgid "Favorite Applications"
+msgstr "Aplicacions preferides"
+
+#: components/sourceregistry.cpp:299
+msgid "List applications marked as favorite"
+msgstr "Llista les aplicacions marcades com a preferides"
+
+#: components/sourceregistry.cpp:302
+msgid "Power Management"
+msgstr "Gestió de l'energia"
+
+#: components/sourceregistry.cpp:303
+msgid "Provide buttons to suspend, hibernate, reboot or halt your computer"
+msgstr ""
+"Proporciona els botons per a suspendre, hibernar, reiniciar o parar "
+"l'ordinador"
+
+#: components/sourceregistry.cpp:306
+#: components/sources/session/sessionmodel.cpp:98
+msgid "Session"
+msgstr "Sessió"
+
+#: components/sourceregistry.cpp:307
+msgid "Provide buttons to lock the screen, log out, or switch to another user"
+msgstr ""
+"Proporciona els botons per a bloquejar la pantalla, eixir de la sessió o "
+"canviar a un altre usuari"
+
+#: components/sourceregistry.cpp:310
+#: components/sources/session/openedsessionsmodel.cpp:67
+msgid "Opened Sessions"
+msgstr "Sessions obertes"
+
+#: components/sourceregistry.cpp:311
+msgid "Provide buttons to switch to opened sessions"
+msgstr "Proporciona els botons per a canviar a les sessions obertes"
+
+#: components/sourceregistry.cpp:314
+#: components/sources/power/combinedpowersessionmodel.cpp:307
+msgid "Power / Session"
+msgstr "Energia / Sessió"
+
+#: components/sourceregistry.cpp:315
+msgid ""
+"Provide buttons to manage your workspace session and the power state of your "
+"computer"
+msgstr ""
+"Proporciona els botons per a gestionar l'espai de treball i l'estat de "
+"l'energia al vostre ordinador"
+
+#: components/sourceregistry.cpp:318
+msgid "KRunner"
+msgstr "KRunner"
+
+#: components/sourceregistry.cpp:319
+msgid "Perform searchs using a selection of runners"
+msgstr "Realitza cerques usant una selecció de corredors"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: components/sources/dir/dirconfigurationwidget.ui:32
+msgid "Folder to show:"
+msgstr "Carpeta a mostrar:"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/dir/dirconfigurationwidget.ui:52
+msgid "Title:"
+msgstr "Títol:"
+
+#. i18n: ectx: property (text), widget (QLabel, titleHelpLabel)
+#: components/sources/dir/dirconfigurationwidget.ui:68
+msgid "If title is left empty, the folder name will be used"
+msgstr "Si es deixa en blanc el títol, s'usarà el nom de la carpeta"
+
+#: components/sources/favorites/fileplacesmodel.cpp:124
+msgctxt "KFile System Bookmarks"
+msgid "Home"
+msgstr "Inici"
+
+#: components/sources/favorites/fileplacesmodel.cpp:127
+msgctxt "KFile System Bookmarks"
+msgid "Network"
+msgstr "Xarxa"
+
+#: components/sources/favorites/fileplacesmodel.cpp:139
+msgctxt "KFile System Bookmarks"
+msgid "Root"
+msgstr "Arrel"
+
+#: components/sources/favorites/fileplacesmodel.cpp:143
+msgctxt "KFile System Bookmarks"
+msgid "Trash"
+msgstr "Paperera"
+
+#: components/sources/favorites/fileplacesmodel.cpp:758
+#, kde-format
+msgid "&Release '%1'"
+msgstr "&Llançament «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:760
+#, kde-format
+msgid "&Safely Remove '%1'"
+msgstr "Extrau «%1» amb &seguretat"
+
+#: components/sources/favorites/fileplacesmodel.cpp:763
+#, kde-format
+msgid "&Unmount '%1'"
+msgstr "&Desmunta «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:784
+#, kde-format
+msgid "&Eject '%1'"
+msgstr "&Expulsa «%1»"
+
+#: components/sources/favorites/fileplacesmodel.cpp:818
+#, kde-format
+msgid "The device '%1' is not a disk and cannot be ejected."
+msgstr "El dispositiu «%1» no és cap disc i no es pot expulsar."
+
+#: components/sources/favorites/fileplacesmodel.cpp:854
+#, kde-format
+msgid "An error occurred while accessing '%1', the system responded: %2"
+msgstr "Hi ha hagut un error en accedir a «%1», el sistema ha contestat: %2"
+
+#: components/sources/favorites/fileplacesmodel.cpp:858
+#, kde-format
+msgid "An error occurred while accessing '%1'"
+msgstr "Hi ha hagut un error en accedir a «%1»"
+
+#: components/sources/installedapps/installedappsconfigurationwidget.cpp:133
+#: components/sources/installedapps/installedappsmodel.cpp:332
+msgid "All Applications"
+msgstr "Totes les aplicacions"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/installedapps/installedappsconfigurationwidget.ui:17
+msgid "Pick the application folder to display:"
+msgstr "Trieu la carpeta d'aplicacions a mostrar:"
+
+#: components/sources/installedapps/installedappsmodel.cpp:258
+#: components/sources/installedapps/installedappsmodel.cpp:269
+#: components/sources/recentapps/recentappsmodel.cpp:121
+#: components/sources/recentapps/recentappsmodel.cpp:132
+msgid "Add to Desktop"
+msgstr "Afig a l'escriptori"
+
+#: components/sources/installedapps/installedappsmodel.cpp:262
+#: components/sources/installedapps/installedappsmodel.cpp:273
+#: components/sources/recentapps/recentappsmodel.cpp:125
+#: components/sources/recentapps/recentappsmodel.cpp:136
+msgid "Add to Panel"
+msgstr "Afig al plafó"
+
+#: components/sources/installedapps/installedappsmodel.cpp:293
+#: components/sources/recentapps/recentappsmodel.cpp:154
+msgid "Add as Launcher"
+msgstr "Afig com a llançador"
+
+#: components/sources/installedapps/installedappsmodel.cpp:437
+msgid "Applications"
+msgstr "Aplicacions"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:241
+msgid "Remove from Sidebar"
+msgstr "Elimina de la barra lateral"
+
+#: components/sources/power/combinedpowersessionmodel.cpp:245
+msgid "Add to Sidebar"
+msgstr "Afig a la barra lateral"
+
+#: components/sources/power/powermodel.cpp:43
+msgid "Power"
+msgstr "Energia"
+
+#: components/sources/power/powermodel.cpp:47
+msgctxt "an action"
+msgid "Suspend"
+msgstr "Suspèn"
+
+#: components/sources/power/powermodel.cpp:53
+msgctxt "an action"
+msgid "Hibernate"
+msgstr "Hiberna"
+
+#: components/sources/power/powermodel.cpp:59
+msgctxt "an action"
+msgid "Restart"
+msgstr "Reinicia"
+
+#: components/sources/power/powermodel.cpp:64
+msgctxt "an action"
+msgid "Shutdown"
+msgstr "Para"
+
+#: components/sources/recentapps/recentappsmodel.cpp:112
+msgid "Forget Application"
+msgstr "Oblida l'aplicació"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: components/sources/runners/runnerconfigurationwidget.ui:17
+msgid "Pick the runners you would like to use in this source:"
+msgstr "Trieu els corredors que vos agradaria usar en esta font:"
+
+#: components/sources/session/sessionmodel.cpp:50
+msgctxt "an action"
+msgid "Lock"
+msgstr "Bloqueja"
+
+#: components/sources/session/sessionmodel.cpp:65
+msgctxt "an action"
+msgid "New Session"
+msgstr "Sessió nova"
+
+#: components/sources/session/sessionmodel.cpp:85
+msgctxt "an action"
+msgid "Logout"
+msgstr "Ix"
+
+#: devdoc/helloworld/helloworld.cpp:47
+msgid "Hello"
+msgstr "Hola"
+
+#: devdoc/helloworld/helloworld.cpp:52
+msgid "World"
+msgstr "Món"
+
+#: devdoc/helloworld/helloworld.cpp:67
+msgid "Hello World"
+msgstr "Hola món"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/applet/generalconfigpage.ui:17
+msgid "Icon:"
+msgstr "Icona:"
+
+#: fullscreen/applet/homerunlauncher.cpp:60
+#: kicker/package/contents/ui/main.qml:571
+msgid "Edit Applications..."
+msgstr "Edita les aplicacions..."
+
+#: fullscreen/applet/homerunlauncher.cpp:143
+msgid "General"
+msgstr "General"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: fullscreen/package/contents/ui/config.ui:17
+msgid "Text Color:"
+msgstr "Color del text:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: fullscreen/package/contents/ui/config.ui:30
+msgid "Text Shadow:"
+msgstr "Ombra del text:"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeNone)
+#: fullscreen/package/contents/ui/config.ui:40
+msgid "None"
+msgstr "Cap"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeAuto)
+#: fullscreen/package/contents/ui/config.ui:47
+msgid "Automatic"
+msgstr "Automàtica"
+
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_shadowModeCustom)
+#: fullscreen/package/contents/ui/config.ui:56
+msgid "Custom:"
+msgstr "Personalitzada:"
+
+#: fullscreen/package/contents/ui/main.qml:101
+msgid "Go to previous tab"
+msgstr "Vés a la pestanya anterior"
+
+#: fullscreen/package/contents/ui/main.qml:107
+msgid "Go to next tab"
+msgstr "Vés a la pestanya següent"
+
+#: fullscreen/package/contents/ui/main.qml:113
+msgid "Focus search field"
+msgstr "Focus al camp de cerca"
+
+#: fullscreen/package/contents/ui/main.qml:119
+msgid "Go back"
+msgstr "Retrocedeix"
+
+#: fullscreen/package/contents/ui/main.qml:125
+msgid "Go forward"
+msgstr "Avança"
+
+#: fullscreen/package/contents/ui/main.qml:131
+msgid "Go up"
+msgstr "Puja"
+
+#: fullscreen/package/contents/ui/main.qml:156
+msgctxt "Used for tabs which have no name"
+msgid "<Untitled>"
+msgstr "<Sense títol>"
+
+#: fullscreen/package/contents/ui/main.qml:241
+msgctxt "Button to leave configure mode"
+msgid "Done"
+msgstr "Fet"
+
+#: fullscreen/package/contents/ui/main.qml:263
+msgid "Search in current tab..."
+msgstr "Cerca a la pestanya actual..."
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "End Configure Tabs"
+msgstr "Finalitza la configuració de les pestanyes"
+
+#: fullscreen/package/contents/ui/main.qml:299
+msgid "Configure Tabs"
+msgstr "Configura les pestanyes"
+
+#: fullscreen/package/contents/ui/main.qml:308
+msgid "Configure Shortcuts..."
+msgstr "Configura les dreceres..."
+
+#: fullscreen/package/contents/ui/main.qml:312
+msgid "Show Action List Buttons"
+msgstr "Mostra els botons de la llista d'accions"
+
+#: fullscreen/package/contents/ui/main.qml:321
+msgid "Show Desktop Tool Box"
+msgstr "Mostra el quadre d'eines de l'escriptori"
+
+#: fullscreen/package/contents/ui/main.qml:332
+msgid "Restore Tabs to Default"
+msgstr "Restaura les pestanyes predeterminades"
+
+#: fullscreen/package/contents/ui/main.qml:335
+msgid ""
+"Are you sure you want to restore tabs?\n"
+"Restoring tabs will reset your configuration to the default Homerun tabs.\n"
+"Your lists of favorite applications and places will remain untouched."
+msgstr ""
+"Esteu segur que voleu restaurar les pestanyes?\n"
+"La restauració de les pestanyes restablirà la configuració de les pestanyes "
+"per omissió del Homerun.\n"
+"Les vostres llistes d'aplicacions i llocs preferits romandran intactes."
+
+#: fullscreen/package/contents/ui/main.qml:336
+#: fullscreen/package/contents/ui/main.qml:337
+msgid "Restore Tabs"
+msgstr "Restaura les pestanyes"
+
+#: fullscreen/package/contents/ui/main.qml:350
+#, kde-format
+msgid "About %1"
+msgstr "Quant a %1"
+
+#: fullscreen/package/contents/ui/Result.qml:149
+msgid "Drag to reorder; release to show menu"
+msgstr "Arrossegueu per a canviar l'orde, deixeu anar per a mostrar-la al menú"
+
+#: fullscreen/package/contents/ui/Result.qml:151
+msgid "Release to show menu"
+msgstr "Deixa anar per a mostrar-la al menú"
+
+#: fullscreen/package/contents/ui/Result.qml:153
+msgid "Drag to reorder"
+msgstr "Arrossega per a canviar l'orde"
+
+#: fullscreen/package/contents/ui/Result.qml:156
+msgid "This item has no menu and cannot be dragged"
+msgstr "Este element no té menú i no es pot arrossegar"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:192
+#: kicker/package/contents/ui/ItemListDelegate.qml:268
+#: kicker/package/contents/ui/SidebarItem.qml:122
+msgid "Remove from Favorites"
+msgstr "Elimina dels preferits"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:196
+#: kicker/package/contents/ui/ItemListDelegate.qml:272
+#: kicker/package/contents/ui/SidebarItem.qml:126
+msgid "Add to Favorites"
+msgstr "Afig als preferits"
+
+#: fullscreen/package/contents/ui/ResultsView.qml:367
+#, kde-format
+msgid "%1 has been added to your favorites"
+msgstr "%1 ha estat afegit als vostres preferits"
+
+#: fullscreen/package/contents/ui/SourceItem.qml:55
+#, kde-format
+msgid "Broken source '%1'"
+msgstr "Font malmesa «%1»"
+
+#: fullscreen/package/contents/ui/TabContent.qml:86
+msgid "Tab Icon:"
+msgstr "Icona de la pestanya:"
+
+#: fullscreen/package/contents/ui/TabContent.qml:105
+msgid "Tab Label:"
+msgstr "Etiqueta de la pestanya:"
+
+#: fullscreen/viewer/main.cpp:41
+#, kde-format
+msgid ""
+"<p><b>Sorry, Homerun failed to load</b></p><p>Do you want to report this "
+"error?</p><p>If you decide to report it, please copy and paste the following "
+"output in your report:</p><pre>%1</pre>"
+msgstr ""
+"<p><b>Perdoneu, el Homerun no s'ha pogut carregar.</b></p><p>Voleu informar "
+"d'este error?</p><p>Si decidiu informar-ne, per favor, copieu i apegueu la "
+"següent eixida al vostre informe:</p><pre>%1</pre>"
+
+#: fullscreen/viewer/main.cpp:48
+msgid "Report Error"
+msgstr "Informa d'un error"
+
+#: fullscreen/viewer/main.cpp:65
+msgid "Log focused item (for debug purposes)"
+msgstr "Registra l'element que té el focus (per a propòsits de depuració)"
+
+#: fullscreen/viewer/main.cpp:66
+msgid "Use a plain window (for debug purposes)"
+msgstr "Usa una finestra plana (per a propòsits de depuració)"
+
+#: internal/aboutdata.cpp:41
+msgctxt "Program name"
+msgid "Homerun"
+msgstr "Homerun"
+
+#: internal/aboutdata.cpp:44
+msgid "(C) 2012-2014 Blue Systems"
+msgstr "(C) 2012-2014 Blue Systems"
+
+#: internal/aboutdata.cpp:47
+msgid "Shaun Reich"
+msgstr "Shaun Reich"
+
+#: internal/aboutdata.cpp:47 internal/aboutdata.cpp:48
+#: internal/aboutdata.cpp:49
+msgid "Developer"
+msgstr "Desenvolupador"
+
+#: internal/aboutdata.cpp:48
+msgid "Aurélien Gâteau"
+msgstr "Aurélien Gâteau"
+
+#: internal/aboutdata.cpp:49
+msgid "Eike Hein"
+msgstr "Eike Hein"
+
+#: internal/i18nconfig.cpp:30
+msgctxt "Tab title"
+msgid "Home"
+msgstr "Inici"
+
+#: internal/i18nconfig.cpp:31
+msgctxt "Tab title"
+msgid "Files"
+msgstr "Fitxers"
+
+#: internal/i18nconfig.cpp:32
+msgctxt "Tab title"
+msgid "Applications"
+msgstr "Aplicacions"
+
+#: internal/i18nconfig.cpp:33
+msgctxt "Tab title"
+msgid "Power"
+msgstr "Energia"
+
+#. i18n: ectx: property (text), widget (QLabel, label_6)
+#: kicker/package/contents/ui/config.ui:26
+msgid "Behavior"
+msgstr "Comportament"
+
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: kicker/package/contents/ui/config.ui:33
+msgid "Search bookmarks and files:"
+msgstr ""
+
+#. i18n: ectx: property (whatsThis), widget (QCheckBox, kcfg_runnerSupport)
+#: kicker/package/contents/ui/config.ui:46
+msgid ""
+"If this option is enabled, search may display additional columns with search "
+"results powered by certain Plasma runner plugins, such as \"Bookmarks\" and "
+"\"Desktop Search\"."
+msgstr ""
+"Si esta opció està activada, la cerca pot mostrar columnes addicionals amb "
+"els resultats de cerca subministrats per certs connectors de corredor del "
+"Plasma, com ara «Adreces d'interés» i «Cerca a l'escriptori»."
+
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: kicker/package/contents/ui/config.ui:62
+msgid "Appearance"
+msgstr "Aparença"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: kicker/package/contents/ui/config.ui:69
+msgid "Custom button image:"
+msgstr "Imatge de botó personalitzat:"
+
+#. i18n: ectx: property (filter), widget (KUrlRequester, kcfg_buttonImage)
+#: kicker/package/contents/ui/config.ui:94
+msgid "*.jpg *.png *.xpm *.gif *.webp"
+msgstr "*.jpg *.png *.xpm *.gif *.webp"
+
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: kicker/package/contents/ui/config.ui:103
+#, fuzzy
+#| msgid "Align contents to bottom"
+msgid "Align contents to bottom:"
+msgstr "Alinea el contingut a baix"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: kicker/package/contents/ui/config.ui:123
+#, fuzzy
+#| msgid "Applications"
+msgid "Show applications as:"
+msgstr "Aplicacions"
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:143
+msgid "Name only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:148
+msgid "Description only"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:153
+msgid "Name (Description)"
+msgstr ""
+
+#. i18n: ectx: property (text), item, widget (QComboBox, kcfg_nameFormat)
+#: kicker/package/contents/ui/config.ui:158
+msgid "Description (Name)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:191
+#, kde-format
+msgctxt "App name (Generic name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/ItemListDelegate.qml:193
+#, kde-format
+msgctxt "Generic Name (App name)"
+msgid "%1 (%2)"
+msgstr ""
+
+#: kicker/package/contents/ui/main.qml:304
+msgid "Search..."
+msgstr "Cerca..."
+
+#: kicker/package/contents/ui/main.qml:504
+#: plugins/recentdocuments/recentdocuments.cpp:130
+msgid "Recent Documents"
+msgstr "Documents recents"
+
+#: kicker/package/contents/ui/main.qml:567
+msgid "Homerun Kicker"
+msgstr "Kicker Homerun"
+
+#: kicker/package/contents/ui/main.qml:568
+msgid "Launch applications and manage your desktop."
+msgstr "Llanceu aplicacions i gestioneu el vostre l'escriptori."
+
+#: lib/actionlist.cpp:75
+msgctxt "@action:inmenu"
+msgid "Empty Trash"
+msgstr "Buida la paperera"
+
+#: lib/actionlist.cpp:93
+msgid "Open with:"
+msgstr "Obri amb:"
+
+#: lib/actionlist.cpp:105
+msgid "Properties"
+msgstr "Propietats"
+
+#: plugins/recentdocuments/recentdocuments.cpp:152
+msgid "Forget Document"
+msgstr "Oblida el document"
+
+#~ msgid "Use Plasma runners for additional search results"
+#~ msgstr ""
+#~ "Usa els corredors de Plasma per obtindre resultats de cerca addicionals"

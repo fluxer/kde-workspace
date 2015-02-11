@@ -13,9 +13,9 @@ zvalue=0
 RightButton;NoModifier=contextmenu
 
 [Containments][1][Applets][23]
-geometry=0,3,32,32
+geometry=4,3,32,32
 immutability=1
-plugin=launcher
+plugin=org.kde.homerun-kicker
 zvalue=0
 
 [Containments][1][Applets][23][LayoutInformation]
