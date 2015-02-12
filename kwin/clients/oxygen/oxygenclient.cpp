@@ -1686,6 +1686,12 @@ namespace Oxygen
         // check format
         if( !event->mimeData()->hasFormat( tabDragMimeType() ) ) return false;
 
+        if( _itemData.count() > 1 )  {
+
+            if( _dragStartTimer.isActive() ) _dragStartTimer.stop();
+
+        }
+
         return false;
 
     }

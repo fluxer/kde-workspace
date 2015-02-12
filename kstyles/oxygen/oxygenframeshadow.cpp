@@ -229,14 +229,14 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void FrameShadowFactory::updateState( const QWidget* widget, bool focus, bool hover, qreal opacity ) const
+    void FrameShadowFactory::updateState( const QWidget* widget, bool focus, bool hover ) const
     {
 
         const QList<QObject *> children = widget->children();
         foreach( QObject *child, children )
         {
             if( FrameShadowBase* shadow = qobject_cast<FrameShadowBase *>(child) )
-            { shadow->updateState( focus, hover, opacity ); }
+            { shadow->updateState( focus, hover ); }
         }
 
     }
@@ -397,28 +397,11 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void SunkenFrameShadow::updateState( bool focus, bool hover, qreal opacity )
+    void SunkenFrameShadow::updateState( bool focus, bool hover )
     {
         bool changed( false );
         if( _focus != focus ) { _focus = focus; changed |= true; }
         if( _hover != hover ) { _hover = hover; changed |= !_focus; }
-
-        if( _opacity != opacity ) { _opacity = opacity; changed |= 0; }
-        if( changed )
-        {
-
-            if( QWidget* viewport = this->viewport() )
-            {
-
-                // need to disable viewport updates to avoid some redundant painting
-                // besides it fixes one visual glitch (from Qt) in QTableViews
-                viewport->setUpdatesEnabled( false );
-                update() ;
-                viewport->setUpdatesEnabled( true );
-
-            } else update();
-
-        }
     }
 
     //____________________________________________________________________________________
@@ -477,7 +460,7 @@ namespace Oxygen
 
         QPainter painter(this);
         painter.setClipRegion( event->region() );
-        _helper.renderHole( &painter, palette().color( QPalette::Window ), r, options, _opacity, tiles );
+        _helper.renderHole( &painter, palette().color( QPalette::Window ), r, options, tiles );
 
         return;
 

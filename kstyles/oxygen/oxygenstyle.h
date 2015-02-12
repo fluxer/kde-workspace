@@ -571,7 +571,6 @@ namespace Oxygen
         /*! there are two methods (_Single and _Plain) implemented, to deal with tabbar appearance selected from options */
         virtual bool drawTabBarTabShapeControl_Single( const QStyleOption*, QPainter*, const QWidget* ) const;
         virtual bool drawTabBarTabShapeControl_Plain( const QStyleOption*, QPainter*, const QWidget* ) const;
-        virtual bool drawToolBarControl( const QStyleOption*, QPainter*, const QWidget* ) const;
         virtual bool drawToolBoxTabLabelControl( const QStyleOption*, QPainter*, const QWidget* ) const;
         virtual bool drawToolBoxTabShapeControl( const QStyleOption*, QPainter*, const QWidget* ) const;
         virtual bool drawToolButtonLabelControl( const QStyleOption*, QPainter*, const QWidget* ) const;
@@ -722,9 +721,6 @@ namespace Oxygen
         void renderHeaderBackground( const QRect&, const QPalette&, QPainter*, const QWidget*, bool horizontal, bool reverse ) const;
         void renderHeaderLines( const QRect&, const QPalette&, QPainter*, TileSet::Tiles ) const;
 
-        //! menu item background
-        void renderMenuItemBackground( const QStyleOption*, QPainter*, const QWidget* ) const;
-
         void renderMenuItemRect( const QStyleOption* opt, const QRect& rect, const QPalette& pal, QPainter* p, qreal opacity = -1 ) const
         { renderMenuItemRect( opt, rect, pal.color(QPalette::Window), p, opacity ); }
 
@@ -740,7 +736,7 @@ namespace Oxygen
         };
 
         //! checkbox
-        void renderCheckBox( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1) const;
+        void renderCheckBox( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState) const;
 
         //! radio button
         void renderRadioButton( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1 ) const;

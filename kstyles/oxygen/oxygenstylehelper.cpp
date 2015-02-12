@@ -447,7 +447,6 @@ namespace Oxygen
             // colors
             const QColor base( KColorUtils::shade( color, shade ) );
             const QColor light( KColorUtils::shade( calcLightColor( color ), shade ) );
-            const QColor dark( KColorUtils::shade( calcDarkColor( color ), shade ) );
             const QColor mid( KColorUtils::shade( calcMidColor( color ), shade ) );
             const QColor shadow( calcShadowColor( color ) );
 
@@ -707,7 +706,7 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void StyleHelper::renderHole( QPainter* p, const QColor& base, const QRect& r, HoleOptions options, qreal opacity,  TileSet::Tiles tiles )
+    void StyleHelper::renderHole( QPainter* p, const QColor& base, const QRect& r, HoleOptions options,  TileSet::Tiles tiles )
     {
         if( !r.isValid() ) return;
         if( options & HoleFocus ) {

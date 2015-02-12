@@ -1105,7 +1105,6 @@ namespace Oxygen
             // default tab style is 'SINGLE'
             case CE_TabBarTabShape: fcn = _tabBarTabShapeControl; break;
 
-            case CE_ToolBar: fcn = &Style::drawToolBarControl; break;
             case CE_ToolBoxTabLabel: fcn = &Style::drawToolBoxTabLabelControl; break;
             case CE_ToolBoxTabShape: fcn = &Style::drawToolBoxTabShapeControl; break;
             case CE_ToolButtonLabel: fcn = &Style::drawToolButtonLabelControl; break;
@@ -2364,12 +2363,11 @@ namespace Oxygen
         if( flags & State_Sunken )
         {
             const QRect local( r.adjusted( 1, 1, -1, -1 ) );
-            qreal opacity( -1 );
 
             if( frameShadowFactory().isRegistered( widget ) )
             {
 
-                frameShadowFactory().updateState( widget, focusHighlight, hoverHighlight, opacity );
+                frameShadowFactory().updateState( widget, focusHighlight, hoverHighlight );
 
             } else {
 
@@ -2378,8 +2376,7 @@ namespace Oxygen
                 if( hoverHighlight ) options |= HoleHover;
 
                 helper().renderHole(
-                    painter, palette.color( QPalette::Window ), local, options,
-                    opacity, TileSet::Ring );
+                    painter, palette.color( QPalette::Window ), local, options, TileSet::Ring );
 
             }
 
@@ -2852,6 +2849,8 @@ namespace Oxygen
     //___________________________________________________________________________________
     bool Style::drawIndicatorHeaderArrowPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
     {
+        Q_UNUSED(widget);
+
         const QStyleOptionHeader *headerOpt = qstyleoption_cast<const QStyleOptionHeader *>( option );
         const State& flags( option->state );
 
@@ -4174,6 +4173,7 @@ namespace Oxygen
     //___________________________________________________________________________________
     bool Style::drawMenuBarItemControl( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
     {
+        Q_UNUSED(widget);
 
         const QStyleOptionMenuItem* menuOpt = ::qstyleoption_cast<const QStyleOptionMenuItem*>( option );
         if ( !menuOpt ) return true;
@@ -4205,9 +4205,6 @@ namespace Oxygen
         const bool enabled( flags & State_Enabled );
         const bool hasFocus( enabled && ( flags & State_HasFocus ) );
         const bool mouseOver( enabled && ( flags & State_MouseOver ) );
-
-        //First of all,render the background.
-        renderMenuItemBackground( option, painter, widget );
 
         // do nothing if invalid option, or empty area
         const QStyleOptionMenuItem* menuItemOption = qstyleoption_cast<const QStyleOptionMenuItem*>( option );
@@ -4452,6 +4449,7 @@ namespace Oxygen
     //___________________________________________________________________________________
     bool Style::drawProgressBarContentsControl( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
     {
+        Q_UNUSED(widget);
 
         const QStyleOptionProgressBar* pbOpt = qstyleoption_cast<const QStyleOptionProgressBar*>( option );
         if ( !pbOpt ) return true;
@@ -4760,6 +4758,7 @@ namespace Oxygen
     //___________________________________________________________________________________
     bool Style::drawScrollBarSliderControl( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
     {
+        Q_UNUSED(widget);
 
         // cast option and check
         const QStyleOptionSlider *sliderOption = qstyleoption_cast<const QStyleOptionSlider *>( option );
@@ -6723,15 +6722,6 @@ namespace Oxygen
     }
 
     //___________________________________________________________________________________
-    bool Style::drawToolBarControl( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
-    {
-        // draw nothing otherwise ( toolbars are transparent )
-
-        return true;
-
-    }
-
-    //___________________________________________________________________________________
     bool Style::drawToolBoxTabLabelControl( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
     {
 
@@ -8173,6 +8163,7 @@ namespace Oxygen
     //___________________________________________________________________________________
     void Style::renderSplitter( const QStyleOption* option, QPainter* painter, const QWidget* widget, bool horizontal ) const
     {
+        Q_UNUSED(widget);
 
         const QPalette& palette( option->palette );
         const QRect& r( option->rect );
@@ -8445,12 +8436,6 @@ namespace Oxygen
     }
 
     //__________________________________________________________________________
-    void Style::renderMenuItemBackground( const QStyleOption* option, QPainter* painter, const QWidget* widget ) const
-    {
-        return;
-    }
-
-    //__________________________________________________________________________
     void Style::renderMenuItemRect( const QStyleOption* opt, const QRect& r, const QColor& base, const QPalette& palette, QPainter* painter, qreal opacity ) const
     {
 
@@ -8523,8 +8508,7 @@ namespace Oxygen
     //________________________________________________________________________
     void Style::renderCheckBox(
         QPainter *painter, const QRect &rect, const QPalette &palette,
-        StyleOptions options, CheckBoxState state,
-        qreal opacity) const
+        StyleOptions options, CheckBoxState state) const
     {
 
         const int s( qMin( rect.width(), rect.height() ) );
@@ -8793,6 +8777,8 @@ namespace Oxygen
     //______________________________________________________________________________
     QColor Style::scrollBarArrowColor( const QStyleOptionSlider* option, const SubControl& control, const QWidget* widget ) const
     {
+        Q_UNUSED(widget);
+
         const QPalette& palette( option->palette );
         QColor color( palette.color( QPalette::WindowText ) );
 
