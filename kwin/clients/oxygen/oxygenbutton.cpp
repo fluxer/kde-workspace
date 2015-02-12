@@ -51,7 +51,6 @@ namespace Oxygen
         _type(type),
         _status( 0 ),
         _forceInactive( false ),
-        _glowAnimation( new Animation( 150, this ) ),
         _glowIntensity(0)
     {
         setAutoFillBackground(false);
@@ -62,13 +61,6 @@ namespace Oxygen
 
         setCursor(Qt::ArrowCursor);
         setToolTip(tip);
-
-        // setup animation
-        _glowAnimation->setStartValue( 0 );
-        _glowAnimation->setEndValue( 1.0 );
-        _glowAnimation->setTargetObject( this );
-        _glowAnimation->setPropertyName( "glowIntensity" );
-        _glowAnimation->setEasingCurve( QEasingCurve::InOutQuad );
 
         // setup connections
         reset(0);
@@ -83,20 +75,12 @@ namespace Oxygen
     //_______________________________________________
     QColor Button::buttonDetailColor(const QPalette &palette) const
     {
-        if( _client.glowIsAnimated() && !_forceInactive && !_client.isForcedActive()) return KColorUtils::mix(
-            buttonDetailColor( palette, false ),
-            buttonDetailColor( palette, true ),
-            _client.glowIntensity() );
-        else return buttonDetailColor( palette, isActive() || _client.isForcedActive() );
+        return buttonDetailColor( palette, isActive() || _client.isForcedActive() );
     }
 
     //___________________________________________________
     bool Button::isActive( void ) const
     { return (!_forceInactive) && _client.isActive(); }
-
-    //___________________________________________________
-    bool Button::buttonAnimationsEnabled( void ) const
-    { return _client.animationsEnabled() && _client.configuration()->buttonAnimationsEnabled(); }
 
     //___________________________________________________
     QSize Button::sizeHint() const
@@ -107,7 +91,7 @@ namespace Oxygen
 
     //___________________________________________________
     void Button::reset( unsigned long )
-    { _glowAnimation->setDuration( _client.configuration()->buttonAnimationsDuration() ); }
+    { }
 
     //___________________________________________________
     void Button::paint( QPainter& painter )
@@ -137,19 +121,13 @@ namespace Oxygen
 
         // decide decoration color
         QColor glow;
-        if( isAnimated() || (_status&Hovered) )
+        if( (_status&Hovered) )
         {
             glow = isCloseButton() ?
                 _helper.viewNegativeTextBrush().brush(palette).color():
                 _helper.viewHoverBrush().brush(palette).color();
 
-            if( isAnimated() )
-            {
-
-                color = KColorUtils::mix( color, glow, glowIntensity() );
-                glow = _helper.alphaColor( glow, glowIntensity() );
-
-            } else if( _status&Hovered  ) color = glow;
+            if( _status&Hovered  ) color = glow;
 
         }
 
@@ -243,13 +221,7 @@ namespace Oxygen
         KCommonDecorationButton::enterEvent( event );
         _status |= Hovered;
 
-        if( buttonAnimationsEnabled() )
-        {
-
-            _glowAnimation->setDirection( Animation::Forward );
-            if( !isAnimated() ) _glowAnimation->start();
-
-        } else parentUpdate();
+        parentUpdate();
 
     }
 
@@ -258,12 +230,6 @@ namespace Oxygen
     {
 
         KCommonDecorationButton::leaveEvent( event );
-
-        if( _status&Hovered && buttonAnimationsEnabled() )
-        {
-            _glowAnimation->setDirection( Animation::Backward );
-            if( !isAnimated() ) _glowAnimation->start();
-        }
 
         _status &= ~Hovered;
         parentUpdate();

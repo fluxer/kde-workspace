@@ -1,5 +1,4 @@
 set(oxygenstyle_LIB_SRCS
-    oxygenanimation.cpp
     oxygenhelper.cpp
     oxygenitemmodel.cpp
     oxygenshadowcache.cpp
@@ -25,16 +24,10 @@ install(TARGETS oxygenstyle ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # next target
 set(oxygenstyleconfig_LIB_SRCS
-    oxygenanimationconfigitem.cpp
-    oxygenbaseanimationconfigwidget.cpp
-    oxygengenericanimationconfigitem.cpp
     oxygenshadowconfigwidget.cpp
 )
 
 kde4_add_ui_files(oxygenstyleconfig_LIB_SRCS
-    ui/oxygenanimationconfigitem.ui
-    ui/oxygenanimationconfigwidget.ui
-    ui/oxygengenericanimationconfigbox.ui
     ui/oxygenshadowconfigurationui.ui
 )
 

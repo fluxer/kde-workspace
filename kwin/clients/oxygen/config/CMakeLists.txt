@@ -1,7 +1,6 @@
 include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/oxygen)
 
 set(kwin_oxygen_config_PART_SRCS
-    oxygenanimationconfigwidget.cpp
     oxygenconfig.cpp
     oxygenconfigwidget.cpp
     oxygendetectwidget.cpp

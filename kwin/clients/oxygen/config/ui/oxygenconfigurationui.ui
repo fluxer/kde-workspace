@@ -174,7 +174,7 @@
          </item>
         </widget>
        </item>
-       <item row="4" column="0" colspan="4">
+       <item row="3" column="0" colspan="4">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -186,13 +186,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="3" column="0" colspan="4">
-        <widget class="QCheckBox" name="animationsEnabled">
-         <property name="text">
-          <string>Enable animations</string>
-         </property>
-        </widget>
        </item>
        <item row="0" column="3">
         <spacer name="horizontalSpacer">
@@ -361,29 +354,6 @@
      </widget>
     </widget>
    </item>
-   <item>
-    <widget class="QWidget" name="_expertModeContainer" native="true">
-     <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="_expertModeButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="3">
-       <widget class="QFrame" name="frame_2">
-        <property name="frameShape">
-         <enum>QFrame::HLine</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -416,8 +386,6 @@
   <tabstop>frameBorder</tabstop>
   <tabstop>titleAlignment</tabstop>
   <tabstop>buttonSize</tabstop>
-  <tabstop>animationsEnabled</tabstop>
-  <tabstop>_expertModeButton</tabstop>
   <tabstop>separatorMode</tabstop>
   <tabstop>titleOutline</tabstop>
   <tabstop>narrowButtonSpacing</tabstop>

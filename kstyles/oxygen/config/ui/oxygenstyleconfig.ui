@@ -74,13 +74,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="_animationsEnabled">
-         <property name="text">
-          <string>Enable animations</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="3" column="0">
           <widget class="QLabel" name="label_3">
@@ -538,29 +531,6 @@
      </widget>
     </widget>
    </item>
-   <item>
-    <widget class="QWidget" name="_expertModeContainer" native="true">
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="_expertModeButton">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="3">
-       <widget class="QFrame" name="frame_2">
-        <property name="frameShape">
-         <enum>QFrame::HLine</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Raised</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -586,11 +556,9 @@
   <tabstop>_toolBarDrawItemSeparator</tabstop>
   <tabstop>_checkDrawX</tabstop>
   <tabstop>_cacheEnabled</tabstop>
-  <tabstop>_animationsEnabled</tabstop>
   <tabstop>_mnemonicsMode</tabstop>
   <tabstop>_windowDragMode</tabstop>
   <tabstop>_useWMMoveResize</tabstop>
-  <tabstop>_expertModeButton</tabstop>
   <tabstop>_viewDrawFocusIndicator</tabstop>
   <tabstop>_viewDrawTreeBranchLines</tabstop>
   <tabstop>_viewDrawTriangularExpander</tabstop>

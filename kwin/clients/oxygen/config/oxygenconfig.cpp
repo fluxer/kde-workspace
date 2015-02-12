@@ -30,7 +30,6 @@
 #include "oxygenconfig.h"
 #include "oxygenconfig.moc"
 
-#include "oxygenanimationconfigwidget.h"
 #include "oxygenconfiguration.h"
 #include "oxygenutil.h"
 #include "../oxygenexceptionlist.h"
@@ -77,10 +76,6 @@ namespace Oxygen
     //_______________________________________________________________________
     Config::~Config()
     { delete _configWidget; }
-
-    //_______________________________________________________________________
-    void Config::toggleExpertMode( bool value )
-    { _configWidget->toggleExpertMode( value ); }
 
     //_______________________________________________________________________
     void Config::load( void )

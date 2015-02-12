@@ -43,7 +43,6 @@ namespace Oxygen
     {
 
         setEnabled( true );
-        setMaxIndex( 256 );
 
     }
 
@@ -65,13 +64,6 @@ namespace Oxygen
         // for now, always return true (meaning that config has changed)
         return;
 
-    }
-
-    //_______________________________________________________
-    void ShadowCache::setAnimationsDuration( int value )
-    {
-        setMaxIndex( qMin( 256, int( (120*value)/1000 ) ) );
-        invalidateCaches();
     }
 
     //_______________________________________________________
@@ -123,56 +115,6 @@ namespace Oxygen
         TileSet* tileSet = new TileSet( pixmap( key, key.active ), size, size, size, size, size, size, 1, 1);
         _shadowCache.insert( hash, tileSet );
 
-        return tileSet;
-
-    }
-
-    //_______________________________________________________
-    TileSet* ShadowCache::tileSet( Key key, qreal opacity )
-    {
-
-        int index( opacity*_maxIndex );
-        assert( index <= _maxIndex );
-
-        // construct key
-        key.index = index;
-
-        // check if tileSet already in cache
-        int hash( key.hash() );
-        if( _enabled && _animatedShadowCache.contains(hash) ) return _animatedShadowCache.object(hash);
-
-        // create shadow and tileset otherwise
-        qreal size( shadowSize() + overlap );
-
-        QPixmap shadow( size*2, size*2 );
-        shadow.fill( Qt::transparent );
-        QPainter p( &shadow );
-        p.setRenderHint( QPainter::Antialiasing );
-
-        QPixmap inactiveShadow( pixmap( key, false ) );
-        if( !inactiveShadow.isNull() )
-        {
-            QPainter pp( &inactiveShadow );
-            pp.setRenderHint( QPainter::Antialiasing );
-            pp.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            pp.fillRect( inactiveShadow.rect(), QColor( 0, 0, 0, 255*(1.0-opacity ) ) );
-        }
-
-        QPixmap activeShadow( pixmap( key, true ) );
-        if( !activeShadow.isNull() )
-        {
-            QPainter pp( &activeShadow );
-            pp.setRenderHint( QPainter::Antialiasing );
-            pp.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-            pp.fillRect( activeShadow.rect(), QColor( 0, 0, 0, 255*( opacity ) ) );
-        }
-
-        p.drawPixmap( QPointF(0,0), inactiveShadow );
-        p.drawPixmap( QPointF(0,0), activeShadow );
-        p.end();
-
-        TileSet* tileSet = new TileSet(shadow, size, size, 1, 1);
-        _animatedShadowCache.insert( hash, tileSet );
         return tileSet;
 
     }

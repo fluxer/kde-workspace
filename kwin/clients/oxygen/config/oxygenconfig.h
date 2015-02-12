@@ -84,9 +84,6 @@ namespace Oxygen {
         //! restore defaults
         void defaults( void );
 
-        //! toggle expert mode
-        void toggleExpertMode( bool );
-
         private slots:
 
         //! update change state

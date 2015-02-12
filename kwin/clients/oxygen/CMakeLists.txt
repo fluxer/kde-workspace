@@ -15,7 +15,6 @@ set(kwin_oxygen_SRCS
      oxygenexceptionlist.cpp
      oxygenfactory.cpp
      oxygensizegrip.cpp
-     oxygentitleanimationdata.cpp
   )
 
 kde4_add_kcfg_files(kwin_oxygen_SRCS oxygenconfiguration.kcfgc )

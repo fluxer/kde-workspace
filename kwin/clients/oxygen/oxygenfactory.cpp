@@ -101,7 +101,6 @@ namespace Oxygen
 
         // read shadowCache configuration
         _shadowCache.readConfig();
-        _shadowCache.setAnimationsDuration( _defaultConfiguration->shadowAnimationsDuration() );
 
         // background pixmap
         {

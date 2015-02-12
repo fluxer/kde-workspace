@@ -74,43 +74,6 @@
        <default>true</default>
     </entry>
 
-    <!-- animations -->
-    <entry name="AnimationsEnabled" type = "Bool">
-       <default>false</default>
-    </entry>
-
-    <entry name="ButtonAnimationsEnabled" type = "Bool">
-       <default>true</default>
-    </entry>
-
-    <entry name="TitleAnimationsEnabled" type = "Bool">
-       <default>true</default>
-    </entry>
-    
-    <entry name="ShadowAnimationsEnabled" type = "Bool">
-       <default>true</default>
-    </entry>
-
-    <entry name="TabAnimationsEnabled" type = "Bool">
-       <default>true</default>
-    </entry>
-
-    <entry name="ButtonAnimationsDuration" type = "Int">
-       <default>150</default>
-    </entry>
-
-    <entry name="TitleAnimationsDuration" type = "Int">
-       <default>150</default>
-    </entry>
-
-    <entry name="ShadowAnimationsDuration" type = "Int">
-       <default>150</default>
-    </entry>
-
-    <entry name="TabAnimationsDuration" type = "Int">
-       <default>150</default>
-    </entry>
-
     <!-- exceptions -->
     <entry name="ExceptionType" type="Enum">
       <choices>

@@ -2,15 +2,12 @@ include_directories( ${KDE4_KDEUI_INCLUDES} ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
 
 ########### next target ###############
 set(kstyle_oxygen_config_PART_SRCS
-    oxygenanimationconfigwidget.cpp
-    oxygenfollowmouseanimationconfigitem.cpp
     oxygenstyleconfig.cpp
 )
 
 kde4_add_kcfg_files(kstyle_oxygen_config_PART_SRCS ../oxygenstyleconfigdata.kcfgc)
 
 kde4_add_ui_files(kstyle_oxygen_config_PART_SRCS
-    ui/oxygenfollowmouseanimationconfigbox.ui
     ui/oxygenstyleconfig.ui
 )
 

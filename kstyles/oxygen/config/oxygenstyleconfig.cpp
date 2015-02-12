@@ -29,7 +29,6 @@ DEALINGS IN THE SOFTWARE.
 
 #include "oxygenstyleconfig.h"
 #include "oxygenstyleconfig.moc"
-#include "oxygenanimationconfigwidget.h"
 #include "oxygenstyleconfigdata.h"
 
 #include <QtCore/QTextStream>
@@ -58,12 +57,9 @@ extern "C"
 
 namespace Oxygen
 {
-
     //__________________________________________________________________
     StyleConfig::StyleConfig(QWidget* parent):
-        QWidget(parent),
-        _expertMode( false ),
-        _animationConfigWidget(0)
+        QWidget(parent)
     {
         KGlobal::locale()->insertCatalog("kstyle_config");
 
@@ -71,12 +67,8 @@ namespace Oxygen
 
         // connections
         connect( _windowDragMode, SIGNAL(currentIndexChanged(int)), SLOT(windowDragModeChanged(int)) );
-        connect( _expertModeButton, SIGNAL(pressed()), SLOT(toggleExpertModeInternal()) );
 
-        _expertModeButton->setIcon( KIcon("configure") );
-
-        // toggle expert mode
-        toggleExpertModeInternal( false );
+        // updateMinimumSize();
 
         // load setup from configData
         load();
@@ -85,7 +77,6 @@ namespace Oxygen
         connect( _checkDrawX, SIGNAL(toggled(bool)), SLOT(updateChanged()) );
         connect( _splitterProxyEnabled, SIGNAL(toggled(bool)), SLOT(updateChanged()) );
         connect( _mnemonicsMode, SIGNAL(currentIndexChanged(int)), SLOT(updateChanged()) );
-        connect( _animationsEnabled, SIGNAL(toggled(bool)), SLOT(updateChanged()) );
         connect( _cacheEnabled, SIGNAL(toggled(bool)), SLOT(updateChanged()) );
         connect( _viewDrawTriangularExpander, SIGNAL(toggled(bool)), SLOT(updateChanged()) );
         connect( _viewTriangularExpanderSize, SIGNAL(currentIndexChanged(int)), SLOT(updateChanged()) );
@@ -123,17 +114,6 @@ namespace Oxygen
         StyleConfigData::setTabStyle( tabStyle() );
         StyleConfigData::setViewTriangularExpanderSize( triangularExpanderSize() );
 
-        if( _expertMode )
-        {
-
-            _animationConfigWidget->save();
-
-        } else {
-
-            StyleConfigData::setAnimationsEnabled( _animationsEnabled->isChecked() );
-
-        }
-
         StyleConfigData::setUseWMMoveResize( _useWMMoveResize->isChecked() );
         if( _windowDragMode->currentIndex() == 0 )
         {
@@ -167,59 +147,6 @@ namespace Oxygen
     {
         StyleConfigData::self()->readConfig();
         load();
-    }
-
-    //__________________________________________________________________
-    void StyleConfig::toggleExpertMode( bool value )
-    {
-        _expertModeContainer->hide();
-        toggleExpertModeInternal( value );
-    }
-
-    //__________________________________________________________________
-    void StyleConfig::toggleExpertModeInternal( bool value )
-    {
-
-        // store value
-        _expertMode = value;
-
-        // update button text
-        _expertModeButton->setText( _expertMode ? i18n( "Hide Advanced Configuration Options" ):i18n( "Show Advanced Configuration Options" ) );
-
-        // update widget visibility based on expert mode
-        if( _expertMode )
-        {
-
-            // create animationConfigWidget if needed
-            if( !_animationConfigWidget )
-            {
-                _animationConfigWidget = new AnimationConfigWidget();
-                _animationConfigWidget->installEventFilter( this );
-                connect( _animationConfigWidget, SIGNAL(changed(bool)), SLOT(updateChanged()) );
-                connect( _animationConfigWidget, SIGNAL(layoutChanged()), SLOT(updateLayout()) );
-                _animationConfigWidget->load();
-            }
-
-            // add animationConfigWidget to tabbar if needed
-            if( tabWidget->indexOf( _animationConfigWidget ) < 0 )
-            { tabWidget->insertTab( 1, _animationConfigWidget, i18n( "Animations" ) ); }
-
-        } else if( _animationConfigWidget ) {
-
-            if( int index = tabWidget->indexOf( _animationConfigWidget ) >= 0 )
-            { tabWidget->removeTab( index ); }
-
-        }
-
-        _mnemonicsLabel->setVisible( _expertMode );
-        _mnemonicsMode->setVisible( _expertMode );
-        _animationsEnabled->setVisible( !_expertMode );
-        _cacheEnabled->setVisible( _expertMode );
-        _useWMMoveResize->setVisible( _expertMode );
-        _viewsExpertWidget->setVisible( _expertMode );
-
-        updateMinimumSize();
-
     }
 
     //__________________________________________________________________
@@ -264,11 +191,6 @@ namespace Oxygen
     //__________________________________________________________________
     void StyleConfig::updateLayout( void )
     {
-        if( _animationConfigWidget )
-        {
-            const int delta = _animationConfigWidget->minimumSizeHint().height() - _animationConfigWidget->size().height();
-            window()->setMinimumSize( QSize( window()->minimumSizeHint().width(), window()->size().height() + delta ) );
-        }
     }
 
     //__________________________________________________________________
@@ -290,11 +212,9 @@ namespace Oxygen
         else if( (_checkDrawX->isChecked() ? StyleConfigData::CS_X : StyleConfigData::CS_CHECK) != StyleConfigData::checkBoxStyle() ) modified = true;
         else if( menuMode() != StyleConfigData::menuHighlightMode() ) modified = true;
         else if( tabStyle() != StyleConfigData::tabStyle() ) modified = true;
-        else if( _animationsEnabled->isChecked() != StyleConfigData::animationsEnabled() ) modified = true;
         else if( _cacheEnabled->isChecked() != StyleConfigData::cacheEnabled() ) modified = true;
         else if( _useWMMoveResize->isChecked() != StyleConfigData::useWMMoveResize() ) modified = true;
         else if( triangularExpanderSize() != StyleConfigData::viewTriangularExpanderSize() ) modified = true;
-        else if( _animationConfigWidget && _animationConfigWidget->isChanged() ) modified = true;
 
         if( !modified )
         {
@@ -350,7 +270,6 @@ namespace Oxygen
         _tabStyleSingle->setChecked( StyleConfigData::tabStyle() == StyleConfigData::TS_SINGLE );
         _tabStylePlain->setChecked( StyleConfigData::tabStyle() == StyleConfigData::TS_PLAIN );
 
-        _animationsEnabled->setChecked( StyleConfigData::animationsEnabled() );
         _cacheEnabled->setChecked( StyleConfigData::cacheEnabled() );
 
         if( !StyleConfigData::windowDragEnabled() ) _windowDragMode->setCurrentIndex(0);
@@ -365,9 +284,6 @@ namespace Oxygen
         }
 
         _useWMMoveResize->setChecked( StyleConfigData::useWMMoveResize() );
-
-        // animation config widget
-        if( _animationConfigWidget ) _animationConfigWidget->load();
 
     }
 

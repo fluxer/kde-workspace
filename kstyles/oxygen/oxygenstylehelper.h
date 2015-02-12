@@ -23,7 +23,6 @@
  */
 
 #include "oxygenhelper.h"
-#include "oxygenanimationmodes.h"
 
 #include <KWindowSystem>
 #include <KDebug>
@@ -150,13 +149,13 @@ namespace Oxygen
         void renderHole( QPainter *p, const QColor& color, const QRect &r,
             HoleOptions options = 0,
             TileSet::Tiles tiles = TileSet::Ring )
-        { renderHole( p, color, r, options, -1, Oxygen::AnimationNone, tiles ); }
+        { renderHole( p, color, r, options, -1, tiles ); }
 
         //! generic hole (with animated glow)
         void renderHole(
             QPainter*, const QColor&, const QRect &r,
             HoleOptions,
-            qreal opacity, Oxygen::AnimationMode animationMode,
+            qreal opacity,
             TileSet::Tiles = TileSet::Ring );
 
         TileSet *holeFlat( const QColor&, qreal shade, bool fill = true, int size = 7 );

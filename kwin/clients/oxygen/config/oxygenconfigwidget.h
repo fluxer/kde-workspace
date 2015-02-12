@@ -38,8 +38,6 @@
 namespace Oxygen
 {
 
-    class AnimationConfigWidget;
-
     //_____________________________________________
     class ConfigWidget: public QWidget
     {
@@ -75,9 +73,6 @@ namespace Oxygen
         //! shadow configuration
         QVector<ShadowConfigWidget*> shadowConfigurations;
 
-        //! toggle expert mode
-        void toggleExpertMode( bool );
-
         //! event filter
         virtual bool eventFilter( QObject*, QEvent* );
 
@@ -87,13 +82,6 @@ namespace Oxygen
         void changed( bool );
 
         protected slots:
-
-        //! toggle expert mode
-        void toggleExpertModeInternal( void )
-        { toggleExpertModeInternal( !_expertMode ); }
-
-        //! toggle expert mode
-        void toggleExpertModeInternal( bool );
 
         //! update changed state
         virtual void updateChanged();
@@ -118,12 +106,6 @@ namespace Oxygen
 
         //! internal exception
         ConfigurationPtr _configuration;
-
-        //! expert mode
-        bool _expertMode;
-
-        //! animation config (expert mode only)
-        AnimationConfigWidget* _animationConfigWidget;
 
         //! changed state
         bool _changed;

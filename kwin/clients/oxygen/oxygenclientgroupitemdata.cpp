@@ -39,19 +39,9 @@ namespace Oxygen
         QList<ClientGroupItemData>(),
         _client( *parent ),
         _dirty( false ),
-        animationsEnabled_( true ),
-        _animation( new Animation( 150, this ) ),
-        animationType_( AnimationNone ),
-        progress_(0),
         draggedItem_( NoItem ),
         targetItem_( NoItem )
     {
-
-        // setup animation
-        animation().data()->setStartValue( 0 );
-        animation().data()->setEndValue( 1.0 );
-        animation().data()->setTargetObject( this );
-        animation().data()->setPropertyName( "progress" );
 
     }
 
@@ -68,194 +58,6 @@ namespace Oxygen
         }
 
         return NoItem;
-
-    }
-
-    //____________________________________________________________________________
-    void ClientGroupItemDataList::animate( AnimationTypes type, int target )
-    {
-
-        // store animation type
-        animationType_ = type;
-
-        if( type == AnimationNone )
-        {
-
-            if( isAnimationRunning() ) animation().data()->stop();
-            targetItem_ = NoItem;
-            draggedItem_ = NoItem;
-            targetRect_ = QRect();
-
-        } else if( type & (AnimationEnter|AnimationMove ) ) {
-
-            // store dragged item
-            bool animate( true );
-
-            if( (type&AnimationSameTarget) && draggedItem_ == NoItem )
-            {
-
-                animate = false;
-                draggedItem_ = target;
-
-            } else if( (type&AnimationMove) && targetItem_ == target ) return;
-
-            // check animation state
-            if( isAnimationRunning() ) animation().data()->stop();
-
-            targetItem_ = target;
-            targetRect_ = QRect();
-            QRect titleRect( _client.titleRect() );
-            int left( titleRect.left() );
-            int width = (type&AnimationSameTarget) ?
-                titleRect.width()/count():
-                titleRect.width()/(count()+1);
-
-            if( (type&AnimationSameTarget) && draggedItem_ < target )
-            {
-                target++;
-                if( target >= count() ) target = NoItem;
-            }
-
-            // loop over items and update bounding rects
-            for( int index = 0; index < count(); index++ )
-            {
-
-                ClientGroupItemData& item( ClientGroupItemDataList::operator[](index) );
-                if( index == target )
-                {
-                    targetRect_ = item._refBoundingRect;
-                    targetRect_.setLeft( left );
-                    targetRect_.setWidth( width );
-                    left+=width;
-                }
-
-                item._startBoundingRect = item._boundingRect;
-                item._endBoundingRect = item._refBoundingRect;
-                item._endBoundingRect.setLeft( left );
-
-                if( (type&AnimationSameTarget) && index == draggedItem_ )
-                {
-
-                    item._endBoundingRect.setWidth( 0 );
-
-                } else {
-
-                    item._endBoundingRect.setWidth( width );
-                    left+=width;
-
-                }
-
-            }
-
-            if( targetRect_.isNull() )
-            {
-                targetRect_ = back()._refBoundingRect;
-                targetRect_.setLeft( left );
-                targetRect_.setWidth( width );
-            }
-
-            if( animate )
-            {
-
-                if( animationsEnabled() ) animation().data()->start();
-                else {
-
-                    // change progress to maximum
-                    progress_ = 1;
-                    updateBoundingRects();
-
-                }
-
-            } else {
-
-                for( int index = 0; index < count(); index++ )
-                {
-                    ClientGroupItemData& item( ClientGroupItemDataList::operator[](index) );
-                    item._boundingRect = item._endBoundingRect;
-                }
-
-                updateButtons( true );
-
-            }
-
-        } else if( type & AnimationLeave ) {
-
-            // stop animation state
-            if( isAnimationRunning() ) animation().data()->stop();
-
-            // reset target
-            targetItem_ = NoItem;
-            targetRect_ = QRect();
-
-            if( type & AnimationSameTarget )
-            {
-
-                // store dragged item
-                draggedItem_ = target;
-
-                // do nothing if only one item
-                if( count() <= 1 ) return;
-
-                QRect titleRect( _client.titleRect() );
-                int left( titleRect.left() );
-                int width = titleRect.width()/(count()-1);
-
-                // loop over items and update bounding rects
-                for( int index = 0; index < count(); index++ )
-                {
-
-                    ClientGroupItemData& item( ClientGroupItemDataList::operator[](index) );
-                    item._startBoundingRect = item._boundingRect;
-                    item._endBoundingRect = item._refBoundingRect;
-                    item._endBoundingRect.setLeft( left );
-                    if( index != target )
-                    {
-
-                        if( count() <= 2 )
-                        {
-
-                            item._endBoundingRect = _client.defaultTitleRect( _client.tabId(index) == _client.currentTabId() );
-
-                        } else {
-
-
-                            item._endBoundingRect.setWidth( width );
-                            left+=width;
-
-                        }
-
-                    } else {
-
-                        item._endBoundingRect.setWidth( 0 );
-
-                    }
-
-                }
-
-            } else {
-
-                // loop over items and update bounding rects
-                for( int index = 0; index < count(); index++ )
-                {
-                    ClientGroupItemData& item( ClientGroupItemDataList::operator[](index) );
-                    item._startBoundingRect = item._boundingRect;
-                    item._endBoundingRect = item._refBoundingRect;
-                }
-
-            }
-
-            if( animationsEnabled() ) animation().data()->start();
-            else {
-
-                // change progress to maximum
-                progress_ = 1;
-                updateBoundingRects();
-
-            }
-
-        }
-
-        return;
 
     }
 
@@ -286,7 +88,7 @@ namespace Oxygen
             const ClientGroupItemData& item( at(index) );
             if( !item._closeButton ) continue;
 
-            if( (!item._boundingRect.isValid()) || ((animationType_ & AnimationSameTarget)&&count()<=2 ) )
+            if( (!item._boundingRect.isValid()) || count()<=2 )
             {
 
                 item._closeButton.data()->hide();
@@ -316,7 +118,6 @@ namespace Oxygen
     void ClientGroupItemDataList::updateBoundingRects( bool alsoUpdate )
     {
 
-        qreal ratio( progress() );
         for( iterator iter = begin(); iter != end(); ++iter )
         {
 
@@ -328,7 +129,7 @@ namespace Oxygen
 
             } else {
 
-                iter->_boundingRect.setLeft( (1.0-ratio)*iter->_startBoundingRect.left() + ratio*iter->_endBoundingRect.left() );
+                iter->_boundingRect.setLeft( (1.0)*iter->_startBoundingRect.left() *iter->_endBoundingRect.left() );
 
             }
 
@@ -340,7 +141,7 @@ namespace Oxygen
 
             } else {
 
-                iter->_boundingRect.setRight( (1.0-ratio)*iter->_startBoundingRect.right() + ratio*iter->_endBoundingRect.right() );
+                iter->_boundingRect.setRight( (1.0)*iter->_startBoundingRect.right() *iter->_endBoundingRect.right() );
 
             }
 

@@ -57,9 +57,6 @@ namespace Oxygen
         KCommonDecorationUnstable(b, f),
         _factory( f ),
         _sizeGrip( 0 ),
-        _glowAnimation( new Animation( 200, this ) ),
-        _titleAnimationData( new TitleAnimationData( this ) ),
-        _glowIntensity(0),
         _initialized( false ),
         _forceActive( false ),
         _mouseButton( Qt::NoButton ),
@@ -93,21 +90,6 @@ namespace Oxygen
         widget()->setAttribute(Qt::WA_NoSystemBackground );
         widget()->setAutoFillBackground( false );
         widget()->setAcceptDrops( true );
-
-        // setup glow animation
-        _glowAnimation->setStartValue( glowBias() );
-        _glowAnimation->setEndValue( 1.0 );
-        _glowAnimation->setTargetObject( this );
-        _glowAnimation->setPropertyName( "glowIntensity" );
-        _glowAnimation->setEasingCurve( QEasingCurve::InOutQuad );
-        connect( _glowAnimation, SIGNAL(finished()), this, SLOT(clearForceActive()) );
-
-        // title animation data
-        _titleAnimationData->initialize();
-        connect( _titleAnimationData, SIGNAL(pixmapsChanged()), SLOT(updateTitleRect()) );
-
-        // lists
-        connect( _itemData.animation().data(), SIGNAL(finished()), this, SLOT(clearTargetItem()) );
 
         // in case of preview, one wants to make the label used
         // for the central widget transparent. This allows one to have
@@ -150,19 +132,6 @@ namespace Oxygen
         }
 
         _configuration = _factory->configuration( *this );
-
-        // glow animations
-        _glowAnimation->setDuration( _configuration->shadowAnimationsDuration() );
-
-        // title transitions
-        _titleAnimationData->setDuration( _configuration->titleAnimationsDuration() );
-
-        // tabs
-        _itemData.setAnimationsEnabled( animationsEnabled() && _configuration->tabAnimationsEnabled() );
-        _itemData.animation().data()->setDuration( _configuration->tabAnimationsDuration() );
-
-        // reset title transitions
-        _titleAnimationData->reset();
 
         // should also update animations for buttons
         resetButtons();
@@ -510,18 +479,11 @@ namespace Oxygen
     //_________________________________________________________
     void Client::clearTargetItem( void )
     {
-
-        if( _itemData.animationType() == AnimationLeave )
-        { _itemData.setDirty( true ); }
-
     }
 
     //_________________________________________________________
     void Client::updateItemBoundingRects( bool alsoUpdate )
     {
-
-        // make sure items are not animated
-        _itemData.animate( AnimationNone );
 
         // maximum available space
         const QRect titleRect( this->titleRect() );
@@ -603,11 +565,7 @@ namespace Oxygen
     //_________________________________________________________
     QColor Client::titlebarTextColor(const QPalette &palette) const
     {
-        if( glowIsAnimated() ) return KColorUtils::mix(
-            titlebarTextColor( palette, false ),
-            titlebarTextColor( palette, true ),
-            glowIntensity() );
-        else return titlebarTextColor( palette, isActive() );
+        return titlebarTextColor( palette, isActive() );
     }
 
     //_________________________________________________________
@@ -683,15 +641,11 @@ namespace Oxygen
         // base color
         QColor color( palette.window().color() );
 
-        // add alpha channel
-        if( _itemData.count() == 1 && glowIsAnimated() )
-        { color = helper().alphaColor( color, glowIntensity() ); }
-
         // title height
         const int titleHeight( layoutMetric( LM_TitleEdgeTop ) + layoutMetric( LM_TitleEdgeBottom ) + layoutMetric( LM_TitleHeight ) );
 
         // make titlebar background darker for tabbed, non-outline window
-        if( ( tabCount() >= 2 || _itemData.isAnimated() ) && !(_configuration->drawTitleOutline() && isActive() ) )
+        if( tabCount() >= 2 && !(_configuration->drawTitleOutline() && isActive() ) )
         {
 
             const QPoint topLeft( r.topLeft()-position );
@@ -716,7 +670,7 @@ namespace Oxygen
 
             // adjustements to cope with shadow size and outline border.
             rect.adjust( -shadowSize, 0, shadowSize-1, 0 );
-            if( _configuration->drawTitleOutline() && ( isActive() || glowIsAnimated() ) && !isMaximized() )
+            if( _configuration->drawTitleOutline() && isActive() && !isMaximized() )
             {
                 if( _configuration->frameBorder() == Configuration::BorderTiny ) rect.adjust( 1, 0, -1, 0 );
                 else if( _configuration->frameBorder() > Configuration::BorderTiny ) rect.adjust( HFRAMESIZE-1, 0, -HFRAMESIZE+1, 0 );
@@ -727,7 +681,7 @@ namespace Oxygen
 
         }
 
-        if( _configuration->drawTitleOutline() && ( isActive() || glowIsAnimated() ) )
+        if( _configuration->drawTitleOutline() && isActive() )
         {
 
             // save old hints and turn off anti-aliasing
@@ -842,8 +796,6 @@ namespace Oxygen
 
         // set color
         QColor local( color );
-        if( glowIsAnimated() && _configuration->separatorMode() != Configuration::SeparatorAlways )
-        { local = helper().alphaColor( color, glowIntensity() ); }
 
         // render
         helper().drawSeparator( painter, QRect(r.top(), titleTop+titleHeight-1.5, r.width(), 2).translated( -position ), local, Qt::Horizontal);
@@ -878,10 +830,6 @@ namespace Oxygen
         const QRect adjustedRect( rect.adjusted(offset, voffset, -offset, shadowSize) );
         QColor color( palette.color( widget()->backgroundRole() ) );
 
-        // add alpha channel
-        if( _itemData.count() == 1 && glowIsAnimated() )
-        { color = helper().alphaColor( color, glowIntensity() ); }
-
         // render slab
         helper().slab( color, 0, shadowSize )->render( adjustedRect, painter, TileSet::Tiles(TileSet::Top|TileSet::Left|TileSet::Right) );
 
@@ -891,63 +839,7 @@ namespace Oxygen
     void Client::renderTitleText( QPainter* painter, const QRect& rect, const QColor& color, const QColor& contrast ) const
     {
 
-        if( !_titleAnimationData->isValid() )
-        {
-            // contrast pixmap
-            _titleAnimationData->reset(
-                rect,
-                renderTitleText( rect, caption(), color ),
-                renderTitleText( rect, caption(), contrast ) );
-        }
-
-        if( _titleAnimationData->isDirty() )
-        {
-
-            // clear dirty flags
-            _titleAnimationData->setDirty( false );
-
-            // finish current animation if running
-            if( _titleAnimationData->isAnimated() )
-            { _titleAnimationData->finishAnimation(); }
-
-            if( !_titleAnimationData->isLocked() )
-            {
-
-                // set pixmaps
-                _titleAnimationData->setPixmaps(
-                    rect,
-                    renderTitleText( rect, caption(), color ),
-                    renderTitleText( rect, caption(), contrast ) );
-
-                _titleAnimationData->startAnimation();
-                renderTitleText( painter, rect, color, contrast );
-
-            } else if( !caption().isEmpty() ) {
-
-                renderTitleText( painter, rect, caption(), color, contrast );
-
-            }
-
-            // lock animations (this must be done whether or not
-            // animation was actually started, in order to extend locking
-            // every time title get changed too rapidly
-            _titleAnimationData->lockAnimations();
-
-        } else if( _titleAnimationData->isAnimated() ) {
-
-            if( isMaximized() ) painter->translate( 0, 2 );
-            if( !_titleAnimationData->contrastPixmap().isNull() )
-            {
-                painter->translate( 0, 1 );
-                painter->drawPixmap( rect.topLeft(), _titleAnimationData->contrastPixmap() );
-                painter->translate( 0, -1 );
-            }
-
-            painter->drawPixmap( rect.topLeft(), _titleAnimationData->pixmap() );
-
-            if( isMaximized() ) painter->translate( 0, -2 );
-
-        } else if( !caption().isEmpty() ) {
+        if( !caption().isEmpty() ) {
             renderTitleText( painter, rect, caption(), color, contrast );
 
         }
@@ -1018,7 +910,7 @@ namespace Oxygen
         QRect textRect( item._boundingRect.adjusted( 0, layoutMetric( LM_TitleEdgeTop )-1, 0, -1 ) );
 
         // add extra space needed for title outline
-        if( itemCount > 1 || _itemData.isAnimated() )
+        if( itemCount > 1 )
         { textRect.adjust( layoutMetric( LM_TitleBorderLeft ), 0, -layoutMetric(LM_TitleBorderRight), 0 ); }
 
         // add extra space for the button
@@ -1044,11 +936,7 @@ namespace Oxygen
             // no title outline if the window caption is empty
             if( !caption.trimmed().isEmpty() )
             {
-                if( _itemData.isAnimated() ) {
-
-                    renderTitleOutline( painter, item._boundingRect, palette );
-
-                } else if( (isActive()||glowIsAnimated()) && _configuration->drawTitleOutline() ) {
+                if( isActive() && _configuration->drawTitleOutline() ) {
 
                     // adjusts boundingRect accordingly
                     QRect boundingRect( item._boundingRect );
@@ -1131,7 +1019,7 @@ namespace Oxygen
     //_______________________________________________________________________
     void Client::renderTargetRect( QPainter* p, const QPalette& palette )
     {
-        if( _itemData.targetRect().isNull() || _itemData.isAnimationRunning() ) return;
+        if( _itemData.targetRect().isNull() ) return;
 
         const QColor color = palette.color(QPalette::Highlight);
         p->setPen(KColorUtils::mix(color, palette.color(QPalette::Active, QPalette::WindowText)));
@@ -1246,13 +1134,6 @@ namespace Oxygen
         KCommonDecorationUnstable::activeChange();
         _itemData.setDirty( true );
 
-        // reset animation
-        if( shadowAnimationsEnabled() )
-        {
-            _glowAnimation->setDirection( isActive() ? Animation::Forward : Animation::Backward );
-            if(!glowIsAnimated()) { _glowAnimation->start(); }
-        }
-
         // update size grip so that it gets the right color
         // also make sure it is remaped to from z stack,
         // unless hidden
@@ -1285,8 +1166,6 @@ namespace Oxygen
 
         KCommonDecorationUnstable::captionChange();
         _itemData.setDirty( true );
-        if( titleAnimationsEnabled() )
-        { _titleAnimationData->setDirty( true ); }
 
     }
 
@@ -1296,16 +1175,7 @@ namespace Oxygen
 
         if( _configuration->drawTitleOutline() )
         {
-            if( glowIsAnimated() && !isForcedActive() )
-            {
-
-                const QColor inactiveColor( backgroundColor( widget, palette, false ) );
-                const QColor activeColor( backgroundColor( widget, palette, true ) );
-                const QColor mixed( KColorUtils::mix( inactiveColor, activeColor, glowIntensity() ) );
-                palette.setColor( QPalette::Window, mixed );
-                palette.setColor( QPalette::Button, mixed );
-
-            } else if( isActive() || isForcedActive() ) {
+            if( isActive() || isForcedActive() ) {
 
                 const QColor color =  options()->color( KDecorationDefines::ColorTitleBar, true );
                 palette.setColor( QPalette::Window, color );
@@ -1414,10 +1284,6 @@ namespace Oxygen
 
         // prepare item data updates
         _itemData.setDirty( true );
-
-        // mark title animation as dirty
-        if( event->oldSize().width() != event->size().width() )
-        { _titleAnimationData->setDirty( true ); }
 
         // resize backing store pixmap
         if( !compositingActive() )
@@ -1556,16 +1422,7 @@ namespace Oxygen
 
             TileSet *tileSet( 0 );
             const ShadowCache::Key key( this->key() );
-            if( shadowCache().isEnabled( QPalette::Active ) && glowIsAnimated() && !isForcedActive() )
-            {
-
-                tileSet = shadowCache().tileSet( key, glowIntensity() );
-
-            } else {
-
-                tileSet = shadowCache().tileSet( key );
-
-            }
+            tileSet = shadowCache().tileSet( key );
 
             tileSet->render( frame, &painter, TileSet::Ring);
 
@@ -1646,7 +1503,7 @@ namespace Oxygen
             renderTargetRect( &painter, widget()->palette() );
 
             // separator
-            if( itemCount == 1 && !_itemData.isAnimated() && drawSeparator() )
+            if( itemCount == 1 && drawSeparator() )
             { renderSeparator(&painter, frame, widget(), color ); }
 
         }
@@ -1723,8 +1580,6 @@ namespace Oxygen
             const QPoint point = event->pos();
             const int clickedIndex( tabIndexAt( point ) );
             if( clickedIndex < 0 ) return false;
-
-            _titleAnimationData->reset();
 
             QDrag *drag = new QDrag( widget() );
             QMimeData *groupData = new QMimeData();
@@ -1812,18 +1667,6 @@ namespace Oxygen
         // accept event
         event->acceptProposedAction();
 
-        // animate
-        if( event->source() != widget() )
-        {
-
-            _itemData.animate( AnimationEnter, tabIndexAt( event->pos(), true ) );
-
-        } else if( _itemData.count() > 1 )  {
-
-            _itemData.animate( AnimationEnter|AnimationSameTarget, tabIndexAt( event->pos(), true ) );
-
-        }
-
         return true;
 
     }
@@ -1831,18 +1674,6 @@ namespace Oxygen
     //_____________________________________________________________
     bool Client::dragLeaveEvent( QDragLeaveEvent* )
     {
-
-        if( _itemData.animationType() & AnimationSameTarget )
-        {
-
-            if( _dragStartTimer.isActive() ) _dragStartTimer.stop();
-            _itemData.animate( AnimationLeave|AnimationSameTarget, _sourceItem );
-
-        } else if( _itemData.isAnimated() ) {
-
-            _itemData.animate( AnimationLeave );
-
-        }
 
         return true;
 
@@ -1855,19 +1686,6 @@ namespace Oxygen
         // check format
         if( !event->mimeData()->hasFormat( tabDragMimeType() ) ) return false;
 
-        // animate
-        if( event->source() != widget() )
-        {
-
-            _itemData.animate( AnimationMove, tabIndexAt( event->pos(), true ) );
-
-        } else if( _itemData.count() > 1 )  {
-
-            if( _dragStartTimer.isActive() ) _dragStartTimer.stop();
-            _itemData.animate( AnimationMove|AnimationSameTarget, tabIndexAt( event->pos(), true ) );
-
-        }
-
         return false;
 
     }
@@ -1877,7 +1695,6 @@ namespace Oxygen
     {
 
         const QPoint point = event->pos();
-        _itemData.animate( AnimationNone );
 
         const QMimeData *groupData = event->mimeData();
         if( !groupData->hasFormat( tabDragMimeType() ) ) return false;
@@ -1894,7 +1711,6 @@ namespace Oxygen
         // update title
         if( widget() == event->source() ) updateTitleRect();
 
-        _titleAnimationData->reset();
         return true;
 
     }
@@ -1907,13 +1723,6 @@ namespace Oxygen
         { return KCommonDecorationUnstable::timerEvent( event ); }
 
         _dragStartTimer.stop();
-
-        // do nothing if there is only one tab
-        if( _itemData.count() > 1 )
-        {
-            _itemData.animate( AnimationMove|AnimationSameTarget, _sourceItem );
-            _itemData.animate( AnimationLeave|AnimationSameTarget, _sourceItem );
-        }
 
     }
 

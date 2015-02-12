@@ -28,7 +28,6 @@
 // IN THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////////
 
-#include "oxygenanimation.h"
 #include "oxygendecorationdefines.h"
 #include "oxygendecohelper.h"
 
@@ -137,15 +136,8 @@ namespace Oxygen
 
         }
 
-        //! true if animation is in progress
-        bool isAnimated( void ) const
-        { return _glowAnimation->isRunning(); }
-
         //! true if button is active
         bool isActive( void ) const;
-
-        //! true if buttons hover are animated
-        bool buttonAnimationsEnabled( void ) const;
 
         //!@name button properties
         //@{
@@ -190,10 +182,6 @@ namespace Oxygen
 
         //! true if button should be forced inactive
         bool _forceInactive;
-
-        //! glow animation
-        //Animation::Pointer _glowAnimation;
-        Animation* _glowAnimation;
 
         //! glow intensity
         qreal _glowIntensity;

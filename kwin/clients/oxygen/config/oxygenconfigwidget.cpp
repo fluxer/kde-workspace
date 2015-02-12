@@ -24,7 +24,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenconfigwidget.h"
-#include "oxygenanimationconfigwidget.h"
 
 #include <kdeversion.h>
 
@@ -40,8 +39,6 @@ namespace Oxygen
     //_________________________________________________________
     ConfigWidget::ConfigWidget( QWidget* parent ):
         QWidget( parent ),
-        _expertMode( false ),
-        _animationConfigWidget(0),
         _changed( false )
     {
 
@@ -53,18 +50,6 @@ namespace Oxygen
 
         shadowConfigurations.append( ui.activeShadowConfiguration );
         shadowConfigurations.append( ui.inactiveShadowConfiguration );
-
-        // animation config widget
-        _animationConfigWidget = new AnimationConfigWidget();
-        _animationConfigWidget->installEventFilter( this );
-
-        // expert mode
-        ui._expertModeButton->setIcon( KIcon("configure") );
-        toggleExpertModeInternal( false );
-
-        // connections
-        connect( ui._expertModeButton, SIGNAL(clicked()), SLOT(toggleExpertModeInternal()) );
-        connect( _animationConfigWidget, SIGNAL(layoutChanged()), SLOT(updateLayout()) );
 
         // track ui changes
         connect( ui.titleAlignment, SIGNAL(currentIndexChanged(int)), SLOT(updateChanged()) );
@@ -84,17 +69,12 @@ namespace Oxygen
         connect( shadowConfigurations[0], SIGNAL(changed(bool)), SLOT(updateChanged()) );
         connect( shadowConfigurations[1], SIGNAL(changed(bool)), SLOT(updateChanged()) );
 
-        // track animations changes
-        connect( ui.animationsEnabled, SIGNAL(clicked()), SLOT(updateChanged()) );
-        connect( _animationConfigWidget, SIGNAL(changed(bool)), SLOT(updateChanged()) );
-
     }
 
     //_________________________________________________________
     void ConfigWidget::setConfiguration( ConfigurationPtr configuration )
     {
         _configuration = configuration;
-        _animationConfigWidget->setConfiguration( configuration );
     }
 
     //_________________________________________________________
@@ -107,13 +87,9 @@ namespace Oxygen
         ui.separatorMode->setCurrentIndex( _configuration->separatorMode() );
         ui.drawSizeGrip->setChecked( _configuration->drawSizeGrip() );
         ui.titleOutline->setChecked( _configuration->drawTitleOutline() );
-        ui.animationsEnabled->setChecked( _configuration->animationsEnabled() );
         ui.narrowButtonSpacing->setChecked( _configuration->useNarrowButtonSpacing() );
         ui.closeFromMenuButton->setChecked( _configuration->closeWindowFromMenuButton() );
         setChanged( false );
-
-        _animationConfigWidget->load();
-
     }
 
     //_________________________________________________________
@@ -133,57 +109,6 @@ namespace Oxygen
         _configuration->setCloseWindowFromMenuButton( ui.closeFromMenuButton->isChecked() );
 
         setChanged( false );
-
-        if( _expertMode ) _animationConfigWidget->save();
-        else _configuration->setAnimationsEnabled( ui.animationsEnabled->isChecked() );
-
-
-    }
-
-    //_________________________________________________________
-    void ConfigWidget::toggleExpertMode( bool value )
-    {
-        ui._expertModeContainer->hide();
-        toggleExpertModeInternal( value );
-    }
-
-    //_________________________________________________________
-    void ConfigWidget::toggleExpertModeInternal( bool value )
-    {
-
-        // store value
-        _expertMode = value;
-
-        // update button text
-        ui._expertModeButton->setText( _expertMode ? i18n( "Hide Advanced Configuration Options" ):i18n( "Show Advanced Configuration Options" ) );
-
-        // narrow button spacing
-        ui.narrowButtonSpacing->setVisible( _expertMode );
-
-        // size grip
-        ui.drawSizeGrip->setVisible( _expertMode );
-
-        // 'basic' animations enabled flag
-        ui.animationsEnabled->setVisible( !_expertMode );
-
-        // layout and animations
-        if( _expertMode )
-        {
-
-            // add animationConfigWidget to tabbar if needed
-            if( ui.tabWidget->indexOf( _animationConfigWidget ) < 0 )
-            { ui.tabWidget->insertTab( 1, _animationConfigWidget, i18n( "Animations" ) ); }
-
-            ui.shadowSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-
-        } else {
-
-            ui.shadowSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
-
-            if( int index = ui.tabWidget->indexOf( _animationConfigWidget ) >= 0 )
-            { ui.tabWidget->removeTab( index ); }
-
-        }
 
     }
 
@@ -207,8 +132,7 @@ namespace Oxygen
     void ConfigWidget::updateLayout( void )
     {
 
-        int delta = _animationConfigWidget->minimumSizeHint().height() - _animationConfigWidget->size().height();
-        window()->setMinimumSize( QSize( window()->minimumSizeHint().width(), window()->size().height() + delta ) );
+        window()->setMinimumSize( QSize( window()->minimumSizeHint().width(), window()->size().height() ) );
 
     }
 
@@ -238,10 +162,6 @@ namespace Oxygen
         // shadow configurations
         else if( shadowConfigurations[0]->isChanged() ) modified = true;
         else if( shadowConfigurations[1]->isChanged() ) modified = true;
-
-        // animations
-        else if( !_expertMode && ui.animationsEnabled->isChecked() !=  _configuration->animationsEnabled() ) modified = true;
-        else if( _expertMode && _animationConfigWidget->isChanged() ) modified = true;
 
         setChanged( modified );
 

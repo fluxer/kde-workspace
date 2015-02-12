@@ -68,9 +68,6 @@ namespace Oxygen
         //! reset to saved configuration
         void reset( void );
 
-        //! toggle expert mode
-        virtual void toggleExpertMode( bool );
-
         protected Q_SLOTS:
 
         //! update minimum size
@@ -86,13 +83,6 @@ namespace Oxygen
         //! update options enable state based on selected drag mode
         void windowDragModeChanged( int );
 
-        //! toggle expert mode
-        virtual void toggleExpertModeInternal( void )
-        { toggleExpertModeInternal( !_expertMode ); }
-
-        //! toggle expert mode
-        virtual void toggleExpertModeInternal( bool );
-
         protected:
 
         //! event processing
@@ -107,11 +97,6 @@ namespace Oxygen
         int triangularExpanderSize( void ) const;
 
         private:
-
-        bool _expertMode;
-
-        //! animation config (expert mode only)
-        AnimationConfigWidget* _animationConfigWidget;
 
     };
 

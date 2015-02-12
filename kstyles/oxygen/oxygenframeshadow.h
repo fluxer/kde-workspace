@@ -87,7 +87,7 @@ namespace Oxygen
         void setHasContrast( const QWidget* widget, bool ) const;
 
         //! update state
-        void updateState( const QWidget*, bool focus, bool hover, qreal opacity, AnimationMode ) const;
+        void updateState( const QWidget*, bool focus, bool hover, qreal opacity ) const;
 
         protected:
 
@@ -167,7 +167,7 @@ namespace Oxygen
         virtual void updateGeometry( void ) = 0;
 
         //! update state
-        virtual void updateState( bool, bool, qreal, AnimationMode )
+        virtual void updateState( bool, bool, qreal )
         {}
 
         protected:
@@ -207,8 +207,7 @@ namespace Oxygen
             _viewHoverBrush( helper.viewHoverBrush() ),
             _focus( false ),
             _hover( false ),
-            _opacity( -1 ),
-            _mode( AnimationNone )
+            _opacity( -1 )
         { init(); }
 
 
@@ -220,7 +219,7 @@ namespace Oxygen
         virtual void updateGeometry( void );
 
         //! update state
-        void updateState( bool focus, bool hover, qreal opacity, AnimationMode mode );
+        void updateState( bool focus, bool hover, qreal opacity );
 
         protected:
 
@@ -249,7 +248,6 @@ namespace Oxygen
         bool _focus;
         bool _hover;
         qreal _opacity;
-        AnimationMode _mode;
 
     };
 

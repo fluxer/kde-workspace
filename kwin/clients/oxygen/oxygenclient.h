@@ -28,13 +28,11 @@
 // IN THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////////
 
-#include "oxygenanimation.h"
 #include "oxygenclientgroupitemdata.h"
 #include "oxygenconfiguration.h"
 #include "oxygendecohelper.h"
 #include "oxygenfactory.h"
 #include "oxygenshadowcache.h"
-#include "oxygentitleanimationdata.h"
 
 #include <kcommondecoration.h>
 #include <QBasicTimer>
@@ -51,9 +49,6 @@ namespace Oxygen
     {
 
         Q_OBJECT
-
-        //! declare glow intensity property
-        Q_PROPERTY( qreal glowIntensity READ glowIntensityUnbiased WRITE setGlowIntensity )
 
         public:
 
@@ -79,14 +74,6 @@ namespace Oxygen
         virtual bool isMaximized( void ) const
         { return maximizeMode()==MaximizeFull && !options()->moveResizeMaximizedWindows();  }
 
-        //! true if animations are used
-        bool animationsEnabled( void ) const
-        { return _configuration->animationsEnabled(); }
-
-        //! true if glow is animated
-        bool glowIsAnimated( void ) const
-        { return _glowAnimation->isRunning(); }
-
         //! true when decoration is forced active
         bool isForcedActive( void ) const
         { return _forceActive && tabCount() > 1; }
@@ -101,7 +88,7 @@ namespace Oxygen
                 return true;
 
                 case Configuration::SeparatorActive:
-                return ( glowIsAnimated() || isActive() );
+                return ( isActive() );
 
                 default:
                 case Configuration::SeparatorNever:
@@ -133,31 +120,6 @@ namespace Oxygen
         //! return associated configuration
         Factory::ConfigurationPtr configuration( void ) const
         { return _configuration; }
-
-        //!@name glow animation
-        //@{
-
-        void setGlowIntensity( qreal value )
-        {
-            if( _glowIntensity == value ) return;
-            _glowIntensity = value;
-            widget()->update();
-        }
-
-        //! unbiased glow intensity
-        qreal glowIntensityUnbiased( void ) const
-        { return _glowIntensity; }
-
-        //! glow bias
-        static qreal glowBias( void )
-        { return 0.2; }
-
-        //! true (biased) intensity
-        /*! this is needed to have glow go from either 0.2->1 or 0.8->0 depending on the animation direction */
-        qreal glowIntensity( void ) const
-        { return _glowAnimation->direction() == Animation::Forward ? _glowIntensity : _glowIntensity-glowBias(); }
-
-        //@}
 
         //! helper class
         DecoHelper& helper( void ) const
@@ -351,28 +313,12 @@ namespace Oxygen
         //! return pixmap corresponding to a given tab, for dragging
         QPixmap itemDragPixmap( int, QRect, bool = false );
 
-        //! return true when activity change are animated
-        bool shadowAnimationsEnabled( void ) const
-        { return ( animationsEnabled() && _configuration->shadowAnimationsEnabled() && !isPreview() ); }
-
-        //! return true when activity change are animated
-        bool titleAnimationsEnabled( void ) const
-        {
-            return
-                animationsEnabled() &&
-                _configuration->titleAnimationsEnabled() &&
-                !_configuration->drawTitleOutline() &&
-                !hideTitleBar() &&
-                !isPreview();
-        }
-
         //! true if some title outline is rendered
         bool hasTitleOutline( void ) const
         {
             return
                 tabCount() >= 2 ||
-                _itemData.isAnimated() ||
-                ( (isActive()||glowIsAnimated()) && _configuration->drawTitleOutline() );
+                ( isActive() && _configuration->drawTitleOutline() );
         }
 
         //! calculate mask
@@ -448,15 +394,6 @@ namespace Oxygen
 
         //! configuration
         Factory::ConfigurationPtr _configuration;
-
-        //! glow animation
-        Animation* _glowAnimation;
-
-        //! title animation data
-        TitleAnimationData* _titleAnimationData;
-
-        //! glow intensity
-        qreal _glowIntensity;
 
         //! true when initialized
         bool _initialized;

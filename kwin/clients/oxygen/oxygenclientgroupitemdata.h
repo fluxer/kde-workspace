@@ -28,7 +28,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenbutton.h"
-#include "oxygenanimation.h"
 
 #include <QList>
 #include <QWeakPointer>
@@ -38,17 +37,6 @@ namespace Oxygen
 {
 
     class Client;
-
-    //! animation type
-    enum AnimationType {
-        AnimationNone = 0,
-        AnimationEnter = 1<<0,
-        AnimationMove = 1<<1,
-        AnimationLeave = 1<<2,
-        AnimationSameTarget = 1<<3
-    };
-
-    Q_DECLARE_FLAGS(AnimationTypes, AnimationType)
 
     //! tab data
     class ClientGroupItemData
@@ -100,9 +88,6 @@ namespace Oxygen
 
         Q_OBJECT
 
-        //! declare animation progress property
-        Q_PROPERTY( qreal progress READ progress WRITE setProgress )
-
         public:
 
         //! invalid item index
@@ -119,36 +104,12 @@ namespace Oxygen
         bool isDirty( void ) const
         { return _dirty; }
 
-        //! enable animations
-        void setAnimationsEnabled( bool value )
-        { animationsEnabled_ = value; }
-
-        //! animations enabled
-        bool animationsEnabled( void ) const
-        { return animationsEnabled_; }
-
-        //! true if being animated
-        bool isAnimated( void ) const
-        { return animationType_ != AnimationNone; }
-
-        //! animation type
-        AnimationTypes animationType( void ) const
-        { return animationType_; }
-
         //! return item index matching QPoint, or -1 if none
         int itemAt( const QPoint&, bool ) const;
 
         //! returns true if index is target
         bool isTarget( int index ) const
         { return index == targetItem_; }
-
-        //! start animation
-        /* might need to add the side of the target here */
-        void animate( AnimationTypes, int = NoItem );
-
-        //! true if animation is in progress
-        bool isAnimationRunning( void ) const
-        { return animation().data()->isRunning(); }
 
         //! update button activity
         void updateButtonActivity( long visibleItem ) const;
@@ -159,25 +120,6 @@ namespace Oxygen
         //! target rect
         const QRect& targetRect( void ) const
         { return targetRect_; }
-
-        //!@name animation progress
-        //@{
-
-        //! return animation object
-        virtual const Animation::Pointer& animation() const
-        { return _animation; }
-
-        void setProgress( qreal value )
-        {
-            if( progress_ == value ) return;
-            progress_ = value;
-            updateBoundingRects();
-        }
-
-        qreal progress( void ) const
-        { return progress_; }
-
-        //@}
 
         protected:
 
@@ -193,18 +135,6 @@ namespace Oxygen
         /* used to trigger update at next paintEvent */
         bool _dirty;
 
-        //! true if animations are enabled
-        bool animationsEnabled_;
-
-        //! animation
-        Animation::Pointer _animation;
-
-        //! last animation type
-        AnimationTypes animationType_;
-
-        //! animation progress
-        qreal progress_;
-
         //! dragged item
         int draggedItem_;
 
@@ -215,8 +145,6 @@ namespace Oxygen
         QRect targetRect_;
 
     };
-
-    Q_DECLARE_OPERATORS_FOR_FLAGS(Oxygen::AnimationTypes)
 
 }
 

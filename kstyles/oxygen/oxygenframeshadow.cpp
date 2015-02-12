@@ -229,14 +229,14 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void FrameShadowFactory::updateState( const QWidget* widget, bool focus, bool hover, qreal opacity, AnimationMode mode ) const
+    void FrameShadowFactory::updateState( const QWidget* widget, bool focus, bool hover, qreal opacity ) const
     {
 
         const QList<QObject *> children = widget->children();
         foreach( QObject *child, children )
         {
             if( FrameShadowBase* shadow = qobject_cast<FrameShadowBase *>(child) )
-            { shadow->updateState( focus, hover, opacity, mode ); }
+            { shadow->updateState( focus, hover, opacity ); }
         }
 
     }
@@ -397,23 +397,13 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void SunkenFrameShadow::updateState( bool focus, bool hover, qreal opacity, AnimationMode mode )
+    void SunkenFrameShadow::updateState( bool focus, bool hover, qreal opacity )
     {
         bool changed( false );
         if( _focus != focus ) { _focus = focus; changed |= true; }
         if( _hover != hover ) { _hover = hover; changed |= !_focus; }
-        if( _mode != mode )
-        {
 
-            _mode = mode;
-            changed |=
-                (_mode == AnimationNone) ||
-                (_mode == AnimationFocus) ||
-                (_mode == AnimationHover && !_focus );
-
-        }
-
-        if( _opacity != opacity ) { _opacity = opacity; changed |= (_mode != AnimationNone ); }
+        if( _opacity != opacity ) { _opacity = opacity; changed |= 0; }
         if( changed )
         {
 
@@ -487,7 +477,7 @@ namespace Oxygen
 
         QPainter painter(this);
         painter.setClipRegion( event->region() );
-        _helper.renderHole( &painter, palette().color( QPalette::Window ), r, options, _opacity, _mode, tiles );
+        _helper.renderHole( &painter, palette().color( QPalette::Window ), r, options, _opacity, tiles );
 
         return;
 

@@ -47,7 +47,6 @@
 // Boston, MA 02110-1301, USA.
 //////////////////////////////////////////////////////////////////////////////
 
-#include "oxygenanimationmodes.h"
 #include "oxygenmetrics.h"
 #include "oxygentileset.h"
 
@@ -335,13 +334,6 @@ namespace Oxygen
         };
 
         //@}
-
-        //! animations
-        Animations& animations( void ) const
-        { return *_animations; }
-
-        Transitions& transitions( void ) const
-        { return *_transitions; }
 
         //! window manager
         WindowManager& windowManager( void ) const
@@ -678,17 +670,17 @@ namespace Oxygen
 
         //! qdial slab
         void renderDialSlab( QPainter* p, const QRect& r, const QColor& c, const QStyleOption* option, StyleOptions opts = 0 ) const
-        { renderDialSlab( p, r, c, option, opts, -1,  AnimationNone ); }
+        { renderDialSlab( p, r, c, option, opts, -1 ); }
 
         //! qdial slab
-        void renderDialSlab( QPainter*, const QRect&, const QColor&, const QStyleOption*, StyleOptions, qreal, AnimationMode ) const;
+        void renderDialSlab( QPainter*, const QRect&, const QColor&, const QStyleOption*, StyleOptions, qreal ) const;
 
         //! generic button slab
         void renderButtonSlab( QPainter* p, QRect r, const QColor& c, StyleOptions opts = 0, TileSet::Tiles tiles = TileSet::Ring) const
-        { renderButtonSlab( p, r, c, opts, -1,  AnimationNone, tiles ); }
+        { renderButtonSlab( p, r, c, opts, -1, tiles ); }
 
         //! generic button slab
-        void renderButtonSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, AnimationMode, TileSet::Tiles ) const;
+        void renderButtonSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, TileSet::Tiles ) const;
 
         //! generic slab
         void renderSlab( QPainter* painter, const SlabRect& slab, const QColor& color, StyleOptions options = 0 ) const
@@ -696,14 +688,14 @@ namespace Oxygen
 
         //! generic slab
         void renderSlab( QPainter* painter, QRect rect, const QColor& color, StyleOptions options = 0, TileSet::Tiles tiles = TileSet::Ring) const
-        { renderSlab( painter, rect, color, options, -1, AnimationNone, tiles ); }
+        { renderSlab( painter, rect, color, options, -1, tiles ); }
 
         //! generic slab
-        void renderSlab( QPainter* painter, const SlabRect& slab, const QColor& color, StyleOptions options, qreal opacity, AnimationMode mode ) const
-        { renderSlab( painter, slab._r, color, options, opacity, mode, slab._tiles ); }
+        void renderSlab( QPainter* painter, const SlabRect& slab, const QColor& color, StyleOptions options, qreal opacity ) const
+        { renderSlab( painter, slab._r, color, options, opacity, slab._tiles ); }
 
         //! generic slab
-        void renderSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, AnimationMode, TileSet::Tiles ) const;
+        void renderSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, TileSet::Tiles ) const;
 
         // render tab background
         void renderTabBackground( QPainter*, const QRect&, const QPalette&, const QTabBar::Shape, const QWidget* ) const;
@@ -748,10 +740,10 @@ namespace Oxygen
         };
 
         //! checkbox
-        void renderCheckBox( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1, AnimationMode mode = AnimationNone ) const;
+        void renderCheckBox( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1) const;
 
         //! radio button
-        void renderRadioButton( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1, AnimationMode mode = AnimationNone ) const;
+        void renderRadioButton( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1 ) const;
 
         //! scrollbar hole
         void renderScrollBarHole( QPainter*, const QRect&, const QColor&, const Qt::Orientation&, const TileSet::Tiles& = TileSet::Full ) const;
@@ -777,7 +769,7 @@ namespace Oxygen
         //@}
 
         //! slab glowing color
-        QColor slabShadowColor( QColor, StyleOptions, qreal, AnimationMode ) const;
+        QColor slabShadowColor( QColor, StyleOptions, qreal ) const;
 
         //! returns point position for generic arrows
         QPolygonF genericArrow( ArrowOrientation, ArrowSize = ArrowNormal ) const;
@@ -857,12 +849,6 @@ namespace Oxygen
 
         //! shadow helper
         ShadowHelper* _shadowHelper;
-
-        //! animations
-        Animations* _animations;
-
-        //! transitions
-        Transitions* _transitions;
 
         //! window manager
         WindowManager* _windowManager;
