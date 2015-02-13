@@ -1406,7 +1406,7 @@ namespace Oxygen
                     if( helper().checkAutoFillBackground( toolBar ) )
                     { helper().renderWindowBackground( &painter, r, toolBar, color ); }
 
-                    return false;
+                    return true;
 
                 } else {
 
