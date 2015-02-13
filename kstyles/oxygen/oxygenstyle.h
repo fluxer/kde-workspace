@@ -668,33 +668,17 @@ namespace Oxygen
         //@{
 
         //! qdial slab
-        void renderDialSlab( QPainter* p, const QRect& r, const QColor& c, const QStyleOption* option, StyleOptions opts = 0 ) const
-        { renderDialSlab( p, r, c, option, opts, -1 ); }
-
-        //! qdial slab
-        void renderDialSlab( QPainter*, const QRect&, const QColor&, const QStyleOption*, StyleOptions, qreal ) const;
+        void renderDialSlab( QPainter* p, const QRect& r, const QColor& c, const QStyleOption* option, StyleOptions opts = 0 ) const;
 
         //! generic button slab
-        void renderButtonSlab( QPainter* p, QRect r, const QColor& c, StyleOptions opts = 0, TileSet::Tiles tiles = TileSet::Ring) const
-        { renderButtonSlab( p, r, c, opts, -1, tiles ); }
-
-        //! generic button slab
-        void renderButtonSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, TileSet::Tiles ) const;
+        void renderButtonSlab( QPainter* p, QRect r, const QColor& c, StyleOptions opts = 0, TileSet::Tiles tiles = TileSet::Ring) const;
 
         //! generic slab
         void renderSlab( QPainter* painter, const SlabRect& slab, const QColor& color, StyleOptions options = 0 ) const
         { renderSlab( painter, slab._r, color, options, slab._tiles ); }
 
         //! generic slab
-        void renderSlab( QPainter* painter, QRect rect, const QColor& color, StyleOptions options = 0, TileSet::Tiles tiles = TileSet::Ring) const
-        { renderSlab( painter, rect, color, options, -1, tiles ); }
-
-        //! generic slab
-        void renderSlab( QPainter* painter, const SlabRect& slab, const QColor& color, StyleOptions options, qreal opacity ) const
-        { renderSlab( painter, slab._r, color, options, opacity, slab._tiles ); }
-
-        //! generic slab
-        void renderSlab( QPainter*, QRect, const QColor&, StyleOptions, qreal, TileSet::Tiles ) const;
+        void renderSlab( QPainter* painter, QRect rect, const QColor& color, StyleOptions options = 0, TileSet::Tiles tiles = TileSet::Ring) const;
 
         // render tab background
         void renderTabBackground( QPainter*, const QRect&, const QPalette&, const QTabBar::Shape, const QWidget* ) const;
@@ -721,10 +705,10 @@ namespace Oxygen
         void renderHeaderBackground( const QRect&, const QPalette&, QPainter*, const QWidget*, bool horizontal, bool reverse ) const;
         void renderHeaderLines( const QRect&, const QPalette&, QPainter*, TileSet::Tiles ) const;
 
-        void renderMenuItemRect( const QStyleOption* opt, const QRect& rect, const QPalette& pal, QPainter* p, qreal opacity = -1 ) const
-        { renderMenuItemRect( opt, rect, pal.color(QPalette::Window), p, opacity ); }
+        void renderMenuItemRect( const QStyleOption* opt, const QRect& rect, const QPalette& pal, QPainter* p ) const
+        { renderMenuItemRect( opt, rect, pal.color(QPalette::Window), p ); }
 
-        void renderMenuItemRect( const QStyleOption*, const QRect&, const QColor&, const QPalette&, QPainter* p, qreal opacity = -1 ) const;
+        void renderMenuItemRect( const QStyleOption*, const QRect&, const QColor&, const QPalette&, QPainter* p ) const;
 
         //! checkbox state (used for checkboxes _and_ radio buttons)
         enum CheckBoxState
@@ -739,7 +723,7 @@ namespace Oxygen
         void renderCheckBox( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState) const;
 
         //! radio button
-        void renderRadioButton( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState, qreal opacity = -1 ) const;
+        void renderRadioButton( QPainter*, const QRect&, const QPalette&, StyleOptions, CheckBoxState ) const;
 
         //! scrollbar hole
         void renderScrollBarHole( QPainter*, const QRect&, const QColor&, const Qt::Orientation&, const TileSet::Tiles& = TileSet::Full ) const;
@@ -747,11 +731,7 @@ namespace Oxygen
         //! scrollbar handle (non animated)
         void renderScrollBarHandle(
             QPainter* painter, const QRect& r, const QPalette& palette,
-            const Qt::Orientation& orientation, const bool& hover) const
-        { renderScrollBarHandle( painter, r, palette, orientation, hover, -1 ); }
-
-        //! scrollbar handle (animated)
-        void renderScrollBarHandle( QPainter*, const QRect&, const QPalette&, const Qt::Orientation&, const bool&, const qreal& ) const;
+            const Qt::Orientation& orientation, const bool& hover) const;
 
         //! scrollbar arrow
         void renderScrollBarArrow( QPainter*, const QRect&, const QColor&, const QColor&, ArrowOrientation ) const;
@@ -765,7 +745,7 @@ namespace Oxygen
         //@}
 
         //! slab glowing color
-        QColor slabShadowColor( QColor, StyleOptions, qreal ) const;
+        QColor slabShadowColor( QColor, StyleOptions ) const;
 
         //! returns point position for generic arrows
         QPolygonF genericArrow( ArrowOrientation, ArrowSize = ArrowNormal ) const;

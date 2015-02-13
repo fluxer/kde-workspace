@@ -3092,28 +3092,6 @@ namespace Oxygen
         if( flags & ( State_Sunken|State_On ) )
         {
 
-            {
-
-                // fill hole
-                qreal opacity = 1.0;
-                const qreal bias = 0.75;
-                opacity = 1.0 - bias;
-
-                if( opacity > 0 )
-                {
-                    QColor color( helper().backgroundColor( helper().calcMidColor( palette.color( QPalette::Window ) ), widget, slitRect.center() ) );
-                    color = helper().alphaColor( color, opacity );
-                    painter->save();
-                    painter->setRenderHint( QPainter::Antialiasing );
-                    painter->setPen( Qt::NoPen );
-                    painter->setBrush( color );
-                    painter->drawRoundedRect( slitRect.adjusted( 1, 1, -1, -1 ), 3.5, 3.5 );
-                    painter->restore();
-                }
-
-            }
-
-
             HoleOptions options( HoleContrast );
             if( hasFocus && enabled ) options |= HoleFocus;
             if( mouseOver && enabled ) options |= HoleHover;
@@ -3597,9 +3575,6 @@ namespace Oxygen
                 if( hasFocus ) opts |= Focus;
                 if( mouseOver ) opts |= Hover;
 
-                // adjust opacity and animation mode
-                qreal opacity( -1 );
-
                 // paint frame
                 painter->save();
                 if( reverseLayout )
@@ -3609,7 +3584,7 @@ namespace Oxygen
                     if( flags & ( State_On|State_Sunken ) ) opts |= Sunken;
 
                     painter->setClipRect( frameRect.adjusted( 0, 0, -8, 0 ), Qt::IntersectClip );
-                    renderButtonSlab( painter, frameRect, background, opts, opacity, TileSet::Bottom | TileSet::Top | TileSet::Left );
+                    renderButtonSlab( painter, frameRect, background, opts, TileSet::Bottom | TileSet::Top | TileSet::Left );
 
                 } else {
 
@@ -3618,7 +3593,7 @@ namespace Oxygen
                     if( flags & ( State_On|State_Sunken ) ) opts |= Sunken;
 
                     painter->setClipRect( frameRect.adjusted( 8, 0, 0, 0 ), Qt::IntersectClip );
-                    renderButtonSlab( painter, frameRect, background, opts, opacity, TileSet::Bottom | TileSet::Top | TileSet::Right );
+                    renderButtonSlab( painter, frameRect, background, opts, TileSet::Bottom | TileSet::Top | TileSet::Right );
 
                 }
 
@@ -7232,7 +7207,7 @@ namespace Oxygen
             if( handleActive && mouseOver ) opts |= Hover;
 
             const QColor color( helper().backgroundColor( palette.color( QPalette::Button ), widget, r.center() ) );
-            const QColor glow( slabShadowColor( color, opts, -1 ) );
+            const QColor glow( slabShadowColor( color, opts ) );
 
             const bool sunken( flags & (State_On|State_Sunken) );
             painter->drawPixmap( r.topLeft(), helper().sliderSlab( color, glow, sunken, 0.0 ) );
@@ -7827,7 +7802,7 @@ namespace Oxygen
     }
 
     //_________________________________________________________________________________
-    void Style::renderDialSlab( QPainter *painter, const QRect& r, const QColor &color, const QStyleOption *option, StyleOptions opts, qreal opacity ) const
+    void Style::renderDialSlab( QPainter *painter, const QRect& r, const QColor &color, const QStyleOption *option, StyleOptions opts ) const
     {
 
         // cast option
@@ -7839,7 +7814,7 @@ namespace Oxygen
         const QRect rect( centerRect( r, dimension, dimension ) );
 
         // calculate glow color
-        const QColor glow( slabShadowColor( color, opts, opacity ) );
+        const QColor glow( slabShadowColor( color, opts ) );
 
         // get main slab
         QPixmap pix( helper().dialSlab( color, glow, 0.0, dimension ) );
@@ -7903,7 +7878,7 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    void Style::renderButtonSlab( QPainter *painter, QRect r, const QColor &color, StyleOptions options, qreal opacity,
+    void Style::renderButtonSlab( QPainter *painter, QRect r, const QColor &color, StyleOptions options,
         TileSet::Tiles tiles ) const
     {
         if( ( r.width() <= 0 ) || ( r.height() <= 0 ) ) return;
@@ -7924,7 +7899,7 @@ namespace Oxygen
 
         } else {
 
-            QColor glow = slabShadowColor( color, options, opacity );
+            QColor glow = slabShadowColor( color, options );
             tile = helper().slab( color, glow, 0.0 );
 
         }
@@ -7938,7 +7913,7 @@ namespace Oxygen
     void Style::renderSlab(
         QPainter *painter, QRect r,
         const QColor &color,
-        StyleOptions options, qreal opacity,
+        StyleOptions options,
         TileSet::Tiles tiles ) const
     {
 
@@ -7991,8 +7966,8 @@ namespace Oxygen
 
         } else {
 
-            // calculate proper glow color based on current settings and opacity
-            const QColor glow( slabShadowColor( color, options, opacity) );
+            // calculate proper glow color based on current settings
+            const QColor glow( slabShadowColor( color, options) );
             if( color.isValid() || glow.isValid() ) tile = helper().slab( color, glow , 0.0 );
             else return;
 
@@ -8436,10 +8411,8 @@ namespace Oxygen
     }
 
     //__________________________________________________________________________
-    void Style::renderMenuItemRect( const QStyleOption* opt, const QRect& r, const QColor& base, const QPalette& palette, QPainter* painter, qreal opacity ) const
+    void Style::renderMenuItemRect( const QStyleOption* opt, const QRect& r, const QColor& base, const QPalette& palette, QPainter* painter ) const
     {
-
-        if( opacity == 0 ) return;
 
         // get relevant color
         // TODO: this is inconsistent with MenuBar color.
@@ -8484,22 +8457,9 @@ namespace Oxygen
             pp.setCompositionMode( QPainter::CompositionMode_DestinationIn );
             pp.drawRect( maskr );
 
-            if( opacity >= 0 && opacity < 1 )
-            {
-                pp.setCompositionMode( QPainter::CompositionMode_DestinationIn );
-                pp.fillRect( pm.rect(), helper().alphaColor( Qt::black, opacity ) );
-            }
-
             pp.end();
 
             painter->drawPixmap( handleRTL( opt, r ), pm );
-
-        } else {
-
-            if( opacity >= 0 && opacity < 1 )
-            { color.setAlphaF( opacity ); }
-
-            helper().holeFlat( color, 0.0 )->render( r.adjusted( 1,2,-2,-1 ), painter, TileSet::Full );
 
         }
 
@@ -8618,8 +8578,7 @@ namespace Oxygen
         QPainter* painter, const QRect& rect,
         const QPalette& palette,
         StyleOptions options,
-        CheckBoxState state,
-        qreal opacity ) const
+        CheckBoxState state) const
     {
 
         const int s( CheckBox_Size );
@@ -8628,7 +8587,7 @@ namespace Oxygen
         const int y = r.y();
 
         const QColor color( palette.color( QPalette::Button ) );
-        const QColor glow( slabShadowColor( color, options, opacity ) );
+        const QColor glow( slabShadowColor( color, options ) );
         painter->drawPixmap( x, y, helper().roundSlab( color, glow, 0.0 ) );
 
         // draw the radio mark
@@ -8681,7 +8640,7 @@ namespace Oxygen
     //______________________________________________________________________________
     void Style::renderScrollBarHandle(
         QPainter* painter, const QRect& r, const QPalette& palette,
-        const Qt::Orientation& orientation, const bool& hover, const qreal& opacity ) const
+        const Qt::Orientation& orientation, const bool& hover ) const
     {
 
         if( !r.isValid() ) return;
@@ -8704,8 +8663,7 @@ namespace Oxygen
         const QColor shadow( helper().alphaColor( helper().calcShadowColor( color ), 0.4 ) );
         const QColor hovered( helper().viewHoverBrush().brush( QPalette::Active ).color() );
 
-        if( opacity >= 0 ) glow = KColorUtils::mix( shadow, hovered, opacity );
-        else if( hover ) glow = hovered;
+        if( hover ) glow = hovered;
         else glow = shadow;
 
         helper().scrollHandle( color, glow )->
@@ -8865,19 +8823,14 @@ namespace Oxygen
     }
 
     //____________________________________________________________________________________
-    QColor Style::slabShadowColor( QColor color, StyleOptions options, qreal opacity ) const
+    QColor Style::slabShadowColor( QColor color, StyleOptions options ) const
     {
 
         QColor glow;
-        if( opacity < 0 )
-        {
-
-            if( options & Hover ) glow = helper().viewHoverBrush().brush( QPalette::Active ).color();
-            else if( options & Focus ) glow = helper().viewFocusBrush().brush( QPalette::Active ).color();
-            else if( ( options & SubtleShadow ) && color.isValid() ) glow = helper().alphaColor( helper().calcShadowColor( color ), 0.15 );
-
-
-        }
+        
+        if( options & Hover ) glow = helper().viewHoverBrush().brush( QPalette::Active ).color();
+        else if( options & Focus ) glow = helper().viewFocusBrush().brush( QPalette::Active ).color();
+        else if( ( options & SubtleShadow ) && color.isValid() ) glow = helper().alphaColor( helper().calcShadowColor( color ), 0.15 );
 
         return glow;
     }
