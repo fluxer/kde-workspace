@@ -279,7 +279,6 @@ void SMBSlave::smbCopyGet(const KUrl& ksrc, const KUrl& kdst, int permissions, K
     }
 
     QFile file (filename);
-#if KDE_IS_VERSION(4,11,80)
     if (!bResume) {
         QFile::Permissions perms;
         if (permissions == -1) {
@@ -289,7 +288,7 @@ void SMBSlave::smbCopyGet(const KUrl& ksrc, const KUrl& kdst, int permissions, K
         }
         file.setPermissions(perms);
     }
-#endif
+
     if (!file.open(mode)) {
         kDebug(KIO_SMB) << "could not write to" << dstFile;
         switch (file.error()) {
