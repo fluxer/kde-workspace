@@ -21,8 +21,6 @@
 #include <QtCore/QDateTime>
 #include <QtCore/QFileInfo>
 
-#include "bugreportaddress.h"
-
 class KCrashBackend;
 
 class CrashedApplication : public QObject
@@ -49,7 +47,7 @@ public:
     QString version() const;
 
     /** Returns the address where the bug report for this application should go */
-    BugReportAddress bugReportAddress() const;
+    QString bugReportAddress() const;
 
     /** Returns the pid of the crashed program */
     int pid() const;
@@ -82,7 +80,7 @@ protected:
     QFileInfo m_executable;
     QString m_fakeBaseName;
     QString m_version;
-    BugReportAddress m_reportAddress;
+    QString m_reportAddress;
     bool m_restarted;
     int m_thread;
     QDateTime m_datetime;

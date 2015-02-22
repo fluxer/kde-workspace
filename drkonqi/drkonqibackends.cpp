@@ -124,7 +124,7 @@ CrashedApplication *KCrashBackend::constructCrashedApplication()
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     a->m_name = args->getOption("programname");
     a->m_version = args->getOption("appversion").toUtf8();
-    a->m_reportAddress = BugReportAddress(args->getOption("bugaddress").toUtf8());
+    a->m_reportAddress = args->getOption("bugaddress").toUtf8();
     a->m_pid = args->getOption("pid").toInt();
     a->m_signalNumber = args->getOption("signal").toInt();
     a->m_restarted = args->isSet("restarted");

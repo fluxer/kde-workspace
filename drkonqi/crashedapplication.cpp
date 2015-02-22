@@ -66,7 +66,7 @@ QString CrashedApplication::version() const
     return m_version;
 }
 
-BugReportAddress CrashedApplication::bugReportAddress() const
+QString CrashedApplication::bugReportAddress() const
 {
     return m_reportAddress;
 }
