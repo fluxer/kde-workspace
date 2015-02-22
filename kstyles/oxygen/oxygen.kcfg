@@ -97,11 +97,6 @@
       <default>CS_CHECK</default>
     </entry>
 
-    <!-- progress bars -->
-    <entry name="ProgressBarAnimated" type="Bool">
-      <default>true</default>
-    </entry>
-
     <!-- menus -->
     <entry name="MenuHighlightMode" type="Enum">
       <choices>
