@@ -402,6 +402,23 @@ namespace Oxygen
         bool changed( false );
         if( _focus != focus ) { _focus = focus; changed |= true; }
         if( _hover != hover ) { _hover = hover; changed |= !_focus; }
+
+        if( changed )
+        {
+
+            if( QWidget* viewport = this->viewport() ) {
+
+                // need to disable viewport updates to avoid some redundant painting
+                // besides it fixes one visual glitch (from Qt) in QTableViews
+                viewport->setUpdatesEnabled( false );
+                update() ;
+                viewport->setUpdatesEnabled( true );
+
+            } else {
+                update();
+            }
+
+        }
     }
 
     //____________________________________________________________________________________

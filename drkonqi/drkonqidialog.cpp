@@ -236,7 +236,7 @@ void DrKonqiDialog::enableDebugMenu(bool debuggerRunning)
 void DrKonqiDialog::startBugReportAssistant()
 {
     const CrashedApplication *crashedApp = DrKonqi::crashedApplication();
-    BugReportAddress appReportAddress = crashedApp->bugReportAddress();
+    QString appReportAddress = crashedApp->bugReportAddress();
     SystemInformation *sysinfo = new SystemInformation(this);
     QString backtrace = DrKonqi::debuggerManager()->backtraceGenerator()->parser()->parsedBacktrace();
     QString query;
