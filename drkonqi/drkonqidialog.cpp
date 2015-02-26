@@ -243,21 +243,18 @@ void DrKonqiDialog::startBugReportAssistant()
     // KDE applications use the email address by default
     if (appReportAddress == BUG_REPORT_EMAIL) {
         // black magic - report is done in Markdown syntax with new lines preserved
-        query += QString(BUG_REPORT_URL) + "/new";
-        query += "?title=" + crashedApp->name();
-        query += " " + crashedApp->version();
-        query += " " + crashedApp->signalName();
-        query += "&body=" + QUrl::toPercentEncoding("## Platform");
-        query += "\nOS: " + sysinfo->system();
-        query += "\nRelease: " + sysinfo->release();
-        query += "\nKDE: " + sysinfo->kdeVersion();
-        query += "\nQt: " + sysinfo->qtVersion() + "\n";
-        query += QUrl::toPercentEncoding("\n## Backtrace\n", "\n");
-        query += QUrl::toPercentEncoding("```\n" + backtrace + "```\n", "\n");
-        query += QUrl::toPercentEncoding("\n## Additional information", "\n");
-        query += "\nPlease, provide any other information that you find useful here\n";
+        // FIXME: since there is URL lenght limit posting the data would be much better
+        // but invokeBrowser() can call external browser and at this point KDE
+        // application can not be trused not to crash again (konqueror, rekonq, etc.).
+        query = QString("%1/new").arg(BUG_REPORT_URL);
+        query.append(QString("?title=%1 %2 %3").arg(crashedApp->name(), crashedApp->version(),
+            crashedApp->signalName()));
+        query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nQt: %5\n%6").arg(
+            QUrl::toPercentEncoding("## Platform"), sysinfo->system(),
+            sysinfo->release(), sysinfo->kdeVersion(), sysinfo->qtVersion(),
+            QUrl::toPercentEncoding("## Backtrace\n```\n" + backtrace + "\n```\n")));
     } else {
-        query += QString(appReportAddress);
+        query = QString(appReportAddress);
     }
 
     KToolInvocation::invokeBrowser(query);
