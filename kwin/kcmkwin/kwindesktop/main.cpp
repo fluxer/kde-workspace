@@ -124,23 +124,10 @@ void KWinDesktopConfig::init()
     // TODO: way to recognize if a effect is not found
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
     KService::List services;
-    QString slide;
-    QString cube;
-    QString fadedesktop;
+    m_ui->effectComboBox->addItem(i18n("No Animation"));
     services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_slide'");
     if (!services.isEmpty())
-        slide = services.first()->name();
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_cubeslide'");
-    if (!services.isEmpty())
-        cube = services.first()->name();
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_fadedesktop'");
-    if (!services.isEmpty())
-        fadedesktop = services.first()->name();
-
-    m_ui->effectComboBox->addItem(i18n("No Animation"));
-    m_ui->effectComboBox->addItem(slide);
-    m_ui->effectComboBox->addItem(cube);
-    m_ui->effectComboBox->addItem(fadedesktop);
+        m_ui->effectComboBox->addItem(services.first()->name());
 
     // effect config and info button
     m_ui->effectInfoButton->setIcon(KIcon("dialog-information"));
@@ -264,10 +251,6 @@ void KWinDesktopConfig::load()
     m_ui->effectComboBox->setCurrentIndex(0);
     if (effectEnabled("slide", effectconfig))
         m_ui->effectComboBox->setCurrentIndex(1);
-    if (effectEnabled("cubeslide", effectconfig))
-        m_ui->effectComboBox->setCurrentIndex(2);
-    if (effectEnabled("fadedesktop", effectconfig))
-        m_ui->effectComboBox->setCurrentIndex(3);
     slotEffectSelectionChanged(m_ui->effectComboBox->currentIndex());
     // TODO: plasma stuff
 
@@ -338,26 +321,10 @@ void KWinDesktopConfig::save()
     case 0:
         // no effect
         effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
         break;
     case 1:
         // slide
         effectconfig.writeEntry("kwin4_effect_slideEnabled", true);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
-        break;
-    case 2:
-        // cube
-        effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", true);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
-        break;
-    case 3:
-        // fadedesktop
-        effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", true);
         break;
     }
 
@@ -519,12 +486,6 @@ void KWinDesktopConfig::slotAboutEffectClicked()
     case 1:
         effect = "slide";
         break;
-    case 2:
-        effect = "cubeslide";
-        break;
-    case 3:
-        effect = "fadedesktop";
-        break;
     default:
         return;
     }
@@ -562,33 +523,6 @@ void KWinDesktopConfig::slotAboutEffectClicked()
 
 void KWinDesktopConfig::slotConfigureEffectClicked()
 {
-    QString effect;
-    switch(m_ui->effectComboBox->currentIndex()) {
-    case 2:
-        effect = "cubeslide_config";
-        break;
-    default:
-        return;
-    }
-    KCModuleProxy* proxy = new KCModuleProxy(effect);
-    QPointer< KDialog > configDialog = new KDialog(this);
-    configDialog->setWindowTitle(m_ui->effectComboBox->currentText());
-    configDialog->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Default);
-    connect(configDialog, SIGNAL(defaultClicked()), proxy, SLOT(defaults()));
-
-    QWidget *showWidget = new QWidget(configDialog);
-    QVBoxLayout *layout = new QVBoxLayout;
-    showWidget->setLayout(layout);
-    layout->addWidget(proxy);
-    layout->insertSpacing(-1, KDialog::marginHint());
-    configDialog->setMainWidget(showWidget);
-
-    if (configDialog->exec() == QDialog::Accepted) {
-        proxy->save();
-    } else {
-        proxy->load();
-    }
-    delete configDialog;
 }
 
 } // namespace

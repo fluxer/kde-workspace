@@ -211,17 +211,9 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_slide'");
     if (!services.isEmpty())
         slide = services.first()->name();
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_cubeslide'");
-    if (!services.isEmpty())
-        cube = services.first()->name();
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_fadedesktop'");
-    if (!services.isEmpty())
-        fadedesktop = services.first()->name();
 
     ui.desktopSwitchingCombo->addItem(i18n("No effect"));
     ui.desktopSwitchingCombo->addItem(slide);
-    ui.desktopSwitchingCombo->addItem(cube);
-    ui.desktopSwitchingCombo->addItem(fadedesktop);
 }
 
 KWinCompositingConfig::~KWinCompositingConfig()
@@ -341,10 +333,6 @@ void KWinCompositingConfig::loadGeneralTab()
     ui.desktopSwitchingCombo->setCurrentIndex(0);
     if (effectEnabled("slide", effectconfig))
         ui.desktopSwitchingCombo->setCurrentIndex(1);
-    if (effectEnabled("cubeslide", effectconfig))
-        ui.desktopSwitchingCombo->setCurrentIndex(2);
-    if (effectEnabled("fadedesktop", effectconfig))
-        ui.desktopSwitchingCombo->setCurrentIndex(3);
 }
 
 void KWinCompositingConfig::glSwapStrategyChanged(int idx)
@@ -522,26 +510,10 @@ void KWinCompositingConfig::saveGeneralTab()
     case 0:
         // no effect
         effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
         break;
     case 1:
         // slide
         effectconfig.writeEntry("kwin4_effect_slideEnabled", true);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
-        break;
-    case 2:
-        // cube
-        effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", true);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", false);
-        break;
-    case 3:
-        // fadedesktop
-        effectconfig.writeEntry("kwin4_effect_slideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_cubeslideEnabled", false);
-        effectconfig.writeEntry("kwin4_effect_fadedesktopEnabled", true);
         break;
     }
 }
