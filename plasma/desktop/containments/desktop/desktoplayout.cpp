@@ -389,4 +389,4 @@ int DesktopLayout::newItemKey()
     return from+1;
 }
 
-#include <desktoplayout.moc>
+#include "moc_desktoplayout.cpp"

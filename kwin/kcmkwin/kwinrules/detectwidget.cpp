@@ -235,4 +235,4 @@ WId DetectDialog::findWindow()
 
 } // namespace
 
-#include "detectwidget.moc"
+#include "moc_detectwidget.cpp"

@@ -165,4 +165,4 @@ void PreviewWidget::setPalette(const KSharedConfigPtr &config,
     ADJUST_WIDGET_FOREGROUND(labelSelection7, HighlightedText, Selection, PositiveText);
 }
 
-#include "previewwidget.moc"
+#include "moc_previewwidget.cpp"

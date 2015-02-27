@@ -446,4 +446,4 @@ QObject *SourceRegistry::createConfigurationDialog(const QString &sourceId, cons
 
 } // namespace Homerun
 
-#include <sourceregistry.moc>
+#include "moc_sourceregistry.cpp"

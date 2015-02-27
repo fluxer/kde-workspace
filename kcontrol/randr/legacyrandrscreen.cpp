@@ -420,4 +420,4 @@ SizeList LegacyRandRScreen::pixelSizes() const
 	return m_pixelSizes;
 }
 
-#include "legacyrandrscreen.moc"
+#include "moc_legacyrandrscreen.cpp"

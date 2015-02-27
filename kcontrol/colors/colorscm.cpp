@@ -1419,4 +1419,4 @@ void KColorCm::on_disabledContrastSlider_valueChanged(int value)
     emit changed(true);
 }
 
-#include "colorscm.moc"
+#include "moc_colorscm.cpp"

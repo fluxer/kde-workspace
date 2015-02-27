@@ -710,5 +710,5 @@ QStringList ScriptEngine::defaultLayoutScripts()
 
 }
 
-#include "scriptengine.moc"
+#include "moc_scriptengine.cpp"
 

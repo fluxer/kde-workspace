@@ -24,7 +24,7 @@
 // IN THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////////
 #include "oxygenconfigdialog.h"
-#include "oxygenconfigdialog.moc"
+#include "moc_oxygenconfigdialog.cpp"
 
 #include <QtCore/QTextStream>
 #include <QtCore/QTimer>

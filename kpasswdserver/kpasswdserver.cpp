@@ -1095,4 +1095,4 @@ void KPasswdServer::updateCachedRequestKey (QList<KPasswdServer::Request*>& list
 }
 
 
-#include "kpasswdserver.moc"
+#include "moc_kpasswdserver.cpp"

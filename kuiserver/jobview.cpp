@@ -436,4 +436,4 @@ void JobView::serviceDropped(const QString &address)
     --m_currentPendingCalls;
 }
 
-#include "jobview.moc"
+#include "moc_jobview.cpp"

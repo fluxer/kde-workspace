@@ -31,4 +31,4 @@ QString UrlConverter::convertToPath(const KUrl& url)
     return url.path();
 }
 
-#include "urlconverter.moc"
+#include "moc_urlconverter.cpp"

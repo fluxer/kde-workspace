@@ -35,7 +35,7 @@
 #include <kfontcombobox.h>
 
 #include "banner.h"
-#include "banner.moc"
+#include "moc_banner.cpp"
 #include <QDesktopWidget>
 // libkscreensaver interface
 class KBannerSaverInterface : public KScreenSaverInterface

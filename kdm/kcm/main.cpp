@@ -377,4 +377,4 @@ void KDModule::slotMinMaxUID(int min, int max)
     maxshowuid = max;
 }
 
-#include "main.moc"
+#include "moc_main.cpp"

@@ -82,4 +82,4 @@ QVariantHash PathModel::get(int row) const
 
 } // namespace Homerun
 
-#include <pathmodel.moc>
+#include "moc_pathmodel.cpp"

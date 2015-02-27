@@ -481,4 +481,4 @@ SourceConfigurationWidget *InstalledAppsSource::createConfigurationWidget(const 
 
 } // namespace Homerun
 
-#include "installedappsmodel.moc"
+#include "moc_installedappsmodel.cpp"

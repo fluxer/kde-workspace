@@ -184,4 +184,4 @@ qreal SvgItem::implicitHeight() const
 
 } // Plasma namespace
 
-#include "svgitem.moc"
+#include "moc_svgitem.cpp"

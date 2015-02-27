@@ -136,4 +136,4 @@ void DebuggerManager::onDBusOldInterfaceDebuggerAvailable()
     emit externalDebuggerAdded(d->dbusOldInterfaceLauncher);
 }
 
-#include "debuggermanager.moc"
+#include "moc_debuggermanager.cpp"

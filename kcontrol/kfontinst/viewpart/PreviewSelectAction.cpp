@@ -96,4 +96,4 @@ void CPreviewSelectAction::selected(int index)
 
 }
 
-#include "PreviewSelectAction.moc"
+#include "moc_PreviewSelectAction.cpp"

@@ -632,4 +632,4 @@ uint Core::backendCapabilities()
 
 }
 
-#include "powerdevilcore.moc"
+#include "moc_powerdevilcore.cpp"

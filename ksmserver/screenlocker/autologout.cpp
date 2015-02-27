@@ -115,4 +115,4 @@ void AutoLogout::setVisible(bool visible)
         QApplication::flush();
 }
 
-#include "autologout.moc"
+#include "moc_autologout.cpp"

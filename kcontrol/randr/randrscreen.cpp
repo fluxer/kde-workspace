@@ -676,7 +676,7 @@ void RandRScreen::slotOutputChanged(RROutput id, int changes)
 		return;
 }
 
-#include "randrscreen.moc"
+#include "moc_randrscreen.cpp"
 
 
 // vim:noet:sts=8:sw=8:

@@ -910,4 +910,4 @@ bool Image::checkSize()
     return true;
 }
 
-#include "image.moc"
+#include "moc_image.cpp"

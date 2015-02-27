@@ -679,4 +679,4 @@ void CFontFileListView::checkFiles()
 
 }
 
-#include "DuplicatesDialog.moc"
+#include "moc_DuplicatesDialog.cpp"

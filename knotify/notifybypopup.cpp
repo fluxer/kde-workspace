@@ -617,4 +617,4 @@ QString NotifyByPopup::HtmlEntityResolver::resolveUndeclaredEntity(
 	return QString(ent);
 }
 
-#include "notifybypopup.moc"
+#include "moc_notifybypopup.cpp"

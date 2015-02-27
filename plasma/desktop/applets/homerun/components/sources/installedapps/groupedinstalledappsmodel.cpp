@@ -158,4 +158,4 @@ QAbstractItemModel *GroupedInstalledAppsSource::createModelFromConfigGroup(const
 
 } // namespace Homerun
 
-#include <groupedinstalledappsmodel.moc>
+#include "moc_groupedinstalledappsmodel.cpp"

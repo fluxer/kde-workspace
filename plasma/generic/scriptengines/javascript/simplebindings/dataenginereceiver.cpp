@@ -222,5 +222,5 @@ QScriptValue DataEngineReceiver::disconnectSource(QScriptContext *context, QScri
     return true;
 }
 
-#include "dataenginereceiver.moc"
+#include "moc_dataenginereceiver.cpp"
 

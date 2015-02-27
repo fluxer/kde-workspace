@@ -281,4 +281,4 @@ void SessionRunner::lock()
     }
 }
 
-#include "sessionrunner.moc"
+#include "moc_sessionrunner.cpp"

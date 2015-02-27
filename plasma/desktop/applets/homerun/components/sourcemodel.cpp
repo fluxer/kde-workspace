@@ -212,4 +212,4 @@ void SourceModel::move(int from, int to)
     endMoveRows();
 }
 
-#include <sourcemodel.moc>
+#include "moc_sourcemodel.cpp"

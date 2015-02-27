@@ -142,4 +142,4 @@ QStandardItem *InstalledAppsConfigurationWidget::fillModel(const QString &entryP
 
 } // namespace Homerun
 
-#include <installedappsconfigurationwidget.moc>
+#include "moc_installedappsconfigurationwidget.cpp"

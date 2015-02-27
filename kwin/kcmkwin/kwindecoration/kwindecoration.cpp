@@ -584,4 +584,4 @@ void DecorationButtons::resetToDefaults()
 
 } // namespace KWin
 
-#include "kwindecoration.moc"
+#include "moc_kwindecoration.cpp"

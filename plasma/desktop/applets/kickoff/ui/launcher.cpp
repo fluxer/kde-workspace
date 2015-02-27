@@ -1065,5 +1065,5 @@ void Launcher::breadcrumbActivated()
     d->applicationView->setCurrentRoot(index);
 }
 
-#include "launcher.moc"
+#include "moc_launcher.cpp"
 

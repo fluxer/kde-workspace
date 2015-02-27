@@ -52,7 +52,7 @@ using namespace Eigen;
 
 #include "pendulum.h"           // own interfaces
 #include <kcolordialog.h>
-#include "pendulum.moc"
+#include "moc_pendulum.cpp"
 
 #define KPENDULUM_VERSION "2.0"
 

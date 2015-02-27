@@ -579,5 +579,5 @@ void DeclarativeAppletScript::signalHandlerException(const QScriptValue &excepti
     kWarning()<<"Exception caught: "<<exception.toVariant();
 }
 
-#include "declarativeappletscript.moc"
+#include "moc_declarativeappletscript.cpp"
 

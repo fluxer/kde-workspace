@@ -302,4 +302,4 @@ void ContextMenu::save(KConfigGroup &config)
 }
 
 
-#include "menu.moc"
+#include "moc_menu.cpp"

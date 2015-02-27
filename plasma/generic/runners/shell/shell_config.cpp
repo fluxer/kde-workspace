@@ -58,4 +58,4 @@ void ShellConfig::slotUpdateUser(bool b)
     }
 }
 
-#include "shell_config.moc"
+#include "moc_shell_config.cpp"

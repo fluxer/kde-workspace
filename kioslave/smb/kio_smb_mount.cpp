@@ -190,4 +190,4 @@ void SMBSlave::special( const QByteArray & data)
    finished();
 }
 
-#include "kio_smb.moc"
+#include "moc_kio_smb.cpp"

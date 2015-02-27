@@ -317,5 +317,5 @@ DeviceAccessList KdePlatformPlugin::deviceAccessListFor(
 
 Q_EXPORT_PLUGIN2(phonon_platform_kde, Phonon::KdePlatformPlugin)
 
-#include "kdeplatformplugin.moc"
+#include "moc_kdeplatformplugin.cpp"
 // vim: sw=4 sts=4 et tw=100

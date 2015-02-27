@@ -86,4 +86,4 @@ WId WindowSelector::findRealWindow( WId w, int depth )
 
 } // namespace KHotKeys
 
-#include "window_selector.moc"
+#include "moc_window_selector.cpp"

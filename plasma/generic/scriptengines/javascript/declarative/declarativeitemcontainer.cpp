@@ -117,4 +117,4 @@ void DeclarativeItemContainer::minimumHeightChanged()
 }
 
 
-#include "declarativeitemcontainer_p.moc"
+#include "moc_declarativeitemcontainer_p.cpp"

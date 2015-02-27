@@ -162,4 +162,4 @@ void TaskSource::updateDesktop()
 }
 
 
-#include "tasksource.moc"
+#include "moc_tasksource.cpp"

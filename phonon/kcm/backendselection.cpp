@@ -236,6 +236,6 @@ void BackendSelection::down()
     }
 }
 
-#include "backendselection.moc"
+#include "moc_backendselection.cpp"
 
 // vim: sw=4 ts=4

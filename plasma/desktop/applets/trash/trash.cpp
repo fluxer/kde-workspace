@@ -423,5 +423,5 @@ void Trash::iconSizeChanged(int group)
     }
 }
 
-#include "trash.moc"
+#include "moc_trash.cpp"
 

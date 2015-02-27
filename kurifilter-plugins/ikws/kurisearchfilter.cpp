@@ -87,4 +87,4 @@ QString KUriSearchFilter::configName() const
   return i18n("Search F&ilters");
 }
 
-#include "kurisearchfilter.moc"
+#include "moc_kurisearchfilter.cpp"

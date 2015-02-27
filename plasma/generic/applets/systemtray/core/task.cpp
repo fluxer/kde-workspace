@@ -195,4 +195,4 @@ void Task::setName(QString name)
 
 }
 
-#include "task.moc"
+#include "moc_task.cpp"

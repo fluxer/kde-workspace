@@ -114,4 +114,4 @@ void DBusOldInterfaceAdaptor::registerDebuggingApplication(const QString & name)
     }
 }
 
-#include "debuggerlaunchers.moc"
+#include "moc_debuggerlaunchers.cpp"

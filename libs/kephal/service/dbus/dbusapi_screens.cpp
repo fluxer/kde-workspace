@@ -109,6 +109,6 @@ QStringList DBusAPIScreens::outputs(int id) {
 }
 
 #ifndef NO_KDE
-#include "dbusapi_screens.moc"
+#include "moc_dbusapi_screens.cpp"
 #endif
 

@@ -88,5 +88,5 @@ Qt::DropActions KickoffProxyModel::supportedDragActions() const
     return Qt::CopyAction;
 }
 
-#include "kickoffproxymodel.moc"
+#include "moc_kickoffproxymodel.cpp"
 

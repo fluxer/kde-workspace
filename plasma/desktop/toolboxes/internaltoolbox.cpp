@@ -515,5 +515,5 @@ void InternalToolBox::reposition()
     }
 }
 
-#include "internaltoolbox.moc"
+#include "moc_internaltoolbox.cpp"
 

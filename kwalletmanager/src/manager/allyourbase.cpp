@@ -674,4 +674,4 @@ class ReturnPressedFilter : public QObject
 		}
 };
 
-#include "allyourbase.moc"
+#include "moc_allyourbase.cpp"

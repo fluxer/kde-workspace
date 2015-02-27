@@ -113,7 +113,7 @@ void SensorLoggerDlg::setUpperLimit( double limit )
   m_loggerWidget->m_upperLimit->setText( QString::number( limit ) );
 }
 
-#include "SensorLoggerDlg.moc"
+#include "moc_SensorLoggerDlg.cpp"
 
 /* vim: et sw=2 ts=2
 */

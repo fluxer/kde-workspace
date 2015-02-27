@@ -158,4 +158,4 @@ void KWrited::block_in()
   notification->sendEvent();
 }
 
-#include "kwrited.moc"
+#include "moc_kwrited.cpp"

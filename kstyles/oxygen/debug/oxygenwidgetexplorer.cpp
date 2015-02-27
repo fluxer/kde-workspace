@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenwidgetexplorer.h"
-#include "oxygenwidgetexplorer.moc"
+#include "moc_oxygenwidgetexplorer.cpp"
 
 #include <QtCore/QTextStream>
 #include <QtGui/QApplication>

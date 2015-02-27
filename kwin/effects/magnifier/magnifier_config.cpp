@@ -103,4 +103,4 @@ void MagnifierEffectConfig::defaults()
 
 } // namespace
 
-#include "magnifier_config.moc"
+#include "moc_magnifier_config.cpp"

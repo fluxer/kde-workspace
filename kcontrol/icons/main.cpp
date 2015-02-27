@@ -112,4 +112,4 @@ QString IconModule::quickHelp() const
 
 
 
-#include "main.moc"
+#include "moc_main.cpp"

@@ -146,4 +146,4 @@ void DirModelTest::testSortOrder()
     }
 }
 
-#include <dirmodeltest.moc>
+#include "moc_dirmodeltest.cpp"

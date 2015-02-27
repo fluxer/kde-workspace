@@ -129,5 +129,5 @@ void ManualGroupingStrategy::handleItem(AbstractGroupableItem *item)
 
 }//namespace
 
-#include "manualgroupingstrategy.moc"
+#include "moc_manualgroupingstrategy.cpp"
 

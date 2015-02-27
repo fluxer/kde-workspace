@@ -111,4 +111,4 @@ void WobblyWindowsEffectConfig::wobblinessChanged()
 
 } // namespace
 
-#include "wobblywindows_config.moc"
+#include "moc_wobblywindows_config.cpp"

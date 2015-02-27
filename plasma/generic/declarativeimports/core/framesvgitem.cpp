@@ -210,4 +210,4 @@ qreal FrameSvgItem::implicitHeight() const
 
 } // Plasma namespace
 
-#include "framesvgitem.moc"
+#include "moc_framesvgitem.cpp"

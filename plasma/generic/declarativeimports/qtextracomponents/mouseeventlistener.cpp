@@ -223,5 +223,5 @@ bool MouseEventListener::sceneEventFilter(QGraphicsItem *item, QEvent *event)
     return QDeclarativeItem::sceneEventFilter(item, event);
 }
 
-#include "mouseeventlistener.moc"
+#include "moc_mouseeventlistener.cpp"
 

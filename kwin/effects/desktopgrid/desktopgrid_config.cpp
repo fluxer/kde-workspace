@@ -127,4 +127,4 @@ void DesktopGridEffectConfig::defaults()
 
 } // namespace
 
-#include "desktopgrid_config.moc"
+#include "moc_desktopgrid_config.cpp"

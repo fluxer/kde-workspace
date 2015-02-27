@@ -50,7 +50,7 @@
 #endif
 
 #include "slideshow.h"
-#include "slideshow.moc"
+#include "moc_slideshow.cpp"
 
 
 #define SLIDESHOW_VERSION "2.3.0"

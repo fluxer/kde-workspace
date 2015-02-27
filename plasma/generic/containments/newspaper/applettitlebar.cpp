@@ -428,4 +428,4 @@ void AppletTitleBar::themeChanged()
 }
 
 
-#include <applettitlebar.moc>
+#include "moc_applettitlebar.cpp"

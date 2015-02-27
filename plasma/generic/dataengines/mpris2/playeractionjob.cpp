@@ -175,6 +175,6 @@ QString PlayerActionJob::errorString() const
     return i18n("Unknown error.");
 }
 
-#include "playeractionjob.moc"
+#include "moc_playeractionjob.cpp"
 
 // vim: sw=4 sts=4 et tw=100

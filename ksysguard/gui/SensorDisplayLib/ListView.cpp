@@ -37,7 +37,7 @@
 #include <QTreeView>
 #include <QHeaderView>
 #include "ListView.h"
-#include "ListView.moc"
+#include "moc_ListView.cpp"
 #include "ListViewSettings.h"
 
 static QString formatByteSize(qlonglong amountInKB, int units) {

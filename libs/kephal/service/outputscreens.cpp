@@ -266,5 +266,5 @@ namespace Kephal {
 }
 
 #ifndef NO_KDE
-#include "outputscreens.moc"
+#include "moc_outputscreens.cpp"
 #endif

@@ -89,4 +89,4 @@ void GlobalShortcutsModule::save()
 }
 
 
-#include "globalshortcuts.moc"
+#include "moc_globalshortcuts.cpp"

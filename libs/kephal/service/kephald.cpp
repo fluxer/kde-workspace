@@ -40,4 +40,4 @@ KephalD::~KephalD()
 {
 }
 
-#include "kephald.moc"
+#include "moc_kephald.cpp"

@@ -390,5 +390,5 @@ bool FullScreenWindow::eventFilter(QObject *watched, QEvent *event)
 
 
 
-#include "fullscreenwindow.moc"
+#include "moc_fullscreenwindow.cpp"
 

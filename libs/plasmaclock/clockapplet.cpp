@@ -760,4 +760,4 @@ const KCalendarSystem *ClockApplet::calendar() const
     }
 }
 
-#include "clockapplet.moc"
+#include "moc_clockapplet.cpp"

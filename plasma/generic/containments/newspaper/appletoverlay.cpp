@@ -41,5 +41,5 @@ void AppletOverlay::paint(QPainter *painter, const QStyleOptionGraphicsItem *opt
     painter->fillRect(option->exposedRect, c);
 }
 
-#include <appletoverlay.moc>
+#include "moc_appletoverlay.cpp"
 

@@ -44,5 +44,5 @@ void QtExtraComponentsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "qtextracomponentsplugin.moc"
+#include "moc_qtextracomponentsplugin.cpp"
 

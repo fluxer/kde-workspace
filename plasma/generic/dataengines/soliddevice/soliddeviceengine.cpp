@@ -803,4 +803,4 @@ void SolidDeviceEngine::deviceChanged(const QString& udi, const QString &propert
 
 K_EXPORT_PLASMA_DATAENGINE(soliddevice, SolidDeviceEngine)
 
-#include "soliddeviceengine.moc"
+#include "moc_soliddeviceengine.cpp"

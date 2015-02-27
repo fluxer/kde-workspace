@@ -701,5 +701,5 @@ Task::WindowProperties::WindowProperties(unsigned int netWinInfoProperties, unsi
 
 } // TaskManager namespace
 
-#include "task.moc"
+#include "moc_task.cpp"
 

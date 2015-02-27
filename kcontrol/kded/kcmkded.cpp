@@ -39,7 +39,7 @@
 
 #include <KPluginFactory>
 #include <KPluginLoader>
-#include "kcmkded.moc"
+#include "moc_kcmkded.cpp"
 
 K_PLUGIN_FACTORY(KDEDFactory,
         registerPlugin<KDEDConfig>();

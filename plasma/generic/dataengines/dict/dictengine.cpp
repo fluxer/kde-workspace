@@ -237,4 +237,4 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     return true;
 }
 
-#include "dictengine.moc"
+#include "moc_dictengine.cpp"

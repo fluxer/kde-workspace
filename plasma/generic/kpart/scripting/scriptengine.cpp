@@ -312,5 +312,5 @@ QScriptValue ScriptEngine::theme(QScriptContext *context, QScriptEngine *engine)
 
 }
 
-#include "scriptengine.moc"
+#include "moc_scriptengine.cpp"
 

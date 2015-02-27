@@ -996,4 +996,4 @@ void PanelController::addSpace()
     }
 }
 
-#include "panelcontroller.moc"
+#include "moc_panelcontroller.cpp"

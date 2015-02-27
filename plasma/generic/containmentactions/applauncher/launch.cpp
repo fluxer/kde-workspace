@@ -133,4 +133,4 @@ void AppLauncher::switchTo(QAction *action)
     }
 }
 
-#include "launch.moc"
+#include "moc_launch.cpp"

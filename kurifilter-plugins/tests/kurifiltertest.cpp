@@ -392,4 +392,4 @@ void KUriFilterTest::localdomain()
     }
 }
 
-#include "kurifiltertest.moc"
+#include "moc_kurifiltertest.cpp"

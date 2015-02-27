@@ -14,7 +14,7 @@
  ***************************************************************************/
 
 #include "componentchooserterminal.h"
-#include "componentchooserterminal.moc"
+#include "moc_componentchooserterminal.cpp"
 
 #include <ktoolinvocation.h>
 #include <klauncher_iface.h>

@@ -266,4 +266,4 @@ void HotplugEngine::onDeviceRemoved(const QString &udi)
 
 K_EXPORT_PLASMA_DATAENGINE(hotplug, HotplugEngine)
 
-#include "hotplugengine.moc"
+#include "moc_hotplugengine.cpp"

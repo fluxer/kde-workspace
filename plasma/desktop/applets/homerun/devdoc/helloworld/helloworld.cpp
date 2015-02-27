@@ -72,4 +72,4 @@ int HelloWorldModel::count() const
     return rowCount(QModelIndex());
 }
 
-#include <helloworld.moc>
+#include "moc_helloworld.cpp"

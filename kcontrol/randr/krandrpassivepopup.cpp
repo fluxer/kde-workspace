@@ -120,4 +120,4 @@ void KRandrPassivePopup::slotPositionSelf()
     positionSelf();
     }
     
-#include "krandrpassivepopup.moc"
+#include "moc_krandrpassivepopup.cpp"

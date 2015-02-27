@@ -219,5 +219,5 @@ void testProcess::testHistoriesWithWidget() {
 }
 QTEST_KDEMAIN(testProcess,GUI)
 
-#include "processtest.moc"
+#include "moc_processtest.cpp"
 

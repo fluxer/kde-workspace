@@ -673,4 +673,4 @@ void KGlobalShortcutsEditor::KGlobalShortcutsEditorPrivate::removeComponent(
     }
 
 
-#include "kglobalshortcutseditor.moc"
+#include "moc_kglobalshortcutseditor.cpp"

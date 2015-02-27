@@ -176,4 +176,4 @@ void ShellRunner::setPassword(const QString &password)
     m_password = password;
 }
 
-#include "shellrunner.moc"
+#include "moc_shellrunner.cpp"

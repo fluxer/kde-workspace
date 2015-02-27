@@ -567,4 +567,4 @@ void PowerDevilUPowerBackend::slotLogin1Resuming(bool active)
     }
 }
 
-#include "powerdevilupowerbackend.moc"
+#include "moc_powerdevilupowerbackend.cpp"

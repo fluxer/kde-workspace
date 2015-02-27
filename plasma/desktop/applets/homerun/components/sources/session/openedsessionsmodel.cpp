@@ -89,4 +89,4 @@ void OpenedSessionsModel::refresh()
 
 } // namespace
 
-#include <openedsessionsmodel.moc>
+#include "moc_openedsessionsmodel.cpp"

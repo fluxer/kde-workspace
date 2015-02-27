@@ -217,4 +217,4 @@ void PanelAppletHandle::mouseReleaseEvent(QMouseEvent *event)
 }
 
 
-#include "panelapplethandle.moc"
+#include "moc_panelapplethandle.cpp"

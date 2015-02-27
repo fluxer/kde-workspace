@@ -44,4 +44,4 @@ void SystemSettingsApp::quit()
     KUniqueApplication::quit();
 }
 
-#include "SystemSettingsApp.moc"
+#include "moc_SystemSettingsApp.cpp"

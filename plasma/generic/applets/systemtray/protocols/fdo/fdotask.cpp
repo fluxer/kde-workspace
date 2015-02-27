@@ -109,4 +109,4 @@ QGraphicsWidget* FdoTask::createWidget(Plasma::Applet *applet)
 
 }
 
-#include "fdotask.moc"
+#include "moc_fdotask.cpp"

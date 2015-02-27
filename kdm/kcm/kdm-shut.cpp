@@ -208,4 +208,4 @@ void KDMSessionsWidget::defaults()
     bm_combo->setCurrentId("None");
 }
 
-#include "kdm-shut.moc"
+#include "moc_kdm-shut.cpp"

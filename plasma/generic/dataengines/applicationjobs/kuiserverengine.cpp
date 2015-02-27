@@ -377,4 +377,4 @@ void KuiserverEngine::init()
 
 K_EXPORT_PLASMA_DATAENGINE(kuiserver, KuiserverEngine)
 
-#include "kuiserverengine.moc"
+#include "moc_kuiserverengine.cpp"

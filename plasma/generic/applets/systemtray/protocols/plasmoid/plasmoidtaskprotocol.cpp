@@ -156,4 +156,4 @@ QStringList PlasmoidProtocol::applets(Plasma::Applet *host) const
 
 }
 
-#include "plasmoidtaskprotocol.moc"
+#include "moc_plasmoidtaskprotocol.cpp"

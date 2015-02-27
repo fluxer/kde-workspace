@@ -115,4 +115,4 @@ SessionModel::SessionModel(QObject *parent)
 
 } // namespace Homerun
 
-#include "sessionmodel.moc"
+#include "moc_sessionmodel.cpp"

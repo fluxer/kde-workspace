@@ -252,5 +252,5 @@ QMimeData * ServiceRunner::mimeDataForMatch(const Plasma::QueryMatch *match)
     return 0;
 }
 
-#include "servicerunner.moc"
+#include "moc_servicerunner.cpp"
 

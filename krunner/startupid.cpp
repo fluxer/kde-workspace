@@ -359,4 +359,4 @@ void StartupId::lostOwner()
     active_selection = false;
     }
 
-#include "startupid.moc"
+#include "moc_startupid.cpp"

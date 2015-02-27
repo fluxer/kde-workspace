@@ -41,5 +41,5 @@ void HotplugJob::start()
     emitResult();
 }
 
-#include "hotplugjob.moc"
+#include "moc_hotplugjob.cpp"
 

@@ -20,7 +20,7 @@
 #include <netwm.h>
 
 #include "ksystraycmd.h"
-#include "ksystraycmd.moc"
+#include "moc_ksystraycmd.cpp"
 #include <QX11Info>
 
 

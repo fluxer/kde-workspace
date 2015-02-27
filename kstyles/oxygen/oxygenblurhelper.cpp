@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenblurhelper.h"
-#include "oxygenblurhelper.moc"
+#include "moc_oxygenblurhelper.cpp"
 
 #include "oxygenstyleconfigdata.h"
 

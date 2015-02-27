@@ -167,4 +167,4 @@ void StandardActionsModule::save()
     KMessageBox::information(this, message, title, "shortcuts_saved_info");
     }
 
-#include "standard_actions_module.moc"
+#include "moc_standard_actions_module.cpp"

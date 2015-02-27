@@ -110,4 +110,4 @@ void KWinDecorationButtonsConfigDialog::slotResetClicked()
 
 } // namespace KWin
 
-#include "buttonsconfigdialog.moc"
+#include "moc_buttonsconfigdialog.cpp"

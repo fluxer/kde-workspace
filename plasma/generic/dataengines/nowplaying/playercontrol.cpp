@@ -70,6 +70,6 @@ Plasma::ServiceJob* PlayerControl::createJob(const QString& operation,
     return new PlayerActionJob(m_player, operation, parameters, this);
 }
 
-#include "playercontrol.moc"
+#include "moc_playercontrol.cpp"
 
 // vim: sw=4 sts=4 et tw=100

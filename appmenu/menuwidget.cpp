@@ -384,4 +384,4 @@ void MenuWidget::installEventFilterForAll(QMenu *menu, QObject *object)
     }
 }
 
-#include "menuwidget.moc"
+#include "moc_menuwidget.cpp"

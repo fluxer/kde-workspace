@@ -183,4 +183,4 @@ void InvertEffect::resetShader()
 
 } // namespace
 
-#include "invert.moc"
+#include "moc_invert.cpp"

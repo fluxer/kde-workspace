@@ -79,4 +79,4 @@ void ToolBoxToggle::setVisible(bool visible)
     }
 }
 
-#include "toolboxtoggle.moc"
+#include "moc_toolboxtoggle.cpp"

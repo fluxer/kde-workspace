@@ -126,4 +126,4 @@ bool TasksEngine::sourceRequestEvent(const QString &source)
 
 K_EXPORT_PLASMA_DATAENGINE(tasks, TasksEngine)
 
-#include "tasksengine.moc"
+#include "moc_tasksengine.cpp"

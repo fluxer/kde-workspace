@@ -201,4 +201,4 @@ void AppletContainer::afterHeightChanged()
 }
 
 
-#include "appletcontainer.moc"
+#include "moc_appletcontainer.cpp"

@@ -961,4 +961,4 @@ QVector<QString> UKMETIon::forecasts(const QString& source)
     return forecastData;
 }
 
-#include "ion_bbcukmet.moc"
+#include "moc_ion_bbcukmet.cpp"

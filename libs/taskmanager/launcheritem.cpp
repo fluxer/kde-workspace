@@ -505,4 +505,4 @@ void LauncherItem::close()
 
 } // TaskManager namespace
 
-#include "launcheritem.moc"
+#include "moc_launcheritem.cpp"

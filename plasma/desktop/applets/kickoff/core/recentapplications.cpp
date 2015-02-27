@@ -190,4 +190,4 @@ void RecentApplications::clear()
     emit cleared();
 }
 
-#include "recentapplications.moc"
+#include "moc_recentapplications.cpp"

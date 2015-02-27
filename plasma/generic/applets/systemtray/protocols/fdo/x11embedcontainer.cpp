@@ -249,4 +249,4 @@ QPixmap X11EmbedContainer::toX11Pixmap(const QPixmap& pix)
 
 }
 
-#include "x11embedcontainer.moc"
+#include "moc_x11embedcontainer.cpp"

@@ -106,4 +106,4 @@ void GlowBar::setInputMask()
             ShapeSet);
     XFreePixmap(QX11Info::display(), mask);
 }
-#include "glowbar.moc"
+#include "moc_glowbar.cpp"

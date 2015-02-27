@@ -540,4 +540,4 @@ bool Greeter::gplugHasNode(const QString &)
 }
 
 } // end namespace
-#include "greeter.moc"
+#include "moc_greeter.cpp"

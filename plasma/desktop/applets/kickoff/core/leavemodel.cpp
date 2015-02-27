@@ -199,5 +199,5 @@ LeaveModel::~LeaveModel()
     delete d;
 }
 
-#include "leavemodel.moc"
+#include "moc_leavemodel.cpp"
 

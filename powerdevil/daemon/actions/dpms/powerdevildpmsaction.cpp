@@ -230,4 +230,4 @@ void PowerDevilDPMSAction::onUnavailablePoliciesChanged(PowerDevil::PolicyAgent:
     }
 }
 
-#include "powerdevildpmsaction.moc"
+#include "moc_powerdevildpmsaction.cpp"

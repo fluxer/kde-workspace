@@ -172,4 +172,4 @@ LinearLayoutAttached *GraphicsLinearLayoutObject::qmlAttachedProperties(QObject 
     return rv;
 }
 
-#include "linearlayout.moc"
+#include "moc_linearlayout.cpp"

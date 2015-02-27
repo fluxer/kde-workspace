@@ -165,4 +165,4 @@ void WebshortcutRunner::run(const Plasma::RunnerContext &context, const Plasma::
     }
 }
 
-#include "webshortcutrunner.moc"
+#include "moc_webshortcutrunner.cpp"

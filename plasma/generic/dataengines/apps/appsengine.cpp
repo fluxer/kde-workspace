@@ -89,4 +89,4 @@ void AppsEngine::addApp(KService::Ptr app)
 
 K_EXPORT_PLASMA_DATAENGINE(apps, AppsEngine)
 
-#include "appsengine.moc"
+#include "moc_appsengine.cpp"

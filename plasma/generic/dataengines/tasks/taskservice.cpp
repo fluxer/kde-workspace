@@ -37,4 +37,4 @@ Plasma::ServiceJob *TaskService::createJob(const QString &operation, QMap<QStrin
     return new TaskJob(m_source, operation, parameters, this);
 }
 
-#include "taskservice.moc"
+#include "moc_taskservice.cpp"

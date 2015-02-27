@@ -82,7 +82,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kdebug.h>
 #include <kshell.h>
 
-#include "server.moc"
+#include "moc_server.cpp"
 
 // must go after #include <config-ksmserver.h>
 #ifdef COMPILE_SCREEN_LOCKER

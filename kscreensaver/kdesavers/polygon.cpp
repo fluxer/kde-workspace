@@ -24,7 +24,7 @@
 #include "polygon.h"
 #include <qpainter.h>
 
-#include "polygon.moc"
+#include "moc_polygon.cpp"
 
 
 #define MAXLENGTH	65

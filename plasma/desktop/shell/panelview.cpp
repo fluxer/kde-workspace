@@ -1673,5 +1673,5 @@ void PanelView::dropEvent(QDropEvent *event)
     }
 }
 
-#include "panelview.moc"
+#include "moc_panelview.cpp"
 

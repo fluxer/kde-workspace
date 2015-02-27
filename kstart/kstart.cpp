@@ -24,7 +24,7 @@
  */
 
 #include <ktoolinvocation.h>
-#include "kstart.moc"
+#include "moc_kstart.cpp"
 
 #include <fcntl.h>
 #include <stdlib.h>

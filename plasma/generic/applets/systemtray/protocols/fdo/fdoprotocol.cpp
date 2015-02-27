@@ -49,5 +49,5 @@ void FdoProtocol::init()
 
 }
 
-#include "fdoprotocol.moc"
+#include "moc_fdoprotocol.cpp"
 

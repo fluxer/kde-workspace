@@ -100,4 +100,4 @@ KSWidget::~KSWidget()
 #endif
 }
 
-#include "kswidget.moc"
+#include "moc_kswidget.cpp"

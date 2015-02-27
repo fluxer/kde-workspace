@@ -296,4 +296,4 @@ PlayerSettingsDialog::~ PlayerSettingsDialog( )
 	delete m_ui;
 }
 
-#include "knotify.moc"
+#include "moc_knotify.cpp"

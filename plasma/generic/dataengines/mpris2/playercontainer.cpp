@@ -394,4 +394,4 @@ void PlayerContainer::recalculatePosition()
     setData(POS_UPD_STRING, now);
 }
 
-#include "playercontainer.moc"
+#include "moc_playercontainer.cpp"

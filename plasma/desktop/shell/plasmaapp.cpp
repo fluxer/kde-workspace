@@ -1247,4 +1247,4 @@ void PlasmaApp::executeCommands(const QList < QVariant > & commands)
     }
 }
 
-#include "plasmaapp.moc"
+#include "moc_plasmaapp.cpp"

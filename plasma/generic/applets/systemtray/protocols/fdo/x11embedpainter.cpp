@@ -149,4 +149,4 @@ void X11EmbedPainter::performUpdates()
 
 }
 
-#include "x11embedpainter.moc"
+#include "moc_x11embedpainter.cpp"

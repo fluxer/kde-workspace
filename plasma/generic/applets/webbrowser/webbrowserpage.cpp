@@ -64,4 +64,4 @@ void WebBrowserPage::networkAccessFinished(QNetworkReply *nReply)
     }
 }
 
-#include "webbrowserpage.moc"
+#include "moc_webbrowserpage.cpp"

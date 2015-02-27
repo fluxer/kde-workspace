@@ -64,4 +64,4 @@ void DirConfigurationWidget::save()
     configGroup().writeEntry("rootName", title);
 }
 
-#include <dirconfigurationwidget.moc>
+#include "moc_dirconfigurationwidget.cpp"

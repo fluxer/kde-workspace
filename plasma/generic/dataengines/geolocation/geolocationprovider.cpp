@@ -133,4 +133,4 @@ void GeolocationProvider::update()
 {
 }
 
-#include "geolocationprovider.moc"
+#include "moc_geolocationprovider.cpp"

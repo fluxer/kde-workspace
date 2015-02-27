@@ -26,7 +26,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenbutton.h"
-#include "oxygenbutton.moc"
+#include "moc_oxygenbutton.cpp"
 #include "oxygenclient.h"
 
 #include <cmath>

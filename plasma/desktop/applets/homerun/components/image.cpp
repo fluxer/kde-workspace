@@ -95,4 +95,4 @@ void Image::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
 }
 
 
-#include <image.moc>
+#include "moc_image.cpp"

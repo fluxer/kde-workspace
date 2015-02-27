@@ -18,5 +18,5 @@
 
 #define USE_JS_SCRIPTENGINE
 #include "appletinterface.cpp"
-#include "appletinterface.moc"
+#include "moc_appletinterface.cpp"
 

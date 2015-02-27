@@ -145,4 +145,4 @@ void NowPlayingEngine::removePlayer(Player::Ptr player)
     removeSource(player->name());
 }
 
-#include "nowplayingengine.moc"
+#include "moc_nowplayingengine.cpp"

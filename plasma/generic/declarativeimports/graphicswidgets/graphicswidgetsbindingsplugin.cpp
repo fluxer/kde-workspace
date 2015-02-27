@@ -103,5 +103,5 @@ void GraphicsWidgetsBindingsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "graphicswidgetsbindingsplugin.moc"
+#include "moc_graphicswidgetsbindingsplugin.cpp"
 

@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenshadowhelper.h"
-#include "oxygenshadowhelper.moc"
+#include "moc_oxygenshadowhelper.cpp"
 #include "oxygenshadowcache.h"
 #include "oxygenstylehelper.h"
 

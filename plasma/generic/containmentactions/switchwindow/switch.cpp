@@ -258,4 +258,4 @@ void SwitchWindow::wheelEvent(QGraphicsSceneWheelEvent *event)
 }
 
 
-#include "switch.moc"
+#include "moc_switch.cpp"

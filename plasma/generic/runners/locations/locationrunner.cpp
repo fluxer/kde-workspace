@@ -163,4 +163,4 @@ QMimeData * LocationsRunner::mimeDataForMatch(const Plasma::QueryMatch *match)
 }
 
 
-#include "locationrunner.moc"
+#include "moc_locationrunner.cpp"

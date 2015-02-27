@@ -234,5 +234,5 @@ void PanelShadows::Private::clearShadow(const QWidget *window)
 #endif
 }
 
-#include "panelshadows.moc"
+#include "moc_panelshadows.cpp"
 

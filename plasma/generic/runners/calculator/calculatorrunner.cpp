@@ -319,4 +319,4 @@ QMimeData * CalculatorRunner::mimeDataForMatch(const Plasma::QueryMatch *match)
     return result;
 }
 
-#include "calculatorrunner.moc"
+#include "moc_calculatorrunner.cpp"

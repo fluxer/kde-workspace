@@ -337,4 +337,4 @@ void IconItem::geometryChanged(const QRectF &newGeometry,
     }
 }
 
-#include "iconitem.moc"
+#include "moc_iconitem.cpp"

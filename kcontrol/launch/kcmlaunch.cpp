@@ -271,4 +271,4 @@ LaunchConfig::checkChanged()
     );
 }
 
-#include "kcmlaunch.moc"
+#include "moc_kcmlaunch.cpp"

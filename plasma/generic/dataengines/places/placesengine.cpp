@@ -119,5 +119,6 @@ void PlacesEngine::sendData(int start, int end)
 
 K_EXPORT_PLASMA_DATAENGINE(places, PlacesEngine)
 
-#include "placesengine.moc"
+#include "moc_placesengine.cpp"
+#include "moc_modeljob.cpp"
 

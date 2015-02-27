@@ -14,7 +14,7 @@
  ***************************************************************************/
 
 #include "componentchooserwm.h"
-#include "componentchooserwm.moc"
+#include "moc_componentchooserwm.cpp"
 
 #include <kdebug.h>
 #include <kdesktopfile.h>

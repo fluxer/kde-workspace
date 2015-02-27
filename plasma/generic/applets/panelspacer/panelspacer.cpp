@@ -177,5 +177,5 @@ void PanelSpacer::updateConfigurationMode(bool config)
 }
 
 
-#include "panelspacer.moc"
+#include "moc_panelspacer.cpp"
 

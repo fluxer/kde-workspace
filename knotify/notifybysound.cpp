@@ -335,5 +335,5 @@ void NotifyBySound::closeNow()
 	}
 }
 
-#include "notifybysound.moc"
+#include "moc_notifybysound.cpp"
 // vim: ts=4 noet

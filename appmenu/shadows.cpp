@@ -377,5 +377,5 @@ bool Shadows::enabled() const
      return hasElement("shadow-left");
 }
 
-#include "shadows.moc"
+#include "moc_shadows.cpp"
 

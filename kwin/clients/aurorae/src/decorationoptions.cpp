@@ -178,4 +178,4 @@ void Borders::setTitle(int value)
 
 } // namespace
 
-#include "decorationoptions.moc"
+#include "moc_decorationoptions.cpp"

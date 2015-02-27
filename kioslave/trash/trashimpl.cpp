@@ -1164,4 +1164,4 @@ bool TrashImpl::adaptTrashSize( const QString& origPath, int trashId )
     return true;
 }
 
-#include "trashimpl.moc"
+#include "moc_trashimpl.cpp"

@@ -315,4 +315,4 @@ QString OuiDb::vendor(octlet_t guid) {
 
 // ------------------------------------------------------------------------
 
-#include "view1394.moc"
+#include "moc_view1394.cpp"

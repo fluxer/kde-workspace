@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygendetectwidget.h"
-#include "oxygendetectwidget.moc"
+#include "moc_oxygendetectwidget.cpp"
 
 #include <cassert>
 #include <QButtonGroup>

@@ -102,4 +102,4 @@ QVariant HddTemp::data(const QString source, const DataType type) const
     return m_data[source][type];
 }
 
-#include "hddtemp.moc"
+#include "moc_hddtemp.cpp"

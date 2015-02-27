@@ -35,5 +35,5 @@ void WheelyToolButton::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 }
 
-#include "wheelytoolbutton.moc"
+#include "moc_wheelytoolbutton.cpp"
 

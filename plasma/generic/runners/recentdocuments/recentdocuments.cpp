@@ -108,4 +108,4 @@ QMimeData * RecentDocuments::mimeDataForMatch(const Plasma::QueryMatch * match)
     return result;
 }
 
-#include "recentdocuments.moc"
+#include "moc_recentdocuments.cpp"

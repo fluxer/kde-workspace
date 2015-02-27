@@ -91,4 +91,4 @@ bool DeclarativeView::x11Event(XEvent *e)
 } // namespace Tabbox
 } // namespace KWin
 
-#include "../declarative.moc"
+#include "../moc_declarative.cpp"

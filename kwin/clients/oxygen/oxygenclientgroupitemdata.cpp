@@ -27,7 +27,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenclientgroupitemdata.h"
-#include "oxygenclientgroupitemdata.moc"
+#include "moc_oxygenclientgroupitemdata.cpp"
 #include "oxygenclient.h"
 
 namespace Oxygen

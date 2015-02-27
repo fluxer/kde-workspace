@@ -28,4 +28,4 @@ void DecorationPlugin::registerTypes(const char *uri)
     qmlRegisterType<KWin::Borders>(uri, 0, 1, "Borders");
 }
 
-#include "decorationplugin.moc"
+#include "moc_decorationplugin.cpp"

@@ -159,4 +159,4 @@ void SessionSwitching::activateSession(int index)
 
 }
 
-#include "sessions.moc"
+#include "moc_sessions.cpp"

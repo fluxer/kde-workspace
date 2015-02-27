@@ -220,4 +220,4 @@ void CPreviewListView::contextMenuEvent(QContextMenuEvent *ev)
 
 }
 
-#include "PreviewList.moc"
+#include "moc_PreviewList.cpp"

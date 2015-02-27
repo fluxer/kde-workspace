@@ -108,4 +108,4 @@ void RunScriptConfig::onIndexChanged(const QString &text)
 }
 }
 
-#include "runscriptconfig.moc"
+#include "moc_runscriptconfig.cpp"

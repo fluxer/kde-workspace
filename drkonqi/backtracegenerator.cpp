@@ -162,4 +162,4 @@ void BacktraceGenerator::slotProcessExited(int exitCode, QProcess::ExitStatus ex
     emit done();
 }
 
-#include "backtracegenerator.moc"
+#include "moc_backtracegenerator.cpp"

@@ -110,4 +110,4 @@ void KDEsuDialog::slotUser1()
     done(AsUser);
 }
 
-#include "sudlg.moc"
+#include "moc_sudlg.cpp"

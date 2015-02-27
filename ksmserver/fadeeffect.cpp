@@ -55,7 +55,7 @@
 #endif
 
 #include "fadeeffect.h"
-#include "fadeeffect.moc"
+#include "moc_fadeeffect.cpp"
 
 
 #ifndef HAVE_SSE2

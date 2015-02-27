@@ -252,4 +252,4 @@ void PlasmaApp::viewDestroyed(QObject *view)
     }
 }
 
-#include "plasmaapp.moc"
+#include "moc_plasmaapp.cpp"

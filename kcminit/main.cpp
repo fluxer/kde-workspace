@@ -267,4 +267,4 @@ extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
   return 0;
 }
 
-#include "main.moc"
+#include "moc_main.cpp"

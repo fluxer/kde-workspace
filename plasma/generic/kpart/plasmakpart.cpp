@@ -163,4 +163,4 @@ Plasma::Containment* PlasmaKPart::containment() const
     return corona()->containments().first();
 }
 
-#include "plasmakpart.moc"
+#include "moc_plasmakpart.cpp"

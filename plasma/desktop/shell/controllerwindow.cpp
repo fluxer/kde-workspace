@@ -502,4 +502,4 @@ void ControllerWindow::resizeEvent(QResizeEvent * event)
     }
 }
 
-#include "controllerwindow.moc"
+#include "moc_controllerwindow.cpp"

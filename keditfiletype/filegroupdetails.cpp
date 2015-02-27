@@ -69,4 +69,4 @@ void FileGroupDetails::slotAutoEmbedClicked(int button)
   emit changed(true);
 }
 
-#include "filegroupdetails.moc"
+#include "moc_filegroupdetails.cpp"

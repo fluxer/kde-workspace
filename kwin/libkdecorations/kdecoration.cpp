@@ -677,4 +677,4 @@ int decoration_bridge_version()
 
 }
 
-#include "kdecoration.moc"
+#include "moc_kdecoration.cpp"

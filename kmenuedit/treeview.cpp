@@ -52,7 +52,7 @@
 #include <KStandardDirs>
 #include <KIO/NetAccess>
 
-#include "treeview.moc"
+#include "moc_treeview.cpp"
 #include "menufile.h"
 #include "menuinfo.h"
 

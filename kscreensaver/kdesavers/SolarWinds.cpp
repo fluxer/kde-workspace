@@ -25,7 +25,7 @@
 #include <time.h>
 #include <qtimer.h>
 #include "SolarWinds.h"
-#include "SolarWinds.moc"
+#include "moc_SolarWinds.cpp"
 #include <GL/glu.h>
 
 

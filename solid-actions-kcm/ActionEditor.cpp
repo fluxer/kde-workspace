@@ -187,4 +187,4 @@ void ActionEditor::accept()
     KDialog::accept();
 }
 
-#include "ActionEditor.moc"
+#include "moc_ActionEditor.cpp"

@@ -483,4 +483,4 @@ void PowermanagementEngine::keyboardBrightnessReply(QDBusPendingCallWatcher *wat
 
 K_EXPORT_PLASMA_DATAENGINE(powermanagement, PowermanagementEngine)
 
-#include "powermanagementengine.moc"
+#include "moc_powermanagementengine.cpp"

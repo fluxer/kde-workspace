@@ -57,6 +57,6 @@ namespace Kephal {
 }
 
 #ifndef NO_KDE
-#include "externalconfiguration.moc"
+#include "moc_externalconfiguration.cpp"
 #endif
 

@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "kcmsambaimports.h"
-#include "kcmsambaimports.moc"
+#include "moc_kcmsambaimports.cpp"
 
 #include <QLayout>
 #include <QWhatsThis>

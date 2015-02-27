@@ -167,4 +167,4 @@ void PlacesRunner::setupComplete(QModelIndex index, bool success)
     }
 }
 
-#include "placesrunner.moc"
+#include "moc_placesrunner.cpp"

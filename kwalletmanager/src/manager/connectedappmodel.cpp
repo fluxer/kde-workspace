@@ -67,4 +67,4 @@ void ConnectedAppModel::removeApp(QString appName)
 }
 
 
-#include "connectedappmodel.moc"
+#include "moc_connectedappmodel.cpp"

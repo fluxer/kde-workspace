@@ -1089,4 +1089,4 @@ QString Klipper::cycleText() const
     return result;
 }
 
-#include "klipper.moc"
+#include "moc_klipper.cpp"

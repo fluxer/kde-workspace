@@ -24,7 +24,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenexceptionlistwidget.h"
-#include "oxygenexceptionlistwidget.moc"
+#include "moc_oxygenexceptionlistwidget.cpp"
 #include "oxygenexceptiondialog.h"
 
 #include <QPointer>

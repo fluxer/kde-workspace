@@ -25,8 +25,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygentabdemowidget.h"
-#include "oxygentabdemowidget.moc"
-#include "oxygentabwidget.moc"
+#include "moc_oxygentabdemowidget.cpp"
+#include "moc_oxygentabwidget.cpp"
 
 #include <QtGui/QToolButton>
 #include <KIcon>

@@ -31,4 +31,4 @@ void LocaleBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<CalendarSystem>(uri, 0, 1, "CalendarSystem");
 }
 
-#include "localebindingsplugin.moc"
+#include "moc_localebindingsplugin.cpp"

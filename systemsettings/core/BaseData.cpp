@@ -67,4 +67,4 @@ KConfigGroup BaseData::configGroup( const QString& pluginName )
     return KGlobal::config()->group( pluginName );
 }
 
-#include "BaseData.moc"
+#include "moc_BaseData.cpp"

@@ -291,4 +291,4 @@ bool Monitor::Corner::active() const
 }
 } // namespace
 
-#include "monitor.moc"
+#include "moc_monitor.cpp"

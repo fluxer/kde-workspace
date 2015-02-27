@@ -42,4 +42,4 @@ int MessageBox::warningContinueCancel(const QString& text, const QString& captio
     return ret;
 }
 
-#include <messagebox.moc>
+#include "moc_messagebox.cpp"

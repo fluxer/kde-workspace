@@ -717,4 +717,4 @@ QHash<QString, QString> ApplicationModelPrivate::iconNameMap()
 } // namespace Kickoff
 
 
-#include "applicationmodel.moc"
+#include "moc_applicationmodel.cpp"

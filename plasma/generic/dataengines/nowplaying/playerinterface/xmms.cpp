@@ -178,4 +178,4 @@ void Xmms::seek(int time)
 }
 
 
-#include "xmms.moc"
+#include "moc_xmms.cpp"

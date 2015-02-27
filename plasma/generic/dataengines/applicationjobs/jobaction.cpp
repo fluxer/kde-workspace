@@ -47,5 +47,5 @@ void JobAction::start()
     emitResult();
 }
 
-#include "jobaction.moc"
+#include "moc_jobaction.cpp"
 

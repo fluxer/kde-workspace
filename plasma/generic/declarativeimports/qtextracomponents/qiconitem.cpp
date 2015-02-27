@@ -122,4 +122,4 @@ void QIconItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 }
 
 
-#include "qiconitem.moc"
+#include "moc_qiconitem.cpp"

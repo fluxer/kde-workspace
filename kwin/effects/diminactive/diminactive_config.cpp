@@ -65,4 +65,4 @@ void DimInactiveEffectConfig::save()
 
 } // namespace
 
-#include "diminactive_config.moc"
+#include "moc_diminactive_config.cpp"

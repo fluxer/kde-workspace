@@ -233,4 +233,4 @@ void ColumnProxyModel::considerRowsRemoved(const QModelIndex& parent, int , int 
     }
 }
 
-#include "columnproxymodel.moc"
+#include "moc_columnproxymodel.cpp"

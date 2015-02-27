@@ -142,4 +142,4 @@ void RemoteDirNotify::FilesChanged(const QStringList &fileList)
 	}
 }
 
-#include "remotedirnotify.moc"
+#include "moc_remotedirnotify.cpp"

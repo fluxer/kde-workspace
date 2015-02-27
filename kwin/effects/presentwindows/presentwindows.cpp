@@ -2013,4 +2013,4 @@ void CloseWindowView::hideEvent(QHideEvent *event)
 
 } // namespace
 
-#include "presentwindows.moc"
+#include "moc_presentwindows.cpp"

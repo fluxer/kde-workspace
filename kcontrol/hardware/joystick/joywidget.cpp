@@ -415,4 +415,4 @@ void JoyWidget::resetCalibration()
 
 //--------------------------------------------------------------
 
-#include "joywidget.moc"
+#include "moc_joywidget.cpp"

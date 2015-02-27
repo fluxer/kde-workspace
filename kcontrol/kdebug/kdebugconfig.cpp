@@ -274,4 +274,4 @@ void KCMDebug::slotAbortFatalChanged()
 {
     save();
 }
-#include "kdebugconfig.moc"
+#include "moc_kdebugconfig.cpp"

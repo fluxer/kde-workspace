@@ -71,4 +71,4 @@ void AbstractSource::setConfig(const KSharedConfig::Ptr& config)
 
 } // namespace Homerun
 
-#include <abstractsource.moc>
+#include "moc_abstractsource.cpp"

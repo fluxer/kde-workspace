@@ -94,4 +94,4 @@ QPoint QsCompletionBox::globalPositionHint() const
 
 } // Namespace QuickSand
 
-#include "qs_completionbox.moc"
+#include "moc_qs_completionbox.cpp"

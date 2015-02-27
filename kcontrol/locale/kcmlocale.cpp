@@ -3454,4 +3454,4 @@ QString KCMLocale::userToPosix( const QString &userFormat, const QMap<QString, Q
     return result;
 }
 
-#include "kcmlocale.moc"
+#include "moc_kcmlocale.cpp"

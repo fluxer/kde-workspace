@@ -345,4 +345,4 @@ Plasma::PackageStructure::Ptr ShareProvider::packageStructure()
     return m_packageStructure;
 }
 
-#include "shareprovider.moc"
+#include "moc_shareprovider.cpp"

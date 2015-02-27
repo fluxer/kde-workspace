@@ -51,8 +51,8 @@
 #include <sys/types.h>
 #endif
 
-#include "ProcessModel.moc"
-#include "ProcessModel_p.moc"
+#include "moc_ProcessModel.cpp"
+#include "moc_ProcessModel_p.cpp"
 
 #ifdef HAVE_XRES
 #include <X11/extensions/XRes.h>

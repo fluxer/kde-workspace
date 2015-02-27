@@ -96,5 +96,5 @@ void AlphaSortingStrategy::sortItems(ItemList &items)
 
 } //namespace
 
-#include "alphasortingstrategy.moc"
+#include "moc_alphasortingstrategy.cpp"
 

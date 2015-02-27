@@ -139,5 +139,5 @@ void FullScreenSheet::open()
 }
 
 
-#include "fullscreensheet.moc"
+#include "moc_fullscreensheet.cpp"
 

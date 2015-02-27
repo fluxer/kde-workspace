@@ -108,5 +108,5 @@ void ManualSortingStrategy::sortItems(ItemList &items)
 }
 
 } //namespace
-#include "manualsortingstrategy.moc"
+#include "moc_manualsortingstrategy.cpp"
 

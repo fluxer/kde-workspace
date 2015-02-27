@@ -199,4 +199,4 @@ WId LauncherProperties::findWindow()
 
 }
 
-#include "launcherproperties.moc"
+#include "moc_launcherproperties.cpp"

@@ -633,4 +633,4 @@ KDE_EXPORT KGreeterPluginInfo kgreeterplugin_info = {
     init, done, create
 };
 
-#include "kgreet_winbind.moc"
+#include "moc_kgreet_winbind.cpp"

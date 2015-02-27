@@ -295,4 +295,4 @@ void SensorModel::setHasLabel( bool hasLabel )
 
 
 
-#include "SensorModel.moc"
+#include "moc_SensorModel.cpp"

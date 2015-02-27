@@ -253,4 +253,4 @@ void LauncherApplet::saveConfigurationFromSimpleLauncher(const KConfigGroup & co
     emit configNeedsSaving();
 }
 
-#include "applet.moc"
+#include "moc_applet.cpp"

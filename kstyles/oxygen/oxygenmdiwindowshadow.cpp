@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenmdiwindowshadow.h"
-#include "oxygenmdiwindowshadow.moc"
+#include "moc_oxygenmdiwindowshadow.cpp"
 #include "oxygenshadowcache.h"
 
 #include <QtGui/QMdiArea>

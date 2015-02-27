@@ -2063,4 +2063,4 @@ bool CFontListView::viewportEvent(QEvent *event)
 
 }
 
-#include "FontList.moc"
+#include "moc_FontList.cpp"

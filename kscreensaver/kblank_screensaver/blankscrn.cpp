@@ -24,7 +24,7 @@
 
 #include "blankscrn.h"
 #include <config-workspace.h>
-#include "blankscrn.moc"
+#include "moc_blankscrn.cpp"
 
 // libkscreensaver interface
 class KBlankSaverInterface : public KScreenSaverInterface

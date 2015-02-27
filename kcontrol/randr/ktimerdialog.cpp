@@ -35,7 +35,7 @@
 #include <kvbox.h>
 
 #include "ktimerdialog.h"
-#include "ktimerdialog.moc"
+#include "moc_ktimerdialog.cpp"
 
 KTimerDialog::KTimerDialog( int msec, TimerStyle style, QWidget *parent,
                  const char *name, bool modal,

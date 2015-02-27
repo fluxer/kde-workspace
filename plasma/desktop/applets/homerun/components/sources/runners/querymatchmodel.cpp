@@ -191,4 +191,4 @@ void QueryMatchModel::setRunnerManager(Plasma::RunnerManager *manager)
 
 } // namespace
 
-#include <querymatchmodel.moc>
+#include "moc_querymatchmodel.cpp"

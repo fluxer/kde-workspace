@@ -935,4 +935,4 @@ QColor FPSensorProperties::color() const
 }
 
 
-#include "FancyPlotter.moc"
+#include "moc_FancyPlotter.cpp"

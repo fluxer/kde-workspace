@@ -293,4 +293,4 @@ void NetworkStatusModule::solidNetworkingStatusChanged( Solid::Networking::Statu
 }
 
 
-#include "networkstatus.moc"
+#include "moc_networkstatus.cpp"

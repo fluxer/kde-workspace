@@ -216,4 +216,4 @@ void KRandomSetup::slotOk()
     accept();
 }
 
-#include "random.moc"
+#include "moc_random.cpp"

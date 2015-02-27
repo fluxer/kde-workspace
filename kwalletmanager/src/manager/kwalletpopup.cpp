@@ -119,5 +119,5 @@ void KWalletPopup::disconnectApp() {
 	}
 }
 
-#include "kwalletpopup.moc"
+#include "moc_kwalletpopup.cpp"
 

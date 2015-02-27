@@ -196,4 +196,4 @@ void OpenWidgetAssistant::finished()
 
 } // Plasma namespace
 
-#include "openwidgetassistant_p.moc"
+#include "moc_openwidgetassistant_p.cpp"

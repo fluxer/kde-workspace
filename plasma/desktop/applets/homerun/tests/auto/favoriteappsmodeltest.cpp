@@ -246,4 +246,4 @@ void FavoriteAppsModelTest::testMove()
     checkRole(&model2, 2, Qt::DisplayRole, "Dolphin");
 }
 
-#include "favoriteappsmodeltest.moc"
+#include "moc_favoriteappsmodeltest.cpp"

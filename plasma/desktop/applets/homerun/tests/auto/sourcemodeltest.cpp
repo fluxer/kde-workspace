@@ -72,4 +72,4 @@ void SourceModelTest::testAppendSource()
     QCOMPARE(sourceGroup.readEntry("sourceId"), QString("foo"));
 }
 
-#include <sourcemodeltest.moc>
+#include "moc_sourcemodeltest.cpp"

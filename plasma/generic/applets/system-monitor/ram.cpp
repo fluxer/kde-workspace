@@ -273,4 +273,4 @@ void SM::Ram::configAccepted()
     emit configNeedsSaving();
 }
 
-#include "ram.moc"
+#include "moc_ram.cpp"

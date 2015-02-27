@@ -188,4 +188,4 @@ bool AbstractSortingStrategy::moveItem(AbstractGroupableItem *item, int newIndex
 
 } //namespace
 
-#include "abstractsortingstrategy.moc"
+#include "moc_abstractsortingstrategy.cpp"

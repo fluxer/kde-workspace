@@ -34,7 +34,7 @@
 #include <KMessageBox>
 
 #include "kclock.h"
-#include "kclock.moc"
+#include "moc_kclock.cpp"
 
 
 const int COLOR_BUTTON_WIDTH = 80;

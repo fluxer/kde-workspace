@@ -318,4 +318,4 @@ QAbstractItemModel *CombinedPowerSessionSource::createModelFromConfigGroup(const
 
 }
 
-#include "combinedpowersessionmodel.moc"
+#include "moc_combinedpowersessionmodel.cpp"

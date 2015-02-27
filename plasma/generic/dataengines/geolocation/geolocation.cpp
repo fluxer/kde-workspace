@@ -140,4 +140,4 @@ void Geolocation::actuallySetData()
     setData(SOURCE, m_data);
 }
 
-#include "geolocation.moc"
+#include "moc_geolocation.cpp"

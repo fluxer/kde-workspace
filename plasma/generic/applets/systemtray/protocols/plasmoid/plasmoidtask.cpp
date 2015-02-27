@@ -202,4 +202,4 @@ void PlasmoidTask::newAppletStatus(Plasma::ItemStatus status)
 
 }
 
-#include "plasmoidtask.moc"
+#include "moc_plasmoidtask.cpp"

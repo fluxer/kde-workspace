@@ -421,4 +421,4 @@ void CFontFilter::setCriteria(ECriteria crit)
 
 }
 
-#include "FontFilter.moc"
+#include "moc_FontFilter.cpp"

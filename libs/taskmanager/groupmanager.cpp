@@ -1319,4 +1319,4 @@ void GroupManager::setGroupingStrategy(TaskGroupingStrategy strategy)
 
 } // TaskManager namespace
 
-#include "groupmanager.moc"
+#include "moc_groupmanager.cpp"

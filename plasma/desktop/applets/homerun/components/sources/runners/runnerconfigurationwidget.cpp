@@ -102,4 +102,4 @@ void RunnerConfigurationWidget::save()
 
 } // namespace Homerun
 
-#include <runnerconfigurationwidget.moc>
+#include "moc_runnerconfigurationwidget.cpp"

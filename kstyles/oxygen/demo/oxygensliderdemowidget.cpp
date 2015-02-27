@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygensliderdemowidget.h"
-#include "oxygensliderdemowidget.moc"
+#include "moc_oxygensliderdemowidget.cpp"
 
 #include <QtGui/QMenu>
 #include <QtGui/QStyleOptionSlider>

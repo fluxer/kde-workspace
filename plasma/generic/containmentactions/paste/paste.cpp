@@ -53,4 +53,4 @@ void Paste::contextEvent(QEvent *event)
     paste(scenePos, screenPos);
 }
 
-#include "paste.moc"
+#include "moc_paste.cpp"

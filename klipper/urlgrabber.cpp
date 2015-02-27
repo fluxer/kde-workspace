@@ -523,4 +523,4 @@ void ClipAction::save( KSharedConfigPtr kc, const QString& group ) const
     }
 }
 
-#include "urlgrabber.moc"
+#include "moc_urlgrabber.cpp"

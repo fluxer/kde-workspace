@@ -348,5 +348,5 @@ bool JavaScriptDataEngine::include(const QString &script)
 
 K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(javascriptdataengine, JavaScriptDataEngine)
 
-#include <javascriptdataengine.moc>
+#include "moc_javascriptdataengine.cpp"
 

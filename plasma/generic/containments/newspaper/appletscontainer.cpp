@@ -670,5 +670,5 @@ void AppletsContainer::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     m_background->paintFrame(painter);
 }
 
-#include "appletscontainer.moc"
+#include "moc_appletscontainer.cpp"
 

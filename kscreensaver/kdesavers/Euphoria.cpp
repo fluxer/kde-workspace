@@ -26,7 +26,7 @@
 #include <qtimer.h>
 
 #include "Euphoria.h"
-#include "Euphoria.moc"
+#include "moc_Euphoria.cpp"
 #include "EuphoriaTexture.h"
 #include <GL/glu.h>
 

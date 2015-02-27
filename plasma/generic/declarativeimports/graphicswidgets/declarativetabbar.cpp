@@ -69,5 +69,5 @@ TabBarAttached *DeclarativeTabBar::qmlAttachedProperties(QObject *obj)
     return attached;
 }
 
-#include "declarativetabbar.moc"
+#include "moc_declarativetabbar.cpp"
 

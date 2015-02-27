@@ -208,4 +208,4 @@ void LauncherConfig::showMoreInfo()
 
 }
 
-#include "launcherconfig.moc"
+#include "moc_launcherconfig.cpp"

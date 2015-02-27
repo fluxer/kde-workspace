@@ -25,4 +25,4 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygendemowidget.h"
-#include "oxygendemowidget.moc"
+#include "moc_oxygendemowidget.cpp"

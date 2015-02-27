@@ -426,4 +426,4 @@ void SensorManager::disconnectClient( SensorClient *client )
     it.next().value()->disconnectClient( client );
 }
 
-#include "SensorManager.moc"
+#include "moc_SensorManager.cpp"

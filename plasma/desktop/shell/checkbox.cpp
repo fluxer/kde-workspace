@@ -49,4 +49,4 @@ void CheckBox::paintEvent(QPaintEvent *event)
     style()->drawControl(QStyle::CE_CheckBox, &m_styleOptionButton, &painter, this);
 }
 
-#include "checkbox.moc"
+#include "moc_checkbox.cpp"

@@ -108,4 +108,4 @@ bool TimeEngine::updateSourceEvent(const QString &tz)
 
 K_EXPORT_PLASMA_DATAENGINE(time, TimeEngine)
 
-#include "timeengine.moc"
+#include "moc_timeengine.cpp"

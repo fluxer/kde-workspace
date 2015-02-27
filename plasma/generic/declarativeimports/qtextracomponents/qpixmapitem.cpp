@@ -154,4 +154,4 @@ bool QPixmapItem::isNull() const
     return m_pixmap.isNull();
 }
 
-#include "qpixmapitem.moc"
+#include "moc_qpixmapitem.cpp"

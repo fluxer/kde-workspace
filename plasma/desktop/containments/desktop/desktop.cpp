@@ -182,4 +182,4 @@ void DefaultDesktop::keyPressEvent(QKeyEvent *event)
 
 K_EXPORT_PLASMA_APPLET(desktop, DefaultDesktop)
 
-#include "desktop.moc"
+#include "moc_desktop.cpp"

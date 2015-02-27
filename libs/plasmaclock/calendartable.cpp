@@ -1227,4 +1227,4 @@ void CalendarTable::paint(QPainter *p, const QStyleOptionGraphicsItem *option, Q
 
 } //namespace Plasma
 
-#include "calendartable.moc"
+#include "moc_calendartable.cpp"

@@ -246,4 +246,4 @@ void KHotKeysModule::save()
     KHotKeys::khotkeys_set_active( true );
     }
 
-#include "kded.moc"
+#include "moc_kded.cpp"

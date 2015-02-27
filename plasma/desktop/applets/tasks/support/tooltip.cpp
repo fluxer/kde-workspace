@@ -252,5 +252,5 @@ void ToolTipProxy::updateToolTip()
     Plasma::ToolTipManager::self()->setContent(m_widget.data(), data);
 }
 
-#include "tooltip.moc"
+#include "moc_tooltip.cpp"
 

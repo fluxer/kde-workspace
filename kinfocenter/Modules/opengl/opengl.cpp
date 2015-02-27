@@ -55,7 +55,7 @@
 #include <GL/glx.h>
 #endif
 
-#include "opengl.moc"
+#include "moc_opengl.cpp"
 
 K_PLUGIN_FACTORY(KCMOpenGLFactory,
     registerPlugin<KCMOpenGL>();

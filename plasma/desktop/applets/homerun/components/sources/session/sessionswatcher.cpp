@@ -89,4 +89,4 @@ SessList SessionsWatcher::sessions() const
 
 
 
-#include <sessionswatcher.moc>
+#include "moc_sessionswatcher.cpp"

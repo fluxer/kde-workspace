@@ -22,7 +22,7 @@
 
 #include "kcolordialog.h"
 #include "lines.h"
-#include "lines.moc"
+#include "moc_lines.cpp"
 
 #include <qlayout.h>
 #include <klocale.h>

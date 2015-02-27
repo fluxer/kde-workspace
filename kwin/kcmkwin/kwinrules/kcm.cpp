@@ -105,4 +105,4 @@ I18N_NOOP("Internal setting for remembering")
 #endif
 
 
-#include "kcm.moc"
+#include "moc_kcm.cpp"

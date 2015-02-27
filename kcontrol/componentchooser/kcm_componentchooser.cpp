@@ -24,7 +24,7 @@
 #include <kcomponentdata.h>
 #include <KPluginFactory>
 
-#include "kcm_componentchooser.moc"
+#include "moc_kcm_componentchooser.cpp"
 
 K_PLUGIN_FACTORY(KCMComponentChooserFactory,
         registerPlugin<KCMComponentChooser>();

@@ -40,7 +40,7 @@
 #include <QX11Info>
 
 #include "themepage.h"
-#include "themepage.moc"
+#include "moc_themepage.cpp"
 
 #include "thememodel.h"
 #include "itemdelegate.h"

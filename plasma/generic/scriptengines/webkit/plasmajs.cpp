@@ -138,4 +138,4 @@ void DataEngineWrapper::connectSource(const QString& source,
     }
 }
 
-#include "plasmajs.moc"
+#include "moc_plasmajs.cpp"

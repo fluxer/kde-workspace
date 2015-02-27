@@ -72,4 +72,4 @@ bool WebPage::javaScriptPrompt(QWebFrame *frame, const QString& msg,
 
 } // namespace Plasma
 
-#include "webpage.moc"
+#include "moc_webpage.cpp"

@@ -1335,5 +1335,5 @@ void KWalletEditor::onAlwaysHideContents(bool checked)
     }
 }
 
-#include "kwalleteditor.moc"
+#include "moc_kwalleteditor.cpp"
 

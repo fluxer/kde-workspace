@@ -576,4 +576,4 @@ void PolicyAgent::setupSystemdInhibition()
 
 }
 
-#include "powerdevilpolicyagent.moc"
+#include "moc_powerdevilpolicyagent.cpp"

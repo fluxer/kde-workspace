@@ -580,4 +580,4 @@ void KDMUsersWidget::slotMinMaxChanged()
     emit setMinMaxUID(leminuid->text().toInt(), lemaxuid->text().toInt());
 }
 
-#include "kdm-users.moc"
+#include "moc_kdm-users.cpp"

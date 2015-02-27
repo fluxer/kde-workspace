@@ -565,4 +565,4 @@ void KShortUriFilter::configure()
 K_PLUGIN_FACTORY(KShortUriFilterFactory, registerPlugin<KShortUriFilter>();)
 K_EXPORT_PLUGIN(KShortUriFilterFactory("kcmkurifilt"))
 
-#include "kshorturifilter.moc"
+#include "moc_kshorturifilter.cpp"

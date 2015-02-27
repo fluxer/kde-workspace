@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include "KTextEditVT.h"
 
-#include "KTextEditVT.moc"
+#include "moc_KTextEditVT.cpp"
 #include <kglobalsettings.h>
 
 KTextEditVT::KTextEditVT(QWidget* parent)

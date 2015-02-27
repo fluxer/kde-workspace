@@ -148,4 +148,4 @@ void SearchBar::clear()
     d->editWidget->clear();
 }
 
-#include "searchbar.moc"
+#include "moc_searchbar.cpp"

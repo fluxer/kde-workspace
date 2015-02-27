@@ -597,5 +597,5 @@ Plasma::Applet *PanelAppletOverlay::applet() const
     return m_applet;
 }
 
-#include "panelappletoverlay.moc"
+#include "moc_panelappletoverlay.cpp"
 

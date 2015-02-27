@@ -56,4 +56,4 @@ void SonnetSpellCheckingModule::defaults()
     m_configWidget->slotDefault();
 }
 
-#include "spellchecking.moc"
+#include "moc_spellchecking.cpp"

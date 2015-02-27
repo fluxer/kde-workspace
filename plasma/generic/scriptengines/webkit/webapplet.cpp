@@ -151,4 +151,4 @@ bool WebApplet::loaded()
     return d->loaded;
 }
 
-#include "webapplet.moc"
+#include "moc_webapplet.cpp"

@@ -113,4 +113,4 @@ void SaverDesktop::newApplet(Plasma::Applet *applet, const QPointF &pos)
 
 K_EXPORT_PLASMA_APPLET(saverdesktop, SaverDesktop)
 
-#include "desktop.moc"
+#include "moc_desktop.cpp"

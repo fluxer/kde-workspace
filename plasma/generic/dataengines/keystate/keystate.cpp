@@ -140,4 +140,4 @@ void KeyStatesEngine::keyRemoved(Qt::Key key)
 
 K_EXPORT_PLASMA_DATAENGINE(keystate, KeyStatesEngine)
 
-#include "keystate.moc"
+#include "moc_keystate.cpp"

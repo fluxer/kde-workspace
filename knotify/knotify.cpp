@@ -310,7 +310,7 @@ void KNotifyAdaptor::update(int id, const QString &title, const QString &text, c
 	static_cast<KNotify *>(parent())->update(id, title, text, image, actions);
 }
 
-#include "knotify.moc"
+#include "moc_knotify.cpp"
 
 // vim: sw=4 sts=4 ts=8 et
 

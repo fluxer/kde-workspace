@@ -661,4 +661,4 @@ void TabModelTest::testResetConfig()
     QCOMPARE(getTabList(config), QStringList() << "Tab0" << "Tab1" << "Tab2");
 }
 
-#include "tabmodeltest.moc"
+#include "moc_tabmodeltest.cpp"

@@ -464,4 +464,4 @@ bool WindowsRunner::actionSupported(const KWindowInfo& info, WindowAction action
     }
 }
 
-#include "windowsrunner.moc"
+#include "moc_windowsrunner.cpp"

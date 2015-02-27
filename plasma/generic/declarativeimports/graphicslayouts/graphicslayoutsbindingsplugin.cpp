@@ -39,5 +39,5 @@ void GraphicsLayoutsBindingsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "graphicslayoutsbindingsplugin.moc"
+#include "moc_graphicslayoutsbindingsplugin.cpp"
 

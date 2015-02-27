@@ -95,4 +95,4 @@ void Joystick::defaults()
 
 //---------------------------------------------------------------------------------------------
 
-#include "joystick.moc"
+#include "moc_joystick.cpp"

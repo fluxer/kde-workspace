@@ -107,4 +107,4 @@ Solid::Networking::Status NetworkManagerStatus::convertNmState( uint nmState )
     return status;
 }
 
-#include "networkmanagerstatus.moc"
+#include "moc_networkmanagerstatus.cpp"

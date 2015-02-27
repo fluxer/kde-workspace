@@ -291,4 +291,4 @@ QList<BacktraceLine> BacktraceParserGdb::parsedBacktraceLines() const
 
 //END BacktraceParserGdb
 
-#include "backtraceparsergdb.moc"
+#include "moc_backtraceparsergdb.cpp"

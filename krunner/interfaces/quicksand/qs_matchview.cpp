@@ -690,4 +690,4 @@ void QsMatchView::keyPressEvent(QKeyEvent *e)
 
 } // namespace QuickSand
 
-#include "qs_matchview.moc"
+#include "moc_qs_matchview.cpp"

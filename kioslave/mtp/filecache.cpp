@@ -77,4 +77,4 @@ void FileCache::removePath ( const QString& path )
     cache.remove( path );
 }
 
-#include "filecache.moc"
+#include "moc_filecache.cpp"

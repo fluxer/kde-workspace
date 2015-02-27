@@ -511,4 +511,4 @@ SaverView *PlasmaApp::viewForScreen(int screen)
     return 0;
 }
 
-#include "plasmaapp.moc"
+#include "moc_plasmaapp.cpp"

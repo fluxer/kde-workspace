@@ -832,6 +832,6 @@ void ButtonPositionWidget::setButtonsRight(const QString &buttons)
 
 } // namespace KWin
 
-#include "buttons.moc"
+#include "moc_buttons.cpp"
 // vim: ts=4
 // kate: space-indent off; tab-width 4;

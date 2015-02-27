@@ -47,7 +47,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenstyle.h"
-#include "oxygenstyle.moc"
+#include "moc_oxygenstyle.cpp"
 
 #include "oxygenblurhelper.h"
 #include "oxygenframeshadow.h"

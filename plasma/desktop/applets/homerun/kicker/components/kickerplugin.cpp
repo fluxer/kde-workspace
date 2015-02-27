@@ -41,4 +41,4 @@ void KickerPlugin::registerTypes(const char *uri)
     qmlRegisterType<WindowSystem>(uri, 0, 1, "WindowSystem");
 }
 
-#include "kickerplugin.moc"
+#include "moc_kickerplugin.cpp"

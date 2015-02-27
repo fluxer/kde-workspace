@@ -97,4 +97,4 @@ void StorageAccessSignalMapper::accessibilityChanged(bool accessible)
     emit(deviceChanged(signalmap[sender()], "Accessible", accessible));
 }
 
-#include "devicesignalmapper.moc"
+#include "moc_devicesignalmapper.cpp"

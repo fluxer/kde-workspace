@@ -237,4 +237,4 @@ QColor ShadowEffect::computeColorFromSource() const
     return value >= 128 ? Qt::black : Qt::white;
 }
 
-#include <shadoweffect.moc>
+#include "moc_shadoweffect.cpp"

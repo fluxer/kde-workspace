@@ -831,4 +831,4 @@ void DesktopToolBox::keyPressEvent(QKeyEvent *event)
     setShowing(false);
 }
 
-#include "desktoptoolbox.moc"
+#include "moc_desktoptoolbox.cpp"

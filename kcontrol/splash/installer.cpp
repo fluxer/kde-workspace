@@ -561,4 +561,4 @@ void SplashInstaller::slotTest()
 }
 
 //-----------------------------------------------------------------------------
-#include "installer.moc"
+#include "moc_installer.cpp"

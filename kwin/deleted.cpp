@@ -179,4 +179,4 @@ void Deleted::mainClientClosed(Toplevel *client)
 
 } // namespace
 
-#include "deleted.moc"
+#include "moc_deleted.cpp"

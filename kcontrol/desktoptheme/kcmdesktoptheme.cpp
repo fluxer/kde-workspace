@@ -163,6 +163,6 @@ void KCMDesktopTheme::detailChanged()
     emit changed(true);
 }
 
-#include "kcmdesktoptheme.moc"
+#include "moc_kcmdesktoptheme.cpp"
 
 // vim: set noet ts=4:

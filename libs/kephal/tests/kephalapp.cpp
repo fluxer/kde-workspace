@@ -212,4 +212,3 @@ void KephalApp::qdwWorkAreaResized(int screen)
     qDebug() << "                   *****************";
 }
 
-

@@ -29,5 +29,5 @@ void DirModelPlugin::registerTypes(const char *uri)
     qmlRegisterType<DirModel>(uri, 0, 1, "DirModel");
 }
 
-#include "dirmodelplugin.moc"
+#include "moc_dirmodelplugin.cpp"
 

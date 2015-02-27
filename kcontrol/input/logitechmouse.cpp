@@ -415,7 +415,7 @@ QString LogitechMouse::cordlessName() const
     }
 }
 
-#include "logitechmouse.moc"
+#include "moc_logitechmouse.cpp"
 
 #endif
 

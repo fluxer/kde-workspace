@@ -143,4 +143,4 @@ void PlasmaDesktopRunner::checkAvailability(const QString &name, const QString &
 }
 
 
-#include "plasma-desktop-runner.moc"
+#include "moc_plasma-desktop-runner.cpp"

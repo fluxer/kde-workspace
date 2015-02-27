@@ -964,4 +964,4 @@ void NOAAIon::readForecast(const QString& source, QXmlStreamReader& xml)
     }
 }
 
-#include "ion_noaa.moc"
+#include "moc_ion_noaa.cpp"

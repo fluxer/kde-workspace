@@ -282,4 +282,4 @@ void KGlobalAccelImpl::setEnabled( bool enable )
 }
 
 
-#include "kglobalaccel_x11.moc"
+#include "moc_kglobalaccel_x11.cpp"

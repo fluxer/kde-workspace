@@ -44,4 +44,4 @@ QString IconDialog::getIcon()
     return dialog.openDialog();
 }
 
-#include <icondialog.moc>
+#include "moc_icondialog.cpp"

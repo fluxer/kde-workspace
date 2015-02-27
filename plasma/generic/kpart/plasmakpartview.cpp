@@ -86,4 +86,4 @@ void PlasmaKPartView::updateGeometry()
 }
 
 
-#include "plasmakpartview.moc"
+#include "moc_plasmakpartview.cpp"

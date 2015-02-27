@@ -44,4 +44,4 @@ QObject *AbstractSourceRegistry::createModelFromConfigGroup(const QString &/*sou
 
 } // namespace Homerun
 
-#include <abstractsourceregistry.moc>
+#include "moc_abstractsourceregistry.cpp"

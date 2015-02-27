@@ -153,4 +153,4 @@ bool KRandRModule::x11Event(XEvent* e)
 }
 
 
-#include "krandrmodule.moc"
+#include "moc_krandrmodule.cpp"

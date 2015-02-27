@@ -562,4 +562,4 @@ void MenuView::contextMenuRequested(const QPoint &pos)
     emit customContextMenuRequested(menu, pos);
 }
 
-#include "menuview.moc"
+#include "moc_menuview.cpp"

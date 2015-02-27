@@ -207,4 +207,4 @@ QStringList DeviceWrapper::actionIds() const
     return m_actionIds;
 }
 
-#include "devicewrapper.moc"
+#include "moc_devicewrapper.cpp"

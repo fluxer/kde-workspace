@@ -4,8 +4,6 @@ set(places_engine_SRCS
     setupdevicejob.cpp
 )
 
-AUTOMOC4_MOC_HEADERS(plasma_engine_places modeljob.h)
-
 kde4_add_plugin(plasma_engine_places ${places_engine_SRCS})
 
 target_link_libraries(plasma_engine_places

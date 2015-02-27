@@ -713,4 +713,4 @@ ItemStateProvider *UrlItemView::itemStateProvider() const
 {
     return d->itemStateProvider;
 }
-#include "urlitemview.moc"
+#include "moc_urlitemview.cpp"

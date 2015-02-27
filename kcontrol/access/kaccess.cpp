@@ -30,7 +30,7 @@
 #include <X11/keysymdef.h>
 
 
-#include "kaccess.moc"
+#include "moc_kaccess.cpp"
 #include <QX11Info>
 #include <kvbox.h>
 

@@ -24,7 +24,7 @@
 #include <QDir>
 
 #include "thememodel.h"
-#include "thememodel.moc"
+#include "moc_thememodel.cpp"
 #include "xcursortheme.h"
 
 #include <X11/Xlib.h>

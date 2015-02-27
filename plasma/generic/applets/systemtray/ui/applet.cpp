@@ -822,4 +822,4 @@ QPoint Applet::popupPosition(QObject *item_var, QSize size, int align) const
 
 }
 
-#include "applet.moc"
+#include "moc_applet.cpp"

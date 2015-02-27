@@ -366,5 +366,5 @@ void DashboardView::showEvent(QShowEvent *event)
     Plasma::View::showEvent(event);
 }
 
-#include "dashboardview.moc"
+#include "moc_dashboardview.cpp"
 

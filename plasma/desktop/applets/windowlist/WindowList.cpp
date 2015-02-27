@@ -310,4 +310,4 @@ void WindowList::triggered(QAction *action)
     }
 }
 
-#include "WindowList.moc"
+#include "moc_WindowList.cpp"

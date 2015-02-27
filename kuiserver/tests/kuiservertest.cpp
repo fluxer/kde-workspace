@@ -79,7 +79,7 @@ bool KJobTest::doSuspend()
     return true;
 }
 
-#include "kuiservertest.moc"
+#include "moc_kuiservertest.cpp"
 
 int main(int argc, char **argv)
 {

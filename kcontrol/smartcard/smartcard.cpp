@@ -419,5 +419,5 @@ extern "C"
 }
 
 
-#include "smartcard.moc"
+#include "moc_smartcard.cpp"
 

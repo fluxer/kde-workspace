@@ -100,4 +100,4 @@ void PresentWindowsEffectConfig::defaults()
 
 } // namespace
 
-#include "presentwindows_config.moc"
+#include "moc_presentwindows_config.cpp"

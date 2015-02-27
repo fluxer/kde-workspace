@@ -168,4 +168,4 @@ void FileBrowserEngine::clearData(const QString &path)
     }
 }
 
-#include "filebrowserengine.moc"
+#include "moc_filebrowserengine.cpp"

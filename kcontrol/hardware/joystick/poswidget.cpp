@@ -130,4 +130,4 @@ void PosWidget::showTrace(bool t)
 
 //-----------------------------------------------------------------
 
-#include "poswidget.moc"
+#include "moc_poswidget.cpp"

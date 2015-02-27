@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 #include "ion.h"
-#include "ion.moc"
+#include "moc_ion.cpp"
 
 #include <KDebug>
 

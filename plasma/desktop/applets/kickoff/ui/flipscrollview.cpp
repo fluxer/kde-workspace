@@ -573,4 +573,4 @@ void FlipScrollView::updateFlipAnimation(qreal)
     setDirtyRegion(rect());
 }
 
-#include "flipscrollview.moc"
+#include "moc_flipscrollview.cpp"

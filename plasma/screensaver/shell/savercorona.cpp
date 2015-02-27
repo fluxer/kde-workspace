@@ -265,5 +265,5 @@ void SaverCorona::capsLocked()
     }
 }
 
-#include "savercorona.moc"
+#include "moc_savercorona.cpp"
 

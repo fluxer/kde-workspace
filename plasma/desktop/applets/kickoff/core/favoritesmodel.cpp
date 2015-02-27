@@ -347,4 +347,4 @@ DisplayOrder FavoritesModel::nameDisplayOrder() const
    return d->displayOrder;
 }
 
-#include "favoritesmodel.moc"
+#include "moc_favoritesmodel.cpp"

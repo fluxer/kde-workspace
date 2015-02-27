@@ -506,4 +506,4 @@ void SolidHardware::slotStorageResult(Solid::ErrorType error, const QVariant &er
     m_loop.exit();
 }
 
-#include "solid-hardware.moc"
+#include "moc_solid-hardware.cpp"

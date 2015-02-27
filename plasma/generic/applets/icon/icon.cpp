@@ -545,5 +545,5 @@ void IconApplet::dropUrls(const KUrl::List& urls,
     }
 }
 
-#include "icon.moc"
+#include "moc_icon.cpp"
 

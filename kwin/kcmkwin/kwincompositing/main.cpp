@@ -869,5 +869,5 @@ QString KWinCompositingConfig::quickHelp() const
 
 } // namespace
 
-#include "dbus.moc"
-#include "main.moc"
+#include "moc_dbus.cpp"
+#include "moc_main.cpp"

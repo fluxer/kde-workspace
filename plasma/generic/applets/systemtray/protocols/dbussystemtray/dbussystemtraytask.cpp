@@ -406,4 +406,4 @@ void DBusSystemTrayTask::syncStatus(QString newStatus)
 
 }
 
-#include "dbussystemtraytask.moc"
+#include "moc_dbussystemtraytask.cpp"

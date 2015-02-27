@@ -122,4 +122,4 @@ void DesktopNamesWidget::setDesktopConfig(KWinDesktopConfig* desktopConfig)
 
 } // namespace
 
-#include "desktopnameswidget.moc"
+#include "moc_desktopnameswidget.cpp"

@@ -91,4 +91,4 @@ QByteArray DashboardApplet::dataFor(const QString &str)
     return data;
 }
 
-#include "dashboardapplet.moc"
+#include "moc_dashboardapplet.cpp"

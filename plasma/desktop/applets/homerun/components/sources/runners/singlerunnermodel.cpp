@@ -128,4 +128,4 @@ QAbstractItemModel *SingleRunnerSource::createModelFromConfigGroup(const KConfig
 
 } // namespace Homerun
 
-#include <singlerunnermodel.moc>
+#include "moc_singlerunnermodel.cpp"

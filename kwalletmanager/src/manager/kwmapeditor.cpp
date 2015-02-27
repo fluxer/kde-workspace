@@ -242,4 +242,4 @@ void KWMapEditor::copy() {
 		QApplication::clipboard()->setText(twi->text());
 }
 
-#include "kwmapeditor.moc"
+#include "moc_kwmapeditor.cpp"

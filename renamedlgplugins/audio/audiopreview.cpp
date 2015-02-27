@@ -128,4 +128,4 @@ void AudioPreview::downloadFile( const QString& url )
   }
 }
 
-#include <audiopreview.moc>
+#include "moc_audiopreview.cpp"

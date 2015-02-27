@@ -219,4 +219,4 @@ Positioner::keyPressEvent(QKeyEvent *event)
     event->accept();
 }
 
-#include "positioner.moc"
+#include "moc_positioner.cpp"

@@ -50,4 +50,4 @@ void SourceConfigurationDialog::save()
 
 } // namespace
 
-#include <sourceconfigurationdialog.moc>
+#include "moc_sourceconfigurationdialog.cpp"

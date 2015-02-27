@@ -265,4 +265,4 @@ bool LookingGlassEffect::isActive() const
 
 } // namespace
 
-#include "lookingglass.moc"
+#include "moc_lookingglass.cpp"

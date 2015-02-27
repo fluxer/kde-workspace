@@ -24,7 +24,7 @@
 // IN THE SOFTWARE.
 //////////////////////////////////////////////////////////////////////////////
 #include "oxygendemodialog.h"
-#include "oxygendemodialog.moc"
+#include "moc_oxygendemodialog.cpp"
 
 #include "oxygenbenchmarkwidget.h"
 #include "oxygenbuttondemowidget.h"

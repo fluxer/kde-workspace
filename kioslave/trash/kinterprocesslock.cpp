@@ -86,4 +86,4 @@ void KInterProcessLock::waitForLockGranted()
     loop.exec();
 }
 
-#include "kinterprocesslock.moc"
+#include "moc_kinterprocesslock.cpp"

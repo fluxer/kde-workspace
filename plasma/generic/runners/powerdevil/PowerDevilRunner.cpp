@@ -326,4 +326,4 @@ void PowerDevilRunner::run(const Plasma::RunnerContext &context, const Plasma::Q
     }
 }
 
-#include "PowerDevilRunner.moc"
+#include "moc_PowerDevilRunner.cpp"

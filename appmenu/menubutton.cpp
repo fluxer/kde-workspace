@@ -82,4 +82,4 @@ void MenuButton::hoverLeaveEvent(QGraphicsSceneHoverEvent *e)
     }
 }
 
-#include "menubutton.moc"
+#include "moc_menubutton.cpp"

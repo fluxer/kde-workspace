@@ -167,5 +167,5 @@ void KRunnerConfigWidget::save(QAbstractButton *pushed)
     }
 }
 
-#include "configdialog.moc"
+#include "moc_configdialog.cpp"
 

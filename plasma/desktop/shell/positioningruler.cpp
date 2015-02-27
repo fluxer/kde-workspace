@@ -813,4 +813,4 @@ void PositioningRuler::resizeEvent(QResizeEvent *event)
     event->accept();
 }
 
-#include "positioningruler.moc"
+#include "moc_positioningruler.cpp"

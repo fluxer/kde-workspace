@@ -98,4 +98,4 @@ bool FixHostUriFilter::exists(const QString& host) const
 K_PLUGIN_FACTORY(FixHostUriFilterFactory, registerPlugin<FixHostUriFilter>();)
 K_EXPORT_PLUGIN(FixHostUriFilterFactory("kcmkurifilt"))
 
-#include "fixhosturifilter.moc"
+#include "moc_fixhosturifilter.cpp"

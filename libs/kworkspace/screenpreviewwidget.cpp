@@ -194,4 +194,4 @@ void ScreenPreviewWidget::dropEvent(QDropEvent *e)
     }
 }
 
-#include "screenpreviewwidget.moc"
+#include "moc_screenpreviewwidget.cpp"

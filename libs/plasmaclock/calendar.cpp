@@ -509,4 +509,4 @@ void Calendar::hideYearSpinBox()
 
 }
 
-#include "calendar.moc"
+#include "moc_calendar.cpp"

@@ -467,4 +467,4 @@ void IconThemesConfig::defaults()
   m_bChanged = true;
 }
 
-#include "iconthemes.moc"
+#include "moc_iconthemes.cpp"

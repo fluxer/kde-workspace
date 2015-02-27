@@ -88,4 +88,4 @@ bool X11EmbedDelegate::eventFilter(QObject *watched, QEvent *event)
 
 }
 
-#include "x11embeddelegate.moc"
+#include "moc_x11embeddelegate.cpp"

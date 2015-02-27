@@ -781,4 +781,4 @@ void Clock::launchDateKcm() //SLOT
     update();
 }
 
-#include "clock.moc"
+#include "moc_clock.cpp"

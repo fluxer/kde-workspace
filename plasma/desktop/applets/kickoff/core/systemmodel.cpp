@@ -480,4 +480,4 @@ void Kickoff::SystemModel::sourceRowsRemoved(const QModelIndex &parent, int /*st
     endRemoveRows();
 }
 
-#include "systemmodel.moc"
+#include "moc_systemmodel.cpp"

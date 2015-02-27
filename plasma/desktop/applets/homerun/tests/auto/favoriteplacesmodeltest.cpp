@@ -102,4 +102,4 @@ void FavoritePlacesModelTest::testMoveRow()
     QVERIFY(checkOrder(&model, QStringList() << "Foo" << "Bar" << "Baz"));
 }
 
-#include <favoriteplacesmodeltest.moc>
+#include "moc_favoriteplacesmodeltest.cpp"

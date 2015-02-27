@@ -34,4 +34,4 @@ void FixesPlugin::registerTypes(const char *uri)
     qmlRegisterType<DialogProxy>(uri, 0, 1, "Dialog");
 }
 
-#include "fixesplugin.moc"
+#include "moc_fixesplugin.cpp"

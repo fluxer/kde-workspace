@@ -206,5 +206,5 @@ void SystemMonitorEngine::sensorLost( int )
     m_waitingFor--;
 }
 
-#include "systemmonitor.moc"
+#include "moc_systemmonitor.cpp"
 

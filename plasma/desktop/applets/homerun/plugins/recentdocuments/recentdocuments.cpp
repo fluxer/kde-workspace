@@ -155,4 +155,4 @@ QVariant RecentDocumentsModel::data(const QModelIndex& index, int role) const
     return actionList;
 }
 
-#include <recentdocuments.moc>
+#include "moc_recentdocuments.cpp"

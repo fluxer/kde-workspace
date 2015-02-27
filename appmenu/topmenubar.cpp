@@ -173,4 +173,4 @@ QRect TopMenuBar::triggerRect()
     return QRect(triggerPoint, triggerSize);
 }
 
-#include "topmenubar.moc"
+#include "moc_topmenubar.cpp"

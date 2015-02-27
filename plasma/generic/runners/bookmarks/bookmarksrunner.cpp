@@ -140,4 +140,4 @@ QMimeData * BookmarksRunner::mimeDataForMatch(const Plasma::QueryMatch * match)
     return result;
 }
 
-#include "bookmarksrunner.moc"
+#include "moc_bookmarksrunner.cpp"

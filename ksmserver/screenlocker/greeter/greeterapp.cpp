@@ -516,4 +516,4 @@ void UnlockApp::shareEvent(QEvent *e, QDeclarativeView *from)
 
 } // namespace
 
-#include "greeterapp.moc"
+#include "moc_greeterapp.cpp"

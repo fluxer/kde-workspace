@@ -477,4 +477,4 @@ KDE_EXPORT KGreeterPluginInfo kgreeterplugin_info = {
     init, done, create
 };
 
-#include "kgreet_classic.moc"
+#include "moc_kgreet_classic.cpp"

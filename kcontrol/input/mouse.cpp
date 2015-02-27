@@ -818,4 +818,4 @@ void MouseConfig::slotSmartSliderEnabling()
   generalTab->slAutoSelect->setEnabled(enabled);
 }
 
-#include "mouse.moc"
+#include "moc_mouse.cpp"

@@ -236,5 +236,5 @@ const char* TestSpeakerWidget::_positionSoundName()
 }
 
 
-#include "testspeakerwidget.moc"
+#include "moc_testspeakerwidget.cpp"
 // vim: sw=4 sts=4 et tw=100

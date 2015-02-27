@@ -904,4 +904,4 @@ void MenuLauncherApplet::configChanged()
     constraintsEvent(Plasma::ImmutableConstraint);
 }
 
-#include "simpleapplet.moc"
+#include "moc_simpleapplet.cpp"

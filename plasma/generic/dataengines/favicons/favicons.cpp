@@ -62,4 +62,4 @@ void FaviconsEngine::error(FaviconProvider *provider)
     provider->deleteLater();
 }
 
-#include "favicons.moc"
+#include "moc_favicons.cpp"

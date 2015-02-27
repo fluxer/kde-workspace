@@ -31,7 +31,7 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-#include "kcmcgi.moc"
+#include "moc_kcmcgi.cpp"
 
 K_PLUGIN_FACTORY(KCMCgiFactory, registerPlugin<KCMCgi>();)
 K_EXPORT_PLUGIN(KCMCgiFactory("kcmcgi"))

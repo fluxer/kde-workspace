@@ -225,4 +225,4 @@ int main( int argc, char** argv )
     return app.exec();
 }
 
-#include "networkingservice.moc"
+#include "moc_networkingservice.cpp"

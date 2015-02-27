@@ -31,4 +31,4 @@ TestWin::TestWin()
     setFocusPolicy(Qt::StrongFocus);
 }
 
-#include "testwin.moc"
+#include "moc_testwin.cpp"

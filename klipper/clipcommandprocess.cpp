@@ -80,4 +80,4 @@ void ClipCommandProcess::slotStdOutputAvailable()
 }
 
 
-#include "clipcommandprocess.moc"
+#include "moc_clipcommandprocess.cpp"

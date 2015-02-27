@@ -222,4 +222,4 @@ void ScreenSaverWindow::stopXScreenSaver()
 }
 
 } // end namespace
-#include "screensaverwindow.moc"
+#include "moc_screensaverwindow.cpp"

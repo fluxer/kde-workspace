@@ -79,4 +79,4 @@ void ImageVisualizer::downloadImage(const QString& url)
   }
 }
 
-#include "imagevisualizer.moc"
+#include "moc_imagevisualizer.cpp"

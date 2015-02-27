@@ -63,4 +63,4 @@ void WindowSystem::raiseParentWindow(QDeclarativeItem *item)
     KWindowSystem::raiseWindow(view->window()->winId());
 }
 
-#include "windowsystem.moc"
+#include "moc_windowsystem.cpp"

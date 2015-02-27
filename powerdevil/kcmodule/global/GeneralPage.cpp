@@ -211,4 +211,4 @@ void GeneralPage::onServiceUnregistered(const QString& service)
                                       this);
 }
 
-#include "GeneralPage.moc"
+#include "moc_GeneralPage.cpp"

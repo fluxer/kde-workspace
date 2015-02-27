@@ -588,4 +588,4 @@ void Tasks::configAccepted()
     emit configNeedsSaving();
 }
 
-#include "tasks.moc"
+#include "moc_tasks.cpp"

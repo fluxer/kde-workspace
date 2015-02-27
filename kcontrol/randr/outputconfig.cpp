@@ -513,4 +513,4 @@ void OutputConfig::updateRateList()
 	updateRateList(sizeCombo->currentIndex());
 }
 
-#include "outputconfig.moc"
+#include "moc_outputconfig.cpp"

@@ -573,4 +573,4 @@ QPoint WidgetExplorer::tooltipPosition(QGraphicsObject *item, int tipWidth, int 
 
 } // namespace Plasma
 
-#include "widgetexplorer.moc"
+#include "moc_widgetexplorer.cpp"

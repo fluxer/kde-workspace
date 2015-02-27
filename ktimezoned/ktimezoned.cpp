@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "ktimezoned.moc"
-#include "ktimezonedbase.moc"
+#include "moc_ktimezoned.cpp"
+#include "moc_ktimezonedbase.cpp"
 
 #include <climits>
 #include <cstdlib>

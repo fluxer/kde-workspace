@@ -69,5 +69,5 @@ void NotificationAction::start()
     emitResult();
 }
 
-#include "notificationaction.moc"
+#include "moc_notificationaction.cpp"
 

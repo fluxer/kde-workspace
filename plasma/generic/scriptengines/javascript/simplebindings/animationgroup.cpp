@@ -99,4 +99,4 @@ void SequentialAnimationGroup::removeAnimation(QAbstractAnimation *animation)
     QSequentialAnimationGroup::removeAnimation(animation);
 }
 
-#include "animationgroup.moc"
+#include "moc_animationgroup.cpp"

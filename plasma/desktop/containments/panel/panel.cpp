@@ -739,5 +739,5 @@ void Panel::saveContents(KConfigGroup &group) const
 
 K_EXPORT_PLASMA_APPLET(panel, Panel)
 
-#include "panel.moc"
+#include "moc_panel.cpp"
 

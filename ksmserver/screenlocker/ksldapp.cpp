@@ -388,4 +388,4 @@ void KSldApp::uninhibit()
 }
 
 } // namespace
-#include "ksldapp.moc"
+#include "moc_ksldapp.cpp"

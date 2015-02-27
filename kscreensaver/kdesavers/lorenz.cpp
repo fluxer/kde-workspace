@@ -26,7 +26,7 @@
 #include <krandom.h>
 
 #include "lorenz.h"
-#include "lorenz.moc"
+#include "moc_lorenz.cpp"
 
 // libkscreensaver interface
 class KLorenzSaverInterface : public KScreenSaverInterface

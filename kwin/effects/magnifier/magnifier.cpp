@@ -324,4 +324,4 @@ bool MagnifierEffect::isActive() const
 
 } // namespace
 
-#include "magnifier.moc"
+#include "moc_magnifier.cpp"

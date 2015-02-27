@@ -110,4 +110,4 @@ void CActionLabel::rotateIcon()
 
 }
 
-#include "ActionLabel.moc"
+#include "moc_ActionLabel.cpp"

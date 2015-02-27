@@ -37,7 +37,7 @@
 
 #include "themepage.h"
 #include <QTreeWidget>
-#include "themepage.moc"
+#include "moc_themepage.cpp"
 
 #include "bitmaps.h"
 

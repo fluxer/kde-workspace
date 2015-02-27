@@ -59,5 +59,5 @@ int DesktopScriptEngine::defaultPanelScreen() const
 
 }
 
-#include "desktopscriptengine.moc"
+#include "moc_desktopscriptengine.cpp"
 

@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenbuttondemowidget.h"
-#include "oxygenbuttondemowidget.moc"
+#include "moc_oxygenbuttondemowidget.cpp"
 
 #include <QtGui/QMenu>
 #include <KIcon>

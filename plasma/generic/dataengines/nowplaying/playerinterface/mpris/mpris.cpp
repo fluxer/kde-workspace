@@ -392,5 +392,5 @@ void Mpris::capsChanged(int caps)
 }
 
 
-#include "mpris.moc"
-#include "mpris_p.moc"
+#include "moc_mpris.cpp"
+#include "moc_mpris_p.cpp"

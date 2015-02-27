@@ -42,7 +42,7 @@
 #include <X11/keysymdef.h>
 #include <ktoolinvocation.h>
 
-#include "kcmaccess.moc"
+#include "moc_kcmaccess.cpp"
 
 K_PLUGIN_FACTORY(KAccessConfigFactory, registerPlugin<KAccessConfig>();)
 K_EXPORT_PLUGIN(KAccessConfigFactory("kcmaccess"))

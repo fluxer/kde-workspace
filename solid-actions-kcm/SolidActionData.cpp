@@ -189,4 +189,4 @@ QList<QMetaObject> SolidActionData::fillInterfaceList()
     return interfaces;
 }
 
-#include "SolidActionData.moc"
+#include "moc_SolidActionData.cpp"

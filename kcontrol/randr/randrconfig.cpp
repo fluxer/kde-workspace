@@ -474,6 +474,6 @@ bool RandRConfig::x11Event(XEvent* e)
     return QWidget::x11Event(e);
 }
 
-#include "randrconfig.moc"
+#include "moc_randrconfig.cpp"
 
 // vim:noet:sts=8:sw=8:

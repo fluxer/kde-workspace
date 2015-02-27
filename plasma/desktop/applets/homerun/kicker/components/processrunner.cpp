@@ -33,4 +33,4 @@ void ProcessRunner::execute(const QString& name)
     KProcess::execute(name);
 }
 
-#include "processrunner.moc"
+#include "moc_processrunner.cpp"

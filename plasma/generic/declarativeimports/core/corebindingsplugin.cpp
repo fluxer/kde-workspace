@@ -101,5 +101,5 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "corebindingsplugin.moc"
+#include "moc_corebindingsplugin.cpp"
 

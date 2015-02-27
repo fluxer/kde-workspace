@@ -103,6 +103,6 @@ void KLineSpellChecking::contextMenuEvent(QContextMenuEvent *e)
 
 
 
-#include "klinespellchecking.moc"
+#include "moc_klinespellchecking.cpp"
 
 

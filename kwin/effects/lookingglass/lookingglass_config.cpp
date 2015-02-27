@@ -103,4 +103,4 @@ void LookingGlassEffectConfig::defaults()
 
 } // namespace
 
-#include "lookingglass_config.moc"
+#include "moc_lookingglass_config.cpp"

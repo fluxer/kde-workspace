@@ -115,4 +115,4 @@ void KCMDisplay::moduleChanged( bool isChanged )
   }
 }
 
-#include "display.moc"
+#include "moc_display.cpp"

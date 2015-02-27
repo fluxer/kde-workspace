@@ -241,4 +241,4 @@ void Juk::seek(int time)
 }
 
 
-#include "juk.moc"
+#include "moc_juk.cpp"

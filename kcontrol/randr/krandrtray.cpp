@@ -19,7 +19,7 @@
 
 #include "krandrtray.h"
 #include "krandrpassivepopup.h"
-#include "krandrtray.moc"
+#include "moc_krandrtray.cpp"
 #include "legacyrandrscreen.h"
 #ifdef HAS_RANDR_1_2
 #include "randrscreen.h"

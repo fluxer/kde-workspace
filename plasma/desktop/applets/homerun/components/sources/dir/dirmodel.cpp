@@ -259,4 +259,4 @@ SourceConfigurationWidget *DirSource::createConfigurationWidget(const KConfigGro
 
 } // namespace Homerun
 
-#include <dirmodel.moc>
+#include "moc_dirmodel.cpp"

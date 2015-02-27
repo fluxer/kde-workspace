@@ -54,4 +54,4 @@ void StatusNotifierItemJob::contextMenuReady(QMenu *menu)
     }
 }
 
-#include "statusnotifieritemjob.moc"
+#include "moc_statusnotifieritemjob.cpp"

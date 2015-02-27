@@ -258,4 +258,4 @@ bool SlideEffect::isActive() const
 
 } // namespace
 
-#include "slide.moc"
+#include "moc_slide.cpp"

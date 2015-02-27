@@ -240,6 +240,6 @@ void Screen::doAnimate()
         sprite->paint();
 }
 
-#include "screen.moc"
+#include "moc_screen.cpp"
 
 // vim: set et ts=8 sw=4:

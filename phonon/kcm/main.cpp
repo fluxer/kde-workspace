@@ -102,5 +102,5 @@ void PhononKcm::speakerSetupReady()
 }
 #endif
 
-#include "main.moc"
+#include "moc_main.cpp"
 // vim: ts=4

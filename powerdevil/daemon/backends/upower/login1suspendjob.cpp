@@ -104,4 +104,4 @@ void Login1SuspendJob::slotLogin1Resuming(bool active)
 }
 
 
-#include "login1suspendjob.moc"
+#include "moc_login1suspendjob.cpp"

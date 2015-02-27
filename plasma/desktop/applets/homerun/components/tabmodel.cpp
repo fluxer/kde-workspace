@@ -372,4 +372,4 @@ void TabModel::writeGeneralTabsEntry()
     m_config->sync();
 }
 
-#include "tabmodel.moc"
+#include "moc_tabmodel.cpp"

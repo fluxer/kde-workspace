@@ -174,5 +174,5 @@ QScriptValue FileDialogProxy::fileDialogOpen(QScriptContext *context, QScriptEng
     return engine->newQObject(fd, QScriptEngine::AutoOwnership, QScriptEngine::ExcludeSuperClassContents);
 }
 
-#include "filedialogproxy.moc"
+#include "moc_filedialogproxy.cpp"
 

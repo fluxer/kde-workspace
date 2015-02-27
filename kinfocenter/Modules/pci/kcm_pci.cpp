@@ -91,4 +91,4 @@ QString KCMPci::quickHelp() const {
 	return i18n("This display shows information about your computer's PCI slots and the related connected devices.");
 }
 
-#include "kcm_pci.moc"
+#include "moc_kcm_pci.cpp"

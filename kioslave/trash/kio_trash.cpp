@@ -592,4 +592,4 @@ void TrashProtocol::mkdir( const KUrl& url, int /*permissions*/ )
 }
 #endif
 
-#include "kio_trash.moc"
+#include "moc_kio_trash.cpp"

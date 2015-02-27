@@ -308,4 +308,4 @@ void TrashConfigModule::setupGui()
     layout->addStretch();
 }
 
-#include "kcmtrash.moc"
+#include "moc_kcmtrash.cpp"

@@ -60,4 +60,4 @@ int main(int argc, char *argv[])
 	return app.exec();
 }
 
-#include "kwalletautoclose.moc"
+#include "moc_kwalletautoclose.cpp"

@@ -186,4 +186,4 @@ GridLayoutAttached *GraphicsGridLayoutObject::qmlAttachedProperties(QObject *obj
     return rv;
 }
 
-#include "gridlayout.moc"
+#include "moc_gridlayout.cpp"

@@ -138,7 +138,7 @@ void MultiMeterSettings::setMeterBackgroundColor( const QColor &c )
   m_settingsWidget->m_backgroundColor->setColor( c );
 }
 
-#include "MultiMeterSettings.moc"
+#include "moc_MultiMeterSettings.cpp"
 
 /* vim: et sw=2 ts=2
 */

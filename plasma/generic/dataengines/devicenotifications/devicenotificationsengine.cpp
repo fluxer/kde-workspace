@@ -61,4 +61,4 @@ void DeviceNotificationsEngine::notify(int solidError, const QString& error, con
 
 K_EXPORT_PLASMA_DATAENGINE(devicenotifications, DeviceNotificationsEngine)
 
-#include "devicenotificationsengine.moc"
+#include "moc_devicenotificationsengine.cpp"

@@ -352,4 +352,4 @@ void Hdd::dataUpdated(const QString& source,
     }
 }
 
-#include "hdd.moc"
+#include "moc_hdd.cpp"

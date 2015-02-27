@@ -531,4 +531,4 @@ bool KDecorationPreviewPlugins::provides(Requirement)
     return false;
 }
 
-#include "preview.moc"
+#include "moc_preview.cpp"

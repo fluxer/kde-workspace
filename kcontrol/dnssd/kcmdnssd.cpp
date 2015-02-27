@@ -70,5 +70,5 @@ void KCMDnssd::save()
 }
 
 
-#include "kcmdnssd.moc"
+#include "moc_kcmdnssd.cpp"
 

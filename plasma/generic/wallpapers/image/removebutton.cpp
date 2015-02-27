@@ -227,4 +227,4 @@ QString RemoveButton::itemName() const
    return m_itemName;
 }
 
-#include "removebutton.moc"
+#include "moc_removebutton.cpp"

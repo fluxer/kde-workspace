@@ -204,4 +204,4 @@ void SuspendSession::onResumeFromSuspend()
 }
 }
 
-#include "suspendsession.moc"
+#include "moc_suspendsession.cpp"

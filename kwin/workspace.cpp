@@ -1461,4 +1461,4 @@ void Workspace::slotToggleCompositing()
 
 } // namespace
 
-#include "workspace.moc"
+#include "moc_workspace.cpp"

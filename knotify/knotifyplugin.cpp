@@ -51,5 +51,5 @@ void KNotifyPlugin::finish(int id)
 	emit finished(id);
 }
 
-#include "knotifyplugin.moc"
+#include "moc_knotifyplugin.cpp"
 

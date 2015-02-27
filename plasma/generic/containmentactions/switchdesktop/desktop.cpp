@@ -109,4 +109,4 @@ void SwitchDesktop::wheelEvent(QGraphicsSceneWheelEvent *event)
 }
 
 
-#include "desktop.moc"
+#include "moc_desktop.cpp"

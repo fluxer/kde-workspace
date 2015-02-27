@@ -80,5 +80,5 @@ void ThemedFrameSvg::setThemedImagePath(const QString &path)
     setImagePath(ThemedSvg::findSvg(engine(), path));
 }
 
-#include "themedsvg.moc"
+#include "moc_themedsvg.cpp"
 

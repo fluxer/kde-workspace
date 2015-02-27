@@ -125,7 +125,7 @@ QPixmap BackgroundListModel::createPixmap(int mode) const
 
     return scaledPixmap;
 }
-#include "backgroundlistmodel.moc"
+#include "moc_backgroundlistmodel.cpp"
 
 
 #endif // BACKGROUNDLISTMODEL_CPP

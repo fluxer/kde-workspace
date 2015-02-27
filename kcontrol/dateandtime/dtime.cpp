@@ -54,7 +54,7 @@
 
 #include <Plasma/Svg>
 
-#include "dtime.moc"
+#include "moc_dtime.cpp"
 
 #include "helper.h"
 

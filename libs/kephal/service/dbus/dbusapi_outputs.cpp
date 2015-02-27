@@ -218,6 +218,6 @@ void DBusAPIOutputs::outputReflectedSlot(Kephal::Output * o, bool oldX, bool old
 }
 
 #ifndef NO_KDE
-#include "dbusapi_outputs.moc"
+#include "moc_dbusapi_outputs.cpp"
 #endif
 

@@ -30,7 +30,7 @@
 #include <klocale.h>
 
 #include "kcmsambalog.h"
-#include "kcmsambalog.moc"
+#include "moc_kcmsambalog.cpp"
 
 #define LOG_SCREEN_XY_OFFSET 10
 

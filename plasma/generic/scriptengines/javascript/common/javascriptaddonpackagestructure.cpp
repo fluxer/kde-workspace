@@ -65,5 +65,5 @@ void JavascriptAddonPackageStructure::pathChanged()
     }
 }
 
-#include "javascriptaddonpackagestructure.moc"
+#include "moc_javascriptaddonpackagestructure.cpp"
 

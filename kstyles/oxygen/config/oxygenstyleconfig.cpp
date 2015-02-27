@@ -28,7 +28,7 @@ DEALINGS IN THE SOFTWARE.
 */
 
 #include "oxygenstyleconfig.h"
-#include "oxygenstyleconfig.moc"
+#include "moc_oxygenstyleconfig.cpp"
 #include "oxygenstyleconfigdata.h"
 
 #include <QtCore/QTextStream>

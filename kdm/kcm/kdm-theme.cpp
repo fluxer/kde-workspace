@@ -380,4 +380,4 @@ void KDMThemeWidget::removeSelectedThemes()
             themeWidget->takeTopLevelItem(themeWidget->indexOfTopLevelItem(themes.at(i)));
 }
 
-#include "kdm-theme.moc"
+#include "moc_kdm-theme.cpp"

@@ -170,4 +170,4 @@ void KWinDecorationConfigDialog::slotDefault()
 
 } // namespace KWin
 
-#include "configdialog.moc"
+#include "moc_configdialog.cpp"

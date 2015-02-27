@@ -177,4 +177,4 @@ void ToolBoxProxy::immutabilityChanged(Plasma::ImmutabilityType immutability)
     loadActions();
 }
 
-#include "toolboxproxy.moc"
+#include "moc_toolboxproxy.cpp"

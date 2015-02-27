@@ -873,4 +873,4 @@ void KFilePlacesModel::Private::_k_storageTeardownDone(Solid::ErrorType error, Q
 } // namespace
 } // namespace
 
-#include "fileplacesmodel.moc"
+#include "moc_fileplacesmodel.cpp"

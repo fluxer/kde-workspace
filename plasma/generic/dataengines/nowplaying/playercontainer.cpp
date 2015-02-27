@@ -79,4 +79,4 @@ void PlayerContainer::updateInfo()
     checkForUpdate();
 }
 
-#include "playercontainer.moc"
+#include "moc_playercontainer.cpp"

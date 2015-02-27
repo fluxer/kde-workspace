@@ -68,4 +68,4 @@ QList<QAction*> ContextMenu::contextualActions()
     return actions;
 }
 
-#include "menu.moc"
+#include "moc_menu.cpp"

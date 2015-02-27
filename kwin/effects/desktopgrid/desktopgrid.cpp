@@ -1444,4 +1444,4 @@ void DesktopButtonsView::setRemoveDesktopEnabled(bool enable)
 
 } // namespace
 
-#include "desktopgrid.moc"
+#include "moc_desktopgrid.cpp"

@@ -17,7 +17,7 @@
 #include <kcolorbutton.h>
 #include <kglobal.h>
 #include "fountain.h"
-#include "fountain.moc"
+#include "moc_fountain.cpp"
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <qimage.h>

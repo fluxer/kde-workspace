@@ -39,7 +39,7 @@
 #include <KIcon>
 #include <kdeversion.h>
 
-#include "main.moc"
+#include "moc_main.cpp"
 
 using namespace std;
 

@@ -14,7 +14,7 @@
 #include <kcolorbutton.h>
 #include <kglobal.h>
 #include "wave.h"
-#include "wave.moc"
+#include "moc_wave.cpp"
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <qimage.h>

@@ -32,4 +32,4 @@ ServiceJob *PowerManagementService::createJob(const QString &operation,
     return new PowerManagementJob(operation, parameters, this);
 }
 
-#include "powermanagementservice.moc"
+#include "moc_powermanagementservice.cpp"

@@ -302,4 +302,4 @@ QAbstractItemModel *RecentAppsSource::createModelFromConfigGroup(const KConfigGr
 
 } // namespace Homerun
 
-#include "recentappsmodel.moc"
+#include "moc_recentappsmodel.cpp"

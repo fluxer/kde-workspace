@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygeninputdemowidget.h"
-#include "oxygeninputdemowidget.moc"
+#include "moc_oxygeninputdemowidget.cpp"
 
 namespace Oxygen
 {

@@ -129,4 +129,4 @@ void Manager::Private::setupProtocol(Protocol *protocol)
 }
 
 
-#include "manager.moc"
+#include "moc_manager.cpp"

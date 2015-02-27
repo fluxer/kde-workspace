@@ -177,5 +177,5 @@ void Widget::showConfigurationInterface()
 
 }
 
-#include "widget.moc"
+#include "moc_widget.cpp"
 

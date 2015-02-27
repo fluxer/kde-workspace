@@ -104,4 +104,4 @@ QString FaviconProvider::identifier() const
     return m_url;
 }
 
-#include "faviconprovider.moc"
+#include "moc_faviconprovider.cpp"

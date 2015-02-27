@@ -554,4 +554,4 @@ int TaskManager::currentDesktop() const
 } // TaskManager namespace
 
 
-#include "taskmanager.moc"
+#include "moc_taskmanager.cpp"

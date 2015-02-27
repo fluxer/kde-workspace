@@ -389,4 +389,4 @@ void ContextMenuFactory::setApplet(Plasma::Applet *applet)
     d->applet = applet;
 }
 
-#include "contextmenufactory.moc"
+#include "moc_contextmenufactory.cpp"

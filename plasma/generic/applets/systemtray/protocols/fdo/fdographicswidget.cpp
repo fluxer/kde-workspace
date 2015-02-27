@@ -220,4 +220,4 @@ void FdoGraphicsWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 }
 
-#include "fdographicswidget.moc"
+#include "moc_fdographicswidget.cpp"

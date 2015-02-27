@@ -19,7 +19,7 @@
  *===========================================================================*/
 
 #include "sspreviewarea.h"
-#include "sspreviewarea.moc"
+#include "moc_sspreviewarea.cpp"
 
 SsPreviewArea::SsPreviewArea(QWidget* parent)
    : QWidget(parent)

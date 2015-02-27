@@ -349,4 +349,4 @@ void KWalletManager::closeAllWallets() {
     m_kwalletdModule->closeAllWallets();
 }
 
-#include "kwalletmanager.moc"
+#include "moc_kwalletmanager.cpp"

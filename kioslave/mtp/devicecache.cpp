@@ -235,4 +235,4 @@ int DeviceCache::size()
     return nameCache.size();
 }
 
-#include "devicecache.moc"
+#include "moc_devicecache.cpp"

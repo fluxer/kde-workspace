@@ -351,4 +351,4 @@ void FavoriteAppsModel::importFromConfigFile()
 
 } // namespace Homerun
 
-#include "favoriteappsmodel.moc"
+#include "moc_favoriteappsmodel.cpp"

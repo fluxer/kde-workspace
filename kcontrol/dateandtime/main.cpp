@@ -34,7 +34,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
-#include "main.moc"
+#include "moc_main.cpp"
 
 #include "dtime.h"
 #include "helper.h"

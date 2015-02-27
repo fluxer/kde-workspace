@@ -47,5 +47,5 @@ bool AdvancedDialog::onlyInKde() const
 }
 
 
-#include "advanceddialog.moc"
+#include "moc_advanceddialog.cpp"
 

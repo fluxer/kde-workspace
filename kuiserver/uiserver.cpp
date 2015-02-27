@@ -155,5 +155,5 @@ UIConfigurationDialog::~UIConfigurationDialog()
 /// ===========================================================
 
 
-#include "uiserver.moc"
-#include "uiserver_p.moc"
+#include "moc_uiserver.cpp"
+#include "moc_uiserver_p.cpp"

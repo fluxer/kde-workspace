@@ -395,4 +395,4 @@ void SaverConfig::slotHelp()
     mAbout.exec();
 }
 
-#include "kpartsaver.moc"
+#include "moc_kpartsaver.cpp"

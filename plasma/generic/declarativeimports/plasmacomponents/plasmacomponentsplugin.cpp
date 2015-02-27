@@ -113,5 +113,5 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 }
 
 
-#include "plasmacomponentsplugin.moc"
+#include "moc_plasmacomponentsplugin.cpp"
 

@@ -572,4 +572,4 @@ extern "C" KDE_EXPORT int kdemain( int argc, char** argv )
   return result;
 }
 
-#include "ksysguard.moc"
+#include "moc_ksysguard.cpp"

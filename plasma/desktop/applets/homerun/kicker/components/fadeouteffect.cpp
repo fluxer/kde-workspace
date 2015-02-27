@@ -64,4 +64,4 @@ void FadeOutEffect::draw(QPainter* painter)
 }
 
 
-#include "fadeouteffect.moc"
+#include "moc_fadeouteffect.cpp"

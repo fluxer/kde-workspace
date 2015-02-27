@@ -127,4 +127,4 @@ void KrunnerHistoryComboBox::currentIndexChanged(const QString &item)
     }
 }
 
-#include "krunnerhistorycombobox.moc"
+#include "moc_krunnerhistorycombobox.cpp"

@@ -99,4 +99,4 @@ void NotifyByKTTS::removeSpeech()
     m_kspeech = 0;
 }
 
-#include "notifybyktts.moc"
+#include "moc_notifybyktts.cpp"

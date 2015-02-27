@@ -381,4 +381,4 @@ void KRunnerApp::reloadConfig()
     display();
 }
 
-#include "krunnerapp.moc"
+#include "moc_krunnerapp.cpp"

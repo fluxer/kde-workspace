@@ -16,7 +16,7 @@
 #include <kcolordialog.h>
 #include <kcolorbutton.h>
 #include "gravity.h"
-#include "gravity.moc"
+#include "moc_gravity.cpp"
 #include <GL/glu.h>
 #include <GL/gl.h>
 #include <qimage.h>

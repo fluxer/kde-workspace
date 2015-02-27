@@ -250,4 +250,4 @@ void SolidUiServer::reparentDialog(QWidget *dialog, WId wId, const QString &appI
     kapp->updateUserTimestamp();
 }
 
-#include "soliduiserver.moc"
+#include "moc_soliduiserver.cpp"

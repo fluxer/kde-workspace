@@ -81,4 +81,4 @@ void QsStatusBar::slotCurrentRowChanged(int newRow)
 
 } //namespace QuickSand
 
-#include "qs_statusbar.moc"
+#include "moc_qs_statusbar.cpp"

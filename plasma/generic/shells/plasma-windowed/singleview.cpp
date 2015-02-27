@@ -161,5 +161,5 @@ void SingleView::updateGeometry()
     }
 }
 
-#include "singleview.moc"
+#include "moc_singleview.cpp"
 

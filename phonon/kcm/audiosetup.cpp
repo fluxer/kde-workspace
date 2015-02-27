@@ -887,4 +887,4 @@ QDebug operator<<(QDebug dbg, const pa_context_state_t &state)
     return dbg;
 }
 
-#include "audiosetup.moc"
+#include "moc_audiosetup.cpp"

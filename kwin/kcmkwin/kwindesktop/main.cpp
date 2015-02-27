@@ -527,4 +527,4 @@ void KWinDesktopConfig::slotConfigureEffectClicked()
 
 } // namespace
 
-#include "main.moc"
+#include "moc_main.cpp"

@@ -56,6 +56,6 @@ void KGlobalAccelImpl::setEnabled( bool enable )
 #endif
 }
 
-#include "kglobalaccel_qws.moc"
+#include "moc_kglobalaccel_qws.cpp"
 
 #endif // Q_WS_QWS

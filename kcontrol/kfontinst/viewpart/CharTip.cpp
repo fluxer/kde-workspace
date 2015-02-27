@@ -296,4 +296,4 @@ bool CCharTip::eventFilter(QObject *, QEvent *e)
 
 }
 
-#include "CharTip.moc"
+#include "moc_CharTip.cpp"

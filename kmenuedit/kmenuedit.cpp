@@ -41,7 +41,7 @@
 #include "preferencesdlg.h"
 #include "kmenueditadaptor.h"
 
-#include "kmenuedit.moc"
+#include "moc_kmenuedit.cpp"
 
 KMenuEdit::KMenuEdit ()
     : KXmlGuiWindow (0)

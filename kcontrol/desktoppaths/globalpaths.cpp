@@ -411,4 +411,4 @@ void DesktopPathConfig::slotResult( KJob * job )
     }
 }
 
-#include "globalpaths.moc"
+#include "moc_globalpaths.cpp"

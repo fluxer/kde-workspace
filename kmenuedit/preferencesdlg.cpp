@@ -87,4 +87,4 @@ void MiscPage::saveOptions()
     group.sync();
 }
 
-#include "preferencesdlg.moc"
+#include "moc_preferencesdlg.cpp"

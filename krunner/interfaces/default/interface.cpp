@@ -661,4 +661,4 @@ void Interface::resetResultsArea()
     resize(qMax(minimumSizeHint().width(), m_defaultSize.width()), minimumSizeHint().height());
 }
 
-#include "interface.moc"
+#include "moc_interface.cpp"

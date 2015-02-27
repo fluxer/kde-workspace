@@ -116,4 +116,4 @@ void SourceListModel::handleModelDestruction()
     emit countChanged();
 }
 
-#include "sourcelistmodel.moc"
+#include "moc_sourcelistmodel.cpp"

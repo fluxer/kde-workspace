@@ -84,5 +84,5 @@ QVariant SelectionBar::itemChange(QGraphicsItem::GraphicsItemChange change, cons
     return QGraphicsWidget::itemChange(change, value);
 }
 
-#include <selectionbar.moc>
+#include "moc_selectionbar.cpp"
 

@@ -115,5 +115,5 @@ ThumbCreator::Flags HTMLCreator::flags() const
     return DrawFrame;
 }
 
-#include "htmlcreator.moc"
+#include "moc_htmlcreator.cpp"
 

@@ -101,4 +101,4 @@ int main(int argc, char *argv[])
 	return app.exec();
 }
 
-#include "kwalletmany.moc"
+#include "moc_kwalletmany.cpp"

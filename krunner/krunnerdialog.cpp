@@ -553,4 +553,4 @@ bool KRunnerDialog::checkCursor(const QPoint &pos)
     return false;
 }
 
-#include "krunnerdialog.moc"
+#include "moc_krunnerdialog.cpp"

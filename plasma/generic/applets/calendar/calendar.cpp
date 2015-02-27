@@ -151,4 +151,4 @@ void CalendarApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 }
 
-#include "calendar.moc"
+#include "moc_calendar.cpp"

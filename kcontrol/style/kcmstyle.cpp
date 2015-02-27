@@ -862,6 +862,6 @@ void KCMStyle::addWhatsThis()
                             "run internal animations.") );
 }
 
-#include "kcmstyle.moc"
+#include "moc_kcmstyle.cpp"
 
 // vim: set noet ts=4:

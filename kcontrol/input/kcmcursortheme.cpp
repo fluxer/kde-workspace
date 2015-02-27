@@ -66,4 +66,4 @@ void CursorThemeConfig::defaults()
     changed();
 }
 
-#include "kcmcursortheme.moc"
+#include "moc_kcmcursortheme.cpp"

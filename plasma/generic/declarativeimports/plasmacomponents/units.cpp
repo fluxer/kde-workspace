@@ -72,5 +72,5 @@ void Units::themeChanged()
     }
 }
 
-#include "units.moc"
+#include "moc_units.cpp"
 

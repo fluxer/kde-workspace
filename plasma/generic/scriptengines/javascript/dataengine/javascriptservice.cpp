@@ -115,5 +115,5 @@ void JavaScriptService::setSetupJobFunction(const QScriptValue &v)
     m_setupFunc = v;
 }
 
-#include "javascriptservice.moc"
+#include "moc_javascriptservice.cpp"
 

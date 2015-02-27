@@ -39,7 +39,7 @@
 #include "kdecorationfactory.h"
 #include <KDE/KLocalizedString>
 
-#include "kcommondecoration.moc"
+#include "moc_kcommondecoration.cpp"
 
 /** @addtogroup kdecoration */
 /** @{ */

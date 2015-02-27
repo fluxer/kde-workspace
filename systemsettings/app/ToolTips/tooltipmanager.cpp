@@ -246,4 +246,4 @@ QLayout * ToolTipManager::generateToolTipLine( QModelIndex * item, QWidget * too
     return layout;
 }
 
-#include "tooltipmanager.moc"
+#include "moc_tooltipmanager.cpp"

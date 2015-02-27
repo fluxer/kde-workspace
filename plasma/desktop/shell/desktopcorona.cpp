@@ -490,5 +490,5 @@ void DesktopCorona::addPanel(const QString &plugin)
     panel->resize(w, h);
 }
 
-#include "desktopcorona.moc"
+#include "moc_desktopcorona.cpp"
 

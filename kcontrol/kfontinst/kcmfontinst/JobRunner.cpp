@@ -767,4 +767,4 @@ bool CJobRunner::Item::operator<(const Item &o) const
 
 }
 
-#include "JobRunner.moc"
+#include "moc_JobRunner.cpp"

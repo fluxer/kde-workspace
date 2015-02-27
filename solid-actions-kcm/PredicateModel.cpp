@@ -173,4 +173,4 @@ void PredicateModel::childrenChanging( const QModelIndex& item, Solid::Predicate
     }
 }
 
-#include "PredicateModel.moc"
+#include "moc_PredicateModel.cpp"

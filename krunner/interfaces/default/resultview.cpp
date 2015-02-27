@@ -203,4 +203,4 @@ void ResultsView::paintEvent(QPaintEvent *event)
     painter.drawPixmap(event->rect(), backBuffer, event->rect());
 }
 
-#include "resultview.moc"
+#include "moc_resultview.cpp"

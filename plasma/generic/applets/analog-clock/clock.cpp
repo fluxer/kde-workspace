@@ -469,4 +469,4 @@ void Clock::invalidateCache()
     m_theme->resize(pixmapSize);
 }
 
-#include "clock.moc"
+#include "moc_clock.cpp"

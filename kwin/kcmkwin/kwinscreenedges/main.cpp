@@ -541,4 +541,4 @@ QList<int> KWinScreenEdgesConfig::monitorCheckEffectHasEdge(int index) const
 
 } // namespace
 
-#include "main.moc"
+#include "moc_main.cpp"

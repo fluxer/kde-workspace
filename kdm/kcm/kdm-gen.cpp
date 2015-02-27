@@ -220,4 +220,4 @@ void KDMGeneralWidget::defaults()
 }
 
 
-#include "kdm-gen.moc"
+#include "moc_kdm-gen.cpp"

@@ -314,4 +314,4 @@ bool OutputGraphicsItem::isPrimary() const
 	return pen().width()>0;
 }
 
-#include "outputgraphicsitem.moc"
+#include "moc_outputgraphicsitem.cpp"

@@ -78,4 +78,4 @@ void ChangeNotifier::timeout()
 
 } // namespace Homerun
 
-#include <changenotifier.moc>
+#include "moc_changenotifier.cpp"

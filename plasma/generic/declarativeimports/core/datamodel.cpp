@@ -518,4 +518,4 @@ int DataModel::roleNameToId(const QString &name)
 
 }
 
-#include "datamodel.moc"
+#include "moc_datamodel.cpp"

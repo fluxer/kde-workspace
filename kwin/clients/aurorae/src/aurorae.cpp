@@ -661,4 +661,4 @@ extern "C"
 }
 
 
-#include "aurorae.moc"
+#include "moc_aurorae.cpp"

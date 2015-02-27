@@ -54,7 +54,7 @@ using namespace Eigen;
 #include "sspreviewarea.h"
 
 #include "rotation.h"           // own interfaces
-#include "rotation.moc"
+#include "moc_rotation.cpp"
 
 /** Version number of this screen saver */
 #define KROTATION_VERSION "2.0"

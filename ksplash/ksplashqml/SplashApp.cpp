@@ -151,4 +151,4 @@ void SplashApp::screenGeometryChanged(int)
     m_windows.erase(m_windows.begin() + i, m_windows.end());
 }
 
-#include "SplashApp.moc"
+#include "moc_SplashApp.cpp"

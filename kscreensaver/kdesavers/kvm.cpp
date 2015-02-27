@@ -390,5 +390,5 @@ void kVmSetup::slotHelp()
 	);
 }
 
-#include "kvm.moc"
+#include "moc_kvm.cpp"
 

@@ -396,4 +396,4 @@ QPoint AppMenuModule::centeredMenubarPos()
 }
 
 
-#include "appmenu.moc"
+#include "moc_appmenu.cpp"

@@ -289,4 +289,4 @@ SourceConfigurationWidget *RunnerSource::createConfigurationWidget(const KConfig
 
 } // namespace Homerun
 
-#include <runnermodel.moc>
+#include "moc_runnermodel.cpp"

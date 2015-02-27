@@ -490,4 +490,4 @@ void Toplevel::setSkipCloseAnimation(bool set)
 
 } // namespace
 
-#include "toplevel.moc"
+#include "moc_toplevel.cpp"

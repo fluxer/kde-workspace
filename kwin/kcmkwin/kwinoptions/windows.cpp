@@ -642,4 +642,4 @@ void KMovingConfig::setCenterSnapZone(int pxls)
     m_ui->centerSnap->setValue(pxls);
 }
 
-#include "windows.moc"
+#include "moc_windows.cpp"

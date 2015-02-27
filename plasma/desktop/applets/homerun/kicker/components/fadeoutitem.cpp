@@ -56,4 +56,4 @@ void FadeOutItem::setCovered(int covered)
     }
 }
 
-#include "fadeoutitem.moc"
+#include "moc_fadeoutitem.cpp"

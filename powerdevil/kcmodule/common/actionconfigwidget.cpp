@@ -85,4 +85,4 @@ void ActionConfigWidget::addWidgets(QList<QPair<QString, QWidget*> > configMap)
     }
 }
 
-#include "actionconfigwidget.moc"
+#include "moc_actionconfigwidget.cpp"

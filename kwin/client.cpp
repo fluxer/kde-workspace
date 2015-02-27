@@ -2313,4 +2313,4 @@ bool Client::decorationHasAlpha() const
 
 } // namespace
 
-#include "client.moc"
+#include "moc_client.cpp"

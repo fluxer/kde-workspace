@@ -316,4 +316,4 @@ QString flags_tos (unsigned int flags)
 }
 #endif
 
-#include "nic.moc"
+#include "moc_nic.cpp"

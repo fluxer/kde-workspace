@@ -806,4 +806,4 @@ int KScreenSaver::indexForSaverFile(const QString & saver)
     return index;
 }
 
-#include "scrnsave.moc"
+#include "moc_scrnsave.cpp"

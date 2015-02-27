@@ -233,4 +233,4 @@ void Color::generatePainting(int mode, QPainter* painter, const QRectF& exposedR
 
     }
 }
-#include "color.moc"
+#include "moc_color.cpp"

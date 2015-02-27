@@ -445,7 +445,7 @@ void FilterOptions::updateSearchProviderEditingButons()
   m_dlg.pbDelete->setEnabled(enable);
 }
 
-#include "ikwsopts.moc"
-#include "ikwsopts_p.moc"
+#include "moc_ikwsopts.cpp"
+#include "moc_ikwsopts_p.cpp"
 
 // kate: replace-tabs 1; indent-width 2;

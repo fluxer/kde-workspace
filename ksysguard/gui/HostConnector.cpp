@@ -227,4 +227,4 @@ void HostConnector::slotHelp()
   KToolInvocation::invokeHelp( "connectingtootherhosts", "ksysguard" );
 }
 
-#include "HostConnector.moc"
+#include "moc_HostConnector.cpp"

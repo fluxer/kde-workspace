@@ -19,4 +19,4 @@
 
 */
 
-#include "processes_base_p.moc"
+#include "moc_processes_base_p.cpp"

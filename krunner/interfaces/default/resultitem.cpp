@@ -652,5 +652,5 @@ void ResultItem::calculateSize(int sceneWidth)
     resize(newSize);
 }
 
-#include "resultitem.moc"
+#include "moc_resultitem.cpp"
 

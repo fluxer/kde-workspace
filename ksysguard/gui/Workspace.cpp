@@ -362,4 +362,4 @@ void Workspace::applyStyle()
     current->applyStyle();
 }
 
-#include "Workspace.moc"
+#include "moc_Workspace.cpp"

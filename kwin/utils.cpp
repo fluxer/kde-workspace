@@ -352,5 +352,5 @@ Qt::KeyboardModifiers x11ToQtKeyboardModifiers(int state)
 } // namespace
 
 #ifndef KCMRULES
-#include "utils.moc"
+#include "moc_utils.cpp"
 #endif

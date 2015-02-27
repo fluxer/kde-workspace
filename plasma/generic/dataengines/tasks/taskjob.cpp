@@ -133,4 +133,4 @@ void TaskJob::start()
     setResult(false);
 }
 
-#include "taskjob.moc"
+#include "moc_taskjob.cpp"

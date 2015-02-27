@@ -316,4 +316,4 @@ QAbstractItemModel *FilterableInstalledAppsSource::createModelFromConfigGroup(co
 
 } // namespace Homerun
 
-#include <filterableinstalledappsmodel.moc>
+#include "moc_filterableinstalledappsmodel.cpp"

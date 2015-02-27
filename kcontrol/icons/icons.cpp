@@ -642,4 +642,4 @@ void KIconEffectSetupDialog::preview()
     mpPreview->setPixmap(pm);
 }
 
-#include "icons.moc"
+#include "moc_icons.cpp"

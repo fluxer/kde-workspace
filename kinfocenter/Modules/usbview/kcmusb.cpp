@@ -26,7 +26,7 @@
 
 #include "usbdevices.h"
 
-#include "kcmusb.moc"
+#include "moc_kcmusb.cpp"
 
 K_PLUGIN_FACTORY(USBFactory,
 		registerPlugin<USBViewer>();

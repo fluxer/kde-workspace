@@ -201,4 +201,4 @@ void IconMode::giveFocus()
     d->categoryView->setFocus();
 }
 
-#include "IconMode.moc"
+#include "moc_IconMode.cpp"

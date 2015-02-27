@@ -21,7 +21,7 @@
 
 #include <config-randr.h>
 #include "krandrapp.h"
-#include "krandrapp.moc"
+#include "moc_krandrapp.cpp"
 
 #include "krandrtray.h"
 

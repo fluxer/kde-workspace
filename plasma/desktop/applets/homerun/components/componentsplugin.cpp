@@ -49,4 +49,4 @@ void ComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<TabModel>(uri, 0, 1, "TabModel");
 }
 
-#include "componentsplugin.moc"
+#include "moc_componentsplugin.cpp"

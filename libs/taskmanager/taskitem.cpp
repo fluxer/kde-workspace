@@ -708,4 +708,4 @@ bool TaskItem::demandsAttention() const
 
 } // TaskManager namespace
 
-#include "taskitem.moc"
+#include "moc_taskitem.cpp"

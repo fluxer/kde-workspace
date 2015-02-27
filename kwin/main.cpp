@@ -595,4 +595,4 @@ KDE_EXPORT int kdemain(int argc, char * argv[])
     return a.exec();
 }
 
-#include "main.moc"
+#include "moc_main.cpp"

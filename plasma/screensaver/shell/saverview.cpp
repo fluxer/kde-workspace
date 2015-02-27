@@ -291,4 +291,4 @@ void SaverView::adjustSize(int screen)
     }
 }
 
-#include "saverview.moc"
+#include "moc_saverview.cpp"

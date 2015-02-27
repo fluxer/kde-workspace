@@ -341,5 +341,5 @@ QDeclarativePropertyMap *ThemeProxy::iconSizes() const
     return m_iconSizes;
 }
 
-#include "theme.moc"
+#include "moc_theme.cpp"
 

@@ -72,4 +72,4 @@ QList< QPair< QString, QWidget* > > BrightnessControlConfig::buildUi()
 }
 }
 
-#include "brightnesscontrolconfig.moc"
+#include "moc_brightnesscontrolconfig.cpp"

@@ -437,4 +437,4 @@ bool TabBar::isHorizontal() const
     return !isVertical();
 }
 
-#include "tabbar.moc"
+#include "moc_tabbar.cpp"

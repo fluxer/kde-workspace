@@ -1,2 +1,2 @@
 #include "kwallettest.h"
-#include "kwallettest.moc"
+#include "moc_kwallettest.cpp"

@@ -55,4 +55,4 @@ QObject *AppletProxy::containment() const
     return 0;
 }
 
-#include "appletproxy.moc"
+#include "moc_appletproxy.cpp"

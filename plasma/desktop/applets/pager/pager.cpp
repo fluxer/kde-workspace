@@ -877,4 +877,4 @@ void Pager::dropMimeData(QObject* mime, int desktop)
     }
 }
 
-#include "pager.moc"
+#include "moc_pager.cpp"

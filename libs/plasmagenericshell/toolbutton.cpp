@@ -211,5 +211,5 @@ void ToolButton::animationFinished()
     m_isAnimating = false;
 }
 
-#include "toolbutton.moc"
+#include "moc_toolbutton.cpp"
 

@@ -131,4 +131,4 @@ void DeviceActionsDialog::launchAction(DeviceAction *action)
     accept();
 }
 
-#include "deviceactionsdialog.moc"
+#include "moc_deviceactionsdialog.cpp"

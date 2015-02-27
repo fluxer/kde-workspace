@@ -198,4 +198,4 @@ void Mpris2Engine::createMultiplexer()
     addSource(m_multiplexer.data());
 }
 
-#include "mpris2engine.moc"
+#include "moc_mpris2engine.cpp"

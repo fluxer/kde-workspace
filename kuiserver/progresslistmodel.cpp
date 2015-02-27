@@ -341,4 +341,4 @@ QStringList ProgressListModel::registeredJobContacts()
     return output;
 }
 
-#include "progresslistmodel.moc"
+#include "moc_progresslistmodel.cpp"

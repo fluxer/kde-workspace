@@ -25,7 +25,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenmdidemowidget.h"
-#include "oxygenmdidemowidget.moc"
+#include "moc_oxygenmdidemowidget.cpp"
 
 #include <QtGui/QMdiSubWindow>
 #include <QtGui/QMenuBar>

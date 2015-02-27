@@ -819,4 +819,4 @@ QKeySequence ShortcutDialog::shortcut() const
 
 } // namespace
 
-#include "ruleswidget.moc"
+#include "moc_ruleswidget.cpp"

@@ -510,4 +510,4 @@ void FancyPlotterSettings::resetOrder()
 
 
 
-#include "FancyPlotterSettings.moc"
+#include "moc_FancyPlotterSettings.cpp"

@@ -21,7 +21,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "kcmsambastatistics.h"
-#include "kcmsambastatistics.moc"
+#include "moc_kcmsambastatistics.cpp"
 
 #include <QApplication>
 #include <QLayout>

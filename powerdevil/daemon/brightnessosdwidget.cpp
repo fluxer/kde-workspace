@@ -132,4 +132,4 @@ void BrightnessOSDWidget::themeUpdated()
 }
 
 
-#include "brightnessosdwidget.moc"
+#include "moc_brightnessosdwidget.cpp"

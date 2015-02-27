@@ -314,5 +314,5 @@ void PanelToolBox::toggle()
 }
 
 
-#include "paneltoolbox.moc"
+#include "moc_paneltoolbox.cpp"
 

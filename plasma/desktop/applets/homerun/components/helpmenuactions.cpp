@@ -70,4 +70,4 @@ QAction *HelpMenuActions::action(HelpMenuActions::ActionId actionId)
     return m_menu->action(static_cast<KHelpMenu::MenuId>(actionId));
 }
 
-#include <helpmenuactions.moc>
+#include "moc_helpmenuactions.cpp"

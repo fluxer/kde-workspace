@@ -1292,4 +1292,4 @@ QXTimer::slotTimeout()
 }
 
 
-#include "kgverify.moc"
+#include "moc_kgverify.cpp"

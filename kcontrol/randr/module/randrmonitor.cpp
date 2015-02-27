@@ -410,4 +410,4 @@ bool RandrMonitorHelper::x11Event( XEvent* e )
     return QWidget::x11Event( e );
 }
 
-#include "randrmonitor.moc"
+#include "moc_randrmonitor.cpp"

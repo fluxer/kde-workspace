@@ -215,4 +215,4 @@ void HomerunLauncher::addToPanel(uint containmentId, const QString &storageId)
 
 }
 
-#include "homerunlauncher.moc"
+#include "moc_homerunlauncher.cpp"

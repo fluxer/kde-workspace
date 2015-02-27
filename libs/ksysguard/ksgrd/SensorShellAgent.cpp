@@ -144,4 +144,4 @@ bool SensorShellAgent::writeMsg( const char *msg, int len )
   return mDaemon->write( msg, len ) != -1;
 }
 
-#include "SensorShellAgent.moc"
+#include "moc_SensorShellAgent.cpp"

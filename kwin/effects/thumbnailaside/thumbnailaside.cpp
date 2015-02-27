@@ -188,4 +188,4 @@ bool ThumbnailAsideEffect::isActive() const
 
 } // namespace
 
-#include "thumbnailaside.moc"
+#include "moc_thumbnailaside.cpp"

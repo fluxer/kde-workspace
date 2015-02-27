@@ -713,7 +713,7 @@ void RandROutput::slotCrtcChanged(RRCrtc c, int changes)
 	emit outputChanged(m_id, changes);
 }
 
-#include "randroutput.moc"
+#include "moc_randroutput.cpp"
 
 
 // vim:noet:sts=8:sw=8:

@@ -1,5 +1,4 @@
 SET (kephalapp_SRCS kephalapp.cpp)
-QT4_WRAP_CPP (kephalapp_SRCS kephalapp.h)
 
 ADD_EXECUTABLE (kephalapp ${kephalapp_SRCS})
 

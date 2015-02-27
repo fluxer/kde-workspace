@@ -275,4 +275,4 @@ void LegacyRandRConfig::populateRefreshRates()
 	}
 }
 
-#include "legacyrandrconfig.moc"
+#include "moc_legacyrandrconfig.cpp"

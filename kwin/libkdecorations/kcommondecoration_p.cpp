@@ -29,7 +29,7 @@
 
 #include <assert.h>
 
-#include "kcommondecoration_p.moc"
+#include "moc_kcommondecoration_p.cpp"
 
 KCommonDecorationWrapper::KCommonDecorationWrapper(KCommonDecoration* deco, KDecorationBridge* bridge, KDecorationFactory* factory)
     : KDecorationUnstable(bridge, factory)

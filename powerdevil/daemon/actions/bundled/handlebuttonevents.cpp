@@ -204,4 +204,4 @@ void HandleButtonEvents::suspendToRam()
 }
 }
 
-#include "handlebuttonevents.moc"
+#include "moc_handlebuttonevents.cpp"

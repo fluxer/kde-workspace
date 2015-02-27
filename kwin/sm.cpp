@@ -492,4 +492,4 @@ void Workspace::sessionSaveDone()
 
 } // namespace
 
-#include "sm.moc"
+#include "moc_sm.cpp"

@@ -9,7 +9,7 @@
 #include <config-workspace.h>
 
 #include "fonts.h"
-#include "fonts.moc"
+#include "moc_fonts.cpp"
 
 #include <stdlib.h>
 

@@ -94,4 +94,4 @@ void GlobalSettings::setShowDesktopToolBox(bool show)
     }
 }
 
-#include <globalsettings.moc>
+#include "moc_globalsettings.cpp"

@@ -54,4 +54,4 @@ void AppletMoveSpacer::paint(QPainter *painter, const QStyleOptionGraphicsItem *
     m_background->paintFrame(painter);
 }
 
-#include "appletmovespacer.moc"
+#include "moc_appletmovespacer.cpp"

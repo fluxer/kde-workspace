@@ -84,4 +84,4 @@ bool LocalDomainUriFilter::exists(const QString& host) const
 K_PLUGIN_FACTORY(LocalDomainUriFilterFactory, registerPlugin<LocalDomainUriFilter>();)
 K_EXPORT_PLUGIN(LocalDomainUriFilterFactory("kcmkurifilt"))
 
-#include "localdomainurifilter.moc"
+#include "moc_localdomainurifilter.cpp"

@@ -516,4 +516,4 @@ void NativeXRenderPaintRedirector::discardScratch()
 
 } // namespace
 
-#include "paintredirector.moc"
+#include "moc_paintredirector.cpp"

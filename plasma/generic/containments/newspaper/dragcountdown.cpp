@@ -107,4 +107,4 @@ void DragCountdown::updateProgress()
     update();
 }
 
-#include "dragcountdown.moc"
+#include "moc_dragcountdown.cpp"

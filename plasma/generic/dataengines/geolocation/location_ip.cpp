@@ -119,4 +119,4 @@ void Ip::result(KJob* job)
 
 K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(ip, Ip)
 
-#include "location_ip.moc"
+#include "moc_location_ip.cpp"

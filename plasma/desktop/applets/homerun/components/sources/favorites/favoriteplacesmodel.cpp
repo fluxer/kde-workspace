@@ -163,4 +163,4 @@ bool FavoritePlacesModel::canMoveRow() const
 
 } // namespace Homerun
 
-#include "favoriteplacesmodel.moc"
+#include "moc_favoriteplacesmodel.cpp"

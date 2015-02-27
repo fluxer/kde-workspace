@@ -543,5 +543,5 @@ bool Processes::isHistoryAvailable() const
 }
 
 }
-#include "processes.moc"
+#include "moc_processes.cpp"
 

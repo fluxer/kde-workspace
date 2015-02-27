@@ -109,4 +109,4 @@ void KDEDPowerDevil::onCoreReady()
     QDBusConnection::sessionBus().registerObject("/org/kde/Solid/PowerManagement/PolicyAgent", PowerDevil::PolicyAgent::instance());
 }
 
-#include "kdedpowerdevil.moc"
+#include "moc_kdedpowerdevil.cpp"

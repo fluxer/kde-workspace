@@ -372,5 +372,5 @@ void DesktopView::screenOwnerChanged(int wasScreen, int isScreen, Plasma::Contai
     }
 }
 
-#include "desktopview.moc"
+#include "moc_desktopview.cpp"
 

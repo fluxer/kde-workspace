@@ -87,4 +87,4 @@ bool StandardItemModel::trigger(int row, const QString &actionId, const QVariant
 
 } // namespace
 
-#include <standarditemmodel.moc>
+#include "moc_standarditemmodel.cpp"

@@ -510,5 +510,5 @@ void AppletsView::spacerRequestedDrop(QGraphicsSceneDragDropEvent *event)
     dropEvent(event);
 }
 
-#include "appletsview.moc"
+#include "moc_appletsview.cpp"
 

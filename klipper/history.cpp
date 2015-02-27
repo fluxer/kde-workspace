@@ -244,4 +244,4 @@ const HistoryItem* History::find(const QByteArray& uuid) const
     return (it == m_items.end()) ? 0L : *it;
 }
 
-#include "history.moc"
+#include "moc_history.cpp"

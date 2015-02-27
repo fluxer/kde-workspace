@@ -16,7 +16,7 @@
 */
 
 #include "kserviceselectdlg.h"
-#include "kserviceselectdlg.moc"
+#include "moc_kserviceselectdlg.cpp"
 #include "kservicelistwidget.h"
 
 #include <klocale.h>

@@ -504,5 +504,5 @@ void InteractiveConsole::clearOutput()
     m_output->clear();
 }
 
-#include "interactiveconsole.moc"
+#include "moc_interactiveconsole.cpp"
 

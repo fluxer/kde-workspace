@@ -199,4 +199,4 @@ KConfigGroup ActionEditWidget::configGroup()
     }
 }
 
-#include "actioneditwidget.moc"
+#include "moc_actioneditwidget.cpp"

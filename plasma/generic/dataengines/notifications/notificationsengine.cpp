@@ -299,4 +299,4 @@ void NotificationsEngine::configureNotification(const QString &appName)
 
 K_EXPORT_PLASMA_DATAENGINE(notifications, NotificationsEngine)
 
-#include "notificationsengine.moc"
+#include "moc_notificationsengine.cpp"

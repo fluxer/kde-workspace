@@ -355,4 +355,4 @@ void WorkspaceOptionsModule::formFactorChanged(int newFormFactorIndex)
     m_ui->dashboardLabel->setEnabled(newFormFactorIndex == 0);
 }
 
-#include "workspaceoptions.moc"
+#include "moc_workspaceoptions.cpp"

@@ -20,7 +20,7 @@
  */
 
 #include "curtaineffect.h"
-#include "curtaineffect.moc"
+#include "moc_curtaineffect.cpp"
 
 #include <QApplication>
 #include <QDesktopWidget>

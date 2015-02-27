@@ -220,4 +220,4 @@ QString KillRunner::getUserName(qlonglong uid)
     return "root";//No user with UID uid was found, so root is used
 }
 
-#include "killrunner.moc"
+#include "moc_killrunner.cpp"

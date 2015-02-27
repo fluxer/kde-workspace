@@ -269,5 +269,5 @@ void ProgramGroupingStrategy::updateIcon(TaskGroup *group)
 
 }//namespace
 
-#include "programgroupingstrategy.moc"
+#include "moc_programgroupingstrategy.cpp"
 

@@ -91,4 +91,4 @@ bool PowerModel::trigger(int row, const QString &/*actionId*/, const QVariant &/
 
 } // namespace Homerun
 
-#include "powermodel.moc"
+#include "moc_powermodel.cpp"

@@ -135,4 +135,4 @@ void SetPreviewWidget::setPalette(const KSharedConfigPtr &config,
     SET_DECO_PALETTE(9, FocusColor);
 }
 
-#include "setpreviewwidget.moc"
+#include "moc_setpreviewwidget.cpp"

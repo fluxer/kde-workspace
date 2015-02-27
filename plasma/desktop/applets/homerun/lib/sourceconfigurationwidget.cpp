@@ -57,4 +57,4 @@ KConfigGroup SourceConfigurationWidget::configGroup() const
 
 } // namespace
 
-#include <sourceconfigurationwidget.moc>
+#include "moc_sourceconfigurationwidget.cpp"

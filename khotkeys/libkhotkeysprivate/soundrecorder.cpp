@@ -78,4 +78,4 @@ Sound SoundRecorder::sound()
 
 }
 
-#include "soundrecorder.moc"
+#include "moc_soundrecorder.cpp"

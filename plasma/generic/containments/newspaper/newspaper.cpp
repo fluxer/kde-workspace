@@ -588,5 +588,5 @@ void Newspaper::dropEvent(QGraphicsSceneDragDropEvent *event)
 
 K_EXPORT_PLASMA_APPLET(newspaper, Newspaper)
 
-#include "newspaper.moc"
+#include "moc_newspaper.cpp"
 

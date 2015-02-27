@@ -117,4 +117,4 @@ void RemoveButtonManager::removeButtonClicked()
     emit removeClicked(removeButton->itemName());
 }
 
-#include "removebuttonmanager.moc"
+#include "moc_removebuttonmanager.cpp"

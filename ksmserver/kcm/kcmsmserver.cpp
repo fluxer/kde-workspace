@@ -134,4 +134,4 @@ void SMServerConfig::defaults()
   dialog->excludeLineedit->clear();
 }
 
-#include "kcmsmserver.moc"
+#include "moc_kcmsmserver.cpp"

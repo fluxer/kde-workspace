@@ -495,6 +495,6 @@ void Mpris2::PropertiesChanged(const QString& interface,
     m_canSeek = m_canControl && updateBoolProp("CanSeek", changedProperties, invalidatedProperties, m_canSeek);
 }
 
-#include "mpris2.moc"
-#include "mpris2_p.moc"
+#include "moc_mpris2.cpp"
+#include "moc_mpris2_p.cpp"
 // vim:et:sts=4:sw=4

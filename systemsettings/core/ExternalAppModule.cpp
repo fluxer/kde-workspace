@@ -54,4 +54,4 @@ void ExternalAppModule::runExternal()
     KRun::run( *(moduleInfo->service()), KUrl::List(), qApp->activeWindow() ); // Launch it!
 }
 
-#include "ExternalAppModule.moc"
+#include "moc_ExternalAppModule.cpp"

@@ -74,4 +74,4 @@ bool ExecutableEngine::sourceRequestEvent(const QString& source)
     return true;
 }
 
-#include "executable.moc"
+#include "moc_executable.cpp"

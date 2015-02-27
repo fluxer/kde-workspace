@@ -284,4 +284,4 @@ bool Voice::doesVoiceCodeExists(const QString &vc)
 
 } // namespace KHotKeys
 
-#include "voices.moc"
+#include "moc_voices.cpp"

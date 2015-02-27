@@ -324,4 +324,4 @@ void KCMMemory::fetchValues() {
 
 #endif
 
-#include "memory.moc"
+#include "moc_memory.cpp"

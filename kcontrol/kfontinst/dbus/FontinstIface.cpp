@@ -25,4 +25,4 @@ OrgKdeFontinstInterface::~OrgKdeFontinstInterface()
 }
 
 
-#include "FontinstIface.moc"
+#include "moc_FontinstIface.cpp"

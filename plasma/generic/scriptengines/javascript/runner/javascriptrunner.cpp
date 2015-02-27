@@ -169,4 +169,4 @@ bool JavaScriptRunner::include(const QString &script)
     return m_env->include(path);
 }
 
-#include "javascriptrunner.moc"
+#include "moc_javascriptrunner.cpp"

@@ -207,4 +207,4 @@ void DataSource::disconnectSource(const QString &source)
 }
 
 }
-#include "datasource.moc"
+#include "moc_datasource.cpp"

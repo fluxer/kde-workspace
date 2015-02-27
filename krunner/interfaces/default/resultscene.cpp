@@ -418,5 +418,5 @@ void ResultScene::updateItemMargins()
     }
 }
 
-#include "resultscene.moc"
+#include "moc_resultscene.cpp"
 

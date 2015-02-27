@@ -244,4 +244,4 @@ void FullView::logFocusedItem()
     }
 }
 
-#include "fullview.moc"
+#include "moc_fullview.cpp"

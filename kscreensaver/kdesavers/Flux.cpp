@@ -983,6 +983,6 @@ int main( int argc, char** argv )
 #endif
 
 
-#include "Flux.moc"
+#include "moc_Flux.cpp"
 
 //EOF

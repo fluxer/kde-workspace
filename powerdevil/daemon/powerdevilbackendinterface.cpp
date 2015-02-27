@@ -177,4 +177,4 @@ void BackendInterface::setCapabilities(BackendInterface::Capabilities capabiliti
 
 }
 
-#include "powerdevilbackendinterface.moc"
+#include "moc_powerdevilbackendinterface.cpp"

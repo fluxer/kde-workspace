@@ -184,4 +184,4 @@ void ConfigGroup::sync()
     }
 }
 
-#include "configgroup.moc"
+#include "moc_configgroup.cpp"

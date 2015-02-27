@@ -101,4 +101,4 @@ void ActionManager::setConfigFileName(const QString &name)
     emit configFileNameChanged();
 }
 
-#include <actionmanager.moc>
+#include "moc_actionmanager.cpp"

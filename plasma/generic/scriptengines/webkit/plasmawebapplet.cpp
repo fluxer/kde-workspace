@@ -480,4 +480,4 @@ void PlasmaWebApplet::setBusy(bool busy)
     applet()->setBusy(busy);
 }
 
-#include "plasmawebapplet.moc"
+#include "moc_plasmawebapplet.cpp"

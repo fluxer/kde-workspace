@@ -40,7 +40,7 @@
 #include <kglobal.h>
 #include <krandomsequence.h>
 
-#include "blob.moc"
+#include "moc_blob.cpp"
 #include "blob.h"
 
 #define SMALLRAND(a)	(int)(rnd->getLong(a)+1)

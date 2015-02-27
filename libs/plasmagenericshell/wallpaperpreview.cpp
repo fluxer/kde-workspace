@@ -64,4 +64,4 @@ void WallpaperPreview::paintEvent(QPaintEvent* event)
     }
 }
 
-#include "wallpaperpreview.moc"
+#include "moc_wallpaperpreview.cpp"

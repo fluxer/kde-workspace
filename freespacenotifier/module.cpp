@@ -33,4 +33,4 @@ FreeSpaceNotifierModule::FreeSpaceNotifierModule(QObject* parent, const QList<QV
 {
 }
 
-#include "module.moc"
+#include "moc_module.cpp"

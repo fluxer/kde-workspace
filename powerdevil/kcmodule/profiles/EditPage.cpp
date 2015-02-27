@@ -297,4 +297,4 @@ void EditPage::onServiceUnregistered(const QString& service)
                                       this);
 }
 
-#include "EditPage.moc"
+#include "moc_EditPage.cpp"

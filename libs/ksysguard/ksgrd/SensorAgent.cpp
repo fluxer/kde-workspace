@@ -307,4 +307,4 @@ int SensorRequest::id()
   return mId;
 }
 
-#include "SensorAgent.moc"
+#include "moc_SensorAgent.cpp"

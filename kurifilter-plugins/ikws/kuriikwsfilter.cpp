@@ -172,4 +172,4 @@ bool KAutoWebSearch::filterUri( KUriFilterData &data ) const
   return false;
 }
 
-#include "kuriikwsfilter.moc"
+#include "moc_kuriikwsfilter.cpp"

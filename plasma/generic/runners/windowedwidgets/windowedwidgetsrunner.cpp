@@ -130,5 +130,5 @@ QMimeData * WindowedWidgetsRunner::mimeDataForMatch(const Plasma::QueryMatch *ma
 }
 
 
-#include "windowedwidgetsrunner.moc"
+#include "moc_windowedwidgetsrunner.cpp"
 

@@ -151,4 +151,4 @@ QString WorkSheetSettings::sheetTitle() const
   return mSheetTitle->text();
 }
 
-#include "WorkSheetSettings.moc"
+#include "moc_WorkSheetSettings.cpp"

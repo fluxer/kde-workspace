@@ -28,7 +28,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenconfig.h"
-#include "oxygenconfig.moc"
+#include "moc_oxygenconfig.cpp"
 
 #include "oxygenconfiguration.h"
 #include "oxygenutil.h"

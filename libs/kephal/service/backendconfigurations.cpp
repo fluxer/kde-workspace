@@ -266,6 +266,6 @@ namespace Kephal {
 }
 
 #ifndef NO_KDE
-#include "backendconfigurations.moc"
+#include "moc_backendconfigurations.cpp"
 #endif
 

@@ -446,6 +446,6 @@ ModeList RandRCrtc::modes() const
 	return modeList;
 }
 
-#include "randrcrtc.moc"
+#include "moc_randrcrtc.cpp"
 
 

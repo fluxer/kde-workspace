@@ -427,4 +427,4 @@ ClientApp::ClientApp(int &argc, char **argv )
 {
 }
 
-#include "kioclient.moc"
+#include "moc_kioclient.cpp"

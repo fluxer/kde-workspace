@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include "ReniceDlg.moc"
+#include "moc_ReniceDlg.cpp"
 #include <QListWidget>
 #include <QButtonGroup>
 #include "ui_ReniceDlgUi.h"

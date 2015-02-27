@@ -142,4 +142,4 @@ void StatusNotifierItemEngine::newItem(const QString &service)
 
 K_EXPORT_PLASMA_DATAENGINE(statusnotifieritem, StatusNotifierItemEngine)
 
-#include "statusnotifieritem_engine.moc"
+#include "moc_statusnotifieritem_engine.cpp"

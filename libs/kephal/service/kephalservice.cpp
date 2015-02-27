@@ -193,6 +193,6 @@ void KephalService::outputConnected(Output * output)
 //     activateConfiguration();
 }
 
-#include "kephalservice.moc"
+#include "moc_kephalservice.cpp"
 
 // vim: sw=4 sts=4 et tw=100

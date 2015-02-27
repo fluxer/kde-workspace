@@ -30,4 +30,4 @@ RequestViewCallWatcher::RequestViewCallWatcher(JobView* jobView, const QString& 
 }
 
 
-#include "requestviewcallwatcher.moc"
+#include "moc_requestviewcallwatcher.cpp"

@@ -1000,5 +1000,5 @@ void MTPSlave::rename ( const KUrl& src, const KUrl& dest, JobFlags flags )
 }
 
 
-#include "kio_mtp.moc"
+#include "moc_kio_mtp.cpp"
 

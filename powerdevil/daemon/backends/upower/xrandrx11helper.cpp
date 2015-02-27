@@ -67,4 +67,4 @@ bool XRandRX11Helper::x11Event(XEvent *event)
     return false;
 }
 
-#include "xrandrx11helper.moc"
+#include "moc_xrandrx11helper.cpp"

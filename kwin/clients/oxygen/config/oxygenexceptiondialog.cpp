@@ -24,7 +24,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "oxygenexceptiondialog.h"
-#include "oxygenexceptiondialog.moc"
+#include "moc_oxygenexceptiondialog.cpp"
 #include "oxygendetectwidget.h"
 
 namespace Oxygen

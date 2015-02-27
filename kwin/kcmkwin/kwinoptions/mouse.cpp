@@ -46,7 +46,7 @@
 
 #include <stdlib.h>
 
-#include "mouse.moc"
+#include "moc_mouse.cpp"
 
 namespace
 {

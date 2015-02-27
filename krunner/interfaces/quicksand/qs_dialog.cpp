@@ -318,4 +318,4 @@ void QsDialog::updateSystemActivityToolTip()
         }
     }
 }
-#include "qs_dialog.moc"
+#include "moc_qs_dialog.cpp"

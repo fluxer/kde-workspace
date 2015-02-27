@@ -47,4 +47,4 @@ void GlideEffectConfig::save()
     EffectsHandler::sendReloadMessage("glide");
 }
 } // namespace KWin
-#include "glide_config.moc"
+#include "moc_glide_config.cpp"

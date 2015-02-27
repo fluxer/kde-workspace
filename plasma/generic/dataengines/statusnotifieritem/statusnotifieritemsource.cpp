@@ -482,4 +482,4 @@ void StatusNotifierItemSource::contextMenu(int x, int y)
     }
 }
 
-#include "statusnotifieritemsource.moc"
+#include "moc_statusnotifieritemsource.cpp"

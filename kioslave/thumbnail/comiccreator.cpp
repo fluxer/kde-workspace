@@ -304,4 +304,4 @@ ThumbCreator::Flags ComicCreator::flags() const
     return DrawFrame;
 }
 
-#include "comiccreator.moc"
+#include "moc_comiccreator.cpp"

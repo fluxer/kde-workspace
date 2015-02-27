@@ -49,4 +49,4 @@ void I18nConfigTest::test()
     }
 }
 
-#include "i18nconfigtest.moc"
+#include "moc_i18nconfigtest.cpp"
