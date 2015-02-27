@@ -31,8 +31,6 @@
 #include <QTimer>
 #include "config-workspace.h"
 
-#include <qimageblitz.h>
-
 CurtainEffect::CurtainEffect(QWidget *parent, QPixmap *pixmap)
     : LogoutEffect(parent, pixmap)
 {
@@ -49,8 +47,16 @@ void CurtainEffect::nextFrame()
 {
     QImage image = QPixmap::grabWindow(QApplication::desktop()->winId(), 0, currentY,
                                        parent->width(), 10 ).toImage();
-    Blitz::intensity(image, -0.4);
-    Blitz::grayscale(image);
+
+    // gray scale
+    QColor oldColor;
+    for(int x = 0; x < image.width(); x++){
+        for(int y = 0; y < image.height(); y++){
+            oldColor = QColor(image.pixel(x, y));
+            int average = (oldColor.red() + oldColor.green() + oldColor.blue()) / 3;
+            image.setPixel(x, y, qRgb(average,average,average));
+        }
+    }
 
     QPainter painter(pixmap);
     painter.drawImage(0, currentY, image);

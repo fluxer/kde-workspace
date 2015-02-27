@@ -38,12 +38,6 @@ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notificati
                        TYPE REQUIRED
                       )
 
-find_package(QImageBlitz)
-set_package_properties(QImageBlitz PROPERTIES DESCRIPTION "An image effects library"
-                       URL "http://sourceforge.net/projects/qimageblitz"
-                       TYPE REQUIRED
-                      )
-
 find_package(KDeclarative QUIET CONFIG)
 set_package_properties(KDeclarative PROPERTIES DESCRIPTION "KDE Declarative (QML) support from kdelibs"
                        URL "http://www.kde.org"
