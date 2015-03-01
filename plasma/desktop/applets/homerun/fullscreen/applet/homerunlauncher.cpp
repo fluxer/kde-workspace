@@ -39,6 +39,7 @@
 #include <Plasma/IconWidget>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
+#include <KDebug>
 
 // Local
 #include <configkeys.h>

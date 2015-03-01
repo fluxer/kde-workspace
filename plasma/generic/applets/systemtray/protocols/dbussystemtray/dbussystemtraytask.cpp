@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include "dbussystemtraytask.h"
-
 #include "dbussystemtrayprotocol.h"
 
 #include <QtCore/QMetaEnum>
@@ -35,6 +34,7 @@
 #include <KDE/Plasma/ServiceJob>
 #include <KDE/Plasma/ToolTipManager>
 #include <KDE/Plasma/Applet>
+#include <KDE/KDebug>
 
 namespace SystemTray
 {

@@ -29,6 +29,7 @@
 #include <KSystemTimeZones>
 #include <KDateTime>
 #include <Solid/PowerManagement>
+#include <KDebug>
 
 #include "timesource.h"
 

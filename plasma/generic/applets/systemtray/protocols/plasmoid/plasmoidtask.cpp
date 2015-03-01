@@ -26,6 +26,7 @@
 
 #include <KIcon>
 #include <KIconLoader>
+#include <KDebug>
 
 #include <plasma/applet.h>
 #include <plasma/popupapplet.h>

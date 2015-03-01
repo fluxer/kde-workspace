@@ -30,12 +30,11 @@
 #include <qspinbox.h>
 #include <qcheckbox.h>
 #include <qlabel.h>
-//Added by qt3to4:
 #include <QList>
+
 #include <klocale.h>
 #include <kapplication.h>
 #include <kdebug.h>
-#include <klibloader.h>
 #include <kconfig.h>
 #include <kfiledialog.h>
 #include <kurl.h>

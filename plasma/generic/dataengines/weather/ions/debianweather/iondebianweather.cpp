@@ -29,8 +29,8 @@
 
 #include <KIO/TransferJob>
 #include <KIO/Job>
-
 #include <KUnitConversion/Converter>
+#include <KDebug>
 
 #include <QXmlStreamReader>
 

@@ -35,6 +35,7 @@
 
 #include <KWindowSystem>
 #include <KStandardDirs>
+#include <KDebug>
 
 #include <kdeclarative.h>
 
