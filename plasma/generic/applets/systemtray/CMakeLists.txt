@@ -1,7 +1,4 @@
 project(plasma-systemtray)
-#TODO: see if is still the case
-# 'engineName' causes error
-kde4_no_enable_final(plasma-systemtray)
 
 find_package(Qt4 4.8 COMPONENTS QtCore QtGui QtDeclarative REQUIRED)
 
