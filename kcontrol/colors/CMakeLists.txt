@@ -1,5 +1,3 @@
-KDE4_NO_ENABLE_FINAL(colors)
-
 set(kcm_colors_PART_SRCS ../krdb/krdb.cpp colorscm.cpp previewwidget.cpp setpreviewwidget.cpp)
 
 kde4_add_ui_files(kcm_colors_PART_SRCS colorsettings.ui preview.ui setpreview.ui)

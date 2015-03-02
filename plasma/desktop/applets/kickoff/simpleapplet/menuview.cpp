@@ -43,9 +43,7 @@
 
 #define MAX_NAME_SIZE 50
 
-#ifndef KDE_USE_FINAL
 Q_DECLARE_METATYPE(QPersistentModelIndex)
-#endif
 Q_DECLARE_METATYPE(QAction*)
 
 using namespace Kickoff;

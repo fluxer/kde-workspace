@@ -11,10 +11,8 @@
 
 #include <X11/Xlib.h>
 #include <QX11Info>
-#ifndef KDE_USE_FINAL
 const int XFocusOut = FocusOut;
 const int XFocusIn = FocusIn;
-#endif
 #undef FocusOut
 #undef FocusIn
 #undef KeyPress

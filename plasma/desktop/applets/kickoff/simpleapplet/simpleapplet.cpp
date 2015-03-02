@@ -74,9 +74,7 @@
 #include "core/urlitemlauncher.h"
 #include "ui/contextmenufactory.h"
 
-#ifndef KDE_USE_FINAL
 Q_DECLARE_METATYPE(QPersistentModelIndex)
-#endif
 
 /// @internal KBookmarkOwner specialization
 class BookmarkOwner : public KBookmarkOwner

@@ -1,4 +1,3 @@
-#KDE4_NO_ENABLE_FINAL(krunner)
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1207)
 
 # for dbus_add_activation_service
