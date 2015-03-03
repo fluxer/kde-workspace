@@ -25,13 +25,43 @@ header='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 <body>
 '
 base="$(basename "$1")"
-page="$(man -w "$base" 2>/dev/null)"
 
-if [ -z "$page" ];then
-    echo "$header <p>Manual page for <b>$base</b> not found."
-    exit 3
-fi
 
-zcat "$page" | groff -mandoc -c -Thtml 2>/dev/null
+case "$base" in
+    [1-9])
+        # section to display
+        secpath=""
+        for p in "/man" "/share/man";do
+            tmppath="$p/man$base"
+            if [ -d "$tmppath" ];then
+                secpath="$tmppath"
+            elif [ -d "/usr$tmppath" ];then
+                secpath="/usr$tmppath"
+            elif [ -d "/usr/local$tmppath" ];then
+                secpath="/usr/local$tmppath"
+            fi
+        done
+        if [ -z "$secpath" ];then
+            echo "$header <p>Manual page section for <b>$base</b> not found."
+            exit 3
+        fi
+        content=""
+        # FIXME: will break on spaces
+        for page in $(find "$secpath" ! -type d);do
+            tmpbase="$(basename "$page")"
+            content="$content <p><a href='man:/$tmpbase'>$tmpbase</a></p>"
+        done
+        echo "$header $content"
+    ;;
+    *)
+        # actual page to display
+        page="$(man -w "$base" 2>/dev/null)"
+        if [ -z "$page" ];then
+            echo "$header <p>Manual page for <b>$base</b> not found."
+            exit 3
+        fi
+        zcat "$page" | groff -mandoc -c -Thtml 2>/dev/null
+    ;;
+esac
 
 exit 0;
