@@ -46,8 +46,22 @@ static unsigned long long STotal = 0;
 static unsigned long long SFree = 0;
 static unsigned long long SUsed = 0;
 
+static void scan_one( const char* buff, const char *key, unsigned long long* val )
+{   
+  int o;
+  char *b = strstr( buff, key );
+  if ( b )  
+    o = sscanf( b + strlen( key ), ": %llu", val );
+}
+
 static void processMemInfo()
 {
+  scan_one( MemInfoBuf, "MemTotal", &Total );
+  scan_one( MemInfoBuf, "MemFree", &MFree );
+  scan_one( MemInfoBuf, "Buffers", &Buffers );
+  scan_one( MemInfoBuf, "Cached", &Cached );
+  scan_one( MemInfoBuf, "SwapTotal", &STotal );
+  scan_one( MemInfoBuf, "SwapFree", &SFree );
   Used = Total - MFree;
   Appl = ( Used - ( Buffers + Cached ) );
 
