@@ -347,10 +347,10 @@ void KWalletConfig::save() {
 void KWalletConfig::defaults() {
 	_wcw->_enabled->setChecked(true);
 	_wcw->_openPrompt->setChecked(false);
-	_wcw->_launchManager->setChecked(true);
+	_wcw->_launchManager->setChecked(false);
 	_wcw->_autocloseManager->setChecked(false);
 	_wcw->_screensaverLock->setChecked(false);
-	_wcw->_autoclose->setChecked(true);
+	_wcw->_autoclose->setChecked(false);
 	_wcw->_closeIdle->setChecked(false);
 	_wcw->_idleTime->setValue(10);
 	_wcw->_defaultWallet->setCurrentIndex(0);
