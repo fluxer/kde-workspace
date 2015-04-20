@@ -156,7 +156,7 @@ void KStart::sendRule() {
 }
 
 const int SUPPORTED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::OverrideMask | NET::TopMenuMask
+    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
     | NET::UtilityMask | NET::SplashMask;
 
 void KStart::windowAdded(WId w){
@@ -382,8 +382,6 @@ int main( int argc, char *argv[] )
 	  windowtype = NET::Menu;
       else if ( s == "dialog" )
 	  windowtype = NET::Dialog;
-      else if ( s == "override" )
-	  windowtype = NET::Override;
       else if ( s == "topmenu" )
 	  windowtype = NET::TopMenu;
       else
@@ -429,9 +427,6 @@ int main( int argc, char *argv[] )
       if( i.isSupported( NET::FullScreen )) {
           state |= NET::FullScreen;
           mask |= NET::FullScreen;
-      } else {
-          windowtype = NET::Override;
-          fullscreen = true;
       }
   }
 

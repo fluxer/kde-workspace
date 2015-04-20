@@ -556,7 +556,7 @@ void Pager::recalculateWindowRects()
         KWindowInfo info = KWindowSystem::windowInfo(window, NET::WMGeometry | NET::WMFrameExtents |
                                                              NET::WMWindowType | NET::WMDesktop |
                                                              NET::WMState | NET::XAWMState | NET::WMVisibleName);
-        NET::WindowType type = info.windowType(NET::NormalMask | NET::DialogMask | NET::OverrideMask |
+        NET::WindowType type = info.windowType(NET::NormalMask | NET::DialogMask |
                                                NET::UtilityMask | NET::DesktopMask | NET::DockMask |
                                                NET::TopMenuMask | NET::SplashMask | NET::ToolbarMask |
                                                NET::MenuMask);

@@ -82,7 +82,6 @@ RootInfo *RootInfo::create()
         NET::ToolbarMask |
         NET::MenuMask |
         NET::DialogMask |
-        NET::OverrideMask |
         NET::UtilityMask |
         NET::SplashMask |
         // No compositing window types here unless we support them also as managed window types

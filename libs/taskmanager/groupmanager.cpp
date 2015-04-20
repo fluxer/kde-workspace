@@ -277,7 +277,7 @@ bool GroupManagerPrivate::addTask(::TaskManager::Task *task)
         }
 
         NET::WindowType type = task->info().windowType(NET::NormalMask | NET::DialogMask |
-                               NET::OverrideMask | NET::UtilityMask);
+                               NET::UtilityMask);
         if (type == NET::Utility) {
             //kDebug() << "skipping utility window" << task->name();
             skip = true;

@@ -208,7 +208,7 @@ void WindowList::showMenu(bool onlyCurrentDesktop)
 
     for (int i = 0; i < windows.count(); ++i) {
         KWindowInfo window = KWindowSystem::windowInfo(windows.at(i), (NET::WMGeometry | NET::WMFrameExtents | NET::WMWindowType | NET::WMDesktop | NET::WMState | NET::XAWMState | NET::WMVisibleName));
-        NET::WindowType type = window.windowType(NET::NormalMask | NET::DialogMask | NET::OverrideMask | NET::UtilityMask | NET::DesktopMask | NET::DockMask | NET::TopMenuMask | NET::SplashMask | NET::ToolbarMask | NET::MenuMask);
+        NET::WindowType type = window.windowType(NET::NormalMask | NET::DialogMask | NET::UtilityMask | NET::DesktopMask | NET::DockMask | NET::TopMenuMask | NET::SplashMask | NET::ToolbarMask | NET::MenuMask);
 
         if ((onlyCurrentDesktop && !window.isOnDesktop(KWindowSystem::currentDesktop())) || type == NET::Desktop || type == NET::Dock || type == NET::TopMenu || type == NET::Splash || type == NET::Menu || type == NET::Toolbar || window.hasState(NET::SkipPager)) {
             windows.removeAt(i);
