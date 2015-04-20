@@ -305,12 +305,7 @@ static Placement::Policy comboToPlacement(int val)
 
 static int typeToCombo(NET::WindowType type)
 {
-    if (type < NET::Normal || type > NET::Splash ||
-        type == NET::Override) // The user must NOT set a window to be unmanaged.
-                               // This case is not handled in KWin and will lead to segfaults.
-                               // Even iff it was supported, it would mean to allow the user to shoot himself
-                               // since an unmanaged window has to manage itself, what is probably not the case when the hint is not set.
-                               // Rule opportunity might be a relict from the Motif Hint window times of KDE1
+    if (type < NET::Normal || type > NET::Splash)
         return 0; // Normal
     static const int conv[] = {
         0, // Normal
@@ -319,8 +314,7 @@ static int typeToCombo(NET::WindowType type)
         4, // Toolbar
         5, // Menu
         1, // Dialog
-        8, // Override - ignored.
-        9, // TopMenu
+        8, // TopMenu
         2, // Utility
         6  // Splash
     };
@@ -389,7 +383,6 @@ void RulesWidget::setRules(Rules* rules)
     types->item(5)->setSelected(rules->types & NET::MenuMask);
     types->item(6)->setSelected(rules->types & NET::SplashMask);
     types->item(7)->setSelected(rules->types & NET::DesktopMask);
-    types->item(8)->setSelected(rules->types & NET::OverrideMask);
     types->item(9)->setSelected(rules->types & NET::TopMenuMask);
     title->setText(rules->title);
     title_match->setCurrentIndex(rules->titlematch);
@@ -486,7 +479,6 @@ Rules* RulesWidget::rules() const
         rules->types |= types->item(5)->isSelected() ? NET::MenuMask : 0U;
         rules->types |= types->item(6)->isSelected() ? NET::SplashMask : 0U;
         rules->types |= types->item(7)->isSelected() ? NET::DesktopMask : 0U;
-        rules->types |= types->item(8)->isSelected() ? NET::OverrideMask : 0U;
         rules->types |= types->item(9)->isSelected() ? NET::TopMenuMask : 0U;
     }
     rules->title = title->text();

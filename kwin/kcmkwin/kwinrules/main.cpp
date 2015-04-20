@@ -79,8 +79,8 @@ static Rules* findRule(const QList< Rules* >& rules, Window wid, bool whole_app)
     QByteArray wmclass_name = info.windowClassName().toLower();
     QByteArray role = info.windowRole().toLower();
     NET::WindowType type = info.windowType(NET::NormalMask | NET::DesktopMask | NET::DockMask
-                                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::OverrideMask | NET::TopMenuMask
-                                           | NET::UtilityMask | NET::SplashMask);
+                                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
+                                           | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask);
     QString title = info.name();
     QByteArray machine = clientMachine.hostName();
     Rules* best_match = NULL;

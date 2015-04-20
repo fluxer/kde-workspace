@@ -82,8 +82,8 @@ void DetectDialog::readWindow(WId w)
     wmclass_name = info.windowClassName();
     role = info.windowRole();
     type = info.windowType(NET::NormalMask | NET::DesktopMask | NET::DockMask
-                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::OverrideMask | NET::TopMenuMask
-                           | NET::UtilityMask | NET::SplashMask);
+                           | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
+                           | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask);
     title = info.name();
     machine = info.clientMachine();
     executeDialog();
@@ -98,7 +98,6 @@ void DetectDialog::executeDialog()
         I18N_NOOP("Toolbar"),
         I18N_NOOP("Torn-Off Menu"),
         I18N_NOOP("Dialog Window"),
-        I18N_NOOP("Override Type"),
         I18N_NOOP("Standalone Menubar"),
         I18N_NOOP("Utility Window"),
         I18N_NOOP("Splash Screen")
