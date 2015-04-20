@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
+    <width>638</width>
     <height>588</height>
    </rect>
   </property>
@@ -461,11 +461,6 @@
          <item>
           <property name="text">
            <string>Desktop</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Unmanaged Window</string>
           </property>
          </item>
          <item>
