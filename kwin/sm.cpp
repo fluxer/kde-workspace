@@ -315,7 +315,7 @@ bool Workspace::sessionInfoWindowTypeMatch(Client* c, SessionInfo* info)
 
 static const char* const window_type_names[] = {
     "Unknown", "Normal" , "Desktop", "Dock", "Toolbar", "Menu", "Dialog",
-    "Override", "TopMenu", "Utility", "Splash"
+    "TopMenu", "Utility", "Splash"
 };
 // change also the two functions below when adding new entries
 

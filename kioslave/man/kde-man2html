@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ -z "$1" ];then
-    exit 1
-elif ! type -p zcat &>/dev/null || ! type -p groff &>/dev/null;then
-    exit 2
-fi
-
 header='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -24,6 +18,15 @@ header='<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 </head>
 <body>
 '
+
+if [ -z "$1" ];then
+    echo "$header <p>Nothing to do.</p>"
+    exit 1
+elif ! type -p zcat &>/dev/null || ! type -p groff &>/dev/null;then
+    echo "$header <p>Either zcat or groff is not present.</p>"
+    exit 2
+fi
+
 base="$(basename "$1")"
 
 

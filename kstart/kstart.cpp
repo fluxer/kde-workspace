@@ -326,7 +326,7 @@ int main( int argc, char *argv[] )
   options.add("maximize-vertically", ki18n("Maximize the window vertically"));
   options.add("maximize-horizontally", ki18n("Maximize the window horizontally"));
   options.add("fullscreen", ki18n("Show window fullscreen"));
-  options.add("type <type>", ki18n("The window type: Normal, Desktop, Dock, Toolbar, \nMenu, Dialog, TopMenu or Override"));
+  options.add("type <type>", ki18n("The window type: Normal, Desktop, Dock, Toolbar, \nMenu, Dialog or TopMenu"));
   options.add("activate", ki18n("Jump to the window even if it is started on a \n"
                          "different virtual desktop"));
   options.add("ontop");

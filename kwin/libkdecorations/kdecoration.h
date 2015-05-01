@@ -599,7 +599,7 @@ public:
      * @code
      * const unsigned long supported_types = NET::NormalMask | NET::DesktopMask
      *  | NET::DockMask | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-     *  | NET::OverrideMask | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
+     *  | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask;
      *
      * NET::WindowType type = windowType( supported_types );
      *
