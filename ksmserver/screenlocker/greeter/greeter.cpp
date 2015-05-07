@@ -81,7 +81,7 @@ void GreeterItem::init()
         return;
     }
     m_widget = m_unlocker->greeterWidget();
-    
+
     themeChanged();
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()));
 #ifndef SHOW_GREETER_BACKGROUND

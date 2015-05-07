@@ -43,7 +43,6 @@ class ThemePage : public QWidget
 
 	private:
 		void insertThemes();
-		void fixCursorFile();
 
 		QTreeWidget *listview;
 		QString currentTheme, selectedTheme;

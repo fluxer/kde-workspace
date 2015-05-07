@@ -95,8 +95,6 @@ void ThemePage::save()
 
 	currentTheme = selectedTheme;
 
-	fixCursorFile();
-
 	KMessageBox::information( this, i18n("You have to restart KDE for these "
 				"changes to take effect."), i18n("Cursor Settings Changed"),
 				"CursorSettingsChanged" );
@@ -176,50 +174,6 @@ void ThemePage::insertThemes()
     lstChildren<<item;
 
     listview->addTopLevelItems( lstChildren );
-}
-
-
-void ThemePage::fixCursorFile()
-{
-	// Make sure we have the 'font' resource dir registered and can find the
-	// override dir.
-	//
-	// Next, if the user wants large cursors, copy the font
-	// cursor_large.pcf.gz to (localkdedir)/share/fonts/override/cursor.pcf.gz.
-	// Else remove the font cursor.pcf.gz from (localkdedir)/share/fonts/override.
-	//
-	// Run mkfontdir to update fonts.dir in that dir.
-
-	KGlobal::dirs()->addResourceType( "font", 0, "share/fonts/" );
-	KIO::mkdir( QDir::homePath() + "/.fonts/kde-override" );
-	QString overrideDir = QDir::homePath() + "/.fonts/kde-override/";
-
-	KUrl installedFont;
-	installedFont.setPath( overrideDir + "cursor.pcf.gz" );
-
-	if ( currentTheme == "SmallBlack" )
-		KIO::NetAccess::del( installedFont, this );
-	else {
-		KUrl source;
-
-		if ( currentTheme == "LargeBlack" )
-			source.setPath( KStandardDirs::locate("data", "kcminput/cursor_large_black.pcf.gz") );
-		else if ( currentTheme == "LargeWhite" )
-			source.setPath( KStandardDirs::locate("data", "kcminput/cursor_large_white.pcf.gz") );
-		else if ( currentTheme == "SmallWhite" )
-			source.setPath( KStandardDirs::locate("data", "kcminput/cursor_small_white.pcf.gz") );
-
-		KIO::Job* job = KIO::file_copy( source, installedFont, -1, KIO::Overwrite );
-		job->exec();
-	}
-
-	QString cmd = KGlobal::dirs()->findExe( "mkfontdir" );
-	if ( !cmd.isEmpty() )
-	{
-		KProcess p;
-		p << cmd << overrideDir;
-		p.execute();
-	}
 }
 
 // vim: set noet ts=4 sw=4:
