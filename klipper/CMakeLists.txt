@@ -30,20 +30,19 @@ kde4_add_app_icon(libklipper_common_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps
 kde4_add_ui_files(libklipper_common_SRCS generalconfig.ui actionsconfig.ui editactiondialog.ui)
 kde4_add_kcfg_files(libklipper_common_SRCS klippersettings.kcfgc)
 
-set(klipper_KDEINIT_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
+set(klipper_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
 
 
-kde4_add_kdeinit_executable(klipper ${klipper_KDEINIT_SRCS})
+kde4_add_executable(klipper ${klipper_SRCS})
 
-target_link_libraries(kdeinit_klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${ZLIB_LIBRARY})
+target_link_libraries(klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${ZLIB_LIBRARY})
 if (X11_Xfixes_FOUND)
-  target_link_libraries(kdeinit_klipper ${X11_Xfixes_LIB})
+  target_link_libraries(klipper ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
 if (PRISON_FOUND)
-  target_link_libraries(kdeinit_klipper ${PRISON_LIBRARIES})
+  target_link_libraries(klipper ${PRISON_LIBRARIES})
 endif (PRISON_FOUND)
 
-install(TARGETS kdeinit_klipper ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS klipper         ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(PROGRAMS klipper.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

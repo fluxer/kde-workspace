@@ -7,18 +7,17 @@ set(kwinrules_SRCS ruleswidget.cpp ruleslist.cpp kwinsrc.cpp detectwidget.cpp ${
 
 kde4_add_ui_files(kwinrules_SRCS ruleslist.ui detectwidget.ui editshortcut.ui ruleswidgetbase.ui)
 
-set(kwin_rules_dialog_KDEINIT_SRCS main.cpp ${kwinrules_SRCS})
+set(kwin_rules_dialog_SRCS main.cpp ${kwinrules_SRCS})
 
-kde4_add_kdeinit_executable( kwin_rules_dialog ${kwin_rules_dialog_KDEINIT_SRCS})
+kde4_add_executable( kwin_rules_dialog ${kwin_rules_dialog_SRCS})
 
 set(kwin_kcm_rules_XCB_LIBS
     ${XCB_XCB_LIBRARIES}
     ${X11_XCB_LIBRARIES}
 )
 
-target_link_libraries(kdeinit_kwin_rules_dialog ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} ${kwin_kcm_rules_XCB_LIBS})
+target_link_libraries(kwin_rules_dialog ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} ${kwin_kcm_rules_XCB_LIBS})
 
-install(TARGETS kdeinit_kwin_rules_dialog ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install(TARGETS kwin_rules_dialog         DESTINATION ${LIBEXEC_INSTALL_DIR} )
 
 ########### next target ###############

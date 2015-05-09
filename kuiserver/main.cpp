@@ -33,7 +33,7 @@
 #include <kdebug.h>
 
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
     //  GS 5/2001 - I changed the name to "KDE" to make it look better
     //              in the titles of dialogs which are displayed.

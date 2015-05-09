@@ -45,8 +45,7 @@
 static const char description[] = I18N_NOOP( "The KDE desktop, panels and widgets workspace application." );
 QString plasmaLocale;
 
-extern "C"
-KDE_EXPORT int kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "START" << "(line:" << __LINE__ << ")";
 

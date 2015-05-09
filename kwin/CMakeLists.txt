@@ -85,7 +85,7 @@ add_subdirectory( tabbox )
 
 ########### next target ###############
 
-set(kwin_KDEINIT_SRCS
+set(kwin_SRCS
    workspace.cpp 
    dbusinterface.cpp
    client.cpp 
@@ -135,7 +135,7 @@ set(kwin_KDEINIT_SRCS
 
 if(KWIN_BUILD_TABBOX)
     set(
-        kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
+        kwin_SRCS ${kwin_SRCS}
         tabbox/tabbox.cpp
         tabbox/clientmodel.cpp
         tabbox/declarative.cpp
@@ -148,34 +148,34 @@ endif()
 
 if(KWIN_BUILD_SCREENEDGES)
     set(
-        kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
+        kwin_SRCS ${kwin_SRCS}
         screenedge.cpp
     )
 endif()
 
 if(KWIN_BUILD_KAPPMENU)
     set(
-        kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS}
+        kwin_SRCS ${kwin_SRCS}
         appmenu.cpp
     )
 endif()
 
 if(KWIN_HAVE_EGL)
-    set(kwin_KDEINIT_SRCS ${kwin_KDEINIT_SRCS} eglonxbackend.cpp)
+    set(kwin_SRCS ${kwin_SRCS} eglonxbackend.cpp)
 endif()
 
-kde4_add_kcfg_files(kwin_KDEINIT_SRCS settings.kcfgc)
+kde4_add_kcfg_files(kwin_SRCS settings.kcfgc)
 
-qt4_add_dbus_adaptor( kwin_KDEINIT_SRCS org.kde.KWin.xml dbusinterface.h KWin::DBusInterface )
-qt4_add_dbus_adaptor( kwin_KDEINIT_SRCS org.kde.kwin.Compositing.xml composite.h KWin::Compositor )
-qt4_add_dbus_adaptor( kwin_KDEINIT_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl )
+qt4_add_dbus_adaptor( kwin_SRCS org.kde.KWin.xml dbusinterface.h KWin::DBusInterface )
+qt4_add_dbus_adaptor( kwin_SRCS org.kde.kwin.Compositing.xml composite.h KWin::Compositor )
+qt4_add_dbus_adaptor( kwin_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl )
 
-qt4_add_dbus_interface( kwin_KDEINIT_SRCS
+qt4_add_dbus_interface( kwin_SRCS
   ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml ksmserver_interface)
-qt4_add_dbus_interface( kwin_KDEINIT_SRCS
+qt4_add_dbus_interface( kwin_SRCS
     ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml screenlocker_interface)
 
-qt4_add_resources( kwin_KDEINIT_SRCS resources.qrc )
+qt4_add_resources( kwin_SRCS resources.qrc )
 
 ########### target link libraries ###############
 
@@ -241,38 +241,34 @@ set(kwinLibs
     ${kwin_OPENGL_LIBS}
 )
 
-kde4_add_kdeinit_executable( kwin ${kwin_KDEINIT_SRCS})
+kde4_add_executable( kwin ${kwin_SRCS})
 
-target_link_libraries(kdeinit_kwin ${kwinLibs})
+target_link_libraries(kwin ${kwinLibs})
 set_target_properties(kwin PROPERTIES OUTPUT_NAME ${KWIN_NAME})
-set_target_properties(kdeinit_kwin PROPERTIES OUTPUT_NAME kdeinit4_${KWIN_NAME})
 
 if(OPENGL_FOUND)
     if( KWIN_BUILD_OPENGL_1_COMPOSITING )
-        set_target_properties(kdeinit_kwin PROPERTIES COMPILE_FLAGS -DKWIN_HAVE_OPENGL_1)
+        set_target_properties(kwin PROPERTIES COMPILE_FLAGS -DKWIN_HAVE_OPENGL_1)
     endif()
   add_subdirectory(opengltest)
-  target_link_libraries(kdeinit_kwin kwinglutils ${OPENGL_gl_LIBRARY})
+  target_link_libraries(kwin kwinglutils ${OPENGL_gl_LIBRARY})
   # -ldl used by OpenGL code
   find_library(DL_LIBRARY dl)
   if (DL_LIBRARY)
-    target_link_libraries(kdeinit_kwin ${DL_LIBRARY})
+    target_link_libraries(kwin ${DL_LIBRARY})
   endif()
 elseif(OPENGLES_FOUND)
-  target_link_libraries(kdeinit_kwin ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
-  set_target_properties(kdeinit_kwin PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
+  target_link_libraries(kwin ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
+  set_target_properties(kwin PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
 endif()
 
-install(TARGETS kdeinit_kwin ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install(TARGETS kwin         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 if(OPENGLES_FOUND)
-  kde4_add_kdeinit_executable( kwin_gles ${kwin_KDEINIT_SRCS})
-  target_link_libraries(kdeinit_kwin_gles ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
-  set_target_properties(kdeinit_kwin_gles PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
+  kde4_add_executable( kwin_gles ${kwin_SRCS})
+  target_link_libraries(kwin_gles ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
+  set_target_properties(kwin_gles PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
   set_target_properties(kwin_gles PROPERTIES OUTPUT_NAME ${KWIN_NAME}_gles)
-  set_target_properties(kdeinit_kwin_gles PROPERTIES OUTPUT_NAME kdeinit4_${KWIN_NAME}_gles)
-  install(TARGETS kdeinit_kwin_gles ${INSTALL_TARGETS_DEFAULT_ARGS} )
   install(TARGETS kwin_gles         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 

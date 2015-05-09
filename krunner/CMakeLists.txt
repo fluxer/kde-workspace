@@ -50,21 +50,22 @@ set(krunner_SRCS
     ksystemactivitydialog.cpp
     startupid.cpp)
 
-kde4_add_kdeinit_executable(krunner ${krunner_SRCS})
+kde4_add_executable(krunner ${krunner_SRCS})
 
-target_link_libraries(kdeinit_krunner kworkspace  plasmagenericshell ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBRARIES} ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDEUI_LIBS}  ${KDE4_KCMUTILS_LIBS} )
-
-target_link_libraries(kdeinit_krunner processui  ${X11_Xrender_LIB} ${X11_LIBRARIES})
+target_link_libraries(krunner kworkspace  plasmagenericshell processui
+    ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBRARIES}
+    ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDEUI_LIBS}
+    ${KDE4_KCMUTILS_LIBS} ${X11_Xrender_LIB}
+    ${X11_LIBRARIES})
 
 if(X11_Xss_LIB)
-  target_link_libraries(kdeinit_krunner ${X11_Xss_LIB})
+  target_link_libraries(krunner ${X11_Xss_LIB})
 endif(X11_Xss_LIB)
 
 if(X11_Xcursor_FOUND)
-  target_link_libraries(kdeinit_krunner ${X11_Xcursor_LIB})
+  target_link_libraries(krunner ${X11_Xcursor_LIB})
 endif(X11_Xcursor_FOUND)
 
-install(TARGETS kdeinit_krunner ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install(TARGETS krunner         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES krunner.desktop  DESTINATION  ${AUTOSTART_INSTALL_DIR})

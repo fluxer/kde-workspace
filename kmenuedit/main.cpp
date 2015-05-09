@@ -54,7 +54,7 @@ public:
 };
 
 
-extern "C" int KDE_EXPORT kdemain( int argc, char **argv )
+int main( int argc, char **argv )
 {
     KAboutData aboutData("kmenuedit", 0, ki18n("KDE Menu Editor"),
                          version, ki18n(description), KAboutData::License_GPL,

@@ -28,8 +28,7 @@
 static const char description[] = I18N_NOOP( "Shell used to load Plasma widgets as stand-alone applications." );
 static const char version[] = "0.1";
 
-extern "C"
-KDE_EXPORT int kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
     KAboutData aboutData("plasma-windowed", 0, ki18n("Plasma Widgets shell"),
                          version, ki18n(description), KAboutData::License_GPL,

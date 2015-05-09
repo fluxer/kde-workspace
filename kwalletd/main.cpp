@@ -140,7 +140,7 @@ char* checkPamModule(int argc, char **argv)
     return hash;
 }
 
-extern "C" KDE_EXPORT int kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
     char *hash = NULL;
     if (getenv("PAM_KWALLET_LOGIN")) {

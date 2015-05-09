@@ -238,8 +238,7 @@ static int edit(Window wid, bool whole_app)
 
 } // namespace
 
-extern "C"
-KDE_EXPORT int kdemain(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
     KCmdLineArgs::init(argc, argv, "kwin_rules_dialog", "kcmkwinrules", ki18n("KWin"), "1.0" ,
                        ki18n("KWin helper utility"));

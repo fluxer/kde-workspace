@@ -40,7 +40,7 @@ kde4_add_ui_files( libsensordisplays_SRCS
    ${CMAKE_CURRENT_SOURCE_DIR}/SensorDisplayLib/SensorLoggerSettingsWidget.ui
 )
 
-set(ksysguard_KDEINIT_SRCS ${libsensordisplays_SRCS}
+set(ksysguard_SRCS ${libsensordisplays_SRCS}
    ksortfilterproxymodel.cpp
    SensorBrowser.cpp
    WorkSheet.cpp
@@ -52,11 +52,10 @@ set(ksysguard_KDEINIT_SRCS ${libsensordisplays_SRCS}
 
 
 
-kde4_add_kdeinit_executable(ksysguard ${ksysguard_KDEINIT_SRCS})
+kde4_add_executable(ksysguard ${ksysguard_SRCS})
 
-target_link_libraries(kdeinit_ksysguard processui ksignalplotter ${KDE4_KIO_LIBS} ksgrd)
+target_link_libraries(ksysguard processui ksignalplotter ${KDE4_KIO_LIBS} ksgrd)
 
-install(TARGETS kdeinit_ksysguard ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(TARGETS ksysguard         ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############

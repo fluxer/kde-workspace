@@ -20,7 +20,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/backend)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=285)
 
-set(kwalletd_KDEINIT_SRCS
+set(kwalletd_SRCS
    main.cpp
    kbetterthankdialog.cpp
    kwalletd.cpp
@@ -29,7 +29,7 @@ set(kwalletd_KDEINIT_SRCS
    kwalletsessionstore.cpp
 )
 
-kde4_add_ui_files(kwalletd_KDEINIT_SRCS
+kde4_add_ui_files(kwalletd_SRCS
    kbetterthankdialogbase.ui
    kwalletwizardpageexplanation.ui
    kwalletwizardpageintro.ui
@@ -38,11 +38,11 @@ kde4_add_ui_files(kwalletd_KDEINIT_SRCS
 )
 
 if (GPGME_FOUND AND QGPGME_FOUND)
-    set(kwalletd_KDEINIT_SRCS
-        ${kwalletd_KDEINIT_SRCS}
+    set(kwalletd_SRCS
+        ${kwalletd_SRCS}
         knewwalletdialog.cpp
     )
-    kde4_add_ui_files(kwalletd_KDEINIT_SRCS
+    kde4_add_ui_files(kwalletd_SRCS
         kwalletwizardpagepasswordgpg.ui
         kwalletwizardpagegpgkey.ui
         knewwalletdialogintro.ui
@@ -52,18 +52,15 @@ endif(GPGME_FOUND AND QGPGME_FOUND)
 
 find_file(kwallet_xml org.kde.KWallet.xml HINTS ${KDE4_DBUS_INTERFACES_DIR} )
 
-qt4_add_dbus_adaptor( kwalletd_KDEINIT_SRCS ${kwallet_xml} kwalletd.h KWalletD )
+qt4_add_dbus_adaptor( kwalletd_SRCS ${kwallet_xml} kwalletd.h KWalletD )
 
-kde4_add_kdeinit_executable( kwalletd NOGUI ${kwalletd_KDEINIT_SRCS} )
+kde4_add_executable( kwalletd NOGUI ${kwalletd_SRCS} )
 
-target_link_libraries(kdeinit_kwalletd ${KDE4_KDEUI_LIBS} kwalletbackend )
+target_link_libraries(kwalletd ${KDE4_KDEUI_LIBS} kwalletbackend )
 if (GPGME_FOUND AND QGPGME_FOUND)
-    target_link_libraries(kdeinit_kwalletd ${QGPGME_LIBRARIES} )
+    target_link_libraries(kwalletd ${QGPGME_LIBRARIES} )
 endif(GPGME_FOUND AND QGPGME_FOUND)
 
-install(TARGETS kdeinit_kwalletd  ${INSTALL_TARGETS_DEFAULT_ARGS})
-
-target_link_libraries(kwalletd kdeinit_kwalletd)
 install(TARGETS kwalletd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############

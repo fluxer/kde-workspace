@@ -31,15 +31,13 @@ if ( Q_WS_QWS )
   set( kglobalaccel_SRCS ${kglobalaccel_SRCS} kglobalaccel_qws.cpp )
 endif ( Q_WS_QWS )
 
-kde4_add_kdeinit_executable( kglobalaccel NOGUI ${kglobalaccel_SRCS} )
-target_link_libraries(kdeinit_kglobalaccel ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
+kde4_add_executable( kglobalaccel NOGUI ${kglobalaccel_SRCS} )
+target_link_libraries(kglobalaccel ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 if(Q_WS_MAC)
-   target_link_libraries(kdeinit_kglobalaccel ${CARBON_LIBRARY})
+   target_link_libraries(kglobalaccel ${CARBON_LIBRARY})
 endif(Q_WS_MAC)
-target_link_libraries(kglobalaccel kdeinit_kglobalaccel)
 
 # Install application and configuration
-install( TARGETS kdeinit_kglobalaccel ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( TARGETS kglobalaccel ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # install( FILES kglobalaccel.desktop DESTINATION ${AUTOSTART_INSTALL_DIR})
 install( FILES kglobalaccel.desktop  DESTINATION ${SERVICES_INSTALL_DIR})

@@ -234,7 +234,7 @@ void KCMInit::runPhase2()
   qApp->exit( 0 );
 }
 
-extern "C" KDE_EXPORT int kdemain(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   // kdeinit waits for kcminit to finish, but during KDE startup
   // only important kcm's are started very early in the login process,

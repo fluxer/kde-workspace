@@ -168,7 +168,7 @@ void KCMShell::appExit(const QString &appId, const QString &oldName, const QStri
     }
 }
 
-extern "C" KDE_EXPORT int kdemain(int _argc, char *_argv[])
+int main(int _argc, char *_argv[])
 {
     KAboutData aboutData( "kcmshell", 0, ki18n("KDE Control Module"),
                           KDE_VERSION_STRING,

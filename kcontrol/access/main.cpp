@@ -4,7 +4,8 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
-extern "C" KDE_EXPORT int kdemain(int argc, char * argv[] )
+
+int main(int argc, char * argv[] )
 {
   KAboutData about(I18N_NOOP("kaccess"), 0, ki18n("KDE Accessibility Tool"),
                   0, KLocalizedString(), KAboutData::License_GPL,

@@ -228,7 +228,7 @@ void sanity_check( int argc, char* argv[], KAboutData* aboutDataPtr )
     }
 }
 
-extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
+int main( int argc, char* argv[] )
 {
     KAboutData aboutData( "ksmserver", 0, ki18n("The KDE Session Manager"),
        version, ki18n(description), KAboutData::License_BSD,
@@ -290,7 +290,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )
 #else
     KSMServer *server = new KSMServer( wm, only_local );
 #endif
-    
+
     // for the KDE-already-running check in startkde
     KSelectionOwner kde_running( "_KDE_RUNNING", 0 );
     kde_running.claim( false );
