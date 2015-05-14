@@ -8,7 +8,6 @@ set(HOMERUN_VERSION "1.2.5")
 # Dependencies
 find_package(KDE4 4.10.0 REQUIRED)
 include(KDE4Defaults)
-find_package(KDE4Workspace REQUIRED)
 find_package(KDeclarative REQUIRED)
 find_package(LibKonq REQUIRED)
 macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)
