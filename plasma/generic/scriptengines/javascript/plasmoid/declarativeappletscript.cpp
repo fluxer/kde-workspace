@@ -51,7 +51,6 @@
 
 #include "common/scriptenv.h"
 #include "declarative/declarativeitemcontainer_p.h"
-#include "declarative/packageaccessmanagerfactory.h"
 #include "simplebindings/bytearrayclass.h"
 //not pretty but only way to avoid a double Q_DECLARE_METATYPE(QVariant) in dataengine.h
 #define DECLARATIVE_BINDING
@@ -72,8 +71,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
       m_toolBoxWidget(0),
       m_interface(0),
       m_engine(0),
-      m_env(0),
-      m_auth(this)
+      m_env(0)
 {
     Q_UNUSED(args);
 }
@@ -92,14 +90,6 @@ bool DeclarativeAppletScript::init()
     //make possible to import extensions from the package
     //FIXME: probably to be removed, would make possible to use native code from within the package :/
     //m_declarativeWidget->engine()->addImportPath(package()->path()+"/contents/imports");
-
-    //use our own custom network access manager that will access Plasma packages and to manage security (i.e. deny access to remote stuff when the proper extension isn't enabled
-    QDeclarativeEngine *engine = m_declarativeWidget->engine();
-    QDeclarativeNetworkAccessManagerFactory *factory = engine->networkAccessManagerFactory();
-    engine->setNetworkAccessManagerFactory(0);
-    delete factory;
-    engine->setNetworkAccessManagerFactory(new PackageAccessManagerFactory(package(), &m_auth));
-
     m_declarativeWidget->setQmlPath(mainScript());
 
     if (!m_declarativeWidget->engine() || !m_declarativeWidget->engine()->rootContext() || !m_declarativeWidget->engine()->rootContext()->isValid() || m_declarativeWidget->mainComponent()->isError()) {
@@ -493,7 +483,7 @@ void DeclarativeAppletScript::setupObjects()
     global.setProperty("FrameSvg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaFrameSvg));
     global.setProperty("ExtenderItem", m_engine->newFunction(DeclarativeAppletScript::newPlasmaExtenderItem));
 
-    if (!m_env->importExtensions(description(), m_self, m_auth)) {
+    if (!m_env->importExtensions(description(), m_self)) {
         return;
     }
 

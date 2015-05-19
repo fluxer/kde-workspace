@@ -24,7 +24,6 @@
 #include <Plasma/Package>
 
 #include "javascriptservice.h"
-#include "common/authorization.h"
 #include "common/scriptenv.h"
 #include "simplebindings/i18n.h"
 #include "simplebindings/dataengine.h"
@@ -62,8 +61,7 @@ bool JavaScriptDataEngine::init()
 
     registerNonGuiMetaTypes(m_qscriptEngine);
 
-    Authorization auth;
-    if (!m_env->importExtensions(description(), m_iface, auth)) {
+    if (!m_env->importExtensions(description(), m_iface)) {
         return false;
     }
 

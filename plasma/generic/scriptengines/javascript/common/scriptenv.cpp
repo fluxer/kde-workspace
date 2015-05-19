@@ -189,7 +189,7 @@ bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &o
     return false;
 }
 
-bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &auth)
+bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj)
 {
     QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
     if (!requiredExtensions.isEmpty()) {
@@ -202,14 +202,8 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
             continue;
         }
 
-        if (!auth.authorizeRequiredExtension(extension)) {
-            return false;
-        }
-
         if (!importBuiltinExtension(extension, obj)) {
-            if (auth.authorizeExternalExtensions()) {
-                m_engine->importExtension(extension);
-            }
+            m_engine->importExtension(extension);
         }
 
         if (checkForErrors(true)) {
@@ -231,14 +225,8 @@ bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj, Aut
             continue;
         }
 
-        if (!auth.authorizeOptionalExtension(extension)) {
-            continue;
-        }
-
         if (!importBuiltinExtension(extension, obj)) {
-            if (auth.authorizeExternalExtensions()) {
-                m_engine->importExtension(extension);
-            }
+            m_engine->importExtension(extension);
         }
 
         if (!checkForErrors(false)) {

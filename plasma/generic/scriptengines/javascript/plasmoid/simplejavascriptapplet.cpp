@@ -57,7 +57,6 @@
 
 #define USE_JS_SCRIPTENGINE
 
-#include "appletauthorization.h"
 #include "appletinterface.h"
 #include "scriptenv.h"
 #include "simplebindings/animationgroup.h"
@@ -310,8 +309,7 @@ bool SimpleJavaScriptApplet::init()
     KGlobal::locale()->insertCatalog("plasma_applet_" % description().pluginName());
     setupObjects();
 
-    AppletAuthorization auth(this);
-    if (!m_env->importExtensions(description(), m_self, auth)) {
+    if (!m_env->importExtensions(description(), m_self)) {
         return false;
     }
 

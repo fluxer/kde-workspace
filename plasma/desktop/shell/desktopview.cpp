@@ -24,7 +24,6 @@
 #include <QWheelEvent>
 #include <QCoreApplication>
 
-#include <KAuthorized>
 #include <KMenu>
 #include <KRun>
 #include <KToggleAction>

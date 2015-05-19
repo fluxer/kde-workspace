@@ -25,7 +25,7 @@ import org.kde.qtextracomponents 0.1
 import org.kde.plasma.extras 0.1 as PlasmaExtras
 import org.kde.locale 0.1 as KLocale
 
-import "plasmapackage:/ui/uiproperties.js" as UiProperties
+import "uiproperties.js" as UiProperties
 
 
 MouseEventListener {

@@ -176,10 +176,6 @@ QAction *ContextMenu::action(const QString &name)
         if (KAuthorized::authorizeKAction("logout")) {
             return m_logoutAction;
         }
-    } else if (name == "manage activities") {
-        if (c->corona()) {
-            return c->corona()->action("manage activities");
-        }
     } else {
         //FIXME: remove action: make removal of current activity possible
         return c->action(name);

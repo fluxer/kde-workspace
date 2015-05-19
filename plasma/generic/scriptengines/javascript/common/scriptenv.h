@@ -25,8 +25,6 @@
 
 #include <KPluginInfo>
 
-#include "authorization.h"
-
 namespace Plasma
 {
     class Package;
@@ -61,7 +59,7 @@ public:
     static void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
     bool include(const QString &path);
 
-    bool importExtensions(const KPluginInfo &info, QScriptValue &obj, Authorization &authorizer);
+    bool importExtensions(const KPluginInfo &info, QScriptValue &obj);
     QSet<QString> loadedExtensions() const;
 
     bool checkForErrors(bool fatal);

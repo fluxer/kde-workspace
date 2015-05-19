@@ -14,7 +14,6 @@ set(simple_javascript_engine_SRCS
     declarative/toolboxproxy.cpp
     declarative/appletcontainer.cpp
     plasmoid/abstractjsappletscript.cpp
-    plasmoid/appletauthorization.cpp
     plasmoid/jsappletinterface.cpp
     plasmoid/simplejavascriptapplet.cpp
     plasmoid/themedsvg.cpp
@@ -134,10 +133,7 @@ set(declarative_appletscript_SRCS
     declarative/toolboxproxy.cpp
     declarative/appletcontainer.cpp
     declarative/declarativeitemcontainer.cpp
-    declarative/packageaccessmanager.cpp
-    declarative/packageaccessmanagerfactory.cpp
     plasmoid/abstractjsappletscript.cpp
-    plasmoid/appletauthorization.cpp
     plasmoid/appletinterface.cpp
     plasmoid/declarativeappletscript.cpp
     plasmoid/themedsvg.cpp

@@ -22,7 +22,7 @@
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as Components
-import "plasmapackage:/code/logic.js" as Logic
+import "../code/logic.js" as Logic
 
 ListView {
     id: view

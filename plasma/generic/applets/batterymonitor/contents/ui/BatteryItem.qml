@@ -23,7 +23,7 @@ import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as Components
 import org.kde.qtextracomponents 0.1
 import org.kde.locale 0.1 as KLocale
-import "plasmapackage:/code/logic.js" as Logic
+import "../code/logic.js" as Logic
 
 Item {
     id: batteryItem

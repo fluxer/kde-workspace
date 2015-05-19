@@ -26,7 +26,6 @@
 #include <Plasma/Package>
 #include <Plasma/QueryMatch>
 
-#include "authorization.h"
 #include "scriptenv.h"
 
 typedef const Plasma::RunnerContext* ConstRunnerContextStar;
@@ -61,8 +60,7 @@ bool JavaScriptRunner::init()
 {
     setupObjects();
 
-    Authorization auth;
-    if (!m_env->importExtensions(description(), m_self, auth)) {
+    if (!m_env->importExtensions(description(), m_self)) {
         return false;
     }
 

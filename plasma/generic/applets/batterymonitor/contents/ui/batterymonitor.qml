@@ -21,7 +21,7 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
-import "plasmapackage:/code/logic.js" as Logic
+import "../code/logic.js" as Logic
 
 Item {
     id: batterymonitor
