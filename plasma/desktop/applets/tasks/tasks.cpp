@@ -30,7 +30,6 @@
 #include <Plasma/Package>
 #include <Plasma/WindowEffects>
 
-#include <KAuthorized>
 #include <KConfigDialog>
 
 #include <taskmanager/groupmanager.h>
@@ -216,7 +215,7 @@ void Tasks::itemContextMenu(int id)
         }
     }
 
-    if (!KAuthorized::authorizeKAction("kwin_rmb") || !item || !declItem) {
+    if (!item || !declItem) {
         return;
     }
 

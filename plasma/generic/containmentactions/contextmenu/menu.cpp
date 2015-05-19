@@ -165,9 +165,7 @@ QAction *ContextMenu::action(const QString &name)
             return c->corona()->action("add panel");
         }
     } else if (name == "_run_command") {
-        if (KAuthorized::authorizeKAction("run_command")) {
-            return m_runCommandAction;
-        }
+        return m_runCommandAction;
     } else if (name == "_lock_screen") {
         if (KAuthorized::authorizeKAction("lock_screen")) {
             return m_lockScreenAction;
@@ -185,10 +183,6 @@ QAction *ContextMenu::action(const QString &name)
 
 void ContextMenu::runCommand()
 {
-    if (!KAuthorized::authorizeKAction("run_command")) {
-        return;
-    }
-
     QString interface("org.kde.krunner");
     org::kde::krunner::App krunner(interface, "/App", QDBusConnection::sessionBus());
     krunner.display();

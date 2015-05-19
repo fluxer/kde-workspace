@@ -24,7 +24,6 @@
 #include <QTimer>
 
 // KDE
-#include <KAuthorized>
 #include <KDebug>
 #include <KJob>
 #include <KService>
@@ -117,11 +116,9 @@ bool LeaveItemHandler::openUrl(const KUrl& url)
 
 void LeaveItemHandler::runCommand()
 {
-    if (KAuthorized::authorize("run_command")) {
-        QString interface("org.kde.krunner");
-        org::kde::krunner::App krunner(interface, "/App", QDBusConnection::sessionBus());
-        krunner.display();
-    }
+    QString interface("org.kde.krunner");
+    org::kde::krunner::App krunner(interface, "/App", QDBusConnection::sessionBus());
+    krunner.display();
 }
 
 void LeaveItemHandler::logout()

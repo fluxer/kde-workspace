@@ -64,7 +64,6 @@ private:
 
     QTimer *m_reactivateTimer;
 
-    bool m_forbidden : 1;
     bool m_openGLVisual : 1;
 };
 

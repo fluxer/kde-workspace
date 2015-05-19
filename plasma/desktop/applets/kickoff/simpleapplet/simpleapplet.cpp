@@ -39,7 +39,6 @@
 
 // KDE Libs
 #include <KActionCollection>
-#include <KAuthorized>
 #include <KBookmarkMenu>
 #include <KCModuleInfo>
 #include <KComboBox>
@@ -302,9 +301,7 @@ MenuLauncherApplet::MenuLauncherApplet(QObject *parent, const QVariantList &args
         }
         default: { //Default configuration
             d->viewtypes << "RecentlyUsedApplications" << "Applications" << "Favorites";
-            if (KAuthorized::authorize("run_command")) {
-                d->viewtypes << "RunCommand";
-            }
+            d->viewtypes << "RunCommand";
             d->viewtypes << "Leave";
             d->iconname = "start-here-kde";
         }
@@ -337,7 +334,7 @@ void MenuLauncherApplet::init()
     Kickoff::UrlItemLauncher::addGlobalHandler(Kickoff::UrlItemLauncher::ExtensionHandler, "desktop", new Kickoff::ServiceItemHandler);
     Kickoff::UrlItemLauncher::addGlobalHandler(Kickoff::UrlItemLauncher::ProtocolHandler, "leave", new Kickoff::LeaveItemHandler);
 
-    if (KService::serviceByStorageId("kde4-kmenuedit.desktop") && KAuthorized::authorize("action/menuedit")) {
+    if (KService::serviceByStorageId("kde4-kmenuedit.desktop")) {
         QAction* menueditor = new QAction(i18n("Edit Applications..."), this);
         d->actions.append(menueditor);
         connect(menueditor, SIGNAL(triggered(bool)), this, SLOT(startMenuEditor()));
@@ -744,9 +741,7 @@ void MenuLauncherApplet::showMenu(bool pressed)
                     }
                 }
             } else if(vtname == "RunCommand") {
-                if (KAuthorized::authorize("run_command")) {
-                    menuview->addAction(KIcon(d->viewIcon(RunCommand)), d->viewText(RunCommand))->setData(KUrl("leave:/run"));
-                }
+                menuview->addAction(KIcon(d->viewIcon(RunCommand)), d->viewText(RunCommand))->setData(KUrl("leave:/run"));
             } else if(vtname == "SwitchUser") {
                 menuview->addAction(KIcon(d->viewIcon(SwitchUser)), d->viewText(SwitchUser))->setData(KUrl("leave:/switch"));
             } else if(vtname == "SaveSession") {

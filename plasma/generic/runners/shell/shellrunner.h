@@ -49,7 +49,6 @@ class ShellRunner : public Plasma::AbstractRunner
     private:
         QString m_username;
         QString m_password;
-        bool m_enabled;
         bool m_inTerminal;
         bool m_asOtherUser;
 };

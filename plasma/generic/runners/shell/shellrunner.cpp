@@ -21,7 +21,6 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include <KAuthorized>
 #include <KDebug>
 #ifdef Q_OS_UNIX
 #include <KDE/SuProcess>
@@ -45,7 +44,6 @@ ShellRunner::ShellRunner(QObject *parent, const QVariantList &args)
     setObjectName( QLatin1String("Command" ));
     setPriority(AbstractRunner::HighestPriority);
     setHasRunOptions(true);
-    m_enabled = KAuthorized::authorizeKAction("run_command") && KAuthorized::authorizeKAction("shell_access");
     setIgnoredTypes(Plasma::RunnerContext::Directory | Plasma::RunnerContext::File |
                     Plasma::RunnerContext::NetworkLocation | Plasma::RunnerContext::UnknownType |
                     Plasma::RunnerContext::Help);
@@ -59,10 +57,6 @@ ShellRunner::~ShellRunner()
 
 void ShellRunner::match(Plasma::RunnerContext &context)
 {
-    if (!m_enabled) {
-        return;
-    }
-
     if (context.type() == Plasma::RunnerContext::Executable ||
         context.type() == Plasma::RunnerContext::ShellCommand)  {
         const QString term = context.query();
@@ -83,52 +77,47 @@ void ShellRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
     // filter match's id to remove runner's name
     // as this is the command we want to run
 
-    if (m_enabled) {
-#ifdef Q_OS_UNIX
-        //kDebug() << m_asOtherUser << m_username << m_password;
-        if (m_asOtherUser && !m_username.isEmpty()) {
-            //TODO: provide some user feedback on failure
-            QString exec;
-            QString args;
-            if (m_inTerminal) {
-                // we have to reimplement this from KToolInvocation because we need to use KDESu
-                KConfigGroup confGroup( KGlobal::config(), "General" );
-                exec = confGroup.readPathEntry("TerminalApplication", "konsole");
-                if (!exec.isEmpty()) {
-                    if (exec == "konsole") {
-                        args += " --noclose";
-                    } else if (exec == "xterm") {
-                        args += " -hold";
-                    }
-
-                    args += " -e " + context.query();
-                }
-            } else {
-                const QStringList commandLine = KShell::splitArgs(context.query(), KShell::TildeExpand);
-                if (!commandLine.isEmpty()) {
-                    exec = commandLine.at(0);
-                }
-
-                args = context.query().right(context.query().size() - commandLine.at(0).length());
-            }
-
-            if (!exec.isEmpty()) {
-                exec = KStandardDirs::findExe(exec);
-                exec.append(args);
-                if (!exec.isEmpty()) {
-                    KDESu::SuProcess client(m_username.toLocal8Bit(), exec.toLocal8Bit());
-                    const QByteArray password = m_password.toLocal8Bit();
-                    //TODO handle errors like wrong password via KNotifications in 4.7
-                    client.exec(password.constData());
-                }
-            }
-        } else
-#endif
+    //kDebug() << m_asOtherUser << m_username << m_password;
+    if (m_asOtherUser && !m_username.isEmpty()) {
+        //TODO: provide some user feedback on failure
+        QString exec;
+        QString args;
         if (m_inTerminal) {
-            KToolInvocation::invokeTerminal(context.query());
+            // we have to reimplement this from KToolInvocation because we need to use KDESu
+            KConfigGroup confGroup( KGlobal::config(), "General" );
+            exec = confGroup.readPathEntry("TerminalApplication", "konsole");
+            if (!exec.isEmpty()) {
+                if (exec == "konsole") {
+                    args += " --noclose";
+                } else if (exec == "xterm") {
+                    args += " -hold";
+                }
+
+                args += " -e " + context.query();
+            }
         } else {
-            KRun::runCommand(context.query(), NULL);
+            const QStringList commandLine = KShell::splitArgs(context.query(), KShell::TildeExpand);
+            if (!commandLine.isEmpty()) {
+                exec = commandLine.at(0);
+            }
+
+            args = context.query().right(context.query().size() - commandLine.at(0).length());
         }
+
+        if (!exec.isEmpty()) {
+            exec = KStandardDirs::findExe(exec);
+            exec.append(args);
+            if (!exec.isEmpty()) {
+                KDESu::SuProcess client(m_username.toLocal8Bit(), exec.toLocal8Bit());
+                const QByteArray password = m_password.toLocal8Bit();
+                //TODO handle errors like wrong password via KNotifications in 4.7
+                client.exec(password.constData());
+            }
+        }
+    } else if (m_inTerminal) {
+        KToolInvocation::invokeTerminal(context.query());
+    } else {
+        KRun::runCommand(context.query(), NULL);
     }
 
     // reset for the next run!

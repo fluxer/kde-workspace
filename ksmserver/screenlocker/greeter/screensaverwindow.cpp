@@ -34,7 +34,6 @@
 #include <kshell.h>
 #include <KService>
 #include <KServiceTypeTrader>
-#include <KAuthorized>
 #include <KDesktopFile>
 #include <KStandardDirs>
 
@@ -49,7 +48,6 @@ namespace ScreenLocker
 ScreenSaverWindow::ScreenSaverWindow(QWidget *parent)
     : QWidget(parent),
       m_startMousePos(-1, -1),
-      m_forbidden(false),
       m_openGLVisual(false)
 {
     setCursor(Qt::BlankCursor);
@@ -97,26 +95,13 @@ void ScreenSaverWindow::readSaver()
         }
         const QString file = KStandardDirs::locate("services", offers.first()->entryPath());
 
-        const bool opengl = KAuthorized::authorizeKAction(QLatin1String( "opengl_screensavers" ));
-        const bool manipulatescreen = KAuthorized::authorizeKAction(QLatin1String( "manipulatescreen_screensavers" ));
         KDesktopFile config( file );
         KConfigGroup desktopGroup = config.desktopGroup();
         foreach (const QString &type, desktopGroup.readEntry("X-KDE-Type").split(QLatin1Char(';'))) {
-            if (type == QLatin1String("ManipulateScreen")) {
-                if (!manipulatescreen) {
-                    kDebug() << "Screensaver is type ManipulateScreen and ManipulateScreen is forbidden";
-                    m_forbidden = true;
-                }
-            } else if (type == QLatin1String("OpenGL")) {
+            if (type == QLatin1String("OpenGL")) {
                 m_openGLVisual = true;
-                if (!opengl) {
-                    kDebug() << "Screensaver is type OpenGL and OpenGL is forbidden";
-                    m_forbidden = true;
-                }
             }
         }
-
-        kDebug() << "m_forbidden: " << (m_forbidden ? "true" : "false");
 
         if (config.hasActionGroup(QLatin1String( "InWindow" )))
         {
@@ -190,7 +175,7 @@ bool ScreenSaverWindow::startXScreenSaver()
     //QString m_saverExec("kannasaver.kss --window-id=%w");
     kDebug() << "Starting hack:" << m_saverExec;
 
-    if (m_saverExec.isEmpty() || m_forbidden) {
+    if (m_saverExec.isEmpty()) {
         return false;
     }
 

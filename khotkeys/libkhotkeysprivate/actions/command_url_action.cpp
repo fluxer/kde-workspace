@@ -20,7 +20,6 @@
 #include "actions/actions.h"
 #include "action_data/action_data.h"
 
-#include <KDE/KAuthorized>
 #include <KDE/KConfigGroup>
 #include <KDE/KDebug>
 #include <KDE/KRun>
@@ -115,8 +114,6 @@ void CommandUrlAction::execute()
             }
         case KUriFilterData::Executable:
             {
-            if (!KAuthorized::authorizeKAction("shell_access"))
-                return;
             if( !uri.hasArgsAndOptions())
                 {
                 KService::Ptr service = KService::serviceByDesktopName( cmd );
@@ -130,8 +127,6 @@ void CommandUrlAction::execute()
             }
         case KUriFilterData::Shell:
             {
-            if (!KAuthorized::authorizeKAction("shell_access"))
-                return;
             if( !KRun::runCommand(
                 cmd + ( uri.hasArgsAndOptions() ? uri.argsAndOptions() : "" ),
                 cmd, uri.iconName(), NULL )) {

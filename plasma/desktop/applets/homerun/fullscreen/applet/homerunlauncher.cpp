@@ -29,7 +29,6 @@
 #include <QDBusServiceWatcher>
 
 // KDE
-#include <KAuthorized>
 #include <KConfigDialog>
 #include <KProcess>
 #include <KRun>
@@ -57,7 +56,7 @@ HomerunLauncher::HomerunLauncher(QObject * parent, const QVariantList & args)
 
 void HomerunLauncher::init()
 {
-    if (KService::serviceByStorageId("kde4-kmenuedit.desktop") && KAuthorized::authorize("action/menuedit")) {
+    if (KService::serviceByStorageId("kde4-kmenuedit.desktop")) {
         QAction* menueditor = new QAction(i18n("Edit Applications..."), this);
         actions.append(menueditor);
         connect(menueditor, SIGNAL(triggered(bool)), this, SLOT(startMenuEditor()));

@@ -43,7 +43,6 @@
 #include <QVBoxLayout>
 
 #include <KAction>
-#include <KAuthorized>
 #include <KCrash>
 #include <KDebug>
 #include <KCmdLineArgs>
@@ -376,7 +375,7 @@ void PlasmaApp::dashboardClosed()
 
 void PlasmaApp::showInteractiveConsole()
 {
-    if (KGlobal::config()->isImmutable() || !KAuthorized::authorize("plasma-desktop/scripting_console")) {
+    if (KGlobal::config()->isImmutable()) {
         return;
     }
 
@@ -1037,10 +1036,6 @@ void PlasmaApp::prepareContainment(Plasma::Containment *containment)
                 containment->addToolBoxAction(action);
             }
         }
-    }
-
-    if (!KAuthorized::authorize("editable_desktop_icons")) {
-        containment->setImmutability(Plasma::SystemImmutable);
     }
 }
 

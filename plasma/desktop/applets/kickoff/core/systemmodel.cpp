@@ -25,7 +25,6 @@
 #include <QTimer>
 
 // KDE
-#include <KAuthorized>
 #include <KDebug>
 #include <KDiskFreeSpaceInfo>
 #include <KIcon>
@@ -158,11 +157,7 @@ int SystemModel::rowCount(const QModelIndex &parent) const
     } else if (!parent.parent().isValid()) {
         switch (parent.row()) {
         case APPLICATIONS_ROW:
-            if (KAuthorized::authorize("run_command")) {
-                return d->appsList.size() + 1;
-            } else {
-                return d->appsList.size();
-            }
+            return d->appsList.size() + 1;
             break;
         case BOOKMARKS_ROW:
             return d->placesModel->rowCount();

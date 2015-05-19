@@ -113,17 +113,15 @@ void KRunnerApp::initialize()
     m_actionCollection = new KActionCollection(this);
     KAction* a = 0;
 
-    if (KAuthorized::authorize(QLatin1String("run_command"))) {
-        a = m_actionCollection->addAction(QLatin1String("Run Command"));
-        a->setText(i18n("Run Command"));
-        a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::Key_F2));
-        connect(a, SIGNAL(triggered(bool)), SLOT(displayOrHide()));
+    a = m_actionCollection->addAction(QLatin1String("Run Command"));
+    a->setText(i18n("Run Command"));
+    a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::Key_F2));
+    connect(a, SIGNAL(triggered(bool)), SLOT(displayOrHide()));
 
-        a = m_actionCollection->addAction(QLatin1String("Run Command on clipboard contents"));
-        a->setText(i18n("Run Command on clipboard contents"));
-        a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_F2));
-        connect(a, SIGNAL(triggered(bool)), SLOT(displayWithClipboardContents()));
-    }
+    a = m_actionCollection->addAction(QLatin1String("Run Command on clipboard contents"));
+    a->setText(i18n("Run Command on clipboard contents"));
+    a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::SHIFT+Qt::Key_F2));
+    connect(a, SIGNAL(triggered(bool)), SLOT(displayWithClipboardContents()));
 
     a = m_actionCollection->addAction(QLatin1String("Show System Activity"));
     a->setText(i18n("Show System Activity"));
@@ -138,9 +136,6 @@ void KRunnerApp::initialize()
     }
 
     //Setup the interface after we have set up the actions
-    //TODO: if !KAuthorized::authorize("run_comand") (and !"switch_user" i suppose?)
-    //      then we probably don't need the interface at all. would be another place
-    //      for some small improvements in footprint in that case
     switch (KRunnerSettings::interface()) {
         default:
         case KRunnerSettings::EnumInterface::CommandOriented:
@@ -163,19 +158,17 @@ void KRunnerApp::initialize()
 
 
     m_actionCollection->readSettings();
-    if (KAuthorized::authorize(QLatin1String("run_command"))) {
-        //m_runnerManager->setAllowedRunners(QStringList() << "shell");
-        m_runnerManager->reloadConfiguration(); // pre-load the runners
+    //m_runnerManager->setAllowedRunners(QStringList() << "shell");
+    m_runnerManager->reloadConfiguration(); // pre-load the runners
 
-        // Single runner mode actions shortcuts
+    // Single runner mode actions shortcuts
 
-        foreach (const QString &runnerId, m_runnerManager->singleModeAdvertisedRunnerIds()) {
-            a = m_actionCollection->addAction(runnerId);
-            a->setText(i18nc("Run krunner restricting the search only to runner %1", "Run Command (runner \"%1\" only)",
-                       m_runnerManager->runnerName(runnerId)));
-            a->setGlobalShortcut(KShortcut());
-            connect(a, SIGNAL(triggered(bool)), SLOT(singleRunnerModeActionTriggered()));
-        }
+    foreach (const QString &runnerId, m_runnerManager->singleModeAdvertisedRunnerIds()) {
+        a = m_actionCollection->addAction(runnerId);
+        a->setText(i18nc("Run krunner restricting the search only to runner %1", "Run Command (runner \"%1\" only)",
+                    m_runnerManager->runnerName(runnerId)));
+        a->setGlobalShortcut(KShortcut());
+        connect(a, SIGNAL(triggered(bool)), SLOT(singleRunnerModeActionTriggered()));
     }
 }
 
@@ -189,10 +182,6 @@ void KRunnerApp::singleRunnerModeActionTriggered()
 
 void KRunnerApp::querySingleRunner(const QString& runnerId, const QString &term)
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        return;
-    }
-
     m_runnerManager->setSingleModeRunnerId(runnerId);
     m_runnerManager->setSingleMode(!runnerId.isEmpty());
 
@@ -248,20 +237,12 @@ void KRunnerApp::showTaskManagerWithFilter(const QString &filterText)
 
 void KRunnerApp::display()
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        return;
-    }
-
     m_runnerManager->setSingleMode(false);
     m_interface->display();
 }
 
 void KRunnerApp::displaySingleRunner(const QString &runnerId)
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        return;
-    }
-
     m_runnerManager->setSingleModeRunnerId(runnerId);
     m_runnerManager->setSingleMode(!runnerId.isEmpty());
     m_interface->display();
@@ -269,11 +250,6 @@ void KRunnerApp::displaySingleRunner(const QString &runnerId)
 
 void KRunnerApp::displayOrHide()
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        m_interface->hide();
-        return;
-    }
-
     if (!m_interface->isVisible()) {
         m_runnerManager->setSingleMode(false);
     }
@@ -293,19 +269,11 @@ void KRunnerApp::displayOrHide()
 
 void KRunnerApp::query(const QString &term)
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        return;
-    }
-
     m_interface->display(term);
 }
 
 void KRunnerApp::displayWithClipboardContents()
 {
-    if (!KAuthorized::authorize(QLatin1String("run_command"))) {
-        return;
-    }
-
     QString clipboardData = QApplication::clipboard()->text(QClipboard::Selection);
     m_interface->display(clipboardData);
 }
