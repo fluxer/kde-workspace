@@ -26,8 +26,8 @@
 #include "action_data/action_data_group.h"
 #include "action_data/simple_action_data.h"
 
-#include "KDE/KLocale"
-#include "KDE/KDebug"
+#include <KLocale>
+#include <KDebug>
 
 #include <QtGui/QContextMenuEvent>
 

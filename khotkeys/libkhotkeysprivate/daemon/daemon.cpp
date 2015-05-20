@@ -26,8 +26,8 @@
 
 #include <KConfigGroup>
 #include <KConfig>
-#include "KDE/KDebug"
-#include "KDE/KLocale"
+#include <KDebug>
+#include <KLocale>
 
 
 namespace KHotKeys { namespace Daemon {

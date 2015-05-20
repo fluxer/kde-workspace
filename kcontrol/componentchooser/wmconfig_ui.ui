@@ -112,12 +112,12 @@
    <customwidget>
      <class>KComboBox</class>
      <extends>QComboBox</extends>
-     <header location="global">KDE/KComboBox</header>
+     <header location="global">KComboBox</header>
    </customwidget>
    <customwidget>
      <class>KPushButton</class>
      <extends>QPushButton</extends>
-     <header location="global">KDE/KPushButton</header>
+     <header location="global">KPushButton</header>
    </customwidget>
  </customwidgets>
  <resources/>
