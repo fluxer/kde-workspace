@@ -30,8 +30,8 @@
 #include <QX11Info>
 #include <fixx11h.h>
 
-#include <KDE/KAction>
-#include <KDE/KDebug>
+#include <KAction>
+#include <KDebug>
 
 #include <QtCore/QUuid>
 #include <kkeyserver.h>

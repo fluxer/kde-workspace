@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kdecorationfactory.h>
 
 #include <kglobal.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <stdlib.h>
 #include <QPixmap>
 

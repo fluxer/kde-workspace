@@ -40,9 +40,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #endif
 #include "workspace.h"
 // KDE
-#include <KDE/KIconLoader>
-#include <KDE/KStandardDirs>
-#include <KDE/KWindowSystem>
+#include <KIconLoader>
+#include <KStandardDirs>
+#include <KWindowSystem>
 // Qt
 #include <QApplication>
 #include <QProcess>

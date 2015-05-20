@@ -20,8 +20,8 @@
 #include "windows_handler.h"
 #include "windows_helper/window_selection_list.h"
 
-#include <KDE/KConfigGroup>
-#include <KDE/KDebug>
+#include <KConfigGroup>
+#include <KDebug>
 
 #ifdef Q_WS_X11
 // Has to be behind all qt related stuff. Else the build fails miserably

@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef LAUNCHER_PROPERTIES_H
 #define LAUNCHER_PROPERTIES_H
 
-#include <KDE/KDialog>
+#include <KDialog>
 #include "ui_launcherproperties.h"
 
 namespace TaskManager

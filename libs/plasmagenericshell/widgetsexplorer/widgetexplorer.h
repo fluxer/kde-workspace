@@ -24,7 +24,7 @@
 
 #include <QtGui>
 
-#include <KDE/KDialog>
+#include <KDialog>
 
 #include <plasma/framesvg.h>
 

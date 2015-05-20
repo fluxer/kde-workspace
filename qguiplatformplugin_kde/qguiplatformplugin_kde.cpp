@@ -18,15 +18,15 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <KDE/KStandardDirs>
-#include <KDE/KGlobal>
-#include <KDE/KComponentData>
-#include <KDE/KGlobalSettings>
-#include <KDE/KStyle>
-#include <KDE/KConfigGroup>
-#include <KDE/KIcon>
-#include <KDE/KFileDialog>
-#include <KDE/KColorDialog>
+#include <KStandardDirs>
+#include <KGlobal>
+#include <KComponentData>
+#include <KGlobalSettings>
+#include <KStyle>
+#include <KConfigGroup>
+#include <KIcon>
+#include <KFileDialog>
+#include <KColorDialog>
 #include <QtCore/QHash>
 #include <QtCore/QTimer>
 #include <QtGui/QFileDialog>

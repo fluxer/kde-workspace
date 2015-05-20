@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kwinglplatform.h>
 
 #include <kwineffects.h>
-#include <KDE/KGlobalSettings>
+#include <KGlobalSettings>
 
 #include <qmath.h>
 #include <cmath>

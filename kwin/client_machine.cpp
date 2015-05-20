@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KWin
 #include "utils.h"
 // KDE
-#include <KDE/KDebug>
+#include <KDebug>
 // Qt
 #include <QtConcurrentRun>
 #include <QFutureWatcher>

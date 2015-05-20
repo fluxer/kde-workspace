@@ -29,10 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kdebug.h>
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
+#include <KGlobal>
+#include <KStandardDirs>
 #include <QVector2D>
 
 #include <kmessagebox.h>

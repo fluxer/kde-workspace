@@ -30,9 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <xcb/render.h>
 #endif
 
-#include <KDE/KAction>
-#include <KDE/KActionCollection>
-#include <KDE/KConfigGroup>
+#include <KAction>
+#include <KActionCollection>
+#include <KConfigGroup>
 
 #include <math.h>
 

@@ -31,7 +31,7 @@
 #include <kwindowsystem.h>
 #include <kiconloader.h>
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kvbox.h>
 

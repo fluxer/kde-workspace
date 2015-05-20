@@ -25,7 +25,7 @@
 #include <kpushbutton.h>
 #include <QLabel>
 #include <kwindowsystem.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <QRegExp>
 
 

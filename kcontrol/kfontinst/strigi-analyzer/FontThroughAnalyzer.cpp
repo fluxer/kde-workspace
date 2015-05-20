@@ -34,7 +34,7 @@
 #include "FontEngine.h"
 #include <QtCore/QByteArray>
 #include <QtCore/QFile>
-#include <KDE/KIO/NetAccess>
+#include <KIO/NetAccess>
 #include <list>
 
 using namespace Strigi;

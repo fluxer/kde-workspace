@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
 // KDE
-#include <KDE/KDebug>
+#include <KDebug>
 
 namespace KWin
 {

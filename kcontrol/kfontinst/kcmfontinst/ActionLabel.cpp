@@ -22,7 +22,7 @@
  */
 
 #include "ActionLabel.h"
-#include <KDE/KIconLoader>
+#include <KIconLoader>
 #include <QtGui/QLabel>
 #include <QtCore/QTimer>
 #include <QtGui/QPixmap>

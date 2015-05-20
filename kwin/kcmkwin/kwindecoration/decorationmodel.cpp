@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDesktopFile>
 #include <KGlobalSettings>
 #include <KIcon>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
 #include <KPluginInfo>

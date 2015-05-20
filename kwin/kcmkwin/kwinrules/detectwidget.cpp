@@ -20,7 +20,7 @@
 #include "detectwidget.h"
 
 #include <kapplication.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kwindowsystem.h>
 #include <QLabel>

@@ -23,9 +23,9 @@
 
 #include <QtNetwork/QHostInfo>
 
-#include <KDE/KUrl>
-#include <KDE/KDebug>
-#include <KDE/KPluginFactory>
+#include <KUrl>
+#include <KDebug>
+#include <KPluginFactory>
 
 #define QL1S(x)   QLatin1String(x)
 #define QL1C(x)   QLatin1Char(x)

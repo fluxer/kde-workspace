@@ -42,9 +42,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 
-#include <KDE/KKeySequenceWidget>
-#include <KDE/KProcess>
-#include <KDE/KToolInvocation>
+#include <KKeySequenceWidget>
+#include <KProcess>
+#include <KToolInvocation>
 
 #include <X11/extensions/Xrandr.h>
 #ifndef KWIN_NO_XF86VM
@@ -56,12 +56,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPushButton>
 
 #include <kglobalsettings.h>
-#include <KDE/KIcon>
+#include <KIcon>
 #include <kiconloader.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kconfig.h>
-#include <KDE/KGlobal>
-#include <KDE/KPushButton>
+#include <KGlobal>
+#include <KPushButton>
 #include <kglobalaccel.h>
 #include <kapplication.h>
 #include <QRegExp>

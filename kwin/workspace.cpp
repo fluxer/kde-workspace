@@ -55,15 +55,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "xcbutils.h"
 // KDE
 #include <kdeversion.h>
-#include <KDE/KActionCollection>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KConfig>
-#include <KDE/KConfigGroup>
-#include <KDE/KGlobal>
-#include <KDE/KGlobalSettings>
-#include <KDE/KStartupInfo>
-#include <KDE/KWindowInfo>
-#include <KDE/KWindowSystem>
+#include <KActionCollection>
+#include <KCmdLineArgs>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KGlobalSettings>
+#include <KStartupInfo>
+#include <KWindowInfo>
+#include <KWindowSystem>
 // Qt
 #include <QtConcurrentRun>
 

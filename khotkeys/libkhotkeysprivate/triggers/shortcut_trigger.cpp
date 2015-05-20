@@ -21,9 +21,9 @@
 #include "action_data/action_data.h"
 #include "windows_handler.h"
 
-#include <KDE/KAction>
-#include <KDE/KConfigGroup>
-#include <KDE/KDebug>
+#include <KAction>
+#include <KConfigGroup>
+#include <KDebug>
 
 #include "shortcuts_handler.h"
 

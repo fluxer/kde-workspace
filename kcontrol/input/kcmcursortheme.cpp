@@ -18,8 +18,8 @@
 
 #include "kcmcursortheme.h"
 
-#include <KDE/KAboutData>
-#include <KDE/KPluginFactory>
+#include <KAboutData>
+#include <KPluginFactory>
 
 K_PLUGIN_FACTORY(CursorThemeConfigFactory,
     registerPlugin<CursorThemeConfig>();

@@ -29,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <math.h>
 #include <kdebug.h>
-#include <KDE/KGlobal>
-#include <KDE/KStandardDirs>
+#include <KGlobal>
+#include <KStandardDirs>
 
 #include <QtGui/QMatrix4x4>
 #include <QtGui/QVector2D>

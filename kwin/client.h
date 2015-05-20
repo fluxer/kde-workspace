@@ -29,8 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "toplevel.h"
 #include "xcbutils.h"
 // KDE
-#include <KDE/KShortcut>
-#include <KDE/NETWinInfo>
+#include <KShortcut>
+#include <NETWinInfo>
 // Qt
 #include <QPixmap>
 // X

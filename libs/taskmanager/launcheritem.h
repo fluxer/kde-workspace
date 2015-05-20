@@ -27,8 +27,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "taskmanager_export.h"
 
 // KDE
-#include <KDE/KIcon>
-#include <KDE/KUrl>
+#include <KIcon>
+#include <KUrl>
 
 
 namespace TaskManager

@@ -47,10 +47,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KActionCollection>
 #include <KConfig>
 #include <KConfigGroup>
-#include <KDE/KAction>
+#include <KAction>
 #include <KDebug>
-#include <KDE/KIcon>
-#include <KDE/KGlobal>
+#include <KIcon>
+#include <KGlobal>
 #include <KLocalizedString>
 #include <kkeyserver.h>
 // X11

@@ -25,14 +25,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QGraphicsObject>
 #include <kdeclarative.h>
-#include <KDE/KConfigGroup>
-#include <KDE/KDesktopFile>
-#include <KDE/KGlobal>
-#include <KDE/KIcon>
-#include <KDE/KIconEffect>
-#include <KDE/KIconLoader>
-#include <KDE/KService>
-#include <KDE/KStandardDirs>
+#include <KConfigGroup>
+#include <KDesktopFile>
+#include <KGlobal>
+#include <KIcon>
+#include <KIconEffect>
+#include <KIconLoader>
+#include <KService>
+#include <KStandardDirs>
 
 namespace KWin
 {

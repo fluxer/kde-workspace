@@ -31,8 +31,8 @@ DEALINGS IN THE SOFTWARE.
 #include <klocale.h>
 #include <klibrary.h>
 #include <kconfiggroup.h>
-#include <KDE/KLocalizedString>
-#include <KDE/KGlobal>
+#include <KLocalizedString>
+#include <KGlobal>
 #include <assert.h>
 
 #include <QDir>

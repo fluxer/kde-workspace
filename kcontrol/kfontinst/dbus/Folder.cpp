@@ -29,10 +29,10 @@
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 #include <QtXml/QDomNode>
-#include <KDE/KStandardDirs>
-#include <KDE/KSaveFile>
-#include <KDE/KShell>
-#include <KDE/KDebug>
+#include <KStandardDirs>
+#include <KSaveFile>
+#include <KShell>
+#include <KDebug>
 #include <fontconfig/fontconfig.h>
 #include "Folder.h"
 #include "FcConfig.h"

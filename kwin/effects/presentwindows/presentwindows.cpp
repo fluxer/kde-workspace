@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "presentwindowsconfig.h"
 #include <kactioncollection.h>
 #include <kaction.h>
-#include <KDE/KGlobal>
-#include <KDE/KIcon>
-#include <KDE/KLocalizedString>
-#include <KDE/KStandardDirs>
+#include <KGlobal>
+#include <KIcon>
+#include <KLocalizedString>
+#include <KStandardDirs>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kdeclarative.h>

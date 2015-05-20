@@ -31,15 +31,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QX11Info>
 
 // include KDE
-#include <KDE/KDebug>
-#include <KDE/KGlobal>
-#include <KDE/KIconEffect>
-#include <KDE/KIconLoader>
-#include <KDE/KServiceTypeTrader>
-#include <KDE/KStandardDirs>
-#include <KDE/Plasma/FrameSvg>
-#include <KDE/Plasma/Theme>
-#include <KDE/Plasma/WindowEffects>
+#include <KDebug>
+#include <KGlobal>
+#include <KIconEffect>
+#include <KIconLoader>
+#include <KServiceTypeTrader>
+#include <KStandardDirs>
+#include <Plasma/FrameSvg>
+#include <Plasma/Theme>
+#include <Plasma/WindowEffects>
 #include <kdeclarative.h>
 // KWin
 #include "thumbnailitem.h"

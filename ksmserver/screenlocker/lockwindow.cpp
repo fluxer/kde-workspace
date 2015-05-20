@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "autologout.h"
 #include "ksldapp.h"
 // KDE
-#include <KDE/KApplication>
-#include <KDE/KDebug>
-#include <KDE/KXErrorHandler>
+#include <KApplication>
+#include <KDebug>
+#include <KXErrorHandler>
 // Qt
 #include <QtCore/QTimer>
 #include <QtCore/QPointer>

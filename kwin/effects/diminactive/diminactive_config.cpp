@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kwineffects.h>
 
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kaction.h>

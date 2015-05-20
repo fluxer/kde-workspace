@@ -42,11 +42,11 @@
 
 #include <QtDBus/QtDBus>
 
-#include <KDE/KAboutData>
-#include <KDE/KDebug>
-#include <KDE/KLocale>
-#include <KDE/KMessageBox>
-#include <KDE/KPluginLoader>
+#include <KAboutData>
+#include <KDebug>
+#include <KLocale>
+#include <KMessageBox>
+#include <KPluginLoader>
 #include <kdeversion.h>
 #include <config-workspace.h>
 

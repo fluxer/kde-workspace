@@ -28,9 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kwindowsystem.h>
 #include <KActionCollection>
 #include <kaction.h>
-#include <KDE/KLocale>
-#include <KDE/KLocalizedString>
-#include <KDE/KGlobal>
+#include <KLocale>
+#include <KLocalizedString>
+#include <KGlobal>
 
 using namespace KWin;
 

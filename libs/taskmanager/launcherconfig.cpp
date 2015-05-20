@@ -23,12 +23,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "launcherconfig.h"
 #include "launcherproperties.h"
-#include <KDE/KDebug>
-#include <KDE/KConfig>
-#include <KDE/KConfigDialog>
-#include <KDE/KConfigGroup>
-#include <KDE/KLocale>
-#include <KDE/KMessageBox>
+#include <KDebug>
+#include <KConfig>
+#include <KConfigDialog>
+#include <KConfigGroup>
+#include <KLocale>
+#include <KMessageBox>
 #include <QtGui/QWhatsThis>
 
 namespace TaskManager

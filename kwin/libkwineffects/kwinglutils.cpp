@@ -31,8 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "kdebug.h"
 #include <kstandarddirs.h>
-#include <KDE/KConfig>
-#include <KDE/KConfigGroup>
+#include <KConfig>
+#include <KConfigGroup>
 
 #include <QPixmap>
 #include <QImage>

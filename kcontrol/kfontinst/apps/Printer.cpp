@@ -39,9 +39,9 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QProgressBar>
 #include <QtGui/QCloseEvent>
-#include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
-#include <KDE/KApplication>
+#include <KCmdLineArgs>
+#include <KAboutData>
+#include <KApplication>
 #include <kdeprintdialog.h>
 
 #if defined(Q_WS_X11) || defined(Q_WS_QWS)

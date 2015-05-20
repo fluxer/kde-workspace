@@ -23,10 +23,10 @@
 
 #include <QBoxLayout>
 
-#include <KDE/KAboutData>
-#include <KDE/KDialog>
-#include <KDE/KPluginFactory>
-#include <KDE/KTabWidget>
+#include <KAboutData>
+#include <KDialog>
+#include <KPluginFactory>
+#include <KTabWidget>
 #include <kdeversion.h>
 
 #include "devicepreference.h"

@@ -34,7 +34,7 @@ namespace Plasma
     class PluginLoader;
 }
 
-#include <KDE/KParts/Part>
+#include <KParts/Part>
 
 #include <QtCore/QHash>
 class QVariant;

@@ -27,8 +27,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QtCore/QObject>
 #include <QtGui/QIcon>
 
-#include <KDE/KWindowSystem>
-#include <KDE/KUrl>
+#include <KWindowSystem>
+#include <KUrl>
 
 #include "taskmanager.h"
 #include "taskmanager_export.h"

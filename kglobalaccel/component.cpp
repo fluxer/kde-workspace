@@ -22,8 +22,8 @@
 #include "globalshortcutcontext.h"
 #include "globalshortcutsregistry.h"
 
-#include <KDE/KDebug>
-#include <KDE/KRun>
+#include <KDebug>
+#include <KRun>
 
 #include <QtCore/QStringList>
 #include <QKeySequence>

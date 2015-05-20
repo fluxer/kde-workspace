@@ -22,8 +22,8 @@
 
 #include <krandom.h>
 #include <KDebug>
-#include <KDE/KIO/MimetypeJob>
-#include <KDE/KIO/FileJob>
+#include <KIO/MimetypeJob>
+#include <KIO/FileJob>
 
 #include "shareprovider.h"
 #include "share_package.h"

@@ -19,9 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #include "../virtualdesktops.h"
 // KDE
-#include <KDE/KAction>
-#include <KDE/KActionCollection>
-#include <KDE/KConfigGroup>
+#include <KAction>
+#include <KActionCollection>
+#include <KConfigGroup>
 
 #include <QtTest/QtTest>
 

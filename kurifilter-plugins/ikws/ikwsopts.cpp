@@ -25,10 +25,10 @@
 #include "searchprovider.h"
 #include "searchproviderdlg.h"
 
-#include <KDE/KDebug>
-#include <KDE/KStandardDirs>
-#include <KDE/KServiceTypeTrader>
-#include <KDE/KBuildSycocaProgressDialog>
+#include <KDebug>
+#include <KStandardDirs>
+#include <KServiceTypeTrader>
+#include <KBuildSycocaProgressDialog>
 
 #include <QtCore/QFile>
 #include <QtDBus/QtDBus>

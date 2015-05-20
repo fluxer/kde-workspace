@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QTimer>
 #include <QModelIndex>
-#include <KDE/KShortcut>
+#include <KShortcut>
 #include "utils.h"
 #include "tabbox/tabboxhandler.h"
 

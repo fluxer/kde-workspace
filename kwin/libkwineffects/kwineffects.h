@@ -38,8 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QHash>
 #include <QStack>
 
-#include <KDE/KPluginFactory>
-#include <KDE/KShortcutsEditor>
+#include <KPluginFactory>
+#include <KShortcutsEditor>
 
 #include <assert.h>
 #include <limits.h>

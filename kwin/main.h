@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAIN_H
 
 #include <kapplication.h>
-#include <KDE/KSelectionWatcher>
+#include <KSelectionWatcher>
 
 namespace KWin
 {

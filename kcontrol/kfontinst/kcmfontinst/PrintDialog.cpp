@@ -25,7 +25,7 @@
 #include <QtGui/QFrame>
 #include <QtGui/QLabel>
 #include <QtGui/QGridLayout>
-#include <KDE/KLocale>
+#include <KLocale>
 
 namespace KFI
 {

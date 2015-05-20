@@ -33,8 +33,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // kwin libs
 #include <kwinglplatform.h>
 // KDE
-#include <KDE/KDebug>
-#include <KDE/KXErrorHandler>
+#include <KDebug>
+#include <KXErrorHandler>
 // system
 #include <unistd.h>
 

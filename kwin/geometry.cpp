@@ -50,7 +50,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVarLengthArray>
 #include <QX11Info>
 
-#include <KDE/KGlobalSettings>
+#include <KGlobalSettings>
 #include "outline.h"
 
 namespace KWin

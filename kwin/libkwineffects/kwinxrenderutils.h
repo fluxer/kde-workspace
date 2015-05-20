@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KWin
 #include <kwinglobals.h>
 // KDE
-#include <KDE/KSharedPtr>
+#include <KSharedPtr>
 // Qt
 #include <QRegion>
 #include <QVector>

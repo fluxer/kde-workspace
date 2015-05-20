@@ -25,7 +25,7 @@
  */
 
 #include <QtCore/QLatin1String>
-#include <KDE/KLocale>
+#include <KLocale>
 #include <kio/udsentry.h>
 
 #define KFI_NAME                     "kfontinst"

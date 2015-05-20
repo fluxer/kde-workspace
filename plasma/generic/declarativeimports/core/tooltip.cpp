@@ -28,10 +28,10 @@
 #include <QDebug>
 #include <QTimer>
 
-#include <KDE/KIcon>
-#include <KDE/KIconLoader>
-#include <KDE/Plasma/ToolTipContent>
-#include <KDE/Plasma/ToolTipManager>
+#include <KIcon>
+#include <KIconLoader>
+#include <Plasma/ToolTipContent>
+#include <Plasma/ToolTipManager>
 
 
 ToolTipProxy::ToolTipProxy(QObject *parent)

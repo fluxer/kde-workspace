@@ -47,10 +47,10 @@
 // KDE
 #include <KAboutData>
 #include <KDialog>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <KMessageBox>
-#include <KDE/KStandardDirs>
-#include <KDE/KConfigDialogManager>
+#include <KStandardDirs>
+#include <KConfigDialogManager>
 #include <KPluginFactory>
 #include <Plasma/ConfigLoader>
 #include <qdeclarative.h>

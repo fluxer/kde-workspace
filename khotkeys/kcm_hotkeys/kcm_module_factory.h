@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <KDE/KPluginFactory>
+#include <KPluginFactory>
 
 #include "kcm_hotkeys.h"
 

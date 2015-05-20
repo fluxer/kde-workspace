@@ -32,8 +32,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QtCore/QTimer>
 
 // KDE
-#include <KDE/KDebug>
-#include <KDE/KIcon>
+#include <KDebug>
+#include <KIcon>
 #include <ksharedptr.h>
 
 

@@ -51,7 +51,7 @@
 #include "FontEngine.h"
 #include "Misc.h"
 #include "Fc.h"
-#include <KDE/KGlobal>
+#include <KGlobal>
 #include <kascii.h>
 #include <ctype.h>
 #include <string.h>

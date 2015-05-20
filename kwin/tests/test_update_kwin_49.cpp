@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../data/update_kwin_49.h"
 #include "../tabbox/tabboxconfig.h"
 
-#include <KDE/KConfig>
+#include <KConfig>
 
 #include <QtTest/QtTest>
 

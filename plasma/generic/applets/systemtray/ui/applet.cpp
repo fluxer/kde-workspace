@@ -36,9 +36,9 @@
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeComponent>
 
-#include <KDE/KStandardDirs>
-#include <KDE/KAction>
-#include <KDE/KWindowSystem>
+#include <KStandardDirs>
+#include <KAction>
+#include <KWindowSystem>
 #include <KConfigDialog>
 #include <KComboBox>
 #include <KCategorizedSortFilterProxyModel>
@@ -48,7 +48,7 @@
 #include <plasma/dataenginemanager.h>
 #include <Plasma/Corona>
 #include <Plasma/IconWidget>
-#include <KDE/Plasma/DeclarativeWidget>
+#include <Plasma/DeclarativeWidget>
 
 #include <inttypes.h>
 

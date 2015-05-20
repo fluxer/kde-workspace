@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KWIN_USERACTIONS_H
 
 // KDE
-#include <KDE/KDialog>
+#include <KDialog>
 // Qt
 #include <QObject>
 #include <QWeakPointer>

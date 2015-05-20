@@ -24,7 +24,7 @@
 #ifndef APPLET_H
 #define APPLET_H
 
-#include <KDE/Plasma/Applet>
+#include <Plasma/Applet>
 
 #include "ui_autohide.h"
 #include "ui_visibleitems.h"

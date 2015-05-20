@@ -25,12 +25,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // workspace
 #include <kcheckpass-enums.h>
 // KDE
-#include <KDE/KDebug>
-#include <KDE/KLibrary>
-#include <KDE/KLocale>
-#include <KDE/KPluginFactory>
-#include <KDE/KPluginLoader>
-#include <KDE/KStandardDirs>
+#include <KDebug>
+#include <KLibrary>
+#include <KLocale>
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <KStandardDirs>
 
 // Qt
 #include <QtCore/QFile>

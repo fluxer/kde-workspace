@@ -20,11 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #include "virtualdesktops.h"
 // KDE
-#include <KDE/KAction>
-#include <KDE/KActionCollection>
-#include <KDE/KConfigGroup>
-#include <KDE/KLocalizedString>
-#include <KDE/NETRootInfo>
+#include <KAction>
+#include <KActionCollection>
+#include <KConfigGroup>
+#include <KLocalizedString>
+#include <NETRootInfo>
 
 namespace KWin {
 

@@ -23,19 +23,19 @@
 
 #include "Viewer.h"
 #include "KfiConstants.h"
-#include <KDE/KCmdLineArgs>
-#include <KDE/KAboutData>
-#include <KDE/KUniqueApplication>
-#include <KDE/KPluginLoader>
-#include <KDE/KPluginFactory>
-#include <KDE/KLocale>
-#include <KDE/KGlobal>
-#include <KDE/KFileDialog>
-#include <KDE/KConfig>
-#include <KDE/KStandardAction>
-#include <KDE/KActionCollection>
-#include <KDE/KShortcutsDialog>
-#include <KDE/KParts/BrowserExtension>
+#include <KCmdLineArgs>
+#include <KAboutData>
+#include <KUniqueApplication>
+#include <KPluginLoader>
+#include <KPluginFactory>
+#include <KLocale>
+#include <KGlobal>
+#include <KFileDialog>
+#include <KConfig>
+#include <KStandardAction>
+#include <KActionCollection>
+#include <KShortcutsDialog>
+#include <KParts/BrowserExtension>
 
 namespace KFI
 {

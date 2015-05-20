@@ -31,9 +31,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kdebug.h>
-#include <KDE/KGlobal>
-#include <KDE/KLocalizedString>
-#include <KDE/KStandardDirs>
+#include <KGlobal>
+#include <KLocalizedString>
+#include <KStandardDirs>
 #include <kdeclarative.h>
 #include <netwm_def.h>
 #include <QApplication>

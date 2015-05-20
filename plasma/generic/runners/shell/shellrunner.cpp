@@ -23,7 +23,7 @@
 
 #include <KDebug>
 #ifdef Q_OS_UNIX
-#include <KDE/SuProcess>
+#include <SuProcess>
 #endif
 #include <KIcon>
 #include <KLocale>

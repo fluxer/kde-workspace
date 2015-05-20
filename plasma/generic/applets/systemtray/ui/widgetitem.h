@@ -31,7 +31,7 @@
 
 #include <QtDeclarative/QDeclarativeItem>
 
-#include <KDE/Plasma/Applet>
+#include <Plasma/Applet>
 
 namespace SystemTray
 {

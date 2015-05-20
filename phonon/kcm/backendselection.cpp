@@ -24,14 +24,14 @@
 #include <QtCore/QStringList>
 #include <QListWidget>
 
-#include <KDE/KApplication>
-#include <KDE/KCModuleProxy>
-#include <KDE/KConfig>
-#include <KDE/KIcon>
-#include <KDE/KIconLoader>
-#include <KDE/KRun>
-#include <KDE/KServiceTypeProfile>
-#include <KDE/KServiceTypeTrader>
+#include <KApplication>
+#include <KCModuleProxy>
+#include <KConfig>
+#include <KIcon>
+#include <KIconLoader>
+#include <KRun>
+#include <KServiceTypeProfile>
+#include <KServiceTypeTrader>
 
 BackendSelection::BackendSelection(QWidget *parent)
     : QWidget(parent)

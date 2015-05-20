@@ -21,9 +21,9 @@
 
 #include "localdomainurifilter.h"
 
-#include <KDE/KProtocolInfo>
-#include <KDE/KDebug>
-#include <KDE/KPluginFactory>
+#include <KProtocolInfo>
+#include <KDebug>
+#include <KPluginFactory>
 
 #include <QtCore/QStringBuilder>
 #include <QtNetwork/QHostInfo>

@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // includes
 #include <QtDeclarative/QDeclarativeImageProvider>
 #include <QtDeclarative/QDeclarativeView>
-#include <KDE/KService>
+#include <KService>
 #include "tabboxconfig.h"
 
 // forward declaration

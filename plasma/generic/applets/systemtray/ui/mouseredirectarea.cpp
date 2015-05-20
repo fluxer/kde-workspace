@@ -33,7 +33,7 @@
 #include <QtGui/QGraphicsSceneHoverEvent>
 #include <QtGui/QGraphicsScene>
 
-#include <KDE/Plasma/Containment>
+#include <Plasma/Containment>
 
 
 namespace SystemTray

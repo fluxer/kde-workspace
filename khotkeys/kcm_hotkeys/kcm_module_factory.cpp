@@ -25,8 +25,8 @@
 #include "daemon/daemon.h"
 
 // KDE
-#include <KDE/KDebug>
-#include <KDE/KToolInvocation>
+#include <KDebug>
+#include <KToolInvocation>
 
 K_PLUGIN_FACTORY_DEFINITION(
     KCMModuleFactory,

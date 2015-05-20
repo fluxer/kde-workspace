@@ -31,7 +31,7 @@
 
 #include <QtCore/QDataStream>
 #include <QtCore/QFile>
-#include <KDE/KUrl>
+#include <KUrl>
 #include "KfiConstants.h"
 
 class QTextStream;

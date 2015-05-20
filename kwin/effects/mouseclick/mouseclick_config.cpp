@@ -24,9 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kwineffects.h>
 
-#include <KDE/KActionCollection>
-#include <KDE/KAction>
-#include <KDE/KShortcutsEditor>
+#include <KActionCollection>
+#include <KAction>
+#include <KShortcutsEditor>
 
 #include <QWidget>
 

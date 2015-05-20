@@ -20,7 +20,7 @@
 #include "preview.h"
 
 #include <kapplication.h>
-#include <KDE/KLocalizedString>
+#include <KLocalizedString>
 #include <kconfig.h>
 #include <kglobal.h>
 #include <QLabel>

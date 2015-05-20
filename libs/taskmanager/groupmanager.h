@@ -32,7 +32,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <taskmanager/task.h>
 #include <taskmanager/taskitem.h>
 #include <taskmanager/taskmanager_export.h>
-#include <KDE/KUrl>
+#include <KUrl>
 #include "launcheritem.h"
 
 class KConfigDialog;

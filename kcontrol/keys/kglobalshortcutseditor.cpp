@@ -24,13 +24,13 @@
 #include "kglobalaccel_interface.h"
 #include "kglobalaccel_component_interface.h"
 
-#include <KDE/KActionCollection>
-#include <KDE/KDebug>
-#include <KDE/KFileDialog>
-#include <KDE/KGlobalAccel>
-#include <KDE/KMessageBox>
-#include <KDE/KShortcut>
-#include <KDE/KStringHandler>
+#include <KActionCollection>
+#include <KDebug>
+#include <KFileDialog>
+#include <KGlobalAccel>
+#include <KMessageBox>
+#include <KShortcut>
+#include <KStringHandler>
 
 #include <QtGui/QStackedWidget>
 #include <QtGui/QMenu>

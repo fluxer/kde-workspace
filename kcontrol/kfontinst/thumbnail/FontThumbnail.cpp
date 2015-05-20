@@ -29,14 +29,14 @@
 #include <QtGui/QApplication>
 #include <QtGui/QPalette>
 #include <QtCore/QFile>
-#include <KDE/KGlobalSettings>
-#include <KDE/KLocale>
-#include <KDE/KUrl>
-#include <KDE/KZip>
-#include <KDE/KTempDir>
-#include <KDE/KMimeType>
-#include <KDE/KStandardDirs>
-#include <KDE/KDebug>
+#include <KGlobalSettings>
+#include <KLocale>
+#include <KUrl>
+#include <KZip>
+#include <KTempDir>
+#include <KMimeType>
+#include <KStandardDirs>
+#include <KDebug>
 
 #define KFI_DBUG kDebug(7115)
 

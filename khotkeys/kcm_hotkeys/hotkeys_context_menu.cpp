@@ -27,10 +27,10 @@
 #include "action_data/action_data_group.h"
 #include "action_data/simple_action_data.h"
 
-#include <KDE/KDebug>
-#include <KDE/KFileDialog>
-#include <KDE/KLocale>
-#include <KDE/KUrl>
+#include <KDebug>
+#include <KFileDialog>
+#include <KLocale>
+#include <KUrl>
 
 #include <QtCore/QSignalMapper>
 #include <QtGui/QContextMenuEvent>

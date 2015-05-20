@@ -27,14 +27,14 @@
 #include <QtGui/QMenu>
 #include <QtGui/QIcon>
 
-#include <KDE/KJob>
-#include <KDE/KIcon>
-#include <KDE/KIconLoader>
-#include <KDE/KStandardDirs>
-#include <KDE/Plasma/ServiceJob>
-#include <KDE/Plasma/ToolTipManager>
-#include <KDE/Plasma/Applet>
-#include <KDE/KDebug>
+#include <KJob>
+#include <KIcon>
+#include <KIconLoader>
+#include <KStandardDirs>
+#include <Plasma/ServiceJob>
+#include <Plasma/ToolTipManager>
+#include <Plasma/Applet>
+#include <KDebug>
 
 namespace SystemTray
 {

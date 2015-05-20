@@ -23,11 +23,11 @@
 // Qt
 #include <QHash>
 // KDE
-#include <KDE/KConfig>
-#include <KDE/KConfigGroup>
-#include <KDE/KDebug>
-#include <KDE/KStandardDirs>
-#include <KDE/KGlobal>
+#include <KConfig>
+#include <KConfigGroup>
+#include <KDebug>
+#include <KStandardDirs>
+#include <KGlobal>
 
 namespace Aurorae {
 
