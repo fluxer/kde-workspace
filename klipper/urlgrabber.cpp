@@ -45,7 +45,6 @@
 #include "historystringitem.h"
 
 URLGrabber::URLGrabber(History* history):
-    m_myCurrentAction(0L),
     m_myMenu(0L),
     m_myPopupKillTimer(new QTimer( this )),
     m_myPopupKillTimeout(8),

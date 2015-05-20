@@ -25,7 +25,6 @@ class KRandomSetup : public KDialog
 
 	private:
 
-		QWidget *preview;
 		QCheckBox *openGL;
 		QCheckBox *manipulateScreen;
 

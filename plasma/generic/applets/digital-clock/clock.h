@@ -96,7 +96,6 @@ class Clock : public ClockApplet
         QTime m_time;
         QDate m_date;
         QString m_dateString;
-        QVBoxLayout *m_layout;
         QPixmap m_toolTipIcon;
         /// Designer Config files
         Ui::clockConfig ui;

@@ -76,7 +76,6 @@ private:
 	QString latestEditedService;
 	bool somethingChanged;
 	QWidget *configWidget;
-	QVBoxLayout *myLayout;
 protected Q_SLOTS:
 	void emitChanged(bool);
 	void slotServiceSelected(QListWidgetItem *);

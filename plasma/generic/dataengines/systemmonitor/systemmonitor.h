@@ -53,7 +53,6 @@ class SystemMonitorEngine : public Plasma::DataEngine, public KSGRD::SensorClien
 
     private:
         QStringList m_sensors;
-        QTimer* m_timer;
         int m_waitingFor;
 };
 

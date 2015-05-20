@@ -81,7 +81,6 @@ private:
   ActionList m_myMatches;
   QStringList m_myAvoidWindows;
   const HistoryItem* m_myClipItem;
-  ClipAction* m_myCurrentAction;
 
   // holds mappings of menu action IDs to action commands (action+cmd index in it)
   QHash<QString, QPair<ClipAction*, int> > m_myCommandMapper;

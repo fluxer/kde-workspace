@@ -267,7 +267,7 @@ qHash(const QSize &sz)
 }
 
 int
-main(int argc ATTR_UNUSED, char **argv)
+main(void)
 {
     char *ci;
     int i;

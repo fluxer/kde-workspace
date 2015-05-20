@@ -102,8 +102,6 @@ private:
     int dFeedbacksize;
     int dWireframe;
     int dTexture;
-    int dPriority;
-
 
     // Using QTimer rather than timerEvent() to avoid getting locked out of
     // the QEvent loop on lower-end systems.  Ian Geiser <geiseri@kde.org>
