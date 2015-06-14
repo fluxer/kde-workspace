@@ -2930,14 +2930,17 @@ fprintfLineWrap(FILE *f, const char *msg, ...)
 
 static const char * const oldkdes[] = {
     KDE_CONFDIR,
-    "/opt/katana/share/config",
-    "/usr/local/katana/share/config",
-    "/local/katana/share/config",
+    "/opt/kde4/share/config",
+    "/usr/local/kde4/share/config",
+    "/usr/kde4/share/config",
 
+    "/opt/kde/share/config",
+    "/usr/local/kde/share/config",
+    "/usr/kde/share/config",
+
+    "/opt/share/config",
     "/usr/local/share/config",
     "/usr/share/config",
-    "/local/share/config",
-    "/share/config",
 };
 
 static const char * const oldxdms[] = {
@@ -2979,7 +2982,7 @@ int main(int argc, char **argv)
 "  --old-kde /path/to/old/kde-config-dir\n"
 "    Where to look for the kdmrc of a previously installed kdm.\n"
 "    Default is to scan " KDE_CONFDIR " and\n"
-"    {/usr,/usr/local,{/opt,/usr/local}/katana}/share/config.\n"
+"    {/usr,/usr/local,/opt}/{kde4,kde}/share/config.\n"
 "  --no-old\n"
 "    Do not look at older xdm/kdm configurations, just create default config.\n"
 "  --no-old-xdm\n"
