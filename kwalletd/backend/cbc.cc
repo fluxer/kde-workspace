@@ -85,8 +85,8 @@ void CipherBlockChain::initRegister() {
 
 int CipherBlockChain::encrypt(void *block, int len)
 {
+    int rc = -1;
     if (_cipher && !_reader) {
-        int rc;
 
         _writer |= 1;
 
@@ -116,7 +116,7 @@ int CipherBlockChain::encrypt(void *block, int len)
 
         return rc;
     }
-    return -1;
+    return rc;
 }
 
 // This is the old decrypt method, that was decrypting using ECB
