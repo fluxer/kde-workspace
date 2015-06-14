@@ -348,7 +348,7 @@ bool RandRCrtc::proposePosition(const QPoint &p)
 bool RandRCrtc::proposeRotation(int rotation)
 {
 	// check if this crtc supports the asked rotation
-	if (!rotation & m_rotations)
+	if (!rotation && m_rotations)
 		return false;
 
 	m_proposedRotation = rotation;
