@@ -243,7 +243,6 @@ void DrKonqiDialog::startBugReportAssistant()
     // KDE applications use the email address by default
     if (appReportAddress == BUG_REPORT_EMAIL) {
         // black magic - report is done in Markdown syntax with new lines preserved
-        // FIXME: since there is URL lenght limit posting the data would be much better
         // but invokeBrowser() can call external browser and at this point KDE
         // application can not be trused not to crash again (konqueror, rekonq, etc.).
         query = QString("%1/new").arg(BUG_REPORT_URL);
@@ -252,7 +251,7 @@ void DrKonqiDialog::startBugReportAssistant()
         query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nQt: %5\n%6").arg(
             QUrl::toPercentEncoding("## Platform"), sysinfo->system(),
             sysinfo->release(), sysinfo->kdeVersion(), sysinfo->qtVersion(),
-            QUrl::toPercentEncoding("## Backtrace\n```\n" + backtrace + "\n```\n")));
+            QUrl::toPercentEncoding("## Backtrace\nPlease, copy-paste it from the DrKonqi window\n")));
     } else {
         query = QString(appReportAddress);
     }
