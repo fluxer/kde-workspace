@@ -12,11 +12,7 @@ include_directories(${KDE4WORKSPACE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
 add_subdirectory( data )
 macro_optional_add_subdirectory( asciiquarium )
 
-if (WIN32)
-    SET(LIBMATH "")
-else (WIN32)
-    SET(LIBMATH "m")
-endif (WIN32)
+SET(LIBMATH "m")
 
 ########### next target ###############
 
