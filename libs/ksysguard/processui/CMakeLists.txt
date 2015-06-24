@@ -23,12 +23,12 @@ kde4_add_ui_files( processui_LIB_SRCS
 kde4_add_library(processui SHARED ${processui_LIB_SRCS})
 
 if(X11_XRes_FOUND)
-  target_link_libraries(processui ${X11_XRes_LIB} ${X11_LIBRARIES})
+  target_link_libraries(processui PRIVATE ${X11_XRes_LIB} ${X11_LIBRARIES})
   include_directories(${X11_XRes_INCLUDE_PATH})
 endif(X11_XRes_FOUND)
 
-target_link_libraries(processui ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY} processcore)
-target_link_libraries(processui LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS} processcore)
+target_link_libraries(processui PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY} processcore)
+target_link_libraries(processui PUBLIC ${KDE4_KDEUI_LIBS} processcore)
 
 
 set_target_properties(processui

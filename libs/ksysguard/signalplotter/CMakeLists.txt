@@ -8,8 +8,8 @@ set(ksignalplotter_LIB_SRCS
 
 kde4_add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})
 
-target_link_libraries(ksignalplotter ${KDE4_KDEUI_LIBS})
-target_link_libraries(ksignalplotter LINK_INTERFACE_LIBRARIES ${KDE4_KDEUI_LIBS})
+target_link_libraries(ksignalplotter PRIVATE ${KDE4_KDEUI_LIBS})
+target_link_libraries(ksignalplotter PUBLIC ${KDE4_KDEUI_LIBS})
 
 set_target_properties(ksignalplotter
    PROPERTIES VERSION ${GENERIC_LIB_VERSION}

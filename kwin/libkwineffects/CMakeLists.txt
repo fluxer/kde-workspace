@@ -32,7 +32,7 @@ set(kwineffects_XCB_LIBS
 )
 
 kde4_add_library(kwineffects SHARED ${kwin_EFFECTSLIB_SRCS})
-target_link_libraries(kwineffects
+target_link_libraries(kwineffects PRIVATE
     ${kwineffects_QT_LIBS}
     ${kwineffects_KDE_LIBS}
     ${kwineffects_XLIB_LIBS}
@@ -58,13 +58,13 @@ macro( KWIN4_ADD_GLUTILS_BACKEND name glinclude )
         include_directories(${OPENGLES_EGL_INCLUDE_DIR})
     endif()
     kde4_add_library(${name} SHARED ${kwin_GLUTILSLIB_SRCS})
-    target_link_libraries(${name} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${kwineffects_XLIB_LIBS} ${kwineffects_XCB_LIBS} kwineffects)
+    target_link_libraries(${name} PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${kwineffects_XLIB_LIBS} ${kwineffects_XCB_LIBS} kwineffects)
     if(OPENGL_EGL_FOUND)
-        target_link_libraries(${name} ${OPENGLES_EGL_LIBRARY})
+        target_link_libraries(${name} PRIVATE ${OPENGLES_EGL_LIBRARY})
     endif()
     set_target_properties(${name} PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-    target_link_libraries(${name} ${ARGN})
-    target_link_libraries(${name} LINK_INTERFACE_LIBRARIES ${ARGN})
+    target_link_libraries(${name} PRIVATE ${ARGN})
+    target_link_libraries(${name} PUBLIC ${ARGN})
 
     install(TARGETS ${name} EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 endmacro()
@@ -82,12 +82,12 @@ if(OPENGL_FOUND)
         set_target_properties(kwinglutils PROPERTIES COMPILE_FLAGS -DKWIN_HAVE_OPENGL_1)
     endif()
 
-    target_link_libraries(kwinglutils ${OPENGL_gl_LIBRARY})
-    target_link_libraries(kwinglutils LINK_INTERFACE_LIBRARIES ${OPENGL_gl_LIBRARY})
+    target_link_libraries(kwinglutils PRIVATE ${OPENGL_gl_LIBRARY})
+    target_link_libraries(kwinglutils PUBLIC ${OPENGL_gl_LIBRARY})
     # -ldl used by OpenGL code
     find_library(DL_LIBRARY dl)
     if (DL_LIBRARY)
-        target_link_libraries(kwinglutils ${DL_LIBRARY})
+        target_link_libraries(kwinglutils PRIVATE ${DL_LIBRARY})
     endif()
 endif()
 
