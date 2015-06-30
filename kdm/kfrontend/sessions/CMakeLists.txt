@@ -26,6 +26,7 @@ install(FILES
 	ion.desktop
 	larswm.desktop
 	lwm.desktop
+	mate.desktop
 	matchbox.desktop
 	metacity.desktop
 	mwm.desktop
