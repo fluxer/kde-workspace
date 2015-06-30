@@ -470,10 +470,7 @@ main(void)
             if ((cmd != G_GreetTimed && !_autoLoginAgain) ||
                     _autoLoginUser.isEmpty())
                 _autoLoginDelay = 0;
-            if (themer)
-                dialog = new KThemedGreeter(themer);
-            else
-                dialog = new KStdGreeter;
+            dialog = new KThemedGreeter(themer);
             if (*_preloader) {
                 proc2 = new KProcess;
                 *proc2 << _preloader;

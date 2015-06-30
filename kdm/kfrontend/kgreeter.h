@@ -103,26 +103,6 @@ class KGreeter : public KGDialog, public KGVerifyHandler {
     virtual void verifySetUser(const QString &user);
 };
 
-class KStdGreeter : public KGreeter {
-    Q_OBJECT
-    typedef KGreeter inherited;
-
-  public:
-    KStdGreeter();
-
-  protected:
-    virtual void pluginSetup();
-
-  private:
-    KdmClock *clock;
-    QLabel *pixLabel;
-    QPushButton *goButton;
-
-  public: // from KGVerifyHandler
-    virtual void verifyFailed();
-    virtual void verifyRetry();
-};
-
 class KThemedGreeter : public KGreeter {
     Q_OBJECT
     typedef KGreeter inherited;
