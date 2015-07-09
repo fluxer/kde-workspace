@@ -24,6 +24,7 @@ install(FILES
 	golem.desktop
 	icewm.desktop
 	ion.desktop
+	jwm.desktop
 	larswm.desktop
 	lwm.desktop
 	mate.desktop
