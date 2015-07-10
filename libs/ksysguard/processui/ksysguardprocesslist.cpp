@@ -58,7 +58,6 @@
 
 #include "ReniceDlg.h"
 #include "ui_ProcessWidgetUI.h"
-#include "scripting.h"
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -151,7 +150,6 @@ struct KSysGuardProcessListPrivate {
     KSysGuardProcessListPrivate(KSysGuardProcessList* q, const QString &hostName)
         : mModel(q, hostName), mFilterModel(q), mUi(new Ui::ProcessWidget()), mProcessContextMenu(NULL), mUpdateTimer(NULL)
     {
-        mScripting = NULL;
         mNeedToExpandInit = false;
         mNumItemsSelected = -1;
         mResortCountDown = 2; //The items added initially will be already sorted, but without CPU info.  On the second refresh we will have CPU usage, so /then/ we can resort
@@ -217,9 +215,6 @@ struct KSysGuardProcessListPrivate {
 
     /** Number of items that are selected */
     int mNumItemsSelected;
-
-    /** Class to deal with the scripting. NULL if scripting is disabled */
-    Scripting *mScripting;
 
     /** A counter to mark when to resort, so that we do not resort on every update */
     int mResortCountDown;
@@ -488,11 +483,6 @@ void KSysGuardProcessList::showProcessContextMenu(const QPoint &point) {
         d->mProcessContextMenu->addAction(d->resume);
     }
 
-    if(numProcesses == 1 && d->mScripting) {
-        foreach(QAction *action, d->mScripting->actions()) {
-            d->mProcessContextMenu->addAction(action);
-        }
-    }
     if (showSignalingEntries) {
         d->mProcessContextMenu->addSeparator();
         d->mProcessContextMenu->addAction(d->terminate);
@@ -916,9 +906,6 @@ void KSysGuardProcessList::hideEvent ( QHideEvent * event )  //virtual protected
     //Stop updating the process list if we are hidden
     if(d->mUpdateTimer)
         d->mUpdateTimer->stop();
-    //stop any scripts running, to save on memory
-    if(d->mScripting)
-        d->mScripting->stopAllScripts();
     QWidget::hideEvent(event);
 }
 
@@ -1476,20 +1463,4 @@ bool KSysGuardProcessList::isKillButtonVisible() const
 {
     return d->mUi->btnKillProcess->isVisible();
 }
-bool KSysGuardProcessList::scriptingEnabled() const
-{
-    return !!d->mScripting;
-}
-void KSysGuardProcessList::setScriptingEnabled(bool enabled)
-{
-    if(!!d->mScripting == enabled)
-        return;  //Nothing changed
-    if(!enabled) {
-        delete d->mScripting;
-        d->mScripting = NULL;
-    } else {
-        d->mScripting = new Scripting(this);
-        d->mScripting->hide();
-    }
 
-}

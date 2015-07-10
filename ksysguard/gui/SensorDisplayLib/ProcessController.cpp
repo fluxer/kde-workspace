@@ -147,7 +147,6 @@ bool ProcessController::addSensor(const QString& hostName,
     mProcessList = new KSysGuardProcessList(this, hostName);
     mProcessList->setUpdateIntervalMSecs(0); //we will call updateList() manually
     mProcessList->setContentsMargins(0,0,0,0);
-    mProcessList->setScriptingEnabled(true);
     addActions(mProcessList->actions());
     connect(mProcessList, SIGNAL(updated()), this, SIGNAL(updated()));
     connect(mProcessList, SIGNAL(processListChanged()), this, SIGNAL(processListChanged()));

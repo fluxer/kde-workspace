@@ -12,7 +12,6 @@ set(processui_LIB_SRCS
    ProcessModel.cpp
    ReniceDlg.cpp
    KTextEditVT.cpp
-   scripting.cpp
 )
 
 kde4_add_ui_files( processui_LIB_SRCS
@@ -27,7 +26,7 @@ if(X11_XRes_FOUND)
   include_directories(${X11_XRes_INCLUDE_PATH})
 endif(X11_XRes_FOUND)
 
-target_link_libraries(processui PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTWEBKIT_LIBRARY} processcore)
+target_link_libraries(processui PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} processcore)
 target_link_libraries(processui PUBLIC ${KDE4_KDEUI_LIBS} processcore)
 
 
