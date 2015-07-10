@@ -238,7 +238,6 @@ void SystemMonitor::appletRemoved(QObject *object)
 
 void SystemMonitor::checkGeometry()
 {
-    QSizeF margins = size() - contentsRect().size();
     qreal minHeight = m_buttons->minimumHeight();
     //kDebug() << minHeight;
 

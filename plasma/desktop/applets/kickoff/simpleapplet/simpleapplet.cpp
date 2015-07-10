@@ -827,7 +827,7 @@ void MenuLauncherApplet::iconSizeChanged(int group)
 QSizeF MenuLauncherApplet::sizeHint(Qt::SizeHint which, const QSizeF & constraint) const
 {
     if (which == Qt::PreferredSize) {
-        int iconSize;
+        int iconSize = -1;
 
         switch (formFactor()) {
             case Plasma::Planar:
