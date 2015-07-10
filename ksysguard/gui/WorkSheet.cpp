@@ -113,9 +113,9 @@ bool WorkSheet::load( const QString &fileName )
     }
 
     // Check for proper size.
-    float interval = element.attribute( "interval", "0.5" ).toFloat();
+    float interval = element.attribute( "interval", "1" ).toFloat();
     if( interval  < 0 || interval > 100000 )  //make sure the interval is fairly sane
-        interval = 0.5;
+        interval = 1;
 
     setUpdateInterval( interval );
 
