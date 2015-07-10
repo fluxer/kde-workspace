@@ -283,7 +283,7 @@ public:
         addWM("metacity");
         addWM("openbox");
         addWM("fvwm2");
-        addWM(KWIN_NAME);
+        addWM("kwin");
 
         setMainWidget(mainWidget);
 
@@ -338,7 +338,7 @@ Application::Application()
     if (crashes >= 4) {
         // Something has gone seriously wrong
         AlternativeWMDialog dialog;
-        QString cmd = KWIN_NAME;
+        QString cmd = "kwin";
         if (dialog.exec() == QDialog::Accepted)
             cmd = dialog.selectedWM();
         else
@@ -535,7 +535,7 @@ int main(int argc, char * argv[])
     }
 
     KAboutData aboutData(
-        KWIN_NAME,                     // The program name used internally
+        "kwin",                     // The program name used internally
         0,                          // The message catalog name. If null, program name is used instead
         ki18n("KWin"),              // A displayable program name string
         version,                    // The program version string
@@ -568,10 +568,10 @@ int main(int argc, char * argv[])
     setenv("QT_NO_GLIB", "1", true);
 
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
-    ksmserver.suspendStartup(KWIN_NAME);
+    ksmserver.suspendStartup("kwin");
     KWin::Application a;
 
-    ksmserver.resumeStartup(KWIN_NAME);
+    ksmserver.resumeStartup("kwin");
     KWin::SessionManager weAreIndeed;
     KWin::SessionSaveDoneHelper helper;
     KGlobal::locale()->insertCatalog("kwin_effects");

@@ -119,7 +119,7 @@ void AuroraeFactory::initQML(const KConfigGroup &group)
     KPluginInfo plugininfo(service);
     const QString pluginName = service->property("X-KDE-PluginInfo-Name").toString();
     const QString scriptName = service->property("X-Plasma-MainScript").toString();
-    const QString file = KStandardDirs::locate("data", QLatin1String(KWIN_NAME) + "/decorations/" + pluginName + "/contents/" + scriptName);
+    const QString file = KStandardDirs::locate("data", "kwin/decorations/" + pluginName + "/contents/" + scriptName);
     if (file.isNull()) {
         kDebug(1212) << "Could not find script file for " << pluginName;
         // TODO: what to do in error case?

@@ -9,24 +9,6 @@ OPTION(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support"
 OPTION(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 OPTION(KWIN_BUILD_XRENDER_COMPOSITING "Enable building of KWin with XRender Compositing support" ON)
 OPTION(KWIN_BUILD_OPENGL_1_COMPOSITING "Enable support for OpenGL 1.x, automatically disabled when building for OpenGL ES 2.0" ON)
-if(${KDE_PLATFORM_PROFILE} STREQUAL "Desktop")
-   OPTION(KWIN_PLASMA_ACTIVE "Enable building KWin for Plasma Active." OFF)
-else()
-   OPTION(KWIN_PLASMA_ACTIVE "Enable building KWin for Plasma Active." On)
-endif()
-
-# Binary name of KWin
-set(KWIN_NAME "kwin")
-
-if(KWIN_PLASMA_ACTIVE)
-    set(KWIN_BUILD_DECORATIONS OFF)
-    set(KWIN_BUILD_KCMS OFF)
-    set(KWIN_BUILD_SCREENEDGES OFF)
-    set(KWIN_BUILD_XRENDER_COMPOSITING OFF)
-    set(KWIN_MOBILE_EFFECTS ON)
-    set(KWIN_BUILD_WITH_OPENGLES ON)
-    set(KWIN_NAME "kwinactive")
-endif()
 
 cmake_dependent_option(KWIN_BUILD_KAPPMENU "Build without appmenu support" ON "KWIN_BUILD_DECORATIONS" FALSE)
 
@@ -244,7 +226,6 @@ set(kwinLibs
 kde4_add_executable( kwin ${kwin_SRCS})
 
 target_link_libraries(kwin ${kwinLibs})
-set_target_properties(kwin PROPERTIES OUTPUT_NAME ${KWIN_NAME})
 
 if(OPENGL_FOUND)
     if( KWIN_BUILD_OPENGL_1_COMPOSITING )
@@ -268,14 +249,13 @@ if(OPENGLES_FOUND)
   kde4_add_executable( kwin_gles ${kwin_SRCS})
   target_link_libraries(kwin_gles ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
   set_target_properties(kwin_gles PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
-  set_target_properties(kwin_gles PROPERTIES OUTPUT_NAME ${KWIN_NAME}_gles)
   install(TARGETS kwin_gles         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 endif()
 
 ########### install files ###############
 
-install( FILES kwin.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} RENAME ${KWIN_NAME}.kcfg )
-install( FILES kwin.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/${KWIN_NAME} RENAME ${KWIN_NAME}.notifyrc)
+install( FILES kwin.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} RENAME kwin.kcfg )
+install( FILES kwin.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/kwin RENAME kwin.notifyrc)
 install( FILES org.kde.KWin.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR} )

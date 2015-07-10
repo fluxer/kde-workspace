@@ -39,7 +39,6 @@ target_link_libraries(kwineffects PRIVATE
     ${kwineffects_XCB_LIBS}
 )
 set_target_properties(kwineffects PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
-set_target_properties(kwineffects PROPERTIES OUTPUT_NAME ${KWIN_NAME}effects)
 
 install(TARGETS kwineffects EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -72,11 +71,9 @@ endmacro()
 if(OPENGLES_FOUND)
     KWIN4_ADD_GLUTILS_BACKEND(kwinglesutils ${OPENGLES_INCLUDE_DIR} ${OPENGLES_LIBRARIES})
     set_target_properties(kwinglesutils PROPERTIES COMPILE_FLAGS -DKWIN_HAVE_OPENGLES)
-    set_target_properties(kwinglesutils PROPERTIES OUTPUT_NAME ${KWIN_NAME}glesutils)
 endif()
 if(OPENGL_FOUND)
     KWIN4_ADD_GLUTILS_BACKEND(kwinglutils ${OPENGL_INCLUDE_DIR} ${OPENGL_gl_LIBRARY})
-    set_target_properties(kwinglutils PROPERTIES OUTPUT_NAME ${KWIN_NAME}glutils)
 
     if( KWIN_BUILD_OPENGL_1_COMPOSITING )
         set_target_properties(kwinglutils PROPERTIES COMPILE_FLAGS -DKWIN_HAVE_OPENGL_1)

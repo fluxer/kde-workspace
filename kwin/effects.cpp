@@ -1286,7 +1286,6 @@ KLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
         libname.replace("kwin4_effect_", "kwin4_effect_gles_");
     }
 #endif
-    libname.replace("kwin", KWIN_NAME);
     KLibrary* library = new KLibrary(libname);
     if (!library) {
         kError(1212) << "couldn't open library for effect '" <<

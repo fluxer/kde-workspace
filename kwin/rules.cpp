@@ -971,7 +971,7 @@ void RuleBook::edit(Client* c, bool whole_app)
 void RuleBook::load()
 {
     deleteAll();
-    KConfig cfg(QLatin1String(KWIN_NAME) + "rulesrc", KConfig::NoGlobals);
+    KConfig cfg("kwinrulesrc", KConfig::NoGlobals);
     int count = cfg.group("General").readEntry("count", 0);
     for (int i = 1;
             i <= count;
@@ -985,7 +985,7 @@ void RuleBook::load()
 void RuleBook::save()
 {
     m_updateTimer->stop();
-    KConfig cfg(QLatin1String(KWIN_NAME) + "rulesrc", KConfig::NoGlobals);
+    KConfig cfg("kwinrulesrc", KConfig::NoGlobals);
     QStringList groups = cfg.groupList();
     for (QStringList::ConstIterator it = groups.constBegin();
             it != groups.constEnd();

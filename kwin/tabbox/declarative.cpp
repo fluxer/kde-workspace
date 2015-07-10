@@ -148,7 +148,7 @@ DeclarativeView::DeclarativeView(QAbstractItemModel *model, TabBoxConfig::TabBox
     } else if (m_mode == TabBoxConfig::DesktopTabBox) {
         rootContext()->setContextProperty("clientModel", model);
     }
-    setSource(QUrl(KStandardDirs::locate("data", QLatin1String(KWIN_NAME) + QLatin1String("/tabbox/tabbox.qml"))));
+    setSource(QUrl(KStandardDirs::locate("data", QLatin1String("kwin/tabbox/tabbox.qml"))));
 
     // FrameSvg
     m_frame->setImagePath("dialogs/background");
@@ -390,14 +390,14 @@ QString DeclarativeView::findWindowSwitcherScriptFile(KService::Ptr service)
 {
     const QString pluginName = service->property("X-KDE-PluginInfo-Name").toString();
     const QString scriptName = service->property("X-Plasma-MainScript").toString();
-    return KStandardDirs::locate("data", QLatin1String(KWIN_NAME) + "/tabbox/" + pluginName + "/contents/" + scriptName);
+    return KStandardDirs::locate("data", "kwin/tabbox/" + pluginName + "/contents/" + scriptName);
 }
 
 QString DeclarativeView::findDesktopSwitcherScriptFile(KService::Ptr service)
 {
     const QString pluginName = service->property("X-KDE-PluginInfo-Name").toString();
     const QString scriptName = service->property("X-Plasma-MainScript").toString();
-    return KStandardDirs::locate("data", QLatin1String(KWIN_NAME) + "/desktoptabbox/" + pluginName + "/contents/" + scriptName);
+    return KStandardDirs::locate("data", "kwin/desktoptabbox/" + pluginName + "/contents/" + scriptName);
 }
 
 void DeclarativeView::slotEmbeddedChanged(bool enabled)
