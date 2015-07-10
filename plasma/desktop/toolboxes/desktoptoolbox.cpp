@@ -290,7 +290,6 @@ void DesktopToolBox::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
     QPoint iconPos;
     QRect backgroundRect;
     const QRectF rect = boundingRect();
-    const QSize icons = iconSize();
 
     QString cornerElement;
 

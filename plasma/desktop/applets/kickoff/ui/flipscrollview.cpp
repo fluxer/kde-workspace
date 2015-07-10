@@ -533,15 +533,6 @@ void FlipScrollView::paintEvent(QPaintEvent * event)
     if (currentRoot.isValid()) {
         state |= QStyle::State_Enabled;
     }
-
-    if (currentRoot.isValid() || previousRoot.isValid()) {
-        qreal opacity = 1.0;
-        if (!previousRoot.isValid()) {
-            opacity = timerValue;
-        } else if (!currentRoot.isValid()) {
-            opacity = 1 - timerValue;
-        }
-    }
 }
 
 void FlipScrollView::startDrag(Qt::DropActions supportedActions)
