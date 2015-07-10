@@ -40,7 +40,6 @@ KSystemActivityDialog::KSystemActivityDialog(QWidget *parent)
     setWindowIcon(KIcon(QLatin1String( "utilities-system-monitor" )));
     setButtons(0);
     setMainWidget(&m_processList);
-    m_processList.setScriptingEnabled(true);
     setSizeGripEnabled(true);
     (void)minimumSizeHint(); //Force the dialog to be laid out now
     layout()->setContentsMargins(0,0,0,0);

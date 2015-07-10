@@ -35,13 +35,6 @@ kde4_add_executable( knotify ${knotify_SRCS})
 
 kde4_add_library( knotifyplugin SHARED ${knotifyplugin_SRCS})
 
-
-if (Q_WS_MAC)
-    set_target_properties(knotify PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Info.plist.template)
-    set_target_properties(knotify PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.knotify4")
-    set_target_properties(knotify PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KDE Notify")
-endif (Q_WS_MAC)
-
 target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_PHONON_LIBS} ${KDE4_SOLID_LIBS} knotifyplugin)
 
 target_link_libraries( knotifyplugin ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
