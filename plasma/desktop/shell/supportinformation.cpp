@@ -103,7 +103,6 @@ void SupportInformation::addInformationForApplet(Plasma::Applet *applet)
         m_stream << "Type: " << applet->package()->metadata().type() << endl;
         m_stream << "Version: " << applet->package()->metadata().version() << endl;
         m_stream << "Author: " << applet->package()->metadata().author() << endl;
-        m_stream << "Hash: " << applet->package()->contentsHash() << endl;
     }
 
     //runtime info

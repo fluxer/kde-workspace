@@ -89,7 +89,6 @@
 #include <QtGui/QToolBox>
 #include <QtGui/QToolButton>
 #include <QtGui/QMenuBar>
-
 #include <QtDBus/QDBusConnection>
 
 #include <KColorUtils>

@@ -398,7 +398,7 @@ QScriptValue ScriptEngine::defaultApplication(QScriptContext *context, QScriptEn
         return storageId ? service->storageId() : onlyExec(service->exec());
     } else {
         // try the files in share/apps/kcm_componentchooser/
-        const QStringList services = KGlobal::dirs()->findAllResources("data","kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
+        const QStringList services = KGlobal::dirs()->findAllResources("data", "kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
         //kDebug() << "ok, trying in" << services.count();
         foreach (const QString &service, services) {
             KConfig config(service, KConfig::SimpleConfig);
