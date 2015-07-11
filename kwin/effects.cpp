@@ -1352,11 +1352,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     }
     KService::Ptr service = offers.first();
 
-    if (service->property("X-Plasma-API").toString() == "javascript") {
-        // this is a scripted effect - use different loader
-        return loadScriptedEffect(name, service.data());
-    }
-
     KLibrary* library = findEffectLibrary(service.data());
     if (!library) {
         return false;
@@ -1438,13 +1433,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     effect_libraries[ name ] = library;
 
     return true;
-}
-
-bool EffectsHandlerImpl::loadScriptedEffect(const QString& name, KService *service)
-{
-    Q_UNUSED(name)
-    Q_UNUSED(service)
-    return false;
 }
 
 void EffectsHandlerImpl::unloadEffect(const QString& name)
