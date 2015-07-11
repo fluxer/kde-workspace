@@ -52,6 +52,7 @@ get_filename_component(proto_xbindir "${some_x_program}" PATH)
 get_filename_component(XBINDIR "${proto_xbindir}" ABSOLUTE)
 get_filename_component(xrootdir "${XBINDIR}" PATH)
 set(XLIBDIR "${xrootdir}/lib/X11")
+set(XKBDIR "${xrootdir}/share/X11")
 
 check_function_exists(getpassphrase HAVE_GETPASSPHRASE)
 check_function_exists(vsyslog HAVE_VSYSLOG)
