@@ -861,13 +861,7 @@ void Options::syncFromKcfgc()
     setRollOverDesktops(m_settings->rollOverDesktops());
     setLegacyFullscreenSupport(m_settings->legacyFullscreenSupport());
     setFocusStealingPreventionLevel(m_settings->focusStealingPreventionLevel());
-
-#ifdef KWIN_BUILD_DECORATIONS
     setPlacement(m_settings->placement());
-#else
-    setPlacement(Placement::Maximizing);
-#endif
-
     setAutoRaise(m_settings->autoRaise());
     setAutoRaiseInterval(m_settings->autoRaiseInterval());
     setDelayFocusInterval(m_settings->delayFocusInterval());

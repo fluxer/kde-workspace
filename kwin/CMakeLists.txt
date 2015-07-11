@@ -1,7 +1,6 @@
 ########### configure tests ###############
 INCLUDE(CMakeDependentOption)
 
-OPTION(KWIN_BUILD_DECORATIONS "Enable building of KWin decorations." ON)
 OPTION(KWIN_BUILD_OXYGEN "Enable building of default decoration Oxygen" ON)
 OPTION(KWIN_BUILD_KCMS "Enable building of KWin configuration modules." ON)
 OPTION(KWIN_BUILD_TABBOX "Enable building of KWin Tabbox functionality" ON)
@@ -9,8 +8,6 @@ OPTION(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support"
 OPTION(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 OPTION(KWIN_BUILD_XRENDER_COMPOSITING "Enable building of KWin with XRender Compositing support" ON)
 OPTION(KWIN_BUILD_OPENGL_1_COMPOSITING "Enable support for OpenGL 1.x, automatically disabled when building for OpenGL ES 2.0" ON)
-
-cmake_dependent_option(KWIN_BUILD_KAPPMENU "Build without appmenu support" ON "KWIN_BUILD_DECORATIONS" FALSE)
 
 # KWIN_HAVE_XRENDER_COMPOSITING - whether XRender-based compositing support is available: may be disabled
 if( KWIN_BUILD_XRENDER_COMPOSITING )
@@ -56,9 +53,7 @@ if(KWIN_BUILD_KCMS)
     add_subdirectory( kcmkwin )
 endif()
 
-if( KWIN_BUILD_DECORATIONS )
-    add_subdirectory( clients )
-endif()
+add_subdirectory( clients )
 add_subdirectory( data )
 
 add_subdirectory( effects )
