@@ -357,8 +357,7 @@ static int startApp()
     int needpw = proc.checkNeedPassword();
     if (needpw < 0)
     {
-        QString err = i18n("Su returned with an error.\n");
-        KMessageBox::error(0L, err);
+        KMessageBox::error(0L, i18n("Su returned with an error.\n"));
         exit(1);
     }
     if (needpw == 0)
