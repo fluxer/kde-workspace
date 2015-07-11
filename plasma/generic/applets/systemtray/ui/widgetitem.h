@@ -22,8 +22,8 @@
  **********************************************************************************************************************/
 
 
-#ifndef __SYSTEMTRAY__WIDGETITEM_H
-#define __SYSTEMTRAY__WIDGETITEM_H
+#ifndef SYSTEMTRAY__WIDGETITEM_H
+#define SYSTEMTRAY__WIDGETITEM_H
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Includess
@@ -78,4 +78,4 @@ private:
 
 } //namespace SystemTray
 
-#endif // __SYSTEMTRAY__WIDGETITEM_H
+#endif // SYSTEMTRAY__WIDGETITEM_H

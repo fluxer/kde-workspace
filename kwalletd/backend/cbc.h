@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __CBC__KO__H
-#define __CBC__KO__H
+#ifndef CBC__KO__H
+#define CBC__KO__H
 
 #include "blockcipher.h"
 

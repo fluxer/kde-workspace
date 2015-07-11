@@ -16,8 +16,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __THEMEPAGE_H
-#define __THEMEPAGE_H
+#ifndef THEMEPAGE_H
+#define THEMEPAGE_H
 
 class QTreeWidget;
 class QTreeWidgetItem;
@@ -48,6 +48,6 @@ class ThemePage : public QWidget
 		QString currentTheme, selectedTheme;
 };
 
-#endif // __THEMEPAGE_H
+#endif // THEMEPAGE_H
 
 // vim: set noet ts=4 sw=4:

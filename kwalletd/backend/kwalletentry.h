@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _KWALLETENTRY_H
-#define _KWALLETENTRY_H
+#ifndef KWALLETENTRY_H
+#define KWALLETENTRY_H
 
 #include <QtCore/QString>
 #include <QtCore/QDataStream>

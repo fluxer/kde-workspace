@@ -27,8 +27,8 @@
 // Desktop menus, paths
 // (c) David Faure 2000
 
-#ifndef __GLOBALPATHS_H
-#define __GLOBALPATHS_H
+#ifndef GLOBALPATHS_H
+#define GLOBALPATHS_H
 
 #include <kcmodule.h>
 #include <kio/global.h>

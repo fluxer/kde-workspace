@@ -18,8 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef _KCM_SMARTCARD_H
-#define _KCM_SMARTCARD_H
+#ifndef KCM_SMARTCARD_H
+#define KCM_SMARTCARD_H
 
 #include <config-workspace.h>
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KWALLETKONFIGURATOR_H
-#define _KWALLETKONFIGURATOR_H
+#ifndef KWALLETKONFIGURATOR_H
+#define KWALLETKONFIGURATOR_H
 #include <kcmodule.h>
 #include <ksharedconfig.h>
 #include "ui_walletconfigwidget.h"

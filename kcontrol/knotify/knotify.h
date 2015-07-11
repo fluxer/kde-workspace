@@ -20,8 +20,8 @@
 */
 
 
-#ifndef _KNOTIFY_H
-#define _KNOTIFY_H
+#ifndef KNOTIFY_H
+#define KNOTIFY_H
 
 
 #include <kcmodule.h>

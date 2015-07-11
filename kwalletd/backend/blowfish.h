@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _BLOWFISH_H
-#define _BLOWFISH_H
+#ifndef BLOWFISH_H
+#define BLOWFISH_H
 
 #include <config-kwalletbackend.h>
 

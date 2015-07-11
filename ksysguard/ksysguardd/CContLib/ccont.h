@@ -22,8 +22,8 @@
 
 */
 
-#ifndef _CCONT_H
-#define _CCONT_H
+#ifndef CCONT_H
+#define CCONT_H
 
 #ifndef NIL
 #define NIL ((void*) 0)

@@ -7,8 +7,8 @@
   (at your option) any later version.
 */
 
-#ifndef _DESKTOPLAYOUT_H
-#define _DESKTOPLAYOUT_H
+#ifndef DESKTOPLAYOUT_H
+#define DESKTOPLAYOUT_H
 
 #include <QHash>
 #include <QMap>

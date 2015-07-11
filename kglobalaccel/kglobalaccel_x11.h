@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KGLOBALACCEL_X11_H
-#define _KGLOBALACCEL_X11_H
+#ifndef KGLOBALACCEL_X11_H
+#define KGLOBALACCEL_X11_H
 
 #include <QWidget>
 
@@ -69,4 +69,4 @@ private:
     GlobalShortcutsRegistry *m_owner;
 };
 
-#endif // _KGLOBALACCEL_X11_H
+#endif // KGLOBALACCEL_X11_H

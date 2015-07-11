@@ -19,8 +19,8 @@
  */
 
 
-#ifndef _KWALLETBACKEND_H
-#define _KWALLETBACKEND_H
+#ifndef KWALLETBACKEND_H
+#define KWALLETBACKEND_H
 
 #include <kcodecs.h>
 

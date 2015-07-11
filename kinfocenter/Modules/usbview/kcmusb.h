@@ -8,8 +8,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef _KCMUSB_H
-#define _KCMUSB_H
+#ifndef KCMUSB_H
+#define KCMUSB_H
 
 #include <QMap>
 

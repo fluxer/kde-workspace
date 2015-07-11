@@ -7,8 +7,8 @@
   (at your option) any later version.
 */
 
-#ifndef _ITEMSPACE_H
-#define _ITEMSPACE_H
+#ifndef ITEMSPACE_H
+#define ITEMSPACE_H
 
 #include <QRectF>
 #include <QList>

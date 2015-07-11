@@ -18,8 +18,8 @@
  ***************************************************************************/
 
 
-#ifndef ResultView_H
-#define ResultView_H
+#ifndef RESULTVIEW_H
+#define RESULTVIEW_H
 
 #include <KDebug>
 

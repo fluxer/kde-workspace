@@ -41,8 +41,8 @@
 **
 **********************************************************************/
 
-#ifndef _PIXMAP_H
-#define _PIXMAP_H
+#ifndef PIXMAP_H
+#define PIXMAP_H
 
 #include "qnamespace.h"
 

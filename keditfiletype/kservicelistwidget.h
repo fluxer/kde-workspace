@@ -19,8 +19,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _KSERVICELISTWIDGET_H
-#define _KSERVICELISTWIDGET_H
+#ifndef KSERVICELISTWIDGET_H
+#define KSERVICELISTWIDGET_H
 
 #include <QGroupBox>
 #include <QListWidget>

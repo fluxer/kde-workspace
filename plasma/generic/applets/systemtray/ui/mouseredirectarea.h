@@ -22,8 +22,8 @@
  **********************************************************************************************************************/
 
 
-#ifndef __SYSTEMTRAY__MOUSEREDIRECTAREA_H
-#define __SYSTEMTRAY__MOUSEREDIRECTAREA_H
+#ifndef SYSTEMTRAY__MOUSEREDIRECTAREA_H
+#define SYSTEMTRAY__MOUSEREDIRECTAREA_H
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Includes
@@ -94,4 +94,4 @@ private: //Variables
 
 } // namespace SystemTray
 
-#endif // __SYSTEMTRAY__MOUSEREDIRECTAREA_H
+#endif // SYSTEMTRAY__MOUSEREDIRECTAREA_H

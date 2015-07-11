@@ -41,8 +41,8 @@
 **
 **********************************************************************/
 
-#ifndef _QGLOBAL_H
-#define _QGLOBAL_H
+#ifndef QGLOBAL_H
+#define QGLOBAL_H
 
 #include "defs.h"
 

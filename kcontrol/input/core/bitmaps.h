@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef __BITMAPS_H
-#define __BITMAPS_H
+#ifndef BITMAPS_H
+#define BITMAPS_H
 
 
 static const char* const arrow_large_black_xpm[] = {

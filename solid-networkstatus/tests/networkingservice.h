@@ -21,8 +21,8 @@
     without including the source code for Qt in the source distribution.
 */
 
-#ifndef _TEST_NETWORKSTATUS_SERVICE_H
-#define _TEST_NETWORKSTATUS_SERVICE_H
+#ifndef TEST_NETWORKSTATUS_SERVICE_H
+#define TEST_NETWORKSTATUS_SERVICE_H
 
 #include <KMainWindow>
 #include <solid/networking.h>

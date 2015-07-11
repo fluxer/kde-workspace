@@ -41,8 +41,8 @@
 **
 **********************************************************************/
 
-#ifndef _X11_DEFS_H
-#define _X11_DEFS_H
+#ifndef X11_DEFS_H
+#define X11_DEFS_H
 
 #include "qrect.h"
 

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef _NEWTYPEDLG_H
-#define _NEWTYPEDLG_H
+#ifndef NEWTYPEDLG_H
+#define NEWTYPEDLG_H
 
 #include <kdialog.h>
 

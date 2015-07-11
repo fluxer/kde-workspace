@@ -18,8 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
-#ifndef _SPLASH_H
-#define _SPLASH_H
+#ifndef SPLASH_H
+#define SPLASH_H
 
 #include <stdio.h>
 
