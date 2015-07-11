@@ -198,35 +198,14 @@ void KWinScreenEdgesConfig::monitorInit()
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
     KService::List services;
     services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_presentwindows'");
-    if (services.isEmpty()) {
-        // adding empty strings in case the effect is not found
-        // TODO: after string freeze add a info that the effect is missing
-        monitorAddItem(QString());
-        monitorAddItem(QString());
-    } else {
+    if (!services.isEmpty()) {
         monitorAddItem(services.first()->name() + " - " + i18n("All Desktops"));
         monitorAddItem(services.first()->name() + " - " + i18n("Current Desktop"));
         monitorAddItem(services.first()->name() + " - " + i18n("Current Application"));
     }
     services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_desktopgrid'");
-    if (services.isEmpty()) {
-        // adding empty strings in case the effect is not found
-        // TODO: after string freeze add a info that the effect is missing
-        monitorAddItem(QString());
-    } else {
+    if (!services.isEmpty()) {
         monitorAddItem(services.first()->name());
-    }
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_cube'");
-    if (services.isEmpty()) {
-        // adding empty strings in case the effect is not found
-        // TODO: after string freeze add a info that the effect is missing
-        monitorAddItem(QString());
-        monitorAddItem(QString());
-        monitorAddItem(QString());
-    } else {
-        monitorAddItem(services.first()->name() + " - " + i18n("Cube"));
-        monitorAddItem(services.first()->name() + " - " + i18n("Cylinder"));
-        monitorAddItem(services.first()->name() + " - " + i18n("Sphere"));
     }
 
     monitorAddItem(i18n("Toggle window switching"));
@@ -290,27 +269,6 @@ void KWinScreenEdgesConfig::monitorLoad()
     list = gridConfig.readEntry("BorderActivate", list);
     foreach (int i, list) {
         monitorChangeEdge(ElectricBorder(i), int(DesktopGrid));
-    }
-
-    // Desktop Cube
-    KConfigGroup cubeConfig(m_config, "Effect-Cube");
-    list.clear();
-    list.append(int(ElectricNone));
-    list = cubeConfig.readEntry("BorderActivate", list);
-    foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(Cube));
-    }
-    list.clear();
-    list.append(int(ElectricNone));
-    list = cubeConfig.readEntry("BorderActivateCylinder", list);
-    foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(Cylinder));
-    }
-    list.clear();
-    list.append(int(ElectricNone));
-    list = cubeConfig.readEntry("BorderActivateSphere", list);
-    foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(Sphere));
     }
 
     // TabBox
@@ -385,15 +343,6 @@ void KWinScreenEdgesConfig::monitorSave()
     gridConfig.writeEntry("BorderActivate",
                           monitorCheckEffectHasEdge(int(DesktopGrid)));
 
-    // Desktop Cube
-    KConfigGroup cubeConfig(m_config, "Effect-Cube");
-    cubeConfig.writeEntry("BorderActivate",
-                          monitorCheckEffectHasEdge(int(Cube)));
-    cubeConfig.writeEntry("BorderActivateCylinder",
-                          monitorCheckEffectHasEdge(int(Cylinder)));
-    cubeConfig.writeEntry("BorderActivateSphere",
-                          monitorCheckEffectHasEdge(int(Sphere)));
-
     // TabBox
     KConfigGroup tabBoxConfig(m_config, "TabBox");
     tabBoxConfig.writeEntry("BorderActivate",
@@ -428,19 +377,10 @@ void KWinScreenEdgesConfig::monitorShowEvent()
         // Desktop Grid
         enabled = effectEnabled("desktopgrid", config);
         monitorItemSetEnabled(int(DesktopGrid), enabled);
-
-        // Desktop Cube
-        enabled = effectEnabled("cube", config);
-        monitorItemSetEnabled(int(Cube), enabled);
-        monitorItemSetEnabled(int(Cylinder), enabled);
-        monitorItemSetEnabled(int(Sphere), enabled);
     } else { // Compositing disabled
         monitorItemSetEnabled(int(PresentWindowsCurrent), false);
         monitorItemSetEnabled(int(PresentWindowsAll), false);
         monitorItemSetEnabled(int(DesktopGrid), false);
-        monitorItemSetEnabled(int(Cube), false);
-        monitorItemSetEnabled(int(Cylinder), false);
-        monitorItemSetEnabled(int(Sphere), false);
     }
     // tabbox, depends on reasonable focus policy.
     KConfigGroup config2(m_config, "Windows");
