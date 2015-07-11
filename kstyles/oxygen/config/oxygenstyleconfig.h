@@ -1,5 +1,5 @@
-#ifndef oxygenstyleconfig_h
-#define oxygenstyleconfig_h
+#ifndef OXYGENSTYLECONFIG_H
+#define OXYGENSTYLECONFIG_H
 /*
 Copyright (c) 2010 Hugo Pereira Da Costa <hugo.pereira@free.fr>
 Copyright (C) 2003 Sandro Giessl <ceebx@users.sourceforge.net>

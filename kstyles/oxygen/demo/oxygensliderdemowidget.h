@@ -1,5 +1,5 @@
-#ifndef oxygensliderdemowidget_h
-#define oxygensliderdemowidget_h
+#ifndef OXYGENSLIDERDEMOWIDGET_H
+#define OXYGENSLIDERDEMOWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygensliderdemowidget.h

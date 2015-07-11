@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef basictab_h
-#define basictab_h
+#ifndef BASICTAB_H
+#define BASICTAB_H
 
 #include <KTabWidget>
 #include <KShortcut>

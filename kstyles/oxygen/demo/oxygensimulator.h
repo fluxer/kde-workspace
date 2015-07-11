@@ -1,5 +1,5 @@
-#ifndef oxygensimulator_h
-#define oxygensimulator_h
+#ifndef OXYGENSIMULATOR_H
+#define OXYGENSIMULATOR_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygensimulator.h

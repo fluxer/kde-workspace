@@ -1,5 +1,5 @@
-#ifndef oxygenmetrics_h
-#define oxygenmetrics_h
+#ifndef OXYGENMETRICS_H
+#define OXYGENMETRICS_H
 
 /*
 * this file is part of the oxygen gtk engine

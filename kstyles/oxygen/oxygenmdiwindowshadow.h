@@ -1,5 +1,5 @@
-#ifndef oxygenmdiwindowshadow_h
-#define oxygenmdiwindowshadow_h
+#ifndef OXYGENMDIWINDOWSHADOW_H
+#define OXYGENMDIWINDOWSHADOW_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenmdiwindowshadow.h

@@ -1,5 +1,5 @@
-#ifndef oxygenclientgroupitemdata_h
-#define oxygenclientgroupitemdata_h
+#ifndef OXYGENCLIENTGROUPITEMDATA_H
+#define OXYGENCLIENTGROUPITEMDATA_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenclientgroupitemdata.h

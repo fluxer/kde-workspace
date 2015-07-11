@@ -1,5 +1,5 @@
-#ifndef oxygenconfigwidget_h
-#define oxygenconfigwidget_h
+#ifndef OXYGENCONFIGWIDGET_H
+#define OXYGENCONFIGWIDGET_H
 //////////////////////////////////////////////////////////////////////////////
 // oxygenconfigurationui.h
 // -------------------

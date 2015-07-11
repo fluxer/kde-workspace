@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef khotkeys_public_h
-#define khotkeys_public_h
+#ifndef KHOTKEYS_PUBLIC_H
+#define KHOTKEYS_PUBLIC_H
 
 #include <QString>
 

@@ -1,5 +1,5 @@
-#ifndef oxygenexceptionlistwidget_h
-#define oxygenexceptionlistwidget_h
+#ifndef OXYGENEXCEPTIONLISTWIDGET_H
+#define OXYGENEXCEPTIONLISTWIDGET_H
 //////////////////////////////////////////////////////////////////////////////
 // oxygenexceptionlistwidget.h
 // -------------------

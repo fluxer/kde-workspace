@@ -1,5 +1,5 @@
-#ifndef oxygenutil_h
-#define oxygenutil_h
+#ifndef OXYGENUTIL_H
+#define OXYGENUTIL_H
 
 /*
  * Copyright 2012 Hugo Pereira Da Costa <hugo.pereira@free.fr>

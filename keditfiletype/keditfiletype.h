@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __keditfiletype_h
-#define __keditfiletype_h
+#ifndef KEDITFILETYPE_H
+#define KEDITFILETYPE_H
 
 #include <kdialog.h>
 #include <kmimetype.h>

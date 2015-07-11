@@ -1,5 +1,5 @@
-#ifndef oxygendemodialog_h
-#define oxygendemodialog_h
+#ifndef OXYGENDEMODIALOG_H
+#define OXYGENDEMODIALOG_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygendemodialog.h

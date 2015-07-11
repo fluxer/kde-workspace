@@ -1,5 +1,5 @@
-#ifndef oxygenshadowdemodialog_h
-#define oxygenshadowdemodialog_h
+#ifndef OXYGENSHADOWDEMODIALOG_H
+#define OXYGENSHADOWDEMODIALOG_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenshadowdemodialog.h

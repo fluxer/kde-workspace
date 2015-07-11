@@ -47,8 +47,8 @@ extern "C" {
  */
 
 /* from @(#)nfs_prot.x	1.3 91/03/11 TIRPC 1.0 */
-#ifndef _rpcsvc_nfs_prot_h
-#define _rpcsvc_nfs_prot_h
+#ifndef RPCSVC_NFS_PROT_H
+#define RPCSVC_NFS_PROT_H
 #define NFS_PORT 2049
 #define NFS_MAXDATA 8192
 #define NFS_MAXPATHLEN 1024
@@ -351,7 +351,7 @@ struct ppathcnf {
 	short pc_mask[2];
 };
 typedef struct ppathcnf ppathcnf;
-#endif /*!_rpcsvc_nfs_prot_h*/
+#endif /*!RPCSVC_NFS_PROT_H*/
 
 #define NFS_PROGRAM 100003
 #define NFS_VERSION 2

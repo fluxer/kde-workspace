@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef treeview_h
-#define treeview_h
+#ifndef TREEVIEW_H
+#define TREEVIEW_H
 
 #include <QTreeWidget>
 #include <QMimeData>

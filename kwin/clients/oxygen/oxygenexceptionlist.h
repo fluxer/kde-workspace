@@ -1,5 +1,5 @@
-#ifndef oxygenexceptionlist_h
-#define oxygenexceptionlist_h
+#ifndef OXYGENEXCEPTIONLIST_H
+#define OXYGENEXCEPTIONLIST_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenexceptionlist.h

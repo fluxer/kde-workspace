@@ -1,5 +1,5 @@
-#ifndef oxygendecohelper_h
-#define oxygendecohelper_h
+#ifndef OXYGENDECOHELPER_H
+#define OXYGENDECOHELPER_H
 
 /*
  * Copyright 2013 Hugo Pereira Da Costa <hugo.pereira@free.fr>

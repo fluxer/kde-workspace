@@ -19,8 +19,8 @@
 
 */
 
-#ifndef _LogFile_h
-#define _LogFile_h
+#ifndef LOGFILE_H
+#define LOGFILE_H
 
 #define MAXLINES 500
 
@@ -80,4 +80,4 @@ private:
 	unsigned long logFileID;
 };
 
-#endif // _LogFile_h
+#endif // LOGFILE_H

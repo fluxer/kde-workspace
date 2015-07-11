@@ -1,5 +1,5 @@
-#ifndef oxygendetectwidget_h
-#define oxygendetectwidget_h
+#ifndef OXYGENDETECTWIDGET_H
+#define OXYGENDETECTWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygendetectwidget.h

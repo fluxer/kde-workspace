@@ -1,5 +1,5 @@
-#ifndef oxygenaddeventfilter_h
-#define oxygenaddeventfilter_h
+#ifndef OXYGENADDEVENTFILTER_H
+#define OXYGENADDEVENTFILTER_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenaddeventfilter.h

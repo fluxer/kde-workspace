@@ -1,5 +1,5 @@
-#ifndef oxygentileset_h
-#define oxygentileset_h
+#ifndef OXYGENTILESET_H
+#define OXYGENTILESET_H
 
 /*
  * Copyright 2009-2010 Hugo Pereira Da Costa <hugo.pereira@free.fr>

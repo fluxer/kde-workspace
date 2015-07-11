@@ -1,5 +1,5 @@
-#ifndef oxygenbutton_h
-#define oxygenbutton_h
+#ifndef OXYGENBUTTON_H
+#define OXYGENBUTTON_H
 
 //////////////////////////////////////////////////////////////////////////////
 // Button.h

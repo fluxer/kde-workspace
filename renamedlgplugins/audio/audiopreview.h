@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef audiopreview_h
-#define audiopreview_h
+#ifndef AUDIOPREVIEW_H
+#define AUDIOPREVIEW_H
 
 #include <kvbox.h>
 

@@ -1,5 +1,5 @@
-#ifndef oxygenexceptiondialog_h
-#define oxygenexceptiondialog_h
+#ifndef OXYGENEXCEPTIONDIALOG_H
+#define OXYGENEXCEPTIONDIALOG_H
 //////////////////////////////////////////////////////////////////////////////
 // oxygenexceptiondialog.h
 // -------------------

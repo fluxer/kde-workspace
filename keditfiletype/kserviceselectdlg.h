@@ -15,8 +15,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __kserviceselectdlg_h
-#define __kserviceselectdlg_h
+#ifndef KSERVICESELECTDLG_H
+#define KSERVICESELECTDLG_H
 #include <kdialog.h>
 #include <kservice.h>
 #include <klistwidget.h>

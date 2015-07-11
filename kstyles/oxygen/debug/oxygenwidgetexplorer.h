@@ -1,5 +1,5 @@
-#ifndef oxygenwidgetexplorer_h
-#define oxygenwidgetexplorer_h
+#ifndef OXYGENWIDGETEXPLORER_H
+#define OXYGENWIDGETEXPLORER_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenwidgetexplorer.h

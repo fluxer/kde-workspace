@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef imagevisualizer_h
-#define imagevisualizer_h
+#ifndef IMAGEVISUALIZER_H
+#define IMAGEVISUALIZER_H
 
 
 //Added by qt3to4:

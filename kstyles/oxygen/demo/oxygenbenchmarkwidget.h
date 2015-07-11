@@ -1,5 +1,5 @@
-#ifndef oxygenbenchmarkwidget_h
-#define oxygenbenchmarkwidget_h
+#ifndef OXYGENBENCHMARKWIDGET_H
+#define OXYGENBENCHMARKWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenbenchmarkwidget.h

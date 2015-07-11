@@ -1,5 +1,5 @@
-#ifndef ShadowConfigWidget_h
-#define ShadowConfigWidget_h
+#ifndef SHADOWCONFIGWIDGET_H
+#define SHADOWCONFIGWIDGET_H
 //////////////////////////////////////////////////////////////////////////////
 // ShadowConfigWidget.h
 // -------------------

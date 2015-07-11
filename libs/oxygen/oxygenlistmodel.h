@@ -1,5 +1,5 @@
-#ifndef ListModel_h
-#define ListModel_h
+#ifndef LISTMODEL_H
+#define LISTMODEL_H
 //////////////////////////////////////////////////////////////////////////////
 // listmodel.h
 // -------------------

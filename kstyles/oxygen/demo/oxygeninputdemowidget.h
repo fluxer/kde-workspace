@@ -1,5 +1,5 @@
-#ifndef oxygeninputdemowidget_h
-#define oxygeninputdemowidget_h
+#ifndef OXYGENINPUTDEMOWIDGET_H
+#define OXYGENINPUTDEMOWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygeninputdemowidget.h

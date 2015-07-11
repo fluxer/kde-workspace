@@ -19,8 +19,8 @@
 */
 
 
-#ifndef __sha1__ko__h
-#define __sha1__ko__h
+#ifndef SHA1__KO_H
+#define SHA1__KO_H
 
 #include <kwallet_export.h>
 

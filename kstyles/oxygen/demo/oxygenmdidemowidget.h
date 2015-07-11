@@ -1,5 +1,5 @@
-#ifndef oxygenmdidemowidget_h
-#define oxygenmdidemowidget_h
+#ifndef OXYGENMDIDEMOWIDGET_H
+#define OXYGENMDIDEMOWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenmdidemowidget.h

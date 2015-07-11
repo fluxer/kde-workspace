@@ -1,5 +1,5 @@
-#ifndef oxygenlistdemowidget_h
-#define oxygenlistdemowidget_h
+#ifndef OXYGENLISTDEMOWIDGET_H
+#define OXYGENLISTDEMOWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenlistdemowidget.h

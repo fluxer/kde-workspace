@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef kmenuedit_h
-#define kmenuedit_h
+#ifndef KMENUEDIT_H
+#define KMENUEDIT_H
 
 #include <KXmlGuiWindow>
 

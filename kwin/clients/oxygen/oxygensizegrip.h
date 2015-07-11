@@ -1,5 +1,5 @@
-#ifndef oxygensizegrip_h
-#define oxygensizegrip_h
+#ifndef OXYGENSIZEGRIP_H
+#define OXYGENSIZEGRIP_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygensizegrip.h

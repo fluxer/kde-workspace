@@ -1,5 +1,5 @@
-#ifndef oxygen_helper_h
-#define oxygen_helper_h
+#ifndef OXYGEN_HELPER_H
+#define OXYGEN_HELPER_H
 
 /*
  * Copyright 2009-2010 Hugo Pereira Da Costa <hugo.pereira@free.fr>

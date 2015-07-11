@@ -1,5 +1,5 @@
-#ifndef oxygenpropertynames_h
-#define oxygenpropertynames_h
+#ifndef OXYGENPROPERTYNAMES_H
+#define OXYGENPROPERTYNAMES_H
 
 /*
 * oxygenpropertynames.h

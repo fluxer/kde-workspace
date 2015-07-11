@@ -1,5 +1,5 @@
-#ifndef oxygenshadowdemowidget_h
-#define oxygenshadowdemowidget_h
+#ifndef OXYGENSHADOWDEMOWIDGET_H
+#define OXYGENSHADOWDEMOWIDGET_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenshadowdemowidget.h

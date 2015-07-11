@@ -21,8 +21,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#ifndef __kdm_main_h
-#define __kdm_main_h
+#ifndef KDM_MAIN_H
+#define KDM_MAIN_H
 
 #include <kcmodule.h>
 #include <ksharedconfig.h>

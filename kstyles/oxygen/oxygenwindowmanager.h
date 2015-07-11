@@ -1,5 +1,5 @@
-#ifndef oxygenwindowmanager_h
-#define oxygenwindowmanager_h
+#ifndef OXYGENWINDOWMANAGER_H
+#define OXYGENWINDOWMANAGER_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenwindowmanager.h

@@ -1,5 +1,5 @@
-#ifndef oxygenconfigdialog_h
-#define oxygenconfigdialog_h
+#ifndef OXYGENCONFIGDIALOG_H
+#define OXYGENCONFIGDIALOG_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenconfigdialog.h

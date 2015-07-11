@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef PREFERENCESDLG_h
-#define PREFERENCESDLG_h
+#ifndef PREFERENCESDLG_H
+#define PREFERENCESDLG_H
 
 #include <KPageDialog>
 

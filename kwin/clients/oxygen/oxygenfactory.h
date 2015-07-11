@@ -1,5 +1,5 @@
-#ifndef oxygenfactory_h
-#define oxygenfactory_h
+#ifndef OXYGENFACTORY_H
+#define OXYGENFACTORY_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygen.h

@@ -16,8 +16,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef __kioclient_h
-#define __kioclient_h
+#ifndef KIOCLIENT_H
+#define KIOCLIENT_H
 
 #include <QApplication>
 #include <kio/udsentry.h>

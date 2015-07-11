@@ -1,5 +1,5 @@
-#ifndef oxygensplitterproxy_h
-#define oxygensplitterproxy_h
+#ifndef OXYGENSPLITTERPROXY_H
+#define OXYGENSPLITTERPROXY_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygensplitterproxy.h

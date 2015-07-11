@@ -1,5 +1,5 @@
-#ifndef oxygenframeshadow_h
-#define oxygenframeshadow_h
+#ifndef OXYGENFRAMESHADOW_H
+#define OXYGENFRAMESHADOW_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenframeshadow.h

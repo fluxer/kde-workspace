@@ -1,5 +1,5 @@
-#ifndef oxygenmnemonics_h
-#define oxygenmnemonics_h
+#ifndef OXYGENMNEMONICS_H
+#define OXYGENMNEMONICS_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenmnemonics.h

@@ -1,5 +1,5 @@
-#ifndef oxygenshadowhelper_h
-#define oxygenshadowhelper_h
+#ifndef OXYGENSHADOWHELPER_H
+#define OXYGENSHADOWHELPER_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenshadowhelper.h

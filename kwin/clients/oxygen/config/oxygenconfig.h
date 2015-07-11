@@ -1,5 +1,5 @@
-#ifndef oxygen_config_h
-#define oxygen_config_h
+#ifndef OXYGEN_CONFIG_H
+#define OXYGEN_CONFIG_H
 
 //////////////////////////////////////////////////////////////////////////////
 // config.h

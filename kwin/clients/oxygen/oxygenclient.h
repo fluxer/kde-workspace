@@ -1,5 +1,5 @@
-#ifndef oxygenclient_h
-#define oxygenclient_h
+#ifndef OXYGENCLIENT_H
+#define OXYGENCLIENT_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenclient.h

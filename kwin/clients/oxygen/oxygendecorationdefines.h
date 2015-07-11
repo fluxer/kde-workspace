@@ -1,5 +1,5 @@
-#ifndef oxygendecorationdefines_h
-#define oxygendecorationdefines_h
+#ifndef OXYGENDECORATIONDEFINES_H
+#define OXYGENDECORATIONDEFINES_H
 //////////////////////////////////////////////////////////////////////////////
 // oxygendecorationdefines.h
 // -------------------

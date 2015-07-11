@@ -1,5 +1,5 @@
-#ifndef oxygenstyle_h
-#define oxygenstyle_h
+#ifndef OXYGENSTYLE_H
+#define OXYGENSTYLE_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenstyle.h

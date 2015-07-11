@@ -1,5 +1,5 @@
-#ifndef oxygenblurhelper_h
-#define oxygenblurhelper_h
+#ifndef OXYGENBLURHELPER_H
+#define OXYGENBLURHELPER_H
 
 //////////////////////////////////////////////////////////////////////////////
 // oxygenblurhelper.h
