@@ -160,10 +160,10 @@ KdmLayoutBox::update(QStack<QSize> &parentSizes, const QRect &parentGeometry, bo
             if (havetot < opttot + (ccnt - 1) * spacing)
                 spacing = (havetot - opttot) / (ccnt - 1);
             int extra = havetot - opttot - (ccnt - 1) * spacing;
-            int tesum, wesum, textra, wextra;
+            int tesum, wesum, wextra;
             do {
                 tesum = wesum = esum;
-                textra = wextra = extra;
+                wextra = extra;
                 int idx = 0;
                 forEachVisibleChild (itm) {
                     if (!lhs[idx].done) {

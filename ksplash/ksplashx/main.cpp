@@ -41,7 +41,7 @@ int main( int argc, char* argv[] )
         usage( argv[ 0 ] );
     bool test = false;
     bool print_pid = false;
-    int* cpid;
+    int* cpid = 0;
     for( int i = 2; // 1 is the theme
          i < argc;
          ++i )

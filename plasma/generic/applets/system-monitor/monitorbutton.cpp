@@ -109,11 +109,6 @@ void MonitorButton::paint(QPainter *p,
     Q_UNUSED(option)
     Q_UNUSED(widget)
 
-    QIcon::Mode mode = QIcon::Disabled;
-    if (isChecked()) {
-        mode = QIcon::Normal;
-    }
-
     QPixmap icon = Plasma::PaintUtils::transition(d->icon.pixmap(d->imageSize, QIcon::Disabled),
                                                   d->icon.pixmap(d->imageSize, QIcon::Normal),
                                                   isChecked() ? 1 : d->highlighter.currentValue());
