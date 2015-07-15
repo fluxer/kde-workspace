@@ -44,16 +44,6 @@ KDMConvenienceWidget::KDMConvenienceWidget(QWidget *parent)
     : QWidget(parent)
 {
     QString wtstr;
-
-    QLabel *paranoia = new QLabel(
-        i18n("<big><b><center>Attention<br/>"
-             "Read help</center></b></big>"), this);
-    QPalette p;
-    p.setBrush(QPalette::WindowText,
-        KColorScheme(QPalette::Active, KColorScheme::Window)
-            .foreground(KColorScheme::NegativeText));
-    paranoia->setPalette(p);
-
     QSizePolicy vpref(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
     alGroup = new QGroupBox(i18n("Enable Au&to-Login"), this);
@@ -182,9 +172,8 @@ KDMConvenienceWidget::KDMConvenienceWidget(QWidget *parent)
 
     QGridLayout *main = new QGridLayout(this);
     main->setSpacing(10);
-    main->addWidget(paranoia, 0, 0);
-    main->addWidget(alGroup, 1, 0);
-    main->addWidget(puGroup, 2, 0);
+    main->addWidget(alGroup, 0, 0);
+    main->addWidget(puGroup, 1, 0);
     main->addWidget(npGroup, 0, 1, 4, 1);
     main->addWidget(btGroup, 4, 0, 1, 2);
     main->setColumnStretch(0, 1);
