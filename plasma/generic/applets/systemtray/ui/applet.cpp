@@ -422,7 +422,7 @@ void Applet::createConfigurationInterface(KConfigDialog *parent)
         m_visibleItemsUi.unlockButton->setVisible(visible);
 
         m_visibleItemsUi.visibleItemsView->setEnabled(immutability() == Plasma::Mutable);
-        m_visibleItemsUi.visibleItemsView->setCategoryDrawer(new KCategoryDrawerV3(m_visibleItemsUi.visibleItemsView));
+        m_visibleItemsUi.visibleItemsView->setCategoryDrawer(new KCategoryDrawer(m_visibleItemsUi.visibleItemsView));
         m_visibleItemsUi.visibleItemsView->setMouseTracking(true);
         m_visibleItemsUi.visibleItemsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         m_visibleItemsUi.visibleItemsView->setVerticalScrollMode(QListView::ScrollPerPixel);
