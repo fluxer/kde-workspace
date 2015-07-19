@@ -45,7 +45,6 @@ private:
     KSharedConfigPtr m_kwinConfig;
     KSharedConfigPtr m_ownConfig;
     KAutostart m_plasmaDesktopAutostart;
-    KAutostart m_plasmaNetbookAutostart;
     KAutostart m_krunnerAutostart;
     bool m_currentlyIsDesktop;
     bool m_currentlyFixedDashboard;

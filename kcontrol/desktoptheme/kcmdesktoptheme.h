@@ -60,8 +60,6 @@ private:
     bool m_bDetailsDirty;
 
     ThemeModel* m_themeModel;
-
-    bool m_isNetbook;
 };
 
 #endif // KCMDESKTOPTHEME_H

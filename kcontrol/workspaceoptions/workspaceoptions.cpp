@@ -41,7 +41,6 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     m_kwinConfig( KSharedConfig::openConfig("kwinrc")),
     m_ownConfig( KSharedConfig::openConfig("workspaceoptionsrc")),
     m_plasmaDesktopAutostart("plasma-desktop"),
-    m_plasmaNetbookAutostart("plasma-netbook"),
     m_krunnerAutostart("krunner"),
     m_ui(new Ui::MainPage)
 {
@@ -63,8 +62,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     connect(m_ui->showToolTips, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(formFactorChanged(int)));
 
-    //enable the combobox if both plasma-desktop and plasma-netbook are present
-    if (KStandardDirs::findExe("plasma-desktop").isNull() || KStandardDirs::findExe("plasma-netbook").isNull()) {
+    if (KStandardDirs::findExe("plasma-desktop").isNull()) {
         m_ui->formFactor->setEnabled(false);
     }
 }
@@ -85,17 +83,12 @@ void WorkspaceOptionsModule::save()
 
     const bool isDesktop = m_ui->formFactor->currentIndex() == 0;
 
-    m_plasmaDesktopAutostart.setAutostarts(isDesktop);
+    m_plasmaDesktopAutostart.setAutostarts(true);
     m_plasmaDesktopAutostart.setStartPhase(KAutostart::BaseDesktop);
     m_plasmaDesktopAutostart.setCommand("plasma-desktop");
     m_plasmaDesktopAutostart.setAllowedEnvironments(QStringList()<<"KDE");
 
-    m_plasmaNetbookAutostart.setAutostarts(!isDesktop);
-    m_plasmaNetbookAutostart.setStartPhase(KAutostart::BaseDesktop);
-    m_plasmaNetbookAutostart.setCommand("plasma-netbook");
-    m_plasmaNetbookAutostart.setAllowedEnvironments(QStringList()<<"KDE");
-
-    m_krunnerAutostart.setAutostarts(isDesktop);
+    m_krunnerAutostart.setAutostarts(true);
     m_krunnerAutostart.setStartPhase(KAutostart::BaseDesktop);
     m_krunnerAutostart.setCommand("krunner");
     m_krunnerAutostart.setAllowedEnvironments(QStringList()<<"KDE");
@@ -282,21 +275,6 @@ void WorkspaceOptionsModule::save()
     QDBusMessage message = QDBusMessage::createSignal( "/KWin", "org.kde.KWin", "reloadConfig" );
     QDBusConnection::sessionBus().send(message);
 
-
-    if (isDesktop && !m_currentlyIsDesktop) {
-        if (KRun::run("plasma-desktop", KUrl::List(), 0)) {
-            QDBusInterface interface("org.kde.plasma-netbook", "/MainApplication");
-            interface.call(QDBus::NoBlock, "quit");
-            KRun::run("krunner", KUrl::List(), 0);
-        }
-    } else if (!isDesktop && m_currentlyIsDesktop) {
-        if (KRun::run("plasma-netbook", KUrl::List(), 0)) {
-            QDBusInterface interface("org.kde.plasma-desktop", "/MainApplication");
-            interface.call(QDBus::NoBlock, "quit");
-            QDBusInterface krunnerInterface("org.kde.krunner", "/MainApplication");
-            krunnerInterface.call(QDBus::NoBlock, "quit");
-        }
-    }
     m_currentlyIsDesktop = isDesktop;
 
     const bool fixedDashboard = m_ui->dashboardMode->currentIndex() == 1;
@@ -326,8 +304,6 @@ void WorkspaceOptionsModule::load()
     } else {
         m_ui->formFactor->setCurrentIndex(1);
     }
-
-    m_currentlyIsDesktop = m_plasmaDesktopAutostart.autostarts();
 
     QDBusInterface interface("org.kde.plasma-desktop", "/App");
     m_currentlyFixedDashboard = false;

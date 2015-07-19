@@ -57,9 +57,6 @@ KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
     m_bDesktopThemeDirty = false;
     m_bDetailsDirty = false;
 
-    KAutostart plasmaNetbookAutoStart("plasma-netbook");
-    m_isNetbook = plasmaNetbookAutoStart.autostarts();
-
     KGlobal::dirs()->addResourceType("themes", "data", "kstyle/themes");
 
     KAboutData *about =
@@ -112,12 +109,7 @@ void KCMDesktopTheme::save()
     if ( m_bDesktopThemeDirty )
     {
         QString theme = m_themeModel->data(m_theme->currentIndex(), ThemeModel::PackageNameRole).toString();
-        if (m_isNetbook) {
-            KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-netbook");
-            cg.writeEntry("name", theme);
-        } else {
-            Plasma::Theme::defaultTheme()->setThemeName(theme);
-        }
+        Plasma::Theme::defaultTheme()->setThemeName(theme);
     }
 
     if (m_bDetailsDirty)
@@ -146,13 +138,7 @@ void KCMDesktopTheme::loadDesktopTheme()
 {
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_themeModel->reload();
-    QString themeName;
-    if (m_isNetbook) {
-        KConfigGroup cg(KSharedConfig::openConfig("plasmarc"), "Theme-plasma-netbook");
-        themeName = cg.readEntry("name", "air-netbook");
-    } else {
-        themeName = Plasma::Theme::defaultTheme()->themeName();
-    }
+    QString themeName = Plasma::Theme::defaultTheme()->themeName();
     m_theme->setCurrentIndex(m_themeModel->indexOf(themeName));
     QApplication::restoreOverrideCursor();
 }
