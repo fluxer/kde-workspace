@@ -94,7 +94,7 @@ Bundle::Bundle(const QString &path)
       m_isValid(false),
       m_width(0), m_height(0)
 {
-    setContentsPrefix(QString());
+    setContentsPrefixPaths(QStringList());
     QFile f(path);
     f.open(QIODevice::ReadOnly);
     m_data = f.readAll();
@@ -109,7 +109,7 @@ Bundle::Bundle(const QByteArray &data)
       m_width(0),
       m_height(0)
 {
-    setContentsPrefix(QString());
+    setContentsPrefixPaths(QStringList());
     m_data = data;
     initTempDir();
     open();
@@ -123,7 +123,7 @@ Bundle::Bundle(QObject *parent, QVariantList args)
       m_height(0)
 {
     Q_UNUSED(args)
-    setContentsPrefix(QString());
+    setContentsPrefixPaths(QStringList());
 }
 
 Bundle::~Bundle()
