@@ -266,7 +266,7 @@ void Applet::_onStatusChangedTask()
             return; 
         }
     }
-    
+
     setStatus(Plasma::PassiveStatus);
 }
 
