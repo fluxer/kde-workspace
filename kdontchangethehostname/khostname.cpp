@@ -128,32 +128,37 @@ void KHostName::changeX()
    foreach ( const QByteArray &it, lines )
    {
       QList<QByteArray> entries = split(it);
-      if (entries.count() != 3)
+      if (entries.count() != 3) {
          continue;
+      }
 
-      QByteArray netId = entries[0];
-      QByteArray authName = entries[1];
-      QByteArray authKey = entries[2];
+      QByteArray netId = entries[0].trimmed();
+      QByteArray authName = entries[1].trimmed();
+      QByteArray authKey = entries[2].trimmed();
 
       int i = netId.lastIndexOf(':');
-      if (i == -1)
+      if (i == -1) {
          continue;
+      }
       QByteArray netDisplay = netId.mid(i);
-      if (netDisplay != display)
+      if (netDisplay != display) {
          continue;
+      }
 
       i = netId.indexOf('/');
-      if (i == -1)
+      if (i == -1) {
          continue;
+      }
 
       QString newNetId = newName+netId.mid(i);
       QString oldNetId = netId.left(i);
 
-      if (oldNetId != oldName)
-	continue;
+      if (oldNetId != oldName) {
+         continue;
+      }
 
-      QProcess::execute("xauth", QStringList() << "-n" << "remove" << netId);
-      QProcess::execute("xauth", QStringList() << "-n" << "add" << newNetId << authName << authKey);
+      QProcess::execute("xauth", QStringList() << "remove" << netId);
+      QProcess::execute("xauth", QStringList() << "add" << newNetId << authName << authKey);
    }
 }
 
