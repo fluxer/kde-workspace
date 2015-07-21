@@ -157,8 +157,8 @@ void KHostName::changeX()
          continue;
       }
 
-      QProcess::execute("xauth", QStringList() << "remove" << netId);
-      QProcess::execute("xauth", QStringList() << "add" << newNetId << authName << authKey);
+      QProcess::execute("xauth", QStringList() << "-n" << "remove" << netId);
+      QProcess::execute("xauth", QStringList() << "-n" << "add" << newNetId << authName << authKey);
    }
 }
 
