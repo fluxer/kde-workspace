@@ -89,16 +89,14 @@ bool SplashApp::x11EventFilter(XEvent * xe)
                     stage = 0; // not actually used
                 else if (strcmp(message, "kded") == 0 && m_stage < 1)
                     stage = 1;
-                else if (strcmp(message, "confupdate") == 0 && m_stage < 2)
+                else if (strcmp(message, "kcminit") == 0 && m_stage < 2)
                     stage = 2;
-                else if (strcmp(message, "kcminit") == 0 && m_stage < 3)
+                else if (strcmp(message, "ksmserver") == 0 && m_stage < 3)
                     stage = 3;
-                else if (strcmp(message, "ksmserver") == 0 && m_stage < 4)
+                else if (strcmp(message, "wm") == 0 && m_stage < 4)
                     stage = 4;
-                else if (strcmp(message, "wm") == 0 && m_stage < 5)
+                else if (strcmp(message, "desktop") == 0 && m_stage < 5)
                     stage = 5;
-                else if (strcmp(message, "desktop") == 0 && m_stage < 6)
-                    stage = 6;
 
                 setStage(stage);
             }

@@ -25,10 +25,10 @@ const int ANIM_IMAGES_ROW = 10;
 
 // for converting from startup states to (internal) numbers
 // these are also in the simple splash and in krunner
-const char states[][ 12 ] =
-    { "initial", "kded", "confupdate", "kcminit", "ksmserver", "wm", "desktop", "ready" };
+const char states[][ 11 ] =
+    { "initial", "kded", "kcminit", "ksmserver", "wm", "desktop", "ready" };
 // State "ready" isn't used, make splash go away as soon as desktop is ready.
-const int LAST_STATE = 6;
+const int LAST_STATE = 5;
 
 extern int screen_number;
 

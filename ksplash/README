@@ -48,7 +48,6 @@ Startup states:
 These are ksplash states:
 - initial - at the beginning
 - kded - after kded is running (dbus is ready, etc.)
-- confupdate - after kconf_update (settings updated after upgrade, etc.)
 - kcminit - after configuration setup
 - ksmserver - session manager is started
 - wm - window manager is running
