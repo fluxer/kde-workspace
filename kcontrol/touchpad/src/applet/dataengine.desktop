@@ -1,0 +1,40 @@
+[Desktop Entry]
+Name=Touchpad DataEngine
+Name[bs]=Pogon podataka za dodirnu površinu
+Name[cs]=Datový stroj pro touchpad
+Name[da]=Datamotor-motor
+Name[de]=Touchpad-Datenquelle
+Name[el]=Μηχανή δεδομένων επιφάνειας αφής
+Name[es]=Motor de datos del panel táctil
+Name[fi]=Kosketuslevyn tietomoottori
+Name[fr]=Moteur de données du pavé tactile
+Name[hu]=Érintőtábla adatmotor
+Name[ko]=터치패드 데이터 엔진
+Name[lt]=Jutiklinio kilimėlio Duomenų variklis
+Name[nl]=Gegevensengine voor touchpad
+Name[pl]=Silnik danych gładzika
+Name[pt]=Motor de Dados do Rato por Toque
+Name[pt_BR]=Mecanismo de dados do touchpad
+Name[ro]=Motor de date Zonă tactilă
+Name[sk]=Touchpad DataEngine
+Name[sl]=PodatkovniPogon za sledilno ploščico
+Name[sv]=Datagränssnitt för tryckplatta
+Name[tr]=Dokunmatik Yüzey Veri Motoru
+Name[uk]=Рушій даних сенсорної панелі
+Name[x-test]=xxTouchpad DataEnginexx
+Icon=input-touchpad
+Type=Service
+
+X-KDE-ServiceTypes=Plasma/DataEngine
+X-KDE-Library=plasma_engine_touchpad
+X-KDE-PluginInfo-Name=touchpad
+X-KDE-PluginInfo-Category=System Information
+X-KDE-PluginInfo-Author=Alexander Mezin
+X-KDE-PluginInfo-Email=mezin.alexander@gmail.com
+X-KDE-PluginInfo-Version=@TOUCHPAD_KCM_VERSION@
+X-KDE-PluginInfo-Website=https://projects.kde.org/projects/playground/utils/kcm-touchpad/
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+
+X-Plasma-EngineName=touchpad
