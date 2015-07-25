@@ -1,6 +1,7 @@
 add_subdirectory(homerun)
 add_subdirectory(kickoff)
 add_subdirectory(trash)
+add_subdirectory(folderview)
 
 #task and windowlist depend on libs/taskmanager
 add_subdirectory(tasks)
