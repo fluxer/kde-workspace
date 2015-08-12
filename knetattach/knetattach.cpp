@@ -21,6 +21,7 @@
 #include "knetattach.h"
 
 #include <QtCore/QVariant>
+#include <QtCore/qtextcodec.h>
 
 #include <KIO/NetAccess>
 #include <KMessageBox>

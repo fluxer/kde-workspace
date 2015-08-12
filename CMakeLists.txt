@@ -223,7 +223,10 @@ macro_optional_add_subdirectory(kstyles)
 
 # imported from kde-runtime and other sub-projects
 macro_optional_add_subdirectory(kdesu)
-macro_optional_add_subdirectory(phonon)
+# XXX: katie and phonon do not play well yet
+if (NOT KATIE_FOUND)
+    macro_optional_add_subdirectory(phonon)
+endif()
 macro_optional_add_subdirectory(menu)
 macro_optional_add_subdirectory(kwalletd)
 macro_optional_add_subdirectory(kwalletmanager)
