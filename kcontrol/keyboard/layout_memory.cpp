@@ -19,7 +19,7 @@
 #include "layout_memory.h"
 
 #include <QtCore/QSet>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <kdebug.h>
 #include <kwindowsystem.h>

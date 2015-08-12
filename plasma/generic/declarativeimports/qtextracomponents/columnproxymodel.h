@@ -20,7 +20,7 @@
 #ifndef COLUMNPROXYMODEL_H
 #define COLUMNPROXYMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 class ColumnProxyModel : public QAbstractListModel
 {

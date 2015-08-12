@@ -23,8 +23,8 @@
 #include <QObject>
 #include <QPoint>
 #include <QRect>
-#include <QWeakPointer>
-#include <QDeclarativeListProperty>
+#include <QtCore/qsharedpointer.h>
+#include <QtDeclarative/qdeclarativelist.h>
 #include <QDeclarativeItem>
 
 #include "enums.h"

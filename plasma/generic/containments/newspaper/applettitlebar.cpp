@@ -21,8 +21,8 @@
 #include "newspaper.h"
 
 #include <QGraphicsGridLayout>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneResizeEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QPainter>
 #include <QParallelAnimationGroup>
 #include <QTimer>

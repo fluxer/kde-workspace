@@ -24,7 +24,7 @@
 #include <QApplication>
 #include <QDeclarativeItem>
 #include <QDeclarativeContext>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QGraphicsScene>
 #include <QGraphicsView>
 #include <QGraphicsWidget>

@@ -23,7 +23,7 @@
 #include <KDebug>
 #include <QApplication>
 #include <QDesktopWidget>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "randrdisplay.h"
 #ifdef HAS_RANDR_1_2 

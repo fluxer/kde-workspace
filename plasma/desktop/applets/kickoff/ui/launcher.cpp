@@ -26,9 +26,9 @@
 
 // Qt
 #include <QApplication>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QLabel>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QTabBar>

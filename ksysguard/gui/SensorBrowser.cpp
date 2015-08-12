@@ -21,7 +21,7 @@
 
 #include <QtGui/QDrag>
 #include <QtGui/QLabel>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QVBoxLayout>

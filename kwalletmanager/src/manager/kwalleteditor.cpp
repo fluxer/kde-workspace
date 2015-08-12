@@ -24,10 +24,10 @@
 #include "allyourbase.h"
 
 #include <stdlib.h>
-#include <QDomElement>
-#include <QDomNode>
-#include <QDomDocument>
-#include <QXmlStreamWriter>
+#include <QtXml/qdom.h>
+#include <QtXml/qdom.h>
+#include <QtXml/qdom.h>
+#include <QtCore/qxmlstream.h>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialog.h>

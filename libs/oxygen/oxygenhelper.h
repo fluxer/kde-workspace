@@ -32,7 +32,7 @@
 #include <QtGui/QColor>
 #include <QtGui/QPixmap>
 #include <QtGui/QWidget>
-#include <QtGui/QLinearGradient>
+#include <QtGui/qbrush.h>
 #include <QtCore/QCache>
 
 #ifdef Q_WS_X11

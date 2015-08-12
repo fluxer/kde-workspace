@@ -23,7 +23,7 @@
 #include <KGlobalSettings>
 #include <KColorScheme>
 
-#include <QtDebug>
+#include <QtCore/qdebug.h>
 
 PreviewWidget::PreviewWidget(QWidget *parent) : QFrame(parent)
 {

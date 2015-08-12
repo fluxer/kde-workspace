@@ -57,7 +57,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <X11/extensions/Xfixes.h>
 #include <X11/extensions/Xrandr.h>
 #include <X11/Xatom.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "composite.h"
 #include "killwindow.h"

@@ -26,7 +26,7 @@
 #include <kprocess.h>
 #include <kstandarddirs.h>
 
-#include <QXmlStreamWriter>
+#include <QtCore/qxmlstream.h>
 #include <QFile>
 
 /// WARNING: this code is duplicated between apps/nsplugins and runtime/filetypes

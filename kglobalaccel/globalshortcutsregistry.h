@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QHash>
-#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 
 
 class GlobalShortcut;

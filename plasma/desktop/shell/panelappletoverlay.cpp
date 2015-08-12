@@ -22,7 +22,7 @@
 
 #include <QApplication>
 #include <QGraphicsLinearLayout>
-#include <QGraphicsSceneContextMenuEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QPainter>
 #include <QTimer>
 #include <QAction>

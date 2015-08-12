@@ -22,7 +22,7 @@
 #define FETCHSQLITE_H
 #include <QSqlDatabase>
 #include <QList>
-#include <QVariantMap>
+#include <QtCore/qvariant.h>
 
 #include <QVariant>
 #include <QString>

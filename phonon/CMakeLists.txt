@@ -10,16 +10,12 @@ include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${KDE4_INCL
 
 option(KDEBASE_DISABLE_MULTIMEDIA "Disable multimedia support (default: off)" OFF)
 
-# print a message for backward compatibility:
-if(KDE4_DISABLE_MULTIMEDIA)
-   message(STATUS "*********** The switch KDE4_DISABLE_MULTIMEDIA is not supported anymore, use KDEBASE_DISABLE_MULTIMEDIA instead ************")
-endif(KDE4_DISABLE_MULTIMEDIA)
-
-
 if(KDEBASE_DISABLE_MULTIMEDIA)
    message(STATUS "NOTICE: Multimedia support DISABLED (KDEBASE_DISABLE_MULTIMEDIA == ON)")
 else(KDEBASE_DISABLE_MULTIMEDIA)
-   set(PHONON_MIN_VERSION "4.4.57")
+   # TODO: even phonon 4.8.3 identifies itself as "4.4.0" in its namespace
+   # header, the version detection should query the .pc files first!
+   set(PHONON_MIN_VERSION "4.4.0")
    macro_ensure_version("${PHONON_MIN_VERSION}" "${PHONON_VERSION}" _phonon_version_ok)
    if(NOT _phonon_version_ok)
     message(FATAL_ERROR "The installed Phonon is too old. Found version ${PHONON_VERSION}. Required is ${PHONON_MIN_VERSION}")

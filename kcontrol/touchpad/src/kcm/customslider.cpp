@@ -20,7 +20,7 @@
 
 #include <cmath>
 
-#include <QResizeEvent>
+#include <QtGui/qevent.h>
 
 CustomSlider::Interpolator::~Interpolator()
 {

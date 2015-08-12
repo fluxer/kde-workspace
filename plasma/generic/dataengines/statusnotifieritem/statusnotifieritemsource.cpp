@@ -34,11 +34,11 @@
 #include <QDBusMessage>
 #include <QDBusPendingCall>
 #include <QDBusPendingReply>
-#include <QVariantMap>
+#include <QtCore/qvariant.h>
 #include <QImage>
 #include <QMenu>
 #include <QPixmap>
-#include <QSysInfo>
+#include <QtCore/qglobal.h>
 
 #include <netinet/in.h>
 

@@ -23,7 +23,7 @@
 
 #include <QtCore/QTextStream>
 #include <QtCore/QStringList>
-#include <QtXml/QDomElement>
+#include <QtXml/qdom.h>
 #include "Fc.h"
 #include "Style.h"
 #include "WritingSystems.h"

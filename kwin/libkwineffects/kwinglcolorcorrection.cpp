@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QDBusPendingCall>
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 #include <QPair>
 #include <QVector3D>
 

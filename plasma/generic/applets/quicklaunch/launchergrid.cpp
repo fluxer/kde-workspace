@@ -19,13 +19,13 @@
 #include "launchergrid.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QEvent>
 #include <QtCore/QMimeData>
 #include <QtCore/QPointer>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
+#include <QtCore/qpoint.h>
+#include <QtCore/qrect.h>
 #include <QtCore/QUrl>
 #include <QtGui/QApplication>
 #include <QtGui/QBrush>
@@ -33,14 +33,14 @@
 #include <QtGui/QGraphicsGridLayout>
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QGraphicsLinearLayout>
-#include <QtGui/QGraphicsSceneDragDropEvent>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QGraphicsSceneResizeEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QIcon>
 #include <QtGui/QPainter>
 #include <QtGui/QSizePolicy>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QWidget>
 
 // KDE

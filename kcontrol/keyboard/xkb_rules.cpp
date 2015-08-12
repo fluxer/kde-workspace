@@ -25,7 +25,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QRegExp>
 #include <QtGui/QTextDocument> // for Qt::escape
-#include <QtXml/QXmlAttributes>
+#include <QtXml/qxml.h>
 #include <QtCore/QtConcurrentFilter>
 
 //#include <libintl.h>
@@ -34,7 +34,7 @@
 #include "x11_helper.h"
 
 // for findXkbRuleFile
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>

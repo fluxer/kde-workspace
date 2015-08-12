@@ -21,7 +21,7 @@
 #define CHECKBOX_H
 
 #include <QCheckBox>
-#include <QStyleOptionButton>
+#include <QtGui/qstyleoption.h>
 
 class CheckBox: public QCheckBox
 {

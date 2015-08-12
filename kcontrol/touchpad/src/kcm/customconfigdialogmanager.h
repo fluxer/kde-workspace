@@ -20,7 +20,7 @@
 #define CUSTOMCONFIGDIALOGMANAGER_H
 
 #include <QMap>
-#include <QVariantHash>
+#include <QtCore/qvariant.h>
 
 #include <KConfigDialogManager>
 

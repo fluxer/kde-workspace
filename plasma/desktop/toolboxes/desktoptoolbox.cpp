@@ -23,12 +23,12 @@
 #include <QAction>
 #include <QDBusInterface>
 #include <QDBusPendingCall>
-#include <QGraphicsSceneHoverEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QPainter>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsView>
 #include <QTimer>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KAuthorized>
 #include <KDebug>

@@ -38,7 +38,7 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusMetaType>
 #include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 
 #include <Plasma/DataContainer>
 #include "powermanagementservice.h"

@@ -26,7 +26,7 @@ THE SOFTWARE.
 #include <QDebug>
 #include <QDir>
 #include <QFile>
-#include <QXmlStreamReader>
+#include <QtCore/qxmlstream.h>
 
 #include <KDebug>
 

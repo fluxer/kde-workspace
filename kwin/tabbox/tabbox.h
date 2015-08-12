@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KWIN_TABBOX_H
 
 #include <QTimer>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <KShortcut>
 #include "utils.h"
 #include "tabbox/tabboxhandler.h"

@@ -26,9 +26,9 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTextStream>
 #include <QtCore/QProcess>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include <QtXml/QDomNode>
+#include <QtXml/qdom.h>
+#include <QtXml/qdom.h>
+#include <QtXml/qdom.h>
 #include <KStandardDirs>
 #include <KSaveFile>
 #include <KShell>

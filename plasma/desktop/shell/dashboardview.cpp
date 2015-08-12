@@ -22,7 +22,7 @@
 #include "dashboardview.h"
 
 #include <QAction>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QTimer>
 #include <QToolButton>
 

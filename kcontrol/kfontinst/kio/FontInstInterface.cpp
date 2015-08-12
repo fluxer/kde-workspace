@@ -27,6 +27,7 @@
 #include <KDebug>
 #include <kio/global.h>
 #include <QtDBus/QDBusServiceWatcher>
+#include <QtCore/qprocess.h>
 #include "config-fontinst.h"
 
 #define KFI_DBUG kDebug(7000) << '(' << time(NULL) << ')'

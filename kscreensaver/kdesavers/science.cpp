@@ -19,7 +19,7 @@
 #include <qcheckbox.h>
 #include <qslider.h>
 #include <qlayout.h>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 
 #include <kapplication.h>
 #include <kglobal.h>

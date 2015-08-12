@@ -21,7 +21,7 @@
 #define APPLET
 
 #include <QObject>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KConfigGroup>
 

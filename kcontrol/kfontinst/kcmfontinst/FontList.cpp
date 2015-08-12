@@ -39,7 +39,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QFileInfo>
 #include <QtGui/QPixmap>
-#include <QtGui/QDropEvent>
+#include <QtGui/qevent.h>
 #include <QtCore/QDateTime>
 #include <QtGui/QHeaderView>
 #include <QtGui/QPainter>

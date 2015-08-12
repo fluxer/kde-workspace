@@ -31,7 +31,7 @@
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QWhatsThis>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <klocale.h>
 #include <kconfig.h>

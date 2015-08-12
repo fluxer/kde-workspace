@@ -19,7 +19,7 @@
 #include "soliddeviceengine.h"
 #include "soliddeviceservice.h"
 
-#include <QMetaEnum>
+#include <QtCore/qmetaobject.h>
 #include <QDateTime>
 #include <Solid/GenericInterface>
 

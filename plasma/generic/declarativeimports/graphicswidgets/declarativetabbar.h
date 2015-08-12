@@ -21,7 +21,7 @@
 #define DECLARATIVETABBAR
 
 #include <QtDeclarative/qdeclarative.h>
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 
 #include "plasma/widgets/tabbar.h"
 

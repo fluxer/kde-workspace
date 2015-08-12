@@ -22,7 +22,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <QtXml/QXmlAttributes>
+#include <QtXml/qxml.h>
 
 
 class IsoCodesPrivate {

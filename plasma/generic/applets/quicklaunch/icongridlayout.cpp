@@ -19,11 +19,11 @@
 #include "icongridlayout.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QList>
-#include <QtCore/QSizeF>
-#include <QtCore/QRectF>
+#include <QtCore/qsize.h>
+#include <QtCore/qrect.h>
 #include <QtGui/QGraphicsLayout>
 #include <QtGui/QGraphicsLayoutItem>
 #include <QtGui/QSizePolicy>

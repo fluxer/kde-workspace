@@ -20,7 +20,7 @@
 #ifndef ACTIONMODEL_H
 #define ACTIONMODEL_H
 
-#include <QtCore/QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 
 class ActionItem;
 

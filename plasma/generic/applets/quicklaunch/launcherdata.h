@@ -20,7 +20,7 @@
 #define QUICKLAUNCH_LAUNCHERDATA_H
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QMimeData>
 #include <QtCore/QList>

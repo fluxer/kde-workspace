@@ -34,7 +34,7 @@
 #include <QtGui/QAbstractScrollArea>
 #include <QtGui/QApplication>
 #include <QtGui/QFrame>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPainter>
 #include <QtGui/QSplitter>
 

@@ -43,8 +43,8 @@
 #include <QLabel>
 #include <QtGui/QPainter>
 #include <QtGui/QBitmap>
-#include <QtGui/QX11Info>
-#include <QObjectList>
+#include <QtGui/qx11info_x11.h>
+#include <QtCore/qobject.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>

@@ -22,7 +22,8 @@
 #include <QApplication>
 #include <QDebug>
 #include <QDesktopWidget>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
+#include <QtGui/qmenu.h>
 #include <QGraphicsView>
 #include <QDeclarativeItem>
 

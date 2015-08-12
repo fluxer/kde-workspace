@@ -27,7 +27,7 @@
 #include <QBitmap>
 #include <QPixmap>
 #include <QEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 
 #include <kapplication.h>
 #include <kiconloader.h>

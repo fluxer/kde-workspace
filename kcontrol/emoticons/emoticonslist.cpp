@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QIcon>
 #include <QLabel>
-#include <QListWidgetItem>
+#include <QtGui/qlistwidget.h>
 #include <KMessageBox>
 #include <KDebug>
 #include <KIcon>

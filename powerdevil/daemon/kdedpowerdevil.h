@@ -21,7 +21,7 @@
 #define KDEDPOWERDEVIL_H
 
 #include <KDEDModule>
-#include <QVariantList>
+#include <QtCore/qvariant.h>
 
 namespace PowerDevil {
     class Core;

@@ -21,8 +21,8 @@
 
 #include <QFile>
 #include <QFileInfo>
-#include <QGraphicsSceneDragDropEvent>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsItem>
 #include <QGraphicsLinearLayout>
 

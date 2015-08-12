@@ -26,7 +26,7 @@
 #include <QtGui/QHBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QFontInfo>
-#include <QtGui/QResizeEvent>
+#include <QtGui/qevent.h>
 
 
 #include <kdebug.h>

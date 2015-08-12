@@ -20,7 +20,7 @@
 #define THEMEPAGE_H
 
 #include <QWidget>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 #include "ui_themepage.h"
 

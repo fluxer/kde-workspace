@@ -26,6 +26,7 @@
 
 #include <QDBusServiceWatcher>
 #include <QMap>
+#include <QtCore/qtimer.h>
 
 #include <KDebug>
 

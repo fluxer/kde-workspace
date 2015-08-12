@@ -23,7 +23,7 @@
 #include "favoriteappsmodel.h"
 
 // Qt
-#include <QDomDocument>
+#include <QtXml/qdom.h>
 #include <QFile>
 
 // KDE

@@ -28,7 +28,7 @@
 #include <QtCore/QSize>
 #include <QtGui/QWidget>
 #include <QtGui/QColor>
-#include <QtGui/QPaintEvent>
+#include <QtGui/qevent.h>
 #include "KfiConstants.h"
 #include "FcEngine.h"
 

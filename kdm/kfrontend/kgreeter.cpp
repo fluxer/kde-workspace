@@ -43,10 +43,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QDir>
 #include <QFile>
 #include <QImageReader>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QLabel>
 #include <QListWidget>
-#include <QListWidgetItem>
+#include <QtGui/qlistwidget.h>
 #include <QMenu>
 #include <QMovie>
 #include <QPainter>

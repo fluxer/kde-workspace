@@ -35,18 +35,18 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QComboBox>
 #include <QtGui/QCursor>
-#include <QtGui/QFocusEvent>
-#include <QtGui/QHoverEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QtGui/QMdiSubWindow>
 #include <QtGui/QMenu>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QScrollBar>
 #include <QtGui/QSlider>
 #include <QtGui/QStyle>
-#include <QtGui/QStyleOptionComboBox>
-#include <QtGui/QStyleOptionSlider>
+#include <QtGui/qstyleoption.h>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QToolButton>
 
 

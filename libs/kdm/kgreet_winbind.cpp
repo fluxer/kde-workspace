@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QRegExp>
 #include <QLayout>
 #include <QLabel>
-#include <QContextMenuEvent>
+#include <QtGui/qevent.h>
 #include <QGridLayout>
 #include <QTextStream>
 

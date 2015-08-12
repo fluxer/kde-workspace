@@ -24,7 +24,7 @@
 
 #include <config-X11.h>
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <X11/Xlib.h>

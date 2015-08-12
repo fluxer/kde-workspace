@@ -17,7 +17,7 @@
 
 #include "wallpaperpreview.h"
 #include <QPainter>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <Plasma/Wallpaper>
 #include <Plasma/Svg>
 

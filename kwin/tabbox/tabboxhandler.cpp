@@ -26,10 +26,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "desktopmodel.h"
 #include "tabboxconfig.h"
 // Qt
-#include <QKeyEvent>
-#include <QModelIndex>
+#include <QtGui/qevent.h>
+#include <QtCore/qabstractitemmodel.h>
 #include <QTimer>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xlib.h>
 // KDE
 #include <KDebug>

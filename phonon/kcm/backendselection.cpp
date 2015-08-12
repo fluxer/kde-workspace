@@ -38,7 +38,7 @@ BackendSelection::BackendSelection(QWidget *parent)
 {
     setupUi(this);
 
-    m_messageWidget->setShown(false);
+    m_messageWidget->setVisible(false);
     m_messageWidget->setCloseButtonVisible(false);
     m_messageWidget->setMessageType(KMessageWidget::Information);
     m_messageWidget->setText(i18nc("@info User changed Phonon backend",

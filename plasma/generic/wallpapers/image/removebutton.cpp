@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 #include <QPainter>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QRect>
 #include <QTimer>
 #include <QTimeLine>

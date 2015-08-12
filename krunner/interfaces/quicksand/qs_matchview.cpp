@@ -20,13 +20,13 @@
 #include <cmath>
 
 #include <QBoxLayout>
-#include <QFocusEvent>
+#include <QtGui/qevent.h>
 #include <QGraphicsItemAnimation>
-#include <QGraphicsPixmapItem>
+#include <QtGui/qgraphicsitem.h>
 #include <QGraphicsView>
 #include <QGraphicsWidget>
-#include <QKeyEvent>
-#include <QResizeEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QStackedWidget>
 #include <QTimeLine>
 #include <QTimer>

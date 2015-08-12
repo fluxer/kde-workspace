@@ -24,7 +24,7 @@
 #include <KIconEffect>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 
 #include <Plasma/PaintUtils>
 #include <Plasma/Svg>

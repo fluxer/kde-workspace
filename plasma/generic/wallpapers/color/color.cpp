@@ -21,8 +21,8 @@
 #include "color.h"
 
 #include <QPainter>
-#include <QLinearGradient>
-#include <QRadialGradient>
+#include <QtGui/qbrush.h>
+#include <QtGui/qbrush.h>
 
 #include "backgroundlistmodel.h"
 #include "backgrounddelegate.h"

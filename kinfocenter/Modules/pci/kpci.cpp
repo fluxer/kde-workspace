@@ -20,7 +20,7 @@ extern "C" {
 #include <ctype.h> //isxdigit
 #include <string.h> //memcpy
 #include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QFile>
 
 static const QString& getNameById(const id2name *const table, int id) {

@@ -18,6 +18,8 @@
 
 #include "desktopnotifier.h"
 
+#include <QtCore/qfile.h>
+
 #include <KDirWatch>
 #include <KGlobal>
 #include <KGlobalSettings>

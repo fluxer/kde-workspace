@@ -5,6 +5,7 @@
 #include <QtTest>
 #include <QtGui>
 #include <limits>
+#include <math.h>
 
 void TestSignalPlotter::init()
 {

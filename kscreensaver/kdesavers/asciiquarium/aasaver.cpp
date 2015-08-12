@@ -39,7 +39,7 @@
 #include <QtGui/QApplication>
 #include <QtGui/QPainter>
 #include <QtGui/QBrush>
-#include <QtGui/QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QtCore/QList>
 
 #include <kdebug.h>

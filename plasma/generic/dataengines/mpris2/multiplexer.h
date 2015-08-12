@@ -24,7 +24,7 @@
 
 #include "playercontainer.h"
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 class Multiplexer : public Plasma::DataContainer
 {

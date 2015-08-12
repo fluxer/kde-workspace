@@ -21,7 +21,7 @@
 #include "autostart.h"
 
 #include <QComboBox>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QTreeWidget>
 #include <QDir>
 

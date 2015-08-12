@@ -18,6 +18,8 @@
 #define BACKTRACEPARSERTEST_H
 
 #include <QtTest>
+#include <QtCore/qsettings.h>
+
 #include "fakebacktracegenerator.h"
 #include "../../parser/backtraceparser.h"
 

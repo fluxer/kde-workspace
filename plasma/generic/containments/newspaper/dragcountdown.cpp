@@ -21,7 +21,7 @@
 
 #include <QColor>
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QTimer>
 
 #include <KDebug>

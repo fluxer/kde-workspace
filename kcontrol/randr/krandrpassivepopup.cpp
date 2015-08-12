@@ -19,7 +19,7 @@
 #include "krandrpassivepopup.h"
 
 #include <kapplication.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 //Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>

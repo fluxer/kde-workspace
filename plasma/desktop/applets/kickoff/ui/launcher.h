@@ -21,7 +21,7 @@
 #define LAUNCHER_H
 
 // Qt
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QWidget>
 
 // Plasma

@@ -23,7 +23,7 @@
 
 #include <QGraphicsItem>
 #include <QPropertyAnimation>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include <KIcon>
 

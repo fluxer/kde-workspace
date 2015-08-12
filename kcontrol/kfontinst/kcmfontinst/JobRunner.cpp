@@ -37,12 +37,13 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QProgressBar>
 #include <QtGui/QLabel>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QtGui/QStackedWidget>
 #include <QtGui/QCheckBox>
 #include <QtGui/QStyleOption>
 #include <QtGui/QStyle>
-#include <QtGui/QCloseEvent>
+#include <QtGui/qevent.h>
+#include <QtCore/qprocess.h>
 #include <QtCore/QTimer>
 #include <QtDBus/QDBusServiceWatcher>
 #include <X11/Xlib.h>

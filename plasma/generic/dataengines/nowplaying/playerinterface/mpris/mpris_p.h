@@ -21,7 +21,7 @@
 #include "mprisdbustypes.h"
 #include "../player.h"
 
-#include <QVariantMap>
+#include <QtCore/qvariant.h>
 
 class MprisPlayer;
 

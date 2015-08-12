@@ -22,10 +22,10 @@
 #include "ui/itemdelegate.h"
 
 // Qt
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QPainter>
 #include <QStyle>
-#include <QStyleOptionViewItem>
+#include <QtGui/qstyleoption.h>
 
 // KDE
 #include <KDebug>

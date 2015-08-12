@@ -30,7 +30,7 @@
 #include <QtCore/QHash>
 #include <QtCore/QVector>
 #include <QtCore/QList>
-#include <QtDBus/QDBusVariant>
+#include <QtDBus/qdbusextratypes.h>
 
 class PhononServer : public KDEDModule
 {

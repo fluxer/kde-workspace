@@ -22,10 +22,10 @@
 
 #include <QAction>
 #include <QApplication>
-#include <QGraphicsSceneHoverEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsView>
 #include <QPainter>
-#include <QRadialGradient>
+#include <QtGui/qbrush.h>
 
 #include <KColorScheme>
 #include <KConfigGroup>

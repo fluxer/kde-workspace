@@ -1,6 +1,6 @@
 
 #include <QtTest>
-#include <Qt>
+#include <QtCore/qnamespace.h>
 
 #include <QObject>
 #include <QProcess>

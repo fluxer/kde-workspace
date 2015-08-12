@@ -26,7 +26,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsView>
 #include <QHBoxLayout>
-#include <QHideEvent>
+#include <QtGui/qevent.h>
 #include <QLabel>
 #include <QShortcut>
 #include <QToolButton>

@@ -45,7 +45,7 @@
 
 #include <QGraphicsLinearLayout>
 #include <QGraphicsLayoutItem>
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 
 class GraphicsLinearLayoutStretchItemObject : public QObject, public QGraphicsLayoutItem
 {

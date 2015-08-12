@@ -22,7 +22,7 @@
 
 #include <QTimer>
 #include <QRadioButton>
-#include <QVariantList>
+#include <QtCore/qvariant.h>
 
 #include <KMenu>
 #include <KDebug>

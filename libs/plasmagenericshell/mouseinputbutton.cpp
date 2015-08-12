@@ -22,7 +22,7 @@
 #include <KDebug>
 
 #include <QApplication>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 
 #include <plasma/containmentactions.h>
 

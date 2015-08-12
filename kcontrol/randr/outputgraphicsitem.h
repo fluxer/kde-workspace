@@ -19,8 +19,8 @@
 #ifndef OUTPUTGRAPHICSITEM_H
 #define OUTPUTGRAPHICSITEM_H
 
-#include <QGraphicsRectItem>
-#include <QGraphicsTextItem>
+#include <QtGui/qgraphicsitem.h>
+#include <QtGui/qgraphicsitem.h>
 
 #include "randr.h"
 

@@ -20,7 +20,7 @@
 #define TOUCHPADBACKEND_H
 
 #include <QObject>
-#include <QVariantHash>
+#include <QtCore/qvariant.h>
 
 #include <kdemacros.h>
 

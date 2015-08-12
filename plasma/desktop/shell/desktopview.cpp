@@ -21,7 +21,7 @@
 #include "desktopview.h"
 
 #include <QFile>
-#include <QWheelEvent>
+#include <QtGui/qevent.h>
 #include <QCoreApplication>
 
 #include <KMenu>

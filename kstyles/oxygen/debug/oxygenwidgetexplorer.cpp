@@ -29,7 +29,7 @@
 
 #include <QtCore/QTextStream>
 #include <QtGui/QApplication>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPainter>
 
 namespace Oxygen

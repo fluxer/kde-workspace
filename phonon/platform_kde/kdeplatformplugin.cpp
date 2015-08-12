@@ -22,7 +22,7 @@
 
 #include <QtCore/QDir>
 #include <QtCore/QFile>
-#include <QtCore/QtPlugin>
+#include <QtCore/qplugin.h>
 #include <QtCore/QCoreApplication>
 
 #include <kaboutdata.h>

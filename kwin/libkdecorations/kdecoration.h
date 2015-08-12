@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 #include <QObject>
 #include <QtGui/QIcon>
 #include <netwm_def.h>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 
 #define KWIN_DECORATION_API_VERSION 1
 

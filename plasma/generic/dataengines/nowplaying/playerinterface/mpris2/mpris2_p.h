@@ -20,8 +20,8 @@
 #include "mpris2.h"
 #include "../player.h"
 
-#include <QTime>
-#include <QVariantMap>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qvariant.h>
 class QDBusInterface;
 
 class Mpris2 : public QObject, public Player

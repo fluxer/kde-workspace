@@ -26,7 +26,7 @@
 #include <KDebug>
 #include <kdeversion.h>
 
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include <config-workspace.h>
 #include "plasmaapp.h"

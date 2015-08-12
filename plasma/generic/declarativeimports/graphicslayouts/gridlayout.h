@@ -45,7 +45,7 @@
 
 #include <QGraphicsGridLayout>
 #include <QGraphicsLayoutItem>
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 
 class GridLayoutAttached;
 class GraphicsGridLayoutObject : public QObject, public QGraphicsGridLayout

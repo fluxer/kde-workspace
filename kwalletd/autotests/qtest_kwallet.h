@@ -2,6 +2,7 @@
 #ifndef KWALLET_CUSTOM_QTEST
 #define KWALLET_CUSTOM_QTEST
 #include <QtTest/QtTest>
+#include <QtCore/qdir.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <kaboutdata.h>

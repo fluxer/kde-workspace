@@ -61,7 +61,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusInterface>
-#include <QGraphicsScale>
+#include <QtGui/qgraphicstransform.h>
 #include <QStringList>
 #include <QVector2D>
 #include <QVector4D>

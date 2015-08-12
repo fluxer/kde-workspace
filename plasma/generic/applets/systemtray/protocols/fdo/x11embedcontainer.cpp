@@ -29,7 +29,7 @@
 // Qt
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEngine>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 // Xlib
 #include <config-X11.h>

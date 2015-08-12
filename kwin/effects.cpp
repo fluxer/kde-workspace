@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFutureWatcher>
 #include <QtConcurrentRun>
 #include <QDBusServiceWatcher>
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 
 #include <KDebug>
 #include <KLibrary>

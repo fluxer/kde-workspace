@@ -27,7 +27,7 @@
 #include <QVBoxLayout>
 
 #ifdef Q_WS_X11
-    #include <QX11Info>
+    #include <QtGui/qx11info_x11.h>
 #endif
 
 KToolTipWindow::KToolTipWindow(QWidget* content) :

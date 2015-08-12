@@ -23,7 +23,7 @@
 #include <KDebug>
 #include <KIO/PreviewJob>
 #include <KImageCache>
-
+#include <QtCore/qtimer.h>
 
 DirModel::DirModel(QObject *parent)
     : KDirModel(parent),

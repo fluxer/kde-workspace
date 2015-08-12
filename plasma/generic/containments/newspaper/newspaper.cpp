@@ -30,7 +30,7 @@
 #include <QAction>
 #include <QGraphicsLinearLayout>
 #include <QTimer>
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
 
 #include <KDebug>
 #include <KIcon>

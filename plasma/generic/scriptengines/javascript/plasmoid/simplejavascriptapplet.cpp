@@ -22,11 +22,11 @@
 #include <iostream>
 
 #include <QFile>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QGraphicsLayout>
-#include <QGraphicsSceneHoverEvent>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QParallelAnimationGroup>
 #include <QPauseAnimation>
 #include <QSequentialAnimationGroup>

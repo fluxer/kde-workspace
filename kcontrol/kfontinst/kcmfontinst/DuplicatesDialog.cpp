@@ -41,12 +41,12 @@
 #include <QtCore/QTimer>
 #include <QtGui/QGridLayout>
 #include <QtCore/QDir>
-#include <QtCore/QFileInfoList>
+#include <QtCore/qfileinfo.h>
 #include <QtCore/QFileInfo>
 #include <QtGui/QHeaderView>
 #include <QtCore/QDateTime>
 #include <QtGui/QMenu>
-#include <QtGui/QContextMenuEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>

@@ -23,8 +23,8 @@
 #include "resultscene.h"
 
 #include <QtCore/QDebug>
-#include <QtGui/QKeyEvent>
-#include <QtCore/QMutexLocker>
+#include <QtGui/qevent.h>
+#include <QtCore/qmutex.h>
 #include <QtGui/QPainter>
 #include <QtCore/QTimeLine>
 #include <QtGui/QGraphicsGridLayout>

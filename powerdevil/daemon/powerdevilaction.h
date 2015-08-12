@@ -24,7 +24,7 @@
 #include "powerdevilpolicyagent.h"
 
 #include <QtCore/QObject>
-#include <QtCore/QVariantMap>
+#include <QtCore/qvariant.h>
 
 #include <kdemacros.h>
 

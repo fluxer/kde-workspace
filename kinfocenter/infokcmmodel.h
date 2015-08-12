@@ -30,7 +30,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QAbstractItemModel>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QVariant>
 #include <QString>
 

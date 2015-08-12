@@ -25,7 +25,7 @@
 #include <konq_operations.h>
 
 #include <Plasma/Corona>
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 
 
 IconWidget::IconWidget(QGraphicsItem *parent)

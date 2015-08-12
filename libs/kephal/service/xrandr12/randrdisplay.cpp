@@ -20,7 +20,7 @@
 
 #include <KDebug>
 #include <QWidget>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "randrdisplay.h"
 #include "randrscreen.h"

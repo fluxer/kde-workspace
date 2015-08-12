@@ -24,6 +24,9 @@
 
 #include <qtextstream.h>
 #include <QtDBus>
+#include <QtCore/qfileinfo.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qeventloop.h>
 
 #include <KDebug>
 #include <KPluginFactory>

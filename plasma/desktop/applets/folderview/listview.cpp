@@ -22,11 +22,11 @@
 
 #include <QApplication>
 #include <QGraphicsView>
-#include <QGraphicsSceneHoverEvent>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QItemSelectionModel>
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 
 #include <KDirModel>
 #include <KStringHandler>

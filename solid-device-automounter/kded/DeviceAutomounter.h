@@ -19,7 +19,7 @@
 #ifndef DEVICEAUTOMOUNTER_H
 #define DEVICEAUTOMOUNTER_H
 
-#include <QtCore/QVariantList>
+#include <QtCore/qvariant.h>
 #include <KDEDModule>
 #include <Solid/Device>
 #include "AutomounterSettings.h"

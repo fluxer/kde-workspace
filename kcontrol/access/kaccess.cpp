@@ -31,7 +31,7 @@
 
 
 #include "moc_kaccess.cpp"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <kvbox.h>
 
 struct ModifierKey {

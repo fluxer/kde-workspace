@@ -28,7 +28,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <QProcess>
 #include <QTextStream>
 #include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 
 #include <kiconloader.h>
 #include <kglobal.h>

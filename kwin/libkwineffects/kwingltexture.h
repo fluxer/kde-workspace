@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QSize>
 #include <QRegion>
 #include <QSharedPointer>
-#include <QExplicitlySharedDataPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QtGui/QMatrix4x4>
 
 class QImage;

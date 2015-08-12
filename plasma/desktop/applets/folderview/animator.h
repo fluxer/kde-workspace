@@ -22,7 +22,7 @@
 
 #include <QAbstractAnimation>
 #include <QEasingCurve>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <kglobalsettings.h>
 

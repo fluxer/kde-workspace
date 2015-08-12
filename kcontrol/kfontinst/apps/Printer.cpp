@@ -38,7 +38,7 @@
 #include <QtGui/QFrame>
 #include <QtGui/QGridLayout>
 #include <QtGui/QProgressBar>
-#include <QtGui/QCloseEvent>
+#include <QtGui/qevent.h>
 #include <KCmdLineArgs>
 #include <KAboutData>
 #include <KApplication>

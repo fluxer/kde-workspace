@@ -20,7 +20,7 @@
 #include "SolidActionData.h"
 
 #include <QList>
-#include <QMetaProperty>
+#include <QtCore/qmetaobject.h>
 
 #include <KGlobal>
 #include <kdesktopfileactions.h>

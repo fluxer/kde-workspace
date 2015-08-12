@@ -27,7 +27,7 @@
 
 #include "testwin.h"
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #ifdef HAVE_GLXCHOOSEVISUAL
 #include <GL/glx.h>

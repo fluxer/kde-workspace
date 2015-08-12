@@ -19,7 +19,7 @@
 #include "klinespellchecking.h"
 
 #include <QMenu>
-#include <QContextMenuEvent>
+#include <QtGui/qevent.h>
 
 #include <KStandardAction>
 #include <KActionCollection>

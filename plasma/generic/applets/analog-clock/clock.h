@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QPainter>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QGraphicsItem>
 
 #include <Plasma/Containment>

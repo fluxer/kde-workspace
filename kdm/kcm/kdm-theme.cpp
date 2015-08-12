@@ -45,7 +45,7 @@
 #include <QPixmap>
 #include <QPushButton>
 #include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QWhatsThis>
 #include <QWidget>
 

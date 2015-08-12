@@ -27,7 +27,7 @@
 #include <QtGui/QPixmap>
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <KUrl>
 #include <KConfig>
 #include <KConfigGroup>

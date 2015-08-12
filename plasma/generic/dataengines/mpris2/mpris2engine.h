@@ -21,7 +21,7 @@
 
 #include <Plasma/DataEngine>
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 class QDBusPendingCallWatcher;
 class PlayerContainer;

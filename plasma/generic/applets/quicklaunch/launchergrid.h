@@ -20,10 +20,10 @@
 #define QUICKLAUNCH_LAUNCHERGRID_H
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QList>
-#include <QtCore/QPointF>
+#include <QtCore/qpoint.h>
 #include <QtGui/QGraphicsWidget>
 
 // KDE

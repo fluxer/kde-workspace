@@ -19,7 +19,7 @@
 
 #include "appbackgroundprovider_p.h"
 
-#include <QLatin1Literal>
+#include <QtCore/qstringbuilder.h>
 #include <QPixmap>
 #include <QSize>
 

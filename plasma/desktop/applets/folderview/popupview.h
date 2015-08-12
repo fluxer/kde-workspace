@@ -22,7 +22,7 @@
 
 #include <QBasicTimer>
 #include <QWidget>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include <KActionCollection>
 #include <KUrl>

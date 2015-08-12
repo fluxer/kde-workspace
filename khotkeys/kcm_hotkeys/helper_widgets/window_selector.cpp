@@ -18,7 +18,7 @@
 #include <QtGui/QDesktopWidget>
 
 #include <X11/Xlib.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <fixx11h.h>
 
 namespace KHotKeys

@@ -20,7 +20,7 @@
 #ifndef XKB_RULES_H_
 #define XKB_RULES_H_
 
-#include <QtXml/QXmlDefaultHandler>
+#include <QtXml/qxml.h>
 #include <QtCore/QList>
 #include <QtCore/QStringList>
 

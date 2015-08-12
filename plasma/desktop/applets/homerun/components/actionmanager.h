@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <action.h>
 
 // Qt
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 
 // KDE
 #include <KActionCollection>

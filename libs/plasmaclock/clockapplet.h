@@ -22,8 +22,8 @@
 #ifndef CLOCKAPPLET_H
 #define CLOCKAPPLET_H
 
-#include <QtCore/QTime>
-#include <QtCore/QDate>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qdatetime.h>
 
 #include <Plasma/DataEngine>
 #include <Plasma/Dialog>

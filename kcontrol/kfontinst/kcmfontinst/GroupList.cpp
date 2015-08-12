@@ -33,14 +33,14 @@
 #include <KSaveFile>
 #include <QtGui/QFont>
 #include <QtGui/QFontDatabase>
-#include <QtGui/QDropEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QHeaderView>
 #include <QtGui/QMenu>
 #include <QtGui/QApplication>
 #include <QtGui/QStyledItemDelegate>
 #include <QtGui/QPainter>
-#include <QtGui/QLinearGradient>
-#include <QtXml/QDomElement>
+#include <QtGui/qbrush.h>
+#include <QtXml/qdom.h>
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
 #include <QtCore/QEvent>

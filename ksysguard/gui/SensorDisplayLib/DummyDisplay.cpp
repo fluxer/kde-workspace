@@ -21,7 +21,7 @@
 
 #include <klocale.h>
 #include <ksgrd/SensorManager.h>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QGridLayout>
 
 #include "DummyDisplay.h"

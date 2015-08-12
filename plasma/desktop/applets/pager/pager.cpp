@@ -24,7 +24,7 @@
 
 #include <QFont>
 #include <QTimer>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QDBusInterface>
 #include <QTextDocument>
 #include <QDesktopWidget>

@@ -22,7 +22,7 @@
 #include "applicationmodel.h"
 
 // Qt
-#include <QtCore/QtAlgorithms>
+#include <QtCore/qalgorithms.h>
 #include <QtCore/QList>
 #include <QtGui/QLabel>
 #include <QtGui/QLayout>

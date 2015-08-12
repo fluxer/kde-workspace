@@ -20,7 +20,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef TABMODEL_H
 #define TABMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <KSharedConfig>
 

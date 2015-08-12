@@ -20,7 +20,7 @@
 #ifndef PROGRESSLISTDELEGATE_H
 #define PROGRESSLISTDELEGATE_H
 
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <kwidgetitemdelegate.h>
 

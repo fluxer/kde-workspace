@@ -31,7 +31,7 @@
 #include <QtGui/QCheckBox>
 #include <QtCore/QPair>
 #include <QtCore/QVector>
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <KPageWidget>
 
 #include "oxygendemowidget.h"

@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Qt
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 
 Image::Image(QDeclarativeItem *parent)
 : QDeclarativeItem(parent)

@@ -41,9 +41,9 @@
 */
 #include "drkonqi.h"
 
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QtCore/QTextStream>
-#include <QtCore/QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 #include <KMessageBox>
 #include <KFileDialog>

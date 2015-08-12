@@ -20,7 +20,7 @@
 #include "selectionbar.h"
 
 #include <QGraphicsScene>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QTimer>
 
 #include <KDebug>

@@ -48,7 +48,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStylePainter>
 #include <QStyle>
 #include <QTreeWidget>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 
 #include <stdlib.h>
 

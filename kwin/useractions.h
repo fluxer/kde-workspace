@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDialog>
 // Qt
 #include <QObject>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 class KKeySequenceWidget;
 class QAction;

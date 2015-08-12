@@ -19,8 +19,8 @@
 #ifndef KRANDRTRAY_H
 #define KRANDRTRAY_H
 
-#include <QMouseEvent>
-#include <QWeakPointer>
+#include <QtGui/qevent.h>
+#include <QtCore/qsharedpointer.h>
 
 #include <KStatusNotifierItem>
 

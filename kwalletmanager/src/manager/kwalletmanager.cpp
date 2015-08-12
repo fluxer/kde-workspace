@@ -42,7 +42,7 @@
 #include <QPointer>
 #include <QRegExp>
 
-#include <QRegExpValidator>
+#include <QtGui/qvalidator.h>
 #include <QTimer>
 #include <ktoolinvocation.h>
 #include <kicon.h>

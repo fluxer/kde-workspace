@@ -31,6 +31,7 @@
 #include <Plasma/Service>
 
 #include <QImage>
+#include <QtCore/qcoreevent.h>
 
 #include <kiconloader.h>
 

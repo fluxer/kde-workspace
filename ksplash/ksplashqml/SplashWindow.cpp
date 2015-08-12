@@ -21,9 +21,9 @@
 
 #include <QApplication>
 #include <QDeclarativeContext>
-#include <QGraphicsObject>
-#include <QKeyEvent>
-#include <QMouseEvent>
+#include <QtGui/qgraphicsitem.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QTimer>
 
 #include "SystemInfo.h"

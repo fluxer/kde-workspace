@@ -24,7 +24,7 @@
 #include <QMap>
 #include <QList>
 #include <QProcess>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QWhatsThis>
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -390,8 +390,8 @@ void ModuleView::updateButtons()
 
     const int buttons = activeModule->buttons();
 
-    d->mApply->setShown(buttons & KCModule::Apply );
-    d->mReset->setShown(buttons & KCModule::Apply );
+    d->mApply->setVisible(buttons & KCModule::Apply );
+    d->mReset->setVisible(buttons & KCModule::Apply );
 
     d->mHelp->setEnabled(buttons & KCModule::Help );
     d->mDefault->setEnabled(buttons & KCModule::Default );

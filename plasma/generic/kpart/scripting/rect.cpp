@@ -16,7 +16,7 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include <QtCore/QRectF>
+#include <QtCore/qrect.h>
 #include "backportglobal.h"
 
 Q_DECLARE_METATYPE(QRectF*)

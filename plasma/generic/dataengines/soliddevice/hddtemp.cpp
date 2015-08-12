@@ -21,7 +21,7 @@
 
 #include <QTcpSocket>
 
-#include <QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 #include <KDebug>
 

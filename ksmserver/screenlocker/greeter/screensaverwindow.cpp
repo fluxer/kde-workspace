@@ -23,11 +23,11 @@
 #include "kscreensaversettings.h"
 
 #include <QApplication>
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QPainter>
 #include <QTimer>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <KDebug>
 #include <kmacroexpander.h>

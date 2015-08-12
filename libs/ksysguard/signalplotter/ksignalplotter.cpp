@@ -36,12 +36,12 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainterPath>
-#include <QtGui/QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QEvent>
 
 #ifdef GRAPHICS_SIGNAL_PLOTTER
-#include <QtGui/QGraphicsSceneResizeEvent>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qstyleoption.h>
 #include <plasma/theme.h>
 #endif
 

@@ -19,7 +19,7 @@
 #ifndef KUISERVERENGINE_H
 #define KUISERVERENGINE_H
 
-#include <QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 #include <QBasicTimer>
 #include <QTimer>
 

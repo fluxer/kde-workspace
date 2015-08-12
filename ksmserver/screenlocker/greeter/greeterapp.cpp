@@ -46,7 +46,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtDeclarative/QDeclarativeProperty>
 #include <QtDeclarative/QDeclarativeView>
 #include <QtDeclarative/qdeclarative.h>
-#include <QtGui/QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QDesktopWidget>
 // X11
 #include <X11/Xatom.h>

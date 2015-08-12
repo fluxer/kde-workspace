@@ -28,7 +28,7 @@
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
 #include <kio/netaccess.h>
-#include <QDragEnterEvent>
+#include <QtGui/qevent.h>
 
 KWalletManagerWidget::KWalletManagerWidget(QWidget* parent, Qt::WindowFlags flags): 
     KPageWidget(parent)

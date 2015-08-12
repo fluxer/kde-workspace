@@ -22,7 +22,7 @@
 #define TOOLBUTTON_H
 
 #include <QToolButton>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include "plasmagenericshell_export.h"
 

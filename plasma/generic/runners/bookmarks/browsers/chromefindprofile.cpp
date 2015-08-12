@@ -22,7 +22,7 @@
 #include "chromefindprofile.h"
 #include <QDir>
 #include <qjson/parser.h>
-#include <QVariantMap>
+#include <QtCore/qvariant.h>
 #include <KDebug>
 #include "bookmarksrunner_defs.h"
 #include "faviconfromblob.h"

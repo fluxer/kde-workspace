@@ -24,7 +24,7 @@
 
 #include "xmltype.h"
 
-#include <QDomNode>
+#include <QtXml/qdom.h>
 
 
 namespace Kephal {

@@ -21,7 +21,7 @@
 #ifndef PAGER_H
 #define PAGER_H
 
-#include <QGraphicsSceneHoverEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QList>
 
 #include <Plasma/Applet>

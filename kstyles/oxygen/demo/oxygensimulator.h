@@ -36,8 +36,8 @@
 #include <QtCore/QEvent>
 #include <QtCore/QList>
 #include <QtCore/QObject>
-#include <QtCore/QTimerEvent>
-#include <QtCore/QWeakPointer>
+#include <QtCore/qcoreevent.h>
+#include <QtCore/qsharedpointer.h>
 
 #include <KLocale>
 

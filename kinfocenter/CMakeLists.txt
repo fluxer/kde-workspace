@@ -1,3 +1,4 @@
+include(CheckCXXSymbolExists)
 
 include_directories( ${KDE4_INCLUDES} )
 add_definitions( -DKDE_DEFAULT_DEBUG_AREA=1208 )

@@ -20,8 +20,8 @@
 #define BOOKMARKITEM_H
 
 
-#include <QStandardItem>
-#include <QtCore/QModelIndex>
+#include <QtGui/qstandarditemmodel.h>
+#include <QtCore/qabstractitemmodel.h>
 #include <kbookmark.h>
 
 

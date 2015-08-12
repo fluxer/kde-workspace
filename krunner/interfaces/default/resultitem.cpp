@@ -30,11 +30,11 @@
 #include <QGraphicsItemAnimation>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsView>
 #include <QPainter>
 #include <QPropertyAnimation>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QTimeLine>
 #include <QTimer>
 

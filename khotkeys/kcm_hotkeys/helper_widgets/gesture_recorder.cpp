@@ -12,7 +12,7 @@
 #include <QtCore/QEvent>
 #include <QtGui/QColor>
 #include <QtGui/QFrame>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 
 #include "gesture_recorder.h"
 

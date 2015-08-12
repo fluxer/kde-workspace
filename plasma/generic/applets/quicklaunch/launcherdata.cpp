@@ -20,11 +20,11 @@
 #include "launcherdata.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QList>
 #include <QtCore/QString>
-#include <QtXml/QDomDocument>
+#include <QtXml/qdom.h>
 
 // KDE
 #include <KBookmark>

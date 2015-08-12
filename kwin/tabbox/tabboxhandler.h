@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tabboxconfig.h"
 
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QPixmap>
 #include <QString>
 #include <X11/Xlib.h>

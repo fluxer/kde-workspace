@@ -44,7 +44,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kmanagerselection.h>
 #include <kwindowsystem.h>
 #include "server.h"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
+#include <QtCore/qfile.h>
 
 #include <X11/extensions/Xrender.h>
 

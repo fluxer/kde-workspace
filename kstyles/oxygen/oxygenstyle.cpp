@@ -81,7 +81,7 @@
 #include <QtGui/QRadioButton>
 #include <QtGui/QScrollBar>
 #include <QtGui/QSpinBox>
-#include <QtGui/QSplitterHandle>
+#include <QtGui/qsplitter.h>
 #include <QtGui/QStylePlugin>
 #include <QtGui/QStyleOption>
 #include <QtGui/QTextEdit>

@@ -23,7 +23,7 @@
 #define FADEEFFECT_H
 
 #include <QObject>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include "logouteffect.h"
 #include <X11/Xlib.h>

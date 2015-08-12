@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QCheckBox>
 //Added by qt3to4:
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 
 #include <kdatepicker.h>
 #include <knuminput.h>

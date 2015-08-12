@@ -21,10 +21,10 @@
 #include "calendar.h"
 
 //Qt
-#include <QtCore/QDate>
+#include <QtCore/qdatetime.h>
 #include <QtCore/QTimer>
 #include <QtGui/QApplication>
-#include <QtGui/QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsGridLayout>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QtGui/QGraphicsProxyWidget>

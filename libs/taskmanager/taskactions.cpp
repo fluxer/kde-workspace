@@ -44,9 +44,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <NETRootInfo>
 
 #include <QtCore/QMap>
-#include <QtGui/QHelpEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QToolTip>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 ///////////////////////////////////////////////////////////////////////////////
 // NOTE: if you change the menu, keep kde-workspace/kwin/useractions.cpp in sync

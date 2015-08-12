@@ -25,7 +25,7 @@
 #include <QTimer>
 #ifdef Q_WS_X11
 #include <X11/Xatom.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/extensions/shape.h>
 #endif
 

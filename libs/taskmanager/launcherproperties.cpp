@@ -28,8 +28,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KLocale>
 #include <KWindowInfo>
 #include <KWindowSystem>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QX11Info>
+#include <QtGui/qevent.h>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>

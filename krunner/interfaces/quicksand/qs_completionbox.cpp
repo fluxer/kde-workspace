@@ -17,9 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .
  */
 
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QPoint>
-#include <QResizeEvent>
+#include <QtGui/qevent.h>
 
 #include <KDebug>
 

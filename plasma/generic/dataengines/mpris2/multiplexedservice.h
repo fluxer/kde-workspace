@@ -22,7 +22,7 @@
 #include <Plasma/Service>
 
 #include "playercontrol.h"
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 class Multiplexer;
 class PlayerControl;

@@ -20,10 +20,10 @@
 
 #include "timeengine.h"
 
-#include <QDate>
+#include <QtCore/qdatetime.h>
 #include <QDBusConnection>
 #include <QStringList>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include <KLocale>
 #include <KSystemTimeZones>

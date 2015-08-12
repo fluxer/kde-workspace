@@ -20,10 +20,10 @@
 #define QUICKLAUNCH_ICONGRIDLAYOUT_H
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QList>
-#include <QtCore/QSizeF>
+#include <QtCore/qsize.h>
 #include <QtGui/QGraphicsLayout>
 
 class QEvent;

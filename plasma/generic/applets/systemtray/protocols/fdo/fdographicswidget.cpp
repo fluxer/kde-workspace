@@ -23,7 +23,7 @@
 #include "x11embeddelegate.h"
 #include "x11embedcontainer.h"
 
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QtCore/QTimer>
 
 #include <QtGui/QApplication>

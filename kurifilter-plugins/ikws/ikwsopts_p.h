@@ -19,7 +19,7 @@
 #ifndef IKWSOPTS_P_H
 #define IKWSOPTS_P_H
 
-#include <QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 
 class SearchProvider;
 

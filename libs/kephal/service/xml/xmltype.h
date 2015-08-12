@@ -22,7 +22,7 @@
 #define KEPHAL_XMLTYPE_H
 
 #include <QObject>
-#include <QDomNode>
+#include <QtXml/qdom.h>
 #include <QMap>
 
 

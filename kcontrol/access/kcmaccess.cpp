@@ -15,7 +15,7 @@
 #include <QCheckBox>
 #include <QLineEdit>
 #include <QRadioButton>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QtDBus/QtDBus>
 
 //Added by qt3to4:

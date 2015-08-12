@@ -41,7 +41,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <NETWinInfo>
 
 #ifdef Q_WS_X11
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #endif
 
 namespace TaskManager

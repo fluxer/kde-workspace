@@ -25,16 +25,16 @@
 #include <math.h>
 
 #include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QSpinBox>
 #include <QtGui/QClipboard>
 #include <QtCore/QTimeLine>
 #include <QtGui/QGraphicsProxyWidget>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsView>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusPendingCall>
-#include <QtCore/QDate>
+#include <QtCore/qdatetime.h>
 #include <QtCore/QTimer>
 #include <QtDBus/QDBusConnectionInterface>
 

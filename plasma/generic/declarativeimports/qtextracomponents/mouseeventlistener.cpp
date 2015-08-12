@@ -21,7 +21,7 @@
 
 #include <QApplication>
 #include <QEvent>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtCore/QTimer>
 
 #include <KDebug>

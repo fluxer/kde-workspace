@@ -33,13 +33,13 @@
 #include <QVariant>
 #include <QHash>
 #include <QSet>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QDebug>
 
 #ifdef Q_WS_X11
 #include <kwindowsystem.h>
 #include <netwm.h>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xatom.h>
 #include <kxerrorhandler.h>
 

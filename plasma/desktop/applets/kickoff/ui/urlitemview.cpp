@@ -22,12 +22,12 @@
 
 // Qt
 #include <QtCore/QHash>
-#include <QtCore/QPersistentModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QUrl>
 
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QScrollBar>
 #include <QtGui/QToolTip>
 

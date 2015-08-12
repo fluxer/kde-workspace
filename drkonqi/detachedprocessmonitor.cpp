@@ -18,7 +18,7 @@
 
 #include <signal.h>
 
-#include <QtCore/QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 #include <KDebug>
 

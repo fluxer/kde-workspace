@@ -26,9 +26,9 @@
 #include <kicontheme.h>
 #include <klistwidget.h>
 #include <QPixmap>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QTreeWidget>
 
 #define KWALLETENTRYMAGIC ((quint32) 0x6B776C65)

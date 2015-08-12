@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWIN_SHOWFPS_H
 #define KWIN_SHOWFPS_H
 
-#include <QTime>
+#include <QtCore/qdatetime.h>
 
 #include <kwineffects.h>
 

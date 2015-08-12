@@ -2,7 +2,7 @@
 #include <QTextStream>
 #include <QImage>
 #include <QRegExp>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -21,7 +21,7 @@
 
 #include "ksystraycmd.h"
 #include "moc_ksystraycmd.cpp"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 
 KSysTrayCmd::KSysTrayCmd()

@@ -44,7 +44,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <QDropEvent>
+#include <QtGui/qevent.h>
 #include <QFile>
 #include <QLabel>
 #include <QStackedWidget>

@@ -28,7 +28,7 @@
 
 #include "../core/task.h"
 
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QtGui/QGraphicsWidget>
 
 #include <Plasma/Containment>

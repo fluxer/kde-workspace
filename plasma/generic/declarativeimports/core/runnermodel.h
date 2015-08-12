@@ -20,7 +20,7 @@
 #ifndef RUNNERMODEL_H
 #define RUNNERMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QStringList>
 
 namespace Plasma

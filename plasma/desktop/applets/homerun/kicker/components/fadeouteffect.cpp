@@ -18,7 +18,7 @@
 
 #include "fadeouteffect.h"
 
-#include <QLinearGradient>
+#include <QtGui/qbrush.h>
 #include <QPainter>
 
 FadeOutEffect::FadeOutEffect(QObject *parent) : QGraphicsEffect(parent)

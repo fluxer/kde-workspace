@@ -36,7 +36,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QSet>
 #include <QtCore/QString>
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <QtGui/QWidget>
 

@@ -38,7 +38,7 @@
 #include <QtGui/QPushButton>
 
 #ifdef Q_WS_X11
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #endif

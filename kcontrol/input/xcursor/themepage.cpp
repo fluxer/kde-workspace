@@ -37,7 +37,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include <QDir>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "themepage.h"
 #include "moc_themepage.cpp"

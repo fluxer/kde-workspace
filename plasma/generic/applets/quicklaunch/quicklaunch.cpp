@@ -20,7 +20,7 @@
 #include "quicklaunch.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QDateTime>
 #include <QtCore/QDir>
@@ -32,7 +32,7 @@
 #include <QtCore/QPointer>
 #include <QtCore/QSize>
 #include <QtGui/QGraphicsLinearLayout>
-#include <QtGui/QGraphicsSceneContextMenuEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsWidget>
 
 // KDE

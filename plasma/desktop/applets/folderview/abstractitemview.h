@@ -26,7 +26,7 @@
 #include <QPointer>
 #include <QCache>
 #include <QTextLayout>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QBasicTimer>
 
 #include <plasma/widgets/scrollbar.h>

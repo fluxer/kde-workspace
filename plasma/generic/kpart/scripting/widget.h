@@ -21,7 +21,7 @@
 #define APPLET
 
 #include <QObject>
-#include <QRectF>
+#include <QtCore/qrect.h>
 #include <QVariant>
 
 namespace Plasma

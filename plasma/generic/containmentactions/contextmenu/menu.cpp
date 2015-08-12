@@ -21,10 +21,10 @@
 
 #include <QAction>
 #include <QCheckBox>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QVBoxLayout>
 #include <QSignalMapper>
+#include <QtCore/qtimer.h>
 
 #include <KAuthorized>
 #include <KDebug>

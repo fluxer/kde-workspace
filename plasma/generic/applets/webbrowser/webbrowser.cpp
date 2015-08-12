@@ -21,7 +21,7 @@
 #include "webbrowser.h"
 
 #include <QGraphicsLinearLayout>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QNetworkReply>
 #include <QPainter>
 #include <QScrollBar>

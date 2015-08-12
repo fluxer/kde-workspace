@@ -22,8 +22,8 @@
 
 //Qt
 #include <QObject>
-#include <QTime>
-#include <QDate>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qdatetime.h>
 
 //KDE
 #include <KLocale>

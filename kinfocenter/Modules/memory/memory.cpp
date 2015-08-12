@@ -29,7 +29,7 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLinearGradient>
+#include <QtGui/qbrush.h>
 #include <QTreeWidget>
 
 #include <kaboutdata.h>

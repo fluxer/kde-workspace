@@ -37,7 +37,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QString>
 #include <QtGui/QMenu>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QApplication>
 #include <QtGui/QActionGroup>
 

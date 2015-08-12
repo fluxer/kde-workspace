@@ -32,7 +32,7 @@
 #include <KUnitConversion/Converter>
 #include <KDebug>
 
-#include <QXmlStreamReader>
+#include <QtCore/qxmlstream.h>
 
 IonDebianWeather::IonDebianWeather(QObject*, const QVariantList&) : IonInterface(), m_ionname(QLatin1String("DebianWeather")) {
 

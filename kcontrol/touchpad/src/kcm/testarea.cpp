@@ -18,8 +18,8 @@
 
 #include "testarea.h"
 
-#include <QKeyEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QScopedPointer>
 #include <QStandardItemModel>
 

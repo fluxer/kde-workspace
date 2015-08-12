@@ -18,7 +18,7 @@
 #include <QDirIterator>
 #include <QFileInfo>
 #include <QFile>
-#include <QMetaEnum>
+#include <QtCore/qmetaobject.h>
 #include <QDebug>
 #include <QSharedPointer>
 

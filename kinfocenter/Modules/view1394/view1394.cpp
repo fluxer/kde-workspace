@@ -24,7 +24,7 @@
 #include <QPushButton>
 #include <QFile>
 #include <QTextStream>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QTreeWidget>
 #include <QVBoxLayout>
 

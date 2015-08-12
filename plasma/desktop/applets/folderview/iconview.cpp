@@ -26,13 +26,13 @@
 #include <QApplication>
 #include <QDrag>
 #include <QGraphicsView>
-#include <QGraphicsSceneHoverEvent>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsProxyWidget>
 #include <QImageReader>
 #include <QItemSelectionModel>
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
+#include <QtCore/qmath.h>
 
 #include <KDirModel>
 #include <KGlobalSettings>

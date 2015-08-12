@@ -37,11 +37,11 @@
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QDir>
-#include <QDragEnterEvent>
+#include <QtGui/qevent.h>
 #include <QEvent>
 #include <QFile>
 #include <QGroupBox>
-#include <QIntValidator>
+#include <QtGui/qvalidator.h>
 #include <QLabel>
 #include <QPushButton>
 #include <QRadioButton>

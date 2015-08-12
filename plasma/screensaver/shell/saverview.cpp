@@ -20,7 +20,7 @@
 
 #include "saverview.h"
 
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QTimer>
 
 #include <Plasma/Applet>

@@ -22,7 +22,7 @@
 #include "declarativeitemcontainer_p.h"
 
 #include <QDeclarativeItem>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QGraphicsWidget>
 #include <QGraphicsScene>
 #include <QDebug>

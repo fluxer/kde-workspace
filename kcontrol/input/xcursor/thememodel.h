@@ -20,7 +20,7 @@
 #ifndef THEMEMODEL_H
 #define THEMEMODEL_H
 
-#include <QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QStringList>
 
 class QDir;

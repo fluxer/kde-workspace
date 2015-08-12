@@ -19,7 +19,7 @@
 
 #include "wheelytoolbutton.h"
 
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
 
 WheelyToolButton::WheelyToolButton(QGraphicsWidget *parent)
     : Plasma::ToolButton(parent)

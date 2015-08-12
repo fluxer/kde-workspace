@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QTimer>
 #include <QPainter>
-#include <QHelpEvent>
+#include <QtGui/qevent.h>
 #include <QScrollBar>
 #include <QGridLayout>
 #include <QApplication>
@@ -35,7 +35,7 @@
 #include <QAbstractItemView>
 
 #ifdef Q_WS_X11
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #endif
 
 #include <KIcon>

@@ -23,7 +23,7 @@
 
 // Qt
 #include <QFileInfo>
-#include <QStandardItem>
+#include <QtGui/qstandarditemmodel.h>
 #include <QDir>
 
 // KDE

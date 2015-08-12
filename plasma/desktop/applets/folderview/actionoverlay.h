@@ -27,7 +27,7 @@
 
 #include <QTimer>
 #include <QGraphicsWidget>
-#include <QPersistentModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QGraphicsGridLayout>
 
 namespace Plasma {

@@ -22,7 +22,7 @@
 
 #include <KTabBar>
 #include <QTimer>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 class QPropertyAnimation;
 

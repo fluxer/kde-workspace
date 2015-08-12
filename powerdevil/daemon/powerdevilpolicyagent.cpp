@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <QtCore/QCoreApplication>
-#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 #include <QtDBus/QDBusArgument>
 #include <QtCore/QMetaType>
 #include <QtDBus/QDBusMetaType>

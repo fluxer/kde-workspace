@@ -28,7 +28,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QListWidget>
-#include <QListWidgetItem>
+#include <QtGui/qlistwidget.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>

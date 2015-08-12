@@ -21,7 +21,7 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusServiceWatcher>
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 #include <QDBusPendingReply>
 #include <QStringList>
 

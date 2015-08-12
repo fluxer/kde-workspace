@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include <QtCore/QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QList>
 #include <QtGui/QCheckBox>
 #include <QtGui/QDoubleSpinBox>

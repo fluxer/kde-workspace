@@ -24,7 +24,7 @@
 
 #include <Plasma/DataContainer>
 #include <QString>
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 
 #include "statusnotifieritem_interface.h"
 

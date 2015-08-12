@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <Plasma/QueryMatch>
 
 // Qt
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 namespace Plasma
 {

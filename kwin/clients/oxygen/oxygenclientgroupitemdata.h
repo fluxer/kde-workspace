@@ -30,7 +30,7 @@
 #include "oxygenbutton.h"
 
 #include <QList>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QRect>
 
 namespace Oxygen

@@ -19,7 +19,7 @@
 #ifndef SOURCELISTMODEL_H
 #define SOURCELISTMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 class SourceListModel : public QAbstractListModel
 {

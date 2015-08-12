@@ -21,7 +21,7 @@
 #include "klipperpopup.h"
 
 #include <QtGui/QApplication>
-#include <QtGui/QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QWidgetAction>
 
 #include <KHelpMenu>

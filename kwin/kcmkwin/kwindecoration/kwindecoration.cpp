@@ -41,7 +41,7 @@
 #include <QtDeclarative/QDeclarativeItem>
 #include <QtDeclarative/QDeclarativeView>
 #include <QSortFilterProxyModel>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QScrollBar>
 #include <QUiLoader>
 // KDE

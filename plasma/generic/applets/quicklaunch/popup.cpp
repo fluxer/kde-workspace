@@ -20,7 +20,7 @@
 #include "popup.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QEvent>
 #include <QtCore/QMargins>

@@ -31,7 +31,7 @@
 #include <QtGui/QLabel>
 #include <QDesktopWidget>
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include "legacyrandrscreen.h"
 
 LegacyRandRScreen::LegacyRandRScreen(int screenIndex)

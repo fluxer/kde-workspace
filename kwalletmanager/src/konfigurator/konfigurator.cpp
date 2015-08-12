@@ -34,6 +34,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QtCore/qfile.h>
 #include <ktoolinvocation.h>
 #include <kconfiggroup.h>
 #include <kmessagebox.h>

@@ -28,7 +28,7 @@
 #include "moc_oxygensliderdemowidget.cpp"
 
 #include <QtGui/QMenu>
-#include <QtGui/QStyleOptionSlider>
+#include <QtGui/qstyleoption.h>
 
 namespace Oxygen
 {

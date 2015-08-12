@@ -27,9 +27,9 @@
 #include <QAbstractItemView>
 #include <QAbstractProxyModel>
 #include <QApplication>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QPainter>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QRect>
 #include <QTimeLine>
 

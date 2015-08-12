@@ -19,7 +19,7 @@
 #ifndef KDED_H
 #define KDED_H
 
-#include <QVariantList>
+#include <QtCore/qvariant.h>
 #include <QTimer>
 #include <QtDBus>
 

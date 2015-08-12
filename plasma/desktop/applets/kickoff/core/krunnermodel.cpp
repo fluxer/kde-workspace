@@ -26,7 +26,7 @@
 #include <QList>
 #include <QMimeData>
 #include <QString>
-#include <QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 // KDE
 #include <KService>

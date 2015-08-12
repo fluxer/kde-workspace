@@ -12,7 +12,7 @@
 #include "chartWidget.h"
 
 #include <QVBoxLayout>
-#include <QLinearGradient>
+#include <QtGui/qbrush.h>
 #include <QLabel>
 #include <QPainter>
 #include <QPen>

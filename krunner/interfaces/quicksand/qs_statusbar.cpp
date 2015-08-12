@@ -18,7 +18,7 @@
  */
 
 #include <QStyle>
-#include <QStyleOptionHeader>
+#include <QtGui/qstyleoption.h>
 #include <QStylePainter>
 
 #include <KGlobalSettings>

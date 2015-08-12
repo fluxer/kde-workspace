@@ -24,7 +24,7 @@
 #define __ResultScene_h__
 
 #include <QtCore/QList>
-#include <QtCore/QMultiMap>
+#include <QtCore/qmap.h>
 #include <QtCore/QTimer>
 #include <QtGui/QGraphicsScene>
 

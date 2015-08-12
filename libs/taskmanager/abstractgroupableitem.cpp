@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 // Own
 #include "abstractgroupableitem.h"
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KDebug>
 

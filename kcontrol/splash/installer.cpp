@@ -19,10 +19,10 @@
 #include <QPixmap>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QDropEvent>
+#include <QtGui/qevent.h>
 #include <QVBoxLayout>
-#include <QDragEnterEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QScrollArea>
 
 #include "installer.h"

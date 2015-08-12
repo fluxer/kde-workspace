@@ -31,7 +31,7 @@
 #include "oxygenhelper.h"
 
 #include <QWidget>
-#include <QtGui/QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QPixmap>
 #include <cassert>
 

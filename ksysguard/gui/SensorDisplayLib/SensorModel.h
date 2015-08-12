@@ -22,7 +22,7 @@
 #ifndef SENSORMODEL_H
 #define SENSORMODEL_H
 
-#include <QtCore/QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QList>
 #include <QtGui/QColor>
 

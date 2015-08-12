@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QVarLengthArray>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <KGlobalSettings>
 #include "outline.h"

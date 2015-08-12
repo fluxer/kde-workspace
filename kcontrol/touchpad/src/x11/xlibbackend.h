@@ -22,10 +22,10 @@
 #include <QMap>
 #include <QSet>
 #include <QScopedPointer>
-#include <QLatin1String>
+#include <QtCore/qstring.h>
 #include <QStringList>
 #include <QSharedPointer>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "touchpadbackend.h"
 

@@ -19,7 +19,7 @@
 #define PLAYERFACTORY_H
 
 #include <QObject>
-#include <QVariantList>
+#include <QtCore/qvariant.h>
 
 #include "player.h"
 

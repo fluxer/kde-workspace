@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QPainter>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <QtDBus/QtDBus>
 #include <klocale.h>

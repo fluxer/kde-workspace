@@ -18,7 +18,7 @@
  ***************************************************************************/
 
 #include <QFile>
-#include <QXmlStreamReader>
+#include <QtCore/qxmlstream.h>
 
 #include <krandom.h>
 #include <KDebug>

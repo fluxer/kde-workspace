@@ -26,7 +26,7 @@
 #include "findprofile.h"
 #include <QMap>
 #include <QList>
-#include <QVariantMap>
+#include <QtCore/qvariant.h>
 
 class FaviconFromBlob;
 class ProfileBookmarks;

@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // Qt
 #include <QApplication>
-#include <QDynamicPropertyChangeEvent>
+#include <QtCore/qcoreevent.h>
 #include <QTimer>
 
 namespace Homerun {

@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 
-#include <QtCore/QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 class QLayout;
 class QAbstractItemView;

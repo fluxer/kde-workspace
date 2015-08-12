@@ -28,7 +28,7 @@
 
 #include <QApplication>
 #include <QDBusMessage>
-#include <QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 #include <QDBusServiceWatcher>
 
 #include <KDebug>

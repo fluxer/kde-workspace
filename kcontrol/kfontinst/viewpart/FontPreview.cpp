@@ -27,9 +27,9 @@
 #include <KApplication>
 #include <KLocale>
 #include <QtGui/QPainter>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWheelEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <stdlib.h>
 
 namespace KFI

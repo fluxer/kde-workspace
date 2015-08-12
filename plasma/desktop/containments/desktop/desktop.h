@@ -23,7 +23,7 @@
 
 #include <QGraphicsItem>
 #include <QObject>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 
 
 #include <Plasma/Containment>

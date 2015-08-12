@@ -21,7 +21,7 @@
 #include "cursortheme.h"
 
 #include <QApplication>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QPainter>
 
 namespace

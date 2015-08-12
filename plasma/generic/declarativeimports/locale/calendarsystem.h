@@ -25,7 +25,7 @@
 #include "locale_p.h"  // needed for enums
 
 //Qt
-#include <QtCore/QDate>
+#include <QtCore/qdatetime.h>
 
 class KCalendarSystem;
 

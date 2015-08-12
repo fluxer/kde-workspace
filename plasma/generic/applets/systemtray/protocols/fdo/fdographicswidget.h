@@ -23,7 +23,7 @@
 #define FDOGRAPHICSWIDGET_H
 
 #include <QtGui/QGraphicsWidget>
-#include <QtGui/QX11EmbedContainer>
+#include <QtGui/qx11embed_x11.h>
 
 
 namespace SystemTray

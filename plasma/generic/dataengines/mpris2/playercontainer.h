@@ -21,7 +21,7 @@
 #define PLAYERCONTAINER_H
 
 #include <Plasma/DataContainer>
-#include <QFlags>
+#include <QtCore/qglobal.h>
 
 class OrgFreedesktopDBusPropertiesInterface;
 class OrgMprisMediaPlayer2Interface;

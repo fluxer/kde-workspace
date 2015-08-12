@@ -34,7 +34,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kworkspace/kworkspace.h>
 #include <kmessagebox.h>
 #include <QTimer>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QMap>
 
 #define INT32 QINT32

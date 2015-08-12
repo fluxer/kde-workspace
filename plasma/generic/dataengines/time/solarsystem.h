@@ -20,7 +20,7 @@
 
 #include <QDateTime>
 #include <QPair>
-#include <QPointF>
+#include <QtCore/qpoint.h>
 
 /*
  *   Mathematics, ideas, public domain code used for these classes from:

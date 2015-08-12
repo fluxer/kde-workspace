@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <stdio.h>
 

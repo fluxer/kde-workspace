@@ -22,7 +22,7 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QApplication>
 #include <QDebug>
 #include <krandom.h>

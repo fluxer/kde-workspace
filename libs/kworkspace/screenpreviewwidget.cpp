@@ -20,8 +20,8 @@
 
 #include "screenpreviewwidget.h"
 
-#include <QResizeEvent>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QPainter>
 
 #include <KDebug>

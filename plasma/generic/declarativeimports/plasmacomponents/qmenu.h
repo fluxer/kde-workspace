@@ -22,7 +22,7 @@
 
 #include <QObject>
 #include <QMenu>
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 #include "qmenuitem.h"
 #include "enums.h"
 

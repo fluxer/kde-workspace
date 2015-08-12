@@ -28,8 +28,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include <QWidget>
-#include <QtGui/QPaintEvent>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 
 namespace Oxygen
 {

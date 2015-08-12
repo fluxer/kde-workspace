@@ -24,7 +24,7 @@
 
 #include "parse.h"
 
-#include <QDomNode>
+#include <QtXml/qdom.h>
 #include <QObject>
 #include <QStack>
 

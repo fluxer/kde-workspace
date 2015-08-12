@@ -22,8 +22,8 @@
 
 #include <QtCore/QFile>
 #include <QtDBus/QDBusReply>
-#include <QtCore/QMutableHashIterator>
-#include <QtCore/QTimerEvent>
+#include <QtCore/qhash.h>
+#include <QtCore/qcoreevent.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <klocale.h>

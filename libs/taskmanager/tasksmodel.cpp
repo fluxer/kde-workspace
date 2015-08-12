@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "tasksmodel.h"
 
-#include <QMetaEnum>
+#include <QtCore/qmetaobject.h>
 #include <QMimeData>
 
 #include <KDebug>

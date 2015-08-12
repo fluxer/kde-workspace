@@ -21,7 +21,7 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
-#include <QMultiMap>
+#include <QtCore/qmap.h>
 #include <QTimer>
 
 // local includes

@@ -22,7 +22,7 @@
 #define MODULE_VIEW_H
 
 #include <QtGui/QWidget>
-#include <QtCore/QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include "systemsettingsview_export.h"
 
 class MenuItem;

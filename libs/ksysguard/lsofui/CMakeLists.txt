@@ -20,7 +20,7 @@ install(TARGETS lsofui EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAU
 install( FILES lsof.h DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard COMPONENT Devel)
 
 set(ksysguardlsofwidgets_PART_SRCS
-   ${CMAKE_CURRENT_BINARY_DIR}/ksysguardlsofwidgets.cpp
+    ${CMAKE_CURRENT_BINARY_DIR}/ksysguardlsofwidgets.cpp
 )
 
 kde4_add_widget_files(ksysguardlsofwidgets_PART_SRCS ksysguardlsof.widgets)
@@ -30,4 +30,3 @@ kde4_add_plugin(ksysguardlsofwidgets ${ksysguardlsofwidgets_PART_SRCS})
 target_link_libraries(ksysguardlsofwidgets ${KDE4_KDECORE_LIBS}  ${QT_QTGUI_LIBRARY} lsofui)
 
 install(TARGETS ksysguardlsofwidgets DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
-

@@ -21,7 +21,7 @@
 
 #include <QApplication>
 #include <QGraphicsLinearLayout>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QPainter>
 
 #include <Plasma/PushButton>

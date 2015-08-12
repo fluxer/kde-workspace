@@ -20,7 +20,7 @@
 #ifndef PREVIEWPLUGINSMODEL_H
 #define PREVIEWPLUGINSMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <KService>
 #include <QVector>
 

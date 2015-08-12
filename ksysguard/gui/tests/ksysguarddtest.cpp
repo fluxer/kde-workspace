@@ -1,6 +1,6 @@
 #include "ksysguarddtest.h"
 #include <QtTest>
-#include <Qt>
+#include <QtCore/qnamespace.h>
 
 KSGRD::SensorAgent *agent;
 

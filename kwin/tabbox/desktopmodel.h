@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef DESKTOPMODEL_H
 #define DESKTOPMODEL_H
 
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 /**
 * @file
 * This file defines the class DesktopModel, the model for desktops.

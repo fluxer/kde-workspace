@@ -20,8 +20,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "favoriteappsmodeltest.h"
 
 // Qt
-#include <QDomNode>
-#include <QDomElement>
+#include <QtXml/qdom.h>
+#include <QtXml/qdom.h>
 
 // KDE
 #include <KConfigGroup>

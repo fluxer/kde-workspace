@@ -66,6 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KWindowSystem>
 // Qt
 #include <QtConcurrentRun>
+#include <QtCore/qmetaobject.h>
 
 namespace KWin
 {

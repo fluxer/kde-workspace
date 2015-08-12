@@ -23,7 +23,7 @@
 #include "kcmlocale.h"
 
 #include <QListWidget>
-#include <QListWidgetItem>
+#include <QtGui/qlistwidget.h>
 #include <QPrinter>
 #include <QTimer>
 

@@ -20,7 +20,7 @@
 #ifndef SAVERVIEW_H
 #define SAVERVIEW_H
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <Plasma/Plasma>
 #include <Plasma/View>

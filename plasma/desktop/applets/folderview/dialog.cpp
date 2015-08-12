@@ -33,7 +33,7 @@
 #include <Plasma/WindowEffects>
 
 #ifdef Q_WS_X11
-#  include <QX11Info>
+#  include <qx11info_x11.h>
 #  include <X11/Xlib.h>
 #endif
 

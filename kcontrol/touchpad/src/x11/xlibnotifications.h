@@ -19,7 +19,7 @@
 #ifndef XLIBNOTIFICATIONS_H
 #define XLIBNOTIFICATIONS_H
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QWidget>
 #include <QSocketNotifier>
 

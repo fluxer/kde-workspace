@@ -32,7 +32,7 @@
 
 #include <QHash>
 #include <QSet>
-#include <QMutableSetIterator>
+#include <QtCore/qset.h>
 #include <QByteArray>
 
 //for sysconf

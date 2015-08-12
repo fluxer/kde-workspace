@@ -22,8 +22,8 @@
 
 // Qt
 #include <QCoreApplication>
-#include <QKeyEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QPainter>
 #include <QScrollBar>
 #include <QStack>

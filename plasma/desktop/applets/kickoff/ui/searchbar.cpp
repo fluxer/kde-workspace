@@ -25,7 +25,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QHBoxLayout>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QLabel>
 #include <QTimer>
 

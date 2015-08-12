@@ -21,7 +21,7 @@
 
 // Qt
 #include <QAction>
-#include <QPersistentModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 // Plasma
 #include <Plasma/Applet>

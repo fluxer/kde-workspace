@@ -28,7 +28,7 @@ Boston, MA 02110-1301, USA.
 #include <querymatchmodel.h>
 
 // Qt
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QStringList>
 
 // KDE

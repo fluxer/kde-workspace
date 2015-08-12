@@ -10,7 +10,7 @@
 #ifndef ITEMSPACE_H
 #define ITEMSPACE_H
 
-#include <QRectF>
+#include <QtCore/qrect.h>
 #include <QList>
 #include <QVariant>
 

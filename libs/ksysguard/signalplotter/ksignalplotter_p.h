@@ -28,7 +28,7 @@
 #ifndef GRAPHICS_SIGNAL_PLOTTER
 #define USE_SEPERATE_WIDGET
 #include <QWidget>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #endif
 
 #ifdef SVG_SUPPORT

@@ -21,7 +21,7 @@
 #include "dbussystemtraytask.h"
 #include "dbussystemtrayprotocol.h"
 
-#include <QtCore/QMetaEnum>
+#include <QtCore/qmetaobject.h>
 #include <QtCore/QDir>
 #include <QtCore/QCoreApplication>
 #include <QtGui/QMenu>

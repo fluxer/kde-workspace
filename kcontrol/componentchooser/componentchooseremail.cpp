@@ -15,11 +15,11 @@
 
 #include "componentchooseremail.h"
 #include <QtDBus/QtDBus>
+#include <QtCore/qfile.h>
+#include <QtGui/qcheckbox.h>
 #include <kemailsettings.h>
-#include <QCheckBox>
 #include <kopenwithdialog.h>
 #include <kstandarddirs.h>
-
 #include <KUrl>
 
 // for chmod:

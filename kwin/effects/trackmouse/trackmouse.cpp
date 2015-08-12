@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KConfigSkeleton
 #include "trackmouseconfig.h"
 
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QMatrix4x4>
 
 #include <kwinconfig.h>

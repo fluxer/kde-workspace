@@ -34,7 +34,7 @@
 #include <QLineEdit>
 #include <QValidator>
 #include <QToolTip>
-#include <QResizeEvent>
+#include <QtGui/qevent.h>
 
 // KDE headers
 #include <KLocale>

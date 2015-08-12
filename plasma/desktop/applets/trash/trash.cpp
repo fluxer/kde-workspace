@@ -20,7 +20,7 @@
 #include "trash.h"
 
 //QT
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsLinearLayout>
 
 //KDE

@@ -33,7 +33,7 @@
 
 #include <QDBusInterface>
 #include <QDBusReply>
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 #include <QMenu>
 #include <QApplication>
 #include <QDesktopWidget>

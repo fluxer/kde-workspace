@@ -22,7 +22,7 @@
 
 #include <QPainter>
 #include <QPicture>
-#include <QPolygonF>
+#include <QtGui/qpolygon.h>
 #include <QWidget>
 
 #include <QtCore/qdebug.h>

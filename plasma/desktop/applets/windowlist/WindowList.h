@@ -23,8 +23,8 @@
 
 #include <QEvent>
 #include <QGraphicsLinearLayout>
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 
 #include <Plasma/Applet>
 

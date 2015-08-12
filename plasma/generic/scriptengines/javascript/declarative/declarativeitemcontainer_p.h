@@ -21,9 +21,9 @@
 #define DECLARATIVEITEMCONTAINER_P
 
 #include <QDeclarativeItem>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QGraphicsWidget>
-#include <QGraphicsSceneResizeEvent>
+#include <QtGui/qgraphicssceneevent.h>
 
 
 class DeclarativeItemContainer : public QGraphicsWidget

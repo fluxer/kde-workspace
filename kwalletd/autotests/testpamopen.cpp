@@ -25,6 +25,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QDebug>
 #include <QtCore/QProcess>
+#include <QtCore/qfile.h>
 
 #include <QDBusConnection>
 #include <QDBusMessage>

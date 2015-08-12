@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KServiceTypeTrader>
 #include <KShortcutsEditor>
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <netwm.h>
 

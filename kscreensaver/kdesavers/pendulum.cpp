@@ -32,7 +32,7 @@
 #include <QColorDialog>
 #include <QPushButton>
 #include <QToolTip>
-#include <QResizeEvent>
+#include <QtGui/qevent.h>
 
 // KDE headers
 #include <KLocale>

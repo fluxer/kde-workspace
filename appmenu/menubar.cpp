@@ -30,7 +30,7 @@
 #include <QPainter>
 #include <QMenu>
 #include <QDesktopWidget>
-#include <QGraphicsDropShadowEffect>
+#include <QtGui/qgraphicseffect.h>
 
 #include <KWindowSystem>
 #include <Plasma/FrameSvg>

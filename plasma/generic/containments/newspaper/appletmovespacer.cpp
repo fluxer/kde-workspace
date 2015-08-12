@@ -19,7 +19,7 @@
 
 #include "appletmovespacer.h"
 
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 
 #include <Plasma/FrameSvg>
 

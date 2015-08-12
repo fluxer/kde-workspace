@@ -31,7 +31,7 @@
 #include <QSet>
 #include <QByteArray>
 #include <QTextStream>
-#include <QtEndian>
+#include <QtCore/qendian.h>
 
 #include <QDebug>
 

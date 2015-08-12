@@ -23,6 +23,9 @@
 #include <kstandarddirs.h>
 #include <QtTest/QtTest>
 #include <QtCore/QObject>
+#include <QtCore/qdebug.h>
+#include <QtCore/qprocess.h>
+#include <QtCore/qfile.h>
 
 class testPamOpenNoFile : public KWalletExecuter
 {

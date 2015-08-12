@@ -22,6 +22,7 @@
 #include "jobcontrol.h"
 
 #include <QDBusConnection>
+#include <QtCore/qcoreevent.h>
 
 #include <KJob>
 

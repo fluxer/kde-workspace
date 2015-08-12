@@ -23,13 +23,13 @@
 #include "ui_quicklaunchConfig.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QObject>
 #include <QtCore/QPoint>
-#include <QtCore/QPointF>
+#include <QtCore/qpoint.h>
 #include <QtCore/QSize>
-#include <QtCore/QSizeF>
+#include <QtCore/qsize.h>
 #include <QtCore/QStringList>
 
 // Plasma

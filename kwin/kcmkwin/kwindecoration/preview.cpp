@@ -26,7 +26,7 @@
 #include <QLabel>
 #include <QStyle>
 #include <QPainter>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QVector>
 #include <kicon.h>
 

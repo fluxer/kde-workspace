@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kwinglutils.h>
 
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <netwm_def.h>
 
 #include <math.h>
@@ -44,7 +44,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDeclarativeContext>
 #include <QDeclarativeEngine>
 #include <QDesktopWidget>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QTimer>
 #include <QVector2D>
 #include <QVector4D>

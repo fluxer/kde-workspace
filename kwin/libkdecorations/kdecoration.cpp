@@ -32,7 +32,7 @@ DEALINGS IN THE SOFTWARE.
 #include <assert.h>
 #include <X11/Xlib.h>
 #include <fixx11h.h>
-#include <QX11Info>
+#include <qx11info_x11.h>
 
 #include "kdecorationfactory.h"
 #include "kdecorationbridge.h"

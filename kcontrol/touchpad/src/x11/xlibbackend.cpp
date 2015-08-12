@@ -20,7 +20,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include <QtAlgorithms>
+#include <QtCore/qalgorithms.h>
 #include <QScopedPointer>
 
 #include <KLocalizedString>

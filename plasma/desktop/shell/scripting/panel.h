@@ -22,7 +22,7 @@
 
 #include <QScriptContext>
 #include <QScriptValue>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <plasmagenericshell/scripting/containment.h>
 

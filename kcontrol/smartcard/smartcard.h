@@ -27,7 +27,7 @@
 
 #define KDE3_SUPPORT
 #include <kcmodule.h>
-#include <QVariantList>
+#include <QtCore/qvariant.h>
 #undef KDE3_SUPPORT
 
 #include "smartcardbase.h"

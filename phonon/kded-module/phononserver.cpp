@@ -35,7 +35,7 @@
 #include <QtCore/QFileSystemWatcher>
 #include <QtCore/QRegExp>
 #include <QtCore/QSettings>
-#include <QtCore/QTimerEvent>
+#include <QtCore/qcoreevent.h>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusMetaType>

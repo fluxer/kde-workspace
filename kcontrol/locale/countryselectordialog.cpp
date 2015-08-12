@@ -15,7 +15,7 @@
 
 #include <QAbstractItemModel>
 #include <QHBoxLayout>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QListView>
 #include <QScrollBar>
 

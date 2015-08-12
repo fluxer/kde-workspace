@@ -24,10 +24,10 @@
 #include <math.h>
 
 // Qt
-#include <QModelIndex>
-#include <QMouseEvent>
+#include <QtCore/qabstractitemmodel.h>
+#include <QtGui/qevent.h>
 #include <QPainter>
-#include <QStyleOptionViewItem>
+#include <QtGui/qstyleoption.h>
 
 // KDE
 #include <KDebug>

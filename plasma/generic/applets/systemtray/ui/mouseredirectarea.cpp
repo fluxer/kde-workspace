@@ -27,10 +27,10 @@
 
 #include "../core/task.h"
 
-#include <QtGui/QGraphicsSceneWheelEvent>
-#include <QtGui/QGraphicsSceneContextMenuEvent>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtGui/QGraphicsSceneHoverEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsScene>
 
 #include <Plasma/Containment>

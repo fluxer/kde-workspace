@@ -27,7 +27,7 @@
 #include <KStandardDirs>
 
 #include <QComboBox>
-#include <QDomElement>
+#include <QtXml/qdom.h>
 #include <QFrame>
 #include <QLineEdit>
 #include <QStack>

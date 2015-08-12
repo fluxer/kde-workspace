@@ -1,7 +1,5 @@
 project(plasma-systemtray)
 
-find_package(Qt4 4.8 COMPONENTS QtCore QtGui QtDeclarative REQUIRED)
-
 set(data_install_dir "plasma/packages/org.kde.systemtray")
 
 set(systemtray_SRCS

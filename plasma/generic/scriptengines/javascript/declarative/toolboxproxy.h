@@ -25,7 +25,7 @@
 #include <Plasma/AbstractToolBox>
 #include <Plasma/Plasma>
 
-#include <QDeclarativeListProperty>
+#include <QtDeclarative/qdeclarativelist.h>
 
 class QAction;
 

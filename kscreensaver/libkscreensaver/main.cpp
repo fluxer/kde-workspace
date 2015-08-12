@@ -29,7 +29,7 @@
 
 #include <QDialog>
 #include <QEvent>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QSocketNotifier>
 
 #include <klocale.h>
@@ -42,7 +42,7 @@
 #include <kaboutdata.h>
 
 #ifdef Q_WS_X11
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #endif
 
 static void crashHandler( int  )

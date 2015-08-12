@@ -45,12 +45,12 @@
 #include <QtGui/QMainWindow>
 #include <QtGui/QMdiSubWindow>
 #include <QtGui/QMenuBar>
-#include <QtGui/QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QtGui/QProgressBar>
 #include <QtGui/QScrollBar>
 #include <QtGui/QStatusBar>
 #include <QtGui/QStyle>
-#include <QtGui/QStyleOptionGroupBox>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QTabBar>
 #include <QtGui/QTabWidget>
 #include <QtGui/QToolBar>
@@ -62,7 +62,7 @@
 #include <KGlobalSettings>
 
 #ifdef Q_WS_X11
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <NETRootInfo>
 #endif
 

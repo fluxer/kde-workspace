@@ -25,8 +25,8 @@
 
 //QT
 #include <QString>
-#include <QModelIndex>
-#include <QContextMenuEvent>
+#include <QtCore/qabstractitemmodel.h>
+#include <QtGui/qevent.h>
 #include <QAction>
 #include <QStringList>
 #include <QTreeView>

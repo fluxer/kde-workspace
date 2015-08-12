@@ -25,7 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QMap>
 #include <QString>
-#include <QtAlgorithms>
+#include <QtCore/qalgorithms.h>
 #include <QList>
 
 #include <KDebug>

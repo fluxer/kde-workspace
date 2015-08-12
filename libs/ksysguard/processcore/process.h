@@ -24,8 +24,8 @@
 #include <kdemacros.h>
 
 #include <QtCore/QList>
-#include <QtCore/QTime>
-#include <QtCore/QFlags>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qglobal.h>
 
 #include <klocale.h>
 

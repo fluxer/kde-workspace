@@ -21,7 +21,7 @@
 #define DIALOG_PROXY_P
 
 #include <QDeclarativeItem>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QPoint>
 
 #include <Plasma/Plasma>

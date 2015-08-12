@@ -32,7 +32,7 @@
 #include <DNSSD/ServiceBrowser>
 // Qt
 #include <QtNetwork/QHostAddress>
-#include <QtCore/QMutableListIterator>
+#include <QtCore/qlist.h>
 
 #include <KDebug>
 

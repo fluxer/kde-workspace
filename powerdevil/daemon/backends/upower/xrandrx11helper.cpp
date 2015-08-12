@@ -19,7 +19,7 @@
 
 #include "xrandrx11helper.h"
 
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <KSystemEventFilter>
 #include <kdebug.h>

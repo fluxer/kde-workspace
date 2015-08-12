@@ -24,7 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "manualgroupingstrategy.h"
 
 #include <QAction>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KDebug>
 #include <KLocale>

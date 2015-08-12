@@ -31,7 +31,7 @@
 #include <QtCore/QBasicTimer>
 #include <QtCore/QQueue>
 #include <QtCore/QTimer>
-#include <QtCore/QTimerEvent>
+#include <QtCore/qcoreevent.h>
 #include <QtCore/QStack>
 #include <QSignalMapper>
 

@@ -21,7 +21,7 @@
 
 #include <QGraphicsView>
 #include <QToolButton>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QMutex>
 #include <QScrollBar>
 

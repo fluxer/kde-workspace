@@ -29,7 +29,7 @@
 
 #include <QApplication>
 #include <QDBusMessage>
-#include <QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 #include <QDBusServiceWatcher>
 
 static const char* DBUS_SERVICE = "org.kde.kded";

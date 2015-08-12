@@ -23,7 +23,7 @@
 // Qt
 #include <QFileInfo>
 #include <QHash>
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 // KDE
 #include <KDebug>

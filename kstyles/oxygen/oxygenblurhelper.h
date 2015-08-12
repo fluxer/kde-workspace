@@ -37,7 +37,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QPointer>
 #include <QtCore/QSet>
-#include <QtCore/QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 #include <QtGui/QDockWidget>
 #include <QtGui/QMenu>

@@ -21,13 +21,13 @@
 #include "calendartable.h"
 
 //Qt
-#include <QtCore/QDate>
-#include <QtCore/QListIterator>
+#include <QtCore/qdatetime.h>
+#include <QtCore/qlist.h>
 #include <QtCore/QTimer>
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
-#include <QtGui/QGraphicsSceneWheelEvent>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qstyleoption.h>
 
 //KDECore
 #include <KGlobal>

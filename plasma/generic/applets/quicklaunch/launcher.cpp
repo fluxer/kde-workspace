@@ -20,10 +20,10 @@
 #include "launcher.h"
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
-#include <QtGui/QGraphicsSceneContextMenuEvent>
-#include <QtGui/QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 
 // KDE
 #include <KRun>

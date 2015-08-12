@@ -19,11 +19,11 @@
 
 */
 
-#include <QDomElement>
+#include <QtXml/qdom.h>
 
 #include <QVBoxLayout>
 #include <QSortFilterProxyModel>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QMenu>
 #include <QAction>
 

@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QPointer>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QPainter>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 // X11
 #include <X11/Xatom.h>
 #include <fixx11h.h>

@@ -18,9 +18,9 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <QtCore/QRectF>
-#include <QtGui/QWidgetList> // For WId
+#include <QtCore/qabstractitemmodel.h>
+#include <QtCore/qrect.h>
+#include <QtGui/qwindowdefs.h> // For WId
 #include <QtGui/QPixmap>
 
 class RectangleModel : public QAbstractListModel

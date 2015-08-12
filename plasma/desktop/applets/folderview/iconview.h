@@ -29,7 +29,7 @@
 #include <QAbstractItemDelegate>
 #include <QPointer>
 #include <QCache>
-#include <QTime>
+#include <QtCore/qdatetime.h>
 #include <QBasicTimer>
 
 

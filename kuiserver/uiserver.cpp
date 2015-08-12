@@ -30,7 +30,7 @@
 #include <QWidget>
 #include <QAction>
 #include <QBoxLayout>
-#include <QCloseEvent>
+#include <QtGui/qevent.h>
 #include <QToolBar>
 
 #include <kconfigdialog.h>

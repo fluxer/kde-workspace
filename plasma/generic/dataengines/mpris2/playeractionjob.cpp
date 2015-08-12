@@ -25,9 +25,9 @@
 #include <mprisplayer.h>
 #include <mprisroot.h>
 
-#include <QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 #include <QDBusPendingReply>
-#include <QDBusVariant>
+#include <QtDBus/qdbusextratypes.h>
 
 #include <kdebug.h>
 

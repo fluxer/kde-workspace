@@ -39,12 +39,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <kglobalsettings.h>
 #include <QtGui/QVector2D>
 #include <QDeclarativeEngine>
 #include <QDeclarativeContext>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 
 namespace KWin
 {

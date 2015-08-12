@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDateTime>
 #include <QTimer>
-#include <QtDebug>
+#include <QtCore/qdebug.h>
 #include <QVector3D>
 
 QDebug operator<<(QDebug dbg, const KWin::FPx2 &fpx2)

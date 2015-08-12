@@ -25,8 +25,8 @@
 #include <QTextStream>
 #include <QGridLayout>
 #include <QEvent>
-#include <QDropEvent>
-#include <QDragEnterEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QFile>
 #include <QByteArray>
 #include <QApplication>

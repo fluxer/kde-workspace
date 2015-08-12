@@ -25,7 +25,7 @@
 #include "libkhotkeysfwd.h"
 
 #include <QtGui/QMenu>
-#include <QtCore/QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 
 class HotkeysTreeView;

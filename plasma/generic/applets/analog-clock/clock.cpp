@@ -26,7 +26,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QPixmap>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QCheckBox>
 #include <QPushButton>
 

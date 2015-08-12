@@ -24,7 +24,7 @@
 
 #include <QGraphicsLinearLayout>
 #include <QGraphicsScene>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QTimer>
 
 #include <KGlobalSettings>

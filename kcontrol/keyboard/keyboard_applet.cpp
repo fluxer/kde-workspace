@@ -27,7 +27,7 @@
 
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
-#include <QtGui/QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QAction>
 #include <QtDBus/QtDBus>
 

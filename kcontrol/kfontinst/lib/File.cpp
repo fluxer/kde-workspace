@@ -21,7 +21,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtXml/QDomElement>
+#include <QtXml/qdom.h>
 #include <QtCore/QTextStream>
 #include <QtCore/QDir>
 #include "File.h"

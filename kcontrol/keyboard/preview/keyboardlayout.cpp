@@ -25,7 +25,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>

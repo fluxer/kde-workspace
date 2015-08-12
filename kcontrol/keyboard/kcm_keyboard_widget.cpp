@@ -30,7 +30,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QPixmap>
 #include <QtGui/QVBoxLayout>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include "keyboard_config.h"
 #include "preview/keyboardpainter.h"

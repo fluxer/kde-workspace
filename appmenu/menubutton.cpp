@@ -27,7 +27,7 @@
 
 #include <QAction>
 #include <QMenu>
-#include <QGraphicsDropShadowEffect>
+#include <QtGui/qgraphicseffect.h>
 
 #include <Plasma/Theme>
 

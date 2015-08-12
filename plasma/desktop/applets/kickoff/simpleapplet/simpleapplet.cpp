@@ -30,12 +30,12 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QGraphicsView>
 #include <QtCore/QMetaObject>
-#include <QtCore/QMetaEnum>
-#include <QtCore/QWeakPointer>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/qsharedpointer.h>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QListWidget>
-#include <QtGui/QListWidgetItem>
+#include <QtGui/qlistwidget.h>
 
 // KDE Libs
 #include <KActionCollection>

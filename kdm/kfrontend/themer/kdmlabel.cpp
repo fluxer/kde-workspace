@@ -36,7 +36,7 @@
 #include <QHash>
 #include <QPainter>
 #include <QTimer>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <X11/Xlib.h>
 #include <fixx11h.h>

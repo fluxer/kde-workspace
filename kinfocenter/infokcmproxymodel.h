@@ -24,7 +24,7 @@
 #define INFOKCMPROXYMODEL
 
 //QT
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QObject>
 #include <QSortFilterProxyModel>
 

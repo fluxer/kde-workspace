@@ -21,9 +21,10 @@
 #ifndef TRASH_H
 #define TRASH_H
 
-#include <QAction>
+#include <QtGui/qaction.h>
+#include <QtCore/qprocess.h>
+#include <QtGui/qgraphicsview.h>
 #include <KMenu>
-#include <QGraphicsView>
 #include <KFileItem>
 #include <KDirLister>
 

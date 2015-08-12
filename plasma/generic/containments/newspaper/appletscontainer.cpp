@@ -30,7 +30,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QGraphicsLinearLayout>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QTimer>
 #include <QPainter>
 

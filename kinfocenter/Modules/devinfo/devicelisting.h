@@ -35,7 +35,7 @@
 #include <QMap>
 #include <QTreeWidget>
 #include <QAction>
-#include <QContextMenuEvent>
+#include <QtGui/qevent.h>
 #include <QTreeWidgetItemIterator>
 
 //Local

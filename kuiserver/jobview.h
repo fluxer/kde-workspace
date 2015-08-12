@@ -23,7 +23,7 @@
 #define JOBVIEW_H
 
 #include <QListView>
-#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 
 #include <kio/global.h>
 

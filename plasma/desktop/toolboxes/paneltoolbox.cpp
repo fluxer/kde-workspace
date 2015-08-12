@@ -20,11 +20,11 @@
 
 #include "paneltoolbox.h"
 
-#include <QGraphicsSceneHoverEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QPainter>
-#include <QRadialGradient>
+#include <QtGui/qbrush.h>
 #include <QApplication>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KDebug>
 #include <KIconLoader>

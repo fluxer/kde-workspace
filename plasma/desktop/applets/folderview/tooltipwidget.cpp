@@ -22,8 +22,8 @@
 #include "proxymodel.h"
 
 #include <QApplication>
-#include <QGraphicsSceneHoverEvent>
-#include <QModelIndex>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <KDesktopFile>
 #include <KDirModel>

@@ -24,7 +24,7 @@
 #include <QDesktopWidget>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsView>
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QImageReader>
 #include <QItemSelectionModel>
 

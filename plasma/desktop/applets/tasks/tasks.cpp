@@ -41,6 +41,7 @@
 #include <taskmanager/tasksmodel.h>
 
 #include <QtDeclarative>
+#include <QtGui/qgraphicslinearlayout.h>
 
 class GroupManager : public TaskManager::GroupManager
 {

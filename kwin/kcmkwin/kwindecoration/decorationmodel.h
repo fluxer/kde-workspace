@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef KWIN_DECORATIONMODEL_H
 #define KWIN_DECORATIONMODEL_H
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QPixmap>
 #include <KConfig>
 #include <kdecoration.h>

@@ -35,7 +35,7 @@
 #include <QtDBus/QDBusReply>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 #include <QtDBus/QDBusServiceWatcher>
 #include <QtCore/QStringList>
 

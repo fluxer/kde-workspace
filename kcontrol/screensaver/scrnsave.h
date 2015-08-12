@@ -29,9 +29,9 @@
 #define SCRNSAVE__H
 
 #include <QWidget>
-#include <QMouseEvent>
-#include <QResizeEvent>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 
 #include <KCModule>
 

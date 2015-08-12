@@ -25,7 +25,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KShell>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QAction>
 
 RandROutput::RandROutput(RandRScreen *parent, RROutput id)

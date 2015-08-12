@@ -25,7 +25,7 @@
 #include <kjob.h>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusPendingCallWatcher>
+#include <QtDBus/qdbuspendingcall.h>
 
 #include "powerdevilbackendinterface.h"
 

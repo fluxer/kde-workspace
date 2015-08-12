@@ -21,7 +21,7 @@
 
 #include "kglobalaccel_x11.h"
 
-#include <QWidgetList>
+#include <QtGui/qwindowdefs.h>
 
 #include "kaction.h"
 #include "globalshortcutsregistry.h"
@@ -32,7 +32,7 @@
 
 #include <QtCore/QRegExp>
 #include <QWidget>
-#include <QtCore/QMetaClassInfo>
+#include <QtCore/qmetaobject.h>
 #include <QMenu>
 
 #include <kxerrorhandler.h>

@@ -25,7 +25,7 @@
 #include <KColorScheme>
 
 #include <QtGui/QPainter>
-#include <QtGui/QLinearGradient>
+#include <QtGui/qbrush.h>
 
 #include <math.h>
 

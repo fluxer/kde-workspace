@@ -28,7 +28,7 @@
 
 // Qt
 #include <QDBusContext>
-#include <QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 #include <QObject>
 #include <QDebug>
 #include <qwindowdefs.h>

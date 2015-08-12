@@ -29,7 +29,7 @@
 #include <QPainter>
 #include <QRegExp>
 #include <QPixmap>
-#include <QDropEvent>
+#include <QtGui/qevent.h>
 #include <QMenu>
 #include <QApplication>
 #include <QtDBus/QtDBus>

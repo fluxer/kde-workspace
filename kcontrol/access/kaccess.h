@@ -6,7 +6,7 @@
 #include <QColor>
 //Added by qt3to4:
 #include <QLabel>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 
 
 #include <KUniqueApplication>

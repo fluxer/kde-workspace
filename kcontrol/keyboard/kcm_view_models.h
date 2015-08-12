@@ -21,7 +21,7 @@
 #define KCM_VIEW_MODELS_H_
 
 #include <QtCore/QAbstractItemModel>
-#include <QtCore/QAbstractTableModel>
+#include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QSet>
 #include <QtGui/QStyledItemDelegate>
 

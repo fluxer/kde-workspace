@@ -23,7 +23,7 @@
 #include <QApplication>
 #include <QDeclarativeItem>
 #include <QDesktopWidget>
-#include <QGraphicsObject>
+#include <QtGui/qgraphicsitem.h>
 #include <QGraphicsWidget>
 #include <QTimer>
 #include <QLayout>

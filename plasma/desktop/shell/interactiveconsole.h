@@ -20,7 +20,7 @@
 #ifndef INTERACTIVECONSOLE
 #define INTERACTIVECONSOLE
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QScriptValue>
 
 #include <KDialog>

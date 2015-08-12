@@ -20,7 +20,7 @@
 #include "backtraceparserkdbgwin.h"
 #include "backtraceparsernull.h"
 #include <QtCore/QRegExp>
-#include <QtCore/QMetaEnum>
+#include <QtCore/qmetaobject.h>
 #include <KDebug>
 
 //factory

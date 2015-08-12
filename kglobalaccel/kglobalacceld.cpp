@@ -28,9 +28,9 @@
 #include "globalshortcutsregistry.h"
 
 #include <QtCore/QTimer>
-#include <QtCore/QMetaMethod>
+#include <QtCore/qmetaobject.h>
 #include <QtDBus/QDBusMetaType>
-#include <QtDBus/QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 
 #include "klocale.h"
 #include "kglobalaccel.h"

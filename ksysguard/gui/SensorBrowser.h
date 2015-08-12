@@ -22,7 +22,7 @@
 #ifndef KSG_SENSORBROWSER_H
 #define KSG_SENSORBROWSER_H
 
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QTreeWidget>
 #include <QMap>
 #include <QHash>

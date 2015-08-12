@@ -21,7 +21,7 @@
 
 #include <QVector>
 #include <QSocketNotifier>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <xcb/xcb.h>
 #include <xcb/record.h>

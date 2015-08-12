@@ -20,7 +20,7 @@
 #ifndef TOOLTIPWIDGET_H
 #define TOOLTIPWIDGET_H
 
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QBasicTimer>
 #include <QGraphicsWidget>
 #include <KFileItem>

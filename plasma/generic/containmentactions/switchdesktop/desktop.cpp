@@ -19,8 +19,8 @@
 
 #include "desktop.h"
 
-#include <QGraphicsSceneMouseEvent>
-#include <QGraphicsSceneWheelEvent>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtGui/qgraphicssceneevent.h>
 
 #include <KDebug>
 #include <KMenu>

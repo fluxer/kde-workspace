@@ -22,7 +22,7 @@
 #ifndef FAVORITEAPPSMODEL_H
 #define FAVORITEAPPSMODEL_H
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <KService>
 #include <KSharedConfig>

@@ -88,7 +88,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "unmanaged.h"
 #include "deleted.h"
 #include "effects.h"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include "composite.h"
 #ifdef KWIN_BUILD_SCREENEDGES
 #include "screenedge.h"

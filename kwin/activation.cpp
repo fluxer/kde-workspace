@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rules.h"
 #include "screens.h"
 #include "useractions.h"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 namespace KWin
 {

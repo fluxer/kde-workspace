@@ -41,6 +41,7 @@
 #include <QtDBus/QtDBus>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QtCore/qsignalmapper.h>
 
 #include <KAction>
 #include <KCrash>

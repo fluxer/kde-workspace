@@ -23,10 +23,10 @@
 //Qt
 #include <QAction>
 #include <QPainter>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QStyle>
-#include <QStyleOptionToolButton>
-#include <QGraphicsSceneHoverEvent>
+#include <QtGui/qstyleoption.h>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QEasingCurve>
 #include <QPropertyAnimation>
 

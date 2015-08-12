@@ -26,6 +26,7 @@
 
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
+#include <QtCore/qsharedpointer.h>
 
 #include <kdemacros.h>
 

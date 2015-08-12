@@ -28,6 +28,7 @@
 
 #include <QStringList>
 #include <QtXml/QtXml>
+#include <QtXml/qdom.h>
 
 class KXftConfig
 {

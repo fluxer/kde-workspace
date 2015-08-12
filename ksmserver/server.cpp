@@ -66,6 +66,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QRegExp>
 #include <QtDBus/QtDBus>
 #include <QSocketNotifier>
+#include <QtCore/qfileinfo.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -90,7 +91,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 
 #include <kworkspace/kdisplaymanager.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <krandom.h>
 #include <klauncher_iface.h>
 

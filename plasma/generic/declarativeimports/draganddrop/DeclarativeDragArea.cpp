@@ -26,7 +26,7 @@
 
 #include <QDrag>
 #include <QMimeData>
-#include <QGraphicsSceneMouseEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>

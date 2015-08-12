@@ -19,7 +19,7 @@
 #ifndef JAVASCRIPTSERVICE_H
 #define JAVASCRIPTSERVICE_H
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QScriptValue>
 
 #include <Plasma/Package>

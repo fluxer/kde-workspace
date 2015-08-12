@@ -20,7 +20,7 @@
 #ifndef AUTOSTARTITEM_H
 #define AUTOSTARTITEM_H
 
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QObject>
 #include <KUrl>
 

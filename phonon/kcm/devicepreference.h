@@ -25,7 +25,7 @@
 #include "ui_devicepreference.h"
 #include <phonon/objectdescriptionmodel.h>
 #include <phonon/objectdescription.h>
-#include <QStandardItem>
+#include <QtGui/qstandarditemmodel.h>
 #include <QtCore/QMap>
 #include <QtCore/QList>
 

@@ -34,10 +34,10 @@
 #include <QtGui/QGroupBox>
 #include <QPushButton>
 #include <QPainter>
-#include <QTimeEdit>
+#include <QtGui/qdatetimeedit.h>
 
 #include <QCheckBox>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>

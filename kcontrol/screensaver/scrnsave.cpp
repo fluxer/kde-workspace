@@ -41,14 +41,14 @@
 #include <QTimer>
 #include <QTreeWidget>
 #include <QHeaderView>
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QTextStream>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QHBoxLayout>
 #include <QBoxLayout>
 #include <QVBoxLayout>
-#include <QResizeEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QtDBus/QtDBus>
 
 #include <QDesktopWidget>
@@ -75,7 +75,7 @@
 #include <fixx11h.h>
 
 #include "scrnsave.h"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 template class QList<SaverConfig*>;
 

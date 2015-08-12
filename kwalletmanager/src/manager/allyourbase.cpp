@@ -34,9 +34,9 @@
 #include <QApplication>
 //Added by qt3to4:
 #include <QPixmap>
-#include <QDropEvent>
-#include <QDragEnterEvent>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 
 /****************
  *  KWalletFolderItem - ListView items to represent kwallet folders

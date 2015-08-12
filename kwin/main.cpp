@@ -32,7 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kcrash.h>
 #include <signal.h>
 #include <fcntl.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <stdio.h>
 #include <fixx11h.h>
 #include <kxerrorhandler.h>

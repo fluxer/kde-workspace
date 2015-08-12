@@ -22,7 +22,7 @@
 #define MENUVIEW_H
 
 // Qt
-#include <QtCore/QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 
 // KDE
 #include <KMenu>

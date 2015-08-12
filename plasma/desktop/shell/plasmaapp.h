@@ -25,7 +25,7 @@
 #include <QList>
 #include <QSize>
 #include <QTimer>
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include <KUniqueApplication>
 

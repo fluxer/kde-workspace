@@ -35,8 +35,8 @@
 #include <kconfiggroup.h>
 
 #include <QEvent>
-#include <QMouseEvent>
-#include <QPaintEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QFile>
 #include <QFileInfo>
 #include <QPainter>

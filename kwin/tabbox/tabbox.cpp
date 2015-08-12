@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "workspace.h"
 // Qt
 #include <QAction>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QtDBus/QDBusConnection>
 // KDE
 #include <KActionCollection>

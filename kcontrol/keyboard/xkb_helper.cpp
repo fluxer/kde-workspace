@@ -22,8 +22,8 @@
 #include <QtCore/QDir>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QTime>
-#include <QtGui/QX11Info>
+#include <QtCore/qdatetime.h>
+#include <QtGui/qx11info_x11.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>

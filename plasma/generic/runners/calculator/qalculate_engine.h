@@ -20,7 +20,7 @@
 #ifndef QALCULATEENGINE_H
 #define QALCULATEENGINE_H
 
-#include <QAtomicInt>
+#include <QtCore/qatomic.h>
 #include <QObject>
 
 class KJob;

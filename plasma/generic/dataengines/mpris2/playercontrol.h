@@ -23,7 +23,7 @@
 #include "playercontainer.h"
 
 #include <Plasma/Service>
-#include <QDBusObjectPath>
+#include <QtDBus/qdbusextratypes.h>
 
 class OrgFreedesktopDBusPropertiesInterface;
 class OrgMprisMediaPlayer2Interface;

@@ -22,7 +22,7 @@
 #include "main.h"
 
 #include <QtCore/QFile>
-#include <QtCore/Q_PID>
+#include <QtCore/qprocess.h>
 
 #include <kapplication.h>
 #include <kdeversion.h>

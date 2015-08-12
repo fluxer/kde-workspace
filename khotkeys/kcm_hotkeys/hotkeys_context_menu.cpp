@@ -33,7 +33,7 @@
 #include <KUrl>
 
 #include <QtCore/QSignalMapper>
-#include <QtGui/QContextMenuEvent>
+#include <QtGui/qevent.h>
 
 
 HotkeysTreeViewContextMenu::HotkeysTreeViewContextMenu( const QModelIndex &index, HotkeysTreeView *parent )

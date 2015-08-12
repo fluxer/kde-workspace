@@ -24,7 +24,7 @@
 #define SOLDEVICE
 
 //QT
-#include <QTreeWidgetItem>
+#include <QtGui/qtreewidget.h>
 #include <QTreeWidget>
 
 //Solid

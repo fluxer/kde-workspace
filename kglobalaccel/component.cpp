@@ -30,7 +30,7 @@
 
 #ifdef Q_WS_X11
 #include <QApplication>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #endif
 
 static QList<int> keysFromString(const QString &str)

@@ -29,7 +29,7 @@
 
 #include <config-randr.h>
 
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QVariant>
 
 #include <KAction>

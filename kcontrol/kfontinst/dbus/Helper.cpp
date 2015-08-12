@@ -27,8 +27,9 @@
 #include "Misc.h"
 #include "Utils.h"
 #include <KDebug>
-#include <QtXml/QDomDocument>
-#include <QtCore/QTextCodec>
+#include <QtXml/qdom.h>
+#include <QtCore/qtextcodec.h>
+#include <QtCore/qcoreapplication.h>
 #include <kio/global.h>
 #include <kde_file.h>
 #include <sys/types.h>

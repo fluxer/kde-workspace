@@ -24,7 +24,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QRegExp>
-#include <QtCore/Q_PID>
+#include <QtCore/qprocess.h>
 
 #include <kcmdlineargs.h>
 #include <kapplication.h>

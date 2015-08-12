@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QVBoxLayout>
 #include <QStylePainter>
-#include <QStyleOptionFrame>
+#include <QtGui/qstyleoption.h>
 
 // For the blurred tooltip background
 #include <plasma/windoweffects.h>

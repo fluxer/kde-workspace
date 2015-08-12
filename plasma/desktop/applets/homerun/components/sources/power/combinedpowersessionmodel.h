@@ -21,7 +21,7 @@
 
 #include <abstractsource.h>
 
-#include <QAbstractListModel>
+#include <QtCore/qabstractitemmodel.h>
 
 #include <KConfigGroup>
 

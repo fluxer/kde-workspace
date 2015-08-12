@@ -25,7 +25,7 @@
 #include <QApplication>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsLayout>
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QTimer>
 #include <QPainter>
 

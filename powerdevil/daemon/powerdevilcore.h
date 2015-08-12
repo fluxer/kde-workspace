@@ -23,7 +23,7 @@
 
 #include "powerdevilbackendinterface.h"
 
-#include <QtCore/QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 #include <QtCore/QStringList>
 
 #include <KComponentData>

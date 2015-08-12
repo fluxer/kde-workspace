@@ -24,8 +24,8 @@
 
 #include <KDebug>
 
-#include <QKeyEvent>
-#include <QFocusEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 
 #include <KHistoryComboBox>
 

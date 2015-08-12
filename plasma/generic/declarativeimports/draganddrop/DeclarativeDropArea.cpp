@@ -24,7 +24,7 @@
 #include "DeclarativeDropArea.h"
 #include "DeclarativeDragDropEvent.h"
 
-#include <QGraphicsSceneDragDropEvent>
+#include <QtGui/qgraphicssceneevent.h>
 #include <QMimeData>
 
 DeclarativeDropArea::DeclarativeDropArea(QDeclarativeItem *parent)

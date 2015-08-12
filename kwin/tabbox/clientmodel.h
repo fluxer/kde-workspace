@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define CLIENTMODEL_H
 #include "tabboxhandler.h"
 
-#include <QModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 /**
 * @file
 * This file defines the class ClientModel, the model for TabBoxClients.

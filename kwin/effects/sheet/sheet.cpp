@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "sheetconfig.h"
 
 #include <QTimeLine>
-#include <QGraphicsRotation>
+#include <QtGui/qgraphicstransform.h>
 #include <QVector3D>
 
 // Effect is based on fade effect by Philip Falkner

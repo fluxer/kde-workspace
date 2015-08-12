@@ -30,7 +30,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <KSycocaEntry>
 
 // Qt
-#include <QStandardItem>
+#include <QtGui/qstandarditemmodel.h>
 #include <QStandardItemModel>
 
 enum {

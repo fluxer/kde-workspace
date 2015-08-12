@@ -22,7 +22,7 @@
 #ifndef X11EMBEDCONTAINER_H
 #define X11EMBEDCONTAINER_H
 
-#include <QtGui/QX11EmbedContainer>
+#include <QtGui/qx11embed_x11.h>
 
 
 namespace SystemTray

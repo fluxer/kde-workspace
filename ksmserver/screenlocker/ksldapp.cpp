@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/QTimer>
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
-#include <QtGui/QX11Info>
+#include <QtGui/qx11info_x11.h>
 // X11
 #include <X11/Xlib.h>
 // other

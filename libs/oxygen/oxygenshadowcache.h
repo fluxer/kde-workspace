@@ -31,7 +31,7 @@
 #include "oxygen_export.h"
 
 #include <QtCore/QCache>
-#include <QtGui/QRadialGradient>
+#include <QtGui/qbrush.h>
 #include <cmath>
 
 namespace Oxygen

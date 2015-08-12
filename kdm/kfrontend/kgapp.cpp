@@ -43,7 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QDesktopWidget>
 #include <QPainter>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <stdio.h>
 #include <stdlib.h> // free(), exit()

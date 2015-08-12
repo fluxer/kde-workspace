@@ -25,12 +25,12 @@
 #include <math.h>
 
 #include <QtGui/QPainter>
-#include <QtGui/QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QSpinBox>
 #include <QtCore/QTimeLine>
 #include <QtGui/QGraphicsView>
-#include <QtGui/QGraphicsSceneMouseEvent>
-#include <QtCore/QDate>
+#include <QtGui/qgraphicssceneevent.h>
+#include <QtCore/qdatetime.h>
 
 #include <KDebug>
 #include <KLocale>

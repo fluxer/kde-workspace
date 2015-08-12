@@ -30,8 +30,8 @@
 #include <QClipboard>
 #include <QToolButton>
 #include <ktextedit.h>
-#include <QFocusEvent>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QItemDelegate>
 
 class InlineEditor : public KTextEdit {

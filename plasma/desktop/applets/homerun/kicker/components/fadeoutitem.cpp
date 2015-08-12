@@ -19,7 +19,7 @@
 #include "fadeoutitem.h"
 #include "fadeouteffect.h"
 
-#include <QGraphicsOpacityEffect>
+#include <QtGui/qgraphicseffect.h>
 
 #include <KDebug>
 

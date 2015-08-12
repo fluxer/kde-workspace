@@ -18,7 +18,7 @@
 
 #include "testbutton.h"
 
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 #include <QTimer>
 
 #include <KLocalizedString>

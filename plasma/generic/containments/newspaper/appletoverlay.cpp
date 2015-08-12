@@ -20,7 +20,7 @@
 #include "appletoverlay.h"
 
 #include <QPainter>
-#include <QStyleOptionGraphicsItem>
+#include <QtGui/qstyleoption.h>
 
 AppletOverlay::AppletOverlay(QGraphicsWidget *parent)
     : QGraphicsWidget(parent)

@@ -37,7 +37,7 @@
 #include <kcommondecoration.h>
 #include <QBasicTimer>
 #include <QTextStream>
-#include <QTimerEvent>
+#include <QtCore/qcoreevent.h>
 
 #include <X11/Xdefs.h>
 

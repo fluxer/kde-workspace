@@ -29,7 +29,7 @@
 #include <QFile>
 
 #include "mouse.h"
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 
 #include <ktoolinvocation.h>
 #include <klauncher_iface.h>

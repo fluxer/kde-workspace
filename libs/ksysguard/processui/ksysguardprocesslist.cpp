@@ -29,8 +29,8 @@
 #include <QApplication>
 #include <QTimer>
 #include <QList>
-#include <QShowEvent>
-#include <QHideEvent>
+#include <QtGui/qevent.h>
+#include <QtGui/qevent.h>
 #include <QHeaderView>
 #include <QAction>
 #include <QMenu>

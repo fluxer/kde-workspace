@@ -26,10 +26,10 @@
 #include "verticalmenu.h"
 
 #include <QCoreApplication>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
 #include <QEvent>
 #include <QMenu>
-#include <QMouseEvent>
+#include <QtGui/qevent.h>
 
 VerticalMenu::VerticalMenu(QWidget* parent) : QMenu(parent)
 {

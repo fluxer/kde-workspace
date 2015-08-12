@@ -29,11 +29,11 @@
 
 #include <QtCore/QEvent>
 #include <QtCore/QMap>
-#include <QtCore/QWeakPointer>
-#include <QtGui/QHoverEvent>
+#include <QtCore/qsharedpointer.h>
+#include <QtGui/qevent.h>
 #include <QtGui/QMainWindow>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QSplitterHandle>
+#include <QtGui/qevent.h>
+#include <QtGui/qsplitter.h>
 #include <QtGui/QWidget>
 
 #include "oxygenaddeventfilter.h"

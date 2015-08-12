@@ -31,7 +31,7 @@ DEALINGS IN THE SOFTWARE.
 #include <kdebug.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
-#include <QX11Info>
+#include <QtGui/qx11info_x11.h>
 #include <QProcess>
 // TODO: remove with Qt 5, only for HTML escaping the caption
 #include <QTextDocument>

@@ -20,7 +20,7 @@
 #ifndef WIDGET
 #define WIDGET
 
-#include <QWeakPointer>
+#include <QtCore/qsharedpointer.h>
 
 #include "applet.h"
 

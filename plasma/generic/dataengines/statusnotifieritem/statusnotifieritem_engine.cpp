@@ -22,6 +22,7 @@
 #include "statusnotifieritem_engine.h"
 #include "statusnotifieritemsource.h"
 
+#include <QtCore/qcoreapplication.h>
 #include <KDebug>
 #include <KIcon>
 #include <iostream>

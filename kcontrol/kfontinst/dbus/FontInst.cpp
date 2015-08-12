@@ -21,8 +21,11 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtDBus/QDBusConnection>
-#include <QtCore/QTimer>
+#include <QtDBus/qdbusconnection.h>
+#include <QtCore/qtimer.h>
+#include <QtCore/qdir.h>
+#include <QtCore/qcoreapplication.h>
+
 #include <kauth.h>
 #include <KDebug>
 #include <kio/global.h>

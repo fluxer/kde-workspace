@@ -21,7 +21,7 @@
 #define APPINTERFACE
 
 #include <QObject>
-#include <QRectF>
+#include <QtCore/qrect.h>
 #include <QStringList>
 
 #include "../plasmagenericshell_export.h"

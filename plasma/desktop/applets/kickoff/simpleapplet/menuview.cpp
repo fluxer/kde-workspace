@@ -23,12 +23,12 @@
 
 // Qt
 #include <QtCore/QAbstractItemModel>
-#include <QtCore/QPersistentModelIndex>
+#include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QStack>
 #include <QtGui/QApplication>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QStandardItem>
-#include <QtGui/QStyleOptionMenuItem>
+#include <QtGui/qevent.h>
+#include <QtGui/qstandarditemmodel.h>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QPainter>
 #include <QtGui/QToolTip>
 

@@ -19,7 +19,7 @@
 #ifndef TOUCHPADPARAMETERSBASE_H
 #define TOUCHPADPARAMETERSBASE_H
 
-#include <QVariantHash>
+#include <QtCore/qvariant.h>
 
 #include <KConfigSkeleton>
 

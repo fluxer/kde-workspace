@@ -42,7 +42,7 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QBoxLayout>
 #include <QtCore/QEvent>
-#include <QtGui/QResizeEvent>
+#include <QtGui/qevent.h>
 
 namespace KFI
 {

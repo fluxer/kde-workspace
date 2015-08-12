@@ -22,7 +22,7 @@
 #include "x11embedpainter.h"
 
 #include <QtCore/QSet>
-#include <QtCore/QTime>
+#include <QtCore/qdatetime.h>
 #include <QtCore/QTimer>
 
 #include <KDebug>

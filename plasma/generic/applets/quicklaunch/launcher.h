@@ -21,7 +21,7 @@
 #define QUICKLAUNCH_LAUNCHER_H
 
 // Qt
-#include <Qt>
+#include <QtCore/qnamespace.h>
 #include <QtGlobal>
 #include <QtCore/QObject>
 

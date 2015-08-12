@@ -8,6 +8,8 @@
 #include <KDirNotify>
 #include <KRecentDocument>
 
+#include <QtCore/qfileinfo.h>
+
 #include "recentdocumentsnotifier.h"
 
 K_PLUGIN_FACTORY(RecentDocumentsFactory, registerPlugin<RecentDocumentsNotifier>();)

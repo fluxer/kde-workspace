@@ -30,8 +30,9 @@
 #include <QtGui/QApplication>
 #include <QtGui/QHeaderView>
 #include <QtGui/QPixmapCache>
-#include <QtGui/QContextMenuEvent>
-#include <QtGui/QX11Info>
+#include <QtGui/qevent.h>
+#include <QtGui/qx11info_x11.h>
+#include <QtCore/qtextstream.h>
 
 namespace KFI
 {

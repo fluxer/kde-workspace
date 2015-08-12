@@ -56,7 +56,7 @@
 #include <QtGui/QDockWidget>
 #include <QtGui/QMdiSubWindow>
 #include <QtGui/QStyleOption>
-#include <QtGui/QStyleOptionSlider>
+#include <QtGui/qstyleoption.h>
 #include <QtGui/QToolBar>
 #include <QtGui/QToolBox>
 #include <QtGui/QWidget>

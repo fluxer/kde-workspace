@@ -33,7 +33,8 @@
 #include <QApplication>
 #include <QDeclarativeInfo>
 #include <QDesktopWidget>
-#include <QKeyEvent>
+#include <QtGui/qevent.h>
+#include <QtCore/qtimer.h>
 
 #include <kdeclarative.h>
 
