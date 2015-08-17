@@ -619,12 +619,6 @@ KDecorationOptions::BorderSize KDecorationOptions::preferredBorderSize(KDecorati
     return d->cached_border_size;
 }
 
-bool KDecorationOptions::moveResizeMaximizedWindows() const
-{
-    // TODO KF5: remove function with API break
-    return false;
-}
-
 KDecorationDefines::WindowOperation KDecorationOptions::operationMaxButtonClick(Qt::MouseButtons button) const
 {
     return button == Qt::RightButton ? d->opMaxButtonRightClick :

@@ -42,6 +42,7 @@
 #include <QApplication>
 #include <QLabel>
 #include <QtGui/QPainter>
+#include <QtGui/QPen>
 #include <QtGui/QBitmap>
 #include <QtGui/qx11info_x11.h>
 #include <QtCore/qobject.h>

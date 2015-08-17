@@ -31,6 +31,7 @@
 
 #include <cassert>
 #include <QtGui/QPainter>
+#include <QtGui/QPen>
 #include <QtGui/QPolygon>
 #include <QTimer>
 

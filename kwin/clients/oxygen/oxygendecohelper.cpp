@@ -22,6 +22,7 @@
 #include "oxygendecohelper.h"
 
 #include <QtGui/QPainter>
+#include <QtGui/QPen>
 #include <KColorUtils>
 #include <KDebug>
 

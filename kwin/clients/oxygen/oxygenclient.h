@@ -72,7 +72,7 @@ namespace Oxygen
 
         //! true if window is maximized
         virtual bool isMaximized( void ) const
-        { return maximizeMode()==MaximizeFull && !options()->moveResizeMaximizedWindows();  }
+        { return maximizeMode()==MaximizeFull;  }
 
         //! true when decoration is forced active
         bool isForcedActive( void ) const

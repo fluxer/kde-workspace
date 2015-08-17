@@ -337,9 +337,7 @@ void AuroraeClient::desktopChange()
 
 void AuroraeClient::maximizeChange()
 {
-    if (!options()->moveResizeMaximizedWindows()) {
-        emit maximizeChanged();
-    }
+    emit maximizeChanged();
 }
 
 void AuroraeClient::resize(const QSize &s)
@@ -364,7 +362,7 @@ void AuroraeClient::borders(int &left, int &right, int &top, int &bottom) const
         left = right = top = bottom = 0;
         return;
     }
-    const bool maximized = maximizeMode() == MaximizeFull && !options()->moveResizeMaximizedWindows();
+    const bool maximized = maximizeMode() == MaximizeFull;
     QObject *borders = NULL;
     if (maximized) {
         borders = m_item->findChild<QObject*>("maximizedBorders");
@@ -376,11 +374,7 @@ void AuroraeClient::borders(int &left, int &right, int &top, int &bottom) const
 
 void AuroraeClient::padding(int &left, int &right, int &top, int &bottom) const
 {
-    if (!m_item) {
-        left = right = top = bottom = 0;
-        return;
-    }
-    if (maximizeMode() == MaximizeFull && !options()->moveResizeMaximizedWindows()) {
+    if (!m_item || maximizeMode() == MaximizeFull) {
         left = right = top = bottom = 0;
         return;
     }
@@ -480,7 +474,7 @@ void AuroraeClient::toggleKeepBelow()
 
 bool AuroraeClient::isMaximized() const
 {
-    return maximizeMode()==KDecorationDefines::MaximizeFull && !options()->moveResizeMaximizedWindows();
+    return maximizeMode()==KDecorationDefines::MaximizeFull;
 }
 
 void AuroraeClient::titlePressed(int button, int buttons)
