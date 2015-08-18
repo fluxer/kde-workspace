@@ -62,10 +62,6 @@ public:
     void setName(const QString &newName);
 
     ItemType itemType() const;
-    /**
-    * @deprecated: use itemType() instead
-    **/
-    KDE_DEPRECATED bool isGroupItem() const;
     bool isRootGroup() const;
 
     /** only true if item is in this group */

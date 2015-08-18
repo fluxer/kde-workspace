@@ -29,6 +29,7 @@
 
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
+#include <QtGui/QPen>
 
 #include <math.h>
 

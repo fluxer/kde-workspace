@@ -45,9 +45,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-K_PLUGIN_FACTORY(KTimeZonedFactory,
-                 registerPlugin<KTimeZoned>();
-    )
+K_PLUGIN_FACTORY(KTimeZonedFactory, registerPlugin<KTimeZoned>();)
 K_EXPORT_PLUGIN(KTimeZonedFactory("ktimezoned"))
 
 // The maximum allowed length for reading a zone.tab line. This is set to

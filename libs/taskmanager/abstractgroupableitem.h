@@ -84,10 +84,6 @@ public:
 
     bool isGroupMember(const GroupPtr group) const;
     virtual ItemType itemType() const = 0;
-    /**
-    * @deprecated: use itemType() instead
-    **/
-    KDE_DEPRECATED virtual bool isGroupItem() const = 0;
 
     virtual bool isStartupItem() const;
 

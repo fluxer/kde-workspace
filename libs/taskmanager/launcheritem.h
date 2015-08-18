@@ -52,10 +52,6 @@ public:
     LauncherItem(QObject *parent, const KUrl &url);
     ~LauncherItem();
 
-    /**
-    * @deprecated: use itemType() instead
-    **/
-    KDE_DEPRECATED bool isGroupItem() const;
     ItemType itemType() const;
 
     bool isValid() const;

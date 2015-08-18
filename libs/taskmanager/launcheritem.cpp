@@ -213,11 +213,6 @@ ItemType LauncherItem::itemType() const
     return LauncherItemType;
 }
 
-bool LauncherItem::isGroupItem() const
-{
-    return false;
-}
-
 void LauncherItem::launch()
 {
     //NOTE: preferred is NOT a protocol, it's just a magic string

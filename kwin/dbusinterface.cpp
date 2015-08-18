@@ -45,23 +45,13 @@ DBusInterface::DBusInterface(QObject *parent)
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/KWin", this);
     if (!dbus.registerService("org.kde.KWin")) {
-        QDBusServiceWatcher *dog = new QDBusServiceWatcher("org.kde.KWin", dbus, QDBusServiceWatcher::WatchForUnregistration, this);
-        connect (dog, SIGNAL(serviceUnregistered(QString)), SLOT(becomeKWinService(QString)));
+        kDebug(1212) << "failed to register service org.kde.KWin. Perhaps something has already taken it?";
     }
     connect(Compositor::self(), SIGNAL(compositingToggled(bool)), SIGNAL(compositingToggled(bool)));
     dbus.connect(QString(), "/KWin", "org.kde.KWin", "reloadConfig",
                  Workspace::self(), SLOT(slotReloadConfig()));
     dbus.connect(QString(), "/KWin", "org.kde.KWin", "reinitCompositing",
                  Compositor::self(), SLOT(slotReinitialize()));
-}
-
-void DBusInterface::becomeKWinService(const QString &service)
-{
-    // TODO: this watchdog exists to make really safe that we at some point get the service
-    // but it's probably no longer needed since we explicitly unregister the service with the deconstructor
-    if (service == "org.kde.KWin" && QDBusConnection::sessionBus().registerService("org.kde.KWin") && sender()) {
-        sender()->deleteLater(); // bye doggy :'(
-    }
 }
 
 DBusInterface::~DBusInterface()

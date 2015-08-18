@@ -400,68 +400,59 @@ QPixmap Task::bestIcon(int size, bool &isStaticIcon)
     isStaticIcon = false;
 
     switch (size) {
-    case KIconLoader::SizeSmall: {
-        pixmap = icon(16, 16, true);
+        case KIconLoader::SizeSmall: {
+            pixmap = icon(16, 16, true);
 
-        // Icon of last resort
-        if (pixmap.isNull()) {
-            pixmap = KIconLoader::global()->loadIcon("xorg",
-                     KIconLoader::NoGroup,
-                     KIconLoader::SizeSmall);
-            isStaticIcon = true;
+            // Icon of last resort
+            if (pixmap.isNull()) {
+                pixmap = KIconLoader::global()->loadIcon("xorg",
+                        KIconLoader::NoGroup,
+                        KIconLoader::SizeSmall);
+                isStaticIcon = true;
+            }
         }
-    }
-    break;
-    case KIconLoader::SizeMedium: {
-        //
-        // Try 34x34 first for KDE 2.1 icons with shadows, if we don't
-        // get one then try 32x32.
-        //
-        pixmap = icon(34, 34, false);
-
-        if (((pixmap.width() != 34) || (pixmap.height() != 34)) &&
-                ((pixmap.width() != 32) || (pixmap.height() != 32))) {
+        break;
+        case KIconLoader::SizeMedium: {
             pixmap = icon(32, 32, true);
-        }
 
-        // Icon of last resort
-        if (pixmap.isNull()) {
-            pixmap = KIconLoader::global()->loadIcon("xorg",
-                     KIconLoader::NoGroup,
-                     KIconLoader::SizeMedium);
-            isStaticIcon = true;
+            // Icon of last resort
+            if (pixmap.isNull()) {
+                pixmap = KIconLoader::global()->loadIcon("xorg",
+                        KIconLoader::NoGroup,
+                        KIconLoader::SizeMedium);
+                isStaticIcon = true;
+            }
         }
-    }
-    break;
-    case KIconLoader::SizeLarge: {
-        // If there's a 48x48 icon in the hints then use it
-        pixmap = icon(size, size, false);
+        break;
+        case KIconLoader::SizeLarge: {
+            // If there's a 48x48 icon in the hints then use it
+            pixmap = icon(size, size, false);
 
-        // If not, try to get one from the classname
-        if (pixmap.isNull() || pixmap.width() != size || pixmap.height() != size) {
-            pixmap = KIconLoader::global()->loadIcon(className(),
-                     KIconLoader::NoGroup,
-                     size,
-                     KIconLoader::DefaultState,
-                     QStringList(), 0L,
-                     true);
-            isStaticIcon = true;
-        }
+            // If not, try to get one from the classname
+            if (pixmap.isNull() || pixmap.width() != size || pixmap.height() != size) {
+                pixmap = KIconLoader::global()->loadIcon(className(),
+                        KIconLoader::NoGroup,
+                        size,
+                        KIconLoader::DefaultState,
+                        QStringList(), 0L,
+                        true);
+                isStaticIcon = true;
+            }
 
-        // If we still don't have an icon then scale the one in the hints
-        if (pixmap.isNull() || (pixmap.width() != size) || (pixmap.height() != size)) {
-            pixmap = icon(size, size, true);
-            isStaticIcon = false;
-        }
+            // If we still don't have an icon then scale the one in the hints
+            if (pixmap.isNull() || (pixmap.width() != size) || (pixmap.height() != size)) {
+                pixmap = icon(size, size, true);
+                isStaticIcon = false;
+            }
 
-        // Icon of last resort
-        if (pixmap.isNull()) {
-            pixmap = KIconLoader::global()->loadIcon("xorg",
-                     KIconLoader::NoGroup,
-                     size);
-            isStaticIcon = true;
+            // Icon of last resort
+            if (pixmap.isNull()) {
+                pixmap = KIconLoader::global()->loadIcon("xorg",
+                        KIconLoader::NoGroup,
+                        size);
+                isStaticIcon = true;
+            }
         }
-    }
     }
 
     return pixmap;

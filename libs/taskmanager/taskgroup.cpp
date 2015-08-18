@@ -384,11 +384,6 @@ ItemType TaskGroup::itemType() const
     return GroupItemType;
 }
 
-bool TaskGroup::isGroupItem() const
-{
-    return true;
-}
-
 bool TaskGroup::isRootGroup() const
 {
     return !parentGroup();

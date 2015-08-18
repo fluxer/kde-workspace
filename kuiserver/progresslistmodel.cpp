@@ -47,18 +47,15 @@ ProgressListModel::ProgressListModel(QObject *parent)
     QDBusConnection sessionBus = QDBusConnection::sessionBus();
 
     if (!sessionBus.registerService(QLatin1String("org.kde.kuiserver"))) {
-        kDebug(7024) <<
-        "********** Error, we have failed to register service org.kde.kuiserver. Perhaps something  has already taken it?";
+        kDebug(7024) << "failed to register service org.kde.kuiserver. Perhaps something has already taken it?";
     }
 
     if (!sessionBus.registerService(QLatin1String("org.kde.JobViewServer"))) {
-        kDebug(7024) <<
-        "********** Error, we have failed to register service JobViewServer. Perhaps something already has taken it?";
+        kDebug(7024) << "failed to register service JobViewServer. Perhaps something already has taken it?";
     }
 
     if (!sessionBus.registerObject(QLatin1String("/JobViewServer"), this)) {
-        kDebug(7024) <<
-        "********** Error, we have failed to register object /JobViewServer.";
+        kDebug(7024) << "failed to register object JobViewServer.";
     }
 
     /* unused
