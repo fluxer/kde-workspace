@@ -44,7 +44,7 @@ ENDIF (HAVE_LIBXSS)
 kde4_add_plugin(plasma_applet_systemtray ${systemtray_SRCS})
 include_directories(${CMAKE_SOURCE_DIR})
 target_link_libraries(plasma_applet_systemtray
-    ${QT_LIBRARIES}
+    ${QT_QTDECLARATIVE_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_PLASMA_LIBS}
     ${X11_LIBRARIES}
