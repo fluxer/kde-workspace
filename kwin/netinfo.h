@@ -71,7 +71,7 @@ inline RootInfo *rootInfo()
 /**
  * NET WM Protocol handler class
  */
-class WinInfo : public NETWinInfo2
+class WinInfo : public NETWinInfo
 {
 private:
     typedef KWin::Client Client; // Because of NET::Client
