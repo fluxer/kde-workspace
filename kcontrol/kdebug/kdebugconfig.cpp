@@ -58,7 +58,7 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
                         ki18n("KDE Debug Module"),
                         0, KLocalizedString(), KAboutData::License_GPL,
                         ki18n("Copyright 1999-2009, David Faure <email>faure@kde.org</email>\n"
-                            "Copyright 2014, Ivailo Monev <email>xakepa10@gmail.com</email>"
+                            "Copyright 2014-2015, Ivailo Monev <email>xakepa10@gmail.com</email>"
                         ));
 
     about->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
@@ -169,7 +169,7 @@ void KCMDebug::readAreas()
 void KCMDebug::load()
 {
     KConfigGroup topGroup(pConfig, QString());
-    m_disableAll->setChecked(topGroup.readEntry("DisableAll", false));
+    m_disableAll->setChecked(topGroup.readEntry("DisableAll", true));
     emit changed( false );
 }
 
