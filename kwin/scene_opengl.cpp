@@ -205,8 +205,7 @@ SceneOpenGL *SceneOpenGL::createScene()
     platformInterface = EglPlatformInterface;
 #else
     // check environment variable
-    if (qstrcmp(envOpenGLInterface, "egl") == 0 ||
-            qstrcmp(envOpenGLInterface, "egl_wayland") == 0) {
+    if (qstrcmp(envOpenGLInterface, "egl") == 0) {
         kDebug(1212) << "Forcing EGL native interface through environment variable";
         platformInterface = EglPlatformInterface;
     }
