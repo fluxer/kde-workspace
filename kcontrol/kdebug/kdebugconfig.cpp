@@ -99,7 +99,7 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
     connect(pFatalCombo, SIGNAL(activated(int)),
             this, SLOT(slotDestinationChanged()));
     pFatalCombo->addItems( destList );
-    connect(pAbortFatal, SIGNAL(activated(int)),
+    connect(pAbortFatal, SIGNAL(stateChanged(int)),
             this, SLOT(slotAbortFatalChanged()));
 
     // Hack!
