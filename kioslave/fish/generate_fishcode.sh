@@ -3,7 +3,7 @@
 # $1 is fish.pl
 # $2 is md5sum
 # $3 is the output file
-# $4 are the parameters for cut 
+# $4 are the parameters for cut
 
 SUM=`$2 "$1" | cut -d ' ' $4 `
 echo '#define CHECKSUM "'$SUM'"' > $3

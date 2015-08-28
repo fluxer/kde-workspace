@@ -286,8 +286,8 @@ int main(int _argc, char *_argv[])
         dlg->setCaption(modules.first()->name());
     }
 
-    for (KService::List::ConstIterator it = modules.constBegin(); it != modules.constEnd(); ++it)
-        dlg->addModule(*it, 0, moduleArgs);
+    foreach(const KSharedPtr<KService> it, modules)
+        dlg->addModule(it, 0, moduleArgs);
 
     if ( !args->isSet( "icon" ) && modules.count() == 1)
     {

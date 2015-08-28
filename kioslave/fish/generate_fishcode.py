@@ -1,7 +1,7 @@
 #1 is generate_fishcode.py
 #2 is md5sum
 #3 is the output file
-#4 are the parameters for cut 
+#4 are the parameters for cut
 import sys
 import re
 import hashlib
