@@ -5,11 +5,12 @@ set(plasmaclock_LIB_SRCS
     calendar.cpp
     calendartable.cpp
     wheelytoolbutton.cpp
+    timezonesConfig.ui
+    generalConfig.ui
+    calendarConfig.ui
 )
 
-kde4_add_ui_files(plasmaclock_LIB_SRCS timezonesConfig.ui generalConfig.ui calendarConfig.ui)
-
-kde4_add_library(plasmaclock SHARED ${plasmaclock_LIB_SRCS})
+add_library(plasmaclock SHARED ${plasmaclock_LIB_SRCS})
 
 target_link_libraries(plasmaclock
                       ${KDE4_PLASMA_LIBS}

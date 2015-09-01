@@ -1,4 +1,4 @@
-kde4_add_executable(kiconfinder NOGUI kiconfinder.cpp)
+add_executable(kiconfinder kiconfinder.cpp)
 
 target_link_libraries(kiconfinder ${KDE4_KDEUI_LIBS})
 

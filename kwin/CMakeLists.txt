@@ -218,7 +218,7 @@ set(kwinLibs
     ${kwin_OPENGL_LIBS}
 )
 
-kde4_add_executable( kwin ${kwin_SRCS})
+add_executable( kwin ${kwin_SRCS})
 
 target_link_libraries(kwin ${kwinLibs})
 
@@ -241,7 +241,7 @@ endif()
 install(TARGETS kwin         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 if(OPENGLES_FOUND)
-  kde4_add_executable( kwin_gles ${kwin_SRCS})
+  add_executable( kwin_gles ${kwin_SRCS})
   target_link_libraries(kwin_gles ${kwinLibs} kwinglesutils ${OPENGLES_LIBRARIES})
   set_target_properties(kwin_gles PROPERTIES COMPILE_FLAGS "-DKWIN_HAVE_OPENGLES")
   install(TARGETS kwin_gles         ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -255,4 +255,6 @@ install( FILES org.kde.KWin.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
 
 kde4_install_icons( ${ICON_INSTALL_DIR} )
 
-add_subdirectory(tests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()

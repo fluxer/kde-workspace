@@ -17,7 +17,7 @@ set(kwalletbackend_LIB_SRCS
    backendpersisthandler.cpp
 )
 
-kde4_add_library(kwalletbackend SHARED ${kwalletbackend_LIB_SRCS})
+add_library(kwalletbackend SHARED ${kwalletbackend_LIB_SRCS})
 
 target_link_libraries(kwalletbackend ${KDE4_KDEUI_LIBS} ${LIBGCRYPT_LIBRARIES})
 if(QGPGME_FOUND)
@@ -27,4 +27,6 @@ endif(QGPGME_FOUND)
 set_target_properties(kwalletbackend PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kwalletbackend ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-add_subdirectory(tests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()

@@ -13,7 +13,7 @@ qt4_add_dbus_interface(
 
 set(kmenuedit_SRCS main.cpp ${kmenueditcommon_STAT_SRCS})
 
-kde4_add_executable(kmenuedit ${kmenuedit_SRCS})
+add_executable(kmenuedit ${kmenuedit_SRCS})
 
 target_link_libraries(kmenuedit ${KDE4_KIO_LIBS} ${QT_QTXML_LIBRARY} ${QT_QTDBUS_LIBRARY})
 

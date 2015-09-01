@@ -7,10 +7,13 @@ include_directories (
 
 ########### next target ###############
 
-set(kcm_style_PART_SRCS ../krdb/krdb.cpp styleconfdialog.cpp kcmstyle.cpp)
-
-
-kde4_add_ui_files(kcm_style_PART_SRCS stylepreview.ui finetuning.ui)
+set(kcm_style_PART_SRCS
+    ../krdb/krdb.cpp
+    styleconfdialog.cpp
+    kcmstyle.cpp
+    stylepreview.ui
+    finetuning.ui
+)
 
 kde4_add_plugin(kcm_style ${kcm_style_PART_SRCS})
 

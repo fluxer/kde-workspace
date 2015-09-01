@@ -18,22 +18,17 @@ set(SRCS
     kcm/touchpadconfig.cpp
     kcm/touchpadparametersbase.cpp
     kcm/customconfigdialogmanager.cpp
+    kcm/pointermotion.ui
+    kcm/tap.ui
+    kcm/scroll.ui
+    kcm/sensitivity.ui
+    kcm/kded.ui
+    kcm/testarea.ui
 )
 
-qt4_add_dbus_interfaces(SRCS
-                        ${CMAKE_CURRENT_BINARY_DIR}/org.kde.touchpad.xml
-)
+qt4_add_dbus_interfaces(SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.touchpad.xml)
 
 kde4_add_kcfg_files(SRCS kcm/touchpadparameters.kcfgc)
-
-kde4_add_ui_files(SRCS
-                  kcm/ui/pointermotion.ui
-                  kcm/ui/tap.ui
-                  kcm/ui/scroll.ui
-                  kcm/ui/sensitivity.ui
-                  kcm/ui/kded.ui
-                  kcm/ui/testarea.ui
-)
 
 qt4_generate_dbus_interface(kded/kded.h org.kde.touchpad.xml)
 

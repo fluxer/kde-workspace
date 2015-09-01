@@ -40,11 +40,8 @@ set(
     hotkeys_widget_base.cpp
     action_group_widget.cpp
     simple_action_data_widget.cpp
-    )
 
-kde4_add_ui_files(
-    kcm_hotkeys_PART_SRCS
-
+    # USER INTERFACES
     global_settings_widget.ui
     hotkeys_export_widget.ui
     kcm_hotkeys.ui

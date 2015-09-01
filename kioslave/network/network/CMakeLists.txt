@@ -65,7 +65,7 @@ if(SLP_FOUND)
 set( molletnetwork_LINK_LIBS  ${molletnetwork_LINK_LIBS} ${SLP_LIBRARIES} )
 endif(SLP_FOUND)
 
-kde4_add_library( molletnetwork  SHARED ${molletnetwork_LIB_SRCS} )
+add_library( molletnetwork  SHARED ${molletnetwork_LIB_SRCS} )
 target_link_libraries( molletnetwork  ${molletnetwork_LINK_LIBS} )
 set_target_properties( molletnetwork  PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 

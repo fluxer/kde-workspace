@@ -7,7 +7,7 @@
 set(kdesu_SRCS kdesu.cpp sudlg.cpp )
 
 
-kde4_add_executable(kdesu_executable ${kdesu_SRCS})
+add_executable(kdesu_executable ${kdesu_SRCS})
 # in KDELibsDependencies.cmake installed by kdelibs there is a dependency to "kdesu"
 # which is then recognized here as the target name for this executable
 # so give the target here a different name and use the OUTPUT_NAME property to 

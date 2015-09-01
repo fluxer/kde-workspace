@@ -21,6 +21,7 @@
 #define EDITPAGE_H
 
 #include <KCModule>
+#include <KSharedConfig>
 
 #include "ui_profileEditPage.h"
 

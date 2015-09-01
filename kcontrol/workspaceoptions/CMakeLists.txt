@@ -1,7 +1,6 @@
 ########### next target ###############
 
-set(kcm_workspaceoptions_PART_SRCS workspaceoptions.cpp )
-kde4_add_ui_files(kcm_workspaceoptions_PART_SRCS mainpage.ui)
+set(kcm_workspaceoptions_PART_SRCS workspaceoptions.cpp mainpage.ui)
 
 kde4_add_plugin(kcm_workspaceoptions ${kcm_workspaceoptions_PART_SRCS})
 

@@ -19,6 +19,8 @@
 
 #include "hotkeys_export_widget.h"
 
+#include <KLocale>
+
 KHotkeysExportWidget::KHotkeysExportWidget(QWidget *parent)
     : QWidget(parent)
     {

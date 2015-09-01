@@ -3,7 +3,7 @@
 set(kcminit_SRCS main.cpp)
 
 
-kde4_add_executable(kcminit ${kcminit_SRCS})
+add_executable(kcminit ${kcminit_SRCS})
 
 target_link_libraries(kcminit  ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES})
 
@@ -16,7 +16,7 @@ install(TARGETS kcminit         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 set(kcminit_startup_SRCS main.cpp)
 
 
-kde4_add_executable( kcminit_startup ${kcminit_startup_SRCS})
+add_executable( kcminit_startup ${kcminit_startup_SRCS})
 
 target_link_libraries(kcminit_startup  ${KDE4_KCMUTILS_LIBS} ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES})
 

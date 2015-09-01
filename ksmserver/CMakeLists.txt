@@ -6,7 +6,9 @@ include_directories(
    ${KDECLARATIVE_INCLUDE_DIR}
 )
 
-add_subdirectory( tests )
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 macro_optional_add_subdirectory( screenlocker )
 set(COMPILE_SCREEN_LOCKER 1)
@@ -53,7 +55,7 @@ qt4_add_dbus_interface( ksmserver_SRCS ${kcminit_xml} kcminit_interface )
 
 qt4_add_dbus_adaptor( ksmserver_SRCS org.kde.KSMServerInterface.xml server.h KSMServer )
 
-kde4_add_executable( ksmserver ${ksmserver_SRCS})
+add_executable( ksmserver ${ksmserver_SRCS})
 
 target_link_libraries(ksmserver ${SCREEN_LOCKER} ${KDE4_PLASMA_LIBS} kworkspace
    ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} ${X11_LIBRARIES} ${X11_Xrender_LIB}
@@ -67,7 +69,7 @@ install(TARGETS ksmserver ${INSTALL_TARGETS_DEFAULT_ARGS})
 set(kcheckrunning_SRCS
    kcheckrunning.cpp)
 
-kde4_add_executable( kcheckrunning ${kcheckrunning_SRCS})
+add_executable( kcheckrunning ${kcheckrunning_SRCS})
 
 target_link_libraries(kcheckrunning ${X11_LIBRARIES})
 

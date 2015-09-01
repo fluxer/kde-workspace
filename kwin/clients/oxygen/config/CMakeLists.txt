@@ -8,13 +8,10 @@ set(kwin_oxygen_config_PART_SRCS
     oxygenexceptionlistwidget.cpp
     oxygenexceptionmodel.cpp
     ../oxygenexceptionlist.cpp
-  )
-
-kde4_add_ui_files(kwin_oxygen_config_PART_SRCS
-   ui/oxygenconfigurationui.ui
-   ui/oxygendetectwidget.ui
-   ui/oxygenexceptiondialog.ui
-   ui/oxygenexceptionlistwidget.ui
+   oxygenconfigurationui.ui
+   oxygendetectwidget.ui
+   oxygenexceptiondialog.ui
+   oxygenexceptionlistwidget.ui
 )
 
 kde4_add_kcfg_files(kwin_oxygen_config_PART_SRCS ../oxygenconfiguration.kcfgc )

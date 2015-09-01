@@ -1,10 +1,13 @@
-add_subdirectory(tests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
-set (trashcommon_PART_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/trashimpl.cpp
-                           ${CMAKE_CURRENT_SOURCE_DIR}/discspaceutil.cpp
-                           ${CMAKE_CURRENT_SOURCE_DIR}/trashsizecache.cpp
-                           ${CMAKE_CURRENT_SOURCE_DIR}/kinterprocesslock.cpp
-    )
+set(trashcommon_PART_SRCS
+    trashimpl.cpp
+    discspaceutil.cpp
+    trashsizecache.cpp
+    kinterprocesslock.cpp
+)
 
 ########### next target ###############
 
@@ -22,8 +25,7 @@ endif(NOT MINGW)
 
 set(ktrash_SRCS ktrash.cpp )
 
-
-kde4_add_executable(ktrash NOGUI ${ktrash_SRCS})
+add_executable(ktrash ${ktrash_SRCS})
 
 target_link_libraries(ktrash  ${KDE4_KIO_LIBS} )
 

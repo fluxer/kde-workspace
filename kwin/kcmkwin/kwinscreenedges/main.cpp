@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kservicetypetrader.h>
 
+#include <KConfigGroup>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <QtDBus/QtDBus>

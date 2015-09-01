@@ -4,9 +4,9 @@ set(krunner_kill_SRCS killrunner.cpp)
 
 set(kcm_krunner_kill_SRCS
     killrunner_config.cpp
+    killrunner_config.ui
 )
 
-kde4_add_ui_files(kcm_krunner_kill_SRCS killrunner_config.ui)
 kde4_add_plugin(kcm_krunner_kill ${kcm_krunner_kill_SRCS})
 target_link_libraries(kcm_krunner_kill
     ${KDE4_KDECORE_LIBS}

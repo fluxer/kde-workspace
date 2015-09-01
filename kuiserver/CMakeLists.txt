@@ -1,4 +1,6 @@
-add_subdirectory( tests )
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 include_directories( ${KDE4_KIO_INCLUDES} )
 
@@ -6,22 +8,19 @@ include_directories( ${KDE4_KIO_INCLUDES} )
 include(MacroDBusAddActivationService)
 
 set(kuiserver_SRCS
-main.cpp
-uiserver.cpp
-jobview.cpp
-progresslistmodel.cpp
-progresslistdelegate.cpp
-requestviewcallwatcher.cpp
-
+    main.cpp
+    uiserver.cpp
+    jobview.cpp
+    progresslistmodel.cpp
+    progresslistdelegate.cpp
+    requestviewcallwatcher.cpp
+    configdialog.ui
 )
 
 set(kuiserver_KDEINIT_PRIVATE
-progresslistdelegate_p.h
-uiserver_p.h
+    progresslistdelegate_p.h
+    uiserver_p.h
 )
-
-kde4_add_ui_files(kuiserver_SRCS configdialog.ui)
-
 
 #<DBus Stuff>
 
@@ -52,7 +51,7 @@ dbus_add_activation_service(org.kde.kuiserver.service.in)
 
 kde4_add_kcfg_files(kuiserver_SRCS kuiserversettings.kcfgc)
 
-kde4_add_executable( kuiserver ${kuiserver_SRCS})
+add_executable( kuiserver ${kuiserver_SRCS})
 
 target_link_libraries(kuiserver  ${KDE4_KIO_LIBS} )
 

@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kconfiggroup.h>
 #include <KActionCollection>
 #include <kaction.h>
+#include <klocale.h>
 
 #include <QVBoxLayout>
 

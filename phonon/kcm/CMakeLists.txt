@@ -17,15 +17,13 @@ add_feature_info ("Audio setup GUI" CANBERRA_FOUND
                   * http://0pointer.de/lennart/projects/libcanberra"
                  )
 
-set(kcmphonon_SRCS main.cpp devicepreference.cpp backendselection.cpp)
-kde4_add_ui_files(kcmphonon_SRCS devicepreference.ui backendselection.ui)
+set(kcmphonon_SRCS main.cpp devicepreference.cpp backendselection.cpp devicepreference.ui backendselection.ui)
 set(kcmphonon_LIBS ${KDE4_PHONON_LIBS} ${KDE4_KCMUTILS_LIBS} ${KDE4_KIO_LIBS})
 
 if(GLIB2_FOUND AND PULSEAUDIO_FOUND AND CANBERRA_FOUND)
   add_definitions(-DHAVE_PULSEAUDIO)
 
-  set(kcmphonon_SRCS ${kcmphonon_SRCS} audiosetup.cpp testspeakerwidget.cpp)
-  kde4_add_ui_files(kcmphonon_SRCS audiosetup.ui)
+  set(kcmphonon_SRCS ${kcmphonon_SRCS} audiosetup.cpp testspeakerwidget.cpp audiosetup.ui)
 
   include_directories(${GLIB2_INCLUDE_DIR} ${PULSEAUDIO_INCLUDE_DIR} ${CANBERRA_INCLUDE_DIRS})
 

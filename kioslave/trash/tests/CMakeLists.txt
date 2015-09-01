@@ -20,6 +20,6 @@ target_link_libraries(testtrash ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} ${QT_QTTEST_
 
 set(lockingtest_SRCS lockingtest.cpp ../kinterprocesslock.cpp )
 
-kde4_add_executable(lockingtest NOGUI ${lockingtest_SRCS})
+add_executable(lockingtest NOGUI ${lockingtest_SRCS})
 
 target_link_libraries(lockingtest ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY})

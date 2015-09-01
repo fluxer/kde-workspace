@@ -11,7 +11,7 @@ set(ksgrd_LIB_SRCS
 )
 
 
-kde4_add_library(ksgrd SHARED ${ksgrd_LIB_SRCS})
+add_library(ksgrd SHARED ${ksgrd_LIB_SRCS})
 
 target_link_libraries(ksgrd ${KDE4_KDECORE_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTNETWORK_LIBRARY} )
 

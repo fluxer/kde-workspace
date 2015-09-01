@@ -32,6 +32,7 @@
 
 #include <KPushButton>
 #include <KFileDialog>
+#include <KLocale>
 
 namespace Oxygen
 {

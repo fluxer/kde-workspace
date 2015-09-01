@@ -11,7 +11,7 @@ include_directories(
 qt4_add_dbus_adaptor(homerunviewer_SRCS org.kde.homerunviewer.xml
    fullview.h FullView)
 
-kde4_add_executable(homerunviewer ${homerunviewer_SRCS})
+add_executable(homerunviewer ${homerunviewer_SRCS})
 
 target_link_libraries(homerunviewer
     ${KDE4_KDEUI_LIBS}

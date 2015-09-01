@@ -3,32 +3,32 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1204)
 ########### next target ###############
 
 set(taskmanager_LIB_SRCS
-   abstractgroupableitem.cpp
-   abstractgroupingstrategy.cpp
-   abstractsortingstrategy.cpp
-   groupmanager.cpp
-   launcheritem.cpp
-   startup.cpp
-   strategies/alphasortingstrategy.cpp
-   strategies/desktopsortingstrategy.cpp
-   strategies/programgroupingstrategy.cpp
-   strategies/manualgroupingstrategy.cpp
-   strategies/manualsortingstrategy.cpp
-   task.cpp
-   taskactions.cpp
-   taskgroup.cpp
-   taskitem.cpp
-   taskmanager.cpp
-   tasksmodel.cpp
-   launcherconfig.cpp
-   launcherproperties.cpp
-   )
-
-kde4_add_ui_files(taskmanager_LIB_SRCS launcherconfig.ui launcherproperties.ui)
+    abstractgroupableitem.cpp
+    abstractgroupingstrategy.cpp
+    abstractsortingstrategy.cpp
+    groupmanager.cpp
+    launcheritem.cpp
+    startup.cpp
+    strategies/alphasortingstrategy.cpp
+    strategies/desktopsortingstrategy.cpp
+    strategies/programgroupingstrategy.cpp
+    strategies/manualgroupingstrategy.cpp
+    strategies/manualsortingstrategy.cpp
+    task.cpp
+    taskactions.cpp
+    taskgroup.cpp
+    taskitem.cpp
+    taskmanager.cpp
+    tasksmodel.cpp
+    launcherconfig.cpp
+    launcherproperties.cpp
+    launcherconfig.ui
+    launcherproperties.ui
+)
 
 set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 
-kde4_add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
+add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 
 target_link_libraries(taskmanager processcore ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 if (X11_Xfixes_FOUND)
@@ -72,7 +72,7 @@ install(FILES
 #   modeltest/main.cpp
 #   )
 
-#kde4_add_executable(tasksmodeltest ${tasksmodel_SRCS})
+#add_executable(tasksmodeltest ${tasksmodel_SRCS})
 #target_link_libraries(tasksmodeltest ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} taskmanager kephal)
 
 

@@ -28,6 +28,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #include <KIcon>
 #include <KServiceGroup>
 #include <KSycocaEntry>
+#include <KConfigGroup>
 
 // Qt
 #include <QtGui/qstandarditemmodel.h>

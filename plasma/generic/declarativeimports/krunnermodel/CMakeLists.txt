@@ -7,7 +7,7 @@ set(runnermodel_SRCS
 
 qt4_automoc(${runnermodel_SRCS})
 
-kde4_add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
+add_library(runnermodelplugin SHARED ${runnermodel_SRCS})
 target_link_libraries(runnermodelplugin
         ${QT_QTCORE_LIBRARY}
         ${QT_QTDECLARATIVE_LIBRARY}

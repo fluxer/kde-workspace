@@ -2,9 +2,10 @@ project(plasma-pager)
 
 set(pager_SRCS
     model.cpp
-    pager.cpp)
+    pager.cpp
+    pagerConfig.ui
+)
 
-kde4_add_ui_files(pager_SRCS pagerConfig.ui)
 kde4_add_plugin(plasma_applet_pager ${pager_SRCS})
 target_link_libraries(plasma_applet_pager
                       ${KDE4_KIO_LIBS}

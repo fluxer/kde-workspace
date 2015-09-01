@@ -1,16 +1,5 @@
 PROJECT (solid-actions)
 
-# We allow this to be built seperately for convienence purposes
-IF(CMAKE_SOURCE_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-
-    FIND_PACKAGE(KDE4 REQUIRED)
-    INCLUDE(KDE4Defaults)
-    ADD_DEFINITIONS(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-
-ENDIF(CMAKE_SOURCE_DIR STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
-
-INCLUDE_DIRECTORIES (${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
-
 ADD_SUBDIRECTORY(device-actions)
 
 ########### next target ###############
@@ -22,19 +11,18 @@ SET(kcm_solid_actions_srcs
     ActionModel.cpp
     ActionEditor.cpp
     SolidActionData.cpp
-    SolidActions.cpp )
+    SolidActions.cpp
+    SolidActions.ui
+    AddAction.ui
+    ActionEditor.ui
+)
 
 SET(solid_action_desktop_gen_srcs
     DesktopFileGenerator.cpp
     SolidActionData.cpp )
 
-KDE4_ADD_UI_FILES(kcm_solid_actions_srcs
-    SolidActions.ui
-    AddAction.ui
-    ActionEditor.ui )
-
 KDE4_ADD_PLUGIN(kcm_solid_actions ${kcm_solid_actions_srcs})
-KDE4_ADD_EXECUTABLE(solid-action-desktop-gen ${solid_action_desktop_gen_srcs})
+add_executable(solid-action-desktop-gen ${solid_action_desktop_gen_srcs})
 
 TARGET_LINK_LIBRARIES(kcm_solid_actions ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} )
 TARGET_LINK_LIBRARIES(solid-action-desktop-gen ${KDE4_SOLID_LIBS} ${KDE4_KIO_LIBS} )

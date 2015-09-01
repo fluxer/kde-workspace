@@ -6,9 +6,8 @@ set(systemsettingsview_LIB_SRCS
     BaseData.cpp
     BaseMode.cpp
     ExternalAppModule.cpp
+    externalModule.ui
 )
-
-KDE4_ADD_UI_FILES( systemsettingsview_LIB_SRCS externalModule.ui )
 
 set(systemsettingsview_LIB_HDRS
     systemsettingsview_export.h
@@ -20,7 +19,7 @@ set(systemsettingsview_LIB_HDRS
     ModuleView.h
 )
 
-kde4_add_library( systemsettingsview SHARED ${systemsettingsview_LIB_SRCS} )
+add_library( systemsettingsview SHARED ${systemsettingsview_LIB_SRCS} )
 
 target_link_libraries( systemsettingsview ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBRARY} ${KDE4_KCMUTILS_LIBS} )
 

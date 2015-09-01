@@ -31,7 +31,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcombobox.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <knotifyconfigwidget.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

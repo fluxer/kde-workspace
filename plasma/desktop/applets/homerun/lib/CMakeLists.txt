@@ -29,7 +29,7 @@ qt4_automoc(${lib_SRCS})
 
 configure_file(libhomerun_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/libhomerun_config.h @ONLY)
 
-kde4_add_library(homerun SHARED ${lib_SRCS})
+add_library(homerun SHARED ${lib_SRCS})
 set_target_properties(homerun PROPERTIES
     VERSION ${lib_VERSION}
     SOVERSION ${lib_VERSION_MAJOR}

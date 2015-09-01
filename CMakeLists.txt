@@ -325,22 +325,12 @@ set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace__)
 
 configure_file(KDE4WorkspaceConfig.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake" @ONLY)
 
-
-set(_KDE4WorkspaceConfig_INSTALL_DIR ${LIB_INSTALL_DIR}/KDE4Workspace/cmake)
-# places where find_package() looks for FooConfig.cmake files:
-# CMake >= 2.6.0 looks in lib/Foo*/cmake/, CMake >= 2.6.3 also looks in
-# lib/cmake/Foo*/, which packagers prefer. So they can set the KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR
-# option to have kdepimlibs install its Config file there. Alex
-if(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-   set(_KDE4WorkspaceConfig_INSTALL_DIR ${LIB_INSTALL_DIR}/cmake/KDE4Workspace)
-endif(KDE4_USE_COMMON_CMAKE_PACKAGE_CONFIG_DIR)
-
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
-        DESTINATION ${_KDE4WorkspaceConfig_INSTALL_DIR})
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace)
 
 install(EXPORT kdeworkspaceLibraryTargets 
         NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
-        DESTINATION ${_KDE4WorkspaceConfig_INSTALL_DIR}
+        DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
         FILE KDE4WorkspaceLibraryTargets.cmake )
 
 

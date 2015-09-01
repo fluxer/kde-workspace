@@ -7,7 +7,7 @@ include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kscreensaver/libkscreensave
 set(kblankscrn.kss_SRCS blankscrn.cpp )
 
 
-kde4_add_executable(kblankscrn.kss ${kblankscrn.kss_SRCS})
+add_executable(kblankscrn.kss ${kblankscrn.kss_SRCS})
 
 target_link_libraries(kblankscrn.kss  ${KDE4_KDEUI_LIBS} kscreensaver m )
 

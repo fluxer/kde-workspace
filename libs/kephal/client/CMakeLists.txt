@@ -35,7 +35,7 @@ set(more_unused_SRCS
 #QT4_GENERATE_DBUS_INTERFACE(../service/dbus/dbusapi_configurations.h org.kde.Kephal.Configurations.xml)
 #QT4_ADD_DBUS_INTERFACE(libkephal_SRCS ${CMAKE_CURRENT_BINARY_DIR}/org.kde.Kephal.Configurations.xml configurations_interface)
 
-KDE4_ADD_LIBRARY(kephal SHARED ${libkephal_SRCS})
+add_library(kephal SHARED ${libkephal_SRCS})
 
 TARGET_LINK_LIBRARIES (kephal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS})
 

@@ -40,7 +40,7 @@ qt4_add_dbus_adaptor(powerdevilcore_SRCS actions/bundled/org.kde.Solid.PowerMana
 qt4_add_dbus_adaptor(powerdevilcore_SRCS actions/bundled/org.kde.Solid.PowerManagement.Actions.SuspendSession.xml
                      actions/bundled/suspendsession.h PowerDevil::BundledActions::SuspendSession)
 
-kde4_add_library(powerdevilcore SHARED ${powerdevilcore_SRCS} ${powerdevil_bundled_actions_SRCS})
+add_library(powerdevilcore SHARED ${powerdevilcore_SRCS} ${powerdevil_bundled_actions_SRCS})
 
 set_target_properties(powerdevilcore PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 
@@ -92,7 +92,7 @@ set(powerdevilui_SRCS
     powerdevilactionconfig.cpp
 )
 
-kde4_add_library(powerdevilui SHARED ${powerdevilui_SRCS})
+add_library(powerdevilui SHARED ${powerdevilui_SRCS})
 set_target_properties(powerdevilui PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 target_link_libraries(powerdevilui

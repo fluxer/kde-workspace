@@ -23,6 +23,7 @@
 
 #include <QStringList>
 #include <KLineEdit>
+#include <KDialog>
 #include <kcmodule.h>
 #include <kemoticons.h>
 #include "ui_emoticonslist.h"

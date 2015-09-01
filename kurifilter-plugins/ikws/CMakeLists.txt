@@ -1,8 +1,16 @@
 add_subdirectory(searchproviders) 
 
-set(kuriikwsfilter_PART_SRCS kuriikwsfiltereng.cpp kuriikwsfilter.cpp searchprovider.cpp)
-
-kde4_add_ui_files(kuriikwsfilter_PART_SRCS ikwsopts_ui.ui searchproviderdlg_ui.ui)
+set(kuriikwsfilter_PART_SRCS
+    kuriikwsfiltereng.cpp
+    kuriikwsfilter.cpp
+    searchprovider.cpp
+    ikwsopts.h
+    ikwsopts.cpp
+    ikwsopts_ui.ui
+    searchproviderdlg.cpp
+    searchproviderdlg.h
+    searchproviderdlg_ui.ui
+)
 
 kde4_add_plugin(kuriikwsfilter ${kuriikwsfilter_PART_SRCS})
 
@@ -11,13 +19,15 @@ target_link_libraries(kuriikwsfilter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 install(TARGETS kuriikwsfilter DESTINATION ${PLUGIN_INSTALL_DIR})
 
 set(kurisearchfilter_PART_SRCS 
-   kurisearchfilter.cpp 
-   kuriikwsfiltereng.cpp 
-   ikwsopts.cpp 
-   searchproviderdlg.cpp 
-   searchprovider.cpp )
-
-kde4_add_ui_files(kurisearchfilter_PART_SRCS ikwsopts_ui.ui searchproviderdlg_ui.ui)
+    kurisearchfilter.cpp
+    kuriikwsfiltereng.cpp
+    ikwsopts.h
+    ikwsopts.cpp
+    searchproviderdlg.cpp
+    searchprovider.cpp
+    ikwsopts_ui.ui
+    searchproviderdlg_ui.ui
+)
 
 kde4_add_plugin(kurisearchfilter ${kurisearchfilter_PART_SRCS})
 

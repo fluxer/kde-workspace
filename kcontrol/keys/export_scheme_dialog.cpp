@@ -20,6 +20,7 @@
 #include "export_scheme_dialog.h"
 
 #include <KDebug>
+#include <KLocale>
 
 #include <QtGui/QCheckBox>
 

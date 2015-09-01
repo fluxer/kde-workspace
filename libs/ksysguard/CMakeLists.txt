@@ -18,7 +18,9 @@ add_subdirectory( processcore )
 add_subdirectory( processui )
 add_subdirectory( signalplotter )
 add_subdirectory( ksgrd )
-add_subdirectory( tests )
+if(ENABLE_TESTING)
+    add_subdirectory( tests )
+endif()
 
 install(DIRECTORY scripts/ DESTINATION ${DATA_INSTALL_DIR}/ksysguard/scripts)
 

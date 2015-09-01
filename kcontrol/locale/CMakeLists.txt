@@ -3,9 +3,7 @@ add_subdirectory( pics )
 
 ########### next target ###############
 
-set(kcm_locale_PART_SRCS kcmlocale.cpp)
-
-kde4_add_ui_files(kcm_locale_PART_SRCS kcmlocalewidget.ui )
+set(kcm_locale_PART_SRCS kcmlocale.cpp kcmlocalewidget.ui )
 
 kde4_add_plugin(kcm_locale ${kcm_locale_PART_SRCS})
 

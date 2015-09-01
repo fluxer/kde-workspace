@@ -28,7 +28,7 @@
 #include <KIcon>
 #include <KLocale>
 #include <KGlobalSettings>
-#include <KConfig>
+#include <KConfigGroup>
 #include <KStandardDirs>
 #include <KDirNotify>
 #include <KCharsets>

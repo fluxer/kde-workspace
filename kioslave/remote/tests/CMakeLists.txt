@@ -6,7 +6,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 set(testremote_SRCS testremote.cpp ${libkioremote_SRCS} )
 
 
-kde4_add_executable(testremote TEST ${testremote_SRCS})
+add_executable(testremote TEST ${testremote_SRCS})
 
 target_link_libraries(testremote  ${KDE4_KIO_LIBS} )
 

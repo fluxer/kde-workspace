@@ -1,16 +1,17 @@
-add_subdirectory(tests)
-
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(libfiletypes_SRCS
- filetypedetails.cpp
- filegroupdetails.cpp
- kservicelistwidget.cpp
- typeslistitem.cpp
- mimetypedata.cpp
- mimetypewriter.cpp
- newtypedlg.cpp
- kserviceselectdlg.cpp
- sharedmimeinfoversion.cpp
+    filetypedetails.cpp
+    filegroupdetails.cpp
+    kservicelistwidget.cpp
+    typeslistitem.cpp
+    mimetypedata.cpp
+    mimetypewriter.cpp
+    newtypedlg.cpp
+    kserviceselectdlg.cpp
+    sharedmimeinfoversion.cpp
 )
 
 ########### next target ###############
@@ -27,7 +28,7 @@ install(TARGETS kcm_filetypes  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
 set(keditfiletype_SRCS keditfiletype.cpp ${libfiletypes_SRCS})
 
-kde4_add_executable(keditfiletype ${keditfiletype_SRCS})
+add_executable(keditfiletype ${keditfiletype_SRCS})
 
 target_link_libraries(keditfiletype ${KDE4_KIO_LIBS})
 if (Q_WS_X11)

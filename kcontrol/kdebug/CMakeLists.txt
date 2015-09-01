@@ -1,9 +1,9 @@
 ########### next target ###############
 
 set(kdebugconfig_SRCS 
-   kdebugconfig.cpp)
-
-kde4_add_ui_files(kdebugconfig_SRCS kdebugconfig.ui)
+    kdebugconfig.cpp
+    kdebugconfig.ui
+)
 
 kde4_add_plugin(kcm_kdebugconfig ${kdebugconfig_SRCS})
 

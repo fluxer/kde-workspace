@@ -3,7 +3,7 @@ project(geolocation)
 # -------------------------------------------------------------------------------------------------
 
 set(plasma_geolocation_interface_SRCS geolocationprovider.cpp)
-kde4_add_library(plasma-geolocation-interface SHARED ${plasma_geolocation_interface_SRCS})
+add_library(plasma-geolocation-interface SHARED ${plasma_geolocation_interface_SRCS})
 target_link_libraries(plasma-geolocation-interface PRIVATE ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
 target_link_libraries(plasma-geolocation-interface
                       PUBLIC ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})

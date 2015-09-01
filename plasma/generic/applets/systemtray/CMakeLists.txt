@@ -27,11 +27,10 @@ set(systemtray_SRCS
     ui/applet.cpp
     ui/widgetitem.cpp
     ui/mouseredirectarea.cpp
-    )
 
-kde4_add_ui_files(systemtray_SRCS
-                  ui/autohide.ui
-                  ui/visibleitems.ui)
+    ui/autohide.ui
+    ui/visibleitems.ui
+)
 
 include(${QT_USE_FILE})
 include (CheckLibraryExists)

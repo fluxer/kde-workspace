@@ -11,7 +11,7 @@ include_directories(
 set(backendtest_SRCS backendtest.cpp )
 
 
-kde4_add_executable(backendtest TEST ${backendtest_SRCS})
+add_executable(backendtest TEST ${backendtest_SRCS})
 
 target_link_libraries(backendtest  ${KDE4_KDEUI_LIBS} kwalletbackend )
 
@@ -21,7 +21,7 @@ target_link_libraries(backendtest  ${KDE4_KDEUI_LIBS} kwalletbackend )
 set(testbf_SRCS testbf.cpp )
 
 
-kde4_add_executable(testbf TEST ${testbf_SRCS})
+add_executable(testbf TEST ${testbf_SRCS})
 
 target_link_libraries(testbf  ${KDE4_KDECORE_LIBS} kwalletbackend )
 
@@ -31,7 +31,7 @@ target_link_libraries(testbf  ${KDE4_KDECORE_LIBS} kwalletbackend )
 set(testsha_SRCS testsha.cpp )
 
 
-kde4_add_executable(testsha TEST ${testsha_SRCS})
+add_executable(testsha TEST ${testsha_SRCS})
 
 target_link_libraries(testsha  ${KDE4_KDECORE_LIBS} kwalletbackend )
 

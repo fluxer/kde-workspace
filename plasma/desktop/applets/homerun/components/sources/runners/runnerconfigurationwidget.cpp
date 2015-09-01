@@ -20,9 +20,8 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 // Self
 #include <runnerconfigurationwidget.h>
 
-// Local
-
 // KDE
+#include <KIcon>
 #include <KDebug>
 #include <KPluginInfo>
 #include <Plasma/RunnerManager>

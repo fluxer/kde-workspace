@@ -1,16 +1,11 @@
 project (freespacenotifier)
 
-find_package(KDE4 REQUIRED)
-include (KDE4Defaults)
-
 add_definitions (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 include_directories (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
 ########### next target ###############
 
-set(kded_freespacenotifier_SRCS freespacenotifier.cpp module.cpp)
-
-kde4_add_ui_files(kded_freespacenotifier_SRCS freespacenotifier_prefs_base.ui)
+set(kded_freespacenotifier_SRCS freespacenotifier.cpp module.cpp freespacenotifier_prefs_base.ui)
 
 kde4_add_kcfg_files(kded_freespacenotifier_SRCS settings.kcfgc)
 

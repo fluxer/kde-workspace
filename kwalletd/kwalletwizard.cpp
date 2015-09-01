@@ -31,6 +31,7 @@
 #include <QButtonGroup>
 
 #include <klocale.h>
+#include <kiconloader.h>
 
 #ifdef HAVE_QGPGME
 #include <QComboBox>

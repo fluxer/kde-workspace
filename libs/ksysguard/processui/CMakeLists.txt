@@ -4,22 +4,17 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../  ../processcore/)
 check_include_files(sys/endian.h HAVE_SYS_ENDIAN_H)
 check_include_files(byteswap.h HAVE_BYTESWAP_H)
 
-set(ksysguard_WIDGETS "ksysguard.widgets")
-
 set(processui_LIB_SRCS
    ksysguardprocesslist.cpp
    ProcessFilter.cpp
    ProcessModel.cpp
    ReniceDlg.cpp
    KTextEditVT.cpp
-)
-
-kde4_add_ui_files( processui_LIB_SRCS
    ReniceDlgUi.ui
    ProcessWidgetUI.ui
 )
 
-kde4_add_library(processui SHARED ${processui_LIB_SRCS})
+add_library(processui SHARED ${processui_LIB_SRCS})
 
 if(X11_XRes_FOUND)
   target_link_libraries(processui PRIVATE ${X11_XRes_LIB} ${X11_LIBRARIES})
@@ -39,9 +34,9 @@ install(TARGETS processui EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DE
 
 #----------------------
 
-kde4_add_widget_files(ksysguardwidgets_PART_SRCS ${ksysguard_WIDGETS})
+kde4_add_widget_files(ksysguard.widgets)
 
-kde4_add_plugin(ksysguardwidgets ${ksysguardwidgets_PART_SRCS})
+kde4_add_plugin(ksysguardwidgets $<TARGET_OBJECTS:ksysguard_autowidgets> ${ksysguardwidgets_PART_SRCS})
 
 target_link_libraries(ksysguardwidgets ${KDE4_KDEUI_LIBS} processui)
 

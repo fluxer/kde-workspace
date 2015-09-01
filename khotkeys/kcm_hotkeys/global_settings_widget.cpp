@@ -26,7 +26,7 @@
 #include <KDesktopFile>
 #include <KGlobal>
 #include <KStandardDirs>
-
+#include <KConfigGroup>
 
 GlobalSettingsWidget::GlobalSettingsWidget( QWidget *parent )
     :   HotkeysWidgetIFace( parent )

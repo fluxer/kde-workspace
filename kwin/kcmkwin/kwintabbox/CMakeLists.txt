@@ -13,9 +13,8 @@ set(kcm_kwintabbox_PART_SRCS
     ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/desktopmodel.cpp
     ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/tabboxconfig.cpp
     ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/tabboxhandler.cpp
+    main.ui
 )
-
-kde4_add_ui_files( kcm_kwintabbox_PART_SRCS main.ui )
 
 kde4_add_plugin(kcm_kwintabbox ${kcm_kwintabbox_PART_SRCS})
 

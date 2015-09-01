@@ -75,7 +75,7 @@ SET(service_libs ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${
 KDE4_ADD_PLUGIN (kded_kephal ${kded_kephal_SRCS})
 TARGET_LINK_LIBRARIES (kded_kephal ${service_libs})
 
-KDE4_ADD_EXECUTABLE (kephald ${standalone_kephald_SRCS})
+add_executable (kephald ${standalone_kephald_SRCS})
 TARGET_LINK_LIBRARIES (kephald ${service_libs})
 
 INSTALL (TARGETS kded_kephal DESTINATION ${PLUGIN_INSTALL_DIR})

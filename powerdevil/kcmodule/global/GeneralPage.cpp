@@ -39,6 +39,7 @@
 #include <KNotifyConfigWidget>
 #include <KPluginFactory>
 #include <KAboutData>
+#include <KIcon>
 
 K_PLUGIN_FACTORY(PowerDevilGeneralKCMFactory,
                  registerPlugin<GeneralPage>();

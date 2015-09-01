@@ -17,7 +17,7 @@ qt4_add_dbus_interface( kworkspace_LIB_SRCS ${kwin_xml} kwin_interface )
 
 
 
-kde4_add_library(kworkspace SHARED ${kworkspace_LIB_SRCS})
+add_library(kworkspace SHARED ${kworkspace_LIB_SRCS})
 
 target_link_libraries(kworkspace  ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${KDE4_PLASMA_LIBS} )
 

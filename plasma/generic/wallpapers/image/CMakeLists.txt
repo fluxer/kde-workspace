@@ -7,8 +7,9 @@ set(image_SRCS
     removebuttonmanager.cpp
     removebutton.cpp
     itemsview.cpp
+    imageconfig.ui
+    slideshowconfig.ui
 )
-kde4_add_ui_files(image_SRCS imageconfig.ui slideshowconfig.ui)
 
 set(ksmserver_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
 qt4_add_dbus_interface(image_SRCS ${ksmserver_xml} ksmserver_interface)

@@ -13,7 +13,7 @@ set(kcheckpass_SRCS
 	checkpass_aix.c
 )
 
-kde4_add_executable(kcheckpass NOGUI ${kcheckpass_SRCS})
+add_executable(kcheckpass ${kcheckpass_SRCS})
 
 if (KDE4_ENABLE_FPIE)
 	macro_add_compile_flags(kcheckpass ${KDE4_CXX_FPIE_FLAGS})

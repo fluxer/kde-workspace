@@ -7,11 +7,11 @@ set(oxygenstyle_LIB_SRCS
 )
 
 kde4_add_kcfg_files(oxygenstyle_LIB_SRCS
-  oxygenactiveshadowconfiguration.kcfgc
-  oxygeninactiveshadowconfiguration.kcfgc
+    oxygenactiveshadowconfiguration.kcfgc
+    oxygeninactiveshadowconfiguration.kcfgc
 )
 
-kde4_add_library(oxygenstyle SHARED ${oxygenstyle_LIB_SRCS})
+add_library(oxygenstyle SHARED ${oxygenstyle_LIB_SRCS})
 
 target_link_libraries(oxygenstyle ${KDE4_KDEUI_LIBS})
 
@@ -25,18 +25,15 @@ install(TARGETS oxygenstyle ${INSTALL_TARGETS_DEFAULT_ARGS} )
 # next target
 set(oxygenstyleconfig_LIB_SRCS
     oxygenshadowconfigwidget.cpp
-)
-
-kde4_add_ui_files(oxygenstyleconfig_LIB_SRCS
-    ui/oxygenshadowconfigurationui.ui
+    oxygenshadowconfigurationui.ui
 )
 
 kde4_add_kcfg_files(oxygenstyleconfig_LIB_SRCS
-  oxygenactiveshadowconfiguration.kcfgc
-  oxygeninactiveshadowconfiguration.kcfgc
+    oxygenactiveshadowconfiguration.kcfgc
+    oxygeninactiveshadowconfiguration.kcfgc
 )
 
-kde4_add_library(oxygenstyleconfig SHARED ${oxygenstyleconfig_LIB_SRCS})
+add_library(oxygenstyleconfig SHARED ${oxygenstyleconfig_LIB_SRCS})
 
 target_link_libraries(oxygenstyleconfig oxygenstyle)
 target_link_libraries(oxygenstyleconfig ${KDE4_KDEUI_LIBS})

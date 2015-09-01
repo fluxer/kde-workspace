@@ -1,16 +1,16 @@
 project(plasma-quicklaunch)
 
 set(quicklaunch_SRCS
-  icongridlayout.cpp
-  launcher.cpp
-  launcherdata.cpp
-  launchergrid.cpp
-  popup.cpp
-  popuplauncherlist.cpp
-  quicklaunch.cpp
+    icongridlayout.cpp
+    launcher.cpp
+    launcherdata.cpp
+    launchergrid.cpp
+    popup.cpp
+    popuplauncherlist.cpp
+    quicklaunch.cpp
+    quicklaunchConfig.ui
 )
 
-kde4_add_ui_files(quicklaunch_SRCS quicklaunchConfig.ui)
 kde4_add_plugin(plasma_applet_quicklaunch ${quicklaunch_SRCS})
 
 target_link_libraries(plasma_applet_quicklaunch

@@ -40,6 +40,6 @@ install(TARGETS krunner_bookmarksrunner DESTINATION ${PLUGIN_INSTALL_DIR} )
 install(FILES plasma-runner-bookmarks.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 # Currently tests include only chrome, so no need to get include them if json is not found
-if(QJSON_FOUND)
+if(QJSON_FOUND AND ENABLE_TESTING)
     add_subdirectory(tests)
-endif(QJSON_FOUND)
+endif()

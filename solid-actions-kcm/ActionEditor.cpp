@@ -20,6 +20,7 @@
 #include "ActionEditor.h"
 
 #include <KMessageBox>
+#include <KLocale>
 
 #include <Solid/Predicate>
 

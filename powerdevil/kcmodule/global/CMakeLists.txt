@@ -1,10 +1,8 @@
 
 set( kcm_powerdevil_global_SRCS
      GeneralPage.cpp
+     generalPage.ui
 )
-
-kde4_add_ui_files(kcm_powerdevil_global_SRCS
-    generalPage.ui)
 
 kde4_add_kcfg_files(kcm_powerdevil_global_SRCS ../../PowerDevilSettings.kcfgc)
 

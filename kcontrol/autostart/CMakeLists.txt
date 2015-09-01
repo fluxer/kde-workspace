@@ -1,7 +1,5 @@
 PROJECT (autostart)
 
-INCLUDE (KDE4Defaults)
-
 ADD_DEFINITIONS (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
 
@@ -11,9 +9,9 @@ SET(kcm_autostart_PART_SRCS
    autostartitem.cpp
    addscriptdialog.cpp
    advanceddialog.cpp
-   autostart.cpp )
-
-KDE4_ADD_UI_FILES(kcm_autostart_PART_SRCS autostartconfig.ui )
+   autostart.cpp
+   autostartconfig.ui
+)
 
 KDE4_ADD_PLUGIN(kcm_autostart ${kcm_autostart_PART_SRCS})
 

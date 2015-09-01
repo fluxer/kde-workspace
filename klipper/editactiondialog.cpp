@@ -24,6 +24,7 @@
 #include <QtGui/QComboBox>
 
 #include <KDebug>
+#include <KLocale>
 
 #include "urlgrabber.h"
 #include "ui_editactiondialog.h"

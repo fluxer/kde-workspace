@@ -31,7 +31,7 @@ set(kwineffects_XCB_LIBS
     ${XCB_RENDER_LIBRARIES}
 )
 
-kde4_add_library(kwineffects SHARED ${kwin_EFFECTSLIB_SRCS})
+add_library(kwineffects SHARED ${kwin_EFFECTSLIB_SRCS})
 target_link_libraries(kwineffects PRIVATE
     ${kwineffects_QT_LIBS}
     ${kwineffects_KDE_LIBS}
@@ -56,7 +56,7 @@ macro( KWIN4_ADD_GLUTILS_BACKEND name glinclude )
     if(OPENGL_EGL_FOUND)
         include_directories(${OPENGLES_EGL_INCLUDE_DIR})
     endif()
-    kde4_add_library(${name} SHARED ${kwin_GLUTILSLIB_SRCS})
+    add_library(${name} SHARED ${kwin_GLUTILSLIB_SRCS})
     target_link_libraries(${name} PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${kwineffects_XLIB_LIBS} ${kwineffects_XCB_LIBS} kwineffects)
     if(OPENGL_EGL_FOUND)
         target_link_libraries(${name} PRIVATE ${OPENGLES_EGL_LIBRARY})

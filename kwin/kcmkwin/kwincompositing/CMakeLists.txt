@@ -5,8 +5,9 @@ include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin )
 set(kcm_kwincompositing_PART_SRCS
     main.cpp
     ktimerdialog.cpp
-    )
-kde4_add_ui_files(kcm_kwincompositing_PART_SRCS main.ui)
+    main.ui
+)
+
 set(kwin_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/org.kde.KWin.xml)
 set_source_files_properties(${kwin_xml} PROPERTIES INCLUDE "interface_util.h")
 QT4_ADD_DBUS_INTERFACE(kcm_kwincompositing_PART_SRCS ${kwin_xml} kwin_interface)

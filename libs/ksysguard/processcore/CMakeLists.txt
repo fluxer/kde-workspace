@@ -12,7 +12,7 @@ set(ksysguard_LIB_SRCS
 
 
 
-kde4_add_library(processcore SHARED ${ksysguard_LIB_SRCS})
+add_library(processcore SHARED ${ksysguard_LIB_SRCS})
 
 target_link_libraries(processcore PRIVATE ${KDE4_KDECORE_LIBS} ${ZLIB_LIBRARIES} )
 target_link_libraries(processcore PUBLIC ${KDE4_KDECORE_LIBS} )
@@ -37,7 +37,7 @@ set(ksysguardprocesslist_helper_srcs
     processes_local_p.cpp
     processes_base_p.cpp)
 
-kde4_add_executable(ksysguardprocesslist_helper ${ksysguardprocesslist_helper_srcs})
+add_executable(ksysguardprocesslist_helper ${ksysguardprocesslist_helper_srcs})
 target_link_libraries(ksysguardprocesslist_helper ${KDE4_KDECORE_LIBS})
 install(TARGETS ksysguardprocesslist_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
 

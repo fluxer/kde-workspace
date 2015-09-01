@@ -11,7 +11,7 @@ set(kdesud_SRCS
    handler.cpp
    secure.cpp )
 
-kde4_add_executable(kdesud NOGUI ${kdesud_SRCS})
+add_executable(kdesud ${kdesud_SRCS})
 
 target_link_libraries(kdesud ${KDE4_KDESU_LIBS} ${KDE4_KDECORE_LIBS} ${X11_LIBRARIES})
 

@@ -23,6 +23,7 @@
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kdialog.h>
 
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusConnection>

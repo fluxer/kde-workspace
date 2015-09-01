@@ -34,7 +34,7 @@
 #include <QtGui/qx11info_x11.h>
 
 #include <klocale.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <knuminput.h>
 
 #include <X11/Xlib.h>

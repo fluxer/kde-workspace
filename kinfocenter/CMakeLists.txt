@@ -9,20 +9,20 @@ add_subdirectory( Modules )
 INCLUDE_DIRECTORIES( ToolTips )
 
 set( kinfocenter_SRCS
-infocenter.cpp
-main.cpp
-sidepanel.cpp
-kcmcontainer.cpp
-kcmtreeitem.cpp
-kcmcategoryitem.cpp
-infokcmmodel.cpp
-infokcmproxymodel.cpp
-ToolTips/ktooltip.cpp
-ToolTips/ktooltipwindow.cpp
-ToolTips/tooltipmanager.cpp
+    infocenter.cpp
+    main.cpp
+    sidepanel.cpp
+    kcmcontainer.cpp
+    kcmtreeitem.cpp
+    kcmcategoryitem.cpp
+    infokcmmodel.cpp
+    infokcmproxymodel.cpp
+    ToolTips/ktooltip.cpp
+    ToolTips/ktooltipwindow.cpp
+    ToolTips/tooltipmanager.cpp
 )
 
-kde4_add_executable( kinfocenter ${kinfocenter_SRCS} )
+add_executable( kinfocenter ${kinfocenter_SRCS} )
 
 target_link_libraries( kinfocenter ${KDE4_KFILE_LIBS} ${KDE4_KCMUTILS_LIBS} )
 

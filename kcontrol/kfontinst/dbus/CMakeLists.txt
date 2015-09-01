@@ -10,8 +10,8 @@ set(fontinst_helper_SRCS FcConfig.cpp Helper.cpp Folder.cpp Utils.cpp ${libkfont
 qt4_add_dbus_adaptor(fontinst_bin_SRCS org.kde.fontinst.xml FontInst.h KFI::FontInst)
 # qt4_add_dbus_interface(fontinst_bin_SRCS org.kde.fontinst.xml FontinstIface)
 
-kde4_add_executable(fontinst_bin ${fontinst_bin_SRCS})
-kde4_add_executable(fontinst_helper ${fontinst_helper_SRCS})
+add_executable(fontinst_bin ${fontinst_bin_SRCS})
+add_executable(fontinst_helper ${fontinst_helper_SRCS})
 
 set_target_properties(fontinst_bin PROPERTIES OUTPUT_NAME fontinst)
 target_link_libraries(fontinst_bin ${KDE4_KDECORE_LIBS}

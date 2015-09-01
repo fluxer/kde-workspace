@@ -16,24 +16,22 @@ ksolidnotify.cpp
 )
 
 set(knotifyplugin_SRCS
-knotifyplugin.cpp
-knotifyconfig.cpp
+    knotifyplugin.cpp
+    knotifyconfig.cpp
 )
 
 set(knotifyplugin_HEADERS
-knotifyplugin.h
-knotifyconfig.h
-knotify_export.h
+    knotifyplugin.h
+    knotifyconfig.h
+    knotify_export.h
 )
 
 qt4_add_dbus_interfaces(knotify_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KSpeech.xml)
 
-kde4_add_app_icon(knotify_SRCS "${CMAKE_SOURCE_DIR}/pics/oxygen/*/apps/preferences-desktop-notification.png")
-
 set (knotify_OUTPUT_NAME knotify4)
-kde4_add_executable( knotify ${knotify_SRCS})
+add_executable( knotify ${knotify_SRCS})
 
-kde4_add_library( knotifyplugin SHARED ${knotifyplugin_SRCS})
+add_library( knotifyplugin SHARED ${knotifyplugin_SRCS})
 
 target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_PHONON_LIBS} ${KDE4_SOLID_LIBS} knotifyplugin)
 

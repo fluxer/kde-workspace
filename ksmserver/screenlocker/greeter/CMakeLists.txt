@@ -14,7 +14,7 @@ set(kscreenlocker_greet_SRCS
 
 kde4_add_kcfg_files(kscreenlocker_greet_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/../kcfg/kscreensaversettings.kcfgc)
 
-kde4_add_executable(kscreenlocker_greet ${kscreenlocker_greet_SRCS})
+add_executable(kscreenlocker_greet ${kscreenlocker_greet_SRCS})
 
 target_link_libraries(kscreenlocker_greet kworkspace ${KDE4_KDEUI_LIBS} ${KDE4_SOLID_LIBS} ${QT_QTDECLARATIVE_LIBRARY} ${X11_LIBRARIES} ${KDE4_PLASMA_LIBS} ${KDE4_PLASMA_LIBS} ${KDECLARATIVE_LIBRARIES})
 

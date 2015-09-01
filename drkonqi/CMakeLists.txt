@@ -13,7 +13,9 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1410)
 
 add_subdirectory( data )
 add_subdirectory( parser )
-add_subdirectory( tests )
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(drkonqi_SRCS
     main.cpp
@@ -32,11 +34,8 @@ set(drkonqi_SRCS
     debuggerlaunchers.cpp
     debuggermanager.cpp
     gdbhighlighter.cpp
-)
-
-kde4_add_ui_files(drkonqi_SRCS
-    ui/maindialog.ui
-    ui/backtracewidget.ui
+    maindialog.ui
+    backtracewidget.ui
 )
 
 # if BACKTRACE_PARSER_DEBUG is enabled, it will show both the
@@ -44,7 +43,7 @@ kde4_add_ui_files(drkonqi_SRCS
 # Comment this out for release.
 #add_definitions(-DBACKTRACE_PARSER_DEBUG)
 
-kde4_add_executable(drkonqi ${drkonqi_SRCS})
+add_executable(drkonqi ${drkonqi_SRCS})
 
 target_link_libraries(drkonqi
     ${KDE4_KIO_LIBS}

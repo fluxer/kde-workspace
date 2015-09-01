@@ -17,7 +17,7 @@ INCLUDE_DIRECTORIES(
 qt4_automoc(${localebindings_SRCS})
 
 
-kde4_add_library(localebindingsplugin SHARED ${localebindings_SRCS})
+add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 
 target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDECORE_LIBRARY})
 

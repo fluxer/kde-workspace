@@ -1,8 +1,8 @@
 project(qtextracomponents)
 
-include(KDE4Defaults)
-
-add_subdirectory(tests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(qtextracomponents_SRCS
     qtextracomponentsplugin.cpp
@@ -18,9 +18,6 @@ INCLUDE_DIRECTORIES(
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
 )
-
-qt4_automoc(${qtextracomponents_SRCS})
-
 
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 target_link_libraries(qtextracomponentsplugin ${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})

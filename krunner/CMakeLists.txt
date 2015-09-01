@@ -35,9 +35,10 @@ set(krunner_SRCS
    krunnerapp.cpp
    main.cpp
    ${default_interface_SRCS}
-   ${quicksand_interface_SRCS})
+   ${quicksand_interface_SRCS}
+   interfaceOptions.ui
+)
 
-kde4_add_ui_files(krunner_SRCS interfaceOptions.ui)
 kde4_add_kcfg_files(krunner_SRCS ${krunner_KCFG_SRCS})
 
 qt4_add_dbus_adaptor(krunner_SRCS ${krunner_dbusAppXML} krunnerapp.h KRunnerApp)
@@ -50,7 +51,7 @@ set(krunner_SRCS
     ksystemactivitydialog.cpp
     startupid.cpp)
 
-kde4_add_executable(krunner ${krunner_SRCS})
+add_executable(krunner ${krunner_SRCS})
 
 target_link_libraries(krunner kworkspace  plasmagenericshell processui
     ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBRARIES}

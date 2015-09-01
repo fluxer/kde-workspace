@@ -31,6 +31,7 @@
 #include <KMessageBox>
 #include <KShortcut>
 #include <KStringHandler>
+#include <KLocale>
 
 #include <QtGui/QStackedWidget>
 #include <QtGui/QMenu>

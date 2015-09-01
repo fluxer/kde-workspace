@@ -27,9 +27,6 @@ set(kwalletd_SRCS
    kwalletwizard.cpp
    ktimeout.cpp
    kwalletsessionstore.cpp
-)
-
-kde4_add_ui_files(kwalletd_SRCS
    kbetterthankdialogbase.ui
    kwalletwizardpageexplanation.ui
    kwalletwizardpageintro.ui
@@ -54,7 +51,7 @@ find_file(kwallet_xml org.kde.KWallet.xml HINTS ${KDE4_DBUS_INTERFACES_DIR} )
 
 qt4_add_dbus_adaptor( kwalletd_SRCS ${kwallet_xml} kwalletd.h KWalletD )
 
-kde4_add_executable( kwalletd NOGUI ${kwalletd_SRCS} )
+add_executable( kwalletd ${kwalletd_SRCS} )
 
 target_link_libraries(kwalletd ${KDE4_KDEUI_LIBS} kwalletbackend )
 if (GPGME_FOUND AND QGPGME_FOUND)
@@ -68,5 +65,7 @@ install(TARGETS kwalletd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES kwalletd.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
 install( FILES kwalletd.notifyrc DESTINATION  ${DATA_INSTALL_DIR}/kwalletd )
 
-add_subdirectory(tests)
-add_subdirectory(autotests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+    add_subdirectory(autotests)
+endif()

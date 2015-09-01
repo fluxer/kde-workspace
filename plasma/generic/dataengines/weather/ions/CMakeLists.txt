@@ -1,6 +1,6 @@
 # the Ion shared library
 set (ionlib_SRCS ion.cpp)
-kde4_add_library (weather_ion SHARED ${ionlib_SRCS})
+add_library (weather_ion SHARED ${ionlib_SRCS})
 target_link_libraries (weather_ion PRIVATE ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
 target_link_libraries (weather_ion PUBLIC ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
 

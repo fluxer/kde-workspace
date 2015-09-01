@@ -2,9 +2,6 @@ project(homerunlauncher)
 
 set(homerunlauncher_SRCS
     homerunlauncher.cpp
-    )
-
-kde4_add_ui_files(homerunlauncher_SRCS
     generalconfigpage.ui
     )
 

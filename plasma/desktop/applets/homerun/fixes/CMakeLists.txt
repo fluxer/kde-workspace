@@ -9,7 +9,7 @@ set(fixes_SRCS
 
 qt4_automoc(${fixes_SRCS})
 
-kde4_add_library(fixesplugin SHARED ${fixes_SRCS})
+add_library(fixesplugin SHARED ${fixes_SRCS})
 
 target_link_libraries(fixesplugin
         ${QT_QTCORE_LIBRARY}

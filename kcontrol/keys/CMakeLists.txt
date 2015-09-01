@@ -1,18 +1,16 @@
 ########### next target ###############
 
 set(kcm_keys_PART_SRCS
-  kglobalshortcutseditor.cpp
-  globalshortcuts.cpp
-  select_scheme_dialog.cpp
-  kglobalaccel_interface.cpp
-  kglobalaccel_component_interface.cpp
-  export_scheme_dialog.cpp
-  )
-
-kde4_add_ui_files( kcm_keys_PART_SRCS 
+    kglobalshortcutseditor.cpp
+    globalshortcuts.cpp
+    select_scheme_dialog.cpp
+    kglobalaccel_interface.cpp
+    kglobalaccel_component_interface.cpp
+    export_scheme_dialog.cpp
     export_scheme_dialog.ui
     kglobalshortcutseditor.ui
-    select_scheme_dialog.ui )
+    select_scheme_dialog.ui
+)
 
 set(kglobalaccel_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KGlobalAccel.xml)
 set_source_files_properties(${kglobalaccel_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")

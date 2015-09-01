@@ -5,8 +5,8 @@ set(color_SRCS
     backgrounddelegate.cpp
     backgroundlistmodel.cpp
     itemsview.cpp
+    config.ui
 )
-kde4_add_ui_files(color_SRCS config.ui)
 
 kde4_add_plugin(plasma_wallpaper_color ${color_SRCS})
 target_link_libraries(plasma_wallpaper_color ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS})

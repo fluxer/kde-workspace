@@ -22,7 +22,7 @@ add_dependencies(kcm_kdm ConfigCi)
 install(TARGETS kcm_kdm  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 #### KAuth helper and actions ####
-kde4_add_executable(kcmkdmhelper helper.cpp)
+add_executable(kcmkdmhelper helper.cpp)
 target_link_libraries(kcmkdmhelper ${KDE4_KDECORE_LIBS})
 install(TARGETS kcmkdmhelper DESTINATION ${LIBEXEC_INSTALL_DIR})
 

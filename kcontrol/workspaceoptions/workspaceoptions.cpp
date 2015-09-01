@@ -29,6 +29,7 @@
 #include <KRun>
 #include <KStandardDirs>
 #include <KUrl>
+#include <KConfigGroup>
 
 using namespace KAuth;
 

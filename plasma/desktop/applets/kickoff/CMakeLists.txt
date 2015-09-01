@@ -29,7 +29,7 @@ QT4_ADD_DBUS_INTERFACE(libkickoff_SRCS ${ksmserver_xml} ksmserver_interface)
 
 set(Kickoff_LIBS ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_SOLID_LIBS} kworkspace)
 
-kde4_add_library(kickoff SHARED ${libkickoff_SRCS})
+add_library(kickoff SHARED ${libkickoff_SRCS})
 target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
 install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -46,8 +46,9 @@ set(Applet_SRCS
     ui/tabbar.cpp
     ui/urlitemview.cpp
     applet/applet.cpp
+    applet/kickoffConfig.ui
 )
-kde4_add_ui_files(Applet_SRCS applet/kickoffConfig.ui )
+
 kde4_add_plugin(plasma_applet_launcher ${Applet_SRCS})
 target_link_libraries(plasma_applet_launcher ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS} kickoff)
 install(TARGETS plasma_applet_launcher DESTINATION ${PLUGIN_INSTALL_DIR})
@@ -69,7 +70,7 @@ install(FILES simpleapplet/plasma-applet-simplelauncher.desktop DESTINATION ${SE
 # Kickoff Standalone Test Application
 #IF (CMAKE_BUILD_TYPE MATCHES Debug)
 #    set(Application_SRCS ${Kickoff_SRCS} main.cpp)
-#    kde4_add_executable(kickoff ${Application_SRCS})
+#    add_executable(kickoff ${Application_SRCS})
 #    target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
 #    install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
 #ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)

@@ -24,6 +24,7 @@
 #include <QStandardItemModel>
 
 #include <KLocale>
+#include <KIcon>
 #include <Plasma/Theme>
 
 TestArea::TestArea(QWidget *parent) : QWidget(parent)

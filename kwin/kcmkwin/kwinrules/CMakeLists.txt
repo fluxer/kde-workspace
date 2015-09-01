@@ -1,15 +1,22 @@
 ADD_DEFINITIONS(-DKCMRULES)
 ########### next target ###############
 
-set (kwinrules_MOC_HDRS yesnobox.h ../../client_machine.h)
-qt4_wrap_cpp(kwinrules_MOC_SRCS ${kwinrules_MOC_HDRS})
-set(kwinrules_SRCS ruleswidget.cpp ruleslist.cpp kwinsrc.cpp detectwidget.cpp ${kwinrules_MOC_SRCS})
-
-kde4_add_ui_files(kwinrules_SRCS ruleslist.ui detectwidget.ui editshortcut.ui ruleswidgetbase.ui)
+set(kwinrules_SRCS
+    ruleswidget.cpp
+    ruleslist.cpp
+    kwinsrc.cpp
+    detectwidget.cpp
+    yesnobox.h
+    ../../client_machine.h
+    ruleslist.ui
+    detectwidget.ui
+    editshortcut.ui
+    ruleswidgetbase.ui
+)
 
 set(kwin_rules_dialog_SRCS main.cpp ${kwinrules_SRCS})
 
-kde4_add_executable( kwin_rules_dialog ${kwin_rules_dialog_SRCS})
+add_executable( kwin_rules_dialog ${kwin_rules_dialog_SRCS})
 
 set(kwin_kcm_rules_XCB_LIBS
     ${XCB_XCB_LIBRARIES}

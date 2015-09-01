@@ -26,6 +26,7 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 // KDE
 #include <KGlobalSettings>
 #include <KUrlRequester>
+#include <KConfigGroup>
 
 // Qt
 #include <QDir>

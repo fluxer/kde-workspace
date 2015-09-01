@@ -2,8 +2,8 @@ project(plasma-containmentactions-switchwindow)
 
 set(switchwindow_SRCS
     switch.cpp
+    config.ui
 )
-kde4_add_ui_files(switchwindow_SRCS config.ui)
 
 kde4_add_plugin(plasma_containmentactions_switchwindow ${switchwindow_SRCS})
 target_link_libraries(plasma_containmentactions_switchwindow ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS})

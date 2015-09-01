@@ -69,7 +69,7 @@ set(khotkeysprivate_SRCS
     # voicesignature.cpp
 )
 
-kde4_add_library(khotkeysprivate SHARED ${khotkeysprivate_SRCS})
+add_library(khotkeysprivate SHARED ${khotkeysprivate_SRCS})
 target_link_libraries(khotkeysprivate kworkspace ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 if(X11_XTest_FOUND)
   target_link_libraries(khotkeysprivate ${X11_XTest_LIB})

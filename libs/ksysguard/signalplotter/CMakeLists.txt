@@ -1,12 +1,9 @@
-
-set(ksignalplotter_WIDGETS "ksignalplotter.widgets")
-
 set(ksignalplotter_LIB_SRCS
     ksignalplotter.cpp
     kgraphicssignalplotter.cpp
 )
 
-kde4_add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})
+add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})
 
 target_link_libraries(ksignalplotter PRIVATE ${KDE4_KDEUI_LIBS})
 target_link_libraries(ksignalplotter PUBLIC ${KDE4_KDEUI_LIBS})
@@ -20,9 +17,9 @@ install(TARGETS ksignalplotter EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGE
 
 #----------------------
 
-kde4_add_widget_files(ksignalplotterwidgets_PART_SRCS ${ksignalplotter_WIDGETS})
+kde4_add_widget_files(ksignalplotter.widgets)
 
-kde4_add_plugin(ksignalplotterwidgets ${ksignalplotterwidgets_PART_SRCS})
+kde4_add_plugin(ksignalplotterwidgets $<TARGET_OBJECTS:ksignalplotter_autowidgets> ${ksignalplotterwidgets_PART_SRCS})
 
 target_link_libraries(ksignalplotterwidgets ${KDE4_KDEUI_LIBS} ksignalplotter)
 

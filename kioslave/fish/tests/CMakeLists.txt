@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES( ${KDE4_INCLUDES} . )
 SET( copytesterSources main.cpp copytester.cpp )
 
 
-KDE4_ADD_EXECUTABLE( copytester ${copytesterSources} )
+add_executable( copytester ${copytesterSources} )
 
 TARGET_LINK_LIBRARIES( copytester ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} )
 

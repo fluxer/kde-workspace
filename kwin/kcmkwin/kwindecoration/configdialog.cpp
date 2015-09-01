@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <KLibrary>
 #include <KVBox>
+#include <KLocale>
 
 namespace KWin
 {

@@ -14,9 +14,6 @@ set(kcm_kwindecoration_PART_SRCS
     decorationmodel.cpp
     ${AURORAE_SOURCE_DIR}/auroraetheme.cpp
     ${AURORAE_SOURCE_DIR}/themeconfig.cpp
-)
-
-kde4_add_ui_files(kcm_kwindecoration_PART_SRCS
     auroraeconfig.ui
     buttons.ui
     config.ui

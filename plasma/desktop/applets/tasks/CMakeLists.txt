@@ -5,9 +5,9 @@ set(tasks_SRCS
     support/draghelper.cpp
     support/textlabel.cpp
     support/declarativeitemcontainer.cpp
-    support/tooltip.cpp)
-
-kde4_add_ui_files(tasks_SRCS tasksConfig.ui)
+    support/tooltip.cpp
+    tasksConfig.ui
+)
 
 kde4_add_plugin(plasma_applet_tasks ${tasks_SRCS})
 

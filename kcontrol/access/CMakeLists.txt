@@ -19,7 +19,7 @@ install(TARGETS kcm_access  DESTINATION ${PLUGIN_INSTALL_DIR} )
 set(kaccess_SRCS kaccess.cpp main.cpp )
 
 
-kde4_add_executable( kaccess ${kaccess_SRCS})
+add_executable( kaccess ${kaccess_SRCS})
 
 target_link_libraries(kaccess  ${KDE4_KDEUI_LIBS} ${KDE4_PHONON_LIBS} ${X11_LIBRARIES})
 

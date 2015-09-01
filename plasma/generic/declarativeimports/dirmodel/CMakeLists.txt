@@ -7,7 +7,7 @@ set(dirmodel_SRCS
 
 qt4_automoc(${dirmodel_SRCS})
 
-kde4_add_library(dirmodelplugin SHARED ${dirmodel_SRCS})
+add_library(dirmodelplugin SHARED ${dirmodel_SRCS})
 target_link_libraries(dirmodelplugin
         ${QT_QTCORE_LIBRARY}
         ${QT_QTDECLARATIVE_LIBRARY}

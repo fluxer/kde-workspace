@@ -21,6 +21,7 @@
 #include <KMessageBox>
 #include <KStandardDirs>
 #include <KZip>
+#include <KLocale>
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>

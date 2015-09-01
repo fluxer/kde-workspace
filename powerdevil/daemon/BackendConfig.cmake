@@ -37,7 +37,7 @@ if (UDEV_FOUND)
     set(powerdevilupowerbackend_LIBS ${X11_LIBRARIES} ${QT_QTGUI_LIBRARY} ${X11_Xrandr_LIB} ${KDE4_KDEUI_LIBRARY} ${UDEV_LIBS})
 
     ## backlight helper executable
-    kde4_add_executable(backlighthelper backends/upower/backlighthelper.cpp ${backlighthelper_mocs})
+    add_executable(backlighthelper backends/upower/backlighthelper.cpp ${backlighthelper_mocs})
     target_link_libraries(backlighthelper ${KDE4_KDECORE_LIBS})
     install(TARGETS backlighthelper DESTINATION ${LIBEXEC_INSTALL_DIR})
     kde4_install_auth_helper_files(backlighthelper org.kde.powerdevil.backlighthelper root)

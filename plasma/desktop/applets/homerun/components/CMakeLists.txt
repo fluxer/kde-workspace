@@ -38,15 +38,11 @@ set(components_SRCS
     sources/session/sessionswatcher.cpp
     standarditemmodel.cpp
     tabmodel.cpp
-    )
 
-kde4_add_ui_files(components_SRCS
     sources/dir/dirconfigurationwidget.ui
     sources/installedapps/installedappsconfigurationwidget.ui
     sources/runners/runnerconfigurationwidget.ui
     )
-
-qt4_automoc(${components_SRCS})
 
 include_directories(
     ${lib_BINARY_DIR}
@@ -61,7 +57,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/sources/session
     )
 
-kde4_add_library(componentsplugin SHARED ${components_SRCS})
+add_library(componentsplugin SHARED ${components_SRCS})
 
 target_link_libraries(componentsplugin
         ${QT_QTCORE_LIBRARY}

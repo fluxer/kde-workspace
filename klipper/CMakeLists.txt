@@ -12,6 +12,9 @@ set(libklipper_common_SRCS
     actionstreewidget.cpp
     editactiondialog.cpp
     clipcommandprocess.cpp
+    generalconfig.ui
+    actionsconfig.ui
+    editactiondialog.ui
 )
 
 macro_optional_find_package(Prison QUIET CONFIG)
@@ -25,15 +28,12 @@ if (PRISON_FOUND)
     include_directories(${PRISON_INCLUDE_DIR})
 endif (PRISON_FOUND)
 
-
-kde4_add_app_icon(libklipper_common_SRCS "${KDE4_ICON_INSTALL_DIR}/oxygen/*/apps/klipper.png")
-kde4_add_ui_files(libklipper_common_SRCS generalconfig.ui actionsconfig.ui editactiondialog.ui)
 kde4_add_kcfg_files(libklipper_common_SRCS klippersettings.kcfgc)
 
 set(klipper_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
 
 
-kde4_add_executable(klipper ${klipper_SRCS})
+add_executable(klipper ${klipper_SRCS})
 
 target_link_libraries(klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${ZLIB_LIBRARY})
 if (X11_Xfixes_FOUND)

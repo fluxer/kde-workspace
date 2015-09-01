@@ -13,7 +13,7 @@ set(kicker_SRCS
 
 qt4_automoc(${kicker_SRCS})
 
-kde4_add_library(kickerplugin SHARED ${kicker_SRCS})
+add_library(kickerplugin SHARED ${kicker_SRCS})
 
 target_link_libraries(kickerplugin
         ${QT_QTCORE_LIBRARY}

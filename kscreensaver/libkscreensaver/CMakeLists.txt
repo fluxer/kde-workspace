@@ -7,7 +7,7 @@
 set(kscreensaver_LIB_SRCS main.cpp kscreensaver.cpp)
 
 
-kde4_add_library(kscreensaver SHARED ${kscreensaver_LIB_SRCS})
+add_library(kscreensaver SHARED ${kscreensaver_LIB_SRCS})
 
 target_link_libraries(kscreensaver  ${KDE4_KIO_LIBS} ${X11_X11_LIB})
 set_target_properties(kscreensaver PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})

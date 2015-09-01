@@ -20,26 +20,25 @@
  */
 
 #include <QCheckBox>
-//Added by qt3to4:
 #include <QVBoxLayout>
-
+#include <QtDBus/QtDBus>
+#include <qregexp.h>
 
 #include <kapplication.h>
-#include <kconfig.h>
+#include <kconfiggroup.h>
 #include <klineedit.h>
 #include <kworkspace/kworkspace.h>
 #include <kstandarddirs.h>
-#include <qregexp.h>
 #include <kdesktopfile.h>
 #include <kdebug.h>
 #include <kprocess.h>
 #include <kmessagebox.h>
-#include <QtDBus/QtDBus>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+#include <klocale.h>
 
 #include "kcmsmserver.h"
 #include "smserverconfigimpl.h"
-#include <KPluginFactory>
-#include <KPluginLoader>
 
 K_PLUGIN_FACTORY(SMSFactory,
         registerPlugin<SMServerConfig>();
