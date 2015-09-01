@@ -21,6 +21,8 @@
 #include "audiosetup.h"
 #include <stdio.h>
 
+#include <klocale.h>
+
 static uint32_t s_CurrentIndex = PA_INVALID_INDEX;
 static TestSpeakerWidget *s_CurrentWidget = NULL;
 
