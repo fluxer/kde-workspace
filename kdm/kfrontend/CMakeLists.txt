@@ -1,70 +1,70 @@
 include(MacroAddFileDependencies)
 
-add_subdirectory( themes )
-add_subdirectory( pics )
-add_subdirectory( sessions )
+add_subdirectory(themes)
+add_subdirectory(pics)
+add_subdirectory(sessions)
 
 include_directories(
-	${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kdm
-	${QIMAGEBLITZ_INCLUDES}
+    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kdm
+    ${QIMAGEBLITZ_INCLUDES}
 )
 
 set(kdmthemer_SRCS
-	themer/kdmthemer.cpp
-	themer/kdmthemer.h
-	themer/kdmitem.cpp
-	themer/kdmitem.h
-	themer/kdmpixmap.cpp
-	themer/kdmpixmap.h
-	themer/kdmrect.cpp
-	themer/kdmrect.h
-	themer/kdmlist.cpp
-	themer/kdmlist.h
-	themer/kdmlabel.cpp
-	themer/kdmlabel.h
-	themer/kdmbutton.cpp
-	themer/kdmbutton.h
-	themer/kdmlayout.cpp
-	themer/kdmlayout.h
-	themer/parse.cpp
-	themer/parse.h
+    themer/kdmthemer.cpp
+    themer/kdmthemer.h
+    themer/kdmitem.cpp
+    themer/kdmitem.h
+    themer/kdmpixmap.cpp
+    themer/kdmpixmap.h
+    themer/kdmrect.cpp
+    themer/kdmrect.h
+    themer/kdmlist.cpp
+    themer/kdmlist.h
+    themer/kdmlabel.cpp
+    themer/kdmlabel.h
+    themer/kdmbutton.cpp
+    themer/kdmbutton.h
+    themer/kdmlayout.cpp
+    themer/kdmlayout.h
+    themer/parse.cpp
+    themer/parse.h
 )
 set(kdm_greet_SRCS
-	kdm_greet.c
-	kdm_greet.h
-	kdmconfig.cpp
-	kdmconfig.h
-	kdmclock.cpp
-	kdmclock.h
-	kfdialog.cpp
-	kfdialog.h
-	kgdialog.cpp
-	kgdialog.h
-	kgverify.cpp
-	kgverify.h
-	kdmshutdown.cpp
-	kdmshutdown.h
-	kgreeter.cpp
-	kgreeter.h
-	kgapp.cpp
-	kgapp.h
-	utils.cpp
-	utils.h
-	${kdmthemer_SRCS}
+    kdm_greet.c
+    kdm_greet.h
+    kdmconfig.cpp
+    kdmconfig.h
+    kdmclock.cpp
+    kdmclock.h
+    kfdialog.cpp
+    kfdialog.h
+    kgdialog.cpp
+    kgdialog.h
+    kgverify.cpp
+    kgverify.h
+    kdmshutdown.cpp
+    kdmshutdown.h
+    kgreeter.cpp
+    kgreeter.h
+    kgapp.cpp
+    kgapp.h
+    utils.cpp
+    utils.h
+    ${kdmthemer_SRCS}
 )
 
 if (XDMCP)
-	set(kdm_greet_SRCS ${kdm_greet_SRCS}
-		kchooser.cpp
-		kchooser.h
-	)
+    set(kdm_greet_SRCS ${kdm_greet_SRCS}
+        kchooser.cpp
+        kchooser.h
+    )
 endif (XDMCP)
 
 if (WITH_KDM_XCONSOLE)
-	set(kdm_greet_SRCS ${kdm_greet_SRCS}
-		kconsole.cpp
-		kconsole.h
-	)
+    set(kdm_greet_SRCS ${kdm_greet_SRCS}
+        kconsole.cpp
+        kconsole.h
+    )
 endif (WITH_KDM_XCONSOLE)
 
 macro_add_file_dependencies(kdmconfig.h ${confci})
@@ -82,7 +82,7 @@ install(TARGETS kdm_greet DESTINATION ${LIBEXEC_INSTALL_DIR})
 set(kdm_config_SRCS kdm_config.c)
 macro_add_file_dependencies(kdm_config.c ${confci})
 add_executable(kdm_config ${kdm_config_SRCS})
-macro_add_compile_flags(kdm_config -U_REENTRANT)
+set_target_properties(kdm_config PROPERTIES COMPILE_FLAGS -U_REENTRANT)
 target_link_libraries(kdm_config ${SOCKET_LIBRARIES} ${RESOLV_LIBRARIES} ${POSIX4_LIBRARIES})
 add_dependencies(kdm_config ConfigCi)
 install(TARGETS kdm_config DESTINATION ${LIBEXEC_INSTALL_DIR})
@@ -90,14 +90,14 @@ install(TARGETS kdm_config DESTINATION ${LIBEXEC_INSTALL_DIR})
 set(genkdmconf_SRCS genkdmconf.c)
 macro_add_file_dependencies(genkdmconf.c ${confci})
 add_executable(genkdmconf ${genkdmconf_SRCS})
-macro_add_compile_flags(genkdmconf -U_REENTRANT)
+set_target_properties(genkdmconf PROPERTIES COMPILE_FLAGS -U_REENTRANT)
 target_link_libraries(genkdmconf ${X11_LIBRARIES})
 add_dependencies(genkdmconf ConfigCi)
 install(TARGETS genkdmconf ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 set(kdmctl_SRCS kdmctl.c)
 add_executable(kdmctl ${kdmctl_SRCS})
-macro_add_compile_flags(kdmctl -U_REENTRANT)
+set_target_properties(kdmctl PROPERTIES COMPILE_FLAGS -U_REENTRANT)
 target_link_libraries(kdmctl ${SOCKET_LIBRARIES})
 add_dependencies(kdmctl ConfigCi)
 
