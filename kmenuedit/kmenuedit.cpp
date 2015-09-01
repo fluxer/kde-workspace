@@ -224,7 +224,7 @@ bool KMenuEdit::queryClose()
     int result;
     result = KMessageBox::warningYesNoCancel(this,
                                              i18n("You have made changes to the menu.\n"
-                         "Do you want to save the changes or discard them?"),
+                                                  "Do you want to save the changes or discard them?"),
                                              i18n("Save Menu Changes?"),
                                              KStandardGuiItem::save(), KStandardGuiItem::discard() );
 

@@ -1,9 +1,6 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 ########### next target ###############
 
 set(kuiservertest_SRCS kuiservertest.cpp)
-
 
 add_executable(kuiservertest TEST ${kuiservertest_SRCS})
 
