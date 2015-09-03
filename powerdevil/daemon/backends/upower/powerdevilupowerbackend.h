@@ -95,6 +95,9 @@ private:
     OrgFreedesktopUPowerKbdBacklightInterface *m_kbdBacklight;
     int m_kbdMaxBrightness;
 
+    // login1 interface
+    QWeakPointer<QDBusInterface> m_login1Interface;
+
     // buttons
     bool m_lidIsPresent;
     bool m_lidIsClosed;

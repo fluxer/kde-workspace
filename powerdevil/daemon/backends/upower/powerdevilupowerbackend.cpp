@@ -35,9 +35,46 @@
 #include "xrandrx11helper.h"
 #include "xrandrbrightness.h"
 #include "upowersuspendjob.h"
+#include "login1suspendjob.h"
+#include "upstart_interface.h"
 #include "udevqt.h"
 
 #define HELPER_ID "org.kde.powerdevil.backlighthelper"
+
+bool checkSystemdVersion(uint requiredVersion)
+{
+
+    QDBusInterface systemdIface("org.freedesktop.systemd1", "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager",
+                                QDBusConnection::systemBus(), 0);
+
+    const QString reply = systemdIface.property("Version").toString();
+
+    QRegExp expsd("(systemd )?([0-9]+)");
+
+    if (expsd.exactMatch(reply)) {
+        const uint version = expsd.cap(2).toUInt();
+        return (version >= requiredVersion);
+    }
+
+    // Since version 1.11 Upstart user sessions implement the exact same API as logind
+    // and are going to the maintain the API in future releases.
+    // Hence, powerdevil can support this init system as well
+    // This has no effect on systemd integration since the check is done after systemd
+    ComUbuntuUpstart0_6Interface upstartInterface(QLatin1String("com.ubuntu.Upstart"),
+                                                  QLatin1String("/com/ubuntu/Upstart"),
+                                                  QDBusConnection::sessionBus());
+
+    QRegExp exp("(?:init \\()?upstart ([0-9.]+)(?:\\))?");
+    if(exp.exactMatch(upstartInterface.version())) {
+        // Only keep the X.Y part of a X.Y.Z version
+        QStringList items = exp.cap(1).split('.').mid(0, 2);
+        const float upstartVersion = items.join(QString('.')).toFloat();
+        return upstartVersion >= 1.1;
+    }
+
+    kDebug() << "No appropriate systemd version or upstart version found";
+    return false;
+}
 
 PowerDevilUPowerBackend::PowerDevilUPowerBackend(QObject* parent)
     : BackendInterface(parent),
@@ -110,9 +147,19 @@ bool PowerDevilUPowerBackend::isAvailable()
 
 void PowerDevilUPowerBackend::init()
 {
+    // interfaces
+    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE)) {
+        // Activate it.
+        QDBusConnection::systemBus().interface()->startService(LOGIN1_SERVICE);
+    }
+
     if (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
         // Activate it.
         QDBusConnection::systemBus().interface()->startService(UPOWER_SERVICE);
+    }
+
+    if (QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE)) {
+        m_login1Interface = new QDBusInterface(LOGIN1_SERVICE, "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus(), this);
     }
 
     bool screenBrightnessAvailable = false;
@@ -187,18 +234,39 @@ void PowerDevilUPowerBackend::init()
 
     // Supported suspend methods
     SuspendMethods supported = UnknownSuspendMethod;
-    if (m_upowerInterface->canSuspend() && m_upowerInterface->SuspendAllowed()) {
-        kDebug() << "Can suspend";
-        supported |= ToRam;
-    }
+    if (m_login1Interface && checkSystemdVersion(195)) {
+        QDBusPendingReply<QString> canSuspend = m_login1Interface.data()->asyncCall("CanSuspend");
+        canSuspend.waitForFinished();
+        if (canSuspend.isValid() && (canSuspend.value() == "yes" || canSuspend.value() == "challenge"))
+            supported |= ToRam;
 
-    if (m_upowerInterface->canHibernate() && m_upowerInterface->HibernateAllowed()) {
-        kDebug() << "Can hibernate";
-        supported |= ToDisk;
+        QDBusPendingReply<QString> canHibernate = m_login1Interface.data()->asyncCall("CanHibernate");
+        canHibernate.waitForFinished();
+        if (canHibernate.isValid() && (canHibernate.value() == "yes" || canHibernate.value() == "challenge"))
+            supported |= ToDisk;
+
+        QDBusPendingReply<QString> canHybridSleep = m_login1Interface.data()->asyncCall("CanHybridSleep");
+        canHybridSleep.waitForFinished();
+        if (canHybridSleep.isValid() && (canHybridSleep.value() == "yes" || canHybridSleep.value() == "challenge"))
+            supported |= HybridSuspend;
+    } else {
+        if (m_upowerInterface->canSuspend() && m_upowerInterface->SuspendAllowed()) {
+            kDebug() << "Can suspend";
+            supported |= ToRam;
+        }
+
+        if (m_upowerInterface->canHibernate() && m_upowerInterface->HibernateAllowed()) {
+            kDebug() << "Can hibernate";
+            supported |= ToDisk;
+        }
     }
 
     // "resuming" signal
-    connect(m_upowerInterface, SIGNAL(Resuming()), this, SIGNAL(resumeFromSuspend()));
+    if (m_login1Interface && checkSystemdVersion(198)) {
+        connect(m_login1Interface.data(), SIGNAL(PrepareForSleep(bool)), this, SLOT(slotLogin1Resuming(bool)));
+    } else {
+        connect(m_upowerInterface, SIGNAL(Resuming()), this, SIGNAL(resumeFromSuspend()));
+    }
 
     // battery
     QList<RecallNotice> recallList;
@@ -366,7 +434,11 @@ void PowerDevilUPowerBackend::onKeyboardBrightnessChanged(int value)
 
 KJob* PowerDevilUPowerBackend::suspend(PowerDevil::BackendInterface::SuspendMethod method)
 {
-    return new UPowerSuspendJob(m_upowerInterface, method, supportedSuspendMethods());
+    if (m_login1Interface && checkSystemdVersion(195)) {
+        return new Login1SuspendJob(m_login1Interface.data(), method, supportedSuspendMethods());
+    } else {
+        return new UPowerSuspendJob(m_upowerInterface, method, supportedSuspendMethods());
+    }
 }
 
 void PowerDevilUPowerBackend::enumerateDevices()
