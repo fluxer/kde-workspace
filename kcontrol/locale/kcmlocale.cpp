@@ -389,7 +389,7 @@ void KCMLocale::initCalendarSettings()
     // Setup the Current Config/Settings
     // These are the currently saved User settings
     // This will be used to check if the kcm settings have been changed
-    calendarType = m_currentSettings.readEntry( "CalendarSystem", KGlobal::locale()->calendar()->calendarType() );
+    calendarType = m_currentSettings.readEntry( "CalendarSystem", KGlobal::locale()->calendar()->calendarLabel() );
     calendarGroup = QString::fromLatin1( "KCalendarSystem %1" ).arg( calendarType );
     m_currentCalendarSettings = m_currentSettings.group( calendarGroup );
 
@@ -397,7 +397,7 @@ void KCMLocale::initCalendarSettings()
     // These are the Group overrides, they exclude any User, Country, or C settings
     // This will be used in the merge to obtain the KCM Defaults
     // These settings should never be saved anywhere
-    calendarType = m_groupSettings.readEntry( "CalendarSystem", KGlobal::locale()->calendar()->calendarType() );
+    calendarType = m_groupSettings.readEntry( "CalendarSystem", KGlobal::locale()->calendar()->calendarLabel() );
     calendarGroup = QString::fromLatin1( "KCalendarSystem %1" ).arg( calendarType );
     m_groupCalendarSettings = m_groupSettings.group( calendarGroup );
 
@@ -2270,11 +2270,10 @@ void KCMLocale::initCalendarSystem()
 
     m_ui->m_comboCalendarSystem->clear();
 
-    QStringList calendarSystems = KCalendarSystem::calendarSystems();
+    QList<KLocale::CalendarSystem> calendarSystems = KCalendarSystem::calendarSystemsList();
 
-    foreach ( const QString &calendarType, calendarSystems ) {
-        m_ui->m_comboCalendarSystem->addItem( KCalendarSystem::calendarLabel(
-                                              KCalendarSystem::calendarSystemForCalendarType( calendarType ), m_kcmLocale ),
+    foreach ( const KLocale::CalendarSystem &calendarType, calendarSystems ) {
+        m_ui->m_comboCalendarSystem->addItem( KCalendarSystem::calendarLabel(calendarType , m_kcmLocale ),
                                               QVariant( calendarType ) );
     }
 
