@@ -20,7 +20,7 @@
 #ifndef PLASMA_PANELVIEW_H
 #define PLASMA_PANELVIEW_H
 
-#include <QSet>
+#include <QtCore/qset.h>
 
 #include <KConfigGroup>
 

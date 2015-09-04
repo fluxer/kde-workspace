@@ -20,9 +20,7 @@
 #ifndef PANEL
 #define PANEL
 
-#include <QScriptContext>
-#include <QScriptValue>
-#include <QtCore/qsharedpointer.h>
+#include <QtScript/qscriptcontext.h>
 
 #include <plasmagenericshell/scripting/containment.h>
 

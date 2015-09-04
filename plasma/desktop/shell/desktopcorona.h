@@ -20,9 +20,6 @@
 #ifndef DESKTOPCORONA_H
 #define DESKTOPCORONA_H
 
-#include <QtGui/QGraphicsScene>
-#include <QHash>
-
 #include <Plasma/Corona>
 
 class QMenu;

@@ -21,8 +21,6 @@
 #ifndef DASHBOARDVIEW_H
 #define DASHBOARDVIEW_H
 
-#include <QtCore/qsharedpointer.h>
-
 #include <Plasma/Plasma>
 #include <Plasma/View>
 #include <Plasma/WindowEffects>

@@ -19,9 +19,8 @@
 
 class KListConfirmationDialogPrivate;
 
-#include <QVariant>
-#include <QList>
-#include <QDialog>
+#include <QtCore/qvariant.h>
+#include <QtGui/qdialog.h>
 
 #include <KIcon>
 

@@ -21,14 +21,10 @@
 #ifndef PLASMA_APP_H
 #define PLASMA_APP_H
 
-#include <QHash>
-#include <QList>
-#include <QSize>
-#include <QTimer>
+#include <QtCore/qtimer.h>
 #include <QtCore/qsharedpointer.h>
 
 #include <KUniqueApplication>
-
 #include <Plasma/Plasma>
 #include <plasma/packagemetadata.h>
 

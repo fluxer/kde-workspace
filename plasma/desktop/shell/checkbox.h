@@ -20,7 +20,7 @@
 #ifndef CHECKBOX_H
 #define CHECKBOX_H
 
-#include <QCheckBox>
+#include <QtGui/qcheckbox.h>
 #include <QtGui/qstyleoption.h>
 
 class CheckBox: public QCheckBox

@@ -24,8 +24,6 @@
 
 #include <Plasma/Plasma>
 
-
-
 namespace Plasma
 {
 }

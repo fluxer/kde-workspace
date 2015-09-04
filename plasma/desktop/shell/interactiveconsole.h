@@ -20,15 +20,12 @@
 #ifndef INTERACTIVECONSOLE
 #define INTERACTIVECONSOLE
 
-#include <QtCore/qsharedpointer.h>
-#include <QScriptValue>
+#include <QtScript/qscriptvalue.h>
 
 #include <KDialog>
-
 #include <KIO/Job>
 
 class QSplitter;
-
 class KAction;
 class KFileDialog;
 class KMenu;

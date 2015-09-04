@@ -20,8 +20,6 @@
 #ifndef CONTROLLERWINDOW_H
 #define CONTROLLERWINDOW_H
 
-#include <QWidget>
-
 #include <Plasma/Plasma>
 #include <Plasma/Dialog>
 
