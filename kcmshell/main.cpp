@@ -244,9 +244,6 @@ int main(int _argc, char *_argv[])
         if (!service) {
             service = locateModule("kcm_" + arg);
         }
-        if (!service) {
-            service = locateModule("kcm" + arg);
-        }
 
         if (service) {
             modules.append(service);

@@ -1,9 +1,5 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 set(crashtest_SRCS crashtest.cpp )
 
+kde4_add_manual_test(crashtest ${crashtest_SRCS})
 
-add_executable(crashtest TEST ${crashtest_SRCS})
-
-target_link_libraries(crashtest  ${KDE4_KDEUI_LIBS} )
-
+target_link_libraries(crashtest ${KDE4_KDEUI_LIBS})

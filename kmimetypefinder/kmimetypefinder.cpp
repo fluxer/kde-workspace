@@ -18,10 +18,10 @@
  */
 
 #include <QFile>
+#include <QCoreApplication>
 
 #include <kmimetype.h>
 #include <kcmdlineargs.h>
-#include <QCoreApplication>
 #include <kdeversion.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
