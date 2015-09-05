@@ -17,7 +17,6 @@
 */
 #include "backtraceparser_p.h"
 #include "backtraceparsergdb.h"
-#include "backtraceparserkdbgwin.h"
 #include "backtraceparsernull.h"
 #include <QtCore/QRegExp>
 #include <QtCore/qmetaobject.h>
@@ -28,8 +27,6 @@ BacktraceParser *BacktraceParser::newParser(const QString & debuggerName, QObjec
 {
     if (debuggerName == "gdb") {
         return new BacktraceParserGdb(parent);
-    } else if (debuggerName == "kdbgwin") {
-        return new BacktraceParserKdbgwin(parent);
     } else {
         return new BacktraceParserNull(parent);
     }

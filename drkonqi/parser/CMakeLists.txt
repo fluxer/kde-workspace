@@ -1,7 +1,6 @@
 set(BACKTRACEPARSER_SRCS
     backtraceparser.cpp
     backtraceparsergdb.cpp
-    backtraceparserkdbgwin.cpp
     backtraceparsernull.cpp
 )
 
