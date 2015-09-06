@@ -48,22 +48,18 @@ static QString qt2KdeFilter(const QString &f)
     QString filter;
     QTextStream str(&filter, QIODevice::WriteOnly);
     const QStringList list(f.split(";;").replaceInStrings("/", "\\/"));
-    QStringList::const_iterator it(list.begin()),
-                                end(list.end());
     bool first=true;
 
-    for(; it!=end; ++it)
-    {
-        int ob=(*it).lastIndexOf('('),
-            cb=(*it).lastIndexOf(')');
+    foreach(const QString it, list) {
+        int ob = it.lastIndexOf('('), cb = it.lastIndexOf(')');
 
-        if(-1!=cb && ob<cb)
-        {
-            if(first)
+        if(cb != -1 && ob < cb) {
+            if(first) {
                 first=false;
-            else
+            } else {
                 str << '\n';
-            str << (*it).mid(ob+1, (cb-ob)-1) << '|' << (*it).mid(0, ob);
+            }
+            str << (it).mid(ob+1, (cb-ob)-1) << '|' << (it).mid(0, ob);
         }
     }
     return filter;
@@ -78,19 +74,19 @@ static void kde2QtFilter(const QString &orig, const QString &kde, QString *sel)
     if(sel)
     {
         const QStringList list(orig.split(";;"));
-        QStringList::const_iterator it(list.begin()),
-                                    end(list.end());
         int pos;
 
-        for(; it!=end; ++it)
-            if(-1!=(pos=(*it).indexOf(kde)) && pos>0 &&
-                ('('==(*it)[pos-1] || ' '==(*it)[pos-1]) &&
-                (*it).length()>=kde.length()+pos &&
-                (')'==(*it)[pos+kde.length()] || ' '==(*it)[pos+kde.length()]))
+        foreach(const QString it, list) {
+            pos = it.indexOf(kde);
+            if(pos != -1 && pos > 0 &&
+                (it[pos-1] == '(' || it[pos-1] == ' ') &&
+                it.length() >= (kde.length() + pos) &&
+                (it[pos+kde.length()] == ')' || it[pos+kde.length()] == ' '))
             {
-                *sel=*it;
+                *sel=it;
                 return;
             }
+        }
     }
 }
 
@@ -160,9 +156,8 @@ public:
     virtual QStringList keys() const { return QStringList() << QLatin1String("kde"); }
     virtual QString styleName()
     {
-        const QString defaultStyle = KStyle::defaultStyle();
         const KConfigGroup pConfig(KGlobal::config(), "General");
-        return pConfig.readEntry("widgetStyle", defaultStyle);
+        return pConfig.readEntry("widgetStyle", KStyle::defaultStyle());
     }
     virtual QPalette palette()
     {
