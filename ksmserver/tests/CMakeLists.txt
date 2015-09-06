@@ -7,7 +7,7 @@ set(testsh_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../curtaineffect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../fadeeffect.cpp)
 
-add_executable(testsh TEST ${testsh_SRCS})
+kde4_add_manual_test(testsh ${testsh_SRCS})
 
 target_link_libraries(testsh ${KDE4_PLASMA_LIBS} kworkspace ${KDE4_KDEUI_LIBS}
    ${KDE4_SOLID_LIBRARY} ${QIMAGEBLITZ_LIBRARIES} ${X11_X11_LIB} ${KDECLARATIVE_LIBRARIES}

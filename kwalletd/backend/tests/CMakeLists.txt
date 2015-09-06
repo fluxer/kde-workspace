@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/..
    ${CMAKE_CURRENT_BINARY_DIR}/..
@@ -11,7 +9,7 @@ include_directories(
 set(backendtest_SRCS backendtest.cpp )
 
 
-add_executable(backendtest TEST ${backendtest_SRCS})
+kde4_add_manual_test(backendtest ${backendtest_SRCS})
 
 target_link_libraries(backendtest  ${KDE4_KDEUI_LIBS} kwalletbackend )
 
@@ -21,7 +19,7 @@ target_link_libraries(backendtest  ${KDE4_KDEUI_LIBS} kwalletbackend )
 set(testbf_SRCS testbf.cpp )
 
 
-add_executable(testbf TEST ${testbf_SRCS})
+kde4_add_manual_test(testbf ${testbf_SRCS})
 
 target_link_libraries(testbf  ${KDE4_KDECORE_LIBS} kwalletbackend )
 
@@ -31,7 +29,7 @@ target_link_libraries(testbf  ${KDE4_KDECORE_LIBS} kwalletbackend )
 set(testsha_SRCS testsha.cpp )
 
 
-add_executable(testsha TEST ${testsha_SRCS})
+kde4_add_manual_test(testsha ${testsha_SRCS})
 
 target_link_libraries(testsha  ${KDE4_KDECORE_LIBS} kwalletbackend )
 

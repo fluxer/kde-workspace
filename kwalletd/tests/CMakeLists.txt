@@ -7,8 +7,6 @@ include_directories(
 set(kwalletwizardtest_SRCS
    kwalletwizardtest.cpp
    ../kwalletwizard.cpp
-)
-kde4_add_ui_files(kwalletwizardtest_SRCS
    ../kbetterthankdialogbase.ui
    ../kwalletwizardpageexplanation.ui
    ../kwalletwizardpageintro.ui
@@ -17,12 +15,7 @@ kde4_add_ui_files(kwalletwizardtest_SRCS
    ../kwalletwizardpagegpgkey.ui
 )
 
-if (QGPGME_FOUND)
-    kde4_add_ui_files(kwalletwizardtest_SRCS
-        ../kwalletwizardpagepasswordgpg.ui)
-endif(QGPGME_FOUND)
-
-add_executable(kwalletwizardtest TEST ${kwalletwizardtest_SRCS})
+kde4_add_manual_test(kwalletwizardtest ${kwalletwizardtest_SRCS})
 target_link_libraries(kwalletwizardtest ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY})
 if (QGPGME_FOUND)
     target_link_libraries(kwalletwizardtest ${QGPGME_LIBRARIES})
@@ -37,7 +30,7 @@ include_directories( ${KDE4_KDEUI_INCLUDES} ) # for kwallet.h
 set(kwalletasync_SRCS kwalletasync.cpp kwallettest.cpp )
 
 
-add_executable(kwalletasync TEST ${kwalletasync_SRCS})
+kde4_add_manual_test(kwalletasync ${kwalletasync_SRCS})
 
 target_link_libraries(kwalletasync ${KDE4_KDEUI_LIBS} )
 
@@ -47,7 +40,7 @@ target_link_libraries(kwalletasync ${KDE4_KDEUI_LIBS} )
 set(kwalletsync_SRCS kwalletsync.cpp )
 
 
-add_executable(kwalletsync TEST ${kwalletsync_SRCS})
+kde4_add_manual_test(kwalletsync ${kwalletsync_SRCS})
 
 target_link_libraries(kwalletsync  ${KDE4_KDEUI_LIBS} )
 
@@ -57,7 +50,7 @@ target_link_libraries(kwalletsync  ${KDE4_KDEUI_LIBS} )
 set(kwalletpath_SRCS kwalletpath.cpp )
 
 
-add_executable(kwalletpath TEST ${kwalletpath_SRCS})
+kde4_add_manual_test(kwalletpath ${kwalletpath_SRCS})
 
 target_link_libraries(kwalletpath  ${KDE4_KDEUI_LIBS} )
 
@@ -67,7 +60,7 @@ target_link_libraries(kwalletpath  ${KDE4_KDEUI_LIBS} )
 set(kwalletboth_SRCS kwalletboth.cpp kwallettest.cpp )
 
 
-add_executable(kwalletboth TEST ${kwalletboth_SRCS})
+kde4_add_manual_test(kwalletboth ${kwalletboth_SRCS})
 
 target_link_libraries(kwalletboth  ${KDE4_KDEUI_LIBS} )
 
@@ -77,7 +70,7 @@ target_link_libraries(kwalletboth  ${KDE4_KDEUI_LIBS} )
 set(kwalletmany_SRCS kwalletmany.cpp)
 
 
-add_executable(kwalletmany TEST ${kwalletmany_SRCS})
+kde4_add_manual_test(kwalletmany ${kwalletmany_SRCS})
 
 target_link_libraries(kwalletmany  ${KDE4_KDEUI_LIBS} )
 
@@ -87,7 +80,7 @@ target_link_libraries(kwalletmany  ${KDE4_KDEUI_LIBS} )
 set(kwalletautoclose_SRCS kwalletautoclose.cpp)
 
 
-add_executable(kwalletautoclose TEST ${kwalletautoclose_SRCS})
+kde4_add_manual_test(kwalletautoclose ${kwalletautoclose_SRCS})
 
 target_link_libraries(kwalletautoclose  ${KDE4_KDEUI_LIBS} )
 
@@ -97,7 +90,7 @@ target_link_libraries(kwalletautoclose  ${KDE4_KDEUI_LIBS} )
 set(kwalletnoautoclose_SRCS kwalletnoautoclose.cpp)
 
 
-add_executable(kwalletnoautoclose TEST ${kwalletnoautoclose_SRCS})
+kde4_add_manual_test(kwalletnoautoclose ${kwalletnoautoclose_SRCS})
 
 target_link_libraries(kwalletnoautoclose  ${KDE4_KDEUI_LIBS} )
 

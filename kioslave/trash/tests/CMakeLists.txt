@@ -1,5 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
-
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
 
 ########### next target ###############
@@ -12,7 +10,7 @@ set(testtrash_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../kinterprocesslock.cpp
 )
 
-kde4_add_unit_test(testtrash ${testtrash_SRCS})
+kde4_add_test(testtrash ${testtrash_SRCS})
 
 target_link_libraries(testtrash ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} ${QT_QTTEST_LIBRARY})
 
@@ -20,6 +18,6 @@ target_link_libraries(testtrash ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} ${QT_QTTEST_
 
 set(lockingtest_SRCS lockingtest.cpp ../kinterprocesslock.cpp )
 
-add_executable(lockingtest NOGUI ${lockingtest_SRCS})
+add_executable(lockingtest ${lockingtest_SRCS})
 
 target_link_libraries(lockingtest ${QT_QTCORE_LIBRARY} ${QT_QTDBUS_LIBRARY})
