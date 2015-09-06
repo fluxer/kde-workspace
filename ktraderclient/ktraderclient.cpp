@@ -70,25 +70,20 @@ int main( int argc, char **argv )
   printf("got %d offers.\n", offers.count());
 
   int i = 0;
-  KService::List::ConstIterator it = offers.constBegin();
-  const KService::List::ConstIterator end = offers.constEnd();
-  for (; it != end; ++it, ++i )
+  foreach(const KSharedPtr<KService> it, offers)
   {
     printf("---- Offer %d ----\n", i);
-    QStringList props = (*it)->propertyNames();
-    QStringList::ConstIterator propIt = props.constBegin();
-    QStringList::ConstIterator propEnd = props.constEnd();
-    for (; propIt != propEnd; ++propIt )
+    foreach(const QString propIt , (it)->propertyNames() )
     {
-      QVariant prop = (*it)->property( *propIt );
+      QVariant prop = (it)->property( propIt );
 
       if ( !prop.isValid() )
       {
-        printf("Invalid property %s\n", (*propIt).toLocal8Bit().data());
+        printf("Invalid property %s\n", (propIt).toLocal8Bit().data());
 	continue;
       }
 
-      QString outp = *propIt;
+      QString outp = propIt;
       outp += " : '";
 
       switch ( prop.type() )

@@ -27,5 +27,3 @@ install(CODE "
     set(KCP_PATH \"\$ENV{DESTDIR}${LIBEXEC_INSTALL_DIR}/kcheckpass\")
     EXECUTE_PROCESS(COMMAND sh -c \"chown root '\${KCP_PATH}' && chmod +s '\${KCP_PATH}'\")
 ")
-
-#EXTRA_DIST = README
