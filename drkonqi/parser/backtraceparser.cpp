@@ -47,9 +47,8 @@ QString BacktraceParser::parsedBacktrace() const
 
     QString result;
     if (d) {
-        QList<BacktraceLine>::const_iterator i;
-        for (i = d->m_linesList.constBegin(); i != d->m_linesList.constEnd(); ++i) {
-            result += i->toString();
+        foreach(const BacktraceLine i, d->m_linesList) {
+            result += i.toString();
         }
     }
     return result;

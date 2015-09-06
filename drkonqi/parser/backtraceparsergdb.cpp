@@ -251,17 +251,16 @@ QString BacktraceParserGdb::parsedBacktrace() const
 
     QString result;
     if (d) {
-        QList<BacktraceLine>::const_iterator i;
-        for (i = d->m_linesList.constBegin(); i != d->m_linesList.constEnd(); ++i) {
+        foreach(const BacktraceLine i, d->m_linesList) {
             //if there is only one thread, we can omit the thread indicator,
             //the thread header and all the empty lines.
-            if (d->m_threadsCount == 1 && ((*i).type() == BacktraceLine::ThreadIndicator
-                                        || (*i).type() == BacktraceLine::ThreadStart
-                                        || (*i).type() == BacktraceLine::EmptyLine))
+            if (d->m_threadsCount == 1 && (i.type() == BacktraceLine::ThreadIndicator
+                                        || i.type() == BacktraceLine::ThreadStart
+                                        || i.type() == BacktraceLine::EmptyLine))
             {
                 continue;
             }
-            result += i->toString();
+            result += i.toString();
         }
     }
     return result;
@@ -273,17 +272,16 @@ QList<BacktraceLine> BacktraceParserGdb::parsedBacktraceLines() const
 
     QList<BacktraceLine> result;
     if (d) {
-        QList<BacktraceLine>::const_iterator i;
-        for (i = d->m_linesList.constBegin(); i != d->m_linesList.constEnd(); ++i) {
+        foreach(const BacktraceLine i, d->m_linesList) {
             //if there is only one thread, we can omit the thread indicator,
             //the thread header and all the empty lines.
-            if (d->m_threadsCount == 1 && ((*i).type() == BacktraceLine::ThreadIndicator
-                                        || (*i).type() == BacktraceLine::ThreadStart
-                                        || (*i).type() == BacktraceLine::EmptyLine))
+            if (d->m_threadsCount == 1 && (i.type() == BacktraceLine::ThreadIndicator
+                                        || i.type() == BacktraceLine::ThreadStart
+                                        || i.type() == BacktraceLine::EmptyLine))
             {
                 continue;
             }
-            result.append(*i);
+            result.append(i);
         }
     }
     return result;

@@ -210,11 +210,9 @@ bool ClientApp::doCopy( int firstArg )
 void ClientApp::slotEntries(KIO::Job* job, const KIO::UDSEntryList& list)
 {
     KUrl url = static_cast<KIO::ListJob*>( job )->url();
-    KIO::UDSEntryList::ConstIterator it=list.begin();
-    for (; it != list.end(); ++it) {
+    foreach(const KIO::UDSEntry it, list) {
         // For each file...
-        QString name = (*it).stringValue( KIO::UDSEntry::UDS_NAME );
-        std::cout << qPrintable(name) << std::endl;
+        std::cout << qPrintable(it.stringValue( KIO::UDSEntry::UDS_NAME )) << std::endl;
     }
 }
 

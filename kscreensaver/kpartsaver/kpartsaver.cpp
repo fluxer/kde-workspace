@@ -176,7 +176,7 @@ bool KPartSaver::openUrl( const KUrl &url )
         closeUrl();
 
     // find mime type
-    QString mime = KMimeType::findByUrl( url )->name();
+    const QString mime = KMimeType::findByUrl( url )->name();
 
     // load part
     m_part = KMimeTypeTrader::createPartInstanceFromQuery<KParts::ReadOnlyPart>(

@@ -192,7 +192,7 @@ int kScreenSaverMain( int argc, char** argv, KScreenSaverInterface& screenSaverI
 #ifdef Q_WS_X11 //FIXME
     if (args->isSet("root"))
     {
-		QX11Info inf;
+        QX11Info inf;
         saveWin = RootWindow(QX11Info::display(), inf.screen());
     }
 #endif
