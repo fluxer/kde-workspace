@@ -1,5 +1,5 @@
 [Desktop Entry]
-Exec=kinfocenter
+Exec=kinfocenter --icon '%i' --caption '%c'
 Icon=hwinfo
 Type=Application
 X-DocPath=kinfocenter/index.html
