@@ -5,19 +5,11 @@ macro(homerun_add_unit_test _test)
     set(_src ${_cpp}.cpp)
     set(_ui "")
     foreach(_name ${ARGN})
-        if(${_name} MATCHES "\\.ui$")
-            set(_ui ${_ui} ${_name})
-        else()
-            set(_src ${_src} ${_name})
-        endif()
+        set(_src ${_src} ${_name})
     endforeach()
 
-    if(_ui)
-        kde4_add_ui_files(_src ${_ui})
-    endif()
-    qt4_automoc(${_src})
-    kde4_add_unit_test(${_test} ${_src})
-    target_link_libraries(${_test}
+    kde4_add_test(homerun-${_test} ${_src})
+    target_link_libraries(homerun-${_test}
         ${KDE4_PLASMA_LIBS}
         ${KDE4_KFILE_LIBS}
         ${KDE4_KIO_LIBS}

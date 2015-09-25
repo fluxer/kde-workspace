@@ -38,8 +38,6 @@ if (GPGME_FOUND AND QGPGME_FOUND)
     set(kwalletd_SRCS
         ${kwalletd_SRCS}
         knewwalletdialog.cpp
-    )
-    kde4_add_ui_files(kwalletd_SRCS
         kwalletwizardpagepasswordgpg.ui
         kwalletwizardpagegpgkey.ui
         knewwalletdialogintro.ui

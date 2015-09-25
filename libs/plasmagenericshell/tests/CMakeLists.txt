@@ -21,9 +21,11 @@ set(backgrounddialog_SRCS
     ../mouseplugins.cpp
     ../mousepluginwidget.cpp
     ../wallpaperpreview.cpp
+    ../MousePlugins.ui
+    ../MousePlugins.ui
+    ../BackgroundDialog.ui
 )
 
-kde4_add_ui_files(backgrounddialog_SRCS ../MousePlugins.ui ../MousePlugins.ui ../BackgroundDialog.ui)
 kde4_add_kcfg_files(backgrounddialog_SRCS ../../../plasma/desktop/shell/data/plasma-shell-desktop.kcfgc)
 
 add_executable(plasmabackgrounddialog ${backgrounddialog_SRCS})
