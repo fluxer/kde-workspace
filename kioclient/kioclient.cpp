@@ -182,8 +182,7 @@ bool ClientApp::kde_open(const KUrl& url, const QString& mimeType, bool allowExe
         this->exec();
         return !krun_has_error;
     } else {
-        KUrl::List urls;
-        urls.append( url );
+        const KUrl::List urls( url );
         const KService::List offers = KMimeTypeTrader::self()->query(
             mimeType, QLatin1String( "Application" ) );
         if (offers.isEmpty()) return 1;
