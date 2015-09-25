@@ -1,4 +1,6 @@
-add_subdirectory(tests)
+if(ENABLE_TESTING)
+    add_subdirectory(tests)
+endif()
 
 set(appletbrowserdialog_SRCS
     widgetsexplorer/kcategorizeditemsviewmodels.cpp

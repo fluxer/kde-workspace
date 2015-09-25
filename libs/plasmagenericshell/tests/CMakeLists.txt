@@ -1,5 +1,3 @@
-if (KDE4_BUILD_TESTS)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../widgetsexplorer)
 
 add_definitions(-DPLASMAGENERICSHELL_EXPORT=)
@@ -30,6 +28,4 @@ kde4_add_kcfg_files(backgrounddialog_SRCS ../../../plasma/desktop/shell/data/pla
 
 add_executable(plasmabackgrounddialog ${backgrounddialog_SRCS})
 target_link_libraries(plasmabackgrounddialog ${KDE4_PLASMA_LIBS} ${QT_QTUITOOLS_LIBRARY} ${KDE4_KFILE_LIBRARY} kworkspace)
-
-endif (KDE4_BUILD_TESTS)
 
