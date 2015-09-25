@@ -356,7 +356,7 @@ matchAclEntry(ARRAY8Ptr clientAddress, CARD16 connectionType, int direct)
     int ne;
 
     for (e = accData->acList, ne = accData->nAcls, re = 0; ne; ne--, e++)
-        if (!e->nhosts == direct)
+        if (e->nhosts != direct)
             if (scanEntrylist(e->entries, e->nentries,
                               clientAddress, connectionType,
                               &clientName))
