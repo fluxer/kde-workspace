@@ -1,7 +1,4 @@
 project(KDEBASE_WORKSPACE)
-# set_package_properties appeared in cmake 2.8.6
-# TODO: Remove when kdelibs >= 4.10 will be required
-cmake_minimum_required(VERSION 2.8.6 FATAL_ERROR)
 
 include(CTest)
 include(CTestConfig.cmake)
@@ -10,9 +7,6 @@ include(CheckFunctionExists)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
-
-#search packages used by KDE
-set(QT_MIN_VERSION "4.8.2")
 
 find_package(KDE4 4.14.3 REQUIRED)
 include(KDE4Defaults)
@@ -173,20 +167,20 @@ add_subdirectory(cmake)
 add_subdirectory(libs)
 
 
-macro_optional_add_subdirectory( systemsettings )
+macro_optional_add_subdirectory(systemsettings )
 
 # core apps
-macro_optional_add_subdirectory( kcheckpass )
-macro_optional_add_subdirectory( kwin )
-macro_optional_add_subdirectory( ksmserver )
+macro_optional_add_subdirectory(kcheckpass)
+macro_optional_add_subdirectory(kwin)
+macro_optional_add_subdirectory(ksmserver)
 
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
-macro_optional_add_subdirectory( ksplash )
+macro_optional_add_subdirectory(ksplash)
 
-macro_optional_add_subdirectory( powerdevil )
-macro_optional_add_subdirectory( qguiplatformplugin_kde )
-macro_optional_add_subdirectory( ksysguard )
+macro_optional_add_subdirectory(powerdevil)
+macro_optional_add_subdirectory(qguiplatformplugin_kde)
+macro_optional_add_subdirectory(ksysguard)
 
 macro_optional_add_subdirectory(kcontrol)
 macro_optional_add_subdirectory(klipper)
