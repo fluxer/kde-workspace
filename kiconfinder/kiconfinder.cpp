@@ -1,5 +1,6 @@
 /*  This file is part of the KDE project
     Copyright (C) 2008 David Faure <faure@kde.org>
+    Copyright (C) 2015 Ivailo Monev <xakepa10@gmail.com>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,32 +25,73 @@
 #include <klocale.h>
 #include <stdio.h>
 #include <kapplication.h>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-    KCmdLineArgs::init( argc, argv, "kiconfinder", 0, ki18n("Icon Finder"), KDE_VERSION_STRING , ki18n("Finds an icon based on its name"));
+    KCmdLineArgs::init(argc, argv,
+                       "kiconfinder",
+                       0,
+                       ki18n("Icon Finder"),
+                       KDE_VERSION_STRING,
+                       ki18n("Finds an icon based on its name")
+                      );
 
 
     KCmdLineOptions options;
 
     options.add("+iconname", ki18n("The icon name to look for"));
+    options.add("icongroup <group>", ki18n("The icon group to look in"), "desktop");
 
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KComponentData instance("kiconfinder");
-
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    if( args->count() < 1 ) {
-        printf( "No icon name specified\n" );
+
+    if(args->count() < 1) {
+        args->usage();
+    }
+
+    QStringList iconArgs;
+    for (int i=0; i<args->count(); i++) {
+        iconArgs << args->arg(i);
+    }
+    const QString groupArg = args->getOption("icongroup");
+
+    KIconLoader::Group iconGroup;
+    if(groupArg == "none")
+        iconGroup = KIconLoader::NoGroup;
+    else if(groupArg == "desktop")
+        iconGroup = KIconLoader::Desktop;
+    else if(groupArg == "first")
+        iconGroup = KIconLoader::FirstGroup;
+    else if(groupArg == "toolbar")
+        iconGroup = KIconLoader::MainToolbar;
+    else if(groupArg == "small")
+        iconGroup = KIconLoader::Small;
+    else if(groupArg == "panel")
+        iconGroup = KIconLoader::Panel;
+    else if(groupArg == "dialog")
+        iconGroup = KIconLoader::Dialog;
+    else if(groupArg == "last")
+        iconGroup = KIconLoader::LastGroup;
+    else if(groupArg == "user")
+        iconGroup = KIconLoader::User;
+    else {
+        std::cerr << "Invalid icon group '" << groupArg.toLatin1().constData() << ","<< std::endl;
+        std::cerr << "Choose one of: none, desktop, first, toolbar, small, panel, dialog, last, user." << std::endl;
         return 1;
     }
-    const QString iconName = args->arg( 0 );
-    const QString icon = KIconLoader::global()->iconPath(iconName, KIconLoader::Desktop /*TODO configurable*/, true);
-    if ( !icon.isEmpty() ) {
-        printf("%s\n", icon.toLatin1().constData());
-    } else {
-        return 1; // error
+
+    int rv = 0;
+    foreach(const QString iconName, iconArgs) {
+        const QString icon = KIconLoader::global()->iconPath(iconName, iconGroup, true);
+        if (!icon.isEmpty()) {
+            printf("%s\n", icon.toLatin1().constData());
+        } else {
+            std::cerr << "Icon '" << iconName.toLatin1().constData() << "' not found" << std::endl;
+            rv = 1;
+        }
     }
 
-    return 0;
+    return rv;
 }
