@@ -6,7 +6,6 @@ main.cpp
 knotify.cpp
 notifybysound.cpp
 notifybypopup.cpp
-notifybypopupgrowl.cpp
 notifybylogfile.cpp
 notifybytaskbar.cpp
 notifybyexecute.cpp

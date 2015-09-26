@@ -20,7 +20,6 @@
 
 #include "notifybypopup.h"
 #include "imageconverter.h"
-#include "notifybypopupgrowl.h"
 
 #include <kdebug.h>
 #include <kpassivepopup.h>
@@ -123,25 +122,6 @@ void NotifyByPopup::notify( int id, KNotifyConfig * config )
 	// Default to 6 seconds if no timeout has been defined
 	int timeout = config->timeout == -1 ? 6000 : config->timeout;
 
-	// if Growl can display our popups, use that instead
-	if(NotifyByPopupGrowl::canPopup())
-	{
-		KNotifyConfig *c = ensurePopupCompatibility( config );
-
-		QString appCaption, iconName;
-		getAppCaptionAndIconName(c, &appCaption, &iconName);
-
-		KIconLoader iconLoader(iconName);
-		QPixmap appIcon = iconLoader.loadIcon( iconName, KIconLoader::Small );
-
-		NotifyByPopupGrowl::popup( &appIcon, timeout, appCaption, c->text );
-
-		// Finish immediately, because current NotifyByPopupGrowl can't callback
-		finish(id);
-		delete c;
-		return;
-	}
-
 	KPassivePopup *pop = new KPassivePopup( config->winId );
 	m_popups[id]=pop;
 	fillPopup(pop,id,config);
@@ -243,12 +223,6 @@ void NotifyByPopup::update(int id, KNotifyConfig * config)
 	{
 		sendNotificationDBus(id, id, config);
 		return;
-	}
-
-	// otherwise, just display a new Growl notification
-	if(NotifyByPopupGrowl::canPopup())
-	{
-		notify( id, config );
 	}
 }
 
@@ -515,13 +489,9 @@ void NotifyByPopup::closeNotificationDBus(int id)
 QStringList NotifyByPopup::popupServerCapabilities()
 {
 	if (!m_dbusServiceExists) {
-		if( NotifyByPopupGrowl::canPopup() ) {
-			return NotifyByPopupGrowl::capabilities();
-		} else {
-			// Return capabilities of the KPassivePopup implementation
-			return QStringList() << "actions" << "body" << "body-hyperlinks"
-			                     << "body-markup" << "icon-static";
-		}
+		// Return capabilities of the KPassivePopup implementation
+                return QStringList() << "actions" << "body" << "body-hyperlinks"
+                                     << "body-markup" << "icon-static";
 	}
 
 	if(m_dbusServiceCapCacheDirty) {
