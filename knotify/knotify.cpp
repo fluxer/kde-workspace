@@ -66,7 +66,6 @@ void KNotify::loadConfig()
 	addPlugin(new NotifyByPopup(this));
 	addPlugin(new NotifyByExecute(this));
 	addPlugin(new NotifyByLogfile(this));
-        //TODO reactivate on Mac/Win when KWindowSystem::demandAttention will implemented on this system.
 	addPlugin(new NotifyByTaskbar(this));
 	addPlugin(new NotifyByKTTS(this));
 

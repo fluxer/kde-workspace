@@ -36,7 +36,6 @@ enum BackendCipherType {
     BACKEND_CIPHER_GPG       /// use GPG backend to encrypt wallet contents
 #endif // HAVE_QGPGME
 };
-        
 
 class BackendPersistHandler {
 protected:
@@ -52,7 +51,7 @@ public:
      */
     static BackendPersistHandler *getPersistHandler(BackendCipherType cipherType);
     static BackendPersistHandler *getPersistHandler(char magicBuf[KWMAGIC_LEN]);
-    
+
     virtual int write(Backend* wb, KSaveFile& sf, QByteArray& version, WId w) =0;
     virtual int read(Backend* wb, QFile& sf, WId w) =0;
 };
@@ -62,7 +61,7 @@ class BlowfishPersistHandler : public BackendPersistHandler {
 public:
     explicit BlowfishPersistHandler(bool useECBforReading =false) : _useECBforReading(useECBforReading) {}
     virtual ~BlowfishPersistHandler() {}
-    
+
     virtual int write(Backend* wb, KSaveFile& sf, QByteArray& version, WId w);
     virtual int read(Backend* wb, QFile& sf, WId w);
 private:
@@ -74,7 +73,7 @@ class GpgPersistHandler : public BackendPersistHandler {
 public:
     GpgPersistHandler() {}
     virtual ~GpgPersistHandler() {}
-    
+
     virtual int write(Backend* wb, KSaveFile& sf, QByteArray& version, WId w);
     virtual int read(Backend* wb, QFile& sf, WId w);
 };

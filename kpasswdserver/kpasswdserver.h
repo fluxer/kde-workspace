@@ -26,8 +26,9 @@
 #define KPASSWDSERVER_H
 
 #include <QtCore/QHash>
-#include <QtCore/QList>
-#include <QtDBus/QtDBus>
+#include <QtCore/QStringList>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusMessage>
 #include <qwindowdefs.h>
 
 #include <kio/authinfo.h>

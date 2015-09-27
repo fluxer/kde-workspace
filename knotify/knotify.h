@@ -21,12 +21,9 @@
 #ifndef KNOTIFY_H
 #define KNOTIFY_H
 
-#include <QObject>
-#include <QHash>
-
-
-#include <QtDBus/QtDBus>
-
+#include <QtCore/QObject>
+#include <QtCore/QHash>
+#include <QtDBus/QDBusAbstractAdaptor>
 
 #include "knotifyconfig.h"
 

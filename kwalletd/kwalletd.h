@@ -24,18 +24,18 @@
 #ifndef _KWALLETD_H_
 #define _KWALLETD_H_
 
-#include <QtCore/QString>
-#include <QImage>
 #include <QtCore/QHash>
-#include "kwalletbackend.h"
 #include <QtCore/QPointer>
-#include <time.h>
-#include <stdlib.h>
-#include <QtDBus/QtDBus>
-#include <QDBusServiceWatcher>
+#include <QtDBus/QDBusContext>
+#include <QtDBus/QDBusServiceWatcher>
+#include <QtDBus/QDBusInterface>
 
+#include "kwalletbackend.h"
 #include "ktimeout.h"
 #include "kwalletsessionstore.h"
+
+#include <time.h>
+#include <stdlib.h>
 
 class KDirWatch;
 class KTimeout;

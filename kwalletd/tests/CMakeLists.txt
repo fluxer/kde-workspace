@@ -1,4 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 # Tests don't need to go into toplevel/bin, they are fine in the current dir.
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/..
@@ -20,8 +19,6 @@ target_link_libraries(kwalletwizardtest ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} 
 if (QGPGME_FOUND)
     target_link_libraries(kwalletwizardtest ${QGPGME_LIBRARIES})
 endif(QGPGME_FOUND)
-
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 
 include_directories( ${KDE4_KDEUI_INCLUDES} ) # for kwallet.h
 

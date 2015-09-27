@@ -187,8 +187,7 @@ void NotifyBySound::loadConfig()
 		d->externalPlayer = cg.readPathEntry("External player", QString());
 		// try to locate a suitable player if none is configured
 		if ( d->externalPlayer.isEmpty() ) {
-			QStringList players;
-			players << "wavplay" << "aplay" << "auplay" << "artsplay" << "akodeplay";
+			const QStringList players = QStringList() << "wavplay" << "aplay" << "auplay" << "artsplay" << "akodeplay";
 			QStringList::const_iterator it = players.constBegin();
 			while ( d->externalPlayer.isEmpty() && it != players.constEnd() ) {
 				d->externalPlayer = KStandardDirs::findExe( *it );
