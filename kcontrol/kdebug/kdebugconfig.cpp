@@ -73,8 +73,11 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
 
     pConfig = new KConfig( "kdebugrc", KConfig::NoGlobals );
 
-    for( QMap<QString,QString>::const_iterator it = mAreaMap.begin(); it != mAreaMap.end(); ++it ) {
-        QTreeWidgetItem* item = new QTreeWidgetItem(m_areaWidget, QStringList() << it.value());
+    QMapIterator<QString,QString> it(mAreaMap);
+    while (it.hasNext() ) {
+        it.next();
+        QTreeWidgetItem* item = new QTreeWidgetItem(m_areaWidget);
+        item->setText(0, it.value());
         item->setData(0, Qt::UserRole, it.key().simplified());
     }
 
@@ -102,9 +105,9 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
     connect(pAbortFatal, SIGNAL(stateChanged(int)),
             this, SLOT(slotAbortFatalChanged()));
 
-    // Hack!
-    m_disableAll = m_disableAll2;
-    connect(m_disableAll, SIGNAL(toggled(bool)), this, SLOT(slotDisableAllChanged()));
+    m_disableAll->setTristate(false);
+    connect(m_disableAll, SIGNAL(stateChanged(int)),
+            this, SLOT(slotDisableAllChanged(int)));
 
     // Get initial values
     showArea(QString("0"));
@@ -170,11 +173,16 @@ void KCMDebug::load()
 {
     KConfigGroup topGroup(pConfig, QString());
     m_disableAll->setChecked(topGroup.readEntry("DisableAll", true));
+    m_loaded = true;
     emit changed( false );
 }
 
 void KCMDebug::save()
 {
+    if (!m_loaded) {
+        return;
+    }
+    kDebug();
     KConfigGroup group = pConfig->group( mCurrentDebugArea ); // Group name = debug area code
     group.writeEntry( "InfoOutput", pInfoCombo->currentIndex() );
     group.writePathEntry( "InfoFilename", pInfoFile->text() );
@@ -209,7 +217,6 @@ void KCMDebug::defaults()
 void KCMDebug::slotApply()
 {
     save();
-    pConfig->sync();
 }
 
 void KCMDebug::showArea(const QString& areaName)
@@ -233,10 +240,10 @@ void KCMDebug::showArea(const QString& areaName)
     slotDestinationChanged();
 }
 
-void KCMDebug::slotDisableAllChanged()
+void KCMDebug::slotDisableAllChanged(const int checked)
 {
-    kDebug();
-    bool enabled = !m_disableAll->isChecked();
+    const bool enabled = !checked;
+    kDebug() << checked;
     m_areaWidget->setEnabled(enabled);
     pInfoGroup->setEnabled(enabled);
     pWarnGroup->setEnabled(enabled);
@@ -245,7 +252,7 @@ void KCMDebug::slotDisableAllChanged()
     pAbortFatal->setEnabled(enabled);
 
     KConfigGroup topGroup(pConfig, QString());
-    if (m_disableAll->checkState() == topGroup.readEntry("DisableAll", false)) {
+    if (checked == topGroup.readEntry("DisableAll", false)) {
         emit changed( false );
     } else {
         emit changed( true );

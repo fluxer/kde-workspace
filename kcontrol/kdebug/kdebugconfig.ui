@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>481</width>
-    <height>447</height>
+    <height>466</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -133,9 +133,12 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2">
-    <widget class="QCheckBox" name="m_disableAll2">
+    <widget class="QCheckBox" name="m_disableAll">
      <property name="text">
       <string>Disable all debug output</string>
+     </property>
+     <property name="tristate">
+      <bool>false</bool>
      </property>
     </widget>
    </item>
@@ -229,7 +232,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>m_disableAll2</tabstop>
+  <tabstop>m_disableAll</tabstop>
   <tabstop>m_areaWidget</tabstop>
   <tabstop>pInfoCombo</tabstop>
   <tabstop>pInfoFile</tabstop>

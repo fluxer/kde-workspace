@@ -53,7 +53,7 @@ public:
     virtual void defaults();
 
 protected Q_SLOTS:
-    void slotDisableAllChanged();
+    void slotDisableAllChanged(const int);
     void slotDebugAreaChanged(QTreeWidgetItem*);
     void slotDestinationChanged();
     void slotAbortFatalChanged();
@@ -64,12 +64,12 @@ private:
     void readAreas();
 
     QString mCurrentDebugArea;
+    bool m_loaded; // hack to avoid saving before loading
 
     QMap<QString /*area name*/, QString /*description*/> mAreaMap;
 
 protected:
     KConfig* pConfig;
-    QCheckBox* m_disableAll;
 };
 
 #endif
