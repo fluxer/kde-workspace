@@ -25,7 +25,6 @@
 
 #include <KDebug>
 
-#include <Plasma/Animator>
 #include <Plasma/FrameSvg>
 
 #include "resultitem.h"
