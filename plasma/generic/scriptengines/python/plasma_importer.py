@@ -22,9 +22,6 @@ import sys
 import os
 import imp
 
-PY3 = sys.version_info[0] == 3
-
-
 class PlasmaImporter(object):
     def __init__(self):
         self.toplevel = {}
@@ -107,10 +104,7 @@ class PlasmaImporter(object):
             mod.__path__ = [self.marker]
         if code is not None:
             try:
-                if PY3:
-                    exec(code in mod.__dict__)
-                else:
-                    exec code in mod.__dict__
+                exec(code in mod.__dict__)
             finally:
                 code.close()
         return mod
