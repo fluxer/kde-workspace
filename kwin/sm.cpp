@@ -157,8 +157,7 @@ void Workspace::storeSubSession(const QString &name, QSet<QByteArray> sessionIds
     KConfigGroup cg(KGlobal::config(), QString("SubSession: ") + name);
     int count =  0;
     int active_client = -1;
-    for (ClientList::Iterator it = clients.begin(); it != clients.end(); ++it) {
-        Client* c = (*it);
+    foreach (Client *c, clients) {
         QByteArray sessionId = c->sessionId();
         QByteArray wmCommand = c->wmCommand();
         if (sessionId.isEmpty())
