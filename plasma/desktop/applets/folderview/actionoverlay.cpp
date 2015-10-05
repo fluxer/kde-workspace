@@ -23,7 +23,6 @@
 #include "iconview.h"
 
 #include <Plasma/PaintUtils>
-#include <Plasma/Animator>
 #include <Plasma/Svg>
 
 #include <QPainter>
@@ -157,17 +156,6 @@ ActionOverlay::ActionOverlay(AbstractItemView* parent)
     m_hideActionOverlayIconTimer->setInterval(500);
     m_hideActionOverlayIconTimer->setSingleShot(true);
 
-    fadeIn = Plasma::Animator::create(Plasma::Animator::FadeAnimation, this);
-    fadeIn->setProperty("startOpacity", 0);
-    fadeIn->setProperty("targetOpacity", 1);
-    fadeIn->setTargetWidget(this);
-
-    fadeOut = Plasma::Animator::create(Plasma::Animator::FadeAnimation, this);
-    fadeOut->setProperty("startOpacity", 1);
-    fadeOut->setProperty("targetOpacity", 0);
-    fadeOut->setTargetWidget(this);
-    connect(fadeOut, SIGNAL(finished()), SLOT(close()));
-
     hide();
 }
 
@@ -212,8 +200,6 @@ void ActionOverlay::entered(const QModelIndex &index)
         show();
         if (m_hoverIndex != index) {
             m_toggleButton->update();
-            fadeOut->stop();
-            fadeIn->start();
         }
         m_hoverIndex = index;
         IconView *iview = qobject_cast<IconView*>(view);
@@ -244,9 +230,8 @@ void ActionOverlay::timeout()
     // allow the animation to restart after hiding the ActionOverlayIcon even if m_hoverIndex didn't change
     m_hoverIndex = QPersistentModelIndex();
 
-    if (isVisible() && (fadeOut->state() != QAbstractAnimation::Running)) {
-        fadeIn->stop();
-        fadeOut->start();
+    if (isVisible()) {
+        close();
     }
 }
 

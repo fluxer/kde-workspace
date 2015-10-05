@@ -30,7 +30,6 @@
 
 #include <plasma/theme.h>
 #include <plasma/framesvg.h>
-#include <plasma/animator.h>
 #include <plasma/paintutils.h>
 #include <Plasma/ComboBox>
 

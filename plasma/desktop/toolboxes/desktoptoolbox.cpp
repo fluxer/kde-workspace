@@ -34,7 +34,6 @@
 #include <KDebug>
 #include <KIconLoader>
 
-#include <Plasma/Animation>
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/FrameSvg>
@@ -480,11 +479,6 @@ void DesktopToolBox::showToolBox()
 
     m_toolBacker->setOpacity(0);
     m_toolBacker->show();
-    Plasma::Animation *fadeAnim = Plasma::Animator::create(Plasma::Animator::FadeAnimation, m_toolBacker);
-    fadeAnim->setTargetWidget(m_toolBacker);
-    fadeAnim->setProperty("startOpacity", 0);
-    fadeAnim->setProperty("targetOpacity", 1);
-    fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
     highlight(true);
     setFocus();
 }
@@ -672,12 +666,7 @@ void DesktopToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void DesktopToolBox::hideToolBox()
 {
     if (m_toolBacker) {
-        Plasma::Animation *fadeAnim = Plasma::Animator::create(Plasma::Animator::FadeAnimation, m_toolBacker);
-        connect(fadeAnim, SIGNAL(finished()), this, SLOT(hideToolBacker()));
-        fadeAnim->setTargetWidget(m_toolBacker);
-        fadeAnim->setProperty("startOpacity", 1);
-        fadeAnim->setProperty("targetOpacity", 0);
-        fadeAnim->start(QAbstractAnimation::DeleteWhenStopped);
+        hideToolBacker();
     }
 
     highlight(false);
@@ -695,32 +684,6 @@ void DesktopToolBox::highlight(bool highlighting)
     }
 
     m_hovering = highlighting;
-
-    QPropertyAnimation *anim = m_anim.data();
-    if (m_hovering) {
-        if (anim) {
-            anim->stop();
-            m_anim.clear();
-        }
-        anim = new QPropertyAnimation(this, "highlight", this);
-        m_anim = anim;
-    }
-
-    if (anim->state() != QAbstractAnimation::Stopped) {
-        anim->stop();
-    }
-
-    anim->setDuration(250);
-    anim->setStartValue(0);
-    anim->setEndValue(1);
-
-    if (m_hovering) {
-        anim->start();
-    } else {
-        anim->setDirection(QAbstractAnimation::Backward);
-        anim->start(QAbstractAnimation::DeleteWhenStopped);
-
-    }
 }
 
 void DesktopToolBox::setHighlight(qreal progress)

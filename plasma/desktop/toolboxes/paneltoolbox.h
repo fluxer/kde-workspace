@@ -28,8 +28,6 @@
 
 #include <KIcon>
 
-#include <Plasma/Animator>
-
 #include "internaltoolbox.h"
 
 class Widget;

@@ -27,7 +27,6 @@
 
 
 #include <Plasma/Containment>
-#include <Plasma/Animator>
 
 #include "desktoplayout.h"
 

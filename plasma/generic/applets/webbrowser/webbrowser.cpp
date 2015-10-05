@@ -45,7 +45,6 @@
 #include <kwebwallet.h>
 #include <KStandardDirs>
 
-#include <Plasma/Animation>
 #include <Plasma/IconWidget>
 #include <Plasma/WebView>
 #include <Plasma/TreeView>
@@ -150,10 +149,6 @@ QGraphicsWidget *WebBrowser::graphicsWidget()
     m_addBookmarkAction = m_addBookmark->action();
     m_removeBookmarkAction = new QAction(KIcon("list-remove"), QString(), this);
     m_organizeBookmarks = addTool("bookmarks-organize", m_statusbarLayout);
-
-    m_bookmarksViewAnimation = Plasma::Animator::create(Plasma::Animator::FadeAnimation, this);
-    m_bookmarksViewAnimation->setTargetWidget(m_bookmarksView);
-    connect(m_bookmarksViewAnimation, SIGNAL(finished()), this, SLOT(bookmarksAnimationFinished()));
 
     m_stop = addTool("process-stop", m_statusbarLayout);
 
@@ -464,16 +459,12 @@ void WebBrowser::removeBookmark()
 void WebBrowser::bookmarksToggle()
 {
     if (m_bookmarksView->isVisible()) {
-        m_bookmarksViewAnimation->setProperty("startOpacity", 1);
-        m_bookmarksViewAnimation->setProperty("targetOpacity", 0);
-        m_bookmarksViewAnimation->start();
+        bookmarksAnimationFinished();
     } else {
         m_bookmarksView->show();
         m_bookmarksView->setOpacity(0);
         updateOverlaysGeometry();
-        m_bookmarksViewAnimation->setProperty("startOpacity", 0);
-        m_bookmarksViewAnimation->setProperty("targetOpacity", 1);
-        m_bookmarksViewAnimation->start();
+        bookmarksAnimationFinished();
     }
 }
 

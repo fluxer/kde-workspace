@@ -23,8 +23,6 @@
 
 #include "abstractitemview.h"
 
-#include <Plasma/Animation>
-
 #include <QTimer>
 #include <QGraphicsWidget>
 #include <QtCore/qabstractitemmodel.h>
@@ -98,8 +96,6 @@ private:
     ActionIcon *m_openButton;
     QPersistentModelIndex m_hoverIndex;
     QTimer *m_hideActionOverlayIconTimer;
-    Plasma::Animation *fadeIn;
-    Plasma::Animation *fadeOut;
     bool m_showFolderButton;
     bool m_showSelectionButton;
     QGraphicsGridLayout * m_layout;

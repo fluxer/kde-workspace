@@ -27,10 +27,8 @@
 #include <QParallelAnimationGroup>
 #include <QTimer>
 
-
 #include <KIconLoader>
 
-#include <plasma/animations/animation.h>
 #include <plasma/applet.h>
 #include <plasma/svg.h>
 #include <plasma/theme.h>
@@ -51,11 +49,6 @@ AppletTitleBar::AppletTitleBar(Plasma::Applet *applet)
     setObjectName( QLatin1String("TitleBar" ));
 
     setZValue(10000);
-
-
-    m_pulse =
-    Plasma::Animator::create(Plasma::Animator::PulseAnimation);
-    m_pulse->setTargetWidget(applet);
 
     m_maximizeButtonRect = m_configureButtonRect = m_closeButtonRect = QRect(0, 0, KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium);
 
@@ -89,8 +82,6 @@ AppletTitleBar::AppletTitleBar(Plasma::Applet *applet)
 
 AppletTitleBar::~AppletTitleBar()
 {
-    delete m_pulse;
-    delete m_animations.data();
 }
 
 void AppletTitleBar::setButtonsVisible(bool visible)
@@ -100,28 +91,6 @@ void AppletTitleBar::setButtonsVisible(bool visible)
     }
 
     m_buttonsVisible = visible;
-
-    if (visible) {
-        if (!m_animations) {
-            initAnimations();
-
-            m_animations.data()->start();
-            m_animations.data()->setCurrentTime(0);
-        } else {
-            QParallelAnimationGroup *group = m_animations.data();
-
-            group->stop();
-            group->setCurrentTime(0);
-            group->setDirection(QAbstractAnimation::Forward);
-
-            group->start();
-        }
-    } else {
-        initAnimations();
-        QParallelAnimationGroup *group = m_animations.data();
-        group->setDirection(QAbstractAnimation::Backward);
-        group->start(QAbstractAnimation::DeleteWhenStopped);
-    }
 }
 
 bool AppletTitleBar::buttonsVisible() const
@@ -142,36 +111,6 @@ void AppletTitleBar::setActive(bool visible)
 bool AppletTitleBar::isActive() const
 {
     return m_active;
-}
-
-void AppletTitleBar::initAnimations()
-{
-    if (m_animations) {
-        return;
-    }
-
-    m_animations = new QParallelAnimationGroup(this);
-    QParallelAnimationGroup *group = m_animations.data();
-
-    if (m_applet->hasValidAssociatedApplication()) {
-        Plasma::Animation *maximizeAnim =
-        Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation);
-        maximizeAnim->setProperty("targetPixmap", m_icons->pixmap("maximize"));
-        maximizeAnim->setTargetWidget(this);
-        group->addAnimation(maximizeAnim);
-    }
-
-    Plasma::Animation *confAnim =
-        Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation);
-    Plasma::Animation *closeAnim =
-        Plasma::Animator::create(Plasma::Animator::PixmapTransitionAnimation);
-    confAnim->setProperty("targetPixmap", m_icons->pixmap("configure"));
-    confAnim->setTargetWidget(this);
-
-    closeAnim->setProperty("targetPixmap", m_icons->pixmap("close"));
-    closeAnim->setTargetWidget(this);
-    group->addAnimation(confAnim);
-    group->addAnimation(closeAnim);
 }
 
 void AppletTitleBar::syncMargins()
@@ -297,7 +236,6 @@ void AppletTitleBar::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (m_pressedButton == MaximizeButton && m_maximizeButtonRect.contains(event->pos())) {
         if (m_applet->hasValidAssociatedApplication()) {
-            m_pulse->start();
             m_applet->runAssociatedApplication();
         }
     } else if (m_pressedButton == ConfigureButton && m_configureButtonRect.contains(event->pos())) {
@@ -354,7 +292,7 @@ void AppletTitleBar::paint(QPainter *painter, const QStyleOptionGraphicsItem *op
         QParallelAnimationGroup *group = m_animations.data();
 
         int i = 0;
-
+        // TODO: revisit
         if (m_applet->hasValidAssociatedApplication()) {
             if (group) {
                 if (group->state() == QAbstractAnimation::Running) {

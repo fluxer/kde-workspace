@@ -21,7 +21,6 @@
 
 #include <QScriptValue>
 
-#include <Plasma/Animator>
 #include <Plasma/DataEngine>
 
 #include "simplebindings/uiloader.h"
@@ -82,9 +81,6 @@ private:
     static void populateAnimationsHash();
 
     static QString findSvg(QScriptContext *context, QScriptEngine *engine, const QString &file);
-    static QScriptValue animation(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue animationGroup(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18n(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18nc(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue jsi18np(QScriptContext *context, QScriptEngine *engine);
@@ -108,7 +104,6 @@ private:
 
 private:
     static KSharedPtr<UiLoader> s_widgetLoader;
-    static QHash<QString, Plasma::Animator::Animation> s_animationDefs;
     ScriptEnv *m_env;
     QScriptEngine *m_engine;
     QScriptValue m_self;

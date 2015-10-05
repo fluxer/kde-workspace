@@ -21,7 +21,6 @@
 #include <QScriptEngine>
 
 #include <Plasma/Applet>
-#include <Plasma/Animation>
 #include <Plasma/Extender>
 #include <Plasma/VideoWidget>
 
@@ -29,7 +28,6 @@
 Q_DECLARE_METATYPE(QGraphicsWidget*)
 Q_DECLARE_METATYPE(QGraphicsLayout*)
 
-Q_DECLARE_METATYPE(Plasma::Animation*)
 Q_DECLARE_METATYPE(Plasma::Applet*)
 Q_DECLARE_METATYPE(Plasma::Extender*)
 Q_DECLARE_METATYPE(Plasma::VideoWidget::Controls)
@@ -67,18 +65,6 @@ void controlsFromScriptValue(const QScriptValue& obj, Plasma::VideoWidget::Contr
     if (flagValue & Plasma::VideoWidget::OpenFile) {
         controls |= Plasma::VideoWidget::OpenFile;
     }
-}
-
-typedef Plasma::Animation* AnimationPtr;
-QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
-{
-    return engine->newQObject(const_cast<Plasma::Animation *>(anim), QScriptEngine::AutoOwnership, QScriptEngine::PreferExistingWrapperObject);
-}
-
-void abstractAnimationFromQScriptValue(const QScriptValue &scriptValue, AnimationPtr &anim)
-{
-    QObject *obj = scriptValue.toQObject();
-    anim = static_cast<Plasma::Animation *>(obj);
 }
 
 typedef QGraphicsWidget * QGraphicsWidgetPtr;
@@ -138,7 +124,6 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterMetaType<Plasma::Svg*>(engine, qScriptValueFromSvg, svgFromQScriptValue);
 
     qScriptRegisterSequenceMetaType<QList<double> >(engine);
-    qScriptRegisterMetaType<Plasma::Animation *>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender, extenderFromQScriptValue);
     qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
     qScriptRegisterMetaType<Qt::MouseButton>(engine, qScriptValueFromMouseButton, mouseButtonFromScriptValue);
