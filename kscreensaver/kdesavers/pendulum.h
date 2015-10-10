@@ -38,6 +38,7 @@
 
 // KDE headers
 #include <kscreensaver.h>
+#include <kdialog.h>
 
 #include "rkodesolver.h"
 

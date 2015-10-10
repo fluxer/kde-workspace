@@ -35,6 +35,7 @@
 
 // KDE headers
 #include <kscreensaver.h>
+#include <kdialog.h>
 
 // Eigen2 from KDE support
 #include <Eigen/Core>
