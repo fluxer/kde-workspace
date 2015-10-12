@@ -122,7 +122,14 @@ QString SystemInformation::fetchOSReleaseInformation() const
         const int index = line.indexOf('=');
         if ( index != -1 ) {
             const QString key = line.left(index);
-            const QString value = line.mid(index+1);
+            QString value = line.mid(index+1);
+            value = value.trimmed();
+            if(value.startsWith("'") or value.startsWith("\"")) {
+                value.remove(0, 1);
+            }
+            if(value.endsWith("'") or value.endsWith("\"")) {
+                value.chop(1);
+            }
             distroInfos.insert(key, value);
         }
     }
