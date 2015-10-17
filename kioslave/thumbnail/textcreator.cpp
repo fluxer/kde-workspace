@@ -29,7 +29,6 @@
 
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
-#include <kencodingprober.h>
 #include <klocale.h>
 
 extern "C"
@@ -53,15 +52,9 @@ TextCreator::~TextCreator()
 
 static QTextCodec *codecFromContent(const char *data, int dataSize)
 {
-#if 0 // ### Use this when KEncodingProber does not return junk encoding for UTF-8 data)
-    KEncodingProber prober;
-    prober.feed(data, dataSize);
-    return QTextCodec::codecForName(prober.encoding());
-#else
     QByteArray ba = QByteArray::fromRawData(data, dataSize);
     // try to detect UTF text, fall back to locale default (which is usually UTF-8)
     return QTextCodec::codecForUtfText(ba, KGlobal::locale()->codecForEncoding());
-#endif
 }
 
 bool TextCreator::create(const QString &path, int width, int height, QImage &img)
