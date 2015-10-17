@@ -177,7 +177,7 @@ QString DesktopProtocol::desktopFile(KIO::UDSEntry &entry) const
 
     if (entry.isDir()) {
         url.addPath(".directory");
-        if (!KStandardDirs::exists(url.path()))
+        if (!KGlobal::dirs()->exists(url.path()))
             return QString();
 
         return url.path();

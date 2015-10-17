@@ -168,7 +168,7 @@ void Autostart::load()
     widget->listCMD->expandItem( m_scriptItem );
 
     foreach (const QString& path, m_paths) {
-        if (! KStandardDirs::exists(path))
+        if (! KGlobal::dirs()->exists(path))
             KStandardDirs::makeDir(path);
 
         QDir autostartdir( path );

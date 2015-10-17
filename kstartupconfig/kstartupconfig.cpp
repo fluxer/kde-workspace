@@ -150,7 +150,7 @@ int main( int argc, char **argv )
              ++it )
             {
             QString cfg = *it + "share/config/" + file;
-            if( KStandardDirs::exists( cfg ))
+            if( KGlobal::dirs()->exists( cfg ))
                 startupconfigfiles << cfg << "\n";
             else
                 startupconfigfiles << "!" << cfg << "\n";
