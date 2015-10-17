@@ -64,7 +64,7 @@ private:
     void readAreas();
 
     QString mCurrentDebugArea;
-    bool m_loaded; // hack to avoid saving before loading
+    bool mLoaded; // hack to avoid saving before loading
 
     QMap<QString /*area name*/, QString /*description*/> mAreaMap;
 

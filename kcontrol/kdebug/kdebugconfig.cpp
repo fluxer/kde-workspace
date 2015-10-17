@@ -173,13 +173,13 @@ void KCMDebug::load()
 {
     KConfigGroup topGroup(pConfig, QString());
     m_disableAll->setChecked(topGroup.readEntry("DisableAll", true));
-    m_loaded = true;
+    mLoaded = true;
     emit changed( false );
 }
 
 void KCMDebug::save()
 {
-    if (!m_loaded) {
+    if (!mLoaded) {
         return;
     }
     kDebug();
@@ -281,4 +281,5 @@ void KCMDebug::slotAbortFatalChanged()
 {
     save();
 }
+
 #include "moc_kdebugconfig.cpp"

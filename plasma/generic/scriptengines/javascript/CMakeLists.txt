@@ -1,11 +1,5 @@
 # APPLET
 
-if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
-    set(PLASMA_NO_KDEWEBKIT TRUE)
-    set(PLASMA_NO_SOLID TRUE)
-    set(PLASMA_NO_KIO TRUE)
-endif(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
-
 set(simple_javascript_engine_SRCS
     common/extension_launchapp.cpp
     common/extension_io.cpp

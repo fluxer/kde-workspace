@@ -257,7 +257,7 @@ SessionInfo* Workspace::takeSessionInfo(Client* c)
     // First search ``session''
     if (! sessionId.isEmpty()) {
         // look for a real session managed client (algorithm suggested by ICCCM)
-        foreach (SessionInfo * info, session) {
+        foreach (SessionInfo *info, session) {
             if (realInfo)
                 break;
             if (info->sessionId == sessionId && sessionInfoWindowTypeMatch(c, info)) {
