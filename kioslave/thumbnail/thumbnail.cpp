@@ -360,7 +360,7 @@ void ThumbnailProtocol::get(const KUrl &url)
         }
         // Keep in sync with kdelibs/kio/kio/previewjob.cpp
         stream << img.width() << img.height() << quint8(img.format());
-        memcpy(shmaddr, img.bits(), img.numBytes());
+        memcpy(shmaddr, img.bits(), img.byteCount());
         shmdt((char*)shmaddr);
         mimeType("application/octet-stream");
         data(imgData);

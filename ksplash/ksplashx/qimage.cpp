@@ -165,7 +165,7 @@
     QImage supports a variety of methods for getting information about
     the image, for example, colorTable(), allGray(), isGrayscale(),
     bitOrder(), bytesPerLine(), depth(), dotsPerMeterX() and
-    dotsPerMeterY(), hasAlphaBuffer(), numBytes(), numColors(), and
+    dotsPerMeterY(), hasAlphaBuffer(), byteCount(), numColors(), and
     width() and height().
 
     Pixel colors are retrieved with pixel() and set with setPixel().
@@ -672,12 +672,12 @@ QImage QImage::copy() const
 #ifdef Q_WS_QWS
 	// Qt/Embedded can create images with non-default bpl
 	// make sure we don't crash.
-	if ( image.numBytes() != numBytes() )
+	if ( image.byteCount() != byteCount() )
 	    for ( int i = 0; i < height(); i++ )
 		memcpy( image.scanLine(i), scanLine(i), image.bytesPerLine() );
 	else
 #endif
-	    memcpy( image.bits(), bits(), numBytes() );
+	    memcpy( image.bits(), bits(), byteCount() );
 	memcpy( image.colorTable(), colorTable(), numColors() * sizeof(QRgb) );
 	image.setAlphaBuffer( hasAlphaBuffer() );
 	image.data->dpmx = dotsPerMeterX();
@@ -869,7 +869,7 @@ QImage QImage::copy(int x, int y, int w, int h, int conversion_flags) const
 */
 
 /*!
-    \fn int QImage::numBytes() const
+    \fn int QImage::byteCount() const
 
     Returns the number of bytes occupied by the image data.
 
@@ -880,9 +880,9 @@ QImage QImage::copy(int x, int y, int w, int h, int conversion_flags) const
     \fn int QImage::bytesPerLine() const
 
     Returns the number of bytes per image scanline. This is equivalent
-    to numBytes()/height().
+    to byteCount()/height().
 
-    \sa numBytes() scanLine()
+    \sa byteCount() scanLine()
 */
 
 /*!
@@ -939,7 +939,7 @@ QImage QImage::copy(int x, int y, int w, int h, int conversion_flags) const
     Returns a pointer to the first pixel data. This is equivalent to
     scanLine(0).
 
-    \sa numBytes() scanLine() jumpTable()
+    \sa byteCount() scanLine() jumpTable()
 */
 
 
@@ -1065,7 +1065,7 @@ void QImage::fill( uint pixel )
 
 void QImage::invertPixels( bool invertAlpha )
 {
-    quint32 n = numBytes();
+    quint32 n = byteCount();
     if ( n % 4 ) {
 	Q_UINT8 *p = (Q_UINT8*)bits();
 	Q_UINT8 *end = p + n;
@@ -1233,7 +1233,7 @@ void QImage::setAlphaBuffer( bool enable )
     and the image data (bits()).
 
     \sa fill() width() height() depth() numColors() bitOrder()
-    jumpTable() scanLine() bits() bytesPerLine() numBytes()
+    jumpTable() scanLine() bits() bytesPerLine() byteCount()
 */
 
 bool QImage::create( int width, int height, int depth, int numColors,
@@ -3004,23 +3004,23 @@ QImage QImage::xForm( const QWMatrix &matrix ) const
     switch ( bpp ) {
 	// initizialize the data
 	case 1:
-	    memset( dImage.bits(), 0, dImage.numBytes() );
+	    memset( dImage.bits(), 0, dImage.byteCount() );
 	    break;
 	case 8:
 	    if ( dImage.data->ncols < 256 ) {
 		// colors are left in the color table, so pick that one as transparent
 		dImage.setNumColors( dImage.data->ncols+1 );
 		dImage.setColor( dImage.data->ncols-1, 0x00 );
-		memset( dImage.bits(), dImage.data->ncols-1, dImage.numBytes() );
+		memset( dImage.bits(), dImage.data->ncols-1, dImage.byteCount() );
 	    } else {
-		memset( dImage.bits(), 0, dImage.numBytes() );
+		memset( dImage.bits(), 0, dImage.byteCount() );
 	    }
 	    break;
 	case 16:
-	    memset( dImage.bits(), 0xff, dImage.numBytes() );
+	    memset( dImage.bits(), 0xff, dImage.byteCount() );
 	    break;
 	case 32:
-	    memset( dImage.bits(), 0x00, dImage.numBytes() );
+	    memset( dImage.bits(), 0x00, dImage.byteCount() );
 	    break;
     }
 
@@ -3688,7 +3688,7 @@ static void swapPixel01( QImage *image )	// 1-bpp: swap 0 and 1 pixels
     int i;
     if ( image->depth() == 1 && image->numColors() == 2 ) {
 	register uint *p = (uint *)image->bits();
-	int nbytes = image->numBytes();
+	int nbytes = image->byteCount();
 	for ( i=0; i<nbytes/4; i++ ) {
 	    *p = ~*p;
 	    p++;
@@ -5605,7 +5605,7 @@ static void write_xbm_image( QImageIO *iio )
     register char *p = buf;
     uchar *b = image.scanLine(0);
     int	 x=0, y=0;
-    int nbytes = image.numBytes();
+    int nbytes = image.byteCount();
     w = (w+7)/8;
     while ( nbytes-- ) {			// write all bytes
 	*p++ = '0';  *p++ = 'x';

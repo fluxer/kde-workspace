@@ -223,7 +223,7 @@ bool Fountain::loadParticle()
     if (buf.load( KStandardDirs::locate("data", QLatin1String( "kscreensaver/particle.png" )) ) )
     {
         tex = convertToGLFormat(buf);  // flipped 32bit RGBA
-        kDebug() << "Texture loaded: " << tex.numBytes ();
+        kDebug() << "Texture loaded: " << tex.byteCount ();
     }
     else
     {

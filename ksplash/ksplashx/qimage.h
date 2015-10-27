@@ -131,7 +131,7 @@ public:
     uchar      *scanLine( int ) const;
     uchar     **jumpTable()	const;
     QRgb       *colorTable()	const;
-    int		numBytes()	const;
+    int		byteCount()	const;
     int		bytesPerLine()	const;
 
 #ifdef Q_WS_QWS
@@ -368,7 +368,7 @@ inline QRgb *QImage::colorTable() const
     return data->ctbl;
 }
 
-inline int QImage::numBytes() const
+inline int QImage::byteCount() const
 {
     return data->nbytes;
 }

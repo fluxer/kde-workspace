@@ -226,7 +226,7 @@ bool Gravity::loadParticle()
 
         {
 		tex = convertToGLFormat(buf);  // flipped 32bit RGBA
-		kDebug() << "Texture loaded: " << tex.numBytes ();
+		kDebug() << "Texture loaded: " << tex.byteCount ();
 	}
 	else
 	{

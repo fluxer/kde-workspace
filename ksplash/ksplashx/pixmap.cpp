@@ -332,7 +332,7 @@ PixmapData PP::convertFromImage( const QImage &img, int conversion_flags )
     Visual *visual = (Visual *)x11Visual();
     XImage *xi	   = 0;
     bool    trucol = (visual->c_class == TrueColor);
-    int	    nbytes = image.numBytes();
+    int	    nbytes = image.byteCount();
     uchar  *newbits= 0;
     int newbits_size = 0;
 #ifdef QT_MITSHM_CONVERSIONS
