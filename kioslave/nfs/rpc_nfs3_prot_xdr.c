@@ -19,8 +19,6 @@
 bool_t
 xdr_uint64 (XDR *xdrs, uint64 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint64_t (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -29,8 +27,6 @@ xdr_uint64 (XDR *xdrs, uint64 *objp)
 bool_t
 xdr_int64 (XDR *xdrs, int64 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_int64_t (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -39,8 +35,6 @@ xdr_int64 (XDR *xdrs, int64 *objp)
 bool_t
 xdr_uint32 (XDR *xdrs, uint32 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_u_long (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -49,8 +43,6 @@ xdr_uint32 (XDR *xdrs, uint32 *objp)
 bool_t
 xdr_int32 (XDR *xdrs, int32 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_long (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -59,8 +51,6 @@ xdr_int32 (XDR *xdrs, int32 *objp)
 bool_t
 xdr_filename3 (XDR *xdrs, filename3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_string (xdrs, objp, ~0))
 		 return FALSE;
 	return TRUE;
@@ -69,8 +59,6 @@ xdr_filename3 (XDR *xdrs, filename3 *objp)
 bool_t
 xdr_nfspath3 (XDR *xdrs, nfspath3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_string (xdrs, objp, ~0))
 		 return FALSE;
 	return TRUE;
@@ -79,8 +67,6 @@ xdr_nfspath3 (XDR *xdrs, nfspath3 *objp)
 bool_t
 xdr_fileid3 (XDR *xdrs, fileid3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint64 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -89,8 +75,6 @@ xdr_fileid3 (XDR *xdrs, fileid3 *objp)
 bool_t
 xdr_cookie3 (XDR *xdrs, cookie3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint64 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -99,8 +83,6 @@ xdr_cookie3 (XDR *xdrs, cookie3 *objp)
 bool_t
 xdr_cookieverf3 (XDR *xdrs, cookieverf3 objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_opaque (xdrs, objp, NFS3_COOKIEVERFSIZE))
 		 return FALSE;
 	return TRUE;
@@ -109,8 +91,6 @@ xdr_cookieverf3 (XDR *xdrs, cookieverf3 objp)
 bool_t
 xdr_createverf3 (XDR *xdrs, createverf3 objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_opaque (xdrs, objp, NFS3_CREATEVERFSIZE))
 		 return FALSE;
 	return TRUE;
@@ -119,8 +99,6 @@ xdr_createverf3 (XDR *xdrs, createverf3 objp)
 bool_t
 xdr_writeverf3 (XDR *xdrs, writeverf3 objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_opaque (xdrs, objp, NFS3_WRITEVERFSIZE))
 		 return FALSE;
 	return TRUE;
@@ -129,8 +107,6 @@ xdr_writeverf3 (XDR *xdrs, writeverf3 objp)
 bool_t
 xdr_uid3 (XDR *xdrs, uid3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -139,8 +115,6 @@ xdr_uid3 (XDR *xdrs, uid3 *objp)
 bool_t
 xdr_gid3 (XDR *xdrs, gid3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -149,8 +123,6 @@ xdr_gid3 (XDR *xdrs, gid3 *objp)
 bool_t
 xdr_size3 (XDR *xdrs, size3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint64 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -159,8 +131,6 @@ xdr_size3 (XDR *xdrs, size3 *objp)
 bool_t
 xdr_offset3 (XDR *xdrs, offset3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint64 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -169,8 +139,6 @@ xdr_offset3 (XDR *xdrs, offset3 *objp)
 bool_t
 xdr_mode3 (XDR *xdrs, mode3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -179,8 +147,6 @@ xdr_mode3 (XDR *xdrs, mode3 *objp)
 bool_t
 xdr_count3 (XDR *xdrs, count3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, objp))
 		 return FALSE;
 	return TRUE;
@@ -189,8 +155,6 @@ xdr_count3 (XDR *xdrs, count3 *objp)
 bool_t
 xdr_nfsstat3 (XDR *xdrs, nfsstat3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -199,8 +163,6 @@ xdr_nfsstat3 (XDR *xdrs, nfsstat3 *objp)
 bool_t
 xdr_ftype3 (XDR *xdrs, ftype3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -209,8 +171,6 @@ xdr_ftype3 (XDR *xdrs, ftype3 *objp)
 bool_t
 xdr_specdata3 (XDR *xdrs, specdata3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, &objp->specdata1))
 		 return FALSE;
 	 if (!xdr_uint32 (xdrs, &objp->specdata2))
@@ -221,8 +181,6 @@ xdr_specdata3 (XDR *xdrs, specdata3 *objp)
 bool_t
 xdr_nfs_fh3 (XDR *xdrs, nfs_fh3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bytes (xdrs, (char **)&objp->data.data_val, (u_int *) &objp->data.data_len, NFS3_FHSIZE))
 		 return FALSE;
 	return TRUE;
@@ -231,8 +189,6 @@ xdr_nfs_fh3 (XDR *xdrs, nfs_fh3 *objp)
 bool_t
 xdr_nfstime3 (XDR *xdrs, nfstime3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_uint32 (xdrs, &objp->seconds))
 		 return FALSE;
 	 if (!xdr_uint32 (xdrs, &objp->nseconds))
@@ -243,8 +199,6 @@ xdr_nfstime3 (XDR *xdrs, nfstime3 *objp)
 bool_t
 xdr_fattr3 (XDR *xdrs, fattr3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_ftype3 (xdrs, &objp->type))
 		 return FALSE;
 	 if (!xdr_mode3 (xdrs, &objp->mode))
@@ -277,8 +231,6 @@ xdr_fattr3 (XDR *xdrs, fattr3 *objp)
 bool_t
 xdr_post_op_attr (XDR *xdrs, post_op_attr *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->attributes_follow))
 		 return FALSE;
 	switch (objp->attributes_follow) {
@@ -297,8 +249,6 @@ xdr_post_op_attr (XDR *xdrs, post_op_attr *objp)
 bool_t
 xdr_wcc_attr (XDR *xdrs, wcc_attr *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_size3 (xdrs, &objp->size))
 		 return FALSE;
 	 if (!xdr_nfstime3 (xdrs, &objp->mtime))
@@ -311,8 +261,6 @@ xdr_wcc_attr (XDR *xdrs, wcc_attr *objp)
 bool_t
 xdr_pre_op_attr (XDR *xdrs, pre_op_attr *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->attributes_follow))
 		 return FALSE;
 	switch (objp->attributes_follow) {
@@ -331,8 +279,6 @@ xdr_pre_op_attr (XDR *xdrs, pre_op_attr *objp)
 bool_t
 xdr_wcc_data (XDR *xdrs, wcc_data *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pre_op_attr (xdrs, &objp->before))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->after))
@@ -343,8 +289,6 @@ xdr_wcc_data (XDR *xdrs, wcc_data *objp)
 bool_t
 xdr_post_op_fh3 (XDR *xdrs, post_op_fh3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->handle_follows))
 		 return FALSE;
 	switch (objp->handle_follows) {
@@ -363,8 +307,6 @@ xdr_post_op_fh3 (XDR *xdrs, post_op_fh3 *objp)
 bool_t
 xdr_time_how (XDR *xdrs, time_how *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -373,8 +315,6 @@ xdr_time_how (XDR *xdrs, time_how *objp)
 bool_t
 xdr_set_mode3 (XDR *xdrs, set_mode3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -391,8 +331,6 @@ xdr_set_mode3 (XDR *xdrs, set_mode3 *objp)
 bool_t
 xdr_set_uid3 (XDR *xdrs, set_uid3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -409,8 +347,6 @@ xdr_set_uid3 (XDR *xdrs, set_uid3 *objp)
 bool_t
 xdr_set_gid3 (XDR *xdrs, set_gid3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -427,8 +363,6 @@ xdr_set_gid3 (XDR *xdrs, set_gid3 *objp)
 bool_t
 xdr_set_size3 (XDR *xdrs, set_size3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -445,8 +379,6 @@ xdr_set_size3 (XDR *xdrs, set_size3 *objp)
 bool_t
 xdr_set_atime (XDR *xdrs, set_atime *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_time_how (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -463,8 +395,6 @@ xdr_set_atime (XDR *xdrs, set_atime *objp)
 bool_t
 xdr_set_mtime (XDR *xdrs, set_mtime *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_time_how (xdrs, &objp->set_it))
 		 return FALSE;
 	switch (objp->set_it) {
@@ -481,8 +411,6 @@ xdr_set_mtime (XDR *xdrs, set_mtime *objp)
 bool_t
 xdr_sattr3 (XDR *xdrs, sattr3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_set_mode3 (xdrs, &objp->mode))
 		 return FALSE;
 	 if (!xdr_set_uid3 (xdrs, &objp->uid))
@@ -501,8 +429,6 @@ xdr_sattr3 (XDR *xdrs, sattr3 *objp)
 bool_t
 xdr_diropargs3 (XDR *xdrs, diropargs3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->dir))
 		 return FALSE;
 	 if (!xdr_filename3 (xdrs, &objp->name))
@@ -513,8 +439,6 @@ xdr_diropargs3 (XDR *xdrs, diropargs3 *objp)
 bool_t
 xdr_GETATTR3args (XDR *xdrs, GETATTR3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->object))
 		 return FALSE;
 	return TRUE;
@@ -523,8 +447,6 @@ xdr_GETATTR3args (XDR *xdrs, GETATTR3args *objp)
 bool_t
 xdr_GETATTR3resok (XDR *xdrs, GETATTR3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_fattr3 (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	return TRUE;
@@ -533,8 +455,6 @@ xdr_GETATTR3resok (XDR *xdrs, GETATTR3resok *objp)
 bool_t
 xdr_GETATTR3res (XDR *xdrs, GETATTR3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -551,8 +471,6 @@ xdr_GETATTR3res (XDR *xdrs, GETATTR3res *objp)
 bool_t
 xdr_sattrguard3 (XDR *xdrs, sattrguard3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bool (xdrs, &objp->check))
 		 return FALSE;
 	switch (objp->check) {
@@ -571,8 +489,6 @@ xdr_sattrguard3 (XDR *xdrs, sattrguard3 *objp)
 bool_t
 xdr_SETATTR3args (XDR *xdrs, SETATTR3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->object))
 		 return FALSE;
 	 if (!xdr_sattr3 (xdrs, &objp->new_attributes))
@@ -585,8 +501,6 @@ xdr_SETATTR3args (XDR *xdrs, SETATTR3args *objp)
 bool_t
 xdr_SETATTR3resok (XDR *xdrs, SETATTR3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->obj_wcc))
 		 return FALSE;
 	return TRUE;
@@ -595,8 +509,6 @@ xdr_SETATTR3resok (XDR *xdrs, SETATTR3resok *objp)
 bool_t
 xdr_SETATTR3resfail (XDR *xdrs, SETATTR3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->obj_wcc))
 		 return FALSE;
 	return TRUE;
@@ -605,8 +517,6 @@ xdr_SETATTR3resfail (XDR *xdrs, SETATTR3resfail *objp)
 bool_t
 xdr_SETATTR3res (XDR *xdrs, SETATTR3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -625,8 +535,6 @@ xdr_SETATTR3res (XDR *xdrs, SETATTR3res *objp)
 bool_t
 xdr_LOOKUP3args (XDR *xdrs, LOOKUP3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->what))
 		 return FALSE;
 	return TRUE;
@@ -635,8 +543,6 @@ xdr_LOOKUP3args (XDR *xdrs, LOOKUP3args *objp)
 bool_t
 xdr_LOOKUP3resok (XDR *xdrs, LOOKUP3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->object))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
@@ -649,8 +555,6 @@ xdr_LOOKUP3resok (XDR *xdrs, LOOKUP3resok *objp)
 bool_t
 xdr_LOOKUP3resfail (XDR *xdrs, LOOKUP3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->dir_attributes))
 		 return FALSE;
 	return TRUE;
@@ -659,8 +563,6 @@ xdr_LOOKUP3resfail (XDR *xdrs, LOOKUP3resfail *objp)
 bool_t
 xdr_LOOKUP3res (XDR *xdrs, LOOKUP3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -679,8 +581,6 @@ xdr_LOOKUP3res (XDR *xdrs, LOOKUP3res *objp)
 bool_t
 xdr_ACCESS3args (XDR *xdrs, ACCESS3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->object))
 		 return FALSE;
 	 if (!xdr_uint32 (xdrs, &objp->access))
@@ -691,8 +591,6 @@ xdr_ACCESS3args (XDR *xdrs, ACCESS3args *objp)
 bool_t
 xdr_ACCESS3resok (XDR *xdrs, ACCESS3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	 if (!xdr_uint32 (xdrs, &objp->access))
@@ -703,8 +601,6 @@ xdr_ACCESS3resok (XDR *xdrs, ACCESS3resok *objp)
 bool_t
 xdr_ACCESS3resfail (XDR *xdrs, ACCESS3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	return TRUE;
@@ -713,8 +609,6 @@ xdr_ACCESS3resfail (XDR *xdrs, ACCESS3resfail *objp)
 bool_t
 xdr_ACCESS3res (XDR *xdrs, ACCESS3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -733,8 +627,6 @@ xdr_ACCESS3res (XDR *xdrs, ACCESS3res *objp)
 bool_t
 xdr_READLINK3args (XDR *xdrs, READLINK3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->symlink))
 		 return FALSE;
 	return TRUE;
@@ -743,8 +635,6 @@ xdr_READLINK3args (XDR *xdrs, READLINK3args *objp)
 bool_t
 xdr_READLINK3resok (XDR *xdrs, READLINK3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->symlink_attributes))
 		 return FALSE;
 	 if (!xdr_nfspath3 (xdrs, &objp->data))
@@ -755,8 +645,6 @@ xdr_READLINK3resok (XDR *xdrs, READLINK3resok *objp)
 bool_t
 xdr_READLINK3resfail (XDR *xdrs, READLINK3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->symlink_attributes))
 		 return FALSE;
 	return TRUE;
@@ -765,8 +653,6 @@ xdr_READLINK3resfail (XDR *xdrs, READLINK3resfail *objp)
 bool_t
 xdr_READLINK3res (XDR *xdrs, READLINK3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -785,8 +671,6 @@ xdr_READLINK3res (XDR *xdrs, READLINK3res *objp)
 bool_t
 xdr_READ3args (XDR *xdrs, READ3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->file))
 		 return FALSE;
 	 if (!xdr_offset3 (xdrs, &objp->offset))
@@ -799,8 +683,6 @@ xdr_READ3args (XDR *xdrs, READ3args *objp)
 bool_t
 xdr_READ3resok (XDR *xdrs, READ3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->file_attributes))
 		 return FALSE;
 	 if (!xdr_count3 (xdrs, &objp->count))
@@ -815,8 +697,6 @@ xdr_READ3resok (XDR *xdrs, READ3resok *objp)
 bool_t
 xdr_READ3resfail (XDR *xdrs, READ3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->file_attributes))
 		 return FALSE;
 	return TRUE;
@@ -825,8 +705,6 @@ xdr_READ3resfail (XDR *xdrs, READ3resfail *objp)
 bool_t
 xdr_READ3res (XDR *xdrs, READ3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -845,8 +723,6 @@ xdr_READ3res (XDR *xdrs, READ3res *objp)
 bool_t
 xdr_stable_how (XDR *xdrs, stable_how *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -855,8 +731,6 @@ xdr_stable_how (XDR *xdrs, stable_how *objp)
 bool_t
 xdr_WRITE3args (XDR *xdrs, WRITE3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->file))
 		 return FALSE;
 	 if (!xdr_offset3 (xdrs, &objp->offset))
@@ -873,8 +747,6 @@ xdr_WRITE3args (XDR *xdrs, WRITE3args *objp)
 bool_t
 xdr_WRITE3resok (XDR *xdrs, WRITE3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->file_wcc))
 		 return FALSE;
 	 if (!xdr_count3 (xdrs, &objp->count))
@@ -889,8 +761,6 @@ xdr_WRITE3resok (XDR *xdrs, WRITE3resok *objp)
 bool_t
 xdr_WRITE3resfail (XDR *xdrs, WRITE3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->file_wcc))
 		 return FALSE;
 	return TRUE;
@@ -899,8 +769,6 @@ xdr_WRITE3resfail (XDR *xdrs, WRITE3resfail *objp)
 bool_t
 xdr_WRITE3res (XDR *xdrs, WRITE3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -919,8 +787,6 @@ xdr_WRITE3res (XDR *xdrs, WRITE3res *objp)
 bool_t
 xdr_createmode3 (XDR *xdrs, createmode3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -929,8 +795,6 @@ xdr_createmode3 (XDR *xdrs, createmode3 *objp)
 bool_t
 xdr_createhow3 (XDR *xdrs, createhow3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_createmode3 (xdrs, &objp->mode))
 		 return FALSE;
 	switch (objp->mode) {
@@ -952,8 +816,6 @@ xdr_createhow3 (XDR *xdrs, createhow3 *objp)
 bool_t
 xdr_CREATE3args (XDR *xdrs, CREATE3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->where))
 		 return FALSE;
 	 if (!xdr_createhow3 (xdrs, &objp->how))
@@ -964,8 +826,6 @@ xdr_CREATE3args (XDR *xdrs, CREATE3args *objp)
 bool_t
 xdr_CREATE3resok (XDR *xdrs, CREATE3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_fh3 (xdrs, &objp->obj))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
@@ -978,8 +838,6 @@ xdr_CREATE3resok (XDR *xdrs, CREATE3resok *objp)
 bool_t
 xdr_CREATE3resfail (XDR *xdrs, CREATE3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -988,8 +846,6 @@ xdr_CREATE3resfail (XDR *xdrs, CREATE3resfail *objp)
 bool_t
 xdr_CREATE3res (XDR *xdrs, CREATE3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1008,8 +864,6 @@ xdr_CREATE3res (XDR *xdrs, CREATE3res *objp)
 bool_t
 xdr_MKDIR3args (XDR *xdrs, MKDIR3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->where))
 		 return FALSE;
 	 if (!xdr_sattr3 (xdrs, &objp->attributes))
@@ -1020,8 +874,6 @@ xdr_MKDIR3args (XDR *xdrs, MKDIR3args *objp)
 bool_t
 xdr_MKDIR3resok (XDR *xdrs, MKDIR3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_fh3 (xdrs, &objp->obj))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
@@ -1034,8 +886,6 @@ xdr_MKDIR3resok (XDR *xdrs, MKDIR3resok *objp)
 bool_t
 xdr_MKDIR3resfail (XDR *xdrs, MKDIR3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1044,8 +894,6 @@ xdr_MKDIR3resfail (XDR *xdrs, MKDIR3resfail *objp)
 bool_t
 xdr_MKDIR3res (XDR *xdrs, MKDIR3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1064,8 +912,6 @@ xdr_MKDIR3res (XDR *xdrs, MKDIR3res *objp)
 bool_t
 xdr_symlinkdata3 (XDR *xdrs, symlinkdata3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_sattr3 (xdrs, &objp->symlink_attributes))
 		 return FALSE;
 	 if (!xdr_nfspath3 (xdrs, &objp->symlink_data))
@@ -1076,8 +922,6 @@ xdr_symlinkdata3 (XDR *xdrs, symlinkdata3 *objp)
 bool_t
 xdr_SYMLINK3args (XDR *xdrs, SYMLINK3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->where))
 		 return FALSE;
 	 if (!xdr_symlinkdata3 (xdrs, &objp->symlink))
@@ -1088,8 +932,6 @@ xdr_SYMLINK3args (XDR *xdrs, SYMLINK3args *objp)
 bool_t
 xdr_SYMLINK3resok (XDR *xdrs, SYMLINK3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_fh3 (xdrs, &objp->obj))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
@@ -1102,8 +944,6 @@ xdr_SYMLINK3resok (XDR *xdrs, SYMLINK3resok *objp)
 bool_t
 xdr_SYMLINK3resfail (XDR *xdrs, SYMLINK3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1112,8 +952,6 @@ xdr_SYMLINK3resfail (XDR *xdrs, SYMLINK3resfail *objp)
 bool_t
 xdr_SYMLINK3res (XDR *xdrs, SYMLINK3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1132,8 +970,6 @@ xdr_SYMLINK3res (XDR *xdrs, SYMLINK3res *objp)
 bool_t
 xdr_devicedata3 (XDR *xdrs, devicedata3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_sattr3 (xdrs, &objp->dev_attributes))
 		 return FALSE;
 	 if (!xdr_specdata3 (xdrs, &objp->spec))
@@ -1144,8 +980,6 @@ xdr_devicedata3 (XDR *xdrs, devicedata3 *objp)
 bool_t
 xdr_mknoddata3 (XDR *xdrs, mknoddata3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_ftype3 (xdrs, &objp->type))
 		 return FALSE;
 	switch (objp->type) {
@@ -1168,8 +1002,6 @@ xdr_mknoddata3 (XDR *xdrs, mknoddata3 *objp)
 bool_t
 xdr_MKNOD3args (XDR *xdrs, MKNOD3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->where))
 		 return FALSE;
 	 if (!xdr_mknoddata3 (xdrs, &objp->what))
@@ -1180,8 +1012,6 @@ xdr_MKNOD3args (XDR *xdrs, MKNOD3args *objp)
 bool_t
 xdr_MKNOD3resok (XDR *xdrs, MKNOD3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_fh3 (xdrs, &objp->obj))
 		 return FALSE;
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
@@ -1194,8 +1024,6 @@ xdr_MKNOD3resok (XDR *xdrs, MKNOD3resok *objp)
 bool_t
 xdr_MKNOD3resfail (XDR *xdrs, MKNOD3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1204,8 +1032,6 @@ xdr_MKNOD3resfail (XDR *xdrs, MKNOD3resfail *objp)
 bool_t
 xdr_MKNOD3res (XDR *xdrs, MKNOD3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1224,8 +1050,6 @@ xdr_MKNOD3res (XDR *xdrs, MKNOD3res *objp)
 bool_t
 xdr_REMOVE3args (XDR *xdrs, REMOVE3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->object))
 		 return FALSE;
 	return TRUE;
@@ -1234,8 +1058,6 @@ xdr_REMOVE3args (XDR *xdrs, REMOVE3args *objp)
 bool_t
 xdr_REMOVE3resok (XDR *xdrs, REMOVE3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1244,8 +1066,6 @@ xdr_REMOVE3resok (XDR *xdrs, REMOVE3resok *objp)
 bool_t
 xdr_REMOVE3resfail (XDR *xdrs, REMOVE3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1254,8 +1074,6 @@ xdr_REMOVE3resfail (XDR *xdrs, REMOVE3resfail *objp)
 bool_t
 xdr_REMOVE3res (XDR *xdrs, REMOVE3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1274,8 +1092,6 @@ xdr_REMOVE3res (XDR *xdrs, REMOVE3res *objp)
 bool_t
 xdr_RMDIR3args (XDR *xdrs, RMDIR3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->object))
 		 return FALSE;
 	return TRUE;
@@ -1284,8 +1100,6 @@ xdr_RMDIR3args (XDR *xdrs, RMDIR3args *objp)
 bool_t
 xdr_RMDIR3resok (XDR *xdrs, RMDIR3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1294,8 +1108,6 @@ xdr_RMDIR3resok (XDR *xdrs, RMDIR3resok *objp)
 bool_t
 xdr_RMDIR3resfail (XDR *xdrs, RMDIR3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->dir_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1304,8 +1116,6 @@ xdr_RMDIR3resfail (XDR *xdrs, RMDIR3resfail *objp)
 bool_t
 xdr_RMDIR3res (XDR *xdrs, RMDIR3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1324,8 +1134,6 @@ xdr_RMDIR3res (XDR *xdrs, RMDIR3res *objp)
 bool_t
 xdr_RENAME3args (XDR *xdrs, RENAME3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_diropargs3 (xdrs, &objp->from))
 		 return FALSE;
 	 if (!xdr_diropargs3 (xdrs, &objp->to))
@@ -1336,8 +1144,6 @@ xdr_RENAME3args (XDR *xdrs, RENAME3args *objp)
 bool_t
 xdr_RENAME3resok (XDR *xdrs, RENAME3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->fromdir_wcc))
 		 return FALSE;
 	 if (!xdr_wcc_data (xdrs, &objp->todir_wcc))
@@ -1348,8 +1154,6 @@ xdr_RENAME3resok (XDR *xdrs, RENAME3resok *objp)
 bool_t
 xdr_RENAME3resfail (XDR *xdrs, RENAME3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->fromdir_wcc))
 		 return FALSE;
 	 if (!xdr_wcc_data (xdrs, &objp->todir_wcc))
@@ -1360,8 +1164,6 @@ xdr_RENAME3resfail (XDR *xdrs, RENAME3resfail *objp)
 bool_t
 xdr_RENAME3res (XDR *xdrs, RENAME3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1380,8 +1182,6 @@ xdr_RENAME3res (XDR *xdrs, RENAME3res *objp)
 bool_t
 xdr_LINK3args (XDR *xdrs, LINK3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->file))
 		 return FALSE;
 	 if (!xdr_diropargs3 (xdrs, &objp->link))
@@ -1392,8 +1192,6 @@ xdr_LINK3args (XDR *xdrs, LINK3args *objp)
 bool_t
 xdr_LINK3resok (XDR *xdrs, LINK3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->file_attributes))
 		 return FALSE;
 	 if (!xdr_wcc_data (xdrs, &objp->linkdir_wcc))
@@ -1404,8 +1202,6 @@ xdr_LINK3resok (XDR *xdrs, LINK3resok *objp)
 bool_t
 xdr_LINK3resfail (XDR *xdrs, LINK3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->file_attributes))
 		 return FALSE;
 	 if (!xdr_wcc_data (xdrs, &objp->linkdir_wcc))
@@ -1416,8 +1212,6 @@ xdr_LINK3resfail (XDR *xdrs, LINK3resfail *objp)
 bool_t
 xdr_LINK3res (XDR *xdrs, LINK3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1436,8 +1230,6 @@ xdr_LINK3res (XDR *xdrs, LINK3res *objp)
 bool_t
 xdr_READDIR3args (XDR *xdrs, READDIR3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->dir))
 		 return FALSE;
 	 if (!xdr_cookie3 (xdrs, &objp->cookie))
@@ -1452,8 +1244,6 @@ xdr_READDIR3args (XDR *xdrs, READDIR3args *objp)
 bool_t
 xdr_entry3 (XDR *xdrs, entry3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_fileid3 (xdrs, &objp->fileid))
 		 return FALSE;
 	 if (!xdr_filename3 (xdrs, &objp->name))
@@ -1468,8 +1258,6 @@ xdr_entry3 (XDR *xdrs, entry3 *objp)
 bool_t
 xdr_dirlist3 (XDR *xdrs, dirlist3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pointer (xdrs, (char **)&objp->entries, sizeof (entry3), (xdrproc_t) xdr_entry3))
 		 return FALSE;
 	 if (!xdr_bool (xdrs, &objp->eof))
@@ -1480,8 +1268,6 @@ xdr_dirlist3 (XDR *xdrs, dirlist3 *objp)
 bool_t
 xdr_READDIR3resok (XDR *xdrs, READDIR3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->dir_attributes))
 		 return FALSE;
 	 if (!xdr_cookieverf3 (xdrs, objp->cookieverf))
@@ -1494,8 +1280,6 @@ xdr_READDIR3resok (XDR *xdrs, READDIR3resok *objp)
 bool_t
 xdr_READDIR3resfail (XDR *xdrs, READDIR3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->dir_attributes))
 		 return FALSE;
 	return TRUE;
@@ -1504,8 +1288,6 @@ xdr_READDIR3resfail (XDR *xdrs, READDIR3resfail *objp)
 bool_t
 xdr_READDIR3res (XDR *xdrs, READDIR3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1524,8 +1306,6 @@ xdr_READDIR3res (XDR *xdrs, READDIR3res *objp)
 bool_t
 xdr_READDIRPLUS3args (XDR *xdrs, READDIRPLUS3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->dir))
 		 return FALSE;
 	 if (!xdr_cookie3 (xdrs, &objp->cookie))
@@ -1542,8 +1322,6 @@ xdr_READDIRPLUS3args (XDR *xdrs, READDIRPLUS3args *objp)
 bool_t
 xdr_entryplus3 (XDR *xdrs, entryplus3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_fileid3 (xdrs, &objp->fileid))
 		 return FALSE;
 	 if (!xdr_filename3 (xdrs, &objp->name))
@@ -1562,8 +1340,6 @@ xdr_entryplus3 (XDR *xdrs, entryplus3 *objp)
 bool_t
 xdr_dirlistplus3 (XDR *xdrs, dirlistplus3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pointer (xdrs, (char **)&objp->entries, sizeof (entryplus3), (xdrproc_t) xdr_entryplus3))
 		 return FALSE;
 	 if (!xdr_bool (xdrs, &objp->eof))
@@ -1574,8 +1350,6 @@ xdr_dirlistplus3 (XDR *xdrs, dirlistplus3 *objp)
 bool_t
 xdr_READDIRPLUS3resok (XDR *xdrs, READDIRPLUS3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->dir_attributes))
 		 return FALSE;
 	 if (!xdr_cookieverf3 (xdrs, objp->cookieverf))
@@ -1588,8 +1362,6 @@ xdr_READDIRPLUS3resok (XDR *xdrs, READDIRPLUS3resok *objp)
 bool_t
 xdr_READDIRPLUS3resfail (XDR *xdrs, READDIRPLUS3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->dir_attributes))
 		 return FALSE;
 	return TRUE;
@@ -1598,8 +1370,6 @@ xdr_READDIRPLUS3resfail (XDR *xdrs, READDIRPLUS3resfail *objp)
 bool_t
 xdr_READDIRPLUS3res (XDR *xdrs, READDIRPLUS3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1618,8 +1388,6 @@ xdr_READDIRPLUS3res (XDR *xdrs, READDIRPLUS3res *objp)
 bool_t
 xdr_FSSTAT3args (XDR *xdrs, FSSTAT3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->fsroot))
 		 return FALSE;
 	return TRUE;
@@ -1628,8 +1396,6 @@ xdr_FSSTAT3args (XDR *xdrs, FSSTAT3args *objp)
 bool_t
 xdr_FSSTAT3resok (XDR *xdrs, FSSTAT3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	 if (!xdr_size3 (xdrs, &objp->tbytes))
@@ -1652,8 +1418,6 @@ xdr_FSSTAT3resok (XDR *xdrs, FSSTAT3resok *objp)
 bool_t
 xdr_FSSTAT3resfail (XDR *xdrs, FSSTAT3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	return TRUE;
@@ -1662,8 +1426,6 @@ xdr_FSSTAT3resfail (XDR *xdrs, FSSTAT3resfail *objp)
 bool_t
 xdr_FSSTAT3res (XDR *xdrs, FSSTAT3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1682,8 +1444,6 @@ xdr_FSSTAT3res (XDR *xdrs, FSSTAT3res *objp)
 bool_t
 xdr_FSINFO3args (XDR *xdrs, FSINFO3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->fsroot))
 		 return FALSE;
 	return TRUE;
@@ -1692,8 +1452,6 @@ xdr_FSINFO3args (XDR *xdrs, FSINFO3args *objp)
 bool_t
 xdr_FSINFO3resok (XDR *xdrs, FSINFO3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	 if (!xdr_uint32 (xdrs, &objp->rtmax))
@@ -1722,8 +1480,6 @@ xdr_FSINFO3resok (XDR *xdrs, FSINFO3resok *objp)
 bool_t
 xdr_FSINFO3resfail (XDR *xdrs, FSINFO3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	return TRUE;
@@ -1732,8 +1488,6 @@ xdr_FSINFO3resfail (XDR *xdrs, FSINFO3resfail *objp)
 bool_t
 xdr_FSINFO3res (XDR *xdrs, FSINFO3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1752,8 +1506,6 @@ xdr_FSINFO3res (XDR *xdrs, FSINFO3res *objp)
 bool_t
 xdr_PATHCONF3args (XDR *xdrs, PATHCONF3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->object))
 		 return FALSE;
 	return TRUE;
@@ -1835,8 +1587,6 @@ xdr_PATHCONF3resok (XDR *xdrs, PATHCONF3resok *objp)
 bool_t
 xdr_PATHCONF3resfail (XDR *xdrs, PATHCONF3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_post_op_attr (xdrs, &objp->obj_attributes))
 		 return FALSE;
 	return TRUE;
@@ -1845,8 +1595,6 @@ xdr_PATHCONF3resfail (XDR *xdrs, PATHCONF3resfail *objp)
 bool_t
 xdr_PATHCONF3res (XDR *xdrs, PATHCONF3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1865,8 +1613,6 @@ xdr_PATHCONF3res (XDR *xdrs, PATHCONF3res *objp)
 bool_t
 xdr_COMMIT3args (XDR *xdrs, COMMIT3args *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfs_fh3 (xdrs, &objp->file))
 		 return FALSE;
 	 if (!xdr_offset3 (xdrs, &objp->offset))
@@ -1879,8 +1625,6 @@ xdr_COMMIT3args (XDR *xdrs, COMMIT3args *objp)
 bool_t
 xdr_COMMIT3resok (XDR *xdrs, COMMIT3resok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->file_wcc))
 		 return FALSE;
 	 if (!xdr_writeverf3 (xdrs, objp->verf))
@@ -1891,8 +1635,6 @@ xdr_COMMIT3resok (XDR *xdrs, COMMIT3resok *objp)
 bool_t
 xdr_COMMIT3resfail (XDR *xdrs, COMMIT3resfail *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_wcc_data (xdrs, &objp->file_wcc))
 		 return FALSE;
 	return TRUE;
@@ -1901,8 +1643,6 @@ xdr_COMMIT3resfail (XDR *xdrs, COMMIT3resfail *objp)
 bool_t
 xdr_COMMIT3res (XDR *xdrs, COMMIT3res *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_nfsstat3 (xdrs, &objp->status))
 		 return FALSE;
 	switch (objp->status) {
@@ -1921,8 +1661,6 @@ xdr_COMMIT3res (XDR *xdrs, COMMIT3res *objp)
 bool_t
 xdr_fhandle3 (XDR *xdrs, fhandle3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_bytes (xdrs, (char **)&objp->fhandle3_val, (u_int *) &objp->fhandle3_len, FHSIZE3))
 		 return FALSE;
 	return TRUE;
@@ -1931,8 +1669,6 @@ xdr_fhandle3 (XDR *xdrs, fhandle3 *objp)
 bool_t
 xdr_dirpath3 (XDR *xdrs, dirpath3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_string (xdrs, objp, MNTPATHLEN3))
 		 return FALSE;
 	return TRUE;
@@ -1941,8 +1677,6 @@ xdr_dirpath3 (XDR *xdrs, dirpath3 *objp)
 bool_t
 xdr_name3 (XDR *xdrs, name3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_string (xdrs, objp, MNTNAMLEN3))
 		 return FALSE;
 	return TRUE;
@@ -1951,8 +1685,6 @@ xdr_name3 (XDR *xdrs, name3 *objp)
 bool_t
 xdr_mountstat3 (XDR *xdrs, mountstat3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_enum (xdrs, (enum_t *) objp))
 		 return FALSE;
 	return TRUE;
@@ -1961,8 +1693,6 @@ xdr_mountstat3 (XDR *xdrs, mountstat3 *objp)
 bool_t
 xdr_mountres3_ok (XDR *xdrs, mountres3_ok *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_fhandle3 (xdrs, &objp->fhandle))
 		 return FALSE;
 	 if (!xdr_array (xdrs, (char **)&objp->auth_flavors.auth_flavors_val, (u_int *) &objp->auth_flavors.auth_flavors_len, ~0,
@@ -1974,8 +1704,6 @@ xdr_mountres3_ok (XDR *xdrs, mountres3_ok *objp)
 bool_t
 xdr_mountres3 (XDR *xdrs, mountres3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_mountstat3 (xdrs, &objp->fhs_status))
 		 return FALSE;
 	switch (objp->fhs_status) {
@@ -1992,8 +1720,6 @@ xdr_mountres3 (XDR *xdrs, mountres3 *objp)
 bool_t
 xdr_mountlist3 (XDR *xdrs, mountlist3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct mountbody3), (xdrproc_t) xdr_mountbody3))
 		 return FALSE;
 	return TRUE;
@@ -2002,8 +1728,6 @@ xdr_mountlist3 (XDR *xdrs, mountlist3 *objp)
 bool_t
 xdr_mountbody3 (XDR *xdrs, mountbody3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_name3 (xdrs, &objp->ml_hostname))
 		 return FALSE;
 	 if (!xdr_dirpath3 (xdrs, &objp->ml_directory))
@@ -2016,8 +1740,6 @@ xdr_mountbody3 (XDR *xdrs, mountbody3 *objp)
 bool_t
 xdr_groups3 (XDR *xdrs, groups3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct groupnode3), (xdrproc_t) xdr_groupnode3))
 		 return FALSE;
 	return TRUE;
@@ -2026,8 +1748,6 @@ xdr_groups3 (XDR *xdrs, groups3 *objp)
 bool_t
 xdr_groupnode3 (XDR *xdrs, groupnode3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_name3 (xdrs, &objp->gr_name))
 		 return FALSE;
 	 if (!xdr_groups3 (xdrs, &objp->gr_next))
@@ -2038,8 +1758,6 @@ xdr_groupnode3 (XDR *xdrs, groupnode3 *objp)
 bool_t
 xdr_exports3 (XDR *xdrs, exports3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_pointer (xdrs, (char **)objp, sizeof (struct exportnode3), (xdrproc_t) xdr_exportnode3))
 		 return FALSE;
 	return TRUE;
@@ -2048,8 +1766,6 @@ xdr_exports3 (XDR *xdrs, exports3 *objp)
 bool_t
 xdr_exportnode3 (XDR *xdrs, exportnode3 *objp)
 {
-	register int32_t *buf;
-
 	 if (!xdr_dirpath3 (xdrs, &objp->ex_dir))
 		 return FALSE;
 	 if (!xdr_groups3 (xdrs, &objp->ex_groups))
