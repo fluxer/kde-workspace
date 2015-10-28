@@ -116,7 +116,7 @@ void AppletDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option
                Qt::AlignTop | Qt::AlignLeft, description);
 
     // Main icon
-    const QIcon& icon = qVariantValue<QIcon>(index.model()->data(index, Qt::DecorationRole));
+    const QIcon& icon = qvariant_cast<QIcon>(index.model()->data(index, Qt::DecorationRole));
     icon.paint(&p,
         leftToRight ? left + UNIVERSAL_PADDING : left + width - UNIVERSAL_PADDING - MAIN_ICON_SIZE,
         top + UNIVERSAL_PADDING, MAIN_ICON_SIZE, MAIN_ICON_SIZE, Qt::AlignCenter, iconMode);

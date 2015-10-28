@@ -76,7 +76,7 @@ void CfgFileManager::load(KConfig *) {
 void CfgFileManager::save(KConfig *)
 {
     QString storageId;
-    Q_FOREACH(QRadioButton* button, qFindChildren<QRadioButton*>(this)) {
+    Q_FOREACH(QRadioButton* button, this->findChildren<QRadioButton*>()) {
         if (button->isChecked()) {
             storageId = button->property("storageId").toString();
         }
