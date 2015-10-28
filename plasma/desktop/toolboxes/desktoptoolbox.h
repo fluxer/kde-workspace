@@ -27,6 +27,7 @@
 
 #include <KIcon>
 
+#include <Plasma/Animator>
 #include <Plasma/IconWidget>
 
 #include "internaltoolbox.h"

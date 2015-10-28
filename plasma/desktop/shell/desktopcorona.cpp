@@ -105,6 +105,8 @@ void DesktopCorona::init()
     connect(this, SIGNAL(availableScreenRegionChanged()), m_delayedUpdateTimer, SLOT(start()));
     connect(m_delayedUpdateTimer, SIGNAL(timeout()), this, SLOT(update()));
 
+    mapAnimation(Plasma::Animator::AppearAnimation, Plasma::Animator::ZoomAnimation);
+    mapAnimation(Plasma::Animator::DisappearAnimation, Plasma::Animator::ZoomAnimation);
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "DesktopCorona init end" << "(line:" << __LINE__ << ")";
 }
 

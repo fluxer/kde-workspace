@@ -130,6 +130,7 @@ private:
     KBookmarkManager *m_bookmarkManager;
     QStandardItemModel *m_bookmarkModel;
     Plasma::TreeView *m_bookmarksView;
+    Plasma::Animation *m_bookmarksViewAnimation;
     
     QTimer *m_autoRefreshTimer;
     bool m_autoRefresh;

@@ -24,6 +24,8 @@
 #include <QParallelAnimationGroup>
 #include <QtCore/qsharedpointer.h>
 
+#include <plasma/animations/animation.h>
+
 namespace Plasma
 {
     class Applet;
@@ -82,6 +84,8 @@ private:
     Plasma::Svg *m_icons;
     Plasma::Svg *m_separator;
     Plasma::FrameSvg *m_background;
+
+    Plasma::Animation *m_pulse;
 
     qreal m_savedAppletTopMargin;
     bool m_underMouse;

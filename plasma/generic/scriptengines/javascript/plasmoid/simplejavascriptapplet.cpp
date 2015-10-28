@@ -45,6 +45,7 @@
 #include <KLocale>
 #include <KRun>
 
+#include <Plasma/Animation>
 #include <Plasma/Applet>
 #include <Plasma/Extender>
 #include <Plasma/ExtenderItem>
@@ -94,6 +95,7 @@ QScriptValue constructTimerClass(QScriptEngine *engine);
 void registerSimpleAppletMetaTypes(QScriptEngine *engine);
 
 KSharedPtr<UiLoader> SimpleJavaScriptApplet::s_widgetLoader;
+QHash<QString, Plasma::Animator::Animation> SimpleJavaScriptApplet::s_animationDefs;
 
 SimpleJavaScriptApplet::SimpleJavaScriptApplet(QObject *parent, const QVariantList &args)
     : AbstractJsAppletScript(parent),
@@ -282,6 +284,20 @@ void SimpleJavaScriptApplet::constraintsEvent(Plasma::Constraints constraints)
 bool SimpleJavaScriptApplet::include(const QString &path)
 {
     return m_env->include(path);
+}
+
+void SimpleJavaScriptApplet::populateAnimationsHash()
+{
+    if (s_animationDefs.isEmpty()) {
+        s_animationDefs.insert("fade", Plasma::Animator::FadeAnimation);
+        s_animationDefs.insert("geometry", Plasma::Animator::GeometryAnimation);
+        s_animationDefs.insert("grow", Plasma::Animator::GrowAnimation);
+        s_animationDefs.insert("pulse", Plasma::Animator::PulseAnimation);
+        s_animationDefs.insert("rotate", Plasma::Animator::RotationAnimation);
+        s_animationDefs.insert("rotateStacked", Plasma::Animator::RotationStackedAnimation);
+        s_animationDefs.insert("slide", Plasma::Animator::SlideAnimation);
+        s_animationDefs.insert("zoom", Plasma::Animator::ZoomAnimation);
+    }
 }
 
 bool SimpleJavaScriptApplet::init()
@@ -480,6 +496,11 @@ void SimpleJavaScriptApplet::setupObjects()
 {
     QScriptValue global = m_engine->globalObject();
 
+    // Bindings for animations
+    global.setProperty("animation", m_engine->newFunction(SimpleJavaScriptApplet::animation));
+    global.setProperty("AnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::animationGroup));
+    global.setProperty("ParallelAnimationGroup", m_engine->newFunction(SimpleJavaScriptApplet::parallelAnimationGroup));
+
     QScriptValue v = m_engine->newVariant(QVariant::fromValue(*applet()->package()));
     global.setProperty("__plasma_package", v,
                        QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
@@ -612,6 +633,76 @@ QScriptValue SimpleJavaScriptApplet::loadService(QScriptContext *context, QScrip
 
     //kDebug( )<< "lets try to get" << source << "from" << dataEngine;
     return engine->newQObject(service, QScriptEngine::AutoOwnership);
+}
+
+QScriptValue SimpleJavaScriptApplet::animation(QScriptContext *context, QScriptEngine *engine)
+{
+    if (context->argumentCount() != 1) {
+        return context->throwError(i18n("animation() takes one argument"));
+    }
+
+    populateAnimationsHash();
+    QString name = context->argument(0).toString();
+    QString animName = name.toLower();
+    const bool isPause = animName == "pause";
+    const bool isProperty = animName == "property";
+
+    bool parentIsApplet = false;
+    QGraphicsWidget *parent = extractParent(context, engine, 0, &parentIsApplet);
+    QAbstractAnimation *anim = 0;
+    Plasma::Animation *plasmaAnim = 0;
+    if (isPause) {
+        anim = new QPauseAnimation(parent);
+    } else if (isProperty) {
+        anim = new QPropertyAnimation(parent);
+    } else if (s_animationDefs.contains(animName)) {
+        plasmaAnim = Plasma::Animator::create(s_animationDefs.value(animName), parent);
+    } else {
+        SimpleJavaScriptApplet *jsApplet = qobject_cast<SimpleJavaScriptApplet *>(engine->parent());
+        if (jsApplet) {
+            //kDebug() << "trying to load it from the package";
+            plasmaAnim = jsApplet->loadAnimationFromPackage(name, parent);
+        }
+
+        if (!plasmaAnim) {
+            plasmaAnim = Plasma::Animator::create(animName, parent);
+        }
+    }
+
+    if (plasmaAnim) {
+        if (!parentIsApplet) {
+            plasmaAnim->setTargetWidget(parent);
+        }
+        anim = plasmaAnim;
+    }
+
+    if (anim) {
+        QScriptValue value = engine->newQObject(anim);
+        ScriptEnv::registerEnums(value, *anim->metaObject());
+        return value;
+    }
+
+    context->throwError(i18n("%1 is not a known animation type", animName));
+
+    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
+    if (env) {
+        env->checkForErrors(false);
+    }
+    return engine->undefinedValue();
+}
+
+QScriptValue SimpleJavaScriptApplet::animationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QGraphicsWidget *parent = extractParent(context, engine);
+    SequentialAnimationGroup *group = new SequentialAnimationGroup(parent);
+    return engine->newQObject(group);
+}
+
+QScriptValue SimpleJavaScriptApplet::parallelAnimationGroup(QScriptContext *context, QScriptEngine *engine)
+{
+    QGraphicsWidget *parent = extractParent(context, engine);
+    ParallelAnimationGroup *group = new ParallelAnimationGroup(parent);
+    return engine->newQObject(group);
 }
 
 QScriptValue SimpleJavaScriptApplet::loadui(QScriptContext *context, QScriptEngine *engine)
