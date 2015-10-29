@@ -15,10 +15,8 @@ if(KDEBASE_DISABLE_MULTIMEDIA)
 else(KDEBASE_DISABLE_MULTIMEDIA)
    # TODO: even phonon 4.8.3 identifies itself as "4.4.0" in its namespace
    # header, the version detection should query the .pc files first!
-   set(PHONON_MIN_VERSION "4.4.0")
-   macro_ensure_version("${PHONON_MIN_VERSION}" "${PHONON_VERSION}" _phonon_version_ok)
-   if(NOT _phonon_version_ok)
-    message(FATAL_ERROR "The installed Phonon is too old. Found version ${PHONON_VERSION}. Required is ${PHONON_MIN_VERSION}")
+   if("${PHONON_VERSION}" VERSION_LESS "4.4.0")
+      message(FATAL_ERROR "The installed Phonon is too old. Found version ${PHONON_VERSION}. Required is ${PHONON_MIN_VERSION}")
    endif()
 
    find_package(Alsa)
