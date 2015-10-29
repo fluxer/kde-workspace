@@ -2,9 +2,6 @@ macro_optional_find_package(Eigen3)
 macro_log_feature(EIGEN3_FOUND "Eigen3" "A C++ template library for linear algebra" "kdesupport" FALSE "" "Needed to build the krotation and kpendulum screensavers" )
 add_definitions(-DEIGEN2_SUPPORT)
 
-macro_optional_find_package(Kexiv2)
-macro_log_feature(KEXIV2_FOUND "Kexiv2" "A C++ library for exiv manipulation" "kdegraphics" FALSE "" "Needed to rotate photos with exif data" )
-
 option(KSCREENSAVER_SOUND_SUPPORT "Build with sound support" OFF)
 
 include_directories(${KDE4WORKSPACE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
@@ -42,15 +39,13 @@ set(kslideshow.kss_SRCS slideshow.cpp slideshowcfg.ui )
 
 add_executable(kslideshow.kss ${kslideshow.kss_SRCS})
 
-macro_bool_to_01(KEXIV2_FOUND HAVE_KEXIV2)
-
-if(HAVE_KEXIV2)
-    include_directories( ${KEXIV2_INCLUDES} )
-    set_source_files_properties(slideshow.cpp PROPERTIES COMPILE_FLAGS -DHAVE_KEXIV2)
-    target_link_libraries(kslideshow.kss  ${KDE4_KIO_LIBS}  ${LIBMATH}  kscreensaver ${KEXIV2_LIBRARIES})
-else(HAVE_KEXIV2)
-    target_link_libraries(kslideshow.kss  ${KDE4_KIO_LIBS}  ${LIBMATH}  kscreensaver)
-endif(HAVE_KEXIV2)
+set_source_files_properties(slideshow.cpp PROPERTIES COMPILE_FLAGS -DHAVE_KEXIV2)
+target_link_libraries(kslideshow.kss
+    ${KDE4_KIO_LIBS}
+    ${LIBMATH}
+    kscreensaver
+    ${KDE4_KEXIV2_LIBS}
+)
 
 install(TARGETS kslideshow.kss  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
