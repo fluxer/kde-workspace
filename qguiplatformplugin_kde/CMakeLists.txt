@@ -2,11 +2,11 @@ project(qguiplatformplugin_kde)
 
 set(kde_SOURCES  qguiplatformplugin_kde.cpp)
 
-add_library (kde SHARED ${kde_SOURCES})
+kde4_add_plugin(libkde ${kde_SOURCES} WITH_PREFIX)
 
-target_link_libraries(kde ${KDE4_KIO_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(libkde ${KDE4_KIO_LIBS} ${QT_QTGUI_LIBRARY})
 
-install (TARGETS kde LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/gui_platform)
+install(TARGETS libkde LIBRARY DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/gui_platform)
 
 
 
