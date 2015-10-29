@@ -5,7 +5,7 @@ set(kwin_effect_OWN_LIBS
 set(kwin_effect_KDE_LIBS
     ${KDE4_KDEUI_LIBS}
     ${KDE4_PLASMA_LIBS}
-    ${KDECLARATIVE_LIBRARIES}
+    ${KDE4_KDECLARATIVE_LIBS}
 )
 
 set(kwin_effect_QT_LIBS

@@ -32,13 +32,6 @@ set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notificati
                        TYPE REQUIRED
                       )
 
-find_package(KDeclarative QUIET CONFIG)
-set_package_properties(KDeclarative PROPERTIES DESCRIPTION "KDE Declarative (QML) support from kdelibs"
-                       URL "http://www.kde.org"
-                       TYPE REQUIRED
-                       PURPOSE "Required for building ksmserver and corebindingsplugin (org.kde.plasma.core)"
-                      )
-
 macro_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
                        URL "http://www.opengl.org"

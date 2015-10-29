@@ -1,16 +1,16 @@
 project(homerun)
 
-SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
-
 # Packaging
 set(HOMERUN_VERSION "1.2.5")
 
 # Dependencies
 find_package(KDE4 4.10.0 REQUIRED)
 include(KDE4Defaults)
-find_package(KDeclarative REQUIRED)
 find_package(LibKonq REQUIRED)
-macro_log_feature(LIBKONQ_FOUND "libkonq" "Standard file management features" "http://www.kde.org" TRUE)
+set_package_properties(LibKonq PROPERTIES
+    DESCRIPTION "Standard file management features"
+    URL "http://www.kde.org"
+)
 
 # Compile options
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})

@@ -16,9 +16,9 @@ add_executable(homerunviewer ${homerunviewer_SRCS})
 target_link_libraries(homerunviewer
     ${KDE4_KDEUI_LIBS}
     ${KDE4_PLASMA_LIBS}
-    ${KDECLARATIVE_LIBRARIES}
+    ${KDE4_KDECLARATIVE_LIBS}
     ${QT_QTDECLARATIVE_LIBRARY}
-    )
+)
 
 
 install(TARGETS homerunviewer ${INSTALL_TARGETS_DEFAULT_ARGS})

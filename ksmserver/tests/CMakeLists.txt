@@ -9,6 +9,13 @@ set(testsh_SRCS
 
 kde4_add_manual_test(testsh ${testsh_SRCS})
 
-target_link_libraries(testsh ${KDE4_PLASMA_LIBS} kworkspace ${KDE4_KDEUI_LIBS}
-   ${KDE4_SOLID_LIBRARY} ${QIMAGEBLITZ_LIBRARIES} ${X11_X11_LIB} ${KDECLARATIVE_LIBRARIES}
-   ${QT_QTDECLARATIVE_LIBRARY} )
+target_link_libraries(testsh
+    kworkspace
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_SOLID_LIBRARY}
+    ${KDE4_KDECLARATIVE_LIBS}
+    ${KDE4_PLASMA_LIBS}
+    ${QIMAGEBLITZ_LIBRARIES}
+    ${X11_X11_LIB}
+    ${QT_QTDECLARATIVE_LIBRARY}
+)

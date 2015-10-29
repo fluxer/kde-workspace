@@ -18,7 +18,14 @@ set(kcm_kwintabbox_PART_SRCS
 
 kde4_add_plugin(kcm_kwintabbox ${kcm_kwintabbox_PART_SRCS})
 
-target_link_libraries(kcm_kwintabbox ${KDE4_KDEUI_LIBS} ${KDE4_KCMUTILS_LIBS} ${KDE4_PLASMA_LIBS} ${X11_LIBRARIES} ${QT_QTDECLARATIVE_LIBRARY} ${KDECLARATIVE_LIBRARIES})
+target_link_libraries(kcm_kwintabbox
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
+    ${KDE4_PLASMA_LIBS}
+    ${X11_LIBRARIES}
+    ${QT_QTDECLARATIVE_LIBRARY}
+    ${KDE4_KDECLARATIVE_LIBS}
+)
 
 install(TARGETS kcm_kwintabbox  DESTINATION ${PLUGIN_INSTALL_DIR} )
 
