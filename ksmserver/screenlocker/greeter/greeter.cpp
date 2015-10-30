@@ -245,7 +245,7 @@ bool Greeter::loadGreetPlugin()
             continue;
         }
         plugin.library = lib;
-        plugin.info = (KGreeterPluginInfo *)lib->resolveSymbol( "kgreeterplugin_info" );
+        plugin.info = (KGreeterPluginInfo *)lib->resolve( "kgreeterplugin_info" );
         if (!plugin.info ) {
             kWarning() << "GreeterPlugin " << *it << " (" << lib->fileName() << ") is no valid greet widget plugin" ;
             lib->unload();
