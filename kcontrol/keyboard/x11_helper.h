@@ -27,18 +27,18 @@
 
 
 class XEventNotifier : public QWidget {
-	Q_OBJECT
+    Q_OBJECT
 
 Q_SIGNALS:
-	void layoutChanged();
-	void layoutMapChanged();
+    void layoutChanged();
+    void layoutMapChanged();
 
 public:
-	XEventNotifier(QWidget* parent=NULL);
-	virtual ~XEventNotifier() {}
+    XEventNotifier(QWidget* parent=NULL);
+    virtual ~XEventNotifier() {}
 
-	virtual void start();
-	virtual void stop();
+    virtual void start();
+    virtual void stop();
 
 protected:
     bool x11Event(XEvent * e);
@@ -46,140 +46,140 @@ protected:
     virtual bool processXkbEvents(XEvent* e);
 
 private:
-	int registerForXkbEvents(Display* display);
-	bool isXkbEvent(XEvent* event);
-	bool isGroupSwitchEvent(XEvent* event);
-	bool isLayoutSwitchEvent(XEvent* event);
+    int registerForXkbEvents(Display* display);
+    bool isXkbEvent(XEvent* event);
+    bool isGroupSwitchEvent(XEvent* event);
+    bool isLayoutSwitchEvent(XEvent* event);
 
-	int xkbOpcode;
+    int xkbOpcode;
 };
 
 class XkbConfig {
 public:
-	QString keyboardModel;
-	QStringList layouts;
-	QStringList variants;
-	QStringList options;
+    QString keyboardModel;
+    QStringList layouts;
+    QStringList variants;
+    QStringList options;
 
-	bool isValid() { return ! layouts.empty(); }
+    bool isValid() { return ! layouts.empty(); }
 };
 
 
 class LayoutUnit {
 public:
-	static const int MAX_LABEL_LENGTH;
+    static const int MAX_LABEL_LENGTH;
 
-	//TODO: move these to private?
-	QString layout;
-	QString variant;
+    //TODO: move these to private?
+    QString layout;
+    QString variant;
 
-	LayoutUnit() {}
-	explicit LayoutUnit(const QString& fullLayoutName);
-	LayoutUnit(const QString& layout_, const QString& variant_) {
-		layout = layout_;
-		variant = variant_;
-	}
-	/*explicit*/ LayoutUnit(const LayoutUnit& layoutUnit) {
-		layout = layoutUnit.layout;
-		variant = layoutUnit.variant;
-		displayName = layoutUnit.displayName;
-		shortcut = layoutUnit.shortcut;
-	}
+    LayoutUnit() {}
+    explicit LayoutUnit(const QString& fullLayoutName);
+    LayoutUnit(const QString& layout_, const QString& variant_) {
+        layout = layout_;
+        variant = variant_;
+    }
+    /*explicit*/ LayoutUnit(const LayoutUnit& layoutUnit) {
+        layout = layoutUnit.layout;
+        variant = layoutUnit.variant;
+        displayName = layoutUnit.displayName;
+        shortcut = layoutUnit.shortcut;
+    }
 
-	QString getRawDisplayName() const { return displayName; }
-	QString getDisplayName() const { return !displayName.isEmpty() ? displayName :  layout; }
-	void setDisplayName(const QString& name) { displayName = name; }
+    QString getRawDisplayName() const { return displayName; }
+    QString getDisplayName() const { return !displayName.isEmpty() ? displayName :  layout; }
+    void setDisplayName(const QString& name) { displayName = name; }
 
-	void setShortcut(const QKeySequence& shortcut) { this->shortcut = shortcut; }
-	QKeySequence getShortcut() const { return shortcut; }
+    void setShortcut(const QKeySequence& shortcut) { this->shortcut = shortcut; }
+    QKeySequence getShortcut() const { return shortcut; }
 
-	bool isEmpty() const { return layout.isEmpty(); }
-	bool isValid() const { return ! isEmpty(); }
-	bool operator==(const LayoutUnit& layoutItem) const {
-		return layout==layoutItem.layout && variant==layoutItem.variant;
-	}
-	bool operator!=(const LayoutUnit& layoutItem) const {
-		return ! (*this == layoutItem);
-	}
-	QString toString() const;
+    bool isEmpty() const { return layout.isEmpty(); }
+    bool isValid() const { return ! isEmpty(); }
+    bool operator==(const LayoutUnit& layoutItem) const {
+        return layout==layoutItem.layout && variant==layoutItem.variant;
+    }
+    bool operator!=(const LayoutUnit& layoutItem) const {
+        return ! (*this == layoutItem);
+    }
+    QString toString() const;
 
 private:
-	QString displayName;
-	QKeySequence shortcut;
+    QString displayName;
+    QKeySequence shortcut;
 };
 
 class LayoutSet {
 public:
-	QList<LayoutUnit> layouts;
-	LayoutUnit currentLayout;
+    QList<LayoutUnit> layouts;
+    LayoutUnit currentLayout;
 
-	LayoutSet() {}
+    LayoutSet() {}
 
-	LayoutSet(const LayoutSet& currentLayouts) {
-		this->layouts = currentLayouts.layouts;
-		this->currentLayout = currentLayouts.currentLayout;
-	}
+    LayoutSet(const LayoutSet& currentLayouts) {
+        this->layouts = currentLayouts.layouts;
+        this->currentLayout = currentLayouts.currentLayout;
+    }
 
-	bool isValid() const {
-		return currentLayout.isValid() && layouts.contains(currentLayout);
-	}
+    bool isValid() const {
+        return currentLayout.isValid() && layouts.contains(currentLayout);
+    }
 
-	bool operator == (const LayoutSet& currentLayouts) const {
-		return this->layouts == currentLayouts.layouts
-				&& this->currentLayout == currentLayouts.currentLayout;
-	}
+    bool operator == (const LayoutSet& currentLayouts) const {
+        return this->layouts == currentLayouts.layouts
+            && this->currentLayout == currentLayouts.currentLayout;
+    }
 
-	LayoutSet& operator = (const LayoutSet& currentLayouts) {
-		this->layouts = currentLayouts.layouts;
-		this->currentLayout = currentLayouts.currentLayout;
-		return *this;
-	}
+    LayoutSet& operator = (const LayoutSet& currentLayouts) {
+        this->layouts = currentLayouts.layouts;
+        this->currentLayout = currentLayouts.currentLayout;
+        return *this;
+    }
 
-	QString toString() const {
-		QString str(currentLayout.toString());
-		str += ": ";
-		foreach(const LayoutUnit& layoutUnit, layouts) {
-			str += layoutUnit.toString() + " ";
-		}
-		return str;
-	}
+    QString toString() const {
+        QString str(currentLayout.toString());
+        str += ": ";
+        foreach(const LayoutUnit& layoutUnit, layouts) {
+            str += layoutUnit.toString() + " ";
+        }
+        return str;
+    }
 
-	static QString toString(const QList<LayoutUnit>& layoutUnits) {
-		QString str;
-		foreach(const LayoutUnit& layoutUnit, layoutUnits) {
-			str += layoutUnit.toString() + ",";
-		}
-		return str;
-	}
+    static QString toString(const QList<LayoutUnit>& layoutUnits) {
+        QString str;
+        foreach(const LayoutUnit& layoutUnit, layoutUnits) {
+            str += layoutUnit.toString() + ",";
+        }
+        return str;
+    }
 };
 
 class X11Helper
 {
 public:
-	static int MAX_GROUP_COUNT;
-	static int ARTIFICIAL_GROUP_LIMIT_COUNT;
-	
-	static const char* LEFT_VARIANT_STR;
-	static const char* RIGHT_VARIANT_STR;
+    static int MAX_GROUP_COUNT;
+    static int ARTIFICIAL_GROUP_LIMIT_COUNT;
 
-	static bool xkbSupported(int* xkbOpcode);
+    static const char* LEFT_VARIANT_STR;
+    static const char* RIGHT_VARIANT_STR;
 
-	static void switchToNextLayout();
-	static void scrollLayouts(int delta);
-	static bool isDefaultLayout();
-	static bool setDefaultLayout();
-	static bool setLayout(const LayoutUnit& layout);
-	static LayoutUnit getCurrentLayout();
-	static LayoutSet getCurrentLayouts();
-	static QList<LayoutUnit> getLayoutsList();
-	static QStringList getLayoutsListAsString(const QList<LayoutUnit>& layoutsList);
+    static bool xkbSupported(int* xkbOpcode);
 
-	enum FetchType { ALL, LAYOUTS_ONLY, MODEL_ONLY };
-	static bool getGroupNames(Display* dpy, XkbConfig* xkbConfig, FetchType fetchType);
+    static void switchToNextLayout();
+    static void scrollLayouts(int delta);
+    static bool isDefaultLayout();
+    static bool setDefaultLayout();
+    static bool setLayout(const LayoutUnit& layout);
+    static LayoutUnit getCurrentLayout();
+    static LayoutSet getCurrentLayouts();
+    static QList<LayoutUnit> getLayoutsList();
+    static QStringList getLayoutsListAsString(const QList<LayoutUnit>& layoutsList);
+
+    enum FetchType { ALL, LAYOUTS_ONLY, MODEL_ONLY };
+    static bool getGroupNames(Display* dpy, XkbConfig* xkbConfig, FetchType fetchType);
 
 private:
-	static unsigned int getGroup();
-	static bool setGroup(unsigned int group);
+    static unsigned int getGroup();
+    static bool setGroup(unsigned int group);
 };
 
 #endif /* X11_HELPER_H_ */
