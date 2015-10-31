@@ -1,4 +1,4 @@
-include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kcontrol/kfontinst/lib/
+include_directories( ${CMAKE_SOURCE_DIR}/kcontrol/kfontinst/lib/
                      ${STRIGI_INCLUDE_DIR}
                    )
 

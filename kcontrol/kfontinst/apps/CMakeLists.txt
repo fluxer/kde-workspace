@@ -1,6 +1,6 @@
 include_directories(
-	${KDEBASE_WORKSPACE_SOURCE_DIR}/kcontrol/kfontinst/kcmfontinst/
-	${KDEBASE_WORKSPACE_SOURCE_DIR}/kcontrol/kfontinst/viewpart/
+	${CMAKE_SOURCE_DIR}/kcontrol/kfontinst/kcmfontinst/
+	${CMAKE_SOURCE_DIR}/kcontrol/kfontinst/viewpart/
 	${CMAKE_CURRENT_BINARY_DIR}
 	)
 

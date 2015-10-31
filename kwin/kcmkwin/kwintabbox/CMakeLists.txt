@@ -1,4 +1,4 @@
-include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox )
+include_directories( ${CMAKE_SOURCE_DIR}/kwin/tabbox )
 
 ########### next target ###############
 
@@ -8,11 +8,11 @@ set(kcm_kwintabbox_PART_SRCS
     main.cpp
     layoutpreview.cpp
     thumbnailitem.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/clientmodel.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/declarative.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/desktopmodel.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/tabboxconfig.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/tabbox/tabboxhandler.cpp
+    ${CMAKE_SOURCE_DIR}/kwin/tabbox/clientmodel.cpp
+    ${CMAKE_SOURCE_DIR}/kwin/tabbox/declarative.cpp
+    ${CMAKE_SOURCE_DIR}/kwin/tabbox/desktopmodel.cpp
+    ${CMAKE_SOURCE_DIR}/kwin/tabbox/tabboxconfig.cpp
+    ${CMAKE_SOURCE_DIR}/kwin/tabbox/tabboxhandler.cpp
     main.ui
 )
 

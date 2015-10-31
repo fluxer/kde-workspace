@@ -1,6 +1,6 @@
 project(plasma-statusnotifieritem_engine)
 
-include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/statusnotifierwatcher)
+include_directories(${CMAKE_SOURCE_DIR}/statusnotifierwatcher)
 include_directories(${DBUSMENUQT_INCLUDE_DIR})
 
 # We add our source code here

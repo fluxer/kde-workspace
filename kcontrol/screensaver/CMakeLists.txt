@@ -13,7 +13,7 @@ set(kcm_screensaver_PART_SRCS
    kswidget.cpp
    screensaver.ui)
 
-set(kscreensaver_xml  ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.kde.screensaver.xml)
+set(kscreensaver_xml  ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.kde.screensaver.xml)
 QT4_ADD_DBUS_INTERFACE( kcm_screensaver_PART_SRCS ${kscreensaver_xml} kscreensaver_interface )
 
 kde4_add_plugin(kcm_screensaver ${kcm_screensaver_PART_SRCS})

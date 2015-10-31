@@ -11,7 +11,7 @@ set(image_SRCS
     slideshowconfig.ui
 )
 
-set(ksmserver_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
+set(ksmserver_xml ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
 qt4_add_dbus_interface(image_SRCS ${ksmserver_xml} ksmserver_interface)
 
 kde4_add_plugin(plasma_wallpaper_image ${image_SRCS})

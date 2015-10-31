@@ -4,7 +4,7 @@ project(kstyle-oxygen)
 add_subdirectory( config )
 add_subdirectory( demo )
 
-include_directories (animations debug transitions ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/oxygen)
+include_directories (animations debug transitions ${CMAKE_SOURCE_DIR}/libs/oxygen)
 
 ########### next target ###############
 

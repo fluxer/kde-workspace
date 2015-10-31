@@ -2,7 +2,7 @@
 add_subdirectory( kcm )
 
 include_directories(
-   ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
+   ${CMAKE_SOURCE_DIR}/libs
    ${KDECLARATIVE_INCLUDE_DIR}
 )
 

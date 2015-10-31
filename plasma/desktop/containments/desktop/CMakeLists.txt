@@ -3,7 +3,7 @@ set(desktop_SRCS
     itemspace.cpp
     desktoplayout.cpp)
 
-set(krunner_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/krunner/dbus/org.kde.krunner.App.xml)
+set(krunner_xml ${CMAKE_SOURCE_DIR}/krunner/dbus/org.kde.krunner.App.xml)
 QT4_ADD_DBUS_INTERFACE(desktop_SRCS ${krunner_xml} krunner_interface)
 
 kde4_add_plugin(plasma_containment_desktop ${desktop_SRCS})

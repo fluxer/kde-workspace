@@ -1,6 +1,6 @@
 ########### next target ###############
 
-include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin )
+include_directories( ${CMAKE_SOURCE_DIR}/kwin )
 
 set(kcm_kwincompositing_PART_SRCS
     main.cpp
@@ -8,7 +8,7 @@ set(kcm_kwincompositing_PART_SRCS
     main.ui
 )
 
-set(kwin_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/kwin/org.kde.KWin.xml)
+set(kwin_xml ${CMAKE_SOURCE_DIR}/kwin/org.kde.KWin.xml)
 set_source_files_properties(${kwin_xml} PROPERTIES INCLUDE "interface_util.h")
 QT4_ADD_DBUS_INTERFACE(kcm_kwincompositing_PART_SRCS ${kwin_xml} kwin_interface)
 kde4_add_plugin(kcm_kwincompositing ${kcm_kwincompositing_PART_SRCS})

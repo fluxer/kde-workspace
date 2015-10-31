@@ -1,8 +1,8 @@
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kcheckpass
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kdm
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kworkspace
+    ${CMAKE_SOURCE_DIR}/kcheckpass
+    ${CMAKE_SOURCE_DIR}/libs/kdm
+    ${CMAKE_SOURCE_DIR}/libs/kworkspace
 )
 
 set(kscreenlocker_greet_SRCS

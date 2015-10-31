@@ -4,7 +4,7 @@ add_definitions ( -DAPP_VERSION=\\\"${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKA
 add_subdirectory( config )
 add_subdirectory( demo )
 
-include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/oxygen)
+include_directories(${CMAKE_SOURCE_DIR}/libs/oxygen)
 
 ########### next target ###############
 set(kwin_oxygen_SRCS

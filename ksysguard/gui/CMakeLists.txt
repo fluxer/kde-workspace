@@ -5,10 +5,10 @@ endif()
 
 include_directories(
    ${CMAKE_CURRENT_SOURCE_DIR}/SensorDisplayLib/
-   ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
-   ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/ksysguard
-   ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/ksysguard/signalplotter
-   ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/ksysguard/processcore )
+   ${CMAKE_SOURCE_DIR}/libs
+   ${CMAKE_SOURCE_DIR}/libs/ksysguard
+   ${CMAKE_SOURCE_DIR}/libs/ksysguard/signalplotter
+   ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore )
 
 
 ########### next target ###############

@@ -1,4 +1,4 @@
-include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal)
+include_directories(${CMAKE_SOURCE_DIR}/libs/kephal)
 
 set(plasmaclock_LIB_SRCS
     clockapplet.cpp

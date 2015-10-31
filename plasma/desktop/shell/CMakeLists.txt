@@ -1,7 +1,7 @@
-include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs 
-                    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/plasmagenericshell
-                    ${KDEBASE_WORKSPACE_SOURCE_DIR}/plasma/desktop/shell/scripting
-                    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kephal
+include_directories(${CMAKE_SOURCE_DIR}/libs 
+                    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
+                    ${CMAKE_SOURCE_DIR}/plasma/desktop/shell/scripting
+                    ${CMAKE_SOURCE_DIR}/libs/kephal
 )
 
 set(plasma_SRCS
@@ -32,7 +32,7 @@ kde4_add_kcfg_files(plasma_SRCS data/plasma-shell-desktop.kcfgc)
 set(plasmaapp_dbusXML dbus/org.kde.plasma.App.xml)
 qt4_add_dbus_adaptor(plasma_SRCS ${plasmaapp_dbusXML} plasmaapp.h PlasmaApp)
 
-set(ksmserver_xml ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
+set(ksmserver_xml ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
 qt4_add_dbus_interface(plasma_SRCS ${ksmserver_xml} ksmserver_interface)
 
 add_executable(plasma-desktop ${plasma_SRCS})

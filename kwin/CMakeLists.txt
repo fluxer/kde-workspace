@@ -148,9 +148,9 @@ qt4_add_dbus_adaptor( kwin_SRCS org.kde.kwin.Compositing.xml composite.h KWin::C
 qt4_add_dbus_adaptor( kwin_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl )
 
 qt4_add_dbus_interface( kwin_SRCS
-  ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml ksmserver_interface)
+  ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml ksmserver_interface)
 qt4_add_dbus_interface( kwin_SRCS
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml screenlocker_interface)
+    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml screenlocker_interface)
 
 qt4_add_resources( kwin_SRCS resources.qrc )
 

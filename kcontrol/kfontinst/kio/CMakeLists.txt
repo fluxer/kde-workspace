@@ -1,5 +1,5 @@
-# include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/kcontrol/fonts
-#                     ${KDEBASE_WORKSPACE_SOURCE_DIR}/kcontrol/kfontinst/kcmfontinst
+# include_directories(${CMAKE_SOURCE_DIR}/kcontrol/fonts
+#                     ${CMAKE_SOURCE_DIR}/kcontrol/kfontinst/kcmfontinst
 #                     ${CMAKE_CURRENT_BINARY_DIR})
 
 set(kio_fonts_PART_SRCS FontInstInterface.cpp KioFonts.cpp ${libkfontinstdbusiface_SRCS})

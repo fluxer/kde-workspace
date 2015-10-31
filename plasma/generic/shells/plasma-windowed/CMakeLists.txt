@@ -1,4 +1,4 @@
-include_directories(${KDEBASE_WORKSPACE_SOURCE_DIR}/libs ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kworkspace)
+include_directories(${CMAKE_SOURCE_DIR}/libs ${CMAKE_SOURCE_DIR}/libs/kworkspace)
 
 
 set(plasma-windowed_SRCS

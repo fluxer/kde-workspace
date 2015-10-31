@@ -1,5 +1,5 @@
 
-include_directories( ${KDEBASE_WORKSPACE_SOURCE_DIR}/kscreensaver/libkscreensaver   )
+include_directories( ${CMAKE_SOURCE_DIR}/kscreensaver/libkscreensaver   )
 
 
 ########### next target ###############

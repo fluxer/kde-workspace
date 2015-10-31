@@ -1,11 +1,11 @@
 include_directories(
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kdm
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/plasmagenericshell
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/greeter/
+    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs/kdm
+    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
+    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/greeter/
     ${CMAKE_BINARY_DIR}/ksmserver/screenlocker/greeter/
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/libs/kworkspace
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/kcheckpass
+    ${CMAKE_SOURCE_DIR}/libs/kworkspace
+    ${CMAKE_SOURCE_DIR}/kcheckpass
 )
 
 set(plasma-overlay_SRCS
@@ -14,12 +14,12 @@ set(plasma-overlay_SRCS
     plasmaapp.cpp
     savercorona.cpp
     saverview.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/greeter/greeter.cpp
-    ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/greeter/sessions.cpp
+    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/greeter/greeter.cpp
+    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/greeter/sessions.cpp
     BackgroundDialog.ui
 )
 
-kde4_add_kcfg_files(plasma-overlay_SRCS ${KDEBASE_WORKSPACE_SOURCE_DIR}/ksmserver/screenlocker/kcfg/kscreensaversettings.kcfgc)
+kde4_add_kcfg_files(plasma-overlay_SRCS ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/kcfg/kscreensaversettings.kcfgc)
 
 set(plasmaapp_dbusXML org.kde.plasma-overlay.App.xml)
 #qt4_generate_dbus_interface(plasmaapp.h ${plasmaapp_dbusXML} OPTIONS -S -M)
