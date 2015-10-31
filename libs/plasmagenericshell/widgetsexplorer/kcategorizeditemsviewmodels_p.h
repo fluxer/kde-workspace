@@ -91,7 +91,7 @@ private:
 class DefaultFilterModel : public QStandardItemModel
 {
     Q_OBJECT
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 public:
     enum Roles {
         FilterTypeRole = Qt::UserRole+1,
@@ -113,8 +113,6 @@ public:
      */
     void addSeparator(const QString &caption);
 
-    int count() {return rowCount(QModelIndex());}
-
     Q_INVOKABLE QVariantHash get(int i) const;
 
 Q_SIGNALS:
@@ -130,7 +128,7 @@ class DefaultItemFilterProxyModel : public QSortFilterProxyModel
     Q_PROPERTY(QString searchTerm READ searchTerm WRITE setSearchTerm NOTIFY searchTermChanged)
     Q_PROPERTY(QString filterType READ filterType WRITE setFilterType NOTIFY filterChanged)
     Q_PROPERTY(QVariant filterQuery READ filterQuery WRITE setFilterQuery NOTIFY filterChanged)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(int count READ rowCount NOTIFY countChanged)
 
 public:
     DefaultItemFilterProxyModel(QObject *parent = 0);
@@ -156,8 +154,6 @@ public:
     int columnCount(const QModelIndex &index) const;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    int count() {return rowCount(QModelIndex());}
 
     Q_INVOKABLE QVariantHash get(int i) const;
 
