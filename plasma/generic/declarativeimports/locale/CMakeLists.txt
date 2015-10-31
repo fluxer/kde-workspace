@@ -1,7 +1,5 @@
 project(localebindings)
 
-include(KDE4Defaults)
-
 set(localebindings_SRCS
     locale.cpp
     localebindingsplugin.cpp
@@ -13,9 +11,6 @@ INCLUDE_DIRECTORIES(
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
 )
-
-qt4_automoc(${localebindings_SRCS})
-
 
 add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 

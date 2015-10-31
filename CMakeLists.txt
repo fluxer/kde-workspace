@@ -1,7 +1,5 @@
-project(KDEBASE_WORKSPACE)
+project(kde-workspace)
 
-include(CTest)
-include(CTestConfig.cmake)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 

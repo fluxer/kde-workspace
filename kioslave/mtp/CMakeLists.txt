@@ -1,5 +1,3 @@
-include(KDE4Defaults)
-
 #add_definitions(-DKDE_DEFAULT_DEBUG_AREA=7999)
 add_definitions(-DQT_NO_CAST_FROM_ASCII)
 

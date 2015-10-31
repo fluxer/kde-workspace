@@ -3,9 +3,6 @@ project(homerun)
 # Packaging
 set(HOMERUN_VERSION "1.2.5")
 
-# Dependencies
-find_package(KDE4 4.10.0 REQUIRED)
-include(KDE4Defaults)
 find_package(LibKonq REQUIRED)
 set_package_properties(LibKonq PROPERTIES
     DESCRIPTION "Standard file management features"
