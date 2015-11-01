@@ -17,9 +17,9 @@ install(TARGETS ksignalplotter EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGE
 
 #----------------------
 
-kde4_add_widget_files(ksignalplotter.widgets)
+kde4_add_widget(ksignalplotterwidgets_SRCS ksignalplotter.widgets)
 
-kde4_add_plugin(ksignalplotterwidgets $<TARGET_OBJECTS:ksignalplotter_autowidgets> ${ksignalplotterwidgets_PART_SRCS})
+kde4_add_plugin(ksignalplotterwidgets ${ksignalplotterwidgets_SRCS} ${ksignalplotterwidgets_PART_SRCS})
 
 target_link_libraries(ksignalplotterwidgets ${KDE4_KDEUI_LIBS} ksignalplotter)
 

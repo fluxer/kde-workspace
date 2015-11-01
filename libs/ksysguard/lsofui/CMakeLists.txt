@@ -16,9 +16,9 @@ install(TARGETS lsofui EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAU
 
 install( FILES lsof.h DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard COMPONENT Devel)
 
-kde4_add_widget_files(ksysguardlsof.widgets)
+kde4_add_widget(ksysguardlsofwidgets_SRCS ksysguardlsof.widgets)
 
-kde4_add_plugin(ksysguardlsofwidgets $<TARGET_OBJECTS:ksysguardlsof_autowidgets> )
+kde4_add_plugin(ksysguardlsofwidgets ${ksysguardlsofwidgets_SRCS})
 
 target_link_libraries(ksysguardlsofwidgets ${KDE4_KDECORE_LIBS}  ${QT_QTGUI_LIBRARY} lsofui)
 
