@@ -2,7 +2,7 @@
 include_directories (
     ${CMAKE_SOURCE_DIR}/kwin/libkwineffects
     ${CMAKE_SOURCE_DIR}/kwin/libkdecorations
-    ${KDEBASE_WORKSPACE_BINARY_DIR}/kwin/libkwineffects
+    ${CMAKE_BINARY_DIR}/kwin/libkwineffects
 )
 
 ########### next target ###############
