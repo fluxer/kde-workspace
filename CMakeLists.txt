@@ -302,7 +302,7 @@ make_install_path_absolute(KDE4WORKSPACE_DBUS_SERVICES_DIR   ${DBUS_SERVICES_INS
 make_install_path_absolute(KDE4WORKSPACE_SERVICES_DIR ${SERVICES_INSTALL_DIR})
 make_install_path_absolute(KDE4WORKSPACE_SERVICETYPES_DIR ${SERVICETYPES_INSTALL_DIR})
 
-set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace__)
+set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace::)
 
 configure_file(
     KDE4WorkspaceConfig.cmake.in
