@@ -304,14 +304,29 @@ make_install_path_absolute(KDE4WORKSPACE_SERVICETYPES_DIR ${SERVICETYPES_INSTALL
 
 set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace__)
 
-configure_file(KDE4WorkspaceConfig.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake" @ONLY)
+configure_file(
+    KDE4WorkspaceConfig.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake"
+    @ONLY
+)
+configure_file(
+    KDE4WorkspaceVersion.cmake.in
+    "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceVersion.cmake"
+    @ONLY
+)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
-        DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace)
+install(
+    FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceVersion.cmake
+    DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
+)
 
-install(EXPORT kdeworkspaceLibraryTargets 
-        NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
-        DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
-        FILE KDE4WorkspaceLibraryTargets.cmake )
+install(
+    EXPORT kdeworkspaceLibraryTargets 
+    NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
+    DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
+    FILE KDE4WorkspaceLibraryTargets.cmake
+)
 
 
