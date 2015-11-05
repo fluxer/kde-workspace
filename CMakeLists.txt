@@ -3,9 +3,6 @@ project(kde-workspace)
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH} )
-
 find_package(KDE4 4.14.3 REQUIRED)
 include(KDE4Defaults)
 
