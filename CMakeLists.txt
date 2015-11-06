@@ -329,7 +329,7 @@ install(
 # The code for installing the exports files will soon go into a macro. Alex
 install(
     CODE "set(EXPORT_FILES KDE4WorkspaceLibraryTargets.cmake)"
-    CODE "set(EXPORT_INSTALL_DIR \"${DATA_INSTALL_DIR}/cmake/modules\")"
+    CODE "set(EXPORT_INSTALL_DIR \"${LIB_INSTALL_DIR}/cmake/KDE4Workspace\")"
     SCRIPT "${CMAKE_SOURCE_DIR}/cmake/modules/check_installed_exports_file.cmake"
 )
 
