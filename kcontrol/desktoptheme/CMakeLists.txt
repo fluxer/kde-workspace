@@ -4,8 +4,6 @@ set(kcmdesktoptheme_SRCS
     kcmdesktoptheme.cpp
     desktopthemedetails.cpp
     thememodel.cpp
-    DesktopTheme.ui
-    DesktopThemeDetails.ui
 )
 
 kde4_add_plugin(kcm_desktoptheme ${kcmdesktoptheme_SRCS})
@@ -18,9 +16,15 @@ target_link_libraries(kcm_desktoptheme
     ${KDE4_KIO_LIBS}
 )
 
-install(TARGETS kcm_desktoptheme DESTINATION ${PLUGIN_INSTALL_DIR})
+install(
+    TARGETS kcm_desktoptheme
+    DESTINATION ${PLUGIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install(FILES desktoptheme.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(
+    FILES desktoptheme.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)
 

@@ -1,20 +1,41 @@
 ########### next target ###############
 
-set(kcm_clock_PART_SRCS dtime.cpp main.cpp dateandtime.ui)
+set(kcm_clock_PART_SRCS
+    dtime.cpp
+    main.cpp
+)
 kde4_add_plugin(kcm_clock ${kcm_clock_PART_SRCS})
 
-target_link_libraries(kcm_clock  ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS} )
+target_link_libraries(kcm_clock
+    ${KDE4_KIO_LIBS}
+    ${KDE4_PLASMA_LIBS}
+)
 
-install(TARGETS kcm_clock  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(
+    TARGETS kcm_clock
+    DESTINATION ${PLUGIN_INSTALL_DIR}
+)
 
 ########### next target ###############
 
-add_executable(kcmdatetimehelper helper.cpp ${helper_mocs})
-target_link_libraries(kcmdatetimehelper ${KDE4_KDECORE_LIBS})
-install(TARGETS kcmdatetimehelper DESTINATION ${LIBEXEC_INSTALL_DIR})
+add_executable(kcmdatetimehelper helper.cpp)
 
-kde4_install_auth_helper_files(kcmdatetimehelper org.kde.kcontrol.kcmclock root)
+target_link_libraries(kcmdatetimehelper ${KDE4_KDECORE_LIBS})
+
+install(
+    TARGETS kcmdatetimehelper
+    DESTINATION ${LIBEXEC_INSTALL_DIR}
+)
+
+kde4_install_auth_helper_files(
+    kcmdatetimehelper
+    org.kde.kcontrol.kcmclock
+    root
+)
 
 ########### install files ###############
 
-install( FILES clock.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install(
+    FILES clock.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)

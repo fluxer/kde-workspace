@@ -1,19 +1,21 @@
-
-
-
 ########### next target ###############
 
-set(kcm_display_PART_SRCS display.cpp )
+kde4_add_plugin(kcm_display display.cpp)
 
+target_link_libraries(kcm_display
+    ${KDE4_KCMUTILS_LIBS}
+    ${QT_QTGUI_LIBRARY}
+    ${KDE4_KDEUI_LIBS}
+)
 
-kde4_add_plugin(kcm_display ${kcm_display_PART_SRCS})
-
-
-target_link_libraries(kcm_display  ${KDE4_KCMUTILS_LIBS} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS})
-
-install(TARGETS kcm_display  DESTINATION ${PLUGIN_INSTALL_DIR} )
-
+install(
+    TARGETS kcm_display
+    DESTINATION ${PLUGIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install( FILES display.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install(
+    FILES display.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)
