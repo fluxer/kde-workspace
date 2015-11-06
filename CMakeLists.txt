@@ -13,128 +13,145 @@ option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
 
 find_package(Strigi)
 
-set_package_properties(Strigi PROPERTIES DESCRIPTION "Desktop indexing and search support"
-                       URL "http://strigi.sourceforge.net"
-                       TYPE REQUIRED
-                      )
+set_package_properties(Strigi PROPERTIES
+    DESCRIPTION "Desktop indexing and search support"
+    URL "http://strigi.sourceforge.net"
+    TYPE REQUIRED
+)
 
 find_package(ZLIB)
-set_package_properties(ZLIB PROPERTIES DESCRIPTION "Support for gzip compressed files and data streams"
-                       URL "http://www.zlib.net"
-                       TYPE REQUIRED
-                      )
+set_package_properties(ZLIB PROPERTIES
+    DESCRIPTION "Support for gzip compressed files and data streams"
+    URL "http://www.zlib.net"
+    TYPE REQUIRED
+)
 
 find_package(DBusMenuQt 0.6.0)
-set_package_properties(DBusMenuQt PROPERTIES DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
-                       URL "https://launchpad.net/libdbusmenu-qt"
-                       TYPE REQUIRED
-                      )
+set_package_properties(DBusMenuQt PROPERTIES
+    DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
+    URL "https://launchpad.net/libdbusmenu-qt"
+    TYPE REQUIRED
+)
 
 macro_optional_find_package(OpenGL)
-set_package_properties(OpenGL PROPERTIES DESCRIPTION "The OpenGL libraries"
-                       URL "http://www.opengl.org"
-                       TYPE OPTIONAL
-                      )
+set_package_properties(OpenGL PROPERTIES
+    DESCRIPTION "The OpenGL libraries"
+    URL "http://www.opengl.org"
+    TYPE OPTIONAL
+)
+
 macro_optional_find_package(OpenGLES)
-set_package_properties(OpenGLES PROPERTIES DESCRIPTION "The OpenGLES libraries"
-                       URL "http://www.khronos.org/opengles"
-                       TYPE OPTIONAL
-                      )
+set_package_properties(OpenGLES PROPERTIES
+    DESCRIPTION "The OpenGLES libraries"
+    URL "http://www.khronos.org/opengles"
+    TYPE OPTIONAL
+)
+
 macro_optional_find_package(UDev)
-set_package_properties(UDev PROPERTIES DESCRIPTION "The UDev Libraries"
-                       TYPE OPTIONAL
-                       PURPOSE "Allows support for UPower backend in PowerDevil - STRONGLY RECOMMENDED"
-                      )
+set_package_properties(UDev PROPERTIES
+    DESCRIPTION "The UDev Libraries"
+    TYPE OPTIONAL
+    PURPOSE "Allows support for UPower backend in PowerDevil - STRONGLY RECOMMENDED"
+)
 
 if(Q_WS_X11)
-  find_package(XCB REQUIRED)
-  set_package_properties(XCB PROPERTIES DESCRIPTION "X protocol C-language Binding"
-                         URL "http://xcb.freedesktop.org"
-                         TYPE REQUIRED
-                        )
+    find_package(XCB REQUIRED)
+    set_package_properties(XCB PROPERTIES
+        DESCRIPTION "X protocol C-language Binding"
+        URL "http://xcb.freedesktop.org"
+        TYPE REQUIRED
+    )
 
-  find_package(X11_XCB)
-  set_package_properties(X11_XCB PROPERTIES DESCRIPTION "XCB X11 protocol client library"
-                         TYPE REQUIRED
-                        )
+    find_package(X11_XCB)
+    set_package_properties(X11_XCB
+        PROPERTIES DESCRIPTION "XCB X11 protocol client library"
+        TYPE REQUIRED
+    )
 
-  find_package(X11 REQUIRED)
-  set_package_properties(X11 PROPERTIES DESCRIPTION "X11 libraries"
-                         URL "http://www.x.org"
-                         TYPE REQUIRED
-                        )
+    find_package(X11 REQUIRED)
+    set_package_properties(X11 PROPERTIES
+        DESCRIPTION "X11 libraries"
+        URL "http://www.x.org"
+        TYPE REQUIRED
+    )
 
-  add_feature_info("Automated testing of X clients" X11_XTest_FOUND
-                   "The X11 Testing Resource extension library is useful for automated testing of X clients")
-  add_feature_info("libXau" X11_Xau_FOUND "The X11 Authorization Protocol library may be used by KDM")
-  add_feature_info("LibXdmcp" X11_Xdmcp_FOUND "The X Display Manager Control Protocol library may be used by KDM")
-  if(NOT X11_Xkbfile_FOUND)
-    message(FATAL_ERROR "The X11 keyboard layout library was not found. Required for building keyboard modules.")
-  endif()
-  if(NOT X11_Xcomposite_FOUND)
-    message(FATAL_ERROR "The X11 composite library was not found. Required for building the plasma tray and notifications widgets.")
-  endif()
-  if(NOT X11_Xdamage_FOUND)
-    message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin.")
-  endif()
-  if(NOT X11_Xrender_FOUND)
-    message(FATAL_ERROR " The X Rendering Extension client library was not found. Required for XRender Compositing backend in KWin.")
-  endif()
-  if(NOT X11_Xfixes_FOUND)
-    message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin.")
-  endif()
-  if(NOT X11_Xrandr_FOUND)
-    message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support.")
-  endif()
-  if(NOT OPENGL_FOUND AND NOT OPENGLES_FOUND)
-    message(FATAL_ERROR "Either OpenGL or OpenGL ES 2.0 are required for Compositing support in KWin.")
-  endif()
-  if(NOT X11_Xcursor_FOUND)
-    message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin.")
-  endif()
+    add_feature_info("Automated testing of X clients" X11_XTest_FOUND
+                    "The X11 Testing Resource extension library is useful for automated testing of X clients")
+    add_feature_info("libXau" X11_Xau_FOUND "The X11 Authorization Protocol library may be used by KDM")
+    add_feature_info("LibXdmcp" X11_Xdmcp_FOUND "The X Display Manager Control Protocol library may be used by KDM")
+
+    if(NOT X11_Xkbfile_FOUND)
+        message(FATAL_ERROR "The X11 keyboard layout library was not found. Required for building keyboard modules.")
+    endif()
+    if(NOT X11_Xcomposite_FOUND)
+        message(FATAL_ERROR "The X11 composite library was not found. Required for building the plasma tray and notifications widgets.")
+    endif()
+    if(NOT X11_Xdamage_FOUND)
+        message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin.")
+    endif()
+    if(NOT X11_Xrender_FOUND)
+        message(FATAL_ERROR " The X Rendering Extension client library was not found. Required for XRender Compositing backend in KWin.")
+    endif()
+    if(NOT X11_Xfixes_FOUND)
+        message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin.")
+    endif()
+    if(NOT X11_Xrandr_FOUND)
+        message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support.")
+    endif()
+    if(NOT OPENGL_FOUND AND NOT OPENGLES_FOUND)
+        message(FATAL_ERROR "Either OpenGL or OpenGL ES 2.0 are required for Compositing support in KWin.")
+    endif()
+    if(NOT X11_Xcursor_FOUND)
+        message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin.")
+    endif()
 endif(Q_WS_X11)
 
 macro_optional_find_package(GLIB2 2.0)
-set_package_properties(GLIB2 PROPERTIES DESCRIPTION "Low-level core library for data structure handling, portability wrappers, etc."
-                       URL "http://www.gtk.org"
-                       TYPE OPTIONAL
-                       PURPOSE "Needed to build the kxkb keyboard map control program and provide XMMS support in the Now Playing Plasma data engine"
-                      )
+set_package_properties(GLIB2 PROPERTIES
+    DESCRIPTION "Low-level core library for data structure handling, portability wrappers, etc."
+    URL "http://www.gtk.org"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build the kxkb keyboard map control program and provide XMMS support in the Now Playing Plasma data engine"
+)
 
 macro_optional_find_package(Fontconfig)
-set_package_properties(Fontconfig PROPERTIES DESCRIPTION "Font access configuration library"
-                       URL "http://www.freedesktop.org/wiki/Software/fontconfig"
-                       TYPE OPTIONAL
-                       PURPOSE "Needed to build font configuration and installation tools"
-                      )
+set_package_properties(Fontconfig PROPERTIES
+    DESCRIPTION "Font access configuration library"
+    URL "http://www.freedesktop.org/wiki/Software/fontconfig"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build font configuration and installation tools"
+)
 
 #### Python support ( plasma scriptengines ) ####
 macro_optional_find_package(PythonLibrary)
-set_package_properties(PythonLibrary PROPERTIES DESCRIPTION "Python scripting language"
-                       URL "http://python.org"
-                       TYPE OPTIONAL
-                       PURPOSE "Needed to build plasma scriptengine for python."
-                      )
+set_package_properties(PythonLibrary PROPERTIES
+    DESCRIPTION "Python scripting language"
+    URL "http://python.org"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build plasma scriptengine for python."
+)
 
 macro_optional_find_package(QJSON)
-set_package_properties(QJSON PROPERTIES DESCRIPTION "Library to manage JSON objects with Qt"
-                       URL "http://qjson.sourceforge.net/"
-                       TYPE OPTIONAL
-                       PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
-                      )
+set_package_properties(QJSON PROPERTIES
+    DESCRIPTION "Library to manage JSON objects with Qt"
+    URL "http://qjson.sourceforge.net/"
+    TYPE OPTIONAL
+    PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
+)
 
 find_package(LibGcrypt 1.5.0 REQUIRED QUIET)
 set_package_properties(LibGcrypt PROPERTIES
-                       TYPE REQUIRED
-                       PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
-                      )
+    TYPE REQUIRED
+    PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
+)
 
 macro_optional_find_package(SLP)
-set_package_properties(SLP PROPERTIES DESCRIPTION "SLP (Service Location Protocol) implementation"
-                       URL "http://www.openslp.org/"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides SLP support in the network:/ kioslave."
-                      )
+set_package_properties(SLP PROPERTIES
+    DESCRIPTION "SLP (Service Location Protocol) implementation"
+    URL "http://www.openslp.org/"
+    TYPE OPTIONAL
+    PURPOSE "Provides SLP support in the network:/ kioslave."
+)
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
@@ -318,7 +335,7 @@ install(
     FILES
     ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceVersion.cmake
-    DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
+    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules
 )
 
 # run a script before installing the exports files which deletes previously
@@ -328,14 +345,14 @@ install(
 # targets with different names.
 install(
     CODE "set(EXPORT_FILES KDE4WorkspaceLibraryTargets.cmake)"
-    CODE "set(EXPORT_INSTALL_DIR \"${LIB_INSTALL_DIR}/cmake/KDE4Workspace\")"
+    CODE "set(EXPORT_INSTALL_DIR \"${DATA_INSTALL_DIR}/cmake/modules\")"
     SCRIPT "${CMAKE_SOURCE_DIR}/cmake/modules/check_installed_exports_file.cmake"
 )
 
 install(
     EXPORT kdeworkspaceLibraryTargets 
     NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
-    DESTINATION ${LIB_INSTALL_DIR}/cmake/KDE4Workspace
+    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules
     FILE KDE4WorkspaceLibraryTargets.cmake
 )
 
