@@ -1,23 +1,27 @@
-PROJECT (autostart)
+project(autostart)
 
-ADD_DEFINITIONS (${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
-INCLUDE_DIRECTORIES (${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 
 ########### next target ###############
 
-SET(kcm_autostart_PART_SRCS
+set(kcm_autostart_PART_SRCS
    autostartitem.cpp
    addscriptdialog.cpp
    advanceddialog.cpp
    autostart.cpp
-   autostartconfig.ui
 )
 
-KDE4_ADD_PLUGIN(kcm_autostart ${kcm_autostart_PART_SRCS})
+kde4_add_plugin(kcm_autostart ${kcm_autostart_PART_SRCS})
 
-TARGET_LINK_LIBRARIES(kcm_autostart   ${KDE4_KIO_LIBS} )
+target_link_libraries(kcm_autostart ${KDE4_KIO_LIBS})
 
 ########### install files ###############
 
-INSTALL(TARGETS kcm_autostart  DESTINATION ${PLUGIN_INSTALL_DIR} )
-INSTALL( FILES autostart.desktop   DESTINATION  ${SERVICES_INSTALL_DIR} )
+install(
+    TARGETS kcm_autostart
+    DESTINATION ${PLUGIN_INSTALL_DIR}
+)
+install(
+    FILES autostart.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)

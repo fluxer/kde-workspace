@@ -1,1 +1,4 @@
-install(PROGRAMS kdeeject DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(
+    PROGRAMS kdeeject
+    DESTINATION ${LIBEXEC_INSTALL_DIR}
+)

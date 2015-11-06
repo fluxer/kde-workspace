@@ -6,6 +6,8 @@ set(cursors_folders
 )
 
 foreach(theme ${cursors_folders})
-    install(DIRECTORY ${theme} DESTINATION ${ICON_INSTALL_DIR})
-endforeach(theme)
-
+    install(
+        DIRECTORY ${theme}
+        DESTINATION ${ICON_INSTALL_DIR}
+    )
+endforeach()
