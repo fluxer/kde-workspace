@@ -78,7 +78,9 @@ QGraphicsWidget *createTextEdit(QGraphicsWidget *parent) { return new Plasma::Te
 QGraphicsWidget *createToolButton(QGraphicsWidget *parent) { return new Plasma::ToolButton(parent); }
 QGraphicsWidget *createTreeView(QGraphicsWidget *parent) { return new Plasma::TreeView(parent); }
 QGraphicsWidget *createVideoWidget(QGraphicsWidget *parent) { return new Plasma::VideoWidget(parent); }
+#ifndef QT_KATIE
 QGraphicsWidget *createWebView(QGraphicsWidget *parent) { return new Plasma::WebView(parent); }
+#endif
 QGraphicsWidget *createGraphicsWidget(QGraphicsWidget *parent) { return new QGraphicsWidget(parent); }
 
 UiLoader::UiLoader()
@@ -108,8 +110,10 @@ UiLoader::UiLoader()
     m_widgetCtors.insert("ToolButton", createToolButton);
     m_widgetCtors.insert("TreeView", createTreeView);
     m_widgetCtors.insert("VideoWidget", createVideoWidget);
+#ifndef QT_KATIE
     m_widgetCtors.insert("WebView", createWebView);
-    m_widgetCtors.insert("GraphicsWidget", createWebView);
+#endif
+    m_widgetCtors.insert("GraphicsWidget", createGraphicsWidget);
 }
 
 UiLoader::~UiLoader()
