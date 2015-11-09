@@ -89,13 +89,15 @@ install(TARGETS textthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(htmlthumbnail_PART_SRCS htmlcreator.cpp)
+if(QT_QTWEBKIT_FOUND)
+    set(htmlthumbnail_PART_SRCS htmlcreator.cpp)
 
-kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
+    kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
 
-target_link_libraries(htmlthumbnail ${KDE4_KDEWEBKIT_LIBS})
+    target_link_libraries(htmlthumbnail ${KDE4_KDEWEBKIT_LIBS})
 
-install(TARGETS htmlthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+    install(TARGETS htmlthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+endif()
 
 ########### next target ###############
 
