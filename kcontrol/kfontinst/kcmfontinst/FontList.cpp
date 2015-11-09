@@ -1736,8 +1736,7 @@ QModelIndexList CFontListView::getSelectedItems()
                            deselectList;
     QModelIndex            index;
     QSet<CFontModelItem *> selectedFamilies;
-    bool                   en(false),
-                           dis(false);
+    bool                   enabled;
 
     foreach(index, selectedItems)
         if(index.isValid())
@@ -1750,10 +1749,7 @@ QModelIndexList CFontListView::getSelectedItems()
                 {
                     CFontItem *font=static_cast<CFontItem *>(realIndex.internalPointer());
 
-                    if(font->isEnabled())
-                        en=true;
-                    else
-                        dis=true;
+                    enabled = font->isEnabled();
                     if(!selectedFamilies.contains(font->parent()))
                     {
                         selectedFamilies.insert(font->parent());
@@ -1769,13 +1765,13 @@ QModelIndexList CFontListView::getSelectedItems()
                     switch((static_cast<CFamilyItem *>(realIndex.internalPointer()))->status())
                     {
                         case CFamilyItem::ENABLED:
-                            en=true;
+                            enabled = true;
                             break;
                         case CFamilyItem::DISABLED:
-                            dis=true;
+                            enabled = false;
                             break;
                         case CFamilyItem::PARTIAL:
-                            en=dis=true;
+                            enabled = true;
                             break;
                     }
                 }
