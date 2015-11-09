@@ -1,10 +1,24 @@
-add_subdirectory( pixmaps ) 
+add_subdirectory(pixmaps)
 
-set(kmenueditcommon_STAT_SRCS preferencesdlg.cpp klinespellchecking.cpp basictab.cpp treeview.cpp kmenuedit.cpp menufile.cpp menuinfo.cpp )
-set(kmenueditcommon_STAT_SRCS ${kmenueditcommon_STAT_SRCS} khotkeys.cpp)
+set(kmenueditcommon_STAT_SRCS
+    preferencesdlg.cpp
+    klinespellchecking.cpp
+    basictab.cpp
+    treeview.cpp
+    kmenuedit.cpp
+    menufile.cpp
+    menuinfo.cpp
+    khotkeys.cpp
+)
+
 ########### next target ###############
 
-qt4_add_dbus_adaptor( kmenueditcommon_STAT_SRCS org.kde.kmenuedit.xml kmenuedit.h KMenuEdit)
+qt4_add_dbus_adaptor(
+    kmenueditcommon_STAT_SRCS
+    org.kde.kmenuedit.xml
+    kmenuedit.h
+    KMenuEdit
+)
 
 qt4_add_dbus_interface(
     kmenueditcommon_STAT_SRCS
@@ -21,10 +35,9 @@ install(TARGETS kmenuedit ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( PROGRAMS kmenuedit.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
-install( FILES kmenueditui.rc  DESTINATION  ${DATA_INSTALL_DIR}/kmenuedit )
+install(PROGRAMS kmenuedit.desktop DESTINATION  ${XDG_APPS_INSTALL_DIR})
+install(FILES kmenueditui.rc DESTINATION ${DATA_INSTALL_DIR}/kmenuedit)
 
 add_dependencies(kmenuedit kded_khotkeys)
 
-kde4_install_icons( ${ICON_INSTALL_DIR}  )
-
+kde4_install_icons(${ICON_INSTALL_DIR})

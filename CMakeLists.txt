@@ -6,7 +6,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 
-find_package(KDE4 4.14.3 REQUIRED)
+find_package(KDE4 4.18.0 REQUIRED)
 include(KDE4Defaults)
 
 option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
