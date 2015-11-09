@@ -159,6 +159,7 @@ void RemoveButton::paintEvent(QPaintEvent* event)
         QPixmap activeIcon = iconEffect.apply(m_icon, KIconLoader::Desktop, KIconLoader::ActiveState);
         painter.drawPixmap(0, 0, activeIcon);
     } else {
+#ifndef QT_KATIE
         if (m_fadingValue < 255) {
             // apply an alpha mask respecting the fading value to the icon
             QPixmap icon = m_icon;
@@ -168,9 +169,14 @@ void RemoveButton::paintEvent(QPaintEvent* event)
             icon.setAlphaChannel(alphaMask);
             painter.drawPixmap(0, 0, icon);
         } else {
+#else
+#warning no fading support with Katie
+#endif
             // no fading is required
             painter.drawPixmap(0, 0, m_icon);
+#ifndef QT_KATIE
         }
+#endif
     }
 }
 

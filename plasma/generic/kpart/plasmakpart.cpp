@@ -61,7 +61,7 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
 
     // initialize the plugin loader
     if (args.length() > 0) {
-        Plasma::PluginLoader *loader = qVariantValue<Plasma::PluginLoader *>(args.first());
+        Plasma::PluginLoader *loader = qvariant_cast<Plasma::PluginLoader *>(args.first());
         if (loader) {
             Plasma::PluginLoader::setPluginLoader(loader);
         }

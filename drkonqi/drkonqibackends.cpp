@@ -134,7 +134,7 @@ CrashedApplication *KCrashBackend::constructCrashedApplication()
     if ( QFileInfo(QString("/proc/%1/exe").arg(a->m_pid)).exists() ) {
         //on linux, the fastest and most reliable way is to get the path from /proc
         kDebug() << "Using /proc to determine executable path";
-        a->m_executable.setFile(QFile::symLinkTarget(QString("/proc/%1/exe").arg(a->m_pid)));
+        a->m_executable.setFile(QFile::readLink(QString("/proc/%1/exe").arg(a->m_pid)));
 
         if (args->isSet("kdeinit") ||
             a->m_executable.fileName().startsWith("python") ) {
