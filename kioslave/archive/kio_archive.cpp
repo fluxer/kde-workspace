@@ -213,7 +213,7 @@ void ArchiveProtocol::createUDSEntry( const KArchiveEntry * archiveEntry, UDSEnt
     entry.insert( KIO::UDSEntry::UDS_ACCESS, archiveEntry->permissions() & 07777 ); // keep permissions only
     entry.insert( KIO::UDSEntry::UDS_USER, archiveEntry->user());
     entry.insert( KIO::UDSEntry::UDS_GROUP, archiveEntry->group());
-    entry.insert( KIO::UDSEntry::UDS_LINK_DEST, archiveEntry->symLinkTarget());
+    entry.insert( KIO::UDSEntry::UDS_LINK_DEST, archiveEntry->readLink());
 }
 
 void ArchiveProtocol::listDir( const KUrl & url )
@@ -421,10 +421,10 @@ void ArchiveProtocol::get( const KUrl & url )
         return;
     }
     const KArchiveFile* archiveFileEntry = static_cast<const KArchiveFile *>(archiveEntry);
-    if ( !archiveEntry->symLinkTarget().isEmpty() )
+    if ( !archiveEntry->readLink().isEmpty() )
     {
-      kDebug(7109) << "Redirection to" << archiveEntry->symLinkTarget();
-      KUrl realURL( url, archiveEntry->symLinkTarget() );
+      kDebug(7109) << "Redirection to" << archiveEntry->readLink();
+      KUrl realURL( url, archiveEntry->readLink() );
       kDebug(7109).nospace() << "realURL=" << realURL.url();
       redirection( realURL );
       finished();

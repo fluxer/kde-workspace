@@ -1258,7 +1258,7 @@ void NFSProtocolV2::copyTo(const KUrl& src, const KUrl& dest, int _mode, KIO::Jo
     }
 
     // Is it a link? No need to copy the data then, just copy the link destination.
-    const QString symlinkTarget = QFile::symLinkTarget(srcPath);
+    const QString symlinkTarget = QFile::readLink(srcPath);
     if (!symlinkTarget.isEmpty()) {
         int rpcStatus;
         nfsstat linkRes;
