@@ -26,11 +26,11 @@ set_package_properties(ZLIB PROPERTIES
     TYPE REQUIRED
 )
 
-find_package(DBusMenuQt 0.6.0)
+macro_optional_find_package(DBusMenuQt 0.6.0)
 set_package_properties(DBusMenuQt PROPERTIES
     DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
     URL "https://launchpad.net/libdbusmenu-qt"
-    TYPE REQUIRED
+    TYPE RECOMMENDED
 )
 
 macro_optional_find_package(OpenGL)
