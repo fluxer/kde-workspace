@@ -15,7 +15,7 @@ RightButton;NoModifier=contextmenu
 [Containments][1][Applets][23]
 geometry=4,3,32,32
 immutability=1
-plugin=org.kde.homerun-kicker
+plugin=@PLASMA_MENU_APPLET@
 zvalue=0
 
 [Containments][1][Applets][23][LayoutInformation]
