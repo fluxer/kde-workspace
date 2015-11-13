@@ -14,7 +14,7 @@ set ( text_paint_LIB ${KDE4_PLASMA_LIBS} )
 
 ### kded daemon ###
 
-set( kded_keyboard_SRCS
+set(kded_keyboard_SRCS
     keyboard_daemon.cpp
     layout_memory.cpp
     layout_memory_persister.cpp
@@ -25,7 +25,7 @@ set( kded_keyboard_SRCS
     keyboard_hardware.cpp
     numlockx.c
     bindings.cpp
-# next are temporary for sys tray UI
+    # next are temporary for sys tray UI
     layout_tray_icon.cpp
     layouts_menu.cpp
     flags.cpp
