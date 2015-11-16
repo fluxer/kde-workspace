@@ -45,12 +45,6 @@ install(TARGETS plasma-geolocation-ip DESTINATION ${PLUGIN_INSTALL_DIR})
 
 # -------------------------------------------------------------------------------------------------
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules ${CMAKE_MODULE_PATH})
-macro_optional_find_package(libgps)
-set_package_properties(libgps PROPERTIES DESCRIPTION "GPS support for geolocation"
-                       URL "http://gpsd.berlios.de/"
-                       TYPE OPTIONAL
-                      )
 if(LIBGPS_FOUND)
     include_directories(${LIBGPS_INCLUDES} ${LIBGPS_INCLUDE_DIR})
     set(plasma_geolocation_gps_SRCS location_gps.cpp)

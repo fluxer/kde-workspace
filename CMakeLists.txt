@@ -167,6 +167,14 @@ set_package_properties(PNG PROPERTIES
     TYPE REQUIRED
 )
 
+macro_optional_find_package(LibGPS)
+set_package_properties(LibGPS PROPERTIES
+    DESCRIPTION "GPSes/AIS service library"
+    URL "http://www.catb.org/gpsd/"
+    PURPOSE "GPS support for geolocation in plasma dataengine"
+    TYPE OPTIONAL
+)
+
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
