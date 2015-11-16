@@ -226,7 +226,7 @@ public:
     {
         if (!source)
             return engine->nullValue();
-        return engine->newVariant(qVariantFromValue(source));
+        return engine->newVariant(QVariant::fromValue(source));
     }
 
     static void fromScriptValue(const QScriptValue &value, T* &target)
@@ -325,7 +325,7 @@ inline void maybeTakeOwnership(const QScriptValue &value)
 template <class T>
 inline QScriptValue wrapPointer(QScriptEngine *eng, T *ptr, uint flags = 0)
 {
-    return eng->newVariant(qVariantFromValue(Pointer<T>::create(ptr, flags)));
+    return eng->newVariant(QVariant::fromValue(Pointer<T>::create(ptr, flags)));
 }
 
 } // namespace QScript

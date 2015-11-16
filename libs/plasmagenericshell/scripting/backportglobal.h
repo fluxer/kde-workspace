@@ -1,46 +1,25 @@
 /****************************************************************************
 **
-** Copyright (C) 1992-2007 Trolltech ASA. All rights reserved.
+** This file is part of the Qt Script Generator.
 **
-** This file is part of the plugins of the Qt Toolkit.
+** Copyright (c) 2011 Nokia Corporation and/or its subsidiary(-ies).
 **
-** This file may be used under the terms of the GNU General Public
-** License version 2.0 as published by the Free Software Foundation
-** and appearing in the file LICENSE.GPL included in the packaging of
-** this file.  Please review the following information to ensure GNU
-** General Public Licensing requirements will be met:
-** http://trolltech.com/products/qt/licenses/licensing/opensource/
+** Contact:  Nokia Corporation info@qt.nokia.com
 **
-** If you are unsure which license is appropriate for your use, please
-** review the following information:
-** http://trolltech.com/products/qt/licenses/licensing/licensingoverview
-** or contact the sales department at sales@trolltech.com.
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation
+** and appearing in the file LICENSE.LGPL included in the packaging of
+** this file.  Please review the following information to ensure the GNU
+** Lesser General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** In addition, as a special exception, Trolltech gives you certain
-** additional rights. These rights are described in the Trolltech GPL
-** Exception version 1.0, which can be found at
-** http://www.trolltech.com/products/qt/gplexception/ and in the file
-** GPL_EXCEPTION.txt in this package.
-**
-** In addition, as a special exception, Trolltech, as the sole copyright
-** holder for Qt Designer, grants users of the Qt/Eclipse Integration
-** plug-in the right for the Qt/Eclipse Integration to link to
-** functionality provided by Qt Designer and its related libraries.
-**
-** Trolltech reserves all rights not expressly granted herein.
-** 
-** Trolltech ASA (c) 2007
-**
-** This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
-** WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-**
+** Copyright (C)  2011 Nokia. All rights reserved
 ****************************************************************************/
 #ifndef QTSCRIPTEXTENSIONS_GLOBAL_H
 #define QTSCRIPTEXTENSIONS_GLOBAL_H
 
 #include <QtCore/QSharedData>
-
-#include "../plasmagenericshell_export.h"
 
 #define DECLARE_SELF(Class, __fn__) \
     Class* self = qscriptvalue_cast<Class*>(ctx->thisObject()); \
@@ -212,7 +191,7 @@ enum {
 };
 
 template <typename T>
-class PLASMAGENERICSHELL_EXPORT Pointer : public QSharedData
+class Pointer : public QSharedData
 {
 public:
     typedef T* pointer_type;
@@ -243,7 +222,7 @@ public:
     {
         if (!source)
             return engine->nullValue();
-        return engine->newVariant(qVariantFromValue(source));
+        return engine->newVariant(QVariant::fromValue(source));
     }
 
     static void fromScriptValue(const QScriptValue &value, T* &target)
@@ -342,7 +321,7 @@ inline void maybeTakeOwnership(const QScriptValue &value)
 template <class T>
 inline QScriptValue wrapPointer(QScriptEngine *eng, T *ptr, uint flags = 0)
 {
-    return eng->newVariant(qVariantFromValue(Pointer<T>::create(ptr, flags)));
+    return eng->newVariant(QVariant::fromValue(Pointer<T>::create(ptr, flags)));
 }
 
 } // namespace QScript
