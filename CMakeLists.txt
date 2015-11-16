@@ -139,7 +139,7 @@ set_package_properties(QJSON PROPERTIES
     PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
 )
 
-find_package(LibGcrypt 1.5.0 REQUIRED QUIET)
+find_package(LibGcrypt 1.5.0 QUIET)
 set_package_properties(LibGcrypt PROPERTIES
     TYPE REQUIRED
     PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
@@ -151,6 +151,20 @@ set_package_properties(SLP PROPERTIES
     URL "http://www.openslp.org/"
     TYPE OPTIONAL
     PURPOSE "Provides SLP support in the network:/ kioslave."
+)
+
+find_package(JPEG)
+set_package_properties(JPEG PROPERTIES
+    DESCRIPTION "Accelerated JPEG image codec"
+    URL "http://libjpeg-turbo.virtualgl.org/"
+    TYPE REQUIRED
+)
+
+find_package(PNG)
+set_package_properties(PNG PROPERTIES
+    DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"
+    URL "http://www.libpng.org/"
+    TYPE REQUIRED
 )
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
@@ -181,8 +195,6 @@ macro_optional_add_subdirectory(kcheckpass)
 macro_optional_add_subdirectory(kwin)
 macro_optional_add_subdirectory(ksmserver)
 
-find_package(JPEG REQUIRED)
-find_package(PNG REQUIRED)
 macro_optional_add_subdirectory(ksplash)
 
 macro_optional_add_subdirectory(powerdevil)
