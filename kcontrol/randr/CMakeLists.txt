@@ -42,28 +42,26 @@ install(TARGETS kcm_randr DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(krandrtray_SRCS 
-   main.cpp 
-   krandrtray.cpp 
-   krandrapp.cpp 
-   krandrpassivepopup.cpp ${randrinternal_PART_SRCS}
-   randrconfigbase.ui
-   outputconfigbase.ui
-)
+# TODO: support build without it
+if(DBUSMENUQT_FOUND)
+    set(krandrtray_SRCS
+        main.cpp
+        krandrtray.cpp
+        krandrapp.cpp
+        krandrpassivepopup.cpp
+        ${randrinternal_PART_SRCS}
+    )
 
-add_executable(krandrtray ${krandrtray_SRCS})
+    add_executable(krandrtray ${krandrtray_SRCS})
 
-target_link_libraries(krandrtray ${KDE4_KCMUTILS_LIBS} ${X11_Xrandr_LIB} ${X11_LIBRARIES})
+    target_link_libraries(krandrtray ${KDE4_KCMUTILS_LIBS} ${X11_Xrandr_LIB} ${X11_LIBRARIES})
 
-install(TARGETS krandrtray ${INSTALL_TARGETS_DEFAULT_ARGS})
-
+    install(TARGETS krandrtray ${INSTALL_TARGETS_DEFAULT_ARGS})
+    install(PROGRAMS krandrtray.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR})
+endif()
 
 ########### next target ###############
 
 install(PROGRAMS krandrstartup DESTINATION ${BIN_INSTALL_DIR})
 
-
-########### install files ###############
-
-install( PROGRAMS krandrtray.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR} )
 install( FILES randr.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
