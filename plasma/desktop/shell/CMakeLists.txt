@@ -1,8 +1,5 @@
-if(DBUSMENUQT_FOUND)
-    set(PLASMA_MENU_APPLET "org.kde.homerun-kicker")
-else()
-    set(PLASMA_MENU_APPLET "launcher")
-endif()
+set(PLASMA_MENU_APPLET "org.kde.homerun-kicker")
+# set(PLASMA_MENU_APPLET "launcher")
 
 configure_file(
     data/plasma-desktoprc.cmake

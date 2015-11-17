@@ -210,10 +210,7 @@ macro_optional_add_subdirectory(qguiplatformplugin_kde)
 macro_optional_add_subdirectory(ksysguard)
 
 macro_optional_add_subdirectory(kcontrol)
-# TODO: support build without it
-if(DBUSMENUQT_FOUND)
-    macro_optional_add_subdirectory(klipper)
-endif()
+macro_optional_add_subdirectory(klipper)
 macro_optional_add_subdirectory(kmenuedit)
 macro_optional_add_subdirectory(krunner)
 macro_optional_add_subdirectory(solid-actions-kcm)
