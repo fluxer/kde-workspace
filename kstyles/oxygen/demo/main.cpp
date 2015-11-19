@@ -29,6 +29,7 @@
 #include <KApplication>
 #include <KIcon>
 #include <KAboutData>
+#include <kdeversion.h>
 #include <config-workspace.h>
 
 #include <cassert>

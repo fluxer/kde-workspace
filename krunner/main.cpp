@@ -20,6 +20,7 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <KLocale>
 #include <KGlobal>
 #include <config-workspace.h>

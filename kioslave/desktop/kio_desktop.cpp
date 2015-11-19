@@ -25,6 +25,7 @@
 #include <KDesktopFile>
 #include <KGlobalSettings>
 #include <KStandardDirs>
+#include <kdeversion.h>
 
 #include <kio/udsentry.h>
 

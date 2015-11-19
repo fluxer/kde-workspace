@@ -51,6 +51,7 @@
 #include <ktoggleaction.h>
 #include <kurl.h>
 #include <kwindowsystem.h>
+#include <kdeversion.h>
 #include <QSplitter>
 
 #include <config-workspace.h>
