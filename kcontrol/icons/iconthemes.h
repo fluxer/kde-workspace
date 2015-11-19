@@ -19,9 +19,7 @@
 #ifndef ICONTHEMES_H
 #define ICONTHEMES_H
 
-#define KDE3_SUPPORT
 #include <kcmodule.h>
-#undef KDE3_SUPPORT
 #include <QLabel>
 
 class KPushButton;

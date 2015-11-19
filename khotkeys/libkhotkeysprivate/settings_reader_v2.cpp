@@ -352,10 +352,7 @@ void SettingsReaderV2::visit(KHotKeys::DBusAction& action)
 
 void SettingsReaderV2::visit(KHotKeys::GestureTrigger& trigger)
     {
-    if (_config->hasKey("Gesture"))
-        trigger.setKDE3Gesture(_config->readEntry("Gesture"));
-    else
-        trigger.setPointData(_config->readEntry("GesturePointData", QStringList()));
+    trigger.setPointData(_config->readEntry("GesturePointData", QStringList()));
     }
 
 void SettingsReaderV2::visit(KHotKeys::KeyboardInputAction& action)

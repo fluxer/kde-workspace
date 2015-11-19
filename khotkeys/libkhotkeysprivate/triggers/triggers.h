@@ -330,7 +330,6 @@ class KDE_EXPORT GestureTrigger
         //! Set the point data of the gesture
         void setPointData(const StrokePoints &data);
         void setPointData(const QStringList &strings);
-        void setKDE3Gesture(const QString &gestureCode);
 
         virtual void activate( bool activate_P );
 

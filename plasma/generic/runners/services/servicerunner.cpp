@@ -153,13 +153,6 @@ void ServiceRunner::match(Plasma::RunnerContext &context)
                     continue;
                 }
 
-                // This is an older version, let's disambiguate it
-                QString subtext("KDE3");
-
-                if (!match.subtext().isEmpty()) {
-                    subtext.append(", " + match.subtext());
-                }
-
                 match.setSubtext(subtext);
             } else {
                 relevance += .1;
