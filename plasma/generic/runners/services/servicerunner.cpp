@@ -146,16 +146,8 @@ void ServiceRunner::match(Plasma::RunnerContext &context)
 
         if (service->categories().contains("KDE") || service->serviceTypes().contains("KCModule")) {
             //kDebug() << "found a kde thing" << id << match.subtext() << relevance;
-            if (id.startsWith("kde-")) {
-                //kDebug() << "old" << service->type();
-                if (!service->isApplication()) {
-                    // avoid showing old kcms and what not
-                    continue;
-                }
-
-                match.setSubtext(subtext);
-            } else {
-                relevance += .1;
+            if (!id.startsWith("kde-")) {
+                relevance += 0.1;
             }
         }
 
