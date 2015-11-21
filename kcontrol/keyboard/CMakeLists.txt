@@ -1,12 +1,8 @@
-SET(CMAKE_REQUIRED_LIBRARIES -lXi)
-CHECK_FUNCTION_EXISTS(_XiGetDevicePresenceNotifyEvent XiGetDevicePresenceNotifyEvent_EXISTS)
-
-if( X11_Xinput_FOUND AND XiGetDevicePresenceNotifyEvent_EXISTS )
-    set(XiGetDevicePresence_FOUND 1)
+if( X11_Xinput_FOUND )
     ADD_DEFINITIONS(-DHAVE_XINPUT_AND_DEVICE_NOTIFY=1)
-else( X11_Xinput_FOUND AND XiGetDevicePresenceNotifyEvent_EXISTS )
-    MESSAGE(STATUS "_XiGetDevicePresenceNotifyEvent is not found, libXi version 1.2.0 or later is required to keep layouts with keyboard hotplugging")
-endif( X11_Xinput_FOUND AND XiGetDevicePresenceNotifyEvent_EXISTS )
+else()
+    MESSAGE(STATUS "libXi version 1.2.0 or later is required to keep layouts with keyboard hotplugging")
+endif()
 
 set ( text_paint_LIB ${KDE4_PLASMA_LIBS} )
 
@@ -44,9 +40,9 @@ if(X11_XTest_FOUND)
   target_link_libraries(kded_keyboard ${X11_XTest_LIB})
 endif(X11_XTest_FOUND)
 
-if(XiGetDevicePresence_FOUND)
+if(X11_Xinput_FOUND)
   target_link_libraries(kded_keyboard ${X11_Xinput_LIB})
-endif(XiGetDevicePresence_FOUND)
+endif(X11_Xinput_FOUND)
 
 install( TARGETS kded_keyboard DESTINATION ${PLUGIN_INSTALL_DIR} )
 install( FILES keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded )
