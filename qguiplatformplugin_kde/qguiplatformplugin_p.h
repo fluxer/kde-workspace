@@ -61,7 +61,9 @@ QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
+#ifndef QT_KATIE
 QT_MODULE(Gui)
+#endif
 
 class QPalette;
 class QIcon;
