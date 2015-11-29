@@ -64,6 +64,7 @@ FullView::FullView()
     kdeclarative.initialize();
     //binds things like kconfig and icons
     kdeclarative.setupBindings();
+    kdeclarative.setupQmlJsDebugger();
 
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
