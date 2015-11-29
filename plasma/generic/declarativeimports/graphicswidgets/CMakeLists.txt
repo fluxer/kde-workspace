@@ -3,16 +3,19 @@ project(graphicswidgetsbindings)
 set(graphicswidgetsbindings_SRCS
     graphicswidgetsbindingsplugin.cpp
     declarativetabbar.cpp
-    )
+)
 
-INCLUDE_DIRECTORIES(
+include_directories(
         ${CMAKE_SOURCE_DIR}
         ${CMAKE_BINARY_DIR}
         ${KDE4_INCLUDES}
 )
 
-qt4_automoc(${graphicswidgetsbindings_SRCS})
+if(QT_QTWEBKIT_FOUND)
+    add_definitions(-DHAVE_QTWEBKIT)
+endif()
 
+qt4_automoc(${graphicswidgetsbindings_SRCS})
 
 add_library(graphicswidgetsbindingsplugin SHARED ${graphicswidgetsbindings_SRCS})
 target_link_libraries(graphicswidgetsbindingsplugin ${KDE4_PLASMA_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
