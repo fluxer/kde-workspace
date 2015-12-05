@@ -30,7 +30,7 @@
 // Qt headers
 #include <QWidget>
 #include <QTimer>
-#include <QGLWidget>
+#include <QGL>
 
 // GL headers
 #include <GL/glu.h>
