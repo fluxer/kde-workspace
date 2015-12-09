@@ -175,6 +175,14 @@ set_package_properties(LibGPS PROPERTIES
     TYPE OPTIONAL
 )
 
+macro_optional_find_package(LibKonq)
+set_package_properties(LibKonq PROPERTIES
+    DESCRIPTION "Konqueror library"
+    URL "http://fluxer.github.io/katana/"
+    PURPOSE "Homerun and folderview plasma applets"
+    TYPE OPTIONAL
+)
+
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 

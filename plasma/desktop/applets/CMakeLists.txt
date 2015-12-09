@@ -1,7 +1,9 @@
-add_subdirectory(homerun)
 add_subdirectory(kickoff)
 add_subdirectory(trash)
-add_subdirectory(folderview)
+if(LIBKONQ_FOUND)
+    add_subdirectory(homerun)
+    add_subdirectory(folderview)
+endif()
 
 #task and windowlist depend on libs/taskmanager
 add_subdirectory(tasks)

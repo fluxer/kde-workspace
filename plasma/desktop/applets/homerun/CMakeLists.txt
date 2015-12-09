@@ -3,12 +3,6 @@ project(homerun)
 # Packaging
 set(HOMERUN_VERSION "1.2.5")
 
-find_package(LibKonq REQUIRED)
-set_package_properties(LibKonq PROPERTIES
-    DESCRIPTION "Standard file management features"
-    URL "http://www.kde.org"
-)
-
 # Compile options
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
