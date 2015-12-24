@@ -33,7 +33,7 @@
 #include <Plasma/TextBrowser>
 #endif
 
-#include <../../../desktop/toolboxes/internaltoolbox.h>
+#include "../../toolboxes/internaltoolbox.h"
 
 using namespace Plasma;
 
