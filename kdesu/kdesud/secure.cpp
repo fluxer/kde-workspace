@@ -23,10 +23,6 @@
 
 #include <kdebug.h>
 
-// FIXME: This is just here to make it compile (since ksock* was removed from kdelibs).
-// It would be better to fix it more globally. (Caleb Tennis)
-typedef unsigned ksocklen_t;
-
 /**
  * Under Linux, Socket_security is supported.
  */
@@ -65,7 +61,7 @@ SocketSecurity::SocketSecurity(int sockfd) : pid(-1), gid(-1), uid(-1)
 SocketSecurity::SocketSecurity(int sockfd) : pid(-1), gid(-1), uid(-1)
 {
     ucred cred;
-    ksocklen_t len = sizeof(struct ucred);
+    socklen_t len = sizeof(struct ucred);
     if (getsockopt(sockfd, SOL_SOCKET, SO_PEERCRED, &cred, &len) < 0) {
 	kError() << "getsockopt(SO_PEERCRED) " << perror << endl;
 	return;
