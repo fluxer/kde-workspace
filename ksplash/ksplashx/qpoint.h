@@ -217,5 +217,5 @@ inline const QPoint operator/( const QPoint &p, double c )
 }
 
 #define Q_DEFINED_QPOINT
-#include "qwinexport.h"
+#include "defs.h"
 #endif // QPOINT_H
