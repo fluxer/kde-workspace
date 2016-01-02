@@ -49,7 +49,7 @@
 #define QPOINT_H
 
 #ifndef QT_H
-#include "qwindowdefs.h"
+#include "defs.h"
 #endif // QT_H
 
 
