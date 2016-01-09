@@ -27,7 +27,7 @@ class ImageCreator : public ThumbCreator
 public:
     ImageCreator() {}
     virtual bool create(const QString &path, int, int, QImage &img);
-	virtual Flags flags() const;
+    virtual Flags flags() const;
 };
 
 #endif
