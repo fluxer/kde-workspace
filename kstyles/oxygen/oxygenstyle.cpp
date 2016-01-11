@@ -653,8 +653,10 @@ namespace Oxygen
             case PM_IndicatorHeight: return CheckBox_Size;
             case PM_ExclusiveIndicatorWidth: return CheckBox_Size;
             case PM_ExclusiveIndicatorHeight: return CheckBox_Size;
+#ifndef QT_KATIE
             case PM_CheckListControllerSize: return CheckBox_Size;
             case PM_CheckListButtonSize: return CheckBox_Size;
+#endif
 
             // splitters and dock widgets
             case PM_SplitterWidth: return Splitter_Width;
@@ -1029,8 +1031,10 @@ namespace Oxygen
             case PE_PanelTipLabel: fcn = &Style::drawPanelTipLabelPrimitive; break;
 
             case PE_IndicatorMenuCheckMark: fcn = &Style::drawIndicatorMenuCheckMarkPrimitive; break;
+#ifndef QT_KATIE
             case PE_Q3CheckListIndicator: fcn = &Style::drawQ3CheckListIndicatorPrimitive; break;
             case PE_Q3CheckListExclusiveIndicator: fcn = &Style::drawQ3CheckListExclusiveIndicatorPrimitive; break;
+#endif
             case PE_IndicatorBranch: fcn = &Style::drawIndicatorBranchPrimitive; break;
             case PE_IndicatorButtonDropDown: fcn = &Style::drawIndicatorButtonDropDownPrimitive; break;
             case PE_IndicatorCheckBox: fcn = &Style::drawIndicatorCheckBoxPrimitive; break;
@@ -1132,7 +1136,9 @@ namespace Oxygen
             case CC_ComboBox: fcn = &Style::drawComboBoxComplexControl; break;
             case CC_Dial: fcn = &Style::drawDialComplexControl; break;
             case CC_GroupBox: fcn = &Style::drawGroupBoxComplexControl; break;
+#ifndef QT_KATIE
             case CC_Q3ListView: fcn = &Style::drawQ3ListViewComplexControl; break;
+#endif
             case CC_Slider: fcn = &Style::drawSliderComplexControl; break;
             case CC_SpinBox: fcn = &Style::drawSpinBoxComplexControl; break;
             case CC_TitleBar: fcn = &Style::drawTitleBarComplexControl; break;
@@ -3370,6 +3376,7 @@ namespace Oxygen
 
     }
 
+#ifndef QT_KATIE
     //___________________________________________________________________________________
     bool Style::drawQ3CheckListIndicatorPrimitive( const QStyleOption *option, QPainter *painter, const QWidget *widget ) const
     {
@@ -3399,6 +3406,7 @@ namespace Oxygen
         drawIndicatorRadioButtonPrimitive( &buttonOption, painter, widget );
         return true;
     }
+#endif // QT_KATIE
 
     //___________________________________________________________________________________
     bool Style::drawIndicatorBranchPrimitive( const QStyleOption* option, QPainter* painter, const QWidget* ) const
@@ -7094,6 +7102,7 @@ namespace Oxygen
         } else return false;
     }
 
+#ifndef QT_KATIE
     //______________________________________________________________
     bool Style::drawQ3ListViewComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
     {
@@ -7150,6 +7159,7 @@ namespace Oxygen
         return true;
 
     }
+#endif // QT_KATIE
 
     //______________________________________________________________
     bool Style::drawSliderComplexControl( const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget ) const
