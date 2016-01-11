@@ -37,7 +37,11 @@ class KUrl;
 class KFileItemList;
 class KonqOperations;
 class QActionGroup;
+#ifndef QT_KATIE
 class QStyleOptionViewItemV4;
+#else
+class QStyleOptionViewItem;
+#endif
 class ToolTipWidget;
 class Animator;
 

@@ -25,7 +25,11 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <KTextEdit>
 
+#ifndef QT_KATIE
 class QStyleOptionViewItemV4;
+#else
+class QStyleOptionViewItem;
+#endif
 
 
 class ItemEditor : public QGraphicsProxyWidget

@@ -25,8 +25,11 @@
 
 #include <QCache>
 
-
+#ifndef QT_KATIE
 class QStyleOptionViewItemV4;
+#else
+class QStyleOptionViewItem;
+#endif
 class Animator;
 
 namespace Plasma {
