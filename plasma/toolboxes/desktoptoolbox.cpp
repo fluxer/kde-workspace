@@ -53,7 +53,7 @@ class EmptyGraphicsItem : public QGraphicsWidget
         EmptyGraphicsItem(QGraphicsItem *parent)
             : QGraphicsWidget(parent)
         {
-            setAcceptsHoverEvents(true);
+            setAcceptHoverEvents(true);
             m_layout = new QGraphicsLinearLayout(this);
             m_layout->setContentsMargins(0, 0, 0, 0);
             m_layout->setSpacing(0);

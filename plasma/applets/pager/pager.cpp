@@ -74,7 +74,7 @@ Pager::Pager(QObject *parent, const QVariantList &args)
       m_configureDesktopsWidget(0),
       m_desktopWidget(qApp->desktop())
 {
-    setAcceptsHoverEvents(true);
+    setAcceptHoverEvents(true);
     setAcceptDrops(true);
     setHasConfigurationInterface(true);
     setAspectRatioMode(Plasma::IgnoreAspectRatio);

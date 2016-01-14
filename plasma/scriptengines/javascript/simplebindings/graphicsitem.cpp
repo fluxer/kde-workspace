@@ -44,9 +44,9 @@ Q_DECLARE_METATYPE(QGraphicsTextItem*)
 Q_DECLARE_METATYPE(QGraphicsSimpleTextItem*)
 
 DECLARE_BOOLEAN_GET_SET_METHODS(QGraphicsItem, acceptDrops, setAcceptDrops)
-DECLARE_BOOLEAN_GET_SET_METHODS(QGraphicsItem, acceptsHoverEvents, setAcceptsHoverEvents)
+DECLARE_BOOLEAN_GET_SET_METHODS(QGraphicsItem, acceptHoverEvents, setAcceptHoverEvents)
 DECLARE_GET_METHOD(QGraphicsItem, boundingRect)
-DECLARE_GET_METHOD(QGraphicsItem, children)
+DECLARE_GET_METHOD(QGraphicsItem, childItems)
 DECLARE_GET_METHOD(QGraphicsItem, childrenBoundingRect)
 #ifndef QT_NO_CURSOR
 DECLARE_GET_SET_METHODS(QGraphicsItem, QCursor, cursor, setCursor)
@@ -323,9 +323,9 @@ QScriptValue constructGraphicsItemClass(QScriptEngine *eng)
 {
     QScriptValue proto = QScript::wrapGVPointer<QGraphicsItem>(eng, new PrototypeGraphicsItem());
     ADD_GET_SET_METHODS(proto, acceptDrops, setAcceptDrops);
-    ADD_GET_SET_METHODS(proto, acceptsHoverEvents, setAcceptsHoverEvents);
+    ADD_GET_SET_METHODS(proto, acceptHoverEvents, setAcceptHoverEvents);
     ADD_GET_METHOD(proto, boundingRect);
-    ADD_GET_METHOD(proto, children);
+    ADD_GET_METHOD(proto, childItems);
     ADD_GET_METHOD(proto, childrenBoundingRect);
 #ifndef QT_NO_CURSOR
     ADD_GET_SET_METHODS(proto, cursor, setCursor);

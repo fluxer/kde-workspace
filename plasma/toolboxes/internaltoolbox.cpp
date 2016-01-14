@@ -80,7 +80,7 @@ void InternalToolBox::init()
                 this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
     }
 
-    setAcceptsHoverEvents(true);
+    setAcceptHoverEvents(true);
 }
 
 Plasma::Containment *InternalToolBox::containment()

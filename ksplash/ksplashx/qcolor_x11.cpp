@@ -267,9 +267,7 @@ void QColor::initialize()
 	    }
 	}
 
-	int dictsize;
 	if ( screendata[scr]->g_truecolor ) {			// truecolor
-	    dictsize    = 1;			// will not need color dict
 	    screendata[scr]->red_mask    = (uint)screendata[scr]->g_vis->red_mask;
 	    screendata[scr]->green_mask  = (uint)screendata[scr]->g_vis->green_mask;
 	    screendata[scr]->blue_mask   = (uint)screendata[scr]->g_vis->blue_mask;
@@ -279,13 +277,7 @@ void QColor::initialize()
 		highest_bit( screendata[scr]->green_mask ) - 7;
 	    screendata[scr]->blue_shift =
 		highest_bit( screendata[scr]->blue_mask ) - 7;
-	} else {
-	    dictsize = col_std_dict;
 	}
-#if 0
-	screendata[scr]->colorDict = new QColorDict(dictsize);	// create dictionary
-	Q_CHECK_PTR( screendata[scr]->colorDict );
-#endif
 
 	if ( spec == (int)QApplication::ManyColor ) {
 	    screendata[scr]->color_reduce = true;
