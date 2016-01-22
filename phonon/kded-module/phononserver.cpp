@@ -40,7 +40,9 @@
 #include <QtDBus/QDBusMessage>
 #include <QtDBus/QDBusMetaType>
 #include <QtCore/QVariant>
+#ifndef QT_KATIE
 #include <phonon/pulsesupport.h>
+#endif
 #include <Solid/AudioInterface>
 #include <Solid/GenericInterface>
 #include <Solid/Device>
@@ -382,6 +384,7 @@ static void removeOssOnlyDevices(QList<PS::DeviceInfo> *list)
 
 void PhononServer::findDevices()
 {
+#ifndef QT_KATIE
     if (Phonon::PulseSupport *pulse = Phonon::PulseSupport::getInstance()) {
         // NOTE: This is relying on internal behavior....
         //       enable internally simply sets a bool that is later && with the
@@ -393,6 +396,7 @@ void PhononServer::findDevices()
             return;
         }
     }
+#endif
 
     // Fetch the full list of audio and video devices from Solid
     const QList<Solid::Device> &solidAudioDevices =
