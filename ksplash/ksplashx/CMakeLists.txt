@@ -39,7 +39,7 @@ set(ksplashx_SRCS
 )
 
 # this doesn't work on x86_64 so it needs somebody who knows assembly enough to fix it
-if(X86_MMX_FOUND AND "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "i?86")
+if(X86_MMX_FOUND AND "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "i[3-6]86")
     enable_language(ASM)
     set(ksplashx_SRCS
         ${ksplashx_SRCS}
