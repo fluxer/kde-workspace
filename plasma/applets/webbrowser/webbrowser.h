@@ -35,7 +35,6 @@ class QGraphicsLinearLayout;
 class QStandardItemModel;
 class QStandardItem;
 class QTimer;
-class KUrlPixmapProvider;
 class KHistoryComboBox;
 class KUrl;
 class KCompletion;
@@ -125,7 +124,6 @@ private:
     KUrl m_url;
     int m_verticalScrollValue;
     int m_horizontalScrollValue;
-    KUrlPixmapProvider *m_pixmapProvider;
     KCompletion *m_completion;
     KBookmarkManager *m_bookmarkManager;
     QStandardItemModel *m_bookmarkModel;

@@ -36,7 +36,6 @@
 #include <KCompletion>
 #include <KBookmarkManager>
 #include <KIconLoader>
-#include <KUrlPixmapProvider>
 #include <KUriFilter>
 #include <KMessageBox>
 #include <KConfigDialog>
@@ -107,8 +106,6 @@ QGraphicsWidget *WebBrowser::graphicsWidget()
     m_historyCombo->setZValue(999);
 
     m_nativeHistoryCombo->setDuplicatesEnabled(false);
-    m_pixmapProvider = new KUrlPixmapProvider;
-    m_nativeHistoryCombo->setPixmapProvider(m_pixmapProvider);
 
     m_toolbarLayout->addItem(m_historyCombo);
     m_go = addTool("go-jump-locationbar", m_toolbarLayout);
