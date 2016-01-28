@@ -1,11 +1,3 @@
-set(PLASMA_MENU_APPLET "org.kde.homerun-kicker")
-# set(PLASMA_MENU_APPLET "launcher")
-
-configure_file(
-    data/plasma-desktoprc.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/plasma-desktoprc
-)
-
 include_directories(${CMAKE_SOURCE_DIR}/libs 
                     ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
                     ${CMAKE_SOURCE_DIR}/plasma/desktop/shell/scripting
@@ -62,6 +54,6 @@ install(FILES data/plasma-themes.knsrc DESTINATION  ${CONFIG_INSTALL_DIR})
 install(FILES data/plasma-desktop.notifyrc DESTINATION ${DATA_INSTALL_DIR}/plasma-desktop)
 install(FILES data/plasma-desktop-js.xml DESTINATION ${DATA_INSTALL_DIR}/katepart/syntax/)
 install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma-desktoprc
+    FILES data/plasma-desktoprc
     DESTINATION ${CONFIG_INSTALL_DIR}
 )
