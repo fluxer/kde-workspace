@@ -193,7 +193,6 @@ void BackendSelection::selectionChanged()
             iconPixmap = KIconLoader::global()->loadIcon("preferences-desktop-sound", KIconLoader::NoGroup, 128);
 
         m_icon->setPixmap(iconPixmap);
-        m_name->setText(QString());//service->name());
         m_comment->setText(service->comment());
         const QString website = service->property("X-KDE-PhononBackendInfo-Website").toString();
         m_website->setText(QString("<a href=\"%1\">%1</a>").arg(website));
