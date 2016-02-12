@@ -266,7 +266,28 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
     connect(fineTuningUi.comboSecondaryToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
     connect(fineTuningUi.comboMenubarStyle,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
 
-    addWhatsThis();
+    // Page1
+    cbStyle->setWhatsThis( i18n("Here you can choose from a list of"
+                            " predefined widget styles (e.g. the way buttons are drawn) which"
+                            " may or may not be combined with a theme (additional information"
+                            " like a marble texture or a gradient).") );
+    stylePreview->setWhatsThis( i18n("This area shows a preview of the currently selected style "
+                            "without having to apply it to the whole desktop.") );
+    // Page2
+    page2->setWhatsThis( i18n("This page allows you to choose details about the widget style options") );
+    fineTuningUi.comboToolbarIcons->setWhatsThis( i18n( "<p><b>No Text:</b> Shows only icons on toolbar buttons. "
+                            "Best option for low resolutions.</p>"
+                            "<p><b>Text Only: </b>Shows only text on toolbar buttons.</p>"
+                            "<p><b>Text Beside Icons: </b> Shows icons and text on toolbar buttons. "
+                            "Text is aligned beside the icon.</p>"
+                            "<b>Text Below Icons: </b> Shows icons and text on toolbar buttons. "
+                            "Text is aligned below the icon.") );
+    fineTuningUi.cbIconsOnButtons->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
+                            "show small icons alongside some important buttons.") );
+    fineTuningUi.cbIconsInMenus->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
+                            "show small icons alongside most menu items.") );
+    fineTuningUi.comboGraphicEffectsLevel->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
+                            "run internal animations.") );
 
     if (!QFile::exists(QLibraryInfo::location(QLibraryInfo::PluginsPath) + "/menubar/libappmenu-qt.so")) {
         fineTuningUi.menubarBox->hide();
@@ -835,32 +856,6 @@ void KCMStyle::loadEffects( KConfig& config )
     fineTuningUi.comboGraphicEffectsLevel->setCurrentIndex(fineTuningUi.comboGraphicEffectsLevel->findData(graphicConfigGroup.readEntry("GraphicEffectsLevel", ((int) KGlobalSettings::graphicEffectsLevel()))));
 
     m_bEffectsDirty = false;
-}
-
-void KCMStyle::addWhatsThis()
-{
-    // Page1
-    cbStyle->setWhatsThis( i18n("Here you can choose from a list of"
-                            " predefined widget styles (e.g. the way buttons are drawn) which"
-                            " may or may not be combined with a theme (additional information"
-                            " like a marble texture or a gradient).") );
-    stylePreview->setWhatsThis( i18n("This area shows a preview of the currently selected style "
-                            "without having to apply it to the whole desktop.") );
-    // Page2
-    page2->setWhatsThis( i18n("This page allows you to choose details about the widget style options") );
-    fineTuningUi.comboToolbarIcons->setWhatsThis( i18n( "<p><b>No Text:</b> Shows only icons on toolbar buttons. "
-                            "Best option for low resolutions.</p>"
-                            "<p><b>Text Only: </b>Shows only text on toolbar buttons.</p>"
-                            "<p><b>Text Beside Icons: </b> Shows icons and text on toolbar buttons. "
-                            "Text is aligned beside the icon.</p>"
-                            "<b>Text Below Icons: </b> Shows icons and text on toolbar buttons. "
-                            "Text is aligned below the icon.") );
-    fineTuningUi.cbIconsOnButtons->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
-                            "show small icons alongside some important buttons.") );
-    fineTuningUi.cbIconsInMenus->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
-                            "show small icons alongside most menu items.") );
-    fineTuningUi.comboGraphicEffectsLevel->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
-                            "run internal animations.") );
 }
 
 #include "moc_kcmstyle.cpp"

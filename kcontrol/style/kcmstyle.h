@@ -72,7 +72,6 @@ protected:
 
     void loadStyle( KConfig& config );
     void loadEffects( KConfig& config );
-    void addWhatsThis();
 
     virtual void changeEvent( QEvent *event );
 
