@@ -22,15 +22,9 @@
 #include <kdebug.h>
 #include <unistd.h>
 
-#if defined(Q_CC_MSVC)
-// TODO: or rather use uid_t in the getuid() call below?
-#define __uid_t uid_t
-#endif
-
 ActionReply SaveHelper::save(QVariantMap args)
 {
-    __uid_t uid = getuid();
-    kDebug() << "executing uid=" << uid;
+    kDebug() << "executing uid=" << getuid();
 
     return ActionReply::SuccessReply;
 }

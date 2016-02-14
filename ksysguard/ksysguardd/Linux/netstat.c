@@ -264,10 +264,10 @@ updateNetStatTcpUdpRaw(const char *cmd)
 {
 	FILE *netstat;
 	char buffer[1024];
-	uint local_addr, local_port;
-	uint remote_addr, remote_port;
+	unsigned int local_addr, local_port;
+	unsigned int remote_addr, remote_port;
 	int uid;
-	uint state;
+	unsigned int state;
 	SocketInfo *socket_info;
 
 	if (strstr(cmd, "tcp")) {
