@@ -114,9 +114,9 @@ kSlideShowSaver::kSlideShowSaver( WId id ): KScreenSaver(id)
   mTimer.start(10);
 
   QDesktopWidget *d = QApplication::desktop();
-  if(geometry() == d->geometry() && d->numScreens() > 1)
+  if(geometry() == d->geometry() && d->screenCount() > 1)
   {
-    for(int i = 0; i < d->numScreens(); ++i)
+    for(int i = 0; i < d->screenCount(); ++i)
     {
       QRect s = d->screenGeometry(i);
       mGeoList.append(mScreenGeo(s.width(), s.height(), s.topLeft().x(), s.topLeft().y()));

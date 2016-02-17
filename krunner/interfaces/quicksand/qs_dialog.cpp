@@ -185,7 +185,7 @@ void QsDialog::display(const QString &term)
     m_matchView->setFocus();
 
     int screen = 0;
-    if (QApplication::desktop()->numScreens() > 1) {
+    if (QApplication::desktop()->screenCount() > 1) {
         screen = QApplication::desktop()->screenNumber(QCursor::pos());
     }
 

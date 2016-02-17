@@ -34,7 +34,7 @@ Kephal::DesktopWidgetScreens::DesktopWidgetScreens(QObject * parent)
     connect(desktop, SIGNAL(screenCountChanged(int)), this, SLOT(handleScreenCountChanged(int)));
     connect(desktop, SIGNAL(resized(int)), this, SLOT(handleScreenResized(int)));
 
-    for (int i = 0; i < desktop->numScreens(); i++) {
+    for (int i = 0; i < desktop->screenCount(); i++) {
         QRect geometry = desktop->screenGeometry(i);
         Kephal::SimpleScreen * screen =
             new Kephal::SimpleScreen(i, geometry.size(), geometry.topLeft(), false, this);

@@ -408,7 +408,7 @@ main(void)
     if (themer) {
         // Group by size to avoid rescaling images repeatedly
         QHash<QSize, QList<int> > scrns;
-        for (int i = 0; i < dw->numScreens(); i++)
+        for (int i = 0; i < dw->screenCount(); i++)
             scrns[dw->screenGeometry(i).size()] << i;
         QPixmap pm(dw->size());
         QPainter p(&pm);

@@ -65,7 +65,7 @@ void SaverCorona::init()
 
     QDesktopWidget *desktop = QApplication::desktop();
     connect(desktop,SIGNAL(screenCountChanged(int)), SLOT(numScreensUpdated(int)));
-    m_numScreens = desktop->numScreens();
+    m_numScreens = desktop->screenCount();
 
     Plasma::ContainmentActionsPluginsConfig plugins;
     plugins.addPlugin(Qt::NoModifier, Qt::RightButton, "minimalcontextmenu");

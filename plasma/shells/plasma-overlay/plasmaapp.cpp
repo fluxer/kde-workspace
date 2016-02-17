@@ -151,7 +151,7 @@ PlasmaApp::PlasmaApp(Display* display, Qt::HANDLE visual, Qt::HANDLE colormap)
     // Add 10% so that other (smaller) pixmaps can also be cached.
     int cacheSize = 0;
     QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->numScreens();
+    int numScreens = desktop->screenCount();
     for (int i = 0; i < numScreens; i++) {
         QRect geometry = desktop->screenGeometry(i);
         cacheSize += 4 * geometry.width() * geometry.height() / 1024;
