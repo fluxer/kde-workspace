@@ -50,7 +50,7 @@ public:
         loaded = false;
 
         Plasma::Applet *applet = q->applet();
-        applet->setAcceptsHoverEvents(true);
+        applet->setAcceptHoverEvents(true);
 
         view = new Plasma::WebView(applet);
         QObject::connect(view, SIGNAL(loadFinished(bool)),
