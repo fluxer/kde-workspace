@@ -1,5 +1,9 @@
 # APPLET
 
+if(QT_QTWEBKIT_FOUND)
+    add_definitions(-DHAVE_QTWEBKIT)
+endif()
+
 set(simple_javascript_engine_SRCS
     common/extension_launchapp.cpp
     common/extension_io.cpp
