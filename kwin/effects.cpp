@@ -47,9 +47,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtConcurrentRun>
 #include <QDBusServiceWatcher>
 #include <QtDBus/qdbuspendingcall.h>
+#include <QLibrary>
 
 #include <KDebug>
-#include <KLibrary>
 #include <KDesktopFile>
 #include <KConfigGroup>
 #include <KGlobal>
@@ -1278,7 +1278,7 @@ unsigned long EffectsHandlerImpl::xrenderBufferPicture()
     return None;
 }
 
-KLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
+QLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
 {
     QString libname = service->library();
 #ifdef KWIN_HAVE_OPENGLES
@@ -1286,7 +1286,7 @@ KLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
         libname.replace("kwin4_effect_", "kwin4_effect_gles_");
     }
 #endif
-    KLibrary* library = new KLibrary(libname);
+    QLibrary* library = new QLibrary(libname);
     if (!library) {
         kError(1212) << "couldn't open library for effect '" <<
                      service->name() << "'" << endl;
@@ -1352,16 +1352,16 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     }
     KService::Ptr service = offers.first();
 
-    KLibrary* library = findEffectLibrary(service.data());
+    QLibrary* library = findEffectLibrary(service.data());
     if (!library) {
         return false;
     }
 
     QString version_symbol = "effect_version_" + name;
-    KLibrary::void_function_ptr version_func = library->resolveFunction(version_symbol.toAscii());
+    void *version_func = library->resolve(version_symbol.toAscii());
     if (version_func == NULL) {
         kWarning(1212) << "Effect " << name << " does not provide required API version, ignoring.";
-	delete library;
+        delete library;
         return false;
     }
     typedef int (*t_versionfunc)();
@@ -1377,13 +1377,13 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     }
 
     const QString enabledByDefault_symbol = "effect_enabledbydefault_" + name;
-    KLibrary::void_function_ptr enabledByDefault_func = library->resolveFunction(enabledByDefault_symbol.toAscii().data());
+    void *enabledByDefault_func = library->resolve(enabledByDefault_symbol.toAscii().data());
 
     const QString supported_symbol = "effect_supported_" + name;
-    KLibrary::void_function_ptr supported_func = library->resolveFunction(supported_symbol.toAscii().data());
+    void *supported_func = library->resolve(supported_symbol.toAscii().data());
 
     const QString create_symbol = "effect_create_" + name;
-    KLibrary::void_function_ptr create_func = library->resolveFunction(create_symbol.toAscii().data());
+    void *create_func = library->resolve(create_symbol.toAscii().data());
 
     if (supported_func) {
         typedef bool (*t_supportedfunc)();

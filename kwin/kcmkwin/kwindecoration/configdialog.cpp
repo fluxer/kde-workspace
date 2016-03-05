@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QDBusConnection>
 #include <QDBusMessage>
 
-#include <KLibrary>
+#include <QLibrary>
 #include <KVBox>
 #include <KLocale>
 
@@ -81,9 +81,9 @@ KWinDecorationConfigDialog::KWinDecorationConfigDialog(QString deco, const QList
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget(m_ui);
 
-    KLibrary library(styleToConfigLib(deco));
+    QLibrary library(styleToConfigLib(deco));
     if (library.load()) {
-        KLibrary::void_function_ptr alloc_ptr = library.resolveFunction("allocate_config");
+        void *alloc_ptr = library.resolve("allocate_config");
         if (alloc_ptr != NULL) {
             allocatePlugin = (QObject * (*)(KConfigGroup & conf, QWidget * parent))alloc_ptr;
             KConfigGroup config(m_kwinConfig, "Style");

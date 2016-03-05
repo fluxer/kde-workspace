@@ -29,12 +29,14 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QFile>
+#include <QBuffer>
+#include <QFile>
 #include <QBitmap>
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>
+#include <QLibrary>
+#include <QDirIterator>
 
 #include <kcodecs.h>
 #include <kurl.h>
@@ -44,7 +46,6 @@
 #include <kglobal.h>
 #include <kiconloader.h>
 #include <kmimetype.h>
-#include <klibrary.h>
 #include <kdebug.h>
 #include <kservice.h>
 #include <kservicetype.h>
@@ -62,7 +63,6 @@
 #include <kconfiggroup.h>
 
 #include <iostream>
-#include <QtCore/QDirIterator>
 
 // Use correctly KComponentData instead of KApplication (but then no QPixmap)
 #undef USE_KINSTANCE
@@ -649,9 +649,9 @@ ThumbCreator* ThumbnailProtocol::getThumbCreator(const QString& plugin)
     if (!creator) {
         // Don't use KPluginFactory here, this is not a QObject and
         // neither is ThumbCreator
-        KLibrary library(plugin);
+        QLibrary library(plugin);
         if (library.load()) {
-            newCreator create = (newCreator)library.resolveFunction("new_creator");
+            newCreator create = (newCreator)library.resolve("new_creator");
             if (create) {
                 creator = create();
             }

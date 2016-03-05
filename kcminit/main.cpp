@@ -25,12 +25,12 @@
 
 #include <QFile>
 #include <QTimer>
+#include <QLibrary>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <kservice.h>
-#include <klibrary.h>
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -69,7 +69,7 @@ static void waitForReady()
 
 bool KCMInit::runModule(const QString &libName, KService::Ptr service)
 {
-    KLibrary lib(libName);
+    QLibrary lib(libName);
     if (lib.load()) {
         QVariant tmp = service->property("X-KDE-Init-Symbol", QVariant::String);
         QString kcminit;
@@ -83,7 +83,7 @@ bool KCMInit::runModule(const QString &libName, KService::Ptr service)
             kcminit = "kcminit_" + libName;
 
         // get the kcminit_ function
-        KLibrary::void_function_ptr init = lib.resolveFunction(kcminit.toUtf8());
+        void *init = lib.resolve(kcminit.toUtf8());
         if (init) {
             // initialize the module
             kDebug(1208) << "Initializing " << libName << ": " << kcminit;

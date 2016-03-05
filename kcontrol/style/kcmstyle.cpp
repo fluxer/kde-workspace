@@ -43,13 +43,13 @@
 #include <kautostart.h>
 #include <KDebug>
 #include <KNotification>
-#include <KLibrary>
 #include <KColorScheme>
 #include <KStandardDirs>
 #ifdef Q_WS_X11
 #include <kdecoration.h>
 #endif
-
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QSettings>
@@ -81,9 +81,6 @@
 
 
 /**** DLL Interface for kcontrol ****/
-
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KCMStyleFactory, registerPlugin<KCMStyle>();)
 K_EXPORT_PLUGIN(KCMStyleFactory("kcmstyle"))
@@ -322,7 +319,8 @@ void KCMStyle::styleSpecificConfig()
 {
     QString libname = styleEntries[currentStyle()]->configPage;
 
-    KLibrary library(libname, KCMStyleFactory::componentData());
+#warning port loader to KPluginLoader
+    QLibrary library(libname); // , KCMStyleFactory::componentData());
     if (!library.load()) {
         KMessageBox::detailedError(this,
             i18n("There was an error loading the configuration dialog for this style."),
@@ -331,7 +329,7 @@ void KCMStyle::styleSpecificConfig()
         return;
     }
 
-    KLibrary::void_function_ptr allocPtr = library.resolveFunction("allocate_kstyle_config");
+    void *allocPtr = library.resolve("allocate_kstyle_config");
 
     if (!allocPtr)
     {

@@ -28,13 +28,13 @@
 
 #include <QtCore/QTextStream>
 #include <QtCore/QTimer>
+#include <QtCore/QLibrary>
 #include <QtGui/QLabel>
 #include <QtGui/QShortcut>
 
 #include <KConfigGroup>
 #include <KGlobalSettings>
 #include <KLocale>
-#include <KLibrary>
 #include <KPushButton>
 #include <KStandardShortcut>
 #include <KVBox>
@@ -164,11 +164,11 @@ namespace Oxygen
     {
 
         // load decoration from plugin
-        KLibrary* library = new KLibrary( "kstyle_oxygen_config" );
+        QLibrary* library = new QLibrary( "kstyle_oxygen_config" );
 
         if (library->load())
         {
-            KLibrary::void_function_ptr alloc_ptr = library->resolveFunction("allocate_kstyle_config");
+            void *alloc_ptr = library->resolve("allocate_kstyle_config");
             if (alloc_ptr != NULL)
             {
 
@@ -210,11 +210,11 @@ namespace Oxygen
     {
 
         // load decoration from plugin
-        KLibrary* library = new KLibrary( "kwin_oxygen_config" );
+        QLibrary* library = new QLibrary( "kwin_oxygen_config" );
 
         if (library->load())
         {
-            KLibrary::void_function_ptr alloc_ptr = library->resolveFunction("allocate_config");
+            void *alloc_ptr = library->resolve("allocate_config");
             if (alloc_ptr != NULL)
             {
 

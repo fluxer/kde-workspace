@@ -24,7 +24,7 @@
 #include "sound.h"
 #include <kdemacros.h>
 
-class KLibrary;
+class QLibrary;
 
 namespace KHotKeys
 {
@@ -46,7 +46,7 @@ public:
     virtual void abort();
     virtual Sound sound();
 
-    static bool init( KLibrary* );
+    static bool init( QLibrary* );
 signals:
     void recorded(const Sound&);
 

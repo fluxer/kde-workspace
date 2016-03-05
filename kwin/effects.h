@@ -236,7 +236,7 @@ protected Q_SLOTS:
     void slotPropertyNotify(long atom);
 
 protected:
-    KLibrary* findEffectLibrary(KService* service);
+    QLibrary* findEffectLibrary(KService* service);
     void effectsChanged();
     void setupClientConnections(KWin::Client *c);
     void setupUnmanagedConnections(KWin::Unmanaged *u);

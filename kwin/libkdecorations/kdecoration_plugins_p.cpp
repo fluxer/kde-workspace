@@ -29,7 +29,6 @@ DEALINGS IN THE SOFTWARE.
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <klibrary.h>
 #include <kconfiggroup.h>
 #include <KLocalizedString>
 #include <KGlobal>
@@ -37,6 +36,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include <QDir>
 #include <QFile>
+#include <QLibrary>
 
 #include "kdecorationfactory.h"
 
@@ -106,7 +106,7 @@ KDecoration* KDecorationPlugins::createDecoration(KDecorationBridge* bridge)
 }
 
 // tests whether the plugin can be loaded
-bool KDecorationPlugins::canLoad(QString nameStr, KLibrary **loadedLib)
+bool KDecorationPlugins::canLoad(QString nameStr, QLibrary **loadedLib)
 {
     if (nameStr.isEmpty())
         return false; // we can't load that
@@ -125,7 +125,7 @@ bool KDecorationPlugins::canLoad(QString nameStr, KLibrary **loadedLib)
         return false;
     }
 
-    KLibrary libToFind(nameStr);
+    QLibrary libToFind(nameStr);
     QString path = libToFind.fileName();
     kDebug(1212) << "kwin : path " << path << " for " << nameStr;
 
@@ -134,7 +134,7 @@ bool KDecorationPlugins::canLoad(QString nameStr, KLibrary **loadedLib)
     }
 
     // Try loading the requested plugin
-    KLibrary *lib = new KLibrary(path);
+    QLibrary *lib = new QLibrary(path);
 
     if (!lib)
         return false;
@@ -155,7 +155,7 @@ bool KDecorationPlugins::canLoad(QString nameStr, KLibrary **loadedLib)
     KDecorationFactory*(*cptr)() = NULL;
     int (*vptr)()  = NULL;
     int deco_version = 0;
-    KLibrary::void_function_ptr version_func = lib->resolveFunction("decoration_version");
+    void *version_func = lib->resolve("decoration_version");
     if (version_func) {
         vptr = (int(*)())version_func;
         deco_version = vptr();
@@ -181,7 +181,7 @@ bool KDecorationPlugins::canLoad(QString nameStr, KLibrary **loadedLib)
         return false;
     }
 
-    KLibrary::void_function_ptr create_func = lib->resolveFunction("create_factory");
+    void *create_func = lib->resolve("create_factory");
     if (create_func)
         cptr = (KDecorationFactory * (*)())create_func;
 
@@ -214,7 +214,7 @@ bool KDecorationPlugins::loadPlugin(QString nameStr)
     if (pluginStr == nameStr)
         return true;
 
-    KLibrary *oldLibrary = library;
+    QLibrary *oldLibrary = library;
     KDecorationFactory* oldFactory = fact;
 
     if (!canLoad(nameStr, &library)) {
@@ -229,7 +229,7 @@ bool KDecorationPlugins::loadPlugin(QString nameStr)
     }
 
     // guarded by "canLoad"
-    KLibrary::void_function_ptr create_func = library->resolveFunction("create_factory");
+    void *create_func = library->resolve("create_factory");
     if (create_func)
         create_ptr = (KDecorationFactory * (*)())create_func;
     if (!create_ptr) {  // this means someone probably attempted to load "some" kwin plugin/lib as deco

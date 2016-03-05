@@ -26,13 +26,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kcheckpass-enums.h>
 // KDE
 #include <KDebug>
-#include <KLibrary>
 #include <KLocale>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KStandardDirs>
 
 // Qt
+#include <QtCore/QLibrary>
 #include <QtCore/QFile>
 #include <QtCore/QSocketNotifier>
 #include <QtCore/QTimer>
@@ -233,7 +233,7 @@ bool Greeter::loadGreetPlugin()
     }
     for (QStringList::ConstIterator it = m_plugins.constBegin(); it != m_plugins.constEnd(); ++it) {
         GreeterPluginHandle plugin;
-        KLibrary *lib = new KLibrary( (*it)[0] == QLatin1Char( '/' ) ? *it : QLatin1String( "kgreet_" ) + *it );
+        QLibrary *lib = new QLibrary( (*it)[0] == QLatin1Char( '/' ) ? *it : QLatin1String( "kgreet_" ) + *it );
         if (lib->fileName().isEmpty()) {
             kWarning() << "GreeterPlugin " << *it << " does not exist" ;
             delete lib;

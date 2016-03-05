@@ -33,13 +33,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <KColorScheme>
 #include <kguiitem.h>
-#include <klibrary.h>
 #include <klocale.h>
 #include <kpushbutton.h>
 #include <krandom.h>
 #include <kseparator.h>
 #include <KStandardGuiItem>
 
+#include <QLibrary>
 #include <QAction>
 #include <QApplication>
 #include <QEvent>
@@ -951,7 +951,7 @@ KGVerify::init(const QStringList &plugins)
 
     foreach (const QString& pg, plugins) {
         GreeterPluginHandle plugin;
-        KLibrary *lib = new KLibrary(pg[0] == '/' ? pg : "kgreet_" + pg);
+        QLibrary *lib = new QLibrary(pg[0] == '/' ? pg : "kgreet_" + pg);
         if (lib->fileName().isEmpty()) {
             logError("GreeterPlugin %s does not exist\n", qPrintable(pg));
             delete lib;

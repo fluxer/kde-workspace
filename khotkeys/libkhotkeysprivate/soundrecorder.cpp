@@ -23,7 +23,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <QtCore/QTimer>
-#include <klibrary.h>
+#include <QtCore/QLibrary>
 
 #include "khotkeysglobal.h"
 
@@ -32,7 +32,7 @@ namespace KHotKeys
 
 SoundRecorder::create_ptr SoundRecorder::create_fun = NULL;
 
-bool SoundRecorder::init( KLibrary* lib )
+bool SoundRecorder::init( QLibrary* lib )
 {
 #ifdef HAVE_ARTS
     if( create_fun == NULL && lib != NULL )

@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include "kdecoration.h"
 
-class KLibrary;
+class QLibrary;
 class KDecoration;
 class KDecorationBridge;
 class KDecorationFactory;
@@ -51,7 +51,7 @@ public:
     /** Whether the plugin with @p name can be loaded
      * if @p loadedLib is passed, the library is NOT unloaded and freed
      * what is now your resposibility (intended for and used by below loadPlugin mainly) */
-    bool canLoad(QString name, KLibrary ** loadedLib = 0);
+    bool canLoad(QString name, QLibrary ** loadedLib = 0);
     bool loadPlugin(QString name);
     void destroyPreviousPlugin();
     KDecorationFactory* factory();
@@ -64,9 +64,9 @@ protected:
     QString defaultPlugin; // FRAME normalne protected?
 private:
     KDecorationFactory*(*create_ptr)();
-    KLibrary *library;
+    QLibrary *library;
     KDecorationFactory* fact;
-    KLibrary *old_library;
+    QLibrary *old_library;
     KDecorationFactory* old_fact;
     QString pluginStr;
     KSharedConfigPtr config;
