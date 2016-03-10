@@ -31,7 +31,6 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kimageio.h>
 #include <kfiledialog.h>
 #include <kstandarddirs.h>
 #include <kurlrequester.h>

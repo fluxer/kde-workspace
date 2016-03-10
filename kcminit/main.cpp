@@ -73,14 +73,13 @@ bool KCMInit::runModule(const QString &libName, KService::Ptr service)
     if (lib.load()) {
         QVariant tmp = service->property("X-KDE-Init-Symbol", QVariant::String);
         QString kcminit;
-        if( tmp.isValid() )
-        {
+        if ( tmp.isValid() ) {
             kcminit = tmp.toString();
             if( !kcminit.startsWith( QLatin1String( "kcminit_" ) ) )
                 kcminit = "kcminit_" + kcminit;
-        }
-        else
+        } else {
             kcminit = "kcminit_" + libName;
+        }
 
         // get the kcminit_ function
         void *init = lib.resolve(kcminit.toUtf8());
@@ -118,8 +117,9 @@ void KCMInit::runModules( int phase )
           library = service->library();
       }
 
-      if (library.isEmpty())
+      if (library.isEmpty()) {
           continue; // Skip
+      }
 
       // see ksmserver's README for the description of the phases
       QVariant vphase = service->property("X-KDE-Init-Phase", QVariant::Int );

@@ -21,7 +21,7 @@ if(X11_XRes_FOUND)
     include_directories(${X11_XRes_INCLUDE_PATH})
 endif()
 
-target_link_libraries(processui PRIVATE ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} processcore)
+target_link_libraries(processui PRIVATE ${QT_QTSCRIPT_LIBRARY})
 target_link_libraries(processui PUBLIC ${KDE4_KDEUI_LIBS} processcore)
 
 
@@ -30,7 +30,10 @@ set_target_properties(processui
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
-install(TARGETS processui EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(
+    TARGETS processui
+    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
 
 #----------------------
 
@@ -40,7 +43,18 @@ kde4_add_plugin(ksysguardwidgets ${ksysguardwidgets_SRCS} ${ksysguardwidgets_PAR
 
 target_link_libraries(ksysguardwidgets ${KDE4_KDEUI_LIBS} processui)
 
-install(TARGETS ksysguardwidgets DESTINATION ${PLUGIN_INSTALL_DIR}/plugins/designer )
+install(
+    TARGETS ksysguardwidgets
+    DESTINATION ${PLUGIN_INSTALL_DIR}/kde4/plugins/designer
+)
 
-install( FILES ProcessModel.h ProcessFilter.h KTextEditVT.h ksysguardprocesslist.h DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard COMPONENT Devel)
+install(
+    FILES
+    ProcessModel.h
+    ProcessFilter.h
+    KTextEditVT.h
+    ksysguardprocesslist.h
+    DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard
+    COMPONENT Devel
+)
 
