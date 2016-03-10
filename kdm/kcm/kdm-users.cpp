@@ -51,6 +51,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QImageReader>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -427,17 +428,23 @@ bool KDMUsersWidget::eventFilter(QObject *, QEvent *e)
     return false;
 }
 
-KUrl *decodeImgDrop(QDropEvent *e, QWidget *wdg);
-
 void KDMUsersWidget::userButtonDropEvent(QDropEvent *e)
 {
-    KUrl *url = decodeImgDrop(e, this);
-    if (url) {
-        QString pixpath;
-        KIO::NetAccess::download(*url, pixpath, parentWidget());
-        changeUserPix(pixpath);
-        KIO::NetAccess::removeTempFile(pixpath);
-        delete url;
+    KUrl::List uriList = KUrl::List::fromMimeData(e->mimeData());
+    if (!uriList.isEmpty()) {
+        KUrl *url = new KUrl(uriList.first());
+
+        QImageReader reader(url->path());
+        if ( !reader.canRead() ) {
+            KMessageBox::sorry(this, i18n("%1 does not appear to be an image file.\n", url->path()));
+            delete url;
+        } else {
+            QString pixpath;
+            KIO::NetAccess::download(*url, pixpath, parentWidget());
+            changeUserPix(pixpath);
+            KIO::NetAccess::removeTempFile(pixpath);
+            delete url;
+        }
     }
 }
 

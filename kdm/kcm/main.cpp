@@ -34,7 +34,6 @@
 #include "helper.h"
 
 #include <kaboutdata.h>
-#include <kimageio.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
@@ -44,12 +43,13 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <QtGui/qevent.h>
+#include <QEvent>
 #include <QFile>
 #include <QLabel>
 #include <QStackedWidget>
 #include <QTabWidget>
 #include <QVBoxLayout>
+#include <QImageReader>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -75,30 +75,6 @@ int handleActionReply(QWidget *parent, const KAuth::ActionReply &reply)
     }
 
     return code;
-}
-
-KUrl *decodeImgDrop(QDropEvent *e, QWidget *wdg)
-{
-    KUrl::List uriList = KUrl::List::fromMimeData(e->mimeData());
-    if (!uriList.isEmpty()) {
-        KUrl *url = new KUrl(uriList.first());
-
-        KMimeType::Ptr mime = KMimeType::findByUrl(*url);
-        if (mime && KImageIO::isSupported(mime->name(), KImageIO::Reading))
-            return url;
-
-        QStringList qs = KImageIO::pattern().split('\n');
-        qs.removeFirst();
-
-        QString msg = i18n(
-            "%1 does not appear to be an image file.\n"
-            "Please use files with these extensions:\n"
-            "%2",
-            url->fileName(), qs.join("\n"));
-        KMessageBox::sorry(wdg, msg);
-        delete url;
-    }
-    return 0;
 }
 
 KConfig *config;
