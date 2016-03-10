@@ -434,16 +434,22 @@ void KDMUsersWidget::userButtonDropEvent(QDropEvent *e)
     if (!uriList.isEmpty()) {
         KUrl *url = new KUrl(uriList.first());
 
-        QImageReader reader(url->path());
-        if ( !reader.canRead() ) {
-            KMessageBox::sorry(this, i18n("%1 does not appear to be an image file.\n", url->path()));
-            delete url;
+        bool tempfile = false;
+        QString pixpath;
+        if (url->isLocalFile()) {
+            pixpath = url->path();
         } else {
-            QString pixpath;
+            tempfile = true;
             KIO::NetAccess::download(*url, pixpath, parentWidget());
+        }
+        QImageReader reader(pixpath);
+        if (!reader.canRead()) {
+            KMessageBox::sorry(this, i18n("%1 does not appear to be an image file.\n", url->path()));
+        } else {
             changeUserPix(pixpath);
+        }
+        if (tempfile) {
             KIO::NetAccess::removeTempFile(pixpath);
-            delete url;
         }
     }
 }
