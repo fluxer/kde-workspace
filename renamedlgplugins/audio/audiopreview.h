@@ -21,11 +21,7 @@
 #define AUDIOPREVIEW_H
 
 #include <kvbox.h>
-
-namespace KMediaPlayer
-{
-  class Player;
-}
+#include <kmediawidget.h>
 
 class QLabel;
 class KUrl;
@@ -48,7 +44,7 @@ private:
   QString m_localFile;
   bool m_isTempFile;
 
-  KMediaPlayer::Player *m_player;
+  KMediaWidget *m_player;
 };
 #endif
 

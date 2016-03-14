@@ -46,7 +46,6 @@
 #include <Plasma/TextEdit>
 #include <Plasma/ToolButton>
 #include <Plasma/TreeView>
-#include <Plasma/VideoWidget>
 #ifdef HAVE_QTWEBKIT
 #include <Plasma/WebView>
 #endif
@@ -100,7 +99,6 @@ void GraphicsWidgetsBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::TextEdit>(uri, 0, 1, "TextEdit");
     qmlRegisterType<Plasma::ToolButton>(uri, 0, 1, "ToolButton");
     qmlRegisterType<Plasma::TreeView>(uri, 0, 1, "TreeView");
-    qmlRegisterType<Plasma::VideoWidget>(uri, 0, 1, "VideoWidget");
 #ifdef HAVE_QTWEBKIT
     qmlRegisterType<Plasma::WebView>(uri, 0, 1, "WebView");
 #endif

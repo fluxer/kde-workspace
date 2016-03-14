@@ -4,7 +4,6 @@ kde4_add_plugin(kcm_access kcmaccess.cpp)
 
 target_link_libraries(kcm_access
     ${KDE4_KIO_LIBS}
-    ${KDE4_PHONON_LIBS}
     ${KDE4_KNOTIFYCONFIG_LIBS}
     ${X11_LIBRARIES}
 )
@@ -26,8 +25,8 @@ add_executable(kaccess ${kaccess_SRCS})
 
 target_link_libraries(kaccess
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_PHONON_LIBS}
     ${X11_LIBRARIES}
+    kmediaplayer
 )
 
 install(

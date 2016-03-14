@@ -53,7 +53,6 @@
 #include <Plasma/Package>
 #include <Plasma/PopupApplet>
 #include <Plasma/Svg>
-#include <Plasma/VideoWidget>
 
 #define USE_JS_SCRIPTENGINE
 

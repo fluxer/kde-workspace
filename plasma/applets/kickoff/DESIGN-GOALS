@@ -37,8 +37,6 @@ Detailed goals:
     Ideas to explore in future:
 
     -> Use Sonnet for spell-checking the user's search query 
-    -> Use Phonon for previews of audio and video content
-       in the favorites and recently used sections
     -> Light KWin integration for interesting effects for revealing,
        hiding or rendering the Kickoff launcher on composited '3D'
        desktops. 

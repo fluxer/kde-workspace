@@ -45,59 +45,32 @@
 #include <config-runtime.h>
 #include <kcomponentdata.h>
 #include <knotifyconfig.h>
-
-// Phonon headers
-#include <phonon/mediaobject.h>
-#include <phonon/path.h>
-#include <phonon/audiooutput.h>
-
-struct Player
-{
-	Player()
-		: media(new Phonon::MediaObject),
-		output(new Phonon::AudioOutput(Phonon::NotificationCategory))
-	{
-		Phonon::createPath(media, output);
-	}
-
-	inline void play(const QString &file) { media->setCurrentSource(KUrl(file)); media->enqueue(Phonon::MediaSource()); media->play(); }
-	inline void stop() { media->stop(); }
-	inline void setVolume(float volume) { output->setVolume(volume); }
-
-	~Player()
-	{
-		output->deleteLater();
-		media->deleteLater();
-	}
-
-	Phonon::MediaObject *const media;
-	Phonon::AudioOutput *const output;
-};
+#include <kmediaplayer.h>
 
 class PlayerPool
 {
 	public:
 		PlayerPool() : m_idlePlayer(0), m_changeVolume(false), m_volume(1.0) {}
 
-		Player *getPlayer();
-		void returnPlayer(Player *);
+		KAudioPlayer *getPlayer();
+		void returnPlayer(KAudioPlayer *);
 		void clear();
 
 		void setChangeVolume(bool b);
 		void setVolume(float volume);
 
 	private:
-		Player *m_idlePlayer;
-		QList<Player *> m_playersInUse;
+		KAudioPlayer *m_idlePlayer;
+		QList<KAudioPlayer *> m_playersInUse;
 		bool m_changeVolume;
 		float m_volume;
 };
 
-Player *PlayerPool::getPlayer()
+KAudioPlayer *PlayerPool::getPlayer()
 {
-	Player *p = 0;
+	KAudioPlayer *p = 0;
 	if (!m_idlePlayer) {
-		p = new Player;
+		p = new KAudioPlayer();
 	} else {
 		p = m_idlePlayer;
 		m_idlePlayer = 0;
@@ -109,7 +82,7 @@ Player *PlayerPool::getPlayer()
 	return p;
 }
 
-void PlayerPool::returnPlayer(Player *p)
+void PlayerPool::returnPlayer(KAudioPlayer *p)
 {
 	m_playersInUse.removeAll(p);
 	if (m_idlePlayer) {
@@ -129,7 +102,7 @@ void PlayerPool::setChangeVolume(bool b)
 {
 	m_changeVolume = b;
 	if (m_changeVolume) {
-		foreach (Player *p, m_playersInUse) {
+		foreach (KAudioPlayer *p, m_playersInUse) {
 			p->setVolume(m_volume);
 		}
 	}
@@ -139,7 +112,7 @@ void PlayerPool::setVolume(float v)
 {
 	m_volume = v;
 	if (m_changeVolume) {
-		foreach (Player *p, m_playersInUse) {
+		foreach (KAudioPlayer *p, m_playersInUse) {
 			p->setVolume(v);
 		}
 	}
@@ -152,7 +125,7 @@ class NotifyBySound::Private
 		QString externalPlayer;
 
 		QHash<int, KProcess *> processes;
-		QHash<int, Player*> playerObjects;
+		QHash<int, KAudioPlayer*> playerObjects;
 		QSignalMapper *signalmapper;
 		PlayerPool playerPool;
 		QBasicTimer poolTimer;
@@ -252,10 +225,10 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
 
 	if(d->playerMode == Private::UsePhonon)
 	{
-		Player *player = d->playerPool.getPlayer();
-		connect(player->media, SIGNAL(finished()), d->signalmapper, SLOT(map()));
-		d->signalmapper->setMapping(player->media, eventId);
-		player->play(soundFile);
+		KAudioPlayer *player = d->playerPool.getPlayer();
+		connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
+		d->signalmapper->setMapping(player, eventId);
+		player->load(soundFile);
 		d->playerObjects.insert(eventId, player);
 	}
 	else if (d->playerMode == Private::ExternalPlayer && !d->externalPlayer.isEmpty())
@@ -295,8 +268,8 @@ void NotifyBySound::slotSoundFinished(int id)
 	kDebug() << id;
 	if(d->playerObjects.contains(id))
 	{
-		Player *player=d->playerObjects.take(id);
-		disconnect(player->media, SIGNAL(finished()), d->signalmapper, SLOT(map()));
+		KAudioPlayer *player=d->playerObjects.take(id);
+		disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
 		d->playerPool.returnPlayer(player);
 		//d->poolTimer.start(1000, this);
 	}
@@ -321,7 +294,7 @@ void NotifyBySound::closeNow()
 	const int id = d->closeQueue.dequeue();
 	if(d->playerObjects.contains(id))
 	{
-		Player *p = d->playerObjects.take(id);
+		KAudioPlayer *p = d->playerObjects.take(id);
 		p->stop();
 		d->playerPool.returnPlayer(p);
 		//d->poolTimer.start(1000, this);

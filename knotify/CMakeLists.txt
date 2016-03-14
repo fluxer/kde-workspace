@@ -2,16 +2,16 @@ add_subdirectory( sounds  )
 ########### next target ###############
 
 set(knotify_SRCS
-main.cpp
-knotify.cpp
-notifybysound.cpp
-notifybypopup.cpp
-notifybylogfile.cpp
-notifybytaskbar.cpp
-notifybyexecute.cpp
-notifybyktts.cpp
-imageconverter.cpp
-ksolidnotify.cpp
+    main.cpp
+    knotify.cpp
+    notifybysound.cpp
+    notifybypopup.cpp
+    notifybylogfile.cpp
+    notifybytaskbar.cpp
+    notifybyexecute.cpp
+    notifybyktts.cpp
+    imageconverter.cpp
+    ksolidnotify.cpp
 )
 
 set(knotifyplugin_SRCS
@@ -32,7 +32,7 @@ add_executable( knotify ${knotify_SRCS})
 
 add_library( knotifyplugin SHARED ${knotifyplugin_SRCS})
 
-target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_PHONON_LIBS} ${KDE4_SOLID_LIBS} knotifyplugin)
+target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_SOLID_LIBS} knotifyplugin kmediaplayer)
 
 target_link_libraries( knotifyplugin ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
 

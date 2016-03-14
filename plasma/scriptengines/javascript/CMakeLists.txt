@@ -43,7 +43,7 @@ set(simple_javascript_engine_SRCS
     simplebindings/url.cpp
 )
 
-include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 kde4_add_plugin(plasma_appletscript_simple_javascript ${simple_javascript_engine_SRCS})
 
@@ -145,7 +145,7 @@ set(declarative_appletscript_SRCS
     simplebindings/point.cpp
     )
 
-include_directories(${PHONON_INCLUDES} ${CMAKE_CURRENT_SOURCE_DIR}/common)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common)
 
 kde4_add_plugin(plasma_appletscript_declarative ${declarative_appletscript_SRCS})
 target_link_libraries(plasma_appletscript_declarative

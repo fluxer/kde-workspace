@@ -28,7 +28,6 @@
 #include <kurl.h>
 #include <kio/netaccess.h>
 #include <kurllabel.h>
-#include <kmediaplayer/player.h>
 #include <kservicetypetrader.h>
 #include <ksqueezedtextlabel.h>
 
@@ -111,11 +110,12 @@ void AudioPreview::initView( const QString& mimeType )
   description = new QLabel(this);
   description->setText( desc );
   description->adjustSize();
-  m_player = KServiceTypeTrader::createInstanceFromQuery<KMediaPlayer::Player>( "KMediaPlayer/Player", QString(), this );
+  m_player = new KMediaWidget( this );
   if ( m_player )
   {
-    static_cast<KParts::ReadOnlyPart*>(m_player)->openUrl( url );
-    m_player->widget()->show();
+    
+    m_player->show();
+    m_player->open( url.url() );
   }
 }
 

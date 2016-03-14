@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QPainter>
 #include <QLabel>
-#include <QtGui/QDesktopWidget>
+#include <QDesktopWidget>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -472,14 +472,13 @@ void KAccessApp::xkbBellNotify(XkbBellNotifyEvent *event)
       flush();
     }
 
-  // ask Phonon to ring a nice bell
+  // ring a nice bell
   if (_artsBell) {
-    if (!_player) { // as creating the player is expensive, delay the creation
-      _player = Phonon::createPlayer(Phonon::AccessibilityCategory);
-      _player->setParent(this);
-      _player->setCurrentSource(KUrl(_currentPlayerSource));
+    // as creating the player is expensive, delay the creation
+    if (!_player) {
+      _player = new KAudioPlayer(this);
     }
-    _player->play();
+    _player->load(_currentPlayerSource);
   }
 }
 

@@ -470,11 +470,11 @@ void KSMServer::completeShutdownOrCheckpoint()
         discardSession();
 
     if ( state == Shutdown ) {
-        KNotification *n = KNotification::event( "exitkde" , QString() , QPixmap() , 0l ,  KNotification::DefaultEvent  ); // KDE says good bye
+        // KDE says good bye
+        KNotification *n = KNotification::event( "exitkde" , QString() , QPixmap() , 0l ,  KNotification::DefaultEvent  );
         connect(n, SIGNAL(closed()) , this, SLOT(logoutSoundFinished()) );
         // https://bugs.kde.org/show_bug.cgi?id=228005
-        // if sound is not working for some reason (e.g. no phonon
-        // backends are installed) the closed() signal never happens
+        // if sound is not working for some reason the closed() signal never happens
         // and logoutSoundFinished() never gets called. Add this timer to make
         // sure the shutdown procedure continues even if sound system is broken.
         QTimer::singleShot(5000, this, SLOT(logoutSoundTimeout()));

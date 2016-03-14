@@ -23,7 +23,6 @@
 #include <Plasma/Applet>
 #include <Plasma/Animation>
 #include <Plasma/Extender>
-#include <Plasma/VideoWidget>
 
 //Q_DECLARE_METATYPE(SimpleJavaScriptApplet*)
 Q_DECLARE_METATYPE(QGraphicsWidget*)
@@ -32,42 +31,9 @@ Q_DECLARE_METATYPE(QGraphicsLayout*)
 Q_DECLARE_METATYPE(Plasma::Animation*)
 Q_DECLARE_METATYPE(Plasma::Applet*)
 Q_DECLARE_METATYPE(Plasma::Extender*)
-Q_DECLARE_METATYPE(Plasma::VideoWidget::Controls)
 Q_DECLARE_METATYPE(Plasma::Svg*)
 Q_DECLARE_METATYPE(Qt::MouseButton)
 Q_DECLARE_METATYPE(QList<double>)
-
-QScriptValue qScriptValueFromControls(QScriptEngine *engine, const Plasma::VideoWidget::Controls &controls)
-{
-    return QScriptValue(engine, controls);
-}
-
-void controlsFromScriptValue(const QScriptValue& obj, Plasma::VideoWidget::Controls &controls)
-{
-    int flagValue = obj.toInteger();
-    //FIXME: it has to be a less ugly way to do that :)
-    if (flagValue & Plasma::VideoWidget::Play) {
-        controls |= Plasma::VideoWidget::Play;
-    }
-    if (flagValue & Plasma::VideoWidget::Pause) {
-        controls |= Plasma::VideoWidget::Pause;
-    }
-    if (flagValue & Plasma::VideoWidget::Stop) {
-        controls |= Plasma::VideoWidget::Stop;
-    }
-    if (flagValue & Plasma::VideoWidget::PlayPause) {
-        controls |= Plasma::VideoWidget::PlayPause;
-    }
-    if (flagValue & Plasma::VideoWidget::Progress) {
-        controls |= Plasma::VideoWidget::Progress;
-    }
-    if (flagValue & Plasma::VideoWidget::Volume) {
-        controls |= Plasma::VideoWidget::Volume;
-    }
-    if (flagValue & Plasma::VideoWidget::OpenFile) {
-        controls |= Plasma::VideoWidget::OpenFile;
-    }
-}
 
 typedef Plasma::Animation* AnimationPtr;
 QScriptValue qScriptValueFromAnimation(QScriptEngine *engine, const AnimationPtr &anim)
@@ -140,7 +106,6 @@ void registerSimpleAppletMetaTypes(QScriptEngine *engine)
     qScriptRegisterSequenceMetaType<QList<double> >(engine);
     qScriptRegisterMetaType<Plasma::Animation *>(engine, qScriptValueFromAnimation, abstractAnimationFromQScriptValue);
     qScriptRegisterMetaType<Plasma::Extender *>(engine, qScriptValueFromExtender, extenderFromQScriptValue);
-    qScriptRegisterMetaType<Plasma::VideoWidget::Controls>(engine, qScriptValueFromControls, controlsFromScriptValue, QScriptValue());
     qScriptRegisterMetaType<Qt::MouseButton>(engine, qScriptValueFromMouseButton, mouseButtonFromScriptValue);
 }
 

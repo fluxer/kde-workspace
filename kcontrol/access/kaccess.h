@@ -1,18 +1,15 @@
 #ifndef __K_ACCESS_H__
 #define __K_ACCESS_H__
 
-
 #include <QWidget>
 #include <QColor>
-//Added by qt3to4:
 #include <QLabel>
-#include <QtGui/qevent.h>
-
+#include <QEvent>
 
 #include <KUniqueApplication>
 #include <KUrl>
-
-#include <Phonon/MediaObject>
+#include <QTextStream> // so that it can define Status
+#include <KMediaPlayer>
 
 #include <X11/Xlib.h>
 #define explicit int_explicit        // avoid compiler name clash in XKBlib.h
@@ -73,7 +70,7 @@ private:
 
   QWidget *overlay;
 
-  Phonon::MediaObject *_player;
+  KAudioPlayer *_player;
   QString _currentPlayerSource;
 
   WId _activeWindow;

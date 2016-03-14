@@ -1,4 +1,3 @@
-
 #include "kaccess.h"
 #include <kdebug.h>
 #include <kaboutdata.h>
