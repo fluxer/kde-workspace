@@ -26,9 +26,9 @@
 #ifndef TESTWIN_H
 #define TESTWIN_H
 
-#include "kswidget.h"
+#include <QWidget>
 
-class TestWin : public KSWidget
+class TestWin : public QWidget
 {
     Q_OBJECT
 public:
