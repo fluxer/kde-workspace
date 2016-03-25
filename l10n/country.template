@@ -13,7 +13,8 @@
 #MonetaryThousandsSeparator=
 #PositiveSign=
 #NegativeSign=-
-#FracDigits=
+#DecimalPlaces=
+#MonetaryDecimalPlaces=
 #PositivePrefixCurrencySymbol=
 #NegativePrefixCurrencySymbol=
 #PositiveMonetarySignPosition=
