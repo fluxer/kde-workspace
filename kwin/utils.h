@@ -46,13 +46,12 @@ namespace KWin
 
 // window types that are supported as normal windows (i.e. KWin actually manages them)
 const int SUPPORTED_MANAGED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
-        | NET::UtilityMask | NET::SplashMask;
+        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::UtilityMask | NET::SplashMask;
 // window types that are supported as unmanaged (mainly for compositing)
 const int SUPPORTED_UNMANAGED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
-        | NET::UtilityMask | NET::SplashMask | NET::DropdownMenuMask | NET::PopupMenuMask
-        | NET::TooltipMask | NET::NotificationMask | NET::ComboBoxMask | NET::DNDIconMask;
+        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::UtilityMask | NET::SplashMask
+        | NET::DropdownMenuMask | NET::PopupMenuMask | NET::TooltipMask | NET::NotificationMask
+        | NET::ComboBoxMask | NET::DNDIconMask;
 
 const long ClientWinMask = XCB_EVENT_MASK_KEY_PRESS | XCB_EVENT_MASK_KEY_RELEASE |
                            XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE |

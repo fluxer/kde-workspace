@@ -83,7 +83,7 @@ void DetectDialog::readWindow(WId w)
     role = info.windowRole();
     type = info.windowType(NET::NormalMask | NET::DesktopMask | NET::DockMask
                            | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-                           | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask);
+                           | NET::UtilityMask | NET::SplashMask);
     title = info.name();
     machine = info.clientMachine();
     executeDialog();

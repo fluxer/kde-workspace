@@ -309,14 +309,13 @@ static int typeToCombo(NET::WindowType type)
         return 0; // Normal
     static const int conv[] = {
         0, // Normal
-        7, // Desktop
+        1, // Dialog
+        2, // Utility
         3, // Dock
         4, // Toolbar
         5, // Menu
-        1, // Dialog
-        8, // TopMenu
-        2, // Utility
         6  // Splash
+        7, // Desktop
     };
     return conv[ type ];
 }
@@ -331,8 +330,7 @@ static NET::WindowType comboToType(int val)
         NET::Toolbar,
         NET::Menu,
         NET::Splash,
-        NET::Desktop,
-        NET::TopMenu
+        NET::Desktop
     };
     return conv[ val ];
 }
@@ -383,7 +381,6 @@ void RulesWidget::setRules(Rules* rules)
     types->item(5)->setSelected(rules->types & NET::MenuMask);
     types->item(6)->setSelected(rules->types & NET::SplashMask);
     types->item(7)->setSelected(rules->types & NET::DesktopMask);
-    types->item(8)->setSelected(rules->types & NET::TopMenuMask);
     title->setText(rules->title);
     title_match->setCurrentIndex(rules->titlematch);
     titleMatchChanged();
@@ -479,7 +476,6 @@ Rules* RulesWidget::rules() const
         rules->types |= types->item(5)->isSelected() ? NET::MenuMask : 0U;
         rules->types |= types->item(6)->isSelected() ? NET::SplashMask : 0U;
         rules->types |= types->item(7)->isSelected() ? NET::DesktopMask : 0U;
-        rules->types |= types->item(8)->isSelected() ? NET::TopMenuMask : 0U;
     }
     rules->title = title->text();
     rules->titlematch = static_cast< Rules::StringMatch >(title_match->currentIndex());

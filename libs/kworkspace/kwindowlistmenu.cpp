@@ -140,7 +140,7 @@ void KWindowListMenu::init()
 
       NET::WindowType windowType = info->windowType( NET::NormalMask | NET::DesktopMask
           | NET::DockMask | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-          | NET::TopMenuMask | NET::UtilityMask | NET::SplashMask );
+          | NET::UtilityMask | NET::SplashMask );
 
       if ( (windowType == NET::Normal || windowType == NET::Unknown
               || (windowType == NET::Dialog && standaloneDialog( info, list )))

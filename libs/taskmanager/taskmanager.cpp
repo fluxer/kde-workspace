@@ -227,7 +227,7 @@ void TaskManager::windowAdded(WId w)
     // ignore NET::Tool and other special window types
     NET::WindowType wType = info.windowType(NET::NormalMask | NET::DesktopMask | NET::DockMask |
                                             NET::ToolbarMask | NET::MenuMask | NET::DialogMask |
-                                            NET::TopMenuMask | NET::UtilityMask | NET::SplashMask);
+                                            NET::UtilityMask | NET::SplashMask);
 
     if (info.transientFor() > 0) {
         const WId transientFor = info.transientFor();

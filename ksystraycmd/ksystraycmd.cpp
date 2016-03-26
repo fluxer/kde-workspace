@@ -286,8 +286,7 @@ void KSysTrayCmd::checkExistingWindows()
 }
 
 const int SUPPORTED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
-    | NET::UtilityMask | NET::SplashMask;
+    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::UtilityMask | NET::SplashMask;
 
 void KSysTrayCmd::windowAdded(WId w)
 {
@@ -298,8 +297,7 @@ void KSysTrayCmd::windowAdded(WId w)
     kDebug() << "windowAdded, id" << w << "pattern is " << window << " window is " << info.name();
 
     // always ignore these window types
-    if( info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::TopMenu
-        || info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Toolbar
+    if( info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Toolbar
         || info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Desktop )
         return;
 

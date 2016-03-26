@@ -43,10 +43,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  and ActiveLayer (see also NETWM sect.7.10.). The layer a window is in depends
  on the window type, and on other things like whether the window is active.
 
- NET::Splash clients belong to the Normal layer. NET::TopMenu clients
- belong to Dock layer. Clients that are both NET::Dock and NET::KeepBelow
- are in the Normal layer in order to keep the 'allow window to cover
- the panel' Kicker setting to work as intended (this may look like a slight
+ NET::Splash clients belong to the Normal layer. Clients that are both NET::Dock
+ and NET::KeepBelow are in the Normal layer in order to keep the 'allow window to
+ cover the panel' Kicker setting to work as intended (this may look like a slight
  spec violation, but a) I have no better idea, b) the spec allows adjusting
  the stacking order if the WM thinks it's a good idea . We put all
  NET::KeepAbove above all Docks too, even though the spec suggests putting

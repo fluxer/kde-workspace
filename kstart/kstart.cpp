@@ -118,7 +118,7 @@ void KStart::sendRule() {
     if( (!windowtitle.isEmpty()) || (!windowclass.isEmpty()) ) {
         // always ignore these window types
         message += "types=" + QString().setNum( -1U &
-            ~( NET::TopMenuMask | NET::ToolbarMask | NET::DesktopMask | NET::SplashMask | NET::MenuMask )) + '\n';
+            ~( NET::ToolbarMask | NET::DesktopMask | NET::SplashMask | NET::MenuMask )) + '\n';
     } else {
         // accept only "normal" windows
         message += "types=" + QString().setNum( NET::NormalMask | NET::DialogMask ) + '\n';
@@ -156,16 +156,14 @@ void KStart::sendRule() {
 }
 
 const int SUPPORTED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
-    | NET::UtilityMask | NET::SplashMask;
+    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::UtilityMask | NET::SplashMask;
 
 void KStart::windowAdded(WId w){
 
     KWindowInfo info = KWindowSystem::windowInfo( w, NET::WMWindowType | NET::WMName );
 
     // always ignore these window types
-    if( info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::TopMenu
-        || info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Toolbar
+    if( info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Toolbar
         || info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) == NET::Desktop )
         return;
 
@@ -382,8 +380,6 @@ int main( int argc, char *argv[] )
 	  windowtype = NET::Menu;
       else if ( s == "dialog" )
 	  windowtype = NET::Dialog;
-      else if ( s == "topmenu" )
-	  windowtype = NET::TopMenu;
       else
 	  windowtype = NET::Normal;
   }

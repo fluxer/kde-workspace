@@ -118,7 +118,7 @@ void KscreenEffect::paintWindow(EffectWindow *w, int mask, QRegion region, Windo
     effects->paintWindow(w, mask, region, data);
 }
 
-void KscreenEffect::propertyNotify(EffectWindow *window, long int atom)
+void KscreenEffect::propertyNotify(EffectWindow *window, long atom)
 {
     if (window || atom != m_atom) {
         return;

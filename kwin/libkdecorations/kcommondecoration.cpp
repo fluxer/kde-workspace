@@ -986,7 +986,7 @@ bool KCommonDecoration::eventFilter(QObject* o, QEvent* e)
 }
 
 const int SUPPORTED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-                                        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
+                                        | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
                                         | NET::UtilityMask | NET::SplashMask;
 
 bool KCommonDecoration::isToolWindow() const

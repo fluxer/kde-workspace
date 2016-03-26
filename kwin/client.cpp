@@ -603,7 +603,6 @@ void Client::detectNoBorder()
     switch(windowType()) {
     case NET::Desktop :
     case NET::Dock :
-    case NET::TopMenu :
     case NET::Splash :
         noborder = true;
         app_noborder = true;

@@ -28,8 +28,7 @@ namespace KHotKeys
 {
 
 const int SUPPORTED_WINDOW_TYPES_MASK = NET::NormalMask | NET::DesktopMask | NET::DockMask
-    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::TopMenuMask
-    | NET::UtilityMask | NET::SplashMask;
+    | NET::ToolbarMask | NET::MenuMask | NET::DialogMask | NET::UtilityMask | NET::SplashMask;
 
 
 class Windowdef_list;
