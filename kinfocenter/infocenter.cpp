@@ -26,7 +26,6 @@
 //KDE
 #include <KLocale>
 #include <KIcon>
-#include <KMenuBar>
 #include <KMenu>
 #include <KHelpMenu>
 #include <KConfig>
@@ -50,6 +49,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QKeySequence>
+#include <QMenuBar>
 
 KInfoCenter::KInfoCenter() : KXmlGuiWindow( 0, Qt::WindowContextHelpButtonHint )
 {

@@ -22,11 +22,10 @@
 
 #include <QTimer>
 #include <QRadioButton>
-#include <QtCore/qvariant.h>
+#include <QMenuBar>
 
 #include <KMenu>
 #include <KDebug>
-#include <KMenuBar>
 #include <KToolBar>
 #include <KAboutData>
 #include <KMessageBox>
