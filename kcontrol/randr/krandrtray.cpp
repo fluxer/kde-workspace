@@ -603,7 +603,7 @@ void KRandRSystemTray::slotPrefs()
 	{
 	    KCMultiDialog *kcm = new KCMultiDialog( associatedWidget() );
 	    kcm->setFaceType( KCMultiDialog::Plain );
-	    kcm->setPlainCaption( i18n( "Configure Display" ) );
+	    kcm->setWindowTitle( i18n( "Configure Display" ) );
 	    kcm->addModule( "display" );
 	    kcm->setAttribute(Qt::WA_DeleteOnClose);
 	    m_kcm = kcm;

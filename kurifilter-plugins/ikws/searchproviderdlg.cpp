@@ -51,7 +51,7 @@ SearchProviderDialog::SearchProviderDialog(SearchProvider *provider, QList<Searc
     m_dlg.cbCharset->addItems(charsets);
     if (m_provider)
     {
-        setPlainCaption(i18n("Modify Web Shortcut"));
+        setWindowTitle(i18n("Modify Web Shortcut"));
         m_dlg.leName->setText(m_provider->name());
         m_dlg.leQuery->setText(m_provider->query());
         m_dlg.leShortcut->setText(m_provider->keys().join(","));
@@ -61,7 +61,7 @@ SearchProviderDialog::SearchProviderDialog(SearchProvider *provider, QList<Searc
     }
     else
     {
-        setPlainCaption(i18n("New Web Shortcut"));
+        setWindowTitle(i18n("New Web Shortcut"));
         m_dlg.leName->setFocus();
 
         //If the clipboard contains a url copy it to the query lineedit

@@ -149,7 +149,7 @@ void TopLevel::setLocalProcessController(ProcessController * localProcessControl
 
 void TopLevel::retranslateUi()
 {
-  setPlainCaption( i18n( "System Monitor" ) );
+  setWindowTitle( i18n( "System Monitor" ) );
   mRefreshTabAction->setText(i18n("&Refresh Tab"));
   mNewWorksheetAction->setText(i18n( "&New Tab..." ));
   mInsertWorksheetAction->setText(i18n( "Import Tab Fr&om File..." ));
