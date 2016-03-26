@@ -76,7 +76,7 @@ void WindowsRunner::gatherInfo()
             // ignore NET::Tool and other special window types
             NET::WindowType wType = info.windowType(NET::NormalMask | NET::DesktopMask | NET::DockMask |
                                                     NET::ToolbarMask | NET::MenuMask | NET::DialogMask |
-                                                    NET::TopMenuMask | NET::UtilityMask | NET::SplashMask);
+                                                    NET::UtilityMask | NET::SplashMask);
 
             if (wType != NET::Normal && wType != NET::Unknown &&
                 wType != NET::Dialog && wType != NET::Utility) {

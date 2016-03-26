@@ -558,14 +558,13 @@ void Pager::recalculateWindowRects()
                                                              NET::WMState | NET::XAWMState | NET::WMVisibleName);
         NET::WindowType type = info.windowType(NET::NormalMask | NET::DialogMask |
                                                NET::UtilityMask | NET::DesktopMask | NET::DockMask |
-                                               NET::TopMenuMask | NET::SplashMask | NET::ToolbarMask |
-                                               NET::MenuMask);
+                                               NET::SplashMask | NET::ToolbarMask | NET::MenuMask);
 
         // the reason we don't check for -1 or Net::Unknown here is that legitimate windows, such
         // as some java application windows, may not have a type set for them.
         // apparently sane defaults on properties is beyond the wisdom of x11.
-        if (type == NET::Desktop || type == NET::Dock || type == NET::TopMenu ||
-            type == NET::Splash || type == NET::Menu || type == NET::Toolbar ||
+        if (type == NET::Desktop || type == NET::Dock || type == NET::Splash
+            || type == NET::Menu || type == NET::Toolbar ||
             info.hasState(NET::SkipPager) || info.isMinimized()) {
             continue;
         }
