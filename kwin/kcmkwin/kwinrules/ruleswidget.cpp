@@ -314,8 +314,8 @@ static int typeToCombo(NET::WindowType type)
         3, // Dock
         4, // Toolbar
         5, // Menu
-        6  // Splash
-        7, // Desktop
+        6,  // Splash
+        7 // Desktop
     };
     return conv[ type ];
 }
