@@ -28,9 +28,8 @@
 
 // QT headers
 #include <QHash>
-#include <QtCore/QBasicTimer>
-#include <QtCore/QQueue>
 #include <QtCore/QTimer>
+#include <QtCore/QQueue>
 #include <QtCore/qcoreevent.h>
 #include <QtCore/QStack>
 #include <QSignalMapper>
@@ -38,7 +37,6 @@
 // KDE headers
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <kstandarddirs.h>
 #include <kconfiggroup.h>
 #include <kurl.h>
@@ -47,88 +45,14 @@
 #include <knotifyconfig.h>
 #include <kmediaplayer.h>
 
-class PlayerPool
-{
-	public:
-		PlayerPool() : m_idlePlayer(0), m_changeVolume(false), m_volume(1.0) {}
-
-		KAudioPlayer *getPlayer();
-		void returnPlayer(KAudioPlayer *);
-		void clear();
-
-		void setChangeVolume(bool b);
-		void setVolume(float volume);
-
-	private:
-		KAudioPlayer *m_idlePlayer;
-		QList<KAudioPlayer *> m_playersInUse;
-		bool m_changeVolume;
-		float m_volume;
-};
-
-KAudioPlayer *PlayerPool::getPlayer()
-{
-	KAudioPlayer *p = 0;
-	if (!m_idlePlayer) {
-		p = new KAudioPlayer();
-	} else {
-		p = m_idlePlayer;
-		m_idlePlayer = 0;
-	}
-	if (m_changeVolume) {
-		p->setVolume(m_volume);
-	}
-	m_playersInUse << p;
-	return p;
-}
-
-void PlayerPool::returnPlayer(KAudioPlayer *p)
-{
-	m_playersInUse.removeAll(p);
-	if (m_idlePlayer) {
-		delete p;
-	} else {
-		m_idlePlayer = p;
-	}
-}
-
-void PlayerPool::clear()
-{
-	delete m_idlePlayer;
-	m_idlePlayer = 0;
-}
-
-void PlayerPool::setChangeVolume(bool b)
-{
-	m_changeVolume = b;
-	if (m_changeVolume) {
-		foreach (KAudioPlayer *p, m_playersInUse) {
-			p->setVolume(m_volume);
-		}
-	}
-}
-
-void PlayerPool::setVolume(float v)
-{
-	m_volume = v;
-	if (m_changeVolume) {
-		foreach (KAudioPlayer *p, m_playersInUse) {
-			p->setVolume(v);
-		}
-	}
-}
-
 class NotifyBySound::Private
 {
 	public:
-		enum { NoSound, UsePhonon, ExternalPlayer } playerMode;
-		QString externalPlayer;
+		enum { NoSound, UseMediaPlayer } playerMode;
 
-		QHash<int, KProcess *> processes;
 		QHash<int, KAudioPlayer*> playerObjects;
 		QSignalMapper *signalmapper;
-		PlayerPool playerPool;
-		QBasicTimer poolTimer;
+		KAudioPlayer *currentPlayer;
 		QQueue<int> closeQueue;
 };
 
@@ -137,6 +61,8 @@ NotifyBySound::NotifyBySound(QObject *parent) : KNotifyPlugin(parent),d(new Priv
 	d->signalmapper = new QSignalMapper(this);
 	connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
 
+	d->currentPlayer = new KAudioPlayer(this);
+	startTimer(1000);
 	loadConfig();
 }
 
@@ -149,32 +75,15 @@ NotifyBySound::~NotifyBySound()
 
 void NotifyBySound::loadConfig()
 {
-    // load external player settings
+        // load player settings
 	KSharedConfig::Ptr kc = KGlobal::config();
 	KConfigGroup cg(kc, "Sounds");
 
-	d->playerMode = Private::UsePhonon;
-	if(cg.readEntry( "Use external player", false ))
-	{
-		d->playerMode = Private::ExternalPlayer;
-		d->externalPlayer = cg.readPathEntry("External player", QString());
-		// try to locate a suitable player if none is configured
-		if ( d->externalPlayer.isEmpty() ) {
-			const QStringList players = QStringList() << "wavplay" << "aplay" << "auplay" << "artsplay" << "akodeplay";
-			QStringList::const_iterator it = players.constBegin();
-			while ( d->externalPlayer.isEmpty() && it != players.constEnd() ) {
-				d->externalPlayer = KStandardDirs::findExe( *it );
-				++it;
-			}
-		}
-	}
-	else if(cg.readEntry( "No sound" , false ))
+	d->playerMode = Private::UseMediaPlayer;
+	if(cg.readEntry( "No sound" , false ))
 	{
 		d->playerMode = Private::NoSound;
 	}
-	// load default volume
-	d->playerPool.setChangeVolume( cg.readEntry( "ChangeVolume", false ) );
-	setVolume( cg.readEntry( "Volume", 100 ) );
 }
 
 
@@ -188,7 +97,7 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
 		return;
 	}
 
-	if(d->playerObjects.contains(eventId)  || d->processes.contains(eventId) )
+	if(d->playerObjects.contains(eventId))
 	{
 		//a sound is already playing for this notification,  we don't support playing two sounds.
 		finish( eventId );
@@ -221,46 +130,35 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
 	}
 
 	kDebug() << " going to play " << soundFile;
-	d->poolTimer.stop();
 
-	if(d->playerMode == Private::UsePhonon)
+	if(d->playerMode == Private::UseMediaPlayer)
 	{
-		KAudioPlayer *player = d->playerPool.getPlayer();
+                KAudioPlayer *player = d->currentPlayer;
+                if (d->currentPlayer && d->currentPlayer->isPlaying()) {
+                    kDebug() << "creating new player";
+                    player = new KAudioPlayer(this);
+                }
 		connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
 		d->signalmapper->setMapping(player, eventId);
 		player->load(soundFile);
 		d->playerObjects.insert(eventId, player);
 	}
-	else if (d->playerMode == Private::ExternalPlayer && !d->externalPlayer.isEmpty())
-	{
-        // use an external player to play the sound
-		KProcess *proc = new KProcess( this );
-		connect( proc, SIGNAL(finished(int, QProcess::ExitStatus)),
-		         d->signalmapper,  SLOT(map()) );
-		d->signalmapper->setMapping( proc , eventId );
-
-		(*proc) << d->externalPlayer << soundFile;
-		proc->start();
-	}
-}
-
-
-void NotifyBySound::setVolume( int volume )
-{
-	if ( volume<0 ) volume=0;
-	if ( volume>=100 ) volume=100;
-	d->playerPool.setVolume(volume / 100.0);
 }
 
 
 void NotifyBySound::timerEvent(QTimerEvent *e)
 {
-	if (e->timerId() == d->poolTimer.timerId()) {
-		d->poolTimer.stop();
-		d->playerPool.clear();
-		return;
-	}
-	KNotifyPlugin::timerEvent(e);
+        QMutableHashIterator<int,KAudioPlayer*> iter(d->playerObjects);
+        while(iter.hasNext()) {
+            iter.next();
+            KAudioPlayer *player = iter.value();
+            if (player != d->currentPlayer && !player->isPlaying()) {
+                kDebug() << "destroying idle player";
+                d->playerObjects.remove(iter.key());
+                delete player;
+            }
+        }
+        KNotifyPlugin::timerEvent(e);
 }
 
 void NotifyBySound::slotSoundFinished(int id)
@@ -268,15 +166,8 @@ void NotifyBySound::slotSoundFinished(int id)
 	kDebug() << id;
 	if(d->playerObjects.contains(id))
 	{
-		KAudioPlayer *player=d->playerObjects.take(id);
+		KAudioPlayer *player=d->playerObjects.value(id);
 		disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
-		d->playerPool.returnPlayer(player);
-		//d->poolTimer.start(1000, this);
-	}
-	if(d->processes.contains(id))
-	{
-		d->processes[id]->deleteLater();
-		d->processes.remove(id);
 	}
 	finish(id);
 }
@@ -294,16 +185,8 @@ void NotifyBySound::closeNow()
 	const int id = d->closeQueue.dequeue();
 	if(d->playerObjects.contains(id))
 	{
-		KAudioPlayer *p = d->playerObjects.take(id);
-		p->stop();
-		d->playerPool.returnPlayer(p);
-		//d->poolTimer.start(1000, this);
-	}
-	if(d->processes.contains(id))
-	{
-		d->processes[id]->kill();
-		d->processes[id]->deleteLater();
-		d->processes.remove(id);
+		KAudioPlayer *player = d->playerObjects.value(id);
+		player->stop();
 	}
 }
 

@@ -72,7 +72,6 @@ public:
     void defaults();
 
 protected Q_SLOTS:
-    void externalToggled( bool on );
     void slotChanged();
 
     signals:
