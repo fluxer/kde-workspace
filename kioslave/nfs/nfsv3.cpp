@@ -43,7 +43,7 @@
 
 #include <QFile>
 #include <QDir>
-#include <QDebug>
+#include <QDateTime>
 
 #include <KDebug>
 #include <KLocalizedString>

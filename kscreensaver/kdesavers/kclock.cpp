@@ -25,6 +25,7 @@
 #include <QLabel>
 #include <QSlider>
 #include <QVBoxLayout>
+#include <QDateTime>
 
 #include <KColorButton>
 #include <KConfig>

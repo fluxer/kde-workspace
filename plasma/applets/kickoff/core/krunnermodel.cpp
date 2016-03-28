@@ -29,6 +29,7 @@
 #include <QtCore/qcoreevent.h>
 
 // KDE
+#include <KUrl>
 #include <KService>
 #include <KStandardDirs>
 #include <Plasma/AbstractRunner>

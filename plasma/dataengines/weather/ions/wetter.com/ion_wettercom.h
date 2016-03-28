@@ -25,9 +25,10 @@
 #ifndef ION_WETTERCOM_H
 #define ION_WETTERCOM_H
 
-#include <QtXml/QXmlStreamReader>
-#include <QtCore/QStringList>
+#include <QXmlStreamReader>
+#include <QStringList>
 #include <QCryptographicHash>
+#include <QDateTime>
 #include <algorithm>
 #include <kurl.h>
 #include <kio/job.h>

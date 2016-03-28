@@ -18,7 +18,8 @@
 #ifndef SELECT_SCHEME_DIALOG_H
 #define SELECT_SCHEME_DIALOG_H
 
-#include "KDialog"
+#include <KDialog>
+#include <KUrl>
 
 namespace Ui
 {

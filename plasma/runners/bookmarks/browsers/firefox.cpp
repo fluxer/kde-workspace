@@ -18,15 +18,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "firefox.h"
+#include <QFile>
+#include <QDir>
+#include <QUrl>
+
+#include <KConfigGroup>
+#include <KSharedConfig>
 #include <KJob>
 #include <KStandardDirs>
 #include <KDebug>
+
+#include "firefox.h"
 #include "bookmarksrunner_defs.h"
-#include <QFile>
-#include <QDir>
-#include <KConfigGroup>
-#include <KSharedConfig>
 #include "bookmarkmatch.h"
 #include "favicon.h"
 #include "fetchsqlite.h"

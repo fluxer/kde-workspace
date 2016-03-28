@@ -41,6 +41,7 @@
 #include <KCModuleProxy>
 #include <KStandardGuiItem>
 #include <KDialogButtonBox>
+#include <KUrl>
 #include <kauthaction.h>
 
 #include "MenuItem.h"

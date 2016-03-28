@@ -25,6 +25,7 @@
 #include <QList>
 #include <QMimeData>
 #include <QFileInfo>
+#include <QUrl>
 
 // KDE
 #include <KConfigGroup>

@@ -23,6 +23,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "launcherconfig.h"
 #include "launcherproperties.h"
+#include <KUrl>
 #include <KDebug>
 #include <KConfig>
 #include <KConfigDialog>
