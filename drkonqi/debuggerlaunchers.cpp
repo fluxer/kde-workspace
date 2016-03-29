@@ -75,43 +75,4 @@ void TerminalDebuggerLauncher::start()
 }
 #endif
 
-
-DBusOldInterfaceLauncher::DBusOldInterfaceLauncher(DebuggerManager *parent)
-    : AbstractDebuggerLauncher(parent)
-{
-    m_adaptor = new DBusOldInterfaceAdaptor(this);
-    QDBusConnection::sessionBus().registerObject("/krashinfo", this);
-}
-
-QString DBusOldInterfaceLauncher::name() const
-{
-    return m_name;
-}
-
-void DBusOldInterfaceLauncher::start()
-{
-    emit starting();
-    emit m_adaptor->acceptDebuggingApplication();
-}
-
-
-DBusOldInterfaceAdaptor::DBusOldInterfaceAdaptor(DBusOldInterfaceLauncher *parent)
-    : QDBusAbstractAdaptor(parent)
-{
-    Q_ASSERT(parent);
-}
-
-int DBusOldInterfaceAdaptor::pid()
-{
-    return DrKonqi::crashedApplication()->pid();
-}
-
-void DBusOldInterfaceAdaptor::registerDebuggingApplication(const QString & name)
-{
-    if ( static_cast<DBusOldInterfaceLauncher*>(parent())->m_name.isEmpty() && !name.isEmpty() ) {
-        static_cast<DBusOldInterfaceLauncher*>(parent())->m_name = name;
-        emit static_cast<DBusOldInterfaceLauncher*>(parent())->available();
-    }
-}
-
 #include "moc_debuggerlaunchers.cpp"

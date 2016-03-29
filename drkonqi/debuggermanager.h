@@ -48,7 +48,6 @@ private slots:
     void onDebuggerStarting();
     void onDebuggerFinished();
     void onDebuggerInvalidated();
-    void onDBusOldInterfaceDebuggerAvailable();
 
 private:
     struct Private;
