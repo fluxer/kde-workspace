@@ -48,7 +48,7 @@ static QString beatifyValue( const QString& value )
 FileProps::FileProps( const QString& path )
     : m_dirty( false )
 {
-    m_info = new KFileMetaInfo(path, QString(), KFileMetaInfo::Everything);
+    m_info = new KFileMetaInfo(path, KFileMetaInfo::Everything);
 }
 
 FileProps::~FileProps()
