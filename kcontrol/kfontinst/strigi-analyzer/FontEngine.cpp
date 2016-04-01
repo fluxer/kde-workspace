@@ -52,7 +52,6 @@
 #include "Misc.h"
 #include "Fc.h"
 #include <KGlobal>
-#include <kascii.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -1076,7 +1075,7 @@ bool CFontEngine::openFontPcf(QByteArray &in)
                                         char tmp[constMaxStrLen];
 
                                         for(prop=0; prop<numProps && !foundXlfd; ++prop)
-                                            if(kasciistricmp(&(str.data()[props[prop].name]), "FONT")==0)
+                                            if(qstricmp(&(str.data()[props[prop].name]), "FONT")==0)
                                             {
                                                 if(props[prop].isString && strlen(&(str.data()[props[prop].value])))
                                                 {
