@@ -38,6 +38,34 @@
 
 namespace KWallet {
 
+/**
+ * @internal
+ */
+class MD5Digest : public QByteArray {
+	public:
+		MD5Digest() : QByteArray(16, 0) {}
+		MD5Digest(const char *data) : QByteArray(data, 16) {}
+		MD5Digest(const QByteArray& digest) : QByteArray(digest) {}
+		virtual ~MD5Digest() {}
+
+		int operator<(const MD5Digest& r) const {
+				int i = 0;
+				char x, y;
+				for (; i < 16; ++i) {
+					x = at(i);
+					y = r.at(i);
+					if (x != y) {
+						break;
+					}
+				}
+				if (i < 16 && x < y) {
+					return 1;
+				}
+				return 0;
+			}
+};
+
+
 /* @internal
  */
 class KDE_EXPORT Backend {
@@ -149,7 +177,7 @@ class KDE_EXPORT Backend {
 		typedef QMap< QString, Entry* > EntryMap;
 		typedef QMap< QString, EntryMap > FolderMap;
 		FolderMap _entries;
-		typedef QMap<QByteArray, QList<QByteArray> > HashMap;
+		typedef QMap<MD5Digest, QList<MD5Digest> > HashMap;
 		HashMap _hashes;
 		QByteArray _passhash;   // password hash used for saving the wallet
 		QByteArray _newPassHash; //Modern hash using KWALLET_HASH_PBKDF2_SHA512
