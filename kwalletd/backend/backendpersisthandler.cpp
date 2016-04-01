@@ -208,7 +208,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
 
         md5->reset();
         md5->addData(i.key().toUtf8());
-        hashStream.writeRawData(md5->result().toHex(), 16);
+        hashStream.writeRawData(md5->result().constData(), 16);
         hashStream << static_cast<quint32>(i.value().count());
 
         for (Backend::EntryMap::ConstIterator j = i.value().constBegin(); j != i.value().constEnd(); ++j) {
@@ -218,7 +218,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
 
             md5->reset();
             md5->addData(j.key().toUtf8());
-            hashStream.writeRawData(md5->result().toHex(), 16);
+            hashStream.writeRawData(md5->result().constData(), 16);
         }
     }
 
@@ -324,7 +324,7 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
     }
 
     for (size_t i = 0; i < n; ++i) {
-        QByteArray ba;
+        QByteArray ba(16, 0);
         QMap<QByteArray,QList<QByteArray> >::iterator it;
         quint32 fsz;
         if (hds.atEnd()) return -43;
@@ -332,7 +332,7 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
         hds >> fsz;
         it = wb->_hashes.insert(ba, QList<QByteArray>());
         for (size_t j = 0; j < fsz; ++j) {
-            QByteArray d2;
+            QByteArray d2(16, 0);
             hds.readRawData(d2.data(), 16);
             (*it).append(d2);
         }
@@ -512,7 +512,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
 
         md5->reset();
         md5->addData(i.key().toUtf8());
-        hashStream.writeRawData(md5->result().toHex(), 16);
+        hashStream.writeRawData(md5->result().constData(), 16);
         hashStream << static_cast<quint32>(i.value().count());
 
         Backend::EntryMap::ConstIterator j = i.value().constBegin();
@@ -524,7 +524,7 @@ int GpgPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WI
 
             md5->reset();
             md5->addData(j.key().toUtf8());
-            hashStream.writeRawData(md5->result().toHex(), 16);
+            hashStream.writeRawData(md5->result().constData(), 16);
         }
     }
 
@@ -658,7 +658,7 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
 
     quint32 folderCount = hashCount;
     while (hashCount--){
-        QByteArray ba;
+        QByteArray ba(16, 0);
         hashStream.readRawData(ba.data(), 16);
 
         quint32 folderSize;
@@ -666,7 +666,7 @@ int GpgPersistHandler::read(Backend* wb, QFile& sf, WId w)
 
         QMap<QByteArray, QList<QByteArray> >::iterator it = wb->_hashes.insert(ba, QList<QByteArray>());
         while (folderSize--){
-            QByteArray d2;
+            QByteArray d2(16, 0);
             hashStream.readRawData(d2.data(), 16);
             (*it).append(d2);
         }
