@@ -25,7 +25,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kcodecs.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>
 #ifdef HAVE_QGPGME
@@ -37,6 +36,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QRegExp>
+#include <QtCore/QCryptographicHash>
 
 #include "blowfish.h"
 #include "sha1.h"
@@ -510,9 +510,8 @@ bool Backend::createFolder(const QString& f) {
 
 	_entries.insert(f, EntryMap());
 
-	KMD5 folderMd5;
-	folderMd5.update(f.toUtf8());
-	_hashes.insert(MD5Digest(folderMd5.rawDigest()), QList<MD5Digest>());
+	QByteArray folderMd5 = QCryptographicHash::hash(f.toUtf8(), QCryptographicHash::Md5);
+	_hashes.insert(folderMd5.toHex(), QList<QByteArray>());
 
 	return true;
 }
@@ -528,16 +527,14 @@ int Backend::renameEntry(const QString& oldName, const QString& newName) {
 		emap.erase(oi);
 		emap[newName] = e;
 
-		KMD5 folderMd5;
-		folderMd5.update(_folder.toUtf8());
+		QByteArray folderMd5 = QCryptographicHash::hash(_folder.toUtf8(), QCryptographicHash::Md5);
 
-		HashMap::iterator i = _hashes.find(MD5Digest(folderMd5.rawDigest()));
+		HashMap::iterator i = _hashes.find(folderMd5.toHex());
 		if (i != _hashes.end()) {
-			KMD5 oldMd5, newMd5;
-			oldMd5.update(oldName.toUtf8());
-			newMd5.update(newName.toUtf8());
-			i.value().removeAll(MD5Digest(oldMd5.rawDigest()));
-			i.value().append(MD5Digest(newMd5.rawDigest()));
+                        QByteArray oldMd5 = QCryptographicHash::hash(oldName.toUtf8(), QCryptographicHash::Md5);
+                        QByteArray newMd5 = QCryptographicHash::hash(newName.toUtf8(), QCryptographicHash::Md5);
+			i.value().removeAll(oldMd5.toHex());
+			i.value().append(newMd5.toHex());
 		}
 		return 0;
 	}
@@ -555,14 +552,12 @@ void Backend::writeEntry(Entry *e) {
 	}
 	_entries[_folder][e->key()]->copy(e);
 
-	KMD5 folderMd5;
-	folderMd5.update(_folder.toUtf8());
+	QByteArray folderMd5 = QCryptographicHash::hash(_folder.toUtf8(), QCryptographicHash::Md5);
 
-	HashMap::iterator i = _hashes.find(MD5Digest(folderMd5.rawDigest()));
+	HashMap::iterator i = _hashes.find(folderMd5.toHex());
 	if (i != _hashes.end()) {
-		KMD5 md5;
-		md5.update(e->key().toUtf8());
-		i.value().append(MD5Digest(md5.rawDigest()));
+		QByteArray md5 = QCryptographicHash::hash(e->key().toUtf8(), QCryptographicHash::Md5);
+		i.value().append(md5.toHex());
 	}
 }
 
@@ -583,14 +578,12 @@ bool Backend::removeEntry(const QString& key) {
 	if (fi != _entries.end() && ei != fi.value().end()) {
 		delete ei.value();
 		fi.value().erase(ei);
-		KMD5 folderMd5;
-		folderMd5.update(_folder.toUtf8());
+		QByteArray folderMd5 = QCryptographicHash::hash(_folder.toUtf8(), QCryptographicHash::Md5);
 
-		HashMap::iterator i = _hashes.find(MD5Digest(folderMd5.rawDigest()));
+		HashMap::iterator i = _hashes.find(folderMd5.toHex());
 		if (i != _hashes.end()) {
-			KMD5 md5;
-			md5.update(key.toUtf8());
-			i.value().removeAll(MD5Digest(md5.rawDigest()));
+			QByteArray md5 = QCryptographicHash::hash(key.toUtf8(), QCryptographicHash::Md5);
+			i.value().removeAll(md5.toHex());
 		}
 		return true;
 	}
@@ -617,9 +610,8 @@ bool Backend::removeFolder(const QString& f) {
 
 		_entries.erase(fi);
 
-		KMD5 folderMd5;
-		folderMd5.update(f.toUtf8());
-		_hashes.remove(MD5Digest(folderMd5.rawDigest()));
+		QByteArray folderMd5 = QCryptographicHash::hash(f.toUtf8(), QCryptographicHash::Md5);
+		_hashes.remove(folderMd5.toHex());
 		return true;
 	}
 
@@ -628,20 +620,19 @@ bool Backend::removeFolder(const QString& f) {
 
 
 bool Backend::folderDoesNotExist(const QString& folder) const {
-	KMD5 md5;
-	md5.update(folder.toUtf8());
-	return !_hashes.contains(MD5Digest(md5.rawDigest()));
+	QByteArray md5 = QCryptographicHash::hash(folder.toUtf8(), QCryptographicHash::Md5);
+	return !_hashes.contains(md5.toHex());
 }
 
 
 bool Backend::entryDoesNotExist(const QString& folder, const QString& entry) const {
-	KMD5 md5;
-	md5.update(folder.toUtf8());
-	HashMap::const_iterator i = _hashes.find(MD5Digest(md5.rawDigest()));
+	QCryptographicHash *md5 = new QCryptographicHash(QCryptographicHash::Md5);
+	md5->addData(folder.toUtf8());
+	HashMap::const_iterator i = _hashes.find(md5->result().toHex());
 	if (i != _hashes.end()) {
-		md5.reset();
-		md5.update(entry.toUtf8());
-		return !i.value().contains(MD5Digest(md5.rawDigest()));
+		md5->reset();
+		md5->addData(entry.toUtf8());
+		return !i.value().contains(md5->result().toHex());
 	}
 	return true;
 }

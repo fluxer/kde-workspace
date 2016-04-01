@@ -36,7 +36,6 @@
 #include <kio/netaccess.h>
 #include <kactioncollection.h>
 #include <klocale.h>
-#include <kcodecs.h>
 #include <kmessagebox.h>
 #include <kmenu.h>
 #include <ksqueezedtextlabel.h>
@@ -1161,7 +1160,7 @@ void KWalletEditor::importXML() {
 			if (type == QLatin1String( "password" )) {
 				_w->writePassword(ename, e.text());
 			} else if (type == QLatin1String( "stream" )) {
-				_w->writeEntry(ename, KCodecs::base64Decode(e.text().toLatin1()));
+				_w->writeEntry(ename, QByteArray::fromBase64(e.text().toLatin1()));
 			} else if (type == QLatin1String( "map" )) {
 				QMap<QString,QString> map;
 				QDomNode mapNode = e.firstChild();
@@ -1219,7 +1218,7 @@ void KWalletEditor::exportXML() {
 						if (_w->readEntry(*j, ba) == 0) {
 							xml.writeStartElement(QLatin1String( "stream" ));
 							xml.writeAttribute(QLatin1String( "name" ), *j);
-							xml.writeCharacters(QLatin1String( KCodecs::base64Encode(ba) ));
+							xml.writeCharacters(QLatin1String( ba.toBase64() ));
 							xml.writeEndElement();
 						}
 						break;

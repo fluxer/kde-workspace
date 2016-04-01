@@ -35,7 +35,6 @@
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kcodecs.h>
 #include <kstandarddirs.h>
 #include <kstringhandler.h>
 #include <ktemporaryfile.h>

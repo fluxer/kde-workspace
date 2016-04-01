@@ -37,8 +37,8 @@
 #include <QPixmap>
 #include <QLibrary>
 #include <QDirIterator>
+#include <QCryptographicHash>
 
-#include <kcodecs.h>
 #include <kurl.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -708,8 +708,8 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         // check whether a cached version of the file is available for
         // 128 x 128 or 256 x 256 pixels
         int cacheSize = 0;
-        KMD5 md5(QFile::encodeName(fileName.url()));
-        const QString thumbName = QFile::encodeName(md5.hexDigest()) + ".png";
+        QByteArray md5 = QCryptographicHash::hash(QFile::encodeName(fileName.url()), QCryptographicHash::Md5);
+        const QString thumbName = QFile::encodeName(md5.toHex()) + ".png";
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
             KStandardDirs::makeDir(m_thumbBasePath + "normal/", 0700);
