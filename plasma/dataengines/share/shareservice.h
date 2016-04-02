@@ -22,6 +22,8 @@
 
 #include "shareengine.h"
 
+#include <QtScript/QScriptEngine>
+
 #include <Plasma/Service>
 #include <Plasma/ServiceJob>
 
@@ -30,10 +32,6 @@ class ShareProvider;
 namespace Plasma {
     class ServiceJob;
     class Package;
-}
-
-namespace Kross {
-    class Action;
 }
 
 class ShareService : public Plasma::Service
@@ -62,7 +60,7 @@ public slots:
     void showError(const QString &msg);
 
 private:
-    Kross::Action *m_action;
+    QScriptEngine *m_engine;
     ShareProvider *m_provider;
     Plasma::Package *m_package;
 };
