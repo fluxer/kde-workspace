@@ -1065,7 +1065,7 @@ QByteArray KWalletD::readMap(int handle, const QString& folder, const QString& k
 		b->setFolder(folder);
 		KWallet::Entry *e = b->readEntry(key);
 		if (e && e->type() == KWallet::Wallet::Map) {
-			return e->map();
+			return e->value();
 		}
 	}
 
@@ -1081,7 +1081,7 @@ QVariantMap KWalletD::readMapList(int handle, const QString& folder, const QStri
 		QVariantMap rc;
 		foreach (KWallet::Entry *entry, b->readEntryList(key)) {
 			if (entry->type() == KWallet::Wallet::Map) {
-				rc.insert(entry->key(), entry->map());
+				rc.insert(entry->key(), entry->value());
 			}
 		}
 		return rc;

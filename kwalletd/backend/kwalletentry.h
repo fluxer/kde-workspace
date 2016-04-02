@@ -40,7 +40,6 @@ class KWALLETBACKEND_EXPORT Entry {
 		const QString& key() const;
 		const QByteArray& value() const;
 		QString password() const;
-		const QByteArray& map() const { return value(); }
 
 		void setValue(const QByteArray& val);
 		void setValue(const QString& val);
