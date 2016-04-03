@@ -1,5 +1,3 @@
-include_directories( ${QIMAGEBLITZ_INCLUDES} )
-
 set(kcm_kdm_PART_SRCS
    kdm-gen.cpp
    kdm-theme.cpp
@@ -14,7 +12,7 @@ set(kcm_kdm_PART_SRCS
 kde4_add_plugin(kcm_kdm ${kcm_kdm_PART_SRCS})
 
 
-target_link_libraries(kcm_kdm ${KDE4_KIO_LIBS} ${QIMAGEBLITZ_LIBRARIES} ${X11_LIBRARIES} kworkspace)
+target_link_libraries(kcm_kdm ${KDE4_KIO_LIBS} ${X11_LIBRARIES} kworkspace)
 
 macro_add_file_dependencies(kdm-shut.cpp ${confci})
 add_dependencies(kcm_kdm ConfigCi)

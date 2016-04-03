@@ -6,7 +6,6 @@ add_subdirectory(sessions)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kdm
-    ${QIMAGEBLITZ_INCLUDES}
 )
 
 set(kdmthemer_SRCS
