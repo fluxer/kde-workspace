@@ -35,6 +35,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QVarLengthArray>
+#include <QtCore/QDateTime>
 
 #include <kapplication.h>
 #include <kuser.h>
