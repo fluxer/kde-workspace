@@ -12,7 +12,6 @@ include(KDE4Defaults)
 option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
 
 find_package(Strigi)
-
 set_package_properties(Strigi PROPERTIES
     DESCRIPTION "Desktop indexing and search support"
     URL "http://strigi.sourceforge.net"
@@ -139,7 +138,7 @@ set_package_properties(QJSON PROPERTIES
     PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
 )
 
-find_package(LibGcrypt 1.5.0 QUIET)
+find_package(LibGcrypt 1.5.0)
 set_package_properties(LibGcrypt PROPERTIES
     TYPE REQUIRED
     PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
@@ -181,6 +180,13 @@ set_package_properties(LibKonq PROPERTIES
     URL "http://fluxer.github.io/katana/"
     PURPOSE "Homerun and folderview plasma applets"
     TYPE OPTIONAL
+)
+
+find_package(Perl)
+set_package_properties(Perl PROPERTIES
+    URL "http://www.perl.org"
+    TYPE REQUIRED
+    PURPOSE "Needed for KDM config handler generator, as well as info and finger KIO slaves"
 )
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
