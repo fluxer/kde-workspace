@@ -136,7 +136,7 @@ class CFontFileListView : public QTreeWidget
     void properties();
     void mark();
     void unmark();
-    void selectionChanged();
+    void selectedChanged();
     void clicked(QTreeWidgetItem *item, int col);
     void contextMenuEvent(QContextMenuEvent *ev);
 

@@ -432,7 +432,7 @@ CFontFileListView::CFontFileListView(QWidget *parent)
     itsMarkAct=itsMenu->addAction(KIcon("edit-delete"), i18n("Mark for Deletion"),
                                   this, SLOT(mark()));
 
-    connect(this, SIGNAL(itemSelectionChanged()), SLOT(selectionChanged()));
+    connect(this, SIGNAL(itemSelectionChanged()), SLOT(selectedChanged()));
     connect(this, SIGNAL(itemClicked(QTreeWidgetItem*,int)), SLOT(clicked(QTreeWidgetItem*,int)));
 }
 
@@ -588,7 +588,7 @@ void CFontFileListView::unmark()
     checkFiles();
 }
 
-void CFontFileListView::selectionChanged()
+void CFontFileListView::selectedChanged()
 {
     QList<QTreeWidgetItem *> items(selectedItems());
     QTreeWidgetItem          *item;
