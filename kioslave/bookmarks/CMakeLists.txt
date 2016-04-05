@@ -1,6 +1,6 @@
 ########### next target ###############
 
-set(kio_bookmarks_PART_SRCS kio_bookmarks.cpp kio_bookmarks_html.cpp kio_bookmarks_pixmap.cpp)
+set(kio_bookmarks_PART_SRCS kio_bookmarks.cpp kio_bookmarks_html.cpp)
 
 kde4_add_plugin(kio_bookmarks ${kio_bookmarks_PART_SRCS})
 

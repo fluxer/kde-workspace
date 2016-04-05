@@ -23,6 +23,8 @@
 
 #include <qregexp.h>
 #include <qtextdocument.h>
+#include <qbuffer.h>
+#include <qpainter.h>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -36,7 +38,6 @@
 #include <kconfiggroup.h>
 #include <kbookmark.h>
 #include <kbookmarkmanager.h>
-#include <kimagecache.h>
 #include <kdebug.h>
 #include <kfileplacesmodel.h>
 #include <solid/device.h>
@@ -51,8 +52,8 @@ BookmarksProtocol::BookmarksProtocol( const QByteArray &pool, const QByteArray &
   manager = KBookmarkManager::userBookmarksManager();
   cfg = new KConfig( "kiobookmarksrc" );
   config = cfg->group("General");
-  cache = new KImageCache("kio_bookmarks", config.readEntry("CacheSize", 5 * 1024) * 1024);
-  cache->setPixmapCaching(false);
+  cache = new QSharedPointer<QCache<QString,QImage> >(new QCache<QString,QImage>());
+  cache->data()->setMaxCost(config.readEntry("CacheSize", 5 * 1024));
 
   indent = 0;
   totalsize = 0;
@@ -201,6 +202,48 @@ void BookmarksProtocol::get( const KUrl& url )
     echo("<p class=\"message\">" + i18n("Bad request: %1", Qt::escape(Qt::escape(url.prettyUrl()))) + "</p>");
   }
   finished();
+}
+
+void BookmarksProtocol::echoImage( const QString &type, const QString &string, const QString &sizestring )
+{
+  int size = sizestring.toInt();
+  if (size == 0) {
+    if (type == "icon") {
+      size = 16;
+    } else {
+      size = 128;
+    }
+  }
+
+  QBuffer buffer;
+  buffer.open(QIODevice::WriteOnly);
+
+  QImage *image = cache->data()->object(type + string + QString::number(size));
+  if (!image || image->isNull()) {
+    KIcon icon = KIcon(string);
+    QPixmap pix; // KIcon can't give us a QImage anyways.
+
+    if (type == "icon") {
+      pix = icon.pixmap(size, size);
+    } else {
+      pix = QPixmap(size, size);
+      pix.fill(Qt::transparent);
+
+      QPainter painter(&pix);
+      painter.setOpacity(0.3);
+      QRectF rect(0, 0, size, size);
+      painter.drawPixmap(pix.rect(), icon.pixmap(size, size), pix.rect());
+    }
+
+    pix.save(&buffer, "PNG");
+    image = new QImage();
+    image->fromData(buffer.buffer(), "PNG");
+    cache->data()->insert(type + string + QString::number(size), image);
+  }
+  image->save(&buffer, "PNG");
+
+  SlaveBase::mimeType("image/png");
+  data(buffer.buffer());
 }
 
 extern "C" int KDE_EXPORT kdemain(int argc, char **argv)

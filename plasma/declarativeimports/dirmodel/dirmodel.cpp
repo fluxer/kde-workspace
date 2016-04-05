@@ -22,7 +22,6 @@
 #include <KDirLister>
 #include <KDebug>
 #include <KIO/PreviewJob>
-#include <KImageCache>
 #include <QtCore/qtimer.h>
 
 DirModel::DirModel(QObject *parent)
@@ -54,9 +53,6 @@ DirModel::DirModel(QObject *parent)
     connect(m_previewTimer, SIGNAL(timeout()),
             this, SLOT(delayedPreview()));
 
-    //using the same cache of the engine, they index both by url
-    m_imageCache = new KImageCache("plasma_engine_preview", 10485760);
-
     connect(this, SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SIGNAL(countChanged()));
     connect(this, SIGNAL(rowsRemoved(QModelIndex,int,int)),
@@ -67,7 +63,6 @@ DirModel::DirModel(QObject *parent)
 
 DirModel::~DirModel()
 {
-    delete m_imageCache;
 }
 
 QString DirModel::url() const
@@ -129,11 +124,6 @@ QVariant DirModel::data(const QModelIndex &index, int role) const
     }
     case Thumbnail: {
         KFileItem item = itemForIndex(index);
-        QImage preview = QImage(m_screenshotSize, QImage::Format_ARGB32_Premultiplied);
-
-        if (m_imageCache->findImage(item.url().prettyUrl(), &preview)) {
-            return preview;
-        }
 
         m_previewTimer->start(100);
         const_cast<DirModel *>(this)->m_filesToPreview[item.url()] = QPersistentModelIndex(index);
@@ -184,7 +174,6 @@ void DirModel::showPreview(const KFileItem &item, const QPixmap &preview)
         return;
     }
 
-    m_imageCache->insertImage(item.url().prettyUrl(), preview.toImage());
     //kDebug() << "preview size:" << preview.size();
     emit dataChanged(index, index);
 }

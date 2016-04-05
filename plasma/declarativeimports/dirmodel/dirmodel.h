@@ -25,8 +25,6 @@
 
 class QTimer;
 
-class KImageCache;
-
 /**
  * This class provides a QML binding to KDirModel
  * Provides an easy way to navigate a filesystem from within QML
@@ -84,7 +82,6 @@ private:
     QHash<KUrl, QPersistentModelIndex> m_filesToPreview;
     QSize m_screenshotSize;
     QHash<KUrl, QPersistentModelIndex> m_previewJobs;
-    KImageCache* m_imageCache;
 };
 
 #endif // DIRMODEL_H
