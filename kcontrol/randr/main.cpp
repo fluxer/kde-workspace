@@ -37,7 +37,6 @@ int main(int argc, char **argv)
 	aboutData.addAuthor(ki18n("Hamish Rodda"),ki18n("Original Author"), "rodda@kde.org");
 	aboutData.addCredit(ki18n("Lubos Lunak"),ki18n("Many fixes"), "l.lunak@suse.cz");
 	aboutData.addCredit(ki18n("Harry Bock"),ki18n("Many fixes, multi-head support"), "hbock@providence.edu");
-	aboutData.setProductName("krandr/krandrtray");
 	aboutData.setProgramIconName("preferences-desktop-display-randr");
 
 	KCmdLineArgs::init(argc,argv,&aboutData);
