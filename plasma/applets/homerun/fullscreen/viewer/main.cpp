@@ -19,12 +19,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 // KDE
 #include <KAboutData>
-#include <KBugReport>
 #include <KCmdLineArgs>
 #include <KDebug>
 #include <KLocale>
 #include <KMessageBox>
 #include <KUniqueApplication>
+#include <KToolInvocation>
 #include <kdeclarative.h>
 
 // Qt
@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fullview.h>
 #include <homerun_config.h>
 
-static void showError(const QString &errorMessage)
+static void showError(const QString &errorMessage, const QString &email)
 {
     int ret = KMessageBox::warningContinueCancel(0,
         i18n("<p><b>Sorry, Homerun failed to load</b></p>"
@@ -51,8 +51,7 @@ static void showError(const QString &errorMessage)
     if (ret != KMessageBox::Continue) {
         return;
     }
-    KBugReport report;
-    report.exec();
+    KToolInvocation::invokeBrowser(email);
 }
 
 int main(int argc, char *argv[])
@@ -89,7 +88,7 @@ int main(int argc, char *argv[])
     QString errorMessage;
     if (!view.init(&errorMessage)) {
         if (args->isSet("show")) {
-            showError(errorMessage);
+            showError(errorMessage, aboutData->bugAddress());
         }
         return 1;
     }
