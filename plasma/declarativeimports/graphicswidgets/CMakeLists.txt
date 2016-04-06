@@ -6,16 +6,14 @@ set(graphicswidgetsbindings_SRCS
 )
 
 include_directories(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
 )
 
 if(QT_QTWEBKIT_FOUND)
     add_definitions(-DHAVE_QTWEBKIT)
 endif()
-
-qt4_automoc(${graphicswidgetsbindings_SRCS})
 
 add_library(graphicswidgetsbindingsplugin SHARED ${graphicswidgetsbindings_SRCS})
 target_link_libraries(graphicswidgetsbindingsplugin ${KDE4_PLASMA_LIBS} ${QT_QTSCRIPT_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})

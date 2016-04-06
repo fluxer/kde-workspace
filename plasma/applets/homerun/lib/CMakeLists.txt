@@ -23,9 +23,7 @@ set(lib_SRCS
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${LIBKONQ_INCLUDE_DIR}
-    )
-
-qt4_automoc(${lib_SRCS})
+)
 
 configure_file(libhomerun_config.h.in ${CMAKE_CURRENT_BINARY_DIR}/libhomerun_config.h @ONLY)
 
@@ -33,7 +31,7 @@ add_library(homerun SHARED ${lib_SRCS})
 set_target_properties(homerun PROPERTIES
     VERSION ${lib_VERSION}
     SOVERSION ${lib_VERSION_MAJOR}
-    )
+)
 
 target_link_libraries(homerun
     ${QT_QTCORE_LIBRARY}
@@ -42,13 +40,13 @@ target_link_libraries(homerun
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${LIBKONQ_LIBRARY}
-    )
+)
 
 # Doxygen
 configure_file(Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
 add_custom_target(dox COMMAND
     doxygen
-    )
+)
 
 # Install
 ## Headers

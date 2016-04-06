@@ -21,9 +21,7 @@ set(decoration_plugin_SRCS
     decorationplugin.cpp
     decorationoptions.cpp
     colorhelper.cpp
-    )
-
-qt4_automoc(${decoration_plugin_SRCS})
+)
 
 add_library(decorationplugin SHARED ${decoration_plugin_SRCS})
 target_link_libraries(decorationplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDEUI_LIBRARY} kdecorations)

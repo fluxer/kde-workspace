@@ -4,10 +4,7 @@ set(plasmaextracomponents_SRCS
     appbackgroundprovider.cpp
     plasmaextracomponentsplugin.cpp
     fallbackcomponent.cpp
-    )
-
-qt4_automoc(${plasmaextracomponents_SRCS})
-
+)
 
 add_library(plasmaextracomponentsplugin SHARED ${plasmaextracomponents_SRCS})
 target_link_libraries(plasmaextracomponentsplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY}

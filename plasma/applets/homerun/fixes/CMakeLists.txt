@@ -5,19 +5,17 @@ set(fixes_SRCS
     dialog.cpp
     fixesplugin.cpp
     toolboxtoggle.cpp
-    )
-
-qt4_automoc(${fixes_SRCS})
+)
 
 add_library(fixesplugin SHARED ${fixes_SRCS})
 
 target_link_libraries(fixesplugin
-        ${QT_QTCORE_LIBRARY}
-        ${QT_QTDECLARATIVE_LIBRARY}
-        ${KDE4_PLASMA_LIBS}
-        ${KDE4_KIO_LIBS}
-        ${KDE4_KFILE_LIBS}
-        )
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTDECLARATIVE_LIBRARY}
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBS}
+)
 
 install(TARGETS fixesplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/homerun/fixes)
 install(DIRECTORY qml/
@@ -25,4 +23,4 @@ install(DIRECTORY qml/
     PATTERN "*.qml"
     PATTERN "qmldir"
     PATTERN "*.js"
-    )
+)

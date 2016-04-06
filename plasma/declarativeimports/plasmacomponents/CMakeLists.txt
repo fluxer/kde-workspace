@@ -10,16 +10,13 @@ set(plasmacomponents_SRCS
     qmenuitem.cpp
     units.cpp
     ../core/declarativeitemcontainer.cpp
-    )
-
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
 )
 
-qt4_automoc(${plasmacomponents_SRCS})
-
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
+)
 
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin

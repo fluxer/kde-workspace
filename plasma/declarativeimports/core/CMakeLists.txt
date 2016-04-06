@@ -16,16 +16,12 @@ set(corebindings_SRCS
     iconitem.cpp
     )
 
-INCLUDE_DIRECTORIES(
-        ${CMAKE_SOURCE_DIR}
-        ${CMAKE_BINARY_DIR}
-        ${KDE4_INCLUDES}
-        ${KDECLARATIVE_INCLUDE_DIR}
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_BINARY_DIR}
+    ${KDE4_INCLUDES}
+    ${KDECLARATIVE_INCLUDE_DIR}
 )
-
-qt4_automoc(${corebindings_SRCS})
-
-
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
