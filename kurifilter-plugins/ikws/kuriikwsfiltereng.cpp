@@ -419,7 +419,7 @@ void KURISearchFilterEngine::loadConfig()
   kDebug(7023) << "Keywords Engine: Loading config..." << endl;
 
   // Load the config.
-  KConfig config( name() + "rc", KConfig::NoGlobals );
+  KConfig config( name() + QLatin1String("rc"), KConfig::NoGlobals );
   KConfigGroup group = config.group( "General" );
 
   m_cKeywordDelimiter = QString(group.readEntry("KeywordDelimiter", ":")).at(0).toLatin1();

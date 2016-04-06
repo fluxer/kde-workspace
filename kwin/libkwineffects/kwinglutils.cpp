@@ -841,7 +841,8 @@ GLShader *ShaderManager::loadFragmentShader(ShaderType vertex, const QString &fr
         "scene-color-vertex.glsl"
     };
 
-    GLShader *shader = new GLShader(m_shaderDir + vertexFile[vertex], fragmentFile, GLShader::ExplicitLinking);
+    QByteArray shaderpath = m_shaderDir + vertexFile[vertex];
+    GLShader *shader = new GLShader(shaderpath.data(), fragmentFile, GLShader::ExplicitLinking);
     bindAttributeLocations(shader);
     bindFragDataLocations(shader);
     shader->link();
@@ -864,7 +865,8 @@ GLShader *ShaderManager::loadVertexShader(ShaderType fragment, const QString &ve
         "scene-color-fragment.glsl"
     };
 
-    GLShader *shader = new GLShader(vertexFile, m_shaderDir + fragmentFile[fragment], GLShader::ExplicitLinking);
+    QByteArray fragmentpath = m_shaderDir + fragmentFile[fragment];
+    GLShader *shader = new GLShader(vertexFile, fragmentpath.data(), GLShader::ExplicitLinking);
     bindAttributeLocations(shader);
     bindFragDataLocations(shader);
     shader->link();
@@ -916,8 +918,9 @@ void ShaderManager::initShaders()
     m_valid = true;
 
     for (int i = 0; i < 3; i++) {
-        m_shader[i] = new GLShader(m_shaderDir + vertexFile[i], m_shaderDir + fragmentFile[i],
-                                   GLShader::ExplicitLinking);
+        QByteArray shaderpath = m_shaderDir + vertexFile[i];
+        QByteArray fragmentpath = m_shaderDir + fragmentFile[i];
+        m_shader[i] = new GLShader(shaderpath, fragmentpath, GLShader::ExplicitLinking);
         bindAttributeLocations(m_shader[i]);
         bindFragDataLocations(m_shader[i]);
         m_shader[i]->link();

@@ -709,7 +709,7 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         // 128 x 128 or 256 x 256 pixels
         int cacheSize = 0;
         QByteArray md5 = QCryptographicHash::hash(QFile::encodeName(fileName.url()), QCryptographicHash::Md5);
-        const QString thumbName = QFile::encodeName(md5.toHex()) + ".png";
+        const QString thumbName = QFile::encodeName(md5.toHex()) + QLatin1String(".png");
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
             KStandardDirs::makeDir(m_thumbBasePath + "normal/", 0700);

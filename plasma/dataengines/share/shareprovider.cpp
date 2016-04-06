@@ -290,7 +290,7 @@ void ShareProvider::publish()
     KIO::TransferJob *tf;
     if (m_isBlob) {
         tf = KIO::http_post(m_service, m_buffer, KIO::HideProgressInfo);
-        tf->addMetaData("content-type","Content-Type: multipart/form-data; boundary=" + m_boundary);
+        tf->addMetaData("content-type", QLatin1String("Content-Type: multipart/form-data; boundary=") + m_boundary);
     } else {
         if (m_isPost) {
             tf = KIO::http_post(m_service,

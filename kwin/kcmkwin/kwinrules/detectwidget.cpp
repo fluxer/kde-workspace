@@ -26,8 +26,6 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <QCheckBox>
-//Added by qt3to4:
-#include <QtGui/qevent.h>
 #include <QEvent>
 #include <QByteArray>
 #include <QTimer>
@@ -102,7 +100,8 @@ void DetectDialog::executeDialog()
         I18N_NOOP("Utility Window"),
         I18N_NOOP("Splash Screen")
     };
-    widget->class_label->setText(wmclass_class + " (" + wmclass_name + ' ' + wmclass_class + ')');
+    QByteArray classtext = wmclass_class + " (" + wmclass_name + ' ' + wmclass_class + ')';
+    widget->class_label->setText(classtext.data());
     widget->role_label->setText(role);
     widget->match_role->setEnabled(!role.isEmpty());
     if (type == NET::Unknown)

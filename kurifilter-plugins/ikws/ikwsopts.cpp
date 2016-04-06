@@ -283,7 +283,7 @@ void FilterOptions::setDefaultEngine(int index)
 
 void FilterOptions::load()
 {
-  KConfig config(KURISearchFilterEngine::self()->name() + "rc", KConfig::NoGlobals);
+  KConfig config(KURISearchFilterEngine::self()->name() + QLatin1String("rc"), KConfig::NoGlobals);
   KConfigGroup group = config.group("General");
 
   const QString defaultSearchEngine = group.readEntry("DefaultWebShortcut");
@@ -328,7 +328,7 @@ void FilterOptions::setDelimiter (char sep)
 
 void FilterOptions::save()
 {
-  KConfig config(KURISearchFilterEngine::self()->name() + "rc", KConfig::NoGlobals );
+  KConfig config(KURISearchFilterEngine::self()->name() + QLatin1String("rc"), KConfig::NoGlobals );
 
   KConfigGroup group = config.group("General");
   group.writeEntry("EnableWebShortcuts", m_dlg.cbEnableShortcuts->isChecked());

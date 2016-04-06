@@ -318,7 +318,7 @@ ListView::answerReceived(int id, const QList<QByteArray>& answer)
                         break;
                       case Percentage:
                         item->setData(records[j].toInt(), Qt::UserRole);
-                        item->setText(records[j] + "%");
+                        item->setText(QLatin1String(records[j]) + "%");
                         break;
                       case Float:
                         item->setData(records[j].toFloat(), Qt::DisplayRole);

@@ -122,7 +122,8 @@ public:
           haveComposite(false)
     {
         display = QX11Info::display();
-        selectionAtom = XInternAtom(display, "_NET_SYSTEM_TRAY_S" + QByteArray::number(QX11Info::appScreen()), false);
+        QByteArray selectiondata = "_NET_SYSTEM_TRAY_S" + QByteArray::number(QX11Info::appScreen());
+        selectionAtom = XInternAtom(display, selectiondata.data(), false);
         opcodeAtom = XInternAtom(display, "_NET_SYSTEM_TRAY_OPCODE", false);
         messageAtom = XInternAtom(display, "_NET_SYSTEM_TRAY_MESSAGE_DATA", false);
         visualAtom = XInternAtom(display, "_NET_SYSTEM_TRAY_VISUAL", false);

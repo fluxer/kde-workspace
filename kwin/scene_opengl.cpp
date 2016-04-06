@@ -569,7 +569,7 @@ bool SceneOpenGL::viewportLimitsMatched(const QSize &size) const {
             QDBusInterface dialog( "org.kde.kwinCompositingDialog", "/CompositorSettings", "org.kde.kwinCompositingDialog" );
             dialog.asyncCall("warn", message, details, "");
         } else {
-            const QString args = "warn " + message.toLocal8Bit().toBase64() + " details " + details.toLocal8Bit().toBase64();
+            const QByteArray args = "warn " + message.toLocal8Bit().toBase64() + " details " + details.toLocal8Bit().toBase64();
             KProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
         }
         QDBusConnection::sessionBus().interface()->setTimeout(oldTimeout);
@@ -600,7 +600,7 @@ bool SceneOpenGL::viewportLimitsMatched(const QSize &size) const {
             QDBusInterface dialog( "org.kde.kwinCompositingDialog", "/CompositorSettings", "org.kde.kwinCompositingDialog" );
             dialog.asyncCall("warn", message, details, "kwin_dialogsrc:max_tex_warning");
         } else {
-            const QString args = "warn " + message.toLocal8Bit().toBase64() + " details " +
+            const QByteArray args = "warn " + message.toLocal8Bit().toBase64() + " details " +
                                  details.toLocal8Bit().toBase64() + " dontagain kwin_dialogsrc:max_tex_warning";
             KProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
         }
