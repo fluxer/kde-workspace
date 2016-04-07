@@ -1452,7 +1452,7 @@ void EffectsHandlerImpl::unloadEffect(const QString& name)
                 removeSupportProperty(property, it.value().second);
             }
             delete it.value().second;
-            effect_order.erase(it);
+            effect_order.remove(it.key());
             effectsChanged();
             if (effect_libraries.contains(name)) {
                 effect_libraries[ name ]->unload();
