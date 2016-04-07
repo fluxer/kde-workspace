@@ -36,7 +36,6 @@ set(krunner_SRCS
    main.cpp
    ${default_interface_SRCS}
    ${quicksand_interface_SRCS}
-   interfaceOptions.ui
 )
 
 kde4_add_kcfg_files(krunner_SRCS ${krunner_KCFG_SRCS})
@@ -49,15 +48,22 @@ dbus_add_activation_service(dbus/org.kde.krunner.service.in)
 set(krunner_SRCS
     ${krunner_SRCS}
     ksystemactivitydialog.cpp
-    startupid.cpp)
+    startupid.cpp
+)
 
 add_executable(krunner ${krunner_SRCS})
 
-target_link_libraries(krunner kworkspace  plasmagenericshell processui
-    ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBRARIES}
-    ${KDE4_THREADWEAVER_LIBRARIES} ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS} ${X11_Xrender_LIB}
-    ${X11_LIBRARIES})
+target_link_libraries(krunner
+    kworkspace
+    plasmagenericshell
+    processui
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_SOLID_LIBRARIES}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
+    ${X11_Xrender_LIB}
+    ${X11_LIBRARIES}
+)
 
 if(X11_Xss_LIB)
   target_link_libraries(krunner ${X11_Xss_LIB})
