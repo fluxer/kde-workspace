@@ -1,5 +1,6 @@
 <apps>
-    <app serviceId="konqueror"/>
-    <app serviceId="dolphin" />
-    <app serviceId="konsole" />
+    <app serviceId="rekonq"/>
+    <app serviceId="dolphin"/>
+    <app serviceId="konsole"/>
+    <app serviceId="systemsettings"/>
 </apps>
