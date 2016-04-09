@@ -25,7 +25,7 @@
 #include <KIcon>
 #include <KProcess>
 #include <KUser>
-#include <kauth.h>
+#include <kauthaction.h>
 
 #include "ksysguard/processcore/processes.h"
 #include "ksysguard/processcore/process.h"

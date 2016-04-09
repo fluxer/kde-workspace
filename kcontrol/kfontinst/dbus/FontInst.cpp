@@ -26,7 +26,8 @@
 #include <QtCore/qdir.h>
 #include <QtCore/qcoreapplication.h>
 
-#include <kauth.h>
+#include <kauthaction.h>
+#include <kauthhelpersupport.h>
 #include <KDebug>
 #include <kio/global.h>
 #include <kde_file.h>

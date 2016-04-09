@@ -31,6 +31,7 @@
 #include <QtCore/qtextcodec.h>
 #include <QtCore/qcoreapplication.h>
 #include <kio/global.h>
+#include <kauthhelpersupport.h>
 #include <kde_file.h>
 #include <sys/types.h>
 #include <unistd.h>

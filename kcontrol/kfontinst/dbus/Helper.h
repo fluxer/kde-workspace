@@ -26,7 +26,7 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSet>
-#include <kauth.h>
+#include <kauthactionreply.h>
 
 using namespace KAuth;
 
