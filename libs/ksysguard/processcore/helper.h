@@ -20,7 +20,7 @@
 
 */
 
-#include <kauth.h>
+#include <kauthactionreply.h>
 #include <QObject>
 
 using namespace KAuth;

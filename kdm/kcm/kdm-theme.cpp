@@ -37,6 +37,7 @@
 #include <KIO/Job>
 #include <KIO/DeleteJob>
 #include <KIO/NetAccess>
+#include <KAuth/Action>
 
 #include <QDir>
 #include <QGridLayout>

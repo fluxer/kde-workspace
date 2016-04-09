@@ -19,6 +19,8 @@
 
 #include "backlighthelper.h"
 
+#include <kauthhelpersupport.h>
+
 #include <QtCore/QDir>
 #include <QtCore/QDebug>
 

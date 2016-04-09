@@ -20,7 +20,7 @@
 #ifndef _SAVEHELPER_H_
 #define _SAVEHELPER_H_
 
-#include <kauth.h>
+#include <kauthactionreply.h>
 
 using namespace KAuth;
 

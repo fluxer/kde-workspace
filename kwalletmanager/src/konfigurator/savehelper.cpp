@@ -20,6 +20,7 @@
 #include "savehelper.h"
 
 #include <kdebug.h>
+#include <kauthhelpersupport.h>
 #include <unistd.h>
 
 ActionReply SaveHelper::save(QVariantMap args)

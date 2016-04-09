@@ -47,7 +47,9 @@
 
 #include <signal.h> //For SIGTERM
 
-#include <kauth.h>
+#include <kauthaction.h>
+#include <kauthactionreply.h>
+#include <kauthhelpersupport.h>
 #include <kaction.h>
 #include <klocale.h>
 #include <kmessagebox.h>

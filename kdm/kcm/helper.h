@@ -21,7 +21,7 @@
 #ifndef KDM_HELPER_H
 #define KDM_HELPER_H
 
-#include <kauth.h>
+#include <kauthactionreply.h>
 
 using namespace KAuth;
 

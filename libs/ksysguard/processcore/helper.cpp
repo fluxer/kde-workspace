@@ -23,6 +23,8 @@
 #include "helper.h"
 #include "processes_local_p.h"
 
+#include <kauthhelpersupport.h>
+
 KSysGuardProcessListHelper::KSysGuardProcessListHelper()
 {
     qRegisterMetaType<QList<long long> >();

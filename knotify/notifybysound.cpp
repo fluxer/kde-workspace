@@ -27,7 +27,6 @@
 #include "notifybysound.h"
 
 // QT headers
-#include <QHash>
 #include <QtCore/QTimer>
 #include <QtCore/QQueue>
 #include <QtCore/qcoreevent.h>
@@ -47,43 +46,38 @@
 
 class NotifyBySound::Private
 {
-	public:
-		enum { NoSound, UseMediaPlayer } playerMode;
-
-		QHash<int, KAudioPlayer*> playerObjects;
-		QSignalMapper *signalmapper;
-		KAudioPlayer *currentPlayer;
-		QQueue<int> closeQueue;
+public:
+    bool noSound;
+    QMap<int, KAudioPlayer*> playerObjects;
+    QSignalMapper *signalmapper;
+    KAudioPlayer *currentPlayer;
+    QQueue<int> closeQueue;
 };
 
 NotifyBySound::NotifyBySound(QObject *parent) : KNotifyPlugin(parent),d(new Private)
 {
-	d->signalmapper = new QSignalMapper(this);
-	connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
+    d->signalmapper = new QSignalMapper(this);
+    connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
 
-	d->currentPlayer = new KAudioPlayer(this);
-	startTimer(1000);
-	loadConfig();
+    d->currentPlayer = new KAudioPlayer(this);
+    startTimer(1000);
+    loadConfig();
 }
 
 
 NotifyBySound::~NotifyBySound()
 {
-	delete d;
+    delete d;
 }
 
 
 void NotifyBySound::loadConfig()
 {
-        // load player settings
-	KSharedConfig::Ptr kc = KGlobal::config();
-	KConfigGroup cg(kc, "Sounds");
+    // load player settings
+    KSharedConfig::Ptr kc = KGlobal::config();
+    KConfigGroup cg(kc, "Sounds");
 
-	d->playerMode = Private::UseMediaPlayer;
-	if(cg.readEntry( "No sound" , false ))
-	{
-		d->playerMode = Private::NoSound;
-	}
+    d->noSound = cg.readEntry( "No sound" , false );
 }
 
 
@@ -91,103 +85,95 @@ void NotifyBySound::loadConfig()
 
 void NotifyBySound::notify( int eventId, KNotifyConfig * config )
 {
-	if(d->playerMode == Private::NoSound)
-	{
-		finish( eventId );
-		return;
-	}
+    if (d->noSound) {
+        finish( eventId );
+        return;
+    }
 
-	if(d->playerObjects.contains(eventId))
-	{
-		//a sound is already playing for this notification,  we don't support playing two sounds.
-		finish( eventId );
-		return;
-	}
+    if (d->playerObjects.contains(eventId)) {
+        //a sound is already playing for this notification,  we don't support playing two sounds.
+        finish( eventId );
+        return;
+    }
 
-	KUrl soundFileURL = config->readEntry( "Sound" , true );
-	QString soundFile = soundFileURL.toLocalFile();
+    KUrl soundFileURL = config->readEntry( "Sound" , true );
+    QString soundFile = soundFileURL.toLocalFile();
 
-	if (soundFile.isEmpty())
-	{
-		finish( eventId );
-		return;
-	}
+    if (soundFile.isEmpty()) {
+        finish( eventId );
+        return;
+    }
 
     // get file name
-	if ( KUrl::isRelativeUrl(soundFile) )
-	{
-		QString search = QString("%1/sounds/%2").arg(config->appname).arg(soundFile);
-		search = KGlobal::mainComponent().dirs()->findResource("data", search);
-		if ( search.isEmpty() )
-			soundFile = KStandardDirs::locate( "sound", soundFile );
-		else
-			soundFile = search;
-	}
-	if ( soundFile.isEmpty() )
-	{
-		finish( eventId );
-		return;
-	}
+    if (KUrl::isRelativeUrl(soundFile)) {
+        QString search = QString("%1/sounds/%2").arg(config->appname).arg(soundFile);
+        search = KGlobal::mainComponent().dirs()->findResource("data", search);
+        if ( search.isEmpty() ) {
+            soundFile = KStandardDirs::locate( "sound", soundFile );
+        } else {
+            soundFile = search;
+        }
+    }
+    if ( soundFile.isEmpty() ) {
+        finish( eventId );
+        return;
+    }
 
-	kDebug() << " going to play " << soundFile;
-
-	if(d->playerMode == Private::UseMediaPlayer)
-	{
-                KAudioPlayer *player = d->currentPlayer;
-                if (d->currentPlayer && d->currentPlayer->isPlaying()) {
-                    kDebug() << "creating new player";
-                    player = new KAudioPlayer(this);
-                }
-		connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
-		d->signalmapper->setMapping(player, eventId);
-		player->load(soundFile);
-		d->playerObjects.insert(eventId, player);
-	}
+    kDebug() << " going to play " << soundFile;
+    if (!d->noSound) {
+        KAudioPlayer *player = d->currentPlayer;
+        if (d->currentPlayer && d->currentPlayer->isPlaying()) {
+            kDebug() << "creating new player";
+            player = new KAudioPlayer(this);
+        }
+        connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
+        d->signalmapper->setMapping(player, eventId);
+        player->load(soundFile);
+        d->playerObjects.insert(eventId, player);
+    }
 }
 
 
 void NotifyBySound::timerEvent(QTimerEvent *e)
 {
-        QMutableHashIterator<int,KAudioPlayer*> iter(d->playerObjects);
-        while(iter.hasNext()) {
-            iter.next();
-            KAudioPlayer *player = iter.value();
-            if (player != d->currentPlayer && !player->isPlaying()) {
-                kDebug() << "destroying idle player";
-                d->playerObjects.remove(iter.key());
-                delete player;
-            }
+    QMutableMapIterator<int,KAudioPlayer*> iter(d->playerObjects);
+    while (iter.hasNext()) {
+        iter.next();
+        KAudioPlayer *player = iter.value();
+        if (player != d->currentPlayer && !player->isPlaying()) {
+            kDebug() << "destroying idle player";
+            d->playerObjects.remove(d->playerObjects.key(player));
+            player->deleteLater();
         }
-        KNotifyPlugin::timerEvent(e);
+    }
+    KNotifyPlugin::timerEvent(e);
 }
 
 void NotifyBySound::slotSoundFinished(int id)
 {
-	kDebug() << id;
-	if(d->playerObjects.contains(id))
-	{
-		KAudioPlayer *player=d->playerObjects.value(id);
-		disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
-	}
-	finish(id);
+    kDebug() << id;
+    if (d->playerObjects.contains(id)) {
+        KAudioPlayer *player=d->playerObjects.value(id);
+        disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
+    }
+    finish(id);
 }
 
 void NotifyBySound::close(int id)
 {
-	// close in 1 min - ugly workaround for sounds getting cut off because the close call in kdelibs
-	// is hardcoded to 6 seconds
-	d->closeQueue.enqueue(id);
-	QTimer::singleShot(60000, this, SLOT(closeNow()));
+    // close in 1 min - ugly workaround for sounds getting cut off because the close call in kdelibs
+    // is hardcoded to 6 seconds
+    d->closeQueue.enqueue(id);
+    QTimer::singleShot(60000, this, SLOT(closeNow()));
 }
 
 void NotifyBySound::closeNow()
 {
-	const int id = d->closeQueue.dequeue();
-	if(d->playerObjects.contains(id))
-	{
-		KAudioPlayer *player = d->playerObjects.value(id);
-		player->stop();
-	}
+    const int id = d->closeQueue.dequeue();
+    if (d->playerObjects.contains(id)) {
+        KAudioPlayer *player = d->playerObjects.value(id);
+        player->stop();
+    }
 }
 
 #include "moc_notifybysound.cpp"

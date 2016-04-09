@@ -34,6 +34,7 @@
 #include <KConfig>
 #include <KConfigGroup>
 #include <KStandardDirs>
+#include <kauthhelpersupport.h>
 
 bool secureCopy(const QString &from, const QString &to)
 {

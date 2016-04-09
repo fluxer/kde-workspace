@@ -39,6 +39,7 @@
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
 #include <kprocess.h>
+#include <kauthhelpersupport.h>
 #include <QFile>
 #include <QDir>
 

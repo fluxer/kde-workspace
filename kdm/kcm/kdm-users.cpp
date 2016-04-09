@@ -33,6 +33,7 @@
 #include <KStandardDirs>
 #include <KStandardGuiItem>
 #include <KIO/NetAccess>
+#include <KAuth/Action>
 
 #include <QButtonGroup>
 #include <QCheckBox>

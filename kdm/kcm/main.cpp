@@ -42,6 +42,7 @@
 #include <kconfig.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kauthaction.h>
 
 #include <QEvent>
 #include <QFile>

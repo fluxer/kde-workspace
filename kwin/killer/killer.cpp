@@ -27,7 +27,7 @@ DEALINGS IN THE SOFTWARE.
 #include <kmessagebox.h>
 #include <KIcon>
 #include <KLocalizedString>
-#include <kauth.h>
+#include <kauthaction.h>
 #include <kdebug.h>
 #include <unistd.h>
 #include <X11/Xlib.h>

@@ -21,7 +21,7 @@
 #define BACKLIGHTHELPER_H
 
 #include <QObject>
-#include <kauth.h>
+#include <kauthactionreply.h>
 
 using namespace KAuth;
 
