@@ -43,6 +43,7 @@ set(backtrace_parser_SRCS
 
 if(ENABLE_TESTING)
     add_library(drkonqi_backtrace_parser STATIC ${backtrace_parser_SRCS})
+    target_link_libraries(drkonqi_backtrace_parser ${KDE4_KDECORE_LIBS})
     add_subdirectory(tests)
 endif()
 
