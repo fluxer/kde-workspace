@@ -1256,7 +1256,6 @@ void CFcEngine::getSizes()
 
     if(f)
     {
-        bool   gotSizes=false;
         double px(0.0);
 
         if(itsInstalled)
@@ -1307,7 +1306,6 @@ void CFcEngine::getSizes()
                     for (int i = 0; i < set->nfont; i++)
                         if(FcResultMatch==FcPatternGetDouble(set->fonts[i], FC_PIXEL_SIZE, 0, &px))
                         {
-                            gotSizes=true;
                             itsSizes.push_back((int)px);
 
 #ifdef KFI_FC_DEBUG
@@ -1330,10 +1328,7 @@ void CFcEngine::getSizes()
                 itsIndexCount=face->num_faces;
                 if(!(itsScalable=FT_IS_SCALABLE(face)))
                 {
-                    int numSizes=face->num_fixed_sizes,
-                        size;
-
-                    gotSizes=true;
+                    int numSizes=face->num_fixed_sizes, size;
 
                     itsSizes.reserve(numSizes);
 
