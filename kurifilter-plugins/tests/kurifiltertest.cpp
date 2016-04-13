@@ -190,7 +190,7 @@ void KUriFilterTest::init()
       KSharedConfig::openConfig("kshorturifilterrc", KConfig::SimpleConfig )->group(QString()).writeEntry( "Verbose", true );
     }
 
-    KStandardDirs::makeDir( kdehome+"/urifilter" );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/urifilter") );
 }
 
 void KUriFilterTest::noFiltering()
@@ -208,16 +208,16 @@ void KUriFilterTest::localFiles()
     filter( "/", "/", KUriFilterData::LocalDir );
     filter( "/", "/", KUriFilterData::LocalDir, QStringList( "kshorturifilter" ) );
     if (QFile::exists(QDir::homePath() + QLatin1String("/.bashrc")))
-        filter( "~/.bashrc", QDir::homePath().toLocal8Bit()+"/.bashrc", KUriFilterData::LocalFile, QStringList( "kshorturifilter" ) );
+        filter( "~/.bashrc", QByteArray(QDir::homePath().toLocal8Bit()+"/.bashrc"), KUriFilterData::LocalFile, QStringList( "kshorturifilter" ) );
     filter( "~", QDir::homePath().toLocal8Bit(), KUriFilterData::LocalDir, QStringList( "kshorturifilter" ), "/tmp" );
     filter( "~bin", 0, KUriFilterData::LocalDir, QStringList( "kshorturifilter" ) );
     filter( "~does_not_exist", 0, KUriFilterData::Error, QStringList( "kshorturifilter" ) );
 
     // Absolute Path tests for kshorturifilter
     const QStringList kshorturifilter( QString("kshorturifilter") );
-    filter( "./", kdehome+"/share", KUriFilterData::LocalDir, kshorturifilter, kdehome+"/share/" ); // cleanPath removes the trailing slash
-    filter( "../", kdehome, KUriFilterData::LocalDir, kshorturifilter, kdehome+"/share" );
-    filter( "config", kdehome+"/share/config", KUriFilterData::LocalDir, kshorturifilter, kdehome+"/share" );
+    filter( "./", QByteArray(kdehome+"/share"), KUriFilterData::LocalDir, kshorturifilter, QByteArray(kdehome+"/share/") ); // cleanPath removes the trailing slash
+    filter( "../", kdehome, KUriFilterData::LocalDir, kshorturifilter, QByteArray(kdehome+"/share") );
+    filter( "config", QByteArray(kdehome+"/share/config"), KUriFilterData::LocalDir, kshorturifilter, QByteArray(kdehome+"/share") );
     // Invalid URLs
     filter( "http://a[b]", "http://a[b]", KUriFilterData::Unknown, kshorturifilter, "/" );
 }
@@ -331,33 +331,33 @@ void KUriFilterTest::environmentVariables()
 
     filter( "$SOMEVAR/kdelibs/kio", 0, KUriFilterData::Error ); // note: this dir doesn't exist...
     filter( "$ETC/passwd", "/etc/passwd", KUriFilterData::LocalFile );
-    QString qtdocPath = qtdir+"/doc/html/functions.html";
+    QString qtdocPath(qtdir+"/doc/html/functions.html");
     if (QFile::exists(qtdocPath)) {
         QString expectedUrl = KUrl(qtdocPath).url()+"#s";
         filter( "$QTDIR/doc/html/functions.html#s", expectedUrl.toUtf8(), KUriFilterData::LocalFile );
     }
     filter( "http://www.kde.org/$USER", "http://www.kde.org/$USER", KUriFilterData::NetProtocol ); // no expansion
 
-    filter( "$KDEHOME/share", kdehome+"/share", KUriFilterData::LocalDir );
-    KStandardDirs::makeDir( kdehome+"/urifilter/a+plus" );
-    filter( "$KDEHOME/urifilter/a+plus", kdehome+"/urifilter/a+plus", KUriFilterData::LocalDir );
+    filter( "$KDEHOME/share", QByteArray(kdehome+"/share"), KUriFilterData::LocalDir );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/urifilter/a+plus") );
+    filter( "$KDEHOME/urifilter/a+plus", QByteArray(kdehome+"/urifilter/a+plus"), KUriFilterData::LocalDir );
 
     // BR 27788
-    KStandardDirs::makeDir( kdehome+"/share/Dir With Space" );
-    filter( "$KDEHOME/share/Dir With Space", kdehome+"/share/Dir With Space", KUriFilterData::LocalDir );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/share/Dir With Space") );
+    filter( "$KDEHOME/share/Dir With Space", QByteArray(kdehome+"/share/Dir With Space"), KUriFilterData::LocalDir );
 
     // support for name filters (BR 93825)
-    filter( "$KDEHOME/*.txt", kdehome+"/*.txt", KUriFilterData::LocalDir );
-    filter( "$KDEHOME/[a-b]*.txt", kdehome+"/[a-b]*.txt", KUriFilterData::LocalDir );
-    filter( "$KDEHOME/a?c.txt", kdehome+"/a?c.txt", KUriFilterData::LocalDir );
-    filter( "$KDEHOME/?c.txt", kdehome+"/?c.txt", KUriFilterData::LocalDir );
+    filter( "$KDEHOME/*.txt", QByteArray(kdehome+"/*.txt"), KUriFilterData::LocalDir );
+    filter( "$KDEHOME/[a-b]*.txt", QByteArray(kdehome+"/[a-b]*.txt"), KUriFilterData::LocalDir );
+    filter( "$KDEHOME/a?c.txt", QByteArray(kdehome+"/a?c.txt"), KUriFilterData::LocalDir );
+    filter( "$KDEHOME/?c.txt", QByteArray(kdehome+"/?c.txt"), KUriFilterData::LocalDir );
     // but let's check that a directory with * in the name still works
-    KStandardDirs::makeDir( kdehome+"/share/Dir*With*Stars" );
-    filter( "$KDEHOME/share/Dir*With*Stars", kdehome+"/share/Dir*With*Stars", KUriFilterData::LocalDir );
-    KStandardDirs::makeDir( kdehome+"/share/Dir?QuestionMark" );
-    filter( "$KDEHOME/share/Dir?QuestionMark", kdehome+"/share/Dir?QuestionMark", KUriFilterData::LocalDir );
-    KStandardDirs::makeDir( kdehome+"/share/Dir[Bracket" );
-    filter( "$KDEHOME/share/Dir[Bracket", kdehome+"/share/Dir[Bracket", KUriFilterData::LocalDir );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/share/Dir*With*Stars") );
+    filter( "$KDEHOME/share/Dir*With*Stars", QByteArray(kdehome+"/share/Dir*With*Stars"), KUriFilterData::LocalDir );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/share/Dir?QuestionMark") );
+    filter( "$KDEHOME/share/Dir?QuestionMark", QByteArray(kdehome+"/share/Dir?QuestionMark"), KUriFilterData::LocalDir );
+    KStandardDirs::makeDir( QByteArray(kdehome+"/share/Dir[Bracket") );
+    filter( "$KDEHOME/share/Dir[Bracket", QByteArray(kdehome+"/share/Dir[Bracket"), KUriFilterData::LocalDir );
 
     filter( "$HOME/$KDEDIR/kdebase/kcontrol/ebrowsing", 0, KUriFilterData::Error );
     filter( "$1/$2/$3", "https://www.google.com/search?q=%241%2F%242%2F%243&ie=UTF-8", KUriFilterData::NetProtocol );  // can be used as bogus or valid test. Currently triggers default search, i.e. google
