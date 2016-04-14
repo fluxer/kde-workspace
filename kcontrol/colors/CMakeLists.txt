@@ -30,8 +30,8 @@ install(
     schemes/Honeycomb.colors
     schemes/Norway.colors
     schemes/ObsidianCoast.colors
-    schemes/OxygenCold.colors
     schemes/Oxygen.colors
+    schemes/OxygenDark.colors
     schemes/Steel.colors
     schemes/WontonSoup.colors
     schemes/Zion.colors
