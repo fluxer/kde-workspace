@@ -197,16 +197,11 @@ void KWinScreenEdgesConfig::monitorInit()
 
     // Search the effect names
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
-    KService::List services;
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_presentwindows'");
+    KService::List services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_presentwindows'");
     if (!services.isEmpty()) {
         monitorAddItem(services.first()->name() + " - " + i18n("All Desktops"));
         monitorAddItem(services.first()->name() + " - " + i18n("Current Desktop"));
         monitorAddItem(services.first()->name() + " - " + i18n("Current Application"));
-    }
-    services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == 'kwin4_effect_desktopgrid'");
-    if (!services.isEmpty()) {
-        monitorAddItem(services.first()->name());
     }
 
     monitorAddItem(i18n("Toggle window switching"));
@@ -261,15 +256,6 @@ void KWinScreenEdgesConfig::monitorLoad()
     list = presentWindowsConfig.readEntry("BorderActivateClass", list);
     foreach (int i, list) {
         monitorChangeEdge(ElectricBorder(i), int(PresentWindowsClass));
-    }
-
-    // Desktop Grid
-    KConfigGroup gridConfig(m_config, "Effect-DesktopGrid");
-    list.clear();
-    list.append(int(ElectricNone));
-    list = gridConfig.readEntry("BorderActivate", list);
-    foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(DesktopGrid));
     }
 
     // TabBox
@@ -339,11 +325,6 @@ void KWinScreenEdgesConfig::monitorSave()
     presentWindowsConfig.writeEntry("BorderActivateClass",
                                     monitorCheckEffectHasEdge(int(PresentWindowsClass)));
 
-    // Desktop Grid
-    KConfigGroup gridConfig(m_config, "Effect-DesktopGrid");
-    gridConfig.writeEntry("BorderActivate",
-                          monitorCheckEffectHasEdge(int(DesktopGrid)));
-
     // TabBox
     KConfigGroup tabBoxConfig(m_config, "TabBox");
     tabBoxConfig.writeEntry("BorderActivate",
@@ -374,14 +355,9 @@ void KWinScreenEdgesConfig::monitorShowEvent()
         bool enabled = effectEnabled("presentwindows", config);
         monitorItemSetEnabled(int(PresentWindowsCurrent), enabled);
         monitorItemSetEnabled(int(PresentWindowsAll), enabled);
-
-        // Desktop Grid
-        enabled = effectEnabled("desktopgrid", config);
-        monitorItemSetEnabled(int(DesktopGrid), enabled);
     } else { // Compositing disabled
         monitorItemSetEnabled(int(PresentWindowsCurrent), false);
         monitorItemSetEnabled(int(PresentWindowsAll), false);
-        monitorItemSetEnabled(int(DesktopGrid), false);
     }
     // tabbox, depends on reasonable focus policy.
     KConfigGroup config2(m_config, "Windows");

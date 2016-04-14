@@ -106,7 +106,6 @@ include( taskbarthumbnail/CMakeLists.txt )
 # Common effects only relevant to desktop
 if( NOT KWIN_MOBILE_EFFECTS )
     include( dashboard/CMakeLists.txt )
-    include( desktopgrid/CMakeLists.txt )
     include( diminactive/CMakeLists.txt )
     include( dimscreen/CMakeLists.txt )
     include( highlightwindow/CMakeLists.txt )
