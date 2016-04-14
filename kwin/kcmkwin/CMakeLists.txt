@@ -8,5 +8,5 @@ endif()
 add_subdirectory( kwindesktop )
 
 if( KWIN_BUILD_TABBOX )
-add_subdirectory( kwintabbox )
+    add_subdirectory( kwintabbox )
 endif()

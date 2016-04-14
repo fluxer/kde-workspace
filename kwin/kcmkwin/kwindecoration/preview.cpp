@@ -526,9 +526,4 @@ void KDecorationPreviewOptions::setCustomTitleButtons(const QString &left, const
     updateSettings();
 }
 
-bool KDecorationPreviewPlugins::provides(Requirement)
-{
-    return false;
-}
-
 #include "moc_preview.cpp"

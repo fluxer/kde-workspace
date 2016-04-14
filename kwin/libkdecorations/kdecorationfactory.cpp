@@ -51,10 +51,6 @@ bool KDecorationFactory::reset(unsigned long)
     return true;
 }
 
-void KDecorationFactory::checkRequirements(KDecorationProvides*)
-{
-}
-
 QList< KDecorationDefines::BorderSize > KDecorationFactory::borderSizes() const
 {
     return QList< BorderSize >() << BorderNormal;

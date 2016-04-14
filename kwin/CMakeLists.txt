@@ -30,9 +30,12 @@ endif()
 include_directories(${XCB_INCLUDE_DIR})
 
 # for things that are also used by kwin libraries
-configure_file(libkwineffects/kwinconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/libkwineffects/kwinconfig.h )
+configure_file(
+    libkwineffects/kwinconfig.h.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/libkwineffects/kwinconfig.h
+)
 # for kwin internal things
-configure_file(config-kwin.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kwin.h )
+configure_file(config-kwin.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kwin.h)
 
 
 ########### global ###############
@@ -44,7 +47,7 @@ include_directories(BEFORE
     ${CMAKE_CURRENT_SOURCE_DIR}/libkdecorations
     ${CMAKE_CURRENT_SOURCE_DIR}/effects
     ${CMAKE_CURRENT_SOURCE_DIR}/tabbox
-    )
+)
 
 add_subdirectory( libkdecorations )
 add_subdirectory( libkwineffects )
@@ -108,11 +111,11 @@ set(kwin_SRCS
    paintredirector.cpp
    virtualdesktops.cpp
    xcbutils.cpp
-   )
+)
 
 if(KWIN_BUILD_TABBOX)
-    set(
-        kwin_SRCS ${kwin_SRCS}
+    set(kwin_SRCS
+        ${kwin_SRCS}
         tabbox/tabbox.cpp
         tabbox/clientmodel.cpp
         tabbox/declarative.cpp
@@ -124,15 +127,15 @@ if(KWIN_BUILD_TABBOX)
 endif()
 
 if(KWIN_BUILD_SCREENEDGES)
-    set(
-        kwin_SRCS ${kwin_SRCS}
+    set(kwin_SRCS
+        ${kwin_SRCS}
         screenedge.cpp
     )
 endif()
 
 if(KWIN_BUILD_KAPPMENU)
-    set(
-        kwin_SRCS ${kwin_SRCS}
+    set(kwin_SRCS
+        ${kwin_SRCS}
         appmenu.cpp
     )
 endif()

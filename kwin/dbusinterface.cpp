@@ -221,9 +221,4 @@ void DBusInterface::previousDesktop()
     VirtualDesktopManager::self()->moveTo<DesktopPrevious>();
 }
 
-QList< int > DBusInterface::decorationSupportedColors()
-{
-    return decorationPlugin()->supportedColors();
-}
-
 } // namespace

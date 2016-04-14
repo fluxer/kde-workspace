@@ -486,7 +486,7 @@ int main(int argc, char * argv[])
     // ""known to be stupid" ideas ;-P
     // The invalid system parameter "" will use the systems default graphicssystem
     // "!= XRender" is intended since eg. pot. SW backends likely would profit from raster as well
-    KConfigGroup config(KSharedConfig::openConfig(KWIN_CONFIG), "Compositing");
+    KConfigGroup config(KSharedConfig::openConfig("kwinrc"), "Compositing");
     QString preferredSystem("native");
     if (config.readEntry("Enabled", true) && config.readEntry("Backend", "OpenGL") != "XRender")
         preferredSystem = "";

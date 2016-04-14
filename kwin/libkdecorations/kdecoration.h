@@ -208,16 +208,6 @@ public:
         AbilityButtonShade = 1009, ///< decoration supports a shade button
         AbilityButtonResize = 1010, ///< decoration supports a resize button
         AbilityButtonApplicationMenu = 1011,   ///< decoration supports the application menu button
-        // colors
-        AbilityColorTitleBack = 2000, ///< decoration supports titlebar background color, @deprecated @todo remove KDE5
-        ABILITYCOLOR_FIRST = AbilityColorTitleBack, ///< @internal, @deprecated @todo remove KDE5
-        AbilityColorTitleFore = 2001, ///< decoration supports titlebar foreground color, @deprecated @todo remove KDE5
-        AbilityColorTitleBlend = 2002, ///< decoration supports second titlebar background color, @deprecated @todo remove KDE5
-        AbilityColorFrame = 2010, ///< decoration supports frame color, @deprecated @todo remove KDE5
-        AbilityColorHandle = 2011, ///< decoration supports resize handle color, @deprecated @todo remove KDE5
-        AbilityColorButtonBack = 2020, ///< decoration supports button background color, @deprecated @todo remove KDE5
-        AbilityColorButtonFore = 2021, ///< decoration supports button foreground color, @deprecated @todo remove KDE5
-        ABILITYCOLOR_END, ///< @internal, @deprecated @todo remove KDE5
         // compositing
         AbilityProvidesShadow = 3000, ///< The decoration draws its own shadows.
         ///  @since 4.3
@@ -233,11 +223,7 @@ public:
         /// @since 4.10
         // Tabbing
         AbilityTabbing = 4000, ///< The decoration supports tabbing
-        // TODO colors for individual button types
-        ABILITY_DUMMY = 10000000,
     };
-
-    enum Requirement { REQUIREMENT_DUMMY = 1000000 };
 
     /**
      * Regions that can be returned by KDecorationUnstable::region().
@@ -272,7 +258,6 @@ class KDecorationProvides
 {
 public:
     virtual ~KDecorationProvides() {}
-    virtual bool provides(Requirement req) = 0;
 };
 
 /**

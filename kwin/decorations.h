@@ -34,7 +34,6 @@ class DecorationPlugin
     Q_OBJECT
 public:
     virtual ~DecorationPlugin();
-    virtual bool provides(Requirement);
     /**
      * @returns @c true if there is no decoration plugin.
      **/
@@ -49,13 +48,6 @@ public:
     Qt::Corner closeButtonCorner();
 
     QString supportInformation();
-
-    // D-Bus interface
-    /**
-     * @deprecated
-     * @todo: remove KDE5
-     **/
-    QList<int> supportedColors() const;
 
 public Q_SLOTS:
     void resetCompositing();

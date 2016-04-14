@@ -158,7 +158,6 @@ class KDecorationPreviewPlugins
 {
 public:
     explicit KDecorationPreviewPlugins(const KSharedConfigPtr &cfg);
-    virtual bool provides(Requirement);
 };
 
 inline KDecorationPreviewPlugins::KDecorationPreviewPlugins(const KSharedConfigPtr &cfg)

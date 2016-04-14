@@ -652,7 +652,7 @@ void EffectsHandler::sendReloadMessage(const QString& effectname)
 
 KConfigGroup EffectsHandler::effectConfig(const QString& effectname)
 {
-    KSharedConfig::Ptr kwinconfig = KSharedConfig::openConfig(KWIN_CONFIG, KConfig::NoGlobals);
+    KSharedConfig::Ptr kwinconfig = KSharedConfig::openConfig("kwinrc", KConfig::NoGlobals);
     return kwinconfig->group("Effect-" + effectname);
 }
 

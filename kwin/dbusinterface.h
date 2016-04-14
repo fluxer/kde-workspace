@@ -64,7 +64,6 @@ public Q_SLOTS: // METHODS
      **/
     void circulateDesktopApplications();
     int currentDesktop();
-    QList<int> decorationSupportedColors();
     /**
      * @deprecated
      **/

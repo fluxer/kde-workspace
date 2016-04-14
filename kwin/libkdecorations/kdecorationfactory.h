@@ -75,7 +75,6 @@ public:
 
     virtual bool supports(Ability ability) const = 0;
 
-    virtual void checkRequirements(KDecorationProvides* provides);
     /**
      * Returns the KDecorationOptions object, which is used to access
      * configuration settings for the decoration.

@@ -57,11 +57,6 @@ void DecorationPlugin::error(const QString &error_msg)
     setDisabled(true);
 }
 
-bool DecorationPlugin::provides(Requirement)
-{
-    return false;
-}
-
 void DecorationPlugin::setDisabled(bool disabled)
 {
     m_disabled = disabled;
@@ -126,20 +121,6 @@ Qt::Corner DecorationPlugin::closeButtonCorner()
         return Qt::TopRightCorner;
     }
     return factory()->closeButtonCorner();
-}
-
-QList< int > DecorationPlugin::supportedColors() const
-{
-    QList<int> ret;
-    if (m_disabled) {
-        return ret;
-    }
-    for (Ability ab = ABILITYCOLOR_FIRST;
-            ab < ABILITYCOLOR_END;
-            ab = static_cast<Ability>(ab + 1))
-        if (factory()->supports(ab))
-            ret << ab;
-    return ret;
 }
 
 void DecorationPlugin::resetCompositing()
