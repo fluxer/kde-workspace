@@ -2,8 +2,10 @@ project(plasma-systemtray)
 
 set(data_install_dir "plasma/packages/org.kde.systemtray")
 
-set(systemtray_SRCS
+cmake_policy(SET CMP0005 NEW)
+add_definitions(-DSYSTEMTRAY_DATA_INSTALL_DIR="${data_install_dir}")
 
+set(systemtray_SRCS
     core/manager.cpp
     core/protocol.cpp
     core/task.cpp
@@ -27,18 +29,7 @@ set(systemtray_SRCS
     ui/applet.cpp
     ui/widgetitem.cpp
     ui/mouseredirectarea.cpp
-
-    ui/autohide.ui
-    ui/visibleitems.ui
 )
-
-include(${QT_USE_FILE})
-include (CheckLibraryExists)
-check_library_exists (Xss XScreenSaverQueryInfo "" HAVE_LIBXSS)
-configure_file (${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_BINARY_DIR}/config.h)
-IF (HAVE_LIBXSS)
-   SET (IDLE_DETECTION_LIB "Xss")
-ENDIF (HAVE_LIBXSS)
 
 kde4_add_plugin(plasma_applet_systemtray ${systemtray_SRCS})
 include_directories(${CMAKE_SOURCE_DIR})
@@ -51,8 +42,6 @@ target_link_libraries(plasma_applet_systemtray
     ${X11_Xfixes_LIB}
     ${X11_Xdamage_LIB}
     ${X11_Xcomposite_LIB}
-    ${KDE4_SOLID_LIBS}
-    ${IDLE_DETECTION_LIB}
 )
 
 install(TARGETS plasma_applet_systemtray DESTINATION ${PLUGIN_INSTALL_DIR})

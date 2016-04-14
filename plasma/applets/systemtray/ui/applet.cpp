@@ -52,8 +52,6 @@
 
 #include <inttypes.h>
 
-#include "config.h"
-
 #include "../core/manager.h"
 
 static const bool DEFAULT_SHOW_APPS = true;

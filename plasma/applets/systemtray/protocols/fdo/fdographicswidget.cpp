@@ -212,10 +212,11 @@ void FdoGraphicsWidget::handleClientError(QX11EmbedContainer::Error error)
 
 void FdoGraphicsWidget::resizeEvent(QGraphicsSceneResizeEvent *event)
 {
+    Q_UNUSED(event);
+
     if (d->widget) {
         d->widget.data()->resize(size().toSize());
     }
-    
 }
 
 }
