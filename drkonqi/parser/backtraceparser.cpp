@@ -194,10 +194,7 @@ static bool lineShouldBeIgnored(const BacktraceLine & line)
         || line.functionName().startsWith(QLatin1String("*__GI_")) //glibc2.9 uses *__GI_ as prefix
         || line.libraryName().contains("libpthread.so")
         || line.libraryName().contains("libglib-2.0.so")
-        || line.libraryName().contains("ntdll.dll")
-        || line.libraryName().contains("kernel32.dll")
-        || line.functionName().contains("_tmain")
-        || line.functionName() == QLatin1String("WinMain") )
+        || line.functionName().contains("_tmain") )
         return true;
 
     return false;
