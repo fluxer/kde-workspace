@@ -28,8 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <kdebug.h>
 #include <KActionCollection>
-#include <kaction.h>
+#include <KAction>
 #include <KShortcutsEditor>
+#include <KIcon>
 
 #include <QVBoxLayout>
 

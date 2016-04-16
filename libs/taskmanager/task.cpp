@@ -196,7 +196,7 @@ bool Task::isIconified() const
 
 bool Task::isAlwaysOnTop() const
 {
-    return d->info.valid(true) && (d->info.state() & NET::StaysOnTop);
+    return d->info.valid(true) && (d->info.state() & NET::KeepAbove);
 }
 
 bool Task::isKeptBelowOthers() const

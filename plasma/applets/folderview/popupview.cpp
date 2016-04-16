@@ -40,6 +40,7 @@
 #include <knewfilemenu.h>
 #include <KWindowSystem>
 #include <KMenu>
+#include <KIcon>
 
 #include <kio/fileundomanager.h>
 #include <kio/paste.h>
