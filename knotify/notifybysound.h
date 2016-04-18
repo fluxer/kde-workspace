@@ -44,9 +44,6 @@ class NotifyBySound : public KNotifyPlugin
 	public:
 		void setVolume( int v );
 
-	protected:
-		void timerEvent(QTimerEvent *);
-
 	private Q_SLOTS:
 		void slotSoundFinished(int id);
 		void closeNow();

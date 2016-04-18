@@ -60,7 +60,6 @@ NotifyBySound::NotifyBySound(QObject *parent) : KNotifyPlugin(parent),d(new Priv
     connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
 
     d->currentPlayer = new KAudioPlayer(this);
-    startTimer(1000);
     loadConfig();
 }
 
@@ -133,28 +132,17 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
     }
 }
 
-
-void NotifyBySound::timerEvent(QTimerEvent *e)
-{
-    QMutableMapIterator<int,KAudioPlayer*> iter(d->playerObjects);
-    while (iter.hasNext()) {
-        iter.next();
-        KAudioPlayer *player = iter.value();
-        if (player != d->currentPlayer && !player->isPlaying()) {
-            kDebug() << "destroying idle player";
-            d->playerObjects.remove(d->playerObjects.key(player));
-            player->deleteLater();
-        }
-    }
-    KNotifyPlugin::timerEvent(e);
-}
-
 void NotifyBySound::slotSoundFinished(int id)
 {
     kDebug() << id;
     if (d->playerObjects.contains(id)) {
         KAudioPlayer *player=d->playerObjects.value(id);
         disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
+        if (player != d->currentPlayer) {
+            kDebug() << "destroying idle player";
+            d->playerObjects.remove(id);
+            player->deleteLater();
+        }
     }
     finish(id);
 }
