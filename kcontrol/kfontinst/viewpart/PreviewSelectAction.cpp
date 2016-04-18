@@ -25,6 +25,7 @@
 #include "UnicodeBlocks.h"
 #include "UnicodeScripts.h"
 #include <KLocale>
+#include <KIcon>
 
 namespace KFI
 {

@@ -335,7 +335,7 @@ void KRunnerDialog::paintEvent(QPaintEvent *e)
 void KRunnerDialog::showEvent(QShowEvent *)
 {
     m_shadows->addWindow(this);
-    unsigned long state = NET::SkipTaskbar | NET::KeepAbove | NET::StaysOnTop;
+    unsigned long state = NET::SkipTaskbar | NET::KeepAbove;
     if (m_floating) {
         KWindowSystem::clearState(winId(), state);
     } else {

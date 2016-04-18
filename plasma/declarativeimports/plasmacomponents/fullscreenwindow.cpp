@@ -57,7 +57,7 @@ public:
 
         setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
         KWindowSystem::setOnAllDesktops(winId(), true);
-        unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
+        unsigned long state = NET::Sticky | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager | NET::MaxVert | NET::MaxHoriz;
         KWindowSystem::setState(effectiveWinId(), state);
     }
 
@@ -107,7 +107,7 @@ FullScreenWindow::FullScreenWindow(QDeclarativeItem *parent)
     m_view->setWindowFlags(Qt::FramelessWindowHint | Qt::CustomizeWindowHint);
     m_view->setFrameShape(QFrame::NoFrame);
     KWindowSystem::setOnAllDesktops(m_view->winId(), true);
-    unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
+    unsigned long state = NET::Sticky | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
     KWindowSystem::setState(m_view->effectiveWinId(), state);
 
     m_background = new Background(this);
@@ -283,7 +283,7 @@ void FullScreenWindow::setVisible(const bool visible)
         m_background->setVisible(visible);
         Plasma::WindowEffects::slideWindow(m_view->winId(), Plasma::BottomEdge, 0);
         m_view->setVisible(visible);
-        unsigned long state = NET::Sticky | NET::StaysOnTop | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
+        unsigned long state = NET::Sticky | NET::KeepAbove | NET::SkipTaskbar | NET::SkipPager;
         KWindowSystem::setState(m_view->effectiveWinId(), state);
         KWindowSystem::setState(m_background->effectiveWinId(), state);
         if (visible) {

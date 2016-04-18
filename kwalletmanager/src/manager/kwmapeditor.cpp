@@ -25,12 +25,12 @@
 #include <kmenu.h>
 #include <kstandardaction.h>
 #include <kwindowsystem.h>
+#include <kicon.h>
+#include <ktextedit.h>
 #include <QPointer>
 #include <QApplication>
 #include <QClipboard>
 #include <QToolButton>
-#include <ktextedit.h>
-#include <QtGui/qevent.h>
 #include <QtGui/qevent.h>
 #include <QItemDelegate>
 

@@ -72,7 +72,7 @@ bool KSysTrayCmd::start()
       if ( win ) {
         // Window always on top
         if (onTop) {
-          KWindowSystem::setState(win, NET::StaysOnTop);
+          KWindowSystem::setState(win, NET::KeepAbove);
         }
         return true;
       }
@@ -108,7 +108,7 @@ void KSysTrayCmd::showWindow()
   // Window always on top
   if (onTop)
   {
-    KWindowSystem::setState(win, NET::StaysOnTop);
+    KWindowSystem::setState(win, NET::KeepAbove);
   }
 
   KWindowSystem::activateWindow( win );
@@ -144,7 +144,7 @@ void KSysTrayCmd::setTargetWindow( WId w )
   // Always on top ?
   if (onTop)
   {
-    KWindowSystem::setState(win, NET::StaysOnTop);
+    KWindowSystem::setState(win, NET::KeepAbove);
   }
 }
 

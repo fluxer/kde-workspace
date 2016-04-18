@@ -204,9 +204,9 @@ void Task::setAlwaysOnTop(bool stay)
 {
     NETWinInfo ni(QX11Info::display(), d->win, QX11Info::appRootWindow(), NET::WMState);
     if (stay)
-        ni.setState(NET::StaysOnTop, NET::StaysOnTop);
+        ni.setState(NET::KeepAbove, NET::KeepAbove);
     else
-        ni.setState(0, NET::StaysOnTop);
+        ni.setState(0, NET::KeepAbove);
 }
 
 void Task::setKeptBelowOthers(bool below)

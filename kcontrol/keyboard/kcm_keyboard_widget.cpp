@@ -24,6 +24,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kglobalsettings.h>
+#include <kicon.h>
 
 #include <QtGui/QMessageBox>
 #include <QtGui/QWidget>
