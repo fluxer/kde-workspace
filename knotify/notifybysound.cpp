@@ -136,7 +136,7 @@ void NotifyBySound::slotSoundFinished(int id)
 {
     kDebug() << id;
     if (d->playerObjects.contains(id)) {
-        KAudioPlayer *player=d->playerObjects.value(id);
+        KAudioPlayer *player = d->playerObjects.value(id);
         disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
         if (player != d->currentPlayer) {
             kDebug() << "destroying idle player";

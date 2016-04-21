@@ -23,9 +23,6 @@
 #ifndef SOLDEVICETYPES
 #define SOLDEVICETYPES
 
-//kde 
-#include <kdiskfreespaceinfo.h>
-
 #include "soldevice.h"
 #include "infopanel.h"
 

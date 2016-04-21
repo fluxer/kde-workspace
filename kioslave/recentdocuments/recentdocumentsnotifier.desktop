@@ -63,7 +63,6 @@ Name[zh_TW]=最近文件監控器
 ServiceTypes=KDEDModule
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-Library=recentdocumentsnotifier
-X-KDE-FactoryName=recentdocumentsnotifier
 X-KDE-DBus-ModuleName=recentdocumentsnotifier
 X-KDE-Kded-load-on-demand=true
 X-KDE-Kded-autoload=false
