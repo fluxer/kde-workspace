@@ -2628,18 +2628,6 @@ Comment: &
 Description:
  Show the <guilabel>Restart X Server</guilabel>/<guilabel>Close Connection</guilabel> action in the greeter.
 
-Key: Preloader
-Type: string
-Default: ""
-User: greeter-c
-Instance: */KDE_BINDIR "/preloadkde"
-Update: upd_preloader
-Comment: &
-Description:
- A program to run while the greeter is visible. It is supposed to preload
- as much as possible of the session that is going to be started (most
- probably).
-
 Key: Theme
 Type: string
 Default: ""

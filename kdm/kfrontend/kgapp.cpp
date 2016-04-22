@@ -37,7 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kcrash.h>
 #include <kglobalsettings.h>
 #include <kcomponentdata.h>
-#include <kprocess.h>
 #include <kconfig.h>
 #include <kstandarddirs.h>
 
@@ -397,7 +396,6 @@ main(void)
 
     setupModifiers(dpy, _numLockStatus);
     secureDisplay(dpy);
-    KProcess *proc = 0;
     if (!_grabServer) {
         gSendInt(G_SetupDpy);
         gRecvInt();
@@ -456,7 +454,6 @@ main(void)
             cmd = G_Greet;
         }
 
-        KProcess *proc2 = 0;
         app.markBusy();
         FDialog *dialog;
 #ifdef XDMCP
@@ -471,11 +468,6 @@ main(void)
                     _autoLoginUser.isEmpty())
                 _autoLoginDelay = 0;
             dialog = new KThemedGreeter(themer);
-            if (*_preloader) {
-                proc2 = new KProcess;
-                *proc2 << _preloader;
-                proc2->start();
-            }
         }
         QObject::connect(dialog, SIGNAL(ready()), &app, SLOT(markReady()));
         app.enableSendInteract();
@@ -483,7 +475,6 @@ main(void)
         rslt = dialog->exec();
         debug("left event loop\n");
         delete dialog;
-        delete proc2;
 #ifdef XDMCP
         switch (rslt) {
         case ex_greet:
@@ -501,7 +492,6 @@ main(void)
 
     KGVerify::done();
 
-    delete proc;
     delete themer;
 
     unsecureDisplay(dpy);
