@@ -23,6 +23,7 @@
 #include "soldevicetypes.h"
 
 #include <kcapacitybar.h>
+#include <kdiskfreespaceinfo.h>
 // ---- Processor
 
 SolProcessorDevice::SolProcessorDevice(QTreeWidgetItem *parent, const Solid::Device &device) :
