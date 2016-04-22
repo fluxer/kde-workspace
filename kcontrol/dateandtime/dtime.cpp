@@ -31,16 +31,16 @@
 #include <sys/types.h>
 
 #include <QComboBox>
-#include <QtGui/QGroupBox>
+#include <QGroupBox>
 #include <QPushButton>
 #include <QPainter>
-#include <QtGui/qdatetimeedit.h>
-
+#include <QDateTimeEdit>
 #include <QCheckBox>
 #include <QtGui/qevent.h>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <kprocess.h>
@@ -48,9 +48,7 @@
 #include <kmessagebox.h>
 #include <kdialog.h>
 #include <kconfig.h>
-#include <kcolorscheme.h>
 #include <ksystemtimezone.h>
-#include <KTreeWidgetSearchLine>
 
 #include <Plasma/Svg>
 
