@@ -22,6 +22,7 @@
 #include <sys/socket.h>
 
 #include <kdebug.h>
+#include <qplatformdefs.h>
 
 /**
  * Under Linux, Socket_security is supported.
@@ -61,7 +62,7 @@ SocketSecurity::SocketSecurity(int sockfd) : pid(-1), gid(-1), uid(-1)
 SocketSecurity::SocketSecurity(int sockfd) : pid(-1), gid(-1), uid(-1)
 {
     ucred cred;
-    socklen_t len = sizeof(struct ucred);
+    QT_SOCKLEN_T len = sizeof(struct ucred);
     if (getsockopt(sockfd, SOL_SOCKET, SO_PEERCRED, &cred, &len) < 0) {
 	kError() << "getsockopt(SO_PEERCRED) " << perror << endl;
 	return;

@@ -412,7 +412,7 @@ static void handleSocketTraffic( int socketNo, const fd_set* fds )
     if ( FD_ISSET( socketNo, fds ) ) {
       int clientsocket;
       struct sockaddr addr;
-      kde_socklen_t addr_len = sizeof( struct sockaddr );
+      socklen_t addr_len = sizeof( struct sockaddr );
 
       /* a new connection */
       if ( ( clientsocket = accept( socketNo, &addr, &addr_len ) ) < 0 ) {

@@ -61,6 +61,7 @@
 #include <QFile>
 #include <QRegExp>
 #include <QByteArray>
+#include <qplatformdefs.h>
 
 #include <kcomponentdata.h>
 #include <kdebug.h>
@@ -80,7 +81,7 @@
 #endif
 
 #ifndef SUN_LEN
-#define SUN_LEN(ptr) ((socklen_t) \
+#define SUN_LEN(ptr) ((QT_SOCKLEN_T) \
     (offsetof(struct sockaddr_un, sun_path) + strlen ((ptr)->sun_path)))
 #endif
 
@@ -163,8 +164,8 @@ void sigchld_handler(int)
 int create_socket()
 {
     int sockfd;
-    socklen_t addrlen;
-    struct stat s;
+    QT_SOCKLEN_T addrlen;
+    QT_STATBUF s;
 
     QString display = QString::fromAscii(getenv("DISPLAY"));
     if (display.isEmpty())
@@ -177,7 +178,7 @@ int create_socket()
     display.replace(QRegExp("\\.[0-9]+$"), "");
 
     sock = QFile::encodeName(KStandardDirs::locateLocal("socket", QString("kdesud_%1").arg(display)));
-    int stat_err=lstat(sock, &s);
+    int stat_err= QT_LSTAT(sock, &s);
     if(!stat_err && S_ISLNK(s.st_mode)) {
         kWarning(1205) << "Someone is running a symlink attack on you\n";
         if(unlink(sock)) {
@@ -328,7 +329,7 @@ int main(int argc, char *argv[])
 
     // Main execution loop
 
-    socklen_t addrlen;
+    QT_SOCKLEN_T addrlen;
     struct sockaddr_un clientname;
 
     fd_set tmp_fds, active_fds;

@@ -25,6 +25,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
+#include <qplatformdefs.h>
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -73,7 +74,7 @@ static int waitForEnvironment()
 
     int s2;
     struct sockaddr_un remote;
-    socklen_t t = sizeof(remote);
+    QT_SOCKLEN_T t = sizeof(remote);
     if ((s2 = accept(socketfd, (struct sockaddr *)&remote, &t)) == -1) {
         fprintf(stdout, "kwalletd: Couldn't accept incoming connection\n");
         return -1;
