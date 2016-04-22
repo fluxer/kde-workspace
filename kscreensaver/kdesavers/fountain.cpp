@@ -410,7 +410,7 @@ void Fountain::paintGL ()
 				particle[loop].g=colors[col][1];			// Select Green From Color Table
 				particle[loop].b=colors[col][2];			// Select Blue From Color Table
 				particle[loop].size=size;
-				if ((1+(random()%20)) == 10)
+				if ((1+(KRandom::random()%20)) == 10)
 				{
 				// Explode
 					particle[loop].active=true;				// Make All The Particles Active
