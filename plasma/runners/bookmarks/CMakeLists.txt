@@ -21,11 +21,11 @@ set(krunner_bookmarksrunner_SRCS
 )
 
 if(QJSON_FOUND)
-set(krunner_bookmarksrunner_SRCS
-    ${krunner_bookmarksrunner_SRCS}
-    browsers/chromefindprofile.cpp
-    browsers/chrome.cpp
-)
+    set(krunner_bookmarksrunner_SRCS
+        ${krunner_bookmarksrunner_SRCS}
+        browsers/chromefindprofile.cpp
+        browsers/chrome.cpp
+    )
 endif(QJSON_FOUND)
 
 

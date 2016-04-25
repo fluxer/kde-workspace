@@ -23,7 +23,7 @@
 #include <QDir>
 #include <QIcon>
 #include <QLabel>
-#include <QtGui/qlistwidget.h>
+#include <QListWidget>
 #include <KMessageBox>
 #include <KDebug>
 #include <KIcon>
@@ -32,7 +32,6 @@
 #include <KFileDialog>
 #include <KInputDialog>
 #include <KUrlRequesterDialog>
-#include <kdecore_export.h>
 #include <kio/netaccess.h>
 #include <kpluginfactory.h>
 

@@ -193,18 +193,17 @@ check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
 include(ConfigureChecks.cmake)
-configure_file (config-runtime.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-runtime.h )
-configure_file(config-unix.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-unix.h )
-configure_file(config-X11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-X11.h )
+configure_file(config-runtime.h.cmake ${CMAKE_BINARY_DIR}/config-runtime.h)
+configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
+configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
 if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
   set(EXPORT_XCURSOR_PATH "XCURSOR_PATH=${CMAKE_INSTALL_PREFIX}/share/icons:$XCURSOR_PATH\":~/.icons:/usr/share/icons:/usr/share/pixmaps:/usr/X11R6/lib/X11/icons\"; export XCURSOR_PATH")
 endif(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
-configure_file(startkde.cmake ${CMAKE_CURRENT_BINARY_DIR}/startkde  @ONLY)
-configure_file(config-workspace.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-workspace.h )
+configure_file(startkde.cmake ${CMAKE_BINARY_DIR}/startkde  @ONLY)
+configure_file(config-workspace.h.cmake ${CMAKE_BINARY_DIR}/config-workspace.h )
 
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS} -DHAVE_CONFIG_H=1)
-add_definitions(-DQT_USE_FAST_CONCATENATION -DQT_USE_FAST_OPERATOR_PLUS)
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
+add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${CMAKE_SOURCE_DIR}/libs)
 
 # libs
 add_subdirectory(libs)
@@ -300,7 +299,7 @@ macro_optional_add_subdirectory(kde-menu)
 
 ########### install files ###############
 # install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${BIN_INSTALL_DIR})
-install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/startkde DESTINATION ${BIN_INSTALL_DIR})
+install(PROGRAMS ${CMAKE_BINARY_DIR}/startkde DESTINATION ${BIN_INSTALL_DIR})
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -352,19 +351,19 @@ set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace::)
 
 configure_file(
     KDE4WorkspaceConfig.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake"
+    "${CMAKE_BINARY_DIR}/KDE4WorkspaceConfig.cmake"
     @ONLY
 )
 configure_file(
     KDE4WorkspaceVersion.cmake.in
-    "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceVersion.cmake"
+    "${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake"
     @ONLY
 )
 
 install(
     FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceVersion.cmake
+    ${CMAKE_BINARY_DIR}/KDE4WorkspaceConfig.cmake
+    ${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake
     DESTINATION ${DATA_INSTALL_DIR}/cmake/modules
 )
 
