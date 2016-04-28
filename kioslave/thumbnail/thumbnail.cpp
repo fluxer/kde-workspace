@@ -56,6 +56,7 @@
 #include <kfilemetainfo.h>
 #include <klocale.h>
 #include <kde_file.h>
+#include <kdemacros.h>
 
 #include <config-runtime.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>

@@ -13,6 +13,7 @@
 #include <kiconloader.h>
 #include <kcomponentdata.h>
 #include <klocale.h>
+#include <kdemacros.h>
 
 using namespace KIO;
 

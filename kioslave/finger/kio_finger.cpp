@@ -32,7 +32,8 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <KProcess>
+#include <kprocess.h>
+#include <kdemacros.h>
 
 
 using namespace KIO;

@@ -22,6 +22,7 @@
 
 #include <KComponentData>
 #include <KTemporaryFile>
+#include <kdemacros.h>
 #include <QFileInfo>
 #include <QDateTime>
 #include <QCoreApplication>

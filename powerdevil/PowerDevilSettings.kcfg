@@ -6,6 +6,8 @@
                           http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
   <kcfgfile name="powerdevilrc"/>
 
+  <include>"kdemacros.h"</include>
+
   <!--The following group is retained just for compatibility and upgrades.-->
   <group name="Profiles">
     <entry name="ACProfile" type="String">

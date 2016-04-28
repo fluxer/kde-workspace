@@ -25,6 +25,7 @@
 #include <QtCore/QStringList>
 
 #include <kglobal.h>
+#include <kdemacros.h>
 
 class KConfigGroup;
 namespace PowerDevil

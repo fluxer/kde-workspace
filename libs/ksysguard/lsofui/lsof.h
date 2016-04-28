@@ -26,6 +26,7 @@
 #include <QtCore/QProcess>
 #include <QtGui/QTreeWidget>
 #include <kapplication.h>
+#include <kdemacros.h>
 
 struct KLsofWidgetPrivate;
 

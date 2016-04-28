@@ -10,6 +10,7 @@
 #include <KStandardDirs>
 #include <KIO/Job>
 #include <KIO/NetAccess>
+#include <kdemacros.h>
 
 #include <stdio.h>
 

@@ -27,6 +27,7 @@
 #include <kde_file.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
+#include <kdemacros.h>
 
 #include <QCoreApplication>
 #include <QDataStream>

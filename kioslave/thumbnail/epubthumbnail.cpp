@@ -21,6 +21,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QtGui/QImage>
 #include <QtCore/QDebug>
+#include <kdemacros.h>
 
 extern "C"
 {

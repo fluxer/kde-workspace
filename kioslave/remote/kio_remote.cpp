@@ -26,7 +26,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kglobal.h>
-
+#include <kdemacros.h>
 
 extern "C" {
 	int KDE_EXPORT kdemain( int argc, char **argv )

@@ -85,12 +85,12 @@ void KephalService::init()
 
     m_outputs = 0;
 #ifdef HAS_RANDR_1_2
-    RandRDisplay * display;
+    RandRDisplay *display = 0;
     if (! m_noXRandR) {
         display = new RandRDisplay();
     }
 
-    if ((! m_noXRandR) && display->isValid()) {
+    if ((! m_noXRandR) && display && display->isValid()) {
         m_outputs = new XRandROutputs(this, display);
         if (m_outputs->outputs().size() <= 1) {
             delete m_outputs;

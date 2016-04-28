@@ -21,6 +21,7 @@
 #define KTOUCHPADENABLER_DAEMON_H
 
 #include <kdedmodule.h>
+#include <kdemacros.h>
 
 class TouchpadEnablerDaemonPrivate;
 

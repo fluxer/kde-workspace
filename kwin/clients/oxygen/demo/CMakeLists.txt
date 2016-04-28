@@ -1,18 +1,19 @@
-include_directories(${CMAKE_SOURCE_DIR}/libs/oxygen)
-include_directories( ${KDE4_KDEUI_INCLUDES} )
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/oxygen
+    ${KDE4_KDEUI_INCLUDES}
+)
 
 
 ########### next target ###############
-set( oxygen_shadow_demo_SOURCES
+set(oxygen_shadow_demo_SOURCES
     oxygenshadowdemodialog.cpp
     oxygenshadowdemowidget.cpp
     main.cpp
-    oxygenshadowdemo.ui
 )
 
-add_executable( oxygen-shadow-demo ${oxygen_shadow_demo_SOURCES} )
+add_executable(oxygen-shadow-demo ${oxygen_shadow_demo_SOURCES})
 
-target_link_libraries( oxygen-shadow-demo
+target_link_libraries(oxygen-shadow-demo
     ${KDE4_KDEUI_LIBS}
     ${X11_X11_LIB}
     ${X11_Xrender_LIB}
@@ -21,4 +22,4 @@ target_link_libraries( oxygen-shadow-demo
 )
 
 ########### install files ###############
-install (TARGETS oxygen-shadow-demo ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS oxygen-shadow-demo ${INSTALL_TARGETS_DEFAULT_ARGS})

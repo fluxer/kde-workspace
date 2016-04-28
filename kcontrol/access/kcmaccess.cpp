@@ -773,7 +773,7 @@ extern "C"
   /* This one gets called by kcminit
 
    */
-  KDE_EXPORT void kcminit_access()
+  Q_DECL_EXPORT void kcminit_access()
   {
     KConfig config("kaccessrc", KConfig::NoGlobals);
     KToolInvocation::startServiceByDesktopName("kaccess");

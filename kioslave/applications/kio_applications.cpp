@@ -17,15 +17,16 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kio/slavebase.h>
-#include <kcomponentdata.h>
-#include <kdebug.h>
-#include <klocale.h>
 #include <sys/stat.h>
 #include <time.h>
 #include <kservice.h>
 #include <kservicegroup.h>
 #include <kstandarddirs.h>
+#include <kio/slavebase.h>
+#include <kcomponentdata.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kdemacros.h>
 
 class ApplicationsProtocol : public KIO::SlaveBase
 {

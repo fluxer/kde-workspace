@@ -44,6 +44,7 @@
 #include <kdebug.h>
 #include <kio/global.h>
 #include <klocale.h>
+#include <kdemacros.h>
 
 using namespace KIO;
 

@@ -24,6 +24,7 @@
 
 // KDE
 #include <KComponentData>
+#include <kdemacros.h>
 // Qt
 #include <QtCore/QCoreApplication>
 

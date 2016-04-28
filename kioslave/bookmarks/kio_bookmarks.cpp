@@ -29,7 +29,7 @@
 #include <kapplication.h>
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
-
+#include <kdemacros.h>
 #include <kshell.h>
 #include <kstandarddirs.h>
 #include <kcomponentdata.h>

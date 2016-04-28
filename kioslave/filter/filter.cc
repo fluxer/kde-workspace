@@ -31,6 +31,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kmimetype.h>
 #include <kfilterbase.h>
 #include <kurl.h>
+#include <kdemacros.h>
 
 extern "C" { KDE_EXPORT int kdemain(int argc, char **argv); }
 

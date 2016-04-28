@@ -26,6 +26,7 @@
 #include <KGlobalSettings>
 #include <KStandardDirs>
 #include <kdeversion.h>
+#include <kdemacros.h>
 
 #include <kio/udsentry.h>
 

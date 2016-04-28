@@ -30,6 +30,7 @@
 #include <kstandarddirs.h>
 #include <kglobalsettings.h>
 #include <klocale.h>
+#include <kdemacros.h>
 
 extern "C"
 {

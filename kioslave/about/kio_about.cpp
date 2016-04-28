@@ -21,6 +21,7 @@
 #include "kio_about.h"
 
 #include <kcomponentdata.h>
+#include <kdemacros.h>
 
 using namespace KIO;
 

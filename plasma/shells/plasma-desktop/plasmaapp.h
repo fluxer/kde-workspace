@@ -28,6 +28,12 @@
 #include <Plasma/Plasma>
 #include <plasma/packagemetadata.h>
 
+#ifdef Q_WS_X11
+// for Atom
+#include <X11/Xlib.h>
+#include <fixx11h.h>
+#endif
+
 class QSignalMapper;
 
 namespace Plasma

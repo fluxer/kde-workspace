@@ -30,6 +30,7 @@
 #include <klocale.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <kdemacros.h>
 
 #include <QFile>
 

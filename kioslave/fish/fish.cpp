@@ -79,6 +79,7 @@
 #include <errno.h>
 #include <sys/resource.h>
 #include <kdefakes.h>
+#include <kdemacros.h>
 
 #include "fishcode.h"
 

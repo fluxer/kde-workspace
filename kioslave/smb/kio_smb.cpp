@@ -31,6 +31,7 @@
 #include "kio_smb.h"
 #include "kio_smb_internal.h"
 #include <kcomponentdata.h>
+#include <kdemacros.h>
 #include <QCoreApplication>
 
 //===========================================================================

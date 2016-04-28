@@ -16,6 +16,7 @@
 #include <QtCore/QTimer>
 
 #include <kservice.h>
+#include <kdemacros.h>
 
 class KConfig;
 

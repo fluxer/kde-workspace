@@ -21,6 +21,7 @@
 #include <QtCore/QString>
 
 #include "KConfigGroup"
+#include <kdemacros.h>
 
 #include <QtGui/qwindowdefs.h>
 

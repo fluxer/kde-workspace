@@ -15,6 +15,7 @@
 #define KHOTKEYS_CONFIG_FILE "khotkeysrc"
 
 #include <klocale.h>
+#include <kdemacros.h>
 
 #include <QtCore/QPointer>
 
