@@ -29,6 +29,7 @@
 #include <kwebpage.h>
 #include <kurl.h>
 #include <kdebug.h>
+#include <kdemacros.h>
 
 extern "C"
 {

@@ -20,16 +20,16 @@
 #include "exrcreator.h"
 
 #include <QImage>
+#include <QFile>
 
 #include <kdebug.h>
 #include <ksharedconfig.h>
 #include <kglobal.h>
-#include <QFile>
+#include <kconfiggroup.h>
+#include <kdemacros.h>
 
 #include <ImfInputFile.h>
 #include <ImfPreviewImage.h>
-
-#include <kconfiggroup.h>
 
 extern "C"
 {

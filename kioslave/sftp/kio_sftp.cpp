@@ -50,6 +50,7 @@
 #include <kde_file.h>
 #include <kconfiggroup.h>
 #include <kio/ioslave_defaults.h>
+#include <kdemacros.h>
 
 
 #define KIO_SFTP_SPECIAL_TIMEOUT 30
