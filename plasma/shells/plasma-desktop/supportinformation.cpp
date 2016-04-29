@@ -56,8 +56,6 @@ void SupportInformation::addHeader()
 
     m_stream << "Version" << endl;
     m_stream << "=======" << endl;
-    m_stream << "Plasma version: " << endl;
-    m_stream << PLASMA_VERSION_STRING << endl;
     m_stream << "KDE SC version (runtime): " << endl;
     m_stream << KDE::versionString() << endl;
     m_stream << "KDE SC version (compile): " << endl;
