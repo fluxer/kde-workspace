@@ -43,7 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <KKeySequenceWidget>
-#include <KProcess>
 #include <KToolInvocation>
 
 #include <X11/extensions/Xrandr.h>
@@ -54,6 +53,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QCheckBox>
 #include <QPointer>
 #include <QPushButton>
+#include <QProcess>
 
 #include <kglobalsettings.h>
 #include <KIcon>
@@ -207,7 +207,7 @@ void UserActionsMenu::helperDialog(const QString& message, const QWeakPointer<Cl
     }
     if (!c.isNull())
         args << "--embed" << QString::number(c.data()->window());
-    KProcess::startDetached("kdialog", args);
+    QProcess::startDetached("kdialog", args);
 }
 
 
@@ -1260,7 +1260,7 @@ static bool screenSwitchImpossible()
     QStringList args;
     args << "--passivepopup" << i18n("The window manager is configured to consider the screen with the mouse on it as active one.\n"
                                      "Therefore it is not possible to switch to a screen explicitly.") << "20";
-    KProcess::startDetached("kdialog", args);
+    QProcess::startDetached("kdialog", args);
     return true;
 }
 

@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+#include <QProcess>
 #include <QDir>
 #include <QLabel>
 #include <QLayout>
@@ -19,11 +20,9 @@
 #include <QPixmap>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QtGui/qevent.h>
 #include <QVBoxLayout>
-#include <QtGui/qevent.h>
-#include <QtGui/qevent.h>
 #include <QScrollArea>
+#include <QtGui/qevent.h>
 
 #include "installer.h"
 
@@ -32,7 +31,6 @@
 #include <kglobalsettings.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
 #include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <ktar.h>
@@ -527,35 +525,21 @@ void SplashInstaller::slotTest()
   qDebug() << "the engine is " << mEngineOfSelected << "for" << themeName;
   if( mEngineOfSelected == "None" )
     return;
-  else if( mEngineOfSelected == "Simple" )
-  {
-    KProcess proc;
-    proc << "ksplashsimple" << themeName << "--test";
-    if (proc.execute())
-      KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
-    return;
-  }
   else if( mEngineOfSelected == "KSplashX" )
   {
-    KProcess proc;
-    proc << "ksplashx" << themeName << "--test";
-    if (proc.execute())
+    if (QProcess::execute("ksplashx", QStringList() << themeName << "--test"))
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
     return;
   }
   else if( mEngineOfSelected == "KSplashQML" )
   {
-    KProcess proc;
-    proc << "ksplashqml" << themeName << "--test";
-    if (proc.execute())
+    if (QProcess::execute("ksplashqml", QStringList() << themeName << "--test"))
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
     return;
   }
   else // KSplashML engines
   {
-    KProcess proc;
-    proc << "ksplash" << "--test" << "--theme" << themeName;
-    if (proc.execute())
+    if (QProcess::execute("ksplash", QStringList() << "--test" << "--theme" << themeName))
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
   }
 }

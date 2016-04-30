@@ -27,22 +27,20 @@
 #include <QtCore/QSettings>
 #include <QtCore/QTextCodec>
 #include <QToolTip>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QByteArray>
 #include <QTextStream>
 #include <QDateTime>
-#include <QtDBus/QtDBus>
+#include <QProcess>
+
 #include <ktoolinvocation.h>
 #include <klauncher_iface.h>
-
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
 #include <ksavefile.h>
 #include <ktemporaryfile.h>
 #include <klocale.h>
@@ -520,9 +518,8 @@ void runRdb( uint flags )
       contents += "Xft.dpi: " + cfgfonts.readEntry( "forceFontDPI" ) + '\n';
     else
     {
-      KProcess proc;
-      proc << "xrdb" << "-quiet" << "-remove" << "-nocpp";
-      proc.start();
+      QProcess proc;
+      proc.start("xrdb", QStringList() << "-quiet" << "-remove" << "-nocpp");
       if (proc.waitForStarted())
       {
         proc.write( QByteArray( "Xft.dpi\n" ) );
@@ -537,13 +534,14 @@ void runRdb( uint flags )
 
   tmpFile.flush();
 
-  KProcess proc;
+  QProcess proc;
+  QStringList procargs;
 #ifndef NDEBUG
-  proc << "xrdb" << "-merge" << tmpFile.fileName();
+  procargs << "-merge" << tmpFile.fileName();
 #else
-  proc << "xrdb" << "-quiet" << "-merge" << tmpFile.fileName();
+  procargs << "-quiet" << "-merge" << tmpFile.fileName();
 #endif
-  proc.execute();
+  proc.execute("xrdb", procargs);
 
   applyGtkStyles(exportColors, 1);
   applyGtkStyles(exportColors, 2);

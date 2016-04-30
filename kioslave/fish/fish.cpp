@@ -17,11 +17,6 @@
 /*
   This code contains fragments and ideas from the ftp kioslave
   done by David Faure <faure@kde.org>.
-
-  Structure is a bit complicated, since I made the mistake to use
-  KProcess... now there is a lightweight homebrew async IO system
-  inside, but if signals/slots become available for ioslaves, switching
-  back to KProcess should be easy.
 */
 
 #include "fish.h"

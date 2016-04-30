@@ -20,10 +20,10 @@
 #include "killrunner.h"
 
 #include <QAction>
+#include <QProcess>
 
 #include <KDebug>
 #include <KIcon>
-#include <KProcess>
 #include <KUser>
 #include <kauthaction.h>
 
@@ -180,10 +180,8 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
 
     QStringList args;
     args << QString("-%1").arg(signal) << QString("%1").arg(pid);
-    KProcess *process = new KProcess(this);
-    int returnCode = process->execute("kill", args);
 
-    if (returnCode == 0)
+    if (QProcess::execute("kill", args))
     {
         return;
     }

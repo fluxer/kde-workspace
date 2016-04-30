@@ -20,7 +20,6 @@
 */
 
 #include <kdebug.h>
-#include <kprocess.h>
 #include <kshell.h>
 #include <klocale.h>
 
@@ -50,8 +49,8 @@ SensorShellAgent::~SensorShellAgent()
 bool SensorShellAgent::start( const QString &host, const QString &shell,
                               const QString &command, int )
 {
-  mDaemon = new KProcess();
-  mDaemon->setOutputChannelMode( KProcess::SeparateChannels );
+  mDaemon = new QProcess();
+  mDaemon->setProcessChannelMode( QProcess::SeparateChannels );
   mRetryCount=3;
   setHostName( host );
   mShell = shell;
@@ -67,11 +66,13 @@ bool SensorShellAgent::start( const QString &host, const QString &shell,
            SLOT(errMsgRcvd()) );
 
   if ( !command.isEmpty() ) {
-    *mDaemon << KShell::splitArgs(command);
+    QStringList args = KShell::splitArgs(command);
+    QString program = args.takeAt(0);
+    mDaemon->start(program, args);
+  } else {
+    mDaemon->start(mShell, QStringList() << hostName() << "ksysguardd");
   }
-  else
-    *mDaemon << mShell << hostName() << "ksysguardd";
-  mDaemon->start();
+  
 
   return true;
 }

@@ -31,7 +31,6 @@
 #include <kstandarddirs.h>
 #include <kdesktopfile.h>
 #include <kdebug.h>
-#include <kprocess.h>
 #include <kmessagebox.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>

@@ -105,7 +105,7 @@ KSMServer* KSMServer::self()
 /*! Utility function to execute a command on the local machine. Used
  * to restart applications.
  */
-KProcess* KSMServer::startApplication( const QStringList& cmd, const QString& clientMachine,
+QProcess* KSMServer::startApplication( const QStringList& cmd, const QString& clientMachine,
     const QString& userId, bool wm )
 {
     QStringList command = cmd;
@@ -125,17 +125,17 @@ KProcess* KSMServer::startApplication( const QStringList& cmd, const QString& cl
         command.prepend( xonCommand ); // "xon" by default
     }
 
-// TODO this function actually should not use KProcess at all and use klauncher (kdeinit) instead.
+// TODO this function actually should not use QProcess at all and use klauncher (kdeinit) instead.
 // Klauncher should also have support for tracking whether the launched process is still alive
-// or not, so this should be redone. For now, use KProcess for wm's, as they need to be tracked,
+// or not, so this should be redone. For now, use QProcess for wm's, as they need to be tracked,
 // klauncher for the rest where ksmserver doesn't care.
     if( wm ) {
-        KProcess* process = new KProcess( this );
-        *process << command;
+        QProcess* process = new QProcess( this );
+        QString program = command.takeAt(0);
         // make it auto-delete
         connect( process, SIGNAL(error(QProcess::ProcessError)), process, SLOT(deleteLater()));
         connect( process, SIGNAL(finished(int,QProcess::ExitStatus)), process, SLOT(deleteLater()));
-        process->start();
+        process->start(program, command);
         return process;
     } else {
         int n = command.count();
@@ -157,7 +157,9 @@ void KSMServer::executeCommand( const QStringList& command )
     if ( command.isEmpty() )
         return;
 
-    KProcess::execute( command );
+    QStringList args = command;
+    QString program = args.takeAt(0);
+    QProcess::execute( program, args );
 }
 
 IceAuthDataEntry *authDataEntries = 0;
@@ -462,9 +464,7 @@ Status SetAuthentication (int count, IceListenObj *listenObjs,
         return 0;
     }
 
-    KProcess p;
-    p << iceAuth << "source" << addTempFile.fileName();
-    p.execute();
+    QProcess::execute(iceAuth, QStringList() << "source" << addTempFile.fileName());
 
     return (1);
 }
@@ -494,9 +494,7 @@ void FreeAuthenticationData(int count, IceAuthDataEntry *authDataEntries)
 
     if (remTempFile)
     {
-        KProcess p;
-        p << iceAuth << "source" << remTempFile->fileName();
-        p.execute();
+        QProcess::execute(iceAuth, QStringList() << "source" << remTempFile->fileName());
     }
 
     delete remTempFile;

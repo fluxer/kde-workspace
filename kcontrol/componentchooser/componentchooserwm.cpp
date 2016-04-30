@@ -165,14 +165,14 @@ bool CfgWm::tryWmLaunch()
         if( wmLaunchingState == WmLaunching )
             { // time out
             wmLaunchingState = WmFailed;
-            KProcess::startDetached( "kwin", QStringList() << "--replace" );
+            QProcess::startDetached( "kwin", QStringList() << "--replace" );
             // Let's hope KWin never fails.
             KMessageBox::sorry( window(),
                 i18n( "The running window manager has been reverted to the default KDE window manager KWin." ));
             }
         else if( wmLaunchingState == WmFailed )
             {
-            KProcess::startDetached( "kwin", QStringList() << "--replace" );
+            QProcess::startDetached( "kwin", QStringList() << "--replace" );
             // Let's hope KWin never fails.
             KMessageBox::sorry( window(),
                 i18n( "The new window manager has failed to start.\n"
@@ -296,6 +296,6 @@ void CfgWm::configureWm()
     QStringList args;
     if( !currentWmData().parentArgument.isEmpty())
         args << currentWmData().parentArgument << QString::number( window()->winId());
-    if( !KProcess::startDetached( currentWmData().configureCommand, args ))
+    if( !QProcess::startDetached( currentWmData().configureCommand, args ))
         KMessageBox::sorry( window(), i18n( "Running the configuration tool failed" ));
 }

@@ -24,18 +24,17 @@
 #include "simpleapplet/menuview.h"
 
 // Qt
+#include <QtCore/QProcess>
+#include <QtCore/qmetaobject.h>
+#include <QtCore/QSharedPointer>
 #include <QtGui/QLabel>
 #include <QtGui/QCheckBox>
 #include <QtGui/QSpinBox>
 #include <QtGui/QGridLayout>
 #include <QtGui/QGraphicsView>
-#include <QtCore/QMetaObject>
-#include <QtCore/qmetaobject.h>
-#include <QtCore/qsharedpointer.h>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QtGui/QSpacerItem>
 #include <QtGui/QListWidget>
-#include <QtGui/qlistwidget.h>
 
 // KDE Libs
 #include <KActionCollection>
@@ -47,7 +46,6 @@
 #include <KIconButton>
 #include <KIconLoader>
 #include <KMenu>
-#include <KProcess>
 #include <KRun>
 #include <KServiceTypeTrader>
 #include <KToolInvocation>
@@ -392,7 +390,7 @@ void MenuLauncherApplet::switchMenuStyle()
 
 void MenuLauncherApplet::startMenuEditor()
 {
-    KProcess::execute("kmenuedit");
+    QProcess::execute("kmenuedit");
 }
 
 void MenuLauncherApplet::customContextMenuRequested(QMenu* menu, const QPoint& pos)

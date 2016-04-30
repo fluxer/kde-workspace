@@ -29,6 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ktoolinvocation.h>
 #include <solid/powermanagement.h>
 
+#include <qprocess.h>
 #include <qdbusservicewatcher.h>
 #include <qdbusconnection.h>
 #include <qdbusconnectioninterface.h>
@@ -179,7 +180,7 @@ void RandrMonitorModule::showKcm()
 
 void RandrMonitorModule::tryAutoConfig()
 {
-    KProcess::execute(QStringList() << "xrandr" << "--auto");
+    QProcess::execute("xrandr", QStringList() << "--auto");
 }
 
 QStringList RandrMonitorModule::connectedMonitors() const
@@ -366,7 +367,7 @@ void RandrMonitorModule::resumedFromSuspend()
 
 void RandrMonitorModule::enableOutput( RandROutput* output, bool enable )
 {   // a bit lame, but I don't know how to do this easily with this codebase :-/
-    KProcess::execute( QStringList() << "xrandr" << "--output" << output->name() << ( enable ? "--auto" : "--off" ));
+    QProcess::execute( "xrandr", QStringList() << "--output" << output->name() << ( enable ? "--auto" : "--off" ));
 }
 
 QList< RandROutput* > RandrMonitorModule::connectedOutputs( RandRDisplay &display )

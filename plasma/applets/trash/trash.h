@@ -35,7 +35,6 @@ class QAction;
 class KCModuleProxy;
 class KDialog;
 class KFilePlacesModel;
-class KProcess;
 
 namespace Plasma
 {
@@ -87,7 +86,7 @@ class Trash : public Plasma::Applet
         bool m_showText;
         KFilePlacesModel *m_places;
         KCModuleProxy *m_proxy;
-        KProcess *m_emptyProcess;
+        QProcess *m_emptyProcess;
 };
 
 K_EXPORT_PLASMA_APPLET(trash, Trash)

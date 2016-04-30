@@ -69,7 +69,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <ktemporaryfile.h>
 #include <knotification.h>
 #include <kconfiggroup.h>
-#include <kprocess.h>
 
 #include "global.h"
 #include "server.h"

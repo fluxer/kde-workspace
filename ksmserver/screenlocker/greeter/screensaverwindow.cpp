@@ -181,9 +181,10 @@ bool ScreenSaverWindow::startXScreenSaver()
 
     QHash<QChar, QString> keyMap;
     keyMap.insert(QLatin1Char( 'w' ), QString::number(winId()));
-    m_ScreenSaverProcess << KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(m_saverExec, keyMap));
+    QStringList saverArgs = KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(m_saverExec, keyMap));
+    QString saverProgram = saverArgs.takeAt(0);
 
-    m_ScreenSaverProcess.start();
+    m_ScreenSaverProcess.start(saverProgram, saverArgs);
     if (m_ScreenSaverProcess.waitForStarted()) {
 #ifdef HAVE_SETPRIORITY
         setpriority(PRIO_PROCESS, m_ScreenSaverProcess.pid(), mPriority);

@@ -37,12 +37,12 @@
 #include <ktar.h>
 #include <kdebug.h>
 #include <ktempdir.h>
-#include <kprocess.h>
 
 #include <memory>
 
 #include <QtCore/QFile>
 #include <QtCore/QEventLoop>
+#include <QtCore/QProcess>
 
 // For KIO-Thumbnail debug outputs
 #define KIO_THUMB 11371
@@ -280,17 +280,15 @@ int ComicCreator::startProcess(const QString& processPath, const QStringList& ar
     /// Run a process and store std::out, std::err data in their respective buffers.
     int ret = 0;
 
-    m_process.reset(new KPtyProcess(this));
-    m_process->setOutputChannelMode(KProcess::SeparateChannels);
+    m_process.reset(new QProcess(this));
+    m_process->setProcessChannelMode(QProcess::SeparateChannels);
 
     connect(m_process.data(), SIGNAL(readyReadStandardOutput()), SLOT(readProcessOut()));
     connect(m_process.data(), SIGNAL(readyReadStandardError()), SLOT(readProcessErr()));
     connect(m_process.data(), SIGNAL(finished(int, QProcess::ExitStatus)),
         SLOT(finishedProcess(int, QProcess::ExitStatus)));
 
-    m_process->setProgram(processPath, args);
-    m_process->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Unbuffered);
-    m_process->start();
+    m_process->start(processPath, args, QIODevice::ReadWrite | QIODevice::Unbuffered);
     QEventLoop loop;
     m_loop = &loop;
     ret = loop.exec(QEventLoop::WaitForMoreEvents);

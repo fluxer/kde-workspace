@@ -21,6 +21,7 @@
  ***************************************************************************/
 
 // Qt
+#include <QProcess>
 #include <QAction>
 #include <QGraphicsLinearLayout>
 #include <QDBusConnection>
@@ -30,7 +31,6 @@
 
 // KDE
 #include <KConfigDialog>
-#include <KProcess>
 #include <KRun>
 #include <KStandardDirs>
 #include <KShortcut>
@@ -92,7 +92,7 @@ QList<QAction *> HomerunLauncher::contextualActions()
 
 void HomerunLauncher::startMenuEditor()
 {
-    KProcess::execute("kmenuedit");
+    QProcess::execute("kmenuedit");
 }
 
 void HomerunLauncher::startViewer()

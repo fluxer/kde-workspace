@@ -22,7 +22,6 @@
 #include <QtCore/QObject>
 #include <QtCore/QProcess>
 
-class KProcess;
 class KProgressDialog;
 
 class DebugPackageInstaller: public QObject
@@ -48,7 +47,7 @@ class DebugPackageInstaller: public QObject
         void canceled();
 
     private:
-        KProcess *              m_installerProcess;
+        QProcess *              m_installerProcess;
         KProgressDialog *       m_progressDialog;
         QString                 m_executablePath;
         QStringList             m_missingLibraries;

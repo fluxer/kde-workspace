@@ -25,7 +25,6 @@
 
 class Dtime;
 class QTabWidget;
-class KProcess;
 
 
 class KclockModule : public KCModule
@@ -41,7 +40,6 @@ public:
 private:
   QTabWidget   *tab;
   Dtime	*dtime;
-  KProcess *process;
 };
 
 #endif // main_included

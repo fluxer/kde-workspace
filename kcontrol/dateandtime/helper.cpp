@@ -38,8 +38,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
 #include <kauthhelpersupport.h>
+#include <QProcess>
 #include <QFile>
 #include <QDir>
 
@@ -85,9 +85,7 @@ int ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
       // Would this be better?: s/^.*\(([^)]*)\).*$/\1/
     }
 
-    KProcess proc;
-    proc << ntpUtility << timeServer;
-    if ( proc.execute() != 0 ) {
+    if ( !QProcess::execute(ntpUtility, QStringList() << timeServer) ) {
       ret |= NTPError;
     }
   } else if( ntpEnabled ) {
@@ -109,7 +107,7 @@ int ClockHelper::date( const QString& newdate, const QString& olddate )
 
     QString hwclock = KStandardDirs::findExe("hwclock", exePath);
     if (!hwclock.isEmpty()) {
-        KProcess::execute(hwclock, QStringList() << "--systohc");
+        QProcess::execute(hwclock, QStringList() << "--systohc");
     }
     return 0;
 }

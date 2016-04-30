@@ -78,8 +78,12 @@ bool BacktraceGenerator::start()
         return false;
     }
 
-    m_proc = new KProcess;
-    m_proc->setEnv("LC_ALL", "C");   // force C locale
+    m_proc = new QProcess(this);
+
+    // force C locale
+    QProcessEnvironment procenv = QProcessEnvironment::systemEnvironment();
+    procenv.insert("LC_ALL", "C");
+    m_proc->setProcessEnvironment(procenv);
 
     m_temp = new KTemporaryFile;
     m_temp->open();
@@ -91,15 +95,15 @@ bool BacktraceGenerator::start()
     QString str = m_debugger.command();
     Debugger::expandString(str, Debugger::ExpansionUsageShell, m_temp->fileName());
 
-    *m_proc << KShell::splitArgs(str);
-    m_proc->setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    m_proc->setNextOpenMode(QIODevice::ReadWrite | QIODevice::Text);
+    m_proc->setReadChannel(QProcess::StandardOutput);
     connect(m_proc, SIGNAL(readyReadStandardOutput()),
             SLOT(slotReadInput()));
     connect(m_proc, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotProcessExited(int,QProcess::ExitStatus)));
 
-    m_proc->start();
+    QStringList procargs = KShell::splitArgs(str);
+    QString procprog = procargs.takeAt(0);
+    m_proc->start(procprog, procargs, QIODevice::ReadWrite | QIODevice::Text);
     if (!m_proc->waitForStarted()) {
         //we mustn't keep these around...
         m_proc->deleteLater();

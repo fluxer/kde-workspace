@@ -13,6 +13,7 @@
 
 #include <stdlib.h>
 
+#include <QProcess>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QLabel>
@@ -32,7 +33,6 @@
 #include <KGlobalSettings>
 #include <KMessageBox>
 #include <KNumInput>
-#include <KProcess>
 #include <KConfig>
 #include <KStandardDirs>
 #include <KDebug>
@@ -758,9 +758,8 @@ void KFonts::save()
   // if the setting is reset in the module, remove the dpi value,
   // otherwise don't explicitly remove it and leave any possible system-wide value
   if( dpi == 0 && dpi_original != 0 ) {
-      KProcess proc;
-      proc << "xrdb" << "-quiet" << "-remove" << "-nocpp";
-      proc.start();
+      QProcess proc;
+      proc.start("xrdb", QStringList() << "-quiet" << "-remove" << "-nocpp");
       if (proc.waitForStarted()) {
         proc.write( QByteArray( "Xft.dpi\n" ) );
         proc.closeWriteChannel();

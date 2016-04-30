@@ -66,10 +66,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QVector2D>
 #include <QVector4D>
 #include <QMatrix4x4>
+#include <QProcess>
 
 #include <KLocalizedString>
 #include <KNotification>
-#include <KProcess>
 
 namespace KWin
 {
@@ -570,7 +570,7 @@ bool SceneOpenGL::viewportLimitsMatched(const QSize &size) const {
             dialog.asyncCall("warn", message, details, "");
         } else {
             const QByteArray args = "warn " + message.toLocal8Bit().toBase64() + " details " + details.toLocal8Bit().toBase64();
-            KProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
+            QProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
         }
         QDBusConnection::sessionBus().interface()->setTimeout(oldTimeout);
         return false;
@@ -602,7 +602,7 @@ bool SceneOpenGL::viewportLimitsMatched(const QSize &size) const {
         } else {
             const QByteArray args = "warn " + message.toLocal8Bit().toBase64() + " details " +
                                  details.toLocal8Bit().toBase64() + " dontagain kwin_dialogsrc:max_tex_warning";
-            KProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
+            QProcess::startDetached("kcmshell4", QStringList() << "kwincompositing" << "--args" << args);
         }
         QDBusConnection::sessionBus().interface()->setTimeout(oldTimeout);
     }

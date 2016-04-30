@@ -155,7 +155,7 @@ void CrashedApplication::restart()
     int ret = -1;
 
     //start the application via kdeinit, as it needs to have a pristine environment and
-    //KProcess::startDetached() can't start a new process with custom environment variables.
+    //QProcess::startDetached() can't start a new process with custom environment variables.
     if (!m_fakeBaseName.isEmpty()) {
         // if m_fakeBaseName is set, this means m_executable is the path to kdeinit4
         // so we need to use the fakeBaseName to restart the app

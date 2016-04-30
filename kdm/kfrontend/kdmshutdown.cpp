@@ -28,7 +28,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <kseparator.h>
 #include <kstandarddirs.h>
 #include <KStandardGuiItem>
@@ -48,7 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QStylePainter>
 #include <QStyle>
 #include <QTreeWidget>
-#include <QtGui/qtreewidget.h>
+#include <QProcess>
 
 #include <stdlib.h>
 
@@ -338,10 +337,9 @@ KDMShutdown::KDMShutdown(int _uid, QWidget *_parent)
 static int
 getDate(const char *str)
 {
-    KProcess prc;
-    prc.setOutputChannelMode(KProcess::OnlyStdoutChannel);
-    prc << "/bin/date" << "+%s" << "-d" << str;
-    if (prc.execute())
+    QProcess prc;
+    prc.setReadChannel(QProcess::StandardOutput);
+    if (prc.execute("/bin/date", QStringList() << "+%s" << "-d" << str))
         return -1;
     return prc.readAll().simplified().toInt();
 }

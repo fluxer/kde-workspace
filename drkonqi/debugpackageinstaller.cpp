@@ -23,7 +23,6 @@
 
 #include <KStandardDirs>
 #include <KDebug>
-#include <KProcess>
 #include <KLocalizedString>
 #include <KProgressDialog>
 
@@ -52,14 +51,14 @@ void DebugPackageInstaller::installDebugPackages()
 
     if (!m_installerProcess) {
         //Run process
-        m_installerProcess = new KProcess(this);
+        m_installerProcess = new QProcess(this);
         connect(m_installerProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
                                             this, SLOT(processFinished(int,QProcess::ExitStatus)));
 
-        *m_installerProcess << m_executablePath
-                            << DrKonqi::crashedApplication()->executable().absoluteFilePath()
-                            << m_missingLibraries;
-        m_installerProcess->start();
+        QStringList installerArguments;
+        installerArguments << DrKonqi::crashedApplication()->executable().absoluteFilePath()
+                           << m_missingLibraries;
+        m_installerProcess->start(m_executablePath, installerArguments);
 
         //Show dialog
         m_progressDialog = new KProgressDialog(qobject_cast<QWidget*>(parent()));

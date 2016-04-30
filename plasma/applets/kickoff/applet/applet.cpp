@@ -21,6 +21,7 @@
 #include "applet/applet.h"
 
 // Qt
+#include <QtCore/QProcess>
 #include <QtGui/QAction>
 #include <QtGui/QApplication>
 #include <QtGui/QGraphicsView>
@@ -32,7 +33,6 @@
 #include <KIcon>
 #include <KDebug>
 #include <KConfigDialog>
-#include <KProcess>
 
 // Plasma
 #include <Plasma/IconWidget>
@@ -148,7 +148,7 @@ void LauncherApplet::switchMenuStyle()
 
 void LauncherApplet::startMenuEditor()
 {
-    KProcess::execute("kmenuedit");
+    QProcess::execute("kmenuedit");
 }
 
 void LauncherApplet::createConfigurationInterface(KConfigDialog *parent)

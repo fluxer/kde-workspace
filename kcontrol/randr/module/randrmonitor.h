@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define RANDRMONITOR_H
 
 #include <kdedmodule.h>
-#include <kprocess.h>
 #include <qwidget.h>
 
 #include <X11/Xlib.h>

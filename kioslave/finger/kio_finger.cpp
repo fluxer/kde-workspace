@@ -25,6 +25,7 @@
 
 #include <QByteArray>
 #include <QRegExp>
+#include <QProcess>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>
@@ -32,7 +33,6 @@
 #include <kstandarddirs.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kprocess.h>
 #include <kdemacros.h>
 
 
@@ -115,13 +115,14 @@ void FingerProtocol::get(const KUrl& url )
 
   //kDebug() << "Refresh rate: " << refreshRate;
 
-  KProcess proc;
-  proc << *myPerlPath << *myFingerPerlScript
+  QProcess proc;
+  QStringList perlArgs;
+  perlArgs << *myFingerPerlScript
        << *myFingerPath << *myFingerCSSFile
        << refreshRate << myURL->host() << myURL->user();
 
-  proc.setOutputChannelMode(KProcess::MergedChannels);
-  proc.execute();
+  proc.setProcessChannelMode(QProcess::MergedChannels);
+  proc.execute(*myPerlPath, perlArgs);
   data(proc.readAllStandardOutput());
   data(QByteArray());
   finished();

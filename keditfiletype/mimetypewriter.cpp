@@ -23,11 +23,11 @@
 
 #include <kdebug.h>
 #include <kdeversion.h>
-#include <kprocess.h>
 #include <kstandarddirs.h>
 
 #include <QtCore/qxmlstream.h>
 #include <QFile>
+#include <QProcess>
 
 /// WARNING: this code is duplicated between apps/nsplugins and runtime/filetypes
 
@@ -136,12 +136,9 @@ void MimeTypeWriter::runUpdateMimeDatabase()
 {
     const QString localPackageDir = KStandardDirs::locateLocal("xdgdata-mime", QString());
     Q_ASSERT(!localPackageDir.isEmpty());
-    KProcess proc;
-    proc << "update-mime-database";
-    proc << localPackageDir;
-    const int exitCode = proc.execute();
-    if (exitCode) {
-        kWarning() << proc.program() << "exited with error code" << exitCode;
+    QProcess proc;
+    if (!proc.execute("update-mime-database", QStringList() << localPackageDir)) {
+        kWarning() << "update-mime-database exited with error code" << proc.exitCode();
     }
 }
 

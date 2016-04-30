@@ -30,8 +30,6 @@
 
 class QString;
 
-class KProcess;
-
 namespace KSGRD {
 
 class SensorManager;
@@ -65,7 +63,7 @@ class SensorShellAgent : public SensorAgent
   private:
     bool writeMsg( const char *msg, int len );
     int mRetryCount;
-    QPointer<KProcess> mDaemon;
+    QPointer<QProcess> mDaemon;
     QString mShell;
     QString mCommand;
 };

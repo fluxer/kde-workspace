@@ -22,7 +22,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <kprocess.h>
 #include <kio/job.h>
 #include <kio/netaccess.h>
 #include <kmessagebox.h>

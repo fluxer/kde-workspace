@@ -30,8 +30,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kuser.h>
-#include <kprocess.h>
 
+#include <QProcess>
 #include <QRegExp>
 #include <QLayout>
 #include <QLabel>
@@ -541,12 +541,11 @@ KWinbindGreeter::slotChanged()
 void
 KWinbindGreeter::slotStartDomainList()
 {
-    m_domainLister = new KProcess(this);
-    (*m_domainLister) << "wbinfo" << "--own-domain" << "--trusted-domains";
-    m_domainLister->setOutputChannelMode(KProcess::OnlyStdoutChannel);
+    m_domainLister = new QProcess(this);
+    m_domainLister->setReadChannel(QProcess::StandardOutput);
     connect(m_domainLister, SIGNAL(finished(int,QProcess::ExitStatus)),
             SLOT(slotEndDomainList()));
-    m_domainLister->start();
+    m_domainLister->start("wbinfo", QStringList() << "--own-domain" << "--trusted-domains");
 }
 
 void

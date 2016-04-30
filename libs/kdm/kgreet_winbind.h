@@ -35,7 +35,7 @@ class KComboBox;
 class KLineEdit;
 class KSimpleConfig;
 class QLabel;
-class KProcess;
+class QProcess;
 
 class KWinbindGreeter : public QObject, public KGreeterPlugin {
     Q_OBJECT
@@ -82,7 +82,7 @@ class KWinbindGreeter : public QObject, public KGreeterPlugin {
     KLineEdit *passwdEdit, *passwd1Edit, *passwd2Edit;
     QString fixedDomain, fixedUser, curUser;
     QStringList allUsers;
-    KProcess* m_domainLister;
+    QProcess* m_domainLister;
 
     Function func;
     Context ctx;

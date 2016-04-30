@@ -30,7 +30,6 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-#include <kprocess.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 
@@ -78,8 +77,6 @@ KclockModule::KclockModule(QWidget *parent, const QVariantList &)
   setButtons(Help|Apply);
 
   setNeedsAuthorization(true);
-
-  process = NULL;
 }
 
 void KclockModule::save()

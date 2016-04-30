@@ -28,7 +28,7 @@
 #ifndef BACKTRACEGENERATOR_H
 #define BACKTRACEGENERATOR_H
 
-#include <KProcess>
+#include <QProcess>
 
 #include "debugger.h"
 
@@ -77,7 +77,7 @@ private Q_SLOTS:
 
 private:
     const Debugger    m_debugger;
-    KProcess *        m_proc;
+    QProcess *        m_proc;
     KTemporaryFile *  m_temp;
     QByteArray        m_output;
     State             m_state;

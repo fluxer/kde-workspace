@@ -43,7 +43,6 @@
 
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kdialog.h>

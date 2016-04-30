@@ -26,9 +26,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KDE
 #include <KDebug>
 #include <KIdleTime>
-#include <KProcess>
 #include <KRandom>
 // Qt
+#include <QProcess>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
@@ -205,14 +205,12 @@ void Interface::configure()
 
 void Interface::setupPlasma()
 {
-    KProcess *plasmaProc = new KProcess;
-    plasmaProc->setProgram(QLatin1String( "plasma-overlay" ));
-    *plasmaProc << QLatin1String( "--setup" );
+    QProcess *plasmaProc = new QProcess;
 
     //make sure it goes away when it's done (and not before)
     connect(plasmaProc, SIGNAL(finished(int,QProcess::ExitStatus)), plasmaProc, SLOT(deleteLater()));
 
-    plasmaProc->start();
+    plasmaProc->start("plasma-overlay", QStringList() << "--setup");
 }
 
 void Interface::saverLockReady()

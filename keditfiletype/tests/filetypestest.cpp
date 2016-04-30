@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <kprocess.h>
+#include <QProcess>
 #include <kservice.h>
 #include <qtest_kde.h>
 
@@ -362,10 +362,9 @@ private: // helper methods
         // (The real KCM code simply does the refresh in a slot, asynchronously)
         QEventLoop loop;
         QObject::connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), &loop, SLOT(quit()));
-        KProcess proc;
-        proc << KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
-        proc.setOutputChannelMode(KProcess::MergedChannels); // silence kbuildsycoca output
-        proc.execute();
+        QProcess proc;
+        proc.setProcessChannelMode(QProcess::MergedChannels); // silence kbuildsycoca output
+        proc.execute(KStandardDirs::findExe(KBUILDSYCOCA_EXENAME));
         loop.exec();
     }
 

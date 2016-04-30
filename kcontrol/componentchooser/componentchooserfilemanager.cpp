@@ -19,9 +19,9 @@
 */
 
 #include "componentchooserfilemanager.h"
+#include <QProcess>
 #include <kbuildsycocaprogressdialog.h>
 #include <kdebug.h>
-#include <kprocess.h>
 #include <kmimetypetrader.h>
 #include <kopenwithdialog.h>
 #include <kglobalsettings.h>
@@ -102,10 +102,7 @@ void CfgFileManager::save(KConfig *)
 
 void CfgFileManager::slotAddFileManager()
 {
-    KProcess proc;
-    proc << "keditfiletype";
-    proc << "inode/directory";
-    if (proc.execute() == 0) {
+    if (QProcess::execute("keditfiletype", QStringList() << "inode/directory")) {
         load(0);
     }
 }

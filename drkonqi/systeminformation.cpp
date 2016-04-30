@@ -29,7 +29,6 @@
 #include <QtCore/QFile>
 
 #include <KStandardDirs>
-#include <KProcess>
 #include <KDebug>
 #include <KConfig>
 #include <KConfigGroup>

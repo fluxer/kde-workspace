@@ -33,7 +33,7 @@
 #include <KMessageBox>
 #include <KLocale>
 #include <KNotification>
-#include <KProcess>
+#include <QProcess>
 #include <KRun>
 #include <KSharedConfig>
 #include <KStandardDirs>
@@ -222,11 +222,11 @@ void Trash::emptyTrash()
     //KonqOperations::emptyTrash(&m_menu);
     m_emptyAction->setEnabled(false);
     m_emptyAction->setText(i18n("Emptying Trashcan..."));
-    m_emptyProcess = new KProcess(this);
+    m_emptyProcess = new QProcess(this);
     connect(m_emptyProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
             this, SLOT(emptyFinished(int,QProcess::ExitStatus)));
-    (*m_emptyProcess) << KStandardDirs::findExe("ktrash") << "--empty";
-    m_emptyProcess->start();
+    QString ktrash = KStandardDirs::findExe("ktrash");
+    m_emptyProcess->start(ktrash, QStringList() << "--empty");
 }
 
 void Trash::emptyFinished(int exitCode, QProcess::ExitStatus exitStatus)

@@ -33,9 +33,9 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QProcess>
 
 #include <kdebug.h>
-#include <kprocess.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
 #include <kwindowsystem.h>
@@ -51,8 +51,9 @@
 
 // some globals
 
-static KProcess* proc = 0;
+static QProcess* proc = 0;
 static QString exe;
+static QStringList exeArgs;
 static QString url;
 static QString windowtitle;
 static QString windowclass;
@@ -82,7 +83,7 @@ KStart::KStart()
 
     //finally execute the comand
     if (proc) {
-        if( int pid = proc->startDetached() ) {
+        if( int pid = proc->startDetached(exe, exeArgs) ) {
             KStartupInfoData data;
             data.addPid( pid );
             data.setName( exe );
@@ -348,9 +349,9 @@ int main( int argc, char *argv[] )
           KCmdLineArgs::usageError(i18n("No command specified"));
 
       exe = args->arg(0);
-      proc = new KProcess;
+      proc = new QProcess;
       for(int i=0; i < args->count(); i++)
-          (*proc) << args->arg(i);
+          exeArgs << args->arg(i);
   }
 
   desktop = args->getOption( "desktop" ).toInt();

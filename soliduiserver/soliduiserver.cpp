@@ -30,7 +30,6 @@
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <kprocess.h>
 #include <krun.h>
 #include <kmessagebox.h>
 #include <kstandardguiitem.h>

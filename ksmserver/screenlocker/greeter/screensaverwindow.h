@@ -22,8 +22,7 @@
 #define SCREENSAVERWINDOW_H
 
 #include <QWidget>
-
-#include <KProcess>
+#include <QProcess>
 
 class QMouseEvent;
 class QTimer;
@@ -56,7 +55,7 @@ private:
     void stopXScreenSaver();
     void readSaver();
 
-    KProcess m_ScreenSaverProcess;
+    QProcess m_ScreenSaverProcess;
     QPoint m_startMousePos;
     QString m_saver;
     QString m_saverExec;

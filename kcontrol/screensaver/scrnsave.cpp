@@ -63,7 +63,7 @@
 #include <KAboutData>
 #include <KIcon>
 #include <KNumInput>
-#include <KProcess>
+#include <QProcess>
 //#include <KServiceGroup>
 #include <KPluginFactory>
 #include <KPluginLoader>
@@ -129,10 +129,10 @@ KScreenSaver::KScreenSaver(QWidget *parent, const QVariantList&)
 
     readSettings();
 
-    mSetupProc = new KProcess;
+    mSetupProc = new QProcess;
     connect(mSetupProc, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotSetupDone()));
 
-    mPreviewProc = new KProcess;
+    mPreviewProc = new QProcess;
     connect(mPreviewProc, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotPreviewExited()));
 
     mSaverListView->setColumnCount(1);
@@ -532,15 +532,14 @@ void KScreenSaver::slotPreviewExited()
     XSelectInput(QX11Info::display(), mMonitor->winId(), widgetEventMask );
 
     if (mSelected >= 0) {
-        mPreviewProc->clearProgram();
-
-        QString saver = mSaverList.at(mSelected)->saver();
+         QString saver = mSaverList.at(mSelected)->saver();
 
         QHash<QChar, QString> keyMap;
         keyMap.insert('w', QString::number(mMonitor->winId()));
-        *mPreviewProc << KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(saver, keyMap));
+        QStringList previewArgs = KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(saver, keyMap));
+        QString previewProgram = previewArgs.takeAt(0);
 
-        mPreviewProc->start();
+        mPreviewProc->start(previewProgram, previewArgs);
     }
 
     mPrevSelected = mSelected;
@@ -632,8 +631,6 @@ void KScreenSaver::slotSetup()
     if (mSetupProc->state() == QProcess::Running)
     return;
 
-    mSetupProc->clearProgram();
-
     QString saver = mSaverList.at(mSelected)->setup();
     if( saver.isEmpty())
         return;
@@ -646,36 +643,30 @@ void KScreenSaver::slotSetup()
 
     if (!path.isEmpty())
     {
-        (*mSetupProc) << path;
+        QStringList setupArgs;
 
         // Add caption and icon to about dialog
         if (!kxsconfig) {
-            word = "-caption";
-            (*mSetupProc) << word;
-            word = mSaverList.at(mSelected)->name();
-            (*mSetupProc) << word;
-            word = "-icon";
-            (*mSetupProc) << word;
-            word = "kscreensaver";
-            (*mSetupProc) << word;
+            setupArgs << "-caption"
+                      << mSaverList.at(mSelected)->name()
+                      << "-icon"
+                      << "kscreensaver";
         }
 
         while (!ts.atEnd())
         {
-            ts >> word;
-            (*mSetupProc) << word;
+            setupArgs << word;
         }
 
         // Pass translated name to kxsconfig
         if (kxsconfig) {
-          word = mSaverList.at(mSelected)->name();
-          (*mSetupProc) << word;
+          setupArgs << mSaverList.at(mSelected)->name();
         }
 
         mSetupBt->setEnabled( false );
         kapp->flush();
 
-        mSetupProc->start();
+        mSetupProc->start(path);
     }
 }
 
@@ -687,11 +678,10 @@ void KScreenSaver::slotTest()
         return;
 
     if (!mTestProc) {
-        mTestProc = new KProcess;
+        mTestProc = new QProcess;
     } else {
         mPreviewProc->kill();
         mPreviewProc->waitForFinished();
-        mTestProc->clearProgram();
     }
 
     if (!mTestWin)
@@ -716,9 +706,10 @@ void KScreenSaver::slotTest()
     QString saver = mSaverList.at(mSelected)->saver();
     QHash<QChar, QString> keyMap;
     keyMap.insert('w', QString::number(mTestWin->winId()));
-    *mTestProc << KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(saver, keyMap));
+    QStringList testArgs = KShell::splitArgs(KMacroExpander::expandMacrosShellQuote(saver, keyMap));
+    QString testProgram = testArgs.takeAt(0);
 
-    mTestProc->start();
+    mTestProc->start(testProgram, testArgs);
 
     mTesting = true;
 }

@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KIdleTime>
 #include <KLocalizedString>
 #include <KNotification>
-#include <KProcess>
+#include <QProcess>
 #include <KStandardDirs>
 // Qt
 #include <QtCore/QTimer>

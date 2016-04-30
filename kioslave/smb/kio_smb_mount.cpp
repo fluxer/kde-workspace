@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <QByteArray>
 #include <QDir>
-#include <KProcess>
+#include <QProcess>
 #include <kshell.h>
 
 void SMBSlave::special( const QByteArray & data)
@@ -74,10 +74,10 @@ void SMBSlave::special( const QByteArray & data)
          // using smbmount instead of "mount -t smbfs", because mount does not allow a non-root
          // user to do a mount, but a suid smbmnt does allow this
 
-         KProcess proc;
-         proc.setOutputChannelMode(KProcess::SeparateChannels);
-         proc << "smbmount";
+         QProcess proc;
+         proc.setProcessChannelMode(QProcess::SeparateChannels);
 
+         QStringList procArgs;
          QString options;
 
          if ( smburl.user().isEmpty() )
@@ -98,11 +98,11 @@ void SMBSlave::special( const QByteArray & data)
          //if ( ! m_default_encoding.isEmpty() )
            //options += ",codepage=" + KShell::quoteArg(m_default_encoding);
 
-         proc << remotePath;
-         proc << mountPoint;
-         proc << "-o" << options;
+         procArgs << remotePath;
+         procArgs << mountPoint;
+         procArgs << "-o" << options;
 
-         proc.start();
+         proc.start("smbmount", procArgs);
          if (!proc.waitForFinished())
          {
             error(KIO::ERR_CANNOT_LAUNCH_PROCESS,
@@ -133,12 +133,10 @@ void SMBSlave::special( const QByteArray & data)
          QString mountPoint;
          stream >> mountPoint;
 
-         KProcess proc;
-         proc.setOutputChannelMode(KProcess::SeparateChannels);
-         proc << "smbumount";
-         proc << mountPoint;
+         QProcess proc;
+         proc.setProcessChannelMode(QProcess::SeparateChannels);
 
-         proc.start();
+         proc.start("smbumount", QStringList() << mountPoint);
          if ( !proc.waitForFinished() )
          {
            error(KIO::ERR_CANNOT_LAUNCH_PROCESS,

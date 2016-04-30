@@ -18,7 +18,7 @@
 
 #include "processrunner.h"
 
-#include <KProcess>
+#include <QProcess>
 
 ProcessRunner::ProcessRunner(QObject *parent) : QObject(parent)
 {
@@ -30,7 +30,7 @@ ProcessRunner::~ProcessRunner()
 
 void ProcessRunner::execute(const QString& name)
 {
-    KProcess::execute(name);
+    QProcess::execute(name);
 }
 
 #include "moc_processrunner.cpp"

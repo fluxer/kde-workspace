@@ -30,8 +30,6 @@
 
 #include <QWidget>
 #include <QtGui/qevent.h>
-#include <QtGui/qevent.h>
-#include <QtGui/qevent.h>
 
 #include <KCModule>
 
@@ -42,7 +40,6 @@
 
 class QTimer;
 
-class KProcess;
 class KIntSpinBox;
 
 class ScreenPreviewWidget;
@@ -96,9 +93,9 @@ protected:
 
 protected:
     TestWin     *mTestWin;
-    KProcess    *mTestProc;
-    KProcess    *mSetupProc;
-    KProcess    *mPreviewProc;
+    QProcess    *mTestProc;
+    QProcess    *mSetupProc;
+    QProcess    *mPreviewProc;
     KSSMonitor  *mMonitor;
     ScreenPreviewWidget *mMonitorPreview;
     KService::List mSaverServices;

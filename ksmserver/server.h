@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define QT_CLEAN_NAMESPACE 1
 #include <QStringList>
 #include <QObject>
+#include <QProcess>
 
 #include <kapplication.h>
 #include <kworkspace/kworkspace.h>
@@ -53,8 +54,6 @@ extern "C" {
 
 #define SESSION_PREVIOUS_LOGOUT "saved at previous logout"
 #define SESSION_BY_USER  "saved by user"
-
-class KProcess;
 
 class KSMListener;
 class KSMConnection;
@@ -169,7 +168,7 @@ private:
     void startProtection();
     void endProtection();
 
-    KProcess* startApplication( const QStringList& command,
+    QProcess* startApplication( const QStringList& command,
         const QString& clientMachine = QString(),
         const QString& userId = QString(),
         bool wm = false );
@@ -240,7 +239,7 @@ private:
     KSMClient* clientInteracting;
     QString wm;
     QStringList wmCommands;
-    KProcess* wmProcess;
+    QProcess* wmProcess;
     QString sessionGroup;
     QString sessionName;
     QTimer protectionTimer;

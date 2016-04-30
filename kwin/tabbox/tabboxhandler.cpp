@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "desktopmodel.h"
 #include "tabboxconfig.h"
 // Qt
+#include <QProcess>
 #include <QtGui/qevent.h>
 #include <QtCore/qabstractitemmodel.h>
 #include <QTimer>
@@ -33,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <X11/Xlib.h>
 // KDE
 #include <KDebug>
-#include <KProcess>
 #include <KWindowSystem>
 
 namespace KWin
@@ -237,7 +237,7 @@ void TabBoxHandler::show()
             QStringList args;
             args << "--passivepopup" << /*i18n*/("The Window Switcher installation is broken, resources are missing.\n"
                                                  "Contact your distribution about this.") << "20";
-            KProcess::startDetached("kdialog", args);
+            QProcess::startDetached("kdialog", args);
             hide();
             return;
         }
