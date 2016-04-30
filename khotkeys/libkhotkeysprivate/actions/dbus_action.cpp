@@ -19,9 +19,10 @@
 
 #include "actions.h"
 
+#include <QProcess>
 #include <KConfigGroup>
 #include <KDebug>
-#include <KProcess>
+#include <KStandardDirs>
 
 namespace KHotKeys {
 
@@ -132,9 +133,15 @@ void DBusAction::execute()
             }
         }
     kDebug() << "D-Bus call:" << _application << ":" << _object << ":" << _function << ":" << args_list;
-    KProcess proc;
-    proc << "qdbus" << _application << _object << _function << args_list;
-    proc.startDetached();
+    // most distributions ship a suffixed symlink to qdbus, look for that first
+    QString qdbusExe = KStandardDirs::findExe("qdbus-qt4");
+    if (qdbusExe.isEmpty()) {
+        // no exe lookup, let it fail if not found
+        qdbusExe = "qdbus";
+    }
+    QStringList qdbusArgs;
+    qdbusArgs << _application << _object << _function << args_list;
+    QProcess::startDetached(qdbusExe, qdbusArgs);
     }
 
 
