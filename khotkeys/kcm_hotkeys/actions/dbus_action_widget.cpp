@@ -20,6 +20,7 @@
 
 #include <KMessageBox>
 #include <KRun>
+#include <KStandardDirs>
 
 DbusActionWidget::DbusActionWidget(
     KHotKeys::DBusAction *action,
@@ -117,7 +118,12 @@ bool DbusActionWidget::isChanged() const
 
 void DbusActionWidget::launchDbusBrowser() const
     {
-    if( KRun::runCommand( "qdbusviewer", window()) == 0 )
+    QString qdbusviewerExe = KStandardDirs::findExe("qdbusviewer-qt4");
+    if (qdbusviewerExe.isEmpty()) {
+        // no exe lookup, let it fail if not found
+        qdbusviewerExe = "qdbusviewer";
+    }
+    if( KRun::runCommand( qdbusviewerExe, window()) == 0 )
         {
         KMessageBox::sorry( window(), i18n( "Failed to run qdbusviewer" ));
         }
