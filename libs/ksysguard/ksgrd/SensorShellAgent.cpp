@@ -51,10 +51,10 @@ bool SensorShellAgent::start( const QString &host, const QString &shell,
 {
   mDaemon = new QProcess();
   mDaemon->setProcessChannelMode( QProcess::SeparateChannels );
-  mRetryCount=3;
   setHostName( host );
   mShell = shell;
   mCommand = command;
+  mArgs.clear();
 
   connect( mDaemon, SIGNAL(error(QProcess::ProcessError)),
            SLOT(daemonError(QProcess::ProcessError)) );
@@ -67,9 +67,11 @@ bool SensorShellAgent::start( const QString &host, const QString &shell,
 
   if ( !command.isEmpty() ) {
     QStringList args = KShell::splitArgs(command);
+    mArgs = args.join(" ");
     QString program = args.takeAt(0);
     mDaemon->start(program, args);
   } else {
+    mArgs = mShell + " " + hostName() + " ksysguardd";
     mDaemon->start(mShell, QStringList() << hostName() << "ksysguardd");
   }
   
@@ -88,7 +90,6 @@ void SensorShellAgent::hostInfo( QString &shell, QString &command,
 void SensorShellAgent::msgRcvd( )
 {
   QByteArray buffer = mDaemon->readAllStandardOutput();
-  mRetryCount = 3; //we received an answer, so reset our retry count back to 3
   processAnswer( buffer.constData(), buffer.size());
 }
 
@@ -109,12 +110,9 @@ void SensorShellAgent::daemonExited(  int exitCode, QProcess::ExitStatus exitSta
 {
   Q_UNUSED(exitCode);
   kDebug(1215) << "daemon exited, exit status "  << exitStatus;
-  if ( mRetryCount--  <= 0 || (mDaemon->start(), !mDaemon->waitForStarted()) )
-  {
-    setDaemonOnLine( false );
-    if(sensorManager()) {
-      sensorManager()->disengage( this ); //delete ourselves
-    }
+  setDaemonOnLine( false );
+  if(sensorManager()) {
+    sensorManager()->disengage( this ); //delete ourselves
   }
 }
 
@@ -123,15 +121,15 @@ void SensorShellAgent::daemonError( QProcess::ProcessError errorStatus )
   QString error;
   switch(errorStatus) {
     case QProcess::FailedToStart:
-      kDebug(1215) << "failed to run" <<  mDaemon->program().join(" ");
-      error = i18n("Could not run daemon program '%1'.", mDaemon->program().join(" "));
+      kDebug(1215) << "failed to run" <<  mArgs;
+      error = i18n("Could not run daemon program '%1'.", mArgs);
       break;
     case QProcess::Crashed:
     case QProcess::Timedout:
     case QProcess::WriteError:
     case QProcess::ReadError:
     default:
-      error = i18n("The daemon program '%1' failed.", mDaemon->program().join(" "));
+      error = i18n("The daemon program '%1' failed.", mArgs);
   }
   setReasonForOffline(error);
   kDebug(1215) << "Error received " << error << "(" << errorStatus << ")";
