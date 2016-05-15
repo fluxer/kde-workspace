@@ -21,9 +21,6 @@
 /* Define if you have the gethostname prototype */
 #cmakedefine HAVE_GETHOSTNAME_PROTO 1
 
-/* Define to 1 if you have the `getpeereid' function. */
-#cmakedefine HAVE_GETPEEREID 1
-
 /* Defines if you have Solaris' libkstat */
 /* #undef HAVE_KSTAT */
 

@@ -232,7 +232,7 @@ fi
 # Mark that full KDE session is running (e.g. Konqueror preloading works only
 # with full KDE running). The KDE_FULL_SESSION property can be detected by
 # any X client connected to the same X session, even if not launched
-# directly from the KDE session but e.g. using "ssh -X", kdesu. $KDE_FULL_SESSION
+# directly from the KDE session but e.g. using "ssh -X", kdesudo. $KDE_FULL_SESSION
 # however guarantees that the application is launched in the same environment
 # like the KDE session and that e.g. KDE utilities/libraries are available.
 # KDE_FULL_SESSION property is also only available since KDE 3.5.5.

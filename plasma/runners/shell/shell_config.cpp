@@ -35,27 +35,10 @@ ShellConfig::ShellConfig(const KConfigGroup &config, QWidget* parent)
     QHBoxLayout *hboxLayout = new QHBoxLayout(parent);
     hboxLayout->addWidget(this);
     m_ui.setupUi(this);
-
-#ifdef Q_OS_UNIX
-    connect(m_ui.cbRunAsOther, SIGNAL(clicked(bool)), this, SLOT(slotUpdateUser(bool)));
-#else
-    m_ui.cbRunAsOther->hide();
-    m_ui.lbUsername->hide();
-    m_ui.leUsername->hide();
-    m_ui.lbPassword->hide();
-    m_ui.lePassword->hide();
-#endif
 }
 
 ShellConfig::~ShellConfig()
 {
-}
-
-void ShellConfig::slotUpdateUser(bool b)
-{
-    if (b) {
-        m_ui.leUsername->setFocus();
-    }
 }
 
 #include "moc_shell_config.cpp"

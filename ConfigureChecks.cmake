@@ -92,7 +92,6 @@ macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 set(CMAKE_EXTRA_INCLUDE_FILES sys/socket.h)
 check_type_size("struct ucred" STRUCT_UCRED)       # kio_fonts
 
-check_function_exists(getpeereid  HAVE_GETPEEREID) # kdesu
 check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
 
 set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH}/Xrandr.h)

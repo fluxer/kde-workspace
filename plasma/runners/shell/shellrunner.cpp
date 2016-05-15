@@ -38,8 +38,7 @@
 
 ShellRunner::ShellRunner(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args),
-      m_inTerminal(false),
-      m_asOtherUser(false)
+      m_inTerminal(false)
 {
     setObjectName( QLatin1String("Command" ));
     setPriority(AbstractRunner::HighestPriority);
@@ -77,44 +76,7 @@ void ShellRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
     // filter match's id to remove runner's name
     // as this is the command we want to run
 
-    //kDebug() << m_asOtherUser << m_username << m_password;
-    if (m_asOtherUser && !m_username.isEmpty()) {
-        //TODO: provide some user feedback on failure
-        QString exec;
-        QString args;
-        if (m_inTerminal) {
-            // we have to reimplement this from KToolInvocation because we need to use KDESu
-            KConfigGroup confGroup( KGlobal::config(), "General" );
-            exec = confGroup.readPathEntry("TerminalApplication", "konsole");
-            if (!exec.isEmpty()) {
-                if (exec == "konsole") {
-                    args += " --noclose";
-                } else if (exec == "xterm") {
-                    args += " -hold";
-                }
-
-                args += " -e " + context.query();
-            }
-        } else {
-            const QStringList commandLine = KShell::splitArgs(context.query(), KShell::TildeExpand);
-            if (!commandLine.isEmpty()) {
-                exec = commandLine.at(0);
-            }
-
-            args = context.query().right(context.query().size() - commandLine.at(0).length());
-        }
-
-        if (!exec.isEmpty()) {
-            exec = KStandardDirs::findExe(exec);
-            exec.append(args);
-            if (!exec.isEmpty()) {
-                KDESu::SuProcess client(m_username.toLocal8Bit(), exec.toLocal8Bit());
-                const QByteArray password = m_password.toLocal8Bit();
-                //TODO handle errors like wrong password via KNotifications in 4.7
-                client.exec(password.constData());
-            }
-        }
-    } else if (m_inTerminal) {
+    if (m_inTerminal) {
         KToolInvocation::invokeTerminal(context.query());
     } else {
         KRun::runCommand(context.query(), NULL);
@@ -122,9 +84,6 @@ void ShellRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
 
     // reset for the next run!
     m_inTerminal = false;
-    m_asOtherUser = false;
-    m_username.clear();
-    m_password.clear();
 }
 
 void ShellRunner::createRunOptions(QWidget *parent)
@@ -139,30 +98,12 @@ void ShellRunner::createRunOptions(QWidget *parent)
     pal.setColor(QPalette::Normal, QPalette::WindowText, theme->color(Plasma::Theme::TextColor));
     configWidget->setPalette(pal);
 
-    connect(configWidget->m_ui.cbRunAsOther, SIGNAL(clicked(bool)), this, SLOT(setRunAsOtherUser(bool)));
     connect(configWidget->m_ui.cbRunInTerminal, SIGNAL(clicked(bool)), this, SLOT(setRunInTerminal(bool)));
-    connect(configWidget->m_ui.leUsername, SIGNAL(textChanged(QString)), this, SLOT(setUsername(QString)));
-    connect(configWidget->m_ui.lePassword, SIGNAL(textChanged(QString)), this, SLOT(setPassword(QString)));
-}
-
-void ShellRunner::setRunAsOtherUser(bool asOtherUser)
-{
-    m_asOtherUser = asOtherUser;
 }
 
 void ShellRunner::setRunInTerminal(bool runInTerminal)
 {
     m_inTerminal = runInTerminal;
-}
-
-void ShellRunner::setUsername(const QString &username)
-{
-    m_username = username;
-}
-
-void ShellRunner::setPassword(const QString &password)
-{
-    m_password = password;
 }
 
 #include "moc_shellrunner.cpp"

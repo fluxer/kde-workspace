@@ -117,7 +117,7 @@ QProcess* KSMServer::startApplication( const QStringList& cmd, const QString& cl
             command.prepend( "--" );
             command.prepend( userId );
             command.prepend( "-u" );
-            command.prepend( KStandardDirs::findExe("kdesu") );
+            command.prepend( KStandardDirs::findExe("kdesudo") );
         }
     }
     if ( !clientMachine.isEmpty() && clientMachine != "localhost" ) {

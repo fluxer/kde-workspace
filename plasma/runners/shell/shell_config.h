@@ -35,9 +35,6 @@ class ShellConfig : public QWidget
 
         Ui::shellOptions m_ui;
 
-    protected slots:
-        void slotUpdateUser(bool);
-
     private:
         KConfigGroup m_config;
 };

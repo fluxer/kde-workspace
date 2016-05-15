@@ -41,16 +41,10 @@ class ShellRunner : public Plasma::AbstractRunner
         void createRunOptions(QWidget *parent);
 
     private Q_SLOTS:
-        void setRunAsOtherUser(bool asOtherUser);
         void setRunInTerminal(bool runInTerminal);
-        void setUsername(const QString &username);
-        void setPassword(const QString &password);
 
     private:
-        QString m_username;
-        QString m_password;
         bool m_inTerminal;
-        bool m_asOtherUser;
 };
 
 K_EXPORT_PLASMA_RUNNER(shell, ShellRunner)

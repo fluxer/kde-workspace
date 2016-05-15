@@ -55,8 +55,6 @@
 #include <QtDBus/QDBusInterface>
 #endif
 
-using namespace KDESu;
-
 namespace KFI
 {
 
