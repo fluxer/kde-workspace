@@ -22,9 +22,6 @@
 #include <QPushButton>
 
 #include <KDebug>
-#ifdef Q_OS_UNIX
-#include <SuProcess>
-#endif
 #include <KIcon>
 #include <KLocale>
 #include <KRun>
