@@ -45,7 +45,7 @@ GlxBackend::GlxBackend()
     , window(None)
     , fbconfig(NULL)
     , glxWindow(None)
-    , ctx(None)
+    , ctx(0)
     , m_bufferAge(0)
     , haveSwapInterval(false)
 {
