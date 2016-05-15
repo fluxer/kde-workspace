@@ -32,7 +32,6 @@
 #include <KIconLoader>
 #include <KLocale>
 #include <KMessageBox>
-#include <SuProcess>
 #include <KFileItem>
 #include <KPropertiesDialog>
 #include <KShell>
