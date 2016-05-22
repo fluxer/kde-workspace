@@ -47,8 +47,7 @@ Item {
         model: widgetExplorer.filterModel
         delegate: PlasmaComponents.MenuItem {
             text: display
-            separator: model["separator"] ? model["separator"] : false
-            onClicked: {
+            onTriggered: {
                 list.contentX = 0
                 list.contentY = 0
                 var item = widgetExplorer.filterModel.get(index)
@@ -73,8 +72,7 @@ Item {
         delegate: PlasmaComponents.MenuItem {
             icon: modelData.icon
             text: modelData.text
-            separator: modelData.separator
-            onClicked: modelData.trigger()
+            onTriggered: modelData.trigger()
             Component.onCompleted: {
                 parent = getWidgetsDialog
             }
