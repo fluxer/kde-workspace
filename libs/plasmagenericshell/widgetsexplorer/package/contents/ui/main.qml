@@ -137,7 +137,6 @@ Item {
         property Item categoryButton
 
         sourceComponent: (widgetExplorer.orientation == Qt.Horizontal) ? horizontalTopBarComponent : verticalTopBarComponent
-        height: item.height + 2
         anchors {
             top: parent.top
             left: parent.left
@@ -145,6 +144,7 @@ Item {
 
             topMargin: widgetExplorer.orientation == Qt.Horizontal ? 4 : 0
             leftMargin: 4
+            rightMargin: 4
         }
     }
 
