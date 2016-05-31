@@ -38,7 +38,7 @@ ShortcutTrigger::ShortcutTrigger(
         const KShortcut& shortcut,
         const QUuid &uuid )
     :   Trigger( data_P ),
-        _uuid(uuid),
+        _uuid(uuid.toString()),
         _active(false),
         _shortcut(shortcut)
     {
@@ -122,7 +122,7 @@ void ShortcutTrigger::cfg_write( KConfigGroup& cfg_P ) const
     base::cfg_write( cfg_P );
     cfg_P.writeEntry( "Key", shortcut().toString());
     cfg_P.writeEntry( "Type", "SHORTCUT" ); // overwrites value set in base::cfg_write()
-    cfg_P.writeEntry( "Uuid", _uuid.toString() );
+    cfg_P.writeEntry( "Uuid", _uuid );
     }
 
 

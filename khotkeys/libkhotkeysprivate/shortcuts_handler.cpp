@@ -70,7 +70,7 @@ KAction *ShortcutsHandler::addAction(
     if (_actions->action(id))
         {
         qDebug() << id << " already present. Using new id!";
-        realId = QUuid::createUuid();
+        realId = QUuid::createUuid().toString();
         }
 
     // Create the action

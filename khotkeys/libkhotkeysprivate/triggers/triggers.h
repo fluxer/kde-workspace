@@ -196,7 +196,7 @@ class KDE_EXPORT ShortcutTrigger
     private:
 
         //! A persistent identifier for this shortcut
-        QUuid _uuid;
+        QString _uuid;
 
         //! Are the conditions met?
         bool _active;
