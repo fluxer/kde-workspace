@@ -262,7 +262,7 @@ bool CursorThemeModel::handleDefault(const QDir &themeDir)
     // If "default" is a symlink
     if (info.isSymLink())
     {
-        QFileInfo target(info.symLinkTarget());
+        QFileInfo target(info.readLink());
         if (target.exists() && (target.isDir() || target.isSymLink()))
             defaultName = target.fileName();
 

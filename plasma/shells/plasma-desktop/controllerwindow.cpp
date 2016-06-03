@@ -242,7 +242,7 @@ void ControllerWindow::syncToGraphicsWidget()
                                  PlasmaApp::self()->corona()->screenGeometry(m_containment.data()->screen()) :
                                  PlasmaApp::self()->corona()->screenGeometry(PlasmaApp::self()->corona()->screenId(pos()));
 
-        QSize maxSize = KWindowSystem::workArea().intersect(screenRect).size();
+        QSize maxSize = KWindowSystem::workArea().intersected(screenRect).size();
 
         QSize windowSize;
         if (m_location == Plasma::LeftEdge || m_location == Plasma::RightEdge) {
