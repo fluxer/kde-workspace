@@ -64,11 +64,11 @@ private:
 
     enum EffectActions {
         PresentWindowsAll = ELECTRIC_ACTION_COUNT, // Start at the end of built in actions
-        PresentWindowsCurrent,
-        PresentWindowsClass,
-        DesktopGrid,
-        TabBox,
-        TabBoxAlternative
+        PresentWindowsCurrent = 6,
+        PresentWindowsClass = 7,
+        DesktopGrid = 8,
+        TabBox = 9,
+        TabBoxAlternative = 10
     };
 
     bool effectEnabled(const QString& effect, const KConfigGroup& cfg) const;

@@ -59,14 +59,14 @@ public:
     int selectedEdgeItem(int edge) const;
 
     enum Edges {
-        Left,
-        Right,
-        Top,
-        Bottom,
-        TopLeft,
-        TopRight,
-        BottomLeft,
-        BottomRight
+        Left = 0,
+        Right = 1,
+        Top = 2,
+        Bottom = 3,
+        TopLeft = 4,
+        TopRight = 5,
+        BottomLeft = 6,
+        BottomRight = 7
     };
 signals:
     void changed();

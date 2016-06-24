@@ -89,12 +89,12 @@ enum ElectricBorder {
 // such as "only when moving windows" desktop switching that the current global action
 // system doesn't support.
 enum ElectricBorderAction {
-    ElectricActionNone,          // No special action, not set, desktop switch or an effect
-    ElectricActionDashboard,     // Launch the Plasma dashboard
-    ElectricActionShowDesktop,   // Show desktop or restore
-    ElectricActionLockScreen,   // Lock screen
-    ElectricActionPreventScreenLocking,
-    ELECTRIC_ACTION_COUNT
+    ElectricActionNone = 0,          // No special action, not set, desktop switch or an effect
+    ElectricActionDashboard = 1,     // Launch the Plasma dashboard
+    ElectricActionShowDesktop = 2,   // Show desktop or restore
+    ElectricActionLockScreen = 3,    // Lock screen
+    ElectricActionPreventScreenLocking = 4,
+    ELECTRIC_ACTION_COUNT = 5
 };
 
 // DesktopMode and WindowsMode are based on the order in which the desktop

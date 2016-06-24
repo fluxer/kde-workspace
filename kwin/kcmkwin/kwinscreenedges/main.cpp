@@ -190,10 +190,10 @@ void KWinScreenEdgesConfig::monitorInit()
     monitorAddItem(i18n("Lock Screen"));
     monitorAddItem(i18n("Prevent Screen Locking"));
     //Prevent Screen Locking is not supported on some edges
-    m_ui->monitor->setEdgeItemEnabled(int(Monitor::Top), 4, false);
-    m_ui->monitor->setEdgeItemEnabled(int(Monitor::Left), 4, false);
-    m_ui->monitor->setEdgeItemEnabled(int(Monitor::Right), 4, false);
-    m_ui->monitor->setEdgeItemEnabled(int(Monitor::Bottom), 4, false);
+    m_ui->monitor->setEdgeItemEnabled(Monitor::Top, 4, false);
+    m_ui->monitor->setEdgeItemEnabled(Monitor::Left, 4, false);
+    m_ui->monitor->setEdgeItemEnabled(Monitor::Right, 4, false);
+    m_ui->monitor->setEdgeItemEnabled(Monitor::Bottom, 4, false);
 
     // Search the effect names
     KServiceTypeTrader* trader = KServiceTypeTrader::self();
@@ -214,10 +214,10 @@ void KWinScreenEdgesConfig::monitorLoadAction(ElectricBorder edge, const QString
 {
     KConfigGroup config(m_config, "ElectricBorders");
     QString lowerName = config.readEntry(configName, "None").toLower();
-    if (lowerName == "dashboard") monitorChangeEdge(edge, int(ElectricActionDashboard));
-    else if (lowerName == "showdesktop") monitorChangeEdge(edge, int(ElectricActionShowDesktop));
-    else if (lowerName == "lockscreen") monitorChangeEdge(edge, int(ElectricActionLockScreen));
-    else if (lowerName == "preventscreenlocking") monitorChangeEdge(edge, int(ElectricActionPreventScreenLocking));
+    if (lowerName == "dashboard") monitorChangeEdge(edge, ElectricActionDashboard);
+    else if (lowerName == "showdesktop") monitorChangeEdge(edge, ElectricActionShowDesktop);
+    else if (lowerName == "lockscreen") monitorChangeEdge(edge, ElectricActionLockScreen);
+    else if (lowerName == "preventscreenlocking") monitorChangeEdge(edge, ElectricActionPreventScreenLocking);
 }
 
 void KWinScreenEdgesConfig::monitorLoad()
@@ -238,41 +238,41 @@ void KWinScreenEdgesConfig::monitorLoad()
     KConfigGroup presentWindowsConfig(m_config, "Effect-PresentWindows");
     QList<int> list = QList<int>();
     // PresentWindows BorderActivateAll
-    list.append(int(ElectricTopLeft));
+    list.append(ElectricTopLeft);
     list = presentWindowsConfig.readEntry("BorderActivateAll", list);
     foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(PresentWindowsAll));
+        monitorChangeEdge(ElectricBorder(i), PresentWindowsAll);
     }
     // PresentWindows BorderActivate
     list.clear();
-    list.append(int(ElectricNone));
+    list.append(ElectricNone);
     list = presentWindowsConfig.readEntry("BorderActivate", list);
     foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(PresentWindowsCurrent));
+        monitorChangeEdge(ElectricBorder(i), PresentWindowsCurrent);
     }
     // PresentWindows BorderActivateClass
     list.clear();
-    list.append(int(ElectricNone));
+    list.append(ElectricNone);
     list = presentWindowsConfig.readEntry("BorderActivateClass", list);
     foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(PresentWindowsClass));
+        monitorChangeEdge(ElectricBorder(i), PresentWindowsClass);
     }
 
     // TabBox
     KConfigGroup tabBoxConfig(m_config, "TabBox");
     list.clear();
     // TabBox
-    list.append(int(ElectricNone));
+    list.append(ElectricNone);
     list = tabBoxConfig.readEntry("BorderActivate", list);
     foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(TabBox));
+        monitorChangeEdge(ElectricBorder(i), TabBox);
     }
     // Alternative TabBox
     list.clear();
-    list.append(int(ElectricNone));
+    list.append(ElectricNone);
     list = tabBoxConfig.readEntry("BorderAlternativeActivate", list);
     foreach (int i, list) {
-        monitorChangeEdge(ElectricBorder(i), int(TabBoxAlternative));
+        monitorChangeEdge(ElectricBorder(i), TabBoxAlternative);
     }
 }
 
@@ -291,10 +291,10 @@ void KWinScreenEdgesConfig::monitorSaveAction(int edge, const QString& configNam
     else // Anything else
         config.writeEntry(configName, "None");
 
-    if ((edge == int(Monitor::TopRight)) ||
-            (edge == int(Monitor::BottomRight)) ||
-            (edge == int(Monitor::BottomLeft)) ||
-            (edge == int(Monitor::TopLeft))) {
+    if ((edge == Monitor::TopRight) ||
+            (edge == Monitor::BottomRight) ||
+            (edge == Monitor::BottomLeft) ||
+            (edge == Monitor::TopLeft)) {
         KConfig scrnConfig("kscreensaverrc");
         KConfigGroup scrnGroup = scrnConfig.group("ScreenSaver");
         scrnGroup.writeEntry("Action" + configName, (item == 4) ? 2 /* Prevent Screen Locking */ : 0 /* None */);
@@ -305,42 +305,42 @@ void KWinScreenEdgesConfig::monitorSaveAction(int edge, const QString& configNam
 void KWinScreenEdgesConfig::monitorSave()
 {
     // Save ElectricBorderActions
-    monitorSaveAction(int(Monitor::Top),         "Top");
-    monitorSaveAction(int(Monitor::TopRight),    "TopRight");
-    monitorSaveAction(int(Monitor::Right),       "Right");
-    monitorSaveAction(int(Monitor::BottomRight), "BottomRight");
-    monitorSaveAction(int(Monitor::Bottom),      "Bottom");
-    monitorSaveAction(int(Monitor::BottomLeft),  "BottomLeft");
-    monitorSaveAction(int(Monitor::Left),        "Left");
-    monitorSaveAction(int(Monitor::TopLeft),     "TopLeft");
+    monitorSaveAction(Monitor::Top,         "Top");
+    monitorSaveAction(Monitor::TopRight,    "TopRight");
+    monitorSaveAction(Monitor::Right,       "Right");
+    monitorSaveAction(Monitor::BottomRight, "BottomRight");
+    monitorSaveAction(Monitor::Bottom,      "Bottom");
+    monitorSaveAction(Monitor::BottomLeft,  "BottomLeft");
+    monitorSaveAction(Monitor::Left,        "Left");
+    monitorSaveAction(Monitor::TopLeft,     "TopLeft");
 
     // Save effect-specific actions:
 
     // Present Windows
     KConfigGroup presentWindowsConfig(m_config, "Effect-PresentWindows");
     presentWindowsConfig.writeEntry("BorderActivateAll",
-                                    monitorCheckEffectHasEdge(int(PresentWindowsAll)));
+                                    monitorCheckEffectHasEdge(PresentWindowsAll));
     presentWindowsConfig.writeEntry("BorderActivate",
-                                    monitorCheckEffectHasEdge(int(PresentWindowsCurrent)));
+                                    monitorCheckEffectHasEdge(PresentWindowsCurrent));
     presentWindowsConfig.writeEntry("BorderActivateClass",
-                                    monitorCheckEffectHasEdge(int(PresentWindowsClass)));
+                                    monitorCheckEffectHasEdge(PresentWindowsClass));
 
     // TabBox
     KConfigGroup tabBoxConfig(m_config, "TabBox");
     tabBoxConfig.writeEntry("BorderActivate",
-                                monitorCheckEffectHasEdge(int(TabBox)));
+                                monitorCheckEffectHasEdge(TabBox));
     tabBoxConfig.writeEntry("BorderAlternativeActivate",
-                                monitorCheckEffectHasEdge(int(TabBoxAlternative)));
+                                monitorCheckEffectHasEdge(TabBoxAlternative));
 }
 
 void KWinScreenEdgesConfig::monitorDefaults()
 {
     // Clear all edges
     for (int i = 0; i < 8; i++)
-        m_ui->monitor->selectEdgeItem(i, 0);
+        m_ui->monitor->selectEdgeItem(i, 1); // the index will be deduced to 0
 
     // Present windows = Top-left
-    m_ui->monitor->selectEdgeItem(int(Monitor::TopLeft), int(PresentWindowsAll));
+    m_ui->monitor->selectEdgeItem(Monitor::TopLeft, PresentWindowsAll);
 }
 
 void KWinScreenEdgesConfig::monitorShowEvent()
@@ -353,46 +353,46 @@ void KWinScreenEdgesConfig::monitorShowEvent()
 
         // Present Windows
         bool enabled = effectEnabled("presentwindows", config);
-        monitorItemSetEnabled(int(PresentWindowsCurrent), enabled);
-        monitorItemSetEnabled(int(PresentWindowsAll), enabled);
+        monitorItemSetEnabled(PresentWindowsCurrent, enabled);
+        monitorItemSetEnabled(PresentWindowsAll, enabled);
     } else { // Compositing disabled
-        monitorItemSetEnabled(int(PresentWindowsCurrent), false);
-        monitorItemSetEnabled(int(PresentWindowsAll), false);
+        monitorItemSetEnabled(PresentWindowsCurrent, false);
+        monitorItemSetEnabled(PresentWindowsAll, false);
     }
     // tabbox, depends on reasonable focus policy.
     KConfigGroup config2(m_config, "Windows");
     QString focusPolicy = config2.readEntry("FocusPolicy", QString());
     bool reasonable = focusPolicy != "FocusStrictlyUnderMouse" && focusPolicy != "FocusUnderMouse";
-    monitorItemSetEnabled(int(TabBox), reasonable);
-    monitorItemSetEnabled(int(TabBoxAlternative), reasonable);
+    monitorItemSetEnabled(TabBox, reasonable);
+    monitorItemSetEnabled(TabBoxAlternative, reasonable);
 }
 
 void KWinScreenEdgesConfig::monitorChangeEdge(ElectricBorder border, int index)
 {
     switch(border) {
     case ElectricTop:
-        m_ui->monitor->selectEdgeItem(int(Monitor::Top), index);
+        m_ui->monitor->selectEdgeItem(Monitor::Top, index);
         break;
     case ElectricTopRight:
-        m_ui->monitor->selectEdgeItem(int(Monitor::TopRight), index);
+        m_ui->monitor->selectEdgeItem(Monitor::TopRight, index);
         break;
     case ElectricRight:
-        m_ui->monitor->selectEdgeItem(int(Monitor::Right), index);
+        m_ui->monitor->selectEdgeItem(Monitor::Right, index);
         break;
     case ElectricBottomRight:
-        m_ui->monitor->selectEdgeItem(int(Monitor::BottomRight), index);
+        m_ui->monitor->selectEdgeItem(Monitor::BottomRight, index);
         break;
     case ElectricBottom:
-        m_ui->monitor->selectEdgeItem(int(Monitor::Bottom), index);
+        m_ui->monitor->selectEdgeItem(Monitor::Bottom, index);
         break;
     case ElectricBottomLeft:
-        m_ui->monitor->selectEdgeItem(int(Monitor::BottomLeft), index);
+        m_ui->monitor->selectEdgeItem(Monitor::BottomLeft, index);
         break;
     case ElectricLeft:
-        m_ui->monitor->selectEdgeItem(int(Monitor::Left), index);
+        m_ui->monitor->selectEdgeItem(Monitor::Left, index);
         break;
     case ElectricTopLeft:
-        m_ui->monitor->selectEdgeItem(int(Monitor::TopLeft), index);
+        m_ui->monitor->selectEdgeItem(Monitor::TopLeft, index);
         break;
     default: // Nothing
         break;
@@ -403,28 +403,28 @@ void KWinScreenEdgesConfig::monitorHideEdge(ElectricBorder border, bool hidden)
 {
     switch(border) {
     case ElectricTop:
-        m_ui->monitor->setEdgeHidden(int(Monitor::Top), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::Top, hidden);
         break;
     case ElectricTopRight:
-        m_ui->monitor->setEdgeHidden(int(Monitor::TopRight), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::TopRight, hidden);
         break;
     case ElectricRight:
-        m_ui->monitor->setEdgeHidden(int(Monitor::Right), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::Right, hidden);
         break;
     case ElectricBottomRight:
-        m_ui->monitor->setEdgeHidden(int(Monitor::BottomRight), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::BottomRight, hidden);
         break;
     case ElectricBottom:
-        m_ui->monitor->setEdgeHidden(int(Monitor::Bottom), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::Bottom, hidden);
         break;
     case ElectricBottomLeft:
-        m_ui->monitor->setEdgeHidden(int(Monitor::BottomLeft), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::BottomLeft, hidden);
         break;
     case ElectricLeft:
-        m_ui->monitor->setEdgeHidden(int(Monitor::Left), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::Left, hidden);
         break;
     case ElectricTopLeft:
-        m_ui->monitor->setEdgeHidden(int(Monitor::TopLeft), hidden);
+        m_ui->monitor->setEdgeHidden(Monitor::TopLeft, hidden);
         break;
     default: // Nothing
         break;
@@ -434,21 +434,21 @@ void KWinScreenEdgesConfig::monitorHideEdge(ElectricBorder border, bool hidden)
 QList<int> KWinScreenEdgesConfig::monitorCheckEffectHasEdge(int index) const
 {
     QList<int> list = QList<int>();
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::Top)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::Top) == index)
         list.append(int(ElectricTop));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::TopRight)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::TopRight) == index)
         list.append(int(ElectricTopRight));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::Right)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::Right) == index)
         list.append(int(ElectricRight));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::BottomRight)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::BottomRight) == index)
         list.append(int(ElectricBottomRight));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::Bottom)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::Bottom) == index)
         list.append(int(ElectricBottom));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::BottomLeft)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::BottomLeft) == index)
         list.append(int(ElectricBottomLeft));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::Left)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::Left) == index)
         list.append(int(ElectricLeft));
-    if (m_ui->monitor->selectedEdgeItem(int(Monitor::TopLeft)) == index)
+    if (m_ui->monitor->selectedEdgeItem(Monitor::TopLeft) == index)
         list.append(int(ElectricTopLeft));
 
     if (list.isEmpty())

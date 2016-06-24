@@ -143,12 +143,12 @@ void Monitor::addEdgeItem(int edge, const QString& item)
 
 void Monitor::setEdgeItemEnabled(int edge, int index, bool enabled)
 {
-    popup_actions[ edge ][ index ]->setEnabled(enabled);
+    popup_actions[ edge ][ index - 1 ]->setEnabled(enabled);
 }
 
 bool Monitor::edgeItemEnabled(int edge, int index) const
 {
-    return popup_actions[ edge ][ index ]->isEnabled();
+    return popup_actions[ edge ][ index - 1 ]->isEnabled();
 }
 
 void Monitor::selectEdgeItem(int edge, int index)
