@@ -105,12 +105,12 @@ QMimeData *LayoutsTableModel::mimeData(const QModelIndexList &indexes) const
 
      QSet<int> rows;
      foreach (const QModelIndex& index, indexes) {
-    	 if (index.isValid()) {
-    		 rows << index.row();
-    	 }
+        if (index.isValid()) {
+            rows << index.row();
+        }
      }
      foreach (int row, rows) {
-    	 stream << row;
+        stream << row;
      }
 
      mimeData->setData("application/keyboard-layout-item", encodedData);
@@ -126,7 +126,7 @@ QVariant LayoutsTableModel::data(const QModelIndex &index, int role) const
      if (index.row() >= keyboardConfig->layouts.size())
          return QVariant();
 
-	 const LayoutUnit& layoutUnit = keyboardConfig->layouts.at(index.row());
+     const LayoutUnit& layoutUnit = keyboardConfig->layouts.at(index.row());
 
      if (role == Qt::DecorationRole) {
     	 switch( index.column() ) {

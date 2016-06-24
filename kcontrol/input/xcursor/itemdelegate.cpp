@@ -55,7 +55,7 @@ QString ItemDelegate::secondLine(const QModelIndex &index) const
     if (index.isValid())
         return index.model()->data(index, CursorTheme::DisplayDetailRole).toString();
 
-	return QString();
+    return QString();
 }
 
 

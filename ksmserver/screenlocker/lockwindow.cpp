@@ -248,7 +248,7 @@ void LockWindow::setVRoot(Window win, Window vr)
     if (gVRoot)
         removeVRoot(gVRoot);
 
-        QX11Info info;
+    QX11Info info;
     unsigned long rw = RootWindowOfScreen(ScreenOfDisplay(QX11Info::display(), info.screen()));
     unsigned long vroot_data[1] = { vr };
 
