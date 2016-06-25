@@ -115,8 +115,8 @@ set_package_properties(Fontconfig PROPERTIES
 )
 
 #### Python support ( plasma scriptengines ) ####
-macro_optional_find_package(PythonLibrary)
-set_package_properties(PythonLibrary PROPERTIES
+macro_optional_find_package(PythonLibs)
+set_package_properties(PythonLibs PROPERTIES
     DESCRIPTION "Python scripting language"
     URL "http://python.org"
     TYPE OPTIONAL

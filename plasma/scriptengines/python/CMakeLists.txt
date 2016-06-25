@@ -1,23 +1,29 @@
 project(plasma-python)
 
-include(PythonMacros)
-
 # install the library, .desktop, and plasma.py
-python_install(pyappletscript.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(plasma_importer.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(pydataengine.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(pyrunner.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(pywallpaper.py ${DATA_INSTALL_DIR}/plasma_scriptengine_python)
-python_install(plasmascript.py ${PYTHON_SITE_PACKAGES_DIR}/PyKDE4)
+install(
+    FILES
+    pyappletscript.py
+    plasma_importer.py
+    pydataengine.py
+    pyrunner.py
+    pywallpaper.py
+    DESTINATION
+    ${DATA_INSTALL_DIR}/plasma_scriptengine_python
+)
+install(
+    FILES plasmascript.py
+    DESTINATION ${PYTHON_SITE_PACKAGES_DIR}/PyKDE4
+)
 
-install(FILES plasma-scriptengine-applet-python.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES plasma-scriptengine-dataengine-python.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES plasma-scriptengine-runner-python.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES plasma-scriptengine-wallpaper-python.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
+install(
+    FILES
+    plasma-scriptengine-applet-python.desktop
+    plasma-scriptengine-dataengine-python.desktop
+    plasma-scriptengine-runner-python.desktop
+    plasma-scriptengine-wallpaper-python.desktop
+    DESTINATION ${SERVICES_INSTALL_DIR}
+)
 
 ###########################################################################
 # Test plasmoids

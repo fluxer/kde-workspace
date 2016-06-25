@@ -2,10 +2,10 @@ macro_optional_add_subdirectory(ruby)
 
 if(QT_QTWEBKIT_FOUND)
     macro_optional_add_subdirectory(webkit)
-endif(QT_QTWEBKIT_FOUND)
+endif()
 
-if (PYTHONLIBRARY_FOUND)
+if (PYTHONLIBS_FOUND)
     macro_optional_add_subdirectory(python)
-endif (PYTHONLIBRARY_FOUND)
+endif()
 
 macro_optional_add_subdirectory(javascript)
