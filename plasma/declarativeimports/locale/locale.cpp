@@ -51,7 +51,7 @@ bool Locale::isApplicationTranslatedInto(const QString &lang)
 void Locale::splitLocale(const QString &locale, QString &language, QString &country, QString &modifier,
                           QString &charset)
 {
-    Locale::splitLocale(locale, language, country, modifier, charset);
+    m_locale->splitLocale(locale, language, country, modifier, charset);
 }
 
 QString Locale::language() const
