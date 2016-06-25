@@ -36,7 +36,6 @@ namespace Plasma
 }
 
 class ScriptEnv;
-class EngineAccess;
 
 class DeclarativeAppletScript : public AbstractJsAppletScript
 {
@@ -97,7 +96,6 @@ private:
     Plasma::DeclarativeWidget *m_declarativeWidget;
     Plasma::DeclarativeWidget *m_toolBoxWidget;
     AppletInterface *m_interface;
-    EngineAccess *m_engineAccess;
     QScriptEngine *m_engine;
     QScriptValue m_self;
     ScriptEnv *m_env;
