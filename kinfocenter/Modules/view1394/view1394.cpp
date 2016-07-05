@@ -231,7 +231,7 @@ void View1394::rescanBus() {
 			else {
 				QString guidStr;
 				char buf[32];
-#ifdef __x86_64__
+#ifdef QT_ARCH_X86_64
 				snprintf(buf, 32, "%lX", guid);
 #else
 				snprintf(buf, 32, "%llX", guid);
