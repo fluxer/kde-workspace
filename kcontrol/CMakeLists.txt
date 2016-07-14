@@ -20,8 +20,6 @@ if(X11_Xkb_FOUND)
 endif(X11_Xkb_FOUND)
 
 add_subdirectory( input )
-# TODO: make conditional?
-add_subdirectory( touchpad )
 add_subdirectory( access )
 add_subdirectory( screensaver )
 add_subdirectory( dateandtime )
