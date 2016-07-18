@@ -124,7 +124,7 @@ const QString& KWalletManagerWidget::activeWalletName() const
 
 void KWalletManagerWidget::dragEnterEvent(QDragEnterEvent* e)
 {
-    if (e->provides("application/x-kwallet-wallet")) {
+    if (e->mimeData()->hasFormat(QLatin1String("application/x-kwallet-wallet"))) {
         e->accept();
     } else {
         e->ignore();
@@ -182,15 +182,21 @@ bool KWalletManagerWidget::shouldIgnoreDropEvent(const QDropEvent* e, KUrl* u) c
 //         return true;
 //     }
 // 
-//     if (!e->provides("application/x-kwallet-folder") &&
-//         !e->provides("application/x-kwallet-wallet") &&
-//         !e->provides("text/uri-list")) {
+//     QMimeData *em = e->mimeData();
+//     if (!em->hasFormat(QLatin1String("application/x-kwallet-folder")) &&
+//         !em->hasFormat(QLatin1String("application/x-kwallet-wallet")) &&
+//         !em->hasFormat(QLatin1String("text/uri-list"))) {
 //         return true;
 //     }
 // 
 //     // Over wallets folders, over nothing wallets
 //     *item = itemAt(e->pos());
-//     const QByteArray edata = e->encodedData(item ? "application/x-kwallet-folder" : "application/x-kwallet-wallet");
+//     const QByteArray edata;
+//     if (item) {
+//         edata = em->data(QLatin1String("application/x-kwallet-folder"));
+//     } else {
+//         edata = em->data(QLatin1String("application/x-kwallet-wallet"));
+//     }
 //     *u = decodeUrl(edata);
 //     if (*u == KUrl()) {
 //         *u = decodeUrl(e->encodedData("text/uri-list"));
