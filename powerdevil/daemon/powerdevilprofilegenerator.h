@@ -28,7 +28,6 @@ namespace ProfileGenerator
     enum GeneratorResult {
         ResultFailed = 0,
         ResultGenerated = 1,
-        ResultUpgraded = 2
     };
 
     enum OldIdleAction {
@@ -53,10 +52,7 @@ namespace ProfileGenerator
         TurnOffScreenMode = 64
     };
 
-    GeneratorResult generateProfiles(bool toRam, bool toDisk,  bool tryUpgrade = false);
-    void upgradeProfilesv1(bool toRam, bool toDisk);
-    void upgradeProfilesv2();
-    unsigned int upgradeOldAction(unsigned int actionId);
+    GeneratorResult generateProfiles(bool toRam, bool toDisk);
 }
 
 }
