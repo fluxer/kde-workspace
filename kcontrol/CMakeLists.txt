@@ -17,10 +17,10 @@ endif(X11_Xrandr_FOUND )
 
 if(X11_Xkb_FOUND)
     add_subdirectory( keyboard )
+    add_subdirectory( access )
 endif(X11_Xkb_FOUND)
 
 add_subdirectory( input )
-add_subdirectory( access )
 add_subdirectory( screensaver )
 add_subdirectory( dateandtime )
 add_subdirectory( autostart )
