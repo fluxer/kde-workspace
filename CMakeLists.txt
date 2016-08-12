@@ -60,7 +60,7 @@ if(Q_WS_X11)
         TYPE REQUIRED
     )
 
-    find_package(X11 REQUIRED)
+    find_package(X11)
     set_package_properties(X11 PROPERTIES
         DESCRIPTION "X11 libraries"
         URL "http://www.x.org"
@@ -74,9 +74,6 @@ if(Q_WS_X11)
 
     if(NOT X11_Xkbfile_FOUND)
         message(FATAL_ERROR "The X11 keyboard layout library was not found. Required for building keyboard modules.")
-    endif()
-    if(NOT X11_Xcomposite_FOUND)
-        message(FATAL_ERROR "The X11 composite library was not found. Required for building the plasma tray and notifications widgets.")
     endif()
     if(NOT X11_Xdamage_FOUND)
         message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin.")

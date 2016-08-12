@@ -4,7 +4,10 @@ add_definitions(-DEIGEN2_SUPPORT)
 
 option(KSCREENSAVER_SOUND_SUPPORT "Build with sound support" OFF)
 
-include_directories(${KDE4WORKSPACE_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
+include_directories(${KDE4WORKSPACE_INCLUDE_DIR})
+if(OPENGL_FOUND)
+    include_directories(${OPENGL_INCLUDE_DIR})
+endif()
 
 add_subdirectory( data )
 macro_optional_add_subdirectory( asciiquarium )

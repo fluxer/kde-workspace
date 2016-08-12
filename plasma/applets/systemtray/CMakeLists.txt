@@ -40,9 +40,14 @@ target_link_libraries(plasma_applet_systemtray
     ${X11_LIBRARIES}
     ${X11_Xrender_LIB}
     ${X11_Xfixes_LIB}
-    ${X11_Xdamage_LIB}
-    ${X11_Xcomposite_LIB}
 )
+
+if(X11_Xdamage_FOUND)
+    target_link_libraries(plasma_applet_systemtray ${X11_Xdamage_LIB})
+endif()
+if(X11_Xcomposite_FOUND)
+    target_link_libraries(plasma_applet_systemtray ${X11_Xcomposite_LIB})
+endif()
 
 install(TARGETS plasma_applet_systemtray DESTINATION ${PLUGIN_INSTALL_DIR})
 install(DIRECTORY "package/" DESTINATION "${DATA_INSTALL_DIR}/${data_install_dir}")
