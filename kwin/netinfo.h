@@ -47,13 +47,13 @@ public:
 protected:
     virtual void changeNumberOfDesktops(int n);
     virtual void changeCurrentDesktop(int d);
-    virtual void changeActiveWindow(xcb_window_t w, NET::RequestSource src, xcb_timestamp_t timestamp, xcb_window_t active_window);
-    virtual void closeWindow(xcb_window_t w);
-    virtual void moveResize(xcb_window_t w, int x_root, int y_root, unsigned long direction);
-    virtual void moveResizeWindow(xcb_window_t w, int flags, int x, int y, int width, int height);
-    virtual void gotPing(xcb_window_t w, xcb_timestamp_t timestamp);
-    virtual void restackWindow(xcb_window_t w, RequestSource source, xcb_window_t above, int detail, xcb_timestamp_t timestamp);
-    virtual void gotTakeActivity(xcb_window_t w, xcb_timestamp_t timestamp, long flags);
+    virtual void changeActiveWindow(Window w, NET::RequestSource src, Time timestamp, Window active_window);
+    virtual void closeWindow(Window w);
+    virtual void moveResize(Window w, int x_root, int y_root, unsigned long direction);
+    virtual void moveResizeWindow(Window w, int flags, int x, int y, int width, int height);
+    virtual void gotPing(Window w, Time timestamp);
+    virtual void restackWindow(Window w, RequestSource source, Window above, int detail, Time timestamp);
+    virtual void gotTakeActivity(Window w, Time timestamp, long flags);
     virtual void changeShowingDesktop(bool showing);
 
 private:
@@ -77,8 +77,8 @@ private:
     typedef KWin::Client Client; // Because of NET::Client
 
 public:
-    WinInfo(Client* c, Display * display, xcb_window_t window,
-            xcb_window_t rwin, const unsigned long pr[], int pr_size);
+    WinInfo(Client* c, Display * display, Window window,
+            Window rwin, const unsigned long pr[], int pr_size);
     virtual void changeDesktop(int desktop);
     virtual void changeFullscreenMonitors(NETFullscreenMonitors topology);
     virtual void changeState(unsigned long state, unsigned long mask);

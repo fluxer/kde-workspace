@@ -162,7 +162,7 @@ void RootInfo::changeCurrentDesktop(int d)
     VirtualDesktopManager::self()->setCurrent(d);
 }
 
-void RootInfo::changeActiveWindow(xcb_window_t w, NET::RequestSource src, xcb_timestamp_t timestamp, xcb_window_t active_window)
+void RootInfo::changeActiveWindow(Window w, NET::RequestSource src, Time timestamp, Window active_window)
 {
     Workspace *workspace = Workspace::self();
     if (Client* c = workspace->findClient(WindowMatchPredicate(w))) {
@@ -190,7 +190,7 @@ void RootInfo::changeActiveWindow(xcb_window_t w, NET::RequestSource src, xcb_ti
     }
 }
 
-void RootInfo::restackWindow(xcb_window_t w, RequestSource src, xcb_window_t above, int detail, xcb_timestamp_t timestamp)
+void RootInfo::restackWindow(Window w, RequestSource src, Window above, int detail, Time timestamp)
 {
     if (Client* c = Workspace::self()->findClient(WindowMatchPredicate(w))) {
         if (timestamp == CurrentTime)
@@ -201,21 +201,21 @@ void RootInfo::restackWindow(xcb_window_t w, RequestSource src, xcb_window_t abo
     }
 }
 
-void RootInfo::gotTakeActivity(xcb_window_t w, xcb_timestamp_t timestamp, long flags)
+void RootInfo::gotTakeActivity(Window w, Time timestamp, long flags)
 {
     Workspace *workspace = Workspace::self();
     if (Client* c = workspace->findClient(WindowMatchPredicate(w)))
         workspace->handleTakeActivity(c, timestamp, flags);
 }
 
-void RootInfo::closeWindow(xcb_window_t w)
+void RootInfo::closeWindow(Window w)
 {
     Client* c = Workspace::self()->findClient(WindowMatchPredicate(w));
     if (c)
         c->closeWindow();
 }
 
-void RootInfo::moveResize(xcb_window_t w, int x_root, int y_root, unsigned long direction)
+void RootInfo::moveResize(Window w, int x_root, int y_root, unsigned long direction)
 {
     Client* c = Workspace::self()->findClient(WindowMatchPredicate(w));
     if (c) {
@@ -224,14 +224,14 @@ void RootInfo::moveResize(xcb_window_t w, int x_root, int y_root, unsigned long 
     }
 }
 
-void RootInfo::moveResizeWindow(xcb_window_t w, int flags, int x, int y, int width, int height)
+void RootInfo::moveResizeWindow(Window w, int flags, int x, int y, int width, int height)
 {
     Client* c = Workspace::self()->findClient(WindowMatchPredicate(w));
     if (c)
         c->NETMoveResizeWindow(flags, x, y, width, height);
 }
 
-void RootInfo::gotPing(xcb_window_t w, xcb_timestamp_t timestamp)
+void RootInfo::gotPing(Window w, Time timestamp)
 {
     if (Client* c = Workspace::self()->findClient(WindowMatchPredicate(w)))
         c->gotPing(timestamp);
@@ -246,8 +246,8 @@ void RootInfo::changeShowingDesktop(bool showing)
 // WinInfo
 // ****************************************
 
-WinInfo::WinInfo(Client * c, Display * display, xcb_window_t window,
-                 xcb_window_t rwin, const unsigned long pr[], int pr_size)
+WinInfo::WinInfo(Client * c, Display * display, Window window,
+                 Window rwin, const unsigned long pr[], int pr_size)
     : NETWinInfo(display, window, rwin, pr, pr_size, NET::WindowManager), m_client(c)
 {
 }
