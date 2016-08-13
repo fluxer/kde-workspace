@@ -7,8 +7,6 @@ set_package_properties(PAM PROPERTIES DESCRIPTION "PAM Libraries"
 include(CheckTypeSize)
 include(FindPkgConfig)
 
-macro_optional_find_package(XKB) # kxkb, kdm
-
 if (PAM_FOUND)
     set(KDE4_COMMON_PAM_SERVICE "kde" CACHE STRING "The PAM service to use unless overridden for a particular app.")
 
@@ -78,6 +76,7 @@ macro_bool_to_01(X11_Xcomposite_FOUND HAVE_XCOMPOSITE) # kicker, kwin
 macro_bool_to_01(X11_Xcursor_FOUND HAVE_XCURSOR) # many uses
 macro_bool_to_01(X11_Xdamage_FOUND HAVE_XDAMAGE) # kwin
 macro_bool_to_01(X11_Xfixes_FOUND HAVE_XFIXES) # klipper, kicker, kwin
+macro_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kdm, kglobalaccel, kcontrol/keyboard
 if(WITH_XINERAMA)
     macro_bool_to_01(X11_Xinerama_FOUND HAVE_XINERAMA)
 else(WITH_XINERAMA)
