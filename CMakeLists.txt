@@ -220,9 +220,9 @@ macro_optional_add_subdirectory(freespacenotifier)
 macro_optional_add_subdirectory(kscreensaver)
 macro_optional_add_subdirectory(kinfocenter)
 
-if (Q_WS_X11)
+if(Q_WS_X11 AND X11_Xkb_FOUND)
     macro_optional_add_subdirectory(ktouchpadenabler)
-endif (Q_WS_X11)
+endif(Q_WS_X11 AND X11_Xkb_FOUND)
 
 macro_optional_add_subdirectory(kcminit)
 macro_optional_add_subdirectory(khotkeys)
