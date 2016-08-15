@@ -201,7 +201,7 @@ Task *TaskManager::findTask(int desktop, const QPoint& p)
             continue;
         }
 
-        if (t->isIconified() || t->isShaded()) {
+        if (t->isMinimized() || t->isShaded()) {
             continue;
         }
 
@@ -503,7 +503,7 @@ bool TaskManager::isOnTop(const Task *task) const
             continue;
         }
 
-        if (!t->isIconified() && (t->isAlwaysOnTop() == task->isAlwaysOnTop())) {
+        if (!t->isMinimized() && (t->isAlwaysOnTop() == task->isAlwaysOnTop())) {
             return false;
         }
     }

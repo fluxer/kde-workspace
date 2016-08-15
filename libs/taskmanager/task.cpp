@@ -189,11 +189,6 @@ bool Task::isMinimized() const
     return d->info.valid(true) && d->info.isMinimized();
 }
 
-bool Task::isIconified() const
-{
-    return d->info.valid(true) && d->info.isMinimized();
-}
-
 bool Task::isAlwaysOnTop() const
 {
     return d->info.valid(true) && (d->info.state() & NET::KeepAbove);
@@ -500,7 +495,7 @@ void Task::setIconified(bool iconify)
 
 void Task::toggleIconified()
 {
-    setIconified(!isIconified());
+    setIconified(!isMinimized());
 }
 
 void Task::raise()
@@ -543,8 +538,8 @@ void Task::activate()
 
 void Task::activateRaiseOrIconify()
 {
-    //kDebug() << isActive() << isIconified() << isOnTop();
-    if (!isActive() || isIconified()) {
+    //kDebug() << isActive() << isMinimized() << isOnTop();
+    if (!isActive() || isMinimized()) {
         activate();
     } else if (!isOnTop()) {
         raise();

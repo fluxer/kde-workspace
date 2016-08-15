@@ -737,8 +737,7 @@ void GroupManagerPrivate::sycocaChanged(const QStringList &types)
     if (types.contains("apps")) {
         KUrl::List removals;
         foreach (LauncherItem *launcher, launchers) {
-            if (launcher->launcherUrl().protocol() != "preferred" &&
-                !QFile::exists(launcher->launcherUrl().toLocalFile())) {
+            if (!QFile::exists(launcher->launcherUrl().toLocalFile())) {
                 removals << launcher->launcherUrl();
             }
         }
@@ -1013,13 +1012,7 @@ void GroupManagerPrivate::unsaveLauncher(LauncherItem *launcher)
         return;
     }
 
-    QString launcherKey;
-
-    if (launcher->launcherUrl().protocol() == "preferred")
-        // in default config the host of the preferred application url is used as key
-        launcherKey = launcher->launcherUrl().host();
-    else
-        launcherKey = launcher->name();
+    QString launcherKey = launcher->name();
 
     if (cg.hasKey(launcherKey)) {
         cg.deleteEntry(launcherKey);
@@ -1078,27 +1071,6 @@ int GroupManagerPrivate::launcherIndex(const KUrl &url)
     foreach (const LauncherItem * item, launchers) {
         if (item->launcherUrl() == url) {
             return index;
-        }
-
-        ++index;
-    }
-
-    // .. and if that fails for preferred launcher matches
-    index = 0;
-    foreach (const LauncherItem * item, launchers) {
-        if (item->launcherUrl().protocol() == "preferred") {
-            KService::Ptr service = KService::serviceByStorageId(item->defaultApplication());
-
-            if (service) {
-                QUrl prefUrl(service->entryPath());
-                if (prefUrl.scheme().isEmpty()) {
-                    prefUrl.setScheme("file");
-                }
-
-                if (prefUrl == url) {
-                    return index;
-                }
-            }
         }
 
         ++index;

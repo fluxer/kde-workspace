@@ -596,7 +596,7 @@ void WebBrowser::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *opt
     Q_UNUSED(option)
     Q_UNUSED(contentsRect)
 
-    if (!isIconified()){
+    if (!isMinimized()){
         p->save();
         p->setBrush(QApplication::palette().window());
         p->setRenderHint(QPainter::Antialiasing);

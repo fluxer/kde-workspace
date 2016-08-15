@@ -59,7 +59,6 @@ class TASKMANAGER_EXPORT Task : public QObject
     Q_PROPERTY(bool maximized READ isMaximized)
     Q_PROPERTY(bool minimized READ isMinimized)
     // KDE4 deprecated
-    Q_PROPERTY(bool iconified READ isIconified)
     Q_PROPERTY(bool shaded READ isShaded WRITE setShaded)
     Q_PROPERTY(bool active READ isActive)
     Q_PROPERTY(bool onCurrentDesktop READ isOnCurrentDesktop)
@@ -163,12 +162,6 @@ public:
     bool isMinimized() const;
 
     /**
-     * @deprecated
-     * Returns true if the task's window is minimized(iconified).
-     */
-    bool isIconified() const;
-
-    /**
      * Returns true if the task's window is shaded.
      */
     bool isShaded() const;
@@ -179,7 +172,7 @@ public:
     bool isActive() const;
 
     /**
-     * Returns true if the task's window is the topmost non-iconified,
+     * Returns true if the task's window is the topmost non-minimized,
      * non-always-on-top window.
      */
     bool isOnTop() const;
@@ -307,7 +300,7 @@ public Q_SLOTS:
     void toggleMaximized();
 
     /**
-     * Restore the main window of the task (if it was iconified).
+     * Restore the main window of the task (if it was minimized).
      */
     void restore();
 

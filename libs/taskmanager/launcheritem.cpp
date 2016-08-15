@@ -189,18 +189,12 @@ QString LauncherItem::wmClass() const
 
 void LauncherItem::setName(const QString& name)
 {
-    //NOTE: preferred is NOT a protocol, it's just a magic string
-    if (d->url.protocol() != "preferred") {
-        d->name = name;
-    }
+    d->name = name;
 }
 
 void LauncherItem::setGenericName(const QString& genericName)
 {
-    //NOTE: preferred is NOT a protocol, it's just a magic string
-    if (d->url.protocol() != "preferred") {
-        d->genericName = genericName;
-    }
+    d->genericName = genericName;
 }
 
 void LauncherItem::setWmClass(const QString &wmClass)
@@ -215,22 +209,7 @@ ItemType LauncherItem::itemType() const
 
 void LauncherItem::launch()
 {
-    //NOTE: preferred is NOT a protocol, it's just a magic string
-    if (d->url.protocol() == "preferred") {
-        KService::Ptr service = KService::serviceByStorageId(defaultApplication());
-
-        if (!service) {
-            return;
-        }
-
-        QString desktopFile = KStandardDirs::locate("xdgdata-apps", service->entryPath());
-        if (desktopFile.isNull()) {
-            desktopFile = KStandardDirs::locate("apps", service->entryPath());
-        }
-        new KRun(desktopFile, 0);
-    } else {
-        new KRun(d->url, 0);
-    }
+    new KRun(d->url, 0);
 }
 
 void LauncherItem::addMimeData(QMimeData* mimeData) const
@@ -243,100 +222,13 @@ KUrl LauncherItem::launcherUrl() const
     return d->url;
 }
 
-//Ugly hack written by Aaron Seigo from plasmagenericshell/scripting/scriptengine.cpp
-QString LauncherItem::defaultApplication() const
-{
-    const QString application = d->url.host();
-    if (application.isEmpty()) {
-        return QString();
-    }
-
-    // FIXME: there are some pretty horrible hacks below, in the sense that they assume a very
-    // specific implementation system. there is much room for improvement here. see
-    // kdebase-runtime/kcontrol/componentchooser/ for all the gory details ;)
-    if (application.compare("mailer", Qt::CaseInsensitive) == 0) {
-        KEMailSettings settings;
-
-        // in KToolInvocation, the default is kmail; but let's be friendlier :)
-        QString command = settings.getSetting(KEMailSettings::ClientProgram);
-        if (command.isEmpty()) {
-            if (KService::Ptr kontact = KService::serviceByStorageId("kontact")) {
-                return kontact->storageId();
-            } else if (KService::Ptr kmail = KService::serviceByStorageId("kmail")) {
-                return kmail->storageId();
-            }
-        }
-
-        if (!command.isEmpty()) {
-            if (settings.getSetting(KEMailSettings::ClientTerminal) == "true") {
-                KConfigGroup confGroup(KGlobal::config(), "General");
-                const QString preferredTerminal = confGroup.readPathEntry("TerminalApplication",
-                                                  QString::fromLatin1("konsole"));
-                command = preferredTerminal + QString::fromLatin1(" -e ") + command;
-            }
-
-            return command;
-        }
-    } else if (application.compare("browser", Qt::CaseInsensitive) == 0) {
-        KConfigGroup config(KGlobal::config(), "General");
-        QString browserApp = config.readPathEntry("BrowserApplication", QString());
-        if (browserApp.isEmpty()) {
-            const KService::Ptr htmlApp = KMimeTypeTrader::self()->preferredService(QLatin1String("text/html"));
-            if (htmlApp) {
-                browserApp = htmlApp->storageId();
-            }
-        } else if (browserApp.startsWith('!')) {
-            browserApp = browserApp.mid(1);
-        }
-
-        return browserApp;
-    } else if (application.compare("terminal", Qt::CaseInsensitive) == 0) {
-        KConfigGroup confGroup(KGlobal::config(), "General");
-        return confGroup.readPathEntry("TerminalApplication", QString::fromLatin1("konsole"));
-    } else if (application.compare("filemanager", Qt::CaseInsensitive) == 0) {
-        KService::Ptr service = KMimeTypeTrader::self()->preferredService("inode/directory");
-        if (service) {
-            return service->storageId();
-        }
-    } else if (application.compare("windowmanager", Qt::CaseInsensitive) == 0) {
-        KConfig cfg("ksmserverrc", KConfig::NoGlobals);
-        KConfigGroup confGroup(&cfg, "General");
-        return confGroup.readEntry("windowManager", QString::fromLatin1("kwin"));
-    } else if (KService::Ptr service = KMimeTypeTrader::self()->preferredService(application)) {
-        return service->storageId();
-    } else {
-        // try the files in share/apps/kcm_componentchooser/
-        const QStringList services = KGlobal::dirs()->findAllResources("data", "kcm_componentchooser/*.desktop", KStandardDirs::NoDuplicates);
-        //kDebug() << "ok, trying in" << services.count();
-        foreach (const QString & service, services) {
-            KConfig config(service, KConfig::SimpleConfig);
-            KConfigGroup cg = config.group(QByteArray());
-            const QString type = cg.readEntry("valueName", QString());
-            //kDebug() << "    checking" << service << type << application;
-            if (type.compare(application, Qt::CaseInsensitive) == 0) {
-                KConfig store(cg.readPathEntry("storeInFile", "null"));
-                KConfigGroup storeCg(&store, cg.readEntry("valueSection", QString()));
-                const QString exec = storeCg.readPathEntry(cg.readEntry("valueName", "kcm_componenchooser_null"),
-                                     cg.readEntry("defaultImplementation", QString()));
-                if (!exec.isEmpty()) {
-                    return exec;
-                }
-
-                break;
-            }
-        }
-    }
-
-    return "";
-}
-
 void LauncherItem::setLauncherUrl(const KUrl &url)
 {
     // Takes care of improperly escaped characters and resolves paths
     // into file:/// URLs
     KUrl newUrl(url.url());
 
-    if (d->url.protocol() != "preferred" && newUrl == d->url) {
+    if (newUrl == d->url) {
         return;
     }
 
@@ -352,31 +244,6 @@ void LauncherItem::setLauncherUrl(const KUrl &url)
         } else {
             d->url = KUrl();
             return;
-        }
-    } else if (d->url.protocol() == "preferred") {
-        //NOTE: preferred is NOT a protocol, it's just a magic string
-        const KService::Ptr service = KService::serviceByStorageId(defaultApplication());
-
-        if (service) {
-            QString desktopFile = KStandardDirs::locate("xdgdata-apps", service->entryPath());
-            if (desktopFile.isNull()) {
-                desktopFile = KStandardDirs::locate("apps", service->entryPath());
-            }
-
-            KDesktopFile f(desktopFile);
-            KConfigGroup cg(&f, "Desktop Entry");
-
-            d->icon = KIcon(f.readIcon());
-            const QString exec = cg.readEntry("Exec", QString());
-            d->name = cg.readEntry("Name", QString());
-            if (d->name.isEmpty() && !exec.isEmpty()) {
-                d->name = exec.split(' ').at(0);
-            }
-            d->genericName = f.readGenericName();
-            d->resolvedUrl = desktopFile;
-            d->resolvedUrl.setScheme("file");
-        } else {
-            d->url = KUrl();
         }
     } else {
         d->icon = KIcon(KMimeType::iconNameForUrl(d->url));
@@ -398,10 +265,7 @@ bool LauncherItem::isValid() const
 
 void LauncherItem::setIcon(const QIcon& icon)
 {
-    //NOTE: preferred is NOT a protocol, it's just a magic string
-    if (d->url.protocol() != "preferred") {
-        d->icon = icon;
-    }
+    d->icon = icon;
 }
 
 bool LauncherItem::demandsAttention() const

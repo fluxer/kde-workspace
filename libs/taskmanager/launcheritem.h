@@ -89,9 +89,6 @@ public:
     KUrl launcherUrl() const;
     void setLauncherUrl(const KUrl &url);
 
-    //preferred applications hack
-    QString defaultApplication() const;
-
 public Q_SLOTS:
     void toDesktop(int);
 
