@@ -42,7 +42,6 @@
 #include <KIcon>
 #include <KLineEdit>
 #include <KLocale>
-#include <KTextBrowser>
 #include <KIntSpinBox>
 #include <KConfigDialog>
 #include <KConfigGroup>

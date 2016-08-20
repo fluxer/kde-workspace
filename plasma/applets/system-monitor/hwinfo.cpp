@@ -24,7 +24,6 @@
 #include <Plasma/Containment>
 #include <Plasma/ToolTipManager>
 #include <Plasma/Theme>
-#include <KTextBrowser>
 #include <KDebug>
 #include <KStandardDirs>
 #include <KIcon>

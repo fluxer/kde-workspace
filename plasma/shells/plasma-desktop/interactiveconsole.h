@@ -30,7 +30,7 @@ class KAction;
 class KFileDialog;
 class KMenu;
 class KTextEdit;
-class KTextBrowser;
+class QTextBrowser;
 
 namespace KTextEditor
 {
@@ -90,7 +90,7 @@ private:
     QSplitter *m_splitter;
     KTextEditor::Document *m_editorPart;
     KTextEdit *m_editor;
-    KTextBrowser *m_output;
+    QTextBrowser *m_output;
     KAction *m_loadAction;
     KAction *m_saveAction;
     KAction *m_clearAction;

@@ -28,6 +28,7 @@
 #include <QSplitter>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QTextBrowser>
 
 #include <KFileDialog>
 #include <KLocale>
@@ -38,7 +39,6 @@
 #include <KServiceTypeTrader>
 #include <KStandardAction>
 #include <KStandardDirs>
-#include <KTextBrowser>
 #include <KTextEdit>
 #include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Document>
@@ -170,7 +170,7 @@ InteractiveConsole::InteractiveConsole(Plasma::Corona *corona, QWidget *parent)
     outputToolBar->addAction(clearOutputAction);
     outputLayout->addWidget(outputToolBar);
 
-    m_output = new KTextBrowser(widget);
+    m_output = new QTextBrowser(widget);
     outputLayout->addWidget(m_output);
     m_splitter->addWidget(widget);
 

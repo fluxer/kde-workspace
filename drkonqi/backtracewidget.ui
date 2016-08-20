@@ -35,7 +35,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="KTextBrowser" name="m_backtraceEdit"/>
+            <widget class="QTextBrowser" name="m_backtraceEdit"/>
            </item>
           </layout>
          </widget>
@@ -162,11 +162,6 @@
    <class>KPushButton</class>
    <extends>QPushButton</extends>
    <header>kpushbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KTextBrowser</class>
-   <extends>QTextBrowser</extends>
-   <header>ktextbrowser.h</header>
   </customwidget>
   <customwidget>
    <class>StatusWidget</class>
