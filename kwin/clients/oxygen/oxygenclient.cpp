@@ -101,8 +101,9 @@ namespace Oxygen
         {
 
             QList<QLabel*> children( widget()->findChildren<QLabel*>() );
-            foreach( QLabel* widget, children )
-            { widget->setAutoFillBackground( false ); }
+            foreach( QLabel* widget, children ) {
+                widget->setAutoFillBackground( false );
+            }
 
             // also change shadow configuration size to something that fits in the preview list
             shadowCache().setShadowSize( QPalette::Active, 15 );
@@ -1360,8 +1361,7 @@ namespace Oxygen
 
             // update buttons
             QList<Button*> buttons( widget()->findChildren<Button*>() );
-            foreach( Button* button, buttons )
-            {
+            foreach( Button* button, buttons ) {
                 if( ( button->isVisible() || isPreview() ) && event->rect().intersects( button->geometry() ) )
                 {
 
@@ -1391,10 +1391,10 @@ namespace Oxygen
 
             // update buttons
             QList<Button*> buttons( widget()->findChildren<Button*>() );
-            foreach( Button* button, buttons )
-            {
-                if( event->rect().intersects( button->geometry() ) )
-                { button->update(); }
+            foreach( Button* button, buttons ) {
+                if( event->rect().intersects( button->geometry() ) ) {
+                    button->update();
+                }
             }
 
         }

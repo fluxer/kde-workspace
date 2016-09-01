@@ -1449,7 +1449,7 @@ void Client::setDesktop(int desktop)
         // the next desktop change
     {
         foreach (Client * c2, mainClients())
-        c2->setDesktop(desktop);
+            c2->setDesktop(desktop);
     }
 
     FocusChain::self()->update(this, FocusChain::MakeFirst);

@@ -83,8 +83,7 @@ namespace Oxygen
 
         // rewrite current exceptions
         int index = 0;
-        foreach( const ConfigurationPtr& exception, _exceptions )
-        {
+        foreach( const ConfigurationPtr& exception, _exceptions ) {
 
             Util::writeConfig( exception.data(), config.data(), exceptionGroupName( index ) );
             ++index;

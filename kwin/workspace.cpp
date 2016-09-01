@@ -434,7 +434,7 @@ Workspace::~Workspace()
     delete Placement::self();
     delete client_keys_dialog;
     foreach (SessionInfo * s, session)
-    delete s;
+        delete s;
 
     // TODO: ungrabXServer();
 

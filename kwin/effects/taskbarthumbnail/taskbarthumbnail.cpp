@@ -87,10 +87,12 @@ void TaskbarThumbnailEffect::slotWindowDamaged(EffectWindow* w, const QRect& dam
 {
     Q_UNUSED(damage);
     // Update the thumbnail if the window was damaged
-    foreach (EffectWindow * window, thumbnails.uniqueKeys())
-    foreach (const Data & thumb, thumbnails.values(window))
-    if (w == effects->findWindow(thumb.window))
-        window->addRepaint(thumb.rect);
+    foreach (EffectWindow * window, thumbnails.uniqueKeys()) {
+        foreach (const Data & thumb, thumbnails.values(window)) {
+            if (w == effects->findWindow(thumb.window))
+                window->addRepaint(thumb.rect);
+        }
+    }
 }
 
 void TaskbarThumbnailEffect::slotWindowAdded(EffectWindow* w)

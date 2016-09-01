@@ -1,5 +1,0 @@
-[Desktop Entry]
-Name=KWin GLES
-Exec=kwin_gles
-TryExec=kwin_gles
-X-KDE-WindowManagerRestartArgument=--replace

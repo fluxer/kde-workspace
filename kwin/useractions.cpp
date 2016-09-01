@@ -1762,7 +1762,7 @@ void Workspace::slotInvertScreen()
 
     if (succeeded)
         return;
-#endif
+#endif // KWIN_NO_XF86VM
 
     if (!succeeded)
         kDebug(1212) << "sorry - neither Xrandr, nor XF86VidModeSetGammaRamp worked and there's no inversion supplying effect plugin either";
@@ -1791,11 +1791,9 @@ void Client::setShortcut(const QString& _cut)
     }
     QList< KShortcut > keys;
     QStringList groups = cut.split(" - ");
-    for (QStringList::ConstIterator it = groups.constBegin();
-            it != groups.constEnd();
-            ++it) {
+    foreach (const QString it, groups) {
         QRegExp reg("(.*\\+)\\((.*)\\)");
-        if (reg.indexIn(*it) > -1) {
+        if (reg.indexIn(it) > -1) {
             QString base = reg.cap(1);
             QString list = reg.cap(2);
             for (int i = 0;
@@ -1807,23 +1805,17 @@ void Client::setShortcut(const QString& _cut)
             }
         } else {
             // regexp doesn't match, so it should be a normal shortcut
-            KShortcut c(*it);
+            KShortcut c(it);
             if (!c.isEmpty()) {
                 keys.append(c);
             }
         }
     }
-    for (QList< KShortcut >::ConstIterator it = keys.constBegin();
-            it != keys.constEnd();
-            ++it) {
-        if (_shortcut == *it)   // current one is in the list
+    foreach (const KShortcut it, keys) {
+        if (_shortcut == it)   // current one is in the list
             return;
-    }
-    for (QList< KShortcut >::ConstIterator it = keys.constBegin();
-            it != keys.constEnd();
-            ++it) {
-        if (workspace()->shortcutAvailable(*it, this)) {
-            setShortcutInternal(*it);
+        if (workspace()->shortcutAvailable(it, this)) {
+            setShortcutInternal(it);
             return;
         }
     }
@@ -1855,15 +1847,13 @@ bool Workspace::shortcutAvailable(const KShortcut& cut, Client* ignore) const
 {
     if (ignore && cut == ignore->shortcut())
         return true;
-    Q_FOREACH (const QKeySequence &seq, cut.toList()) {
+    foreach (const QKeySequence &seq, cut.toList()) {
         if (!KGlobalAccel::getGlobalShortcutsByKey(seq).isEmpty()) {
             return false;
         }
     }
-    for (ClientList::ConstIterator it = clients.constBegin();
-            it != clients.constEnd();
-            ++it) {
-        if ((*it) != ignore && (*it)->shortcut() == cut)
+    foreach (const Client* it, clients) {
+        if (it != ignore && it->shortcut() == cut)
             return false;
     }
     return true;

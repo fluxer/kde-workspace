@@ -122,7 +122,7 @@ void DimInactiveEffect::slotWindowActivated(EffectWindow* w)
             if ((w == NULL || w->group() != active->group()) && active->group() != NULL) {
                 // repaint windows that are no longer in the active group
                 foreach (EffectWindow * tmp, active->group()->members())
-                tmp->addRepaintFull();
+                    tmp->addRepaintFull();
             }
         } else
             active->addRepaintFull();
@@ -133,7 +133,7 @@ void DimInactiveEffect::slotWindowActivated(EffectWindow* w)
             if (active->group() != NULL) {
                 // repaint newly active windows
                 foreach (EffectWindow * tmp, active->group()->members())
-                tmp->addRepaintFull();
+                    tmp->addRepaintFull();
             }
         } else
             active->addRepaintFull();

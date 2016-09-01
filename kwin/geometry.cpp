@@ -333,9 +333,10 @@ QRegion Workspace::restrictedMoveArea(int desktop, StrutAreas areas) const
     if (desktop == NETWinInfo::OnAllDesktops || desktop == 0)
         desktop = VirtualDesktopManager::self()->current();
     QRegion region;
-    foreach (const StrutRect & rect, restrictedmovearea[desktop])
-    if (areas & rect.area())
-        region += rect;
+    foreach (const StrutRect & rect, restrictedmovearea[desktop]) {
+        if (areas & rect.area())
+            region += rect;
+    }
     return region;
 }
 
@@ -349,9 +350,10 @@ QRegion Workspace::previousRestrictedMoveArea(int desktop, StrutAreas areas) con
     if (desktop == NETWinInfo::OnAllDesktops || desktop == 0)
         desktop = VirtualDesktopManager::self()->current();
     QRegion region;
-    foreach (const StrutRect & rect, oldrestrictedmovearea.at(desktop))
-    if (areas & rect.area())
-        region += rect;
+    foreach (const StrutRect & rect, oldrestrictedmovearea.at(desktop)) {
+        if (areas & rect.area())
+            region += rect;
+    }
     return region;
 }
 

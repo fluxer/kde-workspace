@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KWIN_COMPOSITINGPREFS_H
 
 #include <QString>
-#include <QStringList>
 
 #include "kwinglobals.h"
 
@@ -33,9 +32,6 @@ namespace KWin
 class CompositingPrefs
 {
 public:
-    CompositingPrefs();
-    ~CompositingPrefs();
-
     static bool compositingPossible();
     static QString compositingNotPossibleReason();
 };

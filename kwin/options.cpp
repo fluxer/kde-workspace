@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QPalette>
 #include <QPixmap>
-#include <QProcess>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kglobal.h>

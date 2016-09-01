@@ -154,8 +154,7 @@ namespace Oxygen
 
         QString windowTitle;
         QString className;
-        foreach( const ConfigurationPtr& configuration, _exceptions )
-        {
+        foreach( const ConfigurationPtr& configuration, _exceptions ) {
 
             // discard disabled exceptions
             if( !configuration->enabled() ) continue;

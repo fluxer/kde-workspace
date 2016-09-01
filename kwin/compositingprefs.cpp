@@ -21,34 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config-kwin.h"
 
 #include "compositingprefs.h"
-
 #include "xcbutils.h"
 
-#include <kconfiggroup.h>
 #include <kdebug.h>
-#include <kxerrorhandler.h>
-#include <KGlobal>
-#include <KLocalizedString>
-#include <kdeversion.h>
-#include <ksharedconfig.h>
-#include <kstandarddirs.h>
-
-#include <qprocess.h>
+#include <klocale.h>
 
 
 namespace KWin
 {
-
-extern int screen_number; // main.cpp
-extern bool is_multihead;
-
-CompositingPrefs::CompositingPrefs()
-{
-}
-
-CompositingPrefs::~CompositingPrefs()
-{
-}
 
 bool CompositingPrefs::compositingPossible()
 {

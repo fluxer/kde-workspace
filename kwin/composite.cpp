@@ -258,13 +258,13 @@ void Compositor::finish()
     foreach (Deleted * c, Workspace::self()->deletedList())
         m_scene->windowDeleted(c);
     foreach (Client * c, Workspace::self()->clientList())
-    c->finishCompositing();
+        c->finishCompositing();
     foreach (Client * c, Workspace::self()->desktopList())
-    c->finishCompositing();
+        c->finishCompositing();
     foreach (Unmanaged * c, Workspace::self()->unmanagedList())
-    c->finishCompositing();
+        c->finishCompositing();
     foreach (Deleted * c, Workspace::self()->deletedList())
-    c->finishCompositing();
+        c->finishCompositing();
     xcb_composite_unredirect_subwindows(connection(), rootWindow(), XCB_COMPOSITE_REDIRECT_MANUAL);
     delete effects;
     effects = NULL;
@@ -545,9 +545,10 @@ void Compositor::performCompositing()
     // TODO ?
     // this cannot be used so carelessly - needs protections against broken clients, the window
     // should not get focus before it's displayed, handle unredirected windows properly and so on.
-    foreach (Toplevel *t, windows)
+    foreach (Toplevel *t, windows) {
         if (!t->readyForPainting())
             windows.removeAll(t);
+    }
 
     QRegion repaints = repaints_region;
     // clear all repaints, so that post-pass can add repaints for the next repaint
@@ -566,18 +567,22 @@ void Compositor::performCompositing()
 
 bool Compositor::windowRepaintsPending() const
 {
-    foreach (Toplevel * c, Workspace::self()->clientList())
-    if (!c->repaints().isEmpty())
-        return true;
-    foreach (Toplevel * c, Workspace::self()->desktopList())
-    if (!c->repaints().isEmpty())
-        return true;
-    foreach (Toplevel * c, Workspace::self()->unmanagedList())
-    if (!c->repaints().isEmpty())
-        return true;
-    foreach (Toplevel * c, Workspace::self()->deletedList())
-    if (!c->repaints().isEmpty())
-        return true;
+    foreach (Toplevel * c, Workspace::self()->clientList()) {
+        if (!c->repaints().isEmpty())
+            return true;
+    }
+    foreach (Toplevel * c, Workspace::self()->desktopList()) {
+        if (!c->repaints().isEmpty())
+            return true;
+    }
+    foreach (Toplevel * c, Workspace::self()->unmanagedList()) {
+        if (!c->repaints().isEmpty())
+            return true;
+    }
+    foreach (Toplevel * c, Workspace::self()->deletedList()) {
+        if (!c->repaints().isEmpty())
+            return true;
+    }
     return false;
 }
 
@@ -670,9 +675,9 @@ void Compositor::delayedCheckUnredirect()
     ToplevelList list;
     bool changed = forceUnredirectCheck;
     foreach (Client * c, Workspace::self()->clientList())
-    list.append(c);
+        list.append(c);
     foreach (Unmanaged * c, Workspace::self()->unmanagedList())
-    list.append(c);
+        list.append(c);
     foreach (Toplevel * c, list) {
         if (c->updateUnredirectedState())
             changed = true;

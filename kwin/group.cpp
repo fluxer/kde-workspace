@@ -384,7 +384,7 @@ void Workspace::updateMinimizedOfTransients(Client* c)
         }
         if (c->isModal()) { // if a modal dialog is minimized, minimize its mainwindow too
             foreach (Client * c2, c->mainClients())
-            c2->minimize();
+                c2->minimize();
         }
     } else {
         // else unmiminize the transients
@@ -398,7 +398,7 @@ void Workspace::updateMinimizedOfTransients(Client* c)
         }
         if (c->isModal()) {
             foreach (Client * c2, c->mainClients())
-            c2->unminimize();
+                c2->unminimize();
         }
     }
 }
@@ -923,7 +923,7 @@ ClientList Client::allMainClients() const
 {
     ClientList result = mainClients();
     foreach (const Client * cl, result)
-    result += cl->allMainClients();
+        result += cl->allMainClients();
     return result;
 }
 
