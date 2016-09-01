@@ -118,22 +118,6 @@ private:
     bool m_requiresRepaint;
 };
 
-class ImageBasedPaintRedirector : public PaintRedirector
-{
-    Q_OBJECT
-public:
-    virtual ~ImageBasedPaintRedirector();
-protected:
-    ImageBasedPaintRedirector(Client *c, QWidget *widget);
-    virtual QPaintDevice *recreateScratch(const QSize &size);
-    virtual QPaintDevice *scratch();
-    virtual void fillScratch(Qt::GlobalColor color);
-    virtual void discardScratch();
-    const QImage &scratchImage() const;
-private:
-    QImage m_scratchImage;
-};
-
 class NativeXRenderPaintRedirector : public PaintRedirector
 {
     Q_OBJECT
@@ -154,7 +138,7 @@ private:
     QPixmap m_scratch;
 };
 
-class RasterXRenderPaintRedirector : public ImageBasedPaintRedirector
+class RasterXRenderPaintRedirector : public PaintRedirector
 {
     Q_OBJECT
 public:
@@ -166,12 +150,18 @@ protected:
     virtual void resize(DecorationPixmap border, const QSize &size);
     virtual void paint(DecorationPixmap border, const QRect &r, const QRect &b, const QRegion &reg);
     virtual void preparePaint(const QPixmap &pending);
+
+    virtual QPaintDevice *recreateScratch(const QSize &size);
+    virtual QPaintDevice *scratch();
+    virtual void fillScratch(Qt::GlobalColor color);
+    virtual void discardScratch();
 private:
     QSize m_sizes[PixmapCount];
     xcb_pixmap_t m_pixmaps[PixmapCount];
     xcb_gcontext_t m_gc;
     XRenderPicture* m_pictures[PixmapCount];
     QImage m_tempImage;
+    QImage m_scratchImage;
 };
 
 template <>
@@ -200,12 +190,6 @@ inline
 xcb_render_picture_t PaintRedirector::topDecoPixmap() const
 {
     return picture(TopPixmap);
-}
-
-inline
-const QImage &ImageBasedPaintRedirector::scratchImage() const
-{
-    return m_scratchImage;
 }
 
 } // namespace

@@ -258,48 +258,10 @@ void PaintRedirector::paint(DecorationPixmap border, const QRect& r, const QRect
 
 
 
-
 // ------------------------------------------------------------------
-
-
-
-
-ImageBasedPaintRedirector::ImageBasedPaintRedirector(Client *c, QWidget *widget)
-    : PaintRedirector(c, widget)
-{
-}
-
-ImageBasedPaintRedirector::~ImageBasedPaintRedirector()
-{
-}
-
-QPaintDevice *ImageBasedPaintRedirector::recreateScratch(const QSize &size)
-{
-    m_scratchImage = QImage(size, QImage::Format_ARGB32_Premultiplied);
-    return &m_scratchImage;
-}
-
-QPaintDevice *ImageBasedPaintRedirector::scratch()
-{
-    return &m_scratchImage;
-}
-
-void ImageBasedPaintRedirector::fillScratch(Qt::GlobalColor color)
-{
-    m_scratchImage.fill(color);
-}
-
-void ImageBasedPaintRedirector::discardScratch()
-{
-    m_scratchImage = QImage();
-}
-
-
-// ------------------------------------------------------------------
-
 
 RasterXRenderPaintRedirector::RasterXRenderPaintRedirector(Client *c, QWidget *widget)
-    : ImageBasedPaintRedirector(c, widget)
+    : PaintRedirector(c, widget)
     , m_gc(0)
 {
     for (int i=0; i<PixmapCount; ++i) {
@@ -358,10 +320,35 @@ void RasterXRenderPaintRedirector::paint(PaintRedirector::DecorationPixmap borde
         xcb_create_gc(connection(), m_gc, m_pixmaps[border], 0, NULL);
     }
 
-    const QImage img(scratchImage().copy(QRect(bounding.topLeft() - b.topLeft(), bounding.size())));
+    const QImage img(m_scratchImage.copy(QRect(bounding.topLeft() - b.topLeft(), bounding.size())));
     xcb_put_image(connection(), XCB_IMAGE_FORMAT_Z_PIXMAP, m_pixmaps[border], m_gc,
                   img.width(), img.height(), offset.x(), offset.y(), 0, 32, img.byteCount(), img.constBits());
 }
+
+QPaintDevice *RasterXRenderPaintRedirector::recreateScratch(const QSize &size)
+{
+    m_scratchImage = QImage(size, QImage::Format_ARGB32_Premultiplied);
+    return &m_scratchImage;
+}
+
+QPaintDevice *RasterXRenderPaintRedirector::scratch()
+{
+    return &m_scratchImage;
+}
+
+void RasterXRenderPaintRedirector::fillScratch(Qt::GlobalColor color)
+{
+    m_scratchImage.fill(color);
+}
+
+void RasterXRenderPaintRedirector::discardScratch()
+{
+    m_scratchImage = QImage();
+}
+
+
+
+// ------------------------------------------------------------------
 
 NativeXRenderPaintRedirector::NativeXRenderPaintRedirector(Client *c, QWidget *widget)
     : PaintRedirector(c, widget)
