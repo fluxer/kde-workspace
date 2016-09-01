@@ -40,7 +40,7 @@ namespace Aurorae
 
 AuroraeFactory::AuroraeFactory()
         : QObject()
-        , KDecorationFactoryUnstable()
+        , KDecorationFactory()
         , m_theme(new AuroraeTheme(this))
         , m_engine(new QDeclarativeEngine(this))
         , m_component(new QDeclarativeComponent(m_engine, this))
@@ -186,7 +186,6 @@ bool AuroraeFactory::reset(unsigned long changed)
 bool AuroraeFactory::supports(Ability ability) const
 {
     switch (ability) {
-    case AbilityAnnounceButtons:
     case AbilityUsesAlphaChannel:
     case AbilityAnnounceAlphaChannel:
     case AbilityButtonMenu:
@@ -238,7 +237,7 @@ AuroraeFactory *AuroraeFactory::s_instance = NULL;
 * Client
 *******************************************************/
 AuroraeClient::AuroraeClient(KDecorationBridge *bridge, KDecorationFactory *factory)
-    : KDecorationUnstable(bridge, factory)
+    : KDecoration(bridge, factory)
     , m_view(NULL)
     , m_scene(new QGraphicsScene(this))
     , m_item(AuroraeFactory::instance()->createQmlDecoration(this))
@@ -305,7 +304,7 @@ bool AuroraeClient::eventFilter(QObject *object, QEvent *event)
     // TODO: remove in KDE5
     // see BUG: 304248
     if (object != widget() || event->type() != QEvent::Wheel) {
-        return KDecorationUnstable::eventFilter(object, event);
+        return KDecoration::eventFilter(object, event);
     }
     QWheelEvent *wheel = static_cast<QWheelEvent*>(event);
     if (mousePosition(wheel->pos()) == PositionCenter) {
@@ -544,12 +543,12 @@ int AuroraeClient::doubleClickInterval() const
 
 void AuroraeClient::closeWindow()
 {
-    QMetaObject::invokeMethod(qobject_cast< KDecorationUnstable* >(this), "doCloseWindow", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(qobject_cast< KDecoration* >(this), "doCloseWindow", Qt::QueuedConnection);
 }
 
 void AuroraeClient::doCloseWindow()
 {
-    KDecorationUnstable::closeWindow();
+    KDecoration::closeWindow();
 }
 
 void AuroraeClient::maximize(int button)
@@ -557,7 +556,7 @@ void AuroraeClient::maximize(int button)
     // a maximized window does not need to have a window decoration
     // in that case we need to delay handling by one cycle
     // BUG: 304870
-    QMetaObject::invokeMethod(qobject_cast< KDecorationUnstable* >(this),
+    QMetaObject::invokeMethod(qobject_cast< KDecoration* >(this),
                               "doMaximzie",
                               Qt::QueuedConnection,
                               Q_ARG(int, button));
@@ -565,19 +564,19 @@ void AuroraeClient::maximize(int button)
 
 void AuroraeClient::doMaximzie(int button)
 {
-    KDecorationUnstable::maximize(static_cast<Qt::MouseButton>(button));
+    KDecoration::maximize(static_cast<Qt::MouseButton>(button));
 }
 
 void AuroraeClient::titlebarDblClickOperation()
 {
     // the double click operation can result in a window being maximized
     // see maximize
-    QMetaObject::invokeMethod(qobject_cast< KDecorationUnstable* >(this), "doTitlebarDblClickOperation", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(qobject_cast< KDecoration* >(this), "doTitlebarDblClickOperation", Qt::QueuedConnection);
 }
 
 void AuroraeClient::doTitlebarDblClickOperation()
 {
-    KDecorationUnstable::titlebarDblClickOperation();
+    KDecoration::titlebarDblClickOperation();
 }
 
 QVariant AuroraeClient::readConfig(const QString &key, const QVariant &defaultValue)

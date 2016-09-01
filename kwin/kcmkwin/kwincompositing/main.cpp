@@ -18,6 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "main.h"
 #include "dbus.h"
 
@@ -93,7 +95,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     layout()->activate();
     ui.tabWidget->setCurrentIndex(0);
     ui.statusTitleWidget->hide();
-    ui.rearmGlSupport->hide();
     ui.messageBox->setMessageType(KMessageWidget::Warning);
     ui.messageBox->addAction(m_dontShowAgain);
     foreach (QWidget *w, m_dontShowAgain->associatedWidgets())
@@ -123,33 +124,15 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     } else
         ui.messageBox->setVisible(false);
 
-    // For future use
-    (void) I18N_NOOP("Use GLSL shaders");
-
-#define OPENGL31_INDEX 0
-#define OPENGL20_INDEX 1
-#define OPENGL12_INDEX 2
-#define XRENDER_INDEX  3
-
-#ifndef KWIN_HAVE_XRENDER_COMPOSITING
-    ui.compositingType->removeItem(XRENDER_INDEX);
+#ifndef KWIN_BUILD_COMPOSITE
+    ui.compositingType->removeItem(0);
 #define XRENDER_INDEX -1
+#else
+#define XRENDER_INDEX 0
 #endif
-
-    ui.glSwapStrategy->addItem(i18n("None"), "n");
-    ui.glSwapStrategy->setItemData(0, i18n("The painting is not synchronized with the screen."), Qt::ToolTipRole);
-    ui.glSwapStrategy->addItem(i18n("Automatic"), "a");
-    ui.glSwapStrategy->setItemData(1, i18n("Tries to re-use older buffers and if that is not possible,\npicks a strategy matching your hardware."), Qt::ToolTipRole);
-    ui.glSwapStrategy->addItem(i18n("Only when Cheap"), "e");
-    ui.glSwapStrategy->setItemData(2, i18n("When major regions of the screen are updated,\nthe entire screen will be repainted.\nCan cause tearing with small updates."), Qt::ToolTipRole);
-    ui.glSwapStrategy->addItem(i18n("Full scene repaints"), "p");
-    ui.glSwapStrategy->setItemData(3, i18n("The complete screen is repainted for every frame.\nCan be slow with large blurred areas."), Qt::ToolTipRole);
-    ui.glSwapStrategy->addItem(i18n("Re-use screen content"), "c");
-    ui.glSwapStrategy->setItemData(4, i18n("WARNING:\nThis strategy is usually slow with Open Source drivers.\nUndamaged pixels will be copied from GL_FRONT to GL_BACK"), Qt::ToolTipRole);
 
     connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
-    connect(ui.rearmGlSupportButton, SIGNAL(clicked()), this, SLOT(rearmGlSupport()));
     connect(ui.useCompositing, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(ui.useCompositing, SIGNAL(clicked(bool)), this, SLOT(suggestGraphicsSystem()));
     connect(ui.effectWinManagement, SIGNAL(toggled(bool)), this, SLOT(changed()));
@@ -168,12 +151,8 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     connect(ui.graphicsSystem, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(ui.windowThumbnails, SIGNAL(activated(int)), this, SLOT(changed()));
     connect(ui.unredirectFullscreen , SIGNAL(toggled(bool)), this, SLOT(changed()));
-    connect(ui.glScaleFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(ui.xrScaleFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
 
-    connect(ui.glSwapStrategy, SIGNAL(currentIndexChanged(int)), this, SLOT(glSwapStrategyChanged(int)));
-    connect(ui.glSwapStrategy, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
-    connect(ui.glColorCorrection, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(m_showDetailedErrors, SIGNAL(triggered(bool)), SLOT(showDetailedEffectLoadingInformation()));
     connect(m_dontShowAgain, SIGNAL(triggered(bool)), SLOT(blockFutureWarnings()));
 
@@ -335,25 +314,6 @@ void KWinCompositingConfig::loadGeneralTab()
         ui.desktopSwitchingCombo->setCurrentIndex(1);
 }
 
-void KWinCompositingConfig::glSwapStrategyChanged(int idx)
-{
-    ui.glSwapStrategy->setToolTip(ui.glSwapStrategy->itemData(idx, Qt::ToolTipRole).toString());
-}
-
-void KWinCompositingConfig::rearmGlSupport()
-{
-    // rearm config
-    KConfigGroup gl_workaround_config = KConfigGroup(mKWinConfig, "Compositing");
-    gl_workaround_config.writeEntry("OpenGLIsUnsafe", false);
-    gl_workaround_config.sync();
-
-    // save last changes
-    save();
-
-    // Initialize the user interface with the config loaded from kwinrc.
-    load();
-}
-
 void KWinCompositingConfig::suggestGraphicsSystem()
 {
     if (!ui.useCompositing->isChecked() || ui.compositingType->currentIndex() == XRENDER_INDEX)
@@ -362,14 +322,9 @@ void KWinCompositingConfig::suggestGraphicsSystem()
 
 void KWinCompositingConfig::alignGuiToCompositingType(int compositingType)
 {
-    ui.glScaleFilter->setVisible(compositingType != XRENDER_INDEX);
     ui.xrScaleFilter->setVisible(compositingType == XRENDER_INDEX);
-    ui.scaleMethodLabel->setBuddy(compositingType == XRENDER_INDEX ? ui.xrScaleFilter : ui.glScaleFilter);
-
-    ui.glGroup->setEnabled(compositingType != XRENDER_INDEX);
-
-    ui.glColorCorrection->setEnabled(compositingType == OPENGL20_INDEX ||
-                                     compositingType == OPENGL31_INDEX);
+    if (compositingType == XRENDER_INDEX)
+        ui.scaleMethodLabel->setBuddy(ui.xrScaleFilter);
 }
 
 void KWinCompositingConfig::toggleEffectShortcutChanged(const QKeySequence &seq)
@@ -397,17 +352,8 @@ void KWinCompositingConfig::loadEffectsTab()
 void KWinCompositingConfig::loadAdvancedTab()
 {
     KConfigGroup config(mKWinConfig, "Compositing");
-    QString backend = config.readEntry("Backend", "OpenGL");
-    if (backend == "OpenGL") {
-        int index = OPENGL20_INDEX;
-
-        if (config.readEntry<bool>("GLLegacy", false))
-            index = OPENGL12_INDEX;
-        else if (config.readEntry<bool>("GLCore", false))
-            index = OPENGL31_INDEX;
-
-        ui.compositingType->setCurrentIndex(index);
-    } else if (backend == "XRender") {
+    QString backend = config.readEntry("Backend", "XRender");
+    if (backend == "XRender") {
         ui.compositingType->setCurrentIndex(XRENDER_INDEX);
     }
 
@@ -431,13 +377,6 @@ void KWinCompositingConfig::loadAdvancedTab()
     ui.unredirectFullscreen->setChecked(config.readEntry("UnredirectFullscreen", false));
 
     ui.xrScaleFilter->setCurrentIndex((int)config.readEntry("XRenderSmoothScale", false));
-    ui.glScaleFilter->setCurrentIndex(config.readEntry("GLTextureFilter", 2));
-
-    int swapStrategy = ui.glSwapStrategy->findData(config.readEntry("GLPreferBufferSwap", "a"));
-    if (swapStrategy < 0)
-        swapStrategy = ui.glSwapStrategy->findData("n");
-    ui.glSwapStrategy->setCurrentIndex(swapStrategy);
-    ui.glColorCorrection->setChecked(config.readEntry("GLColorCorrection", false));
 
     alignGuiToCompositingType(ui.compositingType->currentIndex());
 }
@@ -447,7 +386,6 @@ void KWinCompositingConfig::updateStatusUI(bool compositingIsPossible)
     if (compositingIsPossible) {
         ui.compositingOptionsContainer->show();
         ui.statusTitleWidget->hide();
-        ui.rearmGlSupport->hide();
     }
     else {
         OrgKdeKWinInterface kwin("org.kde.KWin", "/KWin", QDBusConnection::sessionBus());
@@ -459,7 +397,6 @@ void KWinCompositingConfig::updateStatusUI(bool compositingIsPossible)
         ui.statusTitleWidget->setText(text);
         ui.statusTitleWidget->setPixmap(KTitleWidget::InfoMessage, KTitleWidget::ImageLeft);
         ui.statusTitleWidget->show();
-        ui.rearmGlSupport->setVisible(kwin.isValid() ? kwin.openGLIsBroken() : true);
     }
 }
 
@@ -532,44 +469,15 @@ bool KWinCompositingConfig::saveAdvancedTab()
     QString graphicsSystem = (ui.graphicsSystem->currentIndex() == 0) ? "native" : "raster";
 
     QString backend;
-    bool glLegacy;
-    bool glCore;
 
     switch (ui.compositingType->currentIndex()) {
-    case OPENGL12_INDEX:
-        backend  = "OpenGL";
-        glLegacy = true;
-        glCore   = false;
-        break;
-
-    case OPENGL20_INDEX:
-        backend  = "OpenGL";
-        glLegacy = false;
-        glCore   = false;
-        break;
-
-    case OPENGL31_INDEX:
-        backend  = "OpenGL";
-        glLegacy = false;
-        glCore   = true;
-        break;
-
     case XRENDER_INDEX:
         backend  = "XRender";
-        glLegacy = false;
-        glCore   = false;
         break;
     }
 
-    if (config.readEntry("Backend", "OpenGL")     != backend ||
-        config.readEntry<bool>("GLLegacy", false) != glLegacy ||
-        config.readEntry<bool>("GLCore", false)   != glCore ||
-        ((config.readEntry("GLPreferBufferSwap", "a") == "n") xor (ui.glSwapStrategy->itemData(ui.glSwapStrategy->currentIndex()) == "n"))) {
-        m_showConfirmDialog = true;
-        advancedChanged = true;
-    } else if (config.readEntry("HiddenPreviews", 5) != hps[ ui.windowThumbnails->currentIndex()]
-              || (int)config.readEntry("XRenderSmoothScale", false) != ui.xrScaleFilter->currentIndex()
-              || config.readEntry("GLTextureFilter", 2) != ui.glScaleFilter->currentIndex()) {
+    if (config.readEntry("HiddenPreviews", 5) != hps[ ui.windowThumbnails->currentIndex()]
+              || (int)config.readEntry("XRenderSmoothScale", false) != ui.xrScaleFilter->currentIndex()) {
         advancedChanged = true;
     } else if (originalGraphicsSystem != graphicsSystem) {
         advancedChanged = true;
@@ -577,41 +485,17 @@ bool KWinCompositingConfig::saveAdvancedTab()
 
     config.writeEntry("Backend",  backend);
 
-    if (backend == "OpenGL") {
-        config.writeEntry("GLLegacy", glLegacy);
-        config.writeEntry("GLCore",   glCore);
-    }
-
     config.writeEntry("GraphicsSystem", graphicsSystem);
     config.writeEntry("HiddenPreviews", hps[ ui.windowThumbnails->currentIndex()]);
     config.writeEntry("UnredirectFullscreen", ui.unredirectFullscreen->isChecked());
 
     config.writeEntry("XRenderSmoothScale", ui.xrScaleFilter->currentIndex() == 1);
-    config.writeEntry("GLTextureFilter", ui.glScaleFilter->currentIndex());
-
-    config.writeEntry("GLPreferBufferSwap", ui.glSwapStrategy->itemData(ui.glSwapStrategy->currentIndex()).toString());
-    config.writeEntry("GLColorCorrection", ui.glColorCorrection->isChecked());
 
     return advancedChanged;
 }
 
 void KWinCompositingConfig::save()
 {
-    OrgKdeKWinInterface kwin("org.kde.KWin", "/KWin", QDBusConnection::sessionBus());
-    if (ui.compositingType->currentIndex() != XRENDER_INDEX &&
-        kwin.openGLIsBroken() && !ui.rearmGlSupport->isVisible())
-    {
-        KConfigGroup config(mKWinConfig, "Compositing");
-        QString oldBackend = config.readEntry("Backend", "OpenGL");
-        config.writeEntry("Backend", "OpenGL");
-        config.sync();
-        updateStatusUI(false);
-        config.writeEntry("Backend", oldBackend);
-        config.sync();
-        ui.tabWidget->setCurrentIndex(0);
-        return;
-    }
-
     // Save current config. We'll use this for restoring in case something goes wrong.
     KConfigGroup config(mKWinConfig, "Compositing");
     mPreviousConfig = config.entryMap();
@@ -710,10 +594,6 @@ void KWinCompositingConfig::showDetailedEffectLoadingInformation()
                                                     "%1 effect failed to load due to unknown reason.");
     const KLocalizedString requiresShaders = ki18nc("Effect with given name could not be activated as it requires hardware shaders",
                                                     "%1 effect requires hardware support.");
-    const KLocalizedString requiresOpenGL = ki18nc("Effect with given name could not be activated as it requires OpenGL",
-                                                    "%1 effect requires OpenGL.");
-    const KLocalizedString requiresOpenGL2 = ki18nc("Effect with given name could not be activated as it requires OpenGL 2",
-                                                    "%1 effect requires OpenGL 2.");
     KDialog *dialog = new KDialog(this);
     dialog->setWindowTitle(i18nc("Window title", "List of effects which could not be loaded"));
     dialog->setButtons(KDialog::Ok);
@@ -740,36 +620,7 @@ void KWinCompositingConfig::showDetailedEffectLoadingInformation()
             services = trader->query("KWin/Effect", "[X-KDE-PluginInfo-Name] == '" + effect + '\'');
             if (!services.isEmpty()) {
                 KService::Ptr service = services.first();
-                if (compositingType == "xrender") {
-                    // XRender compositing
-                    QVariant openGL = service->property("X-KWin-Requires-OpenGL");
-                    QVariant openGL2 = service->property("X-KWin-Requires-OpenGL2");
-                    if ((openGL.isValid() && openGL.toBool()) ||
-                            (openGL2.isValid() && openGL2.toBool())) {
-                        // effect requires OpenGL
-                        message = requiresOpenGL.subs(service->name()).toString();
-                    } else {
-                        // effect does not require OpenGL, unknown reason
-                        message = unknownReason.subs(service->name()).toString();
-                    }
-                } else if (compositingType == "gl1") {
-                    // OpenGL 1 compositing
-                    QVariant openGL2 = service->property("X-KWin-Requires-OpenGL2");
-                    QVariant shaders = service->property("X-KWin-Requires-Shaders");
-                    if (openGL2.isValid() && openGL2.toBool()) {
-                        // effect requires OpenGL 2
-                        message = requiresOpenGL2.subs(service->name()).toString();
-                    } else if (shaders.isValid() && shaders.toBool()) {
-                        // effect requires hardware shaders
-                        message = requiresShaders.subs(service->name()).toString();
-                    } else {
-                        // unknown reason
-                        message = unknownReason.subs(service->name()).toString();
-                    }
-                } else {
-                    // OpenGL 2 compositing - unknown reason
-                    message = unknownReason.subs(service->name()).toString();
-                }
+                message = unknownReason.subs(service->name()).toString();
             } else {
                 message = unknownReason.subs(effect).toString();
             }
@@ -853,13 +704,10 @@ void KWinCompositingConfig::defaults()
 
     ui.effectSelector->defaults();
 
-    ui.compositingType->setCurrentIndex(OPENGL20_INDEX);
+    ui.compositingType->setCurrentIndex(XRENDER_INDEX);
     ui.windowThumbnails->setCurrentIndex(1);
     ui.unredirectFullscreen->setChecked(false);
     ui.xrScaleFilter->setCurrentIndex(0);
-    ui.glScaleFilter->setCurrentIndex(2);
-    ui.glSwapStrategy->setCurrentIndex(ui.glSwapStrategy->findData("a"));
-    ui.glColorCorrection->setChecked(false);
 }
 
 QString KWinCompositingConfig::quickHelp() const

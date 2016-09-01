@@ -35,17 +35,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <klocale.h>
 
 #include "client.h"
-#include "compositingprefs.h"
 #include "settings.h"
 #include "xcbutils.h"
-#include <kwinglplatform.h>
 
 #include <X11/extensions/Xrandr.h>
-#ifndef KWIN_HAVE_OPENGLES
-#ifndef KWIN_NO_XF86VM
-#include <X11/extensions/xf86vmode.h>
-#endif
-#endif
 
 #endif //KCMRULES
 
@@ -59,46 +52,6 @@ int currentRefreshRate()
     int rate = -1;
     if (options->refreshRate() > 0)   // use manually configured refresh rate
         rate = options->refreshRate();
-#ifndef KWIN_HAVE_OPENGLES
-    else if (GLPlatform::instance()->driver() == Driver_NVidia) {
-#ifndef KWIN_NO_XF86VM
-        int major, event, error;
-        if (XQueryExtension(display(), "XFree86-VidModeExtension", &major, &event, &error)) {
-            XF86VidModeModeLine modeline;
-            int dotclock, vtotal;
-            if (XF86VidModeGetModeLine(display(), 0, &dotclock, &modeline)) {
-                vtotal = modeline.vtotal;
-                if (modeline.flags & 0x0010) // V_INTERLACE
-                    dotclock *= 2;
-                if (modeline.flags & 0x0020) // V_DBLSCAN
-                    vtotal *= 2;
-                if (modeline.htotal*vtotal) // BUG 313996
-                    rate = 1000*dotclock/(modeline.htotal*vtotal); // WTF was wikipedia 1998 when I nedded it?
-                kDebug(1212) << "Vertical Refresh Rate (as detected by XF86VM): " << rate << "Hz";
-            }
-        }
-        if (rate < 1)
-#endif
-        { // modeline approach failed
-            QProcess nvidia_settings;
-            QStringList env = QProcess::systemEnvironment();
-            env << "LC_ALL=C";
-            nvidia_settings.setEnvironment(env);
-            nvidia_settings.start("nvidia-settings", QStringList() << "-t" << "-q" << "RefreshRate", QIODevice::ReadOnly);
-            nvidia_settings.waitForFinished();
-            if (nvidia_settings.exitStatus() == QProcess::NormalExit) {
-                QString reply = QString::fromLocal8Bit(nvidia_settings.readAllStandardOutput()).split(' ').first();
-                bool ok;
-                float frate = QLocale::c().toFloat(reply, &ok);
-                if (!ok)
-                    rate = -1;
-                else
-                    rate = qRound(frate);
-                kDebug(1212) << "Vertical Refresh Rate (as detected by nvidia-settings): " << rate << "Hz";
-            }
-        }
-    }
-#endif
     else if (Xcb::Extensions::self()->isRandrAvailable()) {
         XRRScreenConfiguration *config = XRRGetScreenInfo(display(), rootWindow());
         rate = XRRConfigCurrentRate(config);
@@ -147,18 +100,10 @@ Options::Options(QObject *parent)
     , m_compositingInitialized(Options::defaultCompositingInitialized())
     , m_hiddenPreviews(Options::defaultHiddenPreviews())
     , m_unredirectFullscreen(Options::defaultUnredirectFullscreen())
-    , m_glSmoothScale(Options::defaultGlSmoothScale())
-    , m_colorCorrected(Options::defaultColorCorrected())
     , m_xrenderSmoothScale(Options::defaultXrenderSmoothScale())
     , m_maxFpsInterval(Options::defaultMaxFpsInterval())
     , m_refreshRate(Options::defaultRefreshRate())
     , m_vBlankTime(Options::defaultVBlankTime())
-    , m_glDirect(Options::defaultGlDirect())
-    , m_glStrictBinding(Options::defaultGlStrictBinding())
-    , m_glStrictBindingFollowsDriver(Options::defaultGlStrictBindingFollowsDriver())
-    , m_glLegacy(Options::defaultGlLegacy())
-    , m_glCoreProfile(Options::defaultGLCoreProfile())
-    , m_glPreferBufferSwap(Options::defaultGlPreferBufferSwap())
     , OpTitlebarDblClick(Options::defaultOperationTitlebarDblClick())
     , CmdActiveTitlebar1(Options::defaultCommandActiveTitlebar1())
     , CmdActiveTitlebar2(Options::defaultCommandActiveTitlebar2())
@@ -651,34 +596,11 @@ void Options::setHiddenPreviews(int hiddenPreviews)
 
 void Options::setUnredirectFullscreen(bool unredirectFullscreen)
 {
-    if (GLPlatform::instance()->driver() == Driver_Intel)
-        unredirectFullscreen = false; // bug #252817
     if (m_unredirectFullscreen == unredirectFullscreen) {
         return;
     }
-    if (GLPlatform::instance()->driver() == Driver_Intel) { // write back the value
-        KConfigGroup(KGlobal::config(), "Compositing").writeEntry("UnredirectFullscreen", false);
-    }
     m_unredirectFullscreen = unredirectFullscreen;
     emit unredirectFullscreenChanged();
-}
-
-void Options::setGlSmoothScale(int glSmoothScale)
-{
-    if (m_glSmoothScale == glSmoothScale) {
-        return;
-    }
-    m_glSmoothScale = glSmoothScale;
-    emit glSmoothScaleChanged();
-}
-
-void Options::setColorCorrected(bool colorCorrected)
-{
-    if (m_colorCorrected == colorCorrected) {
-        return;
-    }
-    m_colorCorrected = colorCorrected;
-    emit colorCorrectedChanged();
 }
 
 void Options::setXrenderSmoothScale(bool xrenderSmoothScale)
@@ -715,69 +637,6 @@ void Options::setVBlankTime(qint64 vBlankTime)
     }
     m_vBlankTime = vBlankTime;
     emit vBlankTimeChanged();
-}
-
-void Options::setGlDirect(bool glDirect)
-{
-    if (m_glDirect == glDirect) {
-        return;
-    }
-    m_glDirect = glDirect;
-    emit glDirectChanged();
-}
-
-void Options::setGlStrictBinding(bool glStrictBinding)
-{
-    if (m_glStrictBinding == glStrictBinding) {
-        return;
-    }
-    m_glStrictBinding = glStrictBinding;
-    emit glStrictBindingChanged();
-}
-
-void Options::setGlStrictBindingFollowsDriver(bool glStrictBindingFollowsDriver)
-{
-    if (m_glStrictBindingFollowsDriver == glStrictBindingFollowsDriver) {
-        return;
-    }
-    m_glStrictBindingFollowsDriver = glStrictBindingFollowsDriver;
-    emit glStrictBindingFollowsDriverChanged();
-}
-
-void Options::setGlLegacy(bool glLegacy)
-{
-    if (m_glLegacy == glLegacy) {
-        return;
-    }
-    m_glLegacy = glLegacy;
-    emit glLegacyChanged();
-}
-
-void Options::setGLCoreProfile(bool value)
-{
-    if (m_glCoreProfile == value) {
-        return;
-    }
-    m_glCoreProfile = value;
-    emit glCoreProfileChanged();
-}
-
-void Options::setGlPreferBufferSwap(char glPreferBufferSwap)
-{
-    if (glPreferBufferSwap == 'a') {
-        // buffer cpying is very fast with the nvidia blob
-        // but due to restrictions in DRI2 *incredibly* slow for all MESA drivers
-        // see http://www.x.org/releases/X11R7.7/doc/dri2proto/dri2proto.txt, item 2.5
-        if (GLPlatform::instance()->driver() == Driver_NVidia)
-            glPreferBufferSwap = CopyFrontBuffer;
-        else if (GLPlatform::instance()->driver() != Driver_Unknown) // undetected, finally resolved when context is initialized
-            glPreferBufferSwap = ExtendDamage;
-    }
-    if (m_glPreferBufferSwap == (GlSwapStrategy)glPreferBufferSwap) {
-        return;
-    }
-    m_glPreferBufferSwap = (GlSwapStrategy)glPreferBufferSwap;
-    emit glPreferBufferSwapChanged();
 }
 
 void Options::reparseConfiguration()
@@ -892,19 +751,12 @@ bool Options::loadCompositingConfig (bool force)
 
     bool useCompositing = false;
     CompositingType compositingMode = NoCompositing;
-    QString compositingBackend = config.readEntry("Backend", "OpenGL");
+    QString compositingBackend = config.readEntry("Backend", "XRender");
     if (compositingBackend == "XRender")
         compositingMode = XRenderCompositing;
-    else
-        compositingMode = OpenGLCompositing;
 
     if (const char *c = getenv("KWIN_COMPOSE")) {
         switch(c[0]) {
-        case 'O':
-            kDebug(1212) << "Compositing forced to OpenGL mode by environment variable";
-            compositingMode = OpenGLCompositing;
-            useCompositing = true;
-            break;
         case 'X':
             kDebug(1212) << "Compositing forced to XRender mode by environment variable";
             compositingMode = XRenderCompositing;
@@ -946,33 +798,8 @@ void Options::reloadCompositingSettings(bool force)
     // see Workspace::setupCompositing(), composite.cpp
     setCompositingInitialized(true);
 
-    // Compositing settings
-    CompositingPrefs prefs;
-    if (compositingMode() == OpenGLCompositing) {
-        prefs.detect();
-    }
-
     KSharedConfig::Ptr _config = KGlobal::config();
     KConfigGroup config(_config, "Compositing");
-
-    setGlDirect(prefs.enableDirectRendering());
-    setGlSmoothScale(qBound(-1, config.readEntry("GLTextureFilter", Options::defaultGlSmoothScale()), 2));
-    setGlStrictBindingFollowsDriver(!config.hasKey("GLStrictBinding"));
-    if (!isGlStrictBindingFollowsDriver()) {
-        setGlStrictBinding(config.readEntry("GLStrictBinding", Options::defaultGlStrictBinding()));
-    }
-    setGlLegacy(config.readEntry("GLLegacy", Options::defaultGlLegacy()));
-    setGLCoreProfile(config.readEntry("GLCore", Options::defaultGLCoreProfile()));
-
-    char c = 0;
-    const QString s = config.readEntry("GLPreferBufferSwap", QString(Options::defaultGlPreferBufferSwap()));
-    if (!s.isEmpty())
-        c = s.at(0).toAscii();
-    if (c != 'a' && c != 'c' && c != 'p' && c != 'e')
-        c = 0;
-    setGlPreferBufferSwap(c);
-
-    setColorCorrected(config.readEntry("GLColorCorrection", Options::defaultColorCorrected()));
 
     m_xrenderSmoothScale = config.readEntry("XRenderSmoothScale", false);
 

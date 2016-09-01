@@ -4,27 +4,17 @@ add_subdirectory( infosummary )
 add_subdirectory( memory )
 add_subdirectory( devinfo )
 add_subdirectory( info )
-
 add_subdirectory( samba )
 add_subdirectory( nics )
 
 add_feature_info("OpenGL support" OPENGL_FOUND "View OpenGL details in kinfocenter." )
 add_feature_info("OpenGL/ES support" OPENGLES_FOUND "View OpenGL ES2.0 details in kinfocenter." )
 
-  if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND NOT KWIN_BUILD_WITH_OPENGLES)
-      set( KCM_ENABLE_OPENGL 1 )
-  endif(OPENGL_FOUND AND OPENGL_GLU_FOUND AND NOT KWIN_BUILD_WITH_OPENGLES)
-
-  if(OPENGLES_FOUND AND KWIN_BUILD_WITH_OPENGLES)
-      set( KCM_ENABLE_OPENGLES 1 )
-  endif(OPENGLES_FOUND AND KWIN_BUILD_WITH_OPENGLES)
-
-  if(KCM_ENABLE_OPENGL OR KCM_ENABLE_OPENGLES)
-      add_subdirectory( opengl )
-  else(KCM_ENABLE_OPENGL OR KCM_ENABLE_OPENGLES)
-      MESSAGE(STATUS "OpenGL/ES2.0 information module has been disabled.")
-  endif(KCM_ENABLE_OPENGL OR KCM_ENABLE_OPENGLES)
-
+if((OPENGL_FOUND AND OPENGL_GLU_FOUND) OR OPENGLES_FOUND)
+    add_subdirectory( opengl )
+else()
+    message(STATUS "OpenGL/ES2.0 information module has been disabled.")
+endif()
 
 macro_optional_find_package(PCIUTILS)
 set_package_properties(PCIUTILS PROPERTIES DESCRIPTION "PciUtils is a library for direct access to PCI slots"

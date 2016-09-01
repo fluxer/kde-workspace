@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace KWin
 {
-class GLTexture;
 
 class ShowFpsEffect
     : public Effect
@@ -73,8 +72,7 @@ public:
         return textColor;
     }
 private:
-    void paintGL(int fps);
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     void paintXrender(int fps);
 #endif
     void paintFPSGraph(int x, int y);
@@ -93,7 +91,6 @@ private:
     int x;
     int y;
     QRect fps_rect;
-    QScopedPointer<GLTexture> fpsText;
     int textPosition;
     QFont textFont;
     QColor textColor;

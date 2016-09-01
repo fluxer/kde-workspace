@@ -67,16 +67,9 @@ class Compositor : public QObject {
      **/
     Q_PROPERTY(QString compositingNotPossibleReason READ compositingNotPossibleReason)
     /**
-     * @brief Whether OpenGL has failed badly in the past (crash) and is considered as broken.
-     **/
-    Q_PROPERTY(bool openGLIsBroken READ isOpenGLBroken)
-    /**
      * The type of the currently used Scene:
      * @li @c none No Compositing
      * @li @c xrender XRender
-     * @li @c gl1 OpenGL 1
-     * @li @c gl2 OpenGL 2
-     * @li @c gles OpenGL ES 2
      **/
     Q_PROPERTY(QString compositingType READ compositingType)
 public:
@@ -149,7 +142,6 @@ public:
     // D-Bus: getters for Properties, see documentation on the property
     bool isCompositingPossible() const;
     QString compositingNotPossibleReason() const;
-    bool isOpenGLBroken() const;
     QString compositingType() const;
 
 public Q_SLOTS:
@@ -179,8 +171,7 @@ public Q_SLOTS:
      *
      * Note: it is possible that the Compositor cannot be resumed, that is there might be Clients
      * blocking the usage of Compositing or the Scene might be broken. Use @link isActive to check
-     * whether the Compositor has been resumed. Also check @link isCompositingPossible and
-     * @link isOpenGLBroken.
+     * whether the Compositor has been resumed. Also check @link isCompositingPossible.
      *
      * Note: The starting of the Compositor can require some time and is partially done threaded.
      * After this method returns the setup may not have been completed.
@@ -189,7 +180,6 @@ public Q_SLOTS:
      * @see suspend
      * @see isActive
      * @see isCompositingPossible
-     * @see isOpenGLBroken
      **/
     Q_SCRIPTABLE inline void resume() { resume(ScriptSuspend); }
     void resume(Compositor::SuspendReason reason);
@@ -216,7 +206,6 @@ public Q_SLOTS:
      * @see resume
      * @see isActive
      * @see isCompositingPossible
-     * @see isOpenGLBroken
      **/
     // NOTICE this is atm. for script usage *ONLY* and needs to be extended like resume / suspend are
     // if intended to be used from within KWin code!
@@ -263,7 +252,6 @@ private Q_SLOTS:
      * That is the Compositor will be stopped and started again.
      **/
     void restart();
-    void fallbackToXRenderCompositing();
     void performCompositing();
     void delayedCheckUnredirect();
     void slotConfigChanged();

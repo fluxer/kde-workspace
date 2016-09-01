@@ -99,10 +99,6 @@ public Q_SLOTS: // METHODS
     /**
      * @deprecated
      **/
-    bool openGLIsBroken();
-    /**
-     * @deprecated
-     **/
     Q_NOREPLY void toggleCompositing();
     /**
      * @deprecated

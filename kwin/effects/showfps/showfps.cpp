@@ -18,15 +18,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "showfps.h"
 
 // KConfigSkeleton
 #include "showfpsconfig.h"
 
-#include <kwinconfig.h>
-
-#include <kwinglutils.h>
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
 #include <xcb/render.h>
 #endif
@@ -158,11 +157,7 @@ void ShowFpsEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
             ++fps; // count all frames in the last second
     if (fps > MAX_TIME)
         fps = MAX_TIME; // keep it the same height
-    if (effects->isOpenGLCompositing()) {
-        paintGL(fps);
-        glFinish(); // make sure all rendering is done
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (effects->compositingType() == XRenderCompositing) {
         paintXrender(fps);
         XSync(display(), False);   // make sure all rendering is done
@@ -171,83 +166,7 @@ void ShowFpsEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
     m_noBenchmark->render(infiniteRegion(), 1.0, alpha);
 }
 
-void ShowFpsEffect::paintGL(int fps)
-{
-    int x = this->x;
-    int y = this->y;
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // TODO painting first the background white and then the contents
-    // means that the contents also blend with the background, I guess
-    ShaderBinder binder(ShaderManager::ColorShader);
-    GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-    vbo->reset();
-    QColor color(255, 255, 255);
-    color.setAlphaF(alpha);
-    vbo->setColor(color);
-    QVector<float> verts;
-    verts.reserve(12);
-    verts << x + 2 * NUM_PAINTS + FPS_WIDTH << y;
-    verts << x << y;
-    verts << x << y + MAX_TIME;
-    verts << x << y + MAX_TIME;
-    verts << x + 2 * NUM_PAINTS + FPS_WIDTH << y + MAX_TIME;
-    verts << x + 2 * NUM_PAINTS + FPS_WIDTH << y;
-    vbo->setData(6, 2, verts.constData(), NULL);
-    vbo->render(GL_TRIANGLES);
-    y += MAX_TIME; // paint up from the bottom
-    color.setRed(0);
-    color.setGreen(0);
-    vbo->setColor(color);
-    verts.clear();
-    verts << x + FPS_WIDTH << y - fps;
-    verts << x << y - fps;
-    verts << x << y;
-    verts << x << y;
-    verts << x + FPS_WIDTH << y;
-    verts << x + FPS_WIDTH << y - fps;
-    vbo->setData(6, 2, verts.constData(), NULL);
-    vbo->render(GL_TRIANGLES);
-
-
-    color.setBlue(0);
-    vbo->setColor(color);
-    QVector<float> vertices;
-    for (int i = 10;
-            i < MAX_TIME;
-            i += 10) {
-        vertices << x << y - i;
-        vertices << x + FPS_WIDTH << y - i;
-    }
-    vbo->setData(vertices.size() / 2, 2, vertices.constData(), NULL);
-    vbo->render(GL_LINES);
-    x += FPS_WIDTH;
-
-    // Paint FPS graph
-    paintFPSGraph(x, y);
-    x += NUM_PAINTS;
-
-    // Paint amount of rendered pixels graph
-    paintDrawSizeGraph(x, y);
-
-    // Paint FPS numerical value
-    if (fpsTextRect.isValid()) {
-        fpsText.reset(new GLTexture(fpsTextImage(fps)));
-        fpsText->bind();
-        ShaderBinder binder(ShaderManager::SimpleShader);
-        if (effects->compositingType() == OpenGL2Compositing) {
-            binder.shader()->setUniform("offset", QVector2D(0, 0));
-        }
-        fpsText->render(QRegion(fpsTextRect), fpsTextRect);
-        fpsText->unbind();
-        effects->addRepaint(fpsTextRect);
-    }
-
-    // Paint paint sizes
-    glDisable(GL_BLEND);
-}
-
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 /*
  Differences between OpenGL and XRender:
  - differently specified rectangles (X: width/height, O: x2,y2)
@@ -353,52 +272,7 @@ void ShowFpsEffect::paintDrawSizeGraph(int x, int y)
 
 void ShowFpsEffect::paintGraph(int x, int y, QList<int> values, QList<int> lines, bool colorize)
 {
-    if (effects->isOpenGLCompositing()) {
-        QColor color(0, 0, 0);
-        color.setAlphaF(alpha);
-        GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-        vbo->reset();
-        vbo->setColor(color);
-        QVector<float> verts;
-        // First draw the lines
-        foreach (int h, lines) {
-            verts << x << y - h;
-            verts << x + values.count() << y - h;
-        }
-        vbo->setData(verts.size() / 2, 2, verts.constData(), NULL);
-        vbo->render(GL_LINES);
-        // Then the graph values
-        int lastValue = 0;
-        verts.clear();
-        for (int i = 0; i < values.count(); i++) {
-            int value = values[ i ];
-            if (colorize && value != lastValue) {
-                if (!verts.isEmpty()) {
-                    vbo->setData(verts.size() / 2, 2, verts.constData(), NULL);
-                    vbo->render(GL_LINES);
-                }
-                verts.clear();
-                if (value <= 10) {
-                    color = QColor(0, 255, 0);
-                } else if (value <= 20) {
-                    color = QColor(255, 255, 0);
-                } else if (value <= 50) {
-                    color = QColor(255, 0, 0);
-                } else {
-                    color = QColor(0, 0, 0);
-                }
-                vbo->setColor(color);
-            }
-            verts << x + values.count() - i << y;
-            verts << x + values.count() - i << y - value;
-            lastValue = value;
-        }
-        if (!verts.isEmpty()) {
-            vbo->setData(verts.size() / 2, 2, verts.constData(), NULL);
-            vbo->render(GL_LINES);
-        }
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (effects->compositingType() == XRenderCompositing) {
         xcb_pixmap_t pixmap = xcb_generate_id(connection());
         xcb_create_pixmap(connection(), 32, pixmap, rootWindow(), values.count(), MAX_TIME);

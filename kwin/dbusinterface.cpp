@@ -146,11 +146,6 @@ bool DBusInterface::compositingPossible()
     return Compositor::self()->isCompositingPossible();
 }
 
-bool DBusInterface::openGLIsBroken()
-{
-    return Compositor::self()->isOpenGLBroken();
-}
-
 bool DBusInterface::compositingActive()
 {
     return Compositor::self()->isActive();

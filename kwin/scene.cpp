@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
  The base class for compositing, implementing shared functionality
- between the OpenGL and XRender backends.
+ between the OpenGL (that is no more) and XRender backends.
 
  Design:
 
@@ -254,10 +254,7 @@ void Scene::paintSimpleScreen(int orig_mask, QRegion region)
 
     QRegion dirtyArea = region;
     bool opaqueFullscreen(false);
-    for (int i = 0;  // do prePaintWindow bottom to top
-            i < stacking_order.count();
-            ++i) {
-        Window* w = stacking_order[ i ];
+    foreach (Window *w, stacking_order) { // do prePaintWindow bottom to top
         Toplevel* topw = w->window();
         WindowPrePaintData data;
         data.mask = orig_mask | (w->isOpaque() ? PAINT_WINDOW_OPAQUE : PAINT_WINDOW_TRANSLUCENT);
@@ -469,7 +466,7 @@ void Scene::paintWindowThumbnails(Scene::Window *w, QRegion region, qreal opacit
         y += (thumb->y()-visualThumbRect.y())*thumbData.yScale();
         thumbData.setXTranslation(x);
         thumbData.setYTranslation(y);
-        int thumbMask = PAINT_WINDOW_TRANSFORMED | PAINT_WINDOW_LANCZOS;
+        int thumbMask = PAINT_WINDOW_TRANSFORMED;
         if (thumbData.opacity() == 1.0) {
             thumbMask |= PAINT_WINDOW_OPAQUE;
         } else {

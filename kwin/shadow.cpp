@@ -17,13 +17,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+
+#include "config-kwin.h"
+
 #include "shadow.h"
 // kwin
 #include "atoms.h"
 #include "effects.h"
 #include "toplevel.h"
-#include "scene_opengl.h"
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include "scene_xrender.h"
 #endif
 
@@ -49,13 +51,11 @@ Shadow *Shadow::createShadow(Toplevel *toplevel)
     QVector<long> data = Shadow::readX11ShadowProperty(toplevel->window());
     if (!data.isEmpty()) {
         Shadow *shadow = NULL;
-        if (effects->isOpenGLCompositing()) {
-            shadow = new SceneOpenGLShadow(toplevel);
-        } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
+        if (effects->compositingType() == XRenderCompositing) {
             shadow = new SceneXRenderShadow(toplevel);
-#endif
         }
+#endif
 
         if (shadow) {
             if (!shadow->init(data)) {

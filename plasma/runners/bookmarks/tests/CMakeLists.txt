@@ -15,7 +15,7 @@ target_link_libraries(plasma-runner-bookmarks-TestChromeBookmarks
     ${QT_QTSQL_LIBRARY}
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KIO_LIBS}
-    qjson
+    ${QJSON_LIBRARIES} ${qjson_LIBRARIES} 
 )
 
 file(COPY chrome-config-home DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

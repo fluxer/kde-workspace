@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // cmake stuff
 #include <config-X11.h>
 #include <config-kwin.h>
-#include <kwinconfig.h>
 // kwin
 #include <kwinglobals.h>
 // KDE

@@ -192,41 +192,38 @@ public:
      * @see KDecorationFactory::supports()
      */
     enum Ability {
-        // announce
-        AbilityAnnounceButtons = 0, ///< decoration supports AbilityButton* values (always use)
-        AbilityAnnounceColors = 1, ///< decoration supports AbilityColor* values (always use), @deprecated @todo remove KDE5
         // buttons
-        AbilityButtonMenu = 1000,   ///< decoration supports the window menu button
-        AbilityButtonOnAllDesktops = 1001, ///< decoration supports the on all desktops button
-        AbilityButtonSpacer = 1002, ///< decoration supports inserting spacers between buttons
-        AbilityButtonHelp = 1003,   ///< decoration supports what's this help button
-        AbilityButtonMinimize = 1004,  ///< decoration supports a minimize button
-        AbilityButtonMaximize = 1005, ///< decoration supports a maximize button
-        AbilityButtonClose = 1006, ///< decoration supports a close button
-        AbilityButtonAboveOthers = 1007, ///< decoration supports an above button
-        AbilityButtonBelowOthers = 1008, ///< decoration supports a below button
-        AbilityButtonShade = 1009, ///< decoration supports a shade button
-        AbilityButtonResize = 1010, ///< decoration supports a resize button
-        AbilityButtonApplicationMenu = 1011,   ///< decoration supports the application menu button
+        AbilityButtonMenu = 0,             ///< decoration supports the window menu button
+        AbilityButtonOnAllDesktops = 1,    ///< decoration supports the on all desktops button
+        AbilityButtonSpacer = 2,           ///< decoration supports inserting spacers between buttons
+        AbilityButtonHelp = 3,             ///< decoration supports what's this help button
+        AbilityButtonMinimize = 4,         ///< decoration supports a minimize button
+        AbilityButtonMaximize = 5,         ///< decoration supports a maximize button
+        AbilityButtonClose = 6,            ///< decoration supports a close button
+        AbilityButtonAboveOthers = 7,      ///< decoration supports an above button
+        AbilityButtonBelowOthers = 8,      ///< decoration supports a below button
+        AbilityButtonShade = 9,            ///< decoration supports a shade button
+        AbilityButtonResize = 10,          ///< decoration supports a resize button
+        AbilityButtonApplicationMenu = 11, ///< decoration supports the application menu button
         // compositing
-        AbilityProvidesShadow = 3000, ///< The decoration draws its own shadows.
+        AbilityProvidesShadow = 12,        ///< The decoration draws its own shadows.
         ///  @since 4.3
-        AbilityUsesAlphaChannel = 3001, ///< The decoration isn't clipped to the mask when compositing is enabled.
+        AbilityUsesAlphaChannel = 13,      ///< The decoration isn't clipped to the mask when compositing is enabled.
         ///  The mask is still used to define the input region and the blurred
         ///  region, when the blur plugin is enabled.
         ///  @since 4.3
-        AbilityExtendIntoClientArea = 3002, ///< The decoration respects transparentRect()
+        AbilityExtendIntoClientArea = 14,  ///< The decoration respects transparentRect()
         ///  @since 4.4
-        AbilityUsesBlurBehind = 3003, ///< The decoration wants the background to be blurred, when the blur plugin is enabled.
+        AbilityUsesBlurBehind = 15,        ///< The decoration wants the background to be blurred, when the blur plugin is enabled.
         /// @since 4.6
-        AbilityAnnounceAlphaChannel = 4004, ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
+        AbilityAnnounceAlphaChannel = 16,  ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
         /// @since 4.10
         // Tabbing
-        AbilityTabbing = 4000, ///< The decoration supports tabbing
+        AbilityTabbing = 17,               ///< The decoration supports tabbing
     };
 
     /**
-     * Regions that can be returned by KDecorationUnstable::region().
+     * Regions that can be returned by KDecoration::region().
      */
     enum Region {
         /**
@@ -735,6 +732,88 @@ public:
      */
     virtual QSize minimumSize() const = 0;
 
+        /**
+     * This function can return additional padding values that are added outside the
+     * borders of the window, and can be used by the decoration if it wants to paint
+     * outside the frame.
+     *
+     * The typical use case is for drawing a drop shadow or glowing effect around the window.
+     *
+     * The area outside the frame cannot receive input, and when compositing is disabled,
+     * painting is clipped to the mask, or the window frame if no mask is defined.
+     */
+    virtual void padding(int &left, int &right, int &top, int &bottom) const;
+    /**
+     * Returns @a true if compositing--and therefore ARGB--is enabled.
+     */
+    bool compositingActive() const;
+
+    // Window tabbing
+
+    /**
+     * Returns whether or not this client group contains the active client.
+     */
+    bool isInActiveTabGroup();
+    /**
+     * Return the amount of tabs in this group
+     */
+    int tabCount() const;
+
+    /**
+     * Return the icon for the tab at index \p idx (\p idx must be smaller than tabCount())
+     */
+    QIcon icon(int idx) const;
+
+    /**
+     * Return the caption for the tab at index \p idx (\p idx must be smaller than tabCount())
+     */
+    QString caption(int idx) const;
+
+    /**
+     * Return the unique id for the tab at index \p idx (\p idx must be smaller than tabCount())
+     */
+    long tabId(int idx) const;
+    /**
+     * Returns the id of the currently active client in this group.
+     */
+    long currentTabId() const;
+    /**
+     * Activate tab for the window with the id  \p id.
+     */
+    void setCurrentTab(long id);
+
+    /**
+     * Entab windw with id \p A beFORE the window with the id \p B.
+     */
+    virtual void tab_A_before_B(long A, long B);
+    /**
+     * Entab windw with id \p A beHIND the window with the id \p B.
+     */
+    virtual void tab_A_behind_B(long A, long B);
+    /**
+     * Remove the window with the id \p id from its tabgroup and place it at \p newGeom
+     */
+    virtual void untab(long id, const QRect& newGeom);
+
+    /**
+     * Close the client with the id \p id.
+     */
+    void closeTab(long id);
+    /**
+     * Close all windows in this group.
+     */
+    void closeTabGroup();
+    /**
+     * Display the right-click client menu belonging to the client at index \p index at the
+     * global coordinates specified by \p pos.
+     */
+    void showWindowMenu(const QPoint& pos, long id);
+    /**
+     * Determine which action the user has mapped \p button to. Useful for determining whether
+     * a button press was for window tab dragging or for displaying the client menu.
+     */
+    WindowOperation buttonToWindowOperation(Qt::MouseButtons button);
+
 public Q_SLOTS:
     /**
      * This function is called whenever the window either becomes or stops being active.
@@ -806,23 +885,6 @@ Q_SIGNALS:
     void alphaEnabledChanged(bool enabled);
 
 public:
-    /**
-     * This method is not any more invoked from KWin core since version 4.8.
-     * There is no need to implement it.
-     *
-     * @param geom  The geometry at this the bound should be drawn
-     * @param clear @a true if the bound should be cleared (when doing the usual XOR
-     *              painting this argument can be simply ignored)
-     *
-     * @see geometry()
-     * @deprecated
-     */
-    virtual bool drawbound(const QRect& geom, bool clear);
-    /**
-     * @internal Reserved.
-     */
-    // TODO position will need also values for top+left+bottom etc. docking ?
-    virtual bool windowDocked(Position side);
     /**
      * This function is called to reset the decoration on settings changes.
      * It is usually invoked by calling KDecorationFactory::resetDecorations().
@@ -993,110 +1055,9 @@ private:
     QWidget* w_;
     KDecorationFactory* factory_;
     friend class KDecorationOptions; // for options_
-    friend class KDecorationUnstable; // for bridge_
     static KDecorationOptions* options_;
     KDecorationPrivate* d;
 
-};
-
-/**
- * @warning THIS CLASS IS UNSTABLE!
- */
-class KWIN_EXPORT KDecorationUnstable
-    : public KDecoration
-{
-    Q_OBJECT
-
-public:
-    KDecorationUnstable(KDecorationBridge* bridge, KDecorationFactory* factory);
-    virtual ~KDecorationUnstable();
-    /**
-     * This function can return additional padding values that are added outside the
-     * borders of the window, and can be used by the decoration if it wants to paint
-     * outside the frame.
-     *
-     * The typical use case is for drawing a drop shadow or glowing effect around the window.
-     *
-     * The area outside the frame cannot receive input, and when compositing is disabled,
-     * painting is clipped to the mask, or the window frame if no mask is defined.
-     */
-    virtual void padding(int &left, int &right, int &top, int &bottom) const;
-    /**
-     * Returns @a true if compositing--and therefore ARGB--is enabled.
-     */
-    bool compositingActive() const;
-
-    // Window tabbing
-
-    /**
-     * Returns whether or not this client group contains the active client.
-     */
-    bool isInActiveTabGroup();
-    /**
-     * Return the amount of tabs in this group
-     */
-    int tabCount() const;
-
-    /**
-     * Return the icon for the tab at index \p idx (\p idx must be smaller than tabCount())
-     */
-    QIcon icon(int idx) const;
-
-    /**
-     * Return the caption for the tab at index \p idx (\p idx must be smaller than tabCount())
-     */
-    QString caption(int idx) const;
-
-    /**
-     * Return the unique id for the tab at index \p idx (\p idx must be smaller than tabCount())
-     */
-    long tabId(int idx) const;
-    /**
-     * Returns the id of the currently active client in this group.
-     */
-    long currentTabId() const;
-    /**
-     * Activate tab for the window with the id  \p id.
-     */
-    void setCurrentTab(long id);
-
-    /**
-     * Entab windw with id \p A beFORE the window with the id \p B.
-     */
-    virtual void tab_A_before_B(long A, long B);
-    /**
-     * Entab windw with id \p A beHIND the window with the id \p B.
-     */
-    virtual void tab_A_behind_B(long A, long B);
-    /**
-     * Remove the window with the id \p id from its tabgroup and place it at \p newGeom
-     */
-    virtual void untab(long id, const QRect& newGeom);
-
-    /**
-     * Close the client with the id \p id.
-     */
-    void closeTab(long id);
-    /**
-     * Close all windows in this group.
-     */
-    void closeTabGroup();
-    /**
-     * Display the right-click client menu belonging to the client at index \p index at the
-     * global coordinates specified by \p pos.
-     */
-    void showWindowMenu(const QPoint& pos, long id);
-    /**
-     * unshadow virtuals
-     */
-    using KDecoration::caption;
-    using KDecoration::icon;
-    using KDecoration::showWindowMenu;
-    /**
-     * Determine which action the user has mapped \p button to. Useful for determining whether
-     * a button press was for window tab dragging or for displaying the client menu.
-     */
-    WindowOperation buttonToWindowOperation(Qt::MouseButtons button);
 };
 
 inline

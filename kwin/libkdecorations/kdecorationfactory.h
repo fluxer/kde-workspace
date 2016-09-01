@@ -77,9 +77,9 @@ public:
 
     /**
      * Returns the KDecorationOptions object, which is used to access
-     * configuration settings for the decoration.
+     * configuration settings for the decoration. Only for convenience.
      */
-    const KDecorationOptions* options(); // convenience
+    inline const KDecorationOptions* options() { return KDecoration::options(); };
     /**
      * Returns true if the given decoration object still exists. This is necessary
      * e.g. when calling KDecoration::showWindowMenu(), which may cause the decoration
@@ -128,20 +128,6 @@ private:
     QList< KDecoration* > _decorations;
     KDecorationFactoryPrivate* d;
 };
-
-/**
- * @warning THIS CLASS IS UNSTABLE!
- * Keep all decoration class names in sync. E.g. KDecorationFactory2 and KDecoration2.
- */
-class KWIN_EXPORT KDecorationFactoryUnstable
-    : public KDecorationFactory
-{
-};
-
-inline const KDecorationOptions* KDecorationFactory::options()
-{
-    return KDecoration::options();
-}
 
 /** @} */
 

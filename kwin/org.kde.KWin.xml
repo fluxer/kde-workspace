@@ -80,16 +80,10 @@
     <method name="compositingNotPossibleReason">
         <arg type="s" direction="out"/>
     </method>
-    <method name="openGLIsBroken">
-        <arg type="b" direction="out"/>
-    </method>
     <method name="compositingType">
         <!--
             none: No Compositing
             xrender: XRender
-            gl1: OpenGL 1
-            gl2: OpenGL 2
-            gles: OpenGL ES 2
         -->
         <arg type="s" direction="out"/>
     </method>

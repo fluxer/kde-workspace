@@ -45,7 +45,7 @@ namespace Oxygen
 {
 
     class SizeGrip;
-    class Client : public KCommonDecorationUnstable
+    class Client : public KCommonDecoration
     {
 
         Q_OBJECT
@@ -172,7 +172,7 @@ namespace Oxygen
         //! frame border
         inline int frameBorder( void ) const;
 
-        //!@name status change methods (overloaded from KCommonDecorationUnstable)
+        //!@name status change methods (overloaded from KCommonDecoration)
         //@{
 
         //! triggered when window activity is changed

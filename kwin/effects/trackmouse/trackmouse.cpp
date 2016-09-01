@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include <config-kwin.h>
+
 #include "trackmouse.h"
 
 // KConfigSkeleton
@@ -27,13 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/qdatetime.h>
 #include <QMatrix4x4>
 
-#include <kwinconfig.h>
-#include <kwinglutils.h>
 #include <kwinxrenderutils.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
@@ -51,14 +50,11 @@ TrackMouseEffect::TrackMouseEffect()
     : m_active(false)
     , m_angle(0)
 {
-    m_texture[0] = m_texture[1] = 0;
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     m_picture[0] = m_picture[1] = 0;
     if ( effects->compositingType() == XRenderCompositing)
         m_angleBase = 1.57079632679489661923; // Pi/2
 #endif
-    if ( effects->isOpenGLCompositing())
-        m_angleBase = 90.0;
     m_mousePolling = false;
     KActionCollection *actionCollection = new KActionCollection(this);
     m_action = static_cast< KAction* >(actionCollection->addAction("TrackMouse"));
@@ -76,8 +72,7 @@ TrackMouseEffect::~TrackMouseEffect()
     if (m_mousePolling)
         effects->stopMousePolling();
     for (int i = 0; i < 2; ++i) {
-        delete m_texture[i]; m_texture[i] = 0;
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
         delete m_picture[i]; m_picture[i] = 0;
 #endif
     }
@@ -124,41 +119,7 @@ void TrackMouseEffect::paintScreen(int mask, QRegion region, ScreenPaintData& da
     if (!m_active)
         return;
 
-    if ( effects->isOpenGLCompositing() && m_texture[0] && m_texture[1]) {
-        ShaderBinder binder(ShaderManager::GenericShader);
-        GLShader *shader(binder.shader());
-        QMatrix4x4 modelview;
-        if (shader) {
-            modelview = shader->getUniformMatrix4x4("modelview");
-        }
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        QMatrix4x4 matrix(modelview);
-        const QPointF p = m_lastRect[0].topLeft() + QPoint(m_lastRect[0].width()/2.0, m_lastRect[0].height()/2.0);
-        const float x = p.x()*data.xScale() + data.xTranslation();
-        const float y = p.y()*data.yScale() + data.yTranslation();
-        for (int i = 0; i < 2; ++i) {
-            matrix.translate(x, y, 0.0);
-            matrix.rotate(i ? -2*m_angle : m_angle, 0, 0, 1.0);
-            matrix.translate(-x, -y, 0.0);
-            if (shader) {
-                shader->setUniform(GLShader::ModelViewMatrix, matrix);
-                shader->setUniform(GLShader::Saturation, 1.0);
-                shader->setUniform(GLShader::ModulationConstant, QVector4D(1.0, 1.0, 1.0, 1.0));
-            } else
-                pushMatrix(matrix);
-            m_texture[i]->bind();
-            m_texture[i]->render(region, m_lastRect[i]);
-            m_texture[i]->unbind();
-            if (!shader)
-                popMatrix();
-        }
-        glDisable(GL_BLEND);
-        if (shader) {
-            shader->setUniform(GLShader::ModelViewMatrix, modelview);
-        }
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if ( effects->compositingType() == XRenderCompositing && m_picture[0] && m_picture[1]) {
         float sine = sin(m_angle);
         const float cosine = cos(m_angle);
@@ -197,18 +158,15 @@ void TrackMouseEffect::postPaintScreen()
 
 bool TrackMouseEffect::init()
 {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
-    if (!(m_texture[0] || m_picture[0])) {
+#ifdef KWIN_BUILD_COMPOSITE
+    if (!m_picture[0]) {
         loadTexture();
-        if (!(m_texture[0] || m_picture[0]))
+        if (!m_picture[0])
             return false;
     }
 #else
-    if (!m_texture[0]) {
-        loadTexture();
-        if (!m_texture[0])
-            return false;
-    }
+    loadTexture();
+    return false;
 #endif
     m_lastRect[0].moveCenter(cursorPos());
     m_lastRect[1].moveCenter(cursorPos());
@@ -255,12 +213,7 @@ void TrackMouseEffect::loadTexture()
         return;
 
     for (int i = 0; i < 2; ++i) {
-        if ( effects->isOpenGLCompositing()) {
-            QImage img(f[i]);
-            m_texture[i] = new GLTexture(img);
-            m_lastRect[i].setSize(img.size());
-        }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
         if ( effects->compositingType() == XRenderCompositing) {
             QPixmap pixmap(f[i]);
             m_picture[i] = new XRenderPicture(pixmap);

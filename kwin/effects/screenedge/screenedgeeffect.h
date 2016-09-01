@@ -19,6 +19,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #ifndef KWIN_SCREEN_EDGE_EFFECT_H
 #define KWIN_SCREEN_EDGE_EFFECT_H
+
+#include "config-kwin.h"
+
 #include <kwineffects.h>
 
 class QTimer;
@@ -28,7 +31,6 @@ namespace Plasma {
 
 namespace KWin {
 class Glow;
-class GLTexture;
 
 class ScreenEdgeEffect : public Effect
 {
@@ -57,8 +59,7 @@ private:
 class Glow
 {
 public:
-    QScopedPointer<GLTexture> texture;
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     QScopedPointer<XRenderPicture> picture;
     QSize pictureSize;
 #endif

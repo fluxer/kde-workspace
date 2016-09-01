@@ -32,8 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kglobalsettings.h>
 #include <kdeclarative.h>
 
-#include <kwinglutils.h>
-
 #include <QtGui/qevent.h>
 #include <netwm_def.h>
 
@@ -323,7 +321,6 @@ void PresentWindowsEffect::paintWindow(EffectWindow *w, int mask, QRegion region
             return;
         }
 
-        mask |= PAINT_WINDOW_LANCZOS;
         // Apply opacity and brightness
         data.multiplyOpacity(winData->opacity);
         data.multiplyBrightness(interpolate(0.40, 1.0, winData->highlight));
@@ -357,9 +354,6 @@ void PresentWindowsEffect::paintWindow(EffectWindow *w, int mask, QRegion region
                     tScale = area.height() / effSize.height();
                 const qreal scale = interpolate(1.0, tScale, winData->highlight);
                 if (scale > 1.0) {
-                    if (scale < tScale) // don't use lanczos during transition
-                        mask &= ~PAINT_WINDOW_LANCZOS;
-
                     const float df = (tScale-1.0f)*0.5f;
                     int tx = qRound(rect.width()*df);
                     int ty = qRound(rect.height()*df);
@@ -378,9 +372,6 @@ void PresentWindowsEffect::paintWindow(EffectWindow *w, int mask, QRegion region
                 }
             }
 
-            if (m_motionManager.areWindowsMoving()) {
-                mask &= ~PAINT_WINDOW_LANCZOS;
-            }
             if (m_dragInProgress && m_dragWindow == w) {
                 data += (cursorPos() - m_dragStart);
             }
@@ -391,20 +382,12 @@ void PresentWindowsEffect::paintWindow(EffectWindow *w, int mask, QRegion region
                 QPoint point(rect.x() + rect.width() * 0.95,
                              rect.y() + rect.height() * 0.95);
                 winData->iconFrame->setPosition(point);
-                if (effects->compositingType() == KWin::OpenGL2Compositing && data.shader) {
-                    const float a = 0.9 * data.opacity() * m_decalOpacity * 0.75;
-                    data.shader->setUniform(GLShader::ModulationConstant, QVector4D(a, a, a, a));
-                }
                 winData->iconFrame->render(region, 0.9 * data.opacity() * m_decalOpacity, 0.75);
             }
             if (m_showCaptions) {
                 QPoint point(rect.x() + rect.width() / 2,
                              rect.y() + rect.height() / 2);
                 winData->textFrame->setPosition(point);
-                if (effects->compositingType() == KWin::OpenGL2Compositing && data.shader) {
-                    const float a = 0.9 * data.opacity() * m_decalOpacity * 0.75;
-                    data.shader->setUniform(GLShader::ModulationConstant, QVector4D(a, a, a, a));
-                }
                 winData->textFrame->render(region, 0.9 * data.opacity() * m_decalOpacity, 0.75);
             }
         } else

@@ -30,8 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <fixx11h.h>
 #include <xcb/xcb.h>
 
-#include <kwinconfig.h>
-
 #define KWIN_EXPORT KDE_EXPORT
 
 namespace KWin
@@ -40,23 +38,7 @@ namespace KWin
 
 enum CompositingType {
     NoCompositing = 0,
-    /**
-     * Used as a flag whether OpenGL based compositing is used.
-     * The flag is or-ed to the enum values of the specific OpenGL types.
-     * The actual Compositors use the @c OpenGL1Compositing or @c OpenGL2Compositing
-     * flags. If you need to know whether OpenGL is used, either and the flag or
-     * use EffectsHandler::isOpenGLCompositing().
-     **/
-    OpenGLCompositing = 1,
     XRenderCompositing = 1<<1,
-    OpenGL1Compositing = 1<<2 | OpenGLCompositing,
-    OpenGL2Compositing = 1<<3 | OpenGLCompositing
-};
-
-enum OpenGLPlatformInterface {
-    NoOpenGLPlatformInterface = 0,
-    GlxPlatformInterface,
-    EglPlatformInterface
 };
 
 enum clientAreaOption {

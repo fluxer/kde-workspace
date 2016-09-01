@@ -40,7 +40,6 @@ namespace KWin
 class Client;
 class Deleted;
 class XRenderPicture;
-class GLTexture;
 
 // This class redirects all painting of a given widget (including its children)
 // into a paint device (QPixmap).
@@ -91,7 +90,6 @@ public slots:
 protected:
     PaintRedirector(Client *c, QWidget* widget);
     virtual xcb_render_picture_t picture(DecorationPixmap border) const;
-    virtual GLTexture *texture(DecorationPixmap border) const;
     virtual void resizePixmaps(const QRect *rects);
     virtual void resize(DecorationPixmap border, const QSize &size);
     virtual void preparePaint(const QPixmap &pending);
@@ -136,29 +134,6 @@ private:
     QImage m_scratchImage;
 };
 
-class OpenGLPaintRedirector : public ImageBasedPaintRedirector
-{
-    Q_OBJECT
-
-    enum Texture { LeftRight = 0, TopBottom, TextureCount };
-
-public:
-    OpenGLPaintRedirector(Client *c, QWidget *widget);
-    virtual ~OpenGLPaintRedirector();
-
-    GLTexture *leftRightTexture() const { return m_textures[LeftRight]; }
-    GLTexture *topBottomTexture() const { return m_textures[TopBottom]; }
-
-protected:
-    virtual void resizePixmaps(const QRect *rects);
-    virtual void updatePixmaps(const QRect *rects, const QRegion &region);
-    virtual void preparePaint(const QPixmap &pending);
-
-private:
-    QImage m_tempImage;
-    GLTexture *m_textures[2];
-};
-
 class NativeXRenderPaintRedirector : public PaintRedirector
 {
     Q_OBJECT
@@ -198,34 +173,6 @@ private:
     XRenderPicture* m_pictures[PixmapCount];
     QImage m_tempImage;
 };
-
-template <>
-inline
-GLTexture *PaintRedirector::bottomDecoPixmap() const
-{
-    return texture(BottomPixmap);
-}
-
-template <>
-inline
-GLTexture *PaintRedirector::leftDecoPixmap() const
-{
-    return texture(LeftPixmap);
-}
-
-template <>
-inline
-GLTexture *PaintRedirector::rightDecoPixmap() const
-{
-    return texture(RightPixmap);
-}
-
-template <>
-inline
-GLTexture *PaintRedirector::topDecoPixmap() const
-{
-    return texture(TopPixmap);
-}
 
 template <>
 inline

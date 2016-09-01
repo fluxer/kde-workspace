@@ -247,7 +247,6 @@ public:
      */
     QRect transparentRect() const;
 
-public:
     /**
      * Handles widget and layout creation, call the base implementation when subclassing this member.
      */
@@ -286,10 +285,6 @@ public:
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
 
-    // *** wrap everything from KDecoration *** //
-    // reimplementing from KDecoration (wrapped)
-    virtual bool drawbound(const QRect& geom, bool clear);
-    virtual bool windowDocked(Position side);
     // wrap everything KDecoration provides
     static const KDecorationOptions* options();
     bool isActive() const;
@@ -355,6 +350,35 @@ public:
     // access the KDecoration wrapper
     const KDecoration* decoration() const;
     KDecoration* decoration();
+    // and some convenience methods, all copied from kdecoration.cpp
+    inline bool compositingActive() const
+        { return decoration()->compositingActive(); };
+    inline int tabCount() const
+        { return decoration()->tabCount(); };
+    inline QString caption(int idx) const
+        { return decoration()->caption(idx); };
+    inline QIcon icon(int idx) const
+        { return decoration()->icon(idx); };
+    inline long tabId(int idx) const
+        { return decoration()->tabId(idx); };
+    inline long currentTabId() const
+        { return decoration()->currentTabId(); };
+    inline void setCurrentTab(long id)
+        { decoration()->setCurrentTab(id); };
+    inline void tab_A_before_B(long A, long B)
+        { decoration()->tab_A_before_B(A, B); };
+    inline void tab_A_behind_B(long A, long B)
+        { decoration()->tab_A_behind_B(A, B); };
+    inline void untab(long id, const QRect& newGeom)
+        { decoration()->untab(id, newGeom); };
+    inline void closeTab(long id)
+        { decoration()->closeTab(id); };
+    inline void closeTabGroup()
+        { decoration()->closeTabGroup(); };
+    inline void showWindowMenu(const QPoint &pos, long id)
+        { decoration()->showWindowMenu(pos, id); };
+    inline WindowOperation buttonToWindowOperation(Qt::MouseButtons button)
+        { return decoration()->buttonToWindowOperation(button); };
 
 protected:
     virtual void timerEvent(QTimerEvent *event);
@@ -414,34 +438,6 @@ private:
     KCommonDecorationWrapper* wrapper;
 
     KCommonDecorationPrivate *d;
-};
-
-class KWIN_EXPORT KCommonDecorationUnstable
-    : public KCommonDecoration
-{
-    Q_OBJECT
-public:
-    KCommonDecorationUnstable(KDecorationBridge* bridge, KDecorationFactory* factory);
-    virtual ~KCommonDecorationUnstable();
-    bool compositingActive() const;
-
-    // Window tabbing
-    using KCommonDecoration::caption;
-    QString caption(int idx) const;
-    void closeTab(long id);
-    void closeTabGroup();
-    long currentTabId() const;
-    QIcon icon(int idx = 0) const;
-    void setCurrentTab(long id);
-    void showWindowMenu(const QPoint &, long id);
-    void tab_A_before_B(long A, long B);
-    void tab_A_behind_B(long A, long B);
-    int tabCount() const;
-    long tabId(int idx) const;
-    void untab(long id, const QRect& newGeom);
-
-    WindowOperation buttonToWindowOperation(Qt::MouseButtons button);
-    virtual bool eventFilter(QObject* o, QEvent* e);
 };
 
 /**

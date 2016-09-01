@@ -1118,14 +1118,6 @@ void KCommonDecorationButton::mouseReleaseEvent(QMouseEvent* e)
 
 
 // *** wrap everything from KDecoration *** //
-bool KCommonDecoration::drawbound(const QRect&, bool)
-{
-    return false;
-}
-bool KCommonDecoration::windowDocked(Position)
-{
-    return false;
-}
 const KDecorationOptions* KCommonDecoration::options()
 {
     return KDecoration::options();
@@ -1355,95 +1347,6 @@ const KDecoration* KCommonDecoration::decoration() const
 KDecoration* KCommonDecoration::decoration()
 {
     return wrapper;
-}
-
-
-KCommonDecorationUnstable::KCommonDecorationUnstable(KDecorationBridge* bridge, KDecorationFactory* factory)
-    : KCommonDecoration(bridge, factory)
-{
-    Q_ASSERT(dynamic_cast<const KDecorationUnstable*>(decoration()));
-}
-
-KCommonDecorationUnstable::~KCommonDecorationUnstable()
-{
-}
-
-// All copied from kdecoration.cpp
-bool KCommonDecorationUnstable::compositingActive() const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->compositingActive();
-}
-
-// Window tabbing
-
-int KCommonDecorationUnstable::tabCount() const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->tabCount();
-}
-
-QString KCommonDecorationUnstable::caption(int idx) const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->caption(idx);
-}
-
-QIcon KCommonDecorationUnstable::icon(int idx) const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->icon(idx);
-}
-
-long KCommonDecorationUnstable::tabId(int idx) const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->tabId(idx);
-}
-
-long KCommonDecorationUnstable::currentTabId() const
-{
-    return static_cast<const KDecorationUnstable*>(decoration())->currentTabId();
-}
-
-void KCommonDecorationUnstable::setCurrentTab(long id)
-{
-    static_cast<KDecorationUnstable*>(decoration())->setCurrentTab(id);
-}
-
-void KCommonDecorationUnstable::tab_A_before_B(long A, long B)
-{
-    static_cast<KDecorationUnstable*>(decoration())->tab_A_before_B(A, B);
-}
-
-void KCommonDecorationUnstable::tab_A_behind_B(long A, long B)
-{
-    static_cast<KDecorationUnstable*>(decoration())->tab_A_behind_B(A, B);
-}
-
-void KCommonDecorationUnstable::untab(long id, const QRect& newGeom)
-{
-    static_cast<KDecorationUnstable*>(decoration())->untab(id, newGeom);
-}
-
-void KCommonDecorationUnstable::closeTab(long id)
-{
-    static_cast<KDecorationUnstable*>(decoration())->closeTab(id);
-}
-
-void KCommonDecorationUnstable::closeTabGroup()
-{
-    static_cast<KDecorationUnstable*>(decoration())->closeTabGroup();
-}
-
-void KCommonDecorationUnstable::showWindowMenu(const QPoint &pos, long id)
-{
-    static_cast<KDecorationUnstable*>(decoration())->showWindowMenu(pos, id);
-}
-
-KDecoration::WindowOperation KCommonDecorationUnstable::buttonToWindowOperation(Qt::MouseButtons button)
-{
-    return static_cast<KDecorationUnstable*>(decoration())->buttonToWindowOperation(button);
-}
-
-bool KCommonDecorationUnstable::eventFilter(QObject* o, QEvent* e)
-{
-    return KCommonDecoration::eventFilter(o, e);
 }
 
 // kate: space-indent on; indent-width 4; mixedindent off; indent-mode cstyle;

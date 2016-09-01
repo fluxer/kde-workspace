@@ -1,19 +1,14 @@
-if(KCM_ENABLE_OPENGL)
-include_directories( ${OPENGL_INCLUDE_DIR} ${OPENGL_GLU_INCLUDE_DIR} )
-endif(KCM_ENABLE_OPENGL)
+if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
+    include_directories( ${OPENGL_INCLUDE_DIR} ${OPENGL_GLU_INCLUDE_DIR} )
+endif()
 
-if(KCM_ENABLE_OPENGLES)
-include_directories( ${OPENGLES_INCLUDE_DIR} )
-endif(KCM_ENABLE_OPENGLES)
+if(OPENGLES_FOUND)
+    include_directories( ${OPENGLES_INCLUDE_DIR} )
+endif()
 
 ########### next target ###############
 
-set(KCM_OPENGL_PART_SRCS opengl.cpp )
-set(KCM_OPENGL_PART_UIS opengl.ui )
-
-qt4_wrap_ui(KCM_OPENGL_PART_UIS_H ${KCM_OPENGL_PART_UIS})
-
-kde4_add_plugin(kcm_opengl ${KCM_OPENGL_PART_SRCS} ${KCM_OPENGL_PART_UIS_H})
+kde4_add_plugin(kcm_opengl opengl.cpp)
 
 target_link_libraries(kcm_opengl ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${X11_X11_LIB})
 
@@ -22,13 +17,13 @@ if (DL_LIBRARY)
   target_link_libraries(kcm_opengl ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-if(KCM_ENABLE_OPENGL)
-target_link_libraries(kcm_opengl ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
-endif(KCM_ENABLE_OPENGL)
+if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
+    target_link_libraries(kcm_opengl ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
+endif()
 
-if(KCM_ENABLE_OPENGLES)
-target_link_libraries(kcm_opengl ${OPENGLES_LIBRARIES})
-endif(KCM_ENABLE_OPENGLES)
+if(OPENGLES_FOUND)
+    target_link_libraries(kcm_opengl ${OPENGLES_LIBRARIES})
+endif()
 
 configure_file(openglconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/openglconfig.h )
 

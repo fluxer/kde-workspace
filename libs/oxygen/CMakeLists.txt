@@ -19,7 +19,10 @@ if ( X11_FOUND )
    target_link_libraries(oxygenstyle ${X11_LIBRARIES})
 endif( X11_FOUND )
 
-set_target_properties(oxygenstyle PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+set_target_properties(oxygenstyle PROPERTIES
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
 install(TARGETS oxygenstyle ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 # next target
@@ -42,7 +45,12 @@ if ( X11_FOUND )
    target_link_libraries(oxygenstyleconfig ${X11_LIBRARIES})
 endif( X11_FOUND )
 
-set_target_properties(oxygenstyleconfig PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} DEFINE_SYMBOL MAKE_OXYGENSTYLE_LIB)
+set_target_properties(oxygenstyleconfig PROPERTIES
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
 install(TARGETS oxygenstyleconfig ${INSTALL_TARGETS_DEFAULT_ARGS} )
+
+generate_export_header(oxygenstyle BASE_NAME oxygen)
 
 # Note: no headers installed

@@ -115,11 +115,6 @@ namespace Oxygen
     {
         switch( ability )
         {
-
-            // announce
-            case AbilityAnnounceButtons:
-            case AbilityAnnounceColors:
-
             // buttons
             case AbilityButtonMenu:
             case AbilityButtonApplicationMenu:

@@ -17,10 +17,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
-#include "composite.h"
-#include "compositingadaptor.h"
 
 #include <config-X11.h>
+#include <config-kwin.h>
+
+#include "composite.h"
+#include "compositingadaptor.h"
 
 #include "utils.h"
 #include <QTextStream>
@@ -32,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "overlaywindow.h"
 #include "scene.h"
 #include "scene_xrender.h"
-#include "scene_opengl.h"
 #include "shadow.h"
 #include "useractions.h"
 #include "compositingprefs.h"
@@ -144,7 +145,6 @@ void Compositor::setup()
     m_starting = true;
 
     if (!options->isCompositingInitialized()) {
-#ifndef KWIN_HAVE_OPENGLES
         // options->reloadCompositingSettings(true) initializes the CompositingPrefs which calls an
         // external program in turn
         // run this in an external thread to make startup faster.
@@ -152,14 +152,9 @@ void Compositor::setup()
         connect(compositingPrefsFuture, SIGNAL(finished()), this, SLOT(slotCompositingOptionsInitialized()));
         connect(compositingPrefsFuture, SIGNAL(finished()), compositingPrefsFuture, SLOT(deleteLater()));
         compositingPrefsFuture->setFuture(QtConcurrent::run(options, &Options::reloadCompositingSettings, true));
-#else
-        // OpenGL ES does not call the external program, so no need to create a thread
-        options->reloadCompositingSettings(true);
-        slotCompositingOptionsInitialized();
-#endif
     } else {
         slotCompositingOptionsInitialized();
-    }
+     }
 }
 
 extern int screen_number; // main.cpp
@@ -184,44 +179,7 @@ void Compositor::slotCompositingOptionsInitialized()
     }
 
     switch(options->compositingMode()) {
-    case OpenGLCompositing: {
-        kDebug(1212) << "Initializing OpenGL compositing";
-
-        // Some broken drivers crash on glXQuery() so to prevent constant KWin crashes:
-        KSharedConfigPtr unsafeConfigPtr = KGlobal::config();
-        KConfigGroup unsafeConfig(unsafeConfigPtr, "Compositing");
-        const QString openGLIsUnsafe = "OpenGLIsUnsafe" + (is_multihead ? QString::number(screen_number) : "");
-        if (unsafeConfig.readEntry(openGLIsUnsafe, false))
-            kWarning(1212) << "KWin has detected that your OpenGL library is unsafe to use";
-        else {
-            unsafeConfig.writeEntry(openGLIsUnsafe, true);
-            unsafeConfig.sync();
-#ifndef KWIN_HAVE_OPENGLES
-            if (!CompositingPrefs::hasGlx()) {
-                unsafeConfig.writeEntry(openGLIsUnsafe, false);
-                unsafeConfig.sync();
-                kDebug(1212) << "No glx extensions available";
-                break;
-            }
-#endif
-
-            m_scene = SceneOpenGL::createScene();
-            connect(m_scene, SIGNAL(resetCompositing()), SLOT(restart()));
-
-            // TODO: Add 30 second delay to protect against screen freezes as well
-            unsafeConfig.writeEntry(openGLIsUnsafe, false);
-            unsafeConfig.sync();
-
-            if (m_scene && !m_scene->initFailed())
-                break; // -->
-            delete m_scene;
-            m_scene = NULL;
-        }
-
-        // Do not Fall back to XRender - it causes problems when selfcheck fails during startup, but works later on
-        break;
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     case XRenderCompositing:
         kDebug(1212) << "Initializing XRender compositing";
         m_scene = new SceneXrender(Workspace::self());
@@ -378,23 +336,6 @@ void Compositor::deleteUnusedSupportProperties()
     foreach (const xcb_atom_t &atom, m_unusedSupportProperties) {
         // remove property from root window
         XDeleteProperty(QX11Info::display(), rootWindow(), atom);
-    }
-}
-
-// OpenGL self-check failed, fallback to XRender
-void Compositor::fallbackToXRenderCompositing()
-{
-    finish();
-    KConfigGroup config(KGlobal::config(), "Compositing");
-    config.writeEntry("Backend", "XRender");
-    config.writeEntry("GraphicsSystem", "native");
-    config.sync();
-    if (Extensions::nonNativePixmaps()) { // must restart to change the graphicssystem
-        restartKWin("automatic graphicssystem change for XRender backend");
-        return;
-    } else {
-        options->setCompositingMode(XRenderCompositing);
-        setup();
     }
 }
 
@@ -586,15 +527,6 @@ void Compositor::performCompositing()
 
     // Get the replies
     foreach (Toplevel *win, damaged) {
-        // Discard the cached lanczos texture
-        if (win->effectWindow()) {
-            const QVariant texture = win->effectWindow()->data(LanczosCacheRole);
-            if (texture.isValid()) {
-                delete static_cast<GLTexture *>(texture.value<void*>());
-                win->effectWindow()->setData(LanczosCacheRole, QVariant());
-            }
-        }
-
         win->getDamageRegionReply();
     }
 
@@ -820,11 +752,6 @@ QString Compositor::compositingNotPossibleReason() const
     return CompositingPrefs::compositingNotPossibleReason();
 }
 
-bool Compositor::isOpenGLBroken() const
-{
-    return CompositingPrefs::openGlIsBroken();
-}
-
 QString Compositor::compositingType() const
 {
     if (!hasScene()) {
@@ -833,14 +760,6 @@ QString Compositor::compositingType() const
     switch (m_scene->compositingType()) {
     case XRenderCompositing:
         return "xrender";
-    case OpenGL1Compositing:
-            return "gl1";
-    case OpenGL2Compositing:
-#ifdef KWIN_HAVE_OPENGLES
-        return "gles";
-#else
-        return "gl2";
-#endif
     case NoCompositing:
     default:
         return "none";

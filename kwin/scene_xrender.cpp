@@ -19,9 +19,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+
+#include "config-kwin.h"
+
 #include "scene_xrender.h"
 
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 
 #include "toplevel.h"
 #include "client.h"
@@ -120,7 +123,7 @@ SceneXrender::~SceneXrender()
     buffer = XCB_RENDER_PICTURE_NONE;
     m_overlayWindow->destroy();
     foreach (Window * w, windows)
-    delete w;
+        delete w;
     delete m_overlayWindow;
 }
 
@@ -1018,7 +1021,6 @@ void SceneXrender::EffectFrame::updatePicture()
 
 void SceneXrender::EffectFrame::updateTextPicture()
 {
-    // Mostly copied from SceneOpenGL::EffectFrame::updateTextTexture() above
     delete m_textPicture;
     m_textPicture = 0L;
 

@@ -378,12 +378,6 @@ public:
         return m_static;
     };
     void finalRender(QRegion region, double opacity, double frameOpacity) const;
-    virtual void setShader(GLShader* shader) {
-        m_shader = shader;
-    }
-    virtual GLShader* shader() const {
-        return m_shader;
-    }
     virtual void setSelection(const QRect& selection);
     const QRect& selection() const {
         return m_selectionGeometry;
@@ -422,7 +416,6 @@ private:
     QRect m_selectionGeometry;
 
     Scene::EffectFrame* m_sceneFrame;
-    GLShader* m_shader;
 };
 
 class ScreenLockerWatcher : public QObject

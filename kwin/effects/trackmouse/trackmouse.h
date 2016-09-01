@@ -28,7 +28,6 @@ class KAction;
 
 namespace KWin
 {
-class GLTexture;
 
 class TrackMouseEffect
     : public Effect
@@ -64,8 +63,7 @@ private:
     bool m_active, m_mousePolling;
     float m_angle;
     float m_angleBase;
-    GLTexture* m_texture[2];
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     QSize m_size[2];
     XRenderPicture *m_picture[2];
 #endif

@@ -488,7 +488,7 @@ int main(int argc, char * argv[])
     // "!= XRender" is intended since eg. pot. SW backends likely would profit from raster as well
     KConfigGroup config(KSharedConfig::openConfig("kwinrc"), "Compositing");
     QString preferredSystem("native");
-    if (config.readEntry("Enabled", true) && config.readEntry("Backend", "OpenGL") != "XRender")
+    if (config.readEntry("Enabled", true) && config.readEntry("Backend", "XRender") != "XRender")
         preferredSystem = "";
     QApplication::setGraphicsSystem(config.readEntry("GraphicsSystem", preferredSystem));
 

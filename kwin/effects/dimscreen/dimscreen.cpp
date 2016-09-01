@@ -19,8 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #include "dimscreen.h"
 
-#include <kwinglutils.h>
-
 namespace KWin
 {
 

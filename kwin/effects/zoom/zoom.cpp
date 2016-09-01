@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "zoom.h"
 // KConfigSkeleton
 #include "zoomconfig.h"
@@ -34,8 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <KDebug>
 
-#include <kwinglutils.h>
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
 #include <xcb/render.h>
 #endif
@@ -129,10 +130,9 @@ ZoomEffect::~ZoomEffect()
 void ZoomEffect::showCursor()
 {
     if (isMouseHidden) {
-        // show the previously hidden mouse-pointer again and free the loaded texture/picture.
+        // show the previously hidden mouse-pointer again and free the loaded picture.
         xcb_xfixes_show_cursor(connection(), rootWindow());
-        texture.reset();
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
         xrenderPicture.reset();
 #endif
         isMouseHidden = false;
@@ -144,13 +144,11 @@ void ZoomEffect::hideCursor()
     if (mouseTracking == MouseTrackingProportional && mousePointer == MousePointerKeep)
         return; // don't replace the actual cursor by a static image for no reason.
     if (!isMouseHidden) {
-        // try to load the cursor-theme into a OpenGL texture and if successful then hide the mouse-pointer
+        // try to load the cursor-theme and if successful then hide the mouse-pointer
         recreateTexture();
         bool shouldHide = false;
-        if (effects->isOpenGLCompositing()) {
-            shouldHide = !texture.isNull();
-        } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+        if (effects->compositingType() == XRenderCompositing) {
+#ifdef KWIN_BUILD_COMPOSITE
             shouldHide = !xrenderPicture.isNull();
 #endif
         }
@@ -179,14 +177,12 @@ void ZoomEffect::recreateTexture()
     if (!ximg) // default is better then nothing, so keep it as backup
         ximg = XcursorLibraryLoadImage("left_ptr", "default", iconSize);
     if (ximg) {
-        // turn the XcursorImage into a QImage that will be used to create the GLTexture/XRenderPicture.
+        // turn the XcursorImage into a QImage that will be used to create the XRenderPicture.
         imageWidth = ximg->width;
         imageHeight = ximg->height;
         cursorHotSpot = QPoint(ximg->xhot, ximg->yhot);
         QImage img((uchar*)ximg->pixels, imageWidth, imageHeight, QImage::Format_ARGB32_Premultiplied);
-        if (effects->isOpenGLCompositing())
-            texture.reset(new GLTexture(img));
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
         if (effects->compositingType() == XRenderCompositing)
             xrenderPicture.reset(new XRenderPicture(QPixmap::fromImage(img)));
 #endif
@@ -237,9 +233,7 @@ void ZoomEffect::reconfigure(ReconfigureFlags)
 
 void ZoomEffect::prePaintScreen(ScreenPrePaintData& data, int time)
 {
-    bool altered = false;
     if (zoom != target_zoom) {
-        altered = true;
         const float zoomDist = qAbs(target_zoom - source_zoom);
         if (target_zoom > zoom)
             zoom = qMin(zoom + ((zoomDist * time) / animationTime(150*zoomFactor)), target_zoom);
@@ -249,9 +243,6 @@ void ZoomEffect::prePaintScreen(ScreenPrePaintData& data, int time)
 
     if (zoom == 1.0) {
         showCursor();
-        // reset the generic shader to avoid artifacts in plenty other effects
-        if (altered && effects->isOpenGLCompositing())
-            ShaderBinder binder(ShaderManager::GenericShader, true);
     } else {
         hideCursor();
         data.mask |= PAINT_SCREEN_TRANSFORMED;
@@ -335,15 +326,7 @@ void ZoomEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
         const QPoint p = effects->cursorPos() - cursorHotSpot;
         QRect rect(p.x() * zoom + data.xTranslation(), p.y() * zoom + data.yTranslation(), w, h);
 
-        if (texture) {
-            texture->bind();
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            texture->render(region, rect);
-            texture->unbind();
-            glDisable(GL_BLEND);
-        }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
         if (xrenderPicture) {
 #define DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
             static xcb_render_transform_t xrenderIdentity = {

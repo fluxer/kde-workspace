@@ -22,13 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWIN_MAGNIFIER_H
 #define KWIN_MAGNIFIER_H
 
+#include "config-kwin.h"
+
 #include <kwineffects.h>
 
 namespace KWin
 {
 
-class GLRenderTarget;
-class GLTexture;
 class XRenderPicture;
 
 class MagnifierEffect
@@ -68,9 +68,7 @@ private:
     double target_zoom;
     bool polling; // Mouse polling
     QSize magnifier_size;
-    GLTexture *m_texture;
-    GLRenderTarget *m_fbo;
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     xcb_pixmap_t m_pixmap;
     QSize m_pixmapSize;
     QScopedPointer<XRenderPicture> m_picture;

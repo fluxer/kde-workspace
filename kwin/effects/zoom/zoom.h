@@ -22,14 +22,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWIN_ZOOM_H
 #define KWIN_ZOOM_H
 
+#include "config-kwin.h"
+
 #include <kwineffects.h>
-#include <QtCore/qdatetime.h>
+#include <QDateTime>
 #include <QTimeLine>
 
 namespace KWin
 {
 
-class GLTexture;
 class XRenderPicture;
 
 class ZoomEffect
@@ -117,8 +118,7 @@ private:
     QPoint prevPoint;
     QTime lastMouseEvent;
     QTime lastFocusEvent;
-    QScopedPointer<GLTexture> texture;
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     QScopedPointer<XRenderPicture> xrenderPicture;
 #endif
     int imageWidth;

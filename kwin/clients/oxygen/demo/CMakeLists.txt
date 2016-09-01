@@ -16,7 +16,6 @@ add_executable(oxygen-shadow-demo ${oxygen_shadow_demo_SOURCES})
 target_link_libraries(oxygen-shadow-demo
     ${KDE4_KDEUI_LIBS}
     ${X11_X11_LIB}
-    ${X11_Xrender_LIB}
     ${KDE4_KIO_LIBS}
     oxygenstyle
 )

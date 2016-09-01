@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWINEFFECTS_H
 #define KWINEFFECTS_H
 
-#include <kwinconfig.h>
 #include <kwinglobals.h>
 
 #include <QPair>
@@ -64,7 +63,6 @@ class EffectFrame;
 class EffectFramePrivate;
 class Effect;
 class WindowQuad;
-class GLShader;
 class XRenderPicture;
 class WindowQuadList;
 class WindowPrePaintData;
@@ -205,7 +203,6 @@ enum DataRole {
     WindowUnminimizedGrabRole,
     WindowForceBlurRole, ///< For fullscreen effects to enforce blurring of windows,
     WindowBlurBehindRole, ///< For single windows to blur behind
-    LanczosCacheRole
 };
 
 /**
@@ -316,16 +313,10 @@ public:
          * Clear whole background as the very first step, without optimizing it
          **/
         PAINT_SCREEN_BACKGROUND_FIRST = 1 << 6,
-        // PAINT_DECORATION_ONLY = 1 << 7 has been deprecated
-        /**
-         * Window will be painted with a lanczos filter.
-         **/
-        PAINT_WINDOW_LANCZOS = 1 << 8
-        // PAINT_SCREEN_WITH_TRANSFORMED_WINDOWS_WITHOUT_FULL_REPAINTS = 1 << 9 has been removed
     };
 
     enum Feature {
-        Nothing = 0, Resize, GeometryTip, Outline, ScreenInversion, Blur
+        Nothing = 0, Resize, GeometryTip, Outline, Blur
     };
 
     /**
@@ -407,8 +398,8 @@ public:
 
     /**
      * This method is called directly before painting an @ref EffectFrame.
-     * You can implement this method if you need to bind a shader or perform
-     * other operations before the frame is rendered.
+     * You can implement this method if you need to perform other operations
+     * before the frame is rendered.
      * @param frame The EffectFrame which will be rendered
      * @param region Region to restrict painting to
      * @param opacity Opacity of text/icon
@@ -814,12 +805,6 @@ public:
     Q_SCRIPTABLE virtual void addRepaint(int x, int y, int w, int h) = 0;
 
     CompositingType compositingType() const;
-    /**
-     * @brief Whether the Compositor is OpenGL based (either GL 1 or 2).
-     *
-     * @return bool @c true in case of OpenGL based Compositor, @c false otherwise
-     **/
-    bool isOpenGLCompositing() const;
     virtual unsigned long xrenderBufferPicture() = 0;
     virtual void reconfigure() = 0;
 
@@ -2118,10 +2103,6 @@ public:
      */
     qreal crossFadeProgress() const;
     WindowQuadList quads;
-    /**
-     * Shader to be used for rendering, if any.
-     */
-    GLShader* shader;
 private:
     WindowPaintDataPrivate * const d;
 };
@@ -2573,15 +2554,6 @@ public:
      * @param selection The geometry of the selection in screen coordinates.
      **/
     virtual void setSelection(const QRect& selection) = 0;
-
-    /**
-     * @param shader The GLShader for rendering.
-     **/
-    virtual void setShader(GLShader* shader) = 0;
-    /**
-     * @returns The GLShader used for rendering or null if none.
-     **/
-    virtual GLShader* shader() const = 0;
 
     /**
      * @returns The style of this EffectFrame.

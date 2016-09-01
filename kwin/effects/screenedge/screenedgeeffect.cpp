@@ -17,10 +17,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+#include "config-kwin.h"
+
 #include "screenedgeeffect.h"
 // KWin
-#include <kwinglutils.h>
-#include <kwingltexture.h>
 #include <kwinxrenderutils.h>
 // KDE
 #include <Plasma/Svg>
@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPainter>
 #include <QVector4D>
 // xcb
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <xcb/render.h>
 #endif
 
@@ -88,27 +88,8 @@ void ScreenEdgeEffect::paintScreen(int mask, QRegion region, ScreenPaintData &da
         if (opacity == 0.0) {
             continue;
         }
-        if (effects->isOpenGLCompositing()) {
-            GLTexture *texture = (*it)->texture.data();
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            texture->bind();
-            if (effects->compositingType() == OpenGL2Compositing) {
-                ShaderBinder binder(ShaderManager::SimpleShader);
-                const QVector4D constant(opacity, opacity, opacity, opacity);
-                binder.shader()->setUniform(GLShader::ModulationConstant, constant);
-                texture->render(infiniteRegion(), (*it)->geometry);
-            } else if (effects->compositingType() == OpenGL1Compositing) {
-#ifdef KWIN_HAVE_OPENGL_1
-                glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-                glColor4f(1.0, 1.0, 1.0, opacity);
-                texture->render(infiniteRegion(), (*it)->geometry);
-#endif
-            }
-            texture->unbind();
-            glDisable(GL_BLEND);
-        } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+        if (effects->compositingType() == XRenderCompositing) {
+#ifdef KWIN_BUILD_COMPOSITE
             const QRect &rect = (*it)->geometry;
             const QSize &size = (*it)->pictureSize;
             int x = rect.x();
@@ -149,10 +130,8 @@ void ScreenEdgeEffect::edgeApproaching(ElectricBorder border, qreal factor, cons
             (*it)->geometry = geometry;
             effects->addRepaint((*it)->geometry);
             if (border == ElectricLeft || border == ElectricRight || border == ElectricTop || border == ElectricBottom) {
-                if (effects->isOpenGLCompositing()) {
-                    (*it)->texture.reset(createEdgeGlow<GLTexture>(border, geometry.size()));
-                } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+                if (effects->compositingType() == XRenderCompositing) {
+#ifdef KWIN_BUILD_COMPOSITE
                     (*it)->picture.reset(createEdgeGlow<XRenderPicture>(border, geometry.size()));
 #endif
                 }
@@ -181,21 +160,8 @@ Glow *ScreenEdgeEffect::createGlow(ElectricBorder border, qreal factor, const QR
     glow->geometry = geometry;
 
     // render the glow image
-    if (effects->isOpenGLCompositing()) {
-        if (border == ElectricTopLeft || border == ElectricTopRight || border == ElectricBottomRight || border == ElectricBottomLeft) {
-            glow->texture.reset(createCornerGlow<GLTexture>(border));
-        } else {
-            glow->texture.reset(createEdgeGlow<GLTexture>(border, geometry.size()));
-        }
-        if (!glow->texture.isNull()) {
-            glow->texture->setWrapMode(GL_CLAMP_TO_EDGE);
-        }
-        if (glow->texture.isNull()) {
-            delete glow;
-            return NULL;
-        }
-    } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+    if (effects->compositingType() == XRenderCompositing) {
+#ifdef KWIN_BUILD_COMPOSITE
         if (border == ElectricTopLeft || border == ElectricTopRight || border == ElectricBottomRight || border == ElectricBottomLeft) {
             glow->pictureSize = cornerGlowSize(border);
             glow->picture.reset(createCornerGlow<XRenderPicture>(border));

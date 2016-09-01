@@ -118,13 +118,11 @@ void KDecorationPreview::render(QPainter *painter, KDecoration *decoration, cons
     int padLeft, padRight, padTop, padBottom;
     padLeft = padRight = padTop = padBottom = 0;
     bool useMask = true;
-    if (KDecorationUnstable *unstable = qobject_cast<KDecorationUnstable *>(decoration)) {
-        unstable->padding(padLeft, padRight, padTop, padBottom);
-        size.setWidth(size.width() + padLeft + padRight);
-        size.setHeight(size.height() + padTop + padBottom);
-        if (padLeft || padRight || padTop || padBottom) {
-            useMask = false;
-        }
+    decoration->padding(padLeft, padRight, padTop, padBottom);
+    size.setWidth(size.width() + padLeft + padRight);
+    size.setHeight(size.height() + padTop + padBottom);
+    if (padLeft || padRight || padTop || padBottom) {
+        useMask = false;
     }
     decoration->resize(size);
 

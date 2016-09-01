@@ -18,12 +18,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "resize.h"
 // KConfigSkeleton
 #include "resizeconfig.h"
 
-#include <kwinglutils.h>
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include "kwinxrenderutils.h"
 #endif
 
@@ -82,31 +83,7 @@ void ResizeEffect::paintWindow(EffectWindow* w, int mask, QRegion region, Window
             float alpha = 0.8f;
             QColor color = KColorScheme(QPalette::Normal, KColorScheme::Selection).background().color();
 
-            if (effects->isOpenGLCompositing()) {
-                GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-                vbo->reset();
-                vbo->setUseColor(true);
-                ShaderBinder binder(ShaderManager::ColorShader);
-                glEnable(GL_BLEND);
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-                color.setAlphaF(alpha);
-                vbo->setColor(color);
-                QVector<float> verts;
-                verts.reserve(paintRegion.rects().count() * 12);
-                foreach (const QRect & r, paintRegion.rects()) {
-                    verts << r.x() + r.width() << r.y();
-                    verts << r.x() << r.y();
-                    verts << r.x() << r.y() + r.height();
-                    verts << r.x() << r.y() + r.height();
-                    verts << r.x() + r.width() << r.y() + r.height();
-                    verts << r.x() + r.width() << r.y();
-                }
-                vbo->setData(verts.count() / 2, 2, verts.data(), NULL);
-                vbo->render(GL_TRIANGLES);
-                glDisable(GL_BLEND);
-            }
-
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
             if (effects->compositingType() == XRenderCompositing) {
                 QVector<xcb_rectangle_t> rects;
                 foreach (const QRect & r, paintRegion.rects()) {

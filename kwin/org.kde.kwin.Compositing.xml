@@ -4,7 +4,6 @@
     <property name="active" type="b" access="read"/>
     <property name="compositingPossible" type="b" access="read"/>
     <property name="compositingNotPossibleReason" type="s" access="read"/>
-    <property name="openGLIsBroken" type="b" access="read"/>
     <property name="compositingType" type="s" access="read"/>
     <signal name="compositingToggled">
       <arg name="active" type="b" direction="out"/>

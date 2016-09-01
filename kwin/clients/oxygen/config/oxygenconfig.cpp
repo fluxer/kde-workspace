@@ -38,6 +38,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusMessage>
 
+#include <kdemacros.h>
 #include <KAboutData>
 #include <KAboutApplicationDialog>
 #include <KConfigGroup>

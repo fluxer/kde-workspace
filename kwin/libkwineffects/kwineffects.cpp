@@ -19,10 +19,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
-#include "kwineffects.h"
-
-#include "kwinxrenderutils.h"
 #include "config-kwin.h"
+
+#include "kwineffects.h"
+#include "kwinxrenderutils.h"
 
 #include <QtDBus/QtDBus>
 #include <QVariant>
@@ -42,7 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <assert.h>
 
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/Xfixes.h>
 #include <xcb/xfixes.h>
@@ -237,7 +237,6 @@ public:
 
 WindowPaintData::WindowPaintData(EffectWindow* w)
     : PaintData()
-    , shader(NULL)
     , d(new WindowPaintDataPrivate())
 {
     quads = w->buildQuads();
@@ -252,7 +251,6 @@ WindowPaintData::WindowPaintData(EffectWindow* w)
 WindowPaintData::WindowPaintData(const WindowPaintData &other)
     : PaintData()
     , quads(other.quads)
-    , shader(other.shader)
     , d(new WindowPaintDataPrivate())
 {
     setXScale(other.xScale());
@@ -636,11 +634,6 @@ EffectsHandler::~EffectsHandler()
 CompositingType EffectsHandler::compositingType() const
 {
     return compositing_type;
-}
-
-bool EffectsHandler::isOpenGLCompositing() const
-{
-    return compositing_type & OpenGLCompositing;
 }
 
 void EffectsHandler::sendReloadMessage(const QString& effectname)
@@ -1350,12 +1343,7 @@ struct PaintClipper::Iterator::Data {
 PaintClipper::Iterator::Iterator()
     : data(new Data)
 {
-    if (clip() && effects->isOpenGLCompositing()) {
-        data->rects = paintArea().rects();
-        data->index = -1;
-        next(); // move to the first one
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (clip() && effects->compositingType() == XRenderCompositing) {
         XFixesRegion region(paintArea());
         xcb_xfixes_set_picture_clip_region(connection(), effects->xrenderBufferPicture(), region, 0, 0);
@@ -1365,7 +1353,7 @@ PaintClipper::Iterator::Iterator()
 
 PaintClipper::Iterator::~Iterator()
 {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (clip() && effects->compositingType() == XRenderCompositing)
         xcb_xfixes_set_picture_clip_region(connection(), effects->xrenderBufferPicture(), XCB_XFIXES_REGION_NONE, 0, 0);
 #endif
@@ -1376,9 +1364,7 @@ bool PaintClipper::Iterator::isDone()
 {
     if (!clip())
         return data->index == 1; // run once
-    if (effects->isOpenGLCompositing())
-        return data->index >= data->rects.count(); // run once per each area
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (effects->compositingType() == XRenderCompositing)
         return data->index == 1; // run once
 #endif
@@ -1394,9 +1380,7 @@ QRect PaintClipper::Iterator::boundingRect() const
 {
     if (!clip())
         return infiniteRegion();
-    if (effects->isOpenGLCompositing())
-        return data->rects[ data->index ];
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (effects->compositingType() == XRenderCompositing)
         return paintArea().boundingRect();
 #endif

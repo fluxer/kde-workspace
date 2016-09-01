@@ -34,15 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-class Client;
-class CompositingPrefs;
 class Settings;
 
 class Options : public QObject, public KDecorationOptions
 {
     Q_OBJECT
     Q_ENUMS(FocusPolicy)
-    Q_ENUMS(GlSwapStrategy)
     Q_ENUMS(MouseCommand)
     Q_ENUMS(MouseWheelCommand)
 
@@ -165,26 +162,10 @@ class Options : public QObject, public KDecorationOptions
      * 2 = try trilinear when transformed; else 1,
      * -1 = auto
      **/
-    Q_PROPERTY(int glSmoothScale READ glSmoothScale WRITE setGlSmoothScale NOTIFY glSmoothScaleChanged)
-    Q_PROPERTY(bool colorCorrected READ isColorCorrected WRITE setColorCorrected NOTIFY colorCorrectedChanged)
     Q_PROPERTY(bool xrenderSmoothScale READ isXrenderSmoothScale WRITE setXrenderSmoothScale NOTIFY xrenderSmoothScaleChanged)
     Q_PROPERTY(qint64 maxFpsInterval READ maxFpsInterval WRITE setMaxFpsInterval NOTIFY maxFpsIntervalChanged)
     Q_PROPERTY(uint refreshRate READ refreshRate WRITE setRefreshRate NOTIFY refreshRateChanged)
     Q_PROPERTY(qint64 vBlankTime READ vBlankTime WRITE setVBlankTime NOTIFY vBlankTimeChanged)
-    Q_PROPERTY(bool glDirect READ isGlDirect WRITE setGlDirect NOTIFY glDirectChanged)
-    Q_PROPERTY(bool glStrictBinding READ isGlStrictBinding WRITE setGlStrictBinding NOTIFY glStrictBindingChanged)
-    /**
-     * Whether strict binding follows the driver or has been overwritten by a user defined config value.
-     * If @c true @link glStrictBinding is set by the OpenGL Scene during initialization.
-     * If @c false @link glStrictBinding is set from a config value and not updated during scene initialization.
-     **/
-    Q_PROPERTY(bool glStrictBindingFollowsDriver READ isGlStrictBindingFollowsDriver WRITE setGlStrictBindingFollowsDriver NOTIFY glStrictBindingFollowsDriverChanged)
-    /**
-     * Whether legacy OpenGL should be used or OpenGL (ES) 2
-     **/
-    Q_PROPERTY(bool glLegacy READ isGlLegacy WRITE setGlLegacy NOTIFY glLegacyChanged)
-    Q_PROPERTY(bool glCoreProfile READ glCoreProfile WRITE setGLCoreProfile NOTIFY glCoreProfileChanged)
-    Q_PROPERTY(GlSwapStrategy glPreferBufferSwap READ glPreferBufferSwap WRITE setGlPreferBufferSwap NOTIFY glPreferBufferSwapChanged)
 public:
 
     explicit Options(QObject *parent = NULL);
@@ -502,16 +483,6 @@ public:
     bool isUnredirectFullscreen() const {
         return m_unredirectFullscreen;
     }
-    // OpenGL
-    // 0 = no, 1 = yes when transformed,
-    // 2 = try trilinear when transformed; else 1,
-    // -1 = auto
-    int glSmoothScale() const {
-        return m_glSmoothScale;
-    }
-    bool isColorCorrected() const {
-        return m_colorCorrected;
-    }
     // XRender
     bool isXrenderSmoothScale() const {
         return m_xrenderSmoothScale;
@@ -526,26 +497,6 @@ public:
     }
     qint64 vBlankTime() const {
         return m_vBlankTime;
-    }
-    bool isGlDirect() const {
-        return m_glDirect;
-    }
-    bool isGlStrictBinding() const {
-        return m_glStrictBinding;
-    }
-    bool isGlStrictBindingFollowsDriver() const {
-        return m_glStrictBindingFollowsDriver;
-    }
-    bool isGlLegacy() const {
-        return m_glLegacy;
-    }
-    bool glCoreProfile() const {
-        return m_glCoreProfile;
-    }
-
-    enum GlSwapStrategy { NoSwapEncourage = 0, CopyFrontBuffer = 'c', PaintFullScreen = 'p', ExtendDamage = 'e', AutoSwapStrategy = 'a' };
-    GlSwapStrategy glPreferBufferSwap() const {
-        return m_glPreferBufferSwap;
     }
 
     // setters
@@ -598,17 +549,10 @@ public:
     void setCompositingInitialized(bool compositingInitialized);
     void setHiddenPreviews(int hiddenPreviews);
     void setUnredirectFullscreen(bool unredirectFullscreen);
-    void setGlSmoothScale(int glSmoothScale);
     void setXrenderSmoothScale(bool xrenderSmoothScale);
     void setMaxFpsInterval(qint64 maxFpsInterval);
     void setRefreshRate(uint refreshRate);
     void setVBlankTime(qint64 vBlankTime);
-    void setGlDirect(bool glDirect);
-    void setGlStrictBinding(bool glStrictBinding);
-    void setGlStrictBindingFollowsDriver(bool glStrictBindingFollowsDriver);
-    void setGlLegacy(bool glLegacy);
-    void setGLCoreProfile(bool glCoreProfile);
-    void setGlPreferBufferSwap(char glPreferBufferSwap);
 
     // default values
     static WindowOperation defaultOperationTitlebarDblClick() {
@@ -666,7 +610,7 @@ public:
         return true;
     }
     static CompositingType defaultCompositingMode() {
-        return OpenGLCompositing;
+        return XRenderCompositing;
     }
     static bool defaultUseCompositing() {
         return true;
@@ -678,12 +622,6 @@ public:
         return HiddenPreviewsShown;
     }
     static bool defaultUnredirectFullscreen() {
-        return false;
-    }
-    static int defaultGlSmoothScale() {
-        return 2;
-    }
-    static bool defaultColorCorrected() {
         return false;
     }
     static bool defaultXrenderSmoothScale() {
@@ -701,24 +639,6 @@ public:
     static uint defaultVBlankTime() {
         return 6000; // 6ms
     }
-    static bool defaultGlDirect() {
-        return true;
-    }
-    static bool defaultGlStrictBinding() {
-        return true;
-    }
-    static bool defaultGlStrictBindingFollowsDriver() {
-        return true;
-    }
-    static bool defaultGlLegacy() {
-        return false;
-    }
-    static bool defaultGLCoreProfile() {
-        return false;
-    }
-    static GlSwapStrategy defaultGlPreferBufferSwap() {
-        return AutoSwapStrategy;
-    }
     static int defaultAnimationSpeed() {
         return 3;
     }
@@ -728,7 +648,7 @@ public:
      **/
     unsigned long loadConfig();
     /**
-     * Performs loading of compositing settings which do not depend on OpenGL.
+     * Performs loading of compositing settings
      **/
     bool loadCompositingConfig(bool force);
     void reparseConfiguration();
@@ -787,21 +707,10 @@ Q_SIGNALS:
     void compositingInitializedChanged();
     void hiddenPreviewsChanged();
     void unredirectFullscreenChanged();
-    void glSmoothScaleChanged();
-    void colorCorrectedChanged();
     void xrenderSmoothScaleChanged();
     void maxFpsIntervalChanged();
     void refreshRateChanged();
     void vBlankTimeChanged();
-    void glDirectChanged();
-    void glStrictBindingChanged();
-    void glStrictBindingFollowsDriverChanged();
-    void glLegacyChanged();
-    void glCoreProfileChanged();
-    void glPreferBufferSwapChanged();
-
-public Q_SLOTS:
-    void setColorCorrected(bool colorCorrected = false);
 
 private:
     void setElectricBorders(int borders);
@@ -836,19 +745,11 @@ private:
     bool m_compositingInitialized;
     HiddenPreviews m_hiddenPreviews;
     bool m_unredirectFullscreen;
-    int m_glSmoothScale;
-    bool m_colorCorrected;
     bool m_xrenderSmoothScale;
     qint64 m_maxFpsInterval;
     // Settings that should be auto-detected
     uint m_refreshRate;
     qint64 m_vBlankTime;
-    bool m_glDirect;
-    bool m_glStrictBinding;
-    bool m_glStrictBindingFollowsDriver;
-    bool m_glLegacy;
-    bool m_glCoreProfile;
-    GlSwapStrategy m_glPreferBufferSwap;
 
     WindowOperation OpTitlebarDblClick;
 

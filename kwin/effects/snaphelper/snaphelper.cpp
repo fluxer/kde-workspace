@@ -20,8 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "snaphelper.h"
 
-#include <kwinglutils.h>
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
 #include <xcb/render.h>
 #endif
@@ -69,55 +68,8 @@ void SnapHelperEffect::postPaintScreen()
     effects->postPaintScreen();
     if (m_timeline.currentValue() != 0.0) {
         // Display the guide
-        if (effects->isOpenGLCompositing()) {
-            GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-            vbo->reset();
-            vbo->setUseColor(true);
-            ShaderBinder binder(ShaderManager::ColorShader);
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-            QColor color;
-            color.setRedF(0.5);
-            color.setGreenF(0.5);
-            color.setBlueF(0.5);
-            color.setAlphaF(m_timeline.currentValue() * 0.5);
-            vbo->setColor(color);
-            glLineWidth(4.0);
-            QVector<float> verts;
-            verts.reserve(effects->numScreens() * 24);
-            for (int i = 0; i < effects->numScreens(); ++i) {
-                const QRect& rect = effects->clientArea(ScreenArea, i, 0);
-                int midX = rect.x() + rect.width() / 2;
-                int midY = rect.y() + rect.height() / 2 ;
-                int halfWidth = m_window->width() / 2;
-                int halfHeight = m_window->height() / 2;
-
-                // Center lines
-                verts << rect.x() + rect.width() / 2 << rect.y();
-                verts << rect.x() + rect.width() / 2 << rect.y() + rect.height();
-                verts << rect.x() << rect.y() + rect.height() / 2;
-                verts << rect.x() + rect.width() << rect.y() + rect.height() / 2;
-
-                // Window outline
-                // The +/- 2 is to prevent line overlap
-                verts << midX - halfWidth + 2 << midY - halfHeight;
-                verts << midX + halfWidth + 2 << midY - halfHeight;
-                verts << midX + halfWidth << midY - halfHeight + 2;
-                verts << midX + halfWidth << midY + halfHeight + 2;
-                verts << midX + halfWidth - 2 << midY + halfHeight;
-                verts << midX - halfWidth - 2 << midY + halfHeight;
-                verts << midX - halfWidth << midY + halfHeight - 2;
-                verts << midX - halfWidth << midY - halfHeight - 2;
-            }
-            vbo->setData(verts.count() / 2, 2, verts.data(), NULL);
-            vbo->render(GL_LINES);
-
-            glDisable(GL_BLEND);
-            glLineWidth(1.0);
-        }
         if ( effects->compositingType() == XRenderCompositing ) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
             for (int i = 0; i < effects->numScreens(); ++i) {
                 const QRect& rect = effects->clientArea( ScreenArea, i, 0 );
                 int midX = rect.x() + rect.width() / 2;

@@ -32,7 +32,7 @@
 #include "moc_kcommondecoration_p.cpp"
 
 KCommonDecorationWrapper::KCommonDecorationWrapper(KCommonDecoration* deco, KDecorationBridge* bridge, KDecorationFactory* factory)
-    : KDecorationUnstable(bridge, factory)
+    : KDecoration(bridge, factory)
     , decoration(deco)
 {
 }
@@ -96,16 +96,6 @@ void KCommonDecorationWrapper::desktopChange()
 void KCommonDecorationWrapper::shadeChange()
 {
     return decoration->shadeChange();
-}
-
-bool KCommonDecorationWrapper::drawbound(const QRect& geom, bool clear)
-{
-    return decoration->drawbound(geom, clear);
-}
-
-bool KCommonDecorationWrapper::windowDocked(Position side)
-{
-    return decoration->windowDocked(side);
 }
 
 void KCommonDecorationWrapper::reset(unsigned long changed)

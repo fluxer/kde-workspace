@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "workspace.h"
 // kwin libs
 #include <kdecorationfactory.h>
-#include <kwinglplatform.h>
 // kwin
 #ifdef KWIN_BUILD_KAPPMENU
 #include "appmenu.h"
@@ -1338,92 +1337,6 @@ QString Workspace::supportInformation() const
     if (effects) {
         support.append("Compositing is active\n");
         switch (effects->compositingType()) {
-        case OpenGL1Compositing:
-        case OpenGL2Compositing:
-        case OpenGLCompositing: {
-#ifdef KWIN_HAVE_OPENGLES
-            support.append("Compositing Type: OpenGL ES 2.0\n");
-#else
-            support.append("Compositing Type: OpenGL\n");
-#endif
-
-            GLPlatform *platform = GLPlatform::instance();
-            support.append("OpenGL vendor string: " %   platform->glVendorString() % '\n');
-            support.append("OpenGL renderer string: " % platform->glRendererString() % '\n');
-            support.append("OpenGL version string: " %  platform->glVersionString() % '\n');
-
-            if (platform->supports(LimitedGLSL) || platform->supports(GLSL))
-                support.append("OpenGL shading language version string: " % platform->glShadingLanguageVersionString() % '\n');
-
-            support.append("Driver: " % GLPlatform::driverToString(platform->driver()) % '\n');
-            if (!platform->isMesaDriver())
-                support.append("Driver version: " % GLPlatform::versionToString(platform->driverVersion()) % '\n');
-
-            support.append("GPU class: " % GLPlatform::chipClassToString(platform->chipClass()) % '\n');
-
-            support.append("OpenGL version: " % GLPlatform::versionToString(platform->glVersion()) % '\n');
-
-            if (platform->supports(LimitedGLSL) || platform->supports(GLSL))
-                support.append("GLSL version: " % GLPlatform::versionToString(platform->glslVersion()) % '\n');
-
-            if (platform->isMesaDriver())
-                support.append("Mesa version: " % GLPlatform::versionToString(platform->mesaVersion()) % '\n');
-            if (platform->serverVersion() > 0)
-                support.append("X server version: " % GLPlatform::versionToString(platform->serverVersion()) % '\n');
-            if (platform->kernelVersion() > 0)
-                support.append("Linux kernel version: " % GLPlatform::versionToString(platform->kernelVersion()) % '\n');
-
-            support.append("Direct rendering: ");
-            if (platform->isDirectRendering()) {
-                support.append("yes\n");
-            } else {
-                support.append("no\n");
-            }
-            support.append("Requires strict binding: ");
-            if (!platform->isLooseBinding()) {
-                support.append("yes\n");
-            } else {
-                support.append("no\n");
-            }
-            support.append("GLSL shaders: ");
-            if (platform->supports(GLSL)) {
-                if (platform->supports(LimitedGLSL)) {
-                    support.append(" limited\n");
-                } else {
-                    support.append(" yes\n");
-                }
-            } else {
-                support.append(" no\n");
-            }
-            support.append("Texture NPOT support: ");
-            if (platform->supports(TextureNPOT)) {
-                if (platform->supports(LimitedNPOT)) {
-                    support.append(" limited\n");
-                } else {
-                    support.append(" yes\n");
-                }
-            } else {
-                support.append(" no\n");
-            }
-            support.append("Virtual Machine: ");
-            if (platform->isVirtualMachine()) {
-                support.append(" yes\n");
-            } else {
-                support.append(" no\n");
-            }
-
-            if (effects->compositingType() == OpenGL2Compositing) {
-                support.append("OpenGL 2 Shaders are used\n");
-            } else {
-                support.append("OpenGL 2 Shaders are not used. Legacy OpenGL 1.x code path is used.\n");
-            }
-            support.append("Painting blocks for vertical retrace: ");
-            if (m_compositor->scene()->blocksForRetrace())
-                support.append(" yes\n");
-            else
-                support.append(" no\n");
-            break;
-        }
         case XRenderCompositing:
             support.append("Compositing Type: XRender\n");
             break;

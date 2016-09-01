@@ -1764,14 +1764,6 @@ void Workspace::slotInvertScreen()
         return;
 #endif
 
-    //BEGIN effect plugin inversion - atm only works with OpenGL and has an overhead to it
-    if (effects) {
-        if (Effect *inverter = static_cast<EffectsHandlerImpl*>(effects)->provides(Effect::ScreenInversion)) {
-            kDebug(1212) << "inverting screen using Effect plugin";
-            QMetaObject::invokeMethod(inverter, "toggleScreenInversion", Qt::DirectConnection);
-        }
-    }
-
     if (!succeeded)
         kDebug(1212) << "sorry - neither Xrandr, nor XF86VidModeSetGammaRamp worked and there's no inversion supplying effect plugin either";
 

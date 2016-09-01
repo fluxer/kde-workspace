@@ -60,7 +60,7 @@ private:
 };
 
 class KDecorationPreviewBridge
-    : public KDecorationBridgeUnstable
+    : public KDecorationBridge
 {
 public:
     KDecorationPreviewBridge(KDecorationPreview* preview, bool active);

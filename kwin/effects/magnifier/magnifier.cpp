@@ -20,18 +20,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "magnifier.h"
 // KConfigSkeleton
 #include "magnifierconfig.h"
-
-#include <kwinconfig.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
 
-#include <kwinglutils.h>
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
 #include <xcb/render.h>
 #endif
@@ -48,9 +47,7 @@ MagnifierEffect::MagnifierEffect()
     : zoom(1)
     , target_zoom(1)
     , polling(false)
-    , m_texture(0)
-    , m_fbo(0)
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     , m_pixmap(XCB_PIXMAP_NONE)
 #endif
 {
@@ -69,8 +66,6 @@ MagnifierEffect::MagnifierEffect()
 
 MagnifierEffect::~MagnifierEffect()
 {
-    delete m_fbo;
-    delete m_texture;
     destroyPixmap();
     // Save the zoom value.
     KConfigGroup conf = EffectsHandler::effectConfig("Magnifier");
@@ -80,7 +75,7 @@ MagnifierEffect::~MagnifierEffect()
 
 void MagnifierEffect::destroyPixmap()
 {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (effects->compositingType() != XRenderCompositing) {
         return;
     }
@@ -94,8 +89,7 @@ void MagnifierEffect::destroyPixmap()
 
 bool MagnifierEffect::supported()
 {
-    return  effects->compositingType() == XRenderCompositing ||
-            (effects->isOpenGLCompositing() && GLRenderTarget::blitSupported());
+    return  effects->compositingType() == XRenderCompositing;
 }
 
 void MagnifierEffect::reconfigure(ReconfigureFlags)
@@ -120,11 +114,6 @@ void MagnifierEffect::prePaintScreen(ScreenPrePaintData& data, int time)
         else {
             zoom = qMax(zoom * qMin(1 - diff, 0.8), target_zoom);
             if (zoom == 1.0) {
-                // zoom ended - delete FBO and texture
-                delete m_fbo;
-                delete m_texture;
-                m_fbo = NULL;
-                m_texture = NULL;
                 destroyPixmap();
             }
         }
@@ -145,51 +134,8 @@ void MagnifierEffect::paintScreen(int mask, QRegion region, ScreenPaintData& dat
         QRect srcArea(cursor.x() - (double)area.width() / (zoom*2),
                       cursor.y() - (double)area.height() / (zoom*2),
                       (double)area.width() / zoom, (double)area.height() / zoom);
-        if (effects->isOpenGLCompositing()) {
-            m_fbo->blitFromFramebuffer(srcArea);
-            // paint magnifier
-            m_texture->bind();
-            m_texture->render(infiniteRegion(), area);
-            m_texture->unbind();
-            QVector<float> verts;
-            GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-            vbo->reset();
-            vbo->setColor(QColor(0, 0, 0));
-            // top frame
-            verts << area.right() + FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.top() - 1;
-            verts << area.left() - FRAME_WIDTH << area.top() - 1;
-            verts << area.right() + FRAME_WIDTH << area.top() - 1;
-            verts << area.right() + FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            // left frame
-            verts << area.left() - 1 << area.top() - FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.left() - 1 << area.bottom() + FRAME_WIDTH;
-            verts << area.left() - 1 << area.top() - FRAME_WIDTH;
-            // right frame
-            verts << area.right() + FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            verts << area.right() + 1 << area.top() - FRAME_WIDTH;
-            verts << area.right() + 1 << area.bottom() + FRAME_WIDTH;
-            verts << area.right() + 1 << area.bottom() + FRAME_WIDTH;
-            verts << area.right() + FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.right() + FRAME_WIDTH << area.top() - FRAME_WIDTH;
-            // bottom frame
-            verts << area.right() + FRAME_WIDTH << area.bottom() + 1;
-            verts << area.left() - FRAME_WIDTH << area.bottom() + 1;
-            verts << area.left() - FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.left() - FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.right() + FRAME_WIDTH << area.bottom() + FRAME_WIDTH;
-            verts << area.right() + FRAME_WIDTH << area.bottom() + 1;
-            vbo->setData(verts.size() / 2, 2, verts.constData(), NULL);
-
-            ShaderBinder binder(ShaderManager::ColorShader);
-            vbo->render(GL_TRIANGLES);
-        }
         if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
             if (m_pixmap == XCB_PIXMAP_NONE || m_pixmapSize != srcArea.size()) {
                 destroyPixmap();
                 m_pixmap = xcb_generate_id(connection());
@@ -255,11 +201,6 @@ void MagnifierEffect::zoomIn()
         polling = true;
         effects->startMousePolling();
     }
-    if (effects->isOpenGLCompositing() && !m_texture) {
-        m_texture = new GLTexture(magnifier_size.width(), magnifier_size.height());
-        m_texture->setYInverted(false);
-        m_fbo = new GLRenderTarget(*m_texture);
-    }
     effects->addRepaint(magnifierArea().adjusted(-FRAME_WIDTH, -FRAME_WIDTH, FRAME_WIDTH, FRAME_WIDTH));
 }
 
@@ -273,10 +214,6 @@ void MagnifierEffect::zoomOut()
             effects->stopMousePolling();
         }
         if (zoom == target_zoom) {
-            delete m_fbo;
-            delete m_texture;
-            m_fbo = NULL;
-            m_texture = NULL;
             destroyPixmap();
         }
     }
@@ -292,11 +229,6 @@ void MagnifierEffect::toggle()
         if (!polling) {
             polling = true;
             effects->startMousePolling();
-        }
-        if (effects->isOpenGLCompositing() && !m_texture) {
-            m_texture = new GLTexture(magnifier_size.width(), magnifier_size.height());
-            m_texture->setYInverted(false);
-            m_fbo = new GLRenderTarget(*m_texture);
         }
     } else {
         target_zoom = 1;

@@ -5,6 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
+include(GenerateExportHeader)
 
 find_package(KDE4 4.18.0 REQUIRED)
 include(KDE4Defaults)
@@ -30,6 +31,7 @@ set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"
     URL "http://www.opengl.org"
     TYPE OPTIONAL
+    PURPOSE "3D screensavers, OpenGL info module"
 )
 
 macro_optional_find_package(OpenGLES)
@@ -37,6 +39,7 @@ set_package_properties(OpenGLES PROPERTIES
     DESCRIPTION "The OpenGLES libraries"
     URL "http://www.khronos.org/opengles"
     TYPE OPTIONAL
+    PURPOSE "OpenGL ES info module"
 )
 
 macro_optional_find_package(UDev)
@@ -83,9 +86,6 @@ if(Q_WS_X11)
     endif()
     if(NOT X11_Xrandr_FOUND)
         message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support.")
-    endif()
-    if(NOT OPENGL_FOUND AND NOT OPENGLES_FOUND)
-        message(FATAL_ERROR "Either OpenGL or OpenGL ES 2.0 are required for Compositing support in KWin.")
     endif()
     if(NOT X11_Xcursor_FOUND)
         message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin.")

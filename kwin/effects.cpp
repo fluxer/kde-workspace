@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "effects.h"
 
 #include "effectsadaptor.h"
@@ -28,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cursor.h"
 #include "group.h"
 #include "scene_xrender.h"
-#include "scene_opengl.h"
 #include "unmanaged.h"
 #ifdef KWIN_BUILD_TABBOX
 #include "tabbox.h"
@@ -40,7 +41,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "thumbnailitem.h"
 #include "virtualdesktops.h"
 #include "workspace.h"
-#include "kwinglutils.h"
 
 #include <QFile>
 #include <QFutureWatcher>
@@ -1271,7 +1271,7 @@ void EffectsHandlerImpl::unreserveElectricBorder(ElectricBorder border, Effect *
 
 unsigned long EffectsHandlerImpl::xrenderBufferPicture()
 {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if (SceneXrender* s = dynamic_cast< SceneXrender* >(m_scene))
         return s->bufferPicture();
 #endif
@@ -1280,13 +1280,7 @@ unsigned long EffectsHandlerImpl::xrenderBufferPicture()
 
 QLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
 {
-    QString libname = service->library();
-#ifdef KWIN_HAVE_OPENGLES
-    if (libname.startsWith(QLatin1String("kwin4_effect_"))) {
-        libname.replace("kwin4_effect_", "kwin4_effect_gles_");
-    }
-#endif
-    QLibrary* library = new QLibrary(libname);
+    QLibrary* library = new QLibrary(service->library());
     if (!library) {
         kError(1212) << "couldn't open library for effect '" <<
                      service->name() << "'" << endl;
@@ -1595,11 +1589,6 @@ EffectWindowImpl::EffectWindowImpl(Toplevel *toplevel)
 
 EffectWindowImpl::~EffectWindowImpl()
 {
-    QVariant cachedTextureVariant = data(LanczosCacheRole);
-    if (cachedTextureVariant.isValid()) {
-        GLTexture *cachedTexture = static_cast< GLTexture*>(cachedTextureVariant.value<void*>());
-        delete cachedTexture;
-    }
 }
 
 bool EffectWindowImpl::isPaintingEnabled()
@@ -1817,7 +1806,6 @@ EffectFrameImpl::EffectFrameImpl(EffectFrameStyle style, bool staticSize, QPoint
     , m_static(staticSize)
     , m_point(position)
     , m_alignment(alignment)
-    , m_shader(NULL)
 {
     if (m_style == EffectFrameStyled) {
         m_frame.setImagePath("widgets/background");
@@ -1829,10 +1817,8 @@ EffectFrameImpl::EffectFrameImpl(EffectFrameStyle style, bool staticSize, QPoint
     m_selection.setCacheAllRenderedFrames(true);
     m_selection.setEnabledBorders(Plasma::FrameSvg::AllBorders);
 
-    if (effects->isOpenGLCompositing()) {
-        m_sceneFrame = new SceneOpenGL::EffectFrame(this, static_cast<SceneOpenGL*>(Compositor::self()->scene()));
-    } else if (effects->compositingType() == XRenderCompositing) {
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+    if (effects->compositingType() == XRenderCompositing) {
+#ifdef KWIN_BUILD_COMPOSITE
         m_sceneFrame = new SceneXrender::EffectFrame(this);
 #endif
     } else {
@@ -1941,13 +1927,12 @@ void EffectFrameImpl::render(QRegion region, double opacity, double frameOpacity
     if (m_geometry.isEmpty()) {
         return; // Nothing to display
     }
-    m_shader = NULL;
     effects->paintEffectFrame(this, region, opacity, frameOpacity);
 }
 
 void EffectFrameImpl::finalRender(QRegion region, double opacity, double frameOpacity) const
 {
-    region = infiniteRegion(); // TODO: Old region doesn't seem to work with OpenGL
+    region = infiniteRegion();
 
     m_sceneFrame->render(region, opacity, frameOpacity);
 }

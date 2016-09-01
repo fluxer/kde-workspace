@@ -19,13 +19,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-kwin.h"
+
 #include "mousemark.h"
 
 // KConfigSkeleton
 #include "mousemarkconfig.h"
-
-#include <kwinconfig.h>
-#include <kwinglutils.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -35,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kdebug.h>
 
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 #include <xcb/render.h>
 #endif
 
@@ -80,7 +79,7 @@ void MouseMarkEffect::reconfigure(ReconfigureFlags)
     color.setAlphaF(1.0);
 }
 
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
 void MouseMarkEffect::addRect(const QPoint &p1, const QPoint &p2, xcb_rectangle_t *r, xcb_render_color_t *c)
 {
     r->x = qMin(p1.x(), p2.x()) - width_2;
@@ -112,41 +111,7 @@ void MouseMarkEffect::paintScreen(int mask, QRegion region, ScreenPaintData& dat
     effects->paintScreen(mask, region, data);   // paint normal screen
     if (marks.isEmpty() && drawing.isEmpty())
         return;
-    if ( effects->isOpenGLCompositing()) {
-#ifndef KWIN_HAVE_OPENGLES
-        glEnable(GL_LINE_SMOOTH);
-#endif
-        glLineWidth(width);
-        GLVertexBuffer *vbo = GLVertexBuffer::streamingBuffer();
-        vbo->reset();
-        vbo->setUseColor(true);
-        vbo->setColor(color);
-        ShaderBinder binder(ShaderManager::ColorShader);
-        QVector<float> verts;
-        foreach (const Mark & mark, marks) {
-            verts.clear();
-            verts.reserve(mark.size() * 2);
-            foreach (const QPoint & p, mark) {
-                verts << p.x() << p.y();
-            }
-            vbo->setData(verts.size() / 2, 2, verts.data(), NULL);
-            vbo->render(GL_LINE_STRIP);
-        }
-        if (!drawing.isEmpty()) {
-            verts.clear();
-            verts.reserve(drawing.size() * 2);
-            foreach (const QPoint & p, drawing) {
-                verts << p.x() << p.y();
-            }
-            vbo->setData(verts.size() / 2, 2, verts.data(), NULL);
-            vbo->render(GL_LINE_STRIP);
-        }
-        glLineWidth(1.0);
-    #ifndef KWIN_HAVE_OPENGLES
-        glDisable(GL_LINE_SMOOTH);
-    #endif
-    }
-#ifdef KWIN_HAVE_XRENDER_COMPOSITING
+#ifdef KWIN_BUILD_COMPOSITE
     if ( effects->compositingType() == XRenderCompositing) {
         xcb_render_color_t c = preMultiply(color);
         for (int i = 0; i < marks.count(); ++i) {

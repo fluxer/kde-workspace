@@ -28,8 +28,6 @@ DEALINGS IN THE SOFTWARE.
 #include "client.h"
 #include "deleted.h"
 #include "effects.h"
-#include <kwinglplatform.h>
-#include <kwinglutils.h>
 #include <kwinxrenderutils.h>
 #include <kdebug.h>
 #include <QPaintEngine>
@@ -42,14 +40,10 @@ namespace KWin
 
 PaintRedirector *PaintRedirector::create(Client *c, QWidget *widget)
 {
-    if (effects->isOpenGLCompositing()) {
-        return new OpenGLPaintRedirector(c, widget);
-    } else {
-        if (!Extensions::nonNativePixmaps()) {
-            return new NativeXRenderPaintRedirector(c, widget);
-        }
-        return new RasterXRenderPaintRedirector(c, widget);
+    if (!Extensions::nonNativePixmaps()) {
+        return new NativeXRenderPaintRedirector(c, widget);
     }
+    return new RasterXRenderPaintRedirector(c, widget);
 }
 
 PaintRedirector::PaintRedirector(Client *c, QWidget* w)
@@ -242,12 +236,6 @@ void PaintRedirector::resizePixmaps(const QRect *rects)
     }
 }
 
-GLTexture *PaintRedirector::texture(PaintRedirector::DecorationPixmap border) const
-{
-    Q_UNUSED(border)
-    return NULL;
-}
-
 xcb_render_picture_t PaintRedirector::picture(PaintRedirector::DecorationPixmap border) const
 {
     Q_UNUSED(border)
@@ -307,92 +295,7 @@ void ImageBasedPaintRedirector::discardScratch()
 }
 
 
-
 // ------------------------------------------------------------------
-
-
-OpenGLPaintRedirector::OpenGLPaintRedirector(Client *c, QWidget *widget)
-    : ImageBasedPaintRedirector(c, widget)
-{
-    for (int i = 0; i < TextureCount; ++i)
-        m_textures[i] = NULL;
-
-    PaintRedirector::resizePixmaps();
-}
-
-OpenGLPaintRedirector::~OpenGLPaintRedirector()
-{
-    for (int i = 0; i < TextureCount; ++i)
-        delete m_textures[i];
-}
-
-void OpenGLPaintRedirector::resizePixmaps(const QRect *rects)
-{
-    QSize size[2];
-    size[LeftRight] = QSize(rects[LeftPixmap].width() + rects[RightPixmap].width(),
-                            align(qMax(rects[LeftPixmap].height(), rects[RightPixmap].height()), 128));
-    size[TopBottom] = QSize(align(qMax(rects[TopPixmap].width(), rects[BottomPixmap].width()), 128),
-                            rects[TopPixmap].height() + rects[BottomPixmap].height());
-
-    if (!GLTexture::NPOTTextureSupported()) {
-        for (int i = 0; i < 2; i++) {
-            size[i].rwidth()  = nearestPowerOfTwo(size[i].width());
-            size[i].rheight() = nearestPowerOfTwo(size[i].height());
-        }
-    }
-
-    for (int i = 0; i < 2; i++) {
-        if (m_textures[i] && m_textures[i]->size() == size[i])
-            continue;
-
-        delete m_textures[i];
-        m_textures[i] = NULL;
-
-        if (size[i].isEmpty())
-            continue;
-
-        m_textures[i] = new GLTexture(size[i].width(), size[i].height());
-        m_textures[i]->setYInverted(true);
-        m_textures[i]->setWrapMode(GL_CLAMP_TO_EDGE);
-        m_textures[i]->clear();
-    }
-}
-
-void OpenGLPaintRedirector::preparePaint(const QPixmap &pending)
-{
-    m_tempImage = pending.toImage();
-}
-
-void OpenGLPaintRedirector::updatePixmaps(const QRect *rects, const QRegion &region)
-{
-    const QImage &image = scratchImage();
-    const QRect bounding = region.boundingRect();
-
-    const int leftWidth = rects[LeftPixmap].width();
-    const int topHeight = rects[TopPixmap].height();
-
-    // Top, Right, Bottom, Left
-    GLTexture *textures[4] = { m_textures[TopBottom], m_textures[LeftRight], m_textures[TopBottom], m_textures[LeftRight] };
-    QPoint offsets[4] = { QPoint(0, 0), QPoint(leftWidth, 0), QPoint(0, topHeight), QPoint(0, 0) };
-
-    for (int i = 0; i < 4; i++) {
-        const QRect dirty = (region & rects[i]).boundingRect();
-        if (!textures[i] || dirty.isEmpty())
-            continue;
-
-        const QPoint dst = dirty.topLeft() - rects[i].topLeft() + offsets[i];
-        const QRect src(dirty.topLeft() - bounding.topLeft(), dirty.size());
-
-        textures[i]->update(image, dst, src);
-    }
-}
-
-
-
-
-// ------------------------------------------------------------------
-
-
 
 
 RasterXRenderPaintRedirector::RasterXRenderPaintRedirector(Client *c, QWidget *widget)

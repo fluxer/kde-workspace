@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QString>
 #include <QStringList>
 
-#include "kwinglutils.h"
 #include "kwinglobals.h"
 
 
@@ -39,25 +38,6 @@ public:
 
     static bool compositingPossible();
     static QString compositingNotPossibleReason();
-    static bool openGlIsBroken();
-    /**
-     * Tests whether GLX is supported and returns @c true
-     * in case KWin is compiled with OpenGL support and GLX
-     * is available.
-     *
-     * If KWin is compiled with OpenGL ES or without OpenGL at
-     * all, @c false is returned.
-     * @returns @c true if GLX is available, @c false otherwise and if not build with OpenGL support.
-     **/
-    static bool hasGlx();
-    bool enableDirectRendering() const  {
-        return mEnableDirectRendering;
-    }
-
-    void detect();
-
-private:
-    bool mEnableDirectRendering;
 };
 
 }

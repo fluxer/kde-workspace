@@ -37,7 +37,7 @@ namespace Aurorae
 class AuroraeTheme;
 class AuroraeClient;
 
-class AuroraeFactory :  public QObject, public KDecorationFactoryUnstable
+class AuroraeFactory :  public QObject, public KDecorationFactory
 {
     Q_OBJECT
 public:
@@ -82,7 +82,7 @@ private:
     QString m_themeName;
 };
 
-class AuroraeClient : public KDecorationUnstable
+class AuroraeClient : public KDecoration
 {
     Q_OBJECT
     Q_PROPERTY(bool active READ isActive NOTIFY activeChanged)
