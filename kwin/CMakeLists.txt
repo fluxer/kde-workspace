@@ -1,12 +1,11 @@
 ########### configure tests ###############
-INCLUDE(CMakeDependentOption)
 
-OPTION(KWIN_BUILD_OXYGEN "Enable building of default decoration Oxygen" ON)
-OPTION(KWIN_BUILD_KCMS "Enable building of KWin configuration modules." ON)
-OPTION(KWIN_BUILD_TABBOX "Enable building of KWin Tabbox functionality" ON)
-OPTION(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support" ON)
-OPTION(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
-OPTION(KWIN_BUILD_COMPOSITE "Enable building of KWin with XRender Compositing support" ON)
+option(KWIN_BUILD_OXYGEN "Enable building of default decoration Oxygen" ON)
+option(KWIN_BUILD_KCMS "Enable building of KWin configuration modules." ON)
+option(KWIN_BUILD_TABBOX "Enable building of KWin Tabbox functionality" ON)
+option(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support" ON)
+option(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
+option(KWIN_BUILD_COMPOSITE "Enable building of KWin with XRender Compositing support" ON)
 
 include_directories(${XCB_INCLUDE_DIR})
 
@@ -117,30 +116,26 @@ qt4_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Compositing.xml composite.h KWin::Co
 qt4_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl)
 
 qt4_add_dbus_interface(kwin_SRCS
-    ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml ksmserver_interface
+    ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml
+    ksmserver_interface
 )
 qt4_add_dbus_interface(kwin_SRCS
-    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml screenlocker_interface
+    ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml
+    screenlocker_interface
 )
 
 ########### target link libraries ###############
 
-set(kwin_OWN_LIBS
-    kdecorations
-    kwineffects
-)
+if (NOT X11_xf86vmode_FOUND)
+    add_definitions(-DKWIN_NO_XF86VM)
+endif()
 
-set(kwin_QT_LIBS
-    ${QT_QTDECLARATIVE_LIBRARY}
-)
+add_executable(kwin ${kwin_SRCS})
 
-set(kwin_KDE_LIBS
+target_link_libraries(kwin
     ${KDE4_KDEUI_LIBS}
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KDECLARATIVE_LIBS}
-)
-
-set(kwin_XLIB_LIBS
     ${X11_X11_LIB}
     ${X11_Xext_LIB}
     ${X11_ICE_LIB}
@@ -150,11 +145,8 @@ set(kwin_XLIB_LIBS
     ${X11_Xdamage_LIB}
     ${X11_Xrender_LIB}
     ${X11_Xfixes_LIB}
-)
-
-set(kwin_XCB_LIBS
-    ${XCB_XCB_LIBRARIES}
     ${X11_XCB_LIBRARIES}
+    ${XCB_XCB_LIBRARIES}
     ${XCB_XFIXES_LIBRARIES}
     ${XCB_DAMAGE_LIBRARIES}
     ${XCB_COMPOSITE_LIBRARIES}
@@ -163,33 +155,20 @@ set(kwin_XCB_LIBS
     ${XCB_RENDER_LIBRARIES}
     ${XCB_RANDR_LIBRARIES}
     ${XCB_KEYSYMS_LIBRARIES}
+    kdecorations
+    kwineffects
 )
 
-find_library(XF86VM_LIBRARY Xxf86vm)
-if (XF86VM_LIBRARY)
-    set(kwin_XLIB_LIBS ${kwin_XLIB_LIBS} ${XF86VM_LIBRARY})
-else()
-    add_definitions(-DKWIN_NO_XF86VM)
+if(X11_xf86vmode_FOUND)
+    target_link_libraries(kwin ${X11_Xxf86vm_LIB})
 endif()
-
-set(kwinLibs
-    ${kwin_OWN_LIBS}
-    ${kwin_QT_LIBS}
-    ${kwin_KDE_LIBS}
-    ${kwin_XLIB_LIBS}
-    ${kwin_XCB_LIBS}
-)
-
-add_executable(kwin ${kwin_SRCS})
-
-target_link_libraries(kwin ${kwinLibs})
 
 install(TARGETS kwin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(FILES kwin.kcfg DESTINATION ${KCFG_INSTALL_DIR} RENAME kwin.kcfg)
-install(FILES kwin.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kwin RENAME kwin.notifyrc)
+install(FILES kwin.kcfg DESTINATION ${KCFG_INSTALL_DIR})
+install(FILES kwin.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kwin)
 install(FILES org.kde.KWin.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
 
 kde4_install_icons(${ICON_INSTALL_DIR})
