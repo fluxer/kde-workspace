@@ -238,8 +238,8 @@ protected Q_SLOTS:
 protected:
     QLibrary* findEffectLibrary(KService* service);
     void effectsChanged();
-    void setupClientConnections(KWin::Client *c);
-    void setupUnmanagedConnections(KWin::Unmanaged *u);
+    void setupClientConnections(const KWin::Client *c);
+    void setupUnmanagedConnections(const KWin::Unmanaged *u);
 
     Effect* keyboard_grab_effect;
     Effect* fullscreen_effect;

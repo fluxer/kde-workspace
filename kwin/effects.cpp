@@ -244,10 +244,10 @@ EffectsHandlerImpl::EffectsHandlerImpl(Compositor *compositor, Scene *scene)
 #endif
     connect(m_screenLockerWatcher, SIGNAL(locked(bool)), SIGNAL(screenLockingChanged(bool)));
     // connect all clients
-    foreach (Client *c, ws->clientList()) {
+    foreach (const Client *c, ws->clientList()) {
         setupClientConnections(c);
     }
-    foreach (Unmanaged *u, ws->unmanagedList()) {
+    foreach (const Unmanaged *u, ws->unmanagedList()) {
         setupUnmanagedConnections(u);
     }
     reconfigure();
@@ -255,13 +255,15 @@ EffectsHandlerImpl::EffectsHandlerImpl(Compositor *compositor, Scene *scene)
 
 EffectsHandlerImpl::~EffectsHandlerImpl()
 {
-    if (keyboard_grab_effect != NULL)
+    if (keyboard_grab_effect != NULL) {
         ungrabKeyboard();
-    foreach (const EffectPair & ep, loaded_effects)
-    unloadEffect(ep.first);
+    }
+    foreach (const EffectPair & ep, loaded_effects) {
+        unloadEffect(ep.first);
+    }
 }
 
-void EffectsHandlerImpl::setupClientConnections(Client* c)
+void EffectsHandlerImpl::setupClientConnections(const Client* c)
 {
     connect(c, SIGNAL(windowClosed(KWin::Toplevel*,KWin::Deleted*)), this, SLOT(slotWindowClosed(KWin::Toplevel*)));
     connect(c, SIGNAL(clientMaximizedStateChanged(KWin::Client*,KDecorationDefines::MaximizeMode)), this, SLOT(slotClientMaximized(KWin::Client*,KDecorationDefines::MaximizeMode)));
@@ -278,7 +280,7 @@ void EffectsHandlerImpl::setupClientConnections(Client* c)
     connect(c, SIGNAL(propertyNotify(KWin::Toplevel*,long)), this, SLOT(slotPropertyNotify(KWin::Toplevel*,long)));
 }
 
-void EffectsHandlerImpl::setupUnmanagedConnections(Unmanaged* u)
+void EffectsHandlerImpl::setupUnmanagedConnections(const Unmanaged* u)
 {
     connect(u, SIGNAL(windowClosed(KWin::Toplevel*,KWin::Deleted*)), this, SLOT(slotWindowClosed(KWin::Toplevel*)));
     connect(u, SIGNAL(opacityChanged(KWin::Toplevel*,qreal)), this, SLOT(slotOpacityChanged(KWin::Toplevel*,qreal)));
@@ -478,9 +480,9 @@ void EffectsHandlerImpl::startPaint()
 {
     m_activeEffects.clear();
     m_activeEffects.reserve(loaded_effects.count());
-    for(QVector< KWin::EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it) {
-        if (it->second->isActive()) {
-            m_activeEffects << it->second;
+    foreach (const KWin::EffectPair it, loaded_effects) {
+        if (it.second->isActive()) {
+            m_activeEffects << it.second;
         }
     }
     m_currentDrawWindowIterator = m_activeEffects.constBegin();
@@ -750,9 +752,11 @@ void* EffectsHandlerImpl::getProxy(QString name)
     // All effects start with "kwin4_effect_", prepend it to the name
     name.prepend("kwin4_effect_");
 
-    for (QVector< EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it)
-        if ((*it).first == name)
-            return (*it).second->proxy();
+    foreach (const EffectPair it, loaded_effects) {
+        if (it.first == name) {
+            return it.second->proxy();
+        }
+    }
 
     return NULL;
 }
@@ -1034,9 +1038,9 @@ EffectWindowList EffectsHandlerImpl::stackingOrder() const
 {
     ToplevelList list = Workspace::self()->xStackingOrder();
     EffectWindowList ret;
-    foreach (Toplevel *t, list) {
-        if (EffectWindow *w = effectWindow(t))
-            ret.append(w);
+    foreach (Toplevel *it, list) {
+        if (EffectWindow *ew = effectWindow(it))
+            ret.append(ew);
     }
     return ret;
 }
@@ -1074,8 +1078,9 @@ EffectWindowList EffectsHandlerImpl::currentTabBoxWindowList() const
     EffectWindowList ret;
     ClientList clients;
     clients = TabBox::TabBox::self()->currentClientList();
-    foreach (Client * c, clients)
-    ret.append(c->effectWindow());
+    foreach (Client *client, clients) {
+        ret.append(client->effectWindow());
+    }
     return ret;
 #else
     return EffectWindowList();
@@ -1301,8 +1306,8 @@ void EffectsHandlerImpl::toggleEffect(const QString& name)
 QStringList EffectsHandlerImpl::loadedEffects() const
 {
     QStringList listModules;
-    for (QVector< EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it) {
-        listModules << (*it).first;
+    foreach (const EffectPair it, loaded_effects) {
+        listModules << it.first;
     }
     return listModules;
 }
@@ -1327,8 +1332,8 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         kWarning(1212) << "Effect names usually have kwin4_effect_ prefix" ;
 
     // Make sure a single effect won't be loaded multiple times
-    for (QVector< EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it) {
-        if ((*it).first == name) {
+    foreach (const EffectPair it, loaded_effects) {
+        if (it.first == name) {
             kDebug(1212) << "EffectsHandler::loadEffect : Effect already loaded : " << name;
             return true;
         }
@@ -1506,12 +1511,11 @@ void EffectsHandlerImpl::effectsChanged()
 QStringList EffectsHandlerImpl::activeEffects() const
 {
     QStringList ret;
-    for(QVector< KWin::EffectPair >::const_iterator it = loaded_effects.constBegin(),
-                                                    end = loaded_effects.constEnd(); it != end; ++it) {
-            if (it->second->isActive()) {
-                ret << it->first;
-            }
+    foreach(const KWin::EffectPair it, loaded_effects) {
+        if (it.second->isActive()) {
+            ret << it.first;
         }
+    }
     return ret;
 }
 
@@ -1674,8 +1678,9 @@ EffectWindowList getMainWindows(Toplevel *toplevel)
     T *c = static_cast<T*>(toplevel);
     EffectWindowList ret;
     ClientList mainclients = c->mainClients();
-    foreach (Client * tmp, mainclients)
+    foreach (Client *tmp, mainclients) {
         ret.append(tmp->effectWindow());
+    }
     return ret;
 }
 
@@ -1790,8 +1795,9 @@ void EffectWindowImpl::unreferencePreviousWindowPixmap()
 EffectWindowList EffectWindowGroupImpl::members() const
 {
     EffectWindowList ret;
-    foreach (Toplevel * c, group->members())
-    ret.append(c->effectWindow());
+    foreach (Toplevel *client, group->members()) {
+        ret.append(client->effectWindow());
+    }
     return ret;
 }
 
