@@ -39,7 +39,6 @@ namespace KWin
 {
 
 KWIN_EFFECT(magnifier, MagnifierEffect)
-KWIN_EFFECT_SUPPORTED(magnifier, MagnifierEffect::supported())
 
 const int FRAME_WIDTH = 5;
 
@@ -85,11 +84,6 @@ void MagnifierEffect::destroyPixmap()
         m_pixmap = XCB_PIXMAP_NONE;
     }
 #endif
-}
-
-bool MagnifierEffect::supported()
-{
-    return  effects->compositingType() == XRenderCompositing;
 }
 
 void MagnifierEffect::reconfigure(ReconfigureFlags)

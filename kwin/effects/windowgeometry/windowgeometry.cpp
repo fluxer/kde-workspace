@@ -33,9 +33,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace KWin;
 
-KWIN_EFFECT(windowgeometry, WindowGeometry)
+KWIN_EFFECT(windowgeometry, WindowGeometryEffect)
 
-WindowGeometry::WindowGeometry()
+WindowGeometryEffect::WindowGeometryEffect()
 {
     iAmActivated = true;
     iAmActive = false;
@@ -69,20 +69,20 @@ WindowGeometry::WindowGeometry()
     connect(effects, SIGNAL(windowStepUserMovedResized(KWin::EffectWindow*,QRect)), this, SLOT(slotWindowStepUserMovedResized(KWin::EffectWindow*,QRect)));
 }
 
-WindowGeometry::~WindowGeometry()
+WindowGeometryEffect::~WindowGeometryEffect()
 {
     for (int i = 0; i < 3; ++i)
         delete myMeasure[i];
 }
 
-void WindowGeometry::reconfigure(ReconfigureFlags)
+void WindowGeometryEffect::reconfigure(ReconfigureFlags)
 {
     WindowGeometryConfiguration::self()->readConfig();
     iHandleMoves = WindowGeometryConfiguration::move();
     iHandleResizes = WindowGeometryConfiguration::resize();
 }
 
-void WindowGeometry::paintScreen(int mask, QRegion region, ScreenPaintData &data)
+void WindowGeometryEffect::paintScreen(int mask, QRegion region, ScreenPaintData &data)
 {
     effects->paintScreen(mask, region, data);
     if (iAmActivated && iAmActive) {
@@ -91,12 +91,12 @@ void WindowGeometry::paintScreen(int mask, QRegion region, ScreenPaintData &data
     }
 }
 
-void WindowGeometry::toggle()
+void WindowGeometryEffect::toggle()
 {
     iAmActivated = !iAmActivated;
 }
 
-void WindowGeometry::slotWindowStartUserMovedResized(EffectWindow *w)
+void WindowGeometryEffect::slotWindowStartUserMovedResized(EffectWindow *w)
 {
     if (!iAmActivated)
         return;
@@ -112,7 +112,7 @@ void WindowGeometry::slotWindowStartUserMovedResized(EffectWindow *w)
     slotWindowStepUserMovedResized(w, w->geometry());
 }
 
-void WindowGeometry::slotWindowFinishUserMovedResized(EffectWindow *w)
+void WindowGeometryEffect::slotWindowFinishUserMovedResized(EffectWindow *w)
 {
     if (iAmActive && w == myResizeWindow) {
         iAmActive = false;
@@ -140,7 +140,7 @@ static inline QString number(int n)
 }
 
 
-void WindowGeometry::slotWindowStepUserMovedResized(EffectWindow *w, const QRect &geometry)
+void WindowGeometryEffect::slotWindowStepUserMovedResized(EffectWindow *w, const QRect &geometry)
 {
     if (iAmActivated && iAmActive && w == myResizeWindow) {
         if (myExtraDirtyArea.isValid())
@@ -218,7 +218,7 @@ void WindowGeometry::slotWindowStepUserMovedResized(EffectWindow *w, const QRect
     }
 }
 
-bool WindowGeometry::isActive() const
+bool WindowGeometryEffect::isActive() const
 {
     return iAmActive;
 }

@@ -2,27 +2,26 @@
 # Effect
 
 # Source files
-set( kwin4_effect_builtins_sources ${kwin4_effect_builtins_sources}
-     dashboard/dashboard.cpp
-     dashboard/dashboard.cpp )
+set(kwin4_effect_builtins_sources
+    ${kwin4_effect_builtins_sources}
+     effects/dashboard/dashboard.cpp
+     effects/dashboard/dashboard.cpp
+)
 
-kde4_add_kcfg_files(kwin4_effect_builtins_sources dashboard/dashboardconfig.kcfgc)
+kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/dashboard/dashboardconfig.kcfgc)
 
 # .desktop files
-install( FILES
-         dashboard/dashboard.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+install(FILES effects/dashboard/dashboard.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
 
 #######################################
 # Config
 
 # Source files
-set( kwin4_effect_builtins_config_sources ${kwin4_effect_builtins_config_sources}
-     dashboard/dashboard_config.cpp
-     dashboard/dashboard_config.ui )
+set(kwin4_effect_builtins_config_sources
+    ${kwin4_effect_builtins_config_sources}
+    effects/dashboard/dashboard_config.cpp
+)
 
-kde4_add_kcfg_files(kwin4_effect_builtins_config_sources dashboard/dashboardconfig.kcfgc)
+kde4_add_kcfg_files(kwin4_effect_builtins_config_sources effects/dashboard/dashboardconfig.kcfgc)
 
-install( FILES
-         dashboard/dashboard_config.desktop
-         DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+install(FILES effects/dashboard/dashboard_config.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)

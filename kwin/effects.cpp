@@ -66,6 +66,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // dbus generated
 #include "screenlocker_interface.h"
 
+#include "effects/dashboard/dashboard.h"
+#include "effects/diminactive/diminactive.h"
+#include "effects/dimscreen/dimscreen.h"
+#include "effects/highlightwindow/highlightwindow.h"
+#include "effects/kscreen/kscreen.h"
+#include "effects/logout/logout.h"
+#include "effects/magnifier/magnifier.h"
+#include "effects/minimizeanimation/minimizeanimation.h"
+#include "effects/mousemark/mousemark.h"
+#include "effects/presentwindows/presentwindows.h"
+#include "effects/resize/resize.h"
+#include "effects/screenedge/screenedgeeffect.h"
+#include "effects/showfps/showfps.h"
+#include "effects/showpaint/showpaint.h"
+#include "effects/slide/slide.h"
+#include "effects/slideback/slideback.h"
+#include "effects/slidingpopups/slidingpopups.h"
+#include "effects/snaphelper/snaphelper.h"
+#include "effects/taskbarthumbnail/taskbarthumbnail.h"
+#include "effects/thumbnailaside/thumbnailaside.h"
+#include "effects/trackmouse/trackmouse.h"
+#include "effects/windowgeometry/windowgeometry.h"
+#include "effects/zoom/zoom.h"
 
 namespace KWin
 {
@@ -1351,85 +1374,153 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     }
     KService::Ptr service = offers.first();
 
-    QLibrary* library = findEffectLibrary(service.data());
-    if (!library) {
-        return false;
+    Effect* effect = 0;
+    QLibrary* library = 0;
+    // builtins first
+    if (internalname == "kwin4_effect_kscreen") {
+        effect = new KscreenEffect();
+    } else if (internalname == "kwin4_effect_presentwindows") {
+        effect = new PresentWindowsEffect();
+    } else if (internalname == "kwin4_effect_screenedge") {
+        effect = new ScreenEdgeEffect();
+    } else if (internalname == "kwin4_effect_slidingpopups") {
+        effect = new SlidingPopupsEffect();
+    } else if (internalname == "kwin4_effect_taskbarthumbnail") {
+        effect = new TaskbarThumbnailEffect();
+    } else if (internalname == "kwin4_effect_dashboard") {
+        effect = new DashboardEffect();
+    } else if (internalname == "kwin4_effect_diminactive") {
+        effect = new DimInactiveEffect();
+    } else if (internalname == "kwin4_effect_dimscreen") {
+        effect = new DimScreenEffect();
+    } else if (internalname == "kwin4_effect_highlightwindow") {
+        effect = new HighlightWindowEffect();
+    } else if (internalname == "kwin4_effect_minimizeanimation") {
+        effect = new MinimizeAnimationEffect();
+    } else if (internalname == "kwin4_effect_resize") {
+        effect = new ResizeEffect();
+    } else if (internalname == "kwin4_effect_showfps") {
+        effect = new ShowFpsEffect();
+    } else if (internalname == "kwin4_effect_showpaint") {
+        effect = new ShowPaintEffect();
+    } else if (internalname == "kwin4_effect_slide") {
+        effect = new SlideEffect();
+    } else if (internalname == "kwin4_effect_slideback") {
+        effect = new SlideBackEffect();
+    } else if (internalname == "kwin4_effect_thumbnailaside") {
+        effect = new ThumbnailAsideEffect();
+    } else if (internalname == "kwin4_effect_windowgeometry") {
+        effect = new WindowGeometryEffect();
+    } else if (internalname == "kwin4_effect_zoom") {
+        effect = new ZoomEffect();
+    } else if (internalname == "kwin4_effect_logout") {
+        effect = new LogoutEffect();
+    } else if (internalname == "kwin4_effect_magnifier") {
+        effect = new MagnifierEffect();
+    } else if (internalname == "kwin4_effect_mousemark") {
+        effect = new MouseMarkEffect();
+    } else if (internalname == "kwin4_effect_snaphelper") {
+        effect = new SnapHelperEffect();
+    } else if (internalname == "kwin4_effect_trackmouse") {
+        effect = new TrackMouseEffect();
     }
 
-    QString version_symbol = "effect_version_" + name;
-    void *version_func = library->resolve(version_symbol.toAscii());
-    if (version_func == NULL) {
-        kWarning(1212) << "Effect " << name << " does not provide required API version, ignoring.";
-        delete library;
-        return false;
-    }
-    typedef int (*t_versionfunc)();
-    int version = reinterpret_cast< t_versionfunc >(version_func)();   // call it
-    // Version must be the same or less, but major must be the same.
-    // With major 0 minor must match exactly.
-    if (version > KWIN_EFFECT_API_VERSION
-            || (version >> 8) != KWIN_EFFECT_API_VERSION_MAJOR
-            || (KWIN_EFFECT_API_VERSION_MAJOR == 0 && version != KWIN_EFFECT_API_VERSION)) {
-        kWarning(1212) << "Effect " << name << " requires unsupported API version " << version;
-        delete library;
-        return false;
-    }
+    if (effect) {
+        kDebug(1212) << "Effect is internal" << name;
+        bool enabledByDefault = service->property("X-KDE-PluginInfo-EnabledByDefault").toBool();
+        if (checkDefault && !enabledByDefault) {
+            delete effect;
+            return false;
+        }
+    // external second
+    } else {
+        kDebug(1212) << "Effect is external" << name;
+        library = findEffectLibrary(service.data());
+        if (!library) {
+            return false;
+        }
 
-    const QString enabledByDefault_symbol = "effect_enabledbydefault_" + name;
-    void *enabledByDefault_func = library->resolve(enabledByDefault_symbol.toAscii().data());
+        QString version_symbol = "effect_version_" + name;
+        void *version_func = library->resolve(version_symbol.toAscii());
+        if (version_func == NULL) {
+            kWarning(1212) << "Effect " << name << " does not provide required API version, ignoring.";
+            delete library;
+            return false;
+        }
+        typedef int (*t_versionfunc)();
+        int version = reinterpret_cast< t_versionfunc >(version_func)();   // call it
+        // Version must be the same or less, but major must be the same.
+        // With major 0 minor must match exactly.
+        if (version > KWIN_EFFECT_API_VERSION
+                || (version >> 8) != KWIN_EFFECT_API_VERSION_MAJOR
+                || (KWIN_EFFECT_API_VERSION_MAJOR == 0 && version != KWIN_EFFECT_API_VERSION)) {
+            kWarning(1212) << "Effect " << name << " requires unsupported API version " << version;
+            delete library;
+            return false;
+        }
 
-    const QString supported_symbol = "effect_supported_" + name;
-    void *supported_func = library->resolve(supported_symbol.toAscii().data());
+        const QString enabledByDefault_symbol = "effect_enabledbydefault_" + name;
+        void *enabledByDefault_func = library->resolve(enabledByDefault_symbol.toAscii().data());
 
-    const QString create_symbol = "effect_create_" + name;
-    void *create_func = library->resolve(create_symbol.toAscii().data());
+        const QString supported_symbol = "effect_supported_" + name;
+        void *supported_func = library->resolve(supported_symbol.toAscii().data());
 
-    if (supported_func) {
-        typedef bool (*t_supportedfunc)();
-        t_supportedfunc supported = reinterpret_cast<t_supportedfunc>(supported_func);
-        if (!supported()) {
-            kWarning(1212) << "EffectsHandler::loadEffect : Effect " << name << " is not supported" ;
+        const QString create_symbol = "effect_create_" + name;
+        void *create_func = library->resolve(create_symbol.toAscii().data());
+
+        if (supported_func) {
+            typedef bool (*t_supportedfunc)();
+            t_supportedfunc supported = reinterpret_cast<t_supportedfunc>(supported_func);
+            if (!supported()) {
+                kWarning(1212) << "EffectsHandler::loadEffect : Effect " << name << " is not supported" ;
+                library->unload();
+                return false;
+            }
+        }
+
+        if (checkDefault && enabledByDefault_func) {
+            typedef bool (*t_enabledByDefaultfunc)();
+            t_enabledByDefaultfunc enabledByDefault = reinterpret_cast<t_enabledByDefaultfunc>(enabledByDefault_func);
+
+            if (!enabledByDefault()) {
+                library->unload();
+                return false;
+            }
+        }
+
+        if (!create_func) {
+            kError(1212) << "EffectsHandler::loadEffect : effect_create function not found" << endl;
             library->unload();
             return false;
         }
-    }
 
-    if (checkDefault && enabledByDefault_func) {
-        typedef bool (*t_enabledByDefaultfunc)();
-        t_enabledByDefaultfunc enabledByDefault = reinterpret_cast<t_enabledByDefaultfunc>(enabledByDefault_func);
+        typedef Effect*(*t_createfunc)();
+        t_createfunc create = reinterpret_cast<t_createfunc>(create_func);
 
-        if (!enabledByDefault()) {
-            library->unload();
-            return false;
+        // Make sure all depenedencies have been loaded
+        // TODO: detect circular deps
+        KPluginInfo plugininfo(service);
+        QStringList dependencies = plugininfo.dependencies();
+        foreach (const QString & depName, dependencies) {
+            if (!loadEffect(depName)) {
+                kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name << endl;
+                library->unload();
+                return false;
+            }
         }
+
+        effect = create();
     }
 
-    if (!create_func) {
-        kError(1212) << "EffectsHandler::loadEffect : effect_create function not found" << endl;
-        library->unload();
-        return false;
-    }
-
-    typedef Effect*(*t_createfunc)();
-    t_createfunc create = reinterpret_cast<t_createfunc>(create_func);
-
-    // Make sure all depenedencies have been loaded
-    // TODO: detect circular deps
-    KPluginInfo plugininfo(service);
-    QStringList dependencies = plugininfo.dependencies();
-    foreach (const QString & depName, dependencies) {
-        if (!loadEffect(depName)) {
-            kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name << endl;
-            library->unload();
-            return false;
-        }
-    }
-
-    Effect* e = create();
-
-    effect_order.insert(service->property("X-KDE-Ordering").toInt(), EffectPair(name, e));
+    effect_order.insert(service->property("X-KDE-Ordering").toInt(), EffectPair(name, effect));
     effectsChanged();
-    effect_libraries[ name ] = library;
+    if (effect) {
+        kDebug(1212) << "Internal effect has been loaded" << name;
+        effect_factories[ name ] = effect;
+    } else if (library) {
+        kDebug(1212) << "External effect has been loaded" << name;
+        effect_libraries[ name ] = library;
+    }
 
     return true;
 }
@@ -1453,7 +1544,9 @@ void EffectsHandlerImpl::unloadEffect(const QString& name)
             delete it.value().second;
             effect_order.remove(it.key());
             effectsChanged();
-            if (effect_libraries.contains(name)) {
+            if (effect_factories.contains(name)) {
+                delete effect_libraries[ name ];
+            } else if (effect_libraries.contains(name)) {
                 effect_libraries[ name ]->unload();
             }
             return;

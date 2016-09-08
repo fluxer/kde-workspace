@@ -26,14 +26,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-class WindowGeometry : public Effect
+class WindowGeometryEffect : public Effect
 {
     Q_OBJECT
     Q_PROPERTY(bool handlesMoves READ isHandlesMoves)
     Q_PROPERTY(bool handlesResizes READ isHandlesResizes)
 public:
-    WindowGeometry();
-    ~WindowGeometry();
+    WindowGeometryEffect();
+    ~WindowGeometryEffect();
 
     inline bool provides(Effect::Feature ef) {
         return ef == Effect::GeometryTip;

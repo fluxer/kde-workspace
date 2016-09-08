@@ -31,9 +31,44 @@ if(KWIN_BUILD_KCMS)
 endif()
 
 add_subdirectory( clients )
-add_subdirectory( effects )
 add_subdirectory( tabbox )
 
+
+# Install the KWin/Effect service type
+install(FILES effects/kwineffect.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+
+# Create initial variables
+set(kwin4_effect_builtins_sources)
+set(kwin4_effect_builtins_config_sources effects/configs_builtins.cpp)
+set(kwin4_effect_include_directories)
+
+include( effects/kscreen/CMakeLists.txt )
+include( effects/presentwindows/CMakeLists.txt )
+include( effects/screenedge/CMakeLists.txt )
+include( effects/slidingpopups/CMakeLists.txt )
+include( effects/taskbarthumbnail/CMakeLists.txt )
+include( effects/dashboard/CMakeLists.txt )
+include( effects/diminactive/CMakeLists.txt )
+include( effects/dimscreen/CMakeLists.txt )
+include( effects/highlightwindow/CMakeLists.txt )
+include( effects/minimizeanimation/CMakeLists.txt )
+include( effects/resize/CMakeLists.txt )
+include( effects/showfps/CMakeLists.txt )
+include( effects/showpaint/CMakeLists.txt )
+include( effects/slide/CMakeLists.txt )
+include( effects/slideback/CMakeLists.txt )
+include( effects/thumbnailaside/CMakeLists.txt )
+include( effects/windowgeometry/CMakeLists.txt )
+include( effects/zoom/CMakeLists.txt )
+include( effects/logout/CMakeLists.txt )
+include( effects/magnifier/CMakeLists.txt )
+include( effects/mousemark/CMakeLists.txt )
+include( effects/snaphelper/CMakeLists.txt )
+include( effects/trackmouse/CMakeLists.txt )
+
+kde4_add_plugin(kcm_kwin4_effect_builtins ${kwin4_effect_builtins_config_sources})
+target_link_libraries(kcm_kwin4_effect_builtins kwineffects ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS})
+install(TARGETS kcm_kwin4_effect_builtins DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -130,7 +165,7 @@ if (NOT X11_xf86vmode_FOUND)
     add_definitions(-DKWIN_NO_XF86VM)
 endif()
 
-add_executable(kwin ${kwin_SRCS})
+add_executable(kwin ${kwin_SRCS} ${kwin4_effect_builtins_sources})
 
 target_link_libraries(kwin
     ${KDE4_KDEUI_LIBS}

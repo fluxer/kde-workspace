@@ -1187,7 +1187,7 @@ Q_SIGNALS:
 protected:
     QVector< EffectPair > loaded_effects;
     QHash< QString, QLibrary* > effect_libraries;
-    //QHash< QString, EffectFactory* > effect_factories;
+    QHash< QString, Effect* > effect_factories;
     CompositingType compositing_type;
 };
 

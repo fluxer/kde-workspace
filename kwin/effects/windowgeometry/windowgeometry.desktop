@@ -126,6 +126,5 @@ X-KDE-PluginInfo-Depends=
 # Whether this effect should be enabled by default
 X-KDE-PluginInfo-EnabledByDefault=false
 # The plugin (library) which contains the effect. One library may contain more effects.
-X-KDE-Library=kwin4_effect_builtins
 # The order in which this effect is loaded.  Lower numbers are loaded first.
 X-KDE-Ordering=90

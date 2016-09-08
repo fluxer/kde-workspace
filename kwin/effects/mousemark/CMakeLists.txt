@@ -2,29 +2,26 @@
 # Effect
 
 # Source files
-set( kwin4_effect_builtins_sources ${kwin4_effect_builtins_sources}
-    mousemark/mousemark.cpp
-    )
+set(kwin4_effect_builtins_sources
+    ${kwin4_effect_builtins_sources}
+    effects/mousemark/mousemark.cpp
+)
 
-kde4_add_kcfg_files(kwin4_effect_builtins_sources mousemark/mousemarkconfig.kcfgc)
+kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/mousemark/mousemarkconfig.kcfgc)
 
 # .desktop files
-install( FILES
-    mousemark/mousemark.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+install(FILES effects/mousemark/mousemark.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
 
 #######################################
 # Config
 
 # Source files
-set( kwin4_effect_builtins_config_sources ${kwin4_effect_builtins_config_sources}
-    mousemark/mousemark_config.cpp
-    mousemark/mousemark_config.ui
-    )
+set(kwin4_effect_builtins_config_sources
+    ${kwin4_effect_builtins_config_sources}
+    effects/mousemark/mousemark_config.cpp
+)
 
-kde4_add_kcfg_files(kwin4_effect_builtins_config_sources mousemark/mousemarkconfig.kcfgc)
+kde4_add_kcfg_files(kwin4_effect_builtins_config_sources effects/mousemark/mousemarkconfig.kcfgc)
 
 # .desktop files
-install( FILES
-    mousemark/mousemark_config.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+install(FILES effects/mousemark/mousemark_config.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)

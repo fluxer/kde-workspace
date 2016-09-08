@@ -166,4 +166,3 @@ X-KDE-PluginInfo-Category=Accessibility
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
-X-KDE-Library=kwin4_effect_builtins
