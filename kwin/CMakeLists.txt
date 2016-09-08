@@ -7,6 +7,11 @@ option(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support"
 option(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 option(KWIN_BUILD_COMPOSITE "Enable building of KWin with XRender Compositing support" ON)
 
+# without dbusmenu-qt the functionality is useless
+if(NOT DBUSMENUQT_FOUND)
+    set(KWIN_BUILD_KAPPMENU OFF)
+endif()
+
 include_directories(${XCB_INCLUDE_DIR})
 
 # for kwin internal things
