@@ -801,7 +801,6 @@ SceneXrender::EffectFrame::EffectFrame(EffectFrameImpl* frame)
     m_picture = NULL;
     m_textPicture = NULL;
     m_iconPicture = NULL;
-    m_selectionPicture = NULL;
 }
 
 SceneXrender::EffectFrame::~EffectFrame()
@@ -809,7 +808,6 @@ SceneXrender::EffectFrame::~EffectFrame()
     delete m_picture;
     delete m_textPicture;
     delete m_iconPicture;
-    delete m_selectionPicture;
 }
 
 void SceneXrender::EffectFrame::cleanup()
@@ -826,8 +824,6 @@ void SceneXrender::EffectFrame::free()
     m_textPicture = NULL;
     delete m_iconPicture;
     m_iconPicture = NULL;
-    delete m_selectionPicture;
-    m_selectionPicture = NULL;
 }
 
 void SceneXrender::EffectFrame::freeIconFrame()
@@ -840,12 +836,6 @@ void SceneXrender::EffectFrame::freeTextFrame()
 {
     delete m_textPicture;
     m_textPicture = NULL;
-}
-
-void SceneXrender::EffectFrame::freeSelection()
-{
-    delete m_selectionPicture;
-    m_selectionPicture = NULL;
 }
 
 void SceneXrender::EffectFrame::crossFadeIcon()
@@ -866,34 +856,7 @@ void SceneXrender::EffectFrame::render(QRegion region, double opacity, double fr
     }
 
     // Render the actual frame
-    if (m_effectFrame->style() == EffectFrameUnstyled) {
-        renderUnstyled(effects->xrenderBufferPicture(), m_effectFrame->geometry(), opacity * frameOpacity);
-    } else if (m_effectFrame->style() == EffectFrameStyled) {
-        if (!m_picture) { // Lazy creation
-            updatePicture();
-        }
-        if (m_picture) {
-            qreal left, top, right, bottom;
-            m_effectFrame->frame().getMargins(left, top, right, bottom);   // m_geometry is the inner geometry
-            QRect geom = m_effectFrame->geometry().adjusted(-left, -top, right, bottom);
-            xcb_render_composite(connection(), XCB_RENDER_PICT_OP_OVER, *m_picture,
-                                 XCB_RENDER_PICTURE_NONE, effects->xrenderBufferPicture(),
-                                 0, 0, 0, 0, geom.x(), geom.y(), geom.width(), geom.height());
-        }
-    }
-    if (!m_effectFrame->selection().isNull()) {
-        if (!m_selectionPicture) { // Lazy creation
-            const QPixmap pix = m_effectFrame->selectionFrame().framePixmap();
-            if (!pix.isNull()) // don't try if there's no content
-                m_selectionPicture = new XRenderPicture(m_effectFrame->selectionFrame().framePixmap());
-        }
-        if (m_selectionPicture) {
-            const QRect geom = m_effectFrame->selection();
-            xcb_render_composite(connection(), XCB_RENDER_PICT_OP_OVER, *m_selectionPicture,
-                                 XCB_RENDER_PICTURE_NONE, effects->xrenderBufferPicture(),
-                                 0, 0, 0, 0, geom.x(), geom.y(), geom.width(), geom.height());
-        }
-    }
+    renderUnstyled(effects->xrenderBufferPicture(), m_effectFrame->geometry(), opacity * frameOpacity);
 
     XRenderPicture fill = xRenderBlendPicture(opacity);
 
@@ -1012,11 +975,6 @@ void SceneXrender::EffectFrame::updatePicture()
 {
     delete m_picture;
     m_picture = 0L;
-    if (m_effectFrame->style() == EffectFrameStyled) {
-        const QPixmap pix = m_effectFrame->frame().framePixmap();
-        if (!pix.isNull())
-            m_picture = new XRenderPicture(pix);
-    }
 }
 
 void SceneXrender::EffectFrame::updateTextPicture()
@@ -1045,12 +1003,8 @@ void SceneXrender::EffectFrame::updateTextPicture()
     pixmap.fill(Qt::transparent);
     QPainter p(&pixmap);
     p.setFont(m_effectFrame->font());
-    if (m_effectFrame->style() == EffectFrameStyled) {
-        p.setPen(m_effectFrame->styledTextColor());
-    } else {
-        // TODO: What about no frame? Custom color setting required
-        p.setPen(Qt::white);
-    }
+    // TODO: What about no frame? Custom color setting required
+    p.setPen(Qt::white);
     p.drawText(rect, m_effectFrame->alignment(), text);
     p.end();
     m_textPicture = new XRenderPicture(pixmap);

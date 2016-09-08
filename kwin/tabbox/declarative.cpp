@@ -118,7 +118,6 @@ DeclarativeView::DeclarativeView(QAbstractItemModel *model, TabBoxConfig::TabBox
     , m_model(model)
     , m_mode(mode)
     , m_currentScreenGeometry()
-    , m_frame(new Plasma::FrameSvg(this))
     , m_currentLayout()
     , m_cachedWidth(0)
     , m_cachedHeight(0)
@@ -149,11 +148,6 @@ DeclarativeView::DeclarativeView(QAbstractItemModel *model, TabBoxConfig::TabBox
         rootContext()->setContextProperty("clientModel", model);
     }
     setSource(QUrl(KStandardDirs::locate("data", QLatin1String("kwin/tabbox/tabbox.qml"))));
-
-    // FrameSvg
-    m_frame->setImagePath("dialogs/background");
-    m_frame->setCacheAllRenderedFrames(true);
-    m_frame->setEnabledBorders(Plasma::FrameSvg::AllBorders);
 
     connect(tabBox, SIGNAL(configChanged()), SLOT(updateQmlSource()));
     if (m_mode == TabBoxConfig::ClientTabBox) {
@@ -189,40 +183,6 @@ void DeclarativeView::showEvent(QShowEvent *event)
     QResizeEvent re(size(), size()); // to set mask and blurring.
     resizeEvent(&re);
     QGraphicsView::showEvent(event);
-}
-
-void DeclarativeView::resizeEvent(QResizeEvent *event)
-{
-    if (tabBox->embedded()) {
-        Plasma::WindowEffects::enableBlurBehind(winId(), false);
-    } else {
-        const QString maskImagePath = rootObject()->property("maskImagePath").toString();
-        if (maskImagePath.isEmpty()) {
-            clearMask();
-            Plasma::WindowEffects::enableBlurBehind(winId(), false);
-        } else {
-            const double maskWidth = rootObject()->property("maskWidth").toDouble();
-            const double maskHeight = rootObject()->property("maskHeight").toDouble();
-            const int maskTopMargin = rootObject()->property("maskTopMargin").toInt();
-            const int maskLeftMargin = rootObject()->property("maskLeftMargin").toInt();
-            m_frame->setImagePath(maskImagePath);
-            m_frame->resizeFrame(QSizeF(maskWidth, maskHeight));
-            QRegion mask = m_frame->mask().translated(maskLeftMargin, maskTopMargin);
-#ifndef TABBOX_KCM
-            // notice: this covers an issue with plasma detecting the compositing state. see plasmaThemeVariant()
-            if (Workspace::self()->compositing() && effects) {
-                // blur background?!
-                Plasma::WindowEffects::enableBlurBehind(winId(), static_cast<EffectsHandlerImpl*>(effects)->provides(Effect::Blur), mask);
-                clearMask();
-            } else
-#endif
-            {
-                // do not trim to mask with compositing enabled, otherwise shadows are cropped
-                setMask(mask);
-            }
-        }
-    }
-    QDeclarativeView::resizeEvent(event);
 }
 
 void DeclarativeView::hideEvent(QHideEvent *event)

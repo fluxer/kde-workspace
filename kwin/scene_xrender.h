@@ -120,7 +120,6 @@ public:
     virtual void free();
     virtual void freeIconFrame();
     virtual void freeTextFrame();
-    virtual void freeSelection();
     virtual void crossFadeIcon();
     virtual void crossFadeText();
     virtual void render(QRegion region, double opacity, double frameOpacity);
@@ -134,7 +133,6 @@ private:
     XRenderPicture* m_picture;
     XRenderPicture* m_textPicture;
     XRenderPicture* m_iconPicture;
-    XRenderPicture* m_selectionPicture;
     static XRenderPicture* s_effectFrameCircle;
 };
 

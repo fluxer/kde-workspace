@@ -33,8 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using namespace KWin;
 
-KWIN_EFFECT(windowgeometry, WindowGeometryEffect)
-
 WindowGeometryEffect::WindowGeometryEffect()
 {
     iAmActivated = true;
@@ -52,7 +50,7 @@ WindowGeometryEffect::WindowGeometryEffect()
     reconfigure(ReconfigureAll);
     QFont fnt; fnt.setBold(true); fnt.setPointSize(12);
     for (int i = 0; i < 3; ++i) {
-        myMeasure[i] = effects->effectFrame(EffectFrameUnstyled, false);
+        myMeasure[i] = effects->effectFrame(false);
         myMeasure[i]->setFont(fnt);
     }
     myMeasure[0]->setAlignment(Qt::AlignLeft | Qt::AlignTop);

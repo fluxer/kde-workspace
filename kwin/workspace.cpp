@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "group.h"
 #include "killwindow.h"
 #include "netinfo.h"
-#include "outline.h"
 #include "placement.h"
 #include "rules.h"
 #ifdef KWIN_BUILD_SCREENEDGES
@@ -221,8 +220,6 @@ Workspace::Workspace(bool restore)
     );
 
     client_keys = new KActionCollection(this);
-
-    Outline::create(this);
 
     initShortcuts();
 

@@ -35,10 +35,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-KWIN_EFFECT(logout, LogoutEffect)
-
-#warning this effect is probably bogus
-
 LogoutEffect::LogoutEffect()
     : progress(0.0)
     , displayEffect(false)

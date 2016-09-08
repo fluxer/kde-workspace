@@ -50,8 +50,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-KWIN_EFFECT(presentwindows, PresentWindowsEffect)
-
 PresentWindowsEffect::PresentWindowsEffect()
     : m_proxy(this)
     , m_activated(false)
@@ -407,12 +405,12 @@ void PresentWindowsEffect::slotWindowAdded(EffectWindow *w)
     winData->visible = isVisibleWindow(w);
     winData->opacity = 0.0;
     winData->highlight = 0.0;
-    winData->textFrame = effects->effectFrame(EffectFrameUnstyled, false);
+    winData->textFrame = effects->effectFrame(false);
     QFont font;
     font.setBold(true);
     font.setPointSize(12);
     winData->textFrame->setFont(font);
-    winData->iconFrame = effects->effectFrame(EffectFrameUnstyled, false);
+    winData->iconFrame = effects->effectFrame(false);
     winData->iconFrame->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     winData->iconFrame->setIcon(w->icon());
     if (isSelectableWindow(w)) {
@@ -1498,12 +1496,12 @@ void PresentWindowsEffect::setActive(bool active)
             if (w->isOnCurrentDesktop() && !w->isMinimized())
                 winData->opacity = 1.0;
             winData->highlight = 1.0;
-            winData->textFrame = effects->effectFrame(EffectFrameUnstyled, false);
+            winData->textFrame = effects->effectFrame(false);
             QFont font;
             font.setBold(true);
             font.setPointSize(12);
             winData->textFrame->setFont(font);
-            winData->iconFrame = effects->effectFrame(EffectFrameUnstyled, false);
+            winData->iconFrame = effects->effectFrame(false);
             winData->iconFrame->setAlignment(Qt::AlignRight | Qt::AlignBottom);
             winData->iconFrame->setIcon(w->icon());
         }
@@ -1600,7 +1598,7 @@ void PresentWindowsEffect::updateFilterFrame()
 {
     QRect area = effects->clientArea(ScreenArea, effects->activeScreen(), effects->currentDesktop());
     if (!m_filterFrame) {
-        m_filterFrame = effects->effectFrame(EffectFrameStyled, false);
+        m_filterFrame = effects->effectFrame(false);
         QFont font;
         font.setPointSize(font.pointSize() * 2);
         font.setBold(true);
@@ -1925,7 +1923,7 @@ void PresentWindowsEffect::screenCountChanged()
         m_gridSizes.append(GridSize());
         if (m_dragToClose) {
             const QRect screenRect = effects->clientArea(FullScreenArea, i, 1);
-            EffectFrame *frame = effects->effectFrame(EffectFrameNone, false);
+            EffectFrame *frame = effects->effectFrame(false);
             KIcon icon("user-trash");
             frame->setIcon(icon.pixmap(QSize(128, 128)));
             frame->setPosition(QPoint(screenRect.x() + screenRect.width(), screenRect.y()));

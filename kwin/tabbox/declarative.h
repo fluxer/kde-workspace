@@ -56,7 +56,6 @@ class DeclarativeView : public QDeclarativeView
 public:
     DeclarativeView(QAbstractItemModel *model, TabBoxConfig::TabBoxMode mode, QWidget *parent = NULL);
     virtual void showEvent(QShowEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
     void setCurrentIndex(const QModelIndex &index, bool disableAnimation = false);
     bool sendKeyEvent(QKeyEvent *event);
 
@@ -79,10 +78,6 @@ private:
     QAbstractItemModel *m_model;
     TabBoxConfig::TabBoxMode m_mode;
     QRect m_currentScreenGeometry;
-    /**
-    * Background Frame required for setting the blur mask
-    */
-    Plasma::FrameSvg* m_frame;
     QString m_currentLayout;
     int m_cachedWidth;
     int m_cachedHeight;

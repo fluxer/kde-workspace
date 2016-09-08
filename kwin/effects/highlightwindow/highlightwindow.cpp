@@ -25,8 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-KWIN_EFFECT(highlightwindow, HighlightWindowEffect)
-
 HighlightWindowEffect::HighlightWindowEffect()
     : m_finishing(false)
     , m_fadeDuration(float(animationTime(150)))

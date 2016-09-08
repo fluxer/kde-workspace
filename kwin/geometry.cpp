@@ -51,7 +51,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGui/qx11info_x11.h>
 
 #include <KGlobalSettings>
-#include "outline.h"
 
 namespace KWin
 {
@@ -2657,7 +2656,6 @@ void Client::finishMoveResize(bool cancel)
     if (isElectricBorderMaximizing()) {
         setQuickTileMode(electricMode);
         electricMaximizing = false;
-        outline()->hide();
         elevate(false);
     } else if (!cancel) {
         if (!(maximizeMode() & MaximizeHorizontal)) {
@@ -3116,10 +3114,6 @@ bool Client::isElectricBorderMaximizing() const
 void Client::setElectricBorderMaximizing(bool maximizing)
 {
     electricMaximizing = maximizing;
-    if (maximizing)
-        outline()->show(electricBorderMaximizeGeometry(cursorPos(), desktop()));
-    else
-        outline()->hide();
     elevate(maximizing);
 }
 

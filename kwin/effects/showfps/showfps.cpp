@@ -38,15 +38,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-KWIN_EFFECT(showfps, ShowFpsEffect)
-
 const int FPS_WIDTH = 10;
 const int MAX_TIME = 100;
 
 ShowFpsEffect::ShowFpsEffect()
     : paints_pos(0)
     , frames_pos(0)
-    , m_noBenchmark(effects->effectFrame(EffectFrameUnstyled, false))
+    , m_noBenchmark(effects->effectFrame(false))
 {
     for (int i = 0;
             i < NUM_PAINTS;

@@ -206,16 +206,6 @@ enum DataRole {
 };
 
 /**
- * Style types used by @ref EffectFrame.
- * @since 4.6
- */
-enum EffectFrameStyle {
-    EffectFrameNone, ///< Displays no frame around the contents.
-    EffectFrameUnstyled, ///< Displays a basic box around the contents.
-    EffectFrameStyled ///< Displays a Plasma-styled frame around the contents.
-};
-
-/**
  * Infinite region (i.e. a special region type saying that everything needs to be painted).
  */
 KWIN_EXPORT inline
@@ -874,8 +864,9 @@ public:
      * EffectFrame.
      * @since 4.6
      */
-    virtual EffectFrame* effectFrame(EffectFrameStyle style, bool staticSize = true,
-                                     const QPoint& position = QPoint(-1, -1), Qt::Alignment alignment = Qt::AlignCenter) const = 0;
+    virtual EffectFrame* effectFrame(bool staticSize = true,
+                                     const QPoint& position = QPoint(-1, -1),
+                                     Qt::Alignment alignment = Qt::AlignCenter) const = 0;
 
     /**
      * Allows an effect to trigger a reload of itself.
@@ -2547,18 +2538,6 @@ public:
     virtual const QPixmap& icon() const = 0;
     virtual void setIconSize(const QSize& size) = 0;
     virtual const QSize& iconSize() const = 0;
-
-    /**
-     * Sets the geometry of a selection.
-     * To remove the selection set a null rect.
-     * @param selection The geometry of the selection in screen coordinates.
-     **/
-    virtual void setSelection(const QRect& selection) = 0;
-
-    /**
-     * @returns The style of this EffectFrame.
-     **/
-    virtual EffectFrameStyle style() const = 0;
 
     /**
      * If @p enable is @c true cross fading between icons and text is enabled

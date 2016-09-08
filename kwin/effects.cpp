@@ -57,7 +57,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KPluginInfo>
-#include <Plasma/Theme>
 
 #include <assert.h>
 #include "composite.h"
@@ -77,7 +76,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effects/mousemark/mousemark.h"
 #include "effects/presentwindows/presentwindows.h"
 #include "effects/resize/resize.h"
-#include "effects/screenedge/screenedgeeffect.h"
 #include "effects/showfps/showfps.h"
 #include "effects/showpaint/showpaint.h"
 #include "effects/slide/slide.h"
@@ -1381,8 +1379,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         effect = new KscreenEffect();
     } else if (internalname == "kwin4_effect_presentwindows") {
         effect = new PresentWindowsEffect();
-    } else if (internalname == "kwin4_effect_screenedge") {
-        effect = new ScreenEdgeEffect();
     } else if (internalname == "kwin4_effect_slidingpopups") {
         effect = new SlidingPopupsEffect();
     } else if (internalname == "kwin4_effect_taskbarthumbnail") {
@@ -1612,9 +1608,9 @@ QStringList EffectsHandlerImpl::activeEffects() const
     return ret;
 }
 
-EffectFrame* EffectsHandlerImpl::effectFrame(EffectFrameStyle style, bool staticSize, const QPoint& position, Qt::Alignment alignment) const
+EffectFrame* EffectsHandlerImpl::effectFrame(bool staticSize, const QPoint& position, Qt::Alignment alignment) const
 {
-    return new EffectFrameImpl(style, staticSize, position, alignment);
+    return new EffectFrameImpl(staticSize, position, alignment);
 }
 
 
@@ -1898,24 +1894,13 @@ EffectWindowList EffectWindowGroupImpl::members() const
 // EffectFrameImpl
 //****************************************
 
-EffectFrameImpl::EffectFrameImpl(EffectFrameStyle style, bool staticSize, QPoint position, Qt::Alignment alignment)
+EffectFrameImpl::EffectFrameImpl(bool staticSize, QPoint position, Qt::Alignment alignment)
     : QObject(0)
     , EffectFrame()
-    , m_style(style)
     , m_static(staticSize)
     , m_point(position)
     , m_alignment(alignment)
 {
-    if (m_style == EffectFrameStyled) {
-        m_frame.setImagePath("widgets/background");
-        m_frame.setCacheAllRenderedFrames(true);
-        connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(plasmaThemeChanged()));
-    }
-    m_selection.setImagePath("widgets/viewitem");
-    m_selection.setElementPrefix("hover");
-    m_selection.setCacheAllRenderedFrames(true);
-    m_selection.setEnabledBorders(Plasma::FrameSvg::AllBorders);
-
     if (effects->compositingType() == XRenderCompositing) {
 #ifdef KWIN_BUILD_COMPOSITE
         m_sceneFrame = new SceneXrender::EffectFrame(this);
@@ -1975,12 +1960,6 @@ void EffectFrameImpl::setGeometry(const QRect& geometry, bool force)
         return;
     }
 
-    if (m_style == EffectFrameStyled) {
-        qreal left, top, right, bottom;
-        m_frame.getMargins(left, top, right, bottom);   // m_geometry is the inner geometry
-        m_frame.resizeFrame(m_geometry.adjusted(-left, -top, right, bottom).size());
-    }
-
     free();
 }
 
@@ -2014,11 +1993,6 @@ void EffectFrameImpl::setIconSize(const QSize& size)
     m_iconSize = size;
     autoResize();
     m_sceneFrame->freeIconFrame();
-}
-
-void EffectFrameImpl::plasmaThemeChanged()
-{
-    free();
 }
 
 void EffectFrameImpl::render(QRegion region, double opacity, double frameOpacity)
@@ -2097,19 +2071,6 @@ void EffectFrameImpl::setText(const QString& text)
     }
 }
 
-void EffectFrameImpl::setSelection(const QRect& selection)
-{
-    if (selection == m_selectionGeometry) {
-        return;
-    }
-    m_selectionGeometry = selection;
-    if (m_selectionGeometry.size() != m_selection.frameSize().toSize()) {
-        m_selection.resizeFrame(m_selectionGeometry.size());
-    }
-    // TODO; optimize to only recreate when resizing
-    m_sceneFrame->freeSelection();
-}
-
 void EffectFrameImpl::autoResize()
 {
     if (m_static)
@@ -2129,11 +2090,6 @@ void EffectFrameImpl::autoResize()
 
     align(geometry);
     setGeometry(geometry);
-}
-
-QColor EffectFrameImpl::styledTextColor()
-{
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 }
 
 } // namespace

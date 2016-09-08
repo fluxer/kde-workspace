@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QStack>
 #include <QHash>
-#include <Plasma/FrameSvg>
 
 class QDBusPendingCallWatcher;
 class QDBusServiceWatcher;
@@ -166,7 +165,7 @@ public:
 
     virtual bool decorationSupportsBlurBehind() const;
 
-    virtual EffectFrame* effectFrame(EffectFrameStyle style, bool staticSize, const QPoint& position, Qt::Alignment alignment) const;
+    virtual EffectFrame* effectFrame(bool staticSize, const QPoint& position, Qt::Alignment alignment) const;
 
     virtual QVariant kwinOption(KWinOption kwopt);
     virtual bool isScreenLocked() const;
@@ -349,7 +348,7 @@ class EffectFrameImpl
 {
     Q_OBJECT
 public:
-    explicit EffectFrameImpl(EffectFrameStyle style, bool staticSize = true, QPoint position = QPoint(-1, -1),
+    explicit EffectFrameImpl(bool staticSize = true, QPoint position = QPoint(-1, -1),
                              Qt::Alignment alignment = Qt::AlignCenter);
     virtual ~EffectFrameImpl();
 
@@ -368,39 +367,14 @@ public:
     virtual void setPosition(const QPoint& point);
     virtual const QString& text() const;
     virtual void setText(const QString& text);
-    virtual EffectFrameStyle style() const {
-        return m_style;
-    };
-    Plasma::FrameSvg& frame() {
-        return m_frame;
-    }
     bool isStatic() const {
         return m_static;
     };
     void finalRender(QRegion region, double opacity, double frameOpacity) const;
-    virtual void setSelection(const QRect& selection);
-    const QRect& selection() const {
-        return m_selectionGeometry;
-    }
-    Plasma::FrameSvg& selectionFrame() {
-        return m_selection;
-    }
-    /**
-     * The foreground text color as specified by the default Plasma theme.
-     */
-    static QColor styledTextColor();
-
-private Q_SLOTS:
-    void plasmaThemeChanged();
-
 private:
     Q_DISABLE_COPY(EffectFrameImpl)   // As we need to use Qt slots we cannot copy this class
     void align(QRect &geometry);   // positions geometry around m_point respecting m_alignment
     void autoResize(); // Auto-resize if not a static size
-
-    EffectFrameStyle m_style;
-    Plasma::FrameSvg m_frame; // TODO: share between all EffectFrames
-    Plasma::FrameSvg m_selection;
 
     // Position
     bool m_static;
@@ -413,7 +387,6 @@ private:
     QFont m_font;
     QPixmap m_icon;
     QSize m_iconSize;
-    QRect m_selectionGeometry;
 
     Scene::EffectFrame* m_sceneFrame;
 };

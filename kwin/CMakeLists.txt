@@ -44,7 +44,6 @@ set(kwin4_effect_include_directories)
 
 include( effects/kscreen/CMakeLists.txt )
 include( effects/presentwindows/CMakeLists.txt )
-include( effects/screenedge/CMakeLists.txt )
 include( effects/slidingpopups/CMakeLists.txt )
 include( effects/taskbarthumbnail/CMakeLists.txt )
 include( effects/dashboard/CMakeLists.txt )
@@ -87,7 +86,6 @@ set(kwin_SRCS
    layers.cpp 
    main.cpp 
    options.cpp 
-   outline.cpp
    decorations.cpp
    events.cpp 
    killwindow.cpp 
@@ -169,7 +167,6 @@ add_executable(kwin ${kwin_SRCS} ${kwin4_effect_builtins_sources})
 
 target_link_libraries(kwin
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
     ${KDE4_KDECLARATIVE_LIBS}
     ${X11_X11_LIB}
     ${X11_Xext_LIB}

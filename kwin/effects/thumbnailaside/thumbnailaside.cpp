@@ -30,8 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-KWIN_EFFECT(thumbnailaside, ThumbnailAsideEffect)
-
 ThumbnailAsideEffect::ThumbnailAsideEffect()
 {
     KActionCollection* actionCollection = new KActionCollection(this);
