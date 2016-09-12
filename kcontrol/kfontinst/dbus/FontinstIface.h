@@ -37,14 +37,14 @@ public:
     ~OrgKdeFontinstInterface();
 
 public Q_SLOTS: // METHODS
-    inline Q_NOREPLY void disable(const QString &family, uint style, bool inSystem, int pid, bool checkConfig)
+    inline void disable(const QString &family, uint style, bool inSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(family) << qVariantFromValue(style) << qVariantFromValue(inSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("disable"), argumentList);
     }
 
-    inline Q_NOREPLY void enable(const QString &family, uint style, bool inSystem, int pid, bool checkConfig)
+    inline void enable(const QString &family, uint style, bool inSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(family) << qVariantFromValue(style) << qVariantFromValue(inSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
@@ -58,35 +58,35 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("folderName"), argumentList);
     }
 
-    inline Q_NOREPLY void install(const QString &file, bool createAfm, bool toSystem, int pid, bool checkConfig)
+    inline void install(const QString &file, bool createAfm, bool toSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(file) << qVariantFromValue(createAfm) << qVariantFromValue(toSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("install"), argumentList);
     }
 
-    inline Q_NOREPLY void list(int folders, int pid)
+    inline void list(int folders, int pid)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(folders) << qVariantFromValue(pid);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("list"), argumentList);
     }
 
-    inline Q_NOREPLY void move(const QString &family, uint style, bool toSystem, int pid, bool checkConfig)
+    inline void move(const QString &family, uint style, bool toSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(family) << qVariantFromValue(style) << qVariantFromValue(toSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("move"), argumentList);
     }
 
-    inline Q_NOREPLY void reconfigure(int pid, bool force)
+    inline void reconfigure(int pid, bool force)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(pid) << qVariantFromValue(force);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("reconfigure"), argumentList);
     }
 
-    inline Q_NOREPLY void removeFile(const QString &family, uint style, const QString &file, bool fromSystem, int pid, bool checkConfig)
+    inline void removeFile(const QString &family, uint style, const QString &file, bool fromSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(family) << qVariantFromValue(style) << qVariantFromValue(file) << qVariantFromValue(fromSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
@@ -99,21 +99,21 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("saveDisabled"), argumentList);
     }
 
-    inline Q_NOREPLY void stat(const QString &name, int folders, int pid)
+    inline void stat(const QString &name, int folders, int pid)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(name) << qVariantFromValue(folders) << qVariantFromValue(pid);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("stat"), argumentList);
     }
 
-    inline Q_NOREPLY void uninstall(const QString &name, bool fromSystem, int pid, bool checkConfig)
+    inline void uninstall(const QString &name, bool fromSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(name) << qVariantFromValue(fromSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);
         callWithArgumentList(QDBus::NoBlock, QLatin1String("uninstall"), argumentList);
     }
 
-    inline Q_NOREPLY void uninstall(const QString &family, uint style, bool fromSystem, int pid, bool checkConfig)
+    inline void uninstall(const QString &family, uint style, bool fromSystem, int pid, bool checkConfig)
     {
         QList<QVariant> argumentList;
         argumentList << qVariantFromValue(family) << qVariantFromValue(style) << qVariantFromValue(fromSystem) << qVariantFromValue(pid) << qVariantFromValue(checkConfig);

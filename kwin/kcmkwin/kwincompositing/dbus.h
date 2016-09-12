@@ -38,7 +38,7 @@ public:
     MainAdaptor(KWinCompositingConfig *config) : QDBusAbstractAdaptor(config), m_config(config) { }
 
 public slots:
-    Q_NOREPLY void warn(QString message, QString details, QString dontAgainKey) {
+    void warn(QString message, QString details, QString dontAgainKey) {
         m_config->warn(message, details, dontAgainKey);
     }
 };

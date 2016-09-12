@@ -58,7 +58,7 @@ public:
 
 public: // PROPERTIES
 public Q_SLOTS: // METHODS
-    Q_NOREPLY void cascadeDesktop();
+    void cascadeDesktop();
     /**
      * @deprecated
      **/
@@ -68,17 +68,17 @@ public Q_SLOTS: // METHODS
      * @deprecated
      **/
     void doNotManage(const QString &name);
-    Q_NOREPLY void killWindow();
+    void killWindow();
     void nextDesktop();
     void previousDesktop();
-    Q_NOREPLY void reconfigure();
+    void reconfigure();
     bool setCurrentDesktop(int desktop);
     /**
      * @deprecated
      **/
     void showWindowMenuAt(qlonglong winId, int x, int y);
     QString supportInformation();
-    Q_NOREPLY void unclutterDesktop();
+    void unclutterDesktop();
     // from compositor
     /**
      * @deprecated
@@ -99,7 +99,7 @@ public Q_SLOTS: // METHODS
     /**
      * @deprecated
      **/
-    Q_NOREPLY void toggleCompositing();
+    void toggleCompositing();
     /**
      * @deprecated
      **/

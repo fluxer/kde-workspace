@@ -33,7 +33,7 @@ public:
     DesktopNotifier(QObject* parent, const QList<QVariant>&);
 
 public slots:
-    Q_SCRIPTABLE Q_NOREPLY void watchDir(const QString &path);
+    Q_SCRIPTABLE void watchDir(const QString &path);
 
 private slots:
     void dirty(const QString &path);

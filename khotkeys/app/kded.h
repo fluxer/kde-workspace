@@ -34,9 +34,9 @@ class KHotKeysModule
 
     public Q_SLOTS:
 
-        Q_SCRIPTABLE Q_NOREPLY void reread_configuration();
+        Q_SCRIPTABLE void reread_configuration();
 
-        Q_SCRIPTABLE Q_NOREPLY void quit();
+        Q_SCRIPTABLE void quit();
 
         /**
          * Register an shortcut for service @serviceStorageId with the key

@@ -77,8 +77,8 @@ Q_SIGNALS:
     void WindowUnregistered(WId id);
 
 public Q_SLOTS:
-    Q_NOREPLY void RegisterWindow(WId id, const QDBusObjectPath& path);
-    Q_NOREPLY void UnregisterWindow(WId id);
+    void RegisterWindow(WId id, const QDBusObjectPath& path);
+    void UnregisterWindow(WId id);
     QString GetMenuForWindow(WId id, QDBusObjectPath& path);
 
 private Q_SLOTS:

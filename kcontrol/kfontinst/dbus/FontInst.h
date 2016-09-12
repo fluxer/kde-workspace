@@ -58,7 +58,7 @@ class KFONTINST_EXPORT FontInst : public QObject
         STATUS_PARTIAL_DELETE,
         STATUS_NO_SYS_CONNECTION
     };
-    
+
     enum EFolder
     {
         FOLDER_SYS,
@@ -96,29 +96,28 @@ class KFONTINST_EXPORT FontInst : public QObject
                     return true;
         }
         return false;
-    } 
-    
+    }
+
     FontInst();
     ~FontInst();
 
     public Q_SLOTS:
 
-    Q_NOREPLY    void    list(int folders, int pid);
-    Q_NOREPLY    void    stat(const QString &font, int folders, int pid);
-    Q_NOREPLY    void    install(const QString &file, bool createAfm, bool toSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    uninstall(const QString &family, quint32 style, bool fromSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    uninstall(const QString &name, bool fromSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    move(const QString &family, quint32 style, bool toSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    enable(const QString &family, quint32 style, bool inSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    disable(const QString &family, quint32 style, bool inSystem, int pid, bool checkConfig);
-    Q_NOREPLY    void    removeFile(const QString &family, quint32 style, const QString &file, bool fromSystem, int pid,
-                                    bool checkConfig);
-    Q_NOREPLY    void    reconfigure(int pid, bool force);
+    void list(int folders, int pid);
+    void stat(const QString &font, int folders, int pid);
+    void install(const QString &file, bool createAfm, bool toSystem, int pid, bool checkConfig);
+    void uninstall(const QString &family, quint32 style, bool fromSystem, int pid, bool checkConfig);
+    void uninstall(const QString &name, bool fromSystem, int pid, bool checkConfig);
+    void move(const QString &family, quint32 style, bool toSystem, int pid, bool checkConfig);
+    void enable(const QString &family, quint32 style, bool inSystem, int pid, bool checkConfig);
+    void disable(const QString &family, quint32 style, bool inSystem, int pid, bool checkConfig);
+    void removeFile(const QString &family, quint32 style, const QString &file, bool fromSystem, int pid, bool checkConfig);
+    void reconfigure(int pid, bool force);
     Q_SCRIPTABLE QString folderName(bool sys);
     Q_SCRIPTABLE void    saveDisabled();
 
     Q_SIGNALS:
-    
+
     void fontList(int pid, const QList<KFI::Families> &families);
     void status(int pid, int status);
     void fontStat(int pid, const KFI::Family &font);
@@ -149,8 +148,6 @@ class KFONTINST_EXPORT FontInst : public QObject
     int performAction(const QVariantMap &args);
 
     static void emergencySave(int sig);
-
-    private:
 
     QTimer    *itsConnectionsTimer,
               *itsFontListTimer;
