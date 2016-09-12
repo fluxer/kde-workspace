@@ -24,7 +24,8 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QHash>
-#include <QtCore/qsharedpointer.h>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QVariant>
 
 #include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusUnixFileDescriptor>

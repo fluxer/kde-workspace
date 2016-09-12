@@ -77,7 +77,7 @@ class KWalletD : public QObject, protected QDBusContext {
 		int close(int handle, bool force, const QString& appid);
 
 		// Save to disk but leave open
-		Q_NOREPLY void sync(int handle, const QString& appid);
+		void sync(int handle, const QString& appid);
 
 		// Physically deletes the wallet from disk.
 		int deleteWallet(const QString& wallet);
