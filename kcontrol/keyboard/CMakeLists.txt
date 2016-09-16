@@ -4,10 +4,6 @@ else()
     MESSAGE(STATUS "libXi version 1.2.0 or later is required to keep layouts with keyboard hotplugging")
 endif()
 
-set ( text_paint_LIB ${KDE4_PLASMA_LIBS} )
-
-
-
 ### kded daemon ###
 
 set(kded_keyboard_SRCS
@@ -31,9 +27,12 @@ set(kded_keyboard_SRCS
 kde4_add_plugin(kded_keyboard ${kded_keyboard_SRCS})
 
 target_link_libraries(kded_keyboard
-    ${KDE4_KDECORE_LIBS}  ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES}
-    ${text_paint_LIB}
-    ${QT_QTXML_LIBRARY} ${X11_Xkbfile_LIB}
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_PLASMA_LIBS}
+    ${QT_QTXML_LIBRARY}
+    ${X11_LIBRARIES}
+    ${X11_Xkbfile_LIB}
  )
 
 if(X11_XTest_FOUND)
@@ -63,8 +62,11 @@ set( plasma_applet_keyboard_SRCS
 kde4_add_plugin(plasma_applet_keyboard ${plasma_applet_keyboard_SRCS})
 
 target_link_libraries(plasma_applet_keyboard
-     ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY} ${X11_Xkbfile_LIB} ${X11_LIBRARIES}
-     ${text_paint_LIB}
+     ${KDE4_KDEUI_LIBS}
+     ${KDE4_PLASMA_LIBS}
+     ${QT_QTXML_LIBRARY}
+     ${X11_Xkbfile_LIB}
+     ${X11_LIBRARIES}
 )
 
 install( TARGETS plasma_applet_keyboard DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -85,9 +87,11 @@ set( keyboard_layout_widget_SRCS
 kde4_add_plugin(keyboard_layout_widget ${keyboard_layout_widget_SRCS})
 
 target_link_libraries(keyboard_layout_widget
-     ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES}
-     ${text_paint_LIB}
-     ${QT_QTXML_LIBRARY} ${X11_Xkbfile_LIB}
+     ${KDE4_KDEUI_LIBS}
+     ${KDE4_PLASMA_LIBS}
+     ${QT_QTXML_LIBRARY}
+     ${X11_LIBRARIES}
+     ${X11_Xkbfile_LIB}
 )
 
 install( TARGETS keyboard_layout_widget DESTINATION ${PLUGIN_INSTALL_DIR} )
@@ -124,13 +128,15 @@ set(kcm_keyboard_PART_SRCS
 kde4_add_plugin(kcm_keyboard ${kcm_keyboard_PART_SRCS})
 
 target_link_libraries(kcm_keyboard
-    ${KDE4_KIO_LIBS} ${X11_Xkbfile_LIB} ${X11_LIBRARIES}
-    ${text_paint_LIB}
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${X11_Xkbfile_LIB}
+    ${X11_LIBRARIES}
 )
 
-install(TARGETS kcm_keyboard DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_keyboard DESTINATION ${PLUGIN_INSTALL_DIR})
 
-install( FILES kcm_keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install(FILES kcm_keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 
 add_subdirectory( pics )
 

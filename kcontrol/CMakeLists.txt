@@ -11,14 +11,14 @@ set(libkxftconfig_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/fonts/kxftconfig.cpp
 )
 
-if( X11_Xrandr_FOUND )
+if(X11_Xrandr_FOUND)
    add_subdirectory( randr )
-endif(X11_Xrandr_FOUND )
+endif()
 
-if(X11_Xkb_FOUND)
+if(X11_Xkb_FOUND AND X11_Xkbfile_FOUND)
     add_subdirectory( keyboard )
     add_subdirectory( access )
-endif(X11_Xkb_FOUND)
+endif()
 
 add_subdirectory( input )
 add_subdirectory( screensaver )
@@ -56,4 +56,4 @@ add_subdirectory( desktoppaths )
 if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
     add_subdirectory( kfontinst )
     add_subdirectory( fonts )
-endif(FONTCONFIG_FOUND AND FREETYPE_FOUND)
+endif()
