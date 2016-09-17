@@ -86,7 +86,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "moc_server.cpp"
 
 // must go after #include <config-ksmserver.h>
-#ifdef COMPILE_SCREEN_LOCKER
+#if COMPILE_SCREEN_LOCKER
 #include "screenlocker/ksldapp.h"
 #endif
 
@@ -607,7 +607,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
   , sessionGroup( "" )
   , logoutEffectWidget( NULL )
 {
-#ifdef COMPILE_SCREEN_LOCKER
+#if COMPILE_SCREEN_LOCKER
     KGlobal::locale()->insertCatalog(QLatin1String( "libkworkspace" ));
 
     ScreenLocker::KSldApp::self();
