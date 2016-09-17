@@ -90,9 +90,7 @@ void GlowBar::setInputMask()
 {
     // Create an empty input mask to achieve click-through effect
     // Thanks to MacSlow for this!
-    Pixmap mask;
-
-    mask = XCreatePixmap(QX11Info::display(),
+    Pixmap mask = XCreatePixmap(QX11Info::display(),
             winId(),
             1, /* width  */
             1, /* height */
