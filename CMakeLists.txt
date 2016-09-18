@@ -26,6 +26,14 @@ set_package_properties(DBusMenuQt PROPERTIES
     TYPE RECOMMENDED
 )
 
+macro_optional_find_package(Strigi 0.6.3)
+set_package_properties(Strigi PROPERTIES
+    DESCRIPTION "Desktop indexing and search support"
+    URL "http://strigi.sourceforge.net"
+    TYPE RECOMMENDED
+    PURPOSE "Required for fonts analyzer"
+)
+
 macro_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"
