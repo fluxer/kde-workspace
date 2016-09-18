@@ -30,7 +30,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <config-workspace.h>
 #include <config-unix.h> // HAVE_LIMITS_H
-#include <config-ksmserver.h>
 
 #include <pwd.h>
 #include <sys/types.h>
@@ -542,10 +541,6 @@ void KSMServer::killWM()
     if( state != Killing )
         return;
     delete logoutEffectWidget;
-#if COMPILE_SCREEN_LOCKER
-    // To prevent kwin from becoming "defunct".
-    ScreenLocker::KSldApp::self()->cleanUp();
-#endif
     kDebug( 1218 ) << "Starting killing WM";
     state = KillingWM;
     bool iswm = false;
