@@ -26,9 +26,10 @@ endif(KDE4_ENABLE_FPIE)
 
 add_definitions(-U_REENTRANT)
 target_link_libraries(kcheckpass
-    ${KDE4_KDEFAKES_LIBS}
     ${UNIXAUTH_LIBRARIES}
     ${SOCKET_LIBRARIES}
+    # for kdefakes
+    ${KDE4_KDECORE_LIBS}
 )
 
 install(
