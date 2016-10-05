@@ -212,8 +212,10 @@ public: // File Dialog integration
     {
         K_FD(qfd);
         if (!kdefd && visible) {
+#ifndef QT_KATIE
             if(qfd->options() & QFileDialog::DontUseNativeDialog)
                 return false;
+#endif
 
             kdefd = new KFileDialogBridge(KUrl::fromPath(qfd->directory().canonicalPath()),
                                           qt2KdeFilter(qfd->nameFilters().join(";;")), qfd);
