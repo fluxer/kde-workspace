@@ -1,13 +1,14 @@
 
 add_subdirectory( pics )
 
-macro_optional_find_package(USB)
+macro_optional_find_package(LibUSB)
 macro_bool_to_01(LIBUSB_FOUND HAVE_LIBUSB)
-set_package_properties(USB PROPERTIES DESCRIPTION "User level access to USB devices"
-                       URL "http://libusb.sourceforge.net"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides Logitech mouse support in KControl."
-                      )
+set_package_properties(LibUSB PROPERTIES
+    DESCRIPTION "User level access to USB devices"
+    URL "http://libusb.sourceforge.net"
+    TYPE OPTIONAL
+    PURPOSE "Provides Logitech mouse support in KControl."
+)
 
 configure_file (config-kcontrol-input.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kcontrol-input.h )
 
@@ -15,7 +16,7 @@ include_directories( ${KDE4_INCLUDES} )
 
 
 if (LIBUSB_FOUND)
-  include_directories( ${LIBUSB_INCLUDE_DIR} )
+  include_directories( ${LIBUSB_INCLUDES} )
 endif (LIBUSB_FOUND)
 
 

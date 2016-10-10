@@ -32,11 +32,11 @@
 #include <config-workspace.h>
 #include <config-kcontrol-input.h>
 #ifdef HAVE_LIBUSB
-#include <usb.h>
+#include <libusb.h>
 
 #include "logitechmouse.h"
 
-LogitechMouse::LogitechMouse( struct usb_device *usbDev, int mouseCapabilityFlags, QWidget* parent, const char* name )
+LogitechMouse::LogitechMouse( libusb_device *usbDev, int mouseCapabilityFlags, QWidget* parent, const char* name )
     : LogitechMouseBase( parent )
     , m_resolution( 0 )
 {
@@ -47,10 +47,10 @@ LogitechMouse::LogitechMouse( struct usb_device *usbDev, int mouseCapabilityFlag
 
     m_mouseCapabilityFlags = mouseCapabilityFlags;
 
-    m_usbDeviceHandle = usb_open( usbDev );
+    int result = libusb_open( usbDev, &m_usbDeviceHandle );
 
-    if ( !m_usbDeviceHandle ) {
-        kWarning() << "Error opening usbfs file: " << usb_strerror() ;
+    if ( !m_usbDeviceHandle || result < 0) {
+        kWarning() << "Error opening usbfs file: " << libusb_strerror(static_cast<libusb_error>(result)) ;
         return;
     }
 
@@ -112,7 +112,7 @@ LogitechMouse::LogitechMouse( struct usb_device *usbDev, int mouseCapabilityFlag
 LogitechMouse::~LogitechMouse()
 {
     if ( m_usbDeviceHandle )
-        usb_close( m_usbDeviceHandle );
+        libusb_close( m_usbDeviceHandle );
 }
 
 void LogitechMouse::initCordlessStatusReporting()
@@ -130,11 +130,11 @@ void LogitechMouse::updateCordlessStatus()
     int result = -1;
 
     if ( m_usbDeviceHandle )
-        result = usb_control_msg( m_usbDeviceHandle,
-                                    USB_TYPE_VENDOR | USB_ENDPOINT_IN,0x09,
+        result = libusb_control_transfer( m_usbDeviceHandle,
+                                    LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_ENDPOINT,0x09,
                                     (0x0003 | m_useSecondChannel),
                                     (0x0000 | m_useSecondChannel),
-                                    status.data(),
+                                    reinterpret_cast<uchar*>(status.data()),
                                     0x0008,
                                     1000);
 
@@ -252,21 +252,21 @@ void LogitechMouse::updateResolution()
 {
     char resolution;
 
-    int result = -1;
+    int result = -1; // LIBUSB_ERROR_IO
 
     if ( m_usbDeviceHandle )
-        result = usb_control_msg( m_usbDeviceHandle,
-                                   USB_TYPE_VENDOR | USB_ENDPOINT_IN,
+        result = libusb_control_transfer( m_usbDeviceHandle,
+                                   LIBUSB_REQUEST_TYPE_VENDOR | LIBUSB_RECIPIENT_ENDPOINT,
                                    0x01,
                                    0x000E,
                                    0x0000,
-                                   &resolution,
+                                   reinterpret_cast<uchar*>(&resolution),
                                    0x0001,
                                    100);
 
     // kDebug() << "resolution is: " << resolution;
     if (0 > result) {
-        kWarning() << "Error getting resolution from device : " << usb_strerror() ;
+        kWarning() << "Error getting resolution from device : " << libusb_strerror(static_cast<libusb_error>(result)) ;
         m_resolution = 0;
     } else {
         m_resolution = resolution;
@@ -275,8 +275,8 @@ void LogitechMouse::updateResolution()
 
 void LogitechMouse::setLogitechTo800()
 {
-    int result = usb_control_msg( m_usbDeviceHandle,
-                                  USB_TYPE_VENDOR,
+    int result = libusb_control_transfer( m_usbDeviceHandle,
+                                  LIBUSB_REQUEST_TYPE_VENDOR,
                                   0x02,
                                   0x000E,
                                   4,
@@ -284,14 +284,14 @@ void LogitechMouse::setLogitechTo800()
                                   0x0000,
                                   100);
     if (0 > result) {
-        kWarning() << "Error setting resolution on device: " << usb_strerror() ;
+        kWarning() << "Error setting resolution on device: " << libusb_strerror(static_cast<libusb_error>(result)) ;
     }
 }
 
 void LogitechMouse::setLogitechTo400()
 {
-    int result = usb_control_msg( m_usbDeviceHandle,
-                                  USB_TYPE_VENDOR,
+    int result = libusb_control_transfer( m_usbDeviceHandle,
+                                  LIBUSB_REQUEST_TYPE_VENDOR,
                                   0x02,
                                   0x000E,
                                   3,
@@ -299,7 +299,7 @@ void LogitechMouse::setLogitechTo400()
                                   0x0000,
                                   100);
     if (0 > result) {
-        kWarning() << "Error setting resolution on device: " << usb_strerror() ;
+        kWarning() << "Error setting resolution on device: " << libusb_strerror(static_cast<libusb_error>(result)) ;
     }
 }
 
@@ -321,8 +321,8 @@ bool LogitechMouse::isDualChannelCapable() const
 
 void LogitechMouse::setChannel1()
 {
-    int result =  usb_control_msg( m_usbDeviceHandle,
-                                   USB_TYPE_VENDOR,
+    int result =  libusb_control_transfer( m_usbDeviceHandle,
+                                   LIBUSB_REQUEST_TYPE_VENDOR,
                                    0x02,
                                    (0x0008 | m_useSecondChannel),
                                    (0x0000 | m_useSecondChannel),
@@ -331,15 +331,15 @@ void LogitechMouse::setChannel1()
                                    1000);
 
     if (0 > result) {
-        kWarning() << "Error setting mouse to channel 1 : " << usb_strerror() ;
+        kWarning() << "Error setting mouse to channel 1 : " << libusb_strerror(static_cast<libusb_error>(result)) ;
     }
 
 }
 
 void LogitechMouse::setChannel2()
 {
-    int result =  usb_control_msg( m_usbDeviceHandle,
-                                   USB_TYPE_VENDOR,
+    int result =  libusb_control_transfer( m_usbDeviceHandle,
+                                   LIBUSB_REQUEST_TYPE_VENDOR,
                                    0x02,
                                    (0x0008 | m_useSecondChannel),
                                    (0x0001 | m_useSecondChannel),
@@ -348,7 +348,7 @@ void LogitechMouse::setChannel2()
                                    1000);
 
     if (0 > result) {
-        kWarning() << "Error setting mouse to channel 2 : " << usb_strerror() ;
+        kWarning() << "Error setting mouse to channel 2 : " << libusb_strerror(static_cast<libusb_error>(result)) ;
     }
 
 }

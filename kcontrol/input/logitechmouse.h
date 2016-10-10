@@ -30,7 +30,7 @@
 
 #include "ui_logitechmouse_base.h"
 
-#include <usb.h>
+#include <libusb.h>
 
 #define VENDOR_LOGITECH 0x046D
 #define HAS_RES 0x01   /* mouse supports variable resolution */
@@ -54,7 +54,7 @@ class LogitechMouse : public LogitechMouseBase
     Q_OBJECT
 
 public:
-    LogitechMouse( struct usb_device *usbDev, int mouseCapabilityFlags, QWidget* parent = 0, const char* name=0);
+    LogitechMouse( libusb_device *usbDev, int mouseCapabilityFlags, QWidget* parent = 0, const char* name=0);
     ~LogitechMouse();
     void applyChanges();
     void save(KConfig *config);
@@ -81,7 +81,7 @@ private:
 
     QTimer *doUpdate;
 
-    struct usb_dev_handle *m_usbDeviceHandle;
+    libusb_device_handle *m_usbDeviceHandle;
     bool m_connectStatus; // true if the CONNECT button on the mouse is pressed
     bool m_mousePowerup; // true if we are doing "just out of the box" auto-locking
     bool m_receiverUnlock; // true if mouse has been disconnected by a long press

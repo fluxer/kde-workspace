@@ -353,25 +353,40 @@ MouseConfig::MouseConfig(QWidget *parent, const QVariantList &args)
       { 0, 0, 0, 0, 0 }
   };
 
-  usb_init();
-  usb_find_busses();
-  usb_find_devices();
+  libusb_init(NULL);
 
-  struct usb_bus *bus;
-  struct usb_device *dev;
+  libusb_device **list;
+  ssize_t cnt = libusb_get_device_list(NULL, &list);
 
-  for (bus = usb_busses; bus; bus = bus->next) {
-      for (dev = bus->devices; dev; dev = dev->next) {
-	  for (int n = 0; device_table[n].idVendor; n++)
-	      if ( (device_table[n].idVendor == dev->descriptor.idVendor) &&
-		   (device_table[n].idProduct == dev->descriptor.idProduct) ) {
-		  // OK, we have a device that appears to be one of the ones we support
-		  LogitechMouse *mouse = new LogitechMouse( dev, device_table[n].flags, this, device_table[n].Name );
-		  settings->logitechMouseList.append(mouse);
-		  tabwidget->addTab( (QWidget*)mouse, device_table[n].Name );
-	      }
+  if (cnt >= 0) {
+    for (int i = 0; i < cnt; i++) {
+      libusb_device_descriptor *descriptor;
+
+      libusb_device *device = list[i];
+      libusb_get_device_descriptor(device, descriptor);
+
+      // the docs state that libusb_device_descriptor() always successeds in libusb-1.0.16
+      // and newer but you never know how successfull that can be when the system is
+      // running out of memory for an example
+      if (!descriptor)
+        continue;
+
+      for (int n = 0; device_table[n].idVendor; n++) {
+        if ( (device_table[n].idVendor == descriptor->idVendor) &&
+          (device_table[n].idProduct == descriptor->idProduct) ) {
+          // OK, we have a device that appears to be one of the ones we support
+          LogitechMouse *mouse = new LogitechMouse( device, device_table[n].flags, this, device_table[n].Name );
+          settings->logitechMouseList.append(mouse);
+          tabwidget->addTab( (QWidget*)mouse, device_table[n].Name );
+        }
       }
+    }
   }
+
+  // passing true to free the refs, is that safe given the pointer passing to LogitechMouse()?
+  libusb_free_device_list(list, true);
+  // TODO: should the default context be exited?
+  libusb_exit(NULL);
 
 #endif
 
