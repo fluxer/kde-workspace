@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KConfigSkeleton
 #include "windowgeometryconfig.h"
 
-#include <QStringBuilder>
 #include <kconfiggroup.h>
 #include <kwindowsystem.h>
 #include <KActionCollection>

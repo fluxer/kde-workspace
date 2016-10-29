@@ -25,7 +25,6 @@
 #include <KDebug>
 #include <KPluginFactory>
 
-#include <QtCore/QStringBuilder>
 #include <QtNetwork/QHostInfo>
 
 #define QL1C(x)   QLatin1Char(x)

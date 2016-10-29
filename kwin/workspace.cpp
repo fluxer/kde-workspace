@@ -1282,7 +1282,7 @@ QString Workspace::supportInformation() const
         if (QLatin1String(property.name()) == "objectName") {
             continue;
         }
-        support.append(QLatin1String(property.name()) % ": " % options->property(property.name()).toString() % '\n');
+        support.append(QLatin1String(property.name()) + ": " + options->property(property.name()).toString() + '\n');
     }
 #ifdef KWIN_BUILD_SCREENEDGES
     support.append("\nScreen Edges\n");
@@ -1293,7 +1293,7 @@ QString Workspace::supportInformation() const
         if (QLatin1String(property.name()) == "objectName") {
             continue;
         }
-        support.append(QLatin1String(property.name()) % ": " % ScreenEdges::self()->property(property.name()).toString() % '\n');
+        support.append(QLatin1String(property.name()) + ": " + ScreenEdges::self()->property(property.name()).toString() + '\n');
     }
 #endif
     support.append("\nScreens\n");
@@ -1344,12 +1344,12 @@ QString Workspace::supportInformation() const
         support.append("\nLoaded Effects:\n");
         support.append(  "---------------\n");
         foreach (const QString &effect, static_cast<EffectsHandlerImpl*>(effects)->loadedEffects()) {
-            support.append(effect % '\n');
+            support.append(effect + '\n');
         }
         support.append("\nCurrently Active Effects:\n");
         support.append(  "-------------------------\n");
         foreach (const QString &effect, static_cast<EffectsHandlerImpl*>(effects)->activeEffects()) {
-            support.append(effect % '\n');
+            support.append(effect + '\n');
         }
         support.append("\nEffect Settings:\n");
         support.append(  "----------------\n");

@@ -216,7 +216,7 @@ void Greeter::initialize()
 QVariant Greeter::getConf(void *ctx, const char *key, const QVariant &dflt)
 {
     Greeter *that = (Greeter *)ctx;
-    QString fkey = QLatin1String( key ) % QLatin1Char( '=' );
+    QString fkey = QLatin1String( key ) + QLatin1Char( '=' );
     for (QStringList::ConstIterator it = that->m_pluginOptions.constBegin();
          it != that->m_pluginOptions.constEnd(); ++it)
         if ((*it).startsWith( fkey ))

@@ -35,9 +35,9 @@ void ThemedSvg::setThemedImagePath(const QString &path)
 
 static QString findLocalSvgFile(AppletInterface *interface, const QString &dir, const QString &file)
 {
-    QString path = interface->file(dir, file % QLatin1Literal(".svg"));
+    QString path = interface->file(dir, file + QLatin1Literal(".svg"));
     if (path.isEmpty()) {
-        path = interface->file(dir, file % QLatin1Literal(".svgz"));
+        path = interface->file(dir, file + QLatin1Literal(".svgz"));
     }
     return path;
 }
@@ -61,7 +61,7 @@ QString ThemedSvg::findSvg(QScriptEngine *engine, const QString &file)
 
     // FIXME: this isn't particularly helpful, as we can't look in the fallback themes
     QString themeName = Plasma::Theme::defaultTheme()->themeName();
-    path = findLocalSvgFile(interface, "theme", themeName % QLatin1Literal("/") % file);
+    path = findLocalSvgFile(interface, "theme", themeName + QLatin1Literal("/") + file);
     if (!path.isEmpty()) {
         return path;
     }

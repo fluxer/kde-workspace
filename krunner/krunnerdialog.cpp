@@ -36,8 +36,6 @@
 #include <NETRootInfo>
 #endif
 
-#include <QtCore/QStringBuilder> // % operator for QString
-
 #include "kworkspace/kdisplaymanager.h"
 
 #include <Plasma/AbstractRunner>

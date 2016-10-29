@@ -1644,7 +1644,7 @@ QString EffectsHandlerImpl::supportInformation(const QString &name) const
                 if (QLatin1String(property.name()) == "objectName") {
                     continue;
                 }
-                support.append(QLatin1String(property.name()) % ": " % (*it).second->property(property.name()).toString() % '\n');
+                support.append(QLatin1String(property.name()) + ": " + (*it).second->property(property.name()).toString() + '\n');
             }
             return support;
         }
