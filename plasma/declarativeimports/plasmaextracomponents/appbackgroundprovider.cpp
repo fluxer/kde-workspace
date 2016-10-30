@@ -35,7 +35,7 @@ QImage AppBackgroundProvider::requestImage(const QString &id, QSize *size, const
 {
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)
-    QString search = QLatin1Literal("desktoptheme/") + Plasma::Theme::defaultTheme()->themeName() + QLatin1Literal("/appbackgrounds/") + id + ".png";
+    QString search = QLatin1String("desktoptheme/") + Plasma::Theme::defaultTheme()->themeName() + QLatin1String("/appbackgrounds/") + id + ".png";
     search =  KStandardDirs::locate("data", search);
     return QImage(search);
 }
