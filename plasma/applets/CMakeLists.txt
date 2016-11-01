@@ -22,7 +22,6 @@ add_subdirectory(systemtray)
 add_subdirectory(kickoff)
 add_subdirectory(trash)
 if(LIBKONQ_FOUND)
-    add_subdirectory(homerun)
     add_subdirectory(folderview)
 endif()
 

@@ -1,6 +1,0 @@
-<apps>
-    <app serviceId="rekonq"/>
-    <app serviceId="dolphin"/>
-    <app serviceId="konsole"/>
-    <app serviceId="systemsettings"/>
-</apps>
