@@ -7502,7 +7502,11 @@ namespace Oxygen
     }
 
     //____________________________________________________________________
+#ifndef QT_KATIE
     QIcon Style::standardIconImplementation(
+#else
+    QIcon Style::standardIcon(
+#endif
         StandardPixmap standardIcon,
         const QStyleOption *option,
         const QWidget *widget ) const
@@ -7730,7 +7734,11 @@ namespace Oxygen
             }
 
             default:
+#ifndef QT_KATIE
             return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
+#else
+            return QCommonStyle::standardIcon( standardIcon, option, widget );
+#endif
         }
     }
 
