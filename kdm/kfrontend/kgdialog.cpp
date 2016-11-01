@@ -173,7 +173,7 @@ KGDialog::slotConsole()
 #endif
     if (verify)
         verify->suspend();
-    int ret = KDMConfShutdown(-1, sess, SHUT_CONSOLE, 0).exec();
+    int ret = KDMConfShutdown(-1, sess, SHUT_CONSOLE, QString()).exec();
     if (verify)
         verify->resume();
     if (!ret)
@@ -197,7 +197,7 @@ KGDialog::slotShutdown()
         else
             KDMSlimShutdown(this).exec();
     } else
-        KDMSlimShutdown::externShutdown(action->data().toInt(), 0, -1, false);
+        KDMSlimShutdown::externShutdown(action->data().toInt(), QString(), -1, false);
     if (verify)
         verify->resume();
 }

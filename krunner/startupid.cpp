@@ -229,7 +229,7 @@ void StartupId::start_startupid( const QString& icon_P )
             0, 0, 1, 1, 0, QX11Info::appDepth(), InputOutput, static_cast< Visual* >( QX11Info::appVisual()),
             CWOverrideRedirect | CWSaveUnder | CWColormap | CWBackPixel | CWBorderPixel, &attrs );
         XClassHint class_hint;
-        QByteArray cls = qAppName().toLatin1();
+        QByteArray cls = QApplication::applicationName().toLatin1();
         class_hint.res_name = cls.data();
         class_hint.res_class = const_cast< char* >( QX11Info::appClass());
         XSetWMProperties( QX11Info::display(), startup_window, NULL, NULL, NULL, 0, NULL, NULL, &class_hint );

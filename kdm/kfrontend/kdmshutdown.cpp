@@ -417,7 +417,7 @@ KDMShutdown::scheduleShutdown(QWidget *_parent)
                               _parent).exec();
         if (!ret)
             return;
-        doShutdown(0, 0);
+        doShutdown(0, QString());
         uid = ret == Authed ? 0 : -1;
     } else {
         uid = -1;
@@ -531,15 +531,15 @@ KDMSlimShutdown::slotSched()
 void
 KDMSlimShutdown::slotHalt()
 {
-    if (checkShutdown(SHUT_HALT, 0))
-        doShutdown(SHUT_HALT, 0);
+    if (checkShutdown(SHUT_HALT, QString()))
+        doShutdown(SHUT_HALT, QString());
 }
 
 void
 KDMSlimShutdown::slotReboot()
 {
-    if (checkShutdown(SHUT_REBOOT, 0))
-        doShutdown(SHUT_REBOOT, 0);
+    if (checkShutdown(SHUT_REBOOT, QString()))
+        doShutdown(SHUT_REBOOT, QString());
 }
 
 void

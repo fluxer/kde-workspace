@@ -119,7 +119,7 @@ void SolidActions::addAction()
     // Lets get a desktop file
     QString internalName = enteredName; // copy the name the user entered -> we will be making mods
     internalName.replace(QChar(' '), QChar('-'), Qt::CaseSensitive); // replace spaces with dashes
-    QString filePath = KStandardDirs::locateLocal("data", 0); // Get the location on disk for "data"
+    QString filePath = KStandardDirs::locateLocal("data", QString()); // Get the location on disk for "data"
     filePath = filePath + "solid/actions/" + internalName + ".desktop"; // Create a file path for new action
 
     // Fill in an initial template

@@ -1326,8 +1326,8 @@ void EnvCanadaIon::updateWeather(const QString& source)
     QMap<QString, ConditionIcons> conditionList;
     conditionList = conditionIcons();
 
-    const double lati = latitude(source).replace(QRegExp("[^0-9.]"), NULL).toDouble();
-    const double longi = longitude(source).replace(QRegExp("[^0-9.]"), NULL).toDouble();
+    const double lati = latitude(source).replace(QRegExp("[^0-9.]"), QString()).toDouble();
+    const double longi = longitude(source).replace(QRegExp("[^0-9.]"), QString()).toDouble();
     const Plasma::DataEngine::Data timeData = m_timeEngine->query(
             QString("Local|Solar|Latitude=%1|Longitude=%2")
                 .arg(lati).arg(-1 * longi));

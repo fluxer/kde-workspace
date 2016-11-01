@@ -54,9 +54,8 @@ QString FullScreenSheet::title() const
 {
     if (mainItem()) {
         return mainItem()->property("title").toString();
-    } else {
-        return 0;
     }
+    return QString();
 }
 
 void FullScreenSheet::setTitle(const QString &text)
@@ -70,9 +69,8 @@ QDeclarativeItem *FullScreenSheet::acceptButton() const
 {
     if (mainItem()) {
         return mainItem()->property("acceptButton").value<QDeclarativeItem *>();
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 void FullScreenSheet::setAcceptButton(QDeclarativeItem *button)
@@ -86,9 +84,8 @@ QDeclarativeItem *FullScreenSheet::rejectButton() const
 {
     if (mainItem()) {
         return mainItem()->property("rejectButton").value<QDeclarativeItem *>();
-    } else {
-        return 0;
     }
+    return 0;
 }
 
 void FullScreenSheet::setRejectButton(QDeclarativeItem *button)
@@ -102,9 +99,8 @@ QString FullScreenSheet::acceptButtonText() const
 {
     if (mainItem()) {
         return mainItem()->property("acceptButtonText").toString();
-    } else {
-        return 0;
     }
+    return QString();
 }
 
 void FullScreenSheet::setAcceptButtonText(const QString &text)
@@ -118,9 +114,8 @@ QString FullScreenSheet::rejectButtonText() const
 {
     if (mainItem()) {
         return mainItem()->property("rejectButtonText").toString();
-    } else {
-        return 0;
     }
+    return QString();
 }
 
 void FullScreenSheet::setRejectButtonText(const QString &text)

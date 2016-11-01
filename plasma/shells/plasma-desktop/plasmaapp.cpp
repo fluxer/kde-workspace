@@ -1092,7 +1092,7 @@ void PlasmaApp::configureContainment(Plasma::Containment *containment)
 
         }
 
-        KConfigSkeleton *nullManager = new KConfigSkeleton(0);
+        KConfigSkeleton *nullManager = new KConfigSkeleton();
         configDialog = new BackgroundDialog(resolution, containment, view, 0, id, nullManager);
         configDialog->setAttribute(Qt::WA_DeleteOnClose);
 

@@ -171,8 +171,8 @@ void Trash::constraintsEvent(Plasma::Constraints constraints)
             //in a panel the icon always behaves like a button
             connect(m_icon, SIGNAL(clicked()), this, SLOT(open()));
 
-            m_icon->setText(0);
-            m_icon->setInfoText(0);
+            m_icon->setText(QString());
+            m_icon->setInfoText(QString());
             m_showText = false;
             m_icon->setDrawBackground(false);
 
