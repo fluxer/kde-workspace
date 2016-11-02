@@ -30,16 +30,16 @@ macro_optional_find_package(Strigi 0.6.3)
 set_package_properties(Strigi PROPERTIES
     DESCRIPTION "Desktop indexing and search support"
     URL "http://strigi.sourceforge.net"
+    PURPOSE "Fonts analyzer"
     TYPE RECOMMENDED
-    PURPOSE "Required for fonts analyzer"
 )
 
 macro_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"
     URL "http://www.opengl.org"
+    PURPOSE "3D screensavers and OpenGL info module"
     TYPE OPTIONAL
-    PURPOSE "3D screensavers, OpenGL info module"
 )
 
 macro_optional_find_package(OpenGLES)
@@ -53,8 +53,8 @@ set_package_properties(OpenGLES PROPERTIES
 macro_optional_find_package(UDev)
 set_package_properties(UDev PROPERTIES
     DESCRIPTION "The UDev Libraries"
-    TYPE OPTIONAL
     PURPOSE "Allows support for UPower backend in PowerDevil - STRONGLY RECOMMENDED"
+    TYPE OPTIONAL
 )
 
 if(Q_WS_X11)
@@ -104,47 +104,40 @@ macro_optional_find_package(GLIB2 2.0)
 set_package_properties(GLIB2 PROPERTIES
     DESCRIPTION "Low-level core library for data structure handling, portability wrappers, etc."
     URL "http://www.gtk.org"
-    TYPE OPTIONAL
     PURPOSE "Needed to build the kxkb keyboard map control program and provide XMMS support in the Now Playing Plasma data engine"
+    TYPE OPTIONAL
 )
 
 macro_optional_find_package(Fontconfig)
 set_package_properties(Fontconfig PROPERTIES
     DESCRIPTION "Font access configuration library"
     URL "http://www.freedesktop.org/wiki/Software/fontconfig"
-    TYPE OPTIONAL
     PURPOSE "Needed to build font configuration and installation tools"
-)
-
-#### Python support ( plasma scriptengines ) ####
-macro_optional_find_package(PythonLibs)
-set_package_properties(PythonLibs PROPERTIES
-    DESCRIPTION "Python scripting language"
-    URL "http://python.org"
     TYPE OPTIONAL
-    PURPOSE "Needed to build plasma scriptengine for python."
 )
 
 macro_optional_find_package(QJSON)
 set_package_properties(QJSON PROPERTIES
     DESCRIPTION "Library to manage JSON objects with Qt"
     URL "http://qjson.sourceforge.net/"
-    TYPE OPTIONAL
     PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
+    TYPE OPTIONAL
 )
 
 find_package(LibGcrypt 1.5.0)
 set_package_properties(LibGcrypt PROPERTIES
-    TYPE REQUIRED
+    DESCRIPTION "general purpose cryptographic library based on the code from GnuPG"
+    URL "https://www.gnu.org/software/libgcrypt/"
     PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
+    TYPE REQUIRED
 )
 
 macro_optional_find_package(SLP)
 set_package_properties(SLP PROPERTIES
     DESCRIPTION "SLP (Service Location Protocol) implementation"
     URL "http://www.openslp.org/"
-    TYPE OPTIONAL
     PURPOSE "Provides SLP support in the network:/ kioslave."
+    TYPE OPTIONAL
 )
 
 find_package(JPEG)
@@ -173,15 +166,16 @@ macro_optional_find_package(LibKonq)
 set_package_properties(LibKonq PROPERTIES
     DESCRIPTION "Konqueror library"
     URL "http://fluxer.github.io/katana/"
-    PURPOSE "Homerun and folderview plasma applets"
+    PURPOSE "folderview plasma applets"
     TYPE OPTIONAL
 )
 
 find_package(Perl)
 set_package_properties(Perl PROPERTIES
+    DESCRIPTION "Highly capable, feature-rich programming language"
     URL "http://www.perl.org"
-    TYPE REQUIRED
     PURPOSE "Needed for KDM config handler generator, as well as info and finger KIO slaves"
+    TYPE REQUIRED
 )
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
