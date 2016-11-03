@@ -360,20 +360,14 @@ MouseConfig::MouseConfig(QWidget *parent, const QVariantList &args)
 
   if (cnt >= 0) {
     for (int i = 0; i < cnt; i++) {
-      libusb_device_descriptor *descriptor;
+      libusb_device_descriptor descriptor;
 
       libusb_device *device = list[i];
-      libusb_get_device_descriptor(device, descriptor);
-
-      // the docs state that libusb_device_descriptor() always successeds in libusb-1.0.16
-      // and newer but you never know how successfull that can be when the system is
-      // running out of memory for an example
-      if (!descriptor)
-        continue;
+      libusb_get_device_descriptor(device, &descriptor);
 
       for (int n = 0; device_table[n].idVendor; n++) {
-        if ( (device_table[n].idVendor == descriptor->idVendor) &&
-          (device_table[n].idProduct == descriptor->idProduct) ) {
+        if ( (device_table[n].idVendor == descriptor.idVendor) &&
+          (device_table[n].idProduct == descriptor.idProduct) ) {
           // OK, we have a device that appears to be one of the ones we support
           LogitechMouse *mouse = new LogitechMouse( device, device_table[n].flags, this, device_table[n].Name );
           settings->logitechMouseList.append(mouse);
