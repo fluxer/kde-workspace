@@ -47,14 +47,6 @@ FocusScope {
     property string placeholderText
 
     /**
-     * type:int
-     * The currently supported input method hints for the text field.
-     *
-     * The default values is Qt.ImhNone.
-     */
-    property alias inputMethodHints: textInput.inputMethodHints
-
-    /**
      * type:font
      * The font used in the text field.
      *

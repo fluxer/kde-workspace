@@ -37,13 +37,6 @@ Item {
     property alias font: textEdit.font
 
     /**
-     * The currently supported input method hints for the text field.
-     *
-     * The default values is Qt.ImhNone.
-     */
-    property int inputMethodHints
-
-    /**
      * Whether the text field is highlighted or not.
      *
      * If it is true then the problematic lines will be highlighted.
