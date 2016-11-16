@@ -31,8 +31,6 @@
 
 #include "ksignalplotter_p.h"
 
-#include <math.h>  //For floor, ceil, log10 etc for calculating ranges
-
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainterPath>
@@ -49,7 +47,8 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <math.h>
+
+#include <cmath>  //For floor, ceil, log10 etc for calculating ranges
 #include <limits>
 
 #ifdef SVG_SUPPORT
@@ -485,20 +484,20 @@ void KSignalPlotterPrivate::recalculateMaxMinValueForSample(const QList<qreal>&s
         qreal value=0;
         for(int i = sampleBuf.count()-1; i>= 0; i--) {
             qreal newValue = sampleBuf[i];
-            if( !isinf(newValue) && !isnan(newValue) )
+            if( !std::isinf(newValue) && !std::isnan(newValue) )
                 value += newValue;
         }
-        if(isnan(mMinValue) || mMinValue > value) mMinValue = value;
-        if(isnan(mMaxValue) || mMaxValue < value) mMaxValue = value;
+        if(std::isnan(mMinValue) || mMinValue > value) mMinValue = value;
+        if(std::isnan(mMaxValue) || mMaxValue < value) mMaxValue = value;
         if(value > 0.7*mMaxValue)
             mRescaleTime = time;
     } else {
         qreal value;
         for(int i = sampleBuf.count()-1; i>= 0; i--) {
             value = sampleBuf[i];
-            if( !isinf(value) && !isnan(value) ) {
-                if(isnan(mMinValue) || mMinValue > value) mMinValue = value;
-                if(isnan(mMaxValue) || mMaxValue < value) mMaxValue = value;
+            if( !std::isinf(value) && !std::isnan(value) ) {
+                if(std::isnan(mMinValue) || mMinValue > value) mMinValue = value;
+                if(std::isnan(mMaxValue) || mMaxValue < value) mMaxValue = value;
                 if(value > 0.7*mMaxValue)
                     mRescaleTime = time;
             }
@@ -789,9 +788,9 @@ void KSignalPlotterPrivate::calculateNiceRange()
     qreal max = mUserMaxValue;
     qreal min = mUserMinValue;
     if( mUseAutoRange ) {
-        if(!isnan(mMaxValue) && mMaxValue * 0.99 > max)  //Allow max value to go very slightly over the given max, for rounding reasons
+        if(!std::isnan(mMaxValue) && mMaxValue * 0.99 > max)  //Allow max value to go very slightly over the given max, for rounding reasons
             max = mMaxValue;
-        if(!isnan(mMinValue) && mMinValue * 0.99 < min) {
+        if(!std::isnan(mMinValue) && mMinValue * 0.99 < min) {
             min = mMinValue;
         }
     }
@@ -920,23 +919,23 @@ void KSignalPlotterPrivate::drawBeam(QPainter *p, const QRect &boundingBox, int 
     bool firstLine = true;
     for (int j = 0; j < count; ++j) {
         qreal point0 = datapoints[j];
-        if( isnan(point0) )
+        if( std::isnan(point0) )
             continue; //Just do not draw points with nans. skip them
 
         qreal point1 = prev_datapoints[j];
         qreal point2 = prev_prev_datapoints[j];
 
-        if(isnan(point1))
+        if(std::isnan(point1))
             point1 = point0;
-        else if(mSmoothGraph && !isinf(point1)) {
+        else if(mSmoothGraph && !std::isinf(point1)) {
             // Apply a weighted average just to smooth the graph out a bit
             // Do not try to smooth infinities or nans
             point0 = (2*point0 + point1)/3;
-            if(!isnan(point2) && !isinf(point2))
+            if(!std::isnan(point2) && !std::isinf(point2))
                 point1 = (2*point1 + point2)/3;
             // We don't bother to average out y2.  This will introduce slight inaccuracies in the gradients, but they aren't really noticeable.
         }
-        if(isnan(point2))
+        if(std::isnan(point2))
             point2 = point1;
 
         if (mStackBeams) {
@@ -1046,12 +1045,12 @@ qreal KSignalPlotter::lastValue( int i) const
 }
 QString KSignalPlotter::lastValueAsString( int i, int precision) const
 {
-    if(d->mBeamData.isEmpty() || d->mBeamData.first().size() <= i || isnan(d->mBeamData.first().at(i))) return QString();
+    if(d->mBeamData.isEmpty() || d->mBeamData.first().size() <= i || std::isnan(d->mBeamData.first().at(i))) return QString();
     return valueAsString(d->mBeamData.first().at(i), precision); //retrieve the newest value for this beam
 }
 QString KSignalPlotter::valueAsString( qreal value, int precision) const
 {
-    if(isnan(value))
+    if(std::isnan(value))
         return QString();
     value = value / d->mScaleDownBy; // scale the value.  E.g. from Bytes to KiB
     return d->scaledValueAsString(value, precision);
