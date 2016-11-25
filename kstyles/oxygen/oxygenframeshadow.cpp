@@ -268,8 +268,6 @@ namespace Oxygen
 
         // grab viewport widget
         QWidget *viewport( FrameShadowBase::viewport() );
-        if( !viewport && parentWidget() && parentWidget()->inherits( "Q3ListView" ) )
-        { viewport = parentWidget(); }
 
         // set cursor from viewport
         if (viewport) setCursor(viewport->cursor());

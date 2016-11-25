@@ -209,7 +209,7 @@ namespace Oxygen
 
     //_______________________________________________________
     bool ShadowHelper::isToolBar( QWidget* widget ) const
-    { return qobject_cast<QToolBar*>( widget ) || widget->inherits( "Q3ToolBar" ); }
+    { return qobject_cast<QToolBar*>( widget ); }
 
     //_______________________________________________________
     bool ShadowHelper::acceptWidget( QWidget* widget ) const
