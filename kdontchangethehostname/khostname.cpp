@@ -53,7 +53,6 @@ protected:
    QString oldName;
    QString newName;
    QString display;
-   QByteArray home;
 };
 
 KHostName::KHostName()
@@ -66,7 +65,7 @@ KHostName::KHostName()
    if (oldName == newName)
       exit(0);
 
-   home = qgetenv("HOME");
+   const QByteArray home = qgetenv("HOME");
    if (home.isEmpty())
    {
       fprintf(stderr, "%s", i18n("Error: HOME environment variable not set.\n").toLocal8Bit().data());
