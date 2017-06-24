@@ -361,7 +361,7 @@ void KRandRSystemTray::populateMenu(KMenu* menu)
 					if (screen->activeCount() != 1)
 					{
 						action = outputMenu->addAction(i18n("Disable"));
-						if (output->crtc() == None)
+						if (!output->crtc())
 						{
 							QFont font = action->font();
 							font.setBold(true);
