@@ -1,11 +1,15 @@
 project(plasma-runner-kill)
 
+# avoid putting the generated files in target specific
+# directory which is the case when automated
+set(CMAKE_AUTOUIC OFF)
+
 set(krunner_kill_SRCS killrunner.cpp)
 
 set(kcm_krunner_kill_SRCS
     killrunner_config.cpp
-    killrunner_config.ui
 )
+qt4_wrap_ui(kcm_krunner_kill_SRCS killrunner_config.ui)
 
 kde4_add_plugin(kcm_krunner_kill ${kcm_krunner_kill_SRCS})
 target_link_libraries(kcm_krunner_kill
