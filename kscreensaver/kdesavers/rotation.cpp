@@ -549,7 +549,7 @@ void KRotationSaver::initData()
 
    // omega_body = L_body * J_body^(-1)
    // component-wise division because J_body is a diagonal matrix
-   Vector3d omega_body = (m_Lz * e_body.col(2)).cwise() / m_J;
+   Vector3d omega_body = (m_Lz * e_body.col(2)).array() / m_J.array();
 
    // initial rotation vector
    m_omega = et * omega_body;

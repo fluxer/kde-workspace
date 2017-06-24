@@ -333,7 +333,7 @@ RkOdeSolver<T, D>::rkStepCheck(const T& dx_requested)
    // generic scaling factor
    // |y| + |dx * dy/dx| + 1e-15
    Matrix<T,D,1> yscal
-      = (m_y.cwise().abs() + (dx*m_dydx).cwise().abs()).cwise()
+      = (m_y.array().abs() + (dx*m_dydx).array().abs()).array()
       + 1e-15;
 
    unsigned int iter = 0;
@@ -354,13 +354,13 @@ RkOdeSolver<T, D>::rkStepCheck(const T& dx_requested)
          }
          // new dx -> update scaling vector
          yscal
-            = (m_y.cwise().abs()
-               + (dx*m_dydx).cwise().abs()).cwise()
+            = (m_y.array().abs()
+               + (dx*m_dydx).array().abs()).array()
             + 1e-15;
       }
 
       ytmp   = rkStep(dx, yerr); // try to make a step forward
-      t      = (yerr.cwise() / yscal).cwise().abs(); // calc the error vector
+      t      = (yerr.array() / yscal.array()).abs(); // calc the error vector
       errmax = t.maxCoeff()/m_eps;    // calc the rel. maximal error
       ++iter;
    } while ((iter < maxiter) && (errmax >= 1.0));
