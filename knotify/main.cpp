@@ -28,7 +28,6 @@
 #include <kmessage.h>
 #include <kpassivepopupmessagehandler.h>
 #include <kdeversion.h>
-#include <kdefakes.h>
 
 #include "knotify.h"
 

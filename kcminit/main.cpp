@@ -44,7 +44,6 @@
 #endif
 
 #include <kservicetypetrader.h>
-#include <kdefakes.h>
 
 static int ready[ 2 ];
 static bool startup = false;

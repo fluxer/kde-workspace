@@ -55,7 +55,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <string.h>
 #include <assert.h>
 #include <fcntl.h>
-#include <kdefakes.h>
 
 #ifdef HAVE_LIMITS_H
 #include <limits.h>

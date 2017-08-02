@@ -53,11 +53,6 @@ endif( ${CMAKE_SYSTEM_NAME} MATCHES "kFreeBSD" )
 
     target_link_libraries(ksysguardd libksysguardd)
 
-   if( NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR NOT ${CMAKE_SYSTEM_NAME} MATCHES "kFreeBSD" )
-      # for kdefakes
-      target_link_libraries(ksysguardd ${KDE4_KDECORE_LIBS})
-   endif( NOT ${CMAKE_SYSTEM_NAME} MATCHES "Linux" OR NOT ${CMAKE_SYSTEM_NAME} MATCHES "kFreeBSD" )
-
 if( ${CMAKE_SYSTEM_NAME} MATCHES "NetBSD" )
   message(STATUS "Adding kvm library on NetBSD")
   target_link_libraries(ksysguardd kvm)

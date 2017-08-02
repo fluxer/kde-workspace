@@ -28,8 +28,6 @@ add_definitions(-U_REENTRANT)
 target_link_libraries(kcheckpass
     ${UNIXAUTH_LIBRARIES}
     ${SOCKET_LIBRARIES}
-    # for kdefakes
-    ${KDE4_KDECORE_LIBS}
 )
 
 install(
