@@ -56,7 +56,7 @@ namespace KSysGuard
 
     public:
 
-        Processes(const QString &hostname = QString::null, QObject * parent = 0);
+        Processes(const QString &hostname = QString(), QObject * parent = 0);
         virtual ~Processes();
         enum UpdateFlag {
             StandardInformation = 1,

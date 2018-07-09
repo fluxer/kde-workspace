@@ -296,7 +296,7 @@ KGenericGreeter::clear()
 {
     // assert(!running && !passwd1Edit);
     revive();
-    curUser = QString::null;
+    curUser = QString();
 }
 
 
