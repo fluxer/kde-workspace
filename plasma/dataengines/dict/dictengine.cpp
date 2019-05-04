@@ -21,7 +21,6 @@
 
 #include <KDebug>
 #include <KLocale>
-#include <ktcpsocket.h>
 
 #include <Plasma/DataContainer>
 
@@ -221,7 +220,7 @@ bool DictEngine::sourceRequestEvent(const QString &query)
         setData(m_currentWord, m_dictName, QString());
     } else {
         setData(m_currentWord, m_dictName, QString());
-        m_tcpSocket = new KTcpSocket(this);
+        m_tcpSocket = new QSslSocket(this);
         m_tcpSocket->abort();
         connect(m_tcpSocket, SIGNAL(disconnected()), this, SLOT(socketClosed()));
 
