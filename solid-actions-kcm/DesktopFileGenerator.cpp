@@ -24,6 +24,7 @@
 #include <KDesktopFile>
 #include <KDebug>
 #include <KConfigGroup>
+#include <QCoreApplication>
 
 #include "SolidActionData.h"
 
@@ -38,7 +39,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor(ki18n("Ben Cooksley"), ki18n("Maintainer"), "ben@eclipse.endoftheinternet.org");
     KCmdLineArgs::init(argc, argv, &aboutData);
 
-    KApplication application(false);
+    QCoreApplication application(argc, argv);
     SolidActionData * availActions = SolidActionData::instance();
     foreach( Solid::DeviceInterface::Type internalType, availActions->interfaceTypeList() ) {
         QString typeName = Solid::DeviceInterface::typeToString( internalType );

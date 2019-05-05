@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <QtCore/QFile>
+#include <QtCore/QCoreApplication>
 #include <QtDBus/QtDBus>
 
 #include <kaboutdata.h>
@@ -124,9 +125,7 @@ int main(int argc, char **argv)
    options.add("+<application-id>", ki18n("The id of the menu entry to locate"));
    KCmdLineArgs::addCmdLineOptions(options);
 
-//   KApplication k(false, false);
-   KApplication k(false);
-   k.disableSessionManagement();
+   QCoreApplication app(argc, argv);
 
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
    if (args->count() != 1)

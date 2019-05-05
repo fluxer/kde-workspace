@@ -122,7 +122,7 @@ int kdemain(int argc, char **argv)
     KAboutData about("kio_thumbnail", 0, ki18n("kio_thumbmail"), "KDE 4.x.x");
     KCmdLineArgs::init(&about);
 
-    KApplication app( true);
+    KApplication app;
 #endif
 
 

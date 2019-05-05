@@ -264,9 +264,6 @@ int main( int argc, char **argv )
     KCmdLineArgs::addCmdLineOptions( options );
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    bool useGUI = args->isSet( "dialog" );
-
-    KApplication app( useGUI );
 
     QList<FileProps *> m_props;
 
@@ -278,6 +275,7 @@ int main( int argc, char **argv )
     }
 
     if ( args->isSet( "dialog" ) ) {
+        KApplication app;
         showPropertiesDialog( args );
         return 0;
     }

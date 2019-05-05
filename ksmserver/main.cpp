@@ -260,7 +260,7 @@ int main( int argc, char* argv[] )
     if( dpy != NULL && DefaultDepth(dpy, DefaultScreen(dpy)) >= 24) // 16bpp breaks the software logout effect for some reason???
         a = new KApplication(dpy, visual ? Qt::HANDLE(visual) : 0, colormap ? Qt::HANDLE(colormap) : 0);
     else
-        a = new KApplication(true);
+        a = new KApplication();
     fcntl(ConnectionNumber(QX11Info::display()), F_SETFD, 1);
 
     a->setQuitOnLastWindowClosed(false); // #169486

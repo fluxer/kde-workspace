@@ -95,8 +95,8 @@ static ModifierKey modifierKeys[] = {
 /********************************************************************/
 
 
-KAccessApp::KAccessApp(bool allowStyles, bool GUIenabled)
-  : KUniqueApplication(allowStyles, GUIenabled),
+KAccessApp::KAccessApp(bool allowStyles)
+  : KUniqueApplication(allowStyles),
   overlay(0), _player(0)
 {
   _activeWindow = KWindowSystem::activeWindow();
