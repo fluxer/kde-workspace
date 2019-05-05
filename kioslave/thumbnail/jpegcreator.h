@@ -22,7 +22,7 @@
 
 #include <kio/thumbcreator.h>
 
-class QTransform;
+#include <QTransform>
 
 class JpegCreator : public ThumbCreator
 {

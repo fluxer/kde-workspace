@@ -28,7 +28,7 @@
 
 class flux;
 class particle;
-class QTimer;
+#include <QTimer>
 
 class FluxWidget : public QGLWidget
 {
@@ -130,7 +130,7 @@ private:
 };
 
 
-class QComboBox;
+#include <QComboBox>
 
 class KFluxSetup : public KDialog
 {

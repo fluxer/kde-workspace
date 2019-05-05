@@ -28,7 +28,7 @@
 
 class KComboBox;
 
-class QRadioButton;
+#include <QRadioButton>
 class KIntSpinBox;
 
 class HostConnector : public KDialog

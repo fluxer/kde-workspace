@@ -24,7 +24,7 @@
 
 #define MAXLINES 500
 
-class QListWidget;
+#include <QListWidget>
 
 #include <QtXml/qdom.h>
 

@@ -33,7 +33,7 @@ class KdmLayoutBox;
 class KdmLayoutFixed;
 class KdmThemer;
 
-class QPainter;
+#include <QPainter>
 
 struct SizeHint {
     QSize min, opt, max;

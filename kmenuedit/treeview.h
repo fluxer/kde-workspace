@@ -29,9 +29,9 @@
 #include <KService>
 #include <KServiceGroup>
 
-class QMenu;
-class QDropEvent;
-class QSignalMapper;
+#include <QMenu>
+#include <QDropEvent>
+#include <QSignalMapper>
 
 class KActionCollection;
 class KDesktopFile;

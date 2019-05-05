@@ -28,7 +28,7 @@
 
 #include "menubar.h"
 
-class QTimer;
+#include <QTimer>
 class GlowBar;
 
 class TopMenuBar : public MenuBar

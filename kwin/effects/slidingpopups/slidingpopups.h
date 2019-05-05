@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Include with base class for effects.
 #include <kwineffects.h>
 
-class QTimeLine;
+#include <QTimeLine>
 
 namespace KWin
 {

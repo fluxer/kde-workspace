@@ -32,14 +32,14 @@
 
 #include "typeslistitem.h"
 
-class QLabel;
-class QTreeWidget;
-class QTreeWidgetItem;
+#include <QLabel>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 class KPushButton;
 class KLineEdit;
 class FileTypeDetails;
 class FileGroupDetails;
-class QStackedWidget;
+#include <QStackedWidget>
 
 class FileTypesView : public KCModule
 {

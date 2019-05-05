@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // forward declarations
 class KActionCollection;
-class QTimer;
+#include <QTimer>
 
 namespace ScreenLocker
 {

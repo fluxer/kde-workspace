@@ -24,7 +24,7 @@
 
 #include "cursortheme.h"
 
-class QDir;
+#include <QDir>
 
 struct _XcursorImage;
 struct _XcursorImages;

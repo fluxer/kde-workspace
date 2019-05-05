@@ -37,7 +37,7 @@ DEALINGS IN THE SOFTWARE.
 
 #include "kdecoration.h"
 
-class QLibrary;
+#include <QLibrary>
 class KDecoration;
 class KDecorationBridge;
 class KDecorationFactory;

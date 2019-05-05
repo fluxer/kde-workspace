@@ -20,9 +20,9 @@
 #ifndef XKB_HELPER_H_
 #define XKB_HELPER_H_
 
-template <typename T> class QList;
+#include <QList>
 class LayoutUnit;
-class QStringList;
+#include <QStringList>
 class KeyboardConfig;
 
 class XkbHelper {

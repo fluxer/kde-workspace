@@ -23,7 +23,7 @@
 #include <KDirModel>
 #include <QVariant>
 
-class QTimer;
+#include <QTimer>
 
 /**
  * This class provides a QML binding to KDirModel

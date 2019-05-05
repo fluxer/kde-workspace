@@ -24,10 +24,10 @@
 
 #include <QtCore/qabstractitemmodel.h>
 
-class QLayout;
+#include <QLayout>
 class MenuItem;
 class KToolTipItem;
-class QAbstractItemView;
+#include <QAbstractItemView>
 
 /**
  * @brief Manages the tooltips for an item view.

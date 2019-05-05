@@ -32,7 +32,7 @@
 #include "KfiConstants.h"
 #include "FcEngine.h"
 
-class QWheelEvent;
+#include <QWheelEvent>
 
 namespace KFI
 {

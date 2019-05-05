@@ -53,9 +53,9 @@
 #define RIGHT_HANDED 0
 #define LEFT_HANDED  1
 
-class QCheckBox;
-class QSlider;
-class QTabWidget;
+#include <QCheckBox>
+#include <QSlider>
+#include <QTabWidget>
 
 class KMouseDlg : public QWidget, public Ui::KMouseDlg
 {

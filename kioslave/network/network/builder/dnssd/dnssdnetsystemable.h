@@ -32,7 +32,7 @@ namespace Mollet {
 class NetServicePrivate;
 class NetDevice;
 }
-class QString;
+#include <QString>
 
 
 namespace Mollet

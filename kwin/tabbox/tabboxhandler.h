@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * @since 4.4
 */
 
-class QKeyEvent;
+#include <QKeyEvent>
 
 namespace KWin
 {

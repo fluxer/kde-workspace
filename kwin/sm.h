@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <X11/SM/SMlib.h>
 #include <fixx11h.h>
 
-class QSocketNotifier;
+#include <QSocketNotifier>
 
 namespace KWin
 {

@@ -27,7 +27,7 @@ class OrgFreedesktopDBusPropertiesInterface;
 class OrgMprisMediaPlayer2Interface;
 class OrgMprisMediaPlayer2PlayerInterface;
 class PlayerControl;
-class QDBusPendingCallWatcher;
+#include <QDBusPendingCallWatcher>
 
 class PlayerContainer : public Plasma::DataContainer
 {

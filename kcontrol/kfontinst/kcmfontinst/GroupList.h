@@ -35,11 +35,11 @@
 #include <QtCore/QVariant>
 #include "FontList.h"
 
-class QDragEnterEvent;
+#include <QDragEnterEvent>
 class QDragLeaveEvent;
-class QDropEvent;
-class QTextStream;
-class QDomElement;
+#include <QDropEvent>
+#include <QTextStream>
+#include <QDomElement>
 
 namespace KFI
 {

@@ -22,16 +22,16 @@
 
 #include <QWidget>
 
-class QTreeWidget;
-class QTreeWidgetItem;
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 class KComboBox;
-class QCheckBox;
-class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QRadioButton;
-class QStackedWidget;
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QStackedWidget>
 
 class KDMUsersWidget : public QWidget {
     Q_OBJECT

@@ -30,8 +30,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QStack>
 #include <QHash>
 
-class QDBusPendingCallWatcher;
-class QDBusServiceWatcher;
+#include <QDBusPendingCallWatcher>
+#include <QDBusServiceWatcher>
 class KService;
 class OrgFreedesktopScreenSaverInterface;
 

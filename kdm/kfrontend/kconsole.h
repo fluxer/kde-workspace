@@ -27,7 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QtGui/QTextEdit>
 
 class KPty;
-class QSocketNotifier;
+#include <QSocketNotifier>
 
 class KConsole : public QTextEdit {
     Q_OBJECT

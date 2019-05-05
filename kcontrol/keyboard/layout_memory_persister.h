@@ -24,7 +24,7 @@
 #include "x11_helper.h"
 
 class LayoutMemory;
-class QFile;
+#include <QFile>
 
 class LayoutMemoryPersister {
 public:

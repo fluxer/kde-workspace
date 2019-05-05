@@ -28,7 +28,7 @@
 #include <QRect>
 
 
-class QSize;
+#include <QSize>
 
 
 class RandRScreen : public QObject

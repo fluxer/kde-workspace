@@ -32,7 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KLineEdit;
 class KSimpleConfig;
-class QLabel;
+#include <QLabel>
 
 class KClassicGreeter : public QObject, public KGreeterPlugin {
     Q_OBJECT

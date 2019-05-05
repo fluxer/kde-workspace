@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // TODO: Cleanup the order of things in this .h file
 
-class QStringList;
+#include <QStringList>
 class KConfig;
 class KActionCollection;
 class KShortcut;

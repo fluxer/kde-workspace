@@ -23,7 +23,7 @@
 #include <QList>
 #include <QWidget>
 
-class QTimer;
+#include <QTimer>
 
 namespace Kephal { class Output;
     class XRandROutputs;

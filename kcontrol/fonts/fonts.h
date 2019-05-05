@@ -17,9 +17,9 @@
 
 #include "kxftconfig.h"
 
-class QCheckBox;
-class QComboBox;
-class QSpinBox;
+#include <QCheckBox>
+#include <QComboBox>
+#include <QSpinBox>
 class KDoubleNumInput;
 class FontAASettings;
 

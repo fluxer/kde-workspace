@@ -32,10 +32,10 @@
 #include <QObject>
 #include <QWidget> // For WId
 
-class QDBusObjectPath;
-class QDBusPendingCallWatcher;
-class QDBusServiceWatcher;
-class QMenu;
+#include <QDBusObjectPath>
+#include <QDBusPendingCallWatcher>
+#include <QDBusServiceWatcher>
+#include <QMenu>
 
 /**
  * Represents an item with its children. GetLayout() returns a

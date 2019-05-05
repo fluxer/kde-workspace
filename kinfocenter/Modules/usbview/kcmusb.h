@@ -15,9 +15,9 @@
 
 #include <kcmodule.h>
 
-class QTreeWidget;
-class QTreeWidgetItem;
-class QTextEdit;
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QTextEdit>
 
 class USBViewer : public KCModule {
 Q_OBJECT

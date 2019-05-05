@@ -28,7 +28,7 @@
 
 #include <kdemacros.h>
 
-class QString;
+#include <QString>
 
 namespace KSGRD {
 

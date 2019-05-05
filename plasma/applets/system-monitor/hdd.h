@@ -30,7 +30,7 @@ namespace Plasma {
     class Meter;
 }
 class MonitorIcon;
-class QGraphicsLinearLayout;
+#include <QGraphicsLinearLayout>
 
 class Hdd : public SM::Applet
 {

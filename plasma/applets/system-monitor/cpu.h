@@ -27,7 +27,7 @@
 #include <QTimer>
 #include <QRegExp>
 
-class QStandardItemModel;
+#include <QStandardItemModel>
 
 namespace SM {
 

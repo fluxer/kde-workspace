@@ -25,7 +25,7 @@
 
 #include <kdemacros.h>
 
-class QSlider;
+#include <QSlider>
 
 namespace PowerDevil {
 namespace BundledActions {

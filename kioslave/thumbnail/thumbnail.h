@@ -25,7 +25,7 @@
 #include <kio/slavebase.h>
 
 class ThumbCreator;
-class QImage;
+#include <QImage>
 
 class ThumbnailProtocol : public KIO::SlaveBase
 {

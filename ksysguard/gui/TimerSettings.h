@@ -26,8 +26,8 @@
 
 #include <kdialog.h>
 
-class QCheckBox;
-class QDoubleSpinBox;
+#include <QCheckBox>
+#include <QDoubleSpinBox>
 
 class KDE_EXPORT TimerSettings : public KDialog
 {

@@ -21,8 +21,8 @@
 #ifndef MIMETYPEWRITER_H
 #define MIMETYPEWRITER_H
 
-class QStringList;
-class QString;
+#include <QStringList>
+#include <QString>
 class MimeTypeWriterPrivate;
 
 /// WARNING: this code is duplicated between apps/nsplugins and runtime/filetypes

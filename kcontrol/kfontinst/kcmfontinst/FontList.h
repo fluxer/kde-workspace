@@ -48,11 +48,11 @@
 class KConfigGroup;
 class KFileItem;
 class KFileItemList;
-class QMenu;
-class QPixmap;
-class QMimeData;
-class QTimer;
-class QPoint;
+#include <QMenu>
+#include <QPixmap>
+#include <QMimeData>
+#include <QTimer>
+#include <QPoint>
 
 #define KFI_FONT_DRAG_MIME "kfontinst/fontlist"
 

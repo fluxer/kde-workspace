@@ -23,9 +23,9 @@
 
 #include <Plasma/Containment>
 
-class QAction;
-class QTimer;
-class QGraphicsLinearLayout;
+#include <QAction>
+#include <QTimer>
+#include <QGraphicsLinearLayout>
 class Spacer;
 
 namespace Plasma

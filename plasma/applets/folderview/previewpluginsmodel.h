@@ -24,7 +24,7 @@
 #include <KService>
 #include <QVector>
 
-class QStringList;
+#include <QStringList>
 
 class PreviewPluginsModel : public QAbstractListModel
 {

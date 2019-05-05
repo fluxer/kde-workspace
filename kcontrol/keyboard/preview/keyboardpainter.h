@@ -24,7 +24,7 @@
 
 #include <QtGui/QDialog>
 
-class QPushButton;
+#include <QPushButton>
 
 class KeyboardPainter : public QDialog
 {

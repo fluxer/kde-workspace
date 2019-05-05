@@ -38,10 +38,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class KdmThemer;
 
-class QLibrary;
+#include <QLibrary>
 class KPushButton;
-class QMenu;
-class QSocketNotifier;
+#include <QMenu>
+#include <QSocketNotifier>
 
 // helper class, nuke when qt supports suspend()/resume()
 class QXTimer : public QObject {

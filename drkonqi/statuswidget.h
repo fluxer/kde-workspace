@@ -26,7 +26,7 @@
 
 class WrapLabel;
 class KPixmapSequenceWidget;
-class QHideEvent;
+#include <QHideEvent>
 
 class StatusWidget: public QStackedWidget
 {

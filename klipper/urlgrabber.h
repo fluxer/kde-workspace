@@ -27,12 +27,12 @@
 
 class History;
 class HistoryItem;
-class QTimer;
+#include <QTimer>
 
 class KConfig;
 class KMenu;
-class QMenu;
-class QAction;
+#include <QMenu>
+#include <QAction>
 
 class ClipAction;
 class ClipCommand;

@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QRect>
 #include <QTimer>
 
-class QDesktopWidget;
+#include <QDesktopWidget>
 
 namespace KWin
 {

@@ -24,7 +24,7 @@
 
 #include "appletscontainer.h"
 
-class QTimer;
+#include <QTimer>
 
 class AppletMoveSpacer;
 class DragCountdown;

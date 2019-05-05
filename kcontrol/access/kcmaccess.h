@@ -13,13 +13,13 @@
 #include <knuminput.h>
 
 
-class QCheckBox;
-class QLabel;
-class QLineEdit;
-class QPushButton;
-class QRadioButton;
+#include <QCheckBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QRadioButton>
 class KColorButton;
-class QSlider;
+#include <QSlider>
 
 class KAccessConfig : public KCModule
 {

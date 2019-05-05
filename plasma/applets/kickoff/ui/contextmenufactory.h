@@ -26,7 +26,7 @@
 // Plasma
 #include <Plasma/Applet>
 
-class QAbstractItemView;
+#include <QAbstractItemView>
 
 namespace Kickoff
 {

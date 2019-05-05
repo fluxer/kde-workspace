@@ -22,8 +22,8 @@
 
 #include <Plasma/Corona>
 
-class QMenu;
-class QAction;
+#include <QMenu>
+#include <QAction>
 
 namespace Plasma
 {

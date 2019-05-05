@@ -27,7 +27,7 @@
 
 
 #include <QSet>
-class QDateTime;
+#include <QDateTime>
 
 namespace KSysGuard
 {

@@ -26,7 +26,7 @@
 #include <QObject>
 #include <solid/storageaccess.h>
 
-class QModelIndex;
+#include <QModelIndex>
 class KUrl;
 
 namespace Kickoff

@@ -20,17 +20,17 @@
 #include <kconfig.h>
 #include <KSharedConfig>
 
-class QCheckBox;
-class QColor;
-class QComboBox;
-class QGridLayout;
-class QGroupBox;
-class QLabel;
-class QListWidget;
-class QPushButton;
-class QSlider;
-class QTabWidget;
-class QWidget;
+#include <QCheckBox>
+#include <QColor>
+#include <QComboBox>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
+#include <QSlider>
+#include <QTabWidget>
+#include <QWidget>
 
 class KColorButton;
 class KIconEffect;

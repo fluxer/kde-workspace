@@ -25,7 +25,7 @@
 #include <QtCore/QSet>
 #include <QtGui/QStyledItemDelegate>
 
-class QTreeView;
+#include <QTreeView>
 class KeyboardConfig;
 class Rules;
 class Flags;

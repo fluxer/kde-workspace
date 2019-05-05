@@ -25,12 +25,12 @@
 
 #include <KService>
 
-class QAction;
+#include <QAction>
 class MenuItem;
 class ModuleView;
 class KConfigDialog;
-class QAbstractItemView;
-template<typename T> class QList;
+#include <QAbstractItemView>
+#include <QList>
 
 /**
  * @brief Provides a interface for System Settings views

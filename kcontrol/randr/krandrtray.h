@@ -26,8 +26,8 @@
 
 #include "randrdisplay.h"
 
-class QAction;
-class QActionGroup;
+#include <QAction>
+#include <QActionGroup>
 class KCMultiDialog;
 class KHelpMenu;
 class KMenu;

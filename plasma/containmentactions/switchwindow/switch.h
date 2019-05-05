@@ -23,8 +23,8 @@
 #include "ui_config.h"
 #include <plasma/containmentactions.h>
 
-class QAction;
-class QTimer;
+#include <QAction>
+#include <QTimer>
 class KMenu;
 
 class SwitchWindow : public Plasma::ContainmentActions

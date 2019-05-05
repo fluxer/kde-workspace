@@ -26,7 +26,7 @@
 
 #include "SensorAgent.h"
 
-class QString;
+#include <QString>
 
 namespace KSGRD {
 

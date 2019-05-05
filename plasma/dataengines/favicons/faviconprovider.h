@@ -23,7 +23,7 @@
 
 #include <QtCore/QObject>
 
-class QImage;
+#include <QImage>
 
 /**
  * This class provides a favicon for a given url

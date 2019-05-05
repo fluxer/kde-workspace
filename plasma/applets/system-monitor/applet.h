@@ -27,8 +27,8 @@
 #define MINIMUM 24
 #define PREFERRED 200
 
-class QGraphicsLinearLayout;
-class QGraphicsWidget;
+#include <QGraphicsLinearLayout>
+#include <QGraphicsWidget>
 
 namespace Plasma {
     class Frame;

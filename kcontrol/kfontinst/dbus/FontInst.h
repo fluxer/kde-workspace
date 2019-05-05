@@ -36,7 +36,7 @@
 
 #define FONTINST_PATH "/FontInst"
 
-class QTimer;
+#include <QTimer>
 
 namespace KFI
 {

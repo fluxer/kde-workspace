@@ -16,7 +16,7 @@
 
 #include <QtGui/QFrame>
 
-class QMouseEvent;
+#include <QMouseEvent>
 
 /**
  * This widget tracks mouse movements when the left mouse button has been

@@ -27,7 +27,7 @@ namespace SM {
 }
 class MonitorButton;
 
-class QGraphicsLinearLayout;
+#include <QGraphicsLinearLayout>
 
 class SystemMonitor : public Plasma::PopupApplet
 {

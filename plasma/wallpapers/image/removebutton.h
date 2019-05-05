@@ -26,7 +26,7 @@
 #include <QAbstractButton>
 #include <QPixmap>
 
-class QTimeLine;
+#include <QTimeLine>
 
 /**
  * @brief Toggle button for changing the selection of an hovered item.

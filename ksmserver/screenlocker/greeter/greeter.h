@@ -28,8 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // forward declarations
 class KGreetPlugin;
-class QLibrary;
-class QSocketNotifier;
+#include <QLibrary>
+#include <QSocketNotifier>
 
 struct GreeterPluginHandle {
     QLibrary *library;

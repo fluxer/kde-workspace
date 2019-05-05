@@ -24,7 +24,7 @@
 
 #include <kwidgetitemdelegate.h>
 
-class QListView;
+#include <QListView>
 
 class ProgressListDelegate
         : public KWidgetItemDelegate

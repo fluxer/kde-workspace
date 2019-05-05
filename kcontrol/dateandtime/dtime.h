@@ -36,7 +36,7 @@
 #include <knuminput.h>
 
 class Kclock;
-class QTimeEdit;
+#include <QTimeEdit>
 
 namespace Plasma {
     class Svg;

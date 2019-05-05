@@ -20,9 +20,9 @@
 
 #include <kcmodule.h>
 
-class QListWidget;
-class QListWidgetItem;
-class QPushButton;
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QPushButton>
 
 class KConfig;
 

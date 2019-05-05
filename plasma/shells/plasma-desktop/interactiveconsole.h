@@ -25,12 +25,12 @@
 #include <KDialog>
 #include <KIO/Job>
 
-class QSplitter;
+#include <QSplitter>
 class KAction;
 class KFileDialog;
 class KMenu;
 class KTextEdit;
-class QTextBrowser;
+#include <QTextBrowser>
 
 namespace KTextEditor
 {

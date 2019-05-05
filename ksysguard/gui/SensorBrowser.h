@@ -29,7 +29,7 @@
 #include <ksgrd/SensorClient.h>
 #include "ksortfilterproxymodel.h"
 
-class QMouseEvent;
+#include <QMouseEvent>
 
 namespace KSGRD {
 class SensorManager;

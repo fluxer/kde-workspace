@@ -24,8 +24,8 @@
 #include <QObject>
 #include <KUrl>
 
-class QComboBox;
-class QTreeWidget;
+#include <QComboBox>
+#include <QTreeWidget>
 class Autostart;
 
 class AutoStartItem : public QTreeWidgetItem, public QObject

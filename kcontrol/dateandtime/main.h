@@ -24,7 +24,7 @@
 #include <kcmodule.h>
 
 class Dtime;
-class QTabWidget;
+#include <QTabWidget>
 
 
 class KclockModule : public KCModule

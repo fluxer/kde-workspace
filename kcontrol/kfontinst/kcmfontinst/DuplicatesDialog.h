@@ -31,9 +31,9 @@
 #include "Misc.h"
 #include "JobRunner.h"
 
-class QLabel;
-class QMenu;
-class QAction;
+#include <QLabel>
+#include <QMenu>
+#include <QAction>
 
 namespace KFI
 {

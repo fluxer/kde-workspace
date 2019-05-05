@@ -25,8 +25,8 @@
 
 #include <QtCore/QRegExp>
 
-class QHostInfo;
-class QEventLoop;
+#include <QHostInfo>
+#include <QEventLoop>
 
 /*
  This filter takes care of hostnames in the local search domain.

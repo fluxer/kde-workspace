@@ -21,7 +21,7 @@
 #include "ui_imageconfig.h"
 #include "ui_slideshowconfig.h"
 
-class QPropertyAnimation;
+#include <QPropertyAnimation>
 
 class KDirWatch;
 class KFileDialog;

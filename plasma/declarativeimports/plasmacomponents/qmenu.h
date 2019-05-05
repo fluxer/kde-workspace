@@ -26,7 +26,7 @@
 #include "qmenuitem.h"
 #include "enums.h"
 
-class QDeclarativeItem;
+#include <QDeclarativeItem>
 
 class QMenuProxy : public QObject
 {

@@ -32,7 +32,7 @@ namespace Mollet {
 class NetDevice;
 class NetService;
 }
-template < class T > class QList;
+#include <QList>
 
 
 namespace Mollet

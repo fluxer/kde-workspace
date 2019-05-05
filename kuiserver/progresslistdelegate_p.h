@@ -29,8 +29,8 @@
 #include <QPushButton>
 #include <QProgressBar>
 
-class QModelIndex;
-class QString;
+#include <QModelIndex>
+#include <QString>
 
 class ProgressListDelegate::Private
 {

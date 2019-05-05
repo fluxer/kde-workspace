@@ -32,9 +32,9 @@ namespace Mollet {
 class NetDevice;
 class NetService;
 }
-template < class T > class QList;
-class QString;
-class QDBusArgument;
+#include <QList>
+#include <QString>
+#include <QDBusArgument>
 
 extern MOLLETNETWORK_EXPORT QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetService& service );
 extern MOLLETNETWORK_EXPORT const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetService& service );

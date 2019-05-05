@@ -26,7 +26,7 @@
 
 #include <Plasma/Plasma>
 
-class QGraphicsObject;
+#include <QGraphicsObject>
 
 namespace Plasma
 {

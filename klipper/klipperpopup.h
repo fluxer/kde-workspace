@@ -23,9 +23,9 @@
 
 #include <KMenu>
 
-class QAction;
-class QWidgetAction;
-class QKeyEvent;
+#include <QAction>
+#include <QWidgetAction>
+#include <QKeyEvent>
 
 class KHelpMenu;
 class KLineEdit;

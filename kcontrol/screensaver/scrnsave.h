@@ -38,7 +38,7 @@
 #include "testwin.h"
 #include "ui_screensaver.h"
 
-class QTimer;
+#include <QTimer>
 
 class KIntSpinBox;
 

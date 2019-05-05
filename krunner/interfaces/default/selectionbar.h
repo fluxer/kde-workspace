@@ -22,7 +22,7 @@
 
 #include <Plasma/ItemBackground>
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

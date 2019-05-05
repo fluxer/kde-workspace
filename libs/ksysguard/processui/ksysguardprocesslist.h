@@ -31,10 +31,10 @@
 #include "ProcessFilter.h"
 #include "processes.h"
 
-class QShowEvent;
-class QHideEvent;
-class QLineEdit;
-class QTreeView;
+#include <QShowEvent>
+#include <QHideEvent>
+#include <QLineEdit>
+#include <QTreeView>
 struct KSysGuardProcessListPrivate;
 
 /**

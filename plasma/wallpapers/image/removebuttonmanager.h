@@ -25,9 +25,9 @@
 
 #include <QObject>
 
-class QAbstractItemView;
-class QModelIndex;
-class QItemSelection;
+#include <QAbstractItemView>
+#include <QModelIndex>
+#include <QItemSelection>
 class RemoveButton;
 
 /**

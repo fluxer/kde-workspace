@@ -25,7 +25,7 @@
 
 #include <QStringList>
 
-class QTimer;
+#include <QTimer>
 
 /**
  * This class evaluates the basic expressions given in the interface.

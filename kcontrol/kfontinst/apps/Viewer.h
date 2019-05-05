@@ -27,7 +27,7 @@
 #include <KParts/ReadOnlyPart>
 #include <KParts/MainWindow>
 
-class QAction;
+#include <QAction>
 
 namespace KFI
 {

@@ -25,9 +25,9 @@
 
 class ThemeData;
 
-class QLabel;
-class QPushButton;
-class QTreeWidget;
+#include <QLabel>
+#include <QPushButton>
+#include <QTreeWidget>
 
 class KDMThemeWidget : public QWidget {
     Q_OBJECT

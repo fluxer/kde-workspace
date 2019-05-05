@@ -30,8 +30,8 @@
 #include "os_current.h"
 
 
-class QPushButton;
-class QTreeWidget;
+#include <QPushButton>
+#include <QTreeWidget>
 
 class KCMPci : public KCModule {
 	Q_OBJECT

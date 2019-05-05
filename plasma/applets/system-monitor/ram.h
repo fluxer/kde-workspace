@@ -25,7 +25,7 @@
 #include <Plasma/DataEngine>
 #include <QStandardItemModel>
 
-class QStandardItemModel;
+#include <QStandardItemModel>
 
 namespace SM {
 

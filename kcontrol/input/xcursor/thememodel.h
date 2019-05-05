@@ -23,7 +23,7 @@
 #include <QtCore/qabstractitemmodel.h>
 #include <QStringList>
 
-class QDir;
+#include <QDir>
 class CursorTheme;
 
 // The two TableView/TreeView columns provided by the model

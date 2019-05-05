@@ -28,8 +28,8 @@ namespace Plasma
     class Svg;
 }
 
-class QGraphicsView;
-class QToolButton;
+#include <QGraphicsView>
+#include <QToolButton>
 class ResultScene;
 class SharedResultData;
 

@@ -27,7 +27,7 @@
 
 class KDecorationPreviewBridge;
 class KDecorationPreviewOptions;
-class QMouseEvent;
+#include <QMouseEvent>
 
 class KDecorationPreview
     : public QWidget

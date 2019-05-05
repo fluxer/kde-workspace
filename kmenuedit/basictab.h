@@ -27,9 +27,9 @@
 class KKeySequenceWidget;
 class KLineEdit;
 class KIconButton;
-class QCheckBox;
-class QGroupBox;
-class QLabel;
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
 class KUrlRequester;
 class KService;
 class KLineSpellChecking;

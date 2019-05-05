@@ -24,8 +24,8 @@
 
 #include <QtCore/qabstractitemmodel.h>
 
-class QLayout;
-class QAbstractItemView;
+#include <QLayout>
+#include <QAbstractItemView>
 
 /**
  * @brief Manages the tooltips for an item view.

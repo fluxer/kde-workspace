@@ -26,7 +26,7 @@
 #include <Plasma/AbstractRunner>
 
 #include "killrunner_config.h"
-class QAction;
+#include <QAction>
 
 namespace KSysGuard
 {

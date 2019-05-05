@@ -23,7 +23,7 @@
 #ifndef MIMETYPES_H
 #define MIMETYPES_H
 
-class QString;
+#include <QString>
 
 
 class Mimetypes

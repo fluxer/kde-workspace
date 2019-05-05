@@ -22,8 +22,8 @@
 
 #include <Plasma/ServiceJob>
 
-class QDBusPendingCallWatcher;
-class QDBusPendingCall;
+#include <QDBusPendingCallWatcher>
+#include <QDBusPendingCall>
 class QDBusVariant;
 class PlayerControl;
 

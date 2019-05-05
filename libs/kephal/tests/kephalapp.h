@@ -24,7 +24,7 @@
 #include <QApplication>
 
 
-class QDesktopWidget;
+#include <QDesktopWidget>
 
 namespace Kephal
 {

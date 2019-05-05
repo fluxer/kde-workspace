@@ -23,9 +23,9 @@
 #include <QList>
 #include <QWidget>
 
-class QFocusEvent;
+#include <QFocusEvent>
 class QKeyPressEvent;
-class QResizeEvent;
+#include <QResizeEvent>
 
 namespace QuickSand {
 

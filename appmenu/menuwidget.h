@@ -31,8 +31,8 @@
 #include <QGraphicsWidget>
 #include <QTimer>
 
-class QGraphicsLinearLayout;
-class QGraphicsView;
+#include <QGraphicsLinearLayout>
+#include <QGraphicsView>
 
 class MenuWidget : public QGraphicsWidget
 {

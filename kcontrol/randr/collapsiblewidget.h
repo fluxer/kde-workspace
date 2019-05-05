@@ -28,7 +28,7 @@
 #include <QDebug>
 #include <QAbstractButton>
 
-class QScrollArea;
+#include <QScrollArea>
 
 class ClickableLabel : public QLabel
 {

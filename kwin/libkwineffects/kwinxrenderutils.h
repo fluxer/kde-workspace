@@ -31,8 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // XCB
 #include <xcb/xfixes.h>
 
-class QColor;
-class QPixmap;
+#include <QColor>
+#include <QPixmap>
 
 /** @addtogroup kwineffects */
 /** @{ */

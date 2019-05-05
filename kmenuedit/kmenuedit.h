@@ -22,7 +22,7 @@
 
 #include <KXmlGuiWindow>
 
-class QSplitter;
+#include <QSplitter>
 class KAction;
 class BasicTab;
 class TreeView;

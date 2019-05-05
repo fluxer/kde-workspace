@@ -23,7 +23,7 @@
 #include <kvbox.h>
 #include <kmediawidget.h>
 
-class QLabel;
+#include <QLabel>
 class KUrl;
 
 class AudioPreview : public KVBox

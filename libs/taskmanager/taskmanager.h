@@ -32,7 +32,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KSharedPtr>
 #include <KWindowSystem>
 
-struct QUuid;
+#include <QUuid>
 
 namespace TaskManager
 {

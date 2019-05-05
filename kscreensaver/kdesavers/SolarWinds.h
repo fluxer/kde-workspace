@@ -29,7 +29,7 @@
 
 
 class wind;
-class QTimer;
+#include <QTimer>
 
 class SWindsWidget : public QGLWidget
 {
@@ -123,7 +123,7 @@ private:
 };
 
 
-class QComboBox;
+#include <QComboBox>
 
 class KSWindsSetup : public KDialog
 {

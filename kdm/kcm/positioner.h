@@ -22,8 +22,8 @@
 
 #include "kworkspace/screenpreviewwidget.h"
 
-class QFrame;
-class QLabel;
+#include <QFrame>
+#include <QLabel>
 
 class Positioner : public ScreenPreviewWidget {
     Q_OBJECT

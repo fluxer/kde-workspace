@@ -23,7 +23,7 @@
 
 #include <powerdevilaction.h>
 
-class QDBusPendingCallWatcher;
+#include <QDBusPendingCallWatcher>
 
 namespace PowerDevil
 {

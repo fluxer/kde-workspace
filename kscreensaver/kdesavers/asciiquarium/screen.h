@@ -34,8 +34,8 @@
 
 class Sprite;
 class AASaver;
-class QPaintEvent;
-class QPainter;
+#include <QPaintEvent>
+#include <QPainter>
 
 /**
  * This is the main display class of Asciiquarium.  We use a pseudo-terminal-ish

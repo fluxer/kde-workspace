@@ -27,8 +27,8 @@
 #include <QImage>
 #include <QPixmap>
 
-class QSignalMapper;
-class QSvgRenderer;
+#include <QSignalMapper>
+#include <QSvgRenderer>
 
 /*
  * KdmPixmap. A pixmap element

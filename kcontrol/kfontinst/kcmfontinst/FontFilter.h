@@ -28,9 +28,9 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QFontDatabase>
 
-class QLabel;
-class QMenu;
-class QActionGroup;
+#include <QLabel>
+#include <QMenu>
+#include <QActionGroup>
 class KAction;
 
 namespace KFI

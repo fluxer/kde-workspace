@@ -22,9 +22,9 @@
 
 #include <kdialog.h>
 
-class QStringList;
+#include <QStringList>
 class KLineEdit;
-class QComboBox;
+#include <QComboBox>
 
 /**
  * A dialog for creating a new file type, with

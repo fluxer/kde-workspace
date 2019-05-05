@@ -34,7 +34,7 @@
 
 class ProgressListModel;
 class ProgressListDelegate;
-class QToolBar;
+#include <QToolBar>
 class KSystemTrayIcon;
 
 class UiServer : public KXmlGuiWindow

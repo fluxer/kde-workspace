@@ -31,8 +31,8 @@
 
 class KActionCollection;
 class KMenu;
-class QTreeWidgetItem;
-class QCheckBox;
+#include <QTreeWidgetItem>
+#include <QCheckBox>
 class KWalletEntryList;
 class KWMapEditor;
 class KAction;

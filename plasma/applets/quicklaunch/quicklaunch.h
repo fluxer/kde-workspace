@@ -43,10 +43,10 @@ namespace Plasma
     class IconWidget;
 }
 
-class QEvent;
-class QGraphicsLinearLayout;
-class QGraphicsSceneContextMenuEvent;
-class QPoint;
+#include <QEvent>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QPoint>
 
 class KConfigGroup;
 

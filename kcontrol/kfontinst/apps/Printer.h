@@ -30,10 +30,10 @@
 #include <QtGui/QFont>
 #include "Misc.h"
 
-class QLabel;
-class QProgressBar;
-class QStackedWidget;
-class QPrinter;
+#include <QLabel>
+#include <QProgressBar>
+#include <QStackedWidget>
+#include <QPrinter>
 
 namespace KFI
 {

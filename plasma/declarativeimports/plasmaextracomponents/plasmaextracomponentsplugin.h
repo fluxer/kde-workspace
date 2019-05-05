@@ -23,7 +23,7 @@
 
 #include <QDeclarativeExtensionPlugin>
 
-class QDeclarativeEngine;
+#include <QDeclarativeEngine>
 
 class PlasmaExtraComponentsPlugin : public QDeclarativeExtensionPlugin
 {

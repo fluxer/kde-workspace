@@ -17,8 +17,8 @@
 #ifndef IMAGECONVERTER_H
 #define IMAGECONVERTER_H
 
-class QVariant;
-class QImage;
+#include <QVariant>
+#include <QImage>
 
 namespace ImageConverter
 {

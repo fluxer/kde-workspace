@@ -24,8 +24,8 @@
 
 #include <QObject>
 
-class QWidget;
-class QPixmap;
+#include <QWidget>
+#include <QPixmap>
 
 class LogoutEffect : public QObject
 {

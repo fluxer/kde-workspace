@@ -13,7 +13,7 @@
 #include <kdialog.h>
 #include <kscreensaver.h>
 
-class QListWidgetItem;
+#include <QListWidgetItem>
 
 #define RAMP		64
 #define SPEED		10
@@ -87,7 +87,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 };
 
-class QListWidget;
+#include <QListWidget>
 class KIntNumInput;
 
 class KBlobSetup : public KDialog

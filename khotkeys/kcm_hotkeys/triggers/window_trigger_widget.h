@@ -23,7 +23,7 @@
 
 #include "ui_window_trigger_widget.h"
 
-class QKeySequence;
+#include <QKeySequence>
 class WindowDefinitionListWidget;
 
 /**

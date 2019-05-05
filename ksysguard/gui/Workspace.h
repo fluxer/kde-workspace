@@ -27,7 +27,7 @@
 
 class KConfig;
 class KUrl;
-class QString;
+#include <QString>
 class WorkSheet;
 
 class Workspace : public KTabWidget

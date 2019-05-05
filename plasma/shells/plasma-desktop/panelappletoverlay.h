@@ -22,8 +22,8 @@
 
 #include <QWidget>
 
-class QGraphicsLinearLayout;
-class QGraphicsWidget;
+#include <QGraphicsLinearLayout>
+#include <QGraphicsWidget>
 
 namespace Plasma
 {

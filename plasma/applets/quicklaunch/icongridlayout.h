@@ -26,9 +26,9 @@
 #include <QtCore/qsize.h>
 #include <QtGui/QGraphicsLayout>
 
-class QEvent;
-class QRectF;
-class QGraphicsLayoutItem;
+#include <QEvent>
+#include <QRectF>
+#include <QGraphicsLayoutItem>
 
 namespace Quicklaunch {
 

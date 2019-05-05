@@ -23,8 +23,8 @@
 #include <Plasma/Plasma>
 #include <Plasma/Dialog>
 
-class QBoxLayout;
-class QGraphicsWidget;
+#include <QBoxLayout>
+#include <QGraphicsWidget>
 
 namespace Plasma
 {

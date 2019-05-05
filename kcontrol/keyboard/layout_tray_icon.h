@@ -33,7 +33,7 @@ class LayoutsMenu;
  *  System tray icon to show layouts
  */
 class KStatusNotifierItem;
-class QActionGroup;
+#include <QActionGroup>
 class Rules;
 class Flags;
 class LayoutTrayIcon : public QObject

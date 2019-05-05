@@ -35,10 +35,10 @@
 #include <kio/udsentry.h>
 #include <kurl.h>
 
-class QFormLayout;
+#include <QFormLayout>
 class KJob;
 class KUrlRequester;
-class QStringList;
+#include <QStringList>
 
 namespace KIO { class Job; }
 

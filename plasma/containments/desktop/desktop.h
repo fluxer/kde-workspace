@@ -31,7 +31,7 @@
 
 #include "desktoplayout.h"
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

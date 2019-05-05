@@ -28,7 +28,7 @@
 #include <QtGui/QTreeView>
 
 
-class QSignalMapper;
+#include <QSignalMapper>
 
 class KHotkeysModel;
 

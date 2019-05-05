@@ -21,9 +21,9 @@
 #include <klistwidget.h>
 #include <kurl.h>
 
-class QLabel;
-class QTextEdit;
-class QPushButton;
+#include <QLabel>
+#include <QTextEdit>
+#include <QPushButton>
 class ThemeListBox;
 
 class SplashInstaller : public QWidget

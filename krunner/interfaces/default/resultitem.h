@@ -28,9 +28,9 @@
 
 #include <Plasma/QueryMatch>
 
-class QGraphicsLinearLayout;
-class QGraphicsProxyWidget;
-class QPropertyAnimation;
+#include <QGraphicsLinearLayout>
+#include <QGraphicsProxyWidget>
+#include <QPropertyAnimation>
 
 namespace Plasma
 {

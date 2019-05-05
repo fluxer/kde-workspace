@@ -30,8 +30,8 @@
 #include "kfontinst_export.h"
 #include "Style.h"
 
-class QDomElement;
-class QTextStream;
+#include <QDomElement>
+#include <QTextStream>
 
 namespace KFI
 {

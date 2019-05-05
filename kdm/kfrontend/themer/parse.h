@@ -27,10 +27,10 @@
 #include <QFont>
 #include <QPalette>
 
-class QString;
-class QStyle;
-class QColor;
-class QDomElement;
+#include <QString>
+#include <QStyle>
+#include <QColor>
+#include <QDomElement>
 
 enum DataType { DTnone, DTpixel, DTnpixel, DTpercent, DTbox, DTscale };
 struct DataPoint {

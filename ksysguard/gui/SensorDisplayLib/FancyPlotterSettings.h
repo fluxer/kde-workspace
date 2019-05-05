@@ -31,10 +31,10 @@
 class KIntNumInput;
 class KLineEdit;
 
-class QCheckBox;
-class QPushButton;
-class QTreeView;
-class QDoubleSpinBox;
+#include <QCheckBox>
+#include <QPushButton>
+#include <QTreeView>
+#include <QDoubleSpinBox>
 
 class FancyPlotterSettings : public KPageDialog
 {

@@ -22,9 +22,9 @@
 
 #include <QDeclarativeView>
 
-class QResizeEvent;
-class QMouseEvent;
-class QKeyEvent;
+#include <QResizeEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 class SplashWindow: public QDeclarativeView
 {

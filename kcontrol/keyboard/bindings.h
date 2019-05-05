@@ -23,11 +23,11 @@
 #include <kactioncollection.h>
 
 
-//class QObject;
+//#include <QObject>
 class KAction;
 class Rules;
 class LayoutUnit;
-template <typename T> class QList;
+#include <QList>
 
 
 class KeyboardLayoutActionCollection : public KActionCollection {

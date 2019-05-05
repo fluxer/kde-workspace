@@ -22,11 +22,11 @@
 #include <QtCore/QList>
 #include <QtGui/QIcon>
 
-class QAction;
+#include <QAction>
 class KeyboardConfig;
 class Flags;
 class Rules;
-class QActionGroup;
+#include <QActionGroup>
 class LayoutUnit;
 
 class LayoutsMenu : public QObject

@@ -24,7 +24,7 @@
 #include <QtCore/qabstractitemmodel.h>
 
 class KCMHotkeysPrivate;
-class QWidget;
+#include <QWidget>
 
 namespace KHotKeys {
     class ActionDataBase;

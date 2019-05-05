@@ -34,9 +34,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Forward declarations
-class QGraphicsWidget;
-class QGraphicsSceneWheelEvent;
-class QGraphicsSceneContextMenuEvent;
+#include <QGraphicsWidget>
+#include <QGraphicsSceneWheelEvent>
+#include <QGraphicsSceneContextMenuEvent>
 
 
 namespace SystemTray

@@ -30,8 +30,8 @@
 
 class HotkeysTreeView;
 
-class QModelIndex;
-class QSignalMapper;
+#include <QModelIndex>
+#include <QSignalMapper>
 
 
 class HotkeysTreeViewContextMenu : public QMenu

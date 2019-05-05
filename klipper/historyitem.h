@@ -21,9 +21,9 @@
 
 #include <QtGui/QPixmap>
 
-class QString;
-class QMimeData;
-class QDataStream;
+#include <QString>
+#include <QMimeData>
+#include <QDataStream>
 
 /**
  * An entry in the clipboard history.

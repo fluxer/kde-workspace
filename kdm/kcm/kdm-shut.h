@@ -27,7 +27,7 @@
 
 class KBackedComboBox;
 class KUrlRequester;
-class QLabel;
+#include <QLabel>
 
 class KDMSessionsWidget : public QWidget {
     Q_OBJECT

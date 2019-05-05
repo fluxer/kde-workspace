@@ -35,8 +35,8 @@
 #ifndef IMAGEFILTER_H
 #define IMAGEFILTER_H
 
-class QImage;
-class QColor;
+#include <QImage>
+#include <QColor>
 
 class ImageFilter
 {

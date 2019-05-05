@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtDBus/QDBusContext>
 #include <QtDBus/QDBusMessage>
 
-class QDBusServiceWatcher;
+#include <QDBusServiceWatcher>
 
 namespace ScreenLocker
 {

@@ -22,7 +22,7 @@
 
 #include <QWidget>
 class MimeTypeData;
-class QButtonGroup;
+#include <QButtonGroup>
 
 /**
  * This widget contains the details for a filetype group.

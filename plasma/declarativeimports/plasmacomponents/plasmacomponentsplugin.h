@@ -23,8 +23,8 @@
 #include <QDeclarativeExtensionPlugin>
 #include <QSet>
 
-class QDeclarativeEngine;
-class QDeclarativeItem;
+#include <QDeclarativeEngine>
+#include <QDeclarativeItem>
 class PlasmaComponentsPlugin;
 
 class EngineBookKeeping : public QObject

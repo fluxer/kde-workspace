@@ -39,12 +39,12 @@
 
 class KComboBox;
 class KConfig;
-class QCheckBox;
-class QComboBox;
-class QLabel;
-class QPushButton;
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
 class StylePreview;
-class QTabWidget;
+#include <QTabWidget>
 
 struct StyleEntry {
     QString name;

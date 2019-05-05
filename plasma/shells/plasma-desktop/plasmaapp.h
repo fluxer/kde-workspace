@@ -34,7 +34,7 @@
 #include <fixx11h.h>
 #endif
 
-class QSignalMapper;
+#include <QSignalMapper>
 
 namespace Plasma
 {

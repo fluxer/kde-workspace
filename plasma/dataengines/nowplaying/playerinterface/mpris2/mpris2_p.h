@@ -22,7 +22,7 @@
 
 #include <QtCore/qdatetime.h>
 #include <QtCore/qvariant.h>
-class QDBusInterface;
+#include <QDBusInterface>
 
 class Mpris2 : public QObject, public Player
 {

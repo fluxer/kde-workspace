@@ -19,8 +19,8 @@
 #ifndef THEMEPAGE_H
 #define THEMEPAGE_H
 
-class QTreeWidget;
-class QTreeWidgetItem;
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 class ThemePage : public QWidget
 {

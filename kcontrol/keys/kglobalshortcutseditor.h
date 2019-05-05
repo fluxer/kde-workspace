@@ -25,7 +25,7 @@
 class KActionCollection;
 class KShortcut;
 class KConfig;
-class QDBusObjectPath;
+#include <QDBusObjectPath>
 
 /**
  * Combine a KShortcutsEditor with a KComboBox.

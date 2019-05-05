@@ -23,7 +23,7 @@
 
 #include "kworkspace.h"
 
-class QSocketNotifier;
+#include <QSocketNotifier>
 
 namespace KWorkSpace
 {

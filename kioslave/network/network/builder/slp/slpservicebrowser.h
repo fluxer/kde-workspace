@@ -30,8 +30,8 @@
 // Qt
 #include <QtCore/QObject>
 
-class QStringList;
-template <class T> class QList;
+#include <QStringList>
+#include <QList>
 
 
 namespace Mollet

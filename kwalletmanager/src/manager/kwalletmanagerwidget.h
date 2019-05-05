@@ -23,7 +23,7 @@
 #include <kpagewidget.h>
 
 class KUrl;
-class QDropEvent;
+#include <QDropEvent>
 class KWalletManagerWidgetItem;
 
 class KWalletManagerWidget : public KPageWidget {

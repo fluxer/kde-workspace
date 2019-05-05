@@ -29,10 +29,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QPushButton>
 #include <kworkspace/kworkspace.h>
 
-class QMenu;
-class QTimer;
-class QTimeLine;
-class QLabel;
+#include <QMenu>
+#include <QTimer>
+#include <QTimeLine>
+#include <QLabel>
 class LogoutEffect;
 
 namespace Plasma
@@ -69,7 +69,7 @@ private:
     bool initialized;
 };
 
-class QDeclarativeView;
+#include <QDeclarativeView>
 
 // The confirmation dialog
 class KSMShutdownDlg : public QDialog

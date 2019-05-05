@@ -24,7 +24,7 @@
 #include <kjobuidelegate.h>
 #include <kio/jobclasses.h>
 
-class QTimer;
+#include <QTimer>
 
 class KJobTest
         : public KIO::Job

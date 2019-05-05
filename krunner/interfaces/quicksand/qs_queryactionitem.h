@@ -27,7 +27,7 @@
     class QueryAction;
 }*/
 
-class QAction;
+#include <QAction>
 
 namespace QuickSand
 {

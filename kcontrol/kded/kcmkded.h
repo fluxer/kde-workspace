@@ -21,9 +21,9 @@
 
 #include <kcmodule.h>
 
-class QPushButton;
-class QTreeWidget;
-class QTreeWidgetItem;
+#include <QPushButton>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 class KConfig;
 
 class KDEDConfig : public KCModule

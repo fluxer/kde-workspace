@@ -25,7 +25,7 @@
 #include "parser/backtraceparser.h"
 #include "backtracegenerator.h"
 
-class QPixmap;
+#include <QPixmap>
 
 class BacktraceRatingWidget: public QWidget
 {

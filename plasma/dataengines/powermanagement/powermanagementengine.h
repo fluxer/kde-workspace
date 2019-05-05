@@ -29,7 +29,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QHash>
 
-class QDBusPendingCallWatcher;
+#include <QDBusPendingCallWatcher>
 
 /**
  * This class provides runtime information about the battery and AC status

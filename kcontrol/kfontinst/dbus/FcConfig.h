@@ -24,7 +24,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-class QString;
+#include <QString>
 
 namespace KFI
 {

@@ -29,8 +29,8 @@
 #include <QtDBus/QtDBus>
 #include "kfontinst_export.h"
 
-class QDomElement;
-class QTextStream;
+#include <QDomElement>
+#include <QTextStream>
 
 namespace KFI
 {

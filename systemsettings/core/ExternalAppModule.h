@@ -24,7 +24,7 @@
 
 #include "ui_externalModule.h"
 
-class QShowEvent;
+#include <QShowEvent>
 class KCModuleInfo;
 
 class ExternalAppModule : public QWidget

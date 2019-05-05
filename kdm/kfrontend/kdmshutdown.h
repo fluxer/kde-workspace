@@ -33,10 +33,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QRadioButton>
 
-class QGroupBox;
-class QComboBox;
-class QCheckBox;
-class QLineEdit;
+#include <QGroupBox>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLineEdit>
 class KGuiItem;
 
 struct DpySpec;

@@ -27,7 +27,7 @@
 #include <SensorDisplay.h>
 
 class LogSensorModel;
-class QDomElement;
+#include <QDomElement>
 
 class LogSensor : public QObject, public KSGRD::SensorClient
 {

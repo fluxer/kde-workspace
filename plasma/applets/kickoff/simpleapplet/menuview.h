@@ -27,8 +27,8 @@
 // KDE
 #include <KMenu>
 
-class QAbstractItemModel;
-class QStandardItem;
+#include <QAbstractItemModel>
+#include <QStandardItem>
 
 namespace Kickoff
 {

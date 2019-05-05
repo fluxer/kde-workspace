@@ -24,7 +24,7 @@
 #include "sound.h"
 #include <kdemacros.h>
 
-class QLibrary;
+#include <QLibrary>
 
 namespace KHotKeys
 {

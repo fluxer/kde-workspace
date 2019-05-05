@@ -37,8 +37,8 @@ class KDMConvenienceWidget;
 class KConfig;
 class KTemporaryFile;
 
-class QStackedWidget;
-class QTabWidget;
+#include <QStackedWidget>
+#include <QTabWidget>
 
 class KDModule : public KCModule {
     Q_OBJECT

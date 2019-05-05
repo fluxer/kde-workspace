@@ -34,7 +34,7 @@
 #include "windows_handler.h"
 #include "triggers/gestures.h"
 
-class QKeySequence;
+#include <QKeySequence>
 
 namespace KHotKeys
 {

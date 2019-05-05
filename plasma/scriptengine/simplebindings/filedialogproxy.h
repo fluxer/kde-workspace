@@ -24,8 +24,8 @@
 
 #include <KFileDialog>
 
-class QScriptEngine;
-class QScriptContext;
+#include <QScriptEngine>
+#include <QScriptContext>
 
 class FileDialogProxy : public QObject
 {

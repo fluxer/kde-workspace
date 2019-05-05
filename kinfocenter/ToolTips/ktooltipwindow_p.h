@@ -21,7 +21,7 @@
 #define KTOOLTIPWINDOW_H
 
 #include <QWidget>
-class QPaintEvent;
+#include <QPaintEvent>
 
 class KToolTipWindow : public QWidget
 {

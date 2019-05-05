@@ -29,8 +29,8 @@
 #include <QColor>
 #include <QFont>
 
-class QAction;
-class QTimer;
+#include <QAction>
+#include <QTimer>
 
 /*
  * KdmLabel. A label element

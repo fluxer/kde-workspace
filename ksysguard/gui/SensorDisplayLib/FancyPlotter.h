@@ -29,7 +29,7 @@
 #include "SharedSettings.h"
 
 class FancyPlotterSettings;
-class QLabel;
+#include <QLabel>
 class SensorToAdd;
 class FancyPlotterLabel;
 class KSignalPlotter;

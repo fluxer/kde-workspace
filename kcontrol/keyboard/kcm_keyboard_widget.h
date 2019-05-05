@@ -25,13 +25,13 @@
 #include <kcomponentdata.h>
 #include <QtGui/QTabWidget>
 
-class QWidget;
+#include <QWidget>
 class KeyboardConfig;
 class Rules;
 class Flags;
 class KComponentData;
-class QString;
-class QPushButton;
+#include <QString>
+#include <QPushButton>
 class LayoutsTableModel;
 class KCMiscKeyboardWidget;
 class KeyboardLayoutActionCollection;

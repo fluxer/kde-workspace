@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <QApplication>
 
-class QTimerEvent;
+#include <QTimerEvent>
 
 class GreeterApp : public QApplication {
     Q_OBJECT

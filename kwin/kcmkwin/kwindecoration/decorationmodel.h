@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KConfig>
 #include <kdecoration.h>
 
-class QWidget;
+#include <QWidget>
 class KDesktopFile;
 class KDecorationPlugins;
 class KDecorationPreview;

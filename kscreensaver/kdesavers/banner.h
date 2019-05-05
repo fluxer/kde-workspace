@@ -16,7 +16,7 @@
 #define SATURATION 150
 #define VALUE 255
 
-class QLineEdit;
+#include <QLineEdit>
 class KColorButton;
 class KRandomSequence;
 

@@ -24,7 +24,7 @@
 
 #include <SensorDisplay.h>
 
-class QLCDNumber;
+#include <QLCDNumber>
 
 class MultiMeter : public KSGRD::SensorDisplay
 {

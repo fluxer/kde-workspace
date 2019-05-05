@@ -28,12 +28,12 @@
 #include "krunnerdialog.h"
 #include "resultitem.h"
 
-class QGraphicsView;
-class QGraphicsItem;
-class QLabel;
-class QToolButton;
-class QHBoxLayout;
-class QVBoxLayout;
+#include <QGraphicsView>
+#include <QGraphicsItem>
+#include <QLabel>
+#include <QToolButton>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 class KCompletion;
 class KrunnerHistoryComboBox;

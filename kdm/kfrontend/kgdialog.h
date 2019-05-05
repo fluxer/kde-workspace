@@ -35,7 +35,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class KConsole;
 class KGVerify;
 
-class QMenu;
+#include <QMenu>
 
 #define ex_exit    1
 #define ex_greet   2

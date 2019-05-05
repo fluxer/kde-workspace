@@ -29,7 +29,7 @@
 namespace Cagibi {
 class Device;
 }
-class QString;
+#include <QString>
 
 
 namespace Mollet

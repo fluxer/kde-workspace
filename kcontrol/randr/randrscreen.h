@@ -25,8 +25,8 @@
 #include <QObject>
 #include <QMap>
 
-class QSize;
-class QAction;
+#include <QSize>
+#include <QAction>
 class KConfig;
 
 class RandRScreen : public QObject

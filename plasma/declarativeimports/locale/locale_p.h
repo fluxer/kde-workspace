@@ -28,10 +28,10 @@
 //KDE
 #include <KLocale>
 
-class QString;
-class QDate;
-class QTime;
-class QDateTime;
+#include <QString>
+#include <QDate>
+#include <QTime>
+#include <QDateTime>
 
 /**
  * \file klocale.h

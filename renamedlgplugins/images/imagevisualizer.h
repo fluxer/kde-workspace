@@ -26,8 +26,8 @@
 #include <QLabel>
 #include <kvbox.h>
 
-class QPixmap;
-class QLabel;
+#include <QPixmap>
+#include <QLabel>
 class KUrl;
 
 class ImageVisualizer : public KVBox

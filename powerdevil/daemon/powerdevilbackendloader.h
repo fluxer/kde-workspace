@@ -20,7 +20,7 @@
 #ifndef POWERDEVIL_BACKENDLOADER_H
 #define POWERDEVIL_BACKENDLOADER_H
 
-class QObject;
+#include <QObject>
 namespace PowerDevil {
 
 class BackendInterface;

@@ -27,8 +27,8 @@
 
 #include "ui_colorsettings.h"
 
-class QStackedWidget;
-class QListWidgetItem;
+#include <QStackedWidget>
+#include <QListWidgetItem>
 
 /**
  * The Desktop/Colors tab in kcontrol.

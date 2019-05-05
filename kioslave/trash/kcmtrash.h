@@ -22,12 +22,12 @@
 
 #include <kcmodule.h>
 
-class QCheckBox;
-class QComboBox;
-class QDoubleSpinBox;
-class QFrame;
-class QLabel;
-class QListWidgetItem;
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDoubleSpinBox>
+#include <QFrame>
+#include <QLabel>
+#include <QListWidgetItem>
 class KIntSpinBox;
 class TrashImpl;
 

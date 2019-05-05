@@ -30,7 +30,7 @@
 
 #include <QGraphicsView>
 
-class QMenu;
+#include <QMenu>
 class Shadows;
 
 namespace Plasma

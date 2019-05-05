@@ -31,7 +31,7 @@ class ActionConfig;
 }
 
 class ErrorOverlay;
-class QCheckBox;
+#include <QCheckBox>
 class KToolBar;
 
 class EditPage : public KCModule, private Ui_profileEditPage

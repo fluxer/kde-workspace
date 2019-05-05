@@ -39,7 +39,7 @@
 #include <QtGui/QImage>
 
 class KArchiveDirectory;
-class QEventLoop;
+#include <QEventLoop>
 
 class ComicCreator : public QObject, public ThumbCreator
 {

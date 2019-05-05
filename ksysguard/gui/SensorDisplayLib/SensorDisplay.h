@@ -30,8 +30,8 @@
 #include <ksgrd/SensorClient.h>
 #include "SharedSettings.h"
 
-class QDomDocument;
-class QDomElement;
+#include <QDomDocument>
+#include <QDomElement>
 
 namespace KSGRD {
 

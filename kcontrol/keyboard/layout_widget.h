@@ -26,7 +26,7 @@
 #include "flags.h"
 #include "x11_helper.h"
 
-class QPushButton;
+#include <QPushButton>
 class KeyboardConfig;
 class LayoutsMenu;
 

@@ -3,8 +3,8 @@
 #include <QtCore/qnamespace.h>
 
 class KGraphicsSignalPlotter;
-class QGraphicsView;
-class QGraphicsScene;
+#include <QGraphicsView>
+#include <QGraphicsScene>
 class BenchmarkGraphicsSignalPlotter : public QObject
 {
     Q_OBJECT

@@ -34,10 +34,10 @@
 #include "FontPreview.h"
 #include "Family.h"
 
-class QPushButton;
-class QLabel;
-class QProcess;
-class QAction;
+#include <QPushButton>
+#include <QLabel>
+#include <QProcess>
+#include <QAction>
 class KAction;
 class KIntNumInput;
 class KTempDir;

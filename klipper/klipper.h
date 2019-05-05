@@ -34,11 +34,11 @@ class KToggleAction;
 class KAboutData;
 class KActionCollection;
 class URLGrabber;
-class QTime;
+#include <QTime>
 class History;
-class QAction;
-class QMenu;
-class QMimeData;
+#include <QAction>
+#include <QMenu>
+#include <QMimeData>
 class HistoryItem;
 class KlipperSessionManager;
 

@@ -25,9 +25,9 @@
 // KDE
 #include <KService>
 
-class QStandardItem;
+#include <QStandardItem>
 class KUrl;
-class QModelIndex;
+#include <QModelIndex>
 
 namespace Solid
 {

@@ -21,7 +21,7 @@
 
 #include <Plasma/AbstractRunner>
 
-class QWidget;
+#include <QWidget>
 
 
 /**

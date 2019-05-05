@@ -23,7 +23,7 @@
 
 #include "sm_export.h"
 
-class QGraphicsLinearLayout;
+#include <QGraphicsLinearLayout>
 
 namespace Plasma {
     class Meter;

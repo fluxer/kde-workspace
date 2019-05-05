@@ -26,7 +26,7 @@
 
 #include <Plasma/DataEngine>
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

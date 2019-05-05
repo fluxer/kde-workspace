@@ -29,9 +29,9 @@
 
 #include "enums.h"
 
-class QGraphicsObject;
-class QGraphicsView;
-class QGraphicsScene;
+#include <QGraphicsObject>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 class DeclarativeItemContainer;
 class Background;
 

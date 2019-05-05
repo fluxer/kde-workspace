@@ -27,9 +27,9 @@ namespace Plasma {
     class FrameSvg;
 }
 
-class QGraphicsView;
-class QGraphicsWidget;
-class QGraphicsScene;
+#include <QGraphicsView>
+#include <QGraphicsWidget>
+#include <QGraphicsScene>
 
 
 class Dialog : public QWidget

@@ -24,8 +24,8 @@
 #include <QWidget>
 #include <QProcess>
 
-class QMouseEvent;
-class QTimer;
+#include <QMouseEvent>
+#include <QTimer>
 
 namespace ScreenLocker
 {

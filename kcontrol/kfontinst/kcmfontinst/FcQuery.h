@@ -28,7 +28,7 @@
 #include <QtCore/QByteArray>
 #include "Misc.h"
 
-class QProcess;
+#include <QProcess>
 
 namespace KFI
 {

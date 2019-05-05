@@ -27,7 +27,7 @@
 #include <strigi/streamthroughanalyzer.h>
 
 class FontThroughAnalyzerFactory;
-class QString;
+#include <QString>
 
 class FontThroughAnalyzer : public Strigi::StreamThroughAnalyzer
 {

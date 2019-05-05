@@ -23,7 +23,7 @@
 
 #include <QtCore/qsharedpointer.h>
 
-class QDBusPendingCallWatcher;
+#include <QDBusPendingCallWatcher>
 class PlayerContainer;
 class Multiplexer;
 

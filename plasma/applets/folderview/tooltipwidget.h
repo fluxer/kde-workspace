@@ -30,7 +30,7 @@ namespace KIO {
     class PreviewJob;
 }
 
-class QModelIndex;
+#include <QModelIndex>
 class AbstractItemView;
 
 /**

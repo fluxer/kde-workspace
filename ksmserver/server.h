@@ -60,7 +60,7 @@ class KSMConnection;
 class KSMClient;
 
 class OrgKdeKLauncherInterface;
-class QDBusInterface;
+#include <QDBusInterface>
 
 enum SMType { SM_ERROR, SM_WMCOMMAND, SM_WMSAVEYOURSELF };
 struct SMData

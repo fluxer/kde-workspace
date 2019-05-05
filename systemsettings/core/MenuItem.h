@@ -26,9 +26,9 @@
 
 #include <KService>
 
-class QString;
+#include <QString>
 class KCModuleInfo;
-template<typename T> class QList;
+#include <QList>
 
 /**
  * @brief Provides a specific item in the list of modules or categories

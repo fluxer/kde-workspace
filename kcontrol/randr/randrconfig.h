@@ -26,7 +26,7 @@
 #include <QWidget>
 #include <QTimer>
 
-class QGraphicsScene;
+#include <QGraphicsScene>
 class SettingsContainer;
 class CollapsibleWidget;
 class RandRDisplay;

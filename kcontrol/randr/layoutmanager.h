@@ -23,7 +23,7 @@
 #include "randr.h"
 
 class RandRScreen;
-class QGraphicsScene;
+#include <QGraphicsScene>
 class OutputGraphicsItem;
 
 class LayoutManager : public QObject

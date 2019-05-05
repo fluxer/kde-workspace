@@ -27,8 +27,8 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "chartWidget.h"
 
-class QWidget;
-class QPaintEvent;
+#include <QWidget>
+#include <QPaintEvent>
 
 class SwapMemoryChart : public Chart {
 public:

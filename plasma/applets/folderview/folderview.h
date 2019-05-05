@@ -50,7 +50,7 @@ class KFilePreviewGenerator;
 class KNewFileMenu;
 class KFileItemActions;
 class KJob;
-class QItemSelectionModel;
+#include <QItemSelectionModel>
 class FolderView;
 class ProxyModel;
 class IconView;

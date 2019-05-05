@@ -24,7 +24,7 @@
 #include <QTimer>
 #include <QtCore/qsharedpointer.h>
 
-class QPropertyAnimation;
+#include <QPropertyAnimation>
 
 namespace Plasma
 {

@@ -28,7 +28,7 @@
 #include <QtCore/QObject>
 #include <kdemacros.h>
 
-class QModelIndex;
+#include <QModelIndex>
 
 #define KSYSGUARD_EXPORT KDE_EXPORT
 

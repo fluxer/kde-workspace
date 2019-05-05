@@ -27,8 +27,8 @@
 #include <QDBusContext>
 
 
-class QDBusAbstractInterface;
-class QDBusServiceWatcher;
+#include <QDBusAbstractInterface>
+#include <QDBusServiceWatcher>
 
 class ProgressListModel: public QAbstractItemModel, protected QDBusContext
 {

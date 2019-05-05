@@ -26,7 +26,7 @@
 #include "outputs.h"
 
 
-class QTimer;
+#include <QTimer>
 namespace Kephal {
 
     /**

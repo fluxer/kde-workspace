@@ -25,8 +25,8 @@
 #include "ui_configwidget.h"
 #include <QList>
 #include <KDialog>
-class QTimer;
-class QLabel;
+#include <QTimer>
+#include <QLabel>
 namespace KParts { class ReadOnlyPart; }
 
 class ConfigWidget : public QWidget, public Ui::ConfigWidget

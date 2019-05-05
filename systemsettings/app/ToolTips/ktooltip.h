@@ -20,9 +20,9 @@
 #ifndef KTOOLTIP_H
 #define KTOOLTIP_H
 
-class QPoint;
-class QString;
-class QWidget;
+#include <QPoint>
+#include <QString>
+#include <QWidget>
 
 /**
  * Allows to show tooltips having a widget as content.

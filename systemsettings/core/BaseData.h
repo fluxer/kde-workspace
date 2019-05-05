@@ -23,7 +23,7 @@
 #include <QtCore/QObject>
 #include "systemsettingsview_export.h"
 
-class QString;
+#include <QString>
 class MenuItem;
 class KConfigGroup;
 

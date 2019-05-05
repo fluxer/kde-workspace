@@ -30,7 +30,7 @@
 
 #include <Plasma/Dialog>
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

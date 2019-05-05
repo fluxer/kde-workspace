@@ -17,8 +17,8 @@
 #ifndef DRKONQI_H
 #define DRKONQI_H
 
-class QString;
-class QWidget;
+#include <QString>
+#include <QWidget>
 
 class SystemInformation;
 class DebuggerManager;

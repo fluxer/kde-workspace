@@ -23,12 +23,12 @@
 
 #include <QWidget>
 
-class QListWidget;
-class QListWidgetItem;
+#include <QListWidget>
+#include <QListWidgetItem>
 class KComboBox;
-class QCheckBox;
-class QGroupBox;
-class QRadioButton;
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QRadioButton>
 
 class KDMConvenienceWidget : public QWidget {
     Q_OBJECT

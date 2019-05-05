@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtCore/qsharedpointer.h>
 
 class KKeySequenceWidget;
-class QAction;
-class QLabel;
-class QMenu;
-class QRect;
+#include <QAction>
+#include <QLabel>
+#include <QMenu>
+#include <QRect>
 
 namespace KWin
 {

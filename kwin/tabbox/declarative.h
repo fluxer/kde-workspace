@@ -26,8 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tabboxconfig.h"
 
 // forward declaration
-class QAbstractItemModel;
-class QModelIndex;
+#include <QAbstractItemModel>
+#include <QModelIndex>
 class QPos;
 
 namespace Plasma

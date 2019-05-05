@@ -32,8 +32,8 @@
 
 #include <kdemacros.h>
 
-class QDBusServiceWatcher;
-class QDBusInterface;
+#include <QDBusServiceWatcher>
+#include <QDBusInterface>
 
 #define SYSTEMD_LOGIN1_SERVICE "org.freedesktop.login1"
 #define SYSTEMD_LOGIN1_PATH "/org/freedesktop/login1"

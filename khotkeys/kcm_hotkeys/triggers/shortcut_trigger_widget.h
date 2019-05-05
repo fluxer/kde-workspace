@@ -22,7 +22,7 @@
 #include "trigger_widget_base.h"
 #include "ui_shortcut_trigger_widget.h"
 
-class QKeySequence;
+#include <QKeySequence>
 
 /**
  * @author Michael Jansen <kde@michael-jansen.biz>

@@ -35,7 +35,7 @@ class KConfig;
 class KCardDB;
 class KMenu;
 class K3ListViewItem;
-class QStringList;
+#include <QStringList>
 
 class KSmartcardConfig : public KCModule, public DCOPObject
 {

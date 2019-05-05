@@ -24,7 +24,7 @@
 
 #include "player.h"
 
-class QDBusConnectionInterface;
+#include <QDBusConnectionInterface>
 class DBusPlayerFactory;
 
 class DBusWatcher : public QObject

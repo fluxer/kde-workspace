@@ -29,8 +29,8 @@
 #include <X11/Xlib.h>
 
 
-class QWidget;
-class QPixmap;
+#include <QWidget>
+#include <QPixmap>
 class BlendingThread;
 
 

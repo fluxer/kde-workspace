@@ -23,9 +23,9 @@
 #include <QLabel>
 
 class KPushButton;
-class QStringList;
-class QTreeWidget;
-class QTreeWidgetItem;
+#include <QStringList>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 class IconThemesConfig : public KCModule

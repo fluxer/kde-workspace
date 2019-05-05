@@ -26,9 +26,9 @@
 #include <QCache>
 
 #ifndef QT_KATIE
-class QStyleOptionViewItemV4;
+#include <QStyleOptionViewItemV4>
 #else
-class QStyleOptionViewItem;
+#include <QStyleOptionViewItem>
 #endif
 class Animator;
 

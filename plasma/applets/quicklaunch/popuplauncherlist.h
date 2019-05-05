@@ -35,14 +35,14 @@
 // Own
 #include "launcherdata.h"
 
-class QAction;
-class QEvent;
-class QGraphicsItem;
-class QGraphicsLayout;
-class QGraphicsLinearLayout;
-class QGraphicsSceneResizeEvent;
-class QGraphicsSceneDragDropEvent;
-class QGraphicsSceneMouseEvent;
+#include <QAction>
+#include <QEvent>
+#include <QGraphicsItem>
+#include <QGraphicsLayout>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsSceneResizeEvent>
+#include <QGraphicsSceneDragDropEvent>
+#include <QGraphicsSceneMouseEvent>
 
 namespace Plasma {
     class IconWidget;

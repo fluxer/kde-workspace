@@ -29,13 +29,13 @@
 #include "SensorModel.h"
 
 class KColorButton;
-class QDoubleSpinBox;
+#include <QDoubleSpinBox>
 class KIntNumInput;
 class KLineEdit;
 
-class QCheckBox;
-class QPushButton;
-class QTreeView;
+#include <QCheckBox>
+#include <QPushButton>
+#include <QTreeView>
 
 class DancingBarsSettings : public KPageDialog
 {

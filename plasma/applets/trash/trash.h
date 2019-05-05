@@ -30,7 +30,7 @@
 
 #include <Plasma/Applet>
 
-class QAction;
+#include <QAction>
 
 class KCModuleProxy;
 class KDialog;

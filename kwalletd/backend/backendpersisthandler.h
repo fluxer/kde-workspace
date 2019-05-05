@@ -23,7 +23,7 @@
 
 #include <qwindowdefs.h>
 
-class QFile;
+#include <QFile>
 class KSaveFile;
 namespace KWallet {
 

@@ -25,7 +25,7 @@
 #include "debugpackageinstaller.h"
 #include "ui_backtracewidget.h"
 
-class QSyntaxHighlighter;
+#include <QSyntaxHighlighter>
 class BacktraceRatingWidget;
 class BacktraceGenerator;
 

@@ -22,7 +22,7 @@
 
 #include <kcmodule.h>
 
-class QTabWidget;
+#include <QTabWidget>
 
 class KCMDisplay : public KCModule
 {

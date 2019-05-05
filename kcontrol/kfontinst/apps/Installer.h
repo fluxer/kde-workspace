@@ -27,7 +27,7 @@
 #include <QtCore/QSet>
 #include <KUrl>
 
-class QWidget;
+#include <QWidget>
 class KTempDir;
 
 namespace KFI

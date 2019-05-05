@@ -25,8 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // forward declaration
 struct addrinfo;
-template <typename T>
-class QFutureWatcher;
+#include <QFutureWatcher>
 
 namespace KWin {
 

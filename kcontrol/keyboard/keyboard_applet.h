@@ -27,10 +27,10 @@
 #include "x11_helper.h"
 #include "flags.h"
 
-class QGraphicsSceneMouseEvent;
-class QAction;
+#include <QGraphicsSceneMouseEvent>
+#include <QAction>
 class KConfigDialog;
-class QActionGroup;
+#include <QActionGroup>
 class Rules;
 class KeyboardConfig;
 class LayoutsMenu;

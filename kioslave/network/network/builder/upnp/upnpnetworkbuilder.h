@@ -33,8 +33,8 @@
 
 namespace Cagibi { class Device; }
 
-class QDBusInterface;
-class QDBusPendingCallWatcher;
+#include <QDBusInterface>
+#include <QDBusPendingCallWatcher>
 
 typedef QHash<QString,QString> DeviceTypeMap;
 Q_DECLARE_METATYPE( DeviceTypeMap )

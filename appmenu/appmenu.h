@@ -30,7 +30,7 @@
 #include "menuimporter.h"
 #include "gtkicons.h"
 
-class QDBusPendingCallWatcher;
+#include <QDBusPendingCallWatcher>
 class KDBusMenuImporter;
 class AppmenuDBus;
 class TopMenuBar;

@@ -34,8 +34,8 @@ class KdmClock;
 class KdmItem;
 
 class KConfigGroup;
-class QListWidgetItem;
-class QActionGroup;
+#include <QListWidgetItem>
+#include <QActionGroup>
 
 struct SessType {
     QString name, type;

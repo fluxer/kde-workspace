@@ -37,10 +37,10 @@
 #include "abstractjsappletscript.h"
 #include "../declarative/toolboxproxy.h"
 
-class QAction;
+#include <QAction>
 class QmlAppletScript;
-class QSignalMapper;
-class QSizeF;
+#include <QSignalMapper>
+#include <QSizeF>
 
 
 namespace Plasma

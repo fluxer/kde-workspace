@@ -25,7 +25,7 @@
 
 #include <kservice.h>
 
-class QListWidgetItem;
+#include <QListWidgetItem>
 class KConfig;
 
 /* The CfgPlugin  class is an exception. It is LGPL. It will be parted of the plugin interface

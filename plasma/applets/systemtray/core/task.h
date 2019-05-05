@@ -26,7 +26,7 @@
 
 #include <QtGui/QIcon>
 
-class QGraphicsWidget;
+#include <QGraphicsWidget>
 
 namespace Plasma
 {

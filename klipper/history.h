@@ -26,7 +26,7 @@
 
 #include "historyitem.h"
 
-class QAction;
+#include <QAction>
 class KlipperPopup;
 
 class History : public QObject

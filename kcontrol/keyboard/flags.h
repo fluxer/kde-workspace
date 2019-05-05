@@ -24,12 +24,12 @@
 #include <QtCore/QString>
 #include <QtCore/QMap>
 
-class QPixmap;
-class QIcon;
+#include <QPixmap>
+#include <QIcon>
 class LayoutUnit;
 class KeyboardConfig;
 class Rules;
-class QPainter;
+#include <QPainter>
 namespace Plasma {
 	class Svg;
 }

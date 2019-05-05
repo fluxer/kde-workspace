@@ -23,7 +23,7 @@
 
 #include <QWidget>
 #include <QList>
-class QPaintEvent;
+#include <QPaintEvent>
 
 /**
   Widget to display the joystick-selected (x,y) position

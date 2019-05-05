@@ -28,12 +28,12 @@
 #include <SensorDisplay.h>
 #include "SharedSettings.h"
 
-class QDomElement;
-class QDragEnterEvent;
-class QDropEvent;
-class QGridLayout;
-class QString;
-class QStringList;
+#include <QDomElement>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QGridLayout>
+#include <QString>
+#include <QStringList>
 
 /**
   A WorkSheet contains the displays to visualize the sensor results. When

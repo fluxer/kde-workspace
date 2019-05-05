@@ -27,10 +27,10 @@
 #include <QtGui/QFrame>
 #include "FcEngine.h"
 
-class QLabel;
-class QTimer;
-class QResizeEvent;
-class QEvent;
+#include <QLabel>
+#include <QTimer>
+#include <QResizeEvent>
+#include <QEvent>
 
 namespace KFI
 {

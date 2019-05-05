@@ -29,7 +29,7 @@
 
 #include <kuiserversettings.h>
 
-class QDBusAbstractInterface;
+#include <QDBusAbstractInterface>
 class RequestViewCallWatcher;
 
 class JobView : public QObject

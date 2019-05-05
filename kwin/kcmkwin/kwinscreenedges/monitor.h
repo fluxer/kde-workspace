@@ -28,10 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <qgraphicsitem.h>
 #include <qvector.h>
 
-class QAction;
-class QGraphicsView;
-class QGraphicsScene;
-class QMenu;
+#include <QAction>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QMenu>
 
 namespace Plasma
 {

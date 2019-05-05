@@ -23,7 +23,7 @@
 #include <QHash>
 #include <QPushButton>
 
-class QEvent;
+#include <QEvent>
 
 class MouseInputButton : public QPushButton
 {

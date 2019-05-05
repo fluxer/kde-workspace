@@ -27,7 +27,7 @@
 #include <Plasma/Containment>
 #include <Plasma/AbstractToolBox>
 
-class QAction;
+#include <QAction>
 
 class KConfigGroup;
 

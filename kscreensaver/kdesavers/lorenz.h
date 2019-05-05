@@ -50,7 +50,7 @@ private:
     Matrix3D *mat;
 };
 
-class QSlider;
+#include <QSlider>
 
 class KLorenzSetup : public KDialog
 {

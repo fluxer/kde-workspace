@@ -30,7 +30,7 @@
 #include <KBookmark>
 #include <KUrl>
 
-class QMimeData;
+#include <QMimeData>
 class KBookmarkGroup;
 
 namespace Quicklaunch {

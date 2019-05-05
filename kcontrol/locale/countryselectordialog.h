@@ -16,7 +16,7 @@ class CSDListView;
 
 class KControlLocale;
 
-class QModelIndex;
+#include <QModelIndex>
 
 class CountrySelectorDialog : public KDialog
 {

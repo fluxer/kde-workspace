@@ -29,7 +29,7 @@
 #include "model.h"
 #include "ui_pagerConfig.h"
 
-class QDesktopWidget;
+#include <QDesktopWidget>
 
 class KColorScheme;
 class KWindowInfo;

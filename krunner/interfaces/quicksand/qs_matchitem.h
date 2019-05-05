@@ -23,8 +23,8 @@
 #include <QGraphicsWidget>
 #include <QIcon>
 
-class QGraphicsItemAnimation;
-class QGraphicsSceneMouseEvent;
+#include <QGraphicsItemAnimation>
+#include <QGraphicsSceneMouseEvent>
 
 namespace QuickSand
 {

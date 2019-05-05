@@ -25,8 +25,8 @@
 #include <QtCore/qsharedpointer.h>
 #include <QtCore/QVariant>
 
-class QGraphicsObject;
-class QGraphicsWidget;
+#include <QGraphicsObject>
+#include <QGraphicsWidget>
 class DeclarativeItemContainer;
 
 /**

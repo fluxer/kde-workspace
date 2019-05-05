@@ -24,8 +24,8 @@
 
 #include "ui_conditions_widget.h"
 
-class QAction;
-class QTreeWidgetItem;
+#include <QAction>
+#include <QTreeWidgetItem>
 
 namespace KHotKeys {
     class Condition_list;

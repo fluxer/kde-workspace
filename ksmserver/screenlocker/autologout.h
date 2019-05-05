@@ -19,10 +19,10 @@ class LockWindow;
 }
 
 class LockProcess;
-class QGridLayout;
-class QLabel;
-class QDialog;
-class QProgressBar;
+#include <QGridLayout>
+#include <QLabel>
+#include <QDialog>
+#include <QProgressBar>
 
 class AutoLogout : public QDialog
 {

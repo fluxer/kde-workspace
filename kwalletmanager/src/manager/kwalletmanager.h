@@ -25,7 +25,7 @@
 
 class KWalletManagerWidget;
 class KStatusNotifierItem;
-class QListWidgetItem;
+#include <QListWidgetItem>
 class OrgKdeKWalletInterface;
 
 class KWalletManager : public KXmlGuiWindow {

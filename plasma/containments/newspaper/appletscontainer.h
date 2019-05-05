@@ -37,9 +37,9 @@ namespace Plasma
     class FrameSvg;
 }
 
-class QGraphicsLinearLayout;
-class QPropertyAnimation;
-class QTimer;
+#include <QGraphicsLinearLayout>
+#include <QPropertyAnimation>
+#include <QTimer>
 
 class AppletsView;
 

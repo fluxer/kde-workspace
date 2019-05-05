@@ -31,7 +31,7 @@ class PlayerSettingsDialog;
 namespace Ui{
 class PlayerSettingsUI;
 }
-class QPushButton;
+#include <QPushButton>
 class KNotifyConfigWidget;
 
 

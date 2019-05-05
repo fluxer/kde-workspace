@@ -32,7 +32,7 @@
 namespace Plasma {
 }
 
-class QGraphicsLinearLayout;
+#include <QGraphicsLinearLayout>
 
 class Hdd_Activity : public SM::Applet
 {

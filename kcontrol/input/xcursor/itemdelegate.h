@@ -22,7 +22,7 @@
 
 #include <QAbstractItemDelegate>
 
-class QPainter;
+#include <QPainter>
 
 class ItemDelegate : public QAbstractItemDelegate
 {

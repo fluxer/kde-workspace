@@ -54,7 +54,7 @@
 
 #endif
 
-class QString;
+#include <QString>
 
 namespace KFI
 {

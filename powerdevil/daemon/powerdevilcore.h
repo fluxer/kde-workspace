@@ -31,7 +31,7 @@
 typedef QMap< QString, QString > StringStringMap;
 
 class KDirWatch;
-class QTimer;
+#include <QTimer>
 class KNotification;
 namespace Solid {
 class Battery;

@@ -37,8 +37,8 @@ namespace Plasma
 #include <KParts/Part>
 
 #include <QtCore/QHash>
-class QVariant;
-class QVBoxLayout;
+#include <QVariant>
+#include <QVBoxLayout>
 
 class PlasmaKPart : public KParts::ReadOnlyPart
 {

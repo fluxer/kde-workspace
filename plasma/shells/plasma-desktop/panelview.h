@@ -33,9 +33,9 @@
 #endif
 
 
-class QWidget;
-class QTimeLine;
-class QTimer;
+#include <QWidget>
+#include <QTimeLine>
+#include <QTimer>
 
 class GlowBar;
 

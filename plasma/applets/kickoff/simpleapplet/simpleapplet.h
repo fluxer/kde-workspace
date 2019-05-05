@@ -24,7 +24,7 @@
 // Plasma
 #include <Plasma/Applet>
 
-class QAction;
+#include <QAction>
 
 /**
 * The MenuLauncherApplet class implements an applet that provides the traditional

@@ -32,7 +32,7 @@
 #include <qdeclarative.h>
 
 
-class QDeclarativePropertyMap;
+#include <QDeclarativePropertyMap>
 
 
 namespace Plasma

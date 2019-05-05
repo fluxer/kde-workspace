@@ -28,11 +28,11 @@
 #include <KDialog>
 #include "FontInstInterface.h"
 
-class QLabel;
-class QProgressBar;
-class QStackedWidget;
-class QCloseEvent;
-class QCheckBox;
+#include <QLabel>
+#include <QProgressBar>
+#include <QStackedWidget>
+#include <QCloseEvent>
+#include <QCheckBox>
 class KJob;
 class KTempDir;
 

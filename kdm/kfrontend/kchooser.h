@@ -30,9 +30,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class ChooserListViewItem;
 
-class QLineEdit;
-class QSocketNotifier;
-class QTreeWidget;
+#include <QLineEdit>
+#include <QSocketNotifier>
+#include <QTreeWidget>
 
 class ChooserDlg : public KGDialog {
     Q_OBJECT

@@ -32,15 +32,15 @@ namespace Plasma {
     class BusyWidget;
 }
 
-class QGraphicsView;
-class QGraphicsScene;
+#include <QGraphicsView>
+#include <QGraphicsScene>
 class KDirModel;
 class KFileItemDelegate;
 class KFilePreviewGenerator;
 class KNewFileMenu;
 class KFileItemActions;
-class QItemSelectionModel;
-class QModelIndex;
+#include <QItemSelectionModel>
+#include <QModelIndex>
 class ProxyModel;
 class IconView;
 

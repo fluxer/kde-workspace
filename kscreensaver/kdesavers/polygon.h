@@ -16,7 +16,7 @@
 #include <kscreensaver.h>
 #include <krandomsequence.h>
 
-class QPolygon;
+#include <QPolygon>
 
 class kPolygonSaver : public KScreenSaver
 {

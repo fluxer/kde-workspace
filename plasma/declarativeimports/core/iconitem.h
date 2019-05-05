@@ -24,7 +24,7 @@
 #include <QPixmap>
 #include <QVariant>
 
-class QPropertyAnimation;
+#include <QPropertyAnimation>
 
 namespace Plasma {
     class Svg;

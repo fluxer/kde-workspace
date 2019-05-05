@@ -19,7 +19,7 @@
 
 #include <QtCore/QPointer>
 
-class QObject;
+#include <QObject>
 
 namespace KHotKeys
 {

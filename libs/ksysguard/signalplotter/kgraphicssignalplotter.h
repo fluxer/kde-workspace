@@ -31,9 +31,9 @@
 #include <kcomponentdata.h>
 #include <kdemacros.h>
 
-class QPaintEvent;
-class QResizeEvent;
-class QGraphicsSceneResizeEvent;
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QGraphicsSceneResizeEvent>
 class KGraphicsSignalPlotterPrivate;
 
 //Make sure only declare KLocalizedString once

@@ -32,8 +32,8 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "base.h"
 
-class QGroupBox;
-class QPushButton;
+#include <QGroupBox>
+#include <QPushButton>
 class ChartWidget;
 
 class KCMMemory : public KCModule {

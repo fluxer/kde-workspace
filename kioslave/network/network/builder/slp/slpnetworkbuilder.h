@@ -31,7 +31,7 @@ class NetworkPrivate;
 class SlpServiceBrowser;
 class SLPService;
 }
-template <class T> class QList;
+#include <QList>
 
 
 namespace Mollet

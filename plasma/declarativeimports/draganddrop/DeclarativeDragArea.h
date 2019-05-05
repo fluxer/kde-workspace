@@ -26,7 +26,7 @@
 
 #include <QDeclarativeItem>
 
-class QDeclarativeComponent;
+#include <QDeclarativeComponent>
 class DeclarativeMimeData;
 
 class DeclarativeDragArea : public QDeclarativeItem

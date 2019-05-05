@@ -21,7 +21,7 @@
 #define ADVANCEDDIALOG_H
 
 #include <KDialog>
-class QCheckBox;
+#include <QCheckBox>
 
 class AdvancedDialog : public KDialog
 {

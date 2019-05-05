@@ -22,7 +22,7 @@
 
 #include <plasma/containmentactions.h>
 
-class QAction;
+#include <QAction>
 class KMenu;
 
 class AppLauncher : public Plasma::ContainmentActions

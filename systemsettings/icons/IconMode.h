@@ -24,8 +24,8 @@
 
 class ModuleView;
 class KAboutData;
-class QModelIndex;
-class QAbstractItemView;
+#include <QModelIndex>
+#include <QAbstractItemView>
 
 class IconMode : public BaseMode
 {

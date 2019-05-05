@@ -27,8 +27,8 @@
 #include <KConfigGroup>
 #include <KLocale>
 
-class QListWidgetItem;
-class QCheckBox;
+#include <QListWidgetItem>
+#include <QCheckBox>
 class KPushButton;
 class KComboBox;
 class KIntNumInput;

@@ -29,7 +29,7 @@ namespace Plasma
     class QueryMatch;
 } // namespace Plasma
 
-class QTimer;
+#include <QTimer>
 
 /**
  * This model provides bindings to use KRunner from QML

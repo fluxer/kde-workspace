@@ -25,8 +25,8 @@
 #include <Plasma/View>
 #include <Plasma/WindowEffects>
 
-class QAction;
-class QToolButton;
+#include <QAction>
+#include <QToolButton>
 
 namespace Plasma
 {

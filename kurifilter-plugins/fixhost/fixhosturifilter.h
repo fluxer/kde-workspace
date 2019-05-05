@@ -23,8 +23,8 @@
 
 #include <KUriFilter>
 
-class QHostInfo;
-class QEventLoop;
+#include <QHostInfo>
+#include <QEventLoop>
 
 /*
  This filter tries to automatically prepend www. to http URLs that need it.

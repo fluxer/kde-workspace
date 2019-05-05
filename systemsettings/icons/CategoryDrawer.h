@@ -22,9 +22,9 @@
 
 #include <KCategoryDrawer>
 
-class QPainter;
-class QModelIndex;
-class QStyleOption;
+#include <QPainter>
+#include <QModelIndex>
+#include <QStyleOption>
 
 class CategoryDrawer : public KCategoryDrawer
 {

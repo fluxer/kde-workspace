@@ -31,17 +31,17 @@
 
 class WebViewOverlay;
 
-class QGraphicsLinearLayout;
-class QStandardItemModel;
-class QStandardItem;
-class QTimer;
+#include <QGraphicsLinearLayout>
+#include <QStandardItemModel>
+#include <QStandardItem>
+#include <QTimer>
 class KHistoryComboBox;
 class KUrl;
 class KCompletion;
 class KBookmarkManager;
 class KBookmarkGroup;
-class QModelIndex;
-class QAction;
+#include <QModelIndex>
+#include <QAction>
 class BookmarksDelegate;
 class BookmarkItem;
 

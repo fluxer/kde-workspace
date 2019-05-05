@@ -26,8 +26,8 @@
 #include <QtCore/QVariant>
 #include <qwindowdefs.h>
 
-class QGraphicsObject;
-class QGraphicsWidget;
+#include <QGraphicsObject>
+#include <QGraphicsWidget>
 class DeclarativeItemContainer;
 
 Q_DECLARE_METATYPE(WId);

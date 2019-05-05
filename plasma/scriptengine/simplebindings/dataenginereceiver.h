@@ -23,8 +23,8 @@
 
 #include <Plasma/DataEngine>
 
-class QScriptContext;
-class QScriptEngine;
+#include <QScriptContext>
+#include <QScriptEngine>
 
 class DataEngineReceiver : public QObject
 {

@@ -26,7 +26,7 @@
 
 #include "plasmagenericshell_export.h"
 
-class QPropertyAnimation;
+#include <QPropertyAnimation>
 
 namespace Plasma
 {

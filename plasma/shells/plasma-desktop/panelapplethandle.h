@@ -23,10 +23,10 @@
 #include <Plasma/Dialog>
 #include <Plasma/Svg>
 
-class QBoxLayout;
-class QPropertyAnimation;
-class QLabel;
-class QTimer;
+#include <QBoxLayout>
+#include <QPropertyAnimation>
+#include <QLabel>
+#include <QTimer>
 
 namespace Plasma
 {

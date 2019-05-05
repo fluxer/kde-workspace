@@ -22,8 +22,8 @@
 
 #include <QGraphicsWidget>
 
-class QString;
-class QPainter;
+#include <QString>
+#include <QPainter>
 
 class Label : public QGraphicsWidget
 {

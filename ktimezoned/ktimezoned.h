@@ -25,7 +25,7 @@
 
 #include <QString>
 #include <QByteArray>
-class QFile;
+#include <QFile>
 
 #include <kdedmodule.h>
 #include <kdirwatch.h>

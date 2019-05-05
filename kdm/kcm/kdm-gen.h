@@ -25,7 +25,7 @@
 class KBackedComboBox;
 class KFontRequester;
 class KLanguageButton;
-class QCheckBox;
+#include <QCheckBox>
 
 class KDMGeneralWidget : public QWidget {
     Q_OBJECT

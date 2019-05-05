@@ -27,7 +27,7 @@
 
 #include <QtDeclarative/qdeclarativelist.h>
 
-class QAction;
+#include <QAction>
 
 class ToolBoxProxyPrivate;
 class AppletInterface;

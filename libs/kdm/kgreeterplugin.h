@@ -28,7 +28,7 @@
 #include <QtGui/QMessageBox>
 #include <kdemacros.h>
 
-class QWidget;
+#include <QWidget>
 
 class KGreeterPluginHandler {
 public:

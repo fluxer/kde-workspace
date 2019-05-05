@@ -15,7 +15,7 @@
 #include <kshortcut.h>
 
 class Sound;
-class QTimer;
+#include <QTimer>
 class KAction;
 
 namespace KHotKeys

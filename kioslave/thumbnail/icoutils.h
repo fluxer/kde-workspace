@@ -19,10 +19,10 @@
 
 #include <QtGlobal>
 
-class QString;
-class QIODevice;
-class QImage;
-class QImageReader;
+#include <QString>
+#include <QIODevice>
+#include <QImage>
+#include <QImageReader>
 
 namespace IcoUtils
 {

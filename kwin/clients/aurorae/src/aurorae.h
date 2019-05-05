@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kdecoration.h>
 #include <kdecorationfactory.h>
 
-class QDeclarativeComponent;
-class QDeclarativeEngine;
-class QDeclarativeItem;
-class QGraphicsSceneMouseEvent;
-class QGraphicsScene;
-class QGraphicsView;
+#include <QDeclarativeComponent>
+#include <QDeclarativeEngine>
+#include <QDeclarativeItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
+#include <QGraphicsView>
 class KConfig;
 class KConfigGroup;
 

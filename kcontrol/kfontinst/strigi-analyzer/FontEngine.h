@@ -36,7 +36,7 @@
 #include <QtCore/QString>
 #include <strigi/streambase.h>
 
-class QByteArray;
+#include <QByteArray>
 
 namespace KFI
 {

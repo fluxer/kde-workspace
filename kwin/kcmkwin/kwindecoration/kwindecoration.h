@@ -38,7 +38,7 @@
 
 #include "ui_decoration.h"
 
-class QSortFilterProxyModel;
+#include <QSortFilterProxyModel>
 namespace KWin
 {
 

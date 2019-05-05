@@ -27,7 +27,7 @@
 #include "randr.h"
 #include "randrmode.h"
 
-class QAction;
+#include <QAction>
 class KConfig;
 	
 /** Class representing an RROutput identifier. This class is used

@@ -27,7 +27,7 @@
 #include <QStringList>
 #include <QSet>
 
-class QDBusServiceWatcher;
+#include <QDBusServiceWatcher>
 
 class StatusNotifierWatcher : public KDEDModule, protected QDBusContext
 {

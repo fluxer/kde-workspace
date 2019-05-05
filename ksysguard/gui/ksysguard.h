@@ -29,8 +29,8 @@
 
 #include <ksgrd/SensorClient.h>
 
-class QSplitter;
-class QAction;
+#include <QSplitter>
+#include <QAction>
 class KAction;
 class SensorBrowserWidget;
 class Workspace;

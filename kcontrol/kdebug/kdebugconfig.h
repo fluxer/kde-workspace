@@ -23,12 +23,12 @@
 
 #include "ui_kdebugconfig.h"
 
-class QLineEdit;
-class QComboBox;
-class QLabel;
-class QGroupBox;
-class QCheckBox;
-class QVBoxLayout;
+#include <QLineEdit>
+#include <QComboBox>
+#include <QLabel>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QVBoxLayout>
 
 class KConfig;
 class KPushButton;

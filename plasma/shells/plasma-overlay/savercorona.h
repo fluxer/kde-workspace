@@ -23,7 +23,7 @@
 
 #include <Plasma/Corona>
 
-class QDeclarativeEngine;
+#include <QDeclarativeEngine>
 
 /**
  * @short A Corona for the screensaver

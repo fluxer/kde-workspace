@@ -28,7 +28,7 @@
 
 #include <Plasma/Theme>
 
-class QDeclarativePropertyMap;
+#include <QDeclarativePropertyMap>
 
 class FontProxy : public QObject
 {

@@ -30,15 +30,15 @@
 #include "ui_focus.h"
 #include "ui_moving.h"
 
-class QRadioButton;
-class QCheckBox;
-class QPushButton;
+#include <QRadioButton>
+#include <QCheckBox>
+#include <QPushButton>
 class KComboBox;
-class QGroupBox;
-class QLabel;
-class QSlider;
+#include <QGroupBox>
+#include <QLabel>
+#include <QSlider>
 class KButtonGroup;
-// class QSpinBox;
+// #include <QSpinBox>
 
 class KColorButton;
 class KIntNumInput;

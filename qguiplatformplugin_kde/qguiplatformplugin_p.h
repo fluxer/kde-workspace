@@ -65,11 +65,11 @@ QT_BEGIN_NAMESPACE
 QT_MODULE(Gui)
 #endif
 
-class QPalette;
-class QIcon;
-class QFileDialog;
-class QColorDialog;
-class QFileInfo;
+#include <QPalette>
+#include <QIcon>
+#include <QFileDialog>
+#include <QColorDialog>
+#include <QFileInfo>
 
 struct Q_GUI_EXPORT QGuiPlatformPluginInterface  : public QFactoryInterface
 {

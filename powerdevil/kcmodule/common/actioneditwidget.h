@@ -32,7 +32,7 @@ namespace PowerDevil
 class ActionConfig;
 }
 
-class QCheckBox;
+#include <QCheckBox>
 class KConfigGroup;
 
 class KDE_EXPORT ActionEditWidget : public QWidget

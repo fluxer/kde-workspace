@@ -35,8 +35,8 @@
 #include <kdemacros.h>
 #include "KfiConstants.h"
 
-class QTextStream;
-class QByteArray;
+#include <QTextStream>
+#include <QByteArray>
 
 namespace KFI
 {

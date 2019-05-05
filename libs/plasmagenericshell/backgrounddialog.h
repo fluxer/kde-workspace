@@ -22,7 +22,7 @@ namespace Plasma {
     class Containment;
     class View;
 }
-class QStandardItemModel;
+#include <QStandardItemModel>
 class ScreenPreviewWidget;
 
 // WallpaperWidget is passed the wallpaper

@@ -26,7 +26,7 @@
 #include "backendconfigurations.h"
 #include "externalconfiguration.h"
 
-class QTimer;
+#include <QTimer>
 
 namespace Kephal {
 

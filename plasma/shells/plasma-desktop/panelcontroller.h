@@ -22,7 +22,7 @@
 
 #include "controllerwindow.h"
 
-class QLabel;
+#include <QLabel>
 
 namespace Plasma
 {

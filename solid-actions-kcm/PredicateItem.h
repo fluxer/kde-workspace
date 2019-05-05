@@ -22,8 +22,8 @@
 
 #include <Solid/Predicate>
 
-class QString;
-template<typename T> class QList;
+#include <QString>
+#include <QList>
 
 class PredicateItem
 {

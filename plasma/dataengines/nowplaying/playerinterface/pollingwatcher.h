@@ -24,7 +24,7 @@
 
 #include "player.h"
 
-class QTimer;
+#include <QTimer>
 
 class PollingPlayerFactory;
 

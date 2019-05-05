@@ -26,12 +26,12 @@
 #include <QList>
 #include <QWidget>
 
-class QTreeWidget;
-class QLabel;
-class QComboBox;
-class QCheckBox;
-class QLineEdit;
-class QPushButton;
+#include <QTreeWidget>
+#include <QLabel>
+#include <QComboBox>
+#include <QCheckBox>
+#include <QLineEdit>
+#include <QPushButton>
 
 class KConfig;
 

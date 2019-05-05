@@ -28,7 +28,7 @@
 #include <QtCore/QEventLoop>
 #include "Family.h"
 
-class QTimer;
+#include <QTimer>
 class OrgKdeFontinstInterface;
 
 namespace KFI

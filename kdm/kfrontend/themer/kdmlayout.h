@@ -27,8 +27,8 @@
 
 class KdmItem;
 
-class QDomNode;
-class QRect;
+#include <QDomNode>
+#include <QRect>
 
 class KdmLayout {
 

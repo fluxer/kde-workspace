@@ -27,9 +27,9 @@
 
 class KdmItem;
 
-class QDomNode;
-class QPainter;
-class QRect;
+#include <QDomNode>
+#include <QPainter>
+#include <QRect>
 
 /**
 * @author Unai Garro

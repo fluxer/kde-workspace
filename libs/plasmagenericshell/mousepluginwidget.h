@@ -29,8 +29,8 @@
 #include <plasma/containmentactions.h>
 #include "mouseinputbutton.h"
 
-class QComboBox;
-class QGridLayout;
+#include <QComboBox>
+#include <QGridLayout>
 
 class  MousePluginWidget : public QObject
 {

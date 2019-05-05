@@ -27,7 +27,7 @@
 #include <SensorDisplay.h>
 
 class ListViewSettings;
-class QTreeView;
+#include <QTreeView>
 
 class ListViewModel : public QStandardItemModel {
 public:

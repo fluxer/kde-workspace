@@ -22,9 +22,9 @@
 
 #include <QObject>
 
-class QDeclarativeItem;
-class QIcon;
-class QUrl;
+#include <QDeclarativeItem>
+#include <QIcon>
+#include <QUrl>
 
 class DragHelper : public QObject
 {

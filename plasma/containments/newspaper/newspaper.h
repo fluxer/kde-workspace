@@ -25,7 +25,7 @@
 #include <Plasma/Containment>
 
 class AppletOverlay;
-class QGraphicsLinearLayout;
+#include <QGraphicsLinearLayout>
 class AppletsContainer;
 class AppletsView;
 

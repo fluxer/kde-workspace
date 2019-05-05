@@ -38,11 +38,11 @@ class KTempDir;
 class KToggleAction;
 class KActionMenu;
 class KAction;
-class QLabel;
-class QMenu;
-class QProcess;
-class QSplitter;
-class QComboBox;
+#include <QLabel>
+#include <QMenu>
+#include <QProcess>
+#include <QSplitter>
+#include <QComboBox>
 
 namespace KFI
 {

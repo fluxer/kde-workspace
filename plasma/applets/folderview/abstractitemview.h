@@ -35,9 +35,9 @@
 
 class KDirModel;
 class KFileItemDelegate;
-class QItemSelectionModel;
+#include <QItemSelectionModel>
 class ProxyModel;
-class QScrollBar;
+#include <QScrollBar>
 
 
 // The abstract base class for IconView and ListView

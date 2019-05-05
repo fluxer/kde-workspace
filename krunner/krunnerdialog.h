@@ -30,7 +30,7 @@ namespace Plasma
 
 class KRunnerConfigWidget;
 class PanelShadows;
-class QDesktopWidget;
+#include <QDesktopWidget>
 
 class KRunnerDialog : public QWidget
 {

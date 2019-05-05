@@ -46,10 +46,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class KConfigGroup;
 class KActionCollection;
-class QFont;
-class QGraphicsScale;
-class QKeyEvent;
-class QMatrix4x4;
+#include <QFont>
+#include <QGraphicsScale>
+#include <QKeyEvent>
+#include <QMatrix4x4>
 
 namespace KWin
 {

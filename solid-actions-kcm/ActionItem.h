@@ -25,7 +25,7 @@
 
 #include <Solid/Predicate>
 
-class QString;
+#include <QString>
 
 class KDesktopFile;
 class KConfigGroup;

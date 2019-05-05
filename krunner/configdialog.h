@@ -27,8 +27,8 @@
 
 class KRunnerDialog;
 
-class QDialogButtonBox;
-class QTabWidget;
+#include <QDialogButtonBox>
+#include <QTabWidget>
 
 class KPluginSelector;
 

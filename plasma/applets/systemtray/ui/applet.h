@@ -39,7 +39,7 @@ class Dialog;
 class DeclarativeWidget;
 }
 
-class QStandardItemModel;
+#include <QStandardItemModel>
 
 namespace SystemTray
 {

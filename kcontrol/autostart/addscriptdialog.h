@@ -26,7 +26,7 @@
 #include <KUrl>
 
 class KUrlRequester;
-class QCheckBox;
+#include <QCheckBox>
 
 class AddScriptDialog : public KDialog
 {

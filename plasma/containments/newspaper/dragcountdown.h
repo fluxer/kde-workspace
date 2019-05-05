@@ -22,7 +22,7 @@
 
 #include <QGraphicsWidget>
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

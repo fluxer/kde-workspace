@@ -25,7 +25,7 @@
 
 #include <plasma/containment.h>
 
-class QAction;
+#include <QAction>
 
 /**
  * SaverDesktop

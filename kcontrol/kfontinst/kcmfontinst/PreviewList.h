@@ -27,7 +27,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtGui/QTreeView>
 
-class QContextMenuEvent;
+#include <QContextMenuEvent>
 
 namespace KFI
 {

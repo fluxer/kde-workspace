@@ -24,7 +24,7 @@
 
 class SpellCheckingPage;
 class MiscPage;
-class QCheckBox;
+#include <QCheckBox>
 
 namespace Sonnet {
     class ConfigWidget;

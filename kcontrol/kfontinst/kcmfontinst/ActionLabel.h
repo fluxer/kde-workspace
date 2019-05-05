@@ -26,8 +26,8 @@
 
 #include <QtGui/QLabel>
 
-class QTimer;
-class QLabel;
+#include <QTimer>
+#include <QLabel>
 
 namespace KFI
 {

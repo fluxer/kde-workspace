@@ -33,7 +33,7 @@
 #include <plasmaclock/clockapplet.h>
 #include "ui_clockConfig.h"
 
-class QTimer;
+#include <QTimer>
 
 namespace Plasma
 {

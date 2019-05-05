@@ -22,8 +22,8 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef OS_CURRENT_H_
 #define OS_CURRENT_H_
 
-class QTreeWidget;
-class QString;
+#include <QTreeWidget>
+#include <QString>
 
 /* function call-back-prototypes... */
 

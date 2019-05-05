@@ -22,7 +22,7 @@
 
 #include <KCompletionBox>
 
-class QKeyEvent;
+#include <QKeyEvent>
 
 namespace QuickSand {
 

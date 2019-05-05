@@ -34,7 +34,7 @@
 // Own
 #include "launcherdata.h"
 
-class QGraphicsItem;
+#include <QGraphicsItem>
 
 namespace Quicklaunch {
 

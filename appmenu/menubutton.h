@@ -29,7 +29,7 @@
 #include <Plasma/ToolButton>
 #include <QToolButton>
 
-class QMenu;
+#include <QMenu>
 
 class MenuButton : public Plasma::ToolButton
 {
