@@ -276,7 +276,7 @@ int qtToX11Button(Qt::MouseButton button)
 {
     if (button == Qt::LeftButton)
         return XCB_BUTTON_INDEX_1;
-    else if (button == Qt::MidButton)
+    else if (button == Qt::MiddleButton)
         return XCB_BUTTON_INDEX_2;
     else if (button == Qt::RightButton)
         return XCB_BUTTON_INDEX_3;
@@ -288,7 +288,7 @@ Qt::MouseButton x11ToQtMouseButton(int button)
     if (button == XCB_BUTTON_INDEX_1)
         return Qt::LeftButton;
     if (button == XCB_BUTTON_INDEX_2)
-        return Qt::MidButton;
+        return Qt::MiddleButton;
     if (button == XCB_BUTTON_INDEX_3)
         return Qt::RightButton;
     if (button == XCB_BUTTON_INDEX_4)
@@ -303,7 +303,7 @@ int qtToX11State(Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
     int ret = 0;
     if (buttons & Qt::LeftButton)
         ret |= XCB_KEY_BUT_MASK_BUTTON_1;
-    if (buttons & Qt::MidButton)
+    if (buttons & Qt::MiddleButton)
         ret |= XCB_KEY_BUT_MASK_BUTTON_2;
     if (buttons & Qt::RightButton)
         ret |= XCB_KEY_BUT_MASK_BUTTON_3;
@@ -324,7 +324,7 @@ Qt::MouseButtons x11ToQtMouseButtons(int state)
     if (state & XCB_KEY_BUT_MASK_BUTTON_1)
         ret |= Qt::LeftButton;
     if (state & XCB_KEY_BUT_MASK_BUTTON_2)
-        ret |= Qt::MidButton;
+        ret |= Qt::MiddleButton;
     if (state & XCB_KEY_BUT_MASK_BUTTON_3)
         ret |= Qt::RightButton;
     if (state & XCB_KEY_BUT_MASK_BUTTON_4)

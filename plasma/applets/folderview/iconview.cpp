@@ -2026,7 +2026,7 @@ void IconView::mousePressEvent(QGraphicsSceneMouseEvent *event)
         }
     }
 
-    if (event->button() == Qt::MidButton) {
+    if (event->button() == Qt::MiddleButton) {
         event->ignore();
     }
 }

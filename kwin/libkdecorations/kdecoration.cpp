@@ -600,7 +600,7 @@ KDecorationOptions::BorderSize KDecorationOptions::preferredBorderSize(KDecorati
 KDecorationDefines::WindowOperation KDecorationOptions::operationMaxButtonClick(Qt::MouseButtons button) const
 {
     return button == Qt::RightButton ? d->opMaxButtonRightClick :
-           button == Qt::MidButton ?   d->opMaxButtonMiddleClick :
+           button == Qt::MiddleButton ?   d->opMaxButtonMiddleClick :
            d->opMaxButtonLeftClick;
 }
 

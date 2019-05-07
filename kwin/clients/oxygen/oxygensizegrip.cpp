@@ -179,7 +179,7 @@ namespace Oxygen
                 break;
             }
 
-            case Qt::MidButton:
+            case Qt::MiddleButton:
             {
                 hide();
                 break;

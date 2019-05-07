@@ -78,7 +78,7 @@ void WindowList::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     Applet::mousePressEvent(event);
 
-    if (event->button() == Qt::MidButton) {
+    if (event->button() == Qt::MiddleButton) {
         event->accept();
     }
 }
@@ -87,7 +87,7 @@ void WindowList::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     Applet::mouseReleaseEvent(event);
 
-    if (event->button() == Qt::MidButton) {
+    if (event->button() == Qt::MiddleButton) {
         showMenu(true);
     }
 }

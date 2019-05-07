@@ -78,7 +78,7 @@ void DesktopCorona::init()
 
     Plasma::ContainmentActionsPluginsConfig desktopPlugins;
     desktopPlugins.addPlugin(Qt::NoModifier, Qt::Vertical, "switchdesktop");
-    desktopPlugins.addPlugin(Qt::NoModifier, Qt::MidButton, "paste");
+    desktopPlugins.addPlugin(Qt::NoModifier, Qt::MiddleButton, "paste");
     desktopPlugins.addPlugin(Qt::NoModifier, Qt::RightButton, "contextmenu");
     Plasma::ContainmentActionsPluginsConfig panelPlugins;
     panelPlugins.addPlugin(Qt::NoModifier, Qt::RightButton, "contextmenu");

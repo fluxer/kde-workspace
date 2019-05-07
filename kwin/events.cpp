@@ -1117,7 +1117,7 @@ void Client::processMousePressEvent(QMouseEvent* e)
     case Qt::LeftButton:
         button = Button1;
         break;
-    case Qt::MidButton:
+    case Qt::MiddleButton:
         button = Button2;
         break;
     case Qt::RightButton:

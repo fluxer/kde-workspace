@@ -1021,7 +1021,7 @@ Options::WindowOperation Client::mouseButtonToWindowOperation(Qt::MouseButtons b
 
     if (button == Qt::LeftButton)
         com = active ? options->commandActiveTitlebar1() : options->commandInactiveTitlebar1();
-    else if (button == Qt::MidButton)
+    else if (button == Qt::MiddleButton)
         com = active ? options->commandActiveTitlebar2() : options->commandInactiveTitlebar2();
     else if (button == Qt::RightButton)
         com = active ? options->commandActiveTitlebar3() : options->commandInactiveTitlebar3();

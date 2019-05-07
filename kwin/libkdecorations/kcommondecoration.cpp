@@ -460,7 +460,7 @@ void KCommonDecoration::addButtons(ButtonContainer &btnContainer, const QString&
                 if ((!m_button[MaxButton]) && isMaximizable()) {
                     btn = createButton(MaxButton);
                     if (!btn) break;
-                    btn->setRealizeButtons(Qt::LeftButton | Qt::MidButton | Qt::RightButton);
+                    btn->setRealizeButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
                     const bool max = maximizeMode() == MaximizeFull;
                     btn->setTipText(max ? i18n("Restore") : i18n("Maximize"));
                     btn->setToggleButton(true);
