@@ -25,7 +25,7 @@
 #include <kdeversion.h>
 #include <kstandarddirs.h>
 
-#include <QtCore/qxmlstream.h>
+#include <QXmlStreamWriter>
 #include <QFile>
 #include <QProcess>
 

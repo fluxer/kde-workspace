@@ -23,10 +23,9 @@
 
 #include <KDialog>
 
-namespace Ui
-{
-    class EditActionDialog;
-}
+QT_BEGIN_NAMESPACE
+class Ui_EditActionDialog;
+QT_END_NAMESPACE
 
 class ClipAction;
 class ActionDetailModel;
@@ -65,7 +64,7 @@ private:
     virtual void slotButtonClicked( int button );
 
 private:
-    Ui::EditActionDialog* m_ui;
+    Ui_EditActionDialog* m_ui;
 
     ClipAction* m_action;
     ActionDetailModel* m_model;

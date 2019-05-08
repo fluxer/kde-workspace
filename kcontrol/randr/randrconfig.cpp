@@ -34,6 +34,13 @@
 #include <kshell.h>
 #include <qmenu.h>
 
+QT_BEGIN_NAMESPACE
+uint qHash( const QPoint& p )
+{
+	return p.x() * 10000 + p.y();
+}
+QT_END_NAMESPACE
+
 RandRConfig::RandRConfig(QWidget *parent, RandRDisplay *display)
 	: QWidget(parent), Ui::RandRConfigBase()
 {
@@ -405,11 +412,6 @@ void RandRConfig::slotDelayedUpdateView()
 	}
 	updatePrimaryDisplay();
 	screenView->update();
-}
-
-uint qHash( const QPoint& p )
-{
-	return p.x() * 10000 + p.y();
 }
 
 void RandRConfig::identifyOutputs()

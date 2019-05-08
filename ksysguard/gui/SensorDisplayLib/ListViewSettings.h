@@ -22,11 +22,11 @@
 #define LISTVIEWSETTINGS_H
 
 #include <kdialog.h>
-
-
 #include <QColor>
 
+QT_BEGIN_NAMESPACE
 class Ui_ListViewSettingsWidget;
+QT_END_NAMESPACE
 
 class ListViewSettings : public KDialog
 {

@@ -42,7 +42,7 @@ static const QString ipAddress = QLatin1String( "ipAddress" );
 static const QString portNumber = QLatin1String( "ipPortNumber" );
 static const QString parentDeviceUdn = QLatin1String( "parentDeviceUDN" );
 
-
+QT_BEGIN_NAMESPACE
 QDBusArgument& operator<<( QDBusArgument& argument, const Cagibi::Device& device )
 {
     Q_UNUSED( device )
@@ -114,3 +114,4 @@ qDebug()<<type;
 
     return argument;
 }
+QT_END_NAMESPACE

@@ -32,7 +32,9 @@
 #include "oxygen_export.h"
 
 // forward declaration
+QT_BEGIN_NAMESPACE
 class Ui_ShadowConfiguraionUI;
+QT_END_NAMESPACE
 
 namespace Oxygen
 {

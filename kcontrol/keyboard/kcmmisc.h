@@ -27,7 +27,9 @@
 #include <QtCore/QString>
 #include <QtGui/QWidget>
 
+QT_BEGIN_NAMESPACE
 class Ui_KeyboardConfigWidget;
+QT_END_NAMESPACE
 
 enum TriState {
 	STATE_ON = 0,  STATE_OFF = 1, STATE_UNCHANGED = 2

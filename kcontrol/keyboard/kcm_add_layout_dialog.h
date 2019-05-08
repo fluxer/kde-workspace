@@ -27,7 +27,10 @@
 
 class Rules;
 class Flags;
+
+QT_BEGIN_NAMESPACE
 class Ui_AddLayoutDialog;
+QT_END_NAMESPACE
 
 class AddLayoutDialog: public QDialog
 {

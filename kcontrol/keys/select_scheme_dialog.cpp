@@ -25,7 +25,7 @@
 
 SelectSchemeDialog::SelectSchemeDialog(QWidget *parent)
  : KDialog(parent),
-   ui(new Ui::SelectSchemeDialog)
+   ui(new Ui_SelectSchemeDialog)
 {
     m_schemes = KGlobal::dirs()->findAllResources("data", "kcmkeys/*.kksrc");
 

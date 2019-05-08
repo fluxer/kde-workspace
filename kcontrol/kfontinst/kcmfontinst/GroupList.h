@@ -28,18 +28,16 @@
 #include <KFileItem>
 #include <KIO/Job>
 #include <KDirLister>
-#include <QtCore/QList>
-#include <QtGui/QTreeView>
-#include <QtCore/QAbstractItemModel>
-#include <QtCore/qabstractitemmodel.h>
-#include <QtCore/QVariant>
-#include "FontList.h"
-
+#include <QList>
+#include <QTreeView>
+#include <QAbstractItemModel>
+#include <QVariant>
 #include <QDragEnterEvent>
-class QDragLeaveEvent;
+#include <QDragLeaveEvent>
 #include <QDropEvent>
 #include <QTextStream>
 #include <QDomElement>
+#include "FontList.h"
 
 namespace KFI
 {

@@ -28,12 +28,14 @@
 // Qt
 #include <QtCore/QMetaType>
 #include <QtCore/QVector>
-
 #include <QDBusArgument>
+
+QT_BEGIN_NAMESPACE
 QDBusArgument& operator<<( QDBusArgument& argument,
                            const Cagibi::Device& device );
 const QDBusArgument& operator>>( const QDBusArgument& argument,
                                  Cagibi::Device& device );
+QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE( Cagibi::Device )
 

@@ -28,7 +28,7 @@
 
 WindowDefinitionWidget::WindowDefinitionWidget(KHotKeys::Windowdef_simple *windowdef, QWidget *parent)
     :   HotkeysWidgetIFace(parent)
-        ,ui(new Ui::WindowDefinitionWidget)
+        ,ui(new Ui_WindowDefinitionWidget)
         ,_windowdef(windowdef)
     {
     ui->setupUi(this);

@@ -109,6 +109,7 @@ namespace Misc
 
 }
 
+QT_BEGIN_NAMESPACE
 inline KDE_EXPORT QDataStream & operator<<(QDataStream &ds, const KFI::Misc::TFont &font)
 {
     ds << font.family << font.styleInfo;
@@ -120,5 +121,6 @@ inline KDE_EXPORT QDataStream & operator>>(QDataStream &ds, KFI::Misc::TFont &fo
     ds >> font.family >> font.styleInfo;
     return ds;
 }
+QT_END_NAMESPACE
 
 #endif

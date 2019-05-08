@@ -43,7 +43,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     m_ownConfig( KSharedConfig::openConfig("workspaceoptionsrc")),
     m_plasmaDesktopAutostart("plasma-desktop"),
     m_krunnerAutostart("krunner"),
-    m_ui(new Ui::MainPage)
+    m_ui(new Ui_MainPage)
 {
     KAboutData *about =
     new KAboutData("kcmworkspaceoptions", 0, ki18n("Global options for the Plasma Workspace"),

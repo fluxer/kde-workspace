@@ -39,7 +39,7 @@
 #include <QDBusConnection>
 #include <QDBusConnectionInterface>
 #include <QDBusServiceWatcher>
-#include <QtCore/qxmlstream.h>
+#include <QXmlStreamReader>
 #include <kconfiggroup.h>
 
 static const char dbusServiceName[] = "org.freedesktop.Notifications";

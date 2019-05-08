@@ -26,7 +26,7 @@
 #include <QMap>
 #include <QHash>
 #include <QStringList>
-#include <QtCore/qxmlstream.h>
+#include <QXmlStreamEntityResolver>
 
 class KPassivePopup;
 

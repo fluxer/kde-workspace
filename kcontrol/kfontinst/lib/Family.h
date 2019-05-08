@@ -69,6 +69,7 @@ struct KFONTINST_EXPORT Families
     FamilyCont items;
 };
 
+
 inline KDE_EXPORT uint qHash(const Family &key)
 {
     return qHash(key.name());
@@ -80,9 +81,11 @@ Q_DECLARE_METATYPE(KFI::Family)
 Q_DECLARE_METATYPE(KFI::Families)
 Q_DECLARE_METATYPE(QList<KFI::Families>)
 
+QT_BEGIN_NAMESPACE
 KDE_EXPORT QDBusArgument & operator<<(QDBusArgument &argument, const KFI::Family &obj);
 KDE_EXPORT const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::Family &obj);
 KDE_EXPORT QDBusArgument & operator<<(QDBusArgument &argument, const KFI::Families &obj);
 KDE_EXPORT const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::Families &obj);
+QT_END_NAMESPACE
 
 #endif

@@ -24,9 +24,11 @@
 #define _ReniceDlg_h_
 
 #include <kdialog.h>
-
-class Ui_ReniceDlgUi;
 #include <QButtonGroup>
+
+QT_BEGIN_NAMESPACE
+class Ui_ReniceDlgUi;
+QT_END_NAMESPACE
 
 /**
  * This class creates and handles a simple dialog to change the scheduling

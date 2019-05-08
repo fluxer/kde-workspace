@@ -20,22 +20,21 @@
 #ifndef KCMLOCALE_H
 #define KCMLOCALE_H
 
-#include <QMap>
-
 #include <KCModule>
 #include <KSharedConfig>
 #include <KConfigGroup>
 #include <KLocale>
-
 #include <QListWidgetItem>
 #include <QCheckBox>
+#include <QMap>
+
 class KPushButton;
 class KComboBox;
 class KIntNumInput;
 
-namespace Ui {
-  class KCMLocaleWidget;
-}
+QT_BEGIN_NAMESPACE
+class Ui_KCMLocaleWidget;
+QT_END_NAMESPACE
 
 /**
  * @short A KCM to configure locale settings
@@ -477,7 +476,7 @@ private:
     // The locale for the current defaults, needed for am/pm as the defaults are hard coded in KLocale
     KLocale *m_defaultLocale;
 
-    Ui::KCMLocaleWidget *m_ui;
+    Ui_KCMLocaleWidget *m_ui;
 };
 
 #endif //KCMLOCALE_H

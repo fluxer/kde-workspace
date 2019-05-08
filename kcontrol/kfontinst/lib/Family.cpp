@@ -89,6 +89,7 @@ void Family::toXml(bool disabled, QTextStream &s) const
 
 }
 
+QT_BEGIN_NAMESPACE
 QDBusArgument & operator<<(QDBusArgument &argument, const KFI::Family &obj)
 {
     argument.beginStructure();
@@ -153,3 +154,4 @@ const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::Families &o
     argument.endStructure();
     return argument;
 }
+QT_END_NAMESPACE

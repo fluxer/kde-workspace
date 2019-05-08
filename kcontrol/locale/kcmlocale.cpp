@@ -56,7 +56,7 @@ KCMLocale::KCMLocale( QWidget *parent, const QVariantList &args )
            m_cConfig( 0 ),
            m_kcmLocale( 0 ),
            m_defaultLocale( 0 ),
-           m_ui( new Ui::KCMLocaleWidget )
+           m_ui( new Ui_KCMLocaleWidget )
 {
     KAboutData *about = new KAboutData( "kcmlocale", 0, ki18n( "Localization options for KDE applications" ),
                                         0, KLocalizedString(), KAboutData::License_GPL,

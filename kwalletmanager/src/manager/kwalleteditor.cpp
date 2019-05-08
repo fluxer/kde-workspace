@@ -25,9 +25,7 @@
 
 #include <stdlib.h>
 #include <QtXml/qdom.h>
-#include <QtXml/qdom.h>
-#include <QtXml/qdom.h>
-#include <QtCore/qxmlstream.h>
+#include <QXmlStreamWriter>
 #include <kaction.h>
 #include <kdebug.h>
 #include <kdialog.h>

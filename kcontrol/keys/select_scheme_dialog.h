@@ -21,10 +21,9 @@
 #include <KDialog>
 #include <KUrl>
 
-namespace Ui
-{
-class SelectSchemeDialog;
-}
+QT_BEGIN_NAMESPACE
+class Ui_SelectSchemeDialog;
+QT_END_NAMESPACE
 
 class SelectSchemeDialog : public KDialog
 {
@@ -40,7 +39,7 @@ private slots:
     void slotUrlChanged(const QString &);
 
 private:
-    Ui::SelectSchemeDialog *ui;
+    Ui_SelectSchemeDialog *ui;
     QStringList m_schemes;
 }; // SelectSchemeDialog
 

@@ -23,17 +23,16 @@
 #ifndef KNOTIFY_H
 #define KNOTIFY_H
 
-
 #include <kcmodule.h>
+#include <QPushButton>
 
 class KComboBox;
 class PlayerSettingsDialog;
-namespace Ui{
-class PlayerSettingsUI;
-}
-#include <QPushButton>
 class KNotifyConfigWidget;
 
+QT_BEGIN_NAMESPACE
+class Ui_PlayerSettingsUI;
+QT_END_NAMESPACE
 
 class KCMKNotify : public KCModule
 {
@@ -77,7 +76,7 @@ protected Q_SLOTS:
     signals:
     void changed(bool);
 private:
-    Ui::PlayerSettingsUI* m_ui;
+    Ui_PlayerSettingsUI* m_ui;
     bool m_change;
 };
 

@@ -821,7 +821,9 @@ namespace Oxygen
 
             case SH_TitleBar_NoBorder: return 0;
             case SH_GroupBox_TextLabelVerticalAlignment: return Qt::AlignVCenter;
+#ifndef QT_KATIE
             case SH_DialogButtonLayout: return QDialogButtonBox::KdeLayout;
+#endif
             case SH_ScrollBar_MiddleClickAbsolutePosition: return true;
             case SH_ItemView_ShowDecorationSelected: return false;
             case SH_ItemView_ArrowKeysNavigateIntoChildren: return true;

@@ -259,11 +259,12 @@ goodLocale(const char *var)
 
 } // extern "C"
 
-static uint
-qHash(const QSize &sz)
+QT_BEGIN_NAMESPACE
+static uint qHash(const QSize &sz)
 {
     return (sz.width() << 12) ^ sz.height();
 }
+QT_END_NAMESPACE
 
 int
 main(void)

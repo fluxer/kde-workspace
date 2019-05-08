@@ -22,11 +22,11 @@
 #define MULTIMETERSETTINGS_H
 
 #include <kdialog.h>
-
-
 #include <QColor>
 
+QT_BEGIN_NAMESPACE
 class Ui_MultiMeterSettingsWidget;
+QT_END_NAMESPACE
 
 class MultiMeterSettings : public KDialog
 {

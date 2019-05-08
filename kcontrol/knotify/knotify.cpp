@@ -214,7 +214,7 @@ PlayerSettingsDialog::PlayerSettingsDialog( QWidget *parent )
     : QWidget(parent), m_change(false)
 {
 
-    m_ui = new Ui::PlayerSettingsUI();
+    m_ui = new Ui_PlayerSettingsUI();
     m_ui->setupUi( this );
 
     load();

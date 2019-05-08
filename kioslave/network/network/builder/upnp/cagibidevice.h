@@ -25,15 +25,14 @@
 
 // Qt
 #include <QtCore/qsharedpointer.h>
-
-namespace Cagibi { class Device; }
 #include <QString>
 #include <QDBusArgument>
+
+namespace Cagibi { class Device; }
 extern QDBusArgument& operator<<( QDBusArgument& argument,
                                   const Cagibi::Device& device );
 extern const QDBusArgument& operator>>( const QDBusArgument& argument,
                                         Cagibi::Device& device );
-
 
 namespace Cagibi
 {
@@ -41,10 +40,8 @@ class DevicePrivate;
 
 class Device
 {
-  friend QDBusArgument& ::operator<<( QDBusArgument& argument,
-                                      const Cagibi::Device& device );
-  friend const QDBusArgument& ::operator>>( const QDBusArgument& argument,
-                                            Cagibi::Device& device );
+    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const Cagibi::Device& device );
+    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
 
   protected:
     explicit Device( DevicePrivate* _d );

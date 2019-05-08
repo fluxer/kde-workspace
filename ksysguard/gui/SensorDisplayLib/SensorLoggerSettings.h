@@ -22,11 +22,11 @@
 #define SENSORLOGGERSETTINGS_H
 
 #include <kdialog.h>
-
-
 #include <QColor>
 
+QT_BEGIN_NAMESPACE
 class Ui_SensorLoggerSettingsWidget;
+QT_END_NAMESPACE
 
 class SensorLoggerSettings : public KDialog
 {

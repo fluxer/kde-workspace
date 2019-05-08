@@ -66,9 +66,11 @@ str2Font(const QString &aValue)
 
     QStringList sl = aValue.split(QString::fromLatin1(","), QString::SkipEmptyParts);
     if (sl.count() == 1) {
+#ifndef QT_KATIE
         /* X11 font spec */
         aRetFont->setRawMode(true);
         aRetFont->setRawName(aValue);
+#endif
     } else {
         aRetFont->fromString(aValue);
     }

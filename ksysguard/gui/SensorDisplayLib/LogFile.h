@@ -25,14 +25,14 @@
 #define MAXLINES 500
 
 #include <QListWidget>
-
 #include <QtXml/qdom.h>
-
 #include <QtCore/qcoreevent.h>
 
 #include <SensorDisplay.h>
 
+QT_BEGIN_NAMESPACE
 class Ui_LogFileSettings;
+QT_END_NAMESPACE
 
 class LogFile : public KSGRD::SensorDisplay
 {

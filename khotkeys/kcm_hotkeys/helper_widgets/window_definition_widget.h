@@ -24,10 +24,9 @@
 #include <QtGui/QWidget>
 #include <KDialog>
 
-
-namespace Ui {
-    class WindowDefinitionWidget;
-}
+QT_BEGIN_NAMESPACE
+class Ui_WindowDefinitionWidget;
+QT_END_NAMESPACE
 
 namespace KHotKeys {
     class Windowdef_simple;
@@ -71,7 +70,7 @@ private Q_SLOTS:
 
 private:
 
-    Ui::WindowDefinitionWidget *ui;
+    Ui_WindowDefinitionWidget *ui;
 
     KHotKeys::Windowdef_simple *_windowdef;
 };

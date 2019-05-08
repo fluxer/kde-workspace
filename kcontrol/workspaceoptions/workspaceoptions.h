@@ -23,9 +23,9 @@
 #include <ksharedconfig.h>
 #include <kautostart.h>
 
-namespace Ui {
-  class MainPage;
-}
+QT_BEGIN_NAMESPACE
+class Ui_MainPage;
+QT_END_NAMESPACE
 
 class WorkspaceOptionsModule : public KCModule
 {
@@ -49,7 +49,7 @@ private:
     bool m_currentlyIsDesktop;
     bool m_currentlyFixedDashboard;
 
-    Ui::MainPage *m_ui;
+    Ui_MainPage *m_ui;
 };
 
 #endif // WORKSPACEOPTIONS_H

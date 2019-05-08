@@ -153,6 +153,7 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
 
 }
 
+QT_BEGIN_NAMESPACE
 QDBusArgument & operator<<(QDBusArgument &argument, const KFI::Style &obj)
 {
     argument.beginStructure();
@@ -187,3 +188,4 @@ const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::Style &obj)
     argument.endStructure();
     return argument;
 }
+QT_END_NAMESPACE

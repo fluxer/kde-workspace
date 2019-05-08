@@ -24,7 +24,7 @@
 
 #include <QDBusPendingCallWatcher>
 #include <QDBusPendingCall>
-class QDBusVariant;
+#include <QDBusVariant>
 class PlayerControl;
 
 class PlayerActionJob : public Plasma::ServiceJob

@@ -76,7 +76,10 @@ inline KDE_EXPORT uint qHash(const File &key)
 }
 
 Q_DECLARE_METATYPE(KFI::File)
+
+QT_BEGIN_NAMESPACE
 KDE_EXPORT QDBusArgument & operator<<(QDBusArgument &argument, const KFI::File &obj);
 KDE_EXPORT const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::File &obj);
+QT_END_NAMESPACE
 
 #endif

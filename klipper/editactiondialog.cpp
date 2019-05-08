@@ -265,7 +265,7 @@ EditActionDialog::EditActionDialog(QWidget* parent)
     setButtons(KDialog::Ok | KDialog::Cancel);
 
     QWidget* dlgWidget = new QWidget(this);
-    m_ui = new Ui::EditActionDialog;
+    m_ui = new Ui_EditActionDialog;
     m_ui->setupUi(dlgWidget);
 
     m_ui->leRegExp->setClearButtonShown(true);

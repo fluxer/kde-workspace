@@ -75,10 +75,6 @@ struct Q_GUI_EXPORT QGuiPlatformPluginInterface  : public QFactoryInterface
 {
 };
 
-#define QGuiPlatformPluginInterface_iid "com.nokia.qt.QGuiPlatformPluginInterface"
-
-Q_DECLARE_INTERFACE(QGuiPlatformPluginInterface, QGuiPlatformPluginInterface_iid)
-
 class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPluginInterface
 {
     Q_OBJECT
@@ -120,6 +116,10 @@ class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPlugi
 QGuiPlatformPlugin *qt_guiPlatformPlugin();
 
 QT_END_NAMESPACE
+
+#define QGuiPlatformPluginInterface_iid "com.nokia.qt.QGuiPlatformPluginInterface"
+
+Q_DECLARE_INTERFACE(QGuiPlatformPluginInterface, QGuiPlatformPluginInterface_iid)
 
 QT_END_HEADER
 

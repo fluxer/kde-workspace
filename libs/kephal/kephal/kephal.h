@@ -27,10 +27,11 @@
 
 #define CONFIRMATION_TIME 30
 
-
+QT_BEGIN_NAMESPACE
 inline uint qHash(const QPoint & key) {
     return ((uint) (key.x() + 32767)) * 65536 + ((uint) (key.y() + 32767));
 }
+QT_END_NAMESPACE
 
 
 namespace Kephal {
