@@ -97,8 +97,7 @@ void CPreviewList::showFonts(const QModelIndexList &fonts)
 {
     clear();
     emit layoutAboutToBeChanged();
-    QModelIndex index;
-    foreach(index, fonts)
+    foreach(QModelIndex index, fonts)
     {
         CFontModelItem *mi=static_cast<CFontModelItem *>(index.internalPointer());
         CFontItem      *font=mi->parent()

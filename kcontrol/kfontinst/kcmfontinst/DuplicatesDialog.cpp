@@ -517,10 +517,9 @@ void CFontFileListView::openViewer()
     static const int constMaxBeforePrompt=10;
 
     QList<QTreeWidgetItem *> items(selectedItems());
-    QTreeWidgetItem          *item;
     QSet<QString>            files;
 
-    foreach(item, items)
+    foreach(QTreeWidgetItem *item, items)
         if(item->parent()) // Then it is a file, not font name :-)
             files.insert(item->text(0));
 
@@ -547,10 +546,9 @@ void CFontFileListView::openViewer()
 void CFontFileListView::properties()
 {
     QList<QTreeWidgetItem *> items(selectedItems());
-    QTreeWidgetItem          *item;
     KFileItemList            files;
 
-    foreach(item, items)
+    foreach(QTreeWidgetItem *item, items)
         if(item->parent())
             files.append(KFileItem(KUrl::fromPath(item->text(0)),
                                    KMimeType::findByPath(item->text(0))->name(),
@@ -566,33 +564,33 @@ void CFontFileListView::properties()
 void CFontFileListView::mark()
 {
     QList<QTreeWidgetItem *> items(selectedItems());
-    QTreeWidgetItem          *item;
 
-    foreach(item, items)
+    foreach(QTreeWidgetItem *item, items) {
         if(item->parent())
             markItem(item);
+    }
     checkFiles();
 }
 
 void CFontFileListView::unmark()
 {
     QList<QTreeWidgetItem *> items(selectedItems());
-    QTreeWidgetItem          *item;
 
-    foreach(item, items)
+    foreach(QTreeWidgetItem *item, items) {
         if(item->parent())
             unmarkItem(item);
+    }
     checkFiles();
 }
 
 void CFontFileListView::selectedChanged()
 {
     QList<QTreeWidgetItem *> items(selectedItems());
-    QTreeWidgetItem          *item;
 
-    foreach(item, items)
+    foreach(QTreeWidgetItem *item, items) {
         if(!item->parent() && item->isSelected())
             item->setSelected(false);
+    }
 }
 
 void CFontFileListView::clicked(QTreeWidgetItem *item, int col)
@@ -620,9 +618,8 @@ void CFontFileListView::contextMenuEvent(QContextMenuEvent *ev)
              haveMarked(false);
 
         QList<QTreeWidgetItem *> items(selectedItems());
-        QTreeWidgetItem          *item;
 
-        foreach(item, items)
+        foreach(QTreeWidgetItem *item, items)
         {
             if(item->parent() && item->isSelected())
             {

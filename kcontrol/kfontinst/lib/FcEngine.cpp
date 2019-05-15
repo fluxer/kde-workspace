@@ -372,7 +372,7 @@ void CFcEngine::Xft::drawString(const QString &text, int x, int &y, int h) const
                                  FC_WEIGHT, FcTypeInteger, qt.bold() ? FC_WEIGHT_BOLD : FC_WEIGHT_REGULAR,
                                  FC_SLANT, FcTypeInteger, qt.italic() ? FC_SLANT_ITALIC : FC_SLANT_ROMAN,
                                  FC_SIZE, FcTypeDouble, (double)qt.pointSize(),
-                                 NULL);
+                                 static_cast<char*>(NULL));
 
     if(xftFont)
     {
@@ -1137,7 +1137,7 @@ XftFont * CFcEngine::getFont(int size)
                           FC_SLANT, FcTypeInteger, slant,
                           FC_WIDTH, FcTypeInteger, width,
                           FC_PIXEL_SIZE, FcTypeDouble, (double)size,
-                          NULL);
+                          static_cast<char*>(NULL));
         else
 #endif
             f=XftFontOpen(QX11Info::display(), 0,
@@ -1145,7 +1145,7 @@ XftFont * CFcEngine::getFont(int size)
                           FC_WEIGHT, FcTypeInteger, weight,
                           FC_SLANT, FcTypeInteger, slant,
                           FC_PIXEL_SIZE, FcTypeDouble, (double)size,
-                          NULL);
+                          static_cast<char*>(NULL));
     }
     else
     {
@@ -1154,7 +1154,7 @@ XftFont * CFcEngine::getFont(int size)
                                                      QFile::encodeName(itsName).constData(),
                                             FC_INDEX, FcTypeInteger, itsIndex<0 ? 0 : itsIndex,
                                             FC_PIXEL_SIZE, FcTypeDouble, (double)size,
-                                            NULL);
+                                            static_cast<char*>(NULL));
         f=XftFontOpenPattern(QX11Info::display(), pattern);
     }
 
@@ -1281,7 +1281,7 @@ void CFcEngine::getSizes()
                                    FC_WEIGHT, FcTypeInteger, weight,
                                    FC_SLANT, FcTypeInteger, slant,
                                    FC_WIDTH, FcTypeInteger, width,
-                                   NULL);
+                                   static_cast<char*>(NULL));
                 else
 #endif
                     pat=FcPatternBuild(NULL,
@@ -1289,7 +1289,7 @@ void CFcEngine::getSizes()
                                         (const FcChar8 *)(itsName.toUtf8().data()),
                                    FC_WEIGHT, FcTypeInteger, weight,
                                    FC_SLANT, FcTypeInteger, slant,
-                                   NULL);
+                                   static_cast<char*>(NULL));
 
                 FcFontSet *set=FcFontList(0, pat, os);
 

@@ -626,7 +626,7 @@ bool bitmapsEnabled()
     if(!checked)
     {
         FcObjectSet *os  = FcObjectSetBuild(FC_FAMILY, (void *)0);
-        FcPattern   *pat = FcPatternBuild(NULL, FC_SCALABLE, FcTypeBool, FcFalse, NULL);
+        FcPattern   *pat = FcPatternBuild(NULL, FC_SCALABLE, FcTypeBool, FcFalse, static_cast<char*>(NULL));
         FcFontSet   *set = FcFontList(0, pat, os);
 
         FcPatternDestroy(pat);

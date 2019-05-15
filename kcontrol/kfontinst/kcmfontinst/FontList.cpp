@@ -1434,9 +1434,8 @@ void CFontListView::getFonts(CJobRunner::ItemList &urls, QStringList &fontNames,
 {
     QModelIndexList   selectedItems(selected ? selectedIndexes() : allIndexes());
     QSet<CFontItem *> usedFonts;
-    QModelIndex       index;
 
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems) {
         if(index.isValid())
         {
             QModelIndex realIndex(itsProxy->mapToSource(index));
@@ -1470,17 +1469,16 @@ void CFontListView::getFonts(CJobRunner::ItemList &urls, QStringList &fontNames,
                 }
             }
         }
-
+    }
     fontNames=CFontList::compact(fontNames);
 }
 
 QSet<QString> CFontListView::getFiles()
 {
     QModelIndexList items(allIndexes());
-    QModelIndex     index;
     QSet<QString>   files;
 
-    foreach(index, items)
+    foreach(QModelIndex index, items) {
         if(index.isValid())
         {
             QModelIndex realIndex(itsProxy->mapToSource(index));
@@ -1508,16 +1506,15 @@ QSet<QString> CFontListView::getFiles()
                     }
                 }
         }
-
+    }
     return files;
 }
 
 void CFontListView::getPrintableFonts(QSet<Misc::TFont> &items, bool selected)
 {
     QModelIndexList selectedItems(selected ? selectedIndexes() : allIndexes());
-    QModelIndex     index;
 
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems)
     {
         CFontItem *font=NULL;
 
@@ -1636,11 +1633,10 @@ void CFontListView::stats(int &enabled, int &disabled, int &partial)
 void CFontListView::selectedStatus(bool &enabled, bool &disabled)
 {
     QModelIndexList selected(selectedIndexes());
-    QModelIndex     index;
 
     enabled=disabled=false;
 
-    foreach(index, selected)
+    foreach(QModelIndex index, selected)
     {
         QModelIndex realIndex(itsProxy->mapToSource(index));
 
@@ -1734,11 +1730,10 @@ QModelIndexList CFontListView::getSelectedItems()
     // ensure 'family' item is not...
     QModelIndexList        selectedItems(selectedIndexes()),
                            deselectList;
-    QModelIndex            index;
     QSet<CFontModelItem *> selectedFamilies;
     bool                   enabled;
 
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems) {
         if(index.isValid())
         {
             QModelIndex realIndex(itsProxy->mapToSource(index));
@@ -1777,15 +1772,18 @@ QModelIndexList CFontListView::getSelectedItems()
                 }
             }
         }
+    }
 
-    if(deselectList.count())
-        foreach(index, deselectList)
+    if(deselectList.count()) {
+        foreach(QModelIndex index, deselectList) {
             selectionModel()->select(index, QItemSelectionModel::Deselect);
+        }
+    }
 
     QModelIndexList sel;
     QSet<void *> pointers;
     selectedItems=selectedIndexes();
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems)
     {
         QModelIndex idx(itsProxy->mapToSource(index));
 
@@ -1834,10 +1832,9 @@ void CFontListView::view()
     static const int constMaxBeforePrompt=10;
 
     QModelIndexList   selectedItems(selectedIndexes());
-    QModelIndex       index;
     QSet<CFontItem *> fonts;
 
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems)
     {
         QModelIndex realIndex(itsProxy->mapToSource(index));
 
@@ -2007,9 +2004,8 @@ void CFontListView::contextMenuEvent(QContextMenuEvent *ev)
     bool            en(false),
                     dis(false);
     QModelIndexList selectedItems(selectedIndexes());
-    QModelIndex     index;
 
-    foreach(index, selectedItems)
+    foreach(QModelIndex index, selectedItems)
     {
         QModelIndex realIndex(itsProxy->mapToSource(index));
 
