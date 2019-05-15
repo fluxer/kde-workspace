@@ -161,21 +161,20 @@ QModelIndex ProgressListModel::index(int row, int column, const QModelIndex &par
 {
     Q_UNUSED(parent);
 
-    if (row >= m_jobViews.count() || column > 0)
+    if (row >= m_jobViews.count() || column > 0) {
         return QModelIndex();
-
-        return createIndex(row, column);
+    }
+    return createIndex(row, column);
 }
 
 QModelIndex ProgressListModel::indexForJob(JobView *jobView) const
 {
     int index = m_jobViews.indexOf(jobView);
 
-    if (index != -1) {
-        return createIndex(index, 0, jobView);
-    } else {
+    if (index == -1) {
         return QModelIndex();
     }
+    return createIndex(index, 0, jobView);
 }
 
 int ProgressListModel::rowCount(const QModelIndex &parent) const
