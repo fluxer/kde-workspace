@@ -54,12 +54,13 @@ public:
     ChromeQuery() {}
     virtual QString query(QSqlDatabase *database) const {
       kDebug(kdbg_code) << "tables: " << database->tables();
-      if(database->tables().contains("favicon_bitmaps"))
-	return "SELECT * FROM favicons " \
+      if(database->tables().contains("favicon_bitmaps")) {
+          return "SELECT * FROM favicons " \
             "inner join icon_mapping on icon_mapping.icon_id = favicons.id " \
             "inner join favicon_bitmaps on icon_mapping.icon_id = favicon_bitmaps.icon_id " \
             "WHERE page_url = :url ORDER BY height desc LIMIT 1;";
-	return "SELECT * FROM favicons inner join icon_mapping " \
+      }
+      return "SELECT * FROM favicons inner join icon_mapping " \
 	"on icon_mapping.icon_id = favicons.id " \
 	"WHERE page_url = :url LIMIT 1;";
     }
