@@ -372,7 +372,7 @@ void Workspace::raiseClient(Client* c, bool nogroup)
         Client *transient_parent = c;
         while ((transient_parent = transient_parent->transientFor()))
             transients << transient_parent;
-        foreach (transient_parent, transients)
+        foreach (Client *transient_parent, transients)
             raiseClient(transient_parent, true);
     }
 

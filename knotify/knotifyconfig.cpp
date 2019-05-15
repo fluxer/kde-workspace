@@ -79,8 +79,7 @@ KNotifyConfig *KNotifyConfig::copy() const
 
 QString KNotifyConfig::readEntry( const QString & entry, bool path )
 {
-	QPair<QString , QString> context;
-	foreach(  context , contexts )
+	for (QPair<QString,QString> context: contexts )
 	{
 		const QString group="Event/" + eventid + '/' + context.first + '/' + context.second;
 		if( configfile->hasGroup( group ) )

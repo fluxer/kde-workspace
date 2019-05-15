@@ -118,8 +118,7 @@ void KNotify::closeNotification(int id)
 	if(e->ref>0)
 	{
 		e->ref++;
-		KNotifyPlugin *plugin;
-		foreach(plugin , m_plugins)
+		foreach(KNotifyPlugin *plugin , m_plugins)
 		{
 			plugin->close( id );
 		}

@@ -799,8 +799,7 @@ void KColorCm::updateColorTable()
         stackColors->setCurrentIndex(0);
         stackPreview->setCurrentIndex(0);
 
-        KColorButton * button;
-        foreach (button, m_commonColorButtons)
+        foreach (KColorButton *button, m_commonColorButtons)
         {
             button->blockSignals(true);
         }
@@ -836,7 +835,7 @@ void KColorCm::updateColorTable()
         m_commonColorButtons[24]->setColor(m_wmColors.color(WindecoColors::InactiveForeground));
         m_commonColorButtons[25]->setColor(m_wmColors.color(WindecoColors::InactiveBlend));
 
-        foreach (button, m_commonColorButtons)
+        foreach (KColorButton *button, m_commonColorButtons)
         {
             button->blockSignals(false);
         }

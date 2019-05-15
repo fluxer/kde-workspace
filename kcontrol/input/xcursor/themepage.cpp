@@ -134,7 +134,6 @@ void ThemePage::updateSizeComboBox()
         QIcon m_icon;
         if (sizes.size() > 1)  // only refill the combobox if there is more that 1 size
         {
-            int i;
             QList<int> comboBoxList;
             QPixmap m_pixmap;
 
@@ -149,7 +148,7 @@ void ThemePage::updateSizeComboBox()
                 i18nc("@item:inlistbox size", "resolution dependent"),
                 0);
             comboBoxList << 0;
-            foreach (i, sizes)
+            foreach (int i, sizes)
             {
                 m_pixmap = theme->createIcon(i);
                 if (m_pixmap.width() > maxIconWidth)
