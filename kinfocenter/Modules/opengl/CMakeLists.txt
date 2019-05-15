@@ -3,6 +3,7 @@ if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
 endif()
 
 if(OPENGLES_FOUND)
+    set(KCM_ENABLE_OPENGLES TRUE)
     include_directories( ${OPENGLES_INCLUDE_DIR} )
 endif()
 

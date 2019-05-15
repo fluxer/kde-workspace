@@ -793,7 +793,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
       gli.glExtensions = (const char *) glGetString(GL_EXTENSIONS);
       gli.displayName = NULL;
 
-      IsDirect = TRUE;
+      IsDirect = true;
       result = print_screen_info(l1, after);
    }
    else {
