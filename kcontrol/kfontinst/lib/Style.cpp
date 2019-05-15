@@ -108,7 +108,7 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
 
     if(files.count()>0)
     {
-        QString str("  <"FONT_TAG" ");
+        QString str("  <" FONT_TAG " ");
         int     weight,
                 width,
                 slant;
@@ -116,20 +116,20 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
         KFI::FC::decomposeStyleVal(itsValue, weight, width, slant);
 
         if(!family.isEmpty())
-            str+=FAMILY_ATTR"=\""+family+"\" ";
+            str+= FAMILY_ATTR "=\""+family+"\" ";
         if(KFI_NULL_SETTING!=weight)
-            str+=WEIGHT_ATTR"=\""+QString::number(weight)+"\" ";
+            str+=WEIGHT_ATTR "=\""+QString::number(weight)+"\" ";
         if(KFI_NULL_SETTING!=width)
-            str+=WIDTH_ATTR"=\""+QString::number(width)+"\" ";
+            str+= WIDTH_ATTR "=\""+QString::number(width)+"\" ";
         if(KFI_NULL_SETTING!=slant)
-            str+=SLANT_ATTR"=\""+QString::number(slant)+"\" ";
+            str+= SLANT_ATTR "=\""+QString::number(slant)+"\" ";
         if(!itsScalable)
-            str+=SCALABLE_ATTR"=\"false\" ";
+            str+= SCALABLE_ATTR "=\"false\" ";
 
         QStringList ws(WritingSystems::instance()->getLangs(itsWritingSystems));
 
         if(ws.count())
-            str+=LANGS_ATTR"=\""+ws.join(LANG_SEP)+"\" ";
+            str+= LANGS_ATTR "=\"" +ws.join(LANG_SEP)+"\" ";
 
 
         if(1==files.count())
@@ -141,8 +141,8 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
 
             str+=">\n";
             for(; it!=end; ++it)
-                str+="   <"FILE_TAG" "+(*it)+"/>\n";
-            str+="  </"FONT_TAG">";
+                str+="   <" FILE_TAG " "+(*it)+"/>\n";
+            str+="  </" FONT_TAG ">";
         }
 
         return str;
