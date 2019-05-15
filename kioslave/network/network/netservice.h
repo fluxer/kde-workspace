@@ -36,9 +36,10 @@ class NetService;
 #include <QString>
 #include <QDBusArgument>
 
+QT_BEGIN_NAMESPACE
 extern MOLLETNETWORK_EXPORT QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetService& service );
 extern MOLLETNETWORK_EXPORT const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetService& service );
-
+QT_END_NAMESPACE
 
 namespace Mollet
 {
@@ -51,8 +52,8 @@ class MOLLETNETWORK_EXPORT NetService
     friend class DNSSDNetworkBuilder;
     friend class UpnpNetworkBuilder;
     friend class NetDevicePrivate;
-    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const NetService& service );
-    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, NetService& service );
+    friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const NetService& service );
+    friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, NetService& service );
 
   public:
     NetService();

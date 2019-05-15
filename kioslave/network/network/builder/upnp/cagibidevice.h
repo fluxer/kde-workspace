@@ -29,10 +29,13 @@
 #include <QDBusArgument>
 
 namespace Cagibi { class Device; }
+
+QT_BEGIN_NAMESPACE
 extern QDBusArgument& operator<<( QDBusArgument& argument,
                                   const Cagibi::Device& device );
 extern const QDBusArgument& operator>>( const QDBusArgument& argument,
                                         Cagibi::Device& device );
+QT_END_NAMESPACE
 
 namespace Cagibi
 {
@@ -40,8 +43,8 @@ class DevicePrivate;
 
 class Device
 {
-    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const Cagibi::Device& device );
-    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
+    friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const Cagibi::Device& device );
+    friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
 
   protected:
     explicit Device( DevicePrivate* _d );

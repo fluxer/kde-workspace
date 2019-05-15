@@ -143,11 +143,8 @@ endif()
 
 ########### next target ###############
 
-set(windowsexethumbnail_SRCS windowsexecreator.cpp icoutils_common.cpp)
-set(windowsimagethumbnail_SRCS windowsimagecreator.cpp icoutils_common.cpp)
-
-set(windowsexethumbnail_SRCS ${windowsexethumbnail_SRCS} icoutils_wrestool.cpp )
-set(windowsimagethumbnail_SRCS ${windowsimagethumbnail_SRCS} icoutils_wrestool.cpp )
+set(windowsexethumbnail_SRCS windowsexecreator.cpp icoutils_common.cpp icoutils_wrestool.cpp)
+set(windowsimagethumbnail_SRCS windowsimagecreator.cpp icoutils_common.cpp icoutils_wrestool.cpp)
 
 kde4_add_plugin(windowsexethumbnail ${windowsexethumbnail_SRCS})
 target_link_libraries( windowsexethumbnail ${KDE4_KIO_LIBS} )

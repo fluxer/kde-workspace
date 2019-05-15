@@ -36,9 +36,10 @@ class NetDevice;
 #include <QString>
 #include <QDBusArgument>
 
+QT_BEGIN_NAMESPACE
 extern MOLLETNETWORK_EXPORT QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetDevice& device );
 extern MOLLETNETWORK_EXPORT const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetDevice& device );
-
+QT_END_NAMESPACE
 
 namespace Mollet
 {
@@ -50,8 +51,8 @@ class MOLLETNETWORK_EXPORT NetDevice
 {
     friend class DNSSDNetworkBuilder;
     friend class UpnpNetworkBuilder;
-    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const NetDevice& device );
-    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, NetDevice& device );
+    friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const NetDevice& device );
+    friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, NetDevice& device );
 
   public:
     // later has priority

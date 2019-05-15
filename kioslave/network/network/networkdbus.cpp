@@ -30,7 +30,7 @@
 
 
 // TODO: Attention, we currently do not stream any references to other items, just the direct data!
-
+QT_BEGIN_NAMESPACE
 QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetDevice& device )
 {
     Mollet::NetDevicePrivate* devicePrivate = device.dPtr();
@@ -104,3 +104,4 @@ const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetServi
 
     return argument;
 }
+QT_END_NAMESPACE

@@ -37,12 +37,13 @@
 // which uses ids as reference to the linked data. Needs more use cases to get a better picture.
 // also needed: xml description for introspection and automagical creation of adaptor and interface
 
-
+QT_BEGIN_NAMESPACE
 MOLLETNETWORK_EXPORT QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetDevice& device );
 MOLLETNETWORK_EXPORT const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetDevice& device );
 
 MOLLETNETWORK_EXPORT QDBusArgument& operator<<( QDBusArgument& argument, const Mollet::NetService& service );
 MOLLETNETWORK_EXPORT const QDBusArgument& operator>>( const QDBusArgument& argument, Mollet::NetService& service );
+QT_END_NAMESPACE
 
 Q_DECLARE_METATYPE(Mollet::NetDevice)
 Q_DECLARE_METATYPE(Mollet::NetService)
