@@ -43,8 +43,13 @@ class DevicePrivate;
 
 class Device
 {
+#ifndef QT_NAMESPACE
+    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const Cagibi::Device& device );
+    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
+#else
     friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const Cagibi::Device& device );
     friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
+#endif
 
   protected:
     explicit Device( DevicePrivate* _d );

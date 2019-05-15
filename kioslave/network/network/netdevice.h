@@ -51,8 +51,13 @@ class MOLLETNETWORK_EXPORT NetDevice
 {
     friend class DNSSDNetworkBuilder;
     friend class UpnpNetworkBuilder;
+#ifndef QT_NAMESPACE
+    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const NetDevice& device );
+    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, NetDevice& device );
+#else
     friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const NetDevice& device );
     friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, NetDevice& device );
+#endif
 
   public:
     // later has priority

@@ -35,7 +35,11 @@ namespace Cagibi
 
 class DevicePrivate : public QSharedData
 {
+#ifndef QT_NAMESPACE
+    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
+#else
     friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, Cagibi::Device& device );
+#endif
 
   public:
     DevicePrivate();

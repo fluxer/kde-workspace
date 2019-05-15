@@ -52,8 +52,13 @@ class MOLLETNETWORK_EXPORT NetService
     friend class DNSSDNetworkBuilder;
     friend class UpnpNetworkBuilder;
     friend class NetDevicePrivate;
+#ifndef QT_NAMESPACE
+    friend QDBusArgument& ::operator<<( QDBusArgument& argument, const NetService& service );
+    friend const QDBusArgument& ::operator>>( const QDBusArgument& argument, NetService& service );
+#else
     friend QDBusArgument& ::QT_NAMESPACE::operator<<( QDBusArgument& argument, const NetService& service );
     friend const QDBusArgument& ::QT_NAMESPACE::operator>>( const QDBusArgument& argument, NetService& service );
+#endif
 
   public:
     NetService();
