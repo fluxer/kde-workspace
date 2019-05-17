@@ -164,6 +164,10 @@ done
 QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
 export QT_PLUGIN_PATH
 
+# Set the platform plugin for Qt to the one provided by KDE
+QT_PLATFORM_PLUGIN=kde
+export QT_PLATFORM_PLUGIN
+
 # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
 # from some users that they're confused and don't know what to do. This is
 # especially necessary on slow machines, where starting KDE takes one or two
