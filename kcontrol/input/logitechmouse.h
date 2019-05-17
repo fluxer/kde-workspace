@@ -22,6 +22,7 @@
 #ifndef __LOGITECHMOUSE_H__
 #define __LOGITECHMOUSE_H__
 
+#include <QTimer>
 #include <QPushButton>
 
 #include <kconfig.h>
