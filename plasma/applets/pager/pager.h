@@ -23,13 +23,13 @@
 
 #include <QtGui/qgraphicssceneevent.h>
 #include <QList>
+#include <QTimer>
+#include <QDesktopWidget>
 
 #include <Plasma/Applet>
 
 #include "model.h"
 #include "ui_pagerConfig.h"
-
-#include <QDesktopWidget>
 
 class KColorScheme;
 class KWindowInfo;

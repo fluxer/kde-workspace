@@ -24,6 +24,8 @@
 #include <Plasma/PopupApplet>
 #include <Plasma/Label>
 
+#include <QTimer>
+
 #include "plasmaclock/calendar.h"
 
 namespace Plasma

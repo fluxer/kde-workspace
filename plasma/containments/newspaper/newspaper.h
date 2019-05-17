@@ -23,9 +23,10 @@
 #define PLASMA_NEWSPAPER_H
 
 #include <Plasma/Containment>
+#include <QTimer>
+#include <QGraphicsLinearLayout>
 
 class AppletOverlay;
-#include <QGraphicsLinearLayout>
 class AppletsContainer;
 class AppletsView;
 

@@ -20,6 +20,7 @@
 #ifndef MOUSEEVENTLISTENER_H
 #define MOUSEEVENTLISTENER_H
 
+#include <QTimer>
 #include <QDeclarativeItem>
 
 class KDeclarativeMouseEvent : public QObject

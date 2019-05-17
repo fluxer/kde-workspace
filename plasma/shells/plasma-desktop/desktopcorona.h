@@ -22,6 +22,7 @@
 
 #include <Plasma/Corona>
 
+#include <QTimer>
 #include <QMenu>
 #include <QAction>
 

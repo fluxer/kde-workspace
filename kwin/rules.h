@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <netwm_def.h>
 #include <QRect>
+#include <QTimer>
 #include <kconfiggroup.h>
 #include <kdebug.h>
 

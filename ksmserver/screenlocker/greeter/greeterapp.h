@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Plasma/PackageStructure>
 
+#include <QTimer>
 #include <QDeclarativeView>
 
 namespace Plasma {

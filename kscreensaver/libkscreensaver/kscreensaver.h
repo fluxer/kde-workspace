@@ -23,6 +23,7 @@
 #define KSCREENSAVER_H
 
 #include <QtGui/QWidget>
+#include <QtGui/QDialog>
 
 #include <kscreensaver_export.h>
 #include <kaboutdata.h> // needed by all users of this header, so no point in a forward declaration

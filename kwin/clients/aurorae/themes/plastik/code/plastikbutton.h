@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWIN_PLASTIK_BUTTON_H
 #define KWIN_PLASTIK_BUTTON_H
 
+#include <QPainter>
 #include <QDeclarativeImageProvider>
 
 namespace KWin

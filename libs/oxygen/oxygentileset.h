@@ -24,6 +24,7 @@
 #include "oxygen_export.h"
 
 #include <QtGui/QPixmap>
+#include <QtGui/QPainter>
 #include <QtCore/QRect>
 #include <QtCore/QVector>
 

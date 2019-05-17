@@ -39,6 +39,8 @@
 #include "ui_decoration.h"
 
 #include <QSortFilterProxyModel>
+#include <QTimer>
+
 namespace KWin
 {
 

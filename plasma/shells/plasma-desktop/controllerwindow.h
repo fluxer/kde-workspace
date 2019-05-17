@@ -25,6 +25,7 @@
 
 #include <QBoxLayout>
 #include <QGraphicsWidget>
+#include <QTimer>
 
 namespace Plasma
 {
