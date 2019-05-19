@@ -27,6 +27,7 @@
 #include <KIcon>
 #include <KFileDialog>
 #include <KColorDialog>
+#include <KDebug>
 #include <QtCore/QHash>
 #include <QtCore/QTimer>
 #include <QtGui/QFileDialog>
@@ -35,9 +36,12 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QToolBar>
 #include <QtGui/QMainWindow>
-#include "qguiplatformplugin_p.h"
 
-#include <kdebug.h>
+#ifndef QT_KATIE
+#include "qguiplatformplugin_p.h"
+#else
+#include "qguiplatformplugin.h"
+#endif
 
 /*
  * Map a Qt filter string into a KDE one.
@@ -173,7 +177,10 @@ public:
     }
     virtual QIcon fileSystemIcon(const QFileInfo &file)
     {
-        return KIcon(KMimeType::findByPath(file.filePath(), 0, true)->iconName());
+        KMimeType::Ptr mime = KMimeType::findByPath(file.filePath(), 0, true);
+        if (!mime)
+            return QIcon();
+        return KIcon(mime->iconName());
     }
     virtual int platformHint(PlatformHint hint)
     {

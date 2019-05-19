@@ -57,13 +57,13 @@
 #include <QtCore/qfactoryinterface.h>
 #include <QtGui/qdialog.h>
 
+#ifndef QT_KATIE
+
 QT_BEGIN_HEADER
 
 QT_BEGIN_NAMESPACE
 
-#ifndef QT_KATIE
 QT_MODULE(Gui)
-#endif
 
 #include <QPalette>
 #include <QIcon>
@@ -94,7 +94,6 @@ class Q_GUI_EXPORT QGuiPlatformPlugin : public QObject, public QGuiPlatformPlugi
         enum PlatformHint { PH_ToolButtonStyle, PH_ToolBarIconSize, PH_ItemView_ActivateItemOnSingleClick };
         virtual int platformHint(PlatformHint hint);
 
-
         virtual void fileDialogDelete(QFileDialog *) {}
         virtual bool fileDialogSetVisible(QFileDialog *, bool) { return false; }
         virtual QDialog::DialogCode fileDialogResultCode(QFileDialog *) { return QDialog::Rejected; }
@@ -123,5 +122,6 @@ Q_DECLARE_INTERFACE(QGuiPlatformPluginInterface, QGuiPlatformPluginInterface_iid
 
 QT_END_HEADER
 
+#endif // QT_KATIE
 
 #endif // QGUIPLATFORMPLUGIN_H
