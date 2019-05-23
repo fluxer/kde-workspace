@@ -154,7 +154,7 @@ bool PlasmaAppletItem::passesFiltering(const KCategorizedItemsViewModels::Filter
     if (filter.first == "running") {
         return running();
     } else if (filter.first == "category") {
-        return m_info.category().toLower() == filter.second;
+        return m_info.category().toLower() == filter.second.toString();
     } else {
         return false;
     }
