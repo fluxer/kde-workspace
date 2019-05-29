@@ -208,7 +208,7 @@ void TrashConfigModule::writeConfig()
         group.writeEntry( "UseSizeLimit", it.value().useSizeLimit );
         group.writeEntry( "Percent", it.value().percent );
         group.writeEntry( "LimitReachedAction", it.value().actionType );
-        groups.sync();
+        group.sync();
     }
     config.sync();
 }
