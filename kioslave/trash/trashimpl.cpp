@@ -775,8 +775,9 @@ void TrashImpl::fileAdded()
     KConfigGroup group = m_config.group( "Status" );
     if ( group.readEntry( "Empty", true) == true ) {
         group.writeEntry( "Empty", false );
-        m_config.sync();
+        group.sync();
     }
+    m_config.sync();
     // The apps showing the trash (e.g. kdesktop) will be notified
     // of this change when KDirNotify::FilesAdded("trash:/") is emitted,
     // which will be done by the job soon after this.
@@ -787,7 +788,7 @@ void TrashImpl::fileRemoved()
     if ( isEmpty() ) {
         KConfigGroup group = m_config.group( "Status" );
         group.writeEntry( "Empty", true );
-        m_config.sync();
+        group.sync();
     }
     // The apps showing the trash (e.g. kdesktop) will be notified
     // of this change when KDirNotify::FilesRemoved(...) is emitted,
