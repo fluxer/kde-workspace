@@ -416,7 +416,6 @@ void Image::updateDirWatch(const QStringList &newDirs)
         }
     }
 
-    m_dirWatch->startScan();
     m_dirs = newDirs;
 }
 
