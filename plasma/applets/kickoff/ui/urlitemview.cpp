@@ -24,10 +24,9 @@
 #include <QtCore/QHash>
 #include <QtCore/qabstractitemmodel.h>
 #include <QtCore/QUrl>
-
+#include <QtGui/QPen>
 #include <QtGui/qevent.h>
 #include <QtGui/QPainter>
-#include <QtGui/qevent.h>
 #include <QtGui/QScrollBar>
 #include <QtGui/QToolTip>
 

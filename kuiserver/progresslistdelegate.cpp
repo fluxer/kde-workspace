@@ -29,6 +29,7 @@
 #include <QFontMetrics>
 #include <QListView>
 #include <QProgressBar>
+#include <QPen>
 
 #include <kicon.h>
 #include <klocale.h>

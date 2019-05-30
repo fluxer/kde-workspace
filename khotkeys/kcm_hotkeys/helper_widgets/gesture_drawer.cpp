@@ -13,8 +13,9 @@
 #include <QtGui/QColor>
 #include <QtGui/QPainter>
 #include <QtGui/QFrame>
+#include <QtGui/QPen>
+#include <QtGui/QBrush>
 #include <QtGui/qevent.h>
-#include <QtGui/qbrush.h>
 
 #include "gesture_drawer.h"
 

@@ -34,6 +34,7 @@
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 #include <QtGui/QPainterPath>
+#include <QtGui/QPen>
 #include <QtGui/qevent.h>
 #include <QEvent>
 

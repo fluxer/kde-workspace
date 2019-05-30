@@ -19,6 +19,7 @@
 
 #include "contentareacap.h"
 #include <QPainter>
+#include <QPen>
 
 ContentAreaCap::ContentAreaCap(QWidget *parent, bool flip)
         :QWidget(parent)

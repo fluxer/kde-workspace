@@ -21,8 +21,9 @@
 
 #include <QColor>
 #include <QPainter>
-#include <QtGui/qstyleoption.h>
+#include <QStyleOption>
 #include <QTimer>
+#include <QPen>
 
 #include <KDebug>
 #include <KIconLoader>

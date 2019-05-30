@@ -25,7 +25,8 @@
 #include <KColorScheme>
 
 #include <QtGui/QPainter>
-#include <QtGui/qbrush.h>
+#include <QtGui/QBrush>
+#include <QtGui/QPen>
 
 #include <math.h>
 
