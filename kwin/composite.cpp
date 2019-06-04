@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "compositingadaptor.h"
 
 #include "utils.h"
-#include <QTextStream>
 #include "workspace.h"
 #include "client.h"
 #include "unmanaged.h"
@@ -41,6 +40,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <stdio.h>
 
+#include <QTextStream>
+#include <QFile>
 #include <QtConcurrentRun>
 #include <QFutureWatcher>
 #include <QMenu>

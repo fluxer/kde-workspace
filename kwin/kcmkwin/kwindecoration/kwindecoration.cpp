@@ -34,6 +34,7 @@
 #include "decorationmodel.h"
 #include "auroraetheme.h"
 // Qt
+#include <QFile>
 #include <QTimer>
 #include <QtDBus/QtDBus>
 #include <QtDeclarative/QDeclarativeContext>
