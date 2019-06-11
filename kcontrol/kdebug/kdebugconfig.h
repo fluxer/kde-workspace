@@ -50,7 +50,6 @@ public:
 
     virtual void load();
     virtual void save();
-    virtual void defaults();
 
 protected Q_SLOTS:
     void slotDisableAllChanged(const int);

@@ -58,7 +58,7 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
                         ki18n("KDE Debug Module"),
                         0, KLocalizedString(), KAboutData::License_GPL,
                         ki18n("Copyright 1999-2009, David Faure <email>faure@kde.org</email>\n"
-                            "Copyright 2014-2015, Ivailo Monev <email>xakepa10@gmail.com</email>"
+                            "Copyright 2014-2019, Ivailo Monev <email>xakepa10@gmail.com</email>"
                         ));
 
     about->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
@@ -105,17 +105,18 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
     connect(pAbortFatal, SIGNAL(stateChanged(int)),
             this, SLOT(slotAbortFatalChanged()));
 
-    m_disableAll->setTristate(false);
     connect(m_disableAll, SIGNAL(stateChanged(int)),
             this, SLOT(slotDisableAllChanged(int)));
 
     // Get initial values
+    load();
     showArea(QString("0"));
 }
 
 
 KCMDebug::~KCMDebug()
 {
+    delete pConfig;
 }
 
 void KCMDebug::readAreas()
@@ -180,9 +181,8 @@ void KCMDebug::load()
 void KCMDebug::save()
 {
     if (!mLoaded) {
-        return;
+        load();
     }
-    kDebug();
     KConfigGroup group = pConfig->group( mCurrentDebugArea ); // Group name = debug area code
     group.writeEntry( "InfoOutput", pInfoCombo->currentIndex() );
     group.writePathEntry( "InfoFilename", pInfoFile->text() );
@@ -207,11 +207,6 @@ void KCMDebug::save()
         kError() << "Unable to send D-BUS message" << endl;
     }
     emit changed( false );
-}
-
-void KCMDebug::defaults()
-{
-    // TODO: reset back to default
 }
 
 void KCMDebug::slotApply()
@@ -252,7 +247,7 @@ void KCMDebug::slotDisableAllChanged(const int checked)
     pAbortFatal->setEnabled(enabled);
 
     KConfigGroup topGroup(pConfig, QString());
-    if (checked == topGroup.readEntry("DisableAll", false)) {
+    if (checked == topGroup.readEntry("DisableAll", true)) {
         emit changed( false );
     } else {
         emit changed( true );
