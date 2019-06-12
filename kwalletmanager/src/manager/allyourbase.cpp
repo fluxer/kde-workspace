@@ -523,7 +523,7 @@ QMimeData *KWalletEntryList::itemMimeData(const QTreeWidgetItem *i) const {
 		QByteArray a;
 		QDataStream ds(&a, QIODevice::WriteOnly);
 
-		ds.setVersion(QDataStream::Qt_4_0);
+		ds.setVersion(QDataStream::Qt_4_8);
 		ds << KWALLETENTRYMAGIC;
 		ds << ei->text(0);
 		ds << ci->entryType();
@@ -540,7 +540,7 @@ QMimeData *KWalletEntryList::itemMimeData(const QTreeWidgetItem *i) const {
 		QByteArray a;
 		QDataStream ds(&a, QIODevice::WriteOnly);
 
-		ds.setVersion(QDataStream::Qt_4_0);
+		ds.setVersion(QDataStream::Qt_4_8);
 
 		ds << KWALLETFOLDERMAGIC;
 		ds << *fi;
