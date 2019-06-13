@@ -41,131 +41,6 @@
 #define FADE_LENGTH 32
 #define MAIN_ICON_SIZE 48
 
-class AppletDelegate : public QAbstractItemDelegate
-{
-public:
-    enum { DescriptionRole = Qt::UserRole + 1, PluginNameRole, ModeRole };
-
-    AppletDelegate(QObject * parent = 0);
-
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option,
-                       const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    int calcItemHeight(const QStyleOptionViewItem& option) const;
-};
-
-AppletDelegate::AppletDelegate(QObject* parent)
-: QAbstractItemDelegate(parent)
-{
-}
-
-void AppletDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option,
-                           const QModelIndex& index) const
-{
-    QStyleOptionViewItemV4 opt(option);
-    QStyle *style = opt.widget ? opt.widget->style() : QApplication::style();
-    style->drawPrimitive(QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget);
-
-    const int left = option.rect.left();
-    const int top = option.rect.top();
-    const int width = option.rect.width();
-    const int height = calcItemHeight(option);
-
-    bool leftToRight = (painter->layoutDirection() == Qt::LeftToRight);
-    QIcon::Mode iconMode = QIcon::Normal;
-
-    const QColor foregroundColor = (option.state.testFlag(QStyle::State_Selected)) ?
-                                    option.palette.color(QPalette::HighlightedText) :
-                                    option.palette.color(QPalette::Text);
-
-    // Borrowed from Dolphin for consistency and beauty.
-    // For the color of the additional info the inactive text color
-    // is not used as this might lead to unreadable text for some color schemes. Instead
-    // the text color is slightly mixed with the background color.
-    const QColor textColor = option.palette.text().color();
-    const QColor baseColor = option.palette.base().color();
-    const int p1 = 70;
-    const int p2 = 100 - p1;
-    const QColor detailsColor = QColor((textColor.red() * p1 + baseColor.red() * p2) / 100,
-                                       (textColor.green() * p1 + baseColor.green() * p2) / 100,
-                                       (textColor.blue() * p1 + baseColor.blue() * p2) /  100);
-
-    QPixmap pixmap(width, height);
-    pixmap.fill(Qt::transparent);
-    QPainter p(&pixmap);
-    p.translate(-option.rect.topLeft());
-
-    QLinearGradient gradient;
-
-    QString title = index.model()->data(index, Qt::DisplayRole).toString();
-    QString description = index.model()->data(index, AppletDelegate::DescriptionRole).toString();
-
-    // Painting
-
-    // Text
-    int textInner = 2 * UNIVERSAL_PADDING + MAIN_ICON_SIZE;
-
-    p.setPen(foregroundColor);
-    p.drawText(left + (leftToRight ? textInner : 0),
-               top, width - textInner, height / 2,
-               Qt::AlignBottom | Qt::AlignLeft, title);
-    p.setPen(detailsColor);
-    p.drawText(left + (leftToRight ? textInner : 0),
-               top + height / 2,
-               width - textInner, height / 2,
-               Qt::AlignTop | Qt::AlignLeft, description);
-
-    // Main icon
-    const QIcon& icon = qvariant_cast<QIcon>(index.model()->data(index, Qt::DecorationRole));
-    icon.paint(&p,
-        leftToRight ? left + UNIVERSAL_PADDING : left + width - UNIVERSAL_PADDING - MAIN_ICON_SIZE,
-        top + UNIVERSAL_PADDING, MAIN_ICON_SIZE, MAIN_ICON_SIZE, Qt::AlignCenter, iconMode);
-
-    // Gradient part of the background - fading of the text at the end
-    if (leftToRight) {
-        gradient = QLinearGradient(left + width - UNIVERSAL_PADDING - FADE_LENGTH, 0,
-                left + width - UNIVERSAL_PADDING, 0);
-        gradient.setColorAt(0, Qt::white);
-        gradient.setColorAt(1, Qt::transparent);
-    } else {
-        gradient = QLinearGradient(left + UNIVERSAL_PADDING, 0,
-                left + UNIVERSAL_PADDING + FADE_LENGTH, 0);
-        gradient.setColorAt(0, Qt::transparent);
-        gradient.setColorAt(1, Qt::white);
-    }
-
-    QRect paintRect = option.rect;
-    p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
-    p.fillRect(paintRect, gradient);
-
-    if (leftToRight) {
-        gradient.setStart(left + width - FADE_LENGTH, 0);
-        gradient.setFinalStop(left + width, 0);
-    } else {
-        gradient.setStart(left + UNIVERSAL_PADDING, 0);
-        gradient.setFinalStop(left + UNIVERSAL_PADDING + FADE_LENGTH, 0);
-    }
-    paintRect.setHeight(UNIVERSAL_PADDING + MAIN_ICON_SIZE / 2);
-    p.fillRect(paintRect, gradient);
-    p.end();
-
-    painter->drawPixmap(option.rect.topLeft(), pixmap);
-}
-
-int AppletDelegate::calcItemHeight(const QStyleOptionViewItem& option) const
-{
-    // Painting main column
-    int textHeight = QFontInfo(option.font).pixelSize() * 2;
-    //kDebug() << textHeight << qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
-    return qMax(textHeight, MAIN_ICON_SIZE) + 2 * UNIVERSAL_PADDING;
-}
-
-QSize AppletDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
-{
-    Q_UNUSED(index)
-    return QSize(200, calcItemHeight(option));
-}
-
 void WallpaperWidget::settingsChanged(bool isModified)
 {
     emit modified(isModified);
@@ -267,7 +142,6 @@ BackgroundDialog::BackgroundDialog(const QSize& res, Plasma::Containment *c, Pla
 
     d->containmentModel = new QStandardItemModel(this);
     d->backgroundDialogUi.containmentComboBox->setModel(d->containmentModel);
-    d->backgroundDialogUi.containmentComboBox->setItemDelegate(new AppletDelegate());
 
     MousePlugins *m = new MousePlugins(d->containment.data(), this);
     connect(m, SIGNAL(modified(bool)), this, SLOT(settingsModified(bool)));
@@ -285,7 +159,6 @@ BackgroundDialog::BackgroundDialog(const QSize& res, Plasma::Containment *c, Pla
 
     d->wallpaperModel = new QStandardItemModel(this);
     d->backgroundDialogUi.wallpaperMode->setModel(d->wallpaperModel);
-    d->backgroundDialogUi.wallpaperMode->setItemDelegate(new AppletDelegate());
 
     QSize dialogSize = QSize(650, 720).expandedTo(sizeHint());
     if (d->containment) {
@@ -355,8 +228,8 @@ void BackgroundDialog::reloadConfig()
         }
 
         QStandardItem* item = new QStandardItem(KIcon(info.icon()), info.name());
-        item->setData(info.comment(), AppletDelegate::DescriptionRole);
-        item->setData(info.pluginName(), AppletDelegate::PluginNameRole);
+        item->setData(info.comment(), BackgroundDialog::DescriptionRole);
+        item->setData(info.pluginName(), BackgroundDialog::PluginNameRole);
         d->containmentModel->appendRow(item);
 
         if (d->containment && info.pluginName() == d->containment.data()->pluginName()) {
@@ -418,9 +291,9 @@ void BackgroundDialog::reloadConfig()
                     KConfig config(KGlobal::dirs()->locate("services", info.entryPath()),
                                    KConfig::SimpleConfig);
                     KConfigGroup cg(&config, "Desktop Action " + mode.name());
-                    item->setData(cg.readEntry("Comment", QString()), AppletDelegate::DescriptionRole);
-                    item->setData(info.pluginName(), AppletDelegate::PluginNameRole);
-                    item->setData(mode.name(), AppletDelegate::ModeRole);
+                    item->setData(cg.readEntry("Comment", QString()), BackgroundDialog::DescriptionRole);
+                    item->setData(info.pluginName(), BackgroundDialog::PluginNameRole);
+                    item->setData(mode.name(), BackgroundDialog::ModeRole);
                     d->wallpaperModel->appendRow(item);
 
                     //kDebug() << matches << mode.name() << currentMode;
@@ -432,8 +305,8 @@ void BackgroundDialog::reloadConfig()
                 }
             } else {
                 QStandardItem *item = new QStandardItem(KIcon(info.icon()), info.name());
-                item->setData(info.comment(), AppletDelegate::DescriptionRole);
-                item->setData(info.pluginName(), AppletDelegate::PluginNameRole);
+                item->setData(info.comment(), BackgroundDialog::DescriptionRole);
+                item->setData(info.pluginName(), BackgroundDialog::PluginNameRole);
                 d->wallpaperModel->appendRow(item);
 
                 if (matches) {
@@ -459,8 +332,8 @@ void BackgroundDialog::changeBackgroundMode(int index)
 {
     kDebug();
     QWidget* w = 0;
-    const QString plugin = d->backgroundDialogUi.wallpaperMode->itemData(index, AppletDelegate::PluginNameRole).toString();
-    const QString mode = d->backgroundDialogUi.wallpaperMode->itemData(index, AppletDelegate::ModeRole).toString();
+    const QString plugin = d->backgroundDialogUi.wallpaperMode->itemData(index, BackgroundDialog::PluginNameRole).toString();
+    const QString mode = d->backgroundDialogUi.wallpaperMode->itemData(index, BackgroundDialog::ModeRole).toString();
 
     if (d->backgroundDialogUi.wallpaperGroup->layout()->count() > 1) {
         QLayoutItem *item = d->backgroundDialogUi.wallpaperGroup->layout()->takeAt(1);
@@ -542,10 +415,10 @@ void BackgroundDialog::saveConfig()
     }
 
     const int wallpaperIndex = d->backgroundDialogUi.wallpaperMode->currentIndex();
-    const QString wallpaperPlugin = d->backgroundDialogUi.wallpaperMode->itemData(wallpaperIndex, AppletDelegate::PluginNameRole).toString();
-    const QString wallpaperMode = d->backgroundDialogUi.wallpaperMode->itemData(wallpaperIndex, AppletDelegate::ModeRole).toString();
+    const QString wallpaperPlugin = d->backgroundDialogUi.wallpaperMode->itemData(wallpaperIndex, BackgroundDialog::PluginNameRole).toString();
+    const QString wallpaperMode = d->backgroundDialogUi.wallpaperMode->itemData(wallpaperIndex, BackgroundDialog::ModeRole).toString();
     const QString containmentPlugin = d->backgroundDialogUi.containmentComboBox->itemData(d->backgroundDialogUi.containmentComboBox->currentIndex(),
-                                                          AppletDelegate::PluginNameRole).toString();
+                                                          BackgroundDialog::PluginNameRole).toString();
 
     // Containment
     if (isLayoutChangeable()) {

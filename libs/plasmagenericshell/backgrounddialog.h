@@ -12,7 +12,7 @@
 #define BACKGROUNDDIALOG_H
 
 #include <KConfigDialog>
-
+#include <QStandardItemModel>
 #include <Plasma/Plasma>
 
 #include "plasmagenericshell_export.h"
@@ -22,7 +22,6 @@ namespace Plasma {
     class Containment;
     class View;
 }
-#include <QStandardItemModel>
 class ScreenPreviewWidget;
 
 // WallpaperWidget is passed the wallpaper
@@ -46,6 +45,12 @@ class PLASMAGENERICSHELL_EXPORT BackgroundDialog : public KConfigDialog
 {
     Q_OBJECT
 public:
+    enum {
+        DescriptionRole = Qt::UserRole + 1,
+        PluginNameRole,
+        ModeRole
+    };
+
     BackgroundDialog(const QSize &res, Plasma::Containment *containment,
                      Plasma::View *view, QWidget* parent, const QString &id,
                      KConfigSkeleton *s);
