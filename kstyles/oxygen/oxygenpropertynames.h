@@ -33,8 +33,10 @@ namespace Oxygen
     struct PropertyNames
     {
 
-        static const char* const noAnimations;
         static const char* const noWindowGrab;
+        static const char* const progressTimer;
+        static const char* const progressDirection;
+        static const char* const progressValue;
 
     };
 

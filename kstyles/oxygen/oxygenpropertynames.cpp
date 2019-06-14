@@ -29,7 +29,9 @@
 namespace Oxygen
 {
 
-    const char* const PropertyNames::noAnimations = "_kde_no_animations";
     const char* const PropertyNames::noWindowGrab = "_kde_no_window_grab";
+    const char* const PropertyNames::progressTimer = "_kde_progressbar_timer";
+    const char* const PropertyNames::progressDirection = "_kde_progressbar_direction";
+    const char* const PropertyNames::progressValue = "_kde_progressbar_value";
 
 }

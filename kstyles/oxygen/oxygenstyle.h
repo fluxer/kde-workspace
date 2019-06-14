@@ -60,6 +60,7 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QToolBox>
 #include <QtGui/QWidget>
+#include <QtGui/QProgressBar>
 
 #include <KIcon>
 
@@ -177,6 +178,7 @@ namespace Oxygen
         bool eventFilterTabBar( QWidget*, QEvent* );
         bool eventFilterToolBar( QToolBar*, QEvent* );
         bool eventFilterToolBox( QToolBox*, QEvent* );
+        bool eventFilterProgressBar( QProgressBar*, QEvent* );
 
         //! install event filter to object, in a unique way
         void addEventFilter( QObject* object )

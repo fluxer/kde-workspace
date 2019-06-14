@@ -381,7 +381,7 @@ namespace Oxygen
     bool WindowManager::isBlackListed( QWidget* widget )
     {
 
-        // check against noAnimations propery
+        // check against noWindowGrab propery
         QVariant propertyValue( widget->property( PropertyNames::noWindowGrab ) );
         if( propertyValue.isValid() && propertyValue.toBool() ) return true;
 

@@ -58,6 +58,7 @@
 #include "oxygenstyleconfigdata.h"
 #include "oxygenwidgetexplorer.h"
 #include "oxygenwindowmanager.h"
+#include "oxygenpropertynames.h"
 
 #include <QtCore/QDebug>
 #include <QtGui/QAbstractButton>
@@ -422,6 +423,10 @@ namespace Oxygen
             widget->setAutoFillBackground( false );
             widget->setBackgroundRole( QPalette::Window );
 
+        } else if( qobject_cast<QProgressBar*>( widget ) ) {
+
+            addEventFilter( widget );
+
         }
 
         // base class polishing
@@ -534,7 +539,14 @@ namespace Oxygen
             widget->setAttribute( Qt::WA_NoSystemBackground, false );
             widget->clearMask();
 
-        } else if( widget->inherits( "QComboBoxPrivateContainer" ) ) widget->removeEventFilter( this );
+        } else if( widget->inherits( "QComboBoxPrivateContainer" ) ) {
+
+            widget->removeEventFilter( this );
+
+        } else if( qobject_cast<QProgressBar*>( widget ) ) {
+
+            widget->removeEventFilter( this );
+        }
 
         QCommonStyle::unpolish( widget );
 
@@ -1165,6 +1177,7 @@ namespace Oxygen
         if( QToolBox* toolBox = qobject_cast<QToolBox*>( object ) ) { return eventFilterToolBox( toolBox, event ); }
         if( QMdiSubWindow* subWindow = qobject_cast<QMdiSubWindow*>( object ) ) { return eventFilterMdiSubWindow( subWindow, event ); }
         if( QScrollBar* scrollBar = qobject_cast<QScrollBar*>( object ) ) { return eventFilterScrollBar( scrollBar, event ); }
+        if( QProgressBar* progressBar = qobject_cast<QProgressBar*>( object ) ) { return eventFilterProgressBar( progressBar, event ); }
 
         // cast to QWidget
         QWidget *widget = static_cast<QWidget*>( object );
@@ -1312,14 +1325,12 @@ namespace Oxygen
     //_________________________________________________________
     bool Style::eventFilterScrollBar( QWidget* widget, QEvent* event )
     {
-
         if( event->type() == QEvent::Paint )
         {
             QPainter painter( widget );
             painter.setClipRegion( static_cast<QPaintEvent*>( event )->region() );
             helper().renderWindowBackground( &painter, widget->rect(), widget,widget->palette() );
         }
-
         return false;
     }
 
@@ -1438,6 +1449,73 @@ namespace Oxygen
                 renderSlab( &painter, r, toolBox->palette().color( QPalette::Button ), opts );
 
             }
+        }
+
+        return false;
+    }
+
+    //_________________________________________________________
+    bool Style::eventFilterProgressBar( QProgressBar* widget, QEvent* event )
+    {
+        if( event->type() == QEvent::Show ) {
+            int id = widget->startTimer( 30 );
+            widget->setProperty( PropertyNames::progressTimer, QVariant(id) );
+            return true;
+
+        } else if( event->type() == QEvent::Timer ) {
+            if (widget->minimum() != widget->maximum()) {
+                // not busy
+                return false;
+            }
+            QVariant kValue = widget->property( PropertyNames::progressTimer );
+            QTimerEvent* te = static_cast<QTimerEvent*>(event);
+            if (!kValue.isValid() || kValue.toInt() != te->timerId()) {
+                // not this event filter timer
+                return false;
+            }
+
+            qreal minimum = widget->minimum();
+            qreal maximum = 100;
+            qreal progress = widget->property(PropertyNames::progressValue).toReal();
+            qreal newprogress = 0;
+            QString direction = widget->property(PropertyNames::progressDirection).toString();
+            Qt::Orientation orientation = widget->orientation();
+
+            if (orientation == Qt::Horizontal) {
+                maximum = widget->width();
+            } else if (orientation == Qt::Vertical) {
+                maximum = widget->height();
+            }
+            maximum = maximum - (maximum/ProgressBar_BusyIndicatorSize);
+
+            if (direction == QLatin1String("left")) {
+                newprogress = progress - 3;
+            } else if (direction == QLatin1String("right")) {
+                newprogress = progress + 3;
+            }
+
+            if (newprogress >= maximum) {
+                newprogress = maximum;
+                widget->setProperty( PropertyNames::progressDirection, "left" );
+            } else if (newprogress <= minimum ) {
+                newprogress = minimum;
+                widget->setProperty( PropertyNames::progressDirection, "right" );
+            }
+
+            widget->setProperty( PropertyNames::progressValue, newprogress );
+            widget->repaint();
+
+            return true;
+
+        } else if ( event->type() == QEvent::Hide ) {
+            QVariant kValue = widget->property( PropertyNames::progressTimer );
+            if (kValue.isValid()) {
+                widget->killTimer( kValue.toInt() );
+                widget->setProperty( PropertyNames::progressTimer, QVariant() );
+                widget->setProperty( PropertyNames::progressDirection, QVariant() );
+                widget->setProperty( PropertyNames::progressValue, QVariant() );
+            }
+            return true;
         }
 
         return false;
@@ -4378,20 +4456,17 @@ namespace Oxygen
 
         // check if anything is to be drawn
         qreal progress = pbOpt->progress - pbOpt->minimum;
-        const bool busyIndicator = ( pbOpt->minimum == 0 && pbOpt->maximum == 0 );
-#warning "busy indicator"
-#if 0
+        const bool busyIndicator = ( pbOpt->minimum == pbOpt->maximum );
         if( busyIndicator && widget )
         {
             // load busy value from widget property
-            QVariant busyValue( widget->property( ProgressBarEngine::busyValuePropertyName ) );
+            QVariant busyValue( widget->property( PropertyNames::progressValue ) );
             if( busyValue.isValid() ) progress = busyValue.toReal();
         }
-#endif
 
         if( !( progress || busyIndicator ) ) return true;
 
-        const int steps = qMax( pbOpt->maximum  - pbOpt->minimum, 1 );
+        const int steps = qMax( pbOpt->maximum - pbOpt->minimum, 1 );
         const bool horizontal = !pbOpt2 || pbOpt2->orientation == Qt::Horizontal;
 
         //Calculate width fraction
