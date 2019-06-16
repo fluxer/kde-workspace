@@ -1503,7 +1503,7 @@ namespace Oxygen
             }
 
             widget->setProperty( PropertyNames::progressValue, newprogress );
-            widget->repaint();
+            widget->update();
 
             return true;
 
