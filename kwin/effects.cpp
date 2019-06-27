@@ -87,6 +87,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effects/trackmouse/trackmouse.h"
 #include "effects/windowgeometry/windowgeometry.h"
 #include "effects/zoom/zoom.h"
+#include "effects/startupfeedback/startupfeedback.h"
 
 namespace KWin
 {
@@ -1419,6 +1420,8 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         effect = new SnapHelperEffect();
     } else if (internalname == "kwin4_effect_trackmouse") {
         effect = new TrackMouseEffect();
+    } else if (internalname == "kwin4_effect_startupfeedback") {
+        effect = new StartupFeedbackEffect();
     }
 
     if (effect) {

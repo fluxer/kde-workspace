@@ -69,6 +69,7 @@ include( effects/magnifier/CMakeLists.txt )
 include( effects/mousemark/CMakeLists.txt )
 include( effects/snaphelper/CMakeLists.txt )
 include( effects/trackmouse/CMakeLists.txt )
+include( effects/startupfeedback/CMakeLists.txt )
 
 kde4_add_plugin(kcm_kwin4_effect_builtins ${kwin4_effect_builtins_config_sources})
 target_link_libraries(kcm_kwin4_effect_builtins kwineffects ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS})

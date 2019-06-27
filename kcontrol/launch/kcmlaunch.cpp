@@ -71,8 +71,6 @@ LaunchConfig::LaunchConfig(QWidget * parent, const QVariantList &)
     cb_busyCursor->setObjectName( "cb_busyCursor" );
     cb_busyCursor->insertItem( 0, i18n( "No Busy Cursor" ) );
     cb_busyCursor->insertItem( 1, i18n( "Passive Busy Cursor" ) );
-    cb_busyCursor->insertItem( 2, i18n( "Blinking Cursor" ) );
-    cb_busyCursor->insertItem( 3, i18n( "Bouncing Cursor" ) );
     GroupBox1Layout->addWidget( cb_busyCursor, 0, 0 );
     connect( cb_busyCursor, SIGNAL(activated(int)),
             SLOT (slotBusyCursor(int)));
@@ -161,14 +159,8 @@ LaunchConfig::load()
 
   c= conf.group( "BusyCursorSettings" );
   sb_cursorTimeout->setValue( c.readEntry( "Timeout", 30 ));
-  bool busyBlinking =c.readEntry("Blinking", false);
-  bool busyBouncing =c.readEntry("Bouncing", true);
   if ( !busyCursor )
      cb_busyCursor->setCurrentIndex(0);
-  else if ( busyBlinking )
-     cb_busyCursor->setCurrentIndex(2);
-  else if ( busyBouncing )
-     cb_busyCursor->setCurrentIndex(3);
   else
      cb_busyCursor->setCurrentIndex(1);
 
@@ -192,8 +184,6 @@ LaunchConfig::save()
 
   c = conf.group("BusyCursorSettings");
   c.writeEntry( "Timeout", sb_cursorTimeout->value());
-  c.writeEntry("Blinking", cb_busyCursor->currentIndex() == 2);
-  c.writeEntry("Bouncing", cb_busyCursor->currentIndex() == 3);
 
   c = conf.group("TaskbarButtonSettings");
   c.writeEntry( "Timeout", sb_taskbarTimeout->value());
@@ -249,9 +239,6 @@ LaunchConfig::checkChanged()
 
   bool newTaskbarButton =cb_taskbarButton->isChecked();
 
-  bool newBusyBlinking= cb_busyCursor->currentIndex()==2;
-  bool newBusyBouncing= cb_busyCursor->currentIndex()==3;
-
   unsigned int newCursorTimeout = sb_cursorTimeout->value();
 
   unsigned int newTaskbarTimeout = sb_taskbarTimeout->value();
@@ -264,10 +251,6 @@ LaunchConfig::checkChanged()
       savedCursorTimeout  != newCursorTimeout
       ||
       savedTaskbarTimeout != newTaskbarTimeout
-      ||
-      savedBusyBlinking != newBusyBlinking
-      ||
-      savedBusyBouncing != newBusyBouncing
     );
 }
 
