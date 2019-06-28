@@ -154,19 +154,9 @@ void ResultsView::wheelEvent(QWheelEvent *e)
 
 void ResultsView::paintEvent(QPaintEvent *event)
 {
-    QPixmap backBuffer(viewport()->size());
-    backBuffer.fill(Qt::transparent);
+    QGraphicsView::paintEvent(event);
 
     QPainter painter(viewport());
-
-    // Here we need to redirect to a backBuffer since krunnerdialog
-    // draws its own background; the QPainter is then propagated to the widgets so that
-    // we cannot directly blit with destinationIn because the destination has
-    // already the (plasma-themed) background painted.
-
-    painter.setRedirected(viewport(),&backBuffer);
-    QGraphicsView::paintEvent(event);
-    painter.restoreRedirected(viewport());
 
     if (m_previousFadeout.isNull() || m_previousFadeout.width() != width()) {
         QLinearGradient g(0, 0, 0, m_previousPage->height());
@@ -190,17 +180,17 @@ void ResultsView::paintEvent(QPaintEvent *event)
         p.fillRect(m_nextFadeout.rect(), g);
     }
 
-    QPainter backBufferPainter(&backBuffer);
-    backBufferPainter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
     if (m_previousPage->isVisible()) {
-        backBufferPainter.drawPixmap(QPoint(0,0), m_previousFadeout);
+        painter.drawPixmap(QPoint(0,0), m_previousFadeout);
     }
 
     if (m_nextPage->isVisible()) {
-        backBufferPainter.drawPixmap(QPoint(0,height()-m_nextFadeout.height()), m_nextFadeout);
+        painter.drawPixmap(QPoint(0,height()-m_nextFadeout.height()), m_nextFadeout);
     }
-    backBufferPainter.end();
-    painter.drawPixmap(event->rect(), backBuffer, event->rect());
+    painter.end();
+
+
 }
 
 #include "moc_resultview.cpp"
