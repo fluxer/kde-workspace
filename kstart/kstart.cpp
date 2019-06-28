@@ -152,7 +152,7 @@ void KStart::sendRule() {
             message += "fullscreen=true\nfullscreenrule=3\n";
     }
 
-    msg.broadcastMessage( "_KDE_NET_WM_TEMPORARY_RULES", message, -1);
+    msg.broadcastMessage( "_KDE_NET_WM_TEMPORARY_RULES", message, -1, false );
     qApp->flush();
 }
 
