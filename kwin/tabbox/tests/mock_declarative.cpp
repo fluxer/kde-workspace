@@ -72,11 +72,6 @@ void DeclarativeView::showEvent(QShowEvent *event)
     Q_UNUSED(event)
 }
 
-void DeclarativeView::resizeEvent(QResizeEvent *event)
-{
-    Q_UNUSED(event)
-}
-
 void DeclarativeView::hideEvent(QHideEvent *event)
 {
     Q_UNUSED(event)

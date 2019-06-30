@@ -6,7 +6,8 @@
 
 int main(int argc, char **argv)
 {
-    QApplication app(argc, argv, "testicons");
+    QApplication app(argc, argv);
+    app.setApplicationName("testicons");
     KComponentData componentData("testicons");
     KIconConfig *w = new KIconConfig(componentData, 0L);
     w->show();

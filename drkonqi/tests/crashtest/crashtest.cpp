@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
   options.add("+crash|malloc|div0|assert|threads", ki18n("Type of crash."));
   KCmdLineArgs::addCmdLineOptions(options);
 
-  KApplication app(false);
+  KApplication app;
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
   //start drkonqi directly so that drkonqi's output goes to the console
