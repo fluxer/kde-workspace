@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) \
     KGlobal::ref(); /* don't quit qeventloop after closing a mainwindow */ \
     int result = QTest::qExec( &tc, argc, argv ); \
     dbus.start("kill", QStringList() << "-9" << pid); \
-    dbus.waitForFinished(); \
+    dbus.waitForFinished(10000); \
     return result; \
 }
 #endif //KWALLET_CUSTOM_QTEST

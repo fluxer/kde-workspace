@@ -23,6 +23,7 @@
 #include <sys/socket.h>
 
 #include <QTest>
+#include <QtCore/QTimer>
 #include <QtCore/QFile>
 #include <QtCore/QDebug>
 #include <QtCore/QEventLoop>
@@ -182,6 +183,7 @@ void KWalletExecuter::execute()
     if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kwalletd")) {
         qDebug() << "AAAAAAAA";
         QEventLoop loop;
+        QTimer::singleShot(30000, &loop, SLOT(quit()));
         QDBusServiceWatcher *watcher = new QDBusServiceWatcher("org.kde.kwalletd",
                                                             QDBusConnection::sessionBus(),
                                                             QDBusServiceWatcher::WatchForRegistration);
