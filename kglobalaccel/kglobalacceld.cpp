@@ -461,7 +461,7 @@ void KGlobalAccelD::doRegister(const QStringList &actionId)
 }
 
 
-QDBusObjectPath KGlobalAccelD::getComponent(const QString &componentUnique) const
+QDBusObjectPath KGlobalAccelD::getComponent(const QString &componentUnique)
     {
 #ifdef KDEDGLOBALACCEL_TRACE
     kDebug() << componentUnique;

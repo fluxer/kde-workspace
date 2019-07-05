@@ -83,7 +83,7 @@ public Q_SLOTS:
      *
      * @return the absolute dbus path
      */
-    Q_SCRIPTABLE QDBusObjectPath getComponent(const QString &componentUnique) const;
+    Q_SCRIPTABLE QDBusObjectPath getComponent(const QString &componentUnique);
 
     //to be called by main components owning the action
     Q_SCRIPTABLE QList<int> setShortcut(const QStringList &actionId,

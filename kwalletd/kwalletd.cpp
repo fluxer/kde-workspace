@@ -298,8 +298,9 @@ int KWalletD::open(const QString& wallet, qlonglong wId, const QString& appid) {
     KWalletTransaction *xact = new KWalletTransaction(connection());
     _transactions.append(xact);
 
-    message().setDelayedReply(true);
+    // message().setDelayedReply(true);
     xact->message = message();
+    xact->message.setDelayedReply(true);
 
     xact->appid = appid;
     xact->wallet = wallet;
@@ -791,8 +792,9 @@ int KWalletD::deleteWallet(const QString& wallet) {
 void KWalletD::changePassword(const QString& wallet, qlonglong wId, const QString& appid) {
 	KWalletTransaction *xact = new KWalletTransaction(connection());
 
-    message().setDelayedReply(true);
+    // message().setDelayedReply(true);
     xact->message = message();
+    xact->message.setDelayedReply(true);
 	// TODO GPG this shouldn't be allowed on a GPG managed wallet; a warning should be displayed about this
 
 	xact->appid = appid;
