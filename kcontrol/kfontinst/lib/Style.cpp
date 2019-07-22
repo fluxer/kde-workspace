@@ -60,10 +60,12 @@ Style::Style(const QDomElement &elem, bool loadFiles)
 
     itsScalable=!elem.hasAttribute(SCALABLE_ATTR) || elem.attribute(SCALABLE_ATTR)!="false";
     itsValue=FC::createStyleVal(weight, width, slant);
-    itsWritingSystems=0;
 
+    itsWritingSystems=0;
+#ifndef QT_KATIE
     if(elem.hasAttribute(LANGS_ATTR))
         itsWritingSystems=WritingSystems::instance()->get(elem.attribute(LANGS_ATTR).split(LANG_SEP, QString::SkipEmptyParts));
+#endif
 
     if(loadFiles)
     {
@@ -126,11 +128,11 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
         if(!itsScalable)
             str+= SCALABLE_ATTR "=\"false\" ";
 
+#ifndef QT_KATIE
         QStringList ws(WritingSystems::instance()->getLangs(itsWritingSystems));
-
         if(ws.count())
             str+= LANGS_ATTR "=\"" +ws.join(LANG_SEP)+"\" ";
-
+#endif
 
         if(1==files.count())
            str+=(*files.begin())+"/>";

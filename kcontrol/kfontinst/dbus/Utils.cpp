@@ -232,7 +232,9 @@ EFileType check(const QString &file, Family &fam)
                                 ? FILE_BITMAP : FILE_SCALABLE;
 
             FC::getDetails(pat, family, style, index, foundry);
+#ifndef QT_KATIE
             ws=WritingSystems::instance()->get(pat);
+#endif
             FcPatternDestroy(pat);
             Style st(style, scalable, ws);
             st.add(File(file, foundry, index));

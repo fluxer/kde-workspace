@@ -87,7 +87,9 @@ class CFontFilter : public KLineEdit
     QLabel                       *itsMenuButton;
     QMenu                        *itsMenu;
     ECriteria                    itsCurrentCriteria;
+#ifndef QT_KATIE
     QFontDatabase::WritingSystem itsCurrentWs;
+#endif
     QStringList                  itsCurrentFileTypes;
     QPixmap                      itsPixmaps[NUM_CRIT];
     KAction                      *itsActions[NUM_CRIT];

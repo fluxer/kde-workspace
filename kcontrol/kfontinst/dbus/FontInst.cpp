@@ -664,7 +664,9 @@ void FontInst::updateFontList(bool emitChanges)
                                foundry;
                     quint32    styleVal;
                     int        index;
+#ifndef QT_KATIE
                     qulonglong writingSystems(WritingSystems::instance()->get(list->fonts[i]));
+#endif
                     FcBool     scalable=FcFalse;
 
                     if(FcResultMatch!=FcPatternGetBool(list->fonts[i], FC_SCALABLE, 0, &scalable))
@@ -676,7 +678,9 @@ void FontInst::updateFontList(bool emitChanges)
                     StyleCont::ConstIterator  style=(*fam).add(Style(styleVal));
                     FileCont::ConstIterator   file=(*style).add(File(fileName, foundry, index));
 
+#ifndef QT_KATIE
                     (*style).setWritingSystems((*style).writingSystems()|writingSystems);
+#endif
                     if(scalable)
                         (*style).setScalable();
                 }

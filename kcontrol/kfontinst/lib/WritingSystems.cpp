@@ -26,6 +26,8 @@
 #include <fontconfig/fontconfig.h>
 #include "WritingSystems.h"
 
+#ifndef QT_KATIE
+
 namespace KFI
 {
 
@@ -174,3 +176,5 @@ WritingSystems::WritingSystems()
 }
 
 }
+
+#endif // QT_KATIE

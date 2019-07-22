@@ -28,6 +28,8 @@
 #include <QtCore/QStringList>
 #include "kfontinst_export.h"
 
+#ifndef QT_KATIE
+
 namespace KFI
 {
 
@@ -49,5 +51,7 @@ class KFONTINST_EXPORT WritingSystems
 };
 
 }
+
+#endif // QT_KATIE
 
 #endif
