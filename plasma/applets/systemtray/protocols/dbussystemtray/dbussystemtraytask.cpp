@@ -325,9 +325,8 @@ void DBusSystemTrayTask::syncIcons(const Plasma::DataEngine::Data &properties)
         }
         const QString path = m_iconThemePath;
         if (!path.isEmpty()) {
-            // FIXME: If last part of path is not "icons", this won't work!
             QStringList tokens = path.split('/', QString::SkipEmptyParts);
-            if (tokens.length() >= 3 && tokens.takeLast() == QLatin1String("icons")) {
+            if (tokens.length() >= 3) {
                 QString appName = tokens.takeLast();
                 QString prefix = QChar('/') + tokens.join("/");
                 // FIXME: Fix KIconLoader and KIconTheme so that we can use

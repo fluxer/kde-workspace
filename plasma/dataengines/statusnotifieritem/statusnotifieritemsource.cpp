@@ -214,9 +214,8 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
         if (!m_customIconLoader) {
             QString path = properties["IconThemePath"].toString();
             if (!path.isEmpty()) {
-                // FIXME: If last part of path is not "icons", this won't work!
                 QStringList tokens = path.split('/', QString::SkipEmptyParts);
-                if (tokens.length() >= 3 && tokens.takeLast() == "icons") {
+                if (tokens.length() >= 3) {
                     QString appName = tokens.takeLast();
                     QString prefix = '/' + tokens.join("/");
                     // FIXME: Fix KIconLoader and KIconTheme so that we can use
