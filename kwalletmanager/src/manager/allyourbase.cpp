@@ -269,7 +269,7 @@ void KWalletItem::processDropEvent(QDropEvent *e) {
 	if (em->hasFormat(QLatin1String("application/x-kwallet-folder")) ||
 	    em->hasFormat(QLatin1String("text/uri-list"))) {
 		// FIXME: don't allow the drop if the wallet name is the same
-		KWallet::Wallet *_wallet = KWallet::Wallet::openWallet(text(), listWidget()->topLevelWidget()->winId());
+		KWallet::Wallet *_wallet = KWallet::Wallet::openWallet(text(), listWidget()->window()->winId());
 		if (!_wallet) {
 			e->ignore();
 			return;
