@@ -129,12 +129,6 @@ void TestClientMachine::hostName()
     clientMachine.resolve(window, XCB_WINDOW_NONE);
     QTEST(clientMachine.hostName(), "expectedHost");
 
-    int i=0;
-    while (clientMachine.isResolving() && i++ < 50) {
-        // name is being resolved in an external thread, so let's wait a little bit
-        QTest::qWait(250);
-    }
-
     QCOMPARE(clientMachine.isLocal(), local);
     QCOMPARE(spy.isEmpty(), !local);
 }
