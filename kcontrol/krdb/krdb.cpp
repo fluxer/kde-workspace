@@ -118,9 +118,9 @@ static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPa
      discg   << newPal.color(QPalette::Disabled,
                 (QPalette::ColorRole) i).name();
 
-  settings.setValue("/qt/Palette/active", actcg);
-  settings.setValue("/qt/Palette/inactive", inactcg);
-  settings.setValue("/qt/Palette/disabled", discg);
+  settings.setValue("Qt/Palette/active", actcg);
+  settings.setValue("Qt/Palette/inactive", inactcg);
+  settings.setValue("Qt/Palette/disabled", discg);
 
   // export kwin's colors to qtrc for kstyle to use
   KConfigGroup wmCfgGroup(kglobalcfg, "WM");
@@ -128,39 +128,39 @@ static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPa
   // active colors
   QColor clr = newPal.color( QPalette::Active, QPalette::Background );
   clr = wmCfgGroup.readEntry("activeBackground", clr);
-  settings.setValue("/qt/KWinPalette/activeBackground", clr.name());
+  settings.setValue("Qt/KWinPalette/activeBackground", clr.name());
   if (QPixmap::defaultDepth() > 8)
     clr = clr.dark(110);
   clr = wmCfgGroup.readEntry("activeBlend", clr);
-  settings.setValue("/qt/KWinPalette/activeBlend", clr.name());
+  settings.setValue("Qt/KWinPalette/activeBlend", clr.name());
   clr = newPal.color( QPalette::Active, QPalette::HighlightedText );
   clr = wmCfgGroup.readEntry("activeForeground", clr);
-  settings.setValue("/qt/KWinPalette/activeForeground", clr.name());
+  settings.setValue("Qt/KWinPalette/activeForeground", clr.name());
   clr = newPal.color( QPalette::Active,QPalette::Background );
   clr = wmCfgGroup.readEntry("frame", clr);
-  settings.setValue("/qt/KWinPalette/frame", clr.name());
+  settings.setValue("Qt/KWinPalette/frame", clr.name());
   clr = wmCfgGroup.readEntry("activeTitleBtnBg", clr);
-  settings.setValue("/qt/KWinPalette/activeTitleBtnBg", clr.name());
+  settings.setValue("Qt/KWinPalette/activeTitleBtnBg", clr.name());
 
   // inactive colors
   clr = newPal.color(QPalette::Inactive, QPalette::Background);
   clr = wmCfgGroup.readEntry("inactiveBackground", clr);
-  settings.setValue("/qt/KWinPalette/inactiveBackground", clr.name());
+  settings.setValue("Qt/KWinPalette/inactiveBackground", clr.name());
   if (QPixmap::defaultDepth() > 8)
     clr = clr.dark(110);
   clr = wmCfgGroup.readEntry("inactiveBlend", clr);
-  settings.setValue("/qt/KWinPalette/inactiveBlend", clr.name());
+  settings.setValue("Qt/KWinPalette/inactiveBlend", clr.name());
   clr = newPal.color(QPalette::Inactive, QPalette::Background).dark();
   clr = wmCfgGroup.readEntry("inactiveForeground", clr);
-  settings.setValue("/qt/KWinPalette/inactiveForeground", clr.name());
+  settings.setValue("Qt/KWinPalette/inactiveForeground", clr.name());
   clr = newPal.color(QPalette::Inactive, QPalette::Background);
   clr = wmCfgGroup.readEntry("inactiveFrame", clr);
-  settings.setValue("/qt/KWinPalette/inactiveFrame", clr.name());
+  settings.setValue("Qt/KWinPalette/inactiveFrame", clr.name());
   clr = wmCfgGroup.readEntry("inactiveTitleBtnBg", clr);
-  settings.setValue("/qt/KWinPalette/inactiveTitleBtnBg", clr.name());
+  settings.setValue("Qt/KWinPalette/inactiveTitleBtnBg", clr.name());
 
   KConfigGroup kdeCfgGroup(kglobalcfg, "KDE");
-  settings.setValue("/qt/KDE/contrast", kdeCfgGroup.readEntry("contrast", 7));
+  settings.setValue("Qt/KDE/contrast", kdeCfgGroup.readEntry("contrast", 7));
 }
 
 // -----------------------------------------------------------------------------
@@ -168,7 +168,7 @@ static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPa
 static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
 {
   /* export font settings */
-  settings.setValue("/qt/font", KGlobalSettings::generalFont().toString());
+  settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
 
   /* export effects settings */
   KConfigGroup kdeCfgGroup(kglobalcfg, "General");
@@ -190,7 +190,7 @@ static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
   else
     guieffects << QString("none");
 
-  settings.setValue("/qt/GUIEffects", guieffects);
+  settings.setValue("Qt/GUIEffects", guieffects);
 }
 
 // -----------------------------------------------------------------------------
@@ -549,7 +549,11 @@ void runRdb( uint flags )
   /* Qt exports */
   if ( exportQtColors || exportQtSettings )
   {
+#ifndef QT_KATIE
     QSettings* settings = new QSettings(QLatin1String("Trolltech"));
+#else
+    QSettings* settings = new QSettings(QLatin1String("Katie"), QSettings::NativeFormat);
+#endif
 
     if ( exportQtColors )
       applyQtColors( kglobalcfg, *settings, newPal );    // For kcmcolors

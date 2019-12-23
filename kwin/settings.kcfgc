@@ -3,5 +3,5 @@ NameSpace=KWin
 ClassName=Settings
 # options.h is needed for FocusPolicy
 # placement.h is needed for Placement::Policy
-IncludeFiles=\"options.h\", \"placement.h\"
+IncludeFiles=options.h,placement.h
 UseEnumTypes=true
