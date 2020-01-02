@@ -779,8 +779,7 @@ void MouseSettings::apply(bool force)
 
   // This iterates through the various Logitech mice, if we have support.
   #ifdef HAVE_LIBUSB
-  LogitechMouse *logitechMouse;
-  Q_FOREACH( logitechMouse, logitechMouseList ) {
+  Q_FOREACH( LogitechMouse *logitechMouse, logitechMouseList ) {
       logitechMouse->applyChanges();
   }
   #endif
@@ -807,8 +806,7 @@ void MouseSettings::save(KConfig *config)
   group.writeEntry("ChangeCursor", changeCursor,KConfig::Persistent|KConfig::Global);
   // This iterates through the various Logitech mice, if we have support.
 #ifdef HAVE_LIBUSB
-  LogitechMouse *logitechMouse;
-  Q_FOREACH( logitechMouse, logitechMouseList ) {
+  Q_FOREACH( LogitechMouse *logitechMouse, logitechMouseList ) {
       logitechMouse->save(config);
   }
 #endif
