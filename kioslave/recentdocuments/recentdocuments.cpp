@@ -13,6 +13,7 @@
 #include <kdemacros.h>
 
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include "recentdocuments.h"
 

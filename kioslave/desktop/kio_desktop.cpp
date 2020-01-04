@@ -35,6 +35,8 @@
 #include <QDesktopServices>
 #include <QDir>
 
+#include <sys/stat.h>
+
 extern "C"
 {
     int KDE_EXPORT kdemain(int argc, char **argv)

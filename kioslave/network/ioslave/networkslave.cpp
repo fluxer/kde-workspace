@@ -33,6 +33,8 @@
 // Qt
 #include <QtCore/QEventLoop>
 
+#include <sys/stat.h>
+
 #include <KDebug>
 
 // static const char NetworkIconName[] = "network-workgroup";
