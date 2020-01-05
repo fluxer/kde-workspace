@@ -59,7 +59,11 @@ void Gpsd::run()
         if (gps_poll(m_gpsdata) != -1) {
 #endif
             //kDebug() << "poll ok";
+#if GPSD_API_MAJOR_VERSION >= 9
+            if (m_gpsdata->online.tv_sec >= 0 && m_gpsdata->online.tv_nsec >= 0) {
+#else
             if (m_gpsdata->online) {
+#endif
                 //kDebug() << "online";
                 if (m_gpsdata->status != STATUS_NO_FIX) {
                     //kDebug() << "fix";
