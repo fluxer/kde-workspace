@@ -161,7 +161,7 @@ void KWindowListMenu::init()
         itemText.replace( '&', QLatin1String( "&&" ));
 
         QAction* action = addAction( pm, itemText, this, SLOT( slotForceActiveWindow() ) );
-        action->setData( (quintptr)info->win() );
+        action->setData( qulonglong(quintptr(info->win())) );
 
         if ( info->win() == activeWindow )
           action->setChecked( true );
@@ -188,19 +188,19 @@ void KWindowListMenu::init()
 void KWindowListMenu::slotForceActiveWindow()
 {
     QAction* window = qobject_cast<QAction*>(sender());
-    if (!window || !window->data().canConvert(QVariant::Int))
+    if (!window || !window->data().canConvert(QVariant::ULongLong))
         return;
 
-    KWindowSystem::forceActiveWindow((WId)window->data().toInt());
+    KWindowSystem::forceActiveWindow((WId)window->data().toULongLong());
 }
 
 void KWindowListMenu::slotSetCurrentDesktop()
 {
     QAction* window = qobject_cast<QAction*>(sender());
-    if (!window || !window->data().canConvert(QVariant::Int))
+    if (!window || !window->data().canConvert(QVariant::UInt))
         return;
 
-    KWindowSystem::setCurrentDesktop(window->data().toInt());
+    KWindowSystem::setCurrentDesktop(window->data().toUInt());
 }
 
 // This popup is much more useful from keyboard if it has the active

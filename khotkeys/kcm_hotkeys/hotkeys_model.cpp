@@ -267,9 +267,9 @@ bool KHotkeysModel::dropMimeData(
     QList<quintptr> ptrs;
     while (!stream.atEnd())
         {
-        quintptr ptr;
+        qulonglong ptr;
         stream >> ptr;
-        ptrs << ptr;
+        ptrs << quintptr(ptr);
         }
 
     // No pointers, nothing to do
@@ -491,7 +491,7 @@ QMimeData *KHotkeysModel::mimeData(const QModelIndexList &indexes) const
             {
             KHotKeys::ActionDataBase *element = indexToActionDataBase(index);
             // We use the pointer as id.
-            stream << reinterpret_cast<quintptr>(element);
+            stream << qulonglong(reinterpret_cast<quintptr>(element));
             }
         }
 
