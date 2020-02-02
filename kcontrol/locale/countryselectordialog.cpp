@@ -236,10 +236,8 @@ bool CountrySelectorDialog::editCountry(KControlLocale *locale)
 
     CountryModel *cm = new CountryModel(this);
 
-    const QString &sub = QString::fromLatin1("l10n/");
-
     QStringList regionlist = KGlobal::dirs()->findAllResources("locale",
-                                 sub + QString::fromLatin1("*.desktop"),
+                                 QString::fromLatin1("l10n/*.desktop"),
                                  KStandardDirs::NoDuplicates);
 
     QFontMetrics fm(lv1->font());
