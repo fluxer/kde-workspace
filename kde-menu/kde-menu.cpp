@@ -129,7 +129,7 @@ int main(int argc, char **argv)
 
    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
    if (args->count() != 1)
-      KCmdLineArgs::usageError(i18n("You must specify an application-id such as 'kde4-konsole.desktop'"));
+      KCmdLineArgs::usageError(i18n("You must specify an application-id such as 'konsole.desktop'"));
 
    utf8 = args->isSet("utf8");
 

@@ -111,7 +111,7 @@ public:
         QList<QString> desktopFiles;
 
         foreach (const QString& application, applications) {
-            KService::Ptr service = KService::serviceByStorageId("kde4-" + application + ".desktop");
+            KService::Ptr service = KService::serviceByStorageId(application + ".desktop");
             if (service) {
                 desktopFiles << service->entryPath();
             }
