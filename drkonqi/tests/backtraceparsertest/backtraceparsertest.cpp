@@ -22,7 +22,7 @@
 #include <QDebug>
 #include <QSharedPointer>
 
-#define DATA_DIR "backtraceparsertest_data"
+#define DATA_DIR KDESRCDIR "backtraceparsertest_data"
 #define SETTINGS_FILE "data.ini"
 
 BacktraceParserTest::BacktraceParserTest(QObject *parent)
@@ -39,7 +39,11 @@ void BacktraceParserTest::fetchData(const QString & group)
     QTest::addColumn<QString>("debugger");
 
     m_settings.beginGroup(group);
+#ifndef QT_KATIE
     QStringList keys = m_settings.allKeys();
+#else
+    QStringList keys = m_settings.groupKeys();
+#endif
     m_settings.endGroup();
 
     foreach(const QString & key, keys) {
@@ -103,7 +107,11 @@ void BacktraceParserTest::btParserBenchmark_data()
     QTest::addColumn<QString>("debugger");
 
     m_settings.beginGroup("debugger");
+#ifndef QT_KATIE
     QStringList keys = m_settings.allKeys();
+#else
+    QStringList keys = m_settings.groupKeys();
+#endif
     foreach(const QString & key, keys) {
         QTest::newRow(key.toLocal8Bit())
             << QString(DATA_DIR"/" + key)
