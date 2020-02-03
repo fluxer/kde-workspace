@@ -19,15 +19,21 @@
  */
 
 
+#include <QFileInfo>
+#include <QFileInfo>
+#include <QDir>
+#include <KDebug>
+
 #include "chrome.h"
 #include "faviconfromblob.h"
 #include "browsers/findprofile.h"
-#include <qjson/parser.h>
-#include <QFileInfo>
-#include <KDebug>
 #include "bookmarksrunner_defs.h"
-#include <QFileInfo>
-#include <QDir>
+
+#ifndef QT_KATIE
+#  include <qjson/parser.h>
+#else
+#  include <QJsonDocument>
+#endif
 
 class ProfileBookmarks {
 public:
@@ -79,15 +85,24 @@ QList<BookmarkMatch> Chrome::match(const QString &term, bool addEveryThing, Prof
 
 void Chrome::prepare()
 {
-    QJson::Parser parser;
-    bool ok;
     foreach(ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
         Profile profile = profileBookmarks->profile();
         QFile bookmarksFile(profile.path());
+
+#ifndef QT_KATIE
+        QJson::Parser parser;
+        bool ok;
         QVariant result = parser.parse(&bookmarksFile, &ok);
         if(!ok || !result.toMap().contains("roots")) {
             return;
         }
+#else
+        QJsonParseError error;
+        QVariant result = QJsonDocument::fromJson(bookmarksFile.readAll(), &error).toVariant();
+        if(error.error != QJsonParseError::NoError || !result.toMap().contains("roots")) {
+            return;
+        }
+#endif
         QVariantMap entries = result.toMap().value("roots").toMap();
         foreach(QVariant folder, entries.values()) {
             parseFolder(folder.toMap(), profileBookmarks);
