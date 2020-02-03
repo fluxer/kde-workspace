@@ -88,6 +88,9 @@ void Chrome::prepare()
     foreach(ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
         Profile profile = profileBookmarks->profile();
         QFile bookmarksFile(profile.path());
+        if (!bookmarksFile.open(QFile::ReadOnly)) {
+            return;
+        }
 
 #ifndef QT_KATIE
         QJson::Parser parser;

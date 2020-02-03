@@ -50,6 +50,10 @@ QList<Profile> FindChromeProfile::find()
   QFile localStateFile(localStateFileName);
   QList<Profile> profiles;
 
+  if (!localStateFile.open(QFile::ReadOnly)) {
+      return profiles;
+  }
+
 #ifndef QT_KATIE
   QJson::Parser parser;
   bool ok;
