@@ -118,7 +118,7 @@ static void removeDir( const QString& trashDir, const QString& dirName )
 
 static void removeDirRecursive( const QString& dir )
 {
-    if ( QFile::exists( dir ) ) {
+    if ( QDir( dir ).exists() ) {
 
         // Make it work even with readonly dirs, like trashReadOnlyDirFromHome() creates
         KUrl u = KUrl::fromPath( dir );
@@ -856,9 +856,9 @@ void TestTrash::moveDirectoryFromTrash()
 void TestTrash::trashDirectoryOwnedByRoot()
 {
     KUrl u;
-    if ( QFile::exists( "/etc/cups" ) )
+    if ( QDir( "/etc/cups" ).exists() )
         u.setPath( "/etc/cups" );
-    else if ( QFile::exists( "/boot" ) )
+    else if ( QDir( "/boot" ).exists() )
         u.setPath( "/boot" );
     else
         u.setPath( "/etc" );
