@@ -760,7 +760,7 @@ void TestTrash::copyFromTrash( const QString& fileId, const QString& destPath, c
     QFileInfo filesItem( m_trashDir + QString::fromLatin1("/files/") + fileId );
     QVERIFY( filesItem.exists() );
 
-    QVERIFY( QFile::exists(destPath) );
+    QVERIFY( QFileInfo(destPath).exists() );
 }
 
 void TestTrash::copyFileFromTrash()
@@ -819,7 +819,7 @@ void TestTrash::moveFromTrash( const QString& fileId, const QString& destPath, c
     QFileInfo filesItem( m_trashDir + "/files/" + fileId );
     QVERIFY( !filesItem.exists() );
 
-    QVERIFY( QFile::exists( destPath ) );
+    QVERIFY( QFileInfo( destPath ).exists() );
 }
 
 void TestTrash::moveFileFromTrash()
@@ -880,7 +880,7 @@ void TestTrash::trashDirectoryOwnedByRoot()
     QFileInfo files( m_trashDir + "/files/" + fileId );
     QVERIFY( !files.exists() );
 
-    QVERIFY( QFile::exists( u.path() ) );
+    QVERIFY( QDir( u.path() ).exists() );
 }
 
 void TestTrash::moveSymlinkFromTrash()
