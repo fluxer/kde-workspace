@@ -1,0 +1,13 @@
+SET(LIBKSYSGUARDD_SOURCES
+    FreeBSD/acpi.c
+    FreeBSD/apm.c
+    FreeBSD/cpuinfo.c
+    FreeBSD/diskstat.c
+    FreeBSD/loadavg.c
+    FreeBSD/logfile.c
+    FreeBSD/Memory.c
+    FreeBSD/netdev.c
+    FreeBSD/ProcessList.c
+    FreeBSD/stat.c
+    FreeBSD/uptime.c
+)

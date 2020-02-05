@@ -1,0 +1,14 @@
+SET(LIBKSYSGUARDD_SOURCES
+    Solaris/LoadAvg.c
+    Solaris/Memory.c
+    Solaris/NetDev.c
+    Solaris/ProcessList.c
+)
+
+SET(LIBKSYSGUARDD_LIBS socket nsl)
+
+if(EXISTS /dev/kstat)
+    ADD_DEFINITIONS(-DHAVE_KSTAT)
+    FIND_LIBRARY(KSTAT_LIBRARY NAMES kstat)
+    SET(LIBKSYSGUARDD_LIBS ${LIBKSYSGUARDD_LIBS} ${KSTAT_LIBRARY})
+ENDIF()
