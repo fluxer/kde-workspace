@@ -21,7 +21,7 @@ if(NETWORKMANAGER_FOUND)
         MESSAGE(STATUS "Adding in-process NetworkManager service-wart to kded module")
         set(kded_networkstatus_PART_SRCS ${kded_networkstatus_PART_SRCS} networkmanagerstatus.cpp)
         include_directories(${NETWORKMANAGER_INCLUDE_DIRS} ${NM-GLIB_INCLUDE_DIRS})
-        add_definitions(-DNM_BACKEND_ENABLED)
+        add_definitions(-DNM_BACKEND_ENABLED -DQT_NO_KEYWORDS)
     endif()
 endif(NETWORKMANAGER_FOUND)
 

@@ -71,7 +71,7 @@ QString NetworkManagerStatus::serviceName() const
 void NetworkManagerStatus::nmStateChanged( uint nmState )
 {
     m_status = convertNmState( nmState );
-    emit statusChanged( m_status );
+    Q_EMIT statusChanged( m_status );
 }
 
 Solid::Networking::Status NetworkManagerStatus::convertNmState( uint nmState )

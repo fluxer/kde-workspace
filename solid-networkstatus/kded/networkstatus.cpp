@@ -118,14 +118,14 @@ void NetworkStatusModule::updateStatus()
         if (d->status == Solid::Networking::Connected) {
             QTimer::singleShot(2000, this, SLOT(delayedStatusChanged()));
         } else {
-            emit statusChanged( (uint)d->status );
+            Q_EMIT statusChanged( (uint)d->status );
         }
     }
 }
 
 void NetworkStatusModule::delayedStatusChanged()
 {
-    emit statusChanged( (uint)d->status );
+    Q_EMIT statusChanged( (uint)d->status );
 }
 
 void NetworkStatusModule::serviceUnregistered( const QString & name )

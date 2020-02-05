@@ -66,12 +66,12 @@ void WicdStatus::wicdStateChanged()
     QDBusMessage message = m_wicd.call("GetConnectionStatus");
 
     if (message.arguments().count() == 0) {
-        emit statusChanged( status );
+        Q_EMIT statusChanged( status );
         return;
     }
 
     if (!message.arguments().at(0).isValid()) {
-        emit statusChanged( status );
+        Q_EMIT statusChanged( status );
         return;
     }
 
@@ -96,7 +96,7 @@ void WicdStatus::wicdStateChanged()
         break;
     }
 
-    emit statusChanged( status );
+    Q_EMIT statusChanged( status );
 }
 
 #include "moc_wicdstatus.cpp"
