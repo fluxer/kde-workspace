@@ -89,18 +89,6 @@ install(TARGETS textthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-if(QT_QTWEBKIT_FOUND)
-    set(htmlthumbnail_PART_SRCS htmlcreator.cpp)
-
-    kde4_add_plugin(htmlthumbnail ${htmlthumbnail_PART_SRCS})
-
-    target_link_libraries(htmlthumbnail ${KDE4_KDEWEBKIT_LIBS})
-
-    install(TARGETS htmlthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
-endif()
-
-########### next target ###############
-
 set(djvuthumbnail_PART_SRCS djvucreator.cpp)
 
 kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
@@ -182,7 +170,6 @@ install(
     imagethumbnail.desktop
     jpegthumbnail.desktop
     textthumbnail.desktop
-    htmlthumbnail.desktop
     djvuthumbnail.desktop
     desktopthumbnail.desktop
     comicbookthumbnail.desktop

@@ -116,14 +116,6 @@ set_package_properties(Fontconfig PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(QJSON)
-set_package_properties(QJSON PROPERTIES
-    DESCRIPTION "Library to manage JSON objects with Qt"
-    URL "http://qjson.sourceforge.net/"
-    PURPOSE "Required to build Chrome/Chromium support for Plasma Bookmarks Runners"
-    TYPE OPTIONAL
-)
-
 find_package(LibGcrypt 1.5.0)
 set_package_properties(LibGcrypt PROPERTIES
     DESCRIPTION "general purpose cryptographic library based on the code from GnuPG"

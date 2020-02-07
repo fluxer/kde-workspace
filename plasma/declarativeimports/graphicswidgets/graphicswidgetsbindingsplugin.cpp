@@ -46,9 +46,6 @@
 #include <Plasma/TextEdit>
 #include <Plasma/ToolButton>
 #include <Plasma/TreeView>
-#ifdef HAVE_QTWEBKIT
-#include <Plasma/WebView>
-#endif
 
 #include "declarativetabbar.h"
 
@@ -99,9 +96,6 @@ void GraphicsWidgetsBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::TextEdit>(uri, 0, 1, "TextEdit");
     qmlRegisterType<Plasma::ToolButton>(uri, 0, 1, "ToolButton");
     qmlRegisterType<Plasma::TreeView>(uri, 0, 1, "TreeView");
-#ifdef HAVE_QTWEBKIT
-    qmlRegisterType<Plasma::WebView>(uri, 0, 1, "WebView");
-#endif
 }
 
 
