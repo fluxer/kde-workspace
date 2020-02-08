@@ -5,12 +5,6 @@ set_package_properties(OpenEXR PROPERTIES DESCRIPTION "API for accessing OpenEXR
                        PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
                       )
 
-find_package(JPEG)
-set_package_properties(JPEG PROPERTIES DESCRIPTION "JPEG image format support"
-                       URL "http://www.ijg.org"
-                       TYPE REQUIRED
-                      )
-
 macro_optional_find_package(Exiv2)
 set_package_properties(Exiv2 PROPERTIES DESCRIPTION "A library to access image metadata"
                        URL "http://www.exiv2.org"
