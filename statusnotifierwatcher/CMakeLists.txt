@@ -19,8 +19,8 @@ kde4_add_plugin(kded_statusnotifierwatcher ${kded_statusnotifierwatcher_SRCS})
 
 target_link_libraries(kded_statusnotifierwatcher  ${KDE4_KIO_LIBS} )
 
-install(TARGETS kded_statusnotifierwatcher  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kded_statusnotifierwatcher  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
-install( FILES statusnotifierwatcher.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install( FILES statusnotifierwatcher.desktop  DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)
 

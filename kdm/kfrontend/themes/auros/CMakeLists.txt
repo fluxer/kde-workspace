@@ -8,4 +8,4 @@ install(FILES
     auros.svg
     branding-icon.png
     screenshot.png
-    DESTINATION ${DATA_INSTALL_DIR}/kdm/themes/auros)
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kdm/themes/auros)

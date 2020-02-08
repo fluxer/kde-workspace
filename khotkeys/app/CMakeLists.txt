@@ -17,11 +17,11 @@ endif(X11_XTest_FOUND)
 
 ########### install files ###############
 
-install(TARGETS kded_khotkeys  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kded_khotkeys  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
-install(FILES khotkeys.desktop DESTINATION  ${SERVICES_INSTALL_DIR}/kded)
+install(FILES khotkeys.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/kded)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.khotkeys.xml
-        DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
+        DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
 
 

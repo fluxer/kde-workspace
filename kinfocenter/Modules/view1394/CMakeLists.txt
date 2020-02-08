@@ -6,11 +6,11 @@ kde4_add_plugin(kcm_view1394 ${kcm_view1394_PART_SRCS})
 
 target_link_libraries(kcm_view1394 ${KDE4_KDEUI_LIBS} ${RAW1394_LIBRARIES})
 
-install(TARGETS kcm_view1394  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_view1394  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install(FILES kcmview1394.desktop DESTINATION  ${SERVICES_INSTALL_DIR})
-install(FILES oui.db DESTINATION ${DATA_INSTALL_DIR}/kcmview1394)
+install(FILES kcmview1394.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})
+install(FILES oui.db DESTINATION ${KDE4_DATA_INSTALL_DIR}/kcmview1394)
 

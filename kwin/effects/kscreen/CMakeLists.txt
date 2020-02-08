@@ -10,4 +10,4 @@ set(kwin4_effect_builtins_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/kscreen/kscreenconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/kscreen/kscreen.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/kscreen/kscreen.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)

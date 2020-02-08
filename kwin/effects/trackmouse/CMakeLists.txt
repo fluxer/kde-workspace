@@ -10,13 +10,13 @@ set(kwin4_effect_builtins_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/trackmouse/trackmouseconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/trackmouse/trackmouse.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/trackmouse/trackmouse.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)
 
 # Data files
 install(FILES
     effects/trackmouse/data/tm_inner.png
     effects/trackmouse/data/tm_outer.png
-    DESTINATION ${DATA_INSTALL_DIR}/kwin
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin
 )
 
 #######################################
@@ -31,4 +31,4 @@ set(kwin4_effect_builtins_config_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_config_sources effects/trackmouse/trackmouseconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/trackmouse/trackmouse_config.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/trackmouse/trackmouse_config.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)

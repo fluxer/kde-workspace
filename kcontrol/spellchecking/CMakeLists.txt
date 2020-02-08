@@ -9,5 +9,5 @@ KDE4_ADD_PLUGIN(kcmspellchecking ${kcm_spellchecking_SRCS})
 
 TARGET_LINK_LIBRARIES(kcmspellchecking   ${KDE4_KDEUI_LIBS} )
 
-INSTALL(TARGETS kcmspellchecking   DESTINATION ${PLUGIN_INSTALL_DIR} )
-INSTALL( FILES spellchecking.desktop   DESTINATION  ${SERVICES_INSTALL_DIR} )
+INSTALL(TARGETS kcmspellchecking   DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+INSTALL( FILES spellchecking.desktop   DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

@@ -1,5 +1,5 @@
 
-install( FILES systemsettingscategory.desktop DESTINATION  ${SERVICETYPES_INSTALL_DIR} )
+install( FILES systemsettingscategory.desktop DESTINATION  ${KDE4_SERVICETYPES_INSTALL_DIR} )
 
 install( FILES 
                settings-accessibility.desktop
@@ -26,10 +26,10 @@ install( FILES
                settings-window-behaviour.desktop
                settings-workspace-appearance-and-behavior.desktop
                settings-workspace-behavior.desktop
-         DESTINATION  ${SERVICES_INSTALL_DIR} )
+         DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 
 install( FILES 
          settings-bluetooth.desktop
          #settings-desktop.desktop
          settings-sharing.desktop
-         DESTINATION  ${SERVICES_INSTALL_DIR} )
+         DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

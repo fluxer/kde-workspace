@@ -40,7 +40,7 @@ add_subdirectory( tabbox )
 
 
 # Install the KWin/Effect service type
-install(FILES effects/kwineffect.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(FILES effects/kwineffect.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})
 
 # Create initial variables
 set(kwin4_effect_builtins_sources)
@@ -73,7 +73,7 @@ include( effects/startupfeedback/CMakeLists.txt )
 
 kde4_add_plugin(kcm_kwin4_effect_builtins ${kwin4_effect_builtins_config_sources})
 target_link_libraries(kcm_kwin4_effect_builtins kwineffects ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS})
-install(TARGETS kcm_kwin4_effect_builtins DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_kwin4_effect_builtins DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -205,11 +205,11 @@ install(TARGETS kwin ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(FILES kwin.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install(FILES kwin.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kwin)
-install(FILES org.kde.KWin.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
+install(FILES kwin.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
+install(FILES kwin.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin)
+install(FILES org.kde.KWin.xml DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
 
-kde4_install_icons(${ICON_INSTALL_DIR})
+kde4_install_icons(${KDE4_ICON_INSTALL_DIR})
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)

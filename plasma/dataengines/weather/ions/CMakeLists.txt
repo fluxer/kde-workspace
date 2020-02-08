@@ -13,10 +13,10 @@ install (TARGETS weather_ion EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS
 
 INSTALL (FILES ion.h
                ion_export.h
-         DESTINATION ${INCLUDE_INSTALL_DIR}/plasma/weather COMPONENT Devel)
+         DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/weather COMPONENT Devel)
 
 INSTALL (FILES includes/Ion
-         DESTINATION ${INCLUDE_INSTALL_DIR}/KDE/Plasma/Weather COMPONENT Devel)
+         DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Weather COMPONENT Devel)
 
 # the individual ion plugins
 add_subdirectory(bbcukmet)

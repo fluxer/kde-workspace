@@ -5,5 +5,5 @@ install(
     kcm_filemanager.desktop
     kcm_terminal.desktop
     kcm_wm.desktop
-    DESTINATION ${DATA_INSTALL_DIR}/kcm_componentchooser
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kcm_componentchooser
 )

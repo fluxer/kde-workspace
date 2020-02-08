@@ -12,4 +12,4 @@ add_executable(kdeasciiquarium.kss ${kdeasciiquarium_SRCS})
 target_link_libraries(kdeasciiquarium.kss ${KDE4_KDEUI_LIBS}  kscreensaver)
 install(TARGETS kdeasciiquarium.kss ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES asciiquarium.desktop DESTINATION ${SERVICES_INSTALL_DIR}/ScreenSavers)
+install(FILES asciiquarium.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers)

@@ -12,7 +12,7 @@ target_link_libraries(dirmodelplugin
     ${KDE4_KIO_LIBS}
 )
 
-install(TARGETS dirmodelplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/dirmodel)
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/dirmodel)
+install(TARGETS dirmodelplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/dirmodel)
+install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/dirmodel)
 
 #add_subdirectory(test)

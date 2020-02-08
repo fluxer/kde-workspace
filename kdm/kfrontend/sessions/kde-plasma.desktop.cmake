@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=XSession
-Exec=${BIN_INSTALL_DIR}/startkde
-TryExec=${BIN_INSTALL_DIR}/startkde
+Exec=${KDE4_BIN_INSTALL_DIR}/startkde
+TryExec=${KDE4_BIN_INSTALL_DIR}/startkde
 DesktopNames=KDE
 Name=KDE Plasma Workspace
 Name[ar]=مساحة عمل بلازما كدي

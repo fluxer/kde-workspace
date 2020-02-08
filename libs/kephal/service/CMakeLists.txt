@@ -81,6 +81,6 @@ target_link_libraries(kded_kephal ${service_libs})
 add_executable(kephald ${standalone_kephald_SRCS})
 target_link_libraries(kephald ${service_libs})
 
-install(TARGETS kded_kephal DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kded_kephal DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
-install(FILES kephal.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install(FILES kephal.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)

@@ -291,8 +291,8 @@ macro_optional_add_subdirectory(localization)
 macro_optional_add_subdirectory(kde-menu)
 
 ########### install files ###############
-# install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${BIN_INSTALL_DIR})
-install(PROGRAMS ${CMAKE_BINARY_DIR}/startkde DESTINATION ${BIN_INSTALL_DIR})
+# install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${KDE4_BIN_INSTALL_DIR})
+install(PROGRAMS ${CMAKE_BINARY_DIR}/startkde DESTINATION ${KDE4_BIN_INSTALL_DIR})
 
 feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -315,30 +315,30 @@ macro(MAKE_INSTALL_PATH_ABSOLUTE out in)
    endif (IS_ABSOLUTE "${in}")
 endmacro(MAKE_INSTALL_PATH_ABSOLUTE out in)
 
-make_install_path_absolute(KDE4WORKSPACE_LIB_DIR     ${LIB_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_LIBEXEC_DIR ${LIBEXEC_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_INCLUDE_DIR ${INCLUDE_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_BIN_DIR     ${BIN_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_SBIN_DIR    ${SBIN_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_DATA_DIR    ${DATA_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_CONFIG_DIR  ${CONFIG_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_ICON_DIR    ${ICON_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_KCFG_DIR    ${KCFG_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_LOCALE_DIR  ${LOCALE_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_MIME_DIR    ${MIME_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_SOUND_DIR   ${SOUND_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_TEMPLATES_DIR    ${TEMPLATES_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_WALLPAPER_DIR    ${WALLPAPER_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_AUTOSTART_DIR    ${AUTOSTART_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_XDG_APPS_DIR        ${XDG_APPS_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_XDG_DIRECTORY_DIR   ${XDG_DIRECTORY_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_SYSCONF_DIR ${SYSCONF_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_MAN_DIR     ${MAN_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_INFO_DIR    ${INFO_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_DBUS_INTERFACES_DIR ${DBUS_INTERFACES_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_DBUS_SERVICES_DIR   ${DBUS_SERVICES_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_SERVICES_DIR ${SERVICES_INSTALL_DIR})
-make_install_path_absolute(KDE4WORKSPACE_SERVICETYPES_DIR ${SERVICETYPES_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_LIB_DIR     ${KDE4_LIB_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_LIBEXEC_DIR ${KDE4_LIBEXEC_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_INCLUDE_DIR ${KDE4_INCLUDE_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_BIN_DIR     ${KDE4_BIN_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_SBIN_DIR    ${KDE4_SBIN_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_DATA_DIR    ${KDE4_DATA_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_CONFIG_DIR  ${KDE4_CONFIG_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_ICON_DIR    ${KDE4_ICON_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_KCFG_DIR    ${KDE4_KCFG_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_LOCALE_DIR  ${KDE4_LOCALE_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_MIME_DIR    ${KDE4_MIME_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_SOUND_DIR   ${KDE4_SOUND_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_TEMPLATES_DIR    ${KDE4_TEMPLATES_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_WALLPAPER_DIR    ${KDE4_WALLPAPER_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_AUTOSTART_DIR    ${KDE4_AUTOSTART_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_XDG_APPS_DIR        ${KDE4_XDG_APPS_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_XDG_DIRECTORY_DIR   ${KDE4_XDG_DIRECTORY_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_SYSCONF_DIR ${KDE4_SYSCONF_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_MAN_DIR     ${KDE4_MAN_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_INFO_DIR    ${KDE4_INFO_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_DBUS_INTERFACES_DIR ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_DBUS_SERVICES_DIR   ${KDE4_DBUS_SERVICES_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_SERVICES_DIR ${KDE4_SERVICES_INSTALL_DIR})
+make_install_path_absolute(KDE4WORKSPACE_SERVICETYPES_DIR ${KDE4_SERVICETYPES_INSTALL_DIR})
 
 set(KDE4WORKSPACE_TARGET_PREFIX KDE4Workspace::)
 
@@ -357,7 +357,7 @@ install(
     FILES
     ${CMAKE_BINARY_DIR}/KDE4WorkspaceConfig.cmake
     ${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake
-    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules
 )
 
 # run a script before installing the exports files which deletes previously
@@ -367,14 +367,14 @@ install(
 # targets with different names.
 install(
     CODE "set(EXPORT_FILES KDE4WorkspaceLibraryTargets.cmake)"
-    CODE "set(EXPORT_INSTALL_DIR \"${DATA_INSTALL_DIR}/cmake/modules\")"
+    CODE "set(EXPORT_INSTALL_DIR \"${KDE4_DATA_INSTALL_DIR}/cmake/modules\")"
     SCRIPT "${CMAKE_SOURCE_DIR}/cmake/modules/check_installed_exports_file.cmake"
 )
 
 install(
     EXPORT kdeworkspaceLibraryTargets 
     NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
-    DESTINATION ${DATA_INSTALL_DIR}/cmake/modules
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules
     FILE KDE4WorkspaceLibraryTargets.cmake
 )
 

@@ -14,9 +14,9 @@ set_target_properties(kscreensaver PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOV
 set_target_properties(kscreensaver PROPERTIES DEFINE_SYMBOL MAKE_KSCREENSAVER_LIB)
 
 install(TARGETS kscreensaver EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES screensaver.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+install(FILES screensaver.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kscreensaver.h kscreensaver_vroot.h kscreensaver_export.h DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+install( FILES kscreensaver.h kscreensaver_vroot.h kscreensaver_export.h DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} COMPONENT Devel)
 

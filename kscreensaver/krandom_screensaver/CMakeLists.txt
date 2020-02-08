@@ -20,5 +20,5 @@ install(TARGETS krandom.kss ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES krandom.desktop  DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+install( FILES krandom.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )
 

@@ -105,7 +105,7 @@ add_executable(kclock.kss ${kclock.kss_SRCS})
 target_link_libraries(kclock.kss ${KDE4_KDEUI_LIBS} ${LIBMATH} kscreensaver)
 
 install(TARGETS kclock.kss ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install(FILES KClock.desktop DESTINATION ${SERVICES_INSTALL_DIR}/ScreenSavers)
+install(FILES KClock.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers)
 
 
 ########### next target ###############
@@ -119,7 +119,7 @@ if(Q_WS_X11)
     target_link_libraries(kscience.kss ${KDE4_KDEUI_LIBS} kscreensaver ${X11_LIBRARIES})
 
     install(TARGETS kscience.kss ${INSTALL_TARGETS_DEFAULT_ARGS} )
-    install(FILES KScience.desktop DESTINATION ${SERVICES_INSTALL_DIR}/ScreenSavers)
+    install(FILES KScience.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers)
 endif(Q_WS_X11)
 
 ########### next target ###############
@@ -131,7 +131,7 @@ if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND KSCREENSAVER_SOUND_SUPPORT)
 ##add_executable(kfiresaver.kss ${kfiresaver.kss_SRCS})
 #target_link_libraries(kfiresaver.kss  ${KDE4_KDEUI_LIBS} )
 #install(TARGETS kfiresaver.kss ${INSTALL_TARGETS_DEFAULT_ARGS} )
-#install( FILES KFiresaver.desktop DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+#install( FILES KFiresaver.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )
 endif(OPENGL_FOUND AND OPENGL_GLU_FOUND AND KSCREENSAVER_SOUND_SUPPORT)
 
 ########### next target ###############
@@ -182,12 +182,12 @@ if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_LIBRARY)
   target_link_libraries( kgravity.kss ${KDE4_KDEUI_LIBS} ${QT_QTOPENGL_LIBRARY} ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY} kscreensaver)
   install(TARGETS kgravity.kss ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-  install( FILES KGravity.desktop KWave.desktop KFountain.desktop KFlux.desktop KEuphoria.desktop KSolarWinds.desktop KRotation.desktop KPendulum.desktop DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+  install( FILES KGravity.desktop KWave.desktop KFountain.desktop KFlux.desktop KEuphoria.desktop KSolarWinds.desktop KRotation.desktop KPendulum.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )
 
 endif(OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_LIBRARY)
 
 ########### install files ###############
 
-install( FILES kscience.png particle.png image.png  DESTINATION  ${DATA_INSTALL_DIR}/kscreensaver )
-install( FILES KBanner.desktop KPolygon.desktop KSlideshow.desktop KLines-saver.desktop KLorenz.desktop KBlob.desktop KVm.desktop DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+install( FILES kscience.png particle.png image.png  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kscreensaver )
+install( FILES KBanner.desktop KPolygon.desktop KSlideshow.desktop KLines-saver.desktop KLorenz.desktop KBlob.desktop KVm.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )
 

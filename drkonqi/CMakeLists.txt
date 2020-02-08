@@ -58,4 +58,4 @@ target_link_libraries(drkonqi
     ${KDE4_KIO_LIBS}
 )
 
-install(TARGETS drkonqi DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS drkonqi DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})

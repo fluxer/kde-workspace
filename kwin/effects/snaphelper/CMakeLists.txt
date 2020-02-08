@@ -8,4 +8,4 @@ set(kwin4_effect_builtins_sources
 )
 
 # .desktop files
-install(FILES  effects/snaphelper/snaphelper.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES  effects/snaphelper/snaphelper.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)

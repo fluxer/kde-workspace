@@ -19,20 +19,20 @@ target_link_libraries(kded_freespacenotifier ${KDE4_KIO_LIBS})
 
 install(
     TARGETS kded_freespacenotifier
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
 
 ########### install files ###############
 
 install(
     FILES freespacenotifier.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}/kded
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded
 )
 install(
     FILES freespacenotifier.notifyrc
-    DESTINATION ${DATA_INSTALL_DIR}/freespacenotifier
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/freespacenotifier
 )
 install(
     FILES freespacenotifier.kcfg
-    DESTINATION ${KCFG_INSTALL_DIR}
+    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
 )

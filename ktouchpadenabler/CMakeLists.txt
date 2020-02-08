@@ -15,6 +15,6 @@ target_link_libraries(kded_ktouchpadenabler
     ${X11_Xinput_LIB}
 )
 
-install(TARGETS kded_ktouchpadenabler DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES ktouchpadenabler.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install(TARGETS kded_ktouchpadenabler DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES ktouchpadenabler.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)
 

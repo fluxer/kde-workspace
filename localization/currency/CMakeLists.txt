@@ -206,5 +206,5 @@ install(
     zmk.desktop
     zwd.desktop
     zwl.desktop
-    DESTINATION ${LOCALE_INSTALL_DIR}/currency
+    DESTINATION ${KDE4_LOCALE_INSTALL_DIR}/currency
 )

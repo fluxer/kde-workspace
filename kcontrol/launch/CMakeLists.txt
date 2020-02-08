@@ -18,10 +18,10 @@ kde4_add_plugin(kcm_launch ${kcm_launch_PART_SRCS})
 
 target_link_libraries(kcm_launch  ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY})
 
-install(TARGETS kcm_launch  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_launch  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES kcmlaunch.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kcmlaunch.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 

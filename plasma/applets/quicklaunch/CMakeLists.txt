@@ -18,5 +18,5 @@ target_link_libraries(plasma_applet_quicklaunch
   ${KDE4_KDEUI_LIBS}
   ${KDE4_KIO_LIBRARY})
 
-install(TARGETS plasma_applet_quicklaunch DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-applet-quicklaunch.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS plasma_applet_quicklaunch DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES plasma-applet-quicklaunch.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

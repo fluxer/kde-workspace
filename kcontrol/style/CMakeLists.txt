@@ -21,10 +21,10 @@ target_link_libraries(kcm_style ${KDE4_KIO_LIBS} ${X11_LIBRARIES}
     ${KDE4_PLASMA_LIBS})
 target_link_libraries(kcm_style kdecorations)
 
-install(TARGETS kcm_style  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_style  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES kcmstyle.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/kcmstyle )
-install( FILES style.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kcmstyle.notifyrc  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kcmstyle )
+install( FILES style.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

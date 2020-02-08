@@ -32,6 +32,6 @@ add_executable(kwalletmanager ${kwalletmanager_SRCS})
 target_link_libraries(kwalletmanager ${KDE4_KIO_LIBS})
 
 install(TARGETS kwalletmanager  ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( FILES kwalletmanager.rc DESTINATION ${DATA_INSTALL_DIR}/kwalletmanager)
+install( FILES kwalletmanager.rc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwalletmanager)
 
-kde4_install_icons( ${ICON_INSTALL_DIR} )
+kde4_install_icons( ${KDE4_ICON_INSTALL_DIR} )

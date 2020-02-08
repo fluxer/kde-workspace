@@ -58,7 +58,7 @@ install(FILES
    taskitem.h
    taskmanager.h
    taskmanager_export.h
-   DESTINATION ${INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
+   DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
    )
 
 

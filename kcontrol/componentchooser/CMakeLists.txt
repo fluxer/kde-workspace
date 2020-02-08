@@ -30,12 +30,12 @@ target_link_libraries(kcm_componentchooser ${KDE4_KIO_LIBS})
 
 install(
     TARGETS kcm_componentchooser
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
 
 ########### install files ###############
 
 install(
     FILES componentchooser.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )

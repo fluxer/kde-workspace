@@ -12,7 +12,7 @@ target_link_libraries(
     ${KDE4_PLASMA_LIBS}
     )
 
-install(TARGETS krunner_placesrunner DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS krunner_placesrunner DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
-install(FILES plasma-runner-places.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES plasma-runner-places.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 

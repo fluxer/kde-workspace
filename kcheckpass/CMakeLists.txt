@@ -27,9 +27,9 @@ target_link_libraries(kcheckpass
 
 install(
     TARGETS kcheckpass
-    DESTINATION ${LIBEXEC_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 install(CODE "
-    set(KCP_PATH \"\$ENV{DESTDIR}${LIBEXEC_INSTALL_DIR}/kcheckpass\")
+    set(KCP_PATH \"\$ENV{DESTDIR}${KDE4_LIBEXEC_INSTALL_DIR}/kcheckpass\")
     EXECUTE_PROCESS(COMMAND sh -c \"chown root '\${KCP_PATH}' && chmod +s '\${KCP_PATH}'\")
 ")

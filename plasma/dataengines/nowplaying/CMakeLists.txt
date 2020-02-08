@@ -50,7 +50,7 @@ if(XMMS_FOUND)
    target_link_libraries(plasma_engine_nowplaying ${XMMS_LDFLAGS})
 endif(XMMS_FOUND)
 
-install(TARGETS plasma_engine_nowplaying DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-dataengine-nowplaying.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(FILES nowplaying.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(TARGETS plasma_engine_nowplaying DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES plasma-dataengine-nowplaying.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+install(FILES nowplaying.operations DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)
 

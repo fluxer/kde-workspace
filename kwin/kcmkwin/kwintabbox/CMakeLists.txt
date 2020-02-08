@@ -27,11 +27,11 @@ target_link_libraries(kcm_kwintabbox
     ${KDE4_KDECLARATIVE_LIBS}
 )
 
-install(TARGETS kcm_kwintabbox  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_kwintabbox  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
-install( FILES kwintabbox.desktop DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( FILES qml/main.qml DESTINATION ${DATA_INSTALL_DIR}/kwin/kcm_kwintabbox)
-install( FILES thumbnails/konqueror.png thumbnails/kmail.png thumbnails/systemsettings.png thumbnails/dolphin.png DESTINATION ${DATA_INSTALL_DIR}/kwin/kcm_kwintabbox)
-install( FILES kwinswitcher.knsrc  DESTINATION  ${CONFIG_INSTALL_DIR} )
+install( FILES kwintabbox.desktop DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install( FILES qml/main.qml DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/kcm_kwintabbox)
+install( FILES thumbnails/konqueror.png thumbnails/kmail.png thumbnails/systemsettings.png thumbnails/dolphin.png DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/kcm_kwintabbox)
+install( FILES kwinswitcher.knsrc  DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )

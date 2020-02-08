@@ -13,16 +13,16 @@ target_link_libraries(plasma_engine_share
                       ${KDE4_KIO_LIBS})
 
 install(TARGETS plasma_engine_share
-        DESTINATION ${PLUGIN_INSTALL_DIR})
+        DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 install(FILES data/plasma-dataengine-share.desktop
-        DESTINATION ${SERVICES_INSTALL_DIR})
+        DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 install(FILES data/plasma_shareprovider.desktop
-        DESTINATION ${SERVICETYPES_INSTALL_DIR})
+        DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})
 
 install(FILES share.operations
-        DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+        DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)
 
 set(sharepackage_SRCS
         share_package.cpp
@@ -37,6 +37,6 @@ target_link_libraries(plasma_packagestructure_share
         ${KDE4_PLASMA_LIBS})
 
 install(TARGETS plasma_packagestructure_share
-                 DESTINATION ${PLUGIN_INSTALL_DIR})
+                 DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES data/plasma-packagestructure-share.desktop
-               DESTINATION ${SERVICES_INSTALL_DIR})
+               DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

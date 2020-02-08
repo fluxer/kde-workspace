@@ -32,8 +32,8 @@ else(PCIUTILS_FOUND)
     target_link_libraries(kcm_pci  ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${X11_LIBRARIES} )
 endif(PCIUTILS_FOUND)
 
-install(TARGETS kcm_pci  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_pci  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kcm_pci.desktop  DESTINATION  ${SERVICES_INSTALL_DIR})
+install( FILES kcm_pci.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})

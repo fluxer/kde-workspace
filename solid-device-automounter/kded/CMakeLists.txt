@@ -7,6 +7,6 @@ kde4_add_plugin(kded_device_automounter ${device_automounter_lib_SRCS} ${kded_de
 
 target_link_libraries(kded_device_automounter ${KDE4_KDEUI_LIBS} ${KDE4_SOLID_LIBS})
 
-install(TARGETS kded_device_automounter DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kded_device_automounter DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
-install(FILES device_automounter.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install(FILES device_automounter.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)

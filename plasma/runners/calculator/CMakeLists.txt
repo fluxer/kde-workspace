@@ -29,7 +29,7 @@ else ( QALCULATE_FOUND )
     target_link_libraries(krunner_calculatorrunner ${KDE4_KDEUI_LIBS} ${QT_QTSCRIPT_LIBRARY} ${KDE4_PLASMA_LIBS})	
 endif ( QALCULATE_FOUND )
 
-install(TARGETS krunner_calculatorrunner DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS krunner_calculatorrunner DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
-install(FILES plasma-runner-calculator.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES plasma-runner-calculator.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

@@ -8,4 +8,4 @@ include_directories (
 add_subdirectory(daemon)
 add_subdirectory(kcmodule)
 
-install( FILES powerdevil.notifyrc DESTINATION ${DATA_INSTALL_DIR}/powerdevil )
+install( FILES powerdevil.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/powerdevil )

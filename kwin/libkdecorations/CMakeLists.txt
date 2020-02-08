@@ -24,4 +24,4 @@ install( FILES
     kdecoration.h
     kdecorationfactory.h
     kcommondecoration.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel )
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} COMPONENT Devel )

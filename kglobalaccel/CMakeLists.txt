@@ -29,8 +29,8 @@ target_link_libraries(kglobalaccel ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIB
 
 # Install application and configuration
 install( TARGETS kglobalaccel ${INSTALL_TARGETS_DEFAULT_ARGS} )
-# install( FILES kglobalaccel.desktop DESTINATION ${AUTOSTART_INSTALL_DIR})
-install( FILES kglobalaccel.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+# install( FILES kglobalaccel.desktop DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR})
+install( FILES kglobalaccel.desktop  DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 # KNotify configuration
-install( FILES kglobalaccel.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kglobalaccel)
+install( FILES kglobalaccel.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kglobalaccel)
 

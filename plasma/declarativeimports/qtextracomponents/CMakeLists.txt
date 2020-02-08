@@ -22,6 +22,6 @@ INCLUDE_DIRECTORIES(
 add_library(qtextracomponentsplugin SHARED ${qtextracomponents_SRCS})
 target_link_libraries(qtextracomponentsplugin ${KDE4_KDEUI_LIBS} ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
 
-install(TARGETS qtextracomponentsplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/qtextracomponents)
+install(TARGETS qtextracomponentsplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/qtextracomponents)
 
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/qtextracomponents)
+install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/qtextracomponents)

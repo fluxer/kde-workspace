@@ -17,6 +17,6 @@ INCLUDE_DIRECTORIES(
 add_library(draganddropplugin SHARED ${declarativedragdrop_SRCS})
 target_link_libraries(draganddropplugin ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY})
 
-install(TARGETS draganddropplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/draganddrop)
+install(TARGETS draganddropplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/draganddrop)
 
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/draganddrop)
+install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/draganddrop)

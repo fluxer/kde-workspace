@@ -24,5 +24,5 @@ SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 #clockapplet.h
 install(FILES clockapplet.h calendar.h calendartable.h plasmaclock_export.h
-        DESTINATION ${INCLUDE_INSTALL_DIR}/plasmaclock COMPONENT Devel)
+        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasmaclock COMPONENT Devel)
 install(TARGETS plasmaclock EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})

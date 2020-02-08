@@ -41,13 +41,13 @@ set_target_properties(knotify PROPERTIES OUTPUT_NAME knotify4 )
 install(TARGETS knotify ${INSTALL_TARGETS_DEFAULT_ARGS} )
 ########### install files ###############
 
-install( FILES kde.notifyrc  DESTINATION  ${DATA_INSTALL_DIR}/kde )
-install( FILES hardwarenotifications.notifyrc DESTINATION ${DATA_INSTALL_DIR}/hardwarenotifications )
-install( FILES knotify4.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kde.notifyrc  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kde )
+install( FILES hardwarenotifications.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/hardwarenotifications )
+install( FILES knotify4.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 
-install( FILES knotifynotifymethod.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR} )
+install( FILES knotifynotifymethod.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR} )
 install( TARGETS knotifyplugin ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( FILES ${knotifyplugin_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR} )
+install( FILES ${knotifyplugin_HEADERS} DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} )
 
 ########### D-Bus Autostart Services #########
 
@@ -55,4 +55,4 @@ install( FILES ${knotifyplugin_HEADERS} DESTINATION ${INCLUDE_INSTALL_DIR} )
 configure_file(org.kde.knotify.service.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.knotify.service)
 
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.knotify.service DESTINATION ${DBUS_SERVICES_INSTALL_DIR} )
+install( FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.knotify.service DESTINATION ${KDE4_DBUS_SERVICES_INSTALL_DIR} )

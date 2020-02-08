@@ -7,9 +7,9 @@ include_directories(  ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${
 set(kcm_ksplashthemes_PART_SRCS installer.cpp main.cpp )
 kde4_add_plugin(kcm_ksplashthemes ${kcm_ksplashthemes_PART_SRCS})
 target_link_libraries(kcm_ksplashthemes ${KDE4_KIO_LIBS})
-install(TARGETS kcm_ksplashthemes  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_ksplashthemes  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install( FILES ksplashthememgr.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( FILES ksplash.knsrc  DESTINATION  ${CONFIG_INSTALL_DIR} )
+install( FILES ksplashthememgr.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install( FILES ksplash.knsrc  DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )

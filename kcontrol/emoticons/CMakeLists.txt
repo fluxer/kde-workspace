@@ -10,14 +10,14 @@ target_link_libraries(kcm_emoticons
 
 install(
     TARGETS kcm_emoticons
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
 
 install(
     FILES emoticons.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
 install(
     FILES emoticons.knsrc
-    DESTINATION ${CONFIG_INSTALL_DIR}
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}
 )

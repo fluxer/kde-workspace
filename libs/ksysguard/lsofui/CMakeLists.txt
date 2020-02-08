@@ -22,7 +22,7 @@ install(
 
 install(
     FILES lsof.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard
     COMPONENT Devel
 )
 
@@ -34,5 +34,5 @@ target_link_libraries(ksysguardlsofwidgets ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRA
 
 install(
     TARGETS ksysguardlsofwidgets
-    DESTINATION ${PLUGIN_INSTALL_DIR}/kde4/plugins/designer
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/designer
 )

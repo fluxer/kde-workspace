@@ -14,10 +14,10 @@ kde4_add_plugin(kio_cgi ${kio_cgi_PART_SRCS})
 
 target_link_libraries(kio_cgi  ${KDE4_KIO_LIBS} )
 
-install(TARGETS kio_cgi  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kio_cgi  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES cgi.protocol  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES cgi.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 

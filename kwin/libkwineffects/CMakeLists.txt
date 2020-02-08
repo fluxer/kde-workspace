@@ -47,4 +47,4 @@ install( FILES
     kwineffects.h
     kwinanimationeffect.h
     kwinxrenderutils.h
-    DESTINATION ${INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} COMPONENT Devel)

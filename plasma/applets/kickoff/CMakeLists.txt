@@ -51,8 +51,8 @@ set(Applet_SRCS
 
 kde4_add_plugin(plasma_applet_launcher ${Applet_SRCS})
 target_link_libraries(plasma_applet_launcher ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS} kickoff)
-install(TARGETS plasma_applet_launcher DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES applet/plasma-applet-launcher.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS plasma_applet_launcher DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES applet/plasma-applet-launcher.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 #######################################################################################
 # Kickoff Simple KMenu Plasma Applet
@@ -64,8 +64,8 @@ set(SimpleApplet_SRCS
 )
 kde4_add_plugin(plasma_applet_simplelauncher ${SimpleApplet_SRCS})
 target_link_libraries(plasma_applet_simplelauncher ${KDE4_KCMUTILS_LIBS} ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS} kickoff)
-install(TARGETS plasma_applet_simplelauncher DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES simpleapplet/plasma-applet-simplelauncher.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS plasma_applet_simplelauncher DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES simpleapplet/plasma-applet-simplelauncher.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 # Kickoff Standalone Test Application
 #IF (CMAKE_BUILD_TYPE MATCHES Debug)

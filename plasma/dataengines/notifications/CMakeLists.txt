@@ -10,6 +10,6 @@ kde4_add_plugin(plasma_engine_notifications ${notifications_engine_SRCS})
 
 target_link_libraries(plasma_engine_notifications ${KDE4_PLASMA_LIBS} ${KDE4_KDECORE_LIBS} ${KDE4_KNOTIFYCONFIG_LIBRARY})
 
-install(TARGETS plasma_engine_notifications DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-dataengine-notifications.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
-install(FILES notifications.operations DESTINATION ${DATA_INSTALL_DIR}/plasma/services)
+install(TARGETS plasma_engine_notifications DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES plasma-dataengine-notifications.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR} )
+install(FILES notifications.operations DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)

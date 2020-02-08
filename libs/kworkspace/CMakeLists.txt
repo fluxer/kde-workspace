@@ -41,6 +41,6 @@ install(
     kwindowlistmenu.h
     kworkspace.h
     kworkspace_export.h
-    DESTINATION ${INCLUDE_INSTALL_DIR}/kworkspace
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/kworkspace
     COMPONENT Devel
 )

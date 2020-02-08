@@ -49,4 +49,4 @@ set_target_properties(kephal PROPERTIES
 
 INSTALL (TARGETS kephal EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL (FILES FindKephal.cmake DESTINATION ${DATA_INSTALL_DIR}/cmake/modules)
+INSTALL (FILES FindKephal.cmake DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules)

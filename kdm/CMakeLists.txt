@@ -4,7 +4,7 @@ install_pam_service(KDM)
 
 include(ConfigureChecks.cmake)
 
-install( FILES README DESTINATION ${DATA_INSTALL_DIR}/doc/kdm )
+install( FILES README DESTINATION ${KDE4_DATA_INSTALL_DIR}/doc/kdm )
 
 set(confproc ${CMAKE_CURRENT_SOURCE_DIR}/confproc.pl)
 set(confdef ${CMAKE_CURRENT_SOURCE_DIR}/config.def)

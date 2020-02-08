@@ -16,6 +16,6 @@ install(
 ########### next target ###############
 
 install(
-    CODE "MESSAGE(STATUS \"Symlinking: ${BIN_INSTALL_DIR}/kcminit to: ${BIN_INSTALL_DIR}/kcminit_startup\")"
-    CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink ${BIN_INSTALL_DIR}/kcminit ${BIN_INSTALL_DIR}/kcminit_startup)"
+    CODE "MESSAGE(STATUS \"Symlinking: ${KDE4_BIN_INSTALL_DIR}/kcminit to: ${KDE4_BIN_INSTALL_DIR}/kcminit_startup\")"
+    CODE "EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink ${KDE4_BIN_INSTALL_DIR}/kcminit ${KDE4_BIN_INSTALL_DIR}/kcminit_startup)"
 )

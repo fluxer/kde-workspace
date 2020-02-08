@@ -32,4 +32,4 @@ target_link_libraries(screenlocker_static kworkspace ${KDE4_KDEUI_LIBS} ${KDE4_K
 # Needed to compile on Arm target.
 set_target_properties(screenlocker_static PROPERTIES COMPILE_FLAGS "-fPIC")
 
-install(FILES kscreenlocker.notifyrc  DESTINATION ${DATA_INSTALL_DIR}/ksmserver/ RENAME ksmserver.notifyrc)
+install(FILES kscreenlocker.notifyrc  DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/ RENAME ksmserver.notifyrc)

@@ -76,7 +76,7 @@ if (WITH_KDM_XCONSOLE)
   target_link_libraries(kdm_greet ${KDE4_KPTY_LIBS})
 endif (WITH_KDM_XCONSOLE)
 
-install(TARGETS kdm_greet DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS kdm_greet DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 set(kdm_config_SRCS kdm_config.c)
 macro_add_file_dependencies(kdm_config.c ${confci})
@@ -84,7 +84,7 @@ add_executable(kdm_config ${kdm_config_SRCS})
 set_target_properties(kdm_config PROPERTIES COMPILE_FLAGS -U_REENTRANT)
 target_link_libraries(kdm_config ${SOCKET_LIBRARIES} ${RESOLV_LIBRARIES} ${POSIX4_LIBRARIES})
 add_dependencies(kdm_config ConfigCi)
-install(TARGETS kdm_config DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS kdm_config DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 set(genkdmconf_SRCS genkdmconf.c)
 macro_add_file_dependencies(genkdmconf.c ${confci})
@@ -105,5 +105,5 @@ install(TARGETS kdmctl ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # use 'GENKDMCONF_FLAGS=... make install' to add flags to the config generation (try genkdmconf -h)
 install(CODE "
-exec_program(\"${CMAKE_CURRENT_BINARY_DIR}/genkdmconf\" ARGS --in \\\"\\\$DESTDIR${CONFIG_INSTALL_DIR}/kdm\\\" --no-in-notice --face-src \\\"${CMAKE_CURRENT_SOURCE_DIR}/pics\\\" \\\$GENKDMCONF_FLAGS)
+exec_program(\"${CMAKE_CURRENT_BINARY_DIR}/genkdmconf\" ARGS --in \\\"\\\$DESTDIR${KDE4_CONFIG_INSTALL_DIR}/kdm\\\" --no-in-notice --face-src \\\"${CMAKE_CURRENT_SOURCE_DIR}/pics\\\" \\\$GENKDMCONF_FLAGS)
 ")

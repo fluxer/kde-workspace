@@ -51,5 +51,5 @@ install(FILES
 	xfce.desktop
 	xfce4.desktop
 
-	DESTINATION ${DATA_INSTALL_DIR}/kdm/sessions
+	DESTINATION ${KDE4_DATA_INSTALL_DIR}/kdm/sessions
 )

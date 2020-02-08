@@ -44,7 +44,7 @@ if (UDEV_FOUND)
     ## backlight helper executable
     add_executable(backlighthelper backends/upower/backlighthelper.cpp ${backlighthelper_mocs})
     target_link_libraries(backlighthelper ${KDE4_KDECORE_LIBS})
-    install(TARGETS backlighthelper DESTINATION ${LIBEXEC_INSTALL_DIR})
+    install(TARGETS backlighthelper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
     kde4_install_auth_helper_files(backlighthelper org.kde.powerdevil.backlighthelper root)
 endif (UDEV_FOUND)
 

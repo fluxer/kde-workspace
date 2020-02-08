@@ -118,7 +118,7 @@ typedef QList< KWin::EffectWindow* > EffectWindowList;
  *  as follows:
  * @code
  *  KWIN_ADD_EFFECT(cooleffect cooleffect.cpp)
- *  install( FILES cooleffect.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin )
+ *  install( FILES cooleffect.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin )
  * @endcode
  *
  * @subsection creating-desktop Effect's .desktop file

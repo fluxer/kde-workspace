@@ -28,8 +28,8 @@ endif()
 
 configure_file(openglconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/openglconfig.h )
 
-install(TARGETS kcm_opengl  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_opengl  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES opengl.desktop  DESTINATION  ${SERVICES_INSTALL_DIR})
+install(FILES opengl.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})

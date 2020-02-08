@@ -22,11 +22,11 @@ target_link_libraries(krunner_bookmarksrunner
     ${QT_QTSQL_LIBRARY}
 )
 
-install(TARGETS krunner_bookmarksrunner DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS krunner_bookmarksrunner DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
-install(FILES plasma-runner-bookmarks.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES plasma-runner-bookmarks.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)

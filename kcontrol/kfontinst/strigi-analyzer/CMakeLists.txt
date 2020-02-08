@@ -15,5 +15,5 @@ target_link_libraries(font
 
 set_target_properties(font PROPERTIES  PREFIX strigita_)
 
-install(TARGETS font LIBRARY DESTINATION ${LIB_INSTALL_DIR}/strigi)
+install(TARGETS font LIBRARY DESTINATION ${KDE4_LIB_INSTALL_DIR}/strigi)
 

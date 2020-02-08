@@ -10,7 +10,7 @@ set(kwin4_effect_builtins_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/mousemark/mousemarkconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/mousemark/mousemark.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/mousemark/mousemark.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)
 
 #######################################
 # Config
@@ -24,4 +24,4 @@ set(kwin4_effect_builtins_config_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_config_sources effects/mousemark/mousemarkconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/mousemark/mousemark_config.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/mousemark/mousemark_config.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)

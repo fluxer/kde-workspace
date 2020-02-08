@@ -43,8 +43,8 @@ if(X11_Xinput_FOUND)
   target_link_libraries(kded_keyboard ${X11_Xinput_LIB})
 endif(X11_Xinput_FOUND)
 
-install( TARGETS kded_keyboard DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded )
+install( TARGETS kded_keyboard DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+install( FILES keyboard.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded )
 
 
 ### plasma applet ###
@@ -69,8 +69,8 @@ target_link_libraries(plasma_applet_keyboard
      ${X11_LIBRARIES}
 )
 
-install( TARGETS plasma_applet_keyboard DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES plasma_applet_keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR} )
+install( TARGETS plasma_applet_keyboard DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+install( FILES plasma_applet_keyboard.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR} )
 
 
 ### widget lib ###
@@ -94,7 +94,7 @@ target_link_libraries(keyboard_layout_widget
      ${X11_Xkbfile_LIB}
 )
 
-install( TARGETS keyboard_layout_widget DESTINATION ${PLUGIN_INSTALL_DIR} )
+install( TARGETS keyboard_layout_widget DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ### kcm keyboard ###
@@ -134,9 +134,9 @@ target_link_libraries(kcm_keyboard
     ${X11_LIBRARIES}
 )
 
-install(TARGETS kcm_keyboard DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_keyboard DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
-install(FILES kcm_keyboard.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(FILES kcm_keyboard.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 add_subdirectory( pics )
 

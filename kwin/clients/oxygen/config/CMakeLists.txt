@@ -22,4 +22,4 @@ target_link_libraries(kwin_oxygen_config
     oxygenstyleconfig
 )
 
-install(TARGETS kwin_oxygen_config DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kwin_oxygen_config DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})

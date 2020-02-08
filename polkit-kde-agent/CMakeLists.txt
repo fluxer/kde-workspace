@@ -34,7 +34,7 @@ configure_file(
 
 install(
     TARGETS polkit-kde-authentication-agent-1
-    DESTINATION ${LIBEXEC_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
 install(
@@ -44,5 +44,5 @@ install(
 
 install(
     FILES policykit1-kde.notifyrc
-    DESTINATION ${DATA_INSTALL_DIR}/policykit1-kde
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/policykit1-kde
 )

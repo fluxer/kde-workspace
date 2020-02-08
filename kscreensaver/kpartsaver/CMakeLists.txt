@@ -11,5 +11,5 @@ target_link_libraries(kpartsaver.kss  ${KDE4_KPARTS_LIBS} kscreensaver)
 
 install(TARGETS kpartsaver.kss  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES kpartsaver.desktop  DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+install( FILES kpartsaver.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )
 

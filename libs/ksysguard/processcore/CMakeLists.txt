@@ -26,7 +26,7 @@ install(TARGETS processcore EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_
 
 ########### install files ###############
 
-install( FILES processes.h process.h DESTINATION ${INCLUDE_INSTALL_DIR}/ksysguard COMPONENT Devel)
+install( FILES processes.h process.h DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard COMPONENT Devel)
 
 #------ KAuth stuff
 
@@ -39,7 +39,7 @@ set(ksysguardprocesslist_helper_srcs
 
 add_executable(ksysguardprocesslist_helper ${ksysguardprocesslist_helper_srcs})
 target_link_libraries(ksysguardprocesslist_helper ${KDE4_KDECORE_LIBS})
-install(TARGETS ksysguardprocesslist_helper DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS ksysguardprocesslist_helper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 kde4_install_auth_helper_files(ksysguardprocesslist_helper org.kde.ksysguard.processlisthelper root)
 

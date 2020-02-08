@@ -29,9 +29,9 @@ target_link_libraries(kscreenlocker_greet
     ${KDE4_KDECLARATIVE_LIBS}
 )
 
-install(TARGETS kscreenlocker_greet DESTINATION ${LIBEXEC_INSTALL_DIR})
+install(TARGETS kscreenlocker_greet DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 install(
     DIRECTORY themes/org.kde.passworddialog
-    DESTINATION ${DATA_INSTALL_DIR}/ksmserver/screenlocker
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/screenlocker
 )

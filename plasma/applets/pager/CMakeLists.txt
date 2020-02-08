@@ -14,6 +14,6 @@ target_link_libraries(plasma_applet_pager
                       ${QT_QTDECLARATIVE_LIBRARY}
                       taskmanager)
 
-install(TARGETS plasma_applet_pager DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-pager-default.desktop DESTINATION ${SERVICES_INSTALL_DIR})
-install(DIRECTORY package/ DESTINATION ${DATA_INSTALL_DIR}/plasma/packages/org.kde.pager)
+install(TARGETS plasma_applet_pager DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES plasma-pager-default.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+install(DIRECTORY package/ DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/packages/org.kde.pager)

@@ -33,9 +33,9 @@ kde4_add_plugin(kio_nfs ${kio_nfs_PART_SRCS})
 
 target_link_libraries(kio_nfs   ${KDE4_KIO_LIBS})
 
-install(TARGETS kio_nfs  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kio_nfs  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES nfs.protocol  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES nfs.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

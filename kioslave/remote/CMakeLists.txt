@@ -13,12 +13,12 @@ kde4_add_plugin(kio_remote ${kio_remote_PART_SRCS})
 
 target_link_libraries(kio_remote  ${KDE4_KIO_LIBS})
 
-install(TARGETS kio_remote  DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kio_remote  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install(FILES remote.protocol  DESTINATION  ${SERVICES_INSTALL_DIR})
+install(FILES remote.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})
 
 
 

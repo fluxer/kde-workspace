@@ -22,7 +22,7 @@ endif (APPLE)
 
 ########### install files ###############
 
-install( FILES ${themes_RC}  DESTINATION  ${DATA_INSTALL_DIR}/kstyle/themes )
+install( FILES ${themes_RC}  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kstyle/themes )
 
 
 

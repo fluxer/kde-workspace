@@ -74,7 +74,7 @@ if (X11_Xfixes_FOUND)
    target_link_libraries(kcm_input ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
 
-install(TARGETS kcm_input  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_input  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### next target ###############
@@ -93,12 +93,12 @@ if (X11_Xfixes_FOUND)
    target_link_libraries(kcm_cursortheme ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
 
-install(TARGETS kcm_cursortheme  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_cursortheme  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES mouse.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( FILES cursortheme.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( FILES xcursor/xcursor.knsrc DESTINATION  ${CONFIG_INSTALL_DIR} )
+install( FILES mouse.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install( FILES cursortheme.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install( FILES xcursor/xcursor.knsrc DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )
 

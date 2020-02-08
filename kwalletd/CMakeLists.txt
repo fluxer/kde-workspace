@@ -60,8 +60,8 @@ install(TARGETS kwalletd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 ########### install files ###############
 
-install( FILES kwalletd.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
-install( FILES kwalletd.notifyrc DESTINATION  ${DATA_INSTALL_DIR}/kwalletd )
+install( FILES kwalletd.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install( FILES kwalletd.notifyrc DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kwalletd )
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)

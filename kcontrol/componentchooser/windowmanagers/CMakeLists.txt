@@ -8,5 +8,5 @@ install(
     metacity.desktop
     openbox.desktop
     xfwm4.desktop
-    DESTINATION ${DATA_INSTALL_DIR}/ksmserver/windowmanagers
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/windowmanagers
 )

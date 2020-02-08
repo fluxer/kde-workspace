@@ -17,5 +17,5 @@ target_link_libraries(kcm_powerdevilglobalconfig
      powerdevilconfigcommonprivate
 )
 
-install(TARGETS kcm_powerdevilglobalconfig  DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES powerdevilglobalconfig.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install(TARGETS kcm_powerdevilglobalconfig  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+install( FILES powerdevilglobalconfig.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

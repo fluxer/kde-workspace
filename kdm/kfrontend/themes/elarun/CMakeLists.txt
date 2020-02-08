@@ -13,4 +13,4 @@ install(FILES
     session_normal.png
     system_normal.png
     user_icon.png
-    DESTINATION ${DATA_INSTALL_DIR}/kdm/themes/elarun)
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kdm/themes/elarun)

@@ -15,7 +15,7 @@ target_link_libraries(
     ${KDE4_KDEUI_LIBS}
     oxygenstyleconfig )
 
-install(TARGETS kstyle_oxygen_config DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kstyle_oxygen_config DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 set( oxygen_settings_SOURCES

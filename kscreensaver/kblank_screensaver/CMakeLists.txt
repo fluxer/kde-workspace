@@ -16,4 +16,4 @@ install(TARGETS kblankscrn.kss ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES kblank.desktop  DESTINATION  ${SERVICES_INSTALL_DIR}/ScreenSavers )
+install( FILES kblank.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR}/ScreenSavers )

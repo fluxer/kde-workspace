@@ -2,5 +2,5 @@ install(
     FILES
     defaults.khotkeys
     printscreen.khotkeys
-    DESTINATION  ${DATA_INSTALL_DIR}/khotkeys
+    DESTINATION  ${KDE4_DATA_INSTALL_DIR}/khotkeys
 )

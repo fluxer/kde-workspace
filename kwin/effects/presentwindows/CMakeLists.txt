@@ -11,8 +11,8 @@ set(kwin4_effect_builtins_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_sources effects/presentwindows/presentwindowsconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/presentwindows/presentwindows.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
-install(FILES effects/presentwindows/main.qml DESTINATION ${DATA_INSTALL_DIR}/kwin/effects/presentwindows)
+install(FILES effects/presentwindows/presentwindows.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/presentwindows/main.qml DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/effects/presentwindows)
 
 #######################################
 # Config
@@ -26,4 +26,4 @@ set(kwin4_effect_builtins_config_sources
 kde4_add_kcfg_files(kwin4_effect_builtins_config_sources effects/presentwindows/presentwindowsconfig.kcfgc)
 
 # .desktop files
-install(FILES effects/presentwindows/presentwindows_config.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kwin)
+install(FILES effects/presentwindows/presentwindows_config.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin)

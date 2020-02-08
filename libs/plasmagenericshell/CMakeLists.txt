@@ -46,10 +46,10 @@ set_target_properties(plasmagenericshell PROPERTIES VERSION ${GENERIC_LIB_VERSIO
 SOVERSION ${GENERIC_LIB_SOVERSION} )
 
 install(DIRECTORY widgetsexplorer/package/
-        DESTINATION ${DATA_INSTALL_DIR}/plasma/packages/org.kde.desktop.widgetexplorer
+        DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/packages/org.kde.desktop.widgetexplorer
         PATTERN "Messages.sh" EXCLUDE
 )
 
 install(TARGETS plasmagenericshell EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
-INSTALL(FILES plasma-layout-template.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})
+INSTALL(FILES plasma-layout-template.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})
 

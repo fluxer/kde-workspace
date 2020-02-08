@@ -21,7 +21,7 @@ install(TARGETS ksgrd EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAUL
 
 ########### install files ###############
 
-install(FILES SensorAgent.h SensorClient.h SensorManager.h SensorShellAgent.h SensorSocketAgent.h DESTINATION ${INCLUDE_INSTALL_DIR}/ksgrd COMPONENT Devel)
+install(FILES SensorAgent.h SensorClient.h SensorManager.h SensorShellAgent.h SensorSocketAgent.h DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksgrd COMPONENT Devel)
 
 
 

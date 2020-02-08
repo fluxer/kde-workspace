@@ -84,7 +84,7 @@ if (UDEV_FOUND)
     target_link_libraries(kded_powerdevil ${UDEV_LIBS})
 endif (UDEV_FOUND)
 
-install(TARGETS kded_powerdevil DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kded_powerdevil DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(TARGETS powerdevilcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # target no.3 - powerdevil ui library
@@ -104,4 +104,4 @@ macro_bool_to_01(UDEV_FOUND HAVE_UDEV)
 configure_file(config-powerdevil.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powerdevil.h )
 
 install(TARGETS powerdevilui ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES powerdevil.desktop DESTINATION ${SERVICES_INSTALL_DIR}/kded)
+install(FILES powerdevil.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)

@@ -36,6 +36,6 @@ if (X11_Xft_FOUND)
     add_subdirectory( thumbnail )
     add_subdirectory( viewpart )
 
-    kde4_install_icons( ${ICON_INSTALL_DIR} )
+    kde4_install_icons( ${KDE4_ICON_INSTALL_DIR} )
 
 endif (X11_Xft_FOUND)

@@ -37,7 +37,7 @@ kde4_add_plugin(kcm_randr ${kcm_randr_PART_SRCS})
 
 target_link_libraries(kcm_randr  ${KDE4_KDEUI_LIBS} ${X11_Xrandr_LIB} ${X11_LIBRARIES})
 
-install(TARGETS kcm_randr DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kcm_randr DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -58,7 +58,7 @@ install(TARGETS krandrtray ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### next target ###############
 
-install(PROGRAMS krandrstartup DESTINATION ${BIN_INSTALL_DIR})
+install(PROGRAMS krandrstartup DESTINATION ${KDE4_BIN_INSTALL_DIR})
 
-install(FILES randr.desktop  DESTINATION  ${SERVICES_INSTALL_DIR})
-install(PROGRAMS krandrtray.desktop  DESTINATION  ${XDG_APPS_INSTALL_DIR})
+install(FILES randr.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})
+install(PROGRAMS krandrtray.desktop  DESTINATION  ${KDE4_XDG_APPS_INSTALL_DIR})

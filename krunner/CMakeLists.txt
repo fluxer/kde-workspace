@@ -75,6 +75,6 @@ endif(X11_Xcursor_FOUND)
 
 install(TARGETS krunner         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install(FILES krunner.desktop  DESTINATION  ${AUTOSTART_INSTALL_DIR})
-install(FILES kcfg/klaunch.kcfg  DESTINATION  ${KCFG_INSTALL_DIR})
-install(FILES ${krunner_dbusAppXML} DESTINATION ${DBUS_INTERFACES_INSTALL_DIR} )
+install(FILES krunner.desktop  DESTINATION  ${KDE4_AUTOSTART_INSTALL_DIR})
+install(FILES kcfg/klaunch.kcfg  DESTINATION  ${KDE4_KCFG_INSTALL_DIR})
+install(FILES ${krunner_dbusAppXML} DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR} )

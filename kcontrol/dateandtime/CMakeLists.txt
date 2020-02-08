@@ -13,7 +13,7 @@ target_link_libraries(kcm_clock
 
 install(
     TARGETS kcm_clock
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
 
 ########### next target ###############
@@ -24,7 +24,7 @@ target_link_libraries(kcmdatetimehelper ${KDE4_KDECORE_LIBS})
 
 install(
     TARGETS kcmdatetimehelper
-    DESTINATION ${LIBEXEC_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
 kde4_install_auth_helper_files(
@@ -37,5 +37,5 @@ kde4_install_auth_helper_files(
 
 install(
     FILES clock.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )

@@ -12,6 +12,6 @@ target_link_libraries(runnermodelplugin
     ${KDE4_PLASMA_LIBS}
 )
 
-install(TARGETS runnermodelplugin DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
-install(FILES qmldir DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
+install(TARGETS runnermodelplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
+install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/runnermodel)
 

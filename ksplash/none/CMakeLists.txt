@@ -1,1 +1,1 @@
-install( FILES Theme.rc  DESTINATION  ${DATA_INSTALL_DIR}/ksplash/Themes/None )
+install( FILES Theme.rc  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/ksplash/Themes/None )

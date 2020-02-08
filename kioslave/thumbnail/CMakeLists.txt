@@ -33,7 +33,7 @@ kde4_add_plugin(kio_thumbnail ${kio_thumbnail_PART_SRCS})
 
 target_link_libraries(kio_thumbnail ${KDE4_KIO_LIBS})
 
-install(TARGETS kio_thumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS kio_thumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -43,11 +43,11 @@ kde4_add_plugin(imagethumbnail ${imagethumbnail_PART_SRCS})
 
 target_link_libraries(imagethumbnail ${KDE4_KIO_LIBS})
 
-install(TARGETS imagethumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-install( FILES directorythumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES directorythumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -64,8 +64,8 @@ if(HAVE_EXIV2)
     target_link_libraries(jpegthumbnail ${EXIV2_LIBRARIES})
 endif()
 
-install(FILES jpegcreatorsettings.kcfg DESTINATION ${KCFG_INSTALL_DIR})
-install(TARGETS jpegthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(FILES jpegcreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
+install(TARGETS jpegthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -75,7 +75,7 @@ kde4_add_plugin(svgthumbnail ${svgthumbnail_PART_SRCS})
 
 target_link_libraries(svgthumbnail ${KDE4_KIO_LIBS})
 
-install(TARGETS svgthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS svgthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -85,7 +85,7 @@ kde4_add_plugin(textthumbnail ${textthumbnail_PART_SRCS})
 
 target_link_libraries(textthumbnail ${KDE4_KIO_LIBS})
 
-install(TARGETS textthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS textthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -95,7 +95,7 @@ kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
 
 target_link_libraries(djvuthumbnail ${KDE4_KIO_LIBS})
 
-install(TARGETS djvuthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -112,8 +112,8 @@ if(OPENEXR_FOUND)
    # when exceptions are not enabled.
    set_target_properties(exrthumbnail PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
 
-   install(TARGETS exrthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
-   install(FILES exrthumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+   install(TARGETS exrthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+   install(FILES exrthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 endif()
 
 ########### next target ###############
@@ -125,8 +125,8 @@ if(X11_Xcursor_FOUND)
 
    target_link_libraries(cursorthumbnail ${X11_Xcursor_LIB} ${KDE4_KIO_LIBS})
 
-   install(TARGETS cursorthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
-   install(FILES cursorthumbnail.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+   install(TARGETS cursorthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+   install(FILES cursorthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 endif()
 
 ########### next target ###############
@@ -136,31 +136,31 @@ set(windowsimagethumbnail_SRCS windowsimagecreator.cpp icoutils_common.cpp icout
 
 kde4_add_plugin(windowsexethumbnail ${windowsexethumbnail_SRCS})
 target_link_libraries( windowsexethumbnail ${KDE4_KIO_LIBS} )
-install(TARGETS windowsexethumbnail DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS windowsexethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 kde4_add_plugin(windowsimagethumbnail ${windowsimagethumbnail_SRCS})
 target_link_libraries(windowsimagethumbnail ${KDE4_KIO_LIBS})
-install(TARGETS windowsimagethumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS windowsimagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 set(comicbookthumbnail_SRCS comiccreator.cpp)
 kde4_add_plugin(comicbookthumbnail ${comicbookthumbnail_SRCS})
 target_link_libraries(comicbookthumbnail ${KDE4_KIO_LIBS} ${KDE4_KPTY_LIBRARY})
-install(TARGETS comicbookthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS comicbookthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 set(epubthumbnail_SRCS epub.cpp epubthumbnail.cpp)
 kde4_add_plugin(epubthumbnail ${epubthumbnail_SRCS})
 target_link_libraries(epubthumbnail ${KDE4_KIO_LIBS})
-install(TARGETS epubthumbnail DESTINATION ${PLUGIN_INSTALL_DIR})
+install(TARGETS epubthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
 install(
     FILES thumbcreator.desktop
-    DESTINATION ${SERVICETYPES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR}
 )
 
 install(
@@ -176,5 +176,5 @@ install(
     epubthumbnail.desktop
     windowsimagethumbnail.desktop
     windowsexethumbnail.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )

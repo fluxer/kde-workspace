@@ -10,5 +10,5 @@ target_link_libraries(plasma_applet_windowlist
                       kworkspace
                       )
 
-install(TARGETS plasma_applet_windowlist DESTINATION ${PLUGIN_INSTALL_DIR})
-install(FILES plasma-applet-windowlist.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install(TARGETS plasma_applet_windowlist DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES plasma-applet-windowlist.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

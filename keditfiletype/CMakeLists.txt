@@ -22,7 +22,7 @@ kde4_add_plugin(kcm_filetypes ${kcm_filetypes_SRCS})
 
 target_link_libraries(kcm_filetypes ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
 
-install(TARGETS kcm_filetypes  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_filetypes  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 ########### next target ###############
 
@@ -39,4 +39,4 @@ install(TARGETS keditfiletype ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES filetypes.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES filetypes.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

@@ -17,5 +17,5 @@ add_executable( systemsettings ${systemsettings_SRCS})
 TARGET_LINK_LIBRARIES( systemsettings ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KCMUTILS_LIBS} systemsettingsview )
 
 INSTALL( TARGETS systemsettings ${INSTALL_TARGETS_DEFAULT_ARGS} )
-INSTALL( FILES systemsettingsui.rc systemsettings.kcfg DESTINATION ${DATA_INSTALL_DIR}/systemsettings )
-INSTALL( PROGRAMS kdesystemsettings.desktop systemsettings.desktop DESTINATION ${XDG_APPS_INSTALL_DIR} )
+INSTALL( FILES systemsettingsui.rc systemsettings.kcfg DESTINATION ${KDE4_DATA_INSTALL_DIR}/systemsettings )
+INSTALL( PROGRAMS kdesystemsettings.desktop systemsettings.desktop DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR} )

@@ -19,10 +19,10 @@ if (DL_LIBRARY)
   target_link_libraries(kcm_screensaver ${DL_LIBRARY})
 endif(DL_LIBRARY)
 
-install(TARGETS kcm_screensaver  DESTINATION ${PLUGIN_INSTALL_DIR} )
+install(TARGETS kcm_screensaver  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 
 ########### install files ###############
 
-install( FILES screensaver.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES screensaver.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 

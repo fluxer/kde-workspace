@@ -20,9 +20,9 @@ target_link_libraries(graphicswidgetsbindingsplugin
 
 install(
     TARGETS graphicswidgetsbindingsplugin
-    DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/graphicswidgets
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/graphicswidgets
 )
 install(
     FILES qmldir
-    DESTINATION ${IMPORTS_INSTALL_DIR}/org/kde/plasma/graphicswidgets
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/graphicswidgets
 )

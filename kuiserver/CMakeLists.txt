@@ -57,4 +57,4 @@ target_link_libraries(kuiserver  ${KDE4_KIO_LIBS} )
 
 install(TARGETS kuiserver ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
-install( FILES kuiserver.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install( FILES kuiserver.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )

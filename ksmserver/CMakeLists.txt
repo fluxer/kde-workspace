@@ -85,5 +85,5 @@ install(TARGETS kcheckrunning ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install( FILES org.kde.KSMServerInterface.xml DESTINATION ${DBUS_INTERFACES_INSTALL_DIR})
-install( DIRECTORY themes/ DESTINATION ${DATA_INSTALL_DIR}/ksmserver/themes )
+install( FILES org.kde.KSMServerInterface.xml DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
+install( DIRECTORY themes/ DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/themes )

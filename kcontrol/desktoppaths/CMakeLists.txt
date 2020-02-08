@@ -12,10 +12,10 @@ target_link_libraries(kcm_desktoppaths
 
 install(
     TARGETS kcm_desktoppaths
-    DESTINATION ${PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
 install(
     FILES desktoppath.desktop
-    DESTINATION ${SERVICES_INSTALL_DIR}
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
 

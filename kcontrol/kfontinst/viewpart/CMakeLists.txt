@@ -10,7 +10,7 @@ kde4_add_plugin(kfontviewpart ${kfontviewpart_PART_SRCS})
 
 target_link_libraries(kfontviewpart  ${KDE4_KPARTS_LIBS} ${FONTCONFIG_LIBRARIES} kfontinstui kfontinst )
 
-install(TARGETS kfontviewpart  DESTINATION ${PLUGIN_INSTALL_DIR} )
-install( FILES kfontviewpart.rc DESTINATION  ${DATA_INSTALL_DIR}/kfontinst )
-install( FILES kfontviewpart.desktop  DESTINATION  ${SERVICES_INSTALL_DIR} )
+install(TARGETS kfontviewpart  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+install( FILES kfontviewpart.rc DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kfontinst )
+install( FILES kfontviewpart.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 
