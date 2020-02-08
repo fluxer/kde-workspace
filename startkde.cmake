@@ -17,16 +17,10 @@ trap 'echo GOT SIGHUP' HUP
 unset DYLD_FORCE_FLAT_NAMESPACE
 
 # in case we have been started with full pathname spec without being in PATH
-bindir=`echo "$0" | sed -n 's,^\(/.*\)/[^/][^/]*$,\1,p'`
-if [ -n "$bindir" ]; then
-  qbindir=`$bindir/kde4-config --qt-binaries`
-  qdbus=$qbindir/qdbus
-  case $PATH in
-    $bindir|$bindir:*|*:$bindir|*:$bindir:*) ;;
-    *) PATH=$bindir:$PATH; export PATH;;
-  esac
+if [ -n "$PATH " ]; then
+    qdbus=$(basename @QT_QDBUS_EXECUTABLE@)
 else
-  qdbus=qdbus
+    qdbus=@QT_QDBUS_EXECUTABLE@
 fi
 
 # Check if a KDE session already is running and whether it's possible to connect to X
