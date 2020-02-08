@@ -9,7 +9,6 @@ install( FILES README DESTINATION ${DATA_INSTALL_DIR}/doc/kdm )
 set(confproc ${CMAKE_CURRENT_SOURCE_DIR}/confproc.pl)
 set(confdef ${CMAKE_CURRENT_SOURCE_DIR}/config.def)
 set(confci ${CMAKE_CURRENT_BINARY_DIR}/config.ci)
-macro_additional_clean_files( ${confci} )
 
 add_custom_command(
     OUTPUT ${confci}
