@@ -19,11 +19,6 @@ set(kcheckpass_SRCS
 
 add_executable(kcheckpass ${kcheckpass_SRCS})
 
-if(KDE4_ENABLE_FPIE)
-    macro_add_compile_flags(kcheckpass ${KDE4_CXX_FPIE_FLAGS})
-    macro_add_link_flags(kcheckpass ${KDE4_PIE_LDFLAGS})
-endif(KDE4_ENABLE_FPIE)
-
 add_definitions(-U_REENTRANT)
 target_link_libraries(kcheckpass
     ${UNIXAUTH_LIBRARIES}
