@@ -124,14 +124,6 @@ set_package_properties(LibGcrypt PROPERTIES
     TYPE REQUIRED
 )
 
-macro_optional_find_package(SLP)
-set_package_properties(SLP PROPERTIES
-    DESCRIPTION "SLP (Service Location Protocol) implementation"
-    URL "http://www.openslp.org/"
-    PURPOSE "Provides SLP support in the network:/ kioslave."
-    TYPE OPTIONAL
-)
-
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
     DESCRIPTION "Accelerated JPEG image codec"

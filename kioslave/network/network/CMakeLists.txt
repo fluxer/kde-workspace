@@ -1,8 +1,5 @@
 project( molletnetwork )
 
-macro_bool_to_01( SLP_FOUND  HAVE_SLP )
-configure_file( config-slp.h.cmake  ${CMAKE_CURRENT_BINARY_DIR}/config-slp.h )
-
 include_directories(
   builder
 )
@@ -10,14 +7,6 @@ include_directories(
 set( netsystemdriver_SRCS
   builder/simpleitemfactory.cpp
 )
-
-# TODO: find best-practice to do such dependant inclusion of files to compile, this is unreadable
-if(SLP_FOUND)
-    set( slpnetworkbuilder_SRCS
-        builder/slp/slpservicebrowser.cpp
-        builder/slp/slpnetworkbuilder.cpp
-    )
-endif(SLP_FOUND)
 
 set( dnssdnetworkbuilder_SRCS
   builder/dnssd/dnssdnetworkbuilder.cpp
@@ -40,7 +29,6 @@ set( networkdbus_LIB_SRCS
 
 set( molletnetwork_LIB_SRCS
   ${netsystemdriver_SRCS}
-#   ${slpnetworkbuilder_SRCS}
   ${upnpnetworkbuilder_SRCS}
   ${dnssdnetworkbuilder_SRCS}
   ${networkbuilder_SRCS}
@@ -60,10 +48,6 @@ set( molletnetwork_LINK_LIBS
     ${QT_QTNETWORK_LIBRARY}
     ${QT_QTGUI_LIBRARY}
 )
-
-if(SLP_FOUND)
-set( molletnetwork_LINK_LIBS  ${molletnetwork_LINK_LIBS} ${SLP_LIBRARIES} )
-endif(SLP_FOUND)
 
 add_library( molletnetwork  SHARED ${molletnetwork_LIB_SRCS} )
 target_link_libraries( molletnetwork  ${molletnetwork_LINK_LIBS} )
