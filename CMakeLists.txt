@@ -7,7 +7,7 @@ include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(GenerateExportHeader)
 
-find_package(KDE4 4.18.0 REQUIRED)
+find_package(KDE4 4.19.0 REQUIRED)
 include(KDE4Defaults)
 
 option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
