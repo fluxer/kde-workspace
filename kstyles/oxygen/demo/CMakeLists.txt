@@ -29,7 +29,6 @@ add_executable(oxygen-demo ${oxygen_demo_SOURCES})
 target_link_libraries(oxygen-demo
     ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
-    ${QT_QTTEST_LIBRARY}
     ${QT_QTGUI_LIBRARY})
 
 ########### install files ###############

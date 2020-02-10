@@ -1,31 +1,35 @@
 include_directories(${kephal_SOURCE_DIR}/kephal)
 
-ADD_DEFINITIONS (-DSCREENS_FACTORY=libkephal_factory)
-ADD_DEFINITIONS (-DOUTPUTS_FACTORY=libkephal_factory)
-ADD_DEFINITIONS (-DCONFIGURATIONS_FACTORY=libkephal_factory)
+add_definitions(
+    -DSCREENS_FACTORY=libkephal_factory
+    -DOUTPUTS_FACTORY=libkephal_factory
+    -DCONFIGURATIONS_FACTORY=libkephal_factory
+)
 
-SET (kephalshared_SRCS
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/simplescreen.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/screens.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/desktopwidgetscreens.cpp
-   )
-   set(unused_SRCS
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/outputs.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/configurations.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/simpleoutput.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/desktopwidgetoutputs.cpp
-   )
+SET(kephalshared_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/simplescreen.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/screens.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/desktopwidgetscreens.cpp
+)
+
+set(unused_SRCS
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/outputs.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/configurations.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/simpleoutput.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kephal/desktopwidgetoutputs.cpp
+)
 
 set(libkephal_SRCS
-   ${kephalshared_SRCS}
-   libkephal.cpp
-   )
+    ${kephalshared_SRCS}
+    libkephal.cpp
+)
+
 set(more_unused_SRCS
-   dbusconfigurations.cpp
-   dbusoutputs.cpp
-   dbusscreens.cpp
-   noconfigurations.cpp
-   )
+    dbusconfigurations.cpp
+    dbusoutputs.cpp
+    dbusscreens.cpp
+    noconfigurations.cpp
+)
 
 # generate dbus-interface from class and add the generated sources
 #QT4_GENERATE_DBUS_INTERFACE(../service/dbus/dbusapi_screens.h org.kde.Kephal.Screens.xml)
@@ -37,16 +41,20 @@ set(more_unused_SRCS
 
 add_library(kephal SHARED ${libkephal_SRCS})
 
-TARGET_LINK_LIBRARIES (kephal ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kephal PUBLIC
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTCORE_LIBRARY}
+    ${QT_QTGUI_LIBRARY}
+)
 
 set_target_properties(kephal PROPERTIES
-   VERSION ${GENERIC_LIB_VERSION}
-   SOVERSION ${GENERIC_LIB_SOVERSION}
-   )
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
 
 #   INSTALL_RPATH_USE_LINK_PATH true
 #   )
 
-INSTALL (TARGETS kephal EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kephal EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-INSTALL (FILES FindKephal.cmake DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules)
+install(FILES FindKephal.cmake DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules)

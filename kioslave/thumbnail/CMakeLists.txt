@@ -140,7 +140,7 @@ install(TARGETS windowsimagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 set(comicbookthumbnail_SRCS comiccreator.cpp)
 kde4_add_plugin(comicbookthumbnail ${comicbookthumbnail_SRCS})
-target_link_libraries(comicbookthumbnail ${KDE4_KIO_LIBS} ${KDE4_KPTY_LIBRARY})
+target_link_libraries(comicbookthumbnail ${KDE4_KIO_LIBS})
 install(TARGETS comicbookthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############

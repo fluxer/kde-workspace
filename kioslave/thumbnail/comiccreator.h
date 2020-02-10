@@ -32,6 +32,7 @@
 
 #include <kio/thumbcreator.h>
 
+#include <QtCore/QEventLoop>
 #include <QtCore/QByteArray>
 #include <QtCore/QStringList>
 #include <QtCore/QScopedPointer>
@@ -39,7 +40,6 @@
 #include <QtGui/QImage>
 
 class KArchiveDirectory;
-#include <QEventLoop>
 
 class ComicCreator : public QObject, public ThumbCreator
 {

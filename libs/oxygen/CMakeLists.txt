@@ -13,10 +13,12 @@ kde4_add_kcfg_files(oxygenstyle_LIB_SRCS
 
 add_library(oxygenstyle SHARED ${oxygenstyle_LIB_SRCS})
 
-target_link_libraries(oxygenstyle ${KDE4_KDEUI_LIBS})
+target_link_libraries(oxygenstyle PUBLIC
+    ${KDE4_KDEUI_LIBS}
+)
 
 if ( X11_FOUND )
-   target_link_libraries(oxygenstyle ${X11_LIBRARIES})
+   target_link_libraries(oxygenstyle PRIVATE ${X11_LIBRARIES})
 endif( X11_FOUND )
 
 set_target_properties(oxygenstyle PROPERTIES
@@ -38,18 +40,20 @@ kde4_add_kcfg_files(oxygenstyleconfig_LIB_SRCS
 
 add_library(oxygenstyleconfig SHARED ${oxygenstyleconfig_LIB_SRCS})
 
-target_link_libraries(oxygenstyleconfig oxygenstyle)
-target_link_libraries(oxygenstyleconfig ${KDE4_KDEUI_LIBS})
+target_link_libraries(oxygenstyleconfig PUBLIC
+    ${KDE4_KDEUI_LIBS}
+    oxygenstyle
+)
 
 if ( X11_FOUND )
-   target_link_libraries(oxygenstyleconfig ${X11_LIBRARIES})
+   target_link_libraries(oxygenstyleconfig PRIVATE ${X11_LIBRARIES})
 endif( X11_FOUND )
 
 set_target_properties(oxygenstyleconfig PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
-install(TARGETS oxygenstyleconfig ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(TARGETS oxygenstyleconfig ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 generate_export_header(oxygenstyle BASE_NAME oxygen)
 

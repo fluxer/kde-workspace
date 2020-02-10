@@ -58,16 +58,16 @@ qt4_add_dbus_adaptor( ksmserver_SRCS org.kde.KSMServerInterface.xml server.h KSM
 add_executable( ksmserver ${ksmserver_SRCS})
 
 target_link_libraries(ksmserver
-    ${SCREEN_LOCKER}
     ${KDE4_PLASMA_LIBS}
-    kworkspace
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     ${KDE4_SOLID_LIBS}
+    ${KDE4_KDECLARATIVE_LIBS}
+    ${QT_QTDECLARATIVE_LIBRARY}
     ${X11_LIBRARIES}
     ${X11_Xrender_LIB}
-    ${QT_QTDECLARATIVE_LIBRARY}
-    ${KDE4_KDECLARATIVE_LIBS}
+    ${SCREEN_LOCKER}
+    kworkspace
 )
 
 install(TARGETS ksmserver ${INSTALL_TARGETS_DEFAULT_ARGS})
