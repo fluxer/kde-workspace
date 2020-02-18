@@ -1,11 +1,8 @@
 # for dbus_add_activation_service
-include(PkgConfigGetVar)
+include(MacroDBusAddActivationService)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1223)
 add_subdirectory(greeter)
-
-# for dbus_add_activation_service
-include(PkgConfigGetVar)
 
 include_directories(${CMAKE_SOURCE_DIR}/libs/kworkspace)
 

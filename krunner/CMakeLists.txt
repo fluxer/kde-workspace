@@ -1,7 +1,7 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1207)
 
 # for dbus_add_activation_service
-include(PkgConfigGetVar)
+include(MacroDBusAddActivationService)
 
 include_directories(${CMAKE_SOURCE_DIR}/libs/ksysguard
                     ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
