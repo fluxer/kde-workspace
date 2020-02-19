@@ -1,11 +1,13 @@
 include(UnixAuth)
-set_package_properties(PAM PROPERTIES DESCRIPTION "PAM Libraries"
-                       URL "https://www.kernel.org/pub/linux/libs/pam/"
-                       TYPE OPTIONAL
-                       PURPOSE "Required for screen unlocking and optionally used by the KDM log in manager"
-                      )
+set_package_properties(PAM PROPERTIES
+    DESCRIPTION "PAM Libraries"
+    URL "https://www.kernel.org/pub/linux/libs/pam/"
+    TYPE OPTIONAL
+    PURPOSE "Required for screen unlocking and optionally used by the KDM log in manager"
+)
+
+include(CMakePushCheckState)
 include(CheckTypeSize)
-include(FindPkgConfig)
 
 if (PAM_FOUND)
     set(KDE4_COMMON_PAM_SERVICE "kde" CACHE STRING "The PAM service to use unless overridden for a particular app.")
@@ -96,9 +98,11 @@ check_type_size("struct ucred" STRUCT_UCRED)       # kio_fonts
 
 check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
 
+cmake_reset_check_state()
 set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH}/Xrandr.h)
 set(CMAKE_REQUIRED_LIBRARIES ${X11_Xrandr_LIB})
 check_function_exists(XRRGetScreenSizeRange XRANDR_1_2_FOUND)
 macro_bool_to_01(XRANDR_1_2_FOUND HAS_RANDR_1_2)
 check_function_exists(XRRGetScreenResourcesCurrent XRANDR_1_3_FOUND)
 macro_bool_to_01(XRANDR_1_3_FOUND HAS_RANDR_1_3)
+cmake_pop_check_state()
