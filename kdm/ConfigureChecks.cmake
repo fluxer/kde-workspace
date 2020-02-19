@@ -1,3 +1,4 @@
+include(CMakePushCheckState)
 include(CheckCSourceRuns)
 include(CheckStructMember)
 
@@ -38,7 +39,7 @@ check_function_exists(_NSGetEnviron HAVE_NSGETENVIRON)
 find_library(UTIL_LIBRARIES util)
 mark_as_advanced(UTIL_LIBRARIES)
 
-macro_push_required_vars()
+cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${UTIL_LIBRARIES})
 check_function_exists(setusercontext HAVE_SETUSERCONTEXT)
 check_function_exists(login_getclass HAVE_LOGIN_GETCLASS)
@@ -47,7 +48,7 @@ if (PAM_FOUND)
     set(CMAKE_REQUIRED_LIBRARIES ${PAM_LIBRARIES})
     check_function_exists(pam_getenvlist HAVE_PAM_GETENVLIST)
 endif (PAM_FOUND)
-macro_pop_required_vars()
+cmake_pop_check_state()
 
 
 macro(define_library LIB FN)
@@ -71,7 +72,7 @@ if (NOT have_gethostbyname)
     define_library(nsl gethostbyname)
 endif (NOT have_gethostbyname)
 
-macro_push_required_vars()
+cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${SOCKET_LIBRARIES})
 check_c_source_runs("
 #include <sys/socket.h>
@@ -101,7 +102,7 @@ int main()
     return errno != EACCES;
 }
 " HONORS_SOCKET_PERMS)
-macro_pop_required_vars()
+cmake_pop_check_state()
 
 # for genkdmconf; this is TODO
 #if (EXISTS /etc/ttys)
@@ -172,10 +173,10 @@ could not be found.")
 endif (KDE4_KRB5AUTH)
 
 if (X11_Xdmcp_FOUND)
-    macro_push_required_vars()
+    cmake_reset_check_state()
     set(CMAKE_REQUIRED_LIBRARIES ${X11_LIBRARIES})
     check_function_exists(XdmcpWrap HASXDMAUTH)
-    macro_pop_required_vars()
+    cmake_pop_check_state()
 endif (X11_Xdmcp_FOUND)
 
 option(KDE4_KERBEROS4 "Compile KDM with Kerberos v4 support" OFF)
@@ -206,10 +207,10 @@ endif (KDE4_XDMCP AND X11_Xdmcp_FOUND)
 option(KDE4_KDM_XCONSOLE "Build KDM with built-in xconsole" OFF)
 macro_bool_to_01(KDE4_KDM_XCONSOLE WITH_KDM_XCONSOLE)
 
-macro_push_required_vars()
+cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${NSL_LIBRARIES})
 check_function_exists(getifaddrs HAVE_GETIFADDRS)
-macro_pop_required_vars()
+cmake_pop_check_state()
 check_function_exists(getloadavg  HAVE_GETLOADAVG)
 check_function_exists(setproctitle HAVE_SETPROCTITLE)
 check_function_exists(strnlen     HAVE_STRNLEN)
