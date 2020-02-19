@@ -100,14 +100,6 @@ if(Q_WS_X11)
     endif()
 endif(Q_WS_X11)
 
-macro_optional_find_package(GLIB2 2.0)
-set_package_properties(GLIB2 PROPERTIES
-    DESCRIPTION "Low-level core library for data structure handling, portability wrappers, etc."
-    URL "http://www.gtk.org"
-    PURPOSE "Needed to build the kxkb keyboard map control program and provide XMMS support in the Now Playing Plasma data engine"
-    TYPE OPTIONAL
-)
-
 macro_optional_find_package(Fontconfig)
 set_package_properties(Fontconfig PROPERTIES
     DESCRIPTION "Font access configuration library"
