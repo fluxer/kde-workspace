@@ -137,7 +137,7 @@ endif(OPENGL_FOUND AND OPENGL_GLU_FOUND AND KSCREENSAVER_SOUND_SUPPORT)
 ########### next target ###############
 if(OPENGL_FOUND AND OPENGL_GLU_FOUND AND QT_QTOPENGL_LIBRARY)
 
-  ## krotation, kpendulum need Eigen2
+  ## krotation and kpendulum need Eigen3
   if (EIGEN3_FOUND)
     include_directories(${EIGEN3_INCLUDE_DIR})
 
