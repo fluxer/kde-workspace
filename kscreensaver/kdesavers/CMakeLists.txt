@@ -1,5 +1,8 @@
 macro_optional_find_package(Eigen3)
-macro_log_feature(EIGEN3_FOUND "Eigen3" "A C++ template library for linear algebra" "kdesupport" FALSE "" "Needed to build the krotation and kpendulum screensavers" )
+set_package_properties(Eigen3 PROPERTIES
+    DESCRIPTION "A C++ template library for linear algebra"
+    PURPOSE "Needed to build the krotation and kpendulum screensavers"
+)
 
 option(KSCREENSAVER_SOUND_SUPPORT "Build with sound support" OFF)
 
