@@ -18,7 +18,7 @@ set_package_properties(LibSSH PROPERTIES
     PURPOSE "Needed to build the SFTP kioslave"
 )
 
-macro_optional_find_package(Mtp)
+macro_optional_find_package(Mtp 1.1.2)
 set_package_properties(Mtp PROPERTIES
     DESCRIPTION "the library implementation of the Media Transfer Protocol"
     URL "http://libmtp.sourceforge.net/"
