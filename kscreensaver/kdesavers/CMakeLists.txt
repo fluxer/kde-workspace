@@ -6,7 +6,6 @@ set_package_properties(Eigen3 PROPERTIES
 
 option(KSCREENSAVER_SOUND_SUPPORT "Build with sound support" OFF)
 
-include_directories(${KDE4WORKSPACE_INCLUDE_DIR})
 if(OPENGL_FOUND)
     include_directories(${OPENGL_INCLUDE_DIR})
 endif()
