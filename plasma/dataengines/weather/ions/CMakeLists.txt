@@ -23,5 +23,3 @@ add_subdirectory(bbcukmet)
 add_subdirectory(envcan)
 add_subdirectory(noaa)
 add_subdirectory(wetter.com)
-add_subdirectory(debianweather)
-
