@@ -1,16 +1,24 @@
 macro_optional_find_package(OpenEXR)
-set_package_properties(OpenEXR PROPERTIES DESCRIPTION "API for accessing OpenEXR formatted images"
-                       URL "http://www.openexr.com"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
-                      )
+set_package_properties(OpenEXR PROPERTIES
+    DESCRIPTION "API for accessing OpenEXR formatted images"
+    URL "http://www.openexr.com"
+    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
+    TYPE OPTIONAL
+)
 
 macro_optional_find_package(Exiv2)
-set_package_properties(Exiv2 PROPERTIES DESCRIPTION "A library to access image metadata"
-                       URL "http://www.exiv2.org"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides support for automatic rotation of JPEGs in the thumbnail kioslave"
-                      )
+set_package_properties(Exiv2 PROPERTIES
+    DESCRIPTION "A library to access image metadata"
+    URL "http://www.exiv2.org"
+    PURPOSE "Provides support for automatic rotation of JPEGs in the thumbnail kioslave"
+    TYPE OPTIONAL
+)
+
+find_program(WRESTOOL_EXECUTABLE wrestool)
+add_feature_info(wrestool
+    WRESTOOL_EXECUTABLE
+    "ICO thumbnails support in KIO slave"
+)
 
 macro_bool_to_01(EXIV2_FOUND HAVE_EXIV2)
 
@@ -94,7 +102,7 @@ install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 if(OPENEXR_FOUND)
-   include_directories( ${OPENEXR_INCLUDE_DIR})
+   include_directories(${OPENEXR_INCLUDE_DIR})
 
    set(exrthumbnail_PART_SRCS exrcreator.cpp)
 
