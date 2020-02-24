@@ -39,7 +39,7 @@
 #include <kstandarddirs.h>
 #include <kconfiggroup.h>
 #include <kurl.h>
-#include <config-runtime.h>
+#include <config-workspace.h>
 #include <kcomponentdata.h>
 #include <knotifyconfig.h>
 #include <kmediaplayer.h>

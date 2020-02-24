@@ -28,7 +28,7 @@
 #include <klocale.h>
 #include <kservicetypetrader.h>
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include "knotifyconfig.h"
 #include "ksolidnotify.h"

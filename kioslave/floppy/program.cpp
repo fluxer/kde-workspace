@@ -19,7 +19,7 @@
 
 #include "program.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>

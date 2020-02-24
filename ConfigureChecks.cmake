@@ -8,6 +8,7 @@ set_package_properties(PAM PROPERTIES
 
 include(CMakePushCheckState)
 include(CheckTypeSize)
+include(CheckSymbolExists)
 
 if (PAM_FOUND)
     set(KDE4_COMMON_PAM_SERVICE "kde" CACHE STRING "The PAM service to use unless overridden for a particular app.")
@@ -56,19 +57,15 @@ set(XKBDIR "${xrootdir}/share/X11")
 
 check_function_exists(getpassphrase HAVE_GETPASSPHRASE)
 check_function_exists(vsyslog HAVE_VSYSLOG)
-check_function_exists(statvfs HAVE_STATVFS)
+check_function_exists(nice HAVE_NICE)
 
+check_include_files(string.h HAVE_STRING_H)
+check_include_files(sys/select.h HAVE_SYS_SELECT_H)
 check_include_files(limits.h HAVE_LIMITS_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)     # ksmserver, ksplashml, sftp
 check_include_files(stdint.h HAVE_STDINT_H)         # kcontrol/kfontinst
-check_include_files("sys/stat.h;sys/vfs.h" HAVE_SYS_VFS_H) # statvfs for plasma/solid
-check_include_files("sys/stat.h;sys/statvfs.h" HAVE_SYS_STATVFS_H) # statvfs for plasma/solid
-check_include_files(sys/param.h HAVE_SYS_PARAM_H)
-check_include_files("sys/param.h;sys/mount.h" HAVE_SYS_MOUNT_H)
-check_include_files("sys/types.h;sys/statfs.h" HAVE_SYS_STATFS_H)
 check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(malloc.h HAVE_MALLOC_H)
-check_function_exists(statfs HAVE_STATFS)
 macro_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/{fonts,kfontinst}
 macro_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts
 macro_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # kwin, ksplash
@@ -93,10 +90,13 @@ macro_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kdesktop and kcontrol/lock
 macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # kdesktop
 macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 
-set(CMAKE_EXTRA_INCLUDE_FILES sys/socket.h)
-check_type_size("struct ucred" STRUCT_UCRED)       # kio_fonts
-
 check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
+
+cmake_reset_check_state()
+set(CMAKE_REQUIRED_LIBRARIES ${X11_Xext_LIB})
+check_symbol_exists(DPMSCapable "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSCAPABLE_PROTO)
+check_symbol_exists(DPMSInfo "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSINFO_PROTO)
+cmake_pop_check_state()
 
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH}/Xrandr.h)

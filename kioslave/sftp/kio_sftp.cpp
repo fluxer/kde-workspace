@@ -21,7 +21,7 @@
 
 #include "kio_sftp.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <cerrno>
 #include <cstring>

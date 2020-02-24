@@ -21,7 +21,7 @@
 
 #include "djvucreator.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <assert.h>
 #include <stdlib.h>

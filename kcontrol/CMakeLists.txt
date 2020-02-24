@@ -1,12 +1,3 @@
-
-macro_optional_find_package(Freetype)
-set_package_properties(Freetype PROPERTIES
-    DESCRIPTION "A font rendering engine"
-    URL "http://www.freetype.org"
-    PURPOSE "Needed to build kfontinst, a simple font installer."
-    TYPE OPTIONAL
-)
-
 set(libkxftconfig_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/fonts/kxftconfig.cpp
 )

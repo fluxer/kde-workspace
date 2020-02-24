@@ -100,6 +100,14 @@ if(Q_WS_X11)
     endif()
 endif(Q_WS_X11)
 
+macro_optional_find_package(Freetype)
+set_package_properties(Freetype PROPERTIES
+    DESCRIPTION "Freely available software library to render fonts"
+    URL "https://www.freetype.org"
+    PURPOSE "Needed to build font configuration and installation tools"
+    TYPE OPTIONAL
+)
+
 macro_optional_find_package(Fontconfig)
 set_package_properties(Fontconfig PROPERTIES
     DESCRIPTION "Font access configuration library"
@@ -175,7 +183,6 @@ check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
 include(ConfigureChecks.cmake)
-configure_file(config-runtime.h.cmake ${CMAKE_BINARY_DIR}/config-runtime.h)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
 if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")

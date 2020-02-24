@@ -21,7 +21,7 @@
 
 #include "fish.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 #include "config-fish.h"
 #include <QFile>
 #include <QDateTime>

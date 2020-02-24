@@ -18,7 +18,7 @@
 
 #include "iconthemes.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <stdlib.h>
 #include <unistd.h>

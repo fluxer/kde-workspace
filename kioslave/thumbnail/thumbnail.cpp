@@ -58,7 +58,7 @@
 #include <kde_file.h>
 #include <kdemacros.h>
 
-#include <config-runtime.h> // For HAVE_NICE
+#include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
 #include <kio/thumbsequencecreator.h>
 #include <kconfiggroup.h>

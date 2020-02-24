@@ -19,7 +19,7 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <arpa/inet.h>
 

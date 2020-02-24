@@ -21,7 +21,7 @@
 #include "kcmdnssd.h"
 
 #include <sys/stat.h>
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <QtDBus/QtDBus>
 

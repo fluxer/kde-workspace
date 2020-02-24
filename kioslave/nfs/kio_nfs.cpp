@@ -21,7 +21,7 @@
 
 #include "kio_nfs.h"
 
-#include <config-runtime.h>
+#include <config-workspace.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
