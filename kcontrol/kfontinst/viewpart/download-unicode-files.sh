@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Note: This file is tkaen, and modified, from gucharmap - svn revision 1169
+# Note: This file is taken, and modified, from gucharmap - svn revision 1169
 #
 # usage: ./download-unicode-files.sh DIRECTORY
 # downloads following files from unicode.org to DIRECTORY or unicode/ (if

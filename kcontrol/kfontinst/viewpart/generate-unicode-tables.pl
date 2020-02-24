@@ -400,17 +400,16 @@ sub process_unihan_zip ($)
             undef $kJapaneseOn;
         }
 
-        for my $f qw(kDefinition kCantonese kMandarin
-                     kTang kKorean kJapaneseKun kJapaneseOn) {
+        for my $f (qw(kDefinition kCantonese kMandarin kTang kKorean kJapaneseKun kJapaneseOn)) {
 
             if ($field eq $f) {
-	        push @strings, $value;
-		my $last_offset = $offset;
-		$offset += length($value) + 1;
-		$value = $last_offset;
-		last;
-	    }
-	}
+                push @strings, $value;
+                my $last_offset = $offset;
+                $offset += length($value) + 1;
+                $value = $last_offset;
+                last;
+            }
+        }
 
         if ($field eq "kDefinition") {
             $kDefinition = $value;
@@ -450,8 +449,7 @@ sub process_unihan_zip ($)
 
     print $out "static const Unihan *_get_unihan (gunichar uc)\n;";
 
-    for my $name qw(kDefinition kCantonese kMandarin
-		    kTang kKorean kJapaneseKun kJapaneseOn) {
+    for my $name (qw(kDefinition kCantonese kMandarin kTang kKorean kJapaneseKun kJapaneseOn)) {
     print $out <<EOT;
 
 static inline const char * unihan_get_$name (const Unihan *uh)
