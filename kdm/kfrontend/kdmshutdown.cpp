@@ -693,13 +693,13 @@ KDMCancelShutdown::KDMCancelShutdown(int how, int start, int timeout,
         strt = i18nc("start of shutdown:", "now");
     } else {
         qdt.setTime_t(start);
-        strt = qdt.toString(Qt::LocalDate);
+        strt = qdt.toString(Qt::SystemLocaleShortDate);
     }
     if (timeout == TO_INF) {
         end = i18nc("timeout of shutdown:", "infinite");
     } else {
         qdt.setTime_t(timeout);
-        end = qdt.toString(Qt::LocalDate);
+        end = qdt.toString(Qt::SystemLocaleShortDate);
     }
     QString trg =
         i18n("Owner: %1"
