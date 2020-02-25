@@ -1,4 +1,4 @@
-macro_optional_find_package(Eigen3)
+macro_optional_find_package(Eigen3 2.91.0)
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "A C++ template library for linear algebra"
     PURPOSE "Needed to build the krotation and kpendulum screensavers"
