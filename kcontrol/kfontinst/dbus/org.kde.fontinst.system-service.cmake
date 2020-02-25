@@ -1,5 +1,5 @@
 [D-BUS Service]
 Name=org.kde.fontinst
-Exec=@LIBEXEC_INSTALL_DIR@/fontinst
+Exec=@KDE4_LIBEXEC_INSTALL_DIR@/fontinst
 User=root
 

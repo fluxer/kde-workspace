@@ -99,7 +99,7 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" 
     fi
 fi
 
-[ -r @BIN_INSTALL_DIR@/krandrstartup ] && . @BIN_INSTALL_DIR@/krandrstartup
+[ -r @KDE4_BIN_INSTALL_DIR@/krandrstartup ] && . @KDE4_BIN_INSTALL_DIR@/krandrstartup
 
 if test "$kcmfonts_general_forcefontdpi" -ne 0; then
     xrdb -quiet -merge -nocpp <<EOF
