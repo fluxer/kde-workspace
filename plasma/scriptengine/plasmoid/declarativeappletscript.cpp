@@ -178,7 +178,6 @@ void DeclarativeAppletScript::qmlCreationFinished()
             }
             QScriptValue global = engine->globalObject();
             m_self = engine->newQObject(m_interface);
-            m_self.setScope(global);
             global.setProperty("plasmoid", m_self);
         } else {
             kWarning() << "Could not load org.kde.toolbox package.";
@@ -442,7 +441,6 @@ void DeclarativeAppletScript::setupObjects()
                        QScriptValue::ReadOnly | QScriptValue::Undeletable | QScriptValue::SkipInEnumeration);
 
     m_self = m_engine->newQObject(m_interface);
-    m_self.setScope(global);
     global.setProperty("plasmoid", m_self);
     m_env->addMainObjectProperties(m_self);
 
