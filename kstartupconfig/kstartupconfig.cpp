@@ -41,35 +41,34 @@ DEALINGS IN THE SOFTWARE.
 #define KPATH_SEPARATOR ':'
 
 static QString get_entry( QString* ll )
-    {
+{
     QString& l = *ll;
     l = l.trimmed();
     if( l.isEmpty())
         return QString();
     QString ret;
-    if( l[ 0 ] == '\'' )
-        {
+    if( l[ 0 ] == '\'' ) {
         int pos = 1;
         while( pos < l.length() && l[ pos ] != '\'' )
             ret += l[ pos++ ];
-        if( pos >= l.length())
-            {
+        if( pos >= l.length()) {
             *ll = QString();
             return QString();
-            }
+        }
         *ll = l.mid( pos + 1 );
         return ret;
-        }
+    }
     int pos = 0;
     while( pos < l.length() && l[ pos ] != ' ' )
         ret += l[ pos++ ];
     *ll = l.mid( pos );
     return ret;
-    }
+}
+
+#define I18N_NOEXTRACT( x ) ki18n( x )
 
 int main( int argc, char **argv )
-    {
-    #define I18N_NOEXTRACT( x ) ki18n( x )
+{
     // Set catalog to "kdelibs4" for KLocale to initialize languages properly.
     KAboutData about( "kdostartupconfig4", "kdelibs4",
                       I18N_NOEXTRACT( "kdostartupconfig4" ), "1.0" );
@@ -89,16 +88,15 @@ int main( int argc, char **argv )
     QTextStream startupconfig( &f1 );
     QTextStream startupconfigfiles( &f2 );
     startupconfig << "#! /bin/sh\n";
-    for(;;)
+    for(;;) {
+        QString line;
         {
-	  QString line;
-	  {
-	    QByteArray buf;
-	    buf.resize(1024);
-	    if( keys.readLine( buf.data(), buf.length() ) < 0 )
-	      break;
-	    line = QString::fromLocal8Bit(buf);
-	  }
+            QByteArray buf;
+            buf.resize(1024);
+            if( keys.readLine( buf.data(), buf.length() ) < 0 )
+                break;
+            line = QString::fromLocal8Bit(buf);
+        }
         line = line.trimmed();
         if( line.isEmpty())
             break;
@@ -110,27 +108,22 @@ int main( int argc, char **argv )
         def = get_entry( &tmp );
         if( file.isEmpty() || group.isEmpty())
             return 6;
-        if( group.startsWith( '[' ) && group.endsWith( ']' ) )
-            { // whole config group
+        if( group.startsWith( '[' ) && group.endsWith( ']' ) ) { // whole config group
             KConfig cfg( file );
             group = group.mid( 1, group.length() - 2 );
             KConfigGroup cg(&cfg, group);
             QMap< QString, QString > entries = cg.entryMap( );
             startupconfig << "# " << line << "\n";
             for( QMap< QString, QString >::ConstIterator it = entries.constBegin();
-                 it != entries.constEnd();
-                 ++it )
-                {
+                 it != entries.constEnd(); ++it ) {
                 QString key = it.key();
                 QString value = *it;
                 startupconfig << file.replace( ' ', '_' ).toLower()
                     << "_" << group.replace( ' ', '_' ).toLower()
                     << "_" << key.replace( ' ', '_' ).toLower()
                     << "=" << KShell::quoteArg( value ) << "\n";
-                }
             }
-        else
-            { // a single key
+        } else { // a single key
             if( key.isEmpty())
                 return 7;
             KConfig cfg( file );
@@ -141,25 +134,23 @@ int main( int argc, char **argv )
                 << "_" << group.replace( ' ', '_' ).toLower()
                 << "_" << key.replace( ' ', '_' ).toLower()
                 << "=" << KShell::quoteArg( value ) << "\n";
-            }
+        }
         startupconfigfiles << line << endl;
         // use even currently non-existing paths in $KDEDIRS
         const QStringList dirs = KGlobal::dirs()->kfsstnd_prefixes().split( KPATH_SEPARATOR, QString::SkipEmptyParts);
-        for( QStringList::ConstIterator it = dirs.constBegin();
-             it != dirs.constEnd();
-             ++it )
-            {
-            QString cfg = *it + "share/config/" + file;
-            if( KGlobal::dirs()->exists( cfg ))
+        foreach(const QString &it, dirs) {
+            QString cfg = it + "share/config/" + file;
+            if( KGlobal::dirs()->exists( cfg )) {
                 startupconfigfiles << cfg << "\n";
-            else
+            } else {
                 startupconfigfiles << "!" << cfg << "\n";
             }
-        startupconfigfiles << "*\n";
+            startupconfigfiles << "*\n";
         }
-
-        // Get languages by priority from KLocale.
-        const QStringList langs = KGlobal::locale()->languageList();
-        startupconfig << "klocale_languages=" << langs.join( ":" ) << "\n";
-    return 0;
     }
+
+    // Get languages by priority from KLocale.
+    const QStringList langs = KGlobal::locale()->languageList();
+    startupconfig << "klocale_languages=" << langs.join( ":" ) << "\n";
+    return 0;
+}
