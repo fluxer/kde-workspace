@@ -13,9 +13,6 @@ fi
 # because we still need to do some cleanup.
 trap 'echo GOT SIGHUP' HUP
 
-# we have to unset this for Darwin since it will screw up KDE's dynamic-loading
-unset DYLD_FORCE_FLAT_NAMESPACE
-
 # in case we have been started with full pathname spec without being in PATH
 if [ -n "$PATH " ]; then
     qdbus=$(basename @QT_QDBUS_EXECUTABLE@)
