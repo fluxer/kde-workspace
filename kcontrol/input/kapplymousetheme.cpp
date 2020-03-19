@@ -24,37 +24,33 @@
 
 #include <config-X11.h>
 
-#include <QtGui/qx11info_x11.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <X11/Xlib.h>
 
 #ifdef HAVE_XCURSOR
+#  include <X11/Xlib.h>
 #  include <X11/Xcursor/Xcursor.h>
 #endif
 
-static Display* dpy;
-Display* QX11Info::display() { return dpy; }
-Qt::HANDLE QX11Info::appRootWindow(int) { return DefaultRootWindow( dpy ); }
-
 static bool isEmpty( const char* str )
-    {
+{
     if( str == NULL )
         return true;
     while( isspace( *str ))
         ++str;
     return *str == '\0';
-    }
+}
 
 int main( int argc, char* argv[] )
-    {
+{
     if( argc != 3 )
         return 1;
-    dpy = XOpenDisplay( NULL );
-    if( dpy == NULL )
-        return 2;
     int ret = 0;
 #ifdef HAVE_XCURSOR
+    Display* dpy = XOpenDisplay( NULL );
+    if( dpy == NULL )
+        return 2;
+
     const char* theme = argv[ 1 ];
     const char* size = argv[ 2 ];
 
@@ -62,8 +58,8 @@ int main( int argc, char* argv[] )
 
     // use a default value for theme only if it's not configured at all, not even in X resources
     if( isEmpty( theme )
-        && isEmpty( XGetDefault( QX11Info::display(), "Xcursor", "theme" ))
-        && isEmpty( XcursorGetTheme( QX11Info::display())))
+        && isEmpty( XGetDefault( dpy, "Xcursor", "theme" ))
+        && isEmpty( XcursorGetTheme( dpy)))
     {
         theme = "default";
         ret = 10; // means to switch to default
@@ -71,21 +67,19 @@ int main( int argc, char* argv[] )
 
      // Apply the KDE cursor theme to ourselves
     if( !isEmpty( theme ))
-        XcursorSetTheme(QX11Info::display(), theme );
+        XcursorSetTheme(dpy, theme );
 
     if (!isEmpty( size ))
-    	XcursorSetDefaultSize(QX11Info::display(), atoi( size ));
+        XcursorSetDefaultSize(dpy, atoi( size ));
 
     // Load the default cursor from the theme and apply it to the root window.
-    Cursor handle = XcursorLibraryLoadCursor(QX11Info::display(), "left_ptr");
-    XDefineCursor(QX11Info::display(), QX11Info::appRootWindow(), handle);
-    XFreeCursor(QX11Info::display(), handle); // Don't leak the cursor
+    Cursor handle = XcursorLibraryLoadCursor(dpy, "left_ptr");
+    XDefineCursor(dpy, DefaultRootWindow( dpy ), handle);
+    XFreeCursor(dpy, handle); // Don't leak the cursor
 
-#else
-    ( void ) QX11Info::display();
-    ( void ) QX11Info::appRootWindow();
-    ( void ) argv;
-#endif
     XCloseDisplay( dpy );
+#else
+    Q_UNUSED(argv);
+#endif
     return ret;
-    }
+}
