@@ -19,7 +19,7 @@
 #include "historyimageitem.h"
 
 #include <QtCore/QMimeData>
-#include <QtCore/QCryptographicHash>
+#include <QCryptographicHash>
 
 #include <KDebug>
 

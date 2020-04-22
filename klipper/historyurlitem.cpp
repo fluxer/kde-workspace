@@ -19,7 +19,7 @@
 #include "historyurlitem.h"
 
 #include <QtCore/QMimeData>
-#include <QtCore/QCryptographicHash>
+#include <QCryptographicHash>
 
 namespace {
     QByteArray compute_uuid(const KUrl::List& _urls, KUrl::MetaDataMap _metaData, bool _cut ) {

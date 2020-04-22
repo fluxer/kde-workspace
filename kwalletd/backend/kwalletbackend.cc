@@ -36,7 +36,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QRegExp>
-#include <QtCore/QCryptographicHash>
+#include <QCryptographicHash>
 
 #include "blowfish.h"
 #include "sha1.h"

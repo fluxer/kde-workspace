@@ -19,7 +19,7 @@
 
 #include <QIODevice>
 #include <QFile>
-#include <QtCore/QCryptographicHash>
+#include <QCryptographicHash>
 #include <assert.h>
 #include <ksavefile.h>
 #include <kdebug.h>
