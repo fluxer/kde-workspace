@@ -119,10 +119,10 @@ void BackgroundListModel::processPaths(const QStringList &paths)
     }
 
     QList<Plasma::Package *> newPackages;
-    foreach (const QString &file, paths) {
-        if (!contains(file) && QFile::exists(file)) {
+    foreach (const QString &path, paths) {
+        if (!contains(path) && QFileInfo(path).exists()) {
             Plasma::PackageStructure::Ptr structure = Plasma::Wallpaper::packageStructure(m_structureParent.data());
-            Plasma::Package *package  = new Plasma::Package(file, structure);
+            Plasma::Package *package  = new Plasma::Package(path, structure);
             if (package->isValid()) {
                 newPackages << package;
             } else {
