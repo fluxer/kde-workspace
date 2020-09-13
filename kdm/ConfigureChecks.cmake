@@ -32,10 +32,6 @@ int main()
 # for config-kdm.h
 check_function_exists(seteuid HAVE_SETEUID)
 
-# for environ in config-kdm.h
-check_include_files(crt_externs.h HAVE_CRT_EXTERNS_H)
-check_function_exists(_NSGetEnviron HAVE_NSGETENVIRON)
-
 find_library(UTIL_LIBRARIES util)
 mark_as_advanced(UTIL_LIBRARIES)
 

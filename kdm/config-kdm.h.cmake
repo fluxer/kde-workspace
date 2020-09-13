@@ -1,14 +1,3 @@
-/* Define if your system needs _NSGetEnviron to set up the environment */
-#cmakedefine HAVE_NSGETENVIRON 1
-/* Define to 1 if you have the <crt_externs.h> header file - needed for "environ". */
-#cmakedefine HAVE_CRT_EXTERNS_H 1
-/* environ - needed by kdm */
-#if defined(HAVE_NSGETENVIRON) && defined(HAVE_CRT_EXTERNS_H)
-# include <sys/time.h>
-# include <crt_externs.h>
-# define environ (*_NSGetEnviron())
-#endif
-
 /* Define to 1 if you have the `auth_timeok' function. */
 #cmakedefine HAVE_AUTH_TIMEOK 1
 
