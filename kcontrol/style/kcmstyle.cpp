@@ -102,7 +102,6 @@ extern "C"
 
         // Write some Qt root property.
 #ifdef Q_WS_X11
-#ifndef __osf__      // this crashes under Tru64 randomly -- will fix later
         QByteArray properties;
         QDataStream d(&properties, QIODevice::WriteOnly);
         d.setVersion(QDataStream::Qt_4_8);
@@ -115,7 +114,6 @@ extern "C"
             XChangeProperty(QX11Info::display(), RootWindow(QX11Info::display(), i),
                             a, a, 8, PropModeReplace,
                             (unsigned char*) properties.data(), properties.size());
-#endif
 #endif
     }
 }

@@ -34,10 +34,7 @@
 
 #include <sys/param.h> /* for #define BSD */
 
-#ifdef _AIX
-# define HALT_CMD	"/usr/sbin/shutdown -h now"
-# define REBOOT_CMD	"/usr/sbin/shutdown -r now"
-#elif defined(__linux__)
+#if defined(__linux__)
 # define HALT_CMD	"/sbin/poweroff"
 # define REBOOT_CMD	"/sbin/reboot"
 #elif defined(BSD)
@@ -68,17 +65,11 @@
 #ifdef HAVE_VTS
 #elif defined(__sun__)
 # define DEF_SERVER_TTY "console"
-#elif defined(_AIX)
-# define DEF_SERVER_TTY "lft0"
 #else
 # define DEF_SERVER_TTY ""
 #endif
 
-#ifdef _AIX
-# define DEF_SERVER_CMD XBINDIR "/X -T -force"
-#else
-# define DEF_SERVER_CMD XBINDIR "/X"
-#endif
+#define DEF_SERVER_CMD XBINDIR "/X"
 </code>
 
 # The contents of this section are copied mostly verbatim to the

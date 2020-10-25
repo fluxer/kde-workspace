@@ -65,9 +65,6 @@
 // including jpeglib.h seems to be a little messy
 extern "C" {
 #define XMD_H           // shut JPEGlib up
-#if defined(Q_OS_UNIXWARE)
-#  define HAVE_BOOLEAN  // libjpeg under Unixware seems to need this
-#endif
 #include <jpeglib.h>
 #ifdef const
 #  undef const          // remove crazy C hackery in jconfig.h
@@ -127,18 +124,14 @@ boolean qt_fill_input_buffer(j_decompress_ptr cinfo)
     num_read = fread( (char*)src->buffer, 1, max_buf, src->f );
 
     if ( num_read <= 0 ) {
-	// Insert a fake EOI marker - as per jpeglib recommendation
-	src->buffer[0] = (JOCTET) 0xFF;
-	src->buffer[1] = (JOCTET) JPEG_EOI;
-	src->bytes_in_buffer = 2;
+        // Insert a fake EOI marker - as per jpeglib recommendation
+        src->buffer[0] = (JOCTET) 0xFF;
+        src->buffer[1] = (JOCTET) JPEG_EOI;
+        src->bytes_in_buffer = 2;
     } else {
-	src->bytes_in_buffer = num_read;
+        src->bytes_in_buffer = num_read;
     }
-#if defined(Q_OS_UNIXWARE)
-    return B_TRUE;
-#else
     return TRUE;
-#endif
 }
 
 static
@@ -153,15 +146,15 @@ void qt_skip_input_data(j_decompress_ptr cinfo, long num_bytes)
      * any trouble anyway --- large skips are infrequent.
      */
     if (num_bytes > 0) {
-	while (num_bytes > (long) src->bytes_in_buffer) {
-	    num_bytes -= (long) src->bytes_in_buffer;
-	    (void) qt_fill_input_buffer(cinfo);
-	    /* note we assume that qt_fill_input_buffer will never return FALSE,
-	    * so suspension need not be handled.
-	    */
-	}
-	src->next_input_byte += (size_t) num_bytes;
-	src->bytes_in_buffer -= (size_t) num_bytes;
+        while (num_bytes > (long) src->bytes_in_buffer) {
+            num_bytes -= (long) src->bytes_in_buffer;
+            (void) qt_fill_input_buffer(cinfo);
+            /* note we assume that qt_fill_input_buffer will never return FALSE,
+            * so suspension need not be handled.
+            */
+        }
+        src->next_input_byte += (size_t) num_bytes;
+        src->bytes_in_buffer -= (size_t) num_bytes;
     }
 }
 
@@ -205,13 +198,9 @@ QImage splash_read_jpeg_image(FILE* f)
     jerr.error_exit = my_error_exit;
 
     if (!setjmp(jerr.setjmp_buffer)) {
-#if defined(Q_OS_UNIXWARE)
-	(void) jpeg_read_header(&cinfo, B_TRUE);
-#else
-	(void) jpeg_read_header(&cinfo, TRUE);
-#endif
+    (void) jpeg_read_header(&cinfo, TRUE);
 
-	(void) jpeg_start_decompress(&cinfo);
+    (void) jpeg_start_decompress(&cinfo);
 
        {
 	    bool created = FALSE;

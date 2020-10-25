@@ -77,7 +77,6 @@ bool KCrashBackend::init()
         return false;
     }
 
-#if !defined(Q_OS_WIN32)
     if (::kill(crashedApplication()->pid(), 0) < 0) {
         switch (errno) {
         case EPERM:
@@ -108,7 +107,6 @@ bool KCrashBackend::init()
         //process when we try to continue it.
         QTimer::singleShot(2000, this, SLOT(stopAttachedProcess()));
     }
-#endif
 
     //Handle drkonqi crashes
     s_pid = crashedApplication()->pid(); //copy pid for use by the crash handler, so that it is safer

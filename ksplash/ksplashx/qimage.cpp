@@ -1105,12 +1105,6 @@ QImage::Endian QImage::systemByteOrder()
 #include <X11/Xlib.h>				// needed for systemBitOrder
 #include <X11/Xutil.h>
 #include <X11/Xos.h>
-#if defined(Q_OS_WIN32)
-#undef open
-#undef close
-#undef read
-#undef write
-#endif
 #endif
 
 // POSIX Large File Support redefines open -> open64

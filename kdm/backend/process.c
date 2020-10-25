@@ -52,7 +52,6 @@ from the copyright holder.
 
 SIGFUNC Signal(int sig, SIGFUNC handler)
 {
-#ifndef __EMX__
     struct sigaction sigact, osigact;
     sigact.sa_handler = handler;
     sigemptyset(&sigact.sa_mask);
@@ -63,9 +62,6 @@ SIGFUNC Signal(int sig, SIGFUNC handler)
 # endif
     sigaction(sig, &sigact, &osigact);
     return osigact.sa_handler;
-#else
-    return signal(sig, handler);
-#endif
 }
 
 void

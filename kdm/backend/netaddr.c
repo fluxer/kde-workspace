@@ -154,11 +154,9 @@ convertAddr(char *saddr, int *len, CARD8 **addr)
         break;
 #endif
 #ifdef AF_UNIX
-#ifndef __hpux
     case AF_UNIX:
         retval = FamilyLocal;
         break;
-#endif
 #endif
 #ifdef TCPCONN
     case AF_INET:

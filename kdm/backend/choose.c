@@ -50,9 +50,6 @@ from the copyright holder.
 #include <netdb.h>
 
 #ifdef STREAMSCONN
-# ifdef WINTCP /* NCR with Wollongong TCP */
-#  include <netinet/ip.h>
-# endif
 # include <stropts.h>
 # include <tiuser.h>
 # include <netconfig.h>
@@ -474,10 +471,6 @@ emptyPingHosts(void)
 
 #define IFC_REQ(ifc) ifc.ifc_req
 
-#ifndef SYSV_SIOCGIFCONF
-# define ifioctl ioctl
-#endif
-
 static void
 registerBroadcastForPing(void)
 {
@@ -493,47 +486,16 @@ registerBroadcastForPing(void)
     register struct ifreq *ifr;
     struct sockaddr broad_addr;
     char buf[2048], *cp, *cplim;
-# ifdef WINTCP /* NCR with Wollongong TCP */
-    int ipfd;
-    struct ifconf *ifcp;
-    struct strioctl ioc;
-    int n;
-
-    ifcp = (struct ifconf *)buf;
-    ifcp->ifc_buf = buf + 4;
-    ifcp->ifc_len = sizeof(buf) - 4;
-
-    if ((ipfd = open("/dev/ip", O_RDONLY)) < 0) {
-        t_error("RegisterBroadcastForPing() t_open(/dev/ip) failed");
-        return;
-    }
-
-    ioc.ic_cmd = IPIOC_GETIFCONF;
-    ioc.ic_timout = 60;
-    ioc.ic_len = sizeof(buf);
-    ioc.ic_dp = (char *)ifcp;
-
-    if (ioctl(ipfd, (int)I_STR, (char *)&ioc) < 0) {
-        perror("RegisterBroadcastForPing() ioctl(I_STR(IPIOC_GETIFCONF)) failed");
-        close(ipfd);
-        return;
-    }
-
-    for (ifr = ifcp->ifc_req, n = ifcp->ifc_len / sizeof(struct ifreq); --n >= 0; ifr++)
-# else /* WINTCP */
     ifc.ifc_len = sizeof(buf);
     ifc.ifc_buf = buf;
-    if (ifioctl(socketFD, (int)SIOCGIFCONF, (char *)&ifc) < 0)
+    if (ioctl(socketFD, (int)SIOCGIFCONF, (char *)&ifc) < 0)
         return;
 
     cplim = (char *)IFC_REQ(ifc) + ifc.ifc_len;
 
     for (cp = (char *)IFC_REQ(ifc); cp < cplim; cp += ifr_size(ifr))
-# endif /* WINTCP */
     {
-# ifndef WINTCP
         ifr = (struct ifreq *)cp;
-# endif
         if (ifr->ifr_addr.sa_family != AF_INET)
             continue;
 
@@ -545,30 +507,12 @@ registerBroadcastForPing(void)
             struct ifreq broad_req;
 
             broad_req = *ifr;
-#  ifdef WINTCP /* NCR with Wollongong TCP */
-            ioc.ic_cmd = IPIOC_GETIFFLAGS;
-            ioc.ic_timout = 0;
-            ioc.ic_len = sizeof(broad_req);
-            ioc.ic_dp = (char *)&broad_req;
-
-            if (ioctl(ipfd, I_STR, (char *)&ioc) != -1 &&
-#  else /* WINTCP */
-            if (ifioctl(socketFD, SIOCGIFFLAGS, (char *)&broad_req) != -1 &&
-#  endif /* WINTCP */
+            if (ioctl(socketFD, SIOCGIFFLAGS, (char *)&broad_req) != -1 &&
                     (broad_req.ifr_flags & IFF_BROADCAST) &&
                     (broad_req.ifr_flags & IFF_UP))
             {
                 broad_req = *ifr;
-#  ifdef WINTCP /* NCR with Wollongong TCP */
-                ioc.ic_cmd = IPIOC_GETIFBRDADDR;
-                ioc.ic_timout = 0;
-                ioc.ic_len = sizeof(broad_req);
-                ioc.ic_dp = (char *)&broad_req;
-
-                if (ioctl(ipfd, I_STR, (char *)&ioc) != -1)
-#  else /* WINTCP */
-                if (ifioctl(socketFD, SIOCGIFBRDADDR, (char *)&broad_req) != -1)
-#  endif /* WINTCP */
+                if (ioctl(socketFD, SIOCGIFBRDADDR, (char *)&broad_req) != -1)
                     broad_addr = broad_req.ifr_addr;
                 else
                     continue;

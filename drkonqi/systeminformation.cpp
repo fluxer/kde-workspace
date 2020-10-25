@@ -66,20 +66,8 @@ QString SystemInformation::fetchOSBasicInformation() const
     return QLatin1String("NetBSD");
 #elif defined(Q_OS_OPENBSD)
     return QLatin1String("OpenBSD");
-#elif defined(Q_OS_AIX)
-    return QLatin1String("AIX");
-#elif defined(Q_OS_HPUX)
-    return QLatin1String("HP-UX");
-#elif defined(Q_OS_IRIX)
-    return QLatin1String("IRIX");
-#elif defined(Q_OS_OSF)
-    return QLatin1String("Tru64");
 #elif defined(Q_OS_SOLARIS)
     return QLatin1String("Solaris");
-#elif defined(Q_OS_CYGWIN)
-    return QLatin1String("Cygwin");
-#elif defined(Q_OS_WIN32)
-    return QLatin1String("MS Windows");
 #else
     return OS_UNSPECIFIED;
 #endif

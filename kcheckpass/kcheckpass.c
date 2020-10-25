@@ -73,51 +73,51 @@ conv_legacy (ConvRequest what, const char *prompt)
 
     switch (what) {
     case ConvGetBinary:
-	break;
+        break;
     case ConvGetNormal:
-	/* there is no prompt == 0 case */
-	if (!havetty)
-	    break;
-	/* i guess we should use /dev/tty ... */
-	fputs(prompt, stdout);
-	fflush(stdout);
-	if (!fgets(buf, sizeof(buf), stdin))
-	    return 0;
-	len = strlen(buf);
-	if (len && buf[len - 1] == '\n')
-	    buf[--len] = 0;
-	return strdup(buf);
+        /* there is no prompt == 0 case */
+        if (!havetty)
+            break;
+        /* i guess we should use /dev/tty ... */
+        fputs(prompt, stdout);
+        fflush(stdout);
+        if (!fgets(buf, sizeof(buf), stdin))
+            return 0;
+        len = strlen(buf);
+        if (len && buf[len - 1] == '\n')
+            buf[--len] = 0;
+        return strdup(buf);
     case ConvGetHidden:
-	if (havetty) {
+    if (havetty) {
 #ifdef HAVE_GETPASSPHRASE
-	    p = getpassphrase(prompt ? prompt : "Password: ");
+        p = getpassphrase(prompt ? prompt : "Password: ");
 #else
-	    p = getpass(prompt ? prompt : "Password: ");
+        p = getpass(prompt ? prompt : "Password: ");
 #endif
-	    p2 = strdup(p);
-	    memset(p, 0, strlen(p));
-	    return p2;
-	} else {
-	    if (prompt)
-		break;
-	    if ((len = read(0, buf, sizeof(buf) - 1)) < 0) {
-		message("Cannot read password\n");
-		return 0;
-	    } else {
-		if (len && buf[len - 1] == '\n')
-		    --len;
-		buf[len] = 0;
-		p2 = strdup(buf);
-		memset(buf, 0, len);
-		return p2;
-	    }
-	}
+        p2 = strdup(p);
+        memset(p, 0, strlen(p));
+        return p2;
+    } else {
+        if (prompt)
+            break;
+        if ((len = read(0, buf, sizeof(buf) - 1)) < 0) {
+            message("Cannot read password\n");
+            return 0;
+        } else {
+            if (len && buf[len - 1] == '\n')
+                --len;
+            buf[len] = 0;
+            p2 = strdup(buf);
+            memset(buf, 0, len);
+            return p2;
+        }
+    }
     case ConvPutInfo:
-	message("Information: %s\n", prompt);
-	return 0;
+        message("Information: %s\n", prompt);
+        return 0;
     case ConvPutError:
-	message("Error: %s\n", prompt);
-	return 0;
+        message("Error: %s\n", prompt);
+        return 0;
     }
     message("Authentication backend requested data type which cannot be handled.\n");
     return 0;
@@ -130,18 +130,18 @@ Reader (void *buf, int count)
     int ret, rlen;
 
     for (rlen = 0; rlen < count; ) {
-      dord:
-	ret = read (sfd, (void *)((char *)buf + rlen), count - rlen);
-	if (ret < 0) {
-	    if (errno == EINTR)
-		goto dord;
-	    if (errno == EAGAIN)
-		break;
-	    return -1;
-	}
-	if (!ret)
-	    break;
-	rlen += ret;
+        dord:
+        ret = read (sfd, (void *)((char *)buf + rlen), count - rlen);
+        if (ret < 0) {
+            if (errno == EINTR)
+                goto dord;
+            if (errno == EAGAIN)
+                break;
+            return -1;
+        }
+        if (!ret)
+            break;
+        rlen += ret;
     }
     return rlen;
 }
@@ -150,8 +150,8 @@ static void
 GRead (void *buf, int count)
 {
     if (Reader (buf, count) != count) {
-	message ("Communication breakdown on read\n");
-	exit(15);
+        message ("Communication breakdown on read\n");
+        exit(15);
     }
 }
 
@@ -159,8 +159,8 @@ static void
 GWrite (const void *buf, int count)
 {
     if (write (sfd, buf, count) != count) {
-	message ("Communication breakdown on write\n");
-	exit(15);
+        message ("Communication breakdown on write\n");
+        exit(15);
     }
 }
 
@@ -201,10 +201,10 @@ GRecvStr (void)
     char *buf;
 
     if (!(len = GRecvInt()))
-	return (char *)0;
+        return (char *)0;
     if (len > 0x1000 || !(buf = malloc (len))) {
-	message ("No memory for read buffer\n");
-	exit(15);
+        message ("No memory for read buffer\n");
+        exit(15);
     }
     GRead (buf, len);
     buf[len - 1] = 0; /* we're setuid ... don't trust "them" */
@@ -219,20 +219,20 @@ GRecvArr (void)
     unsigned const char *up;
 
     if (!(len = (unsigned) GRecvInt()))
-	return (char *)0;
+        return (char *)0;
     if (len < 4) {
-	message ("Too short binary authentication data block\n");
-	exit(15);
+        message ("Too short binary authentication data block\n");
+        exit(15);
     }
     if (len > 0x10000 || !(arr = malloc (len))) {
-	message ("No memory for read buffer\n");
-	exit(15);
+        message ("No memory for read buffer\n");
+        exit(15);
     }
     GRead (arr, len);
     up = (unsigned const char *)arr;
     if (len != (unsigned)(up[3] | (up[2] << 8) | (up[1] << 16) | (up[0] << 24))) {
-	message ("Mismatched binary authentication data block size\n");
-	exit(15);
+        message ("Mismatched binary authentication data block size\n");
+        exit(15);
     }
     return arr;
 }
@@ -245,33 +245,35 @@ conv_server (ConvRequest what, const char *prompt)
     switch (what) {
     case ConvGetBinary:
       {
-	unsigned const char *up = (unsigned const char *)prompt;
-	int len = up[3] | (up[2] << 8) | (up[1] << 16) | (up[0] << 24);
-	GSendArr (len, prompt);
-	return GRecvArr ();
+        unsigned const char *up = (unsigned const char *)prompt;
+        int len = up[3] | (up[2] << 8) | (up[1] << 16) | (up[0] << 24);
+        GSendArr (len, prompt);
+        return GRecvArr ();
       }
     case ConvGetNormal:
     case ConvGetHidden:
       {
-	char *msg;
-	GSendStr (prompt);
-	msg = GRecvStr ();
-	if (msg && (GRecvInt() & IsPassword) && !*msg)
-	  nullpass = 1;
-	return msg;
+        char *msg;
+        GSendStr (prompt);
+        msg = GRecvStr ();
+        if (msg && (GRecvInt() & IsPassword) && !*msg)
+        nullpass = 1;
+        return msg;
       }
     case ConvPutInfo:
     case ConvPutError:
     default:
-	GSendStr (prompt);
-	return 0;
+      {
+        GSendStr (prompt);
+        return 0;
+      }
     }
 }
 
 void
 message(const char *fmt, ...)
 {
-  va_list		ap;
+  va_list ap;
 
   va_start(ap, fmt);
   vfprintf(stderr, fmt, ap);
@@ -320,10 +322,6 @@ main(int argc, char **argv)
   AuthReturn	ret;
   struct flock lk;
   char fname[64], fcont[64];
-
-#ifdef HAVE_OSF_C2_PASSWD
-  initialize_osf_security(argc, argv);
-#endif
 
   /* Make sure stdout/stderr are open */
   for (c = 1; c <= 2; c++) {

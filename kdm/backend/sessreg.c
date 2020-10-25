@@ -39,13 +39,8 @@ from The Open Group.
 #include "dm.h"
 #include "dm_error.h"
 
-#if defined(__svr4__) || defined(__Lynx__) || defined(__QNX__) || defined(__APPLE__) || defined(_SEQUENT_) /*|| defined(USE_PAM)*/
-# define NO_LASTLOG
-#endif
-#ifdef __FreeBSD__
-# if __FreeBSD_version >= 900007
+#if defined(__FreeBSD__) && __FreeBSD_version >= 900007
 #  define NO_LASTLOG
-# endif
 #endif
 
 #ifndef NO_LASTLOG
@@ -74,13 +69,6 @@ from The Open Group.
 # ifndef TTYS_FILE
 #  define TTYS_FILE "/etc/ttys"
 # endif
-#endif
-
-#ifdef _AIX
-# define UTL_PFX "xdm/"
-# define UTL_OFF strlen(UTL_PFX)
-#else
-# define UTL_OFF 0
 #endif
 
 #ifndef BSD_UTMP
@@ -161,7 +149,7 @@ sessreg(struct display *d, int pid, const char *user, int uid)
 
     colon = strchr(d->name, ':');
     clen = strlen(colon);
-    if (clen > (int)(sizeof(ut_ent.ut_line) - UTL_OFF) - 2)
+    if (clen > (int)(sizeof(ut_ent.ut_line)) - 2)
         return; /* uhm, well ... */
     if (colon == d->name) {
 #ifndef BSD_UTMP
@@ -195,7 +183,7 @@ sessreg(struct display *d, int pid, const char *user, int uid)
                               c < 52 ? c - 26 + 'a' : c - 52 + '0';
         }
 #endif
-        left = sizeof(ut_ent.ut_line) - UTL_OFF - clen;
+        left = sizeof(ut_ent.ut_line) - clen;
         if (colon - d->name <= left) {
             clen += colon - d->name;
             colon = d->name;
@@ -203,26 +191,23 @@ sessreg(struct display *d, int pid, const char *user, int uid)
         } else {
             dot = strchr(d->name, '.');
             if (dot && dot - d->name < left) {
-                memcpy(ut_ent.ut_line + UTL_OFF, d->name, left - 1);
-                ut_ent.ut_line[UTL_OFF + left - 1] = '~';
+                memcpy(ut_ent.ut_line, d->name, left - 1);
+                ut_ent.ut_line[left - 1] = '~';
             } else {
-                memcpy(ut_ent.ut_line + UTL_OFF, d->name, left / 2 - 1);
-                ut_ent.ut_line[UTL_OFF + left/2 - 1] = '~';
+                memcpy(ut_ent.ut_line, d->name, left / 2 - 1);
+                ut_ent.ut_line[left/2 - 1] = '~';
                 if (dot) {
-                    memcpy(ut_ent.ut_line + UTL_OFF + left / 2,
+                    memcpy(ut_ent.ut_line + left / 2,
                            dot - (left - left / 2 - 1),
                            left - left / 2 - 1);
-                    ut_ent.ut_line[UTL_OFF + left - 1] = '~';
+                    ut_ent.ut_line[left - 1] = '~';
                 } else
-                    memcpy(ut_ent.ut_line + UTL_OFF + left / 2,
+                    memcpy(ut_ent.ut_line + left / 2,
                            colon - (left - left / 2), left - left / 2);
             }
         }
     }
-#ifdef UTL_PFX
-    memcpy(ut_ent.ut_line, UTL_PFX, UTL_OFF);
-#endif
-    memcpy(ut_ent.ut_line + UTL_OFF + left, colon, clen);
+    memcpy(ut_ent.ut_line + left, colon, clen);
 
 #ifndef NO_UTMP
 # ifdef BSD_UTMP
@@ -321,18 +306,5 @@ sessreg(struct display *d, int pid, const char *user, int uid)
     }
 #else
     (void)uid;
-#endif
-
-#ifdef UTL_PFX
-    {
-        char tmp[sizeof("/dev/") + sizeof(ut_ent.ut_line)];
-        mkdir("/dev/" UTL_PFX, 0755);
-        chmod("/dev/" UTL_PFX, 0755);
-        sprintf(tmp, "/dev/%.*s", sizeof(ut_ent.ut_line), ut_ent.ut_line);
-        if (pid)
-            close(creat(tmp, 0644));
-        else
-            unlink(tmp);
-    }
 #endif
 }

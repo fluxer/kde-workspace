@@ -1809,37 +1809,10 @@ edit_startup(File *file)
         chg1 = True;
     if (oldver < 0x0203) {
         chg2 =
-#ifdef _AIX
-            delstr(file, "\n"
-"# We create a pseudodevice for finger.  (host:0 becomes [kx]dm/host_0)\n");
-"# Without it, finger errors out with \"Cannot stat /dev/host:0\".\n"
-"#\n"
-"if [[] -f /usr/lib/X11/xdm/sessreg ]; then\n"
-"  devname=`echo $DISPLAY | /usr/bin/sed -e 's/[[]:\\.]/_/g' | /usr/bin/cut -c1-8`\n"
-"  hostname=`echo $DISPLAY | /usr/bin/cut -d':' -f1`\n"
-"\n"
-"  if [[] -z \"$devname\" ]; then\n"
-"    devname=\"unknown\"\n"
-"  fi\n"
-"  if [[] ! -d /dev/[kx]dm ]; then\n"
-"    /usr/bin/mkdir /dev/[kx]dm\n"
-"    /usr/bin/chmod 755 /dev/[kx]dm\n"
-"  fi\n"
-"  /usr/bin/touch /dev/[kx]dm/$devname\n"
-"  /usr/bin/chmod 644 /dev/[kx]dm/$devname\n"
-"\n"
-"  if [[] -z \"$hostname\" ]; then\n"
-"    exec /usr/lib/X11/xdm/sessreg -a -l [kx]dm/$devname $USER\n"
-"  else\n"
-"    exec /usr/lib/X11/xdm/sessreg -a -l [kx]dm/$devname -h $hostname $USER\n"
-"  fi\n"
-"fi\n") |
-#else
 # ifdef BSD
             delstr(file, "\n"
 "exec sessreg -a -l $DISPLAY -x */Xservers -u " _PATH_UTMP " $USER\n") |
 # endif
-#endif /* _AIX */
             delstr(file, "\n"
 "exec sessreg -a -l $DISPLAY"
 #ifdef BSD
@@ -1877,18 +1850,10 @@ static int
 edit_reset(File *file)
 {
     return
-#ifdef _AIX
-        delstr(file, "\n"
-"if [[] -f /usr/lib/X11/xdm/sessreg ]; then\n"
-"  devname=`echo $DISPLAY | /usr/bin/sed -e 's/[[]:\\.]/_/g' | /usr/bin/cut -c1-8`\n"
-"  exec /usr/lib/X11/xdm/sessreg -d -l [kx]dm/$devname $USER\n"
-"fi\n") |
-#else
 # ifdef BSD
         delstr(file, "\n"
 "exec sessreg -d -l $DISPLAY -x */Xservers -u " _PATH_UTMP " $USER\n") |
 # endif
-#endif /* _AIX */
         delstr(file, "\n"
 "exec sessreg -d -l $DISPLAY"
 # ifdef BSD

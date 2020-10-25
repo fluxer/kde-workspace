@@ -407,11 +407,7 @@ bool fishProtocol::connectionStart() {
 #endif
 
         int pgrp = getpid();
-#if defined( _AIX) || defined( __hpux)
-        tcsetpgrp(0, pgrp);
-#else
         ioctl(0, TIOCSPGRP, (char *)&pgrp);
-#endif
 
         const char *dev = ttyname(0);
         setpgid(0,0);

@@ -54,7 +54,7 @@ from the copyright holder.
   As since the demise of imake nobody is setting many of these variables
   any more, NEED_UTSNAME is essentially always defined. Who cares?
 */
-#if (defined(_POSIX_SOURCE) && !defined(AIXV3) && !defined(__QNX__)) || defined(hpux) || defined(USG) || defined(SVR4)
+#ifdef _POSIX_SOURCE
 # define NEED_UTSNAME
 # include <sys/utsname.h>
 #endif
@@ -64,15 +64,6 @@ from the copyright holder.
 # undef SIOCGIFCONF
 #else /* __GNU__ */
 # include <net/if.h>
-# ifdef __svr4__
-#  include <netdb.h>
-#  include <sys/sockio.h>
-#  include <sys/stropts.h>
-# endif
-# ifdef __EMX__
-#  define chown(a,b,c)
-#  include <io.h>
-# endif
 #endif /* __GNU__ */
 
 #include <X11/Xlib.h>
@@ -631,34 +622,6 @@ defineLocal(FILE *file, Xauth *auth, int *ok)
                   file, auth, ok);
 }
 
-#ifdef SYSV_SIOCGIFCONF
-
-/* Deal with different SIOCGIFCONF ioctl semantics on SYSV, SVR4 */
-
-int
-ifioctl(int fd, int cmd, char *arg)
-{
-    struct strioctl ioc;
-    int ret;
-
-    bzero(&ioc, sizeof(ioc));
-    ioc.ic_cmd = cmd;
-    ioc.ic_timout = 0;
-    if (cmd == SIOCGIFCONF) {
-        ioc.ic_len = ((struct ifconf *)arg)->ifc_len;
-        ioc.ic_dp = ((struct ifconf *)arg)->ifc_buf;
-    } else {
-        ioc.ic_len = sizeof(struct ifreq);
-        ioc.ic_dp = arg;
-    }
-    ret = ioctl(fd, I_STR, (char *)&ioc);
-    if (ret >= 0 && cmd == SIOCGIFCONF)
-        ((struct ifconf *)arg)->ifc_len = ioc.ic_len;
-    return (ret);
-}
-
-#endif /* SYSV_SIOCGIFCONF */
-
 #ifdef HAVE_GETIFADDRS
 # include <ifaddrs.h>
 
@@ -711,7 +674,7 @@ defineSelf(FILE *file, Xauth *auth, int *ok)
 }
 #else  /* GETIFADDRS */
 
-#if defined(STREAMSCONN) && !defined(SYSV_SIOCGIFCONF) && !defined(WINTCP)
+#if defined(STREAMSCONN) && !defined(SYSV_SIOCGIFCONF)
 
 #include <tiuser.h>
 
@@ -735,85 +698,7 @@ defineSelf(int fd, FILE *file, Xauth *auth, int *ok)
 
 #else
 
-#ifdef WINTCP /* NCR with Wollongong TCP */
-
-#include <stropts.h>
-#include <tiuser.h>
-
-#include <sys/stream.h>
-#include <net/if.h>
-#include <netinet/ip.h>
-#include <netinet/ip_var.h>
-#include <netinet/in.h>
-#include <netinet/in_var.h>
-
-static void
-defineSelf(int fd, FILE *file, Xauth *auth, int *ok)
-{
-    /*
-     * The Wollongong drivers used by NCR SVR4/MP-RAS don't understand the
-     * socket IO calls that most other drivers seem to like. Because of
-     * this, this routine must be special cased for NCR. Eventually,
-     * this will be cleared up.
-     */
-
-    struct ipb ifnet;
-    struct in_ifaddr ifaddr;
-    struct strioctl str;
-    int len, ipfd;
-
-    if ((ipfd = open("/dev/ip", O_RDWR, 0)) < 0) {
-        logError("Trouble getting interface configuration\n");
-        return;
-    }
-
-    /* Indicate that we want to start at the beginning */
-    ifnet.ib_next = (struct ipb *)1;
-
-    while (ifnet.ib_next) {
-        str.ic_cmd = IPIOC_GETIPB;
-        str.ic_timout = 0;
-        str.ic_len = sizeof(struct ipb);
-        str.ic_dp = (char *)&ifnet;
-
-        if (ioctl(ipfd, (int)I_STR, (char *)&str) < 0) {
-            close(ipfd);
-            logError("Trouble getting interface configuration\n");
-            return;
-        }
-
-        ifaddr.ia_next = (struct in_ifaddr *)ifnet.if_addrlist;
-        str.ic_cmd = IPIOC_GETINADDR;
-        str.ic_timout = 0;
-        str.ic_len = sizeof(struct in_ifaddr);
-        str.ic_dp = (char *)&ifaddr;
-
-        if (ioctl(ipfd, (int)I_STR, (char *)&str) < 0) {
-            close(ipfd);
-            logError("Trouble getting interface configuration\n");
-            return;
-        }
-
-        /*
-         * Ignore the 127.0.0.1 entry.
-         */
-        if (IA_SIN(&ifaddr)->sin_addr.s_addr == htonl(0x7f000001))
-            continue;
-
-        writeAddr(FamilyInternet, 4, (CARD8 *)&(IA_SIN(&ifaddr)->sin_addr),
-                  file, auth, ok);
-
-    }
-    close(ipfd);
-}
-
-#else /* WINTCP */
-
 #if defined(SIOCGIFCONF) || defined (SIOCGLIFCONF)
-
-#if !defined(SYSV_SIOCGIFCONF) || defined(SIOCGLIFCONF)
-# define ifioctl ioctl
-#endif
 
 #ifdef SIOCGLIFCONF
 # define ifr_type struct lifreq
@@ -887,7 +772,7 @@ defineSelf(int fd, FILE *file, Xauth *auth, int *ok)
     ifc.ifc_len = sizeof(buf);
     ifc.ifc_buf = buf;
 #endif
-    if (ifioctl(fd, IFC_IOCTL_REQ, (char *)&ifc) < 0) {
+    if (ioctl(fd, IFC_IOCTL_REQ, (char *)&ifc) < 0) {
         logError("Trouble getting network interface configuration\n");
 #if defined(SIOCGLIFNUM) && defined(SIOCGLIFCONF)
         if (bufptr != buf)
@@ -1003,7 +888,6 @@ defineSelf(int fd, int file, int auth, int *ok)
 }
 
 #endif /* SIOCGIFCONF else */
-#endif /* WINTCP else */
 #endif /* STREAMSCONN && !SYSV_SIOCGIFCONF else */
 #endif /* HAVE_GETIFADDRS */
 

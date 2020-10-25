@@ -59,13 +59,7 @@ extern int key_setnet(struct key_netstarg *arg);
 # else
 #  include <security/pam_appl.h>
 # endif
-#elif defined(_AIX) /* USE_PAM */
-# include <login.h>
-# include <usersec.h>
-extern int loginrestrictions(const char *Name, const int Mode, const char *Tty, char **Msg);
-extern int loginfailed(const char *User, const char *Host, const char *Tty);
-extern int loginsuccess(const char *User, const char *Host, const char *Tty, char **Msg);
-#else /* USE_PAM || _AIX */
+#else /* USE_PAM */
 # ifdef KERBEROS
 #  include <sys/param.h>
 #  include <krb.h>
@@ -78,7 +72,7 @@ extern int loginsuccess(const char *User, const char *Host, const char *Tty, cha
 # include <unistd.h>
 /* for expiration */
 # include <time.h>
-#endif /* USE_PAM || _AIX */
+#endif /* USE_PAM */
 #ifdef HAVE_GETSPNAM
 # include <shadow.h>
 #endif
@@ -112,8 +106,6 @@ struct login_cap *lc;
 #ifdef USE_PAM
 static pam_handle_t *pamh;
 static int inAuth;
-#elif defined(_AIX)
-static char tty[16], hostname[100];
 #else
 # ifdef USESHADOW
 static struct spwd *sp;
@@ -132,9 +124,9 @@ displayStr(int lv, const char *msg)
     gRecvInt();
 }
 
-#if (!defined(USE_PAM) && !defined(_AIX) \
+#if !defined(USE_PAM) \
      && (defined(HAVE_STRUCT_PASSWD_PW_EXPIRE) || defined(USESHADOW) \
-         || (defined(KERBEROS) && defined(AFS))))
+         || (defined(KERBEROS) && defined(AFS)))
 static void
 displayMsg(int lv, const char *msg, ...)
 {
@@ -151,17 +143,12 @@ displayMsg(int lv, const char *msg, ...)
 }
 #endif
 
-#ifdef _AIX
-# define _ENDUSERDB , enduserdb()
-#else
-# define _ENDUSERDB
-#endif
 #ifdef HAVE_GETSPNAM /* (sic!) - not USESHADOW */
 # define _ENDSPENT , endspent()
 #else
 # define _ENDSPENT
 #endif
-#define END_ENT endpwent() _ENDSPENT _ENDUSERDB
+#define END_ENT endpwent() _ENDSPENT
 
 #define V_RET_NP \
         do { \
@@ -444,7 +431,7 @@ doPAMAuth(const char *psrv, struct pam_data *pdata)
 #endif /* USE_PAM */
 
 static int
-#if defined(USE_PAM) || defined(_AIX)
+#if defined(USE_PAM)
 isNoPassAllowed(const char *un)
 {
     struct passwd *pw;
@@ -459,7 +446,7 @@ isNoPassAllowed(struct passwd *pw)
     char **fp;
     int hg;
 
-#if defined(USE_PAM) || defined(_AIX)
+#if defined(USE_PAM)
     if (!*un)
         return False;
 #endif
@@ -467,7 +454,7 @@ isNoPassAllowed(struct passwd *pw)
     if (cursource != PWSRC_MANUAL)
         return True;
 
-#if defined(USE_PAM) || defined(_AIX)
+#if defined(USE_PAM)
     /* Give nss_ldap, etc. a chance to normalize (uppercase) the name. */
     if (!(pw = getpwnam(un)) ||
             pw->pw_passwd[0] == '!' || pw->pw_passwd[0] == '*')
@@ -507,7 +494,7 @@ isNoPassAllowed(struct passwd *pw)
     return False;
 }
 
-#if !defined(USE_PAM) && !defined(_AIX) && defined(HAVE_SETUSERCONTEXT)
+#if !defined(USE_PAM) && defined(HAVE_SETUSERCONTEXT)
 # define LC_RET0 do { login_close(lc); V_RET; } while(0)
 #else
 # define LC_RET0 V_RET
@@ -521,9 +508,6 @@ verify(GConvFunc gconv, int rootok)
     struct pam_data pdata;
     int pretc, pnopass;
     char psrvb[64];
-#elif defined(_AIX)
-    char *msg, *curret;
-    int i, reenter;
 #else
     struct stat st;
     const char *nolg;
@@ -535,7 +519,7 @@ verify(GConvFunc gconv, int rootok)
 # if defined(HAVE_STRUCT_PASSWD_PW_EXPIRE) || defined(USESHADOW)
     int tim, expir, warntime, quietlog;
 # endif
-# if !defined(ultrix) && !defined(__ultrix__) && (defined(HAVE_PW_ENCRYPT) || defined(HAVE_CRYPT))
+# if defined(HAVE_PW_ENCRYPT) || defined(HAVE_CRYPT)
     char *crpt_passwd;
 # endif
 #endif
@@ -569,98 +553,6 @@ verify(GConvFunc gconv, int rootok)
     pdata.gconv = gconv;
     if (!doPAMAuth(psrv, &pdata))
         return False;
-
-#elif defined(_AIX)
-
-    if ((td->displayType & d_location) == dForeign) {
-        char *tmpch;
-        strncpy(hostname, td->name, sizeof(hostname) - 1);
-        hostname[sizeof(hostname)-1] = '\0';
-        if ((tmpch = strchr(hostname, ':')))
-            *tmpch = '\0';
-    } else {
-        hostname[0] = '\0';
-    }
-
-    /* tty names should only be 15 characters long */
-# if 0
-    for (i = 0; i < 15 && td->name[i]; i++) {
-        if (td->name[i] == ':' || td->name[i] == '.')
-            tty[i] = '_';
-        else
-            tty[i] = td->name[i];
-    }
-    tty[i] = '\0';
-# else
-    memcpy(tty, "/dev/xdm/", 9);
-    for (i = 0; i < 6 && td->name[i]; i++) {
-        if (td->name[i] == ':' || td->name[i] == '.')
-            tty[9 + i] = '_';
-        else
-            tty[9 + i] = td->name[i];
-    }
-    tty[9 + i] = '\0';
-# endif
-
-    if (!strcmp(curtype, "classic")) {
-        if (!gconv(GCONV_USER, 0))
-            return False;
-        if (isNoPassAllowed(curuser)) {
-            gconv(GCONV_PASS_ND, 0);
-            if (!*curpass) {
-                debug("accepting despite empty password\n");
-                goto done;
-            }
-        } else {
-            if (!gconv(GCONV_PASS, 0))
-                V_RET_NP;
-        }
-        msg = 0;
-        if ((i = authenticate(curuser, curpass, &reenter, &msg))) {
-            debug("authenticate() failed: %s\n", msg);
-            free(msg);
-            loginfailed(curuser, hostname, tty);
-            if (i == ENOENT || i == ESAD)
-                V_RET_AUTH;
-            else
-                V_RET_FAIL(0);
-        }
-        if (reenter) {
-            logError("authenticate() requests more data: %s\n", msg);
-            free(msg);
-            V_RET_FAIL(0);
-        }
-    } else if (!strcmp(curtype, "generic")) {
-        if (!gconv(GCONV_USER, 0))
-            return False;
-        for (curret = 0;;) {
-            msg = 0;
-            if ((i = authenticate(curuser, curret, &reenter, &msg))) {
-                debug("authenticate() failed: %s\n", msg);
-                free(msg);
-                loginfailed(curuser, hostname, tty);
-                if (i == ENOENT || i == ESAD)
-                    V_RET_AUTH;
-                else
-                    V_RET_FAIL(0);
-            }
-            free(curret);
-            if (!reenter)
-                break;
-            if (!(curret = gconv(GCONV_HIDDEN, msg)))
-                return False;
-            free(msg);
-        }
-    } else {
-        logError("Unsupported authentication type %\"s requested\n", curtype);
-        V_RET_FAIL(0);
-    }
-    if (msg) {
-        displayStr(V_MSG_INFO, msg);
-        free(msg);
-    }
-
-  done:
 
 #else
 
@@ -747,9 +639,7 @@ verify(GConvFunc gconv, int rootok)
     krbtkfile[0] = '\0';
 # endif /* KERBEROS */
 
-# if defined(ultrix) || defined(__ultrix__)
-    if (authenticate_user(p, curpass, 0) < 0)
-# elif defined(HAVE_PW_ENCRYPT)
+# if defined(HAVE_PW_ENCRYPT)
     if (!(crpt_passwd = pw_encrypt(curpass, p->pw_passwd)) || strcmp(crpt_passwd, p->pw_passwd))
 # elif defined(HAVE_CRYPT)
     if (!(crpt_passwd = crypt(curpass, p->pw_passwd)) || strcmp(crpt_passwd, p->pw_passwd))
@@ -763,11 +653,11 @@ verify(GConvFunc gconv, int rootok)
 
   done:
 
-#endif /* !defined(USE_PAM) && !defined(_AIX) */
+#endif /* !defined(USE_PAM) */
 
     debug("restrict %s ...\n", curuser);
 
-#if defined(USE_PAM) || defined(_AIX)
+#if defined(USE_PAM)
     if (!(p = getpwnam(curuser))) {
         logError("getpwnam(%s) failed.\n", curuser);
         V_RET_FAIL(0);
@@ -829,27 +719,7 @@ verify(GConvFunc gconv, int rootok)
         V_RET_AUTH;
     }
 
-#elif defined(_AIX) /* USE_PAM */
-
-    msg = 0;
-    if (loginrestrictions(curuser,
-                          ((td->displayType & d_location) == dForeign) ? S_RLOGIN : S_LOGIN,
-                          tty, &msg) == -1) {
-        debug("loginrestrictions() - %s\n", msg ? msg : "error");
-        loginfailed(curuser, hostname, tty);
-        prepareErrorGreet();
-        if (msg) {
-            displayStr(V_MSG_ERR, msg);
-            free(msg);
-        }
-        gSendInt(V_AUTH);
-        V_RET;
-    }
-    free(msg);
-
-#endif /* USE_PAM || _AIX */
-
-#ifndef _AIX
+#endif /* USE_PAM */
 
 # ifdef HAVE_SETUSERCONTEXT
 #  ifdef HAVE_LOGIN_GETCLASS
@@ -1021,8 +891,6 @@ verify(GConvFunc gconv, int rootok)
     }
 # endif
 
-#endif /* !_AIX */
-
     return True;
 
 }
@@ -1030,9 +898,6 @@ verify(GConvFunc gconv, int rootok)
 
 static const char *envvars[] = {
     "TZ", /* SYSV and SVR4, but never hurts */
-#ifdef _AIX
-    "AUTHSTATE", /* for kerberos */
-#endif
     0
 };
 
@@ -1144,13 +1009,7 @@ changeUser(const char *user, const char *authfile)
     if (authfile && chown(authfile, pw->pw_uid, pw->pw_gid))
         logWarn("chmod for %s failed: %m\n", authfile);
 
-#ifdef AIXV3
-    if (setpcred(user, NULL)) {
-        logError("setusercontext for %s failed: %m\n", user);
-        return False;
-    }
-    return True;
-#elif defined(HAS_SETUSERCONTEXT)
+#if defined(HAS_SETUSERCONTEXT)
     if (setusercontext(NULL, pw, pw->pw_uid, LOGIN_SETALL)) {
         logError("setpcred for %s failed: %m\n", user);
         return False;
@@ -1297,12 +1156,6 @@ startClient(volatile int *pid)
     char **saved_env;
 # endif
     int pretc;
-#else
-# ifdef _AIX
-    char *msg;
-    char **theenv;
-    extern char **newenv; /* from libs.a, this is set up by setpenv */
-# endif
 #endif
     char *failsafeArgv[2];
     char *buf, *buf2;
@@ -1314,7 +1167,7 @@ startClient(volatile int *pid)
         curdmrc = dmrcuser = 0;
     }
 
-#if defined(USE_PAM) || defined(_AIX)
+#if defined(USE_PAM)
     if (!(p = getpwnam(curuser))) {
         logError("getpwnam(%s) failed.\n", curuser);
       pError:
@@ -1325,16 +1178,7 @@ startClient(volatile int *pid)
 
     strcpy(curuser, p->pw_name); /* Use normalized login name. */
 
-#ifndef USE_PAM
-# ifdef _AIX
-    msg = 0;
-    loginsuccess(curuser, hostname, tty, &msg);
-    if (msg) {
-        debug("loginsuccess() - %s\n", msg);
-        free(msg);
-    }
-# else /* _AIX */
-#  if defined(KERBEROS) && defined(AFS)
+#if !defined(USE_PAM) && defined(KERBEROS) && defined(AFS)
     if (krbtkfile[0] != '\0') {
         if (k_hasafs()) {
             int fail = False;
@@ -1351,9 +1195,7 @@ startClient(volatile int *pid)
                            "Warning: Problems during Kerberos4/AFS setup.");
         }
     }
-#  endif /* KERBEROS && AFS */
-# endif /* _AIX */
-#endif /* !PAM */
+#endif /* !PAM && KERBEROS && AFS*/
 
     curuid = p->pw_uid;
     curgid = p->pw_gid;
@@ -1372,7 +1214,7 @@ startClient(volatile int *pid)
     env = setEnv(env, "PATH", curuid ? td->userPath : td->systemPath);
     env = setEnv(env, "SHELL", p->pw_shell);
     env = setEnv(env, "HOME", p->pw_dir);
-#if !defined(USE_PAM) && !defined(_AIX) && defined(KERBEROS)
+#if !defined(USE_PAM) && defined(KERBEROS)
     if (krbtkfile[0] != '\0')
         env = setEnv(env, "KRBTKFILE", krbtkfile);
 #endif
@@ -1530,9 +1372,6 @@ startClient(volatile int *pid)
         }
 
     /* Memory leaks are ok here as we exec() soon. */
-
-#if defined(USE_PAM) || !defined(_AIX)
-
 # ifdef USE_PAM
         /* pass in environment variables set by libpam and modules it called */
 #  ifdef HAVE_PAM_GETENVLIST
@@ -1593,32 +1432,6 @@ startClient(volatile int *pid)
             userEnviron = putEnv(environ[i], userEnviron);
 
 # endif /* !HAVE_SETUSERCONTEXT */
-
-#else /* PAM || !_AIX */
-        /*
-         * Set the user's credentials: uid, gid, groups,
-         * audit classes, user limits, and umask.
-         */
-        if (setpcred(curuser, 0) == -1) {
-            logError("setpcred for %s failed: %m\n", curuser);
-            goto cError;
-        }
-
-        /*
-         * Set the users process environment. Store protected variables and
-         * obtain updated user environment list. This call will initialize
-         * global 'newenv'.
-         */
-        userEnviron = xCopyStrArr(1, userEnviron);
-        userEnviron[0] = (char *)"USRENVIRON:";
-        if (setpenv(curuser, PENV_INIT | PENV_ARGV | PENV_NOEXEC,
-                    userEnviron, 0) != 0) {
-            logError("Cannot set %s's process environment\n", curuser);
-            goto cError;
-        }
-        userEnviron = newenv;
-
-#endif /* _AIX */
 
         /*
          * for user-based authorization schemes,
@@ -1825,7 +1638,7 @@ clientExited(void)
 #ifdef K5AUTH
                 krb5Destroy(td->name);
 #endif /* K5AUTH */
-#if !defined(USE_PAM) && !defined(_AIX)
+#if !defined(USE_PAM)
 # ifdef KERBEROS
                 if (krbtkfile[0]) {
                     (void)dest_tkt();
@@ -1835,7 +1648,7 @@ clientExited(void)
 #  endif
                 }
 # endif
-#endif /* !USE_PAM && !_AIX*/
+#endif /* !USE_PAM */
             }
             exit(0);
         case -1:

@@ -13,8 +13,6 @@ set(kcheckpass_SRCS
     checkpass_etcpasswd.c
     checkpass_pam.c
     checkpass_shadow.c
-    checkpass_osfc2passwd.c
-    checkpass_aix.c
 )
 
 add_executable(kcheckpass ${kcheckpass_SRCS})

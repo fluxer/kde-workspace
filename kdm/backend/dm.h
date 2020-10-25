@@ -61,10 +61,6 @@ from the copyright holder.
 extern char **environ;
 
 #ifdef XDMCP
-# if defined(__osf__)
-/* someone somewhere defines QUERY under Tru64 which confuses Xdmcp.h */
-#  undef QUERY
-# endif
 # include <X11/Xdmcp.h>
 #endif
 
@@ -92,7 +88,7 @@ extern char **environ;
 #define wcSig(w) (((w) >> 8) & 0xff)
 
 #include <setjmp.h>
-#if defined(__EMX__) || (defined(__NetBSD__) && defined(__sparc__)) /* XXX netbsd? */
+#if defined(__NetBSD__) && defined(__sparc__) /* XXX netbsd? */
 # define Setjmp(e) setjmp(e)
 # define Longjmp(e,v) longjmp(e,v)
 # define Jmp_buf jmp_buf

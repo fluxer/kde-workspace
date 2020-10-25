@@ -22,14 +22,12 @@ typedef quint64 t_memsize;
 enum { /* entries for memoryInfos[] */
 	TOTAL_MEM = 0, /* total physical memory (without swaps) */
 	FREE_MEM, /* total free physical memory (without swaps) */
-#if !defined(__svr4__) || !defined(sun)
-#if !defined(__NetBSD__) && !defined(__OpenBSD__)
+#if !defined(sun) && !defined(__NetBSD__) && !defined(__OpenBSD__)
 	SHARED_MEM, /* shared memory size */
 	BUFFER_MEM, /* buffered memory size */
 #else
 	ACTIVE_MEM,
 	INACTIVE_MEM,
-#endif
 #endif
 	CACHED_MEM, /* cache memory size (located in ram) */
 	SWAP_MEM, /* total size of all swap-partitions */

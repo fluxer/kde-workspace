@@ -645,7 +645,7 @@ forward_respond(struct sockaddr *from, int fromlen ATTR_UNUSED,
                 memmove(un_addr.sun_path, clientAddress.data, clientAddress.length);
                 un_addr.sun_path[clientAddress.length] = '\0';
                 client = (struct sockaddr *)&un_addr;
-#if defined(HAVE_STRUCT_SOCKADDR_IN_SIN_LEN) && !defined(__Lynx__) && defined(UNIXCONN)
+#if defined(HAVE_STRUCT_SOCKADDR_IN_SIN_LEN) && defined(UNIXCONN)
                 un_addr.sun_len = strlen(un_addr.sun_path);
                 clientlen = SUN_LEN(&un_addr);
 #else
