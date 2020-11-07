@@ -1,10 +1,10 @@
 include(CMakePushCheckState)
 include(CheckCSourceRuns)
-include(CheckStructMember)
+include(CheckStructHasMember)
 
-check_struct_member("struct passwd" "pw_expire" "pwd.h" HAVE_STRUCT_PASSWD_PW_EXPIRE)
-check_struct_member("struct utmp" "ut_user" "utmp.h" HAVE_STRUCT_UTMP_UT_USER)
-check_struct_member("struct utmp" "ut_host" "utmp.h" HAVE_STRUCT_UTMP_UT_HOST)
+check_struct_has_member("struct passwd" "pw_expire" "pwd.h" HAVE_STRUCT_PASSWD_PW_EXPIRE)
+check_struct_has_member("struct utmp" "ut_user" "utmp.h" HAVE_STRUCT_UTMP_UT_USER)
+check_struct_has_member("struct utmp" "ut_host" "utmp.h" HAVE_STRUCT_UTMP_UT_HOST)
 
 check_include_files(lastlog.h HAVE_LASTLOG_H)
 check_include_files(termio.h HAVE_TERMIO_H)
@@ -211,8 +211,8 @@ check_function_exists(getloadavg  HAVE_GETLOADAVG)
 check_function_exists(setproctitle HAVE_SETPROCTITLE)
 check_function_exists(strnlen     HAVE_STRNLEN)
 
-check_struct_member("struct sockaddr_in" "sin_len" "sys/socket.h;netinet/in.h" HAVE_STRUCT_SOCKADDR_IN_SIN_LEN)
-check_struct_member("struct sockaddr_in6" "sin6_len" "sys/socket.h;netinet/in.h" HAVE_STRUCT_SOCKADDR_IN6_SIN6_LEN)
+check_struct_has_member("struct sockaddr_in" "sin_len" "sys/socket.h;netinet/in.h" HAVE_STRUCT_SOCKADDR_IN_SIN_LEN)
+check_struct_has_member("struct sockaddr_in6" "sin6_len" "sys/socket.h;netinet/in.h" HAVE_STRUCT_SOCKADDR_IN6_SIN6_LEN)
 
 FOREACH(path /usr/local/bin /usr/bin /bin)
     if (XBINDIR STREQUAL ${path})
