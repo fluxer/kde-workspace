@@ -17,5 +17,3 @@ target_link_libraries(plasma_wallpaper_image ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS
 
 install(TARGETS plasma_wallpaper_image DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-wallpaper-image.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-
-install(FILES wallpaper.knsrc DESTINATION ${KDE4_CONFIG_INSTALL_DIR})

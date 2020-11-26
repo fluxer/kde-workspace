@@ -30,7 +30,6 @@ install(TARGETS decorationplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde
 ########### install files ###############
 
 install( FILES aurorae.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kwin )
-install( FILES aurorae.knsrc  DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )
 install( FILES
     qml/aurorae.qml
     qml/AuroraeButton.qml

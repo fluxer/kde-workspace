@@ -100,5 +100,4 @@ install(TARGETS kcm_cursortheme  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 install( FILES mouse.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 install( FILES cursortheme.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-install( FILES xcursor/xcursor.knsrc DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )
 

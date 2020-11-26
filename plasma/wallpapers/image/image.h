@@ -27,10 +27,6 @@ class KDirWatch;
 class KFileDialog;
 class KJob;
 
-namespace KNS3 {
-    class DownloadDialog;
-}
-
 class BackgroundListModel;
 
 class Image : public Plasma::Wallpaper

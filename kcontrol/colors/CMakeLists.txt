@@ -20,10 +20,6 @@ install(
     FILES colors.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
-install(
-    FILES colorschemes.knsrc
-    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}
-)
 
 install(
     FILES

@@ -31,4 +31,3 @@ kde4_install_auth_helper_files(kcmkdmhelper org.kde.kcontrol.kcmkdm root)
 install( FILES kdm.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 
 install( FILES anchor.png  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kcontrol/pics )
-install( FILES kdm.knsrc DESTINATION ${KDE4_CONFIG_INSTALL_DIR} )

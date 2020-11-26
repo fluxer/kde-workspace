@@ -12,4 +12,3 @@ install(TARGETS kcm_ksplashthemes  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 ########### install files ###############
 
 install( FILES ksplashthememgr.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-install( FILES ksplash.knsrc  DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )

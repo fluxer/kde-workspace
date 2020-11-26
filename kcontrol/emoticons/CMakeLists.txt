@@ -17,7 +17,3 @@ install(
     FILES emoticons.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
-install(
-    FILES emoticons.knsrc
-    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}
-)

@@ -13,6 +13,5 @@ target_link_libraries(kcm_fontinst ${KDE4_KIO_LIBS} ${KDE4_KDESU_LIBS} kfontinst
 
 install(TARGETS kcm_fontinst  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 install( FILES fontinst.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-install( FILES kfontinst.knsrc DESTINATION  ${KDE4_CONFIG_INSTALL_DIR} )
 
 kde4_install_icons( ${KDE4_DATA_INSTALL_DIR}/kfontinst/icons )
