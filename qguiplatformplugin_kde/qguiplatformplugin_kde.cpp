@@ -36,12 +36,7 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QToolBar>
 #include <QtGui/QMainWindow>
-
-#ifndef QT_KATIE
-#include "qguiplatformplugin_p.h"
-#else
-#include "qguiplatformplugin.h"
-#endif
+#include <QtGui/QGuiPlatformPlugin>
 
 /*
  * Map a Qt filter string into a KDE one.
