@@ -23,15 +23,15 @@ License along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "os_base.h"
 
-#ifdef __linux__
+#ifdef Q_OS_LINUX
 	#include "info_linux.cpp"
-#elif defined(__FreeBSD__) || defined(__DragonFly__)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
 	#include "info_fbsd.cpp"
-#elif defined(__NetBSD__)
+#elif defined(Q_OS_NETBSD)
 	#include "info_netbsd.cpp"
-#elif defined(__OpenBSD__)
+#elif defined(Q_OS_OPENBSD)
 	#include "info_openbsd.cpp"
-#elif defined(sun)
+#elif defined(Q_OS_SOLARIS)
 	#include "info_solaris.cpp"
 #else
 	#include "info_generic.cpp"	/* Default for unsupported systems.... */

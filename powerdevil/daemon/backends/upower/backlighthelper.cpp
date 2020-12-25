@@ -27,7 +27,7 @@
 
 #include <sys/utsname.h>
 
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
 #define USE_SYSCTL
 #endif
 

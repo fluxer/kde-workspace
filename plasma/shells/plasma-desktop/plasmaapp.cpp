@@ -24,7 +24,7 @@
 #include <unistd.h>
 
 #ifndef _SC_PHYS_PAGES
-    #ifdef Q_OS_FREEBSD
+    #if defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
     #include <sys/types.h>
     #include <sys/sysctl.h>
     #endif
@@ -163,7 +163,7 @@ PlasmaApp::PlasmaApp()
     int memorySize = sysconf(_SC_PHYS_PAGES);
     memorySize *= sysconf(_SC_PAGESIZE) / 1024;
 #else
-#ifdef Q_OS_FREEBSD
+#ifdef Q_OS_FREEBSD || defined(Q_OS_DRAGONFLY)
     int sysctlbuf[2];
     size_t size = sizeof(sysctlbuf);
     int memorySize;

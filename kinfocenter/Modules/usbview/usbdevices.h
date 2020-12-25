@@ -14,7 +14,7 @@
 #include <QList>
 #include <QString>
 
-#if defined(__DragonFly__)
+#if defined(Q_OS_DRAGONFLY)
 #include <bus/usb/usb.h>
 #include <QStringList>
 #elif defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)

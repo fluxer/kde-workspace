@@ -19,23 +19,22 @@
 
 */
 
-#if defined __linux__
-#include "processes_linux_p.cpp"
-#elif defined __FreeBSD__ || defined __FreeBSD_kernel__
-#include "processes_freebsd_p.cpp"
-#elif defined __DragonFly__
-#include "processes_dragonfly_p.cpp"
-#elif defined __OpenBSD__
-#include "processes_openbsd_p.cpp"
-#elif defined __NetBSD__
-#include "processes_netbsd_p.cpp"
-#elif defined __GNU__
-#include "processes_gnu_p.cpp"
-#else
-// Use Qt's OS detection
+// Use Katie's OS detection
 #include <qglobal.h>
-#ifdef Q_OS_SOLARIS
+
+#if defined Q_OS_LINUX
+#include "processes_linux_p.cpp"
+#elif defined Q_OS_FREEBSD
+#include "processes_freebsd_p.cpp"
+#elif defined Q_OS_DRAGONFLY
+#include "processes_dragonfly_p.cpp"
+#elif defined Q_OS_OPENBSD
+#include "processes_openbsd_p.cpp"
+#elif defined Q_OS_NETBSD
+#include "processes_netbsd_p.cpp"
+#elif Q_OS_SOLARIS
 #include "processes_solaris_p.cpp"
-#endif
+#elif defined Q_CC_GNU
+#include "processes_gnu_p.cpp"
 #endif
 

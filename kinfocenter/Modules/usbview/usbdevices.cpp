@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-#if defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
+#if defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY)
 #include <sys/ioctl.h>
 #include <sys/param.h>
 #endif
@@ -175,7 +175,7 @@ QString USBDevice::dump() {
 	if (!prname.isEmpty())
 		pr += "<td>(" + prname +")</td>";
 	r += i18n("<tr><td><i>Protocol</i></td>%1</tr>", pr);
-#if !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD))
+#if !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY))
 	r += ki18n("<tr><td><i>USB Version</i></td><td>%1.%2</td></tr>")
 	.subs(_verMajor,0,16).subs(_verMinor,2,16,QChar::fromLatin1('0'))
 	.toString();
@@ -199,7 +199,7 @@ QString USBDevice::dump() {
 
 	r += i18n("<tr><td><i>Speed</i></td><td>%1 Mbit/s</td></tr>", _speed);
 	r += i18n("<tr><td><i>Channels</i></td><td>%1</td></tr>", _channels);
-#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(DISABLE_USBDEVICES_FREEBSD)
+#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY)) && !defined(DISABLE_USBDEVICES_FREEBSD)
 	if ( _power )
 	r += i18n("<tr><td><i>Power Consumption</i></td><td>%1 mA</td></tr>", _power);
 	else
@@ -228,7 +228,7 @@ QString USBDevice::dump() {
 	return r;
 }
 
-#if !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD))
+#if !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY))
 bool USBDevice::parse(const QString &fname) {
 	_devices.clear();
 
@@ -345,7 +345,7 @@ void USBDevice::collectData( int fd, int level, usb_device_info &di, int parent)
 	_channels = di.udi_nports;
 
 	// determine the speed
-#if defined(__DragonFly__) || (defined(Q_OS_FREEBSD) && __FreeBSD_version > 490102) || defined(Q_OS_NETBSD)
+#if defined(Q_OS_DRAGONFLY) || (defined(Q_OS_FREEBSD) && __FreeBSD_version > 490102) || defined(Q_OS_NETBSD)
 	switch (di.udi_speed) {
 		case USB_SPEED_LOW: _speed = 1.5; break;
 		case USB_SPEED_FULL: _speed = 12.0; break;
@@ -432,4 +432,4 @@ bool USBDevice::parse(const QString &fname)
 }
 
 # endif // defined(DISABLE_USBDEVICES_FREEBSD)
-#endif // !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD))
+#endif // !(defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD) || defined(Q_OS_DRAGONFLY))

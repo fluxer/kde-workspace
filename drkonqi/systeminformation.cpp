@@ -66,6 +66,8 @@ QString SystemInformation::fetchOSBasicInformation() const
     return QLatin1String("NetBSD");
 #elif defined(Q_OS_OPENBSD)
     return QLatin1String("OpenBSD");
+#elif defined(Q_OS_DRAGONFLY)
+    return QLatin1String("DragonFly BSD");
 #elif defined(Q_OS_SOLARIS)
     return QLatin1String("Solaris");
 #else

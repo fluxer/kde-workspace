@@ -29,7 +29,7 @@
 #include <sys/types.h>
 #include <sys/user.h>
 #include <sys/resource.h>
-#if defined(__DragonFly__)
+#if defined(Q_OS_DRAGONFLY)
 #include <sys/resourcevar.h>
 #include <err.h>
 #endif
@@ -78,11 +78,11 @@ void ProcessesLocal::Private::readProcStatus(struct kinfo_proc *p, Process *proc
     process->setTracerpid(-1);
 
 
-#if defined(__FreeBSD__) && __FreeBSD_version >= 500015
+#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
     process->setUid(p->ki_uid);
     process->setGid(p->ki_pgid);
     process->setName(QString(p->ki_comm ? p->ki_comm : "????"));
-#elif defined(__DragonFly__) && __DragonFly_version >= 190000
+#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
     process->setUid(p->kp_uid);
     process->setGid(p->kp_pgid);
     process->setName(QString(p->kp_comm ? p->kp_comm : "????"));
@@ -96,13 +96,13 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
 {
     int status;
     struct rusage pru;
-#if defined(__FreeBSD__) && __FreeBSD_version >= 500015
+#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
         ps->setUserTime(p->ki_runtime / 10000);
         ps->setNiceLevel(p->ki_nice);
         ps->setVmSize(p->ki_size);
         ps->setVmRSS(p->ki_rssize * getpagesize());
         status = p->ki_stat;
-#elif defined(__DragonFly__) && __DragonFly_version >= 190000
+#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
         if (!getrusage(p->kp_pid, &pru)) {
             errx(1, "failed to get rusage info");
         }
@@ -185,9 +185,9 @@ long ProcessesLocal::getParentPid(long pid) {
     struct kinfo_proc p;
     if(d->readProc(pid, &p))
     {
-#if defined(__FreeBSD__) && __FreeBSD_version >= 500015
+#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
         ppid = p.ki_ppid;
-#elif defined(__DragonFly__) && __DragonFly_version >= 190000
+#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
         ppid = p.kp_ppid;
 #else
         ppid = p.kp_eproc.e_ppid;
@@ -224,9 +224,9 @@ QSet<long> ProcessesLocal::getAllPids( )
     sysctl(mib, 3, p, &len, NULL, 0);
 
     for (num = 0; num < len / sizeof(struct kinfo_proc); num++)
-#if defined(__FreeBSD__) && __FreeBSD_version >= 500015
+#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
         pids.insert(p[num].ki_pid);
-#elif defined(__DragonFly__) && __DragonFly_version >= 190000
+#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
         pids.insert(p[num].kp_pid);
 #else
         pids.insert(p[num].kp_proc.p_pid);

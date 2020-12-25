@@ -31,7 +31,7 @@
 #define __STRICT_ANSI__
 #endif
 
-#ifdef Q_OS_FREEBSD
+#if defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
 #include <sys/joystick.h>
 #endif
 

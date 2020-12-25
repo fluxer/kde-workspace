@@ -224,7 +224,7 @@ static bool get_dri_device()
     return false;
 }
 
-#elif defined(Q_OS_FREEBSD)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
 
 static bool get_dri_device() {
 

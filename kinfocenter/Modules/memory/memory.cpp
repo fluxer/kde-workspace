@@ -137,7 +137,7 @@ QGroupBox* KCMMemory::initializeText() {
 		case FREE_MEM:
 			title = i18n("Free physical memory:");
 			break;
-#if !defined(sun) && !defined(__NetBSD__) && !defined(__OpenBSD__)
+#if !defined(Q_OS_SOLARIS) && !defined(Q_OS_NETBSD) && !defined(Q_OS_OPENBSD)
 		case SHARED_MEM:
 			title = i18n("Shared memory:");
 			break;
@@ -294,13 +294,13 @@ void KCMMemory::updateMemoryGraphics() {
 
 /* Include system-specific code */
 
-#ifdef __linux__
+#ifdef Q_OS_LINUX
 #include "memory_linux.cpp"
-#elif defined(sun)
+#elif defined(Q_OS_SOLARIS)
 #include "memory_solaris.cpp"
-#elif defined(__FreeBSD__) || defined(__DragonFly__)
+#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
 #include "memory_fbsd.cpp"
-#elif defined(__NetBSD__) || defined(__OpenBSD__)
+#elif defined(Q_OS_NETBSD) || defined(Q_OS_OPENBSD)
 #include "memory_netbsd.cpp"
 #else
 
