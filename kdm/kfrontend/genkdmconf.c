@@ -45,16 +45,20 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <sys/stat.h>
 #include <sys/wait.h>
 #include <sys/param.h>
-#ifdef BSD
-# ifdef BSD_UTMP
-#  include <utmp.h>
-# endif
-# ifndef _PATH_UTMP
-#  if defined(__FreeBSD_version) && __FreeBSD_version >= 900007
-#   define _PATH_UTMP "/var/run/utmp"
-#  else
-#   error "_PATH_UTMP must be defined"
-#  endif
+
+#ifdef HAVE_UTMPX
+# include <utmpx.h>
+#else
+# include <utmp.h>
+#endif
+
+#ifndef UTMP_FILE
+# ifdef _PATH_UTMPX
+#  define UTMP_FILE _PATH_UTMPX
+# elif defined(_PATH_UTMP)
+#  define UTMP_FILE _PATH_UTMP
+# else
+#  define UTMP_FILE "/etc/utmp"
 # endif
 #endif
 
@@ -1811,7 +1815,7 @@ edit_startup(File *file)
         chg2 =
 # ifdef BSD
             delstr(file, "\n"
-"exec sessreg -a -l $DISPLAY -x */Xservers -u " _PATH_UTMP " $USER\n") |
+"exec sessreg -a -l $DISPLAY -x */Xservers -u " UTMP_FILE " $USER\n") |
 # endif
             delstr(file, "\n"
 "exec sessreg -a -l $DISPLAY"
@@ -1852,7 +1856,7 @@ edit_reset(File *file)
     return
 # ifdef BSD
         delstr(file, "\n"
-"exec sessreg -d -l $DISPLAY -x */Xservers -u " _PATH_UTMP " $USER\n") |
+"exec sessreg -d -l $DISPLAY -x */Xservers -u " UTMP_FILE " $USER\n") |
 # endif
         delstr(file, "\n"
 "exec sessreg -d -l $DISPLAY"
