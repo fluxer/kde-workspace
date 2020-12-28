@@ -64,14 +64,6 @@
 #include "uptime.h"
 #endif /* OSTYPE_FreeBSD */
 
-#ifdef OSTYPE_Irix
-#include "cpu.h"
-#include "LoadAvg.h"
-#include "Memory.h"
-#include "NetDev.h"
-#include "ProcessList.h"
-#endif /* OSTYPE_Irix */
-
 #ifdef OSTYPE_NetBSD
 #include <grp.h>
 #ifdef __i386__
@@ -160,14 +152,6 @@ struct SensorModul SensorModulList[] = {
   { "Uptime", initUptime, exitUptime, NULLIVFUNC, NULLVVFUNC, 0, NULLTIME },
 #endif /* OSTYPE_FreeBSD */
 
-#ifdef OSTYPE_Irix
-  { "CpuInfo", initCpuInfo, exitCpuInfo, updateCpuInfo, NULLVVFUNC, 0, NULLTIME },
-  { "LoadAvg", initLoadAvg, exitLoadAvg, updateLoadAvg, NULLVVFUNC, 0, NULLTIME },
-  { "Memory", initMemory, exitMemory, updateMemory, NULLVVFUNC, 0, NULLTIME },
-  { "NetDev", initNetDev, exitNetDev, updateNetDev, NULLVVFUNC, 0, NULLTIME },
-  { "ProcessList", initProcessList, exitProcessList, updateProcessList, NULLVVFUNC, 0, NULLTIME },
-#endif /* OSTYPE_Irix */
-
 #ifdef OSTYPE_NetBSD
   #ifdef __i386__
     { "Apm", initApm, exitApm, updateApm, NULLVVFUNC, 0, NULLTIME },
@@ -199,8 +183,6 @@ struct SensorModul SensorModulList[] = {
   { "Memory", initMemory, exitMemory, updateMemory, NULLVVFUNC, 0, NULLTIME },
   { "NetDev", initNetDev, exitNetDev, updateNetDev, NULLVVFUNC, 0, NULLTIME },
 #endif /* OSTYPE_Tru64 */
-
-
 
   { NULL, NULLVSFUNC, NULLVVFUNC, NULLIVFUNC, NULLVVFUNC, 0, NULLTIME }
 };
