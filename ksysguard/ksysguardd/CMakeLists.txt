@@ -23,7 +23,7 @@ configure_file(config-ksysguardd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksys
 if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/FreeBSD)
     include(FreeBSD/FreeBSD.cmake)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "SunOS")
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(SunOS|Solaris)")
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Solaris)
     include(${CMAKE_SYSTEM_NAME}/Solaris.cmake)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|NetBSD|OpenBSD|Tru64)")
