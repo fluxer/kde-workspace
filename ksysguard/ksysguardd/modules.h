@@ -91,13 +91,6 @@
 #include "ProcessList.h"
 #endif /* OSTYPE_Solaris */
 
-#ifdef OSTYPE_Tru64
-#include "LoadAvg.h"
-#include "Memory.h"
-#include "NetDev.h"
-#endif /* OSTYPE_Tru64 */
-
-
 typedef void (*VSFunc)( struct SensorModul* );
 #define NULLVSFUNC ((VSFunc) 0)
 typedef void (*VVFunc)( void );
@@ -177,12 +170,6 @@ struct SensorModul SensorModulList[] = {
   { "NetDev", initNetDev, exitNetDev, updateNetDev, NULLVVFUNC, 0, NULLTIME },
   { "ProcessList", initProcessList, exitProcessList, updateProcessList, NULLVVFUNC, 0, NULLTIME },
 #endif /* OSTYPE_Solaris */
-
-#ifdef OSTYPE_Tru64
-  { "LoadAvg", initLoadAvg, exitLoadAvg, updateLoadAvg, NULLVVFUNC, 0, NULLTIME },
-  { "Memory", initMemory, exitMemory, updateMemory, NULLVVFUNC, 0, NULLTIME },
-  { "NetDev", initNetDev, exitNetDev, updateNetDev, NULLVVFUNC, 0, NULLTIME },
-#endif /* OSTYPE_Tru64 */
 
   { NULL, NULLVSFUNC, NULLVVFUNC, NULLIVFUNC, NULLVVFUNC, 0, NULLTIME }
 };
