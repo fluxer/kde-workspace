@@ -58,10 +58,8 @@ static QString findNtpUtility()
     return QString();
 }
 
-int ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
+ClockHelper::CH_Error ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
 {
-  int ret = 0;
-
   // write to the system config file
   QFile config_file(KDE_CONFDIR "/kcmclockrc");
   if(!config_file.exists()) {
@@ -86,16 +84,16 @@ int ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
     }
 
     if ( !QProcess::execute(ntpUtility, QStringList() << timeServer) ) {
-      ret |= NTPError;
+      return NTPError;
     }
   } else if( ntpEnabled ) {
-    ret |= NTPError;
+    return NTPError;
   }
 
-  return ret;
+  return NoError;
 }
 
-int ClockHelper::date( const QString& newdate, const QString& olddate )
+ClockHelper::CH_Error ClockHelper::date( const QString& newdate, const QString& olddate )
 {
     struct timeval tv;
 
@@ -109,58 +107,58 @@ int ClockHelper::date( const QString& newdate, const QString& olddate )
     if (!hwclock.isEmpty()) {
         QProcess::execute(hwclock, QStringList() << "--systohc");
     }
-    return 0;
+    return NoError;
 }
 
-int ClockHelper::tz( const QString& selectedzone )
+ClockHelper::CH_Error ClockHelper::tz( const QString& selectedzone )
 {
-    int ret = 0;
-
     //only allow letters, numbers hyphen underscore plus and forward slash
     //allowed pattern taken from time-util.c in systemd
     if (!QRegExp("[a-zA-Z0-9-_+/]*").exactMatch(selectedzone)) {
-        return ret;
+        return TimezoneError;
     }
-        // from ktimezoned
-        QString ZONE_INFO_DIR;
 
-        if (QDir("/usr/share/zoneinfo").exists()) {
-            ZONE_INFO_DIR = "/usr/share/zoneinfo/";
-        } else if (QDir("/usr/lib/zoneinfo").exists()) {
-            ZONE_INFO_DIR = "/usr/lib/zoneinfo/";
-        } else if (QDir("/share/zoneinfo").exists()) {
-            ZONE_INFO_DIR = "/share/zoneinfo/";
-        } else if (QDir("/lib/zoneinfo").exists()) {
-            ZONE_INFO_DIR = "/lib/zoneinfo/";
-        } else {
-            // /usr is kind of standard
-            ZONE_INFO_DIR = "/usr/share/zoneinfo/";
-        }
-        QString tz = ZONE_INFO_DIR + selectedzone;
+    // from ktimezoned
+    QString ZONE_INFO_DIR;
 
-        QFile f("/etc/localtime");
-        if (f.exists() && !f.remove()) {
-          ret |= TimezoneError;
-        }
-        if (!QFile::link(tz, "/etc/localtime")) {
-          ret |= TimezoneError;
-        }
+    if (QDir("/usr/share/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/usr/share/zoneinfo/";
+    } else if (QDir("/usr/lib/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/usr/lib/zoneinfo/";
+    } else if (QDir("/share/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/share/zoneinfo/";
+    } else if (QDir("/lib/zoneinfo").exists()) {
+        ZONE_INFO_DIR = "/lib/zoneinfo/";
+    } else {
+        // /usr is kind of standard
+        ZONE_INFO_DIR = "/usr/share/zoneinfo/";
+    }
+    QString tz = ZONE_INFO_DIR + selectedzone;
 
-        QString val = ':' + tz;
+    QFile f("/etc/localtime");
+    if (f.exists() && !f.remove()) {
+        return TimezoneError;
+    }
 
-        setenv("TZ", val.toAscii(), 1);
-        tzset();
+    if (!QFile::link(tz, "/etc/localtime")) {
+        return TimezoneError;
+    }
 
-    return ret;
+    QString val = ':' + tz;
+
+    setenv("TZ", val.toAscii(), 1);
+    tzset();
+
+    return NoError;
 }
 
-int ClockHelper::tzreset()
+ClockHelper::CH_Error ClockHelper::tzreset()
 {
     unlink( "/etc/localtime" );
 
     setenv("TZ", "", 1);
     tzset();
-    return 0;
+    return NoError;
 }
 
 ActionReply ClockHelper::save(const QVariantMap &args)
@@ -172,7 +170,7 @@ ActionReply ClockHelper::save(const QVariantMap &args)
 
   KComponentData data( "kcmdatetimehelper" );
 
-  int ret = 0; // error code
+  int ret = NoError; // error code
 //  The order here is important
   if( _ntp )
     ret |= ntp( args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
@@ -183,7 +181,7 @@ ActionReply ClockHelper::save(const QVariantMap &args)
   if( _tzreset )
     ret |= tzreset();
 
-  if (ret == 0) {
+  if (ret == NoError) {
     return ActionReply::SuccessReply;
   } else {
     ActionReply reply(ActionReply::HelperError);

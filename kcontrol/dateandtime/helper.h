@@ -30,22 +30,22 @@ class ClockHelper : public QObject
     Q_OBJECT
 
     public:
-        enum
-        {
-            CallError       = 1 << 0,
-            TimezoneError   = 1 << 1,
-            NTPError        = 1 << 2,
-            DateError       = 1 << 3
+        enum CH_Error {
+            NoError         = 0,
+            CallError       = 1,
+            TimezoneError   = 2,
+            NTPError        = 3,
+            DateError       = 4
         };
 
     public slots:
         ActionReply save(const QVariantMap &map);
 
     private:
-        int ntp(const QStringList& ntpServers, bool ntpEnabled);
-        int date(const QString& newdate, const QString& olddate);
-        int tz(const QString& selectedzone);
-        int tzreset();
+        CH_Error ntp(const QStringList& ntpServers, bool ntpEnabled);
+        CH_Error date(const QString& newdate, const QString& olddate);
+        CH_Error tz(const QString& selectedzone);
+        CH_Error tzreset();
 };
 
 #endif // CLOCK_HELPER_H
