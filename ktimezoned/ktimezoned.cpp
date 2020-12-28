@@ -62,7 +62,7 @@ KTimeZoned::KTimeZoned(QObject* parent, const QList<QVariant>& l)
   : KTimeZonedBase(parent, l),
     mSource(0),
     mZonetabWatch(0),
-    mDirWatch(0)
+    mPollWatch(0)
 {
     init(false);
 }
@@ -73,8 +73,8 @@ KTimeZoned::~KTimeZoned()
     mSource = 0;
     delete mZonetabWatch;
     mZonetabWatch = 0;
-    delete mDirWatch;
-    mDirWatch = 0;
+    delete mPollWatch;
+    mPollWatch = 0;
 }
 
 void KTimeZoned::init(bool restart)
@@ -86,8 +86,8 @@ void KTimeZoned::init(bool restart)
         mSource = 0;
         delete mZonetabWatch;
         mZonetabWatch = 0;
-        delete mDirWatch;
-        mDirWatch = 0;
+        delete mPollWatch;
+        mPollWatch = 0;
     }
 
     KConfig config(QLatin1String("ktimezonedrc"));
@@ -140,6 +140,13 @@ void KTimeZoned::init(bool restart)
     mZonetabWatch = new KDirWatch(this);
     mZonetabWatch->addFile(mZoneTab);
     connect(mZonetabWatch, SIGNAL(dirty(const QString&)), SLOT(zonetab_Changed(const QString&)));
+    mPollWatch = new QTimer();
+    // NOTE: super nasty hack #2, see dateandtime KCM
+    mPollWatch->start(3000);
+    // Watch for changes in the file defining the local time zone so as to be
+    // notified of any change in it.
+    connect(mPollWatch, SIGNAL(timeout()), SLOT(localChanged()));
+
 
     // Find the local system time zone and set up file monitors to detect changes
     findLocalZone();
@@ -248,8 +255,6 @@ void KTimeZoned::readZoneTab(QFile &f)
 // Find the local time zone, starting from scratch.
 void KTimeZoned::findLocalZone()
 {
-    delete mDirWatch;
-    mDirWatch = 0;
     mLocalZone.clear();
     mLocalIdFile.clear();
     mLocalZoneDataFile.clear();
@@ -280,16 +285,6 @@ void KTimeZoned::findLocalZone()
         // Watch for creation of /etc/localtime in case it gets created later.
         mLocalIdFile = QLatin1String("/etc/localtime");
     }
-    // Watch for changes in the file defining the local time zone so as to be
-    // notified of any change in it.
-    mDirWatch = new KDirWatch(this);
-    mDirWatch->addFile(mLocalIdFile);
-    if (!mLocalZoneDataFile.isEmpty()) {
-        mDirWatch->addFile(mLocalZoneDataFile);
-    }
-    connect(mDirWatch, SIGNAL(dirty(const QString&)), SLOT(localChanged(const QString&)));
-    connect(mDirWatch, SIGNAL(deleted(const QString&)), SLOT(localChanged(const QString&)));
-    connect(mDirWatch, SIGNAL(created(const QString&)), SLOT(localChanged(const QString&)));
 
     if (mLocalZone.isEmpty() && !mZoneinfoDir.isEmpty()) {
         // SOLUTION 5: HEURISTIC.
@@ -359,36 +354,24 @@ void KTimeZoned::zonetab_Changed(const QString& path)
 }
 
 // Called when KDirWatch detects a change
-void KTimeZoned::localChanged(const QString& path)
+void KTimeZoned::localChanged()
 {
-    if (path == mLocalZoneDataFile) {
-        // Only need to update the definition of the local zone,
-        // not its identity.
-        QDBusMessage message = QDBusMessage::createSignal("/Daemon", "org.kde.KTimeZoned", "zoneDefinitionChanged");
-        QList<QVariant> args;
-        args += mLocalZone;
-        message.setArguments(args);
-        QDBusConnection::sessionBus().send(message);
-        return;
-    }
-    QString oldDataFile = mLocalZoneDataFile;
     const char *envtz = ::getenv("TZ");
     if (mSavedTZ != envtz) {
-                // TZ has changed - start from scratch again
-                findLocalZone();
-                return;
+        // TZ has changed - start from scratch again
+        findLocalZone();
+        return;
     }
+
+    QFileInfo info(mLocalIdFile);
+    QDateTime currentstamp = info.lastModified();
+    if (currentstamp == mLocalStamp)
+        return;
+
+    mLocalStamp = currentstamp;
     matchZoneFile(mLocalIdFile);
     checkTimezone();
 
-    if (oldDataFile != mLocalZoneDataFile) {
-        if (!oldDataFile.isEmpty()) {
-            mDirWatch->removeFile(oldDataFile);
-        }
-        if (!mLocalZoneDataFile.isEmpty()) {
-            mDirWatch->addFile(mLocalZoneDataFile);
-        }
-    }
     updateLocalZone();
 }
 
@@ -413,7 +396,6 @@ bool KTimeZoned::checkTZ(const char *envZone)
             }
             if (TZfile.startsWith(QLatin1Char('/'))) {
                 // It's an absolute file name.
-                QString symlink;
                 if (matchZoneFile(TZfile))
                 {
                     return true;

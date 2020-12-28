@@ -26,6 +26,7 @@
 #include <QString>
 #include <QByteArray>
 #include <QFile>
+#include <QTimer>
 
 #include <kdedmodule.h>
 #include <kdirwatch.h>
@@ -42,7 +43,7 @@ class KTimeZoned : public KTimeZonedBase
 
     private Q_SLOTS:
         void  zonetab_Changed(const QString& path);
-        void  localChanged(const QString& path);
+        void  localChanged();
 
     private:
         /** reimp */
@@ -66,8 +67,9 @@ class KTimeZoned : public KTimeZonedBase
         QString     mLocalIdFile;       // file containing pointer to local time zone definition
         QString     mLocalZoneDataFile; // zoneinfo file containing local time zone definition
         KDirWatch  *mZonetabWatch;      // watch for zone.tab file changes
-        KDirWatch  *mDirWatch;          // watch for time zone definition file changes
+        QTimer     *mPollWatch;         // watch for time zone definition file changes
         bool        mHaveCountryCodes;  // true if zone.tab contains any country codes
+        QDateTime   mLocalStamp;        // mLocalIdFile modification time
 };
 
 #endif
