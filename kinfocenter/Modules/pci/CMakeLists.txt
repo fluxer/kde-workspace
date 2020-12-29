@@ -12,6 +12,7 @@ if(PCIUTILS_FOUND)
     MESSAGE(STATUS "Enabling PCI module based on pciutils library")
 
     add_definitions( -DHAVE_PCIUTILS )
+    include_directories(${PCIUTILS_INCLUDE_DIR})
 if (UNIX AND NOT APPLE)
    add_definitions (-fpermissive)
 endif (UNIX AND NOT APPLE)
