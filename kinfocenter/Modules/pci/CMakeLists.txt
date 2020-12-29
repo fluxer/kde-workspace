@@ -3,7 +3,7 @@
 include(../base/CMakeLists.txt)
 
 include_directories( 
-	${CMAKE_CURRENT_SOURCE_DIR}/../base
+    ${CMAKE_CURRENT_SOURCE_DIR}/../base
 )
 
 ########### next target ###############
@@ -11,11 +11,8 @@ include_directories(
 if(PCIUTILS_FOUND)
     MESSAGE(STATUS "Enabling PCI module based on pciutils library")
 
-    add_definitions( -DHAVE_PCIUTILS )
+    add_definitions( -DHAVE_PCIUTILS -fpermissive)
     include_directories(${PCIUTILS_INCLUDE_DIR})
-if (UNIX AND NOT APPLE)
-   add_definitions (-fpermissive)
-endif (UNIX AND NOT APPLE)
 
     set(KCM_PCI_PART_SRCS kcm_pci.cpp ../base/os_current.cpp kpci.cpp )
 

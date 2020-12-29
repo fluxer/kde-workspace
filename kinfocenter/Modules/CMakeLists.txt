@@ -17,22 +17,22 @@ else()
 endif()
 
 macro_optional_find_package(PCIUTILS)
-set_package_properties(PCIUTILS PROPERTIES DESCRIPTION "PciUtils is a library for direct access to PCI slots"
-                       URL "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
-                       TYPE OPTIONAL
-                       PURPOSE "View PCI details in kinfocenter."
-                      )
+set_package_properties(PCIUTILS PROPERTIES
+    DESCRIPTION "PciUtils is a library for direct access to PCI slots"
+    URL "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
+    TYPE OPTIONAL
+    PURPOSE "View PCI details in kinfocenter."
+)
 
-if(NOT APPLE)
-    add_subdirectory( pci )
-endif(NOT APPLE)
+add_subdirectory( pci )
 
 macro_optional_find_package(RAW1394)
-set_package_properties(RAW1394 PROPERTIES DESCRIPTION "library for direct access to IEEE 1394 bus"
-                       URL "http://www.linux1394.org/"
-                       TYPE OPTIONAL
-                       PURPOSE "View FireWire devices in kinfocenter."
-                      )
+set_package_properties(RAW1394 PROPERTIES
+    DESCRIPTION "library for direct access to IEEE 1394 bus"
+    URL "http://www.linux1394.org/"
+    TYPE OPTIONAL
+    PURPOSE "View FireWire devices in kinfocenter."
+)
 
 if(RAW1394_FOUND)
    add_subdirectory( view1394 )
