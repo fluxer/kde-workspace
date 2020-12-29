@@ -23,9 +23,6 @@ add_feature_info(wrestool
 macro_bool_to_01(EXIV2_FOUND HAVE_EXIV2)
 
 include_directories(${JPEG_INCLUDE_DIR})
-if(EXIV2_FOUND)
-    include_directories(${EXIV2_INCLUDE_DIR})
-endif(EXIV2_FOUND)
 
 ########### next target ###############
 
@@ -62,7 +59,7 @@ target_link_libraries(jpegthumbnail ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${J
 if(HAVE_EXIV2)
     set_source_files_properties(jpegcreator.cpp PROPERTIES
                                 COMPILE_FLAGS "-DHAVE_EXIV2 ${KDE4_ENABLE_EXCEPTIONS}")
-    include_directories(${EXIV1_INCLUDE_DIR})
+    include_directories(${EXIV2_INCLUDE_DIR})
     target_link_libraries(jpegthumbnail ${EXIV2_LIBRARIES})
 endif()
 
