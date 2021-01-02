@@ -77,8 +77,6 @@
 #include "scrnsave.h"
 #include <QtGui/qx11info_x11.h>
 
-template class QList<SaverConfig*>;
-
 const uint widgetEventMask =                 // X event mask
 (uint)(
        ExposureMask |
