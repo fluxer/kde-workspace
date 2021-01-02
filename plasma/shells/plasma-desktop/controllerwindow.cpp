@@ -488,7 +488,7 @@ void ControllerWindow::resizeEvent(QResizeEvent * event)
 
     Plasma::WindowEffects::enableBlurBehind(effectiveWinId(), true, m_background->mask());
 
-    qDebug() << "ControllerWindow::resizeEvent" << event->oldSize();
+    // qDebug() << "ControllerWindow::resizeEvent" << event->oldSize();
 
     QWidget::resizeEvent(event);
     if (PlasmaApp::isPanelContainment(containment())) {
