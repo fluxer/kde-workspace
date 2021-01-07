@@ -52,9 +52,6 @@ set_target_properties(kephal PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
-#   INSTALL_RPATH_USE_LINK_PATH true
-#   )
-
 install(TARGETS kephal EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES FindKephal.cmake DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules)
