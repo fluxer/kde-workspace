@@ -267,17 +267,18 @@ void KTimeZoned::findLocalZone()
         if (!mLocalZone.isEmpty()) kDebug(1221)<<"TZ: "<<mLocalZone;
     }
 
-    if (mLocalZone.isEmpty()) {
-        // SOLUTION 2: DEFINITIVE.
-        // BSD & Linux support: local time zone id in /etc/timezone.
-        checkTimezone();
-    }
     if (mLocalZone.isEmpty() && !mZoneinfoDir.isEmpty()) {
-        // SOLUTION 3: DEFINITIVE.
+        // SOLUTION 2: DEFINITIVE.
         // Try to follow any /etc/localtime symlink to a zoneinfo file.
-        // SOLUTION 4: DEFINITIVE.
+        // SOLUTION 3: DEFINITIVE.
         // Try to match /etc/localtime against the list of zoneinfo files.
         matchZoneFile(QLatin1String("/etc/localtime"));
+    }
+
+    if (mLocalZone.isEmpty()) {
+        // SOLUTION 4: DEFINITIVE.
+        // BSD & Linux support: local time zone id in /etc/timezone.
+        checkTimezone();
     }
 
     if (mLocalZone.isEmpty()) {
@@ -356,23 +357,16 @@ void KTimeZoned::zonetab_Changed(const QString& path)
 // Called when KDirWatch detects a change
 void KTimeZoned::localChanged()
 {
-    const char *envtz = ::getenv("TZ");
-    if (mSavedTZ != envtz) {
-        // TZ has changed - start from scratch again
-        findLocalZone();
-        return;
-    }
-
+    QByteArray envTz = qgetenv("TZ");
     QFileInfo info(mLocalIdFile);
     QDateTime currentstamp = info.lastModified();
-    if (currentstamp == mLocalStamp)
+    if (currentstamp == mLocalStamp && mSavedTZ == envTz)
         return;
 
     mLocalStamp = currentstamp;
-    matchZoneFile(mLocalIdFile);
-    checkTimezone();
+    mSavedTZ = envTz;
 
-    updateLocalZone();
+    findLocalZone();
 }
 
 bool KTimeZoned::checkTZ(const char *envZone)
@@ -445,7 +439,7 @@ bool KTimeZoned::checkTimezone()
 
 bool KTimeZoned::matchZoneFile(const QString &path)
 {
-    // SOLUTION 3: DEFINITIVE.
+    // SOLUTION 2: DEFINITIVE.
     // Try to follow any symlink to a zoneinfo file.
     // Get the path of the file which the symlink points to.
     QFile f;
@@ -475,7 +469,7 @@ bool KTimeZoned::matchZoneFile(const QString &path)
         }
     }
     else if (f.open(QIODevice::ReadOnly)) {
-        // SOLUTION 4: DEFINITIVE.
+        // SOLUTION 3: DEFINITIVE.
         // Try to match the file against the list of zoneinfo files.
 
         KTimeZone local;
