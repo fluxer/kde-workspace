@@ -113,12 +113,12 @@
   </panel>
   <widgets name="Windows" />
   <fonts>
-    <font value="Arial,12,-1,5,50,0,0,0,0,0" object="General" />
-    <fixed value="Courier New,10,-1,5,50,0,0,0,0,0" object="General" />
-    <toolBarFont value="Arial,12,-1,5,50,0,0,0,0,0" object="General" />
-    <menuFont value="Arial,12,-1,5,50,0,0,0,0,0" object="General" />
-    <activeFont value="Arial,12,-1,5,75,0,0,0,0,0" object="WM" />
-    <taskbarFont value="Arial,11,-1,5,50,0,0,0,0,0" object="General" />
+    <font value="Arial,12,-1,5,50,0,0,0,0" object="General" />
+    <fixed value="Courier New,10,-1,5,50,0,0,0,0" object="General" />
+    <toolBarFont value="Arial,12,-1,5,50,0,0,0,0" object="General" />
+    <menuFont value="Arial,12,-1,5,50,0,0,0,0" object="General" />
+    <activeFont value="Arial,12,-1,5,75,0,0,0,0" object="WM" />
+    <taskbarFont value="Arial,11,-1,5,50,0,0,0,0" object="General" />
     <StandardFont value="" object="FMSettings" />
   </fonts>
 </ktheme>

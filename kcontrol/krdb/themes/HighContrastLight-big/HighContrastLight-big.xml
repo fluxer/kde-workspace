@@ -147,12 +147,12 @@
   </panel>
   <widgets name="highcontrast" />
   <fonts>
-    <font value="Arial,24,-1,5,50,0,0,0,0,0" object="General" />
-    <fixed value="Courier New,20,-1,5,50,0,0,0,0,0" object="General" />
-    <toolBarFont value="Arial,24,-1,5,50,0,0,0,0,0" object="General" />
-    <menuFont value="Arial,24,-1,5,50,0,0,0,0,0" object="General" />
-    <activeFont value="Arial,24,-1,5,75,0,0,0,0,0" object="WM" />
-    <taskbarFont value="Arial,22,-1,5,50,0,0,0,0,0" object="General" />
-    <StandardFont value="helvetica,24,-1,5,50,0,0,0,0,0" object="FMSettings" />
+    <font value="Arial,24,-1,5,50,0,0,0,0" object="General" />
+    <fixed value="Courier New,20,-1,5,50,0,0,0,0" object="General" />
+    <toolBarFont value="Arial,24,-1,5,50,0,0,0,0" object="General" />
+    <menuFont value="Arial,24,-1,5,50,0,0,0,0" object="General" />
+    <activeFont value="Arial,24,-1,5,75,0,0,0,0" object="WM" />
+    <taskbarFont value="Arial,22,-1,5,50,0,0,0,0" object="General" />
+    <StandardFont value="helvetica,24,-1,5,50,0,0,0,0" object="FMSettings" />
   </fonts>
 </ktheme>

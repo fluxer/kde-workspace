@@ -2148,20 +2148,20 @@ Description:
 
 Key: GreetFont
 Type: string
-Default: "Serif,20,-1,5,50,0,0,0,0,0"
+Default: "Serif,20,-1,5,50,0,0,0,0"
 CDefault: "Serif 20pt bold"
 User: greeter:font
-Instance: #*/"Serif,20,-1,5,50,0,0,0,0,0"
+Instance: #*/"Serif,20,-1,5,50,0,0,0,0"
 Comment: &
 Description:
  The font for the greeter headline. The value is encoded.
 
 Key: StdFont
 Type: string
-Default: "Sans Serif,10,-1,5,50,0,0,0,0,0"
+Default: "Sans Serif,10,-1,5,50,0,0,0,0"
 CDefault: "Sans Serif 10pt"
 User: greeter(normalFont):font
-Instance: #*/"Sans Serif,10,-1,5,50,0,0,0,0,0"
+Instance: #*/"Sans Serif,10,-1,5,50,0,0,0,0"
 Comment: &
 Description:
  The normal font used in the greeter. The value is encoded.
