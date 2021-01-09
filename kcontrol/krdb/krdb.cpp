@@ -534,14 +534,13 @@ void runRdb( uint flags )
 
   tmpFile.flush();
 
-  QProcess proc;
   QStringList procargs;
 #ifndef NDEBUG
   procargs << "-merge" << tmpFile.fileName();
 #else
   procargs << "-quiet" << "-merge" << tmpFile.fileName();
 #endif
-  proc.execute("xrdb", procargs);
+  QProcess::execute("xrdb", procargs);
 
   applyGtkStyles(exportColors, 1);
   applyGtkStyles(exportColors, 2);
