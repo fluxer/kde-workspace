@@ -31,11 +31,8 @@ PolicyKitKDE::PolicyKitKDE()
     PolkitQt1::UnixSessionSubject session(getpid());
 
     bool result = m_listener->registerListener(session, "/org/kde/PolicyKit1/AuthenticationAgent");
-
-    kDebug() << result;
-
     if (!result) {
-        kDebug() << "Couldn't register listener!";
+        kWarning() << "Couldn't register listener!";
         exit(1);
     }
 }
