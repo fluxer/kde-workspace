@@ -19,7 +19,7 @@ target_link_libraries(processcore PUBLIC ${KDE4_KDECORE_LIBS} )
 if( ${CMAKE_SYSTEM_NAME} MATCHES "NetBSD" )
   message(STATUS "Adding kvm library on NetBSD")
   target_link_libraries(processcore PRIVATE kvm)
-endif( ${CMAKE_SYSTEM_NAME} MATCHES "NetBSD" )
+endif()
 
 set_target_properties(processcore PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS processcore EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
@@ -38,7 +38,11 @@ set(ksysguardprocesslist_helper_srcs
     processes_base_p.cpp)
 
 add_executable(ksysguardprocesslist_helper ${ksysguardprocesslist_helper_srcs})
-target_link_libraries(ksysguardprocesslist_helper ${KDE4_KDECORE_LIBS})
+target_link_libraries(ksysguardprocesslist_helper PUBLIC ${KDE4_KDECORE_LIBS})
+if( ${CMAKE_SYSTEM_NAME} MATCHES "NetBSD" )
+  message(STATUS "Adding kvm library on NetBSD")
+  target_link_libraries(ksysguardprocesslist_helper PRIVATE kvm)
+endif()
 install(TARGETS ksysguardprocesslist_helper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 kde4_install_auth_helper_files(ksysguardprocesslist_helper org.kde.ksysguard.processlisthelper root)

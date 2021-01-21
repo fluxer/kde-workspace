@@ -194,9 +194,9 @@ bool Processes::updateProcessInfo(Process *ps) {
     else
         success = d->mAbstractProcesses->updateProcessInfo(ps->pid, ps);
 
+#ifndef Q_OS_NETBSD
     //Now we have the process info.  Calculate the cpu usage and total cpu usage for itself and all its parents
     if(!d->mUsingHistoricalData && d->mElapsedTimeMilliSeconds != 0) {  //Update the user usage and sys usage
-#ifndef Q_OS_NETBSD
         /* The elapsed time is the d->mElapsedTimeMilliSeconds
          * (which is of the order 2 seconds or so) plus a small
          * correction where we get the amount of time elapsed since
@@ -209,7 +209,6 @@ bool Processes::updateProcessInfo(Process *ps) {
             ps->setUserUsage((int)(((ps->userTime - oldUserTime)*1000.0) / elapsedTime));
             ps->setSysUsage((int)(((ps->sysTime - oldSysTime)*1000.0) / elapsedTime));
         }
-#endif
         if(d->mUpdateFlags.testFlag(Processes::IOStatistics)) {
             if( d->mHavePreviousIoValues ) {
                 ps->setIoCharactersReadRate((ps->ioCharactersRead - oldIoCharactersRead) * 1000.0 / elapsedTime);
@@ -230,6 +229,7 @@ bool Processes::updateProcessInfo(Process *ps) {
             ps->setIoCharactersActuallyWrittenRate(0);
         }
     }
+#endif // !Q_OS_NETBSD
     if(d->mUsingHistoricalData || d->mElapsedTimeMilliSeconds != 0) {
         ps->setTotalUserUsage(ps->userUsage);
         ps->setTotalSysUsage(ps->sysUsage);

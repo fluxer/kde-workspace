@@ -32,7 +32,7 @@
 #include <unistd.h>
 /* Everything post 1.5.x uses uvm/uvm_* includes */
 #if __NetBSD_Version__ >= 105010000
-#include <uvm/uvm_param.h>
+#include <uvm/uvm_extern.h>
 #else
 #include <vm/vm_param.h>
 #endif
