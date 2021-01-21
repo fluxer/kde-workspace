@@ -83,7 +83,7 @@ KStart::KStart()
 
     //finally execute the comand
     if (proc) {
-        if( int pid = proc->startDetached(exe, exeArgs) ) {
+        if( qint64 pid = proc->startDetached(exe, exeArgs) ) {
             KStartupInfoData data;
             data.addPid( pid );
             data.setName( exe );
@@ -95,7 +95,7 @@ KStart::KStart()
     } else {
         QString error;
         QString dbusService;
-        int pid;
+        qint64 pid;
         if (KToolInvocation::startServiceByDesktopPath(exe, url, &error, &dbusService, &pid) == 0) {
             printf("%s\n", qPrintable(dbusService));
         } else {
