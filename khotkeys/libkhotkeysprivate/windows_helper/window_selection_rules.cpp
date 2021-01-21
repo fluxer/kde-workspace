@@ -91,7 +91,7 @@ bool Windowdef_simple::is_substr_match( const QString& str1_P, const QString& st
         case NOT_IMPORTANT :
           return true;
         case CONTAINS :
-          return str1_P.contains( str2_P ) > 0;
+          return str1_P.contains( str2_P );
         case IS :
           return str1_P == str2_P;
         case REGEXP :
@@ -100,7 +100,7 @@ bool Windowdef_simple::is_substr_match( const QString& str1_P, const QString& st
           return rg.indexIn( str1_P ) >= 0;
             }
         case CONTAINS_NOT :
-          return str1_P.contains( str2_P ) == 0;
+          return !str1_P.contains( str2_P );
         case IS_NOT :
           return str1_P != str2_P;
         case REGEXP_NOT :
