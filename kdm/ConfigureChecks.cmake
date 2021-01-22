@@ -44,7 +44,7 @@ if (PAM_FOUND)
     set(CMAKE_REQUIRED_LIBRARIES ${PAM_LIBRARIES})
     check_function_exists(pam_getenvlist HAVE_PAM_GETENVLIST)
 endif (PAM_FOUND)
-cmake_pop_check_state()
+cmake_reset_check_state()
 
 
 macro(define_library LIB FN)
@@ -98,7 +98,7 @@ int main()
     return errno != EACCES;
 }
 " HONORS_SOCKET_PERMS)
-cmake_pop_check_state()
+cmake_reset_check_state()
 
 # for genkdmconf; this is TODO
 #if (EXISTS /etc/ttys)
@@ -172,7 +172,7 @@ if (X11_Xdmcp_FOUND)
     cmake_reset_check_state()
     set(CMAKE_REQUIRED_LIBRARIES ${X11_LIBRARIES})
     check_function_exists(XdmcpWrap HASXDMAUTH)
-    cmake_pop_check_state()
+    cmake_reset_check_state()
 endif (X11_Xdmcp_FOUND)
 
 option(KDE4_KERBEROS4 "Compile KDM with Kerberos v4 support" OFF)
@@ -206,7 +206,7 @@ macro_bool_to_01(KDE4_KDM_XCONSOLE WITH_KDM_XCONSOLE)
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${NSL_LIBRARIES})
 check_function_exists(getifaddrs HAVE_GETIFADDRS)
-cmake_pop_check_state()
+cmake_reset_check_state()
 check_function_exists(getloadavg  HAVE_GETLOADAVG)
 check_function_exists(setproctitle HAVE_SETPROCTITLE)
 check_function_exists(strnlen     HAVE_STRNLEN)
