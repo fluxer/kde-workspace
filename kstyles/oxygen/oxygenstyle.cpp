@@ -54,7 +54,6 @@
 #include "oxygenmdiwindowshadow.h"
 #include "oxygenmnemonics.h"
 #include "oxygenshadowhelper.h"
-#include "oxygensplitterproxy.h"
 #include "oxygenstyleconfigdata.h"
 #include "oxygenwidgetexplorer.h"
 #include "oxygenwindowmanager.h"
@@ -172,7 +171,6 @@ namespace Oxygen
         _blurHelper( new BlurHelper( this, helper() ) ),
         _widgetExplorer( new WidgetExplorer( this ) ),
         _tabBarData( new TabBarData( this ) ),
-        _splitterFactory( new SplitterFactory( this ) ),
         _frameFocusPrimitive( 0 ),
         _tabBarTabShapeControl( 0 ),
         _hintCounter( X_KdeBase+1 ),
@@ -207,7 +205,6 @@ namespace Oxygen
         frameShadowFactory().registerWidget( widget, helper() );
         mdiWindowShadowFactory().registerWidget( widget );
         shadowHelper().registerWidget( widget );
-        splitterFactory().registerWidget( widget );
 
         // scroll areas
         if( QAbstractScrollArea* scrollArea = qobject_cast<QAbstractScrollArea*>( widget ) )
@@ -443,7 +440,6 @@ namespace Oxygen
         frameShadowFactory().unregisterWidget( widget );
         mdiWindowShadowFactory().unregisterWidget( widget );
         shadowHelper().unregisterWidget( widget );
-        splitterFactory().unregisterWidget( widget );
         blurHelper().unregisterWidget( widget );
 
         if( isKTextEditFrame( widget ) )
@@ -7398,9 +7394,6 @@ namespace Oxygen
         // widget explorer
         widgetExplorer().setEnabled( StyleConfigData::widgetExplorerEnabled() );
         widgetExplorer().setDrawWidgetRects( StyleConfigData::drawWidgetRects() );
-
-        // splitter proxy
-        splitterFactory().setEnabled( StyleConfigData::splitterProxyEnabled() );
 
         // scrollbar button dimentions.
         /* it has to be reinitialized here because scrollbar width might have changed */
