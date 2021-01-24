@@ -546,3 +546,5 @@ void LockWindow::paintEvent(QPaintEvent* )
 }
 
 }
+
+#include "moc_lockwindow.cpp"
