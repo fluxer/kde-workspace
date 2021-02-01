@@ -28,7 +28,7 @@
 #include "conf.h"
 #include "ksysguardd.h"
 
-#ifdef OSTYPE_Linux
+#if defined(OSTYPE_Linux) || defined(OSTYPE_GNU)
 #include "acpi.h"
 #include "apm.h"
 #include "cpuinfo.h"
@@ -45,7 +45,7 @@
 #include "stat.h"
 #include "softraid.h"
 #include "uptime.h"
-#endif /* OSTYPE_Linux */
+#endif /* OSTYPE_Linux || OSTYPE_GNU */
 
 #if defined(OSTYPE_FreeBSD) || defined(OSTYPE_DragonFly)
 #include <grp.h>
@@ -62,7 +62,7 @@
 #include "ProcessList.h"
 #include "stat.h"
 #include "uptime.h"
-#endif /* OSTYPE_FreeBSD */
+#endif /* OSTYPE_FreeBSD || OSTYPE_DragonFly */
 
 #ifdef OSTYPE_NetBSD
 #include <grp.h>
@@ -108,7 +108,7 @@ typedef int (*IVFunc)( void );
  * 6. available     - Used internally - set to 0 here
  * 7. timeCentiSeconds - Used internally - set to NULLTIME here */
 struct SensorModul SensorModulList[] = {
-#ifdef OSTYPE_Linux
+#if defined(OSTYPE_Linux) || defined(OSTYPE_GNU)
   { "Acpi", initAcpi, exitAcpi, updateAcpi, NULLVVFUNC, 0, NULLTIME },
   { "Apm", initApm, exitApm, updateApm, NULLVVFUNC, 0, NULLTIME },
   { "CpuInfo", initCpuInfo, exitCpuInfo, updateCpuInfo, NULLVVFUNC, 0, NULLTIME },
@@ -127,7 +127,7 @@ struct SensorModul SensorModulList[] = {
   { "Stat", initStat, exitStat, updateStat, NULLVVFUNC, 0, NULLTIME },
   { "SoftRaid", initSoftRaid, exitSoftRaid, updateSoftRaid, NULLVVFUNC, 0, NULLTIME },
   { "Uptime", initUptime, exitUptime, NULLIVFUNC, NULLVVFUNC, 0, NULLTIME },
-#endif /* OSTYPE_Linux */
+#endif /* OSTYPE_Linux || OSTYPE_GNU */
 
 #if defined OSTYPE_FreeBSD || defined OSTYPE_DragonFly
   { "Acpi", initACPI, exitACPI, updateACPI, NULLVVFUNC, 0, NULLTIME },

@@ -9,8 +9,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/CContLib/ )
 # into kde 3.x it was installed into /etc/
 add_definitions( -DKSYSGUARDDRCFILE="\\"${KDE4_SYSCONF_INSTALL_DIR}/ksysguarddrc\\"" )
 
-add_definitions(-DOSTYPE_${CMAKE_SYSTEM_NAME})
-
 macro_optional_find_package(Sensors)
 macro_bool_to_01(SENSORS_FOUND HAVE_LMSENSORS)
 
@@ -20,13 +18,20 @@ macro_bool_to_01(SYS_INOTIFY_H_FOUND HAVE_SYS_INOTIFY_H)
 
 configure_file(config-ksysguardd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksysguardd.h)
 
-if(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
+if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|GNU)")
+    add_definitions(-DOSTYPE_${CMAKE_SYSTEM_NAME})
+    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Linux)
+    include(Linux/Linux.cmake)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(FreeBSD|DragonFly)")
+    add_definitions(-DOSTYPE_${CMAKE_SYSTEM_NAME})
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/FreeBSD)
     include(FreeBSD/FreeBSD.cmake)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "(SunOS|Solaris)")
+    add_definitions(-DOSTYPE_Solaris)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/Solaris)
-    include(${CMAKE_SYSTEM_NAME}/Solaris.cmake)
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|NetBSD|OpenBSD)")
+    include(Solaris/Solaris.cmake)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "(NetBSD|OpenBSD")
+    add_definitions(-DOSTYPE_${CMAKE_SYSTEM_NAME})
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${CMAKE_SYSTEM_NAME})
     include(${CMAKE_SYSTEM_NAME}/${CMAKE_SYSTEM_NAME}.cmake)
 else()

@@ -30,9 +30,6 @@
 #include <time.h>
 #include <unistd.h>
 #include <sys/ptrace.h>
-#include <asm/unistd.h>
-
-
 
 #include "../../gui/SignalIDs.h"
 #include "Command.h"
@@ -50,7 +47,10 @@
 extern int sys_ioprio_set(int, int, int);
 extern int sys_ioprio_get(int, int);
 
+#ifndef __GNU__ // Hurd
+#include <asm/unistd.h>
 #define HAVE_IONICE
+#endif
 
 /* Check if this system has ionice */
 #if !defined(SYS_ioprio_get) || !defined(SYS_ioprio_set)
@@ -68,9 +68,7 @@ extern int sys_ioprio_get(int, int);
 #define __NR_ioprio_set         1274
 #define __NR_ioprio_get         1275
 #else
-#ifdef __GNUC__
 #warning "This architecture does not support IONICE.  Disabling ionice feature."
-#endif
 #undef HAVE_IONICE
 #endif
 /* Map these to SYS_ioprio_get */
