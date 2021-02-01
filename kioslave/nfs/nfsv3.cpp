@@ -55,10 +55,13 @@
 
 #include "nfsv3.h"
 
+#ifndef PATH_MAX
+# define PATH_MAX _POSIX_PATH_MAX
+#endif
+
 // This ioslave is for NFS version 3.
 #define NFSPROG 100003UL
 #define NFSVERS 3UL
-
 #define NFS3_MAXDATA    32768
 #define NFS3_MAXPATHLEN PATH_MAX
 

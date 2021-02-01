@@ -65,11 +65,7 @@ extern char **environ;
 #endif
 
 #ifndef PATH_MAX
-# ifdef MAXPATHLEN
-#  define PATH_MAX MAXPATHLEN
-# else
-#  define PATH_MAX 1024
-# endif
+# define PATH_MAX _POSIX_PATH_MAX
 #endif
 
 #include <sys/wait.h>
