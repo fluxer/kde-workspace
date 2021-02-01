@@ -60,6 +60,8 @@ QString SystemInformation::fetchOSBasicInformation() const
     //Get the base OS string (bugzillaOS)
 #if defined(Q_OS_LINUX)
     return QLatin1String("Linux");
+#elif defined(Q_OS_HURD)
+    return QLatin1String("Hurd");
 #elif defined(Q_OS_FREEBSD)
     return QLatin1String("FreeBSD");
 #elif defined(Q_OS_NETBSD)
@@ -71,7 +73,8 @@ QString SystemInformation::fetchOSBasicInformation() const
 #elif defined(Q_OS_SOLARIS)
     return QLatin1String("Solaris");
 #else
-    return OS_UNSPECIFIED;
+#warning fetchOSBasicInformation() not implemented
+    return QLatin1String("unspecified");
 #endif
 
 }
@@ -125,7 +128,7 @@ QString SystemInformation::fetchOSReleaseInformation() const
 
     // the PRETTY_NAME entry should be the most appropriate one,
     // but I could be wrong.
-    const QString prettyName = distroInfos.value("PRETTY_NAME", "Linux");
+    const QString prettyName = distroInfos.value("PRETTY_NAME", "unspecified");
     return prettyName;
 }
 
