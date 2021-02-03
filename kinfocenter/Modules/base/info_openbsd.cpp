@@ -117,7 +117,7 @@ void AddIRQLine(QTreeWidget* tree, QString s, void **opaque, bool ending) {
 		return;
 	}
 
-	pos = s.find(" irq ");
+	pos = s.indexOf(" irq ");
 	irqnum = (pos < 0) ? 0 : atoi(&p[pos+5]);
 	if (irqnum) {
 		s.sprintf("%02d%s", irqnum, p);
