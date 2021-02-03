@@ -207,7 +207,7 @@ fillProcessCmdline(char *cmdline, struct kinfo_proc *p, size_t maxlen)
 static int
 updateProcess(struct kinfo_proc *p)
 {
-    static const char * const statuses[] = { "idle","run","sleep","stop","zombie" };
+    static const char * const statuses[] = { "idle", "run", "sleep", "stop", "zombie", "dead", "onproc" };
     
     ProcessInfo* ps;
     struct passwd* pwent;
@@ -228,11 +228,10 @@ updateProcess(struct kinfo_proc *p)
     ps->uid       = p->p_uid;
     ps->gid       = p->p_gid;
     ps->priority  = p->p_priority;
-    ps->niceLevel = p->p_nice;
+    ps->niceLevel = p->p_nice - NZERO;
 
-    /* this isn't usertime -- it's total time (??) */
-    ps->userTime = p->p_uutime_sec*100+p->p_uutime_usec/100;
-    ps->sysTime  = 0;
+    ps->userTime = p->p_uutime_sec*100;
+    ps->sysTime  = p->p_ustime_sec*100;
     ps->sysLoad  = 0;
 
     /* memory, process name, process uid */
@@ -247,7 +246,7 @@ updateProcess(struct kinfo_proc *p)
                     p->p_vm_ssize) * getpagesize();
     ps->vmRss    = p->p_vm_rssize * getpagesize();
     strlcpy(ps->name,p->p_comm ? p->p_comm : "????", sizeof(ps->name));
-    strlcpy(ps->status,(p->p_stat>=1)&&(p->p_stat<=5)? statuses[p->p_stat-1]:"????", sizeof(ps->status));
+    strlcpy(ps->status,(p->p_stat>=1)&&(p->p_stat<=7)? statuses[p->p_stat-1]:"????", sizeof(ps->status));
 
     fillProcessCmdline(ps->cmdline, p, sizeof(ps->cmdline));
     /* process command line */

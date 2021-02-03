@@ -69,12 +69,11 @@ bool ProcessesLocal::Private::readProc(long pid, struct kinfo_proc *p)
 
 void ProcessesLocal::Private::readProcStatus(struct kinfo_proc *p, Process *process)
 {
-    process->setUid(0);
-    process->setGid(0);
-    process->setTracerpid(-1);
-
-    process->setUid(p->p_uid);
-    process->setGid(p->p_gid);
+    process->setUid(p->p_ruid);
+    process->setEuid(p->p_uid);
+    process->setSuid(p->p_sid);
+    process->setGid(p->p_rgid);
+    process->setEgid(p->p_gid);
     process->setName(QString(p->p_comm));
 }
 
@@ -82,18 +81,22 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
 {
     // TODO: verify
     int status;
-    ps->setUserTime(p->p_uutime_sec / 100);
-    ps->setSysTime(p->p_ustime_sec / 100);
+    int pagesize = getpagesize();
+    ps->setUserTime(p->p_uutime_sec * 100);
+    ps->setSysTime(p->p_ustime_sec * 100);
     ps->setNiceLevel(p->p_nice - NZERO);
-    ps->setVmRSS(p->p_vm_rssize * getpagesize() / 1024);
+    ps->setUserUsage(p->p_pctcpu / 100);
+    ps->setVmSize((p->p_vm_tsize + p->p_vm_dsize + p->p_vm_ssize + p->p_vm_rssize) * pagesize / 1024);
+    ps->setVmRSS(p->p_vm_rssize * pagesize / 1024);
     status = p->p_stat;
 
-// "idle","run","sleep","stop","zombie"
+    // "idle", "run", "sleep", "stop", "zombie", "dead", "onproc"
     switch( status ) {
         case SIDL:
             ps->setStatus(Process::DiskSleep);
             break;
         case SRUN:
+        case SONPROC:
             ps->setStatus(Process::Running);
             break;
         case SSLEEP:
@@ -104,6 +107,9 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
             break;
         case SZOMB:
             ps->setStatus(Process::Zombie);
+            break;
+        case SDEAD:
+            ps->setStatus(Process::Ended);
             break;
         default:
             ps->setStatus(Process::OtherStatus);
@@ -121,22 +127,26 @@ void ProcessesLocal::Private::readProcStatm(struct kinfo_proc *p, Process *proce
 bool ProcessesLocal::Private::readProcCmdline(long pid, Process *process)
 {
     int mib[4];
-    struct kinfo_proc p;
-    size_t buflen = 256;
-    char buf[256];
+    size_t buflen = 4096;
+    char buf[4096];
 
     mib[0] = CTL_KERN;
-    mib[1] = KERN_PROC;
-    mib[2] = KERN_PROC_ARGS;
-    mib[3] = pid;
+    mib[1] = KERN_PROC_ARGS;
+    mib[2] = pid;
+    mib[3] = KERN_PROC_ARGV;
 
-    // TODO: fails with invalid argument
-    if (sysctl(mib, 4, buf, &buflen, NULL, 0) == -1 || !buflen)
+    if (sysctl(mib, 4, buf, &buflen, NULL, 0) == -1 || !buflen) {
         return false;
-    QString command = QString(buf);
+    }
 
-    //cmdline seperates parameters with the NULL character
-    command.replace('\0', ' ');
+    QString command;
+    char **procargv = (char**) buf;
+    for (int i = 0; procargv[i] != NULL; i++) {
+        if (i != 0) {
+            command.append(QLatin1Char(' '));
+        }
+        command.append(procargv[i]);
+    }
     process->setCommand(command.trimmed());
 
     return true;
@@ -144,12 +154,12 @@ bool ProcessesLocal::Private::readProcCmdline(long pid, Process *process)
 
 ProcessesLocal::ProcessesLocal() : d(new Private())
 {
-
 }
 
-long ProcessesLocal::getParentPid(long pid) {
+long ProcessesLocal::getParentPid(long pid)
+{
     Q_ASSERT(pid != 0);
-    long long ppid = -1;
+    long ppid = -1;
     struct kinfo_proc p;
     if(d->readProc(pid, &p)) {
         ppid = p.p_ppid;
@@ -202,17 +212,19 @@ QSet<long> ProcessesLocal::getAllPids( )
     return pids;
 }
 
-bool ProcessesLocal::sendSignal(long pid, int sig) {
+bool ProcessesLocal::sendSignal(long pid, int sig)
+{
     if ( kill( (pid_t)pid, sig ) ) {
-        //Kill failed
+        // Kill failed
         return false;
     }
     return true;
 }
 
-bool ProcessesLocal::setNiceness(long pid, int priority) {
+bool ProcessesLocal::setNiceness(long pid, int priority)
+{
     if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
-        //set niceness failed
+        // set niceness failed
         return false;
     }
     return true;
@@ -220,25 +232,46 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
 
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
-    if(priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
+    if (priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
         priority = 0;
-    if(pid <= 0) return false; // check the parameters
+    if (pid <= 0) return false; // check the parameters
         return false;
+    // not supported by OpenBSD yet (last checked on 6.8)
+#if 0
+    struct sched_param params;
+    params.sched_priority = priority;
+    switch(priorityClass) {
+      case (KSysGuard::Process::Other):
+            return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
+      case (KSysGuard::Process::RoundRobin):
+            return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
+      case (KSysGuard::Process::Fifo):
+            return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
+#ifdef SCHED_BATCH
+      case (KSysGuard::Process::Batch):
+            return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
+#endif
+      default:
+            return false;
+    }
+#else
+    return false;
+#endif
 }
 
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority) {
-    return false; //Not yet supported
+bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority)
+{
+    return false; // Not yet supported
 }
 
 bool ProcessesLocal::supportsIoNiceness() {
     return false;
 }
 
-long long ProcessesLocal::totalPhysicalMemory() {
-
+long long ProcessesLocal::totalPhysicalMemory()
+{
     static int physmem_mib[] = { CTL_HW, HW_PHYSMEM };
-    /* get the page size with "getpagesize" and calculate pageshift from
-    * it */
+    /* get the page size with "getpagesize" and calculate pageshift from it */
     int pagesize = ::getpagesize();
     int pageshift = 0;
     while (pagesize > 1) {

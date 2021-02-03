@@ -87,7 +87,7 @@ exitMemory(void)
 int
 updateMemory(void)
 {
-    static int vmtotal_mib[] = {CTL_VM, VM_METER};
+    static int vmtotal_mib[] = { CTL_VM, VM_METER };
     size_t size;
     struct vmtotal vmtotal;
     size = sizeof(vmtotal);
