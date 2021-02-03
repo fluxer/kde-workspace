@@ -83,25 +83,24 @@ void ProcessesLocal::Private::readProcStatus(struct kinfo_proc *p, Process *proc
 void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
 {
     int status;
-    struct rusage pru;
 
-        ps->setUserTime(p->ki_rusage.ru_utime.tv_sec * 100 + p->ki_rusage.ru_utime.tv_usec / 10000);
-        ps->setSysTime(p->ki_rusage.ru_stime.tv_sec * 100 + p->ki_rusage.ru_stime.tv_usec / 10000);
-        ps->setNiceLevel(p->ki_nice);
-        ps->setVmSize(p->ki_size / 1024);
-        ps->setVmRSS(p->ki_rssize * getpagesize() / 1024);
-        status = p->ki_stat;
+    ps->setUserTime(p->ki_rusage.ru_utime.tv_sec * 100 + p->ki_rusage.ru_utime.tv_usec / 10000);
+    ps->setSysTime(p->ki_rusage.ru_stime.tv_sec * 100 + p->ki_rusage.ru_stime.tv_usec / 10000);
+    ps->setNiceLevel(p->ki_nice);
+    ps->setVmSize(p->ki_size / 1024);
+    ps->setVmRSS(p->ki_rssize * getpagesize() / 1024);
+    status = p->ki_stat;
 
 // "idle","run","sleep","stop","zombie"
     switch( status ) {
       case SRUN:
          ps->setStatus(Process::Running);
-	 break;
+        break;
       case SSLEEP:
       case SWAIT:
       case SLOCK:
          ps->setStatus(Process::Sleeping);
-	 break;
+        break;
       case SSTOP:
          ps->setStatus(Process::Stopped);
          break;
@@ -185,7 +184,7 @@ QSet<long> ProcessesLocal::getAllPids( )
     if ((p = (kinfo_proc *) malloc(len)) == NULL)
         return pids;
     if (sysctl(mib, 3, p, &len, NULL, 0) == -1) {
-	free(p);
+        free(p);
         return pids;
     }
 
@@ -205,7 +204,7 @@ QSet<long> ProcessesLocal::getAllPids( )
 
 bool ProcessesLocal::sendSignal(long pid, int sig) {
     if ( kill( (pid_t)pid, sig ) ) {
-	//Kill failed
+        //Kill failed
         return false;
     }
     return true;
@@ -213,8 +212,8 @@ bool ProcessesLocal::sendSignal(long pid, int sig) {
 
 bool ProcessesLocal::setNiceness(long pid, int priority) {
     if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
-	    //set niceness failed
-	    return false;
+        //set niceness failed
+        return false;
     }
     return true;
 }
@@ -222,23 +221,23 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
     if(priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
-	    priority = 0;
+        priority = 0;
     if(pid <= 0) return false; // check the parameters
     struct sched_param params;
     params.sched_priority = priority;
     switch(priorityClass) {
-      case (KSysGuard::Process::Other):
-	    return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
-      case (KSysGuard::Process::RoundRobin):
-	    return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
-      case (KSysGuard::Process::Fifo):
-	    return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
+        case (KSysGuard::Process::Other):
+            return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
+        case (KSysGuard::Process::RoundRobin):
+            return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
+        case (KSysGuard::Process::Fifo):
+            return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
 #ifdef SCHED_BATCH
-      case (KSysGuard::Process::Batch):
-	    return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
+        case (KSysGuard::Process::Batch):
+            return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
 #endif
-      default:
-	    return false;
+        default:
+            return false;
     }
 }
 

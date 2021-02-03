@@ -29,44 +29,40 @@
 #include <sys/types.h>
 #include <sys/user.h>
 #include <sys/resource.h>
-#if defined(Q_OS_DRAGONFLY)
-#include <sys/resourcevar.h>
-#include <err.h>
-#endif
+#include <sys/proc.h>
 #include <signal.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-
-
-
 namespace KSysGuard
 {
 
-  class ProcessesLocal::Private
-  {
-    public:
-      Private() {;}
-      ~Private() {;}
-      inline bool readProc(long pid, struct kinfo_proc *p);
-      inline void readProcStatus(struct kinfo_proc *p, Process *process);
-      inline void readProcStat(struct kinfo_proc *p, Process *process);
-      inline void readProcStatm(struct kinfo_proc *p, Process *process);
-      inline bool readProcCmdline(long pid, Process *process);
-    };
+class ProcessesLocal::Private
+{
+public:
+    Private() {;}
+    ~Private() {;}
+    inline bool readProc(long pid, struct kinfo_proc *p);
+    inline void readProcStatus(struct kinfo_proc *p, Process *process);
+    inline void readProcStat(struct kinfo_proc *p, Process *process);
+    inline void readProcStatm(struct kinfo_proc *p, Process *process);
+    inline bool readProcCmdline(long pid, Process *process);
+};
 
 bool ProcessesLocal::Private::readProc(long pid, struct kinfo_proc *p)
 {
-    int mib[4];
+    int mib[6];
     size_t len;
 
     mib[0] = CTL_KERN;
     mib[1] = KERN_PROC;
     mib[2] = KERN_PROC_PID;
     mib[3] = pid;
+    mib[4] = sizeof(struct kinfo_proc);
+    mib[5] = 1;
 
-    len = sizeof (struct kinfo_proc);
-    if (sysctl(mib, 4, p, &len, NULL, 0) == -1 || !len)
+    len = sizeof(struct kinfo_proc);
+    if (sysctl(mib, 6, p, &len, NULL, 0) == -1 || !len)
         return false;
     return true;
 }
@@ -77,78 +73,49 @@ void ProcessesLocal::Private::readProcStatus(struct kinfo_proc *p, Process *proc
     process->setGid(0);
     process->setTracerpid(-1);
 
-
-#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
-    process->setUid(p->ki_uid);
-    process->setGid(p->ki_pgid);
-    process->setName(QString(p->ki_comm ? p->ki_comm : "????"));
-#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
-    process->setUid(p->kp_uid);
-    process->setGid(p->kp_pgid);
-    process->setName(QString(p->kp_comm ? p->kp_comm : "????"));
-#else
-    process->setUid(p->kp_eproc.e_ucred.cr_uid);
-    process->setGid(p->kp_eproc.e_pgid);
-#endif
+    process->setUid(p->p_uid);
+    process->setGid(p->p_gid);
+    process->setName(QString(p->p_comm));
 }
 
 void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
 {
+    // TODO: verify
     int status;
-    struct rusage pru;
-#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
-        ps->setUserTime(p->ki_runtime / 10000);
-        ps->setNiceLevel(p->ki_nice);
-        ps->setVmSize(p->ki_size);
-        ps->setVmRSS(p->ki_rssize * getpagesize());
-        status = p->ki_stat;
-#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
-        if (!getrusage(p->kp_pid, &pru)) {
-            errx(1, "failed to get rusage info");
-        }
-        ps->setUserTime(pru.ru_utime.tv_usec / 1000); /*p_runtime / 1000*/
-        ps->setNiceLevel(p->kp_nice);
-        ps->setVmSize(p->kp_vm_map_size);
-        ps->setVmRSS(p->kp_vm_rssize * getpagesize());
-        status = p->kp_stat;
-#else
-        ps->setUserTime(p->kp_proc.p_rtime.tv_sec*100+p->kp_proc.p_rtime.tv_usec/100);
-        ps->setNiceLevel(p->kp_proc.p_nice);
-        ps->setVmSize(p->kp_eproc.e_vm.vm_map.size);
-        ps->setVmRSS(p->kp_eproc.e_vm.vm_rssize * getpagesize());
-        status = p->kp_proc.p_stat;
-#endif
-        ps->setSysTime(0);
+    ps->setUserTime(p->p_uutime_sec / 100);
+    ps->setSysTime(p->p_ustime_sec / 100);
+    ps->setNiceLevel(p->p_nice - NZERO);
+    ps->setVmRSS(p->p_vm_rssize * getpagesize() / 1024);
+    status = p->p_stat;
 
 // "idle","run","sleep","stop","zombie"
     switch( status ) {
-      case '0':
-        ps->setStatus(Process::DiskSleep);
-	break;
-      case '1':
-        ps->setStatus(Process::Running);
-	break;
-      case '2':
-        ps->setStatus(Process::Sleeping);
-	break;
-      case '3':
-        ps->setStatus(Process::Stopped);
-	break;
-      case '4':
-         ps->setStatus(Process::Zombie);
-         break;
-      default:
-         ps->setStatus(Process::OtherStatus);
-         break;
+        case SIDL:
+            ps->setStatus(Process::DiskSleep);
+            break;
+        case SRUN:
+            ps->setStatus(Process::Running);
+            break;
+        case SSLEEP:
+            ps->setStatus(Process::Sleeping);
+            break;
+        case SSTOP:
+            ps->setStatus(Process::Stopped);
+            break;
+        case SZOMB:
+            ps->setStatus(Process::Zombie);
+            break;
+        default:
+            ps->setStatus(Process::OtherStatus);
+            break;
     }
 }
 
 void ProcessesLocal::Private::readProcStatm(struct kinfo_proc *p, Process *process)
 {
-// TODO
-
-//     unsigned long shared;
-//     process->setVmURSS(process->vmRSS - (shared * sysconf(_SC_PAGESIZE) / 1024));
+    // TODO: verify
+    unsigned long shared = p->p_vm_tsize + p->p_vm_dsize + p->p_vm_ssize;
+    process->setVmURSS(process->vmRSS - (shared * getpagesize() / 1024));
 }
 
 bool ProcessesLocal::Private::readProcCmdline(long pid, Process *process)
@@ -163,6 +130,7 @@ bool ProcessesLocal::Private::readProcCmdline(long pid, Process *process)
     mib[2] = KERN_PROC_ARGS;
     mib[3] = pid;
 
+    // TODO: fails with invalid argument
     if (sysctl(mib, 4, buf, &buflen, NULL, 0) == -1 || !buflen)
         return false;
     QString command = QString(buf);
@@ -183,15 +151,8 @@ long ProcessesLocal::getParentPid(long pid) {
     Q_ASSERT(pid != 0);
     long long ppid = -1;
     struct kinfo_proc p;
-    if(d->readProc(pid, &p))
-    {
-#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
-        ppid = p.ki_ppid;
-#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
-        ppid = p.kp_ppid;
-#else
-        ppid = p.kp_eproc.e_ppid;
-#endif
+    if(d->readProc(pid, &p)) {
+        ppid = p.p_ppid;
     }
     return ppid;
 }
@@ -199,11 +160,13 @@ long ProcessesLocal::getParentPid(long pid) {
 bool ProcessesLocal::updateProcessInfo( long pid, Process *process)
 {
     struct kinfo_proc p;
-    if(!d->readProc(pid, &p)) return false;
+    if(!d->readProc(pid, &p))
+        return false;
     d->readProcStat(&p, process);
     d->readProcStatus(&p, process);
     d->readProcStatm(&p, process);
-    if(!d->readProcCmdline(pid, process)) return false;
+    if(!d->readProcCmdline(pid, process))
+        return false;
 
     return true;
 }
@@ -211,7 +174,7 @@ bool ProcessesLocal::updateProcessInfo( long pid, Process *process)
 QSet<long> ProcessesLocal::getAllPids( )
 {
     QSet<long> pids;
-    int mib[3];
+    int mib[6];
     size_t len;
     size_t num;
     struct kinfo_proc *p;
@@ -219,25 +182,29 @@ QSet<long> ProcessesLocal::getAllPids( )
     mib[0] = CTL_KERN;
     mib[1] = KERN_PROC;
     mib[2] = KERN_PROC_ALL;
-    sysctl(mib, 3, NULL, &len, NULL, 0);
+    mib[3] = 0;
+    mib[4] = sizeof(struct kinfo_proc);
+    mib[5] = 0;
+    if (sysctl(mib, 6, NULL, &len, NULL, 0) == -1 || !len) {
+        return pids;
+    }
     p = (kinfo_proc *) malloc(len);
-    sysctl(mib, 3, p, &len, NULL, 0);
+    mib[5] = len / sizeof(struct kinfo_proc);
+    if (sysctl(mib, 6, p, &len, NULL, 0) == -1) {
+        free(p);
+        return pids;
+    }
 
-    for (num = 0; num < len / sizeof(struct kinfo_proc); num++)
-#if defined(Q_OS_FREEBSD) && __FreeBSD_version >= 500015
-        pids.insert(p[num].ki_pid);
-#elif defined(Q_OS_DRAGONFLY) && __DragonFly_version >= 190000
-        pids.insert(p[num].kp_pid);
-#else
-        pids.insert(p[num].kp_proc.p_pid);
-#endif
+    for (num = 0; num < len / sizeof(struct kinfo_proc); num++) {
+        pids.insert(p[num].p_pid);
+    }
     free(p);
     return pids;
 }
 
 bool ProcessesLocal::sendSignal(long pid, int sig) {
     if ( kill( (pid_t)pid, sig ) ) {
-	//Kill failed
+        //Kill failed
         return false;
     }
     return true;
@@ -245,8 +212,8 @@ bool ProcessesLocal::sendSignal(long pid, int sig) {
 
 bool ProcessesLocal::setNiceness(long pid, int priority) {
     if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
-	    //set niceness failed
-	    return false;
+        //set niceness failed
+        return false;
     }
     return true;
 }
@@ -254,9 +221,9 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
     if(priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
-	    priority = 0;
+        priority = 0;
     if(pid <= 0) return false; // check the parameters
-	    return false;
+        return false;
 }
 
 bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority) {
@@ -275,8 +242,8 @@ long long ProcessesLocal::totalPhysicalMemory() {
     int pagesize = ::getpagesize();
     int pageshift = 0;
     while (pagesize > 1) {
-	    pageshift++;
-	    pagesize >>= 1;
+        pageshift++;
+        pagesize >>= 1;
     }
     size_t Total = 0;
     size_t size = sizeof(Total);
@@ -284,6 +251,7 @@ long long ProcessesLocal::totalPhysicalMemory() {
     return Total /= 1024;
 }
 
+#ifndef _SC_NPROCESSORS_ONLN
 long int KSysGuard::ProcessesLocal::numberProcessorCores()
 {
     int mib[2];
@@ -298,6 +266,8 @@ long int KSysGuard::ProcessesLocal::numberProcessorCores()
         return 1;
     return len;
 }
+#endif
+
 ProcessesLocal::~ProcessesLocal()
 {
    delete d;

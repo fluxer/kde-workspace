@@ -33,6 +33,7 @@
 #include <sys/resource.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h>
 
 #include "../../gui/SignalIDs.h"
 #include "Command.h"
@@ -155,7 +156,7 @@ findProcessInList(int pid)
 }
 
 static void
-fillProcessCmdline(char *cmdline, struct kinfo_proc2 *p, size_t maxlen)
+fillProcessCmdline(char *cmdline, struct kinfo_proc *p, size_t maxlen)
 {
 	int mib[4];
 	int ret = -1;
@@ -204,7 +205,7 @@ fillProcessCmdline(char *cmdline, struct kinfo_proc2 *p, size_t maxlen)
 }
 
 static int
-updateProcess(struct kinfo_proc2 *p)
+updateProcess(struct kinfo_proc *p)
 {
 	static const char * const statuses[] = { "idle","run","sleep","stop","zombie" };
 	
@@ -231,7 +232,7 @@ updateProcess(struct kinfo_proc2 *p)
         ps->niceLevel = p->p_nice;
 
         /* this isn't usertime -- it's total time (??) */
-	ps->userTime = p->p_uutime_sec*100+p->p_uutime_usec/100;
+        ps->userTime = p->p_uutime_sec*100+p->p_uutime_usec/100;
         ps->sysTime  = 0;
         ps->sysLoad  = 0;
 
@@ -317,31 +318,31 @@ updateProcessList(void)
         int mib[6];
         size_t len;
         size_t num;
-        struct kinfo_proc2 *p;
+        struct kinfo_proc *p;
 
 
         mib[0] = CTL_KERN;
-        mib[1] = KERN_PROC2;
+        mib[1] = KERN_PROC;
         mib[2] = KERN_PROC_ALL;
-	mib[3] = 0;
-	mib[4] = sizeof(struct kinfo_proc2);
-	mib[5] = 0;
+        mib[3] = 0;
+        mib[4] = sizeof(struct kinfo_proc);
+        mib[5] = 0;
         if (sysctl(mib, 6, NULL, &len, NULL, 0) == -1)
-		return 0;
-	len = 5 * len / 4;
-	p = malloc(len);
-	if (!p)
-		return 0;
-	mib[5] = len/ sizeof(struct kinfo_proc2);
+            return 0;
+        len = 5 * len / 4;
+        p = malloc(len);
+        if (!p)
+            return 0;
+        mib[5] = len/ sizeof(struct kinfo_proc);
         if (sysctl(mib, 6, p, &len, NULL, 0) == -1)
-		return 0;
+            return 0;
 
-	for (num = 0; num < len / sizeof(struct kinfo_proc2); num++)
-		updateProcess(&p[num]);
-	free(p);
-	cleanupProcessList();
+        for (num = 0; num < len / sizeof(struct kinfo_proc); num++)
+            updateProcess(&p[num]);
+        free(p);
+        cleanupProcessList();
 
-	return (0);
+        return (0);
 }
 
 void
