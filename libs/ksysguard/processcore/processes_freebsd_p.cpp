@@ -91,25 +91,25 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
     ps->setVmRSS(p->ki_rssize * getpagesize() / 1024);
     status = p->ki_stat;
 
-// "idle","run","sleep","stop","zombie"
+    // "idle","run","sleep","stop","zombie"
     switch( status ) {
-      case SRUN:
-         ps->setStatus(Process::Running);
-        break;
-      case SSLEEP:
-      case SWAIT:
-      case SLOCK:
-         ps->setStatus(Process::Sleeping);
-        break;
-      case SSTOP:
-         ps->setStatus(Process::Stopped);
-         break;
-      case SZOMB:
-         ps->setStatus(Process::Zombie);
-         break;
-      default:
-         ps->setStatus(Process::OtherStatus);
-         break;
+        case SRUN:
+            ps->setStatus(Process::Running);
+            break;
+        case SSLEEP:
+        case SWAIT:
+        case SLOCK:
+            ps->setStatus(Process::Sleeping);
+            break;
+        case SSTOP:
+            ps->setStatus(Process::Stopped);
+            break;
+        case SZOMB:
+            ps->setStatus(Process::Zombie);
+            break;
+        default:
+            ps->setStatus(Process::OtherStatus);
+            break;
     }
 }
 
@@ -149,8 +149,7 @@ ProcessesLocal::ProcessesLocal() : d(new Private())
 long ProcessesLocal::getParentPid(long pid) {
     long long ppid = 0;
     struct kinfo_proc p;
-    if(d->readProc(pid, &p))
-    {
+    if(d->readProc(pid, &p)) {
         ppid = p.ki_ppid;
     }
     return ppid;
