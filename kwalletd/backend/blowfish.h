@@ -53,8 +53,8 @@ class KWALLETBACKEND_EXPORT BlowFish : public BlockCipher {
 		virtual int decrypt(void *block, int len);
 
 	private:
-		uint32_t _S[4][256];
-		uint32_t _P[18];
+		uint32_t _BF_S[4][256];
+		uint32_t _BF_P[18];
 
 		void *_key;
 		int _keylen;  // in bits
