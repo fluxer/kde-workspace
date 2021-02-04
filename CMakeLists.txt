@@ -1,8 +1,5 @@
 project(kde-workspace)
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
-
 include(CheckIncludeFiles)
 include(CheckFunctionExists)
 include(GenerateExportHeader)
@@ -315,17 +312,6 @@ install(
     ${CMAKE_BINARY_DIR}/KDE4WorkspaceConfig.cmake
     ${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules
-)
-
-# run a script before installing the exports files which deletes previously
-# installed configuration specific export files, if the main exports file has
-# changed this makes sure it doesn't include older and different configuration
-# specific exports files, which might have a different set of targets or
-# targets with different names.
-install(
-    CODE "set(EXPORT_FILES KDE4WorkspaceLibraryTargets.cmake)"
-    CODE "set(EXPORT_INSTALL_DIR \"${KDE4_DATA_INSTALL_DIR}/cmake/modules\")"
-    SCRIPT "${CMAKE_SOURCE_DIR}/cmake/modules/check_installed_exports_file.cmake"
 )
 
 install(
