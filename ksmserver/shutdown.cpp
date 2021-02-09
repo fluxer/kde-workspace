@@ -610,9 +610,10 @@ void KSMServer::createLogoutEffectWidget()
 //#if !(QT_VERSION >= QT_VERSION_CHECK(4, 3, 3) || defined(QT_KDE_QT_COPY))
 // Qt doesn't set this on unmanaged windows
     QByteArray appName = QApplication::applicationName().toLatin1();
+    QByteArray appClass = QX11Info::appClass();
     XClassHint class_hint;
     class_hint.res_name = appName.data(); // application name
-    class_hint.res_class = const_cast<char *>(QX11Info::appClass());   // application class
+    class_hint.res_class = appClass.data();   // application class
     XSetWMProperties( QX11Info::display(), logoutEffectWidget->winId(),
         NULL, NULL, NULL, 0, NULL, NULL, &class_hint );
     XChangeProperty( QX11Info::display(), logoutEffectWidget->winId(),
