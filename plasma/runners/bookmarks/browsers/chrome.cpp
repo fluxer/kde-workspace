@@ -22,18 +22,13 @@
 #include <QFileInfo>
 #include <QFileInfo>
 #include <QDir>
+#include <QJsonDocument>
 #include <KDebug>
 
 #include "chrome.h"
 #include "faviconfromblob.h"
 #include "browsers/findprofile.h"
 #include "bookmarksrunner_defs.h"
-
-#ifndef QT_KATIE
-#  include <qjson/parser.h>
-#else
-#  include <QJsonDocument>
-#endif
 
 class ProfileBookmarks {
 public:
@@ -92,20 +87,11 @@ void Chrome::prepare()
             return;
         }
 
-#ifndef QT_KATIE
-        QJson::Parser parser;
-        bool ok;
-        QVariant result = parser.parse(&bookmarksFile, &ok);
-        if(!ok || !result.toMap().contains("roots")) {
+        QJsonDocument jsondoc = QJsonDocument::fromJson(bookmarksFile.readAll());
+        QVariant result = jsondoc.toVariant();
+        if(jsondoc.isNull() || !result.toMap().contains("roots")) {
             return;
         }
-#else
-        QJsonParseError error;
-        QVariant result = QJsonDocument::fromJson(bookmarksFile.readAll(), &error).toVariant();
-        if(error.error != QJsonParseError::NoError || !result.toMap().contains("roots")) {
-            return;
-        }
-#endif
         QVariantMap entries = result.toMap().value("roots").toMap();
         foreach(QVariant folder, entries.values()) {
             parseFolder(folder.toMap(), profileBookmarks);

@@ -22,18 +22,13 @@
 #include <QDir>
 #include <QVariant>
 #include <QFileInfo>
+#include <QJsonDocument>
 #include <KDebug>
 
 #include "chromefindprofile.h"
 #include "bookmarksrunner_defs.h"
 #include "faviconfromblob.h"
 
-#ifndef QT_KATIE
-#  include <qjson/parser.h>
-#else
-#  include <QJsonDocument>
-#  include <QJsonObject>
-#endif
 
 FindChromeProfile::FindChromeProfile (const QString &applicationName, const QString &homeDirectory, QObject* parent )
     : QObject(parent), m_applicationName(applicationName), m_homeDirectory(homeDirectory)
@@ -54,24 +49,13 @@ QList<Profile> FindChromeProfile::find()
       return profiles;
   }
 
-#ifndef QT_KATIE
-  QJson::Parser parser;
-  bool ok;
-
-  QVariantMap localState = parser.parse(&localStateFile, &ok).toMap();
-  if(!ok) {
+  QJsonDocument jsondoc = QJsonDocument::fromJson(localStateFile.readAll());
+  if(jsondoc.isNull()) {
       kDebug(kdbg_code) << "error opening " << QFileInfo(localStateFile).absoluteFilePath();
       return profiles;
   }
-#else
-  QJsonParseError error;
-  QVariantMap localState = QJsonDocument::fromJson(localStateFile.readAll(), &error).object().toVariantMap();
-  if(error.error != QJsonParseError::NoError) {
-      kDebug(kdbg_code) << "error opening " << QFileInfo(localStateFile).absoluteFilePath();
-      return profiles;
-  }
-#endif
 
+  QVariantMap localState = jsondoc.toVariant().toMap();
   QVariantMap profilesConfig = localState.value("profile").toMap().value("info_cache").toMap();
 
   foreach(QString profile, profilesConfig.keys()) {
