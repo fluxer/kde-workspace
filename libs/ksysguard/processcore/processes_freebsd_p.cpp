@@ -121,7 +121,6 @@ void ProcessesLocal::Private::readProcStatm(struct kinfo_proc *p, Process *proce
 bool ProcessesLocal::Private::readProcCmdline(long pid, Process *process)
 {
     int mib[4];
-    struct kinfo_proc p;
     size_t buflen = 256;
     char buf[256];
 

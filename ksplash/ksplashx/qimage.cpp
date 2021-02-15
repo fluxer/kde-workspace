@@ -1386,13 +1386,13 @@ struct QRgbMap {
 
 static bool convert_32_to_8( const QImage *src, QImage *dst, int conversion_flags, QRgb* palette=0, int palette_count=0 )
 {
-    register QRgb *p;
+    QRgb *p;
     uchar  *b;
     bool    do_quant = false;
     int	    y, x;
 
     if ( !dst->create(src->width(), src->height(), 8, 256) )
-	return false;
+        return false;
 
     const int tablesize = 997; // prime
     QRgbMap table[tablesize];
@@ -1696,7 +1696,7 @@ static bool convert_8_to_32( const QImage *src, QImage *dst )
 	return false;				// create failed
     dst->setAlphaBuffer( src->hasAlphaBuffer() );
     for ( int y=0; y<dst->height(); y++ ) {	// for each scan line...
-	register uint *p = (uint *)dst->scanLine(y);
+	uint *p = (uint *)dst->scanLine(y);
 	uchar  *b = src->scanLine(y);
 	uint *end = p + dst->width();
 	while ( p < end )
@@ -1709,10 +1709,10 @@ static bool convert_8_to_32( const QImage *src, QImage *dst )
 static bool convert_1_to_32( const QImage *src, QImage *dst )
 {
     if ( !dst->create(src->width(), src->height(), 32) )
-	return false;				// could not create
+        return false; // could not create
     dst->setAlphaBuffer( src->hasAlphaBuffer() );
     for ( int y=0; y<dst->height(); y++ ) {	// for each scan line...
-	register uint *p = (uint *)dst->scanLine(y);
+	uint *p = (uint *)dst->scanLine(y);
 	uchar *b = src->scanLine(y);
 	int x;
 	if ( src->bitOrder() == QImage::BigEndian ) {
@@ -1750,7 +1750,7 @@ static bool convert_1_to_8( const QImage *src, QImage *dst )
 	dst->setColor( 1, 0xff000000 );
     }
     for ( int y=0; y<dst->height(); y++ ) {	// for each scan line...
-	register uchar *p = dst->scanLine(y);
+	uchar *p = dst->scanLine(y);
 	uchar *b = src->scanLine(y);
 	int x;
 	if ( src->bitOrder() == QImage::BigEndian ) {
@@ -1827,7 +1827,7 @@ static bool dither_to_1( const QImage *src, QImage *dst,
 	int bmwidth = (w+7)/8;
 	if ( !(line1 && line2) )
 	    return false;
-	register uchar *p;
+	uchar *p;
 	uchar *end;
 	int *b1, *b2;
 	int wbytes = w * (d/8);
@@ -2077,7 +2077,7 @@ static bool convert_16_to_32( const QImage *src, QImage *dst )
 	return false;				// create failed
     dst->setAlphaBuffer( src->hasAlphaBuffer() );
     for ( int y=0; y<dst->height(); y++ ) {	// for each scan line...
-	register uint *p = (uint *)dst->scanLine(y);
+	uint *p = (uint *)dst->scanLine(y);
 	ushort  *s = (ushort*)src->scanLine(y);
 	uint *end = p + dst->width();
 	while ( p < end )
@@ -2093,7 +2093,7 @@ static bool convert_32_to_16( const QImage *src, QImage *dst )
 	return false;				// create failed
     dst->setAlphaBuffer( src->hasAlphaBuffer() );
     for ( int y=0; y<dst->height(); y++ ) {	// for each scan line...
-	register ushort *p = (ushort *)dst->scanLine(y);
+	ushort *p = (ushort *)dst->scanLine(y);
 	uint  *s = (uint*)src->scanLine(y);
 	ushort *end = p + dst->width();
 	while ( p < end )
@@ -2357,7 +2357,7 @@ QImage QImage::convertBitOrder( Endian bitOrder ) const
 
     int bpl = (width() + 7) / 8;
     for ( int y = 0; y < data->h; y++ ) {
-	register uchar *p = jumpTable()[y];
+	uchar *p = jumpTable()[y];
 	uchar *end = p + bpl;
 	uchar *b = image.jumpTable()[y];
 	while ( p < end )
@@ -2448,14 +2448,14 @@ void pnmscale(const QImage& src, QImage& dst)
 {
     QRgb* xelrow = 0;
     QRgb* tempxelrow = 0;
-    register QRgb* xP;
-    register QRgb* nxP;
+    QRgb* xP;
+    QRgb* nxP;
     int rows, cols, rowsread, newrows, newcols;
-    register int row, col, needtoreadrow;
+    int row, col, needtoreadrow;
     const uchar maxval = 255;
     double xscale, yscale;
     long sxscale, syscale;
-    register long fracrowtofill, fracrowleft;
+    long fracrowtofill, fracrowleft;
     long* as;
     long* rs;
     long* gs;
@@ -2545,11 +2545,11 @@ void pnmscale(const QImage& src, QImage& dst)
 		xelrow = (QRgb*)src.scanLine(rowsread++);
 		needtoreadrow = 0;
 	    }
-	    register long a=0;
+	    long a=0;
 	    for ( col = 0, xP = xelrow, nxP = tempxelrow;
 		  col < cols; ++col, ++xP, ++nxP )
 	    {
-		register long r, g, b;
+		long r, g, b;
 
 		if ( as ) {
 		    r = rs[col] + fracrowtofill * qRed( *xP ) * qAlpha( *xP ) / 255;
@@ -2595,9 +2595,9 @@ void pnmscale(const QImage& src, QImage& dst)
 	    /* shortcut X scaling if possible */
 	    memcpy(dst.scanLine(rowswritten++), tempxelrow, newcols*4);
 	} else {
-	    register long a, r, g, b;
-	    register long fraccoltofill, fraccolleft = 0;
-	    register int needcol;
+	    long a, r, g, b;
+	    long fraccoltofill, fraccolleft = 0;
+	    int needcol;
 
 	    nxP = (QRgb*)dst.scanLine(rowswritten++);
 	    fraccoltofill = SCALE;
@@ -3681,7 +3681,7 @@ static void swapPixel01( QImage *image )	// 1-bpp: swap 0 and 1 pixels
 {
     int i;
     if ( image->depth() == 1 && image->numColors() == 2 ) {
-	register uint *p = (uint *)image->bits();
+	uint *p = (uint *)image->bits();
 	int nbytes = image->byteCount();
 	for ( i=0; i<nbytes/4; i++ ) {
 	    *p = ~*p;
@@ -3931,7 +3931,7 @@ static QImageHandler *get_image_handler( const char *format )
 {						// get pointer to handler
     qt_init_image_handlers();
     qt_init_image_plugins();
-    register QImageHandler *p = imageHandlers->first();
+    QImageHandler *p = imageHandlers->first();
     while ( p ) {				// traverse list
 	if ( p->format == format )
 	    return p;
@@ -4756,7 +4756,7 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
 	Q_CHECK_PTR( buf );
 	if ( comp == BMP_RLE4 ) {		// run length compression
 	    int x=0, y=0, b, c, i;
-	    register uchar *p = line[h-1];
+	    uchar *p = line[h-1];
 	    uchar *endp = line[h-1]+w;
 	    while ( y < h ) {
 		if ( (b=d->getch()) == EOF )
@@ -4821,7 +4821,7 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
 	    while ( --h >= 0 ) {
 		if ( d->readBlock((char*)buf,buflen) != buflen )
 		    break;
-		register uchar *p = line[h];
+		uchar *p = line[h];
 		uchar *b = buf;
 		for ( int i=0; i<w/2; i++ ) {	// convert nibbles to bytes
 		    *p++ = *b >> 4;
@@ -4837,7 +4837,7 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
     else if ( nbits == 8 ) {			// 8 bit BMP image
 	if ( comp == BMP_RLE8 ) {		// run length compression
 	    int x=0, y=0, b;
-	    register uchar *p = line[h-1];
+	    uchar *p = line[h-1];
 	    const uchar *endp = line[h-1]+w;
 	    while ( y < h ) {
 		if ( (b=d->getch()) == EOF )
@@ -4900,7 +4900,7 @@ bool read_dib( QDataStream& s, int offset, int startpos, QImage& image )
     }
 
     else if ( nbits == 16 || nbits == 24 || nbits == 32 ) { // 16,24,32 bit BMP image
-	register QRgb *p;
+	QRgb *p;
 	QRgb  *end;
 	uchar *buf24 = new uchar[bpl];
 	int    bpl24 = ((w*nbits+31)/32)*4;
@@ -5031,7 +5031,7 @@ bool qt_write_dib( QDataStream& s, QImage image )
 
     uchar *buf	= new uchar[bpl_bmp];
     uchar *b, *end;
-    register uchar *p;
+    uchar *p;
 
     memset( buf, 0, bpl_bmp );
     for ( y=image.height()-1; y>=0; y-- ) {	// write the image bits
@@ -5217,7 +5217,7 @@ static void read_pbm_image( QImageIO *iio )	// read PBM image data
 	    }
 	}
     } else {					// read ascii data
-	register uchar *p;
+	uchar *p;
 	int n;
 	for ( y=0; y<h; y++ ) {
 	    p = image.scanLine( y );
@@ -5482,7 +5482,7 @@ static void read_async_image( QImageIO *iio )
   X bitmap image read/write functions
  *****************************************************************************/
 
-static inline int hex2byte( register char *p )
+static inline int hex2byte( char *p )
 {
     return ( (isdigit((uchar) *p) ? *p - '0' : toupper((uchar) *p) - 'A' + 10) << 4 ) |
 	   ( isdigit((uchar) *(p+1)) ? *(p+1) - '0' : toupper((uchar) *(p+1)) - 'A' + 10 );
@@ -5596,7 +5596,7 @@ static void write_xbm_image( QImageIO *iio )
 	}
     }
     int bcnt = 0;
-    register char *p = buf;
+    char *p = buf;
     uchar *b = image.scanLine(0);
     int	 x=0, y=0;
     int nbytes = image.byteCount();

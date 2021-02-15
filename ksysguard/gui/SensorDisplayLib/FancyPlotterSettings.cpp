@@ -102,8 +102,8 @@ FancyPlotterSettings::FancyPlotterSettings( QWidget* parent, bool locked )
   boxLayout->addWidget( mMinValueLabel, 1, 0 );
 
   mMinValue = new QDoubleSpinBox( groupBox );
-  mMinValue->setMaximum( std::numeric_limits<long long>::max());
-  mMinValue->setMinimum( std::numeric_limits<long long>::min());
+  mMinValue->setMaximum( std::numeric_limits<double>::max());
+  mMinValue->setMinimum( std::numeric_limits<double>::min());
   mMinValue->setWhatsThis( i18n( "Enter the minimum value for the display here." ) );
   mMinValue->setSingleStep(10);
   boxLayout->addWidget( mMinValue, 1, 1 );
@@ -113,8 +113,8 @@ FancyPlotterSettings::FancyPlotterSettings( QWidget* parent, bool locked )
   boxLayout->addWidget( mMaxValueLabel, 1, 3 );
 
   mMaxValue = new QDoubleSpinBox( groupBox);
-  mMaxValue->setMaximum( std::numeric_limits<long long>::max());
-  mMaxValue->setMinimum( std::numeric_limits<long long>::min());
+  mMaxValue->setMaximum( std::numeric_limits<double>::max());
+  mMaxValue->setMinimum( std::numeric_limits<double>::min());
   mMaxValue->setWhatsThis( i18n( "Enter the soft maximum value for the display here. The upper range will not be reduced below this value, but will still go above this number for values above this value." ) );
   mMaxValue->setSingleStep(10);
   boxLayout->addWidget( mMaxValue, 1, 4 );

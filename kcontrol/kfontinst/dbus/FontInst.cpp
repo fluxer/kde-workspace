@@ -970,9 +970,10 @@ int FontInst::performAction(const QVariantMap &args)
         case KAuth::ActionReply::HelperError:
             KFI_DBUG << "Helper failed - error code:" << reply.errorCode();
             return (int)reply.errorCode();
+        case KAuth::ActionReply::Success:
+            KFI_DBUG << "Success!";
     }
 
-    KFI_DBUG << "Success!";
     return STATUS_OK;
 }
 

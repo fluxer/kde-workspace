@@ -181,9 +181,9 @@ static inline quint32 store(const __m64 pixel, const __m64 zero)
 static void scanline_blend_mmx(const quint32 *over, const quint8 a, const quint32 *under,
                                quint32 *result, uint length)
 {
-    register const __m64 alpha    = _mm_set1_pi16(quint16 (a));
-    register const __m64 negalpha = _mm_xor_si64(alpha, _mm_set1_pi16 (0x00ff));
-    register const __m64 zero     = _mm_setzero_si64();
+    const __m64 alpha    = _mm_set1_pi16(quint16 (a));
+    const __m64 negalpha = _mm_xor_si64(alpha, _mm_set1_pi16 (0x00ff));
+    const __m64 zero     = _mm_setzero_si64();
 
     for (uint i = 0; i < length; ++i)
     {
@@ -237,8 +237,8 @@ void scanline_blend_sse2(const __m128i *over, const quint8 a, const __m128i *und
                          __m128i *result, uint length)
 {
     length = (length + 15) >> 4;
-    register const __m128i alpha    = _mm_set1_epi16(__uint16_t (a));
-    register const __m128i negalpha = _mm_xor_si128(alpha, _mm_set1_epi16 (0x00ff));
+    const __m128i alpha    = _mm_set1_epi16(__uint16_t (a));
+    const __m128i negalpha = _mm_xor_si128(alpha, _mm_set1_epi16 (0x00ff));
 
     for (uint i = 0; i < length; i++)
     {
