@@ -158,7 +158,7 @@ static int ReadPipe(QString FileName, QStringList &list)
     FILE *pipe;
 
     if ((pipe = popen(FileName.toAscii().data(), "r")) == NULL) {
-	return 0;
+        return 0;
     }
 
     QTextStream t(pipe, QIODevice::ReadOnly);
@@ -166,8 +166,8 @@ static int ReadPipe(QString FileName, QStringList &list)
     while (!t.atEnd()) list.append(t.readLine());
 
     if (pclose(pipe) != 0) {
-	list.clear();
-	return 0;
+        list.clear();
+        return 0;
     }
     return list.count();
 }
@@ -181,7 +181,7 @@ static bool get_dri_device()
     QFile file;
     file.setFileName(INFO_DRI);
     if (!file.exists() || !file.open(QIODevice::ReadOnly))
-	return false;
+        return false;
 
     QTextStream stream(&file);
     QString line = stream.readLine();
@@ -228,11 +228,12 @@ static bool get_dri_device()
 
 static bool get_dri_device() {
 
-	QStringList pci_info;
-	if (ReadPipe("sysctl -n hw.dri.0.name",pci_info)) {
-		dri_info.module = pci_info[0].mid(0, pci_info[0].indexOf(0x20));
-		}
-	return false;
+    QStringList pci_info;
+    if (ReadPipe("sysctl -n hw.dri.0.name",pci_info)) {
+        dri_info.module = pci_info[0].mid(0, pci_info[0].indexOf(0x20));
+        return true;
+    }
+    return false;
 }
 
 #else
