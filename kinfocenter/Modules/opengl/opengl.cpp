@@ -23,10 +23,6 @@
 
 #include "opengl.h"
 
-#include <QRegExp>
-#include <QFile>
-#include <QTextStream>
-
 #include <KPluginFactory>
 #include <KPluginLoader>
 
@@ -35,12 +31,17 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kdebug.h>
+#include <qplatformdefs.h>
 
 // X11 includes
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
 #include <openglconfig.h>
+
+#ifdef KCM_ENABLE_DRM
+#include <xf86drm.h>
+#endif
 
 #ifdef KCM_ENABLE_OPENGLES
 #include <EGL/egl.h>
@@ -146,94 +147,52 @@ static struct glinfo {
 
 static struct {
 	QString module,
-		pci,
 		vendor,
 		device,
-		subvendor,
 		rev;
 } dri_info;
 
-static int ReadPipe(QString FileName, QStringList &list)
-{
-    FILE *pipe;
-
-    if ((pipe = popen(FileName.toAscii().data(), "r")) == NULL) {
-        return 0;
-    }
-
-    QTextStream t(pipe, QIODevice::ReadOnly);
-
-    while (!t.atEnd()) list.append(t.readLine());
-
-    if (pclose(pipe) != 0) {
-        list.clear();
-        return 0;
-    }
-    return list.count();
-}
-
-#if defined(Q_OS_LINUX)
-
-#define INFO_DRI "/proc/dri/0/name"
+#if defined(KCM_ENABLE_DRM)
 
 static bool get_dri_device()
 {
-    QFile file;
-    file.setFileName(INFO_DRI);
-    if (!file.exists() || !file.open(QIODevice::ReadOnly))
+    const int driAvail = drmAvailable();
+    // qDebug() << "driAvail" << driAvail;
+    if (!driAvail) {
         return false;
-
-    QTextStream stream(&file);
-    QString line = stream.readLine();
-    if (!line.isEmpty()) {
-	dri_info.module = line.mid(0, line.indexOf(0x20));
-
-	// possible formats, for regression testing
-	// line = " PCI:01:00:0";
-	// line = " pci:0000:01:00.0"
-	QRegExp rx = QRegExp("\\b[Pp][Cc][Ii][:]([0-9a-fA-F]+[:])?([0-9a-fA-F]+[:][0-9a-fA-F]+[:.][0-9a-fA-F]+)\\b");
-	if (rx.indexIn(line)>0)	 {
-		dri_info.pci = rx.cap(2);
-		int end = dri_info.pci.lastIndexOf(':');
-		int end2 = dri_info.pci.lastIndexOf('.');
-		if (end2>end) end=end2;
-		dri_info.pci[end]='.';
-
-		QString cmd = QString("lspci -m -v -s ") + dri_info.pci;
-		QStringList pci_info;
-		int num;
-		if (((num = ReadPipe(cmd, pci_info)) ||
-		(num = ReadPipe("/sbin/"+cmd, pci_info)) ||
-		(num = ReadPipe("/usr/sbin/"+cmd, pci_info)) ||
-		(num = ReadPipe("/usr/local/sbin/"+cmd, pci_info))) && num>=7) {
-			for (int i=2; i<=6; i++) {
-				line = pci_info[i];
-				line.remove(QRegExp("[^:]*:[ ]*"));
-				switch (i){
-					case 2: dri_info.vendor = line;    break;
-					case 3: dri_info.device = line;    break;
-					case 4: dri_info.subvendor = line; break;
-					case 6: dri_info.rev = line;       break;
-				}
-			}
-			return true;
-		}
-	}
     }
 
-    return false;
-}
-
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_DRAGONFLY)
-
-static bool get_dri_device() {
-
-    QStringList pci_info;
-    if (ReadPipe("sysctl -n hw.dri.0.name",pci_info)) {
-        dri_info.module = pci_info[0].mid(0, pci_info[0].indexOf(0x20));
-        return true;
+    char driDevBuff[128];
+    snprintf(driDevBuff, sizeof(driDevBuff), DRM_DEV_NAME, DRM_DIR_NAME, 0);
+#ifdef O_CLOEXEC
+    int driFd = QT_OPEN(driDevBuff, O_RDWR | O_CLOEXEC, 0);
+#else
+    int driFd = QT_OPEN(driDevBuff, O_RDWR, 0);
+#endif
+    if (driFd < 0) {
+        kWarning() << "get_dri_device: QT_OPEN() fail";
+        return false;
     }
-    return false;
+
+    drmVersionPtr driVer = drmGetVersion(driFd);
+    if (!driVer) {
+        kWarning() << "get_dri_device: drmGetVersion() fail";
+        drmClose(driFd);
+        return false;
+    }
+
+    const char* driBus = drmGetBusid(driFd);
+
+    dri_info.module = QString::fromLatin1(driVer->name, driVer->name_len);
+    dri_info.vendor = QString::fromLatin1(driVer->desc, driVer->desc_len);
+    dri_info.device = QString::fromLatin1(driBus);
+    dri_info.rev = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
+
+    drmFreeBusid(driBus);
+    drmFreeVersion(driVer);
+    drmClose(driFd);
+
+    return true;
 }
 
 #else
@@ -564,7 +523,6 @@ static QTreeWidgetItem *print_screen_info(QTreeWidgetItem *l1, QTreeWidgetItem *
      			l2->setExpanded(true);
    			l3 = newItem(l2, l3, i18n("Vendor"), dri_info.vendor);
    			l3 = newItem(l2, l3, i18n("Device"), dri_info.device);
-   			l3 = newItem(l2, l3, i18n("Subvendor"), dri_info.subvendor);
    			l3 = newItem(l2, l3, i18n("Revision"), dri_info.rev);
 		} else {
             l2 = newItem(l1, l2, i18n("3D Accelerator"), i18n("unknown"));

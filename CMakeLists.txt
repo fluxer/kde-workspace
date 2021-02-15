@@ -47,6 +47,14 @@ set_package_properties(OpenGLES PROPERTIES
     PURPOSE "OpenGL ES info module"
 )
 
+macro_optional_find_package(LibDRM)
+set_package_properties(LibDRM PROPERTIES
+    DESCRIPTION "Userspace interface to kernel DRM services"
+    URL "https://dri.freedesktop.org/wiki/"
+    TYPE OPTIONAL
+    PURPOSE "OpenGL info module"
+)
+
 macro_optional_find_package(UDev)
 set_package_properties(UDev PROPERTIES
     DESCRIPTION "The UDev Libraries"

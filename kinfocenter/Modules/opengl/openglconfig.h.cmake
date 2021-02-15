@@ -22,6 +22,7 @@
 #ifndef OPENGLCONFIG_H
 #define OPENGLCONFIG_H
 
+#cmakedefine KCM_ENABLE_DRM
 #cmakedefine KCM_ENABLE_OPENGLES
 
 #endif

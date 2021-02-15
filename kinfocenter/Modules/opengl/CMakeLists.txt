@@ -1,10 +1,15 @@
 if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
-    include_directories( ${OPENGL_INCLUDE_DIR} ${OPENGL_GLU_INCLUDE_DIR} )
+    include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_GLU_INCLUDE_DIR})
+endif()
+
+if(LIBDRM_FOUND)
+    set(KCM_ENABLE_DRM TRUE)
+    include_directories(${LIBDRM_INCLUDE_DIR})
 endif()
 
 if(OPENGLES_FOUND)
     set(KCM_ENABLE_OPENGLES TRUE)
-    include_directories( ${OPENGLES_INCLUDE_DIR} )
+    include_directories(${OPENGLES_INCLUDE_DIR})
 endif()
 
 ########### next target ###############
@@ -22,11 +27,15 @@ if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
     target_link_libraries(kcm_opengl ${OPENGL_gl_LIBRARY} ${OPENGL_glu_LIBRARY})
 endif()
 
+if(LIBDRM_FOUND)
+    target_link_libraries(kcm_opengl ${LIBDRM_LIBRARIES})
+endif()
+
 if(OPENGLES_FOUND)
     target_link_libraries(kcm_opengl ${OPENGLES_LIBRARIES})
 endif()
 
-configure_file(openglconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/openglconfig.h )
+configure_file(openglconfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/openglconfig.h)
 
 install(TARGETS kcm_opengl  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
