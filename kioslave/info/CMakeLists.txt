@@ -1,7 +1,3 @@
-
-
-
-
 ########### next target ###############
 
 set(kio_info_PART_SRCS info.cc )
@@ -17,7 +13,7 @@ install(TARGETS kio_info  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 
 ########### install files ###############
 
+install( FILES kio_docfilter.css  DESTINATION ${KDE4_DATA_INSTALL_DIR}/kio_docfilter )
 install( FILES kde-info2html.conf DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kio_info )
 install( FILES info.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 install( PROGRAMS kde-info2html DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kio_info )
-
