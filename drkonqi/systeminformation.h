@@ -32,9 +32,6 @@ class SystemInformation: public QObject
         QString system() const;
         QString release() const;
 
-        bool compiledSources() const;
-        void setCompiledSources(bool);
-
         QString kdeVersion() const;
         QString qtVersion() const;
 
@@ -45,8 +42,6 @@ class SystemInformation: public QObject
 
         QString     m_system;
         QString     m_release;
-
-        bool        m_compiledSources;
 };
 
 #endif

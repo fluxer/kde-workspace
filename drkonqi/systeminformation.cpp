@@ -28,10 +28,7 @@
 
 #include <QtCore/QFile>
 
-#include <KStandardDirs>
 #include <KDebug>
-#include <KConfig>
-#include <KConfigGroup>
 #include <kdeversion.h>
 
 SystemInformation::SystemInformation(QObject * parent)
@@ -40,16 +37,10 @@ SystemInformation::SystemInformation(QObject * parent)
     // NOTE: the relative order is important here
     m_system = fetchOSDetailInformation();
     m_release = fetchOSReleaseInformation();
-
-    KConfigGroup config(KGlobal::config(), "SystemInformation");
-    m_compiledSources = config.readEntry("CompiledSources", false);
 }
 
 SystemInformation::~SystemInformation()
 {
-    KConfigGroup config(KGlobal::config(), "SystemInformation");
-    config.writeEntry("CompiledSources", m_compiledSources);
-    config.sync();
 }
 
 //this function maps the operating system to an OS value that is accepted by bugs.kde.org.
@@ -128,8 +119,7 @@ QString SystemInformation::fetchOSReleaseInformation() const
 
     // the PRETTY_NAME entry should be the most appropriate one,
     // but I could be wrong.
-    const QString prettyName = distroInfos.value("PRETTY_NAME", "unspecified");
-    return prettyName;
+    return distroInfos.value("PRETTY_NAME", "unspecified");
 }
 
 QString SystemInformation::system() const
@@ -140,16 +130,6 @@ QString SystemInformation::system() const
 QString SystemInformation::release() const
 {
     return m_release;
-}
-
-bool SystemInformation::compiledSources() const
-{
-    return m_compiledSources;
-}
-
-void SystemInformation::setCompiledSources(bool compiled)
-{
-    m_compiledSources = compiled;
 }
 
 QString SystemInformation::kdeVersion() const
