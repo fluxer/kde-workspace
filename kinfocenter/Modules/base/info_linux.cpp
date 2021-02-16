@@ -37,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kglobalsettings.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
 
 #define INFO_IRQ "/proc/interrupts"
@@ -139,9 +140,14 @@ bool GetInfo_PCI(QTreeWidget* tree) {
 	tree->setHeaderHidden(true);
 	tree->setSortingEnabled(false);
 
+        QByteArray lspciCmd = KStandardDirs::findRootExe("lspci").toLocal8Bit();
+        if (lspciCmd.isEmpty()) {
+            return false;
+        }
+        lspciCmd.append(" -v");
+
 	/* try to get the output of the lspci package first */
-	if ((num = GetInfo_ReadfromPipe(tree, "lspci -v", true)) || (num = GetInfo_ReadfromPipe(tree, "/sbin/lspci -v", true)) || (num = GetInfo_ReadfromPipe(tree, "/usr/sbin/lspci -v", true)) || (num = GetInfo_ReadfromPipe(tree, "/usr/local/sbin/lspci -v", true)) || (num = GetInfo_ReadfromPipe(tree,
-			"/usr/bin/lspci -v", true)))
+	if (num = GetInfo_ReadfromPipe(tree, lspciCmd.constData(), true))
 		return num;
 
 	/* if lspci failed, read the contents of /proc/pci */

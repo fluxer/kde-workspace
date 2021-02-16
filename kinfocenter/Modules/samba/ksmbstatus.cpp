@@ -26,6 +26,7 @@
 
 #include <klocale.h>
 #include <kdialog.h>
+#include <kstandarddirs.h>
 
 #include "ksmbstatus.h"
 #include "moc_ksmbstatus.cpp"
@@ -164,21 +165,18 @@ void NetMon::update() {
 	list->clear();
 	/* Re-read the Contents ... */
 
-	QString path(::getenv("PATH"));
-	path += "/bin:/sbin:/usr/bin:/usr/sbin";
+	QString smbstatusExe = KStandardDirs::findRootExe("smbstatus");
 
 	rownumber=0;
 	readingpart=header;
 	nrpid=0;
-	process->setEnvironment(QStringList() << ("PATH=" + path));
 	connect(process, SIGNAL(readyRead()), SLOT(readFromProcess()));
 	connect(process, SIGNAL(error(QProcess::ProcessError)), SLOT(smbstatusError()));
-	process->start("smbstatus");
+	process->start(smbstatusExe);
 	process->waitForFinished();
-	if (rownumber==0) // empty result
+	if (rownumber==0) { // empty result
 		version->setText(i18n("Error: Unable to open configuration file \"smb.conf\""));
-	else
-	{
+	} else {
 		// ok -> count the number of locked files for each pid
 		for (int i = 0; i < list->topLevelItemCount(); ++i)
 		{
@@ -192,18 +190,19 @@ void NetMon::update() {
 	delete process;
 	process=0;
 
+        QString showmountExe = KStandardDirs::findRootExe("showmount");
+
 	readingpart=nfs;
 	delete showmountProc;
 	showmountProc=new QProcess();
 	connect(showmountProc, SIGNAL(readyRead()), SLOT(readFromProcess()));
-	showmountProc->setEnvironment(QStringList() << ("PATH=" + path));
 	//without this timer showmount hangs up to 5 minutes
 	//if the portmapper daemon isn't running
 	QTimer::singleShot(5000,this,SLOT(killShowmount()));
 	//kDebug()<<"starting kill timer with 5 seconds";
 	connect(showmountProc,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(killShowmount()));
 	connect(showmountProc,SIGNAL(error(QProcess::ProcessError)),this,SLOT(killShowmount()));
-	showmountProc->start("showmount", QStringList() << "-a" << "localhost");
+	showmountProc->start(showmountExe, QStringList() << "-a" << "localhost");
 
 	version->adjustSize();
 	list->show();

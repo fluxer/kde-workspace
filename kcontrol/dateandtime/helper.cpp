@@ -43,14 +43,10 @@
 #include <QFile>
 #include <QDir>
 
-// We cannot rely on the $PATH environment variable, because D-Bus activation
-// clears it. So we have to use a reasonable default.
-static const QString exePath = QLatin1String("/usr/sbin:/usr/bin:/sbin:/bin");
-
 static QString findNtpUtility()
 {
     foreach(const QString &possible_ntputility, QStringList() << "ntpdate" << "rdate" ) {
-        const QString ntpUtility = KStandardDirs::findExe(possible_ntputility, exePath);
+        const QString ntpUtility = KStandardDirs::findRootExe(possible_ntputility);
         if (!ntpUtility.isEmpty()) {
             return ntpUtility;
         }
@@ -103,7 +99,7 @@ ClockHelper::CH_Error ClockHelper::date( const QString& newdate, const QString& 
         return DateError;
     }
 
-    QString hwclock = KStandardDirs::findExe("hwclock", exePath);
+    QString hwclock = KStandardDirs::findRootExe("hwclock");
     if (!hwclock.isEmpty()) {
         QProcess::execute(hwclock, QStringList() << "--systohc");
     }

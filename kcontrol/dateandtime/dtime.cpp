@@ -141,9 +141,8 @@ void Dtime::serverTimeCheck() {
 
 void Dtime::findNTPutility()
 {
-    const QString exePath = QLatin1String("/usr/sbin:/usr/bin:/sbin:/bin");
     foreach(const QString &possible_ntputility, QStringList() << "ntpdate" << "rdate" ) {
-        ntpUtility = KStandardDirs::findExe(possible_ntputility, exePath);
+        ntpUtility = KStandardDirs::findRootExe(possible_ntputility);
         if (!ntpUtility.isEmpty()) {
             return;
         }

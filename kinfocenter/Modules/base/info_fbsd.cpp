@@ -28,8 +28,8 @@ extern "C" {
 
 #include <QMap>
 #include <QFileInfo>
-
 #include <QTextStream>
+#include <KStandardDirs>
 
 void ProcessChildren(QString name);
 
@@ -87,13 +87,15 @@ bool GetInfo_SCSI(QTreeWidget* tree) {
 	QTextStream *t;
 	QString s;
 
-	if (!QFileInfo(QLatin1String("/sbin/camcontrol")).exists()) {
-		s = i18n("SCSI subsystem could not be queried: /sbin/camcontrol could not be found");
+        QByteArray camExe = KStandardPaths::findRootExe("camcontrol").toLocal8Bit();
+
+	if (camExe.isEmpty()) {
+		s = i18n("SCSI subsystem could not be queried: camcontrol could not be found");
 		QStringList list;
 		list << s;
 		new QTreeWidgetItem(tree, list);
-	} else if ((pipe = popen("/sbin/camcontrol devlist 2>&1", "r")) == NULL) {
-		s = i18n("SCSI subsystem could not be queried: /sbin/camcontrol could not be executed");
+	} else if ((pipe = popen(QByteArray(camExe + " devlist 2>&1").constData(), "r")) == NULL) {
+		s = i18n("SCSI subsystem could not be queried: camcontrol could not be executed");
 		QStringList list;
 		list << s;
 		new QTreeWidgetItem(tree, list);
@@ -125,24 +127,27 @@ bool GetInfo_SCSI(QTreeWidget* tree) {
 
 bool GetInfo_PCI(QTreeWidget* tree) {
 	FILE *pipe;
-	QString s, cmd;
+	QString s;
+        QByteArray cmd;
 	QTreeWidgetItem *olditem= NULL;
 
 	const QStringList headers(i18nc("@title:column Column name for PCI information", "Information"));
 	tree->setHeaderLabels(headers);
 
-	if (!QFileInfo(QLatin1String("/usr/sbin/pciconf")).exists()) {
+        QByteArray pciExe = KStandardPaths::findRootExe("pciconf").toLocal8Bit();
+	if (pciExe.isEmpty()) {
 		QStringList list;
 		list << i18n("Could not find any programs with which to query your system's PCI information");
 		new QTreeWidgetItem(tree, list);
 		return true;
 	} else {
-		cmd = "/usr/sbin/pciconf -l -v 2>&1";
+                cmd.append(pciExe);
+		cmd.append(" -l -v 2>&1");
 	}
 
 	// TODO: GetInfo_ReadfromPipe should be improved so that we could pass the program name and its
 	//       arguments to it and remove most of the code below.
-	if ((pipe = popen(cmd.toLatin1(), "r")) == NULL) {
+	if ((pipe = popen(cmd.constData(), "r")) == NULL) {
 		QStringList list;
 		list << i18n("PCI subsystem could not be queried: %1 could not be executed", cmd);
 		olditem = new QTreeWidgetItem(olditem, list);

@@ -102,11 +102,9 @@ void HWInfo::setSources()
     }
     // TODO: get this from soliddevice
     Plasma::DataEngine* engine = dataEngine("executable");
-    QString path = QString::fromLocal8Bit(qgetenv("PATH"))
-                 + QString::fromLatin1(":/usr/sbin:/sbin/");
-    QString exe = KStandardDirs::findExe( "lspci", path );
+    QString exe = KStandardDirs::findRootExe("lspci");
     if (exe.isEmpty()) {
-       kError()  << "lspci not found in " << path << endl;
+       kError()  << "lspci not found in " << endl;
     } else {
        QString tmp = exe + " | grep VGA | sed 's/.*: //g'";
        engine->connectSource(tmp, this);
