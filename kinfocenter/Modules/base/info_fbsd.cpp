@@ -87,7 +87,7 @@ bool GetInfo_SCSI(QTreeWidget* tree) {
 	QTextStream *t;
 	QString s;
 
-        QByteArray camExe = KStandardPaths::findRootExe("camcontrol").toLocal8Bit();
+        QByteArray camExe = KStandardDirs::findRootExe("camcontrol").toLocal8Bit();
 
 	if (camExe.isEmpty()) {
 		s = i18n("SCSI subsystem could not be queried: camcontrol could not be found");
@@ -134,7 +134,7 @@ bool GetInfo_PCI(QTreeWidget* tree) {
 	const QStringList headers(i18nc("@title:column Column name for PCI information", "Information"));
 	tree->setHeaderLabels(headers);
 
-        QByteArray pciExe = KStandardPaths::findRootExe("pciconf").toLocal8Bit();
+        QByteArray pciExe = KStandardDirs::findRootExe("pciconf").toLocal8Bit();
 	if (pciExe.isEmpty()) {
 		QStringList list;
 		list << i18n("Could not find any programs with which to query your system's PCI information");

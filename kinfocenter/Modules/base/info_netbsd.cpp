@@ -56,7 +56,7 @@ static bool GetDmesgInfo(QTreeWidget* tree, const char *filter, void func(QTreeW
 		t = new QTextStream(dmesg);
 	} else {
 		delete dmesg;
-                QByteArray dmesgExe = KStandardPaths::findRootExe("dmesg").toLocal8Bit();
+                QByteArray dmesgExe = KStandardDirs::findRootExe("dmesg").toLocal8Bit();
                 if (dmesgExe.isEmpty())
                     return false;
 		pipe = popen(dmesgExe.constData(), "r");
