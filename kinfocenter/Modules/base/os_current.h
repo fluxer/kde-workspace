@@ -35,7 +35,7 @@ bool GetInfo_SCSI(QTreeWidget* tree);
 bool GetInfo_XServer_and_Video(QTreeWidget* tree);
 
 
-#ifdef __linux__
+#ifdef Q_OS_LINUX
 
 	#define INFO_IRQ_AVAILABLE
 	#define INFO_DMA_AVAILABLE
