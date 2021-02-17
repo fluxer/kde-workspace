@@ -166,7 +166,6 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
 {
     winId(); // workaround for Qt4.3 setWindowRole() assert
     setWindowRole( "logoutdialog" );
-//#if !(QT_VERSION >= QT_VERSION_CHECK(4, 3, 3) || defined(QT_KDE_QT_COPY))
 // Qt doesn't set this on unmanaged windows
     QByteArray appName = QApplication::applicationName().toLatin1();
     QByteArray appClass = QX11Info::appClass();
@@ -177,8 +176,6 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     XChangeProperty( QX11Info::display(), winId(),
         XInternAtom( QX11Info::display(), "WM_WINDOW_ROLE", False ), XA_STRING, 8, PropModeReplace,
         (unsigned char *)"logoutdialog", strlen( "logoutdialog" ));
-
-//#endif
 
     KDialog::centerOnScreen(this, -3);
 

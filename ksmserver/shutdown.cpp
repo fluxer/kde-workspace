@@ -607,7 +607,6 @@ void KSMServer::createLogoutEffectWidget()
     logoutEffectWidget = new QWidget( NULL, Qt::X11BypassWindowManagerHint );
     logoutEffectWidget->winId(); // workaround for Qt4.3 setWindowRole() assert
     logoutEffectWidget->setWindowRole( "logouteffect" );
-//#if !(QT_VERSION >= QT_VERSION_CHECK(4, 3, 3) || defined(QT_KDE_QT_COPY))
 // Qt doesn't set this on unmanaged windows
     QByteArray appName = QApplication::applicationName().toLatin1();
     QByteArray appClass = QX11Info::appClass();
@@ -619,7 +618,6 @@ void KSMServer::createLogoutEffectWidget()
     XChangeProperty( QX11Info::display(), logoutEffectWidget->winId(),
         XInternAtom( QX11Info::display(), "WM_WINDOW_ROLE", False ), XA_STRING, 8, PropModeReplace,
         (unsigned char *)"logouteffect", strlen( "logouteffect" ));
-//#endif
     logoutEffectWidget->setGeometry( -100, -100, 1, 1 );
     logoutEffectWidget->show();
 }
