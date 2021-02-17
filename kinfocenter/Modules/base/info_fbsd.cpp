@@ -149,7 +149,7 @@ bool GetInfo_PCI(QTreeWidget* tree) {
 	//       arguments to it and remove most of the code below.
 	if ((pipe = popen(cmd.constData(), "r")) == NULL) {
 		QStringList list;
-		list << i18n("PCI subsystem could not be queried: %1 could not be executed", cmd);
+		list << i18n("PCI subsystem could not be queried: %1 could not be executed", QString(cmd));
 		olditem = new QTreeWidgetItem(olditem, list);
 	} else {
 		/* This prints out a list of all the pci devies, perhaps eventually we could
