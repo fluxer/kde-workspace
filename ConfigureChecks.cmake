@@ -94,12 +94,13 @@ check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker
 
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${X11_Xext_LIB})
+set(CMAKE_REQUIRED_INCLUDES ${X11_X11_INCLUDE_PATH})
 check_symbol_exists(DPMSCapable "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSCAPABLE_PROTO)
 check_symbol_exists(DPMSInfo "X11/Xlib.h;X11/extensions/dpms.h" HAVE_DPMSINFO_PROTO)
 cmake_reset_check_state()
 
 cmake_reset_check_state()
-set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH}/Xrandr.h)
+set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH})
 set(CMAKE_REQUIRED_LIBRARIES ${X11_Xrandr_LIB})
 check_function_exists(XRRGetScreenSizeRange XRANDR_1_2_FOUND)
 macro_bool_to_01(XRANDR_1_2_FOUND HAS_RANDR_1_2)
