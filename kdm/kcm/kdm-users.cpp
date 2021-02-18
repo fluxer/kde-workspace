@@ -82,7 +82,7 @@ static int executeFaceAction(QWidget *parent, const QVariantMap &helperargs)
 KDMUsersWidget::KDMUsersWidget(QWidget *parent)
     : QWidget(parent)
 {
-#ifdef __linux__
+#ifdef Q_OS_LINUX
     struct stat st;
     if (!stat("/etc/debian_version", &st)) { /* debian */
         defminuid = "1000";

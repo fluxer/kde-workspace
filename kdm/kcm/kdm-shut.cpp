@@ -99,7 +99,7 @@ KDMSessionsWidget::KDMSessionsWidget(QWidget *parent)
     bm_combo->insertItem("Grub", i18n("Grub"));
     bm_combo->insertItem("Grub2", i18n("Grub2"));
     bm_combo->insertItem("Burg", i18n("Burg"));
-#if defined(__linux__) && (defined(__i386__) || defined(__amd64__))
+#if defined(Q_OS_LINUX) && (defined(QT_ARCH_I386) || defined(QT_ARCH_X86_64))
     bm_combo->insertItem("Lilo", i18n("Lilo"));
 #endif
     QLabel *bm_label = new QLabel(i18n("Boot manager:"), group4);
