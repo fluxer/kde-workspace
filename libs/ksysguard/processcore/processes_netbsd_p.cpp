@@ -41,19 +41,19 @@
 namespace KSysGuard
 {
 
-  class ProcessesLocal::Private
-  {
-    public:
-      Private() { kd = kvm_open(NULL, NULL, NULL, KVM_NO_FILES, "kvm_open");}
-      ~Private() { kvm_close(kd);}
-      inline bool readProc(long pid, struct kinfo_proc2 **p, int *num);
-      inline void readProcStatus(struct kinfo_proc2 *p, Process *process);
-      inline void readProcStat(struct kinfo_proc2 *p, Process *process);
-      inline void readProcStatm(struct kinfo_proc2 *p, Process *process);
-      inline bool readProcCmdline(struct kinfo_proc2 *p, Process *process);
+class ProcessesLocal::Private
+{
+public:
+    Private() { kd = kvm_open(NULL, NULL, NULL, KVM_NO_FILES, "kvm_open");}
+    ~Private() { kvm_close(kd);}
+    inline bool readProc(long pid, struct kinfo_proc2 **p, int *num);
+    inline void readProcStatus(struct kinfo_proc2 *p, Process *process);
+    inline void readProcStat(struct kinfo_proc2 *p, Process *process);
+    inline void readProcStatm(struct kinfo_proc2 *p, Process *process);
+    inline bool readProcCmdline(struct kinfo_proc2 *p, Process *process);
 
-      kvm_t *kd;
-    };
+    kvm_t *kd;
+};
 
 #ifndef _SC_NPROCESSORS_ONLN
 long int KSysGuard::ProcessesLocal::numberProcessorCores()
@@ -117,30 +117,29 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc2 *p, Process *ps)
     ps->setSysUsage(0);
 
     ps->setNiceLevel(p->p_nice - NZERO);
-    ps->setVmSize((p->p_vm_tsize + p->p_vm_dsize + p->p_vm_ssize)
-		   * getpagesize());
+    ps->setVmSize((p->p_vm_tsize + p->p_vm_dsize + p->p_vm_ssize) * getpagesize());
     ps->setVmRSS(p->p_vm_rssize * getpagesize());
 
-// "idle","run","sleep","stop","zombie"
+    // "idle", "run", "sleep", "stop", "zombie"
     switch( p->p_stat ) {
-      case LSRUN:
-        ps->setStatus(Process::Running);
-	break;
-      case LSSLEEP:
-        ps->setStatus(Process::Sleeping);
-	break;
-      case LSSTOP:
-        ps->setStatus(Process::Stopped);
-	break;
-      case LSZOMB:
-	ps->setStatus(Process::Zombie);
-	break;
-      case LSONPROC:
-        ps->setStatus(Process::Running);
-	break;
-      default:
-	ps->setStatus(Process::OtherStatus);
-	break;
+        case LSRUN:
+            ps->setStatus(Process::Running);
+            break;
+        case LSSLEEP:
+            ps->setStatus(Process::Sleeping);
+            break;
+        case LSSTOP:
+            ps->setStatus(Process::Stopped);
+            break;
+        case LSZOMB:
+            ps->setStatus(Process::Zombie);
+            break;
+        case LSONPROC:
+            ps->setStatus(Process::Running);
+            break;
+        default:
+            ps->setStatus(Process::OtherStatus);
+            break;
     }
 
     dev = p->p_tdev;
@@ -153,11 +152,11 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc2 *p, Process *ps)
 
 void ProcessesLocal::Private::readProcStatm(struct kinfo_proc2 *p, Process *process)
 {
-// TODO
+    // TODO
 
-//     unsigned long shared;
-//     process->vmURSS = process->vmRSS - (shared * sysconf(_SC_PAGESIZE) / 1024);
-  process->setVmURSS(-1);
+    //     unsigned long shared;
+    //     process->vmURSS = process->vmRSS - (shared * sysconf(_SC_PAGESIZE) / 1024);
+    process->setVmURSS(-1);
 }
 
 bool ProcessesLocal::Private::readProcCmdline(struct kinfo_proc2 *p, Process *process)
@@ -171,8 +170,8 @@ bool ProcessesLocal::Private::readProcCmdline(struct kinfo_proc2 *p, Process *pr
 
     while (*argv) {
         command += *argv;
-	command += " ";
-	argv++;
+        command += " ";
+        argv++;
     }
     process->setCommand(command.trimmed());
 
@@ -181,14 +180,13 @@ bool ProcessesLocal::Private::readProcCmdline(struct kinfo_proc2 *p, Process *pr
 
 ProcessesLocal::ProcessesLocal() : d(new Private())
 {
-
 }
 
-long ProcessesLocal::getParentPid(long pid) {
+long ProcessesLocal::getParentPid(long pid)
+{
     long ppid = -1;
     struct kinfo_proc2 *p;
-    if(d->readProc(pid, &p, 0))
-    {
+    if (d->readProc(pid, &p, 0)) {
         ppid = p->p_ppid;
     }
     return ppid;
@@ -197,11 +195,13 @@ long ProcessesLocal::getParentPid(long pid) {
 bool ProcessesLocal::updateProcessInfo( long pid, Process *process)
 {
     struct kinfo_proc2 *p;
-    if(!d->readProc(pid, &p, NULL)) return false;
+    if (!d->readProc(pid, &p, NULL))
+        return false;
     d->readProcStat(p, process);
     d->readProcStatus(p, process);
     d->readProcStatm(p, process);
-    if(!d->readProcCmdline(p, process)) return false;
+    if (!d->readProcCmdline(p, process))
+        return false;
 
     return true;
 }
@@ -210,13 +210,11 @@ QSet<long> ProcessesLocal::getAllPids( )
 {
     QSet<long> pids;
     int len;
-    int num;
     struct kinfo_proc2 *p;
 
     d->readProc(0, &p, &len);
 
-    for (num = 0; num < len; num++)
-    {
+    for (int num = 0; num < len; num++) {
         long pid = p[num].p_pid;
         long long ppid = p[num].p_ppid;
 
@@ -228,27 +226,31 @@ QSet<long> ProcessesLocal::getAllPids( )
     return pids;
 }
 
-bool ProcessesLocal::sendSignal(long pid, int sig) {
+bool ProcessesLocal::sendSignal(long pid, int sig)
+{
     if ( kill( (pid_t)pid, sig ) ) {
-	//Kill failed
+        // Kill failed
         return false;
     }
     return true;
 }
 
-bool ProcessesLocal::setNiceness(long pid, int priority) {
+bool ProcessesLocal::setNiceness(long pid, int priority)
+{
     if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
-	    //set niceness failed
-	    return false;
+        // set niceness failed
+        return false;
     }
     return true;
 }
 
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
-    if(priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
+    if (priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
         priority = 0;
-    if(pid <= 0) return false; // check the parameters
+    if (pid <= 0)
+        return false; // check the parameters
+
     struct sched_param params;
     params.sched_priority = priority;
     switch(priorityClass) {
@@ -267,16 +269,18 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
     }
 }
 
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority) {
-    return false; //Not yet supported
+bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority)
+{
+    return false; // Not yet supported
 }
 
-bool ProcessesLocal::supportsIoNiceness() {
+bool ProcessesLocal::supportsIoNiceness()
+{
     return false;
 }
 
-long long ProcessesLocal::totalPhysicalMemory() {
-
+long long ProcessesLocal::totalPhysicalMemory()
+{
     size_t Total;
     size_t len;
     len = sizeof (Total);
