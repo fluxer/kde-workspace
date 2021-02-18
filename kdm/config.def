@@ -2165,10 +2165,10 @@ Description:
 
 Key: FailFont
 Type: string
-Default: "Sans Serif,10,-1,5,75,0,0,0,0,0"
+Default: "Sans Serif,10,-1,5,75,0,0,0,0"
 CDefault: "Sans Serif 10pt bold"
 User: greeter:font
-Instance: #*/"Sans Serif,10,-1,5,75,0,0,0,0,0"
+Instance: #*/"Sans Serif,10,-1,5,75,0,0,0,0"
 Comment: &
 Description:
  The font used for the <quote>Login Failed</quote> message. The value is encoded.
