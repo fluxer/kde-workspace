@@ -291,10 +291,6 @@ Qt::MouseButton x11ToQtMouseButton(int button)
         return Qt::MiddleButton;
     if (button == XCB_BUTTON_INDEX_3)
         return Qt::RightButton;
-    if (button == XCB_BUTTON_INDEX_4)
-        return Qt::XButton1;
-    if (button == XCB_BUTTON_INDEX_5)
-        return Qt::XButton2;
     return Qt::NoButton;
 }
 
@@ -327,10 +323,6 @@ Qt::MouseButtons x11ToQtMouseButtons(int state)
         ret |= Qt::MiddleButton;
     if (state & XCB_KEY_BUT_MASK_BUTTON_3)
         ret |= Qt::RightButton;
-    if (state & XCB_KEY_BUT_MASK_BUTTON_4)
-        ret |= Qt::XButton1;
-    if (state & XCB_KEY_BUT_MASK_BUTTON_5)
-        ret |= Qt::XButton2;
     return ret;
 }
 

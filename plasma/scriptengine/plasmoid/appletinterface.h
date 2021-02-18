@@ -213,9 +213,7 @@ enum QtMouseButton {
     QtNoButton = Qt::NoButton,
     QtLeftButton = Qt::LeftButton,
     QtRightButton = Qt::RightButton,
-    QtMidButton = Qt::MiddleButton,
-    QtXButton1 = Qt::XButton1,
-    QtXButton2 = Qt::XButton2
+    QtMidButton = Qt::MiddleButton
 };
 
 enum QtScrollBarPolicy {

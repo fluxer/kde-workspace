@@ -46,13 +46,11 @@ class DeclarativeDragDropEvent : public QObject
     /**
      * The pressed mouse buttons.
      * A combination of:
-     *  Qt.NoButton    The button state does not refer to any button (see QMouseEvent::button()).
+     *  Qt.NoButton      The button state does not refer to any button (see QMouseEvent::button()).
      *  Qt.LeftButton    The left button is pressed, or an event refers to the left button. (The left button may be the right button on left-handed mice.)
-     *  Qt.RightButton    The right button.
-     *  Qt.MidButton    The middle button.
+     *  Qt.RightButton   The right button.
+     *  Qt.MidButton     The middle button.
      *  Qt.MiddleButton  MidButton  The middle button.
-     *  Qt.XButton1    The first X button.
-     *  Qt.XButton2    The second X button.
      */
     Q_PROPERTY(int buttons READ buttons)
 

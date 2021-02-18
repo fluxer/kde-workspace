@@ -38,7 +38,6 @@ MouseInputButton::MouseInputButton(QWidget *parent)
     m_prettyStrings.insert("LeftButton", i18n("Left-Button"));
     m_prettyStrings.insert("RightButton", i18n("Right-Button"));
     m_prettyStrings.insert("MidButton", i18n("Middle-Button"));
-    //FIXME XButton1/2?
     m_prettyStrings.insert("wheel:Vertical", i18n("Vertical-Scroll"));
     m_prettyStrings.insert("wheel:Horizontal", i18n("Horizontal-Scroll"));
 

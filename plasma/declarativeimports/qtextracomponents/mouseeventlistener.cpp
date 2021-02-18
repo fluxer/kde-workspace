@@ -44,7 +44,7 @@ MouseEventListener::MouseEventListener(QDeclarativeItem *parent)
     qmlRegisterType<KDeclarativeWheelEvent>();
 
     setFiltersChildEvents(true);
-    setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton|Qt::MiddleButton|Qt::XButton1|Qt::XButton2);
+    setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton|Qt::MiddleButton);
 }
 
 MouseEventListener::~MouseEventListener()

@@ -40,8 +40,6 @@ KeyStatesEngine::KeyStatesEngine(QObject *parent, const QVariantList &args)
     m_buttons.insert(Qt::LeftButton, I18N_NOOP("Left Button"));
     m_buttons.insert(Qt::RightButton, I18N_NOOP("Right Button"));
     m_buttons.insert(Qt::MiddleButton, I18N_NOOP("Middle Button"));
-    m_buttons.insert(Qt::XButton1, I18N_NOOP("First X Button"));
-    m_buttons.insert(Qt::XButton2, I18N_NOOP("Second X Button"));
 }
 
 KeyStatesEngine::~KeyStatesEngine()
