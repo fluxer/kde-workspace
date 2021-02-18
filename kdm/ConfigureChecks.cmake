@@ -170,7 +170,7 @@ endif (KDE4_KRB5AUTH)
 
 if (X11_Xdmcp_FOUND)
     cmake_reset_check_state()
-    set(CMAKE_REQUIRED_LIBRARIES ${X11_LIBRARIES})
+    set(CMAKE_REQUIRED_LIBRARIES ${X11_Xdmcp_LIB})
     check_function_exists(XdmcpWrap HASXDMAUTH)
     cmake_reset_check_state()
 endif (X11_Xdmcp_FOUND)
