@@ -22,20 +22,30 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <QtCore/qdir.h>
 #include <QtXml/qxml.h>
 
 
 class IsoCodesPrivate {
 public:
-	IsoCodesPrivate(const QString& isoCode_, const QString& isoCodesXmlDir_):
+	IsoCodesPrivate(const QString& isoCode_):
 		isoCode(isoCode_),
-		isoCodesXmlDir(isoCodesXmlDir_),
+		isoCodesXmlDir(QLatin1String("/usr/share/xml/iso-codes")),
 		loaded(false)
-	{}
+	{
+            static const QStringList additionalCodesDirs = QStringList()
+                << QLatin1String("/usr/local/share/xml/iso-codes")
+                << QLatin1String("/usr/pkg/share/xml/iso-codes"); // NetBSD
+            foreach (const QString &dir, additionalCodesDirs) {
+                if (QDir(dir).exists()) {
+                    isoCodesXmlDir = dir;
+                }
+            }
+        }
 	void buildIsoEntryList();
 
 	const QString isoCode;
-	const QString isoCodesXmlDir;
+	QString isoCodesXmlDir;
 	QList<IsoCodeEntry> isoEntryList;
 	bool loaded;
 };
@@ -73,8 +83,8 @@ bool XmlHandler::startElement(const QString &/*namespaceURI*/, const QString &/*
 }
 
 
-IsoCodes::IsoCodes(const QString& isoCode, const QString& isoCodesXmlDir):
-	d(new IsoCodesPrivate(isoCode, isoCodesXmlDir))
+IsoCodes::IsoCodes(const QString& isoCode):
+	d(new IsoCodesPrivate(isoCode))
 {
 	KGlobal::locale()->insertCatalog(QString("iso_")+d->isoCode);
 }
