@@ -29,6 +29,7 @@
 #include <QTreeWidgetItemIterator>
 
 #include <kdebug.h>
+#include <kstandarddirs.h>
 
 typedef struct {
 	int string;
