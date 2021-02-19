@@ -118,7 +118,10 @@ bool DbusActionWidget::isChanged() const
 
 void DbusActionWidget::launchDbusBrowser() const
     {
-    QString qdbusviewerExe = KStandardDirs::findExe("qdbusviewer-qt4");
+    QString qdbusviewerExe = KStandardDirs::findExe("qdbusviewer-katie");
+    if (qdbusviewerExe.isEmpty()) {
+        qdbusviewerExe = KStandardDirs::findExe("qdbusviewer-qt4");
+    }
     if (qdbusviewerExe.isEmpty()) {
         // no exe lookup, let it fail if not found
         qdbusviewerExe = "qdbusviewer";

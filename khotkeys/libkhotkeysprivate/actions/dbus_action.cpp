@@ -134,7 +134,10 @@ void DBusAction::execute()
         }
     kDebug() << "D-Bus call:" << _application << ":" << _object << ":" << _function << ":" << args_list;
     // most distributions ship a suffixed symlink to qdbus, look for that first
-    QString qdbusExe = KStandardDirs::findExe("qdbus-qt4");
+    QString qdbusExe = KStandardDirs::findExe("qdbus-katie");
+    if (qdbusExe.isEmpty()) {
+        qdbusExe = KStandardDirs::findExe("qdbus-qt4");
+    }
     if (qdbusExe.isEmpty()) {
         // no exe lookup, let it fail if not found
         qdbusExe = "qdbus";
