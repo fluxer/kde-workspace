@@ -12,10 +12,6 @@ add_definitions( -DKSYSGUARDDRCFILE="\\"${KDE4_SYSCONF_INSTALL_DIR}/ksysguarddrc
 macro_optional_find_package(Sensors)
 macro_bool_to_01(SENSORS_FOUND HAVE_LMSENSORS)
 
-check_include_files(sys/inotify.h SYS_INOTIFY_H_FOUND)
-macro_bool_to_01(SYS_INOTIFY_H_FOUND HAVE_SYS_INOTIFY_H)
-
-
 configure_file(config-ksysguardd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksysguardd.h)
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "(Linux|GNU)")

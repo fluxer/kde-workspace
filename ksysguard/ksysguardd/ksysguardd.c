@@ -45,10 +45,6 @@
 
 #include "ksysguardd.h"
 
-#ifdef HAVE_SYS_INOTIFY_H
-#include <sys/inotify.h>
-#endif
-
 #define CMDBUFSIZE	128
 #define MAX_CLIENTS	100
 
@@ -534,16 +530,6 @@ char* escapeString( char* string ) {
   return result;
 }
 
-#ifdef HAVE_SYS_INOTIFY_H
-static void setupInotify(int *mtabfd) {
-  (*mtabfd) = inotify_init ();
-  if ((*mtabfd) >= 0) {
-    int wd = inotify_add_watch ((*mtabfd), "/etc/mtab", IN_MODIFY | IN_CREATE | IN_DELETE);
-    if(wd < 0) (*mtabfd) = -1; /* error setting up inotify watch */
-  }
-
-}
-#endif
 int main( int argc, char* argv[] )
 {
   fd_set fds;
@@ -570,24 +556,12 @@ int main( int argc, char* argv[] )
     ServerSocket = 0;
   }
 
-#ifdef HAVE_SYS_INOTIFY_H
-  /* Monitor mtab for changes */
-  int mtabfd = 0;
-  setupInotify(&mtabfd);
-#endif
-
   struct timeval now;
   struct timeval last;
   gettimeofday( &last, NULL );
 
   while ( !QuitApp ) {
     int highestFD = setupSelect( &fds );
-#ifdef HAVE_SYS_INOTIFY_H
-    if(mtabfd >= 0)
-      FD_SET( mtabfd, &fds);
-    if(mtabfd > highestFD) highestFD = mtabfd;
-#endif
-
     /* wait for communication or timeouts */
     int ret = select( highestFD + 1, &fds, NULL, NULL, NULL );
     if(ret >= 0) {
@@ -597,12 +571,6 @@ int main( int argc, char* argv[] )
             checkModules();
             last = now;
         }
-#ifdef HAVE_SYS_INOTIFY_H
-        if(mtabfd >= 0 && FD_ISSET(mtabfd, &fds)) {
-            close(mtabfd);
-            setupInotify(&mtabfd);
-        }
-#endif
         handleSocketTraffic( ServerSocket, &fds );
     }
   }
