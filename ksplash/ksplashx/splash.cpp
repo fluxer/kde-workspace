@@ -564,7 +564,11 @@ static void createWindow()
     window = XCreateWindow( qt_xdisplay(), DefaultRootWindow( qt_xdisplay()),
         geom.x(), geom.y(), geom.width(), geom.height(),
         0, CopyFromParent, CopyFromParent, CopyFromParent, CWOverrideRedirect | CWBackPixmap, &attrs );
+#ifndef NDEBUG
     XSelectInput( qt_xdisplay(), window, ButtonPressMask | ExposureMask );
+#else
+    XSelectInput( qt_xdisplay(), window, ExposureMask );
+#endif
     XClassHint class_hint;
     class_hint.res_name = const_cast< char* >( "ksplashx" );
     class_hint.res_class = const_cast< char* >( "ksplashx" );
@@ -605,17 +609,20 @@ static bool waitState( int expected_state )
         close( parent_pipe );
         parent_pipe = -1;
         }
+#ifndef NDEBUG
     const int doubleclick_delay = 200; // mouse doubleclick delay - in ms
     struct timeval button_press_time, current_time; // we need timeval to deal with milliseconds
     button_press_time.tv_sec = 0;
     button_press_time.tv_usec = 0;
     long click_delay, click_delay_seconds, click_delay_useconds;
+#endif
     for(;;)
         {
         while( XPending( qt_xdisplay()))
             {
             XEvent ev;
             XNextEvent( qt_xdisplay(), &ev );
+#ifndef NDEBUG
             if( ev.type == ButtonPress && ev.xbutton.window == window && ev.xbutton.button == Button1 )
                 {
                 gettimeofday( &current_time, NULL );
@@ -633,6 +640,7 @@ static bool waitState( int expected_state )
                     }
                 gettimeofday( &button_press_time, NULL );
                 }
+#endif
             if( ev.type == Expose && ev.xexpose.window == window )
                 doPaint( QRect( ev.xexpose.x, ev.xexpose.y, ev.xexpose.width, ev.xexpose.height ));
             if( ev.type == ConfigureNotify && ev.xconfigure.event == DefaultRootWindow( qt_xdisplay()))
