@@ -67,9 +67,9 @@ static int havetty, sfd = -1, nullpass;
 static char *
 conv_legacy (ConvRequest what, const char *prompt)
 {
-    char		*p, *p2;
-    int			len;
-    char		buf[1024];
+    char *p, *p2;
+    int len;
+    char buf[1024];
 
     switch (what) {
     case ConvGetBinary:
@@ -243,41 +243,38 @@ conv_server (ConvRequest what, const char *prompt)
 {
     GSendInt (what);
     switch (what) {
-    case ConvGetBinary:
-      {
-        unsigned const char *up = (unsigned const char *)prompt;
-        int len = up[3] | (up[2] << 8) | (up[1] << 16) | (up[0] << 24);
-        GSendArr (len, prompt);
-        return GRecvArr ();
-      }
-    case ConvGetNormal:
-    case ConvGetHidden:
-      {
-        char *msg;
-        GSendStr (prompt);
-        msg = GRecvStr ();
-        if (msg && (GRecvInt() & IsPassword) && !*msg)
-        nullpass = 1;
-        return msg;
-      }
-    case ConvPutInfo:
-    case ConvPutError:
-    default:
-      {
-        GSendStr (prompt);
-        return 0;
-      }
+        case ConvGetBinary: {
+            unsigned const char *up = (unsigned const char *)prompt;
+            int len = up[3] | (up[2] << 8) | (up[1] << 16) | (up[0] << 24);
+            GSendArr (len, prompt);
+            return GRecvArr ();
+        }
+        case ConvGetNormal:
+        case ConvGetHidden: {
+            char *msg;
+            GSendStr (prompt);
+            msg = GRecvStr ();
+            if (msg && (GRecvInt() & IsPassword) && !*msg)
+                nullpass = 1;
+            return msg;
+        }
+        case ConvPutInfo:
+        case ConvPutError:
+        default: {
+            GSendStr (prompt);
+            return 0;
+        }
     }
 }
 
 void
 message(const char *fmt, ...)
 {
-  va_list ap;
+    va_list ap;
 
-  va_start(ap, fmt);
-  vfprintf(stderr, fmt, ap);
-  va_end(ap);
+    va_start(ap, fmt);
+    vfprintf(stderr, fmt, ap);
+    va_end(ap);
 }
 
 #ifndef O_NOFOLLOW
@@ -287,160 +284,161 @@ message(const char *fmt, ...)
 static void ATTR_NORETURN
 usage(int exitval)
 {
-  message(
-	  "usage: kcheckpass {-h|[-c caller] [-m method] [-U username|-S handle]}\n"
-	  "  options:\n"
-	  "    -h           this help message\n"
-	  "    -U username  authenticate the specified user instead of current user\n"
-	  "    -S handle    operate in binary server mode on file descriptor handle\n"
-	  "    -c caller    the calling application, effectively the PAM service basename\n"
-	  "    -m method    use the specified authentication method (default: \"classic\")\n"
-	  "  exit codes:\n"
-	  "    0 success\n"
-	  "    1 invalid password\n"
-	  "    2 cannot read password database\n"
-	  "    Anything else tells you something's badly hosed.\n"
-	);
-  exit(exitval);
+    message(
+            "usage: kcheckpass {-h|[-c caller] [-m method] [-U username|-S handle]}\n"
+            "  options:\n"
+            "    -h           this help message\n"
+            "    -U username  authenticate the specified user instead of current user\n"
+            "    -S handle    operate in binary server mode on file descriptor handle\n"
+            "    -c caller    the calling application, effectively the PAM service basename\n"
+            "    -m method    use the specified authentication method (default: \"classic\")\n"
+            "  exit codes:\n"
+            "    0 success\n"
+            "    1 invalid password\n"
+            "    2 cannot read password database\n"
+            "    Anything else tells you something's badly hosed.\n"
+            );
+    exit(exitval);
 }
 
 int
 main(int argc, char **argv)
 {
 #ifdef HAVE_PAM
-  const char	*caller = KSCREENSAVER_PAM_SERVICE;
+  const char *caller = KSCREENSAVER_PAM_SERVICE;
 #endif
-  const char	*method = "classic";
-  const char	*username = 0;
+    const char *method = "classic";
+    const char *username = 0;
 #ifdef ACCEPT_ENV
-  char		*p;
+    char *p;
 #endif
-  struct passwd	*pw;
-  int		c, nfd, lfd;
-  uid_t		uid;
-  time_t	nexttime;
-  AuthReturn	ret;
-  struct flock lk;
-  char fname[64], fcont[64];
+    struct passwd *pw;
+    int c, nfd, lfd;
+    uid_t uid;
+    time_t nexttime;
+    AuthReturn ret;
+    struct flock lk;
+    char fname[64], fcont[64];
 
-  /* Make sure stdout/stderr are open */
-  for (c = 1; c <= 2; c++) {
-    if (fcntl(c, F_GETFL) == -1) {
-      if ((nfd = open("/dev/null", O_WRONLY)) < 0) {
-        message("cannot open /dev/null: %s\n", strerror(errno));
-        exit(10);
-      }
-      if (c != nfd) {
-        dup2(nfd, c);
-        close(nfd);
-      }
+    /* Make sure stdout/stderr are open */
+    for (c = 1; c <= 2; c++) {
+        if (fcntl(c, F_GETFL) == -1) {
+            if ((nfd = open("/dev/null", O_WRONLY)) < 0) {
+                message("cannot open /dev/null: %s\n", strerror(errno));
+                exit(10);
+            }
+            if (c != nfd) {
+                dup2(nfd, c);
+                close(nfd);
+            }
+        }
     }
-  }
 
-  havetty = isatty(0);
+    havetty = isatty(0);
 
-  while ((c = getopt(argc, argv, "hc:m:U:S:")) != -1) {
-    switch (c) {
-    case 'h':
-      usage(0);
-      break;
-    case 'c':
+    while ((c = getopt(argc, argv, "hc:m:U:S:")) != -1) {
+        switch (c) {
+            case 'h':
+                usage(0);
+                break;
+            case 'c':
 #ifdef HAVE_PAM
-      caller = optarg;
+                caller = optarg;
 #endif
-      break;
-    case 'm':
-      method = optarg;
-      break;
-    case 'U':
-      username = optarg;
-      break;
-    case 'S':
-      sfd = atoi(optarg);
-      break;
-    default:
-      message("Command line option parsing error\n");
-      usage(10);
+                break;
+            case 'm':
+                method = optarg;
+                break;
+            case 'U':
+                username = optarg;
+                break;
+            case 'S':
+                sfd = atoi(optarg);
+                break;
+            default:
+                message("Command line option parsing error\n");
+                usage(10);
+        }
     }
-  }
 
 #ifdef ACCEPT_ENV
 # ifdef HAVE_PAM
-  if ((p = getenv("KDE_PAM_ACTION")))
-    caller = p;
+    if ((p = getenv("KDE_PAM_ACTION")))
+        caller = p;
 # endif
-  if ((p = getenv("KCHECKPASS_USER")))
-    username = p;
+    if ((p = getenv("KCHECKPASS_USER")))
+        username = p;
 #endif  
 
-  uid = getuid();
-  if (!username) {
-    if (!(p = getenv("LOGNAME")) || !(pw = getpwnam(p)) || pw->pw_uid != uid)
-      if (!(p = getenv("USER")) || !(pw = getpwnam(p)) || pw->pw_uid != uid)
-        if (!(pw = getpwuid(uid))) {
-          message("Cannot determinate current user\n");
-          return AuthError;
+    uid = getuid();
+    if (!username) {
+        if (!(p = getenv("LOGNAME")) || !(pw = getpwnam(p)) || pw->pw_uid != uid) {
+            if (!(p = getenv("USER")) || !(pw = getpwnam(p)) || pw->pw_uid != uid) {
+                if (!(pw = getpwuid(uid))) {
+                    message("Cannot determinate current user\n");
+                    return AuthError;
+                }
+            }
         }
-    if (!(username = strdup(pw->pw_name))) {
-      message("Out of memory\n");
-      return AuthError;
-    }
-  }
-
-  /*
-   * Throttle kcheckpass invocations to avoid abusing it for bruteforcing
-   * the password. This delay belongs to the *previous* invocation, where
-   * we can't enforce it reliably (without risking giving away the result
-   * before it is due). We don't differentiate between success and failure -
-   * it's not expected to have a noticeable adverse effect.
-   */
-  if ( uid != geteuid() ) {
-    sprintf(fname, "/var/run/kcheckpass.%d", uid);
-    if ((lfd = open(fname, O_RDWR | O_CREAT | O_NOFOLLOW, 0600)) < 0) {
-      message("Cannot open lockfile\n");
-      return AuthError;
+        if (!(username = strdup(pw->pw_name))) {
+            message("Out of memory\n");
+            return AuthError;
+        }
     }
 
-    lk.l_type = F_WRLCK;
-    lk.l_whence = SEEK_SET;
-    lk.l_start = lk.l_len = 0;
-    if (fcntl(lfd, F_SETLKW, &lk)) {
-      message("Cannot obtain lock\n");
-      return AuthError;
+    /*
+    * Throttle kcheckpass invocations to avoid abusing it for bruteforcing
+    * the password. This delay belongs to the *previous* invocation, where
+    * we can't enforce it reliably (without risking giving away the result
+    * before it is due). We don't differentiate between success and failure -
+    * it's not expected to have a noticeable adverse effect.
+    */
+    if ( uid != geteuid() ) {
+        sprintf(fname, "/var/run/kcheckpass.%d", uid);
+        if ((lfd = open(fname, O_RDWR | O_CREAT | O_NOFOLLOW, 0600)) < 0) {
+            message("Cannot open lockfile\n");
+            return AuthError;
+        }
+
+        lk.l_type = F_WRLCK;
+        lk.l_whence = SEEK_SET;
+        lk.l_start = lk.l_len = 0;
+        if (fcntl(lfd, F_SETLKW, &lk)) {
+            message("Cannot obtain lock\n");
+            return AuthError;
+        }
+
+        if ((c = read(lfd, fcont, sizeof(fcont)-1)) > 0 &&
+            (fcont[c] = '\0', sscanf(fcont, "%ld", &nexttime) == 1)) {
+            time_t ct = time(0);
+            if (nexttime > ct && nexttime < ct + THROTTLE)
+                sleep(nexttime - ct);
+        }
+
+        lseek(lfd, 0, SEEK_SET);
+        write(lfd, fcont, sprintf(fcont, "%lu\n", time(0) + THROTTLE));
+
+        close(lfd);
     }
 
-    if ((c = read(lfd, fcont, sizeof(fcont)-1)) > 0 &&
-        (fcont[c] = '\0', sscanf(fcont, "%ld", &nexttime) == 1))
-    {
-      time_t ct = time(0);
-      if (nexttime > ct && nexttime < ct + THROTTLE)
-        sleep(nexttime - ct);
-    }
-
-    lseek(lfd, 0, SEEK_SET);
-    write(lfd, fcont, sprintf(fcont, "%lu\n", time(0) + THROTTLE));
-
-    close(lfd);
-  }
-
-  /* Now do the fandango */
-  ret = Authenticate(
+    /* Now do the fandango */
+    ret = Authenticate(
 #ifdef HAVE_PAM
-                     caller,
+                       caller,
 #endif
-                     method,
-                     username, 
-                     sfd < 0 ? conv_legacy : conv_server);
+                       method,
+                       username, 
+                       sfd < 0 ? conv_legacy : conv_server);
 
     if (ret == AuthBad) {
-      message("Authentication failure\n");
-      if (!nullpass) {
-        openlog("kcheckpass", LOG_PID, LOG_AUTH);
-        syslog(LOG_NOTICE, "Authentication failure for %s (invoked by uid %d)", username, uid);
-      }
+        message("Authentication failure\n");
+        if (!nullpass) {
+            openlog("kcheckpass", LOG_PID, LOG_AUTH);
+            syslog(LOG_NOTICE, "Authentication failure for %s (invoked by uid %d)", username, uid);
+        }
     }
 
-  return ret;
+    return ret;
 }
 
 void

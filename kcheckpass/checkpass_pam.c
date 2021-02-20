@@ -48,8 +48,8 @@ typedef void *pam_gi_type;
 
 static int
 PAM_conv (int num_msg, pam_message_type **msg,
-	  struct pam_response **resp,
-	  void *appdata_ptr)
+          struct pam_response **resp,
+          void *appdata_ptr)
 {
   int count;
   struct pam_response *repl;
@@ -99,14 +99,14 @@ PAM_conv (int num_msg, pam_message_type **msg,
     if (repl[count].resp)
       switch (msg[count]->msg_style) {
       case PAM_PROMPT_ECHO_OFF:
-	dispose(repl[count].resp);
+        dispose(repl[count].resp);
         break;
 #ifdef PAM_BINARY_PROMPT
       case PAM_BINARY_PROMPT: /* handle differently? */
 #endif
       case PAM_PROMPT_ECHO_ON:
-	free(repl[count].resp);
-	break;
+        free(repl[count].resp);
+        break;
       }
   free(repl);
   return PAM_CONV_ERR;
@@ -122,7 +122,7 @@ static struct pam_conv PAM_conversation = {
 #ifdef PAM_FAIL_DELAY
 static void
 fail_delay(int retval ATTR_UNUSED, unsigned usec_delay ATTR_UNUSED, 
-	   void *appdata_ptr ATTR_UNUSED)
+           void *appdata_ptr ATTR_UNUSED)
 {}
 #endif
 
