@@ -31,19 +31,26 @@ set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 
 add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 
-target_link_libraries(taskmanager processcore ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} kephal)
-if(X11_Xfixes_FOUND)
-    target_link_libraries(taskmanager ${X11_Xfixes_LIB})
-endif (X11_Xfixes_FOUND)
-if(X11_Xrender_FOUND)
-    target_link_libraries(taskmanager ${X11_Xrender_LIB})
-endif (X11_Xrender_FOUND)
-if(X11_Xcomposite_FOUND)
-    target_link_libraries(taskmanager ${X11_Xcomposite_LIB})
-endif (X11_Xcomposite_FOUND)
+target_link_libraries(taskmanager PUBLIC
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
+    processcore
+    kephal
+)
 
-set_target_properties(taskmanager PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
-install(TARGETS taskmanager EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+target_link_libraries(taskmanager PRIVATE
+    ${X11_X11_LIB}
+)
+
+set_target_properties(taskmanager PROPERTIES
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
+
+install(
+    TARGETS taskmanager
+    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
 
 install(FILES
    abstractgroupableitem.h
@@ -59,14 +66,14 @@ install(FILES
    taskmanager.h
    taskmanager_export.h
    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
-   )
+)
 
 
 #set(tasksmodel_SRCS 
 #   modeltest/dynamictreemodel.cpp
 #   modeltest/modeltest.cpp
 #   modeltest/main.cpp
-#   )
+#)
 
 #add_executable(tasksmodeltest ${tasksmodel_SRCS})
 #target_link_libraries(tasksmodeltest ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} taskmanager kephal)
