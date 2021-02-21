@@ -62,7 +62,8 @@
 
 #define THROTTLE 3
 
-static int havetty, sfd = -1, nullpass;
+static int havetty, nullpass = 0;
+static int sfd = -1;
 
 static char *
 conv_legacy (ConvRequest what, const char *prompt)
