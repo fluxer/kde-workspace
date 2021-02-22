@@ -35,6 +35,8 @@
 #include <stdlib.h>
 #include <pwd.h>
 #include <shadow.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 AuthReturn Authenticate(const char *method,
         const char *login, char *(*conv) (ConvRequest, const char *))
@@ -51,14 +53,22 @@ AuthReturn Authenticate(const char *method,
   if (!(pw = getpwnam(login)))
     return AuthAbort;
 
+  uid_t eid = geteuid();
+  if (eid != 0 && seteuid(0) != 0)
+    return AuthAbort;
+
   spw = getspnam(login);
   password = spw ? spw->sp_pwdp : pw->pw_passwd;
 
-  if (!*password)
+  if (!*password) {
+    seteuid(eid);
     return AuthOk;
+  }
 
-  if (!(typed_in_password = conv(ConvGetHidden, 0)))
+  if (!(typed_in_password = conv(ConvGetHidden, 0))) {
+    seteuid(eid);
     return AuthAbort;
+  }
 
 #if defined( __linux__ ) && defined( HAVE_PW_ENCRYPT )
   crpt_passwd = pw_encrypt(typed_in_password, password);  /* (1) */
@@ -67,10 +77,12 @@ AuthReturn Authenticate(const char *method,
 #endif
 
   if (crpt_passwd && !strcmp(password, crpt_passwd )) {
+    seteuid(eid);
     dispose(typed_in_password);
     return AuthOk; /* Success */
   }
   dispose(typed_in_password);
+  seteuid(eid);
   return AuthBad; /* Password wrong or account locked */
 }
 
