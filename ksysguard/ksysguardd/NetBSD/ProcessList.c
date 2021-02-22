@@ -163,7 +163,7 @@ findProcessInList(int pid)
 static int
 updateProcess(int pid, struct kinfo_proc2 *p)
 {
-	static const char * const statuses[] = { "", "idle","run","sleep","stop","zombie","dead","onproc" };
+	static const char * const statuses[] = { "idle", "run", "sleep", "stop", "zombie", "dead", "onproc", "suspended" };
 	
 	ProcessInfo* ps;
 	struct passwd* pwent;
@@ -205,7 +205,7 @@ updateProcess(int pid, struct kinfo_proc2 *p)
 			p->p_vm_ssize) * getpagesize();
 	ps->vmRss    = p->p_vm_rssize * getpagesize();
 	strlcpy(ps->name,p->p_comm ? p->p_comm : "????", sizeof(ps->name));
-	strlcpy(ps->status,(p->p_stat<=7)? statuses[p->p_stat]:"????", sizeof(ps->status));
+	strlcpy(ps->status,(p->p_stat<=8)? statuses[p->p_stat]:"????", sizeof(ps->status));
 
         /* process command line */
 	argv = kvm_getargv2(kd, p, sizeof(ps->cmdline));

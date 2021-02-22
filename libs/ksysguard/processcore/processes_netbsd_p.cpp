@@ -120,9 +120,9 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc2 *p, Process *ps)
     ps->setVmSize((p->p_vm_tsize + p->p_vm_dsize + p->p_vm_ssize) * getpagesize() / 1024);
     ps->setVmRSS(p->p_vm_rssize * getpagesize() / 1024);
 
-    // "idle", "run", "sleep", "stop", "zombie"
+    // "idle", "run", "sleep", "stop", "zombie", "dead", "onproc", "suspended"
     switch( p->p_stat ) {
-        case SIDL:
+        case LSIDL:
             ps->setStatus(Process::DiskSleep);
             break;
         case LSRUN:
@@ -130,6 +130,7 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc2 *p, Process *ps)
             ps->setStatus(Process::Running);
             break;
         case LSSLEEP:
+        case LSSUSPENDED:
             ps->setStatus(Process::Sleeping);
             break;
         case LSSTOP:
