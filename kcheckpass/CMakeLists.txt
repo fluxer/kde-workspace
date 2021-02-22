@@ -1,4 +1,4 @@
-include_directories(${UNIXAUTH_INCLUDE_DIRS} )
+include_directories(${UNIXAUTH_INCLUDE_DIRS})
 
 check_include_files(paths.h HAVE_PATHS_H)
 
@@ -23,11 +23,15 @@ target_link_libraries(kcheckpass
     ${SOCKET_LIBRARIES}
 )
 
+if (PAM_FOUND)
+    set(kcheckpass_suid "")
+else()
+    set(kcheckpass_suid "SETUID")
+    message(WARNING "PAM not found, will install kcheckpass SUID")
+endif()
+
 install(
     TARGETS kcheckpass
     DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE ${kcheckpass_suid}
 )
-install(CODE "
-    set(KCP_PATH \"\$ENV{DESTDIR}${KDE4_LIBEXEC_INSTALL_DIR}/kcheckpass\")
-    EXECUTE_PROCESS(COMMAND sh -c \"chown root '\${KCP_PATH}' && chmod +s '\${KCP_PATH}'\")
-")
