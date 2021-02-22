@@ -179,7 +179,7 @@ void sanity_check( int argc, char* argv[], KAboutData* aboutDataPtr )
     }
     if (msg.isEmpty())
     {
-        path = getenv("KDETMP");
+        path = getenv("TMPDIR");
         if (path.isEmpty())
             path = "/tmp";
         if (!writeTest(path))

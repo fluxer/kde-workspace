@@ -362,16 +362,9 @@ main(int argc, char **argv)
         }
     }
 
-#ifdef ACCEPT_ENV
-# ifdef HAVE_PAM
-    if ((p = getenv("KDE_PAM_ACTION")))
-        caller = p;
-# endif
-    if ((p = getenv("KCHECKPASS_USER")))
-        username = p;
-#endif  
-
     uid = getuid();
+
+#ifdef ACCEPT_ENV
     if (!username) {
         if (!(p = getenv("LOGNAME")) || !(pw = getpwnam(p)) || pw->pw_uid != uid) {
             if (!(p = getenv("USER")) || !(pw = getpwnam(p)) || pw->pw_uid != uid) {
@@ -386,6 +379,7 @@ main(int argc, char **argv)
             return AuthError;
         }
     }
+#endif
 
     /*
     * Throttle kcheckpass invocations to avoid abusing it for bruteforcing

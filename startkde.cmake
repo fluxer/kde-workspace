@@ -180,7 +180,7 @@ fi
 # - a directory /tmp/kde-$USER and links $KDEHOME/tmp-$HOSTNAME to it.
 # - a directory /tmp/ksocket-$USER and links $KDEHOME/socket-$HOSTNAME to it.
 # - a directory /var/tmp/kdecache-$USER and links $KDEHOME/cache-$HOSTNAME to it.
-# Note: temporary locations can be overriden through the KDETMP and KDEVARTMP
+# Note: temporary locations can be overriden through the TMPDIR and KDEVARTMP
 # environment variables
 for resource in tmp cache socket; do
     if "$lnusertemp" $resource >/dev/null; then

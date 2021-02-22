@@ -562,10 +562,6 @@ int main(int argc, char * argv[])
     if (KDE_signal(SIGHUP, KWin::sighandler) == SIG_IGN)
         KDE_signal(SIGHUP, SIG_IGN);
 
-    // Disable the glib event loop integration, since it seems to be responsible
-    // for several bug reports about high CPU usage (bug #239963)
-    setenv("QT_NO_GLIB", "1", true);
-
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
     ksmserver.suspendStartup("kwin");
     KWin::Application a;
@@ -574,10 +570,6 @@ int main(int argc, char * argv[])
     KWin::SessionManager weAreIndeed;
     KWin::SessionSaveDoneHelper helper;
     KGlobal::locale()->insertCatalog("kwin_effects");
-
-    // Announce when KWIN_DIRECT_GL is set for above HACK
-    if (qstrcmp(qgetenv("KWIN_DIRECT_GL"), "1") == 0)
-        kDebug(1212) << "KWIN_DIRECT_GL set, not forcing LIBGL_ALWAYS_INDIRECT=1";
 
     fcntl(XConnectionNumber(KWin::display()), F_SETFD, 1);
 
