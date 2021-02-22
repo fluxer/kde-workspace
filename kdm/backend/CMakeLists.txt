@@ -39,8 +39,11 @@ endif (K5AUTH)
 if (SECURE_RPC)
     set(kdm_SRCS ${kdm_SRCS} rpcauth.c)
 endif (SECURE_RPC)
+
 macro_add_file_dependencies(dm.h ${confci})
+macro_add_file_dependencies(resource.c ${confci})
 macro_add_file_dependencies(error.c ${CMAKE_CURRENT_SOURCE_DIR}/printf.c)
+
 add_executable(kdm ${kdm_SRCS})
 add_definitions(-U_REENTRANT)
 target_link_libraries(kdm
@@ -58,6 +61,7 @@ target_link_libraries(kdm
     ${RESOLV_LIBRARIES}
     ${SOCKET_LIBRARIES}
 )
+
 if(CKCONNECTOR_FOUND)
     include_directories(${CKCONNECTOR_INCLUDE_DIR} ${DBUS_INCLUDE_DIR} ${DBUS_ARCH_INCLUDE_DIR})
     target_link_libraries(kdm ${CKCONNECTOR_LIBRARIES} ${DBUS_LIBRARIES})
