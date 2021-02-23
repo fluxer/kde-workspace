@@ -28,6 +28,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kpluginloader.h>
 #include <ktoolinvocation.h>
 #include <solid/powermanagement.h>
+#include <solid/button.h>
+#include <solid/device.h>
 
 #include <qprocess.h>
 #include <qdbusservicewatcher.h>
@@ -255,24 +257,14 @@ void RandrMonitorModule::checkInhibition()
 
 bool RandrMonitorModule::isLidPresent()
 {
-    QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.UPower",
-                        "/org/freedesktop/UPower",
-                        "org.freedesktop.DBus.Properties",
-                        "Get");
-    QList <QVariant> args;
-    args.append(QVariant::fromValue<QString>(QString("org.freedesktop.UPower")));
-    args.append(QVariant::fromValue<QString>(QString("LidIsPresent")));
-    call.setArguments(args);
-
-    QDBusMessage msg =  QDBusConnection::systemBus().call(call);
-    QDBusReply<QDBusVariant> reply(msg);
-
-    if (!reply.isValid()) {
-        kDebug() << reply.error();
-        return false;
+    // get a list of all devices that are Buttons
+    foreach (Solid::Device device, Solid::Device::listFromType(Solid::DeviceInterface::Button, QString())) {
+        Solid::Button *button = device.as<Solid::Button>();
+        if (button->type() == Solid::Button::LidButton) {
+            return true;
+        }
     }
-
-    return reply.value().variant().toBool();
+    return false;
 }
 
 
