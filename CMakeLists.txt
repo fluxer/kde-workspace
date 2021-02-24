@@ -163,7 +163,7 @@ find_package(Perl)
 set_package_properties(Perl PROPERTIES
     DESCRIPTION "Highly capable, feature-rich programming language"
     URL "http://www.perl.org"
-    PURPOSE "Needed for KDM config handler generator, as well as info and finger KIO slaves"
+    PURPOSE "Needed for KDM config handler generator"
     TYPE REQUIRED
 )
 
