@@ -49,22 +49,26 @@ static size_t Inactive = 0;
 static size_t Wired = 0;
 static size_t Execpages = 0;
 static size_t Filepages = 0;
+static size_t Anonpages = 0;
 static size_t STotal = 0;
 static size_t SFree = 0;
 static size_t SUsed = 0;
+static size_t Application = 0;
 
 void
 initMemory(struct SensorModul* sm)
 {
-        registerMonitor("mem/physical/free", "integer", printMFree, printMFreeInfo, sm);
-	registerMonitor("mem/physical/used", "integer", printUsed, printUsedInfo, sm);
-	registerMonitor("mem/physical/active", "integer", printActive, printActiveInfo, sm);
-	registerMonitor("mem/physical/inactive", "integer", printInactive, printInactiveInfo, sm);
-	registerMonitor("mem/physical/wired", "integer", printWired, printWiredInfo, sm);
-	registerMonitor("mem/physical/execpages", "integer", printExecpages, printExecpagesInfo, sm);
-	registerMonitor("mem/physical/filepages", "integer", printFilepages, printFilepagesInfo, sm);
-	registerMonitor("mem/swap/free", "integer", printSwapFree, printSwapFreeInfo, sm);
-	registerMonitor("mem/swap/used", "integer", printSwapUsed, printSwapUsedInfo, sm);
+    registerMonitor("mem/physical/free", "integer", printMFree, printMFreeInfo, sm);
+    registerMonitor("mem/physical/used", "integer", printUsed, printUsedInfo, sm);
+    registerMonitor("mem/physical/active", "integer", printActive, printActiveInfo, sm);
+    registerMonitor("mem/physical/inactive", "integer", printInactive, printInactiveInfo, sm);
+    registerMonitor("mem/physical/wired", "integer", printWired, printWiredInfo, sm);
+    registerMonitor("mem/physical/execpages", "integer", printExecpages, printExecpagesInfo, sm);
+    registerMonitor("mem/physical/filepages", "integer", printFilepages, printFilepagesInfo, sm);
+    registerMonitor("mem/physical/anonpages", "integer", printAnonpages, printAnonpagesInfo, sm);
+    registerMonitor("mem/physical/application", "integer", printApplication, printApplicationInfo, sm);
+    registerMonitor("mem/swap/free", "integer", printSwapFree, printSwapFreeInfo, sm);
+    registerMonitor("mem/swap/used", "integer", printSwapUsed, printSwapUsedInfo, sm);
 }
 
 void
@@ -77,143 +81,168 @@ updateMemory(void)
 {
 
 #define ARRLEN(X) (sizeof(X)/sizeof(X[0]))
-  size_t len;
+    size_t len;
   
-  {
-    static int mib[]={ CTL_HW, HW_PHYSMEM };
-    
+    static int hwmib[]={ CTL_HW, HW_PHYSMEM };
+
     len = sizeof(Total);
-    sysctl(mib, ARRLEN(mib), &Total, &len, NULL, 0);
+    if (sysctl(hwmib, ARRLEN(hwmib), &Total, &len, NULL, 0) < 0)
+        return -1;
     Total >>= 10;
-  }
  
-  {
     struct uvmexp_sysctl x;
-    static int mib[] = { CTL_VM, VM_UVMEXP2 };
-    
+    static int vmmib[] = { CTL_VM, VM_UVMEXP2 };
+
     len = sizeof(x);
     STotal = SUsed = SFree = -1;
-    Active = Inactive = Wired = Execpages = Filepages = MFree = Used = -1;
-    if (-1 < sysctl(mib, ARRLEN(mib), &x, &len, NULL, 0)) {
-      STotal = (x.pagesize*x.swpages) >> 10;
-      SUsed = (x.pagesize*x.swpginuse) >> 10;
-      SFree = STotal - SUsed;
-      MFree = (x.free * x.pagesize) >> 10;
-      Active = (x.active * x.pagesize) >> 10;
-      Inactive = (x.inactive * x.pagesize) >> 10;
-      Wired = (x.wired * x.pagesize) >> 10;
-      Execpages = (x.execpages * x.pagesize) >> 10;
-      Filepages = (x.filepages * x.pagesize) >> 10;
-      Used = Total - MFree;
-    }
-  }
-  return 0;
+    Active = Inactive = Wired = Execpages = Filepages = MFree = Used = Anonpages = Application -1;
+    if (sysctl(vmmib, ARRLEN(vmmib), &x, &len, NULL, 0) < 0)
+        return -1;
+
+    STotal = (x.pagesize*x.swpages) >> 10;
+    SUsed = (x.pagesize*x.swpginuse) >> 10;
+    SFree = STotal - SUsed;
+    MFree = (x.free * x.pagesize) >> 10;
+    Active = (x.active * x.pagesize) >> 10;
+    Inactive = (x.inactive * x.pagesize) >> 10;
+    Wired = (x.wired * x.pagesize) >> 10;
+    Execpages = (x.execpages * x.pagesize) >> 10;
+    Filepages = (x.filepages * x.pagesize) >> 10;
+    Anonpages = (x.anonpages * x.pagesize) >> 10;
+    Used = Total - MFree;
+    Application = Active - Filepages;
+
+    return 0;
 }
 
 void
 printMFree(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", MFree);
+    fprintf(CurrentClient, "%d\n", MFree);
 }
 
 void
 printMFreeInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Free Memory\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Free Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printUsed(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Used);
+    fprintf(CurrentClient, "%d\n", Used);
 }
 
 void
 printUsedInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Used Memory\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Used Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printActive(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Active);
+    fprintf(CurrentClient, "%d\n", Active);
 }
 
 void
 printActiveInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Active Memory\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Active Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printInactive(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Inactive);
+    fprintf(CurrentClient, "%d\n", Inactive);
 }
 
 void
 printInactiveInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Inactive Memory\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Inactive Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printWired(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Wired);
+    fprintf(CurrentClient, "%d\n", Wired);
 }
 
 void
 printWiredInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Wired Memory\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Wired Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printExecpages(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Execpages);
+    fprintf(CurrentClient, "%d\n", Execpages);
 }
 
 void
 printExecpagesInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Exec Pages\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "Exec Pages\t0\t%d\tKB\n", Total);
 }
 
 void
 printFilepages(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", Filepages);
+    fprintf(CurrentClient, "%d\n", Filepages);
 }
 
 void
 printFilepagesInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "File Pages\t0\t%d\tKB\n", Total);
+    fprintf(CurrentClient, "File Pages\t0\t%d\tKB\n", Total);
+}
+
+void
+printAnonpages(const char* cmd)
+{
+    fprintf(CurrentClient, "%d\n", Anonpages);
+}
+
+void
+printAnonpagesInfo(const char* cmd)
+{
+    fprintf(CurrentClient, "Anon Pages\t0\t%d\tKB\n", Total);
+}
+
+void
+printApplication(const char* cmd)
+{
+    fprintf(CurrentClient, "%d\n", Application);
+}
+
+void
+printApplicationInfo(const char* cmd)
+{
+    fprintf(CurrentClient, "Application Memory\t0\t%d\tKB\n", Total);
 }
 
 void
 printSwapUsed(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", SUsed);
+    fprintf(CurrentClient, "%d\n", SUsed);
 }
 
 void
 printSwapUsedInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Used Swap Memory\t0\t%d\tKB\n", STotal);
+    fprintf(CurrentClient, "Used Swap Memory\t0\t%d\tKB\n", STotal);
 }
 
 void
 printSwapFree(const char* cmd)
 {
-	fprintf(CurrentClient, "%d\n", SFree);
+    fprintf(CurrentClient, "%d\n", SFree);
 }
 
 void
 printSwapFreeInfo(const char* cmd)
 {
-	fprintf(CurrentClient, "Free Swap Memory\t0\t%d\tKB\n", STotal);
+    fprintf(CurrentClient, "Free Swap Memory\t0\t%d\tKB\n", STotal);
 }
