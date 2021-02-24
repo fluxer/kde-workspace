@@ -207,7 +207,7 @@ fillProcessCmdline(char *cmdline, struct kinfo_proc *p, size_t maxlen)
 static int
 updateProcess(struct kinfo_proc *p)
 {
-    static const char * const statuses[] = { "idle", "run", "sleep", "stop", "zombie", "dead", "onproc" };
+    static const char * const statuses[] = { "????", "idle", "run", "sleep", "stop", "zombie", "dead", "onproc" };
     
     ProcessInfo* ps;
     struct passwd* pwent;

@@ -70,7 +70,7 @@ static struct {
 } pwd_cache[PWDBUF];
 static int pwd_size = 0, pwd_hit = 0, pwd_last = 0;
 
-static char *const statuses[] = { "", "IDLE", "RUN", "SLEEP", "STOP", "ZOMBIE", "WAIT", "LOCK" };
+static char *const statuses[] = { "????", "IDLE", "RUN", "SLEEP", "STOP", "ZOMBIE", "WAIT", "LOCK" };
 static pid_t statcnt[8];
 static char (*cpunames)[8] = NULL;
 
@@ -343,7 +343,7 @@ void printProcessxCount(const char *cmd) {
 
 void printProcessxCountInfo(const char *cmd) {
     int idx;
-    static char *const statnames[] = {"", "Idle", "Running", "Sleeping", "Stopped", "Zombie", "Waiting", "Locked" };
+    static char *const statnames[] = {"????", "Idle", "Running", "Sleeping", "Stopped", "Zombie", "Waiting", "Locked" };
 
     for (idx = 1; idx < 7; ++idx) {
         if (strncasecmp(cmd + 12, statuses[idx], strlen(cmd + 12) - 1) == 0)
