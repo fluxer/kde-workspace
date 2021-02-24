@@ -49,9 +49,6 @@
 /* Define the system's entropy device */
 #cmakedefine DEV_RANDOM ${DEV_RANDOM}
 
-/* Define if the system uses a BSD-style init */
-#cmakedefine BSD_INIT 1
-
 /* Define if the system has no getutent */
 #cmakedefine BSD_UTMP 1
 

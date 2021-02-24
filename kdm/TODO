@@ -27,7 +27,6 @@
   - SVR4, /dev/vc[00] (ESIX), /dev/vt[00] (other)
   - SCO, /dev/tty[00], query current with CONS_GETINFO, counts 0-based
   ref: xorg/programs/Xserver/hw/xfree86/os-support/xf86_OSlib.h
-- act on BSD_INIT
 
 - possibly parse Xserver log to find failure cause. this is very hacky.
 

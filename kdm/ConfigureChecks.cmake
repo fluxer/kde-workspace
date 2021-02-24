@@ -100,12 +100,6 @@ int main()
 " HONORS_SOCKET_PERMS)
 cmake_reset_check_state()
 
-# for genkdmconf; this is TODO
-#if (EXISTS /etc/ttys)
-#    set(BSD_INIT 1)
-#    check_function_exists(getttyent HAVE_GETTTYENT)
-#endif (EXISTS /etc/ttys)
-
 check_function_exists(getutxent HAVE_UTMPX)
 check_function_exists(updlastlogx HAVE_LASTLOGX)
 set(BSD_UTMP)
