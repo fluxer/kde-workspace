@@ -25,12 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
-
-#ifdef HAVE_PAM_PAM_APPL_H
-#include <pam/pam_appl.h>
-#else
 #include <security/pam_appl.h>
-#endif
 
 struct pam_data {
   char *(*conv) (ConvRequest, const char *);

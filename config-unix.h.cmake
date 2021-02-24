@@ -1,9 +1,6 @@
 /* Defines if you have PAM (Pluggable Authentication Modules) */
 #cmakedefine HAVE_PAM 1
 
-/* Define if your PAM headers are in pam/ instead of security/ */
-#cmakedefine HAVE_PAM_PAM_APPL_H 1
-
 /* Define if your PAM expects a conversation function with const pam_message (Solaris) */
 #cmakedefine PAM_MESSAGE_CONST 1
 

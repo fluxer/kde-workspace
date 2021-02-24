@@ -54,11 +54,7 @@ extern int key_setnet(struct key_netstarg *arg);
 # include <login_cap.h>
 #endif
 #ifdef USE_PAM
-# ifdef HAVE_PAM_PAM_APPL_H
-#  include <pam/pam_appl.h>
-# else
-#  include <security/pam_appl.h>
-# endif
+# include <security/pam_appl.h>
 #else /* USE_PAM */
 # ifdef KERBEROS
 #  include <sys/param.h>
