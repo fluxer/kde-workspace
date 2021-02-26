@@ -106,7 +106,7 @@ public:
     static QList<QString> defaultFavorites()
     {
         QList<QString> applications;
-        applications << "rekonq" << "dolphin" << "konsole" << "systemsettings";
+        applications << "konsole" << "dolphin" << "systemsettings";
 
         QList<QString> desktopFiles;
 
