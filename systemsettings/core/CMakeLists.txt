@@ -19,12 +19,12 @@ set(systemsettingsview_LIB_HDRS
     ModuleView.h
 )
 
-add_library( systemsettingsview SHARED ${systemsettingsview_LIB_SRCS} )
+add_library(systemsettingsview SHARED ${systemsettingsview_LIB_SRCS})
 
-target_link_libraries( systemsettingsview ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBRARY} ${KDE4_KCMUTILS_LIBS} )
+target_link_libraries(systemsettingsview ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KCMUTILS_LIBS})
 
-set_target_properties( systemsettingsview PROPERTIES SOVERSION 2 )
+set_target_properties(systemsettingsview PROPERTIES SOVERSION 2)
 
 install( TARGETS systemsettingsview  ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( FILES ${systemsettingsview_LIB_HDRS} DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/systemsettingsview COMPONENT Devel )
-INSTALL( FILES systemsettingsview.desktop systemsettingsexternalapp.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR} )
+install( FILES ${systemsettingsview_LIB_HDRS} DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/systemsettingsview COMPONENT Devel)
+INSTALL( FILES systemsettingsview.desktop systemsettingsexternalapp.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})

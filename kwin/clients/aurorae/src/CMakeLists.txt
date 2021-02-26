@@ -24,7 +24,7 @@ set(decoration_plugin_SRCS
 )
 
 add_library(decorationplugin SHARED ${decoration_plugin_SRCS})
-target_link_libraries(decorationplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDEUI_LIBRARY} kdecorations)
+target_link_libraries(decorationplugin ${QT_QTCORE_LIBRARY} ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDEUI_LIBS} kdecorations)
 install(TARGETS decorationplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/kwin/decoration)
 
 ########### install files ###############

@@ -11,7 +11,7 @@ target_link_libraries(kcm_desktoptheme
     ${X11_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
-    ${KDE4_KCMUTILS_LIBRARY}
+    ${KDE4_KCMUTILS_LIBS}
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KIO_LIBS}
 )

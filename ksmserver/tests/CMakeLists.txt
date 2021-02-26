@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. ${QIMAGEBLITZ_INCLUDES} )
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
 set(testsh_SRCS
     test.cpp
@@ -12,10 +12,9 @@ kde4_add_manual_test(testsh ${testsh_SRCS})
 target_link_libraries(testsh
     kworkspace
     ${KDE4_KDEUI_LIBS}
-    ${KDE4_SOLID_LIBRARY}
+    ${KDE4_SOLID_LIBS}
     ${KDE4_KDECLARATIVE_LIBS}
     ${KDE4_PLASMA_LIBS}
-    ${QIMAGEBLITZ_LIBRARIES}
     ${X11_X11_LIB}
     ${QT_QTDECLARATIVE_LIBRARY}
 )

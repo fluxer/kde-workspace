@@ -39,7 +39,7 @@ if (UDEV_FOUND)
     ${CMAKE_CURRENT_SOURCE_DIR}/backends/upower/dbus/com.ubuntu.Upstart.xml
     upstart_interface)
 
-    set(powerdevilupowerbackend_LIBS ${X11_LIBRARIES} ${QT_QTGUI_LIBRARY} ${X11_Xrandr_LIB} ${KDE4_KDEUI_LIBRARY} ${UDEV_LIBS})
+    set(powerdevilupowerbackend_LIBS ${X11_LIBRARIES} ${QT_QTGUI_LIBRARY} ${X11_Xrandr_LIB} ${KDE4_KDEUI_LIBS} ${UDEV_LIBS})
 
     ## backlight helper executable
     add_executable(backlighthelper backends/upower/backlighthelper.cpp ${backlighthelper_mocs})

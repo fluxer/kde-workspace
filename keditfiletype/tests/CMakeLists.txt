@@ -10,8 +10,8 @@ kde4_add_test(keditfiletype-filetypestest
 )
 target_link_libraries(keditfiletype-filetypestest
     ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBRARY}
-    ${KDE4_KDEUI_LIBRARIES}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KDEUI_LIBS}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}

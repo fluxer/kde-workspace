@@ -9,7 +9,7 @@ add_library(powerdevilconfigcommonprivate SHARED ${powerdevil_config_common_priv
 
 target_link_libraries(powerdevilconfigcommonprivate
      ${KDE4_KDECORE_LIBS}
-     ${KDE4_KDEUI_LIBRARY}
+     ${KDE4_KDEUI_LIBS}
      powerdevilcore
      powerdevilui
 )

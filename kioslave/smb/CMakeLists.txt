@@ -10,21 +10,22 @@ set(kio_smb_PART_SRCS
    kio_smb_dir.cpp 
    kio_smb_file.cpp 
    kio_smb_internal.cpp 
-   kio_smb_mount.cpp )
+   kio_smb_mount.cpp
+)
 
 include_directories(${SAMBA_INCLUDE_DIR})
 
 kde4_add_plugin(kio_smb ${kio_smb_PART_SRCS})
 
 
-target_link_libraries(kio_smb  ${KDE4_KIO_LIBRARY} ${SAMBA_LIBRARIES} )
+target_link_libraries(kio_smb  ${KDE4_KIO_LIBS} ${SAMBA_LIBRARIES})
 
-install(TARGETS kio_smb  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
+install(TARGETS kio_smb  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 
 ########### install files ###############
 
-install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/konqueror/dirtree/remote )
-install( FILES smb.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/remoteview )
+install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/konqueror/dirtree/remote)
+install( FILES smb.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})
+install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/remoteview)
 
