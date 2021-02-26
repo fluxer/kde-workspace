@@ -111,12 +111,9 @@ void AudioPreview::initView( const QString& mimeType )
   description->setText( desc );
   description->adjustSize();
   m_player = new KMediaWidget( this );
-  if ( m_player )
-  {
-    
-    m_player->show();
-    m_player->open( url.url() );
-  }
+  m_player->player()->setPlayerID("audio_rename_plugin");
+  m_player->show();
+  m_player->open( url.url() );
 }
 
 void AudioPreview::downloadFile( const QString& url )

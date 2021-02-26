@@ -1,5 +1,6 @@
 [Desktop Entry]
 Type=Service
+Icon=edit-rename
 Name=Audio Preview
 Name[af]=Klankvoorskou
 Name[ar]=معاينة صوت
@@ -85,3 +86,4 @@ Name[zh_CN]=音频预览
 Name[zh_TW]=音效預覽
 X-KDE-Library=librenaudioplugin
 X-KDE-ServiceTypes=RenameDialog/Plugin,audio/mpeg,audio/x-wav,application/ogg
+X-KDE-MediaPlayer=audio_rename_plugin

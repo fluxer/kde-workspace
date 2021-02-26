@@ -477,6 +477,7 @@ void KAccessApp::xkbBellNotify(XkbBellNotifyEvent *event)
     // as creating the player is expensive, delay the creation
     if (!_player) {
       _player = new KAudioPlayer(this);
+      _player->setPlayerID("kaccess");
     }
     _player->load(_currentPlayerSource);
   }

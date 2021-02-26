@@ -60,6 +60,7 @@ NotifyBySound::NotifyBySound(QObject *parent) : KNotifyPlugin(parent),d(new Priv
     connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
 
     d->currentPlayer = new KAudioPlayer(this);
+    d->currentPlayer->setPlayerID("knotify");
     loadConfig();
 }
 
@@ -124,6 +125,7 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
         if (d->currentPlayer && d->currentPlayer->isPlaying()) {
             kDebug() << "creating new player";
             player = new KAudioPlayer(this);
+            player->setPlayerID("knotify");
         }
         connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
         d->signalmapper->setMapping(player, eventId);
