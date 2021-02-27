@@ -1,6 +1,9 @@
-
-
-
+find_program(MTOOLS_EXECUTABLES NAMES mdir mmd mdel mrd mren mcopy)
+add_feature_info(
+    "mtools"
+    MTOOLS_EXECUTABLES
+    "KIO floppy support"
+)
 
 ########### next target ###############
 
