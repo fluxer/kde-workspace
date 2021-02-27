@@ -175,26 +175,6 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     return true;
   }
 
-  // Handle MAN & INFO pages shortcuts...
-  const QString man_proto = QL1S("man:");
-  const QString info_proto = QL1S("info:");
-  if( cmd[0] == '#' ||
-      cmd.indexOf( man_proto ) == 0 ||
-      cmd.indexOf( info_proto ) == 0 )
-  {
-    if( cmd.left(2) == QL1S("##") )
-      cmd = QL1S("info:/") + cmd.mid(2);
-    else if ( cmd[0] == '#' )
-      cmd = QL1S("man:/") + cmd.mid(1);
-
-    else if ((cmd==info_proto) || (cmd==man_proto))
-      cmd+='/';
-
-    setFilteredUri( data, KUrl( cmd ));
-    setUriType( data, KUriFilterData::Help );
-    return true;
-  }
-
   // Detect UNC style (aka windows SMB) URLs
   if ( cmd.startsWith( QLatin1String( "\\\\") ) )
   {
@@ -439,10 +419,7 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     if ( KProtocolInfo::isKnownProtocol( protocol ) )
     {
       setFilteredUri( data, url );
-      if ( protocol == QL1S("man") || protocol == QL1S("help") )
-        setUriType( data, KUriFilterData::Help );
-      else
-        setUriType( data, KUriFilterData::NetProtocol );
+      setUriType( data, KUriFilterData::NetProtocol );
       return true;
     }
   }

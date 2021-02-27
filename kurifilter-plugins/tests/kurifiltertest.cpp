@@ -36,7 +36,7 @@
 
 QTEST_KDEMAIN( KUriFilterTest, NoGUI )
 
-static const char * const s_uritypes[] = { "NetProtocol", "LOCAL_FILE", "LOCAL_DIR", "EXECUTABLE", "HELP", "SHELL", "BLOCKED", "ERROR", "UNKNOWN" };
+static const char * const s_uritypes[] = { "NetProtocol", "LOCAL_FILE", "LOCAL_DIR", "EXECUTABLE", "SHELL", "BLOCKED", "ERROR", "UNKNOWN" };
 #define NO_FILTERING -2
 
 static void filter( const char* u, const char * expectedResult = 0, int expectedUriType = -1, const QStringList& list = QStringList(), const char * abs_path = 0, bool checkForExecutables = true )
@@ -77,10 +77,6 @@ static void filter( const char* u, const char * expectedResult = 0, int expected
             case KUriFilterData::LocalDir:
                 kDebug() << "*** Result: Local Resource =>  '"
                           << filterData->uri().toLocalFile() << "'" << endl;
-                break;
-            case KUriFilterData::Help:
-                kDebug() << "*** Result: Local Resource =>  '"
-                          << filterData->uri().url() << "'" << endl;
                 break;
             case KUriFilterData::NetProtocol:
                 kDebug() << "*** Result: Network Resource => '"

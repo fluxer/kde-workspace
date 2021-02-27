@@ -107,7 +107,6 @@ void CommandUrlAction::execute()
         case KUriFilterData::LocalFile:
         case KUriFilterData::LocalDir:
         case KUriFilterData::NetProtocol:
-        case KUriFilterData::Help:
             {
             ( void ) new KRun( uri.uri(),0L);
           break;
