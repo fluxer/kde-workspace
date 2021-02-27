@@ -61,12 +61,12 @@ set(kded_powerdevil_SRCS
 
 # DBus Adaptors
 qt4_add_dbus_adaptor(kded_powerdevil_SRCS org.kde.Solid.PowerManagement.xml powerdevilcore.h PowerDevil::Core)
-qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.kde.Solid.PowerManagement.PolicyAgent.xml
+qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.Solid.PowerManagement.PolicyAgent.xml
                                          powerdevilpolicyagent.h PowerDevil::PolicyAgent
                                          powermanagementpolicyagentadaptor PowerManagementPolicyAgentAdaptor)
 
-qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.freedesktop.PowerManagement.xml powerdevilfdoconnector.h PowerDevil::FdoConnector powermanagementfdoadaptor PowerManagementFdoAdaptor)
-qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_DIR}/org.freedesktop.PowerManagement.Inhibit.xml powerdevilfdoconnector.h PowerDevil::FdoConnector powermanagementinhibitadaptor PowerManagementInhibitAdaptor)
+qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.freedesktop.PowerManagement.xml powerdevilfdoconnector.h PowerDevil::FdoConnector powermanagementfdoadaptor PowerManagementFdoAdaptor)
+qt4_add_dbus_adaptor(kded_powerdevil_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.freedesktop.PowerManagement.Inhibit.xml powerdevilfdoconnector.h PowerDevil::FdoConnector powermanagementinhibitadaptor PowerManagementInhibitAdaptor)
 
 
 # Backends

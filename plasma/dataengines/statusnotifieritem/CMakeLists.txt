@@ -12,10 +12,10 @@ set(statusnotifieritem_engine_SRCS
     systemtraytypes.cpp
 )
 
-set(statusnotifierwatcher_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.StatusNotifierWatcher.xml)
+set(statusnotifierwatcher_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.StatusNotifierWatcher.xml)
 QT4_ADD_DBUS_INTERFACE(statusnotifieritem_engine_SRCS ${statusnotifierwatcher_xml} statusnotifierwatcher_interface)
 
-set(statusnotifieritem_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.StatusNotifierItem.xml)
+set(statusnotifieritem_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.StatusNotifierItem.xml)
 
 set_source_files_properties(${statusnotifieritem_xml} PROPERTIES
    NO_NAMESPACE false

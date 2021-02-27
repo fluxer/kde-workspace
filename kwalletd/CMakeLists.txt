@@ -45,7 +45,7 @@ if (GPGME_FOUND AND QGPGME_FOUND)
     )
 endif(GPGME_FOUND AND QGPGME_FOUND)
 
-find_file(kwallet_xml org.kde.KWallet.xml HINTS ${KDE4_DBUS_INTERFACES_DIR} )
+find_file(kwallet_xml org.kde.KWallet.xml HINTS ${KDE4_DBUS_INTERFACES_INSTALL_DIR} )
 
 qt4_add_dbus_adaptor( kwalletd_SRCS ${kwallet_xml} kwalletd.h KWalletD )
 

@@ -25,7 +25,7 @@ set(kuiserver_KDEINIT_PRIVATE
 #<DBus Stuff>
 
 #<JobView>
-  set(jobview_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.JobViewV2.xml)
+  set(jobview_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.JobViewV2.xml)
 
   qt4_add_dbus_adaptor(kuiserver_SRCS ${jobview_xml} jobview.h JobView jobviewadaptor )
 
@@ -34,7 +34,7 @@ set(kuiserver_KDEINIT_PRIVATE
 
 
 #<JobViewServer>
-  set(jobviewserver_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.JobViewServer.xml)
+  set(jobviewserver_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.JobViewServer.xml)
 
   qt4_add_dbus_adaptor(kuiserver_SRCS ${jobviewserver_xml} progresslistmodel.h ProgressListModel jobviewserveradaptor )
 

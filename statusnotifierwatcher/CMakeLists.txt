@@ -2,11 +2,11 @@ project(StatusNotifierWatcher)
 
 set(kded_statusnotifierwatcher_SRCS statusnotifierwatcher.cpp )
 
-QT4_ADD_DBUS_ADAPTOR(kded_statusnotifierwatcher_SRCS     ${KDE4_DBUS_INTERFACES_DIR}/org.kde.StatusNotifierWatcher.xml
+QT4_ADD_DBUS_ADAPTOR(kded_statusnotifierwatcher_SRCS     ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.StatusNotifierWatcher.xml
                      statusnotifierwatcher.h StatusNotifierWatcher)
 
 
-set(statusnotifieritem_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.StatusNotifierItem.xml)
+set(statusnotifieritem_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.StatusNotifierItem.xml)
 set_source_files_properties(${statusnotifieritem_xml} PROPERTIES
    NO_NAMESPACE false
    INCLUDE "systemtraytypedefs.h"

@@ -12,11 +12,11 @@ set(kcm_keys_PART_SRCS
     select_scheme_dialog.ui
 )
 
-set(kglobalaccel_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.KGlobalAccel.xml)
+set(kglobalaccel_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KGlobalAccel.xml)
 set_source_files_properties(${kglobalaccel_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")
 qt4_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_xml} kglobalaccel_interface )
 
-set(kglobalaccel_component_xml ${KDE4_DBUS_INTERFACES_DIR}/org.kde.kglobalaccel.Component.xml)
+set(kglobalaccel_component_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.kglobalaccel.Component.xml)
 set_source_files_properties(${kglobalaccel_component_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")
 qt4_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_component_xml} kglobalaccel_component_interface )
 
