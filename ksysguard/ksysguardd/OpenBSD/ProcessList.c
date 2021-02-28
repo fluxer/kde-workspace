@@ -246,7 +246,7 @@ updateProcess(struct kinfo_proc *p)
                     p->p_vm_ssize) * getpagesize();
     ps->vmRss    = p->p_vm_rssize * getpagesize();
     strlcpy(ps->name,p->p_comm ? p->p_comm : "????", sizeof(ps->name));
-    strlcpy(ps->status,(p->p_stat>=1)&&(p->p_stat<=7)? statuses[p->p_stat-1]:"????", sizeof(ps->status));
+    strlcpy(ps->status,(p->p_stat>=1 && p->p_stat<=7)? statuses[p->p_stat]:"????", sizeof(ps->status));
 
     fillProcessCmdline(ps->cmdline, p, sizeof(ps->cmdline));
     /* process command line */
