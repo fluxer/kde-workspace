@@ -18,11 +18,10 @@
 
 #include "daemon.h"
 
-#include <memory>
-
 #include "khotkeysglobal.h"
 
 #include <QtDBus/QtDBus>
+#include <QtCore/QScopedPointer>
 
 #include <KConfigGroup>
 #include <KConfig>
@@ -55,7 +54,7 @@ static QDBusInterface* Kded()
 
 bool isRunning()
 {
-    std::auto_ptr<QDBusInterface> kded( Kded() );
+    QScopedPointer<QDBusInterface> kded( Kded() );
     if (!kded->isValid()) {
         return false;
     }
@@ -70,7 +69,7 @@ bool isRunning()
 bool reload()
 {
     // No kded no reload
-    std::auto_ptr<QDBusInterface> kded( Kded() );
+    QScopedPointer<QDBusInterface> kded( Kded() );
     if (!kded->isValid()) {
         return false;
     }
@@ -102,8 +101,8 @@ bool reload()
 
 
 bool start()
-    {
-    std::auto_ptr<QDBusInterface> kded( Kded() );
+{
+    QScopedPointer<QDBusInterface> kded( Kded() );
     if (!kded->isValid()) {
         return false;
     }
@@ -133,7 +132,7 @@ bool stop()
         return true;
     }
 
-    std::auto_ptr<QDBusInterface> kded( Kded() );
+    QScopedPointer<QDBusInterface> kded( Kded() );
     if (!kded->isValid()) {
         return false;
     }
