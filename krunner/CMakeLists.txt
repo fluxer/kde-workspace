@@ -65,13 +65,9 @@ target_link_libraries(krunner
     ${X11_LIBRARIES}
 )
 
-if(X11_Xsreensaver_FOUND)
-  target_link_libraries(krunner ${X11_Xsreensaver_LIB})
-endif(X11_Xsreensaver_FOUND)
-
 if(X11_Xcursor_FOUND)
-  target_link_libraries(krunner ${X11_Xcursor_LIB})
-endif(X11_Xcursor_FOUND)
+    target_link_libraries(krunner ${X11_Xcursor_LIB})
+endif()
 
 install(TARGETS krunner         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 

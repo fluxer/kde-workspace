@@ -25,6 +25,7 @@
 #include "ksysguardprocesslist.h"
 
 #include "../config-ksysguard.h"
+#include "config-X11.h"
 
 #include <QApplication>
 #include <QTimer>

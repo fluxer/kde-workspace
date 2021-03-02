@@ -68,27 +68,20 @@ check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(malloc.h HAVE_MALLOC_H)
 macro_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/{fonts,kfontinst}
 macro_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts
-macro_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # kwin, ksplash
+macro_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # ksplash
 macro_bool_to_01(X11_XTest_FOUND HAVE_XTEST) # khotkeys, kxkb, kdm
-macro_bool_to_01(X11_Xcomposite_FOUND HAVE_XCOMPOSITE) # kicker, kwin
+macro_bool_to_01(X11_Xcomposite_FOUND HAVE_XCOMPOSITE) # plasma, kwin
 macro_bool_to_01(X11_Xcursor_FOUND HAVE_XCURSOR) # many uses
 macro_bool_to_01(X11_Xdamage_FOUND HAVE_XDAMAGE) # kwin
 macro_bool_to_01(X11_Xfixes_FOUND HAVE_XFIXES) # klipper, kicker, kwin
-if(X11_Xkbfile_FOUND)
-    macro_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kdm, kglobalaccel, kcontrol/keyboard
-else()
-    set(X11_Xkb_FOUND 0)
-endif()
-if(WITH_XINERAMA)
-    macro_bool_to_01(X11_Xinerama_FOUND HAVE_XINERAMA)
-else(WITH_XINERAMA)
-    set(HAVE_XINERAMA 0)
-endif(WITH_XINERAMA)
+macro_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kdm, kglobalaccel, kcontrol/keyboard
+macro_bool_to_01(X11_Xinerama_FOUND HAVE_XINERAMA)
 macro_bool_to_01(X11_Xrandr_FOUND HAVE_XRANDR) # kwin
 macro_bool_to_01(X11_Xrender_FOUND HAVE_XRENDER) # kcontrol/style, kicker
-macro_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kdesktop and kcontrol/lock
-macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # kdesktop
+macro_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard
+macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # powerdevil
 macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
+macro_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard
 
 check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
 
