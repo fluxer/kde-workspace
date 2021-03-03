@@ -37,9 +37,6 @@
 #include "upowersuspendjob.h"
 #include "login1suspendjob.h"
 #include "upstart_interface.h"
-#include "udevqt.h"
-
-#define HELPER_ID "org.kde.powerdevil.backlighthelper"
 
 bool checkSystemdVersion(uint requiredVersion)
 {
@@ -165,20 +162,7 @@ void PowerDevilUPowerBackend::init()
     bool screenBrightnessAvailable = false;
     m_upowerInterface = new OrgFreedesktopUPowerInterface(UPOWER_SERVICE, "/org/freedesktop/UPower", QDBusConnection::systemBus(), this);
     m_brightnessControl = new XRandrBrightness();
-    if (!m_brightnessControl->isSupported()) {
-        kDebug() << "Using helper";
-        KAuth::Action action("org.kde.powerdevil.backlighthelper.syspath");
-        action.setHelperID(HELPER_ID);
-        KAuth::ActionReply reply = action.execute();
-        if (reply.succeeded()) {
-            m_syspath = reply.data()["syspath"].toString();
-            m_syspath = QFileInfo(m_syspath).readLink();
-
-            UdevQt::Client *client =  new UdevQt::Client(QStringList("backlight"), this);
-            connect(client, SIGNAL(deviceChanged(UdevQt::Device)), SLOT(onDeviceChanged(UdevQt::Device)));
-            screenBrightnessAvailable = true;
-        }
-    } else {
+    if (m_brightnessControl->isSupported()) {
         kDebug() << "Using XRandR";
         m_randrHelper = new XRandRX11Helper();
         connect(m_randrHelper, SIGNAL(brightnessChanged()), this, SLOT(slotScreenBrightnessChanged()));
@@ -292,25 +276,6 @@ void PowerDevilUPowerBackend::init()
     setBackendIsReady(controls, supported);
 }
 
-void PowerDevilUPowerBackend::onDeviceChanged(const UdevQt::Device &device)
-{
-    kDebug() << "Udev device changed" << m_syspath << device.sysfsPath();
-    if (device.sysfsPath() != m_syspath) {
-        return;
-    }
-
-    int maxBrightness = device.sysfsProperty("max_brightness").toInt();
-    if (maxBrightness <= 0) {
-        return;
-    }
-    float newBrightness = device.sysfsProperty("brightness").toInt() * 100 / maxBrightness;
-
-    if (!qFuzzyCompare(newBrightness, m_cachedBrightnessMap[Screen])) {
-        m_cachedBrightnessMap[Screen] = newBrightness;
-        onBrightnessChanged(Screen, m_cachedBrightnessMap[Screen]);
-    }
-}
-
 void PowerDevilUPowerBackend::brightnessKeyPressed(PowerDevil::BackendInterface::BrightnessKeyType type, BrightnessControlType controlType)
 {
     BrightnessControlsList allControls = brightnessControlsAvailable();
@@ -361,18 +326,6 @@ float PowerDevilUPowerBackend::brightness(PowerDevil::BackendInterface::Brightne
         if (m_brightnessControl->isSupported()) {
             //kDebug() << "Calling xrandr brightness";
             result = m_brightnessControl->brightness();
-        } else {
-            //kDebug() << "Falling back to helper to get brightness";
-            KAuth::Action action("org.kde.powerdevil.backlighthelper.brightness");
-            action.setHelperID(HELPER_ID);
-            KAuth::ActionReply reply = action.execute();
-            if (reply.succeeded()) {
-                result = reply.data()["brightness"].toFloat();
-                //kDebug() << "org.kde.powerdevil.backlighthelper.brightness succeeded: " << reply.data()["brightness"];
-            }
-            else
-                kWarning() << "org.kde.powerdevil.backlighthelper.brightness failed";
-
         }
         kDebug() << "Screen brightness: " << result;
     } else if (type == Keyboard) {
@@ -390,19 +343,10 @@ bool PowerDevilUPowerBackend::setBrightness(float brightnessValue, PowerDevil::B
         kDebug() << "set screen brightness: " << brightnessValue;
         if (m_brightnessControl->isSupported()) {
             m_brightnessControl->setBrightness(brightnessValue);
+            success = true;
         } else {
-            //kDebug() << "Falling back to helper to set brightness";
-            KAuth::Action action("org.kde.powerdevil.backlighthelper.setbrightness");
-            action.setHelperID(HELPER_ID);
-            action.addArgument("brightness", brightnessValue);
-            KAuth::ActionReply reply = action.execute();
-            if (reply.failed()) {
-                kWarning() << "org.kde.powerdevil.backlighthelper.setbrightness failed";
-                return false;
-            }
+            success = false;
         }
-
-        success = true;
     } else if (type == Keyboard) {
         kDebug() << "set kbd backlight: " << brightnessValue;
         m_kbdBacklight->SetBrightness(qRound(brightnessValue / 100 * m_kbdMaxBrightness));

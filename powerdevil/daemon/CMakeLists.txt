@@ -80,10 +80,6 @@ target_link_libraries(kded_powerdevil
     powerdevilcore
 )
 
-if (UDEV_FOUND)
-    target_link_libraries(kded_powerdevil ${UDEV_LIBS})
-endif (UDEV_FOUND)
-
 install(TARGETS kded_powerdevil DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(TARGETS powerdevilcore ${INSTALL_TARGETS_DEFAULT_ARGS})
 
@@ -93,15 +89,12 @@ set(powerdevilui_SRCS
 )
 
 add_library(powerdevilui SHARED ${powerdevilui_SRCS})
-set_target_properties(powerdevilui PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+set_target_properties(powerdevilui PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
 
 target_link_libraries(powerdevilui
     ${KDE4_KDECORE_LIBS}
     ${QT_QTGUI_LIBRARY}
 )
-
-macro_bool_to_01(UDEV_FOUND HAVE_UDEV)
-configure_file(config-powerdevil.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-powerdevil.h )
 
 install(TARGETS powerdevilui ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES powerdevil.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)

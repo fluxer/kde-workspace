@@ -53,13 +53,6 @@ set_package_properties(LibDRM PROPERTIES
     PURPOSE "OpenGL info module"
 )
 
-macro_optional_find_package(UDev)
-set_package_properties(UDev PROPERTIES
-    DESCRIPTION "The UDev Libraries"
-    PURPOSE "Allows support for UPower backend in PowerDevil - STRONGLY RECOMMENDED"
-    TYPE OPTIONAL
-)
-
 if(Q_WS_X11)
     find_package(XCB REQUIRED)
     set_package_properties(XCB PROPERTIES
