@@ -166,15 +166,6 @@ set_package_properties(Perl PROPERTIES
     TYPE REQUIRED
 )
 
-set(POLKITQT-1_MIN_VERSION "0.99.0")
-macro_optional_find_package(PolkitQt-1)
-set_package_properties(PolkitQt-1 PROPERTIES
-    DESCRIPTION "Qt wrapper around polkit-1 client libraries"
-    URL "https://cgit.kde.org/polkit-qt-1.git/"
-    PURPOSE "polkit-1 agent"
-    TYPE OPTIONAL
-)
-
 macro_optional_find_package(LibAttica 0.1.4)
 set_package_properties(LibAttica PROPERTIES
     DESCRIPTION "Attica Library"
@@ -267,9 +258,6 @@ macro_optional_add_subdirectory(kquitapp)
 if (Q_WS_X11)
     macro_optional_add_subdirectory(kstart)
 endif (Q_WS_X11)
-if (POLKITQT-1_FOUND)
-    macro_optional_add_subdirectory(polkit-kde-agent)
-endif(POLKITQT-1_FOUND)
 # Background processes
 macro_optional_add_subdirectory(kpasswdserver)
 macro_optional_add_subdirectory(kdontchangethehostname)
