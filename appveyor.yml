@@ -25,7 +25,7 @@ build_script:
         libsmbclient-dev perl-base libdrm-dev libraw1394-dev  \
         libsensors4-dev libgles2-mesa-dev libpam0g-dev libpci-dev libopenexr-dev \
         liblzma-dev libexiv2-dev libbz2-dev libjpeg-dev libdbusmenu-katie \
-        libpolkit-katie libattica-katie ccache
+        libattica-katie ccache
 
     export PATH="/usr/lib/ccache/:$PATH"
 
