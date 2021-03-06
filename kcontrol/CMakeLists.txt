@@ -39,9 +39,6 @@ add_subdirectory( spellchecking )
 
 add_subdirectory( kdebug )
 
-# TODO needs porting
-#add_subdirectory( smartcard )
-
 add_subdirectory( hardware )
 add_subdirectory( desktoppaths )
 
