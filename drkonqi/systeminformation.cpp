@@ -43,33 +43,6 @@ SystemInformation::~SystemInformation()
 {
 }
 
-//this function maps the operating system to an OS value that is accepted by bugs.kde.org.
-//if the values change on the server side, they need to be updated here as well.
-QString SystemInformation::fetchOSBasicInformation() const
-{
-    //krazy:excludeall=cpp
-    //Get the base OS string (bugzillaOS)
-#if defined(Q_OS_LINUX)
-    return QLatin1String("Linux");
-#elif defined(Q_OS_HURD)
-    return QLatin1String("Hurd");
-#elif defined(Q_OS_FREEBSD)
-    return QLatin1String("FreeBSD");
-#elif defined(Q_OS_NETBSD)
-    return QLatin1String("NetBSD");
-#elif defined(Q_OS_OPENBSD)
-    return QLatin1String("OpenBSD");
-#elif defined(Q_OS_DRAGONFLY)
-    return QLatin1String("DragonFly BSD");
-#elif defined(Q_OS_SOLARIS)
-    return QLatin1String("Solaris");
-#else
-#warning fetchOSBasicInformation() not implemented
-    return QLatin1String("unspecified");
-#endif
-
-}
-
 QString SystemInformation::fetchOSDetailInformation() const
 {
     QString operatingSystem = "unspecified";
@@ -82,6 +55,8 @@ QString SystemInformation::fetchOSDetailInformation() const
             + QString::fromLocal8Bit(buf.release) + ' '
             + QString::fromLocal8Bit(buf.machine);
     }
+#else
+#warning fetchOSDetailInformation() not implemented
 #endif
 
     return operatingSystem;

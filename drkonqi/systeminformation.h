@@ -36,7 +36,6 @@ class SystemInformation: public QObject
         QString qtVersion() const;
 
     private:
-        QString fetchOSBasicInformation() const;
         QString fetchOSDetailInformation() const;
         QString fetchOSReleaseInformation() const;
 
