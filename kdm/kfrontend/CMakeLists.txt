@@ -76,6 +76,7 @@ endif (X11_XTest_FOUND)
 if (WITH_KDM_XCONSOLE)
   target_link_libraries(kdm_greet ${KDE4_KPTY_LIBS})
 endif (WITH_KDM_XCONSOLE)
+add_dependencies(kdm_greet ConfigCi)
 
 install(TARGETS kdm_greet DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
@@ -84,6 +85,7 @@ macro_add_file_dependencies(kdm_config.c ${confci})
 add_executable(kdm_config ${kdm_config_SRCS})
 set_target_properties(kdm_config PROPERTIES COMPILE_FLAGS -U_REENTRANT)
 add_dependencies(kdm_config ConfigCi)
+
 install(TARGETS kdm_config DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
 set(genkdmconf_SRCS genkdmconf.c)
