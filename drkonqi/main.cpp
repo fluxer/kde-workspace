@@ -42,14 +42,6 @@ static const char description[] = I18N_NOOP("The KDE Crash Handler gives the use
 
 int main(int argc, char* argv[])
 {
-// When starting Dr Konqi via kdeinit4, Apple OS X aborts us unconditionally for
-// using setgid/setuid, even if the privs were those of the logged-in user.
-// Drop privs.
-    setgid(getgid());
-    if (setuid(getuid()) < 0 && geteuid() != getuid()) {
-        exit(255);
-    }
-
     // Prevent KApplication from setting the crash handler. We will set it later...
     setenv("KDE_DEBUG", "true", 1);
     // Session management is not needed, do not even connect in order to survive longer than ksmserver.
