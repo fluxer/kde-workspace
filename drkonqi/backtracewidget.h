@@ -21,11 +21,10 @@
 #define BACKTRACEWIDGET__H
 
 #include <QWidget>
+#include <QSyntaxHighlighter>
 
-#include "debugpackageinstaller.h"
 #include "ui_backtracewidget.h"
 
-#include <QSyntaxHighlighter>
 class BacktraceRatingWidget;
 class BacktraceGenerator;
 
@@ -37,12 +36,9 @@ public:
     explicit BacktraceWidget(BacktraceGenerator *generator, QWidget *parent = 0,
                              bool showToggleBacktrace = false);
 
-    bool canInstallDebugPackages() const;
-
 public Q_SLOTS:
     void generateBacktrace();
     void hilightExtraDetailsLabel(bool hilight);
-    void focusImproveBacktraceButton();
 
     void toggleBacktrace(bool show);
     void extraDetailsLinkActivated(QString link);
@@ -51,11 +47,10 @@ Q_SIGNALS:
     void stateChanged();
 
 private:
-    BacktraceGenerator * m_btGenerator;
+    BacktraceGenerator *m_btGenerator;
     Ui::Form    ui;
-    BacktraceRatingWidget *   m_backtraceRatingWidget;
+    BacktraceRatingWidget *m_backtraceRatingWidget;
     QSyntaxHighlighter *m_highlighter;
-    DebugPackageInstaller * m_debugPackageInstaller;
 
     void setAsLoading();
 
@@ -69,10 +64,6 @@ private Q_SLOTS:
     void copyClicked();
 
     void anotherDebuggerRunning();
-
-    void installDebugPackages();
-    void debugPackageError(const QString &);
-    void debugPackageCanceled();
 };
 
 #endif

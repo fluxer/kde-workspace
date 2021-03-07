@@ -3,10 +3,6 @@ project(drkonqi)
 check_function_exists("strsignal" HAVE_STRSIGNAL)
 check_function_exists("uname" HAVE_UNAME)
 
-if(NOT DEBUG_PACKAGE_INSTALLER_NAME)
-    set (DEBUG_PACKAGE_INSTALLER_NAME "installdbgsymbols.sh")
-endif()
-
 configure_file(
     config-drkonqi.h.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/config-drkonqi.h
@@ -26,7 +22,6 @@ set(drkonqi_SRCS
     drkonqi.cpp
     drkonqibackends.cpp
     detachedprocessmonitor.cpp
-    debugpackageinstaller.cpp
     systeminformation.cpp
     crashedapplication.cpp
     debugger.cpp
