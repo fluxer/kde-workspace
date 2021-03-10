@@ -1,4 +1,7 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libkscreensaver)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/libkscreensaver
+    ${CMAKE_CURRENT_BINARY_DIR}/libkscreensaver
+)
 
 add_subdirectory( libkscreensaver ) 
 add_subdirectory( kblank_screensaver ) 
