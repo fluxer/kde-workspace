@@ -48,7 +48,7 @@ QString SystemInformation::fetchOSDetailInformation() const
     QString operatingSystem = "unspecified";
 #ifdef HAVE_UNAME
     struct utsname buf;
-    if (uname(&buf) == -1) {
+    if (::uname(&buf) == -1) {
         kDebug() << "call to uname failed" << perror;
     } else {
         operatingSystem = QString::fromLocal8Bit(buf.sysname) + ' '

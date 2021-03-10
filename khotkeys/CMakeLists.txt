@@ -2,7 +2,9 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libkhotkeysprivate
     ${CMAKE_CURRENT_BINARY_DIR}/libkhotkeysprivate
-    )
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1217)
 

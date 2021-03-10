@@ -1,10 +1,12 @@
 
-add_subdirectory( kcm )
-
 include_directories(
    ${CMAKE_SOURCE_DIR}/libs
    ${KDECLARATIVE_INCLUDE_DIR}
+   # for kworkspace_export.h
+   ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
+
+add_subdirectory( kcm )
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)

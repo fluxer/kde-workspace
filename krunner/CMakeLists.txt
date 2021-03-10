@@ -3,9 +3,13 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1207)
 # for dbus_add_activation_service
 include(MacroDBusAddActivationService)
 
-include_directories(${CMAKE_SOURCE_DIR}/libs/ksysguard
-                    ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
-                    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/ksysguard
+    ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
+    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
 
 set(krunner_KCFG_SRCS kcfg/krunnersettings.kcfgc kcfg/klaunchsettings.kcfgc)
 set(krunner_dbusAppXML dbus/org.kde.krunner.App.xml)

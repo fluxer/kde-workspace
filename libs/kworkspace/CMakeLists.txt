@@ -1,4 +1,3 @@
-
 set(kworkspace_LIB_SRCS
     kdisplaymanager.cpp
     kwindowlistmenu.cpp
@@ -32,8 +31,9 @@ target_link_libraries(kworkspace PUBLIC
 set_target_properties(kworkspace PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
     SOVERSION ${GENERIC_LIB_SOVERSION}
-    DEFINE_SYMBOL MAKE_KWORKSPACE_LIB
 )
+
+generate_export_header(kworkspace)
 
 install(
     TARGETS kworkspace
@@ -45,7 +45,7 @@ install(
     kdisplaymanager.h
     kwindowlistmenu.h
     kworkspace.h
-    kworkspace_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kworkspace_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/kworkspace
     COMPONENT Devel
 )

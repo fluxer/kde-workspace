@@ -1,3 +1,8 @@
+include_directories(
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
+
 ########### next target ###############
 
 set(kcm_screensaver_PART_SRCS

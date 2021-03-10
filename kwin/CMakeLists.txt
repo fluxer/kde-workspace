@@ -12,7 +12,11 @@ if(NOT DBUSMENUQT_FOUND)
     set(KWIN_BUILD_KAPPMENU OFF)
 endif()
 
-include_directories(${XCB_INCLUDE_DIR})
+include_directories(
+    ${XCB_INCLUDE_DIR}
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
 
 # for kwin internal things
 configure_file(config-kwin.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kwin.h)

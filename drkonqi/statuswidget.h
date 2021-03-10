@@ -23,10 +23,10 @@
 #include <QStackedWidget>
 #include <QLabel>
 #include <QTextDocument>
+#include <QHideEvent>
 
 class WrapLabel;
 class KPixmapSequenceWidget;
-#include <QHideEvent>
 
 class StatusWidget: public QStackedWidget
 {

@@ -16,9 +16,8 @@ set_target_properties(kscreensaver PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
-set_target_properties(kscreensaver PROPERTIES
-    DEFINE_SYMBOL MAKE_KSCREENSAVER_LIB
-)
+
+generate_export_header(kscreensaver)
 
 install(
     TARGETS kscreensaver
@@ -35,7 +34,7 @@ install(
     FILES
     kscreensaver.h
     kscreensaver_vroot.h
-    kscreensaver_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kscreensaver_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}
     COMPONENT Devel
 )

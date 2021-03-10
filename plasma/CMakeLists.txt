@@ -1,3 +1,8 @@
+include_directories(
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
+
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1204)
 
 MACRO(installPackage dir component)

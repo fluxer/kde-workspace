@@ -1,3 +1,8 @@
+include_directories(
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
+
 set(kcm_kdm_PART_SRCS
    kdm-gen.cpp
    kdm-theme.cpp
@@ -6,7 +11,8 @@ set(kcm_kdm_PART_SRCS
    kdm-conv.cpp
    main.cpp
    kbackedcombobox.cpp
-   positioner.cpp)
+   positioner.cpp
+)
 
 
 kde4_add_plugin(kcm_kdm ${kcm_kdm_PART_SRCS})

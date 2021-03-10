@@ -1,3 +1,8 @@
+include_directories(
+   # for kworkspace_export.h
+   ${CMAKE_BINARY_DIR}/libs/kworkspace
+)
+
 if(ENABLE_TESTING)
     add_subdirectory(tests)
 endif()
