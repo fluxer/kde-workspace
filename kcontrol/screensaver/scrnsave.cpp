@@ -624,47 +624,31 @@ void KScreenSaver::slotScreenSaver(QTreeWidgetItem *item)
 void KScreenSaver::slotSetup()
 {
     if ( mSelected < 0 )
-    return;
+        return;
 
     if (mSetupProc->state() == QProcess::Running)
-    return;
-
-    QString saver = mSaverList.at(mSelected)->setup();
-    if( saver.isEmpty())
         return;
-    QTextStream ts(&saver, QIODevice::ReadOnly);
 
-    QString word;
-    ts >> word;
-    bool kxsconfig = word == "kxsconfig";
-    QString path = findExe(word);
+    QString setup = mSaverList.at(mSelected)->setup();
+    if( setup.isEmpty())
+        return;
 
-    if (!path.isEmpty())
-    {
-        QStringList setupArgs;
+    QStringList setupArgs = KShell::splitArgs(setup);
+    QString setupProgram = setupArgs.takeAt(0);
 
+    QString path = findExe(setupProgram);
+
+    if (!path.isEmpty()) {
         // Add caption and icon to about dialog
-        if (!kxsconfig) {
-            setupArgs << "-caption"
-                      << mSaverList.at(mSelected)->name()
-                      << "-icon"
-                      << "kscreensaver";
-        }
-
-        while (!ts.atEnd())
-        {
-            setupArgs << word;
-        }
-
-        // Pass translated name to kxsconfig
-        if (kxsconfig) {
-          setupArgs << mSaverList.at(mSelected)->name();
-        }
+        setupArgs << "-caption"
+                  << mSaverList.at(mSelected)->name()
+                  << "-icon"
+                  << "kscreensaver";
 
         mSetupBt->setEnabled( false );
         kapp->flush();
 
-        mSetupProc->start(path);
+        mSetupProc->start(path, setupArgs);
     }
 }
 
@@ -682,8 +666,7 @@ void KScreenSaver::slotTest()
         mPreviewProc->waitForFinished();
     }
 
-    if (!mTestWin)
-    {
+    if (!mTestWin) {
         mTestWin = new TestWin();
         mTestWin->setAttribute(Qt::WA_NoSystemBackground, true);
         mTestWin->setAttribute(Qt::WA_PaintOnScreen, true);
@@ -693,11 +676,11 @@ void KScreenSaver::slotTest()
     mTestWin->show();
     mTestWin->raise();
     mTestWin->setFocus();
-	// So that hacks can XSelectInput ButtonPressMask
-	XSelectInput(QX11Info::display(), mTestWin->winId(), widgetEventMask );
+    // So that hacks can XSelectInput ButtonPressMask
+    XSelectInput(QX11Info::display(), mTestWin->winId(), widgetEventMask );
 
-	grabMouse();
-	grabKeyboard();
+    grabMouse();
+    grabKeyboard();
 
     mTestBt->setEnabled( false );
 
