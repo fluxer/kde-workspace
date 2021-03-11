@@ -75,4 +75,5 @@ Name[zh_TW]=SVG 影像
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/svg+xml;image/svg+xml-compressed;
 X-KDE-Library=svgthumbnail
+X-KDE-PluginInfo-EnabledByDefault=true
 CacheThumbnail=true

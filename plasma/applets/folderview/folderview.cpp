@@ -44,6 +44,7 @@
 #include <KTemporaryFile>
 #include <KStandardDirs>
 #include <KMenu>
+#include <KServiceTypeTrader>
 
 #include <kio/copyjob.h>
 #include <kio/fileundomanager.h>
@@ -369,6 +370,16 @@ void FolderView::init()
     // Find out about network availability changes
     connect(Solid::Networking::notifier(), SIGNAL(shouldConnect()), SLOT(networkAvailable()));
 
+    // Find out which thumbnail plugins are enabled by default
+    QStringList enabledByDefault;
+    const KService::List plugins = KServiceTypeTrader::self()->query(QLatin1String("ThumbCreator"));
+    foreach (const KSharedPtr<KService>& service, plugins) {
+        const bool enabled = service->property("X-KDE-PluginInfo-EnabledByDefault", QVariant::Bool).toBool();
+        if (enabled) {
+            enabledByDefault << service->desktopEntryName();
+        }
+    }
+
     KConfigGroup cg = config();
     m_customLabel         = cg.readEntry("customLabel", "");
     m_customIconSize      = cg.readEntry("customIconSize", 0);
@@ -379,7 +390,7 @@ void FolderView::init()
     m_iconsLocked         = cg.readEntry("iconsLocked", false);
     m_alignToGrid         = cg.readEntry("alignToGrid", false);
     m_clickToView         = cg.readEntry("clickForFolderPreviews", true);
-    m_previewPlugins      = cg.readEntry("previewPlugins", QStringList() << "imagethumbnail" << "jpegthumbnail");
+    m_previewPlugins      = cg.readEntry("previewPlugins", enabledByDefault);
     m_sortDirsFirst       = cg.readEntry("sortDirsFirst", true);
     m_sortColumn          = cg.readEntry("sortColumn", int(KDirModel::Name));
     m_sortOrder           = sortOrderStringToEnum(cg.readEntry("sortOrder", "ascending"));

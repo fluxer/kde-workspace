@@ -75,6 +75,7 @@ Name[zh_TW]=JPEG 影像
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/jpeg;
 X-KDE-Library=jpegthumbnail
+X-KDE-PluginInfo-EnabledByDefault=true
 CacheThumbnail=true
 Configurable=true
 ThumbnailerVersion=2

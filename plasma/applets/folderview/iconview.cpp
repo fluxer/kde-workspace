@@ -40,6 +40,7 @@
 #include <KIconEffect>
 #include <KStringHandler>
 #include <KFileItemDelegate>
+#include <KServiceTypeTrader>
 
 #include <KIO/NetAccess>
 
@@ -106,7 +107,13 @@ IconView::IconView(QGraphicsWidget *parent)
     m_animator = new Animator(this);
 
     // set a default for popup preview plugins
-    m_popupPreviewPlugins = QStringList() << "imagethumbnail" << "jpegthumbnail";
+    const KService::List plugins = KServiceTypeTrader::self()->query(QLatin1String("ThumbCreator"));
+    foreach (const KSharedPtr<KService>& service, plugins) {
+        const bool enabled = service->property("X-KDE-PluginInfo-EnabledByDefault", QVariant::Bool).toBool();
+        if (enabled) {
+            m_popupPreviewPlugins << service->desktopEntryName();
+        }
+    }
 
     int size = style()->pixelMetric(QStyle::PM_LargeIconSize);
     setIconSize(QSize(size, size));

@@ -253,10 +253,7 @@ void ToolTipWidget::setContent()
 
 void ToolTipWidget::startPreviewJob()
 {
-    QStringList plugins;
-    plugins << "imagethumbnail" << "jpegthumbnail";
-
-    m_previewJob = KIO::filePreview(KFileItemList() << m_item, QSize(256, 256), &plugins);
+    m_previewJob = KIO::filePreview(KFileItemList() << m_item, QSize(256, 256));
     connect(m_previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)), SLOT(gotPreview(KFileItem,QPixmap)));
     connect(m_previewJob, SIGNAL(finished(KJob*)), SLOT(previewJobFinished(KJob*)));
 }
