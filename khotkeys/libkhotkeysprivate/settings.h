@@ -166,15 +166,6 @@ public:
     void setGesturesExclude( Windowdef_list *gestures );
     Windowdef_list *gesturesExclude();
     const Windowdef_list *gesturesExclude() const;
-    //@}
-
-    /**
-     * @name Voice Commands
-     */
-    //@{
-    void setVoiceShortcut( const KShortcut &shortcut );
-    KShortcut voiceShortcut() const;
-    //@}
 
     /**
      * Check if the given config file is a valid khotkeys file
@@ -241,11 +232,6 @@ private:
      * KHotKeys daemon disabled?
      */
     bool daemon_disabled;
-
-    /**
-     * The shortcut that triggers a voice command
-     */
-    KShortcut voice_shortcut;
 
     /**
      * List of id's for all imported files.

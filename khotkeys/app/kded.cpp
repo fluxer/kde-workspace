@@ -103,8 +103,6 @@ void KHotKeysModule::reread_configuration()
     kDebug() << _settings.areGesturesDisabled();
     KHotKeys::gesture_handler->enable( !_settings.areGesturesDisabled() );
     KHotKeys::gesture_handler->set_exclude( _settings.gesturesExclude() );
-    // FIXME: SOUND
-    // KHotKeys::voice_handler->set_shortcut( _settings.voice_shortcut );
     actions_root = _settings.actions();
     KHotKeys::khotkeys_set_active( true );
     }

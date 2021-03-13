@@ -19,11 +19,7 @@
 #include "windows_handler.h"
 #include "triggers/triggers.h"
 #include "triggers/gestures.h"
-#include "voices.h"
 #include "shortcuts_handler.h"
-
-// FIXME: SOUND
-// #include "soundrecorder.h"
 
 namespace KHotKeys
 {
@@ -49,8 +45,6 @@ void init_global_data( bool active_P, QObject* owner_P )
         {
         gesture_handler = new Gesture( active_P, owner_P );
         }
-// FIXME: SOUND
-//    static_cast< void >( new Voice( active_P, owner_P ));
     khotkeys_set_active( false );
     }
     

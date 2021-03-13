@@ -267,8 +267,6 @@ void SettingsWriter::writeTo(KConfigBase &config)
         }
     else
         config.deleteGroup( "GesturesExclude" );
-    KConfigGroup voiceConfig( &config, "Voice" );
-    voiceConfig.writeEntry("Shortcut" , _settings->voice_shortcut.toString() );
     }
 
 

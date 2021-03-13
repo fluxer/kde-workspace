@@ -169,9 +169,6 @@ void Settings::reinitialize()
 
     daemon_disabled = false;
 
-    // Currently unused
-    voice_shortcut = KShortcut();
-
     already_imported = QStringList();
     }
 
@@ -211,23 +208,11 @@ void Settings::setGestureTimeOut(int timeout)
     }
 
 
-void Settings::setVoiceShortcut( const KShortcut &shortcut )
-    {
-    voice_shortcut = shortcut;
-    }
-
-
 ActionDataGroup *Settings::takeActions()
     {
     ActionDataGroup *res = m_actions;
     m_actions = 0;
     return res;
-    }
-
-
-KShortcut Settings::voiceShortcut() const
-    {
-    return voice_shortcut;
     }
 
 
@@ -458,10 +443,6 @@ bool Settings::reread_settings(bool include_disabled)
     KConfigGroup gesturesExcludeConfig( &config, "GesturesExclude" );
     delete gestures_exclude;
     gestures_exclude = new Windowdef_list( gesturesExcludeConfig );
-
-    // ### Voice
-    KConfigGroup voiceConfig( &config, "Voice" );
-    voice_shortcut=KShortcut( voiceConfig.readEntry("Shortcut" , "")  );
 
     bool rc = read_settings(m_actions, config, include_disabled, Retain);
     // Ensure the system groups exist
