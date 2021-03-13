@@ -36,20 +36,21 @@
 
 NetworkManagerStatus::NetworkManagerStatus( QObject *parent )
     : SystemStatusInterface( parent ),
-      m_manager( NM_DBUS_SERVICE,
-                 NM_DBUS_PATH,
-                 NM_DBUS_INTERFACE,
-                 QDBusConnection::systemBus() )
+    m_status( Solid::Networking::Unknown ),
+    m_manager( NM_DBUS_SERVICE,
+               NM_DBUS_PATH,
+               NM_DBUS_INTERFACE,
+               QDBusConnection::systemBus() )
 {
-    connect( &m_manager, SIGNAL(StateChanged(uint)),
-             this, SLOT(nmStateChanged(uint)));
+    if (isSupported()) {
+        connect( &m_manager, SIGNAL(StateChanged(uint)),
+                this, SLOT(nmStateChanged(uint)));
 
-    QDBusReply<uint> reply = m_manager.call( "state" );
+        QDBusReply<uint> reply = m_manager.call( "state" );
 
-    if ( reply.isValid() ) {
-        m_status = convertNmState( reply );
-    } else {
-        m_status = Solid::Networking::Unknown;
+        if ( reply.isValid() ) {
+            m_status = convertNmState( reply );
+        }
     }
 }
 
