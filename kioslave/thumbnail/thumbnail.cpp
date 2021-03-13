@@ -686,11 +686,17 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
                                            int segmentWidth, int segmentHeight)
 {
     if (m_enabledPlugins.isEmpty()) {
+        QStringList enabledByDefault;
+        const KService::List plugins = KServiceTypeTrader::self()->query(QLatin1String("ThumbCreator"));
+        foreach (const KSharedPtr<KService>& service, plugins) {
+            const bool enabled = service->property("X-KDE-PluginInfo-EnabledByDefault", QVariant::Bool).toBool();
+            if (enabled) {
+                enabledByDefault << service->desktopEntryName();
+            }
+        }
+
         const KConfigGroup globalConfig(KGlobal::config(), "PreviewSettings");
-        m_enabledPlugins = globalConfig.readEntry("Plugins", QStringList()
-                                                             << "imagethumbnail"
-                                                             << "jpegthumbnail"
-                                                             << "videopreview");
+        m_enabledPlugins = globalConfig.readEntry("Plugins", enabledByDefault);
     }
 
     const KUrl fileName = filePath;
