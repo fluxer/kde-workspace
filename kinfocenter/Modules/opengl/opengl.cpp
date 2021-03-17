@@ -669,29 +669,29 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
 
     egl_dpy = eglGetDisplay(dpy);
     if (!egl_dpy) {
-        kDebug() << "Error: eglGetDisplay() failed\n";
+        kWarning() << "eglGetDisplay() failed";
         return result;
     }
 
     if (!eglInitialize(egl_dpy, &major, &minor)) {
-        kDebug() << "Error: eglInitialize() failed\n";
+        kWarning() << "eglInitialize() failed";
         return result;
     }
 
     if (!eglChooseConfig(egl_dpy, attribs, &config, 1, &num_configs)) {
-        kDebug() << "Error: couldn't get an EGL visual config\n";
+        kWarning() << "couldn't get an EGL visual config";
         return result;
     }
 
     if (!eglGetConfigAttrib(egl_dpy, config, EGL_NATIVE_VISUAL_ID, &vid)) {
-        kDebug() << "Error: eglGetConfigAttrib() failed\n";
+        kWarning() << "eglGetConfigAttrib() failed";
         return result;
     }
 
     visTemplate.visualid = vid;
     visinfo = XGetVisualInfo(dpy, VisualIDMask, &visTemplate, &num_visuals);
     if (!visinfo) {
-        kDebug() << "Error: couldn't get X visual\n";
+        kWarning() << "couldn't get X visual";
         return result;
     }
 #endif
@@ -708,7 +708,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
 #ifndef KCM_ENABLE_OPENGLES
     ctx = glXCreateContext( dpy, visinfo, NULL, allowDirect );
     if (!ctx) {
-        kDebug() << "Error: glXCreateContext failed\n";
+        kWarning() << "glXCreateContext failed";
         XDestroyWindow(dpy, win);
         return result;
     }
@@ -733,7 +733,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
 
         result = print_screen_info(l1, after);
     } else {
-        kDebug() << "Error: glXMakeCurrent failed\n";
+        kWarning() << "glXMakeCurrent failed";
     }
 
     glXDestroyContext(dpy, ctx);
@@ -741,14 +741,14 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     eglBindAPI(EGL_OPENGL_ES_API);
     ctx = eglCreateContext(egl_dpy, config, EGL_NO_CONTEXT, ctx_attribs);
     if (!ctx) {
-        kDebug() << "Error: eglCreateContext failed\n";
+        kWarning() << "eglCreateContext failed";
         XDestroyWindow(dpy, win);
         return result;
     }
 
     surf = eglCreateWindowSurface(egl_dpy, config, win, NULL);
     if (!surf) {
-        kDebug() << "Error: eglCreateWindowSurface failed\n";
+        kWarning() << "eglCreateWindowSurface failed";
         eglDestroyContext(egl_dpy, ctx);
         XDestroyWindow(dpy, win);
         return result;
@@ -767,7 +767,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
         IsDirect = true;
         result = print_screen_info(l1, after);
     } else {
-        kDebug() <<"Error: eglMakeCurrent() failed\n";
+        kWarning() << "eglMakeCurrent() failed";
     }
 
     eglDestroySurface(egl_dpy, surf);
@@ -787,7 +787,7 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
 
     dpy = XOpenDisplay(displayName);
     if (!dpy) {
-//      kDebug() << "Error: unable to open display " << displayName;
+        kWarning() << "unable to open display " << displayName;
         return false;
     }
 
