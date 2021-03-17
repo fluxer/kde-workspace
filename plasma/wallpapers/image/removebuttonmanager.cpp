@@ -74,9 +74,6 @@ void RemoveButtonManager::slotEntered(const QModelIndex& index)
     if (!m_connected) {
         connect(m_view->model(), SIGNAL(rowsRemoved(QModelIndex,int,int)),
                 this, SLOT(slotRowsRemoved(QModelIndex,int,int)));
-        connect(m_view->selectionModel(),
-                SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-                this, SLOT(slotSelectionChanged(QItemSelection,QItemSelection)));
         m_connected = true;
     }
 
