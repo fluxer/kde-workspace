@@ -350,7 +350,7 @@ int main( int argc, char *argv[] )
 
       exe = args->arg(0);
       proc = new QProcess;
-      for(int i=0; i < args->count(); i++)
+      for(int i = 1; i < args->count(); i++)
           exeArgs << args->arg(i);
   }
 
