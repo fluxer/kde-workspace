@@ -205,7 +205,7 @@ static bool get_dri_device() { return false; }
 static void
 mesa_hack(Display *dpy, int scrnum)
 {
-    static const int attribs[] = {
+    int attribs[] = {
         GLX_RGBA,
         GLX_RED_SIZE, 1,
         GLX_GREEN_SIZE, 1,
@@ -222,7 +222,7 @@ mesa_hack(Display *dpy, int scrnum)
 
     XVisualInfo *visinfo;
 
-    visinfo = glXChooseVisual(dpy, scrnum, const_cast<int*>(attribs));
+    visinfo = glXChooseVisual(dpy, scrnum, attribs);
     if (visinfo)
         XFree(visinfo);
 }
@@ -618,14 +618,14 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     root = RootWindow(dpy, scrnum);
 
 #ifndef KCM_ENABLE_OPENGLES
-    const int attribSingle[] = {
+    int attribSingle[] = {
         GLX_RGBA,
         GLX_RED_SIZE, 1,
         GLX_GREEN_SIZE, 1,
         GLX_BLUE_SIZE, 1,
         None
     };
-    const int attribDouble[] = {
+    int attribDouble[] = {
         GLX_RGBA,
         GLX_RED_SIZE, 1,
         GLX_GREEN_SIZE, 1,
@@ -635,25 +635,25 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     };
     GLXContext ctx;
 
-    visinfo = glXChooseVisual(dpy, scrnum, const_cast<int*>(attribSingle));
+    visinfo = glXChooseVisual(dpy, scrnum, attribSingle);
     if (!visinfo) {
-        visinfo = glXChooseVisual(dpy, scrnum, const_cast<int*>(attribDouble));
+        visinfo = glXChooseVisual(dpy, scrnum, attribDouble);
         if (!visinfo) {
-            kDebug() << "Error: couldn't find RGB GLX visual\n";
+            kWarning() << "couldn't find RGB GLX visual";
             return result;
         }
     }
 #else
     Q_UNUSED(allowDirect);
 
-    static const EGLint attribs[] = {
+    const EGLint attribs[] = {
         EGL_RED_SIZE, 1,
         EGL_GREEN_SIZE, 1,
         EGL_BLUE_SIZE, 1,
         EGL_DEPTH_SIZE, 1,
         EGL_NONE
     };
-    static const EGLint ctx_attribs[] = {
+    const EGLint ctx_attribs[] = {
         EGL_CONTEXT_CLIENT_VERSION, 2,
         EGL_NONE
     };
