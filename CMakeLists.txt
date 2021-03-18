@@ -166,14 +166,6 @@ set_package_properties(Perl PROPERTIES
     TYPE REQUIRED
 )
 
-macro_optional_find_package(LibAttica 0.1.4)
-set_package_properties(LibAttica PROPERTIES
-    DESCRIPTION "Attica Library"
-    URL "https://github.com/fluxer/attica"
-    PURPOSE "Attica is needed for KDE specific Open Collaboration Service providers"
-    TYPE OPTIONAL
-)
-
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
@@ -280,10 +272,6 @@ macro_optional_add_subdirectory(keditfiletype)
 macro_optional_add_subdirectory(l10n)
 macro_optional_add_subdirectory(localization)
 macro_optional_add_subdirectory(kde-menu)
-# Integration for attica
-if(LIBATTICA_FOUND)
-    macro_optional_add_subdirectory(attica)
-endif()
 
 ########### install files ###############
 # install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${KDE4_BIN_INSTALL_DIR})
