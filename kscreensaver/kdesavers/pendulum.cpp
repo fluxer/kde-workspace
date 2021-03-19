@@ -661,7 +661,7 @@ void KPendulumSaver::doTimeStep()
               (eyePhi1<angleLimit)
                  || ((eyePhi1<M_PI+angleLimit) && (eyePhi1>M_PI-angleLimit))
                  || (eyePhi1>2*M_PI-angleLimit);
-              eyePhi1 = double(rand())/RAND_MAX * 2*M_PI)
+              eyePhi1 = double(qrand())/RAND_MAX * 2*M_PI)
          {
          }
          // new delta phi for next change

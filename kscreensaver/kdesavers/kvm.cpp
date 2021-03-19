@@ -232,7 +232,7 @@ void kVmSaver::readSettings()
 int kVmSaver::getRandom( const int max_value ) {
  return (int)( vm_random(&(pool_state->pool->vm_random_data))*1.0*(max_value + 1.0)/
                (VM_RAND_MAX + 1.0) );
-// return (int)( rand()*1.0*(max_value + 1.0)/
+// return (int)( qrand()*1.0*(max_value + 1.0)/
 //               (RAND_MAX + 1.0) );
 }
 void kVmSaver::modifyArea( const int op ) {

@@ -112,7 +112,6 @@ KWalletD::KWalletD()
      _useGpg = true;
 #endif
 
-	srand(time(0));
 	_showingFailureNotify = false;
 	_closeIdle = false;
 	_idleTime = 0;
@@ -169,7 +168,7 @@ int KWalletD::generateHandle() {
 
 	// ASSUMPTION: RAND_MAX is fairly large.
 	do {
-		rc = rand();
+		rc = qrand();
 	} while (_wallets.contains(rc) || rc == 0);
 
 	return rc;

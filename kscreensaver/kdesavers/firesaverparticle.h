@@ -24,7 +24,7 @@
 #include <qgl.h>
 
 #define FLICKER_FRAMES_DELAY 8
-#define DRAND ((float)rand() / (float)RAND_MAX)  /*random float between 0 and 1*/
+#define DRAND ((float)qrand() / (float)RAND_MAX)  /*random float between 0 and 1*/
 
 /* -- Particle class.
  * Sets initial parameters and takes care of updating physics for a single 

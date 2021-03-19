@@ -105,8 +105,6 @@ KPartSaver::KPartSaver( WId id )
     if( !g_inited ) {
         g_inited = true;
 
-        srand( time(0) );
-
         // install signal handler
         signal( SIGINT, exitHandler );    // Ctrl-C will cause a clean exit...
         signal( SIGTERM, exitHandler );   // "kill"...
@@ -231,7 +229,7 @@ void KPartSaver::next( bool random )
     while( m_media.count()>0 ) {
 
         if( random )
-            m_current = rand() % m_media.count();
+            m_current = qrand() % m_media.count();
         else
             m_current++;
 

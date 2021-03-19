@@ -299,9 +299,8 @@ main(void)
     initConfig();
 
     /* for QSettings */
-    srand(time(0));
     for (i = 0; i < 10000; i++) {
-        sprintf(qtrc, "/tmp/%010d", rand());
+        sprintf(qtrc, "/tmp/%010d", qrand());
         if (!mkdir(qtrc, 0700))
             goto okay;
     }
