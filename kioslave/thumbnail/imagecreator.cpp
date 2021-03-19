@@ -19,12 +19,16 @@
 */
 
 #include "imagecreator.h"
-
-#include <assert.h>
+#include "imagecreatorsettings.h"
 
 #include <QImage>
-
+#include <QCheckBox>
 #include <kdemacros.h>
+#include <klocale.h>
+
+#ifdef HAVE_KEXIV2
+#include <libkexiv2/kexiv2.h>
+#endif
 
 extern "C"
 {
@@ -41,10 +45,38 @@ bool ImageCreator::create(const QString &path, int, int, QImage &img)
         return false;
     if (img.depth() != 32)
         img = img.convertToFormat(img.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
+
+#ifdef HAVE_KEXIV2
+    ImageCreatorSettings* settings = ImageCreatorSettings::self();
+    settings->readConfig();
+    if (settings->rotate()) {
+        KExiv2Iface::KExiv2 exiv(path);
+        exiv.rotateExifQImage(img, exiv.getImageOrientation());
+    }
+#endif
+
     return true;
 }
 
 ThumbCreator::Flags ImageCreator::flags() const
 {
     return None;
+}
+
+
+QWidget *ImageCreator::createConfigurationWidget()
+{
+    QCheckBox *rotateCheckBox = new QCheckBox(i18nc("@option:check", "Rotate the image automatically"));
+    rotateCheckBox->setChecked(ImageCreatorSettings::rotate());
+    return rotateCheckBox;
+}
+
+void ImageCreator::writeConfiguration(const QWidget *configurationWidget)
+{
+    const QCheckBox *rotateCheckBox = qobject_cast<const QCheckBox*>(configurationWidget);
+    if (rotateCheckBox) {
+        ImageCreatorSettings* settings = ImageCreatorSettings::self();
+        settings->setRotate(rotateCheckBox->isChecked());
+        settings->writeConfig();
+    }
 }

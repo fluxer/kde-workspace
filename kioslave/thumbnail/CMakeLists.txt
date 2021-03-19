@@ -6,23 +6,11 @@ set_package_properties(OpenEXR PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(Exiv2)
-set_package_properties(Exiv2 PROPERTIES
-    DESCRIPTION "A library to access image metadata"
-    URL "http://www.exiv2.org"
-    PURPOSE "Provides support for automatic rotation of JPEGs in the thumbnail kioslave"
-    TYPE OPTIONAL
-)
-
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE
     "ICO thumbnails support in KIO slave"
 )
-
-macro_bool_to_01(EXIV2_FOUND HAVE_EXIV2)
-
-include_directories(${JPEG_INCLUDE_DIR})
 
 ########### next target ###############
 
@@ -38,33 +26,22 @@ install(TARGETS kio_thumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 set(imagethumbnail_PART_SRCS imagecreator.cpp)
 
+set_source_files_properties(${imagethumbnail_PART_SRCS} PROPERTIES
+    COMPILE_FLAGS "-DHAVE_KEXIV2 ${KDE4_ENABLE_EXCEPTIONS}"
+)
+
+kde4_add_kcfg_files(imagethumbnail_PART_SRCS imagecreatorsettings.kcfgc)
 kde4_add_plugin(imagethumbnail ${imagethumbnail_PART_SRCS})
 
-target_link_libraries(imagethumbnail ${KDE4_KIO_LIBS})
+target_link_libraries(imagethumbnail ${KDE4_KIO_LIBS} ${KDE4_KEXIV2_LIBS})
 
+install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(FILES imagecreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
 install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
 install( FILES directorythumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-
-########### next target ###############
-
-set(jpegthumbnail_PART_SRCS jpegcreator.cpp)
-kde4_add_kcfg_files(jpegthumbnail_PART_SRCS jpegcreatorsettings.kcfgc)
-kde4_add_plugin(jpegthumbnail ${jpegthumbnail_PART_SRCS})
-
-target_link_libraries(jpegthumbnail ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${JPEG_LIBRARIES} ${KDE4_KIO_LIBS})
-
-if(HAVE_EXIV2)
-    set_source_files_properties(jpegcreator.cpp PROPERTIES
-                                COMPILE_FLAGS "-DHAVE_EXIV2 ${KDE4_ENABLE_EXCEPTIONS}")
-    include_directories(${EXIV2_INCLUDE_DIR})
-    target_link_libraries(jpegthumbnail ${EXIV2_LIBRARIES})
-endif()
-
-install(FILES jpegcreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
-install(TARGETS jpegthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -167,7 +144,6 @@ install(
     thumbnail.protocol
     svgthumbnail.desktop
     imagethumbnail.desktop
-    jpegthumbnail.desktop
     textthumbnail.desktop
     djvuthumbnail.desktop
     desktopthumbnail.desktop

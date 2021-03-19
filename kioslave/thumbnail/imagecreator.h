@@ -28,6 +28,8 @@ public:
     ImageCreator() {}
     virtual bool create(const QString &path, int, int, QImage &img);
     virtual Flags flags() const;
+    virtual QWidget *createConfigurationWidget();
+    virtual void writeConfiguration(const QWidget *configurationWidget);
 };
 
 #endif

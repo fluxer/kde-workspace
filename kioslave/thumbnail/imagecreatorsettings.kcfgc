@@ -1,0 +1,4 @@
+File=imagecreatorsettings.kcfg
+ClassName=ImageCreatorSettings
+Singleton=true
+Mutators=true
