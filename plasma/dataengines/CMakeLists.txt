@@ -19,8 +19,6 @@ add_subdirectory(weather)
 if(DBUSMENUQT_FOUND)
     add_subdirectory(statusnotifieritem)
 endif()
-add_subdirectory(share)
-
 add_subdirectory(mouse)
 add_subdirectory(systemmonitor)
 add_subdirectory(tasks)
