@@ -716,8 +716,8 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         // 128 x 128 or 256 x 256 pixels
         int cacheSize = 0;
         // NOTE: make sure the algorithm matches the one used in kdelibs/kio/kio/previewjob.cpp
-        const QByteArray hash = QCryptographicHash::hash(QFile::encodeName(fileName.url()), QCryptographicHash::Sha1);
-        const QString thumbName = QFile::encodeName(hash.toHex()) + QLatin1String(".png");
+        const QByteArray hash = QFile::encodeName(fileName.url()).toHex();
+        const QString thumbName = hash + QLatin1String(".png");
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
             KStandardDirs::makeDir(m_thumbBasePath + "normal/", 0700);
