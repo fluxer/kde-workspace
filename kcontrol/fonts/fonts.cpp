@@ -512,15 +512,9 @@ KFonts::KFonts(QWidget *parent, const QVariantList &args)
 
   // NOTE: keep in sync with kdelibs/kdeui/kernel/kglobalsettings.cpp
 
-#if   defined(Q_WS_MAEMO_5) || defined(MEEGO_EDITION_HARMATTAN)
-  QFont f0("Sans Serif", 16); // general/menu/desktop
-  QFont f1("Monospace", 16;
-  QFont f2("Sans Serif", 16); // toolbar
-#else
   QFont f0("Sans Serif", 9); // general/menu/desktop
   QFont f1("Monospace", 9);
   QFont f2("Sans Serif", 8); // toolbar
-#endif
   QFont f3("Sans Serif", 8); // window title
   QFont f4("Sans Serif", 9); // taskbar
   QFont f5("Sans Serif", 8); // smallestReadableFont
