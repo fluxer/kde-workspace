@@ -26,31 +26,7 @@ Name[sv]=Qwant-bilder
 Name[uk]=Зображення Qwant
 Name[x-test]=xxQwant Imagesxx
 Name[zh_TW]=Qwant Images
-Query=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[ca]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[cs]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[da]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[de]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[en_GB]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[es]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[et]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[fi]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[ia]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[it]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[nds]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[nl]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[pl]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[pt]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[pt_BR]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[ru]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sk]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sr]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sr@ijekavian]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sr@ijekavianlatin]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sr@latin]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[sv]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[uk]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
-Query[x-test]=xxhttps://www.qwant.com/single?q=\\{@}&client=kde&source=imagesxx
-Query[zh_TW]=https://www.qwant.com/single?q=\\{@}&client=kde&source=images
+Query=https://www.qwant.com/?q=\\{@}&t=images
+Query[x-test]=xxhttps://www.qwant.com/?q=\\{@}&t=imagesxx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
