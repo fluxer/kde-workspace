@@ -734,7 +734,7 @@ void GroupManager::removeLauncher(const KUrl &url)
 
 void GroupManagerPrivate::sycocaChanged(const QStringList &types)
 {
-    if (types.contains("apps")) {
+    if (types.contains("apps") || types.contains("xdgdata-apps")) {
         KUrl::List removals;
         foreach (LauncherItem *launcher, launchers) {
             if (!QFile::exists(launcher->launcherUrl().toLocalFile())) {

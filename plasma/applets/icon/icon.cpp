@@ -118,7 +118,7 @@ void IconApplet::saveState(KConfigGroup &cg) const
 
 void IconApplet::checkService(const QStringList &changedResources)
 {
-    if (changedResources.contains("apps")) {
+    if (changedResources.contains("apps") || changedResources.contains("xdgdata-apps")) {
         setUrl(m_url);
     }
 }
