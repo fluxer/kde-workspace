@@ -572,7 +572,7 @@ void ApplicationModel::reloadMenu()
 
 void ApplicationModel::checkSycocaChange(const QStringList &changes)
 {
-    if (changes.contains("services") || changes.contains("apps")) {
+    if (changes.contains("services") || changes.contains("apps") || changes.contains("xdgdata-apps")) {
         reloadMenu();
     }
 }
