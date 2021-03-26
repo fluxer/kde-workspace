@@ -17,14 +17,6 @@ set(libklipper_common_SRCS
     editactiondialog.ui
 )
 
-macro_optional_find_package(Prison QUIET CONFIG)
-set_package_properties(Prison PROPERTIES
-    DESCRIPTION "Prison library"
-    URL "http://projects.kde.org/prison"
-    TYPE OPTIONAL
-    PURPOSE "Needed to create mobile barcodes from clipboard data"
-)
-
 if (PRISON_FOUND)
     add_definitions(-DHAVE_PRISON)
     include_directories(${PRISON_INCLUDE_DIR})

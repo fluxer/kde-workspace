@@ -1,18 +1,4 @@
 
-macro_optional_find_package(BZip2)
-set_package_properties(BZip2 PROPERTIES DESCRIPTION "A high-quality data compressor"
-                       URL "http://www.bzip.org"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides the ability to read and write bzip2 compressed data files in the filter kioslave."
-                      )
-
-macro_optional_find_package(LibLZMA)
-set_package_properties(LibLZMA PROPERTIES DESCRIPTION "A very high compression ratio data compressor"
-                       URL "http://tukaani.org/xz/"
-                       TYPE OPTIONAL
-                       PURPOSE "Provides the ability to read and write xz compressed data files."
-                      )
-
 ########### next target ###############
 
 set(kio_filter_PART_SRCS filter.cc)
@@ -28,11 +14,21 @@ install(TARGETS kio_filter DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES gzip.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install(
+    FILES gzip.protocol
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
+
 if(BZIP2_FOUND)
-install( FILES bzip.protocol bzip2.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-endif(BZIP2_FOUND)
+    install(
+        FILES bzip.protocol bzip2.protocol
+        DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+    )
+endif()
 
 if(LIBLZMA_FOUND)
-install( FILES lzma.protocol xz.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-endif(LIBLZMA_FOUND)
+    install(
+        FILES lzma.protocol xz.protocol
+        DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+    )
+endif()

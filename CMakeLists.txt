@@ -14,43 +14,34 @@ set_package_properties(ZLIB PROPERTIES
     TYPE REQUIRED
 )
 
-macro_optional_find_package(DBusMenuQt 0.6.0)
-set_package_properties(DBusMenuQt PROPERTIES
-    DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
-    URL "https://launchpad.net/libdbusmenu-qt"
-    TYPE RECOMMENDED
+find_package(LibGcrypt 1.5.0)
+set_package_properties(LibGcrypt PROPERTIES
+    DESCRIPTION "general purpose cryptographic library based on the code from GnuPG"
+    URL "https://www.gnu.org/software/libgcrypt/"
+    PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
+    TYPE REQUIRED
 )
 
-macro_optional_find_package(Strigi 0.6.3)
-set_package_properties(Strigi PROPERTIES
-    DESCRIPTION "Desktop indexing and search support"
-    URL "http://strigi.sourceforge.net"
-    PURPOSE "Fonts analyzer"
-    TYPE RECOMMENDED
+find_package(JPEG)
+set_package_properties(JPEG PROPERTIES
+    DESCRIPTION "Accelerated JPEG image codec"
+    URL "http://libjpeg-turbo.virtualgl.org/"
+    TYPE REQUIRED
 )
 
-macro_optional_find_package(OpenGL)
-set_package_properties(OpenGL PROPERTIES
-    DESCRIPTION "The OpenGL libraries"
-    URL "http://www.opengl.org"
-    PURPOSE "3D screensavers and OpenGL info module"
-    TYPE OPTIONAL
+find_package(PNG)
+set_package_properties(PNG PROPERTIES
+    DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"
+    URL "http://www.libpng.org/"
+    TYPE REQUIRED
 )
 
-macro_optional_find_package(OpenGLES)
-set_package_properties(OpenGLES PROPERTIES
-    DESCRIPTION "The OpenGLES libraries"
-    URL "http://www.khronos.org/opengles"
-    TYPE OPTIONAL
-    PURPOSE "OpenGL ES info module"
-)
-
-macro_optional_find_package(LibDRM)
-set_package_properties(LibDRM PROPERTIES
-    DESCRIPTION "Userspace interface to kernel DRM services"
-    URL "https://dri.freedesktop.org/wiki/"
-    TYPE OPTIONAL
-    PURPOSE "OpenGL info module"
+find_package(Perl)
+set_package_properties(Perl PROPERTIES
+    DESCRIPTION "Highly capable, feature-rich programming language"
+    URL "http://www.perl.org"
+    PURPOSE "Needed for KDM config handler generator"
+    TYPE REQUIRED
 )
 
 if(Q_WS_X11)
@@ -104,6 +95,45 @@ if(Q_WS_X11)
     endif()
 endif(Q_WS_X11)
 
+macro_optional_find_package(DBusMenuQt 0.6.0)
+set_package_properties(DBusMenuQt PROPERTIES
+    DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
+    URL "https://launchpad.net/libdbusmenu-qt"
+    TYPE RECOMMENDED
+)
+
+macro_optional_find_package(Strigi 0.6.3)
+set_package_properties(Strigi PROPERTIES
+    DESCRIPTION "Desktop indexing and search support"
+    URL "http://strigi.sourceforge.net"
+    PURPOSE "Fonts analyzer"
+    TYPE RECOMMENDED
+)
+
+macro_optional_find_package(OpenGL)
+set_package_properties(OpenGL PROPERTIES
+    DESCRIPTION "The OpenGL libraries"
+    URL "http://www.opengl.org"
+    PURPOSE "3D screensavers and OpenGL info module"
+    TYPE OPTIONAL
+)
+
+macro_optional_find_package(OpenGLES)
+set_package_properties(OpenGLES PROPERTIES
+    DESCRIPTION "The OpenGLES libraries"
+    URL "http://www.khronos.org/opengles"
+    TYPE OPTIONAL
+    PURPOSE "OpenGL ES info module"
+)
+
+macro_optional_find_package(LibDRM)
+set_package_properties(LibDRM PROPERTIES
+    DESCRIPTION "Userspace interface to kernel DRM services"
+    URL "https://dri.freedesktop.org/wiki/"
+    TYPE OPTIONAL
+    PURPOSE "OpenGL info module"
+)
+
 macro_optional_find_package(Freetype)
 set_package_properties(Freetype PROPERTIES
     DESCRIPTION "Freely available software library to render fonts"
@@ -118,28 +148,6 @@ set_package_properties(Fontconfig PROPERTIES
     URL "http://www.freedesktop.org/wiki/Software/fontconfig"
     PURPOSE "Needed to build font configuration and installation tools"
     TYPE OPTIONAL
-)
-
-find_package(LibGcrypt 1.5.0)
-set_package_properties(LibGcrypt PROPERTIES
-    DESCRIPTION "general purpose cryptographic library based on the code from GnuPG"
-    URL "https://www.gnu.org/software/libgcrypt/"
-    PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
-    TYPE REQUIRED
-)
-
-find_package(JPEG)
-set_package_properties(JPEG PROPERTIES
-    DESCRIPTION "Accelerated JPEG image codec"
-    URL "http://libjpeg-turbo.virtualgl.org/"
-    TYPE REQUIRED
-)
-
-find_package(PNG)
-set_package_properties(PNG PROPERTIES
-    DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"
-    URL "http://www.libpng.org/"
-    TYPE REQUIRED
 )
 
 macro_optional_find_package(LibGPS)
@@ -158,13 +166,125 @@ set_package_properties(LibKonq PROPERTIES
     TYPE OPTIONAL
 )
 
-find_package(Perl)
-set_package_properties(Perl PROPERTIES
-    DESCRIPTION "Highly capable, feature-rich programming language"
-    URL "http://www.perl.org"
-    PURPOSE "Needed for KDM config handler generator"
-    TYPE REQUIRED
+macro_optional_find_package(Prison QUIET CONFIG)
+set_package_properties(Prison PROPERTIES
+    DESCRIPTION "Prison library"
+    URL "http://projects.kde.org/prison"
+    TYPE OPTIONAL
+    PURPOSE "Needed to create mobile barcodes from clipboard data"
 )
+
+macro_optional_find_package(LibUSB)
+set_package_properties(LibUSB PROPERTIES
+    DESCRIPTION "User level access to USB devices"
+    URL "http://libusb.sourceforge.net"
+    TYPE OPTIONAL
+    PURPOSE "Provides Logitech mouse support in KControl."
+)
+
+macro_optional_find_package(PCIUTILS)
+set_package_properties(PCIUTILS PROPERTIES
+    DESCRIPTION "PciUtils is a library for direct access to PCI slots"
+    URL "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
+    TYPE OPTIONAL
+    PURPOSE "View PCI details in kinfocenter."
+)
+
+macro_optional_find_package(RAW1394)
+set_package_properties(RAW1394 PROPERTIES
+    DESCRIPTION "library for direct access to IEEE 1394 bus"
+    URL "http://www.linux1394.org/"
+    TYPE OPTIONAL
+    PURPOSE "View FireWire devices in kinfocenter."
+)
+
+# we need a version of samba which has already smbc_set_context(), Alex
+set(SAMBA_REQUIRE_SMBC_SET_CONTEXT TRUE)
+set(SAMBA_REQUIRE_SMBC_OPTION_SET TRUE)
+macro_optional_find_package(Samba)
+set_package_properties(Samba PROPERTIES
+    DESCRIPTION "the SMB client library, a version with smbc_set_context() and smbc_option_set()"
+    URL "http://www.samba.org"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build the SMB kioslave"
+)
+
+macro_optional_find_package(LibSSH 0.6.0)
+set_package_properties(LibSSH PROPERTIES
+    DESCRIPTION "the SSH library with SFTP support"
+    URL "http://www.libssh.org/"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build the SFTP kioslave"
+)
+
+macro_optional_find_package(Mtp 1.1.2)
+set_package_properties(Mtp PROPERTIES
+    DESCRIPTION "the library implementation of the Media Transfer Protocol"
+    URL "http://libmtp.sourceforge.net/"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build the MTP kioslave"
+)
+
+macro_optional_find_package(BZip2)
+set_package_properties(BZip2 PROPERTIES
+    DESCRIPTION "A high-quality data compressor"
+    URL "http://www.bzip.org"
+    TYPE OPTIONAL
+    PURPOSE "Provides the ability to read and write bzip2 compressed data files in the filter kioslave."
+)
+
+macro_optional_find_package(LibLZMA)
+set_package_properties(LibLZMA PROPERTIES
+    DESCRIPTION "A very high compression ratio data compressor"
+    URL "http://tukaani.org/xz/"
+    TYPE OPTIONAL
+    PURPOSE "Provides the ability to read and write xz compressed data files."
+)
+
+macro_optional_find_package(OpenEXR)
+set_package_properties(OpenEXR PROPERTIES
+    DESCRIPTION "API for accessing OpenEXR formatted images"
+    URL "http://www.openexr.com"
+    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
+    TYPE OPTIONAL
+)
+
+macro_optional_find_package(Sensors)
+set_package_properties(Sensors PROPERTIES
+    DESCRIPTION "Linux hardware monitoring"
+    URL "https://hwmon.wiki.kernel.org/lm_sensors"
+    PURPOSE "Sensors feedback in ksysguard"
+    TYPE OPTIONAL
+)
+
+macro_optional_find_package(Qalculate)
+set_package_properties(Qalculate PROPERTIES
+    DESCRIPTION "Qalculate Library"
+    URL "http://qalculate.sourceforge.net"
+    TYPE OPTIONAL
+    PURPOSE "Needed to enable advanced features of the calculator runner"
+)
+
+macro_optional_find_package(NetworkManager)
+set_package_properties(NetworkManager PROPERTIES
+    DESCRIPTION "The NetworkManager headers"
+    URL "http://projects.gnome.org/NetworkManager"
+    TYPE OPTIONAL
+    PURPOSE "Needed for kded's networkstatus module"
+)
+
+find_program(WRESTOOL_EXECUTABLE wrestool)
+add_feature_info(wrestool
+    WRESTOOL_EXECUTABLE
+    "ICO thumbnails support in KIO slave"
+)
+
+find_program(MTOOLS_EXECUTABLES NAMES mdir mmd mdel mrd mren mcopy)
+add_feature_info(mtools
+    MTOOLS_EXECUTABLES
+    "KIO floppy support"
+)
+
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
@@ -186,92 +306,91 @@ add_subdirectory(libs)
 # pictures
 add_subdirectory(pics)
 
-macro_optional_add_subdirectory(systemsettings )
+add_subdirectory(systemsettings)
 
 # core apps
-macro_optional_add_subdirectory(kcheckpass)
-macro_optional_add_subdirectory(kwin)
-macro_optional_add_subdirectory(ksmserver)
+add_subdirectory(kcheckpass)
+add_subdirectory(kwin)
+add_subdirectory(ksmserver)
 
-macro_optional_add_subdirectory(ksplash)
+add_subdirectory(ksplash)
 
-macro_optional_add_subdirectory(powerdevil)
-macro_optional_add_subdirectory(qguiplatformplugin_kde)
-macro_optional_add_subdirectory(ksysguard)
+add_subdirectory(powerdevil)
+add_subdirectory(qguiplatformplugin_kde)
+add_subdirectory(ksysguard)
 
-macro_optional_add_subdirectory(kcontrol)
-macro_optional_add_subdirectory(klipper)
-macro_optional_add_subdirectory(kmenuedit)
-macro_optional_add_subdirectory(krunner)
-macro_optional_add_subdirectory(solid-actions-kcm)
-macro_optional_add_subdirectory(kstartupconfig)
-macro_optional_add_subdirectory(freespacenotifier)
-macro_optional_add_subdirectory(kscreensaver)
-macro_optional_add_subdirectory(kinfocenter)
+add_subdirectory(kcontrol)
+add_subdirectory(klipper)
+add_subdirectory(kmenuedit)
+add_subdirectory(krunner)
+add_subdirectory(solid-actions-kcm)
+add_subdirectory(kstartupconfig)
+add_subdirectory(freespacenotifier)
+add_subdirectory(kscreensaver)
+add_subdirectory(kinfocenter)
 
 if(Q_WS_X11 AND X11_Xinput_FOUND)
-    macro_optional_add_subdirectory(ktouchpadenabler)
+    add_subdirectory(ktouchpadenabler)
 endif(Q_WS_X11 AND X11_Xinput_FOUND)
 
-macro_optional_add_subdirectory(kcminit)
-macro_optional_add_subdirectory(khotkeys)
-macro_optional_add_subdirectory(kwrited)
-macro_optional_add_subdirectory(ksystraycmd)
-macro_optional_add_subdirectory(appmenu)
+add_subdirectory(kcminit)
+add_subdirectory(khotkeys)
+add_subdirectory(ksystraycmd)
+add_subdirectory(appmenu)
 
 if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-    macro_optional_add_subdirectory( kdm )
+    add_subdirectory( kdm )
 else(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
     message(STATUS "Xau lib or Xdmcp lib was missing. kdm will not compile")
 endif(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
 
 # data
-macro_optional_add_subdirectory(cursors)
+add_subdirectory(cursors)
 
-macro_optional_add_subdirectory(plasma)
-macro_optional_add_subdirectory(statusnotifierwatcher)
-macro_optional_add_subdirectory(kstyles)
+add_subdirectory(plasma)
+add_subdirectory(statusnotifierwatcher)
+add_subdirectory(kstyles)
 
 # imported from kde-runtime and other sub-projects
-macro_optional_add_subdirectory(menu)
-macro_optional_add_subdirectory(kwalletd)
-macro_optional_add_subdirectory(kwalletmanager)
-macro_optional_add_subdirectory(knotify)
-macro_optional_add_subdirectory(kuiserver)
-macro_optional_add_subdirectory(soliduiserver)
-macro_optional_add_subdirectory(solidautoeject)
-macro_optional_add_subdirectory(solid-device-automounter)
-macro_optional_add_subdirectory(solid-networkstatus)
-macro_optional_add_subdirectory(kcmshell)
-macro_optional_add_subdirectory(kioslave)
-macro_optional_add_subdirectory(kurifilter-plugins)
-macro_optional_add_subdirectory(renamedlgplugins)
-macro_optional_add_subdirectory(kquitapp)
+add_subdirectory(menu)
+add_subdirectory(kwalletd)
+add_subdirectory(kwalletmanager)
+add_subdirectory(knotify)
+add_subdirectory(kuiserver)
+add_subdirectory(soliduiserver)
+add_subdirectory(solidautoeject)
+add_subdirectory(solid-device-automounter)
+add_subdirectory(solid-networkstatus)
+add_subdirectory(kcmshell)
+add_subdirectory(kioslave)
+add_subdirectory(kurifilter-plugins)
+add_subdirectory(renamedlgplugins)
+add_subdirectory(kquitapp)
 if (Q_WS_X11)
-    macro_optional_add_subdirectory(kstart)
+    add_subdirectory(kstart)
 endif (Q_WS_X11)
 # Background processes
-macro_optional_add_subdirectory(kpasswdserver)
-macro_optional_add_subdirectory(kdontchangethehostname)
-macro_optional_add_subdirectory(kglobalaccel)
-macro_optional_add_subdirectory(ktimezoned)
+add_subdirectory(kpasswdserver)
+add_subdirectory(kdontchangethehostname)
+add_subdirectory(kglobalaccel)
+add_subdirectory(ktimezoned)
 # Command-line tools (e.g. for shell scripts)
-macro_optional_add_subdirectory(kdeeject)
-macro_optional_add_subdirectory(kfile)
-macro_optional_add_subdirectory(kiconfinder)
-macro_optional_add_subdirectory(kioclient)
-macro_optional_add_subdirectory(kioexec)
-macro_optional_add_subdirectory(ktraderclient)
-macro_optional_add_subdirectory(kreadconfig)
-macro_optional_add_subdirectory(kmimetypefinder)
+add_subdirectory(kdeeject)
+add_subdirectory(kfile)
+add_subdirectory(kiconfinder)
+add_subdirectory(kioclient)
+add_subdirectory(kioexec)
+add_subdirectory(ktraderclient)
+add_subdirectory(kreadconfig)
+add_subdirectory(kmimetypefinder)
 # UI Helper applications
-macro_optional_add_subdirectory(drkonqi)
-macro_optional_add_subdirectory(knetattach)
-macro_optional_add_subdirectory(keditfiletype)
+add_subdirectory(drkonqi)
+add_subdirectory(knetattach)
+add_subdirectory(keditfiletype)
 # Default settings, content and config
-macro_optional_add_subdirectory(l10n)
-macro_optional_add_subdirectory(localization)
-macro_optional_add_subdirectory(kde-menu)
+add_subdirectory(l10n)
+add_subdirectory(localization)
+add_subdirectory(kde-menu)
 
 ########### install files ###############
 # install(PROGRAMS ${CMAKE_CURRENT_SOURCE_DIR}/kde4 DESTINATION ${KDE4_BIN_INSTALL_DIR})

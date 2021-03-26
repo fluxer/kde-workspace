@@ -8,13 +8,6 @@ set(kded_networkstatus_PART_SRCS
    wicdcustomtypes.cpp
 )
 
-macro_optional_find_package(NetworkManager)
-set_package_properties(NetworkManager PROPERTIES DESCRIPTION "The NetworkManager headers"
-                       URL "http://projects.gnome.org/NetworkManager"
-                       TYPE OPTIONAL
-                       PURPOSE "Needed for kded's networkstatus module"
-                      )
-
 if(NETWORKMANAGER_FOUND)
     if(${NETWORKMANAGER_VERSION} VERSION_EQUAL "0.7.0"
         OR ${NETWORKMANAGER_VERSION} VERSION_GREATER "0.7.0")

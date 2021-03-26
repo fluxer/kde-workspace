@@ -1,17 +1,3 @@
-macro_optional_find_package(OpenEXR)
-set_package_properties(OpenEXR PROPERTIES
-    DESCRIPTION "API for accessing OpenEXR formatted images"
-    URL "http://www.openexr.com"
-    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
-    TYPE OPTIONAL
-)
-
-find_program(WRESTOOL_EXECUTABLE wrestool)
-add_feature_info(wrestool
-    WRESTOOL_EXECUTABLE
-    "ICO thumbnails support in KIO slave"
-)
-
 ########### next target ###############
 
 set(kio_thumbnail_PART_SRCS thumbnail.cpp imagefilter.cpp)

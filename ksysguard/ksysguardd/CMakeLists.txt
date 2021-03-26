@@ -1,7 +1,3 @@
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
-  cmake_minimum_required(VERSION 2.6.2)
-endif()
-
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/CContLib/ )
 
 # Laurent: Verify that we install it into (kdeprefix)/etc/ and not into /etc
@@ -9,7 +5,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/CContLib/ )
 # into kde 3.x it was installed into /etc/
 add_definitions( -DKSYSGUARDDRCFILE="\\"${KDE4_SYSCONF_INSTALL_DIR}/ksysguarddrc\\"" )
 
-macro_optional_find_package(Sensors)
 macro_bool_to_01(SENSORS_FOUND HAVE_LMSENSORS)
 
 configure_file(config-ksysguardd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksysguardd.h)

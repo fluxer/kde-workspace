@@ -1,4 +1,4 @@
-macro_optional_add_subdirectory( asciiquarium )
+add_subdirectory( asciiquarium )
 
 SET(LIBMATH "m")
 

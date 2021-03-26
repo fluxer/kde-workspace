@@ -1,4 +1,4 @@
-set(setuptools tar inkspace xcursorgen)
+set(setuptools tar xcursorgen)
 foreach(tool ${setuptools})
     string(TOUPPER ${tool} uppertool)
     find_program(${uppertool} ${tool})

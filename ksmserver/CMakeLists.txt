@@ -12,7 +12,7 @@ if(ENABLE_TESTING)
     add_subdirectory(tests)
 endif()
 
-macro_optional_add_subdirectory( screenlocker )
+add_subdirectory( screenlocker )
 set(COMPILE_SCREEN_LOCKER 1)
 set(SCREEN_LOCKER "screenlocker_static")
 
