@@ -1,6 +1,3 @@
-/* Define if you have the CoreAudio API */
-#undef HAVE_COREAUDIO
-
 /* Defines if you have libdevinfo of Solaris 7 or later */
 #undef HAVE_LIBDEVINFO_H
 
