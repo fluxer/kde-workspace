@@ -146,7 +146,7 @@ KWalletEditor::KWalletEditor(QWidget* parent, const char *name)
     connect(_hideContents, SIGNAL(clicked()),
             this, SLOT(hidePasswordContents()));
 
-    // createActions();
+    createActions(actionCollection());
     // TODO: remove kwalleteditor.rc file
 }
 
