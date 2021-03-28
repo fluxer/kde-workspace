@@ -36,35 +36,35 @@
 /* @internal
  */
 class KWALLETBACKEND_EXPORT BlowFish : public BlockCipher {
-	public:
-		BlowFish();
-		virtual ~BlowFish();
+public:
+    BlowFish();
+    virtual ~BlowFish();
 
-		virtual bool setKey(void *key, int bitlength);
+    virtual bool setKey(void *key, int bitlength);
 
-		virtual int keyLen() const;
+    virtual int keyLen() const;
 
-		virtual bool variableKeyLen() const;
+    virtual bool variableKeyLen() const;
 
-		virtual bool readyToGo() const;
+    virtual bool readyToGo() const;
 
-		virtual int encrypt(void *block, int len);
+    virtual int encrypt(void *block, int len);
 
-		virtual int decrypt(void *block, int len);
+    virtual int decrypt(void *block, int len);
 
-	private:
-		uint32_t _BF_S[4][256];
-		uint32_t _BF_P[18];
+private:
+    uint32_t _BF_S[4][256];
+    uint32_t _BF_P[18];
 
-		void *_key;
-		int _keylen;  // in bits
+    void *_key;
+    int _keylen;  // in bits
 
-		bool _init;
+    bool _init;
 
-		bool init();
-		uint32_t F(uint32_t x);
-		void encipher(uint32_t *xl, uint32_t *xr);
-		void decipher(uint32_t *xl, uint32_t *xr);
+    bool init();
+    uint32_t F(uint32_t x);
+    void encipher(uint32_t *xl, uint32_t *xr);
+    void decipher(uint32_t *xl, uint32_t *xr);
 };
 
 #endif

@@ -65,122 +65,122 @@ class MD5Digest : public QByteArray {
 /* @internal
  */
 class KDE_EXPORT Backend {
-	public:
-		explicit Backend(const QString& name = QLatin1String("kdewallet"), bool isPath = false);
-		~Backend();
+public:
+    explicit Backend(const QString& name = QLatin1String("kdewallet"), bool isPath = false);
+    ~Backend();
 
-		// Open and unlock the wallet.
-		// If opening succeeds, the password's hash will be remembered.
-		// If opening fails, the password's hash will be cleared.
-		int open(const QByteArray& password, WId w=0);
-      
-      // Open and unlock the wallet using a pre-hashed password.
-      // If opening succeeds, the password's hash will be remembered.
-      // If opening fails, the password's hash will be cleared.
-      int openPreHashed(const QByteArray &passwordHash);
+    // Open and unlock the wallet.
+    // If opening succeeds, the password's hash will be remembered.
+    // If opening fails, the password's hash will be cleared.
+    int open(const QByteArray& password, WId w=0);
 
-		// Close the wallet, losing any changes.
-		// if save is true, the wallet is saved prior to closing it.
-		int close(bool save = false);
+    // Open and unlock the wallet using a pre-hashed password.
+    // If opening succeeds, the password's hash will be remembered.
+    // If opening fails, the password's hash will be cleared.
+    int openPreHashed(const QByteArray &passwordHash);
 
-		// Write the wallet to disk
-		int sync(WId w);
+    // Close the wallet, losing any changes.
+    // if save is true, the wallet is saved prior to closing it.
+    int close(bool save = false);
 
-		// Returns true if the current wallet is open.
-		bool isOpen() const;
+    // Write the wallet to disk
+    int sync(WId w);
 
-		// Returns the current wallet name.
-		const QString& walletName() const;
+    // Returns true if the current wallet is open.
+    bool isOpen() const;
 
-		// The list of folders.
-		QStringList folderList() const;
+    // Returns the current wallet name.
+    const QString& walletName() const;
 
-		// Force creation of a folder.
-		bool createFolder(const QString& f);
+    // The list of folders.
+    QStringList folderList() const;
 
-		// Change the folder.
-		void setFolder(const QString& f) { _folder = f; }
+    // Force creation of a folder.
+    bool createFolder(const QString& f);
 
-		// Current folder.  If empty, it's the global folder.
-		const QString& folder() const { return _folder; }
+    // Change the folder.
+    void setFolder(const QString& f) { _folder = f; }
 
-		// Does it have this folder?
-		bool hasFolder(const QString& f) const { return _entries.contains(f); }
+    // Current folder.  If empty, it's the global folder.
+    const QString& folder() const { return _folder; }
 
-		// Look up an entry.  Returns null if it doesn't exist.
-		Entry *readEntry(const QString& key);
-		
-		// Look up a list of entries.  Supports wildcards.
-		// You delete the list
-		QList<Entry*> readEntryList(const QString& key);
+    // Does it have this folder?
+    bool hasFolder(const QString& f) const { return _entries.contains(f); }
 
-		// Store an entry.
-		void writeEntry(Entry *e);
+    // Look up an entry.  Returns null if it doesn't exist.
+    Entry *readEntry(const QString& key);
+    
+    // Look up a list of entries.  Supports wildcards.
+    // You delete the list
+    QList<Entry*> readEntryList(const QString& key);
 
-		// Does this folder contain this entry?
-		bool hasEntry(const QString& key) const;
+    // Store an entry.
+    void writeEntry(Entry *e);
 
-		// Returns true if the entry was removed
-		bool removeEntry(const QString& key);
+    // Does this folder contain this entry?
+    bool hasEntry(const QString& key) const;
 
-		// Returns true if the folder was removed
-		bool removeFolder(const QString& f);
+    // Returns true if the entry was removed
+    bool removeEntry(const QString& key);
 
-		// The list of entries in this folder.
-		QStringList entryList() const;
+    // Returns true if the folder was removed
+    bool removeFolder(const QString& f);
 
-		// Rename an entry in this folder.
-		int renameEntry(const QString& oldName, const QString& newName);
-		
-		// Set the password used for opening/closing the wallet.
-		// This does not sync the wallet to disk!
-		void setPassword(const QByteArray &password);
-      
-		int ref() { return ++_ref; }
+    // The list of entries in this folder.
+    QStringList entryList() const;
 
-		int deref();
+    // Rename an entry in this folder.
+    int renameEntry(const QString& oldName, const QString& newName);
+    
+    // Set the password used for opening/closing the wallet.
+    // This does not sync the wallet to disk!
+    void setPassword(const QByteArray &password);
 
-		int refCount() const { return _ref; }
+    int ref() { return ++_ref; }
 
-		static bool exists(const QString& wallet);
+    int deref();
 
-		bool folderDoesNotExist(const QString& folder) const;
+    int refCount() const { return _ref; }
 
-		bool entryDoesNotExist(const QString& folder, const QString& entry) const;
+    static bool exists(const QString& wallet);
 
-		static QString openRCToString(int rc);
+    bool folderDoesNotExist(const QString& folder) const;
 
-        void setCipherType(BackendCipherType ct);
-        BackendCipherType cipherType() const { return _cipherType; }
+    bool entryDoesNotExist(const QString& folder, const QString& entry) const;
 
-	private:
-		Q_DISABLE_COPY( Backend )
-		class BackendPrivate;
-		BackendPrivate *const d;
-		QString _name;
-		QString _path;
-		bool _open;
-        bool _useNewHash;
-		QString _folder;
-		int _ref;
-		// Map Folder->Entries
-		typedef QMap< QString, Entry* > EntryMap;
-		typedef QMap< QString, EntryMap > FolderMap;
-		FolderMap _entries;
-		typedef QMap<MD5Digest, QList<MD5Digest> > HashMap;
-		HashMap _hashes;
-		QByteArray _passhash;   // password hash used for saving the wallet
-		QByteArray _newPassHash; //Modern hash using KWALLET_HASH_PBKDF2_SHA512
-		BackendCipherType _cipherType; // the kind of encryption used for this wallet
+    static QString openRCToString(int rc);
 
-		friend class BlowfishPersistHandler;
-        friend class GpgPersistHandler;
-      
-      // open the wallet with the password already set. This is
-      // called internally by both open and openPreHashed.
-      int openInternal(WId w=0);
-      void swapToNewHash();
-      QByteArray createAndSaveSalt(const QString &path) const;
+    void setCipherType(BackendCipherType ct);
+    BackendCipherType cipherType() const { return _cipherType; }
+
+private:
+    Q_DISABLE_COPY( Backend )
+    class BackendPrivate;
+    BackendPrivate *const d;
+    QString _name;
+    QString _path;
+    bool _open;
+    bool _useNewHash;
+    QString _folder;
+    int _ref;
+    // Map Folder->Entries
+    typedef QMap< QString, Entry* > EntryMap;
+    typedef QMap< QString, EntryMap > FolderMap;
+    FolderMap _entries;
+    typedef QMap<MD5Digest, QList<MD5Digest> > HashMap;
+    HashMap _hashes;
+    QByteArray _passhash;   // password hash used for saving the wallet
+    QByteArray _newPassHash; //Modern hash using KWALLET_HASH_PBKDF2_SHA512
+    BackendCipherType _cipherType; // the kind of encryption used for this wallet
+
+    friend class BlowfishPersistHandler;
+    friend class GpgPersistHandler;
+    
+    // open the wallet with the password already set. This is
+    // called internally by both open and openPreHashed.
+    int openInternal(WId w=0);
+    void swapToNewHash();
+    QByteArray createAndSaveSalt(const QString &path) const;
 
 };
 
