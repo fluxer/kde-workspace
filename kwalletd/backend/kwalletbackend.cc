@@ -165,7 +165,7 @@ QString Backend::openRCToString(int rc) {
 
 int Backend::open(const QByteArray& password, WId w) {
     if (_open) {
-            return -255;  // already open
+        return -255;  // already open
     }
     
     setPassword(password);
@@ -250,8 +250,8 @@ void Backend::swapToNewHash()
         kDebug() << "Runtime error on the new hash";
         return;
     }
-    _passhash.fill(0);//Making sure the old passhash is not around in memory
-    _passhash = _newPassHash;//Use the new hash, means the wallet is modern enough
+    _passhash.fill(0); // Making sure the old passhash is not around in memory
+    _passhash = _newPassHash; // Use the new hash, means the wallet is modern enough
 }
 
 QByteArray Backend::createAndSaveSalt(const QString& path) const
@@ -268,6 +268,7 @@ QByteArray Backend::createAndSaveSalt(const QString& path) const
     ::free(randomData);
 
     if (saltFile.write(salt) != PBKDF2_SHA512_SALTSIZE) {
+        kWarning() << "Could not save salt to" << path;
         return QByteArray();
     }
 
@@ -284,7 +285,7 @@ int Backend::sync(WId w) {
     KSaveFile sf(_path);
 
     if (!sf.open(QIODevice::WriteOnly | QIODevice::Unbuffered)) {
-        return -1;		// error opening file
+        return -1; // error opening file
     }
     sf.setPermissions(QFile::ReadUser|QFile::WriteUser);
 
@@ -298,7 +299,7 @@ int Backend::sync(WId w) {
     version[0] = KWALLET_VERSION_MAJOR;
     if (_useNewHash) {
         version[1] = KWALLET_VERSION_MINOR;
-        //Use the sync to update the hash to PBKDF2_SHA512
+        // Use the sync to update the hash to PBKDF2_SHA512
         swapToNewHash();
     } else {
         version[1] = 0; //was KWALLET_VERSION_MINOR before the new hash
@@ -328,7 +329,7 @@ int Backend::close(bool save) {
             return rc;
         }
     }
-	
+
     // do the actual close
     for (FolderMap::ConstIterator i = _entries.constBegin(); i != _entries.constEnd(); ++i) {
         for (EntryMap::ConstIterator j = i.value().constBegin(); j != i.value().constEnd(); ++j) {
