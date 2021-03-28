@@ -22,8 +22,8 @@
 #define KWMAGIC_LEN 12
 
 #include <qwindowdefs.h>
-
 #include <QFile>
+
 class KSaveFile;
 namespace KWallet {
 

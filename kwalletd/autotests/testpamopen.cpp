@@ -70,4 +70,5 @@ void testPamOpen::testWrite()
 }
 
 QTEST_KDEMAIN_CORE_WITH_DBUS_DAEMON(testPamOpen)
+
 #include "testpamopen.moc"

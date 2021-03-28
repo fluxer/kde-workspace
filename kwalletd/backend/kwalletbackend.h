@@ -38,27 +38,27 @@ namespace KWallet {
  * @internal
  */
 class MD5Digest : public QByteArray {
-	public:
-		MD5Digest() : QByteArray(16, 0) {}
-		MD5Digest(const char *data) : QByteArray(data, 16) {}
-		MD5Digest(const QByteArray& digest) : QByteArray(digest) {}
-		virtual ~MD5Digest() {}
+    public:
+        MD5Digest() : QByteArray(16, 0) {}
+        MD5Digest(const char *data) : QByteArray(data, 16) {}
+        MD5Digest(const QByteArray& digest) : QByteArray(digest) {}
+        virtual ~MD5Digest() {}
 
-		int operator<(const MD5Digest& r) const {
-				int i = 0;
-				char x, y;
-				for (; i < 16; ++i) {
-					x = at(i);
-					y = r.at(i);
-					if (x != y) {
-						break;
-					}
-				}
-				if (i < 16 && x < y) {
-					return 1;
-				}
-				return 0;
-			}
+        int operator<(const MD5Digest& r) const {
+            int i = 0;
+            char x, y;
+            for (; i < 16; ++i) {
+                x = at(i);
+                y = r.at(i);
+                if (x != y) {
+                    break;
+                }
+            }
+            if (i < 16 && x < y) {
+                return 1;
+            }
+            return 0;
+        }
 };
 
 

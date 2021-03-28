@@ -20,15 +20,15 @@
 #include <kicon.h>
 
 KBetterThanKDialog::KBetterThanKDialog( QWidget *parent )
-  : QDialog( parent )
+    : QDialog( parent )
 {
-  setupUi( this );
-  connect(_allowOnce, SIGNAL(clicked()), this, SLOT(allowOnceClicked()));
-  connect(_allowAlways, SIGNAL(clicked()), this, SLOT(allowAlwaysClicked()));
-  connect(_deny, SIGNAL(clicked()), this, SLOT(denyClicked()));
-  connect(_denyForever, SIGNAL(clicked()), this, SLOT(denyForeverClicked()));
+    setupUi( this );
+    connect(_allowOnce, SIGNAL(clicked()), this, SLOT(allowOnceClicked()));
+    connect(_allowAlways, SIGNAL(clicked()), this, SLOT(allowAlwaysClicked()));
+    connect(_deny, SIGNAL(clicked()), this, SLOT(denyClicked()));
+    connect(_denyForever, SIGNAL(clicked()), this, SLOT(denyForeverClicked()));
 
-  init();
+    init();
 }
 
 void KBetterThanKDialog::init()

@@ -39,9 +39,9 @@ static int pipefd = 0;
 static int socketfd = 0;
 static bool isWalletEnabled()
 {
-	KConfig cfg("kwalletrc");
-	KConfigGroup walletGroup(&cfg, "Wallet");
-	return walletGroup.readEntry("Enabled", true);
+    KConfig cfg("kwalletrc");
+    KConfigGroup walletGroup(&cfg, "Wallet");
+    return walletGroup.readEntry("Enabled", true);
 }
 
 //Waits until the PAM_MODULE sends the hash
@@ -167,14 +167,13 @@ int main(int argc, char **argv)
 
     // check if kwallet is disabled
     if (!isWalletEnabled()) {
-      kDebug() << "kwalletd is disabled!";
-      return (0);
+        kDebug() << "kwalletd is disabled!";
+        return (0);
     }
 
-    if (!KUniqueApplication::start())
-    {
-      kDebug() << "kwalletd is already running!";
-      return (0);
+    if (!KUniqueApplication::start()) {
+        kDebug() << "kwalletd is already running!";
+        return (0);
     }
 
     kDebug() << "kwalletd started";

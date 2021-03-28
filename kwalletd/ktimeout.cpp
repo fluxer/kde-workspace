@@ -24,22 +24,24 @@
 #include <QtCore/QEvent>
 
 KTimeout::KTimeout(QObject *parent)
- : QObject(parent) {
+    : QObject(parent) {
 }
 
 KTimeout::~KTimeout() {
 }
 
 void KTimeout::clear() {
-    foreach (int timerId, _timers)
+    foreach (int timerId, _timers) {
         killTimer(timerId);
+    }
     _timers.clear();
 }
 
 void KTimeout::removeTimer(int id) {
     const int timerId = _timers.value(id, 0);
-    if (timerId != 0)
+    if (timerId != 0) {
         killTimer(timerId);
+    }
     _timers.remove(id);
 }
 
@@ -53,8 +55,8 @@ void KTimeout::addTimer(int id, int timeout) {
 void KTimeout::resetTimer(int id, int timeout) {
     int timerId = _timers.value(id, 0);
     if (timerId != 0) {
-            killTimer(timerId);
-            _timers.insert(id, startTimer(timeout));
+        killTimer(timerId);
+        _timers.insert(id, startTimer(timeout));
     }
 }
 

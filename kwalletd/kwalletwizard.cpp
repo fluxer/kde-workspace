@@ -168,12 +168,11 @@ KWalletWizard::WizardType KWalletWizard::wizardType() const
 void KWalletWizard::initializePage(int id)
 {
     switch (id) {
-    case PagePasswordId:
-    {
-        bool islast = m_pageIntro->bg->checkedId() == 0;
-        m_pagePasswd->setFinalPage(islast);
-        button(NextButton)->setVisible(!islast);
-        break;
-    }
+        case PagePasswordId: {
+            bool islast = m_pageIntro->bg->checkedId() == 0;
+            m_pagePasswd->setFinalPage(islast);
+            button(NextButton)->setVisible(!islast);
+            break;
+        }
     }
 }

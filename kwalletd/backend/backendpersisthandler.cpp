@@ -45,8 +45,6 @@ namespace KWallet {
 typedef char Digest[16];
 
 static int getRandomBlock(QByteArray& randBlock) {
-
-
     // First try /dev/urandom
     if (QFile::exists("/dev/urandom")) {
         QFile devrand("/dev/urandom");
@@ -114,17 +112,19 @@ static BlowfishPersistHandler *blowfishHandler =0;
 BackendPersistHandler *BackendPersistHandler::getPersistHandler(BackendCipherType cipherType)
 {
     switch (cipherType){
-        case BACKEND_CIPHER_BLOWFISH:
+        case BACKEND_CIPHER_BLOWFISH: {
             if (0 == blowfishHandler)
                 blowfishHandler = new BlowfishPersistHandler;
             return blowfishHandler;
-        default:
+        }
+        default: {
             Q_ASSERT(0);
             return 0;
+        }
     }
 }
 
-BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[12])
+BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[KWMAGIC_LEN])
 {
     if ((magicBuf[2] == KWALLET_CIPHER_BLOWFISH_ECB || magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC) &&
         (magicBuf[3] == KWALLET_HASH_SHA1 || magicBuf[3] == KWALLET_HASH_PBKDF2_SHA512)) {
@@ -153,7 +153,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     if(!wb->_useNewHash) {
         version[3] = KWALLET_HASH_SHA1;
     } else {
-        version[3] = KWALLET_HASH_PBKDF2_SHA512;//Since 4.13 we always use PBKDF2_SHA512
+        version[3] = KWALLET_HASH_PBKDF2_SHA512; // Since 4.13 we always use PBKDF2_SHA512
     }
 
     if (sf.write(version, 4) != 4) {
@@ -408,13 +408,13 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
             et = static_cast<KWallet::Wallet::EntryType>(x);
 
             switch (et) {
-            case KWallet::Wallet::Password:
-            case KWallet::Wallet::Stream:
-            case KWallet::Wallet::Map:
-            break;
-            default: // Unknown entry
-                delete e;
-                continue;
+                case KWallet::Wallet::Password:
+                case KWallet::Wallet::Stream:
+                case KWallet::Wallet::Map:
+                    break;
+                default: // Unknown entry
+                    delete e;
+                    continue;
             }
 
             QByteArray a;

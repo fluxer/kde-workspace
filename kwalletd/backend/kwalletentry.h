@@ -33,27 +33,27 @@ namespace KWallet {
 /* @internal
  */
 class KWALLETBACKEND_EXPORT Entry {
-	public:
-		Entry();
-		~Entry();
+public:
+    Entry();
+    ~Entry();
 
-		const QString& key() const;
-		const QByteArray& value() const;
-		QString password() const;
+    const QString& key() const;
+    const QByteArray& value() const;
+    QString password() const;
 
-		void setValue(const QByteArray& val);
-		void setValue(const QString& val);
-		void setKey(const QString& key);
+    void setValue(const QByteArray& val);
+    void setValue(const QString& val);
+    void setKey(const QString& key);
 
-		Wallet::EntryType type() const;
-		void setType(Wallet::EntryType type);
+    Wallet::EntryType type() const;
+    void setType(Wallet::EntryType type);
 
-		void copy(const Entry* x);
+    void copy(const Entry* x);
 
-	private:
-		QString _key;
-		QByteArray _value;
-		Wallet::EntryType _type;
+private:
+    QString _key;
+    QByteArray _value;
+    Wallet::EntryType _type;
 };
 
 }

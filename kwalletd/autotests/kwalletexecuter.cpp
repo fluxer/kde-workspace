@@ -155,18 +155,21 @@ void KWalletExecuter::execute()
     qputenv("PAM_KWALLET_LOGIN", "1");
     pid_t pid;
     switch (pid = fork ()) {
-    case -1:
-        qFatal("Couldn't fork to execv kwalletd");
+        case -1: {
+            qFatal("Couldn't fork to execv kwalletd");
+            break;
+        }
 
-    //Child fork, will contain kwalletd
-    case 0:
-        execute_kwallet(toWalletPipe, envSocket);
-        /* Should never be reached */
-        break;
+        // Child fork, will contain kwalletd
+        case 0: {
+            execute_kwallet(toWalletPipe, envSocket);
+            /* Should never be reached */
+            break;
+        }
 
-    //Parent
-    default:
-        break;
+        // Parent
+        default:
+            break;
     };
 
     close(toWalletPipe[0]);//Read end of the pipe, we will only use the write

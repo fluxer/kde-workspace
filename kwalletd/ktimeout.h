@@ -27,25 +27,25 @@
 
 // @internal
 class KTimeout : public QObject {
-	Q_OBJECT
-	public:
-		KTimeout(QObject *parent = 0);
-		~KTimeout();
+    Q_OBJECT
+public:
+    KTimeout(QObject *parent = 0);
+    ~KTimeout();
 
-	Q_SIGNALS:
-		void timedOut(int id);
+Q_SIGNALS:
+    void timedOut(int id);
 
-	public Q_SLOTS:
-		void resetTimer(int id, int timeout);
-		void addTimer(int id, int timeout);
-		void removeTimer(int id);
-		void clear();
+public Q_SLOTS:
+    void resetTimer(int id, int timeout);
+    void addTimer(int id, int timeout);
+    void removeTimer(int id);
+    void clear();
 
-        protected:
-		void timerEvent(QTimerEvent*);
+protected:
+    void timerEvent(QTimerEvent*);
 
-	private:
-		QHash<int /*id*/,int /*timerId*/> _timers;
+private:
+    QHash<int /*id*/,int /*timerId*/> _timers;
 };
 
 #endif

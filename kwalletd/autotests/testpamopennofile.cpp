@@ -65,4 +65,5 @@ void testPamOpenNoFile::testWrite()
 }
 
 QTEST_KDEMAIN_CORE_WITH_DBUS_DAEMON(testPamOpenNoFile)
+
 #include "testpamopennofile.moc"

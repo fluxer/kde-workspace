@@ -58,71 +58,72 @@
 
 class KWalletTransaction {
 
-    public:
-        explicit KWalletTransaction(QDBusConnection conn)
-            : tType(Unknown), cancelled(false), tId(nextTransactionId), res(-1), connection(conn)
-        {
-            nextTransactionId++;
-            // make sure the id is never < 0 as that's used for the
-            // error conditions.
-            if (nextTransactionId < 0) {
-                nextTransactionId = 0;
-            }
+public:
+    explicit KWalletTransaction(QDBusConnection conn)
+        : tType(Unknown), cancelled(false), tId(nextTransactionId), res(-1), connection(conn)
+    {
+        nextTransactionId++;
+        // make sure the id is never < 0 as that's used for the
+        // error conditions.
+        if (nextTransactionId < 0) {
+            nextTransactionId = 0;
         }
+    }
 
-        ~KWalletTransaction() {
-        }
+    ~KWalletTransaction() {
+    }
 
-        enum Type {
-            Unknown,
-            Open,
-            ChangePassword,
-            OpenFail,
-            CloseCancelled
-        };
-        Type tType;
-        QString appid;
-        qlonglong wId;
-        QString wallet;
-        QString service;
-        bool cancelled; // set true if the client dies before open
-        bool modal;
-        bool isPath;
-        int tId; // transaction id
-        int res;
-        QDBusMessage message;
-        QDBusConnection connection;
+    enum Type {
+        Unknown,
+        Open,
+        ChangePassword,
+        OpenFail,
+        CloseCancelled
+    };
 
-    private:
-        static int nextTransactionId;
+    Type tType;
+    QString appid;
+    qlonglong wId;
+    QString wallet;
+    QString service;
+    bool cancelled; // set true if the client dies before open
+    bool modal;
+    bool isPath;
+    int tId; // transaction id
+    int res;
+    QDBusMessage message;
+    QDBusConnection connection;
+
+private:
+    static int nextTransactionId;
 };
 
 int KWalletTransaction::nextTransactionId = 0;
 
 KWalletD::KWalletD()
- : QObject(0), _failed(0), _syncTime(5000), _curtrans(0) {
+    : QObject(0), _failed(0), _syncTime(5000), _curtrans(0) {
 
-	_showingFailureNotify = false;
-	_closeIdle = false;
-	_idleTime = 0;
-	connect(&_closeTimers, SIGNAL(timedOut(int)), this, SLOT(timedOutClose(int)));
-	connect(&_syncTimers, SIGNAL(timedOut(int)), this, SLOT(timedOutSync(int)));
+    _showingFailureNotify = false;
+    _closeIdle = false;
+    _idleTime = 0;
+    connect(&_closeTimers, SIGNAL(timedOut(int)), this, SLOT(timedOutClose(int)));
+    connect(&_syncTimers, SIGNAL(timedOut(int)), this, SLOT(timedOutSync(int)));
 
-	(void)new KWalletAdaptor(this);
-	// register services
-	QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.kwalletd"));
-	QDBusConnection::sessionBus().registerObject(QLatin1String("/modules/kwalletd"), this);
+    (void)new KWalletAdaptor(this);
+    // register services
+    QDBusConnection::sessionBus().registerService(QLatin1String("org.kde.kwalletd"));
+    QDBusConnection::sessionBus().registerObject(QLatin1String("/modules/kwalletd"), this);
 
 #ifdef Q_WS_X11
     screensaver = 0;
 #endif
 
-	reconfigure();
-	KGlobal::dirs()->addResourceType("kwallet", 0, "share/apps/kwallet");
-	_dw = new KDirWatch(this );
-		_dw->setObjectName( QLatin1String( "KWallet Directory Watcher" ) );
-	_dw->addDir(KGlobal::dirs()->saveLocation("kwallet"));
-	connect(_dw, SIGNAL(dirty(const QString&)), this, SLOT(emitWalletListDirty()));
+    reconfigure();
+    KGlobal::dirs()->addResourceType("kwallet", 0, "share/apps/kwallet");
+    _dw = new KDirWatch(this );
+    _dw->setObjectName( QLatin1String( "KWallet Directory Watcher" ) );
+    _dw->addDir(KGlobal::dirs()->saveLocation("kwallet"));
+    connect(_dw, SIGNAL(dirty(const QString&)), this, SLOT(emitWalletListDirty()));
 
     _serviceWatcher.setWatchMode( QDBusServiceWatcher::WatchForOwnerChange );
     connect(&_serviceWatcher, SIGNAL(serviceOwnerChanged(QString,QString,QString)), this, SLOT(slotServiceOwnerChanged(QString,QString,QString)));
@@ -131,11 +132,11 @@ KWalletD::KWalletD()
 
 KWalletD::~KWalletD() {
 #ifdef Q_WS_X11
-	delete screensaver;
-	screensaver = 0;
+    delete screensaver;
+    screensaver = 0;
 #endif
-	closeAllWallets();
-	qDeleteAll(_transactions);
+    closeAllWallets();
+    qDeleteAll(_transactions);
 }
 
 void KWalletD::connectToScreenSaver()
@@ -154,100 +155,104 @@ void KWalletD::connectToScreenSaver()
 }
 
 int KWalletD::generateHandle() {
-	int rc;
+    int rc;
 
-	// ASSUMPTION: RAND_MAX is fairly large.
-	do {
-		rc = qrand();
-	} while (_wallets.contains(rc) || rc == 0);
+    // ASSUMPTION: RAND_MAX is fairly large.
+    do {
+        rc = qrand();
+    } while (_wallets.contains(rc) || rc == 0);
 
-	return rc;
+    return rc;
 }
 
 QPair<int, KWallet::Backend*> KWalletD::findWallet(const QString& walletName) const
 {
-	Wallets::const_iterator it = _wallets.constBegin();
-	const Wallets::const_iterator end = _wallets.constEnd();
-	for (; it != end; ++it) {
-		if (it.value()->walletName() == walletName) {
-			return qMakePair(it.key(), it.value());
-		}
-	}
+    Wallets::const_iterator it = _wallets.constBegin();
+    const Wallets::const_iterator end = _wallets.constEnd();
+    for (; it != end; ++it) {
+        if (it.value()->walletName() == walletName) {
+            return qMakePair(it.key(), it.value());
+        }
+    }
     return qMakePair(-1, static_cast<KWallet::Backend*>(0));
 }
 
 bool KWalletD::_processing = false;
 
 void KWalletD::processTransactions() {
-	if (_processing) {
-		return;
-	}
+    if (_processing) {
+        return;
+    }
 
-	_processing = true;
+    _processing = true;
 
-	// Process remaining transactions
-	while (!_transactions.isEmpty()) {
-		_curtrans = _transactions.takeFirst();
-		int res;
+    // Process remaining transactions
+    while (!_transactions.isEmpty()) {
+        _curtrans = _transactions.takeFirst();
+        int res;
 
-		assert(_curtrans->tType != KWalletTransaction::Unknown);
+        assert(_curtrans->tType != KWalletTransaction::Unknown);
 
-		switch (_curtrans->tType) {
-			case KWalletTransaction::Open:
-				res = doTransactionOpen(_curtrans->appid, _curtrans->wallet, _curtrans->isPath,
-				                        _curtrans->wId, _curtrans->modal, _curtrans->service);
+        switch (_curtrans->tType) {
+            case KWalletTransaction::Open: {
+                res = doTransactionOpen(_curtrans->appid, _curtrans->wallet, _curtrans->isPath,
+                                        _curtrans->wId, _curtrans->modal, _curtrans->service);
 
-				// multiple requests from the same client
-				// should not produce multiple password
-				// dialogs on a failure
-				if (res < 0) {
-					QList<KWalletTransaction *>::iterator it;
-					for (it = _transactions.begin(); it != _transactions.end(); ++it) {
-						KWalletTransaction *x = *it;
-						if (_curtrans->appid == x->appid && x->tType == KWalletTransaction::Open
-							&& x->wallet == _curtrans->wallet && x->wId == _curtrans->wId) {
-							x->tType = KWalletTransaction::OpenFail;
-						}
-					}
-				} else if (_curtrans->cancelled) {
-					// the wallet opened successfully but the application
-					// opening exited/crashed while the dialog was still shown.
-					KWalletTransaction *_xact = new KWalletTransaction(_curtrans->connection);
-					_xact->tType = KWalletTransaction::CloseCancelled;
-					_xact->appid = _curtrans->appid;
-					_xact->wallet = _curtrans->wallet;
-					_xact->service = _curtrans->service;
-					_transactions.append(_xact);
-				}
+                // multiple requests from the same client
+                // should not produce multiple password
+                // dialogs on a failure
+                if (res < 0) {
+                    QList<KWalletTransaction *>::iterator it;
+                    for (it = _transactions.begin(); it != _transactions.end(); ++it) {
+                        KWalletTransaction *x = *it;
+                        if (_curtrans->appid == x->appid && x->tType == KWalletTransaction::Open
+                            && x->wallet == _curtrans->wallet && x->wId == _curtrans->wId) {
+                            x->tType = KWalletTransaction::OpenFail;
+                        }
+                    }
+                } else if (_curtrans->cancelled) {
+                    // the wallet opened successfully but the application
+                    // opening exited/crashed while the dialog was still shown.
+                    KWalletTransaction *_xact = new KWalletTransaction(_curtrans->connection);
+                    _xact->tType = KWalletTransaction::CloseCancelled;
+                    _xact->appid = _curtrans->appid;
+                    _xact->wallet = _curtrans->wallet;
+                    _xact->service = _curtrans->service;
+                    _transactions.append(_xact);
+                }
 
-				// emit the AsyncOpened signal as a reply
-				_curtrans->res = res;
-				emit walletAsyncOpened(_curtrans->tId, res);
-				break;
+                // emit the AsyncOpened signal as a reply
+                _curtrans->res = res;
+                emit walletAsyncOpened(_curtrans->tId, res);
+                break;
+            }
 
-			case KWalletTransaction::OpenFail:
-				// emit the AsyncOpened signal with an invalid handle
+            case KWalletTransaction::OpenFail: {
+                // emit the AsyncOpened signal with an invalid handle
                 _curtrans->res = -1;
-				emit walletAsyncOpened(_curtrans->tId, -1);
-				break;
+                emit walletAsyncOpened(_curtrans->tId, -1);
+                break;
+            }
 
-			case KWalletTransaction::ChangePassword:
-				doTransactionChangePassword(_curtrans->appid, _curtrans->wallet, _curtrans->wId);
-				break;
+            case KWalletTransaction::ChangePassword: {
+                doTransactionChangePassword(_curtrans->appid, _curtrans->wallet, _curtrans->wId);
+                break;
+            }
 
-			case KWalletTransaction::CloseCancelled:
-				doTransactionOpenCancelled(_curtrans->appid, _curtrans->wallet,
-				                            _curtrans->service);
-				break;
+            case KWalletTransaction::CloseCancelled: {
+                doTransactionOpenCancelled(_curtrans->appid, _curtrans->wallet,
+                                           _curtrans->service);
+                break;
+            }
 
-			case KWalletTransaction::Unknown:
-				break;
-			default:
-				break;
-		}
+            case KWalletTransaction::Unknown:
+            default: {
+                break;
+            }
+        }
 
-		// send delayed dbus message reply to the caller
-		if (_curtrans->message.type() != QDBusMessage::InvalidMessage) {
+        // send delayed dbus message reply to the caller
+        if (_curtrans->message.type() != QDBusMessage::InvalidMessage) {
             if (_curtrans->connection.isConnected()) {
                 QDBusMessage reply = _curtrans->message.createReply();
                 reply << _curtrans->res;
@@ -255,11 +260,11 @@ void KWalletD::processTransactions() {
             }
         }
 
-		delete _curtrans;
-		_curtrans = 0;
-	}
+        delete _curtrans;
+        _curtrans = 0;
+    }
 
-	_processing = false;
+    _processing = false;
 }
 
 int KWalletD::openPath(const QString& path, qlonglong wId, const QString& appid) {
