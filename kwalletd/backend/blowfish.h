@@ -44,8 +44,6 @@ public:
 
     virtual int keyLen() const;
 
-    virtual bool variableKeyLen() const;
-
     virtual bool readyToGo() const;
 
     virtual int encrypt(void *block, int len);

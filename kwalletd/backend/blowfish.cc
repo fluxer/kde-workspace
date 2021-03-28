@@ -111,11 +111,6 @@ int BlowFish::keyLen() const {
 }
 
 
-bool BlowFish::variableKeyLen() const {
-    return true;
-}
-
-
 bool BlowFish::readyToGo() const {
     return _init;
 }

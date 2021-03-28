@@ -44,12 +44,6 @@ public:
     virtual int keyLen() const = 0;
 
     /*
-    *  True if the key is of a variable length.  In this case,
-    *  getKeyLen() will return the maximum length.
-    */
-    virtual bool variableKeyLen() const = 0;
-
-    /*
     *  True if all settings are good and we are ready to encrypt.
     */
     virtual bool readyToGo() const = 0;

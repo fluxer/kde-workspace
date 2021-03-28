@@ -58,14 +58,6 @@ int CipherBlockChain::keyLen() const
     return -1;
 }
 
-bool CipherBlockChain::variableKeyLen() const
-{
-    if (_cipher) {
-        return _cipher->variableKeyLen();
-    }
-    return false;
-}
-
 bool CipherBlockChain::readyToGo() const
 {
     if (_cipher) {
