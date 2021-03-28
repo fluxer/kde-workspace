@@ -15,7 +15,7 @@ int main()
     printf("%d:  0x11 == %d and 0x44 == %d\n", ((unsigned char *)et)[0],
            0x11, 0x44);
     bf = new BlowFish();
-//  bf = new CipherBlockChain(new BlowFish());
+    // bf = new CipherBlockChain(new BlowFish());
 
     bf->setKey((void *)key, 7 * 8);
 
@@ -35,7 +35,7 @@ int main()
         printf("0x%x ", data[i] & 0xff);
         if ((data[i] & 0xff) != (expect[i] & 0xff)) {
             printf("Error.  This byte failed the comparison.  It should have been 0x%x.\n", expect[i] & 0xff);
-            break;
+            return -1;
         }
     }
     printf("\n");

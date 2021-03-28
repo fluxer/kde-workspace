@@ -24,6 +24,7 @@ int main() {
 
     if (rc != strlen((char *)data)) {
         printf("Error processing the data.  rc=%d\n", rc);
+        return -1;
     } else printf("Done.\n");
 
     const unsigned char *res = sha1->hash();
@@ -36,6 +37,7 @@ int main() {
         printf("\n");
     } else {
         printf("Error - getHash() returned NULL!\n");
+        return -1;
     }
 
     delete sha1;
