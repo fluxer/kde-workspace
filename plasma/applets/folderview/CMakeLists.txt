@@ -2,10 +2,6 @@ project(plasma-folderview)
 
 include_directories(${LIBKONQ_INCLUDE_DIR})
 
-if(Q_WS_X11)
-  find_package(X11 REQUIRED)
-endif(Q_WS_X11)
-
 set(folderview_SRCS
     folderview.cpp
     abstractitemview.cpp

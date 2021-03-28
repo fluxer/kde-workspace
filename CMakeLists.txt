@@ -44,6 +44,15 @@ set_package_properties(Perl PROPERTIES
     TYPE REQUIRED
 )
 
+# shared-mime-info 0.40 is mandatory for generic-icon
+find_package(SharedMimeInfo 0.40)
+set_package_properties(Perl PROPERTIES
+    DESCRIPTION "Shared Mime Info"
+    URL "http://freedesktop.org/wiki/Software/shared-mime-info"
+    PURPOSE "Needed for update MIME database"
+    TYPE REQUIRED
+)
+
 if(Q_WS_X11)
     find_package(XCB REQUIRED)
     set_package_properties(XCB PROPERTIES
