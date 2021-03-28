@@ -20,9 +20,6 @@ set(kwalletbackend_LIB_SRCS
 add_library(kwalletbackend SHARED ${kwalletbackend_LIB_SRCS})
 
 target_link_libraries(kwalletbackend ${KDE4_KDEUI_LIBS} ${LIBGCRYPT_LIBRARIES})
-if(QGPGME_FOUND)
-    target_link_libraries(kwalletbackend ${QGPGME_LIBRARIES} )
-endif(QGPGME_FOUND)
 
 set_target_properties(kwalletbackend PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
 install(TARGETS kwalletbackend ${INSTALL_TARGETS_DEFAULT_ARGS})

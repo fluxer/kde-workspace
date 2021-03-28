@@ -11,14 +11,10 @@ set(kwalletwizardtest_SRCS
    ../kwalletwizardpageintro.ui
    ../kwalletwizardpageoptions.ui
    ../kwalletwizardpagepassword.ui
-   ../kwalletwizardpagegpgkey.ui
 )
 
 kde4_add_manual_test(kwalletwizardtest ${kwalletwizardtest_SRCS})
 target_link_libraries(kwalletwizardtest ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY})
-if (QGPGME_FOUND)
-    target_link_libraries(kwalletwizardtest ${QGPGME_LIBRARIES})
-endif(QGPGME_FOUND)
 
 include_directories( ${KDE4_KDEUI_INCLUDES} ) # for kwallet.h
 
