@@ -241,8 +241,6 @@ class KWalletD : public QObject, protected QDBusContext {
 		// sessions
 		KWalletSessionStore _sessions;
         QDBusServiceWatcher _serviceWatcher;
-
-        bool _useGpg;
 };
 
 

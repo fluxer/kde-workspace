@@ -27,9 +27,6 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>
-#ifdef HAVE_QGPGME
-#include <gpgme++/key.h>
-#endif
 #include <gcrypt.h>
 #include <knotification.h>
 
@@ -266,17 +263,6 @@ int Backend::open(const QByteArray& password, WId w) {
 	setPassword(password);
    return openInternal(w);
 }
-
-#ifdef HAVE_QGPGME
-int Backend::open(const GpgME::Key& key)
-{
-    if (_open) {
-        return -255;  // already open
-    }
-    _gpgKey = key;
-    return openInternal();
-}
-#endif // HAVE_QGPGME
 
 int Backend::openPreHashed(const QByteArray &passwordHash)
 {
@@ -673,9 +659,3 @@ void Backend::setPassword(const QByteArray &password) {
         _useNewHash = true;
     }
 }
-
-#ifdef HAVE_QGPGME
-const GpgME::Key &Backend::gpgKey() const {
-    return _gpgKey;
-}
-#endif

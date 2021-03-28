@@ -28,10 +28,6 @@
 #include "kwalletentry.h"
 #include "backendpersisthandler.h"
 
-#ifdef HAVE_QGPGME
-#include <gpgme++/key.h>
-#endif // HAVE_QGPGME
-
 #define PBKDF2_SHA512_KEYSIZE 56
 #define PBKDF2_SHA512_SALTSIZE 56
 #define PBKDF2_SHA512_ITERATIONS 50000
@@ -77,9 +73,6 @@ class KDE_EXPORT Backend {
 		// If opening succeeds, the password's hash will be remembered.
 		// If opening fails, the password's hash will be cleared.
 		int open(const QByteArray& password, WId w=0);
-#ifdef HAVE_QGPGME
-        int open(const GpgME::Key& key);
-#endif
       
       // Open and unlock the wallet using a pre-hashed password.
       // If opening succeeds, the password's hash will be remembered.
@@ -159,9 +152,6 @@ class KDE_EXPORT Backend {
 
         void setCipherType(BackendCipherType ct);
         BackendCipherType cipherType() const { return _cipherType; }
-#ifdef HAVE_QGPGME
-        const GpgME::Key &gpgKey() const;
-#endif
 
 	private:
 		Q_DISABLE_COPY( Backend )
@@ -182,9 +172,7 @@ class KDE_EXPORT Backend {
 		QByteArray _passhash;   // password hash used for saving the wallet
 		QByteArray _newPassHash; //Modern hash using KWALLET_HASH_PBKDF2_SHA512
 		BackendCipherType _cipherType; // the kind of encryption used for this wallet
-#ifdef HAVE_QGPGME
-        GpgME::Key      _gpgKey;
-#endif
+
 		friend class BlowfishPersistHandler;
         friend class GpgPersistHandler;
       

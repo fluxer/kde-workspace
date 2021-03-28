@@ -32,9 +32,6 @@ class Backend;
 enum BackendCipherType {
     BACKEND_CIPHER_UNKNOWN,  /// this is used by freshly allocated wallets
     BACKEND_CIPHER_BLOWFISH, /// use the legacy blowfish cipher type
-#ifdef HAVE_QGPGME
-    BACKEND_CIPHER_GPG       /// use GPG backend to encrypt wallet contents
-#endif // HAVE_QGPGME
 };
 
 class BackendPersistHandler {
@@ -67,17 +64,6 @@ public:
 private:
     bool _useECBforReading;
 };
-
-#ifdef HAVE_QGPGME
-class GpgPersistHandler : public BackendPersistHandler {
-public:
-    GpgPersistHandler() {}
-    virtual ~GpgPersistHandler() {}
-
-    virtual int write(Backend* wb, KSaveFile& sf, QByteArray& version, WId w);
-    virtual int read(Backend* wb, QFile& sf, WId w);
-};
-#endif // HAVE_QGPGME
 
 } // namespace
 
