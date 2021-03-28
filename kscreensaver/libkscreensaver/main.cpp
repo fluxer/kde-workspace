@@ -105,10 +105,6 @@ protected:
 
 
 //----------------------------------------------------------------------------
-#if defined(Q_WS_QWS) || defined(Q_WS_MACX) || defined(Q_WS_WIN)
-typedef WId Window;
-#endif
-
 #ifdef Q_WS_X11
 extern "C" {
 
