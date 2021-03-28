@@ -28,13 +28,13 @@
 
 class KWalletAutoClose : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	KWalletAutoClose();
+    KWalletAutoClose();
 
 public Q_SLOTS:
-	void openWallet();
+    void openWallet();
 };
 
 #endif // KWALLETAUTOCLOSE_H

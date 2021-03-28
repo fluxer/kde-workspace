@@ -41,23 +41,23 @@ KWalletAutoClose::KWalletAutoClose() : QObject()
 
 void KWalletAutoClose::openWallet()
 {
-	_out << "Opening wallet synchronously" << endl;
-	Wallet *wallet = Wallet::openWallet(Wallet::NetworkWallet(), 0, Wallet::Synchronous);
-	_out << "Exiting without closing. The wallet should autoclose." << endl;
-        Q_UNUSED(wallet);
-	kapp->exit(0);
+    _out << "Opening wallet synchronously" << endl;
+    Wallet *wallet = Wallet::openWallet(Wallet::NetworkWallet(), 0, Wallet::Synchronous);
+    _out << "Exiting without closing. The wallet should autoclose." << endl;
+    Q_UNUSED(wallet);
+    kapp->exit(0);
 }
 
 int main(int argc, char *argv[]) 
 {
-	KAboutData aboutData("kwalletmany", 0, ki18n("kwalletmany"), "version");
-	KCmdLineArgs::init(argc, argv, &aboutData);
-	KApplication app;
-	KWalletAutoClose m;
-	
-	QTimer::singleShot(0, &m, SLOT(openWallet()));
-	
-	return app.exec();
+    KAboutData aboutData("kwalletmany", 0, ki18n("kwalletmany"), "version");
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
+    KWalletAutoClose m;
+    
+    QTimer::singleShot(0, &m, SLOT(openWallet()));
+    
+    return app.exec();
 }
 
 #include "moc_kwalletautoclose.cpp"

@@ -17,27 +17,27 @@ static QTextStream _out(stdout, QIODevice::WriteOnly);
 
 void openWallet()
 {
-	_out << "About to ask for wallet /tmp/test.kwl sync" << endl;
+    _out << "About to ask for wallet /tmp/test.kwl sync" << endl;
 
-	KWallet::Wallet *wallet = KWallet::Wallet::openWallet("/tmp/test.kwl", 0, KWallet::Wallet::Path);
+    KWallet::Wallet *wallet = KWallet::Wallet::openWallet("/tmp/test.kwl", 0, KWallet::Wallet::Path);
 
-	_out << "Got path wallet: " << (wallet != 0) << endl;
-	
-	if (wallet) {
-		_out << "Closing wallet" << endl;
-		delete wallet;
-	}
-	
-	kapp->exit(0);
+    _out << "Got path wallet: " << (wallet != 0) << endl;
+    
+    if (wallet) {
+        _out << "Closing wallet" << endl;
+        delete wallet;
+    }
+    
+    kapp->exit(0);
 }
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData("kwalletpath", 0, ki18n("kwalletpath"), "version");
-	KCmdLineArgs::init(argc, argv, &aboutData);
-	KApplication app;
+    KAboutData aboutData("kwalletpath", 0, ki18n("kwalletpath"), "version");
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
 
-	openWallet();
+    openWallet();
 
-	exit(0);
+    exit(0);
 }

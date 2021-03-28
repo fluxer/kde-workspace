@@ -34,74 +34,74 @@ static QString _kdewallet;
 
 int openAndClose()
 {
-	QDBusInterface service("org.kde.kwalletd", "/modules/kwalletd");
-	if (!service.isValid()) {
-		_out << "Constructed service is invalid!" << endl;
-		return 1;
-	}
-	
-	QDBusReply<int> h = service.call(QDBus::Block, "open", _kdewallet, (qlonglong)0, "kwalletnoautoclose");
-	if (!h.isValid() || h.value() < 0) {
-		_out << "Opening the wallet failed!" << endl;
-		_out << "Error: " << h.error().message() << endl;
-		return 1;
-	} else {
-		_out << "Wallet opened." << endl;
-	}
+    QDBusInterface service("org.kde.kwalletd", "/modules/kwalletd");
+    if (!service.isValid()) {
+        _out << "Constructed service is invalid!" << endl;
+        return 1;
+    }
+    
+    QDBusReply<int> h = service.call(QDBus::Block, "open", _kdewallet, (qlonglong)0, "kwalletnoautoclose");
+    if (!h.isValid() || h.value() < 0) {
+        _out << "Opening the wallet failed!" << endl;
+        _out << "Error: " << h.error().message() << endl;
+        return 1;
+    } else {
+        _out << "Wallet opened." << endl;
+    }
 
-	_out << "closing the wallet" << endl;
-	QDBusReply<int> r = service.call(QDBus::Block, "close", h.value(), false, "kwalletnoautoclose");
-	
-	return r;
+    _out << "closing the wallet" << endl;
+    QDBusReply<int> r = service.call(QDBus::Block, "close", h.value(), false, "kwalletnoautoclose");
+    
+    return r;
 }
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData("kwalletnoautoclose", 0, ki18n("kwalletnoautoclose"), "version");
-	KCmdLineArgs::init(argc, argv, &aboutData);
-	KApplication app;
+    KAboutData aboutData("kwalletnoautoclose", 0, ki18n("kwalletnoautoclose"), "version");
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
 
-	QDBusInterface service("org.kde.kwalletd", "/modules/kwalletd");
-	if (!service.isValid()) {
-		_out << "Constructed service is invalid!" << endl;
-		return 1;
-	}
-	
-	QDBusReply<bool> r = service.call(QDBus::Block, "isEnabled");
-	if (!r.isValid() || !r) {
-		_out << "kwalletd is disabled or not running!" << endl;
-		return 1;
-	}
-	
-	QDBusReply<QString> kdewallet = service.call(QDBus::Block, "localWallet");
-	_kdewallet = kdewallet;
-	_out << "local wallet is " << _kdewallet << endl;
-	
-	QDBusReply<bool> open = service.call(QDBus::Block, "isOpen", _kdewallet);
-	if (open) {
-		_out << "wallet is already open. Please close to run this test." << endl;
-		return 1;
-	}
-	
-	int rc;
-	
-	_out << "Opening and closing the wallet properly." << endl;
-	rc = openAndClose();
-	if (rc != 0) {
-		_out << "FAILED!" << endl;
-		return rc;
-	}
-	
-	_out << "Opening and exiting." << endl;
-	QDBusReply<int> h = service.call(QDBus::Block, "open", _kdewallet, (qlonglong)0, "kwalletnoautoclose");
-	if (h < 0) {
-		_out << "Opening the wallet failed!" << endl;
-		return 1;
-	} else {
-		_out << "Wallet opened." << endl;
-	}
-	
-	_out << "Exiting. Wallet should stay open." << endl;
-	
-	return 0;
+    QDBusInterface service("org.kde.kwalletd", "/modules/kwalletd");
+    if (!service.isValid()) {
+        _out << "Constructed service is invalid!" << endl;
+        return 1;
+    }
+    
+    QDBusReply<bool> r = service.call(QDBus::Block, "isEnabled");
+    if (!r.isValid() || !r) {
+        _out << "kwalletd is disabled or not running!" << endl;
+        return 1;
+    }
+    
+    QDBusReply<QString> kdewallet = service.call(QDBus::Block, "localWallet");
+    _kdewallet = kdewallet;
+    _out << "local wallet is " << _kdewallet << endl;
+    
+    QDBusReply<bool> open = service.call(QDBus::Block, "isOpen", _kdewallet);
+    if (open) {
+        _out << "wallet is already open. Please close to run this test." << endl;
+        return 1;
+    }
+    
+    int rc;
+    
+    _out << "Opening and closing the wallet properly." << endl;
+    rc = openAndClose();
+    if (rc != 0) {
+        _out << "FAILED!" << endl;
+        return rc;
+    }
+    
+    _out << "Opening and exiting." << endl;
+    QDBusReply<int> h = service.call(QDBus::Block, "open", _kdewallet, (qlonglong)0, "kwalletnoautoclose");
+    if (h < 0) {
+        _out << "Opening the wallet failed!" << endl;
+        return 1;
+    } else {
+        _out << "Wallet opened." << endl;
+    }
+    
+    _out << "Exiting. Wallet should stay open." << endl;
+    
+    return 0;
 }

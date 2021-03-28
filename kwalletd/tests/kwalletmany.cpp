@@ -48,57 +48,57 @@ KWalletMany::~KWalletMany()
 
 void KWalletMany::walletOpened(bool open)
 {
-	_out << "Got async wallet: " << (open) << endl;
-	--_pending;
-	if (_pending == 0) {
-		quit();
-	}
+    _out << "Got async wallet: " << (open) << endl;
+    --_pending;
+    if (_pending == 0) {
+        quit();
+    }
 }
 
 void KWalletMany::quit()
 {
-	if (_pending == 0) {
-		_out << "Success!" << endl;
-	} else {
-		_out << "Failed: " << _pending << " requests were not handled!" << endl;
-	}
-	_loop.quit();
+    if (_pending == 0) {
+        _out << "Success!" << endl;
+    } else {
+        _out << "Failed: " << _pending << " requests were not handled!" << endl;
+    }
+    _loop.quit();
 }
 
 void KWalletMany::openWallet()
 {
-	QEventLoop waitLoop;
-	
-	// open plenty of wallets in synchronous and asynchronous mode
-	for (int i = 0; i < NUMWALLETS; ++i) {
-		// request asynchronous wallet
-		_out << "About to ask for wallet async" << endl;
-		Wallet *wallet;
-		wallet = Wallet::openWallet(Wallet::NetworkWallet(), 0, Wallet::Asynchronous);
-		connect(wallet, SIGNAL(walletOpened(bool)), SLOT(walletOpened(bool)));
-		_wallets.append(wallet);
-		
-		QTimer::singleShot(500, &waitLoop, SLOT(quit()));
-		waitLoop.exec();
-	}
-	
-	_loop.exec();
-	while (!_wallets.isEmpty()) {
-		delete _wallets.takeFirst();
-	}
+    QEventLoop waitLoop;
+    
+    // open plenty of wallets in synchronous and asynchronous mode
+    for (int i = 0; i < NUMWALLETS; ++i) {
+        // request asynchronous wallet
+        _out << "About to ask for wallet async" << endl;
+        Wallet *wallet;
+        wallet = Wallet::openWallet(Wallet::NetworkWallet(), 0, Wallet::Asynchronous);
+        connect(wallet, SIGNAL(walletOpened(bool)), SLOT(walletOpened(bool)));
+        _wallets.append(wallet);
+        
+        QTimer::singleShot(500, &waitLoop, SLOT(quit()));
+        waitLoop.exec();
+    }
+    
+    _loop.exec();
+    while (!_wallets.isEmpty()) {
+        delete _wallets.takeFirst();
+    }
 }
 
 int main(int argc, char *argv[])
 {
-	KAboutData aboutData("kwalletmany", 0, ki18n("kwalletmany"), "version");
-	KCmdLineArgs::init(argc, argv, &aboutData);
-	KApplication app;
-	KWalletMany m;
-	
-	QTimer::singleShot(0, &m, SLOT(openWallet()));
-	QTimer::singleShot(30000, &m, SLOT(quit()));
-	
-	return app.exec();
+    KAboutData aboutData("kwalletmany", 0, ki18n("kwalletmany"), "version");
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    KApplication app;
+    KWalletMany m;
+    
+    QTimer::singleShot(0, &m, SLOT(openWallet()));
+    QTimer::singleShot(30000, &m, SLOT(quit()));
+    
+    return app.exec();
 }
 
 #include "moc_kwalletmany.cpp"

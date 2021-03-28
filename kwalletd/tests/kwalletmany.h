@@ -33,21 +33,21 @@ namespace KWallet { class Wallet; }
 
 class KWalletMany : public QObject
 {
-	Q_OBJECT
-	
+    Q_OBJECT
+    
 public:
-	KWalletMany();
-	~KWalletMany();
-	
+    KWalletMany();
+    ~KWalletMany();
+    
 public slots:
-	void openWallet();
-	void quit();
-	void walletOpened(bool open);
-	
+    void openWallet();
+    void quit();
+    void walletOpened(bool open);
+    
 private:
-	QList<KWallet::Wallet*> _wallets;
-	int _pending;
-	QEventLoop _loop;
+    QList<KWallet::Wallet*> _wallets;
+    int _pending;
+    QEventLoop _loop;
 };
 
 #endif // KWALLETMANY_H
