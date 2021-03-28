@@ -20,17 +20,20 @@
 #include <QIODevice>
 #include <QFile>
 #include <QCryptographicHash>
-#include <assert.h>
+
 #include <ksavefile.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <klocalizedstring.h>
+
 #include "backendpersisthandler.h"
 #include "kwalletbackend.h"
 #include "blowfish.h"
 #include "sha1.h"
 #include "cbc.h"
 
+#include <gcrypt.h>
+#include <assert.h>
 
 #define KWALLET_CIPHER_BLOWFISH_ECB 0 // this was the old KWALLET_CIPHER_BLOWFISH_CBC
 #define KWALLET_CIPHER_3DES_CBC     1 // unsupported
@@ -43,69 +46,6 @@
 namespace KWallet {
 
 typedef char Digest[16];
-
-static int getRandomBlock(QByteArray& randBlock) {
-    // First try /dev/urandom
-    if (QFile::exists("/dev/urandom")) {
-        QFile devrand("/dev/urandom");
-        if (devrand.open(QIODevice::ReadOnly)) {
-            int rc = devrand.read(randBlock.data(), randBlock.size());
-
-            if (rc != randBlock.size()) {
-                return -3;      // not enough data read
-            }
-
-            return 0;
-        }
-    }
-
-    // If that failed, try /dev/random
-    // FIXME: open in noblocking mode!
-    if (QFile::exists("/dev/random")) {
-        QFile devrand("/dev/random");
-        if (devrand.open(QIODevice::ReadOnly)) {
-            int rc = 0;
-            int cnt = 0;
-
-            do {
-                int rc2 = devrand.read(randBlock.data() + rc, randBlock.size());
-
-                if (rc2 < 0) {
-                    return -3;  // read error
-                }
-
-                rc += rc2;
-                cnt++;
-                if (cnt > randBlock.size()) {
-                    return -4;  // reading forever?!
-                }
-            } while(rc < randBlock.size());
-
-            return 0;
-        }
-    }
-
-    // EGD method
-    QString randFilename = QString::fromLocal8Bit(qgetenv("RANDFILE"));
-    if (!randFilename.isEmpty()) {
-        if (QFile::exists(randFilename)) {
-            QFile devrand(randFilename);
-            if (devrand.open(QIODevice::ReadOnly)) {
-                int rc = devrand.read(randBlock.data(), randBlock.size());
-                if (rc != randBlock.size()) {
-                    return -3;      // not enough data read
-                }
-                return 0;
-            }
-        }
-    }
-
-    // Couldn't get any random data!!
-    return -1;
-
-}
-
-
 
 static BlowfishPersistHandler *blowfishHandler =0;
 
@@ -220,14 +160,10 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     newsize += delta;
     wholeFile.resize(newsize);
 
-    QByteArray randBlock;
-    randBlock.resize(blksz+delta);
-    if (getRandomBlock(randBlock) < 0) {
-        sha.reset();
-        decrypted.fill(0);
-        sf.abort();
-        return -3;      // Fatal error: can't get random
-    }
+    const int randBlockSize = blksz+delta;
+    char *randomData = (char*) gcry_random_bytes(randBlockSize, GCRY_STRONG_RANDOM);
+    QByteArray randBlock(randomData, randBlockSize);
+    ::free(randomData);
 
     for (int i = 0; i < blksz; i++) {
         wholeFile[i] = randBlock[i];

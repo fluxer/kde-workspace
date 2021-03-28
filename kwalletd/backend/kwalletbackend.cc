@@ -27,7 +27,6 @@
 #include <klocale.h>
 #include <ksavefile.h>
 #include <kstandarddirs.h>
-#include <gcrypt.h>
 #include <knotification.h>
 
 #include <QtCore/QFile>
@@ -39,6 +38,7 @@
 #include "sha1.h"
 #include "cbc.h"
 
+#include <gcrypt.h>
 #include <assert.h>
 
 // quick fix to get random numbers on win32
@@ -357,7 +357,7 @@ QByteArray Backend::createAndSaveSalt(const QString& path) const
 
     char *randomData = (char*) gcry_random_bytes(PBKDF2_SHA512_SALTSIZE, GCRY_STRONG_RANDOM);
     QByteArray salt(randomData, PBKDF2_SHA512_SALTSIZE);
-    free(randomData);
+    ::free(randomData);
 
     if (saltFile.write(salt) != PBKDF2_SHA512_SALTSIZE) {
         return QByteArray();
