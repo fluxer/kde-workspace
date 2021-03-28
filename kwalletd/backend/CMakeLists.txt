@@ -11,7 +11,6 @@ set(kwalletbackend_LIB_SRCS
    blockcipher.cc
    blowfish.cc
    cbc.cc
-   sha1.cc
    kwalletentry.cc
    kwalletbackend.cc
    backendpersisthandler.cpp

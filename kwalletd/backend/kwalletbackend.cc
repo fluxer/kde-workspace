@@ -35,7 +35,6 @@
 #include <QCryptographicHash>
 
 #include "blowfish.h"
-#include "sha1.h"
 #include "cbc.h"
 
 #include <gcrypt.h>
@@ -118,97 +117,6 @@ static int password2PBKDF2_SHA512(const QByteArray &password, QByteArray& hash, 
 
     return error;
 }
-
-// this should be SHA-512 for release probably
-static int password2hash(const QByteArray& password, QByteArray& hash) {
-    SHA1 sha;
-    int shasz = sha.size() / 8;
-
-    assert(shasz >= 20);
-
-    QByteArray block1(shasz, 0);
-
-    sha.process(password.data(), qMin(password.size(), 16));
-
-    // To make brute force take longer
-    for (int i = 0; i < 2000; i++) {
-        memcpy(block1.data(), sha.hash(), shasz);
-        sha.reset();
-        sha.process(block1.data(), shasz);
-    }
-
-    sha.reset();
-
-    if (password.size() > 16) {
-        sha.process(password.data() + 16, qMin(password.size() - 16, 16));
-        QByteArray block2(shasz, 0);
-        // To make brute force take longer
-        for (int i = 0; i < 2000; i++) {
-            memcpy(block2.data(), sha.hash(), shasz);
-            sha.reset();
-            sha.process(block2.data(), shasz);
-        }
-
-        sha.reset();
-
-        if (password.size() > 32) {
-            sha.process(password.data() + 32, qMin(password.size() - 32, 16));
-
-            QByteArray block3(shasz, 0);
-            // To make brute force take longer
-            for (int i = 0; i < 2000; i++) {
-                memcpy(block3.data(), sha.hash(), shasz);
-                sha.reset();
-                sha.process(block3.data(), shasz);
-            }
-
-            sha.reset();
-
-            if (password.size() > 48) {
-                sha.process(password.data() + 48, password.size() - 48);
-
-                QByteArray block4(shasz, 0);
-                // To make brute force take longer
-                for (int i = 0; i < 2000; i++) {
-                    memcpy(block4.data(), sha.hash(), shasz);
-                    sha.reset();
-                    sha.process(block4.data(), shasz);
-                }
-
-                sha.reset();
-                // split 14/14/14/14
-                hash.resize(56);
-                memcpy(hash.data(),      block1.data(), 14);
-                memcpy(hash.data() + 14, block2.data(), 14);
-                memcpy(hash.data() + 28, block3.data(), 14);
-                memcpy(hash.data() + 42, block4.data(), 14);
-                block4.fill(0);
-            } else {
-                // split 20/20/16
-                hash.resize(56);
-                memcpy(hash.data(),      block1.data(), 20);
-                memcpy(hash.data() + 20, block2.data(), 20);
-                memcpy(hash.data() + 40, block3.data(), 16);
-            }
-            block3.fill(0);
-        } else {
-            // split 20/20
-            hash.resize(40);
-            memcpy(hash.data(),      block1.data(), 20);
-            memcpy(hash.data() + 20, block2.data(), 20);
-        }
-        block2.fill(0);
-    } else {
-        // entirely block1
-        hash.resize(20);
-        memcpy(hash.data(), block1.data(), 20);
-    }
-
-    block1.fill(0);
-
-    return 0;
-}
-
 
 int Backend::deref() {
     if (--_ref < 0) {
@@ -636,11 +544,11 @@ void Backend::setPassword(const QByteArray &password) {
     _passhash.fill(0); // empty just in case
     BlowFish _bf;
     CipherBlockChain bf(&_bf);
-    _passhash.resize(bf.keyLen()/8);
     _newPassHash.resize(bf.keyLen()/8);
     _newPassHash.fill(0);
 
-    password2hash(password, _passhash);
+    // this should be SHA-512 for release probably
+    _passhash = QCryptographicHash::hash(password, QCryptographicHash::Sha1);
 
     QByteArray salt;
     QFile saltFile(KGlobal::dirs()->saveLocation("kwallet") + _name + ".salt");

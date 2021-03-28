@@ -29,7 +29,6 @@
 #include "backendpersisthandler.h"
 #include "kwalletbackend.h"
 #include "blowfish.h"
-#include "sha1.h"
 #include "cbc.h"
 
 #include <gcrypt.h>
@@ -37,11 +36,12 @@
 
 #define KWALLET_CIPHER_BLOWFISH_ECB 0 // this was the old KWALLET_CIPHER_BLOWFISH_CBC
 #define KWALLET_CIPHER_3DES_CBC     1 // unsupported
+#define KWALLET_CIPHER_GPG          2 // unsupported
 #define KWALLET_CIPHER_BLOWFISH_CBC 3
 
-#define KWALLET_HASH_SHA1       0
+#define KWALLET_HASH_SHA1       0 // fallback
 #define KWALLET_HASH_MD5        1 // unsupported
-#define KWALLET_HASH_PBKDF2_SHA512 2 // used when using kwallet with pam or since 4.13 version
+#define KWALLET_HASH_PBKDF2_SHA512 2 // used since 4.13 version
 
 namespace KWallet {
 
@@ -142,11 +142,11 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     }
 
     // calculate the hash of the file
-    SHA1 sha;
+    QCryptographicHash sha(QCryptographicHash::Sha1);
     BlowFish _bf;
     CipherBlockChain bf(&_bf);
 
-    sha.process(decrypted.data(), decrypted.size());
+    sha.addData(decrypted);
 
     // prepend and append the random data
     QByteArray wholeFile;
@@ -181,7 +181,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
         wholeFile[(int)(i+blksz+4+decrypted.size())] = randBlock[(int)(i+blksz)];
     }
 
-    const char *hash = (const char *)sha.hash();
+    const QByteArray hash = sha.result();
     for (int i = 0; i < 20; i++) {
         wholeFile[(int)(newsize - 20 + i)] = hash[i];
     }
@@ -300,9 +300,9 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
     }
 
     // compute the hash ourself
-    SHA1 sha;
-    sha.process(t, fsize);
-    const char *testhash = (const char *)sha.hash();
+    QCryptographicHash sha(QCryptographicHash::Sha1);
+    sha.addData(t, fsize);
+    const QByteArray testhash = sha.result();
 
     // compare hashes
     int sz = encrypted.size();

@@ -23,15 +23,3 @@ kde4_add_manual_test(testbf ${testbf_SRCS})
 
 target_link_libraries(testbf  ${KDE4_KDECORE_LIBS} kwalletbackend )
 
-
-########### next target ###############
-
-set(testsha_SRCS testsha.cpp )
-
-
-kde4_add_manual_test(testsha ${testsha_SRCS})
-
-target_link_libraries(testsha  ${KDE4_KDECORE_LIBS} kwalletbackend )
-
-########### install files ###############
-

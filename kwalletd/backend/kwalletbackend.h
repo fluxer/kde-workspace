@@ -174,7 +174,6 @@ private:
     BackendCipherType _cipherType; // the kind of encryption used for this wallet
 
     friend class BlowfishPersistHandler;
-    friend class GpgPersistHandler;
     
     // open the wallet with the password already set. This is
     // called internally by both open and openPreHashed.
