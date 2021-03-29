@@ -47,14 +47,15 @@ namespace KWallet {
 
 typedef char Digest[16];
 
-static BlowfishPersistHandler *blowfishHandler =0;
+static BlowfishPersistHandler *blowfishHandler = 0;
 
 BackendPersistHandler *BackendPersistHandler::getPersistHandler(BackendCipherType cipherType)
 {
     switch (cipherType){
         case BACKEND_CIPHER_BLOWFISH: {
-            if (0 == blowfishHandler)
+            if (blowfishHandler == 0) {
                 blowfishHandler = new BlowfishPersistHandler;
+            }
             return blowfishHandler;
         }
         default: {
@@ -66,14 +67,10 @@ BackendPersistHandler *BackendPersistHandler::getPersistHandler(BackendCipherTyp
 
 BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[KWMAGIC_LEN])
 {
-    if ((magicBuf[2] == KWALLET_CIPHER_BLOWFISH_ECB || magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC) &&
+    if (magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC &&
         (magicBuf[3] == KWALLET_HASH_SHA1 || magicBuf[3] == KWALLET_HASH_PBKDF2_SHA512)) {
-        if (0 == blowfishHandler) {
-            bool useECBforReading = magicBuf[2] == KWALLET_CIPHER_BLOWFISH_ECB;
-            if (useECBforReading) {
-                qDebug() << "this wallet uses ECB encryption. It'll be converted to CBC on next save.";
-            }
-            blowfishHandler = new BlowfishPersistHandler(useECBforReading);
+        if (blowfishHandler == 0) {
+            blowfishHandler = new BlowfishPersistHandler();
         }
         return blowfishHandler;
     }
@@ -83,11 +80,6 @@ BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[KW
 int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& version, WId)
 {
     assert(wb->_cipherType == BACKEND_CIPHER_BLOWFISH);
-
-    if (_useECBforReading) {
-        qDebug() << "This wallet used ECB and is now saved using CBC";
-        _useECBforReading = false;
-    }
 
     version[2] = KWALLET_CIPHER_BLOWFISH_CBC;
     if(!wb->_useNewHash) {
@@ -255,7 +247,7 @@ int BlowfishPersistHandler::read(Backend* wb, QFile& db, WId)
     assert(encrypted.size() < db.size());
 
     BlowFish _bf;
-    CipherBlockChain bf(&_bf, _useECBforReading);
+    CipherBlockChain bf(&_bf);
     int blksz = bf.blockSize();
     if ((encrypted.size() % blksz) != 0) {
         return -5;     // invalid file structure

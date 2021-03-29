@@ -21,9 +21,8 @@
 #include <string.h>
 #include <kdebug.h>
 
-CipherBlockChain::CipherBlockChain(BlockCipher *cipher, bool useECBforReading) :
-    _cipher(cipher)
-    , _useECBforReading(useECBforReading)
+CipherBlockChain::CipherBlockChain(BlockCipher *cipher)
+    : _cipher(cipher)
 {
     _next = 0L;
     _register = 0L;
@@ -111,54 +110,8 @@ int CipherBlockChain::encrypt(void *block, int len)
     return rc;
 }
 
-// This is the old decrypt method, that was decrypting using ECB
-// instead of CBC
-int CipherBlockChain::decryptECB(void *block, int len) {
-    if (_cipher && !_writer) {
-        int rc;
-
-        _reader |= 1;
-
-        if (!_register) {
-            _register = new unsigned char[len];
-            _len = len;
-            memset(_register, 0, len);
-        } else if (len > _len) {
-            return -1;
-        }
-
-        if (!_next) {
-            _next = new unsigned char[_len];
-        }
-        memcpy(_next, block, _len);
-
-        rc = _cipher->decrypt(block, len);
-
-        if (rc != -1) {
-            // This might be optimizable
-            char *tb = (char *)block;
-            for (int i = 0; i < len; i++) {
-                tb[i] ^= ((char *)_register)[i];
-            }
-        }
-
-        void *temp;
-        temp = _next;
-        _next = _register;
-        _register = temp;
-
-        return rc;
-    }
-    return -1;
-}
-
 int CipherBlockChain::decrypt(void *block, int len)
 {
-    if (_useECBforReading) {
-        kDebug() << "decrypting using ECB!";
-        return decryptECB(block, len);
-    }
-
     if (_cipher && !_writer) {
         int rc = 0;
 

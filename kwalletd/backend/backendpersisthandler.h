@@ -56,13 +56,11 @@ public:
 
 class BlowfishPersistHandler : public BackendPersistHandler {
 public:
-    explicit BlowfishPersistHandler(bool useECBforReading =false) : _useECBforReading(useECBforReading) {}
+    explicit BlowfishPersistHandler() {}
     virtual ~BlowfishPersistHandler() {}
 
     virtual int write(Backend* wb, KSaveFile& sf, QByteArray& version, WId w);
     virtual int read(Backend* wb, QFile& sf, WId w);
-private:
-    bool _useECBforReading;
 };
 
 } // namespace
