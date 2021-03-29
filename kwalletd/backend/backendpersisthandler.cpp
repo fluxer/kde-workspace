@@ -32,6 +32,7 @@
 #include "cbc.h"
 
 #include <assert.h>
+#include <limits.h>
 
 #define KWALLET_CIPHER_BLOWFISH_ECB 0 // this was the old KWALLET_CIPHER_BLOWFISH_CBC
 #define KWALLET_CIPHER_3DES_CBC     1 // unsupported
@@ -41,7 +42,7 @@
 #define KWALLET_HASH_SHA1       0 // fallback
 #define KWALLET_HASH_MD5        1 // unsupported
 #define KWALLET_HASH_PBKDF2_SHA512 2 // used since 4.13 version
-#define KWALLET_HASH_SHA512 3 // used since 4.13 version
+#define KWALLET_HASH_SHA512 3 // used since 4.20 version
 
 namespace KWallet {
 
@@ -151,7 +152,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     char randomData[randBlockSize];
     ::memset(randomData, 0, randBlockSize * sizeof(char));
     for (int i = 0; i < randBlockSize; i++) {
-        randomData[i] = char(qrand() % (sizeof(char) * sizeof(char)));
+        randomData[i] = char(qrand() % SHRT_MAX);
     }
     QByteArray randBlock(randomData, randBlockSize);
 
