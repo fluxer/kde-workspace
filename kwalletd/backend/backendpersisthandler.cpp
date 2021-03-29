@@ -31,7 +31,6 @@
 #include "blowfish.h"
 #include "cbc.h"
 
-#include <gcrypt.h>
 #include <assert.h>
 
 #define KWALLET_CIPHER_BLOWFISH_ECB 0 // this was the old KWALLET_CIPHER_BLOWFISH_CBC
@@ -42,6 +41,7 @@
 #define KWALLET_HASH_SHA1       0 // fallback
 #define KWALLET_HASH_MD5        1 // unsupported
 #define KWALLET_HASH_PBKDF2_SHA512 2 // used since 4.13 version
+#define KWALLET_HASH_SHA512 3 // used since 4.13 version
 
 namespace KWallet {
 
@@ -67,8 +67,7 @@ BackendPersistHandler *BackendPersistHandler::getPersistHandler(BackendCipherTyp
 
 BackendPersistHandler *BackendPersistHandler::getPersistHandler(char magicBuf[KWMAGIC_LEN])
 {
-    if (magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC &&
-        (magicBuf[3] == KWALLET_HASH_SHA1 || magicBuf[3] == KWALLET_HASH_PBKDF2_SHA512)) {
+    if (magicBuf[2] == KWALLET_CIPHER_BLOWFISH_CBC && magicBuf[3] == KWALLET_HASH_SHA512) {
         if (blowfishHandler == 0) {
             blowfishHandler = new BlowfishPersistHandler();
         }
@@ -82,11 +81,7 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     assert(wb->_cipherType == BACKEND_CIPHER_BLOWFISH);
 
     version[2] = KWALLET_CIPHER_BLOWFISH_CBC;
-    if(!wb->_useNewHash) {
-        version[3] = KWALLET_HASH_SHA1;
-    } else {
-        version[3] = KWALLET_HASH_PBKDF2_SHA512; // Since 4.13 we always use PBKDF2_SHA512
-    }
+    version[3] = KWALLET_HASH_SHA512; // Since 4.20 we always use SHA512
 
     if (sf.write(version, 4) != 4) {
         sf.abort();
@@ -153,9 +148,12 @@ int BlowfishPersistHandler::write(Backend* wb, KSaveFile& sf, QByteArray& versio
     wholeFile.resize(newsize);
 
     const int randBlockSize = blksz+delta;
-    char *randomData = (char*) gcry_random_bytes(randBlockSize, GCRY_STRONG_RANDOM);
+    char randomData[randBlockSize];
+    ::memset(randomData, 0, randBlockSize * sizeof(char));
+    for (int i = 0; i < randBlockSize; i++) {
+        randomData[i] = char(qrand() % (sizeof(char) * sizeof(char)));
+    }
     QByteArray randBlock(randomData, randBlockSize);
-    ::free(randomData);
 
     for (int i = 0; i < blksz; i++) {
         wholeFile[i] = randBlock[i];

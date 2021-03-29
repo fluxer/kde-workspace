@@ -14,14 +14,6 @@ set_package_properties(ZLIB PROPERTIES
     TYPE REQUIRED
 )
 
-find_package(LibGcrypt 1.5.0)
-set_package_properties(LibGcrypt PROPERTIES
-    DESCRIPTION "general purpose cryptographic library based on the code from GnuPG"
-    URL "https://www.gnu.org/software/libgcrypt/"
-    PURPOSE "kwalletd needs libgcrypt to perform PBKDF2-SHA512 hashing"
-    TYPE REQUIRED
-)
-
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
     DESCRIPTION "Accelerated JPEG image codec"

@@ -35,6 +35,8 @@
 #include "backend/kwalletbackend.h" //For the hash size
 
 #define BSIZE 1000
+#define KWALLET_SHA512_KEYSIZE 128
+
 static int pipefd = 0;
 static int socketfd = 0;
 static bool isWalletEnabled()
@@ -51,10 +53,10 @@ static char *waitForHash()
     int totalRead = 0;
     int readBytes = 0;
     int attemps = 0;
-    char *buf = (char*)malloc(sizeof(char) * PBKDF2_SHA512_KEYSIZE);
-    memset(buf, '\0', PBKDF2_SHA512_KEYSIZE);
-    while(totalRead != PBKDF2_SHA512_KEYSIZE) {
-        readBytes = read(pipefd, buf + totalRead, PBKDF2_SHA512_KEYSIZE - totalRead);
+    char *buf = (char*)malloc(sizeof(char) * KWALLET_SHA512_KEYSIZE);
+    memset(buf, '\0', KWALLET_SHA512_KEYSIZE);
+    while(totalRead != KWALLET_SHA512_KEYSIZE) {
+        readBytes = read(pipefd, buf + totalRead, KWALLET_SHA512_KEYSIZE - totalRead);
         if (readBytes == -1 || attemps > 5) {
             free(buf);
             return NULL;
@@ -180,7 +182,7 @@ int main(int argc, char **argv)
     KWalletD walletd;
     if (hash) {
         kDebug() << "LOGIN INSIDE!";
-        QByteArray passHash(hash, PBKDF2_SHA512_KEYSIZE);
+        QByteArray passHash(hash, KWALLET_SHA512_KEYSIZE);
         int wallet = walletd.pamOpen(KWallet::Wallet::LocalWallet(), passHash, 0);
         kDebug() << "Wallet handler: " << wallet;
         free(hash);

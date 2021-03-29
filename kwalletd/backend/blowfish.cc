@@ -107,7 +107,7 @@ BlowFish::~BlowFish() {
 
 
 int BlowFish::keyLen() const {
-    return 448;
+    return 512;
 }
 
 
@@ -117,7 +117,7 @@ bool BlowFish::readyToGo() const {
 
 
 bool BlowFish::setKey(void *key, int bitlength) {
-    if (bitlength <= 0 || bitlength > 448 || bitlength % 8 != 0) {
+    if (bitlength <= 0 || bitlength > 512 || bitlength % 8 != 0) {
         return false;
     }
 

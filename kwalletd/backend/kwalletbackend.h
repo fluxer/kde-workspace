@@ -28,10 +28,6 @@
 #include "kwalletentry.h"
 #include "backendpersisthandler.h"
 
-#define PBKDF2_SHA512_KEYSIZE 56
-#define PBKDF2_SHA512_SALTSIZE 56
-#define PBKDF2_SHA512_ITERATIONS 50000
-
 namespace KWallet {
 
 /**
@@ -160,7 +156,6 @@ private:
     QString _name;
     QString _path;
     bool _open;
-    bool _useNewHash;
     QString _folder;
     int _ref;
     // Map Folder->Entries
@@ -170,7 +165,6 @@ private:
     typedef QMap<MD5Digest, QList<MD5Digest> > HashMap;
     HashMap _hashes;
     QByteArray _passhash;   // password hash used for saving the wallet
-    QByteArray _newPassHash; //Modern hash using KWALLET_HASH_PBKDF2_SHA512
     BackendCipherType _cipherType; // the kind of encryption used for this wallet
 
     friend class BlowfishPersistHandler;
@@ -178,8 +172,6 @@ private:
     // open the wallet with the password already set. This is
     // called internally by both open and openPreHashed.
     int openInternal(WId w=0);
-    void swapToNewHash();
-    QByteArray createAndSaveSalt(const QString &path) const;
 
 };
 
