@@ -147,7 +147,7 @@ int Backend::openPreHashed(const QByteArray &passwordHash)
     }
    
     // check the password hash for correct size (currently fixed)
-    if (passwordHash.size() != 20 && passwordHash.size() != 128) {
+    if (passwordHash.size() != KWALLET_SHA512_KEYSIZE) {
         return -42; // unsupported encryption scheme
     }
    

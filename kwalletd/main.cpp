@@ -32,10 +32,9 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include "kwalletd.h"
-#include "backend/kwalletbackend.h" //For the hash size
+#include "backend/kwalletbackend.h" // For the hash size
 
 #define BSIZE 1000
-#define KWALLET_SHA512_KEYSIZE 128
 
 static int pipefd = 0;
 static int socketfd = 0;

@@ -28,6 +28,8 @@
 #include "kwalletentry.h"
 #include "backendpersisthandler.h"
 
+#define KWALLET_SHA512_KEYSIZE 128
+
 namespace KWallet {
 
 /**
