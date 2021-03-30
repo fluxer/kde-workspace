@@ -40,6 +40,7 @@
 #include <assert.h>
 
 #define KWALLET_VERSION_MAJOR 0
+// has been 0 until 4.13, 1 until 4.20
 #define KWALLET_VERSION_MINOR 2
 
 using namespace KWallet;
@@ -192,9 +193,7 @@ int Backend::openInternal(WId w)
         return -4; // unknown version
     }
 
-    // 0 has been the MINOR version until 4.13
-    // 1 has been the MINOR version until 4.20
-    if (magicBuf[1] == 2) {
+    if (magicBuf[1] == KWALLET_VERSION_MINOR) {
         kDebug() << "Wallet new enough, using new hash";
     } else if (magicBuf[1] != 0){
         kDebug() << "Wallet is old, sad panda :(";
