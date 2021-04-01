@@ -22,12 +22,12 @@
 #include <QtCore/QDir>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/qdatetime.h>
+#include <QtCore/QDateTime>
+#include <QtCore/QProcess>
 #include <QtGui/qx11info_x11.h>
 
 #include <kglobal.h>
 #include <kstandarddirs.h>
-#include <kprocess.h>
 #include <kdebug.h>
 
 #include "keyboard_config.h"
@@ -47,43 +47,44 @@ static const QString COMMAND_OPTIONS_SEPARATOR(",");
 static
 QString getSetxkbmapExe()
 {
-	if( setxkbmapNotFound )
-		return "";
+    if( setxkbmapNotFound )
+        return "";
 
-	if( setxkbmapExe.isEmpty() ) {
-		setxkbmapExe = KGlobal::dirs()->findExe(SETXKBMAP_EXEC);
-		if( setxkbmapExe.isEmpty() ) {
-			setxkbmapNotFound = true;
-			kError() << "Can't find" << SETXKBMAP_EXEC << "- keyboard layouts won't be configured";
-			return "";
-		}
-	}
-	return setxkbmapExe;
+    if( setxkbmapExe.isEmpty() ) {
+        setxkbmapExe = KGlobal::dirs()->findExe(SETXKBMAP_EXEC);
+        if( setxkbmapExe.isEmpty() ) {
+            setxkbmapNotFound = true;
+            kError() << "Can't find" << SETXKBMAP_EXEC << "- keyboard layouts won't be configured";
+            return "";
+        }
+    }
+    return setxkbmapExe;
 }
 
 static
 void executeXmodmap(const QString& configFileName)
 {
-	if( xmodmapNotFound )
-		return;
+    if( xmodmapNotFound ) {
+        return;
+    }
 
     if( QFile(configFileName).exists() ) {
-    	if( xmodmapExe.isEmpty() ) {
-    		xmodmapExe = KGlobal::dirs()->findExe(XMODMAP_EXEC);
-        	if( xmodmapExe.isEmpty() ) {
-    			xmodmapNotFound = true;
-    			kError() << "Can't find" << XMODMAP_EXEC << "- xmodmap files won't be run";
-    			return;
-        	}
-    	}
+        if( xmodmapExe.isEmpty() ) {
+            xmodmapExe = KGlobal::dirs()->findExe(XMODMAP_EXEC);
+            if( xmodmapExe.isEmpty() ) {
+                xmodmapNotFound = true;
+                kError() << "Can't find" << XMODMAP_EXEC << "- xmodmap files won't be run";
+                return;
+            }
+        }
 
-    	KProcess xmodmapProcess;
-    	xmodmapProcess << xmodmapExe;
-    	xmodmapProcess << configFileName;
-    	kDebug() << "Executing" << xmodmapProcess.program().join(" ");
-    	if( xmodmapProcess.execute() != 0 ) {
-    		kError() << "Failed to execute " << xmodmapProcess.program();
-    	}
+        kDebug() << "Executing" << xmodmapExe << configFileName;
+        QProcess xmodmapProcess;
+        xmodmapProcess.start(xmodmapExe, QStringList() << configFileName);
+        xmodmapProcess.waitForFinished();
+        if( xmodmapProcess.exitCode() != 0 ) {
+            kError() << "Failed to execute " << xmodmapExe << configFileName;
+        }
     }
 }
 
@@ -100,23 +101,28 @@ void restoreXmodmap()
 //TODO: make private
 bool XkbHelper::runConfigLayoutCommand(const QStringList& setxkbmapCommandArguments)
 {
-	QTime timer;
-	timer.start();
+    QTime timer;
+    timer.start();
 
-	KProcess setxkbmapProcess;
-	setxkbmapProcess << getSetxkbmapExe() << setxkbmapCommandArguments;
-	int res = setxkbmapProcess.execute();
+    const QString setxkbmapProgram = getSetxkbmapExe();
+    if (setxkbmapNotFound) {
+        return false;
+    }
 
-	if( res == 0 ) {	// restore Xmodmap mapping reset by setxkbmap
-		kDebug() << "Executed successfully in " << timer.elapsed() << "ms" << setxkbmapProcess.program().join(" ");
-		restoreXmodmap();
-		kDebug() << "\t and with xmodmap" << timer.elapsed() << "ms";
-	    return true;
-	}
-	else {
-		kError() << "Failed to run" << setxkbmapProcess.program().join(" ") << "return code:" << res;
-	}
-	return false;
+    QProcess setxkbmapProcess;
+    setxkbmapProcess.start(setxkbmapProgram, setxkbmapCommandArguments);
+    setxkbmapProcess.waitForFinished();
+    const int res = setxkbmapProcess.exitCode();
+
+    if( res == 0 ) {	// restore Xmodmap mapping reset by setxkbmap
+        kDebug() << "Executed successfully in " << timer.elapsed() << "ms" << setxkbmapProgram << setxkbmapCommandArguments.join(" ");
+        restoreXmodmap();
+        kDebug() << "\t and with xmodmap" << timer.elapsed() << "ms";
+        return true;
+    } else {
+        kError() << "Failed to run" << setxkbmapProgram << setxkbmapCommandArguments.join(" ") << "return code:" << res;
+    }
+    return false;
 }
 
 bool XkbHelper::initializeKeyboardLayouts(const QList<LayoutUnit>& layoutUnits)
