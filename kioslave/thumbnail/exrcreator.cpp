@@ -30,6 +30,7 @@
 
 #include <ImfInputFile.h>
 #include <ImfPreviewImage.h>
+#include <ImfHeader.h>
 
 extern "C"
 {
