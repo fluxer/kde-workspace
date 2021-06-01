@@ -22,21 +22,17 @@ Using PAM
 ---------
 
 By default, PAM is automatically used, if it is found. Use
-./configure --without-pam  to disable it.
+-DWITH_PAM=FALSE  to disable it.
 
 If PAM is found, KDE usually uses the PAM service "kde". You may
-override it for all KDE programs by using --with-pam=<service> and/or
-individually by using --with-<prog>-pam=<service>, where <prog> is
-one of kdm, kcp and kss (for kdm, kcheckpass and kscreensaver).
+override it for all KDE programs by using -DKDE4_COMMON_PAM_SERVICE=<service>
+and/or individually by using -D<prog>_PAM_SERVICE=<service>, where <prog> is
+one of KDM and kscreensaver (both use kcheckpass).
 
-"make install" will attempt to create suitable service definitions; either
-by putting files into /etc/pam.d/ or by adding text to /etc/pam.conf. The
-services are just copies of the "login" service. 
-You may want to edit these definitions to meet your needs.
-There are also two example service definitions in this directory -
-kde.pamd and kscreensaver.pamd - but don't just copy them!
-If the services are misconfigured, you will NOT be able to login via KDM
-and/or unlock a locked screen!
+Two files are provided but not installed - kde.pamd and kscreensaver.pamd.
+The usual location to put these files is /etc/pam.d/. You may want to edit
+the definitions in them to meet your needs. If the services are misconfigured,
+you will NOT be able to login via KDM and/or unlock a locked screen!
 
 If there is ever any doubt about which PAM service a program was
 compiled with, it can be determined by examining the PAM-generated 
@@ -64,8 +60,8 @@ Linux 5.x xdm did not implement it).  This may be configured to carry out
 actions when a user opens or closes an kdm session, if a suitable PAM 
 module is available (e.g., mount and unmount user-specific filesystems).
 
-Note 2: Screensavers typically only authenticate a user to allow her to
-continue working. They may also renew tokens etc., where supported.
+Note 2: Screensavers typically only authenticate a user to allow him/her
+to continue working. They may also renew tokens etc., where supported.
 See the Linux PAM Administrators guide, which is part of the PAM
 distribution, for more details. 
 

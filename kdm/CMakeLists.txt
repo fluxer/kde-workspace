@@ -1,7 +1,5 @@
 include_directories( BEFORE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/backend )
 
-install_pam_service(KDM)
-
 include(ConfigureChecks.cmake)
 
 install( FILES README DESTINATION ${KDE4_DATA_INSTALL_DIR}/doc/kdm )
