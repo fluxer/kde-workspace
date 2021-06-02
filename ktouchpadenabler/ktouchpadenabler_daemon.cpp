@@ -39,12 +39,12 @@ class TouchpadEnablerDaemonPrivate : public QWidget
         TouchpadEnablerDaemonPrivate();
         ~TouchpadEnablerDaemonPrivate();
         
-        bool initSuccessful() const { return m_keyCode != 0; }
+        bool initSuccessful() const;
         
         bool x11Event(XEvent *event);
     
     private:
-        enum TouchpadKey { ToggleKey = 0, OnKey, OffKey };
+        enum TouchpadKey { ToggleKey = 0, OnKey = 1, OffKey = 2 };
         static const int nKeys = OffKey + 1;
         
         bool getEnabled(bool *currentValue) const;
@@ -142,6 +142,15 @@ TouchpadEnablerDaemonPrivate::~TouchpadEnablerDaemonPrivate()
             XUngrabKey(m_display, m_keyCode[i], 0 /* No modifiers */, QX11Info::appRootWindow());
         }
     }
+}
+
+bool TouchpadEnablerDaemonPrivate::initSuccessful() const {
+    for (int i = 0; i < nKeys; ++i) {
+        if (m_keyCode[i] == 0) {
+            return false;
+        }
+    }
+    return true;
 }
 
 bool TouchpadEnablerDaemonPrivate::x11Event(XEvent *event)
