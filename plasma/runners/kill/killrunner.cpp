@@ -181,7 +181,7 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     QStringList args;
     args << QString("-%1").arg(signal) << QString("%1").arg(pid);
 
-    if (QProcess::execute("kill", args))
+    if (QProcess::execute("kill", args) == 0)
     {
         return;
     }

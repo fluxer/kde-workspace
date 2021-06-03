@@ -79,7 +79,7 @@ ClockHelper::CH_Error ClockHelper::ntp( const QStringList& ntpServers, bool ntpE
       // Would this be better?: s/^.*\(([^)]*)\).*$/\1/
     }
 
-    if ( !QProcess::execute(ntpUtility, QStringList() << timeServer) ) {
+    if ( QProcess::execute(ntpUtility, QStringList() << timeServer) != 0) {
       return NTPError;
     }
   } else if( ntpEnabled ) {

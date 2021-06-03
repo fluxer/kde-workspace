@@ -102,7 +102,7 @@ void CfgFileManager::save(KConfig *)
 
 void CfgFileManager::slotAddFileManager()
 {
-    if (QProcess::execute("keditfiletype", QStringList() << "inode/directory")) {
+    if (QProcess::execute("keditfiletype", QStringList() << "inode/directory") == 0) {
         load(0);
     }
 }

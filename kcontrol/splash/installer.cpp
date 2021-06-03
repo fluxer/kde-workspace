@@ -527,19 +527,19 @@ void SplashInstaller::slotTest()
     return;
   else if( mEngineOfSelected == "KSplashX" )
   {
-    if (QProcess::execute("ksplashx", QStringList() << themeName << "--test"))
+    if (QProcess::execute("ksplashx", QStringList() << themeName << "--test") != 0)
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
     return;
   }
   else if( mEngineOfSelected == "KSplashQML" )
   {
-    if (QProcess::execute("ksplashqml", QStringList() << themeName << "--test"))
+    if (QProcess::execute("ksplashqml", QStringList() << themeName << "--test") != 0)
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
     return;
   }
   else // KSplashML engines
   {
-    if (QProcess::execute("ksplash", QStringList() << "--test" << "--theme" << themeName))
+    if (QProcess::execute("ksplash", QStringList() << "--test" << "--theme" << themeName) != 0)
       KMessageBox::error(this,i18n("Failed to successfully test the splash screen."));
   }
 }
