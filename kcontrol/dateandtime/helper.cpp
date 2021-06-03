@@ -114,21 +114,26 @@ ClockHelper::CH_Error ClockHelper::tz( const QString& selectedzone )
         return TimezoneError;
     }
 
-    // from ktimezoned
-    QString ZONE_INFO_DIR;
+    // NOTE: keep in sync with ktimezoned/ktimezoned.cpp
+    static const QStringList zoneDirs = QStringList()
+        << QLatin1String("/share/zoneinfo")
+        << QLatin1String("/lib/zoneinfo")
+        << QLatin1String("/usr/share/zoneinfo")
+        << QLatin1String("/usr/lib/zoneinfo")
+        << QLatin1String("/usr/local/share/zoneinfo")
+        << QLatin1String("/usr/local/lib/zoneinfo")
+        << (KStandardDirs::installPath("kdedir") + QLatin1String("/share/zoneinfo"))
+        << (KStandardDirs::installPath("kdedir") + QLatin1String("/lib/zoneinfo"));
 
-    if (QDir("/usr/share/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/usr/share/zoneinfo/";
-    } else if (QDir("/usr/lib/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/usr/lib/zoneinfo/";
-    } else if (QDir("/share/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/share/zoneinfo/";
-    } else if (QDir("/lib/zoneinfo").exists()) {
-        ZONE_INFO_DIR = "/lib/zoneinfo/";
-    } else {
-        // /usr is kind of standard
-        ZONE_INFO_DIR = "/usr/share/zoneinfo/";
+    // /usr is kind of standard
+    QString ZONE_INFO_DIR = "/usr/share/zoneinfo";
+
+    foreach (const QString &zonedir, zoneDirs) {
+        if (QDir(zonedir).exists()) {
+            ZONE_INFO_DIR = zonedir;
+        }
     }
+
     QString tz = ZONE_INFO_DIR + selectedzone;
 
     QFile f("/etc/localtime");
