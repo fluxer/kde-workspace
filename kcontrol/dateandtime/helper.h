@@ -34,8 +34,8 @@ class ClockHelper : public QObject
             NoError         = 0,
             CallError       = 1,
             TimezoneError   = 2,
-            NTPError        = 3,
-            DateError       = 4
+            NTPError        = 4,
+            DateError       = 8
         };
 
     public slots:

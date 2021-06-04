@@ -172,7 +172,7 @@ ActionReply ClockHelper::save(const QVariantMap &args)
   KComponentData data( "kcmdatetimehelper" );
 
   int ret = NoError; // error code
-//  The order here is important
+  // The order here is important
   if( _ntp )
     ret |= ntp( args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
   if( _date )
