@@ -237,7 +237,7 @@ void scanline_blend_sse2(const __m128i *over, const quint8 a, const __m128i *und
                          __m128i *result, uint length)
 {
     length = (length + 15) >> 4;
-    const __m128i alpha    = _mm_set1_epi16(__uint16_t (a));
+    const __m128i alpha    = _mm_set1_epi16(uint16_t (a));
     const __m128i negalpha = _mm_xor_si128(alpha, _mm_set1_epi16 (0x00ff));
 
     for (uint i = 0; i < length; i++)
