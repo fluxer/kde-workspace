@@ -748,7 +748,7 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
     l1->setExpanded(true);
     l1->setFlags(Qt::ItemIsEnabled);
 
-    l2 = print_drm_info(l1, l2, "Direct Rendering");
+    l2 = print_drm_info(l1, l2, i18n("Direct Rendering"));
 
     // TODO: print_visual_info(dpy, mode);
 
