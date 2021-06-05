@@ -118,9 +118,9 @@ QTreeWidgetItem *newItem(QTreeWidgetItem *parent, QString textCol1, QString text
     return newItem(parent, NULL, textCol1, textCol2);
 }
 
-static bool IsDirect;
+static bool IsDirect = false;
 
-static struct glinfo {
+static struct {
 #ifndef KCM_ENABLE_OPENGLES
     const char *serverVendor;
     const char *serverVersion;
@@ -143,7 +143,7 @@ static struct glinfo {
     const char *gluExtensions;
 #endif
     char *displayName;
-} gli;
+} gl_info;
 
 static struct {
     QString module;
@@ -548,9 +548,9 @@ static QTreeWidgetItem *print_screen_info(QTreeWidgetItem *l1, QTreeWidgetItem *
 
     l2->setExpanded(true);
 
-    l3 = newItem(l2, i18n("Vendor"), gli.glVendor);
-    l3 = newItem(l2, l3, i18n("Renderer"), gli.glRenderer);
-    l3 = newItem(l2, l3, i18n("OpenGL/ES version"), gli.glVersion);
+    l3 = newItem(l2, i18n("Vendor"), gl_info.glVendor);
+    l3 = newItem(l2, l3, i18n("Renderer"), gl_info.glRenderer);
+    l3 = newItem(l2, l3, i18n("OpenGL/ES version"), gl_info.glVersion);
 
     if (IsDirect) {
         if (dri_info.module.isEmpty())
@@ -559,11 +559,11 @@ static QTreeWidgetItem *print_screen_info(QTreeWidgetItem *l1, QTreeWidgetItem *
     }
 
     l3 = newItem(l2, l3, i18n("OpenGL/ES extensions"));
-    print_extension_list(gli.glExtensions, l3);
+    print_extension_list(gl_info.glExtensions, l3);
 
 #ifndef KCM_ENABLE_OPENGLES
     l3 = newItem(l2, l3, i18n("Implementation specific"));
-    print_limits(l3, gli.glExtensions, strstr(gli.clientExtensions, "GLX_ARB_get_proc_address") != NULL);
+    print_limits(l3, gl_info.glExtensions, strstr(gl_info.clientExtensions, "GLX_ARB_get_proc_address") != NULL);
 #endif
 
     return l1;
@@ -575,22 +575,22 @@ void print_glx_glu(QTreeWidgetItem *l1, QTreeWidgetItem *l2)
     QTreeWidgetItem *l3;
 
     l2 = newItem(l1, l2, i18n("GLX"));
-    l3 = newItem(l2, i18n("server GLX vendor"), gli.serverVendor);
-    l3 = newItem(l2, l3, i18n("server GLX version"), gli.serverVersion);
+    l3 = newItem(l2, i18n("server GLX vendor"), gl_info.serverVendor);
+    l3 = newItem(l2, l3, i18n("server GLX version"), gl_info.serverVersion);
     l3 = newItem(l2, l3, i18n("server GLX extensions"));
-    print_extension_list(gli.serverExtensions, l3);
+    print_extension_list(gl_info.serverExtensions, l3);
 
-    l3 = newItem(l2, l3, i18n("client GLX vendor") ,gli.clientVendor);
-    l3 = newItem(l2, l3, i18n("client GLX version"), gli.clientVersion);
+    l3 = newItem(l2, l3, i18n("client GLX vendor") ,gl_info.clientVendor);
+    l3 = newItem(l2, l3, i18n("client GLX version"), gl_info.clientVersion);
     l3 = newItem(l2, l3, i18n("client GLX extensions"));
-    print_extension_list(gli.clientExtensions, l3);
+    print_extension_list(gl_info.clientExtensions, l3);
     l3 = newItem(l2, l3, i18n("GLX extensions"));
-    print_extension_list(gli.glxExtensions, l3);
+    print_extension_list(gl_info.glxExtensions, l3);
 
     l2 = newItem(l1, l2, i18n("GLU"));
-    l3 = newItem(l2, i18n("GLU version"), gli.gluVersion);
+    l3 = newItem(l2, i18n("GLU version"), gl_info.gluVersion);
     l3 = newItem(l2, l3, i18n("GLU extensions"));
-    print_extension_list(gli.gluExtensions, l3);
+    print_extension_list(gl_info.gluExtensions, l3);
 }
 #else
 void print_egl(QTreeWidgetItem *l1, QTreeWidgetItem *l2)
@@ -598,10 +598,10 @@ void print_egl(QTreeWidgetItem *l1, QTreeWidgetItem *l2)
     QTreeWidgetItem *l3;
 
     l2 = newItem(l1, l2, i18n("EGL"));
-    l3 = newItem(l2, i18n("EGL Vendor"), gli.eglVendor);
-    l3 = newItem(l2, l3, i18n("EGL Version"), gli.eglVersion);
+    l3 = newItem(l2, i18n("EGL Vendor"), gl_info.eglVendor);
+    l3 = newItem(l2, l3, i18n("EGL Version"), gl_info.eglVersion);
     l3 = newItem(l2, l3, i18n("EGL Extensions"));
-    print_extension_list(gli.eglExtensions, l3);
+    print_extension_list(gl_info.eglExtensions, l3);
 }
 #endif
 
@@ -714,20 +714,20 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     }
 
     if (glXMakeCurrent(dpy, win, ctx)) {
-        gli.serverVendor = glXQueryServerString(dpy, scrnum, GLX_VENDOR);
-        gli.serverVersion = glXQueryServerString(dpy, scrnum, GLX_VERSION);
-        gli.serverExtensions = glXQueryServerString(dpy, scrnum, GLX_EXTENSIONS);
-        gli.clientVendor = glXGetClientString(dpy, GLX_VENDOR);
-        gli.clientVersion = glXGetClientString(dpy, GLX_VERSION);
-        gli.clientExtensions = glXGetClientString(dpy, GLX_EXTENSIONS);
-        gli.glxExtensions = glXQueryExtensionsString(dpy, scrnum);
-        gli.glVendor = (const char *) glGetString(GL_VENDOR);
-        gli.glRenderer = (const char *) glGetString(GL_RENDERER);
-        gli.glVersion = (const char *) glGetString(GL_VERSION);
-        gli.glExtensions = (const char *) glGetString(GL_EXTENSIONS);
-        gli.displayName = NULL;
-        gli.gluVersion = (const char *) gluGetString(GLU_VERSION);
-        gli.gluExtensions = (const char *) gluGetString(GLU_EXTENSIONS);
+        gl_info.serverVendor = glXQueryServerString(dpy, scrnum, GLX_VENDOR);
+        gl_info.serverVersion = glXQueryServerString(dpy, scrnum, GLX_VERSION);
+        gl_info.serverExtensions = glXQueryServerString(dpy, scrnum, GLX_EXTENSIONS);
+        gl_info.clientVendor = glXGetClientString(dpy, GLX_VENDOR);
+        gl_info.clientVersion = glXGetClientString(dpy, GLX_VERSION);
+        gl_info.clientExtensions = glXGetClientString(dpy, GLX_EXTENSIONS);
+        gl_info.glxExtensions = glXQueryExtensionsString(dpy, scrnum);
+        gl_info.glVendor = (const char *) glGetString(GL_VENDOR);
+        gl_info.glRenderer = (const char *) glGetString(GL_RENDERER);
+        gl_info.glVersion = (const char *) glGetString(GL_VERSION);
+        gl_info.glExtensions = (const char *) glGetString(GL_EXTENSIONS);
+        gl_info.displayName = NULL;
+        gl_info.gluVersion = (const char *) gluGetString(GLU_VERSION);
+        gl_info.gluExtensions = (const char *) gluGetString(GLU_EXTENSIONS);
 
         IsDirect = glXIsDirect(dpy, ctx);
 
@@ -755,14 +755,14 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     }
 
     if (eglMakeCurrent(egl_dpy, surf, surf, ctx)) {
-        gli.eglVendor = eglQueryString(egl_dpy, EGL_VENDOR);
-        gli.eglVersion = eglQueryString(egl_dpy, EGL_VERSION);
-        gli.eglExtensions = eglQueryString(egl_dpy, EGL_EXTENSIONS);
-        gli.glVendor = (const char *) glGetString(GL_VENDOR);
-        gli.glRenderer = (const char *) glGetString(GL_RENDERER);
-        gli.glVersion = (const char *) glGetString(GL_VERSION);
-        gli.glExtensions = (const char *) glGetString(GL_EXTENSIONS);
-        gli.displayName = NULL;
+        gl_info.eglVendor = eglQueryString(egl_dpy, EGL_VENDOR);
+        gl_info.eglVersion = eglQueryString(egl_dpy, EGL_VERSION);
+        gl_info.eglExtensions = eglQueryString(egl_dpy, EGL_EXTENSIONS);
+        gl_info.glVendor = (const char *) glGetString(GL_VENDOR);
+        gl_info.glRenderer = (const char *) glGetString(GL_RENDERER);
+        gl_info.glVersion = (const char *) glGetString(GL_VERSION);
+        gl_info.glExtensions = (const char *) glGetString(GL_EXTENSIONS);
+        gl_info.displayName = NULL;
 
         IsDirect = true;
         result = print_screen_info(l1, after);
