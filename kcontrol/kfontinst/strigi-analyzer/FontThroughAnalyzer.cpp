@@ -177,7 +177,7 @@ InputStream * FontThroughAnalyzer::connectInputStream(InputStream *in)
 #ifndef KFI_FC_NO_WIDTHS
                                                     FC_WIDTH, FcTypeInteger, width,
 #endif
-                                                    NULL);
+                                                    static_cast<char*>(NULL));
 
                 FcFontSet   *set = FcFontList(0, pat, os);
 
