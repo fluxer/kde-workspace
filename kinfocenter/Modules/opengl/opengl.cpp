@@ -118,6 +118,8 @@ QTreeWidgetItem *newItem(QTreeWidgetItem *parent, QString textCol1, QString text
     return newItem(parent, NULL, textCol1, textCol2);
 }
 
+static const int scrnum = 0;
+
 static bool IsDirect = false;
 
 static struct {
@@ -203,7 +205,7 @@ static bool get_dri_device() { return false; }
 
 #ifndef KCM_ENABLE_OPENGLES
 static void
-mesa_hack(Display *dpy, int scrnum)
+mesa_hack(Display *dpy)
 {
     int attribs[] = {
         GLX_RGBA,
@@ -605,7 +607,7 @@ void print_egl(QTreeWidgetItem *l1, QTreeWidgetItem *l2)
 }
 #endif
 
-static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, QTreeWidgetItem *l1, QTreeWidgetItem *after)
+static QTreeWidgetItem *get_gl_info(Display *dpy, Bool allowDirect, QTreeWidgetItem *l1, QTreeWidgetItem *after)
 {
     Window win;
     XSetWindowAttributes attr;
@@ -787,7 +789,6 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
 
     char *displayName = NULL;
     Display *dpy;
-    int numScreens, scrnum;
 
     dpy = XOpenDisplay(displayName);
     if (!dpy) {
@@ -808,28 +809,20 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
     l1->setExpanded(true);
     l1->setFlags(Qt::ItemIsEnabled);
 
-    numScreens = ScreenCount(dpy);
-
-    scrnum = 0;
-#ifdef KCMGL_MANY_SCREENS
-    for (; scrnum < numScreens; scrnum++)
-#endif
-    {
 #ifndef KCM_ENABLE_OPENGLES
-        mesa_hack(dpy, scrnum);
+    mesa_hack(dpy);
 #endif
 
-        l2 = get_gl_info(dpy, scrnum, true, l1, l2);
-        if (l2)
-            l2->setExpanded(true);
+    l2 = get_gl_info(dpy, true, l1, l2);
+    if (l2)
+        l2->setExpanded(true);
 
 #ifndef KCM_ENABLE_OPENGLES
-        if (IsDirect)
-            l2 = get_gl_info(dpy, scrnum, false, l1, l2);
+    if (IsDirect)
+        l2 = get_gl_info(dpy, false, l1, l2);
 #endif
 
-//   TODO      print_visual_info(dpy, scrnum, mode);
-    }
+    // TODO: print_visual_info(dpy, mode);
 
 #ifndef KCM_ENABLE_OPENGLES
     if (l2)
