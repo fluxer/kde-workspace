@@ -1,7 +1,7 @@
 /*
  *  opengl.cpp
  *
- *  Copyright (C) 2021 Ivailo Mone <xakepa10@gmail.com>
+ *  Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
  *  Copyright (C) 2008 Ivo Anjo <knuckles@gmail.com>
  *  Copyright (C) 2004 Ilya Korniyko <k_ilya@ukr.net>
  *  Adapted from Brian Paul's glxinfo from Mesa demos (http://www.mesa3d.org)
@@ -166,33 +166,17 @@ static void print_extension_list(const char *ext, QTreeWidgetItem *l1)
 {
     if (!ext || !ext[0])
         return;
-    QString qext = QString::fromLatin1(ext);
+
+    const QString qext = QString::fromLatin1(ext);
     QTreeWidgetItem *l2 = NULL;
 
-    int i, j = 0;
-    while (1) {
-        if (ext[j] == ' ' || ext[j] == 0) {
-            /* found end of an extension name */
-            const int len = j - i;
-            /* print the extension name between ext[i] and ext[j] */
-            if (!l2) {
-                l2 = newItem(l1, qext.mid(i, len));
-            } else {
-                l2 = newItem(l1, l2, qext.mid(i, len));
-            }
-            i=j;
-            if (ext[j] == 0) {
-                break;
-            } else {
-                i++;
-                j++;
-                if (ext[j] == 0) {
-                    break;
-                }
-            }
+    foreach(const QString &it, qext.split(QLatin1String(" "), QString::SkipEmptyParts)) {
+        if (!l2) {
+            l2 = newItem(l1, it);
+        } else {
+            l2 = newItem(l1, it);
         }
-        j++;
-   }
+    }
 }
 
 static bool get_dri_device();
@@ -462,7 +446,7 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
         { 1, GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS_ARB,   "MAX_VERTEX_TEXTURE_IMAGE_UNITS" },
         { 1, GL_MAX_TEXTURE_IMAGE_UNITS_ARB,          "MAX_TEXTURE_IMAGE_UNITS" },
         { 1, GL_MAX_TEXTURE_COORDS_ARB,               "MAX_TEXTURE_COORDS" },
-        { 0, 0, QString()}
+        { 0, 0, QString() }
     };
 #endif
 
@@ -486,8 +470,8 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
         { KCMGL_SIZE(frame_buffer_props), 0,                       frame_buffer_props, i18n("Frame buffer properties"), NULL },
         { KCMGL_SIZE(various_limits),     0,                       texture_limits,     i18n("Texturing"),               NULL },
         { KCMGL_SIZE(various_limits),     0,                       various_limits,     i18n("Various limits"),          NULL },
-        { KCMGL_SIZE(float_limits),       0,                       float_limits,       i18n("Points and lines"),        NULL},
-        { KCMGL_SIZE(stack_depth),        0,                       stack_depth,        i18n("Stack depth limits"),      NULL},
+        { KCMGL_SIZE(float_limits),       0,                       float_limits,       i18n("Points and lines"),        NULL },
+        { KCMGL_SIZE(stack_depth),        0,                       stack_depth,        i18n("Stack depth limits"),      NULL },
 #ifdef GL_ARB_vertex_program
         { KCMGL_SIZE(arb_vp),             GL_VERTEX_PROGRAM_ARB,   arb_vp,             "ARB_vertex_program",            "GL_ARB_vertex_program" },
 #endif
