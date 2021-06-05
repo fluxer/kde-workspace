@@ -35,7 +35,7 @@ namespace KIO
 
 #include <Plasma/DataEngine>
 
-#include "../dataengineconsumer.h"
+#include "../dataengineconsumer_p.h"
 #include "../ion.h"
 
 class WeatherData

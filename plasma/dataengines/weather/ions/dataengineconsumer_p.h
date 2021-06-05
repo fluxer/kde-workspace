@@ -27,36 +27,41 @@
 #include <kdebug.h>
 
 #include "plasma/dataenginemanager.h"
+#include <plasma/servicejob.h>
 
 namespace Plasma
 {
 
+class DataEngineConsumer;
+
+class ServiceMonitor : public QObject
+{
+    Q_OBJECT
+public:
+    ServiceMonitor(DataEngineConsumer *consumer);
+    ~ServiceMonitor();
+
+public Q_SLOTS:
+    void slotJobFinished(Plasma::ServiceJob *job);
+    void slotServiceReady(Plasma::Service *service);
+
+private:
+    DataEngineConsumer *m_consumer;
+};
+
 class DataEngineConsumer
 {
 public:
-    ~DataEngineConsumer()
-    {
-        foreach (const QString &engine, m_loadedEngines) {
-            DataEngineManager::self()->unloadEngine(engine);
-        }
-    }
-
-    DataEngine *dataEngine(const QString &name)
-    {
-        if (m_loadedEngines.contains(name)) {
-            return DataEngineManager::self()->engine(name);
-        }
-
-        DataEngine *engine = DataEngineManager::self()->loadEngine(name);
-        if (engine->isValid()) {
-            m_loadedEngines.insert(name);
-        }
-
-        return engine;
-    }
+    DataEngineConsumer();
+    ~DataEngineConsumer();
+    DataEngine *dataEngine(const QString &name);
 
 private:
     QSet<QString> m_loadedEngines;
+    QMap<Service*, QString> m_engineNameForService;
+    ServiceMonitor *m_monitor;
+
+    friend class ServiceMonitor;
 };
 
 } // namespace Plasma
