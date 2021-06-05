@@ -1,4 +1,5 @@
 if(OPENGL_FOUND AND OPENGL_GLU_FOUND)
+    set(KCM_ENABLE_OPENGL TRUE)
     include_directories(${OPENGL_INCLUDE_DIR} ${OPENGL_GLU_INCLUDE_DIR})
 endif()
 

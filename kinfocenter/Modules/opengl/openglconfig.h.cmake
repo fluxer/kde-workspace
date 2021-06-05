@@ -23,6 +23,7 @@
 #define OPENGLCONFIG_H
 
 #cmakedefine KCM_ENABLE_DRM
+#cmakedefine KCM_ENABLE_OPENGL
 #cmakedefine KCM_ENABLE_OPENGLES
 
 #endif
