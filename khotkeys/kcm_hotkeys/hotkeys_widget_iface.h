@@ -53,11 +53,11 @@ public:
 
 Q_SIGNALS:
 
-    virtual void changed(bool) const;
+    void changed(bool) const;
 
 public Q_SLOTS:
 
-    virtual void slotChanged(const QString &what = "Nothing" );
+    void slotChanged(const QString &what = "Nothing" );
 
 
 protected:
