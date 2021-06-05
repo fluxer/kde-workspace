@@ -710,6 +710,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     if (!ctx) {
         kWarning() << "glXCreateContext failed";
         XDestroyWindow(dpy, win);
+        XFree(visinfo);
         return result;
     }
 
@@ -743,6 +744,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     if (!ctx) {
         kWarning() << "eglCreateContext failed";
         XDestroyWindow(dpy, win);
+        XFree(visinfo);
         return result;
     }
 
@@ -751,6 +753,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
         kWarning() << "eglCreateWindowSurface failed";
         eglDestroyContext(egl_dpy, ctx);
         XDestroyWindow(dpy, win);
+        XFree(visinfo);
         return result;
     }
 
@@ -774,6 +777,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, int scrnum, Bool allowDirect, 
     eglDestroyContext(egl_dpy, ctx);
 #endif
     XDestroyWindow(dpy, win);
+    XFree(visinfo);
     return result;
 }
 
