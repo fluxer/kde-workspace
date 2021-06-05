@@ -708,6 +708,7 @@ static QTreeWidgetItem *get_egl_info(Display *dpy, QTreeWidgetItem *l1, QTreeWid
 
     if (!eglInitialize(egl_dpy, &egl_major, &egl_minor)) {
         kWarning() << "eglInitialize() failed";
+        eglTerminate(egl_dpy);
         return result;
     }
 
