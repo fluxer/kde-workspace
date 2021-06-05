@@ -63,7 +63,6 @@
 /*
     TODO:
         - separate opengl/glx/glu info query into functions
-        - fix OpenGL->Implementation specific (PFNGLGETPROGRAMIVARBPROC not defined)
         - Direct Rendering must be first
 */
 
@@ -342,9 +341,7 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
     };
 
     QTreeWidgetItem *l2 = NULL, *l3 = NULL;
-#if defined(PFNGLGETPROGRAMIVARBPROC)
     PFNGLGETPROGRAMIVARBPROC kcm_glGetProgramivARB = NULL;
-#endif
 
     #define KCMGL_FLOAT 128
     #define KCMGL_PROG 256
@@ -505,14 +502,14 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
 #endif
     };
 
-#if defined(GLX_ARB_get_proc_address) && defined(PFNGLGETPROGRAMIVARBPROC)
+#if defined(GLX_ARB_get_proc_address)
     if (getProcAddress && strstr(glExtensions, "GL_ARB_vertex_program"))
         kcm_glGetProgramivARB = (PFNGLGETPROGRAMIVARBPROC) glXGetProcAddressARB((const GLubyte *)"glGetProgramivARB");
 #else
     Q_UNUSED(getProcAddress);
 #endif
 
-    for (uint i = 0; i<KCMGL_SIZE(groups); i++) {
+    for (uint i = 0; i < KCMGL_SIZE(groups); i++) {
         if (groups[i].ext && !strstr(glExtensions, groups[i].ext)) continue;
 
         if (l2) {
@@ -528,7 +525,7 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
             GLint max[2] = { 0, 0 };
             GLfloat fmax[2] = { 0.0,0.0 };
 
-#if defined(PFNGLGETPROGRAMIVARBPROC) && defined(GL_ARB_vertex_program)
+#if defined(GL_ARB_vertex_program)
             bool tprog = cur_token->type & KCMGL_PROG;
             if (tprog && kcm_glGetProgramivARB) {
                 kcm_glGetProgramivARB(groups[i].type, cur_token->token, max);
@@ -550,7 +547,8 @@ print_limits(QTreeWidgetItem *l1, const char * glExtensions, bool getProcAddress
                     s = QString("%1 - %2").arg(fmax[0],0,'f',6).arg(fmax[1],0,'f',6);
                 } else if (tfloat && count == 1) {
                     s = QString::number(fmax[0],'f',6);
-                } else if (l3) {
+                }
+                if (l3) {
                     l3 = newItem(l2, l3, cur_token->name, s);
                 } else {
                     l3 = newItem(l2, cur_token->name, s);
