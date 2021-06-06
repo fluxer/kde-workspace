@@ -49,11 +49,11 @@ class FontThroughAnalyzerFactory : public StreamThroughAnalyzerFactory
 
     const RegisteredField * constFamilyNameField;
     const RegisteredField * constFoundryField;
+    const RegisteredField * constVersionField;
     const RegisteredField * constWeightField;
     const RegisteredField * constWidthField;
     const RegisteredField * constSpacingField;
     const RegisteredField * constSlantField;
-    const RegisteredField * constVersionField;
 
     const char * name() const
     {
@@ -70,17 +70,13 @@ class FontThroughAnalyzerFactory : public StreamThroughAnalyzerFactory
 
 void FontThroughAnalyzerFactory::registerFields(FieldRegister &reg)
 {
-#if 0
+    constFamilyNameField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fontFamily");
+    constFoundryField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#foundry");
+    constVersionField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#version");
     constWeightField=reg.registerField("font.weight", FieldRegister::stringType, 1, 0);
     constSlantField=reg.registerField("font.slant", FieldRegister::stringType, 1, 0);
     constWidthField=reg.registerField("font.width", FieldRegister::stringType, 1, 0);
     constSpacingField=reg.registerField("font.spacing", FieldRegister::stringType, 1, 0);
-#else
-#warning TODO: no NFO fields for font weight, slant, width and spacing
-#endif
-    constFamilyNameField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#fontFamily");
-    constFoundryField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#foundry");
-    constVersionField=reg.registerField("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#version");
 }
 
 class Factory : public AnalyzerFactoryFactory
@@ -265,19 +261,16 @@ void FontThroughAnalyzer::result(const QString &family, const QString &foundry, 
                                  const QString &width, const QString &spacing, const QString &slant,
                                  const QString &version, const QString &mime)
 {
-#if 0
-    analysisResult->addValue(factory->constWeightField, (const char *)weight.toUtf8());
-    analysisResult->addValue(factory->constSlantField, (const char *)slant.toUtf8());
-    analysisResult->addValue(factory->constWidthField, (const char *)width.toUtf8());
-    analysisResult->addValue(factory->constSpacingField, (const char *)spacing.toUtf8());
-#endif
-
     analysisResult->addValue(factory->constFamilyNameField, (const char *)family.toUtf8());
     analysisResult->addValue(factory->constFoundryField, foundry.isEmpty()
                                     ? (const char *)i18n(KFI_UNKNOWN_FOUNDRY).toUtf8()
                                     : (const char *)foundry.toUtf8());
     if(!version.isEmpty())
         analysisResult->addValue(factory->constVersionField, (const char *)version.toUtf8());
+    analysisResult->addValue(factory->constWeightField, (const char *)weight.toUtf8());
+    analysisResult->addValue(factory->constSlantField, (const char *)slant.toUtf8());
+    analysisResult->addValue(factory->constWidthField, (const char *)width.toUtf8());
+    analysisResult->addValue(factory->constSpacingField, (const char *)spacing.toUtf8());
 
     analysisResult->setMimeType((const char *)mime.toUtf8());
 }
