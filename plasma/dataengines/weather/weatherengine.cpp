@@ -102,7 +102,7 @@ void WeatherEngine::init()
                              status == Solid::Networking::Unknown);
     connect(Solid::Networking::notifier(), SIGNAL(statusChanged(Solid::Networking::Status)),
             this, SLOT(networkStatusChanged(Solid::Networking::Status)));
-    connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(updateIonList()));
+    connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(updateIonList(QStringList)));
 
     updateIonList();
     kDebug() << "init()";
