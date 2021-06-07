@@ -45,13 +45,8 @@
 # define REBOOT_CMD	"/sbin/reboot"
 #endif
 
-#if defined(BSD) || defined(__linux__)
-# define DEF_USER_PATH KDM_DEF_USER_PATH
-# define DEF_SYSTEM_PATH KDM_DEF_SYSTEM_PATH
-#else
-# define DEF_USER_PATH KDM_DEF_USER_PATH ":/usr/ucb"
-# define DEF_SYSTEM_PATH KDM_DEF_SYSTEM_PATH ":/etc:/usr/ucb"
-#endif
+#define DEF_USER_PATH KDM_DEF_USER_PATH
+#define DEF_SYSTEM_PATH KDM_DEF_SYSTEM_PATH
 
 #if 0 /*def HASXDMAUTH*/
 # define DEF_AUTH_NAME	"XDM-AUTHORIZATION-1,MIT-MAGIC-COOKIE-1"
