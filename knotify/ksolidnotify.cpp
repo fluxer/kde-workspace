@@ -98,10 +98,10 @@ void KSolidNotify::onDeviceRemoved(const QString &udi)
 
 bool KSolidNotify::isSafelyRemovable(const QString &udi)
 {
-	Solid::Device parent = m_devices[udi].parent();
-	if (parent.is<Solid::StorageDrive>()) 
+	Solid::Device device = m_devices[udi];
+	if (device.is<Solid::StorageDrive>())
 	{
-		Solid::StorageDrive *drive = parent.as<Solid::StorageDrive>();
+		Solid::StorageDrive *drive = device.as<Solid::StorageDrive>();
 		return (!drive->isInUse() && (drive->isHotpluggable() || drive->isRemovable()));
 	}
 	Solid::StorageAccess* access = m_devices[udi].as<Solid::StorageAccess>();
@@ -126,7 +126,7 @@ void KSolidNotify::connectSignals(Solid::Device* device)
 	}	
 	if (device->is<Solid::OpticalDisc>())
 	{
-		Solid::OpticalDrive *drive = device->parent().as<Solid::OpticalDrive>();
+		Solid::OpticalDrive *drive = device->as<Solid::OpticalDrive>();
 		connect(drive, SIGNAL(ejectDone(Solid::ErrorType, QVariant, const QString &)),
 				this, SLOT(storageEjectDone(Solid::ErrorType, QVariant , const QString &)));
 	}

@@ -367,7 +367,7 @@ void Trash::dropEvent(QGraphicsSceneDragDropEvent *event)
                     Solid::Device device = devList.first();
 
                     if (device.is<Solid::OpticalDisc>()) {
-                        device.parent().as<Solid::OpticalDrive>()->eject();
+                        device.as<Solid::OpticalDrive>()->eject();
                     } else {
                         device.as<Solid::StorageAccess>()->teardown();
                     }

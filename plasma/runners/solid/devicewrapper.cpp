@@ -174,7 +174,7 @@ void DeviceWrapper::runAction(QAction * action)
         }
     } else {
         if (isOpticalDisc() && m_forceEject) {
-            Solid::OpticalDrive *drive = m_device.parent().as<Solid::OpticalDrive>();
+            Solid::OpticalDrive *drive = m_device.as<Solid::OpticalDrive>();
             if (drive) {
                 drive->eject();
             }
@@ -194,7 +194,7 @@ void DeviceWrapper::runAction(QAction * action)
         }
 
         if (isOpticalDisc()) {
-            Solid::OpticalDrive *drive = m_device.parent().as<Solid::OpticalDrive>();
+            Solid::OpticalDrive *drive = m_device.as<Solid::OpticalDrive>();
             if (drive) {
                 drive->eject();
             }

@@ -42,9 +42,6 @@ void SolidDeviceJob::start()
     else if (operation == "unmount") {
         if (device.is<Solid::OpticalDisc>()) {
             Solid::OpticalDrive *drive = device.as<Solid::OpticalDrive>();
-            if (!drive) {
-                drive = device.parent().as<Solid::OpticalDrive>();
-            }
             if (drive) {
                 drive->eject();
             }

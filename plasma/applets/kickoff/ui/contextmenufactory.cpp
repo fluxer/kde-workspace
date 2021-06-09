@@ -298,7 +298,7 @@ void ContextMenuFactory::showContextMenu(QAbstractItemView *view,
         }
     } else if (ejectAction && result == ejectAction) {
         if (device.is<Solid::OpticalDisc>()) {
-            Solid::OpticalDrive *drive = device.parent().as<Solid::OpticalDrive>();
+            Solid::OpticalDrive *drive = device.as<Solid::OpticalDrive>();
             drive->eject();
         } else {
             access->teardown();
