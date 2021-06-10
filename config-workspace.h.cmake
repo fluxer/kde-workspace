@@ -68,6 +68,3 @@
 
 /* xkb resources directory */
 #cmakedefine XKBDIR "${XKBDIR}"
-
-/* Number of bits in a file offset, on hosts where this is settable. */
-#define _FILE_OFFSET_BITS 64

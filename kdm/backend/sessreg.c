@@ -35,7 +35,6 @@ from The Open Group.
 
 */
 
-#define _FILE_OFFSET_BITS 64
 #include "dm.h"
 #include "dm_error.h"
 
