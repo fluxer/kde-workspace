@@ -32,8 +32,6 @@
 #include "plotter.h"
 #include "temperature-offset-delegate.h"
 
-using namespace KUnitConversion;
-
 Temperature::Temperature(QObject *parent, const QVariantList &args)
     : SM::Applet(parent, args)
     , m_tempModel(0)
@@ -202,12 +200,12 @@ void Temperature::dataUpdated(const QString& source,
     QString temp;
     QString unit = data["units"].toString();
     double doubleValue = data["value"].toDouble() + temperatureOffset(source);
-    Value value = Value(doubleValue, unit);
+    KUnitConversion::Value value = KUnitConversion::Value(doubleValue, unit);
 
     if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
-        value = value.convertTo(Celsius);
+        value = value.convertTo(KUnitConversion::Celsius);
     } else {
-        value = value.convertTo(Fahrenheit);
+        value = value.convertTo(KUnitConversion::Fahrenheit);
     }
 
     value.round(1);
