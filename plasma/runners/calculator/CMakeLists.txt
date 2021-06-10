@@ -14,7 +14,7 @@ if ( QALCULATE_FOUND )
         qalculate_engine.cpp
     )
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS} -Wno-deprecated")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${KDE4_ENABLE_EXCEPTIONS}")
 endif( QALCULATE_FOUND )
 
 kde4_add_plugin(krunner_calculatorrunner ${krunner_calculatorrunner_SRCS})
