@@ -121,28 +121,27 @@ void SolStorageDevice::setDefaultDeviceText()
   const Solid::StorageDrive *stodev = interface<const Solid::StorageDrive>();
   if(!stodev) return;
   
-  QString storageType;
+  QString deviceText;
   switch (stodev->driveType())
   {
     case Solid::StorageDrive::HardDisk: 
-      storageType = i18n("Hard Disk Drive");  break;
+      deviceText = i18n("Hard Disk Drive");  break;
     case Solid::StorageDrive::CompactFlash:
-      storageType = i18n("Compact Flash Reader");  break;
+      deviceText = i18n("Compact Flash Reader");  break;
     case Solid::StorageDrive::SmartMedia:
-      storageType = i18n("Smart Media Reader");  break;
+      deviceText = i18n("Smart Media Reader");  break;
     case Solid::StorageDrive::SdMmc:
-      storageType = i18n("SD/MMC Reader"); break;
+      deviceText = i18n("SD/MMC Reader"); break;
     case Solid::StorageDrive::CdromDrive:
-      storageType = i18n("Optical Drive"); break;
+      deviceText = i18n("Optical Drive"); break;
     case Solid::StorageDrive::MemoryStick:
-      storageType = i18n("Memory Stick Reader"); break;
+      deviceText = i18n("Memory Stick Reader"); break;
     case Solid::StorageDrive::Xd:
-      storageType = i18n("xD Reader"); break;
+      deviceText = i18n("xD Reader"); break;
     default:
-      storageType = i18n("Unknown Drive"); 
+      deviceText = i18n("Unknown Drive");
   }
   
-  QString deviceText = storageType;
   setDeviceText(deviceText);
 }
 
