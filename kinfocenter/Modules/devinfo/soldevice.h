@@ -77,7 +77,7 @@ class SolDevice : public QTreeWidgetItem
 	IFace *dev = tiedDevice.as<const IFace>();
 	if(!dev)
 	{
-	  kDebug() << i18n("Device unable to be cast to correct device") << endl;
+	  kWarning() << i18n("Device unable to be cast to correct device");
 	}
 	return dev;
       } else {
@@ -89,7 +89,7 @@ class SolDevice : public QTreeWidgetItem
     {
 	IFace *dev = device.as<const IFace>();
 	if(!dev) {
-	  kDebug() << i18n("Device unable to be cast to correct device") << endl;
+	  kWarning() << i18n("Device unable to be cast to correct device");
 	}
 	return dev;
     }
