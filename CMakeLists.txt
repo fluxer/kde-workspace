@@ -78,6 +78,7 @@ if(Q_WS_X11)
     add_feature_info("libXft" X11_Xft_FOUND "The X11 font API library may be used by kfontinst KCM")
     add_feature_info("libXinerama" X11_Xinerama_FOUND "The X11 XINERAMA extension library may be used by ksplash")
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
+    add_feature_info("libxf86vmode" X11_xf86vmode_FOUND "The X video mode extension library used by powerdevil")
 
     if(NOT X11_Xdamage_FOUND)
         message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin.")

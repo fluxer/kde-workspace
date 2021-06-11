@@ -3,9 +3,15 @@
 
 
 ########################## UPower Backend #####################################
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/backends/upower
-                    ${X11_INCLUDE_DIR}
-                    ${X11_Xrandr_INCLUDE_PATH})
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/backends/upower
+    ${X11_INCLUDE_DIR}
+    ${X11_Xrandr_INCLUDE_PATH}
+)
+
+if(X11_xf86vmode_FOUND)
+    include_directories(${X11_xf86vmode_INCLUDE_PATH})
+endif()
 
 set(powerdevilupowerbackend_SRCS
     backends/upower/upowersuspendjob.cpp
@@ -33,6 +39,11 @@ ${CMAKE_CURRENT_SOURCE_DIR}/backends/upower/dbus/org.freedesktop.UPower.KbdBackl
 upower_kbdbacklight_interface)
 
 set(powerdevilupowerbackend_LIBS ${X11_LIBRARIES} ${QT_QTGUI_LIBRARY} ${X11_Xrandr_LIB} ${KDE4_KDEUI_LIBS})
+
+if(X11_xf86vmode_FOUND)
+    set(powerdevilupowerbackend_SRCS ${powerdevilupowerbackend_SRCS} backends/upower/xf86vmodegamma.cpp)
+    set(powerdevilupowerbackend_LIBS ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB})
+endif()
 
 ########################## Daemon variables ################################
 

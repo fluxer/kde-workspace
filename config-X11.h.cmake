@@ -39,3 +39,6 @@
 
 /* Define if you have the XRes extension */
 #cmakedefine HAVE_XRES 1
+
+/* Define if you have the xf86vmode extension */
+#cmakedefine HAVE_XF86VMODE

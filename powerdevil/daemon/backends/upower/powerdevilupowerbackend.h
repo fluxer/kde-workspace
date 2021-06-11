@@ -22,6 +22,8 @@
 #ifndef POWERDEVILUPOWERBACKEND_H
 #define POWERDEVILUPOWERBACKEND_H
 
+#include <config-X11.h>
+
 #include <powerdevilbackendinterface.h>
 
 #include <QtDBus/QDBusConnection>
@@ -44,6 +46,7 @@
 class UdevHelper;
 class XRandRX11Helper;
 class XRandrBrightness;
+class XF86VModeGamma;
 
 class KDE_EXPORT PowerDevilUPowerBackend : public PowerDevil::BackendInterface
 {
@@ -88,6 +91,9 @@ private:
     QMap<BrightnessControlType, float> m_cachedBrightnessMap;
     XRandrBrightness         *m_brightnessControl;
     XRandRX11Helper *m_randrHelper;
+#ifdef HAVE_XF86VMODE
+    XF86VModeGamma *m_gammaControl;
+#endif
 
     OrgFreedesktopUPowerInterface *m_upowerInterface;
     OrgFreedesktopUPowerKbdBacklightInterface *m_kbdBacklight;

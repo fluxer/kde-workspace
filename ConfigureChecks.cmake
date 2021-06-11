@@ -64,6 +64,7 @@ macro_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard
 macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # powerdevil
 macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 macro_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard
+macro_bool_to_01(X11_xf86vmode_FOUND HAVE_XF86VMODE) # powerdevil
 
 check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
 

@@ -17,13 +17,14 @@
  * 
  */
 
+#include <kdebug.h>
+
 #include "xrandrbrightness.h"
 
 #include <config-X11.h>
 
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <ctype.h>
 #include <string.h>
 #include <unistd.h>
@@ -33,15 +34,13 @@ XRandrBrightness::XRandrBrightness()
 {
     // init
     int major, minor;
-    if (!XRRQueryVersion (QX11Info::display(), &major, &minor))
-    {
-        qWarning("RandR extension missing");
+    if (!XRRQueryVersion (QX11Info::display(), &major, &minor)) {
+        kWarning() << "RandR extension missing";
         return;
     }
 
-    if (major < 1 || (major == 1 && minor < 2))
-    {
-        qWarning("RandR version %d.%d too old", major, minor);
+    if (major < 1 || (major == 1 && minor < 2)) {
+        kWarning() << "RandR version %d.%d too old" << major << minor;
         return;
     }
 
@@ -49,17 +48,15 @@ XRandrBrightness::XRandrBrightness()
     if (m_backlight == None)
         m_backlight = XInternAtom(QX11Info::display(), "BACKLIGHT", True);  // try with legacy atom
 
-    if (m_backlight == None)
-    {
-        qWarning("No outputs have backlight property");
+    if (m_backlight == None) {
+        kWarning() << "No outputs have backlight property";
         return;
     }
 
     m_resources = XRRGetScreenResources(QX11Info::display(), QX11Info::appRootWindow());
 
-    if (!m_resources)
-    {
-        qWarning("No available Randr resources");
+    if (!m_resources) {
+        kWarning() << "No available Randr resources";
         return;
     }
 }
@@ -77,8 +74,7 @@ bool XRandrBrightness::isSupported() const
         return false;
 
     // Verify that there are outputs that actually support backlight control...
-    for (int o = 0; o < m_resources->noutput; o++)
-    {
+    for (int o = 0; o < m_resources->noutput; o++) {
         if (backlight_get(m_resources->outputs[o]) != -1) {
             return true;
         }
@@ -91,20 +87,17 @@ float XRandrBrightness::brightness() const
 {
     float result = 0;
 
-    if (!m_resources)
+    if (!m_resources) {
         return result;
+    }
 
-    for (int o = 0; o < m_resources->noutput; o++)
-    {
+    for (int o = 0; o < m_resources->noutput; o++) {
         RROutput output = m_resources->outputs[o];
         double cur = backlight_get(output);
-        if (cur != -1)
-        {
+        if (cur != -1) {
             XRRPropertyInfo * info = XRRQueryOutputProperty(QX11Info::display(), output, m_backlight);
-            if (info)
-            {
-                if (info->range && info->num_values == 2)
-                {
+            if (info) {
+                if (info->range && info->num_values == 2) {
                     double min = info->values[0];
                     double max = info->values[1];
                     XFree(info);
@@ -126,17 +119,13 @@ void XRandrBrightness::setBrightness(float brightness)
     if (!m_resources)
         return;
 
-    for (int o = 0; o < m_resources->noutput; o++)
-    {
+    for (int o = 0; o < m_resources->noutput; o++) {
         RROutput output = m_resources->outputs[o];
         double cur = backlight_get(output);
-        if (cur != -1)
-        {
+        if (cur != -1) {
             XRRPropertyInfo * info = XRRQueryOutputProperty(QX11Info::display(), output, m_backlight);
-            if (info)
-            {
-                if (info->range && info->num_values == 2)
-                {
+            if (info) {
+                if (info->range && info->num_values == 2) {
                     double min = info->values[0];
                     double max = info->values[1];
 
@@ -164,13 +153,15 @@ long XRandrBrightness::backlight_get(RROutput output) const
     if (!m_backlight || XRRGetOutputProperty (QX11Info::display(), output, m_backlight,
                                               0, 4, False, False, None,
                                               &actual_type, &actual_format,
-                                              &nitems, &bytes_after, &prop) != Success)
+                                              &nitems, &bytes_after, &prop) != Success) {
         return -1;
+    }
 
-    if (actual_type != XA_INTEGER || nitems != 1 || actual_format != 32)
+    if (actual_type != XA_INTEGER || nitems != 1 || actual_format != 32) {
         value = -1;
-    else
+    } else {
         value = *((long *) prop);
+    }
     XFree (prop);
     return value;
 }

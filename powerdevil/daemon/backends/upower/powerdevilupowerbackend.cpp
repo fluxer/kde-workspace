@@ -37,6 +37,10 @@
 #include "upowersuspendjob.h"
 #include "login1suspendjob.h"
 
+#ifdef HAVE_XF86VMODE
+#include "xf86vmodegamma.h"
+#endif
+
 bool checkSystemdVersion(uint requiredVersion)
 {
 
@@ -57,8 +61,11 @@ bool checkSystemdVersion(uint requiredVersion)
 
 PowerDevilUPowerBackend::PowerDevilUPowerBackend(QObject* parent)
     : BackendInterface(parent),
-      m_brightnessControl(0), m_kbdMaxBrightness(0),
-      m_lidIsPresent(false), m_lidIsClosed(false), m_onBattery(false)
+      m_brightnessControl(0), m_randrHelper(0),
+#ifdef HAVE_XF86VMODE
+      m_gammaControl(0),
+#endif
+      m_kbdMaxBrightness(0), m_lidIsPresent(false), m_lidIsClosed(false), m_onBattery(false)
 {
 
 }
@@ -66,6 +73,9 @@ PowerDevilUPowerBackend::PowerDevilUPowerBackend(QObject* parent)
 PowerDevilUPowerBackend::~PowerDevilUPowerBackend()
 {
     delete m_brightnessControl;
+#ifdef HAVE_XF86VMODE
+    delete m_gammaControl;
+#endif
 }
 
 bool PowerDevilUPowerBackend::isAvailable()
@@ -150,6 +160,16 @@ void PowerDevilUPowerBackend::init()
         connect(m_randrHelper, SIGNAL(brightnessChanged()), this, SLOT(slotScreenBrightnessChanged()));
         screenBrightnessAvailable = true;
     }
+
+#ifdef HAVE_XF86VMODE
+    if (!m_brightnessControl->isSupported()) {
+        m_gammaControl = new XF86VModeGamma();
+        if (m_gammaControl->isSupported()) {
+            kDebug() << "Using X Video Mode";
+            screenBrightnessAvailable = true;
+        }
+    }
+#endif
 
     // Capabilities
     setCapabilities(SignalResumeFromSuspend);
@@ -306,9 +326,15 @@ float PowerDevilUPowerBackend::brightness(PowerDevil::BackendInterface::Brightne
 
     if (type == Screen) {
         if (m_brightnessControl->isSupported()) {
-            //kDebug() << "Calling xrandr brightness";
+            kDebug() << "Calling XRandr brightness";
             result = m_brightnessControl->brightness();
         }
+#ifdef HAVE_XF86VMODE
+        else if (m_gammaControl->isSupported()) {
+            kDebug() << "Calling XF86VidMode gamma";
+            result = m_gammaControl->gamma();
+        }
+#endif
         kDebug() << "Screen brightness: " << result;
     } else if (type == Keyboard) {
         kDebug() << "Kbd backlight brightness: " << m_kbdBacklight->GetBrightness();
@@ -326,6 +352,11 @@ bool PowerDevilUPowerBackend::setBrightness(float brightnessValue, PowerDevil::B
         if (m_brightnessControl->isSupported()) {
             m_brightnessControl->setBrightness(brightnessValue);
             success = true;
+#ifdef HAVE_XF86VMODE
+        } else if (m_gammaControl->isSupported()) {
+            m_gammaControl->setGamma(brightnessValue);
+            success = true;
+#endif
         } else {
             success = false;
         }
