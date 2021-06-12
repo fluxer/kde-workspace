@@ -28,8 +28,8 @@
 // for reference:
 // https://cgit.freedesktop.org/xorg/app/xgamma/plain/xgamma.c
 
-// 50 means normal screen gamma, anything lower than that should make it darker
-// and higher should make it brighter
+// normal gamma for X11 is 1.0, 50 is normal for this class since the UI for configuring screen
+// gamma uses slider that has min-max range of 1-100
 static const float xgammaratio = 50.0;
 
 XF86VModeGamma::XF86VModeGamma()
@@ -49,7 +49,7 @@ XF86VModeGamma::XF86VModeGamma()
     Q_UNUSED(eventbase);
     Q_UNUSED(errorbase);
 
-    // same version requirement as xgamma application
+    // almost the same version requirement as xgamma application
     if (majorversion < 2) {
         kWarning() << "XF86VidMode version too old" << majorversion << minorversion;
         return;
