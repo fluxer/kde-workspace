@@ -202,11 +202,14 @@ void Temperature::dataUpdated(const QString& source,
     double doubleValue = data["value"].toDouble() + temperatureOffset(source);
     KUnitConversion::Value value = KUnitConversion::Value(doubleValue, unit);
 
+#warning FIXME: temporary crash fix, KUnitConversion basically has to be rewriten
+#if 0
     if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
         value = value.convertTo(KUnitConversion::Celsius);
     } else {
         value = value.convertTo(KUnitConversion::Fahrenheit);
     }
+#endif
 
     value.round(1);
     if (plotter) {
