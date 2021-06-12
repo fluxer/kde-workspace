@@ -22,7 +22,7 @@ Using PAM
 ---------
 
 By default, PAM is automatically used, if it is found. Use
--DWITH_PAM=FALSE  to disable it.
+-DWITH_PAM=FALSE to disable it.
 
 If PAM is found, KDE usually uses the PAM service "kde". You may
 override it for all KDE programs by using -DKDE4_COMMON_PAM_SERVICE=<service>
@@ -31,14 +31,21 @@ one of KDM and kscreensaver (both use kcheckpass).
 
 Two files are provided but not installed - kde.pamd and kscreensaver.pamd.
 The usual location to put these files is /etc/pam.d/. You may want to edit
-the definitions in them to meet your needs. If the services are misconfigured,
-you will NOT be able to login via KDM and/or unlock a locked screen!
+the definitions in them to meet your needs, on BSD host for example you may
+have to substitue "pam_unix.so" with "pam_bsdauth.so". If the services are
+misconfigured, you will NOT be able to login via KDM and/or unlock a locked
+screen!
+
+To verify the configuration you can invoke kcheckpass directly and examine
+its exit status. If it is not 0 when correct password is entered (if
+password for the user is set) then you will have to thinker with the
+configuration. kcheckpass is usually installed in /usr/libexec/kde4.
+Authorization failure reason should be logged to /var/log/auth.log.
 
 If there is ever any doubt about which PAM service a program was
 compiled with, it can be determined by examining the PAM-generated 
 entries in the system log associated with kdm logins or kscreensaver
 authentication failures.
-
 
 PAM configuration files have four types of entries for each service:
 
@@ -56,7 +63,7 @@ configured, the default action of PAM is likely to be denial of service.
 
 Note: kdm implements PAM "session" support, which is not implemented in
 certain PAM-aware xdm's that it may be replacing (e.g., the Red Hat 
-Linux 5.x xdm did not implement it).  This may be configured to carry out 
+Linux 5.x xdm did not implement it).  This may be configured to carry out
 actions when a user opens or closes an kdm session, if a suitable PAM 
 module is available (e.g., mount and unmount user-specific filesystems).
 
