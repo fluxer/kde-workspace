@@ -304,11 +304,6 @@ int DesktopCorona::screenId(const QPoint &pos) const
     return Kephal::ScreenUtils::screenId(pos);
 }
 
-void DesktopCorona::processUpdateScripts()
-{
-    evaluateScripts(WorkspaceScripting::ScriptEngine::pendingUpdateScripts());
-}
-
 void DesktopCorona::evaluateScripts(const QStringList &scripts, bool isStartup)
 {
     foreach (const QString &script, scripts) {

@@ -67,7 +67,6 @@ public:
     int screenId(const QPoint &pos) const;
 
     bool loadDefaultLayoutScripts();
-    void processUpdateScripts();
 
 public Q_SLOTS:
     QRect availableScreenRect(int id) const;

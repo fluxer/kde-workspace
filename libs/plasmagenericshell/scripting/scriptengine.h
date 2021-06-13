@@ -45,7 +45,6 @@ public:
     ScriptEngine(Plasma::Corona *corona, QObject *parent = 0);
     ~ScriptEngine();
 
-    static QStringList pendingUpdateScripts();
     static QStringList defaultLayoutScripts();
 
     Plasma::Corona *corona() const;

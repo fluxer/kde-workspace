@@ -623,41 +623,6 @@ void ScriptEngine::exception(const QScriptValue &value)
     emit printError(value.toVariant().toString());
 }
 
-QStringList ScriptEngine::pendingUpdateScripts()
-{
-    const QString appName = KGlobal::activeComponent().aboutData()->appName();
-    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/updates/*.js");
-    QStringList scriptPaths;
-
-    if (scripts.isEmpty()) {
-        //kDebug() << "no update scripts";
-        return scriptPaths;
-    }
-
-    KConfigGroup cg(KGlobal::config(), "Updates");
-    QStringList performed = cg.readEntry("performed", QStringList());
-    const QString localDir = KGlobal::dirs()->localkdedir();
-    const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
-
-    foreach (const QString &script, scripts) {
-        if (performed.contains(script)) {
-            continue;
-        }
-
-        if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
-            kDebug() << "skipping user local script: " << script;
-            continue;
-        }
-
-        scriptPaths.append(script);
-        performed.append(script);
-    }
-
-    cg.writeEntry("performed", performed);
-    KGlobal::config()->sync();
-    return scriptPaths;
-}
-
 QStringList ScriptEngine::defaultLayoutScripts()
 {
     const QString appName = KGlobal::activeComponent().aboutData()->appName();

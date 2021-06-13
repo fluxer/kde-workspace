@@ -744,7 +744,6 @@ DesktopCorona* PlasmaApp::corona(bool createIfMissing)
         m_corona = c;
         c->setItemIndexMethod(QGraphicsScene::NoIndex);
         c->initializeLayout();
-        c->processUpdateScripts();
         c->checkScreens();
         foreach (Plasma::Containment *containment, c->containments()) {
             if (containment->screen() != -1 && containment->wallpaper()) {
