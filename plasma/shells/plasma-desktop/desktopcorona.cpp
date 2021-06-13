@@ -123,8 +123,6 @@ void DesktopCorona::checkAddPanelAction(const QStringList &sycocaChanges)
     m_addPanelsMenu = 0;
 
     KPluginInfo::List panelContainmentPlugins = Plasma::Containment::listContainmentsOfType("panel");
-    const QString constraint = QString("[X-Plasma-Shell] == '%1' and 'panel' ~in [X-Plasma-ContainmentCategories]")
-                                      .arg(KGlobal::mainComponent().componentName());
 
     if (panelContainmentPlugins.count() == 1) {
         m_addPanelAction = new QAction(i18n("Add Panel"), this);
@@ -380,7 +378,6 @@ void DesktopCorona::screenAdded(Kephal::Screen *s)
 void DesktopCorona::populateAddPanelsMenu()
 {
     m_addPanelsMenu->clear();
-    const KPluginInfo emptyInfo;
 
     KPluginInfo::List panelContainmentPlugins = Plasma::Containment::listContainmentsOfType("panel");
     QMap<QString, QPair<KPluginInfo, KService::Ptr> > sorted;
