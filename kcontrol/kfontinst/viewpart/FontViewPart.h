@@ -92,7 +92,6 @@ class CFontViewPart : public KParts::ReadOnlyPart
 //                       *itsMetaLabel;
     KIntNumInput       *itsFaceSelector;
     QAction            *itsChangeTextAction;
-    int                itsFace;
     KSharedConfigPtr   itsConfig;
     BrowserExtension   *itsExtension;
     QProcess           *itsProc;

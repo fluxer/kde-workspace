@@ -23,8 +23,7 @@
 #include "knotifyplugin.h"
 
 KNotifyPlugin::KNotifyPlugin(QObject *parent, const QVariantList &args)
-    : QObject(parent),
-      d(0)
+    : QObject(parent)
 {
     Q_UNUSED(args);
 }

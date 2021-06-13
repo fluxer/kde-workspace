@@ -114,7 +114,6 @@ private:
     static QAction *_exportAction, *_saveAsAction, *_mergeAction, *_importAction;
     static KAction *_newEntryAction, *_renameEntryAction, *_deleteEntryAction;
     static KAction *_copyPassAction;
-    QLabel*_details;
     QString _currentFolder;
     QMap<QString,QString> _currentMap; // save memory by storing
                                         // only the most recent map.
@@ -124,8 +123,6 @@ private:
     KMenu *_contextMenu;
     QTreeWidgetItem *_displayedItem; // used to find old item when selection just changed
     KActionCollection *_actionCollection;
-    KMenu *_controlMenu;
-    KMenu *_walletSubmenu;
     KTreeWidgetSearchLine *_searchLine;
     static QAction *_alwaysShowContentsAction, *_alwaysHideContentsAction;
     bool _alwaysShowContents;

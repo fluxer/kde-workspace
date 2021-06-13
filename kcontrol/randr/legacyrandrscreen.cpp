@@ -37,7 +37,6 @@
 LegacyRandRScreen::LegacyRandRScreen(int screenIndex)
 	: m_config(0L)
 	, m_screen(screenIndex)
-	, m_shownDialog(NULL)
 {
 	loadSettings();
 	setOriginal();

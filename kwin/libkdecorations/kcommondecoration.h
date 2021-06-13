@@ -33,6 +33,8 @@
 
 class KDecorationBridge;
 class KDecorationFactory;
+class KCommonDecorationButton;
+class KCommonDecorationWrapper;
 
 enum ButtonType {
     HelpButton = 0,
@@ -49,12 +51,6 @@ enum ButtonType {
     ItemCloseButton = 100, // Close only one tab
     ItemMenuButton // shows the window menu for one tab
 };
-
-class KCommonDecorationButton;
-
-class KCommonDecorationButtonPrivate;
-class KCommonDecorationPrivate;
-class KCommonDecorationWrapper;
 
 /**
  * This class eases development of decorations by implementing parts of KDecoration
@@ -436,8 +432,6 @@ private:
     bool closing; // for menu doubleclick closing...
 
     KCommonDecorationWrapper* wrapper;
-
-    KCommonDecorationPrivate *d;
 };
 
 /**
@@ -519,8 +513,6 @@ private:
     Qt::MouseButtons m_lastMouse;
 
     bool m_isLeft;
-
-    KCommonDecorationButtonPrivate *d;
 };
 
 /** @} */

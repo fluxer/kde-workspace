@@ -650,7 +650,7 @@ void AppletsContainer::resizeEvent(QGraphicsSceneResizeEvent *event)
 
 void AppletsContainer::syncBorders()
 {
-    qreal left, top, right, bottom = 0;
+    qreal left, top, right, bottom = 0.0;
     if (m_background->isValid()) {
         setFlag(QGraphicsItem::ItemHasNoContents, false);
 

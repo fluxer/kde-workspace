@@ -168,8 +168,8 @@ draw_pool (m_state *state)
           }
           break;
         }
-        if( state->show_threads )
-         if( state->modified[index] == 1 )
+        if( state->show_threads ) {
+         if( state->modified[index] == 1 ) {
           pos_x += 2;
           QPainter p(state->w);
           p.setPen( Qt::green );
@@ -179,6 +179,8 @@ draw_pool (m_state *state)
                          state->images, pos_x*state->char_width,
                          pos_y*state->char_height,
                          state->char_width, state->char_height );
+         }
+       }
        --state->modified[index];
       }
     }

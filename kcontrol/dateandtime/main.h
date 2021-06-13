@@ -38,7 +38,6 @@ public:
   void	load();
 
 private:
-  QTabWidget   *tab;
   Dtime	*dtime;
 };
 

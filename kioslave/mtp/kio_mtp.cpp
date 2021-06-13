@@ -823,7 +823,7 @@ void MTPSlave::mkdir ( const KUrl& url, int )
     kDebug ( KIO_MTP ) << url.path();
 
     QStringList pathItems = url.path().split ( QLatin1Char ( '/' ) , QString::SkipEmptyParts );
-	int pathDepth= pathItems.size();
+    int pathDepth= pathItems.size();
 
     if ( pathItems.size() > 2 && !getPath ( url.path() ).first )
     {
@@ -831,19 +831,18 @@ void MTPSlave::mkdir ( const KUrl& url, int )
 
         LIBMTP_mtpdevice_t *device;
         LIBMTP_file_t *file;
-		LIBMTP_devicestorage_t *storage;
-		int ret;
+        LIBMTP_devicestorage_t *storage;
+        int ret = 0;
 
         QPair<void*, LIBMTP_mtpdevice_t*> pair = getPath ( url.directory() );
 
-		if (pathDepth == 3)
-		{//the folder need to be created straight to a storage device 
-			storage= ( LIBMTP_devicestorage_t* ) pair.first;
-			device = pair.second;
-			ret = LIBMTP_Create_Folder ( device, dirName, 0xFFFFFFFF, storage->id );
-		}
-		else
-        if ( pair.first )
+        if (pathDepth == 3)
+        { //the folder need to be created straight to a storage device 
+            storage= ( LIBMTP_devicestorage_t* ) pair.first;
+            device = pair.second;
+            ret = LIBMTP_Create_Folder ( device, dirName, 0xFFFFFFFF, storage->id );
+        }
+        else if ( pair.first )
         {
             file = ( LIBMTP_file_t* ) pair.first;
             device = pair.second;
@@ -857,17 +856,17 @@ void MTPSlave::mkdir ( const KUrl& url, int )
                
             }
         }
-		if ( ret != 0 )
-			{
-				fileCache->addPath( url.path(), ret );
-				finished();
-				return;
-			}
-			else
-			{
-				LIBMTP_Dump_Errorstack ( device );
-				LIBMTP_Clear_Errorstack ( device );
-			}
+        if ( ret != 0 )
+        {
+            fileCache->addPath( url.path(), ret );
+            finished();
+            return;
+        }
+        else
+        {
+            LIBMTP_Dump_Errorstack ( device );
+            LIBMTP_Clear_Errorstack ( device );
+        }
     }
     else
     {

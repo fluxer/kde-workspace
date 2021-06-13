@@ -31,13 +31,12 @@
 class NetMon : public QWidget {
 Q_OBJECT
 public:
-	explicit NetMon(QWidget *parent, KConfig * config=0);
+	explicit NetMon(QWidget *parent);
 	void saveSettings() {
 	}
 	void loadSettings() {
 	}
 private:
-	KConfig *configFile;
 	QProcess *showmountProc;
 	QTreeWidget *list;
 	QLabel *version;

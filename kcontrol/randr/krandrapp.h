@@ -37,7 +37,6 @@ public:
 
 private:
 	KRandRSystemTray *m_tray;
-	RandRConfig *m_widget;
 	RandRDisplay *m_display;
 };
 

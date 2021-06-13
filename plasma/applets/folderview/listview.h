@@ -95,7 +95,6 @@ private:
     QPersistentModelIndex m_pressedIndex;
     bool m_dragInProgress;
     bool m_wordWrap;
-    bool m_drawShadows;
 };
 
 #endif // LISTVIEW_H

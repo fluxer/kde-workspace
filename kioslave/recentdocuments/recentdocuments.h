@@ -19,8 +19,6 @@ protected:
     virtual void stat(const KUrl& url);
     virtual void mimetype(const KUrl& url);
     virtual void del(const KUrl& url, bool isfile);
-private:
-    KDirWatch* m_recentDocWatch;
 };
 
 #endif

@@ -63,7 +63,6 @@ private:
 	QActionGroup *populateRates(KMenu *menu, const RateList &rates, float rate);
 
 	KHelpMenu* m_help;
-	bool m_popupUp;
 	QList<KMenu*> m_screenPopups;
 	KMenu* m_menu;
 	RandRDisplay *m_display;

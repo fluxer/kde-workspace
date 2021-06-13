@@ -49,7 +49,7 @@ class KDE_EXPORT CFcEngine
 {
     public:
 
-    struct Xft;
+    class Xft;
     
     struct TRange
     {

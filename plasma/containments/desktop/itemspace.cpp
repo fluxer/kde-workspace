@@ -132,7 +132,6 @@ void ItemSpace::checkPreferredPositions()
             ItemSpaceItem &item = group.m_groupItems[itemId];
 
             qreal push;
-            PushPower power;
 
             /*
               Push items back towards their perferred positions.

@@ -31,8 +31,8 @@
 
 #include <stdio.h>
 
-ImportsView::ImportsView(QWidget * parent, KConfig *config) :
-	QWidget(parent), configFile(config), list(this) {
+ImportsView::ImportsView(QWidget * parent) :
+	QWidget(parent), list(this) {
 	QBoxLayout *topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(KDialog::marginHint());
 	topLayout->setSpacing(KDialog::spacingHint());

@@ -135,9 +135,6 @@ namespace Oxygen
         /* used to trigger update at next paintEvent */
         bool _dirty;
 
-        //! dragged item
-        int draggedItem_;
-
         //! target item
         int targetItem_;
 

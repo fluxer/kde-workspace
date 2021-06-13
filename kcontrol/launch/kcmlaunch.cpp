@@ -229,8 +229,6 @@ LaunchConfig::checkChanged()
 
   c = conf.group("BusyCursorSettings");
   unsigned int savedCursorTimeout = c.readEntry( "Timeout", 30 );
-  bool savedBusyBlinking =c.readEntry("Blinking", false);
-  bool savedBusyBouncing =c.readEntry("Bouncing", true);
 
   c = conf.group("TaskbarButtonSettings");
   unsigned int savedTaskbarTimeout = c.readEntry( "Timeout", 30 );

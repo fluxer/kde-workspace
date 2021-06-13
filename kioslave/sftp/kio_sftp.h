@@ -106,9 +106,6 @@ private: // Private variables
 
   ssh_callbacks mCallbacks;
 
-  /** Version of the sftp protocol we are using. */
-  int sftpVersion;
-
   struct Status
   {
     int code;

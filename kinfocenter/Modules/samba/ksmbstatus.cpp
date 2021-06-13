@@ -34,8 +34,8 @@
 #define Before(ttf,in) in.left(in.indexOf(ttf))
 #define After(ttf,in)  (in.contains(ttf)?QString(in.mid(in.indexOf(ttf)+QString(ttf).length())):QString(""))
 
-NetMon::NetMon(QWidget * parent, KConfig *config) :
-	QWidget(parent), configFile(config), showmountProc(0), strShare(""), strUser(""), strGroup(""), strMachine(""), strSince(""), strPid(""), iUser(0), iGroup(0), iMachine(0), iPid(0) {
+NetMon::NetMon(QWidget * parent) :
+	QWidget(parent), showmountProc(0), strShare(""), strUser(""), strGroup(""), strMachine(""), strSince(""), strPid(""), iUser(0), iGroup(0), iMachine(0), iPid(0) {
 	QBoxLayout *topLayout = new QVBoxLayout(this);
 	topLayout->setMargin(KDialog::marginHint());
 	topLayout->setSpacing(KDialog::spacingHint());

@@ -174,9 +174,7 @@ CKCmFontInst::CKCmFontInst(QWidget *parent, const QVariantList&)
             : KCModule(FontInstallFactory::componentData(), parent),
               itsPreview(NULL),
               itsConfig(KFI_UI_CFG_FILE),
-              itsJob(NULL),
               itsProgress(NULL),
-              itsUpdateDialog(NULL),
               itsTempDir(NULL),
               itsPrintProc(NULL),
               itsDownloadFontsAct(NULL)

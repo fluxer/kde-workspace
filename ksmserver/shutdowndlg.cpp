@@ -67,7 +67,7 @@ KSMShutdownFeedback * KSMShutdownFeedback::s_pSelf = 0L;
 
 KSMShutdownFeedback::KSMShutdownFeedback()
  : QWidget( 0L, Qt::Popup ),
-    m_currentY( 0 ), initialized( false )
+    initialized( false )
 {
     setObjectName( "feedbackwidget" );
     setAttribute( Qt::WA_NoSystemBackground );

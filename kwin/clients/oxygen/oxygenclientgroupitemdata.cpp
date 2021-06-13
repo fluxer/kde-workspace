@@ -39,7 +39,6 @@ namespace Oxygen
         QList<ClientGroupItemData>(),
         _client( *parent ),
         _dirty( false ),
-        draggedItem_( NoItem ),
         targetItem_( NoItem )
     {
 

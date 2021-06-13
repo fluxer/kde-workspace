@@ -11,12 +11,7 @@
 
 #include <X11/Xlib.h>
 #include <QtGui/qx11info_x11.h>
-const int XFocusOut = FocusOut;
-const int XFocusIn = FocusIn;
-#undef FocusOut
-#undef FocusIn
-#undef KeyPress
-#undef KeyRelease
+#include <fixx11h.h>
 
 
 int main( int argc, char *argv[] )

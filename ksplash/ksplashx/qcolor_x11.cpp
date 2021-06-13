@@ -79,10 +79,10 @@ struct QColorData {
 #if 0
 typedef QIntDict<QColorData> QColorDict;
 typedef QIntDictIterator<QColorData> QColorDictIt;
-#endif
-static int	current_alloc_context = 0;	// current color alloc context
 static const uint col_std_dict = 419;
 static const uint col_large_dict = 18397;
+#endif
+static int      current_alloc_context = 0;      // current color alloc context
 
 class QColorScreenData {
 public:

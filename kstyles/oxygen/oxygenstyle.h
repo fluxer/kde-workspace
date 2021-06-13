@@ -707,7 +707,7 @@ namespace Oxygen
         void renderHeaderLines( const QRect&, const QPalette&, QPainter*, TileSet::Tiles ) const;
 
         void renderMenuItemRect( const QStyleOption* opt, const QRect& rect, const QPalette& pal, QPainter* p ) const
-        { renderMenuItemRect( opt, rect, pal.color(QPalette::Window), p ); }
+        { renderMenuItemRect( opt, rect, pal.color(QPalette::Window), pal, p ); }
 
         void renderMenuItemRect( const QStyleOption*, const QRect&, const QColor&, const QPalette&, QPainter* p ) const;
 

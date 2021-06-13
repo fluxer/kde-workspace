@@ -32,7 +32,7 @@
 class ImportsView : public QWidget {
 Q_OBJECT
 public:
-	explicit ImportsView(QWidget *parent, KConfig *config=0);
+	explicit ImportsView(QWidget *parent);
 	virtual ~ImportsView() {
 	}
 	void saveSettings() {
@@ -40,7 +40,6 @@ public:
 	void loadSettings() {
 	}
 private:
-	KConfig *configFile;
 	QTreeWidget list;
 	QTimer timer;
 private Q_SLOTS:

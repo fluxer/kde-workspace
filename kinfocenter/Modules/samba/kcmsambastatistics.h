@@ -83,7 +83,7 @@ private:
 class StatisticsView : public QWidget {
 Q_OBJECT
 public:
-	explicit StatisticsView(QWidget *parent=0, KConfig *config=0);
+	explicit StatisticsView(QWidget *parent=0);
 	virtual ~StatisticsView() {
 	}
 	void saveSettings() {
@@ -93,7 +93,6 @@ public:
 public Q_SLOTS:
 	void setListInfo(QTreeWidget *list, int nrOfFiles, int nrOfConnections);
 private:
-	KConfig *configFile;
 	QTreeWidget* dataList;
 	QTreeWidget* viewStatistics;
 	QLabel* connectionsL, *filesL;

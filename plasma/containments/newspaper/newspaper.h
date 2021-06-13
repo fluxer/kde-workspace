@@ -84,7 +84,6 @@ private:
     QGraphicsLinearLayout *m_externalLayout;
     Qt::Orientation m_orientation;
     bool m_expandAll;
-    Plasma::FrameSvg *m_background;
     AppletOverlay *m_appletOverlay;
     QTimer *m_updateSizeTimer;
     QTimer *m_relayoutTimer;

@@ -48,7 +48,7 @@ private:
 
   QCheckBox *systemBell, *customBell, *visibleBell;
   QRadioButton *invertScreen, *flashScreen;
-  QLabel    *soundLabel, *colorLabel;
+  QLabel    *soundLabel;
   QLineEdit *soundEdit;
   QPushButton *soundButton;
   KColorButton *colorButton;

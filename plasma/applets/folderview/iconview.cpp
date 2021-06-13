@@ -71,7 +71,6 @@ IconView::IconView(QGraphicsWidget *parent)
       m_numTextLines(2),
       m_layoutBroken(false),
       m_needPostLayoutPass(false),
-      m_positionsLoaded(false),
       m_doubleClick(false),
       m_dragInProgress(false),
       m_hoverDrag(false),

@@ -152,8 +152,6 @@ private:
 	int m_proposedSize;
 	int m_proposedRefreshRate;
 
-	KTimerDialog* m_shownDialog;
-
 };
 
 #endif

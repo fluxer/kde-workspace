@@ -154,7 +154,6 @@ protected:
 	
 private:	
 	RROutput m_id;
-	XRROutputInfo* m_info;
 	QString m_name;
 	QString m_alias;
 

@@ -38,9 +38,7 @@
 using namespace Plasma;
 
 SaverDesktop::SaverDesktop(QObject *parent, const QVariantList &args)
-    : Containment(parent, args),
-      m_lockDesktopAction(0),
-      m_appletBrowserAction(0)
+    : Containment(parent, args)
 {
     setContainmentType(CustomContainment);
     connect(this, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), SLOT(newApplet(Plasma::Applet*,QPointF)));

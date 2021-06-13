@@ -22,7 +22,6 @@
 
 #include <QPair>
 #include <QHash>
-#include <QTimer>
 #include <QThread>
 #include <QEventLoop>
 
@@ -38,7 +37,6 @@ class CachedDevice : public QObject
 
 private:
     qint32 timeout;
-    QTimer *timer;
     LIBMTP_mtpdevice_t* mtpdevice;
     LIBMTP_raw_device_t rawdevice;
 

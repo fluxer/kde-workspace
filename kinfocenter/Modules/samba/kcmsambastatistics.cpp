@@ -38,8 +38,8 @@
 #include <KGlobal>
 #include <KLocale>
 
-StatisticsView::StatisticsView(QWidget *parent, KConfig *config) :
-	QWidget(parent), configFile(config), dataList(0), connectionsCount(0), filesCount(0), calcCount(0) {
+StatisticsView::StatisticsView(QWidget *parent) :
+	QWidget(parent), dataList(0), connectionsCount(0), filesCount(0), calcCount(0) {
 	viewStatistics = new QTreeWidget( this );
 	connectionsL = new QLabel( i18n( "Connections: 0" ), this );
 	connectionsL->setTextInteractionFlags(Qt::TextSelectableByMouse);

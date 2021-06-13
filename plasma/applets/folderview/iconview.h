@@ -252,7 +252,6 @@ private:
     int m_numTextLines;
     bool m_layoutBroken;
     bool m_needPostLayoutPass;
-    bool m_positionsLoaded;
     bool m_doubleClick;
     bool m_dragInProgress;
     bool m_hoverDrag;

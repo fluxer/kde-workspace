@@ -26,7 +26,12 @@
 
 #include "GroupList.h"
 #include "JobRunner.h"
-#include <QtCore/QSet>
+#include <QSet>
+#include <QLabel>
+#include <QMenu>
+#include <QProcess>
+#include <QSplitter>
+#include <QComboBox>
 #include <KCModule>
 #include <KUrl>
 #include <KConfig>
@@ -38,11 +43,6 @@ class KTempDir;
 class KToggleAction;
 class KActionMenu;
 class KAction;
-#include <QLabel>
-#include <QMenu>
-#include <QProcess>
-#include <QSplitter>
-#include <QComboBox>
 
 namespace KFI
 {
@@ -124,14 +124,11 @@ class CKCmFontInst : public KCModule
                      *itsDeleteFontControl;
     CFontFilter      *itsFilter;
     QString          itsLastStatusBarMsg;
-    KIO::Job         *itsJob;
     KProgressDialog  *itsProgress;
-    CUpdateDialog    *itsUpdateDialog;
     KTempDir         *itsTempDir;
     QProcess         *itsPrintProc;
     QSet<QString>    itsDeletedFonts;
     KUrl::List       itsModifiedUrls;
-    CJobRunner       *itsRunner;
     QMenu            *itsPreviewMenu,
                      *itsPreviewListMenu;
     KAction          *itsDownloadFontsAct;

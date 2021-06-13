@@ -227,7 +227,7 @@ EFileType check(const QString &file, Family &fam)
                        foundry;
             quint32    style;
             int        index;
-            qulonglong ws;
+            qulonglong ws = 0;
             EFileType  type=(FcResultMatch!=FcPatternGetBool(pat, FC_SCALABLE, 0, &scalable) || !scalable)
                                 ? FILE_BITMAP : FILE_SCALABLE;
 

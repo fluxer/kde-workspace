@@ -78,8 +78,6 @@ private:
   QTimer	internalTimer;
 
   QString       timeServer;
-  int		BufI;
-  bool		refresh;
   bool		ontimeout;
 };
 

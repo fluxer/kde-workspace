@@ -100,8 +100,7 @@ private:
 
     QListWidget *mpUsageList;
     QComboBox *mpSizeBox;
-    QCheckBox *wordWrapCB, *underlineCB, *mpAnimatedCheck;
-    QTabWidget *m_pTabWidget;
+    QCheckBox *mpAnimatedCheck;
     QWidget *m_pTab1;
 };
 

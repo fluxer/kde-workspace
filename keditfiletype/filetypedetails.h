@@ -21,16 +21,16 @@
 #define FILETYPEDETAILS_H
 
 #include <QTabWidget>
-
-class KIconButton;
-class MimeTypeData;
-class TypesListItem;
 #include <QLabel>
 #include <QListWidget>
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QCheckBox>
 #include <QRadioButton>
+
+class KIconButton;
+class MimeTypeData;
+class TypesListItem;
 class KLineEdit;
 class KPushButton;
 class KServiceListWidget;
@@ -96,7 +96,6 @@ private:
   QGroupBox *m_autoEmbedBox;
   QButtonGroup *m_autoEmbedGroup;
   KServiceListWidget *embedServiceListWidget;
-  QRadioButton *m_rbOpenSeparate;
   QCheckBox *m_chkAskSave;
   QRadioButton *m_rbGroupSettings;
 };

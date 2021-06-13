@@ -47,7 +47,6 @@
 KRandRSystemTray::KRandRSystemTray(RandRDisplay *dpy, QWidget* parent)
 	: KStatusNotifierItem(parent),
 	  m_help(new KHelpMenu(parent, KGlobal::mainComponent().aboutData(), false, actionCollection())),
-	  m_popupUp(false),
 	  m_display(dpy)
 {
 	setIconByName("preferences-desktop-display-randr");

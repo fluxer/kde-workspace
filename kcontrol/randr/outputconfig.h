@@ -87,7 +87,6 @@ signals:
 
 private:
 	static bool isRelativeTo( QRect rect, QRect to, Relation rel );
-	int m_changes;
 	bool m_changed;
 	bool m_unified;
 	QPoint m_pos;

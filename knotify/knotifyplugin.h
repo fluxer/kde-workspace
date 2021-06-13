@@ -28,7 +28,6 @@
 
 #include "knotify_export.h"
 
-class KNotifyPluginPrivate;
 class KNotifyConfig;
 
 
@@ -98,9 +97,6 @@ class KNOTIFY_EXPORT KNotifyPlugin : public QObject
 		 * @param action is the action number.  zero for the default action
 		 */
 		void actionInvoked(int id , int action);
-
-	private:
-		KNotifyPluginPrivate *const d;
 
 };
 

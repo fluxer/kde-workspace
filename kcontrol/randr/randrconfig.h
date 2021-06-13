@@ -75,7 +75,6 @@ protected:
 private:
         void insufficientVirtualSize();
 	RandRDisplay *m_display;
-	bool m_firstLoad;
 	
 	SettingsContainer *m_container;
 	QList<CollapsibleWidget*> m_outputList;

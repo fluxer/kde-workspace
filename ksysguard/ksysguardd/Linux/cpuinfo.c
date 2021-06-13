@@ -214,7 +214,6 @@ void printCPUClock( const char* cmd )
 {
     int id;
     float clock = 0;
-    cmd = cmd; /*Silence warning*/
 
     if ( Dirty ) {
         processCpuInfo();
@@ -237,7 +236,6 @@ void printCPUxClockInfo( const char* cmd )
 
 void printCPUClockInfo( const char* cmd )
 {
-    cmd = cmd; /*Silence warning*/
     output( "CPU Clock Frequency\t0\t0\tMHz\n" );
 }
 
