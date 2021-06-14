@@ -2,9 +2,8 @@
 #
 # Note: This file is taken, and modified, from gucharmap - svn revision 1169
 #
-# usage: ./download-unicode-files.sh DIRECTORY
-# downloads following files from unicode.org to DIRECTORY or unicode/ (if
-# DIRECTORY is not presented):
+# usage: ./download-unicode-files.sh VERSION
+# downloads following files from unicode.org to unicode/:
 #  - UnicodeData.txt
 #  - Unihan.zip
 #  - NamesList.txt
@@ -12,14 +11,14 @@
 #  - Scripts.txt
 #
 
-# FILES='UnicodeData.txt Unihan.zip NamesList.txt Blocks.txt Scripts.txt'
+set -e
 
-FILES='UnicodeData.txt Blocks.txt Scripts.txt'
+FILES='UnicodeData.txt Unihan.zip NamesList.txt Blocks.txt Scripts.txt'
 
-mkdir -p ${1:-unicode} 
+mkdir -p unicode
 
 for x in $FILES; do
-	wget "http://www.unicode.org/Public/UNIDATA/$x" -O "${1:-unicode}/$x"
+	wget "https://unicode.org/Public/$1/ucd/$x" -O "unicode/$x"
 done
 
 echo 'Done.'
