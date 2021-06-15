@@ -35,21 +35,21 @@ namespace Oxygen
         switch( mode )
         {
             case StyleConfigData::MN_NEVER:
-            qApp->removeEventFilter( this );
-            setEnabled( false );
-            break;
-
-            default:
-            case StyleConfigData::MN_ALWAYS:
-            qApp->removeEventFilter( this );
-            setEnabled( true );
-            break;
+                qApp->removeEventFilter( this );
+                setEnabled( false );
+                break;
 
             case StyleConfigData::MN_AUTO:
-            qApp->removeEventFilter( this );
-            qApp->installEventFilter( this );
-            setEnabled( false );
-            break;
+                qApp->removeEventFilter( this );
+                qApp->installEventFilter( this );
+                setEnabled( false );
+                break;
+
+            case StyleConfigData::MN_ALWAYS:
+            default:
+                qApp->removeEventFilter( this );
+                setEnabled( true );
+                break;
 
         }
 
@@ -65,16 +65,17 @@ namespace Oxygen
         {
 
             case QEvent::KeyPress:
-            if( static_cast<QKeyEvent*>(event)->key() == Qt::Key_Alt )
-            { setEnabled( true ); }
-            break;
+                if( static_cast<QKeyEvent*>(event)->key() == Qt::Key_Alt )
+                { setEnabled( true ); }
+                break;
 
             case QEvent::KeyRelease:
-            if( static_cast<QKeyEvent*>(event)->key() == Qt::Key_Alt )
-            { setEnabled( false ); }
-            break;
+                if( static_cast<QKeyEvent*>(event)->key() == Qt::Key_Alt )
+                { setEnabled( false ); }
+                break;
 
-            default: break;
+            default:
+                break;
 
         }
 

@@ -181,18 +181,17 @@ namespace Oxygen
         {
             case QEvent::MouseButtonPress:
                 return mousePressEvent( object, event );
-            break;
 
             case QEvent::MouseMove:
                 if ( object == _target.data() ) return mouseMoveEvent( object, event );
-            break;
+                break;
 
             case QEvent::MouseButtonRelease:
                 if ( _target ) return mouseReleaseEvent( object, event );
-            break;
+                break;
 
             default:
-            break;
+                break;
 
         }
 

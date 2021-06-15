@@ -135,33 +135,34 @@ namespace Oxygen
             // TODO: possibly implement ZOrderChange event, to make sure that
             // the shadow is always painted on top
             case QEvent::ZOrderChange:
-            updateShadowZOrder( object );
-            break;
+                updateShadowZOrder( object );
+                break;
 
             case QEvent::Destroy:
-            if( isRegistered( object ) )
-            {
-                _registeredWidgets.remove( object );
-                removeShadow( object );
-            }
-            break;
+                if( isRegistered( object ) )
+                {
+                    _registeredWidgets.remove( object );
+                    removeShadow( object );
+                }
+                break;
 
             case QEvent::Hide:
-            hideShadows( object );
-            break;
+                hideShadows( object );
+                break;
 
             case QEvent::Show:
-            installShadow( object );
-            updateShadowGeometry( object );
-            updateShadowZOrder( object );
-            break;
+                installShadow( object );
+                updateShadowGeometry( object );
+                updateShadowZOrder( object );
+                break;
 
             case QEvent::Move:
             case QEvent::Resize:
-            updateShadowGeometry( object );
-            break;
+                updateShadowGeometry( object );
+                break;
 
-            default: break;
+            default:
+                break;
         }
 
         return QObject::eventFilter( object, event );

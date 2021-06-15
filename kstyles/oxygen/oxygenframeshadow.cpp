@@ -121,15 +121,16 @@ namespace Oxygen
             }
 
             case QEvent::Show:
-            updateShadowsGeometry( object );
-            update( object );
-            break;
+                updateShadowsGeometry( object );
+                update( object );
+                break;
 
             case QEvent::Resize:
-            updateShadowsGeometry( object );
-            break;
+                updateShadowsGeometry( object );
+                break;
 
-            default: break;
+            default:
+                break;
         }
 
         return QObject::eventFilter( object, event );
@@ -305,47 +306,47 @@ namespace Oxygen
             case QEvent::DragMove:
             case QEvent::DragLeave:
             case QEvent::Drop:
-            if( viewport )
-            {
-                setAcceptDrops(viewport->acceptDrops());
-                return viewport->QObject::event(e);
-            }
-            break;
+                if( viewport )
+                {
+                    setAcceptDrops(viewport->acceptDrops());
+                    return viewport->QObject::event(e);
+                }
+                break;
 
             case QEvent::Enter:
-            if( viewport ) {
-                setCursor(viewport->cursor());
-                setAcceptDrops(viewport->acceptDrops());
-            }
-            break;
+                if( viewport ) {
+                    setCursor(viewport->cursor());
+                    setAcceptDrops(viewport->acceptDrops());
+                }
+                break;
 
             case QEvent::ContextMenu:
-            if( viewport )
-            {
+                if( viewport )
+                {
 
-                QContextMenuEvent *me = static_cast<QContextMenuEvent *>(e);
-                QContextMenuEvent *ne = new QContextMenuEvent(me->reason(), parentWidget()->mapFromGlobal(me->globalPos()), me->globalPos());
-                QApplication::sendEvent(viewport, ne);
-                e->accept();
-                return true;
-            }
-            break;
+                    QContextMenuEvent *me = static_cast<QContextMenuEvent *>(e);
+                    QContextMenuEvent *ne = new QContextMenuEvent(me->reason(), parentWidget()->mapFromGlobal(me->globalPos()), me->globalPos());
+                    QApplication::sendEvent(viewport, ne);
+                    e->accept();
+                    return true;
+                }
+                break;
 
             case QEvent::MouseButtonPress: releaseMouse();
             case QEvent::MouseMove:
-            case QEvent::MouseButtonRelease:
-            if( viewport )
-            {
-                QMouseEvent *me = static_cast<QMouseEvent *>(e);
-                QMouseEvent *ne = new QMouseEvent(e->type(), parentWidget()->mapFromGlobal(me->globalPos()), me->globalPos(), me->button(), me->buttons(), me->modifiers());
-                QApplication::sendEvent(viewport, ne);
-                e->accept();
-                return true;
-            }
-            break;
+                case QEvent::MouseButtonRelease:
+                if( viewport )
+                {
+                    QMouseEvent *me = static_cast<QMouseEvent *>(e);
+                    QMouseEvent *ne = new QMouseEvent(e->type(), parentWidget()->mapFromGlobal(me->globalPos()), me->globalPos(), me->button(), me->buttons(), me->modifiers());
+                    QApplication::sendEvent(viewport, ne);
+                    e->accept();
+                    return true;
+                }
+                break;
 
             default:
-            break;
+                break;
         }
 
         e->ignore();
@@ -365,30 +366,30 @@ namespace Oxygen
         {
 
             case Top:
-            cr.setHeight( SHADOW_SIZE_TOP );
-            cr.adjust( -1, -1, 1, 0 );
-            break;
+                cr.setHeight( SHADOW_SIZE_TOP );
+                cr.adjust( -1, -1, 1, 0 );
+                break;
 
             case Left:
-            cr.setWidth(SHADOW_SIZE_LEFT);
-            cr.adjust(-1, SHADOW_SIZE_TOP, 0, -SHADOW_SIZE_BOTTOM);
-            break;
+                cr.setWidth(SHADOW_SIZE_LEFT);
+                cr.adjust(-1, SHADOW_SIZE_TOP, 0, -SHADOW_SIZE_BOTTOM);
+                break;
 
 
             case Bottom:
-            cr.setTop(cr.bottom() - SHADOW_SIZE_BOTTOM + 1);
-            cr.adjust( -1, 0, 1, 1 );
-            if( hasContrast() ) cr.adjust( 0, 0, 0, 1 );
-            break;
+                cr.setTop(cr.bottom() - SHADOW_SIZE_BOTTOM + 1);
+                cr.adjust( -1, 0, 1, 1 );
+                if( hasContrast() ) cr.adjust( 0, 0, 0, 1 );
+                break;
 
             case Right:
-            cr.setLeft(cr.right() - SHADOW_SIZE_RIGHT + 1);
-            cr.adjust(0, SHADOW_SIZE_TOP, 1, -SHADOW_SIZE_BOTTOM);
-            break;
+                cr.setLeft(cr.right() - SHADOW_SIZE_RIGHT + 1);
+                cr.adjust(0, SHADOW_SIZE_TOP, 1, -SHADOW_SIZE_BOTTOM);
+                break;
 
             case Unknown:
             default:
-            return;
+                return;
         }
 
         setGeometry(cr);
@@ -493,16 +494,16 @@ namespace Oxygen
         {
 
             case Top:
-            cr.setHeight( SHADOW_SIZE_TOP-3 );
-            break;
+                cr.setHeight( SHADOW_SIZE_TOP-3 );
+                break;
 
             case Bottom:
-            cr.setTop(cr.bottom() - SHADOW_SIZE_BOTTOM + 4);
-            break;
+                cr.setTop(cr.bottom() - SHADOW_SIZE_BOTTOM + 4);
+                break;
 
             case Unknown:
             default:
-            return;
+                return;
         }
 
         setGeometry(cr);

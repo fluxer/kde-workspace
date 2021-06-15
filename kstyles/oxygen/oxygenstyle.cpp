@@ -243,21 +243,23 @@ namespace Oxygen
 
             case Qt::Window:
             case Qt::Dialog:
+            {
+                // set background as styled
+                widget->setAttribute( Qt::WA_StyledBackground );
+                widget->installEventFilter( _topLevelManager );
 
-            // set background as styled
-            widget->setAttribute( Qt::WA_StyledBackground );
-            widget->installEventFilter( _topLevelManager );
+                // initialize connections to kGlobalSettings
+                /*
+                this musts be done in ::polish and not before,
+                in order to be able to detect Qt-KDE vs Qt-only applications
+                */
+                if( !_kGlobalSettingsInitialized ) initializeKGlobalSettings();
 
-            // initialize connections to kGlobalSettings
-            /*
-            this musts be done in ::polish and not before,
-            in order to be able to detect Qt-KDE vs Qt-only applications
-            */
-            if( !_kGlobalSettingsInitialized ) initializeKGlobalSettings();
+                break;
+            }
 
-            break;
-
-            default: break;
+            default:
+                break;
 
         }
 
@@ -451,12 +453,12 @@ namespace Oxygen
 
             case Qt::Window:
             case Qt::Dialog:
-            widget->removeEventFilter( this );
-            widget->setAttribute( Qt::WA_StyledBackground, false );
-            break;
+                widget->removeEventFilter( this );
+                widget->setAttribute( Qt::WA_StyledBackground, false );
+                break;
 
             default:
-            break;
+                break;
 
         }
 
@@ -559,16 +561,16 @@ namespace Oxygen
             // rely on QCommonStyle here
             case PM_SmallIconSize:
             case PM_ButtonIconSize:
-            return KIconLoader::global()->currentSize( KIconLoader::Small );
+                return KIconLoader::global()->currentSize( KIconLoader::Small );
 
             case PM_ToolBarIconSize:
-            return KIconLoader::global()->currentSize( KIconLoader::Toolbar );
+                return KIconLoader::global()->currentSize( KIconLoader::Toolbar );
 
             case PM_LargeIconSize:
-            return KIconLoader::global()->currentSize( KIconLoader::Dialog );
+                return KIconLoader::global()->currentSize( KIconLoader::Dialog );
 
             case PM_MessageBoxIconSize:
-            return KIconLoader::SizeHuge;
+                return KIconLoader::SizeHuge;
 
             case PM_DefaultFrameWidth:
             {
@@ -612,7 +614,7 @@ namespace Oxygen
             // push buttons
             /* HACK: needs special case for kcalc buttons, to prevent the application to set too small margins */
             case PM_ButtonMargin:
-            { return ( widget && widget->inherits( "KCalcButton" ) ) ? 8:5; }
+                return ( widget && widget->inherits( "KCalcButton" ) ) ? 8:5;
 
             case PM_MenuButtonIndicator:
             {
@@ -621,7 +623,7 @@ namespace Oxygen
             }
 
             case PM_ScrollBarExtent:
-            return StyleConfigData::scrollBarWidth() + 2;
+                return StyleConfigData::scrollBarWidth() + 2;
 
             case PM_ScrollBarSliderMin: return ScrollBar_MinimumSliderHeight;
 
@@ -757,15 +759,14 @@ namespace Oxygen
         {
 
             case SH_DialogButtonBox_ButtonsHaveIcons:
-            return KGlobalSettings::showIconsOnPushButtons();
+                return KGlobalSettings::showIconsOnPushButtons();
 
             case SH_GroupBox_TextLabelColor:
-            if( option ) return option->palette.color( QPalette::WindowText ).rgba();
-            else return qApp->palette().color( QPalette::WindowText ).rgba();
+                if( option ) return option->palette.color( QPalette::WindowText ).rgba();
+                else return qApp->palette().color( QPalette::WindowText ).rgba();
 
             case SH_ItemView_ActivateItemOnSingleClick:
-            return helper().config()->group( "KDE" ).readEntry( "SingleClick", KDE_DEFAULT_SINGLECLICK );
-            return false;
+                return helper().config()->group( "KDE" ).readEntry( "SingleClick", KDE_DEFAULT_SINGLECLICK );
 
             case SH_RubberBand_Mask:
             {
@@ -846,9 +847,11 @@ namespace Oxygen
 
             case SH_ProgressDialog_CenterCancelButton:
             case SH_MessageBox_CenterButtons:
-            return false;
+                return false;
 
-            default: return QCommonStyle::styleHint( hint, option, widget, returnData );
+            default:
+                return QCommonStyle::styleHint( hint, option, widget, returnData );
+
         }
 
     }
@@ -976,7 +979,8 @@ namespace Oxygen
                 } else return SC_ScrollBarAddLine;
             }
 
-            default: return QCommonStyle::hitTestComplexControl( control, option, point, widget );
+            default:
+                return QCommonStyle::hitTestComplexControl( control, option, point, widget );
         }
 
     }
@@ -1063,50 +1067,53 @@ namespace Oxygen
 
             fcn = &Style::drawCapacityBarControl;
 
-        } else switch( element ) {
+        } else {
+            switch( element )
+            {
 
-            case CE_ComboBoxLabel: fcn = &Style::drawComboBoxLabelControl; break;
-            case CE_DockWidgetTitle: fcn = &Style::drawDockWidgetTitleControl; break;
-            case CE_HeaderEmptyArea: fcn = &Style::drawHeaderEmptyAreaControl; break;
-            case CE_HeaderLabel: fcn = &Style::drawHeaderLabelControl; break;
-            case CE_HeaderSection: fcn = &Style::drawHeaderSectionControl; break;
-            case CE_MenuBarEmptyArea: fcn = &Style::emptyControl; break;
-            case CE_MenuBarItem: fcn = &Style::drawMenuBarItemControl; break;
-            case CE_MenuItem: fcn = &Style::drawMenuItemControl; break;
-            case CE_ProgressBar: fcn = &Style::drawProgressBarControl; break;
-            case CE_ProgressBarContents: fcn = &Style::drawProgressBarContentsControl; break;
-            case CE_ProgressBarGroove: fcn = &Style::drawProgressBarGrooveControl; break;
-            case CE_ProgressBarLabel: fcn = &Style::drawProgressBarLabelControl; break;
+                case CE_ComboBoxLabel: fcn = &Style::drawComboBoxLabelControl; break;
+                case CE_DockWidgetTitle: fcn = &Style::drawDockWidgetTitleControl; break;
+                case CE_HeaderEmptyArea: fcn = &Style::drawHeaderEmptyAreaControl; break;
+                case CE_HeaderLabel: fcn = &Style::drawHeaderLabelControl; break;
+                case CE_HeaderSection: fcn = &Style::drawHeaderSectionControl; break;
+                case CE_MenuBarEmptyArea: fcn = &Style::emptyControl; break;
+                case CE_MenuBarItem: fcn = &Style::drawMenuBarItemControl; break;
+                case CE_MenuItem: fcn = &Style::drawMenuItemControl; break;
+                case CE_ProgressBar: fcn = &Style::drawProgressBarControl; break;
+                case CE_ProgressBarContents: fcn = &Style::drawProgressBarContentsControl; break;
+                case CE_ProgressBarGroove: fcn = &Style::drawProgressBarGrooveControl; break;
+                case CE_ProgressBarLabel: fcn = &Style::drawProgressBarLabelControl; break;
 
-            /*
-            for CE_PushButtonBevel the only thing that is done is draw the PanelButtonCommand primitive
-            since the prototypes are identical we register the second directly in the control map: fcn = without
-            using an intermediate function
-            */
-            case CE_PushButtonBevel: fcn = &Style::drawPanelButtonCommandPrimitive; break;
-            case CE_PushButtonLabel: fcn = &Style::drawPushButtonLabelControl; break;
+                /*
+                for CE_PushButtonBevel the only thing that is done is draw the PanelButtonCommand primitive
+                since the prototypes are identical we register the second directly in the control map: fcn = without
+                using an intermediate function
+                */
+                case CE_PushButtonBevel: fcn = &Style::drawPanelButtonCommandPrimitive; break;
+                case CE_PushButtonLabel: fcn = &Style::drawPushButtonLabelControl; break;
 
-            case CE_RubberBand: fcn = &Style::drawRubberBandControl; break;
-            case CE_ScrollBarSlider: fcn = &Style::drawScrollBarSliderControl; break;
-            case CE_ScrollBarAddLine: fcn = &Style::drawScrollBarAddLineControl; break;
-            case CE_ScrollBarAddPage: fcn = &Style::drawScrollBarAddPageControl; break;
-            case CE_ScrollBarSubLine: fcn = &Style::drawScrollBarSubLineControl; break;
-            case CE_ScrollBarSubPage: fcn = &Style::drawScrollBarSubPageControl; break;
+                case CE_RubberBand: fcn = &Style::drawRubberBandControl; break;
+                case CE_ScrollBarSlider: fcn = &Style::drawScrollBarSliderControl; break;
+                case CE_ScrollBarAddLine: fcn = &Style::drawScrollBarAddLineControl; break;
+                case CE_ScrollBarAddPage: fcn = &Style::drawScrollBarAddPageControl; break;
+                case CE_ScrollBarSubLine: fcn = &Style::drawScrollBarSubLineControl; break;
+                case CE_ScrollBarSubPage: fcn = &Style::drawScrollBarSubPageControl; break;
 
-            case CE_ShapedFrame: fcn = &Style::drawShapedFrameControl; break;
-            case CE_SizeGrip: fcn = &Style::drawSizeGripControl; break;
-            case CE_Splitter: fcn = &Style::drawSplitterControl; break;
-            case CE_TabBarTabLabel: fcn = &Style::drawTabBarTabLabelControl; break;
+                case CE_ShapedFrame: fcn = &Style::drawShapedFrameControl; break;
+                case CE_SizeGrip: fcn = &Style::drawSizeGripControl; break;
+                case CE_Splitter: fcn = &Style::drawSplitterControl; break;
+                case CE_TabBarTabLabel: fcn = &Style::drawTabBarTabLabelControl; break;
 
-            // default tab style is 'SINGLE'
-            case CE_TabBarTabShape: fcn = _tabBarTabShapeControl; break;
+                // default tab style is 'SINGLE'
+                case CE_TabBarTabShape: fcn = _tabBarTabShapeControl; break;
 
-            case CE_ToolBoxTabLabel: fcn = &Style::drawToolBoxTabLabelControl; break;
-            case CE_ToolBoxTabShape: fcn = &Style::drawToolBoxTabShapeControl; break;
-            case CE_ToolButtonLabel: fcn = &Style::drawToolButtonLabelControl; break;
+                case CE_ToolBoxTabLabel: fcn = &Style::drawToolBoxTabLabelControl; break;
+                case CE_ToolBoxTabShape: fcn = &Style::drawToolBoxTabShapeControl; break;
+                case CE_ToolButtonLabel: fcn = &Style::drawToolButtonLabelControl; break;
 
-            default: break;
+                default: break;
 
+            }
         }
 
         if( !( fcn && ( this->*fcn )( option, painter, widget ) ) )
@@ -1541,27 +1548,27 @@ namespace Oxygen
 
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
-            r.translate( 0, -1 );
-            if( selected ) r.translate( 0, -1 );
-            break;
+                r.translate( 0, -1 );
+                if( selected ) r.translate( 0, -1 );
+                break;
 
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
-            r.translate( 0, -1 );
-            if( selected ) r.translate( 0, 1 );
-            break;
+                r.translate( 0, -1 );
+                if( selected ) r.translate( 0, 1 );
+                break;
 
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
-            r.translate( 0, 1 );
-            if( selected )  r.translate( -1, 0 );
-            break;
+                r.translate( 0, 1 );
+                if( selected )  r.translate( -1, 0 );
+                break;
 
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
-            r.translate( 0, -2 );
-            if( selected ) r.translate( 1, 0 );
-            break;
+                r.translate( 0, -2 );
+                if( selected ) r.translate( 1, 0 );
+                break;
 
             default: break;
 
@@ -1671,35 +1678,35 @@ namespace Oxygen
         {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
-            r = QRect( QPoint( paneRect.x(), paneRect.y() - h ), size );
-            r = visualRect( tabOpt->direction, tabOpt->rect, r );
-            if( !documentMode ) r.translate( 0, 3 );
-            break;
+                r = QRect( QPoint( paneRect.x(), paneRect.y() - h ), size );
+                r = visualRect( tabOpt->direction, tabOpt->rect, r );
+                if( !documentMode ) r.translate( 0, 3 );
+                break;
 
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
-            r = QRect( QPoint( paneRect.x(), paneRect.height() ), size );
-            r = visualRect( tabOpt->direction, tabOpt->rect, r );
-            if( !documentMode ) r.translate( 0, -3 );
-            else r.translate( 0, 2 );
-            break;
+                r = QRect( QPoint( paneRect.x(), paneRect.height() ), size );
+                r = visualRect( tabOpt->direction, tabOpt->rect, r );
+                if( !documentMode ) r.translate( 0, -3 );
+                else r.translate( 0, 2 );
+                break;
 
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
-            r = QRect( QPoint( paneRect.x() - w, paneRect.y() ), size );
-            if( !documentMode ) r.translate( 2, 0 );
-            else r.translate( -2, 0 );
-            break;
+                r = QRect( QPoint( paneRect.x() - w, paneRect.y() ), size );
+                if( !documentMode ) r.translate( 2, 0 );
+                else r.translate( -2, 0 );
+                break;
 
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
-            r = QRect( QPoint( paneRect.x() + paneRect.width(), paneRect.y() ), size );
-            if( !documentMode ) r.translate( -2, 0 );
-            else r.translate( 2, 0 );
-            break;
+                r = QRect( QPoint( paneRect.x() + paneRect.width(), paneRect.y() ), size );
+                if( !documentMode ) r.translate( -2, 0 );
+                else r.translate( 2, 0 );
+                break;
 
             default:
-            break;
+                break;
         }
 
         return r;
@@ -1727,35 +1734,35 @@ namespace Oxygen
         {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
-            r = QRect( QPoint( paneRect.right() - w + 1, paneRect.y() - h ), size );
-            r = visualRect( tabOpt->direction, tabOpt->rect, r );
-            if( !documentMode ) r.translate( 0, 3 );
-            break;
+                r = QRect( QPoint( paneRect.right() - w + 1, paneRect.y() - h ), size );
+                r = visualRect( tabOpt->direction, tabOpt->rect, r );
+                if( !documentMode ) r.translate( 0, 3 );
+                break;
 
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
-            r = QRect( QPoint( paneRect.right() - w + 1, paneRect.height() ), size );
-            r = visualRect( tabOpt->direction, tabOpt->rect, r );
-            if( !documentMode ) r.translate( 0, -3 );
-            else r.translate( 0, 2 );
-            break;
+                r = QRect( QPoint( paneRect.right() - w + 1, paneRect.height() ), size );
+                r = visualRect( tabOpt->direction, tabOpt->rect, r );
+                if( !documentMode ) r.translate( 0, -3 );
+                else r.translate( 0, 2 );
+                break;
 
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
-            r = QRect( QPoint( paneRect.x() - w, paneRect.bottom() - h + 1 ), size );
-            if( !documentMode ) r.translate( 2, 0 );
-            else r.translate( -2, 0 );
-            break;
+                r = QRect( QPoint( paneRect.x() - w, paneRect.bottom() - h + 1 ), size );
+                if( !documentMode ) r.translate( 2, 0 );
+                else r.translate( -2, 0 );
+                break;
 
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
-            r = QRect( QPoint( paneRect.x() + paneRect.width(), paneRect.bottom() - h + 1 ), size );
-            if( !documentMode ) r.translate( -2, 0 );
-            else r.translate( 2, 0 );
-            break;
+                r = QRect( QPoint( paneRect.x() + paneRect.width(), paneRect.bottom() - h + 1 ), size );
+                if( !documentMode ) r.translate( -2, 0 );
+                else r.translate( 2, 0 );
+                break;
 
             default:
-            break;
+                break;
         }
 
         return r;
@@ -1866,10 +1873,10 @@ namespace Oxygen
         switch( subControl )
         {
             case SC_ComboBoxFrame:
-            { return cb->frame ? r : QRect(); }
+                return cb->frame ? r : QRect();
 
             case SC_ComboBoxListBoxPopup:
-            { return r.adjusted( 1,0,-1,0 ); }
+                return r.adjusted( 1,0,-1,0 );
 
             case SC_ComboBoxArrow:
             case SC_ComboBoxEditField:
@@ -1969,7 +1976,7 @@ namespace Oxygen
 
             case SC_ScrollBarSubLine:
             case SC_ScrollBarAddLine:
-            return scrollBarInternalSubControlRect( option, subControl );
+                return scrollBarInternalSubControlRect( option, subControl );
 
             //The main groove area. This is used to compute the others...
             case SC_ScrollBarGroove:
@@ -2090,10 +2097,10 @@ namespace Oxygen
         {
 
             case SC_SpinBoxUp:
-            return handleRTL( option, QRect( buttonsLeft, r.top()+bmt, buttonsWidth, heightUp ) );
+                return handleRTL( option, QRect( buttonsLeft, r.top()+bmt, buttonsWidth, heightUp ) );
 
             case SC_SpinBoxDown:
-            return handleRTL( option, QRect( buttonsLeft, r.bottom()-bmb-heightDown, buttonsWidth, heightDown ) );
+                return handleRTL( option, QRect( buttonsLeft, r.bottom()-bmb-heightDown, buttonsWidth, heightDown ) );
 
             case SC_SpinBoxEditField:
             {
@@ -2102,10 +2109,10 @@ namespace Oxygen
             }
 
             case SC_SpinBoxFrame:
-            return sb->frame ? r : QRect();
+                return sb->frame ? r : QRect();
 
             default:
-            break;
+                break;
 
         }
 
@@ -2251,7 +2258,7 @@ namespace Oxygen
             case QStyleOptionMenuItem::TearOff:
             case QStyleOptionMenuItem::Margin:
             case QStyleOptionMenuItem::EmptyArea:
-            return contentsSize;
+                return contentsSize;
         }
 
         // apply the outermost margin.
@@ -3037,23 +3044,23 @@ namespace Oxygen
             {
                 case QTabBar::RoundedNorth:
                 case QTabBar::TriangularNorth:
-                r.setBottom( r.bottom()-6 );
-                break;
+                    r.setBottom( r.bottom()-6 );
+                    break;
 
                 case QTabBar::RoundedSouth:
                 case QTabBar::TriangularSouth:
-                r.setTop( r.top() + 6 );
-                break;
+                    r.setTop( r.top() + 6 );
+                    break;
 
                 case QTabBar::RoundedWest:
                 case QTabBar::TriangularWest:
-                r.setRight( r.right() - 6 );
-                break;
+                    r.setRight( r.right() - 6 );
+                    break;
 
                 case QTabBar::RoundedEast:
                 case QTabBar::TriangularEast:
-                r.setLeft( r.left() + 6 );
-                break;
+                    r.setLeft( r.left() + 6 );
+                    break;
 
                 default: break;
 
@@ -3482,19 +3489,19 @@ namespace Oxygen
                 switch( StyleConfigData::viewTriangularExpanderSize() )
                 {
                     case StyleConfigData::TE_TINY:
-                    size = ArrowTiny;
-                    break;
+                        size = ArrowTiny;
+                        break;
+
+                    case StyleConfigData::TE_NORMAL:
+                        penThickness = 1.6;
+                        offset = 0.0;
+                        size = ArrowNormal;
+                        break;
 
                     default:
                     case StyleConfigData::TE_SMALL:
-                    size = ArrowSmall;
-                    break;
-
-                    case StyleConfigData::TE_NORMAL:
-                    penThickness = 1.6;
-                    offset = 0.0;
-                    size = ArrowNormal;
-                    break;
+                        size = ArrowSmall;
+                        break;
 
                 }
 
@@ -3775,29 +3782,31 @@ namespace Oxygen
 
             case QTabBar::TriangularNorth:
             case QTabBar::RoundedNorth:
-            gradientRect.adjust( 0, 0, 0, -5 );
-            if( !reverseLayout ) gradientRect.translate( -GlowWidth,0 );
-            break;
+                gradientRect.adjust( 0, 0, 0, -5 );
+                if( !reverseLayout ) gradientRect.translate( -GlowWidth,0 );
+                break;
 
             case QTabBar::TriangularSouth:
             case QTabBar::RoundedSouth:
-            gradientRect.adjust( 0, 5, 0, 0 );
-            if( !reverseLayout ) gradientRect.translate( -GlowWidth,0 );
-            break;
+                gradientRect.adjust( 0, 5, 0, 0 );
+                if( !reverseLayout ) gradientRect.translate( -GlowWidth,0 );
+                break;
 
             case QTabBar::TriangularWest:
             case QTabBar::RoundedWest:
-            gradientRect.adjust( 0, 0, -5, 0 );
-            gradientRect.translate( 0,-GlowWidth );
-            break;
+                gradientRect.adjust( 0, 0, -5, 0 );
+                gradientRect.translate( 0,-GlowWidth );
+                break;
 
             case QTabBar::TriangularEast:
             case QTabBar::RoundedEast:
-            gradientRect.adjust( 5, 0, 0, 0 );
-            gradientRect.translate( 0,-GlowWidth );
-            break;
+                gradientRect.adjust( 5, 0, 0, 0 );
+                gradientRect.translate( 0,-GlowWidth );
+                break;
 
-            default: return true;
+            default:
+                return true;
+
         }
 
         // fade tabbar
@@ -3818,8 +3827,8 @@ namespace Oxygen
         grad.setColorAt( 0, Qt::transparent );
         grad.setColorAt( 0.6, Qt::black );
 
-	if( widget )
-          helper().renderWindowBackground( &pp, pm.rect(), widget, palette );
+        if( widget )
+            helper().renderWindowBackground( &pp, pm.rect(), widget, palette );
         pp.setCompositionMode( QPainter::CompositionMode_DestinationAtop );
         pp.fillRect( pm.rect(), QBrush( grad ) );
         pp.end();
@@ -6691,7 +6700,7 @@ namespace Oxygen
             }
 
             default:
-            break;
+                break;
         }
 
         const bool verticalTabs( _style.data()->isVerticalTab( tabOpt ) );
@@ -7424,13 +7433,13 @@ namespace Oxygen
         switch( StyleConfigData::tabStyle() )
         {
             case StyleConfigData::TS_PLAIN:
-            _tabBarTabShapeControl = &Style::drawTabBarTabShapeControl_Plain;
-            break;
+                _tabBarTabShapeControl = &Style::drawTabBarTabShapeControl_Plain;
+                break;
 
             default:
             case StyleConfigData::TS_SINGLE:
-            _tabBarTabShapeControl = &Style::drawTabBarTabShapeControl_Single;
-            break;
+                _tabBarTabShapeControl = &Style::drawTabBarTabShapeControl_Single;
+                break;
         }
 
         // frame focus
@@ -7949,25 +7958,26 @@ namespace Oxygen
         {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
-            fillRect.adjust( 4, 4, -4, -6 );
-            break;
+                fillRect.adjust( 4, 4, -4, -6 );
+                break;
 
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
-            fillRect.adjust( 4, 4, -4, -4 );
-            break;
+                fillRect.adjust( 4, 4, -4, -4 );
+                break;
 
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
-            fillRect.adjust( 4, 3, -5, -5 );
-            break;
+                fillRect.adjust( 4, 3, -5, -5 );
+                break;
 
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
-            fillRect.adjust( 5, 3, -4, -5 );
-            break;
+                fillRect.adjust( 5, 3, -4, -5 );
+                break;
 
-            default: return;
+            default:
+                return;
 
         }
 
@@ -7990,25 +8000,26 @@ namespace Oxygen
         {
             case QTabBar::RoundedNorth:
             case QTabBar::TriangularNorth:
-            highlight = QLinearGradient( fillRect.topLeft(), fillRect.bottomLeft() );
-            break;
+                highlight = QLinearGradient( fillRect.topLeft(), fillRect.bottomLeft() );
+                break;
 
             case QTabBar::RoundedSouth:
             case QTabBar::TriangularSouth:
-            highlight = QLinearGradient( fillRect.bottomLeft(), fillRect.topLeft() );
-            break;
+                highlight = QLinearGradient( fillRect.bottomLeft(), fillRect.topLeft() );
+                break;
 
             case QTabBar::RoundedEast:
             case QTabBar::TriangularEast:
-            highlight = QLinearGradient( fillRect.topRight(), fillRect.topLeft() );
-            break;
+                highlight = QLinearGradient( fillRect.topRight(), fillRect.topLeft() );
+                break;
 
             case QTabBar::RoundedWest:
             case QTabBar::TriangularWest:
-            highlight = QLinearGradient( fillRect.topLeft(), fillRect.topRight() );
-            break;
+                highlight = QLinearGradient( fillRect.topLeft(), fillRect.topRight() );
+                break;
 
-            default: return;
+            default:
+                return;
 
         }
 
@@ -8291,7 +8302,7 @@ namespace Oxygen
             }
 
             default:
-            break;
+                break;
         }
         painter->restore();
     }
@@ -8835,7 +8846,8 @@ namespace Oxygen
                 break;
             }
 
-            default: break;
+            default:
+                break;
 
         }
 
