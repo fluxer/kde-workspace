@@ -117,7 +117,7 @@ void KWalletExecuter::execute_kwallet(int toWalletPipe[2], int envSocket)
     sprintf(sockIn, "%d", envSocket);
 
     qDebug() << "Executing kwalletd";
-    QByteArray wallet = KStandardDirs::locate("exe", "kwalletd").toLocal8Bit();
+    QByteArray wallet = KStandardDirs::findExec("kwalletd").toLocal8Bit();
     char *args[] = {wallet.data(), (char*)"--pam-login", pipeInt, sockIn, NULL};
     execve(args[0], args, environ);
     qFatal("Couldn't execute kwalletd");

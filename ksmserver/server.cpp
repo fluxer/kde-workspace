@@ -456,7 +456,7 @@ Status SetAuthentication (int count, IceListenObj *listenObjs,
     fclose(addAuthFile);
     fclose(remAuthFile);
 
-    QString iceAuth = KGlobal::dirs()->findExe("iceauth");
+    QString iceAuth = KStandardDirs::findExe("iceauth");
     if (iceAuth.isEmpty())
     {
         qWarning("KSMServer: could not find iceauth");
@@ -484,7 +484,7 @@ void FreeAuthenticationData(int count, IceAuthDataEntry *authDataEntries)
 
     free (authDataEntries);
 
-    QString iceAuth = KGlobal::dirs()->findExe("iceauth");
+    QString iceAuth = KStandardDirs::findExe("iceauth");
     if (iceAuth.isEmpty())
     {
         qWarning("KSMServer: could not find iceauth");

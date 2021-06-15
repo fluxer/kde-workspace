@@ -21,6 +21,7 @@
 
 #include <QtCore/QFile>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QProcess>
 #include <QtDBus/QtDBus>
 
 #include <kaboutdata.h>
@@ -146,13 +147,17 @@ int main(int argc, char **argv)
       args.append("--incremental");
       args.append("--checkstamps");
       QString command = KStandardDirs::findExe(KBUILDSYCOCA_EXENAME);
+      if (command.isEmpty())
+      {
+         error(4, i18n("Could not find '%1' executable.", KBUILDSYCOCA_EXENAME));
+      }
       QDBusMessage reply = KToolInvocation::klauncher()->call("kdeinit_exec_wait", command, args, QStringList(), QString());
       if (reply.type() != QDBusMessage::ReplyMessage)
       {
          qWarning("Can not talk to klauncher!");
-         command = KGlobal::dirs()->findExe(command);
-         command += ' ' + args.join(" ");
-         system(command.toLocal8Bit());
+         if (QProcess::execute(command, args) != 0) {
+            error(5, i18n("Could not execute '%1'.", KBUILDSYCOCA_EXENAME));
+         }
       }
    }
 

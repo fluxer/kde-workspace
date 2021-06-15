@@ -193,7 +193,7 @@ void KHostName::changeStdDirs(const QByteArray &type)
    }
    if (result != 0)
    {
-       const QString lnusertemp = KGlobal::dirs()->findExe( "lnusertemp" );
+       const QString lnusertemp = KStandardDirs::findExe( "lnusertemp" );
        QProcess::execute( lnusertemp, QStringList() << type );
    }
 }
