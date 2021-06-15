@@ -40,6 +40,7 @@
 #include <KStandardAction>
 #include <KStandardDirs>
 #include <KTextEdit>
+#include <KTextEditor/EditorChooser>
 #include <KTextEditor/ConfigInterface>
 #include <KTextEditor/Document>
 #include <KTextEditor/View>
@@ -61,7 +62,7 @@ InteractiveConsole::InteractiveConsole(Plasma::Corona *corona, QWidget *parent)
     : KDialog(parent),
       m_corona(corona),
       m_splitter(new QSplitter(Qt::Vertical, this)),
-      m_editorPart(0),
+      m_docEditor(0),
       m_editor(0),
       m_loadAction(KStandardAction::open(this, SLOT(openScriptFile()), this)),
       m_saveAction(KStandardAction::saveAs(this, SLOT(saveScript()), this)),
@@ -125,29 +126,25 @@ InteractiveConsole::InteractiveConsole(Plasma::Corona *corona, QWidget *parent)
 
     editorLayout->addWidget(toolBar);
 
-    KService::List offers = KServiceTypeTrader::self()->query("KTextEditor/Document");
-    foreach (const KService::Ptr service, offers) {
-        m_editorPart = service->createInstance<KTextEditor::Document>(widget);
-        if (m_editorPart) {
-            m_editorPart->setHighlightingMode("JavaScript/PlasmaDesktop");
+    m_docEditor = KTextEditor::EditorChooser::editor()->createDocument(widget);
+    if (m_docEditor) {
+        m_docEditor->setHighlightingMode("JavaScript/PlasmaDesktop");
 
-            KTextEditor::View * view = m_editorPart->createView(widget);
-            view->setContextMenu(view->defaultContextMenu());
+        KTextEditor::View * view = m_docEditor->createView(widget);
+        view->setContextMenu(view->defaultContextMenu());
 
-            KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view);
-            if (config) {
-                config->setConfigValue("line-numbers", true);
-                config->setConfigValue("dynamic-word-wrap", true);
-            }
-
-            editorLayout->addWidget(view);
-            connect(m_editorPart, SIGNAL(textChanged(KTextEditor::Document*)),
-                    this, SLOT(scriptTextChanged()));
-            break;
+        KTextEditor::ConfigInterface *config = qobject_cast<KTextEditor::ConfigInterface*>(view);
+        if (config) {
+            config->setConfigValue("line-numbers", true);
+            config->setConfigValue("dynamic-word-wrap", true);
         }
+
+        editorLayout->addWidget(view);
+        connect(m_docEditor, SIGNAL(textChanged(KTextEditor::Document*)),
+                this, SLOT(scriptTextChanged()));
     }
 
-    if (!m_editorPart) {
+    if (!m_docEditor) {
         m_editor = new KTextEdit(widget);
         editorLayout->addWidget(m_editor);
         connect(m_editor, SIGNAL(textChanged()), this, SLOT(scriptTextChanged()));
@@ -226,10 +223,10 @@ void InteractiveConsole::modeChanged()
 
 void InteractiveConsole::loadScript(const QString &script)
 {
-    if (m_editorPart) {
-        m_editorPart->closeUrl(false);
-        if (m_editorPart->openUrl(script)) {
-            m_editorPart->setHighlightingMode("JavaScript/PlasmaDesktop");
+    if (m_docEditor) {
+        m_docEditor->closeUrl(false);
+        if (m_docEditor->openUrl(script)) {
+            m_docEditor->setHighlightingMode("JavaScript/PlasmaDesktop");
             return;
         }
     } else {
@@ -246,8 +243,8 @@ void InteractiveConsole::loadScript(const QString &script)
 
 void InteractiveConsole::showEvent(QShowEvent *)
 {
-    if (m_editorPart) {
-        m_editorPart->activeView()->setFocus();
+    if (m_docEditor) {
+        m_docEditor->activeView()->setFocus();
     } else {
         m_editor->setFocus();
     }
@@ -280,7 +277,7 @@ void InteractiveConsole::print(const QString &string)
 
 void InteractiveConsole::scriptTextChanged()
 {
-    const bool enable = m_editorPart ? !m_editorPart->isEmpty() : !m_editor->document()->isEmpty();
+    const bool enable = m_docEditor ? !m_docEditor->isEmpty() : !m_editor->document()->isEmpty();
     m_saveAction->setEnabled(enable);
     m_clearAction->setEnabled(enable);
     m_executeAction->setEnabled(enable);
@@ -321,10 +318,10 @@ void InteractiveConsole::openScriptUrlSelected(int result)
 
 void InteractiveConsole::loadScriptFromUrl(const KUrl &url)
 {
-    if (m_editorPart) {
-        m_editorPart->closeUrl(false);
-        m_editorPart->openUrl(url);
-        m_editorPart->setHighlightingMode("JavaScript/PlasmaDesktop");
+    if (m_docEditor) {
+        m_docEditor->closeUrl(false);
+        m_docEditor->openUrl(url);
+        m_docEditor->setHighlightingMode("JavaScript/PlasmaDesktop");
     } else {
         m_editor->clear();
         m_editor->setEnabled(false);
@@ -350,8 +347,8 @@ void InteractiveConsole::scriptFileDataRecvd(KIO::Job *job, const QByteArray &da
 
 void InteractiveConsole::saveScript()
 {
-    if (m_editorPart) {
-        m_editorPart->documentSaveAs();
+    if (m_docEditor) {
+        m_docEditor->documentSaveAs();
         return;
     }
 
@@ -388,8 +385,8 @@ void InteractiveConsole::saveScriptUrlSelected(int result)
 
 void InteractiveConsole::saveScript(const KUrl &url)
 {
-    if (m_editorPart) {
-        m_editorPart->saveAs(url);
+    if (m_docEditor) {
+        m_docEditor->saveAs(url);
     } else {
         m_editor->setEnabled(false);
 
@@ -460,7 +457,7 @@ void InteractiveConsole::evaluateScript()
         connect(&scriptEngine, SIGNAL(print(QString)), this, SLOT(print(QString)));
         connect(&scriptEngine, SIGNAL(printError(QString)), this, SLOT(print(QString)));
         connect(&scriptEngine, SIGNAL(createPendingPanelViews()), PlasmaApp::self(), SLOT(createWaitingPanels()));
-        scriptEngine.evaluateScript(m_editorPart ? m_editorPart->text() : m_editor->toPlainText());
+        scriptEngine.evaluateScript(m_docEditor ? m_docEditor->text() : m_editor->toPlainText());
     } else if (m_mode == KWinConsole) {
         QDBusMessage message = QDBusMessage::createMethodCall(s_kwinService, "/Scripting", QString(), "loadScript");
         QList<QVariant> arguments;
@@ -492,8 +489,8 @@ void InteractiveConsole::evaluateScript()
 
 void InteractiveConsole::clearEditor()
 {
-    if (m_editorPart) {
-        m_editorPart->clear();
+    if (m_docEditor) {
+        m_docEditor->clear();
     } else {
         m_editor->clear();
     }

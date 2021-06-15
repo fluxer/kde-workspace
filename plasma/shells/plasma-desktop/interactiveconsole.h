@@ -88,7 +88,7 @@ private:
 
     Plasma::Corona *m_corona;
     QSplitter *m_splitter;
-    KTextEditor::Document *m_editorPart;
+    KTextEditor::Document *m_docEditor;
     KTextEdit *m_editor;
     QTextBrowser *m_output;
     KAction *m_loadAction;
