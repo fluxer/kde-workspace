@@ -37,8 +37,8 @@
 #include <klineedit.h>
 #include <klocale.h>
 #include <kpushbutton.h>
-#include <kservicetypeprofile.h>
 #include <kstandarddirs.h>
+#include <kpluginfactory.h>
 #include <kicon.h>
 #include <ksycoca.h>
 
@@ -48,7 +48,7 @@
 #include "filegroupdetails.h"
 
 
-K_PLUGIN_FACTORY(FileTypesViewFactory, registerPlugin<FileTypesView>();)
+K_PLUGIN_FACTORY(FileTypesViewFactory, registerPlugin<FileTypesView>(););
 K_EXPORT_PLUGIN(FileTypesViewFactory("filetypes"))
 
 
@@ -77,7 +77,6 @@ FileTypesView::FileTypesView(QWidget *parent, const QVariantList &)
     " filename patterns; in these cases, KDE is able to determine the"
     " MIME-type by directly examining the contents of the file.</p>"));
 
-  KServiceTypeProfile::setConfigurationMode();
   setButtons(Help | Apply);
   QString wtstr;
 
