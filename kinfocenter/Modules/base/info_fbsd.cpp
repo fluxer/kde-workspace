@@ -18,12 +18,6 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-#ifdef HAVE_DEVINFO_H
-extern "C" {
-#include <devinfo.h>
-}
-#endif
-
 #include <string.h>
 
 #include <QMap>
@@ -35,12 +29,20 @@ void ProcessChildren(QString name);
 
 #ifdef HAVE_DEVINFO_H
 extern "C" {
+#include <devinfo.h>
+}
+
+extern "C" {
     int print_irq(struct devinfo_rman *rman, void *arg);
     int print_dma(struct devinfo_rman *rman, void *arg);
     int print_ioports(struct devinfo_rman *rman, void *arg);
     int print_resource(struct devinfo_res *res, void *arg);
 }
 #endif
+
+#ifdef HAVE_PCIUTILS
+#include "kpci.h"
+#endif //HAVE_PCIUTILS
 
 bool GetInfo_IRQ(QTreeWidget* tree) {
 #ifdef HAVE_DEVINFO_H
@@ -125,6 +127,12 @@ bool GetInfo_SCSI(QTreeWidget* tree) {
 }
 
 bool GetInfo_PCI(QTreeWidget* tree) {
+#ifdef HAVE_PCIUTILS
+    if (GetInfo_PCIUtils(tree)) {
+        return true;
+    }
+#endif //HAVE_PCIUTILS
+
     FILE *pipe;
     QString s;
     QByteArray cmd;
