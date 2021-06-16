@@ -79,7 +79,7 @@ void Folder::init(bool system, bool systemBus)
         itsLocation=Misc::getFolder(Misc::dirSyntax(QDir::homePath()+"/.fonts/"), Misc::dirSyntax(QDir::homePath()), dirs);
     }
     else
-        itsLocation=KFI_DEFAULT_SYS_FONTS_FOLDER;
+        itsLocation=KFONTINST_SYSTEM_FONTS_DIR;
 
     if((!system && !systemBus) || (system && systemBus))
         FcConfig::addDir(itsLocation, system);
@@ -90,7 +90,7 @@ void Folder::init(bool system, bool systemBus)
         QString fileName("/" DISABLED_FONTS ".xml");
 
         if(system)
-            itsDisabledCfg.name=QString::fromLatin1(KFI_ROOT_CFG_DIR)+fileName;
+            itsDisabledCfg.name=QString::fromLatin1(KFONTINST_ROOT_FONTS_DIR)+fileName;
         else
         {
             QString path=KGlobal::dirs()->localxdgconfdir();
