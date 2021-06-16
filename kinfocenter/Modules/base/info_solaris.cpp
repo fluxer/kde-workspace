@@ -16,25 +16,25 @@
 #include <time.h>
 
 bool GetInfo_IRQ(QTreeWidget*) {
-	return false;
+    return false;
 }
 
 bool GetInfo_DMA(QTreeWidget*) {
-	return false;
+    return false;
 }
 
 bool GetInfo_PCI(QTreeWidget*) {
-	return false;
+    return false;
 }
 
 bool GetInfo_IO_Ports(QTreeWidget*) {
-	return false;
+    return false;
 }
 
 bool GetInfo_SCSI(QTreeWidget*) {
-	return false;
+    return false;
 }
 
 bool GetInfo_XServer_and_Video(QTreeWidget* tree) {
-	return GetInfo_XServer_Generic(tree);
+    return GetInfo_XServer_Generic(tree);
 }

@@ -39,36 +39,38 @@
 #include <kglobal.h>
 #include <kseparator.h>
 
-K_PLUGIN_FACTORY(KCMPciFactory,
-		registerPlugin<KCMPci>();
-)
+#ifdef HAVE_PCIUTILS
+#include "kpci.h"
+#endif //HAVE_PCIUTILS
+
+K_PLUGIN_FACTORY(KCMPciFactory, registerPlugin<KCMPci>();)
 K_EXPORT_PLUGIN(KCMPciFactory("kcm_pci"))
 
 KCMPci::KCMPci(QWidget *parent, const QVariantList &) :
-	KCModule(KCMPciFactory::componentData(), parent) {
+    KCModule(KCMPciFactory::componentData(), parent) {
 
-	KAboutData *about = new KAboutData(I18N_NOOP("kcm_pci"), 0,
-			ki18n("KDE PCI Information Control Module"),
-			0, KLocalizedString(), KAboutData::License_GPL,
-			ki18n(	"(c) 2008 Nicolas Ternisien"
-					"(c) 1998 - 2002 Helge Deller"));
+    KAboutData *about = new KAboutData(I18N_NOOP("kcm_pci"), 0,
+                    ki18n("KDE PCI Information Control Module"),
+                    0, KLocalizedString(), KAboutData::License_GPL,
+                    ki18n("(c) 2008 Nicolas Ternisien"
+                          "(c) 1998 - 2002 Helge Deller"));
 
-	about->addAuthor(ki18n("Nicolas Ternisien"), KLocalizedString(), "nicolas.ternisien@gmail.com");
-	about->addAuthor(ki18n("Helge Deller"), KLocalizedString(), "deller@gmx.de");
-	setAboutData(about);
+    about->addAuthor(ki18n("Nicolas Ternisien"), KLocalizedString(), "nicolas.ternisien@gmail.com");
+    about->addAuthor(ki18n("Helge Deller"), KLocalizedString(), "deller@gmx.de");
+    setAboutData(about);
 
-	KGlobal::locale()->insertCatalog("kcm_infobase");
-	
-	QHBoxLayout* layout = new QHBoxLayout(this);
-	layout->setSpacing(0);
-	layout->setMargin(0);
-	
-	tree = new QTreeWidget(this);
-	layout->addWidget(tree);
-	tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	tree->setAllColumnsShowFocus(true);
-	tree->setRootIsDecorated(false);
-	tree->setWhatsThis(i18n("This list displays PCI information.") );
+    KGlobal::locale()->insertCatalog("kcm_infobase");
+    
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->setSpacing(0);
+    layout->setMargin(0);
+    
+    tree = new QTreeWidget(this);
+    layout->addWidget(tree);
+    tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    tree->setAllColumnsShowFocus(true);
+    tree->setRootIsDecorated(false);
+    tree->setWhatsThis(i18n("This list displays PCI information.") );
 
 
 }
@@ -78,17 +80,27 @@ KCMPci::~KCMPci() {
 }
 
 void KCMPci::load() {
-	kDebug() << "Loading PCI information..." << endl;
-	GetInfo_PCI(tree);
+    kDebug() << "Loading PCI information..." << endl;
 
-	//Resize the column width to the maximum needed
-	tree->expandAll();
-	tree->resizeColumnToContents( 0 );
-	tree->collapseAll();
+    bool fallback = false;
+#ifdef HAVE_PCIUTILS
+    if (!GetInfo_PCIUtils(tree)) {
+        fallback = true;
+    }
+#endif //HAVE_PCIUTILS
+
+    if (fallback) {
+        GetInfo_PCI(tree);
+    }
+
+    //Resize the column width to the maximum needed
+    tree->expandAll();
+    tree->resizeColumnToContents( 0 );
+    tree->collapseAll();
 }
 
 QString KCMPci::quickHelp() const {
-	return i18n("This display shows information about your computer's PCI slots and the related connected devices.");
+    return i18n("This display shows information about your computer's PCI slots and the related connected devices.");
 }
 
 #include "moc_kcm_pci.cpp"

@@ -40,10 +40,6 @@ extern "C" {
 }
 #endif
 
-#ifdef HAVE_PCIUTILS
-#include "kpci.h"
-#endif //HAVE_PCIUTILS
-
 bool GetInfo_IRQ(QTreeWidget* tree) {
 #ifdef HAVE_DEVINFO_H
     /* systat lists the interrupts assigned to devices as well as how many were
@@ -127,12 +123,6 @@ bool GetInfo_SCSI(QTreeWidget* tree) {
 }
 
 bool GetInfo_PCI(QTreeWidget* tree) {
-#ifdef HAVE_PCIUTILS
-    if (GetInfo_PCIUtils(tree)) {
-        return true;
-    }
-#endif //HAVE_PCIUTILS
-
     FILE *pipe;
     QString s;
     QByteArray cmd;

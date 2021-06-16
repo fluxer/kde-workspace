@@ -25,11 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <sys/stat.h>
 #include <linux/kernel.h>
 #include <ctype.h>
-#include "config-infocenter.h"
 
-#ifdef HAVE_PCIUTILS
-#include "kpci.h"
-#endif //HAVE_PCIUTILS
 #include <QRegExp>
 #include <QFile>
 #include <QHeaderView>
@@ -54,118 +50,111 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAXCOLUMNWIDTH 600
 
 bool GetInfo_ReadfromFile(QTreeWidget* tree, const char *FileName, const QChar& splitChar) {
-	bool added = false;
-	QFile file(FileName);
+    bool added = false;
+    QFile file(FileName);
 
-	if (!file.exists()) {
-		return false;
-	}
+    if (!file.exists()) {
+        return false;
+    }
 
-	if (!file.open(QIODevice::ReadOnly)) {
-		return false;
-	}
-	QTextStream stream(&file);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+    QTextStream stream(&file);
 
-	QString line = stream.readLine();
+    QString line = stream.readLine();
 
-	while (!line.isNull()) {
-		QString s1, s2;
-		if (!line.isEmpty()) {
-			if (!splitChar.isNull()) {
-				int pos = line.indexOf(splitChar);
-				s1 = line.left(pos-1).trimmed();
-				s2 = line.mid(pos+1).trimmed();
-			} else
-				s1 = line;
-		}
-		QStringList list;
-		list << s1 << s2;
-		new QTreeWidgetItem(tree, list);
-		added = true;
-		line = stream.readLine();
-	}
+    while (!line.isNull()) {
+        QString s1, s2;
+        if (!line.isEmpty()) {
+            if (!splitChar.isNull()) {
+                int pos = line.indexOf(splitChar);
+                s1 = line.left(pos-1).trimmed();
+                s2 = line.mid(pos+1).trimmed();
+            } else {
+                s1 = line;
+            }
+        }
+        QStringList list;
+        list << s1 << s2;
+        new QTreeWidgetItem(tree, list);
+        added = true;
+        line = stream.readLine();
+    }
 
-	file.close();
+    file.close();
 
-	return added;
+    return added;
 }
 
 bool GetInfo_IRQ(QTreeWidget* tree) {
-	tree->setFont(KGlobalSettings::fixedFont());
-	tree->setHeaderHidden(true);
-	
-	return GetInfo_ReadfromFile(tree, INFO_IRQ, 0);
+    tree->setFont(KGlobalSettings::fixedFont());
+    tree->setHeaderHidden(true);
+    
+    return GetInfo_ReadfromFile(tree, INFO_IRQ, 0);
 }
 
 bool GetInfo_DMA(QTreeWidget* tree) {
-	QFile file(INFO_DMA);
+    QFile file(INFO_DMA);
 
-	QStringList headers;
-	headers << i18n("DMA-Channel") << i18n("Used By");
-	tree->setHeaderLabels(headers);
+    QStringList headers;
+    headers << i18n("DMA-Channel") << i18n("Used By");
+    tree->setHeaderLabels(headers);
 
-	if (file.exists() && file.open(QIODevice::ReadOnly)) {
-		QTextStream stream(&file);
-		QString line;
+    if (file.exists() && file.open(QIODevice::ReadOnly)) {
+        QTextStream stream(&file);
+        QString line;
 
-		line = stream.readLine();
-		while (!line.isNull()) {
-			if (!line.isEmpty()) {
-				QRegExp rx("^\\s*(\\S+)\\s*:\\s*(\\S+)");
-				if (-1 != rx.indexIn(line)) {
-					QStringList list;
-					list << rx.cap(1) << rx.cap(2);
-					new QTreeWidgetItem(tree, list);
-				}
-			}
-			line = stream.readLine();
-		}
-		file.close();
-	} else {
-		return false;
-	}
+        line = stream.readLine();
+        while (!line.isNull()) {
+            if (!line.isEmpty()) {
+                QRegExp rx("^\\s*(\\S+)\\s*:\\s*(\\S+)");
+                if (-1 != rx.indexIn(line)) {
+                    QStringList list;
+                    list << rx.cap(1) << rx.cap(2);
+                    new QTreeWidgetItem(tree, list);
+                }
+            }
+            line = stream.readLine();
+        }
+        file.close();
+    } else {
+        return false;
+    }
 
-	return true;
+    return true;
 }
 
 bool GetInfo_PCI(QTreeWidget* tree) {
-	int num;
+    tree->setHeaderHidden(true);
+    tree->setSortingEnabled(false);
 
-#ifdef HAVE_PCIUTILS
-	if ( (num = GetInfo_PCIUtils(tree))) {
-		return num;
-	}
-	
-#endif //HAVE_PCIUTILS
-	tree->setHeaderHidden(true);
-	tree->setSortingEnabled(false);
+    QByteArray lspciCmd = KStandardDirs::findRootExe("lspci").toLocal8Bit();
+    if (lspciCmd.isEmpty()) {
+        return false;
+    }
+    lspciCmd.append(" -v");
 
-        QByteArray lspciCmd = KStandardDirs::findRootExe("lspci").toLocal8Bit();
-        if (lspciCmd.isEmpty()) {
-            return false;
-        }
-        lspciCmd.append(" -v");
+    /* try to get the output of the lspci package first */
+    if (GetInfo_ReadfromPipe(tree, lspciCmd.constData(), true)) {
+        return true;
+    }
 
-	/* try to get the output of the lspci package first */
-	if (num = GetInfo_ReadfromPipe(tree, lspciCmd.constData(), true))
-		return num;
-
-	/* if lspci failed, read the contents of /proc/pci */
-	return GetInfo_ReadfromFile(tree, INFO_PCI, 0);
-
+    /* if lspci failed, read the contents of /proc/pci */
+    return GetInfo_ReadfromFile(tree, INFO_PCI, 0);
 }
 
 bool GetInfo_IO_Ports(QTreeWidget* tree) {
-	QStringList headers;
-	headers << i18n("I/O-Range") << i18n("Used By");
-	tree->setHeaderLabels(headers);
-	return GetInfo_ReadfromFile(tree, INFO_IOPORTS, ':');
+    QStringList headers;
+    headers << i18n("I/O-Range") << i18n("Used By");
+    tree->setHeaderLabels(headers);
+    return GetInfo_ReadfromFile(tree, INFO_IOPORTS, ':');
 }
 
 bool GetInfo_SCSI(QTreeWidget* tree) {
-	return GetInfo_ReadfromFile(tree, INFO_SCSI, 0);
+    return GetInfo_ReadfromFile(tree, INFO_SCSI, 0);
 }
 
 bool GetInfo_XServer_and_Video(QTreeWidget* tree) {
-	return GetInfo_XServer_Generic(tree);
+    return GetInfo_XServer_Generic(tree);
 }

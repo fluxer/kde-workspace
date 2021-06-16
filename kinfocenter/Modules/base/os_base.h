@@ -330,7 +330,7 @@ static bool GetInfo_XServer_Generic(QTreeWidget *lBox) {
 }
 
 /* Helper-function to read output from an external program */
-static int GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool WithEmptyLines = true) {
+static bool GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool WithEmptyLines = true) {
 	QProcess proc;
 	QTreeWidgetItem* olditem = NULL;
 	QString s;
@@ -338,7 +338,7 @@ static int GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool Wi
 	proc.start(FileName, QIODevice::ReadOnly);
 	if (!proc.waitForFinished()) {
 		// Process hanged or did not start
-		return 0;
+		return false;
 	}
 
 	QTextStream t(&proc);
@@ -354,7 +354,7 @@ static int GetInfo_ReadfromPipe(QTreeWidget* tree, const char *FileName, bool Wi
 
 	// compiler warning
 	Q_UNUSED(olditem)
-	return tree->topLevelItemCount();
+	return (tree->topLevelItemCount() > 0);
 }
 
 #endif /*OS_BASE_H_*/

@@ -36,67 +36,71 @@
 #include <kstandarddirs.h>
 
 typedef struct {
-	int string;
-	int name;
-	const char *title;
+    int string;
+    int name;
+    const char *title;
 } hw_info_mib_list_t;
 
 // this is used to find out which devices are currently
 // on system
 static bool GetDmesgInfo(QTreeWidget* tree, const char *filter, void func(QTreeWidget* tree, QString s)) {
-	QFile *dmesg = new QFile("/var/run/dmesg.boot");
-	bool usepipe = false;
-	FILE *pipe= NULL;
-	QTextStream *t;
-	bool seencpu = false;
-	QString s;
-	bool found = false;
+    QFile *dmesg = new QFile("/var/run/dmesg.boot");
+    bool usepipe = false;
+    FILE *pipe= NULL;
+    QTextStream *t;
+    bool seencpu = false;
+    QString s;
+    bool found = false;
 
-	if (dmesg->exists() && dmesg->open(QIODevice::ReadOnly)) {
-		t = new QTextStream(dmesg);
-	} else {
-		delete dmesg;
-                QByteArray dmesgExe = KStandardDirs::findRootExe("dmesg").toLocal8Bit();
-                if (dmesgExe.isEmpty())
-                    return false;
-		pipe = popen(dmesgExe.constData(), "r");
-		if (!pipe)
-			return false;
-		usepipe = true;
-		t = new QTextStream(pipe, QIODevice::ReadOnly);
-	}
+    if (dmesg->exists() && dmesg->open(QIODevice::ReadOnly)) {
+        t = new QTextStream(dmesg);
+    } else {
+        delete dmesg;
+        QByteArray dmesgExe = KStandardDirs::findRootExe("dmesg").toLocal8Bit();
+        if (dmesgExe.isEmpty()) {
+            return false;
+        }
+        pipe = popen(dmesgExe.constData(), "r");
+        if (!pipe) {
+            return false;
+        }
+        usepipe = true;
+        t = new QTextStream(pipe, QIODevice::ReadOnly);
+    }
 
-	while (!(s = t->readLine().toLocal8Bit()).isNull()) {
-		if (!seencpu) {
-			if (s.contains("cpu"))
-				seencpu = true;
-			else
-				continue;
-		}
-		if (s.contains("boot device") || s.contains("WARNING: old BSD partition ID!"))
-			break;
+    while (!(s = t->readLine().toLocal8Bit()).isNull()) {
+        if (!seencpu) {
+            if (s.contains("cpu")) {
+                seencpu = true;
+            } else {
+                continue;
+            }
+        }
+        if (s.contains("boot device") || s.contains("WARNING: old BSD partition ID!")) {
+            break;
+        }
 
-		if (!filter || s.contains(QRegExp(filter))) {
-			if (func)
-				func(tree, s);
-			else {
-				QStringList list;
-				list << s;
-				new QTreeWidgetItem(tree, list);
-			}
-			found = true;
-		}
-	}
+        if (!filter || s.contains(QRegExp(filter))) {
+            if (func) {
+                func(tree, s);
+            } else {
+                QStringList list;
+                list << s;
+                new QTreeWidgetItem(tree, list);
+            }
+            found = true;
+        }
+    }
 
-	delete t;
-	if (pipe)
-		pclose(pipe);
-	else {
-		dmesg->close();
-		delete dmesg;
-	}
+    delete t;
+    if (pipe) {
+        pclose(pipe);
+    } else {
+        dmesg->close();
+        delete dmesg;
+    }
 
-	return found;
+    return found;
 }
 
 void AddIRQLine(QTreeWidget* tree, QString s) {
