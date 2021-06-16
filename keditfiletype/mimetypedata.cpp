@@ -19,7 +19,6 @@
 */
 
 #include "mimetypedata.h"
-#include "sharedmimeinfoversion.h"
 #include <kprotocolmanager.h>
 #include "mimetypewriter.h"
 #include <kdebug.h>
@@ -293,12 +292,8 @@ bool MimeTypeData::sync()
     if (isMimeTypeDirty()) {
         MimeTypeWriter mimeTypeWriter(name());
         mimeTypeWriter.setComment(m_comment);
-        if (SharedMimeInfoVersion::supportsIcon()) {
-            // Very important: don't write <icon> if shared-mime-info doesn't support it,
-            // it would abort on it!
-            if (!m_userSpecifiedIcon.isEmpty()) {
-                mimeTypeWriter.setIconName(m_userSpecifiedIcon);
-            }
+        if (!m_userSpecifiedIcon.isEmpty()) {
+            mimeTypeWriter.setIconName(m_userSpecifiedIcon);
         }
         mimeTypeWriter.setPatterns(m_patterns);
         if (!mimeTypeWriter.write())

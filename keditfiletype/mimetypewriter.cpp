@@ -29,13 +29,6 @@
 #include <QFile>
 #include <QProcess>
 
-/// WARNING: this code is duplicated between apps/nsplugins and runtime/filetypes
-
-static bool sharedMimeInfoSupportsIcon()
-{
-    return KMimeType::sharedMimeInfoVersion() >= KDE_MAKE_VERSION(0, 40, 0);
-}
-
 class MimeTypeWriterPrivate
 {
 public:
@@ -109,11 +102,9 @@ bool MimeTypeWriter::write()
 
     if (!d->m_iconName.isEmpty()) {
         // User-specified icon name
-        if (sharedMimeInfoSupportsIcon()) {
-            writer.writeStartElement(nsUri, "icon");
-            writer.writeAttribute("name", d->m_iconName);
-            writer.writeEndElement(); // icon
-        }
+        writer.writeStartElement(nsUri, "icon");
+        writer.writeAttribute("name", d->m_iconName);
+        writer.writeEndElement(); // icon
     }
 
     // Allow this local definition to override the global definition

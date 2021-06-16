@@ -21,9 +21,9 @@
 #define FILEGROUPDETAILS_H
 
 #include <QWidget>
-class MimeTypeData;
 #include <QButtonGroup>
 
+class MimeTypeData;
 /**
  * This widget contains the details for a filetype group.
  * Currently this only involves the embedding configuration.

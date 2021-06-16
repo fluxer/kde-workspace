@@ -19,7 +19,6 @@
 
 // Own
 #include "filetypedetails.h"
-#include "sharedmimeinfoversion.h"
 
 // Qt
 #include <QBoxLayout>
@@ -64,23 +63,14 @@ FileTypeDetails::FileTypeDetails( QWidget * parent )
   QHBoxLayout *hBox = new QHBoxLayout();
   firstLayout->addLayout(hBox);
 
-    if (SharedMimeInfoVersion::supportsIcon()) {
-        iconButton = new KIconButton(firstWidget);
-        iconButton->setIconType(KIconLoader::Desktop, KIconLoader::MimeType);
-        connect(iconButton, SIGNAL(iconChanged(QString)), SLOT(updateIcon(QString)));
-        iconButton->setWhatsThis( i18n("This button displays the icon associated"
-                                       " with the selected file type. Click on it to choose a different icon.") );
-        iconButton->setFixedSize(70, 70);
-        iconLabel = 0;
-        hBox->addWidget(iconButton);
-    } else {
-        iconButton = 0;
-        iconLabel = new QLabel(firstWidget);
-        iconLabel->setWhatsThis( i18n("This is the icon associated with the selected file type. "
-                                      "Choosing a different icon requires shared-mime-info to be at least version 0.40.") );
-        iconLabel->setFixedSize(70, 70);
-        hBox->addWidget(iconLabel);
-    }
+  iconButton = new KIconButton(firstWidget);
+  iconButton->setIconType(KIconLoader::Desktop, KIconLoader::MimeType);
+  connect(iconButton, SIGNAL(iconChanged(QString)), SLOT(updateIcon(QString)));
+  iconButton->setWhatsThis( i18n("This button displays the icon associated"
+                                " with the selected file type. Click on it to choose a different icon.") );
+  iconButton->setFixedSize(70, 70);
+  iconLabel = 0;
+  hBox->addWidget(iconButton);
 
   QGroupBox *gb = new QGroupBox(i18n("Filename Patterns"), firstWidget);
   hBox->addWidget(gb);

@@ -36,8 +36,8 @@ set_package_properties(Perl PROPERTIES
     TYPE REQUIRED
 )
 
-# shared-mime-info 0.40 is mandatory for generic-icon
-find_package(SharedMimeInfo 0.40)
+# shared-mime-info 0.40 is mandatory for generic-icon, kdelibs requires 0.70 anyway
+find_package(SharedMimeInfo 0.70)
 set_package_properties(SharedMimeInfo PROPERTIES
     DESCRIPTION "Shared Mime Info"
     URL "http://freedesktop.org/wiki/Software/shared-mime-info"
