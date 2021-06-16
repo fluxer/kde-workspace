@@ -50,9 +50,6 @@
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtCore/QProcess>
-#if defined USE_POLICYKIT && USE_POLICYKIT==1
-#include <QtDBus/QDBusInterface>
-#endif
 
 namespace KFI
 {

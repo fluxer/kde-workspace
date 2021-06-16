@@ -70,7 +70,7 @@ typedef QSet<File> FileCont;
 
 inline KDE_EXPORT uint qHash(const File &key)
 {
-    return qHash(key.path()); // +qHash(key.index());
+    return qHash(key.path()) + qHash(key.foundry());
 }
 
 }
