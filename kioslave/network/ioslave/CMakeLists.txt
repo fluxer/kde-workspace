@@ -24,4 +24,3 @@ install( TARGETS kio_network  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 install( FILES network.protocol  DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 install( FILES network.desktop  DESTINATION ${KDE4_DATA_INSTALL_DIR}/remoteview)
-install( FILES virtualfolder_network.desktop  DESTINATION ${KDE4_DATA_INSTALL_DIR}/konqsidebartng/virtual_folders/remote)

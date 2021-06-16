@@ -7,6 +7,5 @@ set(kio_fonts_PART_SRCS FontInstInterface.cpp KioFonts.cpp ${libkfontinstdbusifa
 kde4_add_plugin(kio_fonts ${kio_fonts_PART_SRCS} ${KFI_FONTINST_AUTH_SRC} )
 target_link_libraries(kio_fonts ${KDE4_KIO_LIBS}  ${QT_QTXML_LIBRARY} ${QT_QTDBUS_LIBRARY} ${QT_QTCORE_LIBRARY} kfontinst )
 install(TARGETS kio_fonts  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
-install( FILES fonts.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/konqsidebartng/virtual_folders/services )
 install( FILES fonts.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
 kde4_install_icons( ${KDE4_ICON_INSTALL_DIR}  )

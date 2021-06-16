@@ -25,7 +25,6 @@ install(TARGETS kio_smb  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/konqueror/dirtree/remote)
 install( FILES smb.protocol  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR})
 install( FILES smb-network.desktop  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/remoteview)
 
