@@ -253,7 +253,6 @@ class CFontItem : public CFontModelItem
     const QString &                   family() const           { return (static_cast<CFamilyItem *>(parent()))->name(); }
     int                               rowNumber() const        { return (static_cast<CFamilyItem *>(parent()))->row(this); }
     const FileCont &                  files() const            { return itsStyle.files(); }
-    qulonglong                        writingSystems() const   { return itsStyle.writingSystems(); }
     KUrl                              url() const              { return CJobRunner::encode(family(), styleInfo(), isSystem()); }
     void                              removeFile(const File &f){ itsStyle.remove(f); }
     void                              removeFiles(const FileCont &f){ itsStyle.removeFiles(f); }
@@ -285,7 +284,7 @@ class CFontListSortFilterProxy : public QSortFilterProxyModel
     CGroupListItem * filterGroup()   { return itsGroup; }
 
     void             setFilterText(const QString &text);
-    void             setFilterCriteria(CFontFilter::ECriteria crit, qulonglong ws, const QStringList &ft);
+    void             setFilterCriteria(CFontFilter::ECriteria crit, const QStringList &ft);
 
     private Q_SLOTS:
 
@@ -305,7 +304,6 @@ class CFontListSortFilterProxy : public QSortFilterProxyModel
     CGroupListItem         *itsGroup;
     QString                itsFilterText;
     CFontFilter::ECriteria itsFilterCriteria;
-    qulonglong             itsFilterWs;
     QStringList            itsFilterTypes;
     QTimer                 *itsTimer;
     CFcQuery               *itsFcQuery;
@@ -347,7 +345,7 @@ class CFontListView : public QTreeView
     void            listingPercent(int percent);
     void            refreshFilter();
     void            filterText(const QString &text);
-    void            filterCriteria(int crit, qulonglong ws, const QStringList &ft);
+    void            filterCriteria(int crit, const QStringList &ft);
 
     private Q_SLOTS:
 

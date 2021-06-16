@@ -1,4 +1,4 @@
-set(kfontinst_LIB_SRCS Misc.cpp Fc.cpp Family.cpp Style.cpp File.cpp WritingSystems.cpp)
+set(kfontinst_LIB_SRCS Misc.cpp Fc.cpp Family.cpp Style.cpp File.cpp)
 set(kfontinstui_LIB_SRCS FcEngine.cpp )
 
 add_library(kfontinst SHARED ${kfontinst_LIB_SRCS})

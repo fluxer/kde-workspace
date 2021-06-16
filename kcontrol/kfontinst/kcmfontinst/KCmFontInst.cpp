@@ -369,8 +369,8 @@ CKCmFontInst::CKCmFontInst(QWidget *parent, const QVariantList&)
             itsPreview, SLOT(setUnicodeRange(QList<CFcEngine::TRange>)));
     connect(changeTextAct, SIGNAL(triggered(bool)), SLOT(changeText()));
     connect(itsFilter, SIGNAL(textChanged(QString)), itsFontListView, SLOT(filterText(QString)));
-    connect(itsFilter, SIGNAL(criteriaChanged(int,qulonglong,QStringList)), 
-            itsFontListView, SLOT(filterCriteria(int,qulonglong,QStringList)));
+    connect(itsFilter, SIGNAL(criteriaChanged(int,QStringList)), 
+            itsFontListView, SLOT(filterCriteria(int,QStringList)));
     connect(itsGroupListView, SIGNAL(del()), SLOT(removeGroup()));
     connect(itsGroupListView, SIGNAL(print()), SLOT(printGroup()));
     connect(itsGroupListView, SIGNAL(enable()), SLOT(enableGroup()));

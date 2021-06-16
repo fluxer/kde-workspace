@@ -134,7 +134,6 @@ CFontFilter::CFontFilter(QWidget *parent)
     itsPixmaps[CRIT_FILETYPE]=SmallIcon("preferences-desktop-font-installer");
     itsPixmaps[CRIT_FILENAME]=SmallIcon("application-x-font-type1");
     itsPixmaps[CRIT_LOCATION]=SmallIcon("folder");
-    itsPixmaps[CRIT_WS]=SmallIcon("character-set");
 
     itsActionGroup=new QActionGroup(this);
     addAction(CRIT_FAMILY, i18n("Family"), true);
@@ -182,27 +181,6 @@ CFontFilter::CFontFilter(QWidget *parent)
 
     addAction(CRIT_FILENAME, i18n("File Name"), false);
     addAction(CRIT_LOCATION, i18n("File Location"), false);
-
-#ifndef QT_KATIE
-    KSelectAction *wsMenu=new KSelectAction(KIcon(itsPixmaps[CRIT_WS]), i18n("Writing System"), this);
-    itsActions[CRIT_WS]=wsMenu;
-    itsMenu->addAction(itsActions[CRIT_WS]);
-    wsMenu->setData((int)CRIT_WS);
-
-    itsCurrentWs=QFontDatabase::Any;
-    for(int i=QFontDatabase::Latin; i<QFontDatabase::WritingSystemsCount; ++i)
-    {
-        KToggleAction *wsAct=new KToggleAction(QFontDatabase::Other==i
-                                                ? i18n("Symbol/Other")
-                                                : QFontDatabase::writingSystemName((QFontDatabase::WritingSystem)i), this);
-
-        wsMenu->addAction(wsAct);
-        wsAct->setChecked(false);
-        wsAct->setData(i);
-    }
-    sortActions(wsMenu);
-    connect(wsMenu, SIGNAL(triggered(QString)), SLOT(wsChanged(QString)));
-#endif // QT_KATIE
 
     setCriteria(CRIT_FAMILY);
     setStyle(new CFontFilterStyle(this, itsMenuButton->width()));
@@ -281,11 +259,7 @@ void CFontFilter::filterChanged()
         {
             deselectCurrent((KSelectAction *)itsActions[CRIT_FOUNDRY]);
             deselectCurrent((KSelectAction *)itsActions[CRIT_FILETYPE]);
-            deselectCurrent((KSelectAction *)itsActions[CRIT_WS]);
             setText(QString());
-#ifndef QT_KATIE
-            itsCurrentWs=QFontDatabase::Any;
-#endif
             itsCurrentFileTypes.clear();
 
             setCriteria(crit);
@@ -298,7 +272,6 @@ void CFontFilter::filterChanged()
 void CFontFilter::ftChanged(const QString &ft)
 {
     deselectCurrent((KSelectAction *)itsActions[CRIT_FOUNDRY]);
-    deselectCurrent((KSelectAction *)itsActions[CRIT_WS]);
     deselectCurrent(itsActionGroup);
 
     QAction *act(((KSelectAction *)itsActions[CRIT_FILETYPE])->currentAction());
@@ -312,27 +285,8 @@ void CFontFilter::ftChanged(const QString &ft)
     setClickMessage(text());
 }
 
-void CFontFilter::wsChanged(const QString &writingSystemName)
-{
-    deselectCurrent((KSelectAction *)itsActions[CRIT_FOUNDRY]);
-    deselectCurrent((KSelectAction *)itsActions[CRIT_FILETYPE]);
-    deselectCurrent(itsActionGroup);
-
-#ifndef QT_KATIE
-    QAction *act(((KSelectAction *)itsActions[CRIT_WS])->currentAction());
-    if(act)
-        itsCurrentWs=(QFontDatabase::WritingSystem)act->data().toInt();
-#endif
-    itsCurrentCriteria=CRIT_WS;
-    setReadOnly(true);
-    setCriteria(itsCurrentCriteria);
-    setText(writingSystemName);
-    setClickMessage(text());
-}
-
 void CFontFilter::foundryChanged(const QString &foundry)
 {
-    deselectCurrent((KSelectAction *)itsActions[CRIT_WS]);
     deselectCurrent((KSelectAction *)itsActions[CRIT_FILETYPE]);
     deselectCurrent(itsActionGroup);
 
@@ -421,11 +375,7 @@ void CFontFilter::setCriteria(ECriteria crit)
     itsMenuButton->resize(arrowmap.width(), arrowmap.height());
     itsCurrentCriteria=crit;
 
-#ifndef QT_KATIE
-    emit criteriaChanged(crit, ((qulonglong)1) << (int)itsCurrentWs, itsCurrentFileTypes);
-#else
-    emit criteriaChanged(crit, ((qulonglong)1) << (int)0, itsCurrentFileTypes);
-#endif
+    emit criteriaChanged(crit, itsCurrentFileTypes);
 }
 
 }

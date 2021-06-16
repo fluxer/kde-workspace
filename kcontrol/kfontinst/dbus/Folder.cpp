@@ -320,7 +320,6 @@ void Folder::add(const Family &family)
                         (*existingStyle).add(*fit);
                 }
 
-                (*existingStyle).setWritingSystems((*existingStyle).writingSystems()|(*it).writingSystems());
                 if(!(*existingStyle).scalable() && (*it).scalable())
                     (*existingStyle).setScalable(true);
             }
@@ -388,7 +387,7 @@ Families Folder::Flat::build(bool system) const
     for(; it!=e; ++it)
     {
         Family                    f((*it).family);
-        Style                     s((*it).styleInfo, (*it).scalable, (*it).writingSystems);
+        Style                     s((*it).styleInfo, (*it).scalable);
         FamilyCont::ConstIterator fam=families.items.constFind(f);
 
         if(families.items.constEnd()==fam)

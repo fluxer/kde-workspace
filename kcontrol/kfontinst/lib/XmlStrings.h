@@ -37,7 +37,6 @@
 #define SLANT_ATTR    "slant"
 #define SCALABLE_ATTR "scalable"
 #define FACE_ATTR     "face"
-#define LANGS_ATTR    "langs"
 #define SYSTEM_ATTR   "system"
 #define ERROR_ATTR    "error"
 #define LANG_SEP      ","

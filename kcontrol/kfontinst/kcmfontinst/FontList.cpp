@@ -975,7 +975,6 @@ CFontListSortFilterProxy::CFontListSortFilterProxy(QObject *parent, QAbstractIte
                         : QSortFilterProxyModel(parent),
                           itsGroup(NULL),
                           itsFilterCriteria(CFontFilter::CRIT_FAMILY),
-                          itsFilterWs(0),
                           itsFcQuery(NULL)
 {
     setSourceModel(model);
@@ -1190,9 +1189,6 @@ bool CFontListSortFilterProxy::acceptFont(CFontItem *fnt, bool checkFontText) co
                     }
                     break;
                 }
-                case CFontFilter::CRIT_WS:
-                    fontMatch=fnt->writingSystems()&itsFilterWs;
-                    break;
                 default:
                     break;
             }
@@ -1323,11 +1319,10 @@ void CFontListSortFilterProxy::setFilterText(const QString &text)
     }
 }
 
-void CFontListSortFilterProxy::setFilterCriteria(CFontFilter::ECriteria crit, qulonglong ws, const QStringList &ft)
+void CFontListSortFilterProxy::setFilterCriteria(CFontFilter::ECriteria crit, const QStringList &ft)
 {
-    if(crit!=itsFilterCriteria || ws!=itsFilterWs || ft!=itsFilterTypes)
+    if(crit!=itsFilterCriteria || ft!=itsFilterTypes)
     {
-        itsFilterWs=ws;
         itsFilterCriteria=crit;
         itsFilterTypes=ft;
         if(CFontFilter::CRIT_LOCATION==itsFilterCriteria)
@@ -1593,9 +1588,9 @@ void CFontListView::filterText(const QString &text)
     itsProxy->setFilterText(text);
 }
 
-void CFontListView::filterCriteria(int crit, qulonglong ws, const QStringList &ft)
+void CFontListView::filterCriteria(int crit, const QStringList &ft)
 {
-    itsProxy->setFilterCriteria((CFontFilter::ECriteria)crit, ws, ft);
+    itsProxy->setFilterCriteria((CFontFilter::ECriteria)crit, ft);
 }
 
 void CFontListView::stats(int &enabled, int &disabled, int &partial)

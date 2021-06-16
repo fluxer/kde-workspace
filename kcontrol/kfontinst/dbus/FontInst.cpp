@@ -39,7 +39,6 @@
 #include "fontinstadaptor.h"
 #include "Misc.h"
 #include "Fc.h"
-#include "WritingSystems.h"
 #include "Utils.h"
 #include "FontinstIface.h"
 
@@ -286,7 +285,7 @@ void FontInst::uninstall(const QString &family, quint32 style, bool fromSystem, 
     if(STATUS_OK==result)
     {
         Family                  del((*fam).name());
-        Style                   s((*st).value(), (*st).scalable(), (*st).writingSystems());
+        Style                   s((*st).value(), (*st).scalable());
         FileCont                files((*st).files());
         FileCont::ConstIterator it(files.begin()),
                                 end(files.end());
@@ -664,9 +663,7 @@ void FontInst::updateFontList(bool emitChanges)
                                foundry;
                     quint32    styleVal;
                     int        index;
-#ifndef QT_KATIE
-                    qulonglong writingSystems(WritingSystems::instance()->get(list->fonts[i]));
-#endif
+
                     FcBool     scalable=FcFalse;
 
                     if(FcResultMatch!=FcPatternGetBool(list->fonts[i], FC_SCALABLE, 0, &scalable))
@@ -678,9 +675,6 @@ void FontInst::updateFontList(bool emitChanges)
                     StyleCont::ConstIterator  style=(*fam).add(Style(styleVal));
                     FileCont::ConstIterator   file=(*style).add(File(fileName, foundry, index));
 
-#ifndef QT_KATIE
-                    (*style).setWritingSystems((*style).writingSystems()|writingSystems);
-#endif
                     if(scalable)
                         (*style).setScalable();
                 }
@@ -808,8 +802,8 @@ void FontInst::toggle(bool enable, const QString &family, quint32 style, bool in
         {
             Family addFam((*fam).name()),
                 delFam((*fam).name());
-            Style  addStyle((*st).value(), (*st).scalable(), (*st).writingSystems()),
-                delStyle((*st).value(), (*st).scalable(), (*st).writingSystems());
+            Style  addStyle((*st).value(), (*st).scalable()),
+                delStyle((*st).value(), (*st).scalable());
 
             addStyle.setFiles(toggledFiles);
             addFam.add(addStyle);

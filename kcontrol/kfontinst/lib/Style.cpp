@@ -26,7 +26,6 @@
 #include <QtXml/qdom.h>
 #include "Fc.h"
 #include "Style.h"
-#include "WritingSystems.h"
 #include "XmlStrings.h"
 
 namespace KFI
@@ -60,12 +59,6 @@ Style::Style(const QDomElement &elem, bool loadFiles)
 
     itsScalable=!elem.hasAttribute(SCALABLE_ATTR) || elem.attribute(SCALABLE_ATTR)!="false";
     itsValue=FC::createStyleVal(weight, width, slant);
-
-    itsWritingSystems=0;
-#ifndef QT_KATIE
-    if(elem.hasAttribute(LANGS_ATTR))
-        itsWritingSystems=WritingSystems::instance()->get(elem.attribute(LANGS_ATTR).split(LANG_SEP, QString::SkipEmptyParts));
-#endif
 
     if(loadFiles)
     {
@@ -128,12 +121,6 @@ QString Style::toXml(bool disabled, const QString &family, QTextStream &s) const
         if(!itsScalable)
             str+= SCALABLE_ATTR "=\"false\" ";
 
-#ifndef QT_KATIE
-        QStringList ws(WritingSystems::instance()->getLangs(itsWritingSystems));
-        if(ws.count())
-            str+= LANGS_ATTR "=\"" +ws.join(LANG_SEP)+"\" ";
-#endif
-
         if(1==files.count())
            str+=(*files.begin())+"/>";
         else
@@ -160,7 +147,7 @@ QDBusArgument & operator<<(QDBusArgument &argument, const KFI::Style &obj)
 {
     argument.beginStructure();
 
-    argument << obj.value() << obj.scalable() << obj.writingSystems();
+    argument << obj.value() << obj.scalable();
     argument.beginArray(qMetaTypeId<KFI::File>());
     KFI::FileCont::ConstIterator it(obj.files().begin()),
                                  end(obj.files().end());
@@ -175,10 +162,9 @@ const QDBusArgument & operator>>(const QDBusArgument &argument, KFI::Style &obj)
 {
     quint32    value;
     bool       scalable;
-    qulonglong ws;
     argument.beginStructure();
-    argument >> value >> scalable >> ws;
-    obj=KFI::Style(value, scalable, ws);
+    argument >> value >> scalable;
+    obj=KFI::Style(value, scalable);
     argument.beginArray();
     while(!argument.atEnd())
     {

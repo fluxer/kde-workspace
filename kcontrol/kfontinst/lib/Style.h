@@ -40,7 +40,7 @@ class KFONTINST_EXPORT Style
 {
     public:
 
-    Style(quint32 v=0, bool sc=false, qulonglong ws=0) : itsValue(v), itsWritingSystems(ws), itsScalable(sc) { }
+    Style(quint32 v=0, bool sc=false) : itsValue(v), itsScalable(sc) { }
     Style(const QDomElement &elem, bool loadFiles);
 
     bool operator==(const Style &o) const                          { return itsValue==o.itsValue; }
@@ -49,8 +49,6 @@ class KFONTINST_EXPORT Style
     FileCont::ConstIterator add(const File &f) const               { return itsFiles.insert(f); }
     void                    remove(const File &f) const            { itsFiles.remove(f); }
     quint32                 value() const                          { return itsValue; }
-    void                    setWritingSystems(qulonglong ws) const { itsWritingSystems=ws; }
-    qulonglong              writingSystems() const                 { return itsWritingSystems; }
     const FileCont &        files() const                          { return itsFiles; }
     void                    setScalable(bool sc=true) const        { itsScalable=sc; }
     bool                    scalable() const                       { return itsScalable; }
@@ -62,7 +60,6 @@ class KFONTINST_EXPORT Style
     private:
 
     quint32            itsValue;
-    mutable qulonglong itsWritingSystems;
     mutable bool       itsScalable;
     mutable FileCont   itsFiles;
 };

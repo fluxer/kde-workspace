@@ -619,11 +619,11 @@ void CFontFileListView::contextMenuEvent(QContextMenuEvent *ev)
 
         QList<QTreeWidgetItem *> items(selectedItems());
 
-        foreach(QTreeWidgetItem *item, items)
+        foreach(QTreeWidgetItem *it, items)
         {
-            if(item->parent() && item->isSelected())
+            if(it->parent() && it->isSelected())
             {
-                if(isMarked(item))
+                if(isMarked(it))
                     haveMarked=true;
                 else
                     haveUnmarked=true;

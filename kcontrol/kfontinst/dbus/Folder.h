@@ -53,14 +53,12 @@ class Folder
     {
         FlatFont(const Family &fam, const Style &style, const File &f)
             : Misc::TFont(fam.name(), style.value()),
-              writingSystems(style.writingSystems()),
               scalable(style.scalable()),
               file(f)
         {
         }
         bool operator==(const FlatFont &o) const  { return file.path()==o.file.path(); }
 
-        qulonglong writingSystems;
         bool       scalable;
         File       file;
     };

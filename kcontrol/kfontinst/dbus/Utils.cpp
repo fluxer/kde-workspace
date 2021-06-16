@@ -30,7 +30,6 @@
 #include "FontInst.h"
 #include "Misc.h"
 #include "Fc.h"
-#include "WritingSystems.h"
 
 namespace KFI
 {
@@ -227,16 +226,12 @@ EFileType check(const QString &file, Family &fam)
                        foundry;
             quint32    style;
             int        index;
-            qulonglong ws = 0;
             EFileType  type=(FcResultMatch!=FcPatternGetBool(pat, FC_SCALABLE, 0, &scalable) || !scalable)
                                 ? FILE_BITMAP : FILE_SCALABLE;
 
             FC::getDetails(pat, family, style, index, foundry);
-#ifndef QT_KATIE
-            ws=WritingSystems::instance()->get(pat);
-#endif
             FcPatternDestroy(pat);
-            Style st(style, scalable, ws);
+            Style st(style, scalable);
             st.add(File(file, foundry, index));
             fam=Family(family);
             fam.add(st);
