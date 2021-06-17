@@ -23,21 +23,18 @@ class USBViewer : public KCModule {
 Q_OBJECT
 
 public:
+    explicit USBViewer(QWidget *parent = 0L, const QVariantList &list=QVariantList());
 
-	explicit USBViewer(QWidget *parent = 0L, const QVariantList &list=QVariantList());
-
-	void load();
+    void load();
 
 protected Q_SLOTS:
-
-	void selectionChanged(QTreeWidgetItem *item);
-	void refresh();
+    void selectionChanged(QTreeWidgetItem *item);
+    void refresh();
 
 private:
-
-	QMap<int, QTreeWidgetItem*> _items;
-	QTreeWidget *_devices;
-	QTextEdit *_details;
+    QMap<int, QTreeWidgetItem*> _items;
+    QTreeWidget *_devices;
+    QTextEdit *_details;
 };
 
 #endif
