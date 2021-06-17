@@ -124,9 +124,6 @@ RulesWidget::RulesWidget(QWidget* parent)
     edit_reg_title->hide();
     edit_reg_machine->hide();
 
-    rule_activity->hide();
-    enable_activity->hide();
-    activity->hide();
     int i;
     for (i = 1;
             i <= KWindowSystem::numberOfDesktops();
