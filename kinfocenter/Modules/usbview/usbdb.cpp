@@ -14,17 +14,40 @@
 
 #include <QFile>
 #include <QRegExp>
-//Added by qt3to4:
+#include <QStringList>
 #include <QTextStream>
 
+#include <kdebug.h>
 #include <kstandarddirs.h>
 
+#include "config-workspace.h"
+
 USBDB::USBDB() {
-    QString db = "/usr/share/hwdata/usb.ids"; /* on Fedora */
-    if (!QFile::exists(db))
-            db = KStandardDirs::locate("data", "kcmusb/usb.ids");
-    if (db.isEmpty())
-            return;
+    static const QStringList s_dbpaths = QStringList()
+        << QLatin1String("/share/hwdata/usb.ids")
+        << QLatin1String("/local/share/hwdata/usb.ids")
+        << QLatin1String("/usr/share/hwdata/usb.ids")
+        << QLatin1String("/usr/local/share/hwdata/usb.ids")
+        << QLatin1String("/var/lib/usbutils/usb.ids") // Debian
+        << QLatin1String(KDE_SHAREDIR "/hwdata/usb.ids");
+
+    QString db;
+    foreach (const QString &dbpath, s_dbpaths) {
+        if (QFile::exists(dbpath)) {
+            kDebug() << "Using" << dbpath << "USB database";
+            db = dbpath;
+            break;
+        }
+    }
+    if (db.isEmpty()) {
+        kDebug() << "Using bundled USB database";
+        db = KStandardDirs::locate("data", "kcmusb/usb.ids");
+    }
+
+    if (db.isEmpty()) {
+        kWarning() << "Could not find USB database";
+        return;
+    }
 
     QFile f(db);
 
@@ -81,29 +104,30 @@ USBDB::USBDB() {
 }
 
 QString USBDB::vendor(int id) {
-	QString s = _ids[QString("%1").arg(id)];
-	if (id != 0) {
-		return s;
-	}
-	return QString();
+    QString s = _ids[QString("%1").arg(id)];
+    if (id != 0) {
+        return s;
+    }
+    return QString();
 }
 
 QString USBDB::device(int vendor, int id) {
-	QString s = _ids[QString("%1-%2").arg(vendor).arg(id)];
-	if ((id != 0) && (vendor != 0))
-		return s;
-	return QString();
+    QString s = _ids[QString("%1-%2").arg(vendor).arg(id)];
+    if ((id != 0) && (vendor != 0)) {
+        return s;
+    }
+    return QString();
 }
 
 QString USBDB::cls(int cls) {
-	return _classes[QString("%1").arg(cls)];
+    return _classes[QString("%1").arg(cls)];
 }
 
 QString USBDB::subclass(int cls, int sub) {
-	return _classes[QString("%1-%2").arg(cls).arg(sub)];
+    return _classes[QString("%1-%2").arg(cls).arg(sub)];
 }
 
 QString USBDB::protocol(int cls, int sub, int prot) {
-	return _classes[QString("%1-%2-%3").arg(cls).arg(sub).arg(prot)];
+    return _classes[QString("%1-%2-%3").arg(cls).arg(sub).arg(prot)];
 }
 

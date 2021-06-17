@@ -60,6 +60,9 @@
 /* KDE's static data directory */
 #define KDE_DATADIR "${KDE4_DATA_INSTALL_DIR}"
 
+/* KDE's static shared data directory */
+#define KDE_SHAREDIR "${KDE4_SHARE_INSTALL_PREFIX}"
+
 /* X binaries directory */
 #cmakedefine XBINDIR "${XBINDIR}"
 
