@@ -24,11 +24,16 @@
 
 USBDB::USBDB() {
     static const QStringList s_dbpaths = QStringList()
+        << QLatin1String("/share/usbids/usb.ids")
+        << QLatin1String("/local/share/usbids/usb.ids")
         << QLatin1String("/share/hwdata/usb.ids")
         << QLatin1String("/local/share/hwdata/usb.ids")
         << QLatin1String("/usr/share/hwdata/usb.ids")
         << QLatin1String("/usr/local/share/hwdata/usb.ids")
+        << QLatin1String("/usr/share/usbids/usb.ids")
+        << QLatin1String("/usr/local/share/usbids/usb.ids") // FreeBSD/NetBSD
         << QLatin1String("/var/lib/usbutils/usb.ids") // Debian
+        << QLatin1String(KDE_SHAREDIR "/usbids/usb.ids")
         << QLatin1String(KDE_SHAREDIR "/hwdata/usb.ids");
 
     QString db;
