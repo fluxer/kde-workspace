@@ -34,17 +34,17 @@
 #include <QTreeWidget>
 
 class KCMPci : public KCModule {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit KCMPci(QWidget *parent = NULL, const QVariantList &list = QVariantList());
-	~KCMPci();
+    explicit KCMPci(QWidget *parent = NULL, const QVariantList &list = QVariantList());
+    ~KCMPci();
 
-	virtual void load();
-	virtual QString quickHelp() const;
+    virtual void load();
+    virtual QString quickHelp() const;
 
 private:
-	QTreeWidget* tree;
+    QTreeWidget* tree;
 };
 
 #endif
