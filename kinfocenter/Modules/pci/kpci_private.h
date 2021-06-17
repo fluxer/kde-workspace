@@ -739,7 +739,7 @@ static const id2name agpRate[]={
     { 0x09,     i18n("4X") },
     { 0x0A,     i18n("8X") },
     { 0x0B,     i18n("4X & 8X") },
-    {   -1,     i18n(strUnknown) }
+    { -1,        i18n(strUnknown) }
 };
 
 //keep -1 in last position
