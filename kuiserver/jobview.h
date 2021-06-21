@@ -26,11 +26,10 @@
 #include <QtDBus/qdbusextratypes.h>
 
 #include <kio/global.h>
-
 #include <kuiserversettings.h>
 
-#include <QDBusAbstractInterface>
 class RequestViewCallWatcher;
+class OrgKdeJobViewV2Interface;
 
 class JobView : public QObject
 {
@@ -218,7 +217,7 @@ private:
      * All for the client:
      *   <address name,  <objectPath, interface> >
      */
-    QHash<QString, QPair<QString, QDBusAbstractInterface*> > m_objectPaths;
+    QHash<QString, QPair<QString, OrgKdeJobViewV2Interface*> > m_objectPaths;
 
     const uint m_jobId;
     JobState m_state;          ///< Current state of this job

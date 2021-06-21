@@ -21,14 +21,13 @@
 
 #include "uiserver.h"
 #include "jobviewadaptor.h"
-#include "jobview_interface.h"
 #include "requestviewcallwatcher.h"
+#include "jobview_interface.h"
 
 #include <klocale.h>
 #include <kdebug.h>
 
 #include <QtDBus/QDBusPendingReply>
-#include <qdbusabstractinterface.h>
 
 JobView::JobView(uint jobId, QObject *parent)
     : QObject(parent),
@@ -55,7 +54,7 @@ void JobView::terminate(const QString &errorMessage)
 {
     QDBusConnection::sessionBus().unregisterObject(m_objectPath.path(), QDBusConnection::UnregisterTree);
 
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         kDebug(7024) << "making async call of terminate for: " << pair.first;
         pair.second->asyncCall(QLatin1String("terminate"), errorMessage);
@@ -93,7 +92,7 @@ void JobView::requestCancel()
 
 void JobView::setSuspended(bool suspended)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setSuspended"), suspended);
     }
@@ -109,7 +108,7 @@ uint JobView::state() const
 
 void JobView::setTotalAmount(qulonglong amount, const QString &unit)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setTotalAmount"), amount, unit);
     }
@@ -137,7 +136,7 @@ QString JobView::sizeTotal() const
 
 void JobView::setProcessedAmount(qulonglong amount, const QString &unit)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setProcessedAmount"), amount, unit);
     }
@@ -164,7 +163,7 @@ QString JobView::sizeProcessed() const
 
 void JobView::setPercent(uint value)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setPercent"), value);
     }
@@ -180,7 +179,7 @@ uint JobView::percent() const
 
 void JobView::setSpeed(qulonglong bytesPerSecond)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setSpeed"), bytesPerSecond);
     }
@@ -196,7 +195,7 @@ QString JobView::speed() const
 
 void JobView::setInfoMessage(const QString &infoMessage)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setInfoMessage"), infoMessage);
     }
@@ -212,7 +211,7 @@ QString JobView::infoMessage() const
 
 bool JobView::setDescriptionField(uint number, const QString &name, const QString &value)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setDescriptionField"), number, name, value);
     }
@@ -230,7 +229,7 @@ bool JobView::setDescriptionField(uint number, const QString &name, const QStrin
 
 void JobView::clearDescriptionField(uint number)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("clearDescriptionField"), number);
     }
@@ -243,7 +242,7 @@ void JobView::clearDescriptionField(uint number)
 
 void JobView::setAppName(const QString &appName)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setAppName"), appName);
     }
@@ -258,7 +257,7 @@ QString JobView::appName() const
 
 void JobView::setAppIconName(const QString &appIconName)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setAppIconName"), appIconName);
     }
@@ -273,7 +272,7 @@ QString JobView::appIconName() const
 
 void JobView::setCapabilities(int capabilities)
 {
-    typedef QPair<QString, QDBusAbstractInterface*> iFacePair;
+    typedef QPair<QString, org::kde::JobViewV2*> iFacePair;
     foreach(const iFacePair &pair, m_objectPaths) {
         pair.second->asyncCall(QLatin1String("setCapabilities"), capabilities);
     }
@@ -317,7 +316,7 @@ void JobView::addJobContact(const QString& objectPath, const QString& address)
     org::kde::JobViewV2 *client =
             new org::kde::JobViewV2(address, objectPath, QDBusConnection::sessionBus());
 
-    QPair<QString, QDBusAbstractInterface*> pair(objectPath, client);
+    QPair<QString, org::kde::JobViewV2*> pair(objectPath, client);
 
     //propagate any request signals from the client's job, up to us, then to the parent KJob
     //otherwise e.g. the pause button on plasma's tray would be broken.
@@ -372,7 +371,7 @@ void JobView::addJobContact(const QString& objectPath, const QString& address)
 QStringList JobView::jobContacts()
 {
     QStringList output;
-    QHash<QString, QPair<QString, QDBusAbstractInterface*> >::const_iterator it = m_objectPaths.constBegin();
+    QHash<QString, QPair<QString, org::kde::JobViewV2*> >::const_iterator it = m_objectPaths.constBegin();
     for (; it != m_objectPaths.constEnd(); ++it) {
         //for debug purposes only
         output.append("service name of the interface: " + it.key() + "; objectPath for the interface: " + it.value().first);
