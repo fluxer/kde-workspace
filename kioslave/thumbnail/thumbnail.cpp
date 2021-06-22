@@ -22,12 +22,12 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#ifdef __FreeBSD__
-    #include <machine/param.h>
-#endif
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#ifdef Q_OS_FREEBSD
+    #include <machine/param.h>
+#endif
 
 #include <QBuffer>
 #include <QFile>

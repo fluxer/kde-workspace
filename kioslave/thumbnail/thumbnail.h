@@ -21,11 +21,11 @@
 #define _THUMBNAIL_H_
 
 #include <QtCore/QHash>
+#include <QImage>
 
 #include <kio/slavebase.h>
 
 class ThumbCreator;
-#include <QImage>
 
 class ThumbnailProtocol : public KIO::SlaveBase
 {
