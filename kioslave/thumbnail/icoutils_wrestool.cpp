@@ -24,7 +24,6 @@
 #include <QProcess>
 #include <QSet>
 
-#define abs(n) ( ( n < 0 ) ? -n : n )
 typedef QPair < QString, int > IconInExe;
 
 bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, const QString &outputFileName, const qint32 iconNumber)
