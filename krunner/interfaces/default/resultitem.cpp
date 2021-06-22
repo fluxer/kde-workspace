@@ -50,8 +50,6 @@
 
 //#define NO_GROW_ANIM
 
-void shadowBlur(QImage &image, int radius, const QColor &color);
-
 ResultItem::ResultItem(const SharedResultData *sharedData, QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
       m_match(0),
