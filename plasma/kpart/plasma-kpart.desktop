@@ -66,5 +66,5 @@ Name[x-test]=xxplasma-kpartxx
 Name[zh_CN]=plasma-kpart
 Name[zh_TW]=plasma-kpart
 Type=Service
-ServiceTypes=KParts/Part
+ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=plasma-kpart
