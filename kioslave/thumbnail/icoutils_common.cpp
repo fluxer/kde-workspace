@@ -21,8 +21,6 @@
 #include <QImage>
 #include <QImageReader>
 
-#define abs(n) ( ( n < 0 ) ? -n : n )
-
 bool IcoUtils::loadIcoImageFromExe(QIODevice * inputDevice, QImage &image, int needWidth, int needHeight, const qint32 iconNumber)
 {
 
@@ -80,8 +78,8 @@ bool IcoUtils::loadIcoImage(QImageReader &reader, QImage &image, int needWidth, 
         const QImage &icon = icons.at(i_index);
         int i_width = icon.width();
         int i_height = icon.height();
-        int i_w = abs(i_width - needWidth);
-        int i_h = abs(i_height - needHeight);
+        int i_w = qAbs(i_width - needWidth);
+        int i_h = qAbs(i_height - needHeight);
 
         if ( i_w < min_w || ( i_w == min_w && i_h < min_h ) )
         {
