@@ -67,12 +67,6 @@
 
 // Use correctly KComponentData instead of KApplication (but then no QPixmap)
 #undef USE_KINSTANCE
-// Fix thumbnail: protocol
-#define THUMBNAIL_HACK (1)
-
-#ifdef THUMBNAIL_HACK
-# include <QFileInfo>
-#endif
 
 #include "imagefilter.h"
 
@@ -155,32 +149,6 @@ void ThumbnailProtocol::get(const KUrl &url)
 {
     m_mimeType = metaData("mimeType");
     kDebug(7115) << "Wanting MIME Type:" << m_mimeType;
-#ifdef THUMBNAIL_HACK
-    // ### HACK
-    bool direct=false;
-    if (m_mimeType.isEmpty()) {
-        QFileInfo info(url.path());
-        kDebug(7115) << "PATH: " << url.path() << "isDir:" << info.isDir();
-        if (!info.exists()) {
-            // The file does not exist
-            error(KIO::ERR_DOES_NOT_EXIST,url.path());
-            return;
-        } else if (!info.isReadable()) {
-            // The file is not readable!
-            error(KIO::ERR_COULD_NOT_READ,url.path());
-            return;
-        }
-
-        if (info.isDir()) {
-            m_mimeType = "inode/directory";
-        } else {
-            m_mimeType = KMimeType::findByUrl(KUrl(info.filePath()))->name();
-        }
-
-        kDebug(7115) << "Guessing MIME Type:" << m_mimeType;
-        direct=true; // thumbnail: URL was probably typed in Konqueror
-    }
-#endif
 
     if (m_mimeType.isEmpty()) {
         error(KIO::ERR_INTERNAL, i18n("No MIME Type specified."));
@@ -195,14 +163,6 @@ void ThumbnailProtocol::get(const KUrl &url)
         error(KIO::ERR_INTERNAL, i18n("No or invalid size specified."));
         return;
     }
-#ifdef THUMBNAIL_HACK
-    else if (!m_width || !m_height) {
-        kDebug(7115) << "Guessing height, width, icon size!";
-        m_width = 128;
-        m_height = 128;
-        iconSize = 128;
-    }
-#endif
 
     if (!iconSize) {
         iconSize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
@@ -251,13 +211,6 @@ void ThumbnailProtocol::get(const KUrl &url)
               return;
             }
         } else {
-#ifdef THUMBNAIL_HACK
-            if (plugin.isEmpty()) {
-                plugin = pluginForMimeType(m_mimeType);
-            }
-
-            kDebug(7115) << "Guess plugin: " << plugin;
-#endif
             if (plugin.isEmpty()) {
                 error(KIO::ERR_INTERNAL, i18n("No plugin specified."));
                 return;
@@ -318,30 +271,12 @@ void ThumbnailProtocol::get(const KUrl &url)
 
     const QString shmid = metaData("shmid");
     if (shmid.isEmpty()) {
-#ifdef THUMBNAIL_HACK
-        if (direct) {
-            // If thumbnail was called directly from Konqueror, then the image needs to be raw
-            //kDebug(7115) << "RAW IMAGE TO STREAM";
-            QBuffer buf;
-            if (!buf.open(QIODevice::WriteOnly)) {
-                error(KIO::ERR_INTERNAL, i18n("Could not write image."));
-                return;
-            }
-            img.save(&buf,"PNG");
-            buf.close();
-            mimeType("image/png");
-            data(buf.buffer());
-        }
-        else
-#endif
-        {
-            QByteArray imgData;
-            QDataStream stream( &imgData, QIODevice::WriteOnly );
-            //kDebug(7115) << "IMAGE TO STREAM";
-            stream << img;
-            mimeType("application/octet-stream");
-            data(imgData);
-        }
+        QByteArray imgData;
+        QDataStream stream( &imgData, QIODevice::WriteOnly );
+        //kDebug(7115) << "IMAGE TO STREAM";
+        stream << img;
+        mimeType("application/octet-stream");
+        data(imgData);
     } else {
         QByteArray imgData;
         QDataStream stream( &imgData, QIODevice::WriteOnly );
