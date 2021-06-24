@@ -23,11 +23,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#ifdef Q_OS_FREEBSD
-    #include <machine/param.h>
-#endif
 
 #include <QBuffer>
 #include <QFile>
@@ -79,14 +74,7 @@
 // plugin       - the name of the plugin library to be used for thumbnail creation.
 //                Provided by the application to save an addition KTrader
 //                query here.
-// shmid        - the shared memory segment id to write the image's data to.
-//                The segment is assumed to provide enough space for a 32-bit
-//                image sized width x height pixels.
-//                If this is given, the data returned by the slave will be:
-//                    int width
-//                    int height
-//                    int depth
-//                Otherwise, the data returned is the image in PNG format.
+//                The data returned is the image in PNG format.
 
 using namespace KIO;
 
@@ -269,38 +257,12 @@ void ThumbnailProtocol::get(const KUrl &url)
         return;
     }
 
-    const QString shmid = metaData("shmid");
-    if (shmid.isEmpty()) {
-        QByteArray imgData;
-        QDataStream stream( &imgData, QIODevice::WriteOnly );
-        //kDebug(7115) << "IMAGE TO STREAM";
-        stream << img;
-        mimeType("application/octet-stream");
-        data(imgData);
-    } else {
-        QByteArray imgData;
-        QDataStream stream( &imgData, QIODevice::WriteOnly );
-        //kDebug(7115) << "IMAGE TO SHMID";
-        void *shmaddr = shmat(shmid.toInt(), 0, 0);
-        if (shmaddr == (void *)-1) {
-            error(KIO::ERR_INTERNAL, i18n("Failed to attach to shared memory segment %1", shmid));
-            return;
-        }
-        if (img.width() * img.height() > m_width * m_height) {
-            error(KIO::ERR_INTERNAL, i18n("Image is too big for the shared memory segment"));
-            shmdt((char*)shmaddr);
-            return;
-        }
-        if( img.format() != QImage::Format_ARGB32 ) { // KIO::PreviewJob and this code below completely ignores colortable :-/,
-            img = img.convertToFormat(QImage::Format_ARGB32); //  so make sure there is none
-        }
-        // Keep in sync with kdelibs/kio/kio/previewjob.cpp
-        stream << img.width() << img.height() << quint8(img.format());
-        memcpy(shmaddr, img.bits(), img.byteCount());
-        shmdt((char*)shmaddr);
-        mimeType("application/octet-stream");
-        data(imgData);
-    }
+    QByteArray imgData;
+    QDataStream stream( &imgData, QIODevice::WriteOnly );
+    //kDebug(7115) << "IMAGE TO STREAM";
+    stream << img;
+    mimeType("application/octet-stream");
+    data(imgData);
     finished();
 }
 
