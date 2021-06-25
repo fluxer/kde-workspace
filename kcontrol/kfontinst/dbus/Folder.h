@@ -104,7 +104,7 @@ class Folder
 
 inline KDE_EXPORT uint qHash(const Folder::FlatFont &key)
 {
-    return qHash(key.file) + key.scalable;
+    return qHash(key.file); // +qHash(key.index());
 }
 
 }

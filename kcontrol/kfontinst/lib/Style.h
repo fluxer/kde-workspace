@@ -68,7 +68,7 @@ typedef QSet<Style> StyleCont;
 
 inline KDE_EXPORT uint qHash(const Style &key)
 {
-    return key.value() + uint(key.scalable());
+    return key.value();
 }
 
 }
