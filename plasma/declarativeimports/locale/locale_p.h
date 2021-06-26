@@ -116,7 +116,6 @@ Q_PROPERTY(bool use12Clock READ use12Clock CONSTANT)
 Q_PROPERTY(QString defaultLanguage READ defaultLanguage CONSTANT)//read-only
 Q_PROPERTY(QString defaultCountry READ defaultCountry CONSTANT)//read-only
 Q_PROPERTY(QString defaultCurrencyCode READ defaultCurrencyCode CONSTANT)//read-only
-Q_PROPERTY(bool useTranscript READ useTranscript CONSTANT) //read-only
 Q_PROPERTY(int fileEncodingMib READ fileEncodingMib CONSTANT) //read-only
 Q_PROPERTY(QStringList languageList READ languageList CONSTANT) //read-only
 Q_PROPERTY(QStringList currencyCodeList READ currencyCodeList CONSTANT) //read-only
@@ -1475,13 +1474,6 @@ public:
      * @return ISO Currency Code of the default currency
      */
     QString defaultCurrencyCode();
-
-    /**
-     * Reports whether evaluation of translation scripts is enabled.
-     *
-     * @return true if script evaluation is enabled, false otherwise.
-     */
-    bool useTranscript() const;
 
     /**
      * Checks whether or not the active catalog is found for the given language.

@@ -481,11 +481,6 @@ QString Locale::defaultCurrencyCode()
     return KLocale::defaultCurrencyCode();
 }
 
-bool Locale::useTranscript() const
-{
-    return m_locale->useTranscript();
-}
-
 int Locale::fileEncodingMib() const
 {
     return m_locale->fileEncodingMib();
