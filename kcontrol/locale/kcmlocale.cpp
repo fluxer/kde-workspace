@@ -357,7 +357,7 @@ void KCMLocale::initSettings()
 
 void KCMLocale::initCountrySettings( const QString &countryCode )
 {
-    // Setup a the Country Config/Settings
+    // Setup the Country Config/Settings
     // These are the Country overrides, they exclude any User, Group, or C settings
     // This will be used in the merge to obtain the KCM Defaults
     // These settings should never be saved anywhere
@@ -1181,30 +1181,23 @@ void KCMLocale::initTranslations()
     m_ui->m_selectTranslations->selectedListWidget()->setToolTip( selectedHelp );
     m_ui->m_selectTranslations->selectedListWidget()->setWhatsThis( selectedHelp );
 
-    QString enUS;
-    QString defaultLang = ki18nc( "%1 = default language name", "%1 (Default)" ).subs( enUS ).toString( m_kcmLocale );
-
     // Clear the selector before reloading
     m_ui->m_selectTranslations->availableListWidget()->clear();
     m_ui->m_selectTranslations->selectedListWidget()->clear();
 
     // Load each user selected language into the selected list
-    int i = 0;
     foreach ( const QString &languageCode, m_kcmTranslations ) {
         QListWidgetItem *listItem = new QListWidgetItem( m_ui->m_selectTranslations->selectedListWidget() );
         listItem->setText( m_kcmLocale->languageCodeToName( languageCode ) );
         listItem->setData( Qt::UserRole, languageCode );
-        ++i;
     }
 
     // Load all the available languages the user hasn't selected into the available list
-    i = 0;
     foreach ( const QString &languageCode, m_installedTranslations ) {
         if ( !m_kcmTranslations.contains( languageCode ) ) {
             QListWidgetItem *listItem = new QListWidgetItem( m_ui->m_selectTranslations->availableListWidget() );
             listItem->setText( m_kcmLocale->languageCodeToName( languageCode ) );
             listItem->setData( Qt::UserRole, languageCode );
-            ++i;
         }
     }
     m_ui->m_selectTranslations->availableListWidget()->sortItems();
