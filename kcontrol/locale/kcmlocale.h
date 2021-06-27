@@ -163,8 +163,6 @@ private:
     void initTranslations();
     void setTranslations( const QString &newValue );
 
-    void initTranslationsInstall();
-
     //Numeric tab
 
     void initNumericDigitGrouping();
@@ -292,8 +290,6 @@ private Q_SLOTS:
     void changedTranslations();
     void changedTranslationsAvailable( QListWidgetItem * item );
     void changedTranslationsSelected( QListWidgetItem * item );
-
-    void installTranslations();
 
     //Numeric tab
 

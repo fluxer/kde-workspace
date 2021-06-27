@@ -92,11 +92,6 @@ KCMLocale::KCMLocale( QWidget *parent, const QVariantList &args )
              this,                               SLOT( changedTranslationsSelected( QListWidgetItem* ) ) );
     connect( m_ui->m_selectTranslations,         SIGNAL( movedDown( QListWidgetItem* ) ),
              this,                               SLOT( changedTranslationsSelected( QListWidgetItem* ) ) );
-    // User has clicked Install button, trigger distro specific install routine
-    connect( m_ui->m_buttonTranslationsInstall,  SIGNAL( clicked() ),
-             this,                               SLOT( installTranslations() ) );
-    // Hide the Install button, this will be activated by those distros that support this feature.
-    m_ui->m_buttonTranslationsInstall->setHidden( true );
     // User has clicked Default button, resest lists to Defaults
     connect( m_ui->m_buttonDefaultTranslations,    SIGNAL( clicked() ),
              this,                               SLOT( defaultTranslations() ) );
@@ -687,7 +682,6 @@ void KCMLocale::initAllWidgets()
 
     //Translations tab
     initTranslations();
-    initTranslationsInstall();
 
     initSettingsWidgets();
 }
@@ -1277,21 +1271,6 @@ void KCMLocale::setTranslations( const QString &newValue )
     mergeSettings();
 
     initAllWidgets();
-}
-
-void KCMLocale::initTranslationsInstall()
-{
-    m_ui->m_buttonTranslationsInstall->blockSignals( true );
-    m_ui->m_buttonTranslationsInstall->setText( ki18n( "Install more languages" ).toString( m_kcmLocale ) );
-    QString helpText = ki18n( "<p>Click here to install more languages</p>" ).toString( m_kcmLocale );
-    m_ui->m_buttonTranslationsInstall->setToolTip( helpText );
-    m_ui->m_buttonTranslationsInstall->setWhatsThis( helpText );
-    m_ui->m_buttonTranslationsInstall->blockSignals( false );
-}
-
-void KCMLocale::installTranslations()
-{
-    // User has clicked Install Languages button, trigger distro specific install routine
 }
 
 void KCMLocale::initNumericDigitGrouping()
