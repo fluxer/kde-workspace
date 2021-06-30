@@ -25,84 +25,86 @@
 
 #include <stdio.h>
 
-int main( int argc, char **argv )
+int main(int argc, char **argv)
 {
-  KCmdLineArgs::init( argc, argv, "ktraderclient", 0, ki18n("KTraderClient"), "0.0" , ki18n("A command-line tool for querying the KDE trader system"));
+    KCmdLineArgs::init( argc, argv, "ktraderclient", 0, ki18n("KTraderClient"),
+        "0.0" , ki18n("A command-line tool for querying the KDE trader system"));
 
+    KCmdLineOptions options;
 
-  KCmdLineOptions options;
+    options.add("mimetype <mimetype>", ki18n("A mimetype"));
 
-  options.add("mimetype <mimetype>", ki18n("A mimetype"));
+    options.add("servicetype <servicetype>", ki18n("A servicetype, like KParts/ReadOnlyPart or KMyApp/Plugin"));
 
-  options.add("servicetype <servicetype>", ki18n("A servicetype, like KParts/ReadOnlyPart or KMyApp/Plugin"));
+    options.add("constraint <constraint>", ki18n("A constraint expressed in the trader query language"));
 
-  options.add("constraint <constraint>", ki18n("A constraint expressed in the trader query language"));
+    KCmdLineArgs::addCmdLineOptions(options);
 
-  KCmdLineArgs::addCmdLineOptions( options );
+    QCoreApplication app(argc, argv); // no GUI
 
-  QCoreApplication app( argc, argv ); // no GUI
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    const QString mimetype = args->getOption("mimetype");
+    QString servicetype = args->getOption("servicetype");
+    const QString constraint = args->getOption( "constraint");
 
-  const QString mimetype = args->getOption( "mimetype" );
-  QString servicetype = args->getOption( "servicetype" );
-  const QString constraint = args->getOption( "constraint" );
-
-  if ( mimetype.isEmpty() && servicetype.isEmpty() )
-      KCmdLineArgs::usage();
-
-  if ( !mimetype.isEmpty() )
-      printf( "mimetype is : %s\n", qPrintable( mimetype ) );
-  if ( !servicetype.isEmpty() )
-      printf( "servicetype is : %s\n", qPrintable( servicetype ) );
-  if ( !constraint.isEmpty() )
-      printf( "constraint is : %s\n", qPrintable( constraint ) );
-
-  KService::List offers;
-  if ( !mimetype.isEmpty() ) {
-      if ( servicetype.isEmpty() )
-          servicetype = "Application";
-     offers = KMimeTypeTrader::self()->query( mimetype, servicetype, constraint );
-  }
-  else
-     offers = KServiceTypeTrader::self()->query( servicetype, constraint );
-
-  printf("got %d offers.\n", offers.count());
-
-  int i = 0;
-  foreach(const KSharedPtr<KService> it, offers)
-  {
-    printf("---- Offer %d ----\n", i);
-    foreach(const QString propIt , (it)->propertyNames() )
-    {
-      QVariant prop = (it)->property( propIt );
-
-      if ( !prop.isValid() )
-      {
-        printf("Invalid property %s\n", (propIt).toLocal8Bit().data());
-	continue;
-      }
-
-      QString outp = propIt;
-      outp += " : '";
-
-      switch ( prop.type() )
-      {
-        case QVariant::StringList:
-          outp += prop.toStringList().join(" - ");
-        break;
-        case QVariant::Bool:
-          outp += prop.toBool() ? "TRUE" : "FALSE";
-          break;
-        default:
-          outp += prop.toString();
-        break;
-      }
-
-      if ( !outp.isEmpty() )
-        printf("%s'\n", outp.toLocal8Bit().data());
+    if (mimetype.isEmpty() && servicetype.isEmpty()) {
+        KCmdLineArgs::usage();
     }
-  }
-  return 0;
+
+    if (!mimetype.isEmpty() ) {
+        printf( "mimetype is : %s\n", qPrintable(mimetype));
+    }
+    if (!servicetype.isEmpty() ) {
+        printf("servicetype is : %s\n", qPrintable(servicetype));
+    }
+    if (!constraint.isEmpty() ) {
+        printf("constraint is : %s\n", qPrintable(constraint));
+    }
+
+    KService::List offers;
+    if (!mimetype.isEmpty()) {
+        if (servicetype.isEmpty()) {
+            servicetype = "Application";
+        }
+        offers = KMimeTypeTrader::self()->query(mimetype, servicetype, constraint);
+    } else {
+        offers = KServiceTypeTrader::self()->query(servicetype, constraint);
+    }
+
+    printf("got %d offers.\n", offers.count());
+
+    int i = 0;
+    foreach(const KSharedPtr<KService> it, offers) {
+        printf("---- Offer %d ----\n", i);
+        foreach(const QString propIt , it->propertyNames() ) {
+            QVariant prop = it->property(propIt);
+
+            if (!prop.isValid()) {
+                printf("Invalid property %s\n", propIt.toLocal8Bit().data());
+                continue;
+            }
+
+            QString outp = propIt;
+            outp += " : '";
+
+            switch (prop.type()) {
+                case QVariant::StringList:
+                    outp += prop.toStringList().join(" - ");
+                    break;
+                case QVariant::Bool:
+                    outp += prop.toBool() ? "TRUE" : "FALSE";
+                    break;
+                default:
+                    outp += prop.toString();
+                    break;
+            }
+
+            if (!outp.isEmpty()) {
+                printf("%s'\n", outp.toLocal8Bit().data());
+            }
+        }
+    }
+    return 0;
 }
 
