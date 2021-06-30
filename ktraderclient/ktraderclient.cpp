@@ -74,9 +74,9 @@ int main(int argc, char **argv)
 
     printf("got %d offers.\n", offers.count());
 
-    int i = 0;
-    foreach(const KSharedPtr<KService> it, offers) {
-        printf("---- Offer %d ----\n", i);
+    for (int i = 0; i < offers.count(); i++) {
+        const KSharedPtr<KService> it = offers.at(0);
+        printf("---- Offer %d ----\n", (i + 1));
         foreach(const QString propIt , it->propertyNames() ) {
             QVariant prop = it->property(propIt);
 
