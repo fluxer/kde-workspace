@@ -50,7 +50,6 @@ target_link_libraries(plasmagenericshell PUBLIC
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     kworkspace
-    kephal
 )
 
 if(Q_WS_X11)

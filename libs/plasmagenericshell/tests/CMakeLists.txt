@@ -1,4 +1,7 @@
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_SOURCE_DIR}/../widgetsexplorer)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
+    ${CMAKE_CURRENT_SOURCE_DIR}/../widgetsexplorer
+)
 
 add_definitions(-DPLASMAGENERICSHELL_EXPORT=)
 
@@ -10,7 +13,12 @@ set(appletexplorer_SRCS
    main.cpp
    )
 add_executable(plasmaappletexplorer ${appletexplorer_SRCS})
-target_link_libraries(plasmaappletexplorer ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${QT_QTDECLARATIVE_LIBRARY} kephal)
+target_link_libraries(plasmaappletexplorer
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${QT_QTDECLARATIVE_LIBRARY}
+)
 
 set(backgrounddialog_SRCS
     background.cpp

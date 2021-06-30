@@ -1,5 +1,4 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1204)
-include_directories(${CMAKE_SOURCE_DIR}/libs/kephal)
 
 ########### next target ###############
 
@@ -35,7 +34,6 @@ target_link_libraries(taskmanager PUBLIC
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
     processcore
-    kephal
 )
 
 target_link_libraries(taskmanager PRIVATE
@@ -76,6 +74,6 @@ install(FILES
 #)
 
 #add_executable(tasksmodeltest ${tasksmodel_SRCS})
-#target_link_libraries(tasksmodeltest ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} taskmanager kephal)
+#target_link_libraries(tasksmodeltest ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} taskmanager)
 
 
