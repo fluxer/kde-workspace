@@ -175,7 +175,7 @@ Item {
     function isTaskAt(pos) {
         var mapped = mapToItem(taskList, pos.x, pos.y);
 
-        return (taskList.childAt(mapped.x, mapped.y) != null);
+        return (taskList.childAt(mapped.x, mapped.y) != undefined);
     }
 
     Component.onCompleted: {
