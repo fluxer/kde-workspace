@@ -1,7 +1,7 @@
 /*  This file is part of kdebase/workspace/solid
     Copyright (C) 2005,2007 Will Stephenson <wstephenson@kde.org>
 
-    Copyright (c) 2010 Klarälvdalens Datakonsult AB,
+    Copyright (c) 2010 Klarlvdalens Datakonsult AB,
                        a KDAB Group company <info@kdab.com>
     Author: Kevin Ottens <kevin.ottens@kdab.com>
 
@@ -41,6 +41,7 @@
 #endif
 
 #include "wicdstatus.h"
+#include "connmanstatus.h"
 
 #include <kpluginfactory.h>
 
@@ -230,6 +231,7 @@ void NetworkStatusModule::init()
         backends << new NetworkManagerStatus( this );
 #endif
         backends << new WicdStatus( this );
+        backends << new ConnmanStatus( this );
     }
 
     for ( int i = 0; i < backends.count(); i++ ) {

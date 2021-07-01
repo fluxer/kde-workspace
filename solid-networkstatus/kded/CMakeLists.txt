@@ -6,6 +6,7 @@ set(kded_networkstatus_PART_SRCS
    systemstatusinterface.cpp
    wicdstatus.cpp
    wicdcustomtypes.cpp
+   connmanstatus.cpp
 )
 
 if(NETWORKMANAGER_FOUND)
