@@ -332,29 +332,7 @@ private:
     QMap<QString, Plasma::ConfigLoader*> m_configs;
 };
 
-class JsAppletInterface : public AppletInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(QGraphicsLayout *layout WRITE setLayout READ layout)
-    Q_PROPERTY(QObject *sender READ sender)
-
-public:
-    JsAppletInterface(AbstractJsAppletScript *parent)
-        : AppletInterface(parent)
-    {
-    }
-
-    Q_INVOKABLE void update(const QRectF &rect = QRectF());
-    QGraphicsLayout *layout() const;
-    void setLayout(QGraphicsLayout *);
-};
-
-#ifdef USE_JS_SCRIPTENGINE
-#define APPLETSUPERCLASS JsAppletInterface
-#else
-#define APPLETSUPERCLASS AppletInterface
-#endif
-class PopupAppletInterface : public APPLETSUPERCLASS
+class PopupAppletInterface : public AppletInterface
 {
     Q_OBJECT
     Q_PROPERTY(QIcon popupIcon READ popupIcon WRITE setPopupIcon)

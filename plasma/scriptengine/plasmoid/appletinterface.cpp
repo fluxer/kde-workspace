@@ -128,21 +128,6 @@ void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QStr
     m_appletScriptEngine->setConfigurationRequired(needsConfiguring, reason);
 }
 
-void JsAppletInterface::update(const QRectF &rect)
-{
-    applet()->update(rect);
-}
-
-QGraphicsLayout *JsAppletInterface::layout() const
-{
-    return applet()->layout();
-}
-
-void JsAppletInterface::setLayout(QGraphicsLayout *layout)
-{
-    applet()->setLayout(layout);
-}
-
 QString AppletInterface::activeConfig() const
 {
     return m_currentConfig.isEmpty() ? "main" : m_currentConfig;
@@ -705,6 +690,4 @@ ToolBoxProxy* ContainmentInterface::toolBox()
     return m_toolBox;
 }
 
-#ifndef USE_JS_SCRIPTENGINE
 #include "moc_appletinterface.cpp"
-#endif
