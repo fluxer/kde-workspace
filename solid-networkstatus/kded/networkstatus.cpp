@@ -29,6 +29,8 @@
 #include <QtCore/qtimer.h>
 
 #include <KDebug>
+#include <KNotification>
+#include <KLocale>
 
 #include "network.h"
 #include "clientadaptor.h"
@@ -57,8 +59,8 @@ typedef QMap< QString, Network * > NetworkMap;
 class NetworkStatusModule::Private
 {
 public:
-    Private() : status( Solid::Networking::Unknown ), backend( 0 ), serviceWatcher( 0 ),
-                backendAppearedWatcher( 0 ), backendDisappearedWatcher ( 0 )
+    Private() : firstnotification(true), status( Solid::Networking::Unknown ), backend( 0 ),
+                serviceWatcher( 0 ), backendAppearedWatcher( 0 ), backendDisappearedWatcher ( 0 )
     {
 
     }
@@ -66,6 +68,7 @@ public:
     {
 
     }
+    bool firstnotification;
     NetworkMap networks;
     Solid::Networking::Status status;
     SystemStatusInterface *backend;
@@ -120,6 +123,7 @@ void NetworkStatusModule::updateStatus()
             QTimer::singleShot(2000, this, SLOT(delayedStatusChanged()));
         } else {
             Q_EMIT statusChanged( (uint)d->status );
+            notifyStatus( (uint)d->status );
         }
     }
 }
@@ -127,6 +131,56 @@ void NetworkStatusModule::updateStatus()
 void NetworkStatusModule::delayedStatusChanged()
 {
     Q_EMIT statusChanged( (uint)d->status );
+    notifyStatus( (uint)d->status );
+}
+
+void NetworkStatusModule::notifyStatus( uint status)
+{
+    if (d->firstnotification) {
+        // backends may change their state from unknown to a known state on first run which makes
+        // sense for the module initialization but not for the user when the desktop just started
+        d->firstnotification = false;
+        return;
+    }
+    KNotification *notify = Q_NULLPTR;
+    switch ((Solid::Networking::Status)status) {
+        case Solid::Networking::Unknown: {
+            notify = new KNotification("Unknown");
+            notify->setComponentData(KComponentData("networkstatus"));
+            notify->setTitle(i18n("Network status changed"));
+            notify->setText(i18n("Network status is unknown"));
+            break;
+        }
+        case Solid::Networking::Unconnected: {
+            notify = new KNotification("Unconnected");
+            notify->setComponentData(KComponentData("networkstatus"));
+            notify->setTitle(i18n("Network status changed"));
+            notify->setText(i18n("Network status is offline"));
+            break;
+        }
+        case Solid::Networking::Disconnecting: {
+            notify = new KNotification("Disconnecting");
+            notify->setComponentData(KComponentData("networkstatus"));
+            notify->setTitle(i18n("Network status changed"));
+            notify->setText(i18n("Network status is about to be offline"));
+            break;
+        }
+        case Solid::Networking::Connecting: {
+            notify = new KNotification("Connecting");
+            notify->setComponentData(KComponentData("networkstatus"));
+            notify->setTitle(i18n("Network status changed"));
+            notify->setText(i18n("Network status is connecting"));
+            break;
+        }
+        case Solid::Networking::Connected: {
+            notify = new KNotification("Connected");
+            notify->setComponentData(KComponentData("networkstatus"));
+            notify->setTitle(i18n("Network status changed"));
+            notify->setText(i18n("Network status is connected"));
+            break;
+        }
+    }
+    notify->sendEvent();
 }
 
 void NetworkStatusModule::serviceUnregistered( const QString & name )

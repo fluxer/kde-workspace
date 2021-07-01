@@ -62,6 +62,8 @@ protected:
     void init();
     // recalculate cached status
     void updateStatus();
+    // send notification on status change
+    void notifyStatus( uint status );
 
 private:
     QList<SystemStatusInterface*> backends;
