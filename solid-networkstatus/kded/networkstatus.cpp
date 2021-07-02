@@ -137,7 +137,7 @@ void NetworkStatusModule::delayedStatusChanged()
 void NetworkStatusModule::notifyStatus( uint status)
 {
     if (d->firstnotification) {
-        // backends may change their state from unknown to a known state on first run which makes
+        // backends may change its state from unknown to a known state on first run which makes
         // sense for the module initialization but not for the user when the desktop just started
         d->firstnotification = false;
         return;

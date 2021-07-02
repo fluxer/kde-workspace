@@ -1,6 +1,6 @@
 [Global]
 Name=networkstatus
-Comment=Network status notification
+Comment=Network status
 IconName=network-workgroup
 
 [Event/Unknown]
