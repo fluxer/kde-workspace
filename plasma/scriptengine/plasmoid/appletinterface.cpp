@@ -438,7 +438,7 @@ void AppletInterface::gc()
 
 
 PopupAppletInterface::PopupAppletInterface(AbstractJsAppletScript *parent)
-    : APPLETSUPERCLASS(parent)
+    : AppletInterface(parent)
 {
     connect(m_appletScriptEngine, SIGNAL(popupEvent(bool)), this, SIGNAL(popupEvent(bool)));
     connect(m_appletScriptEngine, SIGNAL(popupEvent(bool)), this, SLOT(sourceAppletPopupEvent(bool)));
@@ -561,7 +561,7 @@ void PopupAppletInterface::sourceAppletPopupEvent(bool show)
 ///////////// ContainmentInterface
 
 ContainmentInterface::ContainmentInterface(AbstractJsAppletScript *parent)
-    : APPLETSUPERCLASS(parent),
+    : AppletInterface(parent),
       m_movableApplets(true),
       m_toolBox(0)
 {

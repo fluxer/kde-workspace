@@ -381,7 +381,7 @@ private:
 };
 
 
-class ContainmentInterface : public APPLETSUPERCLASS
+class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
     Q_PROPERTY(QScriptValue applets READ applets)
