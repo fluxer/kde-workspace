@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE libraries
- * Copyright (C) 2003 Fredrik Höglund <fredrik@kde.org>
+ * Copyright (C) 2003 Fredrik Hglund <fredrik@kde.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -35,43 +35,12 @@
 #  define HAVE_GNU_INLINE_ASM
 #endif
 
-typedef void (*kde_sighandler_t) (int);
-
-#ifdef __i386__
-#ifdef HAVE_X86_SSE
-static jmp_buf env;
-
-// Sighandler for the SSE OS support check
-static void sighandler( int )
-{
-    std::longjmp( env, 1 );
-}
-#endif
-#endif
-
-#ifdef __PPC__
-static sigjmp_buf jmpbuf;
-static sig_atomic_t canjump = 0;
-
-static void sigill_handler( int sig )
-{
-    if ( !canjump ) {
-        signal( sig, SIG_DFL );
-        raise( sig );
-    }
-    canjump = 0;
-    siglongjmp( jmpbuf, 1 );
-}
-#endif
-
 static int getCpuFeatures()
 {
     volatile int features = 0;
 
-#if defined( HAVE_GNU_INLINE_ASM )
-#if defined( __i386__ )
+#if defined( HAVE_GNU_INLINE_ASM ) && defined( __i386__ )
     bool haveCPUID = false;
-    bool have3DNOW = false;
     int result = 0;
 
     // First check if the CPU supports the CPUID instruction
@@ -109,65 +78,6 @@ static int getCpuFeatures()
     // Test bit 23 (MMX support)
     if ( result & 0x00800000 )
         features |= KCPUInfo::IntelMMX;
-
-    __asm__ __volatile__(
-      "pushl %%ebx             \n\t"
-      "movl $0x80000000, %%eax \n\t"
-      "cpuid                   \n\t"
-      "cmpl $0x80000000, %%eax \n\t"
-      "jbe .Lno_extended%=     \n\t"
-      "movl $0x80000001, %%eax \n\t"
-      "cpuid                   \n\t"
-      "test $0x80000000, %%edx \n\t"
-      "jz .Lno_extended%=      \n\t"
-      "movl      $1, %%eax     \n\t"   // // Set EAX to true
-      ".Lno_extended%=:        \n\t"
-      "popl   %%ebx            \n\t"   // Restore EBX
-      : "=a"(have3DNOW) : );
-
-    if ( have3DNOW )
-        features |= KCPUInfo::AMD3DNOW;
-
-#ifdef HAVE_X86_SSE
-    // Test bit 25 (SSE support)
-    if ( result & 0x00200000 ) {
-        features |= KCPUInfo::IntelSSE;
-
-        // OS support test for SSE.
-        // Install our own sighandler for SIGILL.
-        kde_sighandler_t oldhandler = std::signal( SIGILL, sighandler );
-
-        // Try executing an SSE insn to see if we get a SIGILL
-        if ( setjmp( env ) )
-            features ^= KCPUInfo::IntelSSE; // The OS support test failed
-        else
-            __asm__ __volatile__("xorps %xmm0, %xmm0");
-
-        // Restore the default sighandler
-        std::signal( SIGILL, oldhandler );
-
-        // Test bit 26 (SSE2 support)
-        if ( (result & 0x00400000) && (features & KCPUInfo::IntelSSE) )
-            features |= KCPUInfo::IntelSSE2;
-
-        // Note: The OS requirements for SSE2 are the same as for SSE
-        //       so we don't have to do any additional tests for that.
-    }
-#endif // HAVE_X86_SSE
-#elif defined __PPC__ && defined HAVE_PPC_ALTIVEC
-    signal( SIGILL, sigill_handler );
-    if ( sigsetjmp( jmpbuf, 1 ) ) {
-        signal( SIGILL, SIG_DFL );
-    } else {
-        canjump = 1;
-        __asm__ __volatile__( "mtspr 256, %0\n\t"
-                              "vand %%v0, %%v0, %%v0"
-                              : /* none */
-                              : "r" (-1) );
-        signal( SIGILL, SIG_DFL );
-        features |= KCPUInfo::AltiVec;
-    }
-#endif // __i386__
 #endif //HAVE_GNU_INLINE_ASM
 
     return features;

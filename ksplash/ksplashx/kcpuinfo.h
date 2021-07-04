@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE libraries
- * Copyright (C) 2003 Fredrik Höglund <fredrik@kde.org>
+ * Copyright (C) 2003 Fredrik Hglund <fredrik@kde.org>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -31,7 +31,7 @@
 /**
  * This class provides a means for applications to obtain information at
  * runtime about processor support for certain architecture extensions,
- * such as MMX, SSE, 3DNow and AltiVec.
+ * such as MMX.
  */
 class KCPUInfo
 {
@@ -42,10 +42,6 @@ class KCPUInfo
          */
         enum Extensions {
             IntelMMX        = 1 << 0,  //!< Intel's MMX instructions.
-            IntelSSE        = 1 << 1,  //!< Intel's SSE instructions.
-            IntelSSE2       = 1 << 2,  //!< Intel's SSE2 instructions.
-            AMD3DNOW        = 1 << 3,  //!< AMD 3DNOW instructions
-            AltiVec         = 1 << 4   //!< Motorola AltiVec instructions
         };
 
         /**
