@@ -65,12 +65,18 @@ void ConnmanStatus::connmanStateChanged()
     if (!reply.isValid()) {
         kWarning() << "invalid reply" << reply.error().message();
     } else {
-        // TODO: not implemented: Disconnecting, Connecting (match to ready?)
         const ConnmanPropertiesType props = reply.value();
         const QString state = props.value("State").toString();
-        if (state == QLatin1String("online")) {
+        // for reference:
+        // https://git.kernel.org/pub/scm/network/connman/connman.git/tree/doc/overview-api.txt
+        if (state == QLatin1String("ready") || state == QLatin1String("association")
+            || state == QLatin1String("configuration")) {
+            m_status = Solid::Networking::Connecting;
+        } else if (state == QLatin1String("online")) {
             m_status = Solid::Networking::Connected;
-        } else if (state == QLatin1String("offline")) {
+        } else if (state == QLatin1String("disconnect")) {
+            m_status = Solid::Networking::Disconnecting;
+        } else if (state == QLatin1String("offline") || state == QLatin1String("idle")) {
             m_status = Solid::Networking::Unconnected;
         } else {
             kWarning() << "unknown state" << state;
