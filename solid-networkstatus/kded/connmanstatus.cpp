@@ -36,9 +36,11 @@ ConnmanStatus::ConnmanStatus(QObject *parent)
     m_status(Solid::Networking::Unknown),
     m_connman(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE, QDBusConnection::systemBus())
 {
-    QDBusConnection::systemBus().connect(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE,
-        "PropertyChanged", this, SLOT(connmanStateChanged()));
-    connmanStateChanged();
+    if (isSupported()) {
+        QDBusConnection::systemBus().connect(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE,
+            "PropertyChanged", this, SLOT(connmanStateChanged()));
+        connmanStateChanged();
+    }
 }
 
 Solid::Networking::Status ConnmanStatus::status() const
