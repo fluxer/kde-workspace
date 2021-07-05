@@ -120,7 +120,7 @@ void InfoPanel::setTopInfo(const QIcon &deviceIcon, Solid::Device *device)
   tLayout->addWidget(setDevicesIcon(deviceIcon),0,Qt::AlignHCenter);
   
   labels << i18n("Product: ") 
-  << device->product()
+  << friendlyString(device->product())
   << i18n("Vendor: ") 
   << friendlyString(device->vendor());
  
