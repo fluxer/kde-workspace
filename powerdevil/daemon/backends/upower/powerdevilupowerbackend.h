@@ -42,6 +42,12 @@
 #define UPOWER_IFACE_DEVICE "org.freedesktop.UPower.Device"
 
 #define LOGIN1_SERVICE "org.freedesktop.login1"
+#define LOGIN1_PATH "/org/freedesktop/login1"
+#define LOGIN1_IFACE "org.freedesktop.login1.Manager"
+
+#define CONSOLEKIT_SERVICE "org.freedesktop.ConsoleKit"
+#define CONSOLEKIT_PATH "/org/freedesktop/ConsoleKit/Manager"
+#define CONSOLEKIT_IFACE "org.freedesktop.ConsoleKit.Manager"
 
 class UdevHelper;
 class XRandRX11Helper;
@@ -77,6 +83,7 @@ private slots:
     void slotDeviceChanged(const QString &);
     void slotPropertyChanged();
     void slotLogin1Resuming(bool active);
+    void slotConsoleKitResuming(bool active);
     void slotScreenBrightnessChanged();
     void onKeyboardBrightnessChanged(int);
 
@@ -101,6 +108,8 @@ private:
 
     // login1 interface
     QWeakPointer<QDBusInterface> m_login1Interface;
+    // consolekit interface
+    QWeakPointer<QDBusInterface> m_consolekitInterface;
 
     // buttons
     bool m_lidIsPresent;

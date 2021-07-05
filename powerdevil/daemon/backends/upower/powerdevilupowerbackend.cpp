@@ -36,6 +36,7 @@
 #include "xrandrbrightness.h"
 #include "upowersuspendjob.h"
 #include "login1suspendjob.h"
+#include "consolekitsuspendjob.h"
 
 #ifdef HAVE_XF86VMODE
 #include "xf86vmodegamma.h"
@@ -80,79 +81,47 @@ PowerDevilUPowerBackend::~PowerDevilUPowerBackend()
 
 bool PowerDevilUPowerBackend::isAvailable()
 {
-    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
-        // Is it pending activation?
-        kDebug() << "UPower service, " << UPOWER_SERVICE << ", is not registered on the bus. Trying to find out if it is activated.";
-        QDBusMessage message = QDBusMessage::createMethodCall("org.freedesktop.DBus",
-                                                              "/org/freedesktop/DBus",
-                                                              "org.freedesktop.DBus",
-                                                              "ListActivatableNames");
-
-        QDBusPendingReply< QStringList > reply = QDBusConnection::systemBus().asyncCall(message);
-        reply.waitForFinished();
-
-        if (reply.isValid()) {
-            if (reply.value().contains(UPOWER_SERVICE)) {
-                kDebug() << "UPower was found, activating service...";
-                QDBusConnection::systemBus().interface()->startService(UPOWER_SERVICE);
-                if (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
-                    // Wait for it
-                    QEventLoop e;
-                    QTimer *timer = new QTimer;
-                    timer->setInterval(10000);
-                    timer->setSingleShot(true);
-
-                    connect(QDBusConnection::systemBus().interface(), SIGNAL(serviceRegistered(QString)),
-                            &e, SLOT(quit()));
-                    connect(timer, SIGNAL(timeout()), &e, SLOT(quit()));
-
-                    timer->start();
-
-                    while (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
-                        e.exec();
-
-                        if (!timer->isActive()) {
-                            kDebug() << "Activation of UPower timed out. There is likely a problem with your configuration.";
-                            timer->deleteLater();
-                            return false;
-                        }
-                    }
-
-                    timer->deleteLater();
-                }
-                return true;
-            } else {
-                kDebug() << "UPower cannot be found on this system.";
-                return false;
-            }
-        } else {
-            kWarning() << "Could not request activatable names to DBus!";
-            return false;
-        }
-    } else {
-        return true;
+    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE)) {
+        kDebug() << "activating" << LOGIN1_SERVICE;
+        QDBusConnection::systemBus().interface()->startService(LOGIN1_SERVICE);
     }
+
+    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(CONSOLEKIT_SERVICE)) {
+        kDebug() << "activating" << CONSOLEKIT_SERVICE;
+        QDBusConnection::systemBus().interface()->startService(CONSOLEKIT_SERVICE);
+    }
+
+    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
+        kDebug() << "activating" << UPOWER_SERVICE;
+        QDBusConnection::systemBus().interface()->startService(UPOWER_SERVICE);
+    }
+
+    bool isavailable = QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE);
+    isavailable |= QDBusConnection::systemBus().interface()->isServiceRegistered(CONSOLEKIT_SERVICE);
+    isavailable |= QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE);
+
+    if (!isavailable) {
+        kWarning() << "No service for suspending is available on this system.";
+    }
+
+    return isavailable;
 }
 
 void PowerDevilUPowerBackend::init()
 {
     // interfaces
-    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE)) {
-        // Activate it.
-        QDBusConnection::systemBus().interface()->startService(LOGIN1_SERVICE);
-    }
-
-    if (!QDBusConnection::systemBus().interface()->isServiceRegistered(UPOWER_SERVICE)) {
-        // Activate it.
-        QDBusConnection::systemBus().interface()->startService(UPOWER_SERVICE);
-    }
-
     if (QDBusConnection::systemBus().interface()->isServiceRegistered(LOGIN1_SERVICE)) {
-        m_login1Interface = new QDBusInterface(LOGIN1_SERVICE, "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus(), this);
+        kDebug() << LOGIN1_SERVICE << "available";
+        m_login1Interface = new QDBusInterface(LOGIN1_SERVICE, LOGIN1_PATH, LOGIN1_IFACE, QDBusConnection::systemBus(), this);
+    }
+
+    if (QDBusConnection::systemBus().interface()->isServiceRegistered(CONSOLEKIT_SERVICE)) {
+        kDebug() << CONSOLEKIT_SERVICE << "available";
+        m_consolekitInterface = new QDBusInterface(CONSOLEKIT_SERVICE, CONSOLEKIT_PATH, CONSOLEKIT_IFACE, QDBusConnection::systemBus(), this);
     }
 
     bool screenBrightnessAvailable = false;
-    m_upowerInterface = new OrgFreedesktopUPowerInterface(UPOWER_SERVICE, "/org/freedesktop/UPower", QDBusConnection::systemBus(), this);
+    m_upowerInterface = new OrgFreedesktopUPowerInterface(UPOWER_SERVICE, UPOWER_PATH, QDBusConnection::systemBus(), this);
     m_brightnessControl = new XRandrBrightness();
     if (m_brightnessControl->isSupported()) {
         kDebug() << "Using XRandR";
@@ -235,6 +204,25 @@ void PowerDevilUPowerBackend::init()
         canHybridSleep.waitForFinished();
         if (canHybridSleep.isValid() && (canHybridSleep.value() == "yes" || canHybridSleep.value() == "challenge"))
             supported |= HybridSuspend;
+
+        kDebug() << LOGIN1_SERVICE << "supported" << supported;
+    } else if (m_consolekitInterface) {
+        QDBusPendingReply<QString> canSuspend = m_consolekitInterface.data()->asyncCall("CanSuspend");
+        canSuspend.waitForFinished();
+        if (canSuspend.isValid() && (canSuspend.value() == "yes" || canSuspend.value() == "challenge"))
+            supported |= ToRam;
+
+        QDBusPendingReply<QString> canHibernate = m_consolekitInterface.data()->asyncCall("CanHibernate");
+        canHibernate.waitForFinished();
+        if (canHibernate.isValid() && (canHibernate.value() == "yes" || canHibernate.value() == "challenge"))
+            supported |= ToDisk;
+
+        QDBusPendingReply<QString> canHybridSleep = m_consolekitInterface.data()->asyncCall("CanHybridSleep");
+        canHybridSleep.waitForFinished();
+        if (canHybridSleep.isValid() && (canHybridSleep.value() == "yes" || canHybridSleep.value() == "challenge"))
+            supported |= HybridSuspend;
+
+        kDebug() << CONSOLEKIT_SERVICE << "supported" << supported;
     } else {
         if (m_upowerInterface->canSuspend() && m_upowerInterface->SuspendAllowed()) {
             kDebug() << "Can suspend";
@@ -250,6 +238,8 @@ void PowerDevilUPowerBackend::init()
     // "resuming" signal
     if (m_login1Interface && checkSystemdVersion(198)) {
         connect(m_login1Interface.data(), SIGNAL(PrepareForSleep(bool)), this, SLOT(slotLogin1Resuming(bool)));
+    } else if (m_consolekitInterface) {
+        connect(m_consolekitInterface.data(), SIGNAL(PrepareForSleep(bool)), this, SLOT(slotConsoleKitResuming(bool)));
     } else {
         connect(m_upowerInterface, SIGNAL(Resuming()), this, SIGNAL(resumeFromSuspend()));
     }
@@ -393,6 +383,8 @@ KJob* PowerDevilUPowerBackend::suspend(PowerDevil::BackendInterface::SuspendMeth
 {
     if (m_login1Interface && checkSystemdVersion(195)) {
         return new Login1SuspendJob(m_login1Interface.data(), method, supportedSuspendMethods());
+    } else if (m_consolekitInterface) {
+        return new ConsoleKitSuspendJob(m_consolekitInterface.data(), method, supportedSuspendMethods());
     } else {
         return new UPowerSuspendJob(m_upowerInterface, method, supportedSuspendMethods());
     }
@@ -521,6 +513,13 @@ void PowerDevilUPowerBackend::onDevicePropertiesChanged(const QString &ifaceName
 }
 
 void PowerDevilUPowerBackend::slotLogin1Resuming(bool active)
+{
+    if (!active) {
+        emit resumeFromSuspend();
+    }
+}
+
+void PowerDevilUPowerBackend::slotConsoleKitResuming(bool active)
 {
     if (!active) {
         emit resumeFromSuspend();

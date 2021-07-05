@@ -16,6 +16,7 @@ endif()
 set(powerdevilupowerbackend_SRCS
     backends/upower/upowersuspendjob.cpp
     backends/upower/login1suspendjob.cpp
+    backends/upower/consolekitsuspendjob.cpp
     backends/upower/powerdevilupowerbackend.cpp
     backends/upower/xrandrbrightness.cpp
     backends/upower/xrandrx11helper.cpp
