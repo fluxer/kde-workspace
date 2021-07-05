@@ -131,8 +131,6 @@ void InfoPanel::setTopInfo(const QIcon &deviceIcon, Solid::Device *device)
 QString InfoPanel::friendlyString(const QString &input, const QString &blankName) 
 {  
   if(input.isEmpty()) return QString(blankName);
-  if(input.length() >= 40) return input.left(39);
-  
   return input; 
 }
 
