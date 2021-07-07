@@ -252,7 +252,10 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
             QIcon icon;
             QString iconName;
 
-            properties["OverlayIconPixmap"].value<QDBusArgument>() >> image;
+            QDBusArgument argumentValue = properties["OverlayIconPixmap"].value<QDBusArgument>();
+            if (argumentValue.currentType() != QDBusArgument::UnknownType) {
+                argumentValue >> image;
+            }
             if (image.isEmpty()) {
                 QString iconName = properties["OverlayIconName"].toString();
                 setData("OverlayIconName", iconName);
@@ -264,7 +267,10 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
                 overlay = imageVectorToPixmap(image);
             }
 
-            properties["IconPixmap"].value<QDBusArgument>() >> image;
+            argumentValue = properties["IconPixmap"].value<QDBusArgument>();
+            if (argumentValue.currentType() != QDBusArgument::UnknownType) {
+                argumentValue >> image;
+            }
             if (image.isEmpty()) {
                 iconName = properties["IconName"].toString();
                 if (!iconName.isEmpty()) {
@@ -289,7 +295,10 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
             KDbusImageVector image;
             QIcon attentionIcon;
 
-            properties["AttentionIconPixmap"].value<QDBusArgument>() >> image;
+            QDBusArgument argumentValue = properties["AttentionIconPixmap"].value<QDBusArgument>();
+            if (argumentValue.currentType() != QDBusArgument::UnknownType) {
+                argumentValue >> image;
+            }
             if (image.isEmpty()) {
                 QString iconName = properties["AttentionIconName"].toString();
                 setData("AttentionIconName", iconName);
@@ -312,7 +321,10 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
         //ToolTip
         {
             KDbusToolTipStruct toolTip;
-            properties["ToolTip"].value<QDBusArgument>() >> toolTip;
+            QDBusArgument argumentValue = properties["ToolTip"].value<QDBusArgument>();
+            if (argumentValue.currentType() != QDBusArgument::UnknownType) {
+                argumentValue >> toolTip;
+            }
             if (toolTip.title.isEmpty()) {
                 setData("ToolTipTitle", QVariant());
                 setData("ToolTipSubTitle", QVariant());
