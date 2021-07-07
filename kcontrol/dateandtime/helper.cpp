@@ -131,6 +131,7 @@ ClockHelper::CH_Error ClockHelper::tz( const QString& selectedzone )
     foreach (const QString &zonedir, zoneDirs) {
         if (QDir(zonedir).exists()) {
             ZONE_INFO_DIR = zonedir;
+            break;
         }
     }
 

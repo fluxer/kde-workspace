@@ -94,11 +94,15 @@ void KTimeZoned::init(bool restart)
     if (restart)
         config.reparseConfiguration();
     KConfigGroup group(&config, "TimeZones");
-    mZoneinfoDir     = group.readEntry(ZONEINFO_DIR);
-    mZoneTab         = group.readEntry(ZONE_TAB);
+    mZoneinfoDir = QDir::cleanPath(group.readEntry(ZONEINFO_DIR));
+    mZoneTab = group.readEntry(ZONE_TAB);
     mConfigLocalZone = group.readEntry(LOCAL_ZONE);
     if (mZoneinfoDir.length() > 1 && mZoneinfoDir.endsWith('/'))
         mZoneinfoDir.truncate(mZoneinfoDir.length() - 1);   // strip trailing '/'
+
+    kDebug(1221) << ZONEINFO_DIR << mZoneinfoDir;
+    kDebug(1221) << ZONE_TAB << mZoneTab;
+    kDebug(1221) << LOCAL_ZONE << mConfigLocalZone;
 
     // For Unix, read zone.tab.
 
@@ -193,6 +197,7 @@ bool KTimeZoned::findZoneTab(QFile& f)
     foreach (const QString &zonedir, zoneDirs) {
         if (QDir(zonedir).exists()) {
             ZONE_INFO_DIR = zonedir;
+            break;
         }
     }
 
@@ -202,8 +207,8 @@ bool KTimeZoned::findZoneTab(QFile& f)
     // make a note if the dir exists; whether it contains zone.tab or not
     if (dir.exists(zoneinfoDir))
     {
-        mZoneinfoDir = zoneinfoDir;
-        f.setFileName(zoneinfoDir + ZONE_TAB_FILE);
+        mZoneinfoDir = QDir::cleanPath(zoneinfoDir);
+        f.setFileName(mZoneinfoDir + ZONE_TAB_FILE);
         if (f.open(QIODevice::ReadOnly))
             return true;
         kDebug(1221) << "Can't open " << f.fileName();
@@ -212,8 +217,8 @@ bool KTimeZoned::findZoneTab(QFile& f)
     zoneinfoDir = ::getenv("TZDIR");
     if (!zoneinfoDir.isEmpty() && dir.exists(zoneinfoDir))
     {
-        mZoneinfoDir = zoneinfoDir;
-        f.setFileName(zoneinfoDir + ZONE_TAB_FILE);
+        mZoneinfoDir = QDir::cleanPath(zoneinfoDir);
+        f.setFileName(mZoneinfoDir + ZONE_TAB_FILE);
         if (f.open(QIODevice::ReadOnly))
             return true;
         kDebug(1221) << "Can't open " << f.fileName();
@@ -269,7 +274,9 @@ void KTimeZoned::findLocalZone()
     const char *envtz = ::getenv("TZ");
     if (checkTZ(envtz)) {
         mSavedTZ = envtz;
-        if (!mLocalZone.isEmpty()) kDebug(1221)<<"TZ: "<<mLocalZone;
+        if (!mLocalZone.isEmpty()) {
+            kDebug(1221) << "TZ: " << mLocalZone;
+        }
     }
 
     if (mLocalZone.isEmpty() && !mZoneinfoDir.isEmpty()) {
@@ -309,7 +316,7 @@ void KTimeZoned::findLocalZone()
             if (candidateOffset < bestOffset &&  zone.parse()) {
                 QList<QByteArray> abbrs = zone.abbreviations();
                 if (abbrs.contains(tzname0)  &&  abbrs.contains(tzname1)) {
-                    // kDebug(1221) << "local=" << zone.name();
+                    kDebug(1221) << "local=" << zone.name();
                     mLocalZone = zone.name();
                     bestOffset = candidateOffset;
                     if (!bestOffset)
@@ -319,13 +326,15 @@ void KTimeZoned::findLocalZone()
         }
         KSystemTimeZoneSource::endParseBlock();
         if (!mLocalZone.isEmpty()) {
-            kDebug(1221)<<"tzname: "<<mLocalZone;
+            kDebug(1221) << "tzname:" << mLocalZone;
         }
     }
     if (mLocalZone.isEmpty()) {
         // SOLUTION 6: FAILSAFE.
         mLocalZone = KTimeZone::utc().name();
-        if (!mLocalZone.isEmpty()) kDebug(1221)<<"Failsafe: "<<mLocalZone;
+        if (!mLocalZone.isEmpty()) {
+            kDebug(1221) << "Failsafe:" << mLocalZone;
+        }
     }
 
     // Finally, if the local zone identity has changed, store
@@ -438,7 +447,7 @@ bool KTimeZoned::checkTimezone()
         return false;
     }
     mLocalIdFile = f.fileName();
-    kDebug(1221)<<"/etc/timezone: "<<mLocalZone;
+    kDebug(1221) << "/etc/timezone:" << mLocalZone;
     return true;
 }
 
@@ -461,7 +470,7 @@ bool KTimeZoned::matchZoneFile(const QString &path)
                 // Note that some systems (e.g. Gentoo) have zones under zoneinfo which
                 // are not in zone.tab, so don't validate against mZones.
                 mLocalZone = zoneInfoFileName.mid(mZoneinfoDir.length() + 1);
-                // kDebug(1221) << "local=" << mLocalZone;
+                kDebug(1221) << "local=" << mLocalZone;
             } else {
                 // It isn't a zoneinfo file or a copy thereof.
                 // Use the absolute path as the time zone name.
@@ -469,11 +478,10 @@ bool KTimeZoned::matchZoneFile(const QString &path)
             }
             mLocalIdFile = f.fileName();
             mLocalZoneDataFile = zoneInfoFileName;
-            kDebug(1221)<<mLocalIdFile<<": "<<mLocalZone;
+            kDebug(1221) << "symlink" << mLocalIdFile << ":" << mLocalZone;
             return true;
         }
-    }
-    else if (f.open(QIODevice::ReadOnly)) {
+    } else if (f.open(QIODevice::ReadOnly)) {
         // SOLUTION 3: DEFINITIVE.
         // Try to match the file against the list of zoneinfo files.
 
@@ -535,7 +543,7 @@ bool KTimeZoned::matchZoneFile(const QString &path)
         f.close();
         if (success) {
             mLocalIdFile = f.fileName();
-            kDebug(1221)<<mLocalIdFile<<": "<<mLocalZone;
+            kDebug(1221) << "file" << mLocalIdFile << ":" << mLocalZone;
             return true;
         }
     }
