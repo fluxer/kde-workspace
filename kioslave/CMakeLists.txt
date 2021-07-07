@@ -26,5 +26,3 @@ endif()
 if(SAMBA_FOUND)
     add_subdirectory(smb)
 endif()
-
-# add_subdirectory(audiocd)
