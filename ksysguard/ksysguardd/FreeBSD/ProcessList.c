@@ -87,9 +87,9 @@ void initProcessList(struct SensorModul *sm) {
     }
 
     len = sizeof(int);
-    if (sysctlbyname("kern.smp.active", &smpmode, &len, NULL, 0))
+    if (sysctlbyname("kern.smp.active", &smpmode, &len, NULL, 0) == -1) {
         smpmode = 0;
-    else {
+    } else {
         int cpus = 0;
         len = sizeof(int);
         sysctlbyname("kern.smp.cpus", &cpus, &len, NULL, 0);

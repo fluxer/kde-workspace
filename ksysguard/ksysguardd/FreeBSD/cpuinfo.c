@@ -131,7 +131,7 @@ initCpuInfo(struct SensorModul* sm)
     for (id = 0; id < cores; ++id) {
         len = sizeof(int);
         snprintf(name, SYSCTL_ID_LEN, "dev.cpu.%d.freq", id);
-        if (!sysctlbyname(name, &freq[id][0], &len, NULL, 0)) {
+        if (sysctlbyname(name, &freq[id][0], &len, NULL, 0) != -1) {
             get_mmfreq(id, &freq[id][1], &freq[id][2]);
             snprintf(name, SYSCTL_ID_LEN, "cpu/cpu%d/clock", id);
             registerMonitor(name, "integer", printCPUxClock, printCPUxClockInfo, sm);
@@ -163,11 +163,12 @@ initCpuInfo(struct SensorModul* sm)
     for (id = 0; id < cores; ++id) {
         len = sizeof(int);
         snprintf(name, SYSCTL_ID_LEN, "dev.cpu.%d.temperature", id);
-        if (!sysctlbyname(name, &temp[id], &len, NULL, 0)) {
+        if (sysctlbyname(name, &temp[id], &len, NULL, 0) != -1) {
             snprintf(name, SYSCTL_ID_LEN, "cpu/cpu%d/temperature", id);
             registerMonitor(name, "float", printCPUxTemperature, printCPUxTemperatureInfo, sm);
-        } else
+        } else {
             temp[id] = -1;
+        }
     }
 
     updateCpuInfo();
@@ -271,7 +272,7 @@ updateCpuInfo(void)
             len = sizeof(int);
             snprintf(name, SYSCTL_ID_LEN, "dev.cpu.%d.freq", id);
             freq[id][0] = 0;
-            if (!sysctlbyname(name, &freq[id][0], &len, NULL, 0)) {
+            if (sysctlbyname(name, &freq[id][0], &len, NULL, 0) != -1) {
                 freq_count += 1;
                 tot_freq += freq[id][0];
             }
@@ -280,7 +281,7 @@ updateCpuInfo(void)
             len = sizeof(int);
             snprintf(name, SYSCTL_ID_LEN, "dev.cpu.%d.temperature", id);
             temp[id] = 0.0;
-            if (!sysctlbyname(name, &temp[id], &len, NULL, 0)) {
+            if (sysctlbyname(name, &temp[id], &len, NULL, 0) != -1) {
                 temp_count += 1;
                 tot_temp += temp[id];
             }
@@ -557,7 +558,7 @@ void get_mmfreq(int id, int* minfreq, int* maxfreq)
     *maxfreq = 0;
 
     snprintf(mid, sizeof(mid), "dev.cpu.%d.freq_levels", id);
-    if (!sysctlbyname(mid, buf, &len, NULL, 0))
+    if (sysctlbyname(mid, buf, &len, NULL, 0) != -1)
     {
         char *start = buf;
         char *end;
