@@ -68,11 +68,11 @@ void initACPI(struct SensorModul *sm) {
     for (tz_cnt = 0; tz_cnt < MAXTZ; ++tz_cnt) {
         len = sizeof(int);
         snprintf(name, TZ_MIB_LEN, TZ_MIB, tz_cnt);
-        if (sysctlbyname(name, &tz_temp[tz_cnt], &len, NULL, 0))
-            break;
-        else {
+        if (sysctlbyname(name, &tz_temp[tz_cnt], &len, NULL, 0) != -1) {
             snprintf(name, BUF_LEN, TZ_MONITOR, tz_cnt + 1);
             registerMonitor(name, "float", printThermal, printThermalInfo, sm);
+        } else {
+            break;
         }
     }
 

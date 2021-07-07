@@ -307,7 +307,7 @@ void kvm_getswapinfo_sysctl(size_t *ksw_used, size_t *ksw_total)
     *ksw_total = 0;
     if (dmmax == -1) {
         len = sizeof(dmmax);
-        if (sysctlbyname("vm.dmmax", &dmmax, &len, NULL, 0) || len != sizeof(dmmax)) {
+        if (sysctlbyname("vm.dmmax", &dmmax, &len, NULL, 0) == -1 || len != sizeof(dmmax)) {
             dmmax = -1;
             return;
         }
@@ -324,7 +324,7 @@ void kvm_getswapinfo_sysctl(size_t *ksw_used, size_t *ksw_total)
     for (unswdev = 0;; unswdev++) {
         soid[mibi] = unswdev;
         len = sizeof(xsd);
-        if (sysctl(soid, mibi + 1, &xsd, &len, NULL, 0) || len != sizeof(xsd)) {
+        if (sysctl(soid, mibi + 1, &xsd, &len, NULL, 0) == -1 || len != sizeof(xsd)) {
             return;
         }
 
