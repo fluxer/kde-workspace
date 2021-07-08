@@ -30,7 +30,7 @@ KillRunnerConfigForm::KillRunnerConfigForm(QWidget* parent) : QWidget(parent)
 }
 
 KillRunnerConfig::KillRunnerConfig(QWidget* parent, const QVariantList& args) :
-        KCModule(ConfigFactory::componentData(), parent, args)
+        KCModule(KillRunnerConfigFactory::componentData(), parent, args)
 {
     m_ui = new KillRunnerConfigForm(this);
 
