@@ -22,35 +22,25 @@
 
 #include "osdepinfo.h"
 
+#include <sys/utsname.h>
+
 OsDepInfo::OsDepInfo() 
 {
-  setDepInfo();
+    struct utsname unixInfo;
+    if(uname(&unixInfo)) {
+        return;
+    }
+
+    m_osVersion = QString(unixInfo.sysname) + ' ' + QString(unixInfo.release);
+    m_hostName = QString(unixInfo.nodename);
 }
 
 const QString OsDepInfo::hostName() 
 {
-  return m_hostName;
+    return m_hostName;
 }
 
 const QString OsDepInfo::osVersion()
 {
-  return m_osVersion;
+    return m_osVersion;
 }
-
-#if defined(Q_OS_UNIX)
-  #include "osdepinfo_unix.cpp"
-#else
-
-#ifdef __GNUC__
-  #warning OsDepInfo setting info to blank
-  #warning Add OsDepInfo for your OS
-#endif // __GNUC__
-
-void OsDepInfo::setDepInfo() 
-{
-  m_osVersion.clear();
-  m_hostName.clear();
-}
-
-#endif // Q_OS_UNIX
-

@@ -41,7 +41,7 @@ extern int CheckSetupFlag;
  * Delivers the message to the front end
  */
 void output( const char *fmt, ...)
-#ifdef __GNUC__
+#if !defined(__INSURE__)
     __attribute__ (  (  format (  printf, 1, 2 ) ) )
 #endif
    ;
@@ -50,7 +50,7 @@ void output( const char *fmt, ...)
   Delivers the error message to the front end.
  */
 void print_error( const char*, ... )
-#ifdef __GNUC__
+#if !defined(__INSURE__)
     __attribute__ (  (  format (  printf, 1, 2 ) ) )
 #endif
     ;
@@ -59,7 +59,7 @@ void print_error( const char*, ... )
   Writes the error message to the syslog daemon.
  */
 void log_error( const char*, ... )
- #ifdef __GNUC__
+#if !defined(__INSURE__)
     __attribute__ (  (  format (  printf, 1, 2 ) ) )
 #endif
     ;

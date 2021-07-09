@@ -34,16 +34,15 @@
 
 #include <string>
 
-#if defined(__INTEL_COMPILER)
+#if defined(__MMX__)
 #  define HAVE_MMX
+#else
+#  warning no MMX support
+#endif
+#if defined(__SSE2__)
 #  define HAVE_SSE2
-#elif defined(__GNUC__)
-#  if defined(__MMX__)
-#    define HAVE_MMX
-#  endif
-#  if defined(__SSE2__) && __GNUC__ > 3
-#    define HAVE_SSE2
-#  endif
+#else
+#  warning no SSE2 support
 #endif
 
 #ifdef HAVE_MMX

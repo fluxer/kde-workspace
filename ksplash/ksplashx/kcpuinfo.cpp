@@ -31,7 +31,7 @@
 #include "kcpuinfo.h"
 
 
-#if defined(__GNUC__) || defined(__INTEL_COMPILER)
+#if defined(__GNUC__)
 #  define HAVE_GNU_INLINE_ASM
 #endif
 

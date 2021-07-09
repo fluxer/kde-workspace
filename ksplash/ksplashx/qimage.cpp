@@ -254,10 +254,6 @@
     Using 0 as the conversion flag sets all the default options.
 */
 
-#if defined(Q_CC_DEC) && defined(__alpha) && (__DECCXX_VER-0 >= 50190001)
-#pragma message disable narrowptr
-#endif
-
 #ifndef QT_NO_IMAGE_TEXT
 class QImageDataMisc {
 public:

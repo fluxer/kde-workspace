@@ -66,7 +66,7 @@
 # define HAVE_ETCPASSWD
 #endif
 
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#if !defined(__INSURE__)
 # define ATTR_UNUSED __attribute__((unused))
 # define ATTR_NORETURN __attribute__((noreturn))
 # define ATTR_PRINTFLIKE(fmt,var) __attribute__((format(printf,fmt,var)))

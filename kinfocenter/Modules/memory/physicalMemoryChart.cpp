@@ -31,7 +31,7 @@ void PhysicalMemoryChart::paintEvent(QPaintEvent* /*event*/) {
 	t_memsize bufferMemory;
 	
 	bufferMemory = 0;
-#if !defined(sun) && !defined(__NetBSD__) && !defined(__OpenBSD__)
+#if !defined(Q_OS_SOLARIS) && !defined(Q_OS_NETBSD) && !defined(Q_OS_OPENBSD)
 	bufferMemory = ZERO_IF_NO_INFO(memoryInfos[BUFFER_MEM]);
 #endif
 	t_memsize cachedMemory = ZERO_IF_NO_INFO(memoryInfos[CACHED_MEM]);

@@ -34,8 +34,6 @@ class OsDepInfo
     const QString osVersion();
     
   private:
-    void setDepInfo();
-    
     QString m_hostName;
     QString m_osVersion;
 };

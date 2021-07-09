@@ -10,9 +10,6 @@ include_directories(
 
 include(CheckCXXSourceCompiles)
 CHECK_CXX_SOURCE_COMPILES("
-#ifdef __SUNPRO_CC
-    #define __asm__ asm
-#endif
 int main() { __asm__(\"pxor %mm0, %mm0\") ; }"
     X86_MMX_FOUND
 )

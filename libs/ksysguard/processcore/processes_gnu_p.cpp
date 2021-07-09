@@ -20,9 +20,7 @@
 #include "processes_local_p.h"
 #include "process.h"
 
-#ifdef __GNUC__
 #warning Totally bogus ProcessesLocal implementation
-#endif
 
 namespace KSysGuard
 {

@@ -10,11 +10,6 @@
 
 /* Stop <sys/swap.h> from crapping out on 32-bit architectures. */
 
-#if !defined(_LP64) && _FILE_OFFSET_BITS == 64
-# undef _FILE_OFFSET_BITS
-# define _FILE_OFFSET_BITS 32
-#endif
-
 #include <sys/stat.h>
 #include <sys/swap.h>
 #include <vm/anon.h>
@@ -58,9 +53,7 @@ void KCMMemory::fetchValues() {
 	kdata = (kstat_named_t *) kstat_data_lookup( ksp, "freemem" );
 	if( kdata != NULL )
 		memoryInfos[FREE_MEM] = PAGETOK(kdata->value.ui32);
-#ifdef __GNUC__
 #warning "FIXME: memoryInfos[CACHED_MEM]"
-#endif	
 	memoryInfos[CACHED_MEM] = NO_MEMORY_INFO; // cached memory in ram
 	  
 	kstat_close( kctl );
