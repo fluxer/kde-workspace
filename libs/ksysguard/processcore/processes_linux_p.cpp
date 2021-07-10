@@ -42,6 +42,7 @@
 //for ionice
 #include <sys/ptrace.h>
 #include <asm/unistd.h>
+#include <sys/syscall.h>
 //for getsched
 #include <sched.h>
 
@@ -51,33 +52,12 @@
 extern int sys_ioprio_set(int, int, int);
 extern int sys_ioprio_get(int, int);
 
-#warning FIXME hardcoded syscall numbers
-
-#define HAVE_IONICE
 /* Check if this system has ionice */
-#if !defined(SYS_ioprio_get) || !defined(SYS_ioprio_set)
-/* All new kernels have SYS_ioprio_get and _set defined, but for the few that do not, here are the definitions */
-#if defined(__i386__)
-#define __NR_ioprio_set         289
-#define __NR_ioprio_get         290
-#elif defined(__ppc__) || defined(__powerpc__)
-#define __NR_ioprio_set         273
-#define __NR_ioprio_get         274
-#elif defined(__x86_64__)
-#define __NR_ioprio_set         251
-#define __NR_ioprio_get         252
-#elif defined(__ia64__)
-#define __NR_ioprio_set         1274
-#define __NR_ioprio_get         1275
+#if defined(SYS_ioprio_get) && defined(SYS_ioprio_set)
+#define HAVE_IONICE
 #else
 #warning "This architecture does not support IONICE.  Disabling ionice feature."
-#undef HAVE_IONICE
 #endif
-/* Map these to SYS_ioprio_get */
-#define SYS_ioprio_get                __NR_ioprio_get
-#define SYS_ioprio_set                __NR_ioprio_set
-
-#endif /* !SYS_ioprio_get */
 
 /* Set up ionice functions */
 #ifdef HAVE_IONICE
