@@ -40,18 +40,15 @@
 #include <dirent.h>
 #include <stdlib.h>
 //for ionice
-#include <sys/ptrace.h>
 #include <asm/unistd.h>
+#include <sys/ptrace.h>
 #include <sys/syscall.h>
 //for getsched
 #include <sched.h>
 
 #define PROCESS_BUFFER_SIZE 1000
 
-/* For ionice */
-extern int sys_ioprio_set(int, int, int);
-extern int sys_ioprio_get(int, int);
-
+// NOTE: keep in sync with kde-workspace/ksysguard/ksysguardd/Linux/ProcessList.c
 /* Check if this system has ionice */
 #if defined(SYS_ioprio_get) && defined(SYS_ioprio_set)
 #define HAVE_IONICE
@@ -68,12 +65,12 @@ extern int sys_ioprio_get(int, int);
  * See man ioprio_set  and man ioprio_get   for information on these functions */
 static int ioprio_set(int which, int who, int ioprio)
 {
-  return syscall(SYS_ioprio_set, which, who, ioprio);
+    return syscall(SYS_ioprio_set, which, who, ioprio);
 }
 
 static int ioprio_get(int which, int who)
 {
-  return syscall(SYS_ioprio_get, which, who);
+    return syscall(SYS_ioprio_get, which, who);
 }
 #endif
 
@@ -528,7 +525,7 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
         errorCode = Processes::InvalidPid;
         return false;
     }
-    if (setpriority( PRIO_PROCESS, pid, priority )) {
+    if (setpriority( PRIO_PROCESS, pid, priority ) == -1) {
         switch (errno) {
             case ESRCH:
                 errorCode = Processes::ProcessDoesNotExistOrZombie;

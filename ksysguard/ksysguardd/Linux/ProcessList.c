@@ -29,7 +29,9 @@
 #include <sys/resource.h>
 #include <time.h>
 #include <unistd.h>
+#include <asm/unistd.h>
 #include <sys/ptrace.h>
+#include <sys/syscall.h>
 
 #include "../../gui/SignalIDs.h"
 #include "Command.h"
@@ -43,39 +45,13 @@
 #define TAGSIZE 32
 #define KDEINITLEN sizeof( "kdeinit: " )
 
-/* For ionice */
-extern int sys_ioprio_set(int, int, int);
-extern int sys_ioprio_get(int, int);
-
-#ifndef __GNU__ // Hurd
-#include <asm/unistd.h>
-#define HAVE_IONICE
-#endif
-
+// NOTE: keep in sync with kde-workspace/libs/ksysguard/processcore/processes_linux_p.cpp
 /* Check if this system has ionice */
-#if !defined(SYS_ioprio_get) || !defined(SYS_ioprio_set)
-/* All new kernels have SYS_ioprio_get and _set defined, but for the few that do not, here are the definitions */
-#if defined(__i386__)
-#define __NR_ioprio_set         289
-#define __NR_ioprio_get         290
-#elif defined(__ppc__) || defined(__powerpc__)
-#define __NR_ioprio_set         273
-#define __NR_ioprio_get         274
-#elif defined(__x86_64__)
-#define __NR_ioprio_set         251
-#define __NR_ioprio_get         252
-#elif defined(__ia64__)
-#define __NR_ioprio_set         1274
-#define __NR_ioprio_get         1275
+#if defined(SYS_ioprio_get) && defined(SYS_ioprio_set)
+#define HAVE_IONICE
 #else
 #warning "This architecture does not support IONICE.  Disabling ionice feature."
-#undef HAVE_IONICE
 #endif
-/* Map these to SYS_ioprio_get */
-#define SYS_ioprio_get                __NR_ioprio_get
-#define SYS_ioprio_set                __NR_ioprio_set
-
-#endif /* !SYS_ioprio_get */
 
 /* Set up ionice functions */
 #ifdef HAVE_IONICE
@@ -86,12 +62,12 @@ extern int sys_ioprio_get(int, int);
  * See man ioprio_set  and man ioprio_get   for information on these functions */
 static int ioprio_set(int which, int who, int ioprio)
 {
-  return syscall(SYS_ioprio_set, which, who, ioprio);
+    return syscall(SYS_ioprio_set, which, who, ioprio);
 }
  
 static int ioprio_get(int which, int who)
 {
-  return syscall(SYS_ioprio_get, which, who);
+    return syscall(SYS_ioprio_get, which, who);
 }
 #endif
 
@@ -600,7 +576,7 @@ void setPriority( const char* cmd )
   int pid, prio;
   /** as:  setpriority <pid> <priority> */
   sscanf( cmd, "%*s %d %d", &pid, &prio );
-  if ( setpriority( PRIO_PROCESS, pid, prio ) ) {
+  if ( setpriority( PRIO_PROCESS, pid, prio ) == -1 ) {
     switch ( errno ) {
       case EINVAL:
         output( "4\t%d\t%d\n", pid, prio  );
