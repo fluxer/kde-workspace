@@ -214,8 +214,8 @@ QSet<long> ProcessesLocal::getAllPids( )
 
 bool ProcessesLocal::sendSignal(long pid, int sig)
 {
-    if ( kill( (pid_t)pid, sig ) ) {
-        // Kill failed
+    if (kill((pid_t)pid, sig) == -1) {
+        // kill failed
         return false;
     }
     return true;
@@ -223,7 +223,7 @@ bool ProcessesLocal::sendSignal(long pid, int sig)
 
 bool ProcessesLocal::setNiceness(long pid, int priority)
 {
-    if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
+    if (setpriority(PRIO_PROCESS, pid, priority) == -1) {
         // set niceness failed
         return false;
     }

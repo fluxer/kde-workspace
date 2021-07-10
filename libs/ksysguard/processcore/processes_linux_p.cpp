@@ -70,8 +70,8 @@ ProcessesLocal::Private::~Private()
 
 ProcessesLocal::ProcessesLocal() : d(new Private())
 {
-
 }
+
 bool ProcessesLocal::Private::readProcStatus(const QString &dir, Process *process)
 {
     mFile.setFileName(dir + "status");
@@ -496,7 +496,7 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
             default:
                 break;
         }
-        //set niceness failed
+        // set niceness failed
         return false;
     }
     return true;

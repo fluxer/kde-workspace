@@ -401,7 +401,7 @@ killProcess(const char* cmd)
 		sig = SIGUSR2;
 		break;
 	}
-	if (kill((pid_t) pid, sig))
+	if (kill((pid_t) pid, sig) == -1)
 	{
 		switch(errno)
 		{
@@ -430,7 +430,7 @@ setPriority(const char* cmd)
 	int pid, prio;
 
 	sscanf(cmd, "%*s %d %d", &pid, &prio);
-	if (setpriority(PRIO_PROCESS, pid, prio))
+	if (setpriority(PRIO_PROCESS, pid, prio) == -1)
 	{
 		switch(errno)
 		{

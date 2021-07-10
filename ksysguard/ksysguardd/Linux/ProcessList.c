@@ -490,7 +490,7 @@ void killProcess( const char* cmd )
       break;
   }
 
-  if ( kill( (pid_t)pid, sig ) ) {
+  if ( kill( (pid_t)pid, sig ) == -1 ) {
     switch ( errno ) {
       case EINVAL:
         output( "4\t%d\n", pid );
@@ -499,9 +499,9 @@ void killProcess( const char* cmd )
         output( "3\t%d\n", pid );
         break;
       case EPERM:
-	if(vfork() == 0) {
-	  exit(0);/* Won't execute unless execve fails.  Need this for the parent process to continue */
-	}
+        if(vfork() == 0) {
+          exit(0);/* Won't execute unless execve fails.  Need this for the parent process to continue */
+        }
         output( "2\t%d\n", pid );
         break;
       default: /* unknown error */

@@ -207,17 +207,17 @@ QSet<long> ProcessesLocal::getAllPids( )
 }
 
 bool ProcessesLocal::sendSignal(long pid, int sig) {
-    if ( kill( (pid_t)pid, sig ) ) {
-	//Kill failed
+    if (kill((pid_t)pid, sig) == -1) {
+        // kill failed
         return false;
     }
     return true;
 }
 
 bool ProcessesLocal::setNiceness(long pid, int priority) {
-    if ( setpriority( PRIO_PROCESS, pid, priority ) ) {
-	    //set niceness failed
-	    return false;
+    if (setpriority(PRIO_PROCESS, pid, priority) == -1) {
+        // set niceness failed
+        return false;
     }
     return true;
 }
@@ -225,23 +225,25 @@ bool ProcessesLocal::setNiceness(long pid, int priority) {
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
     if(priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
-	    priority = 0;
-    if(pid <= 0) return false; // check the parameters
+        priority = 0;
+    // check the parameters
+    if(pid <= 0)
+        return false;
     struct sched_param params;
     params.sched_priority = priority;
     switch(priorityClass) {
-      case (KSysGuard::Process::Other):
-	    return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
-      case (KSysGuard::Process::RoundRobin):
-	    return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
-      case (KSysGuard::Process::Fifo):
-	    return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
+        case (KSysGuard::Process::Other):
+            return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
+        case (KSysGuard::Process::RoundRobin):
+            return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
+        case (KSysGuard::Process::Fifo):
+            return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
 #ifdef SCHED_BATCH
-      case (KSysGuard::Process::Batch):
-	    return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
+        case (KSysGuard::Process::Batch):
+            return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
 #endif
-      default:
-	    return false;
+        default:
+            return false;
     }
 }
 
