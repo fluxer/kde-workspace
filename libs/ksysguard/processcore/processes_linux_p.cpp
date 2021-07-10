@@ -123,39 +123,39 @@ bool ProcessesLocal::Private::readProcStatus(const QString &dir, Process *proces
     int found = 0; //count how many fields we found
     while( (size = mFile.readLine( mBuffer, sizeof(mBuffer))) > 0) {  //-1 indicates an error
         switch( mBuffer[0]) {
-	  case 'N':
-	    if((unsigned int)size > sizeof("Name:") && qstrncmp(mBuffer, "Name:", sizeof("Name:")-1) == 0) {
-	        if(process->command.isEmpty())
-                process->setName(QString::fromLocal8Bit(mBuffer + sizeof("Name:")-1, size-sizeof("Name:")+1).trimmed());
-	        if(++found == 5) goto finish;
-	    }
-	    break;
-	  case 'U':
-	    if((unsigned int)size > sizeof("Uid:") && qstrncmp(mBuffer, "Uid:", sizeof("Uid:")-1) == 0) {
-            sscanf(mBuffer + sizeof("Uid:") -1, "%Ld %Ld %Ld %Ld", &process->uid, &process->euid, &process->suid, &process->fsuid );
-	        if(++found == 5) goto finish;
-	    }
-	    break;
-	  case 'G':
-	    if((unsigned int)size > sizeof("Gid:") && qstrncmp(mBuffer, "Gid:", sizeof("Gid:")-1) == 0) {
-            sscanf(mBuffer + sizeof("Gid:")-1, "%Ld %Ld %Ld %Ld", &process->gid, &process->egid, &process->sgid, &process->fsgid );
-	        if(++found == 5) goto finish;
-	    }
-	    break;
-      case 'T':
-        if((unsigned int)size > sizeof("TracerPid:") && qstrncmp(mBuffer, "TracerPid:", sizeof("TracerPid:")-1) == 0) {
-            process->tracerpid = atol(mBuffer + sizeof("TracerPid:")-1);
-            if (process->tracerpid == 0)
-                process->tracerpid = -1;
-            if(++found == 5) goto finish;
-        } else if((unsigned int)size > sizeof("Threads:") && qstrncmp(mBuffer, "Threads:", sizeof("Threads:")-1) == 0) {
-            process->setNumThreads(atol(mBuffer + sizeof("Threads:")-1));
-	        if(++found == 5) goto finish;
-	    }
-	    break;
-	  default:
-	    break;
-	}
+            case 'N':
+                if((unsigned int)size > sizeof("Name:") && qstrncmp(mBuffer, "Name:", sizeof("Name:")-1) == 0) {
+                    if(process->command.isEmpty())
+                        process->setName(QString::fromLocal8Bit(mBuffer + sizeof("Name:")-1, size-sizeof("Name:")+1).trimmed());
+                    if(++found == 5) goto finish;
+                }
+                break;
+            case 'U':
+                if((unsigned int)size > sizeof("Uid:") && qstrncmp(mBuffer, "Uid:", sizeof("Uid:")-1) == 0) {
+                    sscanf(mBuffer + sizeof("Uid:") -1, "%Ld %Ld %Ld %Ld", &process->uid, &process->euid, &process->suid, &process->fsuid );
+                    if(++found == 5) goto finish;
+                }
+                break;
+            case 'G':
+                if((unsigned int)size > sizeof("Gid:") && qstrncmp(mBuffer, "Gid:", sizeof("Gid:")-1) == 0) {
+                    sscanf(mBuffer + sizeof("Gid:")-1, "%Ld %Ld %Ld %Ld", &process->gid, &process->egid, &process->sgid, &process->fsgid );
+                    if(++found == 5) goto finish;
+                }
+                break;
+            case 'T':
+                if((unsigned int)size > sizeof("TracerPid:") && qstrncmp(mBuffer, "TracerPid:", sizeof("TracerPid:")-1) == 0) {
+                    process->tracerpid = atol(mBuffer + sizeof("TracerPid:")-1);
+                    if (process->tracerpid == 0)
+                        process->tracerpid = -1;
+                    if(++found == 5) goto finish;
+                } else if((unsigned int)size > sizeof("Threads:") && qstrncmp(mBuffer, "Threads:", sizeof("Threads:")-1) == 0) {
+                    process->setNumThreads(atol(mBuffer + sizeof("Threads:")-1));
+                    if(++found == 5) goto finish;
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     finish:
@@ -231,32 +231,31 @@ bool ProcessesLocal::Private::readProcStat(const QString &dir, Process *ps)
         if(word[0] == ' ' ) {
             ++current_word;
             switch(current_word) {
-                case 2: //status
+                case 2: // status
                     status=word[1];  // Look at the first letter of the status.
                     // We analyze this after the while loop
                     break;
-                case 6: //ttyNo
-                    {
-                        int ttyNo = atoi(word+1);
-                        int major = ttyNo >> 8;
-                        int minor = ttyNo & 0xff;
-                        switch(major) {
-                            case 136:
-                                ps->setTty(QByteArray("pts/") + QByteArray::number(minor));
-                                break;
-                            case 5:
-                                ps->setTty(QByteArray("tty"));
-                            case 4:
-                                if(minor < 64)
-                                    ps->setTty(QByteArray("tty") + QByteArray::number(minor));
-                                else
-                                    ps->setTty(QByteArray("ttyS") + QByteArray::number(minor-64));
-                                break;
-                            default:
-                                ps->setTty(QByteArray());
-                        }
+                case 6: { // ttyNo
+                    int ttyNo = atoi(word+1);
+                    int major = ttyNo >> 8;
+                    int minor = ttyNo & 0xff;
+                    switch(major) {
+                        case 136:
+                            ps->setTty(QByteArray("pts/") + QByteArray::number(minor));
+                            break;
+                        case 5:
+                            ps->setTty(QByteArray("tty"));
+                        case 4:
+                            if(minor < 64)
+                                ps->setTty(QByteArray("tty") + QByteArray::number(minor));
+                            else
+                                ps->setTty(QByteArray("ttyS") + QByteArray::number(minor-64));
+                            break;
+                        default:
+                            ps->setTty(QByteArray());
                     }
                     break;
+                }
                 case 13: //userTime
                     ps->setUserTime(atoll(word+1));
                     break;
@@ -673,7 +672,7 @@ long long ProcessesLocal::totalPhysicalMemory() {
 }
 ProcessesLocal::~ProcessesLocal()
 {
-  delete d;
+    delete d;
 }
 
 }
