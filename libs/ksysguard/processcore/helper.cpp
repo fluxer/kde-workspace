@@ -84,25 +84,6 @@ KAuth::ActionReply KSysGuardProcessListHelper::renice(QVariantMap parameters) {
         return KAuth::ActionReply::HelperErrorReply;
 }
 
-KAuth::ActionReply KSysGuardProcessListHelper::changeioscheduler(QVariantMap parameters) {
-    if(!parameters.contains("ioScheduler") || !parameters.contains("ioSchedulerPriority") || !parameters.contains("pidcount"))
-        return KAuth::ActionReply::HelperErrorReply;
-
-    KSysGuard::ProcessesLocal processes;
-    int ioScheduler = qvariant_cast<int>(parameters.value("ioScheduler"));
-    int ioSchedulerPriority = qvariant_cast<int>(parameters.value("ioSchedulerPriority"));
-    bool success = true;
-    int numProcesses = parameters.value("pidcount").toInt();
-    for (int i = 0; i < numProcesses; ++i) {
-        qlonglong pid = GET_PID(i);
-        success = processes.setIoNiceness(pid, ioScheduler, ioSchedulerPriority) && success;
-    }
-    if(success)
-        return KAuth::ActionReply::SuccessReply;
-    else
-        return KAuth::ActionReply::HelperErrorReply;
-
-}
 KAuth::ActionReply KSysGuardProcessListHelper::changecpuscheduler(QVariantMap parameters) {
     if(!parameters.contains("cpuScheduler") || !parameters.contains("cpuSchedulerPriority") || !parameters.contains("pidcount"))
         return KAuth::ActionReply::HelperErrorReply;

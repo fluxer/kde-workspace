@@ -42,27 +42,6 @@ QString KSysGuard::Process::niceLevelAsString() const {
     return QString(); //impossible;
 }
 
-QString KSysGuard::Process::ioniceLevelAsString() const {
-    // Just some rough heuristic to map a number to how nice it is
-    if( ioniceLevel == 4) return i18nc("Process Niceness", "Normal");
-    if( ioniceLevel >= 6) return i18nc("Process Niceness", "Very low priority");
-    if( ioniceLevel > 4) return i18nc("Process Niceness", "Low priority");
-    if( ioniceLevel <= 2) return i18nc("Process Niceness", "Very high priority");
-    if( ioniceLevel < 4) return i18nc("Process Niceness", "High priority");
-    return QString(); //impossible;
-
-}
-
-QString KSysGuard::Process::ioPriorityClassAsString() const {
-    switch( ioPriorityClass ) {
-        case None: return i18nc("Priority Class", "None");
-        case RealTime: return i18nc("Priority Class", "Real Time");
-        case BestEffort: return i18nc("Priority Class", "Best Effort");
-        case Idle: return i18nc("Priority Class", "Idle");
-        default: return i18nc("Priority Class", "Unknown");
-    }
-}
-
 QString KSysGuard::Process::translatedStatus() const {
     switch( status ) {
         case Running: return i18nc("process status", "running");
@@ -115,8 +94,6 @@ void KSysGuard::Process::clear() {
     hasManagedGuiWindow = false;
     status=OtherStatus;
     parent = NULL;
-    ioPriorityClass = None;
-    ioniceLevel = -1;
     scheduler = Other;
     ioCharactersRead = 0;
     ioCharactersWritten = 0;
@@ -226,16 +203,7 @@ void KSysGuard::Process::setscheduler(Scheduler _scheduler) {
     scheduler = _scheduler;
     changes |= Process::NiceLevels;
 }
-void KSysGuard::Process::setIoPriorityClass(IoPriorityClass _ioPriorityClass) {
-    if(ioPriorityClass == _ioPriorityClass) return;
-    ioPriorityClass = _ioPriorityClass;
-    changes |= Process::NiceLevels;
-}
-void KSysGuard::Process::setIoniceLevel(int _ioniceLevel) {
-    if(ioniceLevel == _ioniceLevel) return;
-    ioniceLevel = _ioniceLevel;
-    changes |= Process::NiceLevels;
-}
+
 void KSysGuard::Process::setVmSize(qlonglong _vmSize) {
     if(vmSizeChange != 0 || vmSize != 0)
         vmSizeChange = _vmSize - vmSize;

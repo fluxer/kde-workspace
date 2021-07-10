@@ -216,15 +216,7 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
     return false;
 }
-
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority) {
-    return false; //Not yet supported
-}
-
-bool ProcessesLocal::supportsIoNiceness() {
-    return false;
-}
-
+s
 long long ProcessesLocal::totalPhysicalMemory() {
     long long memory = ((long long)sysconf(_SC_PHYS_PAGES)) * (sysconf(_SC_PAGESIZE)/1024);
     if(memory > 0) return memory;

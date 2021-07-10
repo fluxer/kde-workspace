@@ -29,9 +29,6 @@
 #include <sys/resource.h>
 #include <time.h>
 #include <unistd.h>
-#include <asm/unistd.h>
-#include <sys/ptrace.h>
-#include <sys/syscall.h>
 
 #include "../../gui/SignalIDs.h"
 #include "Command.h"
@@ -44,33 +41,6 @@
 #define BUFSIZE 1024
 #define TAGSIZE 32
 #define KDEINITLEN sizeof( "kdeinit: " )
-
-// NOTE: keep in sync with kde-workspace/libs/ksysguard/processcore/processes_linux_p.cpp
-/* Check if this system has ionice */
-#if defined(SYS_ioprio_get) && defined(SYS_ioprio_set)
-#define HAVE_IONICE
-#else
-#warning "This architecture does not support IONICE.  Disabling ionice feature."
-#endif
-
-/* Set up ionice functions */
-#ifdef HAVE_IONICE
-#define IOPRIO_WHO_PROCESS 1
-#define IOPRIO_CLASS_SHIFT 13
-
-/* Expose the kernel calls to usespace via syscall
- * See man ioprio_set  and man ioprio_get   for information on these functions */
-static int ioprio_set(int which, int who, int ioprio)
-{
-    return syscall(SYS_ioprio_set, which, who, ioprio);
-}
- 
-static int ioprio_get(int which, int who)
-{
-    return syscall(SYS_ioprio_get, which, who);
-}
-#endif
-
 
 #ifndef bool
 #define bool char
@@ -106,10 +76,6 @@ typedef struct {
 
   /** The scheduling priority. */
   int priority;
-
-  /** The i/o scheduling class and priority. */
-  int ioPriorityClass;  /**< 0 for none, 1 for realtime, 2 for best-effort, 3 for idle.  -1 for error. */
-  int ioPriority;       /**< Between 0 and 7.  0 is highest priority, 7 is lowest.  -1 for error. */
 
   /**
     The total amount of virtual memory space that this process uses. This includes shared and
@@ -161,9 +127,6 @@ typedef struct {
   char userName[ 32 ];
 
 } ProcessInfo;
-
-void getIOnice( int pid, ProcessInfo *ps );
-void ioniceProcess( const char* cmd );
 
 static unsigned ProcessCount;
 static DIR* procDir;
@@ -364,8 +327,6 @@ static bool getProcess( int pid, ProcessInfo *ps )
   ps->userName[ sizeof( ps->userName ) - 1 ] = '\0';
   validateStr( ps->userName );
 
-  getIOnice(pid, ps);
-
   return true;
 }
 
@@ -382,35 +343,18 @@ void printProcessList( const char* cmd)
       long pid;
       pid = atol( entry->d_name );
       if(getProcess( pid, &ps )) /* Print out the details of the process.  Because of a stupid bug in kde3 ksysguard, make sure cmdline and tty are not empty */
-        output( "%s\t%ld\t%ld\t%lu\t%lu\t%s\t%lu\t%lu\t%d\t%lu\t%lu\t%lu\t%s\t%ld\t%s\t%s\t%d\t%d\n",
+        output( "%s\t%ld\t%ld\t%lu\t%lu\t%s\t%lu\t%lu\t%d\t%lu\t%lu\t%lu\t%s\t%ld\t%s\t%s\n",
              ps.name, pid, (long)ps.ppid,
              (long)ps.uid, (long)ps.gid, ps.status, ps.userTime,
              ps.sysTime, ps.niceLevel, ps.vmSize, ps.vmRss, ps.vmURss,
              (ps.userName[0]==0)?" ":ps.userName, (long)ps.tracerpid,
-             (ps.tty[0]==0)?" ":ps.tty, (ps.cmdline[0]==0)?" ":ps.cmdline,
-             ps.ioPriorityClass, ps.ioPriority
+             (ps.tty[0]==0)?" ":ps.tty, (ps.cmdline[0]==0)?" ":ps.cmdline
         );
     }
   }
   output( "\n" );
   return;
 }
-
-void getIOnice( int pid, ProcessInfo *ps ) {
-#ifdef HAVE_IONICE
-  int ioprio = ioprio_get(IOPRIO_WHO_PROCESS, pid);  /* Returns from 0 to 7 for the iopriority, and -1 if there's an error */
-  if(ioprio == -1) {
-      ps->ioPriority = -1;
-      ps->ioPriorityClass = -1;
-      return; /* Error. Just give up. */
-  }
-  ps->ioPriority = ioprio & 0xff;  /* Bottom few bits are the priority */
-  ps->ioPriorityClass = ioprio >> IOPRIO_CLASS_SHIFT; /* Top few bits are the class */
-#else
-  return;  /* Do nothing, if we do not support this architecture */
-#endif
-}
-
 
 /*
 ================================ public part =================================
@@ -426,9 +370,6 @@ void initProcessList( struct SensorModul* sm )
   if ( !RunAsDaemon ) {
     registerCommand( "kill", killProcess );
     registerCommand( "setpriority", setPriority );
-#ifdef HAVE_IONICE
-    registerCommand( "ionice", ioniceProcess );
-#endif
   }
 
   /*open /proc now in advance*/
@@ -594,57 +535,4 @@ void setPriority( const char* cmd )
     }
   } else
     output( "0\t%d\t%d\n",pid, prio );
-}
-
-void ioniceProcess( const char* cmd )
-{
-  /* Re-ionice's a process. cmd is a string containing:
-   *
-   * ionice <pid> <class> <priority>
-   *
-   * where c = 1 for real time, 2 for best-effort, 3 for idle
-   * and priority is between 0 and 7, 0 being the highest priority, and ignored if c=3
-   *
-   * For more information, see:  man ionice
-   *
-   */
-  int pid = 0;
-  int class = 2;
-  int priority = 0;
-  if(sscanf( cmd, "%*s %d %d %d", &pid, &class, &priority ) < 2) {
-    output( "4\t%d\n", pid ); /* 4 means error in values */
-    return; /* Error with input. */
-  }
-
-#ifdef HAVE_IONICE
-  if(pid < 1 || class < 0 || class > 3) {
-    output( "4\t%d\n", pid ); /* 4 means error in values */
-    return; /* Error with input. Just ignore. */
-  }
-
-  if (ioprio_set(IOPRIO_WHO_PROCESS, pid, priority | class << IOPRIO_CLASS_SHIFT) == -1) {
-    switch ( errno ) {
-      case EINVAL:
-        output( "4\t%d\n", pid );
-        break;
-      case ESRCH:
-        output( "3\t%d\n", pid );
-        break;
-      case EPERM:
-        output( "2\t%d\n", pid );
-        break;
-      default: /* unknown error */
-        output( "1\t%d\n", pid );
-        break;
-    }
-  } else {
-    /* Successful */
-    output( "0\t%d\n", pid );
-  }
-  return;
-#else
-  /** should never reach here */
-  output( "1\t%d\n", pid );
-  return;
-#endif
 }

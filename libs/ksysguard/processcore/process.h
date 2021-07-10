@@ -35,7 +35,6 @@ namespace KSysGuard
   class KDE_EXPORT Process {
     public:
     enum ProcessStatus { Running, Sleeping, DiskSleep, Zombie, Stopped, Paging, Ended, OtherStatus=99 };
-    enum IoPriorityClass { None, RealTime, BestEffort, Idle };
     enum Scheduler { Other = 0, Fifo, RoundRobin, Batch, SchedulerIdle, Interactive }; ///< Interactive is Solaris only
     Process();
     Process(qlonglong _pid, qlonglong _ppid, Process *_parent);
@@ -73,8 +72,6 @@ namespace KSysGuard
     void setTotalSysUsage(int totalSysUsage); ///< Percentage (0 to 100) from the sum of itself and all its children recursively. If there's no children, it's equal to sysUsage. It might be more than 100% on multiple cpu core systems
     void setNiceLevel(int niceLevel);      ///< If Scheduler = Other, niceLevel is the niceness (-20 to 20) of this process.  A lower number means a higher priority.  Otherwise sched priority (1 to 99)
     void setscheduler(Scheduler scheduler); ///< The scheduler this process is running in.  See man sched_getscheduler for more info
-    void setIoPriorityClass(IoPriorityClass ioPriorityClass); ///< The IO priority class.  See man ionice for detailed information.
-    void setIoniceLevel(int ioniceLevel);    ///< IO Niceness (0 to 7) of this process.  A lower number means a higher io priority.  -1 if not known or not applicable because ioPriorityClass is Idle or None
     void setVmSize(qlonglong vmSize);   ///< Virtual memory size in KiloBytes, including memory used, mmap'ed files, graphics memory etc,
     void setVmRSS(qlonglong vmRSS);    ///< Physical memory used by the process and its shared libraries.  If the process and libraries are swapped to disk, this could be as low as 0
     void setVmURSS(qlonglong vmURSS);   ///< Physical memory used only by the process, and not counting the code for shared libraries. Set to -1 if unknown
@@ -119,8 +116,6 @@ namespace KSysGuard
     unsigned long numChildren;
     int niceLevel;
     Scheduler scheduler;
-    IoPriorityClass ioPriorityClass;
-    int ioniceLevel;
 
     qlonglong vmSize;
     qlonglong vmRSS;
@@ -154,8 +149,6 @@ namespace KSysGuard
 
     QString translatedStatus() const;  ///< Returns a translated string of the status. e.g. "Running" etc
     QString niceLevelAsString() const; ///< Returns a simple translated string of the nice priority.  e.g. "Normal", "High", etc
-    QString ioniceLevelAsString() const; ///< Returns a simple translated string of the io nice priority.  e.g. "Normal", "High", etc
-    QString ioPriorityClassAsString() const; ///< Returns a translated string of the io nice class.  i.e. "None", "Real Time", "Best Effort", "Idle"
     QString schedulerAsString() const; ///< Returns a translated string of the scheduler class.  e.g. "FIFO", "Round Robin", "Batch"
 
     int index;  ///< Each process has a parent process.  Each sibling has a unique number to identify it under that parent.  This is that number.

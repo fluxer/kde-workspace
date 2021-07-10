@@ -46,8 +46,6 @@ namespace KSysGuard
             virtual bool setNiceness(long pid, int priority);
             virtual bool setScheduler(long pid, int priorityClass, int priority);
             virtual long long totalPhysicalMemory();
-            virtual bool setIoNiceness(long pid, int priorityClass, int priority);
-            virtual bool supportsIoNiceness();
             virtual long numberProcessorCores()
 #ifdef _SC_NPROCESSORS_ONLN
             { return sysconf(_SC_NPROCESSORS_ONLN); } // Should work on any recent posix system

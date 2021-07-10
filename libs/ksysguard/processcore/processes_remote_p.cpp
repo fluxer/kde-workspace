@@ -38,13 +38,14 @@ namespace KSysGuard
   class ProcessesRemote::Private
   {
     public:
-      Private() {havePsInfo = false; pidColumn = 1;
-	      ppidColumn = nameColumn = uidColumn = gidColumn =
-	      statusColumn = userColumn = systemColumn = niceColumn =
-	      vmSizeColumn = vmRSSColumn = loginColumn = commandColumn =
-	      tracerPidColumn = ttyColumn = ioprioClassColumn = ioprioColumn =
-	      vmURSSColumn = -1;
-              usedMemory = freeMemory;}
+      Private() {
+        havePsInfo = false; pidColumn = 1;
+        ppidColumn = nameColumn = uidColumn = gidColumn =
+        statusColumn = userColumn = systemColumn = niceColumn =
+        vmSizeColumn = vmRSSColumn = loginColumn = commandColumn =
+        tracerPidColumn = ttyColumn =  vmURSSColumn = -1;
+        usedMemory = freeMemory;
+      }
       ~Private() {;}
       QString host;
       QList<QByteArray> lastAnswer;
@@ -67,8 +68,6 @@ namespace KSysGuard
       int vmURSSColumn;
       int loginColumn;
       int commandColumn;
-      int ioprioClassColumn;
-      int ioprioColumn;
       int ttyColumn;
 
       int numColumns;
@@ -136,8 +135,6 @@ bool ProcessesRemote::updateProcessInfo( long pid, Process *process)
     if(d->tracerPidColumn!= -1) process->setTracerpid(p.at(d->tracerPidColumn).toLong());
     if(d->vmURSSColumn!= -1) process->setVmURSS(p.at(d->vmURSSColumn).toLong());
     if(d->ttyColumn!= -1) process->setTty(p.at(d->ttyColumn));
-    if(d->ioprioColumn!= -1) process->setIoniceLevel(p.at(d->ioprioColumn).toInt());
-    if(d->ioprioClassColumn!= -1) process->setIoPriorityClass((KSysGuard::Process::IoPriorityClass)(p.at(d->ioprioClassColumn).toInt()));
 
     return true;
 }
@@ -166,17 +163,12 @@ QSet<long> ProcessesRemote::getAllPids( )
 }
 
 bool ProcessesRemote::sendSignal(long pid, int sig) {
-	//TODO run the proper command for all these functions below
+    //TODO run the proper command for all these functions below
     emit runCommand("kill " + QString::number(pid) + " " + QString::number(sig), (int)Kill);
     return true;
 }
 bool ProcessesRemote::setNiceness(long pid, int priority) {
     emit runCommand("setpriority " + QString::number(pid) + " " + QString::number(priority), (int)Renice);
-    return true;
-}
-
-bool ProcessesRemote::setIoNiceness(long pid, int priorityClass, int priority) {
-    emit runCommand("ionice " + QString::number(pid) + " " + QString::number(priorityClass) + " " + QString::number(priority), (int)Ionice);
     return true;
 }
 
@@ -187,10 +179,6 @@ bool ProcessesRemote::setScheduler(long pid, int priorityClass, int priority) {
 
     errorCode = Processes::NotSupported;
     return false;
-}
-
-bool ProcessesRemote::supportsIoNiceness() {
-    return true;
 }
 
 long long ProcessesRemote::totalPhysicalMemory() {
@@ -239,10 +227,6 @@ void ProcessesRemote::answerReceived( int id, const QList<QByteArray>& answer ) 
 			d->ttyColumn = i;
 		else if(info[i] == "Command")
 			d->commandColumn = i;
-		else if(info[i] == "IO Priority Class")
-			d->ioprioClassColumn = i;
-		else if(info[i] == "IO Priority")
-			d->ioprioColumn = i;
 	    }
 	    d->havePsInfo = true;
 	    break;

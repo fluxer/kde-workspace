@@ -114,19 +114,6 @@ namespace KSysGuard
              */
             virtual long long totalPhysicalMemory() = 0;
 
-            /** \brief Set the i/o priority for a process.
-             *
-             *  This is from 7 (very nice, lowest i/o priority) to
-             *  0 (highest priority).  The default value is determined as: io_nice = (cpu_nice + 20) / 5.
-             *
-             *  @return false if you do not have permission to set the priority
-             */
-            virtual bool setIoNiceness(long pid, int priorityClass, int priority) = 0;
-
-            /** \brief Returns true if ionice is supported on this system
-             */
-            virtual bool supportsIoNiceness() = 0;
-
             /** \brief Return the number of processor cores enabled.
              *
              *  (A system can disable processors.  Disabled processors are not counted here).

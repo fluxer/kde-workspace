@@ -77,16 +77,6 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
     return false;
 }
 
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority)
-{
-    return false;
-}
-
-bool ProcessesLocal::supportsIoNiceness()
-{
-    return false;
-}
-
 long long ProcessesLocal::totalPhysicalMemory()
 {
     long long memory = 0;

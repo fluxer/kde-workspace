@@ -1057,22 +1057,19 @@ void KSysGuardProcessList::reniceSelectedProcesses()
         }
 
         int sched = -2;
-        int iosched = -2;
         foreach(KSysGuard::Process *process, processes) {
             pids << process->pid;
             selectedAsStrings << d->mModel.getStringForProcess(process);
-            if(sched == -2) sched = (int)process->scheduler;
-            else if(sched != -1 && sched != (int)process->scheduler) sched = -1;  //If two processes have different schedulers, disable the cpu scheduler stuff
-            if(iosched == -2) iosched = (int)process->ioPriorityClass;
-            else if(iosched != -1 && iosched != (int)process->ioPriorityClass) iosched = -1;  //If two processes have different schedulers, disable the cpu scheduler stuff
-
+            if(sched == -2) {
+                sched = (int)process->scheduler;
+            } else if(sched != -1 && sched != (int)process->scheduler) {
+                // If two processes have different schedulers, disable the cpu scheduler stuff
+                sched = -1;
+            }
         }
         int firstPriority = processes.first()->niceLevel;
-        int firstIOPriority = processes.first()->ioniceLevel;
 
-        bool supportsIoNice = d->mModel.processController()->supportsIoNiceness();
-        if(!supportsIoNice) { iosched = -2; firstIOPriority = -2; }
-        reniceDlg = new ReniceDlg(d->mUi->treeView, selectedAsStrings, firstPriority, sched, firstIOPriority, iosched);
+        reniceDlg = new ReniceDlg(d->mUi->treeView, selectedAsStrings, firstPriority, sched);
         if(reniceDlg->exec() == QDialog::Rejected) {
             delete reniceDlg;
             return;
@@ -1084,7 +1081,6 @@ void KSysGuardProcessList::reniceSelectedProcesses()
 
     QList<long long> renicePids;
     QList<long long> changeCPUSchedulerPids;
-    QList<long long> changeIOSchedulerPids;
     foreach (long long pid, pids) {
         KSysGuard::Process *process = d->mModel.getProcess(pid);
         if (!process)
@@ -1110,32 +1106,6 @@ void KSysGuardProcessList::reniceSelectedProcesses()
                 }
                 break;
         }
-        switch(reniceDlg->newIOSched) {
-            case -2:
-            case -1:  //Invalid, not changed etc.
-                break;  //So do nothing
-            case KSysGuard::Process::None:
-                if(reniceDlg->newIOSched != (int)process->ioPriorityClass) {
-                    // Unfortunately linux doesn't actually let us set the ioniceness back to none after being set to something else
-                    if(process->ioPriorityClass != KSysGuard::Process::BestEffort || reniceDlg->newIOPriority != process->ioniceLevel)
-                        changeIOSchedulerPids << pid;
-                }
-                break;
-            case KSysGuard::Process::Idle:
-                if(reniceDlg->newIOSched != (int)process->ioPriorityClass) {
-                    changeIOSchedulerPids << pid;
-                }
-                break;
-            case KSysGuard::Process::BestEffort:
-                if(process->ioPriorityClass == KSysGuard::Process::None && reniceDlg->newIOPriority  == (process->niceLevel + 20)/5)
-                    break;  //Don't set to BestEffort if it's on None and the nicelevel wouldn't change
-            case KSysGuard::Process::RealTime:
-                if(reniceDlg->newIOSched != (int)process->ioPriorityClass || reniceDlg->newIOPriority != process->ioniceLevel) {
-                    changeIOSchedulerPids << pid;
-                }
-                break;
-        }
-
     }
     if(!changeCPUSchedulerPids.isEmpty()) {
         Q_ASSERT(reniceDlg->newCPUSched >= 0);
@@ -1152,49 +1122,8 @@ void KSysGuardProcessList::reniceSelectedProcesses()
             return;
         }
     }
-    if(!changeIOSchedulerPids.isEmpty()) {
-        if(!changeIoScheduler(changeIOSchedulerPids, (KSysGuard::Process::IoPriorityClass) reniceDlg->newIOSched, reniceDlg->newIOPriority)) {
-            delete reniceDlg;
-            return;
-        }
-    }
     delete reniceDlg;
     updateList();
-}
-
-bool KSysGuardProcessList::changeIoScheduler(const QList< long long> &pids, KSysGuard::Process::IoPriorityClass newIoSched, int newIoSchedPriority)
-{
-    if(newIoSched == KSysGuard::Process::None) newIoSched = KSysGuard::Process::BestEffort;
-    if(newIoSched == KSysGuard::Process::Idle) newIoSchedPriority = 0;
-    QList< long long> unchanged_pids;
-    for (int i = 0; i < pids.size(); ++i) {
-        bool success = d->mModel.processController()->setIoNiceness(pids.at(i), newIoSched, newIoSchedPriority);
-        if(!success) {
-            unchanged_pids << pids.at(i);
-        }
-    }
-    if(unchanged_pids.isEmpty()) return true;
-    if(!d->mModel.isLocalhost()) return false; //We can't use kauth to affect non-localhost processes
-
-    KAuth::Action *action = new KAuth::Action("org.kde.ksysguard.processlisthelper.changeioscheduler");
-    action->setParentWidget(window());
-
-    d->setupKAuthAction( action, unchanged_pids);
-    action->addArgument("ioScheduler", (int)newIoSched);
-    action->addArgument("ioSchedulerPriority", newIoSchedPriority);
-
-    KAuth::ActionReply reply = action->execute();
-
-    if (reply == KAuth::ActionReply::SuccessReply) {
-        updateList();
-        delete action;
-    } else if (reply != KAuth::ActionReply::UserCancelled && reply != KAuth::ActionReply::AuthorizationDenied) {
-        KMessageBox::sorry(this, i18n("You do not have the permission to change the I/O priority of the process and there "
-                    "was a problem trying to run as root.  Error %1 %2", reply.errorCode(), reply.errorDescription()));
-        delete action;
-        return false;
-    }
-    return true;
 }
 
 bool KSysGuardProcessList::changeCpuScheduler(const QList< long long> &pids, KSysGuard::Process::Scheduler newCpuSched, int newCpuSchedPriority)

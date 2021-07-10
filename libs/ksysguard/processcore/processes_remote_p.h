@@ -41,8 +41,6 @@ namespace KSysGuard
         virtual bool setNiceness(long pid, int priority);
 	virtual bool setScheduler(long pid, int priorityClass, int priority);
 	virtual long long totalPhysicalMemory();
-	virtual bool setIoNiceness(long pid, int priorityClass, int priority);
-	virtual bool supportsIoNiceness();
 	virtual long numberProcessorCores();
     virtual void updateAllProcesses( Processes::UpdateFlags updateFlags );
 
@@ -62,7 +60,7 @@ namespace KSysGuard
 	void setup();
 
       protected:
-	enum { PsInfo, Ps, UsedMemory, FreeMemory, Kill, Renice, Ionice };
+	enum { PsInfo, Ps, UsedMemory, FreeMemory, Kill, Renice };
 
       private:
 	/**

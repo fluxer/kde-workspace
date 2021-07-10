@@ -32,6 +32,5 @@ void printProcessCountInfo( const char* );
 
 void killProcess( const char* );
 void setPriority( const char* );
-void ioniceProcess( const char* );
 
 #endif

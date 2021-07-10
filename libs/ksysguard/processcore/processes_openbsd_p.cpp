@@ -259,15 +259,6 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 #endif
 }
 
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority)
-{
-    return false; // Not yet supported
-}
-
-bool ProcessesLocal::supportsIoNiceness() {
-    return false;
-}
-
 long long ProcessesLocal::totalPhysicalMemory()
 {
     static int physmem_mib[] = { CTL_HW, HW_PHYSMEM };

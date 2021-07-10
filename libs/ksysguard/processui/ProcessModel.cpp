@@ -1430,12 +1430,7 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
             if(process->scheduler != KSysGuard::Process::Other)
                 tooltip += i18n("<br/>Scheduler: %1", process->schedulerAsString());
 
-            if(process->ioPriorityClass != KSysGuard::Process::None) {
-                if((process->ioPriorityClass == KSysGuard::Process::RealTime || process->ioPriorityClass == KSysGuard::Process::BestEffort) && process->ioniceLevel != -1)
-                    tooltip += i18n("<br/>I/O Nice level: %1 (%2)", process->ioniceLevel, process->ioniceLevelAsString() );
-                tooltip += i18n("<br/>I/O Class: %1", process->ioPriorityClassAsString() );
-            }
-                if(tracer.isEmpty()) return tooltip;
+            if(tracer.isEmpty()) return tooltip;
             return QString(tooltip + "<br />" + tracer);
         }
         case HeadingCPUUsage:
@@ -1472,11 +1467,6 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
                         .toString();
             if(process->niceLevel != 0)
                 tooltip += i18n("<br />Nice level: %1 (%2)", process->niceLevel, process->niceLevelAsString() );
-            if(process->ioPriorityClass != KSysGuard::Process::None) {
-                if((process->ioPriorityClass == KSysGuard::Process::RealTime || process->ioPriorityClass == KSysGuard::Process::BestEffort) && process->ioniceLevel != -1)
-                    tooltip += i18n("<br/>I/O Nice level: %1 (%2)", process->ioniceLevel, process->ioniceLevelAsString() );
-                tooltip += i18n("<br/>I/O Class: %1", process->ioPriorityClassAsString() );
-            }
 
             if(!tracer.isEmpty())
                 return QString(tooltip + "<br />" + tracer);

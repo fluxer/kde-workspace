@@ -440,21 +440,6 @@ bool Processes::setScheduler(long pid, KSysGuard::Process::Scheduler priorityCla
     return d->mAbstractProcesses->setScheduler(pid, priorityClass, priority);
 }
 
-bool Processes::setIoNiceness(long pid, KSysGuard::Process::IoPriorityClass priorityClass, int priority) {
-    d->mAbstractProcesses->errorCode = Unknown;
-    if(d->mUsingHistoricalData) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
-    return d->mAbstractProcesses->setIoNiceness(pid, priorityClass, priority);
-}
-
-bool Processes::supportsIoNiceness() {
-    if(d->mUsingHistoricalData)
-        return false;
-    return d->mAbstractProcesses->supportsIoNiceness();
-}
-
 long long Processes::totalPhysicalMemory() {
     return d->mAbstractProcesses->totalPhysicalMemory();
 }

@@ -39,43 +39,10 @@
 #include <sys/resource.h>
 #include <dirent.h>
 #include <stdlib.h>
-//for ionice
-#include <asm/unistd.h>
-#include <sys/ptrace.h>
-#include <sys/syscall.h>
 //for getsched
 #include <sched.h>
 
 #define PROCESS_BUFFER_SIZE 1000
-
-// NOTE: keep in sync with kde-workspace/ksysguard/ksysguardd/Linux/ProcessList.c
-/* Check if this system has ionice */
-#if defined(SYS_ioprio_get) && defined(SYS_ioprio_set)
-#define HAVE_IONICE
-#else
-#warning "This architecture does not support IONICE.  Disabling ionice feature."
-#endif
-
-/* Set up ionice functions */
-#ifdef HAVE_IONICE
-#define IOPRIO_WHO_PROCESS 1
-#define IOPRIO_CLASS_SHIFT 13
-
-/* Expose the kernel calls to userspace via syscall
- * See man ioprio_set  and man ioprio_get   for information on these functions */
-static int ioprio_set(int which, int who, int ioprio)
-{
-    return syscall(SYS_ioprio_set, which, who, ioprio);
-}
-
-static int ioprio_get(int which, int who)
-{
-    return syscall(SYS_ioprio_get, which, who);
-}
-#endif
-
-
-
 
 namespace KSysGuard
 {
@@ -401,25 +368,14 @@ bool ProcessesLocal::Private::getNiceness(long pid, Process *process) {
     }
     if(sched == SCHED_FIFO || sched == SCHED_RR) {
         struct sched_param param;
-        if(sched_getparam(pid, &param) == 0)
-        process->setNiceLevel(param.sched_priority);
-        else
-        process->setNiceLevel(0);  //Error getting scheduler parameters.
+        if(sched_getparam(pid, &param) == 0) {
+            process->setNiceLevel(param.sched_priority);
+        } else {
+            process->setNiceLevel(0);  //Error getting scheduler parameters.
+            return false;
+        }
     }
-
-#ifdef HAVE_IONICE
-    int ioprio = ioprio_get(IOPRIO_WHO_PROCESS, pid);  /* Returns from 0 to 7 for the iopriority, and -1 if there's an error */
-    if(ioprio == -1) {
-        process->ioniceLevel = -1;
-        process->ioPriorityClass = KSysGuard::Process::None;
-        return false; /* Error. Just give up. */
-    }
-    process->ioniceLevel = ioprio & 0xff;  /* Bottom few bits are the priority */
-    process->ioPriorityClass = (KSysGuard::Process::IoPriorityClass)(ioprio >> IOPRIO_CLASS_SHIFT); /* Top few bits are the class */
     return true;
-#else
-    return false;  /* Do nothing, if we do not support this architecture */
-#endif
 }
 
 bool ProcessesLocal::Private::getIOStatistics(const QString &dir, Process *process)
@@ -599,46 +555,6 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority) {
         return false;
     }
     return true;
-}
-
-
-bool ProcessesLocal::setIoNiceness(long pid, int priorityClass, int priority) {
-    errno = 0;
-    if (pid <= 0) {
-        errorCode = Processes::InvalidPid;
-        return false;
-    }
-#ifdef HAVE_IONICE
-    if (ioprio_set(IOPRIO_WHO_PROCESS, pid, priority | priorityClass << IOPRIO_CLASS_SHIFT) == -1) {
-        //set io niceness failed
-        switch (errno) {
-            case ESRCH:
-                errorCode = Processes::ProcessDoesNotExistOrZombie;
-                break;
-            case EINVAL:
-                errorCode = Processes::InvalidParameter;
-                break;
-            case EPERM:
-                errorCode = Processes::InsufficientPermissions;
-                break;
-            default:
-                break;
-        }
-        return false;
-    }
-    return true;
-#else
-    errorCode = Processes::NotSupported;
-    return false;
-#endif
-}
-
-bool ProcessesLocal::supportsIoNiceness() {
-#ifdef HAVE_IONICE
-    return true;
-#else
-    return false;
-#endif
 }
 
 long long ProcessesLocal::totalPhysicalMemory() {
