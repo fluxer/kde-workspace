@@ -339,7 +339,6 @@ bool ProcessesLocal::Private::readProcStat(const QString &dir, Process *ps)
 
 bool ProcessesLocal::Private::readProcStatm(const QString &dir, Process *process)
 {
-#ifdef _SC_PAGESIZE
     mFile.setFileName(dir + "statm");
     if(!mFile.open(QIODevice::ReadOnly))
         return false;      /* process has terminated in the meantime */
@@ -354,21 +353,18 @@ bool ProcessesLocal::Private::readProcStatm(const QString &dir, Process *process
     char *word = mBuffer;
 
     while(true) {
-	    if(word[0] == ' ' ) {
-		    if(++current_word == 2) //number of pages that are shared
-			    break;
-	    } else if(word[0] == 0) {
-	    	return false; //end of data - serious problem
-	    }
-	    word++;
+        if(word[0] == ' ' ) {
+        if(++current_word == 2) //number of pages that are shared
+            break;
+        } else if(word[0] == 0) {
+            return false; //end of data - serious problem
+        }
+        word++;
     }
     long shared = atol(word+1);
 
     /* we use the rss - shared  to find the amount of memory just this app uses */
     process->vmURSS = process->vmRSS - (shared * sysconf(_SC_PAGESIZE) / 1024);
-#else
-    process->vmURSS = 0;
-#endif
     return true;
 }
 
@@ -404,49 +400,49 @@ bool ProcessesLocal::Private::readProcCmdline(const QString &dir, Process *proce
 }
 
 bool ProcessesLocal::Private::getNiceness(long pid, Process *process) {
-  int sched = sched_getscheduler(pid);
-  switch(sched) {
-      case (SCHED_OTHER):
-	    process->scheduler = KSysGuard::Process::Other;
+    int sched = sched_getscheduler(pid);
+    switch(sched) {
+        case (SCHED_OTHER):
+            process->scheduler = KSysGuard::Process::Other;
             break;
-      case (SCHED_RR):
-	    process->scheduler = KSysGuard::Process::RoundRobin;
+        case (SCHED_RR):
+            process->scheduler = KSysGuard::Process::RoundRobin;
             break;
-      case (SCHED_FIFO):
-	    process->scheduler = KSysGuard::Process::Fifo;
+        case (SCHED_FIFO):
+            process->scheduler = KSysGuard::Process::Fifo;
             break;
 #ifdef SCHED_IDLE
-      case (SCHED_IDLE):
-	    process->scheduler = KSysGuard::Process::SchedulerIdle;
+        case (SCHED_IDLE):
+            process->scheduler = KSysGuard::Process::SchedulerIdle;
 #endif
 #ifdef SCHED_BATCH
-      case (SCHED_BATCH):
-	    process->scheduler = KSysGuard::Process::Batch;
+        case (SCHED_BATCH):
+            process->scheduler = KSysGuard::Process::Batch;
             break;
 #endif
-      default:
-	    process->scheduler = KSysGuard::Process::Other;
+        default:
+            process->scheduler = KSysGuard::Process::Other;
     }
-  if(sched == SCHED_FIFO || sched == SCHED_RR) {
-    struct sched_param param;
-    if(sched_getparam(pid, &param) == 0)
-      process->setNiceLevel(param.sched_priority);
-    else
-      process->setNiceLevel(0);  //Error getting scheduler parameters.
-  }
+    if(sched == SCHED_FIFO || sched == SCHED_RR) {
+        struct sched_param param;
+        if(sched_getparam(pid, &param) == 0)
+        process->setNiceLevel(param.sched_priority);
+        else
+        process->setNiceLevel(0);  //Error getting scheduler parameters.
+    }
 
 #ifdef HAVE_IONICE
-  int ioprio = ioprio_get(IOPRIO_WHO_PROCESS, pid);  /* Returns from 0 to 7 for the iopriority, and -1 if there's an error */
-  if(ioprio == -1) {
-	  process->ioniceLevel = -1;
-	  process->ioPriorityClass = KSysGuard::Process::None;
-	  return false; /* Error. Just give up. */
-  }
-  process->ioniceLevel = ioprio & 0xff;  /* Bottom few bits are the priority */
-  process->ioPriorityClass = (KSysGuard::Process::IoPriorityClass)(ioprio >> IOPRIO_CLASS_SHIFT); /* Top few bits are the class */
-  return true;
+    int ioprio = ioprio_get(IOPRIO_WHO_PROCESS, pid);  /* Returns from 0 to 7 for the iopriority, and -1 if there's an error */
+    if(ioprio == -1) {
+        process->ioniceLevel = -1;
+        process->ioPriorityClass = KSysGuard::Process::None;
+        return false; /* Error. Just give up. */
+    }
+    process->ioniceLevel = ioprio & 0xff;  /* Bottom few bits are the priority */
+    process->ioPriorityClass = (KSysGuard::Process::IoPriorityClass)(ioprio >> IOPRIO_CLASS_SHIFT); /* Top few bits are the class */
+    return true;
 #else
-  return false;  /* Do nothing, if we do not support this architecture */
+    return false;  /* Do nothing, if we do not support this architecture */
 #endif
 }
 
@@ -514,9 +510,10 @@ QSet<long> ProcessesLocal::getAllPids( )
     if(d->mProcDir==NULL) return pids; //There's not much we can do without /proc
     struct dirent* entry;
     rewinddir(d->mProcDir);
-    while ( ( entry = readdir( d->mProcDir ) ) )
+    while ( ( entry = readdir( d->mProcDir ) ) ) {
         if ( entry->d_name[ 0 ] >= '0' && entry->d_name[ 0 ] <= '9' )
             pids.insert(atol( entry->d_name ));
+    }
     return pids;
 }
 
@@ -683,12 +680,13 @@ long long ProcessesLocal::totalPhysicalMemory() {
     int size;
     while( (size = d->mFile.readLine( d->mBuffer, sizeof(d->mBuffer))) > 0) {  //-1 indicates an error
         switch( d->mBuffer[0]) {
-	  case 'M':
-            if((unsigned int)size > sizeof("MemTotal:") && qstrncmp(d->mBuffer, "MemTotal:", sizeof("MemTotal:")-1) == 0) {
-		    d->mFile.close();
-		    return atoll(d->mBuffer + sizeof("MemTotal:")-1);
+            case 'M': {
+                if((unsigned int)size > sizeof("MemTotal:") && qstrncmp(d->mBuffer, "MemTotal:", sizeof("MemTotal:")-1) == 0) {
+                    d->mFile.close();
+                    return atoll(d->mBuffer + sizeof("MemTotal:")-1);
+                }
             }
-	}
+        }
     }
     return 0; // Not found.  Probably will never happen
 #endif
