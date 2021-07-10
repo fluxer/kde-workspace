@@ -31,18 +31,17 @@
 #define WICD_DAEMON_DBUS_PATH "/org/wicd/daemon"
 #define WICD_DAEMON_DBUS_INTERFACE "org.wicd.daemon"
 
-WicdStatus::WicdStatus( QObject *parent )
-    : SystemStatusInterface( parent ),
-      m_wicd( WICD_DBUS_SERVICE,
-                 WICD_DAEMON_DBUS_PATH,
-                 WICD_DAEMON_DBUS_INTERFACE,
-                 QDBusConnection::systemBus() ),
+WicdStatus::WicdStatus(QObject *parent)
+    : SystemStatusInterface(parent),
+      m_wicd(WICD_DBUS_SERVICE, WICD_DAEMON_DBUS_PATH, WICD_DAEMON_DBUS_INTERFACE, QDBusConnection::systemBus()),
       cachedState(Solid::Networking::Unknown)
 {
     qDBusRegisterMetaType<WicdConnectionInfo>();
-    QDBusConnection::systemBus().connect(WICD_DBUS_SERVICE, WICD_DAEMON_DBUS_PATH, WICD_DAEMON_DBUS_INTERFACE,
-                                         "StatusChanged", this, SLOT(wicdStateChanged()));
-    wicdStateChanged();
+    if (isSupported()) {
+        QDBusConnection::systemBus().connect(WICD_DBUS_SERVICE, WICD_DAEMON_DBUS_PATH, WICD_DAEMON_DBUS_INTERFACE,
+            "StatusChanged", this, SLOT(wicdStateChanged()));
+        wicdStateChanged();
+    }
 }
 
 Solid::Networking::Status WicdStatus::status() const
@@ -96,7 +95,7 @@ void WicdStatus::wicdStateChanged()
         break;
     }
 
-    Q_EMIT statusChanged( status );
+    Q_EMIT statusChanged(status);
 }
 
 #include "moc_wicdstatus.cpp"
