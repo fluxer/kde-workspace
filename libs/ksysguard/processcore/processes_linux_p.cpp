@@ -455,7 +455,7 @@ bool ProcessesLocal::sendSignal(long pid, int sig) {
         errorCode = Processes::InvalidPid;
         return false;
     }
-    if (kill( (pid_t)pid, sig )) {
+    if (kill( (pid_t)pid, sig ) == -1) {
         switch (errno) {
             case ESRCH:
                 errorCode = Processes::ProcessDoesNotExistOrZombie;

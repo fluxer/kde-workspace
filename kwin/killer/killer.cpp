@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
             lst << hostname << "kill" << QString::number(pid);
             QProcess::startDetached("xon", lst);
         } else {
-            if (::kill(pid, SIGKILL) && errno == EPERM) {
+            if (::kill(pid, SIGKILL) == -1 && errno == EPERM) {
                 KAuth::Action killer("org.kde.ksysguard.processlisthelper.sendsignal");
                 killer.setHelperID("org.kde.ksysguard.processlisthelper");
                 killer.addArgument("pid0", pid);

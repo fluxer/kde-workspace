@@ -191,14 +191,14 @@ QSet<long> ProcessesLocal::getAllPids( )
             pid = atol( entry->d_name );
             // Skip all processes with parent id = 0 except init
             if (pid == 1 || getParentPid(pid) > 0) {
-            pids.insert(pid);
+                pids.insert(pid);
             }
         }
     return pids;
 }
 
 bool ProcessesLocal::sendSignal(long pid, int sig) {
-    if ( kill( (pid_t)pid, sig ) ) {
+    if ( kill( (pid_t)pid, sig ) == -1) {
         //Kill failed
         return false;
     }

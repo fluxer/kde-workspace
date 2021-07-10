@@ -212,7 +212,7 @@ Client::Client()
  */
 Client::~Client()
 {
-    if (m_killHelperPID && !::kill(m_killHelperPID, 0)) { // means the process is alive
+    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) { // means the process is alive
         ::kill(m_killHelperPID, SIGTERM);
         m_killHelperPID = 0;
     }
@@ -1328,7 +1328,7 @@ void Client::gotPing(xcb_timestamp_t timestamp)
         return;
     delete ping_timer;
     ping_timer = NULL;
-    if (m_killHelperPID && !::kill(m_killHelperPID, 0)) { // means the process is alive
+    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) { // means the process is alive
         ::kill(m_killHelperPID, SIGTERM);
         m_killHelperPID = 0;
     }
@@ -1344,7 +1344,7 @@ void Client::pingTimeout()
 
 void Client::killProcess(bool ask, xcb_timestamp_t timestamp)
 {
-    if (m_killHelperPID && !::kill(m_killHelperPID, 0)) // means the process is alive
+    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) // means the process is alive
         return;
     Q_ASSERT(!ask || timestamp != XCB_TIME_CURRENT_TIME);
     pid_t pid = info->pid();
