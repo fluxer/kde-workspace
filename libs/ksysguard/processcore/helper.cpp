@@ -61,7 +61,7 @@ KAuth::ActionReply KSysGuardProcessListHelper::sendsignal(QVariantMap parameters
         return KAuth::ActionReply::SuccessReply;
     } else {
         errorReply.setErrorDescription(QString("Could not send signal to: ") + errorList.join(", "));
-        errorReply.setErrorCode(0);
+        errorReply.setErrorCode(3);
         return errorReply;
     }
 }
