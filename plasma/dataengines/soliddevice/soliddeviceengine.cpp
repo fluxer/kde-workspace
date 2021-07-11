@@ -559,9 +559,9 @@ void SolidDeviceEngine::deviceAdded(const QString& udi)
             connect(drive, SIGNAL(ejectDone(Solid::ErrorType,QVariant,QString)),
                     this, SLOT(setIdleState(Solid::ErrorType,QVariant,QString)));
         }
-    }
-    else if (device.is<Solid::StorageVolume>()) {
+    } else if (device.is<Solid::StorageVolume>()) {
         // update the volume in case of 2-stage devices
+#warning FIXME: broken Solid generic interface usage
         if (m_devicemap.contains(udi) && query(udi).value(I18N_NOOP("Size")).toULongLong() == 0) {
             Solid::GenericInterface * iface = device.as<Solid::GenericInterface>();
             if (iface) {
