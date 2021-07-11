@@ -42,7 +42,7 @@ ProcessesLocal::ProcessesLocal()
 
 ProcessesLocal::~ProcessesLocal()
 {
-   delete d;
+    delete d;
 }
 
 long ProcessesLocal::getParentPid(long pid)

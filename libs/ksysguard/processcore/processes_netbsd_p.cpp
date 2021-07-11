@@ -66,8 +66,9 @@ long int KSysGuard::ProcessesLocal::numberProcessorCores()
     mib[1] = HW_NCPU;
     len = sizeof(ncpu);
 
-    if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1 || !len)
+    if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1 || !len) {
         return 1;
+    }
     return len;
 }
 #endif
@@ -86,11 +87,13 @@ bool ProcessesLocal::Private::readProc(long pid, struct kinfo_proc2 **p, int *nu
     }
     *p = kvm_getproc2(kd, op, arg, sizeof(struct kinfo_proc2), &len);
 
-    if (len < 1)
+    if (len < 1) {
         return false;
+    }
 
-    if (num != NULL)
+    if (num != NULL) {
         *num = len;
+    }
     return true;
 }
 
@@ -122,26 +125,32 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc2 *p, Process *ps)
 
     // "idle", "run", "sleep", "stop", "zombie", "dead", "onproc", "suspended"
     switch( p->p_stat ) {
-        case LSIDL:
+        case LSIDL: {
             ps->setStatus(Process::DiskSleep);
             break;
+        }
         case LSRUN:
-        case LSONPROC:
+        case LSONPROC: {
             ps->setStatus(Process::Running);
             break;
+        }
         case LSSLEEP:
-        case LSSUSPENDED:
+        case LSSUSPENDED: {
             ps->setStatus(Process::Sleeping);
             break;
-        case LSSTOP:
+        }
+        case LSSTOP: {
             ps->setStatus(Process::Stopped);
             break;
-        case LSZOMB:
+        }
+        case LSZOMB: {
             ps->setStatus(Process::Zombie);
             break;
-        default:
+        }
+        default: {
             ps->setStatus(Process::OtherStatus);
             break;
+        }
     }
 
     dev = p->p_tdev;
@@ -165,8 +174,9 @@ bool ProcessesLocal::Private::readProcCmdline(struct kinfo_proc2 *p, Process *pr
 {
     char **argv;
 
-    if ((argv = kvm_getargv2(kd, p, 256)) == NULL)
+    if ((argv = kvm_getargv2(kd, p, 256)) == NULL) {
         return false;
+    }
 
     QString command = QString("");
 
@@ -197,13 +207,15 @@ long ProcessesLocal::getParentPid(long pid)
 bool ProcessesLocal::updateProcessInfo( long pid, Process *process)
 {
     struct kinfo_proc2 *p;
-    if (!d->readProc(pid, &p, NULL))
+    if (!d->readProc(pid, &p, NULL)) {
         return false;
+    }
     d->readProcStat(p, process);
     d->readProcStatus(p, process);
     d->readProcStatm(p, process);
-    if (!d->readProcCmdline(p, process))
+    if (!d->readProcCmdline(p, process)) {
         return false;
+    }
 
     return true;
 }
@@ -221,8 +233,9 @@ QSet<long> ProcessesLocal::getAllPids( )
         long long ppid = p[num].p_ppid;
 
         //skip all process with parent id = 0 but init
-        if(ppid <= 0 && pid != 1)
+        if(ppid <= 0 && pid != 1) {
             continue;
+        }
         pids.insert(pid);
     }
     return pids;
@@ -248,26 +261,33 @@ bool ProcessesLocal::setNiceness(long pid, int priority)
 
 bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
-    if (priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
+    if (priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch) {
         priority = 0;
-    if (pid <= 0)
+    }
+    if (pid <= 0) {
         return false; // check the parameters
+    }
 
     struct sched_param params;
     params.sched_priority = priority;
     switch(priorityClass) {
-        case (KSysGuard::Process::Other):
-            return (sched_setscheduler( pid, SCHED_OTHER, &params) == 0);
-        case (KSysGuard::Process::RoundRobin):
-            return (sched_setscheduler( pid, SCHED_RR, &params) == 0);
-        case (KSysGuard::Process::Fifo):
-            return (sched_setscheduler( pid, SCHED_FIFO, &params) == 0);
+        case KSysGuard::Process::Other: {
+            return (sched_setscheduler(pid, SCHED_OTHER, &params) == 0);
+        }
+        case KSysGuard::Process::RoundRobin: {
+            return (sched_setscheduler(pid, SCHED_RR, &params) == 0);
+        }
+        case KSysGuard::Process::Fifo: {
+            return (sched_setscheduler(pid, SCHED_FIFO, &params) == 0);
+        }
 #ifdef SCHED_BATCH
-        case (KSysGuard::Process::Batch):
-            return (sched_setscheduler( pid, SCHED_BATCH, &params) == 0);
+        case KSysGuard::Process::Batch: {
+            return (sched_setscheduler(pid, SCHED_BATCH, &params) == 0);
+        }
 #endif
-        default:
+        default: {
             return false;
+        }
     }
 }
 
@@ -275,14 +295,14 @@ long long ProcessesLocal::totalPhysicalMemory()
 {
     size_t Total;
     size_t len;
-    len = sizeof (Total);
+    len = sizeof(Total);
     sysctlbyname("hw.physmem", &Total, &len, NULL, 0);
     return Total /= 1024;
 }
 
 ProcessesLocal::~ProcessesLocal()
 {
-   delete d;
+    delete d;
 }
 
 }

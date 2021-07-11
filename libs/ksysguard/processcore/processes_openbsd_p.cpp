@@ -62,8 +62,9 @@ bool ProcessesLocal::Private::readProc(long pid, struct kinfo_proc *p)
     mib[5] = 1;
 
     len = sizeof(struct kinfo_proc);
-    if (sysctl(mib, 6, p, &len, NULL, 0) == -1 || !len)
+    if (sysctl(mib, 6, p, &len, NULL, 0) == -1 || !len) {
         return false;
+    }
     return true;
 }
 
@@ -92,28 +93,35 @@ void ProcessesLocal::Private::readProcStat(struct kinfo_proc *p, Process *ps)
 
     // "idle", "run", "sleep", "stop", "zombie", "dead", "onproc"
     switch( status ) {
-        case SIDL:
+        case SIDL: {
             ps->setStatus(Process::DiskSleep);
             break;
+        }
         case SRUN:
-        case SONPROC:
+        case SONPROC: {
             ps->setStatus(Process::Running);
             break;
-        case SSLEEP:
+        }
+        case SSLEEP: {
             ps->setStatus(Process::Sleeping);
             break;
-        case SSTOP:
+        }
+        case SSTOP: {
             ps->setStatus(Process::Stopped);
             break;
-        case SZOMB:
+        }
+        case SZOMB: {
             ps->setStatus(Process::Zombie);
             break;
-        case SDEAD:
+        }
+        case SDEAD: {
             ps->setStatus(Process::Ended);
             break;
-        default:
+        }
+        default: {
             ps->setStatus(Process::OtherStatus);
             break;
+        }
     }
 }
 
@@ -161,7 +169,7 @@ long ProcessesLocal::getParentPid(long pid)
     Q_ASSERT(pid != 0);
     long ppid = -1;
     struct kinfo_proc p;
-    if(d->readProc(pid, &p)) {
+    if (d->readProc(pid, &p)) {
         ppid = p.p_ppid;
     }
     return ppid;
@@ -170,13 +178,15 @@ long ProcessesLocal::getParentPid(long pid)
 bool ProcessesLocal::updateProcessInfo( long pid, Process *process)
 {
     struct kinfo_proc p;
-    if(!d->readProc(pid, &p))
+    if (!d->readProc(pid, &p)) {
         return false;
+    }
     d->readProcStat(&p, process);
     d->readProcStatus(&p, process);
     d->readProcStatm(&p, process);
-    if(!d->readProcCmdline(pid, process))
+    if (!d->readProcCmdline(pid, process)) {
         return false;
+    }
 
     return true;
 }
@@ -201,20 +211,20 @@ QSet<long> ProcessesLocal::getAllPids( )
     p = (kinfo_proc *) malloc(len);
     mib[5] = len / sizeof(struct kinfo_proc);
     if (sysctl(mib, 6, p, &len, NULL, 0) == -1) {
-        free(p);
+        ::free(p);
         return pids;
     }
 
     for (num = 0; num < len / sizeof(struct kinfo_proc); num++) {
         pids.insert(p[num].p_pid);
     }
-    free(p);
+    ::free(p);
     return pids;
 }
 
 bool ProcessesLocal::sendSignal(long pid, int sig)
 {
-    if (kill((pid_t)pid, sig) == -1) {
+    if (:;kill((pid_t)pid, sig) == -1) {
         // kill failed
         return false;
     }
@@ -234,8 +244,11 @@ bool ProcessesLocal::setScheduler(long pid, int priorityClass, int priority)
 {
     if (priorityClass == KSysGuard::Process::Other || priorityClass == KSysGuard::Process::Batch)
         priority = 0;
-    if (pid <= 0) return false; // check the parameters
+    if (pid <= 0) return false; {
+        // check the parameters
         return false;
+    }
+
     // not supported by OpenBSD yet (last checked on 6.8)
 #if 0
     struct sched_param params;
@@ -286,8 +299,9 @@ long int KSysGuard::ProcessesLocal::numberProcessorCores()
     mib[1] = HW_NCPU;
     len = sizeof(ncpu);
 
-    if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1 || !len)
+    if (sysctl(mib, 2, &ncpu, &len, NULL, 0) == -1 || !len) {
         return 1;
+    }
     return len;
 }
 #endif
