@@ -1013,19 +1013,17 @@ bool KSysGuardProcessList::reniceProcesses(const QList<long long> &pids, int nic
     if(!d->mModel.isLocalhost()) return false; //We can't use kauth to renice non-localhost processes
 
 
-    KAuth::Action *action = new KAuth::Action("org.kde.ksysguard.processlisthelper.renice");
-    action->setParentWidget(window());
-    d->setupKAuthAction( action, unreniced_pids);
-    action->addArgument("nicevalue", niceValue);
-    KAuth::ActionReply reply = action->execute();
+    KAuth::Action action("org.kde.ksysguard.processlisthelper.renice");
+    action.setParentWidget(window());
+    d->setupKAuthAction(&action, unreniced_pids);
+    action.addArgument("nicevalue", niceValue);
+    KAuth::ActionReply reply = action.execute();
 
     if (reply == KAuth::ActionReply::SuccessReply) {
         updateList();
-        delete action;
     } else if (reply != KAuth::ActionReply::UserCancelled && reply != KAuth::ActionReply::AuthorizationDenied) {
         KMessageBox::sorry(this, i18n("You do not have the permission to renice the process and there "
                     "was a problem trying to run as root.  Error %1 %2", reply.errorCode(), reply.errorDescription()));
-        delete action;
         return false;
     }
     return true;
@@ -1139,20 +1137,18 @@ bool KSysGuardProcessList::changeCpuScheduler(const QList< long long> &pids, KSy
     if(unchanged_pids.isEmpty()) return true;
     if(!d->mModel.isLocalhost()) return false; //We can't use KAuth to affect non-localhost processes
 
-    KAuth::Action *action = new KAuth::Action("org.kde.ksysguard.processlisthelper.changecpuscheduler");
-    action->setParentWidget(window());
-    d->setupKAuthAction( action, unchanged_pids);
-    action->addArgument("cpuScheduler", (int)newCpuSched);
-    action->addArgument("cpuSchedulerPriority", newCpuSchedPriority);
-    KAuth::ActionReply reply = action->execute();
+    KAuth::Action action("org.kde.ksysguard.processlisthelper.changecpuscheduler");
+    action.setParentWidget(window());
+    d->setupKAuthAction(&action, unchanged_pids);
+    action.addArgument("cpuScheduler", (int)newCpuSched);
+    action.addArgument("cpuSchedulerPriority", newCpuSchedPriority);
+    KAuth::ActionReply reply = action.execute();
 
     if (reply == KAuth::ActionReply::SuccessReply) {
         updateList();
-        delete action;
     } else if (reply != KAuth::ActionReply::UserCancelled && reply != KAuth::ActionReply::AuthorizationDenied) {
         KMessageBox::sorry(this, i18n("You do not have the permission to change the CPU Scheduler for the process and there "
                     "was a problem trying to run as root.  Error %1 %2", reply.errorCode(), reply.errorDescription()));
-        delete action;
         return false;
     }
     return true;
@@ -1174,7 +1170,7 @@ bool KSysGuardProcessList::killProcesses(const QList< long long> &pids, int sig)
 
     KAuth::Action action("org.kde.ksysguard.processlisthelper.sendsignal");
     action.setParentWidget(window());
-    d->setupKAuthAction( &action, unkilled_pids);
+    d->setupKAuthAction(&action, unkilled_pids);
     action.addArgument("signal", sig);
     KAuth::ActionReply reply = action.execute();
 
