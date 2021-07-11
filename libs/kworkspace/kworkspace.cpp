@@ -244,7 +244,7 @@ void propagateSessionManager()
         QFileInfo info ( f );
         smModificationTime = QTime( info.lastModified().time() );
         QTextStream t(&f);
-        t.setCodec( "ISO 8859-1" );
+        t.setCodec( "ISO-8859-1" );
         QString s = t.readLine();
         f.close();
         ::setenv( "SESSION_MANAGER", s.toLatin1(), true  );
