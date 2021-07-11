@@ -99,6 +99,7 @@ DeviceCache::DeviceCache ( qint32 timeout, QObject* parent ) : QEventLoop ( pare
 
 void DeviceCache::checkDevice ( Solid::Device solidDevice )
 {
+#warning FIXME: broken UDev backend specifiec stuff
     Solid::GenericInterface *iface = solidDevice.as<Solid::GenericInterface>();
     QMap<QString, QVariant> properties = iface->allProperties();
 
@@ -150,8 +151,8 @@ void DeviceCache::checkDevice ( Solid::Device solidDevice )
                         }
                     }
                 }
+                break;
             }
-            break;
             case LIBMTP_ERROR_GENERAL:
             default:
                 kError( KIO_MTP ) << "Unknown connection error";
@@ -168,7 +169,7 @@ void DeviceCache::deviceAdded ( const QString& udi )
     Solid::Device device( udi );
     if ( device.isDeviceInterface( Solid::DeviceInterface::PortableMediaPlayer ) )
     {
-        kDebug ( KIO_MTP ) << "SOLID: New Device with udi=" << udi << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
+        kDebug ( KIO_MTP ) << "SOLID: New Device with udi=" << udi;
 
         checkDevice( device );
     }
@@ -178,7 +179,7 @@ void DeviceCache::deviceRemoved ( const QString& udi )
 {
     if ( udiCache.contains( udi ) )
     {
-        kDebug ( KIO_MTP ) << "SOLID: Device with udi=" << udi << " removed. ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||";
+        kDebug ( KIO_MTP ) << "SOLID: Device with udi=" << udi << " removed.";
         
         CachedDevice *cDev = udiCache.value( udi );
         
