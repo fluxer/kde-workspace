@@ -39,12 +39,6 @@ static const char description[] = I18N_NOOP( "KDE run command interface" );
 
 int main(int argc, char* argv[])
 {
-#ifdef Q_WS_X11
-    // krunner only works properly with Qt's native X11 backend; override any compile-time
-    // or command line settings to raster or OpenGL.
-    QApplication::setGraphicsSystem(QLatin1String( "native" ));
-#endif
-
     KAboutData aboutData( "krunner", 0, ki18n( "Run Command Interface" ),
                           KDE_VERSION_STRING, ki18n(description), KAboutData::License_GPL,
                           ki18n("(c) 2006, Aaron Seigo") );

@@ -22,9 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define __MAIN_H__
 
 #include <kcmodule.h>
-
 #include <ksharedconfig.h>
 #include <ktemporaryfile.h>
+
+#include <QLabel>
 
 #include "kwin_interface.h"
 
@@ -33,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class KPluginSelector;
 class KActionCollection;
-#include <QLabel>
 
 namespace KWin
 {
@@ -78,7 +78,6 @@ public slots:
 
 private slots:
     void confirmReInit() { showConfirmDialog(true); }
-    void suggestGraphicsSystem();
     void alignGuiToCompositingType(int compositingType);
     void toggleEffectShortcutChanged(const QKeySequence &seq);
     void updateStatusUI(bool compositingIsPossible);
@@ -96,7 +95,6 @@ private:
     KSharedConfigPtr mTmpConfig;
     bool m_showConfirmDialog;
     KActionCollection* m_actionCollection;
-    QString originalGraphicsSystem;
     QAction *m_showDetailedErrors;
     QAction *m_dontShowAgain;
     QString m_externErrorDetails;

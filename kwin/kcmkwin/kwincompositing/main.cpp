@@ -134,7 +134,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
     connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
     connect(ui.useCompositing, SIGNAL(toggled(bool)), this, SLOT(changed()));
-    connect(ui.useCompositing, SIGNAL(clicked(bool)), this, SLOT(suggestGraphicsSystem()));
     connect(ui.effectWinManagement, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(ui.effectAnimations, SIGNAL(toggled(bool)), this, SLOT(changed()));
 
@@ -147,8 +146,6 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
 
     connect(ui.compositingType, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(ui.compositingType, SIGNAL(currentIndexChanged(int)), this, SLOT(alignGuiToCompositingType(int)));
-    connect(ui.compositingType, SIGNAL(activated(int)), this, SLOT(suggestGraphicsSystem()));
-    connect(ui.graphicsSystem, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(ui.windowThumbnails, SIGNAL(activated(int)), this, SLOT(changed()));
     connect(ui.unredirectFullscreen , SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(ui.xrScaleFilter, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
@@ -314,14 +311,9 @@ void KWinCompositingConfig::loadGeneralTab()
         ui.desktopSwitchingCombo->setCurrentIndex(1);
 }
 
-void KWinCompositingConfig::suggestGraphicsSystem()
-{
-    if (!ui.useCompositing->isChecked() || ui.compositingType->currentIndex() == XRENDER_INDEX)
-        ui.graphicsSystem->setCurrentIndex(0);
-}
-
 void KWinCompositingConfig::alignGuiToCompositingType(int compositingType)
 {
+    ui.scaleMethodLabel->setVisible(compositingType == XRENDER_INDEX);
     ui.xrScaleFilter->setVisible(compositingType == XRENDER_INDEX);
     if (compositingType == XRENDER_INDEX)
         ui.scaleMethodLabel->setBuddy(ui.xrScaleFilter);
@@ -356,15 +348,6 @@ void KWinCompositingConfig::loadAdvancedTab()
     if (backend == "XRender") {
         ui.compositingType->setCurrentIndex(XRENDER_INDEX);
     }
-
-    originalGraphicsSystem = config.readEntry("GraphicsSystem", QString());
-    if (originalGraphicsSystem.isEmpty()) { // detect system default
-        QPixmap pix(1,1);
-        QPainter p(&pix);
-        originalGraphicsSystem = (p.paintEngine()->type() == QPaintEngine::X11) ? "native" : "raster";
-        p.end();
-    }
-    ui.graphicsSystem->setCurrentIndex((originalGraphicsSystem == "native") ? 0 : 1);
 
     // 4 - off, 5 - shown, 6 - always, other are old values
     int hps = config.readEntry("HiddenPreviews", 5);
@@ -466,7 +449,6 @@ bool KWinCompositingConfig::saveAdvancedTab()
     static const int hps[] = { 6 /*always*/, 5 /*shown*/,  4 /*never*/ };
 
     KConfigGroup config(mKWinConfig, "Compositing");
-    QString graphicsSystem = (ui.graphicsSystem->currentIndex() == 0) ? "native" : "raster";
 
     QString backend;
 
@@ -477,15 +459,13 @@ bool KWinCompositingConfig::saveAdvancedTab()
     }
 
     if (config.readEntry("HiddenPreviews", 5) != hps[ ui.windowThumbnails->currentIndex()]
-              || (int)config.readEntry("XRenderSmoothScale", false) != ui.xrScaleFilter->currentIndex()) {
-        advancedChanged = true;
-    } else if (originalGraphicsSystem != graphicsSystem) {
+        || (int)config.readEntry("XRenderSmoothScale", false) != ui.xrScaleFilter->currentIndex()
+        || config.readEntry("Backend") != ui.compositingType->currentText()) {
         advancedChanged = true;
     }
 
-    config.writeEntry("Backend",  backend);
+    config.writeEntry("Backend", backend);
 
-    config.writeEntry("GraphicsSystem", graphicsSystem);
     config.writeEntry("HiddenPreviews", hps[ ui.windowThumbnails->currentIndex()]);
     config.writeEntry("UnredirectFullscreen", ui.unredirectFullscreen->isChecked());
 

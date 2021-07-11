@@ -347,20 +347,15 @@ void Compositor::slotConfigChanged()
         if (effects)   // setupCompositing() may fail
             effects->reconfigure();
         addRepaintFull();
-    } else
+    } else {
         finish();
+    }
 }
 
 void Compositor::slotReinitialize()
 {
     // Reparse config. Config options will be reloaded by setup()
     KGlobal::config()->reparseConfiguration();
-    const QString graphicsSystem = KConfigGroup(KGlobal::config(), "Compositing").readEntry("GraphicsSystem", "");
-    if ((Extensions::nonNativePixmaps() && graphicsSystem == "native") ||
-        (!Extensions::nonNativePixmaps() && (graphicsSystem == "raster" || graphicsSystem == "opengl")) ) {
-        restartKWin("explicitly reconfigured graphicsSystem change");
-        return;
-    }
 
     // Restart compositing
     finish();
@@ -738,14 +733,6 @@ void Compositor::setOverlayWindowVisibility(bool visible)
     if (hasScene() && m_scene->overlayWindow()) {
         m_scene->overlayWindow()->setVisibility(visible);
     }
-}
-
-void Compositor::restartKWin(const QString &reason)
-{
-    kDebug(1212) << "restarting kwin for:" << reason;
-    char cmd[1024]; // copied from crashhandler - maybe not the best way to do?
-    sprintf(cmd, "%s --replace &", QFile::encodeName(QCoreApplication::applicationFilePath()).constData());
-    system(cmd);
 }
 
 bool Compositor::isCompositingPossible() const
