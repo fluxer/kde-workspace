@@ -100,9 +100,6 @@
 /* Define to 1 if `sin_len' is member of `struct sockaddr_in'. */
 #cmakedefine HAVE_STRUCT_SOCKADDR_IN_SIN_LEN
 
-/* Define if you have getdomainname */
-#cmakedefine HAVE_GETDOMAINNAME 1
-
 /* Define to 1 if you have the <termio.h> header file. */
 #cmakedefine HAVE_TERMIO_H 1
 

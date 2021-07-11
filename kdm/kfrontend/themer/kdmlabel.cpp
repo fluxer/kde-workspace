@@ -36,6 +36,7 @@
 #include <QHash>
 #include <QPainter>
 #include <QTimer>
+#include <QHostInfo>
 #include <QtGui/qx11info_x11.h>
 
 #include <X11/Xlib.h>
@@ -43,9 +44,6 @@
 
 #include <unistd.h>
 #include <sys/utsname.h>
-#if !defined(HAVE_GETDOMAINNAME) && defined(HAVE_SYS_SYSTEMINFO)
-# include <sys/systeminfo.h>
-#endif
 
 KdmLabel::KdmLabel(QObject *parent, const QDomNode &node)
     : KdmItem(parent, node)
@@ -313,14 +311,16 @@ KdmLabel::expandMacro(QChar chr, QStringList &ret)
         expandoMap['s'] = QString::fromLocal8Bit(uts.sysname);
         expandoMap['r'] = QString::fromLocal8Bit(uts.release);
         expandoMap['m'] = QString::fromLocal8Bit(uts.machine);
-        char buf[256];
-        buf[sizeof(buf) - 1] = '\0';
-        expandoMap['h'] = gethostname(buf, sizeof(buf) - 1) ? "localhost" : QString::fromLocal8Bit(buf);
-#ifdef HAVE_GETDOMAINNAME
-        expandoMap['o'] = getdomainname(buf, sizeof(buf) - 1) ? "localdomain" : QString::fromLocal8Bit(buf);
-#elif defined(HAVE_SYS_SYSTEMINFO)
-        expandoMap['o'] = (unsigned)sysinfo(SI_SRPC_DOMAIN, buf, sizeof(buf)) > sizeof(buf) ? "localdomain" : QString::fromLocal8Bit(buf);
-#endif
+        QString hostname = QHostInfo::localHostName();
+        if (hostname.isEmpty()) {
+            hostname = QLatin1String("localhost");
+        }
+        QString domainname = QHostInfo::localDomainName();
+        if (domainname.isEmpty()) {
+            domainname = QLatin1String("localdomain");
+        }
+        expandoMap['h'] = hostname;
+        expandoMap['o'] = domainname;
     }
     QHash<QChar, QString>::const_iterator mi = expandoMap.constFind(chr);
     if (mi != expandoMap.constEnd()) {

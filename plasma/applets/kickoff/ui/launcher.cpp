@@ -21,9 +21,6 @@
 
 #include "ui/launcher.h"
 
-// System
-#include <unistd.h>
-
 // Qt
 #include <QApplication>
 #include <QtGui/qevent.h>
@@ -34,6 +31,7 @@
 #include <QTabBar>
 #include <QToolButton>
 #include <QVBoxLayout>
+#include <QHostInfo>
 
 // KDE
 #include <KDebug>
@@ -552,11 +550,7 @@ void Launcher::init()
     // Add status information footer
     d->footer = new QWidget;
 
-    char hostname[256];
-    hostname[0] = '\0';
-    if (!gethostname(hostname, sizeof(hostname))) {
-        hostname[sizeof(hostname)-1] = '\0';
-    }
+    const QString hostname = QHostInfo::localHostName();
     KUser user;
     QString fullName = user.property(KUser::FullName).toString();
     QString labelText;

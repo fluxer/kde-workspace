@@ -69,12 +69,17 @@ endif (WITH_KDM_XCONSOLE)
 macro_add_file_dependencies(kdmconfig.h ${confci})
 macro_add_file_dependencies(kdmconfig.cpp ${confci})
 add_executable(kdm_greet ${kdm_greet_SRCS})
-target_link_libraries(kdm_greet ${KDE4_KDEUI_LIBS} ${QT_QTXML_LIBRARY} ${X11_X11_LIB})
+target_link_libraries(kdm_greet
+    ${KDE4_KDEUI_LIBS}
+    ${QT_QTXML_LIBRARY}
+    ${QT_QTNETWORK_LIBRARY}
+    ${X11_X11_LIB}
+)
 if (X11_XTest_FOUND)
-  target_link_libraries(kdm_greet ${X11_XTest_LIB})
+    target_link_libraries(kdm_greet ${X11_XTest_LIB})
 endif (X11_XTest_FOUND)
 if (WITH_KDM_XCONSOLE)
-  target_link_libraries(kdm_greet ${KDE4_KPTY_LIBS})
+    target_link_libraries(kdm_greet ${KDE4_KPTY_LIBS})
 endif (WITH_KDM_XCONSOLE)
 add_dependencies(kdm_greet ConfigCi)
 

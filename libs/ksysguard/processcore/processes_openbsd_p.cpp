@@ -224,7 +224,7 @@ QSet<long> ProcessesLocal::getAllPids( )
 
 bool ProcessesLocal::sendSignal(long pid, int sig)
 {
-    if (:;kill((pid_t)pid, sig) == -1) {
+    if (::kill((pid_t)pid, sig) == -1) {
         // kill failed
         return false;
     }
