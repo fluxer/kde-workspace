@@ -31,7 +31,7 @@ KSysGuardProcessListHelper::KSysGuardProcessListHelper()
 }
 
 /* The functions here run as ROOT.  So be careful.  DO NOT TRUST THE INPUTS TO BE SANE. */
-#define GET_PID(i) parameters.value(QString("pid%1").arg(i), -1).toULongLong(); if(pid < 0) return KAuth::ActionReply::HelperErrorReply;
+#define GET_PID(i) parameters.value(QString("pid%1").arg(i), -1).toLongLong(); if(pid < 0) return KAuth::ActionReply::HelperErrorReply;
 KAuth::ActionReply KSysGuardProcessListHelper::sendsignal(QVariantMap parameters) {
     KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
     if(!parameters.contains("signal")) {
@@ -46,7 +46,7 @@ KAuth::ActionReply KSysGuardProcessListHelper::sendsignal(QVariantMap parameters
     }
 
     KSysGuard::ProcessesLocal processes;
-    int signal = qvariant_cast<int>(parameters.value("signal"));
+    int signal = parameters.value("signal").toInt();
     bool success = true;
     int numProcesses = parameters.value("pidcount").toInt();
     QStringList errorList;
@@ -71,7 +71,7 @@ KAuth::ActionReply KSysGuardProcessListHelper::renice(QVariantMap parameters) {
         return KAuth::ActionReply::HelperErrorReply;
 
     KSysGuard::ProcessesLocal processes;
-    int niceValue = qvariant_cast<int>(parameters.value("nicevalue"));
+    int niceValue = parameters.value("nicevalue").toInt();
     bool success = true;
     int numProcesses = parameters.value("pidcount").toInt();
     for (int i = 0; i < numProcesses; ++i) {
@@ -89,8 +89,8 @@ KAuth::ActionReply KSysGuardProcessListHelper::changecpuscheduler(QVariantMap pa
         return KAuth::ActionReply::HelperErrorReply;
 
     KSysGuard::ProcessesLocal processes;
-    int cpuScheduler = qvariant_cast<int>(parameters.value("cpuScheduler"));
-    int cpuSchedulerPriority = qvariant_cast<int>(parameters.value("cpuSchedulerPriority"));
+    int cpuScheduler = parameters.value("cpuScheduler").toInt();
+    int cpuSchedulerPriority = parameters.value("cpuSchedulerPriority").toInt();
     bool success = true;
 
     int numProcesses = parameters.value("pidcount").toInt();
