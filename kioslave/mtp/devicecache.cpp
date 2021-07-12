@@ -68,7 +68,6 @@ LIBMTP_mtpdevice_t* CachedDevice::getDevice()
         kDebug(KIO_MTP) << "reopen mtpdevice if we have no storage found";
         LIBMTP_Release_Device(mtpdevice);
         mtpdevice = LIBMTP_Open_Raw_Device_Uncached(&rawdevice);
-        resetDeviceStack(mtpdevice);
     }
     return mtpdevice;
 }
@@ -138,12 +137,14 @@ void DeviceCache::checkDevice(Solid::Device solidDevice)
                     LIBMTP_raw_device_t* rawDevice = &rawdevices[i];
 
                     LIBMTP_mtpdevice_t *mtpDevice = LIBMTP_Open_Raw_Device_Uncached(rawDevice);
-                    resetDeviceStack(mtpDevice);
+                    if (mtpDevice == NULL) {
+                        continue;
+                    }
                     const char* rawDeviceSerial = LIBMTP_Get_Serialnumber(mtpDevice);
 
                     kDebug(KIO_MTP) << "Checking for device match" << solidSerial << rawDeviceSerial;
                     if (solidSerial == rawDeviceSerial) {
-                        kDebug( KIO_MTP ) << "Found device matching the Solid description";
+                        kDebug(KIO_MTP) << "Found device matching the Solid description";
                     } else {
                         LIBMTP_Release_Device(mtpDevice);
                         continue;
@@ -163,6 +164,11 @@ void DeviceCache::checkDevice(Solid::Device solidDevice)
                 break;
             }
         }
+
+        if (!udiCache.contains(solidDevice.udi())) {
+            kError(KIO_MTP) << "No device match found, device busy?";
+        }
+
         ::free(rawdevices);
     }
 }

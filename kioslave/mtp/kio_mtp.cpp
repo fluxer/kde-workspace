@@ -784,7 +784,6 @@ void MTPSlave::mkdir(const KUrl& url, int)
                 kDebug(KIO_MTP) << "Attempting to create folder" << dirName;
 
                 ret = LIBMTP_Create_Folder(device, dirName, file->item_id, file->storage_id);
-               
             }
         }
         if (ret != 0) {
