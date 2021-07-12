@@ -56,10 +56,10 @@ private:
      * @param redirect If udi= should be redirected or just return false
      * @return 0 if valid, 1 if udi and redirected, 2 if udi but invalid device, -1 else
      */
-    int checkUrl( const KUrl& url, bool redirect = true );
+    int checkUrl(const KUrl& url, bool redirect = true);
     FileCache *fileCache;
     DeviceCache *deviceCache;
-    QPair<void*, LIBMTP_mtpdevice_t*> getPath( const QString& path );
+    QPair<void*, LIBMTP_mtpdevice_t*> getPath(const QString& path);
     
 // private slots:
 //     
@@ -69,18 +69,18 @@ public:
     /*
      * Overwritten KIO-functions, see "kio_mtp.cpp"
      */
-    MTPSlave ( const QByteArray& pool, const QByteArray& app );
+    MTPSlave(const QByteArray& pool, const QByteArray& app);
     virtual ~MTPSlave();
 
-    virtual void listDir ( const KUrl& url );
-    virtual void stat ( const KUrl& url );
-    virtual void mimetype ( const KUrl& url );
-    virtual void get ( const KUrl& url );
-    virtual void put ( const KUrl& url, int, JobFlags flags );
-    virtual void copy ( const KUrl& src, const KUrl& dest, int, JobFlags flags );
-    virtual void mkdir ( const KUrl& url, int );
-    virtual void del ( const KUrl& url, bool );
-    virtual void rename ( const KUrl& src, const KUrl& dest, JobFlags flags );
+    virtual void listDir(const KUrl& url);
+    virtual void stat(const KUrl& url);
+    virtual void mimetype(const KUrl& url);
+    virtual void get(const KUrl& url);
+    virtual void put(const KUrl& url, int, JobFlags flags);
+    virtual void copy(const KUrl& src, const KUrl& dest, int, JobFlags flags);
+    virtual void mkdir(const KUrl& url, int);
+    virtual void del(const KUrl& url, bool);
+    virtual void rename(const KUrl& src, const KUrl& dest, JobFlags flags);
 };
 
 #endif  //#endif KIO_MTP_H

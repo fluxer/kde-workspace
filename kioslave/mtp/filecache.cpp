@@ -24,37 +24,34 @@
 
 #include <QTimer>
 
-FileCache::FileCache ( QObject* parent ) : QObject ( parent )
+FileCache::FileCache(QObject* parent)
+    : QObject(parent)
 {
 }
 
-uint32_t FileCache::queryPath ( const QString& path, int timeToLive )
+uint32_t FileCache::queryPath(const QString& path, int timeToLive)
 {
     kDebug(KIO_MTP) << "Querying" << path;
 
-    QPair< QDateTime, uint32_t > item = cache.value ( path );
+    QPair< QDateTime, uint32_t > item = cache.value(path);
 
-    if ( item.second != 0 )
-    {
+    if (item.second != 0) {
         QDateTime dateTime = QDateTime::currentDateTime();
 
-        if ( item.first > dateTime )
-        {
+        if (item.first > dateTime ) {
             kDebug(KIO_MTP) << "Found item with ttl:" << item.first << "- now:" << dateTime;
 
             item.first = dateTime.addSecs ( timeToLive );
             
             kDebug(KIO_MTP) << "Reset item ttl:" << item.first;
 
-            cache.insert ( path, item );
+            cache.insert (path, item);
 
             return item.second;
-        }
-        else
-        {
-            kDebug(KIO_MTP) << "Item too old (" << item.first << "), removed. Current Time: " << dateTime;
+        } else {
+            kDebug(KIO_MTP) << "Item too old (" << item.first << "), removed. Current Time:" << dateTime;
 
-            cache.remove( path );
+            cache.remove(path);
             return 0;
         }
     }
@@ -62,19 +59,19 @@ uint32_t FileCache::queryPath ( const QString& path, int timeToLive )
     return 0;
 }
 
-void FileCache::addPath ( const QString& path, uint32_t id, int timeToLive )
+void FileCache::addPath(const QString& path, uint32_t id, int timeToLive)
 {
     QDateTime dateTime = QDateTime::currentDateTime();
-    dateTime = dateTime.addSecs ( timeToLive );
+    dateTime = dateTime.addSecs(timeToLive);
 
-    QPair< QDateTime, uint32_t > item ( dateTime, id );
+    QPair< QDateTime, uint32_t > item (dateTime, id);
     
-    cache.insert ( path, item );
+    cache.insert(path, item);
 }
 
-void FileCache::removePath ( const QString& path )
+void FileCache::removePath(const QString& path)
 {
-    cache.remove( path );
+    cache.remove(path);
 }
 
 #include "moc_filecache.cpp"

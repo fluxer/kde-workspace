@@ -26,22 +26,20 @@
 
 #include <libmtp.h>
 
+int dataProgress(uint64_t const sent, uint64_t const, void const *const priv);
+uint16_t dataPut(void*, void *priv, uint32_t sendlen, unsigned char *data, uint32_t *putlen);
+uint16_t dataGet(void*, void *priv, uint32_t, unsigned char *data, uint32_t *gotlen);
 
-int dataProgress ( uint64_t const sent, uint64_t const, void const *const priv );
-uint16_t dataPut ( void*, void *priv, uint32_t sendlen, unsigned char *data, uint32_t *putlen );
-uint16_t dataGet ( void*, void *priv, uint32_t, unsigned char *data, uint32_t *gotlen );
+QString convertToPath(const QStringList& pathItems, const int elements);
 
-QString convertToPath( const QStringList& pathItems, const int elements );
+QString getMimetype(LIBMTP_filetype_t filetype);
+LIBMTP_filetype_t getFiletype(const QString &filename);
 
-QString getMimetype ( LIBMTP_filetype_t filetype );
-LIBMTP_filetype_t getFiletype ( const QString &filename );
+QMap<QString, LIBMTP_devicestorage_t*> getDevicestorages(LIBMTP_mtpdevice_t *&device);
+QMap<QString, LIBMTP_file_t*> getFiles(LIBMTP_mtpdevice_t *&device, uint32_t storage_id, uint32_t parent_id = 0xFFFFFFFF);
 
-QMap<QString, LIBMTP_devicestorage_t*> getDevicestorages ( LIBMTP_mtpdevice_t *&device );
-QMap<QString, LIBMTP_file_t*> getFiles ( LIBMTP_mtpdevice_t *&device, uint32_t storage_id, uint32_t parent_id = 0xFFFFFFFF );
-
-void getEntry ( UDSEntry &entry, LIBMTP_mtpdevice_t* device );
-void getEntry ( UDSEntry &entry, const LIBMTP_devicestorage_t* storage );
-void getEntry ( UDSEntry &entry, const LIBMTP_file_t* file );
-
+void getEntry(UDSEntry &entry, LIBMTP_mtpdevice_t* device);
+void getEntry(UDSEntry &entry, const LIBMTP_devicestorage_t* storage);
+void getEntry(UDSEntry &entry, const LIBMTP_file_t* file);
 
 #endif

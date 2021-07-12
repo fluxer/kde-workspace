@@ -48,7 +48,7 @@ private:
 //     void s_removeItem( const QString& path );
 
 public:
-    explicit FileCache ( QObject* parent = 0 );
+    explicit FileCache (QObject* parent = 0);
 
     /**
      * Returns the ID of the item at the given path, else 0.
@@ -57,7 +57,7 @@ public:
      * @param path The Path to query the cache for
      * @return The ID of the Item if it exists, else 0
      */
-    uint32_t queryPath( const QString& path, int timeToLive = 60 );
+    uint32_t queryPath(const QString& path, int timeToLive = 60);
 
     /**
      * Adds a Path to the Cache with the given id and ttl.
@@ -66,14 +66,14 @@ public:
      * @param id The file ID on the storage
      * @param timeToLive The time in seconds the entry should be valid
      */
-    void addPath( const QString& path, uint32_t id, int timeToLive = 60 );
+    void addPath(const QString& path, uint32_t id, int timeToLive = 60);
 
     /**
      * Remove the given path from the cache, i.e. if it got deleted
      *
      * @param path The path that should be removed
      */
-    void removePath (const QString& path );
+    void removePath(const QString& path );
 };
 
 #endif // FILECACHE_H

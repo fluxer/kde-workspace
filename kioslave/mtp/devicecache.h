@@ -48,8 +48,8 @@ public:
     virtual ~CachedDevice();
 
     LIBMTP_mtpdevice_t* getDevice();
-    const QString getName();
-    const QString getUdi();
+    const QString getName() const;
+    const QString getUdi() const;
 };
 
 
