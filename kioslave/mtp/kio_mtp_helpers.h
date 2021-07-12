@@ -42,4 +42,6 @@ void getEntry(UDSEntry &entry, LIBMTP_mtpdevice_t* device);
 void getEntry(UDSEntry &entry, const LIBMTP_devicestorage_t* storage);
 void getEntry(UDSEntry &entry, const LIBMTP_file_t* file);
 
+void resetDeviceStack(LIBMTP_mtpdevice_t* device);
+
 #endif

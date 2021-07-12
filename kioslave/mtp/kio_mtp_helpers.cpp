@@ -284,9 +284,9 @@ QMap<QString, LIBMTP_file_t*> getFiles(LIBMTP_mtpdevice_t *&device, uint32_t sto
     LIBMTP_file_t *files = LIBMTP_Get_Files_And_Folders(device, storage_id, parent_id), *file;
     for (file = files; file != NULL; file = file->next) {
         fileMap.insert(QString::fromUtf8(file->filename), file);
-        //         kDebug(KIO_MTP) << "found file" << file->filename;
+        // kDebug(KIO_MTP) << "found file" << file->filename;
     }
-    
+
     kDebug(KIO_MTP) << "[EXIT]";
     
     return fileMap;
@@ -348,4 +348,10 @@ void getEntry(UDSEntry &entry, const LIBMTP_file_t* file)
     entry.insert(UDSEntry::UDS_ACCESS_TIME, file->modificationdate);
     entry.insert(UDSEntry::UDS_MODIFICATION_TIME, file->modificationdate);
     entry.insert(UDSEntry::UDS_CREATION_TIME, file->modificationdate);
+}
+
+void resetDeviceStack(LIBMTP_mtpdevice_t* device)
+{
+    LIBMTP_Dump_Errorstack(device);
+    LIBMTP_Clear_Errorstack(device);
 }

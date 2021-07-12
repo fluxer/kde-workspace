@@ -501,9 +501,8 @@ void MTPSlave::put(const KUrl& url, int, JobFlags flags)
 
         int ret = LIBMTP_Send_File_From_Handler(device, &dataGet, this, file, &dataProgress, this);
         if (ret != 0) {
-            error (KIO::ERR_COULD_NOT_WRITE, url.fileName());
-            LIBMTP_Dump_Errorstack(device);
-            LIBMTP_Clear_Errorstack(device);
+            resetDeviceStack(device);
+            error(KIO::ERR_COULD_NOT_WRITE, url.fileName());
             return;
         }
     // We need to get the entire file first, then we can upload
@@ -533,6 +532,7 @@ void MTPSlave::put(const KUrl& url, int, JobFlags flags)
 
         int ret = LIBMTP_Send_File_From_File_Descriptor(device, temp.handle(), file, NULL, NULL);
         if (ret != 0) {
+            resetDeviceStack(device);
             error(KIO::ERR_COULD_NOT_WRITE, url.fileName());
             return;
         }
@@ -571,6 +571,7 @@ void MTPSlave::get(const KUrl& url)
 
             int ret = LIBMTP_Get_File_To_Handler(device, file->item_id, &dataPut, this, &dataProgress, this);
             if (ret != 0) {
+                resetDeviceStack(device);
                 error(ERR_COULD_NOT_READ, url.path());
                 return;
             }
@@ -669,9 +670,8 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
 
         int ret = LIBMTP_Send_File_From_File(device, src.path().toUtf8().data(), file, (LIBMTP_progressfunc_t )&dataProgress, this);
         if (ret != 0) {
+            resetDeviceStack(device);
             error(KIO::ERR_COULD_NOT_WRITE, dest.fileName());
-            LIBMTP_Dump_Errorstack(device);
-            LIBMTP_Clear_Errorstack(device);
             return;
         }
 
@@ -723,9 +723,8 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
 
         int ret = LIBMTP_Get_File_To_File(device, source->item_id, dest.path().toUtf8().data(), (LIBMTP_progressfunc_t)&dataProgress, this);
         if (ret != 0) {
+            resetDeviceStack(device);
             error(KIO::ERR_COULD_NOT_WRITE, dest.fileName());
-            LIBMTP_Dump_Errorstack(device);
-            LIBMTP_Clear_Errorstack(device);
             return;
         }
         
@@ -789,12 +788,13 @@ void MTPSlave::mkdir(const KUrl& url, int)
             }
         }
         if (ret != 0) {
+            resetDeviceStack(device);
+            error(ERR_COULD_NOT_MKDIR, url.path());
+            return;
+        } else {
             fileCache->addPath(url.path(), ret);
             finished();
             return;
-        } else {
-            LIBMTP_Dump_Errorstack(device);
-            LIBMTP_Clear_Errorstack(device);
         }
     } else {
         error(ERR_DIR_ALREADY_EXIST, url.path());
@@ -835,6 +835,7 @@ void MTPSlave::del(const KUrl& url, bool)
     LIBMTP_destroy_file_t(file);
 
     if (ret != 0) {
+        resetDeviceStack(pair.second);
         error(ERR_CANNOT_DELETE, url.path());
         return;
     }
@@ -896,6 +897,7 @@ void MTPSlave::rename(const KUrl& src, const KUrl& dest, JobFlags flags)
             int ret = LIBMTP_Set_File_Name(pair.second, source, dest.fileName().toUtf8().data());
 
             if (ret != 0) {
+                resetDeviceStack(pair.second);
                 error(ERR_CANNOT_RENAME, src.path());
                 return;
             } else {

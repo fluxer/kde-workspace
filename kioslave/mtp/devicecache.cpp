@@ -64,11 +64,11 @@ CachedDevice::~CachedDevice()
 
 LIBMTP_mtpdevice_t* CachedDevice::getDevice()
 {
-    LIBMTP_mtpdevice_t* device = mtpdevice;
-    if (!device->storage) {
+    if (!mtpdevice->storage) {
         kDebug(KIO_MTP) << "reopen mtpdevice if we have no storage found";
         LIBMTP_Release_Device(mtpdevice);
         mtpdevice = LIBMTP_Open_Raw_Device_Uncached(&rawdevice);
+        resetDeviceStack(mtpdevice);
     }
     return mtpdevice;
 }
@@ -138,6 +138,7 @@ void DeviceCache::checkDevice(Solid::Device solidDevice)
                     LIBMTP_raw_device_t* rawDevice = &rawdevices[i];
 
                     LIBMTP_mtpdevice_t *mtpDevice = LIBMTP_Open_Raw_Device_Uncached(rawDevice);
+                    resetDeviceStack(mtpDevice);
                     const char* rawDeviceSerial = LIBMTP_Get_Serialnumber(mtpDevice);
 
                     kDebug(KIO_MTP) << "Checking for device match" << solidSerial << rawDeviceSerial;
@@ -181,7 +182,7 @@ void DeviceCache::deviceAdded(const QString& udi)
 void DeviceCache::deviceRemoved(const QString& udi)
 {
     if (udiCache.contains(udi)) {
-        kDebug ( KIO_MTP ) << "SOLID: Device with udi" << udi << "removed.";
+        kDebug(KIO_MTP) << "SOLID: Device with udi" << udi << "removed.";
         
         CachedDevice *cDev = udiCache.value(udi);
         
