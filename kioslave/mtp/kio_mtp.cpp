@@ -303,6 +303,8 @@ void MTPSlave::listDir(const KUrl& url)
                     kDebug(KIO_MTP) << "[SUCCESS] :: Storages";
                 } else {
                     warning(i18n("No Storages found. Maybe you need to unlock your device?"));
+                    error(ERR_NO_CONTENT, url.path());
+                    kDebug(KIO_MTP) << "[ERROR]";
                 }
             // Storage, list files and folders of storage root
             } else {

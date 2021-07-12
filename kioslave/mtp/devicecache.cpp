@@ -144,7 +144,7 @@ void DeviceCache::checkDevice(Solid::Device solidDevice)
                     if (solidSerial == rawDeviceSerial) {
                         kDebug( KIO_MTP ) << "Found device matching the Solid description";
                     } else {
-                        LIBMTP_Release_Device( mtpDevice);
+                        LIBMTP_Release_Device(mtpDevice);
                         continue;
                     }
 
