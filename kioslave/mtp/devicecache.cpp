@@ -27,6 +27,8 @@
 #include <Solid/PortableMediaPlayer>
 #include <Solid/DeviceNotifier>
 
+static const QString solidMTPProtocol = QLatin1String("mtp");
+
 /**
  * Creates a Cached Device that has a predefined lifetime (default: 10000 msec)s
  * The lifetime is reset every time the device is accessed. After it expires it
@@ -96,19 +98,20 @@ DeviceCache::DeviceCache(qint32 timeout, QObject*parent)
     }
 }
 
-void DeviceCache::checkDevice ( Solid::Device solidDevice )
+void DeviceCache::checkDevice(Solid::Device solidDevice)
 {
     Solid::PortableMediaPlayer *iface = solidDevice.as<Solid::PortableMediaPlayer>();
     if (!iface) {
         kWarning(KIO_MTP) << "Not portable media player device" << solidDevice.udi();
         return;
+    } else if (!iface->supportedProtocols().contains(solidMTPProtocol)) {
+        kDebug(KIO_MTP) << "Not MTP device" << solidDevice.udi();
+        return;
     }
 
-    // request handle for MTP protocol
-    static const QString solidDriver(QLatin1String("mtp"));
-    const QByteArray solidSerial = iface->driverHandle(solidDriver).toByteArray();
+    const QByteArray solidSerial = iface->driverHandle(solidMTPProtocol).toByteArray();
     if (solidSerial.isEmpty()) {
-        kWarning (KIO_MTP) << "No serial for device" << solidDevice.udi();
+        kWarning(KIO_MTP) << "No serial for device" << solidDevice.udi();
         return;
     }
 
