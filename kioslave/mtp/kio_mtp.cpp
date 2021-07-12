@@ -71,7 +71,7 @@ MTPSlave::MTPSlave ( const QByteArray& pool, const QByteArray& app )
 
     kDebug ( KIO_MTP ) << "Slave started";
     
-    deviceCache = new DeviceCache( 60000 );
+    deviceCache = new DeviceCache( 60000, this );
     fileCache = new FileCache ( this );
     
     kDebug ( KIO_MTP ) << "Caches created";

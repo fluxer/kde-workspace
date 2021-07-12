@@ -24,7 +24,7 @@
 // #include <fcntl.h>
 
 #include <Solid/Device>
-#include <Solid/GenericInterface>
+#include <Solid/PortableMediaPlayer>
 #include <Solid/DeviceNotifier>
 
 /**
@@ -99,16 +99,23 @@ DeviceCache::DeviceCache ( qint32 timeout, QObject* parent ) : QEventLoop ( pare
 
 void DeviceCache::checkDevice ( Solid::Device solidDevice )
 {
-#warning FIXME: broken UDev backend specifiec stuff
-    Solid::GenericInterface *iface = solidDevice.as<Solid::GenericInterface>();
-    QMap<QString, QVariant> properties = iface->allProperties();
+    Solid::PortableMediaPlayer *iface = solidDevice.as<Solid::PortableMediaPlayer>();
+    if ( !iface )
+    {
+        kWarning ( KIO_MTP ) << "not portable media player device" << solidDevice.udi();
+        return;
+    }
 
-    int solidBusNum = properties.value ( QLatin1String ( "BUSNUM" ) ).toInt();
-    int solidDevNum = properties.value ( QLatin1String ( "DEVNUM" ) ).toInt();
+    // request handle for MTP protocol
+    static const QString solidDriver( QLatin1String("mtp") );
+    const QByteArray solidSerial = iface->driverHandle(solidDriver).toByteArray();
+    if ( solidSerial.isEmpty() )
+    {
+        kWarning ( KIO_MTP ) << "no serial for device" << solidDevice.udi();
+        return;
+    }
 
-    int isMtpDevice = LIBMTP_Check_Specific_Device( solidBusNum, solidDevNum );
-
-    if ( isMtpDevice == 1 && !udiCache.contains( solidDevice.udi() ) )
+    if (!udiCache.contains( solidDevice.udi() ) )
     {
         kDebug ( KIO_MTP ) << "new device, getting raw devices";
 
@@ -134,21 +141,26 @@ void DeviceCache::checkDevice ( Solid::Device solidDevice )
                 for ( int i = 0; i < numrawdevices; i++ )
                 {
                     LIBMTP_raw_device_t* rawDevice = &rawdevices[i];
-                    uint32_t rawBusNum = rawDevice->bus_location;
-                    uint32_t rawDevNum = rawDevice->devnum;
 
-                    if ( rawBusNum == solidBusNum && rawDevNum == solidDevNum )
+                    LIBMTP_mtpdevice_t *mtpDevice = LIBMTP_Open_Raw_Device_Uncached ( rawDevice );
+                    const char* rawDeviceSerial = LIBMTP_Get_Serialnumber( mtpDevice );
+
+                    kDebug( KIO_MTP ) << "Checking for device match" << solidSerial << rawDeviceSerial;
+                    if ( solidSerial == rawDeviceSerial )
                     {
                         kDebug( KIO_MTP ) << "Found device matching the Solid description";
+                    }
+                    else
+                    {
+                        LIBMTP_Release_Device( mtpDevice);
+                        continue;
+                    }
 
-                        LIBMTP_mtpdevice_t *mtpDevice = LIBMTP_Open_Raw_Device_Uncached ( rawDevice );
-                        
-                        if ( udiCache.find( solidDevice.udi() ) == udiCache.end() )
-                        {
-                            CachedDevice *cDev = new CachedDevice( mtpDevice, rawDevice, solidDevice.udi(), timeout );
-                            udiCache.insert( solidDevice.udi(), cDev );
-                            nameCache.insert( cDev->getName(), cDev );
-                        }
+                    if ( udiCache.find( solidDevice.udi() ) == udiCache.end() )
+                    {
+                        CachedDevice *cDev = new CachedDevice( mtpDevice, rawDevice, solidDevice.udi(), timeout );
+                        udiCache.insert( solidDevice.udi(), cDev );
+                        nameCache.insert( cDev->getName(), cDev );
                     }
                 }
                 break;
