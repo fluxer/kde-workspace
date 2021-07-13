@@ -96,8 +96,7 @@ QPair<void*, LIBMTP_mtpdevice_t*> MTPSlave::getPath(const QString& path)
         return ret;
     }
 
-    if (deviceCache->contains(pathItems.at(0)))
-    {
+    if (deviceCache->contains(pathItems.at(0))) {
         LIBMTP_mtpdevice_t *device = deviceCache->get(pathItems.at(0))->getDevice();
 
         // return specific device
@@ -287,8 +286,8 @@ void MTPSlave::listDir(const KUrl& url)
             if (pathItems.size() == 1) {
                 QMap<QString, LIBMTP_devicestorage_t*> storages = getDevicestorages(device);
 
-                kDebug (KIO_MTP) << "Listing storages for device " << pathItems.at(0);
-                totalSize (storages.size());
+                kDebug(KIO_MTP) << "Listing storages for device " << pathItems.at(0);
+                totalSize(storages.size());
 
                 if (storages.size() > 0) {
                     foreach (const QString &storageName, storages.keys()) {
@@ -391,10 +390,10 @@ void MTPSlave::stat(const KUrl& url)
             getEntry(entry, pair.second);
         // Storage
         } else if (pathItems.size() < 3) {
-            getEntry ( entry, (LIBMTP_devicestorage_t* )pair.first);
+            getEntry (entry, (LIBMTP_devicestorage_t*)pair.first);
         // Folder/File
         } else {
-            getEntry(entry, (LIBMTP_file_t*) pair.first);
+            getEntry(entry, (LIBMTP_file_t*)pair.first);
         }
     }
     statEntry(entry);
@@ -455,7 +454,7 @@ void MTPSlave::put(const KUrl& url, int, JobFlags flags)
 
     kDebug(KIO_MTP) << url.path();
 
-    QStringList destItems = url.path().split(QLatin1Char( '/' ), QString::SkipEmptyParts);
+    QStringList destItems = url.path().split(QLatin1Char('/'), QString::SkipEmptyParts);
 
     // Can't copy to root or device, needs storage
     if (destItems.size() < 2) {
@@ -597,7 +596,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         return;
     }
     // file:/// to mtp:///
-    if (src.protocol() == QLatin1String("file" ) && dest.protocol() == QLatin1String ("mtp")) {
+    if (src.protocol() == QLatin1String("file") && dest.protocol() == QLatin1String("mtp")) {
         int check = checkUrl( dest );
         switch (check) {
             case 0: {
@@ -666,7 +665,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
 
         kDebug(KIO_MTP) << "Sending file" << file->filename << "with size" << file->filesize;
 
-        totalSize ( source.size() );
+        totalSize(source.size());
 
         int ret = LIBMTP_Send_File_From_File(device, src.path().toUtf8().data(), file, (LIBMTP_progressfunc_t )&dataProgress, this);
         if (ret != 0) {
@@ -758,7 +757,7 @@ void MTPSlave::mkdir(const KUrl& url, int)
     kDebug(KIO_MTP) << url.path();
 
     QStringList pathItems = url.path().split(QLatin1Char('/'), QString::SkipEmptyParts);
-    int pathDepth= pathItems.size();
+    int pathDepth = pathItems.size();
 
     if (pathItems.size() > 2 && !getPath(url.path()).first) {
         char *dirName = strdup(pathItems.takeLast().toUtf8().data());
@@ -772,7 +771,7 @@ void MTPSlave::mkdir(const KUrl& url, int)
 
         if (pathDepth == 3) {
             //the folder need to be created straight to a storage device 
-            storage= (LIBMTP_devicestorage_t*)pair.first;
+            storage = (LIBMTP_devicestorage_t*)pair.first;
             device = pair.second;
             ret = LIBMTP_Create_Folder(device, dirName, 0xFFFFFFFF, storage->id);
         } else if (pair.first) {
