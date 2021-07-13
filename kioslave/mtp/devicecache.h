@@ -84,8 +84,8 @@ private slots:
 
 public:
     QHash< QString, CachedDevice* > getAll();
-    CachedDevice* get ( const QString& string, bool isUdi = false );
-    bool contains(QString string, bool isUdi = false);
+    CachedDevice* get(const QString& string, bool isUdi = false);
+    bool contains(const QString& string, bool isUdi = false);
     int size();
 };
 

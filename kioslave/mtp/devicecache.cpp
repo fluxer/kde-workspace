@@ -217,7 +217,7 @@ QHash<QString, CachedDevice*> DeviceCache::getAll()
     return nameCache;
 }
 
-bool DeviceCache::contains(QString string, bool isUdi)
+bool DeviceCache::contains(const QString& string, bool isUdi)
 {
     processEvents();
 

@@ -437,7 +437,6 @@ void MTPSlave::mimetype(const KUrl& url)
         }
     } else {
         error(ERR_DOES_NOT_EXIST, url.path());
-        return;
     }
 }
 
