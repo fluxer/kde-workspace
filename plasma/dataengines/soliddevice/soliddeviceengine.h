@@ -94,7 +94,7 @@ private Q_SLOTS:
     void setMountingState(const QString &udi);
     void setUnmountingState(const QString &udi);
     void setIdleState(Solid::ErrorType error, QVariant errorData, const QString &udi);
-    void deviceChanged(const QMap<QString,int> & props);
+    void deviceContentChanged(const QString &udi, const bool hascontent);
 };
 
 #endif

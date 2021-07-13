@@ -21,7 +21,6 @@
 
 #include <QtCore/qmetaobject.h>
 #include <QDateTime>
-#include <Solid/GenericInterface>
 
 #include <KDebug>
 #include <KDiskFreeSpaceInfo>
@@ -64,6 +63,8 @@ void SolidDeviceEngine::listenForNewDevices()
             this, SLOT(deviceAdded(QString)));
     connect(m_notifier, SIGNAL(deviceRemoved(QString)),
             this, SLOT(deviceRemoved(QString)));
+    connect(m_notifier, SIGNAL(contentChanged(QString,bool)),
+            this, SLOT(deviceContentChanged(QString,bool)));
 }
 
 bool SolidDeviceEngine::sourceRequestEvent(const QString &name)
@@ -560,17 +561,6 @@ void SolidDeviceEngine::deviceAdded(const QString& udi)
                     this, SLOT(setIdleState(Solid::ErrorType,QVariant,QString)));
         }
     } else if (device.is<Solid::StorageVolume>()) {
-        // update the volume in case of 2-stage devices
-#warning FIXME: broken Solid generic interface usage
-        if (m_devicemap.contains(udi) && query(udi).value(I18N_NOOP("Size")).toULongLong() == 0) {
-            Solid::GenericInterface * iface = device.as<Solid::GenericInterface>();
-            if (iface) {
-                iface->setProperty("udi", udi);
-                connect(iface, SIGNAL(propertyChanged(QMap<QString,int>)),
-                        this, SLOT(deviceChanged(QMap<QString,int>)));
-            }
-        }
-
         Solid::StorageAccess *access = device.as<Solid::StorageAccess>();
         if (access) {
             connect(access, SIGNAL(setupRequested(QString)),
@@ -622,13 +612,12 @@ void SolidDeviceEngine::setIdleState(Solid::ErrorType error, QVariant errorData,
     setData(udi, I18N_NOOP("File Path"), storageaccess->filePath());
 }
 
-void SolidDeviceEngine::deviceChanged(const QMap<QString, int> &props)
+void SolidDeviceEngine::deviceContentChanged(const QString &udi, const bool hascontent)
 {
-    Solid::GenericInterface * iface = qobject_cast<Solid::GenericInterface *>(sender());
-    if (iface && iface->isValid() && props.contains("Size") && iface->property("Size").toInt() > 0) {
-        const QString udi = qobject_cast<QObject *>(iface)->property("udi").toString();
-        if (populateDeviceData(udi))
+    if (hascontent) {
+        if (populateDeviceData(udi)) {
             forceImmediateUpdateOfAllVisualizations();
+        }
     }
 }
 
