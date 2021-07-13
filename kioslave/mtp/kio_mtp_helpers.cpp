@@ -52,7 +52,7 @@ uint16_t dataGet(void*, void *priv, uint32_t, unsigned char *data, uint32_t *got
 
     kDebug(KIO_MTP) << "transferring" << *gotlen << "bytes to data()";
 
-    data = (unsigned char*) buffer.data();
+    data = (unsigned char*)buffer.data();
 
     return LIBMTP_HANDLER_RETURN_OK;
 }
@@ -151,7 +151,7 @@ QString getMimetype(LIBMTP_filetype_t filetype)
         case LIBMTP_FILETYPE_PPT:
             return QLatin1String("application/vnd.ms-powerpoint");
         case LIBMTP_FILETYPE_MHT:
-            return QLatin1String(""); // TODO: application/x-mimearchive?
+            return QLatin1String("application/x-mimearchive");
         case LIBMTP_FILETYPE_JP2:
             return QLatin1String("image/jpeg2000");
         case LIBMTP_FILETYPE_JPX:
@@ -162,7 +162,7 @@ QString getMimetype(LIBMTP_filetype_t filetype)
     return QString();
 }
 
-LIBMTP_filetype_t getFiletype( const QString &filename)
+LIBMTP_filetype_t getFiletype(const QString &filename)
 {
     LIBMTP_filetype_t filetype;
 
