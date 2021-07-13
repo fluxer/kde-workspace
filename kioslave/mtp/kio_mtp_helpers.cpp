@@ -352,6 +352,10 @@ void getEntry(UDSEntry &entry, const LIBMTP_file_t* file)
 
 void resetDeviceStack(LIBMTP_mtpdevice_t* device)
 {
-    LIBMTP_Dump_Errorstack(device);
+    LIBMTP_error_t* error = LIBMTP_Get_Errorstack(device);
+    while (error) {
+        kWarning(KIO_MTP) << error->error_text;
+        error = error->next;
+    }
     LIBMTP_Clear_Errorstack(device);
 }
