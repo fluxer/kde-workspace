@@ -3,6 +3,3 @@
 
 /* Define to 1 if you have the <devinfo.h> header file. */
 #cmakedefine HAVE_DEVINFO_H 1
-
-/* Define to 1 if you have the <Alib.h> header file. */
-#cmakedefine HAVE_ALIB_H 1
