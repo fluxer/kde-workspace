@@ -257,7 +257,7 @@ void MTPSlave::listDir(const KUrl& url)
 
     // list devices
     if (pathItems.size() == 0) {
-        kDebug (KIO_MTP) << "Root directory, listing devices";
+        kDebug(KIO_MTP) << "Root directory, listing devices";
 
         totalSize(deviceCache->size());
 
@@ -273,7 +273,7 @@ void MTPSlave::listDir(const KUrl& url)
 
         listEntry(entry, true);
 
-        kDebug(KIO_MTP ) << "[SUCCESS] :: Devices";
+        kDebug(KIO_MTP) << "[SUCCESS] :: Devices";
         finished();
     // traverse into device
     } else if (deviceCache->contains(pathItems.at(0))) {
@@ -595,6 +595,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         // MTP doesn't support moving files directly on the device, so we have to download and then upload...
 
         error(ERR_UNSUPPORTED_ACTION, i18n("Cannot copy/move files on the device itself"));
+        return;
     }
     // file:/// to mtp:///
     if (src.protocol() == QLatin1String("file" ) && dest.protocol() == QLatin1String ("mtp")) {
@@ -664,7 +665,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         file->modificationdate = source.lastModified().toTime_t();
         file->storage_id = storage_id;
 
-        kDebug ( KIO_MTP ) << "Sending file" << file->filename << "with size" << file->filesize;
+        kDebug(KIO_MTP) << "Sending file" << file->filename << "with size" << file->filesize;
 
         totalSize ( source.size() );
 
