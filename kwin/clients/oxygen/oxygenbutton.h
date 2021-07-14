@@ -160,9 +160,6 @@ namespace Oxygen
 
         //@}
 
-        private slots:
-            void slotAppMenuHidden();
-
         private:
 
         //! parent client

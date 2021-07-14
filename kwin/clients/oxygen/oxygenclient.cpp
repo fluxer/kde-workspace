@@ -187,9 +187,6 @@ namespace Oxygen
             case MenuButton:
             return new Button(*this, i18n("Window Actions Menu"), ButtonMenu);
 
-            case AppMenuButton:
-            return new Button(*this, i18n("Application Menu"), ButtonApplicationMenu);
-
             case HelpButton:
             return new Button(*this, i18n("Help"), ButtonHelp);
 

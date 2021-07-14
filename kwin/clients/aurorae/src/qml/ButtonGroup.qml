@@ -45,9 +45,6 @@ Item {
             case "M":
                 component = group.menuButton;
                 break;
-            case "N":
-                component = group.appMenuButton;
-                break;
             case "S":
                 component = group.allDesktopsButton;
                 break;
@@ -73,7 +70,6 @@ Item {
     property variant keepBelowButton
     property variant maximizeButton
     property variant menuButton
-    property variant appMenuButton
     property variant minimizeButton
     property variant allDesktopsButton
     property variant shadeButton

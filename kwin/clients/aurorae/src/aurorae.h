@@ -106,7 +106,6 @@ class AuroraeClient : public KDecoration
     Q_PROPERTY(bool keepBelow READ keepBelow WRITE setKeepBelow NOTIFY keepBelowChangedWrapper)
     Q_PROPERTY(bool maximized READ isMaximized NOTIFY maximizeChanged)
     Q_PROPERTY(bool providesContextHelp READ providesContextHelp)
-    Q_PROPERTY(bool appMenu READ menuAvailable NOTIFY appMenuAvailableChanged)
     Q_PROPERTY(QRect transparentRect READ transparentRect)
     Q_PROPERTY(int width READ width)
     Q_PROPERTY(qulonglong windowId READ windowId CONSTANT)
@@ -154,11 +153,9 @@ Q_SIGNALS:
      **/
     void configChanged();
     void fontChanged();
-    void appMenuAvailableChanged();
 
 public slots:
     void menuClicked();
-    void appMenuClicked();
     void toggleShade();
     void toggleKeepAbove();
     void toggleKeepBelow();

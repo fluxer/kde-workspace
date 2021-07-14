@@ -88,8 +88,6 @@ private:
     QString currentStyle();
     static QString toolbarButtonText(int index);
     static int toolbarButtonIndex(const QString &text);
-    static QString menuBarStyleText(int index);
-    static int menuBarStyleIndex(const QString &text);
 
     bool m_bStyleDirty, m_bEffectsDirty;
     QHash <QString,StyleEntry*> styleEntries;

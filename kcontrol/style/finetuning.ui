@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="System"?>
 <ui version="4.0">
  <class>FineTuning</class>
  <widget class="QWidget" name="FineTuning">
@@ -7,23 +7,10 @@
     <x>0</x>
     <y>0</y>
     <width>422</width>
-    <height>358</height>
+    <height>206</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="text">
-      <string>Graphical effects:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QComboBox" name="comboGraphicEffectsLevel"/>
-   </item>
    <item row="0" column="2">
     <spacer name="horizontalSpacer">
      <property name="orientation">
@@ -37,25 +24,8 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>Show icons on buttons:</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buddy">
-      <cstring>cbIconsOnButtons</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
-    <widget class="QCheckBox" name="cbIconsOnButtons">
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="comboGraphicEffectsLevel"/>
    </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_5">
@@ -74,6 +44,26 @@
     <widget class="QCheckBox" name="cbIconsInMenus">
      <property name="text">
       <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="cbIconsOnButtons">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Show icons on buttons:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>cbIconsOnButtons</cstring>
      </property>
     </widget>
    </item>
@@ -173,66 +163,7 @@
      </layout>
     </widget>
    </item>
-   <item row="4" column="0" colspan="3">
-    <widget class="QGroupBox" name="menubarBox">
-     <property name="title">
-      <string>Menubar</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout1">
-      <item row="0" column="0">
-       <widget class="QLabel" name="labelMenubarStyle">
-        <property name="text">
-         <string>Menubar style:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>comboMenubarStyle</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KComboBox" name="comboMenubarStyle">
-        <item>
-         <property name="text">
-          <string>In application</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Title bar button</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Top screen menubar</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Only export</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="2">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item row="5" column="0">
+   <item row="4" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -244,6 +175,16 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Graphical effects:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

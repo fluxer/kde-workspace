@@ -227,16 +227,6 @@ void KDecoration::showWindowMenu(QPoint pos)
     bridge_->showWindowMenu(pos);
 }
 
-void KDecoration::showApplicationMenu(const QPoint &p)
-{
-    bridge_->showApplicationMenu(p);
-}
-
-bool KDecoration::menuAvailable() const
-{
-    return bridge_->menuAvailable();
-}
-
 void KDecoration::performWindowOperation(WindowOperation op)
 {
     bridge_->performWindowOperation(op);

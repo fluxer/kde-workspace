@@ -4,13 +4,7 @@ option(KWIN_BUILD_OXYGEN "Enable building of default decoration Oxygen" ON)
 option(KWIN_BUILD_KCMS "Enable building of KWin configuration modules." ON)
 option(KWIN_BUILD_TABBOX "Enable building of KWin Tabbox functionality" ON)
 option(KWIN_BUILD_SCREENEDGES "Enable building of KWin with screen edge support" ON)
-option(KWIN_BUILD_KAPPMENU "Enable building of KWin with application menu support" ON)
 option(KWIN_BUILD_COMPOSITE "Enable building of KWin with XRender Compositing support" ON)
-
-# without dbusmenu-qt the functionality is useless
-if(NOT DBUSMENUQT_FOUND)
-    set(KWIN_BUILD_KAPPMENU OFF)
-endif()
 
 include_directories(
     ${XCB_INCLUDE_DIR}
@@ -142,13 +136,6 @@ if(KWIN_BUILD_SCREENEDGES)
     set(kwin_SRCS
         ${kwin_SRCS}
         screenedge.cpp
-    )
-endif()
-
-if(KWIN_BUILD_KAPPMENU)
-    set(kwin_SRCS
-        ${kwin_SRCS}
-        appmenu.cpp
     )
 endif()
 

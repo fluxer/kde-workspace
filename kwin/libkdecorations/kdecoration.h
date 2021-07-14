@@ -204,22 +204,21 @@ public:
         AbilityButtonBelowOthers = 8,      ///< decoration supports a below button
         AbilityButtonShade = 9,            ///< decoration supports a shade button
         AbilityButtonResize = 10,          ///< decoration supports a resize button
-        AbilityButtonApplicationMenu = 11, ///< decoration supports the application menu button
         // compositing
-        AbilityProvidesShadow = 12,        ///< The decoration draws its own shadows.
+        AbilityProvidesShadow = 11,        ///< The decoration draws its own shadows.
         ///  @since 4.3
-        AbilityUsesAlphaChannel = 13,      ///< The decoration isn't clipped to the mask when compositing is enabled.
+        AbilityUsesAlphaChannel = 12,      ///< The decoration isn't clipped to the mask when compositing is enabled.
         ///  The mask is still used to define the input region and the blurred
         ///  region, when the blur plugin is enabled.
         ///  @since 4.3
-        AbilityExtendIntoClientArea = 14,  ///< The decoration respects transparentRect()
+        AbilityExtendIntoClientArea = 13,  ///< The decoration respects transparentRect()
         ///  @since 4.4
-        AbilityUsesBlurBehind = 15,        ///< The decoration wants the background to be blurred, when the blur plugin is enabled.
+        AbilityUsesBlurBehind = 14,        ///< The decoration wants the background to be blurred, when the blur plugin is enabled.
         /// @since 4.6
-        AbilityAnnounceAlphaChannel = 16,  ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
+        AbilityAnnounceAlphaChannel = 15,  ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
         /// @since 4.10
         // Tabbing
-        AbilityTabbing = 17,               ///< The decoration supports tabbing
+        AbilityTabbing = 16,               ///< The decoration supports tabbing
     };
 
     /**
@@ -309,7 +308,6 @@ public:
      * If customButtonPositions() returns true, titleButtonsLeft
      * returns which buttons should be on the left side of the titlebar from left
      * to right. Characters in the returned string have this meaning :
-     * @li 'N' application menu button
      * @li 'M' window menu button
      * @li 'S' on_all_desktops button
      * @li 'H' quickhelp button
@@ -579,14 +577,6 @@ public:
      */
     void showWindowMenu(QPoint pos);
     /**
-     * show application menu at p
-     */
-    void showApplicationMenu(const QPoint& p);
-    /**
-     * Returns @a true if menu available for client
-     */
-    bool menuAvailable() const;
-    /**
      * This function performs the given window operation. This function may destroy
      * the current decoration object, just like showWindowMenu().
      */
@@ -854,24 +844,6 @@ Q_SIGNALS:
      * This signal is emitted whenever the window's keep-below state changes.
      */
     void keepBelowChanged(bool);
-
-    /**
-     * This signal is emitted whenever application menu is closed
-     * Application menu button may need to be modified on this signal
-     */
-    void menuHidden();
-    /**
-     * This signal is emitted whenever application want to show it menu
-     */
-    void showRequest();
-    /**
-     * This signal is emitted whenever application menu becomes available
-     */
-    void appMenuAvailable();
-    /**
-     * This signal is emitted whenever application menu becomes unavailable
-     */
-    void appMenuUnavailable();
 
     /**
      * This signal is emitted whenever the decoration changes it's alpha enabled

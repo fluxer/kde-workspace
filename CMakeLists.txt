@@ -337,7 +337,6 @@ endif(Q_WS_X11 AND X11_Xinput_FOUND)
 add_subdirectory(kcminit)
 add_subdirectory(khotkeys)
 add_subdirectory(ksystraycmd)
-add_subdirectory(appmenu)
 
 if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
     add_subdirectory( kdm )

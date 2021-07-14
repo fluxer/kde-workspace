@@ -42,8 +42,7 @@ enum AuroraeButtonType {
     KeepBelowButton,
     ShadeButton,
     HelpButton,
-    MenuButton,
-    AppMenuButton
+    MenuButton
 };
 
 enum DecorationPosition {
@@ -80,7 +79,6 @@ class /*LIBAURORAE_EXPORT*/ AuroraeTheme : public QObject
     Q_PROPERTY(int buttonWidthShade READ buttonWidthShade NOTIFY themeChanged)
     Q_PROPERTY(int buttonWidthHelp READ buttonWidthHelp NOTIFY themeChanged)
     Q_PROPERTY(int buttonWidthMenu READ buttonWidthMenu NOTIFY themeChanged)
-    Q_PROPERTY(int buttonWidthAppMenu READ buttonWidthAppMenu NOTIFY themeChanged)
     Q_PROPERTY(int buttonSpacing READ buttonSpacing NOTIFY themeChanged)
     Q_PROPERTY(int buttonMarginTop READ buttonMarginTop NOTIFY themeChanged)
     Q_PROPERTY(int explicitButtonSpacer READ explicitButtonSpacer NOTIFY themeChanged)
@@ -140,7 +138,6 @@ public:
     int buttonWidthShade() const;
     int buttonWidthHelp() const;
     int buttonWidthMenu() const;
-    int buttonWidthAppMenu() const;
     int buttonHeight() const;
     int buttonSpacing() const;
     int buttonMarginTop() const;

@@ -299,15 +299,6 @@ void KDecorationPreviewBridge::showWindowMenu(const QPoint &)
 {
 }
 
-void KDecorationPreviewBridge::showApplicationMenu(const QPoint &)
-{
-}
-
-bool KDecorationPreviewBridge::menuAvailable() const
-{
-    return false;
-}
-
 void KDecorationPreviewBridge::performWindowOperation(WindowOperation)
 {
 }

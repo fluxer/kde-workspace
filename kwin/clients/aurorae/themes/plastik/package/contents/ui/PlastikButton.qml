@@ -143,19 +143,11 @@ DecorationButton {
         if (buttonType == "H") {
             visible = decoration.providesContextHelp;
         }
-        if (buttonType == "N") {
-            visible = decoration.appMenu;
-        }
     }
     onHoveredChanged: colorize()
     onPressedChanged: colorize()
     Connections {
         target: decoration
         onActiveChanged: button.colorize()
-        onAppMenuChanged: {
-            if (buttonType == "N") {
-                visible = decoration.appMenu;
-            }
-        }
     }
 }

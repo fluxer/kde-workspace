@@ -117,7 +117,6 @@ namespace Oxygen
         {
             // buttons
             case AbilityButtonMenu:
-            case AbilityButtonApplicationMenu:
             case AbilityButtonHelp:
             case AbilityButtonMinimize:
             case AbilityButtonMaximize:

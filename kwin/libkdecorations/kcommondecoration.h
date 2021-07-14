@@ -46,7 +46,6 @@ enum ButtonType {
     AboveButton,
     BelowButton,
     ShadeButton,
-    AppMenuButton,
     NumButtons,
     ItemCloseButton = 100, // Close only one tab
     ItemMenuButton // shows the window menu for one tab
@@ -270,9 +269,7 @@ public Q_SLOTS:
     void slotKeepBelow();
     void menuButtonPressed();
     void menuButtonReleased();
-    void appMenuButtonPressed();
-    void slotAppMenuAvailable();
-    void slotAppMenuUnavailable();
+
 public:
     virtual Position mousePosition(const QPoint &point) const;
 

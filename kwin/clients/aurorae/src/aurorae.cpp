@@ -198,7 +198,6 @@ bool AuroraeFactory::supports(Ability ability) const
     case AbilityButtonShade:
     case AbilityButtonOnAllDesktops:
     case AbilityButtonHelp:
-    case AbilityButtonApplicationMenu:
     case AbilityProvidesShadow:
         return true; // TODO: correct value from theme
     case AbilityTabbing:
@@ -247,8 +246,6 @@ AuroraeClient::AuroraeClient(KDecorationBridge *bridge, KDecorationFactory *fact
     connect(AuroraeFactory::instance(), SIGNAL(configChanged()), SIGNAL(configChanged()));
     connect(AuroraeFactory::instance(), SIGNAL(titleFontChanged()), SIGNAL(fontChanged()));
     connect(m_item, SIGNAL(alphaChanged()), SLOT(slotAlphaChanged()));
-    connect(this, SIGNAL(appMenuAvailable()), SIGNAL(appMenuAvailableChanged()));
-    connect(this, SIGNAL(appMenuUnavailable()), SIGNAL(appMenuAvailableChanged()));
 }
 
 AuroraeClient::~AuroraeClient()
@@ -448,11 +445,6 @@ void AuroraeClient::reset(long unsigned int changed)
 void AuroraeClient::menuClicked()
 {
     showWindowMenu(QCursor::pos());
-}
-
-void AuroraeClient::appMenuClicked()
-{
-    showApplicationMenu(QCursor::pos());
 }
 
 void AuroraeClient::toggleShade()

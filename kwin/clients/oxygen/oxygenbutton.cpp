@@ -205,11 +205,8 @@ namespace Oxygen
     //___________________________________________________
     void Button::mouseReleaseEvent( QMouseEvent* event )
     {
-        if (_type != ButtonApplicationMenu)
-        {
-            _status &= ~Pressed;
-            parentUpdate();
-        }
+        _status &= ~Pressed;
+        parentUpdate();
 
         KCommonDecorationButton::mouseReleaseEvent( event );
     }
@@ -307,68 +304,62 @@ namespace Oxygen
         {
 
             case ButtonSticky:
-            painter->drawPoint(QPointF(10.5,10.5));
-            break;
-
-            case ButtonHelp:
-            painter->translate(1.5, 1.5);
-            painter->drawArc(7,5,4,4,135*16, -180*16);
-            painter->drawArc(9,8,4,4,135*16,45*16);
-            painter->drawPoint(9,12);
-            painter->translate(-1.5, -1.5);
-            break;
-
-            case ButtonApplicationMenu:
-            painter->drawLine(QPointF(7.5, 7.5), QPointF(13.5, 7.5));
-            painter->drawLine(QPointF(7.5, 10.5), QPointF(13.5, 10.5));
-            painter->drawLine(QPointF(7.5, 13.5), QPointF(13.5, 13.5));
-            break;
-
-            case ButtonMin:
-            painter->drawLine(QPointF( 7.5, 9.5), QPointF(10.5,12.5));
-            painter->drawLine(QPointF(10.5,12.5), QPointF(13.5, 9.5));
-            break;
-
-            case ButtonMax:
-            switch(_client.maximizeMode())
-            {
-                case Client::MaximizeRestore:
-                case Client::MaximizeVertical:
-                case Client::MaximizeHorizontal:
-                painter->drawLine(QPointF( 7.5,11.5), QPointF(10.5, 8.5));
-                painter->drawLine(QPointF(10.5, 8.5), QPointF(13.5,11.5));
+                painter->drawPoint(QPointF(10.5,10.5));
                 break;
 
-                case Client::MaximizeFull:
+            case ButtonHelp:
+                painter->translate(1.5, 1.5);
+                painter->drawArc(7,5,4,4,135*16, -180*16);
+                painter->drawArc(9,8,4,4,135*16,45*16);
+                painter->drawPoint(9,12);
+                painter->translate(-1.5, -1.5);
+                break;
+
+            case ButtonMin:
+                painter->drawLine(QPointF( 7.5, 9.5), QPointF(10.5,12.5));
+                painter->drawLine(QPointF(10.5,12.5), QPointF(13.5, 9.5));
+                break;
+
+            case ButtonMax:
+                switch(_client.maximizeMode())
                 {
-                    painter->translate(1.5, 1.5);
-                    QPoint points[4] = {QPoint(9, 6), QPoint(12, 9), QPoint(9, 12), QPoint(6, 9)};
-                    painter->drawPolygon(points, 4);
-                    painter->translate(-1.5, -1.5);
-                    break;
+                    case Client::MaximizeRestore:
+                    case Client::MaximizeVertical:
+                    case Client::MaximizeHorizontal:
+                        painter->drawLine(QPointF( 7.5,11.5), QPointF(10.5, 8.5));
+                        painter->drawLine(QPointF(10.5, 8.5), QPointF(13.5,11.5));
+                        break;
+
+                    case Client::MaximizeFull:
+                    {
+                        painter->translate(1.5, 1.5);
+                        QPoint points[4] = {QPoint(9, 6), QPoint(12, 9), QPoint(9, 12), QPoint(6, 9)};
+                        painter->drawPolygon(points, 4);
+                        painter->translate(-1.5, -1.5);
+                        break;
+                    }
                 }
-            }
-            break;
+                break;
 
             case ButtonItemClose:
             case ButtonClose:
-            painter->drawLine(QPointF( 7.5,7.5), QPointF(13.5,13.5));
-            painter->drawLine(QPointF(13.5,7.5), QPointF( 7.5,13.5));
-            break;
+                painter->drawLine(QPointF( 7.5,7.5), QPointF(13.5,13.5));
+                painter->drawLine(QPointF(13.5,7.5), QPointF( 7.5,13.5));
+                break;
 
             case ButtonAbove:
-            painter->drawLine(QPointF( 7.5,14), QPointF(10.5,11));
-            painter->drawLine(QPointF(10.5,11), QPointF(13.5,14));
-            painter->drawLine(QPointF( 7.5,10), QPointF(10.5, 7));
-            painter->drawLine(QPointF(10.5, 7), QPointF(13.5,10));
-            break;
+                painter->drawLine(QPointF( 7.5,14), QPointF(10.5,11));
+                painter->drawLine(QPointF(10.5,11), QPointF(13.5,14));
+                painter->drawLine(QPointF( 7.5,10), QPointF(10.5, 7));
+                painter->drawLine(QPointF(10.5, 7), QPointF(13.5,10));
+                break;
 
             case ButtonBelow:
-            painter->drawLine(QPointF( 7.5,11), QPointF(10.5,14));
-            painter->drawLine(QPointF(10.5,14), QPointF(13.5,11));
-            painter->drawLine(QPointF( 7.5, 7), QPointF(10.5,10));
-            painter->drawLine(QPointF(10.5,10), QPointF(13.5, 7));
-            break;
+                painter->drawLine(QPointF( 7.5,11), QPointF(10.5,14));
+                painter->drawLine(QPointF(10.5,14), QPointF(13.5,11));
+                painter->drawLine(QPointF( 7.5, 7), QPointF(10.5,10));
+                painter->drawLine(QPointF(10.5,10), QPointF(13.5, 7));
+                break;
 
             case ButtonShade:
             if (!isChecked())
@@ -394,12 +385,6 @@ namespace Oxygen
         }
         painter->restore();
         return;
-    }
-
-    void Button::slotAppMenuHidden()
-    {
-        _status = Normal;
-        update();
     }
 
 }

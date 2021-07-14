@@ -259,7 +259,6 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
     connect(fineTuningUi.comboGraphicEffectsLevel, SIGNAL(activated(int)),   this, SLOT(setEffectsDirty()));
     connect(fineTuningUi.comboToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
     connect(fineTuningUi.comboSecondaryToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
-    connect(fineTuningUi.comboMenubarStyle,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
 
     // Page1
     cbStyle->setWhatsThis( i18n("Here you can choose from a list of"
@@ -283,10 +282,6 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
                             "show small icons alongside most menu items.") );
     fineTuningUi.comboGraphicEffectsLevel->setWhatsThis( i18n( "If you enable this option, KDE Applications will "
                             "run internal animations.") );
-
-    if (!QFile::exists(QLibraryInfo::location(QLibraryInfo::PluginsPath) + "/menubar/libappmenu-qt.so")) {
-        fineTuningUi.menubarBox->hide();
-    }
 
     // Insert the pages into the tabWidget
     tabWidget->addTab(page1, i18nc("@title:tab", "&Applications"));
@@ -428,73 +423,7 @@ void KCMStyle::save()
     toolbarStyleGroup.writeEntry("ToolButtonStyleOtherToolbars",
                             toolbarButtonText(fineTuningUi.comboSecondaryToolbarIcons->currentIndex()));
 
-    // menubar page
-    KConfigGroup menuBarStyleGroup(&_config, "Appmenu Style");
-
-    // load kded module if needed
-    bool load = false;
-    QList<QVariant> args;
-
-    QString style = menuBarStyleText(fineTuningUi.comboMenubarStyle->currentIndex());
-
-    QString previous = menuBarStyleGroup.readEntry("Style", "InApplication");
-    menuBarStyleGroup.writeEntry("Style", style);
     _config.sync();
-
-    QDBusMessage method = QDBusMessage::createMethodCall("org.kde.kded",
-                                                         "/modules/appmenu",
-                                                         "org.kde.kded",
-                                                         "reconfigure");
-    QDBusConnection::sessionBus().asyncCall(method);
-
-    if (previous == "InApplication" && style != "InApplication") {
-        load = true;
-        KNotification *notification = new KNotification("reload", 0);
-        notification->setComponentData(KComponentData("kcmstyle"));
-        notification->setText(i18n("Settings changes will take effect only on application restart"));
-        notification->sendEvent();
-    }
-
-#ifdef Q_WS_X11
-    // If user select ButtonVertical, we add (if needed) a button to titlebar
-    if (style == "ButtonVertical") {
-        KConfig _kwinConfig("kwinrc", KConfig::NoGlobals);
-        KConfigGroup kwinConfig(&_kwinConfig, "Style");
-        QString buttonsOnLeft = kwinConfig.readEntry("ButtonsOnLeft", KDecorationOptions::defaultTitleButtonsLeft());
-        QString buttonsOnRight = kwinConfig.readEntry("ButtonsOnRight", KDecorationOptions::defaultTitleButtonsRight());
-        qDebug() << buttonsOnLeft << buttonsOnRight;
-        if (!buttonsOnLeft.contains("N") && !buttonsOnRight.contains("N")) {
-            buttonsOnLeft = "N" + buttonsOnLeft;
-        }
-        kwinConfig.writeEntry("ButtonsOnLeft", buttonsOnLeft);
-        kwinConfig.writeEntry("CustomButtonPositions", "true");
-    }
-#endif
-
-    args = QList<QVariant>() << "appmenu" << (style != "InApplication");
-    method = QDBusMessage::createMethodCall("org.kde.kded",
-                                            "/kded",
-                                            "org.kde.kded",
-                                            "setModuleAutoloading");
-    method.setArguments(args);
-    QDBusConnection::sessionBus().asyncCall(method);
-
-    args = QList<QVariant>() << "appmenu";
-    if (load) {
-        method = QDBusMessage::createMethodCall("org.kde.kded",
-                                                "/kded",
-                                                "org.kde.kded",
-                                                "loadModule");
-        QDBusMessage method = QDBusMessage::createMethodCall("org.kde.kded", "/modules/appmenu", "org.kde.kded", "reconfigure");
-        QDBusConnection::sessionBus().asyncCall(method);
-    } else if (style == "InApplication") {
-        method = QDBusMessage::createMethodCall("org.kde.kded",
-                                                "/kded",
-                                                "org.kde.kded",
-                                                "unloadModule");
-    }
-    method.setArguments(args);
-    QDBusConnection::sessionBus().asyncCall(method);
 
     // Export the changes we made to qtrc, and update all qt-only
     // applications on the fly, ensuring that we still follow the user's
@@ -581,7 +510,6 @@ void KCMStyle::defaults()
     // Effects
     fineTuningUi.comboToolbarIcons->setCurrentIndex(toolbarButtonIndex("TextBesideIcon"));
     fineTuningUi.comboSecondaryToolbarIcons->setCurrentIndex(toolbarButtonIndex("TextBesideIcon"));
-    fineTuningUi.comboMenubarStyle->setCurrentIndex(menuBarStyleIndex("InApplication"));
     fineTuningUi.cbIconsOnButtons->setChecked(true);
     fineTuningUi.cbIconsInMenus->setChecked(true);
     fineTuningUi.comboGraphicEffectsLevel->setCurrentIndex(fineTuningUi.comboGraphicEffectsLevel->findData(((int) KGlobalSettings::graphicEffectsLevelDefault())));
@@ -803,33 +731,6 @@ int KCMStyle::toolbarButtonIndex(const QString &text)
     return 0;
 }
 
-QString KCMStyle::menuBarStyleText(int index)
-{
-    switch (index) {
-        case 1:
-            return "ButtonVertical";
-        case 2:
-            return "TopMenuBar";
-        case 3:
-            return "Others";
-    }
-
-    return "InApplication";
-}
-
-int KCMStyle::menuBarStyleIndex(const QString &text)
-{
-    if (text == "ButtonVertical") {
-        return 1;
-    } else if (text == "TopMenuBar") {
-        return 2;
-    } else if (text == "Others") {
-        return 3;
-    }
-
-    return 0;
-}
-
 void KCMStyle::loadEffects( KConfig& config )
 {
     // KDE's Part via KConfig
@@ -839,10 +740,6 @@ void KCMStyle::loadEffects( KConfig& config )
     fineTuningUi.comboToolbarIcons->setCurrentIndex(toolbarButtonIndex(tbIcon));
     tbIcon = configGroup.readEntry("ToolButtonStyleOtherToolbars", "TextBesideIcon");
     fineTuningUi.comboSecondaryToolbarIcons->setCurrentIndex(toolbarButtonIndex(tbIcon));
-
-    configGroup = config.group("Appmenu Style");
-    QString menuBarStyle = configGroup.readEntry("Style", "InApplication");
-    fineTuningUi.comboMenubarStyle->setCurrentIndex(menuBarStyleIndex(menuBarStyle));
 
     configGroup = config.group("KDE");
     fineTuningUi.cbIconsOnButtons->setChecked(configGroup.readEntry("ShowIconsOnPushButtons", true));

@@ -21,9 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // own
 #include "client.h"
 // kwin
-#ifdef KWIN_BUILD_KAPPMENU
-#include "appmenu.h"
-#endif
 #include "atoms.h"
 #include "bridge.h"
 #include "client_machine.h"
@@ -126,9 +123,6 @@ Client::Client()
     , electricMaximizing(false)
     , needsSessionInteract(false)
     , needsXWindowMove(false)
-#ifdef KWIN_BUILD_KAPPMENU
-    , m_menuAvailable(false)
-#endif
     , m_decoInputExtent()
 {
     // TODO: Do all as initialization
@@ -448,12 +442,6 @@ void Client::createDecoration(const QRect& oldgeom)
             decoration, SLOT(maximizeChange()));
     connect(this, SIGNAL(keepAboveChanged(bool)), decoration, SIGNAL(keepAboveChanged(bool)));
     connect(this, SIGNAL(keepBelowChanged(bool)), decoration, SIGNAL(keepBelowChanged(bool)));
-#ifdef KWIN_BUILD_KAPPMENU
-    connect(this, SIGNAL(showRequest()), decoration, SIGNAL(showRequest()));
-    connect(this, SIGNAL(appMenuAvailable()), decoration, SIGNAL(appMenuAvailable()));
-    connect(this, SIGNAL(appMenuUnavailable()), decoration, SIGNAL(appMenuUnavailable()));
-    connect(this, SIGNAL(menuHidden()), decoration, SIGNAL(menuHidden()));
-#endif
     // TODO: Check decoration's minimum size?
     decoration->init();
     decoration->widget()->installEventFilter(this);
@@ -2245,25 +2233,6 @@ bool Client::isClient() const
 {
     return true;
 }
-
-#ifdef KWIN_BUILD_KAPPMENU
-void Client::setAppMenuAvailable()
-{
-    m_menuAvailable = true;
-    emit appMenuAvailable();
-}
-
-void Client::setAppMenuUnavailable()
-{
-    m_menuAvailable = false;
-    emit appMenuUnavailable();
-}
-
-void Client::showApplicationMenu(const QPoint &p)
-{
-    ApplicationMenu::self()->showApplicationMenu(p, window());
-}
-#endif
 
 NET::WindowType Client::windowType(bool direct, int supportedTypes) const
 {

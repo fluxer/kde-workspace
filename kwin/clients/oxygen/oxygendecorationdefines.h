@@ -49,7 +49,6 @@ namespace Oxygen
         ButtonAbove,
         ButtonBelow,
         ButtonShade,
-        ButtonApplicationMenu,
         ButtonTypeCount,
 
         // Close only one tab

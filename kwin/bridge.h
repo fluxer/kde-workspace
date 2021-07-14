@@ -54,8 +54,6 @@ public:
     virtual void processMousePressEvent(QMouseEvent*);
     virtual void showWindowMenu(const QPoint &);
     virtual void showWindowMenu(const QRect &);
-    virtual void showApplicationMenu(const QPoint &);
-    virtual bool menuAvailable() const;
     virtual void performWindowOperation(WindowOperation);
     virtual void setMask(const QRegion&, int);
     virtual bool isPreview() const;

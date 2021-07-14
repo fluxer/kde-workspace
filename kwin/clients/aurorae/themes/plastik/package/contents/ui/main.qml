@@ -254,7 +254,6 @@ Decoration {
                     spacing: 1
                     explicitSpacer: root.buttonSize
                     menuButton: menuButtonComponent
-                    appMenuButton: appMenuButtonComponent
                     minimizeButton: minimizeButtonComponent
                     maximizeButton: maximizeButtonComponent
                     keepBelowButton: keepBelowButtonComponent
@@ -295,7 +294,6 @@ Decoration {
                     spacing: 1
                     explicitSpacer: root.buttonSize
                     menuButton: menuButtonComponent
-                    appMenuButton: appMenuButtonComponent
                     minimizeButton: minimizeButtonComponent
                     maximizeButton: maximizeButtonComponent
                     keepBelowButton: keepBelowButtonComponent
@@ -407,13 +405,6 @@ Decoration {
         MenuButton {
             width: root.buttonSize
             height: root.buttonSize
-        }
-    }
-    Component {
-        id: appMenuButtonComponent
-        PlastikButton {
-            buttonType: "N"
-            size: root.buttonSize
         }
     }
     Component.onCompleted: {
