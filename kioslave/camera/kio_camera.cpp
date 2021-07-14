@@ -228,27 +228,27 @@ void KameraProtocol::get(const KUrl &url)
     }
 
 
-#define GPHOTO_TEXT_FILE(xx)                                                                    \
-    if (directory != "/" && !file.endsWith(#xx ".txt")) {                                       \
-            CameraText xx;                                                                      \
-            gpr = gp_camera_get_##xx(m_camera,  &xx, m_context);                                \
-            if (gpr != GP_OK) {                                                                 \
-                error(KIO::ERR_DOES_NOT_EXIST, url.path());                                     \
-                return;                                                                         \
-            }                                                                                   \
-            QByteArray chunkDataBuffer = QByteArray::fromRawData(xx.text, strlen(xx.text));     \
-            data(chunkDataBuffer);                                                              \
-            processedSize(strlen(xx.text));                                                     \
-            chunkDataBuffer.clear();                                                            \
-            finished();                                                                         \
-            return;                                                                             \
+#define GPHOTO_TEXT_FILE(xx)                                                                \
+    if (directory == "/" && file == #xx ".txt") {                                           \
+        CameraText xx;                                                                      \
+        gpr = gp_camera_get_##xx(m_camera,  &xx, m_context);                                \
+        if (gpr != GP_OK) {                                                                 \
+            error(KIO::ERR_DOES_NOT_EXIST, url.path());                                     \
+            return;                                                                         \
+        }                                                                                   \
+        QByteArray chunkDataBuffer = QByteArray::fromRawData(xx.text, strlen(xx.text));     \
+        data(chunkDataBuffer);                                                              \
+        processedSize(strlen(xx.text));                                                     \
+        chunkDataBuffer.clear();                                                            \
+        finished();                                                                         \
+        return;                                                                             \
     }
 
     GPHOTO_TEXT_FILE(about);
     GPHOTO_TEXT_FILE(manual);
     GPHOTO_TEXT_FILE(summary);
-
 #undef GPHOTO_TEXT_FILE
+
     // emit info message
     infoMessage(i18n("Retrieving data from camera <b>%1</b>", current_camera));
 
@@ -476,14 +476,14 @@ void KameraProtocol::statRegular(const KUrl &xurl)
     }
 
 #define GPHOTO_TEXT_FILE(xx)                                    \
-    if (directory != "/" && !file.endsWith(#xx".txt")) {        \
+    if (directory == "/" && file == #xx".txt") {                \
         CameraText xx;                                          \
-        gpr = gp_camera_get_about(m_camera,  &xx, m_context);   \
+        gpr = gp_camera_get_##xx(m_camera,  &xx, m_context);    \
         if (gpr != GP_OK) {                                     \
             error(KIO::ERR_DOES_NOT_EXIST, xurl.fileName());    \
             return;                                             \
         }                                                       \
-        translateTextToUDS(entry,#xx".txt",xx.text);            \
+        translateTextToUDS(entry, #xx".txt", xx.text);          \
         statEntry(entry);                                       \
         finished();                                             \
         return;                                                 \
