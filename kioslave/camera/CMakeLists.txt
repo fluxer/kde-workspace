@@ -18,3 +18,8 @@ install(
     FILES camera.protocol
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
+
+install(
+    FILES solid_camera.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions
+)
