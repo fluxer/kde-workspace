@@ -81,19 +81,19 @@ if(Q_WS_X11)
     add_feature_info("libxf86vmode" X11_xf86vmode_FOUND "The X video mode extension library used by powerdevil")
 
     if(NOT X11_Xdamage_FOUND)
-        message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin.")
+        message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin")
     endif()
     if(NOT X11_Xrender_FOUND)
-        message(FATAL_ERROR " The X Rendering Extension client library was not found. Required for XRender Compositing backend in KWin.")
+        message(FATAL_ERROR " The X Rendering Extension client library was not found. Required for XRender Compositing backend in KWin")
     endif()
     if(NOT X11_Xfixes_FOUND)
-        message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin.")
+        message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin")
     endif()
     if(NOT X11_Xrandr_FOUND)
-        message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support.")
+        message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support")
     endif()
     if(NOT X11_Xcursor_FOUND)
-        message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin.")
+        message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin")
     endif()
 endif(Q_WS_X11)
 
@@ -181,7 +181,7 @@ set_package_properties(LibUSB PROPERTIES
     DESCRIPTION "User level access to USB devices"
     URL "http://libusb.sourceforge.net"
     TYPE OPTIONAL
-    PURPOSE "Provides Logitech mouse support in KControl."
+    PURPOSE "Provides Logitech mouse support in KControl"
 )
 
 macro_optional_find_package(PCIUTILS)
@@ -189,7 +189,7 @@ set_package_properties(PCIUTILS PROPERTIES
     DESCRIPTION "PciUtils is a library for direct access to PCI slots"
     URL "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
     TYPE OPTIONAL
-    PURPOSE "View PCI details in kinfocenter."
+    PURPOSE "View PCI details in kinfocenter"
 )
 
 macro_optional_find_package(RAW1394)
@@ -197,7 +197,7 @@ set_package_properties(RAW1394 PROPERTIES
     DESCRIPTION "library for direct access to IEEE 1394 bus"
     URL "http://www.linux1394.org/"
     TYPE OPTIONAL
-    PURPOSE "View FireWire devices in kinfocenter."
+    PURPOSE "View FireWire devices in kinfocenter"
 )
 
 # we need a version of samba which has already smbc_set_context(), Alex
@@ -227,12 +227,20 @@ set_package_properties(Mtp PROPERTIES
     PURPOSE "Needed to build the MTP kioslave"
 )
 
+macro_optional_find_package(Gphoto2 2.5)
+set_package_properties(Gphoto2 PROPERTIES
+    DESCRIPTION "Free, redistributable, ready to use set of digital camera software applications"
+    URL "http://www.gphoto.org/"
+    TYPE OPTIONAL
+    PURPOSE "Needed to build camera kioslave"
+)
+
 macro_optional_find_package(BZip2)
 set_package_properties(BZip2 PROPERTIES
     DESCRIPTION "A high-quality data compressor"
     URL "http://www.bzip.org"
     TYPE OPTIONAL
-    PURPOSE "Provides the ability to read and write bzip2 compressed data files in the filter kioslave."
+    PURPOSE "Provides the ability to read and write bzip2 compressed data files in the filter kioslaves"
 )
 
 macro_optional_find_package(LibLZMA)
@@ -240,7 +248,7 @@ set_package_properties(LibLZMA PROPERTIES
     DESCRIPTION "A very high compression ratio data compressor"
     URL "http://tukaani.org/xz/"
     TYPE OPTIONAL
-    PURPOSE "Provides the ability to read and write xz compressed data files."
+    PURPOSE "Provides the ability to read and write xz compressed data files"
 )
 
 macro_optional_find_package(OpenEXR)

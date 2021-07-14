@@ -28,7 +28,7 @@ build_script:
         libgps-dev libusb-1.0-0-dev libssh-dev libsmbclient-dev perl-base \
         libdrm-dev libraw1394-dev  libsensors4-dev libgles2-mesa-dev libpam0g-dev \
         libpci-dev libopenexr-dev liblzma-dev libbz2-dev libjpeg-dev \
-        libdbusmenu-katie ccache
+        libgphoto2-dev libdbusmenu-katie ccache
 
     export PATH="/usr/lib/ccache/:$PATH"
 
