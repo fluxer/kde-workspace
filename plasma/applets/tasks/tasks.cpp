@@ -394,9 +394,9 @@ void Tasks::configChanged()
     // group manager reload its tasks list
     const bool showOnlyCurrentDesktop = cg.readEntry("showOnlyCurrentDesktop", true);
     if (showOnlyCurrentDesktop != m_groupManager->showOnlyCurrentDesktop()) {
+        m_groupManager->setShowOnlyCurrentDesktop(showOnlyCurrentDesktop);
         changed = true;
     }
-    m_groupManager->setShowOnlyCurrentDesktop(showOnlyCurrentDesktop);
     m_declarativeWidget->rootObject()->setProperty("showOnlyCurrentDesktop", showOnlyCurrentDesktop);
 
     const bool showOnlyCurrentScreen = cg.readEntry("showOnlyCurrentScreen", false);
@@ -407,9 +407,9 @@ void Tasks::configChanged()
 
     const bool showOnlyMinimized = cg.readEntry("showOnlyMinimized", false);
     if (showOnlyMinimized != m_groupManager->showOnlyMinimized()) {
+        m_groupManager->setShowOnlyMinimized(showOnlyMinimized);
         changed = true;
     }
-    m_groupManager->setShowOnlyMinimized(showOnlyMinimized);
     m_declarativeWidget->rootObject()->setProperty("showOnlyMinimized", showOnlyMinimized);
 
     TaskManager::GroupManager::TaskGroupingStrategy groupingStrategy =
@@ -428,9 +428,9 @@ void Tasks::configChanged()
 
     const bool onlyGroupWhenFull = cg.readEntry("groupWhenFull", true);
     if (onlyGroupWhenFull != m_groupManager->onlyGroupWhenFull()) {
+        m_groupManager->setOnlyGroupWhenFull(onlyGroupWhenFull);
         changed = true;
     }
-    m_groupManager->setOnlyGroupWhenFull(onlyGroupWhenFull);
 
     TaskManager::GroupManager::TaskSortingStrategy sortingStrategy =
         static_cast<TaskManager::GroupManager::TaskSortingStrategy>(
@@ -439,9 +439,9 @@ void Tasks::configChanged()
         );
 
     if (sortingStrategy != m_groupManager->sortingStrategy()) {
+        m_groupManager->setSortingStrategy(sortingStrategy);
         changed = true;
     }
-    m_groupManager->setSortingStrategy(sortingStrategy);
     m_declarativeWidget->rootObject()->setProperty("manualSorting",
         (sortingStrategy == TaskManager::GroupManager::ManualSorting));
 
