@@ -601,13 +601,13 @@ void KameraProtocol::listDir(const KUrl &yurl)
         gp_abilities_list_free(al);
         gp_port_info_list_free(il);
 
-        count = gp_list_count (list);
+        count = gp_list_count(list);
 
         for (i = 0 ; i<count ; i++) {
             const char *model, *value;
 
-            gp_list_get_name  (list, i, &model);
-            gp_list_get_value (list, i, &value);
+            gp_list_get_name(list, i, &model);
+            gp_list_get_value(list, i, &value);
 
             ports[value] = model;
             // NOTE: We might get different ports than usb: later!
@@ -660,7 +660,6 @@ void KameraProtocol::listDir(const KUrl &yurl)
         }
 
         QMap<QString,QString>::iterator portsit;
-
         for (portsit = ports.begin(); portsit != ports.end(); portsit++) {
             entry.clear();
             entry.insert(KIO::UDSEntry::UDS_FILE_TYPE,S_IFDIR);
