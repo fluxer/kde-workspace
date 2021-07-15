@@ -24,8 +24,7 @@
 #include <Plasma/Containment>
 #include <Plasma/Theme>
 #include <KConfigDialog>
-#include <KUnitConversion/Converter>
-#include <KUnitConversion/Value>
+#include <kunitconversion.h>
 #include <QGraphicsLinearLayout>
 #include <QTimer>
 #include <cmath>
@@ -197,30 +196,24 @@ void Temperature::dataUpdated(const QString& source,
         return;
     }
     SM::Plotter *plotter = qobject_cast<SM::Plotter*>(visualization(source));
-    QString temp;
     QString unit = data["units"].toString();
     double doubleValue = data["value"].toDouble() + temperatureOffset(source);
-    KUnitConversion::Value value = KUnitConversion::Value(doubleValue, unit);
+    KTemperature value(doubleValue, unit);
 
-#warning FIXME: temporary crash fix, KUnitConversion basically has to be rewriten
-#if 0
     if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
-        value = value.convertTo(KUnitConversion::Celsius);
+        doubleValue = value.convertTo(KTemperature::Celsius);
     } else {
-        value = value.convertTo(KUnitConversion::Fahrenheit);
+        doubleValue = value.convertTo(KTemperature::Fahrenheit);
     }
-#endif
 
-    value.round(1);
+    doubleValue = KTemperature::round(doubleValue, 1);
     if (plotter) {
         plotter->addSample(QList<double>() << value.number());
     }
 
-    temp = value.toSymbolString();
-
     if (mode() == SM::Applet::Panel) {
         setToolTip(source,
-                   QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(temp));
+                   QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(value.toString()));
     }
 }
 

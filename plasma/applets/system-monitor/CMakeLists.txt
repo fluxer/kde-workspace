@@ -38,7 +38,7 @@ set(temparature_SRCS
     temperature-config.ui
 )
 kde4_add_plugin(plasma_applet_sm_temperature ${temparature_SRCS})
-target_link_libraries(plasma_applet_sm_temperature ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KUNITCONVERSION_LIBS} plasma_applet-system-monitor)
+target_link_libraries(plasma_applet_sm_temperature ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} plasma_applet-system-monitor)
 
 # Network Monitor
 
