@@ -394,23 +394,23 @@ void Tasks::configChanged()
     // group manager reload its tasks list
     const bool showOnlyCurrentDesktop = cg.readEntry("showOnlyCurrentDesktop", true);
     if (showOnlyCurrentDesktop != m_groupManager->showOnlyCurrentDesktop()) {
-        m_groupManager->setShowOnlyCurrentDesktop(showOnlyCurrentDesktop);
-        m_declarativeWidget->rootObject()->setProperty("showOnlyCurrentDesktop", showOnlyCurrentDesktop);
         changed = true;
     }
+    m_groupManager->setShowOnlyCurrentDesktop(showOnlyCurrentDesktop);
+    m_declarativeWidget->rootObject()->setProperty("showOnlyCurrentDesktop", showOnlyCurrentDesktop);
 
     const bool showOnlyCurrentScreen = cg.readEntry("showOnlyCurrentScreen", false);
     if (showOnlyCurrentScreen != m_groupManager->showOnlyCurrentScreen()) {
-        m_groupManager->setShowOnlyCurrentScreen(showOnlyCurrentScreen);
         changed = true;
     }
+    m_groupManager->setShowOnlyCurrentScreen(showOnlyCurrentScreen);
 
     const bool showOnlyMinimized = cg.readEntry("showOnlyMinimized", false);
     if (showOnlyMinimized != m_groupManager->showOnlyMinimized()) {
-        m_groupManager->setShowOnlyMinimized(showOnlyMinimized);
-        m_declarativeWidget->rootObject()->setProperty("showOnlyMinimized", showOnlyMinimized);
         changed = true;
     }
+    m_groupManager->setShowOnlyMinimized(showOnlyMinimized);
+    m_declarativeWidget->rootObject()->setProperty("showOnlyMinimized", showOnlyMinimized);
 
     TaskManager::GroupManager::TaskGroupingStrategy groupingStrategy =
         static_cast<TaskManager::GroupManager::TaskGroupingStrategy>(
@@ -422,15 +422,15 @@ void Tasks::configChanged()
         if (groupingStrategy == TaskManager::GroupManager::ManualGrouping) {
             groupingStrategy = TaskManager::GroupManager::ProgramGrouping;
         }
-        m_groupManager->setGroupingStrategy(groupingStrategy);
         changed = true;
     }
+    m_groupManager->setGroupingStrategy(groupingStrategy);
 
     const bool onlyGroupWhenFull = cg.readEntry("groupWhenFull", true);
     if (onlyGroupWhenFull != m_groupManager->onlyGroupWhenFull()) {
-        m_groupManager->setOnlyGroupWhenFull(onlyGroupWhenFull);
         changed = true;
     }
+    m_groupManager->setOnlyGroupWhenFull(onlyGroupWhenFull);
 
     TaskManager::GroupManager::TaskSortingStrategy sortingStrategy =
         static_cast<TaskManager::GroupManager::TaskSortingStrategy>(
@@ -439,41 +439,41 @@ void Tasks::configChanged()
         );
 
     if (sortingStrategy != m_groupManager->sortingStrategy()) {
-        m_groupManager->setSortingStrategy(sortingStrategy);
-        m_declarativeWidget->rootObject()->setProperty("manualSorting",
-            (sortingStrategy == TaskManager::GroupManager::ManualSorting));
         changed = true;
     }
+    m_groupManager->setSortingStrategy(sortingStrategy);
+    m_declarativeWidget->rootObject()->setProperty("manualSorting",
+        (sortingStrategy == TaskManager::GroupManager::ManualSorting));
 
     const int maxRows = cg.readEntry("maxRows", 2);
     if (maxRows != m_declarativeWidget->rootObject()->property("maxStripes").toInt()) {
-        m_declarativeWidget->rootObject()->setProperty("maxStripes", maxRows);
         changed = true;
     }
+    m_declarativeWidget->rootObject()->setProperty("maxStripes", maxRows);
 
     const bool forceRows = cg.readEntry("forceRows", false);
     if (forceRows != m_declarativeWidget->rootObject()->property("forceStripes").toBool()) {
-        m_declarativeWidget->rootObject()->setProperty("forceStripes", forceRows);
         changed = true;
     }
+    m_declarativeWidget->rootObject()->setProperty("forceStripes", forceRows);
 
     const bool showTooltip = cg.readEntry("showToolTip", true);
     if (showTooltip != m_declarativeWidget->rootObject()->property("showToolTip").toBool()) {
-        m_declarativeWidget->rootObject()->setProperty("showToolTip", showTooltip);
         changed = true;
     }
+    m_declarativeWidget->rootObject()->setProperty("showToolTip", showTooltip);
 
     const bool highlightWindows = cg.readEntry("highlightWindows", false);
     if (highlightWindows != m_highlightWindows) {
         m_highlightWindows = highlightWindows;
-        m_declarativeWidget->rootObject()->setProperty("highlightWindows", m_highlightWindows);
-        if (m_highlightWindows) {
-            connect(m_declarativeWidget->rootObject(), SIGNAL(itemHovered(int,bool)), this, SLOT(itemHovered(int,bool)));
-        } else {
-            disconnect(m_declarativeWidget->rootObject(), SIGNAL(itemHovered(int,bool)), this, SLOT(itemHovered(int,bool)));
-        }
         changed = true;
     }
+    if (m_highlightWindows) {
+        connect(m_declarativeWidget->rootObject(), SIGNAL(itemHovered(int,bool)), this, SLOT(itemHovered(int,bool)));
+    } else {
+        disconnect(m_declarativeWidget->rootObject(), SIGNAL(itemHovered(int,bool)), this, SLOT(itemHovered(int,bool)));
+    }
+    m_declarativeWidget->rootObject()->setProperty("highlightWindows", m_highlightWindows);
 
     m_groupManager->readLauncherConfig();
 
