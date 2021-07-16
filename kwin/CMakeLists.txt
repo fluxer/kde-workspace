@@ -45,7 +45,6 @@ set(kwin4_effect_builtins_sources)
 set(kwin4_effect_builtins_config_sources effects/configs_builtins.cpp)
 set(kwin4_effect_include_directories)
 
-include( effects/kscreen/CMakeLists.txt )
 include( effects/presentwindows/CMakeLists.txt )
 include( effects/slidingpopups/CMakeLists.txt )
 include( effects/taskbarthumbnail/CMakeLists.txt )

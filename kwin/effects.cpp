@@ -68,7 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effects/diminactive/diminactive.h"
 #include "effects/dimscreen/dimscreen.h"
 #include "effects/highlightwindow/highlightwindow.h"
-#include "effects/kscreen/kscreen.h"
 #include "effects/logout/logout.h"
 #include "effects/magnifier/magnifier.h"
 #include "effects/minimizeanimation/minimizeanimation.h"
@@ -1375,9 +1374,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     Effect* effect = 0;
     QLibrary* library = 0;
     // builtins first
-    if (internalname == "kwin4_effect_kscreen") {
-        effect = new KscreenEffect();
-    } else if (internalname == "kwin4_effect_presentwindows") {
+    if (internalname == "kwin4_effect_presentwindows") {
         effect = new PresentWindowsEffect();
     } else if (internalname == "kwin4_effect_slidingpopups") {
         effect = new SlidingPopupsEffect();
