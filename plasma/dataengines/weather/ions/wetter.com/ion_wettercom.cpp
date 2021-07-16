@@ -27,9 +27,10 @@
 // http://api.wetter.com/forecast/weather/city/DE0004329/project/weatherion/cs/89f1264869cce5c6fd5a2db80051f3d8
 
 #include "ion_wettercom.h"
+
 #include <KDebug>
-#include <KUnitConversion/Converter>
 #include <KLocalizedDate>
+#include <kunitconversion.h>
 
 /*
  * Initialization
@@ -703,7 +704,7 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
         data.insert("Station", m_place[source].displayName);
         //data.insert("Condition Icon", "N/A");
         //data.insert("Temperature", "N/A");
-        data.insert("Temperature Unit", QString::number(KUnitConversion::Celsius));
+        data.insert("Temperature Unit", QString::number(KTemperature::Celsius));
 
         int i = 0;
         foreach(WeatherData::ForecastPeriod * forecastPeriod, m_weatherData[source].forecasts) {
