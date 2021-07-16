@@ -65,7 +65,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // dbus generated
 #include "screenlocker_interface.h"
 
-#include "effects/dashboard/dashboard.h"
 #include "effects/diminactive/diminactive.h"
 #include "effects/dimscreen/dimscreen.h"
 #include "effects/highlightwindow/highlightwindow.h"
@@ -1384,8 +1383,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         effect = new SlidingPopupsEffect();
     } else if (internalname == "kwin4_effect_taskbarthumbnail") {
         effect = new TaskbarThumbnailEffect();
-    } else if (internalname == "kwin4_effect_dashboard") {
-        effect = new DashboardEffect();
     } else if (internalname == "kwin4_effect_diminactive") {
         effect = new DimInactiveEffect();
     } else if (internalname == "kwin4_effect_dimscreen") {

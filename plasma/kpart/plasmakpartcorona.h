@@ -30,7 +30,7 @@ namespace Plasma
 } // namespace Plasma
 
 /**
- * @short A Corona with dashboard-y considerations
+ * @short A Corona
  */
 class PlasmaKPartCorona : public Plasma::Corona
 {

@@ -191,11 +191,6 @@ void Edge::handle(const QPoint &cursorPos)
 bool Edge::handleAction()
 {
     switch (m_action) {
-    case ElectricActionDashboard: { // Display Plasma dashboard
-        QDBusInterface plasmaApp("org.kde.plasma-desktop", "/App");
-        plasmaApp.asyncCall("toggleDashboard");
-        return true;
-    }
     case ElectricActionShowDesktop: {
         Workspace::self()->setShowingDesktop(!Workspace::self()->showingDesktop());
         return true;
@@ -577,9 +572,7 @@ void ScreenEdges::init()
 static ElectricBorderAction electricBorderAction(const QString& name)
 {
     QString lowerName = name.toLower();
-    if (lowerName == "dashboard") {
-        return ElectricActionDashboard;
-    } else if (lowerName == "showdesktop") {
+    if (lowerName == "showdesktop") {
         return ElectricActionShowDesktop;
     } else if (lowerName == "lockscreen") {
         return ElectricActionLockScreen;

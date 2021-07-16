@@ -32,7 +32,7 @@
 
 #include "plasmaapp.h"
 
-static const int SUPPRESS_SHOW_TIMEOUT = 500; // Number of millis to prevent reshow of dashboard
+static const int SUPPRESS_SHOW_TIMEOUT = 500; // Number of millis to prevent reshow of saver
 
 
 class ScreenSaverWidgetExplorer : public Plasma::WidgetExplorer

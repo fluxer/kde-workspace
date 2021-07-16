@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>342</width>
-    <height>251</height>
+    <height>184</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,33 +35,13 @@
       <property name="margin">
        <number>0</number>
       </property>
-      <item row="0" column="0">
-       <widget class="QLabel" name="displayLabel">
-        <property name="text">
-         <string>Display text:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1" colspan="2">
        <widget class="QRadioButton" name="desktopNumberRadioButton">
         <property name="text">
          <string>Desktop number</string>
         </property>
         <attribute name="buttonGroup">
-         <string>buttonGroupText</string>
-        </attribute>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QRadioButton" name="desktopNameRadioButton">
-        <property name="text">
-         <string>Desktop name</string>
-        </property>
-        <attribute name="buttonGroup">
-         <string>buttonGroupText</string>
+         <string notr="true">buttonGroupText</string>
         </attribute>
        </widget>
       </item>
@@ -71,21 +51,8 @@
          <string>No text</string>
         </property>
         <attribute name="buttonGroup">
-         <string>buttonGroupText</string>
+         <string notr="true">buttonGroupText</string>
         </attribute>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Display icons:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-        </property>
-        <property name="buddy">
-         <cstring>showWindowIconsCheckBox</cstring>
-        </property>
        </widget>
       </item>
       <item row="3" column="1" colspan="2">
@@ -105,14 +72,17 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1" colspan="2">
-       <widget class="QRadioButton" name="doNothingRadioButton">
+      <item row="3" column="0">
+       <widget class="QLabel" name="label">
         <property name="text">
-         <string>Does nothing</string>
+         <string>Display icons:</string>
         </property>
-        <attribute name="buttonGroup">
-         <string>buttonGroupAction</string>
-        </attribute>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+        <property name="buddy">
+         <cstring>showWindowIconsCheckBox</cstring>
+        </property>
        </widget>
       </item>
       <item row="5" column="1" colspan="2">
@@ -121,21 +91,21 @@
          <string>Shows desktop</string>
         </property>
         <attribute name="buttonGroup">
-         <string>buttonGroupAction</string>
+         <string notr="true">buttonGroupAction</string>
         </attribute>
        </widget>
       </item>
-      <item row="6" column="1" colspan="2">
-       <widget class="QRadioButton" name="showDashboardRadioButton">
+      <item row="4" column="1" colspan="2">
+       <widget class="QRadioButton" name="doNothingRadioButton">
         <property name="text">
-         <string>Shows the dashboard</string>
+         <string>Does nothing</string>
         </property>
         <attribute name="buttonGroup">
-         <string>buttonGroupAction</string>
+         <string notr="true">buttonGroupAction</string>
         </attribute>
        </widget>
       </item>
-      <item row="7" column="1">
+      <item row="6" column="1">
        <spacer name="verticalSpacer">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
@@ -147,6 +117,26 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="displayLabel">
+        <property name="text">
+         <string>Display text:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" colspan="2">
+       <widget class="QRadioButton" name="desktopNameRadioButton">
+        <property name="text">
+         <string>Desktop name</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">buttonGroupText</string>
+        </attribute>
+       </widget>
       </item>
      </layout>
     </widget>

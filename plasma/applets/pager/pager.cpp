@@ -372,10 +372,6 @@ void Pager::createConfigurationInterface(KConfigDialog *parent)
         case ShowDesktop:
             ui.showDesktopRadioButton->setChecked(true);
             break;
-
-        case ShowDashboard:
-            ui.showDashboardRadioButton->setChecked(true);
-            break;
     }
 
     connect(ui.desktopNumberRadioButton, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
@@ -384,7 +380,6 @@ void Pager::createConfigurationInterface(KConfigDialog *parent)
     connect(ui.showWindowIconsCheckBox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(ui.doNothingRadioButton, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(ui.showDesktopRadioButton, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
-    connect(ui.showDashboardRadioButton, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
 
     connect(m_configureDesktopsWidget, SIGNAL(changed(bool)), parent, SLOT(settingsModified()));
 }
@@ -616,12 +611,10 @@ void Pager::configAccepted()
     cg.writeEntry("showWindowIcons", ui.showWindowIconsCheckBox->isChecked());
 
     CurrentDesktopSelected currentDesktopSelected;
-    if (ui.doNothingRadioButton->isChecked()) {
-        currentDesktopSelected = DoNothing;
-    } else if (ui.showDesktopRadioButton->isChecked()) {
+    if (ui.showDesktopRadioButton->isChecked()) {
         currentDesktopSelected = ShowDesktop;
     } else {
-        currentDesktopSelected = ShowDashboard;
+        currentDesktopSelected = DoNothing;
     }
     cg.writeEntry("currentDesktopSelected", (int) currentDesktopSelected);
 
@@ -757,14 +750,11 @@ void Pager::moveWindow(int window, double x, double y, int targetDesktop, int so
 void Pager::changeDesktop(int newDesktop)
 {
     if (m_currentDesktop == newDesktop+1) {
-        // toogle the desktop or the dashboard
+        // toogle the desktop
         if (m_currentDesktopSelected == ShowDesktop) {
             NETRootInfo info(QX11Info::display(), 0);
             m_desktopDown = !m_desktopDown;
             info.setShowingDesktop(m_desktopDown);
-        } else if (m_currentDesktopSelected == ShowDashboard) {
-            QDBusInterface plasmaApp("org.kde.plasma-desktop", "/App");
-            plasmaApp.call("toggleDashboard");
         }
     } else {
         KWindowSystem::setCurrentDesktop(newDesktop + 1);

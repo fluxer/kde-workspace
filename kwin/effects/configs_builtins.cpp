@@ -20,7 +20,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
-#include "dashboard/dashboard_config.h"
 #include "diminactive/diminactive_config.h"
 #include "presentwindows/presentwindows_config.h"
 #include "resize/resize_config.h"
@@ -41,18 +40,17 @@ namespace KWin
 {
 
 KWIN_EFFECT_CONFIG_MULTIPLE(builtins,
-                            KWIN_EFFECT_CONFIG_SINGLE(dashboard, DashboardEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(diminactive, DimInactiveEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(presentwindows, PresentWindowsEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(resize, ResizeEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(showfps, ShowFpsEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(thumbnailaside, ThumbnailAsideEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(windowgeometry, WindowGeometryConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(zoom, ZoomEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(diminactive, DimInactiveEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(presentwindows, PresentWindowsEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(resize, ResizeEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(showfps, ShowFpsEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(thumbnailaside, ThumbnailAsideEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(windowgeometry, WindowGeometryConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(zoom, ZoomEffectConfig)
 
-                            KWIN_EFFECT_CONFIG_SINGLE(magnifier, MagnifierEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(mousemark, MouseMarkEffectConfig)
-                            KWIN_EFFECT_CONFIG_SINGLE(trackmouse, TrackMouseEffectConfig)
-                           )
+    KWIN_EFFECT_CONFIG_SINGLE(magnifier, MagnifierEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(mousemark, MouseMarkEffectConfig)
+    KWIN_EFFECT_CONFIG_SINGLE(trackmouse, TrackMouseEffectConfig)
+)
 
 } // namespace

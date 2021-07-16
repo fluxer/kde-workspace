@@ -39,7 +39,6 @@
 
 #include <kephal/screens.h>
 
-#include "dashboardview.h"
 #include "desktopcorona.h"
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
@@ -47,8 +46,6 @@
 
 DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *parent)
     : Plasma::View(containment, id, parent),
-      m_dashboard(0),
-      m_dashboardFollowsDesktop(true),
       m_init(false)
 {
     setAttribute(Qt::WA_TranslucentBackground, false);
@@ -85,10 +82,6 @@ DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *pare
     setBackgroundBrush(tile);
     */
 
-    KConfigGroup cg = config();
-    const uint dashboardContainmentId = cg.readEntry("DashboardContainment", uint(0));
-    m_dashboardFollowsDesktop = dashboardContainmentId == 0;
-
     // since Plasma::View has a delayed init we need to
     // put a delay also for this call in order to be sure
     // to have correct information set (e.g. screen())
@@ -106,7 +99,6 @@ DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *pare
 
 DesktopView::~DesktopView()
 {
-    delete m_dashboard;
 }
 
 void DesktopView::checkDesktopAffiliation()
@@ -119,101 +111,6 @@ void DesktopView::checkDesktopAffiliation()
         m_desktop = -1;
         KWindowSystem::setOnAllDesktops(winId(), true);
     }
-}
-
-void DesktopView::toggleDashboard()
-{
-    kDebug() << "toggling dashboard for screen" << screen() << "and destop" << desktop() <<
-        (m_dashboard ? (m_dashboard->isVisible() ? "visible" : "hidden") : "non-existent");
-    prepDashboard();
-    if (m_dashboard) {
-        m_dashboard->toggleVisibility();
-        kDebug() << "toggling dashboard for screen" << screen() << "and destop" << desktop() << m_dashboard->isVisible();
-    }
-}
-
-void DesktopView::showDashboard(bool show)
-{
-    if (!show && (!m_dashboard || !m_dashboard->isVisible())) {
-        return;
-    }
-
-    prepDashboard();
-    if (m_dashboard) {
-        m_dashboard->showDashboard(show);
-    }
-}
-
-void DesktopView::prepDashboard()
-{
-    if (!m_dashboard) {
-        if (!containment()) {
-            return;
-        }
-
-        KConfigGroup cg = config();
-        Plasma::Containment *dc = dashboardContainment();
-        m_dashboardFollowsDesktop = dc == 0;
-        if (dc) {
-            dc->resize(size());
-            dc->enableAction("remove", false);
-        } else {
-            dc = containment();
-        }
-
-        m_dashboard = new DashboardView(dc, this);
-        connect(m_dashboard, SIGNAL(dashboardClosed()), this, SIGNAL(dashboardClosed()));
-        m_dashboard->addActions(actions());
-    }
-
-    //If a separate dashboard is used we must use the screen of this containment instead of the dashboard one
-    if (!m_dashboardFollowsDesktop && containment()) {
-        m_dashboard->setGeometry(PlasmaApp::self()->corona()->screenGeometry(containment()->screen()));
-    }
-}
-
-Plasma::Containment *DesktopView::dashboardContainment() const
-{
-    KConfigGroup cg = config();
-    Plasma::Containment *dc = 0;
-    const uint containmentId = cg.readEntry("DashboardContainment", uint(0));
-
-    if (containmentId > 0) {
-        foreach (Plasma::Containment *c, PlasmaApp::self()->corona()->containments()) {
-            if (c->id() == containmentId) {
-                dc = c;
-                break;
-            }
-        }
-    }
-
-    return dc;
-}
-
-void DesktopView::setDashboardContainment(Plasma::Containment *containment)
-{
-    if (containment) {
-        config().writeEntry("DashboardContainment", containment->id());
-        if (m_dashboard) {
-            m_dashboard->setContainment(containment);
-        }
-    } else {
-        Plasma::Containment *dc = 0;
-        if (dashboardContainment()) {
-            dc = dashboardContainment();
-        }
-
-        config().deleteEntry("DashboardContainment");
-        if (m_dashboard) {
-            m_dashboard->setContainment(View::containment());
-        }
-        //destroy this after changing the containment, makes sure the view won't receive the destroyed signal
-        if (dc) {
-            dc->destroy(false);
-        }
-    }
-
-    m_dashboardFollowsDesktop = containment == 0;
 }
 
 void DesktopView::screenResized(Kephal::Screen *s)
@@ -243,21 +140,7 @@ void DesktopView::adjustSize()
         kDebug() << "Containment's geom after resize" << containment()->geometry();
     }
 
-    if (m_dashboard) {
-        m_dashboard->setGeometry(geom);
-    }
-
     kDebug() << "Done" << screen() << geometry();
-}
-
-bool DesktopView::isDashboardVisible() const
-{
-    return m_dashboard && m_dashboard->isVisible();
-}
-
-bool DesktopView::dashboardFollowsDesktop() const
-{
-    return m_dashboardFollowsDesktop;
 }
 
 void DesktopView::setContainment(Plasma::Containment *containment)
@@ -270,10 +153,6 @@ void DesktopView::setContainment(Plasma::Containment *containment)
 
     PlasmaApp::self()->prepareContainment(containment);
     m_init = true;
-
-    if (m_dashboard && m_dashboardFollowsDesktop) {
-        m_dashboard->setContainment(containment);
-    }
 
     KConfigGroup viewIds(KGlobal::config(), "ViewIds");
     if (oldContainment) {
@@ -296,10 +175,6 @@ void DesktopView::setContainment(Plasma::Containment *containment)
 
 void DesktopView::toolBoxOpened(bool open)
 {
-    if (isDashboardVisible()) {
-        return;
-    }
-
     NETRootInfo info(QX11Info::display(), NET::Supported);
     if (!info.isSupported(NET::WM2ShowingDesktop)) {
         return;
@@ -318,10 +193,6 @@ void DesktopView::toolBoxOpened(bool open)
 
 void DesktopView::showWidgetExplorer()
 {
-    if (isDashboardVisible()) {
-        return;
-    }
-
     Plasma::Containment *c = containment();
     if (c) {
         PlasmaApp::self()->showWidgetExplorer(screen(), c);
@@ -330,10 +201,6 @@ void DesktopView::showWidgetExplorer()
 
 void DesktopView::showDesktopUntoggled(WId id)
 {
-    if (isDashboardVisible()) {
-        return;
-    }
-
     Plasma::Containment *c = containment();
     if (c) {
         c->setToolBoxOpen(false);

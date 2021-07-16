@@ -105,8 +105,6 @@ PlasmaApp::PlasmaApp()
       m_panelHidden(0),
       m_mapper(new QSignalMapper(this)),
       m_startupSuspendWaitCount(0),
-      m_ignoreDashboardClosures(false),
-      m_pendingFixedDashboard(false),
       m_unlockCorona(false)
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "plasma app ctor start" << "(line:" << __LINE__ << ")";
@@ -199,12 +197,6 @@ PlasmaApp::PlasmaApp()
 
     kDebug() << "Setting the pixmap cache size to" << cacheSize << "kilobytes";
     QPixmapCache::setCacheLimit(cacheSize);
-
-    KAction *showAction = new KAction(this);
-    showAction->setText(i18n("Show Dashboard"));
-    showAction->setObjectName( QLatin1String("Show Dashboard" )); // NO I18N
-    showAction->setGlobalShortcut(KShortcut(Qt::CTRL + Qt::Key_F12));
-    connect(showAction, SIGNAL(triggered()), this, SLOT(toggleDashboard()));
 
     KGlobal::setAllowQuit(true);
     KGlobal::ref();
@@ -321,57 +313,6 @@ void PlasmaApp::cleanup()
 void PlasmaApp::syncConfig()
 {
     KGlobal::config()->sync();
-}
-
-void PlasmaApp::toggleDashboard()
-{
-    // we don't want to listen to dashboard closure signals when toggling
-    // otherwise we get toggleDashboard -> dashboardClosed -> showDashboard
-    // and the wrong state of shown dashboards occurs.
-    m_ignoreDashboardClosures = true;
-
-    const int currentDesktop = KWindowSystem::currentDesktop() - 1;
-    foreach (DesktopView *view, m_desktops) {
-        if (AppSettings::perVirtualDesktopViews()) {
-            // always hide the dashboard if it isn't on the current desktop
-            if (view->desktop() == currentDesktop) {
-                view->toggleDashboard();
-            }
-        } else {
-            view->toggleDashboard();
-        }
-    }
-
-    m_ignoreDashboardClosures = false;
-}
-
-void PlasmaApp::showDashboard(bool show)
-{
-    // we don't want to listen to dashboard closure signals when showing/hiding
-    // otherwise we get showDashboard -> dashboardClosed -> showDashboard
-    // and that could end up badly :)
-    m_ignoreDashboardClosures = true;
-
-    const int currentDesktop = KWindowSystem::currentDesktop() - 1;
-    foreach (DesktopView *view, m_desktops) {
-        if (AppSettings::perVirtualDesktopViews()) {
-            // always hide the dashboard if it isn't on the current desktop
-            if (view->desktop() == currentDesktop) {
-                view->showDashboard(show);
-            }
-        } else {
-            view->showDashboard(show);
-        }
-    }
-
-    m_ignoreDashboardClosures = false;
-}
-
-void PlasmaApp::dashboardClosed()
-{
-    if (!m_ignoreDashboardClosures) {
-        showDashboard(false);
-    }
 }
 
 void PlasmaApp::showInteractiveConsole()
@@ -984,7 +925,6 @@ void PlasmaApp::createWaitingDesktops()
 
             // we have a new screen. neat.
             view = new DesktopView(containment, id, 0);
-            connect(view, SIGNAL(dashboardClosed()), this, SLOT(dashboardClosed()));
             if (m_corona) {
                 connect(m_corona, SIGNAL(screenOwnerChanged(int,int,Plasma::Containment*)),
                         view, SLOT(screenOwnerChanged(int,int,Plasma::Containment*)));
@@ -995,7 +935,6 @@ void PlasmaApp::createWaitingDesktops()
             setWmClass(view->winId());
         }
     }
-    setFixedDashboard(fixedDashboard());
 }
 
 void PlasmaApp::containmentAdded(Plasma::Containment *containment)
@@ -1095,27 +1034,6 @@ void PlasmaApp::configureContainment(Plasma::Containment *containment)
         configDialog = new BackgroundDialog(resolution, containment, view, 0, id, nullManager);
         configDialog->setAttribute(Qt::WA_DeleteOnClose);
 
-
-        // if our containment is a dashboard containment only, then we don't
-        // want to mess with activities OR allow the user to change the containment type
-        // doing so causes the dashboard view to lose its containment and renders it useless
-        bool isDashboardContainment = fixedDashboard();
-        if (isDashboardContainment) {
-            bool found = false;
-            foreach (DesktopView *view, m_desktops) {
-                if (view->dashboardContainment() == containment) {
-                    found = true;
-                    break;
-                }
-            }
-
-            isDashboardContainment = found;
-        }
-
-        if (isDashboardContainment) {
-            configDialog->setLayoutChangeable(false);
-        }
-
         connect(configDialog, SIGNAL(destroyed(QObject*)), nullManager, SLOT(deleteLater()));
     }
 
@@ -1136,13 +1054,10 @@ void PlasmaApp::setPerVirtualDesktopViews(bool perDesktopViews)
     disconnect(KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
                this, SLOT(checkVirtualDesktopViews(int)));
 
-    m_pendingFixedDashboard = fixedDashboard();
-
     if (perDesktopViews) {
         connect(KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
                 this, SLOT(checkVirtualDesktopViews(int)));
         checkVirtualDesktopViews(KWindowSystem::numberOfDesktops());
-        setFixedDashboard(m_pendingFixedDashboard);
     } else {
         QList<DesktopView *> perScreenViews;
         foreach (DesktopView *view, m_desktops) {
@@ -1167,61 +1082,6 @@ void PlasmaApp::checkVirtualDesktopViews(int numDesktops)
 {
     kDebug() << numDesktops;
     m_corona->checkScreens(true);
-}
-
-void PlasmaApp::setFixedDashboard(bool fixedDashboard)
-{
-    //TODO: should probably have one dashboard containment per screen
-    Plasma::Containment *c = 0;
-    m_pendingFixedDashboard = fixedDashboard;
-    if (fixedDashboard) {
-        foreach (Plasma::Containment *possibility, m_corona->containments()) {
-            if (possibility->pluginName() == "desktopDashboard") {
-                c = possibility;
-                break;
-            }
-        }
-
-        if (!c) {
-            //avoid the containmentAdded signal being emitted
-            c = m_corona->addContainment("desktopDashboard");
-        }
-
-        //everything failed? probably a badly packaged plasma
-        if (!c) {
-            return;
-        }
-        m_corona->addOffscreenWidget(c);
-    }
-
-    QSize maxViewSize;
-    foreach (DesktopView *view, m_desktops) {
-        view->setDashboardContainment(c);
-        if (view->size().width() > maxViewSize.width() && view->size().height() > maxViewSize.height()) {
-            maxViewSize = view->size();
-        }
-    }
-
-    if (fixedDashboard) {
-        c->resize(maxViewSize);
-    }
-
-    m_corona->requestConfigSync();
-}
-
-bool PlasmaApp::fixedDashboard() const
-{
-    if (m_desktops.isEmpty()) {
-        return m_pendingFixedDashboard;
-    }
-
-    foreach (DesktopView *view, m_desktops) {
-        if (!view->dashboardFollowsDesktop()) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 void PlasmaApp::panelRemoved(QObject *panel)

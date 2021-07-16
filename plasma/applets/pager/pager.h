@@ -135,8 +135,7 @@ class Pager : public Plasma::Applet
 
         enum CurrentDesktopSelected {
             DoNothing,
-            ShowDesktop,
-            ShowDashboard
+            ShowDesktop
         };
 
         DisplayedText m_displayedText;

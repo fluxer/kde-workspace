@@ -104,21 +104,6 @@ timezone=Local
 [Containments][1][Applets][6][LayoutInformation]
 Order=6
 
-[Containments][20]
-ActionPluginsSource=Global
-desktop=-1
-formfactor=0
-geometry=-16777215,-16777215,800,600
-immutability=1
-lastDesktop=-1
-lastScreen=-1
-location=0
-plugin=desktopDashboard
-screen=-1
-wallpaperplugin=image
-wallpaperpluginmode=SingleImage
-zvalue=0
-
 [Containments][7]
 ActionPluginsSource=Global
 desktop=-1

@@ -11,7 +11,6 @@ set(plasma_SRCS
     scripting/panel.cpp
     checkbox.cpp
     controllerwindow.cpp
-    dashboardview.cpp
     desktopcorona.cpp
     desktopview.cpp
     interactiveconsole.cpp

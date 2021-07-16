@@ -59,7 +59,6 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     m_ui->setupUi(this);
 
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
-    connect(m_ui->dashboardMode, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(m_ui->showToolTips, SIGNAL(toggled(bool)), this, SLOT(changed()));
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(formFactorChanged(int)));
 
@@ -277,25 +276,6 @@ void WorkspaceOptionsModule::save()
     QDBusConnection::sessionBus().send(message);
 
     m_currentlyIsDesktop = isDesktop;
-
-    const bool fixedDashboard = m_ui->dashboardMode->currentIndex() == 1;
-    if (m_currentlyFixedDashboard != fixedDashboard) {
-        // confirm with th euser that this is really the change they want if going from
-        // separate-dashboard back to dashboard-follows-desktop
-        const QString message = i18n("Turning off the show independent widget set feature will "
-                                     "result in all widgets that were on the dashboard to be removed. "
-                                     "Are you sure you wish to make this change?");
-        if (!m_currentlyFixedDashboard ||
-            KMessageBox::Yes == KMessageBox::warningYesNo(this, message, i18n("Turn off independent widgets?"),
-                                                          KGuiItem(i18n("Turn off independent widgets")),
-                                                          KStandardGuiItem::cancel())) {
-            QDBusInterface interface("org.kde.plasma-desktop", "/App");
-            interface.call(QDBus::NoBlock, "setFixedDashboard", fixedDashboard);
-            m_currentlyFixedDashboard = fixedDashboard;
-        } else {
-            m_ui->dashboardMode->setCurrentIndex(m_currentlyFixedDashboard ? 1 : 0);
-        }
-    }
 }
 
 void WorkspaceOptionsModule::load()
@@ -306,15 +286,6 @@ void WorkspaceOptionsModule::load()
         m_ui->formFactor->setCurrentIndex(1);
     }
 
-    QDBusInterface interface("org.kde.plasma-desktop", "/App");
-    m_currentlyFixedDashboard = false;
-
-    if (interface.isValid()) {
-        m_currentlyFixedDashboard = interface.call("fixedDashboard").arguments().first().toBool();
-    }
-
-    m_ui->dashboardMode->setCurrentIndex(m_currentlyFixedDashboard ? 1 : 0);
-
     KConfig config("plasmarc");
     KConfigGroup cg(&config, "PlasmaToolTips");
     m_ui->showToolTips->setChecked(cg.readEntry("Delay", 0.7) > 0);
@@ -323,13 +294,11 @@ void WorkspaceOptionsModule::load()
 void WorkspaceOptionsModule::defaults()
 {
     m_ui->formFactor->setCurrentIndex(0);
-    m_ui->dashboardMode->setCurrentIndex(0);
 }
 
 void WorkspaceOptionsModule::formFactorChanged(int newFormFactorIndex)
 {
-    m_ui->dashboardMode->setEnabled(newFormFactorIndex == 0);
-    m_ui->dashboardLabel->setEnabled(newFormFactorIndex == 0);
+    Q_UNUSED(newFormFactorIndex);
 }
 
 #include "moc_workspaceoptions.cpp"

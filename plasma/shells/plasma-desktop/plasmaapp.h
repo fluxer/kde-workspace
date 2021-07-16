@@ -97,9 +97,6 @@ public:
 public Q_SLOTS:
     // DBUS interface. if you change these methods, you MUST run:
     // qdbuscpp2xml plasmaapp.h -o dbus/org.kde.plasma.App.xml
-    void toggleDashboard();
-    void showDashboard(bool show);
-
     void showInteractiveConsole();
     void loadScriptInInteractiveConsole(const QString &script);
     void showInteractiveKWinConsole();
@@ -108,8 +105,6 @@ public Q_SLOTS:
     Q_SCRIPTABLE void quit();
     void setPerVirtualDesktopViews(bool perDesktopViews);
     bool perVirtualDesktopViews() const;
-    void setFixedDashboard(bool fixedDashboard);
-    bool fixedDashboard() const;
 
     void createWaitingPanels();
     void createWaitingDesktops();
@@ -145,7 +140,6 @@ private Q_SLOTS:
     void setWmClass(WId id);
     void wallpaperCheckedIn();
     void wallpaperCheckInTimeout();
-    void dashboardClosed();
     void relocatePanels();
     void executeCommands(const QList < QVariant > & commands);
 
@@ -167,8 +161,6 @@ private:
     QSignalMapper *m_mapper;
     QHash<int, QWeakPointer<ControllerWindow> > m_widgetExplorers;
     int m_startupSuspendWaitCount;
-    bool m_ignoreDashboardClosures;
-    bool m_pendingFixedDashboard;
     bool m_unlockCorona;
 };
 

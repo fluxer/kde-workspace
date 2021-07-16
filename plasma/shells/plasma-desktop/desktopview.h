@@ -33,8 +33,6 @@ namespace Kephal
     class Screen;
 } // namespace Kephal
 
-class DashboardView;
-
 class DesktopView : public Plasma::View
 {
     Q_OBJECT
@@ -48,23 +46,7 @@ public:
      */
     void checkDesktopAffiliation();
 
-    /**
-     * Returns whether or not the dashboard view is visible
-     */
-    bool isDashboardVisible() const;
-
-    /**
-     * Returns whether the dashboard containment will always be the desktop's one
-     */
-    bool dashboardFollowsDesktop() const;
-
-    Plasma::Containment *dashboardContainment() const;
-    void setDashboardContainment(Plasma::Containment *containment);
-
 public slots:
-    void toggleDashboard();
-    void showDashboard(bool show);
-
     void screenResized(Kephal::Screen *);
     void screenMoved(Kephal::Screen *);
     void adjustSize();
@@ -82,16 +64,8 @@ public slots:
      */
     void setContainment(Plasma::Containment *containment);
 
-Q_SIGNALS:
-    void dashboardClosed();
-
-protected:
-    void prepDashboard();
-
 private:
-    DashboardView *m_dashboard;
-    bool m_dashboardFollowsDesktop : 1;
-    bool m_init : 1;
+    bool m_init;
     int m_desktop;
 
     //FIXME: duplicated from containment_p.h 
