@@ -74,11 +74,6 @@ private:
     void initLayoutLists();
 
 private:
-    enum Mode {
-        CoverSwitch = 0,
-        FlipSwitch = 1,
-        Layout = 2
-    };
     KWinTabBoxConfigForm* m_primaryTabBoxUi;
     KWinTabBoxConfigForm* m_alternativeTabBoxUi;
     KSharedConfigPtr m_config;

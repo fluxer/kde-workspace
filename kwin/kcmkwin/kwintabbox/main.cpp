@@ -393,9 +393,7 @@ void KWinTabBoxConfig::updateConfigFromUi(const KWin::KWinTabBoxConfigForm* ui, 
 
     config.setShowTabBox(ui->showTabBox->isChecked());
     config.setHighlightWindows(ui->highlightWindowCheck->isChecked());
-    if (ui->effectCombo->currentIndex() >= Layout) {
-        config.setLayoutName(ui->effectCombo->itemData(ui->effectCombo->currentIndex()).toString());
-    }
+    config.setLayoutName(ui->effectCombo->itemData(ui->effectCombo->currentIndex()).toString());
     config.setShowDesktopMode(ui->showDesktop->isChecked() ? TabBoxConfig::ShowDesktopClient : TabBoxConfig::DoNotShowDesktopClient);
 }
 
@@ -410,21 +408,18 @@ void KWinTabBoxConfig::updateConfigFromUi(const KWin::KWinTabBoxConfigForm* ui, 
 void KWinTabBoxConfig::effectSelectionChanged(int index)
 {
     CHECK_CURRENT_TABBOX_UI
-    ui->effectConfigButton->setIcon(KIcon(index < Layout ? "configure" : "view-preview"));
+    ui->effectConfigButton->setIcon(KIcon("view-preview"));
     if (!ui->showTabBox->isChecked())
         return;
-    ui->highlightWindowCheck->setEnabled(index >= Layout);
+    ui->highlightWindowCheck->setEnabled(index);
     if (m_layoutPreview && m_layoutPreview->isVisible()) {
-        if (index < Layout)
-            m_layoutPreview->hide();
-        else
-            m_layoutPreview->setLayout(ui->effectCombo->itemData(index, Qt::UserRole+1).toString(), ui->effectCombo->itemText(index));
+        m_layoutPreview->setLayout(ui->effectCombo->itemData(index, Qt::UserRole+1).toString(), ui->effectCombo->itemText(index));
     }
 }
 
 void KWinTabBoxConfig::tabBoxToggled(bool on) {
     CHECK_CURRENT_TABBOX_UI
-    on = !on || ui->effectCombo->currentIndex() >= Layout;
+    on = !on || ui->effectCombo->currentIndex() >= 0;
     ui->highlightWindowCheck->setEnabled(on);
     emit changed();
 }
