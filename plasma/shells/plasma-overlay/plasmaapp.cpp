@@ -26,20 +26,6 @@
 #include "greeter.h"
 #include "sessions.h"
 
-#include <unistd.h>
-
-#ifndef _SC_PHYS_PAGES
-    #ifdef Q_OS_FREEBSD
-    #include <sys/types.h>
-    #include <sys/sysctl.h>
-    #endif
-
-    #ifdef Q_OS_NETBSD
-    #include <sys/param.h>
-    #include <sys/sysctl.h>
-    #endif
-#endif
-
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPixmapCache>
@@ -108,7 +94,7 @@ void checkComposite()
                 break;
             }
         }
-	XFree(xvi);
+        XFree(xvi);
     }
 
     composite = KWindowSystem::compositingActive() && colormap;
@@ -144,65 +130,6 @@ PlasmaApp::PlasmaApp(Display* display, Qt::HANDLE visual, Qt::HANDLE colormap)
 
     new AppAdaptor(this);
     QDBusConnection::sessionBus().registerObject("/App", this);
-
-    //FIXME this is probably totally invalid
-    // Enlarge application pixmap cache
-    // Calculate the size required to hold background pixmaps for all screens.
-    // Add 10% so that other (smaller) pixmaps can also be cached.
-    int cacheSize = 0;
-    QDesktopWidget *desktop = QApplication::desktop();
-    int numScreens = desktop->screenCount();
-    for (int i = 0; i < numScreens; i++) {
-        QRect geometry = desktop->screenGeometry(i);
-        cacheSize += 4 * geometry.width() * geometry.height() / 1024;
-    }
-    cacheSize += cacheSize / 10;
-
-    // Calculate the size of physical system memory; _SC_PHYS_PAGES *
-    // _SC_PAGESIZE is documented to be able to overflow 32-bit integers,
-    // so apply a 10-bit shift. FreeBSD 6-STABLE doesn't have _SC_PHYS_PAGES
-    // (it is documented in FreeBSD 7-STABLE as "Solaris and Linux extension")
-    // so use sysctl in those cases.
-#if defined(_SC_PHYS_PAGES)
-    int memorySize = sysconf(_SC_PHYS_PAGES);
-    memorySize *= sysconf(_SC_PAGESIZE) / 1024;
-#else
-#ifdef Q_OS_FREEBSD
-    int sysctlbuf[2];
-    size_t size = sizeof(sysctlbuf);
-    int memorySize;
-    // This could actually use hw.physmem instead, but I can't find
-    // reliable documentation on how to read the value (which may
-    // not fit in a 32 bit integer).
-    if (!sysctlbyname("vm.stats.vm.v_page_size", sysctlbuf, &size, NULL, 0)) {
-        memorySize = sysctlbuf[0] / 1024;
-        size = sizeof(sysctlbuf);
-        if (!sysctlbyname("vm.stats.vm.v_page_count", sysctlbuf, &size, NULL, 0)) {
-            memorySize *= sysctlbuf[0];
-        }
-    }
-#endif
-#ifdef Q_OS_NETBSD
-    size_t memorySize;
-    size_t len;
-    static int mib[] = { CTL_HW, HW_PHYSMEM };
-
-    len = sizeof(memorySize);
-    sysctl(mib, 2, &memorySize, &len, NULL, 0);
-    memorySize /= 1024;
-#endif
-    // If you have no suitable sysconf() interface and are not FreeBSD,
-    // then you are out of luck and get a compile error.
-#endif
-
-    // Increase the pixmap cache size to 1% of system memory if it isn't already
-    // larger so as to maximize cache usage. 1% of 1GB ~= 10MB.
-    if (cacheSize < memorySize / 100) {
-        cacheSize = memorySize / 100;
-    }
-
-    kDebug() << "Setting the pixmap cache size to" << cacheSize << "kilobytes";
-    QPixmapCache::setCacheLimit(cacheSize);
 
     KConfigGroup cg(KGlobal::config(), "General");
     Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", font()));
