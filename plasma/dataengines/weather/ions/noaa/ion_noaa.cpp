@@ -680,7 +680,7 @@ QMap<QString, QString> NOAAIon::pressure(const QString& source) const
 
     if (m_weatherData[source].pressure == "NA") {
         pressureInfo.insert("pressure", i18n("N/A"));
-        pressureInfo.insert("visibilityUnit", QString::number(KUnitConversion::NoUnit));
+        pressureInfo.insert("pressureUnit", QString::number(KUnitConversion::NoUnit));
     } else {
         pressureInfo.insert("pressure", m_weatherData[source].pressure);
         pressureInfo.insert("pressureUnit", QString::number(KUnitConversion::InchesOfMercury));
