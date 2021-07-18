@@ -29,7 +29,7 @@ namespace KWin
 Atoms::Atoms()
 {
 
-    const int max = 50;
+    const int max = 32;
     Atom* atoms[max];
     char* names[max];
     Atom atoms_return[max];
