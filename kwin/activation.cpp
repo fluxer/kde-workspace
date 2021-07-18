@@ -160,26 +160,6 @@ namespace KWin
          (SELI TODO - but what if they do?)
 
  Special cases I can think of:
-    - konqueror reusing, i.e. kfmclient tells running Konqueror instance
-        to open new window
-        - without focus stealing prevention - no problem
-        - with ASN (application startup notification) - ASN is forwarded,
-            and because it's newer than the instance's user timestamp,
-            it takes precedence
-        - without ASN - user timestamp needs to be reset, otherwise it would
-            be used, and it's old; moreover this new window mustn't be detected
-            as window belonging to already running application, or it wouldn't
-            be activated - see Client::sameAppWindowRoleMatch() for the (rather ugly)
-            hack
-    - konqueror preloading, i.e. window is created in advance, and kfmclient
-        tells this Konqueror instance to show it later
-        - without focus stealing prevention - no problem
-        - with ASN - ASN is forwarded, and because it's newer than the instance's
-            user timestamp, it takes precedence
-        - without ASN - user timestamp needs to be reset, otherwise it would
-            be used, and it's old; also, creation timestamp is changed to
-            the time the instance starts (re-)initializing the window,
-            this ensures creation timestamp will still work somewhat even in this case
     - KUniqueApplication - when the window is already visible, and the new instance
         wants it to activate
         - without focus stealing prevention - _NET_ACTIVE_WINDOW - no problem

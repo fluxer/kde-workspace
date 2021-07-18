@@ -284,7 +284,7 @@ Number of commands=6
 Regexp=^https?://.
 
 [Action_1/Command_0]
-Commandline=kfmclient exec %s
+Commandline=kioclient exec %s
 Description=Open with &default Browser
 Description[af]=Open met verstekblaaier
 Description[ar]=افتح بواسطة &المتصفح المبدئي
@@ -1970,7 +1970,7 @@ Number of commands=5
 Regexp=^ftp://.
 
 [Action_6/Command_0]
-Commandline=kfmclient exec %s
+Commandline=kioclient exec %s
 Description=Open with &default Browser
 Description[af]=Open met verstekblaaier
 Description[ar]=افتح بواسطة &المتصفح المبدئي

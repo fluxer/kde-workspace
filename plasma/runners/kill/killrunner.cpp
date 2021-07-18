@@ -37,7 +37,7 @@ KillRunner::KillRunner(QObject *parent, const QVariantList& args)
           m_processes(0)
 {
     Q_UNUSED(args);
-    setObjectName( QLatin1String("Kill Runner") );
+    setObjectName(QLatin1String("Kill Runner"));
     reloadConfiguration();
 
     connect(this, SIGNAL(prepare()), this, SLOT(prep()));
@@ -181,8 +181,7 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     QStringList args;
     args << QString("-%1").arg(signal) << QString("%1").arg(pid);
 
-    if (QProcess::execute("kill", args) == 0)
-    {
+    if (QProcess::execute("kill", args) == 0) {
         return;
     }
 

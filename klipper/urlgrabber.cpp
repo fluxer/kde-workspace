@@ -59,7 +59,7 @@ URLGrabber::URLGrabber(History* history):
     /*
     ClipAction *action;
     action = new ClipAction( "^http:\\/\\/", "Web-URL" );
-    action->addCommand("kfmclient exec %s", "Open with Konqi", true);
+    action->addCommand("kioclient exec %s", "Open with Browser", true);
     action->addCommand("netscape -no-about-splash -remote \"openURL(%s, new-window)\"", "Open with Netscape", true);
     m_myActions->append( action );
 
