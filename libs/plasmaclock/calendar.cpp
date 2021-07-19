@@ -284,21 +284,6 @@ const QDate& Calendar::date() const
     return calendarTable()->date();
 }
 
-void Calendar::clearHolidaysRegions()
-{
-    calendarTable()->clearHolidaysRegions();
-}
-
-void Calendar::addHolidaysRegion(const QString &region, bool daysOff)
-{
-    calendarTable()->addHolidaysRegion(region, daysOff);
-}
-
-QStringList Calendar::holidaysRegions() const
-{
-    return calendarTable()->holidaysRegions();
-}
-
 void Calendar::setAutomaticUpdateEnabled(bool automatic)
 {
     calendarTable()->setAutomaticUpdateEnabled(automatic);
@@ -333,12 +318,6 @@ void Calendar::configAccepted(KConfigGroup cg)
 {
     calendarTable()->configAccepted(cg);
     applyConfiguration(cg);
-}
-
-void Calendar::resizeEvent(QGraphicsSceneResizeEvent * event)
-{
-    // just forward the event. Not removed due to BC.
-    QGraphicsWidget::resizeEvent(event);
 }
 
 void CalendarPrivate::updateSize()

@@ -56,10 +56,6 @@ public:
     void setDate(const QDate &date);
     const QDate& date() const;
 
-    void clearHolidaysRegions();
-    void addHolidaysRegion(const QString &regionCode, bool daysOff);
-    QStringList holidaysRegions() const;
-
     bool isDisplayingDateDetails() const;
 
     void setAutomaticUpdateEnabled(bool automatic);
@@ -82,7 +78,6 @@ protected:
     void keyPressEvent(QKeyEvent * event);
     void focusInEvent(QFocusEvent * event);
     void focusOutEvent(QFocusEvent * event);
-    void resizeEvent(QGraphicsSceneResizeEvent * event); // not removed due to BC
 
 private Q_SLOTS:
     void prevMonth();

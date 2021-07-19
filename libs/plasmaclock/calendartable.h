@@ -42,15 +42,14 @@ class PLASMACLOCK_EXPORT CalendarTable : public QGraphicsWidget
     Q_OBJECT
 
 public:
-    enum CellType { NoType = 0,
-                    Today = 1,
-                    Selected = 2,
-                    Hovered = 4,
-                    Holiday = 8,
-                    NotInCurrentMonth = 16,
-                    InvalidDate = 32,
-                    Event = 64,
-                    PublicHoliday = 128};
+    enum CellType {
+        NoType = 0,
+        Today = 1,
+        Selected = 2,
+        Hovered = 4,
+        NotInCurrentMonth = 8,
+        InvalidDate = 16
+    };
     Q_DECLARE_FLAGS(CellTypes, CellType)
 
     explicit CalendarTable(QGraphicsWidget *parent = 0);
@@ -63,17 +62,6 @@ public:
 
     void setDate(const QDate &date);
     const QDate& date() const;
-
-    void setDisplayEvents(bool display);
-    bool displayEvents();
-
-    void setDisplayHolidays(bool showHolidays);
-    bool displayHolidays();
-
-    void clearHolidaysRegions();
-    void addHolidaysRegion(const QString &regionCode, bool daysOff);
-    QStringList holidaysRegions() const;
-    QStringList holidaysRegionsDaysOff() const;
 
     void clearHolidays();
     void addHoliday(Plasma::DataEngine::Data holidayData);
@@ -98,7 +86,6 @@ Q_SIGNALS:
     void dateSelected(const QDate &date);
     void dateHovered(const QDate &date);
     void tableClicked();
-    void eventsChanged();
 
 public Q_SLOTS:
     void dataUpdated(const QString &source, const Plasma::DataEngine::Data &data);
@@ -119,12 +106,9 @@ protected:
     virtual void paintBorder(QPainter *p, int cell, int week, int weekDay, CellTypes type, const QDate &cellDate);
 
 private:
-    QString buildOccurrenceDescription(const Plasma::DataEngine::Data &occurrence) const;
-
     friend class CalendarTablePrivate;
     CalendarTablePrivate* const d;
 
-    Q_PRIVATE_SLOT(d, void populateCalendar())
     Q_PRIVATE_SLOT(d, void settingsChanged(int category))
 };
 
