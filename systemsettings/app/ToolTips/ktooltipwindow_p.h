@@ -34,7 +34,6 @@ public:
 
 protected:
     virtual void paintEvent(QPaintEvent* event);
-    virtual void showEvent(QShowEvent *);
 };
 
 #endif

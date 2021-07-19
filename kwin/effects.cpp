@@ -485,16 +485,6 @@ bool EffectsHandlerImpl::hasDecorationShadows() const
     return decorationPlugin()->hasShadows();
 }
 
-bool EffectsHandlerImpl::decorationsHaveAlpha() const
-{
-    return decorationPlugin()->hasAlpha();
-}
-
-bool EffectsHandlerImpl::decorationSupportsBlurBehind() const
-{
-    return decorationPlugin()->supportsBlurBehind();
-}
-
 // start another painting pass
 void EffectsHandlerImpl::startPaint()
 {

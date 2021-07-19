@@ -601,14 +601,6 @@ class KWIN_EXPORT EffectsHandler : public QObject
      */
     Q_PROPERTY(qreal animationTimeFactor READ animationTimeFactor)
     Q_PROPERTY(QList< KWin::EffectWindow* > stackingOrder READ stackingOrder)
-    /**
-     * Whether window decorations use the alpha channel.
-     **/
-    Q_PROPERTY(bool decorationsHaveAlpha READ decorationsHaveAlpha)
-    /**
-     * Whether the window decorations support blurring behind the decoration.
-     **/
-    Q_PROPERTY(bool decorationSupportsBlurBehind READ decorationSupportsBlurBehind)
     Q_PROPERTY(CompositingType compositingType READ compositingType CONSTANT)
     Q_PROPERTY(QPoint cursorPos READ cursorPos)
     friend class Effect;
@@ -843,18 +835,6 @@ public:
      * Returns @a true if the active window decoration has shadow API hooks.
      */
     virtual bool hasDecorationShadows() const = 0;
-
-    /**
-     * Returns @a true if the window decorations use the alpha channel, and @a false otherwise.
-     * @since 4.5
-     */
-    virtual bool decorationsHaveAlpha() const = 0;
-
-    /**
-     * Returns @a true if the window decorations support blurring behind the decoration, and @a false otherwise
-     * @since 4.6
-     */
-    virtual bool decorationSupportsBlurBehind() const = 0;
 
     /**
      * Creates a new frame object. If the frame does not have a static size

@@ -202,8 +202,6 @@ bool AuroraeFactory::supports(Ability ability) const
         return true; // TODO: correct value from theme
     case AbilityTabbing:
         return false;
-    case AbilityUsesBlurBehind:
-        return true;
     default:
         return false;
     }

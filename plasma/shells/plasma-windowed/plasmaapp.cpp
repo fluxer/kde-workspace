@@ -162,7 +162,6 @@ int  PlasmaApp::newInstance()
         view->viewport()->setAutoFillBackground(false);
         view->setAttribute(Qt::WA_NoSystemBackground);
         view->viewport()->setAttribute(Qt::WA_NoSystemBackground);
-        Plasma::WindowEffects::overrideShadow(view->winId(), true);
     }
 
     if (args->isSet("fullscreen")) {

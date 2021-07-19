@@ -44,7 +44,6 @@ public:
     bool supportsAnnounceAlpha() const;
     bool supportsTabbing() const;
     bool supportsFrameOverlap() const;
-    bool supportsBlurBehind() const;
     Qt::Corner closeButtonCorner();
 
     QString supportInformation();

@@ -69,7 +69,6 @@ ControllerWindow::ControllerWindow(QWidget* parent)
     pal.setBrush(backgroundRole(), Qt::transparent);
     setPalette(pal);
 
-    Plasma::WindowEffects::overrideShadow(winId(), true);
     m_panelShadow = new PanelShadows(this);
     m_panelShadow->setImagePath("dialogs/background");
 
@@ -485,8 +484,6 @@ void ControllerWindow::keyPressEvent(QKeyEvent *event)
 void ControllerWindow::resizeEvent(QResizeEvent * event)
 {
     m_background->resizeFrame(size());
-
-    Plasma::WindowEffects::enableBlurBehind(effectiveWinId(), true, m_background->mask());
 
     // qDebug() << "ControllerWindow::resizeEvent" << event->oldSize();
 

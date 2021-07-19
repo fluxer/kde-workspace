@@ -55,10 +55,4 @@ void KToolTipWindow::paintEvent(QPaintEvent* event)
    QWidget::paintEvent(event);
 }
 
-void KToolTipWindow::showEvent(QShowEvent *)
-{
-    Plasma::WindowEffects::overrideShadow(winId(), true);
-    Plasma::WindowEffects::enableBlurBehind(winId(), true, mask());
-}
-
 #include "moc_ktooltipwindow_p.cpp"

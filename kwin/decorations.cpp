@@ -107,14 +107,6 @@ bool DecorationPlugin::supportsFrameOverlap() const
     return factory()->supports(AbilityExtendIntoClientArea);
 }
 
-bool DecorationPlugin::supportsBlurBehind() const
-{
-    if (m_disabled) {
-        return false;
-    }
-    return factory()->supports(AbilityUsesBlurBehind);
-}
-
 Qt::Corner DecorationPlugin::closeButtonCorner()
 {
     if (m_disabled) {
@@ -156,8 +148,6 @@ QString DecorationPlugin::supportInformation()
     support.append("Frame Overlap: ");
     support.append(supportsFrameOverlap() ? "yes\n" : "no\n");
 
-    support.append("Blur Behind: ");
-    support.append(supportsBlurBehind() ? "yes\n" : "no\n");
     // TODO: Qt5 - read support information from Factory
     return support;
 }

@@ -161,10 +161,6 @@ public:
 
     virtual bool hasDecorationShadows() const;
 
-    virtual bool decorationsHaveAlpha() const;
-
-    virtual bool decorationSupportsBlurBehind() const;
-
     virtual EffectFrame* effectFrame(bool staticSize, const QPoint& position, Qt::Alignment alignment) const;
 
     virtual QVariant kwinOption(KWinOption kwopt);

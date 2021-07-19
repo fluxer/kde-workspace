@@ -212,13 +212,11 @@ public:
         ///  region, when the blur plugin is enabled.
         ///  @since 4.3
         AbilityExtendIntoClientArea = 13,  ///< The decoration respects transparentRect()
-        ///  @since 4.4
-        AbilityUsesBlurBehind = 14,        ///< The decoration wants the background to be blurred, when the blur plugin is enabled.
         /// @since 4.6
-        AbilityAnnounceAlphaChannel = 15,  ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
+        AbilityAnnounceAlphaChannel = 14,  ///< The decoration can tell whether it currently uses an alpha channel or not. Requires AbilityUsesAlphaChannel.
         /// @since 4.10
         // Tabbing
-        AbilityTabbing = 16,               ///< The decoration supports tabbing
+        AbilityTabbing = 15,               ///< The decoration supports tabbing
     };
 
     /**

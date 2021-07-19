@@ -89,7 +89,6 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
     }
 #endif
 
-
     KWindowSystem::setState(effectiveWinId(), NET::SkipTaskbar | NET::SkipPager);
 
     setAcceptDrops(true);
@@ -137,8 +136,6 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
     if (pt.y() < available.top()) {
         pt.ry() = available.top();
     }
-
-    Plasma::WindowEffects::overrideShadow(winId(), true);
 
     move(pt);
     show();
@@ -530,11 +527,7 @@ void PopupView::resizeEvent(QResizeEvent *event)
         m_view->setGeometry(contentsRect());
     }
 
-    if (KWindowSystem::compositingActive()) {
-        Plasma::WindowEffects::enableBlurBehind(winId(), true, m_background->mask());
-    } else {
-        setMask(m_background->mask());
-    }
+    setMask(m_background->mask());
 }
 
 void PopupView::showEvent(QShowEvent *event)

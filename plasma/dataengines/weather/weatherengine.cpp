@@ -219,7 +219,7 @@ bool WeatherEngine::updateSourceEvent(const QString& source)
 
 void WeatherEngine::networkStatusChanged(Solid::Networking::Status status)
 {
-    kDebug();
+    kDebug() << status;
     m_networkAvailable = status == Solid::Networking::Connected || status == Solid::Networking::Unknown;
     if (m_networkAvailable) {
         // allow the network to settle down and actually come up

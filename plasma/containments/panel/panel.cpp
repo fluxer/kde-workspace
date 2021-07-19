@@ -588,7 +588,6 @@ void Panel::paintInterface(QPainter *painter,
         if (containmentOpt && containmentOpt->view && !m_background->mask().isEmpty()) {
             const QRegion mask = m_background->mask();
             containmentOpt->view->setMask(mask);
-            Plasma::WindowEffects::enableBlurBehind(containmentOpt->view->winId(), true, mask);
         }
     }
 

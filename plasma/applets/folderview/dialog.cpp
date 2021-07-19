@@ -30,7 +30,6 @@
 
 #include <Plasma/Applet>
 #include <Plasma/FrameSvg>
-#include <Plasma/WindowEffects>
 
 #ifdef Q_WS_X11
 #  include <qx11info_x11.h>
@@ -45,13 +44,7 @@ Dialog::Dialog(QWidget *parent)
 
 #ifdef Q_WS_X11
     setAttribute(Qt::WA_X11NetWmWindowTypeDropDownMenu);
-
-    if (KWindowSystem::compositingActive()) {
-        setAttribute(Qt::WA_NoSystemBackground, false);
-        Plasma::WindowEffects::overrideShadow(winId(), true);
-    } else {
-        setAttribute(Qt::WA_NoSystemBackground);
-    }
+    setAttribute(Qt::WA_NoSystemBackground, KWindowSystem::compositingActive());
 #endif
 
     KWindowSystem::setState(effectiveWinId(), NET::SkipTaskbar | NET::SkipPager);
@@ -156,11 +149,7 @@ void Dialog::resizeEvent(QResizeEvent *event)
     m_background->resizeFrame(rect().size());
     m_view->setGeometry(contentsRect());
 
-    if (KWindowSystem::compositingActive()) {
-        Plasma::WindowEffects::enableBlurBehind(winId(), true, m_background->mask());
-    } else {
-        setMask(m_background->mask());
-    }
+    setMask(m_background->mask());
 }
 
 void Dialog::paintEvent(QPaintEvent *event)
