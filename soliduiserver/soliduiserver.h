@@ -21,20 +21,10 @@
 #define SOLIDUISERVER_H
 
 #include <kdedmodule.h>
-#include <kfileitem.h>
-#include <kio/job.h>
-
 
 #include <QMap>
 
-//solid specific includes
-#include <solid/devicenotifier.h>
-#include <solid/device.h>
-#include <solid/deviceinterface.h>
-#include <solid/predicate.h>
-
 class DeviceActionsDialog;
-class KPasswordDialog;
 
 class SolidUiServer : public KDEDModule
 {
@@ -49,35 +39,11 @@ public Q_SLOTS:
     Q_SCRIPTABLE void showActionsDialog(const QString &udi,
                                         const QStringList &desktopFiles);
 
-    Q_SCRIPTABLE void showPassphraseDialog(const QString &udi,
-                                           const QString &returnService, const QString &returnObject,
-                                           uint wId, const QString &appId);
-
 
 private Q_SLOTS:
     void onActionDialogFinished();
-    void onPassphraseDialogCompleted(const QString &pass, bool keep);
-    void onPassphraseDialogRejected();
 
 private:
-    void reparentDialog(QWidget *dialog, WId wId, const QString &appId, bool modal);
-
     QMap<QString, DeviceActionsDialog*> m_udiToActionsDialog;
-    QMap<QString, KPasswordDialog*> m_idToPassphraseDialog;
-
-#if 0
-private Q_SLOTS:
-    void slotStatResult(KJob *job);
-
-private:
-    bool autostart(const KFileItem &medium);
-
-    bool execAutorun(const KFileItem &medium, const QString &path,
-                     const QString &autorunFile);
-    bool execAutoopen(const KFileItem &medium, const QString &path,
-                      const QString &autoopenFile);
-
-    QMap<KJob*,bool> m_allowNotificationMap;
-#endif
 };
 #endif

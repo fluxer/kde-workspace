@@ -21,31 +21,17 @@
 
 #include "soliduiserver.h"
 
-#include <QFile>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/QDBusError>
-#include <kjobuidelegate.h>
-
 #include <kapplication.h>
 #include <kdebug.h>
 #include <klocale.h>
-#include <krun.h>
-#include <kmessagebox.h>
-#include <kstandardguiitem.h>
 #include <kstandarddirs.h>
 #include <kdesktopfileactions.h>
-#include <kwindowsystem.h>
-#include <kpassworddialog.h>
-#include <kwallet.h>
-#include <kicon.h>
 #include <solid/storagevolume.h>
 
 #include "deviceactionsdialog.h"
 #include "deviceaction.h"
 #include "deviceserviceaction.h"
 #include "devicenothingaction.h"
-
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -127,126 +113,6 @@ void SolidUiServer::onActionDialogFinished()
         QString udi = dialog->device().udi();
         m_udiToActionsDialog.remove(udi);
     }
-}
-
-
-void SolidUiServer::showPassphraseDialog(const QString &udi,
-                                         const QString &returnService, const QString &returnObject,
-                                         uint wId, const QString &appId)
-{
-    if (m_idToPassphraseDialog.contains(returnService+':'+udi)) {
-        KPasswordDialog *dialog = m_idToPassphraseDialog[returnService+':'+udi];
-        dialog->activateWindow();
-        return;
-    }
-
-    Solid::Device device(udi);
-
-    KPasswordDialog *dialog = new KPasswordDialog(0, KPasswordDialog::ShowKeepPassword);
-
-    QString label = device.vendor();
-    if (!label.isEmpty()) label+=' ';
-    label+= device.product();
-
-    dialog->setPrompt(i18n("'%1' needs a password to be accessed. Please enter a password.", label));
-    dialog->setPixmap(KIcon(device.icon()).pixmap(64, 64));
-    dialog->setProperty("soliduiserver.udi", udi);
-    dialog->setProperty("soliduiserver.returnService", returnService);
-    dialog->setProperty("soliduiserver.returnObject", returnObject);
-
-    QString uuid;
-    if (device.is<Solid::StorageVolume>())
-        uuid = device.as<Solid::StorageVolume>()->uuid();
-
-    // read the password from wallet and prefill it to the dialog
-    if (!uuid.isEmpty()) {
-        dialog->setProperty("soliduiserver.uuid", uuid);
-
-        KWallet::Wallet * wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), (WId) wId);
-        const QString folderName = QString::fromLatin1("SolidLuks");
-        if (wallet && wallet->hasFolder(folderName)) {
-            wallet->setFolder(folderName);
-            QString savedPassword;
-            if (wallet->readPassword(uuid, savedPassword) == 0) {
-                dialog->setKeepPassword(true);
-                dialog->setPassword(savedPassword);
-            }
-            wallet->closeWallet(wallet->walletName(), false);
-        }
-        delete wallet;
-    }
-
-
-    connect(dialog, SIGNAL(gotPassword(const QString&, bool)),
-            this, SLOT(onPassphraseDialogCompleted(const QString&, bool)));
-    connect(dialog, SIGNAL(rejected()),
-            this, SLOT(onPassphraseDialogRejected()));
-
-    m_idToPassphraseDialog[returnService+':'+udi] = dialog;
-
-    reparentDialog(dialog, (WId)wId, appId, true);
-    dialog->show();
-}
-
-void SolidUiServer::onPassphraseDialogCompleted(const QString &pass, bool keep)
-{
-    KPasswordDialog *dialog = qobject_cast<KPasswordDialog*>(sender());
-
-    if (dialog) {
-        QString returnService = dialog->property("soliduiserver.returnService").toString();
-        QString returnObject = dialog->property("soliduiserver.returnObject").toString();
-        QDBusInterface returnIface(returnService, returnObject);
-
-        QDBusReply<void> reply = returnIface.call("passphraseReply", pass);
-
-        QString udi = dialog->property("soliduiserver.udi").toString();
-        m_idToPassphraseDialog.remove(returnService+':'+udi);
-
-        if (!reply.isValid()) {
-            kWarning() << "Impossible to send the passphrase to the application, D-Bus said: "
-                       << reply.error().name() << ", " << reply.error().message() << endl;
-            return;  // don't save into wallet if an error occurs
-        }
-
-        if (keep)  { // save the password into the wallet
-            KWallet::Wallet * wallet = KWallet::Wallet::openWallet(KWallet::Wallet::LocalWallet(), 0);
-            if (wallet) {
-                const QString folderName = QString::fromLatin1("SolidLuks");
-                const QString uuid = dialog->property("soliduiserver.uuid").toString();
-                if (!wallet->hasFolder(folderName))
-                    wallet->createFolder(folderName);
-                if (wallet->setFolder(folderName))
-                    wallet->writePassword(uuid, pass);
-                wallet->closeWallet(wallet->walletName(), false);
-                delete wallet;
-            }
-        }
-    }
-}
-
-void SolidUiServer::onPassphraseDialogRejected()
-{
-    onPassphraseDialogCompleted(QString(), false);
-}
-
-void SolidUiServer::reparentDialog(QWidget *dialog, WId wId, const QString &appId, bool modal)
-{
-    Q_UNUSED(appId);
-    // Code borrowed from kwalletd
-
-    KWindowSystem::setMainWindow(dialog, wId); // correct, set dialog parent
-
-#ifdef Q_WS_X11
-    if (modal) {
-        KWindowSystem::setState(dialog->winId(), NET::Modal);
-    } else {
-        KWindowSystem::clearState(dialog->winId(), NET::Modal);
-    }
-#endif
-
-    // allow dialog activation even if it interrupts, better than trying hacks
-    // with keeping the dialog on top or on all desktops
-    kapp->updateUserTimestamp();
 }
 
 #include "moc_soliduiserver.cpp"
