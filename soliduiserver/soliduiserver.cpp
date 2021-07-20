@@ -26,15 +26,20 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdesktopfileactions.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
+#include <solid/block.h>
 #include <solid/storagevolume.h>
+#include <solid/storageaccess.h>
+#include <solid/solidnamespace.h>
 
 #include "deviceactionsdialog.h"
 #include "deviceaction.h"
 #include "deviceserviceaction.h"
 #include "devicenothingaction.h"
 
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
+#include <QProcess>
+#include <QDir>
 
 K_PLUGIN_FACTORY(SolidUiServerFactory,
                  registerPlugin<SolidUiServer>();
@@ -113,6 +118,73 @@ void SolidUiServer::onActionDialogFinished()
         QString udi = dialog->device().udi();
         m_udiToActionsDialog.remove(udi);
     }
+}
+
+int SolidUiServer::mountDevice(const QString &udi)
+{
+    Solid::Device device(udi);
+    Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
+    Solid::Block *block = device.as<Solid::Block>();
+    if (!storagevolume || !block) {
+        return int(Solid::ErrorType::InvalidOption);
+    }
+
+    // permission denied on /run/mount so.. using base directory that is writable
+    const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
+    const QString deviceuuid(storagevolume->uuid());
+    QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
+    QDir mountdir(mountbase);
+    if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
+        kWarning() << "could not create" << mountpoint;
+        return int(Solid::ErrorType::OperationFailed);
+    }
+
+    const QStringList mountargs = QStringList() << "mount" << block->device() << mountpoint;
+    QProcess mountproc;
+    mountproc.start("kdesudo", mountargs);
+    mountproc.waitForStarted();
+    while (mountproc.state() == QProcess::Running) {
+        QCoreApplication::processEvents();
+    }
+
+    if (mountproc.exitCode() == 0) {
+        return int(Solid::ErrorType::NoError);
+    }
+
+    QString mounterror = mountproc.readAllStandardError();
+    if (mounterror.isEmpty()) {
+        mounterror = mountproc.readAllStandardOutput();
+    }
+    kWarning() << "mount error" << mounterror;
+    return int(Solid::ErrorType::OperationFailed);
+}
+
+int SolidUiServer::unmountDevice(const QString &udi)
+{
+    Solid::Device device(udi);
+    Solid::StorageAccess *storageaccess = device.as<Solid::StorageAccess>();
+    if (!storageaccess) {
+        return int(Solid::ErrorType::InvalidOption);
+    }
+
+    const QStringList umountargs = QStringList() << "umount" << storageaccess->filePath();
+    QProcess umountproc;
+    umountproc.start("kdesudo", umountargs);
+    umountproc.waitForStarted();
+    while (umountproc.state() == QProcess::Running) {
+        QCoreApplication::processEvents();
+    }
+
+    if (umountproc.exitCode() == 0) {
+        return int(Solid::ErrorType::NoError);
+    }
+
+    QString umounterror = umountproc.readAllStandardError();
+    if (umounterror.isEmpty()) {
+        umounterror = umountproc.readAllStandardOutput();
+    }
+    kWarning() << "unmount error" << umounterror;
+    return int(Solid::ErrorType::OperationFailed);
 }
 
 #include "moc_soliduiserver.cpp"

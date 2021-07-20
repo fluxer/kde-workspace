@@ -39,6 +39,8 @@ public Q_SLOTS:
     Q_SCRIPTABLE void showActionsDialog(const QString &udi,
                                         const QStringList &desktopFiles);
 
+    Q_SCRIPTABLE int mountDevice(const QString &udi);
+    Q_SCRIPTABLE int unmountDevice(const QString &udi);
 
 private Q_SLOTS:
     void onActionDialogFinished();
