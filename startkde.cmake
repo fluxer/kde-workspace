@@ -131,26 +131,6 @@ if test -z "$dl"; then
   unset KLOCALE_LANGUAGES
 fi
 
-# Source scripts found in <localprefix>/env/*.sh and <prefixes>/env/*.sh
-# (where <localprefix> is $KDEHOME or ~/.kde, and <prefixes> is where KDE is installed)
-#
-# This is where you can define environment variables that will be available to
-# all KDE programs, so this is where you can run agents using e.g. eval `ssh-agent`
-# or eval `gpg-agent --daemon`.
-# Note: if you do that, you should also put "ssh-agent -k" as a shutdown script
-#
-# (see end of this file).
-# For anything else (that doesn't set env vars, or that needs a window manager),
-# better use the Autostart folder.
-
-libpath=`kde4-config --path lib | tr : '\n'`
-
-for prefix in `echo "$libpath" | sed -n -e 's,/lib[^/]*/,/env/,p'`; do
-  for file in "$prefix"*.sh; do
-    test -r "$file" && . "$file"
-  done
-done
-
 # Set the path for Qt plugins provided by KDE
 QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
 export QT_PLUGIN_PATH
@@ -324,15 +304,6 @@ test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 
 # Clean up
 kdeinit4_shutdown
-
-echo 'startkde: Running shutdown scripts...'  1>&2
-
-# Run scripts found in $KDEDIRS/shutdown
-for prefix in `echo "$libpath" | sed -n -e 's,/lib[^/]*/,/shutdown/,p'`; do
-  for file in `ls "$prefix" 2> /dev/null | egrep -v '(~|\.bak)$'`; do
-    test -x "$prefix$file" && "$prefix$file"
-  done
-done
 
 unset KDE_FULL_SESSION
 xprop -root -remove KDE_FULL_SESSION
