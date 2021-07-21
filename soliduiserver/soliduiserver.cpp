@@ -26,6 +26,8 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kdesktopfileactions.h>
+#include <kpassworddialog.h>
+#include <kauthaction.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <solid/block.h>
@@ -129,6 +131,43 @@ int SolidUiServer::mountDevice(const QString &udi)
         return int(Solid::ErrorType::InvalidOption);
     }
 
+    QString devicenode = block->device();
+    if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
+        KPasswordDialog passworddialog(0, KPasswordDialog::NoFlags);
+
+        QString label = device.vendor();
+        if (!label.isEmpty()) {
+            label += ' ';
+        }
+        label += device.product();
+
+        passworddialog.setPrompt(i18n("'%1' needs a password to be accessed. Please enter a password.", label));
+        passworddialog.setPixmap(KIcon(device.icon()).pixmap(64, 64));
+        if (!passworddialog.exec()) {
+            return int(Solid::ErrorType::UserCanceled);
+        }
+
+        KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.cryptopen");
+        action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        action.addArgument("device", block->device());
+        action.addArgument("name", storagevolume->uuid());
+        action.addArgument("password", passworddialog.password().toLocal8Bit().toHex());
+        KAuth::ActionReply reply = action.execute();
+
+        // qDebug() << "cryptopen" << reply.errorCode() << reply.errorDescription() << reply.type();
+
+        if (reply == KAuth::ActionReply::UserCancelled) {
+            return int(Solid::ErrorType::UserCanceled);
+        } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+            return int(Solid::ErrorType::UnauthorizedOperation);
+        } else if (reply != KAuth::ActionReply::SuccessReply) {
+            return int(Solid::ErrorType::OperationFailed);
+        }
+
+        // NOTE: keep in sync with kdelibs/solid/solid/backends/udev/udevstorageaccess.cpp
+        devicenode = QLatin1String("/dev/mapper/") + storagevolume->uuid();
+    }
+
     // permission denied on /run/mount so.. using base directory that is writable
     const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
     const QString deviceuuid(storagevolume->uuid());
@@ -139,52 +178,67 @@ int SolidUiServer::mountDevice(const QString &udi)
         return int(Solid::ErrorType::OperationFailed);
     }
 
-    const QStringList mountargs = QStringList() << "mount" << block->device() << mountpoint;
-    QProcess mountproc;
-    mountproc.start("kdesudo", mountargs);
-    mountproc.waitForStarted();
-    while (mountproc.state() == QProcess::Running) {
-        QCoreApplication::processEvents();
-    }
+    KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.mount");
+    action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    action.addArgument("device", devicenode);
+    action.addArgument("mountpoint", mountpoint);
+    KAuth::ActionReply reply = action.execute();
 
-    if (mountproc.exitCode() == 0) {
+    // qDebug() << "mount" << reply.errorCode() << reply.errorDescription() << reply.type();
+
+    if (reply == KAuth::ActionReply::SuccessReply) {
         return int(Solid::ErrorType::NoError);
+    } else if (reply == KAuth::ActionReply::UserCancelled) {
+        return int(Solid::ErrorType::UserCanceled);
+    } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+        return int(Solid::ErrorType::UnauthorizedOperation);
     }
 
-    QString mounterror = mountproc.readAllStandardError();
-    if (mounterror.isEmpty()) {
-        mounterror = mountproc.readAllStandardOutput();
-    }
-    kWarning() << "mount error" << mounterror;
     return int(Solid::ErrorType::OperationFailed);
 }
 
 int SolidUiServer::unmountDevice(const QString &udi)
 {
     Solid::Device device(udi);
+    Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     Solid::StorageAccess *storageaccess = device.as<Solid::StorageAccess>();
-    if (!storageaccess) {
+    if (!storagevolume || !storageaccess) {
         return int(Solid::ErrorType::InvalidOption);
     }
 
-    const QStringList umountargs = QStringList() << "umount" << storageaccess->filePath();
-    QProcess umountproc;
-    umountproc.start("kdesudo", umountargs);
-    umountproc.waitForStarted();
-    while (umountproc.state() == QProcess::Running) {
-        QCoreApplication::processEvents();
+    KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.unmount");
+    action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    action.addArgument("mountpoint", storageaccess->filePath());
+    KAuth::ActionReply reply = action.execute();
+
+    // qDebug() << "unmount" << reply.errorCode() << reply.errorDescription();
+
+    if (reply == KAuth::ActionReply::UserCancelled) {
+        return int(Solid::ErrorType::UserCanceled);
+    } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+        return int(Solid::ErrorType::UnauthorizedOperation);
+    } else if (reply != KAuth::ActionReply::SuccessReply) {
+        return int(Solid::ErrorType::OperationFailed);
     }
 
-    if (umountproc.exitCode() == 0) {
-        return int(Solid::ErrorType::NoError);
+    if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
+        KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.cryptclose");
+        action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        action.addArgument("name", storagevolume->uuid());
+        KAuth::ActionReply reply = action.execute();
+
+        // qDebug() << "cryptclose" << reply.errorCode() << reply.errorDescription() << reply.type();
+
+        if (reply == KAuth::ActionReply::UserCancelled) {
+            return int(Solid::ErrorType::UserCanceled);
+        } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+            return int(Solid::ErrorType::UnauthorizedOperation);
+        } else if (reply != KAuth::ActionReply::SuccessReply) {
+            return int(Solid::ErrorType::OperationFailed);
+        }
     }
 
-    QString umounterror = umountproc.readAllStandardError();
-    if (umounterror.isEmpty()) {
-        umounterror = umountproc.readAllStandardOutput();
-    }
-    kWarning() << "unmount error" << umounterror;
-    return int(Solid::ErrorType::OperationFailed);
+    return int(Solid::ErrorType::NoError);
 }
 
 #include "moc_soliduiserver.cpp"
