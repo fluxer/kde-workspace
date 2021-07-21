@@ -132,6 +132,9 @@ int SolidUiServer::mountDevice(const QString &udi)
     }
 
     QString devicenode = block->device();
+    const QString deviceuuid(storagevolume->uuid());
+    const QString dmnode = QLatin1String("/dev/mapper/") + deviceuuid;
+    // TODO: device may be crypto opened but not mounted
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
         KPasswordDialog passworddialog(0, KPasswordDialog::NoFlags);
 
@@ -147,30 +150,29 @@ int SolidUiServer::mountDevice(const QString &udi)
             return int(Solid::ErrorType::UserCanceled);
         }
 
-        KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.cryptopen");
-        action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-        action.addArgument("device", block->device());
-        action.addArgument("name", storagevolume->uuid());
-        action.addArgument("password", passworddialog.password().toLocal8Bit().toHex());
-        KAuth::ActionReply reply = action.execute();
+        KAuth::Action cryptopenaction("org.kde.soliduiserver.mountunmounthelper.cryptopen");
+        cryptopenaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        cryptopenaction.addArgument("device", devicenode);
+        cryptopenaction.addArgument("name", deviceuuid);
+        cryptopenaction.addArgument("password", passworddialog.password().toLocal8Bit().toHex());
+        KAuth::ActionReply cryptopenreply = cryptopenaction.execute();
 
-        // qDebug() << "cryptopen" << reply.errorCode() << reply.errorDescription() << reply.type();
+        // qDebug() << "cryptopen" << cryptopenreply.errorCode() << cryptopenreply.errorDescription();
 
-        if (reply == KAuth::ActionReply::UserCancelled) {
+        if (cryptopenreply == KAuth::ActionReply::UserCancelled) {
             return int(Solid::ErrorType::UserCanceled);
-        } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+        } else if (cryptopenreply == KAuth::ActionReply::AuthorizationDenied) {
             return int(Solid::ErrorType::UnauthorizedOperation);
-        } else if (reply != KAuth::ActionReply::SuccessReply) {
+        } else if (cryptopenreply != KAuth::ActionReply::SuccessReply) {
             return int(Solid::ErrorType::OperationFailed);
         }
 
         // NOTE: keep in sync with kdelibs/solid/solid/backends/udev/udevstorageaccess.cpp
-        devicenode = QLatin1String("/dev/mapper/") + storagevolume->uuid();
+        devicenode = dmnode;
     }
 
     // permission denied on /run/mount so.. using base directory that is writable
     const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
-    const QString deviceuuid(storagevolume->uuid());
     QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
     QDir mountdir(mountbase);
     if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
@@ -178,19 +180,19 @@ int SolidUiServer::mountDevice(const QString &udi)
         return int(Solid::ErrorType::OperationFailed);
     }
 
-    KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.mount");
-    action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-    action.addArgument("device", devicenode);
-    action.addArgument("mountpoint", mountpoint);
-    KAuth::ActionReply reply = action.execute();
+    KAuth::Action mountaction("org.kde.soliduiserver.mountunmounthelper.mount");
+    mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    mountaction.addArgument("device", devicenode);
+    mountaction.addArgument("mountpoint", mountpoint);
+    KAuth::ActionReply mountreply = mountaction.execute();
 
-    // qDebug() << "mount" << reply.errorCode() << reply.errorDescription() << reply.type();
+    // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
 
-    if (reply == KAuth::ActionReply::SuccessReply) {
+    if (mountreply == KAuth::ActionReply::SuccessReply) {
         return int(Solid::ErrorType::NoError);
-    } else if (reply == KAuth::ActionReply::UserCancelled) {
+    } else if (mountreply == KAuth::ActionReply::UserCancelled) {
         return int(Solid::ErrorType::UserCanceled);
-    } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+    } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
 
@@ -206,34 +208,34 @@ int SolidUiServer::unmountDevice(const QString &udi)
         return int(Solid::ErrorType::InvalidOption);
     }
 
-    KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.unmount");
-    action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-    action.addArgument("mountpoint", storageaccess->filePath());
-    KAuth::ActionReply reply = action.execute();
+    KAuth::Action unmountaction("org.kde.soliduiserver.mountunmounthelper.unmount");
+    unmountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    unmountaction.addArgument("mountpoint", storageaccess->filePath());
+    KAuth::ActionReply unmountreply = unmountaction.execute();
 
-    // qDebug() << "unmount" << reply.errorCode() << reply.errorDescription();
+    // qDebug() << "unmount" << unmountreply.errorCode() << unmountreply.errorDescription();
 
-    if (reply == KAuth::ActionReply::UserCancelled) {
+    if (unmountreply == KAuth::ActionReply::UserCancelled) {
         return int(Solid::ErrorType::UserCanceled);
-    } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+    } else if (unmountreply == KAuth::ActionReply::AuthorizationDenied) {
         return int(Solid::ErrorType::UnauthorizedOperation);
-    } else if (reply != KAuth::ActionReply::SuccessReply) {
+    } else if (unmountreply != KAuth::ActionReply::SuccessReply) {
         return int(Solid::ErrorType::OperationFailed);
     }
 
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
-        KAuth::Action action("org.kde.soliduiserver.mountunmounthelper.cryptclose");
-        action.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-        action.addArgument("name", storagevolume->uuid());
-        KAuth::ActionReply reply = action.execute();
+        KAuth::Action cryptcloseaction("org.kde.soliduiserver.mountunmounthelper.cryptclose");
+        cryptcloseaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        cryptcloseaction.addArgument("name", storagevolume->uuid());
+        KAuth::ActionReply cryptclosereply = cryptcloseaction.execute();
 
-        // qDebug() << "cryptclose" << reply.errorCode() << reply.errorDescription() << reply.type();
+        // qDebug() << "cryptclose" << cryptclosereply.errorCode() << cryptclosereply.errorDescription();
 
-        if (reply == KAuth::ActionReply::UserCancelled) {
+        if (cryptclosereply == KAuth::ActionReply::UserCancelled) {
             return int(Solid::ErrorType::UserCanceled);
-        } else if (reply == KAuth::ActionReply::AuthorizationDenied) {
+        } else if (cryptclosereply == KAuth::ActionReply::AuthorizationDenied) {
             return int(Solid::ErrorType::UnauthorizedOperation);
-        } else if (reply != KAuth::ActionReply::SuccessReply) {
+        } else if (cryptclosereply != KAuth::ActionReply::SuccessReply) {
             return int(Solid::ErrorType::OperationFailed);
         }
     }
