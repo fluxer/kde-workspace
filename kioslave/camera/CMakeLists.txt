@@ -23,3 +23,8 @@ install(
     FILES solid_camera.desktop
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions
 )
+
+install(
+    FILES camera-network.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/remoteview
+)
