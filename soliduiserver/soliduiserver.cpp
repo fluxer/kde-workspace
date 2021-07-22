@@ -201,7 +201,7 @@ int SolidUiServer::mountDevice(const QString &udi)
     if (didcryptopen) {
         KAuth::Action cryptcloseaction("org.kde.soliduiserver.mountunmounthelper.cryptclose");
         cryptcloseaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-        cryptcloseaction.addArgument("name", storagevolume->uuid());
+        cryptcloseaction.addArgument("name", deviceuuid);
         cryptcloseaction.execute();
     }
 
