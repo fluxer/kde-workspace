@@ -34,10 +34,10 @@ KAuth::ActionReply SolidUiServerHelper::cryptopen(QVariantMap parameters)
 
     const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
     if (cryptbin.isEmpty()) {
-        KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-        errorReply.setErrorDescription("cryptsetup is missing");
-        errorReply.setErrorCode(1);
-        return errorReply;
+        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+        errorreply.setErrorDescription("cryptsetup is missing");
+        errorreply.setErrorCode(1);
+        return errorreply;
     }
 
     const QString device = parameters.value("device").toString();
@@ -58,10 +58,10 @@ KAuth::ActionReply SolidUiServerHelper::cryptopen(QVariantMap parameters)
     if (crypterror.isEmpty()) {
         crypterror = cryptproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-    errorReply.setErrorDescription(crypterror);
-    errorReply.setErrorCode(cryptproc.exitCode());
-    return errorReply;
+    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+    errorreply.setErrorDescription(crypterror);
+    errorreply.setErrorCode(cryptproc.exitCode());
+    return errorreply;
 }
 
 KAuth::ActionReply SolidUiServerHelper::cryptclose(QVariantMap parameters)
@@ -72,10 +72,10 @@ KAuth::ActionReply SolidUiServerHelper::cryptclose(QVariantMap parameters)
 
     const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
     if (cryptbin.isEmpty()) {
-        KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-        errorReply.setErrorDescription("cryptsetup is missing");
-        errorReply.setErrorCode(1);
-        return errorReply;
+        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+        errorreply.setErrorDescription("cryptsetup is missing");
+        errorreply.setErrorCode(1);
+        return errorreply;
     }
 
     const QString name = parameters.value("name").toString();
@@ -92,10 +92,10 @@ KAuth::ActionReply SolidUiServerHelper::cryptclose(QVariantMap parameters)
     if (crypterror.isEmpty()) {
         crypterror = cryptproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-    errorReply.setErrorDescription(crypterror);
-    errorReply.setErrorCode(cryptproc.exitCode());
-    return errorReply;
+    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+    errorreply.setErrorDescription(crypterror);
+    errorreply.setErrorCode(cryptproc.exitCode());
+    return errorreply;
 }
 
 KAuth::ActionReply SolidUiServerHelper::mount(QVariantMap parameters)
@@ -119,10 +119,10 @@ KAuth::ActionReply SolidUiServerHelper::mount(QVariantMap parameters)
     if (mounterror.isEmpty()) {
         mounterror = mountproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-    errorReply.setErrorDescription(mounterror);
-    errorReply.setErrorCode(mountproc.exitCode());
-    return errorReply;
+    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+    errorreply.setErrorDescription(mounterror);
+    errorreply.setErrorCode(mountproc.exitCode());
+    return errorreply;
 }
 
 KAuth::ActionReply SolidUiServerHelper::unmount(QVariantMap parameters)
@@ -145,10 +145,10 @@ KAuth::ActionReply SolidUiServerHelper::unmount(QVariantMap parameters)
     if (umounterror.isEmpty()) {
         umounterror = umountproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorReply(KAuth::ActionReply::HelperError);
-    errorReply.setErrorDescription(umounterror);
-    errorReply.setErrorCode(umountproc.exitCode());
-    return errorReply;
+    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+    errorreply.setErrorDescription(umounterror);
+    errorreply.setErrorCode(umountproc.exitCode());
+    return errorreply;
 }
 
 KDE4_AUTH_HELPER_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)

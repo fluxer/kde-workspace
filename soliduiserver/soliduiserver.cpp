@@ -133,8 +133,10 @@ int SolidUiServer::mountDevice(const QString &udi)
 
     QString devicenode = block->device();
     const QString deviceuuid(storagevolume->uuid());
+
+    bool didcryptopen = false;
+#ifdef Q_OS_LINUX
     const QString dmnode = QLatin1String("/dev/mapper/") + deviceuuid;
-    // TODO: device may be crypto opened but not mounted
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
         KPasswordDialog passworddialog(0, KPasswordDialog::NoFlags);
 
@@ -167,9 +169,13 @@ int SolidUiServer::mountDevice(const QString &udi)
             return int(Solid::ErrorType::OperationFailed);
         }
 
+        didcryptopen = true;
         // NOTE: keep in sync with kdelibs/solid/solid/backends/udev/udevstorageaccess.cpp
         devicenode = dmnode;
     }
+#else
+#warning crypto storage devices are not supported on this platform
+#endif
 
     // permission denied on /run/mount so.. using base directory that is writable
     const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
@@ -190,12 +196,20 @@ int SolidUiServer::mountDevice(const QString &udi)
 
     if (mountreply == KAuth::ActionReply::SuccessReply) {
         return int(Solid::ErrorType::NoError);
-    } else if (mountreply == KAuth::ActionReply::UserCancelled) {
+    }
+
+    if (didcryptopen) {
+        KAuth::Action cryptcloseaction("org.kde.soliduiserver.mountunmounthelper.cryptclose");
+        cryptcloseaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        cryptcloseaction.addArgument("name", storagevolume->uuid());
+        cryptcloseaction.execute();
+    }
+
+    if (mountreply == KAuth::ActionReply::UserCancelled) {
         return int(Solid::ErrorType::UserCanceled);
     } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
-
     return int(Solid::ErrorType::OperationFailed);
 }
 
