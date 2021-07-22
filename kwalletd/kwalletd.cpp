@@ -60,14 +60,15 @@ class KWalletTransaction {
 
 public:
     explicit KWalletTransaction(QDBusConnection conn)
-        : tType(Unknown), cancelled(false), tId(nextTransactionId), res(-1), connection(conn)
+        : tType(Unknown), cancelled(false), res(-1), connection(conn)
     {
-        nextTransactionId++;
         // make sure the id is never < 0 as that's used for the
         // error conditions.
         if (nextTransactionId < 0) {
             nextTransactionId = 0;
         }
+        nextTransactionId++;
+        tId = nextTransactionId;
     }
 
     ~KWalletTransaction() {
