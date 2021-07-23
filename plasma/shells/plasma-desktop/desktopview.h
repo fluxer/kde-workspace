@@ -66,7 +66,6 @@ public slots:
 
 private:
     bool m_init;
-    int m_desktop;
 
     //FIXME: duplicated from containment_p.h 
     //(but with a bigger margin to make room even for very big panels)

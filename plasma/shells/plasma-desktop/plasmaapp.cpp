@@ -236,11 +236,6 @@ void PlasmaApp::setupDesktop()
     connect(screens, SIGNAL(screenRemoved(int)), SLOT(screenRemoved(int)));
     connect(screens, SIGNAL(screenAdded(Kephal::Screen*)), SLOT(screenAdded(Kephal::Screen*)));
 
-    if (AppSettings::perVirtualDesktopViews()) {
-        connect(KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
-                this, SLOT(checkVirtualDesktopViews(int)));
-    }
-
     // free the memory possibly occupied by the background image of the
     // root window - login managers will typically set one
     QPalette palette;
@@ -685,7 +680,6 @@ DesktopCorona* PlasmaApp::corona(bool createIfMissing)
         m_corona = c;
         c->setItemIndexMethod(QGraphicsScene::NoIndex);
         c->initializeLayout();
-        c->checkScreens();
         foreach (Plasma::Containment *containment, c->containments()) {
             if (containment->screen() != -1 && containment->wallpaper()) {
                 ++m_startupSuspendWaitCount;
@@ -772,15 +766,7 @@ void PlasmaApp::createView(Plasma::Containment *containment)
     if (isPanelContainment(containment)) {
         m_panelsWaiting << containment;
         m_panelViewCreationTimer.start();
-    } else if (containment->screen() > -1 &&
-               containment->screen() < m_corona->numScreens()) {
-        if (AppSettings::perVirtualDesktopViews()) {
-            if (containment->desktop() < 0 ||
-                containment->desktop() > KWindowSystem::numberOfDesktops() - 1) {
-                return;
-            }
-        }
-
+    } else if (containment->screen() > -1 && containment->screen() < m_corona->numScreens()) {
         m_desktopsWaiting.append(containment);
         m_desktopViewCreationTimer.start();
     }
@@ -900,19 +886,13 @@ void PlasmaApp::createWaitingDesktops()
             KConfigGroup viewIds(KGlobal::config(), "ViewIds");
             const int id = viewIds.readEntry(QString::number(containment->id()), 0);
 
-            const int desktop = AppSettings::perVirtualDesktopViews() ? containment->desktop() : -1;
-            if (desktop >= KWindowSystem::numberOfDesktops()) {
-                kDebug() << "not creating a view on desktop" << desktop << " as it does not exist";
-                continue;
-            }
-
             const int screen = containment->screen();
             if (screen >= m_corona->numScreens() || screen < 0) {
                 kDebug() << "not creating a view on screen" << screen << "as it does not exist";
                 continue;
             }
 
-            DesktopView *view = viewForScreen(screen, desktop);
+            DesktopView *view = viewForScreen(screen, -1);
 
             if (view) {
                 kDebug() << "already had a view for" << containment->screen() << containment->desktop();
@@ -993,9 +973,8 @@ void PlasmaApp::containmentScreenOwnerChanged(int wasScreen, int isScreen, Plasm
         return;
     }
 
-    bool pvd = AppSettings::perVirtualDesktopViews();
     foreach (DesktopView *view, m_desktops) {
-        if (view->screen() == isScreen && (!pvd || view->desktop() == containment->desktop())) {
+        if (view->screen() == isScreen) {
             kDebug() << "@@@@found view" << view;
             return;
         }
@@ -1042,53 +1021,10 @@ void PlasmaApp::configureContainment(Plasma::Containment *containment)
     KWindowSystem::activateWindow(configDialog->winId());
 }
 
-//TODO accomodate activities
-void PlasmaApp::setPerVirtualDesktopViews(bool perDesktopViews)
-{
-    if (perDesktopViews == perVirtualDesktopViews()) {
-        return;
-    }
-    AppSettings::setPerVirtualDesktopViews(perDesktopViews);
-    AppSettings::self()->writeConfig();
-
-    disconnect(KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
-               this, SLOT(checkVirtualDesktopViews(int)));
-
-    if (perDesktopViews) {
-        connect(KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
-                this, SLOT(checkVirtualDesktopViews(int)));
-        checkVirtualDesktopViews(KWindowSystem::numberOfDesktops());
-    } else {
-        QList<DesktopView *> perScreenViews;
-        foreach (DesktopView *view, m_desktops) {
-            if (view->containment()) {
-                view->containment()->setScreen(-1, -1);
-            }
-
-            delete view;
-        }
-
-        m_desktops.clear();
-        m_corona->checkScreens(true);
-    }
-}
-
-bool PlasmaApp::perVirtualDesktopViews() const
-{
-    return AppSettings::perVirtualDesktopViews();
-}
-
-void PlasmaApp::checkVirtualDesktopViews(int numDesktops)
-{
-    kDebug() << numDesktops;
-    m_corona->checkScreens(true);
-}
-
 void PlasmaApp::panelRemoved(QObject *panel)
 {
     m_panels.removeAll((PanelView *)panel);
 }
-
 
 QString PlasmaApp::supportInformation() const
 {

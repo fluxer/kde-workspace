@@ -13,12 +13,6 @@
     </method>
     <method name="quit">
     </method>
-    <method name="setPerVirtualDesktopViews">
-      <arg name="perDesktopViews" type="b" direction="in"/>
-    </method>
-    <method name="perVirtualDesktopViews">
-      <arg type="b" direction="out"/>
-    </method>
     <method name="createWaitingPanels">
     </method>
     <method name="createWaitingDesktops">

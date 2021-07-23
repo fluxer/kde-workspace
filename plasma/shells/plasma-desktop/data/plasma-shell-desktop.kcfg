@@ -10,10 +10,5 @@
             <label>The font to use on the desktop</label>
             <default code="true">qApp->font()</default>
         </entry>
-
-        <entry key="perVirtualDesktopViews" type="Bool">
-            <label>Set to true if each virtual desktop should get its own, unique Plasma view.</label>
-            <default>false</default>
-        </entry>
     </group>
 </kcfg>

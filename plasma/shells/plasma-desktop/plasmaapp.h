@@ -103,8 +103,6 @@ public Q_SLOTS:
     void loadKWinScriptInInteractiveConsole(const QString &script);
 
     Q_SCRIPTABLE void quit();
-    void setPerVirtualDesktopViews(bool perDesktopViews);
-    bool perVirtualDesktopViews() const;
 
     void createWaitingPanels();
     void createWaitingDesktops();
@@ -136,7 +134,6 @@ private Q_SLOTS:
     void screenRemoved(int id);
     void screenAdded(Kephal::Screen *screen);
     void configureContainment(Plasma::Containment*);
-    void checkVirtualDesktopViews(int numDesktops);
     void setWmClass(WId id);
     void wallpaperCheckedIn();
     void wallpaperCheckInTimeout();

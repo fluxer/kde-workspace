@@ -103,14 +103,7 @@ DesktopView::~DesktopView()
 
 void DesktopView::checkDesktopAffiliation()
 {
-    if (AppSettings::perVirtualDesktopViews()) {
-        m_desktop = containment() ? containment()->desktop() + 1 : -1;
-        kDebug() << "setting to desktop" << m_desktop;
-        KWindowSystem::setOnDesktop(winId(), m_desktop);
-    } else {
-        m_desktop = -1;
-        KWindowSystem::setOnAllDesktops(winId(), true);
-    }
+    KWindowSystem::setOnAllDesktops(winId(), true);
 }
 
 void DesktopView::screenResized(Kephal::Screen *s)
@@ -221,18 +214,15 @@ void DesktopView::screenOwnerChanged(int wasScreen, int isScreen, Plasma::Contai
              << "containment:" << (QObject *)newContainment << newContainment->activity()
              << "current containment" << (QObject *)containment() 
              << "myself:" << (QObject *)this
-             << "containment desktop:" << newContainment->desktop() << "my desktop:" << m_desktop;
+             << "containment desktop:" << newContainment->desktop();
     */
 
-    if (containment() == newContainment &&
-        wasScreen == screen() &&
-        (isScreen != wasScreen || AppSettings::perVirtualDesktopViews())) {
+    if (containment() == newContainment && wasScreen == screen() && isScreen != wasScreen) {
         //kDebug() << "nulling out containment";
         setContainment(0);
     }
 
-    if (isScreen > -1 && isScreen == screen() &&
-        (!AppSettings::perVirtualDesktopViews() || newContainment->desktop() == m_desktop - 1) ) {
+    if (isScreen > -1 && isScreen == screen() ) {
         //kDebug() << "setting new containment";
         setContainment(newContainment);
     }

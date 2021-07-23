@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QDBusMessage>
 #include <QDBusConnection>
-#include <QDBusInterface>
 
 #include <KAboutApplicationDialog>
 #include <KActionCollection>
@@ -136,7 +135,6 @@ void KWinDesktopConfig::init()
     connect(m_ui->rowsSpinBox, SIGNAL(valueChanged(int)), SLOT(changed()));
     connect(m_ui->numberSpinBox, SIGNAL(valueChanged(int)), SLOT(changed()));
     connect(m_ui->numberSpinBox, SIGNAL(valueChanged(int)), SLOT(slotChangeShortcuts(int)));
-    connect(m_ui->activityCheckBox, SIGNAL(stateChanged(int)), SLOT(changed()));
     connect(m_ui->desktopNames, SIGNAL(changed()), SLOT(changed()));
     connect(m_ui->popupInfoCheckBox, SIGNAL(toggled(bool)), SLOT(changed()));
     connect(m_ui->popupHideSpinBox, SIGNAL(valueChanged(int)), SLOT(changed()));
@@ -254,14 +252,6 @@ void KWinDesktopConfig::load()
     slotEffectSelectionChanged(m_ui->effectComboBox->currentIndex());
     // TODO: plasma stuff
 
-    QDBusInterface interface("org.kde.plasma-desktop", "/App");
-    if (interface.isValid()) {
-        bool perVirtualDesktopViews = interface.call("perVirtualDesktopViews").arguments().first().toBool();
-        m_ui->activityCheckBox->setEnabled(true);
-        m_ui->activityCheckBox->setChecked(perVirtualDesktopViews);
-    } else
-        m_ui->activityCheckBox->setEnabled(false);
-
     emit changed(false);
 }
 
@@ -334,9 +324,6 @@ void KWinDesktopConfig::save()
     // Send signal to all kwin instances
     QDBusMessage message = QDBusMessage::createSignal("/KWin", "org.kde.KWin", "reloadConfig");
     QDBusConnection::sessionBus().send(message);
-
-    QDBusInterface interface("org.kde.plasma-desktop", "/App");
-    interface.call("setPerVirtualDesktopViews", (m_ui->activityCheckBox->isChecked()));
 
     emit changed(false);
 }

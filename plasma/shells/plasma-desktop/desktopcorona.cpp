@@ -151,41 +151,22 @@ void DesktopCorona::updateImmutability(Plasma::ImmutabilityType immutability)
     }
 }
 
-void DesktopCorona::checkScreens(bool signalWhenExists)
+void DesktopCorona::checkScreen(int screen)
 {
-    // quick sanity check to ensure we have containments for each screen
-    int num = numScreens();
-    for (int i = 0; i < num; ++i) {
-        checkScreen(i, signalWhenExists);
-    }
-}
-
-void DesktopCorona::checkScreen(int screen, bool signalWhenExists)
-{
-    // signalWhenExists is there to allow PlasmaApp to know when to create views
-    // it does this only on containment addition, but in the case of a screen being
-    // added and the containment already existing for that screen, no signal is emitted
-    // and so PlasmaApp does not know that it needs to create a view for it. to avoid
-    // taking care of that case in PlasmaApp (which would duplicate some of the code below,
-    // DesktopCorona will, when signalWhenExists is true, emit a containmentAdded signal
-    // even if the containment actually existed prior to this method being called.
-    //
     //note: hte signal actually triggers view creation only for panels, atm.
     //desktop views are created in response to containment's screenChanged signal instead, which is
     //buggy (sometimes the containment thinks it's already on the screen, so no view is created)
 
     //ensure the panels get views too
-    if (signalWhenExists) {
-        foreach (Plasma::Containment * c, containments()) {
-            if (c->screen() != screen) {
-                continue;
-            }
+    foreach (Plasma::Containment * c, containments()) {
+        if (c->screen() != screen) {
+            continue;
+        }
 
-            Plasma::Containment::Type t = c->containmentType();
-            if (t == Plasma::Containment::PanelContainment ||
-                t == Plasma::Containment::CustomPanelContainment) {
-                emit containmentAdded(c);
-            }
+        Plasma::Containment::Type t = c->containmentType();
+        if (t == Plasma::Containment::PanelContainment ||
+            t == Plasma::Containment::CustomPanelContainment) {
+            emit containmentAdded(c);
         }
     }
 }
@@ -367,7 +348,7 @@ Plasma::Applet *DesktopCorona::loadDefaultApplet(const QString &pluginName, Plas
 void DesktopCorona::screenAdded(Kephal::Screen *s)
 {
     kDebug() << s->id();
-    checkScreen(s->id(), true);
+    checkScreen(s->id());
 }
 
 void DesktopCorona::populateAddPanelsMenu()

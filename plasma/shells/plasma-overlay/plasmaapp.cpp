@@ -264,7 +264,6 @@ Plasma::Corona* PlasmaApp::corona()
         connect(m_corona, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
 
         //kDebug() << "layout should exist";
-        //c->checkScreens();
     }
 
     return m_corona;
