@@ -140,13 +140,7 @@ int SolidUiServer::mountDevice(const QString &udi)
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
         KPasswordDialog passworddialog(0, KPasswordDialog::NoFlags);
 
-        QString label = device.vendor();
-        if (!label.isEmpty()) {
-            label += ' ';
-        }
-        label += device.product();
-
-        passworddialog.setPrompt(i18n("'%1' needs a password to be accessed. Please enter a password.", label));
+        passworddialog.setPrompt(i18n("'%1' needs a password to be accessed. Please enter a password.", device.description()));
         passworddialog.setPixmap(KIcon(device.icon()).pixmap(64, 64));
         if (!passworddialog.exec()) {
             return int(Solid::ErrorType::UserCanceled);
@@ -179,7 +173,7 @@ int SolidUiServer::mountDevice(const QString &udi)
 
     // permission denied on /run/mount so.. using base directory that is writable
     const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
-    QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
+    const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
     QDir mountdir(mountbase);
     if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
         kWarning() << "could not create" << mountpoint;
