@@ -48,7 +48,6 @@
 #include <kmimetypetrader.h>
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
-#include <kfilemetainfo.h>
 #include <klocale.h>
 #include <kde_file.h>
 #include <kdemacros.h>
@@ -163,63 +162,36 @@ void ThumbnailProtocol::get(const KUrl &url)
     m_iconAlpha = metaData("iconAlpha").toInt();
 
     QImage img;
-
-    KConfigGroup group( KGlobal::config(), "PreviewSettings" );
-
-    // ### KFMI
-    bool kfmiThumb = false;
-    if (group.readEntry( "UseFileThumbnails", true)) {
-        KService::Ptr service =
-            KMimeTypeTrader::self()->preferredService( m_mimeType, "KFilePlugin");
-
-        if (service && service->isValid() &&
-            service->property("SupportsThumbnail").toBool()) {
-            // was:  KFileMetaInfo info(url.path(), m_mimeType, KFileMetaInfo::Thumbnail);
-            // but m_mimeType and WhatFlags are now unused in KFileMetaInfo, and not present in the
-            // call that takes a KUrl
-            KFileMetaInfo info(url);
-            if (info.isValid()) {
-                KFileMetaInfoItem item = info.item("thumbnail");
-                if (item.isValid() && item.value().type() == QVariant::Image) {
-                    img = item.value().value<QImage>();
-                    kDebug(7115) << "using KFMI for the thumbnail\n";
-                    kfmiThumb = true;
-                }
-            }
-        }
-    }
     ThumbCreator::Flags flags = ThumbCreator::None;
 
-    if (!kfmiThumb) {
-        QString plugin = metaData("plugin");
-        if ((plugin.isEmpty() || plugin == "directorythumbnail") && m_mimeType == "inode/directory") {
-            img = thumbForDirectory(url);
-            if(img.isNull()) {
-              error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for directory"));
-              return;
-            }
-        } else {
-            if (plugin.isEmpty()) {
-                error(KIO::ERR_INTERNAL, i18n("No plugin specified."));
-                return;
-            }
-
-            ThumbCreator* creator = getThumbCreator(plugin);
-            if(!creator) {
-                error(KIO::ERR_INTERNAL, i18n("Cannot load ThumbCreator %1", plugin));
-                return;
-            }
-
-            ThumbSequenceCreator* sequenceCreator = dynamic_cast<ThumbSequenceCreator*>(creator);
-            if(sequenceCreator)
-                sequenceCreator->setSequenceIndex(sequenceIndex());
-
-            if (!creator->create(url.path(), m_width, m_height, img)) {
-                error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1", url.path()));
-                return;
-            }
-            flags = creator->flags();
+    QString plugin = metaData("plugin");
+    if ((plugin.isEmpty() || plugin == "directorythumbnail") && m_mimeType == "inode/directory") {
+        img = thumbForDirectory(url);
+        if(img.isNull()) {
+            error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for directory"));
+            return;
         }
+    } else {
+        if (plugin.isEmpty()) {
+            error(KIO::ERR_INTERNAL, i18n("No plugin specified."));
+            return;
+        }
+
+        ThumbCreator* creator = getThumbCreator(plugin);
+        if(!creator) {
+            error(KIO::ERR_INTERNAL, i18n("Cannot load ThumbCreator %1", plugin));
+            return;
+        }
+
+        ThumbSequenceCreator* sequenceCreator = dynamic_cast<ThumbSequenceCreator*>(creator);
+        if(sequenceCreator)
+            sequenceCreator->setSequenceIndex(sequenceIndex());
+
+        if (!creator->create(url.path(), m_width, m_height, img)) {
+            error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1", url.path()));
+            return;
+        }
+        flags = creator->flags();
     }
 
     scaleDownImage(img, m_width, m_height);
