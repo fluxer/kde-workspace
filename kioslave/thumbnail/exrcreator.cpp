@@ -42,42 +42,41 @@ extern "C"
 
 bool EXRCreator::create(const QString &path, int, int, QImage &img)
 {
-    Imf::InputFile in ( path.toAscii() );
+    Imf::InputFile in (path.toAscii());
     const Imf::Header &h = in.header();
 
-    if ( h.hasPreviewImage() ) {
-	kDebug() << "EXRcreator - using preview";
-	const Imf::PreviewImage &preview = in.header().previewImage();
-	QImage qpreview(preview.width(), preview.height(), QImage::Format_RGB32);
-	for ( unsigned int y=0; y < preview.height(); y++ ) {
-	    for ( unsigned int x=0; x < preview.width(); x++ ) {
-		const Imf::PreviewRgba &q = preview.pixels()[x+(y*preview.width())];
-		qpreview.setPixel( x, y, qRgba(q.r, q.g, q.b, q.a) );
-	    }
-	}
-	img = qpreview;
-	return true;
+    if (h.hasPreviewImage()) {
+        kDebug() << "EXRcreator - using preview";
+        const Imf::PreviewImage &preview = in.header().previewImage();
+        QImage qpreview(preview.width(), preview.height(), QImage::Format_RGB32);
+        for (unsigned int y = 0; y < preview.height(); y++ ) {
+            for (unsigned int x=0; x < preview.width(); x++) {
+                const Imf::PreviewRgba &q = preview.pixels()[x+(y*preview.width())];
+                qpreview.setPixel(x, y, qRgba(q.r, q.g, q.b, q.a));
+            }
+        }
+        img = qpreview;
+        return true;
     } else {
         // do it the hard way
-	// We ignore maximum size when just extracting the thumnail
-	// from the header, but it is very expensive to render large
-	// EXR images just to turn it into an icon, so we go back
-	// to honoring it in here.
-	kDebug() << "EXRcreator - using original image";
-	KSharedConfig::Ptr config = KGlobal::config();
-	KConfigGroup configGroup( config, "PreviewSettings" );
-	unsigned long long maxSize = configGroup.readEntry( "MaximumSize", 1024*1024 /* 1MB */ );
-	unsigned long long fileSize = QFile( path ).size();
-	if ( (fileSize > 0) && (fileSize < maxSize) ) {
-	    if (!img.load( path )) {
-		return false;
-	    }
-	    if (img.depth() != 32)
-		img = img.convertToFormat( QImage::Format_RGB32 );
-	    return true;
-	} else {
-	    return false;
-	}
+        // We ignore maximum size when just extracting the thumnail
+        // from the header, but it is very expensive to render large
+        // EXR images just to turn it into an icon, so we go back
+        // to honoring it in here.
+        kDebug() << "EXRcreator - using original image";
+        KSharedConfig::Ptr config = KGlobal::config();
+        KConfigGroup configGroup(config, "PreviewSettings");
+        unsigned long long maxSize = configGroup.readEntry("MaximumSize", 1024*1024 /* 1MB */);
+        unsigned long long fileSize = QFile(path).size();
+        if ((fileSize > 0) && (fileSize < maxSize)) {
+            if (!img.load(path)) {
+                return false;
+            }
+            if (img.depth() != 32)
+                img = img.convertToFormat(QImage::Format_RGB32);
+            return true;
+        }
+        return false;
     }
 }
 
