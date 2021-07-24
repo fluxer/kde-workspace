@@ -25,6 +25,12 @@
 
 #include <kio/slavebase.h>
 
+// NOTE: keep in sync with kdelibs/kio/kio/previewjob.cpp
+enum MaxPreviewSizes {
+    MaxLocalSize = 5, // 5 MB
+    MaxRemoteSize = 1 // 1 MB
+};
+
 class ThumbCreator;
 
 class ThumbnailProtocol : public KIO::SlaveBase

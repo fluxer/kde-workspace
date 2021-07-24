@@ -371,7 +371,7 @@ QImage ThumbnailProtocol::thumbForDirectory(const KUrl& directory)
         // Directories that the directory preview will be propagated into if there is no direct sub-directories
         const KConfigGroup globalConfig(KGlobal::config(), "PreviewSettings");
         m_propagationDirectories = globalConfig.readEntry("PropagationDirectories", QStringList() << "VIDEO_TS").toSet();
-        m_maxFileSize = globalConfig.readEntry("MaximumSize", 5 * 1024 * 1024); // 5 MByte default
+        m_maxFileSize = globalConfig.readEntry("MaximumSize", MaxPreviewSizes::MaxLocalSize * 1024 * 1024);
     }
 
     const int tiles = 2; //Count of items shown on each dimension

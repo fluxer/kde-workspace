@@ -18,6 +18,7 @@
 */
 
 #include "exrcreator.h"
+#include "thumbnail.h"
 
 #include <QImage>
 #include <QFile>
@@ -66,7 +67,7 @@ bool EXRCreator::create(const QString &path, int, int, QImage &img)
         kDebug() << "EXRcreator - using original image";
         KSharedConfig::Ptr config = KGlobal::config();
         KConfigGroup configGroup(config, "PreviewSettings");
-        unsigned long long maxSize = configGroup.readEntry("MaximumSize", 1024*1024 /* 1MB */);
+        unsigned long long maxSize = configGroup.readEntry("MaximumSize", MaxPreviewSizes::MaxLocalSize * 1024 * 1024);
         unsigned long long fileSize = QFile(path).size();
         if ((fileSize > 0) && (fileSize < maxSize)) {
             if (!img.load(path)) {
@@ -76,6 +77,7 @@ bool EXRCreator::create(const QString &path, int, int, QImage &img)
                 img = img.convertToFormat(QImage::Format_RGB32);
             return true;
         }
+        kDebug() << "EXRcreator - image file size too large" << fileSize << maxSize;
         return false;
     }
 }
