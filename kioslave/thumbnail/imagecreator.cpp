@@ -41,10 +41,9 @@ extern "C"
 bool ImageCreator::create(const QString &path, int, int, QImage &img)
 {
     // create image preview
-    if (!img.load( path ))
+    if (!img.load(path)) {
         return false;
-    if (img.depth() != 32)
-        img = img.convertToFormat(img.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
+    }
 
 #ifdef HAVE_KEXIV2
     ImageCreatorSettings* settings = ImageCreatorSettings::self();
@@ -54,6 +53,10 @@ bool ImageCreator::create(const QString &path, int, int, QImage &img)
         exiv.rotateExifQImage(img, exiv.getImageOrientation());
     }
 #endif
+
+    if (img.depth() != 32) {
+        img = img.convertToFormat(img.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
+    }
 
     return true;
 }
