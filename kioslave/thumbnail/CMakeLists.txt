@@ -12,14 +12,14 @@ install(TARGETS kio_thumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 set(imagethumbnail_PART_SRCS imagecreator.cpp)
 
-set_source_files_properties(${imagethumbnail_PART_SRCS} PROPERTIES
-    COMPILE_FLAGS "-DHAVE_KEXIV2 ${KDE4_ENABLE_EXCEPTIONS}"
-)
-
 kde4_add_kcfg_files(imagethumbnail_PART_SRCS imagecreatorsettings.kcfgc)
 kde4_add_plugin(imagethumbnail ${imagethumbnail_PART_SRCS})
 
 target_link_libraries(imagethumbnail ${KDE4_KIO_LIBS} ${KDE4_KEXIV2_LIBS})
+
+set_target_properties(imagethumbnail PROPERTIES
+    COMPILE_FLAGS "-DHAVE_KEXIV2 ${KDE4_ENABLE_EXCEPTIONS}"
+)
 
 install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES imagecreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
@@ -62,20 +62,22 @@ install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 ########### next target ###############
 
 if(OPENEXR_FOUND)
-   include_directories(${OPENEXR_INCLUDE_DIR})
+    include_directories(${OPENEXR_INCLUDE_DIR})
 
-   set(exrthumbnail_PART_SRCS exrcreator.cpp)
+    set(exrthumbnail_PART_SRCS exrcreator.cpp)
 
-   kde4_add_plugin(exrthumbnail ${exrthumbnail_PART_SRCS})
+    kde4_add_plugin(exrthumbnail ${exrthumbnail_PART_SRCS})
 
-   target_link_libraries(exrthumbnail ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES})
+    target_link_libraries(exrthumbnail ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES})
 
-   # OpenEXR headers use exceptions; at least clang refuses to build the target
-   # when exceptions are not enabled.
-   set_target_properties(exrthumbnail PROPERTIES COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}")
+    # OpenEXR headers use exceptions; at least clang refuses to build the target
+    # when exceptions are not enabled.
+    set_target_properties(exrthumbnail PROPERTIES
+        COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
+    )
 
-   install(TARGETS exrthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-   install(FILES exrthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+    install(TARGETS exrthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+    install(FILES exrthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 endif()
 
 ########### next target ###############
