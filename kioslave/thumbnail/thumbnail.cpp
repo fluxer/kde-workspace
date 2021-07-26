@@ -32,7 +32,6 @@
 #include <QPixmap>
 #include <QLibrary>
 #include <QDirIterator>
-#include <QCryptographicHash>
 
 #include <kurl.h>
 #include <kapplication.h>
