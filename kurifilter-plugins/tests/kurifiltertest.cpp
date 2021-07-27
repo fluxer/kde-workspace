@@ -368,7 +368,6 @@ void KUriFilterTest::internetKeywords()
 {
     QString sc;
     filter( sc.sprintf("gg%cfoo bar",s_delimiter).toUtf8(), "https://www.google.com/search?q=foo+bar&ie=UTF-8", KUriFilterData::NetProtocol );
-    filter( sc.sprintf("bug%c55798", s_delimiter).toUtf8(), "https://bugs.kde.org/show_bug.cgi?id=55798", KUriFilterData::NetProtocol );
 
     filter( sc.sprintf("gg%cC++", s_delimiter).toUtf8(), "https://www.google.com/search?q=C%2B%2B&ie=UTF-8", KUriFilterData::NetProtocol );
     filter( sc.sprintf("gg%cC#", s_delimiter).toUtf8(), "https://www.google.com/search?q=C%23&ie=UTF-8", KUriFilterData::NetProtocol );
