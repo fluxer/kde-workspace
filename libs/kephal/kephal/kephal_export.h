@@ -25,7 +25,7 @@
 #include <kdemacros.h>
 
 #ifndef KEPHAL_EXPORT
-# if defined(MAKE_KEPHAL_LIB) || defined(MAKE_KDED_KEPHAL_LIB) || defined(kephal_EXPORTS)
+# if defined(kded_kephal_EXPORTS) || defined(kephal_EXPORTS)
 /* We are building this library */
 #  define KEPHAL_EXPORT KDE_EXPORT
 # else
