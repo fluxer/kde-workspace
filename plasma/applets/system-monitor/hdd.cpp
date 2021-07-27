@@ -311,44 +311,34 @@ bool Hdd::isValidDevice(const QString& uuid, Plasma::DataEngine::Data* data)
 void Hdd::dataUpdated(const QString& source,
                       const Plasma::DataEngine::Data &data)
 {
-    if (m_diskMap.keys().contains(source) && mode() != SM::Applet::Panel) {
-        if (data.keys().contains("Temperature")) {
-            QList<Plasma::Meter *> widgets = m_diskMap[source];
-            foreach (Plasma::Meter *w, widgets) {
-                w->setLabel(2, QString("%1\xb0%2").arg(data["Temperature"].toString())
-                                                  .arg(data["Temperature Unit"].toString()));
-            }
+    Plasma::Meter *w = qobject_cast<Plasma::Meter *>(visualization(source));
+    if (!w) {
+        return;
+    }
+    qulonglong size = qulonglong(data["Size"].toULongLong());
+    qlonglong availBytes = 0;
+    QVariant freeSpace = data["Free Space"];
+    if (freeSpace.isValid()) {
+        if (freeSpace.canConvert(QVariant::LongLong)) {
+            availBytes = qlonglong(freeSpace.toLongLong());
+            w->setValue((size / (1024 * 1024)) - (availBytes / (1024 * 1024)));
         }
+    }
+    else {
+        w->setValue(0);
+    }
+    if (mode() != SM::Applet::Panel) {
+        w->setLabel(1, KGlobal::locale()->formatByteSize(availBytes));
+        QStringList overlays;
+        if (data["Accessible"].toBool()) {
+            overlays << "emblem-mounted";
+        }
+        m_icons[source]->setOverlays(overlays);
     } else {
-        Plasma::Meter *w = qobject_cast<Plasma::Meter *>(visualization(source));
-        if (!w) {
-            return;
-        }
-        qulonglong size = qulonglong(data["Size"].toULongLong());
-        qlonglong availBytes = 0;
-        QVariant freeSpace = data["Free Space"];
-        if (freeSpace.isValid()) {
-            if (freeSpace.canConvert(QVariant::LongLong)) {
-                availBytes = qlonglong(freeSpace.toLongLong());
-                w->setValue((size / (1024 * 1024)) - (availBytes / (1024 * 1024)));
-            }
-        }
-        else {
-            w->setValue(0);
-        }
-        if (mode() != SM::Applet::Panel) {
-            w->setLabel(1, KGlobal::locale()->formatByteSize(availBytes));
-            QStringList overlays;
-            if (data["Accessible"].toBool()) {
-                overlays << "emblem-mounted";
-            }
-            m_icons[source]->setOverlays(overlays);
-        } else {
-            setToolTip(source, QString("<tr><td>%1</td><td>%2</td><td>/</td><td>%3</td></tr>")
-                                      .arg(w->label(0))
-                                      .arg(KGlobal::locale()->formatByteSize(availBytes))
-                                      .arg(KGlobal::locale()->formatByteSize(size)));
-        }
+        setToolTip(source, QString("<tr><td>%1</td><td>%2</td><td>/</td><td>%3</td></tr>")
+                                    .arg(w->label(0))
+                                    .arg(KGlobal::locale()->formatByteSize(availBytes))
+                                    .arg(KGlobal::locale()->formatByteSize(size)));
     }
 }
 

@@ -34,7 +34,6 @@
 #include <Plasma/DataEngine>
 #include "devicesignalmapmanager.h"
 #include "devicesignalmapper.h"
-#include "hddtemp.h"
 
 enum State {
     Idle = 0,
@@ -69,7 +68,6 @@ private:
     bool populateDeviceData(const QString &name);
     qulonglong freeDiskSpace(const QString &mountPoint);
     bool updateFreeSpace(const QString &udi);
-    bool updateHardDiskTemperature(const QString &udi);
     bool updateEmblems(const QString &udi);
     bool updateInUse(const QString &udi);
     bool forceUpdateAccessibility(const QString &udi);
@@ -83,7 +81,6 @@ private:
     QMap<QString, QString> m_encryptedContainerMap;
     DeviceSignalMapManager *m_signalmanager;
 
-    HddTemp *m_temperature;
     Solid::DeviceNotifier *m_notifier;
 
 private Q_SLOTS:

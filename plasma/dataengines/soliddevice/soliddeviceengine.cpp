@@ -29,9 +29,8 @@
 #include <Plasma/DataContainer>
 
 SolidDeviceEngine::SolidDeviceEngine(QObject* parent, const QVariantList& args)
-        : Plasma::DataEngine(parent, args),
-          m_temperature(0),
-          m_notifier(0)
+    : Plasma::DataEngine(parent, args),
+        m_notifier(0)
 {
     Q_UNUSED(args)
     m_signalmanager = new DeviceSignalMapManager(this);
@@ -183,8 +182,6 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         setData(name, I18N_NOOP("Drive Type"), drivetype.at((int)storagedrive->driveType()));
         setData(name, I18N_NOOP("Removable"), storagedrive->isRemovable());
         setData(name, I18N_NOOP("Hotpluggable"), storagedrive->isHotpluggable());
-
-        updateHardDiskTemperature(name);
     }
     else {
         bool isRemovable = false;
@@ -655,27 +652,6 @@ bool SolidDeviceEngine::updateFreeSpace(const QString &udi)
     return true;
 }
 
-bool SolidDeviceEngine::updateHardDiskTemperature(const QString &udi)
-{
-    Solid::Device device = m_devicemap.value(udi);
-    Solid::Block *block = device.as<Solid::Block>();
-    if (!block) {
-        return false;
-    }
-
-    if (!m_temperature) {
-        m_temperature = new HddTemp(this);
-    }
-
-    if (m_temperature->sources().contains(block->device())) {
-        setData(udi, I18N_NOOP("Temperature"), m_temperature->data(block->device(), HddTemp::Temperature));
-        setData(udi, I18N_NOOP("Temperature Unit"), m_temperature->data(block->device(), HddTemp::Unit));
-        return true;
-    }
-
-    return false;
-}
-
 bool SolidDeviceEngine::updateEmblems(const QString &udi)
 {
     Solid::Device device = m_devicemap.value(udi);
@@ -728,11 +704,10 @@ bool SolidDeviceEngine::updateInUse(const QString &udi)
 bool SolidDeviceEngine::updateSourceEvent(const QString& source)
 {
     bool update1 = updateFreeSpace(source);
-    bool update2 = updateHardDiskTemperature(source);
-    bool update3 = updateEmblems(source);
-    bool update4 = updateInUse(source);
+    bool update2 = updateEmblems(source);
+    bool update3 = updateInUse(source);
 
-    return (update1 || update2 || update3 || update4);
+    return (update1 || update2 || update3);
 }
 
 void SolidDeviceEngine::deviceRemoved(const QString& udi)
