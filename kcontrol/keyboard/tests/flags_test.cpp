@@ -79,7 +79,7 @@ private Q_SLOTS:
 
         const Rules* rules = Rules::readRules(Rules::NO_EXTRAS);
         QCOMPARE( flags->getLongText(layoutUnit, rules), QString("English (US)") );
-        QVERIFY( flags->getLongText(layoutUnit1, rules).startsWith("English (US, international with dead keys)") );
+        QVERIFY( flags->getLongText(layoutUnit1, rules).startsWith("English (US, intl., with dead keys)") );
         QCOMPARE( flags->getLongText(layoutUnit2, rules), QString("other") );
 
         rules = NULL; // when no rules found
