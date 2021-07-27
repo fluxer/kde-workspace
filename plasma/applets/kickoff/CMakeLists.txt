@@ -1,6 +1,10 @@
 #######################################################################################
 # Kickoff Library
 
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 set(libkickoff_SRCS
     core/kickoffmodel.cpp
     core/kickoffabstractmodel.cpp
@@ -31,6 +35,9 @@ set(Kickoff_LIBS ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_SOLID_LIBS} kworkspa
 
 add_library(kickoff SHARED ${libkickoff_SRCS})
 target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
+
+generate_export_header(kickoff)
+
 install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 #######################################################################################

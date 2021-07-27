@@ -21,7 +21,8 @@
 #define TEMPLATETEMPLATEPACKAGE_H
 
 #include <Plasma/PackageStructure>
-#include "../plasmagenericshell_export.h"
+
+#include "plasmagenericshell_export.h"
 
 namespace WorkspaceScripting
 {

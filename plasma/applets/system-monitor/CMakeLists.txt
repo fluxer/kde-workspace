@@ -8,9 +8,19 @@ set(lib_SRCS
     applet.cpp
     plotter.cpp
 )
+
 add_library(plasma_applet-system-monitor SHARED ${lib_SRCS})
-target_link_libraries(plasma_applet-system-monitor ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS})
-set_target_properties(plasma_applet-system-monitor PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION} )
+target_link_libraries(plasma_applet-system-monitor
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KDEUI_LIBS}
+)
+
+set_target_properties(plasma_applet-system-monitor PROPERTIES
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
+
+generate_export_header(plasma_applet-system-monitor BASE_NAME plasma_applet_system_monitor)
 
 # HDD Space Monitor
 
@@ -86,10 +96,12 @@ kde4_add_plugin(plasma_applet_system-monitor ${system-monitor_SRCS})
 target_link_libraries(plasma_applet_system-monitor ${KDE4_PLASMA_LIBS} ${KDE4_KDEUI_LIBS} plasma_applet-system-monitor)
 
 # Install
-install(TARGETS
-    plasma_applet-system-monitor
-    ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(TARGETS
+install(
+    TARGETS plasma_applet-system-monitor
+    ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
+install(
+    TARGETS
     plasma_applet_sm_hdd_activity
     plasma_applet_sm_hdd
     plasma_applet_sm_temperature
@@ -98,8 +110,10 @@ install(TARGETS
     plasma_applet_sm_cpu
     plasma_applet_sm_ram
     plasma_applet_system-monitor
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-install(FILES
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
+install(
+    FILES
     plasma-applet-sm_hdd_activity.desktop
     plasma-applet-sm_hdd.desktop
     plasma-applet-sm_temperature.desktop
@@ -108,7 +122,9 @@ install(FILES
     plasma-applet-sm_cpu.desktop
     plasma-applet-sm_ram.desktop
     plasma-applet-system-monitor.desktop
-    DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(FILES
-    hdd_panel.svgz
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/desktoptheme/default/system-monitor/)
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
+install(
+    FILES hdd_panel.svgz
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/desktoptheme/default/system-monitor/
+)

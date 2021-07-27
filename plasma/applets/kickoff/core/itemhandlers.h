@@ -22,7 +22,7 @@
 
 #include <QtCore/QObject>
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 #include "core/urlitemlauncher.h"
 
 namespace Kickoff

@@ -1,3 +1,8 @@
+include_directories(
+    ${CMAKE_CURRENT_BINARY_DIR}/ions
+)
+
+
 ADD_SUBDIRECTORY(ions)
 
 SET(weather_SRCS weatherengine.cpp)

@@ -5,7 +5,10 @@ add_subdirectory(backend)
 
 ########### kwalletd ###############
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/backend)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/backend
+    ${CMAKE_CURRENT_BINARY_DIR}/backend
+)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=285)
 

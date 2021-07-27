@@ -21,12 +21,13 @@
 #ifndef URLITEMLAUNCHER_H
 #define URLITEMLAUNCHER_H
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 
 #include <QObject>
+#include <QModelIndex>
 #include <solid/storageaccess.h>
 
-#include <QModelIndex>
+
 class KUrl;
 
 namespace Kickoff

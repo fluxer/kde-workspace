@@ -20,7 +20,7 @@
 #ifndef LEAVEMODEL_H
 #define LEAVEMODEL_H
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 
 #include <QStandardItemModel>
 

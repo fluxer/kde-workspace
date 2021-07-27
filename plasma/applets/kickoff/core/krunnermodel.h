@@ -20,8 +20,8 @@
 #ifndef KRUNNERMODEL_H
 #define KRUNNERMODEL_H
 
+#include "kickoff_export.h"
 #include "core/models.h"
-#include "core/kickoff_export.h"
 #include "core/kickoffmodel.h"
 #include "core/urlitemlauncher.h"
 

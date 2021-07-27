@@ -4,18 +4,27 @@ project(geolocation)
 
 set(plasma_geolocation_interface_SRCS geolocationprovider.cpp)
 add_library(plasma-geolocation-interface SHARED ${plasma_geolocation_interface_SRCS})
-target_link_libraries(plasma-geolocation-interface PRIVATE ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
-target_link_libraries(plasma-geolocation-interface
-                      PUBLIC ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
+target_link_libraries(plasma-geolocation-interface PUBLIC
+    ${KDE4_KIO_LIBS}
+    ${KDE4_PLASMA_LIBS}
+)
+
 set_target_properties(plasma-geolocation-interface PROPERTIES
    VERSION ${GENERIC_LIB_VERSION}
    SOVERSION ${GENERIC_LIB_SOVERSION}
 )
+
+generate_export_header(plasma-geolocation-interface BASE_NAME geolocation)
+
 install(TARGETS plasma-geolocation-interface ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-install(FILES geolocationprovider.h geolocation_export.h
-        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/geolocation
-        COMPONENT Devel)
+install(
+    FILES
+    geolocationprovider.h
+    ${CMAKE_CURRENT_BINARY_DIR}/geolocation_export.h
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/geolocation
+    COMPONENT Devel
+)
 
 #install(FILES includes/Interface
 #        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Geolocation
@@ -29,7 +38,8 @@ target_link_libraries(plasma_engine_geolocation
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS})
+    ${KDE4_SOLID_LIBS}
+)
 
 install(TARGETS plasma_engine_geolocation DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-dataengine-geolocation.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

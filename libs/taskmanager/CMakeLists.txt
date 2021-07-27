@@ -45,25 +45,27 @@ set_target_properties(taskmanager PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
+generate_export_header(taskmanager)
+
 install(
     TARGETS taskmanager
     EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
 )
 
 install(FILES
-   abstractgroupableitem.h
-   abstractgroupingstrategy.h
-   abstractsortingstrategy.h
-   groupmanager.h
-   launcheritem.h
-   startup.h
-   task.h
-   taskactions.h
-   taskgroup.h
-   taskitem.h
-   taskmanager.h
-   taskmanager_export.h
-   DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
+    abstractgroupableitem.h
+    abstractgroupingstrategy.h
+    abstractsortingstrategy.h
+    groupmanager.h
+    launcheritem.h
+    startup.h
+    task.h
+    taskactions.h
+    taskgroup.h
+    taskitem.h
+    taskmanager.h
+    ${CMAKE_CURRENT_BINARY_DIR}/taskmanager_export.h
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
 )
 
 

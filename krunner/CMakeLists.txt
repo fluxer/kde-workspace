@@ -7,6 +7,8 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/ksysguard
     ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
     ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
+    # for plasmagenericshell_export.h
+    ${CMAKE_BINARY_DIR}/libs/plasmagenericshell
     # for kworkspace_export.h
     ${CMAKE_BINARY_DIR}/libs/kworkspace
 )

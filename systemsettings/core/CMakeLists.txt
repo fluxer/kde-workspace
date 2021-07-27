@@ -10,7 +10,7 @@ set(systemsettingsview_LIB_SRCS
 )
 
 set(systemsettingsview_LIB_HDRS
-    systemsettingsview_export.h
+    ${CMAKE_CURRENT_BINARY_DIR}/systemsettingsview_export.h
     MenuItem.h
     MenuModel.h
     MenuProxyModel.h
@@ -22,6 +22,8 @@ set(systemsettingsview_LIB_HDRS
 add_library(systemsettingsview SHARED ${systemsettingsview_LIB_SRCS})
 
 target_link_libraries(systemsettingsview ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KCMUTILS_LIBS})
+
+generate_export_header(systemsettingsview)
 
 install( TARGETS systemsettingsview  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 install( FILES ${systemsettingsview_LIB_HDRS} DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/systemsettingsview COMPONENT Devel)

@@ -21,7 +21,7 @@
 #ifndef SYSTEMMODEL_H
 #define SYSTEMMODEL_H
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 #include "core/kickoffproxymodel.h"
 
 #include <QThread>

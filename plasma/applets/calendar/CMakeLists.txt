@@ -1,12 +1,21 @@
 project(plasma-applet-calendar)
 
+include_directories(
+    # for plasmaclock_export.h
+    ${CMAKE_BINARY_DIR}/libs/plasmaclock
+)
+
 set(calendar_SRCS
     calendar.cpp)
 
 add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 kde4_add_plugin(plasma_applet_calendar ${calendar_SRCS})
-target_link_libraries(plasma_applet_calendar ${KDE4_PLASMA_LIBS} plasmaclock ${KDE4_KIO_LIBS})
+target_link_libraries(plasma_applet_calendar
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    plasmaclock
+)
 
 install(TARGETS plasma_applet_calendar DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-applet-calendar.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

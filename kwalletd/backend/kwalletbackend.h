@@ -25,6 +25,8 @@
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
+#include <kdemacros.h>
+
 #include "kwalletentry.h"
 #include "backendpersisthandler.h"
 

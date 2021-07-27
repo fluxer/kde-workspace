@@ -25,7 +25,7 @@
 
 #include <KConfigGroup>
 
-#include "../plasmagenericshell_export.h"
+#include "plasmagenericshell_export.h"
 
 namespace Plasma
 {

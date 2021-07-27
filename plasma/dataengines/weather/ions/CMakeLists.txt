@@ -1,6 +1,6 @@
 # the Ion shared library
 set(ionlib_SRCS ion.cpp)
-add_library (weather_ion SHARED ${ionlib_SRCS})
+add_library(weather_ion SHARED ${ionlib_SRCS})
 target_link_libraries(weather_ion PUBLIC
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
@@ -12,6 +12,8 @@ set_target_properties(weather_ion PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
+generate_export_header(weather_ion BASE_NAME ion)
+
 install(
     TARGETS weather_ion
     EXPORT kdeworkspaceLibraryTargets
@@ -19,7 +21,9 @@ install(
 )
 
 install(
-    FILES ion.h ion_export.h
+    FILES
+    ion.h
+    ${CMAKE_CURRENT_BINARY_DIR}/ion_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/weather
     COMPONENT Devel
 )

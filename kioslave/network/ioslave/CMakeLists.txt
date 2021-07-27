@@ -2,6 +2,7 @@ project( kio_network )
 
 include_directories(
   ../network
+  ${CMAKE_CURRENT_BINARY_DIR}/../network
 )
 
 set( kio_network_SRCS

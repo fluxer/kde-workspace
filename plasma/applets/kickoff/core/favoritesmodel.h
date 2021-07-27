@@ -20,7 +20,7 @@
 #ifndef FAVORITESMODEL_H
 #define FAVORITESMODEL_H
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 #include "core/kickoffmodel.h"
 #include "core/models.h"
 

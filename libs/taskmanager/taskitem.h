@@ -24,6 +24,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef TASKITEM_H
 #define TASKITEM_H
 
+#include <kdemacros.h>
 #include <taskmanager/abstractgroupableitem.h>
 #include <taskmanager/startup.h>
 #include <taskmanager/task.h>

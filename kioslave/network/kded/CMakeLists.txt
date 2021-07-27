@@ -2,6 +2,7 @@ project( networkwatcher )
 
 include_directories(
   ../network
+  ${CMAKE_CURRENT_BINARY_DIR}/../network
   ../ioslave
 )
 set( kded_networkwatcher_SRCS

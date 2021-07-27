@@ -21,9 +21,15 @@ set_target_properties(plasmaclock PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
+generate_export_header(plasmaclock)
+
 #clockapplet.h
 install(
-    FILES clockapplet.h calendar.h calendartable.h plasmaclock_export.h
+    FILES
+    clockapplet.h
+    calendar.h
+    calendartable.h
+    ${CMAKE_CURRENT_BINARY_DIR}/plasmaclock_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasmaclock
     COMPONENT Devel
 )

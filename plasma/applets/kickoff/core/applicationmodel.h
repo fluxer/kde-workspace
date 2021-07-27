@@ -21,7 +21,7 @@
 #ifndef APPLICATIONMODEL_H
 #define APPLICATIONMODEL_H
 
-#include "core/kickoff_export.h"
+#include "kickoff_export.h"
 #include "core/kickoffabstractmodel.h"
 #include "core/models.h"
 

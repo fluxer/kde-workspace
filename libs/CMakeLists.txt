@@ -1,3 +1,8 @@
+include_directories(
+    # for taskmanager_export.h
+    ${CMAKE_BINARY_DIR}/libs
+)
+
 add_subdirectory(kephal)
 add_subdirectory(kworkspace)
 add_subdirectory(oxygen)

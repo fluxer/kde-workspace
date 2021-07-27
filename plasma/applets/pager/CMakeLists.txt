@@ -1,5 +1,11 @@
 project(plasma-pager)
 
+include_directories(
+    # for taskmanager_export.h
+    ${CMAKE_BINARY_DIR}/libs
+    ${CMAKE_BINARY_DIR}/libs/taskmanager
+)
+
 set(pager_SRCS
     model.cpp
     pager.cpp
@@ -8,11 +14,12 @@ set(pager_SRCS
 
 kde4_add_plugin(plasma_applet_pager ${pager_SRCS})
 target_link_libraries(plasma_applet_pager
-                      ${KDE4_KIO_LIBS}
-                      ${KDE4_PLASMA_LIBS}
-                      ${KDE4_KCMUTILS_LIBS}
-                      ${QT_QTDECLARATIVE_LIBRARY}
-                      taskmanager)
+    ${KDE4_KIO_LIBS}
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
+    ${QT_QTDECLARATIVE_LIBRARY}
+    taskmanager
+)
 
 install(TARGETS plasma_applet_pager DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-pager-default.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

@@ -1,14 +1,20 @@
 project(plasma-windowlist)
 
+include_directories(
+    # for taskmanager_export.h
+    ${CMAKE_BINARY_DIR}/libs
+    ${CMAKE_BINARY_DIR}/libs/taskmanager
+)
+
 set(windowlist_SRCS WindowList.cpp)
 
 kde4_add_plugin(plasma_applet_windowlist ${windowlist_SRCS})
 target_link_libraries(plasma_applet_windowlist
-                      ${KDE4_PLASMA_LIBS}
-                      ${KDE4_KDEUI_LIBS}
-                      taskmanager
-                      kworkspace
-                      )
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    taskmanager
+    kworkspace
+)
 
 install(TARGETS plasma_applet_windowlist DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-applet-windowlist.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

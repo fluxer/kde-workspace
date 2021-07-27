@@ -23,7 +23,7 @@
 #include <QScriptEngine>
 #include <QScriptValue>
 
-#include "../plasmagenericshell_export.h"
+#include "plasmagenericshell_export.h"
 
 namespace Plasma
 {

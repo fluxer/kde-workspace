@@ -21,9 +21,9 @@
 #define MONITORICON_HEADER
 
 #include <QGraphicsWidget>
-#include "sm_export.h"
+#include "plasma_applet_system_monitor_export.h"
 
-class SM_EXPORT MonitorIcon : public QGraphicsWidget
+class PLASMA_APPLET_SYSTEM_MONITOR_EXPORT MonitorIcon : public QGraphicsWidget
 {
     Q_OBJECT
     Q_PROPERTY(QString image READ image WRITE setImage)

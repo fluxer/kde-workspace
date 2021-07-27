@@ -21,7 +21,7 @@
 
 #include <QGraphicsWidget>
 
-#include "sm_export.h"
+#include "plasma_applet_system_monitor_export.h"
 
 #include <QGraphicsLinearLayout>
 
@@ -33,7 +33,7 @@ namespace Plasma {
 
 namespace SM {
 
-class SM_EXPORT Plotter : public QGraphicsWidget
+class PLASMA_APPLET_SYSTEM_MONITOR_EXPORT Plotter : public QGraphicsWidget
 {
         Q_OBJECT
     public:

@@ -1,6 +1,7 @@
 include_directories(
-   # for kworkspace_export.h
-   ${CMAKE_BINARY_DIR}/libs/kworkspace
+    ${CMAKE_CURRENT_BINARY_DIR}
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
 
 if(ENABLE_TESTING)
@@ -60,6 +61,8 @@ set_target_properties(plasmagenericshell PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
+
+generate_export_header(plasmagenericshell)
 
 install(DIRECTORY widgetsexplorer/package/
         DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/packages/org.kde.desktop.widgetexplorer

@@ -24,7 +24,7 @@
 #include <QtCore/qrect.h>
 #include <QStringList>
 
-#include "../plasmagenericshell_export.h"
+#include "plasmagenericshell_export.h"
 
 namespace Plasma
 {

@@ -26,7 +26,7 @@
 
 #include "applet.h"
 
-#include "../plasmagenericshell_export.h"
+#include "plasmagenericshell_export.h"
 
 namespace Plasma
 {

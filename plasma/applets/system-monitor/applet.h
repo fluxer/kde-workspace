@@ -22,7 +22,7 @@
 
 #include <Plasma/Applet>
 
-#include "sm_export.h"
+#include "plasma_applet_system_monitor_export.h"
 
 #define MINIMUM 24
 #define PREFERRED 200
@@ -37,7 +37,7 @@ namespace Plasma {
 
 namespace SM {
 
-class SM_EXPORT Applet : public Plasma::Applet
+class PLASMA_APPLET_SYSTEM_MONITOR_EXPORT Applet : public Plasma::Applet
 {
     Q_OBJECT
     public:

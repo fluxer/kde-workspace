@@ -21,9 +21,9 @@
 #define MONITORBUTTON_HEADER
 
 #include <Plasma/PushButton>
-#include "sm_export.h"
+#include "plasma_applet_system_monitor_export.h"
 
-class SM_EXPORT MonitorButton : public Plasma::PushButton
+class PLASMA_APPLET_SYSTEM_MONITOR_EXPORT MonitorButton : public Plasma::PushButton
 {
     Q_OBJECT
     Q_PROPERTY(QString image READ image WRITE setImage)
