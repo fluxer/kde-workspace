@@ -6,7 +6,6 @@ kde4_add_test(keditfiletype-filetypestest
     filetypestest.cpp
     ../mimetypedata.cpp
     ../mimetypewriter.cpp
-    ../sharedmimeinfoversion.cpp
 )
 target_link_libraries(keditfiletype-filetypestest
     ${KDE4_KDECORE_LIBS}
