@@ -27,6 +27,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QMetaType>
 #include <QtDBus/QtDBus>
+#include <kdemacros.h>
 #include "kfontinst_export.h"
 #include "Style.h"
 

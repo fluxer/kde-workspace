@@ -25,6 +25,7 @@
 #define __FC_H__
 
 #include <KUrl>
+#include <kdemacros.h>
 #include <fontconfig/fontconfig.h>
 #include "kfontinst_export.h"
 #include "KfiConstants.h"

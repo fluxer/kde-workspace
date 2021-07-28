@@ -27,10 +27,10 @@
 #include <QtCore/QSet>
 #include <QtCore/QMetaType>
 #include <QtDBus/QtDBus>
-#include "kfontinst_export.h"
-
 #include <QDomElement>
 #include <QTextStream>
+#include <kdemacros.h>
+#include "kfontinst_export.h"
 
 namespace KFI
 {

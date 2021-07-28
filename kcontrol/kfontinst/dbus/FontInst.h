@@ -29,10 +29,10 @@
 #include <QtCore/QSet>
 #include <QtDBus/QtDBus>
 #include <KJob>
+#include <kdemacros.h>
 #include "Family.h"
 #include "Folder.h"
 #include "FontinstIface.h"
-#include "kfontinst_export.h"
 
 #define FONTINST_PATH "/FontInst"
 
@@ -41,7 +41,7 @@
 namespace KFI
 {
 
-class KFONTINST_EXPORT FontInst : public QObject
+class KDE_EXPORT FontInst : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.fontinst")
