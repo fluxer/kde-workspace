@@ -529,6 +529,7 @@ void NOAAIon::updateWeather(const QString& source)
     data.insert("Wind Gust Unit", dataFields["windGustUnit"]);
     data.insert("Wind Direction", getWindDirectionIcon(windIcons(), dataFields["windDirection"].toLower()));
     data.insert("Credit", i18n("Data provided by NOAA National Weather Service"));
+    data.insert("Credit Url", "https://www.weather.gov/");
 
     int dayIndex = 0;
     foreach(const WeatherData::Forecast &forecast, m_weatherData[source].forecasts) {
