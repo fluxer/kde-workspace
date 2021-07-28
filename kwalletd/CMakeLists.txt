@@ -30,6 +30,8 @@ find_file(kwallet_xml org.kde.KWallet.xml HINTS ${KDE4_DBUS_INTERFACES_INSTALL_D
 
 qt4_add_dbus_adaptor( kwalletd_SRCS ${kwallet_xml} kwalletd.h KWalletD )
 
+dbus_add_activation_service(org.kde.kwalletd.service.in)
+
 add_executable( kwalletd ${kwalletd_SRCS} )
 
 target_link_libraries(kwalletd ${KDE4_KDEUI_LIBS} kwalletbackend )

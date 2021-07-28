@@ -234,7 +234,7 @@ private:
     KWalletTransaction *_curtrans; // current transaction
     QList<KWalletTransaction*> _transactions;
     QPointer< QWidget > activeDialog;
-		
+
 #ifdef Q_WS_X11
     QDBusInterface *screensaver;
 #endif
