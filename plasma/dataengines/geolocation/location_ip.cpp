@@ -81,11 +81,11 @@ Ip::~Ip()
 void Ip::update()
 {
     d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("http://api.hostip.info/get_html.php?position=true"),
+    KIO::TransferJob *datajob = KIO::get(KUrl("https://api.hostip.info/get_html.php?position=true"),
                                          KIO::NoReload, KIO::HideProgressInfo);
 
     if (datajob) {
-        kDebug() << "Fetching http://api.hostip.info/get_html.php?position=true";
+        kDebug() << "Fetching https://api.hostip.info/get_html.php?position=true";
         connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
                 SLOT(readData(KIO::Job*,QByteArray)));
         connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
