@@ -477,13 +477,13 @@ void NOAAIon::updateWeather(const QString& source)
         QString weather = condition(source).toLower();
         ConditionIcons condition = getConditionIcon(weather, true);
         data.insert("Condition Icon", getWeatherIcon(condition));
-        kDebug() << "Using daytime icons\n";
+        kDebug() << "Using daytime icons";
     } else {
         // Night
         QString weather = condition(source).toLower();
         ConditionIcons condition = getConditionIcon(weather, false);
         data.insert("Condition Icon", getWeatherIcon(condition));
-        kDebug() << "Using nighttime icons\n";
+        kDebug() << "Using nighttime icons";
     }
 
     dataFields = temperature(source);

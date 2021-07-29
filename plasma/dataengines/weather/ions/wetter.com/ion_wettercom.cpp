@@ -29,6 +29,7 @@
 #include "ion_wettercom.h"
 
 #include <KDebug>
+#include <KDateTime>
 #include <KLocalizedDate>
 #include <kunitconversion.h>
 
@@ -700,12 +701,15 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
     Plasma::DataEngine::Data data;
     data.insert("Place", m_place[source].displayName);
 
+    QString conditionIcon = "weather-none-available";
+
     if (!parseError && !m_weatherData[source].forecasts.isEmpty()) {
         data.insert("Station", m_place[source].displayName);
-        //data.insert("Condition Icon", "N/A");
         //data.insert("Temperature", "N/A");
         data.insert("Temperature Unit", QString::number(KTemperature::Celsius));
 
+        // TODO: data for day period (day or night), see:
+        // kde-extraapps/kdeplasma-addons/wallpapers/weather/TODO
         int i = 0;
         foreach(WeatherData::ForecastPeriod * forecastPeriod, m_weatherData[source].forecasts) {
             if (i > 0) {
@@ -727,6 +731,7 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
                             .arg(dayWeather.summary).arg(dayWeather.tempHigh)
                             .arg(dayWeather.tempLow).arg(dayWeather.probability));
                 i++;
+                conditionIcon = dayWeather.iconName;
 
                 if (forecastPeriod->hasNightWeather()) {
                     WeatherData::ForecastInfo nightWeather = forecastPeriod->getNightWeather();
@@ -738,6 +743,10 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
                                 .arg(nightWeather.tempLow)
                                 .arg(nightWeather.probability));
                     i++;
+                    const KDateTime localdt = KDateTime::currentLocalDateTime();
+                    if (localdt.isNightTime()) {
+                        conditionIcon = nightWeather.iconName;
+                    }
                 }
             }
         }
@@ -752,6 +761,8 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
     } else {
         kDebug() << "Something went wrong when parsing weather data for source:" << source;
     }
+
+    data.insert("Condition Icon", conditionIcon);
 
     setData(weatherSource, data);
 }
