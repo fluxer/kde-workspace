@@ -309,8 +309,8 @@ bool WetterComIon::updateIonSource(const QString& source)
 void WetterComIon::findPlace(const QString& place, const QString& source)
 {
     QCryptographicHash md5(QCryptographicHash::Md5);
-    md5.addData(QString::fromLatin1(PROJECTNAME).toUtf8());
-    md5.addData(QString::fromLatin1(APIKEY).toUtf8());
+    md5.addData(QByteArray(PROJECTNAME));
+    md5.addData(QByteArray(APIKEY));
     md5.addData(place.toUtf8());
 
     KUrl url = QString::fromLatin1(SEARCH_URL).arg(place).arg(md5.result().toHex().data());
