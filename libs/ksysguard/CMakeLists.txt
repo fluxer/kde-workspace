@@ -11,5 +11,3 @@ if(ENABLE_TESTING)
     add_subdirectory( tests )
 endif()
 
-install(DIRECTORY scripts/ DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksysguard/scripts)
-
