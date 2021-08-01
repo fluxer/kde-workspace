@@ -112,10 +112,10 @@ void WorkspaceOptionsModule::save()
 
 
     QString desktopTitleBarButtonsLeft = ownButtonsCg.readEntry("DesktopLeft", "MS");
-    QString desktopTitleBarButtonsRight = ownButtonsCg.readEntry("DesktopRight", "HIA__X");
+    QString desktopTitleBarButtonsRight = ownButtonsCg.readEntry("DesktopRight", "HIAX");
 
     QString netbookTitleBarButtonsLeft = ownButtonsCg.readEntry("NetbookLeft", "MS");
-    QString netbookTitleBarButtonsRight = ownButtonsCg.readEntry("NetbookRight", "HA__X");
+    QString netbookTitleBarButtonsRight = ownButtonsCg.readEntry("NetbookRight", "HAX");
 
 
     bool desktopPresentWindowsTabbox = false;
@@ -138,7 +138,7 @@ void WorkspaceOptionsModule::save()
     if (m_currentlyIsDesktop) {
         //save the user preferences on titlebar buttons
         desktopTitleBarButtonsLeft = kwinStyleCg.readEntry("ButtonsOnLeft", "MS");
-        desktopTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HIA__X");
+        desktopTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HIAX");
         ownButtonsCg.writeEntry("DesktopLeft", desktopTitleBarButtonsLeft);
         ownButtonsCg.writeEntry("DesktopRight", desktopTitleBarButtonsRight);
 
@@ -174,7 +174,7 @@ void WorkspaceOptionsModule::save()
     } else {
         //save the user preferences on titlebar buttons
         netbookTitleBarButtonsLeft = kwinStyleCg.readEntry("ButtonsOnLeft", "MS");
-        netbookTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HA__X");
+        netbookTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HAX");
         ownButtonsCg.writeEntry("NetbookLeft", netbookTitleBarButtonsLeft);
         ownButtonsCg.writeEntry("NetbookRight", netbookTitleBarButtonsRight);
 

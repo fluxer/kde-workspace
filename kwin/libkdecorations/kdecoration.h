@@ -335,7 +335,7 @@ public:
      * in titleButtonsLeft().
      *
      * The default ( which is also returned if customButtonPositions returns false )
-     * is "HIA__X".
+     * is "HIAX".
      * Unknown buttons in the returned string must be ignored.
      * The changed flags for this setting is SettingButtons.
      */

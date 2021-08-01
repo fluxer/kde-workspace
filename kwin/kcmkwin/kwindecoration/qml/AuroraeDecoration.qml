@@ -42,7 +42,7 @@ Item {
         property bool maximized: false
         property bool providesContextHelp: true
         property string leftButtons: "MS"
-        property string rightButtons: "HIA__X"
+        property string rightButtons: "HIAX"
         function titleMouseMoved() {}
         function readConfig(key, defaultValue) {
             if (key == "BorderSize") {
