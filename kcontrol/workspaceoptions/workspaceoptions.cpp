@@ -118,17 +118,6 @@ void WorkspaceOptionsModule::save()
     QString netbookTitleBarButtonsRight = ownButtonsCg.readEntry("NetbookRight", "HAX");
 
 
-    bool desktopPresentWindowsTabbox = false;
-    bool desktopBoxSwitchTabbox = true;
-    bool desktopCoverSwitchTabbox = false;
-    bool desktopFlipSwitchTabbox = false;
-
-    bool netbookPresentWindowsTabbox = true;
-    bool netbookBoxSwitchTabbox = false;
-    bool netbookCoverSwitchTabbox = false;
-    bool netbookFlipSwitchTabbox = false;
-
-
     int desktopPresentWindowsLayoutMode = 0;
     int netbookPresentWindowsLayoutMode = 1;
 
@@ -149,28 +138,6 @@ void WorkspaceOptionsModule::save()
         //desktop grid effect
         desktopPresentWindowsLayoutMode = kwinPresentWindowsCg.readEntry("LayoutMode", 0);
         ownPresentWindowsCg.writeEntry("DesktopLayoutMode", desktopPresentWindowsLayoutMode);
-
-        //box switch effect
-        desktopPresentWindowsTabbox = kwinPresentWindowsCg.readEntry("TabBox", false);
-        ownPresentWindowsCg.writeEntry("DesktopTabBox", desktopPresentWindowsTabbox);
-
-        KConfigGroup ownBoxSwitchCg( m_ownConfig, "Effect-BoxSwitch" );
-        KConfigGroup kwinBoxSwitchCg( m_kwinConfig, "Effect-BoxSwitch" );
-        desktopBoxSwitchTabbox = kwinBoxSwitchCg.readEntry("TabBox", desktopBoxSwitchTabbox);
-        ownBoxSwitchCg.writeEntry( "DesktopTabBox", desktopBoxSwitchTabbox );
-        ownBoxSwitchCg.sync();
-
-        KConfigGroup ownCoverSwitchCg( m_ownConfig, "Effect-CoverSwitch" );
-        KConfigGroup kwinCoverSwitchCg( m_kwinConfig, "Effect-CoverSwitch" );
-        desktopCoverSwitchTabbox = kwinCoverSwitchCg.readEntry("TabBox", desktopCoverSwitchTabbox);
-        ownCoverSwitchCg.writeEntry( "DesktopTabBox", desktopCoverSwitchTabbox );
-        ownCoverSwitchCg.sync();
-
-        KConfigGroup ownFlipSwitchCg( m_ownConfig, "Effect-FlipSwitch" );
-        KConfigGroup kwinFlipSwitchCg( m_kwinConfig, "Effect-FlipSwitch" );
-        desktopFlipSwitchTabbox = kwinFlipSwitchCg.readEntry("TabBox", desktopFlipSwitchTabbox);
-        ownFlipSwitchCg.writeEntry( "DesktopTabBox", desktopFlipSwitchTabbox );
-        ownFlipSwitchCg.sync();
     } else {
         //save the user preferences on titlebar buttons
         netbookTitleBarButtonsLeft = kwinStyleCg.readEntry("ButtonsOnLeft", "MS");
@@ -185,29 +152,6 @@ void WorkspaceOptionsModule::save()
         //desktop grid effect
         desktopPresentWindowsLayoutMode = kwinPresentWindowsCg.readEntry("LayoutMode", 0);
         ownPresentWindowsCg.writeEntry("NetbookLayoutMode", desktopPresentWindowsLayoutMode);
-
-
-        //box switch effect
-        netbookPresentWindowsTabbox = kwinPresentWindowsCg.readEntry("TabBox", false);
-        ownPresentWindowsCg.writeEntry("NetbookTabBox", netbookPresentWindowsTabbox);
-
-        KConfigGroup ownBoxSwitchCg( m_ownConfig, "Effect-BoxSwitch" );
-        KConfigGroup kwinBoxSwitchCg( m_kwinConfig, "Effect-BoxSwitch" );
-        netbookBoxSwitchTabbox = kwinBoxSwitchCg.readEntry("TabBox", netbookBoxSwitchTabbox);
-        ownBoxSwitchCg.writeEntry( "NetbookTabBox", netbookBoxSwitchTabbox );
-        ownBoxSwitchCg.sync();
-
-        KConfigGroup ownCoverSwitchCg( m_ownConfig, "Effect-CoverSwitch" );
-        KConfigGroup kwinCoverSwitchCg( m_kwinConfig, "Effect-CoverSwitch" );
-        netbookCoverSwitchTabbox = kwinCoverSwitchCg.readEntry("TabBox", netbookCoverSwitchTabbox);
-        ownCoverSwitchCg.writeEntry( "NetbookTabBox", netbookCoverSwitchTabbox );
-        ownCoverSwitchCg.sync();
-
-        KConfigGroup ownFlipSwitchCg( m_ownConfig, "Effect-FlipSwitch" );
-        KConfigGroup kwinFlipSwitchCg( m_kwinConfig, "Effect-FlipSwitch" );
-        netbookFlipSwitchTabbox = kwinFlipSwitchCg.readEntry("TabBox", netbookFlipSwitchTabbox);
-        ownFlipSwitchCg.writeEntry( "NetbookTabBox", netbookFlipSwitchTabbox );
-        ownFlipSwitchCg.sync();
     }
 
     ownButtonsCg.sync();
@@ -225,21 +169,6 @@ void WorkspaceOptionsModule::save()
 
         //present windows mode
         kwinPresentWindowsCg.writeEntry("LayoutMode", desktopPresentWindowsLayoutMode);
-
-        //what to use as tabbox
-        kwinPresentWindowsCg.writeEntry("TabBox", desktopPresentWindowsTabbox);
-
-        KConfigGroup kwinBoxSwitchCg( m_kwinConfig, "Effect-BoxSwitch" );
-        kwinBoxSwitchCg.writeEntry( "TabBox", desktopBoxSwitchTabbox );
-        kwinBoxSwitchCg.sync();
-
-        KConfigGroup kwinCoverSwitchCg( m_kwinConfig, "Effect-CoverSwitch" );
-        kwinCoverSwitchCg.writeEntry( "TabBox", desktopCoverSwitchTabbox );
-        kwinCoverSwitchCg.sync();
-
-        KConfigGroup kwinFlipSwitchCg( m_kwinConfig, "Effect-FlipSwitch" );
-        kwinFlipSwitchCg.writeEntry( "TabBox", desktopFlipSwitchTabbox );
-        kwinFlipSwitchCg.sync();
     } else {
         //kill/enable the minimize button, unless configured differently
         kwinStyleCg.writeEntry("ButtonsOnLeft", netbookTitleBarButtonsLeft);
@@ -250,21 +179,6 @@ void WorkspaceOptionsModule::save()
 
         //present windows mode
         kwinPresentWindowsCg.writeEntry("LayoutMode", netbookPresentWindowsLayoutMode);
-
-        //what to use as tabbox
-        kwinPresentWindowsCg.writeEntry("TabBox", netbookPresentWindowsTabbox);
-
-        KConfigGroup kwinBoxSwitchCg( m_kwinConfig, "Effect-BoxSwitch" );
-        kwinBoxSwitchCg.writeEntry( "TabBox", netbookBoxSwitchTabbox );
-        kwinBoxSwitchCg.sync();
-
-        KConfigGroup kwinCoverSwitchCg( m_kwinConfig, "Effect-CoverSwitch" );
-        kwinCoverSwitchCg.writeEntry( "TabBox", netbookCoverSwitchTabbox );
-        kwinCoverSwitchCg.sync();
-
-        KConfigGroup kwinFlipSwitchCg( m_kwinConfig, "Effect-FlipSwitch" );
-        kwinFlipSwitchCg.writeEntry( "TabBox", netbookFlipSwitchTabbox );
-        kwinFlipSwitchCg.sync();
     }
 
     kwinStyleCg.sync();
