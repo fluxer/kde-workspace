@@ -17,10 +17,6 @@ kde4_add_plugin(imagethumbnail ${imagethumbnail_PART_SRCS})
 
 target_link_libraries(imagethumbnail ${KDE4_KIO_LIBS} ${KDE4_KEXIV2_LIBS})
 
-set_target_properties(imagethumbnail PROPERTIES
-    COMPILE_FLAGS "-DHAVE_KEXIV2 ${KDE4_ENABLE_EXCEPTIONS}"
-)
-
 install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES imagecreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
 install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})

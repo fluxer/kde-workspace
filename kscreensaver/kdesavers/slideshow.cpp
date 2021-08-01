@@ -38,15 +38,12 @@
 #include <kaboutapplicationdialog.h>
 #include <kdebug.h>
 #include <krandom.h>
+#include <kexiv2.h>
 
 #include <stdlib.h>
 #include <assert.h>
 #include <math.h>
 #include <time.h>
-
-#ifdef HAVE_KEXIV2
-#include <libkexiv2/kexiv2.h>
-#endif
 
 #include "slideshow.h"
 #include "moc_slideshow.cpp"
@@ -896,10 +893,8 @@ nexttry:
   }
   mFileIdx++;
 
-#ifdef HAVE_KEXIV2
-  KExiv2Iface::KExiv2 exiv(fname);
-  exiv.rotateExifQImage(mImage, exiv.getImageOrientation());
-#endif
+  KExiv2 exiv(fname);
+  exiv.rotateImage(mImage);
 
   mImageName = mPrintPath ? fname : QFileInfo(fname).completeBaseName();
 }

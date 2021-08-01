@@ -25,10 +25,7 @@
 #include <QCheckBox>
 #include <kdemacros.h>
 #include <klocale.h>
-
-#ifdef HAVE_KEXIV2
-#include <libkexiv2/kexiv2.h>
-#endif
+#include <kexiv2.h>
 
 extern "C"
 {
@@ -40,19 +37,20 @@ extern "C"
 
 bool ImageCreator::create(const QString &path, int, int, QImage &img)
 {
-    // create image preview
-    if (!img.load(path)) {
+    // use preview from Exiv2 metadata if possible
+    KExiv2 exiv(path);
+    img = exiv.preview();
+
+    // create image preview otherwise
+    if (img.isNull() && !img.load(path)) {
         return false;
     }
 
-#ifdef HAVE_KEXIV2
     ImageCreatorSettings* settings = ImageCreatorSettings::self();
     settings->readConfig();
     if (settings->rotate()) {
-        KExiv2Iface::KExiv2 exiv(path);
-        exiv.rotateExifQImage(img, exiv.getImageOrientation());
+        exiv.rotateImage(img);
     }
-#endif
 
     if (img.depth() != 32) {
         img = img.convertToFormat(img.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32);

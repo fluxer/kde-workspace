@@ -28,7 +28,6 @@ set(kslideshow.kss_SRCS slideshow.cpp slideshowcfg.ui)
 
 add_executable(kslideshow.kss ${kslideshow.kss_SRCS})
 
-set_source_files_properties(slideshow.cpp PROPERTIES COMPILE_FLAGS -DHAVE_KEXIV2)
 target_link_libraries(kslideshow.kss
     ${KDE4_KIO_LIBS}
     ${KDE4_KEXIV2_LIBS}
