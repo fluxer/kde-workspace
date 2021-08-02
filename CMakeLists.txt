@@ -152,14 +152,6 @@ set_package_properties(Fontconfig PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(LibGPS)
-set_package_properties(LibGPS PROPERTIES
-    DESCRIPTION "GPSes/AIS service library"
-    URL "http://www.catb.org/gpsd/"
-    PURPOSE "GPS support for geolocation in plasma dataengine"
-    TYPE OPTIONAL
-)
-
 macro_optional_find_package(LibKonq)
 set_package_properties(LibKonq PROPERTIES
     DESCRIPTION "Konqueror library"

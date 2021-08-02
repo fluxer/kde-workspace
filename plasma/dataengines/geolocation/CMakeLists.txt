@@ -54,14 +54,3 @@ install(FILES plasma-geolocation-ip.desktop DESTINATION ${KDE4_SERVICES_INSTALL_
 install(TARGETS plasma-geolocation-ip DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 # -------------------------------------------------------------------------------------------------
-
-if(LIBGPS_FOUND)
-    include_directories(${LIBGPS_INCLUDES} ${LIBGPS_INCLUDE_DIR})
-    set(plasma_geolocation_gps_SRCS location_gps.cpp)
-    kde4_add_plugin(plasma-geolocation-gps ${plasma_geolocation_gps_SRCS})
-    target_link_libraries(plasma-geolocation-gps plasma-geolocation-interface ${LIBGPS_LIBRARIES})
-    install(FILES plasma-geolocation-gps.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-    install(TARGETS plasma-geolocation-gps DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-endif(LIBGPS_FOUND)
-
-# -------------------------------------------------------------------------------------------------
