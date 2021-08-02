@@ -3,6 +3,8 @@
  *                  - Original Implementation.
  *                 2009 Andrew Coles  <andrew.coles@yahoo.co.uk>
  *                  - Extension to iplocationtools engine.
+ *                 2021 Ivailo Monev <xakepa10@gmail.com>
+ *                  - Additional IP provider for geolocation engine.
  *
  *   This program is free software; you can redistribute it and/or
  *   modify it under the terms of the GNU General Public License as
@@ -18,74 +20,60 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "location_ip.h"
+#include "location_ipinfo.h"
 #include <KDebug>
 #include <KJob>
 #include <KIO/Job>
 #include <KIO/TransferJob>
+#include <QJsonDocument>
+#include <locale>
 
-class Ip::Private : public QObject {
+class IPinfo::Private : public QObject {
 
 public:
     QByteArray payload;
 
     void populateDataEngineData(Plasma::DataEngine::Data & outd)
     {
-        QString country, countryCode, city, latitude, longitude, ip;
-        const QList<QByteArray> &bl = payload.split('\n');
-        payload.clear();
-        foreach (const QByteArray &b, bl) {
-            const QList<QByteArray> &t = b.split(':');
-            if (t.count() > 1) {
-                const QByteArray k = t[0];
-                const QByteArray v = t[1];
-                if (k == "Latitude") {
-                    latitude = v;
-                } else if (k == "Longitude") {
-                    longitude = v;
-                } else if (k == "Country") {
-                    QStringList cc = QString(v).split('(');
-                    if (cc.count() > 1) {
-                        country = cc[0].trimmed();
-                        countryCode = cc[1].replace(')', "");
-                    }
-                } else if (k == "City") {
-                    city = v;
-                } else if (k == "IP") {
-                    ip = v;
-                }
-            }
-        }
-        // ordering of first three to preserve backwards compatibility
-        outd["accuracy"] = 40000;
-        outd["country"] = country;
-        outd["country code"] = countryCode;
-        outd["city"] = city;
+        const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
+        const QVariantMap jsonmap = jsondoc.toVariant().toMap();
+        const QStringList location = jsonmap["loc"].toString().split(QLatin1Char(','));
+        // TODO: which is which?
+        const QString latitude = (location.size() == 2 ? location.at(0) : QString());
+        const QString longitude = (location.size() == 2 ? location.at(1) : QString());
+        const QLocale locale(jsonmap["country"].toString());
+        // for reference:
+        // https://ipinfo.io/developers
+        outd["accuracy"] = 50000;
+        outd["country"] = QLocale::countryToString(locale.country());
+        outd["country code"] = jsonmap["country"];
+        outd["city"] = jsonmap["city"];
         outd["latitude"] = latitude;
         outd["longitude"] = longitude;
-        outd["ip"] = ip;
+        outd["ip"] = jsonmap["ip"];
+        // qDebug() << Q_FUNC_INFO << outd;
     }
 };
 
-Ip::Ip(QObject* parent, const QVariantList& args)
+IPinfo::IPinfo(QObject* parent, const QVariantList& args)
     : GeolocationProvider(parent, args), d(new Private())
 {
     setUpdateTriggers(SourceEvent | NetworkConnected);
 }
 
-Ip::~Ip()
+IPinfo::~IPinfo()
 {
     delete d;
 }
 
-void Ip::update()
+void IPinfo::update()
 {
     d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("https://api.hostip.info/get_html.php?position=true"),
+    KIO::TransferJob *datajob = KIO::get(KUrl("https://ipinfo.io/json"),
                                          KIO::NoReload, KIO::HideProgressInfo);
 
     if (datajob) {
-        kDebug() << "Fetching https://api.hostip.info/get_html.php?position=true";
+        kDebug() << "Fetching https://ipinfo.io/json";
         connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
                 SLOT(readData(KIO::Job*,QByteArray)));
         connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
@@ -94,7 +82,7 @@ void Ip::update()
     }
 }
 
-void Ip::readData(KIO::Job* job, const QByteArray& data)
+void IPinfo::readData(KIO::Job* job, const QByteArray& data)
 {
     Q_UNUSED(job)
 
@@ -104,7 +92,7 @@ void Ip::readData(KIO::Job* job, const QByteArray& data)
     d->payload.append(data);
 }
 
-void Ip::result(KJob* job)
+void IPinfo::result(KJob* job)
 {
     Plasma::DataEngine::Data outd;
 
@@ -117,6 +105,6 @@ void Ip::result(KJob* job)
     setData(outd);
 }
 
-K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(ip, Ip)
+K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(ipinfo, IPinfo)
 
-#include "moc_location_ip.cpp"
+#include "moc_location_ipinfo.cpp"

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Geolocation HostIP
+Comment=Geolocation from IP address via https://hostip.info/.
+X-KDE-ServiceTypes=Plasma/GeolocationProvider
+X-KDE-ParentApp=geolocation
+Type=Service
+Icon=applications-internet
+X-KDE-Library=plasma-geolocation-hostip
+X-KDE-PluginInfo-Name=hostip

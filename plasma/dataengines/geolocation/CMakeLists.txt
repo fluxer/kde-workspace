@@ -47,10 +47,16 @@ install(FILES plasma-geolocationprovider.desktop DESTINATION ${KDE4_SERVICETYPES
 
 # -------------------------------------------------------------------------------------------------
 
-set(plasma_geolocation_ip_SRCS location_ip.cpp)
-kde4_add_plugin(plasma-geolocation-ip ${plasma_geolocation_ip_SRCS})
-target_link_libraries(plasma-geolocation-ip plasma-geolocation-interface)
-install(FILES plasma-geolocation-ip.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(TARGETS plasma-geolocation-ip DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+set(plasma_geolocation_hostip_SRCS location_hostip.cpp)
+kde4_add_plugin(plasma-geolocation-hostip ${plasma_geolocation_hostip_SRCS})
+target_link_libraries(plasma-geolocation-hostip plasma-geolocation-interface)
+install(FILES plasma-geolocation-hostip.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+install(TARGETS plasma-geolocation-hostip DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 # -------------------------------------------------------------------------------------------------
+
+set(plasma_geolocation_ipinfo_SRCS location_ipinfo.cpp)
+kde4_add_plugin(plasma-geolocation-ipinfo ${plasma_geolocation_ipinfo_SRCS})
+target_link_libraries(plasma-geolocation-ipinfo plasma-geolocation-interface)
+install(FILES plasma-geolocation-ipinfo.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+install(TARGETS plasma-geolocation-ipinfo DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})

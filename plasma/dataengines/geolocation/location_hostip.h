@@ -15,8 +15,8 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef IP_H
-#define IP_H
+#ifndef HOSTIP_H
+#define HOSTIP_H
 
 #include "geolocationprovider.h"
 
@@ -25,12 +25,12 @@ namespace KIO {
     class Job;
 }
 
-class Ip : public GeolocationProvider
+class HostIP : public GeolocationProvider
 {
     Q_OBJECT
 public:
-    explicit Ip(QObject *parent = 0, const QVariantList &args = QVariantList());
-    ~Ip();
+    explicit HostIP(QObject *parent = 0, const QVariantList &args = QVariantList());
+    ~HostIP();
 
     virtual void update();
 
