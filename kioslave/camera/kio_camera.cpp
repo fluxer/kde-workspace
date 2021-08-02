@@ -187,7 +187,8 @@ void KameraProtocol::closeCamera(void)
     }
 
     kDebug(7123) << "KameraProtocol::closeCamera at " << getpid();
-    if (gpr = gp_camera_exit(m_camera,m_context) != GP_OK) {
+    gpr = gp_camera_exit(m_camera, m_context);
+    if (gpr != GP_OK) {
         kDebug(7123) << "closeCamera failed with " << gp_result_as_string(gpr);
     }
     // HACK: gp_camera_exit() in gp 2.0 does not close the port if there
@@ -478,7 +479,7 @@ void KameraProtocol::statRegular(const KUrl &xurl)
 #define GPHOTO_TEXT_FILE(xx)                                    \
     if (directory == "/" && file == #xx".txt") {                \
         CameraText xx;                                          \
-        gpr = gp_camera_get_##xx(m_camera,  &xx, m_context);    \
+        gpr = gp_camera_get_##xx(m_camera, &xx, m_context);     \
         if (gpr != GP_OK) {                                     \
             error(KIO::ERR_DOES_NOT_EXIST, xurl.fileName());    \
             return;                                             \
