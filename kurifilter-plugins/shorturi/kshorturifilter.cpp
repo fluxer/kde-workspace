@@ -167,14 +167,6 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
   // executable and only the argument part, if any, changed! (Dawit)
   // You mean caching the last filtering, to try and reuse it, to save stat()s? (David)
 
-  const QString starthere_proto = QL1S("start-here:");
-  if (cmd.indexOf(starthere_proto) == 0 )
-  {
-    setFilteredUri( data, KUrl("system:/") );
-    setUriType( data, KUriFilterData::LocalDir );
-    return true;
-  }
-
   // Detect UNC style (aka windows SMB) URLs
   if ( cmd.startsWith( QLatin1String( "\\\\") ) )
   {

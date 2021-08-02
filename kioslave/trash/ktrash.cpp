@@ -73,12 +73,6 @@ int main(int argc, char *argv[])
 
     QString restoreArg = args->getOption( "restore" );
     if ( !restoreArg.isEmpty() ) {
-
-        if (restoreArg.indexOf(QLatin1String("system:/trash"))==0) {
-            restoreArg.remove(0, 13);
-            restoreArg.prepend(QString::fromLatin1("trash:"));
-        }
-
         KUrl trashURL( restoreArg );
         if ( !trashURL.isValid() || trashURL.protocol() != QLatin1String("trash") ) {
             kError() << "Invalid URL for restoring a trashed file:" << trashURL << endl;
