@@ -26,7 +26,7 @@
 #include <KIO/Job>
 #include <KIO/TransferJob>
 #include <QJsonDocument>
-#include <locale>
+#include <QLocale>
 
 class IPinfo::Private : public QObject {
 
