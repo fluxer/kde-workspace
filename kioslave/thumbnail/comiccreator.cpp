@@ -81,7 +81,7 @@ bool ComicCreator::create(const QString& path, int width, int height, QImage& im
     }
 
     if (cover.isNull()) {
-        kWarning(KIO_THUMB) << "Error creating the comic book thumbnail.";
+        kDebug(KIO_THUMB) << "Error creating the comic book thumbnail.";
         return false;
     }
 
@@ -175,7 +175,10 @@ QImage ComicCreator::extractRARImage(const QString& path)
     /// Extracts the cover image out of the .cbr file.
 
     // Check if unrar is available. Get its path in 'unrarPath'.
-    QString unrar = unrarPath();
+    QString unrar = unrarPath("--version");
+    if (unrar.isEmpty()) {
+        unrar = unrarPath("-v");
+    }
     if (unrar.isEmpty()) {
         kWarning(KIO_THUMB) << "A suitable version of unrar is not available.";
         return QImage();
@@ -217,7 +220,7 @@ QStringList ComicCreator::getRARFileList(const QString& path,
     return entries;
 }
 
-QString ComicCreator::unrarPath() const
+QString ComicCreator::unrarPath(const QString& versionarg) const
 {
     /// Check the standard paths to see if a suitable unrar is available.
     QString unrar = KStandardDirs::findExe("unrar");
@@ -229,7 +232,7 @@ QString ComicCreator::unrarPath() const
     }
     if (!unrar.isEmpty()) {
         QProcess proc;
-        proc.start(unrar, QStringList() << "--version");
+        proc.start(unrar, QStringList() << versionarg);
         proc.waitForFinished(-1);
         const QStringList lines = QString::fromLocal8Bit(proc.readAllStandardOutput()).split
             ('\n', QString::SkipEmptyParts);

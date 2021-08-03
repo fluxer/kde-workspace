@@ -67,7 +67,7 @@ class ComicCreator : public QObject, public ThumbCreator
         // For "rar" type files.
         // Uses the non-free 'unrar' executable, if available.
         QImage extractRARImage(const QString& path);
-        QString unrarPath() const;
+        QString unrarPath(const QString& versionarg) const;
         QStringList getRARFileList(const QString& path, const QString& unrarPath);
 
     private slots:
