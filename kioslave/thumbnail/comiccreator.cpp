@@ -67,21 +67,21 @@ bool ComicCreator::create(const QString& path, int width, int height, QImage& im
     // Detect mime type.
     const KMimeType::Ptr mime = KMimeType::findByFileContent(path);
 
-    if (mime->is("application/x-cbz") || mime->name() == "application/zip") {
+    if (mime->is("application/x-cbz") || mime->is("application/zip")) {
         // ZIP archive.
         cover = extractArchiveImage(path, ZIP);
     } else if (mime->is("application/x-cbt") ||
-                mime->name() == "application/x-gzip" ||
-                mime->name() == "application/x-tar") {
+               mime->is("application/x-gzip") ||
+               mime->is("application/x-tar")) {
         // TAR archive
         cover = extractArchiveImage(path, TAR);
-    } else if (mime->is("application/x-cbr") || mime->name() == "application/x-rar") {
+    } else if (mime->is("application/x-cbr") || mime->is("application/x-rar")) {
         // RAR archive.
         cover = extractRARImage(path);
     }
 
     if (cover.isNull()) {
-        kDebug(KIO_THUMB)<<"Error creating the comic book thumbnail.";
+        kWarning(KIO_THUMB) << "Error creating the comic book thumbnail.";
         return false;
     }
 
@@ -177,7 +177,7 @@ QImage ComicCreator::extractRARImage(const QString& path)
     // Check if unrar is available. Get its path in 'unrarPath'.
     QString unrar = unrarPath();
     if (unrar.isEmpty()) {
-        kDebug(KIO_THUMB)<<"A suitable version of unrar is not available.";
+        kWarning(KIO_THUMB) << "A suitable version of unrar is not available.";
         return QImage();
     }
 
