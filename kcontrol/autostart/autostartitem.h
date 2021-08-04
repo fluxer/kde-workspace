@@ -55,21 +55,8 @@ class ScriptStartItem : public AutoStartItem
     Q_OBJECT
 
 public:
-    enum ENV { START=0, SHUTDOWN=1, PRE_START=2}; //rename
     ScriptStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* );
     ~ScriptStartItem();
-
-    void changeStartup( ScriptStartItem::ENV type );
-
-signals:
-    void askChangeStartup(ScriptStartItem* item, int index);
-
-private slots:
-
-    void slotStartupChanged(int index);
-
-private:
-    QComboBox *m_comboBoxStartup;
 };
 
 #endif

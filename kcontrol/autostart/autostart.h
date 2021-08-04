@@ -39,19 +39,14 @@ class Autostart: public KCModule
 public:
     Autostart( QWidget* parent, const QVariantList&  );
     ~Autostart();
-    enum COL_TYPE { COL_NAME = 0, COL_COMMAND=1, COL_STATUS=2,COL_RUN=3 };
+    enum COL_TYPE { COL_NAME = 0, COL_COMMAND=1, COL_STATUS=2 };
     void load();
     void save();
     void defaults();
 
-    QStringList listPathName() const { return m_pathName;}
-
-public slots:
-    void slotChangeStartup( ScriptStartItem* item, int index );
-
 protected:
-    void addItem(DesktopStartItem *item, const QString& name, const QString& run, const QString& command, bool disabled );
-    void addItem(ScriptStartItem *item, const QString& name, const QString& command, ScriptStartItem::ENV type );
+    void addItem(DesktopStartItem *item, const QString& name, const QString& command, bool disabled );
+    void addItem(ScriptStartItem *item, const QString& name, const QString& command );
 
 private slots:
     void slotAddProgram();
@@ -67,7 +62,6 @@ private slots:
 private:
     QTreeWidgetItem *m_programItem, *m_scriptItem;
     QStringList m_paths;
-    QStringList m_pathName;
 
     Ui_AutostartConfig *widget;
 };

@@ -71,41 +71,11 @@ DesktopStartItem::~DesktopStartItem()
 ScriptStartItem::ScriptStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* autostart )
     : AutoStartItem( service, parent,autostart )
 {
-    m_comboBoxStartup = new QComboBox;
-    m_comboBoxStartup->addItems( autostart->listPathName() );
-
-    setText( 2, i18nc( "The program will be run", "Enabled" ) );
-    QObject::connect( m_comboBoxStartup,SIGNAL(activated(int)),this,SLOT(slotStartupChanged(int)) );
-    QObject::connect( this,SIGNAL(askChangeStartup(ScriptStartItem*,int)),autostart,SLOT(slotChangeStartup(ScriptStartItem*,int)) );
-    treeWidget()->setItemWidget ( this, Autostart::COL_RUN, m_comboBoxStartup );
 }
 
 ScriptStartItem::~ScriptStartItem()
 {
 }
 
-void ScriptStartItem::slotStartupChanged(int index)
-{
-    emit askChangeStartup(this, index);
-}
-
-void ScriptStartItem::changeStartup(ScriptStartItem::ENV type )
-{
-    switch( type )
-    {
-    case ScriptStartItem::START:
-        m_comboBoxStartup->setCurrentIndex( 0 );
-        break;
-    case ScriptStartItem::SHUTDOWN:
-        m_comboBoxStartup->setCurrentIndex( 1 );
-        break;
-    case ScriptStartItem::PRE_START:
-        m_comboBoxStartup->setCurrentIndex( 2 );
-        break;
-    default:
-        kWarning() << " startup type is not defined :" << type;
-        break;
-    }
-}
 
 #include "moc_autostartitem.cpp"

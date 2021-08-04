@@ -57,8 +57,7 @@ K_PLUGIN_FACTORY(AutostartFactory, registerPlugin<Autostart>();)
     QStringList lstHeader;
     lstHeader << i18n( "Name" )
               << i18n( "Command" )
-              << i18n( "Status" )
-              << i18nc("@title:column The name of the column that decides if the program is run on kde startup, on kde shutdown, etc", "Run On" );
+              << i18n( "Status" );
     widget->listCMD->setHeaderLabels(lstHeader);
     widget->listCMD->setFocus();
 
@@ -113,22 +112,20 @@ void Autostart::slotItemClicked( QTreeWidgetItem *item, int col)
     }
 }
 
-void Autostart::addItem( DesktopStartItem* item, const QString& name, const QString& run, const QString& command, bool disabled )
+void Autostart::addItem( DesktopStartItem* item, const QString& name, const QString& command, bool disabled )
 {
     Q_ASSERT( item );
     item->setText( COL_NAME, name );
-    item->setText( COL_RUN, run );
     item->setText( COL_COMMAND, command );
     item->setCheckState( COL_STATUS, disabled ? Qt::Unchecked : Qt::Checked );
     item->setText( COL_STATUS, disabled ? i18nc( "The program won't be run", "Disabled" ) : i18nc( "The program will be run", "Enabled" ));
 }
 
-void Autostart::addItem(ScriptStartItem* item, const QString& name, const QString& command, ScriptStartItem::ENV type )
+void Autostart::addItem(ScriptStartItem* item, const QString& name, const QString& command )
 {
     Q_ASSERT( item );
     item->setText( COL_NAME, name );
     item->setText( COL_COMMAND, command );
-    item->changeStartup( type );
 }
 
 
@@ -139,16 +136,9 @@ void Autostart::load()
     // autostart on the otherhand may contain all of the above.
     // share/autostart is special as it overrides entries found in $KDEDIR/share/autostart
     m_paths << KGlobalSettings::autostartPath()	// All new entries should go here
-            << componentData().dirs()->localkdedir() + "shutdown/"
-            << componentData().dirs()->localkdedir() + "env/"
             << componentData().dirs()->localkdedir() + "share/autostart/"	// For Importing purposes
             << componentData().dirs()->localxdgconfdir() + "autostart/" ; //xdg-config autostart dir
 
-    // share/autostart shouldn't be an option as this should be reserved for global autostart entries
-    m_pathName << i18n("Startup")
-             << i18n("Shutdown")
-             << i18n("Pre-KDE startup")
-        ;
     widget->listCMD->clear();
 
     m_programItem = new QTreeWidgetItem( widget->listCMD );
@@ -204,37 +194,21 @@ void Autostart::load()
                                       (!onlyShowList.isEmpty() && !onlyShowList.contains("KDE"));
 
                 int indexPath = m_paths.indexOf((item->fileName().directory()+'/' ) );
-                if ( indexPath > 2 )
+                if ( indexPath > 0 )
                     indexPath = 0; //.kde/share/autostart and .config/autostart load destkop at startup
-                addItem(item, config.readName(), m_pathName.value(indexPath),  grp.readEntry("Exec"), disabled );
+                addItem(item, config.readName(), grp.readEntry("Exec"), disabled );
             }
             else
             {
                 ScriptStartItem *item = new ScriptStartItem( fi.absoluteFilePath(), m_scriptItem,this );
                 int typeOfStartup = m_paths.indexOf((item->fileName().directory()+'/') );
-                ScriptStartItem::ENV type = ScriptStartItem::START;
-                switch( typeOfStartup )
-                {
-                case 0:
-                    type =ScriptStartItem::START;
-                    break;
-                case 1:
-                    type = ScriptStartItem::SHUTDOWN;
-                    break;
-                case 2:
-                    type = ScriptStartItem::PRE_START;
-                    break;
-                default:
-                    kDebug()<<" type is not defined :"<<type;
-                    break;
-                }
                 if ( fi.isSymLink() ) {
                     QString link = fi.readLink();
-                    addItem(item, filename, link, type );
+                    addItem(item, filename, link );
                 }
                 else
                 {
-                    addItem( item, filename, filename,type );
+                    addItem( item, filename, filename );
                 }
             }
         }
@@ -244,7 +218,6 @@ void Autostart::load()
     widget->listCMD->resizeColumnToContents(COL_NAME);
     //widget->listCMD->resizeColumnToContents(COL_COMMAND);
     widget->listCMD->resizeColumnToContents(COL_STATUS);
-    widget->listCMD->resizeColumnToContents(COL_RUN);
 }
 
 void Autostart::slotAddProgram()
@@ -297,7 +270,7 @@ void Autostart::slotAddProgram()
             return;
     }
     DesktopStartItem * item = new DesktopStartItem( desktopPath, m_programItem,this );
-    addItem( item, service->name(), m_pathName[0],  service->exec() , false);
+    addItem( item, service->name(), service->exec() , false);
 }
 
 void Autostart::slotAddScript()
@@ -311,7 +284,7 @@ void Autostart::slotAddScript()
             KIO::copy(addDialog->importUrl(), m_paths[0]);
 
         ScriptStartItem * item = new ScriptStartItem( m_paths[0] + addDialog->importUrl().fileName(), m_scriptItem,this );
-        addItem( item,  addDialog->importUrl().fileName(), addDialog->importUrl().fileName(),ScriptStartItem::START );
+        addItem( item,  addDialog->importUrl().fileName(), addDialog->importUrl().fileName() );
     }
     delete addDialog;
 }
@@ -352,7 +325,7 @@ void Autostart::slotEditCMD(QTreeWidgetItem* ent)
         DesktopStartItem *desktopEntry = dynamic_cast<DesktopStartItem*>( entry );
         if (desktopEntry) {
             KService service(desktopEntry->fileName().path());
-            addItem( desktopEntry, service.name(), m_pathName.value(m_paths.indexOf((desktopEntry->fileName().directory()+'/') )), service.exec(),false );
+            addItem( desktopEntry, service.name(), service.exec(),false );
         }
     }
 }
@@ -403,20 +376,6 @@ void Autostart::slotAdvanced()
         }
     }
     delete dlg;
-}
-
-void Autostart::slotChangeStartup( ScriptStartItem* item, int index )
-{
-    Q_ASSERT(item);
-
-    if ( item )
-    {
-        item->setPath(m_paths.value(index));
-        widget->listCMD->setCurrentItem( item );
-        if ( ( index == 2 ) && !item->fileName().path().endsWith( ".sh" ))
-            KMessageBox::information( this, i18n( "Only files with “.sh” extensions are allowed for setting up the environment." ) );
-
-    }
 }
 
 void Autostart::slotSelectionChanged()
