@@ -5,7 +5,7 @@ Type=Service
 X-KDE-ServiceTypes=KCModule
 X-DocPath=kcontrol/spellchecking/index.html
 
-X-KDE-Library=kcmspellchecking
+X-KDE-Library=kcm_spellchecking
 X-KDE-ParentApp=kcontrol
 
 X-KDE-System-Settings-Parent-Category=locale
