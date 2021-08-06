@@ -142,7 +142,7 @@ void NetworkStatusModule::notifyStatus( uint status)
         d->firstnotification = false;
         return;
     }
-    KNotification *notify = Q_NULLPTR;
+    KNotification *notify = nullptr;
     switch ((Solid::Networking::Status)status) {
         case Solid::Networking::Unknown: {
             notify = new KNotification("Unknown");
