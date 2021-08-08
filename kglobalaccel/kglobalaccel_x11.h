@@ -31,41 +31,41 @@ class GlobalShortcutsRegistry;
  */
 class KGlobalAccelImpl : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-    KGlobalAccelImpl( GlobalShortcutsRegistry *owner);
+    KGlobalAccelImpl(GlobalShortcutsRegistry *owner);
 
 public:
-	/**
-	 * This function registers or unregisters a certain key for global capture,
-	 * depending on \b grab.
-	 *
-	 * Before destruction, every grabbed key will be released, so this
-	 * object does not need to do any tracking.
-	 *
-	 * \param key the Qt keycode to grab or release.
-	 * \param grab true to grab they key, false to release the key.
-	 *
-	 * \return true if successful, otherwise false.
-	 */
-	bool grabKey(int key, bool grab);
-	
-	/// Enable/disable all shortcuts. There will not be any grabbed shortcuts at this point.
-	void setEnabled(bool);
+    /**
+     * This function registers or unregisters a certain key for global capture,
+     * depending on \b grab.
+     *
+     * Before destruction, every grabbed key will be released, so this
+     * object does not need to do any tracking.
+     *
+     * \param key the Qt keycode to grab or release.
+     * \param grab true to grab they key, false to release the key.
+     *
+     * \return true if successful, otherwise false.
+     */
+    bool grabKey(int key, bool grab);
+    
+    /// Enable/disable all shortcuts. There will not be any grabbed shortcuts at this point.
+    void setEnabled(bool);
 
 private:
-	/**
-	 * Filters X11 events ev for key bindings in the accelerator dictionary.
-	 * If a match is found the activated activated is emitted and the function
-	 * returns true. Return false if the event is not processed.
-	 *
-	 * This is public for compatibility only. You do not need to call it.
-	 */
-	virtual bool x11Event( XEvent* );
-	void x11MappingNotify();
-	bool x11KeyPress( const XEvent *pEvent );
-	
+    /**
+     * Filters X11 events ev for key bindings in the accelerator dictionary.
+     * If a match is found the activated activated is emitted and the function
+     * returns true. Return false if the event is not processed.
+     *
+     * This is public for compatibility only. You do not need to call it.
+     */
+    virtual bool x11Event(XEvent*);
+    void x11MappingNotify();
+    bool x11KeyPress(const XEvent *pEvent);
+
     GlobalShortcutsRegistry *m_owner;
 };
 

@@ -37,9 +37,8 @@ class GlobalShortcutContext;
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
 class GlobalShortcut
-    {
+{
 public:
-
     GlobalShortcut(const QString &uniqueName, const QString &friendlyName, GlobalShortcutContext *context);
     GlobalShortcut();
 
@@ -97,15 +96,14 @@ public:
     void unRegister();
 
 private:
-
     //! means the associated application is present.
-    bool _isPresent:1;
+    bool _isPresent;
 
     //! means the shortcut is registered with GlobalShortcutsRegistry
-    bool _isRegistered:1;
+    bool _isRegistered;
 
     //! means the shortcut is new
-    bool _isFresh:1;
+    bool _isFresh;
 
     //! The context the shortcut belongs too
     GlobalShortcutContext *_context;
@@ -115,7 +113,6 @@ private:
 
     QList<int> _keys;
     QList<int> _defaultKeys;
-    };
-
+};
 
 #endif /* #ifndef GLOBALSHORTCUT_H */

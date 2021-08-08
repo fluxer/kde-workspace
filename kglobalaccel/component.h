@@ -37,23 +37,17 @@ namespace KdeDGlobalAccel {
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
 class Component : public QObject
-    {
+{
     Q_OBJECT
-
     Q_CLASSINFO("D-Bus Interface", "org.kde.kglobalaccel.Component")
 
     Q_SCRIPTABLE Q_PROPERTY( QString friendlyName READ friendlyName )
     Q_SCRIPTABLE Q_PROPERTY( QString uniqueName READ uniqueName )
 
 public:
-
     //! Creates a new component. The component will be registered with @p
     //! registry if specified and registered with dbus.
-    Component(
-            const QString &uniqueName,
-            const QString &friendlyName,
-            GlobalShortcutsRegistry *registry = NULL);
-
+    Component(const QString &uniqueName, const QString &friendlyName, GlobalShortcutsRegistry *registry = NULL);
     ~Component();
 
     bool activateGlobalShortcutContext(const QString &uniqueName);
@@ -93,17 +87,12 @@ public:
 
     //! Returns the shortcut by unique name. Only the active context is
     //! searched.
-    GlobalShortcut *getShortcutByName(
-            const QString &uniqueName,
-            const QString &context = "default") const;
+    GlobalShortcut *getShortcutByName(const QString &uniqueName, const QString &context = "default") const;
 
     /**
      * Check if @a key is available for component @p component
      */
-    bool isShortcutAvailable(
-            int key,
-            const QString &component,
-            const QString &context) const;
+    bool isShortcutAvailable(int key, const QString &component, const QString &context) const;
 
     //! Load the settings from config group @p config
     void loadSettings(KConfigGroup &config);
@@ -119,7 +108,6 @@ public:
     void writeSettings(KConfigGroup &config) const;
 
 public Q_SLOTS:
-
     // For dbus Q_SCRIPTABLE has to be on slots. Scriptable methods are not
     // exported.
 
@@ -161,12 +149,10 @@ public Q_SLOTS:
     Q_SCRIPTABLE void invokeShortcut(const QString &shortcutName, const QString &context = "default");
 
 Q_SIGNALS:
-
     //! Signals that a action for this component was triggered
     Q_SCRIPTABLE void globalShortcutPressed(const QString &componentUnique, const QString &shortcutUnique, qlonglong timestamp);
 
 private:
-
     QString _uniqueName;
     //the name as it would be found in a magazine article about the application,
     //possibly localized if a localized name exists.
@@ -176,9 +162,8 @@ private:
 
     GlobalShortcutContext *_current;
     QHash<QString, GlobalShortcutContext *> _contexts;
-    };
+};
 
 }
-
 
 #endif /* #ifndef COMPONENT_H */

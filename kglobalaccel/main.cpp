@@ -32,10 +32,10 @@
 #include <signal.h>
 
 static bool isEnabled()
-    {
+{
     // TODO: Check if kglobalaccel can be disabled
     return true;
-    }
+}
 
 
 static void sighandler(int /*sig*/)
@@ -46,7 +46,7 @@ static void sighandler(int /*sig*/)
 
 
 int main(int argc, char **argv)
-    {
+{
     // Disable Session Management the right way (C)
     //
     // ksmserver has global shortcuts. disableSessionManagement() does not prevent Qt from
@@ -72,17 +72,15 @@ int main(int argc, char **argv)
     KUniqueApplication::addCmdLineOptions();
 
     // check if kglobalaccel is disabled
-    if (!isEnabled())
-        {
+    if (!isEnabled()) {
         kDebug() << "kglobalaccel is disabled!";
         return 0;
-        }
+    }
 
-    if (!KUniqueApplication::start())
-        {
+    if (!KUniqueApplication::start()) {
         kDebug() << "kglobalaccel is already running!";
         return (0);
-        }
+    }
 
     // As in the KUniqueApplication example only create a instance AFTER
     // calling KUniqueApplication::start()
@@ -106,4 +104,4 @@ int main(int argc, char **argv)
     }
 
     return app.exec();
-    }
+}

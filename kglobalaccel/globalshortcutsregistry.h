@@ -29,9 +29,9 @@ class GlobalShortcut;
 class KGlobalAccelImpl;
 
 namespace KdeDGlobalAccel
-    {
+{
     class Component;
-    }
+}
 
 /**
  * Global Shortcut Registry.
@@ -49,13 +49,11 @@ namespace KdeDGlobalAccel
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
 class GlobalShortcutsRegistry : public QObject
-    {
+{
     Q_OBJECT
-
     Q_CLASSINFO("D-Bus Interface", "org.kde.KdedGlobalAccel.GlobalShortcutsRegistry")
 
 public:
-
     /**
      * Activate all shortcuts having their application present.
      */
@@ -75,7 +73,6 @@ public:
      * Deactivate all currently active shortcuts.
      */
     void deactivateShortcuts(bool temporarily=false);
-
 
     /**
      * Get the shortcut corresponding to key. Only active shortcut are
@@ -110,10 +107,7 @@ public:
      * It is available if not used by another component in any context or used
      * by @p component only in not active contexts.
      */
-    bool isShortcutAvailable(
-            int shortcut,
-            const QString &component,
-            const QString &context) const;
+    bool isShortcutAvailable(int shortcut, const QString &component, const QString &context) const;
 
     static GlobalShortcutsRegistry *self();
 
@@ -126,7 +120,6 @@ public:
     bool unregisterKey(int key, GlobalShortcut *shortcut);
 
 public Q_SLOTS:
-
     void clear();
 
     void loadSettings();
@@ -140,7 +133,6 @@ public Q_SLOTS:
     void ungrabKeys();
 
 private:
-
     friend class KdeDGlobalAccel::Component;
     friend class KGlobalAccelImpl;
 
@@ -163,7 +155,7 @@ private:
     mutable KConfig _config;
 
     QDBusObjectPath _dbusPath;
-    };
+};
 
 
 #endif /* #ifndef GLOBALSHORTCUTSREGISTRY_H */

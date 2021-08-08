@@ -33,16 +33,12 @@ class GlobalShortcut;
  * @author Michael Jansen <kde@michael-jansen.biz>
  */
 class GlobalShortcutContext
-    {
+{
 public:
-
     /**
      * Default constructor
      */
-    GlobalShortcutContext(
-            const QString &uniqueName,
-            const QString &friendlyName,
-            KdeDGlobalAccel::Component *component );
+    GlobalShortcutContext(const QString &uniqueName, const QString &friendlyName, KdeDGlobalAccel::Component *component );
 
     /**
      * Destructor
@@ -86,6 +82,5 @@ private:
     //! The actions associated with this context
     QHash<QString, GlobalShortcut*> _actions;
 };
-
 
 #endif /* #ifndef GLOBALSHORTCUTCONTEXT_H */

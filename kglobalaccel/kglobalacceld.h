@@ -41,9 +41,7 @@ class KGlobalAccelD : public QObject, protected QDBusContext
     Q_ENUMS(SetShortcutFlag)
 
 public:
-
-    enum SetShortcutFlag
-    {
+    enum SetShortcutFlag {
         SetPresent = 2,
         NoAutoloading = 4,
         IsDefault = 8
@@ -56,7 +54,6 @@ public:
     bool init();
 
 public Q_SLOTS:
-
     /**
      * Get the dbus path for all known components.
      *
@@ -86,8 +83,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE QDBusObjectPath getComponent(const QString &componentUnique);
 
     //to be called by main components owning the action
-    Q_SCRIPTABLE QList<int> setShortcut(const QStringList &actionId,
-                           const QList<int> &keys, uint flags);
+    Q_SCRIPTABLE QList<int> setShortcut(const QStringList &actionId, const QList<int> &keys, uint flags);
 
     //this is used if application A wants to change shortcuts of application B
     Q_SCRIPTABLE void setForeignShortcut(const QStringList &actionId, const QList<int> &keys);
@@ -101,9 +97,7 @@ public Q_SLOTS:
     //! @see unregister
     Q_SCRIPTABLE KDE_DEPRECATED void unRegister(const QStringList &actionId);
 
-    Q_SCRIPTABLE void activateGlobalShortcutContext(
-            const QString &component,
-            const QString &context);
+    Q_SCRIPTABLE void activateGlobalShortcutContext(const QString &component, const QString &context);
 
 
     /**
@@ -117,9 +111,7 @@ public Q_SLOTS:
     /**
      * Return true if the @p shortcut is available for @p component.
      */
-    Q_SCRIPTABLE bool isGlobalShortcutAvailable(
-            int key,
-            const QString &component) const;
+    Q_SCRIPTABLE bool isGlobalShortcutAvailable(int key, const QString &component) const;
 
     /**
      * Delete the shortcut with @a component and @name.
@@ -132,21 +124,16 @@ public Q_SLOTS:
      *
      * @return @c true if the shortcuts was deleted, @c false if it didn't * exist.
      */
-    Q_SCRIPTABLE bool unregister(
-            const QString &componentUnique,
-            const QString &shortcutUnique);
+    Q_SCRIPTABLE bool unregister(const QString &componentUnique, const QString &shortcutUnique);
 
 Q_SIGNALS:
-
     Q_SCRIPTABLE void yourShortcutGotChanged(const QStringList &actionId, const QList<int> &newKeys);
 
 private Q_SLOTS:
-
     void blockGlobalShortcuts(int);
 
 
 private:
-
     Q_PRIVATE_SLOT(d, void _k_newGlobalShortcutNotification() )
 
     void scheduleWriteSettings() const;
