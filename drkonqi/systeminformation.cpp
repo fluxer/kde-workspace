@@ -24,6 +24,8 @@
 
 #ifdef HAVE_UNAME
 # include <sys/utsname.h>
+# include <string.h>
+# include <errno.h>
 #endif
 
 #include <QtCore/QFile>
@@ -49,7 +51,7 @@ QString SystemInformation::fetchOSDetailInformation() const
 #ifdef HAVE_UNAME
     struct utsname buf;
     if (::uname(&buf) == -1) {
-        kDebug() << "call to uname failed" << perror;
+        kDebug() << "call to uname failed" << ::strerror(errno);
     } else {
         operatingSystem = QString::fromLocal8Bit(buf.sysname) + ' '
             + QString::fromLocal8Bit(buf.release) + ' '
