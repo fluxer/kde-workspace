@@ -57,24 +57,5 @@ bool khotkeys_active()
     {
     return _khotkeys_active;
     }
-    
-// does the opposite of KStandardDirs::findResource() i.e. e.g.
-// "/opt/kde2/share/applnk/System/konsole.desktop" -> "System/konsole.desktop"
-QString get_menu_entry_from_path( const QString& path_P )
-    {
-    const QStringList dirs = KGlobal::dirs()->resourceDirs( "apps" );
-    for( QStringList::ConstIterator it = dirs.constBegin();
-         it != dirs.constEnd();
-         ++it )
-        if( path_P.indexOf( *it ) == 0 )
-            {
-            QString ret = path_P;
-            ret.remove( 0, (*it).length());
-            if( ret[ 0 ] == '/' )
-                ret.remove( 0, 1 );
-            return ret;
-            }
-    return path_P;
-    }
 
 } // namespace KHotKeys
