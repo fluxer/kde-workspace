@@ -196,24 +196,27 @@ void Temperature::dataUpdated(const QString& source,
         return;
     }
     SM::Plotter *plotter = qobject_cast<SM::Plotter*>(visualization(source));
-    QString unit = data["units"].toString();
+    const QString unit = data["units"].toString();
     double doubleValue = data["value"].toDouble() + temperatureOffset(source);
     KTemperature value(doubleValue, unit);
 
+    QString stringValue;
     if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
         doubleValue = value.convertTo(KTemperature::Celsius);
+        stringValue = KTemperature(doubleValue, KTemperature::Celsius).toString();
     } else {
         doubleValue = value.convertTo(KTemperature::Fahrenheit);
+        stringValue = KTemperature(doubleValue, KTemperature::Fahrenheit).toString();
     }
 
     doubleValue = KTemperature::round(doubleValue, 1);
     if (plotter) {
-        plotter->addSample(QList<double>() << value.number());
+        plotter->addSample(QList<double>() << doubleValue);
     }
 
     if (mode() == SM::Applet::Panel) {
         setToolTip(source,
-                   QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(value.toString()));
+                   QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(stringValue));
     }
 }
 
