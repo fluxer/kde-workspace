@@ -98,14 +98,14 @@ bool ProcessesLocal::Private::readProcStatus(const QString &dir, Process *proces
             }
             case 'U': {
                 if((unsigned int)size > sizeof("Uid:") && qstrncmp(mBuffer, "Uid:", sizeof("Uid:")-1) == 0) {
-                    sscanf(mBuffer + sizeof("Uid:") -1, "%Ld %Ld %Ld %Ld", &process->uid, &process->euid, &process->suid, &process->fsuid);
+                    sscanf(mBuffer + sizeof("Uid:") -1, "%lld %lld %lld %lld", &process->uid, &process->euid, &process->suid, &process->fsuid);
                     if(++found == 5) goto finish;
                 }
                 break;
             }
             case 'G': {
                 if((unsigned int)size > sizeof("Gid:") && qstrncmp(mBuffer, "Gid:", sizeof("Gid:")-1) == 0) {
-                    sscanf(mBuffer + sizeof("Gid:")-1, "%Ld %Ld %Ld %Ld", &process->gid, &process->egid, &process->sgid, &process->fsgid);
+                    sscanf(mBuffer + sizeof("Gid:")-1, "%lld %lld %lld %lld", &process->gid, &process->egid, &process->sgid, &process->fsgid);
                     if(++found == 5) goto finish;
                 }
                 break;
