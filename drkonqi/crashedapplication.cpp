@@ -19,16 +19,12 @@
 
 #include "crashedapplication.h"
 
-#if defined(HAVE_STRSIGNAL) && defined(Q_OS_UNIX)
+#if defined(HAVE_STRSIGNAL)
 # include <clocale>
 # include <cstring>
 # include <cstdlib>
 #else
-# if defined(Q_OS_UNIX)
-#  include <signal.h>
-# else
-#  include <windows.h>
-# endif
+# include <signal.h>
 #endif
 
 #include <KToolInvocation>
@@ -83,7 +79,7 @@ int CrashedApplication::signalNumber() const
 
 QString CrashedApplication::signalName() const
 {
-#if defined(HAVE_STRSIGNAL) && defined(Q_OS_UNIX)
+#if defined(HAVE_STRSIGNAL)
     const char * oldLocale = std::setlocale(LC_MESSAGES, NULL);
     char * savedLocale;
     if (oldLocale) {
@@ -98,34 +94,11 @@ QString CrashedApplication::signalName() const
     return QString::fromLocal8Bit(name != NULL ? name : "Unknown");
 #else
     switch (m_signalNumber) {
-# if defined(Q_OS_UNIX)
     case SIGILL: return QLatin1String("SIGILL");
     case SIGABRT: return QLatin1String("SIGABRT");
     case SIGFPE: return QLatin1String("SIGFPE");
     case SIGSEGV: return QLatin1String("SIGSEGV");
     case SIGBUS: return QLatin1String("SIGBUS");
-# else
-    case EXCEPTION_ACCESS_VIOLATION: return QLatin1String("EXCEPTION_ACCESS_VIOLATION");
-    case EXCEPTION_DATATYPE_MISALIGNMENT: return QLatin1String("EXCEPTION_DATATYPE_MISALIGNMENT");
-    case EXCEPTION_BREAKPOINT: return QLatin1String("EXCEPTION_BREAKPOINT");
-    case EXCEPTION_SINGLE_STEP: return QLatin1String("EXCEPTION_SINGLE_STEP");
-    case EXCEPTION_ARRAY_BOUNDS_EXCEEDED: return QLatin1String("EXCEPTION_ARRAY_BOUNDS_EXCEEDED");
-    case EXCEPTION_FLT_DENORMAL_OPERAND: return QLatin1String("EXCEPTION_FLT_DENORMAL_OPERAND");
-    case EXCEPTION_FLT_DIVIDE_BY_ZERO: return QLatin1String("EXCEPTION_FLT_DIVIDE_BY_ZERO");
-    case EXCEPTION_FLT_INEXACT_RESULT: return QLatin1String("EXCEPTION_FLT_INEXACT_RESULT");
-    case EXCEPTION_FLT_INVALID_OPERATION: return QLatin1String("EXCEPTION_FLT_INVALID_OPERATION");
-    case EXCEPTION_FLT_OVERFLOW: return QLatin1String("EXCEPTION_FLT_OVERFLOW");
-    case EXCEPTION_FLT_STACK_CHECK: return QLatin1String("EXCEPTION_FLT_STACK_CHECK");
-    case EXCEPTION_FLT_UNDERFLOW: return QLatin1String("EXCEPTION_FLT_UNDERFLOW");
-    case EXCEPTION_INT_DIVIDE_BY_ZERO: return QLatin1String("EXCEPTION_INT_DIVIDE_BY_ZERO");
-    case EXCEPTION_INT_OVERFLOW: return QLatin1String("EXCEPTION_INT_OVERFLOW");
-    case EXCEPTION_PRIV_INSTRUCTION: return QLatin1String("EXCEPTION_PRIV_INSTRUCTION");
-    case EXCEPTION_IN_PAGE_ERROR: return QLatin1String("EXCEPTION_IN_PAGE_ERROR");
-    case EXCEPTION_ILLEGAL_INSTRUCTION: return QLatin1String("EXCEPTION_ILLEGAL_INSTRUCTION");
-    case EXCEPTION_NONCONTINUABLE_EXCEPTION: return QLatin1String("EXCEPTION_NONCONTINUABLE_EXCEPTION");
-    case EXCEPTION_STACK_OVERFLOW: return QLatin1String("EXCEPTION_STACK_OVERFLOW");
-    case EXCEPTION_INVALID_DISPOSITION: return QLatin1String("EXCEPTION_INVALID_DISPOSITION");
-# endif
     default: return QLatin1String("Unknown");
     }
 #endif
