@@ -14,7 +14,7 @@ fi
 trap 'echo GOT SIGHUP' HUP
 
 # in case we have been started with full pathname spec without being in PATH
-if [ -n "$PATH " ]; then
+if test -n "$PATH" ; then
     qdbus=$(basename @QT_QDBUS_EXECUTABLE@)
 else
     qdbus=@QT_QDBUS_EXECUTABLE@
