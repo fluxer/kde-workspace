@@ -170,7 +170,9 @@ static void print_extension_list(const char *ext, QTreeWidgetItem *l1)
     const QString qext = QString::fromLatin1(ext);
     QTreeWidgetItem *l2 = NULL;
 
-    foreach(const QString &it, qext.split(QLatin1String(" "), QString::SkipEmptyParts)) {
+    QStringList qexts = qext.split(QLatin1String(" "), QString::SkipEmptyParts);
+    qSort(qexts);
+    foreach(const QString &it, qexts) {
         if (!l2) {
             l2 = newItem(l1, it);
         } else {
