@@ -135,8 +135,6 @@ bool TextCreator::create(const QString &path, int width, int height, QImage &img
 #endif
             m_pixmap.fill( bgColor );
 
-            QRect rect;
-
             QPainter painter( &m_pixmap );
             painter.setFont( font );
             painter.setPen( fgColor );
