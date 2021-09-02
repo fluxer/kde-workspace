@@ -840,6 +840,8 @@ QVListLayout *SolSerialDevice::infoPanelLayout()
       type = i18nc("platform serial interface type", "Platform"); break;
     case Solid::SerialInterface::Usb:
       type = i18n("USB"); break;
+    case Solid::SerialInterface::Pci:
+      type = i18n("PCI"); break;
     default:
       type = i18nc("unknown serial interface type", "Unknown"); 
   }
