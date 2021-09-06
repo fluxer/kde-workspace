@@ -36,7 +36,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
-#include <sys/errno.h>
+#include <errno.h>
 
 #define KFI_DBUG kDebug() << time(0L)
 
