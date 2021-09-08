@@ -69,7 +69,7 @@ bool XF86VModeGamma::isSupported() const
 
 float XF86VModeGamma::gamma() const
 {
-    float result = 0;
+    float result = 50.0;
 
     if (!m_supported) {
         return result;
