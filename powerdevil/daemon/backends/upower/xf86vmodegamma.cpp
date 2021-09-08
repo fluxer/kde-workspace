@@ -92,6 +92,11 @@ void XF86VModeGamma::setGamma(float gamma)
         return;
     }
 
+    if (gamma < 0.1 || gamma > 100.0) {
+        kWarning() << "Gamma should be in the 0.1-100.0 range";
+        return;
+    }
+
     XF86VidModeGamma xgamma;
     // in case new member is added
     ::memset(&xgamma, 0, sizeof(XF86VidModeGamma));
