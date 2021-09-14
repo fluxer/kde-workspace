@@ -19,15 +19,13 @@
 #include "krunnerdialog.h"
 
 #include <QPainter>
-#include <QSvgRenderer>
 #include <QtGui/qevent.h>
-#include <QtGui/qevent.h>
-#ifdef Q_WS_X11
-#include <QtGui/qx11info_x11.h>
-#endif
 #include <QBitmap>
 #include <QTimer>
 #include <QDesktopWidget>
+#ifdef Q_WS_X11
+#include <QtGui/qx11info_x11.h>
+#endif
 
 #include <KDebug>
 #include <KWindowSystem>
