@@ -38,6 +38,7 @@
 
 static int pipefd = 0;
 static int socketfd = 0;
+
 static bool isWalletEnabled()
 {
     KConfig cfg("kwalletrc");
@@ -144,6 +145,12 @@ char* checkPamModule(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+    // check if kwallet is disabled
+    if (!isWalletEnabled()) {
+        kDebug() << "kwalletd is disabled!";
+        return (0);
+    }
+
     char *hash = NULL;
     if (getenv("PAM_KWALLET_LOGIN")) {
         hash = checkPamModule(argc, argv);
@@ -165,12 +172,6 @@ int main(int argc, char **argv)
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
     app.setQuitOnLastWindowClosed( false );
-
-    // check if kwallet is disabled
-    if (!isWalletEnabled()) {
-        kDebug() << "kwalletd is disabled!";
-        return (0);
-    }
 
     if (!KUniqueApplication::start()) {
         kDebug() << "kwalletd is already running!";
