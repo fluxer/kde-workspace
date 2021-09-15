@@ -73,6 +73,7 @@ target_link_libraries(kdm_greet
     ${KDE4_KDEUI_LIBS}
     ${QT_QTXML_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
+    ${QT_QTSVG_LIBRARY}
     ${X11_X11_LIB}
 )
 if (X11_XTest_FOUND)

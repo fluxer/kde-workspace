@@ -31,7 +31,7 @@ set(svgthumbnail_PART_SRCS svgcreator.cpp)
 
 kde4_add_plugin(svgthumbnail ${svgthumbnail_PART_SRCS})
 
-target_link_libraries(svgthumbnail ${KDE4_KIO_LIBS})
+target_link_libraries(svgthumbnail ${KDE4_KIO_LIBS} ${QT_QTSVG_LIBRARY})
 
 install(TARGETS svgthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
