@@ -52,7 +52,7 @@ bool EXRCreator::create(const QString &path, int, int, QImage &img)
         QImage qpreview(preview.width(), preview.height(), QImage::Format_RGB32);
         for (unsigned int y = 0; y < preview.height(); y++ ) {
             for (unsigned int x=0; x < preview.width(); x++) {
-                const Imf::PreviewRgba &q = preview.pixels()[x+(y*preview.width())];
+                const Imf::PreviewRgba &q = preview.pixel(x, y);
                 qpreview.setPixel(x, y, qRgba(q.r, q.g, q.b, q.a));
             }
         }
