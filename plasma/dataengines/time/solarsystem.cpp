@@ -55,8 +55,8 @@ void Sun::rotate(double* y, double* z)
     *z *= sind(m_obliquity);
 }
 
-Moon::Moon(Sun *sun)
-    : m_sun(sun)
+Moon::Moon(Sun *sunptr)
+    : m_sun(sunptr)
 {
 }
 

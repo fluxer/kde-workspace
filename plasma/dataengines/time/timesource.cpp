@@ -193,7 +193,7 @@ QString TimeSource::parseName(const QString &name)
     return list.at(0);
 }
 
-Sun* TimeSource::sun()
+Sun* TimeSource::sunptr()
 {
     if (!m_sun) {
         m_sun = new Sun();
@@ -202,10 +202,10 @@ Sun* TimeSource::sun()
     return m_sun;
 }
 
-Moon* TimeSource::moon()
+Moon* TimeSource::moonptr()
 {
     if (!m_moon) {
-        m_moon = new Moon(sun());
+        m_moon = new Moon(sunptr());
     }
     m_moon->setPosition(m_latitude, m_longitude);
     return m_moon;
@@ -213,7 +213,7 @@ Moon* TimeSource::moon()
 
 void TimeSource::addMoonPositionData(const QDateTime &dt)
 {
-    Moon* m = moon();
+    Moon* m = moonptr();
     m->calcForDateTime(dt, m_offset);
     setData("Moon Azimuth", m->azimuth());
     setData("Moon Zenith", 90 - m->altitude());
@@ -223,7 +223,7 @@ void TimeSource::addMoonPositionData(const QDateTime &dt)
 
 void TimeSource::addDailyMoonPositionData(const QDateTime &dt)
 {
-    Moon* m = moon();
+    Moon* m = moonptr();
     QList< QPair<QDateTime, QDateTime> > times = m->timesForAngles(
             QList<double>() << -0.833, dt, m_offset);
     setData("Moonrise", times[0].first);
@@ -234,7 +234,7 @@ void TimeSource::addDailyMoonPositionData(const QDateTime &dt)
 
 void TimeSource::addSolarPositionData(const QDateTime &dt)
 {
-    Sun* s = sun();
+    Sun* s = sunptr();
     s->calcForDateTime(dt, m_offset);
     setData("Azimuth", s->azimuth());
     setData("Zenith", 90.0 - s->altitude());
@@ -243,7 +243,7 @@ void TimeSource::addSolarPositionData(const QDateTime &dt)
 
 void TimeSource::addDailySolarPositionData(const QDateTime &dt)
 {
-    Sun* s = sun();
+    Sun* s = sunptr();
     QList< QPair<QDateTime, QDateTime> > times = s->timesForAngles(
             QList<double>() << -0.833 << -6.0 << -12.0 << -18.0, dt, m_offset);
 

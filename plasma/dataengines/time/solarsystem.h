@@ -110,7 +110,7 @@ class Sun : public SolarSystemObject
 class Moon : public SolarSystemObject
 {
     public:
-        Moon(Sun *sun);
+        Moon(Sun *sunptr);
         virtual ~Moon() {}; // to not delete the Sun
 
         virtual void calcForDateTime(const QDateTime& local, int offset);
