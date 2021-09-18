@@ -22,19 +22,19 @@
 // Use Katie's OS detection
 #include <qglobal.h>
 
-#if defined Q_OS_LINUX
+#if defined(Q_OS_LINUX)
 #include "processes_linux_p.cpp"
-#elif defined Q_OS_FREEBSD
+#elif defined(Q_OS_FREEBSD)
 #include "processes_freebsd_p.cpp"
-#elif defined Q_OS_DRAGONFLY
+#elif defined(Q_OS_DRAGONFLY)
 #include "processes_dragonfly_p.cpp"
-#elif defined Q_OS_OPENBSD
+#elif defined(Q_OS_OPENBSD)
 #include "processes_openbsd_p.cpp"
-#elif defined Q_OS_NETBSD
+#elif defined(Q_OS_NETBSD)
 #include "processes_netbsd_p.cpp"
-#elif Q_OS_SOLARIS
+#elif defined(Q_OS_SOLARIS)
 #include "processes_solaris_p.cpp"
-#elif defined Q_CC_GNU
+#elif defined(Q_CC_GNU)
 #include "processes_gnu_p.cpp"
 #endif
 
