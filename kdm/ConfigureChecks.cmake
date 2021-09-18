@@ -44,28 +44,6 @@ if (PAM_FOUND)
 endif (PAM_FOUND)
 cmake_reset_check_state()
 
-
-macro(define_library LIB FN)
-    set(varname ${FN}_in_${LIB})
-    string(TOUPPER ${LIB}_LIBRARIES libname)
-    check_library_exists(${LIB} ${FN} "" ${varname})
-    set(${libname})
-    if (${varname})
-        set(${libname} ${LIB})
-    endif (${varname})
-endmacro(define_library)
-
-define_library(s authenticate)
-define_library(posix4 sched_yield)
-define_library(socket connect)
-define_library(resolv dn_expand)
-
-# for Solaris
-check_function_exists(gethostbyname have_gethostbyname)
-if (NOT have_gethostbyname)
-    define_library(nsl gethostbyname)
-endif (NOT have_gethostbyname)
-
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${SOCKET_LIBRARIES})
 check_c_source_runs("

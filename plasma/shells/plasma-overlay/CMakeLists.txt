@@ -27,8 +27,18 @@ qt4_add_dbus_adaptor(plasma-overlay_SRCS ${plasmaapp_dbusXML} plasmaapp.h Plasma
 
 add_executable(plasma-overlay ${plasma-overlay_SRCS})
 
-target_link_libraries(plasma-overlay ${KDE4_PLASMA_LIBS} kworkspace  ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS}
-                                     ${X11_X11_LIB} plasmagenericshell ${QT_QTDECLARATIVE_LIBRARY} kdeclarative)
+target_link_libraries(plasma-overlay
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${QT_QTDECLARATIVE_LIBRARY}
+    ${X11_X11_LIB}
+    ${SOCKET_LIBRARIES}
+    kworkspace
+    plasmagenericshell
+    kdeclarative
+)
+
 if(X11_Xrender_FOUND)
   target_link_libraries(plasma-overlay ${X11_Xrender_LIB})
 endif(X11_Xrender_FOUND)
