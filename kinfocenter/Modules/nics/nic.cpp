@@ -215,7 +215,7 @@ QList<MyNIC*> findNICs() {
 
 			ifcopy=*ifr;
 			result=-1; // if none of the two #ifs below matches, ensure that result!=0 so that "Unknown" is returned as result
-#ifdef SIOCGIFHWADDR
+#if defined(SIOCGIFHWADDR) && defined(HAVE_STRUCT_IFREQ_IFR_IFRU_IFRU_HWADDR)
 			result=ioctl(sockfd, SIOCGIFHWADDR, &ifcopy);
 			if (result==0) {
 				char *n = &ifcopy.ifr_ifru.ifru_hwaddr.sa_data[0];

@@ -10,3 +10,6 @@
 
 /* Define to 1 if you have the `getifaddrs' function. */
 #cmakedefine HAVE_GETIFADDRS 1
+
+/* Define to 1 if `ifru_hwaddr' is member of `struct ifreq.ifr_ifru'. */
+#cmakedefine HAVE_STRUCT_IFREQ_IFR_IFRU_IFRU_HWADDR
