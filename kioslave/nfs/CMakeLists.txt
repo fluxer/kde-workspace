@@ -1,13 +1,16 @@
-## Check for XDR functions
-include(CheckFunctionExists)
+## Check for XDR types
+include(CheckTypeSize)
 
-CHECK_FUNCTION_EXISTS(xdr_u_int64_t HAVE_XDR_U_INT64_T)
-CHECK_FUNCTION_EXISTS(xdr_uint64_t HAVE_XDR_UINT64_T)
-CHECK_FUNCTION_EXISTS(xdr_u_hyper HAVE_XDR_U_HYPER)
-CHECK_FUNCTION_EXISTS(xdr_u_longlong_t HAVE_XDR_U_LONGLONG_T)
+cmake_reset_check_state()
+set(CMAKE_EXTRA_INCLUDE_FILES "rpc/rpc.h")
+check_type_size(xdr_u_int64_t HAVE_XDR_U_INT64_T)
+check_type_size(xdr_uint64_t HAVE_XDR_UINT64_T)
+check_type_size(xdr_u_hyper HAVE_XDR_U_HYPER)
+check_type_size(xdr_u_longlong_t HAVE_XDR_U_LONGLONG_T)
+cmake_reset_check_state()
 
 if (NOT HAVE_XDR_U_INT64_T AND NOT HAVE_XDR_UINT64_T AND NOT HAVE_XDR_U_HYPER AND NOT HAVE_XDR_U_LONGLONG_T)
-    message(FATAL_ERROR "Could not find 64-bit XDR datatype functions!")
+    message(FATAL_ERROR "Could not find 64-bit XDR data types!")
 endif (NOT HAVE_XDR_U_INT64_T AND NOT HAVE_XDR_UINT64_T AND NOT HAVE_XDR_U_HYPER AND NOT HAVE_XDR_U_LONGLONG_T)
 
 if (HAVE_XDR_U_INT64_T)
