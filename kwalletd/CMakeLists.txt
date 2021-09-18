@@ -34,7 +34,11 @@ dbus_add_activation_service(org.kde.kwalletd.service.in)
 
 add_executable( kwalletd ${kwalletd_SRCS} )
 
-target_link_libraries(kwalletd ${KDE4_KDEUI_LIBS} kwalletbackend )
+target_link_libraries(kwalletd
+    ${KDE4_KDEUI_LIBS}
+    ${SOCKET_LIBRARIES}
+    kwalletbackend
+)
 
 install(TARGETS kwalletd  ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
