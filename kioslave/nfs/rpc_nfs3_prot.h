@@ -6,6 +6,11 @@
 #ifndef _RPC_NFS3_PROT_H_RPCGEN
 #define _RPC_NFS3_PROT_H_RPCGEN
 
+// This is needed on Solaris so that rpc.h defines clnttcp_create etc.
+#ifndef PORTMAP
+#define PORTMAP
+#endif
+
 #include <rpc/rpc.h>
 
 

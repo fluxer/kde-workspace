@@ -23,7 +23,11 @@
 
 #include "kio_nfs.h"
 
-#define PORTMAP  //this seems to be required to compile on Solaris
+// This is needed on Solaris so that rpc.h defines clnttcp_create etc.
+#ifndef PORTMAP
+#define PORTMAP
+#endif
+
 #include <rpc/rpc.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
