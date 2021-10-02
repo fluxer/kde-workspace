@@ -46,7 +46,6 @@ public:
     void teardown();
     QList<QVariantMap> query(const QString &sql, QMap<QString,QVariant> bindObjects);
     QList<QVariantMap> query(BuildQuery *buildQuery, QMap<QString,QVariant> bindObjects);
-    QList<QVariantMap> query(const QString &sql);
 
 private:
     QString const m_databaseFile;
