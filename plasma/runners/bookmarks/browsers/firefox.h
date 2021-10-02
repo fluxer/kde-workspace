@@ -21,7 +21,6 @@
 #ifndef FIREFOX_H
 #define FIREFOX_H
 
-#include <QSqlDatabase>
 #include "browser.h"
 
 class KJob;

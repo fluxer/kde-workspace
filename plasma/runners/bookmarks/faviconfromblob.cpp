@@ -31,9 +31,6 @@
 #include "fetchsqlite.h"
 
 #include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QSqlRecord>
 
 #define dbFileName m_profileCacheDirectory + QDir::separator() + "Favicons.sqlite"
 

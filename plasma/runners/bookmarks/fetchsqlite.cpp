@@ -19,9 +19,10 @@
  */
 
 #include "fetchsqlite.h"
+#include "bookmarksrunner_defs.h"
+
 #include <QFile>
 #include <KDebug>
-#include "bookmarksrunner_defs.h"
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>

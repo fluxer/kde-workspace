@@ -21,6 +21,7 @@
 #include <QFile>
 #include <QDir>
 #include <QUrl>
+#include <QSqlDatabase>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
