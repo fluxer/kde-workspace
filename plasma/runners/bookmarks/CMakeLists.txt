@@ -6,7 +6,6 @@ set(krunner_bookmarksrunner_SRCS
     faviconfromblob.cpp
     favicon.cpp
     fetchsqlite.cpp
-    browsers/opera.cpp
     bookmarksrunner.cpp
     browsers/kdebrowser.cpp
     browsers/firefox.cpp
