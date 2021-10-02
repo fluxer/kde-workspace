@@ -61,8 +61,8 @@ public:
             "WHERE page_url = :url ORDER BY height desc LIMIT 1;";
       }
       return "SELECT * FROM favicons inner join icon_mapping " \
-	"on icon_mapping.icon_id = favicons.id " \
-	"WHERE page_url = :url LIMIT 1;";
+        "on icon_mapping.icon_id = favicons.id " \
+        "WHERE page_url = :url LIMIT 1;";
     }
 };
 
@@ -137,7 +137,7 @@ QIcon FaviconFromBlob::iconFor(const QString &url)
 
         QByteArray iconData = faviconFound.first().value(m_blobcolumn).toByteArray();
         kDebug(kdbg_code) << "Favicon found: " << iconData.size() << " bytes";
-	if(iconData.size() <=0)
+        if(iconData.size() <=0)
             return defaultIcon();
 
         iconFile.open(QFile::WriteOnly);
