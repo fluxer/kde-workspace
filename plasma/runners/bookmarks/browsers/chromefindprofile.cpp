@@ -37,32 +37,30 @@ FindChromeProfile::FindChromeProfile (const QString &applicationName, const QStr
 
 QList<Profile> FindChromeProfile::find()
 {
-  QString configDirectory = QString("%1/.config/%2")
-            .arg(m_homeDirectory).arg(m_applicationName);
-  QString localStateFileName = QString("%1/Local State")
-          .arg(configDirectory);
+    QString configDirectory = QString("%1/.config/%2").arg(m_homeDirectory).arg(m_applicationName);
+    QString localStateFileName = QString("%1/Local State").arg(configDirectory);
 
-  QFile localStateFile(localStateFileName);
-  QList<Profile> profiles;
+    QFile localStateFile(localStateFileName);
+    QList<Profile> profiles;
 
-  if (!localStateFile.open(QFile::ReadOnly)) {
-      return profiles;
-  }
+    if (!localStateFile.open(QFile::ReadOnly)) {
+        return profiles;
+    }
 
-  QJsonDocument jsondoc = QJsonDocument::fromJson(localStateFile.readAll());
-  if(jsondoc.isNull()) {
-      kDebug(kdbg_code) << "error opening " << QFileInfo(localStateFile).absoluteFilePath();
-      return profiles;
-  }
+    QJsonDocument jsondoc = QJsonDocument::fromJson(localStateFile.readAll());
+    if(jsondoc.isNull()) {
+        kDebug(kdbg_code) << "error opening " << QFileInfo(localStateFile).absoluteFilePath();
+        return profiles;
+    }
 
-  QVariantMap localState = jsondoc.toVariant().toMap();
-  QVariantMap profilesConfig = localState.value("profile").toMap().value("info_cache").toMap();
+    QVariantMap localState = jsondoc.toVariant().toMap();
+    QVariantMap profilesConfig = localState.value("profile").toMap().value("info_cache").toMap();
 
-  foreach(QString profile, profilesConfig.keys()) {
-      QString profilePath = QString("%1/%2").arg(configDirectory).arg(profile);
-      QString profileBookmarksPath = QString("%1/%2").arg(profilePath).arg("Bookmarks");
-      profiles << Profile(profileBookmarksPath, FaviconFromBlob::chrome(profilePath, this));
-  }
+    foreach(QString profile, profilesConfig.keys()) {
+        QString profilePath = QString("%1/%2").arg(configDirectory).arg(profile);
+        QString profileBookmarksPath = QString("%1/%2").arg(profilePath).arg("Bookmarks");
+        profiles << Profile(profileBookmarksPath, FaviconFromBlob::chrome(profilePath, this));
+    }
 
-  return profiles;
+    return profiles;
 }

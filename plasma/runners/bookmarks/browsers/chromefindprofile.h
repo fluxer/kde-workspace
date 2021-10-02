@@ -33,8 +33,8 @@ public:
     explicit FindChromeProfile (const QString& applicationName, const QString &homeDirectory = QDir::homePath(), QObject* parent = 0 );
     virtual QList<Profile> find();
 private:
-  QString const m_applicationName;
-  QString const m_homeDirectory;
+    QString const m_applicationName;
+    QString const m_homeDirectory;
 };
 
 #endif // CHROMEFINDPROFILE_H

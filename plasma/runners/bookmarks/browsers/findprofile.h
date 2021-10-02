@@ -35,8 +35,8 @@ private:
 
 class FindProfile {
 public:
-  virtual QList<Profile> find() = 0;
-  virtual ~FindProfile() {}
+    virtual QList<Profile> find() = 0;
+    virtual ~FindProfile() {}
 };
 
 #endif

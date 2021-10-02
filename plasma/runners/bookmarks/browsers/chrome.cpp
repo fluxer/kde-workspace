@@ -112,9 +112,9 @@ void Chrome::parseFolder(const QVariantMap &entry, ProfileBookmarks *profile)
     QVariantList children = entry.value("children").toList();
     foreach(QVariant child, children) {
         QVariantMap entry = child.toMap();
-        if(entry.value("type").toString() == "folder")
+        if(entry.value("type").toString() == "folder") {
             parseFolder(entry, profile);
-        else {
+        } else {
             profile->add(entry);
         }
     }

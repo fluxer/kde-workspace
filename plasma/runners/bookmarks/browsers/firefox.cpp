@@ -41,8 +41,8 @@ Firefox::Firefox(QObject *parent) :
     m_favicon(new FallbackFavicon(this)),
     m_fetchsqlite(0)
 {
-  reloadConfiguration();
-  kDebug(kdbg_code) << "Loading Firefox Bookmarks Browser";
+    reloadConfiguration();
+    kDebug(kdbg_code) << "Loading Firefox Bookmarks Browser";
 }
 
 
@@ -159,7 +159,7 @@ void Firefox::reloadConfiguration()
                 kDebug(kdbg_code) << "No default firefox profile found";
                 return;
             }
-	    kDebug(kdbg_code) << "Profile " << profilePath << " found";
+            kDebug(kdbg_code) << "Profile " << profilePath << " found";
             profilePath.prepend(QString("%1/.mozilla/firefox/").arg(QDir::homePath()));
             m_dbFile = profilePath + "/places.sqlite";
             grp.writeEntry("dbfile", m_dbFile);
