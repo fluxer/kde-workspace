@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QDir>
+
 #include "browsers/findprofile.h"
 
 class FindChromeProfile : public QObject, public FindProfile

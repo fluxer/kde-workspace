@@ -26,9 +26,9 @@
 #include <KDebug>
 
 #include "chrome.h"
-#include "faviconfromblob.h"
 #include "browsers/findprofile.h"
 #include "bookmarksrunner_defs.h"
+#include "favicon.h"
 
 class ProfileBookmarks {
 public:

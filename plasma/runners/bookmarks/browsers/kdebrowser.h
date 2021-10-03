@@ -23,16 +23,8 @@
 
 #include "browser.h"
 #include "favicon.h"
+
 class KBookmarkManager;
-class Favicon;
-
-class KDEFavicon : public Favicon {
-    Q_OBJECT
-public:
-    KDEFavicon(QObject *parent = 0);
-    virtual QIcon iconFor(const QString &url);
-
-};
 
 class KDEBrowser : public QObject, public Browser
 {

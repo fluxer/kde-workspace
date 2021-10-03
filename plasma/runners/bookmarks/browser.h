@@ -20,6 +20,7 @@
 
 #ifndef BROWSER_H
 #define BROWSER_H
+
 #include <QObject>
 #include <QString>
 #include "bookmarkmatch.h"

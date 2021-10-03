@@ -30,7 +30,7 @@ class Browser;
 class BrowserFactory;
 class KJob;
 
-/** This runner searchs for bookmarks in browsers like Konqueror, Firefox and Chromium */
+/** This runner searchs for bookmarks in browsers like Konqueror and Chromium */
 class BookmarksRunner : public Plasma::AbstractRunner
 {
     Q_OBJECT

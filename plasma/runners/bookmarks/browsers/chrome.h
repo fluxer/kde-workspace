@@ -28,7 +28,6 @@
 #include <QList>
 #include <QtCore/qvariant.h>
 
-class FaviconFromBlob;
 class ProfileBookmarks;
 class Chrome : public QObject, public Browser
 {

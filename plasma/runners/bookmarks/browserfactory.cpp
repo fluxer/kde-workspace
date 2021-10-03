@@ -21,7 +21,6 @@
 #include "browserfactory.h"
 #include "browser.h"
 #include "browsers/kdebrowser.h"
-#include "browsers/firefox.h"
 #include "browsers/chromefindprofile.h"
 #include "browsers/chrome.h"
 
@@ -32,9 +31,7 @@ Browser *BrowserFactory::find(const QString& browserName, QObject* parent)
     }
     delete m_previousBrowser;
     m_previousBrowserName = browserName;
-    if (browserName.contains("firefox", Qt::CaseInsensitive) || browserName.contains("iceweasel", Qt::CaseInsensitive)) {
-        m_previousBrowser = new Firefox(parent);
-    } else if (browserName.contains("chrome", Qt::CaseInsensitive)) {
+    if (browserName.contains("chrome", Qt::CaseInsensitive)) {
         m_previousBrowser = new Chrome(new FindChromeProfile("google-chrome", QDir::homePath(), parent), parent);
     } else if (browserName.contains("chromium", Qt::CaseInsensitive)) {
         m_previousBrowser = new Chrome(new FindChromeProfile("chromium", QDir::homePath(), parent), parent);

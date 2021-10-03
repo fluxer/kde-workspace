@@ -18,30 +18,18 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-#include "kdebrowser.h"
 #include <KBookmarkManager>
 #include <QStack>
 #include <QIcon>
-#include "bookmarkmatch.h"
 #include <KUrl>
-#include <KMimeType>
+
+#include "kdebrowser.h"
+#include "bookmarkmatch.h"
 #include "favicon.h"
 
 
-QIcon KDEFavicon::iconFor(const QString &url)  {
-    const QString iconFile = KMimeType::favIconForUrl(KUrl(url));
-    if (iconFile.isEmpty()) {
-        return defaultIcon();
-    }
-    return KIcon(iconFile);
-}
-
-
-KDEFavicon::KDEFavicon(QObject *parent)  : Favicon(parent) {}
-
-
 KDEBrowser::KDEBrowser(QObject *parent) :
-    QObject(parent), m_bookmarkManager(KBookmarkManager::userBookmarksManager()), m_favicon(new KDEFavicon(this))
+    QObject(parent), m_bookmarkManager(KBookmarkManager::userBookmarksManager()), m_favicon(new Favicon(this))
 {
 }
 

@@ -30,7 +30,7 @@ class Favicon : public QObject
     Q_OBJECT
 public:
     explicit Favicon(QObject *parent = 0);
-    virtual QIcon iconFor(const QString &url) = 0;
+    QIcon iconFor(const QString &url);
 
 protected:
     inline KIcon defaultIcon() const { return m_default_icon; }

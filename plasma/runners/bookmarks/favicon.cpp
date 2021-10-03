@@ -18,9 +18,33 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+
+#include <QDBusReply>
+#include <QDBusInterface>
+#include <KMimeType>
+
 #include "favicon.h"
 
 Favicon::Favicon(QObject *parent) :
     QObject(parent), m_default_icon(KIcon("bookmarks"))
 {
 }
+
+QIcon Favicon::iconFor(const QString &url)  {
+    const KUrl kurl(url);
+    QString iconFile = KMimeType::favIconForUrl(kurl);
+    if (iconFile.isEmpty()) {
+        QDBusInterface kded(QString::fromLatin1("org.kde.kded"),
+                            QString::fromLatin1("/modules/favicons"),
+                            QString::fromLatin1("org.kde.FavIcon"));
+        const QDBusReply<void> reply = kded.call(QString::fromLatin1("downloadHostIcon"), url );
+        if (reply.isValid()) {
+            iconFile = KMimeType::favIconForUrl(kurl);
+        }
+        if (iconFile.isEmpty()) {
+            return defaultIcon();
+        }
+    }
+    return KIcon(iconFile);
+}
+

@@ -19,6 +19,7 @@
  */
 #ifndef FIND_PROFILE_H
 #define FIND_PROFILE_H
+
 #include <QString>
 #include <QList>
 
