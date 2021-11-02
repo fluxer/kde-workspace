@@ -53,7 +53,8 @@ class HWInfo : public SM::Applet
 
         Plasma::TextBrowser *m_info;
         Plasma::IconWidget *m_icon;
-        QString m_gpu;
+        QStringList m_gpus;
+        QStringList m_gpuNames;
         QStringList m_cpus;
         QStringList m_cpuNames;
         QStringList m_networks;

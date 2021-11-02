@@ -100,14 +100,9 @@ void HWInfo::setSources()
     foreach (const QString& id, m_audios) {
         appendSource(id);
     }
-    // TODO: get this from soliddevice
-    Plasma::DataEngine* engine = dataEngine("executable");
-    QString exe = KStandardDirs::findRootExe("lspci");
-    if (exe.isEmpty()) {
-       kError()  << "lspci not found in " << endl;
-    } else {
-       QString tmp = exe + " | grep VGA | sed 's/.*: //g'";
-       engine->connectSource(tmp, this);
+    m_gpus = engine()->query("IS Graphic")["IS Graphic"].toStringList();
+    foreach (const QString& id, m_gpus) {
+        appendSource(id);
     }
 }
 
@@ -123,8 +118,9 @@ void HWInfo::dataUpdated(const QString& source,
     } else if (m_cpus.contains(source) && !m_cpuNames.contains(data["Product"].toString()) &&
                !data["Product"].toString().isEmpty()) {
         m_cpuNames.append(data["Product"].toString().trimmed());
-    } else if (source.indexOf("VGA") > -1) {
-        m_gpu = data["stdout"].toString().trimmed();
+    } else if (m_gpus.contains(source) && !m_gpuNames.contains(data["Product"].toString()) &&
+               !data["Product"].toString().isEmpty()) {
+        m_gpuNames.append(data["Product"].toString());
     }
     updateHtml();
 }
@@ -135,7 +131,9 @@ void HWInfo::updateHtml()
     foreach(const QString& cpu, m_cpuNames) {
         html += QString(INFO_ROW).arg(i18n("CPU")).arg(cpu);
     }
-    html += QString(INFO_ROW).arg(i18n("GPU")).arg(m_gpu);
+    foreach(const QString& gpu, m_gpuNames) {
+        html += QString(INFO_ROW).arg(i18n("GPU")).arg(gpu);
+    }
     foreach(const QString& audio, m_audioNames) {
         html += QString(INFO_ROW).arg(i18n("Audio")).arg(audio);
     }
