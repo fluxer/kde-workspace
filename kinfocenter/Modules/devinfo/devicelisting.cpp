@@ -81,37 +81,38 @@ void DeviceListing::contextMenuEvent(QContextMenuEvent *event)
 
 QTreeWidgetItem *DeviceListing::createListItems(const Solid::DeviceInterface::Type &type) 
 {
-      switch(type)
-      {
-	case Solid::DeviceInterface::Processor: 
-	  return new SolProcessorDevice(type);
-	case Solid::DeviceInterface::StorageDrive:
-	  return new SolStorageDevice(type);
-	case Solid::DeviceInterface::NetworkInterface:
-	  return new SolNetworkDevice(type);
-	case Solid::DeviceInterface::AudioInterface:
-	  return new SolAudioDevice(type);
-	case Solid::DeviceInterface::Camera:
-	  return new SolCameraDevice(type);
-	case Solid::DeviceInterface::PortableMediaPlayer:
-	  return new SolMediaPlayerDevice(type);
-	case Solid::DeviceInterface::Button:
-	  return new SolButtonDevice(type);
-	case Solid::DeviceInterface::Battery:
-	  return new SolBatteryDevice(type);
-	case Solid::DeviceInterface::AcAdapter:
-	  return new SolAcAdapterDevice(type);
-	case Solid::DeviceInterface::DvbInterface:
-	  return new SolDvbDevice(type);
-	case Solid::DeviceInterface::SerialInterface:
-	  return new SolSerialDevice(type);
-	case Solid::DeviceInterface::SmartCardReader:
-	  return new SolSmartCardDevice(type);
-	case Solid::DeviceInterface::Video:
-	  return new SolVideoDevice(type);
-	default:
-	  return new SolDevice(type,i18nc("unknown device type", "Unknown"));
-      }
+    switch(type) {
+        case Solid::DeviceInterface::Processor:
+            return new SolProcessorDevice(type);
+        case Solid::DeviceInterface::StorageDrive:
+            return new SolStorageDevice(type);
+        case Solid::DeviceInterface::NetworkInterface:
+            return new SolNetworkDevice(type);
+        case Solid::DeviceInterface::AudioInterface:
+            return new SolAudioDevice(type);
+        case Solid::DeviceInterface::Camera:
+            return new SolCameraDevice(type);
+        case Solid::DeviceInterface::PortableMediaPlayer:
+            return new SolMediaPlayerDevice(type);
+        case Solid::DeviceInterface::Button:
+            return new SolButtonDevice(type);
+        case Solid::DeviceInterface::Battery:
+            return new SolBatteryDevice(type);
+        case Solid::DeviceInterface::AcAdapter:
+            return new SolAcAdapterDevice(type);
+        case Solid::DeviceInterface::DvbInterface:
+            return new SolDvbDevice(type);
+        case Solid::DeviceInterface::SerialInterface:
+            return new SolSerialDevice(type);
+        case Solid::DeviceInterface::SmartCardReader:
+            return new SolSmartCardDevice(type);
+        case Solid::DeviceInterface::Video:
+            return new SolVideoDevice(type);
+        case Solid::DeviceInterface::Graphic:
+            return new SolGraphicDevice(type);
+        default:
+            return new SolDevice(type,i18nc("unknown device type", "Unknown"));
+    }
 }
 
 void DeviceListing::populateListing(const show showStatus)
@@ -129,7 +130,8 @@ void DeviceListing::populateListing(const show showStatus)
     Solid::DeviceInterface::Battery, 
     Solid::DeviceInterface::AcAdapter,
     Solid::DeviceInterface::PortableMediaPlayer,
-    Solid::DeviceInterface::Camera
+    Solid::DeviceInterface::Camera,
+    Solid::DeviceInterface::Graphic
   };
   
   clear();
@@ -186,7 +188,7 @@ void DeviceListing::deviceAddedSlot(const QString udi)
       
       switch(deviceType) 
       {
-	case Solid::DeviceInterface::Processor: 
+	case Solid::DeviceInterface::Processor:
 	  new SolProcessorDevice(deviceMap[deviceType],dev); break;
 	case Solid::DeviceInterface::NetworkInterface:
 	  new SolNetworkDevice(deviceMap[deviceType],dev); break;

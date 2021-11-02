@@ -45,6 +45,7 @@
 #include <solid/video.h>
 #include <solid/smartcardreader.h>
 #include <solid/dvbinterface.h>
+#include <solid/graphic.h>
 #include <solid/predicate.h>
 
 //KDE

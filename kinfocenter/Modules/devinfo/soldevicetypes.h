@@ -214,5 +214,17 @@ class SolVideoDevice : public SolDevice
     void setDefaultListing(const Solid::DeviceInterface::Type &);
 };
 
+class SolGraphicDevice : public SolDevice
+{
+
+  public:
+    SolGraphicDevice(const Solid::DeviceInterface::Type &);
+    SolGraphicDevice(QTreeWidgetItem *, const Solid::Device &);
+    QVListLayout *infoPanelLayout();
+    
+  private:
+    void setDefaultListing(const Solid::DeviceInterface::Type &);
+};
+
 
 #endif //SOLDEVICETYPES

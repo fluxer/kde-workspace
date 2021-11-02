@@ -946,3 +946,45 @@ QVListLayout *SolVideoDevice::infoPanelLayout()
   deviceInfoLayout->applyQListToLayout(labels);
   return deviceInfoLayout;
 }
+
+// Graphic
+
+SolGraphicDevice::SolGraphicDevice(QTreeWidgetItem *parent, const Solid::Device &device) :
+  SolDevice(parent, device)
+{
+  deviceTypeHolder = Solid::DeviceInterface::Video;
+}
+
+SolGraphicDevice::SolGraphicDevice(const Solid::DeviceInterface::Type &type) :
+  SolDevice(type)
+{
+  deviceTypeHolder = Solid::DeviceInterface::Video;
+  
+  setDeviceIcon(KIcon("video-display"));
+  setDeviceText(i18n("Graphic Displays"));
+  setDefaultListing(type);
+}
+
+void SolGraphicDevice::setDefaultListing(const Solid::DeviceInterface::Type &type)
+{
+  createDeviceChildren<SolGraphicDevice>(this,QString(),type);
+}
+
+QVListLayout *SolGraphicDevice::infoPanelLayout()
+{
+  QStringList labels;
+  const Solid::Graphic *graphdev = interface<const Solid::Graphic>();
+
+  if(!graphdev) return NULL;
+  deviceInfoLayout = new QVListLayout();
+
+#if 0
+  labels << i18n("Supported Drivers: ")
+  << graphdev->supportedDrivers()
+  << i18n("Supported Protocols: ")
+  << graphdev->supportedProtocols();
+  
+  deviceInfoLayout->applyQListToLayout(labels);
+#endif
+  return deviceInfoLayout;
+}

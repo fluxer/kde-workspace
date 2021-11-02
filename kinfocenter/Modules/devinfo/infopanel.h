@@ -30,10 +30,7 @@
 
 //Solid
 #include <solid/device.h>
-#include <solid/processor.h>
 #include <solid/deviceinterface.h>
-#include <solid/networkinterface.h>
-#include <solid/storagedrive.h>
 
 //KDE
 #include <kicon.h>
