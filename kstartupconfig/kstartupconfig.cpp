@@ -91,8 +91,7 @@ int main( int argc, char **argv )
     for(;;) {
         QString line;
         {
-            QByteArray buf;
-            buf.resize(1024);
+            QByteArray buf(1024, Qt::Uninitialized);
             if( keys.readLine( buf.data(), buf.length() ) < 0 )
                 break;
             line = QString::fromLocal8Bit(buf);
