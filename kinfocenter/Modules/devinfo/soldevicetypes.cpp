@@ -247,8 +247,10 @@ QVListLayout *SolNetworkDevice::infoPanelLayout()
   labels << i18n("Hardware Address: ")
   << InfoPanel::friendlyString(netdev->hwAddress())
   << i18n("Wireless?")
-  << InfoPanel::convertTf(netdev->isWireless());
-  
+  << InfoPanel::convertTf(netdev->isWireless())
+  << i18n("Loopback?")
+  << InfoPanel::convertTf(netdev->isLoopback());
+
   deviceInfoLayout->applyQListToLayout(labels); 
   return deviceInfoLayout;
 }

@@ -389,6 +389,7 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
 
         setData(name, I18N_NOOP("Interface Name"), networkinterface->ifaceName());
         setData(name, I18N_NOOP("Wireless"), networkinterface->isWireless());
+        setData(name, I18N_NOOP("Loopback"), networkinterface->isLoopback());
         setData(name, I18N_NOOP("Hardware Address"), networkinterface->hwAddress());
         setData(name, I18N_NOOP("MAC Address"), networkinterface->macAddress());
     }

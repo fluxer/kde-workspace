@@ -286,8 +286,11 @@ Name[x-test]=xxWirelessxx
 Name[zh_CN]=无线
 Name[zh_TW]=無線
 
+[Desktop Action loopback]
+Name=Loopback
+
 [Desktop Entry]
-Actions=hwAddress;ifaceName;macAddress;wireless;
+Actions=hwAddress;ifaceName;macAddress;wireless;loopback;
 Name=Solid Device
 Name[ar]=جهاز في سوليد
 Name[ast]=Preseos de Solid
