@@ -521,6 +521,14 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         }
         setData(name, I18N_NOOP("Driver Handles"), handles);
     }
+    if (device.is<Solid::Graphic>()) {
+        Solid::Graphic *graphic = device.as<Solid::Graphic>();
+        if (!graphic) {
+            return false;
+        }
+
+        devicetypes << I18N_NOOP("Graphic");
+    }
 
     int index = Solid::DeviceInterface::staticMetaObject.indexOfEnumerator("Type");
     QMetaEnum typeEnum = Solid::DeviceInterface::staticMetaObject.enumerator(index);
