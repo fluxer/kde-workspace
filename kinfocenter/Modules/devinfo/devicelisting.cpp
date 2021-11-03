@@ -100,12 +100,6 @@ QTreeWidgetItem *DeviceListing::createListItems(const Solid::DeviceInterface::Ty
             return new SolBatteryDevice(type);
         case Solid::DeviceInterface::AcAdapter:
             return new SolAcAdapterDevice(type);
-        case Solid::DeviceInterface::DvbInterface:
-            return new SolDvbDevice(type);
-        case Solid::DeviceInterface::SerialInterface:
-            return new SolSerialDevice(type);
-        case Solid::DeviceInterface::SmartCardReader:
-            return new SolSmartCardDevice(type);
         case Solid::DeviceInterface::Video:
             return new SolVideoDevice(type);
         case Solid::DeviceInterface::Graphic:
@@ -123,9 +117,6 @@ void DeviceListing::populateListing(const show showStatus)
     Solid::DeviceInterface::NetworkInterface,
     Solid::DeviceInterface::AudioInterface,
     Solid::DeviceInterface::Video,
-    Solid::DeviceInterface::SerialInterface,
-    Solid::DeviceInterface::SmartCardReader,
-    Solid::DeviceInterface::DvbInterface,
     Solid::DeviceInterface::Button,
     Solid::DeviceInterface::Battery, 
     Solid::DeviceInterface::AcAdapter,
@@ -204,12 +195,6 @@ void DeviceListing::deviceAddedSlot(const QString udi)
 	  new SolBatteryDevice(deviceMap[deviceType],dev); break;
 	case Solid::DeviceInterface::AcAdapter:
 	 new SolAcAdapterDevice(deviceMap[deviceType],dev); break;
-	case Solid::DeviceInterface::DvbInterface:
-	  new SolDvbDevice(deviceMap[deviceType],dev); break;
-	case Solid::DeviceInterface::SerialInterface:
-	  new SolSerialDevice(deviceMap[deviceType],dev); break;
-	case Solid::DeviceInterface::SmartCardReader:
-	  new SolSmartCardDevice(deviceMap[deviceType],dev); break;
 	case Solid::DeviceInterface::Video:
 	  new SolVideoDevice(deviceMap[deviceType],dev); break;
 	case Solid::DeviceInterface::StorageDrive:

@@ -41,7 +41,6 @@
 #include <solid/battery.h>
 #include <solid/button.h>
 #include <solid/audiointerface.h>
-#include <solid/dvbinterface.h>
 #include <solid/video.h>
 #include <solid/graphic.h>
 

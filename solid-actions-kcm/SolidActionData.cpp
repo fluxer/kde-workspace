@@ -35,7 +35,6 @@
 #include <Solid/Block>
 #include <Solid/Button>
 #include <Solid/Camera>
-#include <Solid/DvbInterface>
 #include <Solid/GenericInterface>
 #include <Solid/NetworkInterface>
 #include <Solid/PortableMediaPlayer>
@@ -46,8 +45,6 @@
 #include <Solid/StorageVolume>
 #include <Solid/OpticalDisc>
 #include <solid/video.h>
-#include <solid/serialinterface.h>
-#include <solid/smartcardreader.h>
 #include <solid/graphic.h>
 
 static SolidActionData * actData = 0;
@@ -175,18 +172,15 @@ QList<QMetaObject> SolidActionData::fillInterfaceList()
     interfaces.append( Solid::Block::staticMetaObject );
     interfaces.append( Solid::Button::staticMetaObject );
     interfaces.append( Solid::Camera::staticMetaObject );
-    interfaces.append( Solid::DvbInterface::staticMetaObject );
     interfaces.append( Solid::NetworkInterface::staticMetaObject );
     interfaces.append( Solid::PortableMediaPlayer::staticMetaObject );
     interfaces.append( Solid::Processor::staticMetaObject );
-    interfaces.append( Solid::SerialInterface::staticMetaObject );
     interfaces.append( Solid::StorageAccess::staticMetaObject );
     interfaces.append( Solid::StorageDrive::staticMetaObject );
     interfaces.append( Solid::OpticalDrive::staticMetaObject );
     interfaces.append( Solid::StorageVolume::staticMetaObject );
     interfaces.append( Solid::OpticalDisc::staticMetaObject );
     interfaces.append( Solid::Video::staticMetaObject );
-    interfaces.append( Solid::SmartCardReader::staticMetaObject );
     interfaces.append( Solid::Graphic::staticMetaObject );
     return interfaces;
 }

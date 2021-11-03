@@ -41,10 +41,7 @@
 #include <solid/camera.h>
 #include <solid/battery.h>
 #include <solid/acadapter.h>
-#include <solid/serialinterface.h>
 #include <solid/video.h>
-#include <solid/smartcardreader.h>
-#include <solid/dvbinterface.h>
 #include <solid/graphic.h>
 #include <solid/predicate.h>
 

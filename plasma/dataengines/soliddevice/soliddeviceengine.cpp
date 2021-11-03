@@ -485,26 +485,6 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
                 << I18N_NOOP("Headset") << I18N_NOOP("Modem");
         setData(name, I18N_NOOP("Soundcard Type"), soundcardtype.at((int)audiointerface->soundcardType()));
     }
-    if (device.is<Solid::DvbInterface>()) {
-        Solid::DvbInterface *dvbinterface = device.as<Solid::DvbInterface>();
-        if (!dvbinterface) {
-            return false;
-        }
-
-        devicetypes << I18N_NOOP("DVB Interface");
-
-        setData(name, I18N_NOOP("Device"), dvbinterface->device());
-        setData(name, I18N_NOOP("Device Adapter"), dvbinterface->deviceAdapter());
-
-        //get devicetypes
-        QStringList dvbdevicetypes;
-        dvbdevicetypes << I18N_NOOP("DVB Unknown") << I18N_NOOP("DVB Audio") << I18N_NOOP("DVB Ca")
-                << I18N_NOOP("DVB Demux") << I18N_NOOP("DVB DVR") << I18N_NOOP("DVB Frontend")
-                << I18N_NOOP("DVB Net") << I18N_NOOP("DVB OSD") << I18N_NOOP("DVB Sec") << I18N_NOOP("DVB Video");
-
-        setData(name, I18N_NOOP("DVB Device Type"), dvbdevicetypes.at((int)dvbinterface->deviceType()));
-        setData(name, I18N_NOOP("Device Index"), dvbinterface->deviceIndex());
-    }
     if (device.is<Solid::Video>()) {
         Solid::Video *video = device.as<Solid::Video>();
         if (!video) {
