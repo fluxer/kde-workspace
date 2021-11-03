@@ -42,13 +42,14 @@ private Q_SLOTS:
 private:
     class Wicd {
     public:
+        // for reference:
+        // https://git.launchpad.net/wicd/plain/wicd/misc.py
         enum ConnectionStatus {
             NOT_CONNECTED = 0,
             CONNECTING = 1,
             WIRELESS = 2,
             WIRED = 3,
-            SUSPENDED = 4,
-            Unknown = 16
+            SUSPENDED = 4
         };
     };
 

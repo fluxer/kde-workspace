@@ -89,8 +89,8 @@ void WicdStatus::wicdStateChanged()
     case Wicd::NOT_CONNECTED:
         status = Solid::Networking::Unconnected;
         break;
-    default:
     case Wicd::SUSPENDED:
+    default:
         status = Solid::Networking::Unknown;
         break;
     }
