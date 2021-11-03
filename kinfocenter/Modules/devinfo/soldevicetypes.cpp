@@ -980,13 +980,9 @@ QVListLayout *SolGraphicDevice::infoPanelLayout()
   if(!graphdev) return NULL;
   deviceInfoLayout = new QVListLayout();
 
-#if 0
-  labels << i18n("Supported Drivers: ")
-  << graphdev->supportedDrivers()
-  << i18n("Supported Protocols: ")
-  << graphdev->supportedProtocols();
+  labels << i18n("Driver: ")
+  << graphdev->driver();
   
   deviceInfoLayout->applyQListToLayout(labels);
-#endif
   return deviceInfoLayout;
 }

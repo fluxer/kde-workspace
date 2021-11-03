@@ -529,6 +529,8 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         }
 
         devicetypes << I18N_NOOP("Graphic");
+
+        setData(name, I18N_NOOP("Driver"), graphic->driver());
     }
 
     int index = Solid::DeviceInterface::staticMetaObject.indexOfEnumerator("Type");
