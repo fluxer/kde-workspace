@@ -50,6 +50,7 @@
 #include <klocale.h>
 #include <kde_file.h>
 #include <kdemacros.h>
+#include <kiconeffect.h>
 
 #include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
@@ -60,8 +61,6 @@
 
 // Use correctly KComponentData instead of KApplication (but then no QPixmap)
 #undef USE_KINSTANCE
-
-#include "imagefilter.h"
 
 // Recognized metadata entries:
 // mimeType     - the mime type of the file, used for the overlay icon if any
@@ -327,7 +326,7 @@ void ThumbnailProtocol::drawPictureFrame(QPainter *painter, const QPoint &center
     p.drawImage(radius, radius, transformed);
     p.end();
 
-    ImageFilter::shadowBlur(shadow, radius, QColor(0, 0, 0, 128));
+    KIconEffect::shadowblur(shadow, radius, QColor(0, 0, 0, 128));
 
     r.moveCenter(centerPos);
 

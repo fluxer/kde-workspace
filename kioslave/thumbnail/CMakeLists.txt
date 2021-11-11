@@ -1,10 +1,10 @@
 ########### next target ###############
 
-set(kio_thumbnail_PART_SRCS thumbnail.cpp imagefilter.cpp)
+set(kio_thumbnail_PART_SRCS thumbnail.cpp)
 
 kde4_add_plugin(kio_thumbnail ${kio_thumbnail_PART_SRCS})
 
-target_link_libraries(kio_thumbnail ${KDE4_KIO_LIBS})
+target_link_libraries(kio_thumbnail ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS})
 
 install(TARGETS kio_thumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
