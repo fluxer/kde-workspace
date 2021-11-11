@@ -50,11 +50,6 @@ extern "C" {
 #include <termio.h>
 #endif
 
-#if defined (_HPUX_SOURCE)
-#define _TERMIOS_INCLUDED
-#include <bsdtty.h>
-#endif
-
 KConsole::KConsole(QWidget *_parent)
     : inherited(_parent)
     , pty(0)
