@@ -50,8 +50,6 @@ public:
 	void apply();
 	void update();
 
-	virtual bool x11Event(XEvent* e);
-
 public slots:
 	void slotUpdateView();
 	void slotDelayedUpdateView();
@@ -73,7 +71,6 @@ protected:
 	virtual bool eventFilter(QObject *obj, QEvent *event);
 	
 private:
-        void insufficientVirtualSize();
 	RandRDisplay *m_display;
 	
 	SettingsContainer *m_container;
