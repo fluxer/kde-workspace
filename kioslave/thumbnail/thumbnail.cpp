@@ -326,7 +326,7 @@ void ThumbnailProtocol::drawPictureFrame(QPainter *painter, const QPoint &center
     p.drawImage(radius, radius, transformed);
     p.end();
 
-    KIconEffect::shadowblur(shadow, radius, QColor(0, 0, 0, 128));
+    KIconEffect::shadowBlur(shadow, radius, QColor(0, 0, 0, 128));
 
     r.moveCenter(centerPos);
 
