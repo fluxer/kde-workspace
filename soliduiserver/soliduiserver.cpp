@@ -129,6 +129,10 @@ int SolidUiServer::mountDevice(const QString &udi)
     Solid::Block *block = device.as<Solid::Block>();
     if (!storagevolume || !block) {
         return int(Solid::ErrorType::InvalidOption);
+    } else if (storagevolume->fsType() == "zfs_member") {
+        // create pool on USB stick, put some bad stuff on it, set mount point to / and watch it
+        // unfold when mounted
+        return int(Solid::ErrorType::Insecure);
     }
 
     QString devicenode = block->device();
