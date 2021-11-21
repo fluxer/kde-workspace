@@ -302,7 +302,7 @@ bool DesktopPathConfig::xdgSavePath(KUrlRequester* ur, const KUrl& currentUrl, c
             }
         }
         if (moveDir(currentUrl, newUrl, type)) {
-            //save in XDG user-dirs.dirs config file, this is where KGlobalSettings/QDesktopServices reads from.
+            //save in XDG user-dirs.dirs config file, this is where KGlobalSettings/QStandardPaths reads from.
             const QString userDirsFile(KGlobal::dirs()->localxdgconfdir() + QLatin1String("user-dirs.dirs"));
             KConfig xdgUserConf(userDirsFile, KConfig::SimpleConfig);
             KConfigGroup g(&xdgUserConf, "");

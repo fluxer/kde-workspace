@@ -32,7 +32,7 @@
 
 #include <QFile>
 #include <QDBusInterface>
-#include <QDesktopServices>
+#include <QStandardPaths>
 #include <QDir>
 
 #include <sys/stat.h>
@@ -70,7 +70,7 @@ void DesktopProtocol::checkLocalInstall()
 {
     // We can't use KGlobalSettings::desktopPath() here, since it returns the home dir
     // if the desktop folder doesn't exist.
-    QString desktopPath = QDesktopServices::storageLocation(QDesktopServices::DesktopLocation);
+    QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     if (desktopPath.isEmpty())
         desktopPath = QDir::homePath() + "/Desktop";
 
