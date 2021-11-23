@@ -146,13 +146,13 @@ char* checkPamModule(int argc, char **argv)
 int main(int argc, char **argv)
 {
     // check if kwallet is disabled
-    if (!isWalletEnabled()) {
+    const bool enabled = isWalletEnabled();
+    if (!enabled) {
         kDebug() << "kwalletd is disabled!";
-        return (0);
     }
 
     char *hash = NULL;
-    if (getenv("PAM_KWALLET_LOGIN")) {
+    if (enabled && getenv("PAM_KWALLET_LOGIN")) {
         hash = checkPamModule(argc, argv);
     }
 
