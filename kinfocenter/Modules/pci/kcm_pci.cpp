@@ -82,10 +82,10 @@ KCMPci::~KCMPci() {
 void KCMPci::load() {
     kDebug() << "Loading PCI information..." << endl;
 
-    bool fallback = false;
+    bool fallback = true;
 #ifdef HAVE_PCIUTILS
-    if (!GetInfo_PCIUtils(tree)) {
-        fallback = true;
+    if (GetInfo_PCIUtils(tree)) {
+        fallback = false;
     }
 #endif //HAVE_PCIUTILS
 
