@@ -44,6 +44,7 @@
 
 #include "wicdstatus.h"
 #include "connmanstatus.h"
+#include "toolkitstatus.h"
 
 #include <kpluginfactory.h>
 
@@ -286,6 +287,7 @@ void NetworkStatusModule::init()
 #endif
         backends << new WicdStatus( this );
         backends << new ConnmanStatus( this );
+        backends << new ToolkitStatus( this );
     }
 
     for ( int i = 0; i < backends.count(); i++ ) {
