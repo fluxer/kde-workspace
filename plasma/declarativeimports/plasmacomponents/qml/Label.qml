@@ -36,7 +36,6 @@ Text {
     height: Math.max(paintedHeight, theme.defaultFont.mSize.height*1.6)
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
-    font.capitalization: theme.defaultFont.capitalization
     font.family: theme.defaultFont.family
     font.italic: theme.defaultFont.italic
     font.letterSpacing: theme.defaultFont.letterSpacing

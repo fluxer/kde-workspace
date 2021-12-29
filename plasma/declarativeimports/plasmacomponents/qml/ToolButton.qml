@@ -364,7 +364,6 @@ Item {
             width: parent.width - icon.width - parent.spacing
             height: parent.height
 
-            font.capitalization: theme.defaultFont.capitalization
             font.family: theme.defaultFont.family
             font.italic: theme.defaultFont.italic
             font.letterSpacing: theme.defaultFont.letterSpacing

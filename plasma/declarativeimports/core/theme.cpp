@@ -47,8 +47,6 @@ FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(boldChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SIGNAL(capitalizationChanged()));
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(familyChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(italicChanged()));
@@ -92,11 +90,6 @@ FontProxy *FontProxy::smallestFont()
 bool FontProxy::bold() const
 {
     return Plasma::Theme::defaultTheme()->font(m_fontRole).bold();
-}
-
-FontProxy::Capitalization FontProxy::capitalization() const
-{
-    return (FontProxy::Capitalization)Plasma::Theme::defaultTheme()->font(m_fontRole).capitalization();
 }
 
 QString FontProxy::family() const

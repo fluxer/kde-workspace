@@ -314,7 +314,6 @@ FocusScope {
         opacity: 0.5
         elide: Text.ElideRight
         clip: true
-        font.capitalization: theme.defaultFont.capitalization
         font.family: theme.defaultFont.family
         font.italic: theme.defaultFont.italic
         font.letterSpacing: theme.defaultFont.letterSpacing

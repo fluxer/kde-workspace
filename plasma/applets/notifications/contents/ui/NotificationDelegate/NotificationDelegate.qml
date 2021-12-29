@@ -211,7 +211,6 @@ PlasmaComponents.ListItem {
                         anchors.fill: parent
                         text: body
                         color: theme.textColor
-                        font.capitalization: theme.defaultFont.capitalization
                         font.family: theme.defaultFont.family
                         font.italic: theme.defaultFont.italic
                         font.letterSpacing: theme.defaultFont.letterSpacing

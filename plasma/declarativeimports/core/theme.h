@@ -40,16 +40,6 @@ class FontProxy : public QObject
     Q_PROPERTY(bool bold READ bold NOTIFY boldChanged)
 
     /**
-     * One of
-     * MixedCase: The text is not changed
-     * AllUppercase: the text becomes UPPERCASE
-     * AllLowercase: the text becomes all lowercase
-     * SmallCaps: the lowercase characters becomes smaller uppercase ones
-     * Capitalize: the first letter of all words are uppercase
-     */
-    Q_PROPERTY(Capitalization capitalization READ capitalization  NOTIFY capitalizationChanged )
-
-    /**
      * name of the font family
      */
     Q_PROPERTY(QString family READ family NOTIFY familyChanged )
@@ -105,18 +95,9 @@ class FontProxy : public QObject
      */
     Q_PROPERTY(QSize mSize READ mSize NOTIFY mSizeChanged )
 
-    Q_ENUMS(Capitalization)
     Q_ENUMS(Weight)
 
 public:
-    enum Capitalization {
-        MixedCase = 0,
-        AllUppercase = 1,
-        AllLowercase = 2,
-        SmallCaps = 3,
-        Capitalize = 4
-    };
-
     enum Weight {
         Light = 25,
         Normal = 50,
@@ -132,7 +113,6 @@ public:
     static FontProxy *smallestFont();
 
     bool bold() const;
-    Capitalization capitalization() const;
     QString family() const;
     bool italic() const;
     qreal letterSpacing() const;
@@ -150,7 +130,6 @@ public:
 
 Q_SIGNALS:
     void boldChanged();
-    void capitalizationChanged();
     void familyChanged();
     void italicChanged();
     void letterSpacingChanged();

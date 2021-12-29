@@ -97,7 +97,6 @@ PlasmaCore.FrameSvgItem {
             // theme.font in plasma-desktop.
             font.family: theme.defaultFont.family
             font.bold: theme.defaultFont.bold
-            font.capitalization: theme.defaultFont.capitalization
             font.italic: theme.defaultFont.italic
             font.weight: theme.defaultFont.weight
             font.underline: theme.defaultFont.underline
