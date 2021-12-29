@@ -75,8 +75,7 @@ str2Font(const QString &aValue)
         aRetFont->fromString(aValue);
     }
     aRetFont->setStyleStrategy((QFont::StyleStrategy)
-       (QFont::PreferMatch |
-        (_antiAliasing ? QFont::PreferAntialias : QFont::NoAntialias)));
+       (_antiAliasing ? QFont::PreferAntialias : QFont::NoAntialias));
 
     return aRetFont;
 }
