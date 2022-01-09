@@ -100,7 +100,6 @@ PlasmaCore.FrameSvgItem {
             font.italic: theme.defaultFont.italic
             font.weight: theme.defaultFont.weight
             font.underline: theme.defaultFont.underline
-            font.wordSpacing: theme.defaultFont.wordSpacing
         }
     }
 

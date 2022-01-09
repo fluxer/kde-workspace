@@ -366,12 +366,10 @@ Item {
 
             font.family: theme.defaultFont.family
             font.italic: theme.defaultFont.italic
-            font.letterSpacing: theme.defaultFont.letterSpacing
             font.pointSize: theme.defaultFont.pointSize
             font.strikeout: theme.defaultFont.strikeout
             font.underline: theme.defaultFont.underline
             font.weight: theme.defaultFont.weight
-            font.wordSpacing: theme.defaultFont.wordSpacing
 
             color: mouse.containsMouse ? theme.buttonTextColor : theme.textColor
             Behavior on color { ColorAnimation { duration: 100 } }

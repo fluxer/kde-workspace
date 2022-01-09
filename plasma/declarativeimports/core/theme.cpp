@@ -51,8 +51,6 @@ FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(italicChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SIGNAL(letterSpacingChanged()));
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(pixelSizeChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(pointSizeChanged()));
@@ -62,8 +60,6 @@ FontProxy::FontProxy(Plasma::Theme::FontRole role, QObject *parent)
             this, SIGNAL(underlineChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(weightChanged()));
-    connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-            this, SIGNAL(wordSpacingChanged()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
             this, SIGNAL(mSizeChanged()));
 }
@@ -102,11 +98,6 @@ bool FontProxy::italic() const
     return Plasma::Theme::defaultTheme()->font(m_fontRole).italic();
 }
 
-qreal FontProxy::letterSpacing() const
-{
-    return Plasma::Theme::defaultTheme()->font(m_fontRole).letterSpacing();
-}
-
 int FontProxy::pixelSize() const
 {
     return Plasma::Theme::defaultTheme()->font(m_fontRole).pixelSize();
@@ -130,11 +121,6 @@ bool FontProxy::underline() const
 FontProxy::Weight FontProxy::weight() const
 {
     return (FontProxy::Weight)Plasma::Theme::defaultTheme()->font(m_fontRole).weight();
-}
-
-qreal FontProxy::wordSpacing() const
-{
-    return Plasma::Theme::defaultTheme()->font(m_fontRole).wordSpacing();
 }
 
 QSize FontProxy::mSize() const

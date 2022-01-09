@@ -50,11 +50,6 @@ class FontProxy : public QObject
     Q_PROPERTY(bool italic READ italic NOTIFY italicChanged )
 
     /**
-     * horizontal space between letters
-     */
-    Q_PROPERTY(qreal letterSpacing READ letterSpacing NOTIFY letterSpacingChanged )
-
-    /**
      * Size of the font in pixels: settings this is strongly discouraged.
      * @see pointSize
      */
@@ -86,11 +81,6 @@ class FontProxy : public QObject
     Q_PROPERTY(Weight weight READ weight NOTIFY weightChanged )
 
     /**
-     * Horizontal space between words
-     */
-    Q_PROPERTY(qreal wordSpacing READ wordSpacing NOTIFY wordSpacingChanged )
-
-    /**
      * Size in pixels of an uppercase "M" letter
      */
     Q_PROPERTY(QSize mSize READ mSize NOTIFY mSizeChanged )
@@ -115,13 +105,11 @@ public:
     bool bold() const;
     QString family() const;
     bool italic() const;
-    qreal letterSpacing() const;
     int pixelSize() const;
     qreal pointSize() const;
     bool strikeout() const;
     bool underline() const;
     Weight weight() const;
-    qreal wordSpacing() const;
 
     /**
      * @return The size of an uppercase M in this font
@@ -132,13 +120,11 @@ Q_SIGNALS:
     void boldChanged();
     void familyChanged();
     void italicChanged();
-    void letterSpacingChanged();
     void pixelSizeChanged();
     void pointSizeChanged();
     void strikeoutChanged();
     void underlineChanged();
     void weightChanged();
-    void wordSpacingChanged();
     void mSizeChanged();
 
 private:
