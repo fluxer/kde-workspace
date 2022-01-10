@@ -125,7 +125,7 @@ class ProgressBarItemDelegate : public QStyledItemDelegate
 
                 painter->setFont(option.font);
                 QTextOption textOption;
-                textOption.setWrapMode(QTextOption::ManualWrap);
+                textOption.setWrapMode(QTextOption::NoWrap);
                 textOption.setTextDirection(option.direction);
                 textOption.setAlignment(QStyle::visualAlignment(option.direction, option.displayAlignment));
 
