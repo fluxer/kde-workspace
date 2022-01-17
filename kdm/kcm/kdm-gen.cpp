@@ -164,9 +164,9 @@ void KDMGeneralWidget::loadGuiStyles(KBackedComboBox *combo)
 
 void KDMGeneralWidget::set_def()
 {
-    stdFontChooser->setFont(QFont("Sans Serif", 10));
-    failFontChooser->setFont(QFont("Sans Serif", 10, QFont::Bold));
-    greetingFontChooser->setFont(QFont("Serif", 20));
+    stdFontChooser->setFont(QFont(KDE_DEFAULT_FONT, 10));
+    failFontChooser->setFont(QFont(KDE_DEFAULT_FONT, 10, QFont::Bold));
+    greetingFontChooser->setFont(QFont(KDE_DEFAULT_FONT, 20));
 }
 
 void KDMGeneralWidget::save()

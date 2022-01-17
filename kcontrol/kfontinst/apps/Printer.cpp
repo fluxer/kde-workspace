@@ -203,7 +203,7 @@ void CPrintThread::cancel()
 void CPrintThread::run()
 {
     QPainter   painter;
-    QFont      sans("sans", 12, QFont::Bold);
+    QFont      sans(KDE_DEFAULT_FONT, 12, QFont::Bold);
     bool       changedFontEmbeddingSetting(false);
     QString    str(CFcEngine(false).getPreviewString());
 

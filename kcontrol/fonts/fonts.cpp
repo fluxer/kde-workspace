@@ -512,12 +512,12 @@ KFonts::KFonts(QWidget *parent, const QVariantList &args)
 
   // NOTE: keep in sync with kdelibs/kdeui/kernel/kglobalsettings.cpp
 
-  QFont f0("Sans Serif", 9); // general/menu/desktop
-  QFont f1("Monospace", 9);
-  QFont f2("Sans Serif", 8); // toolbar
-  QFont f3("Sans Serif", 8); // window title
-  QFont f4("Sans Serif", 9); // taskbar
-  QFont f5("Sans Serif", 8); // smallestReadableFont
+  QFont f0(KDE_DEFAULT_FONT, 9); // general/menu/desktop
+  QFont f1(KDE_DEFAULT_FIXED_FONT, 9);
+  QFont f2(KDE_DEFAULT_FONT, 8); // toolbar
+  QFont f3(KDE_DEFAULT_FONT, 8); // window title
+  QFont f4(KDE_DEFAULT_FONT, 9); // taskbar
+  QFont f5(KDE_DEFAULT_FONT, 8); // smallestReadableFont
 
   defaultFontList << f0 << f1 << f5 << f2 << f0 << f3 << f4 << f0;
 
