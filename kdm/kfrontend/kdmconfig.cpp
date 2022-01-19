@@ -74,8 +74,8 @@ str2Font(const QString &aValue)
     } else {
         aRetFont->fromString(aValue);
     }
-    aRetFont->setStyleStrategy((QFont::StyleStrategy)
-       (_antiAliasing ? QFont::PreferAntialias : QFont::NoAntialias));
+    aRetFont->setHintingPreference((QFont::HintingPreference)
+       (_antiAliasing ? QFont::PreferDefaultHinting : QFont::PreferNoHinting));
 
     return aRetFont;
 }
