@@ -287,6 +287,11 @@ add_feature_info(mtools
     "KIO floppy support"
 )
 
+find_program(FORTUNE_EXECUTABLE fortune)
+add_feature_info(fortune
+    FORTUNE_EXECUTABLE
+    "Fortune messages support in screensaver"
+)
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
