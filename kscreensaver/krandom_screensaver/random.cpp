@@ -44,9 +44,9 @@
 
 void usage(char *name)
 {
-	puts(i18n("Usage: %1 [-setup] [args]\n"
-				"Starts a random screen saver.\n"
-				"Any arguments (except -setup) are passed on to the screen saver.", name ).toLocal8Bit().data());
+    puts(i18n("Usage: %1 [-setup] [args]\n"
+              "Starts a random screen saver.\n"
+              "Any arguments (except -setup) are passed on to the screen saver.", name ).toLocal8Bit().data());
 }
 
 static const char appName[] = "random";
@@ -56,8 +56,9 @@ static const char description[] = I18N_NOOP("Start a random KDE screen saver");
 static QString exeFromActionGroup(const QList<KServiceAction>& actions, const char* name)
 {
     foreach(const KServiceAction& action, actions) {
-        if (action.name() == name)
+        if (action.name() == name) {
             return action.exec();
+        }
     }
     return QString();
 }
@@ -66,88 +67,80 @@ static QString exeFromActionGroup(const QList<KServiceAction>& actions, const ch
 
 int main(int argc, char *argv[])
 {
-	KCmdLineArgs::init(argc, argv, appName, "kscreensaver", ki18n("Random screen saver"), 
-                KDE_VERSION_STRING, ki18n(description));
+    KCmdLineArgs::init(argc, argv, appName, "kscreensaver", ki18n("Random screen saver"), 
+                       KDE_VERSION_STRING, ki18n(description));
 
 
-	KCmdLineOptions options;
+    KCmdLineOptions options;
 
-	options.add("setup", ki18n("Setup screen saver"));
+    options.add("setup", ki18n("Setup screen saver"));
 
-	options.add("window-id wid", ki18n("Run in the specified XWindow"));
+    options.add("window-id wid", ki18n("Run in the specified XWindow"));
 
-	options.add("root", ki18n("Run in the root XWindow"));
+    options.add("root", ki18n("Run in the root XWindow"));
 
-	KCmdLineArgs::addCmdLineOptions(options);
+    KCmdLineArgs::addCmdLineOptions(options);
 
-	KApplication app;
+    KApplication app;
 
-	WId windowId = 0;
+    WId windowId = 0;
 
-	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-	if (args->isSet("setup"))
-	{
-		KRandomSetup setup;
-		setup.exec();
-		exit(0);
-	}
+    if (args->isSet("setup")) {
+        KRandomSetup setup;
+        setup.exec();
+        exit(0);
+    }
 
-	if (args->isSet("window-id"))
-	{
-		windowId = args->getOption("window-id").toInt();
-	}
+    if (args->isSet("window-id")) {
+        windowId = args->getOption("window-id").toInt();
+    }
 
 #ifdef Q_WS_X11
-	if (args->isSet("root"))
-	{
-		QX11Info info;
-		windowId = RootWindow(QX11Info::display(), info.screen());
-	}
+    if (args->isSet("root")) {
+        QX11Info info;
+        windowId = RootWindow(QX11Info::display(), info.screen());
+    }
 #endif
-	args->clear();
-	const KService::List lst = KServiceTypeTrader::self()->query( "ScreenSaver");
-        KService::List availableSavers;
+    args->clear();
+    const KService::List lst = KServiceTypeTrader::self()->query( "ScreenSaver");
+    KService::List availableSavers;
 
-	KConfig type("krandom.kssrc", KConfig::NoGlobals);
-        const KConfigGroup configGroup = type.group("Settings");
-	const bool opengl = configGroup.readEntry("OpenGL", false);
-	const bool manipulatescreen = configGroup.readEntry("ManipulateScreen", false);
-        // TODO replace this with TryExec=fortune in the desktop files
-        const bool fortune = !KStandardDirs::findExe("fortune").isEmpty();
-        foreach( const KService::Ptr& service, lst ) {
-            //QString file = KStandardDirs::locate("services", service->entryPath());
-            //kDebug() << "Looking at " << file;
-            const QString saverType = service->property("X-KDE-Type").toString();
-            foreach (const QString &type, saverType.split(QLatin1Char(';'))) {
-                //kDebug() << "saverTypes is "<< type;
-                if (type == QLatin1String("ManipulateScreen")) {
-                    if (!manipulatescreen)
-                        goto fail;
-                } else if (type == QLatin1String("OpenGL")) {
-                    if (!opengl)
-                        goto fail;
-                } else if (type == QLatin1String("Fortune")) {
-                    if (!fortune)
-                        goto fail;
+    KConfig type("krandom.kssrc", KConfig::NoGlobals);
+    const KConfigGroup configGroup = type.group("Settings");
+    const bool manipulatescreen = configGroup.readEntry("ManipulateScreen", false);
+    foreach( const KService::Ptr& service, lst ) {
+        //QString file = KStandardDirs::locate("services", service->entryPath());
+        //kDebug() << "Looking at " << file;
+        const QString saverType = service->property("X-KDE-Type").toString();
+        foreach (const QString &type, saverType.split(QLatin1Char(';'))) {
+            //kDebug() << "saverTypes is "<< type;
+            if (type == QLatin1String("ManipulateScreen")) {
+                if (!manipulatescreen) {
+                    goto fail;
                 }
             }
-            availableSavers.append(service);
-          fail: ;
         }
+        availableSavers.append(service);
+        fail: ;
+    }
 
-	KRandomSequence rnd;
-	const int indx = rnd.getLong(availableSavers.count());
-        const KService::Ptr service = availableSavers.at(indx);
-        const QList<KServiceAction> actions = service->actions();
+    KRandomSequence rnd;
+    const int indx = rnd.getLong(availableSavers.count());
+    const KService::Ptr service = availableSavers.at(indx);
+    const QList<KServiceAction> actions = service->actions();
 
-	QString cmd;
-	if (windowId)
-            cmd = exeFromActionGroup(actions, "InWindow");
-        if (cmd.isEmpty() && windowId == 0)
-            cmd = exeFromActionGroup(actions, "Root");
-        if (cmd.isEmpty())
-            cmd = service->exec();
+    QString cmd;
+    if (windowId) {
+        cmd = exeFromActionGroup(actions, "InWindow");
+    }
+    if (cmd.isEmpty() && windowId == 0) {
+        cmd = exeFromActionGroup(actions, "Root");
+    }
+    if (cmd.isEmpty()) {
+        cmd = service->exec();
+    }
 
     QHash<QChar, QString> keyMap;
     keyMap.insert('w', QString::number(windowId));
@@ -165,43 +158,39 @@ int main(int argc, char *argv[])
         }
     }
 
-	// If we end up here then we couldn't start a saver.
-	// If we have been supplied a window id or root window then blank it.
+    // If we end up here then we couldn't start a saver.
+    // If we have been supplied a window id or root window then blank it.
 #ifdef Q_WS_X11
-	QX11Info info;
-	Window win = windowId ? windowId : RootWindow(QX11Info::display(), info.screen());
-	XSetWindowBackground(QX11Info::display(), win,
-			BlackPixel(QX11Info::display(), info.screen()));
-	XClearWindow(QX11Info::display(), win);
+    QX11Info info;
+    Window win = windowId ? windowId : RootWindow(QX11Info::display(), info.screen());
+    XSetWindowBackground(QX11Info::display(), win,
+                         BlackPixel(QX11Info::display(), info.screen()));
+    XClearWindow(QX11Info::display(), win);
 #endif
 }
 
 
 KRandomSetup::KRandomSetup( QWidget *parent, const char *name )
-	: KDialog( parent )
+    : KDialog( parent )
 {
-  setObjectName( name );
-  setModal( true );
-  setCaption( i18n( "Setup Random Screen Saver" ) );
-  setButtons( Ok | Cancel );
+    setObjectName( name );
+    setModal( true );
+    setCaption( i18n( "Setup Random Screen Saver" ) );
+    setButtons( Ok | Cancel );
 
-	QFrame *main = new QFrame( this );
-  setMainWidget( main );
-	QGridLayout *grid = new QGridLayout(main );
-        grid->setSpacing( spacingHint() );
+    QFrame *main = new QFrame( this );
+    setMainWidget( main );
+    QGridLayout *grid = new QGridLayout(main );
+    grid->setSpacing( spacingHint() );
 
-	openGL = new QCheckBox( i18n("Use OpenGL screen savers"), main );
-	grid->addWidget(openGL, 0, 0);
+    manipulateScreen = new QCheckBox(i18n("Use screen savers that manipulate the screen"), main);
+    grid->addWidget(manipulateScreen, 0, 0);
 
-	manipulateScreen = new QCheckBox(i18n("Use screen savers that manipulate the screen"), main);
-	grid->addWidget(manipulateScreen, 1, 0);
+    setMinimumSize( sizeHint() );
 
-	setMinimumSize( sizeHint() );
-
-	KConfig config("krandom.kssrc", KConfig::NoGlobals);
-        const KConfigGroup configGroup = config.group("Settings");
-	openGL->setChecked(configGroup.readEntry("OpenGL", true));
-	manipulateScreen->setChecked(configGroup.readEntry("ManipulateScreen", true));
+    KConfig config("krandom.kssrc", KConfig::NoGlobals);
+    const KConfigGroup configGroup = config.group("Settings");
+    manipulateScreen->setChecked(configGroup.readEntry("ManipulateScreen", true));
 
   connect( this, SIGNAL(okClicked()), SLOT(slotOk()) );
 }
@@ -210,7 +199,6 @@ void KRandomSetup::slotOk()
 {
     KConfig config("krandom.kssrc");
     KConfigGroup configGroup = config.group("Settings");
-    configGroup.writeEntry("OpenGL", openGL->isChecked());
     configGroup.writeEntry("ManipulateScreen", manipulateScreen->isChecked());
 
     accept();

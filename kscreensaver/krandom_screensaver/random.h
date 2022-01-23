@@ -19,18 +19,15 @@
 
 class KRandomSetup : public KDialog
 {
-	Q_OBJECT
-	public:
-		KRandomSetup( QWidget *parent = NULL, const char *name = NULL );
+    Q_OBJECT
+public:
+    KRandomSetup( QWidget *parent = NULL, const char *name = NULL );
 
-	private:
+private:
+    QCheckBox *manipulateScreen;
 
-		QCheckBox *openGL;
-		QCheckBox *manipulateScreen;
-
-  private Q_SLOTS:
-		void slotOk();
-
+private Q_SLOTS:
+    void slotOk();
 };
 
-#endif
+#endif // RANDOM_H
