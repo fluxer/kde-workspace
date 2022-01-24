@@ -53,23 +53,7 @@ public:
     ~KScreenSaver();
 
 protected:
-    /**
-     * You cannot create a new widget with this widget as parent, since this
-     * widget may not be owned by your application.  In order to create
-     * widgets with a KScreenSaver as parent, create the widget with no parent,
-     * call embed(), and then show() the widget.
-     *
-     * @param widget The widget to embed in the screensaver widget.
-     */
-    void embed( QWidget *widget );
     bool event( QEvent* event );
-
-private:
-    //Note: To keep binary compatibility this class must have only one member, which is a pointer.
-    //      If more members are needed, use the d-pointer technique.
-    //      See http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C%2B%2B
-    //KScreenSaverPrivate *d;
-    QWidget *embeddedWidget;
 };
 
 /**

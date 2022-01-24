@@ -22,19 +22,13 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QtGui/qx11info_x11.h>
 #include <QApplication>
 #include <QDebug>
 #include <krandom.h>
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#endif
-
-
 //-----------------------------------------------------------------------------
 
-KScreenSaver::KScreenSaver( WId id ) : QWidget(), embeddedWidget(0)
+KScreenSaver::KScreenSaver( WId id ) : QWidget()
 {
     if ( id )
     {
@@ -50,25 +44,10 @@ KScreenSaver::~KScreenSaver()
 bool KScreenSaver::event(QEvent* e)
 {
     bool r = QWidget::event(e);
-    if (e->type() == QEvent::Polish)
+    if (e->type() == QEvent::Polish) {
         setAttribute(Qt::WA_StyledBackground, false);
-    if ((e->type() == QEvent::Resize) && embeddedWidget)
-    {
-        embeddedWidget->resize( size() );
     }
     return r;
-}
-
-void KScreenSaver::embed( QWidget *w )
-{
-    w->resize( size() );
-    QApplication::sendPostedEvents();
-#if defined(Q_WS_X11) //FIXME
-    XReparentWindow(QX11Info::display(), w->winId(), winId(), 0, 0);
-#endif
-    w->setGeometry( 0, 0, width(), height() );
-    embeddedWidget = w;
-    QApplication::sendPostedEvents();
 }
 
 KScreenSaverInterface::~KScreenSaverInterface()
