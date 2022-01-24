@@ -106,8 +106,6 @@ endif(Q_WS_X11)
 install(
     FILES
     kscience.png
-    particle.png
-    image.png
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kscreensaver
 )
 install(
