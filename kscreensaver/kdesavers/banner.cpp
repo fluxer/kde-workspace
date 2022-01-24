@@ -131,7 +131,7 @@ KBannerSetup::KBannerSetup(QWidget *parent)
     gl->addWidget(colorPush, 4, 1);
     connect(colorPush, SIGNAL(changed(QColor)), this, SLOT(slotColor(QColor)));
 
-    QCheckBox *cyclingColorCb=new QCheckBox(i18n("Cycling color"), group);
+    QCheckBox *cyclingColorCb = new QCheckBox(i18n("Cycling color"), group);
     cyclingColorCb->setMinimumSize(cyclingColorCb->sizeHint());
     gl->addWidget(cyclingColorCb, 5, 0,5,1);
     connect(cyclingColorCb, SIGNAL(toggled(bool)), this, SLOT(slotCyclingColor(bool)));
@@ -289,7 +289,7 @@ void KBannerSetup::slotColor(const QColor &col)
 void KBannerSetup::slotCyclingColor(bool on)
 {
     colorPush->setEnabled(!on);
-    cyclingColor=on;
+    cyclingColor = on;
 
     if (saver) {
         saver->setCyclingColor(on);
@@ -396,7 +396,9 @@ void KBannerSetup::slotHelp()
 
 //-----------------------------------------------------------------------------
 
-KBannerSaver::KBannerSaver( WId id ) : KScreenSaver( id )
+KBannerSaver::KBannerSaver(WId id)
+    : KScreenSaver(id),
+    needUpdate(false)
 {
     krnd = new KRandomSequence();
     readSettings();
@@ -537,8 +539,9 @@ void KBannerSaver::paintEvent(QPaintEvent *event)
 
     xpos -= step;
 
-    if (cyclingColor || needUpdate) {
+    if (needUpdate) {
         messageWidth = QFontMetrics(font).boundingRect(message).width();
+        needUpdate = false;
     }
 
     QPainter p(this);
