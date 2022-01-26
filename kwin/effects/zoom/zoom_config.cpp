@@ -98,12 +98,6 @@ ZoomEffectConfig::ZoomEffectConfig(QWidget* parent, const QVariantList& args) :
     a->setProperty("isConfigurationAction", true);
     a->setGlobalShortcut(KShortcut(Qt::META + Qt::Key_Down));
 
-    a = static_cast< KAction* >(actionCollection->addAction("MoveMouseToFocus"));
-    a->setIcon(KIcon("view-restore"));
-    a->setText(i18n("Move Mouse to Focus"));
-    a->setProperty("isConfigurationAction", true);
-    a->setGlobalShortcut(KShortcut(Qt::META + Qt::Key_F5));
-
     a = static_cast< KAction* >(actionCollection->addAction("MoveMouseToCenter"));
     a->setIcon(KIcon("view-restore"));
     a->setText(i18n("Move Mouse to Center"));

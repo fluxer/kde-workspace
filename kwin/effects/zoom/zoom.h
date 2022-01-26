@@ -40,9 +40,6 @@ class ZoomEffect
     Q_PROPERTY(qreal zoomFactor READ configuredZoomFactor)
     Q_PROPERTY(int mousePointer READ configuredMousePointer)
     Q_PROPERTY(int mouseTracking READ configuredMouseTracking)
-    Q_PROPERTY(bool enableFocusTracking READ isEnableFocusTracking)
-    Q_PROPERTY(bool followFocus READ isFollowFocus)
-    Q_PROPERTY(int focusDelay READ configuredFocusDelay)
     Q_PROPERTY(qreal moveFactor READ configuredMoveFactor)
     Q_PROPERTY(qreal targetZoom READ targetZoom)
 public:
@@ -63,15 +60,6 @@ public:
     int configuredMouseTracking() const {
         return mouseTracking;
     }
-    bool isEnableFocusTracking() const {
-        return enableFocusTracking;
-    }
-    bool isFollowFocus() const {
-        return followFocus;
-    }
-    int configuredFocusDelay() const {
-        return focusDelay;
-    }
     qreal configuredMoveFactor() const {
         return moveFactor;
     }
@@ -87,10 +75,8 @@ private slots:
     void moveZoomRight();
     void moveZoomUp();
     void moveZoomDown();
-    void moveMouseToFocus();
     void moveMouseToCenter();
     void timelineFrameChanged(int frame);
-    void focusChanged(int px, int py, int rx, int ry, int rwidth, int rheight);
     void slotMouseChanged(const QPoint& pos, const QPoint& old,
                               Qt::MouseButtons buttons, Qt::MouseButtons oldbuttons,
                               Qt::KeyboardModifiers modifiers, Qt::KeyboardModifiers oldmodifiers);
@@ -107,14 +93,10 @@ private:
     double zoomFactor;
     enum MouseTrackingType { MouseTrackingProportional = 0, MouseTrackingCentred = 1, MouseTrackingPush = 2, MouseTrackingDisabled = 3 };
     MouseTrackingType mouseTracking;
-    bool enableFocusTracking;
-    bool followFocus;
     enum MousePointerType { MousePointerScale = 0, MousePointerKeep = 1, MousePointerHide = 2 };
     MousePointerType mousePointer;
-    int focusDelay;
     QPoint cursorPoint;
     QPoint cursorHotSpot;
-    QPoint focusPoint;
     QPoint prevPoint;
     QTime lastMouseEvent;
     QTime lastFocusEvent;

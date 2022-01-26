@@ -5,8 +5,6 @@ include_directories(${CMAKE_SOURCE_DIR}/libs
 )
 
 set(plasma_SRCS
-    accessibility/accessiblefactory.cpp
-    accessibility/accessibleplasmaview.cpp
     scripting/desktopscriptengine.cpp
     scripting/panel.cpp
     checkbox.cpp

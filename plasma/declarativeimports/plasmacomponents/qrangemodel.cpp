@@ -55,10 +55,6 @@
     \ingroup qt-components
 */
 
-#ifndef QT_NO_ACCESSIBILITY
-#include <QAccessible>
-#endif
-
 #include <QDebug>
 
 #include "qrangemodel.h"

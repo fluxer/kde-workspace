@@ -547,7 +547,7 @@ void KBannerSaver::paintEvent(QPaintEvent *event)
     QPainter p(this);
     p.fillRect(rect(), Qt::black);
 
-    if ( xpos < -messageWidth) {
+    if (xpos < -messageWidth) {
         xpos = width();
         ypos = (fsize + (int) ((double)(height() - 3 * fsize) * krnd->getDouble()));
     }
