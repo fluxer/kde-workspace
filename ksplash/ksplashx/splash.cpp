@@ -358,12 +358,9 @@ static void pregeneratePixmap( const char* file, const char* real_file, int widt
 
 static QImage readImage( FILE* f )
     {
-    const char jpeg[ 3 + 1 ] = "\377\330\377";
     char buf[ 3 ] = "";
     fread( buf, 1, 3, f );
     rewind( f );
-    if( memcmp( buf, jpeg, 3 ) == 0 )
-        return splash_read_jpeg_image( f );
     return splash_read_png_image( f );
     }
 

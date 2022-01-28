@@ -5,7 +5,6 @@ add_subdirectory(utils)
 
 include_directories(
     ${PNG_INCLUDE_DIRS}
-    ${JPEG_INCLUDE_DIR}
 )
 
 include(CheckCXXSourceCompiles)
@@ -19,7 +18,6 @@ int main() { __asm__(\"pxor %mm0, %mm0\") ; }"
 set(ksplashx_SRCS
     main.cpp
     qglobal.cpp
-    qjpegio.cpp
     qpngio.cpp
     qimage.cpp
     qsize.cpp
@@ -46,7 +44,7 @@ if(X86_MMX_FOUND AND "${CMAKE_SYSTEM_PROCESSOR}" MATCHES "i[3-6]86")
 endif()
 
 add_executable(ksplashx ${ksplashx_SRCS})
-target_link_libraries(ksplashx ${X11_LIBRARIES} ${PNG_LIBRARIES} ${JPEG_LIBRARIES})
+target_link_libraries(ksplashx ${X11_LIBRARIES} ${PNG_LIBRARIES})
 if(X11_Xinerama_FOUND)
     target_link_libraries(ksplashx ${X11_Xinerama_LIB})
 endif()

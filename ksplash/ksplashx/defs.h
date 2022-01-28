@@ -69,13 +69,6 @@
 #define QT_NO_CAST_ASCII
 #endif
 
-#define QT_NO_IMAGEIO_BMP
-#define QT_NO_IMAGEIO_PPM
-#define QT_NO_IMAGEIO_XBM
-#define QT_NO_IMAGEIO_XPM
-#define QT_NO_IMAGEIO_MNG
-#define QT_NO_ASYNC_IMAGE_IO
-
 #define QT_STATIC_CONST static const
 #define QT_STATIC_CONST_IMPL const
 

@@ -14,13 +14,6 @@ set_package_properties(ZLIB PROPERTIES
     TYPE REQUIRED
 )
 
-find_package(JPEG)
-set_package_properties(JPEG PROPERTIES
-    DESCRIPTION "Accelerated JPEG image codec"
-    URL "http://libjpeg-turbo.virtualgl.org/"
-    TYPE REQUIRED
-)
-
 find_package(PNG)
 set_package_properties(PNG PROPERTIES
     DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"
