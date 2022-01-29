@@ -22,7 +22,7 @@
 
 // Qt
 #include <QtCore/QHash>
-#include <QtCore/QLinkedList>
+#include <QtCore/QList>
 
 // KDE
 #include <KConfigGroup>
@@ -107,7 +107,7 @@ public:
         QString storageId;
         int startCount;
         QDateTime lastStartedTime;
-        QLinkedList<QString>::iterator queueIter;
+        QList<QString>::iterator queueIter;
 
         bool operator<(const ServiceInfo& rhs) const {
             return this->lastStartedTime < rhs.lastStartedTime;
@@ -118,7 +118,7 @@ public:
     int defaultMaxServices, maxServices;
     // queue to keep track of the order in which services have been used
     // (most recently used at the back)
-    QLinkedList<QString> serviceQueue;
+    QList<QString> serviceQueue;
     QHash<QString, ServiceInfo> serviceInfo;
     RecentApplications instance;
 };

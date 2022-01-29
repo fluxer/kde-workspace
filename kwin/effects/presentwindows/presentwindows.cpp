@@ -1012,7 +1012,7 @@ void PresentWindowsEffect::calculateWindowTransformationsClosest(EffectWindowLis
         }
 
     // Assign each window to the closest available slot
-    EffectWindowList tmpList = windowlist; // use a QLinkedList copy instead?
+    EffectWindowList tmpList = windowlist; // use a QList copy instead?
     QPoint otherPos;
     while (!tmpList.isEmpty()) {
         EffectWindow *w = tmpList.first();
