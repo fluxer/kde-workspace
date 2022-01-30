@@ -38,6 +38,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
+#include <QtCore/QScopedPointer>
 #include <QtCore/QTimer>
 
 #include <ctime>

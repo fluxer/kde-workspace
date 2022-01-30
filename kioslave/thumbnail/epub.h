@@ -19,6 +19,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 #ifndef EPUB_H
 #define EPUB_H
 
+#include <QScopedPointer>
 #include <QImage>
 #include <QXmlStreamReader>
 #include <kzip.h>

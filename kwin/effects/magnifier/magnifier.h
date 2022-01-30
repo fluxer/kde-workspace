@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config-kwin.h"
 
 #include <kwineffects.h>
+#include <QScopedPointer>
 
 namespace KWin
 {
