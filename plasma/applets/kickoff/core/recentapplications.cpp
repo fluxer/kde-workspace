@@ -80,11 +80,10 @@ public:
         // queue entry (so that there are no duplicates in the queue)
         if (serviceInfo.contains(id)) {
             kDebug() << "Duplicate entry added.  Removing existing entry from queue.";
-            serviceQueue.erase(serviceInfo[id].queueIter);
+            serviceQueue.removeAll(id);
         }
 
         serviceQueue.append(id);
-        info.queueIter = --serviceQueue.end();
         serviceInfo.insert(id, info);
     }
 
@@ -107,7 +106,6 @@ public:
         QString storageId;
         int startCount;
         QDateTime lastStartedTime;
-        QList<QString>::iterator queueIter;
 
         bool operator<(const ServiceInfo& rhs) const {
             return this->lastStartedTime < rhs.lastStartedTime;
