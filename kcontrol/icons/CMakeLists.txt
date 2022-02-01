@@ -12,7 +12,7 @@ set(kcm_icons_PART_SRCS
 
 kde4_add_plugin(kcm_icons ${kcm_icons_PART_SRCS})
 
-target_link_libraries(kcm_icons ${KDE4_KIO_LIBS} ${QT_QTSVG_LIBRARY})
+target_link_libraries(kcm_icons ${KDE4_KIO_LIBS} ${QT_QTGUI_LIBRARY})
 
 ########### install files ###############
 

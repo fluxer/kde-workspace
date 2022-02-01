@@ -30,8 +30,6 @@
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QTreeWidget>
-#include <QPainter>
-#include <QSvgRenderer>
 
 #include <kdebug.h>
 #include <kapplication.h>
@@ -109,7 +107,7 @@ IconThemesConfig::IconThemesConfig(const KComponentData &inst, QWidget *parent)
   connect(m_removeButton,SIGNAL(clicked()),SLOT(removeSelectedTheme()));
 
   topLayout->addWidget(
-	new QLabel(i18n("Select the icon theme you want to use:"), this));
+  new QLabel(i18n("Select the icon theme you want to use:"), this));
   topLayout->addWidget(m_preview);
   topLayout->addWidget(m_iconThemes);
   QHBoxLayout *lg = new QHBoxLayout();
@@ -370,7 +368,6 @@ void IconThemesConfig::updateRemoveButton()
 void loadPreview(QLabel *label, KIconTheme& icontheme, const QStringList& iconnames)
 {
     const int size = qMin(48, icontheme.defaultSize(KIconLoader::Desktop));
-    QSvgRenderer renderer;
     foreach(const QString &iconthemename, QStringList() << icontheme.internalName() << icontheme.inherits()) {
       foreach(const QString &name, iconnames) {
         K3Icon icon = KIconTheme(iconthemename).iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
@@ -379,19 +376,11 @@ void loadPreview(QLabel *label, KIconTheme& icontheme, const QStringList& iconna
             return;
         }
         icon = KIconTheme(iconthemename).iconPath(QString("%1.svg").arg(name), size, KIconLoader::MatchBest);
-        if( ! icon.isValid() ) {
+        if(!icon.isValid() ) {
             icon = KIconTheme(iconthemename).iconPath(QString("%1.svgz").arg(name), size, KIconLoader::MatchBest);
-            if( ! icon.isValid() ) {
-                continue;
-            }
         }
-        if (renderer.load(icon.path)) {
-            QPixmap pix(size, size);
-            pix.fill(label->palette().color(QPalette::Background));
-            QPainter p(&pix);
-            p.setViewport(0, 0, size, size);
-            renderer.render(&p);
-            label->setPixmap(pix.scaled(size, size));
+        if (icon.isValid()) {
+            label->setPixmap(QPixmap(icon.path).scaled(size, size));
             return;
         }
       }
