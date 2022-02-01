@@ -27,16 +27,6 @@ install( FILES directorythumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DI
 
 ########### next target ###############
 
-set(svgthumbnail_PART_SRCS svgcreator.cpp)
-
-kde4_add_plugin(svgthumbnail ${svgthumbnail_PART_SRCS})
-
-target_link_libraries(svgthumbnail ${KDE4_KIO_LIBS} ${QT_QTSVG_LIBRARY})
-
-install(TARGETS svgthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-
-########### next target ###############
-
 set(textthumbnail_PART_SRCS textcreator.cpp)
 
 kde4_add_plugin(textthumbnail ${textthumbnail_PART_SRCS})
@@ -126,7 +116,6 @@ install(
 install(
     FILES
     thumbnail.protocol
-    svgthumbnail.desktop
     imagethumbnail.desktop
     textthumbnail.desktop
     djvuthumbnail.desktop
