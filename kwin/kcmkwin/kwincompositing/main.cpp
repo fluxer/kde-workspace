@@ -127,8 +127,10 @@ KWinCompositingConfig::KWinCompositingConfig(QWidget *parent, const QVariantList
 #ifndef KWIN_BUILD_COMPOSITE
     ui.compositingType->removeItem(0);
 #define XRENDER_INDEX -1
+#define NONE_INDEX 0
 #else
 #define XRENDER_INDEX 0
+#define NONE_INDEX 1
 #endif
 
     connect(ui.tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
@@ -315,8 +317,9 @@ void KWinCompositingConfig::alignGuiToCompositingType(int compositingType)
 {
     ui.scaleMethodLabel->setVisible(compositingType == XRENDER_INDEX);
     ui.xrScaleFilter->setVisible(compositingType == XRENDER_INDEX);
-    if (compositingType == XRENDER_INDEX)
+    if (compositingType == XRENDER_INDEX) {
         ui.scaleMethodLabel->setBuddy(ui.xrScaleFilter);
+    }
 }
 
 void KWinCompositingConfig::toggleEffectShortcutChanged(const QKeySequence &seq)
@@ -347,6 +350,8 @@ void KWinCompositingConfig::loadAdvancedTab()
     QString backend = config.readEntry("Backend", "XRender");
     if (backend == "XRender") {
         ui.compositingType->setCurrentIndex(XRENDER_INDEX);
+    } else {
+        ui.compositingType->setCurrentIndex(NONE_INDEX);
     }
 
     // 4 - off, 5 - shown, 6 - always, other are old values
@@ -450,7 +455,7 @@ bool KWinCompositingConfig::saveAdvancedTab()
 
     KConfigGroup config(mKWinConfig, "Compositing");
 
-    QString backend;
+    QString backend = "none";
 
     switch (ui.compositingType->currentIndex()) {
     case XRENDER_INDEX:
