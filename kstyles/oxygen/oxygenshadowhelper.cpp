@@ -65,8 +65,16 @@ namespace Oxygen
     {
 
         #ifdef Q_WS_X11
-        foreach( const Qt::HANDLE& value, _pixmaps  ) XFreePixmap( QX11Info::display(), value );
-        foreach( const Qt::HANDLE& value, _dockPixmaps  ) XFreePixmap( QX11Info::display(), value );
+        foreach( const Qt::HANDLE& value, _pixmaps ) {
+            if (value != 0) {
+                XFreePixmap( QX11Info::display(), value );
+            }
+        }
+        foreach( const Qt::HANDLE& value, _dockPixmaps ) {
+            if (value != 0) {
+                XFreePixmap( QX11Info::display(), value );
+            }
+        }
         #endif
 
         delete _shadowCache;
@@ -78,8 +86,16 @@ namespace Oxygen
     {
         #ifdef Q_WS_X11
         // round pixmaps
-        foreach( const Qt::HANDLE& value, _pixmaps  ) XFreePixmap( QX11Info::display(), value );
-        foreach( const Qt::HANDLE& value, _dockPixmaps  ) XFreePixmap( QX11Info::display(), value );
+        foreach( const Qt::HANDLE& value, _pixmaps ) {
+            if (value != 0) {
+                XFreePixmap( QX11Info::display(), value );
+            }
+        }
+        foreach( const Qt::HANDLE& value, _dockPixmaps ) {
+            if (value != 0) {
+                XFreePixmap( QX11Info::display(), value );
+            }
+        }
         #endif
 
         _pixmaps.clear();
