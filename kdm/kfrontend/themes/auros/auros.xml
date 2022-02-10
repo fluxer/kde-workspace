@@ -144,9 +144,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	<item type="rect" id="footer">
 		<pos x="-0" y="-75" min-width="50%" width="box" height="43" anchor="e"/>
 		<fixed>
-			<item type="svg">
-				<normal file="auros.svg" element="footer-background"/>
-				<pos width="1980" height="43"/>
+			<item type="pixmap">
+				<normal file="auros.png"/>
+				<pos width="820" height="43"/>
 			</item>
 		</fixed>
 		<box orientation="horizontal" spacing="10" xpadding="10">

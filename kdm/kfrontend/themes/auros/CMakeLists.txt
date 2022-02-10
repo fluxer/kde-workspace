@@ -5,7 +5,7 @@ install(
     system.png
     session.png
     auros-box.svg
-    auros.svg
+    auros.png
     branding-icon.png
     screenshot.png
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kdm/themes/auros
