@@ -20,6 +20,8 @@
 #include <QImage>
 #include <QDebug>
 
+#include <stdlib.h>
+
 int main(int argc, char **argv)
 {
     // Initialize Qt application, otherwise for some svg files it can segfault with:
@@ -27,20 +29,28 @@ int main(int argc, char **argv)
     // constructed before FontConfig is used."
     QApplication app(argc, argv);
 
-    if(argc < 5) {
+    if (argc < 5) {
         qDebug() << "Usage : ksvgtopng width height svgfilename outputfilename";
         qDebug() << "Please use full path name for svgfilename";
         return 1;
     }
 
-    QImage image(argv[3], "SVG");
-    if (image.isNull()) {
-        qWarning() << "Could not load" << argv[3];
+    const int width = atoi(argv[1]);
+    const int height = atoi(argv[2]);
+    if (width <= 0) {
+        qWarning() << "Width cannot be negative or zero";
+        return 2;
+    } else if (height <= 0) {
+        qWarning() << "Height cannot be negative or zero";
         return 2;
     }
 
-    const int width = atoi(argv[1]);
-    const int height = atoi(argv[2]);
+    QImage image(argv[3], "SVG");
+    if (image.isNull()) {
+        qWarning() << "Could not load" << argv[3];
+        return 3;
+    }
+
     image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     if (image.save(argv[4], "PNG") == false) {
