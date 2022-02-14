@@ -17,6 +17,7 @@
 */
 
 #include <QApplication>
+#include <QImageReader>
 #include <QImage>
 #include <QDebug>
 
@@ -45,13 +46,13 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    QImage image(argv[3], "SVG");
+    QImageReader imagereader(argv[3], "SVG");
+    imagereader.setScaledSize(QSize(width, height));
+    QImage image = imagereader.read();
     if (image.isNull()) {
-        qWarning() << "Could not load" << argv[3];
+        qWarning() << "Cannot not read" << argv[3] << ":" << imagereader.errorString();
         return 3;
     }
-
-    image = image.scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
     if (image.save(argv[4], "PNG") == false) {
         qWarning() << "Could not save" << argv[4];
