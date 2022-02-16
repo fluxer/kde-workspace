@@ -92,7 +92,7 @@ void KNetAttach::setInformationText(const QString &type)
         text = i18n("Enter a name for this <i>File Transfer Protocol connection</i> as well as a server address and folder path to use and press the <b>Save & Connect</b> button.");
     } else if (type=="SFTP") {
         text = i18n("Enter a name for this <i>SSH File Transfer Protocol</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
-    } else if (type=="SFTP") {
+    } else if (type=="NFS") {
         text = i18n("Enter a name for this <i>Network File System</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
     } else if (type=="SMB") {
         text = i18n("Enter a name for this <i>Microsoft Windows network drive</i> as well as a server address and folder path to use and press the <b>Save & Connect</b> button.");
