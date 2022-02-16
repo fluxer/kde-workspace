@@ -58,7 +58,7 @@ KNetAttach::KNetAttach( QWidget* parent )
     connect( this, SIGNAL(currentIdChanged(int)), this, SLOT(slotPageChanged(int)) );
     setWindowIcon(KIcon("knetattach"));
     setOption(HaveHelpButton, true);
-    //setResizeMode(Fixed); FIXME: make the wizard fixed-geometry
+    // setResizeMode(Fixed); FIXME: make the wizard fixed-geometry
     button(FinishButton)->setEnabled(false);
     KConfig crecent( "krecentconnections", KConfig::NoGlobals  );
     KConfigGroup recent(&crecent, "General");
@@ -78,17 +78,17 @@ KNetAttach::KNetAttach( QWidget* parent )
     _encoding->setCurrentIndex(codecForLocaleIdx != -1 ? codecForLocaleIdx : 0);
 }
 
-void KNetAttach::slotPageChanged( int )
+void KNetAttach::slotPageChanged(int)
 {
     updateFinishButtonText(true);
 }
 
 void KNetAttach::slotHelpClicked()
 {
-    KToolInvocation::invokeHelp(QString(), "knetattach" );
+    KToolInvocation::invokeHelp(QString(), "knetattach");
 }
 
-void KNetAttach::setInformationText( const QString &type )
+void KNetAttach::setInformationText(const QString &type)
 {
     QString text;
 
