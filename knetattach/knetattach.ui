@@ -48,6 +48,40 @@
      </spacer>
     </item>
     <item>
+     <widget class="QRadioButton" name="_ftp">
+      <property name="text">
+       <string>&amp;File Transfer Protocol (ftp)</string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="_sftp">
+      <property name="text">
+       <string>&amp;SSH File Transfer Protocol (sftp)</string>
+      </property>
+      <property name="checked">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="_nfs">
+      <property name="text">
+       <string>N&amp;etwork File System (nfs)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QRadioButton" name="_smb">
+      <property name="text">
+       <string>&amp;Microsoft® Windows® network drive (smb)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="KButtonGroup" name="buttonGroup1">
       <property name="title">
        <string/>
@@ -82,33 +116,6 @@
            <width>250</width>
            <height>0</height>
           </size>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QRadioButton" name="_sftp">
-         <property name="text">
-          <string>&amp;SSH File Transfer Protocol (sftp)</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" colspan="2">
-        <widget class="QRadioButton" name="_smb">
-         <property name="text">
-          <string>&amp;Microsoft® Windows® network drive (smb)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" colspan="2">
-        <widget class="QRadioButton" name="_ftp">
-         <property name="text">
-          <string>&amp;File Transfer Protocol (ftp)</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
