@@ -134,6 +134,9 @@ bool KNetAttach::validateCurrentPage()
             setInformationText("NFS");
             updateForProtocol("NFS");
             _port->setValue(2049);
+            if (_path->text().isEmpty()) {
+                _path->setText("/");
+            }
         } else if (_smb->isChecked()) {
             setInformationText("SMB");
             updateForProtocol("SMB");
