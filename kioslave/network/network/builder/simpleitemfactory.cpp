@@ -61,15 +61,6 @@ static const DNSSDServiceDatum DNSSDServiceData[] =
     { "_nfs._tcp",         "nfs",        "folder-remote",  true, "nfs",     "path", 0, 0, 0 },
     { "_afpovertcp._tcp",  "afpovertcp", "folder-remote",  true, "afp",     "path", 0, 0, 0 },
     { "_smb._tcp",         "smb",        "folder-remote",  true, "smb",     "path", 0, "u", "p" },
-    { "_webdav._tcp",      "webdav",     "folder-remote",  true, "webdav",  "path", 0, "u", "p" },
-    { "_webdavs._tcp",     "webdavs",    "folder-remote",  true, "webdavs", "path", 0, "u", "p" },
-
-    { "_svn._tcp",    "svn",   "folder-sync",  true, 0, 0, 0, 0, 0 },
-    { "_rsync._tcp",  "rsync", "folder-sync",  true, 0, 0, 0, 0, 0 },
-
-    // email
-    { "_imap._tcp",   "imap",   "email",  false, 0, 0, 0, 0, 0 },
-    { "_pop3._tcp",   "pop3",   "email",  false, "pop3", 0, 0, 0, 0 },
 
     // shell services
     { "_ssh._tcp",    "ssh",    "terminal",  false, "ssh",    0,      0, "u", "p" },

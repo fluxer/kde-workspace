@@ -97,36 +97,6 @@ Notes:
     <generic-icon name="folder-remote"/>
     <comment>SMB server</comment>
   </mime-type>
-  <mime-type type="inode/vnd.kde.service.webdav">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="folder-remote"/>
-    <comment>WebDav server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.webdavs">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="folder-remote"/>
-    <comment>WebDav secure server</comment>
-  </mime-type>
-
-  <mime-type type="inode/vnd.kde.service.svn">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="folder-sync"/>
-    <comment>Subversion server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.rsync">
-    <generic-icon name="folder-sync"/>
-    <comment>RSync server</comment>
-  </mime-type>
-
-  <!-- email -->
-  <mime-type type="inode/vnd.kde.service.pop3">
-    <generic-icon name="email"/>
-    <comment>POP3 server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.imap">
-    <generic-icon name="email"/>
-    <comment>IMAP server</comment>
-  </mime-type>
 
   <!-- shell services -->
   <mime-type type="inode/vnd.kde.service.ssh">

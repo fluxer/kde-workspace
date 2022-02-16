@@ -55,14 +55,6 @@ static const char* const SimpleServiceMimetype[] =
     "nfs",
     "afpovertcp",
     "smb",
-    "webdav",
-    "webdavs",
-
-    "svn",
-    "rsync",
-
-    "pop3",
-    "imap",
 
     "ssh",
     "telnet",

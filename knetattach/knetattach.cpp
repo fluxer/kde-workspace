@@ -42,7 +42,6 @@ KNetAttach::KNetAttach( QWidget* parent )
 {
     setupUi( this );
 
-    _webfolder->setEnabled(KProtocolInfo::isKnownProtocol("webdav"));
     _ftp->setEnabled(KProtocolInfo::isKnownProtocol("ftp"));
     _smb->setEnabled(KProtocolInfo::isKnownProtocol("smb"));
     _sftp->setEnabled(KProtocolInfo::isKnownProtocol("sftp"));
@@ -52,7 +51,6 @@ KNetAttach::KNetAttach( QWidget* parent )
     connect(_user, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_host, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_path, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
-    connect(_useEncryption, SIGNAL(toggled(bool)), this, SLOT(updatePort(bool)));
     connect(_createIcon, SIGNAL(toggled(bool)), this, SLOT(updateFinishButtonText(bool)));
     connect( this, SIGNAL(helpRequested()), this, SLOT(slotHelpClicked()) );
     connect( this, SIGNAL(currentIdChanged(int)), this, SLOT(slotPageChanged(int)) );
@@ -65,9 +63,6 @@ KNetAttach::KNetAttach( QWidget* parent )
     QStringList idx = recent.readEntry("Index",QStringList());
     if (idx.isEmpty()) {
         _recent->setEnabled(false);
-        if (_recent->isChecked()) {
-            _webfolder->setChecked(true);
-        }
     } else {
         _recent->setEnabled(true);
         _recentConnectionName->addItems(idx);
@@ -92,9 +87,7 @@ void KNetAttach::setInformationText(const QString &type)
 {
     QString text;
 
-    if (type=="WebFolder") {
-        text = i18n("Enter a name for this <i>WebFolder</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
-    } else if (type=="SFTP") {
+    if (type=="SFTP") {
         text = i18n("Enter a name for this <i>SSH File Transfer Protocol</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
     } else if (type=="FTP") {
         text = i18n("Enter a name for this <i>File Transfer Protocol connection</i> as well as a server address and folder path to use and press the <b>Save & Connect</b> button.");
@@ -120,11 +113,7 @@ bool KNetAttach::validateCurrentPage()
         _host->setFocus();
         _connectionName->setFocus();
 
-        if (_webfolder->isChecked()) {
-            setInformationText("WebFolder");
-            updateForProtocol("WebFolder");
-            _port->setValue(80);
-        } else if (_sftp->isChecked()) {
+        if (_sftp->isChecked()) {
             setInformationText("SFTP");
             updateForProtocol("SFTP");
             _port->setValue(22);
@@ -148,9 +137,6 @@ bool KNetAttach::validateCurrentPage()
                 QStringList idx = group.readEntry("Index",QStringList());
                 if (idx.isEmpty()) {
                     _recent->setEnabled(false);
-                    if (_recent->isChecked()) {
-                        _webfolder->setChecked(true);
-                    }
                 } else {
                     _recent->setEnabled(true);
                     _recentConnectionName->addItems(idx);
@@ -180,14 +166,7 @@ bool KNetAttach::validateCurrentPage()
         button(BackButton)->setEnabled(false);
         button(FinishButton)->setEnabled(false);
         KUrl url;
-        if (_type == "WebFolder") {
-            if (_useEncryption->isChecked()) {
-                url.setProtocol("webdavs");
-            } else {
-                url.setProtocol("webdav");
-            }
-            url.setPort(_port->value());
-        } else if (_type == "SFTP") {
+        if (_type == "SFTP") {
             url.setProtocol("sftp");
             url.setPort(_port->value());
         } else if (_type == "FTP") {
@@ -260,7 +239,7 @@ bool KNetAttach::validateCurrentPage()
             }
             recent = KConfigGroup(&_recent,name);
             recent.writeEntry("URL", url.prettyUrl());
-            if (_type == "WebFolder" || _type == "SFTP" || _type == "FTP") {
+            if ( _type == "SFTP" || _type == "FTP") {
                 recent.writeEntry("Port", _port->value());
             }
             recent.writeEntry("Type", _type);
@@ -269,19 +248,6 @@ bool KNetAttach::validateCurrentPage()
     }
     return true;
 }
-
-
-void KNetAttach::updatePort(bool encryption)
-{
-    if (_webfolder->isChecked()) {
-        if (encryption) {
-            _port->setValue(443);
-        } else {
-            _port->setValue(80);
-        }
-    }
-}
-
 
 bool KNetAttach::doConnectionTest(const KUrl& url)
 {
@@ -293,20 +259,10 @@ bool KNetAttach::doConnectionTest(const KUrl& url)
     return false;
 }
 
-
 bool KNetAttach::updateForProtocol(const QString& protocol)
 {
     _type = protocol;
-    if (protocol == "WebFolder") {
-        _useEncryption->show();
-        _portText->show();
-        _port->show();
-        _userText->show();
-        _user->show();
-        _encodingText->hide();
-        _encoding->hide();
-    } else if (protocol == "SFTP") {
-        _useEncryption->hide();
+    if (protocol == "SFTP") {
         _portText->show();
         _port->show();
         _userText->show();
@@ -314,7 +270,6 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
         _encodingText->hide();
         _encoding->hide();
     } else if (protocol == "FTP") {
-        _useEncryption->hide();
         _portText->show();
         _port->show();
         _userText->show();
@@ -322,7 +277,6 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
         _encodingText->show();
         _encoding->show();
     } else if (protocol == "SMB") {
-        _useEncryption->hide();
         _portText->hide();
         _port->hide();
         _userText->hide();
@@ -335,7 +289,6 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
     }
     return true;
 }
-
 
 void KNetAttach::updateFinishButtonText(bool save)
 {
