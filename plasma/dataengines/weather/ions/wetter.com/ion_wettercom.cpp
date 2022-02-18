@@ -316,7 +316,6 @@ void WetterComIon::findPlace(const QString& place, const QString& source)
     KUrl url = QString::fromLatin1(SEARCH_URL).arg(place).arg(md5.result().toHex().data());
 
     m_job = KIO::get(url.url(), KIO::Reload, KIO::HideProgressInfo);
-    m_job->addMetaData("cookies", "none");    // Disable displaying cookies
     m_searchJobXml.insert(m_job, new QXmlStreamReader);
     m_searchJobList.insert(m_job, source);
 
@@ -490,7 +489,6 @@ void WetterComIon::fetchForecast(const QString& source)
                .arg(m_place[source].placeCode).arg(md5.result().toHex().data());
 
     m_job = KIO::get(url.url(), KIO::Reload, KIO::HideProgressInfo);
-    m_job->addMetaData("cookies", "none");
     m_forecastJobXml.insert(m_job, new QXmlStreamReader);
     m_forecastJobList.insert(m_job, source);
 
