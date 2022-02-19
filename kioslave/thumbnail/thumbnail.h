@@ -22,6 +22,7 @@
 
 #include <QtCore/QHash>
 #include <QImage>
+#include <QSet>
 
 #include <kio/slavebase.h>
 

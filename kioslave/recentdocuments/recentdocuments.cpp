@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include <QDBusInterface>
 #include <QFileInfo>
+#include <QScopedPointer>
 
 #include <KDebug>
 #include <KComponentData>
