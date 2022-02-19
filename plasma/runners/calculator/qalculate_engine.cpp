@@ -27,7 +27,6 @@
 #include <libqalculate/Function.h>
 
 #include <QFile>
-#include <QHttp>
 #include <QApplication>
 #include <QClipboard>
 
