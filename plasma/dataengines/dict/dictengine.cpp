@@ -109,7 +109,7 @@ void DictEngine::slotKIOData(KIO::Job *kiojob, const QByteArray &kiodata)
 
 void DictEngine::setError(const QString &query, const QString &message)
 {
-    setData(query, QString("text"), QString::fromLatin1("<p>\n<dl><b>%1</b>\n</dl>").arg(message));
+    setData(query, QString("text"), QString::fromLatin1("<p>\n<dl><b>%1</b>\n</dl></p>\n").arg(message));
     setData(QString("list-dictionaries"), QString("dictionaries"), QString("en"));
 }
 
