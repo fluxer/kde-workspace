@@ -9,7 +9,6 @@
 #include <KUniqueApplication>
 #include <KUrl>
 #include <QTextStream> // so that it can define Status
-#include <KMediaPlayer>
 
 #include <X11/Xlib.h>
 #define explicit int_explicit        // avoid compiler name clash in XKBlib.h
@@ -69,7 +68,6 @@ private:
 
   QWidget *overlay;
 
-  KAudioPlayer *_player;
   QString _currentPlayerSource;
 
   WId _activeWindow;

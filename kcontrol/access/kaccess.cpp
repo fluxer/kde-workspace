@@ -8,6 +8,7 @@
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QDBusInterface>
 
 #include <KDialog>
 #include <KMessageBox>
@@ -97,7 +98,7 @@ static ModifierKey modifierKeys[] = {
 
 KAccessApp::KAccessApp(bool allowStyles)
   : KUniqueApplication(allowStyles),
-  overlay(0), _player(0)
+  overlay(0)
 {
   _activeWindow = KWindowSystem::activeWindow();
   connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), this, SLOT(activeWindowChanged(WId)));
@@ -472,12 +473,8 @@ void KAccessApp::xkbBellNotify(XkbBellNotifyEvent *event)
 
   // ring a nice bell
   if (_artsBell) {
-    // as creating the player is expensive, delay the creation
-    if (!_player) {
-      _player = new KAudioPlayer(this);
-      _player->setPlayerID("kaccess");
-    }
-    _player->load(_currentPlayerSource);
+    QDBusInterface kaudioplayer("org.kde.kded", "/modules/kaudioplayer", "org.kde.kaudioplayer");
+    kaudioplayer.call("play", _currentPlayerSource, QString::fromLatin1("kaccess"));
   }
 }
 

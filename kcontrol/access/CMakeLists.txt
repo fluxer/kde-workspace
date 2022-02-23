@@ -26,7 +26,6 @@ add_executable(kaccess ${kaccess_SRCS})
 target_link_libraries(kaccess
     ${KDE4_KDEUI_LIBS}
     ${X11_LIBRARIES}
-    kmediaplayer
 )
 
 install(
