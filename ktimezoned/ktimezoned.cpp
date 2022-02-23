@@ -556,22 +556,20 @@ bool KTimeZoned::matchZoneFile(const QString &path)
 bool KTimeZoned::setLocalZone(const QString &zoneName)
 {
     KTimeZone local = mZones.zone(zoneName);
+    const QString path = mZoneinfoDir + '/' + zoneName;
     if (!local.isValid()) {
         // It isn't a recognised zone in zone.tab.
         // Note that some systems (e.g. Gentoo) have zones under zoneinfo which
         // are not in zone.tab, so check if it points to another zone file.
         if (mZoneinfoDir.isEmpty())
             return false;
-        QString path = mZoneinfoDir + '/' + zoneName;
-        QFile qf;
-        qf.setFileName(path);
-        QFileInfo fi(qf);
+        QFileInfo fi(path);
         if (fi.isSymLink())
             fi.setFile(fi.canonicalFilePath());
         if (!fi.exists() || !fi.isReadable())
             return false;
     }
     mLocalZone = zoneName;
-    mLocalZoneDataFile = mZoneinfoDir.isEmpty() ? QString() : mZoneinfoDir + '/' + zoneName;
+    mLocalZoneDataFile = mZoneinfoDir.isEmpty() ? QString() : path;
     return true;
 }
