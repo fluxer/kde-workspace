@@ -32,6 +32,7 @@
 #include <QPixmap>
 #include <QLibrary>
 #include <QDirIterator>
+#include <QImageWriter>
 
 #include <kurl.h>
 #include <kapplication.h>
@@ -582,9 +583,13 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         // check whether a cached version of the file is available for
         // 128 x 128 or 256 x 256 pixels
         int cacheSize = 0;
-        // NOTE: make sure the algorithm matches the one used in kdelibs/kio/kio/previewjob.cpp
+        // NOTE: make sure the algorithm and name match those used in kdelibs/kio/kio/previewjob.cpp
         const QByteArray hash = QFile::encodeName(fileName.url()).toHex();
+#if QT_VERSION >= 0x041200
+        const QString thumbName = hash + QLatin1Char('.') + QImageWriter::defaultImageFormat();
+#else
         const QString thumbName = hash + QLatin1String(".png");
+#endif
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
             KStandardDirs::makeDir(m_thumbBasePath + "normal/", 0700);
