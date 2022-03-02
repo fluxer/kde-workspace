@@ -1,4 +1,3 @@
-add_subdirectory( bookmarks )
 add_subdirectory( filter )
 add_subdirectory( archive )
 add_subdirectory( settings )
