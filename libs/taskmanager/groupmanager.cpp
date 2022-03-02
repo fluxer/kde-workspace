@@ -29,6 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QTimer>
 #include <QUuid>
 #include <QFile>
+#include <QImageWriter>
 
 #include <KDebug>
 #include <KService>
@@ -51,6 +52,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace TaskManager
 {
+
+#if QT_VERSION >= 0x041200
+static const QByteArray pixmapFormat = QImageWriter::defaultImageFormat();
+#else
+static const QByteArray pixmapFormat = "png";
+#endif
 
 class GroupManagerPrivate
 {
@@ -806,7 +813,7 @@ void GroupManager::readLauncherConfig(const KConfigGroup &cg)
             } else if (item.length() >= 5) {
                 QPixmap pixmap;
                 QByteArray bytes = QByteArray::fromBase64(item.at(4).toAscii());
-                pixmap.loadFromData(bytes);
+                pixmap.loadFromData(bytes, pixmapFormat);
                 icon.addPixmap(pixmap);
             }
             QString name(item.at(2));
@@ -997,7 +1004,7 @@ bool GroupManagerPrivate::saveLauncher(LauncherItem *launcher, KConfigGroup &cg)
         QByteArray bytes;
         QBuffer buffer(&bytes);
         buffer.open(QIODevice::WriteOnly);
-        pixmap.save(&buffer, "PNG");
+        pixmap.save(&buffer, pixmapFormat);
         launcherProperties.append(bytes.toBase64());
     }
 
