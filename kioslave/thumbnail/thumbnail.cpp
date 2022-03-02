@@ -76,6 +76,14 @@
 
 using namespace KIO;
 
+#if QT_VERSION >= 0x041200
+static const QByteArray thumbFormat = QImageWriter::defaultImageFormat();
+static const QByteArray thumbExt = "." + thumbFormat;
+#else
+static const QByteArray thumbFormat = "png";
+static const QByteArray thumbExt = ".png";
+#endif
+
 extern "C"
 {
     KDE_EXPORT int kdemain(int argc, char **argv);
@@ -585,11 +593,7 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         int cacheSize = 0;
         // NOTE: make sure the algorithm and name match those used in kdelibs/kio/kio/previewjob.cpp
         const QByteArray hash = QFile::encodeName(fileName.url()).toHex();
-#if QT_VERSION >= 0x041200
-        const QString thumbName = hash + QLatin1Char('.') + QImageWriter::defaultImageFormat();
-#else
-        const QString thumbName = hash + QLatin1String(".png");
-#endif
+        const QString thumbName = hash + thumbExt;
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
             KStandardDirs::makeDir(m_thumbBasePath + "normal/", 0700);
@@ -616,11 +620,11 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
                 // to the cache for future access.
                 KTemporaryFile temp;
                 temp.setPrefix(thumbPath + "kde-tmp-");
-                temp.setSuffix(".png");
+                temp.setSuffix(thumbExt);
                 temp.setAutoRemove(false);
                 if (temp.open()) {
                     tempFileName = temp.fileName();
-                    savedCorrectly = thumbnail.save(tempFileName, "PNG");
+                    savedCorrectly = thumbnail.save(tempFileName, thumbFormat);
                 }
             } else {
                 return false;
