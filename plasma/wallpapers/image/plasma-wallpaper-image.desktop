@@ -93,8 +93,8 @@ X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
-MimeType=image/jpeg;image/png;image/svg+xml;image/svg+xml-compressed;image/bmp;
-X-Plasma-DropMimeTypes=image/jpeg,image/png,image/svg+xml,image/svg+xml-compressed,image/bmp
+MimeType=image/bmp;image/gif;image/jp2;image/jpeg;image/katie;image/png;image/svg+xml;image/svg+xml-compressed;image/tiff;image/vnd.microsoft.icon;image/webp;image/x-dcraw;image/x-dds;image/x-eps;image/x-exr;image/x-pcx;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-psd;image/x-tga;image/x-xbitmap;image/x-xcf;image/x-xpixmap;
+X-Plasma-DropMimeTypes=image/bmp,image/gif,image/jp2,image/jpeg,image/katie,image/png,image/svg+xml,image/svg+xml-compressed,image/tiff,image/vnd.microsoft.icon,image/webp,image/x-dcraw,image/x-dds,image/x-eps,image/x-exr,image/x-pcx,image/x-portable-bitmap,image/x-portable-graymap,image/x-portable-pixmap,image/x-psd,image/x-tga,image/x-xbitmap,image/x-xcf,image/x-xpixmap
 
 [Desktop Action SingleImage]
 Name=Image

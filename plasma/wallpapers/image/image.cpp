@@ -25,6 +25,7 @@
 #include <KFileDialog>
 #include <KRandom>
 #include <KStandardDirs>
+#include <KImageIO>
 #include <KIO/Job>
 #include <krun.h>
 
@@ -664,7 +665,7 @@ void Image::showFileDialog()
             baseUrl = KUrl(m_wallpaper);
         }
 
-        m_dialog = new KFileDialog(baseUrl, "*.png *.jpeg *.jpg *.xcf *.svg *.svgz *.bmp", m_configWidget);
+        m_dialog = new KFileDialog(baseUrl, KImageIO::pattern(KImageIO::Reading), m_configWidget);
         m_dialog->setOperationMode(KFileDialog::Opening);
         m_dialog->setInlinePreviewShown(true);
         m_dialog->setCaption(i18n("Select Wallpaper Image File"));

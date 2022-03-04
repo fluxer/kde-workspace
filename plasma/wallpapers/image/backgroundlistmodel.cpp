@@ -21,6 +21,7 @@
 #include <KIO/PreviewJob>
 #include <KProgressDialog>
 #include <KStandardDirs>
+#include <KImageIO>
 
 #include <Plasma/Package>
 #include <Plasma/PackageStructure>
@@ -28,10 +29,8 @@
 #include "backgrounddelegate.h"
 #include "image.h"
 
-QSet<QString> BackgroundFinder::m_suffixes;
-
 ImageSizeFinder::ImageSizeFinder(const QString &path, QObject *parent)
-    : QObject(parent),
+    : QThread(parent),
       m_path(path)
 {
 }
@@ -203,13 +202,12 @@ QSize BackgroundListModel::bestSize(Plasma::Package *package) const
         return QSize();
     }
 
-    ImageSizeFinder *finder = new ImageSizeFinder(image);
+    QSize size(-1, -1);
+    m_sizeCache.insert(package, size);
+    ImageSizeFinder *finder = new ImageSizeFinder(image, const_cast<BackgroundListModel *>(this));
     connect(finder, SIGNAL(sizeFound(QString,QSize)), this,
             SLOT(sizeFound(QString,QSize)));
-    QThreadPool::globalInstance()->start(finder);
-
-    QSize size(-1, -1);
-    const_cast<BackgroundListModel *>(this)->m_sizeCache.insert(package, size);
+    finder->start();
     return size;
 }
 
@@ -252,7 +250,6 @@ QVariant BackgroundListModel::data(const QModelIndex &index, int role) const
 
         return title;
     }
-    break;
 
     case BackgroundDelegate::ScreenshotRole: {
         if (m_previews.contains(b)) {
@@ -277,11 +274,9 @@ QVariant BackgroundListModel::data(const QModelIndex &index, int role) const
         const_cast<BackgroundListModel *>(this)->m_previews.insert(b, m_previewUnavailablePix);
         return m_previewUnavailablePix;
     }
-    break;
 
     case BackgroundDelegate::AuthorRole:
         return b->metadata().author();
-    break;
 
     case BackgroundDelegate::ResolutionRole:{
         QSize size = bestSize(b);
@@ -292,11 +287,9 @@ QVariant BackgroundListModel::data(const QModelIndex &index, int role) const
 
         return QString();
     }
-    break;
 
     default:
         return QVariant();
-    break;
     }
 }
 
@@ -361,20 +354,16 @@ QString BackgroundFinder::token() const
     return m_token;
 }
 
-const QSet<QString> &BackgroundFinder::suffixes()
+QStringList BackgroundFinder::suffixes()
 {
-    if(m_suffixes.isEmpty()) {
-        m_suffixes << "png" << "jpeg" << "jpg" << "svg" << "svgz";
-    }
-
-    return m_suffixes;
+    return KImageIO::types(KImageIO::Reading);
 }
 
 void BackgroundFinder::run()
 {
     //QTime t;
     //t.start();
-    const QSet<QString> &fileSuffixes = suffixes();
+    const QStringList fileSuffixes = suffixes();
 
     QStringList papersFound;
     //kDebug() << "starting with" << m_paths;

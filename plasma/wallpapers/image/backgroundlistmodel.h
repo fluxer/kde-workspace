@@ -30,7 +30,7 @@ namespace Plasma
 
 class Image;
 
-class ImageSizeFinder : public QObject, public QRunnable
+class ImageSizeFinder : public QThread
 {
     Q_OBJECT
     public:
@@ -78,7 +78,7 @@ private:
 
     QWeakPointer<Image> m_structureParent;
     QList<Plasma::Package *> m_packages;
-    QHash<Plasma::Package *, QSize> m_sizeCache;
+    mutable QHash<Plasma::Package *, QSize> m_sizeCache;
     QHash<Plasma::Package *, QPixmap> m_previews;
     QHash<KUrl, QPersistentModelIndex> m_previewJobs;
     KDirWatch m_dirwatch;
@@ -99,7 +99,7 @@ public:
 
     QString token() const;
 
-    static const QSet<QString> &suffixes();
+    static QStringList suffixes();
 
 signals:
     void backgroundsFound(const QStringList &paths, const QString &token);
@@ -111,8 +111,6 @@ private:
     Plasma::PackageStructure::Ptr m_structure;
     QStringList m_paths;
     QString m_token;
-
-    static QSet<QString> m_suffixes;
 };
 
 #endif // BACKGROUNDLISTMODEL_H
