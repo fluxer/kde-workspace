@@ -13,7 +13,6 @@
 
 #include <QFile>
 #include <QDir>
-#include <QThreadPool>
 #include <QUuid>
 
 #include <KDebug>
