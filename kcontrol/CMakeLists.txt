@@ -34,7 +34,6 @@ add_subdirectory( componentchooser )
 add_subdirectory( mediaplayer )
 add_subdirectory( menus )
 add_subdirectory( dnssd )
-add_subdirectory( emoticons )
 add_subdirectory( spellchecking )
 
 add_subdirectory( kdebug )

@@ -303,8 +303,6 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR} ${KDE4_INCLUDES} ${C
 
 # libs
 add_subdirectory(libs)
-# pictures
-add_subdirectory(pics)
 
 add_subdirectory(systemsettings)
 
