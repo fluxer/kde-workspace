@@ -106,34 +106,35 @@ QList<MyNIC*> findNICs()
 
     foreach (const QNetworkInterface &iface, QNetworkInterface::allInterfaces()) {
         const QNetworkInterface::InterfaceFlags flags = iface.flags();
-        const QList<QNetworkAddressEntry> adresses = iface.addressEntries();
+        foreach (const QNetworkAddressEntry &address, iface.addressEntries()) {
 
-        MyNIC *tmp = new MyNIC;
-        tmp->name = iface.name();
-        tmp->addr = (!adresses.isEmpty() ? adresses.first().ip().toString() : QString());
-        tmp->netmask = (!adresses.isEmpty() ? adresses.first().netmask().toString() : QString());
-        if (tmp->netmask.isEmpty()) {
-            tmp->netmask = i18nc("Unknown network mask", "Unknown");
+            MyNIC *tmp = new MyNIC;
+            tmp->name = iface.name();
+            tmp->addr = address.ip().toString();
+            tmp->netmask = address.netmask().toString();
+            if (tmp->netmask.isEmpty()) {
+                tmp->netmask = i18nc("Unknown network mask", "Unknown");
+            }
+            tmp->state = (flags & QNetworkInterface::IsUp) ? upMessage : downMessage;
+
+            if (flags & QNetworkInterface::CanBroadcast)
+                tmp->type=i18nc("@item:intext Mode of network card", "Broadcast");
+            else if (flags & QNetworkInterface::IsPointToPoint)
+                tmp->type=i18nc("@item:intext Mode of network card", "Point to Point");
+            else if (flags & QNetworkInterface::CanMulticast)
+                tmp->type=i18nc("@item:intext Mode of network card", "Multicast");
+            else if (flags & QNetworkInterface::IsLoopBack)
+                tmp->type=i18nc("@item:intext Mode of network card", "Loopback");
+            else
+                tmp->type=i18nc("@item:intext Mode of network card", "Unknown");
+
+            tmp->HWaddr = iface.hardwareAddress();
+            if (tmp->HWaddr.isEmpty()) {
+                tmp->HWaddr = i18nc("Unknown HWaddr", "Unknown");
+            }
+
+            nl.append(tmp);
         }
-        tmp->state = (flags & QNetworkInterface::IsUp) ? upMessage : downMessage;
-
-        if (flags & QNetworkInterface::CanBroadcast)
-            tmp->type=i18nc("@item:intext Mode of network card", "Broadcast");
-        else if (flags & QNetworkInterface::IsPointToPoint)
-            tmp->type=i18nc("@item:intext Mode of network card", "Point to Point");
-        else if (flags & QNetworkInterface::CanMulticast)
-            tmp->type=i18nc("@item:intext Mode of network card", "Multicast");
-        else if (flags & QNetworkInterface::IsLoopBack)
-            tmp->type=i18nc("@item:intext Mode of network card", "Loopback");
-        else
-            tmp->type=i18nc("@item:intext Mode of network card", "Unknown");
-
-        tmp->HWaddr = iface.hardwareAddress();
-        if (tmp->HWaddr.isEmpty()) {
-            tmp->HWaddr = i18nc("Unknown HWaddr", "Unknown");
-        }
-
-        nl.append(tmp);
     }
 
     return nl;
