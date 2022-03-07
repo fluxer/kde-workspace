@@ -29,16 +29,15 @@
 class KCMNic:public KCModule
 {
    Q_OBJECT
-   public:
-      explicit KCMNic(QWidget *parent=0, const QVariantList &list = QVariantList( ));
+public:
+    explicit KCMNic(QWidget *parent=0, const QVariantList &list = QVariantList( ));
 
-   protected Q_SLOTS:
-      void update();
+protected Q_SLOTS:
+    void update();
 
-   protected:
-      QTreeWidget *m_list;
-      QPushButton *m_updateButton;
+protected:
+    QTreeWidget *m_list;
+    QPushButton *m_updateButton;
 };
 
-#endif
-
+#endif // KCONTROL_NIC_H
