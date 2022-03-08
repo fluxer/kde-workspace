@@ -29,10 +29,7 @@
 #include <KDirModel>
 #include <KLocale>
 #include <KIO/PreviewJob>
-
 #include <Plasma/ToolTipManager>
-
-#include <cmath>
 
 
 ToolTipWidget::ToolTipWidget(AbstractItemView *parent)
@@ -92,111 +89,29 @@ QString ToolTipWidget::metaInfo() const
 {
     const QString mimetype = m_item.mimetype();
     if (!mimetype.startsWith(QLatin1String("audio/")) &&
-            !mimetype.startsWith(QLatin1String("image/")) &&
+        !mimetype.startsWith(QLatin1String("video/")) &&
+        !mimetype.startsWith(QLatin1String("image/")) &&
         !m_item.mimeTypePtr()->is("application/vnd.oasis.opendocument.text"))
     {
         return QString();
     }
 
     KFileMetaInfo info = m_item.metaInfo(true, KFileMetaInfo::TechnicalInfo | KFileMetaInfo::ContentInfo);
-    QString text;
-
-    if (mimetype.startsWith(QLatin1String("audio/"))) {
-        // ### Disabled because the strigi ID3 analyzer is broken
-#if 0
-        const QString title  = info.item("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#title").value().toString();
-        const QString artist = info.item("http://www.semanticdesktop.org/ontologies/2009/02/19/nmm#performer").value().toString();
-        const QString album  = info.item("http://www.semanticdesktop.org/ontologies/2009/02/19/nmm#musicAlbum").value().toString();
-
-        if (!artist.isEmpty() || !title.isEmpty() || !album.isEmpty()) {
-            text += "<p><table border='0' cellspacing='0' cellpadding='0'>";
-            if (!artist.isEmpty()) {
-                text += QString("<tr><td>") + i18nc("Music", "Artist:") + QString(" </td><td>") + artist + QString("</td></tr>");
-            }
-            if (!title.isEmpty()) {
-                text += QString("<tr><td>") + i18nc("Music", "Title:") + QString(" </td><td>") + title + QString("</td></tr>");
-            }
-            if (!album.isEmpty()) {
-                text += QString("<tr><td>") + i18nc("Music", "Album:") + QString(" </td><td>") + album + QString("</td></tr>");
-            }
-            text += "</table>";
+    QString text = "<p><table border='0' cellspacing='0' cellpadding='0'>";
+    int itemcount = 0;
+    for (QHash< QString, KFileMetaInfoItem >::const_iterator i = info.items().constBegin(); i != info.items().constEnd(); ++i) {
+        const QString itvalue = i.value().value().toString();
+        if (itvalue.isEmpty()) {
+            continue;
         }
-#endif
-    } else if (mimetype.startsWith(QLatin1String("image/"))) {
-        int width             = info.item("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#width").value().toInt();
-        int height            = info.item("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#height").value().toInt();
-        const QString camera  = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#model").value().toString();
-        const QString type    = info.item("http://www.w3.org/1999/02/22-rdf-syntax-ns#type").value().toString();
-        QString exposureTime  = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#exposureTime").value().toString();
-        QString focalLength   = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#focalLength").value().toString();
-        QString focal35mm     = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#focalLengthIn35mmFilm").value().toString();
-        QString aperture      = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#apertureValue").value().toString();
-        QString iso           = info.item("http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#isoSpeedRatings").value().toString();
-        QString created       = info.item("http://www.semanticdesktop.org/ontologies/2007/01/19/nie#contentCreated").value().toString();
-
-        text += "<p><table border='0' cellspacing='0' cellpadding='0'>";
-        if (width > 0 && height > 0) {
-            QString size = QString::number(width) + 'x' + QString::number(height);
-            // Add the megapixel count for photos
-            if (type == "http://www.semanticdesktop.org/ontologies/2007/05/10/nexif#Photo") {
-                const qreal pixels = qreal(width * height) / 1e6;
-                size += QString(" (") + ki18n("%1 MPixels").subs(pixels, 0, 'f', 1).toString() + QString(")");
-            }
-            text += QString("<tr><td>") + i18n("Size:") + QString(" </td><td>") + size + QString("</td></tr>");
+        text += QString("<tr><td>") + i.value().name() + QString(": </td><td>") + itvalue + QString("</td></tr>");
+        itemcount++;
+        if (itemcount > 10) {
+            // the tooltip should not cover too much of the screen space
+            break;
         }
-        if (!camera.isEmpty()) {
-            text += QString("<tr><td>") + i18n("Camera:") + QString(" </td><td>") + camera + QString("</td></tr>");
-        }
-        if (!focalLength.isEmpty()) {
-            const qreal length = convertToReal(focalLength);
-            focalLength = i18nc("Length in millimeters", "%1 mm", qRound(length));
-            if (!focal35mm.isEmpty()) {
-                const qreal length = convertToReal(focal35mm);
-                focalLength += QString(" (") + i18nc("In photography", "35 mm equivalent: %1 mm", qRound(length)) + QString(")");
-            }
-            text += QString("<tr><td>") + i18nc("On a camera", "Focal Length:") +
-                    QString(" </td><td>") + focalLength + QString("</td></tr>");
-        }
-        if (!exposureTime.isEmpty()) {
-            const qreal time = convertToReal(exposureTime);
-            if (time < 1.0) {
-                exposureTime = QString("1/") + QString::number(qRound((1.0 / time)));
-            } else {
-                exposureTime = QString::number(time, 'f', 1);
-            }
-            text += QString("<tr><td>") + i18nc("On a camera", "Exposure Time:") + QString(" </td><td>") +
-                    i18nc("Fraction of a second, or number of seconds", "%1 s", exposureTime) + QString("</td></tr>");
-        }
-        if (!aperture.isEmpty()) {
-            // Convert the APEX value to the F number
-            const qreal fnumber = std::sqrt(std::pow(2, convertToReal(aperture)));
-            aperture = QString("f/") + QString::number(fnumber, 'f', 1);
-            if (aperture.endsWith(QLatin1String(".0"))) {
-                aperture = aperture.left(aperture.length() - 2);
-            }
-            text += QString("<tr><td>") + i18nc("On a camera", "Aperture:") +
-                    QString(" </td><td>") + aperture + QString("</td></tr>");
-        }
-        if (!iso.isEmpty()) {
-            text += QString("<tr><td>") + i18nc("On a camera", "ISO Speed:") +
-                    QString(" </td><td>") + iso + QString("</td></tr>");
-        }
-        if (!created.isEmpty()) {
-            const QDateTime dateTime = QDateTime::fromString(created, "yyyy:MM:dd HH:mm:ss");
-            text += QString("<tr><td>") + i18n("Time:") + QString(" </td><td>") +
-                    KGlobal::locale()->formatDateTime(dateTime, KLocale::ShortDate, true) + QString("</td></tr>");
-        }
-        text += "</table>";
-    } else if (m_item.mimeTypePtr()->is("application/vnd.oasis.opendocument.text")) {
-        int wordCount = info.item("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#wordCount").value().toInt();
-        int pageCount = info.item("http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#pageCount").value().toInt();
-
-        const QString str1 = i18ncp("Inserted as %1 in the message below.", "1 page", "%1 pages", pageCount);
-        const QString str2 = i18ncp("Inserted as %2 in the message below.", "1 word", "%1 words", wordCount); 
-        if (pageCount > 0) {
-            text += QString("<p>") + i18nc("%1 and %2 are the messages translated above.", "%1, %2.", str1, str2);
-        } 
     }
+    text += "</table>";
 
     return text;
 }
@@ -302,4 +217,3 @@ void ToolTipWidget::timerEvent(QTimerEvent *event)
 }
 
 #include "moc_tooltipwidget.cpp"
-
