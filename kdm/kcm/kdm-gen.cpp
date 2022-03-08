@@ -151,9 +151,6 @@ void KDMGeneralWidget::loadGuiStyles(KBackedComboBox *combo)
         if (!(config.hasGroup("KDE") && config.hasGroup("Misc")))
             continue;
 
-        if (config.group("Desktop Entry").readEntry("Hidden" , false))
-            continue;
-
         QString str2 = config.group("KDE").readEntry("WidgetStyle");
         if (str2.isNull())
             continue;

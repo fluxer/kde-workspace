@@ -563,10 +563,6 @@ void KCMStyle::loadStyle( KConfig& config )
         entry->desc = configGroup.readEntry("Comment", i18n("No description available."));
         entry->configPage = configGroup.readEntry("ConfigPage", QString());
 
-        // Check if this style should be shown
-        configGroup = config.group("Desktop Entry");
-        entry->hidden = configGroup.readEntry("Hidden", false);
-
         // Insert the entry into our dictionary.
         styleEntries.insert(strWidgetStyle.toLower(), entry);
     }
@@ -574,7 +570,7 @@ void KCMStyle::loadStyle( KConfig& config )
     // Obtain all style names
     QStringList allStyles = QStyleFactory::keys();
 
-    // Get translated names, remove all hidden style entries.
+    // Get translated names
     QStringList styles;
     StyleEntry* entry;
     for (QStringList::iterator it = allStyles.begin(); it != allStyles.end(); ++it)
@@ -583,10 +579,6 @@ void KCMStyle::loadStyle( KConfig& config )
         // Find the entry.
         if ( (entry = styleEntries[id]) != 0 )
         {
-            // Do not add hidden entries
-            if (entry->hidden)
-                continue;
-
             styles += entry->name;
 
             nameToStyleKey[entry->name] = id;

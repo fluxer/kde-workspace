@@ -31,6 +31,11 @@
 #include <QHash>
 #include <QLayout>
 #include <QMap>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QPushButton>
+#include <QTabWidget>
 
 #include <kcmodule.h>
 #include <kvbox.h>
@@ -39,18 +44,13 @@
 
 class KComboBox;
 class KConfig;
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QPushButton>
+
 class StylePreview;
-#include <QTabWidget>
 
 struct StyleEntry {
     QString name;
     QString desc;
     QString configPage;
-    bool hidden;
 };
 
 class KCMStyle : public KCModule
