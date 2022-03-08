@@ -1,4 +1,4 @@
-This is a commandline frontend to KFileMetaInfo. It allows
-to read and write meta information of files.
+This is a commandline frontend to KFileMetaInfo. It allows to read meta
+information of URL(s).
 
-Carsten Pfeiffer <pfeiffer@kde.org>
+Ivailo Monev <xakepa10@gmail.com>
