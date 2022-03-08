@@ -34,6 +34,7 @@
 #include <QPushButton>
 #include <QFormLayout>
 #include <QVBoxLayout>
+#include <QStyleFactory>
 
 extern KConfig *config;
 
@@ -145,17 +146,21 @@ void KDMGeneralWidget::loadGuiStyles(KBackedComboBox *combo)
     // XXX: Global + local schemes
     const QStringList list = KGlobal::dirs()->
         findAllResources("data", "kstyle/themes/*.themerc", KStandardDirs::NoDuplicates);
+    const QStringList list2 = QStyleFactory::keys();
     for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it) {
         KConfig config(*it, KConfig::SimpleConfig);
 
         if (!(config.hasGroup("KDE") && config.hasGroup("Misc")))
             continue;
 
-        QString str2 = config.group("KDE").readEntry("WidgetStyle");
+        const QString str2 = config.group("KDE").readEntry("WidgetStyle");
         if (str2.isNull())
             continue;
+        if (!list2.contains(str2, Qt::CaseInsensitive))
+            continue;
 
-        combo->insertItem(str2, config.group("Misc").readEntry("Name"));
+        const QString str3 = config.group("Misc").readEntry("Name");
+        combo->insertItem(str2, str3);
     }
 }
 
