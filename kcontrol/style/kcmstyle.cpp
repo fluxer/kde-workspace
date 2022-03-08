@@ -494,13 +494,11 @@ void KCMStyle::defaults()
 
     found = findStyle( KStyle::defaultStyle(), item );
     if (!found)
-        found = findStyle( "plastique", item );
+        found = findStyle( "oxygen", item );
+    if (!found)
+        found = findStyle( "cleanlooks", item );
     if (!found)
         found = findStyle( "windows", item );
-    if (!found)
-        found = findStyle( "platinum", item );
-    if (!found)
-        found = findStyle( "motif", item );
 
     cbStyle->setCurrentIndex( item );
 
