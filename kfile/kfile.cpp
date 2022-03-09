@@ -41,9 +41,11 @@ int main(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("ls"); // short option for --listsupported
-    options.add("listsupported", ki18n("List all supported metadata keys." ));
+    options.add("listsupported", ki18n("List all supported metadata keys for the given URL(s)." ));
     options.add("la"); // short option for --listavailable
     options.add("listavailable", ki18n("List all metadata keys which have a value in the given URL(s)."));
+    options.add("lp"); // short option for --listpreferred
+    options.add("listpreferred", ki18n("List all preferred metadata keys for the given URL(s)."));
     options.add("av"); // short option for --allValues
     options.add("allvalues", ki18n("Prints all metadata values, available in the given URL(s)."));
     options.add("getvalue <key>", ki18n("Prints the value for 'key' of the given URL(s). 'key' may also be a comma-separated list of keys"));
@@ -59,10 +61,11 @@ int main(int argc, char **argv)
 
     const bool listsupported = (args->isSet("ls") || args->isSet("listsupported"));
     const bool listavailable = (args->isSet("la") || args->isSet("listavailable"));
+    const bool listpreferred = (args->isSet("lp") || args->isSet("listpreferred"));
     const bool allvalues = (args->isSet("av") || args->isSet("allvalues"));
     const bool getvalue = args->isSet("getvalue");
-    if (!listsupported && !listavailable && !allvalues && !getvalue) {
-        KCmdLineArgs::usageError(i18n("One of listsupported, listavailable, allvalues or getvalue must be specified"));
+    if (!listsupported && !listavailable && !listpreferred && !allvalues && !getvalue) {
+        KCmdLineArgs::usageError(i18n("One of listsupported, listavailable, listpreferred, allvalues or getvalue must be specified"));
     }
 
     for (int pos = 0; pos < args->count(); ++pos) {
@@ -76,14 +79,18 @@ int main(int argc, char **argv)
             foreach (const QString &key, metainfo.keys()) {
                 qDebug() << key;
             }
+        } else if (listpreferred) {
+            foreach (const QString &key, metainfo.preferredKeys()) {
+                qDebug() << key;
+            }
         } else if (allvalues) {
-            foreach (const KFileMetaInfoItem &item, metainfo.items().values()) {
-                qDebug() << item.key() << item.value().toString();
+            foreach (const KFileMetaInfoItem &item, metainfo.items()) {
+                qDebug() << item.key() << item.value();
             }
         } else if (getvalue) {
             const QString getvaluekey = args->getOption("getvalue");
             const KFileMetaInfoItem item = metainfo.item(getvaluekey);
-            qDebug() << item.value().toString();
+            qDebug() << item.value();
         } else {
             Q_ASSERT(false);
         }

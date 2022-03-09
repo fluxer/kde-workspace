@@ -96,20 +96,15 @@ QString ToolTipWidget::metaInfo() const
         return QString();
     }
 
-    KFileMetaInfo info = m_item.metaInfo(true, KFileMetaInfo::TechnicalInfo | KFileMetaInfo::ContentInfo);
+    const KFileMetaInfo info = m_item.metaInfo(true, KFileMetaInfo::TechnicalInfo | KFileMetaInfo::ContentInfo);
+    const QStringList preferredinfo = info.preferredKeys();
     QString text = "<p><table border='0' cellspacing='0' cellpadding='0'>";
-    int itemcount = 0;
-    for (QHash< QString, KFileMetaInfoItem >::const_iterator i = info.items().constBegin(); i != info.items().constEnd(); ++i) {
-        const QString itvalue = i.value().value().toString();
-        if (itvalue.isEmpty()) {
+    foreach (const KFileMetaInfoItem &it, info.items()) {
+        const QString itvalue = it.value();
+        if (itvalue.isEmpty() || !preferredinfo.contains(it.key())) {
             continue;
         }
-        text += QString("<tr><td>") + i.value().name() + QString(": </td><td>") + itvalue + QString("</td></tr>");
-        itemcount++;
-        if (itemcount > 10) {
-            // the tooltip should not cover too much of the screen space
-            break;
-        }
+        text += QString("<tr><td>") + it.name() + QString(": </td><td>") + itvalue + QString("</td></tr>");
     }
     text += "</table>";
 

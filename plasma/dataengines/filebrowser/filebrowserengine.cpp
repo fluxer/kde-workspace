@@ -137,8 +137,8 @@ void FileBrowserEngine::updateData(const QString &path, EventType event)
                 kDebug() << "MATCH";
                 it.value()->setData("item.type", QVariant("file"));
 
-                for (QHash< QString, KFileMetaInfoItem >::const_iterator i = kfmi.items().constBegin(); i != kfmi.items().constEnd(); ++i) {
-                    it.value()->setData(i.key(), i.value().value());
+                foreach (const KFileMetaInfoItem &item, kfmi.items()) {
+                    it.value()->setData(item.key(), item.value());
                 }
             }
         }
