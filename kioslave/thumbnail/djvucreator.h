@@ -1,11 +1,9 @@
-/*  This file is part of the KDE libraries
-    Copyright (C) 2000 Malte Starostik <malte@kde.org>
-    Copyright (C) 2003 Leon Bottou <leon@bottou.org>
+/*  This file is part of the KDE project
+    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    License version 2, as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,8 +26,7 @@ class DjVuCreator : public ThumbCreator
 public:
     DjVuCreator() {}
     virtual bool create(const QString &path, int, int, QImage &img);
-	virtual Flags flags() const;
-
+    virtual ThumbCreator::Flags flags() const;
 };
 
-#endif
+#endif // _DJVUCREATOR_H_
