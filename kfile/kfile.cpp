@@ -14,7 +14,7 @@
     along with this library; see the file COPYING.LIB.  If not, write to
     the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
     Boston, MA 02110-1301, USA.
-*/ 
+*/
 
 #include <kaboutdata.h>
 #include <kapplication.h>
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
 
     KCmdLineOptions options;
     options.add("ls"); // short option for --listsupported
-    options.add("listsupported", ki18n("List all supported metadata keys for the given URL(s)." ));
+    options.add("listsupported", ki18n("List all supported metadata keys." ));
     options.add("la"); // short option for --listavailable
     options.add("listavailable", ki18n("List all metadata keys which have a value in the given URL(s)."));
     options.add("lp"); // short option for --listpreferred
@@ -54,45 +54,47 @@ int main(int argc, char **argv)
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if (args->count() == 0) {
-        // exits
-        KCmdLineArgs::usageError(i18n("No URL specified"));
-    }
-
     const bool listsupported = (args->isSet("ls") || args->isSet("listsupported"));
     const bool listavailable = (args->isSet("la") || args->isSet("listavailable"));
     const bool listpreferred = (args->isSet("lp") || args->isSet("listpreferred"));
     const bool allvalues = (args->isSet("av") || args->isSet("allvalues"));
     const bool getvalue = args->isSet("getvalue");
     if (!listsupported && !listavailable && !listpreferred && !allvalues && !getvalue) {
+        // exits
         KCmdLineArgs::usageError(i18n("One of listsupported, listavailable, listpreferred, allvalues or getvalue must be specified"));
     }
 
-    for (int pos = 0; pos < args->count(); ++pos) {
-        const KUrl url = args->url(pos);
-        const KFileMetaInfo metainfo(url, KFileMetaInfo::Everything);
-        if (listsupported) {
-            foreach (const QString &key, metainfo.supportedKeys()) {
-                qDebug() << key;
+    if (listsupported) {
+        foreach (const QString &key, KFileMetaInfo::supportedKeys()) {
+            qDebug() << key;
+        }
+    } else {
+        if (args->count() == 0) {
+            KCmdLineArgs::usageError(i18n("No URL specified"));
+        }
+
+        for (int pos = 0; pos < args->count(); ++pos) {
+            const KUrl url = args->url(pos);
+            const KFileMetaInfo metainfo(url, KFileMetaInfo::Everything);
+            if (listavailable) {
+                foreach (const QString &key, metainfo.keys()) {
+                    qDebug() << key;
+                }
+            } else if (listpreferred) {
+                foreach (const QString &key, metainfo.preferredKeys()) {
+                    qDebug() << key;
+                }
+            } else if (allvalues) {
+                foreach (const KFileMetaInfoItem &item, metainfo.items()) {
+                    qDebug() << item.key() << item.value();
+                }
+            } else if (getvalue) {
+                const QString getvaluekey = args->getOption("getvalue");
+                const KFileMetaInfoItem item = metainfo.item(getvaluekey);
+                qDebug() << item.value();
+            } else {
+                Q_ASSERT(false);
             }
-        } else if (listavailable) {
-            foreach (const QString &key, metainfo.keys()) {
-                qDebug() << key;
-            }
-        } else if (listpreferred) {
-            foreach (const QString &key, metainfo.preferredKeys()) {
-                qDebug() << key;
-            }
-        } else if (allvalues) {
-            foreach (const KFileMetaInfoItem &item, metainfo.items()) {
-                qDebug() << item.key() << item.value();
-            }
-        } else if (getvalue) {
-            const QString getvaluekey = args->getOption("getvalue");
-            const KFileMetaInfoItem item = metainfo.item(getvaluekey);
-            qDebug() << item.value();
-        } else {
-            Q_ASSERT(false);
         }
     }
 

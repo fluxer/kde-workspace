@@ -37,6 +37,7 @@ add_subdirectory( dnssd )
 add_subdirectory( spellchecking )
 
 add_subdirectory( kdebug )
+add_subdirectory( kmetainfo )
 
 add_subdirectory( hardware )
 add_subdirectory( desktoppaths )

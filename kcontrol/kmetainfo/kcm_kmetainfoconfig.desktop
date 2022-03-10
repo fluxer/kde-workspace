@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kmetainfoconfig
+Icon=nepomuk
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kmetainfoconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=workspace-appearance-and-behavior
+X-KDE-System-Settings-Parent-Category-V2=workspace-appearance-and-behavior
+X-DocPath=kcontrol/kmetainfoconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-workspace-appearance-and-behavior;
+
+Name=Meta Information
+Comment=Change meta information options
+X-KDE-Keywords=Meta,Information,Metainfo
