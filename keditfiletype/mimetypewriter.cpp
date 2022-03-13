@@ -128,7 +128,8 @@ void MimeTypeWriter::runUpdateMimeDatabase()
     const QString localPackageDir = KStandardDirs::locateLocal("xdgdata-mime", QString());
     Q_ASSERT(!localPackageDir.isEmpty());
     QProcess proc;
-    if (!proc.execute("update-mime-database", QStringList() << localPackageDir)) {
+    proc.start("update-mime-database", QStringList() << localPackageDir);
+    if (!proc.waitForFinished() || proc.exitCode() != 0) {
         kWarning() << "update-mime-database exited with error code" << proc.exitCode();
     }
 }

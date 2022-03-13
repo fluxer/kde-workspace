@@ -339,7 +339,8 @@ getDate(const char *str)
 {
     QProcess prc;
     prc.setReadChannel(QProcess::StandardOutput);
-    if (prc.execute("/bin/date", QStringList() << "+%s" << "-d" << str))
+    prc.start("date", QStringList() << "+%s" << "-d" << str);
+    if (!prc.waitForFinished() || prc.exitCode() != 0)
         return -1;
     return prc.readAll().simplified().toInt();
 }

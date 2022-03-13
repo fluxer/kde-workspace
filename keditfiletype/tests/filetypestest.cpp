@@ -360,7 +360,8 @@ private: // helper methods
         QObject::connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), &loop, SLOT(quit()));
         QProcess proc;
         proc.setProcessChannelMode(QProcess::MergedChannels); // silence kbuildsycoca output
-        proc.execute(KStandardDirs::findExe(KBUILDSYCOCA_EXENAME));
+        proc.start(KStandardDirs::findExe(KBUILDSYCOCA_EXENAME));
+        proc.waitForFinished();
         loop.exec();
     }
 
