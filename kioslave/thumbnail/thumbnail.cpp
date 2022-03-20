@@ -56,7 +56,6 @@
 #include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
 #include <kio/thumbsequencecreator.h>
-#include <kio/netaccess.h>
 #include <kconfiggroup.h>
 
 #include <iostream>
@@ -593,10 +592,8 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
         // 128 x 128 or 256 x 256 pixels
         int cacheSize = 0;
         // NOTE: make sure the algorithm and name match those used in kdelibs/kio/kio/previewjob.cpp
-        const QByteArray hash = QFile::encodeName(fileName.url()).toHex();
-        KIO::UDSEntry thumbEntry;
-        KIO::NetAccess::stat(fileName, thumbEntry, nullptr);
-        const QString modTime = QString::number(thumbEntry.numberValue(KIO::UDSEntry::UDS_MODIFICATION_TIME));
+        const QByteArray hash = QFile::encodeName(filePath).toHex();
+        const QString modTime = QString::number(QFileInfo(filePath).lastModified().toTime_t());
         const QString thumbName = hash + modTime + thumbExt;
         if (m_thumbBasePath.isEmpty()) {
             m_thumbBasePath = QDir::homePath() + "/.thumbnails/";
