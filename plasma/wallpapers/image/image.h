@@ -82,7 +82,7 @@ class Image : public Plasma::Wallpaper
         void pathCreated(const QString &path);
         void pathDirty(const QString &path);
         void pathDeleted(const QString &path);
-        void backgroundsFound(const QStringList &paths, const QString &token);
+        void backgroundsFound(const QStringList &paths);
         bool checkSize();
         void actuallyRenderWallpaper();
 
@@ -105,7 +105,6 @@ class Image : public Plasma::Wallpaper
         QColor m_color;
         QStringList m_usersWallpapers;
         KDirWatch *m_dirWatch;
-        bool m_scanDirty;
 
         QWidget* m_configWidget;
         Ui::ImageConfig m_uiImage;
@@ -126,7 +125,6 @@ class Image : public Plasma::Wallpaper
         KFileDialog *m_dialog;
         QSize m_size;
         QString m_img;
-        QString m_findToken;
 
         QAction* m_nextWallpaperAction;
         QAction* m_openImageAction;

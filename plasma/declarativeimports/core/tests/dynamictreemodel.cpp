@@ -213,7 +213,6 @@ void ModelInsertCommand::doCommand()
       {
         m_model->m_childItems[parentId].append(QList<qint64>());
       }
-//       QString name = QUuid::createUuid().toString();
       qint64 id = m_model->newId();
       QString name = QString::number(id);
 

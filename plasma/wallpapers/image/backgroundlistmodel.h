@@ -70,7 +70,6 @@ protected Q_SLOTS:
     void showPreview(const KFileItem &item, const QPixmap &preview);
     void previewFailed(const KFileItem &item);
     void sizeFound(const QString &path, const QSize &s);
-    void backgroundsFound(const QStringList &paths, const QString &token);
     void processPaths(const QStringList &paths);
 
 private:
@@ -85,7 +84,6 @@ private:
 
     QSize m_size;
     Plasma::Wallpaper::ResizeMethod m_resizeMethod;
-    QString m_findToken;
     QPixmap m_previewUnavailablePix;
 };
 
@@ -97,12 +95,10 @@ public:
     BackgroundFinder(Plasma::Wallpaper *structureParent, const QStringList &p);
     ~BackgroundFinder();
 
-    QString token() const;
-
     static QStringList suffixes();
 
 signals:
-    void backgroundsFound(const QStringList &paths, const QString &token);
+    void backgroundsFound(const QStringList &paths);
 
 protected:
     void run();

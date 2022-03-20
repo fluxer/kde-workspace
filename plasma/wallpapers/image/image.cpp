@@ -41,7 +41,6 @@ Image::Image(QObject *parent, const QVariantList &args)
     : Plasma::Wallpaper(parent, args),
       m_delay(10),
       m_dirWatch(0),
-      m_scanDirty(false),
       m_configWidget(0),
       m_wallpaperPackage(0),
       m_currentSlide(-1),
@@ -551,36 +550,19 @@ void Image::startSlideshow()
         return;
     }
 
-    if (m_findToken.isEmpty()) {
-        // populate background list
-        m_timer.stop();
-        m_slideshowBackgrounds.clear();
-        m_unseenSlideshowBackgrounds.clear();
-        BackgroundFinder *finder = new BackgroundFinder(this, m_dirs);
-        m_findToken = finder->token();
-        connect(finder, SIGNAL(backgroundsFound(QStringList,QString)), this, SLOT(backgroundsFound(QStringList,QString)));
-        finder->start();
-        //TODO: what would be cool: paint on the wallpaper itself a busy widget and perhaps some text
-        //about loading wallpaper slideshow while the thread runs
-    } else {
-        m_scanDirty = true;
-    }
+    // populate background list
+    m_timer.stop();
+    m_slideshowBackgrounds.clear();
+    m_unseenSlideshowBackgrounds.clear();
+    BackgroundFinder *finder = new BackgroundFinder(this, m_dirs);
+    connect(finder, SIGNAL(backgroundsFound(QStringList)), this, SLOT(backgroundsFound(QStringList)));
+    finder->start();
+    //TODO: what would be cool: paint on the wallpaper itself a busy widget and perhaps some text
+    //about loading wallpaper slideshow while the thread runs
 }
 
-void Image::backgroundsFound(const QStringList &paths, const QString &token)
+void Image::backgroundsFound(const QStringList &paths)
 {
-    if (token != m_findToken) {
-        return;
-    }
-
-    m_findToken.clear();
-
-    if(m_scanDirty) {
-        m_scanDirty = false;
-        startSlideshow();
-        return;
-    }
-
     m_slideshowBackgrounds = paths;
     m_unseenSlideshowBackgrounds.clear();
     updateWallpaperActions();
