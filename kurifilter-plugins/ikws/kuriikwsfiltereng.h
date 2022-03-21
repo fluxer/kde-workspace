@@ -29,7 +29,7 @@
 #include <QtCore/QStringList>
 
 #define DEFAULT_PREFERRED_SEARCH_PROVIDERS \
-QStringList() << "google" << "youtube" << "yahoo" << "wikipedia" << "wikit"
+QStringList() << "google" << "youtube" << "github" << "wikipedia"
 
 class SearchProvider;
 
