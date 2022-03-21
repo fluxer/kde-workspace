@@ -28,7 +28,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QTimer>
-#include <QUuid>
 
 // KDE
 #include <KConfig>
@@ -93,7 +92,7 @@ public:
     QHash<WId, Task *> tasksByWId;
     QList<Startup *> startups;
     WindowList skiptaskbarWindows;
-    QSet<QUuid> trackGeometryTokens;
+    bool trackGeometry;
 };
 
 TaskManager::TaskManager()
@@ -511,20 +510,14 @@ bool TaskManager::isOnTop(const Task *task) const
     return false;
 }
 
-void TaskManager::setTrackGeometry(bool track, const QUuid &token)
+void TaskManager::setTrackGeometry(bool track)
 {
-    if (track) {
-        if (!d->trackGeometryTokens.contains(token)) {
-            d->trackGeometryTokens.insert(token);
-        }
-    } else {
-        d->trackGeometryTokens.remove(token);
-    }
+    d->trackGeometry = track;
 }
 
 bool TaskManager::trackGeometry() const
 {
-    return !d->trackGeometryTokens.isEmpty();
+    return d->trackGeometry;
 }
 
 bool TaskManager::isOnScreen(int screen, const WId wid)

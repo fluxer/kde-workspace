@@ -32,8 +32,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KSharedPtr>
 #include <KWindowSystem>
 
-#include <QUuid>
-
 namespace TaskManager
 {
 typedef QSet<WId> WindowList;
@@ -131,7 +129,7 @@ public:
      * updates. This generates a lot of activity so should only be used
      * when necessary.
      */
-    void setTrackGeometry(bool track, const QUuid &token);
+    void setTrackGeometry(bool track);
 
     /**
      * @return true if geometry tracking is on

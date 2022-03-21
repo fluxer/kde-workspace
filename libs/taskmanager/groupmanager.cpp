@@ -27,7 +27,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QList>
 #include <QStack>
 #include <QTimer>
-#include <QUuid>
 #include <QFile>
 #include <QImageWriter>
 
@@ -128,7 +127,6 @@ public:
     QTimer checkIfFullTimer;
     QSet<Task *> geometryTasks;
     int groupIsFullLimit;
-    QUuid configToken;
 
     QHash<int, TaskGroup*> rootGroups; //container for groups
     QList<LauncherItem *> launchers;
@@ -175,7 +173,7 @@ GroupManager::GroupManager(QObject *parent)
 
 GroupManager::~GroupManager()
 {
-    TaskManager::self()->setTrackGeometry(false, d->configToken);
+    TaskManager::self()->setTrackGeometry(false);
     delete d->abstractSortingStrategy;
     delete d->abstractGroupingStrategy;
     delete d;
@@ -591,7 +589,7 @@ void GroupManager::reconnect()
                 this, SLOT(taskChanged(::TaskManager::Task *, ::TaskManager::TaskChanges)));
     }
 
-    TaskManager::self()->setTrackGeometry(d->showOnlyCurrentScreen, d->configToken);
+    TaskManager::self()->setTrackGeometry(d->showOnlyCurrentScreen);
 
     if (!d->showOnlyCurrentScreen) {
         d->geometryTasks.clear();
