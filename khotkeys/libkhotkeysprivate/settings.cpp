@@ -241,6 +241,7 @@ bool Settings::isConfigFileValid(KConfigBase const &config, ImportType ask)
             case 2:
             case 1:         // Version 1 and 2 files no longer supported
                 kDebug() << "Version 1 or 2 file encountered.";
+                valid = false;
                 break;
 
             case -1234576:  // No Version entry -> invalid file

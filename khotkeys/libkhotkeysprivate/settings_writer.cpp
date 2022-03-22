@@ -226,7 +226,7 @@ void SettingsWriter::writeTo(KConfigBase &config)
 
     // Write the global settings
     KConfigGroup mainGroup(&config, "Main");
-    mainGroup.writeEntry("Version", 2);
+    mainGroup.writeEntry("Version", CurrentFileVersion);
     mainGroup.writeEntry("AlreadyImported", _settings->already_imported);
     mainGroup.writeEntry("Disabled", _settings->isDaemonDisabled());
 
