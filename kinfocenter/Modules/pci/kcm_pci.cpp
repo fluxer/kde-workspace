@@ -40,7 +40,7 @@
 #include <kseparator.h>
 
 #ifdef HAVE_PCIUTILS
-#include "kpci.h"
+#  include "kpci.h"
 #endif //HAVE_PCIUTILS
 
 K_PLUGIN_FACTORY(KCMPciFactory, registerPlugin<KCMPci>();)

@@ -18,7 +18,7 @@ if(PCIUTILS_FOUND)
 
     kde4_add_plugin(kcm_pci ${KCM_PCI_PART_SRCS})
 
-    target_link_libraries(kcm_pci ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${PCIUTILS_LIBRARIES} ${X11_LIBRARIES} ${ZLIB_LIBRARIES})
+    target_link_libraries(kcm_pci ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${PCIUTILS_LIBRARIES} ${X11_LIBRARIES})
 
     
 else(PCIUTILS_FOUND)
