@@ -28,7 +28,7 @@ set(klipper_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
 
 add_executable(klipper ${klipper_SRCS})
 
-target_link_libraries(klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${ZLIB_LIBRARY})
+target_link_libraries(klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${QT_QTNETWORK_LIBRARY})
 if (X11_Xfixes_FOUND)
   target_link_libraries(klipper ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)

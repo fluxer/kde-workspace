@@ -23,10 +23,9 @@
 
 #include "klipper.h"
 
-#include <zlib.h>
-
 #include <QtGui/QMenu>
 #include <QtDBus/QDBusConnection>
+#include <QtNetwork/QCryptographicHash>
 
 #include <KAboutData>
 #include <KLocale>
@@ -63,6 +62,12 @@
 #endif
 
 //#define NOISY_KLIPPER
+
+#if QT_VERSION >= 0x041200
+static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::KAT;
+#else
+static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::Sha1;
+#endif
 
 namespace {
     /**
@@ -368,7 +373,7 @@ bool Klipper::loadHistory() {
     static const char* const failed_load_warning =
         "Failed to load history resource. Clipboard history cannot be read.";
     // don't use "appdata", klipper is also a kicker applet
-    QString history_file_name = KStandardDirs::locateLocal( "data", "klipper/history2.lst" );
+    QString history_file_name = KStandardDirs::locateLocal( "data", "klipper/history3.lst" );
     QFile history_file( history_file_name );
     if ( !history_file.exists() ) {
         kWarning() << failed_load_warning << ": " << "History file does not exist" ;
@@ -384,10 +389,10 @@ bool Klipper::loadHistory() {
         return false;
     }
     QByteArray data;
-    quint32 crc;
-    file_stream >> crc >> data;
-    if( crc32( 0, reinterpret_cast<unsigned char *>( data.data() ), data.size() ) != crc ) {
-        kWarning() << failed_load_warning << ": " << "CRC checksum does not match" ;
+    QByteArray hash;
+    file_stream >> hash >> data;
+    if( QCryptographicHash::hash( data, KlipperHashAlhorithm ).toHex() != hash ) {
+        kWarning() << failed_load_warning << ": " << "Hash does not match" ;
         return false;
     }
     QDataStream history_stream( &data, QIODevice::ReadOnly );
@@ -428,7 +433,7 @@ void Klipper::saveHistory(bool empty) {
     static const char* const failed_save_warning =
         "Failed to save history. Clipboard history cannot be saved.";
     // don't use "appdata", klipper is also a kicker applet
-    QString history_file_name( KStandardDirs::locateLocal( "data", "klipper/history2.lst" ) );
+    QString history_file_name( KStandardDirs::locateLocal( "data", "klipper/history3.lst" ) );
     if ( history_file_name.isNull() || history_file_name.isEmpty() ) {
         kWarning() << failed_save_warning ;
         return;
@@ -452,9 +457,9 @@ void Klipper::saveHistory(bool empty) {
         }
     }
 
-    quint32 crc = crc32( 0, reinterpret_cast<unsigned char *>( data.data() ), data.size() );
+    QByteArray hash = QCryptographicHash::hash( data, KlipperHashAlhorithm ).toHex();
     QDataStream ds ( &history_file );
-    ds << crc << data;
+    ds << hash << data;
 }
 
 // save session on shutdown. Don't simply use the c'tor, as that may not be called.
