@@ -234,12 +234,13 @@ bool Settings::isConfigFileValid(KConfigBase const &config, ImportType ask)
         int version = mainGroup.readEntry( "Version", -1234576 );
         switch (version)
             {
-            case 2:
+            case 3:
                 valid = true;
                 break;
 
-            case 1:         // Version 1 files no longer supported
-                kDebug() << "Version 1 file encountered.";
+            case 2:
+            case 1:         // Version 1 and 2 files no longer supported
+                kDebug() << "Version 1 or 2 file encountered.";
                 break;
 
             case -1234576:  // No Version entry -> invalid file
@@ -461,9 +462,9 @@ bool Settings::read_settings(ActionDataGroup *root, KConfigBase const &config, b
     QString import_id = mainGroup.readEntry( "ImportId" );
     switch (version)
         {
-        case 2:
+        case 3:
                 {
-                kDebug() << "Version 2 File!";
+                kDebug() << "Version 3 File!";
                 SettingsReaderV2 reader(this, include_disabled, stateStrategy, import_id);
                 reader.read(config, root);
                 }

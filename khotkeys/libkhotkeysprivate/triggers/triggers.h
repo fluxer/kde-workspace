@@ -22,7 +22,7 @@
 
 #include <QtCore/QList>
 #include <QtCore/QMap>
-#include <QtCore/QUuid>
+#include <QtCore/QByteArray>
 
 #include <KShortcut>
 
@@ -34,6 +34,15 @@
 #include "triggers/gestures.h"
 
 #include <QKeySequence>
+
+static inline QByteArray createShortcutID()
+{
+#if QT_VERSION >= 0x041200
+    return qRandomUuid();
+#else
+    return QByteArray::number(qrand());
+#endif
+}
 
 namespace KHotKeys
 {
@@ -153,7 +162,7 @@ class KDE_EXPORT ShortcutTrigger
         ShortcutTrigger(
             ActionData* data,
             const KShortcut& shortcut = KShortcut(),
-            const QUuid &uuid = QUuid::createUuid() );
+            const QByteArray &uuid = createShortcutID() );
 
         virtual ~ShortcutTrigger();
         virtual void cfg_write( KConfigGroup& cfg_P ) const;
@@ -195,7 +204,7 @@ class KDE_EXPORT ShortcutTrigger
     private:
 
         //! A persistent identifier for this shortcut
-        QString _uuid;
+        QByteArray _uuid;
 
         //! Are the conditions met?
         bool _active;

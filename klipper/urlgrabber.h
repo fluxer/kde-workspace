@@ -83,7 +83,7 @@ private:
   const HistoryItem* m_myClipItem;
 
   // holds mappings of menu action IDs to action commands (action+cmd index in it)
-  QHash<QString, QPair<ClipAction*, int> > m_myCommandMapper;
+  QHash<QByteArray, QPair<ClipAction*, int> > m_myCommandMapper;
   KMenu* m_myMenu;
   QTimer* m_myPopupKillTimer;
   int m_myPopupKillTimeout;

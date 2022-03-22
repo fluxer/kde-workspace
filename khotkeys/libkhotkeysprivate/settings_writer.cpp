@@ -38,7 +38,7 @@
 
 namespace KHotKeys {
 
-const int CurrentFileVersion = 2;
+const int CurrentFileVersion = 3;
 
 
 SettingsWriter::SettingsWriter(

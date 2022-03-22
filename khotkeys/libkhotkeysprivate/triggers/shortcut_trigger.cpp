@@ -36,9 +36,9 @@ ShortcutTriggerVisitor::~ShortcutTriggerVisitor()
 ShortcutTrigger::ShortcutTrigger(
         ActionData* data_P,
         const KShortcut& shortcut,
-        const QUuid &uuid )
+        const QByteArray &uuid )
     :   Trigger( data_P ),
-        _uuid(uuid.toString()),
+        _uuid(uuid),
         _active(false),
         _shortcut(shortcut)
     {
@@ -93,7 +93,7 @@ void ShortcutTrigger::activate( bool newState )
         KAction *act = keyboard_handler->addAction( _uuid, name, _shortcut );
         // addAction can change the uuid. That's why we store the uuid from the
         // action
-        _uuid = act->objectName();
+        _uuid = act->objectName().toLatin1();
 
         connect(
             act, SIGNAL(triggered(bool)),
@@ -128,7 +128,7 @@ void ShortcutTrigger::cfg_write( KConfigGroup& cfg_P ) const
 
 ShortcutTrigger* ShortcutTrigger::copy( ActionData* data_P ) const
     {
-    return new ShortcutTrigger( data_P ? data_P : data, shortcut(), QUuid::createUuid());
+    return new ShortcutTrigger( data_P ? data_P : data, shortcut(), createShortcutID());
     }
 
 

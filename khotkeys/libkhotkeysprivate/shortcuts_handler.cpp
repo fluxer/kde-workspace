@@ -20,10 +20,10 @@
 #include <config-X11.h>
 
 #include "input.h"
+#include "triggers/triggers.h"
 #include "shortcuts_handler.h"
 #include "windows_handler.h"
 #include "khotkeysglobal.h"
-
 
 #include <X11/X.h>
 // #include <X11/Xutil.h>
@@ -33,7 +33,6 @@
 #include <KAction>
 #include <KDebug>
 
-#include <QtCore/QUuid>
 #include <kkeyserver.h>
 
 namespace KHotKeys {
@@ -70,7 +69,7 @@ KAction *ShortcutsHandler::addAction(
     if (_actions->action(id))
         {
         qDebug() << id << " already present. Using new id!";
-        realId = QUuid::createUuid().toString();
+        realId = QString::fromLatin1(createShortcutID());
         }
 
     // Create the action

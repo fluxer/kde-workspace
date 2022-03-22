@@ -432,5 +432,5 @@ Key=Print
 Type=SHORTCUT
 
 [Main]
-Version=2
+Version=3
 ImportId=printscreen

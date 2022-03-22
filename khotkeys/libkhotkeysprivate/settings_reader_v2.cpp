@@ -301,9 +301,9 @@ KHotKeys::Trigger_list *SettingsReaderV2::readTriggerList(
         {
         KConfigGroup triggerConfig( triggersGroup.config(), triggersGroup.name() + QString::number( i ));
         QString type = triggerConfig.readEntry("Type");
-        QUuid uuid = triggerConfig.readEntry( "Uuid" );
+        QByteArray uuid = triggerConfig.readEntry( "Uuid", QByteArray() );
         if( uuid.isNull())
-            uuid = QUuid::createUuid();
+            uuid = createShortcutID();
 
         if (type == "SHORTCUT" || type == "SINGLE_SHORTCUT")
             trigger = new KHotKeys::ShortcutTrigger(parent, KShortcut(), uuid);

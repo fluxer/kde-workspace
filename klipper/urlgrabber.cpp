@@ -22,7 +22,6 @@
 
 #include <QtCore/QHash>
 #include <QtCore/QTimer>
-#include <QtCore/QUuid>
 #include <QtCore/QFile>
 #include <QtGui/qx11info_x11.h>
 
@@ -43,6 +42,15 @@
 // TODO: script-interface?
 #include "history.h"
 #include "historystringitem.h"
+
+static inline QByteArray createActionID()
+{
+#if QT_VERSION >= 0x041200
+    return qRandomUuid();
+#else
+    return QByteArray::number(qrand());
+#endif
+}
 
 URLGrabber::URLGrabber(History* history):
     m_myMenu(0L),
@@ -228,7 +236,7 @@ void URLGrabber::actionMenu( const HistoryItem* item, bool automatically_invoked
                 if ( item.isEmpty() )
                     item = command.command;
 
-                QString id = QUuid::createUuid().toString();
+                QByteArray id = createActionID();
                 QAction * action = new QAction(this);
                 action->setData(id);
                 action->setText(item);
@@ -270,7 +278,7 @@ void URLGrabber::slotItemSelected(QAction* action)
     if (m_myMenu)
         m_myMenu->hide(); // deleted by the timer or the next action
 
-    QString id = action->data().toString();
+    QByteArray id = action->data().toByteArray();
 
     if (id.isEmpty()) {
         kDebug() << "Klipper: no command associated";
