@@ -19,10 +19,10 @@
 #include <kdebug.h>
 #include <kdesktopfile.h>
 #include <kmessagebox.h>
-#include <kprocess.h>
-#include <kshell.h>
 #include <kstandarddirs.h>
 #include <ktimerdialog.h>
+#include <qprocess.h>
+#include <qelapsedtimer.h>
 #include <qdbusinterface.h>
 #include <qdbusconnectioninterface.h>
 #include <netwm.h>
@@ -32,8 +32,6 @@ CfgWm::CfgWm(QWidget *parent)
 : QWidget(parent)
 , Ui::WmConfig_UI()
 , CfgPlugin()
-, wmLaunchingState( WmNone )
-, wmProcess( NULL )
 {
     setupUi(this);
     connect(wmCombo,SIGNAL(activated(int)), this, SLOT(configChanged()));
@@ -141,74 +139,65 @@ bool CfgWm::tryWmLaunch()
     }
     KMessageBox::information( window(), i18n( "Your running window manager will be now replaced with "
         "the configured one." ), i18n( "Window Manager Change" ), "windowmanagerchange" );
-    wmLaunchingState = WmLaunching;
-    wmProcess = new KProcess;
-    *wmProcess << KShell::splitArgs( currentWmData().exec ) << currentWmData().restartArgument;
-    connect( wmProcess, SIGNAL( error( QProcess::ProcessError )), this, SLOT( wmLaunchError()));
-    connect( wmProcess, SIGNAL( finished( int, QProcess::ExitStatus )),
-        this, SLOT( wmLaunchFinished( int, QProcess::ExitStatus )));
-    wmProcess->start();
-    wmDialog = new KTimerDialog( 20000, KTimerDialog::CountDown, window(), i18n( "Config Window Manager Change" ),
-        KTimerDialog::Ok | KTimerDialog::Cancel, KTimerDialog::Cancel );
-    wmDialog->setButtonGuiItem( KDialog::Ok, KGuiItem( i18n( "&Accept Change" ), "dialog-ok" ));
-    wmDialog->setButtonGuiItem( KDialog::Cancel, KGuiItem( i18n( "&Revert to Previous" ), "dialog-cancel" ));
-    QLabel *label = new QLabel(
-        i18n( "The configured window manager is being launched.\n"
-            "Please check it has started properly and confirm the change.\n"
-            "The launch will be automatically reverted in 20 seconds." ), wmDialog );
-    label->setWordWrap( true );
-    wmDialog->setMainWidget( label );
-    if( wmDialog->exec() == QDialog::Accepted ) // the user confirmed
-        wmLaunchingState = WmOk;
-    else // cancelled for some reason
-        {
-        if( wmLaunchingState == WmLaunching )
-            { // time out
-            wmLaunchingState = WmFailed;
-            QProcess::startDetached( "kwin", QStringList() << "--replace" );
-            // Let's hope KWin never fails.
-            KMessageBox::sorry( window(),
-                i18n( "The running window manager has been reverted to the default KDE window manager KWin." ));
-            }
-        else if( wmLaunchingState == WmFailed )
-            {
-            QProcess::startDetached( "kwin", QStringList() << "--replace" );
-            // Let's hope KWin never fails.
-            KMessageBox::sorry( window(),
-                i18n( "The new window manager has failed to start.\n"
-                    "The running window manager has been reverted to the default KDE window manager KWin." ));
+
+    bool ret = false;
+    if (QProcess::startDetached( currentWmData().exec, QStringList() << currentWmData().restartArgument )) {
+        // assume it's forked into background
+        ret = true;
+
+        if (currentWmData().internalName == "openbox") {
+            // HACK: forked but not operational yet, wait 2sec otherwise the timer dialog may not
+            // show up and the configuration window becomes non-interactive until the timeout is
+            // reached
+            QElapsedTimer workaround;
+            workaround.start();
+            while (workaround.elapsed() < 2000) {
+                QCoreApplication::processEvents();
             }
         }
-    bool ret = ( wmLaunchingState == WmOk );
-    wmLaunchingState = WmNone;
-    delete wmDialog;
-    wmDialog = NULL;
-    // delete wmProcess; - it is intentionally leaked, since there is no KProcess:detach()
-    wmProcess = NULL;
+
+        KTimerDialog* wmDialog = new KTimerDialog( 20000, KTimerDialog::CountDown, window(), i18n( "Config Window Manager Change" ),
+            KTimerDialog::Ok | KTimerDialog::Cancel, KTimerDialog::Cancel );
+        wmDialog->setButtonGuiItem( KDialog::Ok, KGuiItem( i18n( "&Accept Change" ), "dialog-ok" ));
+        wmDialog->setButtonGuiItem( KDialog::Cancel, KGuiItem( i18n( "&Revert to Previous" ), "dialog-cancel" ));
+        QLabel *label = new QLabel(
+            i18n( "The configured window manager is being launched.\n"
+                "Please check it has started properly and confirm the change.\n"
+                "The launch will be automatically reverted in 20 seconds." ), wmDialog );
+        label->setWordWrap( true );
+        wmDialog->setMainWidget( label );
+
+        if ( wmDialog->exec() != QDialog::Accepted ) {
+            // cancelled for some reason
+            ret = false;
+
+            KMessageBox::sorry( window(),
+                i18n( "The running window manager has been reverted to the previous window manager." ));
+        }
+
+        delete wmDialog;
+        wmDialog = NULL;
+    } else {
+        ret = false;
+
+        KMessageBox::sorry( window(),
+            i18n( "The new window manager has failed to start.\n"
+            "The running window manager has been reverted to the previous window manager." ));
+    }
+
+    if (!ret) {
+        // case-insensitive search
+        foreach (const QString &wmkey, wms.keys()) {
+            if (wmkey.toLower() == oldwm) {
+                WmData oldwmdata = wms.value(wmkey);
+                QProcess::startDetached( oldwmdata.exec, QStringList() << oldwmdata.restartArgument );
+
+                break;
+            }
+        }
+    }
+
     return ret;
-}
-
-void CfgWm::wmLaunchError()
-{
-    if( wmLaunchingState != WmLaunching || sender() != wmProcess )
-        return;
-    wmLaunchingState = WmFailed;
-    wmDialog->reject();
-}
-
-
-void CfgWm::wmLaunchFinished( int exitcode, QProcess::ExitStatus exitstatus )
-{
-    if( wmLaunchingState != WmLaunching || sender() != wmProcess )
-        return;
-    if( exitstatus == QProcess::NormalExit && exitcode == 0 )
-        { // assume it's forked into background
-        wmLaunchingState = WmOk;
-        return;
-        }
-    // otherwise it's a failure
-    wmLaunchingState = WmFailed;
-    wmDialog->reject();
 }
 
 void CfgWm::loadWMs( const QString& current )
@@ -236,9 +225,7 @@ void CfgWm::loadWMs( const QString& current )
         QString testexec = file.desktopGroup().readEntry( "X-KDE-WindowManagerTestExec" );
         if( !testexec.isEmpty())
         {
-            KProcess proc;
-            proc.setShellCommand( testexec );
-            if( proc.execute() != 0 )
+            if( QProcess::execute(testexec) != 0 )
                 continue;
         }
         QString name = file.readName();
