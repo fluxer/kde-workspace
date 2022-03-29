@@ -67,10 +67,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #define RCVERSTR stringify(RCVERMAJOR) "." stringify(RCVERMINOR)
 
-static int old_scripts, no_old_scripts, old_confs, no_old,
-    no_backup, no_in_notice, use_destdir, mixed_scripts;
-static const char *newdir = KDMCONF, *facesrc = KDMDATA "/pics/users",
-    *oldxdm, *oldkde, *oldkdepfx;
+static int old_scripts = 0;
+static int no_old_scripts = 0;
+static int old_confs = 0;
+static int no_old = 0;
+static int no_backup = 0;
+static int no_in_notice = 0;
+static int use_destdir = 0;
+static int mixed_scripts = 0;
+static const char *newdir = KDMCONF;
+static const char *facesrc = KDMDATA "/pics/users";
+static const char *oldxdm = NULL;
+static const char *oldkde = NULL;
+static const char *oldkdepfx = NULL;
 
 static int oldver;
 
