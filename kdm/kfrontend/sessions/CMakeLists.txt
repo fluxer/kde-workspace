@@ -11,45 +11,11 @@ install(
     FILES
     ${CMAKE_CURRENT_BINARY_DIR}/kde-plasma.desktop
     ${CMAKE_CURRENT_BINARY_DIR}/kde-plasma-safe.desktop
-    gnome.desktop
-    9wm.desktop
-    aewm++.desktop
-    aewm.desktop
-    afterstep.desktop
-    amiwm.desktop
-    blackbox.desktop
-    budgie-desktop.desktop
-    cde.desktop
-    ctwm.desktop
-    e16.desktop
-    enlightenment.desktop
-    evilwm.desktop
-    fluxbox.desktop
-    flwm.desktop
-    fvwm.desktop
-    golem.desktop
-    icewm.desktop
-    jwm.desktop
-    larswm.desktop
-    lwm.desktop
-    lxde.desktop
-    lxqt.desktop
-    mate.desktop
-    matchbox.desktop
-    metacity.desktop
-    openbox.desktop
-    oroborus.desktop
-    pwm.desktop
-    qvwm.desktop
-    ratpoison.desktop
-    sawfish.desktop
-    twm.desktop
-    ude.desktop
-    vtwm.desktop
-    w9wm.desktop
-    wm2.desktop
-    wmaker.desktop
-    xfce.desktop
-    xfce4.desktop
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kdm/sessions
+    DESTINATION ${KDE4_SHARE_INSTALL_PREFIX}/xsessions
+)
+
+
+install(
+    FILES plasma.png
+    DESTINATION ${KDE4_SHARE_INSTALL_PREFIX}/pixmaps
 )

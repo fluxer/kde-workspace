@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
-Type=XSession
+Type=Application
 Exec=${KDE4_BIN_INSTALL_DIR}/startkde
 TryExec=${KDE4_BIN_INSTALL_DIR}/startkde
-DesktopNames=KDE
+Icon=plasma
 Name=KDE Plasma Workspace
 Name[ar]=مساحة عمل بلازما كدي
 Name[bg]=Работно пространство Plasma на KDE

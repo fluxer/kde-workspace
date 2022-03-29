@@ -63,6 +63,9 @@
 /* KDE's static shared data directory */
 #define KDE_SHAREDIR "${KDE4_SHARE_INSTALL_PREFIX}"
 
+/* KDE's system configuration directory */
+#define KDE_SYSCONFDIR "${KDE4_SYSCONF_INSTALL_DIR}"
+
 /* X binaries directory */
 #cmakedefine XBINDIR "${XBINDIR}"
 

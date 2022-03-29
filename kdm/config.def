@@ -27,8 +27,10 @@
 # The contents of this section are copied into config.ci verbatim.
 <code>
 #define RCVERMAJOR 2
-#define RCVERMINOR 4
+#define RCVERMINOR 5
 
+#define KDMETC KDE_SYSCONFDIR
+#define KDMSHARE KDE_SHAREDIR
 #define KDMCONF KDE_CONFDIR "/kdm"
 #define KDMDATA KDE_DATADIR "/kdm"
 
@@ -1897,10 +1899,10 @@ Description:
 
 Key: SessionsDirs
 Type: list
-Default: *KDMDATA "/sessions"
+Default: *KDMETC "/xsessions"
 User: core
 User: greeter-c
-Instance: */KDMCONF "/sessions," KDMDATA "/sessions"
+Instance: */KDMETC "/xsessions," KDMSHARE "/xsessions"
 Update: upd_sessionsdirs
 Comment:
  The directories containing session type definitions in .desktop format,

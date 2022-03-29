@@ -2229,31 +2229,15 @@ upd_facedir(Entry *ce, Section *cs ATTR_UNUSED)
 static void
 upd_sessionsdirs(Entry *ce, Section *cs ATTR_UNUSED)
 {
-    StrList *sl, *sp;
-    int olen;
-    char olddir[PATH_MAX];
+    StrList *sl;
 
     if (ce->written) {
-        sprintf(olddir, "%s/share/apps/kdm/sessions", oldkdepfx);
-        olen = strlen(oldkde);
         sl = splitList(ce->value);
-        for (sp = sl; sp; sp = sp->next) {
-            if (!strcmp(sp->str, olddir)) {
-                sp->str = def_SessionsDirs;
-            } else if (!memcmp(sp->str, oldkde, olen) &&
-                       !memcmp(sp->str + olen, "/kdm/", 5)) {
-                char nd[PATH_MAX];
-                sprintf(nd, "%s%s", newdir, sp->str + olen + 4);
-                mkdirp(nd, 0755, "sessions", False);
-                copyDir(sp->str, nd);
-                ASPrintf((char **)&sp->str, KDMCONF "%s", sp->str + olen + 4);
-            }
-        }
         ce->value = joinList(sl);
     } else {
         char nd[PATH_MAX];
-        sprintf(nd, "%s/sessions", newdir);
-        mkdirp(nd, 0755, "sessions", False);
+        sprintf(nd, "%s/xsessions", newdir);
+        mkdirp(nd, 0755, "xsessions", False);
     }
 }
 
