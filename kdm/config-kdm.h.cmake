@@ -103,9 +103,6 @@
 /* Define to 1 if you have the <sys/sockio.h> header file. */
 #cmakedefine HAVE_SYS_SOCKIO_H 1
 
-/* Define to 1 if the ck-connector library is found */
-#cmakedefine HAVE_CKCONNECTOR 1
-
 /* Define to 1 if OS honors permission bits on socket inodes */
 #cmakedefine HONORS_SOCKET_PERMS 1
 
