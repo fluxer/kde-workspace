@@ -14,14 +14,6 @@ cmake options that affect KDM
   Set the PAM service used by all of kdebase resp. specifically by KDM.
   Whether PAM should be used in the first place is auto-detected.
 
--DKDE4_KERBEROS4:BOOL=ON
-  Compile KDM (and the LDAP KIO slave) with KTH Kerberos 4 support. Note
-  that this does not work with the Kerberos 4 compatibility layer found in
-  MIT Kerberos 5. This affects KDM only if PAM is not used.
-
--DKDE4_AFS:BOOL=ON
-  Compile KDM with AFS support. Depends on KDE4_KERBEROS4.
-
 -DKDE4_KRB5AUTH:BOOL=ON
 -DKDE4_RPCAUTH:BOOL=ON
   Compile KDM with Kerberos 5 resp. secure RPC support for X authorization

@@ -56,13 +56,6 @@ extern int key_setnet(struct key_netstarg *arg);
 #ifdef USE_PAM
 # include <security/pam_appl.h>
 #else /* USE_PAM */
-# ifdef KERBEROS
-#  include <sys/param.h>
-#  include <krb.h>
-#  ifdef AFS
-#   include <kafs.h>
-#  endif
-# endif
 /* for nologin */
 # include <sys/types.h>
 # include <unistd.h>
@@ -106,9 +99,6 @@ static int inAuth;
 # ifdef USESHADOW
 static struct spwd *sp;
 # endif
-# ifdef KERBEROS
-static char krbtkfile[MAXPATHLEN];
-# endif
 #endif
 
 static void
@@ -121,8 +111,7 @@ displayStr(int lv, const char *msg)
 }
 
 #if !defined(USE_PAM) \
-     && (defined(HAVE_STRUCT_PASSWD_PW_EXPIRE) || defined(USESHADOW) \
-         || (defined(KERBEROS) && defined(AFS)))
+     && (defined(HAVE_STRUCT_PASSWD_PW_EXPIRE) || defined(USESHADOW))
 static void
 displayMsg(int lv, const char *msg, ...)
 {
@@ -604,36 +593,6 @@ verify(GConvFunc gconv, int rootok)
         if (!gconv(GCONV_PASS, 0))
             V_RET_NP;
     }
-
-# ifdef KERBEROS
-    if (p->pw_uid) {
-        int ret;
-        char realm[REALM_SZ];
-
-        if (krb_get_lrealm(realm, 1)) {
-            logError("Cannot get KerberosIV realm.\n");
-            V_RET_FAIL(0);
-        }
-
-        sprintf(krbtkfile, "%s.%.*s", TKT_ROOT, MAXPATHLEN - strlen(TKT_ROOT) - 2, td->name);
-        krb_set_tkt_string(krbtkfile);
-        unlink(krbtkfile);
-
-        ret = krb_verify_user(curuser, "", realm, curpass, 1, "rcmd");
-        if (ret == KSUCCESS) {
-            chown(krbtkfile, p->pw_uid, p->pw_gid);
-            debug("KerberosIV verify succeeded\n");
-            goto done;
-        } else if (ret != KDC_PR_UNKNOWN && ret != SKDC_CANT) {
-            logError("KerberosIV verification failure %\"s for %s\n",
-                     krb_get_err_text(ret), curuser);
-            krbtkfile[0] = '\0';
-            V_RET_FAIL(0);
-        }
-        debug("KerberosIV verify failed: %s\n", krb_get_err_text(ret));
-    }
-    krbtkfile[0] = '\0';
-# endif /* KERBEROS */
 
 # if defined(HAVE_PW_ENCRYPT)
     if (!(crpt_passwd = pw_encrypt(curpass, p->pw_passwd)) || strcmp(crpt_passwd, p->pw_passwd))
@@ -1174,25 +1133,6 @@ startClient(volatile int *pid)
 
     strcpy(curuser, p->pw_name); /* Use normalized login name. */
 
-#if !defined(USE_PAM) && defined(KERBEROS) && defined(AFS)
-    if (krbtkfile[0] != '\0') {
-        if (k_hasafs()) {
-            int fail = False;
-            if (k_setpag() == -1) {
-                logError("setpag() for %s failed\n", curuser);
-                fail = True;
-            }
-            if ((ret = k_afsklog(0, 0)) != KSUCCESS) {
-                logError("AFS Warning: %s\n", krb_get_err_text(ret));
-                fail = True;
-            }
-            if (fail)
-                displayMsg(V_MSG_ERR,
-                           "Warning: Problems during Kerberos4/AFS setup.");
-        }
-    }
-#endif /* !PAM && KERBEROS && AFS*/
-
     curuid = p->pw_uid;
     curgid = p->pw_gid;
 
@@ -1210,10 +1150,6 @@ startClient(volatile int *pid)
     env = setEnv(env, "PATH", curuid ? td->userPath : td->systemPath);
     env = setEnv(env, "SHELL", p->pw_shell);
     env = setEnv(env, "HOME", p->pw_dir);
-#if !defined(USE_PAM) && defined(KERBEROS)
-    if (krbtkfile[0] != '\0')
-        env = setEnv(env, "KRBTKFILE", krbtkfile);
-#endif
     userEnviron = inheritEnv(env, envvars);
     env = systemEnv(0, curuser);
     systemEnviron = setEnv(env, "HOME", p->pw_dir);
@@ -1634,17 +1570,6 @@ clientExited(void)
 #ifdef K5AUTH
                 krb5Destroy(td->name);
 #endif /* K5AUTH */
-#if !defined(USE_PAM)
-# ifdef KERBEROS
-                if (krbtkfile[0]) {
-                    (void)dest_tkt();
-#  ifdef AFS
-                    if (k_hasafs())
-                        (void)k_unlog();
-#  endif
-                }
-# endif
-#endif /* !USE_PAM */
             }
             exit(0);
         case -1:

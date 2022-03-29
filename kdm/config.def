@@ -1045,8 +1045,7 @@ Instance: #"/nfs-shared/var/dmrcs"
 Comment: &
 Description:
  The directory in which &kdm; should store users' <filename>.dmrc</filename> files. This is only
- needed if the home directories are not readable before actually logging in
- (like with AFS).
+ needed if the home directories are not readable before actually logging in.
 
 
 Section: Xdmcp

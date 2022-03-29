@@ -67,12 +67,6 @@
 /* Define if kdm should use Kerberos 5 for Xauth cookies. */
 #cmakedefine K5AUTH 1
 
-/* Define if kdm should use Kerberos IV */
-#cmakedefine KERBEROS 1
-
-/* Define if kdm should not use AFS */
-#cmakedefine AFS 1
-
 /* Define if kdm should be built with XDMCP support */
 #cmakedefine XDMCP 1
 
