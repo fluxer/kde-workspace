@@ -35,6 +35,7 @@ install(
     jwm.desktop
     larswm.desktop
     lwm.desktop
+    lxde.desktop
     mate.desktop
     matchbox.desktop
     metacity.desktop
