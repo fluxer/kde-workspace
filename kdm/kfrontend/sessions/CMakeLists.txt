@@ -17,7 +17,6 @@ install(
     aewm.desktop
     afterstep.desktop
     amiwm.desktop
-    asclassic.desktop
     blackbox.desktop
     budgie-desktop.desktop
     cde.desktop
@@ -28,10 +27,8 @@ install(
     fluxbox.desktop
     flwm.desktop
     fvwm.desktop
-    fvwm95.desktop
     golem.desktop
     icewm.desktop
-    ion.desktop
     jwm.desktop
     larswm.desktop
     lwm.desktop
@@ -39,22 +36,16 @@ install(
     mate.desktop
     matchbox.desktop
     metacity.desktop
-    mwm.desktop
-    olvwm.desktop
-    olwm.desktop
     openbox.desktop
     oroborus.desktop
     pwm.desktop
     qvwm.desktop
     ratpoison.desktop
-    sapphire.desktop
     sawfish.desktop
-    subtle.desktop
     twm.desktop
     ude.desktop
     vtwm.desktop
     w9wm.desktop
-    waimea.desktop
     wm2.desktop
     wmaker.desktop
     xfce.desktop
