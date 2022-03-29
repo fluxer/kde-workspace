@@ -177,11 +177,6 @@ from the copyright holder.
 # define isTTY            2
 #define G_QueryShutdown 112 /* ; 5*int; string */
 #define G_Activate      113 /* int vt; async */
-#define G_ListBootOpts  114 /* ; int sts, [argv opts, int dflt, int cur] */
-# define BO_OK      0
-# define BO_NOMAN  -1
-# define BO_NOENT  -2
-# define BO_IO     -3
 #define G_Console       116 /* ; async */
 #define G_AutoLogin     117 /* ; async */
 #define G_QryDpyShutdown 118 /* ; int, int, str */

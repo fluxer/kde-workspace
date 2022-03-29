@@ -106,7 +106,6 @@ class KDMShutdown : public KDMShutdownBase {
     virtual void accepted();
 
   private Q_SLOTS:
-    void slotTargetChanged();
     void slotWhenChanged();
 
   private:
@@ -115,7 +114,6 @@ class KDMShutdown : public KDMShutdownBase {
     QRadioButton *restart_rb;
     QLineEdit *le_start, *le_timeout;
     QCheckBox *cb_force;
-    QComboBox *targets;
     int oldTarget;
     int sch_st, sch_to;
 
@@ -134,18 +132,6 @@ class KDMRadioButton : public QRadioButton {
   Q_SIGNALS:
     void doubleClicked();
 
-};
-
-class KDMDelayedPushButton : public KPushButton {
-    Q_OBJECT
-    typedef KPushButton inherited;
-
-  public:
-    KDMDelayedPushButton(const KGuiItem &item, QWidget *parent);
-    void setDelayedMenu(QMenu *pop);
-
-  private:
-    QTimer popt;
 };
 
 class KDMSlimShutdown : public FDialog {

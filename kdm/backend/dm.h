@@ -611,11 +611,6 @@ int iniSave(const char *data, const char *fname);
 char *iniEntry(char *data, const char *section, const char *key, const char *value);
 char *iniMerge(char *data, const char *newdata);
 
-/* in bootman.c */
-int getBootOptions(char ***opts, int *def, int *cur);
-int setBootOption(const char *opt, SdRec *sdr);
-void commitBootOption(void);
-
 /* in netaddr.c */
 CARD8 *netaddrAddress(char *netaddrp, int *lenp);
 CARD8 *netaddrPort(char *netaddrp, int *lenp);

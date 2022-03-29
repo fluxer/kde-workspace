@@ -466,8 +466,6 @@ processCtrl(const char *string, int len, int fd, struct display *d)
             if (ar[1])
                 goto exce;
             Reply("ok\tkdm\tlist\t");
-            if (bootManager != BO_NONE)
-                Reply("bootoptions\t");
             if (d) {
                 if ((d->displayType & d_location) == dLocal)
                     Reply("local\t" CMD_ACTIVATE);
@@ -615,21 +613,6 @@ processCtrl(const char *string, int len, int fd, struct display *d)
                 sdr.uid = -1;
                 if (!*++ap)
                     goto miss;
-                if (**ap == '=') {
-                    switch (setBootOption(*ap + 1, &sdr)) {
-                    case BO_NOMAN:
-                        fLog(d, fd, "notsup", "boot options unavailable");
-                        goto bust;
-                    case BO_NOENT:
-                        fLog(d, fd, "noent", "no such boot option");
-                        goto bust;
-                    case BO_IO:
-                        fLog(d, fd, "io", "io error");
-                        goto bust;
-                    }
-                    if (!*++ap)
-                        goto miss;
-                }
                 sdr.start = strtol(*ap, &bp, 10);
                 if (bp != *ap && !*bp) {
                     if (**ap == '+') {
@@ -750,37 +733,6 @@ processCtrl(const char *string, int len, int fd, struct display *d)
                     sdRec = sdr;
                 }
             }
-        } else if (!strcmp(ar[0], "listbootoptions")) {
-            char **opts;
-            int def, cur, i, j;
-
-            if (ar[1])
-                goto exce;
-            switch (getBootOptions(&opts, &def, &cur)) {
-            case BO_NOMAN:
-                fLog(d, fd, "notsup", "boot options unavailable");
-                goto bust;
-            case BO_IO:
-                fLog(d, fd, "io", "io error");
-                goto bust;
-            }
-            Reply("ok\t");
-            for (i = 0; opts[i]; i++) {
-                bp = cbuf;
-                if (i)
-                    *bp++ = ' ';
-                for (j = 0; opts[i][j]; j++)
-                    if (opts[i][j] == ' ') {
-                        *bp++ = '\\';
-                        *bp++ = 's';
-                    } else {
-                        *bp++ = opts[i][j];
-                    }
-                writer(fd, cbuf, bp - cbuf);
-            }
-            freeStrArr(opts);
-            writer(fd, cbuf, sprintf(cbuf, "\t%d\t%d\n", def, cur));
-            goto bust;
         } else if (d) {
             if (!strcmp(ar[0], "lock")) {
                 if (ar[1])

@@ -91,36 +91,15 @@ KDMSessionsWidget::KDMSessionsWidget(QWidget *parent)
     restart_label->setWhatsThis(wtstr);
     restart_lined->setWhatsThis(wtstr);
 
-
-    QGroupBox *group4 = new QGroupBox(i18nc("@title:group", "Miscellaneous"), this);
-
-    bm_combo = new KBackedComboBox(group4);
-    bm_combo->insertItem("None", i18nc("boot manager", "None"));
-    bm_combo->insertItem("Grub", i18n("Grub"));
-    bm_combo->insertItem("Grub2", i18n("Grub2"));
-    bm_combo->insertItem("Burg", i18n("Burg"));
-#if defined(Q_OS_LINUX) && (defined(QT_ARCH_I386) || defined(QT_ARCH_X86_64))
-    bm_combo->insertItem("Lilo", i18n("Lilo"));
-#endif
-    QLabel *bm_label = new QLabel(i18n("Boot manager:"), group4);
-    bm_label->setBuddy(bm_combo);
-    connect(bm_combo, SIGNAL(activated(int)), SIGNAL(changed()));
-    wtstr = i18n("Enable boot options in the \"Shutdown...\" dialog.");
-    bm_label->setWhatsThis(wtstr);
-    bm_combo->setWhatsThis(wtstr);
-
     QBoxLayout *main = new QVBoxLayout(this);
     main->setMargin(10);
     QGridLayout *lgroup0 = new QGridLayout(group0);
     lgroup0->setSpacing(10);
     QGridLayout *lgroup1 = new QGridLayout(group1);
     lgroup1->setSpacing(10);
-    QGridLayout *lgroup4 = new QGridLayout(group4);
-    lgroup4->setSpacing(10);
 
     main->addWidget(group0);
     main->addWidget(group1);
-    main->addWidget(group4);
     main->addStretch();
 
     lgroup0->setColumnMinimumWidth(2, KDialog::spacingHint() * 2);
@@ -138,10 +117,6 @@ KDMSessionsWidget::KDMSessionsWidget(QWidget *parent)
     lgroup1->addWidget(shutdown_lined, 1, 1);
     lgroup1->addWidget(restart_label, 1, 3);
     lgroup1->addWidget(restart_lined, 1, 4);
-
-    lgroup4->addWidget(bm_label, 1, 0);
-    lgroup4->addWidget(bm_combo, 1, 1);
-    lgroup4->setColumnStretch(2, 1);
 
     main->activate();
 
@@ -167,8 +142,6 @@ void KDMSessionsWidget::save()
     KConfigGroup configGrp = config->group("Shutdown");
     configGrp.writeEntry("HaltCmd", shutdown_lined->url().path(), KConfig::Persistent);
     configGrp.writeEntry("RebootCmd", restart_lined->url().path(), KConfig::Persistent);
-
-    configGrp.writeEntry("BootManager", bm_combo->currentId());
 }
 
 void KDMSessionsWidget::readSD(KComboBox *combo, const QString &def, KConfigGroup group)
@@ -193,8 +166,6 @@ void KDMSessionsWidget::load()
     KConfigGroup configGrp = config->group("Shutdown");
     restart_lined->setUrl(configGrp.readEntry("RebootCmd", REBOOT_CMD));
     shutdown_lined->setUrl(configGrp.readEntry("HaltCmd", HALT_CMD));
-
-    bm_combo->setCurrentId(configGrp.readEntry("BootManager", "None"));
 }
 
 void KDMSessionsWidget::defaults()
@@ -204,8 +175,6 @@ void KDMSessionsWidget::defaults()
 
     sdlcombo->setCurrentIndex(SdAll);
     sdrcombo->setCurrentIndex(SdRoot);
-
-    bm_combo->setCurrentId("None");
 }
 
 #include "moc_kdm-shut.cpp"

@@ -315,7 +315,6 @@ main(int argc, char **argv)
     closeCtrl(0);
     if (sdRec.how) {
         int pid;
-        commitBootOption();
         if (Fork(&pid) <= 0) {
             char *cmd = sdRec.how == SHUT_HALT ? cmdHalt : cmdReboot;
             execute(parseArgs((char **)0, cmd), (char **)0);
@@ -847,25 +846,12 @@ processGPipe(struct display *d)
         return;
     }
     switch (cmd) {
-    case G_ListBootOpts:
-        ret = getBootOptions(&opts, &dflt, &curr);
-        gSendInt(ret);
-        if (ret == BO_OK) {
-            gSendArgv(opts);
-            freeStrArr(opts);
-            gSendInt(dflt);
-            gSendInt(curr);
-        }
-        break;
     case G_Shutdown:
         sdRec.how = gRecvInt();
         sdRec.start = gRecvInt();
         sdRec.timeout = gRecvInt();
         sdRec.force = gRecvInt();
         sdRec.uid = gRecvInt();
-        option = gRecvStr();
-        setBootOption(option, &sdRec);
-        free(option);
         break;
     case G_QueryShutdown:
         gSendInt(sdRec.how);

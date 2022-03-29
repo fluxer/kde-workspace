@@ -51,7 +51,6 @@ class KDMSessionsWidget : public QWidget {
     KComboBox *sdlcombo, *sdrcombo;
     QLabel *sdllabel, *sdrlabel;
     KUrlRequester *restart_lined, *shutdown_lined;
-    KBackedComboBox *bm_combo;
 };
 
 #endif

@@ -1234,24 +1234,6 @@ Description:
  </para><para>
  This will have no effect unless <option>AllowFifo</option> is enabled.
 
-Key: BootManager
-Type: enum
- None/BO_NONE: no boot manager
- Grub/BO_GRUB: Grub boot manager
- Grub2/BO_GRUB2: Grub2 boot manager
- Burg/BO_BURG: Burg boot manager
- Lilo/BO_LILO: Lilo boot manager (Linux on i386 &amp; x86-64 only)
-Default: None
-User: core
-User: greeter
-Instance: #Grub
-Merge: kdm:UseLilo(P_UseLilo)
-Comment: &
-Description:
- The boot manager &kdm; should use for offering boot options in the
- shutdown dialog.
-
-
 Section: -Core
 Description:
  This section class contains options concerning the configuration
