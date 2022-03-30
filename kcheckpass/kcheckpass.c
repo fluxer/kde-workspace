@@ -27,7 +27,6 @@
  *	It's hopefully simple enough to allow it to be setuid
  *	root.
  *
- *	Compile with -DHAVE_VSYSLOG if you have vsyslog().
  *	Compile with -DHAVE_PAM if you have a PAM system,
  *	and link with -lpam -ldl.
  *	Compile with -DHAVE_SHADOW if you have a shadow
@@ -64,6 +63,15 @@
 
 static int havetty, nullpass = 0;
 static int sfd = -1;
+
+static const char* methods[3] = { "", "", "" };
+#if defined(HAVE_PAM)
+const char *method = "pam";
+#elif defined(HAVE_SHADOW)
+const char *method = "shadow";
+#else
+const char *method = "etcpasswd";
+#endif
 
 static char *
 conv_legacy (ConvRequest what, const char *prompt)
@@ -292,23 +300,22 @@ usage(int exitval)
             "    -U username  authenticate the specified user instead of current user\n"
             "    -S handle    operate in binary server mode on file descriptor handle\n"
             "    -c caller    the calling application, effectively the PAM service basename\n"
-            "    -m method    use the specified authentication method (default: \"classic\")\n"
+            "    -m method    use the specified authentication method (default: \"%s\")\n"
             "  exit codes:\n"
             "    0 success\n"
             "    1 invalid password\n"
             "    2 cannot read password database\n"
-            "    Anything else tells you something's badly hosed.\n"
-            );
+            "    Anything else tells you something's badly hosed.\n",
+            method);
     exit(exitval);
 }
 
 int
 main(int argc, char **argv)
 {
-#ifdef HAVE_PAM
-  const char *caller = KSCREENSAVER_PAM_SERVICE;
+#if defined(HAVE_PAM)
+    const char *caller = KSCREENSAVER_PAM_SERVICE;
 #endif
-    const char *method = "classic";
     const char *username = 0;
 #ifdef ACCEPT_ENV
     char *p;
@@ -360,6 +367,28 @@ main(int argc, char **argv)
                 message("Command line option parsing error\n");
                 usage(10);
         }
+    }
+
+    int validmethod = 0;
+#ifdef HAVE_PAM
+    methods[0] = "pam";
+    if (strcmp(method, "pam") == 0) {
+        validmethod = 1;
+    }
+#endif
+#ifdef HAVE_SHADOW
+    methods[1] = ", shadow";
+    if (strcmp(method, "shadow") == 0) {
+        validmethod = 1;
+    }
+#endif
+    methods[2] = ", etcpasswd";
+    if (strcmp(method, "etcpasswd") == 0) {
+        validmethod = 1;
+    }
+    if (!validmethod) {
+        message("Method must be one of: %s%s%s\n", methods[0], methods[1], methods[2]);
+        usage(11);
     }
 
     uid = getuid();
@@ -417,13 +446,32 @@ main(int argc, char **argv)
     }
 
     /* Now do the fandango */
-    ret = Authenticate(
 #ifdef HAVE_PAM
-                       caller,
+    if (strcmp(method, "pam") == 0) {
+        ret = Authenticate_pam(
+            caller,
+            method,
+            username,
+            sfd < 0 ? conv_legacy : conv_server
+        );
+    }
 #endif
-                       method,
-                       username, 
-                       sfd < 0 ? conv_legacy : conv_server);
+#ifdef HAVE_SHADOW
+    if (strcmp(method, "shadow") == 0) {
+        ret = Authenticate_shadow(
+            method,
+            username,
+            sfd < 0 ? conv_legacy : conv_server
+        );
+    }
+#endif
+    if (strcmp(method, "etcpasswd") == 0) {
+        ret = Authenticate_etcpasswd(
+            method,
+            username,
+            sfd < 0 ? conv_legacy : conv_server
+        );
+    }
 
     if (ret == AuthBad) {
         message("Authentication failure\n");

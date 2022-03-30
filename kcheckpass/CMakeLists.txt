@@ -23,11 +23,10 @@ target_link_libraries(kcheckpass
     ${SOCKET_LIBRARIES}
 )
 
-if (PAM_FOUND)
-    set(kcheckpass_suid "")
-else()
+set(kcheckpass_suid "")
+if (HAVE_GETSPNAM)
     set(kcheckpass_suid "SETUID")
-    message(WARNING "PAM not found, will install kcheckpass SUID")
+    message(WARNING "Will install kcheckpass SUID")
 endif()
 
 install(

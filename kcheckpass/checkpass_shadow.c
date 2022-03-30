@@ -31,31 +31,40 @@
  *******************************************************************/
 
 #ifdef HAVE_SHADOW
+
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <syslog.h>
 #include <pwd.h>
 #include <shadow.h>
 #include <unistd.h>
 #include <sys/types.h>
 
-AuthReturn Authenticate(const char *method,
+AuthReturn Authenticate_shadow(const char *method,
         const char *login, char *(*conv) (ConvRequest, const char *))
 {
+  if (strcmp(method, "shadow") != 0)
+    return AuthError;
+
   char          *typed_in_password;
   char          *crpt_passwd;
   char          *password;
   struct passwd *pw;
   struct spwd   *spw;
 
-  if (strcmp(method, "classic"))
-    return AuthError;
+  openlog("kcheckpass", LOG_PID, LOG_AUTH);
 
-  if (!(pw = getpwnam(login)))
+  if (!(pw = getpwnam(login))) {
+    syslog(LOG_ERR, "getpwnam: %s", strerror(errno));
     return AuthAbort;
+  }
 
   uid_t eid = geteuid();
-  if (eid != 0 && seteuid(0) != 0)
+  if (eid != 0 && seteuid(0) != 0) {
+    syslog(LOG_ERR, "seteuid: %s", strerror(errno));
     return AuthAbort;
+  }
 
   spw = getspnam(login);
   password = spw ? spw->sp_pwdp : pw->pw_passwd;
@@ -92,4 +101,4 @@ AuthReturn Authenticate(const char *method,
      everything else you need to support shadow passwords is in
      the standard (ELF) libc.
  */
-#endif
+#endif // HAVE_SHADOW

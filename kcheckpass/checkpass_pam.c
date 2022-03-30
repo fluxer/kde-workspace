@@ -30,7 +30,6 @@
 struct pam_data {
   char *(*conv) (ConvRequest, const char *);
   int abort:1;
-  int classic:1;
 };
 
 #ifdef PAM_MESSAGE_CONST
@@ -68,7 +67,7 @@ PAM_conv (int num_msg, pam_message_type **msg,
         break;
       case PAM_PROMPT_ECHO_OFF:
         repl[count].resp =
-            pd->conv(ConvGetHidden, pd->classic ? 0 : msg[count]->msg);
+            pd->conv(ConvGetHidden, msg[count]->msg);
         break;
 #ifdef PAM_BINARY_PROMPT
       case PAM_BINARY_PROMPT:
@@ -122,9 +121,12 @@ fail_delay(int retval ATTR_UNUSED, unsigned usec_delay ATTR_UNUSED,
 #endif
 
 
-AuthReturn Authenticate(const char *caller, const char *method,
+AuthReturn Authenticate_pam(const char *caller, const char *method,
         const char *user, char *(*conv) (ConvRequest, const char *))
 {
+  if (strcmp(method, "pam") != 0)
+    return AuthError;
+
   const char	*tty;
   pam_handle_t	*pamh;
   pam_gi_type	pam_item;
@@ -135,14 +137,7 @@ AuthReturn Authenticate(const char *caller, const char *method,
   openlog("kcheckpass", LOG_PID, LOG_AUTH);
 
   PAM_data.conv = conv;
-  if (strcmp(method, "classic")) {
-    sprintf(pservb, "%.31s-%.31s", caller, method);
-    pam_service = pservb;
-  } else {
-    /* PAM_data.classic = 1; */
-    pam_service = caller;
-  }
-  pam_error = pam_start(pam_service, user, &PAM_conversation, &pamh);
+  pam_error = pam_start(caller, user, &PAM_conversation, &pamh);
   if (pam_error != PAM_SUCCESS)
     return AuthError;
 
@@ -196,4 +191,4 @@ AuthReturn Authenticate(const char *caller, const char *method,
   return AuthOk;
 }
 
-#endif
+#endif // HAVE_PAM

@@ -51,19 +51,10 @@
 
 #include <pwd.h>
 #include <sys/types.h>
-
-#ifndef _PATH_TMP
-#define _PATH_TMP "/tmp/"
-#endif
-
 #include <unistd.h>
 
-/* Make sure there is only one! */
-#if defined(HAVE_PAM)
-#elif defined(HAVE_GETSPNAM)
+#ifdef HAVE_GETSPNAM
 # define HAVE_SHADOW
-#else
-# define HAVE_ETCPASSWD
 #endif
 
 #if !defined(__INSURE__)
@@ -85,10 +76,22 @@ extern "C" {
 /*****************************************************************
  * Authenticates user
  *****************************************************************/
-AuthReturn Authenticate(
 #ifdef HAVE_PAM
+AuthReturn Authenticate_pam(
         const char *caller, 
+        const char *method,
+        const char *user,
+        char *(*conv) (ConvRequest, const char *));
 #endif
+
+#ifdef HAVE_SHADOW
+AuthReturn Authenticate_shadow(
+        const char *method,
+        const char *user,
+        char *(*conv) (ConvRequest, const char *));
+#endif
+
+AuthReturn Authenticate_etcpasswd(
         const char *method,
         const char *user,
         char *(*conv) (ConvRequest, const char *));

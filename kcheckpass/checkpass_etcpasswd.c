@@ -21,28 +21,32 @@
 
 #include "kcheckpass.h"
 
-#ifdef HAVE_ETCPASSWD
-
 /*******************************************************************
  * This is the authentication code for /etc/passwd passwords
  *******************************************************************/
 
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <syslog.h>
 
-AuthReturn Authenticate(const char *method,
+AuthReturn Authenticate_etcpasswd(const char *method,
         const char *login, char *(*conv) (ConvRequest, const char *))
 {
+  if (strcmp(method, "etcpasswd") != 0)
+    return AuthError;
+
   struct passwd *pw;
   char *passwd;
   char *crpt_passwd;
 
-  if (strcmp(method, "classic"))
-    return AuthError;
+  openlog("kcheckpass", LOG_PID, LOG_AUTH);
 
   /* Get the password entry for the user we want */
-  if (!(pw = getpwnam(login)))
+  if (!(pw = getpwnam(login))) {
+    syslog(LOG_ERR, "getpwnam: %s", strerror(errno));
     return AuthBad;
+  }
 
   if (!*pw->pw_passwd)
     return AuthOk;
@@ -57,5 +61,3 @@ AuthReturn Authenticate(const char *method,
   dispose(passwd);
   return AuthBad; /* Password wrong or account locked */
 }
-
-#endif
