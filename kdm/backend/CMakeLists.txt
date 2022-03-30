@@ -58,17 +58,9 @@ target_link_libraries(kdm
     ${SOCKET_LIBRARIES}
 )
 
-if(CKCONNECTOR_FOUND)
-    include_directories(${CKCONNECTOR_INCLUDE_DIR} ${DBUS_INCLUDE_DIR} ${DBUS_ARCH_INCLUDE_DIR})
-    target_link_libraries(kdm ${CKCONNECTOR_LIBRARIES} ${DBUS_LIBRARIES})
-endif (CKCONNECTOR_FOUND)
 if(UTIL_LIBRARIES)
     target_link_libraries(kdm ${UTIL_LIBRARIES})
 endif(UTIL_LIBRARIES)
-target_link_libraries(kdm ${POSIX4_LIBRARIES})
-if(QT_RT_LIBRARY)
-    target_link_libraries(kdm ${QT_RT_LIBRARY})
-endif(QT_RT_LIBRARY)
 
 add_dependencies(kdm ConfigCi)
 
