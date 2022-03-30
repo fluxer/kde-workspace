@@ -31,7 +31,6 @@ code signals an error.
 
 Compilation hints:
 ------------------
-Compile with -DHAVE_VSYSLOG if you have vsyslog().
 Compile with -DHAVE_PAM if you have a PAM system, and link with -lpam -ldl
   (If libdl is present).
 Compile with -DHAVE_SHADOW if you have a shadow password system.
