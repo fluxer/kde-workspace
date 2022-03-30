@@ -508,7 +508,6 @@ void Greeter::gplugStart()
         sprintf(fdbuf, "%d", sfd[1]);
         execlp(QFile::encodeName(KStandardDirs::findExe(QLatin1String( "kcheckpass" ))).data(),
                "kcheckpass",
-               "-m", m_pluginHandle.info->method,
                "-S", fdbuf,
                (char *)0);
         _exit(20);
