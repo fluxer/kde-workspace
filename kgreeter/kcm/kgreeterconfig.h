@@ -36,8 +36,10 @@ public:
     KCMGreeter(QWidget* parent, const QVariantList&);
     ~KCMGreeter();
 
+public Q_SLOTS:
     void load() final;
     void save() final;
+    void defaults() final;
 
 private Q_SLOTS:
     void slotStyleChanged(const QString &style);

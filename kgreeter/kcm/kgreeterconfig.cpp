@@ -57,7 +57,6 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     setAboutData(about);
 
     setNeedsAuthorization(true);
-    setButtons(KCModule::Help | KCModule::Apply);
 
     load();
 
@@ -147,6 +146,20 @@ void KCMGreeter::save()
         KMessageBox::error(this, kgreeterreply.errorDescription());
     }
     emit changed(false);
+}
+
+void KCMGreeter::defaults()
+{
+    for (int i = 0; i < stylesbox->count(); i++) {
+        if (stylesbox->itemText(i).toLower() == KStyle::defaultStyle().toLower()) {
+            stylesbox->setCurrentIndex(i);
+            break;
+        }
+    }
+    colorsbox->setCurrentIndex(0);
+    backgroundrequester->setUrl(KUrl());
+    rectanglerequester->setUrl(KUrl());
+    emit changed(true);
 }
 
 void KCMGreeter::slotStyleChanged(const QString &style)
