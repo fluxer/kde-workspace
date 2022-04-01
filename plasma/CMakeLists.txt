@@ -27,4 +27,4 @@ add_subdirectory(wallpapers)
 add_subdirectory(kpart)
 add_subdirectory(tools)
 add_subdirectory(toolboxes)
-
+add_subdirectory(sessions)
