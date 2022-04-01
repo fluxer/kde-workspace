@@ -28,8 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
-#include <config-workspace.h>
-#include <config-unix.h> // HAVE_LIMITS_H
+#include <config-unix.h> // HAVE_SYS_TIME_H, HAVE_LIMITS_H
 
 #include <pwd.h>
 #include <sys/types.h>

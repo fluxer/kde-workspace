@@ -20,7 +20,7 @@
 
 #include "kio_floppy.h"
 
-#include <config-workspace.h>
+#include "config-unix.h"
 
 #ifdef HAVE_STRING_H
 #include <string.h>

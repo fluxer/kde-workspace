@@ -28,11 +28,9 @@ set(XLIBDIR "${xrootdir}/lib/X11")
 set(XKBDIR "${xrootdir}/share/X11")
 
 check_function_exists(getpassphrase HAVE_GETPASSPHRASE)
-check_function_exists(vsyslog HAVE_VSYSLOG)
 check_function_exists(nice HAVE_NICE)
 
 check_include_files(string.h HAVE_STRING_H)
-check_include_files(sys/select.h HAVE_SYS_SELECT_H)
 check_include_files(limits.h HAVE_LIMITS_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)     # ksmserver, ksplashml, sftp
 check_include_files(stdint.h HAVE_STDINT_H)         # kcontrol/kfontinst
@@ -86,8 +84,5 @@ macro(define_library LIB FN)
 endmacro(define_library)
 
 # for Solaris
-define_library(s authenticate)
-define_library(posix4 sched_yield)
 define_library(socket connect)
-define_library(resolv dn_expand)
 define_library(nsl gethostbyname)

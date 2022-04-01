@@ -22,9 +22,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
+#include "config-ksmserver.h"
+#include "server.h"
+
 #include <fixx11h.h>
-#include <config-workspace.h>
-#include <config-ksmserver.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -44,7 +45,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kconfig.h>
 #include <kmanagerselection.h>
 #include <kwindowsystem.h>
-#include "server.h"
 #include <QtGui/qx11info_x11.h>
 #include <QtCore/qfile.h>
 

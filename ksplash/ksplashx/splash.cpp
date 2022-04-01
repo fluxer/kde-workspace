@@ -32,7 +32,8 @@ const int LAST_STATE = 5;
 
 extern int screen_number;
 
-#include <config-workspace.h>
+#include "config-unix.h"
+#include "config-workspace.h"
 
 #include "splash.h"
 #include "qcolor.h"

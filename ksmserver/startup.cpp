@@ -29,11 +29,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
-#include <kglobalsettings.h>
-#include <QDir>
-#include <krun.h>
-#include <config-workspace.h>
-#include <config-unix.h> // HAVE_LIMITS_H
+#include "config-unix.h" // HAVE_SYS_TIME_H, HAVE_LIMITS_H
 
 #include <pwd.h>
 #include <sys/types.h>
@@ -59,8 +55,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QPushButton>
 #include <QTimer>
+#include <QDir>
 #include <QtDBus/QtDBus>
 
+#include <kglobalsettings.h>
+#include <krun.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
@@ -69,11 +68,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <ktemporaryfile.h>
 #include <knotification.h>
 #include <kconfiggroup.h>
+#include <kdebug.h>
 
 #include "global.h"
 #include "server.h"
 #include "client.h"
-#include <kdebug.h>
 
 #include <QtGui/qx11info_x11.h>
 

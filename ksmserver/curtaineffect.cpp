@@ -29,7 +29,6 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QTimer>
-#include "config-workspace.h"
 
 CurtainEffect::CurtainEffect(QWidget *parent, QPixmap *pixmap)
     : LogoutEffect(parent, pixmap)

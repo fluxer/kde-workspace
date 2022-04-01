@@ -18,19 +18,25 @@
 */
 
 #include "kworkspace.h"
+
 #include <QApplication>
 #include <QDataStream>
-#include <kapplication.h>
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <klocale.h>
 #include <QDateTime>
-#include <kstandarddirs.h>
-#include <QtDBus/QtDBus>
-#include <stdlib.h> // getenv()
-#include <ksmserver_interface.h>
 #include <QSocketNotifier>
+#include <QtDBus/QtDBus>
+
+#include <kapplication.h>
+#include <klocale.h>
+#include <kstandarddirs.h>
+#include <ksmserver_interface.h>
+
+#include <unistd.h> // geteuid()
+#include <stdlib.h> // getenv()
+#include <pwd.h>
+#include <sys/types.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -45,15 +51,6 @@
 #elif defined(Q_WS_QWS)
 #define DISPLAY "QWS_DISPLAY"
 #endif
-
-#include "config-workspace.h"
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif // HAVE_UNISTD_H
-
-#include <pwd.h>
-#include <sys/types.h>
 
 #include "kworkspace_p.h"
 

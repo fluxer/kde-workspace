@@ -19,11 +19,15 @@
  */
 
 
+#include "config-unix.h"
 #include "screensaverwindow.h"
 #include "kscreensaversettings.h"
 
+#ifdef HAVE_SETPRIORITY
+#  include <sys/resource.h>
+#endif
+
 #include <QApplication>
-#include <QtGui/qevent.h>
 #include <QtGui/qevent.h>
 #include <QPainter>
 #include <QTimer>
@@ -187,7 +191,7 @@ bool ScreenSaverWindow::startXScreenSaver()
     m_ScreenSaverProcess.start(saverProgram, saverArgs);
     if (m_ScreenSaverProcess.waitForStarted()) {
 #ifdef HAVE_SETPRIORITY
-        setpriority(PRIO_PROCESS, m_ScreenSaverProcess.pid(), mPriority);
+        setpriority(PRIO_PROCESS, m_ScreenSaverProcess.pid(), 10);
 #endif
         return true;
     }

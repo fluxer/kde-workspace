@@ -23,9 +23,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
+#include "config-workspace.h"
 #include "shutdowndlg.h"
 #include "plasma/framesvg.h"
 #include "plasma/theme.h"
+
+#include <stdio.h>
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -43,23 +46,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kuser.h>
+#include <kjob.h>
 #include <Solid/PowerManagement>
 #include <kwindowsystem.h>
 #include <netwm.h>
 #include <KStandardDirs>
 #include <kdeclarative.h>
-
-#include <stdio.h>
 #include <kxerrorhandler.h>
 
 #include <kworkspace/kdisplaymanager.h>
 
-#include <config-workspace.h>
-
 #include "logouteffect.h"
 #include "moc_shutdowndlg.cpp"
-
-#include <kjob.h>
 
 #define FONTCOLOR "#bfbfbf"
 

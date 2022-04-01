@@ -19,36 +19,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 
+#include "config-unix.h"
 #include "main.h"
 
-//#define QT_CLEAN_NAMESPACE
-#include <ksharedconfig.h>
-
-#include <kglobal.h>
-#include <klocale.h>
-#include <stdlib.h>
-#include <kcmdlineargs.h>
-#include <kaboutdata.h>
-#include <kcrash.h>
 #include <signal.h>
 #include <fcntl.h>
-#include <QtGui/qx11info_x11.h>
 #include <stdio.h>
-#include <fixx11h.h>
-#include <kxerrorhandler.h>
-#include <QDBusConnection>
-#include <QMessageBox>
-#include <QEvent>
-
-#include <kdialog.h>
-#include <kstandarddirs.h>
-#include <kdebug.h>
-#include <kde_file.h>
-#include <QLabel>
-#include <KComboBox>
-#include <QVBoxLayout>
-
-#include "config-workspace.h"
+#include <stdlib.h>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -57,6 +34,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
 #endif // HAVE_MALLOC_H
+
+#include <QDBusConnection>
+#include <QMessageBox>
+#include <QEvent>
+#include <QVBoxLayout>
+#include <QLabel>
+
+#include <ksharedconfig.h>
+#include <kglobal.h>
+#include <klocale.h>
+#include <kcmdlineargs.h>
+#include <kaboutdata.h>
+#include <kcrash.h>
+#include <kxerrorhandler.h>
+#include <kdialog.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
+#include <kde_file.h>
+#include <KComboBox>
+#include <QtGui/qx11info_x11.h>
+#include <fixx11h.h>
 
 #include <ksmserver_interface.h>
 

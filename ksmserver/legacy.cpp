@@ -29,16 +29,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
-#include <config-workspace.h>
+#include "config-unix.h"
 
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-
-#include "server.h"
-
 #include <unistd.h>
 
+#include "server.h"
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
