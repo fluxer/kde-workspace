@@ -18,9 +18,6 @@
 /* KDE's default home directory */
 #cmakedefine KDE_DEFAULT_HOME "${KDE_DEFAULT_HOME}"
 
-/* KDE's binaries directory */
-#define KDE_BINDIR "${KDE4_BIN_INSTALL_DIR}"
-
 /* KDE's configuration directory */
 #define KDE_CONFDIR "${KDE4_CONFIG_INSTALL_DIR}"
 
@@ -32,9 +29,6 @@
 
 /* KDE's system configuration directory */
 #define KDE_SYSCONFDIR "${KDE4_SYSCONF_INSTALL_DIR}"
-
-/* X binaries directory */
-#cmakedefine XBINDIR "${XBINDIR}"
 
 /* X libraries directory */
 #cmakedefine XLIBDIR "${XLIBDIR}"

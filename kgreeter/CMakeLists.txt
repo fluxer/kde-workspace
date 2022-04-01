@@ -8,7 +8,6 @@ set_package_properties(GLIB2 PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(kcm)
 
 include_directories(
