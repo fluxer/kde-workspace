@@ -63,6 +63,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     stylesbox->addItems(QStyleFactory::keys());
     connect(stylesbox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotStyleChanged(QString)));
 
+    colorsbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
     const QStringList kcolorschemes = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
     foreach (const QString &kcolorscheme, kcolorschemes) {
         const QString kcolorschemename = QSettings(kcolorscheme, QSettings::IniFormat).value("General/Name").toString();
@@ -103,6 +104,7 @@ void KCMGreeter::load()
         }
     }
 
+    colorsbox->setCurrentIndex(0); // default
     const QString kgreetercolor = kgreetersettings.value("greeter/colorscheme").toString();
     if (!kgreetercolor.isEmpty()) {
         for (int i = 0; i < colorsbox->count(); i++) {

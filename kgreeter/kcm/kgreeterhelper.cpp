@@ -30,9 +30,14 @@ ActionReply KGreeterHelper::save(const QVariantMap &parameters)
         return KAuth::ActionReply::HelperErrorReply;
     }
 
+    QString colorscheme = parameters.value("colorscheme").toString();
+    if (colorscheme == QLatin1String("default")) {
+        colorscheme = QString();
+    }
+
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
     kgreetersettings.setValue("greeter/style", parameters.value("style"));
-    kgreetersettings.setValue("greeter/colorscheme", parameters.value("colorscheme"));
+    kgreetersettings.setValue("greeter/colorscheme", colorscheme);
     kgreetersettings.setValue("greeter/background", parameters.value("background"));
     kgreetersettings.setValue("greeter/rectangle", parameters.value("rectangle"));
     if (kgreetersettings.status() != QSettings::NoError) {
