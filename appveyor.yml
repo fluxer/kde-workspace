@@ -27,7 +27,8 @@ build_script:
         libxcb-record0-dev libglu1-mesa-dev mesa-common-dev libmtp-dev python \
         libusb-1.0-0-dev libssh-dev libsmbclient-dev libdrm-dev libraw1394-dev \
         libsensors4-dev libgles2-mesa-dev libpam0g-dev libpci-dev libopenexr-dev \
-        liblzma-dev libbz2-dev libgphoto2-dev liblightdm-gobject-dev libdbusmenu-katie ccache
+        liblzma-dev libbz2-dev libgphoto2-dev liblightdm-gobject-1-dev \
+        libdbusmenu-katie ccache
 
     export PATH="/usr/lib/ccache/:$PATH"
 
