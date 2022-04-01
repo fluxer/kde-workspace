@@ -19,8 +19,8 @@ add_definitions(
     ${LIGHTDM_DEFINITIONS}
 )
 
-add_executable(kgreeter kgreeter.cpp)
-target_link_libraries(kgreeter
+add_executable(lightdm-kgreeter-greeter kgreeter.cpp)
+target_link_libraries(lightdm-kgreeter-greeter
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDEUI_LIBS}
@@ -29,12 +29,8 @@ target_link_libraries(kgreeter
     gobject-2.0
 )
 
-set_target_properties(kgreeter PROPERTIES
-    OUTPUT_NAME lightdm-kgreeter-greeter
-)
-
 install(
-    TARGETS kgreeter
+    TARGETS lightdm-kgreeter-greeter
     DESTINATION ${KDE4_SBIN_INSTALL_DIR}
 )
 
