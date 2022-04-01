@@ -27,6 +27,7 @@
 #include <kimageio.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
+#include <kstyle.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -94,6 +95,12 @@ void KCMGreeter::load()
 {
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
 
+    for (int i = 0; i < stylesbox->count(); i++) {
+        if (stylesbox->itemText(i).toLower() == KStyle::defaultStyle().toLower()) {
+            stylesbox->setCurrentIndex(i);
+            break;
+        }
+    }
     const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
     if (!kgreeterstyle.isEmpty()) {
         for (int i = 0; i < stylesbox->count(); i++) {
