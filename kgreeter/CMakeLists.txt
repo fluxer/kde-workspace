@@ -8,12 +8,6 @@ set_package_properties(GLIB2 PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
-configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/config-kgreeter.h.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/config-kgreeter.h
-    @ONLY
-)
-
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_subdirectory(kcm)
 

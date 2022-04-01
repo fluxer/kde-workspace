@@ -31,7 +31,7 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include "config-kgreeter.h"
+#include "config-workspace.h"
 
 K_PLUGIN_FACTORY(KCMGreeterFactory, registerPlugin<KCMGreeter>();)
 K_EXPORT_PLUGIN(KCMGreeterFactory("kcmgreeterconfig", "kcm_greeterconfig"))
@@ -91,7 +91,7 @@ KCMGreeter::~KCMGreeter()
 
 void KCMGreeter::load()
 {
-    QSettings kgreetersettings(SYSCONF_INSTALL_DIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
+    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
 
     const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
     if (!kgreeterstyle.isEmpty()) {

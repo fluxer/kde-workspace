@@ -21,7 +21,7 @@
 #include <QSettings>
 #include <kauthhelpersupport.h>
 
-#include "config-kgreeter.h"
+#include "config-workspace.h"
 
 ActionReply KGreeterHelper::save(const QVariantMap &parameters)
 {
@@ -30,7 +30,7 @@ ActionReply KGreeterHelper::save(const QVariantMap &parameters)
         return KAuth::ActionReply::HelperErrorReply;
     }
 
-    QSettings kgreetersettings(SYSCONF_INSTALL_DIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
+    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
     kgreetersettings.setValue("greeter/style", parameters.value("style"));
     kgreetersettings.setValue("greeter/colorscheme", parameters.value("colorscheme"));
     kgreetersettings.setValue("greeter/background", parameters.value("background"));
