@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kgreeterconfig
+Icon=preferences-system-login
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kgreeterconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=workspace-appearance-and-behavior
+X-KDE-System-Settings-Parent-Category-V2=workspace-appearance-and-behavior
+X-DocPath=kcontrol/kgreeterconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-workspace-appearance-and-behavior;
+
+Name=Greeter
+Comment=Change greeter options
+X-KDE-Keywords=Greeter,Login

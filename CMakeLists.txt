@@ -21,14 +21,6 @@ set_package_properties(PNG PROPERTIES
     TYPE REQUIRED
 )
 
-find_package(Perl)
-set_package_properties(Perl PROPERTIES
-    DESCRIPTION "Highly capable, feature-rich programming language"
-    URL "http://www.perl.org"
-    PURPOSE "Needed for KDM config handler generator"
-    TYPE REQUIRED
-)
-
 # shared-mime-info 0.40 is mandatory for generic-icon, kdelibs requires 0.70 anyway
 find_package(SharedMimeInfo 0.70)
 set_package_properties(SharedMimeInfo PROPERTIES
@@ -60,8 +52,6 @@ if(Q_WS_X11)
     )
 
     add_feature_info("libXTest" X11_XTest_FOUND "The X11 Testing Resource extension library is useful for automated testing of X clients")
-    add_feature_info("libXau" X11_Xau_FOUND "The X11 Authorization Protocol library may be used by KDM")
-    add_feature_info("libXdmcp" X11_Xdmcp_FOUND "The X Display Manager Control Protocol library may be used by KDM")
     add_feature_info("libXcomposite" X11_Xcomposite_FOUND "The X11 Composite extension library may be used by Plasma and KWin")
     add_feature_info("libXShm" X11_XShm_FOUND "The X11 shared-memory fences library may be used by ksplash")
     add_feature_info("libxf86misc" X11_xf86misc_FOUND "The X11 miscellaneous library may be used by keyboard KCM") # TODO: unused?
@@ -73,11 +63,14 @@ if(Q_WS_X11)
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
     add_feature_info("libxf86vmode" X11_xf86vmode_FOUND "The X video mode extension library used by powerdevil")
 
+    if(NOT X11_Xau_FOUND)
+        message(FATAL_ERROR "The X11 authorization extension library was not found. Required for authorization in kworkspace library")
+    endif()
     if(NOT X11_Xdamage_FOUND)
         message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin")
     endif()
     if(NOT X11_Xrender_FOUND)
-        message(FATAL_ERROR " The X Rendering Extension client library was not found. Required for XRender Compositing backend in KWin")
+        message(FATAL_ERROR " The X Rendering extension client library was not found. Required for XRender Compositing backend in KWin")
     endif()
     if(NOT X11_Xfixes_FOUND)
         message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin")
@@ -260,6 +253,14 @@ set_package_properties(NetworkManager PROPERTIES
     PURPOSE "Needed for kded's networkstatus module"
 )
 
+macro_optional_find_package(LightDM)
+set_package_properties(LightDM PROPERTIES
+    DESCRIPTION "Cross-desktop display manager"
+    URL "https://github.com/canonical/lightdm"
+    TYPE OPTIONAL
+    PURPOSE "Needed for the LightDM greeter"
+)
+
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE
@@ -326,11 +327,9 @@ add_subdirectory(kcminit)
 add_subdirectory(khotkeys)
 add_subdirectory(ksystraycmd)
 
-if(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-    add_subdirectory( kdm )
-else(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
-    message(STATUS "Xau lib or Xdmcp lib was missing. kdm will not compile")
-endif(X11_Xau_FOUND AND X11_Xdmcp_FOUND)
+if (LightDM_FOUND)
+    add_subdirectory(kgreeter)
+endif(LightDM_FOUND)
 
 # data
 add_subdirectory(cursors)
