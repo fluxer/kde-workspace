@@ -9,8 +9,7 @@ Semi-official home page: http://developer.kde.org/~ossi/sw/kdm.html
 cmake options that affect KDM
 -----------------------------
 
--DKDE4_COMMON_PAM_SERVICE:STRING=service
--DKDE4_KDM_PAM_SERVICE:STRING=service
+-DKDE4_PAM_SERVICE:STRING=service
   Set the PAM service used by all of kdebase resp. specifically by KDM.
   Whether PAM should be used in the first place is auto-detected.
 

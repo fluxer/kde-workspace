@@ -12,19 +12,8 @@ include(CheckSymbolExists)
 include(CheckLibraryExists)
 
 if (PAM_FOUND)
-    set(KDE4_COMMON_PAM_SERVICE "kde" CACHE STRING "The PAM service to use unless overridden for a particular app.")
-
-    macro(define_pam_service APP)
-        string(TOUPPER ${APP}_PAM_SERVICE var)
-        set(cvar KDE4_${var})
-        set(${cvar} "${KDE4_COMMON_PAM_SERVICE}" CACHE STRING "The PAM service for ${APP}.")
-        mark_as_advanced(${cvar})
-        set(${var} "\"${${cvar}}\"")
-    endmacro(define_pam_service)
-
-    define_pam_service(KDM)
-    define_pam_service(kscreensaver)
-
+    set(KDE4_PAM_SERVICE "kde" CACHE STRING "The PAM service")
+    mark_as_advanced(KDE4_PAM_SERVICE)
 endif (PAM_FOUND)
 
 find_program(some_x_program NAMES iceauth xrdb xterm)

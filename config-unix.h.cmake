@@ -4,11 +4,8 @@
 /* Define if your PAM expects a conversation function with const pam_message (Solaris) */
 #cmakedefine PAM_MESSAGE_CONST 1
 
-/* The PAM service to be used by kdm */
-#cmakedefine KDM_PAM_SERVICE ${KDM_PAM_SERVICE}
-
-/* The PAM service to be used by kscreensaver */
-#cmakedefine KSCREENSAVER_PAM_SERVICE ${KSCREENSAVER_PAM_SERVICE}
+/* The PAM service to be used by kcheckpass */
+#cmakedefine KDE4_PAM_SERVICE "${KDE4_PAM_SERVICE}"
 
 /* Defines if your system has the getspnam function */
 #cmakedefine HAVE_GETSPNAM 1

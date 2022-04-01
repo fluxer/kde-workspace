@@ -781,7 +781,7 @@ Description:
 Key: PAMService
 If: defined(USE_PAM)
 Type: string
-Default: KDM_PAM_SERVICE
+Default: KDE4_PAM_SERVICE
 User: core
 Instance: -
 Comment: -

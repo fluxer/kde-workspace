@@ -314,7 +314,7 @@ int
 main(int argc, char **argv)
 {
 #if defined(HAVE_PAM)
-    const char *caller = KSCREENSAVER_PAM_SERVICE;
+    const char *caller = KDE4_PAM_SERVICE;
 #endif
     const char *username = 0;
 #ifdef ACCEPT_ENV
