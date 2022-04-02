@@ -26,7 +26,6 @@ target_link_libraries(lightdm-kgreeter-greeter
     ${KDE4_KDEUI_LIBS}
     ${LIGHTDM_LIBRARIES}
     ${GLIB2_LIBRARIES}
-    gobject-2.0
 )
 
 install(
