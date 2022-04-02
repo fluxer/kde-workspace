@@ -22,6 +22,7 @@
 #include <QStyleFactory>
 #include <QProcess>
 #include <kdebug.h>
+#include <kconfiggroup.h>
 #include <klocale.h>
 #include <kauthaction.h>
 #include <kimageio.h>
@@ -59,7 +60,19 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
 
     load();
 
-    stylesbox->addItems(QStyleFactory::keys());
+    const QStringList kthemercs = KGlobal::dirs()->findAllResources("data", "kstyle/themes/*.themerc");
+    foreach (const QString &style, QStyleFactory::keys()) {
+        QString kthemename = style;
+        foreach (const QString &kthemerc, kthemercs) {
+            KConfig kconfig(kthemerc, KConfig::SimpleConfig);
+            const QString kthemercwidgetstyle = kconfig.group("KDE").readEntry("WidgetStyle");
+            if (kthemercwidgetstyle.isEmpty() || kthemercwidgetstyle.toLower() != style.toLower()) {
+                continue;
+            }
+            kthemename = kconfig.group("Misc").readEntry("Name");
+        }
+        stylesbox->addItem(kthemename, QVariant(style));
+    }
     connect(stylesbox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotStyleChanged(QString)));
 
     colorsbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
@@ -94,7 +107,7 @@ void KCMGreeter::load()
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
 
     for (int i = 0; i < stylesbox->count(); i++) {
-        if (stylesbox->itemText(i).toLower() == KStyle::defaultStyle().toLower()) {
+        if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
             stylesbox->setCurrentIndex(i);
             break;
         }
@@ -102,7 +115,7 @@ void KCMGreeter::load()
     const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
     if (!kgreeterstyle.isEmpty()) {
         for (int i = 0; i < stylesbox->count(); i++) {
-            if (stylesbox->itemText(i) == kgreeterstyle) {
+            if (stylesbox->itemData(i).toString().toLower() == kgreeterstyle.toLower()) {
                 stylesbox->setCurrentIndex(i);
                 break;
             }
@@ -113,7 +126,7 @@ void KCMGreeter::load()
     const QString kgreetercolor = kgreetersettings.value("greeter/colorscheme").toString();
     if (!kgreetercolor.isEmpty()) {
         for (int i = 0; i < colorsbox->count(); i++) {
-            if (colorsbox->itemData(i).toString() == kgreetercolor) {
+            if (colorsbox->itemData(i).toString().toLower() == kgreetercolor.toLower()) {
                 colorsbox->setCurrentIndex(i);
                 break;
             }
@@ -133,7 +146,7 @@ void KCMGreeter::save()
 {
     KAuth::Action kgreeteraction("org.kde.kcontrol.kcmkgreeter.save");
     kgreeteraction.setHelperID("org.kde.kcontrol.kcmkgreeter");
-    kgreeteraction.addArgument("style", stylesbox->currentText());
+    kgreeteraction.addArgument("style", stylesbox->itemData(stylesbox->currentIndex()).toString());
     kgreeteraction.addArgument("colorscheme", colorsbox->itemData(colorsbox->currentIndex()).toString());
     kgreeteraction.addArgument("background", backgroundrequester->url().path());
     kgreeteraction.addArgument("rectangle", rectanglerequester->url().path());
@@ -150,7 +163,7 @@ void KCMGreeter::save()
 void KCMGreeter::defaults()
 {
     for (int i = 0; i < stylesbox->count(); i++) {
-        if (stylesbox->itemText(i).toLower() == KStyle::defaultStyle().toLower()) {
+        if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
             stylesbox->setCurrentIndex(i);
             break;
         }
