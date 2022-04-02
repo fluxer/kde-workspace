@@ -34,7 +34,7 @@ if ( X11_FOUND )
    target_link_libraries(oxygen ${X11_LIBRARIES})
 endif( X11_FOUND )
 
-install(TARGETS oxygen  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/plugins/styles/ )
+install(TARGETS oxygen  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/styles/ )
 
 ########### install files ###############
 
