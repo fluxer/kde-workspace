@@ -46,13 +46,12 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
 
     setupUi(this);
 
-    KAboutData *about =
-        new KAboutData(I18N_NOOP("kcmkgreeter"), 0,
-                       ki18n("KDE Greeter Module"),
-                       0, KLocalizedString(), KAboutData::License_GPL,
-                       ki18n("Copyright 2022, Ivailo Monev <email>xakepa10@gmail.com</email>"
-                       ));
-
+    KAboutData *about = new KAboutData(
+        I18N_NOOP("kcmkgreeter"), 0,
+        ki18n("KDE Greeter Module"),
+        0, KLocalizedString(), KAboutData::License_GPL,
+        ki18n("Copyright 2022, Ivailo Monev <email>xakepa10@gmail.com</email>")
+    );
     about->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
     setAboutData(about);
 
@@ -64,7 +63,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     connect(stylesbox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotStyleChanged(QString)));
 
     colorsbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
-    const QStringList kcolorschemes = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors", KStandardDirs::NoDuplicates);
+    const QStringList kcolorschemes = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors");
     foreach (const QString &kcolorscheme, kcolorschemes) {
         const QString kcolorschemename = QSettings(kcolorscheme, QSettings::IniFormat).value("General/Name").toString();
         const QString kcolorschemebasename = QFileInfo(kcolorscheme).baseName();

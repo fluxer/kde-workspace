@@ -6,6 +6,7 @@
 #include <KMessageBox>
 #include <KIcon>
 #include <KStyle>
+#include <KStandardDirs>
 #include <KGlobalSettings>
 #include <KSharedConfig>
 #include <KLocale>
@@ -448,6 +449,12 @@ bool KGreeter::isUserLogged() const
 int main(int argc, char**argv)
 {
     QApplication app(argc, argv);
+
+    // for the style
+    const QStringList pluginpaths = KGlobal::dirs()->resourceDirs("qtplugins");
+    Q_FOREACH (const QString &path, pluginpaths) {
+        app.addLibraryPath(path);
+    }
 
     const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
     if (!kgreeterstyle.isEmpty()) {
