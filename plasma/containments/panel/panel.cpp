@@ -23,6 +23,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsLayout>
 #include <QtGui/qgraphicssceneevent.h>
@@ -40,8 +41,6 @@
 #include <Plasma/View>
 #include <Plasma/PaintUtils>
 #include <Plasma/WindowEffects>
-
-#include <kephal/screens.h>
 
 using namespace Plasma;
 
@@ -90,7 +89,7 @@ protected:
 Panel::Panel(QObject *parent, const QVariantList &args)
     : Containment(parent, args),
       m_configureAction(0),
-      m_currentSize(QSize(Kephal::ScreenUtils::screenSize(screen()).width(), 35)),
+      m_currentSize(QSize(QApplication::desktop()->screenGeometry(screen()).width(), 35)),
       m_maskDirty(true),
       m_canResize(true),
       m_spacerIndex(-1),
@@ -391,7 +390,7 @@ void Panel::updateBorders(const QRect &geom, bool inPaintEvent)
     if (s < 0) {
         // do nothing in this case, we want all the borders
     } else if (loc == BottomEdge || loc == TopEdge) {
-        QRect r = Kephal::ScreenUtils::screenGeometry(s);
+        QRect r = QApplication::desktop()->screenGeometry(s);
 
         if (loc == BottomEdge) {
             enabledBorders ^= FrameSvg::BottomBorder;
@@ -412,7 +411,7 @@ void Panel::updateBorders(const QRect &geom, bool inPaintEvent)
 
         //kDebug() << "top/bottom: Width:" << width << ", height:" << height;
     } else if (loc == LeftEdge || loc == RightEdge) {
-        QRect r = Kephal::ScreenUtils::screenGeometry(s);
+        QRect r = QApplication::desktop()->screenGeometry(s);
 
         if (loc == RightEdge) {
             enabledBorders ^= FrameSvg::RightBorder;
@@ -499,7 +498,7 @@ void Panel::constraintsEvent(Plasma::Constraints constraints)
     if (constraints & Plasma::LocationConstraint || constraints & Plasma::SizeConstraint) {
         m_maskDirty = true;
         m_currentSize = geometry().size().toSize();
-        QRectF screenRect = screen() >= 0 ? Kephal::ScreenUtils::screenGeometry(screen()) :
+        QRectF screenRect = screen() >= 0 ? QApplication::desktop()->screenGeometry(screen()) :
                                             geometry();
 
         if ((formFactor() == Horizontal && m_currentSize.width() >= screenRect.width()) ||
