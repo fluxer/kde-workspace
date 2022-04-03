@@ -199,21 +199,6 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     mapSpdMethods->insert("HibernateState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::HibernateState)));
     context->setContextProperty("spdMethods", mapSpdMethods);
 
-    QString bootManager = KConfig(KDE_CONFDIR "/kdm/kdmrc", KConfig::SimpleConfig).group("Shutdown").readEntry("BootManager", "None");
-    context->setContextProperty("bootManager", bootManager);
-
-    QStringList options;
-    int def, cur;
-    if ( KDisplayManager().bootOptions( rebootOptions, def, cur ) ) {
-        if ( cur > -1 ) {
-            def = cur;
-        }
-    }
-    QDeclarativePropertyMap *rebootOptionsMap = new QDeclarativePropertyMap(this);
-    rebootOptionsMap->insert("options", QVariant::fromValue(rebootOptions));
-    rebootOptionsMap->insert("default", QVariant::fromValue(def));
-    context->setContextProperty("rebootOptions", rebootOptionsMap);
-
     setModal( true );
 
     // window stuff
@@ -281,16 +266,12 @@ void KSMShutdownDlg::slotLogout()
 
 void KSMShutdownDlg::slotReboot()
 {
-    // no boot option selected -> current
-    m_bootOption.clear();
     m_shutdownType = KWorkSpace::ShutdownTypeReboot;
     accept();
 }
 
 void KSMShutdownDlg::slotReboot(int opt)
 {
-    if (int(rebootOptions.size()) > opt)
-        m_bootOption = rebootOptions[opt];
     m_shutdownType = KWorkSpace::ShutdownTypeReboot;
     accept();
 }
@@ -298,7 +279,6 @@ void KSMShutdownDlg::slotReboot(int opt)
 
 void KSMShutdownDlg::slotLockScreen()
 {
-    m_bootOption.clear();
     QDBusMessage call = QDBusMessage::createMethodCall("org.kde.screensaver",
                                                        "/ScreenSaver",
                                                        "org.freedesktop.ScreenSaver",
@@ -309,7 +289,6 @@ void KSMShutdownDlg::slotLockScreen()
 
 void KSMShutdownDlg::slotHalt()
 {
-    m_bootOption.clear();
     m_shutdownType = KWorkSpace::ShutdownTypeHalt;
     accept();
 }
@@ -317,7 +296,6 @@ void KSMShutdownDlg::slotHalt()
 
 void KSMShutdownDlg::slotSuspend(int spdMethod)
 {
-    m_bootOption.clear();
     switch (spdMethod) {
         case Solid::PowerManagement::StandbyState:
         case Solid::PowerManagement::SuspendState:
@@ -331,7 +309,7 @@ void KSMShutdownDlg::slotSuspend(int spdMethod)
 }
 
 bool KSMShutdownDlg::confirmShutdown(
-        bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype, QString& bootOption,
+        bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype,
         const QString& theme)
 {
     KSMShutdownDlg* l = new KSMShutdownDlg( 0,
@@ -344,7 +322,6 @@ bool KSMShutdownDlg::confirmShutdown(
     XSetClassHint(QX11Info::display(), l->winId(), &classHint);
     bool result = l->exec();
     sdtype = l->m_shutdownType;
-    bootOption = l->m_bootOption;
 
     delete l;
 

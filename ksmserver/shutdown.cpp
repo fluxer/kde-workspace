@@ -148,12 +148,11 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
         sdmode = KWorkSpace::ShutdownModeInteractive;
 
     dialogActive = true;
-    QString bopt;
     if ( !logoutConfirmed ) {
         KApplication::kApplication()->updateUserTimestamp();
         KSMShutdownFeedback::start(); // make the screen gray
         QString theme = cg.readEntry( "theme", "default" );
-        logoutConfirmed = KSMShutdownDlg::confirmShutdown( maysd, choose, sdtype, bopt, theme);
+        logoutConfirmed = KSMShutdownDlg::confirmShutdown( maysd, choose, sdtype, theme);
         // ###### We can't make the screen remain gray while talking to the apps,
         // because this prevents interaction ("do you want to save", etc.)
         // TODO: turn the feedback widget into a list of apps to be closed,
@@ -169,7 +168,6 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
 
         shutdownType = sdtype;
         shutdownMode = sdmode;
-        bootOption = bopt;
 
         // shall we save the session on logout?
         saveSession = ( cg.readEntry( "loginMode", "restorePreviousLogout" ) == "restorePreviousLogout" );

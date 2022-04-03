@@ -39,9 +39,8 @@ main(int argc, char *argv[])
         sdtype = KWorkSpace::ShutdownTypeNone;
     }
 
-    QString bopt;
-    (void)KSMShutdownDlg::confirmShutdown( true, true, sdtype, bopt, "default" );
-/*   (void)KSMShutdownDlg::confirmShutdown( false, false, sdtype, bopt ); */
+    (void)KSMShutdownDlg::confirmShutdown( true, true, sdtype, "default" );
+/*   (void)KSMShutdownDlg::confirmShutdown( false, false, sdtype ); */
 
     KSMShutdownFeedback::stop();
 }

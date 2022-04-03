@@ -77,7 +77,7 @@ class KSMShutdownDlg : public QDialog
 
 public:
     static bool confirmShutdown(
-            bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype, QString& bopt, const QString& theme );
+            bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype, const QString& theme );
     bool eventFilter( QObject* watched, QEvent* event );
 
 public Q_SLOTS:
@@ -94,8 +94,6 @@ protected:
 private:
     KSMShutdownDlg( QWidget* parent, bool maysd, bool choose, KWorkSpace::ShutdownType sdtype, const QString& theme );
     KWorkSpace::ShutdownType m_shutdownType;
-    QString m_bootOption;
-    QStringList rebootOptions;
     QDeclarativeView* m_view;
 };
 
