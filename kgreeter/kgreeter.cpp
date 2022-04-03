@@ -61,6 +61,7 @@ private:
     void setUser(const QString &user);
     void setSession(const QString &session);
     bool isUserLogged() const;
+    static QString glibErrorString(const GError *const gliberror);
 
     Ui::KGreeter m_ui;
     LightDMGreeter *m_ldmgreeter;
@@ -282,7 +283,7 @@ void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, Lig
 
         g_autoptr(GError) gliberror = NULL;
         if (!lightdm_greeter_respond(ldmgreeter, kgreeterpass.constData(), &gliberror)) {
-            kgreeter->statusBar()->showMessage(i18n("Failed to repsond: %1", gliberror->message));
+            kgreeter->statusBar()->showMessage(i18n("Failed to repsond: %1", KGreeter::glibErrorString(gliberror)));
         }
     }
 }
@@ -296,13 +297,18 @@ void KGreeter::authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldm
 
     const QByteArray kgreetersession = kgreeter->getSession();
 
-    g_autoptr(GError) gliberror = NULL;
-    if (!lightdm_greeter_get_is_authenticated(ldmgreeter) ||
-        !lightdm_greeter_start_session_sync(ldmgreeter, kgreetersession.constData(), &gliberror)) {
-        kgreeter->statusBar()->showMessage(i18n("Failed to authenticate or start session: %1", gliberror->message));
-    } else {
-        qApp->quit();
+    if (!lightdm_greeter_get_is_authenticated(ldmgreeter)) {
+        kgreeter->statusBar()->showMessage(i18n("Failed to authenticate"));
+        return;
     }
+
+    g_autoptr(GError) gliberror = NULL;
+    if (!lightdm_greeter_start_session_sync(ldmgreeter, kgreetersession.constData(), &gliberror)) {
+        kgreeter->statusBar()->showMessage(i18n("Failed to start session: %1", KGreeter::glibErrorString(gliberror)));
+        return;
+    }
+
+    qApp->quit();
 }
 
 void KGreeter::showMessageCb(LightDMGreeter *ldmgreeter, const gchar *ldmtext, LightDMMessageType ldmtype, gpointer ldmptr)
@@ -319,7 +325,7 @@ void KGreeter::slotSuspend()
 {
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_suspend(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not suspend: %1", gliberror->message));
+        statusBar()->showMessage(i18n("Could not suspend: %1", KGreeter::glibErrorString(gliberror)));
     }
 }
 
@@ -327,7 +333,7 @@ void KGreeter::slotHibernate()
 {
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_hibernate(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not hibernate: %1", gliberror->message));
+        statusBar()->showMessage(i18n("Could not hibernate: %1", KGreeter::glibErrorString(gliberror)));
     }
 }
 
@@ -345,7 +351,7 @@ void KGreeter::slotPoweroff()
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_shutdown(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not poweroff: %1", gliberror->message));
+        statusBar()->showMessage(i18n("Could not poweroff: %1", KGreeter::glibErrorString(gliberror)));
     }
 }
 
@@ -363,7 +369,7 @@ void KGreeter::slotReboot()
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_restart(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not reboot: %1", gliberror->message));
+        statusBar()->showMessage(i18n("Could not reboot: %1", KGreeter::glibErrorString(gliberror)));
     }
 }
 
@@ -460,6 +466,14 @@ bool KGreeter::isUserLogged() const
         }
     }
     return false;
+}
+
+QString KGreeter::glibErrorString(const GError *const gliberror)
+{
+    if (!gliberror) {
+        return i18n("Unknown error");
+    }
+    return QString::fromUtf8(gliberror->message);
 }
 
 int main(int argc, char**argv)
