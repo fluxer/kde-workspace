@@ -36,6 +36,8 @@
 
 #include <QSignalMapper>
 
+#include "desktoptracker.h"
+
 namespace Plasma
 {
     class AccessAppletJob;
@@ -43,10 +45,6 @@ namespace Plasma
     class Corona;
     class Dialog;
 } // namespace Plasma
-
-namespace Kephal {
-    class Screen;
-} // namespace Kephal
 
 class ControllerWindow;
 class DesktopView;
@@ -121,7 +119,7 @@ private:
     PlasmaApp();
     DesktopView* viewForScreen(int screen, int desktop) const;
     ControllerWindow *showController(int screen, Plasma::Containment *c, bool widgetExplorerMode);
-    bool canRelocatePanel(PanelView * view, Kephal::Screen *screen);
+    bool canRelocatePanel(PanelView * view, const DesktopTracker::Screen &screen);
     PanelView *createPanelView(Plasma::Containment *containment);
 
 private Q_SLOTS:
@@ -131,8 +129,8 @@ private Q_SLOTS:
     void containmentScreenOwnerChanged(int, int, Plasma::Containment*);
     void syncConfig();
     void panelRemoved(QObject* panel);
-    void screenRemoved(int id);
-    void screenAdded(Kephal::Screen *screen);
+    void screenRemoved(const DesktopTracker::Screen &screen);
+    void screenAdded(const DesktopTracker::Screen &screen);
     void configureContainment(Plasma::Containment*);
     void setWmClass(WId id);
     void wallpaperCheckedIn();

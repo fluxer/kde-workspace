@@ -23,15 +23,12 @@
 #include <Plasma/Plasma>
 #include <Plasma/View>
 
+#include "desktoptracker.h"
+
 namespace Plasma
 {
     class Containment;
 } // namespace Plasma
-
-namespace Kephal
-{
-    class Screen;
-} // namespace Kephal
 
 class DesktopView : public Plasma::View
 {
@@ -47,8 +44,8 @@ public:
     void checkDesktopAffiliation();
 
 public slots:
-    void screenResized(Kephal::Screen *);
-    void screenMoved(Kephal::Screen *);
+    void screenResized(const DesktopTracker::Screen &screen);
+    void screenMoved(const DesktopTracker::Screen &screen);
     void adjustSize();
     void toolBoxOpened(bool);
     void showDesktopUntoggled(WId id);

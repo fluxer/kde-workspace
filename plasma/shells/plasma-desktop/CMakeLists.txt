@@ -1,7 +1,7 @@
-include_directories(${CMAKE_SOURCE_DIR}/libs 
-                    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
-                    ${CMAKE_SOURCE_DIR}/plasma/desktop/shell/scripting
-                    ${CMAKE_SOURCE_DIR}/libs/kephal
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs 
+    ${CMAKE_SOURCE_DIR}/libs/plasmagenericshell
+    ${CMAKE_SOURCE_DIR}/plasma/desktop/shell/scripting
 )
 
 set(plasma_SRCS
@@ -11,6 +11,7 @@ set(plasma_SRCS
     controllerwindow.cpp
     desktopcorona.cpp
     desktopview.cpp
+    desktoptracker.cpp
     interactiveconsole.cpp
     main.cpp
     supportinformation.cpp
@@ -37,7 +38,7 @@ add_executable(plasma-desktop ${plasma_SRCS})
 target_link_libraries(plasma-desktop ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIDLETIME_LIBS} ${QT_QTSCRIPT_LIBRARY} kworkspace plasmagenericshell ${QT_QTDECLARATIVE_LIBRARY})
 
 if(UNIX AND Q_WS_X11)
-    target_link_libraries(plasma-desktop ${X11_LIBRARIES} kephal)
+    target_link_libraries(plasma-desktop ${X11_LIBRARIES})
 
     if(X11_Xrender_FOUND)
        target_link_libraries(plasma-desktop ${X11_Xrender_LIB})

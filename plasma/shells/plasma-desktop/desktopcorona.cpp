@@ -21,6 +21,7 @@
 
 #include <QAction>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QDir>
 #include <QGraphicsLayout>
 #include <QTimer>
@@ -42,8 +43,6 @@
 #include <plasma/containmentactionspluginsconfig.h>
 #include <Plasma/DataEngineManager>
 #include <Plasma/Package>
-
-#include <kephal/screens.h>
 
 #include "panelview.h"
 #include "plasmaapp.h"
@@ -72,8 +71,8 @@ void DesktopCorona::init()
     setPreferredToolBoxPlugin(Plasma::Containment::CustomPanelContainment, "org.kde.paneltoolbox");
 
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "DesktopCorona init start" << "(line:" << __LINE__ << ")";
-    Kephal::Screens *screens = Kephal::Screens::self();
-    connect(screens, SIGNAL(screenAdded(Kephal::Screen*)), SLOT(screenAdded(Kephal::Screen*)));
+    DesktopTracker *tracker = DesktopTracker::self();
+    connect(tracker, SIGNAL(screenAdded(DesktopTracker::Screen)), SLOT(screenAdded(DesktopTracker::Screen)));
     connect(KWindowSystem::self(), SIGNAL(workAreaChanged()), this, SIGNAL(availableScreenRegionChanged()));
 
     Plasma::ContainmentActionsPluginsConfig desktopPlugins;
@@ -180,7 +179,7 @@ int DesktopCorona::numScreens() const
     }
 #endif
 
-    return Kephal::ScreenUtils::numScreens();
+    return QApplication::desktop()->screenCount();
 }
 
 QRect DesktopCorona::screenGeometry(int id) const
@@ -197,7 +196,7 @@ QRect DesktopCorona::screenGeometry(int id) const
     }
 #endif
 
-    return Kephal::ScreenUtils::screenGeometry(id);
+    return QApplication::desktop()->screenGeometry(id);
 }
 
 QRegion DesktopCorona::availableScreenRegion(int id) const
@@ -215,7 +214,7 @@ QRegion DesktopCorona::availableScreenRegion(int id) const
 #endif
 
     if (id < 0) {
-        id = Kephal::ScreenUtils::primaryScreenId();
+        id = QApplication::desktop()->primaryScreen();
     }
 
     QRegion r(screenGeometry(id));
@@ -231,7 +230,7 @@ QRegion DesktopCorona::availableScreenRegion(int id) const
 QRect DesktopCorona::availableScreenRect(int id) const
 {
     if (id < 0) {
-        id = Kephal::ScreenUtils::primaryScreenId();
+        id = QApplication::desktop()->primaryScreen();
     }
 
     QRect r(screenGeometry(id));
@@ -282,7 +281,7 @@ int DesktopCorona::screenId(const QPoint &pos) const
     }
 #endif
 
-    return Kephal::ScreenUtils::screenId(pos);
+    return QApplication::desktop()->screenNumber(pos);
 }
 
 void DesktopCorona::evaluateScripts(const QStringList &scripts, bool isStartup)
@@ -345,10 +344,10 @@ Plasma::Applet *DesktopCorona::loadDefaultApplet(const QString &pluginName, Plas
     return applet;
 }
 
-void DesktopCorona::screenAdded(Kephal::Screen *s)
+void DesktopCorona::screenAdded(const DesktopTracker::Screen &screen)
 {
-    kDebug() << s->id();
-    checkScreen(s->id());
+    kDebug() << screen.id;
+    checkScreen(screen.id);
 }
 
 void DesktopCorona::populateAddPanelsMenu()
@@ -407,7 +406,7 @@ void DesktopCorona::addPanel(const QString &plugin)
     panel->showConfigurationInterface();
 
     //Fall back to the cursor position since we don't know what is the originating containment
-    const int screen = Kephal::ScreenUtils::screenId(QCursor::pos());
+    const int screen = QApplication::desktop()->screenNumber(QCursor::pos());
 
     panel->setScreen(screen);
 

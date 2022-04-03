@@ -20,6 +20,7 @@
 #include "panelview.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QGraphicsLinearLayout>
 #include <QPropertyAnimation>
 #include <QTimer>
@@ -41,9 +42,8 @@
 #include <Plasma/Theme>
 #include <Plasma/WindowEffects>
 
-#include <kephal/screens.h>
-
 #include "desktopcorona.h"
+#include "desktoptracker.h"
 #include "panelappletoverlay.h"
 #include "panelcontroller.h"
 #include "panelshadows.h"
@@ -261,12 +261,12 @@ PanelView::PanelView(Plasma::Containment *panel, int id, QWidget *parent)
 
     connect(this, SIGNAL(sceneRectAboutToChange()), this, SLOT(pinchContainmentToCurrentScreen()));
 
-    Kephal::Screens *screens = Kephal::Screens::self();
-    connect(screens, SIGNAL(screenResized(Kephal::Screen*,QSize,QSize)),
+    connect(QApplication::desktop(), SIGNAL(resized(int)),
             this, SLOT(pinchContainmentToCurrentScreen()));
-    connect(screens, SIGNAL(screenMoved(Kephal::Screen*,QPoint,QPoint)),
+    DesktopTracker *tracker = DesktopTracker::self();
+    connect(tracker, SIGNAL(screenMoved(DesktopTracker::Screen)),
             this, SLOT(updatePanelGeometry()));
-    connect(screens, SIGNAL(screenAdded(Kephal::Screen*)),
+    connect(tracker, SIGNAL(screenAdded(DesktopTracker::Screen)),
             this, SLOT(updateStruts()));
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(themeChanged()), Qt::QueuedConnection);
 }
@@ -968,7 +968,7 @@ void PanelView::updateStruts()
 
     if (m_visibilityMode == NormalPanel) {
         const QRect thisScreen = PlasmaApp::self()->corona()->screenGeometry(containment()->screen());
-        const QRect wholeScreen = Kephal::ScreenUtils::desktopGeometry();
+        const QRect wholeScreen = DesktopTracker::desktopGeometry();
 
         //Extended struts against a screen edge near to another screen are really harmful, so windows maximized under the panel is a lesser pain
         //TODO: force "windows can cover" in those cases?

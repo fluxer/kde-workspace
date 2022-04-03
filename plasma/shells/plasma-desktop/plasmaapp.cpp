@@ -65,8 +65,6 @@
 #include <Plasma/Wallpaper>
 #include <Plasma/WindowEffects>
 
-#include <kephal/screens.h>
-
 #include <plasmagenericshell/backgrounddialog.h>
 
 #include "appadaptor.h"
@@ -141,12 +139,11 @@ PlasmaApp::PlasmaApp()
             XCloseDisplay(dpy);
         }
 #endif
-        const QSize size = Kephal::ScreenUtils::screenSize(id);
+        const QSize size = QApplication::desktop()->screenGeometry(id).size();
         cacheSize += 4 * size.width() * size.height() / 1024;
     } else {
-        const int numScreens = Kephal::ScreenUtils::numScreens();
-        for (int i = 0; i < numScreens; i++) {
-            QSize size = Kephal::ScreenUtils::screenSize(i);
+        for (int i = 0; i < QApplication::desktop()->screenCount(); i++) {
+            QSize size = QApplication::desktop()->screenGeometry(i).size();
             cacheSize += 4 * size.width() * size.height() / 1024;
         }
     }
@@ -232,9 +229,9 @@ void PlasmaApp::setupDesktop()
     // this line initializes the corona.
     corona();
 
-    Kephal::Screens *screens = Kephal::Screens::self();
-    connect(screens, SIGNAL(screenRemoved(int)), SLOT(screenRemoved(int)));
-    connect(screens, SIGNAL(screenAdded(Kephal::Screen*)), SLOT(screenAdded(Kephal::Screen*)));
+    DesktopTracker *tracker = DesktopTracker::self();
+    connect(tracker, SIGNAL(screenRemoved(DesktopTracker::Screen)), SLOT(screenRemoved(DesktopTracker::Screen)));
+    connect(tracker, SIGNAL(screenAdded(DesktopTracker::Screen)), SLOT(screenAdded(DesktopTracker::Screen)));
 
     // free the memory possibly occupied by the background image of the
     // root window - login managers will typically set one
@@ -514,16 +511,16 @@ bool PlasmaApp::x11EventFilter(XEvent *event)
 }
 #endif
 
-void PlasmaApp::screenRemoved(int id)
+void PlasmaApp::screenRemoved(const DesktopTracker::Screen &screen)
 {
-    kDebug() << "@@@@" << id;
+    kDebug() << "@@@@" << screen.id;
     QMutableListIterator<DesktopView *> it(m_desktops);
     while (it.hasNext()) {
         DesktopView *view = it.next();
-        if (view->screen() == id) {
+        if (view->screen() == screen.id) {
             // the screen was removed, so we'll destroy the
             // corresponding view
-            kDebug() << "@@@@removing the view for screen" << id;
+            kDebug() << "@@@@removing the view for screen" << screen.id;
             view->setContainment(0);
             it.remove();
             delete view;
@@ -538,8 +535,8 @@ void PlasmaApp::screenRemoved(int id)
     NOTE: CURRENTLY UNSAFE DUE TO HOW KEPHAL (or rather, it seems, Qt?) PROCESSES EVENTS
           DURING XRANDR EVENTS. REVISIT IN 4.8!
           */
-    Kephal::Screen *primary = Kephal::Screens::self()->primaryScreen();
-    QList<Kephal::Screen *> screens = Kephal::Screens::self()->screens();
+    const DesktopTracker::Screen primary = DesktopTracker::self()->primaryScreen();
+    QList<DesktopTracker::Screen> screens = DesktopTracker::self()->screens();
     screens.removeAll(primary);
 
     // Now we process panels: if there is room on another screen for the panel,
@@ -548,12 +545,12 @@ void PlasmaApp::screenRemoved(int id)
     QMutableListIterator<PanelView*> pIt(m_panels);
     while (pIt.hasNext()) {
         PanelView *panel = pIt.next();
-        if (panel->screen() == id) {
-            Kephal::Screen *moveTo = 0;
+        if (panel->screen() == screen.id) {
+            DesktopTracker::Screen moveTo;
             if (canRelocatePanel(panel, primary)) {
                 moveTo = primary;
             } else {
-                foreach (Kephal::Screen *screen, screens) {
+                foreach (const DesktopTracker::Screen &screen, screens) {
                     if (canRelocatePanel(panel, screen)) {
                         moveTo = screen;
                         break;
@@ -561,8 +558,8 @@ void PlasmaApp::screenRemoved(int id)
                 }
             }
 
-            if (moveTo) {
-                panel->migrateTo(moveTo->id());
+            if (moveTo.id >= 0) {
+                panel->migrateTo(moveTo.id);
             } else {
                 pIt.remove();
                 delete panel;
@@ -576,7 +573,7 @@ void PlasmaApp::screenRemoved(int id)
     QMutableListIterator<PanelView*> pIt(m_panels);
     while (pIt.hasNext()) {
         PanelView *panel = pIt.next();
-        if (panel->screen() == id) {
+        if (panel->screen() == screen.id) {
             pIt.remove();
             delete panel;
         }
@@ -584,55 +581,55 @@ void PlasmaApp::screenRemoved(int id)
 #endif
 }
 
-void PlasmaApp::screenAdded(Kephal::Screen *screen)
+void PlasmaApp::screenAdded(const DesktopTracker::Screen &screen)
 {
     foreach (Plasma::Containment *containment, corona()->containments()) {
-        if (isPanelContainment(containment) && containment->screen() == screen->id()) {
+        if (isPanelContainment(containment) && containment->screen() == screen.id) {
             m_panelsWaiting << containment;
             m_panelViewCreationTimer.start();
         }
     }
 
     foreach (PanelView *view, m_panels) {
-        if (view->migratedFrom(screen->id())) {
-            view->migrateTo(screen->id());
+        if (view->migratedFrom(screen.id)) {
+            view->migrateTo(screen.id);
         }
     }
 }
 
-bool PlasmaApp::canRelocatePanel(PanelView * view, Kephal::Screen *screen)
+bool PlasmaApp::canRelocatePanel(PanelView * view, const DesktopTracker::Screen &screen)
 {
-    if (!screen || !view->containment()) {
+    if (!view->containment()) {
         return false;
     }
 
     QRect newGeom = view->geometry();
     switch (view->location()) {
         case Plasma::TopEdge:
-            newGeom.setY(screen->geom().y());
+            newGeom.setY(screen.geom.y());
             newGeom.setX(view->offset());
             break;
         case Plasma::BottomEdge:
-            newGeom.setY(screen->geom().bottom() - newGeom.height());
+            newGeom.setY(screen.geom.bottom() - newGeom.height());
             newGeom.setX(view->offset());
             break;
         case Plasma::LeftEdge:
-            newGeom.setX(screen->geom().left());
+            newGeom.setX(screen.geom.left());
             newGeom.setY(view->offset());
             break;
         case Plasma::RightEdge:
-            newGeom.setX(screen->geom().right() - newGeom.width());
+            newGeom.setX(screen.geom.right() - newGeom.width());
             newGeom.setY(view->offset());
             break;
         default:
             break;
     }
 
-    kDebug() << "testing:" << screen->id() << view << view->geometry() << view->location() << newGeom;
+    kDebug() << "testing:" << screen.id << view << view->geometry() << view->location() << newGeom;
     foreach (PanelView *pv, m_panels) {
         kDebug() << pv << pv->screen() << pv->screen() << pv->location() << pv->geometry();
         if (pv != view &&
-            pv->screen() == screen->id() &&
+            pv->screen() == screen.id &&
             pv->location() == view->location() &&
             pv->geometry().intersects(newGeom)) {
             return false;
@@ -828,8 +825,8 @@ void PlasmaApp::relocatePanels()
 {
     // we go through relocatables last so that all other panels can be set up first,
     // preventing panel creation ordering to trip up the canRelocatePanel algorithm
-    Kephal::Screen *primary = Kephal::Screens::self()->primaryScreen();
-    QList<Kephal::Screen *> screens = Kephal::Screens::self()->screens();
+    const DesktopTracker::Screen primary = DesktopTracker::self()->primaryScreen();
+    QList<DesktopTracker::Screen> screens = DesktopTracker::self()->screens();
     screens.removeAll(primary);
 
     foreach (QWeakPointer<Plasma::Containment> c, m_panelRelocationCandidates) {
@@ -838,12 +835,12 @@ void PlasmaApp::relocatePanels()
             continue;
         }
 
-        Kephal::Screen *moveTo = 0;
+        DesktopTracker::Screen moveTo;
         PanelView *panelView = createPanelView(containment);
         if (canRelocatePanel(panelView, primary)) {
             moveTo = primary;
         } else {
-            foreach (Kephal::Screen *screen, screens) {
+            foreach (const DesktopTracker::Screen &screen, screens) {
                 if (canRelocatePanel(panelView, screen)) {
                     moveTo = screen;
                     break;
@@ -851,8 +848,8 @@ void PlasmaApp::relocatePanels()
             }
         }
 
-        if (moveTo) {
-            panelView->migrateTo(moveTo->id());
+        if (moveTo.id >= 0) {
+            panelView->migrateTo(moveTo.id);
         } else {
             m_panels.removeAll(panelView);
             delete panelView;

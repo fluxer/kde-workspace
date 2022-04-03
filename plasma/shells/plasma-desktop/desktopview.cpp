@@ -37,8 +37,6 @@
 #include <Plasma/Wallpaper>
 #include <Plasma/Theme>
 
-#include <kephal/screens.h>
-
 #include "desktopcorona.h"
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
@@ -90,11 +88,11 @@ DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *pare
         setGeometry(geom);
     }
 
-    Kephal::Screens *screens = Kephal::Screens::self();
-    connect(screens, SIGNAL(screenResized(Kephal::Screen*,QSize,QSize)),
-            this, SLOT(screenResized(Kephal::Screen*)));
-    connect(screens, SIGNAL(screenMoved(Kephal::Screen*,QPoint,QPoint)),
-            this, SLOT(screenMoved(Kephal::Screen*)));
+    DesktopTracker *tracker = DesktopTracker::self();
+    connect(tracker, SIGNAL(screenResized(DesktopTracker::Screen)),
+            this, SLOT(screenResized(DesktopTracker::Screen)));
+    connect(tracker, SIGNAL(screenMoved(DesktopTracker::Screen)),
+            this, SLOT(screenMoved(DesktopTracker::Screen)));
 }
 
 DesktopView::~DesktopView()
@@ -106,17 +104,17 @@ void DesktopView::checkDesktopAffiliation()
     KWindowSystem::setOnAllDesktops(winId(), true);
 }
 
-void DesktopView::screenResized(Kephal::Screen *s)
+void DesktopView::screenResized(const DesktopTracker::Screen &s)
 {
-    if (s->id() == screen()) {
+    if (s.id == screen()) {
         kDebug() << screen();
         adjustSize();
     }
 }
 
-void DesktopView::screenMoved(Kephal::Screen *s)
+void DesktopView::screenMoved(const DesktopTracker::Screen &s)
 {
-    if (s->id() == screen()) {
+    if (s.id == screen()) {
         kDebug() << screen();
         adjustSize();
     }

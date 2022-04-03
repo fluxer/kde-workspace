@@ -26,14 +26,12 @@
 #include <QMenu>
 #include <QAction>
 
+#include "desktoptracker.h"
+
 namespace Plasma
 {
     class Applet;
 } // namespace Plasma
-
-namespace Kephal {
-    class Screen;
-} // namespace Kephal
 
 /**
  * @short A Corona with desktop-y considerations
@@ -72,7 +70,7 @@ public Q_SLOTS:
     void evaluateScripts(const QStringList &scripts, bool isStartup = true);
 
 protected Q_SLOTS:
-    void screenAdded(Kephal::Screen *s);
+    void screenAdded(const DesktopTracker::Screen &screen);
     void saveDefaultSetup();
     void printScriptError(const QString &error);
     void printScriptMessage(const QString &error);
