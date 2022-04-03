@@ -25,7 +25,7 @@
 
 namespace {
     QByteArray compute_uuid(const KUrl::List& _urls, KUrl::MetaDataMap _metaData, bool _cut ) {
-        QCryptographicHash hash(KlipperHashAlhorithm);
+        QCryptographicHash hash(KlipperHashAlgorithm);
         foreach(const KUrl& url, _urls) {
             hash.addData(url.toEncoded());
             hash.addData("\0", 1); // Use binary zero as that is not a valid path character

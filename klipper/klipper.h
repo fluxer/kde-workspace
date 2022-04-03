@@ -35,9 +35,9 @@
 #include "urlgrabber.h"
 
 #if QT_VERSION >= 0x041200
-static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::KAT;
+static const QCryptographicHash::Algorithm KlipperHashAlgorithm = QCryptographicHash::KAT;
 #else
-static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::Sha1;
+static const QCryptographicHash::Algorithm KlipperHashAlgorithm = QCryptographicHash::Sha1;
 #endif
 
 class KAction;

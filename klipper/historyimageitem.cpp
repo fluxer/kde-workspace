@@ -30,7 +30,7 @@ namespace {
         QByteArray buffer;
         QDataStream out(&buffer, QIODevice::WriteOnly);
         out << data;
-        return QCryptographicHash::hash(buffer, KlipperHashAlhorithm);
+        return QCryptographicHash::hash(buffer, KlipperHashAlgorithm);
     }
 
 }

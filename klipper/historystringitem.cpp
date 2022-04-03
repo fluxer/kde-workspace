@@ -23,7 +23,7 @@
 #include <QCryptographicHash>
 
 HistoryStringItem::HistoryStringItem( const QString& data )
-    : HistoryItem(QCryptographicHash::hash(data.toUtf8(), KlipperHashAlhorithm))
+    : HistoryItem(QCryptographicHash::hash(data.toUtf8(), KlipperHashAlgorithm))
     , m_data( data )
 {
 

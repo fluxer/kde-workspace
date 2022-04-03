@@ -385,7 +385,7 @@ bool Klipper::loadHistory() {
     QByteArray data;
     QByteArray hash;
     file_stream >> hash >> data;
-    if( QCryptographicHash::hash( data, KlipperHashAlhorithm ).toHex() != hash ) {
+    if( QCryptographicHash::hash( data, KlipperHashAlgorithm ).toHex() != hash ) {
         kWarning() << failed_load_warning << ": " << "Hash does not match" ;
         return false;
     }
@@ -451,7 +451,7 @@ void Klipper::saveHistory(bool empty) {
         }
     }
 
-    QByteArray hash = QCryptographicHash::hash( data, KlipperHashAlhorithm ).toHex();
+    QByteArray hash = QCryptographicHash::hash( data, KlipperHashAlgorithm ).toHex();
     QDataStream ds ( &history_file );
     ds << hash << data;
 }
