@@ -19,9 +19,9 @@
 
 #include "desktopscriptengine.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <QCursor>
-
-#include <kephal/screens.h>
 
 #include <plasmagenericshell/scripting/containment.h>
 #include <plasmagenericshell/scripting/appinterface.h>
@@ -52,9 +52,8 @@ int DesktopScriptEngine::defaultPanelScreen() const
 {
     if (m_startup) {
         return ScriptEngine::defaultPanelScreen();
-    } else {
-        return Kephal::ScreenUtils::screenId(QCursor::pos());
     }
+    return QApplication::desktop()->screenNumber(QCursor::pos());
 }
 
 }

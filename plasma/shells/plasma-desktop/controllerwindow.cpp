@@ -22,6 +22,7 @@
 #include "controllerwindow.h"
 
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QBoxLayout>
 #include <QPainter>
 
@@ -39,8 +40,6 @@
 #include "plasmaapp.h"
 #include "widgetsexplorer/widgetexplorer.h"
 #include "panelshadows.h"
-
-#include <kephal/screens.h>
 
 ControllerWindow::ControllerWindow(QWidget* parent)
    : QWidget(parent),
@@ -76,9 +75,7 @@ ControllerWindow::ControllerWindow(QWidget* parent)
 
     connect(KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)), this, SLOT(closeIfNotFocussed()));
     connect(m_background, SIGNAL(repaintNeeded()), SLOT(backgroundChanged()));
-    Kephal::Screens *screens = Kephal::Screens::self();
-    connect(screens, SIGNAL(screenResized(Kephal::Screen*,QSize,QSize)),
-            this, SLOT(adjustAndSetMaxSize()));
+    connect(QApplication::desktop(), SIGNAL(resized(int)), this, SLOT(adjustAndSetMaxSize()));
     m_adjustViewTimer = new QTimer(this);
     m_adjustViewTimer->setSingleShot(true);
     connect(m_adjustViewTimer, SIGNAL(timeout()), this, SLOT(syncToGraphicsWidget()));

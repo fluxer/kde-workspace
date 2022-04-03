@@ -36,11 +36,6 @@ namespace Plasma
     class Dialog;
 } // namespace Plasma
 
-namespace Kephal
-{
-    class Screen;
-}
-
 class PanelShadows;
 
 class ControllerWindow : public QWidget
