@@ -18,6 +18,7 @@
 #include "config-workspace.h"
 
 // for the callbacks
+static const int gliblooppolltime = 200;
 static GMainLoop *glibloop = NULL;
 
 static QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
@@ -27,6 +28,7 @@ class KGreeter : public QMainWindow
     Q_OBJECT
 public:
     explicit KGreeter(QWidget *parent = nullptr);
+    ~KGreeter();
 
     QByteArray getUser() const;
     QByteArray getPass() const;
@@ -41,6 +43,7 @@ public:
     // QMainWindow reimplementations
 protected:
     void paintEvent(QPaintEvent *event) final;
+    void timerEvent(QTimerEvent *event) final;
 
 private Q_SLOTS:
     void slotSuspend();
@@ -65,11 +68,13 @@ private:
     QList<QAction*> m_layoutactions;
     QImage m_background;
     QImage m_rectangle;
+    int m_timerid;
 };
 
 KGreeter::KGreeter(QWidget *parent)
     : QMainWindow(parent),
-    m_ldmgreeter(nullptr)
+    m_ldmgreeter(nullptr),
+    m_timerid(0)
 {
 #if !defined(GLIB_VERSION_2_36)
     g_type_init();
@@ -81,6 +86,8 @@ KGreeter::KGreeter(QWidget *parent)
     m_rectangle = QImage(kgreetersettings.value("greeter/rectangle").toString());
 
     m_ldmgreeter = lightdm_greeter_new();
+
+    m_timerid = startTimer(gliblooppolltime);
 
     g_signal_connect(
         m_ldmgreeter, LIGHTDM_GREETER_SIGNAL_SHOW_PROMPT,
@@ -200,6 +207,11 @@ KGreeter::KGreeter(QWidget *parent)
     }
 }
 
+KGreeter::~KGreeter()
+{
+    killTimer(m_timerid);
+}
+
 void KGreeter::paintEvent(QPaintEvent *event)
 {
     if (!m_background.isNull()) {
@@ -219,6 +231,14 @@ void KGreeter::paintEvent(QPaintEvent *event)
     }
 
     QMainWindow::paintEvent(event);
+}
+
+void KGreeter::timerEvent(QTimerEvent *event)
+{
+    if (event->timerId() == m_timerid) {
+        g_main_context_iteration(g_main_loop_get_context(glibloop), false);
+    }
+    QMainWindow::timerEvent(event);
 }
 
 QByteArray KGreeter::getUser() const
@@ -280,9 +300,7 @@ void KGreeter::authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldm
     if (!lightdm_greeter_get_is_authenticated(ldmgreeter) ||
         !lightdm_greeter_start_session_sync(ldmgreeter, kgreetersession.constData(), &gliberror)) {
         kgreeter->statusBar()->showMessage(i18n("Failed to authenticate or start session: %1", gliberror->message));
-        g_main_loop_quit(glibloop);
     } else {
-        g_main_loop_quit(glibloop);
         qApp->quit();
     }
 }
@@ -407,8 +425,6 @@ void KGreeter::slotLogin()
 
     g_autoptr(GError) gliberror = NULL;
     lightdm_greeter_authenticate(m_ldmgreeter, kgreeterusername.constData(), &gliberror);
-
-    g_main_loop_run(glibloop);
 }
 
 void KGreeter::setUser(const QString &user)
