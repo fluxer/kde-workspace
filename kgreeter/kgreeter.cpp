@@ -36,6 +36,8 @@ public:
 
     LightDMGreeter* getGreeter() const;
 
+    void clearPass();
+
     static void showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, LightDMPromptType ldmtype, gpointer ldmptr);
     static void authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldmptr);
     static void showMessageCb(LightDMGreeter *ldmgreeter, const gchar *ldmtext, LightDMMessageType ldmtype, gpointer ldmptr);
@@ -271,6 +273,16 @@ LightDMGreeter * KGreeter::getGreeter() const
     return m_ldmgreeter;
 }
 
+void KGreeter::clearPass()
+{
+    m_ui.passedit->clear();
+    if (m_ui.useredit->isVisible()) {
+        m_ui.useredit->setFocus();
+    } else {
+        m_ui.passedit->setFocus();
+    }
+}
+
 void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, LightDMPromptType ldmtype, gpointer ldmptr)
 {
     // qDebug() << Q_FUNC_INFO;
@@ -299,12 +311,14 @@ void KGreeter::authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldm
 
     if (!lightdm_greeter_get_is_authenticated(ldmgreeter)) {
         kgreeter->statusBar()->showMessage(i18n("Failed to authenticate"));
+        kgreeter->clearPass();
         return;
     }
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_greeter_start_session_sync(ldmgreeter, kgreetersession.constData(), &gliberror)) {
         kgreeter->statusBar()->showMessage(i18n("Failed to start session: %1", KGreeter::glibErrorString(gliberror)));
+        kgreeter->clearPass();
         return;
     }
 
