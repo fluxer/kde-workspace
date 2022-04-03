@@ -33,10 +33,9 @@ public:
 
         int id;
         QRect geom;
-        QPoint position;
 
         bool operator==(const Screen &other) const
-        { return id == other.id && geom == other.geom && position == other.position; }
+        { return id == other.id && geom == other.geom; }
 
         bool operator<(const Screen &other) const
         { return id < other.id; }
@@ -59,7 +58,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotResized(int screennumber);
-    void slotScreenCountChanged(int count);
+    void slotScreenCountChanged(int screencount);
 
 private:
     QList<DesktopTracker::Screen> m_screens;

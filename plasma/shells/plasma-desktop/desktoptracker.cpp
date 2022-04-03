@@ -36,7 +36,6 @@ DesktopTracker::DesktopTracker(QObject *parent)
         DesktopTracker::Screen screen;
         screen.id = i;
         screen.geom = QApplication::desktop()->screenGeometry(i);
-        screen.position = screen.geom.topLeft();
         m_screens.append(screen);
     }
     qStableSort(m_screens);
@@ -81,14 +80,13 @@ void DesktopTracker::slotResized(int screennumber)
     for (int i = 0; i < m_screens.size(); i++) {
         DesktopTracker::Screen screen = m_screens.at(i);
         if (screen.id == screennumber) {
-            const QPoint oldposition = screen.position;
-            screen.geom = QApplication::desktop()->screenGeometry(screen.id);
-            screen.position = screen.geom.topLeft();
+            const QPoint oldposition = screen.geom.topLeft();
+            screen.geom = QApplication::desktop()->screenGeometry(screennumber);
             m_screens.removeAt(i);
             m_screens.append(screen);
             qStableSort(m_screens);
             emit screenResized(screen);
-            if (oldposition != screen.position) {
+            if (oldposition != screen.geom.topLeft()) {
                 emit screenMoved(screen);
             }
             return;
@@ -97,20 +95,19 @@ void DesktopTracker::slotResized(int screennumber)
     kDebug() << "Untracked screen resized" << screennumber;
 }
 
-void DesktopTracker::slotScreenCountChanged(int count)
+void DesktopTracker::slotScreenCountChanged(int screencount)
 {
     // this is bogus but it is how kephal did it
-    for (int i = m_screens.size(); i < count; i++) {
+    for (int i = m_screens.size(); i < screencount; i++) {
         DesktopTracker::Screen screen;
         screen.id = i;
         screen.geom = QApplication::desktop()->screenGeometry(i);
-        screen.position = screen.geom.topLeft();
         m_screens.append(screen);
         qStableSort(m_screens);
         emit screenAdded(screen);
     }
 
-    while (m_screens.size() > count) {
+    while (m_screens.size() > screencount) {
         DesktopTracker::Screen screen = m_screens.takeLast();
         emit screenRemoved(screen);
     }
