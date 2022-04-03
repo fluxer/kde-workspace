@@ -21,24 +21,31 @@
 #ifndef KLIPPER_H
 #define KLIPPER_H
 
-#include <QtCore/qdatetime.h>
-#include <QtCore/QTimer>
-#include <QtGui/QClipboard>
+#include <QTime>
+#include <QAction>
+#include <QMenu>
+#include <QMimeData>
+#include <QDateTime>
+#include <QTimer>
+#include <QClipboard>
+#include <QCryptographicHash>
 
 #include <KGlobal>
 
 #include "urlgrabber.h"
+
+#if QT_VERSION >= 0x041200
+static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::KAT;
+#else
+static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::Sha1;
+#endif
 
 class KAction;
 class KToggleAction;
 class KAboutData;
 class KActionCollection;
 class URLGrabber;
-#include <QTime>
 class History;
-#include <QAction>
-#include <QMenu>
-#include <QMimeData>
 class HistoryItem;
 class KlipperSessionManager;
 

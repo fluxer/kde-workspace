@@ -16,6 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "klipper.h"
 #include "historyurlitem.h"
 
 #include <QtCore/QMimeData>
@@ -23,7 +25,7 @@
 
 namespace {
     QByteArray compute_uuid(const KUrl::List& _urls, KUrl::MetaDataMap _metaData, bool _cut ) {
-        QCryptographicHash hash(QCryptographicHash::Sha1);
+        QCryptographicHash hash(KlipperHashAlhorithm);
         foreach(const KUrl& url, _urls) {
             hash.addData(url.toEncoded());
             hash.addData("\0", 1); // Use binary zero as that is not a valid path character

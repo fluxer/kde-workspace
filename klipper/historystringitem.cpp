@@ -16,12 +16,14 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
+
+#include "klipper.h"
 #include "historystringitem.h"
 
 #include <QCryptographicHash>
 
 HistoryStringItem::HistoryStringItem( const QString& data )
-    : HistoryItem(QCryptographicHash::hash(data.toUtf8(), QCryptographicHash::Sha1))
+    : HistoryItem(QCryptographicHash::hash(data.toUtf8(), KlipperHashAlhorithm))
     , m_data( data )
 {
 

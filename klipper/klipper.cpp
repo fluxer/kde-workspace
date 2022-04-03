@@ -63,12 +63,6 @@
 
 //#define NOISY_KLIPPER
 
-#if QT_VERSION >= 0x041200
-static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::KAT;
-#else
-static const QCryptographicHash::Algorithm KlipperHashAlhorithm = QCryptographicHash::Sha1;
-#endif
-
 namespace {
     /**
      * Use this when manipulating the clipboard
