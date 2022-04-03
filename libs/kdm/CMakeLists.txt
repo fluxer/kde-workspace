@@ -1,6 +1,3 @@
-
-include_directories( ${CMAKE_SOURCE_DIR}/kdm/kfrontend  )
-
 ########### next target ###############
 
 set(kgreet_classic_PART_SRCS kgreet_classic.cpp )

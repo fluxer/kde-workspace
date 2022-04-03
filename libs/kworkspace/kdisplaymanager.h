@@ -57,8 +57,6 @@ public:
     bool switchVT(int vt);
     void lockSwitchVT(int vt);
 
-    bool bootOptions(QStringList &opts, int &dflt, int &curr);
-
     static QString sess2Str(const SessEnt &se);
     static void sess2Str2(const SessEnt &se, QString &user, QString &loc);
 

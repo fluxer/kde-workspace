@@ -568,35 +568,6 @@ KDisplayManager::shutdown(KWorkSpace::ShutdownType shutdownType,
     }
     exec(cmd.data());
 }
-
-bool
-KDisplayManager::bootOptions(QStringList &opts, int &defopt, int &current)
-{
-    if (DMType != NewKDM)
-        return false;
-
-    QByteArray re;
-    if (!exec("listbootoptions\n", re))
-        return false;
-
-    opts = QString::fromLocal8Bit(re.data()).split('\t', QString::SkipEmptyParts);
-    if (opts.size() < 4)
-        return false;
-
-    bool ok;
-    defopt = opts[2].toInt(&ok);
-    if (!ok)
-        return false;
-    current = opts[3].toInt(&ok);
-    if (!ok)
-        return false;
-
-    opts = opts[1].split(' ', QString::SkipEmptyParts);
-    for (QStringList::Iterator it = opts.begin(); it != opts.end(); ++it)
-        (*it).replace("\\s", " ");
-
-    return true;
-}
 #endif // KDM_NO_SHUTDOWN
 
 // This only tells KDM to not auto-re-login upon session crash
