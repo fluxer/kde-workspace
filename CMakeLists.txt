@@ -340,8 +340,6 @@ add_subdirectory(kstyles)
 
 # imported from kde-runtime and other sub-projects
 add_subdirectory(menu)
-add_subdirectory(kwalletd)
-add_subdirectory(kwalletmanager)
 add_subdirectory(knotify)
 add_subdirectory(kuiserver)
 add_subdirectory(soliduiserver)
@@ -358,7 +356,6 @@ if (Q_WS_X11)
     add_subdirectory(kstart)
 endif (Q_WS_X11)
 # Background processes
-add_subdirectory(kpasswdserver)
 add_subdirectory(kdontchangethehostname)
 add_subdirectory(kglobalaccel)
 add_subdirectory(ktimezoned)
