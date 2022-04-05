@@ -27,7 +27,6 @@
 #include <cstring>
 #include <unistd.h>
 
-#include <QtCore/QCoreApplication>
 #include <QtCore/QBuffer>
 #include <QtCore/QByteArray>
 #include <QtCore/QDir>
@@ -36,6 +35,7 @@
 #include <QtCore/QString>
 #include <QtCore/QVarLengthArray>
 #include <QtCore/QDateTime>
+#include <QtGui/QApplication>
 
 #include <kapplication.h>
 #include <kuser.h>
@@ -69,7 +69,7 @@ extern "C"
 {
     int KDE_EXPORT kdemain( int argc, char **argv )
     {
-        QCoreApplication app(argc, argv);
+        QApplication app(argc, argv);
         KComponentData componentData( "kio_sftp" );
         (void) KGlobal::locale();
 
