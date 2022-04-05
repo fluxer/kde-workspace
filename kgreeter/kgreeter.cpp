@@ -196,6 +196,7 @@ KGreeter::KGreeter(QWidget *parent)
     connect(m_ui.actionPoweroff, SIGNAL(triggered()), this, SLOT(slotPoweroff()));
     connect(m_ui.actionReboot, SIGNAL(triggered()), this, SLOT(slotReboot()));
 
+    connect(m_ui.passedit, SIGNAL(returnPressed()), this, SLOT(slotLogin()));
     connect(m_ui.loginbutton, SIGNAL(pressed()), this, SLOT(slotLogin()));
 
     if (lightdm_greeter_get_hide_users_hint(m_ldmgreeter)
