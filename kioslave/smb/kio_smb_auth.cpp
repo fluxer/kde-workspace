@@ -92,7 +92,6 @@ void SMBSlave::auth_smbc_get_data(const char *server,const char *share,
 
     info.username = s_username;
     info.password = s_password;
-    info.verifyPath = true;
 
     kDebug(KIO_SMB) << "libsmb-auth-callback URL:" << info.url;
 
@@ -133,7 +132,6 @@ bool SMBSlave::checkPassword(SMBUrl &url)
     if (share.at(0) == '/')
         share = share.mid(1);
     info.url.setPath('/' + share);
-    info.verifyPath = true;
     info.keepPassword = true;
 
     if ( share.isEmpty() )

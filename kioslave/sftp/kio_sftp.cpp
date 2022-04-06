@@ -221,7 +221,6 @@ int sftpProtocol::auth_callback(const char *prompt, char *buf, size_t len,
     mPublicKeyAuthInfo->keepPassword = false; // don't save passwords for public key,
                                 // that's the task of ssh-agent.
     mPublicKeyAuthInfo->setExtraField(QLatin1String("hide-username-line"), true);
-    mPublicKeyAuthInfo->setModified(false);
 
     kDebug(KIO_SFTP_DB) << "Entering authentication callback, prompt=" << mPublicKeyAuthInfo->prompt;
 
@@ -776,7 +775,7 @@ void sftpProtocol::openConnection()
                 clearPubKeyAuthInfo();
                 error(KIO::ERR_COULD_NOT_LOGIN, i18n("Authentication failed."));
                 return;
-            } else if (rc != SSH_AUTH_DENIED || !mPublicKeyAuthInfo || !mPublicKeyAuthInfo->isModified()) {
+            } else if (rc != SSH_AUTH_DENIED || !mPublicKeyAuthInfo) {
                 clearPubKeyAuthInfo();
                 break;
             }
@@ -825,7 +824,6 @@ void sftpProtocol::openConnection()
         for(;;) {
             if (!isFirstLoginAttempt || info.password.isEmpty()) {
                 info.keepPassword = true; // make the "keep Password" check box visible to the user.
-                info.setModified(false);
 
                 QString username (info.username);
                 const QString errMsg(isFirstLoginAttempt ? QString() : i18n("Incorrect username or password"));
