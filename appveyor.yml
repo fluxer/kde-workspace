@@ -28,7 +28,7 @@ build_script:
         libusb-1.0-0-dev libssh-dev libsmbclient-dev libdrm-dev libraw1394-dev \
         libsensors4-dev libgles2-mesa-dev libpam0g-dev libpci-dev libopenexr-dev \
         liblzma-dev libbz2-dev libgphoto2-dev liblightdm-gobject-1-dev \
-        libdbusmenu-katie ccache
+        libgeoclue-2-dev libdbusmenu-katie ccache
 
     export PATH="/usr/lib/ccache/:$PATH"
 
