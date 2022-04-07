@@ -60,3 +60,15 @@ kde4_add_plugin(plasma-geolocation-ipinfo ${plasma_geolocation_ipinfo_SRCS})
 target_link_libraries(plasma-geolocation-ipinfo plasma-geolocation-interface)
 install(FILES plasma-geolocation-ipinfo.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 install(TARGETS plasma-geolocation-ipinfo DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+
+# -------------------------------------------------------------------------------------------------
+
+if (GEOCLUE_FOUND)
+    include_directories(${GEOCLUE_INCLUDES})
+
+    set(plasma_geolocation_geoclue_SRCS location_geoclue.cpp)
+    kde4_add_plugin(plasma-geolocation-geoclue ${plasma_geolocation_geoclue_SRCS})
+    target_link_libraries(plasma-geolocation-geoclue plasma-geolocation-interface ${GEOCLUE_LIBRARIES})
+    install(FILES plasma-geolocation-geoclue.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+    install(TARGETS plasma-geolocation-geoclue DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+endif()

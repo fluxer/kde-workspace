@@ -261,6 +261,14 @@ set_package_properties(LightDM PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
+macro_optional_find_package(GeoClue)
+set_package_properties(GeoClue PROPERTIES
+    DESCRIPTION "D-Bus service that provides location information"
+    URL "https://gitlab.freedesktop.org/geoclue/geoclue/wikis/home"
+    PURPOSE "Geo location via GeoClue"
+    TYPE OPTIONAL
+)
+
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE
