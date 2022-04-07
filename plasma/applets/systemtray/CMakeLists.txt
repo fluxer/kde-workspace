@@ -2,7 +2,6 @@ project(plasma-systemtray)
 
 set(data_install_dir "plasma/packages/org.kde.systemtray")
 
-cmake_policy(SET CMP0005 NEW)
 add_definitions(-DSYSTEMTRAY_DATA_INSTALL_DIR="${data_install_dir}")
 
 set(systemtray_SRCS
