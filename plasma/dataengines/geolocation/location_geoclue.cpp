@@ -50,19 +50,19 @@ void GeoClue::update()
         return;
     }
 
-    GClueLocation* gcluelocaiton = gclue_simple_get_location(gcluesimple);
-    if (!gcluelocaiton) {
+    GClueLocation* gcluelocation = gclue_simple_get_location(gcluesimple);
+    if (!gcluelocation) {
         kWarning() << "Null GClueLocation pointer";
         return;
     }
 
-    // qDebug() << Q_FUNC_INFO << gclue_location_get_description(gcluelocaiton);
-    // qDebug() << Q_FUNC_INFO << gclue_location_get_accuracy(gcluelocaiton);
-    // qDebug() << Q_FUNC_INFO << gclue_location_get_latitude(gcluelocaiton)
-    // qDebug() << Q_FUNC_INFO << gclue_location_get_longitude(gcluelocaiton);
-    enginedata["accuracy"] = qRound(qreal(gclue_location_get_accuracy(gcluelocaiton)));
-    enginedata["latitude"] = qreal(gclue_location_get_latitude(gcluelocaiton));
-    enginedata["longitude"] = qreal(gclue_location_get_longitude(gcluelocaiton));
+    // qDebug() << Q_FUNC_INFO << gclue_location_get_description(gcluelocation);
+    // qDebug() << Q_FUNC_INFO << gclue_location_get_accuracy(gcluelocation);
+    // qDebug() << Q_FUNC_INFO << gclue_location_get_latitude(gcluelocation)
+    // qDebug() << Q_FUNC_INFO << gclue_location_get_longitude(gcluelocation);
+    enginedata["accuracy"] = qRound(qreal(gclue_location_get_accuracy(gcluelocation)));
+    enginedata["latitude"] = qreal(gclue_location_get_latitude(gcluelocation));
+    enginedata["longitude"] = qreal(gclue_location_get_longitude(gcluelocation));
     setData(enginedata);
 }
 
