@@ -38,8 +38,7 @@ WicdStatus::WicdStatus(QObject *parent)
 {
     qDBusRegisterMetaType<WicdConnectionInfo>();
     if (isSupported()) {
-        QDBusConnection::systemBus().connect(WICD_DBUS_SERVICE, WICD_DAEMON_DBUS_PATH, WICD_DAEMON_DBUS_INTERFACE,
-            "StatusChanged", this, SLOT(wicdStateChanged()));
+        connect(&m_wicd, SIGNAL(StatusChanged()), this, SLOT(wicdStateChanged()));
         wicdStateChanged();
     }
 }

@@ -38,10 +38,7 @@
 
 #include "systemstatusinterface.h"
 
-#ifdef NM_BACKEND_ENABLED
 #include "networkmanagerstatus.h"
-#endif
-
 #include "wicdstatus.h"
 #include "connmanstatus.h"
 #include "toolkitstatus.h"
@@ -282,9 +279,7 @@ void NetworkStatusModule::backendUnregistered()
 void NetworkStatusModule::init()
 {
     if (backends.isEmpty()) {
-#ifdef NM_BACKEND_ENABLED
         backends << new NetworkManagerStatus( this );
-#endif
         backends << new WicdStatus( this );
         backends << new ConnmanStatus( this );
         backends << new ToolkitStatus( this );

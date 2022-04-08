@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 2010 Klarälvdalens Datakonsult AB,
+    Copyright (c) 2010 Klarlvdalens Datakonsult AB,
                        a KDAB Group company <info@kdab.com>
     Author: Kevin Ottens <kevin.ottens@kdab.com>
 
@@ -32,20 +32,19 @@ class NetworkManagerStatus : public SystemStatusInterface
 {
     Q_OBJECT
 public:
-    NetworkManagerStatus( QObject *parent = 0 );
+    NetworkManagerStatus(QObject *parent = 0);
 
-    /* reimp */ Solid::Networking::Status status() const;
-    /* reimp */ bool isSupported() const;
-    /* reimp */ QString serviceName() const;
+    // reimplementations
+    Solid::Networking::Status status() const final;
+    bool isSupported() const final;
+    QString serviceName() const final;
 
 private Q_SLOTS:
-    void nmStateChanged( uint nmState );
+    void nmStateChanged(uint nmState);
 
 private:
-    static Solid::Networking::Status convertNmState( uint nmState );
-
     Solid::Networking::Status m_status;
-    QDBusInterface m_manager;
+    QDBusInterface m_nm;
 };
 
 #endif

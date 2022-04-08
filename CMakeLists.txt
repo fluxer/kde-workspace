@@ -245,14 +245,6 @@ set_package_properties(Qalculate PROPERTIES
     PURPOSE "Needed to enable advanced features of the calculator runner"
 )
 
-macro_optional_find_package(NetworkManager)
-set_package_properties(NetworkManager PROPERTIES
-    DESCRIPTION "The NetworkManager headers"
-    URL "http://projects.gnome.org/NetworkManager"
-    TYPE OPTIONAL
-    PURPOSE "Needed for kded's networkstatus module"
-)
-
 macro_optional_find_package(LightDM)
 set_package_properties(LightDM PROPERTIES
     DESCRIPTION "Cross-desktop display manager"

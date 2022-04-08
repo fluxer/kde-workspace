@@ -37,8 +37,7 @@ ConnmanStatus::ConnmanStatus(QObject *parent)
     m_connman(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE, QDBusConnection::systemBus())
 {
     if (isSupported()) {
-        QDBusConnection::systemBus().connect(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE,
-            "PropertyChanged", this, SLOT(connmanStateChanged()));
+        connect(&m_connman, SIGNAL(PropertyChanged()), this, SLOT(connmanStateChanged()));
         connmanStateChanged();
     }
 }

@@ -1,6 +1,6 @@
 /*  This file is part of the KDE project
 
-    Copyright (c) 2010 Klar‰lvdalens Datakonsult AB,
+    Copyright (c) 2010 Klar√§lvdalens Datakonsult AB,
                        a KDAB Group company <info@kdab.com>
     Author: Kevin Ottens <kevin.ottens@kdab.com>
 
@@ -28,28 +28,23 @@
 
 #include <QtDBus/QDBusReply>
 
-#include <NetworkManager.h>
+#include <KDebug>
 
-#if !defined(NM_CHECK_VERSION)
-    #define NM_CHECK_VERSION(x,y,z) 0
-#endif
+#define NM_DBUS_SERVICE "org.freedesktop.NetworkManager"
+#define NM_DBUS_PATH "/org/freedesktop/NetworkManager"
+#define NM_DBUS_INTERFACE "org.freedesktop.NetworkManager"
 
-NetworkManagerStatus::NetworkManagerStatus( QObject *parent )
-    : SystemStatusInterface( parent ),
-    m_status( Solid::Networking::Unknown ),
-    m_manager( NM_DBUS_SERVICE,
-               NM_DBUS_PATH,
-               NM_DBUS_INTERFACE,
-               QDBusConnection::systemBus() )
+NetworkManagerStatus::NetworkManagerStatus(QObject *parent)
+    : SystemStatusInterface(parent),
+    m_status(Solid::Networking::Unknown),
+    m_nm(NM_DBUS_SERVICE, NM_DBUS_PATH, NM_DBUS_INTERFACE, QDBusConnection::systemBus())
 {
     if (isSupported()) {
-        connect( &m_manager, SIGNAL(StateChanged(uint)),
-                this, SLOT(nmStateChanged(uint)));
+        connect(&m_nm, SIGNAL(StateChanged(uint)), this, SLOT(nmStateChanged(uint)));
 
-        QDBusReply<uint> reply = m_manager.call( "state" );
-
-        if ( reply.isValid() ) {
-            m_status = convertNmState( reply );
+        QDBusReply<uint> reply = m_nm.call("state");
+        if (reply.isValid()) {
+            nmStateChanged(reply.value());
         }
     }
 }
@@ -61,51 +56,41 @@ Solid::Networking::Status NetworkManagerStatus::status() const
 
 bool NetworkManagerStatus::isSupported() const
 {
-    return m_manager.isValid();
+    return m_nm.isValid();
 }
 
 QString NetworkManagerStatus::serviceName() const
 {
-    return QString(NM_DBUS_SERVICE);
+    return QString::fromLatin1(NM_DBUS_SERVICE);
 }
 
-void NetworkManagerStatus::nmStateChanged( uint nmState )
+void NetworkManagerStatus::nmStateChanged(uint nmState)
 {
-    m_status = convertNmState( nmState );
-    Q_EMIT statusChanged( m_status );
-}
-
-Solid::Networking::Status NetworkManagerStatus::convertNmState( uint nmState )
-{
-    Solid::Networking::Status status = Solid::Networking::Unknown;
-
+    m_status = Solid::Networking::Unknown;
+    // for reference:
+    // https://developer-old.gnome.org/NetworkManager/stable/gdbus-org.freedesktop.NetworkManager.html
     switch (nmState) {
-    case NM_STATE_UNKNOWN:
-    case NM_STATE_ASLEEP:
+    case 0:
+    case 10:
         break;
-    case NM_STATE_CONNECTING:
-        status = Solid::Networking::Connecting;
+    case 20:
+        m_status = Solid::Networking::Unconnected;
         break;
-#if NM_CHECK_VERSION(0,8,992)
-    case NM_STATE_CONNECTED_LOCAL:
-    case NM_STATE_CONNECTED_SITE:
-    case NM_STATE_CONNECTED_GLOBAL:
-#else
-    case NM_STATE_CONNECTED:
-#endif
-        status = Solid::Networking::Connected;
+    case 30:
+        m_status = Solid::Networking::Disconnecting;
         break;
-    case NM_STATE_DISCONNECTED:
-        status = Solid::Networking::Unconnected;
+    case 40:
+        m_status = Solid::Networking::Connecting;
         break;
-#if NM_CHECK_VERSION(0,8,992)
-    case NM_STATE_DISCONNECTING:
-        status = Solid::Networking::Disconnecting;
+    case 50:
+    case 60:
+    case 70:
+        m_status = Solid::Networking::Connected;
         break;
-#endif
+    default:
+        kWarning() << "unknown state" << nmState;
     }
-
-    return status;
+    Q_EMIT statusChanged(m_status);
 }
 
 #include "moc_networkmanagerstatus.cpp"

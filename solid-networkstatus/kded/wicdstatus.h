@@ -30,11 +30,12 @@ class WicdStatus : public SystemStatusInterface
 {
     Q_OBJECT
 public:
-    WicdStatus( QObject *parent = 0 );
+    WicdStatus(QObject *parent = 0);
 
-    /* reimp */ Solid::Networking::Status status() const;
-    /* reimp */ bool isSupported() const;
-    /* reimp */ QString serviceName() const;
+    // reimplementations
+    Solid::Networking::Status status() const final;
+    bool isSupported() const final;
+    QString serviceName() const final;
 
 private Q_SLOTS:
     void wicdStateChanged();

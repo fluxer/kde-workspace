@@ -8,17 +8,8 @@ set(kded_networkstatus_PART_SRCS
    wicdcustomtypes.cpp
    connmanstatus.cpp
    toolkitstatus.cpp
+   networkmanagerstatus.cpp
 )
-
-if(NETWORKMANAGER_FOUND)
-    if(${NETWORKMANAGER_VERSION} VERSION_EQUAL "0.7.0"
-        OR ${NETWORKMANAGER_VERSION} VERSION_GREATER "0.7.0")
-        MESSAGE(STATUS "Adding in-process NetworkManager service-wart to kded module")
-        set(kded_networkstatus_PART_SRCS ${kded_networkstatus_PART_SRCS} networkmanagerstatus.cpp)
-        include_directories(${NETWORKMANAGER_INCLUDE_DIRS} ${NM-GLIB_INCLUDE_DIRS})
-        add_definitions(-DNM_BACKEND_ENABLED -DQT_NO_KEYWORDS)
-    endif()
-endif(NETWORKMANAGER_FOUND)
 
 qt4_add_dbus_adaptor(kded_networkstatus_PART_SRCS ../org.kde.Solid.Networking.Service.xml
         networkstatus.h NetworkStatusModule)

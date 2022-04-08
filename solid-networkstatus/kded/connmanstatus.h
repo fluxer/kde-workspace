@@ -33,9 +33,9 @@ public:
     ConnmanStatus(QObject *parent = 0);
 
     // reimplementations
-    Solid::Networking::Status status() const;
-    bool isSupported() const;
-    QString serviceName() const;
+    Solid::Networking::Status status() const final;
+    bool isSupported() const final;
+    QString serviceName() const final;
 
 private Q_SLOTS:
     void connmanStateChanged();
