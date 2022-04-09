@@ -192,6 +192,7 @@ void KCMGreeter::slotStyleChanged(const QString &style)
 void KCMGreeter::slotColorChanged(const QString &color)
 {
     Q_UNUSED(color);
+    enableTest(false);
     emit changed(true);
 }
 
