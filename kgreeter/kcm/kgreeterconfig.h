@@ -19,6 +19,7 @@
 #ifndef KGREETERCONFIG_H
 #define KGREETERCONFIG_H
 
+#include <QProcess>
 #include <kcmodule.h>
 
 #include "ui_kgreeterconfig.h"
@@ -51,8 +52,10 @@ private Q_SLOTS:
 
 private:
     void enableTest(const bool enable);
+    void killLightDM();
 
     QString m_lightdmexe;
+    Q_PID m_lightdmpid;
 };
 
 #endif // KGREETERCONFIG_H

@@ -20,7 +20,6 @@
 
 #include <QSettings>
 #include <QStyleFactory>
-#include <QProcess>
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
@@ -33,6 +32,9 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
+#include <sys/types.h>
+#include <signal.h>
+
 #include "config-workspace.h"
 
 K_PLUGIN_FACTORY(KCMGreeterFactory, registerPlugin<KCMGreeter>();)
@@ -40,7 +42,8 @@ K_EXPORT_PLUGIN(KCMGreeterFactory("kcmgreeterconfig", "kcm_greeterconfig"))
 
 KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     : KCModule(KCMGreeterFactory::componentData(), parent),
-    m_lightdmexe(KStandardDirs::findRootExe("lightdm"))
+    m_lightdmexe(KStandardDirs::findRootExe("lightdm")),
+    m_lightdmpid(0)
 {
     Q_UNUSED(args);
 
@@ -99,6 +102,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
 
 KCMGreeter::~KCMGreeter()
 {
+    killLightDM();
 }
 
 void KCMGreeter::load()
@@ -207,7 +211,15 @@ void KCMGreeter::slotURLChanged(const KUrl &url)
 
 void KCMGreeter::slotTest()
 {
-    if (!QProcess::startDetached(m_lightdmexe, QStringList() << QString::fromLatin1("--test-mode"))) {
+    killLightDM();
+
+    const bool result = QProcess::startDetached(
+        m_lightdmexe,
+        QStringList() << QString::fromLatin1("--test-mode"),
+        QDir::currentPath(),
+        &m_lightdmpid
+    );
+    if (!result) {
         KMessageBox::error(this, i18n("Could not start LightDM"));
     }
 }
@@ -218,6 +230,13 @@ void KCMGreeter::enableTest(const bool enable)
         testbutton->setEnabled(!m_lightdmexe.isEmpty());
     } else {
         testbutton->setEnabled(false);
+    }
+}
+
+void KCMGreeter::killLightDM()
+{
+    if (m_lightdmpid > 0) {
+        ::kill(pid_t(m_lightdmpid), SIGTERM);
     }
 }
 
