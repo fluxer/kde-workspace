@@ -28,7 +28,6 @@
 #include "ui_maindialog.h"
 
 class BacktraceWidget;
-class AboutBugReportingDialog;
 class KTabWidget;
 class AbstractDebuggerLauncher;
 class KMenu;
@@ -56,8 +55,6 @@ private Q_SLOTS:
 
 private:
     KTabWidget *                        m_tabWidget;
-
-    QPointer<AboutBugReportingDialog>   m_aboutBugReportingDialog;
 
     QWidget *                           m_introWidget;
     Ui::MainWidget                      ui;

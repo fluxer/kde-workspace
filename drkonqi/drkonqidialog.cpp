@@ -39,7 +39,7 @@
 #include "drkonqi_globals.h"
 #include "systeminformation.h"
 
-static const char ABOUT_BUG_REPORTING_URL[] = "#aboutbugreporting";
+static const char ABOUT_BUG_REPORTING_URL[] = "https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues";
 
 DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
         KDialog(parent),
