@@ -38,6 +38,7 @@ add_subdirectory( spellchecking )
 
 add_subdirectory( kdebug )
 add_subdirectory( kmetainfo )
+add_subdirectory( kpasswdstore )
 
 add_subdirectory( hardware )
 add_subdirectory( desktoppaths )

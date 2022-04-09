@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kpasswdstoreconfig
+Icon=preferences-desktop-user-password
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kpasswdstoreconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=account-details
+X-KDE-System-Settings-Parent-Category-V2=account-details
+X-DocPath=kcontrol/kpasswdstoreconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-account-details;
+
+Name=Password Store
+Comment=Change password store options
+X-KDE-Keywords=Password,Store
