@@ -50,6 +50,8 @@ private Q_SLOTS:
     void slotTest();
 
 private:
+    void enableTest(const bool enable);
+
     QString m_lightdmexe;
 };
 

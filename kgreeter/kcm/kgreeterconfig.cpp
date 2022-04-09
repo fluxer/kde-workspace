@@ -39,7 +39,8 @@ K_PLUGIN_FACTORY(KCMGreeterFactory, registerPlugin<KCMGreeter>();)
 K_EXPORT_PLUGIN(KCMGreeterFactory("kcmgreeterconfig", "kcm_greeterconfig"))
 
 KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
-    : KCModule(KCMGreeterFactory::componentData(), parent)
+    : KCModule(KCMGreeterFactory::componentData(), parent),
+    m_lightdmexe(KStandardDirs::findRootExe("lightdm"))
 {
     Q_UNUSED(args);
 
@@ -92,8 +93,6 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     connect(rectanglerequester, SIGNAL(textChanged(QString)), this, SLOT(slotURLChanged(QString)));
     connect(rectanglerequester, SIGNAL(urlSelected(KUrl)), this, SLOT(slotURLChanged(KUrl)));
 
-    m_lightdmexe = KStandardDirs::findRootExe("lightdm");
-    testbutton->setEnabled(!m_lightdmexe.isEmpty());
     testbutton->setIcon(KIcon("debug-run"));
     connect(testbutton, SIGNAL(pressed()), this, SLOT(slotTest()));
 }
@@ -139,6 +138,7 @@ void KCMGreeter::load()
     const QString kgreeterrectangle = kgreetersettings.value("greeter/rectangle").toString();
     rectanglerequester->setUrl(KUrl(kgreeterrectangle));
 
+    enableTest(true);
     emit changed(false);
 }
 
@@ -157,6 +157,8 @@ void KCMGreeter::save()
     if (kgreeterreply != KAuth::ActionReply::SuccessReply) {
         KMessageBox::error(this, kgreeterreply.errorDescription());
     }
+
+    enableTest(true);
     emit changed(false);
 }
 
@@ -171,12 +173,15 @@ void KCMGreeter::defaults()
     colorsbox->setCurrentIndex(0);
     backgroundrequester->setUrl(KUrl());
     rectanglerequester->setUrl(KUrl());
+
+    enableTest(false);
     emit changed(true);
 }
 
 void KCMGreeter::slotStyleChanged(const QString &style)
 {
     Q_UNUSED(style);
+    enableTest(false);
     emit changed(true);
 }
 
@@ -189,12 +194,14 @@ void KCMGreeter::slotColorChanged(const QString &color)
 void KCMGreeter::slotURLChanged(const QString &url)
 {
     Q_UNUSED(url);
+    enableTest(false);
     emit changed(true);
 }
 
 void KCMGreeter::slotURLChanged(const KUrl &url)
 {
     Q_UNUSED(url);
+    enableTest(false);
     emit changed(true);
 }
 
@@ -202,6 +209,15 @@ void KCMGreeter::slotTest()
 {
     if (!QProcess::startDetached(m_lightdmexe, QStringList() << QString::fromLatin1("--test-mode"))) {
         KMessageBox::error(this, i18n("Could not start LightDM"));
+    }
+}
+
+void KCMGreeter::enableTest(const bool enable)
+{
+    if (enable) {
+        testbutton->setEnabled(!m_lightdmexe.isEmpty());
+    } else {
+        testbutton->setEnabled(false);
     }
 }
 
