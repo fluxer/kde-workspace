@@ -9,7 +9,7 @@ X-KDE-ParentApp=kcontrol
 X-KDE-System-Settings-Parent-Category=account-details
 X-KDE-System-Settings-Parent-Category-V2=account-details
 X-DocPath=kcontrol/kpasswdstoreconfig/index.html
-Categories=Qt;KDE;X-KDE-settings-account-details;
+Categories=Qt;KDE;
 
 Name=Password Store
 Comment=Change password store options
