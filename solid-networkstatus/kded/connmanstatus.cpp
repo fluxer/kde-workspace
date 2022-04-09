@@ -25,6 +25,9 @@
 
 #include <KDebug>
 
+// for reference:
+// https://git.kernel.org/pub/scm/network/connman/connman.git/tree/doc/overview-api.txt
+
 #define CONNMAN_DBUS_SERVICE "net.connman"
 #define CONNMAN_DBUS_PATH "/"
 #define CONNMAN_DBUS_INTERFACE "net.connman.Manager"
@@ -66,8 +69,6 @@ void ConnmanStatus::connmanStateChanged()
     } else {
         const ConnmanPropertiesType props = reply.value();
         const QString state = props.value("State").toString();
-        // for reference:
-        // https://git.kernel.org/pub/scm/network/connman/connman.git/tree/doc/overview-api.txt
         if (state == QLatin1String("ready") || state == QLatin1String("association")
             || state == QLatin1String("configuration")) {
             m_status = Solid::Networking::Connecting;

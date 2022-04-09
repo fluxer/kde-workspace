@@ -30,6 +30,9 @@
 
 #include <KDebug>
 
+// for reference:
+// https://developer-old.gnome.org/NetworkManager/stable/gdbus-org.freedesktop.NetworkManager.html
+
 #define NM_DBUS_SERVICE "org.freedesktop.NetworkManager"
 #define NM_DBUS_PATH "/org/freedesktop/NetworkManager"
 #define NM_DBUS_INTERFACE "org.freedesktop.NetworkManager"
@@ -67,8 +70,6 @@ QString NetworkManagerStatus::serviceName() const
 void NetworkManagerStatus::nmStateChanged(uint nmState)
 {
     m_status = Solid::Networking::Unknown;
-    // for reference:
-    // https://developer-old.gnome.org/NetworkManager/stable/gdbus-org.freedesktop.NetworkManager.html
     switch (nmState) {
     case 0:
     case 10:
@@ -89,6 +90,7 @@ void NetworkManagerStatus::nmStateChanged(uint nmState)
         break;
     default:
         kWarning() << "unknown state" << nmState;
+        break;
     }
     Q_EMIT statusChanged(m_status);
 }
