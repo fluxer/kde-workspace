@@ -138,14 +138,6 @@ set_package_properties(LibKonq PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(Prison QUIET CONFIG)
-set_package_properties(Prison PROPERTIES
-    DESCRIPTION "Prison library"
-    URL "http://projects.kde.org/prison"
-    TYPE OPTIONAL
-    PURPOSE "Needed to create mobile barcodes from clipboard data"
-)
-
 macro_optional_find_package(LibUSB)
 set_package_properties(LibUSB PROPERTIES
     DESCRIPTION "User level access to USB devices"
@@ -277,6 +269,12 @@ find_program(FORTUNE_EXECUTABLE fortune)
 add_feature_info(fortune
     FORTUNE_EXECUTABLE
     "Fortune messages support in screensaver"
+)
+
+find_program(QRENCODE_EXECUTABLE qrencode)
+add_feature_info(qrencode
+    QRENCODE_EXECUTABLE
+    "QR Code support in klipper"
 )
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)

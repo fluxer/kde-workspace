@@ -23,6 +23,7 @@
 
 #include "klipper.h"
 
+#include <QtCore/QProcess>
 #include <QtGui/QMenu>
 #include <QtDBus/QDBusConnection>
 #include <QtNetwork/QCryptographicHash>
@@ -40,6 +41,7 @@
 #include <KTextEdit>
 #include <KApplication>
 #include <KIcon>
+#include <KTemporaryFile>
 
 #include "configdialog.h"
 #include "klippersettings.h"
@@ -49,12 +51,6 @@
 #include "historyitem.h"
 #include "historystringitem.h"
 #include "klipperpopup.h"
-
-#ifdef HAVE_PRISON
-#include <prison/BarcodeWidget>
-#include <prison/DataMatrixBarcode>
-#include <prison/QRCodeBarcode>
-#endif
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -167,6 +163,8 @@ Klipper::Klipper(QObject* parent, const KSharedConfigPtr& config)
         loadHistory();
     }
 
+    m_qrencodeexe = KStandardDirs::findExe("qrencode");
+
     m_clearHistoryAction = m_collection->addAction( "clear-history" );
     m_clearHistoryAction->setIcon( KIcon("edit-clear-history") );
     m_clearHistoryAction->setText( i18n("C&lear Clipboard History") );
@@ -195,13 +193,13 @@ Klipper::Klipper(QObject* parent, const KSharedConfigPtr& config)
     m_editAction->setGlobalShortcut(KShortcut());
     connect(m_editAction, SIGNAL(triggered()), SLOT(slotEditData()));
 
-#ifdef HAVE_PRISON
-    // add barcode for mobile phones
-    m_showBarcodeAction = m_collection->addAction("show-barcode");
-    m_showBarcodeAction->setText(i18n("&Show Barcode..."));
-    m_showBarcodeAction->setGlobalShortcut(KShortcut());
-    connect(m_showBarcodeAction, SIGNAL(triggered()), SLOT(slotShowBarcode()));
-#endif
+    if (!m_qrencodeexe.isEmpty()) {
+        // add barcode for mobile phones
+        m_showBarcodeAction = m_collection->addAction("show-barcode");
+        m_showBarcodeAction->setText(i18n("&Show Barcode..."));
+        m_showBarcodeAction->setGlobalShortcut(KShortcut());
+        connect(m_showBarcodeAction, SIGNAL(triggered()), SLOT(slotShowBarcode()));
+    }
 
     // Cycle through history
     m_cycleNextAction = m_collection->addAction("cycleNextAction");
@@ -228,9 +226,9 @@ Klipper::Klipper(QObject* parent, const KSharedConfigPtr& config)
     popup->plugAction( m_configureAction );
     popup->plugAction( m_repeatAction );
     popup->plugAction( m_editAction );
-#ifdef HAVE_PRISON
-    popup->plugAction( m_showBarcodeAction );
-#endif
+    if (!m_qrencodeexe.isEmpty()) {
+        popup->plugAction( m_showBarcodeAction );
+    }
     if ( !isApplet() ) {
         popup->plugAction( m_quitAction );
     }
@@ -983,10 +981,8 @@ void Klipper::slotEditData()
 
 }
 
-#ifdef HAVE_PRISON
 void Klipper::slotShowBarcode()
 {
-    using namespace prison;
     const HistoryStringItem* item = dynamic_cast<const HistoryStringItem*>(m_history->first());
 
     KDialog dlg;
@@ -997,16 +993,43 @@ void Klipper::slotShowBarcode()
     QWidget* mw = new QWidget(&dlg);
     QHBoxLayout* layout = new QHBoxLayout(mw);
 
-    BarcodeWidget* qrcode = new BarcodeWidget(new QRCodeBarcode());
-    BarcodeWidget* datamatrix = new BarcodeWidget(new DataMatrixBarcode());
+    // TODO: implement print and save as
+    QLabel* qrcode = new QLabel(mw);
 
     if (item) {
-        qrcode->setData( item->text() );
-        datamatrix->setData( item->text() );
+        QString qrpath;
+        {
+            KTemporaryFile ktempfile;
+            ktempfile.open();
+            qrpath = ktempfile.fileName();
+        }
+        QString qrtext = item->text();
+        QPixmap qrpixmap;
+
+        QProcess qrproc(this);
+        qrproc.start(m_qrencodeexe, QStringList() << "-o" << qrpath << "-t" << "PNG");
+        if (qrproc.waitForStarted()) {
+            qrproc.write(qrtext.toLocal8Bit());
+            qrproc.closeWriteChannel();
+        }
+        qrproc.waitForFinished();
+        if (qrproc.exitCode() == 0) {
+            qrpixmap = QPixmap(qrpath);
+        } else {
+            qrtext = qrproc.readAllStandardError();
+        }
+
+        qrcode->setText( qrtext );
+        if (!qrpixmap.isNull()) {
+            qrcode->setPixmap( qrpixmap );
+        }
+
+        if (!qrpath.isEmpty()) {
+            QFile::remove(qrpath);
+        }
     }
 
     layout->addWidget(qrcode);
-    layout->addWidget(datamatrix);
 
     mw->setFocus();
     dlg.setMainWidget( mw );
@@ -1014,7 +1037,6 @@ void Klipper::slotShowBarcode()
 
     dlg.exec();
 }
-#endif //HAVE_PRISON
 
 void Klipper::slotAskClearHistory()
 {

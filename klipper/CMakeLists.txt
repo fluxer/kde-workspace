@@ -17,11 +17,6 @@ set(libklipper_common_SRCS
     editactiondialog.ui
 )
 
-if (PRISON_FOUND)
-    add_definitions(-DHAVE_PRISON)
-    include_directories(${PRISON_INCLUDE_DIR})
-endif (PRISON_FOUND)
-
 kde4_add_kcfg_files(libklipper_common_SRCS klippersettings.kcfgc)
 
 set(klipper_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
@@ -32,9 +27,6 @@ target_link_libraries(klipper ${KDE4_KDEUI_LIBS} ${X11_LIBRARIES} ${QT_QTNETWORK
 if (X11_Xfixes_FOUND)
   target_link_libraries(klipper ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
-if (PRISON_FOUND)
-  target_link_libraries(klipper ${PRISON_LIBRARIES})
-endif (PRISON_FOUND)
 
 install(TARGETS klipper ${INSTALL_TARGETS_DEFAULT_ARGS})
 

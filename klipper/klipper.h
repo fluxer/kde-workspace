@@ -87,9 +87,7 @@ public Q_SLOTS:
     void slotHistoryTopChanged();
     void slotConfigure();
     void slotEditData();
-#ifdef HAVE_PRISON
     void slotShowBarcode();
-#endif
     void slotCycleNext();
     void slotCyclePrev();
 
@@ -169,9 +167,7 @@ private:
     KAction* m_clearHistoryAction;
     KAction* m_repeatAction;
     KAction* m_editAction;
-#ifdef HAVE_PRISON
     KAction* m_showBarcodeAction;
-#endif
     KAction* m_configureAction;
     KAction* m_quitAction;
     KAction* m_cycleNextAction;
@@ -203,6 +199,7 @@ private:
     QTimer m_overflowClearTimer;
     QTimer m_pendingCheckTimer;
     bool m_pendingContentsCheck;
+    QString m_qrencodeexe;
     static KAboutData* m_about_data;
 
     bool blockFetchingNewData();
