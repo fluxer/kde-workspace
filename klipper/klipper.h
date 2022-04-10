@@ -150,6 +150,8 @@ private Q_SLOTS:
     void slotClearOverflow();
     void slotCheckPending();
 
+    void slotSaveBarcode();
+
     void loadSettings();
 
 private:
@@ -200,6 +202,7 @@ private:
     QTimer m_pendingCheckTimer;
     bool m_pendingContentsCheck;
     QString m_qrencodeexe;
+    QPixmap m_qrpixmap;
     static KAboutData* m_about_data;
 
     bool blockFetchingNewData();

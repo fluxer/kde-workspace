@@ -42,6 +42,8 @@
 #include <KApplication>
 #include <KIcon>
 #include <KTemporaryFile>
+#include <KImageIO>
+#include <KFileDialog>
 
 #include "configdialog.h"
 #include "klippersettings.h"
@@ -638,6 +640,22 @@ void Klipper::slotCheckPending()
     newClipData( QClipboard::Selection ); // always selection
 }
 
+void Klipper::slotSaveBarcode()
+{
+    const QString path = KFileDialog::getSaveFileName(
+        KUrl("kfiledialog:///qrcode"),
+        KImageIO::pattern(KImageIO::Writing),
+        nullptr,
+        QString(),
+        KFileDialog::ConfirmOverwrite
+    );
+    if (!path.isEmpty()) {
+        if (!m_qrpixmap.save(path)) {
+            KMessageBox::error(nullptr, i18n("Could not save QR Code image"));
+        };
+    }
+}
+
 void Klipper::checkClipData( bool selectionMode )
 {
     if ( ignoreClipboardChanges() ) // internal to klipper, ignoring QSpinBox selections
@@ -985,15 +1003,19 @@ void Klipper::slotShowBarcode()
 {
     const HistoryStringItem* item = dynamic_cast<const HistoryStringItem*>(m_history->first());
 
+    m_qrpixmap = QPixmap();
+
     KDialog dlg;
     dlg.setModal( true );
     dlg.setCaption( i18n("Mobile Barcode") );
-    dlg.setButtons( KDialog::Ok );
+    dlg.setButtons( KDialog::User1 | KDialog::Ok );
+    dlg.setButtonText( KDialog::User1, i18nc("@action:button", "Save as"));
+    dlg.setButtonIcon( KDialog::User1, KIcon("document-save"));
+    connect(&dlg, SIGNAL(user1Clicked()), this, SLOT(slotSaveBarcode()));
 
     QWidget* mw = new QWidget(&dlg);
     QHBoxLayout* layout = new QHBoxLayout(mw);
 
-    // TODO: implement print and save as
     QLabel* qrcode = new QLabel(mw);
 
     if (item) {
@@ -1004,7 +1026,6 @@ void Klipper::slotShowBarcode()
             qrpath = ktempfile.fileName();
         }
         QString qrtext = item->text();
-        QPixmap qrpixmap;
 
         QProcess qrproc(this);
         qrproc.start(m_qrencodeexe, QStringList() << "-o" << qrpath << "-t" << "PNG");
@@ -1014,14 +1035,14 @@ void Klipper::slotShowBarcode()
         }
         qrproc.waitForFinished();
         if (qrproc.exitCode() == 0) {
-            qrpixmap = QPixmap(qrpath);
+            m_qrpixmap = QPixmap(qrpath);
         } else {
             qrtext = qrproc.readAllStandardError();
         }
 
         qrcode->setText( qrtext );
-        if (!qrpixmap.isNull()) {
-            qrcode->setPixmap( qrpixmap );
+        if (!m_qrpixmap.isNull()) {
+            qrcode->setPixmap( m_qrpixmap );
         }
 
         if (!qrpath.isEmpty()) {
@@ -1029,7 +1050,7 @@ void Klipper::slotShowBarcode()
         }
     }
 
-    layout->addWidget(qrcode);
+    layout->addWidget(qrcode, 0, Qt::AlignHCenter | Qt::AlignVCenter);
 
     mw->setFocus();
     dlg.setMainWidget( mw );
