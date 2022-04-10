@@ -98,14 +98,6 @@ set_package_properties(OpenGL PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(OpenGLES)
-set_package_properties(OpenGLES PROPERTIES
-    DESCRIPTION "The OpenGLES libraries"
-    URL "http://www.khronos.org/opengles"
-    TYPE OPTIONAL
-    PURPOSE "OpenGL ES info module"
-)
-
 macro_optional_find_package(LibDRM)
 set_package_properties(LibDRM PROPERTIES
     DESCRIPTION "Userspace interface to kernel DRM services"

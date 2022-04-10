@@ -8,10 +8,10 @@ add_subdirectory( samba )
 add_subdirectory( nics )
 
 add_feature_info("OpenGL support" OPENGL_FOUND "View OpenGL details in kinfocenter." )
-add_feature_info("OpenGL/ES support" OPENGLES_FOUND "View OpenGL ES2.0 details in kinfocenter." )
+add_feature_info("EGL support" OpenGL_EGL_FOUND "View EGL details in kinfocenter." )
 add_feature_info("DRM support" LIBDRM_FOUND "View 3D acceleration details in kinfocenter." )
 
-if((OPENGL_FOUND AND OPENGL_GLU_FOUND) OR OPENGLES_FOUND)
+if((OPENGL_FOUND AND OPENGL_GLU_FOUND) OR OpenGL_EGL_FOUND)
     add_subdirectory( opengl )
 else()
     message(STATUS "OpenGL/ES2.0 information module has been disabled.")

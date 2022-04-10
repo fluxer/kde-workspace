@@ -24,6 +24,6 @@
 
 #cmakedefine KCM_ENABLE_DRM
 #cmakedefine KCM_ENABLE_OPENGL
-#cmakedefine KCM_ENABLE_OPENGLES
+#cmakedefine KCM_ENABLE_EGL
 
 #endif

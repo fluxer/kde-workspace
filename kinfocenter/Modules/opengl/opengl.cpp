@@ -53,9 +53,8 @@
 #include <GL/glx.h>
 #endif
 
-#ifdef KCM_ENABLE_OPENGLES
+#ifdef KCM_ENABLE_EGL
 #include <EGL/egl.h>
-#include <GLES2/gl2.h>
 #endif
 
 #include "moc_opengl.cpp"
@@ -155,7 +154,7 @@ static struct {
     const char *glVersion;
     const char *glExtensions;
 #endif
-#ifdef KCM_ENABLE_OPENGLES
+#ifdef KCM_ENABLE_EGL
     const char *eglVendor;
     const char *eglVersion;
     const char *eglExtensions;
@@ -665,7 +664,7 @@ static QTreeWidgetItem *get_gl_info(Display *dpy, QTreeWidgetItem *l1, QTreeWidg
 }
 #endif // KCM_ENABLE_OPENGL
 
-#ifdef KCM_ENABLE_OPENGLES
+#ifdef KCM_ENABLE_EGL
 QTreeWidgetItem *print_egl(QTreeWidgetItem *l1, QTreeWidgetItem *l2)
 {
     QTreeWidgetItem *l3;
@@ -707,7 +706,7 @@ static QTreeWidgetItem *get_egl_info(Display *dpy, QTreeWidgetItem *l1, QTreeWid
     eglTerminate(egl_dpy);
     return result;
 }
-#endif // KCM_ENABLE_OPENGLES
+#endif // KCM_ENABLE_EGL
 
 bool GetInfo_OpenGL(QTreeWidget *treeWidget)
 {
@@ -749,7 +748,7 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
     if (l2)
         l2->setExpanded(true);
 
-#ifdef KCM_ENABLE_OPENGLES
+#ifdef KCM_ENABLE_EGL
     l2 = get_egl_info(dpy, l1, l2);
     if (!l2)
         KMessageBox::error(0, i18n("Could not initialize OpenGL ES2.0"));
