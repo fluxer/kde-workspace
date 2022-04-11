@@ -63,4 +63,7 @@ to continue working. They may also renew tokens etc., where supported.
 See the Linux PAM Administrators guide, which is part of the PAM
 distribution, for more details. 
 
-
+As of 4.21 if authentication via PAM fails attempts will be made to
+authenticate via other methods (e.g. shadow). That way the user will not be
+stuck with locked screen if PAM is misconfigured and authentication via other
+method is possible.
