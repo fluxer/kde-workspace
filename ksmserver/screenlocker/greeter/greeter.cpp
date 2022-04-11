@@ -389,13 +389,13 @@ void Greeter::reapVerify()
             emit greeterAccepted();
             return;
         case AuthBad:
+        case AuthError:
+        case AuthAbort:
             m_greet->failed();
             emit greeterFailed();
             m_failedLock = true;
             QTimer::singleShot(1500, this, SLOT(failedTimer()));
             //KNotification::event( QLatin1String( "unlockfailed" ) );*/
-            return;
-        case AuthAbort:
             return;
         }
     cantCheck();
