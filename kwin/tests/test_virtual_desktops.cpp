@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KActionCollection>
 #include <KConfigGroup>
 
+#include <QtCore/QScopedPointer>
 #include <QtTest/QtTest>
 
 namespace KWin {

@@ -400,8 +400,8 @@ void printProcessListInfo( const char* cmd )
 {
   (void)cmd;
   output( "Name\tPID\tPPID\tUID\tGID\tStatus\tUser Time\tSystem Time\tNice\tVmSize"
-                          "\tVmRss\tVmURss\tLogin\tTracerPID\tTTY\tCommand\tIO Priority Class\tIO Priority\n" );
-  output( "s\td\td\td\td\tS\td\td\td\tD\tD\tD\ts\td\ts\ts\td\td\n" );
+                          "\tVmRss\tVmURss\tLogin\tTracerPID\tTTY\tCommand\n" );
+  output( "s\td\td\td\td\tS\td\td\td\tD\tD\tD\ts\td\ts\ts\n" );
 }
 
 void printProcessCount( const char* cmd )
