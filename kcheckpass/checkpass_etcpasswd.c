@@ -30,14 +30,9 @@
 #include <errno.h>
 #include <syslog.h>
 
-AuthReturn Authenticate_etcpasswd(const char *method,
-        const char *login, char *(*conv) (ConvRequest, const char *))
+AuthReturn Authenticate_etcpasswd(const char *login, const char *password)
 {
-  if (strcmp(method, "etcpasswd") != 0)
-    return AuthError;
-
   struct passwd *pw;
-  char *passwd;
   char *crpt_passwd;
 
   openlog("kcheckpass", LOG_PID, LOG_AUTH);
@@ -51,13 +46,8 @@ AuthReturn Authenticate_etcpasswd(const char *method,
   if (!*pw->pw_passwd)
     return AuthOk;
 
-  if (!(passwd = conv(ConvGetHidden, 0)))
-    return AuthAbort;
-
-  if ((crpt_passwd = crypt(passwd, pw->pw_passwd)) && !strcmp(pw->pw_passwd, crpt_passwd)) {
-    dispose(passwd);
+  if ((crpt_passwd = crypt(password, pw->pw_passwd)) && !strcmp(pw->pw_passwd, crpt_passwd)) {
     return AuthOk; /* Success */
   }
-  dispose(passwd);
   return AuthBad; /* Password wrong or account locked */
 }

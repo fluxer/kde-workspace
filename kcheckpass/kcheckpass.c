@@ -61,7 +61,8 @@
 
 #define THROTTLE 3
 
-static int havetty, nullpass = 0;
+static int havetty = 0;
+static int nullpass = 0;
 static int sfd = -1;
 
 static const char* methods[3] = { "", "", "" };
@@ -301,6 +302,7 @@ usage(int exitval)
             "    -S handle    operate in binary server mode on file descriptor handle\n"
             "    -c caller    the calling application, effectively the PAM service basename\n"
             "    -m method    use the specified authentication method (default: \"%s\")\n"
+            "    -n           do not fallback to other methods if one fails\n"
             "  exit codes:\n"
             "    0 success\n"
             "    1 invalid password\n"
@@ -324,9 +326,12 @@ main(int argc, char **argv)
     int c, nfd, lfd;
     uid_t uid;
     time_t nexttime;
-    AuthReturn ret;
+    AuthReturn ret = AuthError;
     struct flock lk;
     char fname[64], fcont[64];
+    char *password = NULL;
+    int validmethod = 0;
+    int fallback = 1;
 
     /* Make sure stdout/stderr are open */
     for (c = 1; c <= 2; c++) {
@@ -344,7 +349,7 @@ main(int argc, char **argv)
 
     havetty = isatty(0);
 
-    while ((c = getopt(argc, argv, "hc:m:U:S:")) != -1) {
+    while ((c = getopt(argc, argv, "hc:m:U:S:n")) != -1) {
         switch (c) {
             case 'h':
                 usage(0);
@@ -363,13 +368,15 @@ main(int argc, char **argv)
             case 'S':
                 sfd = atoi(optarg);
                 break;
+            case 'n':
+                fallback = 0;
+                break;
             default:
                 message("Command line option parsing error\n");
                 usage(10);
         }
     }
 
-    int validmethod = 0;
 #ifdef HAVE_PAM
     methods[0] = "pam";
     if (strcmp(method, "pam") == 0) {
@@ -445,33 +452,38 @@ main(int argc, char **argv)
         close(lfd);
     }
 
+    password = (sfd < 0 ? conv_legacy(ConvGetHidden, 0) : conv_server(ConvGetHidden, 0));
+    if (!password) {
+        return AuthAbort;
+    }
+
     /* Now do the fandango */
 #ifdef HAVE_PAM
     if (strcmp(method, "pam") == 0) {
         ret = Authenticate_pam(
             caller,
-            method,
             username,
+            password,
             sfd < 0 ? conv_legacy : conv_server
         );
     }
 #endif
 #ifdef HAVE_SHADOW
-    if (strcmp(method, "shadow") == 0) {
+    if (strcmp(method, "shadow") == 0 || (fallback && ret == AuthBad)) {
         ret = Authenticate_shadow(
-            method,
             username,
-            sfd < 0 ? conv_legacy : conv_server
+            password
         );
     }
 #endif
-    if (strcmp(method, "etcpasswd") == 0) {
+    if (strcmp(method, "etcpasswd") == 0 || (fallback && ret == AuthBad)) {
         ret = Authenticate_etcpasswd(
-            method,
             username,
-            sfd < 0 ? conv_legacy : conv_server
+            password
         );
     }
+
+    dispose(password);
 
     if (ret == AuthBad) {
         message("Authentication failure\n");

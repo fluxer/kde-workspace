@@ -28,6 +28,7 @@
 #include <security/pam_appl.h>
 
 struct pam_data {
+  const char* password;
   char *(*conv) (ConvRequest, const char *);
   int abort:1;
 };
@@ -63,11 +64,8 @@ PAM_conv (int num_msg, pam_message_type **msg,
     default:
       switch (msg[count]->msg_style) {
       case PAM_PROMPT_ECHO_ON:
-        repl[count].resp = pd->conv(ConvGetNormal, msg[count]->msg);
-        break;
       case PAM_PROMPT_ECHO_OFF:
-        repl[count].resp =
-            pd->conv(ConvGetHidden, msg[count]->msg);
+        repl[count].resp = strdup(pd->password);
         break;
 #ifdef PAM_BINARY_PROMPT
       case PAM_BINARY_PROMPT:
@@ -92,14 +90,13 @@ PAM_conv (int num_msg, pam_message_type **msg,
   for (; count >= 0; count--)
     if (repl[count].resp)
       switch (msg[count]->msg_style) {
+      case PAM_PROMPT_ECHO_ON:
       case PAM_PROMPT_ECHO_OFF:
-        dispose(repl[count].resp);
+        free(repl[count].resp);
         break;
 #ifdef PAM_BINARY_PROMPT
       case PAM_BINARY_PROMPT: /* handle differently? */
 #endif
-      case PAM_PROMPT_ECHO_ON:
-        free(repl[count].resp);
         break;
       }
   free(repl);
@@ -121,12 +118,9 @@ fail_delay(int retval ATTR_UNUSED, unsigned usec_delay ATTR_UNUSED,
 #endif
 
 
-AuthReturn Authenticate_pam(const char *caller, const char *method,
-        const char *user, char *(*conv) (ConvRequest, const char *))
+AuthReturn Authenticate_pam(const char *caller, const char *user,
+        const char *password, char *(*conv) (ConvRequest, const char *))
 {
-  if (strcmp(method, "pam") != 0)
-    return AuthError;
-
   const char	*tty;
   pam_handle_t	*pamh;
   pam_gi_type	pam_item;
@@ -136,7 +130,9 @@ AuthReturn Authenticate_pam(const char *caller, const char *method,
 
   openlog("kcheckpass", LOG_PID, LOG_AUTH);
 
+  PAM_data.password = password;
   PAM_data.conv = conv;
+
   pam_error = pam_start(caller, user, &PAM_conversation, &pamh);
   if (pam_error != PAM_SUCCESS)
     return AuthError;

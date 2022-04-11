@@ -78,23 +78,24 @@ extern "C" {
  *****************************************************************/
 #ifdef HAVE_PAM
 AuthReturn Authenticate_pam(
-        const char *caller, 
-        const char *method,
-        const char *user,
-        char *(*conv) (ConvRequest, const char *));
+    const char *caller,
+    const char *user,
+    const char *password,
+    char *(*conv) (ConvRequest, const char *)
+);
 #endif
 
 #ifdef HAVE_SHADOW
 AuthReturn Authenticate_shadow(
-        const char *method,
-        const char *user,
-        char *(*conv) (ConvRequest, const char *));
+    const char *user,
+    const char *password
+);
 #endif
 
 AuthReturn Authenticate_etcpasswd(
-        const char *method,
-        const char *user,
-        char *(*conv) (ConvRequest, const char *));
+    const char *user,
+    const char *password
+);
 
 /*****************************************************************
  * Output a message to stderr

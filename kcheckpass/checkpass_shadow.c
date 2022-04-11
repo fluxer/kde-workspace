@@ -41,13 +41,8 @@
 #include <unistd.h>
 #include <sys/types.h>
 
-AuthReturn Authenticate_shadow(const char *method,
-        const char *login, char *(*conv) (ConvRequest, const char *))
+AuthReturn Authenticate_shadow(const char *login, const char *typed_in_password)
 {
-  if (strcmp(method, "shadow") != 0)
-    return AuthError;
-
-  char          *typed_in_password;
   char          *crpt_passwd;
   char          *password;
   struct passwd *pw;
@@ -74,11 +69,6 @@ AuthReturn Authenticate_shadow(const char *method,
     return AuthOk;
   }
 
-  if (!(typed_in_password = conv(ConvGetHidden, 0))) {
-    seteuid(eid);
-    return AuthAbort;
-  }
-
 #if defined( __linux__ ) && defined( HAVE_PW_ENCRYPT )
   crpt_passwd = pw_encrypt(typed_in_password, password);  /* (1) */
 #else  
@@ -87,10 +77,8 @@ AuthReturn Authenticate_shadow(const char *method,
 
   if (crpt_passwd && !strcmp(password, crpt_passwd )) {
     seteuid(eid);
-    dispose(typed_in_password);
     return AuthOk; /* Success */
   }
-  dispose(typed_in_password);
   seteuid(eid);
   return AuthBad; /* Password wrong or account locked */
 }
