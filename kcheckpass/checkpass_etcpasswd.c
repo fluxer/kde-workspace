@@ -40,7 +40,7 @@ AuthReturn Authenticate_etcpasswd(const char *login, const char *password)
   /* Get the password entry for the user we want */
   if (!(pw = getpwnam(login))) {
     syslog(LOG_ERR, "getpwnam: %s", strerror(errno));
-    return AuthBad;
+    return AuthAbort;
   }
 
   if (!*pw->pw_passwd)
