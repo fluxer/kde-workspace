@@ -490,6 +490,7 @@ void Greeter::gplugStart()
 {
     int sfd[2];
     char fdbuf[16];
+    ::memset(fdbuf, 0, sizeof(fdbuf));
 
     if (m_notifier)
         return;
