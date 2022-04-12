@@ -199,7 +199,7 @@ KGreeter::KGreeter(QWidget *parent)
         m_sessionactions.first()->setChecked(true);
     }
 
-    m_ui.groupbox->setTitle(QString::fromUtf8(lightdm_get_hostname()));
+    m_ui.grouplabel->setText(QString::fromUtf8(lightdm_get_hostname()));
 
     m_ui.actionSuspend->setVisible(lightdm_get_can_suspend());
     m_ui.actionSuspend->setIcon(KIcon("system-suspend"));
@@ -242,14 +242,16 @@ void KGreeter::paintEvent(QPaintEvent *event)
     }
 
     if (!m_rectangle.isNull()) {
-        m_ui.groupbox->setFlat(true);
+        m_ui.groupframe->setFrameShape(QFrame::NoFrame);
         QPainter painter(this);
-        QSize kgreeterrectanglesize(m_ui.groupbox->size());
-        kgreeterrectanglesize.rwidth() = kgreeterrectanglesize.width() * 1.04;
-        kgreeterrectanglesize.rheight() = kgreeterrectanglesize.height() * 1.8;
-        painter.drawImage(m_ui.groupbox->pos(), m_rectangle.scaled(kgreeterrectanglesize));
+        QSize kgreeterrectanglesize(m_ui.groupframe->size());
+        kgreeterrectanglesize.rwidth() = kgreeterrectanglesize.width() * 1.06;
+        kgreeterrectanglesize.rheight() = kgreeterrectanglesize.height() * 1.65;
+        QPointF kgreeterrectanglepoint(m_ui.groupframe->pos());
+        kgreeterrectanglepoint -= QPointF(kgreeterrectanglepoint.x() * 0.03 , 0);
+        painter.drawImage(kgreeterrectanglepoint, m_rectangle.scaled(kgreeterrectanglesize));
     } else {
-        m_ui.groupbox->setFlat(false);
+        m_ui.groupframe->setFrameShape(QFrame::StyledPanel);
     }
 
     QMainWindow::paintEvent(event);
