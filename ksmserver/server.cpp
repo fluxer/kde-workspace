@@ -84,11 +84,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "moc_server.cpp"
 
-// must go after #include <config-ksmserver.h>
-#if COMPILE_SCREEN_LOCKER
-#include "screenlocker/ksldapp.h"
-#endif
-
 #include <kworkspace/kdisplaymanager.h>
 #include <QtGui/qx11info_x11.h>
 #include <krandom.h>
@@ -606,16 +601,10 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
   , sessionGroup( "" )
   , logoutEffectWidget( NULL )
 {
-#if COMPILE_SCREEN_LOCKER
-    KGlobal::locale()->insertCatalog(QLatin1String( "libkworkspace" ));
-
-    ScreenLocker::KSldApp::self();
     if (lockscreen) {
-        ScreenLocker::KSldApp::self()->lock();
+        QDBusInterface screensaver("org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver");
+        screensaver.asyncCall("Lock");
     }
-#else
-    Q_UNUSED(lockscreen)
-#endif
 
     new KSMServerInterfaceAdaptor( this );
     QDBusConnection::sessionBus().registerObject("/KSMServer", this);

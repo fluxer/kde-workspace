@@ -94,7 +94,7 @@ macro_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"
     URL "http://www.opengl.org"
-    PURPOSE "3D screensavers and OpenGL info module"
+    PURPOSE "OpenGL info module"
     TYPE OPTIONAL
 )
 
@@ -257,16 +257,16 @@ add_feature_info(mtools
     "KIO floppy support"
 )
 
-find_program(FORTUNE_EXECUTABLE fortune)
-add_feature_info(fortune
-    FORTUNE_EXECUTABLE
-    "Fortune messages support in screensaver"
-)
-
 find_program(QRENCODE_EXECUTABLE qrencode)
 add_feature_info(qrencode
     QRENCODE_EXECUTABLE
     "QR Code support in klipper"
+)
+
+find_program(XSCREENSAVER_EXECUTABLE xscreensaver)
+add_feature_info(xscreensaver
+    XSCREENSAVER_EXECUTABLE
+    "Screen saver and screen locking support"
 )
 
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
@@ -290,9 +290,9 @@ add_subdirectory(libs)
 add_subdirectory(systemsettings)
 
 # core apps
-add_subdirectory(kcheckpass)
 add_subdirectory(kwin)
 add_subdirectory(ksmserver)
+add_subdirectory(kscreensaver)
 
 add_subdirectory(ksplash)
 
@@ -306,7 +306,6 @@ add_subdirectory(kmenuedit)
 add_subdirectory(krunner)
 add_subdirectory(kstartupconfig)
 add_subdirectory(freespacenotifier)
-add_subdirectory(kscreensaver)
 add_subdirectory(kinfocenter)
 
 if(Q_WS_X11 AND X11_Xinput_FOUND)

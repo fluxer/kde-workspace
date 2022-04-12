@@ -1,20 +1,7 @@
-include(UnixAuth)
-set_package_properties(PAM PROPERTIES
-    DESCRIPTION "PAM Libraries"
-    URL "https://www.kernel.org/pub/linux/libs/pam/"
-    TYPE OPTIONAL
-    PURPOSE "Required for screen unlocking"
-)
-
 include(CMakePushCheckState)
 include(CheckTypeSize)
 include(CheckSymbolExists)
 include(CheckLibraryExists)
-
-if (PAM_FOUND)
-    set(KDE4_PAM_SERVICE "kde" CACHE STRING "The PAM service")
-    mark_as_advanced(KDE4_PAM_SERVICE)
-endif (PAM_FOUND)
 
 find_program(some_x_program NAMES iceauth xrdb xterm)
 if (NOT some_x_program)
@@ -27,7 +14,6 @@ get_filename_component(xrootdir "${xbindir}" PATH)
 set(XLIBDIR "${xrootdir}/lib/X11")
 set(XKBDIR "${xrootdir}/share/X11")
 
-check_function_exists(getpassphrase HAVE_GETPASSPHRASE)
 check_function_exists(nice HAVE_NICE)
 
 check_include_files(string.h HAVE_STRING_H)
@@ -53,8 +39,6 @@ macro_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # powerdevil
 macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 macro_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard
 macro_bool_to_01(X11_xf86vmode_FOUND HAVE_XF86VMODE) # powerdevil
-
-check_function_exists(setpriority  HAVE_SETPRIORITY) # kscreenlocker 
 
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_LIBRARIES ${X11_Xext_LIB})

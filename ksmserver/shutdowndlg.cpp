@@ -279,7 +279,7 @@ void KSMShutdownDlg::slotReboot(int opt)
 
 void KSMShutdownDlg::slotLockScreen()
 {
-    QDBusMessage call = QDBusMessage::createMethodCall("org.kde.screensaver",
+    QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver",
                                                        "/ScreenSaver",
                                                        "org.freedesktop.ScreenSaver",
                                                        "Lock");

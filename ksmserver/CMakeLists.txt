@@ -12,10 +12,6 @@ if(ENABLE_TESTING)
     add_subdirectory(tests)
 endif()
 
-add_subdirectory( screenlocker )
-set(COMPILE_SCREEN_LOCKER 1)
-set(SCREEN_LOCKER "screenlocker_static")
-
 check_library_exists(ICE _IceTransNoListen "" HAVE__ICETRANSNOLISTEN)
 configure_file(config-ksmserver.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksmserver.h)
 
@@ -68,7 +64,6 @@ target_link_libraries(ksmserver
     ${QT_QTDECLARATIVE_LIBRARY}
     ${X11_LIBRARIES}
     ${X11_Xrender_LIB}
-    ${SCREEN_LOCKER}
     kworkspace
 )
 

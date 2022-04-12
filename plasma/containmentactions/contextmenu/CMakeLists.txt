@@ -7,7 +7,7 @@ set(contextmenu_SRCS
 set(krunner_xml ${CMAKE_SOURCE_DIR}/krunner/dbus/org.kde.krunner.App.xml)
 QT4_ADD_DBUS_INTERFACE(contextmenu_SRCS ${krunner_xml} krunner_interface)
 
-set(screensaver_xml ${CMAKE_SOURCE_DIR}/ksmserver/screenlocker/dbus/org.freedesktop.ScreenSaver.xml)
+set(screensaver_xml ${CMAKE_SOURCE_DIR}/kscreensaver/org.freedesktop.ScreenSaver.xml)
 QT4_ADD_DBUS_INTERFACE(contextmenu_SRCS ${screensaver_xml} screensaver_interface)
 
 

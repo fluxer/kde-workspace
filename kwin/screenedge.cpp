@@ -196,7 +196,7 @@ bool Edge::handleAction()
         return true;
     }
     case ElectricActionLockScreen: { // Lock the screen
-        QDBusInterface screenSaver("org.kde.screensaver", "/ScreenSaver");
+        QDBusInterface screenSaver("org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver");
         screenSaver.asyncCall("Lock");
         return true;
     }

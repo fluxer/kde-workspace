@@ -12,7 +12,6 @@ if(X11_Xkb_FOUND AND X11_Xkbfile_FOUND)
 endif()
 
 add_subdirectory( input )
-add_subdirectory( screensaver )
 add_subdirectory( dateandtime )
 add_subdirectory( autostart )
 
