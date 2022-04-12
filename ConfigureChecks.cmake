@@ -3,7 +3,7 @@ set_package_properties(PAM PROPERTIES
     DESCRIPTION "PAM Libraries"
     URL "https://www.kernel.org/pub/linux/libs/pam/"
     TYPE OPTIONAL
-    PURPOSE "Required for screen unlocking and optionally used by the KDM log in manager"
+    PURPOSE "Required for screen unlocking"
 )
 
 include(CMakePushCheckState)
@@ -39,12 +39,12 @@ check_include_files(malloc.h HAVE_MALLOC_H)
 macro_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/{fonts,kfontinst}
 macro_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts
 macro_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # ksplash
-macro_bool_to_01(X11_XTest_FOUND HAVE_XTEST) # khotkeys, kxkb, kdm
+macro_bool_to_01(X11_XTest_FOUND HAVE_XTEST) # khotkeys, kxkb
 macro_bool_to_01(X11_Xcomposite_FOUND HAVE_XCOMPOSITE) # plasma, kwin
 macro_bool_to_01(X11_Xcursor_FOUND HAVE_XCURSOR) # many uses
 macro_bool_to_01(X11_Xdamage_FOUND HAVE_XDAMAGE) # kwin
 macro_bool_to_01(X11_Xfixes_FOUND HAVE_XFIXES) # klipper, kicker, kwin
-macro_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kdm, kglobalaccel, kcontrol/keyboard
+macro_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kglobalaccel, kcontrol/keyboard
 macro_bool_to_01(X11_Xinerama_FOUND HAVE_XINERAMA)
 macro_bool_to_01(X11_Xrandr_FOUND HAVE_XRANDR) # kwin
 macro_bool_to_01(X11_Xrender_FOUND HAVE_XRENDER) # kcontrol/style, kicker
