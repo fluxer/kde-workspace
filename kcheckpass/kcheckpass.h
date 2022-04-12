@@ -39,14 +39,9 @@
 
 #include <config-workspace.h>
 #include <config-unix.h>
-#include <config-kcheckpass.h>
 
 #ifdef HAVE_CRYPT_H
 #include <crypt.h>
-#endif
-
-#ifdef HAVE_PATHS_H
-#include <paths.h>
 #endif
 
 #include <pwd.h>
