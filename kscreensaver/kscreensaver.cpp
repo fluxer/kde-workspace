@@ -19,18 +19,14 @@
 #include "kscreensaver.h"
 #include "screensaveradaptor.h"
 
-#include <QCoreApplication>
-#include <QProcess>
 #include <kdebug.h>
 #include <kidletime.h>
 
 static const uint ChangeScreenSettings = 4;
 
-// TODO: disable via config
-// TODO: watch the xscreensaver state and emit ActiveChanged() signal
-
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
+    m_xscreensaver(nullptr),
     m_inhibitionscounter(0)
 {
     (void)new ScreenSaverAdaptor(this);
@@ -42,11 +38,11 @@ KScreenSaver::KScreenSaver(QObject *parent)
         if (service) {
             kDebug() << "kscreensaver is online";
         } else {
-            kWarning() << "could not register object" << connection.lastError().message();
+            kWarning() << "Could not register service" << connection.lastError().message();
             return;
         }
     } else {
-        kWarning() << "could not register object" << connection.lastError().message();
+        kWarning() << "Could not register object" << connection.lastError().message();
         return;
     }
 
@@ -54,6 +50,23 @@ KScreenSaver::KScreenSaver(QObject *parent)
         QString::fromLatin1("xscreensaver"),
         QStringList() << QString::fromLatin1("-nosplash")
     );
+
+    m_xscreensaver = new QProcess(this);
+    connect(m_xscreensaver, SIGNAL(readyReadStandardOutput()), this, SLOT(slotXScreenSaverOutput()));
+    connect(m_xscreensaver, SIGNAL(readyReadStandardError()), this, SLOT(slotXScreenSaverError()));
+    m_xscreensaver->start(
+        QString::fromLatin1("xscreensaver-command"),
+        QStringList() << QString::fromLatin1("-watch")
+    );
+}
+
+KScreenSaver::~KScreenSaver()
+{
+    if (m_xscreensaver) {
+        disconnect(m_xscreensaver, SIGNAL(readyReadStandardOutput()), this, SLOT(slotXScreenSaverOutput()));
+        disconnect(m_xscreensaver, SIGNAL(readyReadStandardError()), this, SLOT(slotXScreenSaverError()));
+        m_xscreensaver->deleteLater();
+    }
 }
 
 bool KScreenSaver::GetActive()
@@ -165,3 +178,30 @@ void KScreenSaver::UnThrottle(uint cookie)
     // was not implemented before either
     Q_UNUSED(cookie);
 }
+
+void KScreenSaver::slotXScreenSaverOutput()
+{
+    // qDebug() << Q_FUNC_INFO;
+    const QByteArray xscreensaverdata = m_xscreensaver->readAllStandardOutput();
+    foreach (const QByteArray &xscreensaverline, xscreensaverdata.split('\n')) {
+        // qDebug() << Q_FUNC_INFO << xscreensaverline;
+        if (xscreensaverline.isEmpty()) {
+            continue;
+        }
+
+        if (xscreensaverline.startsWith("BLANK") || xscreensaverline.startsWith("LOCK")) {
+            emit ActiveChanged(true);
+        } else if (xscreensaverline.startsWith("UNBLANK")) {
+            emit ActiveChanged(false);
+        }
+    }
+}
+
+void KScreenSaver::slotXScreenSaverError()
+{
+    // qDebug() << Q_FUNC_INFO;
+    const QByteArray xscreensaverdata = m_xscreensaver->readAllStandardError();
+    kWarning() << xscreensaverdata;
+}
+
+#include "moc_kscreensaver.cpp"

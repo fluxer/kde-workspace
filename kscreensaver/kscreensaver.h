@@ -20,6 +20,7 @@
 #define KSCREENSAVER_H
 
 #include <QObject>
+#include <QProcess>
 #include <QElapsedTimer>
 
 class KScreenSaver : public QObject
@@ -27,6 +28,7 @@ class KScreenSaver : public QObject
     Q_OBJECT
 public:
     KScreenSaver(QObject *parent = nullptr);
+    ~KScreenSaver();
 
 public Q_SLOTS:
     bool GetActive();
@@ -46,7 +48,12 @@ public Q_SLOTS:
 Q_SIGNALS:
     void ActiveChanged(bool active);
 
+private Q_SLOTS:
+    void slotXScreenSaverOutput();
+    void slotXScreenSaverError();
+
 private:
+    QProcess* m_xscreensaver;
     QElapsedTimer m_activetimer;
     uint m_inhibitionscounter;
     QList<uint> m_inhibitions;
