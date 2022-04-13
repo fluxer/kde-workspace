@@ -26,8 +26,7 @@ static const uint ChangeScreenSettings = 4;
 
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
-    m_xscreensaver(nullptr),
-    m_inhibitionscounter(0)
+    m_xscreensaver(nullptr)
 {
     (void)new ScreenSaverAdaptor(this);
 
@@ -132,7 +131,15 @@ void KScreenSaver::SimulateUserActivity()
 uint KScreenSaver::Inhibit(const QString &application_name, const QString &reason_for_inhibit)
 {
     // qDebug() << Q_FUNC_INFO << application_name << reason_for_inhibit;
-    m_inhibitionscounter++;
+    uint inhibitionscounter = 0;
+    while (m_inhibitions.contains(inhibitionscounter)) {
+        inhibitionscounter++;
+        if (inhibitionscounter >= INT_MAX) {
+            kWarning() << "Inhibit limit reached";
+            return INT_MAX;
+        }
+    }
+
     QDBusInterface policyAgent(
         "org.kde.Solid.PowerManagement",
         "/org/kde/Solid/PowerManagement/PolicyAgent",
@@ -140,8 +147,8 @@ uint KScreenSaver::Inhibit(const QString &application_name, const QString &reaso
         QDBusConnection::sessionBus()
     );
     policyAgent.asyncCall("AddInhibition", ChangeScreenSettings, application_name, reason_for_inhibit);
-    m_inhibitions.append(m_inhibitionscounter);
-    return m_inhibitionscounter;
+    m_inhibitions.append(inhibitionscounter);
+    return inhibitionscounter;
 }
 
 uint KScreenSaver::Throttle(const QString &application_name, const QString &reason_for_inhibit)

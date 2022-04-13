@@ -55,7 +55,6 @@ private Q_SLOTS:
 private:
     QProcess* m_xscreensaver;
     QElapsedTimer m_activetimer;
-    uint m_inhibitionscounter;
     QList<uint> m_inhibitions;
 };
 
