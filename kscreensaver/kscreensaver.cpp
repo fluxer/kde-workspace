@@ -122,8 +122,6 @@ bool KScreenSaver::SetActive(bool active)
     }
     if (!xscreensaverstatus) {
         kWarning() << "Could not set activity";
-    } else {
-        emit ActiveChanged(active);
     }
     return xscreensaverstatus;
 }
