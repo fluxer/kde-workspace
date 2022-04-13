@@ -97,11 +97,8 @@ void KScreenSaver::Lock()
         QString::fromLatin1("xscreensaver-command"),
         QStringList() << QString::fromLatin1("-lock")
     );
-    if (xscreensaverstatus) {
-        m_activetimer.start();
-    } else {
+    if (!xscreensaverstatus) {
         kWarning() << "Could not lock";
-        m_activetimer.invalidate();
     }
 }
 
@@ -189,8 +186,10 @@ void KScreenSaver::slotXScreenSaverOutput()
         }
 
         if (xscreensaverline.startsWith("BLANK") || xscreensaverline.startsWith("LOCK")) {
+            m_activetimer.restart();
             emit ActiveChanged(true);
         } else if (xscreensaverline.startsWith("UNBLANK")) {
+            m_activetimer.invalidate();
             emit ActiveChanged(false);
         }
     }
