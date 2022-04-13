@@ -38,7 +38,7 @@ public:
     QString serviceName() const final;
 
 private Q_SLOTS:
-    void connmanStateChanged();
+    void connmanStateChanged(const QString &name, const QDBusVariant &value);
 
 private:
     Solid::Networking::Status m_status;

@@ -27,6 +27,7 @@
 
 // for reference:
 // https://git.kernel.org/pub/scm/network/connman/connman.git/tree/doc/overview-api.txt
+// https://git.kernel.org/pub/scm/network/connman/connman.git/tree/doc/manager-api.txt
 
 #define CONNMAN_DBUS_SERVICE "net.connman"
 #define CONNMAN_DBUS_PATH "/"
@@ -40,8 +41,11 @@ ConnmanStatus::ConnmanStatus(QObject *parent)
     m_connman(CONNMAN_DBUS_SERVICE, CONNMAN_DBUS_PATH, CONNMAN_DBUS_INTERFACE, QDBusConnection::systemBus())
 {
     if (isSupported()) {
-        connect(&m_connman, SIGNAL(PropertyChanged()), this, SLOT(connmanStateChanged()));
-        connmanStateChanged();
+        connect(
+            &m_connman, SIGNAL(PropertyChanged(QString,QDBusVariant)),
+            this, SLOT(connmanStateChanged(QString,QDBusVariant))
+        );
+        connmanStateChanged(QString(), QDBusVariant());
     }
 }
 
@@ -60,8 +64,11 @@ QString ConnmanStatus::serviceName() const
     return QString::fromLatin1(CONNMAN_DBUS_SERVICE);
 }
 
-void ConnmanStatus::connmanStateChanged()
+void ConnmanStatus::connmanStateChanged(const QString &name, const QDBusVariant &value)
 {
+    Q_UNUSED(name);
+    Q_UNUSED(value);
+
     m_status = Solid::Networking::Unknown;
     QDBusReply<ConnmanPropertiesType> reply = m_connman.call("GetProperties");
     if (!reply.isValid()) {
