@@ -143,6 +143,7 @@ uint KScreenSaver::Inhibit(const QString &application_name, const QString &reaso
         QDBusConnection::sessionBus()
     );
     policyAgent.asyncCall("AddInhibition", ChangeScreenSettings, application_name, reason_for_inhibit);
+    m_inhibitions.append(m_inhibitionscounter);
     return m_inhibitionscounter;
 }
 
