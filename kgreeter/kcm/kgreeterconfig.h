@@ -19,6 +19,7 @@
 #ifndef KGREETERCONFIG_H
 #define KGREETERCONFIG_H
 
+#include <QFont>
 #include <QProcess>
 #include <kcmodule.h>
 
@@ -43,6 +44,7 @@ public Q_SLOTS:
     void defaults() final;
 
 private Q_SLOTS:
+    void slotFontChanged(const QFont &font);
     void slotStyleChanged(const QString &style);
     void slotColorChanged(const QString &color);
     void slotURLChanged(const QString &url);

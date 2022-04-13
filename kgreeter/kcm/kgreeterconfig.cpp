@@ -28,6 +28,7 @@
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstyle.h>
+#include <kglobalsettings.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -63,6 +64,8 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     setNeedsAuthorization(true);
 
     load();
+
+    connect(fontchooser, SIGNAL(fontSelected(QFont)), this, SLOT(slotFontChanged(QFont)));
 
     const QStringList kthemercs = KGlobal::dirs()->findAllResources("data", "kstyle/themes/*.themerc");
     foreach (const QString &style, QStyleFactory::keys()) {
@@ -109,6 +112,13 @@ void KCMGreeter::load()
 {
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
 
+    const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
+    QFont kgreeterfont;
+    if (!kgreeterfont.fromString(kgreeterfontstring)) {
+        kgreeterfont = KGlobalSettings::generalFont();
+    }
+    fontchooser->setFont(kgreeterfont);
+
     for (int i = 0; i < stylesbox->count(); i++) {
         if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
             stylesbox->setCurrentIndex(i);
@@ -150,6 +160,7 @@ void KCMGreeter::save()
 {
     KAuth::Action kgreeteraction("org.kde.kcontrol.kcmkgreeter.save");
     kgreeteraction.setHelperID("org.kde.kcontrol.kcmkgreeter");
+    kgreeteraction.addArgument("font", fontchooser->font().toString());
     kgreeteraction.addArgument("style", stylesbox->itemData(stylesbox->currentIndex()).toString());
     kgreeteraction.addArgument("colorscheme", colorsbox->itemData(colorsbox->currentIndex()).toString());
     kgreeteraction.addArgument("background", backgroundrequester->url().path());
@@ -168,6 +179,7 @@ void KCMGreeter::save()
 
 void KCMGreeter::defaults()
 {
+    fontchooser->setFont(KGlobalSettings::generalFont());
     for (int i = 0; i < stylesbox->count(); i++) {
         if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
             stylesbox->setCurrentIndex(i);
@@ -178,6 +190,13 @@ void KCMGreeter::defaults()
     backgroundrequester->setUrl(KUrl());
     rectanglerequester->setUrl(KUrl());
 
+    enableTest(false);
+    emit changed(true);
+}
+
+void KCMGreeter::slotFontChanged(const QFont &font)
+{
+    Q_UNUSED(font);
     enableTest(false);
     emit changed(true);
 }

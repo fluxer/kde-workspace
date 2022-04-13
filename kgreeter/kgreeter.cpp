@@ -515,6 +515,13 @@ int main(int argc, char**argv)
 {
     QApplication app(argc, argv);
 
+    const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
+    QFont kgreeterfont;
+    if (!kgreeterfont.fromString(kgreeterfontstring)) {
+        kgreeterfont = KGlobalSettings::generalFont();
+    }
+    app.setFont(kgreeterfont);
+
     // for the style
     const QStringList pluginpaths = KGlobal::dirs()->resourceDirs("qtplugins");
     Q_FOREACH (const QString &path, pluginpaths) {

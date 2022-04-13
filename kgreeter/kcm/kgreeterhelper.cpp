@@ -25,8 +25,9 @@
 
 ActionReply KGreeterHelper::save(const QVariantMap &parameters)
 {
-    if (!parameters.contains("style") || !parameters.contains("colorscheme")
-        || !parameters.contains("background") || !parameters.contains("rectangle")) {
+    if (!parameters.contains("font") || !parameters.contains("style")
+        || !parameters.contains("colorscheme") || !parameters.contains("background")
+        || !parameters.contains("rectangle")) {
         return KAuth::ActionReply::HelperErrorReply;
     }
 
@@ -36,6 +37,7 @@ ActionReply KGreeterHelper::save(const QVariantMap &parameters)
     }
 
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
+    kgreetersettings.setValue("greeter/font", parameters.value("font"));
     kgreetersettings.setValue("greeter/style", parameters.value("style"));
     kgreetersettings.setValue("greeter/colorscheme", colorscheme);
     kgreetersettings.setValue("greeter/background", parameters.value("background"));
