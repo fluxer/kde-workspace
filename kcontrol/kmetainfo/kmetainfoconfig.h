@@ -36,11 +36,14 @@ public:
     KCMMetaInfo(QWidget* parent, const QVariantList&);
     ~KCMMetaInfo();
 
-    virtual void load();
-    virtual void save();
+    void load() final;
+    void save() final;
 
 private Q_SLOTS:
     void slotItemChanged(QListWidgetItem *item);
+
+private:
+    void loadMetaInfo();
 };
 
 #endif // KDEMETAINFO_H
