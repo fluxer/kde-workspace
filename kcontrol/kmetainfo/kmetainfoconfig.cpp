@@ -37,8 +37,7 @@ KCMMetaInfo::KCMMetaInfo(QWidget* parent, const QVariantList& args)
 {
     Q_UNUSED(args);
 
-    setQuickHelp( i18n("<h1>KFileMetaInfo</h1>"
-            "This module allows you to change KDE meta information preferences."));
+    setQuickHelp(i18n("<h1>KFileMetaInfo</h1> This module allows you to change KDE meta information preferences."));
 
     setupUi(this);
 
@@ -48,11 +47,10 @@ KCMMetaInfo::KCMMetaInfo(QWidget* parent, const QVariantList& args)
         0, KLocalizedString(), KAboutData::License_GPL,
         ki18n("Copyright 2022, Ivailo Monev <email>xakepa10@gmail.com</email>")
     );
-
     about->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
     setAboutData(about);
 
-    layout()->setContentsMargins(0, 0, 0, 0);
+    setButtons(KCModule::Help | KCModule::Apply);
 
     pluginslist->setSelectionMode(QAbstractItemView::NoSelection);
     pluginslist->setSortingEnabled(true);
