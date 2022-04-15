@@ -28,6 +28,7 @@ LldbHighlighter::LldbHighlighter(QTextDocument* parent, const QList<BacktraceLin
 
     KColorScheme kcolorscheme(QPalette::Active);
     m_crapformat.setForeground(kcolorscheme.foreground(KColorScheme::InactiveText));
+    m_signalformat.setForeground(kcolorscheme.foreground(KColorScheme::NegativeText));
     m_idformat.setForeground(kcolorscheme.foreground(KColorScheme::PositiveText));
     m_hexformat.setForeground(kcolorscheme.foreground(KColorScheme::NegativeText));
     m_hexformat.setFontWeight(QFont::Bold);
@@ -40,9 +41,19 @@ LldbHighlighter::LldbHighlighter(QTextDocument* parent, const QList<BacktraceLin
 void LldbHighlighter::highlightBlock(const QString &text)
 {
     // qDebug() << Q_FUNC_INFO << text << currentBlock().position() << currentBlock().length();
-    if (!text.contains(QLatin1String(" thread #"))
-        && !text.contains(QLatin1String(" frame #"))) {
+    const bool hasthread = text.contains(QLatin1String(" thread #"));
+    if (!hasthread && !text.contains(QLatin1String(" frame #"))) {
         setFormat(0, text.length(), m_crapformat);
+    }
+
+    if (hasthread) {
+        int partlength = 0;
+        foreach (const QString &textpart, text.split(QLatin1Char(' '))) {
+            if (textpart.startsWith(QLatin1String("SIG"))) {
+                setFormat(partlength, textpart.length(), m_signalformat);
+            }
+            partlength += (textpart.length() + 1);
+        }
     }
 
     int partlength = 0;

@@ -34,6 +34,7 @@ protected:
 
 private:
     QTextCharFormat m_crapformat;
+    QTextCharFormat m_signalformat;
     QTextCharFormat m_idformat;
     QTextCharFormat m_hexformat;
     QTextCharFormat m_libraryformat;
