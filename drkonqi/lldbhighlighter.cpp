@@ -24,7 +24,7 @@
 LldbHighlighter::LldbHighlighter(QTextDocument* parent, const QList<BacktraceLine> &lines)
     : QSyntaxHighlighter(parent)
 {
-    m_lines = lines;
+    Q_UNUSED(lines);
 
     KColorScheme kcolorscheme(QPalette::Active);
     m_crapformat.setForeground(kcolorscheme.foreground(KColorScheme::InactiveText));
@@ -59,7 +59,11 @@ void LldbHighlighter::highlightBlock(const QString &text)
             if (subtextpart.size() >= 2) {
                 const int firstpartlength = subtextpart.at(0).length();
                 setFormat(partlength, firstpartlength, m_libraryformat);
-                // TODO: setFormat(partlength + firstpartlength, subtextpart.at(1).length(), m_functionformat);
+                const QString subtextpart2 = subtextpart.at(1);
+                if (!subtextpart2.contains(QLatin1Char('('))
+                    || subtextpart2.endsWith(QLatin1Char(')'))) {
+                    setFormat(partlength + firstpartlength, subtextpart2.length() + 1, m_functionformat);
+                }
             }
         } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
             setFormat(partlength, textpart.length(), m_sourceformat);

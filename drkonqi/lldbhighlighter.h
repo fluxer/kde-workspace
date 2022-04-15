@@ -33,7 +33,6 @@ protected:
     void highlightBlock(const QString& text) final;
 
 private:
-    QList<BacktraceLine> m_lines;
     QTextCharFormat m_crapformat;
     QTextCharFormat m_idformat;
     QTextCharFormat m_hexformat;
