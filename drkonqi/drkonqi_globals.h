@@ -31,7 +31,7 @@ public:
 };
 
 /* Urls are defined globally here, so that they can change easily */
-#define TECHBASE_HOWTO_DOC "http://techbase.kde.org/Development/Tutorials/Debugging/How_to_create_useful_crash_reports#Preparing_your_KDE_packages"
+#define TECHBASE_HOWTO_DOC_URL "http://techbase.kde.org/Development/Tutorials/Debugging/How_to_create_useful_crash_reports#Preparing_your_KDE_packages"
 #define ABOUT_BUG_REPORTING_URL "https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues"
 
 #endif

@@ -247,7 +247,7 @@ void BacktraceWidget::loadData()
                                             "backtrace; install the needed packages (<link url='%2'>"
                                             "list of files</link>) and click the "
                                             "<interface>Reload</interface> button.",
-                                            QLatin1String(TECHBASE_HOWTO_DOC),
+                                            QLatin1String(TECHBASE_HOWTO_DOC_URL),
                                             QLatin1String("#missingDebugPackages")));
         }
 
