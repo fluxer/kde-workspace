@@ -18,16 +18,50 @@
 
 #include "lldbhighlighter.h"
 
-#include <QTextDocument>
+#include <QDebug>
 #include <KColorScheme>
 
 LldbHighlighter::LldbHighlighter(QTextDocument* parent, const QList<BacktraceLine> &lines)
     : QSyntaxHighlighter(parent)
 {
     m_lines = lines;
+
+    KColorScheme kcolorscheme(QPalette::Active);
+    m_crapformat.setForeground(kcolorscheme.foreground(KColorScheme::InactiveText));
+    m_idformat.setForeground(kcolorscheme.foreground(KColorScheme::PositiveText));
+    m_hexformat.setForeground(kcolorscheme.foreground(KColorScheme::NegativeText));
+    m_hexformat.setFontWeight(QFont::Bold);
+    m_libraryformat.setForeground(kcolorscheme.foreground(KColorScheme::NeutralText));
+    m_functionformat.setForeground(kcolorscheme.foreground(KColorScheme::VisitedText));
+    m_functionformat.setFontWeight(QFont::Bold);
+    m_sourceformat.setForeground(kcolorscheme.foreground(KColorScheme::LinkText));
 }
 
 void LldbHighlighter::highlightBlock(const QString &text)
 {
-    // TODO:
+    // qDebug() << Q_FUNC_INFO << text << currentBlock().position() << currentBlock().length();
+    if (!text.contains(QLatin1String(" thread #"))
+        && !text.contains(QLatin1String(" frame #"))) {
+        setFormat(0, text.length(), m_crapformat);
+    }
+
+    int partlenth = 0;
+    foreach (const QString &textpart, text.split(QLatin1Char(' '))) {
+        if (textpart.startsWith(QLatin1Char('#'))) {
+            const bool lastcharislon = (textpart.length() > 0 && textpart.at(textpart.length() - 1).isLetterOrNumber());
+            setFormat(partlenth, textpart.length() - int(!lastcharislon), m_idformat);
+        } else if (textpart.startsWith(QLatin1String("0x"))) {
+            setFormat(partlenth, textpart.length(), m_hexformat);
+        } else if (textpart.contains(QLatin1Char('`'))) {
+            const QStringList subtextpart = textpart.split(QLatin1Char('`'));
+            if (subtextpart.size() == 2) {
+                const int firstsublenth = subtextpart.at(0).length();
+                setFormat(partlenth, firstsublenth, m_libraryformat);
+                // TODO: setFormat(partlenth + firstsublenth, subtextpart.at(1).length(), m_functionformat);
+            }
+        } else if (textpart.count(QLatin1Char(':')) == 2) {
+            setFormat(partlenth, textpart.length(), m_sourceformat);
+        }
+        partlenth += (textpart.length() + 1);
+    }
 }

@@ -40,9 +40,27 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
 
     if (line.trimmed().isEmpty()) {
         d->m_type = BacktraceLine::EmptyLine;
+        return;
     }
 
-    // TODO:
+    const QByteArray linebytes = line.toAscii();
+    int threadnum = 0;
+    int framenum = 0;
+    if (::sscanf(linebytes.constData(), "* thread #%d", &threadnum) == 1) {
+        // also SignalHandlerStart
+        d->m_type = BacktraceLine::ThreadIndicator;
+        d->m_rating = BacktraceLine::Good;
+    } else if (::sscanf(linebytes.constData(), "  thread #%d", &threadnum) == 1) {
+        d->m_type = BacktraceLine::ThreadStart;
+        d->m_rating = BacktraceLine::Good;
+    } else if (::sscanf(linebytes.constData(), "    frame #%d:", &framenum) > 0) {
+        d->m_type = BacktraceLine::StackFrame;
+        d->m_rating = BacktraceLine::Good;
+        d->m_stackFrameNumber = framenum;
+    } else {
+        d->m_type = BacktraceLine::Crap;
+    }
+    // qDebug() << Q_FUNC_INFO << line << d->m_type << d->m_rating;
 }
 
 //END BacktraceLineLldb

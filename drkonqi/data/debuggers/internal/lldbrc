@@ -5,4 +5,4 @@ Backends=KCrash
 
 [KCrash]
 Exec=lldb --batch --source %tempfile --attach-pid %pid
-BatchCommands=settings set term-width 200\nsettings set use-color no\nthread backtrace all
+BatchCommands=settings set use-color no\nthread backtrace all

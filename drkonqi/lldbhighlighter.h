@@ -19,9 +19,10 @@
 #ifndef LLDBHIGHLIGHTER_H
 #define LLDBHIGHLIGHTER_H
 
-#include <QSyntaxHighlighter>
-
 #include "parser/backtraceline.h"
+
+#include <QSyntaxHighlighter>
+#include <QTextDocument>
 
 class LldbHighlighter : public QSyntaxHighlighter
 {
@@ -33,6 +34,12 @@ protected:
 
 private:
     QList<BacktraceLine> m_lines;
+    QTextCharFormat m_crapformat;
+    QTextCharFormat m_idformat;
+    QTextCharFormat m_hexformat;
+    QTextCharFormat m_libraryformat;
+    QTextCharFormat m_functionformat;
+    QTextCharFormat m_sourceformat;
 };
 
 #endif // LLDBHIGHLIGHTER_H
