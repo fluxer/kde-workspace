@@ -51,7 +51,6 @@ void BacktraceParserNull::newLine(const QString & lineStr)
     d_ptr->m_linesList.append(BacktraceLineNull(lineStr));
 }
 
-
 //END BacktraceParserNull
 
 #include "moc_backtraceparsernull.cpp"

@@ -38,6 +38,7 @@
 #include "drkonqi_globals.h"
 #include "debuggermanager.h"
 #include "gdbhighlighter.h"
+#include "lldbhighlighter.h"
 
 static const char extraDetailsLabelMargin[] = " margin: 5px; ";
 
@@ -202,8 +203,15 @@ void BacktraceWidget::loadData()
 
         // highlight if possible
         if (m_btGenerator->debugger().codeName() == "gdb") {
-            m_highlighter = new GdbHighlighter(ui.m_backtraceEdit->document(),
-                                               m_btGenerator->parser()->parsedBacktraceLines());
+            m_highlighter = new GdbHighlighter(
+                ui.m_backtraceEdit->document(),
+                m_btGenerator->parser()->parsedBacktraceLines()
+            );
+        } else if (m_btGenerator->debugger().codeName() == "lldb") {
+            m_highlighter = new LldbHighlighter(
+                ui.m_backtraceEdit->document(),
+                m_btGenerator->parser()->parsedBacktraceLines()
+            );
         }
 
         BacktraceParser * btParser = m_btGenerator->parser();

@@ -28,11 +28,13 @@ set(drkonqi_SRCS
     debuggerlaunchers.cpp
     debuggermanager.cpp
     gdbhighlighter.cpp
+    lldbhighlighter.cpp
 )
 
 set(backtrace_parser_SRCS
     parser/backtraceparser.cpp
     parser/backtraceparsergdb.cpp
+    parser/backtraceparserlldb.cpp
     parser/backtraceparsernull.cpp
 )
 
