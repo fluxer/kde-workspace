@@ -56,10 +56,10 @@ void LldbHighlighter::highlightBlock(const QString &text)
             setFormat(partlenth, textpart.length(), m_hexformat);
         } else if (textpart.contains(QLatin1Char('`'))) {
             const QStringList subtextpart = textpart.split(QLatin1Char('`'));
-            if (subtextpart.size() == 2) {
-                const int firstsublenth = subtextpart.at(0).length();
-                setFormat(partlenth, firstsublenth, m_libraryformat);
-                // TODO: setFormat(partlenth + firstsublenth, subtextpart.at(1).length(), m_functionformat);
+            if (subtextpart.size() >= 2) {
+                const int firstpartlength = subtextpart.at(0).length();
+                setFormat(partlenth, firstpartlength, m_libraryformat);
+                // TODO: setFormat(partlenth + firstpartlength, subtextpart.at(1).length(), m_functionformat);
             }
         } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
             setFormat(partlenth, textpart.length(), m_sourceformat);
