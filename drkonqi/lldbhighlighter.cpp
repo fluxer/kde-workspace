@@ -58,6 +58,8 @@ void LldbHighlighter::highlightBlock(const QString &text)
 
     int partlength = 0;
     int partscounter = 0;
+    int functionstart = 0;
+    int functionend = 0;
     const QStringList textparts = text.split(QLatin1Char(' '));
     foreach (const QString &textpart, textparts) {
         if (textpart.startsWith(QLatin1Char('#'))) {
@@ -66,20 +68,23 @@ void LldbHighlighter::highlightBlock(const QString &text)
         } else if (textpart.startsWith(QLatin1String("0x"))) {
             setFormat(partlength, textpart.length(), m_hexformat);
         } else if (textpart.contains(QLatin1Char('`'))) {
-            const QStringList subtextpart = textpart.split(QLatin1Char('`'));
-            if (subtextpart.size() >= 2) {
-                const int firstpartlength = subtextpart.at(0).length();
-                setFormat(partlength, firstpartlength, m_libraryformat);
-                const QString subtextpart2 = subtextpart.at(1);
-                if (!subtextpart2.contains(QLatin1Char('('))
-                    || subtextpart2.endsWith(QLatin1Char(')'))) {
-                    setFormat(partlength + firstpartlength, subtextpart2.length() + 1, m_functionformat);
-                }
+            const int tildeindex = textpart.indexOf(QLatin1Char('`'));
+            setFormat(partlength, tildeindex, m_libraryformat);
+            functionstart = (partlength + tildeindex + 1);
+            if (!textpart.contains(QLatin1Char('(')) || textpart.endsWith(QLatin1Char(')'))) {
+                setFormat(functionstart, textpart.length() - tildeindex - 1, m_functionformat);
+                functionstart = 0;
             }
+        } else if (functionstart && (textpart == QLatin1String("+") || textpart == QLatin1String("at"))) {
+            functionend = (partlength - textpart.length());
         } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
             setFormat(partlength, textpart.length(), m_sourceformat);
         }
         partlength += (textpart.length() + 1);
         partscounter += 1;
+    }
+
+    if (functionstart > 0 && functionend > 0) {
+        setFormat(functionstart, functionend - functionstart + 1, m_functionformat);
     }
 }
