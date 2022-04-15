@@ -53,7 +53,7 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
     } else if (::sscanf(linebytes.constData(), "  thread #%d", &threadnum) == 1) {
         d->m_type = BacktraceLine::ThreadStart;
         d->m_rating = BacktraceLine::Good;
-    } else if (::sscanf(linebytes.constData(), "    frame #%d:", &framenum) > 0) {
+    } else if (::sscanf(linebytes.constData(), "    frame #%d:", &framenum) == 1) {
         d->m_type = BacktraceLine::StackFrame;
         d->m_rating = BacktraceLine::Good;
         d->m_stackFrameNumber = framenum;

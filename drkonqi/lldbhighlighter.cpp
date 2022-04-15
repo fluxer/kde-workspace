@@ -46,7 +46,9 @@ void LldbHighlighter::highlightBlock(const QString &text)
     }
 
     int partlenth = 0;
-    foreach (const QString &textpart, text.split(QLatin1Char(' '))) {
+    int partscounter = 0;
+    const QStringList textparts = text.split(QLatin1Char(' '));
+    foreach (const QString &textpart, textparts) {
         if (textpart.startsWith(QLatin1Char('#'))) {
             const bool lastcharislon = (textpart.length() > 0 && textpart.at(textpart.length() - 1).isLetterOrNumber());
             setFormat(partlenth, textpart.length() - int(!lastcharislon), m_idformat);
@@ -59,9 +61,10 @@ void LldbHighlighter::highlightBlock(const QString &text)
                 setFormat(partlenth, firstsublenth, m_libraryformat);
                 // TODO: setFormat(partlenth + firstsublenth, subtextpart.at(1).length(), m_functionformat);
             }
-        } else if (textpart.count(QLatin1Char(':')) == 2) {
+        } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
             setFormat(partlenth, textpart.length(), m_sourceformat);
         }
         partlenth += (textpart.length() + 1);
+        partscounter += 1;
     }
 }
