@@ -45,26 +45,26 @@ void LldbHighlighter::highlightBlock(const QString &text)
         setFormat(0, text.length(), m_crapformat);
     }
 
-    int partlenth = 0;
+    int partlength = 0;
     int partscounter = 0;
     const QStringList textparts = text.split(QLatin1Char(' '));
     foreach (const QString &textpart, textparts) {
         if (textpart.startsWith(QLatin1Char('#'))) {
             const bool lastcharislon = (textpart.length() > 0 && textpart.at(textpart.length() - 1).isLetterOrNumber());
-            setFormat(partlenth, textpart.length() - int(!lastcharislon), m_idformat);
+            setFormat(partlength, textpart.length() - int(!lastcharislon), m_idformat);
         } else if (textpart.startsWith(QLatin1String("0x"))) {
-            setFormat(partlenth, textpart.length(), m_hexformat);
+            setFormat(partlength, textpart.length(), m_hexformat);
         } else if (textpart.contains(QLatin1Char('`'))) {
             const QStringList subtextpart = textpart.split(QLatin1Char('`'));
             if (subtextpart.size() >= 2) {
                 const int firstpartlength = subtextpart.at(0).length();
-                setFormat(partlenth, firstpartlength, m_libraryformat);
-                // TODO: setFormat(partlenth + firstpartlength, subtextpart.at(1).length(), m_functionformat);
+                setFormat(partlength, firstpartlength, m_libraryformat);
+                // TODO: setFormat(partlength + firstpartlength, subtextpart.at(1).length(), m_functionformat);
             }
         } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
-            setFormat(partlenth, textpart.length(), m_sourceformat);
+            setFormat(partlength, textpart.length(), m_sourceformat);
         }
-        partlenth += (textpart.length() + 1);
+        partlength += (textpart.length() + 1);
         partscounter += 1;
     }
 }
