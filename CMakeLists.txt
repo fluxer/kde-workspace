@@ -269,6 +269,12 @@ add_feature_info(xscreensaver
     "Screen saver and screen locking support"
 )
 
+find_program(GDB_OR_LLDB_EXECUTABLE NAMES gdb lldb)
+add_feature_info(gdb_or_lldb
+    GDB_OR_LLDB_EXECUTABLE
+    "Backtraces support"
+)
+
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
