@@ -43,20 +43,16 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
         return;
     }
 
-    const QByteArray linebytes = line.toAscii();
-    int threadnum = 0;
-    int framenum = 0;
-    if (::sscanf(linebytes.constData(), "* thread #%d", &threadnum) == 1) {
+    if (line.startsWith(QLatin1String("* thread"))) {
         // also SignalHandlerStart
         d->m_type = BacktraceLine::ThreadIndicator;
         d->m_rating = BacktraceLine::Good;
-    } else if (::sscanf(linebytes.constData(), "  thread #%d", &threadnum) == 1) {
+    } else if (line.contains(QLatin1String(" thread #"))) {
         d->m_type = BacktraceLine::ThreadStart;
         d->m_rating = BacktraceLine::Good;
-    } else if (::sscanf(linebytes.constData(), "    frame #%d:", &framenum) == 1) {
+    } else if (line.contains(QLatin1String(" frame #"))) {
         d->m_type = BacktraceLine::StackFrame;
         d->m_rating = BacktraceLine::Good;
-        d->m_stackFrameNumber = framenum;
     } else {
         d->m_type = BacktraceLine::Crap;
     }
