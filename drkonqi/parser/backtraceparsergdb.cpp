@@ -170,7 +170,7 @@ BacktraceParserGdb::BacktraceParserGdb(QObject *parent)
 
 BacktraceParserPrivate* BacktraceParserGdb::constructPrivate() const
 {
-    return new BacktraceParserGdbPrivate;
+    return new BacktraceParserGdbPrivate();
 }
 
 void BacktraceParserGdb::newLine(const QString & lineStr)

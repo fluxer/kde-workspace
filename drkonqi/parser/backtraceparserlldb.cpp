@@ -83,15 +83,15 @@ BacktraceParserLldb::BacktraceParserLldb(QObject *parent)
 
 BacktraceParserPrivate* BacktraceParserLldb::constructPrivate() const
 {
-    BacktraceParserPrivate *d = BacktraceParser::constructPrivate();
-    d->m_usefulness = BacktraceParser::MayBeUseful;
-    return d;
+    return new BacktraceParserLldbPrivate();
 }
 
 void BacktraceParserLldb::newLine(const QString &line)
 {
     Q_D(BacktraceParserLldb);
-    d->m_linesList.append(BacktraceLineLldb(line));
+    BacktraceLineLldb lldbline(line);
+    d->m_linesList.append(lldbline);
+    d->m_linesToRate.append(lldbline);
 }
 
 //END BacktraceParserLldb
