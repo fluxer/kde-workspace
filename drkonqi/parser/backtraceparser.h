@@ -49,20 +49,8 @@ public:
      */
     virtual QList<BacktraceLine> parsedBacktraceLines() const;
 
-    /*! Returns a simplified version of the backtrace. This backtrace:
-     * \li Starts from the first useful function
-     * \li Has maximum 5 lines
-     * \li Replaces garbage with [...]
-     */
-    virtual QString simplifiedBacktrace() const;
-
     /*! Returns a value that indicates how much useful is the backtrace that we got */
     virtual Usefulness backtraceUsefulness() const;
-
-    /*! Returns a short list of the first good functions that appear in the backtrace
-     * (in the crashing thread). This is used for quering for duplicate reports.
-     */
-    virtual QStringList firstValidFunctions() const;
 
     /*! Returns a list of libraries/executables that are missing debug symbols. */
     virtual QSet<QString> librariesWithMissingDebugSymbols() const;
@@ -84,10 +72,9 @@ protected:
     /*! Subclasses should override to provide their own BacktraceParserPrivate instance */
     virtual BacktraceParserPrivate *constructPrivate() const;
 
-    /*! This method should fill the m_usefulness, m_simplifiedBacktrace, m_firstValidFunctions
-     * and m_librariesWithMissingDebugSymbols members of the BacktraceParserPrivate instance.
-     * The default implementation uses the lines inserted in m_linesToRate and applies a
-     * generic algorithm that should work for many debuggers.
+    /*! This method should fill the m_usefulness and m_librariesWithMissingDebugSymbols members of
+     * the BacktraceParserPrivate instance. The default implementation uses the lines inserted in
+     * m_linesToRate and applies a generic algorithm that should work for many debuggers.
      */
     virtual void calculateRatingData();
 

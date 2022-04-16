@@ -28,8 +28,6 @@ public:
 
     QList<BacktraceLine> m_linesList;
     QList<BacktraceLine> m_linesToRate;
-    QStringList m_firstUsefulFunctions;
-    QString m_simplifiedBacktrace;
     QSet<QString> m_librariesWithMissingDebugSymbols;
     BacktraceParser::Usefulness m_usefulness;
 };

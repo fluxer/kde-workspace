@@ -32,8 +32,6 @@ public:
 private slots:
     void btParserUsefulnessTest_data();
     void btParserUsefulnessTest();
-    void btParserFunctionsTest_data();
-    void btParserFunctionsTest();
     void btParserBenchmark_data();
     void btParserBenchmark();
 

@@ -63,19 +63,6 @@ QList<BacktraceLine> BacktraceParser::parsedBacktraceLines() const
     return d ? d->m_linesList : QList<BacktraceLine>();
 }
 
-QString BacktraceParser::simplifiedBacktrace() const
-{
-    Q_D(const BacktraceParser);
-
-    //if there is no cached usefulness, the data calculation function has not run yet.
-    if (d && d->m_usefulness == InvalidUsefulness) {
-        const_cast<BacktraceParser*>(this)->calculateRatingData();
-    }
-
-    //if there is no d, the debugger has not run yet, so we have no backtrace.
-    return d ? d->m_simplifiedBacktrace : QString();
-}
-
 BacktraceParser::Usefulness BacktraceParser::backtraceUsefulness() const
 {
     Q_D(const BacktraceParser);
@@ -89,20 +76,6 @@ BacktraceParser::Usefulness BacktraceParser::backtraceUsefulness() const
     //so we can say that the (inexistent) backtrace is Useless.
     return d ? d->m_usefulness : Useless;
 }
-
-QStringList BacktraceParser::firstValidFunctions() const
-{
-    Q_D(const BacktraceParser);
-
-    //if there is no cached usefulness, the data calculation function has not run yet.
-    if (d && d->m_usefulness == InvalidUsefulness) {
-        const_cast<BacktraceParser*>(this)->calculateRatingData();
-    }
-
-    //if there is no d, the debugger has not run yet, so we have no functions to return.
-    return d ? d->m_firstUsefulFunctions : QStringList();
-}
-
 
 QSet<QString> BacktraceParser::librariesWithMissingDebugSymbols() const
 {
@@ -126,7 +99,7 @@ void BacktraceParser::resetState()
 
 BacktraceParserPrivate *BacktraceParser::constructPrivate() const
 {
-    return new BacktraceParserPrivate;
+    return new BacktraceParserPrivate();
 }
 
 
@@ -203,82 +176,6 @@ static bool lineShouldBeIgnored(const BacktraceLine & line)
     return false;
 }
 
-static bool isFunctionUseful(const BacktraceLine & line)
-{
-    //We need the function name
-    if ( line.rating() == BacktraceLine::MissingEverything
-        || line.rating() == BacktraceLine::MissingFunction ) {
-        return false;
-    }
-
-    //Misc ignores
-    if ( line.functionName() == "__kernel_vsyscall"
-         || line.functionName() == "raise"
-         || line.functionName() == "abort"
-         || line.functionName() == "__libc_message"
-         || line.functionName() == "thr_kill" /* *BSD */) {
-        return false;
-    }
-
-    //Ignore core Qt functions
-    //(QObject can be useful in some cases)
-    if ( line.functionName().startsWith(QLatin1String("QBasicAtomicInt::"))
-        || line.functionName().startsWith(QLatin1String("QBasicAtomicPointer::"))
-        || line.functionName().startsWith(QLatin1String("QAtomicInt::"))
-        || line.functionName().startsWith(QLatin1String("QAtomicPointer::"))
-        || line.functionName().startsWith(QLatin1String("QMetaObject::"))
-        || line.functionName().startsWith(QLatin1String("QPointer::"))
-        || line.functionName().startsWith(QLatin1String("QWeakPointer::"))
-        || line.functionName().startsWith(QLatin1String("QSharedPointer::"))
-        || line.functionName().startsWith(QLatin1String("QScopedPointer::"))
-        || line.functionName().startsWith(QLatin1String("QMetaCallEvent::")) ) {
-        return false;
-    }
-
-    //Ignore core Qt containers misc functions
-    if ( line.functionName().endsWith(QLatin1String("detach"))
-        || line.functionName().endsWith(QLatin1String("detach_helper"))
-        || line.functionName().endsWith(QLatin1String("node_create"))
-        || line.functionName().endsWith(QLatin1String("deref"))
-        || line.functionName().endsWith(QLatin1String("ref"))
-        || line.functionName().endsWith(QLatin1String("node_copy"))
-        || line.functionName().endsWith(QLatin1String("d_func")) ) {
-        return false;
-    }
-
-    //Misc Qt stuff
-    if ( line.functionName() == "qt_message_output"
-        || line.functionName() == "qt_message"
-        || line.functionName() == "qFatal"
-        || line.functionName().startsWith(QLatin1String("qGetPtrHelper"))
-        || line.functionName().startsWith(QLatin1String("qt_meta_")) ) {
-        return false;
-    }
-
-    return true;
-}
-
-static bool isFunctionUsefulForSearch(const BacktraceLine & line)
-{
-    //Ignore Qt containers (and iterators Q*Iterator)
-    if ( line.functionName().startsWith(QLatin1String("QList"))
-        || line.functionName().startsWith(QLatin1String("QLinkedList"))
-        || line.functionName().startsWith(QLatin1String("QVector"))
-        || line.functionName().startsWith(QLatin1String("QStack"))
-        || line.functionName().startsWith(QLatin1String("QQueue"))
-        || line.functionName().startsWith(QLatin1String("QSet"))
-        || line.functionName().startsWith(QLatin1String("QMap"))
-        || line.functionName().startsWith(QLatin1String("QMultiMap"))
-        || line.functionName().startsWith(QLatin1String("QMapData"))
-        || line.functionName().startsWith(QLatin1String("QHash"))
-        || line.functionName().startsWith(QLatin1String("QMultiHash"))
-        || line.functionName().startsWith(QLatin1String("QHashData")) ) {
-        return false;
-    }
-
-    return true;
-}
-
 void BacktraceParser::calculateRatingData()
 {
     Q_D(BacktraceParser);
@@ -321,41 +218,6 @@ void BacktraceParser::calculateRatingData()
         bestPossibleRating += static_cast<uint>(BacktraceLine::BestRating) * multiplier;
 
         kDebug() << line.rating() << line.toString();
-    }
-
-    //Generate a simplified backtrace
-    //- Starts from the first useful function
-    //- Max of 5 lines
-    //- Replaces garbage with [...]
-    //At the same time, grab the first three useful functions for search queries
-
-    i.toFront(); //Reuse the list iterator
-    int functionIndex = 0;
-    int usefulFunctionsCount = 0;
-    bool firstUsefulFound = false;
-    while( i.hasNext() && functionIndex < 5 ) {
-        const BacktraceLine & line = i.next();
-        if ( !lineShouldBeIgnored(line) && isFunctionUseful(line) ) { //Line is not garbage to use
-            if (!firstUsefulFound) {
-                firstUsefulFound = true;
-            }
-            //Save simplified backtrace line
-            d->m_simplifiedBacktrace += line.toString();
-
-            //Fetch three useful functions (only functionName) for search queries
-            if (usefulFunctionsCount < 3 && isFunctionUsefulForSearch(line) &&
-                !d->m_firstUsefulFunctions.contains(line.functionName())) {
-                d->m_firstUsefulFunctions.append(line.functionName());
-                usefulFunctionsCount++;
-            }
-
-            functionIndex++;
-        } else if (firstUsefulFound) {
-            //Add "[...]" if there are invalid functions in the middle
-            if (!d->m_simplifiedBacktrace.endsWith(QLatin1String("[...]\n"))) {
-                d->m_simplifiedBacktrace += QLatin1String("[...]\n");
-            }
-        }
     }
 
     //calculate rating
