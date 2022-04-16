@@ -72,14 +72,14 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
             partscounter += 1;
         }
 
-        if (d->m_functionName.isEmpty()) {
-            d->m_rating = BacktraceLine::MissingFunction;
+        if (d->m_file.isEmpty()) {
+            d->m_rating = BacktraceLine::MissingSourceFile;
         }
         if (d->m_library.isEmpty()) {
             d->m_rating = BacktraceLine::MissingLibrary;
         }
-        if (d->m_file.isEmpty()) {
-            d->m_rating = BacktraceLine::MissingSourceFile;
+        if (d->m_functionName.isEmpty()) {
+            d->m_rating = BacktraceLine::MissingFunction;
         }
         // qDebug() << Q_FUNC_INFO << line << d->m_functionName << d->m_library << d->m_file;
     } else {
