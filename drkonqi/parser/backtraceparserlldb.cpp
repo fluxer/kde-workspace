@@ -38,7 +38,8 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
     d->m_type = BacktraceLine::Unknown;
     d->m_rating = BacktraceLine::MissingEverything;
 
-    if (line.trimmed().isEmpty()) {
+    const QString trimmedline = line.trimmed();
+    if (trimmedline.isEmpty()) {
         d->m_type = BacktraceLine::EmptyLine;
         return;
     }
@@ -55,18 +56,18 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
         d->m_rating = BacktraceLine::Good;
 
         int partscounter = 0;
-        const QStringList textparts = line.trimmed().split(QLatin1Char(' '));
-        foreach (const QString &textpart, textparts) {
-            if (textpart.contains(QLatin1Char('`'))) {
-                const int tildeindex = textpart.indexOf(QLatin1Char('`'));
-                d->m_library = textpart.mid(0, tildeindex);
-                d->m_functionName = textpart.mid(tildeindex + 1, textpart.length() - tildeindex + 1);
+        const QStringList lineparts = trimmedline.split(QLatin1Char(' '));
+        foreach (const QString &linepart, lineparts) {
+            if (linepart.contains(QLatin1Char('`'))) {
+                const int tildeindex = linepart.indexOf(QLatin1Char('`'));
+                d->m_library = linepart.mid(0, tildeindex);
+                d->m_functionName = linepart.mid(tildeindex + 1, linepart.length() - tildeindex + 1);
                 const int bracketindex = d->m_functionName.indexOf(QLatin1Char('('));
                 if (bracketindex > 0) {
                     d->m_functionName = d->m_functionName.mid(0, bracketindex);
                 }
-            } else if (partscounter > 0 && textparts.at(partscounter - 1) == QLatin1String("at")) {
-                d->m_file = textpart;
+            } else if (partscounter > 0 && lineparts.at(partscounter - 1) == QLatin1String("at")) {
+                d->m_file = linepart;
             }
             partscounter += 1;
         }
