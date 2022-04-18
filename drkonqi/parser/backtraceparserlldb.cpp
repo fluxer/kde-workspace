@@ -78,7 +78,7 @@ BacktraceLineLldb::BacktraceLineLldb(const QString &line)
         if (d->m_library.isEmpty()) {
             d->m_rating = BacktraceLine::MissingLibrary;
         }
-        if (d->m_functionName.isEmpty()) {
+        if (d->m_functionName.isEmpty() || d->m_functionName.startsWith(QLatin1String("___lldb_unnamed_symbol"))) {
             d->m_rating = BacktraceLine::MissingFunction;
         }
         // qDebug() << Q_FUNC_INFO << line << d->m_functionName << d->m_library << d->m_file;
