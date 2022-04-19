@@ -26,24 +26,35 @@ static const uint ChangeScreenSettings = 4;
 
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
+    m_objectsregistered(false),
+    m_serviceregistered(false),
     m_xscreensaver(nullptr)
 {
     (void)new ScreenSaverAdaptor(this);
 
     QDBusConnection connection = QDBusConnection::sessionBus();
-    const bool object = connection.registerObject("/ScreenSaver", this);
-    if (object) {
-        const bool service = connection.registerService("org.freedesktop.ScreenSaver");
-        if (service) {
-            kDebug() << "kscreensaver is online";
-        } else {
-            kWarning() << "Could not register service" << connection.lastError().message();
-            return;
-        }
-    } else {
+
+    const bool object = connection.registerObject("/ScreenSaver", this); // used by e.g. xdg-screensaver
+    if (!object) {
         kWarning() << "Could not register object" << connection.lastError().message();
         return;
     }
+    const bool object2 = connection.registerObject("/org/freedesktop/ScreenSaver", this); // used by e.g. chromium
+    if (!object2) {
+        kWarning() << "Could not register second object" << connection.lastError().message();
+        connection.unregisterObject("/ScreenSaver");
+        return;
+    }
+    m_objectsregistered = true;
+
+    const bool service = connection.registerService("org.freedesktop.ScreenSaver");
+    if (!service) {
+        kWarning() << "Could not register service" << connection.lastError().message();
+        connection.unregisterObject("/ScreenSaver");
+        connection.unregisterObject("/org/freedesktop/ScreenSaver");
+        return;
+    }
+    m_serviceregistered = true;
 
     QProcess::startDetached(
         QString::fromLatin1("xscreensaver"),
@@ -61,6 +72,17 @@ KScreenSaver::KScreenSaver(QObject *parent)
 
 KScreenSaver::~KScreenSaver()
 {
+    if (m_serviceregistered) {
+        QDBusConnection connection = QDBusConnection::sessionBus();
+        connection.unregisterService("org.freedesktop.ScreenSaver");
+    }
+
+    if (m_objectsregistered) {
+        QDBusConnection connection = QDBusConnection::sessionBus();
+        connection.unregisterObject("/ScreenSaver");
+        connection.unregisterObject("/org/freedesktop/ScreenSaver");
+    }
+
     if (m_xscreensaver) {
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardOutput()), this, SLOT(slotXScreenSaverOutput()));
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardError()), this, SLOT(slotXScreenSaverError()));

@@ -53,6 +53,8 @@ private Q_SLOTS:
     void slotXScreenSaverError();
 
 private:
+    bool m_objectsregistered;
+    bool m_serviceregistered;
     QProcess* m_xscreensaver;
     QElapsedTimer m_activetimer;
     QList<uint> m_inhibitions;
