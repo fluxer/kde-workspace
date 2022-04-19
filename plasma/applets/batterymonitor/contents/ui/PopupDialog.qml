@@ -37,18 +37,6 @@ FocusScope {
 
     property bool popupShown // somehow plasmoid.popupShowing isn't working
 
-    property bool isBrightnessAvailable
-    property alias screenBrightness: brightnessSlider.value
-    property alias screenBrightnessPercentage: brightnessSlider.percentage
-
-    property bool isKeyboardBrightnessAvailable
-    property alias keyboardBrightness: keyboardBrightnessSlider.value
-    property alias keyboardBrightnessPercentage: keyboardBrightnessSlider.percentage
-
-    property int pmSwitchWidth: padding.margins.left + pmSwitch.implicitWidth + padding.margins.right
-
-    signal brightnessChanged(int screenBrightness)
-    signal keyboardBrightnessChanged(int keyboardBrightness)
     signal powermanagementChanged(bool checked)
 
     PlasmaCore.FrameSvgItem {
@@ -75,8 +63,6 @@ FocusScope {
             property int activeIndex
 
             delegate: BatteryItem { }
-            KeyNavigation.tab: brightnessSlider
-            KeyNavigation.backtab: pmSwitch
 
             function updateSelection(old,active) {
                 itemAt(old).updateSelection();
@@ -121,34 +107,6 @@ FocusScope {
             right: parent.right
             top: plasmoid.location == BottomEdge ? undefined : parent.top
             bottom: plasmoid.location == BottomEdge ? parent.bottom : undefined
-        }
-
-        BrightnessItem {
-            id: brightnessSlider
-            icon: QIcon("video-display")
-            label: i18n("Display Brightness")
-            visible: isBrightnessAvailable
-            onChanged: brightnessChanged(value)
-            KeyNavigation.tab: keyboardBrightnessSlider
-            KeyNavigation.backtab: batteryList
-            focus: true
-        }
-
-        BrightnessItem {
-            id: keyboardBrightnessSlider
-            icon: QIcon("input-keyboard")
-            label: i18n("Keyboard Brightness")
-            visible: isKeyboardBrightnessAvailable
-            onChanged: keyboardBrightnessChanged(value)
-            KeyNavigation.tab: pmSwitch
-            KeyNavigation.backtab: brightnessSlider
-        }
-
-        PowerManagementItem {
-            id: pmSwitch
-            onEnabledChanged: powermanagementChanged(enabled)
-            KeyNavigation.tab: batteryList
-            KeyNavigation.backtab: keyboardBrightnessSlider
         }
     }
 

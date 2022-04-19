@@ -153,24 +153,20 @@ void KScreenSaver::SimulateUserActivity()
 uint KScreenSaver::Inhibit(const QString &application_name, const QString &reason_for_inhibit)
 {
     // qDebug() << Q_FUNC_INFO << application_name << reason_for_inhibit;
-    uint inhibitionscounter = 0;
-    while (m_inhibitions.contains(inhibitionscounter)) {
-        inhibitionscounter++;
-        if (inhibitionscounter >= INT_MAX) {
-            kWarning() << "Inhibit limit reached";
-            return INT_MAX;
-        }
-    }
-
-    QDBusInterface policyAgent(
-        "org.kde.Solid.PowerManagement",
-        "/org/kde/Solid/PowerManagement/PolicyAgent",
-        "org.kde.Solid.PowerManagement.PolicyAgent",
+    QDBusInterface poweriface(
+        "org.freedesktop.PowerManagement",
+        "/org/freedesktop/PowerManagement/Inhibit",
+        "org.freedesktop.PowerManagement.Inhibit",
         QDBusConnection::sessionBus()
     );
-    policyAgent.asyncCall("AddInhibition", ChangeScreenSettings, application_name, reason_for_inhibit);
-    m_inhibitions.append(inhibitionscounter);
-    return inhibitionscounter;
+    QDBusReply<uint> powerreply = poweriface.call("Inhibit", application_name, reason_for_inhibit);
+    if (powerreply.isValid()) {
+        uint inhibitioncookie = powerreply.value();
+        m_inhibitions.append(inhibitioncookie);
+        return inhibitioncookie;
+    }
+    kWarning() << "Power manager reply is invalid";
+    return 0;
 }
 
 uint KScreenSaver::Throttle(const QString &application_name, const QString &reason_for_inhibit)
@@ -186,13 +182,13 @@ void KScreenSaver::UnInhibit(uint cookie)
 {
     // qDebug() << Q_FUNC_INFO << cookie;
     if (m_inhibitions.contains(cookie)) {
-        QDBusInterface policyAgent(
-            "org.kde.Solid.PowerManagement",
-            "/org/kde/Solid/PowerManagement/PolicyAgent",
-            "org.kde.Solid.PowerManagement.PolicyAgent",
+        QDBusInterface poweriface(
+            "org.freedesktop.PowerManagement",
+            "/org/freedesktop/PowerManagement/Inhibit",
+            "org.freedesktop.PowerManagement.Inhibit",
             QDBusConnection::sessionBus()
         );
-        policyAgent.asyncCall("ReleaseInhibition", cookie);
+        poweriface.asyncCall("UnInhibit", cookie);
         m_inhibitions.removeAll(cookie);
     }
 }

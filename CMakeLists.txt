@@ -55,13 +55,11 @@ if(Q_WS_X11)
     add_feature_info("libXcomposite" X11_Xcomposite_FOUND "The X11 Composite extension library may be used by Plasma and KWin")
     add_feature_info("libXShm" X11_XShm_FOUND "The X11 shared-memory fences library may be used by ksplash")
     add_feature_info("libxf86misc" X11_xf86misc_FOUND "The X11 miscellaneous library may be used by keyboard KCM") # TODO: unused?
-    add_feature_info("libdpms" X11_dpms_FOUND "The X11 extension library may be used by powerdevil")
     add_feature_info("libXSync" X11_XSync_FOUND "The X11 synchronization may be used by KWin")
     add_feature_info("libXinput" X11_Xinput_FOUND "The X11 XINPUT extension library may be used by keyboard KCM")
     add_feature_info("libXft" X11_Xft_FOUND "The X11 font API library may be used by kfontinst KCM")
     add_feature_info("libXinerama" X11_Xinerama_FOUND "The X11 XINERAMA extension library may be used by ksplash")
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
-    add_feature_info("libxf86vmode" X11_xf86vmode_FOUND "The X video mode extension library used by powerdevil")
 
     if(NOT X11_Xau_FOUND)
         message(FATAL_ERROR "The X11 authorization extension library was not found. Required for authorization in kworkspace library")
@@ -302,7 +300,6 @@ add_subdirectory(kscreensaver)
 
 add_subdirectory(ksplash)
 
-add_subdirectory(powerdevil)
 add_subdirectory(qguiplatformplugin_kde)
 add_subdirectory(ksysguard)
 

@@ -62,12 +62,6 @@ private slots:
     void deviceAdded(const QString& udi);
     void batteryRemainingTimeChanged(qulonglong time);
     void batteryRemainingTimeReply(QDBusPendingCallWatcher*);
-    void screenBrightnessChanged(int brightness);
-    void keyboardBrightnessChanged(int brightness);
-    void screenBrightnessReply(QDBusPendingCallWatcher *watcher);
-    void keyboardBrightnessReply(QDBusPendingCallWatcher *watcher);
-    void brightnessControlsAvailableChanged(bool available);
-    void keyboardBrightnessControlsAvailableChanged(bool available);
 
 private:
     QString batteryType(const Solid::Battery *battery);
@@ -76,10 +70,6 @@ private:
     QStringList m_sources;
 
     QHash<QString, QString> m_batterySources;  // <udi, Battery0>
-
-    bool m_brightnessControlsAvailable;
-    bool m_keyboardBrightnessControlsAvailable;
-
 };
 
 

@@ -31,15 +31,4 @@
             <label>The cookie obtained from beginSuppressingScreenPowerManagement, representing the inhibition to release</label>
         </entry>
     </group>
-
-    <group name="setBrightness">
-        <entry name="brightness" type="Int">
-          <label>The value of the screen brightness</label>
-        </entry>
-    </group>
-    <group name="setKeyboardBrightness">
-        <entry name="brightness" type="Int">
-            <label>The value of the keyboard brightness</label>
-        </entry>
-    </group>
 </kcfg>

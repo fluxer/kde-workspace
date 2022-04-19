@@ -60,13 +60,28 @@ void PowerManagementJob::start()
         setResult(false);
         return;
     } else if (operation == "suspend" || operation == "suspendToRam") {
-        setResult(suspend(Ram));
+        if (!Solid::PowerManagement::supportedSleepStates().contains(Solid::PowerManagement::SuspendState)) {
+            setResult(false);
+            return;
+        }
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, nullptr, nullptr);
+        setResult(true);
         return;
     } else if (operation == "suspendToDisk") {
-        setResult(suspend(Disk));
+        if (!Solid::PowerManagement::supportedSleepStates().contains(Solid::PowerManagement::HibernateState)) {
+            setResult(false);
+            return;
+        }
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, nullptr, nullptr);
+        setResult(true);
         return;
     } else if (operation == "suspendHybrid") {
-        setResult(suspend(Hybrid));
+        if (!Solid::PowerManagement::supportedSleepStates().contains(Solid::PowerManagement::HybridSuspendState)) {
+            setResult(false);
+            return;
+        }
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, nullptr, nullptr);
+        setResult(true);
         return;
     } else if (operation == "requestShutDown") {
         requestShutDown();
@@ -90,65 +105,10 @@ void PowerManagementJob::start()
     } else if (operation == "stopSuppressingScreenPowerManagement") {
         setResult(Solid::PowerManagement::stopSuppressingScreenPowerManagement(parameters().value("cookie").toInt()));
         return;
-    } else if (operation == "setBrightness") {
-        setScreenBrightness(parameters().value("brightness").toInt());
-        setResult(true);
-        return;
-    } else if (operation == "setKeyboardBrightness") {
-        setKeyboardBrightness(parameters().value("brightness").toInt());
-        setResult(true);
-        return;
     }
 
     kDebug() << "don't know what to do with " << operation;
     setResult(false);
-}
-
-bool PowerManagementJob::suspend(const SuspendType &type)
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.Solid.PowerManagement",
-                                                      "/org/kde/Solid/PowerManagement/Actions/SuspendSession",
-                                                      "org.kde.Solid.PowerManagement.Actions.SuspendSession",
-                                                      callForType(type));
-    QDBusConnection::sessionBus().asyncCall(msg);
-    return true;
-}
-
-QString PowerManagementJob::callForType(const SuspendType &type)
-{
-    switch (type) {
-        case Disk:
-            return "suspendToDisk";
-        break;
-
-        case Hybrid:
-            return "suspendHybrid";
-        break;
-
-        default:
-            return "suspendToRam";
-        break;
-    }
-}
-
-void PowerManagementJob::setScreenBrightness(int value)
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.Solid.PowerManagement",
-                                                      "/org/kde/Solid/PowerManagement/Actions/BrightnessControl",
-                                                      "org.kde.Solid.PowerManagement.Actions.BrightnessControl",
-                                                      "setBrightness");
-    msg << value;
-    QDBusConnection::sessionBus().asyncCall(msg);
-}
-
-void PowerManagementJob::setKeyboardBrightness(int value)
-{
-    QDBusMessage msg = QDBusMessage::createMethodCall("org.kde.Solid.PowerManagement",
-                                                      "/org/kde/Solid/PowerManagement/Actions/KeyboardBrightnessControl",
-                                                      "org.kde.Solid.PowerManagement.Actions.KeyboardBrightnessControl",
-                                                      "setKeyboardBrightness");
-    msg << value;
-    QDBusConnection::sessionBus().asyncCall(msg);
 }
 
 void PowerManagementJob::requestShutDown()

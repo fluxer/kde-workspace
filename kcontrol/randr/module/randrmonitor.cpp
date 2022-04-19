@@ -53,10 +53,10 @@ RandrMonitorModule::RandrMonitorModule( QObject* parent, const QList<QVariant>& 
     setModuleName( "randrmonitor" );
     initRandr();
 
-    QDBusReply <bool> re =  QDBusConnection::systemBus().interface()->isServiceRegistered("org.kde.Solid.PowerManagement");
+    QDBusReply <bool> re =  QDBusConnection::systemBus().interface()->isServiceRegistered("org.freedesktop.PowerManagement");
     if (!re.value()) {
         kDebug() << "PowerManagement not loaded, waiting for it";
-        QDBusServiceWatcher *serviceWatcher = new QDBusServiceWatcher("org.kde.Solid.PowerManagement", QDBusConnection::sessionBus(),
+        QDBusServiceWatcher *serviceWatcher = new QDBusServiceWatcher("org.freedesktop.PowerManagement", QDBusConnection::sessionBus(),
                 QDBusServiceWatcher::WatchForRegistration, this);
         connect(serviceWatcher, SIGNAL(serviceRegistered(QString)), this, SLOT(checkInhibition()));
         connect(serviceWatcher, SIGNAL(serviceRegistered(QString)), this, SLOT(checkResumeFromSuspend()));
@@ -276,9 +276,9 @@ void RandrMonitorModule::checkResumeFromSuspend()
 
 void RandrMonitorModule::switchDisplay()
 {
-    QDBusMessage call = QDBusMessage::createMethodCall("org.kde.Solid.PowerManagement",
-                        "/org/kde/Solid/PowerManagement",
-                        "org.kde.Solid.PowerManagement",
+    QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.PowerManagement",
+                        "/org/freedesktop/PowerManagement",
+                        "org.freedesktop.PowerManagement",
                         "isLidClosed");
     QDBusMessage msg =  QDBusConnection::sessionBus().call(call);
     QDBusReply<bool> reply(msg);

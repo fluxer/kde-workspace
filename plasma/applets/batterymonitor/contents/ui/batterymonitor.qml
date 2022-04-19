@@ -25,7 +25,7 @@ import "../code/logic.js" as Logic
 
 Item {
     id: batterymonitor
-    property int minimumWidth: Math.max(theme.iconSizes.dialog * 9, dialogItem.pmSwitchWidth)
+    property int minimumWidth: dialogItem.actualWidth
     property int minimumHeight: dialogItem.actualHeight
     property int maximumHeight: dialogItem.actualHeight
 
@@ -36,7 +36,7 @@ Item {
 
     Component.onCompleted: {
         plasmoid.aspectRatioMode = IgnoreAspectRatio
-        updateLogic(true);
+        updateLogic();
         plasmoid.addEventListener('ConfigChanged', configChanged);
         plasmoid.popupEvent.connect(popupEventSlot);
     }
@@ -45,7 +45,7 @@ Item {
         show_remaining_time = plasmoid.readConfig("showRemainingTime");
     }
 
-    function updateLogic(updateBrightness) {
+    function updateLogic() {
         Logic.updateCumulative();
 
         if (!dialogItem.popupShown) {
@@ -53,9 +53,6 @@ Item {
         }
 
         Logic.updateTooltip();
-        if (updateBrightness) {
-            Logic.updateBrightness(pmSource);
-        }
     }
 
     function popupEventSlot(popped) {
@@ -79,7 +76,7 @@ Item {
         engine: "powermanagement"
         connectedSources: sources
         onDataChanged: {
-            updateLogic(true);
+            updateLogic();
         }
         onSourceAdded: {
             disconnectSource(source);
@@ -101,7 +98,7 @@ Item {
             sourceModel: PlasmaCore.DataModel {
                 dataSource: pmSource
                 sourceFilter: "Battery[0-9]+"
-                onDataChanged: updateLogic(false)
+                onDataChanged: updateLogic()
             }
         }
 
@@ -120,34 +117,11 @@ Item {
         anchors.fill: parent
         focus: true
 
-        property bool disableBrightnessUpdate: false
-
-        isBrightnessAvailable: pmSource.data["PowerDevil"]["Screen Brightness Available"] ? true : false
-        isKeyboardBrightnessAvailable: pmSource.data["PowerDevil"]["Keyboard Brightness Available"] ? true : false
-
         showRemainingTime: show_remaining_time
         remainingTime: Number(pmSource.data["Battery"]["Remaining msec"])
 
         pluggedIn: pmSource.data["AC Adapter"]["Plugged in"]
 
-        onBrightnessChanged: {
-            if (disableBrightnessUpdate) {
-                return;
-            }
-            service = pmSource.serviceForSource("PowerDevil");
-            operation = service.operationDescription("setBrightness");
-            operation.brightness = screenBrightness;
-            service.startOperationCall(operation);
-        }
-        onKeyboardBrightnessChanged: {
-            if (disableBrightnessUpdate) {
-                return;
-            }
-            service = pmSource.serviceForSource("PowerDevil");
-            operation = service.operationDescription("setKeyboardBrightness");
-            operation.brightness = keyboardBrightness;
-            service.startOperationCall(operation);
-        }
         property int cookie1: -1
         property int cookie2: -1
         onPowermanagementChanged: {
