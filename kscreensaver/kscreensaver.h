@@ -41,9 +41,7 @@ public Q_SLOTS:
     void SimulateUserActivity();
 
     uint Inhibit(const QString &application_name, const QString &reason_for_inhibit);
-    uint Throttle(const QString &application_name, const QString &reason_for_inhibit);
     void UnInhibit(uint cookie);
-    void UnThrottle(uint cookie);
 
 Q_SIGNALS:
     void ActiveChanged(bool active);

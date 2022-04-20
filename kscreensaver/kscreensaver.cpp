@@ -169,15 +169,6 @@ uint KScreenSaver::Inhibit(const QString &application_name, const QString &reaso
     return 0;
 }
 
-uint KScreenSaver::Throttle(const QString &application_name, const QString &reason_for_inhibit)
-{
-    // qDebug() << Q_FUNC_INFO << application_name << reason_for_inhibit;
-    // was not implemented before either
-    Q_UNUSED(application_name);
-    Q_UNUSED(reason_for_inhibit);
-    return 0;
-}
-
 void KScreenSaver::UnInhibit(uint cookie)
 {
     // qDebug() << Q_FUNC_INFO << cookie;
@@ -191,13 +182,6 @@ void KScreenSaver::UnInhibit(uint cookie)
         poweriface.asyncCall("UnInhibit", cookie);
         m_inhibitions.removeAll(cookie);
     }
-}
-
-void KScreenSaver::UnThrottle(uint cookie)
-{
-    // qDebug() << Q_FUNC_INFO << cookie;
-    // was not implemented before either
-    Q_UNUSED(cookie);
 }
 
 void KScreenSaver::slotXScreenSaverOutput()
