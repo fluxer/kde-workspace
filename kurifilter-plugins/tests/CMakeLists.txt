@@ -1,4 +1,3 @@
-set( EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR} )
 set(kurifiltertest_SRCS kurifiltertest.cpp)
 
 kde4_add_test(kurifiltertest ${kurifiltertest_SRCS})
