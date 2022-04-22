@@ -34,7 +34,7 @@ function updateCumulative() {
             sum += b["Percent"];
             plugged = true;
         }
-        if (b["State"] != "NoCharge") {
+        if (b["State"] != "FullyCharge") {
             charged = false;
         }
         count++;
@@ -96,10 +96,11 @@ function lowestBattery() {
 function stringForBatteryState(batteryData) {
     if (batteryData["Plugged in"]) {
         switch(batteryData["State"]) {
-            case "NoCharge": return i18n("Not Charging");
+            case "UnknownCharge": return i18n("Unknown");
             case "Discharging": return i18n("Discharging");
+            case "Charging": return i18n("Charging");
             case "FullyCharged": return i18n("Fully Charged");
-            default: return i18n("Charging");
+            default: return i18n("Unknown");
         }
     } else {
         return i18nc("Battery is currently not present in the bay","Not present");
@@ -108,16 +109,10 @@ function stringForBatteryState(batteryData) {
 
 function iconForBattery(batteryData,pluggedIn) {
     switch(batteryData["Type"]) {
-        case "Monitor":
-            return "video-display";
-        case "Mouse":
-            return "input-mouse";
-        case "Keyboard":
-            return "input-keyboard";
-        case "Pda":
-            return "pda";
-        case "Phone":
-            return "phone";
+        case "Unknown":
+            return "unknown";
+        case "Usb":
+            return "drive-removable-media-usb";
         default: // Primary and UPS
             p = batteryData["Percent"];
             if (p >= 90) {

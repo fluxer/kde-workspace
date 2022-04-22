@@ -198,20 +198,8 @@ QString PowermanagementEngine::batteryType(const Solid::Battery* battery)
       case Solid::Battery::UpsBattery:
           return QLatin1String("Ups");
           break;
-      case Solid::Battery::MonitorBattery:
-          return QLatin1String("Monitor");
-          break;
-      case Solid::Battery::MouseBattery:
-          return QLatin1String("Mouse");
-          break;
-      case Solid::Battery::KeyboardBattery:
-          return QLatin1String("Keyboad");
-          break;
-      case Solid::Battery::PdaBattery:
-          return QLatin1String("Pda");
-          break;
-      case Solid::Battery::PhoneBattery:
-          return QLatin1String("Phone");
+      case Solid::Battery::UsbBattery:
+          return QLatin1String("Usb");
           break;
       default:
           return QLatin1String("Unknown");
@@ -241,8 +229,8 @@ Plasma::Service* PowermanagementEngine::serviceForSource(const QString &source)
 void PowermanagementEngine::updateBatteryChargeState(int newState, const QString& udi)
 {
     QString state("Unknown");
-    if (newState == Solid::Battery::NoCharge) {
-        state = "NoCharge";
+    if (newState == Solid::Battery::FullyCharged) {
+        state = "FullyCharged";
     } else if (newState == Solid::Battery::Charging) {
         state = "Charging";
     } else if (newState == Solid::Battery::Discharging) {

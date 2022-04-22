@@ -664,20 +664,12 @@ QVListLayout *SolBatteryDevice::infoPanelLayout()
   QString type;
   switch(batdev->type()) 
   {
-      case Solid::Battery::PdaBattery:
-        type = i18n("PDA"); break;
-      case Solid::Battery::UpsBattery:
-        type = i18n("UPS"); break;
-      case Solid::Battery::MouseBattery:
-        type = i18n("Mouse"); break;
       case Solid::Battery::PrimaryBattery:
         type = i18n("Primary"); break;
-      case Solid::Battery::KeyboardBattery:
-        type = i18n("Keyboard"); break;
-      case Solid::Battery::KeyboardMouseBattery:
-        type = i18n("Keyboard + Mouse"); break;
-      case Solid::Battery::CameraBattery:
-        type = i18n("Camera"); break;
+      case Solid::Battery::UpsBattery:
+        type = i18n("UPS"); break;
+      case Solid::Battery::UsbBattery:
+        type = i18n("USB"); break;
       default:
         type = i18nc("unknown battery type", "Unknown");
   }
@@ -689,8 +681,10 @@ QVListLayout *SolBatteryDevice::infoPanelLayout()
         state = i18n("Charging"); break;
       case Solid::Battery::Discharging:
         state = i18n("Discharging"); break;
+      case Solid::Battery::FullyCharged:
+        state = i18n("Fully Charged"); break;
       default:
-        state = i18n("No Charge");
+        state = i18nc("unknown battery charge", "Unknown");
     }
   
   labels << i18n("Battery Type: ")
