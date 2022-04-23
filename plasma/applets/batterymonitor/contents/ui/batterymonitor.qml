@@ -25,7 +25,7 @@ import "../code/logic.js" as Logic
 
 Item {
     id: batterymonitor
-    property int minimumWidth: dialogItem.actualWidth
+    property int minimumWidth: Math.max(theme.iconSizes.dialog * 9, dialogItem.pmSwitchWidth)
     property int minimumHeight: dialogItem.actualHeight
     property int maximumHeight: dialogItem.actualHeight
 

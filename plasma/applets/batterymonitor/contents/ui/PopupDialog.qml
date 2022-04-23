@@ -37,6 +37,8 @@ FocusScope {
 
     property bool popupShown // somehow plasmoid.popupShowing isn't working
 
+    property int pmSwitchWidth: padding.margins.left + pmSwitch.implicitWidth + padding.margins.right
+
     signal powermanagementChanged(bool checked)
 
     PlasmaCore.FrameSvgItem {
@@ -63,6 +65,7 @@ FocusScope {
             property int activeIndex
 
             delegate: BatteryItem { }
+            KeyNavigation.tab: pmSwitch
 
             function updateSelection(old,active) {
                 itemAt(old).updateSelection();
@@ -107,6 +110,12 @@ FocusScope {
             right: parent.right
             top: plasmoid.location == BottomEdge ? undefined : parent.top
             bottom: plasmoid.location == BottomEdge ? parent.bottom : undefined
+        }
+
+        PowerManagementItem {
+            id: pmSwitch
+            onEnabledChanged: powermanagementChanged(enabled)
+            KeyNavigation.tab: batteryList
         }
     }
 
