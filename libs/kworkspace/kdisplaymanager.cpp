@@ -589,6 +589,17 @@ KDisplayManager::isSwitchable()
                 QVariant prop = SDseat.property("CanMultiSession");
                 if (prop.isValid())
                     return prop.toBool();
+                QDBusInterface systemdIface(
+                    "org.freedesktop.systemd1", "/org/freedesktop/systemd1", "org.freedesktop.systemd1.Manager",
+                    QDBusConnection::systemBus()
+                );
+                QString systemdversion = systemdIface.property("Version").toString();
+                const int dotindex = systemdversion.indexOf(QLatin1Char('.'));
+                if (dotindex > 0) {
+                    systemdversion = systemdversion.left(dotindex);
+                }
+                // always allowed since 246 and the CanMultiSession property is hidden
+                return (systemdversion.toLongLong() >= 246);
             }
             CKSeat CKseat(currentSeat);
             if (CKseat.isValid()) {
