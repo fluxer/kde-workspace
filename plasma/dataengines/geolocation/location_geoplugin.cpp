@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
+    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,15 +16,14 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include "location_ipinfo.h"
+#include "location_geoplugin.h"
 
 #include <KDebug>
 #include <KJob>
 #include <KIO/TransferJob>
 #include <QJsonDocument>
-#include <QLocale>
 
-class IPinfo::Private
+class geoPlugin::Private
 {
 public:
     QByteArray payload;
@@ -33,43 +32,38 @@ public:
     {
         const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
-        const QStringList location = jsonmap["loc"].toString().split(QLatin1Char(','));
-        // TODO: which is which?
-        const QString latitude = (location.size() == 2 ? location.at(0) : QString());
-        const QString longitude = (location.size() == 2 ? location.at(1) : QString());
-        const QLocale locale(jsonmap["country"].toString());
         // for reference:
-        // https://ipinfo.io/developers
+        // http://www.geoplugin.com/quickstart
         outd["accuracy"] = 50000;
-        outd["country"] = QLocale::countryToString(locale.country());
-        outd["country code"] = jsonmap["country"];
-        outd["city"] = jsonmap["city"];
-        outd["latitude"] = latitude;
-        outd["longitude"] = longitude;
-        outd["ip"] = jsonmap["ip"];
+        outd["country"] = jsonmap["geoplugin_countryName"];;
+        outd["country code"] = jsonmap["geoplugin_countryCode"];
+        outd["city"] = jsonmap["geoplugin_city"];
+        outd["latitude"] = jsonmap["geoplugin_latitude"];
+        outd["longitude"] = jsonmap["geoplugin_longitude"];
+        outd["ip"] = jsonmap["geoplugin_request"];
         // qDebug() << Q_FUNC_INFO << outd;
     }
 };
 
-IPinfo::IPinfo(QObject* parent, const QVariantList& args)
+geoPlugin::geoPlugin(QObject* parent, const QVariantList& args)
     : GeolocationProvider(parent, args), d(new Private())
 {
     setUpdateTriggers(SourceEvent | NetworkConnected);
 }
 
-IPinfo::~IPinfo()
+geoPlugin::~geoPlugin()
 {
     delete d;
 }
 
-void IPinfo::update()
+void geoPlugin::update()
 {
     d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("https://ipinfo.io/json"),
+    KIO::TransferJob *datajob = KIO::get(KUrl("http://www.geoplugin.net/json.gp"),
                                          KIO::NoReload, KIO::HideProgressInfo);
 
     if (datajob) {
-        kDebug() << "Fetching https://ipinfo.io/json";
+        kDebug() << "Fetching http://www.geoplugin.net/json.gp";
         connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
                 SLOT(readData(KIO::Job*,QByteArray)));
         connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
@@ -78,7 +72,7 @@ void IPinfo::update()
     }
 }
 
-void IPinfo::readData(KIO::Job* job, const QByteArray& data)
+void geoPlugin::readData(KIO::Job* job, const QByteArray& data)
 {
     Q_UNUSED(job)
 
@@ -88,7 +82,7 @@ void IPinfo::readData(KIO::Job* job, const QByteArray& data)
     d->payload.append(data);
 }
 
-void IPinfo::result(KJob* job)
+void geoPlugin::result(KJob* job)
 {
     Plasma::DataEngine::Data outd;
 
@@ -101,6 +95,6 @@ void IPinfo::result(KJob* job)
     setData(outd);
 }
 
-K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(ipinfo, IPinfo)
+K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(geoplugin, geoPlugin)
 
-#include "moc_location_ipinfo.cpp"
+#include "moc_location_geoplugin.cpp"

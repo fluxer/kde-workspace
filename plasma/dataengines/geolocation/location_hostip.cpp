@@ -21,11 +21,10 @@
 #include "location_hostip.h"
 #include <KDebug>
 #include <KJob>
-#include <KIO/Job>
 #include <KIO/TransferJob>
 
-class HostIP::Private : public QObject {
-
+class HostIP::Private
+{
 public:
     QByteArray payload;
 

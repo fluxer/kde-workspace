@@ -20,10 +20,7 @@
 
 #include "geolocationprovider.h"
 
-class KJob;
-namespace KIO {
-    class Job;
-}
+#include <KIO/Job>
 
 class HostIP : public GeolocationProvider
 {
