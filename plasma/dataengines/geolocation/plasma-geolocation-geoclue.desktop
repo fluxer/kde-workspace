@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Geolocation GeoClue
-Comment=Geolocation via GeoClue.
-X-KDE-ServiceTypes=Plasma/GeolocationProvider
-X-KDE-ParentApp=geolocation
-Type=Service
-Icon=applications-internet
-X-KDE-Library=plasma-geolocation-geoclue
-X-KDE-PluginInfo-Name=geoclue
