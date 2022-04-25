@@ -61,6 +61,7 @@ private:
     QElapsedTimer m_activetimer;
     QList<uint> m_inhibitions;
     QDBusInterface m_login1;
+    QDBusInterface m_consolekit;
 };
 
 #endif // KSCREENSAVER_H

@@ -25,14 +25,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-// TODO: fallback to ConsoleKit
-
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
     m_objectsregistered(false),
     m_serviceregistered(false),
     m_xscreensaver(nullptr),
-    m_login1("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus())
+    m_login1("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus()),
+    m_consolekit("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", "org.freedesktop.ConsoleKit.Manager", QDBusConnection::systemBus())
 {
     (void)new ScreenSaverAdaptor(this);
 
@@ -85,6 +84,23 @@ KScreenSaver::KScreenSaver(QObject *parent)
             );
             connection.connect(
                 "org.freedesktop.login1", login1sessionpath, "org.freedesktop.login1.Session", "Unlock",
+                this, SLOT(slotUnlock())
+            );
+        } else {
+            kWarning() << "Invalid GetSessionByPID reply";
+        }
+    } else if (m_consolekit.isValid()) {
+        QDBusReply<QDBusObjectPath> reply = m_consolekit.call("GetSessionByPID", uint(::getpid()));
+        if (reply.isValid()) {
+            connection = QDBusConnection::systemBus();
+            const QString consolekitsessionpath = reply.value().path();
+            // qDebug() << Q_FUNC_INFO << consolekitsessionpath;
+            connection.connect(
+                "org.freedesktop.ConsoleKit", consolekitsessionpath, "org.freedesktop.ConsoleKit.Session", "Lock",
+                this, SLOT(slotLock())
+            );
+            connection.connect(
+                "org.freedesktop.ConsoleKit", consolekitsessionpath, "org.freedesktop.ConsoleKit.Session", "Unlock",
                 this, SLOT(slotUnlock())
             );
         } else {
