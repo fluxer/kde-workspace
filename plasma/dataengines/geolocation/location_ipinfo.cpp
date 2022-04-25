@@ -34,7 +34,6 @@ public:
         const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
         const QStringList location = jsonmap["loc"].toString().split(QLatin1Char(','));
-        // TODO: which is which?
         const QString latitude = (location.size() == 2 ? location.at(0) : QString());
         const QString longitude = (location.size() == 2 ? location.at(1) : QString());
         const QLocale locale(jsonmap["country"].toString());
