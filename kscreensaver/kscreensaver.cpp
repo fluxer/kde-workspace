@@ -114,11 +114,11 @@ uint KScreenSaver::GetSessionIdleTime()
 void KScreenSaver::Lock()
 {
     // qDebug() << Q_FUNC_INFO;
-    const bool xscreensaverstatus = QProcess::execute(
+    const int xscreensaverstatus = QProcess::execute(
         QString::fromLatin1("xscreensaver-command"),
         QStringList() << QString::fromLatin1("-lock")
     );
-    if (!xscreensaverstatus) {
+    if (xscreensaverstatus != 0) {
         kWarning() << "Could not lock";
     }
 }
@@ -126,7 +126,7 @@ void KScreenSaver::Lock()
 bool KScreenSaver::SetActive(bool active)
 {
     // qDebug() << Q_FUNC_INFO << active;
-    bool xscreensaverstatus = false;
+    int xscreensaverstatus = false;
     if (active) {
         xscreensaverstatus = QProcess::execute(
             QString::fromLatin1("xscreensaver-command"),
@@ -138,7 +138,7 @@ bool KScreenSaver::SetActive(bool active)
             QStringList() << QString::fromLatin1("-deactivate")
         );
     }
-    if (!xscreensaverstatus) {
+    if (xscreensaverstatus != 0) {
         kWarning() << "Could not set activity";
     }
     return xscreensaverstatus;
