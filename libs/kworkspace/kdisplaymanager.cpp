@@ -599,7 +599,9 @@ KDisplayManager::isSwitchable()
                     systemdversion = systemdversion.left(dotindex);
                 }
                 // always allowed since 246 and the CanMultiSession property is hidden
-                return (systemdversion.toLongLong() >= 246);
+                if (systemdversion.toLongLong() >= 246) {
+                    return true;
+                }
             }
             CKSeat CKseat(currentSeat);
             if (CKseat.isValid()) {
