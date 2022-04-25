@@ -22,13 +22,17 @@
 #include <kdebug.h>
 #include <kidletime.h>
 
-static const uint ChangeScreenSettings = 4;
+#include <sys/types.h>
+#include <unistd.h>
+
+// TODO: fallback to ConsoleKit
 
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
     m_objectsregistered(false),
     m_serviceregistered(false),
-    m_xscreensaver(nullptr)
+    m_xscreensaver(nullptr),
+    m_login1("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus())
 {
     (void)new ScreenSaverAdaptor(this);
 
@@ -68,6 +72,25 @@ KScreenSaver::KScreenSaver(QObject *parent)
         QString::fromLatin1("xscreensaver-command"),
         QStringList() << QString::fromLatin1("-watch")
     );
+
+    if (m_login1.isValid()) {
+        QDBusReply<QDBusObjectPath> reply = m_login1.call("GetSessionByPID", uint(::getpid()));
+        if (reply.isValid()) {
+            connection = QDBusConnection::systemBus();
+            const QString login1sessionpath = reply.value().path();
+            // qDebug() << Q_FUNC_INFO << login1sessionpath;
+            connection.connect(
+                "org.freedesktop.login1", login1sessionpath, "org.freedesktop.login1.Session", "Lock",
+                this, SLOT(slotLock())
+            );
+            connection.connect(
+                "org.freedesktop.login1", login1sessionpath, "org.freedesktop.login1.Session", "Unlock",
+                this, SLOT(slotUnlock())
+            );
+        } else {
+            kWarning() << "Invalid GetSessionByPID reply";
+        }
+    }
 }
 
 KScreenSaver::~KScreenSaver()
@@ -209,6 +232,18 @@ void KScreenSaver::slotXScreenSaverError()
     // qDebug() << Q_FUNC_INFO;
     const QByteArray xscreensaverdata = m_xscreensaver->readAllStandardError();
     kWarning() << xscreensaverdata;
+}
+
+void KScreenSaver::slotLock()
+{
+    // qDebug() << Q_FUNC_INFO;
+    Lock();
+}
+
+void KScreenSaver::slotUnlock()
+{
+    // qDebug() << Q_FUNC_INFO;
+    SetActive(false);
 }
 
 #include "moc_kscreensaver.cpp"
