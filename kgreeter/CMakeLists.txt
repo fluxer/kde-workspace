@@ -8,9 +8,8 @@ set_package_properties(GLIB2 PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
-add_subdirectory(kcm)
-
 include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${LIGHTDM_INCLUDE_DIR}
     ${GLIB2_INCLUDE_DIR}
 )
@@ -24,6 +23,7 @@ target_link_libraries(lightdm-kgreeter-greeter
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${KDE4_KDEUI_LIBS}
+    ${KDE4_PLASMA_LIBS}
     ${LIGHTDM_LIBRARIES}
     ${GLIB2_LIBRARIES}
 )
@@ -46,4 +46,11 @@ install(
 install(
     FILES lightdm-kgreeter-greeter.desktop
     DESTINATION ${KDE4_SHARE_INSTALL_PREFIX}/xgreeters
+)
+
+add_subdirectory(kcm)
+
+install(
+    FILES data/rectangle.png
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kgreeter
 )

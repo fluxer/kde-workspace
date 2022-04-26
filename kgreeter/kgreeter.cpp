@@ -23,7 +23,6 @@
 #include <QPainter>
 #include <KMessageBox>
 #include <KIcon>
-#include <KStyle>
 #include <KStandardDirs>
 #include <KGlobalSettings>
 #include <KSharedConfig>
@@ -32,6 +31,7 @@
 #include <glib.h>
 #include <lightdm-gobject-1/lightdm.h>
 
+#include "kgreeter.h"
 #include "ui_kgreeter.h"
 #include "config-workspace.h"
 
@@ -103,8 +103,8 @@ KGreeter::KGreeter(QWidget *parent)
 
     m_ui.setupUi(this);
 
-    m_background = QImage(kgreetersettings.value("greeter/background").toString());
-    m_rectangle = QImage(kgreetersettings.value("greeter/rectangle").toString());
+    m_background = QImage(kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString());
+    m_rectangle = QImage(kgreetersettings.value("greeter/rectangle", KGreeterDefaultRectangle()).toString());
 
     m_ldmgreeter = lightdm_greeter_new();
 
@@ -518,7 +518,7 @@ int main(int argc, char**argv)
     const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
     QFont kgreeterfont;
     if (!kgreeterfont.fromString(kgreeterfontstring)) {
-        kgreeterfont = KGlobalSettings::generalFont();
+        kgreeterfont = KGreeterDefaultFont();
     }
     app.setFont(kgreeterfont);
 
@@ -528,12 +528,8 @@ int main(int argc, char**argv)
         app.addLibraryPath(path);
     }
 
-    const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
-    if (!kgreeterstyle.isEmpty()) {
-        app.setStyle(kgreeterstyle);
-    } else {
-        app.setStyle(KStyle::defaultStyle());
-    }
+    const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
+    app.setStyle(kgreeterstyle);
 
     const QString kgreetercolorscheme = kgreetersettings.value("greeter/colorscheme").toString();
     if (!kgreetercolorscheme.isEmpty()) {

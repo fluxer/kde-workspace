@@ -17,6 +17,7 @@
 */
 
 #include "kgreeterconfig.h"
+#include "kgreeter.h"
 
 #include <QSettings>
 #include <QStyleFactory>
@@ -115,23 +116,15 @@ void KCMGreeter::load()
     const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
     QFont kgreeterfont;
     if (!kgreeterfont.fromString(kgreeterfontstring)) {
-        kgreeterfont = KGlobalSettings::generalFont();
+        kgreeterfont = KGreeterDefaultFont();
     }
     fontchooser->setFont(kgreeterfont);
 
+    const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
     for (int i = 0; i < stylesbox->count(); i++) {
-        if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
+        if (stylesbox->itemData(i).toString().toLower() == kgreeterstyle.toLower()) {
             stylesbox->setCurrentIndex(i);
             break;
-        }
-    }
-    const QString kgreeterstyle = kgreetersettings.value("greeter/style").toString();
-    if (!kgreeterstyle.isEmpty()) {
-        for (int i = 0; i < stylesbox->count(); i++) {
-            if (stylesbox->itemData(i).toString().toLower() == kgreeterstyle.toLower()) {
-                stylesbox->setCurrentIndex(i);
-                break;
-            }
         }
     }
 
@@ -146,10 +139,10 @@ void KCMGreeter::load()
         }
     }
 
-    const QString kgreeterbackground = kgreetersettings.value("greeter/background").toString();
+    const QString kgreeterbackground = kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString();
     backgroundrequester->setUrl(KUrl(kgreeterbackground));
 
-    const QString kgreeterrectangle = kgreetersettings.value("greeter/rectangle").toString();
+    const QString kgreeterrectangle = kgreetersettings.value("greeter/rectangle", KGreeterDefaultRectangle()).toString();
     rectanglerequester->setUrl(KUrl(kgreeterrectangle));
 
     enableTest(true);
