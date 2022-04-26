@@ -55,6 +55,17 @@ public:
                 }
             }
         }
+
+        if (country.contains(QLatin1String("Unknown Country"))) {
+            country = QString();
+        }
+        if (city.contains(QLatin1String("Unknown City"))) {
+            city = QString();
+        }
+        if (country.isEmpty() && city.isEmpty()) {
+            return;
+        }
+
         // ordering of first three to preserve backwards compatibility
         outd["accuracy"] = 40000;
         outd["country"] = country;
