@@ -160,18 +160,31 @@ bool KDisplayManager::isSwitchable()
         QDBusReply<QDBusObjectPath> reply = d->m_consolekit.call("GetCurrentSession");
         if (reply.isValid()) {
             QDBusInterface consolekitiface(
-                "org.freedesktop.ConsoleKit", reply.value().path(), "org.freedesktop.ConsoleKit.Seat",
+                "org.freedesktop.ConsoleKit", reply.value().path(), "org.freedesktop.ConsoleKit.Session",
                 QDBusConnection::systemBus()
             );
             if (!consolekitiface.isValid()) {
                 kWarning() << "Invalid session interface";
                 return false;
             }
-            QDBusReply<bool> reply2 = consolekitiface.call("CanActivateSessions");
-            if (reply2.isValid()) {
-                return reply2.value();
+            QDBusReply<QDBusObjectPath> reply2 = consolekitiface.call("GetSeatId");
+            if (!reply2.isValid()) {
+                kWarning() << "Invalid session reply";
+                return false;
             }
-            kWarning() << "Invalid session reply";
+            QDBusInterface consolekitiface2(
+                "org.freedesktop.ConsoleKit", reply2.value().path(), "org.freedesktop.ConsoleKit.Seat",
+                QDBusConnection::systemBus()
+            );
+            if (!consolekitiface2.isValid()) {
+                kWarning() << "Invalid seat interface";
+                return false;
+            }
+            QDBusReply<bool> reply3 = consolekitiface2.call("CanActivateSessions");
+            if (reply3.isValid()) {
+                return reply3.value();
+            }
+            kWarning() << "Invalid seat reply";
             return false;
         }
         kWarning() << "Invalid reply";
