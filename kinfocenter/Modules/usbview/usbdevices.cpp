@@ -37,9 +37,11 @@ static float getSpeed(int number)
         case LIBUSB_SPEED_SUPER: {
             return 5000.0;
         }
+#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_DRAGONFLY)
         case LIBUSB_SPEED_SUPER_PLUS: {
             return 10000.0;
         }
+#endif
         case LIBUSB_SPEED_UNKNOWN: {
             return 0.0;
         }
@@ -151,10 +153,12 @@ bool USBDevice::init() {
     libusb_init(&libusbctx);
     struct libusb_device **libusbdevices = nullptr;
     const size_t libusbdevicessize = libusb_get_device_list(libusbctx, &libusbdevices);
+    // qDebug() << Q_FUNC_INFO << libusbdevicessize;
     for (size_t i = 0; i < libusbdevicessize; i++) {
         USBDevice* device = new USBDevice();
         struct libusb_device_descriptor libusbdevice;
         libusb_get_device_descriptor(libusbdevices[i], &libusbdevice);
+        // qDebug() << Q_FUNC_INFO << libusbdevice.idVendor << libusbdevice.idProduct;
 
         device->_bus = libusb_get_bus_number(libusbdevices[i]);
         device->_port = libusb_get_port_number(libusbdevices[i]);
@@ -175,11 +179,13 @@ bool USBDevice::init() {
 
         device->_device = device->_port;
         device->_level = 0;
+#if !defined(Q_OS_FREEBSD) && !defined(Q_OS_DRAGONFLY)
         struct libusb_device *libusbparent = libusb_get_parent(libusbdevices[i]);
         if (libusbparent) {
             device->_parent = libusb_get_port_number(libusbparent);
             device->_level = 1;
         }
+#endif
     }
     libusb_free_device_list(libusbdevices, 1);
     libusb_exit(libusbctx);
