@@ -173,7 +173,9 @@ bool USBDevice::init() {
         device->_maxPacketSize = libusbdevice.bMaxPacketSize0;
         device->_vendorID = libusbdevice.idVendor;
         device->_prodID = libusbdevice.idProduct;
-        device->_serial = QString::number(libusbdevice.iSerialNumber);
+        if (libusbdevice.iSerialNumber > 0) {
+            device->_serial = QString::number(libusbdevice.iSerialNumber);
+        }
         device->_ver = getVersion(libusbdevice.bcdUSB);
         device->_rev = getVersion(libusbdevice.bcdDevice);
 
@@ -184,6 +186,11 @@ bool USBDevice::init() {
         if (libusbparent) {
             device->_parent = libusb_get_port_number(libusbparent);
             device->_level = 1;
+            struct libusb_device *libusbparentparent = libusb_get_parent(libusbparent);
+            if (libusbparentparent) {
+                // device->_parent = libusb_get_port_number(libusbparentparent);
+                device->_level = 2;
+            }
         }
 #endif
     }

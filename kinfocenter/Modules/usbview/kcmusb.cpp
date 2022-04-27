@@ -11,7 +11,7 @@
 #include <QGroupBox>
 #include <QLayout>
 #include <QSplitter>
-#include <QtGui/QTextEdit>
+#include <QTextEdit>
 #include <QTimer>
 #include <QHBoxLayout>
 #include <QList>
@@ -20,12 +20,10 @@
 
 #include <kaboutdata.h>
 #include <kdialog.h>
-
 #include <KPluginFactory>
 #include <KPluginLoader>
 
 #include "usbdevices.h"
-
 #include "moc_kcmusb.cpp"
 
 K_PLUGIN_FACTORY(USBFactory, registerPlugin<USBViewer>();)
@@ -173,4 +171,3 @@ void USBViewer::selectionChanged(QTreeWidgetItem *item) {
     }
     _details->clear();
 }
-
