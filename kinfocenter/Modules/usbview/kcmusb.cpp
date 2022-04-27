@@ -17,6 +17,7 @@
 #include <QList>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QDebug>
 
 #include <kaboutdata.h>
 #include <kdialog.h>
@@ -33,6 +34,7 @@ USBViewer::USBViewer(QWidget *parent, const QVariantList &) :
     KCModule(USBFactory::componentData(), parent) {
 
     setQuickHelp(i18n("This module allows you to see the devices attached to your USB bus(es)."));
+    setButtons(KCModule::Help | KCModule::Export);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->setMargin(0);
@@ -158,6 +160,10 @@ void USBViewer::refresh() {
     if (_devices->selectedItems().isEmpty() == true) {
         selectionChanged(_devices->topLevelItem(0));
     }
+
+    // TODO: export all devices information
+    setExportText(_details->toPlainText());
+    // qDebug() << Q_FUNC_INFO << _details->toPlainText();
 }
 
 void USBViewer::selectionChanged(QTreeWidgetItem *item) {
