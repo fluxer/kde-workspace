@@ -247,7 +247,7 @@ void KInfoCenter::exportClickedSlot()
 
 	if(m_contain->exportText().isEmpty())
 	{
-		KInfoCenter::showError(this,i18n("Export of the module has produced no output."));
+		KMessageBox::sorry(this,i18n("Export of the module has produced no output."));
 		return;
 	}
 
@@ -258,7 +258,7 @@ void KInfoCenter::exportClickedSlot()
 
 	if(!exportFile.open(QIODevice::WriteOnly))
 	{
-		KInfoCenter::showError(this,i18n("Unable to open file to write export information"));
+		KMessageBox::sorry(this,i18n("Unable to open file to write export information"));
 		return;
 	}
 
@@ -267,16 +267,11 @@ void KInfoCenter::exportClickedSlot()
 		<< "\n\n" << m_contain->exportText() << endl;
 
 	exportFile.close();
-	KInfoCenter::showError(this, i18n("Information exported"));
+	KMessageBox::information(this, i18n("Information exported"));
 }
 
 void KInfoCenter::aboutKcmSlot()
 {
 	KAboutApplicationDialog kcmAboutDialog(m_contain->kcmAboutData());
 	kcmAboutDialog.exec();
-}
-
-void KInfoCenter::showError(QWidget *parent, const QString& errorMessage)
-{
-	KMessageBox::sorry(parent, errorMessage);
 }

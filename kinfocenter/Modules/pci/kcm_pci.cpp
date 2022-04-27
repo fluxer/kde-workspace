@@ -66,9 +66,7 @@ KCMPci::KCMPci(QWidget *parent, const QVariantList &) :
     tree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     tree->setAllColumnsShowFocus(true);
     tree->setRootIsDecorated(false);
-    tree->setWhatsThis(i18n("This list displays PCI information.") );
-
-
+    tree->setWhatsThis(i18n("This list displays PCI information."));
 }
 
 KCMPci::~KCMPci() {

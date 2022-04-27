@@ -99,14 +99,6 @@ class KInfoCenter : public KXmlGuiWindow
 		*/
 		void aboutKcmSlot();
 
-		/**
-		* Show a error message box
-		*
-		* @param parent parent object
-		* @param errorMessage error message text
-		*/
-		static void showError(QWidget *parent, const QString& errorMessage);
-
 	private:
 
 		/**
