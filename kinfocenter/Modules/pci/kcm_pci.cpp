@@ -19,22 +19,18 @@
 #include "kcm_pci.h"
 
 #include <QStringList>
-
-#include <KPluginFactory>
-#include <KPluginLoader>
-
-#include <kaboutdata.h>
-#include <kdialog.h>
-#include <kdebug.h>
-
 #include <QLayout>
 #include <QPainter>
-
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QTreeWidget>
 
+#include <KPluginFactory>
+#include <KPluginLoader>
+#include <kaboutdata.h>
+#include <kdialog.h>
+#include <kdebug.h>
 #include <klocale.h>
 #include <kglobal.h>
 #include <kseparator.h>
