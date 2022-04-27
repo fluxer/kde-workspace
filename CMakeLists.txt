@@ -131,9 +131,9 @@ set_package_properties(LibKonq PROPERTIES
 macro_optional_find_package(LibUSB)
 set_package_properties(LibUSB PROPERTIES
     DESCRIPTION "User level access to USB devices"
-    URL "http://libusb.sourceforge.net"
+    URL "https://libusb.info/"
     TYPE OPTIONAL
-    PURPOSE "Provides Logitech mouse support in KControl"
+    PURPOSE "Provides Logitech mouse support in KControl and USB devices information"
 )
 
 macro_optional_find_package(PCIUTILS)

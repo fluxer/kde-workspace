@@ -14,78 +14,51 @@
 #include <QList>
 #include <QString>
 
-#if defined(Q_OS_DRAGONFLY)
-#include <bus/usb/usb.h>
-#include <QStringList>
-#elif defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)
-#include <sys/param.h>
-# if defined(__FreeBSD_version) && __FreeBSD_version >= 800100
-#  define DISABLE_USBDEVICES_FREEBSD
-#  warning "The USB subsystem has changed in 8.0. Disabling."
-# else
-#  include <dev/usb/usb.h>
-#  include <QStringList>
-# endif
-#endif
-
 class USBDB;
 
-class USBDevice {
+class USBDevice
+{
 public:
+    USBDevice();
+    ~USBDevice();
 
-	USBDevice();
-	
-	~USBDevice();
+    int level() const {
+        return _level;
+    }
+    int device() const {
+        return _device;
+    }
+    int parent() const {
+        return _parent;
+    }
+    int bus() const {
+        return _bus;
+    }
+    QString product();
 
-	void parseLine(const QString &line);
-	void parseSysDir(int bus, int parent, int level, const QString &line);
+    QString dump();
 
-	int level() const {
-		return _level;
-	}
-	int device() const {
-		return _device;
-	}
-	int parent() const {
-		return _parent;
-	}
-	int bus() const {
-		return _bus;
-	}
-	QString product();
-
-	QString dump();
-
-	static QList<USBDevice*> &devices() {
-		return _devices;
-	}
-	static USBDevice *find(int bus, int device);
-	static bool parse(const QString& fname);
-	static bool parseSys(const QString& fname);
+    static QList<USBDevice*> &devices() {
+        return _devices;
+    }
+    static USBDevice *find(int bus, int device);
+    static bool init();
 
 private:
+    static QList<USBDevice*> _devices;
 
-	static QList<USBDevice*> _devices;
+    static USBDB *_db;
 
-	static USBDB *_db;
+    int _bus, _level, _parent, _port, _device, _channels;
+    float _speed;
 
-	int _bus, _level, _parent, _port, _count, _device, _channels, _power;
-	float _speed;
+    QString _serial;
 
-	QString _manufacturer, _product, _serial;
+    unsigned int _class, _sub, _prot, _maxPacketSize;
 
-	int _bwTotal, _bwUsed, _bwPercent, _bwIntr, _bwIso;
-	bool _hasBW;
+    unsigned int _vendorID, _prodID;
 
-	unsigned int _verMajor, _verMinor, _class, _sub, _prot, _maxPacketSize, _configs;
-	QString _className;
-
-	unsigned int _vendorID, _prodID, _revMajor, _revMinor;
-
-#if (defined(Q_OS_FREEBSD) || defined(Q_OS_NETBSD)) && !defined(DISABLE_USBDEVICES_FREEBSD)
-	void collectData( int fd, int level, usb_device_info &di, int parent );
-	QStringList _devnodes;
-#endif
+    QString _ver, _rev;
 };
 
 #endif

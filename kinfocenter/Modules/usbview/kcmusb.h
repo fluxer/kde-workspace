@@ -19,9 +19,9 @@
 #include <QTreeWidgetItem>
 #include <QTextEdit>
 
-class USBViewer : public KCModule {
-Q_OBJECT
-
+class USBViewer : public KCModule
+{
+    Q_OBJECT
 public:
     explicit USBViewer(QWidget *parent = 0L, const QVariantList &list=QVariantList());
 
