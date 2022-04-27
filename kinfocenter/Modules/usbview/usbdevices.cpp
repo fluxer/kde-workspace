@@ -9,13 +9,10 @@
  ***************************************************************************/
 
 #include "usbdevices.h"
-
-#include <sys/types.h>
+#include "usbdb.h"
 
 #include <klocale.h>
 #include <kdebug.h>
-
-#include "usbdb.h"
 
 #include <libusb.h>
 
