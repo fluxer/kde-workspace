@@ -248,7 +248,42 @@ bool KDisplayManager::localSessions(SessList &list)
         return false;
     }
 
-    // TODO: ConsoleKit fallback
+    if (d->m_consolekit.isValid()) {
+        QDBusReply<QList<QDBusObjectPath>> reply = d->m_consolekit.call("GetSessions");
+        if (reply.isValid()) {
+            // qDebug() << Q_FUNC_INFO << reply.value().size();
+            foreach (const QDBusObjectPath &consolekitsession, reply.value()) {
+                QDBusInterface consolekitiface(
+                    "org.freedesktop.ConsoleKit", consolekitsession.path(), "org.freedesktop.ConsoleKit.Session",
+                    QDBusConnection::systemBus()
+                );
+                if (!consolekitiface.isValid()) {
+                    kWarning() << "Invalid session interface";
+                    continue;
+                }
+                const bool islocal = consolekitiface.property("is-local").toBool();
+                if (!islocal) {
+                    continue;
+                }
+                SessEnt sessionentity;
+                sessionentity.display = consolekitiface.property("x11-display").toString();
+                sessionentity.user = KUser(K_UID(consolekitiface.property("unix-user").toUInt())).loginName();
+                sessionentity.session = "<unknown>";
+                sessionentity.vt = consolekitiface.property("VTNr").toInt();
+                sessionentity.self = (sessionentity.display == qgetenv("DISPLAY"));
+                sessionentity.tty = (consolekitiface.property("session-type").toString() == QLatin1String("tty"));
+#if 0
+                qDebug() << Q_FUNC_INFO << sessionentity.display << sessionentity.user
+                     << sessionentity.session << sessionentity.vt
+                     << sessionentity.self << sessionentity.tty;
+#endif
+                list.append(sessionentity);
+            }
+            return true;
+        }
+        kWarning() << "Invalid reply";
+        return false;
+    }
 
     return false;
 }
@@ -318,7 +353,37 @@ bool KDisplayManager::switchVT(int vt)
         return false;
     }
 
-    // TODO: ConsoleKit fallback
+    if (d->m_consolekit.isValid()) {
+        QDBusReply<QList<QDBusObjectPath>> reply = d->m_consolekit.call("GetSessions");
+        if (reply.isValid()) {
+            // qDebug() << Q_FUNC_INFO << reply.value().size();
+            foreach (const QDBusObjectPath &consolekitsession, reply.value()) {
+                QDBusInterface consolekitiface(
+                    "org.freedesktop.ConsoleKit", consolekitsession.path(), "org.freedesktop.ConsoleKit.Session",
+                    QDBusConnection::systemBus()
+                );
+                if (!consolekitiface.isValid()) {
+                    kWarning() << "Invalid session interface";
+                    continue;
+                }
+                const bool islocal = consolekitiface.property("is-local").toBool();
+                if (!islocal) {
+                    continue;
+                }
+                const int vtnr = consolekitiface.property("VTNr").toInt();
+                // qDebug() << Q_FUNC_INFO << vt << vtnr;
+                if (vtnr != vt) {
+                    continue;
+                }
+                consolekitiface.asyncCall("Activate");
+                return true;
+            }
+            kWarning() << "Could not find VT";
+            return false;
+        }
+        kWarning() << "Invalid reply";
+        return false;
+    }
 
     return false;
 }
