@@ -746,7 +746,7 @@ void KSMServer::cleanUp()
     signal(SIGTERM, SIG_DFL);
     signal(SIGINT, SIG_DFL);
 
-    KDisplayManager().shutdown( shutdownType, shutdownMode, bootOption );
+    KDisplayManager().shutdown( shutdownType, shutdownMode );
 }
 
 

@@ -233,7 +233,6 @@ private:
 
     KWorkSpace::ShutdownType shutdownType;
     KWorkSpace::ShutdownMode shutdownMode;
-    QString bootOption;
 
     bool clean;
     KSMClient* clientInteracting;

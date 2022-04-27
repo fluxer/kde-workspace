@@ -156,9 +156,7 @@ void SessionRunner::match(Plasma::RunnerContext &context)
                       term.compare(i18n("new session"), Qt::CaseInsensitive) == 0;
 
     if (switchUser &&
-        KAuthorized::authorizeKAction("start_new_session") &&
-        dm.isSwitchable() &&
-        dm.numReserve() >= 0) {
+        KAuthorized::authorizeKAction("start_new_session") && dm.isSwitchable()) {
         Plasma::QueryMatch match(this);
         match.setType(Plasma::QueryMatch::ExactMatch);
         match.setIcon(KIcon("system-switch-user"));
@@ -268,7 +266,7 @@ void SessionRunner::run(const Plasma::RunnerContext &context, const Plasma::Quer
     }
 
     lock();
-    dm.startReserve();
+    dm.newSession();
 }
 
 void SessionRunner::lock()

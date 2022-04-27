@@ -80,11 +80,6 @@ namespace KWorkSpace
      */
     ShutdownModeDefault = -1,
     /**
-     * Schedule a shutdown (halt or reboot) for the time all active sessions
-     * have exited.
-     */
-    ShutdownModeSchedule = 0,
-    /**
      * Shut down, if no sessions are active. Otherwise do nothing.
      */
     ShutdownModeTryNow = 1,
