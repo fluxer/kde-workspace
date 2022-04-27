@@ -32,9 +32,6 @@ FocusScope {
     property alias model: batteryList.model
     property bool pluggedIn
 
-    property int remainingTime
-    property bool showRemainingTime
-
     property bool popupShown // somehow plasmoid.popupShowing isn't working
 
     property int pmSwitchWidth: padding.margins.left + pmSwitch.implicitWidth + padding.margins.right

@@ -60,8 +60,6 @@ private slots:
 
     void deviceRemoved(const QString& udi);
     void deviceAdded(const QString& udi);
-    void batteryRemainingTimeChanged(qulonglong time);
-    void batteryRemainingTimeReply(QDBusPendingCallWatcher*);
 
 private:
     QString batteryType(const Solid::Battery *battery);

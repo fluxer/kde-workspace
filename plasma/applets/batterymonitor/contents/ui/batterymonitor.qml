@@ -29,20 +29,13 @@ Item {
     property int minimumHeight: dialogItem.actualHeight
     property int maximumHeight: dialogItem.actualHeight
 
-    property bool show_remaining_time: false
-
     LayoutMirroring.enabled: Qt.application.layoutDirection == Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
 
     Component.onCompleted: {
         plasmoid.aspectRatioMode = IgnoreAspectRatio
         updateLogic();
-        plasmoid.addEventListener('ConfigChanged', configChanged);
         plasmoid.popupEvent.connect(popupEventSlot);
-    }
-
-    function configChanged() {
-        show_remaining_time = plasmoid.readConfig("showRemainingTime");
     }
 
     function updateLogic() {
@@ -116,9 +109,6 @@ Item {
         model: batteries
         anchors.fill: parent
         focus: true
-
-        showRemainingTime: show_remaining_time
-        remainingTime: Number(pmSource.data["Battery"]["Remaining msec"])
 
         pluggedIn: pmSource.data["AC Adapter"]["Plugged in"]
 

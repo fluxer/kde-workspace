@@ -64,17 +64,8 @@ void PowermanagementEngine::init()
     connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
             this,                              SLOT(deviceRemoved(QString)));
 
-    // FIXME This check doesn't work, connect seems to always return true, hence the hack below
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.freedesktop.PowerManagement")) {
         sourceRequestEvent("PowerDevil");
-
-        if (!QDBusConnection::sessionBus().connect("org.freedesktop.PowerManagement",
-                                                   "/org/freedesktop/PowerManagement",
-                                                   "org.freedesktop.PowerManagement",
-                                                   "BatteryRemainingTimeChanged", this,
-                                                   SLOT(batteryRemainingTimeChanged(qulonglong)))) {
-            kDebug() << "error connecting to remaining time changes";
-        }
     }
 }
 
@@ -136,14 +127,6 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         setData("Battery", "Has Battery", !batterySources.isEmpty());
         if (!batterySources.isEmpty()) {
             setData("Battery", "Sources", batterySources);
-            QDBusMessage msg = QDBusMessage::createMethodCall("org.freedesktop.PowerManagement",
-                                                              "/org/freedesktop/PowerManagement",
-                                                              "org.freedesktop.PowerManagement",
-                                                              "BatteryRemainingTimeChanged");
-            QDBusPendingReply<qulonglong> reply = QDBusConnection::sessionBus().asyncCall(msg);
-            QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(reply, this);
-            QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
-                             this, SLOT(batteryRemainingTimeReply(QDBusPendingCallWatcher*)));
         }
 
         m_sources = basicSourceNames() + batterySources;
@@ -357,24 +340,6 @@ void PowermanagementEngine::deviceAdded(const QString& udi)
             updateBatteryNames();
         }
     }
-}
-
-void PowermanagementEngine::batteryRemainingTimeChanged(qulonglong time)
-{
-    //kDebug() << "Remaining time 2:" << time;
-    setData("Battery", "Remaining msec", time);
-}
-
-void PowermanagementEngine::batteryRemainingTimeReply(QDBusPendingCallWatcher *watcher)
-{
-    QDBusPendingReply<qulonglong> reply = *watcher;
-    if (reply.isError()) {
-        kDebug() << "Error getting battery remaining time: " << reply.error().message();
-    } else {
-        batteryRemainingTimeChanged(reply.value());
-    }
-
-    watcher->deleteLater();
 }
 
 K_EXPORT_PLASMA_DATAENGINE(powermanagement, PowermanagementEngine)

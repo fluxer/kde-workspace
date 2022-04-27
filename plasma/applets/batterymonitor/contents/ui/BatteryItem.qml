@@ -40,8 +40,6 @@ Item {
     // UPower seems to set the Present property false when a device is added but not probed yet
     property bool isPresent: model["Plugged in"]
 
-    property int remainingTime
-
     KLocale.Locale { id: locale }
 
     function updateSelection() {
@@ -225,19 +223,6 @@ Item {
                     onPaintedWidthChanged: {
                         if (paintedWidth > parent.width) { parent.width = paintedWidth; }
                     }
-                    // FIXME Bound to AC adapter plugged in, not battery charging, see below
-                    text: pluggedIn ? i18n("Time To Full:") : i18n("Time To Empty:")
-                    visible: remainingTimeLabel.visible
-                    font.pointSize: theme.smallestFont.pointSize
-                    color: "#99"+(theme.textColor.toString().substr(1))
-                }
-                Components.Label {
-                    height: paintedHeight
-                    width: parent.width
-                    horizontalAlignment: Text.AlignRight
-                    onPaintedWidthChanged: {
-                        if (paintedWidth > parent.width) { parent.width = paintedWidth; }
-                    }
                     text: i18n("Capacity:")
                     visible: capacityLabel.visible
                     font.pointSize: theme.smallestFont.pointSize
@@ -270,17 +255,6 @@ Item {
             }
             Column {
                 width: parent.width - labelsColumn.width - parent.spacing * 2
-                Components.Label { // Remaining Time
-                    id: remainingTimeLabel
-                    height: paintedHeight
-                    width: parent.width
-                    elide: Text.ElideRight
-                    // FIXME Uses overall remaining time, not bound to individual battery
-                    text: locale.prettyFormatDuration(dialogItem.remainingTime)
-                    visible: showRemainingTime && model["Is Power Supply"] && model["State"] != "FullyCharged" && text != "" && dialogItem.remainingTime > 0
-                    font.pointSize: theme.smallestFont.pointSize
-                    color: "#99"+(theme.textColor.toString().substr(1))
-                }
                 Components.Label { // Capacity
                     id: capacityLabel
                     height: paintedHeight
