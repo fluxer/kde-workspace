@@ -1,5 +1,3 @@
-configure_file(config-ksysguard.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksysguard.h)
-
 ########### next target ###############
 
 add_subdirectory( lsofui )

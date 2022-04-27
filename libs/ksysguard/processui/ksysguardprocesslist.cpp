@@ -24,13 +24,11 @@
 #include "moc_ksysguardprocesslist.cpp"
 #include "ksysguardprocesslist.h"
 
-#include "../config-ksysguard.h"
 #include "config-X11.h"
 
 #include <QApplication>
 #include <QTimer>
 #include <QList>
-#include <QtGui/qevent.h>
 #include <QtGui/qevent.h>
 #include <QHeaderView>
 #include <QAction>

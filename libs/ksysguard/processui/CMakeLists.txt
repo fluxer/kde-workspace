@@ -1,9 +1,6 @@
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../  ../processcore/)
 
-check_include_files(sys/endian.h HAVE_SYS_ENDIAN_H)
-check_include_files(byteswap.h HAVE_BYTESWAP_H)
-
 set(processui_LIB_SRCS
    ksysguardprocesslist.cpp
    ProcessFilter.cpp

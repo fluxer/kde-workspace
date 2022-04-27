@@ -196,7 +196,7 @@ void KDisplayManager::newSession()
     QDBusInterface lightdmiface(
         "org.freedesktop.DisplayManager",
         qgetenv("XDG_SEAT_PATH"),
-        QLatin1String("org.freedesktop.DisplayManager.Seat"),
+        "org.freedesktop.DisplayManager.Seat",
         QDBusConnection::systemBus()
     );
     if (lightdmiface.isValid()) {

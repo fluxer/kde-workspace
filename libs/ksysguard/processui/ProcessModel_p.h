@@ -55,7 +55,6 @@ struct WindowInfo {
     WId wid;
     QString name;
 };
-#include "../config-ksysguard.h"
 #include "config-X11.h"
 #endif
 
