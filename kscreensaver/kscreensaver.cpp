@@ -165,7 +165,7 @@ void KScreenSaver::Lock()
 bool KScreenSaver::SetActive(bool active)
 {
     // qDebug() << Q_FUNC_INFO << active;
-    int xscreensaverstatus = false;
+    int xscreensaverstatus = 1;
     if (active) {
         xscreensaverstatus = QProcess::execute(
             QString::fromLatin1("xscreensaver-command"),
