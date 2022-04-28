@@ -241,6 +241,10 @@ bool KDisplayManager::localSessions(SessList &list)
                 if (isremote) {
                     continue;
                 }
+                const QString state = systemdiface.property("State").toString();
+                if (state != QLatin1String("online") && state != QLatin1String("active")) {
+                    continue;
+                }
                 SessEnt sessionentity;
                 sessionentity.display = systemdiface.property("Display").toString();
                 sessionentity.user = systemdiface.property("Name").toString();
@@ -276,6 +280,10 @@ bool KDisplayManager::localSessions(SessList &list)
                 }
                 const bool islocal = consolekitiface.property("is-local").toBool();
                 if (!islocal) {
+                    continue;
+                }
+                const QString state = consolekitiface.property("session-state").toString();
+                if (state != QLatin1String("online") && state != QLatin1String("active")) {
                     continue;
                 }
                 SessEnt sessionentity;
