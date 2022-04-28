@@ -270,7 +270,10 @@ void KGreeter::timerEvent(QTimerEvent *event)
 {
     if (event->timerId() == m_timerid) {
         g_main_context_iteration(g_main_loop_get_context(glibloop), false);
+        event->accept();
+        return;
     }
+
     QMainWindow::timerEvent(event);
 }
 
