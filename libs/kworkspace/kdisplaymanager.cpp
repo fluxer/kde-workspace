@@ -113,7 +113,7 @@ void KDisplayManager::shutdown(KWorkSpace::ShutdownType shutdownType,
     if (shutdownType == KWorkSpace::ShutdownTypeNone || shutdownType == KWorkSpace::ShutdownTypeLogout) {
         return;
     }
-    bool interactive = (
+    const bool interactive = (
         shutdownMode == KWorkSpace::ShutdownModeInteractive
         || shutdownMode == KWorkSpace::ShutdownModeForceNow
     );
@@ -412,8 +412,10 @@ bool KDisplayManager::switchVT(int vt)
 void KDisplayManager::lockSwitchVT(int vt)
 {
     // Lock first, otherwise the lock won't be able to kick in until the session is re-activated.
-    QDBusInterface screensaver("org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver");
-    screensaver.call("Lock");
+    QDBusInterface saveriface(
+        "org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver"
+    );
+    saveriface.call("Lock");
 
     switchVT(vt);
 }
