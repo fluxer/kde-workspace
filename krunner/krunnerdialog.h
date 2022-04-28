@@ -19,6 +19,7 @@
 #ifndef KRUNNERDIALOG_H
 #define KRUNNERDIALOG_H
 
+#include <QDesktopWidget>
 #include <KDialog>
 
 namespace Plasma
@@ -29,8 +30,6 @@ namespace Plasma
 }
 
 class KRunnerConfigWidget;
-class PanelShadows;
-#include <QDesktopWidget>
 
 class KRunnerDialog : public QWidget
 {
@@ -103,7 +102,6 @@ class KRunnerDialog : public QWidget
 
     private:
         KRunnerConfigWidget *m_configWidget;
-        PanelShadows *m_shadows;
         Plasma::FrameSvg *m_background;
         QPixmap *m_cachedBackground;
         QPoint m_lastPressPos;

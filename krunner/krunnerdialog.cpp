@@ -55,7 +55,6 @@ KRunnerDialog::KRunnerDialog(Plasma::RunnerManager *runnerManager, QWidget *pare
     : QWidget(parent, f),
       m_runnerManager(runnerManager),
       m_configWidget(0),
-      m_shadows(new PanelShadows(this)),
       m_background(new Plasma::FrameSvg(this)),
       m_shownOnScreen(-1),
       m_offset(.5),
@@ -199,14 +198,17 @@ void KRunnerDialog::updatePresentation()
     if (m_floating) {
         KWindowSystem::setType(winId(), NET::Normal);
 
-        //m_shadows->setImagePath(QLatin1String("dialogs/krunner"));
         m_background->setImagePath(QLatin1String("dialogs/krunner"));
         m_background->setElementPrefix(QString());
 
         themeUpdated();
     } else {
-        //m_shadows->setImagePath(QLatin1String("widgets/panel-background"));
-        m_background->setImagePath(QLatin1String("widgets/panel-background"));
+        if (KWindowSystem::compositingActive()) {
+            m_background->setImagePath(QLatin1String("widgets/translucentbackground"));
+        }
+        if (!m_background->isValid()) {
+            m_background->setImagePath(QLatin1String("widgets/panel-background"));
+        }
         m_background->resizeFrame(size());
         m_background->setElementPrefix("north-mini");
         // load the positions for each screen from our config
@@ -281,35 +283,28 @@ void KRunnerDialog::configCompleted()
 
 void KRunnerDialog::themeUpdated()
 {
-    m_shadows->addWindow(this);
-
     bool useShadowsForMargins = false;
     if (m_floating) {
         // recalc the contents margins
         m_background->blockSignals(true);
         if (KWindowSystem::compositingActive()) {
             m_background->setEnabledBorders(Plasma::FrameSvg::NoBorder);
-            useShadowsForMargins = true;
         } else {
             m_background->setEnabledBorders(Plasma::FrameSvg::AllBorders);
         }
         m_background->blockSignals(false);
     }
 
-    if (useShadowsForMargins) {
-        m_shadows->getMargins(m_topBorderHeight, m_rightBorderWidth, m_bottomBorderHeight, m_leftBorderWidth);
-    } else {
-        m_leftBorderWidth = qMax(0, int(m_background->marginSize(Plasma::LeftMargin)));
-        m_rightBorderWidth = qMax(0, int(m_background->marginSize(Plasma::RightMargin)));
-        m_bottomBorderHeight = qMax(0, int(m_background->marginSize(Plasma::BottomMargin)));
-        // the -1 in the non-floating case is not optimal, but it gives it a bit of a "more snug to the
-        // top" feel; best would be if we could tell exactly where the edge/shadow of the frame svg was
-        // but this works nicely
-        m_topBorderHeight = m_floating ? qMax(0, int(m_background->marginSize(Plasma::TopMargin)))
-                                       : Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()
-                                            ? qMax(1, m_bottomBorderHeight / 2)
-                                            : qMax(1, m_bottomBorderHeight - 1);
-    }
+    m_leftBorderWidth = qMax(0, int(m_background->marginSize(Plasma::LeftMargin)));
+    m_rightBorderWidth = qMax(0, int(m_background->marginSize(Plasma::RightMargin)));
+    m_bottomBorderHeight = qMax(0, int(m_background->marginSize(Plasma::BottomMargin)));
+    // the -1 in the non-floating case is not optimal, but it gives it a bit of a "more snug to the
+    // top" feel; best would be if we could tell exactly where the edge/shadow of the frame svg was
+    // but this works nicely
+    m_topBorderHeight = m_floating ? qMax(0, int(m_background->marginSize(Plasma::TopMargin)))
+                                    : Plasma::Theme::defaultTheme()->windowTranslucencyEnabled()
+                                        ? qMax(1, m_bottomBorderHeight / 2)
+                                        : qMax(1, m_bottomBorderHeight - 1);
 
     kDebug() << m_leftBorderWidth << m_topBorderHeight << m_rightBorderWidth << m_bottomBorderHeight;
     // the +1 gives us the extra mouseMoveEvent needed to always reset the resize cursor
@@ -330,7 +325,6 @@ void KRunnerDialog::paintEvent(QPaintEvent *e)
 
 void KRunnerDialog::showEvent(QShowEvent *)
 {
-    m_shadows->addWindow(this);
     unsigned long state = NET::SkipTaskbar | NET::KeepAbove;
     if (m_floating) {
         KWindowSystem::clearState(winId(), state);
@@ -353,7 +347,16 @@ void KRunnerDialog::hideEvent(QHideEvent *)
 
 void KRunnerDialog::updateMask()
 {
-    setMask(m_background->mask());
+    // Enable the mask only when compositing is disabled;
+    // As this operation is quite slow, it would be nice to find some
+    // way to workaround it for no-compositing users.
+
+    if (KWindowSystem::compositingActive()) {
+        clearMask();
+        const QRegion mask = m_background->mask();
+    } else {
+        setMask(m_background->mask());
+    }
 }
 
 void KRunnerDialog::resizeEvent(QResizeEvent *e)
