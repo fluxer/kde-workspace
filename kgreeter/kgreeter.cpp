@@ -55,6 +55,7 @@ public:
     LightDMGreeter* getGreeter() const;
 
     void clearPass();
+    void stopGlibPoll();
 
     static void showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, LightDMPromptType ldmtype, gpointer ldmptr);
     static void authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldmptr);
@@ -316,6 +317,12 @@ void KGreeter::clearPass()
     }
 }
 
+void KGreeter::stopGlibPoll()
+{
+    killTimer(m_timerid);
+    g_main_loop_unref(glibloop);
+}
+
 void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, LightDMPromptType ldmtype, gpointer ldmptr)
 {
     // qDebug() << Q_FUNC_INFO;
@@ -354,6 +361,8 @@ void KGreeter::authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldm
         kgreeter->clearPass();
         return;
     }
+
+    kgreeter->stopGlibPoll();
 
     qApp->quit();
 }
