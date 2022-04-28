@@ -276,19 +276,6 @@ void RandrMonitorModule::checkResumeFromSuspend()
 
 void RandrMonitorModule::switchDisplay()
 {
-    QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.PowerManagement",
-                        "/org/freedesktop/PowerManagement",
-                        "org.freedesktop.PowerManagement",
-                        "isLidClosed");
-    QDBusMessage msg =  QDBusConnection::sessionBus().call(call);
-    QDBusReply<bool> reply(msg);
-
-    if (reply.isValid() && reply.value()) {
-        kDebug() << "Lid is closed, ignoring the event";
-        //TODO: When we rewrite this, be sure that in this case LVDS is disabled instead of ignoring
-        return;
-    }
-
     QList< RandROutput* > outputs;
     RandRDisplay display;
     outputs = connectedOutputs( display );
