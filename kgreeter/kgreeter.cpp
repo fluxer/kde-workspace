@@ -88,6 +88,7 @@ private:
     QList<QAction*> m_sessionactions;
     QList<QAction*> m_layoutactions;
     QImage m_background;
+    QImage m_backgroundscaled;
     QImage m_rectangle;
     QImage m_rectanglescaled;
     int m_timerid;
@@ -237,14 +238,18 @@ KGreeter::~KGreeter()
 
 void KGreeter::paintEvent(QPaintEvent *event)
 {
+    QPainter painter(this);
+
     if (!m_background.isNull()) {
-        QPainter painter(this);
-        painter.drawImage(rect(), m_background);
+        const QSize windowsize = size();
+        if (m_backgroundscaled.isNull() || windowsize != m_backgroundscaled.size()) {
+            m_backgroundscaled = m_background.scaled(windowsize);
+        }
+        painter.drawImage(QPoint(0, 0), m_backgroundscaled);
     }
 
     if (!m_rectangle.isNull()) {
         m_ui.groupframe->setFrameShape(QFrame::NoFrame);
-        QPainter painter(this);
         QSize kgreeterrectanglesize(m_ui.groupframe->size());
         kgreeterrectanglesize.rwidth() = kgreeterrectanglesize.width() * 1.06;
         kgreeterrectanglesize.rheight() = kgreeterrectanglesize.height() * 1.65;
