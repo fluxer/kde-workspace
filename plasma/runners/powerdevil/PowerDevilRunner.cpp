@@ -21,16 +21,14 @@
 #include "PowerDevilRunner.h"
 
 #include <QDBusInterface>
-#include <QDBusReply>
-#include <QtDBus/QDBusConnectionInterface>
-#include <QtDBus/QDBusMetaType>
+#include <QDBusConnectionInterface>
+#include <QDBusConnection>
 
 #include <KIcon>
 #include <KLocale>
 #include <KDebug>
 #include <KStandardDirs>
 #include <KRun>
-
 #include <Solid/PowerManagement>
 
 PowerDevilRunner::PowerDevilRunner(QObject *parent, const QVariantList &args)
@@ -38,7 +36,6 @@ PowerDevilRunner::PowerDevilRunner(QObject *parent, const QVariantList &args)
           m_shortestCommand(1000)
 {
     Q_UNUSED(args)
-    qDBusRegisterMetaType< StringStringMap >();
 
     setObjectName( QLatin1String("PowerDevil" ));
     setIgnoredTypes(Plasma::RunnerContext::Directory | Plasma::RunnerContext::File |
