@@ -89,6 +89,7 @@ private:
     QList<QAction*> m_layoutactions;
     QImage m_background;
     QImage m_rectangle;
+    QImage m_rectanglescaled;
     int m_timerid;
 };
 
@@ -249,7 +250,10 @@ void KGreeter::paintEvent(QPaintEvent *event)
         kgreeterrectanglesize.rheight() = kgreeterrectanglesize.height() * 1.65;
         QPointF kgreeterrectanglepoint(m_ui.groupframe->pos());
         kgreeterrectanglepoint -= QPointF(kgreeterrectanglepoint.x() * 0.03 , 0);
-        painter.drawImage(kgreeterrectanglepoint, m_rectangle.scaled(kgreeterrectanglesize));
+        if (m_rectanglescaled.isNull() || kgreeterrectanglesize != m_rectanglescaled.size()) {
+            m_rectanglescaled = m_rectangle.scaled(kgreeterrectanglesize);
+        }
+        painter.drawImage(kgreeterrectanglepoint, m_rectanglescaled);
     } else {
         m_ui.groupframe->setFrameShape(QFrame::StyledPanel);
     }
