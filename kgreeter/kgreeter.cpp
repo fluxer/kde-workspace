@@ -243,7 +243,7 @@ void KGreeter::paintEvent(QPaintEvent *event)
     if (!m_background.isNull()) {
         const QSize windowsize(size());
         if (m_backgroundscaled.isNull() || windowsize != m_backgroundscaled.size()) {
-            m_backgroundscaled = m_background.scaled(windowsize);
+            m_backgroundscaled = m_background.scaled(windowsize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
         }
         painter.drawImage(QPoint(0, 0), m_backgroundscaled);
     }
