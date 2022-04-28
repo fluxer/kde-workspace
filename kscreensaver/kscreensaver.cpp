@@ -200,7 +200,7 @@ uint KScreenSaver::Inhibit(const QString &application_name, const QString &reaso
     );
     QDBusReply<uint> powerreply = poweriface.call("Inhibit", application_name, reason_for_inhibit);
     if (powerreply.isValid()) {
-        uint inhibitioncookie = powerreply.value();
+        const uint inhibitioncookie = powerreply.value();
         m_inhibitions.append(inhibitioncookie);
         return inhibitioncookie;
     }
