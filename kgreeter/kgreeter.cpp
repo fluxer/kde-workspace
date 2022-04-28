@@ -36,7 +36,7 @@
 #include "config-workspace.h"
 
 // for the callbacks
-static const int gliblooppolltime = 200;
+static const int gliblooppolltime = 400;
 static GMainLoop *glibloop = NULL;
 
 static QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
@@ -191,7 +191,7 @@ KGreeter::KGreeter(QWidget *parent)
 
     // if no default session is specified and no last session is saved use the first
     bool sessionchecked = false;
-    Q_FOREACH (QAction *sessionaction, m_sessionactions) {
+    Q_FOREACH (const QAction *sessionaction, m_sessionactions) {
         if (sessionaction->isChecked()) {
             sessionchecked = true;
             break;
@@ -241,7 +241,7 @@ void KGreeter::paintEvent(QPaintEvent *event)
     QPainter painter(this);
 
     if (!m_background.isNull()) {
-        const QSize windowsize = size();
+        const QSize windowsize(size());
         if (m_backgroundscaled.isNull() || windowsize != m_backgroundscaled.size()) {
             m_backgroundscaled = m_background.scaled(windowsize);
         }
