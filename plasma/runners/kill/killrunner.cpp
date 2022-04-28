@@ -21,7 +21,6 @@
 
 #include <QAction>
 #include <QProcess>
-
 #include <KDebug>
 #include <KIcon>
 #include <KUser>
@@ -29,8 +28,9 @@
 
 #include "ksysguard/processcore/processes.h"
 #include "ksysguard/processcore/process.h"
-
 #include "killrunner_config.h"
+
+#include <signal.h>
 
 KillRunner::KillRunner(QObject *parent, const QVariantList& args)
         : Plasma::AbstractRunner(parent, args),
@@ -175,7 +175,7 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     if (match.selectedAction() != NULL) {
         signal = match.selectedAction()->data().toInt();
     } else {
-        signal = 9; //default: SIGKILL
+        signal = SIGKILL;
     }
 
     QStringList args;
