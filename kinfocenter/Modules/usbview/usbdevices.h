@@ -42,7 +42,7 @@ public:
         return _devices;
     }
     static USBDevice *find(int bus, int device);
-    static bool init();
+    static void init();
 
 private:
     static QList<USBDevice*> _devices;

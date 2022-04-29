@@ -143,18 +143,29 @@ QString USBDevice::dump() {
     return r;
 }
 
-bool USBDevice::init() {
+void USBDevice::init() {
     _devices.clear();
 
     struct libusb_context *libusbctx = nullptr;
-    libusb_init(&libusbctx);
+    int libusbstatus = libusb_init(&libusbctx);
+    if (libusbstatus != LIBUSB_SUCCESS) {
+        kWarning() << libusb_error_name(libusbstatus);
+        return;
+    }
+
     struct libusb_device **libusbdevices = nullptr;
     const size_t libusbdevicessize = libusb_get_device_list(libusbctx, &libusbdevices);
     // qDebug() << Q_FUNC_INFO << libusbdevicessize;
     for (size_t i = 0; i < libusbdevicessize; i++) {
         USBDevice* device = new USBDevice();
         struct libusb_device_descriptor libusbdevice;
-        libusb_get_device_descriptor(libusbdevices[i], &libusbdevice);
+        ::memset(&libusbdevice, 0, sizeof(struct libusb_device_descriptor));
+        libusbstatus = libusb_get_device_descriptor(libusbdevices[i], &libusbdevice);
+        if (libusbstatus != LIBUSB_SUCCESS) {
+            kWarning() << libusb_error_name(libusbstatus);
+            _devices.clear();
+            break;
+        }
         // qDebug() << Q_FUNC_INFO << libusbdevice.idVendor << libusbdevice.idProduct;
 
         device->_bus = libusb_get_bus_number(libusbdevices[i]);
@@ -193,6 +204,4 @@ bool USBDevice::init() {
     }
     libusb_free_device_list(libusbdevices, 1);
     libusb_exit(libusbctx);
-
-    return (libusbdevicessize > 0);
 }
