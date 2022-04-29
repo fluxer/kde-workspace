@@ -202,8 +202,6 @@ KGreeter::KGreeter(QWidget *parent)
         m_sessionactions.first()->setChecked(true);
     }
 
-    m_ui.grouplabel->setText(QString::fromUtf8(lightdm_get_hostname()));
-
     m_ui.actionSuspend->setVisible(lightdm_get_can_suspend());
     m_ui.actionSuspend->setIcon(KIcon("system-suspend"));
     m_ui.actionHibernate->setVisible(lightdm_get_can_hibernate());
@@ -217,9 +215,7 @@ KGreeter::KGreeter(QWidget *parent)
     connect(m_ui.actionPoweroff, SIGNAL(triggered()), this, SLOT(slotPoweroff()));
     connect(m_ui.actionReboot, SIGNAL(triggered()), this, SLOT(slotReboot()));
 
-    connect(m_ui.passedit, SIGNAL(returnPressed()), this, SLOT(slotLogin()));
-    connect(m_ui.loginbutton, SIGNAL(pressed()), this, SLOT(slotLogin()));
-
+    m_ui.grouplabel->setText(QString::fromUtf8(lightdm_get_hostname()));
     if (lightdm_greeter_get_hide_users_hint(m_ldmgreeter)
         || lightdm_greeter_get_show_manual_login_hint(m_ldmgreeter)) {
         m_ui.userlabel->setVisible(false);
@@ -230,6 +226,9 @@ KGreeter::KGreeter(QWidget *parent)
         m_ui.useredit->setVisible(false);
         m_ui.passedit->setFocus();
     }
+
+    connect(m_ui.passedit, SIGNAL(returnPressed()), this, SLOT(slotLogin()));
+    connect(m_ui.loginbutton, SIGNAL(pressed()), this, SLOT(slotLogin()));
 }
 
 KGreeter::~KGreeter()
