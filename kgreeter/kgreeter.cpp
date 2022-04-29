@@ -234,7 +234,7 @@ KGreeter::KGreeter(QWidget *parent)
 
 KGreeter::~KGreeter()
 {
-    killTimer(m_timerid);
+    stopGlibPoll();
 }
 
 void KGreeter::paintEvent(QPaintEvent *event)
@@ -319,8 +319,13 @@ void KGreeter::clearPass()
 
 void KGreeter::stopGlibPoll()
 {
-    killTimer(m_timerid);
-    g_main_loop_unref(glibloop);
+    if (m_timerid > 0) {
+        killTimer(m_timerid);
+    }
+    if (glibloop) {
+        g_main_loop_unref(glibloop);
+        glibloop = nullptr;
+    }
 }
 
 void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, LightDMPromptType ldmtype, gpointer ldmptr)
