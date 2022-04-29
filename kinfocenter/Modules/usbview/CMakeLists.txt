@@ -2,7 +2,7 @@
 
 include_directories(${LIBUSB_INCLUDES})
 
-set(kcm_usb_PART_SRCS kcmusb.cpp usbdevices.cpp usbdb.cpp )
+set(kcm_usb_PART_SRCS kcmusb.cpp usbdevices.cpp )
 kde4_add_plugin(kcm_usb ${kcm_usb_PART_SRCS})
 
 target_link_libraries(kcm_usb
@@ -22,9 +22,4 @@ install(
 install(
     FILES kcmusb.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
-)
-
-install(
-    FILES usb.ids
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kcmusb
 )

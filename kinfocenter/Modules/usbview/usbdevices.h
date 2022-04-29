@@ -47,8 +47,6 @@ public:
 private:
     static QList<USBDevice*> _devices;
 
-    static USBDB *_db;
-
     int _bus, _level, _parent, _port, _device, _channels;
     float _speed;
 

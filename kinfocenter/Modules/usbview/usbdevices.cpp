@@ -9,15 +9,15 @@
  ***************************************************************************/
 
 #include "usbdevices.h"
-#include "usbdb.h"
 
 #include <klocale.h>
+#include <kdevicedatabase.h>
 #include <kdebug.h>
 
 #include <libusb.h>
 
 QList<USBDevice*> USBDevice::_devices;
-USBDB *USBDevice::_db;
+static KDeviceDatabase kdevicedb;
 
 static float getSpeed(int number)
 {
@@ -59,10 +59,6 @@ USBDevice::USBDevice() :
     _vendorID(0), _prodID(0)
 {
     _devices.append(this);
-
-    if (!_db) {
-        _db = new USBDB;
-    }
 }
 
 USBDevice::~USBDevice() {
@@ -79,7 +75,10 @@ USBDevice* USBDevice::find(int bus, int device) {
 }
 
 QString USBDevice::product() {
-    QString pname = _db->device(_vendorID, _prodID);
+    QString pname = kdevicedb.lookupUSBDevice(
+        QByteArray::number(_vendorID, 16),
+        QByteArray::number(_prodID, 16)
+    );
     if (!pname.isEmpty()) {
         return pname;
     }
@@ -88,6 +87,10 @@ QString USBDevice::product() {
 
 QString USBDevice::dump() {
     QString r;
+
+    const QByteArray class16 = QByteArray::number(_class, 16);
+    const QByteArray sub16 = QByteArray::number(_sub, 16);
+    const QByteArray vendorid16 = QByteArray::number(_vendorID, 16);
 
     r = "<qml><h2><center>" + product() + "</center></h2><br/><hl/>";
 
@@ -98,19 +101,19 @@ QString USBDevice::dump() {
     r += "<br/><table>";
 
     QString c = QString("<td>%1</td>").arg(_class);
-    QString cname = _db->cls(_class);
+    QString cname = kdevicedb.lookupUSBClass(class16);
     if (!cname.isEmpty()) {
         c += "<td>(" + i18n(cname.toLatin1()) +")</td>";
     }
     r += i18n("<tr><td><i>Class</i></td>%1</tr>", c);
     QString sc = QString("<td>%1</td>").arg(_sub);
-    QString scname = _db->subclass(_class, _sub);
+    QString scname = kdevicedb.lookupUSBSubClass(class16, sub16);
     if (!scname.isEmpty()) {
         sc += "<td>(" + i18n(scname.toLatin1()) +")</td>";
     }
     r += i18n("<tr><td><i>Subclass</i></td>%1</tr>", sc);
     QString pr = QString("<td>%1</td>").arg(_prot);
-    QString prname = _db->protocol(_class, _sub, _prot);
+    QString prname = kdevicedb.lookupUSBProtocol(class16, sub16, QByteArray::number(_prot, 16));
     if (!prname.isEmpty()) {
         pr += "<td>(" + prname +")</td>";
     }
@@ -119,13 +122,13 @@ QString USBDevice::dump() {
     r += "<tr><td></td></tr>";
 
     QString v = QString::number(_vendorID, 16);
-    QString name = _db->vendor(_vendorID);
+    QString name = kdevicedb.lookupUSBVendor(vendorid16);
     if (!name.isEmpty()) {
         v += "<td>(" + name +")</td>";
     }
     r += i18n("<tr><td><i>Vendor ID</i></td><td>0x%1</td></tr>", v);
     QString p = QString::number(_prodID, 16);
-    QString pname = _db->device(_vendorID, _prodID);
+    QString pname = kdevicedb.lookupUSBDevice(vendorid16, QByteArray::number(_prodID, 16));
     if (!pname.isEmpty()) {
         p += "<td>(" + pname +")</td>";
     }
