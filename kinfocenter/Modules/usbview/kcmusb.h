@@ -32,6 +32,7 @@ protected Q_SLOTS:
     void refresh();
 
 private:
+    int _lastdevicecount;
     QMap<int, QTreeWidgetItem*> _items;
     QTreeWidget *_devices;
     QTextEdit *_details;

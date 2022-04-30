@@ -30,8 +30,10 @@
 K_PLUGIN_FACTORY(USBFactory, registerPlugin<USBViewer>();)
 K_EXPORT_PLUGIN(USBFactory("kcmusb"))
 
-USBViewer::USBViewer(QWidget *parent, const QVariantList &) :
-    KCModule(USBFactory::componentData(), parent) {
+USBViewer::USBViewer(QWidget *parent, const QVariantList &)
+    : KCModule(USBFactory::componentData(), parent),
+    _lastdevicecount(0)
+{
 
     setQuickHelp(i18n("This module allows you to see the devices attached to your USB bus(es)."));
     setButtons(KCModule::Help | KCModule::Export);
@@ -78,9 +80,6 @@ USBViewer::USBViewer(QWidget *parent, const QVariantList &) :
 }
 
 void USBViewer::load() {
-    _items.clear();
-    _devices->clear();
-
     refresh();
 }
 
@@ -108,10 +107,19 @@ static void delete_recursive(QTreeWidgetItem *item, const QMap<int, QTreeWidgetI
     }
 }
 
-void USBViewer::refresh() {
-    QMap<int, QTreeWidgetItem*> new_items;
-
+void USBViewer::refresh()
+{
     USBDevice::init();
+    const int currentdevicecount = USBDevice::devices().size();
+    if (currentdevicecount == _lastdevicecount) {
+        return;
+    }
+    _lastdevicecount = currentdevicecount;
+
+    _items.clear();
+    _devices->clear();
+
+    QMap<int, QTreeWidgetItem*> new_items;
 
     int level = 0;
     bool found = true;
