@@ -1,0 +1,14 @@
+[Desktop Entry]
+Exec=kcmshell4 kernel
+Type=Service
+X-KDE-ServiceTypes=KCModule
+Icon=preferences-plugin
+
+X-KDE-Library=kcm_kernel
+X-KDE-ParentApp=kinfocenter
+X-DocPath=kinfocenter/index.html#kernel
+
+Name=Kernel Modules
+Comment=Kernel modules information
+
+Categories=Qt;KDE;X-KDE-information;

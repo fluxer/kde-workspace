@@ -136,6 +136,13 @@ set_package_properties(LibUSB PROPERTIES
     PURPOSE "Provides Logitech mouse support in KControl and USB devices information"
 )
 
+macro_optional_find_package(Kmod)
+set_package_properties(Kmod PROPERTIES
+    DESCRIPTION "Set of tools to handle common tasks with Linux kernel modules"
+    URL "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/"
+    TYPE OPTIONAL
+    PURPOSE "Kernel modules information"
+)
 macro_optional_find_package(PCIUTILS)
 set_package_properties(PCIUTILS PROPERTIES
     DESCRIPTION "PciUtils is a library for direct access to PCI slots"
