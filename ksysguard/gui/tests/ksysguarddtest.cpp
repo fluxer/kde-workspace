@@ -1,10 +1,12 @@
 #include "ksysguarddtest.h"
 #include <QtTest>
-#include <QtCore/qnamespace.h>
+#include <KStandardDirs>
 
 KSGRD::SensorAgent *agent;
 
 Q_DECLARE_METATYPE(KSGRD::SensorAgent *)
+
+static const QString ksysguarddexe = KStandardDirs::findExe("ksysguardd");
 
 using namespace KSGRD;
 void TestKsysguardd::initTestCase()
@@ -14,7 +16,7 @@ void TestKsysguardd::initTestCase()
     hostConnectionLostSpy = new QSignalSpy(&manager, SIGNAL(hostConnectionLost(QString)));
     updateSpy = new QSignalSpy(&manager, SIGNAL(update()));
     hostAddedSpy = new QSignalSpy(&manager, SIGNAL(hostAdded(KSGRD::SensorAgent*,QString)));
-    bool success = manager.engage("", "", "../../ksysguardd/ksysguardd", -1);
+    bool success = manager.engage("", "", ksysguarddexe, -1);
     QCOMPARE(hostAddedSpy->count(), 1);
     QVERIFY(success);
     QVERIFY(manager.isConnected(""));
@@ -50,7 +52,7 @@ void TestKsysguardd::testSetup()
     bool success = manager.hostInfo("", shell, command, port );
     QCOMPARE(success, true);
     QCOMPARE(shell, QString(""));
-    QCOMPARE(command, QString("../../ksysguardd/ksysguardd"));
+    QCOMPARE(command, ksysguarddexe);
     QCOMPARE(port, -1);
 
     success = manager.hostInfo("nonexistant host", shell, command, port );
