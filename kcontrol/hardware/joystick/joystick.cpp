@@ -59,14 +59,14 @@ Joystick::Joystick(QWidget *parent, const QVariantList &)
               "If you have another device file, enter it in the combobox.<br />"
               "The Buttons list shows the state of the buttons on your joystick, the Axes list "
               "shows the current value for all axes.<br />"
-              "NOTE: the current Linux device driver (Kernel 2.4, 2.6) can only autodetect"
+              "NOTE: the current Linux device driver can only autodetect"
               "<ul>"
               "<li>2-axis, 4-button joystick</li>"
               "<li>3-axis, 4-button joystick</li>"
               "<li>4-axis, 4-button joystick</li>"
               "<li>Saitek Cyborg 'digital' joysticks</li>"
               "</ul>"
-              "(For details you can check your Linux source/Documentation/input/joystick.txt)"
+              "(For details you can check https://www.kernel.org/doc/Documentation/input/joystick.txt)"
               ));
 
   joyWidget = new JoyWidget(this);
