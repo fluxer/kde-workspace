@@ -74,8 +74,7 @@ enum ElectricBorderAction {
     ElectricActionNone = 0,          // No special action, not set, desktop switch or an effect
     ElectricActionShowDesktop = 1,   // Show desktop or restore
     ElectricActionLockScreen = 2,    // Lock screen
-    ElectricActionPreventScreenLocking = 3,
-    ELECTRIC_ACTION_COUNT = 4
+    ELECTRIC_ACTION_COUNT = 3
 };
 
 // DesktopMode and WindowsMode are based on the order in which the desktop

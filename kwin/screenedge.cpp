@@ -576,8 +576,6 @@ static ElectricBorderAction electricBorderAction(const QString& name)
         return ElectricActionShowDesktop;
     } else if (lowerName == "lockscreen") {
         return ElectricActionLockScreen;
-    } else if (lowerName == "preventscreenlocking") {
-        return ElectricActionPreventScreenLocking;
     }
     return ElectricActionNone;
 }
