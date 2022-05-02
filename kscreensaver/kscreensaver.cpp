@@ -35,6 +35,8 @@ KScreenSaver::KScreenSaver(QObject *parent)
 {
     (void)new ScreenSaverAdaptor(this);
 
+    m_activetimer.invalidate();
+
     QDBusConnection connection = QDBusConnection::sessionBus();
 
     const bool object = connection.registerObject("/ScreenSaver", this); // used by e.g. xdg-screensaver
