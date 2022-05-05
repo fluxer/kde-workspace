@@ -27,6 +27,17 @@
 
 #include <sys/stat.h>
 
+static QString urlForService(const KDNSSDService &kdnssdservice)
+{
+    // for compatibility since there is no KIO slave to open rfb protocols
+    if (kdnssdservice.url.startsWith(QLatin1String("rfb://"))) {
+        QString result = kdnssdservice.url;
+        result = result.replace(QLatin1String("rfb://"), QLatin1String("vnc://"));
+        return result;
+    }
+    return kdnssdservice.url;
+}
+
 static QString mimeForService(const KDNSSDService &kdnssdservice)
 {
     return QString::fromLatin1("inode/vnd.kde.service.%1").arg(
@@ -50,6 +61,7 @@ NetworkSlave::~NetworkSlave()
 
 void NetworkSlave::mimetype(const KUrl &url)
 {
+    m_kdnssd.startBrowse();
     foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
         // qDebug() << Q_FUNC_INFO << kdnssdservice.url << url.prettyUrl();
         if (kdnssdservice.url == url.prettyUrl()) {
@@ -73,7 +85,7 @@ void NetworkSlave::stat(const KUrl &url)
             kioudsentry.insert(KIO::UDSEntry::UDS_ACCESS, S_IRWXU | S_IRWXG | S_IRWXO);
             kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(kdnssdservice));
             kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mimeForService(kdnssdservice));
-            kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, kdnssdservice.url);
+            kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, urlForService(kdnssdservice));
             statEntry(kioudsentry);
             finished();
             return;
@@ -93,7 +105,7 @@ void NetworkSlave::listDir(const KUrl &url)
         kioudsentry.insert(KIO::UDSEntry::UDS_ACCESS, S_IRWXU | S_IRWXG | S_IRWXO);
         kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(kdnssdservice));
         kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mimeForService(kdnssdservice));
-        kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, kdnssdservice.url);
+        kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, urlForService(kdnssdservice));
         listEntry(kioudsentry, false);
     }
     listEntry(kioudsentry, true);
