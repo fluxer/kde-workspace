@@ -22,6 +22,7 @@
 
 #include "networkslave.h"
 
+#include <KMimeType>
 #include <KDebug>
 
 #include <sys/stat.h>
@@ -35,10 +36,7 @@ static QString mimeForService(const KDNSSDService &kdnssdservice)
 
 static QString iconForService(const KDNSSDService &kdnssdservice)
 {
-    if (kdnssdservice.url.startsWith(QLatin1String("rfb://"))) {
-        return QString::fromLatin1("krfb");
-    }
-    return QString::fromLatin1("network-workgroup");
+    return KMimeType::mimeType(mimeForService(kdnssdservice))->iconName();
 }
 
 NetworkSlave::NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket)
