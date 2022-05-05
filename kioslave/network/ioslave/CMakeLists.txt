@@ -1,27 +1,27 @@
-project( kio_network )
+project(kio_network)
 
-include_directories(
-  ../network
-  ${CMAKE_CURRENT_BINARY_DIR}/../network
-)
-
-set( kio_network_SRCS
-  networkdbusinterface.cpp
-  networkinitwatcher.cpp
-  networkthread.cpp
-  networkuri.cpp
-  mimetypes.cpp
+set(kio_network_SRCS
   networkslave.cpp
   main.cpp
 )
 
-# qt4_add_dbus_interface( kio_network_SRCS  ../kded/org.kde.network.xml networkdbusproxy )
+kde4_add_plugin(kio_network ${kio_network_SRCS})
 
-kde4_add_plugin( kio_network  ${kio_network_SRCS} )
+target_link_libraries(kio_network
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KDNSSD_LIBS}
+)
 
-target_link_libraries( kio_network  molletnetwork ${KDE4_KIO_LIBS} )
+install(
+    TARGETS kio_network
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
 
-install( TARGETS kio_network  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-
-install( FILES network.protocol  DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install( FILES network.desktop  DESTINATION ${KDE4_DATA_INSTALL_DIR}/remoteview)
+install(
+    FILES network.protocol
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
+install(
+    FILES network.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/remoteview
+)

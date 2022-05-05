@@ -26,18 +26,17 @@
 #include <KComponentData>
 #include <kdemacros.h>
 // Qt
-#include <QtCore/QCoreApplication>
-
+#include <QCoreApplication>
 
 extern "C"
 {
 
-int KDE_EXPORT kdemain( int argc, char** argv )
+int KDE_EXPORT kdemain(int argc, char** argv)
 {
-    KComponentData componentData( "kio_network" );
-    QCoreApplication app( argc, argv );
+    KComponentData componentData("kio_network");
+    QCoreApplication app(argc, argv);
 
-    NetworkSlave slave( argv[1], argv[2], argv[3] );
+    NetworkSlave slave(argv[1], argv[2], argv[3]);
     slave.dispatchLoop();
 
     return 0;

@@ -25,38 +25,21 @@
 
 // KDE
 #include <KIO/SlaveBase>
-
-class NetworkDBusInterface;
-class NetworkUri;
-namespace Mollet {
-class NetDevice;
-class NetService;
-}
-namespace KIO {
-class UDSEntry;
-}
+#include <kdnssd.h>
 
 class NetworkSlave : public KIO::SlaveBase
 {
-  public:
-    NetworkSlave( const QByteArray& name, const QByteArray& poolSocket, const QByteArray& programSocket );
+public:
+    NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket);
     virtual ~NetworkSlave();
 
-  public: // KIO::SlaveBase API
-    virtual void mimetype( const KUrl& url );
-    virtual void get( const KUrl& url );
-    virtual void stat( const KUrl& url );
-    virtual void listDir( const KUrl& url );
+public: // KIO::SlaveBase API
+    virtual void mimetype(const KUrl &url);
+    virtual void stat(const KUrl &url);
+    virtual void listDir(const KUrl &url);
 
-  private:
-    void feedEntryAsNetwork( KIO::UDSEntry* entry );
-    void feedEntryAsDevice( KIO::UDSEntry* entry, const Mollet::NetDevice& deviceData );
-    void feedEntryAsService( KIO::UDSEntry* entry, const Mollet::NetService& serviceData );
-
-    void reportError( const NetworkUri& networkUri, int errorId );
-
-  private: // data
-    NetworkDBusInterface* mNetworkDBusProxy;
+private: // data
+    KDNSSD m_kdnssd;
 };
 
 #endif
