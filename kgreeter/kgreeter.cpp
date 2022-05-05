@@ -111,8 +111,6 @@ KGreeter::KGreeter(QWidget *parent)
 
     m_ldmgreeter = lightdm_greeter_new();
 
-    m_timerid = startTimer(gliblooppolltime);
-
     g_signal_connect(
         m_ldmgreeter, LIGHTDM_GREETER_SIGNAL_SHOW_PROMPT,
         G_CALLBACK(KGreeter::showPromptCb), this
@@ -229,6 +227,8 @@ KGreeter::KGreeter(QWidget *parent)
 
     connect(m_ui.passedit, SIGNAL(returnPressed()), this, SLOT(slotLogin()));
     connect(m_ui.loginbutton, SIGNAL(pressed()), this, SLOT(slotLogin()));
+
+    m_timerid = startTimer(gliblooppolltime);
 }
 
 KGreeter::~KGreeter()
