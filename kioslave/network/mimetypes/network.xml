@@ -100,14 +100,14 @@ Notes:
   <!-- shell services -->
   <mime-type type="inode/vnd.kde.service.ssh">
     <sub-class-of type="inode/symlink"/>
-    <generic-icon name="terminal"/>
+    <generic-icon name="utilities-terminal"/>
     <comment>SSH server</comment>
     <acronym>SSH</acronym>
     <expanded-acronym>Secure shell</expanded-acronym>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.telnet">
     <sub-class-of type="inode/symlink"/>
-    <generic-icon name="terminal"/>
+    <generic-icon name="utilities-terminal"/>
     <comment>Telnet server</comment>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.rfb">
@@ -127,7 +127,7 @@ Notes:
     <comment>Web server</comment>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.ntp">
-    <generic-icon name="xclock"/>
+    <generic-icon name="preferences-system-time"/>
     <comment>Time server</comment>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.ldap">
@@ -137,7 +137,7 @@ Notes:
 
   <!-- user2user (chat, collaboration) -->
   <mime-type type="inode/vnd.kde.service.xmpp-server">
-    <generic-icon name="xchat"/>
+    <generic-icon name="im-jabber"/>
     <comment>XMPP/Jabber server</comment>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.presence">
