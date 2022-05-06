@@ -46,6 +46,7 @@ KFirewallModule::~KFirewallModule()
 
 bool KFirewallModule::enable()
 {
+    m_kfirewallsettingsmap.clear();
     QFile kfirewallfile(m_kfirewallconfigpath);
     if (!kfirewallfile.open(QFile::ReadOnly)) {
         // may not exist yet but if it is created eventually it will be applied
