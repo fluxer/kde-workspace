@@ -19,17 +19,20 @@
 #include "kscreensaver.h"
 #include "screensaveradaptor.h"
 
+#include <QDir>
 #include <kdebug.h>
 #include <kidletime.h>
 
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 
 KScreenSaver::KScreenSaver(QObject *parent)
     : QObject(parent),
     m_objectsregistered(false),
     m_serviceregistered(false),
     m_xscreensaver(nullptr),
+    m_xscreensaverpid(0),
     m_login1("org.freedesktop.login1", "/org/freedesktop/login1", "org.freedesktop.login1.Manager", QDBusConnection::systemBus()),
     m_consolekit("org.freedesktop.ConsoleKit", "/org/freedesktop/ConsoleKit/Manager", "org.freedesktop.ConsoleKit.Manager", QDBusConnection::systemBus())
 {
@@ -63,7 +66,9 @@ KScreenSaver::KScreenSaver(QObject *parent)
 
     QProcess::startDetached(
         QString::fromLatin1("xscreensaver"),
-        QStringList() << QString::fromLatin1("-nosplash")
+        QStringList() << QString::fromLatin1("-nosplash"),
+        QDir::currentPath(),
+        &m_xscreensaverpid
     );
 
     m_xscreensaver = new QProcess(this);
@@ -122,6 +127,10 @@ KScreenSaver::~KScreenSaver()
         QDBusConnection connection = QDBusConnection::sessionBus();
         connection.unregisterObject("/ScreenSaver");
         connection.unregisterObject("/org/freedesktop/ScreenSaver");
+    }
+
+    if (m_xscreensaverpid > 0) {
+        ::kill(pid_t(m_xscreensaverpid), SIGTERM);
     }
 
     if (m_xscreensaver) {

@@ -58,6 +58,7 @@ private:
     bool m_objectsregistered;
     bool m_serviceregistered;
     QProcess* m_xscreensaver;
+    Q_PID m_xscreensaverpid;
     QElapsedTimer m_activetimer;
     QList<uint> m_inhibitions;
     QDBusInterface m_login1;
