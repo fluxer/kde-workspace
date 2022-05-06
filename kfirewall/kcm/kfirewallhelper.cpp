@@ -35,9 +35,11 @@ static QByteArray rulesForParameters(const QVariantMap &parameters, const bool a
         const QByteArray actionvalue = rulesettingsmap.value(QString::fromLatin1("action")).toByteArray();
         // qDebug() << Q_FUNC_INFO << trafficvalue << addressvalue << portvalue << actionvalue;
 
+        bool isinbound = false;
         QByteArray iptablestraffic = trafficvalue.toUpper();
         if (iptablestraffic == "INBOUND") {
             iptablestraffic = "INPUT";
+            isinbound = true;
         } else {
             iptablestraffic = "OUTPUT";
         }
@@ -56,8 +58,11 @@ static QByteArray rulesForParameters(const QVariantMap &parameters, const bool a
             iptablesruledata.append(" -p tcp --dport ");
             iptablesruledata.append(QByteArray::number(portvalue));
         }
-        iptablesruledata.append(" -m owner --uid-owner ");
-        iptablesruledata.append(uservalue);
+        if (!isinbound) {
+            // NOTE: only output can be user-bound
+            iptablesruledata.append(" -m owner --uid-owner ");
+            iptablesruledata.append(uservalue);
+        }
         iptablesruledata.append(" -j ");
         iptablesruledata.append(actionvalue.toUpper());
         iptablesruledata.append("\n");
