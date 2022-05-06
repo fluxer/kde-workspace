@@ -53,12 +53,17 @@ bool KFirewallModule::enable()
         return true;
     }
 
-    QJsonDocument kfirewalljsondocument = QJsonDocument::fromJson(kfirewallfile.readAll());
-    if (kfirewalljsondocument.isNull()) {
+    const QByteArray kfirewalljsondata = kfirewallfile.readAll();
+    QJsonDocument kfirewalljsondocument = QJsonDocument::fromJson(kfirewalljsondata);
+    if (!kfirewalljsondata.isEmpty() && kfirewalljsondocument.isNull()) {
         kWarning() << "Could create JSON document" << kfirewalljsondocument.errorString();
         return false;
     }
     m_kfirewallsettingsmap = kfirewalljsondocument.toVariant().toMap();
+    if (m_kfirewallsettingsmap.isEmpty()) {
+        kDebug() << "No firewall rules";
+        return true;
+    }
 
     KAuth::Action kfirewallaction("org.kde.kcontrol.kcmkfirewall.apply");
     kfirewallaction.setHelperID("org.kde.kcontrol.kcmkfirewall");
@@ -76,6 +81,11 @@ bool KFirewallModule::enable()
 
 bool KFirewallModule::disable()
 {
+    if (m_kfirewallsettingsmap.isEmpty()) {
+        kDebug() << "No firewall rules";
+        return true;
+    }
+
     KAuth::Action kfirewallaction("org.kde.kcontrol.kcmkfirewall.revert");
     kfirewallaction.setHelperID("org.kde.kcontrol.kcmkfirewall");
     kfirewallaction.setArguments(m_kfirewallsettingsmap);

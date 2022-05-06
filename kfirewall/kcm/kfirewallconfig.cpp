@@ -98,8 +98,9 @@ void KCMFirewall::load()
         return;
     }
 
-    QJsonDocument kfirewalljsondocument = QJsonDocument::fromJson(kfirewallfile.readAll());
-    if (kfirewalljsondocument.isNull()) {
+    const QByteArray kfirewalljsondata = kfirewallfile.readAll();
+    QJsonDocument kfirewalljsondocument = QJsonDocument::fromJson(kfirewalljsondata);
+    if (!kfirewalljsondata.isEmpty() && kfirewalljsondocument.isNull()) {
         KMessageBox::error(this, i18n("Could create JSON document: %1", kfirewalljsondocument.errorString()));
         return;
     }
@@ -219,7 +220,7 @@ void KCMFirewall::save()
     // qDebug() << Q_FUNC_INFO << kfirewallsettingsmap;
 
     QJsonDocument kfirewalljsondocument = QJsonDocument::fromVariant(kfirewallsettingsmap);
-    if (kfirewalljsondocument.isNull()) {
+    if (!kfirewallsettingsmap.isEmpty() && kfirewalljsondocument.isNull()) {
         KMessageBox::error(this, i18n("Could create JSON document: %1", kfirewalljsondocument.errorString()));
         return;
     }
