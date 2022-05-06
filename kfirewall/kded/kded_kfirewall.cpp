@@ -35,7 +35,10 @@ KFirewallModule::KFirewallModule(QObject *parent, const QList<QVariant>&)
 {
     enable();
 
-    connect(&m_watcher, SIGNAL(fileChanged(QString)), this, SLOT(slotFileChanged(QString)));
+    connect(
+        &m_watcher, SIGNAL(fileChanged(QString)),
+        this, SLOT(slotFileChanged(QString))
+    );
     m_watcher.addPath(m_kfirewallconfigpath);
 }
 

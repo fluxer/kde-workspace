@@ -52,7 +52,7 @@ static QByteArray rulesForParameters(const QVariantMap &parameters, const bool a
         iptablesruledata.append(iptablestraffic);
         if (!addressvalue.isEmpty()) {
             iptablesruledata.append(" --destination ");
-            iptablesruledata.append(addressvalue.toUpper());
+            iptablesruledata.append(addressvalue);
         }
         if (portvalue > 0) {
             iptablesruledata.append(" --proto tcp --dport ");
