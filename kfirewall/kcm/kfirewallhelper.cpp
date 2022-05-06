@@ -45,25 +45,25 @@ static QByteArray rulesForParameters(const QVariantMap &parameters, const bool a
         }
 
         if (appendrules) {
-            iptablesruledata.append("-A ");
+            iptablesruledata.append("--append ");
         } else {
-            iptablesruledata.append("-D ");
+            iptablesruledata.append("--delete ");
         }
         iptablesruledata.append(iptablestraffic);
         if (!addressvalue.isEmpty()) {
-            iptablesruledata.append(" -d ");
+            iptablesruledata.append(" --destination ");
             iptablesruledata.append(addressvalue.toUpper());
         }
         if (portvalue > 0) {
-            iptablesruledata.append(" -p tcp --dport ");
+            iptablesruledata.append(" --proto tcp --dport ");
             iptablesruledata.append(QByteArray::number(portvalue));
         }
         if (!isinbound) {
             // NOTE: only output can be user-bound
-            iptablesruledata.append(" -m owner --uid-owner ");
+            iptablesruledata.append(" --match owner --uid-owner ");
             iptablesruledata.append(uservalue);
         }
-        iptablesruledata.append(" -j ");
+        iptablesruledata.append(" --jump ");
         iptablesruledata.append(actionvalue.toUpper());
         iptablesruledata.append("\n");
     }
