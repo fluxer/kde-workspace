@@ -159,8 +159,7 @@ void KCMGreeter::save()
     kgreeteraction.addArgument("background", backgroundrequester->url().path());
     kgreeteraction.addArgument("rectangle", rectanglerequester->url().path());
     KAuth::ActionReply kgreeterreply = kgreeteraction.execute();
-
-    // qDebug() << kgreeter.errorCode() << kgreeter.errorDescription();
+    // qDebug() << kgreeterreply.errorCode() << kgreeterreply.errorDescription();
 
     if (kgreeterreply != KAuth::ActionReply::SuccessReply) {
         KMessageBox::error(this, kgreeterreply.errorDescription());

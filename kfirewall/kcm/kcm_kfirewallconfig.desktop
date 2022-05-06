@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kfirewallconfig
+Icon=security-high
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kfirewallconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=network-settings
+X-KDE-System-Settings-Parent-Category-V2=network-settings
+X-DocPath=kcontrol/kfirewallconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-network-settings;
+
+Name=Firewall
+Comment=Change filrewall options
+X-KDE-Keywords=Filrewall

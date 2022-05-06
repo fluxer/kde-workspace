@@ -272,6 +272,12 @@ add_feature_info(gdb_or_lldb
     "Backtraces support"
 )
 
+find_program(IPTABLES_EXECUTABLE iptables-restore)
+add_feature_info(iptables
+    IPTABLES_EXECUTABLE
+    "Firewall support"
+)
+
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
@@ -318,6 +324,7 @@ add_subdirectory(kcminit)
 add_subdirectory(khotkeys)
 add_subdirectory(ksystraycmd)
 
+add_subdirectory(kfirewall)
 if (LightDM_FOUND)
     add_subdirectory(kgreeter)
 endif(LightDM_FOUND)
