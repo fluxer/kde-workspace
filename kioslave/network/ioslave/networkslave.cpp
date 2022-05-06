@@ -34,6 +34,10 @@ static QString urlForService(const KDNSSDService &kdnssdservice)
         QString result = kdnssdservice.url;
         result = result.replace(QLatin1String("rfb://"), QLatin1String("vnc://"));
         return result;
+    } else if (kdnssdservice.url.startsWith(QLatin1String("sftp-ssh://"))) {
+        QString result = kdnssdservice.url;
+        result = result.replace(QLatin1String("sftp-ssh://"), QLatin1String("sftp://"));
+        return result;
     }
     return kdnssdservice.url;
 }
