@@ -246,7 +246,7 @@ void DrKonqiDialog::startBugReportAssistant()
         query = QString("%1/new").arg(BUG_REPORT_URL);
         query.append(QString("?title=%1 %2 %3").arg(crashedApp->name(), crashedApp->version(),
             crashedApp->signalName()));
-        query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nQt: %5\n%6").arg(
+        query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nKatie: %5\n%6").arg(
             QUrl::toPercentEncoding("## Platform"), sysinfo->system(),
             sysinfo->release(), sysinfo->kdeVersion(), sysinfo->qtVersion(),
             QUrl::toPercentEncoding("## Backtrace\nPlease, copy-paste it from the DrKonqi window\n")));
