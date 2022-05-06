@@ -7,10 +7,7 @@ COPYING.
 -->
 <!--
 Notes:
-- the mime types in this file are valid with the version 0.23 of the
-  shared-mime-info package.
-- the "fdo #xxxxx" are the wish in the freedesktop.org bug database to include
-  the mime type there.
+- the mime types are for services as described at: http://www.dns-sd.org/ServiceTypes.html.
 -->
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
   <mime-type type="inode/vnd.kde.network">
@@ -19,39 +16,6 @@ Notes:
     <comment>Network</comment>
   </mime-type>
 
-  <!-- Devices -->
-  <mime-type type="inode/vnd.kde.device.workstation">
-    <sub-class-of type="inode/directory"/>
-    <comment>Workstation</comment>
-    <generic-icon name="computer"/>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.device.router">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="network-server"/>
-    <comment>Router</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.device.server">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="network-server"/>
-    <comment>Server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.device.printer">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="printer"/>
-    <comment>Printer</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.device.scanner">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="scanner"/>
-    <comment>Scanner</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.device.unknown">
-    <sub-class-of type="inode/directory"/>
-    <generic-icon name="network-server"/>
-    <comment>Unknown device</comment>
-  </mime-type>
-
-
   <!-- Services -->
   <mime-type type="inode/vnd.kde.service.unknown">
     <generic-icon name="document"/>
@@ -59,7 +23,6 @@ Notes:
   </mime-type>
 
   <!-- File services -->
-  <!-- TODO: find why a generic service.filesystem does not forward its generic-icon -->
   <mime-type type="inode/vnd.kde.service.ftp">
     <sub-class-of type="inode/directory"/>
     <generic-icon name="folder-remote"/>
@@ -148,10 +111,6 @@ Notes:
     <generic-icon name="document-edit"/>
     <comment>Gobby server</comment>
   </mime-type>
-  <mime-type type="inode/vnd.kde.service.giver">
-    <generic-icon name="folder-remote"/>
-    <comment>Giver Peer</comment>
-  </mime-type>
   <mime-type type="inode/vnd.kde.service.sip">
     <generic-icon name="phone"/>
     <comment>SIP Telephony</comment>
@@ -177,32 +136,6 @@ Notes:
   <mime-type type="inode/vnd.kde.service.pdl-datastream">
     <generic-icon name="printer"/>
     <comment>PDL Printing</comment>
-  </mime-type>
-
-  <!-- Hardware -->
-  <mime-type type="inode/vnd.kde.service.pulse-server">
-    <generic-icon name="audio-card"/>
-    <comment>Pulse server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.pulse-source">
-    <generic-icon name="audio-input-line"/>
-    <comment>Pulse source</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.pulse-sink">
-    <generic-icon name="speaker"/>
-    <comment>Pulse sink</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.udisks-ssh">
-    <generic-icon name="drive-harddisk"/>
-    <comment>Udisks server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.libvirt">
-    <generic-icon name="computer"/>
-    <comment>libvirt server</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.airmouse">
-    <generic-icon name="input-mouse"/>
-    <comment>Air Mouse server</comment>
   </mime-type>
 
   <!-- Database -->
@@ -279,10 +212,6 @@ Notes:
   <mime-type type="inode/vnd.kde.service.nssocketport">
     <generic-icon name="services"/>
     <comment>NSSocketPort</comment>
-  </mime-type>
-  <mime-type type="inode/vnd.kde.service.home-sharing">
-    <generic-icon name="services"/>
-    <comment>iTunes Home Sharing</comment>
   </mime-type>
   <mime-type type="inode/vnd.kde.service.appletv-itunes">
     <generic-icon name="services"/>
