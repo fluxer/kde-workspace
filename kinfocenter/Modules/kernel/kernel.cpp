@@ -95,7 +95,10 @@ void KCMKernel::load()
             moduleoptionswidgetitemlist << i18n("Size") << KGlobal::locale()->formatByteSize(kmod_module_get_size(kmodmodule), 1);
             (void)new QTreeWidgetItem(modulewidgetitem, moduleoptionswidgetitemlist);
 
+            QTreeWidgetItem* modulelicenseswidgetitem = nullptr;
+            QTreeWidgetItem* moduledescriptionswidgetitem = nullptr;
             QTreeWidgetItem* moduleauthorswidgetitem = nullptr;
+            QTreeWidgetItem* modulesignerswidgetitem = nullptr;
             QTreeWidgetItem* modulefirmwareswidgetitem = nullptr;
 
             struct kmod_list *kseclist = NULL;
@@ -109,11 +112,23 @@ void KCMKernel::load()
 
                     QStringList modulesectionwidgetitemlist;
                     if (qstrcmp(kmodkey, "license") == 0) {
+                        if (!modulelicenseswidgetitem) {
+                            QStringList modulelicenseswidgetitemlist;
+                            modulelicenseswidgetitemlist << i18n("Licenses");
+                            modulelicenseswidgetitem = new QTreeWidgetItem(modulewidgetitem, modulelicenseswidgetitemlist);
+                        }
+
                         modulesectionwidgetitemlist << i18n("License") << QString::fromAscii(kmodvalue);
-                        (void)new QTreeWidgetItem(modulewidgetitem, modulesectionwidgetitemlist);
+                        (void)new QTreeWidgetItem(modulelicenseswidgetitem, modulesectionwidgetitemlist);
                     } else if (qstrcmp(kmodkey, "description") == 0) {
+                        if (!moduledescriptionswidgetitem) {
+                            QStringList moduledescriptionswidgetitemlist;
+                            moduledescriptionswidgetitemlist << i18n("Descriptions");
+                            moduledescriptionswidgetitem = new QTreeWidgetItem(modulewidgetitem, moduledescriptionswidgetitemlist);
+                        }
+
                         modulesectionwidgetitemlist << i18n("Description") << QString::fromAscii(kmodvalue);
-                        (void)new QTreeWidgetItem(modulewidgetitem, modulesectionwidgetitemlist);
+                        (void)new QTreeWidgetItem(moduledescriptionswidgetitem, modulesectionwidgetitemlist);
                     } else if (qstrcmp(kmodkey, "author") == 0) {
                         if (!moduleauthorswidgetitem) {
                             QStringList moduleauthorswidgetitemlist;
@@ -124,8 +139,14 @@ void KCMKernel::load()
                         modulesectionwidgetitemlist << i18n("Author") << QString::fromAscii(kmodvalue);
                         (void)new QTreeWidgetItem(moduleauthorswidgetitem, modulesectionwidgetitemlist);
                     } else if (qstrcmp(kmodkey, "signer") == 0) {
+                        if (!modulesignerswidgetitem) {
+                            QStringList modulesignerswidgetitemlist;
+                            modulesignerswidgetitemlist << i18n("Signers");
+                            modulesignerswidgetitem = new QTreeWidgetItem(modulewidgetitem, modulesignerswidgetitemlist);
+                        }
+
                         modulesectionwidgetitemlist << i18n("Signer") << QString::fromAscii(kmodvalue);
-                        (void)new QTreeWidgetItem(modulewidgetitem, modulesectionwidgetitemlist);
+                        (void)new QTreeWidgetItem(modulesignerswidgetitem, modulesectionwidgetitemlist);
                     } else if (qstrcmp(kmodkey, "firmware") == 0) {
                         if (!modulefirmwareswidgetitem) {
                             QStringList modulefirmwareswidgetitemlist;
