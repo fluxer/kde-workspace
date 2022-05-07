@@ -318,10 +318,6 @@ add_subdirectory(kcminit)
 add_subdirectory(khotkeys)
 add_subdirectory(ksystraycmd)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-    # only Linux is known to have iptables
-    add_subdirectory(kfirewall)
-endif()
 if (LightDM_FOUND)
     add_subdirectory(kgreeter)
 endif(LightDM_FOUND)
