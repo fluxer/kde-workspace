@@ -149,7 +149,6 @@ void KCMFirewall::load()
         QSpinBox* tableportwidget = qobject_cast<QSpinBox*>(rulestable->cellWidget(counter, 2));
         tableportwidget->setValue(portvalue);
 
-
         int actionindex = 0;
         if (actionvalue == QLatin1String("accept")) {
             actionindex = 0;
@@ -172,8 +171,6 @@ void KCMFirewall::save()
     QVariantMap kfirewallsettingsmap;
     const QVariant uservalue = QVariant(KUser().loginName());
     for (int i = 0; i < rulestable->rowCount(); i++) {
-        QVariantMap rowsettingsmap;
-
         QVariant trafficvalue;
         const QComboBox* tabletrafficwidget = qobject_cast<QComboBox*>(rulestable->cellWidget(i, 0));
         switch (tabletrafficwidget->currentIndex()) {
@@ -223,6 +220,7 @@ void KCMFirewall::save()
         }
         // qDebug() << Q_FUNC_INFO << actionvalue;
 
+        QVariantMap rowsettingsmap;
         rowsettingsmap.insert(QString::fromLatin1("user"), uservalue);
         rowsettingsmap.insert(QString::fromLatin1("traffic"), trafficvalue);
         rowsettingsmap.insert(QString::fromLatin1("address"), addressvalue);
