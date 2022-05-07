@@ -35,11 +35,17 @@ extern "C"
     }
 }
 
-bool ImageCreator::create(const QString &path, int, int, QImage &img)
+bool ImageCreator::create(const QString &path, int width, int height, QImage &img)
 {
     // use preview from Exiv2 metadata if possible
     KExiv2 exiv(path);
     img = exiv.preview();
+
+    // if the thumbnail from Exiv2 metadata is smaller than the request discard it, the preview in
+    // file properties dialog for example often requests large thumbnails
+    if (!img.isNull() && (img.width() < width || img.height() < height)) {
+        img = QImage();
+    }
 
     // create image preview otherwise
     if (img.isNull() && !img.load(path)) {
