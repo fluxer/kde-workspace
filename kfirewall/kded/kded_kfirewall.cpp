@@ -60,7 +60,7 @@ bool KFirewallModule::enable()
     const QByteArray kfirewalljsondata = kfirewallfile.readAll();
     QJsonDocument kfirewalljsondocument = QJsonDocument::fromJson(kfirewalljsondata);
     if (!kfirewalljsondata.isEmpty() && kfirewalljsondocument.isNull()) {
-        kWarning() << "Could create JSON document" << kfirewalljsondocument.errorString();
+        kWarning() << "Could not create JSON document" << kfirewalljsondocument.errorString();
         return false;
     }
     m_kfirewallsettingsmap = kfirewalljsondocument.toVariant().toMap();
@@ -101,6 +101,7 @@ bool KFirewallModule::disable()
         return false;
     }
 
+    m_kfirewallsettingsmap.clear();
     return true;
 }
 

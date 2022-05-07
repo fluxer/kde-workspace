@@ -23,6 +23,50 @@
 #include <kauthhelpersupport.h>
 #include <kdebug.h>
 
+static QByteArray ruleForSettings(const QByteArray &uservalue, const QByteArray &trafficvalue,
+                                  const QByteArray &addressvalue, const uint portvalue,
+                                  const QByteArray &actionvalue, const bool appendrules, const bool tcprule)
+{
+    QByteArray iptablesruledata;
+    bool isinbound = false;
+    QByteArray iptablestraffic = trafficvalue.toUpper();
+    if (iptablestraffic == "INBOUND") {
+        iptablestraffic = "INPUT";
+        isinbound = true;
+    } else {
+        iptablestraffic = "OUTPUT";
+    }
+
+    if (appendrules) {
+        iptablesruledata.append("--append ");
+    } else {
+        iptablesruledata.append("--delete ");
+    }
+    iptablesruledata.append(iptablestraffic);
+    if (!addressvalue.isEmpty()) {
+        iptablesruledata.append(" --destination ");
+        iptablesruledata.append(addressvalue);
+    }
+    if (portvalue > 0) {
+        if (tcprule) {
+            iptablesruledata.append(" --proto tcp --dport ");
+            iptablesruledata.append(QByteArray::number(portvalue));
+        } else {
+            iptablesruledata.append(" --proto udp --dport ");
+            iptablesruledata.append(QByteArray::number(portvalue));
+        }
+    }
+    if (!isinbound) {
+        // NOTE: only output can be user-bound
+        iptablesruledata.append(" --match owner --uid-owner ");
+        iptablesruledata.append(uservalue);
+    }
+    iptablesruledata.append(" --jump ");
+    iptablesruledata.append(actionvalue.toUpper());
+    iptablesruledata.append("\n");
+    return iptablesruledata;
+}
+
 static QByteArray rulesForParameters(const QVariantMap &parameters, const bool appendrules)
 {
     QByteArray iptablesruledata("*filter\n");
@@ -35,37 +79,18 @@ static QByteArray rulesForParameters(const QVariantMap &parameters, const bool a
         const QByteArray actionvalue = rulesettingsmap.value(QString::fromLatin1("action")).toByteArray();
         // qDebug() << Q_FUNC_INFO << trafficvalue << addressvalue << portvalue << actionvalue;
 
-        bool isinbound = false;
-        QByteArray iptablestraffic = trafficvalue.toUpper();
-        if (iptablestraffic == "INBOUND") {
-            iptablestraffic = "INPUT";
-            isinbound = true;
-        } else {
-            iptablestraffic = "OUTPUT";
-        }
-
-        if (appendrules) {
-            iptablesruledata.append("--append ");
-        } else {
-            iptablesruledata.append("--delete ");
-        }
-        iptablesruledata.append(iptablestraffic);
-        if (!addressvalue.isEmpty()) {
-            iptablesruledata.append(" --destination ");
-            iptablesruledata.append(addressvalue);
-        }
-        if (portvalue > 0) {
-            iptablesruledata.append(" --proto tcp --dport ");
-            iptablesruledata.append(QByteArray::number(portvalue));
-        }
-        if (!isinbound) {
-            // NOTE: only output can be user-bound
-            iptablesruledata.append(" --match owner --uid-owner ");
-            iptablesruledata.append(uservalue);
-        }
-        iptablesruledata.append(" --jump ");
-        iptablesruledata.append(actionvalue.toUpper());
-        iptablesruledata.append("\n");
+        iptablesruledata.append(
+            ruleForSettings(
+                uservalue, trafficvalue, addressvalue, portvalue, actionvalue,
+                appendrules, true
+            )
+        );
+        iptablesruledata.append(
+            ruleForSettings(
+                uservalue, trafficvalue, addressvalue, portvalue, actionvalue,
+                appendrules, false
+            )
+        );
     }
     iptablesruledata.append("COMMIT\n");
     // qDebug() << Q_FUNC_INFO << iptablesruledata;
