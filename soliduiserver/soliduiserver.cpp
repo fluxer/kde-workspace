@@ -33,6 +33,7 @@
 #include <solid/block.h>
 #include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
+#include <solid/networkshare.h>
 #include <solid/solidnamespace.h>
 
 #include "deviceactionsdialog.h"
@@ -40,7 +41,6 @@
 #include "deviceserviceaction.h"
 #include "devicenothingaction.h"
 
-#include <QProcess>
 #include <QDir>
 
 K_PLUGIN_FACTORY(SolidUiServerFactory,
@@ -125,6 +125,63 @@ void SolidUiServer::onActionDialogFinished()
 int SolidUiServer::mountDevice(const QString &udi)
 {
     Solid::Device device(udi);
+
+    Solid::NetworkShare *networkshare = device.as<Solid::NetworkShare>();
+    if (networkshare) {
+        // qDebug() << Q_FUNC_INFO << udi << networkshare->url();
+
+        QString devicenode;
+        QString devicefstype;
+        switch (networkshare->type()) {
+            case Solid::NetworkShare::Unknown: {
+                return int(Solid::ErrorType::MissingDriver);
+            }
+            case Solid::NetworkShare::Nfs: {
+                devicenode = QString::fromLatin1("%1:%2").arg(device.product()).arg(device.vendor());
+                devicefstype = QString::fromLatin1("nfs");
+                break;
+            }
+            case Solid::NetworkShare::Cifs: {
+                devicenode = QString::fromLatin1("//%1/%2").arg(device.product()).arg(device.vendor());
+                devicefstype = QString::fromLatin1("cifs");
+                break;
+            }
+            default: {
+                kWarning() << "invalid network share type" << networkshare->type();
+                return int(Solid::ErrorType::InvalidOption);
+            }
+        }
+        const QString deviceuuid = device.product();
+
+        // permission denied on /run/mount so.. using base directory that is writable
+        const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
+        const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
+        QDir mountdir(mountbase);
+        if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
+            kWarning() << "could not create" << mountpoint;
+            return int(Solid::ErrorType::OperationFailed);
+        }
+
+        KAuth::Action mountaction("org.kde.soliduiserver.mountunmounthelper.mount");
+        mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+        mountaction.addArgument("device", devicenode);
+        mountaction.addArgument("mountpoint", mountpoint);
+        mountaction.addArgument("fstype", devicefstype);
+        KAuth::ActionReply mountreply = mountaction.execute();
+        // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
+
+        if (mountreply == KAuth::ActionReply::SuccessReply) {
+            return int(Solid::ErrorType::NoError);
+        }
+
+        if (mountreply == KAuth::ActionReply::UserCancelled) {
+            return int(Solid::ErrorType::UserCanceled);
+        } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
+            return int(Solid::ErrorType::UnauthorizedOperation);
+        }
+        return int(Solid::ErrorType::OperationFailed);
+    }
+
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     Solid::Block *block = device.as<Solid::Block>();
     if (!storagevolume || !block) {
@@ -190,7 +247,6 @@ int SolidUiServer::mountDevice(const QString &udi)
     mountaction.addArgument("mountpoint", mountpoint);
     mountaction.addArgument("fstype", storagevolume->fsType());
     KAuth::ActionReply mountreply = mountaction.execute();
-
     // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
 
     if (mountreply == KAuth::ActionReply::SuccessReply) {

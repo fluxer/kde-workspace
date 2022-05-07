@@ -113,6 +113,7 @@ KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
     const QString device = parameters.value("device").toString();
     const QString mountpoint = parameters.value("mountpoint").toString();
     const QString fstype = parameters.value("fstype").toString();
+    // qDebug() << Q_FUNC_INFO << device << mountpoint << fstype;
 
 #ifdef Q_OS_LINUX
     // NOTE: if the filesystem is not listed in /proc/filesystems then mount() will fail
