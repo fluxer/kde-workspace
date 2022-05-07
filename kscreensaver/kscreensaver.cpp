@@ -129,14 +129,14 @@ KScreenSaver::~KScreenSaver()
         connection.unregisterObject("/org/freedesktop/ScreenSaver");
     }
 
-    if (m_xscreensaverpid > 0) {
-        ::kill(pid_t(m_xscreensaverpid), SIGTERM);
-    }
-
     if (m_xscreensaver) {
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardOutput()), this, SLOT(slotXScreenSaverOutput()));
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardError()), this, SLOT(slotXScreenSaverError()));
         m_xscreensaver->deleteLater();
+    }
+
+    if (m_xscreensaverpid > 0) {
+        ::kill(pid_t(m_xscreensaverpid), SIGTERM);
     }
 }
 
