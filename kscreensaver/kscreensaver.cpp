@@ -132,6 +132,7 @@ KScreenSaver::~KScreenSaver()
     if (m_xscreensaver) {
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardOutput()), this, SLOT(slotXScreenSaverOutput()));
         disconnect(m_xscreensaver, SIGNAL(readyReadStandardError()), this, SLOT(slotXScreenSaverError()));
+        m_xscreensaver->terminate();
         m_xscreensaver->deleteLater();
     }
 
