@@ -120,9 +120,10 @@ KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
     const QByteArray fstypebytes = fstype.toLocal8Bit();
     QFile filesystemsfile(QString::fromLatin1("/proc/filesystems"));
     if (filesystemsfile.open(QFile::ReadOnly)) {
+        const QByteArray filesystemmatch = QByteArray(" ") + fstypebytes;
         while (!filesystemsfile.atEnd()) {
             const QByteArray filesystemsline = filesystemsfile.readLine().trimmed();
-            if (filesystemsline.endsWith(QByteArray(" ") + fstypebytes)) {
+            if (filesystemsline.endsWith(filesystemmatch)) {
                 isknownfs = true;
                 break;
             }
