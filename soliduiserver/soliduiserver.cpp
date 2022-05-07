@@ -188,6 +188,7 @@ int SolidUiServer::mountDevice(const QString &udi)
     mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
     mountaction.addArgument("device", devicenode);
     mountaction.addArgument("mountpoint", mountpoint);
+    mountaction.addArgument("fstype", storagevolume->fsType());
     KAuth::ActionReply mountreply = mountaction.execute();
 
     // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();

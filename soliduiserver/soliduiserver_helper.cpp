@@ -26,7 +26,12 @@
 #include <QDir>
 #include <QCoreApplication>
 
-KAuth::ActionReply SolidUiServerHelper::cryptopen(QVariantMap parameters)
+#ifdef Q_OS_LINUX
+#  include <sys/mount.h>
+#  include <errno.h>
+#endif
+
+KAuth::ActionReply SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
 {
     if (!parameters.contains("device") || !parameters.contains("name") || !parameters.contains("password")) {
         return KAuth::ActionReply::HelperErrorReply;
@@ -64,7 +69,7 @@ KAuth::ActionReply SolidUiServerHelper::cryptopen(QVariantMap parameters)
     return errorreply;
 }
 
-KAuth::ActionReply SolidUiServerHelper::cryptclose(QVariantMap parameters)
+KAuth::ActionReply SolidUiServerHelper::cryptclose(const QVariantMap &parameters)
 {
     if (!parameters.contains("name")) {
         return KAuth::ActionReply::HelperErrorReply;
@@ -98,14 +103,50 @@ KAuth::ActionReply SolidUiServerHelper::cryptclose(QVariantMap parameters)
     return errorreply;
 }
 
-KAuth::ActionReply SolidUiServerHelper::mount(QVariantMap parameters)
+KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
 {
-    if (!parameters.contains("device") || !parameters.contains("mountpoint")) {
+    if (!parameters.contains("device") || !parameters.contains("mountpoint")
+        || !parameters.contains("fstype")) {
         return KAuth::ActionReply::HelperErrorReply;
     }
 
     const QString device = parameters.value("device").toString();
     const QString mountpoint = parameters.value("mountpoint").toString();
+    const QString fstype = parameters.value("fstype").toString();
+
+#ifdef Q_OS_LINUX
+    // NOTE: if the filesystem is not listed in /proc/filesystems then mount() will fail
+    bool isknownfs = false;
+    const QByteArray fstypebytes = fstype.toLocal8Bit();
+    QFile filesystemsfile(QString::fromLatin1("/proc/filesystems"));
+    if (filesystemsfile.open(QFile::ReadOnly)) {
+        while (!filesystemsfile.atEnd()) {
+            const QByteArray filesystemsline = filesystemsfile.readLine().trimmed();
+            if (filesystemsline.endsWith(QByteArray(" ") + fstypebytes)) {
+                isknownfs = true;
+                break;
+            }
+        }
+    }
+    if (isknownfs) {
+        const QByteArray devicebytes = device.toLocal8Bit();
+        const QByteArray mountpointbytes = mountpoint.toLocal8Bit();
+        const int mountresult = ::mount(
+            devicebytes.constData(), mountpointbytes.constData(), fstypebytes.constData(),
+            0, NULL
+        );
+        if (mountresult == 0) {
+            return KAuth::ActionReply::SuccessReply;
+        }
+        const int savederrno = errno;
+        // qDebug() << Q_FUNC_INFO << qt_error_string(savederrno);
+        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+        errorreply.setErrorDescription(qt_error_string(savederrno));
+        errorreply.setErrorCode(savederrno);
+        return errorreply;
+    }
+#endif // Q_OS_LINUX
+
     const QStringList mountargs = QStringList() << device << mountpoint;
     QProcess mountproc;
     mountproc.start("mount", mountargs);
@@ -125,13 +166,26 @@ KAuth::ActionReply SolidUiServerHelper::mount(QVariantMap parameters)
     return errorreply;
 }
 
-KAuth::ActionReply SolidUiServerHelper::unmount(QVariantMap parameters)
+KAuth::ActionReply SolidUiServerHelper::unmount(const QVariantMap &parameters)
 {
     if (!parameters.contains("mountpoint")) {
         return KAuth::ActionReply::HelperErrorReply;
     }
 
     const QString mountpoint = parameters.value("mountpoint").toString();
+
+#ifdef Q_OS_LINUX
+    const QByteArray mountpointbytes = mountpoint.toLocal8Bit();;
+    const int umountresult = ::umount2(mountpointbytes.constData(), MNT_DETACH);
+    if (umountresult == 0) {
+        return KAuth::ActionReply::SuccessReply;
+    }
+    const int savederrno = errno;
+    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
+    errorreply.setErrorDescription(qt_error_string(savederrno));
+    errorreply.setErrorCode(savederrno);
+    return errorreply;
+#else
     const QStringList umountargs = QStringList() << mountpoint;
     QProcess umountproc;
     umountproc.start("umount", umountargs);
@@ -149,6 +203,7 @@ KAuth::ActionReply SolidUiServerHelper::unmount(QVariantMap parameters)
     errorreply.setErrorDescription(umounterror);
     errorreply.setErrorCode(umountproc.exitCode());
     return errorreply;
+#endif // Q_OS_LINUX
 }
 
 KDE4_AUTH_HELPER_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)

@@ -29,10 +29,10 @@ class SolidUiServerHelper : public QObject
 {
     Q_OBJECT
 public Q_SLOTS:
-    ActionReply cryptopen(QVariantMap parameters);
-    ActionReply cryptclose(QVariantMap parameters);
-    ActionReply mount(QVariantMap parameters);
-    ActionReply unmount(QVariantMap parameters);
+    ActionReply cryptopen(const QVariantMap &parameters);
+    ActionReply cryptclose(const QVariantMap &parameters);
+    ActionReply mount(const QVariantMap &parameters);
+    ActionReply unmount(const QVariantMap &parameters);
 };
 
 #endif // SOLIDUISERVER_HELPER_H
