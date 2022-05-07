@@ -1,4 +1,4 @@
-/*  This file is part of the KDE libraries
+/*  This file is part of the KDE project
     Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
@@ -116,7 +116,7 @@ KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
     // qDebug() << Q_FUNC_INFO << device << mountpoint << fstype;
 
 #ifdef Q_OS_LINUX
-    // NOTE: if the filesystem is not listed in /proc/filesystems then mount() will fail
+    // NOTE: if the filesystem type is not listed in /proc/filesystems then mount() will fail
     bool isknownfs = false;
     const QByteArray fstypebytes = fstype.toLocal8Bit();
     QFile filesystemsfile(QString::fromLatin1("/proc/filesystems"));
