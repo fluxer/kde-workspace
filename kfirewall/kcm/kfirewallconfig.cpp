@@ -47,6 +47,19 @@ KCMFirewall::KCMFirewall(QWidget* parent, const QVariantList& args)
 
     setupUi(this);
 
+    const QString iptablesexe = KStandardDirs::findRootExe("iptables-restore");
+    messagewidget->setMessageType(KMessageWidget::Error);
+    messagewidget->setCloseButtonVisible(false);
+    if (iptablesexe.isEmpty()) {
+        rulestable->setEnabled(false);
+        addbutton->setEnabled(false);
+        removebutton->setEnabled(false);
+        messagewidget->show();
+        messagewidget->setText(i18n("iptables is not available"));
+    } else {
+        messagewidget->hide();
+    }
+
     KAboutData *about = new KAboutData(
         I18N_NOOP("kcmkfirewall"), 0,
         ki18n("KDE Firewall Module"),
