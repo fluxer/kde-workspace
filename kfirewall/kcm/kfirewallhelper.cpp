@@ -27,6 +27,11 @@ static QByteArray ruleForSettings(const QByteArray &uservalue, const QByteArray 
                                   const QByteArray &addressvalue, const uint portvalue,
                                   const QByteArray &actionvalue, const bool appendrules, const bool tcprule)
 {
+    if (!tcprule && portvalue <= 0) {
+        // no port specified
+        return QByteArray();
+    }
+
     QByteArray iptablesruledata;
     bool isinbound = false;
     QByteArray iptablestraffic = trafficvalue.toUpper();
@@ -152,6 +157,8 @@ ActionReply KFirewallHelper::apply(const QVariantMap &parameters)
 
 ActionReply KFirewallHelper::revert(const QVariantMap &parameters)
 {
+    //qDebug() << Q_FUNC_INFO << parameters;
+
     if (parameters.isEmpty()) {
         KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
         errorreply.setErrorDescription("Empty rules");
