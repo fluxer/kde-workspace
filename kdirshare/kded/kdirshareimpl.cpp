@@ -172,6 +172,11 @@ quint16 KDirShareImpl::portMax() const
     return m_portmax;
 }
 
+QString KDirShareImpl::publishError() const
+{
+    return m_kdnssd.errorString();
+}
+
 void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders)
 {
     // qDebug() << Q_FUNC_INFO << url;

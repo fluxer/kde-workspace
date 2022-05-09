@@ -95,7 +95,7 @@ QString KDirShareModule::share(const QString &dirpath, const uint portmin, const
     if (!kdirshareimpl->publish()) {
         kdirshareimpl->stop();
         delete kdirshareimpl;
-        return i18n("Could not publish service for: %1", dirpath);
+        return i18n("Could not publish service for: %1", kdirshareimpl->publishError());
     }
     m_dirshares.append(kdirshareimpl);
     return QString();

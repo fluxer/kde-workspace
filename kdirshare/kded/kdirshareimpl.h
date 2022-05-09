@@ -40,6 +40,8 @@ public:
     quint16 portMin() const;
     quint16 portMax() const;
 
+    QString publishError() const;
+
 protected:
     void respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders) final;
 
