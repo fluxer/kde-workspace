@@ -34,10 +34,13 @@ public:
     ~KDirShareModule();
 
 public Q_SLOTS:
-    Q_SCRIPTABLE QString share(const QString &dirpath);
+    Q_SCRIPTABLE QString share(const QString &dirpath, const uint portmin, const uint portmax);
     Q_SCRIPTABLE QString unshare(const QString &dirpath);
 
     Q_SCRIPTABLE bool isShared(const QString &dirpath) const;
+
+    Q_SCRIPTABLE quint16 getPortMin(const QString &dirpath) const;
+    Q_SCRIPTABLE quint16 getPortMax(const QString &dirpath) const;
 
 private:
     QList<KDirShareImpl*> m_dirshares;

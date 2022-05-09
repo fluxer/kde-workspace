@@ -22,6 +22,9 @@
 #include <khttp.h>
 #include <kdnssd.h>
 
+static const quint16 s_kdirshareportmin = 1000;
+static const quint16 s_kdirshareportmax = 32000;
+
 class KDirShareImpl : public KHTTP
 {
     Q_OBJECT
@@ -31,8 +34,11 @@ public:
 
     QString directory() const;
     bool setDirectory(const QString &dirpath);
-    bool serve(const QHostAddress &address, const quint16 port);
+    bool serve(const QHostAddress &address, const quint16 portmin, const quint16 portmax);
     bool publish();
+
+    quint16 portMin() const;
+    quint16 portMax() const;
 
 protected:
     void respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders) final;
@@ -40,6 +46,8 @@ protected:
 private:
     QString m_directory;
     quint16 m_port;
+    quint16 m_portmin;
+    quint16 m_portmax;
     KDNSSD m_kdnssd;
 };
 

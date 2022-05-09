@@ -27,6 +27,9 @@
 
 #include "kdirshareplugin.h"
 
+static const quint16 s_kdirshareportmin = 1000;
+static const quint16 s_kdirshareportmax = 32000;
+
 K_PLUGIN_FACTORY(KDirSharePluginFactory, registerPlugin<KDirSharePlugin>();)
 K_EXPORT_PLUGIN(KDirSharePluginFactory("kdirshareplugin"))
 
@@ -56,17 +59,41 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
     if (m_kdirshareiface.isValid()) {
         QDBusReply<bool> kdirsharereply = m_kdirshareiface.call("isShared", m_url);
         if (!kdirsharereply.isValid()) {
-            kWarning() << "Invalid kdirshare module reply";
+            kWarning() << "Invalid kdirshare module reply for isShared()";
             m_ui.sharebox->setChecked(false);
+            m_ui.portgroup->setEnabled(false);
         } else {
             m_ui.sharebox->setChecked(kdirsharereply.value());
+            m_ui.portgroup->setEnabled(kdirsharereply.value());
         }
+
+        QDBusReply<quint16> kdirsharereply2 = m_kdirshareiface.call("getPortMin", m_url);
+        if (!kdirsharereply2.isValid()) {
+            kWarning() << "Invalid kdirshare module reply for getPortMin()";
+            m_ui.portmininput->setValue(s_kdirshareportmin);
+        } else {
+            m_ui.portmininput->setValue(kdirsharereply2.value());
+        }
+        kdirsharereply2 = m_kdirshareiface.call("getPortMax", m_url);
+        if (!kdirsharereply2.isValid()) {
+            kWarning() << "Invalid kdirshare module reply for getPortMax()";
+            m_ui.portmaxinput->setValue(s_kdirshareportmax);
+        } else {
+            m_ui.portmaxinput->setValue(kdirsharereply2.value());
+        }
+        const bool randomport = (m_ui.portmininput->value() != m_ui.portmaxinput->value());
+        m_ui.randombox->setChecked(randomport);
+        m_ui.portmininput->setVisible(randomport);
     } else {
         kWarning() << "kdirshare module interface is not valid";
         m_ui.sharebox->setEnabled(false);
+        m_ui.portgroup->setEnabled(false);
     }
 
-    connect(m_ui.sharebox, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
+    connect(m_ui.sharebox, SIGNAL(toggled(bool)), this, SLOT(slotShare(bool)));
+    connect(m_ui.randombox, SIGNAL(toggled(bool)), this, SLOT(slotRandomPort(bool)));
+    connect(m_ui.portmininput, SIGNAL(valueChanged(int)), this, SLOT(slotPortMin(int)));
+    connect(m_ui.portmaxinput, SIGNAL(valueChanged(int)), this, SLOT(slotPortMax(int)));
 }
 
 KDirSharePlugin::~KDirSharePlugin()
@@ -79,7 +106,10 @@ void KDirSharePlugin::applyChanges()
     if (m_ui.sharebox->isEnabled()) {
         QDBusReply<QString> kdirsharereply;
         if (m_ui.sharebox->isChecked()) {
-            kdirsharereply = m_kdirshareiface.call("share", m_url);
+            kdirsharereply = m_kdirshareiface.call("share",
+                m_url,
+                uint(m_ui.portmininput->value()), uint(m_ui.portmaxinput->value())
+            );
         } else {
             kdirsharereply = m_kdirshareiface.call("unshare", m_url);
         }
@@ -92,6 +122,41 @@ void KDirSharePlugin::applyChanges()
             }
         }
     }
+}
+
+void KDirSharePlugin::slotShare(const bool value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    m_ui.portgroup->setEnabled(value);
+    emit changed();
+}
+
+void KDirSharePlugin::slotRandomPort(const bool value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    m_ui.portmininput->setVisible(value);
+    if (!value) {
+        m_ui.portmininput->setValue(m_ui.portmaxinput->value());
+    } else {
+        m_ui.portmininput->setValue(s_kdirshareportmin);
+    }
+    emit changed();
+}
+
+void KDirSharePlugin::slotPortMin(const int value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    Q_UNUSED(value);
+    emit changed();
+}
+
+void KDirSharePlugin::slotPortMax(const int value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    if (!m_ui.portmininput->isVisible()) {
+        m_ui.portmininput->setValue(value);
+    }
+    emit changed();
 }
 
 #include "moc_kdirshareplugin.cpp"

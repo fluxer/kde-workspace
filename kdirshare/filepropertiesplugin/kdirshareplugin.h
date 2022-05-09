@@ -33,6 +33,12 @@ public:
 
     void applyChanges() final;
 
+private Q_SLOTS:
+    void slotShare(const bool value);
+    void slotRandomPort(const bool value);
+    void slotPortMin(const int value);
+    void slotPortMax(const int value);
+
 private:
     Ui_KDirShareUI m_ui;
     QDBusInterface m_kdirshareiface;

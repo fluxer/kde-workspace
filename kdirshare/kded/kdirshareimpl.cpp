@@ -29,6 +29,18 @@
 
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
 
+static quint16 getPort(const quint16 portmin, const quint16 portmax)
+{
+    if (portmin == portmax) {
+        return portmax;
+    }
+    quint16 portnumber = 0;
+    while (portnumber < portmin || portnumber > portmax) {
+        portnumber = quint16(qrand());
+    }
+    return portnumber;
+}
+
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
     QByteArray data;
@@ -98,7 +110,9 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
 KDirShareImpl::KDirShareImpl(QObject *parent)
     : KHTTP(parent),
     m_directory(QDir::currentPath()),
-    m_port(0)
+    m_port(0),
+    m_portmin(s_kdirshareportmin),
+    m_portmax(s_kdirshareportmax)
 {
 }
 
@@ -122,10 +136,12 @@ bool KDirShareImpl::setDirectory(const QString &dirpath)
     return true;
 }
 
-bool KDirShareImpl::serve(const QHostAddress &address, const quint16 port)
+bool KDirShareImpl::serve(const QHostAddress &address, const quint16 portmin, const quint16 portmax)
 {
-    m_port = port;
-    return start(address, port);
+    m_port = getPort(portmin, portmax);
+    m_portmin = portmin;
+    m_portmax = portmax;
+    return start(address, m_port);
 }
 
 bool KDirShareImpl::publish()
@@ -134,6 +150,16 @@ bool KDirShareImpl::publish()
         "_http._tcp", m_port,
         i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), QFileInfo(m_directory).baseName())
     );
+}
+
+quint16 KDirShareImpl::portMin() const
+{
+    return m_portmin;
+}
+
+quint16 KDirShareImpl::portMax() const
+{
+    return m_portmax;
 }
 
 void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders)
