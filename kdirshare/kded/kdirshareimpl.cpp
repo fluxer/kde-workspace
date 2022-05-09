@@ -28,6 +28,8 @@
 #include <kdebug.h>
 
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
+static const QByteArray s_data404("<html>404 Not Found</html>");
+static const QByteArray s_data500("<html>500 Internal Server Error</html>");
 
 static quint16 getPort(const quint16 portmin, const quint16 portmax)
 {
@@ -68,7 +70,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     }
     QDir dir(path);
     foreach (const QFileInfo &fileinfo, dir.entryInfoList(dirfilters, s_dirsortflags)) {
-        const QString fullpath = path.toLocal8Bit() + QLatin1Char('/') + fileinfo.fileName();
+        const QString fullpath = path + QLatin1Char('/') + fileinfo.fileName();
         // chromium does weird stuff if the link starts with two slashes - removes, the host and
         // port part of the link (or rather does not prepend them) and converts the first directory
         // to lower-case
@@ -195,38 +197,28 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
         if (!iconpixmap.save(&iconbuffer, "PNG")) {
             kWarning() << "Could not save image";
         }
-        const QByteArray data = iconbuffer.data();
-
-        outdata->append(data);
+        outdata->append(iconbuffer.data());
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "image/png");
     } else if (pathinfo.isDir()) {
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
-        const QByteArray data = contentForDirectory(pathinfo.filePath(), m_directory);
-        outdata->append(data);
+        outdata->append(contentForDirectory(pathinfo.filePath(), m_directory));
     } else if (pathinfo.isFile()) {
         QFile datafile(pathinfo.filePath());
         if (!datafile.open(QFile::ReadOnly)) {
             kWarning() << "Could not open" << pathinfo.filePath() << datafile.errorString();
-
-            const QByteArray data("<html>500 Could not open the file</html>");
-
-            outdata->append(data);
+            outdata->append(s_data500);
             *outhttpstatus = 500;
             outheaders->insert("Content-Type", "text/html; charset=UTF-8");
         } else {
             const QString filemime = KMimeType::findByPath(pathinfo.filePath())->name();
-            const QByteArray data = datafile.readAll();
-
             *outhttpstatus = 200;
             outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
-            outdata->append(data);
+            outdata->append(datafile.readAll());
         };
     } else {
-        const QByteArray data("<html>404 Not Found</html>");
-
-        outdata->append(data);
+        outdata->append(s_data404);
         *outhttpstatus = 404;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
     }
