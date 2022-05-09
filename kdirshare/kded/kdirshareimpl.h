@@ -32,7 +32,7 @@ public:
     QString directory() const;
     bool setDirectory(const QString &dirpath);
     bool serve(const QHostAddress &address, const quint16 port);
-    bool publishService();
+    bool publish();
 
 protected:
     void respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders) final;

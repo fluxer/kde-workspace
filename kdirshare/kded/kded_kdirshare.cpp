@@ -20,8 +20,8 @@
 
 #include <klocale.h>
 #include <ksettings.h>
-#include <kdebug.h>
 #include <kpluginfactory.h>
+#include <kdebug.h>
 
 static quint16 getRandomPort()
 {
@@ -71,7 +71,7 @@ QString KDirShareModule::share(const QString &dirpath)
         kdirshareimpl->deleteLater();
         return i18n("Could not serve: %1", kdirshareimpl->errorString());
     }
-    if (!kdirshareimpl->publishService()) {
+    if (!kdirshareimpl->publish()) {
         kdirshareimpl->stop();
         kdirshareimpl->deleteLater();
         return i18n("Could not publish service for: %1", dirpath);

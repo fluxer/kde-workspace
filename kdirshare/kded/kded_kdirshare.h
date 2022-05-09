@@ -19,9 +19,10 @@
 #ifndef KDIRSHARE_KDED_H
 #define KDIRSHARE_KDED_H
 
+#include "kdirshareimpl.h"
+
 #include <QList>
 #include <kdedmodule.h>
-#include "kdirshareimpl.h"
 
 class KDirShareModule: public KDEDModule
 {

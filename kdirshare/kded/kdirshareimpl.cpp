@@ -128,7 +128,7 @@ bool KDirShareImpl::serve(const QHostAddress &address, const quint16 port)
     return start(address, port);
 }
 
-bool KDirShareImpl::publishService()
+bool KDirShareImpl::publish()
 {
     return m_kdnssd.publishService(
         "_http._tcp", m_port,
@@ -179,3 +179,5 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
     }
 }
+
+#include "moc_kdirshareimpl.cpp"
