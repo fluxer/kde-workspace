@@ -177,6 +177,8 @@ QString KDirShareImpl::publishError() const
     return m_kdnssd.errorString();
 }
 
+// for reference:
+// https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders)
 {
     // qDebug() << Q_FUNC_INFO << url;
@@ -191,7 +193,7 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
         QBuffer iconbuffer;
         iconbuffer.open(QBuffer::ReadWrite);
         if (!iconpixmap.save(&iconbuffer, "PNG")) {
-            kWarning() << "could not save image";
+            kWarning() << "Could not save image";
         }
         const QByteArray data = iconbuffer.data();
 
@@ -205,13 +207,22 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
         outdata->append(data);
     } else if (pathinfo.isFile()) {
         QFile datafile(pathinfo.filePath());
-        datafile.open(QFile::ReadOnly);
-        const QString filemime = KMimeType::findByPath(pathinfo.filePath())->name();
-        const QByteArray data = datafile.readAll();
+        if (!datafile.open(QFile::ReadOnly)) {
+            kWarning() << "Could not open" << pathinfo.filePath() << datafile.errorString();
 
-        *outhttpstatus = 200;
-        outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
-        outdata->append(data);
+            const QByteArray data("<html>500 Could not open the file</html>");
+
+            outdata->append(data);
+            *outhttpstatus = 500;
+            outheaders->insert("Content-Type", "text/html; charset=UTF-8");
+        } else {
+            const QString filemime = KMimeType::findByPath(pathinfo.filePath())->name();
+            const QByteArray data = datafile.readAll();
+
+            *outhttpstatus = 200;
+            outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
+            outdata->append(data);
+        };
     } else {
         const QByteArray data("<html>404 Not Found</html>");
 
