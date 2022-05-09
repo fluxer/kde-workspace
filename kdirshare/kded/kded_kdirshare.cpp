@@ -19,7 +19,7 @@
 #include "kded_kdirshare.h"
 
 #include <klocale.h>
-#include <ksettings.h>
+#include <kconfiggroup.h>
 #include <knotification.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
@@ -31,14 +31,17 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
     bool shareerror = false;
-    KSettings kdirsharesettings("kdirsharerc", KSettings::SimpleConfig);
-    foreach (const QString &kdirsharekey, kdirsharesettings.keys()) {
-        const QString kdirsharedirpathkey = QString::fromLatin1("%1/dirpath").arg(kdirsharekey);
-        const QString kdirshareportminkey = QString::fromLatin1("%1/portmin").arg(kdirsharekey);
-        const QString kdirshareportmaxkey = QString::fromLatin1("%1/portmax").arg(kdirsharekey);
+    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
+    for (const QString &kdirsharekey: kdirshareconfig.groupList()) {
+        // qDebug() << Q_FUNC_INFO << kdirsharekey;
+        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+        const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
+        const uint kdirshareportmin = kdirsharegroup.readEntry("portmin", uint(s_kdirshareportmin));
+        const uint kdirshareportmax = kdirsharegroup.readEntry("portmax", uint(s_kdirshareportmax));
+        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharedirpath << kdirshareportmin << kdirshareportmax;
         const QString kdirshareerror = share(
-            kdirsharesettings.value(kdirsharedirpathkey).toString(),
-            kdirsharesettings.value(kdirshareportminkey).toUInt(), kdirsharesettings.value(kdirshareportmaxkey).toUInt()
+            kdirsharedirpath,
+            quint16(kdirshareportmin), quint16(kdirshareportmax)
         );
         if (!kdirshareerror.isEmpty()) {
             kWarning() << kdirshareerror;
@@ -57,17 +60,17 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
 
 KDirShareModule::~KDirShareModule()
 {
-    KSettings kdirsharesettings("kdirsharerc", KSettings::SimpleConfig);
+    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
     foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
         const QByteArray kdirsharekey = kdirshareimpl->directory().toLocal8Bit().toHex();
-        const QString kdirsharedirpathkey = QString::fromLatin1("%1/dirpath").arg(kdirsharekey.constData());
-        const QString kdirshareportminkey = QString::fromLatin1("%1/portmin").arg(kdirsharekey.constData());
-        const QString kdirshareportmaxkey = QString::fromLatin1("%1/portmax").arg(kdirsharekey.constData());
-        kdirsharesettings.setValue(kdirsharedirpathkey, kdirshareimpl->directory());
-        kdirsharesettings.setValue(kdirshareportminkey, kdirshareimpl->portMin());
-        kdirsharesettings.setValue(kdirshareportmaxkey, kdirshareimpl->portMax());
+        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirshareimpl->directory() << kdirshareimpl->portMin() << kdirshareimpl->portMax();
+        kdirsharegroup.writeEntry("dirpath", kdirshareimpl->directory());
+        kdirsharegroup.writeEntry("portmin", kdirshareimpl->portMin());
+        kdirsharegroup.writeEntry("portmax", kdirshareimpl->portMax());
     }
     qDeleteAll(m_dirshares);
+    m_dirshares.clear();
 }
 
 QString KDirShareModule::share(const QString &dirpath, const uint portmin, const uint portmax)
