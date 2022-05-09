@@ -1,0 +1,2 @@
+add_subdirectory(filepropertiesplugin)
+add_subdirectory(kded)

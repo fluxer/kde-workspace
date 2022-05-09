@@ -362,6 +362,7 @@ add_subdirectory(kmimetypefinder)
 # UI Helper applications
 add_subdirectory(drkonqi)
 add_subdirectory(knetattach)
+add_subdirectory(kdirshare)
 add_subdirectory(keditfiletype)
 # Default settings, content and config
 add_subdirectory(l10n)

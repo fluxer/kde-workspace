@@ -29,7 +29,7 @@
 
 static QString urlForService(const KDNSSDService &kdnssdservice)
 {
-    // for compatibility since there is no KIO slave to open rfb protocols
+    // for compatibility and because there is no KIO slave to open rfb protocol
     if (kdnssdservice.url.startsWith(QLatin1String("rfb://"))) {
         QString result = kdnssdservice.url;
         result = result.replace(QLatin1String("rfb://"), QLatin1String("vnc://"));
