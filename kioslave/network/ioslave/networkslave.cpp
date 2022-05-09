@@ -49,9 +49,13 @@ static QString mimeForService(const KDNSSDService &kdnssdservice)
     );
 }
 
-static QString iconForService(const KDNSSDService &kdnssdservice)
+static QString iconForService(const QString &servicemimetype)
 {
-    return KMimeType::mimeType(mimeForService(kdnssdservice))->iconName();
+    const KMimeType::Ptr kmimetypeptr = KMimeType::mimeType(servicemimetype);
+    if (kmimetypeptr.isNull()) {
+        return QString::fromLatin1("unknown");
+    }
+    return kmimetypeptr->iconName();
 }
 
 NetworkSlave::NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket)
@@ -83,12 +87,13 @@ void NetworkSlave::stat(const KUrl &url)
     foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
         // qDebug() << Q_FUNC_INFO << kdnssdservice.url << url.prettyUrl();
         if (kdnssdservice.url == url.prettyUrl()) {
+            const QString servicemimetype = mimeForService(kdnssdservice);
             KIO::UDSEntry kioudsentry;
             kioudsentry.insert(KIO::UDSEntry::UDS_NAME, kdnssdservice.name);
             kioudsentry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFLNK);
             kioudsentry.insert(KIO::UDSEntry::UDS_ACCESS, S_IRWXU | S_IRWXG | S_IRWXO);
-            kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(kdnssdservice));
-            kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mimeForService(kdnssdservice));
+            kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(servicemimetype));
+            kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, servicemimetype);
             kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, urlForService(kdnssdservice));
             statEntry(kioudsentry);
             finished();
@@ -103,12 +108,13 @@ void NetworkSlave::listDir(const KUrl &url)
     m_kdnssd.startBrowse();
     KIO::UDSEntry kioudsentry;
     foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
+        const QString servicemimetype = mimeForService(kdnssdservice);
         kioudsentry.clear();
         kioudsentry.insert(KIO::UDSEntry::UDS_NAME, kdnssdservice.name);
         kioudsentry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFLNK);
         kioudsentry.insert(KIO::UDSEntry::UDS_ACCESS, S_IRWXU | S_IRWXG | S_IRWXO);
-        kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(kdnssdservice));
-        kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, mimeForService(kdnssdservice));
+        kioudsentry.insert(KIO::UDSEntry::UDS_ICON_NAME, iconForService(servicemimetype));
+        kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, servicemimetype);
         kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, urlForService(kdnssdservice));
         listEntry(kioudsentry, false);
     }
