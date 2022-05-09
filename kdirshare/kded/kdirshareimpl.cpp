@@ -41,6 +41,16 @@ static quint16 getPort(const quint16 portmin, const quint16 portmax)
     return portnumber;
 }
 
+static QString getShareName(const QString &dirpath)
+{
+    const QString absolutedirpath = QDir(dirpath).absolutePath();
+    QString basedirname = QDir(absolutedirpath).dirName();
+    // TODO: figure out what the Avahi limit is
+    basedirname = basedirname.left(40);
+    // qDebug() << Q_FUNC_INFO << basedirname;
+    return basedirname;
+}
+
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
     QByteArray data;
@@ -148,7 +158,7 @@ bool KDirShareImpl::publish()
 {
     return m_kdnssd.publishService(
         "_http._tcp", m_port,
-        i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), QFileInfo(m_directory).baseName())
+        i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), getShareName(m_directory))
     );
 }
 
@@ -178,8 +188,8 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
         if (!iconpixmap.save(&iconbuffer, "PNG")) {
             kWarning() << "could not save image";
         }
-
         const QByteArray data = iconbuffer.data();
+
         outdata->append(data);
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "image/png");
