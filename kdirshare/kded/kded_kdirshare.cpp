@@ -72,6 +72,7 @@ QString KDirShareModule::share(const QString &dirpath)
         return i18n("Could not serve: %1", kdirshareimpl->errorString());
     }
     if (!kdirshareimpl->publishService()) {
+        kdirshareimpl->stop();
         kdirshareimpl->deleteLater();
         return i18n("Could not publish service for: %1", dirpath);
     }

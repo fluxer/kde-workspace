@@ -27,6 +27,8 @@
 #include <kmimetype.h>
 #include <kdebug.h>
 
+static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
+
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
     QByteArray data;
@@ -42,9 +44,8 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     if (QDir::cleanPath(path) == QDir::cleanPath(basedir)) {
         dirfilters = (QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
     }
-    const QDir::SortFlags dirsortflags = (QDir::Name | QDir::DirsFirst);
     QDir dir(path);
-    foreach (const QFileInfo &fileinfo, dir.entryInfoList(dirfilters, dirsortflags)) {
+    foreach (const QFileInfo &fileinfo, dir.entryInfoList(dirfilters, s_dirsortflags)) {
         const QString fullpath = path.toLocal8Bit() + QLatin1Char('/') + fileinfo.fileName();
         // chromium does weird stuff if the link starts with two slashes - removes, the host and
         // port part of the link (or rather does not prepend them) and converts the first directory
