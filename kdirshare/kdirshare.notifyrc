@@ -1,0 +1,10 @@
+[Global]
+Name=kdirshare
+Comment=Directory share
+IconName=network-server
+
+[Event/ShareError]
+Name=Unable to share one or more directories
+Action=Sound|Popup
+Sound=KDE-Sys-App-Error-Serious.ogg
+IconName=dialog-error

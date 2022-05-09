@@ -20,6 +20,7 @@
 
 #include <klocale.h>
 #include <ksettings.h>
+#include <knotification.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
@@ -29,6 +30,7 @@ K_EXPORT_PLUGIN(KDirShareModuleFactory("kdirshare"))
 KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
+    bool shareerror = false;
     KSettings kdirsharesettings("kdirsharerc", KSettings::SimpleConfig);
     foreach (const QString &kdirsharekey, kdirsharesettings.keys()) {
         const QString kdirsharedirpathkey = QString::fromLatin1("%1/dirpath").arg(kdirsharekey);
@@ -40,7 +42,16 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
         );
         if (!kdirshareerror.isEmpty()) {
             kWarning() << kdirshareerror;
+            shareerror = true;
         }
+    }
+
+    if (shareerror) {
+        KNotification *knotification = new KNotification("ShareError");
+        knotification->setComponentData(KComponentData("kdirshare"));
+        knotification->setTitle(i18n("Directory share"));
+        knotification->setText(i18n("Unable to share one or more directories"));
+        knotification->sendEvent();
     }
 }
 
