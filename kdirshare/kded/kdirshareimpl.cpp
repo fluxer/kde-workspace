@@ -193,13 +193,17 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
     if (normalizedpath.startsWith(QLatin1String("/kdirshare_icons/"))) {
         const QPixmap iconpixmap = KIcon(normalizedpath.mid(17)).pixmap(20);
         QBuffer iconbuffer;
-        iconbuffer.open(QBuffer::ReadWrite);
+        iconbuffer.open(QBuffer::WriteOnly);
         if (!iconpixmap.save(&iconbuffer, "PNG")) {
             kWarning() << "Could not save image";
+            outdata->append(s_data500);
+            *outhttpstatus = 500;
+            outheaders->insert("Content-Type", "text/html; charset=UTF-8");
+        } else {
+            outdata->append(iconbuffer.data());
+            *outhttpstatus = 200;
+            outheaders->insert("Content-Type", "image/png");
         }
-        outdata->append(iconbuffer.data());
-        *outhttpstatus = 200;
-        outheaders->insert("Content-Type", "image/png");
     } else if (pathinfo.isDir()) {
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
