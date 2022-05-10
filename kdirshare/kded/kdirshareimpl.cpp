@@ -46,11 +46,11 @@ static quint16 getPort(const quint16 portmin, const quint16 portmax)
 static QString getShareName(const QString &dirpath)
 {
     const QString absolutedirpath = QDir(dirpath).absolutePath();
-    QString basedirname = QDir(absolutedirpath).dirName();
+    QString dirname = QDir(absolutedirpath).dirName();
     // TODO: figure out what the Avahi limit is
-    basedirname = basedirname.left(40);
-    // qDebug() << Q_FUNC_INFO << basedirname;
-    return basedirname;
+    dirname = dirname.left(40);
+    // qDebug() << Q_FUNC_INFO << dirname;
+    return dirname;
 }
 
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)

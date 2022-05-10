@@ -74,8 +74,8 @@ KDirShareModule::~KDirShareModule()
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
         // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirshareimpl->directory() << kdirshareimpl->portMin() << kdirshareimpl->portMax();
         kdirsharegroup.writeEntry("dirpath", kdirshareimpl->directory());
-        kdirsharegroup.writeEntry("portmin", kdirshareimpl->portMin());
-        kdirsharegroup.writeEntry("portmax", kdirshareimpl->portMax());
+        kdirsharegroup.writeEntry("portmin", uint(kdirshareimpl->portMin()));
+        kdirsharegroup.writeEntry("portmax", uint(kdirshareimpl->portMax()));
     }
     qDeleteAll(m_dirshares);
     m_dirshares.clear();
