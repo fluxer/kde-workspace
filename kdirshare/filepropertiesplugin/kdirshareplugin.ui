@@ -34,7 +34,7 @@
       <item row="1" column="0">
        <widget class="QCheckBox" name="randombox">
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If the random port option is on then a random port will be used for the server in the range of values specified on the right. Otherwise, the server will always use the same port.&lt;/p&gt;&lt;p&gt;If, for example, firewall is used then using specifiec port and unblocking it in the firewall is the way to go.&lt;/p&gt;&lt;p&gt;There is a chance another service may be using the port, if that happens the server will not start.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If the random port option is on then a random port in the range of values specified on the right will be used by the server. Otherwise, the server will always use the same port.&lt;/p&gt;&lt;p&gt;If, for example, firewall is used then using specifiec port and unblocking it in the firewall is the way to go.&lt;/p&gt;&lt;p&gt;There is a chance another service may be using the port, if that happens the server will not start.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="text">
          <string>Use random port</string>

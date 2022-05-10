@@ -181,7 +181,9 @@ QString KDirShareImpl::publishError() const
 
 // for reference:
 // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders)
+void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
+                            ushort *outhttpstatus, KHTTPHeaders *outheaders,
+                            QString *outfilepath)
 {
     // qDebug() << Q_FUNC_INFO << url;
 
@@ -219,7 +221,7 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata, ushort *
             const QString filemime = KMimeType::findByPath(pathinfo.filePath())->name();
             *outhttpstatus = 200;
             outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
-            outdata->append(pathfile.readAll());
+            outfilepath->append(pathinfo.filePath());
         };
     } else {
         outdata->append(s_data404);

@@ -43,7 +43,10 @@ public:
     QString publishError() const;
 
 protected:
-    void respond(const QByteArray &url, QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders) final;
+    void respond(
+        const QByteArray &url,
+        QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders, QString *outfilepath
+    ) final;
 
 private:
     QString m_directory;
