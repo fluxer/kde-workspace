@@ -24,6 +24,11 @@
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
+static QByteArray getDirShareKey(const KDirShareImpl *kdirshareimpl)
+{
+    return kdirshareimpl->directory().toLocal8Bit().toHex();
+};
+
 K_PLUGIN_FACTORY(KDirShareModuleFactory, registerPlugin<KDirShareModule>();)
 K_EXPORT_PLUGIN(KDirShareModuleFactory("kdirshare"))
 
@@ -32,10 +37,13 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
 {
     bool shareerror = false;
     KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-    for (const QString &kdirsharekey: kdirshareconfig.groupList()) {
+    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
         // qDebug() << Q_FUNC_INFO << kdirsharekey;
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
         const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
+        if (kdirsharedirpath.isEmpty()) {
+            continue;
+        }
         const uint kdirshareportmin = kdirsharegroup.readEntry("portmin", uint(s_kdirshareportmin));
         const uint kdirshareportmax = kdirsharegroup.readEntry("portmax", uint(s_kdirshareportmax));
         // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharedirpath << kdirshareportmin << kdirshareportmax;
@@ -62,7 +70,7 @@ KDirShareModule::~KDirShareModule()
 {
     KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
     foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
-        const QByteArray kdirsharekey = kdirshareimpl->directory().toLocal8Bit().toHex();
+        const QByteArray kdirsharekey = getDirShareKey(kdirshareimpl);
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
         // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirshareimpl->directory() << kdirshareimpl->portMin() << kdirshareimpl->portMax();
         kdirsharegroup.writeEntry("dirpath", kdirshareimpl->directory());
@@ -95,7 +103,7 @@ QString KDirShareModule::share(const QString &dirpath, const uint portmin, const
     if (!kdirshareimpl->publish()) {
         kdirshareimpl->stop();
         delete kdirshareimpl;
-        return i18n("Could not publish service for: %1", kdirshareimpl->publishError());
+        return i18n("Could not publish service: %1", kdirshareimpl->publishError());
     }
     m_dirshares.append(kdirshareimpl);
     return QString();
@@ -105,6 +113,10 @@ QString KDirShareModule::unshare(const QString &dirpath)
 {
     foreach (KDirShareImpl *kdirshareimpl, m_dirshares) {
         if (kdirshareimpl->directory() == dirpath) {
+            KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
+            const QByteArray kdirsharekey = getDirShareKey(kdirshareimpl);
+            KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+            kdirsharegroup.writeEntry("dirpath", QString());
             kdirshareimpl->stop();
             delete kdirshareimpl;
             m_dirshares.removeAll(kdirshareimpl);
