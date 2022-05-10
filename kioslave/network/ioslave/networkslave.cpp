@@ -44,9 +44,15 @@ static QString urlForService(const KDNSSDService &kdnssdservice)
 
 static QString mimeForService(const KDNSSDService &kdnssdservice)
 {
-    return QString::fromLatin1("inode/vnd.kde.service.%1").arg(
+    const QString servicemimetype = QString::fromLatin1("inode/vnd.kde.service.%1").arg(
         KUrl(kdnssdservice.url).protocol()
     );
+    // qDebug() << Q_FUNC_INFO << servicemimetype;
+    const KMimeType::Ptr kmimetypeptr = KMimeType::mimeType(servicemimetype);
+    if (kmimetypeptr.isNull()) {
+        return QString::fromLatin1("inode/vnd.kde.service.unknown");
+    }
+    return kmimetypeptr->name();
 }
 
 static QString iconForService(const QString &servicemimetype)
