@@ -218,7 +218,16 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
             *outhttpstatus = 500;
             outheaders->insert("Content-Type", "text/html; charset=UTF-8");
         } else {
-            const QString filemime = KMimeType::findByPath(pathinfo.filePath())->name();
+            QString filemime;
+            const KMimeType::Ptr kmimetypeptr = KMimeType::findByUrl(
+                KUrl(pathinfo.filePath()),
+                mode_t(0), true
+            );
+            if (!kmimetypeptr.isNull()) {
+                filemime = kmimetypeptr->name();
+            } else {
+                filemime = QString::fromLatin1("application/octet-stream");
+            }
             *outhttpstatus = 200;
             outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
             outfilepath->append(pathinfo.filePath());
