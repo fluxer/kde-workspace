@@ -18,15 +18,137 @@
 
 #include "kded_kdirshare.h"
 
+#include <QThread>
+#include <QCoreApplication>
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <knotification.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
-static QByteArray getDirShareKey(const KDirShareImpl *kdirshareimpl)
+class KDirShareThread : public QThread
 {
-    return kdirshareimpl->directory().toLocal8Bit().toHex();
+    Q_OBJECT
+public:
+    KDirShareThread(QObject *parent = nullptr);
+    ~KDirShareThread();
+
+    QString serve(const QString &dirpath, const quint16 portmin, const quint16 portmax);
+    QString directory() const;
+    quint16 portMin() const;
+    quint16 portMax() const;
+
+Q_SIGNALS:
+    void unblock();
+    void serveError(const QString &error);
+
+private Q_SLOTS:
+    void slotUnblock();
+    void slotServeError(const QString &error);
+
+protected:
+    void run() final;
+
+private:
+    KDirShareImpl* m_kdirshareimpl;
+    bool m_starting;
+    QString m_directory;
+    quint16 m_portmin;
+    quint16 m_portmax;
+    QString m_error;
+};
+
+KDirShareThread::KDirShareThread(QObject *parent)
+    : QThread(parent),
+    m_kdirshareimpl(new KDirShareImpl(this)),
+    m_starting(false),
+    m_portmin(0),
+    m_portmax(0)
+{
+    connect(
+        this, SIGNAL(unblock()),
+        this, SLOT(slotUnblock())
+    );
+    connect(
+        this, SIGNAL(serveError(QString)),
+        this, SLOT(slotServeError(QString))
+    );
+}
+
+KDirShareThread::~KDirShareThread()
+{
+    if (m_kdirshareimpl) {
+        m_kdirshareimpl->stop();
+        m_kdirshareimpl->deleteLater();
+    }
+}
+
+QString KDirShareThread::directory() const
+{
+    return m_directory;
+}
+
+quint16 KDirShareThread::portMin() const
+{
+    return m_portmin;
+}
+
+quint16 KDirShareThread::portMax() const
+{
+    return m_portmax;
+}
+
+void KDirShareThread::run()
+{
+    if (!m_kdirshareimpl->setDirectory(m_directory)) {
+        emit serveError(i18n("Directory does not exist: %1", m_directory));
+        emit unblock();
+        return;
+    }
+    if (!m_kdirshareimpl->serve(QHostAddress(QHostAddress::Any), m_portmin, m_portmax)) {
+        emit serveError(i18n("Could not serve: %1", m_kdirshareimpl->errorString()));
+        emit unblock();
+        return;
+    }
+    if (!m_kdirshareimpl->publish()) {
+        m_kdirshareimpl->stop();
+        emit serveError(i18n("Could not publish service: %1", m_kdirshareimpl->publishError()));
+        emit unblock();
+        return;
+    }
+    emit unblock();
+}
+
+QString KDirShareThread::serve(const QString &dirpath, const quint16 portmin, const quint16 portmax)
+{
+    // qDebug() << Q_FUNC_INFO << dirpath << portmin << portmax;
+    m_directory = dirpath;
+    m_portmin = portmin;
+    m_portmax = portmax;
+    m_starting = true;
+    m_error.clear();
+    start();
+    while (m_starting) {
+        QCoreApplication::processEvents();
+    }
+    // qDebug() << Q_FUNC_INFO << m_error;
+    return m_error;
+}
+
+void KDirShareThread::slotUnblock()
+{
+    m_starting = false;
+}
+
+void KDirShareThread::slotServeError(const QString &error)
+{
+    m_error = error;
+}
+
+
+static QByteArray getDirShareKey(const KDirShareThread *kdirsharethread)
+{
+    return kdirsharethread->directory().toLocal8Bit().toHex();
 };
 
 K_PLUGIN_FACTORY(KDirShareModuleFactory, registerPlugin<KDirShareModule>();)
@@ -69,13 +191,13 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
 KDirShareModule::~KDirShareModule()
 {
     KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-    foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
-        const QByteArray kdirsharekey = getDirShareKey(kdirshareimpl);
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        const QByteArray kdirsharekey = getDirShareKey(kdirsharethread);
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
-        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirshareimpl->directory() << kdirshareimpl->portMin() << kdirshareimpl->portMax();
-        kdirsharegroup.writeEntry("dirpath", kdirshareimpl->directory());
-        kdirsharegroup.writeEntry("portmin", uint(kdirshareimpl->portMin()));
-        kdirsharegroup.writeEntry("portmax", uint(kdirshareimpl->portMax()));
+        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharethread->directory() << kdirsharethread->portMin() << kdirsharethread->portMax();
+        kdirsharegroup.writeEntry("dirpath", kdirsharethread->directory());
+        kdirsharegroup.writeEntry("portmin", uint(kdirsharethread->portMin()));
+        kdirsharegroup.writeEntry("portmax", uint(kdirsharethread->portMax()));
     }
     qDeleteAll(m_dirshares);
     m_dirshares.clear();
@@ -90,38 +212,28 @@ QString KDirShareModule::share(const QString &dirpath, const uint portmin, const
         }
     }
 
-    KDirShareImpl *kdirshareimpl = new KDirShareImpl(this);
-    if (!kdirshareimpl->setDirectory(dirpath)) {
-        delete kdirshareimpl;
-        return i18n("Directory does not exist: %1", dirpath);
+    KDirShareThread *kdirsharethread = new KDirShareThread(this);
+    // qDebug() << Q_FUNC_INFO << dirpath << portmin << portmax;
+    const QString serveerror = kdirsharethread->serve(dirpath, portmin, portmax);
+    if (!serveerror.isEmpty()) {
+        delete kdirsharethread;
+        return serveerror;
     }
-    // qDebug() << Q_FUNC_INFO << serverport;
-    if (!kdirshareimpl->serve(QHostAddress(QHostAddress::Any), portmin, portmax)) {
-        const QString serveerror = kdirshareimpl->errorString();
-        delete kdirshareimpl;
-        return i18n("Could not serve: %1", serveerror);
-    }
-    if (!kdirshareimpl->publish()) {
-        const QString publisherror = kdirshareimpl->publishError();
-        kdirshareimpl->stop();
-        delete kdirshareimpl;
-        return i18n("Could not publish service: %1", publisherror);
-    }
-    m_dirshares.append(kdirshareimpl);
+    m_dirshares.append(kdirsharethread);
     return QString();
 }
 
 QString KDirShareModule::unshare(const QString &dirpath)
 {
-    foreach (KDirShareImpl *kdirshareimpl, m_dirshares) {
-        if (kdirshareimpl->directory() == dirpath) {
+    foreach (KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
             KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-            const QByteArray kdirsharekey = getDirShareKey(kdirshareimpl);
+            const QByteArray kdirsharekey = getDirShareKey(kdirsharethread);
             KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
             kdirsharegroup.writeEntry("dirpath", QString());
-            kdirshareimpl->stop();
-            delete kdirshareimpl;
-            m_dirshares.removeAll(kdirshareimpl);
+            kdirsharethread->terminate();
+            delete kdirsharethread;
+            m_dirshares.removeAll(kdirsharethread);
             return QString();
         }
     }
@@ -130,8 +242,8 @@ QString KDirShareModule::unshare(const QString &dirpath)
 
 bool KDirShareModule::isShared(const QString &dirpath) const
 {
-    foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
-        if (kdirshareimpl->directory() == dirpath) {
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
             return true;
         }
     }
@@ -140,9 +252,9 @@ bool KDirShareModule::isShared(const QString &dirpath) const
 
 quint16 KDirShareModule::getPortMin(const QString &dirpath) const
 {
-    foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
-        if (kdirshareimpl->directory() == dirpath) {
-            return kdirshareimpl->portMin();
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
+            return kdirsharethread->portMin();
         }
     }
     return s_kdirshareportmin;
@@ -150,12 +262,12 @@ quint16 KDirShareModule::getPortMin(const QString &dirpath) const
 
 quint16 KDirShareModule::getPortMax(const QString &dirpath) const
 {
-    foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
-        if (kdirshareimpl->directory() == dirpath) {
-            return kdirshareimpl->portMax();
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
+            return kdirsharethread->portMax();
         }
     }
     return s_kdirshareportmax;
 }
 
-#include "moc_kded_kdirshare.cpp"
+#include "kded_kdirshare.moc"

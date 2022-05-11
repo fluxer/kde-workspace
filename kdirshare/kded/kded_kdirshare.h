@@ -24,6 +24,8 @@
 #include <QList>
 #include <kdedmodule.h>
 
+class KDirShareThread;
+
 class KDirShareModule: public KDEDModule
 {
     Q_OBJECT
@@ -43,7 +45,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE quint16 getPortMax(const QString &dirpath) const;
 
 private:
-    QList<KDirShareImpl*> m_dirshares;
+    QList<KDirShareThread*> m_dirshares;
 };
 
 #endif // KDIRSHARE_KDED_H
