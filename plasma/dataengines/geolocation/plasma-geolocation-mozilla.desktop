@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Geolocation Mozilla Location Service
+Comment=Geolocation from IP address via Mozilla Location Service.
+X-KDE-ServiceTypes=Plasma/GeolocationProvider
+X-KDE-ParentApp=geolocation
+Type=Service
+Icon=applications-internet
+X-KDE-Library=plasma-geolocation-mozilla
+X-KDE-PluginInfo-Name=mozilla
