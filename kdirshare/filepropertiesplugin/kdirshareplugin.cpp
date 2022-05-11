@@ -132,6 +132,12 @@ void KDirSharePlugin::applyChanges()
     if (m_ui.sharebox->isEnabled()) {
         QDBusReply<QString> kdirsharereply;
         if (m_ui.sharebox->isChecked()) {
+            if (m_ui.authbox->isChecked() && (m_ui.useredit->text().isEmpty() || m_ui.passwordedit->text().isEmpty())) {
+                KMessageBox::error(nullptr, i18n("User and password cannot be empty"));
+                properties->abortApplying();
+                return;
+            }
+
             kdirsharereply = m_kdirshareiface.call("share",
                 m_url,
                 uint(m_ui.portmininput->value()), uint(m_ui.portmaxinput->value()),
