@@ -49,12 +49,8 @@ static QString getShareName(const QString &dirpath)
 {
     const QString absolutedirpath = QDir(dirpath).absolutePath();
     QString dirname = QDir(absolutedirpath).dirName();
-    bool appenddots = false;
     if (dirname.size() > s_sharenamelimit) {
-        appenddots = true;
-    }
-    dirname = dirname.left(s_sharenamelimit);
-    if (appenddots) {
+        dirname = dirname.left(s_sharenamelimit);
         dirname.append(QLatin1String("..."));
     }
     // qDebug() << Q_FUNC_INFO << dirname;
@@ -73,7 +69,7 @@ static QString getFileMIME(const QString &filepath)
     return QString::fromLatin1("application/octet-stream");
 }
 
-const QString getTitle(const QString &dirpath)
+static QString getTitle(const QString &dirpath)
 {
     return i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), getShareName(dirpath));
 }
