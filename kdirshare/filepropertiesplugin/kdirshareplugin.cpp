@@ -16,6 +16,9 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "kdirshareplugin.h"
+#include "kdirshare.h"
+
 #include <QDBusReply>
 #include <QFileInfo>
 #include <kvbox.h>
@@ -24,11 +27,6 @@
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
-
-#include "kdirshareplugin.h"
-
-static const quint16 s_kdirshareportmin = 1000;
-static const quint16 s_kdirshareportmax = 32000;
 
 K_PLUGIN_FACTORY(KDirSharePluginFactory, registerPlugin<KDirSharePlugin>();)
 K_EXPORT_PLUGIN(KDirSharePluginFactory("kdirshareplugin"))

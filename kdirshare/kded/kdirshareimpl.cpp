@@ -33,18 +33,6 @@ static const QByteArray s_data500("<html>500 Internal Server Error</html>");
 // TODO: figure out what the Avahi limit is
 static const int s_sharenamelimit = 40;
 
-static quint16 getPort(const quint16 portmin, const quint16 portmax)
-{
-    if (portmin == portmax) {
-        return portmax;
-    }
-    quint16 portnumber = 0;
-    while (portnumber < portmin || portnumber > portmax) {
-        portnumber = quint16(qrand());
-    }
-    return portnumber;
-}
-
 static QString getShareName(const QString &dirpath)
 {
     const QString absolutedirpath = QDir(dirpath).absolutePath();
@@ -150,9 +138,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
 KDirShareImpl::KDirShareImpl(QObject *parent)
     : KHTTP(parent),
     m_directory(QDir::currentPath()),
-    m_port(0),
-    m_portmin(s_kdirshareportmin),
-    m_portmax(s_kdirshareportmax)
+    m_port(0)
 {
 }
 
@@ -176,11 +162,9 @@ bool KDirShareImpl::setDirectory(const QString &dirpath)
     return true;
 }
 
-bool KDirShareImpl::serve(const QHostAddress &address, const quint16 portmin, const quint16 portmax)
+bool KDirShareImpl::serve(const QHostAddress &address, const quint16 port)
 {
-    m_port = getPort(portmin, portmax);
-    m_portmin = portmin;
-    m_portmax = portmax;
+    m_port = port;
     return start(address, m_port);
 }
 
@@ -190,16 +174,6 @@ bool KDirShareImpl::publish()
         "_http._tcp", m_port,
         getTitle(m_directory)
     );
-}
-
-quint16 KDirShareImpl::portMin() const
-{
-    return m_portmin;
-}
-
-quint16 KDirShareImpl::portMax() const
-{
-    return m_portmax;
 }
 
 QString KDirShareImpl::publishError() const
