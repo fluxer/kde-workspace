@@ -148,11 +148,6 @@ KDirShareImpl::~KDirShareImpl()
     stop();
 }
 
-QString KDirShareImpl::directory() const
-{
-    return m_directory;
-}
-
 bool KDirShareImpl::setDirectory(const QString &dirpath)
 {
     if (!QDir(dirpath).exists()) {

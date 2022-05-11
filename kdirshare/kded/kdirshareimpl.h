@@ -29,7 +29,6 @@ public:
     KDirShareImpl(QObject *parent = nullptr);
     ~KDirShareImpl();
 
-    QString directory() const;
     bool setDirectory(const QString &dirpath);
     bool serve(const QHostAddress &address, const quint16 port);
     bool publish();

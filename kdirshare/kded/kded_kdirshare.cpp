@@ -21,6 +21,7 @@
 
 #include <QThread>
 #include <QCoreApplication>
+#include <QTimer>
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <knotification.h>
@@ -52,10 +53,14 @@ public:
     KDirShareThread(QObject *parent = nullptr);
     ~KDirShareThread();
 
-    QString serve(const QString &dirpath, const quint16 portmin, const quint16 portmax);
+    QString serve(const QString &dirpath,
+                  const quint16 portmin, const quint16 portmax,
+                  const QString &username, const QString &password);
     QString directory() const;
     quint16 portMin() const;
     quint16 portMax() const;
+    QString user() const;
+    QString password() const;
 
 Q_SIGNALS:
     void unblock();
@@ -75,6 +80,8 @@ private:
     quint16 m_port;
     quint16 m_portmin;
     quint16 m_portmax;
+    QString m_user;
+    QString m_password;
     QString m_error;
 };
 
@@ -119,12 +126,29 @@ quint16 KDirShareThread::portMax() const
     return m_portmax;
 }
 
+QString KDirShareThread::user() const
+{
+    return m_user;
+}
+
+QString KDirShareThread::password() const
+{
+    return m_password;
+}
+
 void KDirShareThread::run()
 {
     if (!m_kdirshareimpl->setDirectory(m_directory)) {
         emit serveError(i18n("Directory does not exist: %1", m_directory));
         emit unblock();
         return;
+    }
+    if (!m_user.isEmpty() && !m_password.isEmpty()) {
+        if (!m_kdirshareimpl->setAuthenticate(m_user.toUtf8(), m_password.toUtf8(), i18n("Not authorized"))) {
+            emit serveError(i18n("Could not set authentication: %1", m_kdirshareimpl->errorString()));
+            emit unblock();
+            return;
+        }
     }
     if (!m_kdirshareimpl->serve(QHostAddress(QHostAddress::Any), m_port)) {
         emit serveError(i18n("Could not serve: %1", m_kdirshareimpl->errorString()));
@@ -140,13 +164,17 @@ void KDirShareThread::run()
     emit unblock();
 }
 
-QString KDirShareThread::serve(const QString &dirpath, const quint16 portmin, const quint16 portmax)
+QString KDirShareThread::serve(const QString &dirpath,
+                               const quint16 portmin, const quint16 portmax,
+                               const QString &username, const QString &password)
 {
     // qDebug() << Q_FUNC_INFO << dirpath << port;
     m_directory = dirpath;
     m_port = getPort(portmin, portmax);
     m_portmin = portmin;
     m_portmax = portmax;
+    m_user = username;
+    m_password = password;
     m_starting = true;
     m_error.clear();
     start();
@@ -174,35 +202,9 @@ K_EXPORT_PLUGIN(KDirShareModuleFactory("kdirshare"))
 KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
-    bool shareerror = false;
-    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
-        // qDebug() << Q_FUNC_INFO << kdirsharekey;
-        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
-        const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
-        if (kdirsharedirpath.isEmpty()) {
-            continue;
-        }
-        const uint kdirshareportmin = kdirsharegroup.readEntry("portmin", uint(s_kdirshareportmin));
-        const uint kdirshareportmax = kdirsharegroup.readEntry("portmax", uint(s_kdirshareportmax));
-        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharedirpath << kdirshareportmin << kdirshareportmax;
-        const QString kdirshareerror = share(
-            kdirsharedirpath,
-            quint16(kdirshareportmin), quint16(kdirshareportmax)
-        );
-        if (!kdirshareerror.isEmpty()) {
-            kWarning() << kdirshareerror;
-            shareerror = true;
-        }
-    }
-
-    if (shareerror) {
-        KNotification *knotification = new KNotification("ShareError");
-        knotification->setComponentData(KComponentData("kdirshare"));
-        knotification->setTitle(i18n("Directory share"));
-        knotification->setText(i18n("Unable to share one or more directories"));
-        knotification->sendEvent();
-    }
+    m_passwdstore.setStoreID("KDirShare");
+    // HACK: kpasswdstore uses on-demand service so doing delayed restore
+    QTimer::singleShot(2000, this, SLOT(slotDelayedRestore()));
 }
 
 KDirShareModule::~KDirShareModule()
@@ -215,12 +217,15 @@ KDirShareModule::~KDirShareModule()
         kdirsharegroup.writeEntry("dirpath", kdirsharethread->directory());
         kdirsharegroup.writeEntry("portmin", uint(kdirsharethread->portMin()));
         kdirsharegroup.writeEntry("portmax", uint(kdirsharethread->portMax()));
+        kdirsharegroup.writeEntry("user", kdirsharethread->user());
     }
     qDeleteAll(m_dirshares);
     m_dirshares.clear();
 }
 
-QString KDirShareModule::share(const QString &dirpath, const uint portmin, const uint portmax)
+QString KDirShareModule::share(const QString &dirpath,
+                               const uint portmin, const uint portmax,
+                               const QString &username, const QString &password)
 {
     if (isShared(dirpath)) {
         const QString unshareerror = unshare(dirpath);
@@ -231,7 +236,14 @@ QString KDirShareModule::share(const QString &dirpath, const uint portmin, const
 
     KDirShareThread *kdirsharethread = new KDirShareThread(this);
     // qDebug() << Q_FUNC_INFO << dirpath << portmin << portmax;
-    const QString serveerror = kdirsharethread->serve(dirpath, portmin, portmax);
+    const QString serveerror = kdirsharethread->serve(
+        dirpath,
+        portmin, portmax,
+        username, password
+    );
+    if (!username.isEmpty() && !password.isEmpty()) {
+        m_passwdstore.storePasswd(KPasswdStore::makeKey(dirpath), password);
+    }
     if (!serveerror.isEmpty()) {
         delete kdirsharethread;
         return serveerror;
@@ -285,6 +297,86 @@ quint16 KDirShareModule::getPortMax(const QString &dirpath) const
         }
     }
     return s_kdirshareportmax;
+}
+
+QString KDirShareModule::getUser(const QString &dirpath) const
+{
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
+            return kdirsharethread->user();
+        }
+    }
+    return QString();
+}
+
+QString KDirShareModule::getPassword(const QString &dirpath) const
+{
+    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
+        if (kdirsharethread->directory() == dirpath) {
+            return kdirsharethread->password();
+        }
+    }
+    return QString();
+}
+
+void KDirShareModule::slotDelayedRestore()
+{
+    bool requiresauth = false;
+    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
+    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
+        // qDebug() << Q_FUNC_INFO << kdirsharekey;
+        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+        const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
+        if (kdirsharedirpath.isEmpty()) {
+            continue;
+        }
+        const QString kdirshareuser = kdirsharegroup.readEntry("user", QString());
+        if (!kdirshareuser.isEmpty()) {
+            requiresauth = true;
+            break;
+        }
+    }
+    if (requiresauth) {
+        if (!m_passwdstore.openStore()) {
+            KNotification *knotification = new KNotification("AuthError");
+            knotification->setComponentData(KComponentData("kdirshare"));
+            knotification->setTitle(i18n("Directory share"));
+            knotification->setText(i18n("Authorization is required but could not open password store"));
+            knotification->sendEvent();
+            return;
+        }
+    }
+
+    bool shareerror = false;
+    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
+        // qDebug() << Q_FUNC_INFO << kdirsharekey;
+        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+        const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
+        if (kdirsharedirpath.isEmpty()) {
+            continue;
+        }
+        const uint kdirshareportmin = kdirsharegroup.readEntry("portmin", uint(s_kdirshareportmin));
+        const uint kdirshareportmax = kdirsharegroup.readEntry("portmax", uint(s_kdirshareportmax));
+        const QString kdirshareuser = kdirsharegroup.readEntry("user", QString());
+        const QString kdirsharepassword = m_passwdstore.getPasswd(KPasswdStore::makeKey(kdirsharedirpath));
+        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharedirpath << kdirshareportmin << kdirshareportmax;
+        const QString kdirshareerror = share(
+            kdirsharedirpath,
+            quint16(kdirshareportmin), quint16(kdirshareportmax),
+            kdirshareuser, kdirsharepassword
+        );
+        if (!kdirshareerror.isEmpty()) {
+            kWarning() << kdirshareerror;
+            shareerror = true;
+        }
+    }
+    if (shareerror) {
+        KNotification *knotification = new KNotification("ShareError");
+        knotification->setComponentData(KComponentData("kdirshare"));
+        knotification->setTitle(i18n("Directory share"));
+        knotification->setText(i18n("Unable to share one or more directories"));
+        knotification->sendEvent();
+    }
 }
 
 #include "kded_kdirshare.moc"

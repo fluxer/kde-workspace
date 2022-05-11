@@ -60,9 +60,11 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
             kWarning() << "Invalid kdirshare module reply for isShared()";
             m_ui.sharebox->setChecked(false);
             m_ui.portgroup->setEnabled(false);
+            m_ui.authgroup->setEnabled(false);
         } else {
             m_ui.sharebox->setChecked(kdirsharereply.value());
             m_ui.portgroup->setEnabled(kdirsharereply.value());
+            m_ui.authgroup->setEnabled(kdirsharereply.value());
         }
 
         QDBusReply<quint16> kdirsharereply2 = m_kdirshareiface.call("getPortMin", m_url);
@@ -82,16 +84,40 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
         const bool randomport = (m_ui.portmininput->value() != m_ui.portmaxinput->value());
         m_ui.randombox->setChecked(randomport);
         m_ui.portmininput->setVisible(randomport);
+
+        QDBusReply<QString> kdirsharereply3 = m_kdirshareiface.call("getUser", m_url);
+        if (!kdirsharereply3.isValid()) {
+            kWarning() << "Invalid kdirshare module reply for getUser()";
+            m_ui.useredit->setText(QString());
+        } else {
+            m_ui.useredit->setText(kdirsharereply3.value());
+        }
+        kdirsharereply3 = m_kdirshareiface.call("getPassword", m_url);
+        if (!kdirsharereply3.isValid()) {
+            kWarning() << "Invalid kdirshare module reply for getPassword()";
+            m_ui.passwordedit->setText(QString());
+        } else {
+            m_ui.passwordedit->setText(kdirsharereply3.value());
+        }
+        if (!m_ui.useredit->text().isEmpty() || !m_ui.passwordedit->text().isEmpty()) {
+            m_ui.authbox->setChecked(true);
+        }
+        m_ui.useredit->setEnabled(m_ui.authbox->isChecked());
+        m_ui.passwordedit->setEnabled(m_ui.authbox->isChecked());
     } else {
         kWarning() << "kdirshare module interface is not valid";
         m_ui.sharebox->setEnabled(false);
         m_ui.portgroup->setEnabled(false);
+        m_ui.authgroup->setEnabled(false);
     }
 
     connect(m_ui.sharebox, SIGNAL(toggled(bool)), this, SLOT(slotShare(bool)));
     connect(m_ui.randombox, SIGNAL(toggled(bool)), this, SLOT(slotRandomPort(bool)));
     connect(m_ui.portmininput, SIGNAL(valueChanged(int)), this, SLOT(slotPortMin(int)));
     connect(m_ui.portmaxinput, SIGNAL(valueChanged(int)), this, SLOT(slotPortMax(int)));
+    connect(m_ui.authbox, SIGNAL(toggled(bool)), this, SLOT(slotAuthorization(bool)));
+    connect(m_ui.useredit, SIGNAL(textEdited(QString)), this, SLOT(slotUserEdited(QString)));
+    connect(m_ui.passwordedit, SIGNAL(textEdited(QString)), this, SLOT(slotPasswordEdited(QString)));
 }
 
 KDirSharePlugin::~KDirSharePlugin()
@@ -106,7 +132,8 @@ void KDirSharePlugin::applyChanges()
         if (m_ui.sharebox->isChecked()) {
             kdirsharereply = m_kdirshareiface.call("share",
                 m_url,
-                uint(m_ui.portmininput->value()), uint(m_ui.portmaxinput->value())
+                uint(m_ui.portmininput->value()), uint(m_ui.portmaxinput->value()),
+                m_ui.useredit->text(), m_ui.passwordedit->text()
             );
         } else {
             kdirsharereply = m_kdirshareiface.call("unshare", m_url);
@@ -126,6 +153,7 @@ void KDirSharePlugin::slotShare(const bool value)
 {
     // qDebug() << Q_FUNC_INFO << value;
     m_ui.portgroup->setEnabled(value);
+    m_ui.authgroup->setEnabled(value);
     emit changed();
 }
 
@@ -154,6 +182,30 @@ void KDirSharePlugin::slotPortMax(const int value)
     if (!m_ui.portmininput->isVisible()) {
         m_ui.portmininput->setValue(value);
     }
+    emit changed();
+}
+
+void KDirSharePlugin::slotAuthorization(const bool value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    m_ui.useredit->setEnabled(value);
+    m_ui.passwordedit->setEnabled(value);
+    if (!value) {
+        m_ui.useredit->clear();
+        m_ui.passwordedit->clear();
+    }
+    emit changed();
+}
+
+void KDirSharePlugin::slotUserEdited(const QString &value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
+    emit changed();
+}
+
+void KDirSharePlugin::slotPasswordEdited(const QString &value)
+{
+    // qDebug() << Q_FUNC_INFO << value;
     emit changed();
 }
 

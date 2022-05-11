@@ -14,6 +14,7 @@ target_link_libraries(kded_kdirshare PRIVATE
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KHTTP_LIBS}
     ${KDE4_KDNSSD_LIBS}
+    ${KDE4_KPASSWDSTORE_LIBS}
 )
 
 if(OPENSSL_FOUND)

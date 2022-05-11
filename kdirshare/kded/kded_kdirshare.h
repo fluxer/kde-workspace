@@ -23,6 +23,7 @@
 
 #include <QList>
 #include <kdedmodule.h>
+#include <kpasswdstore.h>
 
 class KDirShareThread;
 
@@ -36,16 +37,24 @@ public:
     ~KDirShareModule();
 
 public Q_SLOTS:
-    Q_SCRIPTABLE QString share(const QString &dirpath, const uint portmin, const uint portmax);
+    Q_SCRIPTABLE QString share(const QString &dirpath,
+                               const uint portmin, const uint portmax,
+                               const QString &username, const QString &password);
     Q_SCRIPTABLE QString unshare(const QString &dirpath);
 
     Q_SCRIPTABLE bool isShared(const QString &dirpath) const;
 
     Q_SCRIPTABLE quint16 getPortMin(const QString &dirpath) const;
     Q_SCRIPTABLE quint16 getPortMax(const QString &dirpath) const;
+    Q_SCRIPTABLE QString getUser(const QString &dirpath) const;
+    Q_SCRIPTABLE QString getPassword(const QString &dirpath) const;
+
+private Q_SLOTS:
+    void slotDelayedRestore();
 
 private:
     QList<KDirShareThread*> m_dirshares;
+    KPasswdStore m_passwdstore;
 };
 
 #endif // KDIRSHARE_KDED_H

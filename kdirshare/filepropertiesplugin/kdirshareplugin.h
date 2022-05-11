@@ -38,6 +38,9 @@ private Q_SLOTS:
     void slotRandomPort(const bool value);
     void slotPortMin(const int value);
     void slotPortMax(const int value);
+    void slotAuthorization(const bool value);
+    void slotUserEdited(const QString &value);
+    void slotPasswordEdited(const QString &value);
 
 private:
     Ui_KDirShareUI m_ui;
