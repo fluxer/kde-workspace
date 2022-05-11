@@ -92,14 +92,16 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
         } else {
             m_ui.useredit->setText(kdirsharereply3.value());
         }
-        kdirsharereply3 = m_kdirshareiface.call("getPassword", m_url);
-        if (!kdirsharereply3.isValid()) {
-            kWarning() << "Invalid kdirshare module reply for getPassword()";
-            m_ui.passwordedit->setText(QString());
-        } else {
-            m_ui.passwordedit->setText(kdirsharereply3.value());
+        if (!m_ui.useredit->text().isEmpty()) {
+            kdirsharereply3 = m_kdirshareiface.call("getPassword", m_url);
+            if (!kdirsharereply3.isValid()) {
+                kWarning() << "Invalid kdirshare module reply for getPassword()";
+                m_ui.passwordedit->setText(QString());
+            } else {
+                m_ui.passwordedit->setText(kdirsharereply3.value());
+            }
         }
-        if (!m_ui.useredit->text().isEmpty() || !m_ui.passwordedit->text().isEmpty()) {
+        if (!m_ui.useredit->text().isEmpty()) {
             m_ui.authbox->setChecked(true);
         }
         m_ui.useredit->setEnabled(m_ui.authbox->isChecked());
