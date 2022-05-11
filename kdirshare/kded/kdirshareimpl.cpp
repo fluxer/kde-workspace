@@ -30,6 +30,8 @@
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
 static const QByteArray s_data404("<html>404 Not Found</html>");
 static const QByteArray s_data500("<html>500 Internal Server Error</html>");
+// TODO: figure out what the Avahi limit is
+static const int s_sharenamelimit = 40;
 
 static quint16 getPort(const quint16 portmin, const quint16 portmax)
 {
@@ -47,8 +49,14 @@ static QString getShareName(const QString &dirpath)
 {
     const QString absolutedirpath = QDir(dirpath).absolutePath();
     QString dirname = QDir(absolutedirpath).dirName();
-    // TODO: figure out what the Avahi limit is
-    dirname = dirname.left(40);
+    bool appenddots = false;
+    if (dirname.size() > s_sharenamelimit) {
+        appenddots = true;
+    }
+    dirname = dirname.left(s_sharenamelimit);
+    if (appenddots) {
+        dirname.append(QLatin1String("..."));
+    }
     // qDebug() << Q_FUNC_INFO << dirname;
     return dirname;
 }
@@ -65,17 +73,26 @@ static QString getFileMIME(const QString &filepath)
     return QString::fromLatin1("application/octet-stream");
 }
 
+const QString getTitle(const QString &dirpath)
+{
+    return i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), getShareName(dirpath));
+}
+
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
     QByteArray data;
-    data.append("<html>");
-    data.append("<table>");
-    data.append("  <tr>");
-    data.append("    <th></th>"); // icon
-    data.append("    <th>Filename</th>");
-    data.append("    <th>MIME</th>");
-    data.append("    <th>Size</th>");
-    data.append("  </tr>");
+    data.append("<html>\n");
+    data.append("  <body>\n");
+    data.append("    <title>");
+    data.append(getTitle(path).toUtf8());
+    data.append("</title>\n");
+    data.append("    <table>\n");
+    data.append("      <tr>\n");
+    data.append("        <th></th>\n"); // icon
+    data.append("        <th>Filename</th>\n");
+    data.append("        <th>MIME</th>\n");
+    data.append("        <th>Size</th>\n");
+    data.append("      </tr>\n");
     QDir::Filters dirfilters = (QDir::Files | QDir::AllDirs | QDir::NoDot);
     if (QDir::cleanPath(path) == QDir::cleanPath(basedir)) {
         dirfilters = (QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
@@ -88,45 +105,46 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
         // to lower-case
         const QString cleanpath = QDir::cleanPath(fullpath.mid(basedir.size()));
 
-        data.append("  <tr>");
+        data.append("      <tr>\n");
 
         const bool isdotdot = (fileinfo.fileName() == QLatin1String(".."));
         if (isdotdot) {
             const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/go-previous\" width=\"20\" height=\"20\">");
-            data.append("<td>");
+            data.append("        <td>");
             data.append(fileicon.toAscii());
-            data.append("</td>");
+            data.append("</td>\n");
         } else {
             const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
-            data.append("<td>");
+            data.append("        <td>");
             data.append(fileicon.toAscii());
-            data.append("</td>");
+            data.append("</td>\n");
         }
 
         // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
-        data.append("<td><a href=\"");
+        data.append("        <td><a href=\"");
         data.append(cleanpath.toLocal8Bit());
         data.append("\">");
         data.append(fileinfo.fileName().toLocal8Bit());
-        data.append("</a><br></td>");
+        data.append("</a><br></td>\n");
 
-        data.append("<td>");
+        data.append("        <td>");
         if (!isdotdot) {
             const QString filemime = getFileMIME(fullpath);
             data.append(filemime.toAscii());
         }
-        data.append("</td>");
+        data.append("    </td>\n");
 
-        data.append("<td>");
+        data.append("        <td>");
         if (fileinfo.isFile()) {
             const QString filesize = KGlobal::locale()->formatByteSize(fileinfo.size(), 1);
             data.append(filesize.toAscii());
         }
-        data.append("</td>");
+        data.append("</td>\n");
 
-        data.append("  </tr>");
+        data.append("      </tr>\n");
     }
-    data.append("</table>");
+    data.append("    </table>\n");
+    data.append("  </body>\n");
     data.append("</html>");
     return data;
 }
@@ -172,7 +190,7 @@ bool KDirShareImpl::publish()
 {
     return m_kdnssd.publishService(
         "_http._tcp", m_port,
-        i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), getShareName(m_directory))
+        getTitle(m_directory)
     );
 }
 
