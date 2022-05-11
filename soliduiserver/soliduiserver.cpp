@@ -43,6 +43,37 @@
 
 #include <QDir>
 
+static int doMount(const QString &deviceuuid, const QString &devicenode, const QString &devicefstype)
+{
+    // permission denied on /run/mount so.. using base directory that is writable
+    const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
+    const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
+    QDir mountdir(mountbase);
+    if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
+        kWarning() << "could not create" << mountpoint;
+        return int(Solid::ErrorType::OperationFailed);
+    }
+
+    KAuth::Action mountaction("org.kde.soliduiserver.mountunmounthelper.mount");
+    mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    mountaction.addArgument("device", devicenode);
+    mountaction.addArgument("mountpoint", mountpoint);
+    mountaction.addArgument("fstype", devicefstype);
+    KAuth::ActionReply mountreply = mountaction.execute();
+    // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
+
+    if (mountreply == KAuth::ActionReply::SuccessReply) {
+        return int(Solid::ErrorType::NoError);
+    }
+
+    if (mountreply == KAuth::ActionReply::UserCancelled) {
+        return int(Solid::ErrorType::UserCanceled);
+    } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
+        return int(Solid::ErrorType::UnauthorizedOperation);
+    }
+    return int(Solid::ErrorType::OperationFailed);
+}
+
 K_PLUGIN_FACTORY(SolidUiServerFactory,
                  registerPlugin<SolidUiServer>();
     )
@@ -130,6 +161,7 @@ int SolidUiServer::mountDevice(const QString &udi)
     if (networkshare) {
         // qDebug() << Q_FUNC_INFO << udi << networkshare->url();
 
+        const QString deviceuuid = device.product();
         QString devicenode;
         QString devicefstype;
         switch (networkshare->type()) {
@@ -151,35 +183,8 @@ int SolidUiServer::mountDevice(const QString &udi)
                 return int(Solid::ErrorType::InvalidOption);
             }
         }
-        const QString deviceuuid = device.product();
 
-        // permission denied on /run/mount so.. using base directory that is writable
-        const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
-        const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
-        QDir mountdir(mountbase);
-        if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
-            kWarning() << "could not create" << mountpoint;
-            return int(Solid::ErrorType::OperationFailed);
-        }
-
-        KAuth::Action mountaction("org.kde.soliduiserver.mountunmounthelper.mount");
-        mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-        mountaction.addArgument("device", devicenode);
-        mountaction.addArgument("mountpoint", mountpoint);
-        mountaction.addArgument("fstype", devicefstype);
-        KAuth::ActionReply mountreply = mountaction.execute();
-        // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
-
-        if (mountreply == KAuth::ActionReply::SuccessReply) {
-            return int(Solid::ErrorType::NoError);
-        }
-
-        if (mountreply == KAuth::ActionReply::UserCancelled) {
-            return int(Solid::ErrorType::UserCanceled);
-        } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
-            return int(Solid::ErrorType::UnauthorizedOperation);
-        }
-        return int(Solid::ErrorType::OperationFailed);
+        return doMount(deviceuuid, devicenode, devicefstype);
     }
 
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
@@ -232,40 +237,14 @@ int SolidUiServer::mountDevice(const QString &udi)
 #warning crypto storage devices are not supported on this platform
 #endif
 
-    // permission denied on /run/mount so.. using base directory that is writable
-    const QString mountbase = KGlobal::dirs()->saveLocation("tmp");
-    const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
-    QDir mountdir(mountbase);
-    if (!mountdir.exists(deviceuuid) && !mountdir.mkdir(deviceuuid)) {
-        kWarning() << "could not create" << mountpoint;
-        return int(Solid::ErrorType::OperationFailed);
-    }
-
-    KAuth::Action mountaction("org.kde.soliduiserver.mountunmounthelper.mount");
-    mountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-    mountaction.addArgument("device", devicenode);
-    mountaction.addArgument("mountpoint", mountpoint);
-    mountaction.addArgument("fstype", storagevolume->fsType());
-    KAuth::ActionReply mountreply = mountaction.execute();
-    // qDebug() << "mount" << mountreply.errorCode() << mountreply.errorDescription();
-
-    if (mountreply == KAuth::ActionReply::SuccessReply) {
-        return int(Solid::ErrorType::NoError);
-    }
-
-    if (didcryptopen) {
+    const int mountresult = doMount(deviceuuid, devicenode, storagevolume->fsType());
+    if (mountresult != int(Solid::ErrorType::NoError) && didcryptopen) {
         KAuth::Action cryptcloseaction("org.kde.soliduiserver.mountunmounthelper.cryptclose");
         cryptcloseaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
         cryptcloseaction.addArgument("name", deviceuuid);
         cryptcloseaction.execute();
     }
-
-    if (mountreply == KAuth::ActionReply::UserCancelled) {
-        return int(Solid::ErrorType::UserCanceled);
-    } else if (mountreply == KAuth::ActionReply::AuthorizationDenied) {
-        return int(Solid::ErrorType::UnauthorizedOperation);
-    }
-    return int(Solid::ErrorType::OperationFailed);
+    return mountresult;
 }
 
 int SolidUiServer::unmountDevice(const QString &udi)
