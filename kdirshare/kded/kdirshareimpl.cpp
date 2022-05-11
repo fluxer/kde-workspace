@@ -80,11 +80,13 @@ const QString getTitle(const QString &dirpath)
 
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
+    const QString pathtitle = getTitle(path);
+
     QByteArray data;
     data.append("<html>\n");
     data.append("  <body>\n");
     data.append("    <title>");
-    data.append(getTitle(path).toUtf8());
+    data.append(pathtitle.toUtf8());
     data.append("</title>\n");
     data.append("    <table>\n");
     data.append("      <tr>\n");
@@ -111,33 +113,33 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
         if (isdotdot) {
             const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/go-previous\" width=\"20\" height=\"20\">");
             data.append("        <td>");
-            data.append(fileicon.toAscii());
+            data.append(fileicon.toUtf8());
             data.append("</td>\n");
         } else {
             const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
             data.append("        <td>");
-            data.append(fileicon.toAscii());
+            data.append(fileicon.toUtf8());
             data.append("</td>\n");
         }
 
         // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
         data.append("        <td><a href=\"");
-        data.append(cleanpath.toLocal8Bit());
+        data.append(cleanpath.toUtf8());
         data.append("\">");
-        data.append(fileinfo.fileName().toLocal8Bit());
+        data.append(fileinfo.fileName().toUtf8());
         data.append("</a><br></td>\n");
 
         data.append("        <td>");
         if (!isdotdot) {
             const QString filemime = getFileMIME(fullpath);
-            data.append(filemime.toAscii());
+            data.append(filemime.toUtf8());
         }
         data.append("    </td>\n");
 
         data.append("        <td>");
         if (fileinfo.isFile()) {
             const QString filesize = KGlobal::locale()->formatByteSize(fileinfo.size(), 1);
-            data.append(filesize.toAscii());
+            data.append(filesize.toUtf8());
         }
         data.append("</td>\n");
 
