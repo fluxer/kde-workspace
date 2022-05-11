@@ -1,7 +1,7 @@
 [Desktop Entry]
 Icon=network-server
-Name=Directory share
-Comment=Directory share service
+Name=Directory Share
+Comment=Serves shared directories over HTTP
 Type=Service
 X-KDE-ServiceTypes=KDEDModule
 X-KDE-Library=kdirshare
