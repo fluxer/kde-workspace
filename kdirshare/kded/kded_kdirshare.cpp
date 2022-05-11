@@ -97,13 +97,15 @@ QString KDirShareModule::share(const QString &dirpath, const uint portmin, const
     }
     // qDebug() << Q_FUNC_INFO << serverport;
     if (!kdirshareimpl->serve(QHostAddress(QHostAddress::Any), portmin, portmax)) {
+        const QString serveerror = kdirshareimpl->errorString();
         delete kdirshareimpl;
-        return i18n("Could not serve: %1", kdirshareimpl->errorString());
+        return i18n("Could not serve: %1", serveerror);
     }
     if (!kdirshareimpl->publish()) {
+        const QString publisherror = kdirshareimpl->publishError();
         kdirshareimpl->stop();
         delete kdirshareimpl;
-        return i18n("Could not publish service: %1", kdirshareimpl->publishError());
+        return i18n("Could not publish service: %1", publisherror);
     }
     m_dirshares.append(kdirshareimpl);
     return QString();
