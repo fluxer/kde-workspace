@@ -76,10 +76,9 @@ void ConnmanStatus::connmanStateChanged(const QString &name, const QDBusVariant 
     } else {
         const ConnmanPropertiesType props = reply.value();
         const QString state = props.value("State").toString();
-        if (state == QLatin1String("ready") || state == QLatin1String("association")
-            || state == QLatin1String("configuration")) {
+        if (state == QLatin1String("association") || state == QLatin1String("configuration")) {
             m_status = Solid::Networking::Connecting;
-        } else if (state == QLatin1String("online")) {
+        } else if (state == QLatin1String("ready") || state == QLatin1String("online")) {
             m_status = Solid::Networking::Connected;
         } else if (state == QLatin1String("disconnect")) {
             m_status = Solid::Networking::Disconnecting;
