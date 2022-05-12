@@ -358,7 +358,10 @@ void KDirShareModule::slotDelayedRestore()
         const uint kdirshareportmin = kdirsharegroup.readEntry("portmin", uint(s_kdirshareportmin));
         const uint kdirshareportmax = kdirsharegroup.readEntry("portmax", uint(s_kdirshareportmax));
         const QString kdirshareuser = kdirsharegroup.readEntry("user", QString());
-        const QString kdirsharepassword = m_passwdstore.getPasswd(KPasswdStore::makeKey(kdirsharedirpath));
+        QString kdirsharepassword;
+        if (!kdirshareuser.isEmpty()) {
+            kdirsharepassword = m_passwdstore.getPasswd(KPasswdStore::makeKey(kdirsharedirpath));
+        }
         // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharedirpath << kdirshareportmin << kdirshareportmax;
         const QString kdirshareerror = share(
             kdirsharedirpath,
