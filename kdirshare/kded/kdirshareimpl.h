@@ -44,8 +44,6 @@ protected:
 private:
     QString m_directory;
     quint16 m_port;
-    quint16 m_portmin;
-    quint16 m_portmax;
     KDNSSD m_kdnssd;
 };
 
