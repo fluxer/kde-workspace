@@ -40,7 +40,7 @@ public:
     void save() final;
 
 private Q_SLOTS:
-    void slotPluginItemChanged(QTableWidgetItem *item);
+    void slotPluginItemChanged(QTreeWidgetItem *item, int column);
     void slotMetaItemChanged(QListWidgetItem *item);
 
 private:

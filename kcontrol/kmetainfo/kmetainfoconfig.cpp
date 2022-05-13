@@ -52,9 +52,15 @@ KCMMetaInfo::KCMMetaInfo(QWidget* parent, const QVariantList& args)
 
     setButtons(KCModule::Help | KCModule::Apply);
 
-    connect(pluginstable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(slotPluginItemChanged(QTableWidgetItem*)));
+    connect(
+        pluginstree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+        this, SLOT(slotPluginItemChanged(QTreeWidgetItem*,int))
+    );
 
-    connect(metainfolist, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(slotMetaItemChanged(QListWidgetItem*)));
+    connect(
+        metainfolist, SIGNAL(itemChanged(QListWidgetItem*)),
+        this, SLOT(slotMetaItemChanged(QListWidgetItem*))
+    );
 
     load();
 }
@@ -67,31 +73,23 @@ void KCMMetaInfo::load()
 {
     {
         KConfig config("kmetainformationrc", KConfig::NoGlobals);
-        pluginstable->clearContents();
-        pluginstable->setRowCount(0);
-        int rowcount = 0;
+        pluginstree->clear();
         KConfigGroup pluginsgroup = config.group("Plugins");
         const KService::List kfmdplugins = KServiceTypeTrader::self()->query("KFileMetaData/Plugin");
         foreach (const KService::Ptr &kfmdplugin, kfmdplugins) {
             const QString key = kfmdplugin->desktopEntryName();
-
-            pluginstable->setRowCount(rowcount + 1);
-
-            QTableWidgetItem* nameitem = new QTableWidgetItem();
-            nameitem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
-            nameitem->setText(kfmdplugin->genericName());
-            nameitem->setData(Qt::UserRole, key);
             const bool enable = pluginsgroup.readEntry(key, true);
-            nameitem->setCheckState(enable ? Qt::Checked : Qt::Unchecked);
-            pluginstable->setItem(rowcount, 0, nameitem);
 
-            QTableWidgetItem* descitem = new QTableWidgetItem();
-            descitem->setFlags(Qt::ItemIsEnabled);
-            descitem->setText(kfmdplugin->comment());
-            pluginstable->setItem(rowcount, 1, descitem);
-
-            rowcount++;
+            QTreeWidgetItem* pluginitem = new QTreeWidgetItem();
+            pluginitem->setData(0, Qt::UserRole, key);
+            pluginitem->setCheckState(0, enable ? Qt::Checked : Qt::Unchecked);
+            pluginitem->setText(1, kfmdplugin->genericName());
+            pluginitem->setText(2, kfmdplugin->comment());
+            pluginstree->addTopLevelItem(pluginitem);
         }
+        pluginstree->resizeColumnToContents(0);
+        pluginstree->resizeColumnToContents(1);
+        pluginstree->resizeColumnToContents(2);
     }
 
     loadMetaInfo();
@@ -104,10 +102,10 @@ void KCMMetaInfo::save()
     {
         KConfig config("kmetainformationrc", KConfig::NoGlobals);
         KConfigGroup pluginsgroup = config.group("Plugins");
-        for (int i = 0; i < pluginstable->rowCount(); ++i) {
-            QTableWidgetItem* item = pluginstable->item(i, 0);
-            const bool enable = (item->checkState() == Qt::Checked);
-            const QString key = item->data(Qt::UserRole).toString();
+        for (int i = 0; i < pluginstree->topLevelItemCount(); ++i) {
+            QTreeWidgetItem* item = pluginstree->topLevelItem(i);
+            const bool enable = (item->checkState(0) == Qt::Checked);
+            const QString key = item->data(0, Qt::UserRole).toString();
             pluginsgroup.writeEntry(key, enable);
         }
 
@@ -125,9 +123,10 @@ void KCMMetaInfo::save()
     loadMetaInfo();
 }
 
-void KCMMetaInfo::slotPluginItemChanged(QTableWidgetItem *item)
+void KCMMetaInfo::slotPluginItemChanged(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED(item);
+    Q_UNUSED(column);
     emit changed(true);
 }
 
