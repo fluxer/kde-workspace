@@ -52,13 +52,9 @@ KCMMetaInfo::KCMMetaInfo(QWidget* parent, const QVariantList& args)
 
     setButtons(KCModule::Help | KCModule::Apply);
 
-    pluginslist->setSelectionMode(QAbstractItemView::NoSelection);
-    pluginslist->setSortingEnabled(true);
-    connect(pluginslist, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(slotItemChanged(QListWidgetItem*)));
+    connect(pluginstable, SIGNAL(itemChanged(QTableWidgetItem*)), this, SLOT(slotPluginItemChanged(QTableWidgetItem*)));
 
-    metainfolist->setSelectionMode(QAbstractItemView::NoSelection);
-    metainfolist->setSortingEnabled(true);
-    connect(metainfolist, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(slotItemChanged(QListWidgetItem*)));
+    connect(metainfolist, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(slotMetaItemChanged(QListWidgetItem*)));
 
     load();
 }
@@ -71,16 +67,30 @@ void KCMMetaInfo::load()
 {
     {
         KConfig config("kmetainformationrc", KConfig::NoGlobals);
-        pluginslist->clear();
+        pluginstable->clearContents();
+        pluginstable->setRowCount(0);
+        int rowcount = 0;
         KConfigGroup pluginsgroup = config.group("Plugins");
         const KService::List kfmdplugins = KServiceTypeTrader::self()->query("KFileMetaData/Plugin");
         foreach (const KService::Ptr &kfmdplugin, kfmdplugins) {
             const QString key = kfmdplugin->desktopEntryName();
-            const QString itemtext = kfmdplugin->genericName();
-            QListWidgetItem* item = new QListWidgetItem(itemtext, pluginslist);
-            item->setData(Qt::UserRole, key);
+
+            pluginstable->setRowCount(rowcount + 1);
+
+            QTableWidgetItem* nameitem = new QTableWidgetItem();
+            nameitem->setFlags(Qt::ItemIsEnabled | Qt::ItemIsUserCheckable);
+            nameitem->setText(kfmdplugin->genericName());
+            nameitem->setData(Qt::UserRole, key);
             const bool enable = pluginsgroup.readEntry(key, true);
-            item->setCheckState(enable ? Qt::Checked : Qt::Unchecked);
+            nameitem->setCheckState(enable ? Qt::Checked : Qt::Unchecked);
+            pluginstable->setItem(rowcount, 0, nameitem);
+
+            QTableWidgetItem* descitem = new QTableWidgetItem();
+            descitem->setFlags(Qt::ItemIsEnabled);
+            descitem->setText(kfmdplugin->comment());
+            pluginstable->setItem(rowcount, 1, descitem);
+
+            rowcount++;
         }
     }
 
@@ -94,8 +104,8 @@ void KCMMetaInfo::save()
     {
         KConfig config("kmetainformationrc", KConfig::NoGlobals);
         KConfigGroup pluginsgroup = config.group("Plugins");
-        for (int i = 0; i < pluginslist->count(); ++i) {
-            QListWidgetItem* item = pluginslist->item(i);
+        for (int i = 0; i < pluginstable->rowCount(); ++i) {
+            QTableWidgetItem* item = pluginstable->item(i, 0);
             const bool enable = (item->checkState() == Qt::Checked);
             const QString key = item->data(Qt::UserRole).toString();
             pluginsgroup.writeEntry(key, enable);
@@ -115,7 +125,13 @@ void KCMMetaInfo::save()
     loadMetaInfo();
 }
 
-void KCMMetaInfo::slotItemChanged(QListWidgetItem *item)
+void KCMMetaInfo::slotPluginItemChanged(QTableWidgetItem *item)
+{
+    Q_UNUSED(item);
+    emit changed(true);
+}
+
+void KCMMetaInfo::slotMetaItemChanged(QListWidgetItem *item)
 {
     Q_UNUSED(item);
     emit changed(true);

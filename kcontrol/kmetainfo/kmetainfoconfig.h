@@ -40,7 +40,8 @@ public:
     void save() final;
 
 private Q_SLOTS:
-    void slotItemChanged(QListWidgetItem *item);
+    void slotPluginItemChanged(QTableWidgetItem *item);
+    void slotMetaItemChanged(QListWidgetItem *item);
 
 private:
     void loadMetaInfo();
