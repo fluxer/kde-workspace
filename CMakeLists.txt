@@ -7,6 +7,8 @@ include(GenerateExportHeader)
 find_package(KDE4 4.22.0 REQUIRED)
 include(KDE4Defaults)
 
+set(LIBRARY_TYPE SHARED)
+
 find_package(ZLIB)
 set_package_properties(ZLIB PROPERTIES
     DESCRIPTION "Support for gzip compressed files and data streams"
@@ -28,6 +30,14 @@ set_package_properties(SharedMimeInfo PROPERTIES
     URL "http://freedesktop.org/wiki/Software/shared-mime-info"
     PURPOSE "Needed for update MIME database"
     TYPE REQUIRED
+)
+
+find_package(Sudo)
+set_package_properties(Sudo PROPERTIES
+    DESCRIPTION "Sudo allows a system administrator to delegate authority to give certain users"
+    URL "https://www.sudo.ws/"
+    TYPE RUNTIME
+    PURPOSE "Needed for kdesudo to operate"
 )
 
 if(Q_WS_X11)
@@ -117,14 +127,6 @@ set_package_properties(Fontconfig PROPERTIES
     DESCRIPTION "Font access configuration library"
     URL "http://www.freedesktop.org/wiki/Software/fontconfig"
     PURPOSE "Needed to build font configuration and installation tools"
-    TYPE OPTIONAL
-)
-
-macro_optional_find_package(LibKonq)
-set_package_properties(LibKonq PROPERTIES
-    DESCRIPTION "Konqueror library"
-    URL "http://fluxer.github.io/katana/"
-    PURPOSE "folderview plasma applets"
     TYPE OPTIONAL
 )
 
@@ -272,6 +274,30 @@ add_feature_info(gdb_or_lldb
     "Backtraces support"
 )
 
+find_program(CTAGS_EXECUTABLE ctags ctags-universal ctags-exuberant exctags uctags)
+add_feature_info(ctags
+    CTAGS_EXECUTABLE
+    "Code indexing support in Kate"
+)
+
+find_program(CPPCHECK_EXECUTABLE cppcheck)
+add_feature_info(cppcheck
+    CPPCHECK_EXECUTABLE
+    "Code analysis support in Kate"
+)
+
+find_program(RZSZ_EXECUTABLE NAMES rz lrz)
+add_feature_info(rzsz
+    RZSZ_EXECUTABLE
+    "ZModem support in Konsole"
+)
+
+find_program(LOCALE_EXECUTABLE NAMES locate)
+add_feature_info(locate
+    LOCALE_EXECUTABLE
+    "Search indexing support in KFind"
+)
+
 check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
 check_include_files(sys/time.h HAVE_SYS_TIME_H)
 
@@ -346,6 +372,16 @@ add_subdirectory(kquitapp)
 if (Q_WS_X11)
     add_subdirectory(kstart)
 endif (Q_WS_X11)
+# imported from kde-baseapps
+add_subdirectory(dolphin)
+add_subdirectory(kate)
+add_subdirectory(kdepasswd)
+add_subdirectory(kdesudo)
+add_subdirectory(kdialog)
+add_subdirectory(keditbookmarks)
+add_subdirectory(kfind)
+add_subdirectory(kmediaplayer)
+add_subdirectory(konsole)
 # Background processes
 add_subdirectory(kdontchangethehostname)
 add_subdirectory(kglobalaccel)

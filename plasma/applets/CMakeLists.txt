@@ -15,9 +15,7 @@ add_subdirectory(systemtray)
 
 add_subdirectory(kickoff)
 add_subdirectory(trash)
-if(LIBKONQ_FOUND)
-    add_subdirectory(folderview)
-endif()
+add_subdirectory(folderview)
 
 #task and windowlist depend on libs/taskmanager
 add_subdirectory(tasks)

@@ -45,3 +45,6 @@ if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
     add_subdirectory( kfontinst )
     add_subdirectory( fonts )
 endif()
+
+add_subdirectory( ebrowsing )
+add_subdirectory( kio )

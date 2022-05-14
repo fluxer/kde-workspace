@@ -1,6 +1,9 @@
 project(plasma-folderview)
 
-include_directories(${LIBKONQ_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/konq
+    ${CMAKE_BINARY_DIR}/libs/konq
+)
 
 set(folderview_SRCS
     folderview.cpp
@@ -30,8 +33,14 @@ set(folderview_SRCS
 
 kde4_add_plugin(plasma_applet_folderview ${folderview_SRCS})
 
-target_link_libraries(plasma_applet_folderview ${KDE4_PLASMA_LIBS} ${LIBKONQ_LIBRARY}
-                      ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_SOLID_LIBS} ${X11_LIBRARIES})
+target_link_libraries(plasma_applet_folderview
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${KDE4_SOLID_LIBS}
+    ${X11_LIBRARIES}
+    konq
+)
 
 install(TARGETS plasma_applet_folderview DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-applet-folderview.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})

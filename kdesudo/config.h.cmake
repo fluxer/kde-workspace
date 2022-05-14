@@ -1,0 +1,2 @@
+#cmakedefine HAVE_PR_SET_DUMPABLE
+#cmakedefine HAVE_PROCCTL

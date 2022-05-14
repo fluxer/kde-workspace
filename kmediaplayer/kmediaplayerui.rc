@@ -1,0 +1,21 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="kmediaplayer" version="3" >
+    <MenuBar>
+        <Menu name="file"><text>&amp;File</text>
+            <Action name="file_open_path"/>
+            <Action name="file_open_url"/>
+            <Action name="file_open_recent"/>
+            <Separator/>
+            <Action name="file_close"/>
+            <Separator/>
+            <Action name="file_quit"/>
+        </Menu>
+        <Menu name="player"><text>&amp;Player</text>
+            <Action name="player_fullscreen"/>
+            <Separator/>
+        </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="settings_player"/>
+        </Menu>
+    </MenuBar>
+</kpartgui>

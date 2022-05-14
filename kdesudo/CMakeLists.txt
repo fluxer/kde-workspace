@@ -1,0 +1,34 @@
+include(CheckSymbolExists)
+include(CheckIncludeFiles)
+
+# Linux
+check_symbol_exists(PR_SET_DUMPABLE "sys/prctl.h" HAVE_PR_SET_DUMPABLE)
+add_feature_info("pr_set_dumpable" HAVE_PR_SET_DUMPABLE "Used to disallow process tracing")
+
+# FreeBSD
+check_symbol_exists(procctl "sys/procctl.h" HAVE_PROCCTL)
+add_feature_info("procctl" HAVE_PROCCTL "Used to disallow process tracing")
+
+configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
+include_directories(
+    ${KDE4_KDECORE_INCLUDES}
+    ${KDE4_KDEUI_INCLUDES}
+)
+
+set(KDESUDO_SRC
+    main.cpp
+    kdesudo.cpp
+    kcookie.cpp
+)
+
+add_executable(kdesudo ${KDESUDO_SRC})
+
+target_link_libraries(kdesudo
+    ${KDE4_KDEUI_LIBS}
+)
+
+install(
+    TARGETS kdesudo
+    ${INSTALL_TARGETS_DEFAULT_ARGS}
+)
