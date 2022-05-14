@@ -4,6 +4,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/libs/konq
+    ${CMAKE_SOURCE_DIR}/libs/konq
 )
 
 add_definitions(
