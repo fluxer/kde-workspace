@@ -29,12 +29,12 @@
 #include <kuiserversettings.h>
 
 class RequestViewCallWatcher;
-class OrgKdeJobViewV2Interface;
+class OrgKdeJobViewInterface;
 
 class JobView : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.JobViewV2")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.JobView")
 
 public:
 
@@ -102,8 +102,6 @@ public:
 
     QDBusObjectPath objectPath() const;
 
-
-
      /**
      * Set the dest Url of the job...
      * sent from the jobtracker (once upon construction)
@@ -128,7 +126,6 @@ public:
     void requestSuspend();
     void requestResume();
     void requestCancel();
-
 
     /**
      * Called by the model.
@@ -182,29 +179,17 @@ private Q_SLOTS:
 private:
 
     int m_capabilities;        ///< The capabilities of the job
-
     QString m_applicationName; ///< The application name
-
     QString m_appIconName;     ///< The icon name
-
     QString m_sizeTotal;       ///< The total size of the operation
-
     QString m_sizeProcessed;   ///< The processed size at the moment(amount completed)
-
     QString m_speed;           ///< The current speed of the operation (human readable, example, "3Mb/s")
-
     int m_percent;             ///< The current percent completed of the job
-
     QString m_infoMessage;     ///< The information message to be shown
-
     QString m_error;           ///< The error message of the job, set when it's terminated
-
     QString m_totalUnit;       ///< The unit used in setTotalAmount
-
     qulonglong m_totalAmount;  ///< The amount used in setTotalAmount
-
     QString m_processUnit;     ///< The unit used in setProcessedAmount
-
     qulonglong m_processAmount; ///< The processed amount (setProcessedAmount)
 
     QHash<uint, QPair<QString, QString> > m_descFields;
@@ -217,7 +202,7 @@ private:
      * All for the client:
      *   <address name,  <objectPath, interface> >
      */
-    QHash<QString, QPair<QString, OrgKdeJobViewV2Interface*> > m_objectPaths;
+    QHash<QString, QPair<QString, OrgKdeJobViewInterface*> > m_objectPaths;
 
     const uint m_jobId;
     JobState m_state;          ///< Current state of this job

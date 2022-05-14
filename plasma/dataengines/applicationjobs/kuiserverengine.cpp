@@ -47,7 +47,7 @@ JobView::JobView(QObject* parent)
     m_jobId = ++s_jobId;
     setObjectName(QString("Job %1").arg(s_jobId));
 
-    new JobViewV2Adaptor(this);
+    new JobViewAdaptor(this);
 
     m_objectPath.setPath(QString("/DataEngine/applicationjobs/JobView_%1").arg(m_jobId));
     QDBusConnection::sessionBus().registerObject(m_objectPath.path(), this);

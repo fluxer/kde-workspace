@@ -59,7 +59,7 @@ private:
 class JobView : public Plasma::DataContainer
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.JobViewV2")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.JobView")
 
 public:
     enum State {

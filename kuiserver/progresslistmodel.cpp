@@ -278,8 +278,7 @@ void ProgressListModel::registerService(const QString &serviceName, const QStrin
 
                 //tell this new client to create all of the same jobs that we currently have.
                 //also connect them so that when the method comes back, it will return a
-                //QDBusObjectPath value, which is where we can contact that job, within "org.kde.JobViewV2"
-                //TODO: KDE5 remember to replace current org.kde.JobView interface with the V2 one.. (it's named V2 for compat. reasons).
+                //QDBusObjectPath value, which is where we can contact that job, within "org.kde.JobView"
 
                 //TODO: this falls victim to what newJob used to be vulnerable to...async calls returning too slowly and a terminate ensuing before that.
                 // it may not be a problem (yet), though.
