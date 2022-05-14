@@ -19,10 +19,9 @@ build_script:
     sudo apt-get update -qq
 
     sudo apt-get install -qq cmake katie-dev katanalibs \
-        katana-baseapps xorg-dev libqalculate-dev libxxf86vm-dev \
-        libx11-xcb-dev libxcb-composite0-dev libxcb-damage0-dev \
-        libxcb-xfixes0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-shape0-dev \
-        libxcb-sync-dev libxcb-render-util0-dev libxcb-keysyms1-dev \
+        xorg-dev libqalculate-dev libxxf86vm-dev libx11-xcb-dev libxcb-composite0-dev \
+        libxcb-damage0-dev libxcb-xfixes0-dev libxcb-render0-dev libxcb-randr0-dev \
+        libxcb-shape0-dev libxcb-sync-dev libxcb-render-util0-dev libxcb-keysyms1-dev \
         libglu1-mesa-dev mesa-common-dev libmtp-dev libusb-1.0-0-dev libssh-dev \
         libsmbclient-dev libdrm-dev libraw1394-dev libsensors4-dev \
         libegl-dev libpci-dev libopenexr-dev liblzma-dev libbz2-dev libgphoto2-dev \
