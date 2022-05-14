@@ -12,6 +12,7 @@ kde4_add_plugin(kded_kdirshare ${kded_kdirshare_SRCS})
 target_link_libraries(kded_kdirshare PRIVATE
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KDEUI_LIBS}
+    ${KDE4_KIO_LIBS}
     ${KDE4_KHTTP_LIBS}
     ${KDE4_KDNSSD_LIBS}
     ${KDE4_KPASSWDSTORE_LIBS}

@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kconfiggroup.h>
 #include <knotification.h>
+#include <kdirnotify.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
@@ -249,6 +250,7 @@ QString KDirShareModule::share(const QString &dirpath,
         return serveerror;
     }
     m_dirshares.append(kdirsharethread);
+    org::kde::KDirNotify::emitFilesAdded(QString::fromLatin1("network:/"));
     return QString();
 }
 
@@ -263,6 +265,7 @@ QString KDirShareModule::unshare(const QString &dirpath)
             kdirsharethread->terminate();
             delete kdirsharethread;
             m_dirshares.removeAll(kdirsharethread);
+            org::kde::KDirNotify::emitFilesAdded(QString::fromLatin1("network:/")); // works the same as emitFilesRemoved()
             return QString();
         }
     }
