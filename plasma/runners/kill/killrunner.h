@@ -20,19 +20,12 @@
 #ifndef KILLRUNNER_H
 #define KILLRUNNER_H
 
-#include <QReadWriteLock>
-#include <QTimer>
-
+#include <QAction>
 #include <Plasma/AbstractRunner>
 
+#include "ksysguard/processcore/processes.h"
+#include "ksysguard/processcore/process.h"
 #include "killrunner_config.h"
-#include <QAction>
-
-namespace KSysGuard
-{
-    class Processes;
-    class Process;
-}
 
 class KillRunner : public Plasma::AbstractRunner
 {
@@ -47,10 +40,6 @@ public:
     QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
     void reloadConfiguration();
 
-private Q_SLOTS:
-    void prep();
-    void cleanup();
-
 private:
     /** @param uid the uid of the user
       * @return the username of the user with the UID uid
@@ -62,15 +51,6 @@ private:
 
     /** How to sort */
     KillRunnerConfig::Sort m_sorting;
-
-    /** process lister */
-    KSysGuard::Processes *m_processes;
-
-    /** lock for initializing m_processes */
-    QReadWriteLock m_prepLock;
-
-    /** timer for retrying the cleanup due to lock contention */
-    QTimer m_delayedCleanupTimer;
 };
 K_EXPORT_PLASMA_RUNNER(kill, KillRunner)
 

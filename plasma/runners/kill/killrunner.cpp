@@ -26,26 +26,16 @@
 #include <KUser>
 #include <kauthaction.h>
 
-#include "ksysguard/processcore/processes.h"
-#include "ksysguard/processcore/process.h"
 #include "killrunner_config.h"
 
 #include <signal.h>
 
 KillRunner::KillRunner(QObject *parent, const QVariantList& args)
-        : Plasma::AbstractRunner(parent, args),
-          m_processes(0)
+        : Plasma::AbstractRunner(parent, args)
 {
     Q_UNUSED(args);
     setObjectName(QLatin1String("Kill Runner"));
     reloadConfiguration();
-
-    connect(this, SIGNAL(prepare()), this, SLOT(prep()));
-    connect(this, SIGNAL(teardown()), this, SLOT(cleanup()));
-
-    m_delayedCleanupTimer.setInterval(50);
-    m_delayedCleanupTimer.setSingleShot(true);
-    connect(&m_delayedCleanupTimer, SIGNAL(timeout()), this, SLOT(cleanup()));
 }
 
 KillRunner::~KillRunner()
@@ -68,27 +58,6 @@ void KillRunner::reloadConfiguration()
     setSyntaxes(syntaxes);
 }
 
-void KillRunner::prep()
-{
-    m_delayedCleanupTimer.stop();
-}
-
-void KillRunner::cleanup()
-{
-    if (!m_processes) {
-        return;
-    }
-
-    if (m_prepLock.tryLockForWrite()) {
-        delete m_processes;
-        m_processes = 0;
-
-        m_prepLock.unlock();
-    } else {
-        m_delayedCleanupTimer.stop();
-    }
-}
-
 void KillRunner::match(Plasma::RunnerContext &context)
 {
     QString term = context.query();
@@ -97,19 +66,6 @@ void KillRunner::match(Plasma::RunnerContext &context)
         return;
     }
 
-    m_prepLock.lockForRead();
-    if (!m_processes) {
-        m_prepLock.unlock();
-        m_prepLock.lockForWrite();
-        if (!m_processes) {
-            suspendMatching(true);
-            m_processes = new KSysGuard::Processes();
-            m_processes->updateAllProcesses();
-            suspendMatching(false);
-        }
-    }
-    m_prepLock.unlock();
-
     term = term.right(term.length() - m_triggerWord.length());
 
     if (term.length() < 2)  {
@@ -117,7 +73,10 @@ void KillRunner::match(Plasma::RunnerContext &context)
     }
 
     QList<Plasma::QueryMatch> matches;
-    const QList<KSysGuard::Process *> processlist = m_processes->getAllProcesses();
+    KSysGuard::Processes *processes = new KSysGuard::Processes();
+    processes->updateAllProcesses();
+    const QList<KSysGuard::Process *> processlist = processes->getAllProcesses();
+    processes->deleteLater();
     foreach (const KSysGuard::Process *process, processlist) {
         if (!context.isValid()) {
             return;
