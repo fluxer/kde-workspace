@@ -33,18 +33,6 @@ static const QByteArray s_data500("<html>500 Internal Server Error</html>");
 // AVAHI_LABEL_MAX - 3 (for dots) - 1 (for null terminator)
 static const int s_sharenamelimit = 60;
 
-static QString getShareName(const QString &dirpath)
-{
-    const QString absolutedirpath = QDir(dirpath).absolutePath();
-    QString dirname = QDir(absolutedirpath).dirName();
-    if (dirname.size() > s_sharenamelimit) {
-        dirname = dirname.left(s_sharenamelimit);
-        dirname.append(QLatin1String("..."));
-    }
-    // qDebug() << Q_FUNC_INFO << dirname;
-    return dirname;
-}
-
 static QString getFileMIME(const QString &filepath)
 {
     const KMimeType::Ptr kmimetypeptr = KMimeType::findByUrl(
@@ -59,7 +47,13 @@ static QString getFileMIME(const QString &filepath)
 
 static QString getTitle(const QString &dirpath)
 {
-    return i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), getShareName(dirpath));
+    const QString sharename = QDir(QDir(dirpath).absolutePath()).dirName();
+    QString title = i18n("KDirShare@%1 (%2)", QHostInfo::localHostName(), sharename);
+    if (title.size() > s_sharenamelimit) {
+        title = title.left(s_sharenamelimit);
+        title.append(QLatin1String("..."));
+    }
+    return title;
 }
 
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
