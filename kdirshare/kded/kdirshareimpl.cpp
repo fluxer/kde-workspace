@@ -30,8 +30,8 @@
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
 static const QByteArray s_data404("<html>404 Not Found</html>");
 static const QByteArray s_data500("<html>500 Internal Server Error</html>");
-// TODO: figure out what the Avahi limit is
-static const int s_sharenamelimit = 40;
+// AVAHI_LABEL_MAX - 3 (for dots) - 1 (for null terminator)
+static const int s_sharenamelimit = 60;
 
 static QString getShareName(const QString &dirpath)
 {
