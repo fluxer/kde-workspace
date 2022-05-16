@@ -31,9 +31,6 @@
 
 QTEST_KDEMAIN(KonqPopupMenuTest, GUI)
 
-// NOTE: keep in sync with kde-baseapps/lib/konq/konq_popupmenu.cpp
-static const QString smbdExe = KStandardDirs::findRootExe("smbd");
-
 KonqPopupMenuTest::KonqPopupMenuTest()
     : m_actionCollection(this)
 {
@@ -288,9 +285,7 @@ void KonqPopupMenuTest::testSubDirectory()
     expectedActions << "separator";
     expectedActions << "copyTo_submenu" << "moveTo_submenu" << "separator";
     expectedActions << "properties";
-    if (!smbdExe.isEmpty()) {
-        expectedActions << "separator" << "share";
-    }
+    expectedActions << "separator" << "share";
     kDebug() << "Expected:" << expectedActions;
     QCOMPARE(actions, expectedActions);
 }
@@ -325,9 +320,7 @@ void KonqPopupMenuTest::testViewDirectory()
     expectedActions << "separator";
     expectedActions << "copyTo_submenu" << "moveTo_submenu" << "separator";
     expectedActions << "properties";
-    if (!smbdExe.isEmpty()) {
-        expectedActions << "separator" << "share";
-    }
+    expectedActions << "separator" << "share";
     kDebug() << "Expected:" << expectedActions;
     QCOMPARE(actions, expectedActions);
 }
@@ -362,9 +355,7 @@ void KonqPopupMenuTest::testViewReadOnlyDirectory()
     expectedActions << "separator";
     expectedActions << "copyTo_submenu" << "separator"; // no moveTo_submenu, since readonly
     expectedActions << "properties";
-    if (!smbdExe.isEmpty()) {
-        expectedActions << "separator" << "share";
-    }
+    expectedActions << "separator" << "share";
     kDebug() << "Expected:" << expectedActions;
     QCOMPARE(actions, expectedActions);
 }

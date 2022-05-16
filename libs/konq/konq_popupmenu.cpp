@@ -443,19 +443,13 @@ void KonqPopupMenuPrivate::init(KonqPopupMenu::Flags kpf, KParts::BrowserExtensi
         delete q->actions().last();
 
     if ( isDirectory && isLocal ) {
-        // same check is done in:
-        // kdelibs/kio/kio/ksambashare.cpp
-        // kde-extraapps/kdenetwork-filesharing/samba/filepropertiesplugin/sambausershareplugin.cpp
-        static const QString smbdExe = KStandardDirs::findRootExe("smbd");
-        if ( !smbdExe.isEmpty() ) {
-            q->addSeparator();
-            act = new KAction(m_parentWidget);
-            m_ownActions.append(act);
-            act->setObjectName( QLatin1String("share" )); // for unittest
-            act->setText( i18n("Share") );
-            QObject::connect(act, SIGNAL(triggered()), q, SLOT(slotOpenShareFileDialog()));
-            q->addAction(act);
-        }
+        q->addSeparator();
+        act = new KAction(m_parentWidget);
+        m_ownActions.append(act);
+        act->setObjectName( QLatin1String("share" )); // for unittest
+        act->setText( i18n("Share") );
+        QObject::connect(act, SIGNAL(triggered()), q, SLOT(slotOpenShareFileDialog()));
+        q->addAction(act);
     }
 
     // Anything else that is provided by the part
