@@ -74,6 +74,27 @@ static int doMount(const QString &deviceuuid, const QString &devicenode, const Q
     return int(Solid::ErrorType::OperationFailed);
 }
 
+static int doUnmount(const QString &devicemountpoint)
+{
+    KAuth::Action unmountaction("org.kde.soliduiserver.mountunmounthelper.unmount");
+    unmountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
+    unmountaction.addArgument("mountpoint", devicemountpoint);
+    KAuth::ActionReply unmountreply = unmountaction.execute();
+    // qDebug() << "unmount" << unmountreply.errorCode() << unmountreply.errorDescription();
+
+    if (unmountreply == KAuth::ActionReply::SuccessReply) {
+        return int(Solid::ErrorType::NoError);
+    }
+
+    if (unmountreply == KAuth::ActionReply::UserCancelled) {
+        return int(Solid::ErrorType::UserCanceled);
+    } else if (unmountreply == KAuth::ActionReply::AuthorizationDenied) {
+        return int(Solid::ErrorType::UnauthorizedOperation);
+    }
+    return int(Solid::ErrorType::OperationFailed);
+}
+
+
 K_PLUGIN_FACTORY(SolidUiServerFactory,
                  registerPlugin<SolidUiServer>();
     )
@@ -179,7 +200,7 @@ int SolidUiServer::mountDevice(const QString &udi)
                 break;
             }
             default: {
-                kWarning() << "invalid network share type" << networkshare->type();
+                kWarning() << "Invalid network share type" << networkshare->type();
                 return int(Solid::ErrorType::InvalidOption);
             }
         }
@@ -250,25 +271,21 @@ int SolidUiServer::mountDevice(const QString &udi)
 int SolidUiServer::unmountDevice(const QString &udi)
 {
     Solid::Device device(udi);
-    Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
+
+    Solid::NetworkShare *networkshare = device.as<Solid::NetworkShare>();
     Solid::StorageAccess *storageaccess = device.as<Solid::StorageAccess>();
+    if (networkshare && storageaccess) {
+        return doUnmount(storageaccess->filePath());
+    }
+
+    Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     if (!storagevolume || !storageaccess) {
         return int(Solid::ErrorType::InvalidOption);
     }
 
-    KAuth::Action unmountaction("org.kde.soliduiserver.mountunmounthelper.unmount");
-    unmountaction.setHelperID("org.kde.soliduiserver.mountunmounthelper");
-    unmountaction.addArgument("mountpoint", storageaccess->filePath());
-    KAuth::ActionReply unmountreply = unmountaction.execute();
-
-    // qDebug() << "unmount" << unmountreply.errorCode() << unmountreply.errorDescription();
-
-    if (unmountreply == KAuth::ActionReply::UserCancelled) {
-        return int(Solid::ErrorType::UserCanceled);
-    } else if (unmountreply == KAuth::ActionReply::AuthorizationDenied) {
-        return int(Solid::ErrorType::UnauthorizedOperation);
-    } else if (unmountreply != KAuth::ActionReply::SuccessReply) {
-        return int(Solid::ErrorType::OperationFailed);
+    const int unmountresult = doUnmount(storageaccess->filePath());
+    if (unmountresult != int(Solid::ErrorType::NoError)) {
+        return unmountresult;
     }
 
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
