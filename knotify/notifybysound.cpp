@@ -50,7 +50,6 @@ public:
     bool noSound;
     QMap<int, KAudioPlayer*> playerObjects;
     QSignalMapper *signalmapper;
-    KAudioPlayer *currentPlayer;
     QQueue<int> closeQueue;
 };
 
@@ -59,8 +58,6 @@ NotifyBySound::NotifyBySound(QObject *parent) : KNotifyPlugin(parent),d(new Priv
     d->signalmapper = new QSignalMapper(this);
     connect(d->signalmapper, SIGNAL(mapped(int)), this, SLOT(slotSoundFinished(int)));
 
-    d->currentPlayer = new KAudioPlayer(this);
-    d->currentPlayer->setPlayerID("knotify");
     loadConfig();
 }
 
@@ -121,16 +118,13 @@ void NotifyBySound::notify( int eventId, KNotifyConfig * config )
 
     kDebug() << " going to play " << soundFile;
     if (!d->noSound) {
-        KAudioPlayer *player = d->currentPlayer;
-        if (d->currentPlayer && d->currentPlayer->isPlaying()) {
-            kDebug() << "creating new player";
-            player = new KAudioPlayer(this);
-            player->setPlayerID("knotify");
-        }
+        kDebug() << "creating new player";
+        KAudioPlayer *player = new KAudioPlayer(this);
+        player->setPlayerID("knotify");
         connect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
         d->signalmapper->setMapping(player, eventId);
-        player->load(soundFile);
         d->playerObjects.insert(eventId, player);
+        player->load(soundFile);
     }
 }
 
@@ -138,13 +132,10 @@ void NotifyBySound::slotSoundFinished(int id)
 {
     kDebug() << id;
     if (d->playerObjects.contains(id)) {
-        KAudioPlayer *player = d->playerObjects.value(id);
+        KAudioPlayer *player = d->playerObjects.take(id);
         disconnect(player, SIGNAL(finished()), d->signalmapper, SLOT(map()));
-        if (player != d->currentPlayer) {
-            kDebug() << "destroying idle player";
-            d->playerObjects.remove(id);
-            player->deleteLater();
-        }
+        kDebug() << "destroying idle player";
+        player->deleteLater();
     }
     finish(id);
 }
