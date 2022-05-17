@@ -26,7 +26,6 @@
 #include <QtCore/QRegExp>
 #include <QtGui/QTextDocument> // for Qt::escape
 #include <QtXml/qxml.h>
-#include <QtCore/QtConcurrentFilter>
 
 //#include <libintl.h>
 //#include <locale.h>
@@ -78,15 +77,16 @@ static QString translate_description(ConfigItem* item)
 			? item->name : translate_xml_item(item->description);
 }
 
-static bool notEmpty(const ConfigItem* item)
-{
-  return ! item->name.isEmpty();
-}
-
 template<class T>
 void removeEmptyItems(QList<T*>& list)
 {
-  QtConcurrent::blockingFilter(list, notEmpty);
+  QMutableListIterator<T*> filterit(list);
+  while (filterit.hasNext()) {
+    const T* it = filterit.next();
+    if (it->name.isEmpty()) {
+        filterit.remove();
+    }
+  }
 }
 
 static
