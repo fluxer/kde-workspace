@@ -312,22 +312,7 @@ void EffectsHandlerImpl::setupUnmanagedConnections(const Unmanaged* u)
 
 void EffectsHandlerImpl::reconfigure()
 {
-    // perform querying for the services in a thread
-    QFutureWatcher<KService::List> *watcher = new QFutureWatcher<KService::List>(this);
-    connect(watcher, SIGNAL(finished()), this, SLOT(slotEffectsQueried()));
-    watcher->setFuture(QtConcurrent::run(KServiceTypeTrader::self(), &KServiceTypeTrader::query, QString("KWin/Effect"), QString()));
-    watcher->waitForFinished(); // TODO: remove once KConfigGroup is thread safe, bug #321576
-}
-
-void EffectsHandlerImpl::slotEffectsQueried()
-{
-    QFutureWatcher<KService::List> *watcher = dynamic_cast< QFutureWatcher<KService::List>* >(sender());
-    if (!watcher) {
-        // slot invoked not from a FutureWatcher
-        return;
-    }
-
-    KService::List offers = watcher->result();
+    const KService::List offers = KServiceTypeTrader::self()->query(QString("KWin/Effect"), QString());
     QStringList effectsToBeLoaded;
     QStringList checkDefault;
     KSharedConfig::Ptr _config = KGlobal::config();
@@ -363,7 +348,6 @@ void EffectsHandlerImpl::slotEffectsQueried()
         if (!newLoaded.contains(ep.first))    // don't reconfigure newly loaded effects
             ep.second->reconfigure(Effect::ReconfigureAll);
     }
-    watcher->deleteLater();
 }
 
 // the idea is that effects call this function again which calls the next one

@@ -140,7 +140,6 @@ Workspace::Workspace(bool restore)
     // start the cursor support
     Cursor::create(this);
 
-
     // PluginMgr needs access to the config file, so we need to wait for it for finishing
     reparseConfigFuture.waitForFinished();
 

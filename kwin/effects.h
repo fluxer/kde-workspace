@@ -243,9 +243,6 @@ protected:
     QHash< long, int > registered_atoms;
     int next_window_quad_type;
 
-private Q_SLOTS:
-    void slotEffectsQueried();
-
 private:
     typedef QVector< Effect*> EffectsList;
     typedef EffectsList::const_iterator EffectsIterator;
