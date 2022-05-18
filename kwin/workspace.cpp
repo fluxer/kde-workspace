@@ -60,12 +60,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KWindowInfo>
 #include <KWindowSystem>
 // Qt
-#include <QtConcurrentRun>
 #include <QtCore/qmetaobject.h>
 
 namespace KWin
 {
 
+// main.cpp
 extern int screen_number;
 extern bool is_multihead;
 
@@ -128,9 +128,6 @@ Workspace::Workspace(bool restore)
     , block_stacking_updates(0)
     , forced_global_mouse_grab(false)
 {
-    // If KWin was already running it saved its configuration after loosing the selection -> Reread
-    QFuture<void> reparseConfigFuture = QtConcurrent::run(options, &Options::reparseConfiguration);
-
     _self = this;
 
     // first initialize the extensions
@@ -140,8 +137,8 @@ Workspace::Workspace(bool restore)
     // start the cursor support
     Cursor::create(this);
 
-    // PluginMgr needs access to the config file, so we need to wait for it for finishing
-    reparseConfigFuture.waitForFinished();
+    // PluginMgr needs access to the config file, so we need to wait for
+    options->reparseConfiguration();
 
     // get screen support
     Screens *screens = Screens::create(this);
@@ -1063,7 +1060,6 @@ void Workspace::sendClientToDesktop(Client* c, int desk, bool dont_activate)
  * this is NOT in any way related to XRandR multiscreen
  *
  */
-extern bool is_multihead; // main.cpp
 bool Workspace::isOnCurrentHead()
 {
     if (!is_multihead) {

@@ -245,7 +245,6 @@ private Q_SLOTS:
     /**
      * Called from setupCompositing() when the CompositingPrefs are ready.
      **/
-    void slotCompositingOptionsInitialized();
     void finish();
     /**
      * Restarts the Compositor if running.

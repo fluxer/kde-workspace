@@ -43,8 +43,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "workspace.h"
 
 #include <QFile>
-#include <QFutureWatcher>
-#include <QtConcurrentRun>
 #include <QDBusServiceWatcher>
 #include <QtDBus/qdbuspendingcall.h>
 #include <QLibrary>
@@ -102,12 +100,14 @@ ScreenLockerWatcher::ScreenLockerWatcher(QObject *parent)
     m_serviceWatcher->setWatchMode(QDBusServiceWatcher::WatchForOwnerChange);
     m_serviceWatcher->addWatchedService(SCREEN_LOCKER_SERVICE_NAME);
     // check whether service is registered
-    QFutureWatcher<QDBusReply<bool> > *watcher = new QFutureWatcher<QDBusReply<bool> >(this);
-    connect(watcher, SIGNAL(finished()), SLOT(serviceRegisteredQueried()));
-    connect(watcher, SIGNAL(canceled()), watcher, SLOT(deleteLater()));
-    watcher->setFuture(QtConcurrent::run(QDBusConnection::sessionBus().interface(),
-                                         &QDBusConnectionInterface::isServiceRegistered,
-                                         SCREEN_LOCKER_SERVICE_NAME));
+    QDBusConnectionInterface* dbusConnection = QDBusConnection::sessionBus().interface();
+    QDBusReply<bool> reply = dbusConnection->isServiceRegistered(SCREEN_LOCKER_SERVICE_NAME);
+    if (reply.isValid() && reply.value()) {
+        QDBusReply<QString> reply2 = dbusConnection->serviceOwner(SCREEN_LOCKER_SERVICE_NAME);
+        if (reply2.isValid()) {
+            serviceOwnerChanged(SCREEN_LOCKER_SERVICE_NAME, QString(), reply2.value());
+        }
+    }
 }
 
 ScreenLockerWatcher::~ScreenLockerWatcher()
@@ -129,38 +129,6 @@ void ScreenLockerWatcher::serviceOwnerChanged(const QString &serviceName, const 
         QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(m_interface->GetActive(), this);
         connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), SLOT(activeQueried(QDBusPendingCallWatcher*)));
     }
-}
-
-void ScreenLockerWatcher::serviceRegisteredQueried()
-{
-    QFutureWatcher<QDBusReply<bool> > *watcher = dynamic_cast<QFutureWatcher<QDBusReply<bool> > *>(sender());
-    if (!watcher) {
-        return;
-    }
-    const QDBusReply<bool> &reply = watcher->result();
-    if (reply.isValid() && reply.value()) {
-        QFutureWatcher<QDBusReply<QString> > *ownerWatcher = new QFutureWatcher<QDBusReply<QString> >(this);
-        connect(ownerWatcher, SIGNAL(finished()), SLOT(serviceOwnerQueried()));
-        connect(ownerWatcher, SIGNAL(canceled()), ownerWatcher, SLOT(deleteLater()));
-        ownerWatcher->setFuture(QtConcurrent::run(QDBusConnection::sessionBus().interface(),
-                                                  &QDBusConnectionInterface::serviceOwner,
-                                                  SCREEN_LOCKER_SERVICE_NAME));
-    }
-    watcher->deleteLater();
-}
-
-void ScreenLockerWatcher::serviceOwnerQueried()
-{
-    QFutureWatcher<QDBusReply<QString> > *watcher = dynamic_cast<QFutureWatcher<QDBusReply<QString> > *>(sender());
-    if (!watcher) {
-        return;
-    }
-    const QDBusReply<QString> reply = watcher->result();
-    if (reply.isValid()) {
-        serviceOwnerChanged(SCREEN_LOCKER_SERVICE_NAME, QString(), reply.value());
-    }
-
-    watcher->deleteLater();
 }
 
 void ScreenLockerWatcher::activeQueried(QDBusPendingCallWatcher *watcher)

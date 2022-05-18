@@ -42,8 +42,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QTextStream>
 #include <QFile>
-#include <QtConcurrentRun>
-#include <QFutureWatcher>
 #include <QMenu>
 #include <QtCore/qcoreevent.h>
 #include <QDateTime>
@@ -146,23 +144,10 @@ void Compositor::setup()
     m_starting = true;
 
     if (!options->isCompositingInitialized()) {
-        // options->reloadCompositingSettings(true) initializes the CompositingPrefs which calls an
-        // external program in turn
-        // run this in an external thread to make startup faster.
-        QFutureWatcher<void> *compositingPrefsFuture = new QFutureWatcher<void>();
-        connect(compositingPrefsFuture, SIGNAL(finished()), this, SLOT(slotCompositingOptionsInitialized()));
-        connect(compositingPrefsFuture, SIGNAL(finished()), compositingPrefsFuture, SLOT(deleteLater()));
-        compositingPrefsFuture->setFuture(QtConcurrent::run(options, &Options::reloadCompositingSettings, true));
-    } else {
-        slotCompositingOptionsInitialized();
-     }
-}
+        // options->reloadCompositingSettings(true) initializes the CompositingPrefs
+        options->reloadCompositingSettings(true);
+    }
 
-extern int screen_number; // main.cpp
-extern bool is_multihead;
-
-void Compositor::slotCompositingOptionsInitialized()
-{
     char selection_name[ 100 ];
     sprintf(selection_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
     if (!cm_selection) {
