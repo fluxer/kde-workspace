@@ -26,7 +26,7 @@ build_script:
         libsmbclient-dev libdrm-dev libraw1394-dev libsensors4-dev \
         libegl-dev libpci-dev libopenexr-dev liblzma-dev libbz2-dev libgphoto2-dev \
         liblightdm-gobject-1-dev libkmod-dev libdbusmenu-katie \
-        sudo ctags cppcheck lrzsz locate ccache
+        sudo ctags cppcheck lrzsz locate dbus-x11 ccache
 
     export PATH="/usr/lib/ccache/:$PATH"
 
