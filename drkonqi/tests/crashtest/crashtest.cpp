@@ -32,9 +32,11 @@
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
-#include <assert.h>
-#include <QtConcurrentMap>
 #include <KLocalizedString>
+#include <QRunnable>
+#include <QThreadPool>
+
+#include <assert.h>
 
 enum CrashType { Crash, Malloc, Div0, Assert, QAssert, Threads };
 
@@ -74,18 +76,37 @@ void do_qassert()
   Q_ASSERT(false);
 }
 
-void map_function(const QString & s)
+class FooRunnable : public QRunnable
 {
-    while ( s != "thread 4" ) {}
+public:
+    FooRunnable(const QString &foostring);
+
+    void run() final;
+
+private:
+    const QString m_foostring;
+};
+
+FooRunnable::FooRunnable(const QString &foostring)
+    : QRunnable(),
+    m_foostring(foostring)
+{
+}
+
+void FooRunnable::run()
+{
+    while ( m_foostring != "thread 4" ) {}
     do_crash();
 }
 
 void do_threads()
 {
-    QStringList foo;
-    foo << "thread 1" << "thread 2" << "thread 3" << "thread 4" << "thread 5";
+    QStringList foolist;
+    foolist << "thread 1" << "thread 2" << "thread 3" << "thread 4" << "thread 5";
     QThreadPool::globalInstance()->setMaxThreadCount(5);
-    QtConcurrent::blockingMap(foo, map_function);
+    foreach (const QString &foostring, foolist) {
+        QThreadPool::globalInstance()->start(new FooRunnable(foostring));
+    }
 }
 
 void level4(int t)
