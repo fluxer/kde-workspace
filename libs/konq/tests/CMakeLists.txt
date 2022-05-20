@@ -1,3 +1,8 @@
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/konq
+    ${CMAKE_BINARY_DIR}/libs/konq
+)
+
 ########### konqmimedatatest ###############
 
 kde4_add_test(libkonq-konqmimedatatest konqmimedatatest.cpp)
