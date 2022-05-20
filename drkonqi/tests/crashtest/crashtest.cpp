@@ -142,7 +142,7 @@ void level1(int t)
 
 int main(int argc, char *argv[])
 {
-  KAboutData aboutData("crashtext", 0, ki18n("Crash Test for DrKonqi"),
+  KAboutData aboutData("crashtest", 0, ki18n("Crash Test for DrKonqi"),
                        "1.1",
                        ki18n("Crash Test for DrKonqi"),
                        KAboutData::License_GPL,
