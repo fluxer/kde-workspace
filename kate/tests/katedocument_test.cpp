@@ -333,13 +333,8 @@ void KateDocumentTest::testInsertNewline()
 void KateDocumentTest::testDigest()
 {
   // QCryptographicHash is used, therefore we need fromHex here
-#if QT_VERSION >= 0x041200
   // Katie checksum of data/sha1checksum.txt: ba8bd2ee351783dffd6bb7b750271549e1b0c356e28aced4b0480d9f262d869d
   const QByteArray fileDigest = QByteArray::fromHex("ba8bd2ee351783dffd6bb7b750271549e1b0c356e28aced4b0480d9f262d869d");
-#else
-  // sha1sum of data/sha1checksum.txt: 58527e1f4c8574d61450ff18cffaa8cd41c3554d
-  const QByteArray fileDigest = QByteArray::fromHex("58527e1f4c8574d61450ff18cffaa8cd41c3554d");
-#endif
 
   // make sure, Kate::TextBuffer and KateDocument::createDigest() equal
   KateDocument doc(false, false, false);

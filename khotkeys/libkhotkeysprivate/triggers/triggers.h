@@ -37,11 +37,7 @@
 
 static inline QByteArray createShortcutID()
 {
-#if QT_VERSION >= 0x041200
     return qRandomUuid();
-#else
-    return QByteArray::number(qrand());
-#endif
 }
 
 namespace KHotKeys

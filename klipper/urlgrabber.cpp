@@ -43,15 +43,6 @@
 #include "history.h"
 #include "historystringitem.h"
 
-static inline QByteArray createActionID()
-{
-#if QT_VERSION >= 0x041200
-    return qRandomUuid();
-#else
-    return QByteArray::number(qrand());
-#endif
-}
-
 URLGrabber::URLGrabber(History* history):
     m_myMenu(0L),
     m_myPopupKillTimer(new QTimer( this )),
@@ -236,7 +227,7 @@ void URLGrabber::actionMenu( const HistoryItem* item, bool automatically_invoked
                 if ( item.isEmpty() )
                     item = command.command;
 
-                QByteArray id = createActionID();
+                QByteArray id = qRandomUuid();
                 QAction * action = new QAction(this);
                 action->setData(id);
                 action->setText(item);

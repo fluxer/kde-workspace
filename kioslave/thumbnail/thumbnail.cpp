@@ -76,13 +76,8 @@
 
 using namespace KIO;
 
-#if QT_VERSION >= 0x041200
 static const QByteArray thumbFormat = QImageWriter::defaultImageFormat();
 static const QByteArray thumbExt = "." + thumbFormat;
-#else
-static const QByteArray thumbFormat = "png";
-static const QByteArray thumbExt = ".png";
-#endif
 
 extern "C"
 {

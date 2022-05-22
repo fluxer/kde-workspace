@@ -708,11 +708,7 @@ bool KateDocManager::computeUrlChecksum(const KUrl &url, QByteArray &result)
 
   if (f.exists() && f.open(QIODevice::ReadOnly))
   {
-#if QT_VERSION >= 0x041200
     QCryptographicHash crypto(QCryptographicHash::KAT);
-#else
-    QCryptographicHash crypto(QCryptographicHash::Sha1);
-#endif
     crypto.addData(&f);
     QByteArray sha1 = crypto.result();
 

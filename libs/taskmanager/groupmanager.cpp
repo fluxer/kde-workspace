@@ -52,11 +52,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace TaskManager
 {
 
-#if QT_VERSION >= 0x041200
 static const QByteArray pixmapFormat = QImageWriter::defaultImageFormat();
-#else
-static const QByteArray pixmapFormat = "png";
-#endif
 
 class GroupManagerPrivate
 {

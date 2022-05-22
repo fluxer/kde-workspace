@@ -65,11 +65,7 @@ int Session::lastSessionId = 0;
 
 static inline QByteArray createSessionID()
 {
-#if QT_VERSION >= 0x041200
     return qRandomUuid();
-#else
-    return QByteArray::number(qrand());
-#endif
 }
 
 Session::Session(QObject* parent) :
