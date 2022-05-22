@@ -104,11 +104,13 @@ void TestClientMachine::hostName_data()
     QTest::newRow("ostname")   << cutted << cutted << false;
     QByteArray domain("random.name.not.exist.tld");
     QTest::newRow("domain")    << domain << domain << false;
-    QTest::newRow("fqdn")      << m_fqdn << m_fqdn << true;
-    QTest::newRow("FQDN")      << m_fqdn.toUpper() << m_fqdn.toUpper() << true;
-    cutted = m_fqdn;
-    cutted.remove(0, 1);
-    QTest::newRow("qdn")       << cutted << cutted << false;
+    if (!m_fqdn.isEmpty()) {
+        QTest::newRow("fqdn")      << m_fqdn << m_fqdn << true;
+        QTest::newRow("FQDN")      << m_fqdn.toUpper() << m_fqdn.toUpper() << true;
+        cutted = m_fqdn;
+        cutted.remove(0, 1);
+        QTest::newRow("qdn")       << cutted << cutted << false;
+    }
 }
 
 void TestClientMachine::hostName()
