@@ -23,7 +23,6 @@
 #include "moc_codecompletiontestmodels.cpp"
 
 #include <qtest_kde.h>
-#include <ksycoca.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editorchooser.h>
@@ -85,9 +84,6 @@ static void invokeCompletionBox(KateView* view)
 
 void CompletionTest::init()
 {
-    if ( !KSycoca::isAvailable() )
-        QSKIP( "ksycoca not available", SkipAll );
-
     Editor* editor = EditorChooser::editor();
     QVERIFY(editor);
 
