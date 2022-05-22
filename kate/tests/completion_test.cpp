@@ -39,6 +39,8 @@ QTEST_KDEMAIN(CompletionTest, GUI)
 
 using namespace KTextEditor;
 
+static const qint64 verifyTimeout = 3000;
+
 int countItems(KateCompletionModel *model)
 {
     int ret = 0;
@@ -50,8 +52,9 @@ int countItems(KateCompletionModel *model)
 
 static void verifyCompletionStarted(KateView* view)
 {
-  const QDateTime startTime = QDateTime::currentDateTime();
-  while (startTime.msecsTo(QDateTime::currentDateTime()) < 1000)
+  QElapsedTimer timer;
+  timer.start();
+  while (timer.elapsed() < verifyTimeout)
   {
     QApplication::processEvents();
     if (view->completionWidget()->isCompletionActive())
@@ -64,8 +67,9 @@ static void verifyCompletionStarted(KateView* view)
 
 static void verifyCompletionAborted(KateView* view)
 {
-  const QDateTime startTime = QDateTime::currentDateTime();
-  while (startTime.msecsTo(QDateTime::currentDateTime()) < 1000)
+  QElapsedTimer timer;
+  timer.start();
+  while (timer.elapsed() < verifyTimeout)
   {
     QApplication::processEvents();
     if (!view->completionWidget()->isCompletionActive())
