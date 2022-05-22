@@ -22,7 +22,6 @@
 
 #include <QObject>
 #include "favicon_interface.h"
-#include <QEventLoop>
 
 class FavIconTest : public QObject
 {
@@ -39,7 +38,6 @@ private Q_SLOTS:
 private:
     void waitForSignal();
     org::kde::FavIcon m_favIconModule;
-    QEventLoop m_eventLoop;
 };
 
 

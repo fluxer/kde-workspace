@@ -22,16 +22,17 @@
 #include <kio/job.h>
 #include <kconfiggroup.h>
 #include <kio/netaccess.h>
-#include <QDateTime>
 #include <kmimetype.h>
+#include <QDateTime>
+#include <QEventLoop>
 
 #include "moc_favicontest.cpp"
 
 QTEST_KDEMAIN( FavIconTest, NoGUI )
 
-static const char s_hostUrl[] = "http://www.google.com";
-static const char s_iconUrl[] = "http://www.google.com/favicon.ico";
-static const char s_altIconUrl[] = "http://www.ibm.com/favicon.ico";
+static const char s_hostUrl[] = "https://www.google.com";
+static const char s_iconUrl[] = "https://www.google.com/favicon.ico";
+static const char s_altIconUrl[] = "https://www.ibm.com/favicon.ico";
 
 static int s_downloadTime; // in ms
 
@@ -86,34 +87,42 @@ void FavIconTest::testSetIconForURL()
     QVERIFY( spy.isValid() );
     QCOMPARE( spy.count(), 0 );
 
-    // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
-    connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &m_eventLoop, SLOT(quit()));
+    {
+        QEventLoop eventLoop;
+        // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
+        connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
 
-    m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_altIconUrl ) );
+        m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_altIconUrl ) );
 
-    qDebug( "called first setIconForUrl, waiting" );
-    if ( spy.count() < 1 ) {
-        m_eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
+        qDebug( "called first setIconForUrl, waiting" );
+        if ( spy.count() < 1 ) {
+            QTimer::singleShot(10000, &eventLoop, SLOT(quit()));
+            eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
+        }
+
+        QCOMPARE( spy.count(), 1 );
+        QCOMPARE( spy[0][0].toBool(), false );
+        QCOMPARE( spy[0][1].toString(), QString( s_hostUrl ) );
+        QCOMPARE( spy[0][2].toString(), QString( "favicons/www.ibm.com" ) );
     }
 
-    QCOMPARE( spy.count(), 1 );
-    QCOMPARE( spy[0][0].toBool(), false );
-    QCOMPARE( spy[0][1].toString(), QString( s_hostUrl ) );
-    QCOMPARE( spy[0][2].toString(), QString( "favicons/www.ibm.com" ) );
+    {
+        QEventLoop eventLoop;
+        // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
+        connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
+        m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_iconUrl ) );
 
-    m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_iconUrl ) );
+        qDebug( "called setIconForUrl again, waiting" );
+        if ( spy.count() < 2 ) {
+            QTimer::singleShot(10000, &eventLoop, SLOT(quit()));
+            eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
+        }
 
-    qDebug( "called setIconForUrl again, waiting" );
-    if ( spy.count() < 2 ) {
-        m_eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
+        QCOMPARE( spy.count(), 2 );
+        QCOMPARE( spy[1][0].toBool(), false );
+        QCOMPARE( spy[1][1].toString(), QString( s_hostUrl ) );
+        QCOMPARE( spy[1][2].toString(), QString( "favicons/www.google.com" ) );
     }
-
-    QCOMPARE( spy.count(), 2 );
-    QCOMPARE( spy[1][0].toBool(), false );
-    QCOMPARE( spy[1][1].toString(), QString( s_hostUrl ) );
-    QCOMPARE( spy[1][2].toString(), QString( "favicons/www.google.com" ) );
-
-    disconnect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &m_eventLoop, SLOT(quit()));
 }
 
 void FavIconTest::testIconForURL()
