@@ -75,7 +75,7 @@ void TestClientMachine::initTestCase()
         hostnamebuf[sizeof(hostnamebuf)-1] = 0;
         m_hostName = hostnamebuf;
     }
-    addrinfo *res;
+    addrinfo *res = NULL;
     addrinfo addressHints;
     memset(&addressHints, 0, sizeof(addressHints));
     addressHints.ai_family = PF_UNSPEC;
@@ -86,7 +86,9 @@ void TestClientMachine::initTestCase()
             m_fqdn = QByteArray(res->ai_canonname);
         }
     }
-    freeaddrinfo(res);
+    if (res) {
+        freeaddrinfo(res);
+    }
 }
 
 void TestClientMachine::cleanupTestCase()
@@ -148,4 +150,5 @@ void TestClientMachine::emptyHostName()
 }
 
 KWIN_TEST_MAIN(TestClientMachine)
+
 #include "test_client_machine.moc"
