@@ -17,36 +17,35 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <qtest.h>
-
 #include "kio_trash.h"
 #include "testtrash.h"
+
 #include <kprotocolinfo.h>
 #include <ktemporaryfile.h>
-
 #include <kurl.h>
 #include <klocale.h>
-#include <kio/netaccess.h>
-#include <kio/job.h>
-#include <kio/copyjob.h>
-#include <kio/deletejob.h>
 #include <kdebug.h>
 #include <kcmdlineargs.h>
 #include <kconfiggroup.h>
+#include <kjobuidelegate.h>
+#include <kmimetype.h>
+#include <kfileitem.h>
+#include <kstandarddirs.h>
+#include <kio/netaccess.h>
+#include <kio/job.h>
+#include <kio/copyjob.h>
+#include <kio/chmodjob.h>
+#include <kio/deletejob.h>
+#include <kio/directorysizejob.h>
 
+#include <qtest.h>
 #include <QDir>
 #include <QFileInfo>
 #include <QVector>
-#include <kjobuidelegate.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <kmimetype.h>
-#include <kfileitem.h>
-#include <kstandarddirs.h>
-#include <kio/chmodjob.h>
-#include <kio/directorysizejob.h>
 
 // There are two ways to test encoding things:
 // * with utf8 filenames
@@ -448,6 +447,10 @@ void TestTrash::trashFileIntoOtherPartition()
 
 void TestTrash::trashFileOwnedByRoot()
 {
+    if (::getuid() == 0) {
+        QSKIP("This test is not for root", SkipAll);
+    }
+
     KUrl u( "/etc/passwd" );
     const QString fileId = QString::fromLatin1("passwd");
 
@@ -854,6 +857,10 @@ void TestTrash::moveDirectoryFromTrash()
 
 void TestTrash::trashDirectoryOwnedByRoot()
 {
+    if (::getuid() == 0) {
+        QSKIP("This test is not for root", SkipAll);
+    }
+
     KUrl u;
     if ( QDir( "/etc/cups" ).exists() )
         u.setPath( "/etc/cups" );
