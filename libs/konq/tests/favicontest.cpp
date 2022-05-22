@@ -83,14 +83,14 @@ void FavIconTest::testSetIconForURL()
     if ( !checkNetworkAccess() )
         QSKIP( "no network access", SkipAll );
 
-    QSignalSpy spy( &m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)) );
-    QVERIFY( spy.isValid() );
-    QCOMPARE( spy.count(), 0 );
-
     {
         QEventLoop eventLoop;
         // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
         connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
+
+        QSignalSpy spy( &m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)) );
+        QVERIFY( spy.isValid() );
+        QCOMPARE( spy.count(), 0 );
 
         m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_altIconUrl ) );
 
@@ -110,18 +110,23 @@ void FavIconTest::testSetIconForURL()
         QEventLoop eventLoop;
         // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
         connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
+
+        QSignalSpy spy( &m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)) );
+        QVERIFY( spy.isValid() );
+        QCOMPARE( spy.count(), 0 );
+
         m_favIconModule.setIconForUrl( QString( s_hostUrl ), QString( s_iconUrl ) );
 
         qDebug( "called setIconForUrl again, waiting" );
-        if ( spy.count() < 2 ) {
+        if ( spy.count() < 1 ) {
             QTimer::singleShot(10000, &eventLoop, SLOT(quit()));
             eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
         }
 
-        QCOMPARE( spy.count(), 2 );
-        QCOMPARE( spy[1][0].toBool(), false );
-        QCOMPARE( spy[1][1].toString(), QString( s_hostUrl ) );
-        QCOMPARE( spy[1][2].toString(), QString( "favicons/www.google.com" ) );
+        QCOMPARE( spy.count(), 1 );
+        QCOMPARE( spy[0][0].toBool(), false );
+        QCOMPARE( spy[0][1].toString(), QString( s_hostUrl ) );
+        QCOMPARE( spy[0][2].toString(), QString( "favicons/www.google.com" ) );
     }
 }
 
