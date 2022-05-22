@@ -151,7 +151,7 @@ void FdoGraphicsWidget::setupXEmbedDelegate()
         return;
     }
 
-    const Qt::ApplicationAttribute attr = (Qt::ApplicationAttribute)4;
+    static const Qt::ApplicationAttribute attr = Qt::AA_DontCreateNativeWidgetSiblings;
     if (!QApplication::testAttribute(attr)) {
         QApplication::setAttribute(attr);
     }
