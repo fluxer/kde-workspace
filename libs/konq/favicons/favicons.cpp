@@ -39,8 +39,6 @@
 #include <QImage>
 #include <QImageReader>
 
-#include <ctime>
-
 K_PLUGIN_FACTORY(FavIconsFactory,
                  registerPlugin<FavIconsModule>();
     )
