@@ -80,6 +80,18 @@ static QString iconNameFromURL(const KUrl &iconURL)
     return result;
 }
 
+static QString removeSlash(QString result)
+{
+    for (unsigned int i = result.length() - 1; i > 0; --i) {
+        if (result[i] != '/') {
+            result.truncate(i + 1);
+            break;
+        }
+    }
+
+    return result;
+}
+
 struct FavIconsModulePrivate
 {
     FavIconsModulePrivate() : config(nullptr) { }
@@ -91,13 +103,6 @@ struct FavIconsModulePrivate
         bool isHost;
         QByteArray iconData;
     };
-
-    QString makeIconName(const DownloadInfo& download, const KUrl& iconURL)
-    {
-        QString iconName (QLatin1String("favicons/"));
-        iconName += (download.isHost ? download.hostOrURL : iconNameFromURL(iconURL));
-        return iconName;
-    }
 
     QMap<KJob *, DownloadInfo> downloads;
     KUrl::List failedDownloads;
@@ -127,16 +132,11 @@ FavIconsModule::~FavIconsModule()
     delete d;
 }
 
-static QString removeSlash(QString result)
+static QString makeIconName(const FavIconsModulePrivate::DownloadInfo& download, const KUrl& iconURL)
 {
-    for (unsigned int i = result.length() - 1; i > 0; --i) {
-        if (result[i] != '/') {
-            result.truncate(i + 1);
-            break;
-        }
-    }
-
-    return result;
+    QString iconName (QLatin1String("favicons/"));
+    iconName += (download.isHost ? download.hostOrURL : iconNameFromURL(iconURL));
+    return iconName;
 }
 
 QString FavIconsModule::iconForUrl(const KUrl &url)
@@ -274,7 +274,7 @@ void FavIconsModule::slotResult(KJob *job)
             ir.setScaledSize( desired );
             const QImage img = ir.read();
             if( !img.isNull() ) {
-                iconName = d->makeIconName(download, iconURL);
+                iconName = makeIconName(download, iconURL);
                 const QString localPath = d->faviconsDir + iconName + QLatin1String(".png");
                 if( !img.save(localPath, "PNG") ) {
                     iconName.clear();
