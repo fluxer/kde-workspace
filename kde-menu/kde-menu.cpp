@@ -32,8 +32,6 @@
 #include <kservice.h>
 #include <kservicegroup.h>
 #include <kstandarddirs.h>
-#include <ktoolinvocation.h>
-#include "klauncher_iface.h"
 #include <ksycoca.h>
 
 static const char appName[] = "kde-menu";
@@ -151,13 +149,8 @@ int main(int argc, char **argv)
       {
          error(4, i18n("Could not find '%1' executable.", QLatin1String(KBUILDSYCOCA_EXENAME)));
       }
-      QDBusMessage reply = KToolInvocation::klauncher()->call("kdeinit_exec_wait", command, args, QStringList(), QString());
-      if (reply.type() != QDBusMessage::ReplyMessage)
-      {
-         qWarning("Can not talk to klauncher!");
-         if (QProcess::execute(command, args) != 0) {
-            error(5, i18n("Could not execute '%1'.", QLatin1String(KBUILDSYCOCA_EXENAME)));
-         }
+      if (QProcess::execute(command, args) != 0) {
+         error(5, i18n("Could not execute '%1'.", QLatin1String(KBUILDSYCOCA_EXENAME)));
       }
    }
 
