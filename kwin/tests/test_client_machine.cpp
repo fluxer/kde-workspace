@@ -25,7 +25,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../xcbutils.h"
 // Qt
 #include <QApplication>
-#include <QtTest/QtTest>
+#include <QtTest>
+#include <QHostInfo>
 // xcb
 #include <xcb/xcb.h>
 // system
@@ -66,15 +67,8 @@ void TestClientMachine::setClientMachineProperty(xcb_window_t window, const QByt
 
 void TestClientMachine::initTestCase()
 {
-#ifdef HOST_NAME_MAX
-    char hostnamebuf[HOST_NAME_MAX];
-#else
-    char hostnamebuf[256];
-#endif
-    if (gethostname(hostnamebuf, sizeof hostnamebuf) >= 0) {
-        hostnamebuf[sizeof(hostnamebuf)-1] = 0;
-        m_hostName = hostnamebuf;
-    }
+    m_hostName = QHostInfo::localHostName().toAscii();
+
     addrinfo *res = NULL;
     addrinfo addressHints;
     memset(&addressHints, 0, sizeof(addressHints));
