@@ -194,7 +194,7 @@ void KonqPopupMenuTest::testFileInReadOnlyDirectory()
     static const QString notwritablefile = QString::fromLatin1("/etc/passwd");
     QFileInfo fileinfo(notwritablefile);
     if (fileinfo.permission(QFile::WriteUser)) {
-        QSKIP("/etc/passwd file is writable", SkipAll);
+        QSKIP("/etc/passwd file is writable", SkipSingle);
     }
 
     const KFileItem item(KFileItem::Unknown, KFileItem::Unknown, KUrl(notwritablefile));
@@ -336,7 +336,7 @@ void KonqPopupMenuTest::testViewReadOnlyDirectory()
     static const QString notreadabledir = QDir::rootPath();
     QFileInfo dirinfo(notreadabledir);
     if (dirinfo.permission(QFile::ReadUser)) {
-        QSKIP("/root directory is readable", SkipAll);
+        QSKIP("/root directory is readable", SkipSingle);
     }
 
     KFileItem rootItem(notreadabledir, "inode/directory", KFileItem::Unknown);
