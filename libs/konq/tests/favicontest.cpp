@@ -34,7 +34,8 @@ static const char s_hostUrl[] = "https://www.google.com";
 static const char s_iconUrl[] = "https://www.google.com/favicon.ico";
 static const char s_altIconUrl[] = "https://www.ibm.com/favicon.ico";
 
-static int s_downloadTime; // in ms
+static int s_downloadTime = 0; // in ms
+static const int s_waitTime = 20000; // in ms
 
 enum NetworkAccess { Unknown, Yes, No } s_networkAccess = Unknown;
 static bool checkNetworkAccess() {
@@ -96,7 +97,7 @@ void FavIconTest::testSetIconForURL()
 
         qDebug( "called first setIconForUrl, waiting" );
         if ( spy.count() < 1 ) {
-            QTimer::singleShot(10000, &eventLoop, SLOT(quit()));
+            QTimer::singleShot(s_waitTime, &eventLoop, SLOT(quit()));
             eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
         }
 
@@ -119,7 +120,7 @@ void FavIconTest::testSetIconForURL()
 
         qDebug( "called setIconForUrl again, waiting" );
         if ( spy.count() < 1 ) {
-            QTimer::singleShot(10000, &eventLoop, SLOT(quit()));
+            QTimer::singleShot(s_waitTime, &eventLoop, SLOT(quit()));
             eventLoop.exec( QEventLoop::ExcludeUserInputEvents );
         }
 
