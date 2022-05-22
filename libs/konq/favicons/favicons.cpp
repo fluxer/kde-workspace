@@ -33,6 +33,7 @@
 
 #include <QtCore/QBuffer>
 #include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 #include <QtCore/QCache>
 #include <QtCore/QTimer>
 #include <QImage>
@@ -166,14 +167,16 @@ QString FavIconsModule::iconForUrl(const KUrl &url)
 
 bool FavIconsModule::isIconOld(const QString &icon)
 {
-    KDE_struct_stat st;
-    if (KDE::stat(QFile::encodeName(icon), &st) != 0) {
+    QFileInfo iconInfo(icon);
+    const QDateTime iconLastModified = iconInfo.lastModified();
+    if (!iconInfo.isFile() || !iconLastModified.isValid()) {
         // kDebug() << "isIconOld" << icon << "yes, no such file";
         return true; // Trigger a new download on error
     }
 
     // kDebug() << "isIconOld" << icon << "?";
-    return (time(0) - st.st_mtime) > 604800; // arbitrary value (one week)
+    const QDateTime currentTime = QDateTime::currentDateTime();
+    return ((currentTime.toTime_t() - iconLastModified.toTime_t()) > 604800); // arbitrary value (one week)
 }
 
 void FavIconsModule::setIconForUrl(const KUrl &url, const KUrl &iconURL)
