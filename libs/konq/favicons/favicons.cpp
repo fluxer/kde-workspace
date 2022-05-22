@@ -82,7 +82,8 @@ static QString iconNameFromURL(const KUrl &iconURL)
 
 struct FavIconsModulePrivate
 {
-    virtual ~FavIconsModulePrivate() { delete config; }
+    FavIconsModulePrivate() : config(nullptr) { }
+    ~FavIconsModulePrivate() { delete config; }
 
     struct DownloadInfo
     {
@@ -90,6 +91,7 @@ struct FavIconsModulePrivate
         bool isHost;
         QByteArray iconData;
     };
+
     QString makeIconName(const DownloadInfo& download, const KUrl& iconURL)
     {
         QString iconName (QLatin1String("favicons/"));
