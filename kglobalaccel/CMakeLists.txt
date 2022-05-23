@@ -23,7 +23,7 @@ if(Q_WS_X11)
     set(kglobalaccel_SRCS ${kglobalaccel_SRCS} kglobalaccel_x11.cpp)
 endif()
 
-add_executable( kglobalaccel ${kglobalaccel_SRCS})
+add_executable(kglobalaccel ${kglobalaccel_SRCS})
 
 target_link_libraries(kglobalaccel ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
 
@@ -34,3 +34,4 @@ install( FILES kglobalaccel.desktop  DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 # KNotify configuration
 install( FILES kglobalaccel.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kglobalaccel)
 
+dbus_add_activation_service(org.kde.kglobalaccel.service.in)
