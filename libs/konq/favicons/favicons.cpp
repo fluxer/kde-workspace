@@ -263,25 +263,28 @@ void FavIconsModule::slotResult(KJob *job)
     const KUrl iconURL = tjob->url();
     QString iconName;
     QString errorMessage;
-    if (!job->error())
-    {
+    if (!job->error()) {
         QBuffer buffer(&download.iconData);
         buffer.open(QIODevice::ReadOnly);
-        QImageReader ir( &buffer );
-        QSize desired( 16,16 );
-        if( ir.canRead() ) {
-            ir.setScaledSize( desired );
+        QImageReader ir(&buffer);
+        QSize desired(16,16);
+        if (ir.canRead()) {
+            ir.setScaledSize(desired);
             const QImage img = ir.read();
-            if( !img.isNull() ) {
+            if (!img.isNull()) {
                 iconName = makeIconName(download, iconURL);
                 const QString localPath = d->faviconsDir + iconName + QLatin1String(".png");
-                if( !img.save(localPath, "PNG") ) {
+                if (!img.save(localPath, "PNG")) {
                     iconName.clear();
                     errorMessage = i18n("Error saving image to %1", localPath);
                     kWarning() << "Error saving image to" << localPath;
-                } else if (!download.isHost)
+                } else if (!download.isHost) {
                     d->config->group(QString()).writeEntry(removeSlash(download.hostOrURL), iconURL.url());
+                }
             }
+        } else {
+            errorMessage = i18n("Image reader cannot read the data");
+            kWarning() << "Image reader cannot read the data" << ir.errorString();
         }
     } else {
         errorMessage = job->errorString();
