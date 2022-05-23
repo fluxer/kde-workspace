@@ -281,6 +281,9 @@ void FavIconsModule::slotResult(KJob *job)
                 } else if (!download.isHost) {
                     d->config->group(QString()).writeEntry(removeSlash(download.hostOrURL), iconURL.url());
                 }
+            } else {
+                errorMessage = i18n("Image reader returned null image");
+                kWarning() << "Image reader returned null image" << ir.errorString();
             }
         } else {
             errorMessage = i18n("Image reader cannot read the data");
