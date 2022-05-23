@@ -92,6 +92,13 @@ static QString removeSlash(QString result)
     return result;
 }
 
+static QString faviconsCacheDir()
+{
+    QString faviconsDir = KGlobal::dirs()->saveLocation("cache", QLatin1String("favicons/"));
+    faviconsDir.truncate(faviconsDir.length() - 9); // Strip off "favicons/"
+    return faviconsDir;
+}
+
 struct FavIconsModulePrivate
 {
     FavIconsModulePrivate() : config(nullptr) { }
@@ -108,7 +115,6 @@ struct FavIconsModulePrivate
     KUrl::List failedDownloads;
     KConfig *config;
     KIO::MetaData metaData;
-    QString faviconsDir;
     QCache<QString,QString> faviconsCache;
 };
 
@@ -117,8 +123,6 @@ FavIconsModule::FavIconsModule(QObject* parent, const QList<QVariant>&)
 {
     // create our favicons folder so that KIconLoader knows about it
     d = new FavIconsModulePrivate;
-    d->faviconsDir = KGlobal::dirs()->saveLocation( "cache", QLatin1String("favicons/"));
-    d->faviconsDir.truncate(d->faviconsDir.length()-9); // Strip off "favicons/"
     d->metaData.insert(QLatin1String("cache"), "reload");
     d->metaData.insert(QLatin1String("no-www-auth"), QLatin1String("true"));
     d->config = new KConfig(KStandardDirs::locateLocal("data", QLatin1String("konqueror/faviconrc")));
@@ -158,7 +162,7 @@ QString FavIconsModule::iconForUrl(const KUrl &url)
 
     kDebug() << "URL:" << url << "ICON:" << icon;
 
-    if (QFile::exists(d->faviconsDir+icon+QLatin1String(".png")))
+    if (QFile::exists(faviconsCacheDir() + icon + QLatin1String(".png")))
         return icon;
 
     return QString();
@@ -186,7 +190,7 @@ void FavIconsModule::setIconForUrl(const KUrl &url, const KUrl &iconURL)
     d->faviconsCache.insert(removeSlash(simplifiedURL), new QString(iconURL.url()) );
 
     const QString iconName = QLatin1String("favicons/") + iconNameFromURL(iconURL);
-    const QString iconFile = d->faviconsDir + iconName + QLatin1String(".png");
+    const QString iconFile = faviconsCacheDir() + iconName + QLatin1String(".png");
 
     if (!isIconOld(iconFile)) {
         // kDebug() << "emit iconChanged" << false << url << iconName;
@@ -200,7 +204,7 @@ void FavIconsModule::setIconForUrl(const KUrl &url, const KUrl &iconURL)
 void FavIconsModule::downloadHostIcon(const KUrl &url)
 {
     // kDebug() << url;
-    const QString iconFile = d->faviconsDir + QLatin1String("favicons/") + url.host() + QLatin1String(".png");
+    const QString iconFile = faviconsCacheDir() + QLatin1String("favicons/") + url.host() + QLatin1String(".png");
     if (!isIconOld(iconFile)) {
         // kDebug() << "not old -> doing nothing";
         return;
@@ -273,7 +277,7 @@ void FavIconsModule::slotResult(KJob *job)
             const QImage img = ir.read();
             if (!img.isNull()) {
                 iconName = makeIconName(download, iconURL);
-                const QString localPath = d->faviconsDir + iconName + QLatin1String(".png");
+                const QString localPath = faviconsCacheDir() + iconName + QLatin1String(".png");
                 if (!img.save(localPath, "PNG")) {
                     iconName.clear();
                     errorMessage = i18n("Error saving image to %1", localPath);
