@@ -119,7 +119,6 @@ private Q_SLOTS:
     void slotData(KIO::Job *, const QByteArray &);
     void slotResult(KJob *);
     void slotInfoMessage(KJob *, const QString &);
-    void slotKill();
 
 private:
     struct FavIconsModulePrivate *d;

@@ -107,7 +107,6 @@ struct FavIconsModulePrivate
     QMap<KJob *, DownloadInfo> downloads;
     KUrl::List failedDownloads;
     KConfig *config;
-    QList<KIO::Job*> killJobs;
     KIO::MetaData metaData;
     QString faviconsDir;
     QCache<QString,QString> faviconsCache;
@@ -246,10 +245,11 @@ void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
     // Testcase (as of june 2008, at least): http://planet-soc.com/favicon.ico, 136K and strange format.
     if (oldSize > 500000U) {
         kWarning() << "Favicon too big, aborting download of" << tjob->url();
-        d->killJobs.append(job);
-        QTimer::singleShot(0, this, SLOT(slotKill()));
         const KUrl iconURL = tjob->url();
         d->failedDownloads.append(iconURL);
+        d->downloads.remove(job);
+        job->kill();
+        return;
     }
     download.iconData.resize(oldSize + data.size());
     memcpy(download.iconData.data() + oldSize, data.data(), data.size());
@@ -259,7 +259,6 @@ void FavIconsModule::slotResult(KJob *job)
 {
     KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
     FavIconsModulePrivate::DownloadInfo download = d->downloads[job];
-    d->killJobs.removeAll(tjob);
     d->downloads.remove(job);
     const KUrl iconURL = tjob->url();
     QString iconName;
@@ -301,15 +300,6 @@ void FavIconsModule::slotResult(KJob *job)
 void FavIconsModule::slotInfoMessage(KJob *job, const QString &msg)
 {
     emit infoMessage(static_cast<KIO::TransferJob *>( job )->url().url(), msg);
-}
-
-void FavIconsModule::slotKill()
-{
-    // kDebug();
-    Q_FOREACH(KIO::Job* job, d->killJobs) {
-        job->kill();
-    }
-    d->killJobs.clear();
 }
 
 #include "moc_favicons.cpp"
