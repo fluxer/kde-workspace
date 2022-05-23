@@ -31,9 +31,10 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
+    void testSetIconForURL_data();
     void testSetIconForURL();
+    void testIconForURL_data();
     void testIconForURL();
-    //void testDownloadHostIcon();
 
 private:
     void waitForSignal();
