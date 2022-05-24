@@ -24,10 +24,14 @@
  to connect to X, 2 when it's not possible to connect to X.
 */
 int main()
-    {
-    Display* dpy = XOpenDisplay( NULL );
-    if( dpy == NULL )
+{
+    Display* dpy = XOpenDisplay(NULL);
+    if (dpy == NULL) {
         return 2;
-    Atom atom = XInternAtom( dpy, "_KDE_RUNNING", False );
-    return XGetSelectionOwner( dpy, atom ) != None ? 0 : 1;
     }
+    Atom atom = XInternAtom(dpy, "_KDE_RUNNING", False);
+    if (XGetSelectionOwner(dpy, atom) != None) {
+        return 0;
+    }
+    return 1;
+}
