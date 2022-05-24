@@ -88,6 +88,9 @@ void FavIconTest::testSetIconForURL_data()
     QTest::newRow("https://github.com/")
         << QString::fromLatin1("https://github.com/") << QString::fromLatin1("https://github.com/favicon.ico")
         << QString::fromLatin1("favicons/github.com");
+    QTest::newRow("https://140.82.121.3/")
+        << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("https://140.82.121.3/favicon.ico")
+        << QString::fromLatin1("favicons/lb-140-82-121-3-fra.github.com");
 }
 
 void FavIconTest::testSetIconForURL()
@@ -134,6 +137,8 @@ void FavIconTest::testIconForURL_data()
         << QString::fromLatin1("https://www.ibm.com") << QString::fromLatin1("favicons/www.ibm.com");
     QTest::newRow("https://github.com/")
         << QString::fromLatin1("https://github.com/") << QString::fromLatin1("favicons/github.com");
+    QTest::newRow("https://140.82.121.3/")
+        << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("favicons/140.82.121.3");
 }
 
 void FavIconTest::testIconForURL()
