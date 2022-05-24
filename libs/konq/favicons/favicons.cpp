@@ -39,9 +39,7 @@
 #include <QImage>
 #include <QImageReader>
 
-K_PLUGIN_FACTORY(FavIconsFactory,
-                 registerPlugin<FavIconsModule>();
-    )
+K_PLUGIN_FACTORY(FavIconsFactory, registerPlugin<FavIconsModule>();)
 K_EXPORT_PLUGIN(FavIconsFactory("favicons"))
 
 static QString portForUrl(const KUrl& url)
@@ -100,19 +98,29 @@ static QString faviconsCacheDir()
     return faviconsDir;
 }
 
+struct FavIconsDownloadInfo
+{
+    QString hostOrURL;
+    bool isHost;
+    QByteArray iconData;
+};
+QT_BEGIN_NAMESPACE
+Q_DECLARE_TYPEINFO(FavIconsDownloadInfo, Q_PRIMITIVE_TYPE);
+QT_END_NAMESPACE
+
+static QString makeIconName(const FavIconsDownloadInfo& download, const KUrl& iconURL)
+{
+    QString iconName (QLatin1String("favicons/"));
+    iconName += (download.isHost ? download.hostOrURL : iconNameFromURL(iconURL));
+    return iconName;
+}
+
 struct FavIconsModulePrivate
 {
     FavIconsModulePrivate() : config(nullptr) { }
     ~FavIconsModulePrivate() { delete config; }
 
-    struct DownloadInfo
-    {
-        QString hostOrURL;
-        bool isHost;
-        QByteArray iconData;
-    };
-
-    QMap<KJob *, DownloadInfo> downloads;
+    QMap<KJob *, FavIconsDownloadInfo> downloads;
     KUrl::List failedDownloads;
     KConfig *config;
     KIO::MetaData metaData;
@@ -133,13 +141,6 @@ FavIconsModule::FavIconsModule(QObject* parent, const QList<QVariant>&)
 FavIconsModule::~FavIconsModule()
 {
     delete d;
-}
-
-static QString makeIconName(const FavIconsModulePrivate::DownloadInfo& download, const KUrl& iconURL)
-{
-    QString iconName (QLatin1String("favicons/"));
-    iconName += (download.isHost ? download.hostOrURL : iconNameFromURL(iconURL));
-    return iconName;
 }
 
 QString FavIconsModule::iconForUrl(const KUrl &url)
@@ -224,7 +225,7 @@ void FavIconsModule::startDownload(const QString &hostOrURL, bool isHost, const 
     }
 
     // kDebug() << iconURL;
-    FavIconsModulePrivate::DownloadInfo download;
+    FavIconsDownloadInfo download;
     download.hostOrURL = hostOrURL;
     download.isHost = isHost;
     KIO::Job *job = KIO::get(iconURL, KIO::NoReload, KIO::HideProgressInfo);
@@ -238,7 +239,7 @@ void FavIconsModule::startDownload(const QString &hostOrURL, bool isHost, const 
 void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
 {
     KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
-    FavIconsModulePrivate::DownloadInfo &download = d->downloads[job];
+    FavIconsDownloadInfo &download = d->downloads[job];
     unsigned int oldSize = download.iconData.size();
     // Size limit. Stop downloading if the file is huge.
     // Testcase (as of june 2008, at least): http://planet-soc.com/favicon.ico, 136K and strange format.
@@ -257,7 +258,7 @@ void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
 void FavIconsModule::slotResult(KJob *job)
 {
     KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
-    FavIconsModulePrivate::DownloadInfo download = d->downloads[job];
+    FavIconsDownloadInfo download = d->downloads[job];
     d->downloads.remove(job);
     const KUrl iconURL = tjob->url();
     QString iconName;
