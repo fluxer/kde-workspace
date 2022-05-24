@@ -64,6 +64,11 @@ int main(int argc, char **argv)
         return 0;
     }
 
+    KApplication app;
+    // This app is started automatically, no need for session management
+    app.disableSessionManagement();
+    app.setQuitOnLastWindowClosed(false);
+
     QDBusConnection session = QDBusConnection::sessionBus();
     if (!session.isConnected()) {
         kWarning() << "No DBUS session-bus found. Check if you have started the DBUS server.";
@@ -75,14 +80,9 @@ int main(int argc, char **argv)
         return 2;
     }
 
-    KApplication app;
-    // This app is started automatically, no need for session management
-    app.disableSessionManagement();
-    app.setQuitOnLastWindowClosed( false );
-
     KGlobalAccelD globalaccel;
     if (!globalaccel.init()) {
-        return -1;
+        return 3;
     }
 
     return app.exec();
