@@ -33,7 +33,6 @@ class KSysGuardProcessListHelper : public QObject {
         KSysGuardProcessListHelper();
 
     public Q_SLOTS:
-        ActionReply sendsignal(QVariantMap parameters);
         ActionReply renice(QVariantMap parameters);
         ActionReply changecpuscheduler(QVariantMap parameters);
 };
