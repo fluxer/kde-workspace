@@ -27,14 +27,12 @@ DEALINGS IN THE SOFTWARE.
 #include <kmessagebox.h>
 #include <KIcon>
 #include <KLocalizedString>
-#include <kauthaction.h>
 #include <kdebug.h>
-#include <unistd.h>
+#include <QProcess>
 #include <X11/Xlib.h>
 #include <QtGui/qx11info_x11.h>
-#include <QProcess>
-// TODO: remove with Qt 5, only for HTML escaping the caption
-#include <QTextDocument>
+
+#include <unistd.h>
 #include <signal.h>
 #include <errno.h>
 
@@ -96,19 +94,11 @@ int main(int argc, char* argv[])
             lst << hostname << "kill" << QString::number(pid);
             QProcess::startDetached("xon", lst);
         } else {
-            if (::kill(pid, SIGKILL) == -1 && errno == EPERM) {
-                KAuth::Action killer("org.kde.ksysguard.processlisthelper.sendsignal");
-                killer.setHelperID("org.kde.ksysguard.processlisthelper");
-                killer.addArgument("pid0", pid);
-                killer.addArgument("pidcount", 1);
-                killer.addArgument("signal", SIGKILL);
-                if (killer.isValid()) {
-                    kDebug(1212) << "Using KAuth to kill pid: " << pid;
-                    killer.execute();
-                } else {
-                    kDebug(1212) << "KWin process killer action not valid";
-                }
+            if (::kill(pid, SIGKILL) == -1) {
+                kWarning(1212) << "KWin process killer failed";
             }
         }
     }
+
+    return 0;
 }
