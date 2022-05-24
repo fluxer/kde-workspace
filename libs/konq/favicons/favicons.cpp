@@ -98,6 +98,20 @@ static QString faviconsCacheDir()
     return faviconsDir;
 }
 
+static bool isIconOld(const QString &icon)
+{
+    QFileInfo iconInfo(icon);
+    const QDateTime iconLastModified = iconInfo.lastModified();
+    if (!iconInfo.isFile() || !iconLastModified.isValid()) {
+        // kDebug() << "isIconOld" << icon << "yes, no such file";
+        return true; // Trigger a new download on error
+    }
+
+    // kDebug() << "isIconOld" << icon << "?";
+    const QDateTime currentTime = QDateTime::currentDateTime();
+    return ((currentTime.toTime_t() - iconLastModified.toTime_t()) > 604800); // arbitrary value (one week)
+}
+
 struct FavIconsDownloadInfo
 {
     QString hostOrURL;
@@ -166,20 +180,6 @@ QString FavIconsModule::iconForUrl(const KUrl &url)
         return icon;
 
     return QString();
-}
-
-bool FavIconsModule::isIconOld(const QString &icon)
-{
-    QFileInfo iconInfo(icon);
-    const QDateTime iconLastModified = iconInfo.lastModified();
-    if (!iconInfo.isFile() || !iconLastModified.isValid()) {
-        // kDebug() << "isIconOld" << icon << "yes, no such file";
-        return true; // Trigger a new download on error
-    }
-
-    // kDebug() << "isIconOld" << icon << "?";
-    const QDateTime currentTime = QDateTime::currentDateTime();
-    return ((currentTime.toTime_t() - iconLastModified.toTime_t()) > 604800); // arbitrary value (one week)
 }
 
 void FavIconsModule::setIconForUrl(const KUrl &url, const KUrl &iconURL)

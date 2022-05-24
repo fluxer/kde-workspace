@@ -113,7 +113,6 @@ signals: // D-Bus signals
 
 private:
     void startDownload(const QString &, bool, const KUrl &);
-    bool isIconOld(const QString &);
 
 private Q_SLOTS:
     void slotData(KIO::Job *, const QByteArray &);
