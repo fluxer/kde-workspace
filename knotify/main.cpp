@@ -19,7 +19,7 @@
  */
 
 
-#include <kuniqueapplication.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
@@ -28,6 +28,8 @@
 #include <kmessage.h>
 #include <kpassivepopupmessagehandler.h>
 #include <kdeversion.h>
+#include <QDBusConnectionInterface>
+#include <QDBusReply>
 
 #include "knotify.h"
 
@@ -45,21 +47,25 @@ int main(int argc, char **argv)
     aboutdata.addAuthor(ki18n("Allan Sandfeld Jensen"),ki18n("Porting to KDE 4"),"kde@carewolf.com");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
-    KUniqueApplication::addCmdLineOptions();
 
-    // initialize application
-    if ( !KUniqueApplication::start() ) {
-        kDebug() << "Running knotify found";
-        return 0;
-    }
-
+    KApplication app;
     // do not connect to ksmserver at all, knotify is launched on demand and doesn't need
     // to know about logout, and moreover it may be ksmserver who tries to launch knotify,
     // in which case there is a deadlock with ksmserver waiting for knotify to finish
     // startup and knotify waiting to register with ksmserver
-    unsetenv( "SESSION_MANAGER" ); 
-    KUniqueApplication app;
-    
+    app.disableSessionManagement();
+
+    QDBusConnection session = QDBusConnection::sessionBus();
+    if (!session.isConnected()) {
+        kWarning() << "No DBUS session-bus found. Check if you have started the DBUS server.";
+        return 1;
+    }
+    QDBusReply<bool> sessionReply = session.interface()->isServiceRegistered("org.kde.knotify");
+    if (sessionReply.isValid() && sessionReply.value() == true) {
+        kWarning() << "Another instance of knotify is already running!";
+        return 2;
+    }
+
     /*
      * the default KMessageBoxMessageHandler will do messagesbox that notify
      * so we have a deadlock if one debug message is shown as messagebox.

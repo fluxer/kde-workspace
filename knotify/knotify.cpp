@@ -39,8 +39,6 @@
 #include "notifybytaskbar.h"
 #include "notifybyktts.h"
 
-
-
 KNotify::KNotify( QObject *parent )
     : QObject( parent ),
     m_counter(0)
@@ -48,6 +46,7 @@ KNotify::KNotify( QObject *parent )
 	loadConfig();
 	(void)new KNotifyAdaptor(this);
 	(void)new KSolidNotify(this);
+	QDBusConnection::sessionBus().registerService("org.kde.knotify");
 	QDBusConnection::sessionBus().registerObject("/Notify", this, QDBusConnection::ExportAdaptors
 	 /*|  QDBusConnection::ExportScriptableSlots |  QDBusConnection::ExportScriptableSignals*/ );
 }
