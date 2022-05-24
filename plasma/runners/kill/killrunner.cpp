@@ -24,14 +24,14 @@
 #include <KDebug>
 #include <KIcon>
 #include <KUser>
-#include <kauthaction.h>
+#include <KMessageBox>
 
 #include "killrunner_config.h"
 
 #include <signal.h>
 
 KillRunner::KillRunner(QObject *parent, const QVariantList& args)
-        : Plasma::AbstractRunner(parent, args)
+    : Plasma::AbstractRunner(parent, args)
 {
     Q_UNUSED(args);
     setObjectName(QLatin1String("Kill Runner"));
@@ -140,16 +140,12 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     QStringList args;
     args << QString("-%1").arg(signal) << QString("%1").arg(pid);
 
-    if (QProcess::execute("kill", args) == 0) {
-        return;
+    QProcess killproc(this);
+    killproc.start("kill", args);
+    if (!killproc.waitForFinished() || killproc.exitCode() != 0) {
+        const QString errorstring = QString::fromLocal8Bit(killproc.readAllStandardError());
+        KMessageBox::error(nullptr, errorstring);
     }
-
-    KAuth::Action killAction = QString("org.kde.ksysguard.processlisthelper.sendsignal");
-    killAction.setHelperID("org.kde.ksysguard.processlisthelper");
-    killAction.addArgument("pid0", pid);
-    killAction.addArgument("pidcount", 1);
-    killAction.addArgument("signal", signal);
-    killAction.execute();
 }
 
 QList<QAction*> KillRunner::actionsForMatch(const Plasma::QueryMatch &match)
