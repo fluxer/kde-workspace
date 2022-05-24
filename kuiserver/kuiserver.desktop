@@ -165,6 +165,7 @@ Comment[x-test]=xxKDE's Progress Info UI serverxx
 Comment[zh_CN]=KDE 的进程信息用户界面服务器
 Comment[zh_TW]=KDE 的進度資訊介面伺服器
 X-KDE-ServiceTypes=
+X-DBUS-ServiceName=org.kde.kuiserver
 # It is a server
 X-DBUS-StartupType=Unique
 X-KDE-StartupNotify=false

@@ -3,6 +3,7 @@ Type=Service
 Icon=preferences-desktop-keyboard
 Exec=kglobalaccel
 X-KDE-autostart-phase=1
+X-DBUS-ServiceName=org.kde.kglobalaccel
 X-DBUS-StartupType=Unique
 X-KDE-ServiceTypes=
 X-KDE-StartupNotify=false
