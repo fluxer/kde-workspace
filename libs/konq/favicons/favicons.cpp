@@ -54,16 +54,19 @@ static QString simplifyURL(const KUrl &url)
 {
     // splat any = in the URL so it can be safely used as a config key
     QString result = url.host() + portForUrl(url) + url.path();
-    for (int i = 0; i < result.length(); ++i)
-        if (result[i] == QLatin1Char('='))
+    for (int i = 0; i < result.length(); ++i) {
+        if (result[i] == QLatin1Char('=')) {
             result[i] = QLatin1Char('_');
+        }
+    }
     return result;
 }
 
 static QString iconNameFromURL(const KUrl &iconURL)
 {
-    if (iconURL.path() == QLatin1String("/favicon.ico"))
+    if (iconURL.path() == QLatin1String("/favicon.ico")) {
        return iconURL.host() + portForUrl(iconURL);
+    }
 
     QString result = simplifyURL(iconURL);
     // splat / so it can be safely used as a file name
@@ -74,8 +77,9 @@ static QString iconNameFromURL(const KUrl &iconURL)
     }
 
     QString ext = result.right(4);
-    if (ext == QLatin1String(".ico") || ext == QLatin1String(".png") || ext == QLatin1String(".xpm"))
+    if (ext == QLatin1String(".ico") || ext == QLatin1String(".png") || ext == QLatin1String(".xpm")) {
         result.remove(result.length() - 4, 4);
+    }
 
     return result;
 }
@@ -100,7 +104,7 @@ static QString faviconsCacheDir()
 
 static bool isIconOld(const QString &icon)
 {
-    QFileInfo iconInfo(icon);
+    const QFileInfo iconInfo(icon);
     const QDateTime iconLastModified = iconInfo.lastModified();
     if (!iconInfo.isFile() || !iconLastModified.isValid()) {
         // kDebug() << "isIconOld" << icon << "yes, no such file";
@@ -124,7 +128,7 @@ QT_END_NAMESPACE
 
 static QString makeIconName(const FavIconsDownloadInfo& download, const KUrl& iconURL)
 {
-    QString iconName (QLatin1String("favicons/"));
+    QString iconName = QString::fromLatin1("favicons/");
     iconName += (download.isHost ? download.hostOrURL : iconNameFromURL(iconURL));
     return iconName;
 }
@@ -143,13 +147,12 @@ struct FavIconsModulePrivate
 FavIconsModule::FavIconsModule(QObject* parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
-    // create our favicons folder so that KIconLoader knows about it
     d = new FavIconsModulePrivate;
     d->metaData.insert(QLatin1String("cache"), "reload");
     d->metaData.insert(QLatin1String("no-www-auth"), QLatin1String("true"));
     d->config = new KConfig(KStandardDirs::locateLocal("data", QLatin1String("konqueror/faviconrc")));
 
-    new FavIconsAdaptor( this );
+    new FavIconsAdaptor(this);
 }
 
 FavIconsModule::~FavIconsModule()
@@ -159,25 +162,28 @@ FavIconsModule::~FavIconsModule()
 
 QString FavIconsModule::iconForUrl(const KUrl &url)
 {
-    if (url.host().isEmpty())
+    if (url.host().isEmpty()) {
         return QString();
+    }
 
     // kDebug() << url;
 
     const QString simplifiedURL = removeSlash(simplifyURL(url));
     QString icon = d->config->group(QString()).readEntry(simplifiedURL, QString());
 
-    if (!icon.isEmpty())
+    if (!icon.isEmpty()) {
         icon = iconNameFromURL(KUrl(icon));
-    else
+    } else {
         icon = url.host();
+    }
 
     icon = QLatin1String("favicons/") + icon;
 
     kDebug() << "URL:" << url << "ICON:" << icon;
 
-    if (QFile::exists(faviconsCacheDir() + icon + QLatin1String(".png")))
+    if (QFile::exists(faviconsCacheDir() + icon + QLatin1String(".png"))) {
         return icon;
+    }
 
     return QString();
 }
@@ -229,30 +235,32 @@ void FavIconsModule::startDownload(const QString &hostOrURL, bool isHost, const 
     download.hostOrURL = hostOrURL;
     download.isHost = isHost;
     KIO::Job *job = KIO::get(iconURL, KIO::NoReload, KIO::HideProgressInfo);
+    job->setAutoDelete(false);
     job->addMetaData(d->metaData);
     d->downloads.insert(job, download);
     connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(slotInfoMessage(KJob*,QString)));
     connect(job, SIGNAL(data(KIO::Job*,QByteArray)), SLOT(slotData(KIO::Job*,QByteArray)));
     connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
+    job->start();
 }
 
 void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
 {
     KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
     FavIconsDownloadInfo &download = d->downloads[job];
-    unsigned int oldSize = download.iconData.size();
+    const int oldSize = download.iconData.size();
     // Size limit. Stop downloading if the file is huge.
     // Testcase (as of june 2008, at least): http://planet-soc.com/favicon.ico, 136K and strange format.
-    if (oldSize > 500000U) {
+    if (oldSize > 500000) {
         kWarning() << "Favicon too big, aborting download of" << tjob->url();
         const KUrl iconURL = tjob->url();
         d->failedDownloads.append(iconURL);
         d->downloads.remove(job);
         job->kill();
+        job->deleteLater();
         return;
     }
-    download.iconData.resize(oldSize + data.size());
-    memcpy(download.iconData.data() + oldSize, data.data(), data.size());
+    download.iconData.append(data);
 }
 
 void FavIconsModule::slotResult(KJob *job)
@@ -295,6 +303,7 @@ void FavIconsModule::slotResult(KJob *job)
         errorMessage = job->errorString();
         kWarning() << "Job error" << job->errorString();
     }
+    job->deleteLater();
     if (iconName.isEmpty()) {
         // kDebug() << "adding" << iconURL << "to failed downloads";
         d->failedDownloads.append(iconURL);
@@ -307,7 +316,7 @@ void FavIconsModule::slotResult(KJob *job)
 
 void FavIconsModule::slotInfoMessage(KJob *job, const QString &msg)
 {
-    emit infoMessage(static_cast<KIO::TransferJob *>( job )->url().url(), msg);
+    emit infoMessage(static_cast<KIO::TransferJob*>(job)->url().url(), msg);
 }
 
 #include "moc_favicons.cpp"
