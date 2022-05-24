@@ -26,12 +26,13 @@
 
 #include "progresslistmodel.h"
 
-#include <kuniqueapplication.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kdebug.h>
-
+#include <QDBusConnectionInterface>
+#include <QDBusReply>
 
 int main(int argc, char **argv)
 {
@@ -47,18 +48,22 @@ int main(int argc, char **argv)
     aboutdata.addAuthor(ki18n("Matej Koss"), ki18n("Developer"), "koss@miesto.sk");
 
     KCmdLineArgs::init(argc, argv, &aboutdata);
-    KUniqueApplication::addCmdLineOptions();
 
-    if (!KUniqueApplication::start()) {
-        kDebug(7024) << "kuiserver is already running!";
-        return 0;
-    }
-
-    KUniqueApplication app;
-
+    KApplication app;
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
     app.setQuitOnLastWindowClosed(false);
+
+    QDBusConnection session = QDBusConnection::sessionBus();
+    if (!session.isConnected()) {
+        kWarning() << "No DBUS session-bus found. Check if you have started the DBUS server.";
+        return 1;
+    }
+    QDBusReply<bool> sessionReply = session.interface()->isServiceRegistered("org.kde.kuiserver");
+    if (sessionReply.isValid() && sessionReply.value() == true) {
+        kWarning() << "Another instance of kuiserver is already running!";
+        return 2;
+    }
 
     ProgressListModel model;
 
