@@ -21,29 +21,17 @@
 
 #include "kglobalacceld.h"
 
-#include <kuniqueapplication.h>
+#include <kapplication.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <kcrash.h>
-#include <kde_file.h>
 #include <kdebug.h>
 #include <klocale.h>
-
-#include <signal.h>
 
 static bool isEnabled()
 {
     // TODO: Check if kglobalaccel can be disabled
     return true;
 }
-
-
-static void sighandler(int /*sig*/)
-{
-    if (qApp)
-       qApp->quit();
-}
-
 
 int main(int argc, char **argv)
 {
@@ -69,7 +57,6 @@ int main(int argc, char **argv)
     aboutdata.setProgramIconName("kglobalaccel");
 
     KCmdLineArgs::init( argc, argv, &aboutdata );
-    KUniqueApplication::addCmdLineOptions();
 
     // check if kglobalaccel is disabled
     if (!isEnabled()) {
@@ -77,26 +64,21 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    if (!KUniqueApplication::start()) {
-        kDebug() << "kglobalaccel is already running!";
-        return (0);
+    QDBusConnection session = QDBusConnection::sessionBus();
+    if (!session.isConnected()) {
+        kWarning() << "No DBUS session-bus found. Check if you have started the DBUS server.";
+        return 1;
+    }
+    QDBusReply<bool> sessionReply = session.interface()->isServiceRegistered("org.kde.kglobalaccel");
+    if (sessionReply.isValid() && sessionReply.value() == true) {
+        kWarning() << "Another instance of kglobalaccel is already running!";
+        return 2;
     }
 
-    // As in the KUniqueApplication example only create a instance AFTER
-    // calling KUniqueApplication::start()
-    KUniqueApplication app;
-
+    KApplication app;
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
     app.setQuitOnLastWindowClosed( false );
-
-    // Stop gracefully
-    KDE_signal(SIGINT, sighandler);
-    KDE_signal(SIGTERM, sighandler);
-    KDE_signal(SIGHUP, sighandler);
-
-    // Restart on a crash
-    KCrash::setFlags(KCrash::AutoRestart);
 
     KGlobalAccelD globalaccel;
     if (!globalaccel.init()) {
