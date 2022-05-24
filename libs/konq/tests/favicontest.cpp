@@ -104,9 +104,10 @@ void FavIconTest::testSetIconForURL_data()
     QTest::newRow("https://github.com/")
         << QString::fromLatin1("https://github.com/") << QString::fromLatin1("https://github.com/favicon.ico")
         << QString::fromLatin1("favicons/github.com");
+    // lb-140-82-121-3-fra.github.com if not address
     QTest::newRow("https://140.82.121.3/")
         << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("https://140.82.121.3/favicon.ico")
-        << QString::fromLatin1("favicons/140.82.121.3"); // lb-140-82-121-3-fra.github.com if not host
+        << QString::fromLatin1("favicons/140.82.121.3");
 }
 
 void FavIconTest::testSetIconForURL()
