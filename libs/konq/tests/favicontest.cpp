@@ -58,7 +58,7 @@ static void cleanCache()
     QDir faviconsdir(KGlobal::dirs()->saveLocation("cache", QString::fromLatin1("favicons/")));
     // qDebug() << Q_FUNC_INFO << faviconsdir.absolutePath();
     foreach (const QFileInfo &favinfo, faviconsdir.entryInfoList(QDir::Files | QDir::NoDotAndDotDot)) {
-        kWarning() << "Removing cached icon" << favinfo.filePath();
+        qDebug() << "Removing cached icon" << favinfo.filePath();
         QFile::remove(favinfo.filePath());
     }
 }
@@ -67,6 +67,14 @@ FavIconTest::FavIconTest()
     : QObject(),
     m_favIconModule("org.kde.kded", "/modules/favicons", QDBusConnection::sessionBus())
 {
+    connect(
+        &m_favIconModule, SIGNAL(infoMessage(QString,QString)),
+        this, SLOT(slotInfoMessage(QString,QString))
+    );
+    connect(
+        &m_favIconModule, SIGNAL(error(bool,QString,QString)),
+        this, SLOT(slotError(bool,QString,QString))
+    );
 }
 
 void FavIconTest::initTestCase()
@@ -106,7 +114,6 @@ void FavIconTest::testSetIconForURL()
     cleanCache();
 
     QEventLoop eventLoop;
-    // The call to connect() triggers qdbus initialization stuff, while QSignalSpy doesn't...
     connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
 
     QSignalSpy spy(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)));
@@ -173,6 +180,16 @@ void FavIconTest::testIconForURL()
 
     favicon = KMimeType::favIconForUrl(favUrl);
     QCOMPARE(favicon, icon);
+}
+
+void FavIconTest::slotInfoMessage(const QString &iconURL, const QString &msg)
+{
+    qDebug() << iconURL << msg;
+}
+
+void FavIconTest::slotError(const bool isHost, const QString &hostOrURL, const QString &errorString)
+{
+    qWarning() << isHost << hostOrURL << errorString;
 }
 
 #include "moc_favicontest.cpp"

@@ -36,6 +36,9 @@ private Q_SLOTS:
     void testIconForURL_data();
     void testIconForURL();
 
+    void slotInfoMessage(const QString &iconURL, const QString &msg);
+    void slotError(const bool isHost, const QString &hostOrURL, const QString &errorString);
+
 private:
     void waitForSignal();
     org::kde::FavIcon m_favIconModule;
