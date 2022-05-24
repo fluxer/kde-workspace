@@ -26,8 +26,8 @@
 ActionReply KGreeterHelper::save(const QVariantMap &parameters)
 {
     if (!parameters.contains("font") || !parameters.contains("style")
-        || !parameters.contains("colorscheme") || !parameters.contains("background")
-        || !parameters.contains("rectangle")) {
+        || !parameters.contains("colorscheme") || !parameters.contains("cursortheme")
+        || !parameters.contains("background") || !parameters.contains("rectangle")) {
         return KAuth::ActionReply::HelperErrorReply;
     }
 
@@ -35,11 +35,16 @@ ActionReply KGreeterHelper::save(const QVariantMap &parameters)
     if (colorscheme == QLatin1String("default")) {
         colorscheme = QString();
     }
+    QString cursortheme = parameters.value("cursortheme").toString();
+    if (cursortheme == QLatin1String("default")) {
+        cursortheme = QString();
+    }
 
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
     kgreetersettings.setValue("greeter/font", parameters.value("font"));
     kgreetersettings.setValue("greeter/style", parameters.value("style"));
     kgreetersettings.setValue("greeter/colorscheme", colorscheme);
+    kgreetersettings.setValue("greeter/cursortheme", cursortheme);
     kgreetersettings.setValue("greeter/background", parameters.value("background"));
     kgreetersettings.setValue("greeter/rectangle", parameters.value("rectangle"));
     if (kgreetersettings.status() != QSettings::NoError) {

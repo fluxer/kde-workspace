@@ -47,6 +47,7 @@ private Q_SLOTS:
     void slotFontChanged(const QFont &font);
     void slotStyleChanged(const QString &style);
     void slotColorChanged(const QString &color);
+    void slotCursorChanged(const QString &cursor);
     void slotURLChanged(const QString &url);
     void slotURLChanged(const KUrl &url);
 

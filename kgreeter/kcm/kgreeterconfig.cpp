@@ -92,6 +92,20 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     }
     connect(colorsbox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotColorChanged(QString)));
 
+    cursorbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
+    const QStringList cursorthemes = KGlobal::dirs()->findAllResources("icon", "*/index.theme");
+    foreach (const QString &cursortheme, cursorthemes) {
+        const QString cursorthemename = QSettings(cursortheme, QSettings::IniFormat).value("Icon Theme/Name").toString();
+        QDir cursorthemedir(cursortheme);
+        cursorthemedir.cdUp();
+        if (!cursorthemedir.exists(QString::fromLatin1("cursors"))) {
+            continue;
+        }
+        const QString cursorthemebasename = QFileInfo(cursorthemedir.dirName()).baseName();
+        cursorbox->addItem(cursorthemename, QVariant(cursorthemebasename));
+    }
+    connect(cursorbox, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotCursorChanged(QString)));
+
     backgroundrequester->setFilter(KImageIO::pattern(KImageIO::Reading));
     connect(backgroundrequester, SIGNAL(textChanged(QString)), this, SLOT(slotURLChanged(QString)));
     connect(backgroundrequester, SIGNAL(urlSelected(KUrl)), this, SLOT(slotURLChanged(KUrl)));
@@ -139,6 +153,17 @@ void KCMGreeter::load()
         }
     }
 
+    cursorbox->setCurrentIndex(0); // default
+    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme").toString();
+    if (!kgreetercursortheme.isEmpty()) {
+        for (int i = 0; i < cursorbox->count(); i++) {
+            if (cursorbox->itemData(i).toString().toLower() == kgreetercursortheme.toLower()) {
+                cursorbox->setCurrentIndex(i);
+                break;
+            }
+        }
+    }
+
     const QString kgreeterbackground = kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString();
     backgroundrequester->setUrl(KUrl(kgreeterbackground));
 
@@ -156,6 +181,7 @@ void KCMGreeter::save()
     kgreeteraction.addArgument("font", fontchooser->font().toString());
     kgreeteraction.addArgument("style", stylesbox->itemData(stylesbox->currentIndex()).toString());
     kgreeteraction.addArgument("colorscheme", colorsbox->itemData(colorsbox->currentIndex()).toString());
+    kgreeteraction.addArgument("cursortheme", cursorbox->itemData(cursorbox->currentIndex()).toString());
     kgreeteraction.addArgument("background", backgroundrequester->url().path());
     kgreeteraction.addArgument("rectangle", rectanglerequester->url().path());
     KAuth::ActionReply kgreeterreply = kgreeteraction.execute();
@@ -179,6 +205,7 @@ void KCMGreeter::defaults()
         }
     }
     colorsbox->setCurrentIndex(0);
+    cursorbox->setCurrentIndex(0);
     backgroundrequester->setUrl(KUrl());
     rectanglerequester->setUrl(KUrl());
 
@@ -203,6 +230,13 @@ void KCMGreeter::slotStyleChanged(const QString &style)
 void KCMGreeter::slotColorChanged(const QString &color)
 {
     Q_UNUSED(color);
+    enableTest(false);
+    emit changed(true);
+}
+
+void KCMGreeter::slotCursorChanged(const QString &cursor)
+{
+    Q_UNUSED(cursor);
     enableTest(false);
     emit changed(true);
 }

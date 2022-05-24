@@ -567,6 +567,12 @@ int main(int argc, char**argv)
         app.setPalette(KGlobalSettings::createApplicationPalette());
     }
 
+    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme").toString();
+    if (!kgreetercursortheme.isEmpty()) {
+        const QByteArray xcursorthemebytes = kgreetercursortheme.toAscii();
+        ::setenv("XCURSOR_THEME", xcursorthemebytes.constData(), 1);
+    }
+
     glibloop = g_main_loop_new(NULL, false);
 
     KGreeter kgreeter;
