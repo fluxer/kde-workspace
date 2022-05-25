@@ -230,11 +230,7 @@ fi
 # started, any problems thereafter, e.g. ksmserver failing to initialize,
 # will remain undetected.
 test -n "$KDEWM" && KDEWM="--windowmanager $KDEWM"
-# If the session should be locked from the start (locked autologin),
-# lock now and do the rest of the KDE startup underneath the locker.
-KSMSERVEROPTIONS=""
-test -n "$dl" && KSMSERVEROPTIONS=" --lockscreen"
-kwrapper4 ksmserver $KDEWM $KSMSERVEROPTIONS
+kwrapper4 ksmserver $KDEWM
 if test $? -eq 255; then
     # Startup error
     echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
