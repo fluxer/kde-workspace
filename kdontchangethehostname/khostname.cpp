@@ -46,7 +46,6 @@ public:
    KHostName();
 
    void changeX();
-   void changeStdDirs(const QByteArray &type);
    void changeSessionManager();
 
 protected:
@@ -161,43 +160,6 @@ void KHostName::changeX()
    }
 }
 
-void KHostName::changeStdDirs(const QByteArray &type)
-{
-   // We make links to the old dirs cause we can't delete the old dirs.
-   QByteArray oldDir = QFile::encodeName(QString("%1%2-%3").arg(KGlobal::dirs()->localkdedir()).arg(QString( type )).arg(QString( oldName )));
-   QByteArray newDir = QFile::encodeName(QString("%1%2-%3").arg(KGlobal::dirs()->localkdedir()).arg(QString( type )).arg(QString( newName )));
-
-   KDE_struct_stat st_buf;
-
-   int result = KDE_lstat(oldDir.data(), &st_buf);
-   if (result == 0)
-   {
-      if (S_ISLNK(st_buf.st_mode))
-      {
-         char buf[4096+1];
-         result = readlink(oldDir.data(), buf, 4096);
-         if (result >= 0)
-         {
-            buf[result] = 0;
-            result = symlink(buf, newDir.data());
-         }
-      }
-      else if (S_ISDIR(st_buf.st_mode))
-      {
-         result = symlink(oldDir.data(), newDir.data());
-      }
-      else
-      {
-         result = -1;
-      }
-   }
-   if (result != 0)
-   {
-       const QString lnusertemp = KStandardDirs::findExe( "lnusertemp" );
-       QProcess::execute( lnusertemp, QStringList() << type );
-   }
-}
-
 void KHostName::changeSessionManager()
 {
    QString sm = QString::fromLocal8Bit(qgetenv("SESSION_MANAGER"));
@@ -235,8 +197,6 @@ int main(int argc, char **argv)
    KHostName hn;
 
    hn.changeX();
-   hn.changeStdDirs("socket");
-   hn.changeStdDirs("tmp");
    hn.changeSessionManager();
 }
 
