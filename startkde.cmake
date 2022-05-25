@@ -105,31 +105,26 @@ EOF
 fi
 
 
-dl=$DESKTOP_LOCKED
-unset DESKTOP_LOCKED # Don't want it in the environment
-
 ksplash_pid=
-if test -z "$dl"; then
-  # languages as resolved by KLocale, for the splash screens use
-  # klocale_languages is assembled by kdostartupconfig4 calling KLocale
-  KLOCALE_LANGUAGES="$klocale_languages"
-  export KLOCALE_LANGUAGES
-  # the splashscreen and progress indicator
-  case "$ksplashrc_ksplash_engine" in
+# languages as resolved by KLocale, for the splash screens use
+# klocale_languages is assembled by kdostartupconfig4 calling KLocale
+KLOCALE_LANGUAGES="$klocale_languages"
+export KLOCALE_LANGUAGES
+# the splashscreen and progress indicator
+case "$ksplashrc_ksplash_engine" in
     KSplashX)
-      ksplash_pid=`ksplashx "${ksplashrc_ksplash_theme}" --pid`
-      ;;
+        ksplash_pid=`ksplashx "${ksplashrc_ksplash_theme}" --pid`
+        ;;
     KSplashQML)
-      ksplash_pid=`ksplashqml "${ksplashrc_ksplash_theme}" --pid`
-      ;;
+        ksplash_pid=`ksplashqml "${ksplashrc_ksplash_theme}" --pid`
+        ;;
     None)
-      ;;
+        ;;
     *)
-      ;;
-  esac
-  # no longer needed in the environment
-  unset KLOCALE_LANGUAGES
-fi
+        ;;
+esac
+# no longer needed in the environment
+unset KLOCALE_LANGUAGES
 
 # Set the path for Qt plugins provided by KDE
 QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
