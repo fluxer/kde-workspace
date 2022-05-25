@@ -50,12 +50,8 @@ export XDG_DATA_DIRS
 # and startup time.
 #
 # * kdeinit starts klauncher first.
-# * Then kded is started. kded is responsible for keeping the sycoca
-#   database up to date. When an up to date database is present it goes
-#   into the background and the startup continues.
 # * Then kdeinit starts kcminit. kcminit performs initialisation of
 #   certain devices according to the user's settings
-#
 # * Then ksmserver is started which takes control of the rest of the startup sequence
 
 # The user's personal KDE directory is usually ~/.kde, but this setting
@@ -172,13 +168,13 @@ else
 fi
 
 
-# Mark that full KDE session is running (e.g. Konqueror preloading works only
-# with full KDE running). The KDE_FULL_SESSION property can be detected by
-# any X client connected to the same X session, even if not launched
-# directly from the KDE session but e.g. using "ssh -X", kdesudo. $KDE_FULL_SESSION
-# however guarantees that the application is launched in the same environment
-# like the KDE session and that e.g. KDE utilities/libraries are available.
-# KDE_FULL_SESSION property is also only available since KDE 3.5.5.
+# Mark that full KDE session is running. The KDE_FULL_SESSION property can be
+# detected by any X client connected to the same X session, even if not
+# launched directly from the KDE session but e.g. using "ssh -X", kdesudo.
+# $KDE_FULL_SESSION however guarantees that the application is launched in the
+# same environment like the KDE session and that e.g. KDE utilities/libraries
+# are available. KDE_FULL_SESSION property is also only available since KDE
+# 3.5.5.
 # The matching tests are:
 #   For $KDE_FULL_SESSION:
 #     if test -n "$KDE_FULL_SESSION"; then ... whatever
