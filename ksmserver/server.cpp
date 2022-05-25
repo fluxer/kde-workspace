@@ -46,7 +46,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #endif
 #include <sys/socket.h>
 #include <sys/un.h>
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -65,7 +64,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QRegExp>
 #include <QtDBus/QtDBus>
 #include <QSocketNotifier>
-#include <QtCore/qfileinfo.h>
+#include <QtCore/QFileInfo>
+#include <QtGui/qx11info_x11.h>
 
 #include <kaction.h>
 #include <kactioncollection.h>
@@ -81,13 +81,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kprocess.h>
 #include <kdebug.h>
 #include <kshell.h>
-
-#include "moc_server.cpp"
-
 #include <kworkspace/kdisplaymanager.h>
-#include <QtGui/qx11info_x11.h>
 #include <krandom.h>
 #include <klauncher_iface.h>
+#include <kde_file.h>
 
 KSMServer* the_server = 0;
 
@@ -706,10 +703,9 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
         connect( con, SIGNAL(activated(int)), this, SLOT(newConnection(int)) );
     }
 
-    signal(SIGHUP, sighandler);
-    signal(SIGTERM, sighandler);
-    signal(SIGINT, sighandler);
-    signal(SIGPIPE, SIG_IGN);
+    KDE_signal(SIGHUP, sighandler);
+    KDE_signal(SIGTERM, sighandler);
+    KDE_signal(SIGINT, sighandler);
 
     connect( &protectionTimer, SIGNAL(timeout()), this, SLOT(protectionTimeout()) );
     connect( &restoreTimer, SIGNAL(timeout()), this, SLOT(tryRestoreNext()) );
@@ -743,12 +739,12 @@ void KSMServer::cleanUp()
     ::unlink(fName.data());
 
     FreeAuthenticationData(numTransports, authDataEntries);
-    signal(SIGTERM, SIG_DFL);
-    signal(SIGINT, SIG_DFL);
+
+    KDE_signal(SIGTERM, SIG_DFL);
+    KDE_signal(SIGINT, SIG_DFL);
 
     KDisplayManager().shutdown( shutdownType, shutdownMode );
 }
-
 
 
 void* KSMServer::watchConnection( IceConn iceConn )
@@ -1067,3 +1063,5 @@ void KSMServer::rebootWithoutConfirmation()
 {
     shutdown(KWorkSpace::ShutdownConfirmNo, KWorkSpace::ShutdownTypeReboot, KWorkSpace::ShutdownModeDefault);
 }
+
+#include "moc_server.cpp"
