@@ -657,7 +657,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
 
     {
         // publish available transports.
-        QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("socket", "KSMserver"));
+        QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("tmp", "KSMserver"));
         QString display = ::getenv("DISPLAY");
         // strip the screen number from the display
         display.replace(QRegExp("\\.[0-9]+$"), "");
@@ -729,7 +729,7 @@ void KSMServer::cleanUp()
     clean = true;
     IceFreeListenObjs (numTransports, listenObjs);
 
-    QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("socket", "KSMserver"));
+    QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("tmp", "KSMserver"));
     QString display  = QString::fromLocal8Bit(::getenv("DISPLAY"));
     // strip the screen number from the display
     display.replace(QRegExp("\\.[0-9]+$"), "");

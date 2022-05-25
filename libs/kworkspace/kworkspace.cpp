@@ -215,7 +215,7 @@ static QTime smModificationTime;
 void propagateSessionManager()
 {
 #ifdef Q_WS_X11
-    QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("socket", "KSMserver"));
+    QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("tmp", "KSMserver"));
     QString display = QString::fromLocal8Bit( ::getenv(DISPLAY) );
     // strip the screen number from the display
     display.remove(QRegExp("\\.[0-9]+$"));
