@@ -258,7 +258,7 @@ echo 'startkde: Shutting down...'  1>&2
 test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 
 # Clean up
-kdeinit4_shutdown
+kdeinit4 --shutdown
 
 unset KDE_FULL_SESSION
 xprop -root -remove KDE_FULL_SESSION
