@@ -13,24 +13,36 @@ fi
 # because we still need to do some cleanup.
 trap 'echo GOT SIGHUP' HUP
 
-# in case we have been started with full pathname spec without being in PATH
-if test -n "$PATH" ; then
-    qdbus=$(basename @QT_QDBUS_EXECUTABLE@)
-else
-    qdbus=@QT_QDBUS_EXECUTABLE@
-fi
-
 # Check if a KDE session already is running and whether it's possible to connect to X
 kcheckrunning
 kcheckrunning_result=$?
 if test $kcheckrunning_result -eq 0 ; then
-	echo "KDE seems to be already running on this display."
-	xmessage -geometry 500x100 "KDE seems to be already running on this display." > /dev/null 2>/dev/null
-	exit 1
+    echo "KDE seems to be already running on this display."
+    xmessage -geometry 500x100 "KDE seems to be already running on this display." > /dev/null 2>/dev/null
+    exit 1
 elif test $kcheckrunning_result -eq 2 ; then
-	echo "\$DISPLAY is not set or cannot connect to the X server."
-        exit 1
+    echo "\$DISPLAY is not set or cannot connect to the X server."
+    exit 1
 fi
+
+# Set the path for Katie plugins provided by KDE
+QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
+export QT_PLUGIN_PATH
+
+# Set the platform plugin for Katie to the one provided by KDE
+QT_PLATFORM_PLUGIN=kde
+export QT_PLATFORM_PLUGIN
+
+# Make sure that the KDE prefix is first in XDG_DATA_DIRS and that it's set at all.
+# The spec allows XDG_DATA_DIRS to be not set, but X session startup scripts tend
+# to set it to a list of paths *not* including the KDE prefix if it's not /usr or
+# /usr/local.
+if test -z "$XDG_DATA_DIRS"; then
+    XDG_DATA_DIRS="@KDE4_SHARE_INSTALL_PREFIX@:/usr/share:/usr/local/share"
+else
+    XDG_DATA_DIRS="@KDE4_SHARE_INSTALL_PREFIX@:$XDG_DATA_DIRS"
+fi
+export XDG_DATA_DIRS
 
 # Boot sequence:
 #
@@ -126,14 +138,6 @@ esac
 # no longer needed in the environment
 unset KLOCALE_LANGUAGES
 
-# Set the path for Qt plugins provided by KDE
-QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
-export QT_PLUGIN_PATH
-
-# Set the platform plugin for Qt to the one provided by KDE
-QT_PLATFORM_PLUGIN=kde
-export QT_PLATFORM_PLUGIN
-
 # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
 # from some users that they're confused and don't know what to do. This is
 # especially necessary on slow machines, where starting KDE takes one or two
@@ -173,16 +177,12 @@ done
 
 echo 'startkde: Starting up...'  1>&2
 
-# Make sure that the KDE prefix is first in XDG_DATA_DIRS and that it's set at all.
-# The spec allows XDG_DATA_DIRS to be not set, but X session startup scripts tend
-# to set it to a list of paths *not* including the KDE prefix if it's not /usr or
-# /usr/local.
-if test -z "$XDG_DATA_DIRS"; then
-    XDG_DATA_DIRS="@KDE4_SHARE_INSTALL_PREFIX@:/usr/share:/usr/local/share"
+# in case we have been started with full pathname spec without being in PATH
+if test -n "$PATH" ; then
+    qdbus=$(basename @QT_QDBUS_EXECUTABLE@)
 else
-    XDG_DATA_DIRS="@KDE4_SHARE_INSTALL_PREFIX@:$XDG_DATA_DIRS"
+    qdbus=@QT_QDBUS_EXECUTABLE@
 fi
-export XDG_DATA_DIRS
 
 # Make sure that D-Bus is running
 # D-Bus autolaunch is broken
@@ -239,11 +239,11 @@ export XDG_CURRENT_DESKTOP
 # kdeinit unsets this variable before loading applications.
 LD_BIND_NOW=true @KDE4_BIN_INSTALL_DIR@/kdeinit4 +kcminit_startup
 if test $? -ne 0; then
-  # Startup error
-  echo 'startkde: Could not start kdeinit4. Check your installation.'  1>&2
-  test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-  xmessage -geometry 500x100 "Could not start kdeinit4. Check your installation."
-  exit 1
+    # Startup error
+    echo 'startkde: Could not start kdeinit4. Check your installation.'  1>&2
+    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
+    xmessage -geometry 500x100 "Could not start kdeinit4. Check your installation."
+    exit 1
 fi
 
 # finally, give the session control to the session manager
@@ -263,10 +263,10 @@ KSMSERVEROPTIONS=""
 test -n "$dl" && KSMSERVEROPTIONS=" --lockscreen"
 kwrapper4 ksmserver $KDEWM $KSMSERVEROPTIONS
 if test $? -eq 255; then
-  # Startup error
-  echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-  test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-  xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
+    # Startup error
+    echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
+    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
+    xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
 fi
 
 wait_drkonqi=`kreadconfig --file startkderc --group WaitForDrKonqi --key Enabled --default true`
