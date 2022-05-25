@@ -112,7 +112,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
             const QString filemime = getFileMIME(fullpath);
             data.append(filemime.toUtf8());
         }
-        data.append("    </td>\n");
+        data.append("</td>\n");
 
         data.append("        <td>");
         if (fileinfo.isFile()) {
