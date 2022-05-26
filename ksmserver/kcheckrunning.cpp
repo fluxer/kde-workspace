@@ -31,6 +31,7 @@ int main()
     }
     Atom atom = XInternAtom(dpy, "_KDE_RUNNING", False);
     if (XGetSelectionOwner(dpy, atom) != None) {
+        XCloseDisplay(dpy);
         return 0;
     }
     // if ksmserver is not started yet check for the X11 atom that startkde sets
@@ -48,6 +49,7 @@ int main()
     if (data) {
         XFree(data);
     }
+    XCloseDisplay(dpy);
     if (kde_running) {
         return 0;
     }
