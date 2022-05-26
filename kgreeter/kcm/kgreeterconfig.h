@@ -54,6 +54,8 @@ private Q_SLOTS:
     void slotTest();
 
 private:
+    void loadSettings(const QString &font, const QString &style, const QString &color,
+                      const QString &cursor, const QString &background, const QString &rectangle);
     void enableTest(const bool enable);
     void killLightDM();
 

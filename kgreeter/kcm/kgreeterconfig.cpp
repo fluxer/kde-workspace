@@ -126,49 +126,19 @@ KCMGreeter::~KCMGreeter()
 void KCMGreeter::load()
 {
     QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
-
     const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
-    QFont kgreeterfont;
-    if (!kgreeterfont.fromString(kgreeterfontstring)) {
-        kgreeterfont = KGreeterDefaultFont();
-    }
-    fontchooser->setFont(kgreeterfont);
-
     const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
-    for (int i = 0; i < stylesbox->count(); i++) {
-        if (stylesbox->itemData(i).toString().toLower() == kgreeterstyle.toLower()) {
-            stylesbox->setCurrentIndex(i);
-            break;
-        }
-    }
-
-    colorsbox->setCurrentIndex(0); // default
     const QString kgreetercolor = kgreetersettings.value("greeter/colorscheme").toString();
-    if (!kgreetercolor.isEmpty()) {
-        for (int i = 0; i < colorsbox->count(); i++) {
-            if (colorsbox->itemData(i).toString().toLower() == kgreetercolor.toLower()) {
-                colorsbox->setCurrentIndex(i);
-                break;
-            }
-        }
-    }
-
-    cursorbox->setCurrentIndex(0); // default
     const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme", KGreeterDefaultCursorTheme()).toString();
-    if (!kgreetercursortheme.isEmpty()) {
-        for (int i = 0; i < cursorbox->count(); i++) {
-            if (cursorbox->itemData(i).toString().toLower() == kgreetercursortheme.toLower()) {
-                cursorbox->setCurrentIndex(i);
-                break;
-            }
-        }
-    }
-
     const QString kgreeterbackground = kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString();
-    backgroundrequester->setUrl(KUrl(kgreeterbackground));
-
     const QString kgreeterrectangle = kgreetersettings.value("greeter/rectangle", KGreeterDefaultRectangle()).toString();
-    rectanglerequester->setUrl(KUrl(kgreeterrectangle));
+    loadSettings(
+        kgreeterfontstring,
+        kgreeterstyle,
+        kgreetercolor,
+        kgreetercursortheme,
+        kgreeterbackground, kgreeterrectangle
+    );
 
     enableTest(true);
     emit changed(false);
@@ -197,17 +167,13 @@ void KCMGreeter::save()
 
 void KCMGreeter::defaults()
 {
-    fontchooser->setFont(KGlobalSettings::generalFont());
-    for (int i = 0; i < stylesbox->count(); i++) {
-        if (stylesbox->itemData(i).toString().toLower() == KStyle::defaultStyle().toLower()) {
-            stylesbox->setCurrentIndex(i);
-            break;
-        }
-    }
-    colorsbox->setCurrentIndex(0);
-    cursorbox->setCurrentIndex(0);
-    backgroundrequester->setUrl(KUrl());
-    rectanglerequester->setUrl(KUrl());
+    loadSettings(
+        KGreeterDefaultFont().toString(),
+        KGreeterDefaultStyle(),
+        QString(),
+        KGreeterDefaultCursorTheme(),
+        KGreeterDefaultBackground(), KGreeterDefaultRectangle()
+    );
 
     enableTest(false);
     emit changed(true);
@@ -268,6 +234,47 @@ void KCMGreeter::slotTest()
     if (!result) {
         KMessageBox::error(this, i18n("Could not start LightDM"));
     }
+}
+
+void KCMGreeter::loadSettings(const QString &font, const QString &style, const QString &color,
+                              const QString &cursor, const QString &background, const QString &rectangle)
+{
+    QFont kgreeterfont;
+    if (!kgreeterfont.fromString(font)) {
+        kgreeterfont = KGreeterDefaultFont();
+    }
+    fontchooser->setFont(kgreeterfont);
+
+    for (int i = 0; i < stylesbox->count(); i++) {
+        if (stylesbox->itemData(i).toString().toLower() == style.toLower()) {
+            stylesbox->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    colorsbox->setCurrentIndex(0); // default
+    if (!color.isEmpty()) {
+        for (int i = 0; i < colorsbox->count(); i++) {
+            if (colorsbox->itemData(i).toString().toLower() == color.toLower()) {
+                colorsbox->setCurrentIndex(i);
+                break;
+            }
+        }
+    }
+
+    cursorbox->setCurrentIndex(0); // default
+    if (!cursor.isEmpty()) {
+        for (int i = 0; i < cursorbox->count(); i++) {
+            if (cursorbox->itemData(i).toString().toLower() == cursor.toLower()) {
+                cursorbox->setCurrentIndex(i);
+                break;
+            }
+        }
+    }
+
+    backgroundrequester->setUrl(KUrl(background));
+
+    rectanglerequester->setUrl(KUrl(rectangle));
 }
 
 void KCMGreeter::enableTest(const bool enable)
