@@ -154,7 +154,7 @@ void KCMGreeter::load()
     }
 
     cursorbox->setCurrentIndex(0); // default
-    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme").toString();
+    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme", KGreeterDefaultCursorTheme()).toString();
     if (!kgreetercursortheme.isEmpty()) {
         for (int i = 0; i < cursorbox->count(); i++) {
             if (cursorbox->itemData(i).toString().toLower() == kgreetercursortheme.toLower()) {

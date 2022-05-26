@@ -34,6 +34,11 @@ static QString KGreeterDefaultStyle()
     return QString::fromLatin1("Cleanlooks");
 }
 
+static QString KGreeterDefaultCursorTheme()
+{
+    return QString::fromLatin1("Oxygen_White");
+}
+
 static QString KGreeterDefaultBackground()
 {
     return Plasma::Theme::defaultTheme()->wallpaperPath();

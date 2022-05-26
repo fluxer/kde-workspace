@@ -567,7 +567,7 @@ int main(int argc, char**argv)
         app.setPalette(KGlobalSettings::createApplicationPalette());
     }
 
-    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme").toString();
+    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme", KGreeterDefaultCursorTheme()).toString();
     if (!kgreetercursortheme.isEmpty()) {
         const QByteArray xcursorthemebytes = kgreetercursortheme.toAscii();
         ::setenv("XCURSOR_THEME", xcursorthemebytes.constData(), 1);
