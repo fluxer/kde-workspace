@@ -36,6 +36,10 @@
 
 int main(int argc, char **argv)
 {
+    // NOTE: disables session manager entirely, for reference:
+    // https://www.x.org/releases/X11R7.7/doc/libSM/xsmp.html
+    ::unsetenv("SESSION_MANAGER");
+
     //  GS 5/2001 - I changed the name to "KDE" to make it look better
     //              in the titles of dialogs which are displayed.
     KAboutData aboutdata("kuiserver", "kdelibs4", ki18n("Job Manager"),

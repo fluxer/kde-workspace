@@ -251,7 +251,7 @@ int main( int argc, char* argv[] )
     options.add("lockscreen", ki18n("Starts the session in locked mode"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    putenv((char*)"SESSION_MANAGER=");
+    ::unsetenv("SESSION_MANAGER");
     checkComposite();
     KApplication *a;
 

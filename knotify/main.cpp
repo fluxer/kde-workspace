@@ -36,6 +36,10 @@
 
 int main(int argc, char **argv)
 {
+    // NOTE: disables session manager entirely, for reference:
+    // https://www.x.org/releases/X11R7.7/doc/libSM/xsmp.html
+    ::unsetenv("SESSION_MANAGER");
+
     KAboutData aboutdata("knotify", "knotify4", ki18n("KNotify"),
                          KDE_VERSION_STRING, ki18n("KDE Notification Daemon"),
                          KAboutData::License_GPL, ki18n("(C) 1997-2008, KDE Developers"));
