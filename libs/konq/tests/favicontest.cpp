@@ -107,7 +107,7 @@ void FavIconTest::testSetIconForURL_data()
     // lb-140-82-121-3-fra.github.com if not address
     QTest::newRow("https://140.82.121.3/")
         << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("https://140.82.121.3/favicon.ico")
-        << QString::fromLatin1("favicons/140.82.121.3");
+        << QString::fromLatin1("favicons/lb-140-82-121-3-fra.github.com");
 }
 
 void FavIconTest::testSetIconForURL()
@@ -141,8 +141,8 @@ void FavIconTest::testSetIconForURL()
     QCOMPARE(spy[0][2].toString(), result);
 #else
     m_iconChanged = false;
-    m_favIconModule.downloadHostIcon(url);
-    qDebug("called downloadHostIcon, waiting");
+    m_favIconModule.setIconForUrl(url, icon);
+    qDebug("called setIconForUrl, waiting");
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     while (!m_iconChanged && elapsedTimer.elapsed() < s_waitTime) {
