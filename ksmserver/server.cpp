@@ -706,6 +706,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
     KDE_signal(SIGHUP, sighandler);
     KDE_signal(SIGTERM, sighandler);
     KDE_signal(SIGINT, sighandler);
+    KDE_signal(SIGPIPE, SIG_IGN);
 
     connect( &protectionTimer, SIGNAL(timeout()), this, SLOT(protectionTimeout()) );
     connect( &restoreTimer, SIGNAL(timeout()), this, SLOT(tryRestoreNext()) );
