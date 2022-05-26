@@ -33,5 +33,23 @@ int main()
     if (XGetSelectionOwner(dpy, atom) != None) {
         return 0;
     }
+    // if ksmserver is not started yet check for the X11 atom that startkde sets
+    Atom type = None;
+    int format = 0;
+    unsigned long nitems = 0;
+    unsigned long after = 0;
+    unsigned char* data = NULL;
+    const int kde_full_session_status = XGetWindowProperty(
+        dpy, RootWindow(dpy, 0),
+        XInternAtom(dpy, "KDE_FULL_SESSION", False),
+        0, 0, False, AnyPropertyType, &type, &format, &nitems, &after, &data
+    );
+    const bool kde_running = (kde_full_session_status == Success && data);
+    if (data) {
+        XFree(data);
+    }
+    if (kde_running) {
+        return 0;
+    }
     return 1;
 }
