@@ -725,10 +725,9 @@ bool TextBuffer::save (const QString &filename)
   }
 
   /**
-   * construct stream + disable Unicode headers
+   * construct stream
    */
   QTextStream stream (&saveFile);
-  stream.setCodec (QTextCodec::codecForName("UTF-16"));
 
   // set the correct codec
   stream.setCodec (m_textCodec);
