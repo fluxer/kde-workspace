@@ -275,9 +275,7 @@ void FavIconsModule::slotResult(KJob *job)
         QBuffer buffer(&download.iconData);
         buffer.open(QIODevice::ReadOnly);
         QImageReader ir(&buffer);
-        QSize desired(16,16);
         if (ir.canRead()) {
-            ir.setScaledSize(desired);
             const QImage img = ir.read();
             if (!img.isNull()) {
                 iconName = makeIconName(download, iconURL);
