@@ -95,3 +95,4 @@ MimeType=image/vnd.djvu;image/x.djvu;
 X-KDE-Library=djvuthumbnail
 CacheThumbnail=true
 IgnoreMaximumSize=true
+InitialPreference=2

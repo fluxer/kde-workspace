@@ -76,3 +76,4 @@ ServiceTypes=ThumbCreator
 MimeType=image/vnd.microsoft.icon;image/x-win-bitmap;application/x-navi-animation;
 CacheThumbnail=false
 X-KDE-Library=windowsimagethumbnail
+InitialPreference=2
