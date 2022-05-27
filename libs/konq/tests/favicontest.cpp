@@ -26,6 +26,7 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
+#include <QImageReader>
 #include <QElapsedTimer>
 #include <QEventLoop>
 
@@ -35,12 +36,14 @@ QTEST_KDEMAIN(FavIconTest, NoGUI)
 // #define USE_EVENT_LOOP
 
 static const char s_hostUrl[] = "https://www.google.com/";
+static const char s_icoPath[] = KDESRCDIR "designer.ico";
 static const int s_waitTime = 20000; // in ms
 
-enum NetworkAccess { Unknown, Yes, No } s_networkAccess = Unknown;
+enum CheckStatus { Unknown, Yes, No };
+CheckStatus s_networkAccess = CheckStatus::Unknown;
 static bool checkNetworkAccess()
 {
-    if (s_networkAccess == Unknown) {
+    if (s_networkAccess == CheckStatus::Unknown) {
         QElapsedTimer networkTimer;
         networkTimer.start();
         KIO::Job* job = KIO::get(KUrl(s_hostUrl), KIO::NoReload, KIO::HideProgressInfo);
@@ -49,10 +52,28 @@ static bool checkNetworkAccess()
             qDebug("Network access OK. Download time %lld", networkTimer.elapsed());
         } else {
             qWarning("%s", qPrintable(KIO::NetAccess::lastErrorString()));
-            s_networkAccess = No;
+            s_networkAccess = CheckStatus::No;
         }
     }
-    return s_networkAccess == Yes;
+    return s_networkAccess == CheckStatus::Yes;
+}
+
+CheckStatus s_icoReadable = CheckStatus::Unknown;
+static bool checkICOReadable()
+{
+    if (s_icoReadable == CheckStatus::Unknown) {
+        QFile icofile(s_icoPath);
+        icofile.open(QFile::ReadOnly);
+        QImageReader icoimagereader(&icofile);
+        if (icoimagereader.canRead()) {
+            s_icoReadable = Yes;
+            qDebug("ICO is readable");
+        } else {
+            qWarning("%s", qPrintable(icoimagereader.errorString()));
+            s_icoReadable = CheckStatus::No;
+        }
+    }
+    return s_icoReadable == CheckStatus::Yes;
 }
 
 static void cleanCache()
@@ -116,6 +137,10 @@ void FavIconTest::testSetIconForURL()
     QFETCH(QString, icon);
     QFETCH(QString, result);
 
+    if (!checkICOReadable()) {
+        QSKIP("ico not readable", SkipAll);
+    }
+
     if (!checkNetworkAccess()) {
         QSKIP("no network access", SkipAll);
     }
@@ -177,6 +202,10 @@ void FavIconTest::testIconForURL()
 {
     QFETCH(QString, url);
     QFETCH(QString, icon);
+
+    if (!checkICOReadable()) {
+        QSKIP("ico not readable", SkipAll);
+    }
 
     if (!checkNetworkAccess()) {
         QSKIP("no network access", SkipAll);
