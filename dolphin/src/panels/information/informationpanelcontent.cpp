@@ -139,10 +139,12 @@ void InformationPanelContent::showItem(const KFileItem& item)
         if (isSearchUrl) {
             // in the case of a search-URL the URL is not readable for humans
             // (at least not useful to show in the Information Panel)
+            m_preview->clearPreview();
             QString iconPath = KIconLoader::global()->iconPath("nepomuk", -KIconLoader::SizeEnormous, false);
             // qDebug() << Q_FUNC_INFO << iconPath;
             m_preview->showPreview(KUrl(iconPath));
         } else {
+            m_preview->clearPreview();
             m_preview->showPreview(itemUrl);
         }
     }
@@ -178,6 +180,7 @@ void InformationPanelContent::showItems(const KFileItemList& items)
 {
     // qDebug() << Q_FUNC_INFO << items;
 
+    m_preview->clearPreview();
     QString iconPath = KIconLoader::global()->iconPath("dialog-information", -KIconLoader::SizeEnormous, false);
     // qDebug() << Q_FUNC_INFO << iconPath;
     m_preview->showPreview(KUrl(iconPath));
@@ -287,6 +290,7 @@ bool InformationPanelContent::applyPlace(const KUrl& url)
         const PlacesItem* item = m_placesItemModel->placesItem(i);
         if (item->url().equals(url, KUrl::CompareWithoutTrailingSlash)) {
             setNameLabelText(item->text());
+            m_preview->clearPreview();
             QString iconPath = KIconLoader::global()->iconPath(item->icon(), -KIconLoader::SizeEnormous, false);
             // qDebug() << Q_FUNC_INFO << iconPath << item->icon();
             m_preview->showPreview(KUrl(iconPath));
