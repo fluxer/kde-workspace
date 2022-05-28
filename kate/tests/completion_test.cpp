@@ -93,6 +93,11 @@ static void invokeCompletionBox(KateView* view)
 
 void CompletionTest::init()
 {
+    // most tests require window manager
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     QVERIFY(editor);
 
@@ -117,10 +122,6 @@ void CompletionTest::cleanup()
 
 void CompletionTest::testFilterEmptyRange()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CodeCompletionTestModel(m_view, "a");
@@ -207,10 +208,6 @@ void CompletionTest::testCustomRange1()
 
 void CompletionTest::testCustomRange2()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     m_doc->setText("$ bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
@@ -231,10 +228,6 @@ void CompletionTest::testCustomRange2()
 
 void CompletionTest::testCustomRangeMultipleModels()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     m_doc->setText("$a bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
@@ -263,10 +256,6 @@ void CompletionTest::testCustomRangeMultipleModels()
 
 void CompletionTest::testAbortController()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CustomRangeModel(m_view, "$a");
@@ -286,10 +275,6 @@ void CompletionTest::testAbortController()
 
 void CompletionTest::testAbortControllerMultipleModels()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel1 = new CodeCompletionTestModel(m_view, "aa");
@@ -320,10 +305,6 @@ void CompletionTest::testAbortControllerMultipleModels()
 
 void CompletionTest::testEmptyFilterString()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new EmptyFilterStringModel(m_view, "aa");
@@ -343,10 +324,6 @@ void CompletionTest::testEmptyFilterString()
 
 void CompletionTest::testUpdateCompletionRange()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     m_doc->setText("ab    bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
@@ -369,10 +346,6 @@ void CompletionTest::testUpdateCompletionRange()
 
 void CompletionTest::testCustomStartCompl()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     m_view->completionWidget()->setAutomaticInvocationDelay(1);
@@ -414,10 +387,6 @@ void CompletionTest::testAbortImmideatelyAfterStart()
 
 void CompletionTest::testJumpToListBottomAfterCursorUpWhileAtTop()
 {
-    if (!hasWM()) {
-        QSKIP("No window manager", SkipAll);
-    }
-
     new CodeCompletionTestModel(m_view, "aa");
     invokeCompletionBox(m_view);
 
@@ -529,10 +498,6 @@ void CompletionTest::testAbbrevAndContainsMatching()
 
 void CompletionTest::benchCompletionModel()
 {
-  if (!hasWM()) {
-    QSKIP("No window manager", SkipAll);
-  }
-
   const QString text("abcdefg abcdef");
   m_doc->setText(text);
   CodeCompletionTestModel* testModel1 = new CodeCompletionTestModel(m_view, "abcdefg");
