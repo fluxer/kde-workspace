@@ -24,7 +24,7 @@
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include "dcd.h"
 
-class LumenCompletionModel: public CodeCompletionModel2,
+class LumenCompletionModel: public KTextEditor::CodeCompletionModel2,
     public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
@@ -33,9 +33,9 @@ public:
     LumenCompletionModel(QObject* parent, DCD* dcd);
     virtual ~LumenCompletionModel();
 
-    virtual bool shouldStartCompletion(View* view, const QString& insertedText, bool userInsertion, const Cursor& position);
-    virtual void completionInvoked(View* view, const Range& range, InvocationType invocationType);
-    virtual void executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const;
+    virtual bool shouldStartCompletion(KTextEditor::View* view, const QString& insertedText, bool userInsertion, const KTextEditor::Cursor& position);
+    virtual void completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, InvocationType invocationType);
+    virtual void executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const;
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
 private:
     DCD* m_dcd;

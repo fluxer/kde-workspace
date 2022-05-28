@@ -26,7 +26,7 @@
 #include <klocalizedstring.h>
 
 
-LumenCompletionModel::LumenCompletionModel(QObject* parent, DCD* dcd): CodeCompletionModel2(parent)
+LumenCompletionModel::LumenCompletionModel(QObject* parent, DCD* dcd): KTextEditor::CodeCompletionModel2(parent)
 {
     m_dcd = dcd;
 }
@@ -36,7 +36,7 @@ LumenCompletionModel::~LumenCompletionModel()
 
 }
 
-bool LumenCompletionModel::shouldStartCompletion(View* view, const QString& insertedText, bool userInsertion, const Cursor& position)
+bool LumenCompletionModel::shouldStartCompletion(KTextEditor::View* view, const QString& insertedText, bool userInsertion, const KTextEditor::Cursor& position)
 {
     bool complete = KTextEditor::CodeCompletionModelControllerInterface::shouldStartCompletion(
         view, insertedText, userInsertion, position
@@ -48,7 +48,7 @@ bool LumenCompletionModel::shouldStartCompletion(View* view, const QString& inse
     return complete;
 }
 
-void LumenCompletionModel::completionInvoked(View* view, const Range& range, CodeCompletionModel::InvocationType invocationType)
+void LumenCompletionModel::completionInvoked(KTextEditor::View* view, const KTextEditor::Range& range, CodeCompletionModel::InvocationType invocationType)
 {
     Q_UNUSED(invocationType);
     KTextEditor::Document* document = view->document();
@@ -69,7 +69,7 @@ void LumenCompletionModel::completionInvoked(View* view, const Range& range, Cod
     setHasGroups(false);
 }
 
-void LumenCompletionModel::executeCompletionItem2(Document* document, const Range& word, const QModelIndex& index) const
+void LumenCompletionModel::executeCompletionItem2(KTextEditor::Document* document, const KTextEditor::Range& word, const QModelIndex& index) const
 {
     QModelIndex sibling = index.sibling(index.row(), Name);
     KTextEditor::View* view = document->activeView();
@@ -80,7 +80,7 @@ void LumenCompletionModel::executeCompletionItem2(Document* document, const Rang
     if (crole & Function) {
         KTextEditor::Cursor cursor = document->activeView()->cursorPosition();
         document->insertText(cursor, QString("()"));
-        view->setCursorPosition(Cursor(cursor.line(), cursor.column()+1));
+        view->setCursorPosition(KTextEditor::Cursor(cursor.line(), cursor.column()+1));
     }
 }
 

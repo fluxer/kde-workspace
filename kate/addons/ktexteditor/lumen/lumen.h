@@ -53,15 +53,15 @@ class LumenPluginView: public QObject, public KXMLGUIClient
         bool m_registered;
 };
 
-class LumenPlugin: public Plugin
+class LumenPlugin: public KTextEditor::Plugin
 {
     Q_OBJECT
     public:
         LumenPlugin(QObject *parent, const QVariantList & = QVariantList());
         ~LumenPlugin();
         DCD* dcd();
-        void addView(View *view);
-        void removeView(View *view);
+        void addView(KTextEditor::View *view);
+        void removeView(KTextEditor::View *view);
         virtual void readConfig(KConfig*) {}
         virtual void writeConfig(KConfig*) {}
     private:

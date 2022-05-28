@@ -94,7 +94,7 @@ void LumenPluginView::registerTextHints()
             this, SLOT(getTextHint(const KTextEditor::Cursor&, QString &)));
 }
 
-void LumenPluginView::getTextHint(const Cursor& cursor, QString& text)
+void LumenPluginView::getTextHint(const KTextEditor::Cursor& cursor, QString& text)
 {
     KTextEditor::Document* document = m_view->document();
 
@@ -114,7 +114,7 @@ LumenPluginView::~LumenPluginView()
 {
 }
 
-void LumenPluginView::urlChanged(Document* document)
+void LumenPluginView::urlChanged(KTextEditor::Document* document)
 {
     registerCompletion();
 

@@ -68,8 +68,8 @@ void IconInserterPluginView::insertIcon()
 	if(iconName.isEmpty())
 		return;
 	
-	View *view=m_view.data();
-	Document *doc=view->document();
+	KTextEditor::View *view=m_view.data();
+	KTextEditor::Document *doc=view->document();
 	
 	
 	QString suffix = doc->url().url();

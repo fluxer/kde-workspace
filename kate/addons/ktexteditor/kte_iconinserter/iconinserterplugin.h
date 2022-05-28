@@ -45,14 +45,14 @@ class IconInserterPluginView: public QObject, public KXMLGUIClient
 		QPointer<KTextEditor::View> m_view;
 };
 
-class IconInserterPlugin: public Plugin
+class IconInserterPlugin: public KTextEditor::Plugin
 {
 	Q_OBJECT
 	public:
 		IconInserterPlugin (QObject *parent, const QVariantList & = QVariantList());
 		~IconInserterPlugin();
-		void addView (View *view);
-		void removeView(View *view);
+		void addView (KTextEditor::View *view);
+		void removeView(KTextEditor::View *view);
 		virtual void readConfig (KConfig*) {}
 		virtual void writeConfig (KConfig*) {}
 	private:
