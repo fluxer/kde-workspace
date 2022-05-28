@@ -180,7 +180,7 @@ void ReplaceMatches::doReplaceNextMatch()
     for (int i=0; i<rVector.size(); i++) {
         line = rVector[i]->start().line();
         column = rVector[i]->start().column();
-        doc->replaceText(*rVector[i], rTexts[i]);
+        doc->replaceText(rVector[i]->toRange(), rTexts[i]);
         emit matchReplaced(doc, line, column, rTexts[i].length());
     }
 

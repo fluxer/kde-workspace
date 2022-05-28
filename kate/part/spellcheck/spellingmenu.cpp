@@ -181,8 +181,8 @@ void KateSpellingMenu::populateSuggestionsMenu()
   m_spellingMenu->addAction(m_ignoreWordAction);
   m_spellingMenu->addAction(m_addToDictionaryAction);
   m_spellingMenu->addSeparator();
-  const QString& misspelledWord = m_view->doc()->text(*m_currentMisspelledRange);
-  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(*m_currentMisspelledRange);
+  const QString& misspelledWord = m_view->doc()->text(m_currentMisspelledRange->toRange());
+  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(m_currentMisspelledRange->toRange());
   m_currentSuggestions = KateGlobal::self()->spellCheckManager()->suggestions(misspelledWord, dictionary);
 
   int counter = 0;
@@ -199,7 +199,7 @@ void KateSpellingMenu::populateSuggestionsMenu()
 void KateSpellingMenu::replaceWordBySuggestion(const QString& suggestion)
 {
   KateDocument *doc = m_view->doc();
-  KateGlobal::self()->spellCheckManager()->replaceCharactersEncodedIfNecessary(suggestion, doc, *m_currentMisspelledRange);
+  KateGlobal::self()->spellCheckManager()->replaceCharactersEncodedIfNecessary(suggestion, doc, m_currentMisspelledRange->toRange());
 }
 
 void KateSpellingMenu::addCurrentWordToDictionary()
@@ -207,8 +207,8 @@ void KateSpellingMenu::addCurrentWordToDictionary()
   if(!m_currentMisspelledRange) {
     return;
   }
-  const QString& misspelledWord = m_view->doc()->text(*m_currentMisspelledRange);
-  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(*m_currentMisspelledRange);
+  const QString& misspelledWord = m_view->doc()->text(m_currentMisspelledRange->toRange());
+  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(m_currentMisspelledRange->toRange());
   KateGlobal::self()->spellCheckManager()->addToDictionary(misspelledWord, dictionary);
   m_view->doc()->clearMisspellingForWord(misspelledWord); // WARNING: 'm_currentMisspelledRange' is deleted here!
 }
@@ -218,8 +218,8 @@ void KateSpellingMenu::ignoreCurrentWord()
   if(!m_currentMisspelledRange) {
     return;
   }
-  const QString& misspelledWord = m_view->doc()->text(*m_currentMisspelledRange);
-  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(*m_currentMisspelledRange);
+  const QString& misspelledWord = m_view->doc()->text(m_currentMisspelledRange->toRange());
+  const QString dictionary = m_view->doc()->dictionaryForMisspelledRange(m_currentMisspelledRange->toRange());
   KateGlobal::self()->spellCheckManager()->ignoreWord(misspelledWord, dictionary);
   m_view->doc()->clearMisspellingForWord(misspelledWord); // WARNING: 'm_currentMisspelledRange' is deleted here!
 }

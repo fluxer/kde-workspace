@@ -151,7 +151,7 @@ void KateSpellCheckDialog::spellcheck( const KTextEditor::Cursor &from, const KT
   m_globalSpellCheckRange = m_view->doc()->newMovingRange (KTextEditor::Range( start, end ),
                                                            KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
   m_spellCheckCancelledByUser = false;
-  performSpellCheck( *m_globalSpellCheckRange );
+  performSpellCheck( m_globalSpellCheckRange->toRange() );
 }
 
 KTextEditor::Cursor KateSpellCheckDialog::locatePosition( int pos )
@@ -208,7 +208,7 @@ void KateSpellCheckDialog::corrected( const QString& word, int pos, const QStrin
   // the misspelled word being replaced, i.e. new line breaks might be inserted as well. As such, the text
   // in the 'Sonnet::Dialog' might be eventually out of sync with the visible text. Therefore, we 'restart'
   // spell checking from the current position.
-  performSpellCheck( KTextEditor::Range( replacementStartCursor, m_globalSpellCheckRange->end() ) );
+  performSpellCheck( KTextEditor::Range( replacementStartCursor, m_globalSpellCheckRange->end().toCursor() ) );
 }
 
 void KateSpellCheckDialog::performSpellCheck(const KTextEditor::Range& range)

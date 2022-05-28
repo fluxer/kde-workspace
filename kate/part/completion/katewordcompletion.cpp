@@ -443,7 +443,7 @@ void KateWordCompletionView::complete( bool fw )
     {
       const int spansColumns = d->liRange->end().column() - d->liRange->start().column();
       if ( spansColumns > 0 )
-        doc->removeText( *d->liRange );
+        doc->removeText( d->liRange->toRange() );
 
       d->liRange->setRange( KTextEditor::Range::invalid()  );
       d->dcCursor = r.end();
@@ -488,7 +488,7 @@ void KateWordCompletionView::complete( bool fw )
     {
       //kDebug( 13040 )<<"USABLE MATCH";
       QString m = d->re.cap( 1 );
-      if ( m != doc->text( *d->liRange ) && (d->dcCursor.line() != d->dcRange.start().line() || pos != d->dcRange.start().column() ) )
+      if ( m != doc->text( d->liRange->toRange() ) && (d->dcCursor.line() != d->dcRange.start().line() || pos != d->dcRange.start().column() ) )
       {
         // we got good a match! replace text and return.
         d->isCompleting = true;

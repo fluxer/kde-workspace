@@ -132,7 +132,7 @@ void CompletionTest::testFilterWithRange()
     m_view->setCursorPosition(Cursor(0, 2));
     invokeCompletionBox(m_view);
 
-    Range complRange = *m_view->completionWidget()->completionRange(testModel);
+    Range complRange = m_view->completionWidget()->completionRange(testModel)->toRange();
     QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 2)));
     QCOMPARE(countItems(model), 14);
 
@@ -182,7 +182,7 @@ void CompletionTest::testCustomRange1()
     m_view->setCursorPosition(Cursor(0, 3));
     invokeCompletionBox(m_view);
 
-    Range complRange = *m_view->completionWidget()->completionRange(testModel);
+    Range complRange = m_view->completionWidget()->completionRange(testModel)->toRange();
     kDebug() << complRange;
     QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 3)));
     QCOMPARE(countItems(model), 14);
@@ -201,7 +201,7 @@ void CompletionTest::testCustomRange2()
     m_view->setCursorPosition(Cursor(0, 1));
     invokeCompletionBox(m_view);
 
-    Range complRange = *m_view->completionWidget()->completionRange(testModel);
+    Range complRange = m_view->completionWidget()->completionRange(testModel)->toRange();
     QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 1)));
     QCOMPARE(countItems(model), 40);
 
@@ -220,8 +220,8 @@ void CompletionTest::testCustomRangeMultipleModels()
     m_view->setCursorPosition(Cursor(0, 1));
     invokeCompletionBox(m_view);
 
-    QCOMPARE(Range(*m_view->completionWidget()->completionRange(testModel1)), Range(Cursor(0, 0), Cursor(0, 2)));
-    QCOMPARE(Range(*m_view->completionWidget()->completionRange(testModel2)), Range(Cursor(0, 1), Cursor(0, 2)));
+    QCOMPARE(Range(m_view->completionWidget()->completionRange(testModel1)->toRange()), Range(Cursor(0, 0), Cursor(0, 2)));
+    QCOMPARE(Range(m_view->completionWidget()->completionRange(testModel2)->toRange()), Range(Cursor(0, 1), Cursor(0, 2)));
     QCOMPARE(model->currentCompletion(testModel1), QString("$"));
     QCOMPARE(model->currentCompletion(testModel2), QString(""));
     QCOMPARE(countItems(model), 80);
@@ -312,11 +312,11 @@ void CompletionTest::testUpdateCompletionRange()
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 40);
-    QCOMPARE(Range(*m_view->completionWidget()->completionRange(testModel)), Range(Cursor(0, 3), Cursor(0, 3)));
+    QCOMPARE(Range(m_view->completionWidget()->completionRange(testModel)->toRange()), Range(Cursor(0, 3), Cursor(0, 3)));
 
     m_view->insertText("ab");
     QTest::qWait(1000); // process events
-    QCOMPARE(Range(*m_view->completionWidget()->completionRange(testModel)), Range(Cursor(0, 0), Cursor(0, 5)));
+    QCOMPARE(Range(m_view->completionWidget()->completionRange(testModel)->toRange()), Range(Cursor(0, 0), Cursor(0, 5)));
     QCOMPARE(countItems(model), 40);
 }
 

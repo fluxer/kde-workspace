@@ -143,12 +143,6 @@ class KATEPARTINTERFACES_EXPORT TextRange : public KTextEditor::MovingRange {
     const KTextEditor::Range toRange () const { return KTextEditor::Range (start().toCursor(), end().toCursor()); }
 
     /**
-     * Convert this clever range into a dumb one. Equal to toRange, allowing to use implicit conversion.
-     * @return normal range
-     */
-    operator const KTextEditor::Range () const { return KTextEditor::Range (start().toCursor(), end().toCursor()); }
-
-    /**
      * Gets the active view for this range. Might be already invalid, internally only used for pointer comparisons.
      *
      * \return a pointer to the active view

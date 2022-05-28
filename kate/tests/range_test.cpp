@@ -97,7 +97,7 @@ void RangeTest::testTextRange()
   // test text range
   KateDocument doc (false, false, false);
   KTextEditor::MovingRange *complexRange = doc.newMovingRange (KTextEditor::Range());
-  KTextEditor::Range range = *complexRange;
+  KTextEditor::Range range = complexRange->toRange();
   rangeCheck (range);
   delete complexRange;
 }
@@ -123,7 +123,7 @@ void RangeTest::testInsertText()
   KTextEditor::Cursor cursor3 = doc.endOfLine(1);
 
   // Set up a few more lines
-  doc.insertText(*cursor2, "\nEven More Test Text");
+  doc.insertText(cursor2->toCursor(), "\nEven More Test Text");
   QCOMPARE(doc.documentEnd(), KTextEditor::Cursor(2,19));
   QCOMPARE(cursor3, doc.endOfLine(1));
 }

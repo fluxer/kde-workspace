@@ -1796,13 +1796,13 @@ bool KateView::setSelection( const KTextEditor::Range &selection )
   /**
    * anything to do?
    */
-  if (selection == m_selection)
+  if (selection == m_selection.toRange())
     return true;
 
   /**
    * backup old range
    */
-  KTextEditor::Range oldSelection = m_selection;
+  KTextEditor::Range oldSelection = m_selection.toRange();
 
   /**
    * set new range
@@ -1842,7 +1842,7 @@ bool KateView::clearSelection(bool redraw, bool finishedChangingSelection)
   /**
    * backup old range
    */
-  KTextEditor::Range oldSelection = m_selection;
+  KTextEditor::Range oldSelection = m_selection.toRange();
 
   /**
    * invalidate current selection
@@ -1871,14 +1871,14 @@ bool KateView::clearSelection(bool redraw, bool finishedChangingSelection)
 bool KateView::selection() const
 {
   if (!wrapCursor())
-    return m_selection != KTextEditor::Range::invalid();
+    return m_selection.toRange() != KTextEditor::Range::invalid();
   else
     return m_selection.toRange().isValid();
 }
 
 QString KateView::selectionText() const
 {
-  return m_doc->text(m_selection, blockSelect);
+  return m_doc->text(m_selection.toRange(), blockSelect);
 }
 
 bool KateView::removeSelectedText()
@@ -1889,7 +1889,7 @@ bool KateView::removeSelectedText()
   m_doc->editStart ();
 
   // Optimization: clear selection before removing text
-  KTextEditor::Range selection = m_selection;
+  KTextEditor::Range selection = m_selection.toRange();
 
   m_doc->removeText(selection, blockSelect);
 
@@ -1928,7 +1928,7 @@ bool KateView::cursorSelected(const KTextEditor::Cursor& cursor)
     return cursor.line() >= m_selection.start().line() && ret.line() <= m_selection.end().line()
         && ret.column() >= m_selection.start().column() && ret.column() <= m_selection.end().column();
   else
-    return m_selection.toRange().contains(cursor) || m_selection.end() == cursor;
+    return m_selection.toRange().contains(cursor) || m_selection.end().toCursor() == cursor;
 }
 
 bool KateView::lineSelected (int line)
@@ -1960,26 +1960,26 @@ void KateView::tagSelection(const KTextEditor::Range &oldSelection)
       // We have to tag the whole lot if
       // 1) we have a selection, and:
       //  a) it's new; or
-      tagLines(m_selection, true);
+      tagLines(m_selection.toRange(), true);
 
     } else if (blockSelection() && (oldSelection.start().column() != m_selection.start().column() || oldSelection.end().column() != m_selection.end().column())) {
       //  b) we're in block selection mode and the columns have changed
-      tagLines(m_selection, true);
+      tagLines(m_selection.toRange(), true);
       tagLines(oldSelection, true);
 
     } else {
-      if (oldSelection.start() != m_selection.start()) {
-        if (oldSelection.start() < m_selection.start())
-          tagLines(oldSelection.start(), m_selection.start(), true);
+      if (oldSelection.start() != m_selection.start().toCursor()) {
+        if (oldSelection.start() < m_selection.start().toCursor())
+          tagLines(oldSelection.start(), m_selection.start().toCursor(), true);
         else
-          tagLines(m_selection.start(), oldSelection.start(), true);
+          tagLines(m_selection.start().toCursor(), oldSelection.start(), true);
       }
 
-      if (oldSelection.end() != m_selection.end()) {
-        if (oldSelection.end() < m_selection.end())
-          tagLines(oldSelection.end(), m_selection.end(), true);
+      if (oldSelection.end() != m_selection.end().toCursor()) {
+        if (oldSelection.end() < m_selection.end().toCursor())
+          tagLines(oldSelection.end(), m_selection.end().toCursor(), true);
         else
-          tagLines(m_selection.end(), oldSelection.end(), true);
+          tagLines(m_selection.end().toCursor(), oldSelection.end(), true);
       }
     }
 
@@ -2025,7 +2025,7 @@ void KateView::cut()
 
   copy();
   if (!selection())
-    selectLine(m_viewInternal->m_cursor);
+    selectLine(m_viewInternal->m_cursor.toCursor());
   removeSelectedText();
 }
 
@@ -2067,7 +2067,7 @@ bool KateView::setBlockSelection (bool on)
   {
     blockSelect = on;
 
-    KTextEditor::Range oldSelection = m_selection;
+    KTextEditor::Range oldSelection = m_selection.toRange();
 
     const bool hadSelection = clearSelection(false, false);
 
@@ -2366,7 +2366,7 @@ void KateView::toggleComment( )
 
 void KateView::uppercase( )
 {
-  m_doc->transform( this, m_viewInternal->m_cursor, KateDocument::Uppercase );
+  m_doc->transform( this, m_viewInternal->m_cursor.toCursor(), KateDocument::Uppercase );
 }
 
 void KateView::killLine( )
@@ -2384,14 +2384,14 @@ void KateView::killLine( )
 
 void KateView::lowercase( )
 {
-  m_doc->transform( this, m_viewInternal->m_cursor, KateDocument::Lowercase );
+  m_doc->transform( this, m_viewInternal->m_cursor.toCursor(), KateDocument::Lowercase );
 }
 
 void KateView::capitalize( )
 {
   m_doc->editStart();
-  m_doc->transform( this, m_viewInternal->m_cursor, KateDocument::Lowercase );
-  m_doc->transform( this, m_viewInternal->m_cursor, KateDocument::Capitalize );
+  m_doc->transform( this, m_viewInternal->m_cursor.toCursor(), KateDocument::Lowercase );
+  m_doc->transform( this, m_viewInternal->m_cursor.toCursor(), KateDocument::Capitalize );
   m_doc->editEnd();
 }
 
@@ -2644,7 +2644,7 @@ void KateView::toNextModifiedLine()
 const KTextEditor::Range & KateView::selectionRange( ) const
 {
   // update the cache
-  m_holdSelectionRangeForAPI = m_selection;
+  m_holdSelectionRangeForAPI = m_selection.toRange();
 
   // return cached value, has right type!
   return m_holdSelectionRangeForAPI;

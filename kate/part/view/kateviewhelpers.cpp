@@ -1832,7 +1832,7 @@ void KateIconBorder::showBlock()
     }
   }
 
-  if (newRange.isValid() && m_foldingRange && *m_foldingRange == newRange) {
+  if (newRange.isValid() && m_foldingRange && m_foldingRange->toRange() == newRange) {
     // new range equals the old one, nothing to do.
     return;
   } else { // the ranges differ, delete the old, if it exists

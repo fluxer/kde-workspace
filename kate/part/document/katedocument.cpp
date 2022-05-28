@@ -5055,7 +5055,7 @@ void KateDocument::setDictionary(const QString& newDictionary, const KTextEditor
       kDebug(13000) << "dictionaryRange contains newDictionaryRange";
       return;
     }
-    if(newDictionaryRange.contains(*dictionaryRange))
+    if(newDictionaryRange.contains(dictionaryRange->toRange()))
     {
       delete dictionaryRange;
       i = m_dictionaryRanges.erase(i);
@@ -5075,7 +5075,7 @@ void KateDocument::setDictionary(const QString& newDictionary, const KTextEditor
         kDebug(13000) << "dictionarySet == newDictionary";
         continue;
       }
-      QList<KTextEditor::Range> remainingRanges = KateSpellCheckManager::rangeDifference(*dictionaryRange, intersection);
+      QList<KTextEditor::Range> remainingRanges = KateSpellCheckManager::rangeDifference(dictionaryRange->toRange(), intersection);
       for(QList<KTextEditor::Range>::iterator j = remainingRanges.begin(); j != remainingRanges.end(); ++j)
       {
         KTextEditor::MovingRange *remainingRange = newMovingRange(*j,

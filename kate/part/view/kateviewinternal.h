@@ -120,7 +120,7 @@ class KateViewInternal : public QWidget
 
   public:
     // Start Position is a virtual cursor
-    KTextEditor::Cursor startPos() const { return m_startPos; }
+    KTextEditor::Cursor startPos() const { return m_startPos.toCursor(); }
     int startLine () const { return m_startPos.line(); }
     int startX () const { return m_startX; }
 
@@ -186,7 +186,7 @@ class KateViewInternal : public QWidget
     void top_home(bool sel=false);
     void bottom_end(bool sel=false);
 
-    KTextEditor::Cursor getCursor() const { return m_cursor; }
+    KTextEditor::Cursor getCursor() const { return m_cursor.toCursor(); }
     KTextEditor::Cursor getMouse() const { return m_mouse; }
 
     QPoint cursorToCoordinate(const KTextEditor::Cursor& cursor, bool realCursor = true, bool includeBorder = true) const;

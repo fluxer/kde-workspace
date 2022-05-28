@@ -108,7 +108,7 @@ QList<QTextLayout::FormatRange> KateCompletionDelegate::createHighlighting(const
     ///@todo reset the cache when the model changed
     m_cachedRow = index.row();
 
-    KTextEditor::Cursor completionStart = widget()->completionRange()->start();
+    KTextEditor::Cursor completionStart = widget()->completionRange()->start().toCursor();
 
     QString startText = document()->text(KTextEditor::Range(completionStart.line(), 0, completionStart.line(), completionStart.column()));
 

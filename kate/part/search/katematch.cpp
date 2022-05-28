@@ -54,7 +54,7 @@ KTextEditor::Range KateMatch::replace(const QString &replacement, bool blockMode
     blockMode = blockMode && !range().onSingleLine();
     m_document->replaceText(range(), finalReplacement, blockMode);
 
-    const KTextEditor::Range result = *afterReplace;
+    const KTextEditor::Range result = afterReplace->toRange();
     delete afterReplace;
 
     return result;

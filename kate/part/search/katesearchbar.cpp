@@ -581,7 +581,7 @@ bool KateSearchBar::find(SearchDirection searchDirection, const QString * replac
             // Selection is match -> replace
             KTextEditor::MovingRange *smartInputRange = m_view->doc()->newMovingRange (inputRange, KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
             afterReplace = match.replace(*replacement, m_view->blockSelection());
-            inputRange = *smartInputRange;
+            inputRange = smartInputRange->toRange();
             delete smartInputRange;
         }
 
@@ -816,7 +816,7 @@ int KateSearchBar::findAll(Range inputRange, const QString * replacement)
 
         for (;;) {
             KateMatch match(m_view->doc(), enabledOptions);
-            match.searchText(*workingRange, searchPattern());
+            match.searchText(workingRange->toRange(), searchPattern());
             if (!match.isValid()) {
                 break;
             }
@@ -842,7 +842,7 @@ int KateSearchBar::findAll(Range inputRange, const QString * replacement)
             }
 
             // Continue after match
-            if (highlightRanges.last().end() >= workingRange->end())
+            if (highlightRanges.last().end() >= workingRange->end().toCursor())
                 break;
             KTextEditor::MovingCursor* workingStart =
                 static_cast<KateDocument*>(m_view->document())->newMovingCursor(highlightRanges.last().end());
@@ -855,7 +855,7 @@ int KateSearchBar::findAll(Range inputRange, const QString * replacement)
                 // therefore we better advance to the next line
                 workingStart->move(1);
             }
-            workingRange->setRange(*workingStart, workingRange->end());
+            workingRange->setRange(workingStart->toCursor(), workingRange->end().toCursor());
 
             const bool atEndOfDocument = workingStart->atEndOfDocument();
             delete workingStart;

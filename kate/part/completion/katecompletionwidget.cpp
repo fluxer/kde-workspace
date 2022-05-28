@@ -373,7 +373,7 @@ void KateCompletionWidget::startCompletion(const KTextEditor::Range& word, const
       continue;
     }
     if(m_completionRanges.contains(model)) {
-      if(*m_completionRanges[model].range == range) {
+      if(m_completionRanges[model].range->toRange() == range) {
         continue; //Leave it running as it is
       }
       else { // delete the range that was used previously
@@ -487,7 +487,7 @@ bool KateCompletionWidget::updatePosition(bool force)
   if (!completionRange()) {
     return false;
   }
-  QPoint cursorPosition = view()->cursorToCoordinate(completionRange()->start());
+  QPoint cursorPosition = view()->cursorToCoordinate(completionRange()->start().toCursor());
   if (cursorPosition == QPoint(-1,-1)) {
     // Start of completion range is now off-screen -> abort
     abortCompletion();
@@ -692,12 +692,12 @@ void KateCompletionWidget::cursorPositionChanged( )
       m_completionRanges[model].range->setRange (newRange);
       
       //kDebug()<<"range after _updateRange:"<< *range;
-      QString currentCompletion = _filterString(model,view(), *m_completionRanges[model].range, view()->cursorPosition());
+      QString currentCompletion = _filterString(model,view(), m_completionRanges[model].range->toRange(), view()->cursorPosition());
       if(!m_completionRanges.contains(model))
         continue;
       
       //kDebug()<<"after _filterString, currentCompletion="<< currentCompletion;
-      bool abort = _shouldAbortCompletion(model,view(), *m_completionRanges[model].range, currentCompletion);
+      bool abort = _shouldAbortCompletion(model,view(), m_completionRanges[model].range->toRange(), currentCompletion);
       if(!m_completionRanges.contains(model))
         continue;
       
@@ -831,15 +831,15 @@ void KateCompletionWidget::execute()
   KTextEditor::CodeCompletionModel2* model2 = qobject_cast<KTextEditor::CodeCompletionModel2*>(model);
 
   Q_ASSERT(m_completionRanges.contains(model));
-  KTextEditor::Cursor start = m_completionRanges[model].range->start();
+  KTextEditor::Cursor start = m_completionRanges[model].range->start().toCursor();
 
   if(model2)
-    model2->executeCompletionItem2(view()->document(), *m_completionRanges[model].range, toExecute);
+    model2->executeCompletionItem2(view()->document(), m_completionRanges[model].range->toRange(), toExecute);
   else if(toExecute.parent().isValid())
     //The normale CodeCompletionInterface cannot handle feedback for hierarchical models, so just do the replacement
-    view()->document()->replaceText(*m_completionRanges[model].range, model->data(toExecute.sibling(toExecute.row(), KTextEditor::CodeCompletionModel::Name)).toString());
+    view()->document()->replaceText(m_completionRanges[model].range->toRange(), model->data(toExecute.sibling(toExecute.row(), KTextEditor::CodeCompletionModel::Name)).toString());
   else
-    model->executeCompletionItem(view()->document(), *m_completionRanges[model].range, toExecute.row());
+    model->executeCompletionItem(view()->document(), m_completionRanges[model].range->toRange(), toExecute.row());
 
   view()->doc()->editEnd();
   m_completionEditRunning = false;
@@ -850,9 +850,9 @@ void KateCompletionWidget::execute()
 
   KTextEditor::Cursor newPos = view()->cursorPosition();
 
-  if(newPos > *oldPos) {
+  if(newPos > oldPos->toCursor()) {
     m_automaticInvocationAt = newPos;
-    m_automaticInvocationLine = view()->doc()->text(KTextEditor::Range(*oldPos, newPos));
+    m_automaticInvocationLine = view()->doc()->text(KTextEditor::Range(oldPos->toCursor(), newPos));
     //kDebug() << "executed, starting automatic invocation with line" << m_automaticInvocationLine;
     m_lastInsertionByUser = false;
     m_automaticInvocationTimer->start();
@@ -1344,7 +1344,7 @@ void KateCompletionWidget::tab(bool shift)
     //Reset left boundaries, so completion isn't stopped
     typedef QMap<KTextEditor::CodeCompletionModel*, CompletionRange> CompletionRangeMap;
     for(CompletionRangeMap::iterator it = m_completionRanges.begin(); it != m_completionRanges.end(); ++it)
-      (*it).leftBoundary = (*it).range->start();
+      (*it).leftBoundary = (*it).range->start().toCursor();
 
     //Remove suffix until the completion-list filter is widened again
     uint itemCount = m_presentationModel->filteredItemCount();

@@ -106,7 +106,7 @@ QList<QPair<KTextEditor::Range, QString> > KateSpellCheckManager::spellCheckLang
     KTextEditor::Range consideredRange = splitQueue.takeFirst();
     for(QList<QPair<KTextEditor::MovingRange*, QString> >::iterator i = dictionaryRanges.begin();
         i != dictionaryRanges.end(); ++i) {
-      KTextEditor::Range languageRange = *((*i).first);
+      KTextEditor::Range languageRange = (*i).first->toRange();
       KTextEditor::Range intersection = languageRange.intersect(consideredRange);
       if(intersection.isEmpty()) {
         continue;

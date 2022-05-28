@@ -207,17 +207,17 @@ void MovingCursorTest::testOperators()
     QVERIFY(!(invalid > c02));
     QVERIFY(!(invalid >= c02));
 
-    QVERIFY(!(invalid == *m02));
-    QVERIFY(invalid <= *m02);
-    QVERIFY(invalid < *m02);
-    QVERIFY(!(invalid > *m02));
-    QVERIFY(!(invalid >= *m02));
+    QVERIFY(!(invalid == m02->toCursor()));
+    QVERIFY(invalid <= m02->toCursor());
+    QVERIFY(invalid < m02->toCursor());
+    QVERIFY(!(invalid > m02->toCursor()));
+    QVERIFY(!(invalid >= m02->toCursor()));
 
-    QVERIFY(!(*m02 == invalid));
-    QVERIFY(!(*m02 <= invalid));
-    QVERIFY(!(*m02 < invalid));
-    QVERIFY(*m02 > invalid);
-    QVERIFY(*m02 >= invalid);
+    QVERIFY(!(m02->toCursor() == invalid));
+    QVERIFY(!(m02->toCursor() <= invalid));
+    QVERIFY(!(m02->toCursor() < invalid));
+    QVERIFY(m02->toCursor() > invalid);
+    QVERIFY(m02->toCursor() >= invalid);
 
     // MovingCursor <-> MovingCursor
     QVERIFY(*m02 == *m02);
@@ -256,76 +256,76 @@ void MovingCursorTest::testOperators()
     QVERIFY(*m14 != *m02);
 
     // MovingCursor <-> Cursor
-    QVERIFY(*m02 == c02);
-    QVERIFY(*m02 <= c02);
-    QVERIFY(*m02 >= c02);
-    QVERIFY(!(*m02 < c02));
-    QVERIFY(!(*m02 > c02));
-    QVERIFY(!(*m02 != c02));
+    QVERIFY(m02->toCursor() == c02);
+    QVERIFY(m02->toCursor() <= c02);
+    QVERIFY(m02->toCursor() >= c02);
+    QVERIFY(!(m02->toCursor() < c02));
+    QVERIFY(!(m02->toCursor() > c02));
+    QVERIFY(!(m02->toCursor() != c02));
 
-    QVERIFY(!(*m02 == c04));
-    QVERIFY(*m02 <= c04);
-    QVERIFY(!(*m02 >= c04));
-    QVERIFY(*m02 < c04);
-    QVERIFY(!(*m02 > c04));
-    QVERIFY(*m02 != c04);
+    QVERIFY(!(m02->toCursor() == c04));
+    QVERIFY(m02->toCursor() <= c04);
+    QVERIFY(!(m02->toCursor() >= c04));
+    QVERIFY(m02->toCursor() < c04);
+    QVERIFY(!(m02->toCursor() > c04));
+    QVERIFY(m02->toCursor() != c04);
 
-    QVERIFY(!(*m04 == c02));
-    QVERIFY(!(*m04 <= c02));
-    QVERIFY(*m04 >= c02);
-    QVERIFY(!(*m04 < c02));
-    QVERIFY(*m04 > c02);
-    QVERIFY(*m04 != c02);
+    QVERIFY(!(m04->toCursor() == c02));
+    QVERIFY(!(m04->toCursor() <= c02));
+    QVERIFY(m04->toCursor() >= c02);
+    QVERIFY(!(m04->toCursor() < c02));
+    QVERIFY(m04->toCursor() > c02);
+    QVERIFY(m04->toCursor() != c02);
 
-    QVERIFY(!(*m02 == c14));
-    QVERIFY(*m02 <= c14);
-    QVERIFY(!(*m02 >= c14));
-    QVERIFY(*m02 < c14);
-    QVERIFY(!(*m02 > c14));
-    QVERIFY(*m02 != c14);
+    QVERIFY(!(m02->toCursor() == c14));
+    QVERIFY(m02->toCursor() <= c14);
+    QVERIFY(!(m02->toCursor() >= c14));
+    QVERIFY(m02->toCursor() < c14);
+    QVERIFY(!(m02->toCursor() > c14));
+    QVERIFY(m02->toCursor() != c14);
 
-    QVERIFY(!(*m14 == c02));
-    QVERIFY(!(*m14 <= c02));
-    QVERIFY(*m14 >= c02);
-    QVERIFY(!(*m14 < c02));
-    QVERIFY(*m14 > c02);
-    QVERIFY(*m14 != c02);
+    QVERIFY(!(m14->toCursor() == c02));
+    QVERIFY(!(m14->toCursor() <= c02));
+    QVERIFY(m14->toCursor() >= c02);
+    QVERIFY(!(m14->toCursor() < c02));
+    QVERIFY(m14->toCursor() > c02);
+    QVERIFY(m14->toCursor() != c02);
 
     // Cursor <-> MovingCursor
-    QVERIFY(c02 == *m02);
-    QVERIFY(c02 <= *m02);
-    QVERIFY(c02 >= *m02);
-    QVERIFY(!(c02 < *m02));
-    QVERIFY(!(c02 > *m02));
-    QVERIFY(!(c02 != *m02));
+    QVERIFY(c02 == m02->toCursor());
+    QVERIFY(c02 <= m02->toCursor());
+    QVERIFY(c02 >= m02->toCursor());
+    QVERIFY(!(c02 < m02->toCursor()));
+    QVERIFY(!(c02 > m02->toCursor()));
+    QVERIFY(!(c02 != m02->toCursor()));
 
-    QVERIFY(!(c02 == *m04));
-    QVERIFY(c02 <= *m04);
-    QVERIFY(!(c02 >= *m04));
-    QVERIFY(c02 < *m04);
-    QVERIFY(!(c02 > *m04));
-    QVERIFY(c02 != *m04);
+    QVERIFY(!(c02 == m04->toCursor()));
+    QVERIFY(c02 <= m04->toCursor());
+    QVERIFY(!(c02 >= m04->toCursor()));
+    QVERIFY(c02 < m04->toCursor());
+    QVERIFY(!(c02 > m04->toCursor()));
+    QVERIFY(c02 != m04->toCursor());
 
-    QVERIFY(!(c04 == *m02));
-    QVERIFY(!(c04 <= *m02));
-    QVERIFY(c04 >= *m02);
-    QVERIFY(!(c04 < *m02));
-    QVERIFY(c04 > *m02);
-    QVERIFY(c04 != *m02);
+    QVERIFY(!(c04 == m02->toCursor()));
+    QVERIFY(!(c04 <= m02->toCursor()));
+    QVERIFY(c04 >= m02->toCursor());
+    QVERIFY(!(c04 < m02->toCursor()));
+    QVERIFY(c04 > m02->toCursor());
+    QVERIFY(c04 != m02->toCursor());
 
-    QVERIFY(!(c02 == *m14));
-    QVERIFY(c02 <= *m14);
-    QVERIFY(!(c02 >= *m14));
-    QVERIFY(c02 < *m14);
-    QVERIFY(!(c02 > *m14));
-    QVERIFY(c02 != *m14);
+    QVERIFY(!(c02 == m14->toCursor()));
+    QVERIFY(c02 <= m14->toCursor());
+    QVERIFY(!(c02 >= m14->toCursor()));
+    QVERIFY(c02 < m14->toCursor());
+    QVERIFY(!(c02 > m14->toCursor()));
+    QVERIFY(c02 != m14->toCursor());
 
-    QVERIFY(!(c14 == *m02));
-    QVERIFY(!(c14 <= *m02));
-    QVERIFY(c14 >= *m02);
-    QVERIFY(!(c14 < *m02));
-    QVERIFY(c14 > *m02);
-    QVERIFY(c14 != *m02);
+    QVERIFY(!(c14 == m02->toCursor()));
+    QVERIFY(!(c14 <= m02->toCursor()));
+    QVERIFY(c14 >= m02->toCursor());
+    QVERIFY(!(c14 < m02->toCursor()));
+    QVERIFY(c14 > m02->toCursor());
+    QVERIFY(c14 != m02->toCursor());
 }
 
 void MovingCursorTest::testInvalidMovingCursor()
@@ -334,10 +334,10 @@ void MovingCursorTest::testInvalidMovingCursor()
 
   // add invalid MovingCursor. Inserts c into KateBuffer::m_invalidCursors
   MovingCursor* c = doc->newMovingCursor(Cursor(-1, -1));
-  QVERIFY(Cursor(-1, -1) == *c);
+  QVERIFY(Cursor(-1, -1) == c->toCursor());
 
   c->setPosition(Cursor(0, 0));
-  QVERIFY(Cursor(0, 0) == *c);
+  QVERIFY(Cursor(0, 0) == c->toCursor());
 
   // now c should be removed from KateBuffer::m_invalidCursors
   delete c;

@@ -386,7 +386,7 @@ QList<QTextLayout::FormatRange> KateRenderer::decorationsForLine( const Kate::Te
 
         // span range
         NormalRenderRange *additionaHl = new NormalRenderRange();
-        additionaHl->addRange(new KTextEditor::Range (*kateRange), attribute);
+        additionaHl->addRange(new KTextEditor::Range (kateRange->toRange()), attribute);
         renderRanges.append(additionaHl);
       }
     } else {
