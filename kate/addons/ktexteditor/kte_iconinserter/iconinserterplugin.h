@@ -31,8 +31,6 @@
 #include <kaction.h>
 #include <kxmlguiclient.h>
 
-using namespace KTextEditor;
-
 class IconInserterPlugin;
 
 class IconInserterPluginView: public QObject, public KXMLGUIClient

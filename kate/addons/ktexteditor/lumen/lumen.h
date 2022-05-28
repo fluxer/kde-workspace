@@ -33,8 +33,6 @@
 #include "dcd.h"
 #include "completion.h"
 
-using namespace KTextEditor;
-
 class LumenPlugin;
 
 class LumenPluginView: public QObject, public KXMLGUIClient

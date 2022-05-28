@@ -26,10 +26,7 @@
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
 
-using namespace KTextEditor;
-
-
-class CustomRangeModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class CustomRangeModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -37,12 +34,12 @@ public:
     CustomRangeModel(KTextEditor::View* parent = 0L, const QString &startText = QString())
         : CodeCompletionTestModel(parent, startText)
     {}
-    Range completionRange(View* view, const Cursor &position)
+    KTextEditor::Range completionRange(KTextEditor::View* view, const KTextEditor::Cursor &position)
     {
-        Range range = CodeCompletionModelControllerInterface::completionRange(view, position);
+        KTextEditor::Range range = CodeCompletionModelControllerInterface::completionRange(view, position);
         if (range.start().column() > 0) {
-            KTextEditor::Range preRange(Cursor(range.start().line(), range.start().column()-1),
-                                        Cursor(range.start().line(), range.start().column()));
+            KTextEditor::Range preRange(KTextEditor::Cursor(range.start().line(), range.start().column()-1),
+                                        KTextEditor::Cursor(range.start().line(), range.start().column()));
             kDebug() << preRange << view->document()->text(preRange);
             if (view->document()->text(preRange) == "$") {
                 range.expandToRange(preRange);
@@ -52,7 +49,7 @@ public:
         return range;
     }
 
-    bool shouldAbortCompletion(View* view, const Range& range, const QString &currentCompletion)
+    bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString &currentCompletion)
     {
         Q_UNUSED(view);
         Q_UNUSED(range);
@@ -61,7 +58,7 @@ public:
     }
 };
 
-class CustomAbortModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class CustomAbortModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -70,7 +67,7 @@ public:
         : CodeCompletionTestModel(parent, startText)
     {}
 
-    bool shouldAbortCompletion(View* view, const Range& range, const QString &currentCompletion)
+    bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range& range, const QString &currentCompletion)
     {
         Q_UNUSED(view);
         Q_UNUSED(range);
@@ -79,7 +76,7 @@ public:
     }
 };
 
-class EmptyFilterStringModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class EmptyFilterStringModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -88,13 +85,13 @@ public:
         : CodeCompletionTestModel(parent, startText)
     {}
 
-    QString filterString(View*, const Range&, const Cursor &)
+    QString filterString(KTextEditor::View*, const KTextEditor::Range&, const KTextEditor::Cursor &)
     {
         return QString();
     }
 };
 
-class UpdateCompletionRangeModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class UpdateCompletionRangeModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -103,15 +100,15 @@ public:
         : CodeCompletionTestModel(parent, startText)
     {}
 
-    Range updateCompletionRange(View* view, const Range& range)
+    KTextEditor::Range updateCompletionRange(KTextEditor::View* view, const KTextEditor::Range& range)
     {
         Q_UNUSED(view);
         if (view->document()->text(range) == QString("ab")) {
-            return Range(Cursor(range.start().line(), 0), range.end());
+            return KTextEditor::Range(KTextEditor::Cursor(range.start().line(), 0), range.end());
         }
         return range;
     }
-    bool shouldAbortCompletion(View* view, const Range &range, const QString &currentCompletion)
+    bool shouldAbortCompletion(KTextEditor::View* view, const KTextEditor::Range &range, const QString &currentCompletion)
     {
         Q_UNUSED(view);
         Q_UNUSED(range);
@@ -120,7 +117,7 @@ public:
     }
 };
 
-class StartCompletionModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class StartCompletionModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)
@@ -129,7 +126,7 @@ public:
         : CodeCompletionTestModel(parent, startText)
     {}
 
-    bool shouldStartCompletion(View* view, const QString &insertedText, bool userInsertion, const Cursor &position)
+    bool shouldStartCompletion(KTextEditor::View* view, const QString &insertedText, bool userInsertion, const KTextEditor::Cursor &position)
     {
         Q_UNUSED(view);
         Q_UNUSED(userInsertion);
@@ -145,7 +142,7 @@ public:
     }
 };
 
-class ImmideatelyAbortCompletionModel : public CodeCompletionTestModel, public CodeCompletionModelControllerInterface
+class ImmideatelyAbortCompletionModel : public CodeCompletionTestModel, public KTextEditor::CodeCompletionModelControllerInterface
 {
     Q_OBJECT
     Q_INTERFACES(KTextEditor::CodeCompletionModelControllerInterface)

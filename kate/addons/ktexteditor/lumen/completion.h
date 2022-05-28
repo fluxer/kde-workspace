@@ -24,8 +24,6 @@
 #include <ktexteditor/codecompletionmodelcontrollerinterface.h>
 #include "dcd.h"
 
-using namespace KTextEditor;
-
 class LumenCompletionModel: public CodeCompletionModel2,
     public KTextEditor::CodeCompletionModelControllerInterface
 {

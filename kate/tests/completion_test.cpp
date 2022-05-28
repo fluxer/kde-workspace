@@ -23,6 +23,8 @@
 #include "moc_codecompletiontestmodels.cpp"
 
 #include <qtest_kde.h>
+#include <netwm.h>
+#include <qx11info_x11.h>
 
 #include <ktexteditor/document.h>
 #include <ktexteditor/editorchooser.h>
@@ -36,9 +38,6 @@
 
 QTEST_KDEMAIN(CompletionTest, GUI)
 
-
-using namespace KTextEditor;
-
 static const qint64 verifyTimeout = 3000;
 
 int countItems(KateCompletionModel *model)
@@ -48,6 +47,12 @@ int countItems(KateCompletionModel *model)
         ret += model->rowCount(model->index(i, 0));
     }
     return ret;
+}
+
+static bool hasWM()
+{
+    static const QByteArray wmname = NETRootInfo(QX11Info::display(), NET::SupportingWMCheck).wmName();
+    return !wmname.isEmpty();
 }
 
 static void verifyCompletionStarted(KateView* view)
@@ -88,7 +93,7 @@ static void invokeCompletionBox(KateView* view)
 
 void CompletionTest::init()
 {
-    Editor* editor = EditorChooser::editor();
+    KTextEditor::Editor* editor = KTextEditor::EditorChooser::editor();
     QVERIFY(editor);
 
     m_doc = editor->createDocument(this);
@@ -112,10 +117,14 @@ void CompletionTest::cleanup()
 
 void CompletionTest::testFilterEmptyRange()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CodeCompletionTestModel(m_view, "a");
-    m_view->setCursorPosition(Cursor(0, 0));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 40);
@@ -129,13 +138,13 @@ void CompletionTest::testFilterWithRange()
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel = new CodeCompletionTestModel(m_view, "a");
-    m_view->setCursorPosition(Cursor(0, 2));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 2));
     invokeCompletionBox(m_view);
 
     KTextEditor::MovingRange *movingRange = m_view->completionWidget()->completionRange(testModel);
     QVERIFY(movingRange);
-    Range complRange = movingRange->toRange();
-    QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 2)));
+    KTextEditor::Range complRange = movingRange->toRange();
+    QCOMPARE(complRange, KTextEditor::Range(KTextEditor::Cursor(0, 0), KTextEditor::Cursor(0, 2)));
     QCOMPARE(countItems(model), 14);
 
     m_view->insertText("a");
@@ -149,13 +158,13 @@ void CompletionTest::testAbortCursorMovedOutOfRange()
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CodeCompletionTestModel(m_view, "a");
-    m_view->setCursorPosition(Cursor(0, 2));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 2));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 14);
     QVERIFY(m_view->completionWidget()->isCompletionActive());
 
-    m_view->setCursorPosition(Cursor(0, 4));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 4));
     QTest::qWait(1000); // process events
     QVERIFY(!m_view->completionWidget()->isCompletionActive());
 }
@@ -165,7 +174,7 @@ void CompletionTest::testAbortInvalidText()
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CodeCompletionTestModel(m_view, "a");
-    m_view->setCursorPosition(Cursor(0, 2));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 2));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 14);
@@ -181,14 +190,14 @@ void CompletionTest::testCustomRange1()
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel = new CustomRangeModel(m_view, "$a");
-    m_view->setCursorPosition(Cursor(0, 3));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 3));
     invokeCompletionBox(m_view);
 
     KTextEditor::MovingRange *movingRange = m_view->completionWidget()->completionRange(testModel);
     QVERIFY(movingRange);
-    Range complRange = movingRange->toRange();
+    KTextEditor::Range complRange = movingRange->toRange();
     kDebug() << complRange;
-    QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 3)));
+    QCOMPARE(complRange, KTextEditor::Range(KTextEditor::Cursor(0, 0), KTextEditor::Cursor(0, 3)));
     QCOMPARE(countItems(model), 14);
 
     m_view->insertText("a");
@@ -198,17 +207,21 @@ void CompletionTest::testCustomRange1()
 
 void CompletionTest::testCustomRange2()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     m_doc->setText("$ bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel = new CustomRangeModel(m_view, "$a");
-    m_view->setCursorPosition(Cursor(0, 1));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 1));
     invokeCompletionBox(m_view);
 
     KTextEditor::MovingRange *movingRange = m_view->completionWidget()->completionRange(testModel);
     QVERIFY(movingRange);
-    Range complRange = movingRange->toRange();
-    QCOMPARE(complRange, Range(Cursor(0, 0), Cursor(0, 1)));
+    KTextEditor::Range complRange = movingRange->toRange();
+    QCOMPARE(complRange, KTextEditor::Range(KTextEditor::Cursor(0, 0), KTextEditor::Cursor(0, 1)));
     QCOMPARE(countItems(model), 40);
 
     m_view->insertText("aa");
@@ -218,20 +231,24 @@ void CompletionTest::testCustomRange2()
 
 void CompletionTest::testCustomRangeMultipleModels()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     m_doc->setText("$a bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel1 = new CustomRangeModel(m_view, "$a");
     CodeCompletionTestModel* testModel2 = new CodeCompletionTestModel(m_view, "a");
-    m_view->setCursorPosition(Cursor(0, 1));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 1));
     invokeCompletionBox(m_view);
 
     KTextEditor::MovingRange *movingRange1 = m_view->completionWidget()->completionRange(testModel1);
     QVERIFY(movingRange1);
     KTextEditor::MovingRange *movingRange2 = m_view->completionWidget()->completionRange(testModel2);
     QVERIFY(movingRange2);
-    QCOMPARE(Range(movingRange1->toRange()), Range(Cursor(0, 0), Cursor(0, 2)));
-    QCOMPARE(Range(movingRange2->toRange()), Range(Cursor(0, 1), Cursor(0, 2)));
+    QCOMPARE(KTextEditor::Range(movingRange1->toRange()), KTextEditor::Range(KTextEditor::Cursor(0, 0), KTextEditor::Cursor(0, 2)));
+    QCOMPARE(KTextEditor::Range(movingRange2->toRange()), KTextEditor::Range(KTextEditor::Cursor(0, 1), KTextEditor::Cursor(0, 2)));
     QCOMPARE(model->currentCompletion(testModel1), QString("$"));
     QCOMPARE(model->currentCompletion(testModel2), QString(""));
     QCOMPARE(countItems(model), 80);
@@ -246,10 +263,14 @@ void CompletionTest::testCustomRangeMultipleModels()
 
 void CompletionTest::testAbortController()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new CustomRangeModel(m_view, "$a");
-    m_view->setCursorPosition(Cursor(0, 0));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 40);
@@ -265,11 +286,15 @@ void CompletionTest::testAbortController()
 
 void CompletionTest::testAbortControllerMultipleModels()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel1 = new CodeCompletionTestModel(m_view, "aa");
     CodeCompletionTestModel* testModel2 = new CustomAbortModel(m_view, "a-");
-    m_view->setCursorPosition(Cursor(0, 0));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 80);
@@ -295,10 +320,14 @@ void CompletionTest::testAbortControllerMultipleModels()
 
 void CompletionTest::testEmptyFilterString()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     new EmptyFilterStringModel(m_view, "aa");
-    m_view->setCursorPosition(Cursor(0, 0));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     invokeCompletionBox(m_view);
 
     QCOMPARE(countItems(model), 40);
@@ -314,35 +343,43 @@ void CompletionTest::testEmptyFilterString()
 
 void CompletionTest::testUpdateCompletionRange()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     m_doc->setText("ab    bb cc\ndd");
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     CodeCompletionTestModel* testModel = new UpdateCompletionRangeModel(m_view, "ab ab");
-    m_view->setCursorPosition(Cursor(0, 3));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 3));
     invokeCompletionBox(m_view);
 
     KTextEditor::MovingRange *movingRange = m_view->completionWidget()->completionRange(testModel);
     QVERIFY(movingRange);
     QCOMPARE(countItems(model), 40);
-    QCOMPARE(Range(movingRange->toRange()), Range(Cursor(0, 3), Cursor(0, 3)));
+    QCOMPARE(KTextEditor::Range(movingRange->toRange()), KTextEditor::Range(KTextEditor::Cursor(0, 3), KTextEditor::Cursor(0, 3)));
 
     m_view->insertText("ab");
     QTest::qWait(1000); // process events
     movingRange = m_view->completionWidget()->completionRange(testModel);
     QVERIFY(movingRange);
-    QCOMPARE(Range(movingRange->toRange()), Range(Cursor(0, 0), Cursor(0, 5)));
+    QCOMPARE(KTextEditor::Range(movingRange->toRange()), KTextEditor::Range(KTextEditor::Cursor(0, 0), KTextEditor::Cursor(0, 5)));
     QCOMPARE(countItems(model), 40);
 }
 
 void CompletionTest::testCustomStartCompl()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     KateCompletionModel *model = m_view->completionWidget()->model();
 
     m_view->completionWidget()->setAutomaticInvocationDelay(1);
 
     new StartCompletionModel(m_view, "aa");
 
-    m_view->setCursorPosition(Cursor(0, 0));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 0));
     m_view->insertText("%");
     QTest::qWait(1000);
 
@@ -369,7 +406,7 @@ void CompletionTest::testKateCompletionModel()
 void CompletionTest::testAbortImmideatelyAfterStart()
 {
     new ImmideatelyAbortCompletionModel(m_view);
-    m_view->setCursorPosition(Cursor(0, 3));
+    m_view->setCursorPosition(KTextEditor::Cursor(0, 3));
     QVERIFY(!m_view->completionWidget()->isCompletionActive());
     emit m_view->userInvokedCompletion();
     QVERIFY(!m_view->completionWidget()->isCompletionActive());
@@ -377,6 +414,10 @@ void CompletionTest::testAbortImmideatelyAfterStart()
 
 void CompletionTest::testJumpToListBottomAfterCursorUpWhileAtTop()
 {
+    if (!hasWM()) {
+        QSKIP("No window manager", SkipAll);
+    }
+
     new CodeCompletionTestModel(m_view, "aa");
     invokeCompletionBox(m_view);
 
@@ -488,6 +529,10 @@ void CompletionTest::testAbbrevAndContainsMatching()
 
 void CompletionTest::benchCompletionModel()
 {
+  if (!hasWM()) {
+    QSKIP("No window manager", SkipAll);
+  }
+
   const QString text("abcdefg abcdef");
   m_doc->setText(text);
   CodeCompletionTestModel* testModel1 = new CodeCompletionTestModel(m_view, "abcdefg");
@@ -500,7 +545,7 @@ void CompletionTest::benchCompletionModel()
   testModel4->setRowCount(5000);
   QBENCHMARK_ONCE {
     for(int i = 0; i < text.size(); ++i) {
-      m_view->setCursorPosition(Cursor(0, i));
+      m_view->setCursorPosition(KTextEditor::Cursor(0, i));
       invokeCompletionBox(m_view);
     }
   }
