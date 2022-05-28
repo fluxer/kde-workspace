@@ -32,13 +32,9 @@
 #include <QScrollArea>
 
 class KFileItemList;
-class PixmapViewer;
 class PlacesItemModel;
 
-namespace KIO {
-  class PreviewJob;
-}
-
+class KImageFilePreview;
 class KFileMetaDataWidget;
 
 /**
@@ -82,24 +78,6 @@ protected:
 
 private slots:
     /**
-     * Is invoked if no preview is available for the item. In this
-     * case the icon will be shown.
-     */
-    void showIcon(const KFileItem& item);
-
-    /**
-     * Is invoked if a preview is available for the item. The preview
-     * \a pixmap is shown inside the info page.
-     */
-    void showPreview(const KFileItem& item, const QPixmap& pixmap);
-
-    /**
-     * Marks the currently shown preview as outdated
-     * by greying the content.
-     */
-    void markOutdatedPreview();
-
-    /**
      * Is invoked after the file meta data configuration dialog has been
      * closed and refreshes the visibility of the meta data.
      */
@@ -131,10 +109,7 @@ private:
 private:
     KFileItem m_item;
 
-    QPointer<KIO::PreviewJob> m_previewJob;
-    QTimer* m_outdatedPreviewTimer;
-
-    PixmapViewer* m_preview;
+    KImageFilePreview* m_preview;
     KMediaWidget* m_playerWidget;
     QLabel* m_nameLabel;
     KFileMetaDataWidget* m_metaDataWidget;

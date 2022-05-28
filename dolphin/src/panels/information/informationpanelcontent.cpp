@@ -22,14 +22,12 @@
 #include <KDialog>
 #include <KFileItem>
 #include <KGlobalSettings>
-#include <KIO/JobUiDelegate>
-#include <KIO/PreviewJob>
-#include <KIconEffect>
 #include <KIconLoader>
 #include <KLocale>
 #include <KMenu>
-#include <kseparator.h>
+#include <KSeparator>
 #include <KStringHandler>
+#include <KImageFilePreview>
 #include <KMediaWidget>
 #include <KFileMetaDataWidget>
 
@@ -50,13 +48,10 @@
 
 #include "dolphin_informationpanelsettings.h"
 #include "filemetadataconfigurationdialog.h"
-#include "pixmapviewer.h"
 
 InformationPanelContent::InformationPanelContent(QWidget* parent) :
     QWidget(parent),
     m_item(),
-    m_previewJob(0),
-    m_outdatedPreviewTimer(0),
     m_preview(0),
     m_playerWidget(0),
     m_nameLabel(0),
@@ -66,22 +61,13 @@ InformationPanelContent::InformationPanelContent(QWidget* parent) :
 {
     parent->installEventFilter(this);
 
-    // Initialize timer for disabling an outdated preview with a small
-    // delay. This prevents flickering if the new preview can be generated
-    // within a very small timeframe.
-    m_outdatedPreviewTimer = new QTimer(this);
-    m_outdatedPreviewTimer->setInterval(300);
-    m_outdatedPreviewTimer->setSingleShot(true);
-    connect(m_outdatedPreviewTimer, SIGNAL(timeout()),
-            this, SLOT(markOutdatedPreview()));
-
     QVBoxLayout* layout = new QVBoxLayout(this);
     layout->setSpacing(KDialog::spacingHint());
 
     // preview
     const int minPreviewWidth = KIconLoader::SizeEnormous + KIconLoader::SizeMedium;
 
-    m_preview = new PixmapViewer(parent);
+    m_preview = new KImageFilePreview(parent);
     m_preview->setMinimumWidth(minPreviewWidth);
     m_preview->setMinimumHeight(KIconLoader::SizeEnormous);
 
@@ -144,11 +130,7 @@ InformationPanelContent::~InformationPanelContent()
 
 void InformationPanelContent::showItem(const KFileItem& item)
 {
-    // If there is a preview job, kill it to prevent that we have jobs for
-    // multiple items running, and thus a race condition (bug 250787).
-    if (m_previewJob) {
-        m_previewJob->kill();
-    }
+    // qDebug() << Q_FUNC_INFO << item.url();
 
     const KUrl itemUrl = item.url();
     const bool isSearchUrl = itemUrl.protocol().contains("search") && item.localPath().isEmpty();
@@ -157,34 +139,11 @@ void InformationPanelContent::showItem(const KFileItem& item)
         if (isSearchUrl) {
             // in the case of a search-URL the URL is not readable for humans
             // (at least not useful to show in the Information Panel)
-            KIconLoader iconLoader;
-            QPixmap icon = iconLoader.loadIcon("nepomuk",
-                                               KIconLoader::NoGroup,
-                                               KIconLoader::SizeEnormous);
-            m_preview->setPixmap(icon);
+            QString iconPath = KIconLoader::global()->iconPath("nepomuk", -KIconLoader::SizeEnormous, false);
+            // qDebug() << Q_FUNC_INFO << iconPath;
+            m_preview->showPreview(KUrl(iconPath));
         } else {
-            // try to get a preview pixmap from the item...
-
-            // Mark the currently shown preview as outdated. This is done
-            // with a small delay to prevent a flickering when the next preview
-            // can be shown within a short timeframe. This timer is not started
-            // for directories, as directory previews might fail and return the
-            // same icon.
-            if (!item.isDir()) {
-                m_outdatedPreviewTimer->start();
-            }
-
-            m_previewJob = new KIO::PreviewJob(KFileItemList() << item, QSize(m_preview->width(), m_preview->height()));
-            m_previewJob->setScaleType(KIO::PreviewJob::Unscaled);
-            m_previewJob->setIgnoreMaximumSize(item.isLocalFile());
-            if (m_previewJob->ui()) {
-                m_previewJob->ui()->setWindow(this);
-            }
-
-            connect(m_previewJob, SIGNAL(gotPreview(KFileItem,QPixmap)),
-                    this, SLOT(showPreview(KFileItem,QPixmap)));
-            connect(m_previewJob, SIGNAL(failed(KFileItem)),
-                    this, SLOT(showIcon(KFileItem)));
+            m_preview->showPreview(itemUrl);
         }
     }
 
@@ -217,17 +176,11 @@ void InformationPanelContent::showItem(const KFileItem& item)
 
 void InformationPanelContent::showItems(const KFileItemList& items)
 {
-    // If there is a preview job, kill it to prevent that we have jobs for
-    // multiple items running, and thus a race condition (bug 250787).
-    if (m_previewJob) {
-        m_previewJob->kill();
-    }
+    // qDebug() << Q_FUNC_INFO << items;
 
-    KIconLoader iconLoader;
-    QPixmap icon = iconLoader.loadIcon("dialog-information",
-                                       KIconLoader::NoGroup,
-                                       KIconLoader::SizeEnormous);
-    m_preview->setPixmap(icon);
+    QString iconPath = KIconLoader::global()->iconPath("dialog-information", -KIconLoader::SizeEnormous, false);
+    // qDebug() << Q_FUNC_INFO << iconPath;
+    m_preview->showPreview(KUrl(iconPath));
     setNameLabelText(i18ncp("@label", "%1 item selected", "%1 items selected", items.count()));
 
     if (m_metaDataWidget) {
@@ -320,34 +273,6 @@ void InformationPanelContent::configureSettings(const QList<QAction*>& customCon
     }
 }
 
-void InformationPanelContent::showIcon(const KFileItem& item)
-{
-    m_outdatedPreviewTimer->stop();
-    if (!applyPlace(item.targetUrl())) {
-        KIcon icon(item.iconName(), KIconLoader::global(), item.overlays());
-        m_preview->setPixmap(icon.pixmap(KIconLoader::SizeEnormous));
-    }
-}
-
-void InformationPanelContent::showPreview(const KFileItem& item,
-                                          const QPixmap& pixmap)
-{
-    m_outdatedPreviewTimer->stop();
-
-    QPixmap p = pixmap;
-    KIconLoader::global()->drawOverlays(item.overlays(), p, KIconLoader::Desktop);
-    m_preview->setPixmap(p);
-}
-
-void InformationPanelContent::markOutdatedPreview()
-{
-    KIconEffect *iconEffect = KIconLoader::global()->iconEffect();
-    QPixmap disabledPixmap = iconEffect->apply(m_preview->pixmap(),
-                                               KIconLoader::Desktop,
-                                               KIconLoader::DisabledState);
-    m_preview->setPixmap(disabledPixmap);
-}
-
 void InformationPanelContent::refreshMetaData()
 {
     if (!m_item.isNull()) {
@@ -362,7 +287,9 @@ bool InformationPanelContent::applyPlace(const KUrl& url)
         const PlacesItem* item = m_placesItemModel->placesItem(i);
         if (item->url().equals(url, KUrl::CompareWithoutTrailingSlash)) {
             setNameLabelText(item->text());
-            m_preview->setPixmap(KIcon(item->icon()).pixmap(128, 128));
+            QString iconPath = KIconLoader::global()->iconPath(item->icon(), -KIconLoader::SizeEnormous, false);
+            // qDebug() << Q_FUNC_INFO << iconPath << item->icon();
+            m_preview->showPreview(KUrl(iconPath));
             return true;
         }
     }
@@ -418,7 +345,7 @@ void InformationPanelContent::adjustWidgetSizes(int width)
     }
 
     // try to increase the preview as large as possible
-    m_preview->setSizeHint(QSize(maxWidth, maxWidth));
+    m_preview->setMaximumSize(QSize(maxWidth, maxWidth));
 
     if (m_playerWidget->isVisible()) {
         // assure that the size of the video player is the same as the preview size

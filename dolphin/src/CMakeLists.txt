@@ -145,7 +145,6 @@ set(dolphin_SRCS
     panels/information/filemetadataconfigurationdialog.cpp
     panels/information/informationpanel.cpp
     panels/information/informationpanelcontent.cpp
-    panels/information/pixmapviewer.cpp
     panels/places/placespanel.cpp
     panels/places/placesitem.cpp
     panels/places/placesitemeditdialog.cpp
