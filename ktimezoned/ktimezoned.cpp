@@ -30,7 +30,6 @@
 #include <QDir>
 #include <QRegExp>
 #include <QStringList>
-#include <QTextStream>
 #include <QtDBus/QtDBus>
 
 #include <kglobal.h>
@@ -236,15 +235,15 @@ void KTimeZoned::readZoneTab(QFile &f)
     if (!mSource)
         mSource = new KSystemTimeZoneSource;
     mZones.clear();
-    QTextStream str(&f);
-    while (!str.atEnd())
+    while (!f.atEnd())
     {
         // Read the next line, but limit its length to guard against crashing
         // due to a corrupt very large zone.tab (see KDE bug 224868).
-        QString line = str.readLine(MAX_ZONE_TAB_LINE_LENGTH);
+        const QByteArray line = f.readLine(MAX_ZONE_TAB_LINE_LENGTH);
         if (line.isEmpty() || line[0] == '#')
             continue;
-        QStringList tokens = KStringHandler::perlSplit(lineSeparator, line, 4);
+        const QString lineStr = QString::fromLatin1(line.constData(), line.size());
+        QStringList tokens = KStringHandler::perlSplit(lineSeparator, lineStr, 4);
         int n = tokens.count();
         if (n < 3)
         {
@@ -433,17 +432,15 @@ bool KTimeZoned::checkTimezone()
         return false;
     }
     // Read the first line of the file.
-    QTextStream ts(&f);
-    ts.setCodec("ISO-8859-1");
-    QString zoneName;
-    if (!ts.atEnd()) {
-        zoneName = ts.readLine();
+    QByteArray zoneName;
+    if (!f.atEnd()) {
+        zoneName = f.readLine();
     }
     f.close();
     if (zoneName.isEmpty()) {
         return false;
     }
-    if (!setLocalZone(zoneName)) {
+    if (!setLocalZone(QString::fromLatin1(zoneName.constData(), zoneName.size()))) {
         return false;
     }
     mLocalIdFile = f.fileName();

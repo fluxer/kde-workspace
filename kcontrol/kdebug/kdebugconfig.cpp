@@ -29,7 +29,6 @@
 #include <QPushButton>
 #include <QtDBus/QtDBus>
 #include <QFile>
-#include <QTextStream>
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -129,12 +128,8 @@ void KCMDebug::readAreas()
     if (!file.open(QIODevice::ReadOnly)) {
         kWarning() << "Couldn't open" << confAreasFile;
     } else {
-        QString data;
-
-        QTextStream ts(&file);
-        ts.setCodec( "ISO-8859-1" );
-        while (!ts.atEnd()) {
-            data = ts.readLine().simplified();
+        while (!file.atEnd()) {
+            QByteArray data = file.readLine().simplified();
 
             int pos = data.indexOf("#");
             if ( pos != -1 ) {
@@ -154,11 +149,12 @@ void KCMDebug::readAreas()
             if (!longOK)
                 kError() << "The first part wasn't a number : " << data << endl;
 
-            const QString description = data.mid(space).simplified();
+            const QByteArray description = data.mid(space).simplified();
+            const QString descriptionStr = QString::fromLatin1(description.constData(), description.size());
 
             // In the key, right-align the area number to 6 digits for proper sorting
             const QString key = QString::number(number).rightJustified(6);
-            mAreaMap.insert( key, QString("%1 %2").arg(number).arg(description) );
+            mAreaMap.insert( key, QString::fromLatin1("%1 %2").arg(number).arg(descriptionStr) );
         }
     }
 
