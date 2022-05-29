@@ -239,7 +239,7 @@ void KTimeZoned::readZoneTab(QFile &f)
     {
         // Read the next line, but limit its length to guard against crashing
         // due to a corrupt very large zone.tab (see KDE bug 224868).
-        const QByteArray line = f.readLine(MAX_ZONE_TAB_LINE_LENGTH);
+        const QByteArray line = f.readLine(MAX_ZONE_TAB_LINE_LENGTH).trimmed();
         if (line.isEmpty() || line[0] == '#')
             continue;
         const QString lineStr = QString::fromLatin1(line.constData(), line.size());
@@ -434,7 +434,7 @@ bool KTimeZoned::checkTimezone()
     // Read the first line of the file.
     QByteArray zoneName;
     if (!f.atEnd()) {
-        zoneName = f.readLine();
+        zoneName = f.readLine().trimmed();
     }
     f.close();
     if (zoneName.isEmpty()) {

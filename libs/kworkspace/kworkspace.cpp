@@ -239,7 +239,7 @@ void propagateSessionManager()
             return;
         QFileInfo info ( f );
         smModificationTime = QTime( info.lastModified().time() );
-        const QByteArray b = f.readLine();
+        const QByteArray b = f.readLine().trimmed();
         f.close();
         ::setenv( "SESSION_MANAGER", b.constData(), true  );
     }
