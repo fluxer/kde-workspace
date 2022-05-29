@@ -28,10 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QPair>
 #include <QSet>
 #include <QRect>
-#include <QtGui/QRegion>
-#include <QtGui/QVector2D>
-#include <QtGui/QVector3D>
-
+#include <QRegion>
+#include <QVector2D>
+#include <QVector3D>
+#include <QFont>
+#include <QGraphicsScale>
+#include <QKeyEvent>
+#include <QMatrix4x4>
 #include <QVector>
 #include <QList>
 #include <QHash>
@@ -46,10 +49,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class KConfigGroup;
 class KActionCollection;
-#include <QFont>
-#include <QGraphicsScale>
-#include <QKeyEvent>
-#include <QMatrix4x4>
 
 namespace KWin
 {
@@ -1641,19 +1640,6 @@ public:
 };
 
 
-struct GLVertex2D
-{
-    QVector2D position;
-    QVector2D texcoord;
-};
-
-struct GLVertex3D
-{
-    QVector3D position;
-    QVector2D texcoord;
-};
-
-
 /**
  * @short Vertex class
  *
@@ -1731,7 +1717,6 @@ public:
     WindowQuadList select(WindowQuadType type) const;
     WindowQuadList filterOut(WindowQuadType type) const;
     bool smoothNeeded() const;
-    void makeInterleavedArrays(unsigned int type, GLVertex2D *vertices, const QMatrix4x4 &matrix) const;
     void makeArrays(float** vertices, float** texcoords, const QSizeF &size, bool yInverted) const;
     bool isTransformed() const;
 };
