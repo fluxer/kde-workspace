@@ -196,22 +196,6 @@ set_package_properties(Gphoto2 PROPERTIES
     PURPOSE "Needed to build camera kioslave"
 )
 
-macro_optional_find_package(BZip2)
-set_package_properties(BZip2 PROPERTIES
-    DESCRIPTION "A high-quality data compressor"
-    URL "http://www.bzip.org"
-    TYPE OPTIONAL
-    PURPOSE "Provides the ability to read and write bzip2 compressed data files in the filter kioslaves"
-)
-
-macro_optional_find_package(LibLZMA)
-set_package_properties(LibLZMA PROPERTIES
-    DESCRIPTION "A very high compression ratio data compressor"
-    URL "http://tukaani.org/xz/"
-    TYPE OPTIONAL
-    PURPOSE "Provides the ability to read and write xz compressed data files"
-)
-
 macro_optional_find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "API for accessing OpenEXR formatted images"
