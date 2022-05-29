@@ -138,7 +138,7 @@ struct FavIconsModulePrivate
     FavIconsModulePrivate() : config(nullptr) { }
     ~FavIconsModulePrivate() { delete config; }
 
-    QMap<KJob *, FavIconsDownloadInfo> downloads;
+    QMap<KIO::TransferJob*, FavIconsDownloadInfo> downloads;
     KUrl::List failedDownloads;
     KConfig *config;
     KIO::MetaData metaData;
@@ -234,20 +234,20 @@ void FavIconsModule::startDownload(const QString &hostOrURL, bool isHost, const 
     FavIconsDownloadInfo download;
     download.hostOrURL = hostOrURL;
     download.isHost = isHost;
-    KIO::Job *job = KIO::get(iconURL, KIO::NoReload, KIO::HideProgressInfo);
-    job->setAutoDelete(false);
-    job->addMetaData(d->metaData);
-    d->downloads.insert(job, download);
-    connect(job, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(slotInfoMessage(KJob*,QString)));
-    connect(job, SIGNAL(data(KIO::Job*,QByteArray)), SLOT(slotData(KIO::Job*,QByteArray)));
-    connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
-    job->start();
+    KIO::TransferJob *tjob = KIO::get(iconURL, KIO::NoReload, KIO::HideProgressInfo);
+    tjob->setAutoDelete(false);
+    tjob->addMetaData(d->metaData);
+    d->downloads.insert(tjob, download);
+    connect(tjob, SIGNAL(infoMessage(KJob*,QString,QString)), SLOT(slotInfoMessage(KJob*,QString)));
+    connect(tjob, SIGNAL(data(KIO::Job*,QByteArray)), SLOT(slotData(KIO::Job*,QByteArray)));
+    connect(tjob, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
+    tjob->start();
 }
 
 void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
 {
-    KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
-    FavIconsDownloadInfo &download = d->downloads[job];
+    KIO::TransferJob* tjob = qobject_cast<KIO::TransferJob*>(job);
+    FavIconsDownloadInfo &download = d->downloads[tjob];
     const int oldSize = download.iconData.size();
     // Size limit. Stop downloading if the file is huge.
     // Testcase (as of june 2008, at least): http://planet-soc.com/favicon.ico, 136K and strange format.
@@ -255,9 +255,9 @@ void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
         kWarning() << "Favicon too big, aborting download of" << tjob->url();
         const KUrl iconURL = tjob->url();
         d->failedDownloads.append(iconURL);
-        d->downloads.remove(job);
-        job->kill();
-        job->deleteLater();
+        d->downloads.remove(tjob);
+        tjob->kill();
+        tjob->deleteLater();
         return;
     }
     download.iconData.append(data);
@@ -265,13 +265,13 @@ void FavIconsModule::slotData(KIO::Job *job, const QByteArray &data)
 
 void FavIconsModule::slotResult(KJob *job)
 {
-    KIO::TransferJob* tjob = static_cast<KIO::TransferJob*>(job);
-    FavIconsDownloadInfo download = d->downloads[job];
-    d->downloads.remove(job);
+    KIO::TransferJob* tjob = qobject_cast<KIO::TransferJob*>(job);
+    FavIconsDownloadInfo download = d->downloads[tjob];
+    d->downloads.remove(tjob);
     const KUrl iconURL = tjob->url();
     QString iconName;
     QString errorMessage;
-    if (!job->error()) {
+    if (!tjob->error()) {
         QBuffer buffer(&download.iconData);
         buffer.open(QIODevice::ReadOnly);
         QImageReader ir(&buffer);
@@ -298,10 +298,10 @@ void FavIconsModule::slotResult(KJob *job)
             kWarning() << "Image reader cannot read the data" << ir.errorString();
         }
     } else {
-        errorMessage = job->errorString();
-        kWarning() << "Job error" << job->errorString();
+        errorMessage = tjob->errorString();
+        kWarning() << "Job error" << tjob->errorString();
     }
-    job->deleteLater();
+    tjob->deleteLater();
     if (iconName.isEmpty()) {
         // kDebug() << "adding" << iconURL << "to failed downloads";
         d->failedDownloads.append(iconURL);
@@ -314,7 +314,8 @@ void FavIconsModule::slotResult(KJob *job)
 
 void FavIconsModule::slotInfoMessage(KJob *job, const QString &msg)
 {
-    emit infoMessage(static_cast<KIO::TransferJob*>(job)->url().url(), msg);
+    KIO::TransferJob* tjob = qobject_cast<KIO::TransferJob*>(job);
+    emit infoMessage(tjob->url().url(), msg);
 }
 
 #include "moc_favicons.cpp"
