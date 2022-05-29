@@ -136,15 +136,14 @@ void InformationPanelContent::showItem(const KFileItem& item)
     const bool isSearchUrl = itemUrl.protocol().contains("search") && item.localPath().isEmpty();
     if (!applyPlace(itemUrl)) {
         setNameLabelText(item.text());
+        m_preview->clearPreview();
         if (isSearchUrl) {
             // in the case of a search-URL the URL is not readable for humans
             // (at least not useful to show in the Information Panel)
-            m_preview->clearPreview();
             QString iconPath = KIconLoader::global()->iconPath("nepomuk", -KIconLoader::SizeEnormous, false);
             // qDebug() << Q_FUNC_INFO << iconPath;
             m_preview->showPreview(KUrl(iconPath));
         } else {
-            m_preview->clearPreview();
             m_preview->showPreview(itemUrl);
         }
     }
