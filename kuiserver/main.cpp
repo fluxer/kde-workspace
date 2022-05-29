@@ -21,9 +21,6 @@
   * Boston, MA 02110-1301, USA.
 */
 
-#include "uiserver.h"
-#include "uiserver_p.h"
-
 #include "progresslistmodel.h"
 
 #include <kapplication.h>

@@ -19,7 +19,6 @@
 *   along with this program.  If not, see <http://www.gnu.org/licenses/>.    *
 *****************************************************************************/
 
-#include "uiserver.h"
 #include "jobviewadaptor.h"
 #include "requestviewcallwatcher.h"
 #include "jobview_interface.h"

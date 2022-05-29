@@ -21,12 +21,9 @@
 #ifndef PROGRESSLISTMODEL_H
 #define PROGRESSLISTMODEL_H
 
-#include "uiserver.h"
 #include "jobview.h"
 
 #include <QDBusContext>
-
-
 #include <QDBusAbstractInterface>
 #include <QDBusServiceWatcher>
 
@@ -34,8 +31,6 @@ class ProgressListModel: public QAbstractItemModel, protected QDBusContext
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.JobViewServer")
-
-
 public:
 
     explicit ProgressListModel(QObject *parent = 0);
@@ -187,7 +182,6 @@ private:
      */
     QHash<QString, QDBusAbstractInterface*> m_registeredServices;
 
-    UiServer *m_uiServer;
     QDBusServiceWatcher *m_serviceWatcher;
 };
 

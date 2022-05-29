@@ -9,17 +9,10 @@ include(MacroDBusAddActivationService)
 
 set(kuiserver_SRCS
     main.cpp
-    uiserver.cpp
     jobview.cpp
     progresslistmodel.cpp
     progresslistdelegate.cpp
     requestviewcallwatcher.cpp
-    configdialog.ui
-)
-
-set(kuiserver_KDEINIT_PRIVATE
-    progresslistdelegate_p.h
-    uiserver_p.h
 )
 
 #<DBus Stuff>

@@ -19,21 +19,17 @@
 */
 
 #include "progresslistmodel.h"
-
-#include <QDBusServiceWatcher>
-
-#include <KDebug>
-
 #include "jobviewserveradaptor.h"
 #include "kuiserveradaptor.h"
 #include "jobviewserver_interface.h"
 #include "requestviewcallwatcher.h"
-#include "uiserver.h"
+
+#include <KDebug>
+#include <QDBusServiceWatcher>
 #include <QtDBus/qdbusabstractinterface.h>
 
 ProgressListModel::ProgressListModel(QObject *parent)
-        : QAbstractItemModel(parent), QDBusContext(), m_jobId(1),
-          m_uiServer(0)
+        : QAbstractItemModel(parent), QDBusContext(), m_jobId(1)
 {
     m_serviceWatcher = new QDBusServiceWatcher(this);
     m_serviceWatcher->setConnection(QDBusConnection::sessionBus());
@@ -57,12 +53,6 @@ ProgressListModel::ProgressListModel(QObject *parent)
     if (!sessionBus.registerObject(QLatin1String("/JobViewServer"), this)) {
         kDebug(7024) << "failed to register object JobViewServer.";
     }
-
-    /* unused
-    if (m_registeredServices.isEmpty() && !m_uiServer) {
-        m_uiServer = new UiServer(this);
-    }
-    */
 }
 
 ProgressListModel::~ProgressListModel()
@@ -73,8 +63,6 @@ ProgressListModel::~ProgressListModel()
 
     qDeleteAll(m_jobViews);
     qDeleteAll(m_registeredServices);
-
-    delete m_uiServer;
 }
 
 QModelIndex ProgressListModel::parent(const QModelIndex&) const
@@ -235,14 +223,11 @@ QStringList ProgressListModel::gatherJobUrls()
 
 void ProgressListModel::jobFinished(JobView *jobView)
 {
-        // Job finished, delete it if we are not in self-ui mode, *and* the config option to keep finished jobs is set
-        //TODO: does not check for case for the config
-        if (!m_uiServer) {
-            kDebug(7024) << "removing jobview from list, it finished";
-            m_jobViews.removeOne(jobView);
-            //job dies, dest. URL's change..
-            emit jobUrlsChanged(gatherJobUrls());
-        }
+    // Job finished, delete it if we are not in self-ui mode, *and* the config option to keep finished jobs is set
+    kDebug(7024) << "removing jobview from list, it finished";
+    m_jobViews.removeOne(jobView);
+    //job dies, dest. URL's change..
+    emit jobUrlsChanged(gatherJobUrls());
 }
 
 void ProgressListModel::jobChanged(uint jobId)
@@ -268,10 +253,6 @@ void ProgressListModel::registerService(const QString &serviceName, const QStrin
                 new org::kde::JobViewServer(serviceName, objectPath, sessionBus);
 
             if (client->isValid()) {
-
-                delete m_uiServer;
-                m_uiServer = 0;
-
                 m_serviceWatcher->addWatchedService(serviceName);
                 m_registeredServices.insert(serviceName, client);
 
@@ -309,13 +290,6 @@ void ProgressListModel::serviceUnregistered(const QString &name)
 
         emit serviceDropped(name);
         m_registeredServices.remove(name);
-
-        /* unused (FIXME)
-        if (m_registeredServices.isEmpty()) {
-            //the last service dropped, we *need* to show our GUI
-            m_uiServer = new UiServer(this);
-        }
-         */
     }
 
     QList<JobView*> jobs = m_jobViewsOwners.values(name);
