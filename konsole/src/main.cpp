@@ -97,7 +97,7 @@ bool shouldUseNewProcess()
     const KCmdLineArgs* qtArgs = KCmdLineArgs::parsedArgs("qt");
     QStringList qtProblematicOptions;
     qtProblematicOptions << "session" << "name" << "reverse"
-                         << "stylesheet" << "graphicssystem";
+                         << "stylesheet";
 #if defined(Q_WS_X11)
     qtProblematicOptions << "display" << "visual";
 #endif
