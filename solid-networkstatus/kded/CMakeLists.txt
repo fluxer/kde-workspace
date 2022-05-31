@@ -4,8 +4,6 @@ set(kded_networkstatus_PART_SRCS
    networkstatus.cpp
    network.cpp
    systemstatusinterface.cpp
-   wicdstatus.cpp
-   wicdcustomtypes.cpp
    connmanstatus.cpp
    toolkitstatus.cpp
    networkmanagerstatus.cpp

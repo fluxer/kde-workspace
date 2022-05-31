@@ -39,7 +39,6 @@
 #include "systemstatusinterface.h"
 
 #include "networkmanagerstatus.h"
-#include "wicdstatus.h"
 #include "connmanstatus.h"
 #include "toolkitstatus.h"
 
@@ -280,7 +279,6 @@ void NetworkStatusModule::init()
 {
     if (backends.isEmpty()) {
         backends << new NetworkManagerStatus( this );
-        backends << new WicdStatus( this );
         backends << new ConnmanStatus( this );
         backends << new ToolkitStatus( this );
     }
