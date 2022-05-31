@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     fillCommandLineOptions(konsoleOptions);
     KCmdLineArgs::addCmdLineOptions(konsoleOptions);
 
-    KUniqueApplication::StartFlags startFlags;
+    KUniqueApplication::StartFlags startFlags = 0;
     if (shouldUseNewProcess())
         startFlags = KUniqueApplication::NonUniqueInstance;
 
