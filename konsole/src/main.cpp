@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 {
     KAboutData about("konsole",
                      0,
-                     ki18nc("@title", "<application>Konsole</application>"),
+                     ki18nc("@title", "Konsole"),
                      KONSOLE_VERSION,
                      ki18nc("@title", "Terminal emulator"),
                      KAboutData::License_GPL_V2
