@@ -47,7 +47,7 @@ void AppsEngine::sycocaChanged(const QStringList &changes)
 
 Plasma::Service *AppsEngine::serviceForSource(const QString &name)
 {
-    AppSource *source = dynamic_cast<AppSource*>(containerForSource(name));
+    AppSource *source = qobject_cast<AppSource*>(containerForSource(name));
     // if source does not exist, return null service
     if (!source) {
         return Plasma::DataEngine::serviceForSource(name);

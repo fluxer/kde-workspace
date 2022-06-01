@@ -376,7 +376,7 @@ void BackgroundDialog::changeBackgroundMode(int index)
     if (!w) {
         w = new QWidget(d->backgroundDialogUi.wallpaperGroup);
     } else if (w->layout()) {
-        QGridLayout *gridLayout = dynamic_cast<QGridLayout *>(w->layout());
+        QGridLayout *gridLayout = qobject_cast<QGridLayout *>(w->layout());
         if (gridLayout) {
             gridLayout->setColumnMinimumWidth(0, d->backgroundDialogUi.wallpaperTypeLabel->geometry().right());
             gridLayout->setColumnStretch(0, 0);

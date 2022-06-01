@@ -294,7 +294,7 @@ void Toplevel::setReadyForPainting()
         if (compositing()) {
             addRepaintFull();
             emit windowShown(this);
-            if (Client *cl = dynamic_cast<Client*>(this)) {
+            if (Client *cl = qobject_cast<Client*>(this)) {
                 if (cl->tabGroup() && cl->tabGroup()->current() == cl)
                     cl->tabGroup()->setCurrent(cl, true);
             }

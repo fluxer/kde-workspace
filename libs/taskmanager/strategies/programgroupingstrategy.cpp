@@ -191,7 +191,7 @@ void ProgramGroupingStrategy::handleItem(AbstractGroupableItem *item)
         return;
     }
 
-    TaskItem *task = dynamic_cast<TaskItem*>(item);
+    TaskItem *task = qobject_cast<TaskItem*>(item);
     if (task && !programGrouping(task, root)) {
         //kDebug() << item->name() << "joined rootGroup ";
         root->add(item);

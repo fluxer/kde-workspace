@@ -65,7 +65,7 @@ public:
     QMenu* popupMenuFactory(const char *type)
     {
         QWidget * menu = factory()->container(type, this);
-        return dynamic_cast<QMenu *>(menu);
+        return qobject_cast<QMenu *>(menu);
     }
 
     KToggleAction* getToggleAction(const char *) const;

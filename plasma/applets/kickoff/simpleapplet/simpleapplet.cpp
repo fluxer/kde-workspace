@@ -803,7 +803,7 @@ void MenuLauncherApplet::actionTriggered(QAction *action)
         return;
     }
     for (QWidget* w = action->parentWidget(); w; w = w->parentWidget()) {
-        if (Kickoff::MenuView *view = dynamic_cast<Kickoff::MenuView*>(w)) {
+        if (Kickoff::MenuView *view = qobject_cast<Kickoff::MenuView*>(w)) {
             view->actionTriggered(action);
             break;
         }

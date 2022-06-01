@@ -84,7 +84,7 @@ QList<QAction*> ManualGroupingStrategy::strategyActions(QObject *parent, Abstrac
         QAction *a = new QAction(i18n("Remove Group"), parent);
         connect(a, SIGNAL(triggered()), this, SLOT(removeGroup()));
         actionList.append(a);
-        d->tempGroup = dynamic_cast<TaskGroup*>(item);
+        d->tempGroup = qobject_cast<TaskGroup*>(item);
     }
 
     return actionList;

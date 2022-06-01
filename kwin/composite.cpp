@@ -779,7 +779,7 @@ bool Toplevel::setupCompositing()
     // and us setting up damage tracking.  If the client wins we won't get a damage event even
     // though the window has been painted.  To avoid this we mark the whole window as damaged
     // and schedule a repaint immediately after creating the damage object.
-    if (dynamic_cast<Unmanaged*>(this))
+    if (qobject_cast<Unmanaged*>(this))
         addDamageFull();
 
     return true;

@@ -473,7 +473,7 @@ namespace KateMDI
     if (ev->type() == QEvent::ContextMenu)
     {
       QContextMenuEvent *e = (QContextMenuEvent *) ev;
-      KMultiTabBarTab *bt = dynamic_cast<KMultiTabBarTab*>(obj);
+      KMultiTabBarTab *bt = qobject_cast<KMultiTabBarTab*>(obj);
       if (bt)
       {
         //kDebug() << "Request for popup";
@@ -487,7 +487,7 @@ namespace KateMDI
           KMenu *p = new KMenu (this);
 
           if (!w->plugin.isNull()) {
-            Kate::PluginConfigPageInterface* pcpi=dynamic_cast<Kate::PluginConfigPageInterface*>(w->plugin.data());
+            Kate::PluginConfigPageInterface* pcpi=qobject_cast<Kate::PluginConfigPageInterface*>(w->plugin.data());
             if (pcpi) {
               if (pcpi->configPages()>0)
                 p->addAction(i18n("Configure ..."))->setData(20);
@@ -559,7 +559,7 @@ namespace KateMDI
     // configure actionCollection
     if (id==20) {
       if (!w->plugin.isNull()) {
-          Kate::PluginConfigPageInterface* pcpi=dynamic_cast<Kate::PluginConfigPageInterface*>(w->plugin.data());
+          Kate::PluginConfigPageInterface* pcpi=qobject_cast<Kate::PluginConfigPageInterface*>(w->plugin.data());
           if (pcpi) {
             if (pcpi->configPages()>0)
               emit sigShowPluginConfigPage(pcpi,0);

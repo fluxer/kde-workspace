@@ -432,7 +432,7 @@ void CalendarPrivate::popupMonthsMenu()
 
 void Calendar::monthTriggered()
 {
-    QAction *action = dynamic_cast<QAction*> (sender());
+    QAction *action = qobject_cast<QAction*> (sender());
 
     if (action && action->property("month").type() == QVariant::Int) {
         int newMonth = action->property("month").toInt();

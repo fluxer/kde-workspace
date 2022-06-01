@@ -509,22 +509,6 @@ void KonqOperations::doDropFileCopy()
     {
         // Neither control, shift or alt are pressed => show popup menu
 
-        // TODO move this code out somehow. Allow user of KonqOperations to add his own actions...
-#if 0
-        KonqIconViewWidget *iconView = dynamic_cast<KonqIconViewWidget*>(parent());
-        bool bSetWallpaper = false;
-        if ( iconView && iconView->maySetWallpaper() && lst.count() == 1 )
-	{
-            KUrl url = lst.first();
-            KMimeType::Ptr mime = KMimeType::findByUrl( url );
-            if ( mime && ( ( KImageIO::isSupported(mime->name(), KImageIO::Reading) ) ||
-                 mime->is( "image/svg+xml" ) ) )
-            {
-                bSetWallpaper = true;
-            }
-        }
-#endif
-
         // Check what the source can do
         // we'll assume it's the same for all URLs (hack)
         // TODO: if we had a KFileItemList instead of a KUrl::List,
@@ -780,18 +764,6 @@ void KonqOperations::setOperation( KIO::Job * job, Operation method, const KUrl 
         job->ui()->setWindow(parentWidget());
         connect( job, SIGNAL(result(KJob*)),
                  SLOT(slotResult(KJob*)) );
-#if 0
-        KIO::CopyJob *copyJob = dynamic_cast<KIO::CopyJob*>(job);
-        KonqIconViewWidget *iconView = dynamic_cast<KonqIconViewWidget*>(parent());
-        if (copyJob && iconView)
-        {
-            connect(copyJob, SIGNAL(aboutToCreate(KIO::Job*,QList<KIO::CopyInfo>)),
-                 this, SLOT(slotAboutToCreate(KIO::Job*,QList<KIO::CopyInfo>)));
-            // TODO move this connect into the iconview!
-            connect(this, SIGNAL(aboutToCreate(QPoint,QList<KIO::CopyInfo>)),
-                 iconView, SLOT(slotAboutToCreate(QPoint,QList<KIO::CopyInfo>)));
-        }
-#endif
     }
     else // for link
         slotResult( 0L );

@@ -43,7 +43,7 @@ StatusNotifierItemEngine::~StatusNotifierItemEngine()
 
 Plasma::Service* StatusNotifierItemEngine::serviceForSource(const QString &name)
 {
-    StatusNotifierItemSource *source = dynamic_cast<StatusNotifierItemSource*>(containerForSource(name));
+    StatusNotifierItemSource *source = qobject_cast<StatusNotifierItemSource*>(containerForSource(name));
     // if source does not exist, return null service
     if (!source) {
         return Plasma::DataEngine::serviceForSource(name);

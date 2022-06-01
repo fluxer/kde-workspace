@@ -93,7 +93,7 @@ void BookmarkListView::setModel(QAbstractItemModel * model)
 
 KBookmarkModel* BookmarkListView::bookmarkModel() const
 {
-    return dynamic_cast<KBookmarkModel*>(QTreeView::model());
+    return qobject_cast<KBookmarkModel*>(QTreeView::model());
 }
 
 KBookmark BookmarkListView::bookmarkForIndex(const QModelIndex & idx) const

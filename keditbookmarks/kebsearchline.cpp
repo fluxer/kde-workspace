@@ -66,8 +66,8 @@ KViewSearchLine::KViewSearchLine(QWidget *parent, QAbstractItemView *v) :
 
     setClearButtonShown(true);
 
-    d->treeView = dynamic_cast<QTreeView *>(v);
-    d->listView = dynamic_cast<QListView *>(v);
+    d->treeView = qobject_cast<QTreeView *>(v);
+    d->listView = qobject_cast<QListView *>(v);
 
     connect(this, SIGNAL(textChanged(QString)),
             this, SLOT(queueSearch(QString)));
@@ -184,8 +184,8 @@ void KViewSearchLine::setView(QAbstractItemView *v)
         disconnect(model(), SIGNAL(modelReset()), this, SLOT(slotModelReset()));
     }
 
-    d->treeView = dynamic_cast<QTreeView *>(v);
-    d->listView = dynamic_cast<QListView *>(v);
+    d->treeView = qobject_cast<QTreeView *>(v);
+    d->listView = qobject_cast<QListView *>(v);
 
     if(view()) {
         connect(view(), SIGNAL(destroyed()),

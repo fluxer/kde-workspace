@@ -168,8 +168,8 @@ int TaskGroup::totalSize()
 void TaskGroup::add(AbstractGroupableItem *item, int insertIndex)
 {
     /*    if (!item->itemType() == GroupItemType) {
-            if ((dynamic_cast<TaskItem*>(item))->task()) {
-                kDebug() << "Add item" << (dynamic_cast<TaskItem*>(item))->task()->visibleName();
+            if ((qobject_cast<TaskItem*>(item))->task()) {
+                kDebug() << "Add item" << (qobject_cast<TaskItem*>(item))->task()->visibleName();
             }
             kDebug() << " to Group " << name();
         }
@@ -253,9 +253,9 @@ void TaskGroup::add(AbstractGroupableItem *item, int insertIndex)
     //For debug
     /* foreach (AbstractGroupableItem *item, d->members) {
          if (item->itemType() == GroupItemType) {
-             kDebug() << (dynamic_cast<TaskGroup*>(item))->name();
+             kDebug() << (qobject_cast<TaskGroup*>(item))->name();
          } else {
-             kDebug() << (dynamic_cast<TaskItem*>(item))->task()->visibleName();
+             kDebug() << (qobject_cast<TaskItem*>(item))->task()->visibleName();
          }
      }*/
     emit itemAdded(item);
@@ -301,9 +301,9 @@ void TaskGroup::remove(AbstractGroupableItem *item)
 
     /*
     if (item->itemType() == GroupItemType) {
-        kDebug() << "Remove group" << (dynamic_cast<TaskGroup*>(item))->name();
-    } else if ((dynamic_cast<TaskItem*>(item))->task()) {
-        kDebug() << "Remove item" << (dynamic_cast<TaskItem*>(item))->task()->visibleName();
+        kDebug() << "Remove group" << (qobject_cast<TaskGroup*>(item))->name();
+    } else if ((qobject_cast<TaskItem*>(item))->task()) {
+        kDebug() << "Remove item" << (qobject_cast<TaskItem*>(item))->task()->visibleName();
     }
     kDebug() << "from Group: " << name();
     */
@@ -311,9 +311,9 @@ void TaskGroup::remove(AbstractGroupableItem *item)
     /* kDebug() << "GroupMembers: ";
      foreach (AbstractGroupableItem *item, d->members) {
          if (item->itemType() == GroupItemType) {
-             kDebug() << (dynamic_cast<TaskGroup*>(item))->name();
+             kDebug() << (qobject_cast<TaskGroup*>(item))->name();
          } else {
-             kDebug() << (dynamic_cast<TaskItem*>(item))->task()->visibleName();
+             kDebug() << (qobject_cast<TaskItem*>(item))->task()->visibleName();
          }
      }*/
 

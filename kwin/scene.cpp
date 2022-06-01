@@ -671,7 +671,7 @@ void Scene::Window::discardShape()
 const QRegion &Scene::Window::shape() const
 {
     if (!shape_valid) {
-        Client* c = dynamic_cast< Client* >(toplevel);
+        Client* c = qobject_cast< Client* >(toplevel);
         if (toplevel->shape() || (c != NULL && !c->mask().isEmpty())) {
             int count, order;
             XRectangle* rects = XShapeGetRectangles(display(), toplevel->frameId(),
@@ -771,7 +771,7 @@ WindowQuadList Scene::Window::buildQuads(bool force) const
     if (toplevel->clientPos() == QPoint(0, 0) && toplevel->clientSize() == toplevel->decorationRect().size())
         ret = makeQuads(WindowQuadContents, shape());  // has no decoration
     else {
-        Client *client = dynamic_cast<Client*>(toplevel);
+        Client *client = qobject_cast<Client*>(toplevel);
         QRegion contents = clientShape();
         QRegion center = toplevel->transparentRect();
         QRegion decoration = (client && decorationPlugin()->hasAlpha() ?

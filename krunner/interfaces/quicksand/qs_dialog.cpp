@@ -308,7 +308,7 @@ void QsDialog::updateSystemActivityToolTip()
 {
     /* Set the tooltip for the Show System Activity button to include the global shortcut */
     KRunnerApp *krunnerApp = KRunnerApp::self();
-    KAction *showSystemActivityAction = dynamic_cast<KAction *>(krunnerApp->actionCollection()->action(QLatin1String( "Show System Activity" )));
+    KAction *showSystemActivityAction = qobject_cast<KAction *>(krunnerApp->actionCollection()->action(QLatin1String( "Show System Activity" )));
     if (showSystemActivityAction) {
         QString shortcut = showSystemActivityAction->globalShortcut().toString();
         if (shortcut.isEmpty()) {

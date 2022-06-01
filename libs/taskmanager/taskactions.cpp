@@ -645,9 +645,9 @@ BasicMenu::BasicMenu(QWidget *parent, TaskGroup* group, GroupManager *strategy, 
 
     foreach (AbstractGroupableItem * item, group->members()) {
         if (item->itemType() == GroupItemType) {
-            addMenu(new BasicMenu(this, dynamic_cast<TaskGroup*>(item), strategy));
+            addMenu(new BasicMenu(this, qobject_cast<TaskGroup*>(item), strategy));
         } else {
-            addMenu(new BasicMenu(this, dynamic_cast<TaskItem*>(item), strategy, QList <QAction*>(), QList <QAction*>(), maxWidth));
+            addMenu(new BasicMenu(this, qobject_cast<TaskItem*>(item), strategy, QList <QAction*>(), QList <QAction*>(), maxWidth));
         }
     }
     addSeparator();

@@ -71,7 +71,7 @@ void Deleted::discard()
 
 void Deleted::copyToDeleted(Toplevel* c)
 {
-    assert(dynamic_cast< Deleted* >(c) == NULL);
+    assert(qobject_cast< Deleted* >(c) == NULL);
     Toplevel::copyToDeleted(c);
     desk = c->desktop();
     contentsRect = QRect(c->clientPos(), c->clientSize());
@@ -79,7 +79,7 @@ void Deleted::copyToDeleted(Toplevel* c)
     m_layer = c->layer();
     if (WinInfo* cinfo = dynamic_cast< WinInfo* >(info))
         cinfo->disable();
-    Client* client = dynamic_cast<Client*>(c);
+    Client* client = qobject_cast<Client*>(c);
     if (client) {
         m_wasClient = true;
         no_border = client->noBorder();

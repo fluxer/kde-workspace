@@ -435,8 +435,8 @@ void SceneXrender::Window::performPaint(int mask, QRegion region, WindowPaintDat
     qreal yscale = 1;
     bool scaled = false;
 
-    Client *client = dynamic_cast<Client*>(toplevel);
-    Deleted *deleted = dynamic_cast<Deleted*>(toplevel);
+    Client *client = qobject_cast<Client*>(toplevel);
+    Deleted *deleted = qobject_cast<Deleted*>(toplevel);
     const QRect decorationRect = toplevel->decorationRect();
     if (((client && !client->noBorder()) || (deleted && !deleted->noBorder())) &&
                                                         decorationPlugin()->hasAlpha()) {

@@ -477,7 +477,7 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
 
 QWidget *KateFileTemplates::parentWindow()
 {
-  return dynamic_cast<QWidget*>(application()->activeMainWindow());
+  return qobject_cast<QWidget*>(application()->activeMainWindow());
 }
 
 // The next part are tools to aid the creation and editing of templates

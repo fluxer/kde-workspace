@@ -255,7 +255,7 @@ void TopLevel::initStatusBar()
   KSGRD::SensorMgr->sendRequest( "localhost", "mem/swap/used?",
                                  (KSGRD::SensorClient*)this, 7 );
 
-  KToggleAction *sb = dynamic_cast<KToggleAction*>(action("options_show_statusbar"));
+  KToggleAction *sb = qobject_cast<KToggleAction*>(action("options_show_statusbar"));
   if (sb)
      connect(sb, SIGNAL(toggled(bool)), this, SLOT(updateStatusBar()));
   setupGUI(QSize(800,600), ToolBar | Keys | StatusBar | Save | Create);

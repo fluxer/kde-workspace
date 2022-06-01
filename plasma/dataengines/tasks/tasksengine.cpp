@@ -34,7 +34,7 @@ TasksEngine::~TasksEngine()
 
 Plasma::Service *TasksEngine::serviceForSource(const QString &name)
 {
-    TaskSource *source = dynamic_cast<TaskSource*>(containerForSource(name));
+    TaskSource *source = qobject_cast<TaskSource*>(containerForSource(name));
     // if source does not exist or it represents a startup task, return a null service
     if (!source || !source->task()) {
         return Plasma::DataEngine::serviceForSource(name);

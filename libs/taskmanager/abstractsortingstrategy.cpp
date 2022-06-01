@@ -91,7 +91,7 @@ void AbstractSortingStrategy::handleGroup(TaskGroup *group)
 
 void AbstractSortingStrategy::removeGroup()
 {
-    TaskGroup *group = dynamic_cast<TaskGroup*>(sender());
+    TaskGroup *group = qobject_cast<TaskGroup*>(sender());
 
     if (!group) {
         return;
@@ -117,7 +117,7 @@ void AbstractSortingStrategy::check(AbstractGroupableItem *itemToCheck)
 {
     AbstractGroupableItem *item;
     if (!itemToCheck) {
-        item = dynamic_cast<AbstractGroupableItem *>(sender());
+        item = qobject_cast<AbstractGroupableItem *>(sender());
     } else {
         item = itemToCheck;
     }

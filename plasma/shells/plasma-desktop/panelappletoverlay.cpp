@@ -268,7 +268,7 @@ void PanelAppletOverlay::mouseMoveEvent(QMouseEvent *event)
         //kDebug() << "checking view" << view << m_applet->view();
 
         if (!view) {
-            view = dynamic_cast<Plasma::View*>(parent());
+            view = qobject_cast<Plasma::View*>(parent());
         }
 
         if (!view) {
