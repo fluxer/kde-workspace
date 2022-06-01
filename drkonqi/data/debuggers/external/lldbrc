@@ -4,5 +4,5 @@ TryExec=lldb
 Backends=KCrash
 
 [KCrash]
-Exec=konsole --nofork -e lldb --attach-pid %pid
+Exec=konsole -e lldb --attach-pid %pid
 Terminal=true
