@@ -114,8 +114,6 @@ void fillCommandLineOptions(KCmdLineOptions& options)
                 ki18nc("@info:shell", "Command to execute. This option will catch all following"
                       " arguments, so use it as the last option."));
     options.add("+[args]", ki18nc("@info:shell", "Arguments passed to command"));
-    options.add("", ki18nc("@info:shell", "Use --nofork to run in the foreground (helpful"
-                          " with the -e option)."));
 }
 
 void fillAboutData(KAboutData& aboutData)
