@@ -114,6 +114,9 @@ KScreenSaver::KScreenSaver(QObject *parent)
             kWarning() << "Invalid GetSessionByPID reply";
         }
     }
+
+    // xscreensaver daemon instantly shows screen saver when started, deactivate it
+    SetActive(false);
 }
 
 KScreenSaver::~KScreenSaver()
