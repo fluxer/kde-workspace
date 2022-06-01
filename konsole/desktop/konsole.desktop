@@ -7,7 +7,7 @@ Terminal=false
 Categories=Qt;KDE;System;TerminalEmulator;
 Actions=NewWindow;
 X-DocPath=konsole/index.html
-X-DBUS-StartupType=Unique
+X-DBUS-StartupType=Multi
 X-KDE-StartupNotify=true
 X-KDE-AuthorizeAction=shell_access
 
