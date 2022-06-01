@@ -493,11 +493,11 @@ void NOAAIon::updateWeather(const QString& source)
     // Do we have a comfort temperature? if so display it
     if (dataFields["comfortTemperature"] != "N/A") {
         if (m_weatherData[source].windchill_F != "NA") {
-            data.insert("Windchill", QString("%1").arg(dataFields["comfortTemperature"]));
+            data.insert("Windchill", dataFields["comfortTemperature"]);
             data.insert("Humidex", i18n("N/A"));
         }
         if (m_weatherData[source].heatindex_F != "NA" && m_weatherData[source].temperature_F.toInt() != m_weatherData[source].heatindex_F.toInt()) {
-            data.insert("Humidex", QString("%1").arg(dataFields["comfortTemperature"]));
+            data.insert("Humidex", dataFields["comfortTemperature"]);
             data.insert("Windchill", i18n("N/A"));
         }
     } else {

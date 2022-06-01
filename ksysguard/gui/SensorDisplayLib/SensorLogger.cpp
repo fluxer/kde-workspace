@@ -570,9 +570,9 @@ bool SensorLogger::saveSettings( QDomDocument& doc, QDomElement& element )
     log.setAttribute("fileName", sensor->fileName());
     log.setAttribute("timerInterval", sensor->timerInterval());
     log.setAttribute("lowerLimitActive", QString("%1").arg(sensor->lowerLimitActive()));
-    log.setAttribute("lowerLimit", QString("%1").arg(sensor->lowerLimit()));
+    log.setAttribute("lowerLimit", QString::number(sensor->lowerLimit()));
     log.setAttribute("upperLimitActive", QString("%1").arg(sensor->upperLimitActive()));
-    log.setAttribute("upperLimit", QString("%1").arg(sensor->upperLimit()));
+    log.setAttribute("upperLimit", QString::number(sensor->upperLimit()));
 
     element.appendChild( log );
   }

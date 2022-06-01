@@ -376,9 +376,9 @@ bool KatePrinter::print (KateDocument *doc)
         QString re("%P");
         QStringList::Iterator it;
         for ( it=headerTagList.begin(); it!=headerTagList.end(); ++it )
-          (*it).replace( re, QString( "%1" ).arg( totalPages ) );
+          (*it).replace( re, QString::number( totalPages ) );
         for ( it=footerTagList.begin(); it!=footerTagList.end(); ++it )
-          (*it).replace( re, QString( "%1" ).arg( totalPages ) );
+          (*it).replace( re, QString::number( totalPages ) );
       }
     } // end prepare block
 
@@ -602,7 +602,7 @@ bool KatePrinter::print (KateDocument *doc)
         paint.setPen( renderer.config()->lineNumberColor() );
         paint.drawText( (( useBox || useBackground ) ? innerMargin : 0)-xstart, 0,
                     lineNumberWidth, fontHeight,
-                    Qt::AlignRight, QString("%1").arg( lineCount + 1 ) );
+                    Qt::AlignRight, QString::number( lineCount + 1 ) );
       }
 
       // HA! this is where we print [part of] a line ;]]

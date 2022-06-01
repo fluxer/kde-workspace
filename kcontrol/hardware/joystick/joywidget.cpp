@@ -354,7 +354,7 @@ void JoyWidget::checkDevice()
     if ( ! axesTbl->item(number, 0) )
       axesTbl->setItem(number, 0, new QTableWidgetItem());
 
-    axesTbl->item(number, 0)->setText(QString("%1").arg(int(value)));
+    axesTbl->item(number, 0)->setText(QString::number(value));
   }
 }
 

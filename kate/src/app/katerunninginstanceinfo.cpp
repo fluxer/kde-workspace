@@ -38,7 +38,7 @@ bool fillinRunningKateAppInstances(KateRunningInstanceMap *map)
 
   QString serviceName;
 
-  QString my_pid(QString("%1").arg(getpid()).toLatin1());
+  QString my_pid = QString::number(::getpid());
 
   foreach (const QString &s, services)
   {

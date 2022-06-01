@@ -130,15 +130,13 @@ void KillRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMa
     quint64 pid = data[0].toUInt();
     QString user = data[1].toString();
 
-    int signal;
+    int signal = SIGKILL;
     if (match.selectedAction() != NULL) {
         signal = match.selectedAction()->data().toInt();
-    } else {
-        signal = SIGKILL;
     }
 
     QStringList args;
-    args << QString("-%1").arg(signal) << QString("%1").arg(pid);
+    args << QString("-%1").arg(signal) << QString::number(pid);
 
     QProcess killproc(this);
     killproc.start("kill", args);

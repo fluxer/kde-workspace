@@ -1647,7 +1647,7 @@ void KateIconBorder::paintBorder (int /*x*/, int y, int /*width*/, int height)
         if (m_viewInternal->cache()->viewLine(z).startCol() == 0) {
           if (m_lineNumbersOn) {
             p.drawText( lnX + m_maxCharWidth / 2, y, lnWidth - m_maxCharWidth, h,
-                        Qt::TextDontClip|Qt::AlignRight|Qt::AlignVCenter, QString("%1").arg( realLine + 1 ) );
+                        Qt::TextDontClip|Qt::AlignRight|Qt::AlignVCenter, QString::number( realLine + 1 ) );
           }
         } else if (m_view->dynWordWrap() && m_dynWrapIndicatorsOn) {
           p.drawPixmap(lnX + lnWidth - m_arrow.width() - 2, y, m_arrow);

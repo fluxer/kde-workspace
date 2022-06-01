@@ -183,7 +183,7 @@ void NetMon::update() {
 			QTreeWidgetItem *row = list->topLevelItem(i);
 			//         cerr<<"NetMon::update: this should be the pid: "<<row->text(5)<<endl;
 			int pid=row->text(5).toInt();
-			row->setText(6,QString("%1").arg((lo)[pid]));
+			row->setText(6,QString::number((lo)[pid]));
 		}
 	}
 

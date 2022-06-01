@@ -275,8 +275,8 @@ bool DancingBars::restoreSettings( QDomElement &element )
                                        KSGRD::Style->alarmColor() );
   mPlotter->mBackgroundColor = restoreColor( element, "backgroundColor",
                                             KSGRD::Style->backgroundColor() );
-  mPlotter->fontSize = element.attribute( "fontSize", QString( "%1" ).arg(
-                                          KSGRD::Style->fontSize() ) ).toInt();
+  mPlotter->fontSize = element.attribute( "fontSize",
+                                          QString::number(KSGRD::Style->fontSize() ) ).toInt();
 
   QDomNodeList dnList = element.elementsByTagName( "beam" );
   for ( int i = 0; i < dnList.count(); ++i ) {

@@ -161,7 +161,7 @@ KTextEditor::Document *KateDocManager::createDoc (const KateDocumentInfo& docInf
 
 void KateDocManager::deleteDoc (KTextEditor::Document *doc)
 {
-  KateApp::self()->emitDocumentClosed(QString("%1").arg((qptrdiff)doc));
+  KateApp::self()->emitDocumentClosed(QString::number((qptrdiff)doc));
   kDebug()<<"deleting document with name:"<<doc->documentName();
 
   // document will be deleted, soon

@@ -121,8 +121,9 @@ QString KateApp::kateVersion (bool fullVersion)
 void KateApp::initKate ()
 {
 
-  kDebug() << "Setting KATE_PID: '" << getpid() << "'";
-  ::setenv( "KATE_PID", QString("%1").arg(getpid()).toLatin1(), 1 );
+  kDebug() << "Setting KATE_PID: '" << ::getpid() << "'";
+  const QByteArray pidbytes = QByteArray::number(::getpid());
+  ::setenv( "KATE_PID", pidbytes.constData(), 1 );
 
   // handle restore different
   if (isSessionRestored())
@@ -159,7 +160,7 @@ void KateApp::restoreKate ()
 
   // restore all windows ;)
   for (int n = 1; KMainWindow::canBeRestored(n); n++)
-    newMainWindow(sessionConfig(), QString ("%1").arg(n));
+    newMainWindow(sessionConfig(), QString::number(n));
 
   // oh, no mainwindow, create one, should not happen, but make sure ;)
   if (mainWindows() == 0)

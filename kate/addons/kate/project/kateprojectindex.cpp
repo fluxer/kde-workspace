@@ -203,7 +203,7 @@ void KateProjectIndex::findMatches (QStandardItemModel &model, const QString &se
         items << new QStandardItem (name);
         items << new QStandardItem (entry.kind ? QString::fromLocal8Bit(entry.kind) : QString());
         items << new QStandardItem (entry.file ? QString::fromLocal8Bit(entry.file) : QString());
-        items << new QStandardItem (QString("%1").arg(entry.address.lineNumber));
+        items << new QStandardItem (QString::number(entry.address.lineNumber));
         model.appendRow (items);
         break;
     }
