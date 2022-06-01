@@ -28,6 +28,7 @@
 #include <KAboutData>
 #include <KCmdLineArgs>
 #include <KLocale>
+#include <KDebug>
 
 #define KONSOLE_VERSION "2.14.2"
 
@@ -38,10 +39,6 @@ void fillAboutData(KAboutData& aboutData);
 
 // fill the KCmdLineOptions object with konsole specific options.
 void fillCommandLineOptions(KCmdLineOptions& options);
-
-// check and report whether this konsole instance should use a new konsole
-// process, or re-use an existing konsole process.
-bool shouldUseNewProcess();
 
 // restore sessions saved by KDE.
 void restoreSession(Application& app);
@@ -62,21 +59,11 @@ int main(int argc, char** argv)
 
     KCmdLineArgs::init(argc, argv, &about);
     KCmdLineArgs::addStdCmdLineOptions();  // Qt and KDE options
-    KUniqueApplication::addCmdLineOptions(); // KUniqueApplication options
     KCmdLineOptions konsoleOptions; // Konsole options
     fillCommandLineOptions(konsoleOptions);
     KCmdLineArgs::addCmdLineOptions(konsoleOptions);
 
-    KUniqueApplication::StartFlags startFlags = 0;
-    if (shouldUseNewProcess())
-        startFlags = KUniqueApplication::NonUniqueInstance;
-
-    // create a new application instance if there are no running Konsole
-    // instances, otherwise inform the existing Konsole process and exit
-    if (!KUniqueApplication::start(startFlags)) {
-        exit(0);
-    }
-
+    // create a new application instance
     Application app;
 
     // make sure the d&d popup menu provided by libkonq get translated.
@@ -84,76 +71,6 @@ int main(int argc, char** argv)
 
     restoreSession(app);
     return app.exec();
-}
-bool shouldUseNewProcess()
-{
-    // The "unique process" model of konsole is incompatible with some or all
-    // Qt/KDE options. When those incompatible options are given, konsole must
-    // use new process
-    //
-    // TODO: make sure the existing list is OK and add more incompatible options.
-
-    // take Qt options into consideration
-    const KCmdLineArgs* qtArgs = KCmdLineArgs::parsedArgs("qt");
-    QStringList qtProblematicOptions;
-    qtProblematicOptions << "session" << "name" << "reverse"
-                         << "stylesheet";
-#if defined(Q_WS_X11)
-    qtProblematicOptions << "display" << "visual";
-#endif
-    foreach(const QString& option, qtProblematicOptions) {
-        if ( qtArgs->isSet(option.toLocal8Bit()) ) {
-            return true;
-        }
-    }
-
-    // take KDE options into consideration
-    const KCmdLineArgs* kdeArgs = KCmdLineArgs::parsedArgs("kde");
-    QStringList kdeProblematicOptions;
-    kdeProblematicOptions << "config" << "style";
-#if defined(Q_WS_X11)
-    kdeProblematicOptions << "waitforwm";
-#endif
-    foreach(const QString& option, kdeProblematicOptions) {
-        if ( kdeArgs->isSet(option.toLocal8Bit()) ) {
-            return true;
-        }
-    }
-
-    const KCmdLineArgs* kUniqueAppArgs = KCmdLineArgs::parsedArgs("kuniqueapp");
-
-    // when user asks konsole to run in foreground through the --nofork option
-    // provided by KUniqueApplication, we must use new process. Otherwise, there
-    // will be no process for users to wait for finishing.
-    const bool shouldRunInForeground = !kUniqueAppArgs->isSet("fork");
-    if (shouldRunInForeground) {
-        return true;
-    }
-
-    const KCmdLineArgs* konsoleArgs = KCmdLineArgs::parsedArgs();
-
-    // if users have explictly requested starting a new process
-    if (konsoleArgs->isSet("separate")) {
-        return true;
-    }
-
-    // the only way to create new tab is to reuse existing Konsole process.
-    if (konsoleArgs->isSet("new-tab")) {
-        return false;
-    }
-
-    // when starting Konsole from a terminal, a new process must be used
-    // so that the current environment is propagated into the shells of the new
-    // Konsole and any debug output or warnings from Konsole are written to
-    // the current terminal
-    bool hasControllingTTY = false;
-    const int fd = KDE_open("/dev/tty", O_RDONLY);
-    if (fd != -1) {
-        hasControllingTTY = true;
-        close(fd);
-    }
-
-    return hasControllingTTY;
 }
 
 void fillCommandLineOptions(KCmdLineOptions& options)

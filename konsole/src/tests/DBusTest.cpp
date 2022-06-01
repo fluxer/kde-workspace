@@ -21,14 +21,15 @@
 #include "DBusTest.h"
 #include "../Session.h"
 
-#include <QtDBus/QDBusConnectionInterface>
+#include <QTextCodec>
+#include <QDBusConnectionInterface>
 
 using namespace Konsole;
 
 /* Exec a new Konsole and grab its dbus */
 void DBusTest::initTestCase()
 {
-    const QString interfaceName = "org.kde.konsole";
+    const QString interfaceName = "org.kde.konsole-";
     QDBusConnectionInterface* bus = 0;
     QStringList konsoleServices;
 
@@ -50,15 +51,15 @@ void DBusTest::initTestCase()
     }
 
     // Create a new Konsole with a separate process id
-    QProcess proc;
-    proc.start("konsole");
-    proc.waitForStarted();
-    if (proc.exitCode() != 0) {
-        kFatal() << "Unable to exec a new Konsole : " << proc.exitCode();
+    _process.reset(new QProcess(this));
+    _process->start("konsole");
+    _process->waitForStarted();
+    if (_process->exitCode() != 0) {
+        kFatal() << "Unable to exec a new Konsole : " << _process->exitCode();
     }
 
     // Wait for above Konsole to finish starting
-    QTest::qWait(5000);
+    QTest::qWait(3000);
 
     serviceReply = bus->registeredServiceNames();
     if (!serviceReply.isValid())
@@ -101,6 +102,8 @@ void DBusTest::cleanupTestCase()
     QDBusReply<void> instanceReply = iface.call("close");
     if (!instanceReply.isValid())
         kFatal() << "Unable to close Konsole :" << instanceReply.error();
+
+    _process.reset(nullptr);
 }
 
 void DBusTest::testSessions()

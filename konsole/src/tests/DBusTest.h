@@ -24,7 +24,7 @@
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
 #include <QtCore/QProcess>
-#include <QtCore/QTextCodec>
+#include <QtCore/QScopedPointer>
 #include <KDebug>
 
 #include <unistd.h>
@@ -47,6 +47,7 @@ protected slots:
 
 private:
     QString _interfaceName;
+    QScopedPointer<QProcess> _process;
 };
 
 }

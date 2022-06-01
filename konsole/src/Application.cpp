@@ -41,53 +41,9 @@
 
 using namespace Konsole;
 
-Application::Application() : KUniqueApplication()
-{
-    init();
-}
-
-void Application::init()
-{
-    _backgroundInstance = 0;
-
-}
-
-Application::~Application()
-{
-    SessionManager::instance()->closeAllSessions();
-    ProfileManager::instance()->saveSettings();
-}
-
-MainWindow* Application::newMainWindow()
-{
-    MainWindow* window = new MainWindow();
-
-    connect(window, SIGNAL(newWindowRequest(Profile::Ptr,QString)),
-            this, SLOT(createWindow(Profile::Ptr,QString)));
-    connect(window, SIGNAL(viewDetached(Session*)),
-            this, SLOT(detachView(Session*)));
-
-    return window;
-}
-
-void Application::createWindow(Profile::Ptr profile, const QString& directory)
-{
-    MainWindow* window = newMainWindow();
-    window->createSession(profile, directory);
-    window->show();
-}
-
-void Application::detachView(Session* session)
-{
-    MainWindow* window = newMainWindow();
-    window->createView(session);
-    // Since user is dragging and dropping, move dnd window to where
-    // the user has the cursor (correct multiple monitor setups).
-    window->move(QCursor::pos());
-    window->show();
-}
-
-int Application::newInstance()
+Application::Application()
+    : KApplication(),
+    _backgroundInstance(nullptr)
 {
     static bool firstInstance = true;
 
@@ -98,7 +54,7 @@ int Application::newInstance()
         // check for arguments to print help or other information to the
         // terminal, quit if such an argument was found
         if (processHelpArgs(args))
-            return 0;
+            return;
 
         // create a new window or use an existing one
         MainWindow* window = processWindowArgs(args);
@@ -148,7 +104,41 @@ int Application::newInstance()
 
     firstInstance = false;
     args->clear();
-    return 0;
+}
+
+Application::~Application()
+{
+    SessionManager::instance()->closeAllSessions();
+    ProfileManager::instance()->saveSettings();
+}
+
+MainWindow* Application::newMainWindow()
+{
+    MainWindow* window = new MainWindow();
+
+    connect(window, SIGNAL(newWindowRequest(Profile::Ptr,QString)),
+            this, SLOT(createWindow(Profile::Ptr,QString)));
+    connect(window, SIGNAL(viewDetached(Session*)),
+            this, SLOT(detachView(Session*)));
+
+    return window;
+}
+
+void Application::createWindow(Profile::Ptr profile, const QString& directory)
+{
+    MainWindow* window = newMainWindow();
+    window->createSession(profile, directory);
+    window->show();
+}
+
+void Application::detachView(Session* session)
+{
+    MainWindow* window = newMainWindow();
+    window->createView(session);
+    // Since user is dragging and dropping, move dnd window to where
+    // the user has the cursor (correct multiple monitor setups).
+    window->move(QCursor::pos());
+    window->show();
 }
 
 /* Documentation for tab file:

@@ -21,7 +21,7 @@
 #define APPLICATION_H
 
 // KDE
-#include <KUniqueApplication>
+#include <KApplication>
 
 // Konsole
 #include "Profile.h"
@@ -45,7 +45,7 @@ class Session;
  * The factory used to create new terminal sessions can be retrieved using
  * the sessionManager() accessor.
  */
-class Application : public KUniqueApplication
+class Application : public KApplication
 {
     Q_OBJECT
 
@@ -54,9 +54,6 @@ public:
     Application();
 
     virtual ~Application();
-
-    /** Creates a new main window and opens a default terminal session */
-    virtual int newInstance();
 
     /**
      * Creates a new, empty main window and connects to its newSessionRequest()
