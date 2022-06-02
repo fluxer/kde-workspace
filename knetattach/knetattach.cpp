@@ -44,8 +44,6 @@ KNetAttach::KNetAttach( QWidget* parent )
 
     _ftp->setEnabled(KProtocolInfo::isKnownProtocol("ftp"));
     _sftp->setEnabled(KProtocolInfo::isKnownProtocol("sftp"));
-    _nfs->setEnabled(KProtocolInfo::isKnownProtocol("nfs"));
-    _smb->setEnabled(KProtocolInfo::isKnownProtocol("smb"));
 
     connect(_recent, SIGNAL(toggled(bool)), _recentConnectionName, SLOT(setEnabled(bool)));
     connect(_connectionName, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
@@ -92,10 +90,6 @@ void KNetAttach::setInformationText(const QString &type)
         text = i18n("Enter a name for this <i>File Transfer Protocol connection</i> as well as a server address and folder path to use and press the <b>Save & Connect</b> button.");
     } else if (type=="SFTP") {
         text = i18n("Enter a name for this <i>SSH File Transfer Protocol</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
-    } else if (type=="NFS") {
-        text = i18n("Enter a name for this <i>Network File System</i> as well as a server address, port and folder path to use and press the <b>Save & Connect</b> button.");
-    } else if (type=="SMB") {
-        text = i18n("Enter a name for this <i>Microsoft Windows network drive</i> as well as a server address and folder path to use and press the <b>Save & Connect</b> button.");
     }
 
     _informationText->setText(text);
@@ -130,16 +124,6 @@ bool KNetAttach::validateCurrentPage()
             if (_path->text().isEmpty()) {
                 _path->setText("/");
             }
-        } else if (_nfs->isChecked()) {
-            setInformationText("NFS");
-            updateForProtocol("NFS");
-            _port->setValue(2049);
-            if (_path->text().isEmpty()) {
-                _path->setText("/");
-            }
-        } else if (_smb->isChecked()) {
-            setInformationText("SMB");
-            updateForProtocol("SMB");
         } else { //if (_recent->isChecked()) {
             KConfig recent( "krecentconnections", KConfig::NoGlobals );
             if (!recent.hasGroup(_recentConnectionName->currentText())) {
@@ -186,11 +170,6 @@ bool KNetAttach::validateCurrentPage()
         } else if (_type == "SFTP") {
             url.setProtocol("sftp");
             url.setPort(_port->value());
-        } else if (_type == "NFS") {
-            url.setProtocol("nfs");
-            url.setPort(_port->value());
-        } else if (_type == "SMB") {
-            url.setProtocol("smb");
         } else { // recent
         }
 
@@ -252,7 +231,7 @@ bool KNetAttach::validateCurrentPage()
             }
             recent = KConfigGroup(&_recent,name);
             recent.writeEntry("URL", url.prettyUrl());
-            if (_type == "FTP" || _type == "SFTP" ||  _type == "NFS") {
+            if (_type == "FTP" || _type == "SFTP") {
                 recent.writeEntry("Port", _port->value());
             }
             recent.writeEntry("Type", _type);
@@ -287,20 +266,6 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
         _port->show();
         _userText->show();
         _user->show();
-        _encodingText->hide();
-        _encoding->hide();
-    } else if (protocol == "NFS") {
-        _portText->show();
-        _port->show();
-        _userText->show();
-        _user->show();
-        _encodingText->hide();
-        _encoding->hide();
-    } else if (protocol == "SMB") {
-        _portText->hide();
-        _port->hide();
-        _userText->hide();
-        _user->hide();
         _encodingText->hide();
         _encoding->hide();
     } else {

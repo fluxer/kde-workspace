@@ -33,7 +33,6 @@
 #include <solid/block.h>
 #include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
-#include <solid/networkshare.h>
 #include <solid/solidnamespace.h>
 
 #include "deviceactionsdialog.h"
@@ -177,37 +176,6 @@ void SolidUiServer::onActionDialogFinished()
 int SolidUiServer::mountDevice(const QString &udi)
 {
     Solid::Device device(udi);
-
-    Solid::NetworkShare *networkshare = device.as<Solid::NetworkShare>();
-    if (networkshare) {
-        // qDebug() << Q_FUNC_INFO << udi << networkshare->url();
-
-        const QString deviceuuid = device.product();
-        QString devicenode;
-        QString devicefstype;
-        switch (networkshare->type()) {
-            case Solid::NetworkShare::Unknown: {
-                return int(Solid::ErrorType::MissingDriver);
-            }
-            case Solid::NetworkShare::Nfs: {
-                devicenode = QString::fromLatin1("%1:%2").arg(device.product()).arg(device.vendor());
-                devicefstype = QString::fromLatin1("nfs");
-                break;
-            }
-            case Solid::NetworkShare::Cifs: {
-                devicenode = QString::fromLatin1("//%1/%2").arg(device.product()).arg(device.vendor());
-                devicefstype = QString::fromLatin1("cifs");
-                break;
-            }
-            default: {
-                kWarning() << "Invalid network share type" << networkshare->type();
-                return int(Solid::ErrorType::InvalidOption);
-            }
-        }
-
-        return doMount(deviceuuid, devicenode, devicefstype);
-    }
-
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     Solid::Block *block = device.as<Solid::Block>();
     if (!storagevolume || !block) {
@@ -271,13 +239,7 @@ int SolidUiServer::mountDevice(const QString &udi)
 int SolidUiServer::unmountDevice(const QString &udi)
 {
     Solid::Device device(udi);
-
-    Solid::NetworkShare *networkshare = device.as<Solid::NetworkShare>();
     Solid::StorageAccess *storageaccess = device.as<Solid::StorageAccess>();
-    if (networkshare && storageaccess) {
-        return doUnmount(storageaccess->filePath());
-    }
-
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     if (!storagevolume || !storageaccess) {
         return int(Solid::ErrorType::InvalidOption);

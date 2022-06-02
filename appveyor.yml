@@ -23,8 +23,8 @@ build_script:
         libxcb-damage0-dev libxcb-xfixes0-dev libxcb-render0-dev libxcb-randr0-dev \
         libxcb-shape0-dev libxcb-sync-dev libxcb-render-util0-dev libxcb-keysyms1-dev \
         libglu1-mesa-dev mesa-common-dev libmtp-dev libusb-1.0-0-dev libssh-dev \
-        libsmbclient-dev libdrm-dev libraw1394-dev libsensors4-dev libgphoto2-dev \
-        libegl-dev libpci-dev libopenexr-dev liblightdm-gobject-1-dev libkmod-dev \
+        libdrm-dev libraw1394-dev libsensors4-dev libgphoto2-dev libegl-dev \
+        libpci-dev libopenexr-dev liblightdm-gobject-1-dev libkmod-dev \
         libdbusmenu-katie \
         sudo ctags cppcheck lrzsz locate \
         ariya-icons dbus-x11 ccache

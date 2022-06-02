@@ -59,14 +59,7 @@
        <property name="margin">
         <number>0</number>
        </property>
-       <item row="3" column="0">
-        <widget class="QRadioButton" name="_nfs">
-         <property name="text">
-          <string>N&amp;etwork File System (nfs)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
+       <item row="3" column="1">
         <widget class="KComboBox" name="_recentConnectionName">
          <property name="enabled">
           <bool>false</bool>
@@ -85,13 +78,6 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QRadioButton" name="_recent">
-         <property name="text">
-          <string>&amp;Recent connection:</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0">
         <widget class="QRadioButton" name="_ftp">
          <property name="text">
@@ -102,6 +88,13 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QRadioButton" name="_recent">
+         <property name="text">
+          <string>&amp;Recent connection:</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="0">
         <widget class="QRadioButton" name="_sftp">
          <property name="text">
@@ -109,13 +102,6 @@
          </property>
          <property name="checked">
           <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0">
-        <widget class="QRadioButton" name="_smb">
-         <property name="text">
-          <string>&amp;Microsoft® Windows® network drive (smb)</string>
          </property>
         </widget>
        </item>

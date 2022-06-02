@@ -161,17 +161,6 @@ set_package_properties(RAW1394 PROPERTIES
     PURPOSE "View FireWire devices in kinfocenter"
 )
 
-# we need a version of samba which has already smbc_set_context(), Alex
-set(SAMBA_REQUIRE_SMBC_SET_CONTEXT TRUE)
-set(SAMBA_REQUIRE_SMBC_OPTION_SET TRUE)
-macro_optional_find_package(Samba)
-set_package_properties(Samba PROPERTIES
-    DESCRIPTION "the SMB client library, a version with smbc_set_context() and smbc_option_set()"
-    URL "http://www.samba.org"
-    TYPE OPTIONAL
-    PURPOSE "Needed to build the SMB kioslave"
-)
-
 macro_optional_find_package(LibSSH 0.6.0)
 set_package_properties(LibSSH PROPERTIES
     DESCRIPTION "the SSH library with SFTP support"

@@ -4,7 +4,6 @@ add_subdirectory( infosummary )
 add_subdirectory( memory )
 add_subdirectory( devinfo )
 add_subdirectory( info )
-add_subdirectory( samba )
 add_subdirectory( nics )
 add_subdirectory( pci )
 
