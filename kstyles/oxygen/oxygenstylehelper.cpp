@@ -656,13 +656,15 @@ namespace Oxygen
         QPainter& p, const QColor& color,
         int pad, int size, int rsize ) const
     {
-
         const QRectF r( pad, pad, size, size );
         const qreal m( qreal( size )*0.5 );
 
         const qreal width( 3.5 );
         const qreal bias( _glowBias*7.0/rsize );
-        const qreal k0( ( m-width )/( m-bias ) );
+        qreal k0( ( m-width )/( m-bias ) );
+        if (k0 < 0.0) {
+            k0 = -k0;
+        }
         QRadialGradient glowGradient( pad+m, pad+m, m-bias );
         for ( int i = 0; i < 8; i++ )
         {
