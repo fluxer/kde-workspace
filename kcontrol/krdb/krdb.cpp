@@ -233,14 +233,15 @@ static QString color( const QColor& col )
     return QString( "{ %1, %2, %3 }" ).arg( item( col.red() ) ).arg( item( col.green() ) ).arg( item( col.blue() ) );
 }
 
-static void createGtkrc( bool exportColors, const QPalette& cg, bool exportGtkTheme, const QString& gtkTheme, int version )
+static void createGtkrc( bool exportColors, const QPalette& cg, int version )
 {
     // lukas: why does it create in ~/.kde/share/config ???
     // pfeiffer: so that we don't overwrite the user's gtkrc.
     // it is found via the GTK_RC_FILES environment variable.
     KSaveFile saveFile( KStandardDirs::locateLocal( "config", 2==version?"gtkrc-2.0":"gtkrc" ) );
-    if ( !saveFile.open() )
+    if ( !saveFile.open() ) {
         return;
+    }
 
     QTextStream t ( &saveFile );
     t.setCodec( QTextCodec::codecForLocale () );
@@ -258,64 +259,6 @@ static void createGtkrc( bool exportColors, const QPalette& cg, bool exportGtkTh
         t << endl;
         t << "gtk-alternative-button-order = 1" << endl;
         t << endl;
-    }
-
-    if (exportGtkTheme)
-    {
-        QString gtkStyle;
-        if (gtkTheme.toLower() == "oxygen")
-            gtkStyle = QString("oxygen-gtk");
-        else
-            gtkStyle = gtkTheme;
-
-        bool exist_gtkrc = false;
-        QByteArray gtkrc = getenv(gtkEnvVar(version));
-        QStringList listGtkrc = QFile::decodeName(gtkrc).split(":");
-        if (listGtkrc.contains(saveFile.fileName()))
-            listGtkrc.removeAll(saveFile.fileName());
-        listGtkrc.append(QDir::homePath() + userGtkrc(version));
-        listGtkrc.append(QDir::homePath() + "/.gtkrc-2.0-kde");
-        listGtkrc.append(QDir::homePath() + "/.gtkrc-2.0-kde4");
-        listGtkrc.removeAll("");
-        listGtkrc.removeDuplicates();
-        for (int i = 0; i < listGtkrc.size(); ++i)
-        {
-            if ((exist_gtkrc = QFile::exists(listGtkrc.at(i))))
-                break;
-        }
-
-        if (!exist_gtkrc)
-        {
-            QString gtk2ThemeFilename;
-            gtk2ThemeFilename = QString("%1/.themes/%2/gtk-2.0/gtkrc").arg(QDir::homePath()).arg(gtkStyle);
-            if (!QFile::exists(gtk2ThemeFilename)) {
-                QStringList gtk2ThemePath;
-                gtk2ThemeFilename.clear();
-                QByteArray xdgDataDirs = getenv("XDG_DATA_DIRS");
-                gtk2ThemePath.append(QDir::homePath() + "/.local");
-                gtk2ThemePath.append(QFile::decodeName(xdgDataDirs).split(":"));
-                gtk2ThemePath.removeDuplicates();
-                for (int i = 0; i < gtk2ThemePath.size(); ++i)
-                {
-                    gtk2ThemeFilename = QString("%1/themes/%2/gtk-2.0/gtkrc").arg(gtk2ThemePath.at(i)).arg(gtkStyle);
-                    if (QFile::exists(gtk2ThemeFilename))
-                        break;
-                    else
-                        gtk2ThemeFilename.clear();
-                }
-            }
-
-            if (!gtk2ThemeFilename.isEmpty())
-            {
-                t << "include \"" << gtk2ThemeFilename << "\"" << endl;
-                t << endl;
-                t << "gtk-theme-name=\"" << gtkStyle << "\"" << endl;
-                t << endl;
-                if (gtkStyle == "oxygen-gtk")
-                    exportColors = false;
-            }
-        }
-
     }
 
     if (exportColors)
@@ -388,7 +331,6 @@ void runRdb( uint flags )
   bool exportQtColors    = flags & KRdbExportQtColors;
   bool exportQtSettings  = flags & KRdbExportQtSettings;
   bool exportXftSettings = flags & KRdbExportXftSettings;
-  bool exportGtkTheme    = flags & KRdbExportGtkTheme;
 
   KSharedConfigPtr kglobalcfg = KSharedConfig::openConfig( "kdeglobals" );
   KConfigGroup kglobals(kglobalcfg, "KDE");
@@ -401,17 +343,10 @@ void runRdb( uint flags )
     exit(0);
   }
 
-
   KConfigGroup generalCfgGroup(kglobalcfg, "General");
 
-  QString gtkTheme;
-  if (generalCfgGroup.hasKey("widgetStyle"))
-    gtkTheme = generalCfgGroup.readEntry("widgetStyle");
-  else
-    gtkTheme = "oxygen";
-
-  createGtkrc( exportColors, newPal, exportGtkTheme, gtkTheme, 1 );
-  createGtkrc( exportColors, newPal, exportGtkTheme, gtkTheme, 2 );
+  createGtkrc( exportColors, newPal, 1 );
+  createGtkrc( exportColors, newPal, 2 );
 
   // Export colors to non-(KDE/Qt) apps (e.g. Motif, GTK+ apps)
   if (exportColors)

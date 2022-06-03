@@ -1212,7 +1212,7 @@ void KColorCm::save()
     displayGroup.writeEntry("exportKDEColors", applyToAlien->isChecked());
     cfg.sync();
 
-    runRdb(KRdbExportQtColors | KRdbExportGtkTheme | ( applyToAlien->isChecked() ? KRdbExportColors : 0 ) );
+    runRdb(KRdbExportQtColors | ( applyToAlien->isChecked() ? KRdbExportColors : 0 ) );
 
     emit changed(false);
 }
