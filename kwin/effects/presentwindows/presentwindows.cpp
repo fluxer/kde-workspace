@@ -45,7 +45,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QtGui/qgraphicsitem.h>
 #include <QTimer>
 #include <QVector2D>
-#include <QVector4D>
 
 namespace KWin
 {
