@@ -26,20 +26,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KConfigSkeleton
 #include "trackmouseconfig.h"
 
-#include <QtCore/qdatetime.h>
-#include <QMatrix4x4>
-
 #include <kwinxrenderutils.h>
-
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <KLocalizedString>
+#include <kdebug.h>
 
 #include <math.h>
-
-#include <kdebug.h>
 
 namespace KWin
 {
@@ -51,7 +46,7 @@ TrackMouseEffect::TrackMouseEffect()
 #ifdef KWIN_BUILD_COMPOSITE
     m_picture[0] = m_picture[1] = 0;
     if ( effects->compositingType() == XRenderCompositing)
-        m_angleBase = 1.57079632679489661923; // Pi/2
+        m_angleBase = M_PI_2;
 #endif
     m_mousePolling = false;
     KActionCollection *actionCollection = new KActionCollection(this);
