@@ -520,19 +520,19 @@ void KSMServer::resumeStartupInternal()
     switch( state ) {
         case LaunchingWM:
             autoStart0();
-          break;
+            break;
         case AutoStart0:
             autoStart0Done();
-          break;
+            break;
         case AutoStart1:
             autoStart1Done();
-          break;
+            break;
         case Restoring:
             autoStart2();
-          break;
+            break;
         default:
             kWarning( 1218 ) << "Unknown resume startup state" ;
-          break;
+            break;
     }
 }
 
