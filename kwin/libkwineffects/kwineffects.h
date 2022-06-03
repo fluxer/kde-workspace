@@ -34,7 +34,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QFont>
 #include <QGraphicsScale>
 #include <QKeyEvent>
-#include <QMatrix4x4>
 #include <QVector>
 #include <QList>
 #include <QHash>
