@@ -13,7 +13,6 @@ install( FILES
     linkZIP.desktop
     linkDVDROM.desktop
     linkCAMERA.desktop
-    linkNFS.desktop
     linkCDWRITER.desktop
     linkMO.desktop
     DESTINATION ${KDE4_TEMPLATES_INSTALL_DIR}
@@ -32,7 +31,6 @@ install(
     ZIP-Device.desktop
     DVDROM-Device.desktop
     CAMERA-Device.desktop
-    NFS.desktop
     CDWRITER-Device.desktop
     MO-Device.desktop
     DESTINATION ${KDE4_TEMPLATES_INSTALL_DIR}/.source
