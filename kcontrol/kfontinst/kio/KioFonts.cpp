@@ -116,10 +116,8 @@ static int getSize(const QString &file)
         if (S_ISLNK(buff.st_mode))
         {
             char buffer2[1000];
-            int n=readlink(f.constData(), buffer2, 999);
-            if(n!= -1)
-                buffer2[n]='\0';
-
+            ::memset(buffer2, 0, 1000 * sizeof(char));
+            readlink(f.constData(), buffer2, 999);
             if(-1==KDE_stat(f.constData(), &buff))
                 return -1;
         }
