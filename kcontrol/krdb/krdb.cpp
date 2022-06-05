@@ -121,46 +121,6 @@ static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPa
   settings.setValue("Qt/Palette/active", actcg);
   settings.setValue("Qt/Palette/inactive", inactcg);
   settings.setValue("Qt/Palette/disabled", discg);
-
-  // export kwin's colors to qtrc for kstyle to use
-  KConfigGroup wmCfgGroup(kglobalcfg, "WM");
-
-  // active colors
-  QColor clr = newPal.color( QPalette::Active, QPalette::Background );
-  clr = wmCfgGroup.readEntry("activeBackground", clr);
-  settings.setValue("Qt/KWinPalette/activeBackground", clr.name());
-  if (QPixmap::defaultDepth() > 8)
-    clr = clr.dark(110);
-  clr = wmCfgGroup.readEntry("activeBlend", clr);
-  settings.setValue("Qt/KWinPalette/activeBlend", clr.name());
-  clr = newPal.color( QPalette::Active, QPalette::HighlightedText );
-  clr = wmCfgGroup.readEntry("activeForeground", clr);
-  settings.setValue("Qt/KWinPalette/activeForeground", clr.name());
-  clr = newPal.color( QPalette::Active,QPalette::Background );
-  clr = wmCfgGroup.readEntry("frame", clr);
-  settings.setValue("Qt/KWinPalette/frame", clr.name());
-  clr = wmCfgGroup.readEntry("activeTitleBtnBg", clr);
-  settings.setValue("Qt/KWinPalette/activeTitleBtnBg", clr.name());
-
-  // inactive colors
-  clr = newPal.color(QPalette::Inactive, QPalette::Background);
-  clr = wmCfgGroup.readEntry("inactiveBackground", clr);
-  settings.setValue("Qt/KWinPalette/inactiveBackground", clr.name());
-  if (QPixmap::defaultDepth() > 8)
-    clr = clr.dark(110);
-  clr = wmCfgGroup.readEntry("inactiveBlend", clr);
-  settings.setValue("Qt/KWinPalette/inactiveBlend", clr.name());
-  clr = newPal.color(QPalette::Inactive, QPalette::Background).dark();
-  clr = wmCfgGroup.readEntry("inactiveForeground", clr);
-  settings.setValue("Qt/KWinPalette/inactiveForeground", clr.name());
-  clr = newPal.color(QPalette::Inactive, QPalette::Background);
-  clr = wmCfgGroup.readEntry("inactiveFrame", clr);
-  settings.setValue("Qt/KWinPalette/inactiveFrame", clr.name());
-  clr = wmCfgGroup.readEntry("inactiveTitleBtnBg", clr);
-  settings.setValue("Qt/KWinPalette/inactiveTitleBtnBg", clr.name());
-
-  KConfigGroup kdeCfgGroup(kglobalcfg, "KDE");
-  settings.setValue("Qt/KDE/contrast", kdeCfgGroup.readEntry("contrast", 7));
 }
 
 // -----------------------------------------------------------------------------
@@ -480,14 +440,10 @@ void runRdb( uint flags )
   applyGtkStyles(exportColors, 1);
   applyGtkStyles(exportColors, 2);
 
-  /* Qt exports */
+  /* Katie exports */
   if ( exportQtColors || exportQtSettings )
   {
-#ifndef QT_KATIE
-    QSettings* settings = new QSettings(QLatin1String("Trolltech"));
-#else
     QSettings* settings = new QSettings(QLatin1String("Katie"), QSettings::NativeFormat);
-#endif
 
     if ( exportQtColors )
       applyQtColors( kglobalcfg, *settings, newPal );    // For kcmcolors
@@ -502,7 +458,7 @@ void runRdb( uint flags )
     // QApp::setDesktopSettingsAware(false);
     // Instead of calling QApp::x11_apply_settings() directly, we instead
     // modify the timestamp which propagates the settings changes onto
-    // Qt-only apps without adversely affecting ourselves.
+    // Katie-only apps without adversely affecting ourselves.
 
     // Cheat and use the current timestamp, since we just saved to qtrc.
     QDateTime settingsstamp = QDateTime::currentDateTime();
