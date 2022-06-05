@@ -21,13 +21,11 @@
 
 namespace KHotKeys {
 
-ConditionsVisitor::ConditionsVisitor( bool recurse )
-    :   _recurse(recurse)
+ConditionsVisitor::ConditionsVisitor()
     {}
 
 
 ConditionsVisitor::~ConditionsVisitor()
     {}
-
 
 } // namespace KHotKeys

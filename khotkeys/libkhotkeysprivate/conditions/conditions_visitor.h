@@ -33,7 +33,7 @@ class KDE_EXPORT ConditionsVisitor
     {
 public:
 
-    ConditionsVisitor( bool recurse = true );
+    ConditionsVisitor();
     virtual ~ ConditionsVisitor();
 
     virtual void visitCondition( Condition *condition ) = 0;
@@ -41,8 +41,6 @@ public:
     virtual void visitConditionsListBase( Condition_list_base *list) = 0;
 
 private:
-
-    bool _recurse;
 
     }; // class ConditionsVisitor
 

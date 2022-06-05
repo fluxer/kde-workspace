@@ -520,7 +520,7 @@ void AppSelectorDialog::launcherSelected()
 }
 
 NewInstanceActionImpl::NewInstanceActionImpl(QObject *parent, AbstractGroupableItem *item)
-    : QAction(parent), m_abstractItem(item)
+    : QAction(parent)
 {
     if (LauncherItemType == item->itemType()) {
         setVisible(false);

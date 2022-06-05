@@ -38,7 +38,7 @@
 #include "diskstats.h"
 
 #define DISKSTATSBUFSIZE (32 * 1024)
-#define DISKDEVNAMELEN 20
+#define DISKDEVNAMELEN 21
 
 #define STRINGIFY(x) #x
 #define TOSTRING(x) STRINGIFY(x)

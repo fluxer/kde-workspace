@@ -88,9 +88,9 @@ static void cleanCache()
 
 FavIconTest::FavIconTest()
     : QObject(),
-    m_favIconModule("org.kde.kded", "/modules/favicons", QDBusConnection::sessionBus()),
     m_iconChanged(false),
-    m_isHost(false)
+    m_isHost(false),
+    m_favIconModule("org.kde.kded", "/modules/favicons", QDBusConnection::sessionBus())
 {
     connect(
         &m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)),

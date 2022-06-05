@@ -981,7 +981,6 @@ void FloppyProtocol::get( const KUrl& url )
 
    clearBuffers();
    int result;
-   int bytesRead(0);
    bool loopFinished(false);
    bool errorOccured(false);
    do
@@ -997,7 +996,6 @@ void FloppyProtocol::get( const KUrl& url )
          if (readStdout()>0)
          {
             kDebug(7101)<<"Floppy::get(): m_stdoutSize:"<<m_stdoutSize;
-            bytesRead+=m_stdoutSize;
             data( QByteArray::fromRawData(m_stdoutBuffer, m_stdoutSize) );
          }
          else

@@ -42,21 +42,28 @@ extern "C" void numlockx_change_numlock_state(Display* dpy, int state);
 static
 void set_repeatrate(int delay, double rate)
 {
-	if( !X11Helper::xkbSupported(NULL) ) {
-		kError() << "Failed to set keyboard repeat rate: xkb is not supported";
-		return;
-	}
+    if( !X11Helper::xkbSupported(NULL) ) {
+        kError() << "Failed to set keyboard repeat rate: xkb is not supported";
+        return;
+    }
 
-	XkbDescPtr xkb = XkbAllocKeyboard();
-	if (xkb) {
-		Display* dpy = QX11Info::display();
-		int res = XkbGetControls(dpy, XkbRepeatKeysMask, xkb);
-		xkb->ctrls->repeat_delay = delay;
-		xkb->ctrls->repeat_interval = (int)floor(1000/rate + 0.5);
-		res = XkbSetControls(dpy, XkbRepeatKeysMask, xkb);
-                XkbFreeKeyboard(xkb, 0, true);
-		return;
-	}
+    XkbDescPtr xkb = XkbAllocKeyboard();
+    if (xkb) {
+        Display* dpy = QX11Info::display();
+        int res = XkbGetControls(dpy, XkbRepeatKeysMask, xkb);
+        if (res != True) {
+            kError() << "Failed to get keyboard repeat controls";
+            XkbFreeKeyboard(xkb, 0, true);
+            return;
+        }
+        xkb->ctrls->repeat_delay = delay;
+        xkb->ctrls->repeat_interval = (int)floor(1000/rate + 0.5);
+        res = XkbSetControls(dpy, XkbRepeatKeysMask, xkb);
+        if (res != True) {
+            kError() << "Failed to set keyboard repeat controls";
+        }
+        XkbFreeKeyboard(xkb, 0, true);
+    }
 }
 
 static

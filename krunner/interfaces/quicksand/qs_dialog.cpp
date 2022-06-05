@@ -184,11 +184,6 @@ void QsDialog::display(const QString &term)
     adjustSize();
     m_matchView->setFocus();
 
-    int screen = 0;
-    if (QApplication::desktop()->screenCount() > 1) {
-        screen = QApplication::desktop()->screenNumber(QCursor::pos());
-    }
-
     //positionOnScreen will call QWidget::show anyways so we don't need to call it here
     positionOnScreen();
     KWindowSystem::forceActiveWindow(winId());

@@ -308,7 +308,6 @@ void KProxyDialog::load()
 
 void KProxyDialog::save()
 {
-    const KProtocolManager::ProxyType lastProxyType = KProtocolManager::proxyType();
     KProtocolManager::ProxyType proxyType = KProtocolManager::NoProxy;
     if (mUi.manualProxyRadioButton->isChecked()) {
         proxyType = KProtocolManager::ManualProxy;
@@ -325,8 +324,7 @@ void KProxyDialog::save()
             mProxyMap[QL1S("FtpProxy")] = mUi.systemProxyFtpEdit->text();
             mProxyMap[QL1S("SocksProxy")] = mUi.systemProxySocksEdit->text();
             mProxyMap[QL1S("NoProxy")] = mUi.systemNoProxyEdit->text();
-        }
-        else {
+        } else {
             mProxyMap[QL1S("HttpProxy")] = mProxyMap.take(mUi.systemProxyHttpEdit->objectName());
             mProxyMap[QL1S("HttpsProxy")] = mProxyMap.take(mUi.systemProxyHttpsEdit->objectName());
             mProxyMap[QL1S("FtpProxy")] = mProxyMap.take(mUi.systemProxyFtpEdit->objectName());

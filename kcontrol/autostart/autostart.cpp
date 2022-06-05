@@ -201,7 +201,6 @@ void Autostart::load()
             else
             {
                 ScriptStartItem *item = new ScriptStartItem( fi.absoluteFilePath(), m_scriptItem,this );
-                int typeOfStartup = m_paths.indexOf((item->fileName().directory()+'/') );
                 if ( fi.isSymLink() ) {
                     QString link = fi.readLink();
                     addItem(item, filename, link );

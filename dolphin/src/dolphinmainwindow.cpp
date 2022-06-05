@@ -1087,10 +1087,10 @@ void DolphinMainWindow::updateControlMenu()
     KActionCollection* ac = actionCollection();
 
     // Add "Edit" actions
-    bool added = addActionToMenu(ac->action(KStandardAction::name(KStandardAction::Undo)), menu) |
-                 addActionToMenu(ac->action(KStandardAction::name(KStandardAction::Find)), menu) |
-                 addActionToMenu(ac->action("select_all"), menu) |
-                 addActionToMenu(ac->action("invert_selection"), menu);
+    bool added = addActionToMenu(ac->action(KStandardAction::name(KStandardAction::Undo)), menu);
+    added |= addActionToMenu(ac->action(KStandardAction::name(KStandardAction::Find)), menu);
+    added |= addActionToMenu(ac->action("select_all"), menu);
+    added |= addActionToMenu(ac->action("invert_selection"), menu);
 
     if (added) {
         menu->addSeparator();
@@ -1103,20 +1103,20 @@ void DolphinMainWindow::updateControlMenu()
         menu->addSeparator();
     }
 
-    added = addActionToMenu(ac->action("view_mode"), menu) |
-            addActionToMenu(ac->action("sort"), menu) |
-            addActionToMenu(ac->action("additional_info"), menu) |
-            addActionToMenu(ac->action("show_preview"), menu) |
-            addActionToMenu(ac->action("show_in_groups"), menu) |
-            addActionToMenu(ac->action("show_hidden_files"), menu);
+    added = addActionToMenu(ac->action("view_mode"), menu);
+    added |= addActionToMenu(ac->action("sort"), menu);
+    added |= addActionToMenu(ac->action("additional_info"), menu);
+    added |= addActionToMenu(ac->action("show_preview"), menu);
+    added |= addActionToMenu(ac->action("show_in_groups"), menu);
+    added |= addActionToMenu(ac->action("show_hidden_files"), menu);
 
     if (added) {
         menu->addSeparator();
     }
 
-    added = addActionToMenu(ac->action("split_view"), menu) |
-            addActionToMenu(ac->action("reload"), menu) |
-            addActionToMenu(ac->action("view_properties"), menu);
+    added = addActionToMenu(ac->action("split_view"), menu);
+    added |= addActionToMenu(ac->action("reload"), menu);
+    added |= addActionToMenu(ac->action("view_properties"), menu);
     if (added) {
         menu->addSeparator();
     }

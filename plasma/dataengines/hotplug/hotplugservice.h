@@ -35,7 +35,6 @@ protected:
                                    QMap<QString, QVariant>& parameters);
 
 private:
-    HotplugEngine *m_engine;
     QString m_dest;
 };
 

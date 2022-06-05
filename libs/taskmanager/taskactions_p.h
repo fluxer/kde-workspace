@@ -97,7 +97,6 @@ private Q_SLOTS:
     void launchNewInstance();
 
 private:
-    AbstractGroupableItem *m_abstractItem;
     KUrl m_url;
 };
 

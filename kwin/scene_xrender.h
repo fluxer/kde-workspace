@@ -92,7 +92,6 @@ private:
     void prepareTempPixmap();
     void setPictureFilter(xcb_render_picture_t pic, ImageFilterType filter);
     xcb_render_pictformat_t format;
-    double alpha_cached_opacity;
     QRegion transformed_shape;
     static QRect temp_visibleRect;
     static XRenderPicture *s_tempPicture;

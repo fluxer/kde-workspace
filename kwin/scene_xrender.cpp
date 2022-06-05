@@ -305,7 +305,6 @@ QRect SceneXrender::Window::temp_visibleRect;
 SceneXrender::Window::Window(Toplevel* c)
     : Scene::Window(c)
     , format(findFormatForVisual(c->visual()->visualid))
-    , alpha_cached_opacity(0.0)
 {
 }
 

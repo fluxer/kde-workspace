@@ -283,7 +283,6 @@ void KRunnerDialog::configCompleted()
 
 void KRunnerDialog::themeUpdated()
 {
-    bool useShadowsForMargins = false;
     if (m_floating) {
         // recalc the contents margins
         m_background->blockSignals(true);

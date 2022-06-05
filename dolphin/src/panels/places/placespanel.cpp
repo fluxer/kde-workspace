@@ -334,7 +334,6 @@ void PlacesPanel::slotItemDropEvent(int index, QGraphicsSceneDragDropEvent* even
     }
 
     const PlacesItem* destItem = m_model->placesItem(index);
-    const PlacesItem::GroupType group = destItem->groupType();
 
     if (m_model->storageSetupNeeded(index)) {
         connect(m_model, SIGNAL(storageSetupDone(int,bool)),

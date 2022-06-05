@@ -602,6 +602,7 @@ bool KHotkeysModel::removeRows( int row, int count, const QModelIndex &parent )
         list = _actions;
         }
     Q_ASSERT(list);
+    Q_UNUSED(list);
 
     KHotKeys::ActionDataBase *action = indexToActionDataBase(index(row,0,parent));
 

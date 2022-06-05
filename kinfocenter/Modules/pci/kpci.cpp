@@ -72,6 +72,7 @@ static QTreeWidgetItem* addDeviceClass(QTreeWidgetItem *parent, QTreeWidgetItem 
         localAfter=create(after, i18n("Primary programmable indicator"), (info->cooked.devProgIface.devProgIface_bits.progPriProgInd ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
         localAfter=create(after, i18n("Primary operating mode"), (info->cooked.devProgIface.devProgIface_bits.progPriOperMode ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addDeviceClass
 
@@ -155,6 +156,7 @@ static QTreeWidgetItem* addInterrupt(QTreeWidgetItem *parent, QTreeWidgetItem *a
         localAfter=create(after, i18n("IRQ"), value.sprintf("%i", irq));
         localAfter=create(after, i18n("Pin"), value.sprintf("%c", (pin==0 ? '?' : 'A'-1+pin)));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addInterrupt
 
@@ -173,6 +175,7 @@ static QTreeWidgetItem* addControl(QTreeWidgetItem *parent, QTreeWidgetItem *aft
     localAfter=create(after, i18n("System error"), (info->cooked.command.command_bits.comSerr ? i18nc(strCtxt, strEnabled) : i18nc(strCtxt, strDisabled)));
     localAfter=create(after, i18n("Back-to-back writes"), (info->cooked.command.command_bits.comFastBack ? i18nc(strCtxt, strEnabled) : i18nc(strCtxt, strDisabled)));
     localAfter=create(after, i18n("Interrupt"), (info->cooked.command.command_bits.comInterrupt ? i18nc(strCtxt, strDisabled) : i18nc(strCtxt, strEnabled))); //reverse order is intentional
+    Q_UNUSED(localAfter);
     return after;
 }//addControl
 
@@ -192,6 +195,7 @@ static QTreeWidgetItem* addStatus(QTreeWidgetItem *parent, QTreeWidgetItem *afte
     localAfter=create(after, i18n("Received master abort"), (info->cooked.status.status_bits.statRecMasterAbort ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
     localAfter=create(after, i18n("Signaled system error"), (info->cooked.status.status_bits.statSigSystemError ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
     localAfter=create(after, i18n("Parity error"), (info->cooked.status.status_bits.statDetectedParity ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
+    Q_UNUSED(localAfter);
     return after;
 }//addStatus
 
@@ -213,6 +217,7 @@ static QTreeWidgetItem* addLatency(QTreeWidgetItem *parent, QTreeWidgetItem *aft
             localAfter=create(after, i18n("MAX_LAT"), value.sprintf("%u ns (0x%02X)", info->cooked.header.header0.maxLat*250, info->cooked.header.header0.maxLat));
         }//else
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addLatency
 
@@ -222,6 +227,7 @@ static QTreeWidgetItem* addHeaderType(QTreeWidgetItem *parent, QTreeWidgetItem *
     after=create(parent, i18n("Header"),value.sprintf("0x%02X",info->cooked.headerType.headerTypeFull));
     localAfter=create(after, i18n("Type"),getNameById(headerType,info->cooked.headerType.headerType_bits.headerType)+value.sprintf(" (0x%02X)",info->cooked.headerType.headerType_bits.headerType));
     localAfter=create(after, i18n("Multifunctional"),(info->cooked.headerType.headerType_bits.multifunctional?i18nc(strCtxt, strYes):i18nc(strCtxt, strNo)));
+    Q_UNUSED(localAfter);
     return after;
 }//addHeaderType
 
@@ -234,6 +240,7 @@ static QTreeWidgetItem* addBist(QTreeWidgetItem *parent, QTreeWidgetItem *after,
         localAfter=create(after, i18n("BIST Start"), (info->cooked.bist.bist_bits.bistStart ? i18nc(strCtxt, strYes) : i18nc(strCtxt, strNo)));
         localAfter=create(after, i18n("Completion code"), value.sprintf("0x%01X", info->cooked.bist.bist_bits.bistCode));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addBist
 
@@ -317,6 +324,7 @@ static QTreeWidgetItem* addMapping(QTreeWidgetItem *parent, QTreeWidgetItem *aft
             }//else
         }//else
     }//for
+    Q_UNUSED(localAfter);
     return after;
 }//addMapping
 
@@ -337,6 +345,7 @@ static QTreeWidgetItem* addBus(QTreeWidgetItem *parent, QTreeWidgetItem *after, 
         localAfter=create(after, i18n("Subordinate bus number"), value.sprintf("0x%02X", info->cooked.header.header2.cbSubordinateBus));
         localAfter=create(after, i18n("CardBus latency timer"), value.sprintf("0x%02X", info->cooked.header.header2.cbLatencyTimer));
     }//elif
+    Q_UNUSED(localAfter);
     return after;
 }//addBus
 
@@ -373,6 +382,7 @@ static QTreeWidgetItem* addSecStatus(QTreeWidgetItem *parent, QTreeWidgetItem *a
         localAfter=create(after, i18n("Signaled system error"),(info->cooked.header.header2.cbSecStatus.cbSecStatus_bits.cbSecStatSigSystemError?i18nc(strCtxt, strYes):i18nc(strCtxt, strNo)));
         localAfter=create(after, i18n("Parity error"),(info->cooked.header.header2.cbSecStatus.cbSecStatus_bits.cbSecStatDetectedParity?i18nc(strCtxt, strYes):i18nc(strCtxt, strNo)));
     }//elif
+    Q_UNUSED(localAfter);
     return after;
 }//addSecStatus
 
@@ -404,6 +414,7 @@ static QTreeWidgetItem* addBridgeBehind(QTreeWidgetItem *parent, QTreeWidgetItem
             localAfter=create(after, i18n("Limit"),value.sprintf("0x%0x8X%08X",info->cooked.header.header1.prefLimitUpper32,(info->cooked.header.header1.prefMemoryLimit<<16)|0x0FFFFF));
         }//else
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addBridgeBechind
 
@@ -424,6 +435,7 @@ static QTreeWidgetItem* addBridgeControl(QTreeWidgetItem *parent, QTreeWidgetIte
         localAfter=create(after, i18n("Discard timer error"),(info->cooked.header.header1.bridgeControl.bridgeControl_bits.bridgeControlDisTimStat?i18nc(strCtxt, strYes):i18nc(strCtxt, strNo)));
         localAfter=create(after, i18n("Discard timer system error"),(info->cooked.header.header1.bridgeControl.bridgeControl_bits.bridgeControlDisTimeSerr?i18nc(strCtxt, strEnabled):i18nc(strCtxt, strDisabled)));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addBridgeControl
 
@@ -442,6 +454,7 @@ static QTreeWidgetItem* addRom(QTreeWidgetItem *parent, QTreeWidgetItem *after, 
             localAfter=addSize(after, localAfter, PCIDevice->rom_size);
         }//else
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addRom
 
@@ -474,6 +487,7 @@ static QTreeWidgetItem* addCardbusResource(QTreeWidgetItem *parent, QTreeWidgetI
         }//for
         after=create(parent, i18n("16-bit legacy interface ports"),value.sprintf("0x%04X",info->cooked.header.header2.cbLegacyModeBase));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addCardbusResource
 
@@ -492,6 +506,7 @@ static QTreeWidgetItem* addCardbusControl(QTreeWidgetItem *parent, QTreeWidgetIt
         localAfter=create(after, i18n("Window 1 prefetchable memory"),(info->cooked.header.header2.cbControl.cbControl_bits.cbControlPref1?i18nc(strCtxt, strEnabled):i18nc(strCtxt, strDisabled)));
         localAfter=create(after, i18n("Post writes"),(info->cooked.header.header2.cbControl.cbControl_bits.cbControlPostWrites?i18nc(strCtxt, strEnabled):i18nc(strCtxt, strDisabled)));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addCardbusControl
 
@@ -510,6 +525,7 @@ static QTreeWidgetItem* addRaw(QTreeWidgetItem *parent, QTreeWidgetItem *after, 
         }//for
         localAfter=create(after, temp.sprintf("0x%02X:",i*16),value);
     }//for
+    Q_UNUSED(localAfter);
     return after;
 }//addRaw
 
@@ -548,6 +564,8 @@ static QTreeWidgetItem* addCapsPm(QTreeWidgetItem *parent, QTreeWidgetItem *afte
         }//if
     }//if
     after=create(parent, i18n("Data"),value.sprintf("0x%02X",infoPm.cooked.data));
+    Q_UNUSED(localAfter);
+    Q_UNUSED(subLocalAfter);
     return after;
 }//addCapsPm
 
@@ -599,6 +617,7 @@ static QTreeWidgetItem* addCapsAgp(QTreeWidgetItem *parent, QTreeWidgetItem *aft
         }//if
         localAfter=create(after, i18n("Maximum number of AGP command"),value.sprintf("%i (0x%02X)",infoAgp.cooked.config.config_bits1.configReq+1,infoAgp.cooked.config.config_bits1.configReq));
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addCapsAgp
 
@@ -648,6 +667,7 @@ static QTreeWidgetItem* addCapsMsi(QTreeWidgetItem *parent, QTreeWidgetItem *aft
             }//else
         }//if
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addCapsMsi
 
@@ -716,6 +736,7 @@ static QTreeWidgetItem* addCaps(QTreeWidgetItem *parent, QTreeWidgetItem *after,
                 after=create(parent, i18n("Capabilities"),i18n("0x00 (None)"));
         }//else
     }//if
+    Q_UNUSED(localAfter);
     return after;
 }//addCaps
 

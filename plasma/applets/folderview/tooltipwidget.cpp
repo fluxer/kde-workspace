@@ -73,18 +73,6 @@ void ToolTipWidget::updateToolTip(const QModelIndex &index, const QRectF &rect)
     Plasma::ToolTipManager::self()->show(this);
 }
 
-static qreal convertToReal(const QString &string)
-{
-    const int pos = string.indexOf('/');
-    if (pos != -1) {
-        const int left = string.left(pos).toInt();
-        const int right = string.mid(pos + 1).toInt();
-        return right > 0 ? qreal(left) / qreal(right) : 0.0;
-    }
-
-    return qreal(string.toInt());
-}
-
 QString ToolTipWidget::metaInfo() const
 {
     const QString mimetype = m_item.mimetype();

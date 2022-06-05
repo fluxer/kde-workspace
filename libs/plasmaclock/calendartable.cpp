@@ -743,7 +743,6 @@ void CalendarTable::paint(QPainter *p, const QStyleOptionGraphicsItem *option, Q
             CalendarTable::CellTypes type(CalendarTable::NoType);
             // get cell info
             const int cellDay = calendar()->day(cellDate);
-            const int julian = cellDate.toJulianDay();
 
             // check what kind of cell we are
             if (calendar()->month(cellDate) != d->selectedMonth) {

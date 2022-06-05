@@ -4492,7 +4492,7 @@ void bitBlt( QImage* dst, int dx, int dy, const QImage* src,
     // Now assume palette can be ignored
 
     if ( dst->depth() != src->depth() ) {
-	if ( sw == src->width() && sh == src->height() || dst->depth()==32 ) {
+	if ( (sw == src->width() && sh == src->height()) || dst->depth()==32 ) {
 	    QImage srcconv = src->convertDepth( dst->depth(), conversion_flags );
 	    bitBlt( dst, dx, dy, &srcconv, sx, sy, sw, sh, conversion_flags );
 	} else {
