@@ -74,9 +74,9 @@ QString Locale::currencyCode() const
     return m_locale->currencyCode();
 }
 
-QString Locale::translateQt(const char *context, const char *sourceText, const char *comment) const
+QString Locale::translateQt(const char *context, const char *sourceText) const
 {
-    return m_locale->translateQt(context, sourceText, comment);
+    return m_locale->translateQt(context, sourceText);
 }
 
 QList<int> Locale::allDigitSetsList() const

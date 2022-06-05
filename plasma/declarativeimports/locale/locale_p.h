@@ -1361,7 +1361,7 @@ public:
      * The parameters are similar to i18n(), but the result
      * value has other semantics (it can be QString())
      */
-    Q_INVOKABLE QString translateQt(const char *context, const char *sourceText, const char *comment) const;
+    Q_INVOKABLE QString translateQt(const char *context, const char *sourceText) const;
 
     /**
      * Provides list of all known language codes.
