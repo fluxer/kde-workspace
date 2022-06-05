@@ -63,16 +63,17 @@ void PartTest::testFd()
     ptyProcess.start();
     QVERIFY(ptyProcess.waitForStarted());
 
+    // suspend the KPtyDevice so that the embedded terminal gets a chance to
+    // read from the pty.  Otherwise the KPtyDevice will simply read everything
+    // as soon as it becomes available and the terminal will not display any output
+    ptyProcess.pty()->setSuspended(true);
+
     int fd = ptyProcess.pty()->masterFd();
 
     bool result = QMetaObject::invokeMethod(terminalPart, "openTeletype",
                                             Qt::DirectConnection, Q_ARG(int, fd));
     QVERIFY(result);
 
-    // suspend the KPtyDevice so that the embedded terminal gets a chance to
-    // read from the pty.  Otherwise the KPtyDevice will simply read everything
-    // as soon as it becomes available and the terminal will not display any output
-    ptyProcess.pty()->setSuspended(true);
 
     QWeakPointer<KDialog> dialog = new KDialog();
     dialog.data()->setButtons(0);
