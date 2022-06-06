@@ -50,9 +50,9 @@ class CalculatorRunner : public Plasma::AbstractRunner
         void powSubstitutions(QString& cmd);
         void hexSubstitutions(QString& cmd);
 
-        #ifdef ENABLE_QALCULATE
+#ifdef ENABLE_QALCULATE
         QalculateEngine* m_engine;
-        #endif
+#endif
 };
 
 K_EXPORT_PLASMA_RUNNER(calculatorrunner, CalculatorRunner)

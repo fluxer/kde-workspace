@@ -37,10 +37,10 @@ CalculatorRunner::CalculatorRunner( QObject* parent, const QVariantList &args )
 {
     Q_UNUSED(args)
 
-    #ifdef ENABLE_QALCULATE
+#ifdef ENABLE_QALCULATE
     m_engine = new QalculateEngine;
     setSpeed(SlowSpeed);
-    #endif
+#endif
 
     setObjectName( QLatin1String("Calculator" ));
     setIgnoredTypes(Plasma::RunnerContext::Directory | Plasma::RunnerContext::File |
@@ -56,9 +56,9 @@ CalculatorRunner::CalculatorRunner( QObject* parent, const QVariantList &args )
 
 CalculatorRunner::~CalculatorRunner()
 {
-    #ifdef ENABLE_QALCULATE
+#ifdef ENABLE_QALCULATE
     delete m_engine;
-    #endif
+#endif
 }
 
 void CalculatorRunner::powSubstitutions(QString& cmd)
@@ -180,7 +180,7 @@ void CalculatorRunner::userFriendlySubstitutions(QString& cmd)
     }
 
     // the following substitutions are not needed with libqalculate
-    #ifndef ENABLE_QALCULATE
+#ifndef ENABLE_QALCULATE
     hexSubstitutions(cmd);
     powSubstitutions(cmd);
 
@@ -193,7 +193,7 @@ void CalculatorRunner::userFriendlySubstitutions(QString& cmd)
     if (cmd.contains(QRegExp("\\d+xor\\d+"))) {
          cmd = cmd.replace(QRegExp("(\\d+)xor(\\d+)"), "\\1^\\2");
     }
-    #endif
+#endif
 }
 
 
@@ -249,9 +249,9 @@ void CalculatorRunner::match(Plasma::RunnerContext &context)
     }
 
     userFriendlySubstitutions(cmd);
-    #ifndef ENABLE_QALCULATE
-    cmd.replace(QRegExp("([a-zA-Z]+)"), "Math.\\1"); //needed for accessing math funktions like sin(),....
-    #endif
+#ifndef ENABLE_QALCULATE
+    cmd.replace(QRegExp("([a-zA-Z]+)"), "Math.\\1"); //needed for accessing math functions like sin(),....
+#endif
 
     QString result = calculate(cmd);
     if (!result.isEmpty() && result != cmd) {
@@ -271,17 +271,19 @@ void CalculatorRunner::match(Plasma::RunnerContext &context)
 
 QString CalculatorRunner::calculate(const QString& term)
 {
-    #ifdef ENABLE_QALCULATE
+#ifdef ENABLE_QALCULATE
     QString result;
 
     try {
         result = m_engine->evaluate(term);
     } catch(std::exception& e) {
         kDebug() << "qalculate error: " << e.what();
+    } catch (...) {
+        kDebug() << "exception";
     }
 
     return result.replace('.', KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive);
-    #else
+#else
     //kDebug() << "calculating" << term;
     QScriptEngine eng;
     QScriptValue result = eng.evaluate(" var result ="+term+"; result");
@@ -308,7 +310,7 @@ QString CalculatorRunner::calculate(const QString& term)
     roundedResultString.replace('.', KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive);
 
     return roundedResultString;
-    #endif
+#endif // ENABLE_QALCULATE
 }
 
 QMimeData * CalculatorRunner::mimeDataForMatch(const Plasma::QueryMatch *match)
