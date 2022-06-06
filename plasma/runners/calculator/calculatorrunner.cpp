@@ -209,17 +209,6 @@ void CalculatorRunner::match(Plasma::RunnerContext &context)
         return;
     }
 
-    if (cmd.toLower() == "universe" || cmd.toLower() == "life") {
-        Plasma::QueryMatch match(this);
-        match.setType(Plasma::QueryMatch::InformationalMatch);
-        match.setIcon(KIcon("accessories-calculator"));
-        match.setText("42");
-        match.setData("42");
-        match.setId(term);
-        context.addMatch(term, match);
-        return;
-    }
-
     bool toHex = cmd.startsWith(QLatin1String("hex="));
     bool startsWithEquals = !toHex && cmd[0] == '=';
 
