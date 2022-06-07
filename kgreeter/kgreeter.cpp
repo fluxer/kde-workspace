@@ -550,7 +550,7 @@ int main(int argc, char**argv)
     // for the style
     const QStringList pluginpaths = KGlobal::dirs()->resourceDirs("qtplugins");
     Q_FOREACH (const QString &path, pluginpaths) {
-        app.addLibraryPath(path);
+        app.addPluginPath(path);
     }
 
     const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
