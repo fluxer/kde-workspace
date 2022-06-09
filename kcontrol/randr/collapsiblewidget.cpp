@@ -142,7 +142,7 @@ void CollapsibleWidget::init()
   d->expander = 0;
   d->expanderLayout = 0;
   d->timeline = new QTimeLine( 150, this );
-  d->timeline->setCurveShape( QTimeLine::EaseInOutCurve );
+  d->timeline->setEasingCurve( QEasingCurve(QEasingCurve::InOutSine) );
   connect( d->timeline, SIGNAL(valueChanged(qreal)),
            this, SLOT(animateCollapse(qreal)) );
 

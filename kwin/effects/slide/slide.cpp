@@ -30,7 +30,7 @@ SlideEffect::SlideEffect()
     : slide(false)
 {
     connect(effects, SIGNAL(desktopChanged(int,int)), this, SLOT(slotDesktopChanged(int,int)));
-    mTimeLine.setCurveShape(QTimeLine::EaseInOutCurve);
+    mTimeLine.setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
     reconfigure(ReconfigureAll);
 }
 

@@ -32,7 +32,7 @@ SnapHelperEffect::SnapHelperEffect()
     : m_active(false)
     , m_window(NULL)
 {
-    m_timeline.setCurveShape(QTimeLine::LinearCurve);
+    m_timeline.setEasingCurve(QEasingCurve(QEasingCurve::Linear));
     reconfigure(ReconfigureAll);
     connect(effects, SIGNAL(windowClosed(KWin::EffectWindow*)), this, SLOT(slotWindowClosed(KWin::EffectWindow*)));
     connect(effects, SIGNAL(windowStartUserMovedResized(KWin::EffectWindow*)), this, SLOT(slotWindowStartUserMovedResized(KWin::EffectWindow*)));

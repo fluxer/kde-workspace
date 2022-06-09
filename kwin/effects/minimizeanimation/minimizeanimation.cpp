@@ -128,7 +128,7 @@ void MinimizeAnimationEffect::slotWindowMinimized(EffectWindow* w)
         timeline = new QTimeLine(animationTime(250), this);
         mTimeLineWindows.insert(w, timeline);
     }
-    timeline->setCurveShape(QTimeLine::EaseInCurve);
+    timeline->setEasingCurve(QEasingCurve(QEasingCurve::InCurve));
     timeline->setCurrentTime(0.0);
 }
 
@@ -143,7 +143,7 @@ void MinimizeAnimationEffect::slotWindowUnminimized(EffectWindow* w)
         timeline = new QTimeLine(animationTime(250), this);
         mTimeLineWindows.insert(w, timeline);
     }
-    timeline->setCurveShape(QTimeLine::EaseInOutCurve);
+    timeline->setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
     timeline->setCurrentTime(timeline->duration());
 }
 

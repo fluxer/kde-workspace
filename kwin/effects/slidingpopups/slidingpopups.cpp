@@ -228,7 +228,7 @@ void SlidingPopupsEffect::slotWindowAdded(EffectWindow *w)
     slotPropertyNotify(w, mAtom);
     if (w->isOnCurrentDesktop() && mWindowsData.contains(w)) {
         mAppearingWindows.insert(w, new QTimeLine(mWindowsData[ w ].fadeInDuration, this));
-        mAppearingWindows[ w ]->setCurveShape(QTimeLine::EaseInOutCurve);
+        mAppearingWindows[ w ]->setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
 
         // Tell other windowAdded() effects to ignore this window
         w->setData(WindowAddedGrabRole, QVariant::fromValue(static_cast<void*>(this)));
@@ -245,7 +245,7 @@ void SlidingPopupsEffect::slotWindowClosed(EffectWindow* w)
         w->refWindow();
         delete mAppearingWindows.take(w);
         mDisappearingWindows.insert(w, new QTimeLine(mWindowsData[ w ].fadeOutDuration, this));
-        mDisappearingWindows[ w ]->setCurveShape(QTimeLine::EaseInOutCurve);
+        mDisappearingWindows[ w ]->setEasingCurve(QEasingCurve(QEasingCurve::InOutSine));
 
         // Tell other windowClosed() effects to ignore this window
         w->setData(WindowClosedGrabRole, QVariant::fromValue(static_cast<void*>(this)));

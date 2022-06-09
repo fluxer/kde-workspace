@@ -53,7 +53,7 @@ MonitorButton::MonitorButton(QGraphicsWidget *parent) :
 
    d->highlighter.setDuration(100);
    d->highlighter.setFrameRange(0, 10);
-   d->highlighter.setCurveShape(QTimeLine::EaseInCurve);
+   d->highlighter.setEasingCurve(QEasingCurve(QEasingCurve::InCurve));
    connect(&d->highlighter, SIGNAL(valueChanged(qreal)), this, SLOT(highlight()));
 }
 
