@@ -56,7 +56,6 @@ private:
     KRecentFilesAction *m_recentfiles;
     QMenu *m_menu;
     bool m_menuvisible;
-    bool m_toolvisible;
     bool m_statusvisible;
 };
 

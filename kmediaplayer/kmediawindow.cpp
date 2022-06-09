@@ -214,6 +214,7 @@ void KMediaWindow::configure()
 
 void KMediaWindow::menubar() {
     menuBar()->setVisible(!menuBar()->isVisible());
+    m_menuvisible = menuBar()->isVisible();
 }
 
 void KMediaWindow::menu(QPoint position)
