@@ -443,15 +443,14 @@ void runRdb( uint flags )
   /* Katie exports */
   if ( exportQtColors || exportQtSettings )
   {
-    QSettings* settings = new QSettings(QLatin1String("Katie"), QSettings::NativeFormat);
+    QSettings settings(QLatin1String("Katie"), QSettings::NativeFormat);
 
     if ( exportQtColors )
-      applyQtColors( kglobalcfg, *settings, newPal );    // For kcmcolors
+      applyQtColors( kglobalcfg, settings, newPal );    // For kcmcolors
 
     if ( exportQtSettings )
-      applyQtSettings( kglobalcfg, *settings );          // For kcmstyle
+      applyQtSettings( kglobalcfg, settings );          // For kcmstyle
 
-    delete settings;
     QApplication::flush();
 #ifdef Q_WS_X11
     // We let KIPC take care of ourselves, as we are in a KDE app with
