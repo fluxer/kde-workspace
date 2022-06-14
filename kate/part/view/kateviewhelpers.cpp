@@ -1213,7 +1213,6 @@ KateIconBorder::KateIconBorder ( KateViewInternal* internalView, QWidget *parent
   , m_nextHighlightBlock(-2)
   , m_currentBlockLine(-1)
 {
-  setAttribute( Qt::WA_StaticContents );
   setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Minimum );
   setMouseTracking(true);
   m_doc->setMarkDescription( MarkInterface::markType01, i18n("Bookmark") );
