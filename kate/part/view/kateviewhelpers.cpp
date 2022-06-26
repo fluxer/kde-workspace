@@ -526,27 +526,24 @@ void KateScrollBar::miniMapPaintEvent(QPaintEvent *e)
     backgroundColor = palette().color(QPalette::Base);
     foregroundColor = palette().color(QPalette::Text);
   }
-  int backgroundLightness = backgroundColor.lightness();
-  int foregroundLightness = foregroundColor.lightness();
-  int lighnessDiff = (foregroundLightness - backgroundLightness);
+
+  qreal backgroundLightness = KColorUtils::luma(backgroundColor);
+  qreal foregroundLightness = KColorUtils::luma(foregroundColor);
+  qreal lighnessDiff = (foregroundLightness - backgroundLightness);
 
   // get a color suited for the color theme
-  QColor darkShieldColor = palette().color(QPalette::Mid);
-  int hue, sat, light;
-  darkShieldColor.getHsl(&hue, &sat, &light);
+  QColor darkShieldColorBase = palette().color(QPalette::Mid);
   // apply suitable lightness
-  darkShieldColor.setHsl(hue, sat, backgroundLightness + lighnessDiff * 0.35);
+  QColor darkShieldColor = KColorUtils::lighten(darkShieldColorBase, lighnessDiff * 0.35);
   // gradient for nicer results
   QLinearGradient gradient(0, 0, width(), 0);
   gradient.setColorAt(0, darkShieldColor);
   gradient.setColorAt(0.3, darkShieldColor.lighter(115));
   gradient.setColorAt(1, darkShieldColor);
 
-  QColor lightShieldColor;
-  lightShieldColor.setHsl(hue, sat, backgroundLightness + lighnessDiff * 0.15);
+  QColor lightShieldColor = KColorUtils::lighten(darkShieldColorBase, lighnessDiff * 0.15);
 
-  QColor outlineColor;
-  outlineColor.setHsl(hue, sat, backgroundLightness + lighnessDiff * 0.5);
+  QColor outlineColor = KColorUtils::lighten(darkShieldColorBase, lighnessDiff * 0.5);
 
   // draw the grove background in case the document is small
   painter.setPen(QPen(QColor("transparent"),0));
