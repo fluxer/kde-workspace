@@ -31,7 +31,7 @@ OsDepInfo::OsDepInfo()
         return;
     }
 
-    m_osVersion = QString(unixInfo.sysname) + ' ' + QString(unixInfo.release);
+    m_osVersion = QString(unixInfo.sysname) + ' ' + QString(unixInfo.release) + ' (' + QString(unixInfo.machine) + ')';
     m_hostName = QString(unixInfo.nodename);
 }
 

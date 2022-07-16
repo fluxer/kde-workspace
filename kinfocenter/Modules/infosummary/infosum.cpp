@@ -59,7 +59,7 @@ void InfoSumPlugin::createOsBox()
 {  
   DefaultBoxWidget *osWidget = new DefaultBoxWidget();
   osWidget->setIcon(KIcon("kde"));
-  osWidget->setLabelTitles(i18n("OS Version"),i18n("KDE SC Version"), i18n("Hostname"));
+  osWidget->setLabelTitles(i18n("Operating System"),i18n("Sangria Version"), i18n("Hostname"));
   
   OsDepInfo *osInfo = new OsDepInfo();
   
