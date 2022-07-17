@@ -70,12 +70,12 @@ SearchBar::SearchBar(QWidget *parent)
     d->searchLabel = new QLabel(i18nc("Label of the search bar textedit", "Search:"), this);
     QLabel *searchIcon = new QLabel(this);
 
-    const QFileInfo fi(QDir(QDir::homePath()), ".face.icon");
+    /* const QFileInfo fi(QDir(QDir::homePath()), ".face.icon");
     if (fi.exists()) {
         searchIcon->setPixmap(QPixmap(fi.absoluteFilePath()).scaled(KIconLoader::SizeMedium, KIconLoader::SizeMedium, Qt::KeepAspectRatio));
     } else {
         searchIcon->setPixmap(KIcon("system-search").pixmap(KIconLoader::SizeMedium, KIconLoader::SizeMedium));
-    }
+    } */
 
     d->editWidget = new KLineEdit(this);
     d->editWidget->installEventFilter(this);
@@ -83,8 +83,8 @@ SearchBar::SearchBar(QWidget *parent)
     connect(d->editWidget, SIGNAL(textChanged(QString)), this, SIGNAL(startUpdateTimer()));
 
     //add arbitrary spacing
-    layout->addSpacing(2);
-    layout->addWidget(searchIcon);
+    /* layout->addSpacing(2);
+    layout->addWidget(searchIcon); */
     layout->addSpacing(5);
     layout->addWidget(d->searchLabel);
     layout->addSpacing(5);

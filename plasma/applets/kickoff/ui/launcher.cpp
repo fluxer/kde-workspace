@@ -538,7 +538,7 @@ void Launcher::init()
     d->contentAreaFooter = new ContentAreaCap(this, flipCap);
     d->contentSwitcher = new TabBar(this);
     d->contentSwitcher->installEventFilter(this);
-    d->contentSwitcher->setIconSize(QSize(48, 48));
+    d->contentSwitcher->setIconSize(QSize(32, 32));
     d->contentSwitcher->setShape(QTabBar::RoundedSouth);
     connect(d->contentSwitcher, SIGNAL(currentChanged(int)),
             d->contentArea, SLOT(setCurrentIndex(int)));
@@ -555,7 +555,7 @@ void Launcher::init()
     QString fullName = user.property(KUser::FullName).toString();
     QString labelText;
     if (fullName.isEmpty()) {
-        labelText = i18nc("login name, hostname", "User <b>%1</b> on <b>%2</b>", user.loginName(), hostname);
+        labelText = i18nc("login name, hostname", "<b>%1</b> on <b>%2</b>", user.loginName(), hostname);
     } else {
         labelText = i18nc("full name, login name, hostname", "<b>%1 (%2)</b> on <b>%3</b>", fullName, user.loginName(), hostname);
     }
@@ -571,11 +571,11 @@ void Launcher::init()
     d->footer->setLayout(brandingLayout);
 
     layout->addWidget(d->footer);
-    layout->addWidget(d->searchBar);
     layout->addWidget(d->contentAreaHeader);
     layout->addWidget(d->contentArea);
     layout->addWidget(d->contentAreaFooter);
     layout->addWidget(d->contentSwitcher);
+    layout->addWidget(d->searchBar);
 
     setLayout(layout);
     setAttribute(Qt::WA_TranslucentBackground);
