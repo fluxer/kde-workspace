@@ -50,6 +50,7 @@ public:
     QPainterPath shape() const;
     QGraphicsWidget *toolParent();
 
+    void addTool(QAction *action);
     void showToolBox();
     void hideToolBox();
     void setShowing(bool show);

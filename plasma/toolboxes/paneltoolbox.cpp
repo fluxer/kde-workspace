@@ -28,6 +28,7 @@
 #include <QGraphicsView>
 #include <QtCore/qsharedpointer.h>
 
+#include <KAuthorized>
 #include <KDebug>
 #include <KIconLoader>
 
@@ -174,6 +175,20 @@ void PanelToolBox::init()
 
     Plasma::ToolTipManager::self()->registerWidget(this);
 
+    if (KAuthorized::authorizeKAction("logout")) {
+        QAction *action = new QAction(i18n("Leave..."), this);
+        action->setIcon(KIcon("system-shutdown"));
+        connect(action, SIGNAL(triggered()), this, SLOT(startLogout()));
+        addTool(action);
+    }
+
+    if (KAuthorized::authorizeKAction("lock_screen")) {
+        QAction *action = new QAction(i18n("Lock Screen"), this);
+        action->setIcon(KIcon("system-lock-screen"));
+        connect(action, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
+        addTool(action);
+    }
+    
     if (containment()) {
         QObject::connect(containment(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)),
                          this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
@@ -437,6 +452,48 @@ void PanelToolBox::showToolBox()
     m_toolBacker->show();
     highlight(true);
     setFocus();
+}
+
+void PanelToolBox::addTool(QAction *action)
+{
+    if (!action) {
+        return;
+    }
+
+    if (actions().contains(action)) {
+        return;
+    }
+
+    InternalToolBox::addTool(action);
+    Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
+
+    tool->setTextBackgroundColor(QColor());
+    tool->setAction(action);
+    tool->setDrawBackground(true);
+    tool->setOrientation(Qt::Horizontal);
+    tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
+    tool->setPreferredIconSize(QSizeF(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
+    tool->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+    tool->hide();
+    const int height = static_cast<int>(tool->boundingRect().height());
+    tool->setPos(toolPosition(height));
+    tool->setZValue(zValue() + 10);
+    tool->setToolTip(action->text());
+
+    //make enabled/disabled tools appear/disappear instantly
+    connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
+
+    ToolType type = AbstractToolBox::MiscTool;
+    if (!action->data().isNull() && action->data().type() == QVariant::Int) {
+        int t = action->data().toInt();
+        if (t >= 0 && t < AbstractToolBox::UserToolType) {
+            type = static_cast<AbstractToolBox::ToolType>(t);
+        }
+    }
+
+    m_tools.insert(type, tool);
+    kDebug() << "added tool" << type << action->text();
 }
 
 void PanelToolBox::hideToolBox()
