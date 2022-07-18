@@ -14,6 +14,7 @@ add_subdirectory(notifications)
 add_subdirectory(systemtray)
 
 add_subdirectory(kickoff)
+add_subdirectory(sangria-menu)
 add_subdirectory(trash)
 add_subdirectory(folderview)
 

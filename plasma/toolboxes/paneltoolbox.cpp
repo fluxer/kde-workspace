@@ -24,11 +24,8 @@
 #include <QPainter>
 #include <QtGui/qbrush.h>
 #include <QApplication>
-#include <QGraphicsLinearLayout>
-#include <QGraphicsView>
 #include <QtCore/qsharedpointer.h>
 
-#include <KAuthorized>
 #include <KDebug>
 #include <KIconLoader>
 
@@ -38,97 +35,6 @@
 #include <plasma/theme.h>
 #include <plasma/tooltipcontent.h>
 #include <plasma/tooltipmanager.h>
-#include <Plasma/ItemBackground>
-
-class EmptyGraphicsItem : public QGraphicsWidget
-{
-    public:
-        EmptyGraphicsItem(QGraphicsItem *parent)
-            : QGraphicsWidget(parent)
-        {
-            setAcceptHoverEvents(true);
-            m_layout = new QGraphicsLinearLayout(this);
-            m_layout->setContentsMargins(0, 0, 0, 0);
-            m_layout->setSpacing(0);
-            m_background = new Plasma::FrameSvg(this);
-            m_background->setImagePath("widgets/background");
-            m_background->setEnabledBorders(Plasma::FrameSvg::AllBorders);
-            m_layout->setOrientation(Qt::Vertical);
-            m_itemBackground = new Plasma::ItemBackground(this);
-            updateMargins();
-        }
-
-        ~EmptyGraphicsItem()
-        {
-        }
-
-        void updateMargins()
-        {
-            qreal left, top, right, bottom;
-            m_background->getMargins(left, top, right, bottom);
-            setContentsMargins(left, top, right, bottom);
-        }
-
-        void paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *)
-        {
-            m_background->paintFrame(p, option->rect, option->rect);
-        }
-
-        void clearLayout()
-        {
-            while (m_layout->count()) {
-                //safe? at the moment everything it's thre will always be QGraphicsWidget
-                static_cast<QGraphicsWidget *>(m_layout->itemAt(0))->removeEventFilter(this);
-                m_layout->removeAt(0);
-            }
-        }
-
-        void addToLayout(QGraphicsWidget *widget)
-        {
-            qreal left, top, right, bottom;
-            m_itemBackground->getContentsMargins(&left, &top, &right, &bottom);
-            widget->setContentsMargins(left, top, right, bottom);
-            m_layout->addItem(widget);
-            widget->installEventFilter(this);
-
-            if (m_layout->count() == 1) {
-                m_itemBackground->hide();
-                m_itemBackground->setTargetItem(widget);
-            }
-        }
-
-    protected:
-        void resizeEvent(QGraphicsSceneResizeEvent *)
-        {
-            m_background->resizeFrame(size());
-        }
-
-        bool eventFilter(QObject *watched, QEvent *event)
-        {
-            QGraphicsWidget *widget = qobject_cast<QGraphicsWidget *>(watched);
-            if (event->type() == QEvent::GraphicsSceneHoverEnter) {
-                m_itemBackground->setTargetItem(widget);
-            }
-            return false;
-        }
-
-        void hoverEnterEvent(QGraphicsSceneHoverEvent *event)
-        {
-            event->accept();
-        }
-
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *)
-        {
-            m_itemBackground->hide();
-        }
-
-    private:
-        QRectF m_rect;
-        Plasma::FrameSvg *m_background;
-        QGraphicsLinearLayout *m_layout;
-        Plasma::ItemBackground *m_itemBackground;
-};
-
 
 PanelToolBox::PanelToolBox(Plasma::Containment *parent)
     : InternalToolBox(parent)
@@ -150,12 +56,9 @@ PanelToolBox::~PanelToolBox()
 void PanelToolBox::init()
 {
     m_icon = KIcon("plasma");
-    m_toolBacker = 0;
     m_animFrame = 0;
     m_highlighting = false;
-    m_background = new Plasma::FrameSvg(this);
-    m_background->setImagePath("widgets/toolbox");
-    
+
     setIconSize(QSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall));
     setSize(KIconLoader::SizeSmallMedium);
     connect(this, SIGNAL(toggled()), this, SLOT(toggle()));
@@ -175,20 +78,6 @@ void PanelToolBox::init()
 
     Plasma::ToolTipManager::self()->registerWidget(this);
 
-    if (KAuthorized::authorizeKAction("logout")) {
-        QAction *action = new QAction(i18n("Leave..."), this);
-        action->setIcon(KIcon("system-shutdown"));
-        connect(action, SIGNAL(triggered()), this, SLOT(startLogout()));
-        addTool(action);
-    }
-
-    if (KAuthorized::authorizeKAction("lock_screen")) {
-        QAction *action = new QAction(i18n("Lock Screen"), this);
-        action->setIcon(KIcon("system-lock-screen"));
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
-        addTool(action);
-    }
-    
     if (containment()) {
         QObject::connect(containment(), SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)),
                          this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
@@ -340,160 +229,8 @@ void PanelToolBox::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     QGraphicsItem::hoverLeaveEvent(event);
 }
 
-QGraphicsWidget *PanelToolBox::toolParent()
-{
-    if (!m_toolBacker) {
-        m_toolBacker = new EmptyGraphicsItem(this);
-        m_toolBacker->hide();
-    }
-
-    return m_toolBacker;
-}
-
-void PanelToolBox::adjustToolBackerGeometry()
-{
-    if (!m_toolBacker) {
-        return;
-    }
-
-    m_toolBacker->clearLayout();
-    QMapIterator<ToolType, Plasma::IconWidget *> it(m_tools);
-    while (it.hasNext()) {
-        it.next();
-        Plasma::IconWidget *icon = it.value();
-        //kDebug() << "showing off" << it.key() << icon->text();
-        if (icon->isEnabled()) {
-            icon->show();
-            icon->setDrawBackground(false);
-            m_toolBacker->addToLayout(icon);
-        } else {
-            icon->hide();
-        }
-    }
-
-    qreal left, top, right, bottom;
-    m_toolBacker->getContentsMargins(&left, &top, &right, &bottom);
-    m_toolBacker->adjustSize();
-
-    int x = 0;
-    int y = 0;
-    const int iconWidth = KIconLoader::SizeMedium;
-    switch (corner()) {
-    case TopRight:
-        x = (int)boundingRect().left() - m_toolBacker->size().width();
-        y = (int)boundingRect().top();
-        break;
-    case Top:
-        x = (int)boundingRect().center().x() - (m_toolBacker->size().width() / 2);
-        y = (int)boundingRect().bottom();
-        break;
-    case TopLeft:
-        x = (int)boundingRect().right();
-        y = (int)boundingRect().top();
-        break;
-    case Left:
-        x = (int)boundingRect().left() + iconWidth;
-        y = (int)boundingRect().y();
-        break;
-    case Right:
-        x = (int)boundingRect().right() - iconWidth - m_toolBacker->size().width();
-        y = (int)boundingRect().y();
-        break;
-    case BottomLeft:
-        x = (int)boundingRect().left() + iconWidth;
-        y = (int)boundingRect().bottom();
-        break;
-    case Bottom:
-        x = (int)boundingRect().center().x() - (m_toolBacker->size().width() / 2);
-        y = (int)boundingRect().top();
-        break;
-    case BottomRight:
-    default:
-        x = (int)boundingRect().right() - iconWidth - m_toolBacker->size().width();
-        y = (int)boundingRect().top();
-        break;
-    }
-
-    //kDebug() << "starting at" <<  x << startY;
-    m_toolBacker->setPos(x, y);
-    // now check that it actually fits within the parent's boundaries
-    QRectF backerRect = mapToParent(m_toolBacker->geometry()).boundingRect();
-    QSizeF parentSize = parentWidget()->size();
-    if (backerRect.x() < 5) {
-        m_toolBacker->setPos(mapFromParent(QPointF(5, 0)).x(), y);
-    } else if (backerRect.right() > parentSize.width() - 5) {
-        m_toolBacker->setPos(mapFromParent(QPointF(parentSize.width() - 5 - backerRect.width(), 0)).x(), y);
-    }
-
-    if (backerRect.y() < 5) {
-        m_toolBacker->setPos(x, mapFromParent(QPointF(0, 5)).y());
-    } else if (backerRect.bottom() > parentSize.height() - 5) {
-        m_toolBacker->setPos(x, mapFromParent(QPointF(0, parentSize.height() - 5 - backerRect.height())).y());
-    }
-}
-
 void PanelToolBox::showToolBox()
 {
-    if (isShowing()) {
-        kDebug() << "it is showing";
-        return;
-    }
-    
-    if (!m_toolBacker) {
-        kDebug() << "making new tool backer";
-        m_toolBacker = new EmptyGraphicsItem(this);
-    }
-    
-    m_toolBacker->setZValue(zValue() + 1);
-
-    adjustToolBackerGeometry();
-    
-    kDebug() << "trying to show toolbacker";
-    m_toolBacker->show();
-    highlight(true);
-    setFocus();
-}
-
-void PanelToolBox::addTool(QAction *action)
-{
-    if (!action) {
-        return;
-    }
-
-    if (actions().contains(action)) {
-        return;
-    }
-
-    InternalToolBox::addTool(action);
-    Plasma::IconWidget *tool = new Plasma::IconWidget(toolParent());
-
-    tool->setTextBackgroundColor(QColor());
-    tool->setAction(action);
-    tool->setDrawBackground(true);
-    tool->setOrientation(Qt::Horizontal);
-    tool->resize(tool->sizeFromIconSize(KIconLoader::SizeSmallMedium));
-    tool->setPreferredIconSize(QSizeF(KIconLoader::SizeSmallMedium, KIconLoader::SizeSmallMedium));
-    tool->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-    tool->hide();
-    const int height = static_cast<int>(tool->boundingRect().height());
-    tool->setPos(toolPosition(height));
-    tool->setZValue(zValue() + 10);
-    tool->setToolTip(action->text());
-
-    //make enabled/disabled tools appear/disappear instantly
-    connect(tool, SIGNAL(changed()), this, SLOT(updateToolBox()));
-
-    ToolType type = AbstractToolBox::MiscTool;
-    if (!action->data().isNull() && action->data().type() == QVariant::Int) {
-        int t = action->data().toInt();
-        if (t >= 0 && t < AbstractToolBox::UserToolType) {
-            type = static_cast<AbstractToolBox::ToolType>(t);
-        }
-    }
-
-    m_tools.insert(type, tool);
-    kDebug() << "added tool" << type << action->text();
 }
 
 void PanelToolBox::hideToolBox()
@@ -578,4 +315,3 @@ void PanelToolBox::toggle()
 
 
 #include "moc_paneltoolbox.cpp"
-

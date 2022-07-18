@@ -29,7 +29,6 @@
 #include <KIcon>
 
 #include <Plasma/Animator>
-#include <Plasma/IconWidget>
 
 #include "internaltoolbox.h"
 
@@ -48,9 +47,7 @@ public:
     ~PanelToolBox();
     QRectF boundingRect() const;
     QPainterPath shape() const;
-    QGraphicsWidget *toolParent();
 
-    void addTool(QAction *action);
     void showToolBox();
     void hideToolBox();
     void setShowing(bool show);
@@ -75,10 +72,8 @@ protected slots:
 
 private:
     void highlight(bool highlighting);
-    void adjustToolBackerGeometry();
-    QMultiMap<Plasma::AbstractToolBox::ToolType, Plasma::IconWidget *> m_tools;
+
     KIcon m_icon;
-    EmptyGraphicsItem *m_toolBacker;
     QWeakPointer<QPropertyAnimation> m_anim;
     qreal m_animFrame;
     QColor m_fgColor;
@@ -90,4 +85,3 @@ private:
 K_EXPORT_PLASMA_TOOLBOX(paneltoolbox, PanelToolBox)
 
 #endif // multiple inclusion guard
-

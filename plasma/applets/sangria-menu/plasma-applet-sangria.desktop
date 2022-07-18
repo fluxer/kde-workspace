@@ -1,0 +1,23 @@
+[Desktop Entry]
+Name=Melon Menu
+Comment=The Sangria Menu. Placeholder.
+
+Type=Service
+Icon=kde
+X-KDE-ServiceTypes=Plasma/Applet
+
+X-KDE-Library=plasma_applet_sangria
+X-KDE-PluginInfo-Author=Chaz Peloquin
+X-KDE-PluginInfo-Email=chazpelo2@gmail.com
+X-KDE-PluginInfo-Name=sangriamenu
+X-KDE-PluginInfo-Version=0.1
+X-KDE-PluginInfo-Website=http://plasma.kde.org/
+X-KDE-PluginInfo-Category=File System
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true
+X-Plasma-Requires-KRun=true
+
+X-Plasma-Requires-FileDialog=Unused
+X-Plasma-Requires-LaunchApp=Required
+
