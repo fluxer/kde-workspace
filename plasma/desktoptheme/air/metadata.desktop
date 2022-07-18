@@ -160,7 +160,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Ariya
+defaultWallpaperTheme=Sangria
 defaultFileSuffix=.png
 defaultWidth=1024
 defaultHeight=768
