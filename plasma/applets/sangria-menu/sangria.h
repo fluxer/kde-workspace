@@ -61,6 +61,7 @@ class SangriaMenu : public Plasma::Applet
     protected Q_SLOTS:
         void startLogout();
         void logout();
+        void lockScreen();
         
     protected slots:
         void popup();

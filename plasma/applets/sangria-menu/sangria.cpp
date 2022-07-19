@@ -20,6 +20,8 @@
 #include "sangria.h"
 
 //QT
+#include <QDBusInterface>
+#include <QDBusPendingCall>
 #include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QGraphicsWidget>
@@ -108,9 +110,13 @@ void SangriaMenu::init()
 
 void SangriaMenu::createMenu()
 {
+    QAction* lock = new QAction(SmallIcon("system-lock-screen"), i18n("Lock Screen"), this);
+    connect(lock, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
+
     QAction* shutdown = new QAction(SmallIcon("system-shutdown"), i18n("Leave..."), this);
     connect(shutdown, SIGNAL(triggered(bool)), this, SLOT(startLogout()));
 
+    m_menu.addAction(lock);
     m_menu.addAction(shutdown);
 
     //add the menu as an action icon
@@ -212,6 +218,13 @@ void SangriaMenu::iconSizeChanged(int group)
     if (group == KIconLoader::Desktop || group == KIconLoader::Panel) {
         updateGeometry();
     }
+}
+
+void SangriaMenu::lockScreen()
+{
+    const QString interface("org.freedesktop.ScreenSaver");
+    QDBusInterface screensaver(interface, "/ScreenSaver");
+    screensaver.asyncCall("Lock");
 }
 
 void SangriaMenu::startLogout()
