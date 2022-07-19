@@ -141,7 +141,7 @@ namespace Oxygen
         QWidget *widget = static_cast<QWidget*>( object );
         if( event->type() == QEvent::Show && _helper.hasDecoration( widget ) )
         {
-            _helper.setHasBackgroundGradient( widget->winId(), true );
+            _helper.setHasBackgroundGradient( widget->winId(), false );
             _helper.setHasBackgroundPixmap( widget->winId(), _helper.hasBackgroundPixmap() );
         }
 

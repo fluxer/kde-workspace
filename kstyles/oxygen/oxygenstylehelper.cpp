@@ -558,28 +558,11 @@ namespace Oxygen
         // colors
         const QColor base( KColorUtils::shade( color, shade ) );
         const QColor light( KColorUtils::shade( calcLightColor( color ), shade ) );
-
-        // bevel, part 1
-        QLinearGradient bevelGradient1( 0, 10, 0, 18 );
-        bevelGradient1.setColorAt( 0.0, light );
-        bevelGradient1.setColorAt( 0.9, alphaColor( light, 0.85 ) );
-        p.setBrush( bevelGradient1 );
-        p.drawEllipse( QRectF( 3.0,3.0,15.0,15.0 ) );
-
-        // bevel, part 2
-        if ( _slabThickness > 0.0 ) {
-            QLinearGradient bevelGradient2( 0, 7, 0, 28 );
-            bevelGradient2.setColorAt( 0.0, light );
-            bevelGradient2.setColorAt( 0.9, base );
-            p.setBrush( bevelGradient2 );
-            p.drawEllipse( QRectF( 3.6,3.6,13.8,13.8 ) );
-        }
-
-        // inside
+        
         QLinearGradient innerGradient( 0, -17, 0, 20 );
         innerGradient.setColorAt( 0, light );
         innerGradient.setColorAt( 1, base );
-        p.setBrush( innerGradient );
+        p.setBrush( base );
         const qreal ic( 3.6 + _slabThickness );
         const qreal is( 21.0 - 2.0*ic );
         p.drawEllipse( QRectF( ic, ic, is, is ) );
