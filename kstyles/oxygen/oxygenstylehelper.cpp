@@ -42,7 +42,7 @@ namespace Oxygen
     StyleHelper::StyleHelper( const QByteArray &componentName ):
         Helper( componentName ),
         _debugArea( KDebug::registerArea( "Oxygen ( style )" ) ),
-        _useBackgroundGradient( true )
+        _useBackgroundGradient( false )
     {
 
         #ifdef Q_WS_X11
@@ -114,21 +114,11 @@ namespace Oxygen
     //____________________________________________________________________
     void StyleHelper::renderWindowBackground( QPainter* p, const QRect& clipRect, const QWidget* widget, const QColor& color, int y_shift, int gradientHeight)
     {
+        // if background gradient is disabled, simply render flat background
+        if ( clipRect.isValid() )
+        { p->setClipRegion( clipRect,Qt::IntersectClip ); }
 
-        if( _useBackgroundGradient )
-        {
-
-            // normal background gradient
-            Helper::renderWindowBackground( p, clipRect, widget, widget->window(), color, y_shift, gradientHeight );
-
-        } else {
-
-            // if background gradient is disabled, simply render flat background
-            if ( clipRect.isValid() )
-            { p->setClipRegion( clipRect,Qt::IntersectClip ); }
-
-            p->fillRect( widget->rect(), color );
-        }
+        p->fillRect( widget->rect(), color );
 
         // background pixmap
         Helper::renderBackgroundPixmap( p, clipRect, widget, widget->window(), y_shift, gradientHeight );

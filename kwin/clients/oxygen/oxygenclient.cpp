@@ -570,25 +570,7 @@ namespace Oxygen
     //_________________________________________________________
     void Client::renderWindowBackground( QPainter* painter, const QRect& rect, const QWidget* widget, const QPalette& palette ) const
     {
-
-        // window background
-        if( helper().hasBackgroundGradient( windowId() ) )
-        {
-
-            int offset = layoutMetric( LM_OuterPaddingTop );
-
-            // radial gradient positionning
-            const int height = hideTitleBar() ? 0:layoutMetric(LM_TitleHeight);
-            if( isMaximized() ) offset -= 3;
-
-            const QWidget* window( isPreview() ? this->widget() : widget->window() );
-            helper().renderWindowBackground(painter, rect, widget, window, palette, offset, height );
-
-        } else {
-
-            painter->fillRect( rect, palette.color( QPalette::Window ) );
-
-        }
+        painter->fillRect( rect, palette.color( QPalette::Window ) );
 
         // background pixmap
         if( isPreview() || helper().hasBackgroundPixmap( windowId() ) )
