@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright 2022 by Chaz Peloquin <chazpelo2@gmail.com>                 *
+ *   Copyright 2022 by Chaz Péloquin <chazizcontact@gmail.com              *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
