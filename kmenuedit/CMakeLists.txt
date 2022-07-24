@@ -13,14 +13,14 @@ set(kmenueditcommon_STAT_SRCS
 
 ########### next target ###############
 
-qt4_add_dbus_adaptor(
+qt_add_dbus_adaptor(
     kmenueditcommon_STAT_SRCS
     org.kde.kmenuedit.xml
     kmenuedit.h
     KMenuEdit
 )
 
-qt4_add_dbus_interface(
+qt_add_dbus_interface(
     kmenueditcommon_STAT_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/../khotkeys/app/org.kde.khotkeys.xml
     khotkeys_interface)

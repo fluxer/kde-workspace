@@ -1,6 +1,6 @@
 set(kded_favicons_SRCS favicons.cpp)
 
-qt4_add_dbus_adaptor(kded_favicons_SRCS
+qt_add_dbus_adaptor(kded_favicons_SRCS
     org.kde.FavIcon.xml
     favicons.h
     FavIconsModule

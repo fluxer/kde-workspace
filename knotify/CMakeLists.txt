@@ -25,7 +25,7 @@ set(knotifyplugin_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/knotify_export.h
 )
 
-qt4_add_dbus_interfaces(knotify_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml)
+qt_add_dbus_interfaces(knotify_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml)
 
 add_executable( knotify ${knotify_SRCS})
 

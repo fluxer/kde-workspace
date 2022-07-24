@@ -46,7 +46,7 @@ set(krunner_SRCS
 
 kde4_add_kcfg_files(krunner_SRCS ${krunner_KCFG_SRCS})
 
-qt4_add_dbus_adaptor(krunner_SRCS ${krunner_dbusAppXML} krunnerapp.h KRunnerApp)
+qt_add_dbus_adaptor(krunner_SRCS ${krunner_dbusAppXML} krunnerapp.h KRunnerApp)
 
 dbus_add_activation_service(dbus/org.kde.krunner.service.in)
 

@@ -14,11 +14,11 @@ set(kcm_keys_PART_SRCS
 
 set(kglobalaccel_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KGlobalAccel.xml)
 set_source_files_properties(${kglobalaccel_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")
-qt4_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_xml} kglobalaccel_interface )
+qt_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_xml} kglobalaccel_interface )
 
 set(kglobalaccel_component_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.kglobalaccel.Component.xml)
 set_source_files_properties(${kglobalaccel_component_xml} PROPERTIES INCLUDE "kglobalshortcutinfo_p.h")
-qt4_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_component_xml} kglobalaccel_component_interface )
+qt_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_component_xml} kglobalaccel_component_interface )
 
 kde4_add_plugin(kcm_keys ${kcm_keys_PART_SRCS})
 target_link_libraries(kcm_keys  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_X11_LIB})

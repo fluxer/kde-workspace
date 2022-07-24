@@ -20,20 +20,20 @@ set(kuiserver_SRCS
 #<JobView>
 set(jobview_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.JobView.xml)
 
-qt4_add_dbus_adaptor(kuiserver_SRCS ${jobview_xml} jobview.h JobView jobviewadaptor )
+qt_add_dbus_adaptor(kuiserver_SRCS ${jobview_xml} jobview.h JobView jobviewadaptor )
 
-qt4_add_dbus_interface(kuiserver_SRCS ${jobview_xml} jobview_interface )
+qt_add_dbus_interface(kuiserver_SRCS ${jobview_xml} jobview_interface )
 #</JobView>
 
 #<JobViewServer>
 set(jobviewserver_xml ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.JobViewServer.xml)
 
-qt4_add_dbus_adaptor(kuiserver_SRCS ${jobviewserver_xml} progresslistmodel.h ProgressListModel jobviewserveradaptor)
+qt_add_dbus_adaptor(kuiserver_SRCS ${jobviewserver_xml} progresslistmodel.h ProgressListModel jobviewserveradaptor)
 
-qt4_add_dbus_interface(kuiserver_SRCS ${jobviewserver_xml} jobviewserver_interface )
+qt_add_dbus_interface(kuiserver_SRCS ${jobviewserver_xml} jobviewserver_interface )
 #</JobViewServer>
 
-qt4_add_dbus_adaptor(kuiserver_SRCS org.kde.kuiserver.xml progresslistmodel.h ProgressListModel kuiserveradaptor)
+qt_add_dbus_adaptor(kuiserver_SRCS org.kde.kuiserver.xml progresslistmodel.h ProgressListModel kuiserveradaptor)
 
 dbus_add_activation_service(org.kde.kuiserver.service.in)
 

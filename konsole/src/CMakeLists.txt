@@ -50,12 +50,12 @@ qt4_generate_dbus_interface(
     OPTIONS -M
 )
 
-qt4_add_dbus_adaptor(sessionadaptors_SRCS
+qt_add_dbus_adaptor(sessionadaptors_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.konsole.Session.xml
     Session.h
     Konsole::Session
 )
-qt4_add_dbus_adaptor(windowadaptors_SRCS
+qt_add_dbus_adaptor(windowadaptors_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.konsole.Window.xml
     ViewManager.h
     Konsole::ViewManager

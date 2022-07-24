@@ -37,12 +37,12 @@ qt4_generate_dbus_interface(
     org.kde.keditbookmarks.xml
 )
 
-qt4_add_dbus_interface(keditbookmarks_SRCS
+qt_add_dbus_interface(keditbookmarks_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.keditbookmarks.xml
     toplevel_interface
 )
 
-qt4_add_dbus_interface(keditbookmarks_SRCS
+qt_add_dbus_interface(keditbookmarks_SRCS
     ${CMAKE_SOURCE_DIR}/libs/konq/favicons/org.kde.FavIcon.xml
     favicon_interface
 )

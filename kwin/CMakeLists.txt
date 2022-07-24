@@ -139,15 +139,15 @@ endif()
 
 kde4_add_kcfg_files(kwin_SRCS settings.kcfgc)
 
-qt4_add_dbus_adaptor(kwin_SRCS org.kde.KWin.xml dbusinterface.h KWin::DBusInterface)
-qt4_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Compositing.xml composite.h KWin::Compositor)
-qt4_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl)
+qt_add_dbus_adaptor(kwin_SRCS org.kde.KWin.xml dbusinterface.h KWin::DBusInterface)
+qt_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Compositing.xml composite.h KWin::Compositor)
+qt_add_dbus_adaptor(kwin_SRCS org.kde.kwin.Effects.xml effects.h KWin::EffectsHandlerImpl)
 
-qt4_add_dbus_interface(kwin_SRCS
+qt_add_dbus_interface(kwin_SRCS
     ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml
     ksmserver_interface
 )
-qt4_add_dbus_interface(kwin_SRCS
+qt_add_dbus_interface(kwin_SRCS
     ${CMAKE_SOURCE_DIR}/kscreensaver/org.freedesktop.ScreenSaver.xml
     screenlocker_interface
 )

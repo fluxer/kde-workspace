@@ -1,6 +1,6 @@
 set(networkingservice_SRCS networkingservice.cpp networkingserviceview.ui)
 
-qt4_add_dbus_interface(networkingservice_SRCS ../org.kde.Solid.Networking.Service.xml serviceinterface)
+qt_add_dbus_interface(networkingservice_SRCS ../org.kde.Solid.Networking.Service.xml serviceinterface)
 
 add_executable(networkingservice ${networkingservice_SRCS})
 

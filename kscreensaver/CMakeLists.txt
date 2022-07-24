@@ -5,7 +5,7 @@ set(kded_kscreensaver_SRCS
     kscreensaver.cpp
 )
 
-qt4_add_dbus_adaptor(kded_kscreensaver_SRCS
+qt_add_dbus_adaptor(kded_kscreensaver_SRCS
     org.freedesktop.ScreenSaver.xml
     kscreensaver.h
     KScreenSaver

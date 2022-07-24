@@ -9,11 +9,11 @@ set(kded_networkstatus_PART_SRCS
    networkmanagerstatus.cpp
 )
 
-qt4_add_dbus_adaptor(kded_networkstatus_PART_SRCS ../org.kde.Solid.Networking.Service.xml
+qt_add_dbus_adaptor(kded_networkstatus_PART_SRCS ../org.kde.Solid.Networking.Service.xml
         networkstatus.h NetworkStatusModule)
 
 # we need one of the interfaces installed by kdelibs:
-qt4_add_dbus_adaptor(kded_networkstatus_PART_SRCS
+qt_add_dbus_adaptor(kded_networkstatus_PART_SRCS
         ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.Solid.Networking.Client.xml
         networkstatus.h NetworkStatusModule)
 

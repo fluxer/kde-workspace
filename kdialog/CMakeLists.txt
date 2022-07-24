@@ -4,7 +4,7 @@ set(kdialog_SRCS
     klistboxdialog.cpp
     progressdialog.cpp)
 
-qt4_add_dbus_adaptor(kdialog_SRCS
+qt_add_dbus_adaptor(kdialog_SRCS
     org.kde.kdialog.ProgressDialog.xml
     progressdialog.h
     KProgressDialog

@@ -1,4 +1,5 @@
 include(CMakePushCheckState)
+include(CMakePushCheckState)
 include(CheckTypeSize)
 include(CheckSymbolExists)
 include(CheckLibraryExists)
@@ -37,6 +38,7 @@ macro_bool_to_01(X11_Xrender_FOUND HAVE_XRENDER) # kcontrol/style, kicker
 macro_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard
 macro_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 macro_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard
+macro_bool_to_01(Q_WS_X11 Q_WS_X11) # misc shit
 
 cmake_reset_check_state()
 set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH})

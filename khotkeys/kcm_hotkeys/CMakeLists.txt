@@ -69,7 +69,7 @@ set(
     hotkeys_widget_base.ui
     )
 
-qt4_add_dbus_interface(
+qt_add_dbus_interface(
     kcm_hotkeys_PART_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/../app/org.kde.khotkeys.xml
     khotkeys_interface)

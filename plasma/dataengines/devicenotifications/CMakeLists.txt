@@ -2,7 +2,7 @@ set(device_notifications_engine_SRCS
     devicenotificationsengine.cpp
 )
 
-qt4_add_dbus_adaptor( device_notifications_engine_SRCS org.kde.DeviceNotifications.xml devicenotificationsengine.h DeviceNotificationsEngine )
+qt_add_dbus_adaptor( device_notifications_engine_SRCS org.kde.DeviceNotifications.xml devicenotificationsengine.h DeviceNotificationsEngine )
 
 kde4_add_plugin(plasma_engine_devicenotifications ${device_notifications_engine_SRCS})
 

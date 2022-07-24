@@ -30,7 +30,7 @@ target_link_libraries(libkonq-konqpopupmenutest
 
 set(favicontest_SRCS favicontest.cpp)
 
-qt4_add_dbus_interface(favicontest_SRCS
+qt_add_dbus_interface(favicontest_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../favicons/org.kde.FavIcon.xml
     favicon_interface
 )

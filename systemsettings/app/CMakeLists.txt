@@ -10,7 +10,7 @@ SET( systemsettings_SRCS
     configDialog.ui
 )
 KDE4_ADD_KCFG_FILES( systemsettings_SRCS BaseConfig.kcfgc )
-QT4_ADD_DBUS_ADAPTOR( systemsettings_SRCS org.kde.systemsettings.xml SystemSettingsApp.h SystemSettingsApp  )
+QT_ADD_DBUS_ADAPTOR( systemsettings_SRCS org.kde.systemsettings.xml SystemSettingsApp.h SystemSettingsApp  )
 
 add_executable( systemsettings ${systemsettings_SRCS})
 
