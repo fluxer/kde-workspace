@@ -32,7 +32,7 @@ set(keditbookmarks_SRCS
     bookmarklistview.cpp
 )
 
-qt4_generate_dbus_interface(
+qt_generate_dbus_interface(
     ${CMAKE_CURRENT_SOURCE_DIR}/toplevel.h
     org.kde.keditbookmarks.xml
 )

@@ -6,7 +6,7 @@ set(kded_kdirshare_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/org.kde.kdirshare.xml
 )
 
-qt4_generate_dbus_interface(kded_kdirshare.h org.kde.kdirshare.xml )
+qt_generate_dbus_interface(kded_kdirshare.h org.kde.kdirshare.xml )
 
 kde4_add_plugin(kded_kdirshare ${kded_kdirshare_SRCS})
 target_link_libraries(kded_kdirshare PRIVATE

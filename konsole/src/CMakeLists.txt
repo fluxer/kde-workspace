@@ -39,12 +39,12 @@ endif()
 # qdbuscpp2xml -M -s ViewManager.h -o org.kde.konsole.Konsole.xml
 
 # Generate dbus .xml files; do not store .xml in source folder
-qt4_generate_dbus_interface(
+qt_generate_dbus_interface(
     Session.h
     org.kde.konsole.Session.xml
     OPTIONS -M
 )
-qt4_generate_dbus_interface(
+qt_generate_dbus_interface(
     ViewManager.h
     org.kde.konsole.Window.xml
     OPTIONS -M

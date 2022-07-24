@@ -4,7 +4,7 @@ set(kded_khotkeys_PART_SRCS
         kded.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/org.kde.khotkeys.xml)
 
-qt4_generate_dbus_interface(kded.h org.kde.khotkeys.xml )
+qt_generate_dbus_interface(kded.h org.kde.khotkeys.xml )
 
 kde4_add_plugin(kded_khotkeys ${kded_khotkeys_PART_SRCS})
 target_link_libraries(kded_khotkeys khotkeysprivate kworkspace ${KDE4_KDEUI_LIBS})
