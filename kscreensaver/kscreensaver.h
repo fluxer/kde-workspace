@@ -20,8 +20,8 @@
 #define KSCREENSAVER_H
 
 #include <QObject>
-#include <QProcess>
 #include <QElapsedTimer>
+#include <QTimer>
 #include <QDBusInterface>
 
 class KScreenSaver : public QObject
@@ -48,8 +48,7 @@ Q_SIGNALS:
     void ActiveChanged(bool active);
 
 private Q_SLOTS:
-    void slotXScreenSaverOutput();
-    void slotXScreenSaverError();
+    void slotCheckState();
 
     void slotLock();
     void slotUnlock();
@@ -57,10 +56,11 @@ private Q_SLOTS:
 private:
     bool m_objectsregistered;
     bool m_serviceregistered;
-    QProcess* m_xscreensaver;
-    Q_PID m_xscreensaverpid;
+    bool m_havedpms;
+    bool m_dpmsactive;
     QElapsedTimer m_activetimer;
-    QList<uint> m_inhibitions;
+    QTimer m_statetimer;
+    QList<uint> m_cookies;
     QDBusInterface m_login1;
     QDBusInterface m_consolekit;
 };

@@ -26,6 +26,10 @@ target_link_libraries(kded_kscreensaver PRIVATE
     ${QT_QTDBUS_LIBRARY}
 )
 
+if(X11_dpms_FOUND)
+    target_link_libraries(kded_kscreensaver PRIVATE ${X11_Xext_LIB})
+endif(X11_dpms_FOUND)
+
 install(
     TARGETS kded_kscreensaver
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}

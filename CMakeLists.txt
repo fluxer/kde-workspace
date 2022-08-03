@@ -70,6 +70,7 @@ if(Q_WS_X11)
     add_feature_info("libXft" X11_Xft_FOUND "The X11 font API library may be used by kfontinst KCM")
     add_feature_info("libXinerama" X11_Xinerama_FOUND "The X11 XINERAMA extension library may be used by ksplash")
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
+    add_feature_info("libXext" X11_dpms_FOUND "The X extensions library may be used by kscreensaver")
 
     if(NOT X11_Xau_FOUND)
         message(FATAL_ERROR "The X11 authorization extension library was not found. Required for authorization in kworkspace library")
@@ -233,12 +234,6 @@ find_program(QRENCODE_EXECUTABLE qrencode)
 add_feature_info(qrencode
     QRENCODE_EXECUTABLE
     "QR Code support in klipper"
-)
-
-find_program(XSCREENSAVER_EXECUTABLE xscreensaver)
-add_feature_info(xscreensaver
-    XSCREENSAVER_EXECUTABLE
-    "Screen saver and screen locking support"
 )
 
 find_program(GDB_OR_LLDB_EXECUTABLE NAMES gdb lldb)

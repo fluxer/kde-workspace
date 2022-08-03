@@ -39,3 +39,6 @@
 
 /* Define if you have the XRes extension */
 #cmakedefine HAVE_XRES 1
+
+/* Define if you have the DPMS extension */
+#cmakedefine HAVE_DPMS 1
