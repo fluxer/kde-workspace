@@ -235,7 +235,7 @@ void KScreenSaver::SimulateUserActivity()
 uint KScreenSaver::Inhibit(const QString &application_name, const QString &reason_for_inhibit)
 {
     // qDebug() << Q_FUNC_INFO << application_name << reason_for_inhibit;
-    uint cookiecounter = 0;
+    uint cookiecounter = 1;
     while (m_cookies.contains(cookiecounter)) {
         if (cookiecounter >= INT_MAX) {
             kWarning() << "Inhibit limit reached";
