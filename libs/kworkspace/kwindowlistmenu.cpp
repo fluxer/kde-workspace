@@ -76,7 +76,7 @@ static bool standaloneDialog( const KWindowInfo* info, const QList<KWindowInfo*>
   WId group = info->groupLeader();
 
   if ( group == 0 )
-  return info->transientFor() == QX11Info::appRootWindow();
+    return info->transientFor() == QX11Info::appRootWindow();
 
   foreach ( KWindowInfo* info, list )
     if ( info->groupLeader() == group )
