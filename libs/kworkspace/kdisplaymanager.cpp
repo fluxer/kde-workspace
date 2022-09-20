@@ -309,8 +309,9 @@ bool KDisplayManager::localSessions(SessList &list)
     return false;
 }
 
-void KDisplayManager::sess2Str2(const SessEnt &se, QString &user, QString &loc)
+QString KDisplayManager::sess2Str(const SessEnt &se)
 {
+    QString user, loc;
     if (se.tty) {
         user = i18nc("user: ...", "%1: TTY login", se.user);
         loc = se.vt ? QString("vt%1").arg(se.vt) : se.display ;
@@ -331,12 +332,6 @@ void KDisplayManager::sess2Str2(const SessEnt &se, QString &user, QString &loc)
                 QString("%1, vt%2").arg(se.display).arg(se.vt) :
                 se.display;
     }
-}
-
-QString KDisplayManager::sess2Str(const SessEnt &se)
-{
-    QString user, loc;
-    sess2Str2(se, user, loc);
     return i18nc("session (location)", "%1 (%2)", user, loc);
 }
 

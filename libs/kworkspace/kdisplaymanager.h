@@ -56,7 +56,6 @@ public:
     void lockSwitchVT(int vt);
 
     static QString sess2Str(const SessEnt &se);
-    static void sess2Str2(const SessEnt &se, QString &user, QString &loc);
 
 private:
     Q_DISABLE_COPY(KDisplayManager);
