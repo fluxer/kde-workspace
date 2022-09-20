@@ -122,18 +122,6 @@ void PowerDevilRunner::updateStatus()
     updateSyntaxes();
 }
 
-
-bool PowerDevilRunner::parseQuery(const QString& query, const QList<QRegExp>& rxList, QString& parameter) const
-{
-    foreach (const QRegExp& rx, rxList) {
-        if (rx.exactMatch(query)) {
-             parameter = rx.cap(1).trimmed();
-             return true;
-        }
-    }
-    return false;
-}
-
 void PowerDevilRunner::match(Plasma::RunnerContext &context)
 {
     const QString term = context.query();
@@ -142,9 +130,6 @@ void PowerDevilRunner::match(Plasma::RunnerContext &context)
     }
 
     QList<Plasma::QueryMatch> matches;
-
-    QString parameter;
-
     if (term.compare(i18nc("Note this is a KRunner keyword", "suspend"), Qt::CaseInsensitive) == 0) {
         QSet< Solid::PowerManagement::SleepState > states = Solid::PowerManagement::supportedSleepStates();
 

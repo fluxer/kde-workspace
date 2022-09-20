@@ -40,7 +40,6 @@ class PowerDevilRunner : public Plasma::AbstractRunner
         void initUpdateTriggers();
         void updateSyntaxes();
         void addSuspendMatch(int value, QList<Plasma::QueryMatch> &matches);
-        bool parseQuery(const QString& query, const QList<QRegExp>& rxList, QString& parameter) const;
 
         int m_shortestCommand;
 };
