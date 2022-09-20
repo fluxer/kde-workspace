@@ -134,22 +134,15 @@ void WidgetExplorerPrivate::initFilters()
 
     filterModel.addSeparator(i18n("Categories:"));
 
-    typedef QPair<QString, QString> catPair;
-    QMap<QString, catPair > categories;
     QSet<QString> existingCategories = itemModel.categories();
     foreach (const QString &category, Plasma::Applet::listCategories(application)) {
         const QString lowerCaseCat = category.toLower();
         if (existingCategories.contains(lowerCaseCat)) {
             const QString trans = i18n(category.toLocal8Bit());
-            categories.insert(trans.toLower(), qMakePair(trans, lowerCaseCat));
+            filterModel.addFilter(trans,
+                                  KCategorizedItemsViewModels::Filter("category", lowerCaseCat));
         }
     }
-
-    foreach (const catPair &category, categories) {
-        filterModel.addFilter(category.first,
-                              KCategorizedItemsViewModels::Filter("category", category.second));
-    }
-
 }
 
 void WidgetExplorerPrivate::init(Plasma::Location loc)
