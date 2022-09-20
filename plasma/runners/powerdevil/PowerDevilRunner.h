@@ -37,8 +37,6 @@ class PowerDevilRunner : public Plasma::AbstractRunner
         void updateStatus();
 
     private:
-        void initUpdateTriggers();
-        void updateSyntaxes();
         void addSuspendMatch(int value, QList<Plasma::QueryMatch> &matches);
 
         int m_shortestCommand;
