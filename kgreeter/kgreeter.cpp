@@ -339,7 +339,7 @@ void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, Lig
 
         g_autoptr(GError) gliberror = NULL;
         if (!lightdm_greeter_respond(ldmgreeter, kgreeterpass.constData(), &gliberror)) {
-            kgreeter->statusBar()->showMessage(i18n("Failed to repsond: %1", KGreeter::glibErrorString(gliberror)));
+            kgreeter->statusBar()->showMessage(i18n("Failed to respond: %1", KGreeter::glibErrorString(gliberror)));
         }
     }
 }
