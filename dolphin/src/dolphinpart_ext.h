@@ -21,7 +21,6 @@
 #define DOLPHINPART_EXT_H
 
 #include <kparts/browserextension.h>
-#include <kparts/listingextension.h>
 
 class DolphinPart;
 
