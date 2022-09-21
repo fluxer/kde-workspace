@@ -89,10 +89,9 @@ void KAutoWebSearch::populateProvidersList(QList<KUriFilterSearchProvider*>& sea
         favEngines.insert(0, defaultEngine);
     }
 
-    QStringListIterator it (favEngines);
-    while (it.hasNext())
+    foreach (const QString &it, favEngines)
     {
-      SearchProvider *favProvider = SearchProvider::findByDesktopName(it.next());
+      SearchProvider *favProvider = SearchProvider::findByDesktopName(it);
       if (favProvider)
           providers << favProvider;
     }
