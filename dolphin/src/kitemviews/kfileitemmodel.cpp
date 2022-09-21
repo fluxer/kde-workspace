@@ -1519,21 +1519,16 @@ QHash<QByteArray, QVariant> KFileItemModel::retrieveData(const KFileItem& item, 
     }
 
     if (m_requestRole[PathRole]) {
-        QString path;
-        if (item.url().protocol() == QLatin1String("trash")) {
-            path = item.entry().stringValue(KIO::UDSEntry::UDS_EXTRA);
-        } else {
-            // For performance reasons cache the home-path in a static QString
-            // (see QDir::homePath() for more details)
-            static QString homePath;
-            if (homePath.isEmpty()) {
-                homePath = QDir::homePath();
-            }
+        // For performance reasons cache the home-path in a static QString
+        // (see QDir::homePath() for more details)
+        static QString homePath;
+        if (homePath.isEmpty()) {
+            homePath = QDir::homePath();
+        }
 
-            path = item.localPath();
-            if (path.startsWith(homePath)) {
-                path.replace(0, homePath.length(), QLatin1Char('~'));
-            }
+        QString path = item.localPath();
+        if (path.startsWith(homePath)) {
+            path.replace(0, homePath.length(), QLatin1Char('~'));
         }
 
         const int index = path.lastIndexOf(item.text());

@@ -434,8 +434,12 @@ bool TrashProtocol::createUDSEntry( const QString& physicalPath, const QString& 
     entry.insert( KIO::UDSEntry::UDS_GROUP, m_groupName ); // assumption
     entry.insert( KIO::UDSEntry::UDS_MODIFICATION_TIME, buff.st_mtime );
     entry.insert( KIO::UDSEntry::UDS_ACCESS_TIME, buff.st_atime ); // ## or use it for deletion time?
-    entry.insert( KIO::UDSEntry::UDS_EXTRA, info.origPath );
-    entry.insert( KIO::UDSEntry::UDS_EXTRA + 1, info.deletionDate.toString( Qt::ISODate ) );
+    entry.insert( KIO::UDSEntry::UDS_COMMENT,
+        i18n(
+            "Original path is %1, deletion date %2",
+            info.origPath, info.deletionDate.toString( Qt::ISODate )
+        )
+    );
     return true;
 }
 
