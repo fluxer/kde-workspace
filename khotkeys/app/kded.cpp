@@ -13,11 +13,7 @@
 #include "action_data/action_data_group.h"
 #include "action_data/menuentry_shortcut_action_data.h"
 #include "actions/actions.h"
-
 #include "shortcuts_handler.h"
-
-#include "triggers/gestures.h"
-
 
 #include <kdebug.h>
 #include <kglobalaccel.h>
@@ -98,11 +94,6 @@ void KHotKeysModule::reread_configuration()
     // Load the settings
     _settings.reread_settings(true);
 
-    KHotKeys::gesture_handler->set_mouse_button( _settings.gestureMouseButton() );
-    KHotKeys::gesture_handler->set_timeout( _settings.gestureTimeOut() );
-    kDebug() << _settings.areGesturesDisabled();
-    KHotKeys::gesture_handler->enable( !_settings.areGesturesDisabled() );
-    KHotKeys::gesture_handler->set_exclude( _settings.gesturesExclude() );
     actions_root = _settings.actions();
     KHotKeys::khotkeys_set_active( true );
     }

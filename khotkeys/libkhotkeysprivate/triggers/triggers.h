@@ -31,7 +31,6 @@
 
 #include "input.h"
 #include "windows_handler.h"
-#include "triggers/gestures.h"
 
 #include <QKeySequence>
 
@@ -61,10 +60,9 @@ class KDE_EXPORT Trigger
 
         enum TriggerType
             {
-            GestureTriggerType  = 0x01, //!< @see GestureTrigger
-            ShortcutTriggerType = 0x02, //!< @see ShortcutTrigger
-            WindowTriggerType   = 0x04, //!< @see WindowTrigger
-            TriggerListType     = 0x08, //!< @see Trigger_list
+            ShortcutTriggerType = 0x01, //!< @see ShortcutTrigger
+            WindowTriggerType   = 0x02, //!< @see WindowTrigger
+            TriggerListType     = 0x04, //!< @see Trigger_list
             AllTypes            = 0xFF  //!< All types. For convenience.
             };
 
@@ -304,57 +302,6 @@ class KDE_EXPORT WindowTrigger : public QObject, public Trigger
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(WindowTrigger::WindowEvents)
 
-/**
- * This class handles the storage of gesture data; it also matches gestures
- * and links the gesture to an action.
- * One object equals one configured gesture.
- */
-class GestureTrigger;
-class GestureTriggerVisitor
-    {
-public:
-    virtual ~GestureTriggerVisitor();
-    virtual void visit(GestureTrigger&) = 0;
-    };
-
-class KDE_EXPORT GestureTrigger
-    : public QObject, public Trigger
-    {
-    Q_OBJECT
-    typedef Trigger base;
-    public:
-        GestureTrigger( ActionData* data, const StrokePoints& pointdata_P = StrokePoints() );
-
-        virtual ~GestureTrigger();
-        virtual void cfg_write( KConfigGroup& cfg_P ) const;
-        virtual Trigger* copy( ActionData* data_P ) const;
-        virtual const QString description() const;
-        const StrokePoints& pointData() const;
-
-        //! Set the point data of the gesture
-        void setPointData(const StrokePoints &data);
-        void setPointData(const QStringList &strings);
-
-        virtual void activate( bool activate_P );
-
-        virtual TriggerType type() const { return GestureTriggerType; }
-
-        /**
-         * Acyclic visitor pattern
-         */
-        virtual void accept(TriggerVisitor&);
-
-    protected Q_SLOTS:
-        void handle_gesture( const StrokePoints& gesture_P );
-    Q_SIGNALS:
-        void gotScore( ActionData* const data, const qreal score );
-
-    private:
-        qreal comparePointData(const StrokePoints &a, const StrokePoints &b) const;
-        inline qreal angleSquareDifference(qreal alpha, qreal beta) const;
-
-        StrokePoints _pointdata;
-    };
 } // namespace KHotKeys
 
 

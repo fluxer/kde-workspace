@@ -37,8 +37,7 @@ namespace KHotKeys
 // Settings
 
 Settings::Settings()
-    : m_actions( NULL ),
-      gestures_exclude(NULL)
+    : m_actions( NULL )
     {
     reinitialize();
     }
@@ -61,36 +60,15 @@ const ActionDataGroup *Settings::actions() const
     return m_actions;
     }
 
-
-bool Settings::areGesturesDisabled() const
-    {
-    return gestures_disabled;
-    }
-
-
 void Settings::disableDaemon()
     {
     daemon_disabled = true;
     }
 
-
-void Settings::disableGestures()
-    {
-    gestures_disabled = true;
-    }
-
-
 void Settings::enableDaemon()
     {
     daemon_disabled = false;
     }
-
-
-void Settings::enableGestures()
-    {
-    gestures_disabled = false;
-    }
-
 
 void Settings::exportTo(
         ActionDataBase *what,
@@ -101,30 +79,6 @@ void Settings::exportTo(
     {
     SettingsWriter writer(this, state, id, allowMerging);
     writer.exportTo(what, config);
-    }
-
-
-int Settings::gestureMouseButton() const
-    {
-    return gesture_mouse_button;
-    }
-
-
-Windowdef_list *Settings::gesturesExclude()
-    {
-    return gestures_exclude;
-    }
-
-
-const Windowdef_list *Settings::gesturesExclude() const
-    {
-    return gestures_exclude;
-    }
-
-
-int Settings::gestureTimeOut() const
-    {
-    return gesture_timeout;
     }
 
 
@@ -162,11 +116,6 @@ void Settings::reinitialize()
     // Rereading settings. First delete what we have
     setActions(NULL);
 
-    gestures_disabled = true;
-    gesture_mouse_button = 2;
-    gesture_timeout = 300;
-    gestures_exclude = NULL,
-
     daemon_disabled = false;
 
     already_imported = QStringList();
@@ -187,26 +136,6 @@ void Settings::setActions( ActionDataGroup *actions )
                 ActionDataGroup::SYSTEM_ROOT);
     m_actions->enable();
     }
-
-
-void Settings::setGesturesExclude( Windowdef_list *gestures )
-    {
-    delete gestures_exclude;
-    gestures_exclude = gestures;
-    }
-
-
-void Settings::setGestureMouseButton( int mouse_button )
-    {
-    gesture_mouse_button = mouse_button;
-    }
-
-
-void Settings::setGestureTimeOut(int timeout)
-    {
-    gesture_timeout = timeout;
-    }
-
 
 ActionDataGroup *Settings::takeActions()
     {
@@ -428,23 +357,6 @@ bool Settings::reread_settings(bool include_disabled)
     already_imported = mainGroup.readEntry(
             "AlreadyImported",
             QStringList());
-
-    // ### Gestures
-    KConfigGroup gesturesConfig( &config, "Gestures" );
-    // ### Read the gesture configurations. Reinitialize sets the default.
-    // Keep them
-    gestures_disabled = gesturesConfig.readEntry( "Disabled", gestures_disabled);
-    gesture_mouse_button = gesturesConfig.readEntry( "MouseButton", gesture_mouse_button );
-    gesture_mouse_button = qBound( 2, gesture_mouse_button, 9 );
-    gesture_timeout = gesturesConfig.readEntry( "Timeout", gesture_timeout );
-
-    // Somhow gesture_timeout found it's way into my config file. Fix it for
-    // everyone else too.
-    if (gesture_timeout < 100) gesture_timeout = 300;
-
-    KConfigGroup gesturesExcludeConfig( &config, "GesturesExclude" );
-    delete gestures_exclude;
-    gestures_exclude = new Windowdef_list( gesturesExcludeConfig );
 
     bool rc = read_settings(m_actions, config, include_disabled, Retain);
     // Ensure the system groups exist

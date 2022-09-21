@@ -150,24 +150,6 @@ public:
     bool loadDefaults();
 
     /**
-     * @name Gestures
-     */
-    //@{
-    void disableGestures();
-    void enableGestures();
-    bool areGesturesDisabled() const;
-
-    int gestureMouseButton() const;
-    void setGestureMouseButton( int );
-
-    int gestureTimeOut() const;
-    void setGestureTimeOut(int);
-
-    void setGesturesExclude( Windowdef_list *gestures );
-    Windowdef_list *gesturesExclude();
-    const Windowdef_list *gesturesExclude() const;
-
-    /**
      * Check if the given config file is a valid khotkeys file
      */
     bool isConfigFileValid(KConfigBase const &config, ImportType ask);
@@ -202,31 +184,6 @@ private:
      * TODO
      */
     ActionDataGroup* m_actions;
-
-    /**
-     * @name Gestures
-     */
-    //@{
-    /**
-     * Gestures globally disabled?
-     */
-    bool gestures_disabled;
-
-    /**
-     * Mouse button used for gestures.
-     */
-    int gesture_mouse_button;
-
-    /**
-     * Gesture timeout
-     */
-    int gesture_timeout;
-
-    /**
-     * Windows to exclude from gestures
-     */
-    Windowdef_list* gestures_exclude;
-    //@}
 
     /**
      * KHotKeys daemon disabled?

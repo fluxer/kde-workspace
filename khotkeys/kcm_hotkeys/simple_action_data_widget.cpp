@@ -25,7 +25,6 @@
 #include "actions/keyboard_input_action_widget.h"
 #include "triggers/shortcut_trigger_widget.h"
 #include "triggers/window_trigger_widget.h"
-#include "triggers/gesture_trigger_widget.h"
 
 #include <KDebug>
 
@@ -104,11 +103,6 @@ void SimpleActionDataWidget::setActionData( KHotKeys::SimpleActionData* pData )
             case KHotKeys::Trigger::WindowTriggerType:
                 kDebug() << "2";
                 currentTrigger = new WindowTriggerWidget( static_cast<KHotKeys::WindowTrigger*>(trg) );
-                break;
-
-            case KHotKeys::Trigger::GestureTriggerType:
-                kDebug() << "3";
-                currentTrigger = new GestureTriggerWidget( static_cast<KHotKeys::GestureTrigger*>(trg) );
                 break;
 
             default:

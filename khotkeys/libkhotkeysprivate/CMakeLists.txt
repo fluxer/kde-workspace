@@ -37,8 +37,6 @@ set(khotkeysprivate_SRCS
     conditions/conditions_visitor.cpp
 
     # TRIGGERS
-    triggers/gestures.cpp
-    triggers/gesture_trigger.cpp
     triggers/shortcut_trigger.cpp
     triggers/trigger.cpp
     triggers/trigger_list.cpp

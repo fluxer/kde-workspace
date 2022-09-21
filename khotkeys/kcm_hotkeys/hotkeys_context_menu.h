@@ -64,7 +64,6 @@ private Q_SLOTS:
 
     void newGlobalShortcutActionAction(int);
     void newWindowTriggerActionAction(int);
-    void newMouseGestureTriggerActionAction(int);
     void newGroupAction();
 
 private:

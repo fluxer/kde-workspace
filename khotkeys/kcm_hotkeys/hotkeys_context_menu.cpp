@@ -181,19 +181,6 @@ void HotkeysTreeViewContextMenu::createTriggerMenus(
             this, SLOT(newWindowTriggerActionAction(int)) );
         }
 
-    if (triggerTypes & KHotKeys::Trigger::GestureTriggerType)
-        {
-        QSignalMapper *mapper = new QSignalMapper(this);
-
-        QMenu *menu = new QMenu( i18n("Mouse Gesture Action") );
-        populateTriggerMenu(menu, mapper, actionTypes);
-        newMenu->addMenu(menu);
-
-        connect(
-            mapper, SIGNAL(mapped(int)),
-            this, SLOT(newMouseGestureTriggerActionAction(int)) );
-        }
-
     addMenu(newMenu);
     }
 
@@ -311,35 +298,6 @@ void HotkeysTreeViewContextMenu::newGlobalShortcutActionAction( int actionType )
     KHotKeys::SimpleActionData *data =
         new KHotKeys::SimpleActionData( 0, i18n("New Action"), i18n("Comment"));
     data->set_trigger( new KHotKeys::ShortcutTrigger( data, KShortcut() ) );
-    data->enable();
-
-    createActionFromType(actionType, data);
-
-    QModelIndex newAct = _view->model()->insertActionData(data, parent);
-    _view->setCurrentIndex(newAct);
-    _view->edit(newAct);
-    _view->resizeColumnToContents(KHotkeysModel::NameColumn);
-    }
-
-
-void HotkeysTreeViewContextMenu::newMouseGestureTriggerActionAction( int actionType )
-    {
-    QModelIndex parent;      // == root element
-    if (!_index.isValid()
-        || _view->model()->data( _index.sibling( _index.row(), KHotkeysModel::IsGroupColumn)).toBool())
-        {
-        // if the index is invalid (root index) or represents an group use it.
-        parent = _index;
-        }
-    else
-        {
-        // It is an action. Take the parent.
-        parent = _index.parent();
-        }
-
-    KHotKeys::SimpleActionData *data =
-        new KHotKeys::SimpleActionData( 0, i18n("New Action"), i18n("Comment"));
-    data->set_trigger( new KHotKeys::GestureTrigger(data) );
     data->enable();
 
     createActionFromType(actionType, data);

@@ -8,7 +8,6 @@ very soon :
 
 SOON :
 
-pri modify gestures vymazat stav
 nektere simple akce by mely mit i conditions (nebo alespon jedno okno)
 QPtrList -> QValueList
 pouzit Q/KApp( nogui ? ) v daemonu ?

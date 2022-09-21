@@ -254,19 +254,6 @@ void SettingsWriter::writeTo(KConfigBase &config)
     // CHECKME Count still needed????
     // int cnt = write_actions( dataGroup, _settings->actions(), true );
     // mainGroup.writeEntry( "Autostart", cnt != 0 && !_settings->isDaemonDisabled() );
-
-    // Write the gestures configuration
-    KConfigGroup gesturesConfig( &config, "Gestures" );
-    gesturesConfig.writeEntry( "Disabled", _settings->areGesturesDisabled() );
-    gesturesConfig.writeEntry( "MouseButton", _settings->gestureMouseButton() );
-    gesturesConfig.writeEntry( "Timeout", _settings->gestureTimeOut() );
-    if( _settings->gesturesExclude() != NULL )
-        {
-        KConfigGroup gesturesExcludeConfig( &config, "GesturesExclude" );
-        _settings->gesturesExclude()->cfg_write( gesturesExcludeConfig );
-        }
-    else
-        config.deleteGroup( "GesturesExclude" );
     }
 
 

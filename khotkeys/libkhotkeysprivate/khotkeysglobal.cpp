@@ -18,7 +18,6 @@
 #include "input.h"
 #include "windows_handler.h"
 #include "triggers/triggers.h"
-#include "triggers/gestures.h"
 #include "shortcuts_handler.h"
 
 namespace KHotKeys
@@ -40,10 +39,6 @@ void init_global_data( bool active_P, QObject* owner_P )
     if (!windows_handler)
         {
         windows_handler = new WindowsHandler( active_P, owner_P );
-        }
-    if (!gesture_handler)
-        {
-        gesture_handler = new Gesture( active_P, owner_P );
         }
     khotkeys_set_active( false );
     }

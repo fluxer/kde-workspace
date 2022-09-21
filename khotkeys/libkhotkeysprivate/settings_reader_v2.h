@@ -49,8 +49,7 @@ class SettingsReaderV2 :
 
         public KHotKeys::TriggerVisitor,
         public KHotKeys::WindowTriggerVisitor,
-        public KHotKeys::ShortcutTriggerVisitor,
-        public KHotKeys::GestureTriggerVisitor
+        public KHotKeys::ShortcutTriggerVisitor
     {
 public:
 
@@ -90,7 +89,6 @@ public:
     virtual void visit(KHotKeys::KeyboardInputAction&);
     virtual void visit(KHotKeys::MenuEntryAction&);
 
-    virtual void visit(KHotKeys::GestureTrigger&);
     virtual void visit(KHotKeys::ShortcutTrigger&);
     virtual void visit(KHotKeys::WindowTrigger&);
 private:

@@ -189,7 +189,6 @@ KHotKeys::ActionDataBase *SettingsReaderV2::readActionData(
     else if (type == "SIMPLE_ACTION_DATA"
           || type == "COMMAND_URL_SHORTCUT_ACTION_DATA"
           || type == "DCOP_SHORTCUT_ACTION_DATA" || type == "DBUS_SHORTCUT_ACTION_DATA"
-          || type == "KEYBOARD_INPUT_GESTURE_ACTION_DATA"
           || type == "KEYBOARD_INPUT_SHORTCUT_ACTION_DATA"
           || type == "ACTIVATE_WINDOW_SHORTCUT_ACTION_DATA")
         {
@@ -309,8 +308,6 @@ KHotKeys::Trigger_list *SettingsReaderV2::readTriggerList(
             trigger = new KHotKeys::ShortcutTrigger(parent, KShortcut(), uuid);
         else if (type == "WINDOW")
             trigger = new KHotKeys::WindowTrigger(parent);
-        else if (type == "GESTURE")
-            trigger = new KHotKeys::GestureTrigger(parent);
         else
             {
             kWarning() << "khotkeys: Unknown trigger type" << type;
@@ -347,12 +344,6 @@ void SettingsReaderV2::visit(KHotKeys::DBusAction& action)
     action.set_remote_object(_config->readEntry( "RemoteObj" ));
     action.set_called_function(_config->readEntry( "Call" ));
     action.set_arguments(_config->readEntry( "Arguments" ));
-    }
-
-
-void SettingsReaderV2::visit(KHotKeys::GestureTrigger& trigger)
-    {
-    trigger.setPointData(_config->readEntry("GesturePointData", QStringList()));
     }
 
 void SettingsReaderV2::visit(KHotKeys::KeyboardInputAction& action)
