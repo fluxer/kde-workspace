@@ -128,21 +128,6 @@ DolphinPart::DolphinPart(QWidget* parentWidget, QObject* parent, const QVariantL
     connect(clipboard, SIGNAL(dataChanged()),
             this, SLOT(updatePasteAction()));
 
-    // Create file info and listing filter extensions.
-    // NOTE: Listing filter needs to be instantiated after the creation of the view.
-    new DolphinPartFileInfoExtension(this);
-
-    new DolphinPartListingFilterExtension(this);
-
-    KDirLister* lister = m_view->m_model->m_dirLister;
-    if (lister) {
-        DolphinPartListingNotificationExtension* notifyExt = new DolphinPartListingNotificationExtension(this);
-        connect(lister, SIGNAL(newItems(KFileItemList)), notifyExt, SLOT(slotNewItems(KFileItemList)));
-        connect(lister, SIGNAL(itemsDeleted(KFileItemList)), notifyExt, SLOT(slotItemsDeleted(KFileItemList)));
-    } else {
-        kWarning() << "NULL KDirLister object! KParts::ListingNotificationExtension will NOT be supported";
-    }
-
     createActions();
     m_actionHandler->updateViewActions();
     slotSelectionChanged(KFileItemList()); // initially disable selection-dependent actions

@@ -21,7 +21,6 @@
 #define DOLPHINPART_EXT_H
 
 #include <kparts/browserextension.h>
-#include <kparts/fileinfoextension.h>
 #include <kparts/listingextension.h>
 
 class DolphinPart;
@@ -43,50 +42,6 @@ public Q_SLOTS:
 
 private:
     DolphinPart* m_part;
-};
-
-class DolphinPartFileInfoExtension : public KParts::FileInfoExtension
-{
-    Q_OBJECT
-
-public:
-    DolphinPartFileInfoExtension(DolphinPart* part);
-
-    virtual QueryModes supportedQueryModes() const;
-    virtual bool hasSelection() const;
-
-    virtual KFileItemList queryFor(QueryMode mode) const;
-
-private:
-    DolphinPart* m_part;
-};
-
-class DolphinPartListingFilterExtension : public KParts::ListingFilterExtension
-{
-    Q_OBJECT
-
-public:
-    DolphinPartListingFilterExtension(DolphinPart* part);
-    virtual FilterModes supportedFilterModes() const;
-    virtual bool supportsMultipleFilters(FilterMode mode) const;
-    virtual QVariant filter(FilterMode mode) const;
-    virtual void setFilter(FilterMode mode, const QVariant& filter);
-
-private:
-    DolphinPart* m_part;
-};
-
-class DolphinPartListingNotificationExtension : public KParts::ListingNotificationExtension
-{
-    Q_OBJECT
-
-public:
-    DolphinPartListingNotificationExtension(DolphinPart* part);
-    virtual NotificationEventTypes supportedNotificationEventTypes() const;
-
-public Q_SLOTS:
-    void slotNewItems(const KFileItemList&);
-    void slotItemsDeleted(const KFileItemList&);
 };
 
 #endif
