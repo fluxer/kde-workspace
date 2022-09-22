@@ -105,17 +105,7 @@ int main(int argc, char **argv) {
     KCmdLineArgs::addStdCmdLineOptions();
 
     KCmdLineOptions options;
-    options.add("importmoz <filename>", ki18n("Import bookmarks from a file in Mozilla format"));
-    options.add("importns <filename>", ki18n("Import bookmarks from a file in Netscape (4.x and earlier) format"));
-    options.add("importie <filename>", ki18n("Import bookmarks from a file in Internet Explorer's Favorites format"));
-    options.add("importopera <filename>", ki18n("Import bookmarks from a file in Opera format"));
     options.add("importkde3 <filename>", ki18n("Import bookmarks from a file in KDE2 format"));
-    options.add("importgaleon <filename>", ki18n("Import bookmarks from a file in Galeon format"));
-    options.add("exportmoz <filename>", ki18n("Export bookmarks to a file in Mozilla format"));
-    options.add("exportns <filename>", ki18n("Export bookmarks to a file in Netscape (4.x and earlier) format"));
-    options.add("exporthtml <filename>", ki18n("Export bookmarks to a file in a printable HTML format"));
-    options.add("exportie <filename>", ki18n("Export bookmarks to a file in Internet Explorer's Favorites format"));
-    options.add("exportopera <filename>", ki18n("Export bookmarks to a file in Opera format"));
     options.add("address <address>", ki18n("Open at the given position in the bookmarks file"));
     options.add("customcaption <caption>", ki18n("Set the user-readable caption, for example \"Konsole\""));
     options.add("nobrowser", ki18n("Hide all browser related functions"));
@@ -126,11 +116,7 @@ int main(int argc, char **argv) {
     KCmdLineArgs::addCmdLineOptions(options);
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    bool isGui = !(args->isSet("exportmoz") || args->isSet("exportns") || args->isSet("exporthtml")
-                || args->isSet("exportie") || args->isSet("exportopera")
-                || args->isSet("importmoz") || args->isSet("importns")
-                || args->isSet("importie") || args->isSet("importopera")
-                || args->isSet("importkde3") || args->isSet("importgaleon"));
+    bool isGui = !args->isSet("importkde3");
 
     bool browser = args->isSet("browser");
 
@@ -145,28 +131,10 @@ int main(int argc, char **argv) {
 
     if (!isGui) {
         GlobalBookmarkManager::self()->createManager(filename, QString(), new CommandHistory());
-        GlobalBookmarkManager::ExportType exportType = GlobalBookmarkManager::MozillaExport; // uumm.. can i just set it to -1 ?
         int got = 0;
         const char *arg, *arg2 = 0, *importType = 0;
-        if (arg = "exportmoz",  args->isSet(arg)) { exportType = GlobalBookmarkManager::MozillaExport;  arg2 = arg; got++; }
-        if (arg = "exportns",   args->isSet(arg)) { exportType = GlobalBookmarkManager::NetscapeExport; arg2 = arg; got++; }
-        if (arg = "exporthtml", args->isSet(arg)) { exportType = GlobalBookmarkManager::HTMLExport;     arg2 = arg; got++; }
-        if (arg = "exportie",   args->isSet(arg)) { exportType = GlobalBookmarkManager::IEExport;       arg2 = arg; got++; }
-        if (arg = "exportopera", args->isSet(arg)) { exportType = GlobalBookmarkManager::OperaExport;    arg2 = arg; got++; }
-        if (arg = "importmoz",  args->isSet(arg)) { importType = "Moz";   arg2 = arg; got++; }
-        if (arg = "importns",   args->isSet(arg)) { importType = "NS";    arg2 = arg; got++; }
-        if (arg = "importie",   args->isSet(arg)) { importType = "IE";    arg2 = arg; got++; }
-        if (arg = "importopera", args->isSet(arg)) { importType = "Opera"; arg2 = arg; got++; }
-        if (arg = "importgaleon", args->isSet(arg)) { importType = "Galeon"; arg2 = arg; got++; }
         if (arg = "importkde3", args->isSet(arg)) { importType = "KDE2"; arg2 = arg; got++; }
-        if (!importType && arg2) {
-            Q_ASSERT(arg2);
-            // TODO - maybe an xbel export???
-            if (got > 1) // got == 0 isn't possible as !isGui is dependant on "export.*"
-                KCmdLineArgs::usage(I18N_NOOP("You may only specify a single --export option."));
-            QString path = args->getOption(arg2);
-            GlobalBookmarkManager::self()->doExport(exportType, path);
-        } else if (importType) {
+        if (importType) {
             if (got > 1) // got == 0 isn't possible as !isGui is dependant on "import.*"
                 KCmdLineArgs::usage(I18N_NOOP("You may only specify a single --import option."));
             QString path = args->getOption(arg2);

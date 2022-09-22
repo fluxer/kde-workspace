@@ -9,21 +9,6 @@
   <Separator/>
   <Menu name="import" noMerge="1"><text>&amp;Import</text>
     <Action name="importKDE2"/>
-    <Action name="importIE"/>
-    <Action name="importOpera"/>
-    <Action name="importMoz"/>
-    <Action name="importNS"/>
-    <Action name="importGaleon"/>
-    <Separator/>
-    <Action name="importCrashes"/>
-  </Menu>
-  <Menu name="export" noMerge="1"><text>&amp;Export</text>
-    <Action name="exportIE"/>
-    <Action name="exportOpera"/>
-    <Action name="exportMoz"/>
-    <Action name="exportNS"/>
-    <Separator/>
-    <Action name="exportHTML"/>
   </Menu>
   <Separator/>
   <Action name="file_quit"/>
@@ -157,11 +142,6 @@
     <Action name="file_open"/>
     <Action name="file_save_as"/>
     <Action name="file_quit"/>
-    <Action name="exportOpera"/>
-    <Action name="exportHTML"/>
-    <Action name="exportIE"/>
-    <Action name="exportNS"/>
-    <Action name="exportMoz"/>
     <Action name="expandall"/>
     <Action name="collapseall"/>
   </Enable>
@@ -177,13 +157,7 @@
     <Action name="edit_cut"/>
     <Action name="edit_paste"/>
     <!-- automated by K3CommandHistory: <Action name="edit_redo"/> <Action name="edit_undo"/> -->
-    <Action name="importGaleon"/>
-    <Action name="importIE"/>
     <Action name="importKDE2"/>
-    <Action name="importMoz"/>
-    <Action name="importNS"/>
-    <Action name="importOpera"/>
-    <Action name="importCrashes"/>
     <Action name="insertseparator"/>
     <Action name="newbookmark"/>
     <Action name="newfolder"/>

@@ -29,10 +29,7 @@
 #include "importers.h"
 #include "favicons.h"
 #include "testlink.h"
-#include "exporters.h"
 #include "bookmarkinfowidget.h"
-
-#include <stdlib.h>
 
 #include <QClipboard>
 #include <QtCore/QMimeData>
@@ -51,15 +48,12 @@
 #include <kfiledialog.h>
 #include <krun.h>
 #include <kstandarddirs.h>
-
 #include <kbookmark.h>
 #include <kbookmarkmanager.h>
 #include <kbookmarkimporter.h>
-
-#include <kbookmarkimporter_ie.h>
-#include <kbookmarkimporter_opera.h>
-#include <kbookmarkimporter_ns.h>
 #include <kbookmarkexporter.h>
+
+#include <stdlib.h>
 
 // decoupled from resetActions in toplevel.cpp
 // as resetActions simply uses the action groups
@@ -188,69 +182,12 @@ void KEBApp::createActions() {
     m_actionsImplCancelFavIconUpdates->setText(i18n("Cancel &Favicon Updates"));
     connect(m_actionsImplCancelFavIconUpdates, SIGNAL(triggered()), m_actionsImpl, SLOT(slotCancelFavIconUpdates()));
 
-    KAction* m_actionsImplImportNS = actionCollection()->addAction("importNS");
-    m_actionsImplImportNS->setObjectName( QLatin1String("NS" ));
-    m_actionsImplImportNS->setIcon(KIcon("netscape"));
-    m_actionsImplImportNS->setText(i18n("Import &Netscape Bookmarks..."));
-    connect(m_actionsImplImportNS, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-
-    KAction* m_actionsImplImportOpera = actionCollection()->addAction("importOpera");
-    m_actionsImplImportOpera->setObjectName( QLatin1String("Opera" ));
-    m_actionsImplImportOpera->setIcon(KIcon("opera"));
-    m_actionsImplImportOpera->setText(i18n("Import &Opera Bookmarks..."));
-    connect(m_actionsImplImportOpera, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-/*
-    KAction* m_actionsImplImportCrashes = actionCollection()->addAction("importCrashes");
-    m_actionsImplImportCrashes->setObjectName( QLatin1String("Crashes" ));
-    m_actionsImplImportCrashes->setText(i18n("Import All &Crash Sessions as Bookmarks..."));
-    connect(m_actionsImplImportCrashes, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-*/
-    KAction* m_actionsImplImportGaleon = actionCollection()->addAction("importGaleon");
-    m_actionsImplImportGaleon->setObjectName( QLatin1String("Galeon" ));
-    m_actionsImplImportGaleon->setText(i18n("Import &Galeon Bookmarks..."));
-    connect(m_actionsImplImportGaleon, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-
     KAction* m_actionsImplImportKDE2 = actionCollection()->addAction("importKDE2");
     m_actionsImplImportKDE2->setObjectName( QLatin1String("KDE2" ));
     m_actionsImplImportKDE2->setIcon(KIcon("kde"));
     m_actionsImplImportKDE2->setText(i18n("Import &KDE 2 or KDE 3 Bookmarks..."));
 
     connect(m_actionsImplImportKDE2, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-
-    KAction* m_actionsImplImportIE = actionCollection()->addAction("importIE");
-    m_actionsImplImportIE->setObjectName( QLatin1String("IE" ));
-    m_actionsImplImportIE->setText(i18n("Import &Internet Explorer Bookmarks..."));
-    connect(m_actionsImplImportIE, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-
-    KAction* m_actionsImplImportMoz = actionCollection()->addAction("importMoz");
-    m_actionsImplImportMoz->setObjectName( QLatin1String("Moz" ));
-    m_actionsImplImportMoz->setIcon(KIcon("mozilla"));
-    m_actionsImplImportMoz->setText(i18n("Import &Mozilla Bookmarks..."));
-    connect(m_actionsImplImportMoz, SIGNAL(triggered()), m_actionsImpl, SLOT(slotImport()));
-
-    KAction* m_actionsImplExportNS = actionCollection()->addAction("exportNS");
-    m_actionsImplExportNS->setIcon(KIcon("netscape"));
-    m_actionsImplExportNS->setText(i18n("Export &Netscape Bookmarks"));
-    connect(m_actionsImplExportNS, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExportNS()));
-
-    KAction* m_actionsImplExportOpera = actionCollection()->addAction("exportOpera");
-    m_actionsImplExportOpera->setIcon(KIcon("opera"));
-    m_actionsImplExportOpera->setText(i18n("Export &Opera Bookmarks..."));
-    connect(m_actionsImplExportOpera, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExportOpera()));
-
-    KAction* m_actionsImplExportHTML = actionCollection()->addAction("exportHTML");
-    m_actionsImplExportHTML->setIcon(KIcon("text-html"));
-    m_actionsImplExportHTML->setText(i18n("Export &HTML Bookmarks..."));
-    connect(m_actionsImplExportHTML, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExportHTML()));
-
-    KAction* m_actionsImplExportIE = actionCollection()->addAction("exportIE");
-    m_actionsImplExportIE->setText(i18n("Export &Internet Explorer Bookmarks..."));
-    connect(m_actionsImplExportIE, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExportIE()));
-
-    KAction* m_actionsImplExportMoz = actionCollection()->addAction("exportMoz");
-    m_actionsImplExportMoz->setIcon(KIcon("mozilla"));
-    m_actionsImplExportMoz->setText(i18n("Export &Mozilla Bookmarks..."));
-    connect(m_actionsImplExportMoz, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExportMoz()));
 }
 
 ActionsImpl::ActionsImpl(QObject* parent, KBookmarkModel* model)
@@ -276,56 +213,6 @@ void ActionsImpl::slotSaveAs() {
         = KFileDialog::getSaveFileName(QString(), "*.xml", KEBApp::self());
     if (!saveFilename.isEmpty())
         GlobalBookmarkManager::self()->saveAs(saveFilename);
-}
-
-void GlobalBookmarkManager::doExport(ExportType type, const QString & _path) {
-    //it can be null when we use command line to export => there is not interface
-    if ( KEBApp::self() && KEBApp::self()->bkInfo() )
-        KEBApp::self()->bkInfo()->commitChanges();
-    QString path(_path);
-    // TODO - add a factory and make all this use the base class
-    if (type == OperaExport) {
-        if (path.isNull())
-            path = KOperaBookmarkImporterImpl().findDefaultLocation(true);
-        KOperaBookmarkExporterImpl exporter(mgr(), path);
-        exporter.write(mgr()->root());
-        return;
-
-    } else if (type == HTMLExport) {
-        if (path.isNull())
-            path = KFileDialog::getSaveFileName(
-                        QDir::homePath(),
-                        i18n("*.html|HTML Bookmark Listing"),
-                        KEBApp::self() );
-        HTMLExporter exporter;
-        exporter.write(mgr()->root(), path);
-        return;
-
-    } else if (type == IEExport) {
-        if (path.isNull())
-            path = KIEBookmarkImporterImpl().findDefaultLocation(true);
-        KIEBookmarkExporterImpl exporter(mgr(), path);
-        exporter.write(mgr()->root());
-        return;
-    }
-
-    bool moz = (type == MozillaExport);
-
-    if (path.isNull()) {
-        if (moz) {
-            KMozillaBookmarkImporterImpl importer;
-            path = importer.findDefaultLocation(true);
-        }
-        else {
-            KNSBookmarkImporterImpl importer;
-            path = importer.findDefaultLocation(true);
-        }
-    }
-
-    if (!path.isEmpty()) {
-        KNSBookmarkExporterImpl exporter(mgr(), path);
-        exporter.write(mgr()->root());
-    }
 }
 
 void KEBApp::setCancelFavIconUpdatesEnabled(bool enabled) {
@@ -413,24 +300,6 @@ void ActionsImpl::slotImport() {
     commandHistory()->addCommand(import);
     //FIXME select import->groupAddress
 }
-
-// TODO - this is getting ugly and repetitive. cleanup!
-
-void ActionsImpl::slotExportOpera() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    GlobalBookmarkManager::self()->doExport(GlobalBookmarkManager::OperaExport); }
-void ActionsImpl::slotExportHTML() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    GlobalBookmarkManager::self()->doExport(GlobalBookmarkManager::HTMLExport); }
-void ActionsImpl::slotExportIE() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    GlobalBookmarkManager::self()->doExport(GlobalBookmarkManager::IEExport); }
-void ActionsImpl::slotExportNS() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    GlobalBookmarkManager::self()->doExport(GlobalBookmarkManager::NetscapeExport); }
-void ActionsImpl::slotExportMoz() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    GlobalBookmarkManager::self()->doExport(GlobalBookmarkManager::MozillaExport); }
 
 /* -------------------------------------- */
 

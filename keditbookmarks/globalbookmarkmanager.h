@@ -31,8 +31,6 @@ class GlobalBookmarkManager : public QObject
 {
     Q_OBJECT
 public:
-    typedef enum {HTMLExport, OperaExport, IEExport, MozillaExport, NetscapeExport} ExportType;
-
     // TODO port to K_GLOBAL_STATIC if we keep this class
     static GlobalBookmarkManager* self() { if (!s_mgr) { s_mgr = new GlobalBookmarkManager(); } return s_mgr; }
     ~GlobalBookmarkManager();
@@ -48,7 +46,6 @@ public:
     void notifyManagers();
     bool managerSave();
     void saveAs(const QString &fileName);
-    void doExport(ExportType type, const QString & path = QString());
     void setUpdate(bool update);
 
     void reloadConfig();

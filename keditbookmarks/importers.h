@@ -96,16 +96,6 @@ private:
    virtual void doExecute(const KBookmarkGroup &);
 };
 
-class GaleonImportCommand : public XBELImportCommand
-{
-public:
-   GaleonImportCommand(KBookmarkModel* model) : XBELImportCommand(model) { setVisibleName(i18n("Galeon")); }
-   virtual void import(const QString &fileName, bool folder) {
-      init(fileName, folder, "", false);
-   }
-   virtual QString requestFilename() const;
-};
-
 class KDE2ImportCommand : public XBELImportCommand
 {
 public:
@@ -114,61 +104,6 @@ public:
       init(fileName, folder, "", false);
    }
    virtual QString requestFilename() const;
-};
-
-// part pure
-class HTMLImportCommand : public ImportCommand
-{
-public:
-   HTMLImportCommand(KBookmarkModel* model) : ImportCommand(model) {}
-   virtual void import(const QString &fileName, bool folder) = 0;
-   virtual QString requestFilename() const = 0;
-private:
-   virtual void doExecute(const KBookmarkGroup &);
-};
-
-class NSImportCommand : public HTMLImportCommand
-{
-public:
-   NSImportCommand(KBookmarkModel* model) : HTMLImportCommand(model) { setVisibleName(i18n("Netscape")); }
-   virtual void import(const QString &fileName, bool folder) {
-      init(fileName, folder, "netscape", false);
-   }
-   virtual QString requestFilename() const;
-};
-
-class MozImportCommand : public HTMLImportCommand
-{
-public:
-   MozImportCommand(KBookmarkModel* model) : HTMLImportCommand(model) { setVisibleName(i18n("Mozilla")); }
-   virtual void import(const QString &fileName, bool folder) {
-      init(fileName, folder, "mozilla", true);
-   }
-   virtual QString requestFilename() const;
-};
-
-class IEImportCommand : public ImportCommand
-{
-public:
-   IEImportCommand(KBookmarkModel* model) : ImportCommand(model) { setVisibleName(i18n("IE")); }
-   virtual void import(const QString &fileName, bool folder) {
-      init(fileName, folder, "", false);
-   }
-   virtual QString requestFilename() const;
-private:
-   virtual void doExecute(const KBookmarkGroup &);
-};
-
-class OperaImportCommand : public ImportCommand
-{
-public:
-   OperaImportCommand(KBookmarkModel* model) : ImportCommand(model) { setVisibleName(i18n("Opera")); }
-   virtual void import(const QString &fileName, bool folder) {
-      init(fileName, folder, "opera", false);
-   }
-   virtual QString requestFilename() const;
-private:
-   virtual void doExecute(const KBookmarkGroup &);
 };
 
 #endif

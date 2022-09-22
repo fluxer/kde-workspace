@@ -30,19 +30,13 @@
 #include <QtCore/QRegExp>
 #include <kdebug.h>
 #include <klocale.h>
-
+#include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kfiledialog.h>
-
 #include <kbookmark.h>
 #include <kbookmarkmanager.h>
-
 #include <kbookmarkimporter.h>
-#include <kbookmarkimporter_ie.h>
-#include <kbookmarkimporter_opera.h>
-//#include <kbookmarkimporter_crash.h>
 #include <kbookmarkdombuilder.h>
-#include <kbookmarkimporter_ns.h>
 
 
 ImportCommand::ImportCommand(KBookmarkModel* model)
@@ -62,13 +56,7 @@ QString ImportCommand::folder() const {
 
 ImportCommand* ImportCommand::importerFactory(KBookmarkModel* model, const QString &type)
 {
-    if (type == "Galeon") return new GaleonImportCommand(model);
-    else if (type == "IE") return new IEImportCommand(model);
-    else if (type == "KDE2") return new KDE2ImportCommand(model);
-    else if (type == "Opera") return new OperaImportCommand(model);
-    //else if (type == "Crashes") return new CrashesImportCommand();
-    else if (type == "Moz") return new MozImportCommand(model);
-    else if (type == "NS") return new NSImportCommand(model);
+    if (type == "KDE2") return new KDE2ImportCommand(model);
     else {
         kError() << "ImportCommand::importerFactory() - invalid type (" << type << ")!" << endl;
         return 0;
@@ -171,69 +159,12 @@ QString ImportCommand::affectedBookmarks() const
 
 /* -------------------------------------- */
 
-QString MozImportCommand::requestFilename() const {
-    static KMozillaBookmarkImporterImpl importer;
-    return importer.findDefaultLocation();
-}
-
-QString NSImportCommand::requestFilename() const {
-    static KNSBookmarkImporterImpl importer;
-    return importer.findDefaultLocation();
-}
-
-QString OperaImportCommand::requestFilename() const {
-    static KOperaBookmarkImporterImpl importer;
-    return importer.findDefaultLocation();
-}
-
-QString IEImportCommand::requestFilename() const {
-    static KIEBookmarkImporterImpl importer;
-    return importer.findDefaultLocation();
-}
-
-// following two are really just xbel
-
-QString GaleonImportCommand::requestFilename() const {
-    return KFileDialog::getOpenFileName(
-            QString(QDir::homePath() + "/.galeon"),
-            i18n("*.xbel|Galeon Bookmark Files (*.xbel)"),
-            KEBApp::self());
-}
-
-#include "kstandarddirs.h"
-
+// following is really just xbel
 QString KDE2ImportCommand::requestFilename() const {
     return KFileDialog::getOpenFileName(
             KStandardDirs::locateLocal("data", "konqueror"),
             i18n("*.xml|KDE Bookmark Files (*.xml)"),
             KEBApp::self());
-}
-
-/* -------------------------------------- */
-
-static void parseInto(const KBookmarkGroup &bkGroup, KBookmarkImporterBase *importer) {
-    KBookmarkDomBuilder builder(bkGroup, GlobalBookmarkManager::self()->mgr());
-    builder.connectImporter(importer);
-    importer->parse();
-}
-
-void OperaImportCommand::doExecute(const KBookmarkGroup &bkGroup) {
-    KOperaBookmarkImporterImpl importer;
-    importer.setFilename(m_fileName);
-    parseInto(bkGroup, &importer);
-}
-
-void IEImportCommand::doExecute(const KBookmarkGroup &bkGroup) {
-    KIEBookmarkImporterImpl importer;
-    importer.setFilename(m_fileName);
-    parseInto(bkGroup, &importer);
-}
-
-void HTMLImportCommand::doExecute(const KBookmarkGroup &bkGroup) {
-    KNSBookmarkImporterImpl importer;
-    importer.setFilename(m_fileName);
-    importer.setUtf8(m_utf8);
-    parseInto(bkGroup, &importer);
 }
 
 /* -------------------------------------- */

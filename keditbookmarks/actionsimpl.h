@@ -66,11 +66,6 @@ public Q_SLOTS:
    void slotExpandAll();
    void slotCollapseAll();
    void slotImport();
-   void slotExportOpera();
-   void slotExportHTML();
-   void slotExportIE();
-   void slotExportNS();
-   void slotExportMoz();
 private:
     CommandHistory* commandHistory();
     KBookmarkModel* m_model;

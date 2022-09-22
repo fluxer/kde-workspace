@@ -26,7 +26,6 @@ set(keditbookmarks_SRCS
     testlink.cpp
     favicons.cpp
     faviconupdater.cpp
-    exporters.cpp
     bookmarkinfowidget.cpp
     kebsearchline.cpp
     bookmarklistview.cpp
