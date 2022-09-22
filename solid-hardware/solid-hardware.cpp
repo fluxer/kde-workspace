@@ -36,10 +36,9 @@
 #include <solid/genericinterface.h>
 #include <solid/storageaccess.h>
 #include <solid/opticaldrive.h>
+#include <solid/devicenotifier.h>
 
 #include <iostream>
-#include <solid/devicenotifier.h>
-using namespace std;
 
 static const char appName[] = "solid-hardware";
 static const char programName[] = I18N_NOOP("solid-hardware");
@@ -208,10 +207,10 @@ int main(int argc, char **argv)
   {
       KCmdLineArgs::enable_i18n();
 
-      cout << endl << i18n("Syntax:") << endl << endl;
+      std::cout << endl << i18n("Syntax:") << endl << endl;
 
-      cout << "  solid-hardware list [details|nonportableinfo]" << endl;
-      cout << i18n("             # List the hardware available in the system.\n"
+      std::cout << "  solid-hardware list [details|nonportableinfo]" << endl;
+      std::cout << i18n("             # List the hardware available in the system.\n"
                     "             # - If the 'nonportableinfo' option is specified, the device\n"
                     "             # properties are listed (be careful, in this case property names\n"
                     "             # are backend dependent),\n"
@@ -220,31 +219,31 @@ int main(int argc, char **argv)
                     "             # neutral fashion,\n"
                     "             # - Otherwise only device UDIs are listed.\n") << endl;
 
-      cout << "  solid-hardware details 'udi'" << endl;
-      cout << i18n("             # Display all the interfaces and properties of the device\n"
+      std::cout << "  solid-hardware details 'udi'" << endl;
+      std::cout << i18n("             # Display all the interfaces and properties of the device\n"
                     "             # corresponding to 'udi' in a platform neutral fashion.\n") << endl;
 
-      cout << "  solid-hardware nonportableinfo 'udi'" << endl;
-      cout << i18n("             # Display all the properties of the device corresponding to 'udi'\n"
+      std::cout << "  solid-hardware nonportableinfo 'udi'" << endl;
+      std::cout << i18n("             # Display all the properties of the device corresponding to 'udi'\n"
                     "             # (be careful, in this case property names are backend dependent).\n") << endl;
 
-      cout << "  solid-hardware query 'predicate' ['parentUdi']" << endl;
-      cout << i18n("             # List the UDI of devices corresponding to 'predicate'.\n"
+      std::cout << "  solid-hardware query 'predicate' ['parentUdi']" << endl;
+      std::cout << i18n("             # List the UDI of devices corresponding to 'predicate'.\n"
                     "             # - If 'parentUdi' is specified, the search is restricted to the\n"
                     "             # branch of the corresponding device,\n"
                     "             # - Otherwise the search is done on all the devices.\n") << endl;
 
-      cout << "  solid-hardware mount 'udi'" << endl;
-      cout << i18n("             # If applicable, mount the device corresponding to 'udi'.\n") << endl;
+      std::cout << "  solid-hardware mount 'udi'" << endl;
+      std::cout << i18n("             # If applicable, mount the device corresponding to 'udi'.\n") << endl;
 
-      cout << "  solid-hardware unmount 'udi'" << endl;
-      cout << i18n("             # If applicable, unmount the device corresponding to 'udi'.\n") << endl;
+      std::cout << "  solid-hardware unmount 'udi'" << endl;
+      std::cout << i18n("             # If applicable, unmount the device corresponding to 'udi'.\n") << endl;
 
-      cout << "  solid-hardware eject 'udi'" << endl;
-      cout << i18n("             # If applicable, eject the device corresponding to 'udi'.\n") << endl;
+      std::cout << "  solid-hardware eject 'udi'" << endl;
+      std::cout << i18n("             # If applicable, eject the device corresponding to 'udi'.\n") << endl;
 
-      cout << "  solid-hardware listen" << endl;
-      cout << i18n("             # Listen to all add/remove events on supported hardware.") << endl;
+      std::cout << "  solid-hardware listen" << endl;
+      std::cout << i18n("             # Listen to all add/remove events on supported hardware.") << endl;
 
       return 0;
   }
@@ -319,7 +318,7 @@ bool SolidHardware::doIt()
     }
     else
     {
-        cerr << i18n("Syntax Error: Unknown command '%1'" ,command) << endl;
+        std::cerr << i18n("Syntax Error: Unknown command '%1'" ,command) << endl;
     }
 
     return false;
@@ -331,16 +330,16 @@ bool SolidHardware::hwList(bool interfaces, bool system)
 
     foreach (const Solid::Device &device, all)
     {
-        cout << "udi = '" << device.udi() << "'" << endl;
+        std::cout << "udi = '" << device.udi() << "'" << endl;
 
         if (interfaces)
         {
-            cout << device << endl;
+            std::cout << device << endl;
         }
         else if (system && device.is<Solid::GenericInterface>())
         {
             QMap<QString,QVariant> properties = device.as<Solid::GenericInterface>()->allProperties();
-            cout << properties << endl;
+            std::cout << properties << endl;
         }
     }
 
@@ -351,8 +350,8 @@ bool SolidHardware::hwCapabilities(const QString &udi)
 {
     const Solid::Device device(udi);
 
-    cout << "udi = '" << device.udi() << "'" << endl;
-    cout << device << endl;
+    std::cout << "udi = '" << device.udi() << "'" << endl;
+    std::cout << device << endl;
 
     return true;
 }
@@ -361,10 +360,10 @@ bool SolidHardware::hwProperties(const QString &udi)
 {
     const Solid::Device device(udi);
 
-    cout << "udi = '" << device.udi() << "'" << endl;
+    std::cout << "udi = '" << device.udi() << "'" << endl;
     if (device.is<Solid::GenericInterface>()) {
         QMap<QString,QVariant> properties = device.as<Solid::GenericInterface>()->allProperties();
-        cout << properties << endl;
+        std::cout << properties << endl;
     }
 
     return true;
@@ -377,7 +376,7 @@ bool SolidHardware::hwQuery(const QString &parentUdi, const QString &query)
 
     foreach (const Solid::Device &device, devices)
     {
-        cout << "udi = '" << device.udi() << "'" << endl;
+        std::cout << "udi = '" << device.udi() << "'" << endl;
     }
 
     return true;
@@ -389,12 +388,12 @@ bool SolidHardware::hwVolumeCall(SolidHardware::VolumeCallType type, const QStri
 
     if (!device.is<Solid::StorageAccess>() && type!=Eject)
     {
-        cerr << i18n("Error: %1 does not have the interface StorageAccess." , udi) << endl;
+        std::cerr << i18n("Error: %1 does not have the interface StorageAccess." , udi) << endl;
         return false;
     }
     else if (!device.is<Solid::OpticalDrive>() && type==Eject)
     {
-        cerr << i18n("Error: %1 does not have the interface OpticalDrive." , udi) << endl;
+        std::cerr << i18n("Error: %1 does not have the interface OpticalDrive." , udi) << endl;
         return false;
     }
 
@@ -427,7 +426,7 @@ bool SolidHardware::hwVolumeCall(SolidHardware::VolumeCallType type, const QStri
 
     if (m_error)
     {
-        cerr << i18n("Error: %1" , m_errorString) << endl;
+        std::cerr << i18n("Error: %1" , m_errorString) << endl;
         return false;
     }
 
@@ -444,7 +443,7 @@ bool SolidHardware::listen()
         return false;
     }
 
-    cout << "Listening to add/remove events: " << endl;
+    std::cout << "Listening to add/remove events: " << endl;
     m_loop.exec();
     return true;
 }
@@ -462,25 +461,25 @@ void SolidHardware::connectJob(KJob *job)
 void SolidHardware::slotPercent(KJob *job, unsigned long percent)
 {
     Q_UNUSED(job)
-    cout << i18n("Progress: %1%" , percent) << endl;
+    std::cout << i18n("Progress: %1%" , percent) << endl;
 }
 
 void SolidHardware::slotInfoMessage(KJob *job, const QString &message)
 {
     Q_UNUSED(job)
-    cout << i18n("Info: %1" , message) << endl;
+    std::cout << i18n("Info: %1" , message) << endl;
 }
 
 void SolidHardware::deviceAdded(const QString &udi)
 {
-    cout << "Device Added:" << endl;
-    cout << "udi = '" << udi << "'" << endl;
+    std::cout << "Device Added:" << endl;
+    std::cout << "udi = '" << udi << "'" << endl;
 }
 
 void SolidHardware::deviceRemoved(const QString &udi)
 {
-    cout << "Device Removed:" << endl;
-    cout << "udi = '" << udi << "'" << endl;
+    std::cout << "Device Removed:" << endl;
+    std::cout << "udi = '" << udi << "'" << endl;
 }
 
 
