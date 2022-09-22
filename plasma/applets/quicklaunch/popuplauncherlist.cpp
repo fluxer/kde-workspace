@@ -32,8 +32,6 @@
 #include <QtGui/QGraphicsItem>
 #include <QtGui/QGraphicsLinearLayout>
 #include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsWidget>
 #include <QtGui/QIcon>
 #include <QtGui/QPainter>
