@@ -33,11 +33,11 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QApplication>
-#include <QProcess>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
+#include <kprocess.h>
 #include <kwindowsystem.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -51,7 +51,7 @@
 
 // some globals
 
-static QProcess* proc = 0;
+static bool proc = false;
 static QString exe;
 static QStringList exeArgs;
 static QString url;
@@ -83,7 +83,8 @@ KStart::KStart()
 
     //finally execute the comand
     if (proc) {
-        if( qint64 pid = proc->startDetached(exe, exeArgs) ) {
+        qint64 pid = KProcess::startDetached(exe, exeArgs);
+        if( pid ) {
             KStartupInfoData data;
             data.addPid( pid );
             data.setName( exe );
@@ -345,7 +346,7 @@ int main( int argc, char *argv[] )
           KCmdLineArgs::usageError(i18n("No command specified"));
 
       exe = args->arg(0);
-      proc = new QProcess;
+      proc = true;
       for(int i = 1; i < args->count(); i++)
           exeArgs << args->arg(i);
   }
