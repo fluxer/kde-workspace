@@ -22,8 +22,6 @@
 
 #include <Plasma/AbstractRunner>
 
-#include <KIcon>
-
 class RecentDocuments : public Plasma::AbstractRunner {
     Q_OBJECT
 
@@ -41,7 +39,6 @@ class RecentDocuments : public Plasma::AbstractRunner {
         void loadRecentDocuments();
 
     private:
-        KIcon m_icon;
         QStringList m_recentdocuments;
 };
 

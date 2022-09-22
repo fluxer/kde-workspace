@@ -35,7 +35,7 @@ RecentDocuments::RecentDocuments(QObject *parent, const QVariantList& args)
 {
     Q_UNUSED(args);
     setObjectName( QLatin1String("Recent Documents" ));
-    m_icon = KIcon("document-open-recent");
+
     loadRecentDocuments();
     // listen for changes to the list of recent documents
     KDirWatch *recentDocWatch = new KDirWatch(this);
@@ -76,13 +76,12 @@ void RecentDocuments::match(Plasma::RunnerContext &context)
         if (document.contains(term, Qt::CaseInsensitive)) {
             KConfig _config( document, KConfig::SimpleConfig );
             KConfigGroup config(&_config, "Desktop Entry" );
-            QString niceName =  config.readEntry( "Name" );
             Plasma::QueryMatch match(this);
             match.setType(Plasma::QueryMatch::PossibleMatch);
             match.setRelevance(1.0);
             match.setIcon(KIcon(config.readEntry("Icon")));
             match.setData(document); // TODO: Read URL[$e], or can we just pass the path to the .desktop file?
-            match.setText(niceName);
+            match.setText(config.readEntry("Name"));
             match.setSubtext(i18n("Recent Document"));
             context.addMatch(term, match);
         }
