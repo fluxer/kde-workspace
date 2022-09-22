@@ -38,7 +38,7 @@ CalculatorRunner::CalculatorRunner( QObject* parent, const QVariantList &args )
     Q_UNUSED(args)
 
 #ifdef ENABLE_QALCULATE
-    m_engine = new QalculateEngine;
+    m_engine = new QalculateEngine();
     setSpeed(SlowSpeed);
 #endif
 

@@ -20,7 +20,7 @@
 #ifndef QALCULATEENGINE_H
 #define QALCULATEENGINE_H
 
-#include <QtCore/qatomic.h>
+#include <QAtomicInt>
 #include <QObject>
 
 class KJob;
@@ -36,16 +36,8 @@ public:
 
 public slots:
 	QString evaluate(const QString& expression);
-	void updateExchangeRates();
 
 	void copyToClipboard(bool flag = true);
-
-protected slots:
-        void updateResult(KJob*);
-
-signals:
-	void resultReady(const QString&);
-	void formattedResultReady(const QString&);
 
 private:
 	QString m_lastResult;
