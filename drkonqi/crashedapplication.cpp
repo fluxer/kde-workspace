@@ -98,12 +98,12 @@ QString CrashedApplication::signalName() const
     return QString::fromLocal8Bit(name != NULL ? name : "Unknown");
 #else
     switch (m_signalNumber) {
-    case SIGILL: return QLatin1String("SIGILL");
-    case SIGABRT: return QLatin1String("SIGABRT");
-    case SIGFPE: return QLatin1String("SIGFPE");
-    case SIGSEGV: return QLatin1String("SIGSEGV");
-    case SIGBUS: return QLatin1String("SIGBUS");
-    default: return QLatin1String("Unknown");
+    case SIGILL: return QString::fromLatin1("SIGILL");
+    case SIGABRT: return QString::fromLatin1("SIGABRT");
+    case SIGFPE: return QString::fromLatin1("SIGFPE");
+    case SIGSEGV: return QString::fromLatin1("SIGSEGV");
+    case SIGBUS: return QString::fromLatin1("SIGBUS");
+    default: return QString::fromLatin1("Unknown");
     }
 #endif
 }
