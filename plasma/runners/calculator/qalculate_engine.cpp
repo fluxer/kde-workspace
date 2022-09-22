@@ -64,36 +64,42 @@ QalculateEngine::~QalculateEngine()
 QString QalculateEngine::evaluate(const QString& expression)
 {
     if (expression.isEmpty()) {
-        return "";
+        return QString();
     }
 
     QString input = expression;
     QByteArray ba = input.replace(QChar(0xA3), "GBP").replace(QChar(0xA5), "JPY").replace('$', "USD").replace(QChar(0x20AC), "EUR").toLatin1();
-    const char *ctext = ba.data();
 
-    CALCULATOR->terminateThreads();
-    EvaluationOptions eo;
+    m_lastResult = QString();
+    try {
+        CALCULATOR->terminateThreads();
+        EvaluationOptions eo;
 
-    eo.auto_post_conversion = POST_CONVERSION_BEST;
-    eo.keep_zero_units = false;
+        eo.auto_post_conversion = POST_CONVERSION_BEST;
+        eo.keep_zero_units = false;
 
-    eo.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
-    eo.structuring = STRUCTURING_SIMPLIFY;
+        eo.parse_options.angle_unit = ANGLE_UNIT_RADIANS;
+        eo.structuring = STRUCTURING_SIMPLIFY;
 
-    MathStructure result = CALCULATOR->calculate(ctext, eo);
+        MathStructure result = CALCULATOR->calculate(ba.constData(), eo);
 
-    PrintOptions po;
-    po.number_fraction_format = FRACTION_DECIMAL;
-    po.indicate_infinite_series = false;
-    po.use_all_prefixes = false;
-    po.use_denominator_prefix = true;
-    po.negative_exponents = false;
-    po.lower_case_e = true;
-    po.base_display = BASE_DISPLAY_NORMAL;
+        PrintOptions po;
+        po.number_fraction_format = FRACTION_DECIMAL;
+        po.indicate_infinite_series = false;
+        po.use_all_prefixes = false;
+        po.use_denominator_prefix = true;
+        po.negative_exponents = false;
+        po.lower_case_e = true;
+        po.base_display = BASE_DISPLAY_NORMAL;
 
-    result.format(po);
+        result.format(po);
 
-    m_lastResult = result.print(po).c_str();
+        m_lastResult = result.print(po).c_str();
+    } catch(std::exception &err) {
+        kDebug() << err.what();
+    } catch (...) {
+        kDebug() << "Exception raised";
+    }
 
     return m_lastResult;
 }

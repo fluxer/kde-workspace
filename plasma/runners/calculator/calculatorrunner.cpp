@@ -261,16 +261,7 @@ void CalculatorRunner::match(Plasma::RunnerContext &context)
 QString CalculatorRunner::calculate(const QString& term)
 {
 #ifdef ENABLE_QALCULATE
-    QString result;
-
-    try {
-        result = m_engine->evaluate(term);
-    } catch(std::exception& e) {
-        kDebug() << "qalculate error: " << e.what();
-    } catch (...) {
-        kDebug() << "exception";
-    }
-
+    QString result = m_engine->evaluate(term);
     return result.replace('.', KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive);
 #else
     //kDebug() << "calculating" << term;
