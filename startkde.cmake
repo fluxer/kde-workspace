@@ -56,7 +56,6 @@ export XDG_DATA_DIRS
 
 # The user's personal KDE directory is usually ~/.kde, but this setting
 # may be overridden by setting KDEHOME.
-
 kdehome=$HOME/@KDE_DEFAULT_HOME@
 test -n "$KDEHOME" && kdehome=`echo "$KDEHOME"|sed "s,^~/,$HOME/,"`
 
@@ -112,7 +111,6 @@ Xft.dpi: $kcmfonts_general_forcefontdpi
 EOF
 fi
 
-
 ksplash_pid=
 # languages as resolved by KLocale, for the splash screens use
 # klocale_languages is assembled by kdostartupconfig4 calling KLocale
@@ -141,7 +139,6 @@ unset KLOCALE_LANGUAGES
 #
 # If the user has overwritten fonts, the cursor font may be different now
 # so don't move this up.
-#
 xsetroot -cursor_name left_ptr
 
 echo 'startkde: Starting up...'  1>&2
@@ -189,7 +186,6 @@ fi
 # Since KDE4 there is also KDE_SESSION_VERSION, containing the major version number.
 # Note that this didn't exist in KDE3, which can be detected by its absense and
 # the presence of KDE_FULL_SESSION.
-#
 KDE_FULL_SESSION=true
 export KDE_FULL_SESSION
 xprop -root -f KDE_FULL_SESSION 8t -set KDE_FULL_SESSION true
@@ -203,6 +199,9 @@ export KDE_SESSION_UID
 
 XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
+
+# For session services that require X11
+dbus-update-activation-environment DISPLAY XAUTHORITY
 
 # We set LD_BIND_NOW to increase the efficiency of kdeinit.
 # kdeinit unsets this variable before loading applications.
