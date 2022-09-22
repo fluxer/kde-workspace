@@ -30,7 +30,11 @@
 #include <KToolInvocation>
 
 CrashedApplication::CrashedApplication(QObject *parent)
-    : QObject(parent), m_restarted(false)
+    : QObject(parent),
+    m_pid(0),
+    m_signalNumber(0),
+    m_restarted(false),
+    m_thread(0)
 {
 }
 
