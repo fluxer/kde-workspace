@@ -47,18 +47,3 @@ macro_bool_to_01(XRANDR_1_2_FOUND HAS_RANDR_1_2)
 check_function_exists(XRRGetScreenResourcesCurrent XRANDR_1_3_FOUND)
 macro_bool_to_01(XRANDR_1_3_FOUND HAS_RANDR_1_3)
 cmake_reset_check_state()
-
-
-macro(define_library LIB FN)
-    set(varname ${FN}_in_${LIB})
-    string(TOUPPER ${LIB}_LIBRARIES libname)
-    check_library_exists(${LIB} ${FN} "" ${varname})
-    set(${libname})
-    if (${varname})
-        set(${libname} ${LIB})
-    endif (${varname})
-endmacro(define_library)
-
-# for Solaris
-define_library(socket connect)
-define_library(nsl gethostbyname)
