@@ -3,12 +3,7 @@ if( XRANDR_1_2_FOUND )
     add_subdirectory(module)
 endif( XRANDR_1_2_FOUND )
 
-configure_file(
-    config-randr.h.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/config-randr.h
-)
-
-include_directories( ${X11_Xrandr_INCLUDE_PATH}  )
+include_directories( ${X11_Xrandr_INCLUDE_PATH} )
 
 ########### next target ###############
 

@@ -17,6 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <config-X11.h>
+
 #include "krandrtray.h"
 #include "krandrpassivepopup.h"
 #include "moc_krandrtray.cpp"
@@ -26,8 +28,6 @@
 #include "randroutput.h"
 #include "randrmode.h"
 #endif
-
-#include <config-randr.h>
 
 #include <QtGui/qevent.h>
 #include <QVariant>

@@ -19,7 +19,7 @@
 
 #include <kdebug.h>
 
-#include <config-randr.h>
+#include <config-X11.h>
 #include "krandrapp.h"
 #include "moc_krandrapp.cpp"
 

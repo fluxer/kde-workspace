@@ -1,6 +1,12 @@
 /* Define if you have the XRandR extension */
 #cmakedefine HAVE_XRANDR 1
 
+/* Define if you have XRandR 1.2 */
+#cmakedefine HAS_RANDR_1_2 1
+
+/* Define if you have XRandR 1.3 */
+#cmakedefine HAS_RANDR_1_3 1
+
 /* Define if you have the XDamage extension */
 #cmakedefine HAVE_XDAMAGE 1
 
@@ -33,9 +39,6 @@
 
 /* Define if you have the XSync extension */
 #cmakedefine HAVE_XSYNC 1
-
-/* Define if you have XRandR 1.3 */
-#cmakedefine HAS_RANDR_1_3 1
 
 /* Define if you have the XRes extension */
 #cmakedefine HAVE_XRES 1

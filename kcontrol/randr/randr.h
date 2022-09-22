@@ -21,11 +21,13 @@
 #ifndef __RANDR_H__
 #define __RANDR_H__
 
+#include <config-X11.h>
+
 #include <KDebug>
 #include <KLocale>
 #include <QString>
 #include <QPixmap>
-#include <config-randr.h>
+
 #include "ktimerdialog.h"
 
 extern "C"

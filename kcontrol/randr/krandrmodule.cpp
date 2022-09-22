@@ -19,16 +19,16 @@
 
 #include "krandrmodule.h"
 #include "legacyrandrconfig.h"
-#include <QTextStream>
 #include "legacyrandrscreen.h"
 #include "randrdisplay.h"
 #include "randrconfig.h"
 
+#include <QTextStream>
 #include <KPluginFactory>
 #include <KPluginLoader>
 #include <KDebug>
 #include <KApplication>
-#include <config-randr.h>
+#include <config-X11.h>
 
 #include "randr.h"
 

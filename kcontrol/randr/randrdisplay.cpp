@@ -18,6 +18,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include <config-X11.h>
+
 #include <KLocale>
 #include <KConfigGroup>
 #include <KDebug>
@@ -30,7 +32,6 @@
 #include "randrscreen.h"
 #endif
 #include "legacyrandrscreen.h"
-#include <config-randr.h>
 
 RandRDisplay::RandRDisplay()
 	: m_valid(true)
