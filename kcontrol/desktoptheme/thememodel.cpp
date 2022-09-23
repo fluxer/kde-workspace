@@ -205,5 +205,3 @@ QSize ThemeDelegate::sizeHint(const QStyleOptionViewItem &, const QModelIndex &)
 {
     return QSize(152, 100);
 }
-
-

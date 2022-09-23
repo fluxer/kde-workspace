@@ -95,7 +95,7 @@ private:
 
     QVBoxLayout* mainLayout;
     QTabWidget* tabWidget;
-    QWidget *page0, *page1, *page2;
+    QWidget *page1, *page2;
     QVBoxLayout* page1Layout;
 
     // Page1 widgets
