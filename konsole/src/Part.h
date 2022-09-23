@@ -190,7 +190,7 @@ signals:
     void currentDirectoryChanged(const QString& dir);
 
 protected:
-    /** Reimplemented from KParts::PartBase. */
+    /** Reimplemented from KParts::ReadOnlyPart. */
     virtual bool openFile();
     virtual bool openUrl(const KUrl& url);
 
