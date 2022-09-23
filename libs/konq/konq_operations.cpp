@@ -133,12 +133,7 @@ KIO::SimpleJob* KonqOperations::mkdir( QWidget *parent, const KUrl & url )
     return job;
 }
 
-void KonqOperations::doPaste( QWidget * parent, const KUrl & destUrl, const QPoint &pos )
-{
-    (void) KonqOperations::doPasteV2( parent, destUrl, pos );
-}
-
-KonqOperations *KonqOperations::doPasteV2(QWidget *parent, const KUrl &destUrl, const QPoint &pos)
+KonqOperations *KonqOperations::doPaste( QWidget * parent, const KUrl & destUrl, const QPoint &pos )
 {
     QClipboard *clipboard = QApplication::clipboard();
     const QMimeData *data = clipboard->mimeData();
@@ -723,12 +718,7 @@ static QString translatePath( QString path ) // krazy:exclude=passbyvalue
     return path;
 }
 
-void KonqOperations::rename( QWidget * parent, const KUrl & oldurl, const KUrl& newurl )
-{
-    renameV2(parent, oldurl, newurl);
-}
-
-KonqOperations *KonqOperations::renameV2( QWidget * parent, const KUrl & oldurl, const KUrl& newurl )
+KonqOperations *KonqOperations::rename( QWidget * parent, const KUrl & oldurl, const KUrl& newurl )
 {
     kDebug(1203) << "oldurl=" << oldurl << " newurl=" << newurl;
     if ( oldurl == newurl )
@@ -850,17 +840,12 @@ void KonqOperations::slotResult(KJob *job)
     deleteLater();
 }
 
-void KonqOperations::rename( QWidget * parent, const KUrl & oldurl, const QString & name )
-{
-    renameV2(parent, oldurl, name);
-}
-
-KonqOperations *KonqOperations::renameV2( QWidget * parent, const KUrl & oldurl, const QString & name )
+KonqOperations *KonqOperations::rename( QWidget * parent, const KUrl & oldurl, const QString & name )
 {
     KUrl newurl( oldurl );
     newurl.setPath( oldurl.directory( KUrl::AppendTrailingSlash ) + name );
     kDebug(1203) << "KonqOperations::rename("<<name<<") called. newurl=" << newurl;
-    return renameV2( parent, oldurl, newurl );
+    return rename( parent, oldurl, newurl );
 }
 
 // Duplicated in libkfile's KDirOperator

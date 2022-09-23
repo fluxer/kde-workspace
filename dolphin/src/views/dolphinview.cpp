@@ -1441,7 +1441,7 @@ void DolphinView::slotRoleEditingFinished(int index, const QByteArray& role, con
                 m_model->setData(index, data);
             }
 
-            KonqOperations* op = KonqOperations::renameV2(this, oldUrl, newName);
+            KonqOperations* op = KonqOperations::rename(this, oldUrl, newName);
             if (op && !newNameExistsAlready) {
                 // Only connect the renamingFailed signal if there is no item with the new name
                 // in the model yet, see bug 328262.
@@ -1582,7 +1582,7 @@ void DolphinView::applyModeToView()
 
 void DolphinView::pasteToUrl(const KUrl& url)
 {
-    KonqOperations* op = KonqOperations::doPasteV2(this, url);
+    KonqOperations* op = KonqOperations::doPaste(this, url);
     if (op) {
         m_clearSelectionBeforeSelectingNewItems = true;
         m_markFirstNewlySelectedItemAsCurrent = true;

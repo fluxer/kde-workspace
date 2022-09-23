@@ -25,13 +25,14 @@
 
 #include <kurl.h>
 #include <konq_export.h>
+#include <kio/job.h>
 
 #include <QtCore/QObject>
 #include <QtGui/qevent.h>
+#include <QtGui/QWidget>
 
 class KJob;
 namespace KIO { class Job; class SimpleJob; struct CopyInfo; }
-#include <QWidget>
 class KFileItem;
 class KFileItemListProperties;
 
@@ -108,6 +109,7 @@ public:
      * after the slot returns.
      *
      * @return The KonqOperations object
+     *
      * @since 4.3
      */
     static KonqOperations *doDrop( const KFileItem & destItem, const KUrl & destUrl, QDropEvent * ev, QWidget * parent,
@@ -115,23 +117,16 @@ public:
 
     /**
      * Paste the clipboard contents
-     */
-    static void doPaste( QWidget * parent, const KUrl & destUrl, const QPoint &pos = QPoint() );
-
-    /**
-     * Paste the clipboard contents
      *
      * @return The KonqOperations object
-     * @since 4.10
-     *
-     * @todo TODO KDE 5,0 - Merge doPaste and doPasteV2
      */
-    static KonqOperations *doPasteV2(QWidget * parent, const KUrl & destUrl, const QPoint &pos = QPoint());
+    static KonqOperations *doPaste( QWidget * parent, const KUrl & destUrl, const QPoint &pos = QPoint() );
 
     /**
      * Returns the state of the paste action:
      * first is whether the action should be enabled
      * second is the text for the action
+     *
      * @since 4.3
      */
     static QPair<bool, QString> pasteInfo(const KUrl& targetUrl);
@@ -185,31 +180,10 @@ public:
      * @param parent the parent widget, passed to KonqOperations ctor
      * @param oldurl the current url of the file to be renamed
      * @param name the new name for the file. Shouldn't include '/'.
-     */
-    static void rename( QWidget * parent, const KUrl & oldurl, const QString & name );
-
-    /**
-     * Do a renaming.
-     * @param parent the parent widget, passed to KonqOperations ctor
-     * @param oldurl the current url of the file to be renamed
-     * @param name the new name for the file. Shouldn't include '/'.
      *
      * @return The KonqOperations object
-     * @since 4.11
-     *
-     * @todo TODO KDE 5.0 - Merge rename and renameV2
      */
-    static KonqOperations *renameV2( QWidget * parent, const KUrl & oldurl, const QString & name );
-
-    /**
-     * Do a renaming.
-     * @param parent the parent widget, passed to KonqOperations ctor
-     * @param oldurl the current url of the file to be renamed
-     * @param newurl the new url for the file
-     * Use this version if the other one wouldn't work :)  (e.g. because name could
-     * be a relative path, including a '/').
-     */
-    static void rename( QWidget * parent, const KUrl & oldurl, const KUrl & newurl );
+    static KonqOperations *rename( QWidget * parent, const KUrl & oldurl, const QString & name );
 
     /**
      * Do a renaming.
@@ -220,11 +194,8 @@ public:
      * be a relative path, including a '/').
      *
      * @return The KonqOperations object
-     * @since 4.11
-     *
-     * @todo TODO KDE 5.0 - Merge rename and renameV2
      */
-    static KonqOperations *renameV2( QWidget * parent, const KUrl & oldurl, const KUrl & newurl );
+    static KonqOperations *rename( QWidget * parent, const KUrl & oldurl, const KUrl & newurl );
 
     enum ConfirmationType { DEFAULT_CONFIRMATION, SKIP_CONFIRMATION, FORCE_CONFIRMATION };
     /**
@@ -249,6 +220,7 @@ public:
 
     /**
      * Returns the position where the drop occurred.
+     *
      * @since 4.3
      */
     QPoint dropPosition() const;
@@ -311,8 +283,6 @@ private:
     DropInfo * m_info;
     KIOPasteInfo * m_pasteInfo;
 };
-
-#include <kio/job.h>
 
 /// Restore multiple trashed files
 class KonqMultiRestoreJob : public KIO::Job
