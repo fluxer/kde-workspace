@@ -266,9 +266,6 @@ add_feature_info(locate
     "Search indexing support in KFind"
 )
 
-check_include_files(sys/wait.h HAVE_SYS_WAIT_H)
-check_include_files(sys/time.h HAVE_SYS_TIME_H)
-
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )

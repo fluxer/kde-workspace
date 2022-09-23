@@ -15,12 +15,6 @@ set(XLIBDIR "${xrootdir}/lib/X11")
 set(XKBDIR "${xrootdir}/share/X11")
 
 check_function_exists(nice HAVE_NICE)
-
-check_include_files(string.h HAVE_STRING_H)
-check_include_files(limits.h HAVE_LIMITS_H)
-check_include_files(sys/time.h HAVE_SYS_TIME_H)     # ksmserver, ksplashml, sftp
-check_include_files(stdint.h HAVE_STDINT_H)         # kcontrol/kfontinst
-check_include_files(unistd.h HAVE_UNISTD_H)
 check_include_files(malloc.h HAVE_MALLOC_H)
 macro_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/{fonts,kfontinst}
 macro_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts

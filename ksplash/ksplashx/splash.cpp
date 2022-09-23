@@ -43,6 +43,8 @@ extern int screen_number;
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/time.h>
+#include <time.h>
 #include <unistd.h>
 #include <string.h>
 #include <assert.h>
@@ -51,11 +53,6 @@ extern int screen_number;
 #include <math.h>
 
 #include <X11/Xutil.h>
-
-# ifdef HAVE_SYS_TIME_H
-#  include <sys/time.h>
-# endif
-#include <time.h>
 
 struct AnimData
     {

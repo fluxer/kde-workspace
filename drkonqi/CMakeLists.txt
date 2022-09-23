@@ -1,7 +1,6 @@
 project(drkonqi)
 
 check_function_exists("strsignal" HAVE_STRSIGNAL)
-check_function_exists("uname" HAVE_UNAME)
 
 configure_file(
     config-drkonqi.h.cmake

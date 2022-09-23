@@ -25,6 +25,7 @@
 #include "Printer.h"
 #include "FcEngine.h"
 #include "ActionLabel.h"
+
 #include <QtCore/QCoreApplication>
 #include <QtCore/QTextStream>
 #include <QtCore/QFile>
@@ -39,6 +40,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QProgressBar>
 #include <QtGui/qevent.h>
+
 #include <KCmdLineArgs>
 #include <KAboutData>
 #include <KApplication>
@@ -50,9 +52,8 @@
 #include FT_FREETYPE_H
 #endif
 
-#ifdef HAVE_LOCALE_H
 #include <locale.h>
-#endif
+
 #include "CreateParent.h"
 
 // Enable the following to allow printing of non-installed fonts. Does not seem to work :-(
@@ -364,9 +365,7 @@ CPrinter::~CPrinter()
 
 void CPrinter::print(const QList<Misc::TFont> &items, int size)
 {
-    #ifdef HAVE_LOCALE_H
     char *oldLocale=setlocale(LC_NUMERIC, "C");
-    #endif
                 
     QPrinter     printer;
     QPrintDialog *dialog = KdePrint::createPrintDialog(&printer, parentWidget());
@@ -388,11 +387,9 @@ void CPrinter::print(const QList<Misc::TFont> &items, int size)
     }
 
     delete dialog;
-    
-    #ifdef HAVE_LOCALE_H
+
     if(oldLocale)
         setlocale(LC_NUMERIC, oldLocale);
-    #endif
 }
 
 void CPrinter::progress(int p, const QString &label)

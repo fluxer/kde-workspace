@@ -35,9 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <stdlib.h>
 #include <unistd.h>
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 #include <time.h>
 
 #include <kglobal.h>

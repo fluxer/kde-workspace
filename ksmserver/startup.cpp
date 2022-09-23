@@ -29,18 +29,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
-#include "config-unix.h" // HAVE_SYS_TIME_H, HAVE_LIMITS_H
+#include "config-unix.h"
 
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 #include <sys/socket.h>
 #include <sys/un.h>
-
 #include <unistd.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -48,10 +45,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <errno.h>
 #include <string.h>
 #include <assert.h>
-
-#ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
 
 #include <QPushButton>
 #include <QTimer>

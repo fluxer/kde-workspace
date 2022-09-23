@@ -35,15 +35,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "ksmserverinterfaceadaptor.h"
 
 #include <config-workspace.h>
-#include <config-unix.h> // HAVE_LIMITS_H
+#include <config-unix.h>
 #include <config-ksmserver.h>
 #include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
-#ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
-#endif
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <unistd.h>
@@ -54,10 +52,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <string.h>
 #include <assert.h>
 #include <fcntl.h>
-
-#ifdef HAVE_LIMITS_H
 #include <limits.h>
-#endif
 
 #include <QFile>
 #include <QPushButton>
