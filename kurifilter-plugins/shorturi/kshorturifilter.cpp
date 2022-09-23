@@ -262,7 +262,7 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
 
   if ( expanded || cmd.startsWith( '/' ) )
   {
-    // Look for #ref again, after $ and ~ expansion (testcase: $QTDIR/doc/html/functions.html#s)
+    // Look for #ref again, after $ and ~ expansion
     // Can't use KUrl here, setPath would escape it...
     const int pos = path.indexOf('#');
     if ( pos > -1 )

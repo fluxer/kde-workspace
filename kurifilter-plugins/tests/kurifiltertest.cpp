@@ -154,7 +154,6 @@ static char s_delimiter = ':'; // the alternative is ' '
 KUriFilterTest::KUriFilterTest()
 {
     minicliFilters << "kshorturifilter" << "kurisearchfilter" << "localdomainurifilter";
-    qtdir = getenv("QTDIR");
     home = getenv("HOME");
     kdehome = getenv("KDEHOME");
 }
@@ -326,11 +325,6 @@ void KUriFilterTest::environmentVariables()
 
     filter( "$SOMEVAR/kdelibs/kio", 0, KUriFilterData::Error ); // note: this dir doesn't exist...
     filter( "$ETC/passwd", "/etc/passwd", KUriFilterData::LocalFile );
-    QString qtdocPath(qtdir+"/doc/html/functions.html");
-    if (QFile::exists(qtdocPath)) {
-        QString expectedUrl = KUrl(qtdocPath).url()+"#s";
-        filter( "$QTDIR/doc/html/functions.html#s", expectedUrl.toUtf8(), KUriFilterData::LocalFile );
-    }
     filter( "http://www.kde.org/$USER", "http://www.kde.org/$USER", KUriFilterData::NetProtocol ); // no expansion
 
     filter( "$KDEHOME/share", QByteArray(kdehome+"/share"), KUriFilterData::LocalDir );
@@ -358,9 +352,6 @@ void KUriFilterTest::environmentVariables()
     filter( "$1/$2/$3", "https://www.google.com/search?q=%241%2F%242%2F%243&ie=UTF-8", KUriFilterData::NetProtocol );  // can be used as bogus or valid test. Currently triggers default search, i.e. google
     filter( "$$$$", "https://www.google.com/search?q=%24%24%24%24&ie=UTF-8", KUriFilterData::NetProtocol ); // worst case scenarios.
 
-    if (!qtdir.isEmpty()) {
-        filter( "$QTDIR", qtdir, KUriFilterData::LocalDir, QStringList( "kshorturifilter" ) ); //use specific filter.
-    }
     filter( "$HOME", home, KUriFilterData::LocalDir, QStringList( "kshorturifilter" ) ); //use specific filter.
 }
 
