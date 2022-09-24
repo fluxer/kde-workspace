@@ -71,36 +71,19 @@ void DesktopProtocol::checkLocalInstall()
     // We can't use KGlobalSettings::desktopPath() here, since it returns the home dir
     // if the desktop folder doesn't exist.
     QString desktopPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
-    if (desktopPath.isEmpty())
+    if (desktopPath.isEmpty()) {
         desktopPath = QDir::homePath() + "/Desktop";
-
-    const QDir desktopDir(desktopPath);
-    bool desktopIsEmpty;
-    bool newRelease;
-
-    // Check if we have a new KDE release
-    KConfig config("kio_desktoprc");
-    KConfigGroup cg(&config, "General");
-    QString version = cg.readEntry("Version", "0.0.0");
-    int major = version.section('.', 0, 0).toInt();
-    int minor = version.section('.', 1, 1).toInt();
-    int release = version.section('.', 2, 2).toInt();
-
-    if (KDE_MAKE_VERSION(major, minor, release) < KDE::version()) {
-        const QString version = QString::number(KDE::versionMajor()) + '.' +
-                                QString::number(KDE::versionMinor()) + '.' +
-                                QString::number(KDE::versionRelease());
-        cg.writeEntry("Version", version);
-        newRelease = true;
-    } else 
-        newRelease = false;
+    }
 
     // Create the desktop folder if it doesn't exist
+    bool desktopIsEmpty = false;
+    const QDir desktopDir(desktopPath);
     if (!desktopDir.exists()) {
         ::mkdir(QFile::encodeName(desktopPath), S_IRWXU);
         desktopIsEmpty = true;
-    } else
+    } else {
         desktopIsEmpty = desktopDir.entryList(QDir::AllEntries | QDir::Hidden | QDir::NoDotAndDotDot).isEmpty();
+    }
 
     if (desktopIsEmpty) {
         // Copy the .directory file
@@ -118,34 +101,6 @@ void DesktopProtocol::checkLocalInstall()
             KDesktopFile file(link);
             if (!file.desktopGroup().readEntry("Hidden", false))
                 QFile::copy(link, desktopPath + link.mid(link.lastIndexOf('/')));
-        }
-    } else if (newRelease) {
-        // Update the icon name in the .directory file to the FDO naming spec
-        const QString directoryFile = desktopPath + "/.directory";
-        if (QFile::exists(directoryFile)) {
-             KDesktopFile file(directoryFile);
-             if (file.readIcon() == "desktop")
-                 file.desktopGroup().writeEntry("Icon", "user-desktop");
-        } else
-             QFile::copy(KStandardDirs::locate("data", "kio_desktop/directory.desktop"), directoryFile);
-  
-        // Update the home icon to the FDO naming spec
-        const QString homeLink = desktopPath + "/Home.desktop";
-        if (QFile::exists(homeLink)) {
-            KDesktopFile home(homeLink);
-            const QString icon = home.readIcon();
-            if (icon == "kfm_home" || icon == "folder_home")
-                home.desktopGroup().writeEntry("Icon", "user-home");
-        }
-
-        // Update the trash icon to the FDO naming spec  
-        const QString trashLink = desktopPath + "/trash.desktop";
-        if (QFile::exists(trashLink)) {
-            KDesktopFile trash(trashLink);
-            if (trash.readIcon() == "trashcan_full")
-                trash.desktopGroup().writeEntry("Icon", "user-trash-full");
-            if (trash.desktopGroup().readEntry("EmptyIcon") == "trashcan_empty")
-                trash.desktopGroup().writeEntry("EmptyIcon", "user-trash");
         }
     }
 }
