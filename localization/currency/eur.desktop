@@ -78,15 +78,8 @@ Name[zh_TW]=歐洲─歐元（Euro）
 CurrencyUnitSymbols=€,EUR
 CurrencyUnitSymbolDefault=€
 #CurrencyUnitSymbolUnambiguous=
-CurrencyUnitSingular=euro
-CurrencyUnitPlural=euros
 CurrencySubunitSymbol=c
-CurrencySubunitSingular=cent
-CurrencySubunitPlural=cents
 #Use accounting date
-CurrencyIntroducedDate=1999,01,01
-#CurrencySuspendedDate=
-#CurrencyWithdrawnDate=
 #CurrencySubunits=1
 #CurrencySubunitsInCirculation=true
 #CurrencySubunitsPerUnit=100

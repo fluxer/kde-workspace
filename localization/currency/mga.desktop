@@ -76,15 +76,8 @@ CurrencyNameIso=Malagasy ariary
 CurrencyUnitSymbols=MGA
 CurrencyUnitSymbolDefault=MGA
 CurrencyUnitSymbolUnambiguous=MGA
-CurrencyUnitSingular=ariary
-CurrencyUnitPlural=ariary
 #CurrencySubunitSymbol=
-CurrencySubunitSingular=iraimbilanja
-CurrencySubunitPlural=iraimbilanja
 #Exact date in July uncertain
-CurrencyIntroducedDate=2003,07,31
-#CurrencySuspendedDate=
-#CurrencyWithdrawnDate=
 #CurrencySubunits=1
 #CurrencySubunitsInCirculation=true
 CurrencySubunitsPerUnit=5

@@ -77,15 +77,8 @@ Name[zh_TW]=波札那─普拉（Pula）
 CurrencyUnitSymbols=P,BWP
 CurrencyUnitSymbolDefault=P
 #CurrencyUnitSymbolUnambiguous=
-CurrencyUnitSingular=pula
-CurrencyUnitPlural=pula
 CurrencySubunitSymbol=
-CurrencySubunitSingular=thebe
-CurrencySubunitPlural=thebe
 #Exact date in 1967 unknown
-CurrencyIntroducedDate=1976,01,01
-#CurrencySuspendedDate=
-#CurrencyWithdrawnDate=
 #CurrencySubunits=1
 #CurrencySubunitsInCirculation=true
 #CurrencySubunitsPerUnit=100

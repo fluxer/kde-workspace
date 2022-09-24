@@ -78,15 +78,8 @@ CurrencyNameIso=Chinese Yuan
 CurrencyUnitSymbols=¥,RMB,CNY
 CurrencyUnitSymbolDefault=¥
 CurrencyUnitSymbolUnambiguous=CNY
-CurrencyUnitSingular=yuan
-CurrencyUnitPlural=yuan
 #CurrencySubunitSymbol=
-CurrencySubunitSingular=jiǎo
-CurrencySubunitPlural=jiǎo
 #Revalued on 1955-04-01?
-CurrencyIntroducedDate=1948,12,01
-#CurrencySuspendedDate=
-#CurrencyWithdrawnDate=
 CurrencySubunits=2
 #CurrencySubunitsInCirculation=true
 CurrencySubunitsPerUnit=10
