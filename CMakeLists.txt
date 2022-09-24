@@ -218,6 +218,12 @@ set_package_properties(LightDM PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
+find_program(UNRAR_EXECUTABLE NAMES unrar unrar-nonfree rar)
+add_feature_info(unrar
+    UNRAR_EXECUTABLE
+    "Comic Books thumbnails support in KIO slave"
+)
+
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE
