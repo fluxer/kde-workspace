@@ -35,6 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/time.h>
 #include <time.h>
 
@@ -93,7 +94,8 @@ char * safeSmsGenerateClientID( SmsConn /*c*/ )
            /* Faking our IP address, the 0 below is "unknown" address format
               (1 would be IP, 2 would be DEC-NET format) */
            char hostname[ 256 ];
-           if( gethostname( hostname, 255 ) != 0 )
+           ::memset(hostname, '\0', sizeof(hostname));
+           if( ::gethostname( hostname, 255 ) != 0 )
                my_addr->sprintf("0%.8x", KRandom::random());
            else {
                // create some kind of hash for the hostname

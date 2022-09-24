@@ -29,7 +29,7 @@
 #include "curtaineffect.h"
 
 #include <unistd.h> // for gethostname()
-
+#include <string.h> // for memset()
 
 static bool localDisplay(Display *dpy)
 {
@@ -46,7 +46,8 @@ static bool localDisplay(Display *dpy)
         return true;
 
     char name[2048];
-    gethostname(name, sizeof(name));
+    ::memset(name, '\0', sizeof(name));
+    ::gethostname(name, sizeof(name));
 
     if (hostPart == name)
        return true;

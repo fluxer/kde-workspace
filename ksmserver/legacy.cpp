@@ -33,6 +33,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <sys/time.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "server.h"
 
@@ -360,8 +361,8 @@ QString KSMServer::windowWmClientMachine(WId w)
     } else {
         // special name for the local machine (localhost)
         char hostnamebuf[80];
-        if (gethostname (hostnamebuf, sizeof hostnamebuf) >= 0) {
-            hostnamebuf[sizeof(hostnamebuf)-1] = 0;
+        ::memset(hostnamebuf, '\0', sizeof(hostnamebuf));
+        if (::gethostname (hostnamebuf, sizeof(hostnamebuf)) >= 0) {
             if (result == hostnamebuf)
                 result = "localhost";
             if(char *dot = strchr(hostnamebuf, '.')) {
