@@ -31,7 +31,7 @@ int main(int argc, char **argv)
                          KAboutData::License_GPL_V2,
                          ki18n("(c) 2022 Ivailo Monev"),
                          KLocalizedString(),
-                        "http://github.com/fluxer/katana"
+                        "https://osdn.net/projects/kde/"
                         );
     aboutData.addAuthor(ki18n("Ivailo Monev"),
                         ki18n("Maintainer"),

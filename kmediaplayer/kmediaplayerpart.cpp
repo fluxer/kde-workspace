@@ -33,7 +33,7 @@ K_EXPORT_PLUGIN(KMediaPlayerPartFactory(KAboutData(
                KAboutData::License_GPL_V2,
                ki18n("(c) 2016 Ivailo Monev"),
                KLocalizedString(),
-               "http://github.com/fluxer/katana",
+               "https://osdn.net/projects/kde/",
                "xakepa10@gmail.com").
                setProgramIconName(QLatin1String("KMediaPlayerPart")).
                setCatalogName("kmediaplayer")))
