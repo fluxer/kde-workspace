@@ -74,11 +74,5 @@ Name[zh_TW]=CFP 法郎（CFP Franc）
 CurrencyNameIso=CFP franc
 CurrencyUnitSymbols=F,XPF
 CurrencyUnitSymbolDefault=F
-CurrencyUnitSymbolUnambiguous=XPF
-CurrencySubunitSymbol=
-#CurrencySubunits=1
-CurrencySubunitsInCirculation=false
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=PF,NC,WF
 

@@ -75,11 +75,5 @@ Name[zh_TW]=英國─英鎊先令（Pound Sterling）
 CurrencyNameIso=Pound sterling
 CurrencyUnitSymbols=£,GBP
 CurrencyUnitSymbolDefault=£
-#CurrencyUnitSymbolUnambiguous=
-CurrencySubunitSymbol=p
 #Use decimalisation day?
-#CurrencySubunits=1
-#CurrencySubunitsInCirculation=true
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=UK,FK,GI,GG,IM,JE,SH,GS,ZW

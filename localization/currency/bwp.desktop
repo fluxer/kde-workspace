@@ -76,11 +76,5 @@ Name[zh_CN]=博茨瓦纳普拉
 Name[zh_TW]=波札那─普拉（Pula）
 CurrencyUnitSymbols=P,BWP
 CurrencyUnitSymbolDefault=P
-#CurrencyUnitSymbolUnambiguous=
-CurrencySubunitSymbol=
 #Exact date in 1967 unknown
-#CurrencySubunits=1
-#CurrencySubunitsInCirculation=true
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=BW,ZW

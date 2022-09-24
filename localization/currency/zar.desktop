@@ -75,11 +75,5 @@ Name[zh_TW]=南非─蘭特（Rand）
 CurrencyNameIso=South African rand
 CurrencyUnitSymbols=R,ZAR
 CurrencyUnitSymbolDefault=R
-#CurrencyUnitSymbolUnambiguous=
-CurrencySubunitSymbol=c
 #Exact day in 1961 unknown
-#CurrencySubunits=1
-#CurrencySubunitsInCirculation=true
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=ZA,LS,NA,SZ,ZW

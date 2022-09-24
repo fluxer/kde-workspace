@@ -77,11 +77,5 @@ Name[zh_CN]=欧元
 Name[zh_TW]=歐洲─歐元（Euro）
 CurrencyUnitSymbols=€,EUR
 CurrencyUnitSymbolDefault=€
-#CurrencyUnitSymbolUnambiguous=
-CurrencySubunitSymbol=c
 #Use accounting date
-#CurrencySubunits=1
-#CurrencySubunitsInCirculation=true
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=AT,BE,CY,FI,FR,DE,EE,GR,IE,IT,LT,LU,LV,MT,NL,PT,SK,SI,ES,MC,SM,VA,AD,ME,ZW

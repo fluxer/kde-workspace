@@ -77,11 +77,5 @@ Name[zh_TW]=中國─人民幣（RMB，Yuan）
 CurrencyNameIso=Chinese Yuan
 CurrencyUnitSymbols=¥,RMB,CNY
 CurrencyUnitSymbolDefault=¥
-CurrencyUnitSymbolUnambiguous=CNY
-#CurrencySubunitSymbol=
 #Revalued on 1955-04-01?
-CurrencySubunits=2
-#CurrencySubunitsInCirculation=true
-CurrencySubunitsPerUnit=10
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=CN,HK,MO,KP,MM

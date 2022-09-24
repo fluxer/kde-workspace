@@ -75,11 +75,5 @@ Name[zh_TW]=西非─CFA 法郎（CFA Franc）
 CurrencyNameIso=CFA Franc BCEAO
 CurrencyUnitSymbols=CFA,XOF
 CurrencyUnitSymbolDefault=CFA
-CurrencyUnitSymbolUnambiguous=CFA
-CurrencySubunitSymbol=
-#CurrencySubunits=1
-CurrencySubunitsInCirculation=false
-#CurrencySubunitsPerUnit=100
 #CurrencyDecimalPlacesDisplay=2
-CurrencyCountriesInUse=BJ,BF,CI,GW,ML,NE,SN,TG
 
