@@ -126,9 +126,6 @@ private:
                      KIntNumInput *itemInput, KPushButton *itemDefaultButton );
     void setCheckItem( const QString &itemKey, bool itemValue,
                        QCheckBox *itemCheck, KPushButton *itemDefaultButton );
-    void setMonetaryFormat( const QString &prefixCurrencySymbolKey, bool prefixCurrencySymbol,
-                            const QString &signPositionKey, KLocale::SignPosition signPosition,
-                            QWidget *formatWidget, KPushButton *formatDefaultButton );
 
     // Check if the chaged flag needs to be set
     void checkIfChanged();
@@ -141,8 +138,6 @@ private:
     void insertDigitGroupingItem( KComboBox *digitGroupingCombo,
                                   KSharedConfigPtr groupingConfig, KConfigGroup *groupingSettings,
                                   const QString &digitGroupingKey, const QString &digitGroupingFormat);
-    void insertMonetaryPositiveFormat( bool prefixCurrencySymbol, KLocale::SignPosition signPosition );
-    void insertMonetaryNegativeFormat( bool prefixCurrencySymbol, KLocale::SignPosition signPosition );
 
     void initAllWidgets();
     void initSettingsWidgets();
@@ -185,35 +180,6 @@ private:
 
     void initNumericDigitSet();
     void setNumericDigitSet( int newValue );
-
-    //Monetary tab
-
-    void initCurrencyCode();
-    void setCurrencyCode( const QString &newValue );
-
-    void initCurrencySymbol();
-    void setCurrencySymbol( const QString &newValue );
-
-    void initMonetaryDigitGrouping();
-    void setMonetaryDigitGrouping( const QString &newValue );
-
-    void initMonetaryThousandsSeparator();
-    void setMonetaryThousandsSeparator( const QString &newValue );
-
-    void initMonetaryDecimalSymbol();
-    void setMonetaryDecimalSymbol( const QString &newValue );
-
-    void initMonetaryDecimalPlaces();
-    void setMonetaryDecimalPlaces( int newValue );
-
-    void initMonetaryPositiveFormat();
-    void setMonetaryPositiveFormat( bool prefixCurrencySymbol, KLocale::SignPosition signPosition );
-
-    void initMonetaryNegativeFormat();
-    void setMonetaryNegativeFormat( bool prefixCurrencySymbol, KLocale::SignPosition signPosition );
-
-    void initMonetaryDigitSet();
-    void setMonetaryDigitSet( int newValue );
 
     //Calendar Tab
 
@@ -313,35 +279,6 @@ private Q_SLOTS:
 
     void defaultNumericDigitSet();
     void changedNumericDigitSetIndex( int index );
-
-    //Monetary tab
-
-    void defaultCurrencyCode();
-    void changedCurrencyCodeIndex( int index );
-
-    void defaultCurrencySymbol();
-    void changedCurrencySymbolIndex( int index );
-
-    void defaultMonetaryDigitGrouping();
-    void changedMonetaryDigitGroupingIndex( int index );
-
-    void defaultMonetaryThousandsSeparator();
-    void changedMonetaryThousandsSeparator( const QString &newValue );
-
-    void defaultMonetaryDecimalSymbol();
-    void changedMonetaryDecimalSymbol( const QString &newValue );
-
-    void defaultMonetaryDecimalPlaces();
-    void changedMonetaryDecimalPlaces( int newValue );
-
-    void defaultMonetaryPositiveFormat();
-    void changedMonetaryPositiveFormatIndex( int index );
-
-    void defaultMonetaryNegativeFormat();
-    void changedMonetaryNegativeFormatIndex( int index );
-
-    void defaultMonetaryDigitSet();
-    void changedMonetaryDigitSetIndex( int index );
 
     //Calendar Tab
 

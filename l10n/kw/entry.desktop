@@ -100,6 +100,3 @@ WorkingWeekStartDay=7
 WorkingWeekEndDay=4
 WeekDayOfPray=5
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=KWD
-CurrencyCode=KWD

@@ -97,6 +97,3 @@ Languages=ar
 DecimalSymbol=,
 DateFormatShort=%y/%m/%d
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=TND
-CurrencyCode=TND

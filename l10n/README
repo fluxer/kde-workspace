@@ -1,8 +1,8 @@
 GENERAL
 =======
 
-In KDE we support localization of calendars, dates, time, numbers and
-money. KDE will use this when displaying such information, giving you
+In KDE we support localization of calendars, dates, time, numbers.
+KDE will use this when displaying such information, giving you
 a feeling that KDE was written to fit your national standards. To make
 this possible, we need to gather some information on your national
 standards. Currently there are some 237 countries supported. If your
@@ -122,80 +122,17 @@ between the entry name and the value.
 
 	Default: 0
 
-
-* CurrencyCode
-    The ISO Code of the primary currency used in the country.
-
-    Default: "USD"
-
-* CurrencyCodesInUse
-    A list of ISO Codes of all the currencies used in the country.
-
-    Default: "USD"
-
-* MonetaryDecimalSymbol
-	The symbol that separates the decimals from the rest of the number
-	when displaying.
-
-	Default: "."
-
-* MonetaryDecimalPlaces
-    The number of decimal places to display in a formatted money amount
-
-    Default: 2
-
-* MonetaryThousandsSeparator
-	Thousands separator for money.
-
-	Default: ","
-
-* MonetaryDigitSet
-	The set of digits used to display money amounts.
-
-	See DigitSet for possible values.
-
-	Default: 0
-
 * PositiveSign
-	Positive sign for money.
-	Note: this will be used for formatting numbers. Do not add "+" if
-	      you don't really want numbers to be formatted that way.
+	Positive sign for numbers.
+	Note: Do not add "+" if you don't really want numbers to be
+	      formatted that way.
 
 	Default: ""
 
 * NegativeSign
-	Negative sign for money.
+	Negative sign for numbers.
 
 	Default: "-"
-
-* PositivePrefixCurrencySymbol
-	If currency symbol should be prepended (if not, it will be
-	appended). This is for non-negative money values.
-
-	Default: true
-
-* NegativePrefixCurrencySymbol
-	If currency symbol should be prepended (if not, it will be
-	appended). This is for negative money values.
-
-	Default: true
-
-* PositiveMonetarySignPosition
-	Defines which type and where the sign (if it's positive or
-	negative) should be placed. This is for non-negative money values.
-
-	0 ParensAround
-	1 BeforeQuantityMoney
-	2 AfterQuantityMoney
-	3 BeforeMoney
-	4 AfterMoney
-
-	Default: 1
-
-* NegativeMonetarySignPosition
-	Same as PositiveMonetarySignPosition, but for negative numbers.
-
-	Default: 0
 
 * DateFormat[language code]
 	This defines how a date is formated. The date string will be

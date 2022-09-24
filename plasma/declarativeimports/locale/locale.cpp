@@ -37,12 +37,6 @@ bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
     return ok;
 }
 
-void Locale::setCurrencyCode(const QString &newCurrencyCode)
-{
-    m_locale->setCurrencyCode(newCurrencyCode);
-    emit currencyCodeChanged();
-}
-
 bool Locale::isApplicationTranslatedInto(const QString &lang)
 {
     return m_locale->isApplicationTranslatedInto(lang);
@@ -67,11 +61,6 @@ QString Locale::country() const
 QString Locale::countryDivisionCode() const
 {
     return m_locale->countryDivisionCode();
-}
-
-QString Locale::currencyCode() const
-{
-    return m_locale->currencyCode();
 }
 
 QString Locale::translateQt(const char *context, const char *sourceText) const
@@ -140,21 +129,6 @@ QString Locale::thousandsSeparator() const
     return m_locale->thousandsSeparator();
 }
 
-QString Locale::currencySymbol() const
-{
-    return m_locale->currencySymbol();
-}
-
-QString Locale::monetaryDecimalSymbol() const
-{
-    return m_locale->monetaryDecimalSymbol();
-}
-
-QString Locale::monetaryThousandsSeparator() const
-{
-    return m_locale->monetaryThousandsSeparator();
-}
-
 QString Locale::positiveSign() const
 {
     return m_locale->positiveSign();
@@ -163,36 +137,6 @@ QString Locale::positiveSign() const
 QString Locale::negativeSign() const
 {
     return m_locale->negativeSign();
-}
-
-int Locale::monetaryDecimalPlaces() const
-{
-    return m_locale->monetaryDecimalPlaces();
-}
-
-bool Locale::positivePrefixCurrencySymbol() const
-{
-    return m_locale->positivePrefixCurrencySymbol();
-}
-
-bool Locale::negativePrefixCurrencySymbol() const
-{
-    return m_locale->negativePrefixCurrencySymbol();
-}
-
-Locale::SignPosition Locale::positiveMonetarySignPosition() const
-{
-    return (Locale::SignPosition)m_locale->positiveMonetarySignPosition();
-}
-
-Locale::SignPosition Locale::negativeMonetarySignPosition() const
-{
-    return (Locale::SignPosition)m_locale->negativeMonetarySignPosition();
-}
-
-QString Locale::formatMoney(double num, const QString &symbol, int precision) const
-{
-    return m_locale->formatMoney(num, symbol, precision);
 }
 
 QString Locale::formatLong(long num) const
@@ -248,12 +192,6 @@ double Locale::readNumber(const QString &_str) const
     return m_locale->readNumber(_str, &ok);
 }
 
-double Locale::readMoney(const QString &_str) const
-{
-    bool ok;
-    return m_locale->readMoney(_str, &ok);
-}
-
 QDate Locale::readDate(const QString &intstr, ReadDateFlags flags) const
 {
     bool ok;
@@ -291,11 +229,6 @@ QString Locale::dayPeriodText(const QTime &time, DateTimeComponentFormat format)
 QStringList Locale::languageList() const
 {
     return m_locale->languageList();
-}
-
-QStringList Locale::currencyCodeList() const
-{
-    return m_locale->currencyCodeList();
 }
 
 QString Locale::formatDateTime(const QDateTime &dateTime, Locale::DateFormat format, DateTimeFormatOptions options) const
@@ -396,54 +329,6 @@ void Locale::setNegativeSign(const QString &sign)
     emit negativeSignChanged();
 }
 
-void Locale::setPositiveMonetarySignPosition(Locale::SignPosition signpos)
-{
-    m_locale->setPositiveMonetarySignPosition((KLocale::SignPosition)signpos);
-    emit positiveMonetarySignPositionChanged();
-}
-
-void Locale::setNegativeMonetarySignPosition(Locale::SignPosition signpos)
-{
-    m_locale->setNegativeMonetarySignPosition((KLocale::SignPosition)signpos);
-    emit negativeMonetarySignPositionChanged();
-}
-
-void Locale::setPositivePrefixCurrencySymbol(bool prefix)
-{
-    m_locale->setPositivePrefixCurrencySymbol(prefix);
-    emit positivePrefixCurrencySymbolChanged();
-}
-
-void Locale::setNegativePrefixCurrencySymbol(bool prefix)
-{
-    m_locale->setNegativePrefixCurrencySymbol(prefix);
-    emit negativePrefixCurrencySymbolChanged();
-}
-
-void Locale::setMonetaryDecimalPlaces(int digits)
-{
-    m_locale->setMonetaryDecimalPlaces(digits);
-    emit monetaryDecimalPlacesChanged();
-}
-
-void Locale::setMonetaryThousandsSeparator(const QString &separator)
-{
-    m_locale->setMonetaryThousandsSeparator(separator);
-    emit monetaryThousandsSeparatorChanged();
-}
-
-void Locale::setMonetaryDecimalSymbol(const QString &symbol)
-{
-    m_locale->setMonetaryDecimalSymbol(symbol);
-    emit monetaryDecimalSymbolChanged();
-}
-
-void Locale::setCurrencySymbol(const QString & symbol)
-{
-    m_locale->setCurrencySymbol(symbol);
-    emit currencySymbolChanged();
-}
-
 int Locale::pageSize() const
 {
     return m_locale->pageSize();
@@ -474,11 +359,6 @@ QString Locale::defaultLanguage()
 QString Locale::defaultCountry()
 {
     return KLocale::defaultCountry();
-}
-
-QString Locale::defaultCurrencyCode()
-{
-    return KLocale::defaultCurrencyCode();
 }
 
 int Locale::fileEncodingMib() const
@@ -547,17 +427,6 @@ void Locale::setDigitSet(Locale::DigitSet digitSet)
 Locale::DigitSet Locale::digitSet() const
 {
     return (Locale::DigitSet)m_locale->digitSet();
-}
-
-void Locale::setMonetaryDigitSet(Locale::DigitSet digitSet)
-{
-    m_locale->setMonetaryDigitSet((KLocale::DigitSet)digitSet);
-    emit monetaryDigitSetChanged();
-}
-
-Locale::DigitSet Locale::monetaryDigitSet() const
-{
-    return (Locale::DigitSet)m_locale->monetaryDigitSet();
 }
 
 void Locale::setDateTimeDigitSet(Locale::DigitSet digitSet)

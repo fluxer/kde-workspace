@@ -99,6 +99,3 @@ DateFormat[zh_TW]=%Y %B %e %A
 DateFormat[eo]=%A, la %ea de %B %Y
 TimeFormat=%H:%M:%S
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=TWD
-CurrencyCode=TWD

@@ -97,6 +97,3 @@ DecimalSymbol=,
 DateFormatShort=%y/%m/%d
 CalendarSystem=hijri
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=SAR
-CurrencyCode=SAR

@@ -100,6 +100,3 @@ WorkingWeekStartDay=6
 WorkingWeekEndDay=4
 WeekDayOfPray=5
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=EGP
-CurrencyCode=EGP

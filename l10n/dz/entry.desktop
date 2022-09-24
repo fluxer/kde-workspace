@@ -100,6 +100,3 @@ WorkingWeekStartDay=6
 WorkingWeekEndDay=3
 WeekDayOfPray=7
 #DecimalPlaces=2
-#MonetaryDecimalPlaces=2
-CurrencyCodesInUse=DZD
-CurrencyCode=DZD

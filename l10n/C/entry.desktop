@@ -106,18 +106,6 @@ PositiveSign=
 NegativeSign=-
 DigitSet=0
 
-CurrencyCode=USD
-CurrencyCodesInUse=USD
-#CurrencySymbol=$ Don't default as will use default for CurrencyCode
-MonetaryDecimalPlaces=2
-MonetaryDecimalSymbol=.
-MonetaryDigitGroupFormat=3
-MonetaryThousandsSeparator=,
-PositivePrefixCurrencySymbol=true
-NegativePrefixCurrencySymbol=true
-PositiveMonetarySignPosition=1
-NegativeMonetarySignPosition=1
-MonetaryDigitSet=0
 
 CalendarSystem=gregorian
 

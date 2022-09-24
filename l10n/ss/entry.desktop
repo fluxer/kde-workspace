@@ -65,6 +65,4 @@ Name[zh_CN]=南苏丹
 Name[zh_TW]=南蘇丹
 Region=eastafrica
 Languages=en_US
-CurrencyCodesInUse=SSP,SDG
-CurrencyCode=SSP
 Author=John Layt <jlayt@kde.org>

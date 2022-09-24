@@ -367,7 +367,6 @@ add_subdirectory(kdirshare)
 add_subdirectory(keditfiletype)
 # Default settings, content and config
 add_subdirectory(l10n)
-add_subdirectory(localization)
 add_subdirectory(kde-menu)
 
 ########### install files ###############
