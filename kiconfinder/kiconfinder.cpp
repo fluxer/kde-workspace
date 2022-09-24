@@ -23,9 +23,10 @@
 #include <kiconloader.h>
 #include <kdeversion.h>
 #include <klocale.h>
-#include <stdio.h>
 #include <kapplication.h>
+
 #include <iostream>
+#include <stdio.h>
 
 int main(int argc, char *argv[])
 {
