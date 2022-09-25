@@ -48,7 +48,6 @@
 #include <kservice.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
-#include <kauthorized.h>
 
 K_PLUGIN_FACTORY(KateKonsoleFactory, registerPlugin<KateKonsolePlugin>();)
 K_EXPORT_PLUGIN(KateKonsoleFactory(KAboutData("katekonsole","katekonsoleplugin",ki18n("Konsole"), "0.1", ki18n("Embedded Konsole"), KAboutData::License_LGPL_V2)) )

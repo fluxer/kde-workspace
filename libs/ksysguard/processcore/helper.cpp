@@ -23,19 +23,18 @@
 #include "helper.h"
 #include "processes_local_p.h"
 
-#include <kauthhelpersupport.h>
-
 KSysGuardProcessListHelper::KSysGuardProcessListHelper()
 {
     qRegisterMetaType<QList<long long> >();
 }
 
 /* The functions here run as ROOT.  So be careful.  DO NOT TRUST THE INPUTS TO BE SANE. */
-#define GET_PID(i) parameters.value(QString("pid%1").arg(i), -1).toLongLong(); if(pid < 0) return KAuth::ActionReply::HelperErrorReply;
+#define GET_PID(i) parameters.value(QString("pid%1").arg(i), -1).toLongLong(); if(pid < 0) return KAuthorization::HelperError;
 
-KAuth::ActionReply KSysGuardProcessListHelper::renice(QVariantMap parameters) {
+int KSysGuardProcessListHelper::renice(QVariantMap parameters)
+{
     if(!parameters.contains("nicevalue") || !parameters.contains("pidcount"))
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
 
     KSysGuard::ProcessesLocal processes;
     int niceValue = parameters.value("nicevalue").toInt();
@@ -45,15 +44,17 @@ KAuth::ActionReply KSysGuardProcessListHelper::renice(QVariantMap parameters) {
         qlonglong pid = GET_PID(i);
         success = processes.setNiceness(pid, niceValue) && success;
     }
-    if(success)
-        return KAuth::ActionReply::SuccessReply;
-    else
-        return KAuth::ActionReply::HelperErrorReply;
+    if (success) {
+        return KAuthorization::NoError;
+    }
+    return KAuthorization::HelperError;
 }
 
-KAuth::ActionReply KSysGuardProcessListHelper::changecpuscheduler(QVariantMap parameters) {
-    if(!parameters.contains("cpuScheduler") || !parameters.contains("cpuSchedulerPriority") || !parameters.contains("pidcount"))
-        return KAuth::ActionReply::HelperErrorReply;
+int KSysGuardProcessListHelper::changecpuscheduler(QVariantMap parameters)
+{
+    if (!parameters.contains("cpuScheduler") || !parameters.contains("cpuSchedulerPriority") || !parameters.contains("pidcount")) {
+        return KAuthorization::HelperError;
+    }
 
     KSysGuard::ProcessesLocal processes;
     int cpuScheduler = parameters.value("cpuScheduler").toInt();
@@ -65,11 +66,11 @@ KAuth::ActionReply KSysGuardProcessListHelper::changecpuscheduler(QVariantMap pa
         qlonglong pid = GET_PID(i);
         success = processes.setScheduler(pid, cpuScheduler, cpuSchedulerPriority) && success;
     }
-    if(success)
-        return KAuth::ActionReply::SuccessReply;
-    else
-        return KAuth::ActionReply::HelperErrorReply;
+    if (success) {
+        return KAuthorization::NoError;
+    }
+    return KAuthorization::HelperError;
 
 }
-KDE4_AUTH_HELPER_MAIN("org.kde.ksysguard.processlisthelper", KSysGuardProcessListHelper)
+K_AUTH_MAIN("org.kde.ksysguard.processlisthelper", KSysGuardProcessListHelper)
 

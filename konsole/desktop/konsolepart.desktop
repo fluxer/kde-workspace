@@ -10,8 +10,6 @@ X-KDE-BrowserView-Toggable=true
 X-KDE-BrowserView-ToggableView-Orientation=horizontal
 X-KDE-BrowserView-FollowActive=true
 
-X-KDE-AuthorizeAction=shell_access
-
 Name=Terminal Emulator
 Name[af]=Terminaal Emulasie
 Name[ar]=محاكي طرفية

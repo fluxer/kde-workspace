@@ -43,7 +43,6 @@
 #include <kconfiggroup.h>
 #include <ksettings.h>
 #include <kdesktopfile.h>
-#include <kauthorized.h>
 #include <kglobal.h>
 #include <kacceleratormanager.h>
 

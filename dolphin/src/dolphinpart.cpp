@@ -36,7 +36,6 @@
 #include <KToggleAction>
 #include <KIO/NetAccess>
 #include <KToolInvocation>
-#include <kauthorized.h>
 #include <KMenu>
 #include <KInputDialog>
 #include <KProtocolInfo>

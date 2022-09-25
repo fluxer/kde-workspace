@@ -43,9 +43,6 @@ enforced security
 
 This is security that doesn't rely on plasmoid developers. Mostly it's about disabling access to features via the scripting API, so that plasmoids using that API absolutely cannot use the disabled features.
 
-it'd be nice if we could use KAuthorized to enforce some stuff on the c++ applets... I tried, but didn't get anywhere.
-
-
 misc
 ----
 

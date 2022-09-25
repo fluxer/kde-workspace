@@ -26,8 +26,7 @@
 #include <QtCore/qdir.h>
 #include <QtCore/qcoreapplication.h>
 
-#include <kauthaction.h>
-#include <kauthhelpersupport.h>
+#include <kauthorization.h>
 #include <KDebug>
 #include <kio/global.h>
 #include <kde_file.h>
@@ -947,24 +946,22 @@ bool FontInst::findFont(const QString &family, quint32 style, EFolder folder,
 
 int FontInst::performAction(const QVariantMap &args)
 {
-    KAuth::Action action("org.kde.fontinst.manage");
-
-    action.setHelperID("org.kde.fontinst");
-    action.setArguments(args);
     KFI_DBUG << "Call " << args["method"].toString() << " on helper";
     itsFontListTimer->stop();
     itsConnectionsTimer->stop();
-    KAuth::ActionReply reply = action.execute();
+    int reply = KAuthorization::execute(
+        "org.kde.fontinst", "manage", args
+    );
 
-    switch(reply.type())
+    switch(reply)
     {
-        case KAuth::ActionReply::KAuthError:
-            KFI_DBUG << "KAuth failed - error code:" << reply.errorCode();
+        case KAuthorization::AuthorizationError:
+            KFI_DBUG << "KAuth failed - error code:" << reply;
             return KIO::ERR_COULD_NOT_AUTHENTICATE;
-        case KAuth::ActionReply::HelperError:
-            KFI_DBUG << "Helper failed - error code:" << reply.errorCode();
-            return (int)reply.errorCode();
-        case KAuth::ActionReply::Success:
+        case KAuthorization::HelperError:
+            KFI_DBUG << "Helper failed - error code:" << reply;
+            return reply;
+        case KAuthorization::NoError:
             KFI_DBUG << "Success!";
     }
 

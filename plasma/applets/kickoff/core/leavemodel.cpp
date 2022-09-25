@@ -24,7 +24,6 @@
 #include <QFileInfo>
 
 // KDE
-#include <KAuthorized>
 #include <KConfigGroup>
 #include <KDebug>
 #include <KIcon>
@@ -119,29 +118,22 @@ void LeaveModel::updateModel()
     QStandardItem *sessionOptions = new QStandardItem(i18n("Session"));
 
     // Logout
-    const bool canLogout = KAuthorized::authorizeKAction("logout") && KAuthorized::authorize("logout");
-    if (canLogout) {
-        QStandardItem *logoutOption = createStandardItem("leave:/logoutonly");
-        sessionOptions->appendRow(logoutOption);
-    }
+    QStandardItem *logoutOption = createStandardItem("leave:/logoutonly");
+    sessionOptions->appendRow(logoutOption);
 
     // Lock
-    if (KAuthorized::authorizeKAction("lock_screen")) {
-        QStandardItem *lockOption = createStandardItem("leave:/lock");
-        sessionOptions->appendRow(lockOption);
-    }
+    QStandardItem *lockOption = createStandardItem("leave:/lock");
+    sessionOptions->appendRow(lockOption);
 
     // Save Session
-    if (canLogout) {
-        KConfigGroup c(KSharedConfig::openConfig("ksmserverrc", KConfig::NoGlobals), "General");
-        if (c.readEntry("loginMode") == "restoreSavedSession") {
-            QStandardItem *saveSessionOption = createStandardItem("leave:/savesession");
-            sessionOptions->appendRow(saveSessionOption);
-        }
+    KConfigGroup c(KSharedConfig::openConfig("ksmserverrc", KConfig::NoGlobals), "General");
+    if (c.readEntry("loginMode") == "restoreSavedSession") {
+        QStandardItem *saveSessionOption = createStandardItem("leave:/savesession");
+        sessionOptions->appendRow(saveSessionOption);
     }
 
     // Switch User
-    if (KDisplayManager().isSwitchable() && KAuthorized::authorize(QLatin1String("switch_user")))  {
+    if (KDisplayManager().isSwitchable())  {
         QStandardItem *switchUserOption = createStandardItem("leave:/switch");
         sessionOptions->appendRow(switchUserOption);
     }
@@ -170,20 +162,18 @@ void LeaveModel::updateModel()
         addSystemSession = true;
     }
 
-    if (canLogout) {
-        if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeReboot)) {
-            // Restart
-            QStandardItem *restartOption = createStandardItem("leave:/restart");
-            systemOptions->appendRow(restartOption);
-            addSystemSession = true;
-        }
+    if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeReboot)) {
+        // Restart
+        QStandardItem *restartOption = createStandardItem("leave:/restart");
+        systemOptions->appendRow(restartOption);
+        addSystemSession = true;
+    }
 
-        if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeHalt)) {
-            // Shutdown
-            QStandardItem *shutDownOption = createStandardItem("leave:/shutdown");
-            systemOptions->appendRow(shutDownOption);
-            addSystemSession = true;
-        }
+    if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeHalt)) {
+        // Shutdown
+        QStandardItem *shutDownOption = createStandardItem("leave:/shutdown");
+        systemOptions->appendRow(shutDownOption);
+        addSystemSession = true;
     }
 
     appendRow(sessionOptions);

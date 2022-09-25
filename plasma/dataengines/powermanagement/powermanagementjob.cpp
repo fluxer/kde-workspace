@@ -21,8 +21,6 @@
 #include <QDBusMessage>
 #include <QDBusPendingReply>
 
-#include <KAuthorized>
-
 // kde-workspace/libs
 #include <kworkspace/kworkspace.h>
 
@@ -49,15 +47,11 @@ void PowerManagementJob::start()
     //kDebug() << "starting operation  ... " << operation;
 
     if (operation == "lockScreen") {
-        if (KAuthorized::authorizeKAction("lock_screen")) {
-            const QString interface("org.freedesktop.ScreenSaver");
-            QDBusInterface screensaver(interface, "/ScreenSaver");
-            screensaver.asyncCall("Lock");
-            setResult(true);
-            return;
-        }
-        kDebug() << "operation denied " << operation;
-        setResult(false);
+#warning TODO: error check
+        const QString interface("org.freedesktop.ScreenSaver");
+        QDBusInterface screensaver(interface, "/ScreenSaver");
+        screensaver.asyncCall("Lock");
+        setResult(true);
         return;
     } else if (operation == "suspend" || operation == "suspendToRam") {
         if (!Solid::PowerManagement::supportedSleepStates().contains(Solid::PowerManagement::SuspendState)) {

@@ -19,16 +19,13 @@
 #ifndef KGREETERHELPER_H
 #define KGREETERHELPER_H
 
-#include <kauthactionreply.h>
+#include <kauthorization.h>
 
-// methods return type must be ActionReply otherwise QMetaObject::invokeMethod() fails
-using namespace KAuth;
-
-class KGreeterHelper : public QObject
+class KGreeterHelper : public KAuthorization
 {
     Q_OBJECT
 public slots:
-    ActionReply save(const QVariantMap &parameters);
+    int save(const QVariantMap &parameters);
 };
 
 #endif // KGREETERHELPER_H

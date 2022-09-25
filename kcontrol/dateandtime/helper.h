@@ -21,11 +21,9 @@
 #ifndef CLOCK_HELPER_H
 #define CLOCK_HELPER_H
 
-#include <kauthactionreply.h>
+#include <kauthorization.h>
 
-using namespace KAuth;
-
-class ClockHelper : public QObject
+class ClockHelper : public KAuthorization
 {
     Q_OBJECT
 
@@ -39,7 +37,7 @@ class ClockHelper : public QObject
         };
 
     public slots:
-        ActionReply save(const QVariantMap &map);
+        int save(const QVariantMap &map);
 
     private:
         CH_Error ntp(const QStringList& ntpServers, bool ntpEnabled);

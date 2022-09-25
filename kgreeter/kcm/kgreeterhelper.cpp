@@ -19,16 +19,16 @@
 #include "kgreeterhelper.h"
 
 #include <QSettings>
-#include <kauthhelpersupport.h>
+#include <kdebug.h>
 
 #include "config-workspace.h"
 
-ActionReply KGreeterHelper::save(const QVariantMap &parameters)
+int KGreeterHelper::save(const QVariantMap &parameters)
 {
     if (!parameters.contains("font") || !parameters.contains("style")
         || !parameters.contains("colorscheme") || !parameters.contains("cursortheme")
         || !parameters.contains("background") || !parameters.contains("rectangle")) {
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
     }
 
     QString colorscheme = parameters.value("colorscheme").toString();
@@ -48,13 +48,11 @@ ActionReply KGreeterHelper::save(const QVariantMap &parameters)
     kgreetersettings.setValue("greeter/background", parameters.value("background"));
     kgreetersettings.setValue("greeter/rectangle", parameters.value("rectangle"));
     if (kgreetersettings.status() != QSettings::NoError) {
-        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-        errorreply.setErrorDescription("Could not save settings");
-        errorreply.setErrorCode(1);
-        return errorreply;
+        kWarning() << "Could not save settings";
+        return KAuthorization::HelperError;
     }
 
-    return KAuth::ActionReply::SuccessReply;
+    return KAuthorization::NoError;
 }
 
-KDE4_AUTH_HELPER_MAIN("org.kde.kcontrol.kcmkgreeter", KGreeterHelper)
+K_AUTH_MAIN("org.kde.kcontrol.kcmkgreeter", KGreeterHelper)

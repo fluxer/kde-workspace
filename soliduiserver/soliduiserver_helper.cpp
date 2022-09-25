@@ -18,7 +18,6 @@
 
 #include "soliduiserver_helper.h"
 
-#include <kauthhelpersupport.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
@@ -31,18 +30,16 @@
 #  include <errno.h>
 #endif
 
-KAuth::ActionReply SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
+int SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
 {
     if (!parameters.contains("device") || !parameters.contains("name") || !parameters.contains("password")) {
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
     }
 
     const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
     if (cryptbin.isEmpty()) {
-        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-        errorreply.setErrorDescription("cryptsetup is missing");
-        errorreply.setErrorCode(1);
-        return errorreply;
+        kWarning() << "cryptsetup is missing";
+        return KAuthorization::HelperError;
     }
 
     const QString device = parameters.value("device").toString();
@@ -57,30 +54,26 @@ KAuth::ActionReply SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
     cryptproc.waitForFinished();
 
     if (cryptproc.exitCode() == 0) {
-        return KAuth::ActionReply::SuccessReply;
+        return KAuthorization::NoError;
     }
     QString crypterror = cryptproc.readAllStandardError();
     if (crypterror.isEmpty()) {
         crypterror = cryptproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-    errorreply.setErrorDescription(crypterror);
-    errorreply.setErrorCode(cryptproc.exitCode());
-    return errorreply;
+    kWarning() << crypterror;
+    return KAuthorization::HelperError;
 }
 
-KAuth::ActionReply SolidUiServerHelper::cryptclose(const QVariantMap &parameters)
+int SolidUiServerHelper::cryptclose(const QVariantMap &parameters)
 {
     if (!parameters.contains("name")) {
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
     }
 
     const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
     if (cryptbin.isEmpty()) {
-        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-        errorreply.setErrorDescription("cryptsetup is missing");
-        errorreply.setErrorCode(1);
-        return errorreply;
+        kWarning() << "cryptsetup is missing";
+        return KAuthorization::HelperError;
     }
 
     const QString name = parameters.value("name").toString();
@@ -91,23 +84,21 @@ KAuth::ActionReply SolidUiServerHelper::cryptclose(const QVariantMap &parameters
     cryptproc.waitForFinished();
 
     if (cryptproc.exitCode() == 0) {
-        return KAuth::ActionReply::SuccessReply;
+        return KAuthorization::NoError;
     }
     QString crypterror = cryptproc.readAllStandardError();
     if (crypterror.isEmpty()) {
         crypterror = cryptproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-    errorreply.setErrorDescription(crypterror);
-    errorreply.setErrorCode(cryptproc.exitCode());
-    return errorreply;
+    kWarning() << crypterror;
+    return KAuthorization::HelperError;
 }
 
-KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
+int SolidUiServerHelper::mount(const QVariantMap &parameters)
 {
     if (!parameters.contains("device") || !parameters.contains("mountpoint")
         || !parameters.contains("fstype")) {
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
     }
 
     const QString device = parameters.value("device").toString();
@@ -138,14 +129,11 @@ KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
             0, NULL
         );
         if (mountresult == 0) {
-            return KAuth::ActionReply::SuccessReply;
+            return KAuthorization::NoError;
         }
         const int savederrno = errno;
-        // qDebug() << Q_FUNC_INFO << qt_error_string(savederrno);
-        KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-        errorreply.setErrorDescription(qt_error_string(savederrno));
-        errorreply.setErrorCode(savederrno);
-        return errorreply;
+        kWarning() << qt_error_string(savederrno);
+        return KAuthorization::HelperError;
     }
 #endif // Q_OS_LINUX
 
@@ -156,22 +144,20 @@ KAuth::ActionReply SolidUiServerHelper::mount(const QVariantMap &parameters)
     mountproc.waitForFinished();
 
     if (mountproc.exitCode() == 0) {
-        return KAuth::ActionReply::SuccessReply;
+        return KAuthorization::NoError;
     }
     QString mounterror = mountproc.readAllStandardError();
     if (mounterror.isEmpty()) {
         mounterror = mountproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-    errorreply.setErrorDescription(mounterror);
-    errorreply.setErrorCode(mountproc.exitCode());
-    return errorreply;
+    kWarning() << mounterror;
+    return KAuthorization::HelperError;
 }
 
-KAuth::ActionReply SolidUiServerHelper::unmount(const QVariantMap &parameters)
+int SolidUiServerHelper::unmount(const QVariantMap &parameters)
 {
     if (!parameters.contains("mountpoint")) {
-        return KAuth::ActionReply::HelperErrorReply;
+        return KAuthorization::HelperError;
     }
 
     const QString mountpoint = parameters.value("mountpoint").toString();
@@ -180,13 +166,11 @@ KAuth::ActionReply SolidUiServerHelper::unmount(const QVariantMap &parameters)
     const QByteArray mountpointbytes = mountpoint.toLocal8Bit();;
     const int umountresult = ::umount2(mountpointbytes.constData(), MNT_DETACH);
     if (umountresult == 0) {
-        return KAuth::ActionReply::SuccessReply;
+        return KAuthorization::NoError;
     }
     const int savederrno = errno;
-    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-    errorreply.setErrorDescription(qt_error_string(savederrno));
-    errorreply.setErrorCode(savederrno);
-    return errorreply;
+    kWarning() << qt_error_string(savederrno);
+    return KAuthorization::HelperError;
 #else
     const QStringList umountargs = QStringList() << mountpoint;
     QProcess umountproc;
@@ -195,17 +179,15 @@ KAuth::ActionReply SolidUiServerHelper::unmount(const QVariantMap &parameters)
     umountproc.waitForFinished();
 
     if (umountproc.exitCode() == 0) {
-        return KAuth::ActionReply::SuccessReply;
+        return KAuthorization::NoError;
     }
     QString umounterror = umountproc.readAllStandardError();
     if (umounterror.isEmpty()) {
         umounterror = umountproc.readAllStandardOutput();
     }
-    KAuth::ActionReply errorreply(KAuth::ActionReply::HelperError);
-    errorreply.setErrorDescription(umounterror);
-    errorreply.setErrorCode(umountproc.exitCode());
-    return errorreply;
+    kWarning() << umounterror;
+    return KAuthorization::HelperError;
 #endif // Q_OS_LINUX
 }
 
-KDE4_AUTH_HELPER_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)
+K_AUTH_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)

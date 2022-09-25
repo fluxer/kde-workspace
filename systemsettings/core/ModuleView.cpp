@@ -35,14 +35,12 @@
 #include <KAboutData>
 #include <KPageWidget>
 #include <KPushButton>
-#include <KAuthorized>
 #include <KMessageBox>
 #include <KCModuleInfo>
 #include <KCModuleProxy>
 #include <KStandardGuiItem>
 #include <KDialogButtonBox>
 #include <KUrl>
-#include <kauthaction.h>
 
 #include "MenuItem.h"
 
@@ -156,10 +154,6 @@ void ModuleView::addModule( KCModuleInfo *module )
         kWarning() << "ModuleInfo has no associated KService" ;
         return;
     }
-    if ( !KAuthorized::authorizeControlModule( module->service()->menuId() ) ) {
-        kWarning() << "Not authorised to load module" ;
-        return;
-    }
     if( module->service()->noDisplay() ) {
         return;
     }
@@ -263,7 +257,6 @@ bool ModuleView::resolveChanges(KCModuleProxy * currentProxy)
 void ModuleView::closeModules()
 {
     d->pageChangeSupressed = true;
-    d->mApply->setAuthAction( 0 ); // Ensure KAuth knows that authentication is now pointless...
     QMap<KPageWidgetItem*, KCModuleInfo*>::iterator page = d->mModules.begin();
     QMap<KPageWidgetItem*, KCModuleInfo*>::iterator pageEnd = d->mModules.end();
     for ( ; page != pageEnd; ++page ) {
@@ -341,23 +334,15 @@ void ModuleView::activeModuleChanged(KPageWidgetItem * current, KPageWidgetItem 
 void ModuleView::stateChanged()
 {
     KCModuleProxy * activeModule = d->mPages.value( d->mPageWidget->currentPage() );
-    KAuth::Action * moduleAction = 0;
     bool change = false;
     if( activeModule ) {
         change = activeModule->changed();
 
-        disconnect( d->mApply, SIGNAL(authorized(KAuth::Action*)), this, SLOT(moduleSave()) );
         disconnect( d->mApply, SIGNAL(clicked()), this, SLOT(moduleSave()) );
-        if( activeModule->realModule()->authAction() ) {
-            connect( d->mApply, SIGNAL(authorized(KAuth::Action*)), this, SLOT(moduleSave()) );
-            moduleAction = activeModule->realModule()->authAction();
-        } else {
-            connect( d->mApply, SIGNAL(clicked()), this, SLOT(moduleSave()) );
-        }
+        connect( d->mApply, SIGNAL(clicked()), this, SLOT(moduleSave()) );
     }
 
     updatePageIconHeader( d->mPageWidget->currentPage() );
-    d->mApply->setAuthAction( moduleAction );
     d->mApply->setEnabled( change );
     d->mReset->setEnabled( change );
     emit moduleChanged( change );

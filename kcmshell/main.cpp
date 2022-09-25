@@ -27,7 +27,6 @@
 
 #include <KAboutData>
 #include <KApplication>
-#include <KAuthorized>
 #include <KCmdLineArgs>
 #include <KCModuleInfo>
 #include <KCMultiDialog>
@@ -65,8 +64,6 @@ static void listModules()
        it != services.end(); ++it)
   {
       const KService::Ptr s = (*it);
-      if (!KAuthorized::authorizeControlModule(s->menuId()))
-          continue;
       m_modules.append(s);
   }
 

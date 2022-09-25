@@ -33,7 +33,6 @@
 #include <kstandarddirs.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
-#include <kauthorized.h>
 #include <kmimetype.h>
 #include <kuser.h>
 #include <kde_file.h>
@@ -347,15 +346,6 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     u.setRef(ref);
     u.setQuery(query);
 
-    if (!KAuthorized::authorizeUrlAction( QLatin1String("open"), KUrl(), u))
-    {
-      // No authorization, we pretend it's a file will get
-      // an access denied error later on.
-      setFilteredUri( data, u );
-      setUriType( data, KUriFilterData::LocalFile );
-      return true;
-    }
-
     // Can be abs path to file or directory, or to executable with args
     bool isDir = S_ISDIR( buff.st_mode );
     if( !isDir && access ( QFile::encodeName(path).data(), X_OK) == 0 )
@@ -477,14 +467,6 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     u.setPath(path);
     u.setRef(ref);
 
-    if (!KAuthorized::authorizeUrlAction( QL1S("open"), KUrl(), u))
-    {
-      // No authorization, we pretend it exists and will get
-      // an access denied error later on.
-      setFilteredUri( data, u );
-      setUriType( data, KUriFilterData::LocalFile );
-      return true;
-    }
     //kDebug(7023) << "fileNotFound -> ERROR";
     setErrorMsg( data, i18n( "<qt>The file or folder <b>%1</b> does not exist.</qt>", data.uri().prettyUrl() ) );
     setUriType( data, KUriFilterData::Error );

@@ -24,29 +24,27 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <QtCore/QObject>
 #include <QtCore/QSet>
-#include <kauthactionreply.h>
 
-using namespace KAuth;
+#include <kauthorization.h>
 
 namespace KFI
 {
 
-class Helper : public QObject
+class Helper : public KAuthorization
 {
     Q_OBJECT
 
-    public:
+public:
 
     Helper();
     ~Helper();
 
-    public Q_SLOTS:
+public Q_SLOTS:
 
-    ActionReply manage(const QVariantMap &args);
+    int manage(const QVariantMap &args);
 
-    private:
+private:
 
     int install(const QVariantMap &args);
     int uninstall(const QVariantMap &args);

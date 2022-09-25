@@ -20,21 +20,19 @@
 
 */
 
-#include <kauthactionreply.h>
-#include <QObject>
-
-using namespace KAuth;
+#include <kauthorization.h>
 
 /* The functions here run as ROOT.  So be careful. */
 
-class KSysGuardProcessListHelper : public QObject {
+class KSysGuardProcessListHelper : public KAuthorization
+{
     Q_OBJECT
-    public:
-        KSysGuardProcessListHelper();
+public:
+    KSysGuardProcessListHelper();
 
-    public Q_SLOTS:
-        ActionReply renice(QVariantMap parameters);
-        ActionReply changecpuscheduler(QVariantMap parameters);
+public Q_SLOTS:
+    int renice(QVariantMap parameters);
+    int changecpuscheduler(QVariantMap parameters);
 };
 
 Q_DECLARE_METATYPE( QList<long long> )

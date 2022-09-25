@@ -68,7 +68,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QLabel>
 #include <QMenu>
 #include <QVBoxLayout>
-#include <kauthorized.h>
 #include <kactioncollection.h>
 #include <kaction.h>
 
@@ -137,8 +136,6 @@ bool UserActionsMenu::isMenuClient(const Client *c) const
 
 void UserActionsMenu::show(const QRect &pos, const QWeakPointer<Client> &cl)
 {
-    if (!KAuthorized::authorizeKAction("kwin_rmb"))
-        return;
     if (cl.isNull())
         return;
     if (isShown())   // recursion
@@ -214,10 +211,10 @@ void UserActionsMenu::helperDialog(const QString& message, const QWeakPointer<Cl
 QStringList configModules(bool controlCenter)
 {
     QStringList args;
-    args <<  "kwindecoration";
-    if (controlCenter)
+    args << "kwindecoration";
+    if (controlCenter) {
         args << "kwinoptions";
-    else if (KAuthorized::authorizeControlModule("kde-kwinoptions.desktop"))
+    } else {
         args << "kwinactions" << "kwinfocus" <<  "kwinmoving" << "kwinadvanced"
              << "kwinrules" << "kwincompositing"
 #ifdef KWIN_BUILD_TABBOX
@@ -227,6 +224,7 @@ QStringList configModules(bool controlCenter)
              << "kwinscreenedges"
 #endif
              ;
+    }
     return args;
 }
 
@@ -318,8 +316,7 @@ void UserActionsMenu::init()
     action = advancedMenu->addAction(i18n("S&pecial Application Settings..."));
     action->setIcon(KIcon("preferences-system-windows-actions"));
     action->setData(Options::ApplicationRulesOp);
-    if (!KGlobal::config()->isImmutable() &&
-            !KAuthorized::authorizeControlModules(configModules(true)).isEmpty()) {
+    if (!KGlobal::config()->isImmutable()) {
         advancedMenu->addSeparator();
         action = advancedMenu->addAction(i18nc("Entry in context menu of window decoration to open the configuration module of KWin",
                                         "Window &Manager Settings..."));

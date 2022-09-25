@@ -19,20 +19,16 @@
 #ifndef SOLIDUISERVER_HELPER_H
 #define SOLIDUISERVER_HELPER_H
 
-#include <kauthactionreply.h>
-#include <QObject>
+#include <kauthorization.h>
 
-// methods return type must be ActionReply otherwise QMetaObject::invokeMethod() fails
-using namespace KAuth;
-
-class SolidUiServerHelper : public QObject
+class SolidUiServerHelper : public KAuthorization
 {
     Q_OBJECT
 public Q_SLOTS:
-    ActionReply cryptopen(const QVariantMap &parameters);
-    ActionReply cryptclose(const QVariantMap &parameters);
-    ActionReply mount(const QVariantMap &parameters);
-    ActionReply unmount(const QVariantMap &parameters);
+    int cryptopen(const QVariantMap &parameters);
+    int cryptclose(const QVariantMap &parameters);
+    int mount(const QVariantMap &parameters);
+    int unmount(const QVariantMap &parameters);
 };
 
 #endif // SOLIDUISERVER_HELPER_H

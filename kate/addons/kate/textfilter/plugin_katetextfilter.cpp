@@ -34,9 +34,7 @@
 #include <klineedit.h>
 #include <kinputdialog.h>
 #include <kprocess.h>
-
 #include <kpluginfactory.h>
-#include <kauthorized.h>
 #include <kactioncollection.h>
 
 #include <qapplication.h>

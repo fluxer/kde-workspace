@@ -32,13 +32,12 @@
 #include <kpluginloader.h>
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
+#include <kauthorization.h>
 
 #include "moc_main.cpp"
 
 #include "dtime.h"
 #include "helper.h"
-
-#include <kauthaction.h>
 
 K_PLUGIN_FACTORY(KlockModuleFactory, registerPlugin<KclockModule>();)
 K_EXPORT_PLUGIN(KlockModuleFactory("kcmkclock"))
@@ -76,7 +75,11 @@ KclockModule::KclockModule(QWidget *parent, const QVariantList &)
 
   setButtons(Help|Apply);
 
-  setNeedsAuthorization(true);
+
+  if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmclock")) {
+    setUseRootOnlyMessage(true);
+    setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
+  }
 }
 
 void KclockModule::save()
@@ -86,19 +89,17 @@ void KclockModule::save()
   QVariantMap helperargs;
   dtime->save( helperargs );
 
-  Action *action = authAction();
-  action->setArguments(helperargs);
+  int reply = KAuthorization::execute(
+    "org.kde.kcontrol.kcmclock", "save", helperargs
+  );
 
-  ActionReply reply = action->execute();
-
-  if (reply.failed()) {
-    if (reply.type() == ActionReply::KAuthError) {
-          KMessageBox::error(this, i18n("Unable to authenticate/execute the action: %1, %2", reply.errorCode(), reply.errorDescription()));
+  if (reply != KAuthorization::NoError) {
+    if (reply < KAuthorization::NoError) {
+      KMessageBox::error(this, i18n("Unable to authenticate/execute the action: %1", KAuthorization::errorString(reply)));
     } else {
-        dtime->processHelperErrors(reply.errorCode());
+      dtime->processHelperErrors(reply);
     }
-  }
-  else {
+  } else {
       QDBusMessage msg = QDBusMessage::createSignal("/org/kde/kcmshell_clock", "org.kde.kcmshell_clock", "clockUpdated");
       QDBusConnection::sessionBus().send(msg);
   }

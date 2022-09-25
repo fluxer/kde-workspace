@@ -24,12 +24,12 @@
 #include <kdebug.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
-#include <kauthaction.h>
 #include <kimageio.h>
 #include <kstandarddirs.h>
 #include <kmessagebox.h>
 #include <kstyle.h>
 #include <kglobalsettings.h>
+#include <kauthorization.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -62,7 +62,10 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     about->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
     setAboutData(about);
 
-    setNeedsAuthorization(true);
+    if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmkgreeter")) {
+        setUseRootOnlyMessage(true);
+        setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
+    }
 
     load();
 
@@ -146,19 +149,20 @@ void KCMGreeter::load()
 
 void KCMGreeter::save()
 {
-    KAuth::Action kgreeteraction("org.kde.kcontrol.kcmkgreeter.save");
-    kgreeteraction.setHelperID("org.kde.kcontrol.kcmkgreeter");
-    kgreeteraction.addArgument("font", fontchooser->font().toString());
-    kgreeteraction.addArgument("style", stylesbox->itemData(stylesbox->currentIndex()).toString());
-    kgreeteraction.addArgument("colorscheme", colorsbox->itemData(colorsbox->currentIndex()).toString());
-    kgreeteraction.addArgument("cursortheme", cursorbox->itemData(cursorbox->currentIndex()).toString());
-    kgreeteraction.addArgument("background", backgroundrequester->url().path());
-    kgreeteraction.addArgument("rectangle", rectanglerequester->url().path());
-    KAuth::ActionReply kgreeterreply = kgreeteraction.execute();
-    // qDebug() << kgreeterreply.errorCode() << kgreeterreply.errorDescription();
+    QVariantMap kgreeterarguments;
+    kgreeterarguments.insert("font", fontchooser->font().toString());
+    kgreeterarguments.insert("style", stylesbox->itemData(stylesbox->currentIndex()).toString());
+    kgreeterarguments.insert("colorscheme", colorsbox->itemData(colorsbox->currentIndex()).toString());
+    kgreeterarguments.insert("cursortheme", cursorbox->itemData(cursorbox->currentIndex()).toString());
+    kgreeterarguments.insert("background", backgroundrequester->url().path());
+    kgreeterarguments.insert("rectangle", rectanglerequester->url().path());
+    int kgreeterreply = KAuthorization::execute(
+        "org.kde.kcontrol.kcmkgreeter", "save", kgreeterarguments
+    );
+    // qDebug() << kgreeterreply;
 
-    if (kgreeterreply != KAuth::ActionReply::SuccessReply) {
-        KMessageBox::error(this, kgreeterreply.errorDescription());
+    if (kgreeterreply != KAuthorization::NoError) {
+        KMessageBox::error(this, i18n("Could not save settings"));
     }
 
     enableTest(true);

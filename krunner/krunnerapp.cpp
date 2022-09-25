@@ -29,7 +29,6 @@
 #include <KAction>
 #include <KActionCollection>
 #include <KCrash>
-#include <KAuthorized>
 #include <KLocale>
 #include <KWindowSystem>
 
@@ -128,12 +127,10 @@ void KRunnerApp::initialize()
     a->setGlobalShortcut(KShortcut(Qt::CTRL+Qt::Key_Escape));
     connect(a, SIGNAL(triggered(bool)), SLOT(showTaskManager()));
 
-    if (KAuthorized::authorize(QLatin1String("switch_user"))) {
-        a = m_actionCollection->addAction(QLatin1String("Switch User"));
-        a->setText(i18n("Switch User"));
-        a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_Insert));
-        connect(a, SIGNAL(triggered(bool)), SLOT(switchUser()));
-    }
+    a = m_actionCollection->addAction(QLatin1String("Switch User"));
+    a->setText(i18n("Switch User"));
+    a->setGlobalShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_Insert));
+    connect(a, SIGNAL(triggered(bool)), SLOT(switchUser()));
 
     //Setup the interface after we have set up the actions
     switch (KRunnerSettings::interface()) {

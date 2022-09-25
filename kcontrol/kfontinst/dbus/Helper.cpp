@@ -31,7 +31,6 @@
 #include <QtCore/qtextcodec.h>
 #include <QtCore/qcoreapplication.h>
 #include <kio/global.h>
-#include <kauthhelpersupport.h>
 #include <kde_file.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -40,7 +39,7 @@
 
 #define KFI_DBUG kDebug() << time(0L)
 
-KDE4_AUTH_HELPER_MAIN("org.kde.fontinst", KFI::Helper)
+K_AUTH_MAIN("org.kde.fontinst", KFI::Helper)
 
 namespace KFI
 {
@@ -109,7 +108,7 @@ Helper::~Helper()
     theFontFolder.saveDisabled();
 }
 
-ActionReply Helper::manage(const QVariantMap &args)
+int Helper::manage(const QVariantMap &args)
 {
     int result=KIO::ERR_UNSUPPORTED_ACTION;
     QString method=args["method"].toString();
@@ -134,11 +133,9 @@ ActionReply Helper::manage(const QVariantMap &args)
         KFI_DBUG << "Uknown action";
 
     if(FontInst::STATUS_OK==result)
-        return ActionReply::SuccessReply;
+        return KAuthorization::NoError;
 
-    ActionReply reply(ActionReply::HelperError);
-    reply.setErrorCode(result);
-    return reply;
+    return result;
 }
 
 int Helper::install(const QVariantMap &args)

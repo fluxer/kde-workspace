@@ -31,8 +31,6 @@
 #include <KUrl>
 #include <KConfigGroup>
 
-using namespace KAuth;
-
 K_PLUGIN_FACTORY(WorkspaceOptionsModuleFactory, registerPlugin<WorkspaceOptionsModule>();)
 K_EXPORT_PLUGIN(WorkspaceOptionsModuleFactory("kcmworkspaceoptions"))
 

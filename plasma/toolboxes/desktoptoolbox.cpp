@@ -30,7 +30,6 @@
 #include <QTimer>
 #include <QtCore/qsharedpointer.h>
 
-#include <KAuthorized>
 #include <KDebug>
 #include <KIconLoader>
 
@@ -175,19 +174,15 @@ void DesktopToolBox::init()
             this, SLOT(updateTheming()));
     Plasma::ToolTipManager::self()->registerWidget(this);
 
-    if (KAuthorized::authorizeKAction("logout")) {
-        QAction *action = new QAction(i18n("Leave..."), this);
-        action->setIcon(KIcon("system-shutdown"));
-        connect(action, SIGNAL(triggered()), this, SLOT(startLogout()));
-        addTool(action);
-    }
+    QAction *action = new QAction(i18n("Leave..."), this);
+    action->setIcon(KIcon("system-shutdown"));
+    connect(action, SIGNAL(triggered()), this, SLOT(startLogout()));
+    addTool(action);
 
-    if (KAuthorized::authorizeKAction("lock_screen")) {
-        QAction *action = new QAction(i18n("Lock Screen"), this);
-        action->setIcon(KIcon("system-lock-screen"));
-        connect(action, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
-        addTool(action);
-    }
+    action = new QAction(i18n("Lock Screen"), this);
+    action->setIcon(KIcon("system-lock-screen"));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(lockScreen()));
+    addTool(action);
 }
 
 QSize DesktopToolBox::cornerSize() const
@@ -780,10 +775,6 @@ void DesktopToolBox::lockScreen()
         setShowing(false);
     }
 
-    if (!KAuthorized::authorizeKAction("lock_screen")) {
-        return;
-    }
-
     const QString interface("org.freedesktop.ScreenSaver");
     QDBusInterface screensaver(interface, "/ScreenSaver");
     screensaver.asyncCall("Lock");
@@ -813,10 +804,6 @@ void DesktopToolBox::startLogout()
 
 void DesktopToolBox::logout()
 {
-    if (!KAuthorized::authorizeKAction("logout")) {
-        return;
-    }
-
     KWorkSpace::requestShutDown();
 }
 

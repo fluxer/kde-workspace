@@ -26,7 +26,6 @@
 #include <QSignalMapper>
 #include <QtCore/qtimer.h>
 
-#include <KAuthorized>
 #include <KDebug>
 #include <KIcon>
 #include <KMenu>
@@ -167,13 +166,9 @@ QAction *ContextMenu::action(const QString &name)
     } else if (name == "_run_command") {
         return m_runCommandAction;
     } else if (name == "_lock_screen") {
-        if (KAuthorized::authorizeKAction("lock_screen")) {
-            return m_lockScreenAction;
-        }
+        return m_lockScreenAction;
     } else if (name == "_logout") {
-        if (KAuthorized::authorizeKAction("logout")) {
-            return m_logoutAction;
-        }
+        return m_logoutAction;
     } else {
         //FIXME: remove action: make removal of current activity possible
         return c->action(name);
@@ -190,10 +185,6 @@ void ContextMenu::runCommand()
 
 void ContextMenu::lockScreen()
 {
-    if (!KAuthorized::authorizeKAction("lock_screen")) {
-        return;
-    }
-
     QString interface("org.freedesktop.ScreenSaver");
     org::freedesktop::ScreenSaver screensaver(interface, "/ScreenSaver",
                                               QDBusConnection::sessionBus());
@@ -220,10 +211,6 @@ void ContextMenu::startLogout()
 
 void ContextMenu::logout()
 {
-    if (!KAuthorized::authorizeKAction("logout")) {
-        return;
-    }
-
     KWorkSpace::requestShutDown();
 }
 

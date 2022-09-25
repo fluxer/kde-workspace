@@ -27,21 +27,17 @@
 #include <kiconloader.h>
 #include <ktexteditor/document.h>
 #include <ktexteditor/view.h>
-
 #include <kparts/part.h>
 #include <kaction.h>
 #include <kactioncollection.h>
-
 #include <kurl.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
 #include <KToolInvocation>
-
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaboutdata.h>
-#include <kauthorized.h>
 
 K_PLUGIN_FACTORY(KateMailFilesFactory, registerPlugin<KateMailFilesPlugin>();)
 K_EXPORT_PLUGIN(KateMailFilesFactory(KAboutData("katemailfilesplugin","katemailfilesplugin",ki18n("Mail Files"), "0.1", ki18n("Support mailing files"), KAboutData::License_LGPL_V2)) )

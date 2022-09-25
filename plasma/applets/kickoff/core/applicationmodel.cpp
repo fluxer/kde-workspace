@@ -29,7 +29,6 @@
 #include <QtGui/QCheckBox>
 
 // KDE
-#include <kauthorized.h>
 #include <khistorycombobox.h>
 #include <kdesktopfile.h>
 #include <klineedit.h>

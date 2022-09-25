@@ -49,7 +49,6 @@
 #include <kstandarddirs.h>
 // For doDrop
 #include <kicon.h>
-#include <kauthorized.h>
 #include <kglobal.h>
 #include <kglobalsettings.h>
 #include <kdebug.h>

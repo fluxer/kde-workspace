@@ -38,7 +38,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
-#include <kauthhelpersupport.h>
 #include <QProcess>
 #include <QFile>
 #include <QDir>
@@ -159,7 +158,7 @@ ClockHelper::CH_Error ClockHelper::tzreset()
     return NoError;
 }
 
-ActionReply ClockHelper::save(const QVariantMap &args)
+int ClockHelper::save(const QVariantMap &args)
 {
   bool _ntp = args.value("ntp").toBool();
   bool _date = args.value("date").toBool();
@@ -179,13 +178,7 @@ ActionReply ClockHelper::save(const QVariantMap &args)
   if( _tzreset )
     ret |= tzreset();
 
-  if (ret == NoError) {
-    return ActionReply::SuccessReply;
-  } else {
-    ActionReply reply(ActionReply::HelperError);
-    reply.setErrorCode(ret);
-    return reply;
-  }
+  return ret;
 }
 
-KDE4_AUTH_HELPER_MAIN("org.kde.kcontrol.kcmclock", ClockHelper)
+K_AUTH_MAIN("org.kde.kcontrol.kcmclock", ClockHelper)
