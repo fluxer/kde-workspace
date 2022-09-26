@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef TASKITEM_H
 #define TASKITEM_H
 
-#include <kdemacros.h>
 #include <taskmanager/abstractgroupableitem.h>
 #include <taskmanager/startup.h>
 #include <taskmanager/task.h>
@@ -60,7 +59,7 @@ public:
     /**
     * @deprecated: use itemType() instead
     **/
-    KDE_DEPRECATED bool isGroupItem() const;
+    TASKMANAGER_DEPRECATED bool isGroupItem() const;
 
     QIcon icon() const;
     QString name() const;
