@@ -23,7 +23,6 @@
 #define KGLOBALACCELD_H
 
 #include <kglobalshortcutinfo.h>
-#include <kdemacros.h>
 
 #include <QtCore/QStringList>
 #include <QtCore/QList>
@@ -94,11 +93,7 @@ public Q_SLOTS:
 
     Q_SCRIPTABLE void doRegister(const QStringList &actionId);
 
-    //! @see unregister
-    Q_SCRIPTABLE KDE_DEPRECATED void unRegister(const QStringList &actionId);
-
     Q_SCRIPTABLE void activateGlobalShortcutContext(const QString &component, const QString &context);
-
 
     /**
      * Returns the shortcuts registered for @p key.
@@ -131,7 +126,6 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void blockGlobalShortcuts(int);
-
 
 private:
     Q_PRIVATE_SLOT(d, void _k_newGlobalShortcutNotification() )
