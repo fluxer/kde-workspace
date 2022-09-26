@@ -25,7 +25,7 @@
 
 #include "testdir.h"
 
-#include <KRandomSequence>
+#include <KRandom>
 
 void myMessageOutput(QtMsgType type, const char* msg)
 {
@@ -294,8 +294,7 @@ void KFileItemModelBenchmark::insertManyChildItems()
     }
 
     // Bring the items into random order.
-    KRandomSequence randomSequence(0);
-    randomSequence.randomize(newItems);
+    KRandom::randomize(newItems);
 
     // Measure how long it takes to insert and then remove all files.
     QBENCHMARK {
