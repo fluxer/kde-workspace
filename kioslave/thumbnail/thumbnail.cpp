@@ -52,6 +52,7 @@
 #include <kde_file.h>
 #include <kdemacros.h>
 #include <kiconeffect.h>
+#include <krandom.h>
 
 #include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
@@ -295,7 +296,7 @@ void ThumbnailProtocol::drawPictureFrame(QPainter *painter, const QPoint &center
     float scaledFrameWidth = frameWidth / scaling;
 
     QTransform m;
-    m.rotate(qrand() % 17 - 8); // Random rotation ±8°
+    m.rotate(KRandom::randomMax(17) - 8); // Random rotation ±8°
     m.scale(scaling, scaling);
 
     QRectF frameRect(QPointF(0, 0), QPointF(image.width() + scaledFrameWidth*2, image.height() + scaledFrameWidth*2));

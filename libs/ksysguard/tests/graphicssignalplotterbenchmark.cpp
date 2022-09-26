@@ -2,9 +2,11 @@
 #include "../../../libs/ksysguard/signalplotter/kgraphicssignalplotter.h"
 
 #include <qtest_kde.h>
+#include <KRandom>
 #include <QtTest>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+
 #include <limits>
 
 void BenchmarkGraphicsSignalPlotter::init()
@@ -33,7 +35,7 @@ void BenchmarkGraphicsSignalPlotter::addData()
     QTest::qWaitForWindowShown(view);
 
     QBENCHMARK {
-        s->addSample(QList<qreal>() << qrand()%10 << qrand()%10 << qrand()%10 << qrand()%10);
+        s->addSample(QList<qreal>() << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10));
         qApp->processEvents();
     }
 
@@ -47,7 +49,7 @@ void BenchmarkGraphicsSignalPlotter::addDataWhenHidden()
     s->addBeam(Qt::yellow);
 
     QBENCHMARK {
-        s->addSample(QList<qreal>() << qrand()%10 << qrand()%10 << qrand()%10 << qrand()%10);
+        s->addSample(QList<qreal>() << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10));
         qApp->processEvents();
     }
 

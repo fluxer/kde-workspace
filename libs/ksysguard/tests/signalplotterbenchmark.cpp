@@ -2,8 +2,10 @@
 #include "../../../libs/ksysguard/signalplotter/ksignalplotter.h"
 
 #include <qtest_kde.h>
+#include <KRandom>
 #include <QtTest>
 #include <QtGui>
+
 #include <limits>
 
 void BenchmarkSignalPlotter::init()
@@ -27,7 +29,7 @@ void BenchmarkSignalPlotter::addData()
     QTest::qWaitForWindowShown(s);
 
     QBENCHMARK {
-        s->addSample(QList<qreal>() << qrand()%10 << qrand()%10 << qrand()%10 << qrand()%10);
+        s->addSample(QList<qreal>() << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10));
         qApp->processEvents();
     }
 
@@ -45,7 +47,7 @@ void BenchmarkSignalPlotter::stackedData()
     QTest::qWaitForWindowShown(s);
 
     QBENCHMARK {
-        s->addSample(QList<qreal>() << qrand()%10 << qrand()%10 << qrand()%10 << qrand()%10);
+        s->addSample(QList<qreal>() << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10));
         qApp->processEvents();
     }
 
@@ -58,7 +60,7 @@ void BenchmarkSignalPlotter::addDataWhenHidden()
     s->addBeam(Qt::yellow);
 
     QBENCHMARK {
-        s->addSample(QList<qreal>() << qrand()%10 << qrand()%10 << qrand()%10 << qrand()%10);
+        s->addSample(QList<qreal>() << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10) << KRandom::randomMax(10));
         qApp->processEvents();
     }
 

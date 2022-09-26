@@ -726,7 +726,7 @@ void Image::nextSlide()
         }
     }
 
-    m_currentSlide = KRandom::random() % m_unseenSlideshowBackgrounds.size();
+    m_currentSlide = KRandom::randomMax(m_unseenSlideshowBackgrounds.size());
     const QString currentPath = m_unseenSlideshowBackgrounds.at(m_currentSlide);
 
     if (!m_wallpaperPackage) {

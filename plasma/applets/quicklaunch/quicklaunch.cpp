@@ -55,6 +55,7 @@
 #include <KStandardDirs>
 #include <KWindowSystem>
 #include <KUrl>
+#include <KRandom>
 
 // Plasma
 #include <Plasma/Applet>
@@ -822,7 +823,7 @@ QString Quicklaunch::determineNewDesktopFilePath(const QString &baseName)
         }
 
         // Limit to [0-9] and [a-z] range.
-        char newChar = qrand() % 36;
+        char newChar = static_cast<char>(KRandom::randomMax(36));
         newChar += newChar < 10 ? 48 : 97-10;
         appendix += newChar;
 
