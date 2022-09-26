@@ -35,10 +35,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kshellcompletion.h>
+#include <kcompletion.h>
 
 #include <QDir>
-#include <QtCore/QRegExp>
+#include <QRegExp>
 
 //BEGIN CoreCommands
 KateCommands::CoreCommands* KateCommands::CoreCommands::m_instance = 0;
