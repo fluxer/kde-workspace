@@ -1,4 +1,4 @@
 [D-BUS Service]
 Name=org.kde.krunner
-Exec=@CMAKE_INSTALL_PREFIX@/bin/krunner
+Exec=@KDE4_BIN_INSTALL_DIR@/krunner
 

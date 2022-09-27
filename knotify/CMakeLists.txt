@@ -1,4 +1,8 @@
+# for dbus_add_activation_service
+include(MacroDBusAddActivationService)
+
 add_subdirectory( sounds  )
+
 ########### next target ###############
 
 set(knotify_SRCS
@@ -51,8 +55,4 @@ install( FILES ${knotifyplugin_HEADERS} DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} 
 
 ########### D-Bus Autostart Services #########
 
-
-configure_file(org.kde.knotify.service.cmake
-    ${CMAKE_CURRENT_BINARY_DIR}/org.kde.knotify.service)
-
-install( FILES ${CMAKE_CURRENT_BINARY_DIR}/org.kde.knotify.service DESTINATION ${KDE4_DBUS_SERVICES_INSTALL_DIR} )
+dbus_add_activation_service(org.kde.knotify.service.in)
