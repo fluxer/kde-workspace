@@ -18,28 +18,30 @@
  */
 
 //Project-Includes
+#include "killrunnerdefs.h"
 #include "killrunner_config.h"
 //KDE-Includes
 #include <plasma/abstractrunner.h>
 
 K_EXPORT_RUNNER_CONFIG(kill, KillRunnerConfig)
 
-KillRunnerConfigForm::KillRunnerConfigForm(QWidget* parent) : QWidget(parent)
+KillRunnerConfigForm::KillRunnerConfigForm(QWidget* parent)
+    : QWidget(parent)
 {
     setupUi(this);
 }
 
-KillRunnerConfig::KillRunnerConfig(QWidget* parent, const QVariantList& args) :
-        KCModule(KillRunnerConfigFactory::componentData(), parent, args)
+KillRunnerConfig::KillRunnerConfig(QWidget* parent, const QVariantList& args)
+    : KCModule(KillRunnerConfigFactory::componentData(), parent, args)
 {
     m_ui = new KillRunnerConfigForm(this);
 
     QGridLayout* layout = new QGridLayout(this);
     layout->addWidget(m_ui, 0, 0);
 
-    m_ui->sorting->addItem(i18n("CPU usage"), CPU);
-    m_ui->sorting->addItem(i18n("inverted CPU usage"), CPUI);
-    m_ui->sorting->addItem(i18n("nothing"), NONE);
+    m_ui->sorting->addItem(i18n("CPU usage"), KillRunnerSort::CPU);
+    m_ui->sorting->addItem(i18n("inverted CPU usage"), KillRunnerSort::CPUI);
+    m_ui->sorting->addItem(i18n("nothing"), KillRunnerSort::NONE);
 
     connect(m_ui->useTriggerWord,SIGNAL(stateChanged(int)),this,SLOT(changed()));
     connect(m_ui->triggerWord,SIGNAL(textChanged(QString)),this,SLOT(changed()));
@@ -58,7 +60,7 @@ void KillRunnerConfig::load()
 
     m_ui->useTriggerWord->setChecked(grp.readEntry(CONFIG_USE_TRIGGERWORD,true));
     m_ui->triggerWord->setText(grp.readEntry(CONFIG_TRIGGERWORD,i18n("kill")));
-    m_ui->sorting->setCurrentIndex(m_ui->sorting->findData(grp.readEntry<int>(CONFIG_SORTING, (int) NONE)));
+    m_ui->sorting->setCurrentIndex(m_ui->sorting->findData(grp.readEntry<int>(CONFIG_SORTING, (int) KillRunnerSort::NONE)));
 
     emit changed(false);
 }

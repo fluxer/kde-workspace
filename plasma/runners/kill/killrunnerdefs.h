@@ -1,4 +1,4 @@
-/* Copyright 2009  <Jan Gerrit Marker> <jangerrit@weiler-marker.com>
+/* Copyright 2009  Jan Gerrit Marker <jangerrit@weiler-marker.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,38 +16,19 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
+ 
+#ifndef KILLRUNNERDEFS_H
+#define KILLRUNNERDEFS_H
 
-#ifndef KILLRUNNERCONFIG_H
-#define KILLRUNNERCONFIG_H
-
-//Project-Includes
-#include "ui_killrunner_config.h"
-//KDE-Includes
-#include <KCModule>
-//Qt
-
-class KillRunnerConfigForm : public QWidget, public Ui::KillRunnerConfigUi
-{
-    Q_OBJECT
-
-public:
-    explicit KillRunnerConfigForm(QWidget* parent);
+/** Possibilities to sort */
+enum KillRunnerSort {
+    NONE = 0,
+    CPU = 1,
+    CPUI = 2
 };
 
-class KillRunnerConfig : public KCModule
-{
-    Q_OBJECT
-
-public:
-    explicit KillRunnerConfig(QWidget* parent = 0, const QVariantList& args = QVariantList());
-
-public slots:
-    void save();
-    void load();
-    void defaults();
-
-private:
-    KillRunnerConfigForm* m_ui;
-};
-
-#endif // KILLRUNNERCONFIG_H
+static const char CONFIG_USE_TRIGGERWORD[] = "useTriggerWord";
+static const char CONFIG_TRIGGERWORD[] = "triggerWord";
+static const char CONFIG_SORTING[] = "sorting";
+ 
+#endif // KILLRUNNERDEFS_H

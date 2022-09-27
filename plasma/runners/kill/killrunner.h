@@ -23,9 +23,9 @@
 #include <QAction>
 #include <Plasma/AbstractRunner>
 
+#include "killrunnerdefs.h"
 #include "ksysguard/processcore/processes.h"
 #include "ksysguard/processcore/process.h"
-#include "killrunner_config.h"
 
 class KillRunner : public Plasma::AbstractRunner
 {
@@ -50,8 +50,9 @@ private:
     QString m_triggerWord;
 
     /** How to sort */
-    KillRunnerConfig::Sort m_sorting;
+    KillRunnerSort m_sorting;
 };
+
 K_EXPORT_PLASMA_RUNNER(kill, KillRunner)
 
-#endif
+#endif // KILLRUNNER_H

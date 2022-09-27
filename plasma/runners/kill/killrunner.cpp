@@ -26,8 +26,6 @@
 #include <KUser>
 #include <KMessageBox>
 
-#include "killrunner_config.h"
-
 #include <signal.h>
 
 KillRunner::KillRunner(QObject *parent, const QVariantList& args)
@@ -42,7 +40,6 @@ KillRunner::~KillRunner()
 {
 }
 
-
 void KillRunner::reloadConfiguration()
 {
     KConfigGroup grp = config();
@@ -51,7 +48,7 @@ void KillRunner::reloadConfiguration()
         m_triggerWord = grp.readEntry(CONFIG_TRIGGERWORD, i18n("kill")) + ' ';
     }
 
-    m_sorting = (KillRunnerConfig::Sort) grp.readEntry(CONFIG_SORTING, 0);
+    m_sorting = static_cast<KillRunnerSort>(grp.readEntry(CONFIG_SORTING, static_cast<int>(KillRunnerSort::NONE)));
     QList<Plasma::RunnerSyntax> syntaxes;
     syntaxes << Plasma::RunnerSyntax(m_triggerWord + ":q:",
                                      i18n("Terminate running applications whose names match the query."));
@@ -104,13 +101,13 @@ void KillRunner::match(Plasma::RunnerContext &context)
 
         // Set the relevance
         switch (m_sorting) {
-        case KillRunnerConfig::CPU:
+        case KillRunnerSort::CPU:
             match.setRelevance((process->userUsage + process->sysUsage) / 100);
             break;
-        case KillRunnerConfig::CPUI:
+        case KillRunnerSort::CPUI:
             match.setRelevance(1 - (process->userUsage + process->sysUsage) / 100);
             break;
-        case KillRunnerConfig::NONE:
+        case KillRunnerSort::NONE:
             match.setRelevance(name.compare(term, Qt::CaseInsensitive) == 0 ? 1 : 9);
             break;
         }
