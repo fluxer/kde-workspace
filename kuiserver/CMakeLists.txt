@@ -4,9 +4,6 @@ endif()
 
 include_directories(${KDE4_KIO_INCLUDES})
 
-# for dbus_add_activation_service
-include(MacroDBusAddActivationService)
-
 set(kuiserver_SRCS
     main.cpp
     jobview.cpp
@@ -35,7 +32,7 @@ qt4_add_dbus_interface(kuiserver_SRCS ${jobviewserver_xml} jobviewserver_interfa
 
 qt4_add_dbus_adaptor(kuiserver_SRCS org.kde.kuiserver.xml progresslistmodel.h ProgressListModel kuiserveradaptor)
 
-dbus_add_activation_service(org.kde.kuiserver.service.in)
+kde4_add_dbus_service(org.kde.kuiserver.service.in)
 
 #</DBus Stuff>
 

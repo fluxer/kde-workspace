@@ -7,9 +7,6 @@ include_directories(
 )
 add_definitions(${QT_DEFINITIONS})
 
-# for dbus_add_activation_service
-include(MacroDBusAddActivationService)
-
 set(fontinst_bin_SRCS FcConfig.cpp FontInst.cpp Folder.cpp Main.cpp Utils.cpp ${libkfontinstdbusiface_SRCS} )
 set(fontinst_helper_SRCS FcConfig.cpp Helper.cpp Folder.cpp Utils.cpp ${libkfontinstdbusiface_SRCS} )
 
@@ -32,6 +29,6 @@ install(TARGETS fontinst_bin DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR} )
 install(TARGETS fontinst_helper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR} )
 install(PROGRAMS fontinst_x11 DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
-dbus_add_activation_service(org.kde.fontinst.service.in)
+kde4_add_dbus_service(org.kde.fontinst.service.in)
 
 kde4_install_auth_helper_files(fontinst_helper org.kde.fontinst root)

@@ -1,8 +1,5 @@
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1207)
 
-# for dbus_add_activation_service
-include(MacroDBusAddActivationService)
-
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/ksysguard
     ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
@@ -48,7 +45,7 @@ kde4_add_kcfg_files(krunner_SRCS ${krunner_KCFG_SRCS})
 
 qt4_add_dbus_adaptor(krunner_SRCS ${krunner_dbusAppXML} krunnerapp.h KRunnerApp)
 
-dbus_add_activation_service(dbus/org.kde.krunner.service.in)
+kde4_add_dbus_service(dbus/org.kde.krunner.service.in)
 
 set(krunner_SRCS
     ${krunner_SRCS}

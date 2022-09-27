@@ -1,8 +1,5 @@
 project(kglobalaccel)
 
-# for dbus_add_activation_service
-include(MacroDBusAddActivationService)
-
 ###############################################################################
 ### KDED Global Accel Daemon
 
@@ -37,4 +34,4 @@ install( FILES kglobalaccel.desktop  DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 # KNotify configuration
 install( FILES kglobalaccel.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kglobalaccel)
 
-dbus_add_activation_service(org.kde.kglobalaccel.service.in)
+kde4_add_dbus_service(org.kde.kglobalaccel.service.in)
