@@ -50,7 +50,6 @@ KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const
 
 KMediaPlayerPart::~KMediaPlayerPart()
 {
-    m_player->player()->stop();
     m_player->deleteLater();
 }
 
