@@ -46,7 +46,8 @@ LogoutEffect::LogoutEffect()
     effects->registerPropertyType(logoutAtom, true);
 
     // Block KSMServer's effect
-    char net_wm_cm_name[ 100 ];
+    char net_wm_cm_name[100];
+    ::memset(net_wm_cm_name, '\0', sizeof(net_wm_cm_name) * sizeof(char));
     sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
     Atom net_wm_cm = XInternAtom(display(), net_wm_cm_name, False);
     Window sel = XGetSelectionOwner(display(), net_wm_cm);
