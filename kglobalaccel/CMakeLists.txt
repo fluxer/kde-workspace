@@ -1,5 +1,8 @@
 project(kglobalaccel)
 
+# for dbus_add_activation_service
+include(MacroDBusAddActivationService)
+
 ###############################################################################
 ### KDED Global Accel Daemon
 
