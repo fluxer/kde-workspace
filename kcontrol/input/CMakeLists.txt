@@ -1,7 +1,7 @@
 
 add_subdirectory( pics )
 
-macro_bool_to_01(LIBUSB_FOUND HAVE_LIBUSB)
+kde4_bool_to_01(LIBUSB_FOUND HAVE_LIBUSB)
 
 configure_file (
     config-kcontrol-input.h.cmake
