@@ -1,7 +1,6 @@
 project(kuiserver_engine)
 
 #include (KDE4Defaults)
-#include (MacroLibrary)
 
 set(kuiserver_engine_SRCS
     kuiserverengine.cpp
