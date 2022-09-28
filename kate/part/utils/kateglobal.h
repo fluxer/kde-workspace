@@ -31,7 +31,7 @@
 #include <kaboutdata.h>
 #include <ktexteditor/commandinterface.h>
 #include <ktexteditor/containerinterface.h>
-#include <ktexteditor/templateinterface2.h>
+#include <ktexteditor/templateinterface.h>
 #include <QList>
 #include <QCryptographicHash>
 #include <qplatformdefs.h>

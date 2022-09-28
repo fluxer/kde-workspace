@@ -28,7 +28,6 @@
 #include <ktexteditor/codecompletioninterface.h>
 #include <ktexteditor/sessionconfiginterface.h>
 #include <ktexteditor/templateinterface.h>
-#include <ktexteditor/templateinterface2.h>
 #include <ktexteditor/configinterface.h>
 #include <ktexteditor/annotationinterface.h>
 
@@ -75,7 +74,7 @@ class KSelectAction;
 class KATEPARTINTERFACES_EXPORT KateView : public KTextEditor::View,
                  public KTextEditor::TextHintInterface,
                  public KTextEditor::SessionConfigInterface,
-                 public KTextEditor::TemplateInterface2,
+                 public KTextEditor::TemplateInterface,
                  public KTextEditor::CodeCompletionInterface,
                  public KTextEditor::ConfigInterface,
                  public KTextEditor::AnnotationViewInterface,
@@ -85,7 +84,6 @@ class KATEPARTINTERFACES_EXPORT KateView : public KTextEditor::View,
     Q_INTERFACES(KTextEditor::TextHintInterface)
     Q_INTERFACES(KTextEditor::SessionConfigInterface)
     Q_INTERFACES(KTextEditor::TemplateInterface)
-    Q_INTERFACES(KTextEditor::TemplateInterface2)
     Q_INTERFACES(KTextEditor::ConfigInterface)
     Q_INTERFACES(KTextEditor::CodeCompletionInterface)
     Q_INTERFACES(KTextEditor::AnnotationViewInterface)
@@ -663,11 +661,10 @@ class KATEPARTINTERFACES_EXPORT KateView : public KTextEditor::View,
     bool blockSelect;
 
   //
-  // TemplateInterface + TemplateInterface2
+  // TemplateInterface
   //
   public:
     virtual bool insertTemplateTextImplementation ( const KTextEditor::Cursor&, const QString &templateString, const QMap<QString,QString> &initialValues);
-    virtual bool insertTemplateTextImplementation ( const KTextEditor::Cursor&, const QString &templateString, const QMap<QString,QString> &initialValues, KTextEditor::TemplateScript* templateScript);
   /**
    * Accessors to the bars...
    */

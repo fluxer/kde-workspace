@@ -2114,14 +2114,6 @@ bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
                                                   const QString &templateString,
                                                   const QMap<QString,QString> &initialValues)
 {
-  return insertTemplateTextImplementation(c, templateString, initialValues, 0);
-}
-
-bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
-                                                  const QString &templateString,
-                                                  const QMap<QString,QString> &initialValues,
-                                                  KTextEditor::TemplateScript* templateScript)
-{
   /**
    * no empty templates
    */
@@ -2136,7 +2128,6 @@ bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
 
   return true;
 }
-
 
 bool KateView::tagLines( KTextEditor::Range range, bool realRange )
 {
