@@ -162,19 +162,6 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     // this is a WType_Popup on purpose. Do not change that! Not
     // having a popup here has severe side effects.
 {
-    winId(); // workaround for Qt4.3 setWindowRole() assert
-    setWindowRole( "logoutdialog" );
-// Qt doesn't set this on unmanaged windows
-    QByteArray appName = QApplication::applicationName().toLatin1();
-    QByteArray appClass = QX11Info::appClass();
-    XClassHint class_hint;
-    class_hint.res_name = appName.data(); // application name
-    class_hint.res_class = appClass.data();   // application class
-    XSetWMProperties( QX11Info::display(), winId(), NULL, NULL, NULL, 0, NULL, NULL, &class_hint );
-    XChangeProperty( QX11Info::display(), winId(),
-        XInternAtom( QX11Info::display(), "WM_WINDOW_ROLE", False ), XA_STRING, 8, PropModeReplace,
-        (unsigned char *)"logoutdialog", strlen( "logoutdialog" ));
-
     KDialog::centerOnScreen(this, -3);
 
     //kDebug() << "Creating QML view";
@@ -312,14 +299,17 @@ bool KSMShutdownDlg::confirmShutdown(
         bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype,
         const QString& theme)
 {
-    KSMShutdownDlg* l = new KSMShutdownDlg( 0,
-                                            //KSMShutdownFeedback::self(),
-                                            maysd, choose, sdtype, theme );
+    KSMShutdownDlg* l = new KSMShutdownDlg(0,
+                                           //KSMShutdownFeedback::self(),
+                                           maysd, choose, sdtype, theme);
+    // NOTE: KWin logout effect expects class hint values to be ksmserver
     XClassHint classHint;
     classHint.res_name = const_cast<char*>("ksmserver");
     classHint.res_class = const_cast<char*>("ksmserver");
-
     XSetClassHint(QX11Info::display(), l->winId(), &classHint);
+
+    l->setWindowRole("logoutdialog");
+
     bool result = l->exec();
     sdtype = l->m_shutdownType;
 
