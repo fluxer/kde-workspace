@@ -284,12 +284,10 @@ void DBusSystemTrayTask::syncIcons(const Plasma::DataEngine::Data &properties)
 
     QString icon_name            = properties["IconName"].toString();
     QString att_icon_name        = properties["AttentionIconName"].toString();
-    QString movie_path           = properties["AttentionMovieName"].toString();
     QString overlay_icon_name    = properties["OverlayIconName"].value<QString>();
     QString icon_theme_path      = properties["IconThemePath"].value<QString>();
     bool is_icon_name_changed           = false;
     bool is_att_icon_name_changed       = false;
-    bool is_movie_path_changed          = false;
     bool is_overlay_icon_name_changed   = false;
 
     if (icon_name != m_iconName) {
@@ -300,15 +298,6 @@ void DBusSystemTrayTask::syncIcons(const Plasma::DataEngine::Data &properties)
     if (att_icon_name != m_attentionIconName) {
         m_attentionIconName = att_icon_name;
         is_att_icon_name_changed = true;
-    }
-
-    if (!movie_path.isEmpty() && !QDir::isAbsolutePath(movie_path)) {
-        movie_path = KIconLoader::global()->moviePath(movie_path, KIconLoader::Panel);
-    }
-
-    if (movie_path != m_moviePath) {
-        m_moviePath = movie_path;
-        is_movie_path_changed = true;
     }
 
     if (overlay_icon_name != m_overlayIconName) {
@@ -355,9 +344,6 @@ void DBusSystemTrayTask::syncIcons(const Plasma::DataEngine::Data &properties)
     }
     if (is_att_icon_name_changed) {
         emit changedAttIconName();
-    }
-    if (is_movie_path_changed) {
-        emit changedMoviePath();
     }
     if (is_overlay_icon_name_changed) {
         emit changedOverlayIconName();

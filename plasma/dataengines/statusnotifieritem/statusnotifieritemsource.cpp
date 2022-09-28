@@ -236,9 +236,6 @@ void StatusNotifierItemSource::refreshCallback(QDBusPendingCallWatcher *call)
         setData("WindowId", properties["WindowId"]);
         setData("ItemIsMenu", properties["ItemIsMenu"]);
 
-        //Attention Movie
-        setData("AttentionMovieName", properties["AttentionMovieName"]);
-
         QIcon overlay;
         QStringList overlayNames;
 

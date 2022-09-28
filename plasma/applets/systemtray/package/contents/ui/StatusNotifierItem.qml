@@ -39,7 +39,6 @@ Item {
     property variant  __icon:              __has_task ? task.icon : QIcon("default")
     property variant  __att_icon:          __has_task ? task.attIcon : __getDefaultIcon()
     property string   __overlay_icon_name: __has_task ? task.overlayIconName : ""
-    property string   __movie_path:        __has_task ? task.moviePath : ""
     property int      __status:            __has_task ? task.status : UnknownStatus
     //Hack for activating only items that has been clicked by ourselves
     property variant  __clickTime:        0;
@@ -154,18 +153,6 @@ Item {
                     plasmoid.destroyShortcutAction(act)
                 }
             }
-
-            // Animation (Movie icon)
-            AnimatedImage {
-                id: animation
-
-                anchors.fill: parent
-
-                playing: false
-                visible: false
-                smooth: true
-                source: __movie_path
-            }
         }
         onWheelMoved: {
             if (wheel.orientation === Qt.Horizontal)
@@ -217,11 +204,6 @@ Item {
                 source: __getDefaultIcon()
                 visible: true
             }
-            PropertyChanges {
-                target: animation
-                visible: false
-                playing: false
-            }
             StateChangeScript {
                 script: tooltip.target = icon_widget // binding to property doesn't work
             }
@@ -229,7 +211,7 @@ Item {
         // Attention icon
         State {
             name: "__BLINK"
-            when: __status === NeedsAttention && !__movie_path
+            when: __status === NeedsAttention
             PropertyChanges {
                 target: icon_widget
                 source: __getAttentionIcon()
@@ -240,35 +222,8 @@ Item {
                 running: true
                 is_att_icon: false
             }
-            PropertyChanges {
-                target: animation
-                visible: false
-                playing: false
-            }
             StateChangeScript {
                 script: tooltip.target = icon_widget
-            }
-        },
-        // Animation icon
-        State {
-            name: "__ANIM"
-            when: __status === NeedsAttention && __movie_path
-            PropertyChanges {
-                target: timer_blink
-                running: false
-            }
-            PropertyChanges {
-                target: icon_widget
-                source: __getDefaultIcon()
-                visible: false
-            }
-            PropertyChanges {
-                target: animation
-                visible: true
-                playing: true
-            }
-            StateChangeScript {
-                script: tooltip.target = animation
             }
         }
     ]

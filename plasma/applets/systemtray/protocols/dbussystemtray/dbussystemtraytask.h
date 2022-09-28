@@ -49,7 +49,6 @@ class DBusSystemTrayTask : public Task
     Q_PROPERTY(QString overlayIconName READ overlayIconName NOTIFY changedOverlayIconName)
     Q_PROPERTY(QString iconName READ iconName NOTIFY changedIconName)
     Q_PROPERTY(QString attIconName READ attIconName NOTIFY changedAttIconName)
-    Q_PROPERTY(QString moviePath READ moviePath NOTIFY changedMoviePath)
     Q_PROPERTY(bool isMenu READ isMenu NOTIFY changedIsMenu)
     Q_PROPERTY(QString title READ title NOTIFY changedTitle)
     Q_PROPERTY(QString tooltipTitle READ tooltipTitle NOTIFY changedTooltipTitle)
@@ -77,7 +76,6 @@ public:
     QString iconName() const { return m_iconName; }
     QIcon   attIcon() const { return m_attentionIcon; }
     QString attIconName() const { return m_attentionIconName; }
-    QString moviePath() const { return m_moviePath; }
     QString overlayIconName() const { return m_overlayIconName; }
     QString title() const { return name(); }
     bool    isMenu() const { return m_isMenu; }
@@ -96,10 +94,9 @@ public:
     Q_INVOKABLE QVariant customIcon(QVariant variant) const;
 
 signals:
-    void changedIcons(); // if icons, icon names, movie path are changed
+    void changedIcons(); // if icons, icon names are changed
     void changedIconName(); // if icon name changed
     void changedAttIconName(); // if attention icon name is changed
-    void changedMoviePath();
     void changedOverlayIconName();
     void changedIsMenu();
     void changedTitle();
@@ -128,7 +125,6 @@ private:
     QIcon m_attentionIcon;
     QString m_attentionIconName;
     QString m_shortcut;
-    QString m_moviePath;
     QString m_overlayIconName;
     QString m_iconThemePath;
     QString m_tooltipTitle;
