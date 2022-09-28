@@ -31,9 +31,10 @@ public:
     ~KMediaPlayerPart();
 
     // reimplementations
-    virtual bool openUrl(const KUrl &url);
-    virtual bool openFile();
-    virtual bool closeUrl();
+    bool openFile() final;
+    bool closeUrl() final;
+public Q_SLOTS:
+    bool openUrl(const KUrl &url) final;
 
 private:
     KMediaWidget *m_player;
