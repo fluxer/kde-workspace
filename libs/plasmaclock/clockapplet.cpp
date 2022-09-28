@@ -365,7 +365,7 @@ void ClockApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     createClockConfigurationInterface(parent);
 
-    d->kttsAvailable = (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd") || KService::serviceByDesktopName("kttsd"));
+    d->kttsAvailable = KService::serviceByDesktopName("kttsd");
 
     if (d->kttsAvailable) {
         QWidget *generalWidget = new QWidget();
