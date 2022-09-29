@@ -25,7 +25,7 @@
 
 #include "knotifyplugin.h"
 
-#include "kspeechinterface.h"
+#include <KSpeech>
 
 class NotifyByKTTS : public KNotifyPlugin
 {
@@ -37,15 +37,8 @@ public:
     virtual QString optionName() { return "KTTS"; }
     virtual void notify(int id , KNotifyConfig *config);
 
-private slots:
-    void removeSpeech();
-
 private:
-    void setupKttsd();
-
-private:
-    org::kde::KSpeech *m_kspeech;
-    bool tryToStartKttsd;
+    KSpeech *m_kspeech;
 };
 
 #endif

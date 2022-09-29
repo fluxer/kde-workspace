@@ -24,7 +24,6 @@
 #include <ktexteditor/document.h>
 // Qt includes.
 #include <QtCore/QTimer>
-#include <QtDBus/QtDBus>
 
 // KDE includes.
 #include <kmessagebox.h>
@@ -34,10 +33,11 @@
 #include <ktoolinvocation.h>
 #include <KActionCollection>
 #include <KAboutData>
+#include <KSpeech>
 #include <kate/mainwindow.h>
 
 K_PLUGIN_FACTORY(KateKttsdFactory, registerPlugin<KateKttsdPlugin>();)
-K_EXPORT_PLUGIN(KateKttsdFactory(KAboutData("kate_kttsd","kate_kttsd",ki18n("Jovie Text-to-Speech Plugin"), "0.1", ki18n("Jovie Text-to-Speech Plugin"), KAboutData::License_LGPL_V2)) )
+K_EXPORT_PLUGIN(KateKttsdFactory(KAboutData("kate_kttsd","kate_kttsd",ki18n("Text-to-Speech Plugin"), "0.1", ki18n("Text-to-Speech Plugin"), KAboutData::License_LGPL_V2)) )
 
 KateKttsdPlugin::KateKttsdPlugin(QObject* parent, const QList<QVariant>&)
     : Kate::Plugin ((Kate::Application*)parent)
@@ -84,22 +84,14 @@ void KateKttsdPluginView::slotReadOut()
     if ( text.isEmpty() )
         return;
 
-    // If KTTSD not running, start it.
-    if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd"))
+    if (!KSpeech::isSupported())
     {
-        QString error;
-        if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error))
-        {
-            KMessageBox::error(0, i18n( "Starting Jovie Text-to-Speech Service Failed"), error );
-            return;
-        }
+        KMessageBox::error(0, i18n( "Text-to-Speech not supported") );
+        return;
     }
 
-    QDBusInterface kttsd( "org.kde.kttsd", "/KSpeech", "org.kde.KSpeech" );
-
-    QDBusReply<int> reply = kttsd.call("say", text,0);
-    if ( !reply.isValid())
-        KMessageBox::error( 0, i18n( "D-Bus Call Failed" ),
-                              i18n( "The D-Bus call say failed." ));
+    KSpeech kspeech(this);
+    kspeech.setSpeechID(QString::fromLatin1("kate"));
+    kspeech.say(text);
 }
 

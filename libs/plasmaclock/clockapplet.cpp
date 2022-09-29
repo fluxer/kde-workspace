@@ -32,11 +32,8 @@
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/qgraphicssceneevent.h>
 #include <QtGui/QGraphicsView>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusPendingCall>
-#include <QtCore/qdatetime.h>
+#include <QtCore/QDateTime>
 #include <QtCore/QTimer>
-#include <QtDBus/QDBusConnectionInterface>
 
 #include <KColorScheme>
 #include <KConfigDialog>
@@ -54,6 +51,7 @@
 #include <KTimeZone>
 #include <KToolInvocation>
 #include <KMessageBox>
+#include <KSpeech>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -186,17 +184,6 @@ void ClockApplet::speakTime(const QTime &time)
     }
 
     if ((time.minute() % d->announceInterval) == 0) {
-        // If KTTSD not running, start it.
-        if (!QDBusConnection::sessionBus().interface()->isServiceRegistered("org.kde.kttsd")) {
-            QString error;
-            if (KToolInvocation::startServiceByDesktopName("kttsd", QStringList(), &error)) {
-                KPassivePopup::message(i18n("Starting Jovie Text-to-Speech Service Failed"), error, static_cast<QWidget *>(0));
-                return;
-            }
-        }
-
-        QDBusInterface ktts("org.kde.kttsd", "/KSpeech", "org.kde.KSpeech");
-        ktts.asyncCall("setApplicationName", "plasmaclock");
         QString text;
         if (time.minute() == 0) {
             if (KGlobal::locale()->use12Clock()) {
@@ -240,7 +227,9 @@ void ClockApplet::speakTime(const QTime &time)
                                 time.minute());
             }
         }
-        ktts.asyncCall("say", text, 0);
+        KSpeech kspeech(this);
+        kspeech.setSpeechID(QString::fromLatin1("plasmaclock"));
+        kspeech.say(text);
     }
 }
 
@@ -365,7 +354,7 @@ void ClockApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     createClockConfigurationInterface(parent);
 
-    d->kttsAvailable = KService::serviceByDesktopName("kttsd");
+    d->kttsAvailable = KSpeech::isSupported();
 
     if (d->kttsAvailable) {
         QWidget *generalWidget = new QWidget();

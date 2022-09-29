@@ -4,6 +4,7 @@ target_link_libraries(kate_kttsd
     ${KDE4_KDECORE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS}
     ${KDE4_KPARTS_LIBS}
+    ${KDE4_KSPEECH_LIBS}
     kateinterfaces
 )
 

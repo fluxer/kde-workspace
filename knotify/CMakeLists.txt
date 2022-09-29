@@ -26,13 +26,11 @@ set(knotifyplugin_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/knotify_export.h
 )
 
-qt4_add_dbus_interfaces(knotify_SRCS ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KSpeech.xml)
-
 add_executable( knotify ${knotify_SRCS})
 
 add_library( knotifyplugin SHARED ${knotifyplugin_SRCS})
 
-target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_SOLID_LIBS} knotifyplugin kmediaplayer)
+target_link_libraries( knotify ${KDE4_KDEUI_LIBS} ${KDE4_SOLID_LIBS} ${KDE4_KSPEECH_LIBS} knotifyplugin kmediaplayer)
 
 target_link_libraries( knotifyplugin ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})
 

@@ -20,6 +20,7 @@
 
 #include "knotify.h"
 
+#include <QDBusConnection>
 // KDE headers
 #include <kapplication.h>
 #include <kconfig.h>
