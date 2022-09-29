@@ -834,7 +834,7 @@ static QString createDesktopFile(const QString &file, QString *menuId, QStringLi
    QRegExp r("(.*)(?=-\\d+)");
    base = (r.indexIn(base) > -1) ? r.cap(1) : base;
 
-   QString result = KService::newServicePath(true, base, menuId, excludeList);
+   QString result = KService::newServicePath(base, menuId, excludeList);
    excludeList->append(*menuId);
    // Todo for Undo-support: Undo menuId allocation:
 

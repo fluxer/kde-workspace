@@ -22,7 +22,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsItem>
 #include <QGraphicsLinearLayout>
 
@@ -165,7 +164,7 @@ void IconApplet::setUrl(const KUrl& url, bool fromConfigDialog)
             m_hasDesktopFile = true;
         } else if (!fi.isDir() && fi.isExecutable()) {
             const QString suggestedName = fi.baseName();
-            const QString file = KService::newServicePath(false, suggestedName);
+            const QString file = KService::newServicePath(suggestedName);
             KDesktopFile df(file);
             KConfigGroup desktopGroup = df.desktopGroup();
             desktopGroup.writeEntry("Name", suggestedName);
@@ -173,6 +172,7 @@ void IconApplet::setUrl(const KUrl& url, bool fromConfigDialog)
             desktopGroup.writeEntry("Exec", m_url.toLocalFile());
             desktopGroup.writeEntry("Icon", KMimeType::iconNameForUrl(url));
             desktopGroup.writeEntry("Type", "Application");
+            desktopGroup.writeEntry("NoDisplay", true);
             df.sync();
             m_url.setPath(file);
             m_hasDesktopFile = true;
@@ -314,8 +314,7 @@ void IconApplet::showConfigurationInterface()
     if (m_hasDesktopFile) {
         const QFileInfo fi(m_url.toLocalFile());
         if (!fi.isWritable()) {
-            const QString suggestedName = fi.baseName();
-            m_configTarget = KService::newServicePath(false, suggestedName);
+            m_configTarget = KService::newServicePath(fi.baseName());
             KIO::Job *job = KIO::file_copy(m_url, m_configTarget);
             job->exec();
         }
