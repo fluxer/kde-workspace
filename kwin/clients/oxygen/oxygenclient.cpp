@@ -168,13 +168,13 @@ namespace Oxygen
         {
 
             case DB_MenuClose:
-            return _configuration->closeWindowFromMenuButton();
+                return _configuration->closeWindowFromMenuButton();
 
             case DB_WindowMask:
-            return false;
+                return false;
 
             default:
-            return KCommonDecoration::decorationBehaviour(behaviour);
+                return KCommonDecoration::decorationBehaviour(behaviour);
         }
     }
 
@@ -185,33 +185,34 @@ namespace Oxygen
         switch (type) {
 
             case MenuButton:
-            return new Button(*this, i18n("Window Actions Menu"), ButtonMenu);
+                return new Button(*this, i18n("Window Actions Menu"), ButtonMenu);
 
             case HelpButton:
-            return new Button(*this, i18n("Help"), ButtonHelp);
+                return new Button(*this, i18n("Help"), ButtonHelp);
 
             case MinButton:
-            return new Button(*this, i18n("Minimize"), ButtonMin);
+                return new Button(*this, i18n("Minimize"), ButtonMin);
 
             case MaxButton:
-            return new Button(*this, i18n("Maximize"), ButtonMax);
+                return new Button(*this, i18n("Maximize"), ButtonMax);
 
             case CloseButton:
-            return new Button(*this, i18n("Close"), ButtonClose);
+                return new Button(*this, i18n("Close"), ButtonClose);
 
             case AboveButton:
-            return new Button(*this, i18n("Keep Above Others"), ButtonAbove);
+                return new Button(*this, i18n("Keep Above Others"), ButtonAbove);
 
             case BelowButton:
-            return new Button(*this, i18n("Keep Below Others"), ButtonBelow);
+                return new Button(*this, i18n("Keep Below Others"), ButtonBelow);
 
             case OnAllDesktopsButton:
-            return new Button(*this, i18n("On All Desktops"), ButtonSticky);
+                return new Button(*this, i18n("On All Desktops"), ButtonSticky);
 
             case ShadeButton:
-            return new Button(*this, i18n("Shade Button"), ButtonShade);
+                return new Button(*this, i18n("Shade Button"), ButtonShade);
 
-            default: break;
+            default:
+                break;
 
         }
 
@@ -370,21 +371,21 @@ namespace Oxygen
             }
 
             case LM_ButtonSpacing:
-            return narrowSpacing ? 1:3;
+                return narrowSpacing ? 1:3;
 
             case LM_ButtonMarginTop:
-            return 0;
+                return 0;
 
             // outer margin for shadow/glow
             case LM_OuterPaddingLeft:
             case LM_OuterPaddingRight:
             case LM_OuterPaddingTop:
             case LM_OuterPaddingBottom:
-            if( maximized ) return 0;
-            else return shadowCache().shadowSize();
+                if( maximized ) return 0;
+                else return shadowCache().shadowSize();
 
             default:
-            return KCommonDecoration::layoutMetric(lm, respectWindowState, btn);
+                return KCommonDecoration::layoutMetric(lm, respectWindowState, btn);
         }
 
     }
@@ -1226,51 +1227,51 @@ namespace Oxygen
         {
 
             case QEvent::Show:
-            if( widget() == object )
-            { _itemData.setDirty( true ); }
-            break;
+                if( widget() == object )
+                { _itemData.setDirty( true ); }
+                break;
 
             case QEvent::MouseButtonPress:
-            if( widget() == object )
-            { state = mousePressEvent( static_cast< QMouseEvent* >( event ) ); }
-            break;
+                if( widget() == object )
+                { state = mousePressEvent( static_cast< QMouseEvent* >( event ) ); }
+                break;
 
             case QEvent::MouseButtonRelease:
-            if( widget() == object ) state = mouseReleaseEvent( static_cast< QMouseEvent* >( event ) );
-            else if( Button *btn = qobject_cast< Button* >( object ) )
-            {
-                QMouseEvent* mouseEvent( static_cast< QMouseEvent* >( event ) );
-                if( mouseEvent->button() == Qt::LeftButton && btn->rect().contains( mouseEvent->pos() ) )
-                { state = closeItem( btn ); }
-            }
-
-            break;
+                if( widget() == object ) state = mouseReleaseEvent( static_cast< QMouseEvent* >( event ) );
+                else if( Button *btn = qobject_cast< Button* >( object ) )
+                {
+                    QMouseEvent* mouseEvent( static_cast< QMouseEvent* >( event ) );
+                    if( mouseEvent->button() == Qt::LeftButton && btn->rect().contains( mouseEvent->pos() ) )
+                    { state = closeItem( btn ); }
+                }
+                break;
 
             case QEvent::MouseMove:
-            state = mouseMoveEvent( static_cast< QMouseEvent* >( event ) );
-            break;
+                state = mouseMoveEvent( static_cast< QMouseEvent* >( event ) );
+                break;
 
             case QEvent::DragEnter:
-            if(  widget() == object )
-            { state = dragEnterEvent( static_cast< QDragEnterEvent* >( event ) ); }
-            break;
+                if(  widget() == object )
+                { state = dragEnterEvent( static_cast< QDragEnterEvent* >( event ) ); }
+                break;
 
             case QEvent::DragMove:
-            if( widget() == object )
-            { state = dragMoveEvent( static_cast< QDragMoveEvent* >( event ) ); }
-            break;
+                if( widget() == object )
+                { state = dragMoveEvent( static_cast< QDragMoveEvent* >( event ) ); }
+                break;
 
             case QEvent::DragLeave:
-            if( widget() == object )
-            { state = dragLeaveEvent( static_cast< QDragLeaveEvent* >( event ) ); }
-            break;
+                if( widget() == object )
+                { state = dragLeaveEvent( static_cast< QDragLeaveEvent* >( event ) ); }
+                break;
 
             case QEvent::Drop:
-            if( widget() == object )
-            { state = dropEvent( static_cast< QDropEvent* >( event ) ); }
-            break;
+                if( widget() == object )
+                { state = dropEvent( static_cast< QDropEvent* >( event ) ); }
+                break;
 
-            default: break;
+            default:
+                break;
 
         }
         return state || KCommonDecoration::eventFilter( object, event );
