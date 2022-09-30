@@ -829,7 +829,7 @@ QTextCodec *KateDocumentConfig::codec () const
   if (m_encodingSet || isGlobal())
   {
     if (m_encoding.isEmpty() && isGlobal())
-      return KGlobal::locale()->codecForEncoding();
+      return QTextCodec::codecForLocale();
     else if (m_encoding.isEmpty())
       return s_global->codec ();
     else

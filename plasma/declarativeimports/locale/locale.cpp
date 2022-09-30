@@ -361,11 +361,6 @@ QString Locale::defaultCountry()
     return KLocale::defaultCountry();
 }
 
-int Locale::fileEncodingMib() const
-{
-    return m_locale->fileEncodingMib();
-}
-
 QStringList Locale::allLanguagesList() const
 {
     return m_locale->allLanguagesList();

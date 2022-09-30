@@ -55,7 +55,7 @@ static QTextCodec *codecFromContent(const char *data, int dataSize)
 {
     QByteArray ba = QByteArray::fromRawData(data, dataSize);
     // try to detect UTF text, fall back to locale default (which is usually UTF-8)
-    return QTextCodec::codecForUtfText(ba, KGlobal::locale()->codecForEncoding());
+    return QTextCodec::codecForUtfText(ba, QTextCodec::codecForLocale());
 }
 
 bool TextCreator::create(const QString &path, int width, int height, QImage &img)

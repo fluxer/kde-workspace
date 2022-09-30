@@ -105,7 +105,6 @@ Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeek
 Q_PROPERTY(bool use12Clock READ use12Clock CONSTANT)
 Q_PROPERTY(QString defaultLanguage READ defaultLanguage CONSTANT)//read-only
 Q_PROPERTY(QString defaultCountry READ defaultCountry CONSTANT)//read-only
-Q_PROPERTY(int fileEncodingMib READ fileEncodingMib CONSTANT) //read-only
 Q_PROPERTY(QStringList languageList READ languageList CONSTANT) //read-only
 Q_PROPERTY(QStringList allLanguagesList READ allLanguagesList CONSTANT) //read-only
 Q_PROPERTY(QStringList installedLanguages READ installedLanguages CONSTANT) //read-only
@@ -876,16 +875,6 @@ public:
      * @see languageCodeToName
      */
     QStringList languageList() const;
-
-    /**
-     * Returns the file encoding.
-     *
-     * @return The Mib of the file encoding
-     *
-     * @see QFile::encodeName
-     * @see QFile::decodeName
-     */
-    int fileEncodingMib() const;
 
     /**
      * Changes the current date format.

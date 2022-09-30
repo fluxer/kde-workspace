@@ -58,12 +58,10 @@ int initLocale()
 #ifdef UTF8TEST
     // Assume utf8 system
     setenv( "LC_ALL", "en_US.utf-8", 1 );
-    setenv( "KDE_UTF8_FILENAMES", "true", 1 );
 #else
     // Ensure a known QFile::encodeName behavior for trashUtf8FileFromHome
     // However this assume your $HOME doesn't use characters from other locales...
     setenv( "LC_ALL", "en_US.ISO-8859-1", 1 );
-    unsetenv( "KDE_UTF8_FILENAMES" );
 #endif
     setenv("KDEHOME", QFile::encodeName( QDir::homePath() + QString::fromLatin1("/.kde-unit-test") ), 1);
     setenv("XDG_DATA_HOME", QFile::encodeName( QDir::homePath() + QString::fromLatin1("/.kde-unit-test/xdg/local") ), 1);
