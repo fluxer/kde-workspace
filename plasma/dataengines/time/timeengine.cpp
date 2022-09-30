@@ -33,11 +33,6 @@
 
 #include "timesource.h"
 
-//timezone is defined in msvc
-#ifdef timezone
-#undef timezone
-#endif
-
 TimeEngine::TimeEngine(QObject *parent, const QVariantList &args)
     : Plasma::DataEngine(parent, args)
 {
