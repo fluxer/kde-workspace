@@ -33,11 +33,6 @@
 
 #include "solarsystem.h"
 
-//timezone is defined in msvc
-#ifdef timezone
-#undef timezone
-#endif
-
 TimeSource::TimeSource(const QString &name, QObject *parent)
     : Plasma::DataContainer(parent),
       m_offset(0),
