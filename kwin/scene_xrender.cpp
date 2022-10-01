@@ -51,10 +51,6 @@ namespace KWin
 xcb_render_picture_t SceneXrender::buffer = XCB_RENDER_PICTURE_NONE;
 ScreenPaintData SceneXrender::screen_paint;
 
-#define DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
-#define FIXED_TO_DOUBLE(f) ((double) ((f) / 65536.0))
-
-
 static xcb_render_pictformat_t findFormatForVisual(xcb_visualid_t visual)
 {
     static QHash<xcb_visualid_t, xcb_render_pictformat_t> s_cache;
@@ -453,14 +449,14 @@ void SceneXrender::Window::performPaint(int mask, QRegion region, WindowPaintDat
         transformed_shape |= toplevel->shadow()->shadowRegion();
 
     xcb_render_transform_t xform = {
-        DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-        DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0),
-        DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+        KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+        KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0),
+        KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
     };
     static xcb_render_transform_t identity = {
-        DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-        DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0),
-        DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+        KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+        KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0),
+        KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
     };
 
     if (mask & PAINT_WINDOW_TRANSFORMED) {
@@ -473,8 +469,8 @@ void SceneXrender::Window::performPaint(int mask, QRegion region, WindowPaintDat
     }
     if (!qFuzzyCompare(xscale, 1.0) || !qFuzzyCompare(yscale, 1.0)) {
         scaled = true;
-        xform.matrix11 = DOUBLE_TO_FIXED(1.0 / xscale);
-        xform.matrix22 = DOUBLE_TO_FIXED(1.0 / yscale);
+        xform.matrix11 = KWIN_DOUBLE_TO_FIXED(1.0 / xscale);
+        xform.matrix22 = KWIN_DOUBLE_TO_FIXED(1.0 / yscale);
 
         // transform the shape for clipping in paintTransformedScreen()
         QVector<QRect> rects = transformed_shape.rects();
@@ -652,9 +648,9 @@ xcb_render_composite(connection(), XCB_RENDER_PICT_OP_OVER, m_xrenderShadow->pic
                     }
                     if (previous->size() != pixmap->size()) {
                         xcb_render_transform_t xform2 = {
-                            DOUBLE_TO_FIXED(FIXED_TO_DOUBLE(xform.matrix11) * previous->size().width() / pixmap->size().width()), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-                            DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(FIXED_TO_DOUBLE(xform.matrix22) * previous->size().height() / pixmap->size().height()), DOUBLE_TO_FIXED(0),
-                            DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+                            KWIN_DOUBLE_TO_FIXED(KWIN_FIXED_TO_DOUBLE(xform.matrix11) * previous->size().width() / pixmap->size().width()), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+                            KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(KWIN_FIXED_TO_DOUBLE(xform.matrix22) * previous->size().height() / pixmap->size().height()), KWIN_DOUBLE_TO_FIXED(0),
+                            KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
                             };
                         xcb_render_set_picture_transform(connection(), previous->picture(), xform2);
                     }
@@ -929,12 +925,12 @@ void SceneXrender::EffectFrame::renderUnstyled(xcb_render_picture_t pict, const 
 
         QVector<xcb_render_pointfix_t> points;
         xcb_render_pointfix_t point;
-        point.x = DOUBLE_TO_FIXED(roundness);
-        point.y = DOUBLE_TO_FIXED(roundness);
+        point.x = KWIN_DOUBLE_TO_FIXED(roundness);
+        point.y = KWIN_DOUBLE_TO_FIXED(roundness);
         points << point;
         for (int ii = 0; ii <= num_segments; ++ii) {
-            point.x = DOUBLE_TO_FIXED(x + roundness);
-            point.y = DOUBLE_TO_FIXED(y + roundness);
+            point.x = KWIN_DOUBLE_TO_FIXED(x + roundness);
+            point.y = KWIN_DOUBLE_TO_FIXED(y + roundness);
             points << point;
             //apply the rotation matrix
             t = x;
@@ -1084,9 +1080,6 @@ xcb_render_picture_t SceneXRenderShadow::picture(Shadow::ShadowElements element)
     }
     return *m_pictures[element];
 }
-
-#undef DOUBLE_TO_FIXED
-#undef FIXED_TO_DOUBLE
 
 } // namespace
 #endif

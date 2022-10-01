@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
+#include <xcbutils.h>
 #include <xcb/render.h>
 #endif
 
@@ -135,23 +136,21 @@ void MagnifierEffect::paintScreen(int mask, QRegion region, ScreenPaintData& dat
                 xcb_create_pixmap(connection(), 32, m_pixmap, rootWindow(), m_pixmapSize.width(), m_pixmapSize.height());
                 m_picture.reset(new XRenderPicture(m_pixmap, 32));
             }
-#define DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
             static xcb_render_transform_t identity = {
-                DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+                KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
             };
             static xcb_render_transform_t xform = {
-                DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+                KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
             };
             xcb_render_composite(connection(), XCB_RENDER_PICT_OP_SRC, effects->xrenderBufferPicture(), 0, *m_picture,
                                 srcArea.x(), srcArea.y(), 0, 0, 0, 0, srcArea.width(), srcArea.height());
             xcb_flush(connection());
-            xform.matrix11 = DOUBLE_TO_FIXED(1.0/zoom);
-            xform.matrix22 = DOUBLE_TO_FIXED(1.0/zoom);
-#undef DOUBLE_TO_FIXED
+            xform.matrix11 = KWIN_DOUBLE_TO_FIXED(1.0/zoom);
+            xform.matrix22 = KWIN_DOUBLE_TO_FIXED(1.0/zoom);
             xcb_render_set_picture_transform(connection(), *m_picture, xform);
             xcb_render_set_picture_filter(connection(), *m_picture, 4, const_cast<char*>("good"), 0, NULL);
             xcb_render_composite(connection(), XCB_RENDER_PICT_OP_SRC, *m_picture, 0, effects->xrenderBufferPicture(),

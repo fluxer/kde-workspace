@@ -27,8 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <QApplication>
 #include <QStyle>
-#include <QtGui/QVector2D>
-#include <QtDBus/QDBusConnection>
+#include <QVector2D>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
@@ -38,6 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifdef KWIN_BUILD_COMPOSITE
 #include <kwinxrenderutils.h>
+#include <xcbutils.h>
 #include <xcb/render.h>
 #endif
 #include <xcb/xfixes.h>
@@ -286,18 +286,17 @@ void ZoomEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
 
 #ifdef KWIN_BUILD_COMPOSITE
         if (xrenderPicture) {
-#define DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
             static xcb_render_transform_t xrenderIdentity = {
-                DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1), DOUBLE_TO_FIXED(0),
-                DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+                KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1), KWIN_DOUBLE_TO_FIXED(0),
+                KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
             };
             if (mousePointer == MousePointerScale) {
                 xcb_render_set_picture_filter(connection(), *xrenderPicture, 4, const_cast<char*>("good"), 0, NULL);
                 const xcb_render_transform_t xform = {
-                    DOUBLE_TO_FIXED(1.0 / zoom), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0),
-                    DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1.0 / zoom), DOUBLE_TO_FIXED(0),
-                    DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(0), DOUBLE_TO_FIXED(1)
+                    KWIN_DOUBLE_TO_FIXED(1.0 / zoom), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0),
+                    KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1.0 / zoom), KWIN_DOUBLE_TO_FIXED(0),
+                    KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(0), KWIN_DOUBLE_TO_FIXED(1)
                 };
                 xcb_render_set_picture_transform(connection(), *xrenderPicture, xform);
             }
@@ -305,7 +304,6 @@ void ZoomEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
                                  effects->xrenderBufferPicture(), 0, 0, 0, 0, rect.x(), rect.y(), rect.width(), rect.height());
             if (mousePointer == MousePointerScale)
                 xcb_render_set_picture_transform(connection(), *xrenderPicture, xrenderIdentity);
-#undef DOUBLE_TO_FIXED
         }
 #endif
     }

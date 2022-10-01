@@ -30,6 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <xcb/xcb.h>
 #include <xcb/composite.h>
 
+#define KWIN_DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
+#define KWIN_FIXED_TO_DOUBLE(f) ((double) ((f) / 65536.0))
+
 namespace KWin {
 
 namespace Xcb {

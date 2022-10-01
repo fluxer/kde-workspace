@@ -34,6 +34,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KLocalizedString>
 #include <kdebug.h>
 
+#ifdef KWIN_BUILD_COMPOSITE
+#include <xcbutils.h>
+#endif
+
 #include <math.h>
 
 namespace KWin
@@ -121,13 +125,11 @@ void TrackMouseEffect::paintScreen(int mask, QRegion region, ScreenPaintData& da
             const float dx = m_size[i].width()/2.0;
             const float dy = m_size[i].height()/2.0;
             const xcb_render_picture_t picture = *m_picture[i];
-#define DOUBLE_TO_FIXED(d) ((xcb_render_fixed_t) ((d) * 65536))
             xcb_render_transform_t xform = {
-                DOUBLE_TO_FIXED( cosine ), DOUBLE_TO_FIXED( -sine ), DOUBLE_TO_FIXED( dx - cosine*dx + sine*dy ),
-                DOUBLE_TO_FIXED( sine ), DOUBLE_TO_FIXED( cosine ), DOUBLE_TO_FIXED( dy - sine*dx - cosine*dy ),
-                DOUBLE_TO_FIXED( 0.0 ), DOUBLE_TO_FIXED( 0.0 ), DOUBLE_TO_FIXED( 1.0 )
+                KWIN_DOUBLE_TO_FIXED( cosine ), KWIN_DOUBLE_TO_FIXED( -sine ), KWIN_DOUBLE_TO_FIXED( dx - cosine*dx + sine*dy ),
+                KWIN_DOUBLE_TO_FIXED( sine ), KWIN_DOUBLE_TO_FIXED( cosine ), KWIN_DOUBLE_TO_FIXED( dy - sine*dx - cosine*dy ),
+                KWIN_DOUBLE_TO_FIXED( 0.0 ), KWIN_DOUBLE_TO_FIXED( 0.0 ), KWIN_DOUBLE_TO_FIXED( 1.0 )
             };
-#undef DOUBLE_TO_FIXED
             xcb_render_set_picture_transform(connection(), picture, xform);
             xcb_render_set_picture_filter(connection(), picture, 8, "bilinear", 0, NULL);
             const QRect &rect = m_lastRect[i];
