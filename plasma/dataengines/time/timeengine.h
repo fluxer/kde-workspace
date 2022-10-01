@@ -46,7 +46,10 @@ class TimeEngine : public Plasma::DataEngine
 
     protected Q_SLOTS:
         void clockSkewed(); // call when system time changed and all clocks should be updated
-        void tzConfigChanged();
+        void checkTZ();
+
+    private:
+        QString m_tz;
 };
 
 #endif // TIMEENGINE_H

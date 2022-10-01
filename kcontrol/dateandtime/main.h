@@ -21,24 +21,27 @@
 #ifndef main_included
 #define main_included
 
+#include <QTabWidget>
 #include <kcmodule.h>
 
 class Dtime;
-#include <QTabWidget>
-
 
 class KclockModule : public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  KclockModule(QWidget *parent, const QVariantList &);
+    KclockModule(QWidget *parent, const QVariantList &);
 
-  void	save();
-  void	load();
+    void save();
+    void load();
+
+protected Q_SLOTS:
+    void checkTZ();
 
 private:
-  Dtime	*dtime;
+    Dtime *dtime;
+    QString m_tz;
 };
 
 #endif // main_included

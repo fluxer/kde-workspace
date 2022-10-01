@@ -33,6 +33,7 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <kauthorization.h>
+#include <ksystemtimezone.h>
 
 #include "moc_main.cpp"
 
@@ -46,76 +47,84 @@ K_EXPORT_PLUGIN(KlockModuleFactory("kcmkclock"))
 KclockModule::KclockModule(QWidget *parent, const QVariantList &)
   : KCModule(KlockModuleFactory::componentData(), parent/*, name*/)
 {
-  KAboutData *about =
-  new KAboutData(I18N_NOOP("kcmclock"), 0, ki18n("KDE Clock Control Module"),
-                  0, KLocalizedString(), KAboutData::License_GPL,
-                  ki18n("(c) 1996 - 2001 Luca Montecchiani\n"
-                      "(c) 2014 Ivailo Monev"));
+    KAboutData *about =
+    new KAboutData(I18N_NOOP("kcmclock"), 0, ki18n("KDE Clock Control Module"),
+                   0, KLocalizedString(), KAboutData::License_GPL,
+                   ki18n("(c) 1996 - 2001 Luca Montecchiani\n(c) 2014 Ivailo Monev"));
 
-  about->addAuthor(ki18n("Luca Montecchiani"), ki18n("Original author"), "m.luca@usa.net");
-  about->addAuthor(ki18n("Paul Campbell"), ki18n("Past Maintainer"), "paul@taniwha.com");
-  about->addAuthor(ki18n("Benjamin Meyer"), ki18n("Added NTP support"), "ben+kcmclock@meyerhome.net");
-  about->addAuthor(ki18n("Ivailo Monev"), ki18n("Current Maintainer"), "xakepa10@gmail.com");
-  setAboutData( about );
-  setQuickHelp( i18n("<h1>Date & Time</h1> This control module can be used to set the system date and"
-    " time. As these settings do not only affect you as a user, but rather the whole system, you"
-    " can only change these settings when you start the System Settings as root. If you do not have"
-    " the root password, but feel the system time should be corrected, please contact your system"
-    " administrator."));
+    about->addAuthor(ki18n("Luca Montecchiani"), ki18n("Original author"), "m.luca@usa.net");
+    about->addAuthor(ki18n("Paul Campbell"), ki18n("Past Maintainer"), "paul@taniwha.com");
+    about->addAuthor(ki18n("Benjamin Meyer"), ki18n("Added NTP support"), "ben+kcmclock@meyerhome.net");
+    about->addAuthor(ki18n("Ivailo Monev"), ki18n("Current Maintainer"), "xakepa10@gmail.com");
+    setAboutData( about );
+    setQuickHelp( i18n("<h1>Date & Time</h1> This control module can be used to set the system date and"
+        " time. As these settings do not only affect you as a user, but rather the whole system, you"
+        " can only change these settings when you start the System Settings as root. If you do not have"
+        " the root password, but feel the system time should be corrected, please contact your system"
+        " administrator."));
 
-  KGlobal::locale()->insertCatalog("timezones4"); // For time zone translations
+    KGlobal::locale()->insertCatalog("timezones4"); // For time zone translations
 
-  QVBoxLayout *layout = new QVBoxLayout(this);
-  layout->setMargin(0);
-  layout->setSpacing(KDialog::spacingHint());
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(KDialog::spacingHint());
 
-  dtime = new Dtime(this);
-  layout->addWidget(dtime);
-  connect(dtime, SIGNAL(timeChanged(bool)), this, SIGNAL(changed(bool)));
+    dtime = new Dtime(this);
+    layout->addWidget(dtime);
+    connect(dtime, SIGNAL(timeChanged(bool)), this, SIGNAL(changed(bool)));
 
-  setButtons(Help|Apply);
+    setButtons(Help|Apply);
 
 
-  if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmclock")) {
-    setUseRootOnlyMessage(true);
-    setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
-  }
+    if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmclock")) {
+        setUseRootOnlyMessage(true);
+        setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
+    }
+
+    m_tz = KSystemTimeZones::local().name();
+    QTimer::singleShot(3000, this, SLOT(checkTZ()));
 }
 
 void KclockModule::save()
 {
-  setDisabled(true);
+    setDisabled(true);
 
-  QVariantMap helperargs;
-  dtime->save( helperargs );
+    QVariantMap helperargs;
+    dtime->save( helperargs );
 
-  int reply = KAuthorization::execute(
-    "org.kde.kcontrol.kcmclock", "save", helperargs
-  );
+    int reply = KAuthorization::execute(
+        "org.kde.kcontrol.kcmclock", "save", helperargs
+    );
 
-  if (reply != KAuthorization::NoError) {
-    if (reply < KAuthorization::NoError) {
-      KMessageBox::error(this, i18n("Unable to authenticate/execute the action: %1", KAuthorization::errorString(reply)));
+    if (reply != KAuthorization::NoError) {
+        if (reply < KAuthorization::NoError) {
+            KMessageBox::error(this, i18n("Unable to authenticate/execute the action: %1", KAuthorization::errorString(reply)));
+        } else {
+            dtime->processHelperErrors(reply);
+        }
     } else {
-      dtime->processHelperErrors(reply);
+        QDBusMessage msg = QDBusMessage::createSignal("/org/kde/kcmshell_clock", "org.kde.kcmshell_clock", "clockUpdated");
+        QDBusConnection::sessionBus().send(msg);
     }
-  } else {
-      QDBusMessage msg = QDBusMessage::createSignal("/org/kde/kcmshell_clock", "org.kde.kcmshell_clock", "clockUpdated");
-      QDBusConnection::sessionBus().send(msg);
-  }
 
-  // NOTE: super nasty hack #1
-  // Try to work around time mismatch between KSystemTimeZones' update of local
-  // timezone and reloading of data, so that the new timezone is taken into account.
-  // The Ultimate solution to this would be if KSTZ emitted a signal when a new
-  // local timezone was found.
-  QTimer::singleShot(5000, this, SLOT(load()));
-
-  // setDisabled(false) happens in load(), since QTimer::singleShot is non-blocking
+    // setDisabled(false) happens in load()
 }
 
 void KclockModule::load()
 {
-  dtime->load();
-  setDisabled(false);
+    dtime->load();
+    setDisabled(false);
+    emit changed(false);
+}
+
+
+void KclockModule::checkTZ()
+{
+    const QString localtz = KSystemTimeZones::local().name();
+    if (localtz != m_tz) {
+        m_tz = localtz;
+
+        load();
+    }
+    QTimer::singleShot(1000, this, SLOT(checkTZ()));
 }

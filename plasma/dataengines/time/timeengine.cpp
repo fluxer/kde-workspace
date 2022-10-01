@@ -50,12 +50,13 @@ TimeEngine::~TimeEngine()
 
 void TimeEngine::init()
 {
-    //QDBusInterface *ktimezoned = new QDBusInterface("org.kde.kded", "/modules/ktimezoned", "org.kde.KTimeZoned");
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.connect(QString(), QString(), "org.kde.KTimeZoned", "configChanged", this, SLOT(tzConfigChanged()));
     dbus.connect(QString(), "/org/kde/kcmshell_clock", "org.kde.kcmshell_clock", "clockUpdated", this, SLOT(clockSkewed()));
 
-    connect( Solid::PowerManagement::notifier(), SIGNAL(resumingFromSuspend()), this , SLOT(clockSkewed()) );
+    connect(Solid::PowerManagement::notifier(), SIGNAL(resumingFromSuspend()), this , SLOT(clockSkewed()));
+
+    m_tz = KSystemTimeZones::local().name();
+    QTimer::singleShot(3000, this, SLOT(checkTZ()));
 }
 
 void TimeEngine::clockSkewed()
@@ -65,15 +66,21 @@ void TimeEngine::clockSkewed()
     forceImmediateUpdateOfAllVisualizations();
 }
 
-void TimeEngine::tzConfigChanged()
+void TimeEngine::checkTZ()
 {
-    TimeSource *s = qobject_cast<TimeSource *>(containerForSource("Local"));
+    const QString localtz = KSystemTimeZones::local().name();
+    if (localtz != m_tz) {
+        m_tz = localtz;
 
-    if (s) {
-        s->setTimeZone("Local");
+        TimeSource *s = qobject_cast<TimeSource *>(containerForSource("Local"));
+
+        if (s) {
+            s->setTimeZone("Local");
+        }
+
+        updateAllSources();
     }
-
-    updateAllSources();
+    QTimer::singleShot(3000, this, SLOT(checkTZ()));
 }
 
 QStringList TimeEngine::sources() const
