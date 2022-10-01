@@ -63,11 +63,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "workspace.h"
 #include "xcbutils.h"
 
-#define INT8 _X11INT8
-#define INT32 _X11INT32
 #include <X11/Xproto.h>
-#undef INT8
-#undef INT32
 
 static bool isMultiHead()
 {
