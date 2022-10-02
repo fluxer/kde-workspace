@@ -122,7 +122,7 @@ void KStart::sendRule()
     }
     if (!windowtitle.isEmpty() || !windowclass.isEmpty()) {
         // always ignore these window types
-        message += "types=" + QString().setNum( -1U &
+        message += "types=" + QString().setNum(-1U &
             ~(NET::ToolbarMask | NET::DesktopMask | NET::SplashMask | NET::MenuMask)) + '\n';
     } else {
         // accept only "normal" windows
@@ -190,25 +190,24 @@ void KStart::windowAdded(WId w)
         }
     }
     if (!windowclass.isEmpty()) {
-#warning "Porting required"
-#if 0
         XClassHint hint;
-        if( !XGetClassHint( QX11Info::display(), w, &hint ))
+        if (!XGetClassHint(QX11Info::display(), w, &hint)) {
             return;
-        Q3CString cls = windowclass.contains( ' ' )
-            ? Q3CString( hint.res_name ) + ' ' + hint.res_class : Q3CString( hint.res_class );
+        }
+        QString cls = windowclass.contains(' ')
+            ? QString(hint.res_name) + ' ' + hint.res_class : QString(hint.res_class);
         cls = cls.toLower();
-        XFree( hint.res_name );
-	XFree( hint.res_class );
-        if( cls != windowclass )
+        XFree(hint.res_name);
+        XFree(hint.res_class);
+        if (cls != windowclass) {
             return;
-#endif
+        }
     }
     if (windowtitle.isEmpty() && windowclass.isEmpty()) {
         // accept only "normal" windows
-        if (info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) != NET::Unknown
-            && info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) != NET::Normal
-            && info.windowType( SUPPORTED_WINDOW_TYPES_MASK ) != NET::Dialog) {
+        if (info.windowType(SUPPORTED_WINDOW_TYPES_MASK) != NET::Unknown
+            && info.windowType(SUPPORTED_WINDOW_TYPES_MASK) != NET::Normal
+            && info.windowType(SUPPORTED_WINDOW_TYPES_MASK) != NET::Dialog) {
             return;
         }
     }
