@@ -7,6 +7,7 @@ if (X11_Xft_FOUND)
         ${KDE4_INCLUDES}
         ${FREETYPE_INCLUDE_DIRS}
         ${FONTCONFIG_INCLUDE_DIR}
+        ${Fontconfig_INCLUDE_DIRS}
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_BINARY_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/lib
