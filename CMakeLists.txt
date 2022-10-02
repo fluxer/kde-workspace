@@ -92,14 +92,14 @@ if(Q_WS_X11)
     endif()
 endif(Q_WS_X11)
 
-macro_optional_find_package(DBusMenuQt 0.6.0)
+kde4_optional_find_package(DBusMenuQt 0.6.0)
 set_package_properties(DBusMenuQt PROPERTIES
     DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
     URL "https://launchpad.net/libdbusmenu-qt"
     TYPE RECOMMENDED
 )
 
-macro_optional_find_package(OpenGL)
+kde4_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"
     URL "http://www.opengl.org"
@@ -107,7 +107,7 @@ set_package_properties(OpenGL PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(LibDRM)
+kde4_optional_find_package(LibDRM)
 set_package_properties(LibDRM PROPERTIES
     DESCRIPTION "Userspace interface to kernel DRM services"
     URL "https://dri.freedesktop.org/wiki/"
@@ -115,7 +115,7 @@ set_package_properties(LibDRM PROPERTIES
     PURPOSE "OpenGL info module"
 )
 
-macro_optional_find_package(Freetype)
+kde4_optional_find_package(Freetype)
 set_package_properties(Freetype PROPERTIES
     DESCRIPTION "Freely available software library to render fonts"
     URL "https://www.freetype.org"
@@ -123,7 +123,7 @@ set_package_properties(Freetype PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(Fontconfig)
+kde4_optional_find_package(Fontconfig)
 set_package_properties(Fontconfig PROPERTIES
     DESCRIPTION "Font access configuration library"
     URL "http://www.freedesktop.org/wiki/Software/fontconfig"
@@ -131,7 +131,7 @@ set_package_properties(Fontconfig PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(LibUSB)
+kde4_optional_find_package(LibUSB)
 set_package_properties(LibUSB PROPERTIES
     DESCRIPTION "User level access to USB devices"
     URL "https://libusb.info/"
@@ -139,14 +139,14 @@ set_package_properties(LibUSB PROPERTIES
     PURPOSE "Provides Logitech mouse support in KControl and USB devices information"
 )
 
-macro_optional_find_package(Kmod)
+kde4_optional_find_package(Kmod)
 set_package_properties(Kmod PROPERTIES
     DESCRIPTION "Set of tools to handle common tasks with Linux kernel modules"
     URL "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/"
     TYPE OPTIONAL
     PURPOSE "Kernel modules information"
 )
-macro_optional_find_package(PCIUTILS)
+kde4_optional_find_package(PCIUTILS)
 set_package_properties(PCIUTILS PROPERTIES
     DESCRIPTION "PciUtils is a library for direct access to PCI slots"
     URL "http://atrey.karlin.mff.cuni.cz/~mj/pciutils.shtml"
@@ -154,7 +154,7 @@ set_package_properties(PCIUTILS PROPERTIES
     PURPOSE "View PCI details in kinfocenter"
 )
 
-macro_optional_find_package(RAW1394)
+kde4_optional_find_package(RAW1394)
 set_package_properties(RAW1394 PROPERTIES
     DESCRIPTION "library for direct access to IEEE 1394 bus"
     URL "http://www.linux1394.org/"
@@ -162,7 +162,7 @@ set_package_properties(RAW1394 PROPERTIES
     PURPOSE "View FireWire devices in kinfocenter"
 )
 
-macro_optional_find_package(LibSSH 0.6.0)
+kde4_optional_find_package(LibSSH 0.6.0)
 set_package_properties(LibSSH PROPERTIES
     DESCRIPTION "the SSH library with SFTP support"
     URL "http://www.libssh.org/"
@@ -170,7 +170,7 @@ set_package_properties(LibSSH PROPERTIES
     PURPOSE "Needed to build the SFTP kioslave"
 )
 
-macro_optional_find_package(Mtp 1.1.2)
+kde4_optional_find_package(Mtp 1.1.2)
 set_package_properties(Mtp PROPERTIES
     DESCRIPTION "the library implementation of the Media Transfer Protocol"
     URL "http://libmtp.sourceforge.net/"
@@ -178,7 +178,7 @@ set_package_properties(Mtp PROPERTIES
     PURPOSE "Needed to build the MTP kioslave"
 )
 
-macro_optional_find_package(Gphoto2 2.5)
+kde4_optional_find_package(Gphoto2 2.5)
 set_package_properties(Gphoto2 PROPERTIES
     DESCRIPTION "Free, redistributable, ready to use set of digital camera software applications"
     URL "http://www.gphoto.org/"
@@ -186,7 +186,7 @@ set_package_properties(Gphoto2 PROPERTIES
     PURPOSE "Needed to build camera kioslave"
 )
 
-macro_optional_find_package(OpenEXR)
+kde4_optional_find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "API for accessing OpenEXR formatted images"
     URL "http://www.openexr.com"
@@ -194,7 +194,7 @@ set_package_properties(OpenEXR PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(Sensors)
+kde4_optional_find_package(Sensors)
 set_package_properties(Sensors PROPERTIES
     DESCRIPTION "Linux hardware monitoring"
     URL "https://hwmon.wiki.kernel.org/lm_sensors"
@@ -202,7 +202,7 @@ set_package_properties(Sensors PROPERTIES
     TYPE OPTIONAL
 )
 
-macro_optional_find_package(Qalculate)
+kde4_optional_find_package(Qalculate)
 set_package_properties(Qalculate PROPERTIES
     DESCRIPTION "Qalculate Library"
     URL "http://qalculate.sourceforge.net"
@@ -210,7 +210,7 @@ set_package_properties(Qalculate PROPERTIES
     PURPOSE "Needed to enable advanced features of the calculator runner"
 )
 
-macro_optional_find_package(LightDM)
+kde4_optional_find_package(LightDM)
 set_package_properties(LightDM PROPERTIES
     DESCRIPTION "Cross-desktop display manager"
     URL "https://github.com/canonical/lightdm"
