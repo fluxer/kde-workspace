@@ -38,6 +38,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kstandarddirs.h>
+#include <ksystemtimezone.h>
 #include <QProcess>
 #include <QFile>
 #include <QDir>
@@ -112,28 +113,8 @@ ClockHelper::CH_Error ClockHelper::tz( const QString& selectedzone )
         return TimezoneError;
     }
 
-    // NOTE: keep in sync with ktimezoned/ktimezoned.cpp
-    static const QStringList zoneDirs = QStringList()
-        << QLatin1String("/share/zoneinfo/")
-        << QLatin1String("/lib/zoneinfo/")
-        << QLatin1String("/usr/share/zoneinfo/")
-        << QLatin1String("/usr/lib/zoneinfo/")
-        << QLatin1String("/usr/local/share/zoneinfo/")
-        << QLatin1String("/usr/local/lib/zoneinfo/")
-        << (KStandardDirs::installPath("kdedir") + QLatin1String("/share/zoneinfo/"))
-        << (KStandardDirs::installPath("kdedir") + QLatin1String("/lib/zoneinfo/"));
-
-    // /usr is kind of standard
-    QString ZONE_INFO_DIR = "/usr/share/zoneinfo/";
-
-    foreach (const QString &zonedir, zoneDirs) {
-        if (QDir(zonedir).exists()) {
-            ZONE_INFO_DIR = zonedir;
-            break;
-        }
-    }
-
-    QString tz = ZONE_INFO_DIR + selectedzone;
+    const QString tzdir = KSystemTimeZones::zoneinfoDir();
+    const QString tz = QDir::cleanPath(tzdir + QDir::separator() + selectedzone);
 
     unlink( "/etc/localtime" );
 
@@ -141,9 +122,9 @@ ClockHelper::CH_Error ClockHelper::tz( const QString& selectedzone )
         return TimezoneError;
     }
 
-    QString val = ':' + tz;
+    QByteArray val = ':' + tz.toAscii();
 
-    setenv("TZ", val.toAscii(), 1);
+    setenv("TZ", val.constData(), 1);
     tzset();
 
     return NoError;
