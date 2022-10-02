@@ -36,11 +36,10 @@ if (HAVE_MMMX)
    SET_SOURCE_FILES_PROPERTIES(fadeeffect.cpp PROPERTIES COMPILE_FLAGS -mmmx)
 endif (HAVE_MMMX)
 
-set(kcminit_adaptor ${CMAKE_CURRENT_SOURCE_DIR}/../kcminit/main.h)
+set(kcminit_adaptor ${CMAKE_SOURCE_DIR}/kcminit/main.h)
 set(kcminit_xml ${CMAKE_CURRENT_BINARY_DIR}/org.kde.KCMinit.xml)
-add_custom_command(OUTPUT ${kcminit_xml}
-       COMMAND ${QT_DBUSCPP2XML_EXECUTABLE} ${kcminit_adaptor} > ${kcminit_xml}
-       DEPENDS ${kcminit_adaptor})
+qt4_generate_dbus_interface(${kcminit_adaptor} ${kcminit_xml})
+
 qt4_add_dbus_interface( ksmserver_SRCS ${kcminit_xml} kcminit_interface )
 
 # This is actually now disabled, because OrgKDEKlauncherInterface is also provided

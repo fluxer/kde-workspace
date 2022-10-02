@@ -70,7 +70,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QtGui/qx11info_x11.h>
 
-//#include "kdesktop_interface.h"
 #include <klauncher_iface.h>
 #include "kcminit_interface.h"
 
