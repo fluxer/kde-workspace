@@ -84,7 +84,7 @@ KStart::KStart()
     //finally execute the comand
     if (proc) {
         qint64 pid = KProcess::startDetached(exe, exeArgs);
-        if( pid ) {
+        if (pid) {
             KStartupInfoData data;
             data.addPid(pid);
             data.setName(exe);
@@ -114,7 +114,7 @@ void KStart::sendRule()
     if (!windowtitle.isEmpty()) {
         message += "title=" + windowtitle + "\ntitlematch=3\n"; // 3 = regexp match
     }
-    if(!windowclass.isEmpty()) {
+    if (!windowclass.isEmpty()) {
         message += "wmclass=" + windowclass + "\nwmclassmatch=1\n" // 1 = exact match
             + "wmclasscomplete="
             // if windowclass contains a space (i.e. 2 words, use whole WM_CLASS)
@@ -177,7 +177,7 @@ void KStart::windowAdded(WId w)
     KWindowInfo info = KWindowSystem::windowInfo(w, NET::WMWindowType | NET::WMName);
 
     // always ignore these window types
-    if(info.windowType(SUPPORTED_WINDOW_TYPES_MASK) == NET::Toolbar
+    if (info.windowType(SUPPORTED_WINDOW_TYPES_MASK) == NET::Toolbar
         || info.windowType(SUPPORTED_WINDOW_TYPES_MASK) == NET::Desktop) {
         return;
     }
@@ -236,8 +236,8 @@ static bool wstate_withdrawn(WId winid)
     bool withdrawn = true;
     if (r == Success && data && format == 32) {
         quint32 *wstate = (quint32*)data;
-        withdrawn  = (*wstate == WithdrawnState );
-        XFree( (char *)data );
+        withdrawn  = (*wstate == WithdrawnState);
+        XFree((char *)data);
     }
     return withdrawn;
 #endif
@@ -245,8 +245,8 @@ static bool wstate_withdrawn(WId winid)
 }
 
 
-void KStart::applyStyle(WId w ) {
-
+void KStart::applyStyle(WId w)
+{
     if (state || iconify || windowtype != NET::Unknown || desktop >= 1) {
         QX11Info info;
         XWithdrawWindow(QX11Info::display(), w, info.screen());
@@ -260,7 +260,7 @@ void KStart::applyStyle(WId w ) {
     NETWinInfo info(QX11Info::display(), w, QX11Info::appRootWindow(), NET::WMState);
 
     if ((desktop > 0 && desktop <= KWindowSystem::numberOfDesktops())
-        || desktop == NETWinInfo::OnAllDesktops ) {
+        || desktop == NETWinInfo::OnAllDesktops) {
         info.setDesktop(desktop);
     }
 
@@ -294,13 +294,13 @@ void KStart::applyStyle(WId w ) {
     XSync(QX11Info::display(), False);
 
     if (activate) {
-        KWindowSystem::forceActiveWindow( w );
+        KWindowSystem::forceActiveWindow(w);
     }
 
     QApplication::flush();
 }
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
     KAboutData aboutData("kstart", 0, ki18n("KStart"), KDE_VERSION_STRING,
         ki18n(
@@ -316,7 +316,7 @@ int main( int argc, char *argv[] )
     aboutData.addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
     aboutData.addAuthor(ki18n("Richard J. Moore"), KLocalizedString(), "rich@kde.org");
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
     KCmdLineOptions options;
 
@@ -359,7 +359,7 @@ int main( int argc, char *argv[] )
     KCmdLineArgs::addCmdLineOptions(options); // Add our own options.
 
     KComponentData componentData( &aboutData);
-    QApplication app(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv() );
+    QApplication app(KCmdLineArgs::qtArgc(), KCmdLineArgs::qtArgv());
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -417,7 +417,7 @@ int main( int argc, char *argv[] )
     if (args->isSet("keepabove")) {
         state |= NET::KeepAbove;
         mask |= NET::KeepAbove;
-    } else if ( args->isSet("keepbelow") ) {
+    } else if (args->isSet("keepbelow")) {
         state |= NET::KeepBelow;
         mask |= NET::KeepBelow;
     }
