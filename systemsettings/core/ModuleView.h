@@ -101,7 +101,7 @@ public Q_SLOTS:
     void loadModule( QModelIndex menuItem );
 
     /**
-     * Will open KHelpCenter, and load the help for the active module.
+     * Will open the help for the active module.
      */
     void moduleHelp();
 

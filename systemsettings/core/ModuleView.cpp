@@ -41,6 +41,7 @@
 #include <KStandardGuiItem>
 #include <KDialogButtonBox>
 #include <KUrl>
+#include <KToolInvocation>
 
 #include "MenuItem.h"
 
@@ -311,8 +312,9 @@ void ModuleView::moduleHelp()
     if( docPath.isEmpty() ) {
         return;
     }
-    KUrl url( KUrl("help:/"), docPath );
-    QProcess::startDetached("khelpcenter", QStringList() << url.url());
+
+    QString moduleService = activeModule->fileName().replace(QLatin1String(".desktop"), QString());
+    KToolInvocation::invokeHelp(QString(), moduleService);
 }
 
 void ModuleView::activeModuleChanged(KPageWidgetItem * current, KPageWidgetItem * previous)
