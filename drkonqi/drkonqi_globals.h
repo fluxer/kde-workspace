@@ -19,6 +19,7 @@
 
 #include <KGuiItem>
 #include <KIcon>
+#include <KGlobalSettings>
 
 /** This class provides a custom constructor to fill the "toolTip"
  * and "whatsThis" texts of KGuiItem with the same text.
@@ -31,7 +32,7 @@ public:
 };
 
 /* Urls are defined globally here, so that they can change easily */
-#define TECHBASE_HOWTO_DOC_URL "https://osdn.net/projects/kde/wiki/"
-#define ABOUT_BUG_REPORTING_URL "https://osdn.net/projects/kde/wiki/"
+#define TECHBASE_HOWTO_DOC_URL KDE_HELP_URL "/how_to_debug"
+#define ABOUT_BUG_REPORTING_URL KDE_HELP_URL "/how_to_report"
 
 #endif

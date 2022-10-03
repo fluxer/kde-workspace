@@ -98,7 +98,7 @@ void DrKonqiDialog::buildIntroWidget()
                                            "to the KDE bug tracking system. Do not forget to include "
                                            "the backtrace from the <interface>Developer Information</interface> "
                                            "tab.</para>",
-                                           QLatin1String(BUG_REPORT_URL));
+                                           QLatin1String(KDE_BUG_REPORT_URL));
         } else if (KCmdLineArgs::parsedArgs()->isSet("safer")) {
             reportMessage = i18nc("@info", "<para>The reporting assistant is disabled because "
                                            "the crash handler dialog was started in safe mode."
@@ -239,11 +239,11 @@ void DrKonqiDialog::startBugReportAssistant()
     QString backtrace = DrKonqi::debuggerManager()->backtraceGenerator()->parser()->parsedBacktrace();
     QString query;
     // KDE applications use the email address by default
-    if (appReportAddress == BUG_REPORT_EMAIL) {
+    if (appReportAddress == QLatin1String(KDE_BUG_REPORT_EMAIL)) {
         // black magic - report is done in Markdown syntax with new lines preserved
         // but invokeBrowser() can call external browser and at this point KDE
         // application can not be trused not to crash again (konqueror, rekonq, etc.).
-        query = QString("%1/new").arg(BUG_REPORT_URL);
+        query = QString("%1/new").arg(KDE_BUG_REPORT_URL);
         query.append(QString("?title=%1 %2 %3").arg(crashedApp->name(), crashedApp->version(),
             crashedApp->signalName()));
         query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nKatie: %5\n%6").arg(
