@@ -69,14 +69,14 @@ endif()
 ########### next target ###############
 
 if(X11_Xcursor_FOUND)
-   set(cursorthumbnail_PART_SRCS cursorcreator.cpp)
+    set(cursorthumbnail_PART_SRCS cursorcreator.cpp)
 
-   kde4_add_plugin(cursorthumbnail ${cursorthumbnail_PART_SRCS})
+    kde4_add_plugin(cursorthumbnail ${cursorthumbnail_PART_SRCS})
 
-   target_link_libraries(cursorthumbnail ${X11_Xcursor_LIB} ${KDE4_KIO_LIBS})
+    target_link_libraries(cursorthumbnail ${X11_Xcursor_LIB} ${KDE4_KIO_LIBS})
 
-   install(TARGETS cursorthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-   install(FILES cursorthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+    install(TARGETS cursorthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+    install(FILES cursorthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 endif()
 
 ########### next target ###############
@@ -101,10 +101,17 @@ install(TARGETS comicbookthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(epubthumbnail_SRCS epub.cpp epubthumbnail.cpp)
-kde4_add_plugin(epubthumbnail ${epubthumbnail_SRCS})
-target_link_libraries(epubthumbnail ${KDE4_KIO_LIBS})
-install(TARGETS epubthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+if(EPUB_FOUND)
+    include_directories(${EPUB_INCLUDE_DIR})
+
+    set(epubthumbnail_SRCS epubthumbnail.cpp)
+
+    kde4_add_plugin(epubthumbnail ${epubthumbnail_SRCS})
+    target_link_libraries(epubthumbnail ${KDE4_KIO_LIBS} ${EPUB_LIBRARIES})
+
+    install(TARGETS epubthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+    install(FILES epubthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+endif()
 
 ########### install files ###############
 
@@ -121,7 +128,6 @@ install(
     djvuthumbnail.desktop
     desktopthumbnail.desktop
     comicbookthumbnail.desktop
-    epubthumbnail.desktop
     windowsimagethumbnail.desktop
     windowsexethumbnail.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}

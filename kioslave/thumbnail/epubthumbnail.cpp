@@ -1,27 +1,48 @@
-/*
-This file is part of kde-thumbnailer-epub
-Copyright (C) 2012-2013-2014 Caig <giacomosrv@gmail.com>
+/*  This file is part of the KDE project
+    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2, as published by the Free Software Foundation.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 */
 
 #include "epubthumbnail.h"
-#include "epub.h"
 
-#include <QtGui/QImage>
-#include <QtCore/QDebug>
+#include <QFile>
+#include <QImage>
+#include <kdebug.h>
 #include <kdemacros.h>
+
+#include <epub.h>
+
+// for reference:
+// https://idpf.org/epub/30/spec/epub30-publications.html
+
+static const char* const s_coverpaths[] = {
+    "cover.png",
+    "cover.jpg",
+    "cover.jpeg",
+    "cover_image.png",
+    "cover_image.jpg",
+    "cover_image.jpeg",
+    nullptr
+};
+
+static const char* const s_contentpaths[] = {
+    "content.opf",
+    "OEBPS/content.opf",
+    nullptr
+};
 
 extern "C"
 {
@@ -33,60 +54,75 @@ extern "C"
 
 EPUBCreator::EPUBCreator()
 {
-
-}
-
-EPUBCreator::~EPUBCreator()
-{
-
 }
 
 bool EPUBCreator::create(const QString &path, int width, int height, QImage &img)
-{    
-    epub epubFile(path);
+{
+    Q_UNUSED(width);
+    Q_UNUSED(height);
 
-    if (!epubFile.open(QIODevice::ReadOnly)) {
-        qDebug() << "[epub thumbnailer]" << "Couldn't open or parse" << path;
-    } else {
-        QString metadataRef = epubFile.parseMetadata();
-        QString coverHref = epubFile.parseManifest(metadataRef);
-
-        if (coverHref.isEmpty()) {
-            coverHref = epubFile.parseGuide();
-
-            if (coverHref.isEmpty()) {
-                QString idRef = epubFile.parseSpine();
-                if (idRef.isEmpty()) {
-                    coverHref = "cover"; // last chance, will try to pick a file with "cover" in the url
-                } else {
-                    coverHref = epubFile.parseManifest(idRef);
-                    if (coverHref.isEmpty()) {
-                        coverHref = "cover"; // last chance
-                    }
-                }
-            }
-        }
-        
-        qDebug() << "[epub thumbnailer]" << "Searching for cover url...";
-        QString coverUrl = epubFile.getCoverUrl(coverHref);
-
-        if (!coverUrl.isEmpty()) {
-            qDebug() << "[epub thumbnailer]" << "Cover url:" << coverUrl;
-
-            QImage coverImage;
-            if (epubFile.getCoverImage(coverUrl, coverImage)) {
-                img = coverImage.scaled(width, height, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-                qDebug() << "[epub thumbnailer]" << "Done!";
-            }
-        }
+    const QByteArray pathbytes = QFile::encodeName(path);
+    struct epub *epubdocument = epub_open(pathbytes.constData(), 1);
+    if (!epubdocument) {
+        kWarning() << "Could not open" << pathbytes;
+        return false;
     }
 
-    epubFile.close();
-    
-    return !img.isNull();
+    int coontentpathcounter = 0;
+    while (s_contentpaths[coontentpathcounter]) {
+        char *epubdata = nullptr;
+        int epubresult = epub_get_data(epubdocument, s_contentpaths[coontentpathcounter], &epubdata);
+        if (epubresult > 0) {
+            const QString containerstring = QString::fromAscii(epubdata);
+            ::free(epubdata);
+            QRegExp coverregexp("(id=\"cover\" href=\"([^\\s]+)\" media-type=)");
+            if (coverregexp.indexIn(containerstring) != -1) {
+                const QByteArray coverhref = coverregexp.capturedTexts()[2].toAscii();
+                if (!coverhref.isEmpty()) {
+                    kDebug() << "Found cover reference for" << pathbytes << coverhref;
+                    epubdata = nullptr;
+                    epubresult = epub_get_data(epubdocument, coverhref.constData(), &epubdata);
+                    if (epubresult > 0) {
+                        img.loadFromData(epubdata, epubresult);
+                        ::free(epubdata);
+                        epub_close(epubdocument);
+                        return !img.isNull();
+                    } else {
+                        kDebug() << "Could not get cover data for" << pathbytes;
+                    }
+                }
+            } else {
+                kDebug() << "Could not find cover reference for" << pathbytes;
+            }
+            ::free(epubdata);
+        } else {
+            kDebug() << "Could not get" << s_contentpaths[coontentpathcounter] << "for" << pathbytes;
+        }
+
+        coontentpathcounter++;
+    }
+
+    int coverpathcounter = 0;
+    while (s_coverpaths[coverpathcounter]) {
+        char *epubdata = nullptr;
+        int epubresult = epub_get_data(epubdocument, s_coverpaths[coverpathcounter], &epubdata);
+        if (!epubdata || epubresult < 1) {
+            kDebug() << "Could not get" << s_coverpaths[coverpathcounter] << "for" << pathbytes;
+            coverpathcounter++;
+            continue;
+        }
+        img.loadFromData(epubdata, epubresult);
+        ::free(epubdata);
+        epub_close(epubdocument);
+        return !img.isNull();
+    }
+
+    epub_close(epubdocument);
+    kDebug() << "No cover found for" << pathbytes;
+    return false;
 }
 
 ThumbCreator::Flags EPUBCreator::flags() const
 {
-    return None;
+    return ThumbCreator::None;
 }

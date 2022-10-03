@@ -191,8 +191,16 @@ kde4_optional_find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "API for accessing OpenEXR formatted images"
     URL "http://www.openexr.com"
-    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail kioslave"
+    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail KIO slave"
     TYPE OPTIONAL
+)
+
+kde4_optional_find_package(EPub)
+set_package_properties(EPub PROPERTIES
+    DESCRIPTION "A library for reading EPub documents"
+    URL "https://sourceforge.net/projects/ebook-tools/"
+    TYPE RECOMMENDED
+    PURPOSE "Provides support for eBook in the thumbnail KIO slave"
 )
 
 kde4_optional_find_package(Sensors)
