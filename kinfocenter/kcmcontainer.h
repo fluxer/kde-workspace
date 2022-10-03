@@ -65,11 +65,9 @@ class KcmContainer : public QScrollArea
 		void setKcmTopEdge(int y);
 
 		/**
-		* Get currently selected KCMs document path
-		* for .desktop
-		* X-KDE-DocPath
+		* Get currently selected KCMs service name
 		*/
-		QString helpPath() const;
+		QString serviceName() const;
 
 		/**
 		* Get currently selected KCMs

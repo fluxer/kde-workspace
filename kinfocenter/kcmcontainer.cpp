@@ -117,10 +117,10 @@ void KcmContainer::setKcmTitle(const KCModuleInfo &info)
 	m_titleLabel->setText(i18n("%1  ( %2 )",kcmTitle,kcmComment));
 }
 
-QString KcmContainer::helpPath() const
+QString KcmContainer::serviceName() const
 {
 	if(m_mod == NULL) return QString();
-	return m_modInfo.docPath();
+	return m_modInfo.fileName().replace(QLatin1String(".desktop"), QString());
 }
 
 KCModule::Buttons KcmContainer::buttons() const

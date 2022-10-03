@@ -234,11 +234,7 @@ void KInfoCenter::resetCondition()
 
 void KInfoCenter::helpClickedSlot()
 {
-	// Nicked from Ben, could not use KToolInvocation due to docpath.
-	QString docPath = m_contain->helpPath();
-
-	KUrl url( KUrl("help:/"), docPath );
-	QProcess::startDetached("khelpcenter", QStringList() << url.url());
+    KToolInvocation::invokeHelp(QString(), m_contain->serviceName());
 }
 
 void KInfoCenter::exportClickedSlot()
