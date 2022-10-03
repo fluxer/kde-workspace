@@ -94,7 +94,6 @@ bool EPUBCreator::create(const QString &path, int width, int height, QImage &img
             } else {
                 kDebug() << "Could not find cover reference for" << pathbytes;
             }
-            ::free(epubdata);
         } else {
             kDebug() << "Could not get" << s_contentpaths[coontentpathcounter] << "for" << pathbytes;
         }
