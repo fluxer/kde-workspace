@@ -37,13 +37,17 @@ extern "C"
 {
     KDE_EXPORT ThumbCreator *new_creator()
     {
-        return new EXRCreator;
+        return new EXRCreator();
     }
+}
+
+EXRCreator::EXRCreator()
+{
 }
 
 bool EXRCreator::create(const QString &path, int, int, QImage &img)
 {
-    Imf::InputFile in (path.toAscii());
+    Imf::InputFile in(path.toAscii());
     const Imf::Header &h = in.header();
 
     if (h.hasPreviewImage()) {
@@ -58,31 +62,32 @@ bool EXRCreator::create(const QString &path, int, int, QImage &img)
         }
         img = qpreview;
         return true;
-    } else {
-        // do it the hard way
-        // We ignore maximum size when just extracting the thumnail
-        // from the header, but it is very expensive to render large
-        // EXR images just to turn it into an icon, so we go back
-        // to honoring it in here.
-        kDebug() << "EXRcreator - using original image";
-        KSharedConfig::Ptr config = KGlobal::config();
-        KConfigGroup configGroup(config, "PreviewSettings");
-        unsigned long long maxSize = configGroup.readEntry("MaximumSize", MaxPreviewSizes::MaxLocalSize * 1024 * 1024);
-        unsigned long long fileSize = QFile(path).size();
-        if ((fileSize > 0) && (fileSize < maxSize)) {
-            if (!img.load(path)) {
-                return false;
-            }
-            if (img.depth() != 32)
-                img = img.convertToFormat(QImage::Format_RGB32);
-            return true;
-        }
-        kDebug() << "EXRcreator - image file size too large" << fileSize << maxSize;
-        return false;
     }
+
+    // do it the hard way
+    // We ignore maximum size when just extracting the thumnail
+    // from the header, but it is very expensive to render large
+    // EXR images just to turn it into an icon, so we go back
+    // to honoring it in here.
+    kDebug() << "EXRcreator - using original image";
+    KSharedConfig::Ptr config = KGlobal::config();
+    KConfigGroup configGroup(config, "PreviewSettings");
+    unsigned long long maxSize = configGroup.readEntry("MaximumSize", MaxPreviewSizes::MaxLocalSize * 1024 * 1024);
+    unsigned long long fileSize = QFile(path).size();
+    if ((fileSize > 0) && (fileSize < maxSize)) {
+        if (!img.load(path)) {
+            return false;
+        }
+        if (img.depth() != 32) {
+            img = img.convertToFormat(QImage::Format_RGB32);
+        }
+        return true;
+    }
+    kDebug() << "EXRcreator - image file size too large" << fileSize << maxSize;
+    return false;
 }
 
 ThumbCreator::Flags EXRCreator::flags() const
 {
-    return None;
+    return ThumbCreator::None;
 }

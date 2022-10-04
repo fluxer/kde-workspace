@@ -25,9 +25,10 @@
 class EXRCreator : public ThumbCreator
 {
 public:
-    EXRCreator() {};
-    virtual bool create(const QString &path, int, int, QImage &img);
-    virtual Flags flags() const;
+    EXRCreator();
+
+    bool create(const QString &path, int, int, QImage &img) final;
+    Flags flags() const final;
 };
 
 #endif
