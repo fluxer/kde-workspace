@@ -127,23 +127,5 @@ MouseArea {
             text: license
             wrapMode: Text.Wrap
         }
-
-        Item {
-            width: 1; height:1
-            // just here to push the button into the second column
-        }
-        PlasmaComponents.Button {
-            id: uninstallButton
-            opacity: local ? 1 : 0
-            Behavior on opacity {
-                NumberAnimation { duration: 250 }
-            }
-            iconSource: "application-exit"
-            text: i18n("Uninstall")
-            onClicked: {
-                widgetExplorer.uninstall(pluginName)
-                tooltipDialog.visible = false
-            }
-        }
     }
 }

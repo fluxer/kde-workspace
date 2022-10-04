@@ -49,12 +49,6 @@
 
 #include "kcategorizeditemsviewmodels_p.h"
 #include "plasmaappletitemmodel_p.h"
-#include "openwidgetassistant_p.h"
-
-//getting the user local
-//KGlobal::dirs()->localkdedir();
-//Compare it to the entryPath of the KPluginInfo
-//and see if it can be uninstalled
 
 using namespace KCategorizedItemsViewModels;
 
@@ -110,7 +104,6 @@ public:
     QHash<QString, int> runningApplets; // applet name => count
     //extra hash so we can look up the names of deleted applets
     QHash<Plasma::Applet *,QString> appletNames;
-    QWeakPointer<Plasma::OpenWidgetAssistant> openAssistant;
     Plasma::Package *package;
 
     PlasmaAppletItemModel itemModel;
@@ -244,11 +237,6 @@ QList <QObject *>  WidgetExplorer::widgetsMenuActions()
 
     WidgetAction *action = new WidgetAction(this);
     action->setSeparator(true);
-    actionList << action;
-
-    action = new WidgetAction(KIcon("package-x-generic"),
-                         i18n("Install Widget From Local File..."), this);
-    QObject::connect(action, SIGNAL(triggered(bool)), this, SLOT(openWidgetFile()));
     actionList << action;
 
     return actionList;
@@ -457,39 +445,6 @@ bool WidgetExplorer::event(QEvent *event)
 void WidgetExplorer::focusInEvent(QFocusEvent* event)
 {
     Q_UNUSED(event);
-}
-
-void WidgetExplorer::openWidgetFile()
-{
-    emit closeClicked();
-
-    Plasma::OpenWidgetAssistant *assistant = d->openAssistant.data();
-    if (!assistant) {
-        assistant = new Plasma::OpenWidgetAssistant(0);
-        d->openAssistant = assistant;
-    }
-
-    KWindowSystem::setOnDesktop(assistant->winId(), KWindowSystem::currentDesktop());
-    assistant->setAttribute(Qt::WA_DeleteOnClose, true);
-    assistant->show();
-    assistant->raise();
-    assistant->setFocus();
-}
-
-void WidgetExplorer::uninstall(const QString &pluginName)
-{
-    Plasma::PackageStructure installer;
-    installer.uninstallPackage(pluginName,
-                               KStandardDirs::locateLocal("data", "plasma/plasmoids/"));
-
-    //FIXME: moreefficient way rather a linear scan?
-    for (int i = 0; i < d->itemModel.rowCount(); ++i) {
-        QStandardItem *item = d->itemModel.item(i);
-        if (item->data(PlasmaAppletItemModel::PluginNameRole).toString() == pluginName) {
-            d->itemModel.takeRow(i);
-            break;
-        }
-    }
 }
 
 QPoint WidgetExplorer::tooltipPosition(QGraphicsObject *item, int tipWidth, int tipHeight)

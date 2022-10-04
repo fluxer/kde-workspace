@@ -12,7 +12,6 @@ set(appletbrowserdialog_SRCS
     widgetsexplorer/kcategorizeditemsviewmodels.cpp
     widgetsexplorer/plasmaappletitemmodel.cpp
     widgetsexplorer/widgetexplorer.cpp
-    widgetsexplorer/openwidgetassistant.cpp
 )
 
 set(scripting_SRC

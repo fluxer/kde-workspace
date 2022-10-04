@@ -150,8 +150,6 @@ public:
     QList <QObject *>  widgetsMenuActions();
     QList <QObject *>  extraActions() const;
 
-    Q_INVOKABLE void uninstall(const QString &pluginName);
-
     Q_INVOKABLE QPoint tooltipPosition(QGraphicsObject *item, int tipWidth, int tipHeight);
 
 Q_SIGNALS:
@@ -166,7 +164,6 @@ public Q_SLOTS:
      * Adds currently selected applets
      */
     void addApplet(const QString &pluginName);
-    void openWidgetFile();
 
 protected Q_SLOTS:
     void immutabilityChanged(Plasma::ImmutabilityType);

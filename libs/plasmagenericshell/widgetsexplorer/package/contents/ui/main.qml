@@ -35,7 +35,6 @@ Item {
         )
     property int minimumHeight: topBar.height + list.delegateHeight + (widgetExplorer.orientation == Qt.Horizontal ? scrollBar.height : 0) + 4
 
-    property Item getWidgetsButton
     property Item categoryButton
 
     PlasmaComponents.ContextMenu {
@@ -58,23 +57,6 @@ Item {
             }
             Component.onCompleted: {
                 parent = categoriesDialog
-            }
-        }
-    }
-
-    PlasmaComponents.ContextMenu {
-        id: getWidgetsDialog
-        visualParent: main.getWidgetsButton
-    }
-    Repeater {
-        parent: getWidgetsDialog
-        model: widgetExplorer.widgetsMenuActions
-        delegate: PlasmaComponents.MenuItem {
-            icon: modelData.icon
-            text: modelData.text
-            onTriggered: modelData.trigger()
-            Component.onCompleted: {
-                parent = getWidgetsDialog
             }
         }
     }
@@ -185,12 +167,6 @@ Item {
             Row {
                 anchors.right: parent.right
                 spacing: 5
-                PlasmaComponents.Button {
-                    id: getWidgetsButton
-                    iconSource: "get-hot-new-stuff"
-                    text: i18n("Get new widgets")
-                    onClicked: getWidgetsDialog.open()
-                }
 
                 Repeater {
                     model: widgetExplorer.extraActions.length
@@ -208,7 +184,6 @@ Item {
                 }
             }
             Component.onCompleted: {
-                main.getWidgetsButton = getWidgetsButton
                 main.categoryButton = categoryButton
             }
         }
@@ -331,17 +306,6 @@ Item {
 
             spacing: 4
 
-            PlasmaComponents.Button {
-                anchors {
-                    left: parent.left
-                    right: parent.right
-                }
-                id: getWidgetsButton
-                iconSource: "get-hot-new-stuff"
-                text: i18n("Get new widgets")
-                onClicked: getWidgetsDialog.open()
-            }
-
             Repeater {
                 model: widgetExplorer.extraActions.length
                 PlasmaComponents.Button {
@@ -355,10 +319,6 @@ Item {
                         widgetExplorer.extraActions[modelData].trigger()
                     }
                 }
-            }
-
-            Component.onCompleted: {
-                main.getWidgetsButton = getWidgetsButton
             }
         }
     }
