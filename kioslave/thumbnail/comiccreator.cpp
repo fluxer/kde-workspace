@@ -51,11 +51,14 @@ extern "C"
 {
     KDE_EXPORT ThumbCreator *new_creator()
     {
-        return new ComicCreator;
+        return new ComicCreator();
     }
 }
 
-ComicCreator::ComicCreator() : m_loop(0) {}
+ComicCreator::ComicCreator()
+    : m_loop(0)
+{
+}
 
 bool ComicCreator::create(const QString& path, int width, int height, QImage& img)
 {
@@ -124,7 +127,7 @@ QImage ComicCreator::extractArchiveImage(const QString& path, const ComicCreator
 
     // Can our archive be opened?
     if (!cArchive->open(QIODevice::ReadOnly)) {
-            return QImage();
+        return QImage();
     }
 
     // Get the archive's directory.

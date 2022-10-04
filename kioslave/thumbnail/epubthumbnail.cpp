@@ -68,10 +68,10 @@ bool EPUBCreator::create(const QString &path, int width, int height, QImage &img
         return false;
     }
 
-    int coontentpathcounter = 0;
-    while (s_contentpaths[coontentpathcounter]) {
+    int contentpathcounter = 0;
+    while (s_contentpaths[contentpathcounter]) {
         char *epubdata = nullptr;
-        int epubresult = epub_get_data(epubdocument, s_contentpaths[coontentpathcounter], &epubdata);
+        int epubresult = epub_get_data(epubdocument, s_contentpaths[contentpathcounter], &epubdata);
         if (epubresult > 0) {
             const QString containerstring = QString::fromAscii(epubdata);
             ::free(epubdata);
@@ -95,10 +95,10 @@ bool EPUBCreator::create(const QString &path, int width, int height, QImage &img
                 kDebug() << "Could not find cover reference for" << pathbytes;
             }
         } else {
-            kDebug() << "Could not get" << s_contentpaths[coontentpathcounter] << "for" << pathbytes;
+            kDebug() << "Could not get" << s_contentpaths[contentpathcounter] << "for" << pathbytes;
         }
 
-        coontentpathcounter++;
+        contentpathcounter++;
     }
 
     int coverpathcounter = 0;

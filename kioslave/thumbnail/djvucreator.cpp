@@ -32,6 +32,10 @@ extern "C"
     }
 }
 
+DjVuCreator::DjVuCreator()
+{
+}
+
 bool DjVuCreator::create(const QString &path, int width, int height, QImage &img)
 {
     const QString ddjvuexe = KStandardDirs::findExe("ddjvu");
