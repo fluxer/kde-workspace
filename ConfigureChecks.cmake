@@ -16,7 +16,7 @@ set(XKBDIR "${xrootdir}/share/X11")
 
 check_function_exists(nice HAVE_NICE)
 check_include_files(malloc.h HAVE_MALLOC_H)
-kde4_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/{fonts,kfontinst}
+kde4_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/fonts
 kde4_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts
 kde4_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # ksplash
 kde4_bool_to_01(X11_XTest_FOUND HAVE_XTEST) # khotkeys, kxkb

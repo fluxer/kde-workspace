@@ -68,7 +68,6 @@ if(Q_WS_X11)
     add_feature_info("libxf86misc" X11_xf86misc_FOUND "The X11 miscellaneous library may be used by keyboard KCM") # TODO: unused?
     add_feature_info("libXSync" X11_XSync_FOUND "The X11 synchronization may be used by KWin")
     add_feature_info("libXinput" X11_Xinput_FOUND "The X11 XINPUT extension library may be used by keyboard KCM")
-    add_feature_info("libXft" X11_Xft_FOUND "The X11 font API library may be used by kfontinst KCM")
     add_feature_info("libXinerama" X11_Xinerama_FOUND "The X11 XINERAMA extension library may be used by ksplash")
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
     add_feature_info("libXext" X11_dpms_FOUND "The X extensions library may be used by kscreensaver")
