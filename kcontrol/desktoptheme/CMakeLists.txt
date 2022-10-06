@@ -14,6 +14,7 @@ target_link_libraries(kcm_desktoptheme
     ${KDE4_KCMUTILS_LIBS}
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KIO_LIBS}
+    ${KDE4_KARCHIVE_LIBS}
 )
 
 install(

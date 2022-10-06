@@ -21,7 +21,6 @@
 #include <KConfig>
 #include <KLocale>
 #include <KStandardDirs>
-
 #include <KGlobalSettings>
 #include <KToolInvocation>
 #include <KMessageBox>
@@ -29,7 +28,8 @@
 #include <KIO/Job>
 #include <KIO/DeleteJob>
 #include <KIO/NetAccess>
-#include <KTar>
+#include <KArchive>
+#include <KDebug>
 
 #include <klauncher_iface.h>
 #include "../../krdb/krdb.h"
@@ -54,6 +54,7 @@
 #  include <X11/extensions/Xfixes.h>
 #endif
 
+#include <sys/stat.h>
 
 ThemePage::ThemePage(QWidget *parent)
     : QWidget(parent)
@@ -497,33 +498,38 @@ void ThemePage::removeClicked()
 
 bool ThemePage::installThemes(const QString &file)
 {
-    KTar archive(file);
+    KArchive archive(file);
 
-    if (!archive.open(QIODevice::ReadOnly))
+    if (!archive.isReadable())
         return false;
 
-    const KArchiveDirectory *archiveDir = archive.directory();
     QStringList themeDirs;
 
     // Extract the dir names of the cursor themes in the archive, and
     // append them to themeDirs
-    foreach(const QString &name, archiveDir->entries())
+    QList<KArchiveEntry> entries = archive.list();
+    foreach(const KArchiveEntry &entry, entries)
     {
-        const KArchiveEntry *entry = archiveDir->entry(name);
-        if (entry->isDirectory() && entry->name().toLower() != "default")
+        if (entry.pathname.contains("/cursors/"))
         {
-            const KArchiveDirectory *dir = static_cast<const KArchiveDirectory *>(entry);
-            if (dir->entry("index.theme") && dir->entry("cursors"))
-                themeDirs << dir->name();
+            QString entryDir = QFileInfo(QFile::decodeName(entry.pathname)).path();
+            entryDir = entryDir.replace(QLatin1String("/cursors"), QString());
+            if (!archive.entry(entryDir + "/index.theme").isNull()) {
+                if (QFileInfo(entryDir).filePath().toLower() == QLatin1String("default")) {
+                    kDebug() << "ignoring default theme";
+                    continue;
+                }
+                themeDirs << entryDir;
+            }
         }
     }
+    themeDirs.removeDuplicates();
 
     if (themeDirs.isEmpty())
         return false;
 
     // The directory we'll install the themes to
     QString destDir = QDir::homePath() + "/.icons/";
-    KStandardDirs::makeDir(destDir); // Make sure the directory exists
 
     // Process each cursor theme in the archive
     foreach (const QString &dirName, themeDirs)
@@ -545,20 +551,28 @@ bool ThemePage::installThemes(const QString &file)
             //     will cause cursor inconsistencies in newly started apps.
         }
 
+        
+        KStandardDirs::makeDir(destDir + dirName); // Make sure the directory exists
+
         // ### Should we check if a theme with the same name exists in a global theme dir?
         //     If that's the case it will effectively replace it, even though the global theme
         //     won't be deleted. Checking for this situation is easy, since the global theme
         //     will be in the listview. Maybe this should never be allowed since it might
         //     result in strange side effects (from the average users point of view). OTOH
         //     a user might want to do this 'upgrade' a global theme.
-
-        const KArchiveDirectory *dir = static_cast<const KArchiveDirectory*>
-                        (archiveDir->entry(dirName));
-        dir->copyTo(dest.path());
+        QStringList themeFiles;
+        entries = archive.list(dirName);
+        foreach(const KArchiveEntry &entry, entries)
+        {
+            themeFiles << QFile::decodeName(entry.pathname);
+        }
+        if (!archive.extract(themeFiles, destDir)) {
+            kWarning() << archive.errorString();
+            return false;
+        }
         model->addTheme(dest);
     }
 
-    archive.close();
     return true;
 }
 

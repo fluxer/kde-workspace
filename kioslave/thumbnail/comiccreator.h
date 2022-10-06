@@ -1,85 +1,35 @@
-/**
- * This file is part of the KDE libraries
- *
- * Comic Book Thumbnailer for KDE 4 v0.1
- * Creates cover page previews for comic-book files (.cbr/z/t).
- * Copyright (c) 2009 Harsh J <harsh@harshj.com>
- *
- * Some code borrowed from Okular's comicbook generators,
- * by Tobias Koenig <tokoe@kde.org>
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of
- * the License or (at your option) version 3 or any later version
- * accepted by the membership of KDE e.V. (or its successor approved
- * by the membership of KDE e.V.), which shall act as a proxy
- * defined in Section 14 of version 3 of the license.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+/*  This file is part of the KDE project
+    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
 
-// comiccreator.h
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2, as published by the Free Software Foundation.
 
-#ifndef COMIC_CREATOR_H
-#define COMIC_CREATOR_H
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#ifndef COMICCREATOR_H
+#define COMICCREATOR_H
 
 #include <kio/thumbcreator.h>
 
-#include <QtCore/QEventLoop>
-#include <QtCore/QByteArray>
-#include <QtCore/QStringList>
-#include <QtCore/QScopedPointer>
-#include <QtCore/QProcess>
-#include <QtGui/QImage>
+#include <QImage>
 
-class KArchiveDirectory;
-
-class ComicCreator : public QObject, public ThumbCreator
+class ComicCreator : public ThumbCreator
 {
-    Q_OBJECT
-    public:
-        ComicCreator();
-        virtual bool create(const QString& path, int width, int height, QImage& img);
-        virtual Flags flags() const;
+public:
+    ComicCreator();
 
-    private:
-        enum Type {
-            ZIP,
-            TAR,
-            RAR
-        };
-        void filterImages(QStringList& entries);
-        int  startProcess(const QString& processPath, const QStringList& args);
-
-        // For "zip" and "tar" type files.
-        // Uses KDE's internal archive classes.
-        QImage extractArchiveImage(const QString& path, const ComicCreator::Type);
-        void getArchiveFileList(QStringList& entries, const QString& prefix,
-            const KArchiveDirectory* dir);
-
-        // For "rar" type files.
-        // Uses the non-free 'unrar' executable, if available.
-        QImage extractRARImage(const QString& path);
-        QString unrarPath(const QString& versionarg) const;
-        QStringList getRARFileList(const QString& path, const QString& unrarPath);
-
-    private slots:
-        void readProcessOut();
-        void readProcessErr();
-        void finishedProcess(int exitCode, QProcess::ExitStatus exitStatus);
-
-    private:
-        QScopedPointer<QProcess> m_process;
-        QByteArray m_stdOut;
-        QByteArray m_stdErr;
-        QEventLoop* m_loop;
+    bool create(const QString& path, int width, int height, QImage &img) final;
+    Flags flags() const final;
 };
 
-#endif
+#endif // COMICCREATOR_H

@@ -20,7 +20,7 @@
 #include <KFileDialog>
 #include <KMessageBox>
 #include <KStandardDirs>
-#include <KZip>
+#include <KArchive>
 #include <KLocale>
 #include <kio/netaccess.h>
 #include <kio/copyjob.h>
@@ -283,14 +283,20 @@ void DesktopThemeDetails::exportTheme()
         const QString themePath = dirs.findResource("data", "desktoptheme/" + themeStoragePath + "/metadata.desktop");
         if (!themePath.isEmpty()){
             QString expFileName = KFileDialog::getSaveFileName(KUrl(), "*.zip", this, i18n("Export theme to file"));
-            if (!expFileName.endsWith(".zip"))
+            if (!expFileName.endsWith(".zip")) {
                 expFileName = expFileName + ".zip";
+            }
             if (!expFileName.isEmpty()) {
                 KUrl path(themePath);
-                KZip expFile(expFileName);
-                expFile.open(QIODevice::WriteOnly);
-                expFile.addLocalDirectory(path.directory (), themeStoragePath);
-                expFile.close();
+                KArchive expFile(expFileName);
+                const bool karchiveresult = expFile.add(
+                    QStringList() << (QDir::cleanPath(path.directory()) + QDir::separator()),
+                    QFile::encodeName(QDir::cleanPath(path.directory()) + QDir::separator()),
+                    QFile::encodeName(themeStoragePath + QDir::separator())
+                );
+                if (!karchiveresult) {
+                    KMessageBox::error(this, expFile.errorString());
+                }
             }
         }
     }

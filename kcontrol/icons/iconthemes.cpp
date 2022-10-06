@@ -23,6 +23,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include <QDir>
 #include <QFileInfo>
 #include <QLabel>
 #include <QPixmap>
@@ -36,13 +37,9 @@
 #include <kbuildsycocaprogressdialog.h>
 #include <klocale.h>
 #include <kicon.h>
-#include <kpushbutton.h>
 #include <kstandarddirs.h>
 #include <kservice.h>
 #include <kconfig.h>
-
-#undef Unsorted
-
 #include <kurlrequesterdialog.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
@@ -51,7 +48,7 @@
 #include <kio/job.h>
 #include <kio/deletejob.h>
 #include <kio/netaccess.h>
-#include <ktar.h>
+#include <karchive.h>
 #include <kglobalsettings.h>
 
 static const int ThemeNameRole = Qt::UserRole + 1;
@@ -227,7 +224,7 @@ void IconThemesConfig::installNewTheme()
 bool IconThemesConfig::installThemes(const QStringList &themes, const QString &archiveName)
 {
   bool everythingOk = true;
-  QString localThemesDir(KStandardDirs::locateLocal("icon", "./"));
+  const QString localThemesDir(KGlobal::dirs()->saveLocation("icon"));
 
   KProgressDialog progressDiag(this,
                                i18n("Installing icon themes"),
@@ -238,39 +235,31 @@ bool IconThemesConfig::installThemes(const QStringList &themes, const QString &a
   progressBar->setMaximum(themes.count());
   progressDiag.show();
 
-  KTar archive(archiveName);
-  archive.open(QIODevice::ReadOnly);
+  KArchive karchive(archiveName);
+  everythingOk = karchive.isReadable();
   kapp->processEvents();
 
-  const KArchiveDirectory* rootDir = archive.directory();
-
-  KArchiveDirectory* currentTheme;
-  for (QStringList::ConstIterator it = themes.begin();
-       it != themes.end();
-       ++it) {
-    progressDiag.setLabelText(
-        i18n("<qt>Installing <strong>%1</strong> theme</qt>",
-         *it));
+  foreach (const QString &it, themes) {
+    progressDiag.setLabelText(i18n("<qt>Installing <strong>%1</strong> theme</qt>", it));
     kapp->processEvents();
 
     if (progressDiag.wasCancelled())
       break;
 
-    currentTheme = dynamic_cast<KArchiveDirectory*>(
-                     const_cast<KArchiveEntry*>(
-                       rootDir->entry(*it)));
-    if (currentTheme == NULL) {
+    QStringList themeFiles;
+    foreach(const KArchiveEntry &karchiveentry, karchive.list(it + QDir::separator())) {
+      themeFiles << QFile::decodeName(karchiveentry.pathname);
+    }
+    if (!karchive.extract(themeFiles, localThemesDir)) {
+       kWarning() << karchive.errorString();
       // we tell back that something went wrong, but try to install as much
       // as possible
       everythingOk = false;
-      continue;
     }
 
-    currentTheme->copyTo(localThemesDir + *it);
     progressBar->setValue(progressBar->value()+1);
   }
 
-  archive.close();
   return everythingOk;
 }
 
@@ -278,27 +267,21 @@ QStringList IconThemesConfig::findThemeDirs(const QString &archiveName)
 {
   QStringList foundThemes;
 
-  KTar archive(archiveName);
-  archive.open(QIODevice::ReadOnly);
-  const KArchiveDirectory* themeDir = archive.directory();
-
-  KArchiveEntry* possibleDir = 0L;
-  KArchiveDirectory* subDir = 0L;
+  KArchive karchive(archiveName);
+  if (!karchive.isReadable()) {
+    kWarning() << karchive.errorString();
+    return foundThemes;
+  }
 
   // iterate all the dirs looking for an index.theme file
-  QStringList entries = themeDir->entries();
-  for (QStringList::const_iterator it = entries.constBegin();
-       it != entries.constEnd();
-       ++it) {
-    possibleDir = const_cast<KArchiveEntry*>(themeDir->entry(*it));
-    if (possibleDir->isDirectory()) {
-      subDir = dynamic_cast<KArchiveDirectory*>( possibleDir );
-      if (subDir && (subDir->entry("index.theme") != NULL))
-        foundThemes.append(subDir->name());
+  foreach (const KArchiveEntry &karchiveentry, karchive.list()) {
+    if (karchiveentry.pathname.endsWith("/index.theme")) {
+        const QString pathString = QFile::decodeName(karchiveentry.pathname);
+        const QString themeDir = QFileInfo(pathString).path();
+        foundThemes.append(themeDir);
     }
   }
 
-  archive.close();
   return foundThemes;
 }
 

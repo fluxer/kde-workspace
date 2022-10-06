@@ -16,6 +16,7 @@ add_executable(kfind ${kfind_SRCS})
 
 target_link_libraries(kfind
     ${KDE4_KFILE_LIBS}
+    ${KDE4_KARCHIVE_LIBS}
     konq
 )
 

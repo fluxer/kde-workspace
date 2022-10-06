@@ -32,7 +32,7 @@
 #include <kmessagebox.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <kzip.h>
+#include <karchive.h>
 
 KQuery::KQuery(QObject *parent)
   : QObject(parent),
@@ -365,24 +365,23 @@ void KQuery::processQuery( const KFileItem &file)
     if( ooo_mimetypes.indexOf(file.mimetype()) != -1 ||
         koffice_mimetypes.indexOf(file.mimetype()) != -1 )
     {
-      KZip zipfile(file.url().path());
-      KZipFileEntry *zipfileEntry;
+      KArchive zipfile(file.url().path());
 
-      if(zipfile.open(QIODevice::ReadOnly))
+      if(zipfile.isReadable())
       {
-        const KArchiveDirectory *zipfileContent = zipfile.directory();
-
+        QString zipfileEntryName;
         if( koffice_mimetypes.indexOf(file.mimetype()) != -1 )
-          zipfileEntry = (KZipFileEntry*)zipfileContent->entry("maindoc.xml");
+          zipfileEntryName = QString::fromLatin1("maindoc.xml");
         else
-          zipfileEntry = (KZipFileEntry*)zipfileContent->entry("content.xml"); //for OpenOffice.org
+          zipfileEntryName = QString::fromLatin1("content.xml"); //for OpenOffice.org
 
-        if(!zipfileEntry) {
+        KArchiveEntry zipfileEntry = zipfile.entry(zipfileEntryName);
+        if(zipfileEntry.isNull()) {
           kWarning() << "Expected XML file not found in ZIP archive " << file.url() ;
           return;
         }
 
-        zippedXmlFileContent = zipfileEntry->data();
+        zippedXmlFileContent = zipfile.data(zipfileEntryName);
         xmlTags.setPattern("<.*>");
         xmlTags.setMinimal(true);
         stream = new QTextStream(zippedXmlFileContent, QIODevice::ReadOnly);

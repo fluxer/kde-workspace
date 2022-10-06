@@ -20,9 +20,9 @@
 #define ICONTHEMES_H
 
 #include <kcmodule.h>
-#include <QLabel>
+#include <kpushbutton.h>
 
-class KPushButton;
+#include <QLabel>
 #include <QStringList>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
