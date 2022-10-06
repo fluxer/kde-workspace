@@ -54,19 +54,16 @@
 #include <KDebug>
 #include <KLocalizedString>
 
-#include "systeminformation.h"
 #include "crashedapplication.h"
 #include "drkonqibackends.h"
 
 DrKonqi::DrKonqi()
 {
     m_backend = new KCrashBackend();
-    m_systemInformation = new SystemInformation();
 }
 
 DrKonqi::~DrKonqi()
 {
-    delete m_systemInformation;
     delete m_backend;
 }
 
@@ -118,12 +115,6 @@ bool DrKonqi::init()
 void DrKonqi::cleanup()
 {
     delete instance();
-}
-
-//static
-SystemInformation *DrKonqi::systemInformation()
-{
-    return instance()->m_systemInformation;
 }
 
 //static

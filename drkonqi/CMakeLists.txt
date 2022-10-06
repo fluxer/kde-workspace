@@ -21,7 +21,6 @@ set(drkonqi_SRCS
     drkonqi.cpp
     drkonqibackends.cpp
     detachedprocessmonitor.cpp
-    systeminformation.cpp
     crashedapplication.cpp
     debugger.cpp
     debuggerlaunchers.cpp

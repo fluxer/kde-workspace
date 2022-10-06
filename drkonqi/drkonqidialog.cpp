@@ -37,7 +37,6 @@
 #include "debuggermanager.h"
 #include "debuggerlaunchers.h"
 #include "drkonqi_globals.h"
-#include "systeminformation.h"
 
 DrKonqiDialog::DrKonqiDialog(QWidget * parent) :
         KDialog(parent),
@@ -234,27 +233,7 @@ void DrKonqiDialog::enableDebugMenu(bool debuggerRunning)
 void DrKonqiDialog::startBugReportAssistant()
 {
     const CrashedApplication *crashedApp = DrKonqi::crashedApplication();
-    QString appReportAddress = crashedApp->bugReportAddress();
-    SystemInformation *sysinfo = new SystemInformation(this);
-    QString backtrace = DrKonqi::debuggerManager()->backtraceGenerator()->parser()->parsedBacktrace();
-    QString query;
-    // KDE applications use the email address by default
-    if (appReportAddress == QLatin1String(KDE_BUG_REPORT_EMAIL)) {
-        // black magic - report is done in Markdown syntax with new lines preserved
-        // but invokeBrowser() can call external browser and at this point KDE
-        // application can not be trused not to crash again (konqueror, rekonq, etc.).
-        query = QString("%1/new").arg(KDE_BUG_REPORT_URL);
-        query.append(QString("?title=%1 %2 %3").arg(crashedApp->name(), crashedApp->version(),
-            crashedApp->signalName()));
-        query.append(QString("&body=%1\nOS: %2\nRelease: %3\nKDE: %4\nKatie: %5\n%6").arg(
-            QUrl::toPercentEncoding("## Platform"), sysinfo->system(),
-            sysinfo->release(), sysinfo->kdeVersion(), sysinfo->qtVersion(),
-            QUrl::toPercentEncoding("## Backtrace\nPlease, copy-paste it from the DrKonqi window\n")));
-    } else {
-        query = QString(appReportAddress);
-    }
-
-    KToolInvocation::invokeBrowser(query);
+    KToolInvocation::invokeBrowser(crashedApp->bugReportAddress());
 }
 
 void DrKonqiDialog::applicationRestarted(bool success)

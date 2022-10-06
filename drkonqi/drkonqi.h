@@ -20,7 +20,6 @@
 #include <QString>
 #include <QWidget>
 
-class SystemInformation;
 class DebuggerManager;
 class CrashedApplication;
 class AbstractDrKonqiBackend;
@@ -31,7 +30,6 @@ public:
     static bool init();
     static void cleanup();
 
-    static SystemInformation *systemInformation();
     static DebuggerManager *debuggerManager();
     static CrashedApplication *crashedApplication();
 
@@ -42,7 +40,6 @@ private:
     ~DrKonqi();
     static DrKonqi *instance();
 
-    SystemInformation *m_systemInformation;
     AbstractDrKonqiBackend *m_backend;
 };
 
