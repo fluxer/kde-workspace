@@ -34,7 +34,6 @@
 
 NavigationSettingsPage::NavigationSettingsPage(QWidget* parent) :
     SettingsPageBase(parent),
-    m_openArchivesAsFolder(0),
     m_autoExpandFolders(0)
 {
     const int spacing = KDialog::spacingHint();
@@ -55,8 +54,6 @@ NavigationSettingsPage::NavigationSettingsPage(QWidget* parent) :
     mouseBoxLayout->addWidget(m_singleClick);
     mouseBoxLayout->addWidget(m_doubleClick);
 
-    m_openArchivesAsFolder = new QCheckBox(i18nc("@option:check", "Open archives as folder"), vBox);
-
     m_autoExpandFolders = new QCheckBox(i18nc("option:check", "Open folders during drag operations"), vBox);
 
     // Add a dummy widget with no restriction regarding
@@ -70,7 +67,6 @@ NavigationSettingsPage::NavigationSettingsPage(QWidget* parent) :
 
     connect(m_singleClick, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(m_doubleClick, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
-    connect(m_openArchivesAsFolder, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
     connect(m_autoExpandFolders, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
 }
 
@@ -87,7 +83,6 @@ void NavigationSettingsPage::applySettings()
     KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
 
     GeneralSettings* settings = GeneralSettings::self();
-    settings->setBrowseThroughArchives(m_openArchivesAsFolder->isChecked());
     settings->setAutoExpandFolders(m_autoExpandFolders->isChecked());
 
     settings->writeConfig();
@@ -111,7 +106,6 @@ void NavigationSettingsPage::loadSettings()
     const bool singleClick = KGlobalSettings::singleClick();
     m_singleClick->setChecked(singleClick);
     m_doubleClick->setChecked(!singleClick);
-    m_openArchivesAsFolder->setChecked(GeneralSettings::browseThroughArchives());
     m_autoExpandFolders->setChecked(GeneralSettings::autoExpandFolders());
 }
 

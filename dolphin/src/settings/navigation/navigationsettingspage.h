@@ -47,7 +47,6 @@ private:
 private:
     QRadioButton* m_singleClick;
     QRadioButton* m_doubleClick;
-    QCheckBox* m_openArchivesAsFolder;
     QCheckBox* m_autoExpandFolders;
 };
 

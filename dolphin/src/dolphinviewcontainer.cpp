@@ -443,10 +443,10 @@ void DolphinViewContainer::slotUrlIsFileError(const KUrl& url)
 {
     const KFileItem item(KFileItem::Unknown, KFileItem::Unknown, url);
 
-    // Find out if the file can be opened in the view (for example, this is the
-    // case if the file is an archive). The mime type must be known for that.
+    // Find out if the file can be opened in the view. The mime type must be
+    // known for that.
     item.determineMimeType();
-    const KUrl& folderUrl = DolphinView::openItemAsFolderUrl(item, true);
+    const KUrl& folderUrl = DolphinView::openItemAsFolderUrl(item);
     if (!folderUrl.isEmpty()) {
         m_view->setUrl(folderUrl);
     } else {
@@ -461,7 +461,7 @@ void DolphinViewContainer::slotItemActivated(const KFileItem& item)
     // results in an active view.
     m_view->setActive(true);
 
-    const KUrl& url = DolphinView::openItemAsFolderUrl(item, GeneralSettings::browseThroughArchives());
+    const KUrl& url = DolphinView::openItemAsFolderUrl(item);
     if (!url.isEmpty()) {
         m_view->setUrl(url);
         return;

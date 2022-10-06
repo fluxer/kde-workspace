@@ -303,12 +303,12 @@ public:
     QString viewPropertiesContext() const;
 
     /**
-     * Checks if the given \a item can be opened as folder (e.g. archives).
-     * This function will also adjust the \a url (e.g. change the protocol).
+     * Checks if the given \a item can be opened as folder. This function
+     * will also adjust the \a url (e.g. change the protocol).
      * @return a valid and adjusted url if the item can be opened as folder,
      * otherwise return an empty url.
      */
-    static KUrl openItemAsFolderUrl(const KFileItem& item, const bool browseThroughArchives = true);
+    static KUrl openItemAsFolderUrl(const KFileItem& item);
 
 public slots:
     /**
