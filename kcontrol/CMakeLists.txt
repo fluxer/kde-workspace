@@ -42,7 +42,6 @@ add_subdirectory( hardware )
 add_subdirectory( desktoppaths )
 
 if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
-    add_subdirectory( kfontinst )
     add_subdirectory( fonts )
 endif()
 
