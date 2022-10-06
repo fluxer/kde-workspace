@@ -331,10 +331,10 @@ void FileTypeDetails::setMimeTypeData( MimeTypeData * mimeTypeData, TypesListIte
   addExtButton->setEnabled(true);
   removeExtButton->setEnabled(false);
 
-  serviceListWidget->setMimeTypeData( mimeTypeData );
-  embedServiceListWidget->setMimeTypeData( mimeTypeData );
+  serviceListWidget->setMimeTypeData(mimeTypeData);
+  embedServiceListWidget->setMimeTypeData(mimeTypeData);
   m_autoEmbedGroup->button(mimeTypeData->autoEmbed())->setChecked(true);
-  m_rbGroupSettings->setEnabled( mimeTypeData->canUseGroupSetting() );
+  m_rbGroupSettings->setEnabled(true);
 
   extensionLB->addItems(mimeTypeData->patterns());
 

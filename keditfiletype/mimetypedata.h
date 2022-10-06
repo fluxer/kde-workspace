@@ -68,7 +68,6 @@ public:
     void setAutoEmbed( AutoEmbed a ) { m_autoEmbed = a; }
 
     const KMimeType::Ptr& mimeType() const { return m_mimetype; }
-    bool canUseGroupSetting() const;
 
     void getAskSave(bool &);
     void setAskSave(bool);

@@ -419,15 +419,6 @@ void MimeTypeData::setAskSave(bool _askSave)
     m_askSave = _askSave ? AskSaveYes : AskSaveNo;
 }
 
-bool MimeTypeData::canUseGroupSetting() const
-{
-    // "Use group settings" isn't available for zip, tar etc.; those have a builtin default...
-    if (!m_mimetype) // e.g. new mimetype
-        return true;
-    const bool hasLocalProtocolRedirect = !KProtocolManager::protocolForArchiveMimetype(name()).isEmpty();
-    return !hasLocalProtocolRedirect;
-}
-
 void MimeTypeData::setPatterns(const QStringList &p)
 {
     m_patterns = p;
