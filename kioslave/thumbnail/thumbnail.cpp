@@ -78,7 +78,7 @@
 using namespace KIO;
 
 static const QByteArray thumbFormat = QImageWriter::defaultImageFormat();
-static const QByteArray thumbExt = "." + thumbFormat;
+static const QString thumbExt = QLatin1String(".") + thumbFormat;
 
 extern "C"
 {
@@ -615,14 +615,8 @@ bool ThumbnailProtocol::createSubThumbnail(QImage& thumbnail, const QString& fil
 
                 // The thumbnail has been created successfully. Store the thumbnail
                 // to the cache for future access.
-                KTemporaryFile temp;
-                temp.setPrefix(thumbPath + "kde-tmp-");
-                temp.setSuffix(thumbExt);
-                temp.setAutoRemove(false);
-                if (temp.open()) {
-                    tempFileName = temp.fileName();
-                    savedCorrectly = thumbnail.save(tempFileName, thumbFormat);
-                }
+                tempFileName = KTemporaryFile::filePath(QString::fromLatin1("XXXXXXXXXX%1").arg(thumbExt));
+                savedCorrectly = thumbnail.save(tempFileName, thumbFormat);
             } else {
                 return false;
             }
