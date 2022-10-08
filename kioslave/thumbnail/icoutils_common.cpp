@@ -21,23 +21,6 @@
 #include <QImage>
 #include <QImageReader>
 
-bool IcoUtils::loadIcoImageFromExe(QIODevice * inputDevice, QImage &image, int needWidth, int needHeight, const qint32 iconNumber)
-{
-
-    QTemporaryFile inputFile;
-
-    if ( ! inputFile.open() )
-         return false;
-
-    QByteArray data = inputDevice->readAll();
-
-    if ( inputFile.write(data) == -1 )
-        return false;
-
-    return IcoUtils::loadIcoImageFromExe(inputFile.fileName(), image, needWidth, needHeight, iconNumber);
-
-}
-
 bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, QImage &image, int needWidth, int needHeight, const qint32 iconNumber)
 {
 
@@ -94,14 +77,6 @@ bool IcoUtils::loadIcoImage(QImageReader &reader, QImage &image, int needWidth, 
 
     image = icons.at(index);
     return true;
-
-}
-
-bool IcoUtils::loadIcoImage(QIODevice * inputDevice, QImage &image, int needWidth, int needHeight)
-{
-
-    QImageReader reader(inputDevice, "ico");
-    return IcoUtils::loadIcoImage(reader, image, needWidth, needHeight);
 
 }
 

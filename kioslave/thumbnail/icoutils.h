@@ -17,21 +17,16 @@
 #ifndef ICO_UTILS_H
 #define ICO_UTILS_H
 
-#include <QtGlobal>
-
 #include <QString>
-#include <QIODevice>
 #include <QImage>
 #include <QImageReader>
 
 namespace IcoUtils
 {
 
-    bool loadIcoImageFromExe(QIODevice * inputDevice, QImage &image, int needWidth=512, int needHeight=512, const qint32 iconNumber=0);
     bool loadIcoImageFromExe(const QString &inputPath, QImage &image, int needWidth=512, int needHeight=512, const qint32 iconNumber=0);
     bool loadIcoImageFromExe(const QString &inputFileName, const QString &outputFileName, const qint32 iconNumber);
 
-    bool loadIcoImage(QIODevice * inputDevice, QImage &image, int needWidth=512, int needHeight=512);
     bool loadIcoImage(const QString &inputFileName, QImage &image, int needWidth=512, int needHeight=512);
     bool loadIcoImage(QImageReader &reader, QImage &image, int needWidth, int needHeight);
 
