@@ -485,40 +485,6 @@ void CalendarTable::dataUpdated(const QString &source, const Plasma::DataEngine:
 
 void CalendarTable::applyConfiguration(KConfigGroup cg)
 {
-    // convert pre 4.11 value if needed
-    const QVariant oldCalendarTypeValue = cg.readEntry("calendarType", QVariant());
-
-    if (oldCalendarTypeValue.type() == QVariant::String) {
-        const QString oldCalendarType = oldCalendarTypeValue.toString();
-        int newCalendarType = -1;
-
-        if (oldCalendarType == "gregorian") {
-            newCalendarType = KLocale::GregorianCalendar;
-        } else if (oldCalendarType == "coptic") {
-            newCalendarType = KLocale::CopticCalendar;
-        } else if (oldCalendarType == "ethiopian") {
-            newCalendarType = KLocale::EthiopianCalendar;
-        } else if (oldCalendarType == "hebrew") {
-            newCalendarType = KLocale::HebrewCalendar;
-        } else if (oldCalendarType == "hijri") {
-            newCalendarType = KLocale::IslamicCivilCalendar;
-        } else if (oldCalendarType == "indian-national") {
-            newCalendarType = KLocale::IndianNationalCalendar;
-        } else if (oldCalendarType == "jalali") {
-            newCalendarType = KLocale::JalaliCalendar;
-        } else if (oldCalendarType == "japanese") {
-            newCalendarType = KLocale::JapaneseCalendar;
-        } else if (oldCalendarType == "julian") {
-            newCalendarType = KLocale::JulianCalendar;
-        } else if (oldCalendarType == "minguo") {
-            newCalendarType = KLocale::MinguoCalendar;
-        } else if (oldCalendarType == "thai") {
-            newCalendarType = KLocale::ThaiCalendar;
-        }
-
-        cg.writeEntry("calendarType", newCalendarType);
-    }
-
     setCalendar(cg.readEntry("calendarType", -1));
 }
 
