@@ -25,7 +25,7 @@
 
 typedef QPair < QString, int > IconInExe;
 
-bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, QImage &image, int needWidth, int needHeight, const qint32 iconNumber)
+bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, QImage &image, int needWidth, int needHeight)
 {
     QProcess wrestool;
     wrestool.start("wrestool", QStringList() << "-l" << inputFileName);
@@ -37,10 +37,6 @@ bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, QImage &image, 
     const QStringList output = QString(wrestool.readAll()).split('\n');
 
     QRegExp regExp("--type=(.*) --name=(.*) --language=(.*) \\[(.*)\\]");
-
-    // If we specify number of icon, use only group icons (Windows use only group icons)
-    if ( iconNumber > 0 )
-        regExp.setPattern("--type=(14) --name=(.*) --language=(.*) \\[(.*)\\]");
 
     QList <IconInExe> icons;
 
@@ -59,9 +55,6 @@ bool IcoUtils::loadIcoImageFromExe(const QString &inputFileName, QImage &image, 
 
     if ( icons.isEmpty() )
         return false;
-
-    if ( iconNumber > 0 && icons.size() >= iconNumber )
-        icons = QList <IconInExe> () << icons.at(iconNumber+1);
 
     foreach ( const IconInExe &icon, icons )
     {

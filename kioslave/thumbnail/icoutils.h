@@ -23,9 +23,9 @@
 namespace IcoUtils
 {
 
-    bool loadIcoImageFromExe(const QString &inputPath, QImage &image, int needWidth=512, int needHeight=512, const qint32 iconNumber=0);
+    bool loadIcoImageFromExe(const QString &inputPath, QImage &image, int needWidth, int needHeigh);
 
-    bool loadIcoImage(const QString &inputFileName, QImage &image, int needWidth=512, int needHeight=512);
+    bool loadIcoImage(const QString &inputFileName, QImage &image, int needWidth, int needHeight);
 
 }
 
