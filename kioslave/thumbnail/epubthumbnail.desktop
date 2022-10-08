@@ -8,4 +8,5 @@ Name[zh_CN]=ePub 文档
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/epub+zip;
 CacheThumbnail=true
+IgnoreMaximumSize=true
 X-KDE-Library=epubthumbnail
