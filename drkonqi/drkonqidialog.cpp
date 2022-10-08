@@ -233,7 +233,13 @@ void DrKonqiDialog::enableDebugMenu(bool debuggerRunning)
 void DrKonqiDialog::startBugReportAssistant()
 {
     const CrashedApplication *crashedApp = DrKonqi::crashedApplication();
-    KToolInvocation::invokeBrowser(crashedApp->bugReportAddress());
+    const QString appReportAddress = crashedApp->bugReportAddress();
+    // KDE applications use the email address by default
+    if (appReportAddress == QLatin1String(KDE_BUG_REPORT_EMAIL)) {
+        KToolInvocation::invokeBrowser(KDE_BUG_REPORT_URL);
+        return;
+    }
+    KToolInvocation::invokeMailer(appReportAddress, QString());
 }
 
 void DrKonqiDialog::applicationRestarted(bool success)
