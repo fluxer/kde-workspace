@@ -65,18 +65,23 @@ static QString iconForService(const QString &servicemimetype)
 }
 
 NetworkSlave::NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket)
-    : SlaveBase(name, poolSocket, programSocket)
+    : SlaveBase(name, poolSocket, programSocket),
+    m_kdnssd(nullptr)
 {
 }
 
 NetworkSlave::~NetworkSlave()
 {
+    delete m_kdnssd;
 }
 
 void NetworkSlave::mimetype(const KUrl &url)
 {
-    m_kdnssd.startBrowse();
-    foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
+    if (!m_kdnssd) {
+        m_kdnssd = new KDNSSD();
+    }
+    m_kdnssd->startBrowse();
+    foreach (const KDNSSDService &kdnssdservice, m_kdnssd->services()) {
         // qDebug() << Q_FUNC_INFO << kdnssdservice.url << url.prettyUrl();
         if (kdnssdservice.url == url.prettyUrl()) {
             mimeType(mimeForService(kdnssdservice));
@@ -89,8 +94,11 @@ void NetworkSlave::mimetype(const KUrl &url)
 
 void NetworkSlave::stat(const KUrl &url)
 {
-    m_kdnssd.startBrowse();
-    foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
+    if (!m_kdnssd) {
+        m_kdnssd = new KDNSSD();
+    }
+    m_kdnssd->startBrowse();
+    foreach (const KDNSSDService &kdnssdservice, m_kdnssd->services()) {
         // qDebug() << Q_FUNC_INFO << kdnssdservice.url << url.prettyUrl();
         if (kdnssdservice.url == url.prettyUrl()) {
             const QString servicemimetype = mimeForService(kdnssdservice);
@@ -111,9 +119,12 @@ void NetworkSlave::stat(const KUrl &url)
 
 void NetworkSlave::listDir(const KUrl &url)
 {
-    m_kdnssd.startBrowse();
+    if (!m_kdnssd) {
+        m_kdnssd = new KDNSSD();
+    }
+    m_kdnssd->startBrowse();
     KIO::UDSEntry kioudsentry;
-    foreach (const KDNSSDService &kdnssdservice, m_kdnssd.services()) {
+    foreach (const KDNSSDService &kdnssdservice, m_kdnssd->services()) {
         const QString servicemimetype = mimeForService(kdnssdservice);
         kioudsentry.clear();
         kioudsentry.insert(KIO::UDSEntry::UDS_NAME, kdnssdservice.name);

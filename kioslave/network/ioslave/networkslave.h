@@ -39,7 +39,7 @@ public: // KIO::SlaveBase API
     virtual void listDir(const KUrl &url);
 
 private: // data
-    KDNSSD m_kdnssd;
+    KDNSSD *m_kdnssd;
 };
 
 #endif
