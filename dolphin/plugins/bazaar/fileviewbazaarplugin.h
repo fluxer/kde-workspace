@@ -26,7 +26,6 @@
 #include <kversioncontrolplugin.h>
 #include <QHash>
 #include <QProcess>
-#include <QTemporaryFile>
 
 /**
  * @brief Bazaar (bzr) implementation for the KVersionControlPlugin interface.
@@ -98,7 +97,6 @@ private:
     mutable KFileItemList m_contextItems;
 
     QProcess m_process;
-    QTemporaryFile m_tempFile;
 };
 #endif // FILEVIEWBAZAARPLUGIN_H
 

@@ -61,8 +61,7 @@ FileViewBazaarPlugin::FileViewBazaarPlugin(QObject* parent, const QList<QVariant
     m_operationCompletedMsg(),
     m_contextDir(),
     m_contextItems(),
-    m_process(),
-    m_tempFile()
+    m_process()
 {
     Q_UNUSED(args);
 
