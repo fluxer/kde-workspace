@@ -177,10 +177,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
 
     // non root users need to be able to read the xauth file.
     // the xauth file is deleted when kdesudo exits. security?
-    QFile tf;
-    tf.setFileName(m_tmpName);
-
-    if (!runas.isEmpty() && runas != "root" && tf.exists()) {
+    if (!runas.isEmpty() && runas != "root" && QFile::exists(m_tmpName)) {
         chmod(QFile::encodeName(m_tmpName), 0644);
     }
 
