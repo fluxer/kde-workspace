@@ -37,7 +37,7 @@ class PasswdProcess
     : public PtyProcess
 {
 public:
-    PasswdProcess(const QByteArray &user = QByteArray());
+    PasswdProcess(const QString &user = QString());
     ~PasswdProcess();
 
     enum Errors { PasswdNotFound=1, PasswordIncorrect, PasswordNotGood };
@@ -52,7 +52,8 @@ private:
     int ConversePasswd(const char *oldpass, const char *newpass,
             int check);
 
-    QByteArray m_User, m_Error;
+    QString m_User;
+    QByteArray m_Error;
     bool bOtherUser;
 };
 

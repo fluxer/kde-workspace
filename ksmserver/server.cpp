@@ -37,7 +37,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <config-workspace.h>
 #include <config-unix.h>
 #include <config-ksmserver.h>
-#include <pwd.h>
+
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>
@@ -75,6 +75,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kprocess.h>
 #include <kdebug.h>
 #include <kshell.h>
+#include <kuser.h>
 #include <kworkspace/kdisplaymanager.h>
 #include <krandom.h>
 #include <klauncher_iface.h>
@@ -97,8 +98,8 @@ QProcess* KSMServer::startApplication( const QStringList& cmd, const QString& cl
     if ( command.isEmpty() )
         return NULL;
     if ( !userId.isEmpty()) {
-        struct passwd* pw = getpwuid( getuid());
-        if( pw != NULL && userId != QString::fromLocal8Bit( pw->pw_name )) {
+        const KUser kuser(::getuid());
+        if( kuser.isValid() && userId != kuser.loginName() ) {
             command.prepend( "--" );
             command.prepend( userId );
             command.prepend( "-u" );

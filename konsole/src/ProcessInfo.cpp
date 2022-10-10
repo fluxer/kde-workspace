@@ -25,7 +25,6 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include <pwd.h>
 #include <sys/param.h>
 
 // Qt
@@ -397,27 +396,13 @@ void UnixProcessInfo::readUserName()
     const int uid = userId(&ok);
     if (!ok) return;
 
-    struct passwd passwdStruct;
-    struct passwd* getpwResult;
-    char* getpwBuffer;
-    long getpwBufferSize;
-    int getpwStatus;
-
-    getpwBufferSize = sysconf(_SC_GETPW_R_SIZE_MAX);
-    if (getpwBufferSize == -1)
-        getpwBufferSize = 16384;
-
-    getpwBuffer = new char[getpwBufferSize];
-    if (getpwBuffer == NULL)
-        return;
-    getpwStatus = getpwuid_r(uid, &passwdStruct, getpwBuffer, getpwBufferSize, &getpwResult);
-    if ((getpwStatus == 0) && (getpwResult != NULL)) {
-        setUserName(QString(passwdStruct.pw_name));
+    const KUser kuser(static_cast<K_UID>(uid));
+    if (kuser.isValid()) {
+        setUserName(kuser.loginName());
     } else {
         setUserName(QString());
-        kWarning() << "getpwuid_r returned error : " << getpwStatus;
+        kWarning() << "invalid user ID: " << uid;
     }
-    delete [] getpwBuffer;
 }
 
 #if defined(Q_OS_LINUX) || defined(Q_OS_HURD)

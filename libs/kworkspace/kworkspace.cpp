@@ -30,11 +30,10 @@
 #include <kapplication.h>
 #include <klocale.h>
 #include <kstandarddirs.h>
+#include <kuser.h>
 #include <ksmserver_interface.h>
 
-#include <unistd.h> // geteuid()
 #include <stdlib.h> // getenv()
-#include <pwd.h>
 #include <sys/types.h>
 
 #ifdef Q_WS_X11
@@ -92,9 +91,9 @@ KRequestShutdownHelper::KRequestShutdownHelper()
     props[ 0 ].type = const_cast< char* >( SmCARD8 );
     props[ 0 ].num_vals = 1;
     props[ 0 ].vals = &propvalue[ 0 ];
-    struct passwd* entry = getpwuid( geteuid() );
-    propvalue[ 1 ].length = entry != NULL ? strlen( entry->pw_name ) : 0;
-    propvalue[ 1 ].value = (SmPointer)( entry != NULL ? entry->pw_name : "" );
+    QByteArray username = KUser(KUser::UseEffectiveUID).loginName().toLocal8Bit();
+    propvalue[ 1 ].length = username.size();
+    propvalue[ 1 ].value = (SmPointer)( username.isEmpty() ? "" : username.data() );
     props[ 1 ].name = const_cast< char* >( SmUserID );
     props[ 1 ].type = const_cast< char* >( SmARRAY8 );
     props[ 1 ].num_vals = 1;

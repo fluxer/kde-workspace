@@ -31,7 +31,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
-#include <pwd.h>
 #include <signal.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -41,32 +40,32 @@
 
 #include <kdebug.h>
 #include <kstandarddirs.h>
+#include <kuser.h>
 
-
-PasswdProcess::PasswdProcess(const QByteArray &user)
+PasswdProcess::PasswdProcess(const QString &user)
 {
-    struct passwd *pw;
+    uid_t userid = -1;
 
     if (user.isEmpty())
     {
-        pw = getpwuid(getuid());
-        if (pw == 0L)
+        const KUser kuser(::getuid());
+        if (!kuser.isValid())
         {
             kDebug(1512) << "You don't exist!\n";
             return;
         }
-        m_User = pw->pw_name;
+        m_User = kuser.loginName();
     } else
     {
-        pw = getpwnam(user);
-        if (pw == 0L)
+        const KUser kuser(user);
+        if (!kuser.isValid())
         {
             kDebug(1512) << "User " << user << "does not exist.\n";
             return;
         }
         m_User = user;
     }
-    bOtherUser = (pw->pw_uid != getuid());
+    bOtherUser = (userid != ::getuid());
 }
 
 
@@ -95,7 +94,7 @@ int PasswdProcess::exec(const char *oldpass, const char *newpass,
 
     QList<QByteArray> args;
     if(bOtherUser)
-        args += m_User;
+        args += m_User.toLocal8Bit();
     int ret = PtyProcess::exec("passwd", args);
     if (ret < 0)
     {

@@ -27,6 +27,7 @@
 #include <kde_file.h>
 #include <kcomponentdata.h>
 #include <kmimetype.h>
+#include <kuser.h>
 #include <kdemacros.h>
 
 #include <QCoreApplication>
@@ -35,8 +36,6 @@
 #include <QEventLoop>
 
 #include <time.h>
-#include <pwd.h>
-#include <grp.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdlib.h>
@@ -64,12 +63,8 @@ extern "C" {
 TrashProtocol::TrashProtocol( const QByteArray& protocol, const QByteArray &pool, const QByteArray &app)
     : SlaveBase(protocol, pool, app )
 {
-    struct passwd *user = getpwuid( getuid() );
-    if ( user )
-        m_userName = QString::fromLatin1(user->pw_name);
-    struct group *grp = getgrgid( getgid() );
-    if ( grp )
-        m_groupName = QString::fromLatin1(grp->gr_name);
+    m_userName = KUser(::getuid()).loginName();
+    m_groupName = KUserGroup(::getgid()).name();
 }
 
 TrashProtocol::~TrashProtocol()

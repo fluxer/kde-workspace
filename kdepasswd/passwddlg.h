@@ -27,7 +27,7 @@
 
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>
-#include <QtCore/qbytearray.h>
+#include <QString>
 
 class KDEpasswd1Dialog
     : public KPasswordDialog
@@ -50,14 +50,14 @@ class KDEpasswd2Dialog
     Q_OBJECT
 
 public:
-    KDEpasswd2Dialog(const char *oldpass, const QByteArray &user);
+    KDEpasswd2Dialog(const char *oldpass, const QString &user);
     ~KDEpasswd2Dialog();
 
     void accept();
 
 private:
     const char *m_Pass;
-    QByteArray m_User;
+    QString m_User;
 };
 
 

@@ -30,7 +30,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <config-unix.h>
 
-#include <pwd.h>
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/stat.h>

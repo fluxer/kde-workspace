@@ -39,7 +39,6 @@
 #include <stdlib.h>
 #include <sched.h>
 #include <dirent.h>
-#include <pwd.h>
 #include <procfs.h>
 #include <sys/proc.h>
 #include <sys/resource.h>

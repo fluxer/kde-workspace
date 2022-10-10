@@ -23,10 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <unistd.h>
 #include <stdlib.h>
-#include <pwd.h>
 #include <fixx11h.h>
 #include <kconfig.h>
 #include <kglobal.h>
+#include <kuser.h>
 
 #include "workspace.h"
 #include "client.h"
@@ -428,9 +428,9 @@ SessionSaveDoneHelper::SessionSaveDoneHelper()
     props[ 0 ].type = const_cast< char* >(SmCARD8);
     props[ 0 ].num_vals = 1;
     props[ 0 ].vals = &propvalue[ 0 ];
-    struct passwd* entry = getpwuid(geteuid());
-    propvalue[ 1 ].length = entry != NULL ? strlen(entry->pw_name) : 0;
-    propvalue[ 1 ].value = (SmPointer)(entry != NULL ? entry->pw_name : "");
+    QByteArray username = KUser(KUser::UseEffectiveUID).loginName().toLocal8Bit();
+    propvalue[ 1 ].length = username.size();
+    propvalue[ 1 ].value = (SmPointer)(username.isEmpty() ? "" : username.data());
     props[ 1 ].name = const_cast< char* >(SmUserID);
     props[ 1 ].type = const_cast< char* >(SmARRAY8);
     props[ 1 ].num_vals = 1;

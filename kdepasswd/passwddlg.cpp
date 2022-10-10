@@ -42,7 +42,7 @@ KDEpasswd1Dialog::~KDEpasswd1Dialog()
 
 void KDEpasswd1Dialog::accept()
 {
-    PasswdProcess proc(0);
+    PasswdProcess proc;
 
     int ret = proc.checkCurrent(password().toLocal8Bit());
     switch (ret)
@@ -92,7 +92,7 @@ int KDEpasswd1Dialog::getPassword(QByteArray &password)
 
 
 
-KDEpasswd2Dialog::KDEpasswd2Dialog(const char *oldpass, const QByteArray &user)
+KDEpasswd2Dialog::KDEpasswd2Dialog(const char *oldpass, const QString &user)
     : KNewPasswordDialog()
 {
     m_Pass = oldpass;
@@ -102,7 +102,7 @@ KDEpasswd2Dialog::KDEpasswd2Dialog(const char *oldpass, const QByteArray &user)
     if (m_User.isEmpty())
         setPrompt(i18n("Please enter your new password:"));
     else
-        setPrompt(i18n("Please enter the new password for user <b>%1</b>:", QString::fromLocal8Bit(m_User)));
+        setPrompt(i18n("Please enter the new password for user <b>%1</b>:", m_User));
 }
 
 
