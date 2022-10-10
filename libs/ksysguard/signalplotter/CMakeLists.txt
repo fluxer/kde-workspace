@@ -27,7 +27,7 @@ target_link_libraries(ksignalplotterwidgets ${KDE4_KDEUI_LIBS} ksignalplotter)
 
 install(
     TARGETS ksignalplotterwidgets
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/designer
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/plugins/designer
 )
 
 install(

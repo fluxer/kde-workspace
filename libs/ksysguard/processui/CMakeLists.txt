@@ -42,7 +42,7 @@ target_link_libraries(ksysguardwidgets ${KDE4_KDEUI_LIBS} processui)
 
 install(
     TARGETS ksysguardwidgets
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/designer
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/plugins/designer
 )
 
 install(

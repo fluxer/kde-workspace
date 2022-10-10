@@ -34,5 +34,5 @@ target_link_libraries(ksysguardlsofwidgets ${KDE4_KDECORE_LIBS} ${QT_QTGUI_LIBRA
 
 install(
     TARGETS ksysguardlsofwidgets
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/designer
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/plugins/designer
 )

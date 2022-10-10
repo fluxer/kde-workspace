@@ -8,9 +8,5 @@ target_link_libraries(kde ${KDE4_KIO_LIBS} ${QT_QTGUI_LIBRARY})
 
 install(
     TARGETS kde LIBRARY
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/kde4/plugins/gui_platform
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}/plugins/gui_platform
 )
-
-
-
-
