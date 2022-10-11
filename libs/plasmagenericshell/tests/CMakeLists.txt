@@ -6,12 +6,11 @@ include_directories(
 add_definitions(-DPLASMAGENERICSHELL_EXPORT=)
 
 set(appletexplorer_SRCS
-   ../widgetsexplorer/kcategorizeditemsviewmodels.cpp
-   ../widgetsexplorer/plasmaappletitemmodel.cpp
-   ../widgetsexplorer/widgetexplorer.cpp
-   ../widgetsexplorer/openwidgetassistant.cpp
-   main.cpp
-   )
+    ../widgetsexplorer/kcategorizeditemsviewmodels.cpp
+    ../widgetsexplorer/plasmaappletitemmodel.cpp
+    ../widgetsexplorer/widgetexplorer.cpp
+    main.cpp
+)
 add_executable(plasmaappletexplorer ${appletexplorer_SRCS})
 target_link_libraries(plasmaappletexplorer
     ${KDE4_PLASMA_LIBS}
