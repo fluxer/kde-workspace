@@ -34,7 +34,6 @@ private slots:
     void cleanup();
 
     void testPlainTextDecoder();
-    void testHTMLFileForValidity();
 };
 
 }

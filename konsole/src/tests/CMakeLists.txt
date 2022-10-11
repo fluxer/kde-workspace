@@ -8,9 +8,9 @@ include_directories(
 
 set(KONSOLE_TEST_LIBS
     ${QT_QTTEST_LIBRARY}
-    konsoleprivate
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KPTY_LIBS}
+    konsoleprivate
 )
 
 kde4_add_manual_test(PartManualTest PartManualTest.cpp)

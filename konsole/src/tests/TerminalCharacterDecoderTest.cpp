@@ -26,7 +26,6 @@
 #include <QtCore/QTextStream>
 
 #include <QFile>
-#include <QtXml/qxml.h>
 
 // KDE
 #include <qtest_kde.h>
@@ -59,20 +58,6 @@ void TerminalCharacterDecoderTest::testPlainTextDecoder()
     decoder->end();
     QCOMPARE(outputString, QString("hello"));
     delete decoder;
-}
-
-void TerminalCharacterDecoderTest::testHTMLFileForValidity()
-{
-    QString fileName = "konsole.html";
-    QFile fi(fileName);
-
-    if (!fi.exists())
-        QSKIP("Test html file not found.", SkipSingle);
-
-    QXmlSimpleReader xmlReader;
-    QXmlInputSource source(&fi);
-
-    QVERIFY(xmlReader.parse(&source));
 }
 
 QTEST_KDEMAIN_CORE(TerminalCharacterDecoderTest)
