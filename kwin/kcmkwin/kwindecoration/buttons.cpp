@@ -42,14 +42,39 @@
 
 #include <KLocalizedString>
 #include <kglobalsettings.h>
-
 #include <kdecorationfactory.h>
-
 
 #define BUTTONDRAGMIMETYPE "application/x-kde_kwindecoration_buttons"
 
 namespace KWin
 {
+
+// helper functions to deal with the Button's bitmaps more easily...
+static QBitmap buttonBitmap(const char* const bits[])
+{
+#ifndef QT_NO_IMAGEFORMAT_XPM
+    const QImage image(bits);
+    QBitmap bmp = QBitmap::fromImage(image);
+    bmp.createMaskFromColor(Qt::white);
+    return bmp;
+#else
+#warning XPM is not supported
+    return QBitmap();
+#endif
+}
+
+static QPixmap bitmapPixmap(const QBitmap& bm, const QColor& color)
+{
+    QPixmap pm(bm.size());
+    pm.fill(Qt::white);
+    QPainter p(&pm);
+    p.setPen(color);
+    p.drawPixmap(0, 0, bm);
+    p.end();
+    pm.setMask(pm.createMaskFromColor(Qt::white));
+    return pm;
+}
+
 
 ButtonDrag::ButtonDrag(Button btn)
     : QMimeData()
@@ -109,20 +134,6 @@ Button::Button(const QString& n, const QBitmap& i, QChar t, bool d, bool s)
 Button::~Button()
 {
 }
-
-// helper function to deal with the Button's bitmaps more easily...
-QPixmap bitmapPixmap(const QBitmap& bm, const QColor& color)
-{
-    QPixmap pm(bm.size());
-    pm.fill(Qt::white);
-    QPainter p(&pm);
-    p.setPen(color);
-    p.drawPixmap(0, 0, bm);
-    p.end();
-    pm.setMask(pm.createMaskFromColor(Qt::white));
-    return pm;
-}
-
 
 ButtonSource::ButtonSource(QWidget *parent)
     : QListWidget(parent)
@@ -706,49 +717,27 @@ Button ButtonPositionWidget::getButton(QChar type, bool& success)
     success = true;
 
     if (type == 'R') {
-        QBitmap bmp = QBitmap::fromData(QSize(resize_width, resize_height), resize_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Resize"), bmp, 'R', false, m_supportedButtons.contains('R'));
+        return Button(i18n("Resize"), buttonBitmap(resize_bits), 'R', false, m_supportedButtons.contains('R'));
     } else if (type == 'L') {
-        QBitmap bmp = QBitmap::fromData(QSize(shade_width, shade_height), shade_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Shade"), bmp, 'L', false, m_supportedButtons.contains('L'));
+        return Button(i18n("Shade"), buttonBitmap(shade_bits), 'L', false, m_supportedButtons.contains('L'));
     } else if (type == 'B') {
-        QBitmap bmp = QBitmap::fromData(QSize(keepbelowothers_width, keepbelowothers_height), keepbelowothers_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Keep Below Others"), bmp, 'B', false, m_supportedButtons.contains('B'));
+        return Button(i18n("Keep Below Others"), buttonBitmap(keepbelowothers_bits), 'B', false, m_supportedButtons.contains('B'));
     } else if (type == 'F') {
-        QBitmap bmp = QBitmap::fromData(QSize(keepaboveothers_width, keepaboveothers_height), keepaboveothers_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Keep Above Others"), bmp, 'F', false, m_supportedButtons.contains('F'));
+        return Button(i18n("Keep Above Others"), buttonBitmap(keepaboveothers_bits), 'F', false, m_supportedButtons.contains('F'));
     } else if (type == 'X') {
-        QBitmap bmp = QBitmap::fromData(QSize(close_width, close_height), close_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Close"), bmp, 'X', false, m_supportedButtons.contains('X'));
+        return Button(i18n("Close"), buttonBitmap(close_bits), 'X', false, m_supportedButtons.contains('X'));
     } else if (type == 'A') {
-        QBitmap bmp = QBitmap::fromData(QSize(maximize_width, maximize_height), maximize_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Maximize"), bmp, 'A', false, m_supportedButtons.contains('A'));
+        return Button(i18n("Maximize"), buttonBitmap(maximize_bits), 'A', false, m_supportedButtons.contains('A'));
     } else if (type == 'I') {
-        QBitmap bmp = QBitmap::fromData(QSize(minimize_width, minimize_height), minimize_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Minimize"), bmp, 'I', false, m_supportedButtons.contains('I'));
+        return Button(i18n("Minimize"), buttonBitmap(minimize_bits), 'I', false, m_supportedButtons.contains('I'));
     } else if (type == 'H') {
-        QBitmap bmp = QBitmap::fromData(QSize(help_width, help_height), help_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("Help"), bmp, 'H', false, m_supportedButtons.contains('H'));
+        return Button(i18n("Help"), buttonBitmap(help_bits), 'H', false, m_supportedButtons.contains('H'));
     } else if (type == 'S') {
-        QBitmap bmp = QBitmap::fromData(QSize(onalldesktops_width, onalldesktops_height), onalldesktops_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("On All Desktops"), bmp, 'S', false, m_supportedButtons.contains('S'));
+        return Button(i18n("On All Desktops"), buttonBitmap(onalldesktops_bits), 'S', false, m_supportedButtons.contains('S'));
     } else if (type == 'M') {
-        QBitmap bmp = QBitmap::fromData(QSize(menu_width, menu_height), menu_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18nc("Button showing window actions menu", "Window Menu"), bmp, 'M', false, m_supportedButtons.contains('M'));
+        return Button(i18nc("Button showing window actions menu", "Window Menu"), buttonBitmap(menu_bits), 'M', false, m_supportedButtons.contains('M'));
     } else if (type == '_') {
-        QBitmap bmp = QBitmap::fromData(QSize(spacer_width, spacer_height), spacer_bits);
-        bmp.createMaskFromColor(Qt::white);
-        return Button(i18n("--- spacer ---"), bmp, '_', true, m_supportedButtons.contains('_'));
+        return Button(i18n("--- spacer ---"), buttonBitmap(spacer_bits), '_', true, m_supportedButtons.contains('_'));
     } else {
         success = false;
         return Button();
