@@ -87,7 +87,6 @@ ModeConfigPage::ModeConfigPage( QWidget *parent )
   connect( ui->btnDelete, SIGNAL(clicked()), this, SLOT(deleteType()) );
   ui->btnMimeTypes->setIcon(KIcon("tools-wizard"));
   connect(ui->btnMimeTypes, SIGNAL(clicked()), this, SLOT(showMTDlg()));
-  connect( ui->btnDownload, SIGNAL(clicked()), this, SLOT(hlDownload()) );
 
   reload();
 
@@ -309,12 +308,6 @@ void ModeConfigPage::showMTDlg()
     ui->edtFileExtensions->setText( d.chooser()->patterns().join(";") );
     ui->edtMimeTypes->setText( d.chooser()->mimeTypes().join(";") );
   }
-}
-
-void ModeConfigPage::hlDownload()
-{
-  KateHlDownloadDialog diag(this,"hlDownload",true);
-  diag.exec();
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;

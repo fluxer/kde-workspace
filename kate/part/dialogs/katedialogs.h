@@ -341,28 +341,6 @@ class KatePartPluginConfigPage : public KateConfigPage
     QList<KPluginInfo> plugins;
 };
 
-
-class KateHlDownloadDialog: public KDialog
-{
-  Q_OBJECT
-
-  public:
-    KateHlDownloadDialog(QWidget *parent, const char *name, bool modal);
-    ~KateHlDownloadDialog();
-
-  private:
-    static unsigned parseVersion(const QString&);
-    class QTreeWidget  *list;
-    class QString listData;
-    KIO::TransferJob *transferJob;
-
-  private Q_SLOTS:
-    void listDataReceived(KIO::Job *, const QByteArray &data);
-
-  public Q_SLOTS:
-    void slotUser1();
-};
-
 /**
  * This dialog will prompt the user for what do with a file that is
  * modified on disk.
