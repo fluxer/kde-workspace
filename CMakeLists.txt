@@ -189,8 +189,8 @@ set_package_properties(Gphoto2 PROPERTIES
 kde4_optional_find_package(OpenEXR)
 set_package_properties(OpenEXR PROPERTIES
     DESCRIPTION "API for accessing OpenEXR formatted images"
-    URL "http://www.openexr.com"
-    PURPOSE "Provides support for OpenEXR formatted images in the thumbnail KIO slave"
+    URL "https://www.openexr.com/"
+    PURPOSE "Provides support for EXR formatted images in the thumbnail KIO slave"
     TYPE OPTIONAL
 )
 
