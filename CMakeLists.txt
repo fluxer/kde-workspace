@@ -186,14 +186,6 @@ set_package_properties(Gphoto2 PROPERTIES
     PURPOSE "Needed to build camera kioslave"
 )
 
-kde4_optional_find_package(OpenEXR)
-set_package_properties(OpenEXR PROPERTIES
-    DESCRIPTION "API for accessing OpenEXR formatted images"
-    URL "https://www.openexr.com/"
-    PURPOSE "Provides support for EXR formatted images in the thumbnail KIO slave"
-    TYPE OPTIONAL
-)
-
 kde4_optional_find_package(EPub)
 set_package_properties(EPub PROPERTIES
     DESCRIPTION "A library for reading EPub documents"

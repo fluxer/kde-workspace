@@ -47,27 +47,6 @@ install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-if(OPENEXR_FOUND)
-    include_directories(${OPENEXR_INCLUDE_DIR})
-
-    set(exrthumbnail_PART_SRCS exrcreator.cpp)
-
-    kde4_add_plugin(exrthumbnail ${exrthumbnail_PART_SRCS})
-
-    target_link_libraries(exrthumbnail ${KDE4_KIO_LIBS} ${OPENEXR_LIBRARIES})
-
-    # OpenEXR headers use exceptions; at least clang refuses to build the target
-    # when exceptions are not enabled.
-    set_target_properties(exrthumbnail PROPERTIES
-        COMPILE_FLAGS "${KDE4_ENABLE_EXCEPTIONS}"
-    )
-
-    install(TARGETS exrthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-    install(FILES exrthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-endif()
-
-########### next target ###############
-
 if(X11_Xcursor_FOUND)
     set(cursorthumbnail_PART_SRCS cursorcreator.cpp)
 
