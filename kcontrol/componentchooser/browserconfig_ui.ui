@@ -92,7 +92,6 @@
    <header location="global">KLineEdit</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>radioExec</sender>

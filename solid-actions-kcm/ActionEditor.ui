@@ -330,6 +330,5 @@ This can include any or all of the following case insensitive expands:
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

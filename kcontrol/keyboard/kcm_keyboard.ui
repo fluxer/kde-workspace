@@ -470,7 +470,6 @@
    <header>kkeysequencewidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
  <slots>
   <signal>changed(bool)</signal>

@@ -568,7 +568,6 @@ You very likely want to use&lt;br&gt;
   <tabstop>separateScreenFocus</tabstop>
   <tabstop>activeMouseScreen</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>windowFocusPolicy</sender>

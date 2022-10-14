@@ -196,7 +196,6 @@ beginning of a file.</string>
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>gbWordWrap</sender>

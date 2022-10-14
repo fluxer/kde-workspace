@@ -566,7 +566,6 @@
   <tabstop>_menuHighlightStrong</tabstop>
   <tabstop>_menuHighlightSubtle</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>_scrollBarWidth</sender>

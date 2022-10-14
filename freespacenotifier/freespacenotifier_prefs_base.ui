@@ -53,7 +53,6 @@
    </item>
   </layout>
  </widget>
- <resources/>
  <connections>
   <connection>
    <sender>kcfg_enableNotification</sender>

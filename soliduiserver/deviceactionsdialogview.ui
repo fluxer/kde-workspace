@@ -99,6 +99,5 @@
  <includes>
   <include location="local" >klistwidget.h</include>
  </includes>
- <resources/>
  <connections/>
 </ui>

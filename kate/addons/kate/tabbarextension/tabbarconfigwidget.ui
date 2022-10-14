@@ -442,7 +442,6 @@
   <tabstop>slOpacity</tabstop>
   <tabstop>btnClearCache</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>chkModified</sender>

@@ -124,7 +124,6 @@
   <tabstop>outerColor</tabstop>
   <tabstop>useOuterColor</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>useOuterColor</sender>

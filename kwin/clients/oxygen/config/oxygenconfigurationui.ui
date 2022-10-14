@@ -392,7 +392,6 @@
   <tabstop>inactiveShadowConfiguration</tabstop>
   <tabstop>activeShadowConfiguration</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>titleOutline</sender>

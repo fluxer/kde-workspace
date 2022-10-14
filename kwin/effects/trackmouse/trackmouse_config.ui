@@ -96,7 +96,6 @@
    <header>ktitlewidget.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>shortcutRadio</sender>

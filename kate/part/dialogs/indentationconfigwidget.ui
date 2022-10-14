@@ -283,6 +283,5 @@ p, li { white-space: pre-wrap; }
    <header>kcombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

@@ -134,7 +134,6 @@
   <tabstop>launcherNamesVisibleCheckBox</tabstop>
   <tabstop>popupEnabledCheckBox</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>autoSectionCountEnabledCheckBox</sender>

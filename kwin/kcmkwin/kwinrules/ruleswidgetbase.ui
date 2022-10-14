@@ -2529,7 +2529,6 @@ but this may sometimes fail or superact.
   <tabstop>rule_blockcompositing</tabstop>
   <tabstop>tabs</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>detect</sender>

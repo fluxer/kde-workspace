@@ -715,6 +715,5 @@ p, li { white-space: pre-wrap; }
   <tabstop>xrScaleFilter</tabstop>
   <tabstop>unredirectFullscreen</tabstop>
  </tabstops>
- <resources/>
  <connections/>
 </ui>

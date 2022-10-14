@@ -218,7 +218,6 @@
   <tabstop>titleCombo</tabstop>
   <tabstop>titleEdit</tabstop>
  </tabstops>
- <resources/>
  <connections/>
  <buttongroups>
   <buttongroup name="locatgionButtonGroup"/>

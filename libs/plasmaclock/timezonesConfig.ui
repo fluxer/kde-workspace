@@ -118,6 +118,5 @@ Local is the time you set in System Settings.</string>
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

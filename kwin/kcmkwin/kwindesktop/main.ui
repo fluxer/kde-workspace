@@ -295,7 +295,6 @@
    </slots>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>numberSpinBox</sender>

@@ -231,7 +231,6 @@ Select the search engine to use for input boxes that provide automatic lookup se
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>cbEnableShortcuts</sender>

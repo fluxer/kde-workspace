@@ -123,7 +123,6 @@ For example "&lt;b>Shift+Alt+(123) Shift+Ctrl+(ABC)&lt;/b>" will first try &lt;b
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>pushButton1</sender>

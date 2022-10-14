@@ -107,7 +107,6 @@
   <tabstop>useTriggerWord</tabstop>
   <tabstop>triggerWord</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>useTriggerWord</sender>

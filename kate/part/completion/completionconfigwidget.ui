@@ -433,7 +433,6 @@
    <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>filteringHideAttributes</sender>

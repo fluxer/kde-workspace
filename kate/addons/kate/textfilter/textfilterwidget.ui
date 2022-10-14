@@ -70,6 +70,5 @@ Otherwise, STDERR will be displayed as a passive message.</string>
    <header>khistorycombobox.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

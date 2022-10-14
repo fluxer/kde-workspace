@@ -161,6 +161,5 @@ p, li { white-space: pre-wrap; }
   <tabstop>allowMerging</tabstop>
   <tabstop>filename</tabstop>
  </tabstops>
- <resources/>
  <connections/>
 </ui>

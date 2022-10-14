@@ -149,7 +149,6 @@
   <tabstop>displayNoneRadioButton</tabstop>
   <tabstop>showWindowIconsCheckBox</tabstop>
  </tabstops>
- <resources/>
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroupAction"/>

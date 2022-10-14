@@ -255,6 +255,5 @@ p, li { white-space: pre-wrap; }
  <tabstops>
   <tabstop>listWidget</tabstop>
  </tabstops>
- <resources/>
  <connections/>
 </ui>

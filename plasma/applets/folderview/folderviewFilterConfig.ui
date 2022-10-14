@@ -190,6 +190,5 @@ For example, if you have &quot;*&quot; as your pattern, but have nothing selecte
  <includes>
   <include location="global">KUrlRequester</include>
  </includes>
- <resources/>
  <connections/>
 </ui>

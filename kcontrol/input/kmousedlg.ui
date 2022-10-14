@@ -257,7 +257,6 @@
  <includes>
   <include location="global">kdialog.h</include>
  </includes>
- <resources/>
  <connections>
   <connection>
    <sender>singleClick</sender>

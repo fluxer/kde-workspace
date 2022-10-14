@@ -120,7 +120,6 @@
      <header location="global">KPushButton</header>
    </customwidget>
  </customwidgets>
- <resources/>
  <connections>
   <connection>
    <sender>differentRB</sender>

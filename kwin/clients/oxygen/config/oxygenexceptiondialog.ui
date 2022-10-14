@@ -264,7 +264,6 @@
   <tabstop>separatorComboBox</tabstop>
   <tabstop>hideTitleBar</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>frameBorderCheckBox</sender>

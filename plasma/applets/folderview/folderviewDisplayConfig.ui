@@ -485,6 +485,5 @@ When this option is checked, icons will automatically snap to the nearest grid c
   <tabstop>colorButton</tabstop>
   <tabstop>drawShadows</tabstop>
  </tabstops>
- <resources/>
  <connections/>
 </ui>

@@ -123,6 +123,5 @@
  <includes>
   <include location="local">kdialog.h</include>
  </includes>
- <resources/>
  <connections/>
 </ui>

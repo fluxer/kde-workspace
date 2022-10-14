@@ -59,7 +59,6 @@
    </item>
   </layout>
  </widget>
- <resources/>
  <connections>
   <connection>
    <sender>radioExec</sender>

@@ -269,7 +269,6 @@
  <includes>
   <include location="local" >kcolorbutton.h</include>
  </includes>
- <resources/>
  <connections>
   <connection>
    <sender>m_upperLimitActive</sender>

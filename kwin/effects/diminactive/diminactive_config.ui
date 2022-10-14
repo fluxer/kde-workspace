@@ -113,7 +113,6 @@
   <tabstop>kcfg_DimDesktop</tabstop>
   <tabstop>kcfg_DimByGroup</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>kcfg_Strength</sender>

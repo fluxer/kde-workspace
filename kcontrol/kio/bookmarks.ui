@@ -195,6 +195,5 @@ It looks less nice but it may help if you have a very big folder you want to spr
    <header>knuminput.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

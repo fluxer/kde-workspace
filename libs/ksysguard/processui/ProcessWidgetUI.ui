@@ -183,6 +183,5 @@ Kernel threads are shown as normal processes, but are actually running inside th
    <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
  <connections/>
 </ui>

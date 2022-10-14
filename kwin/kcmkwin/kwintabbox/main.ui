@@ -559,7 +559,6 @@
   <tabstop>visibleWindows</tabstop>
   <tabstop>hiddenWindows</tabstop>
  </tabstops>
- <resources/>
  <connections>
   <connection>
    <sender>filterDesktops</sender>

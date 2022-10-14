@@ -197,6 +197,5 @@ The shortcuts entered here can be used as a pseudo-URI scheme in KDE. For exampl
   <include location="local">klineedit.h</include>
   <include location="local">kcombobox.h</include>
  </includes>
- <resources/>
  <connections/>
 </ui>
