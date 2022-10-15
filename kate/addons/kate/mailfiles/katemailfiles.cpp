@@ -137,7 +137,6 @@ void KateMailFilesPluginView::slotMail()
     return;
   KToolInvocation::invokeMailer( QString(), // to
                                  QString(), // cc
-                                 QString(), // bcc
                                  QString(), // subject
                                  QString(), // body
                                  urls           // urls to atthatch
