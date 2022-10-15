@@ -70,6 +70,9 @@ int main(int argc, char **argv) {
         if (argurl.hasQueryItem("cc")) {
             mailto.append(splitMailArg(argurl.queryItemValue("cc")));
         }
+        if (mailto.isEmpty()) {
+            mailto.append(argurl.url().replace(QLatin1String("mailto:"), QString()));
+        }
         dialog->setTo(mailto);
 
         if (argurl.hasQueryItem("body")) {
