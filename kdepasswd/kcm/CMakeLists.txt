@@ -11,7 +11,12 @@ kde4_add_kcfg_files(kcm_useraccount_PART_SRCS settings.kcfgc pass.kcfgc)
 
 kde4_add_plugin(kcm_useraccount ${kcm_useraccount_PART_SRCS})
 
-target_link_libraries(kcm_useraccount konq ${KDE4_KIO_LIBS} ${KDE4_KDESU_LIBS})
+target_link_libraries(kcm_useraccount
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KEMAIL_LIBS}
+    ${KDE4_KDESU_LIBS}
+    konq
+)
 
 install(
     TARGETS kcm_useraccount
