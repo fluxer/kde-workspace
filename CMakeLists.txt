@@ -346,6 +346,7 @@ add_subdirectory(kdialog)
 add_subdirectory(keditbookmarks)
 add_subdirectory(kfind)
 add_subdirectory(kmediaplayer)
+add_subdirectory(kmail)
 add_subdirectory(konsole)
 # Background processes
 add_subdirectory(kdontchangethehostname)

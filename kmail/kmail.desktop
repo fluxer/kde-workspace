@@ -1,0 +1,10 @@
+[Desktop Entry]
+Icon=internet-mail
+Name=KMail
+GenericName=Mail sender
+Comment=A simple program to send e-mail
+Exec=kmail --icon '%i' --caption '%c' %U
+Terminal=false
+Type=Application
+Categories=Qt;KDE;Network;Email;
+MimeType=x-scheme-handler/mailto;
