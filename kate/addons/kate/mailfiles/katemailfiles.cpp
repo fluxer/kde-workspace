@@ -140,7 +140,6 @@ void KateMailFilesPluginView::slotMail()
                                  QString(), // bcc
                                  QString(), // subject
                                  QString(), // body
-                                 QString(), // msgfile
                                  urls           // urls to atthatch
                                );
 }
