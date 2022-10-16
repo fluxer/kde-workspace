@@ -27,7 +27,6 @@ kde4_add_plugin(plasma_appletscript_declarative ${declarative_appletscript_SRCS}
 target_link_libraries(plasma_appletscript_declarative
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDE4_KEMAIL_LIBS}
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}

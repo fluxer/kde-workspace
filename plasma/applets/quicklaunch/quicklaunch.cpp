@@ -41,7 +41,6 @@
 #include <KConfigDialog>
 #include <KDesktopFile>
 #include <KDialog>
-#include <KEMailSettings>
 #include <KGlobal>
 #include <KGlobalSettings>
 #include <KMenu>

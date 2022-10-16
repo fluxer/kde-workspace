@@ -84,7 +84,6 @@ private:
     static QScriptValue debug(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runCommand(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue defaultApplication(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue applicationPath(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue applicationExists(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue openUrl(QScriptContext *context, QScriptEngine *engine);
