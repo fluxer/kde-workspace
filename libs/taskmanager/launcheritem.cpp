@@ -35,9 +35,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <KStandardDirs>
 #include <KToolInvocation>
 
-// KIO
-#include <kemailsettings.h> // no camelcase include
-
 #include "groupmanager.h"
 #include "taskitem.h"
 #include "taskgroup.h"
