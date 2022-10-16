@@ -52,8 +52,8 @@ void WindowThumbnailItem::findImage()
 {
     QString imagePath;
     switch (m_wId) {
-    case Konqueror:
-        imagePath = KStandardDirs::locate("data", "kwin/kcm_kwintabbox/konqueror.png");
+    case Konsole:
+        imagePath = KStandardDirs::locate("data", "kwin/kcm_kwintabbox/konsole.png");
         break;
     case Systemsettings:
         imagePath = KStandardDirs::locate("data", "kwin/kcm_kwintabbox/systemsettings.png");

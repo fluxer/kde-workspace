@@ -41,7 +41,7 @@ public:
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
     enum Thumbnail {
-        Konqueror = 1,
+        Konsole = 1,
         KMail,
         Systemsettings,
         Dolphin

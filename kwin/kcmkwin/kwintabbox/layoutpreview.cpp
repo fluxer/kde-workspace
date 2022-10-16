@@ -129,7 +129,7 @@ ExampleClientModel::~ExampleClientModel()
 void ExampleClientModel::init()
 {
     QList<QString> applications;
-    applications << "konqbrowser" << "KMail2" << "systemsettings" << "dolphin";
+    applications << "konsole" << "kmail" << "systemsettings" << "dolphin";
 
     foreach (const QString& application, applications) {
         KService::Ptr service = KService::serviceByStorageId(application + ".desktop");
@@ -156,9 +156,9 @@ QVariant ExampleClientModel::data(const QModelIndex &index, int role) const
         return KDesktopFile(m_nameList.at(index.row())).readIcon();
     case Qt::UserRole+4:
         const QString desktopFile = KDesktopFile(m_nameList.at(index.row())).fileName().split('/').last();
-        if (desktopFile == "konqbrowser.desktop") {
-            return WindowThumbnailItem::Konqueror;
-        } else if (desktopFile == "KMail2.desktop") {
+        if (desktopFile == "konsole.desktop") {
+            return WindowThumbnailItem::Konsole;
+        } else if (desktopFile == "kmail.desktop") {
             return WindowThumbnailItem::KMail;
         } else if (desktopFile == "systemsettings.desktop") {
             return WindowThumbnailItem::Systemsettings;
