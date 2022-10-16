@@ -31,7 +31,6 @@
 #include <kxmlguiclient.h>
 
 #include "kateproject.h"
-#include "kateprojectcompletion.h"
 
 class KateProjectPlugin : public Kate::Plugin
 {
@@ -78,16 +77,7 @@ class KateProjectPlugin : public Kate::Plugin
     {
       return m_projects;
     }
-    
-    /**
-     * Get global code completion.
-     * @return global completion object for KTextEditor::View
-     */
-    KateProjectCompletion *completion ()
-    {
-      return &m_completion;
-    }
-    
+
     /**
      * Map current open documents to projects.
      * @param document document we want to know which project it belongs to
@@ -145,11 +135,6 @@ class KateProjectPlugin : public Kate::Plugin
      * Mapping document => project
      */
     QHash<QObject *, KateProject *> m_document2Project;
-    
-    /**
-     * Project completion
-     */
-    KateProjectCompletion m_completion;
 };
 
 #endif

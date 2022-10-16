@@ -29,6 +29,7 @@
 #include <klocale.h>
 #include <kmessagewidget.h>
 #include <kstandarddirs.h>
+#include <ktexteditor/view.h>
 
 KateProjectInfoViewCodeAnalysis::KateProjectInfoViewCodeAnalysis (KateProjectPluginView *pluginView, KateProject *project)
   : QWidget ()

@@ -181,19 +181,6 @@ void KateProject::loadProjectDone (KateProjectSharedQStandardItem topLevel, Kate
   emit modelChanged ();
 }
 
-void KateProject::loadIndexDone (KateProjectSharedProjectIndex projectIndex)
-{
-  /**
-   * move to our project
-   */
-  m_projectIndex = projectIndex;
-
-  /**
-   * notify external world that data is available
-   */
-  emit indexChanged ();
-}
-
 QFile *KateProject::projectLocalFile (const QString &file) const
 {
   /**

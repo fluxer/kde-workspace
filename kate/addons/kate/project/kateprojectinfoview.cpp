@@ -20,7 +20,6 @@
 
 #include "kateprojectinfoview.h"
 #include "kateprojectpluginview.h"
-#include "kateprojectinfoviewindex.h"
 #include "kateprojectinfoviewcodeanalysis.h"
 #include "kateprojectinfoviewnotes.h"
 
@@ -31,11 +30,6 @@ KateProjectInfoView::KateProjectInfoView (KateProjectPluginView *pluginView, Kat
   , m_pluginView (pluginView)
   , m_project (project)
 {
-  /**
-   * index
-   */
-  addTab (new KateProjectInfoViewIndex (pluginView, project), i18n("Code Index"));
-
   /**
    * code analysis
    */

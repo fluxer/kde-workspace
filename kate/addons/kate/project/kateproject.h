@@ -23,10 +23,10 @@
 
 #include <QThread>
 #include <QMap>
+#include <QFile>
 #include <QSharedPointer>
 #include <QTextDocument>
 #include <KTextEditor/ModificationInterface>
-#include "kateprojectindex.h"
 #include "kateprojectitem.h"
 
 /**
@@ -38,9 +38,6 @@ Q_DECLARE_METATYPE(KateProjectSharedQStandardItem)
 
 typedef QSharedPointer<QMap<QString, KateProjectItem *> > KateProjectSharedQMapStringItem;
 Q_DECLARE_METATYPE(KateProjectSharedQMapStringItem)
-
-typedef QSharedPointer<KateProjectIndex> KateProjectSharedProjectIndex;
-Q_DECLARE_METATYPE(KateProjectSharedProjectIndex)
 
 /**
  * Private worker thread.
@@ -182,17 +179,6 @@ class KateProject : public QObject
     }
 
     /**
-     * Access to project index.
-     * May be null.
-     * Don't store this pointer, might change.
-     * @return project index
-     */
-    KateProjectIndex *projectIndex ()
-    {
-      return m_projectIndex.data();
-    }
-    
-    /**
      * Will try to open a project local file.
      * Such files will be stored as .kateproject.d/file in the project directory.
      * @param file wanted file name, relative to .kateproject.d folder in project directory
@@ -232,12 +218,6 @@ class KateProject : public QObject
      */
     void loadProjectDone (KateProjectSharedQStandardItem topLevel, KateProjectSharedQMapStringItem file2Item);
 
-    /**
-     * Used for worker to send back the results of index loading
-     * @param projectIndex new project index
-     */
-    void loadIndexDone (KateProjectSharedProjectIndex projectIndex);
-
     void slotModifiedChanged(KTextEditor::Document*);
     
     
@@ -257,12 +237,6 @@ class KateProject : public QObject
      * This includes the files list, itemForFile mapping!
      */
     void modelChanged ();
-
-    /**
-     * Emitted when the index creation is finished.
-     * This includes the ctags index.
-     */
-    void indexChanged ();
 
   private:
     /**
@@ -309,11 +283,6 @@ class KateProject : public QObject
      */
     KateProjectSharedQMapStringItem m_file2Item;
 
-    /**
-     * project index, if any
-     */
-    KateProjectSharedProjectIndex m_projectIndex;
-    
     /**
      * notes buffer for project local notes
      */

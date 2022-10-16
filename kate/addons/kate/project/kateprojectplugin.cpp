@@ -43,14 +43,12 @@
 
 KateProjectPlugin::KateProjectPlugin (QObject* parent, const QList<QVariant>&)
   : Kate::Plugin ((Kate::Application*)parent)
-  , m_completion (this)
 {
   /**
    * register some data types
    */
   qRegisterMetaType<KateProjectSharedQStandardItem>("KateProjectSharedQStandardItem");
   qRegisterMetaType<KateProjectSharedQMapStringItem>("KateProjectSharedQMapStringItem");
-  qRegisterMetaType<KateProjectSharedProjectIndex>("KateProjectSharedProjectIndex");
  
   /**
    * connect to important signals, e.g. for auto project loading

@@ -78,13 +78,7 @@ class KateProjectWorker : public QObject
      * @param file2Item mapping file => item, will be filled
      */
     void loadFilesEntry (QStandardItem *parent, const QVariantMap &filesEntry, QMap<QString, KateProjectItem *> *file2Item);
-    
-    /**
-     * Load index for whole project.
-     * @param files list of all project files to index
-     */
-    void loadIndex (const QStringList &files);
-    
+
   private:
     /**
      * our project, only as QObject, we only send messages back and forth!

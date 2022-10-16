@@ -8,9 +8,6 @@ set(kateprojectplugin_PART_SRCS
     kateprojectviewtree.cpp
     kateprojecttreeviewcontextmenu.cpp
     kateprojectinfoview.cpp
-    kateprojectcompletion.cpp
-    kateprojectindex.cpp
-    kateprojectinfoviewindex.cpp
     kateprojectinfoviewcodeanalysis.cpp
     kateprojectinfoviewnotes.cpp
     kateprojectnew.cpp

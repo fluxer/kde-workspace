@@ -57,19 +57,9 @@ void KateProjectWorker::loadProject (QString baseDir, QVariantMap projectMap)
   loadProject (topLevel.data(), projectMap, file2Item.data());
 
   /**
-   * create some local backup of some data we need for further processing!
-   */
-  QStringList files = file2Item->keys ();
-
-  /**
    * feed back our results
    */
   QMetaObject::invokeMethod (m_project, "loadProjectDone", Qt::QueuedConnection, Q_ARG(KateProjectSharedQStandardItem, topLevel), Q_ARG(KateProjectSharedQMapStringItem, file2Item));
-
-  /**
-   * load index
-   */
-  loadIndex (files);
 }
 
 void KateProjectWorker::loadProject (QStandardItem *parent, const QVariantMap &project, QMap<QString, KateProjectItem *> *file2Item)
@@ -382,20 +372,6 @@ void KateProjectWorker::loadFilesEntry (QStandardItem *parent, const QVariantMap
     i->second->appendRow (i->first);
     ++i;
   }
-}
-
-void KateProjectWorker::loadIndex (const QStringList &files)
-{
-  /**
-   * create new index, this will do the loading in the constructor
-   * wrap it into shared pointer for transfer to main thread
-   */
-  KateProjectSharedProjectIndex index (new KateProjectIndex(files));
-
-  /**
-   * send new index object back to project
-   */
-  QMetaObject::invokeMethod (m_project, "loadIndexDone", Qt::QueuedConnection, Q_ARG(KateProjectSharedProjectIndex, index));
 }
 
 // kate: space-indent on; indent-width 2; replace-tabs on;
