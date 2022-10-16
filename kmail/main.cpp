@@ -51,16 +51,16 @@ int main(int argc, char **argv) {
     option.add("+[url]", ki18n("URL to be opened"));
     KCmdLineArgs::addCmdLineOptions(option);
 
-    KApplication *app = new KApplication();
-    KEMailDialog *dialog = new KEMailDialog();
-    dialog->show();
+    KApplication *kapplication = new KApplication();
+    KEMailDialog kemaildialog;
+    kemaildialog.show();
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     for (int pos = 0; pos < args->count(); pos++) {
         const KUrl argurl = args->url(pos);
 
         if (argurl.hasQueryItem("subject")) {
-            dialog->setSubject(argurl.queryItemValue("subject"));
+            kemaildialog.setSubject(argurl.queryItemValue("subject"));
         }
 
         QStringList mailto;
@@ -73,17 +73,17 @@ int main(int argc, char **argv) {
         if (mailto.isEmpty()) {
             mailto.append(argurl.url().replace(QLatin1String("mailto:"), QString()));
         }
-        dialog->setTo(mailto);
+        kemaildialog.setTo(mailto);
 
         if (argurl.hasQueryItem("body")) {
-            dialog->setMessage(argurl.queryItemValue("body"));
+            kemaildialog.setMessage(argurl.queryItemValue("body"));
         }
 
         if (argurl.hasQueryItem("attach")) {
-            dialog->setAttach(splitMailArg(argurl.queryItemValue("attach")));
+            kemaildialog.setAttach(splitMailArg(argurl.queryItemValue("attach")));
         }
         break;
     }
 
-    return app->exec();
+    return kapplication->exec();
 }
