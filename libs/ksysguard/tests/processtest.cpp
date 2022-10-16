@@ -128,6 +128,7 @@ void testProcess::testTimeToUpdateAllProcesses() {
         processController->updateAllProcesses();
     }
 }
+
 void testProcess::testTimeToUpdateModel() {
     KSysGuardProcessList *processList = new KSysGuardProcessList;
     processList->treeView()->setColumnHidden(13, false);
@@ -139,54 +140,6 @@ void testProcess::testTimeToUpdateModel() {
         QTest::qWait(0);
     }
     delete processList;
-}
-
-void testProcess::testHistories() {
-    KSysGuard::Processes *processController = new KSysGuard::Processes();
-    QBENCHMARK_ONCE {
-        if(!processController->isHistoryAvailable()) {
-            qWarning("History was not available");
-            delete processController;
-            return;
-        }
-    }
-    QCOMPARE(processController->historyFileName(), QString("/var/log/atop.log"));
-    QList< QPair<QDateTime, uint> > history = processController->historiesAvailable();
-    bool success = processController->setViewingTime(history[0].first);
-    QVERIFY(success);
-    QVERIFY(processController->viewingTime() == history[0].first);
-    success = processController->setViewingTime(history[0].first.addSecs(-1));
-    QVERIFY(success);
-    QVERIFY(processController->viewingTime() == history[0].first);
-    success = processController->setViewingTime(history[0].first.addSecs(-history[0].second -1));
-    QVERIFY(!success);
-    QVERIFY(processController->viewingTime() == history[0].first);
-    QCOMPARE(processController->historyFileName(), QString("/var/log/atop.log"));
-    
-    //Test the tree structure
-    processController->updateAllProcesses();
-    QList<KSysGuard::Process *> processes = processController->getAllProcesses();
-    
-    Q_FOREACH( KSysGuard::Process *process, processes) {
-        QCOMPARE(countNumChildren(process), process->numChildren);
-
-        for(int i =0; i < process->children.size(); i++) {
-            QVERIFY(process->children[i]->parent);
-            QCOMPARE(process->children[i]->parent, process);
-        }
-    }
-
-    //test all the pids are unique
-    QSet<long> pids;
-    Q_FOREACH( KSysGuard::Process *process, processes) {
-        if(process->pid == 0) continue;
-        QVERIFY(process->pid > 0);
-        QVERIFY(!process->name.isEmpty());
-
-        QVERIFY(!pids.contains(process->pid));
-        pids.insert(process->pid);
-    }
-    delete processController;
 }
 
 void testProcess::testUpdateOrAddProcess() {
@@ -204,25 +157,7 @@ void testProcess::testUpdateOrAddProcess() {
     processController->updateOrAddProcess(0);
     processController->updateOrAddProcess(-1);
 }
-void testProcess::testHistoriesWithWidget() {
-    KSysGuardProcessList *processList = new KSysGuardProcessList;
-    processList->treeView()->setColumnHidden(13, false);
-    processList->show();
-    QTest::qWaitForWindowShown(processList);
-    KSysGuard::Processes *processController = processList->processModel()->processController();
-        
-    QList< QPair<QDateTime, uint> > history = processController->historiesAvailable();
 
-    for(int i = 0; i < history.size(); i++) {
-        qDebug() << "Viewing time" << history[i].first;
-        bool success = processController->setViewingTime(history[i].first);
-        QVERIFY(success);
-        QCOMPARE(processController->viewingTime(), history[i].first);
-        processList->updateList();
-        QTest::qWait(100);
-    }
-    delete processList;
-}
 QTEST_KDEMAIN(testProcess,GUI)
 
 #include "moc_processtest.cpp"

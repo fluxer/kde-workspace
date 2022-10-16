@@ -23,7 +23,6 @@
 #include "processes_base_p.h"
 #include "processes_local_p.h"
 #include "processes_remote_p.h"
-#include "processes_atop_p.h"
 #include "process.h"
 
 #include <klocale.h>
@@ -50,13 +49,11 @@ namespace KSysGuard
       Private(Processes *q_ptr) {
         mFakeProcess.parent = &mFakeProcess;
         mAbstractProcesses = 0;
-        mHistoricProcesses = 0;
         mIsLocalHost = true;
         mProcesses.insert(-1, &mFakeProcess);
         mElapsedTimeMilliSeconds = 0;
         mHavePreviousIoValues = false;
         mUpdateFlags = 0;
-        mUsingHistoricalData = false;
         q = q_ptr;
     }
       ~Private();
@@ -71,7 +68,6 @@ namespace KSysGuard
       Process mFakeProcess; ///< A fake process with pid -1 just so that even init points to a parent
 
       AbstractProcesses *mAbstractProcesses; ///< The OS specific code to get the process information
-      ProcessesATop *mHistoricProcesses; ///< A way to get historic information about processes
       bool mIsLocalHost; ///< Whether this is localhost or not
 
       QTime mLastUpdated; ///< This is the time we last updated.  Used to calculate cpu usage.
@@ -79,7 +75,6 @@ namespace KSysGuard
 
       Processes::UpdateFlags mUpdateFlags;
       bool mHavePreviousIoValues; ///< This is whether we updated the IO value on the last update
-      bool mUsingHistoricalData; ///< Whether to return historical data for updateProcess() etc
       Processes *q;
   };
 
@@ -188,15 +183,11 @@ bool Processes::updateProcessInfo(Process *ps) {
     }
 
     ps->changes = Process::Nothing;
-    bool success;
-    if(d->mUsingHistoricalData)
-        success = d->mHistoricProcesses->updateProcessInfo(ps->pid, ps);
-    else
-        success = d->mAbstractProcesses->updateProcessInfo(ps->pid, ps);
+    bool success = d->mAbstractProcesses->updateProcessInfo(ps->pid, ps);
 
 #ifndef Q_OS_NETBSD
     //Now we have the process info.  Calculate the cpu usage and total cpu usage for itself and all its parents
-    if(!d->mUsingHistoricalData && d->mElapsedTimeMilliSeconds != 0) {  //Update the user usage and sys usage
+    if(d->mElapsedTimeMilliSeconds != 0) {  //Update the user usage and sys usage
         /* The elapsed time is the d->mElapsedTimeMilliSeconds
          * (which is of the order 2 seconds or so) plus a small
          * correction where we get the amount of time elapsed since
@@ -230,7 +221,7 @@ bool Processes::updateProcessInfo(Process *ps) {
         }
     }
 #endif // !Q_OS_NETBSD
-    if(d->mUsingHistoricalData || d->mElapsedTimeMilliSeconds != 0) {
+    if(d->mElapsedTimeMilliSeconds != 0) {
         ps->setTotalUserUsage(ps->userUsage);
         ps->setTotalSysUsage(ps->sysUsage);
         if(ps->userUsage != 0 || ps->sysUsage != 0) {
@@ -283,11 +274,7 @@ bool Processes::addProcess(long pid, long ppid)
 }
 bool Processes::updateOrAddProcess( long pid)
 {
-    long ppid;
-    if(d->mUsingHistoricalData)
-        ppid = d->mHistoricProcesses->getParentPid(pid);
-    else
-        ppid = d->mAbstractProcesses->getParentPid(pid);
+    long ppid = d->mAbstractProcesses->getParentPid(pid);
 
     if (ppid == pid) //Shouldn't ever happen
         ppid = -1;
@@ -310,12 +297,10 @@ void Processes::updateAllProcesses(long updateDurationMS, Processes::UpdateFlags
 {
     d->mUpdateFlags = updateFlags;
 
-    if(d->mUsingHistoricalData || d->mLastUpdated.elapsed() >= updateDurationMS || !d->mLastUpdated.isValid())  {
+    if(d->mLastUpdated.elapsed() >= updateDurationMS || !d->mLastUpdated.isValid())  {
         d->mElapsedTimeMilliSeconds = d->mLastUpdated.restart();
-        if(d->mUsingHistoricalData)
-            d->mHistoricProcesses->updateAllProcesses(d->mUpdateFlags);
-        else
-            d->mAbstractProcesses->updateAllProcesses(d->mUpdateFlags);  //For a local machine, this will directly call Processes::processesUpdated()
+        //For a local machine, this will directly call Processes::processesUpdated()
+        d->mAbstractProcesses->updateAllProcesses(d->mUpdateFlags);
     }
 }
 
@@ -330,11 +315,7 @@ void Processes::processesUpdated() {
         }
     }
 
-    if(d->mUsingHistoricalData)
-        d->mToBeProcessed = d->mHistoricProcesses->getAllPids();
-    else
-        d->mToBeProcessed = d->mAbstractProcesses->getAllPids();
-
+    d->mToBeProcessed = d->mAbstractProcesses->getAllPids();
 
     QSet<long> beingProcessed(d->mToBeProcessed); //keep a copy so that we can replace mProcessedLastTime with this at the end of this function
 
@@ -415,28 +396,16 @@ bool Processes::killProcess(long pid) {
 
 bool Processes::sendSignal(long pid, int sig) {
     d->mAbstractProcesses->errorCode = Unknown;
-    if(d->mUsingHistoricalData) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
     return d->mAbstractProcesses->sendSignal(pid, sig);
 }
 
 bool Processes::setNiceness(long pid, int priority) {
     d->mAbstractProcesses->errorCode = Unknown;
-    if(d->mUsingHistoricalData) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
     return d->mAbstractProcesses->setNiceness(pid, priority);
 }
 
 bool Processes::setScheduler(long pid, KSysGuard::Process::Scheduler priorityClass, int priority) {
     d->mAbstractProcesses->errorCode = Unknown;
-    if(d->mUsingHistoricalData) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
     return d->mAbstractProcesses->setScheduler(pid, priorityClass, priority);
 }
 
@@ -452,79 +421,6 @@ void Processes::answerReceived( int id, const QList<QByteArray>& answer ) {
     KSysGuard::ProcessesRemote *processes = qobject_cast<KSysGuard::ProcessesRemote *>(d->mAbstractProcesses);
     if(processes)
         processes->answerReceived(id, answer);
-}
-
-QList< QPair<QDateTime,uint> > Processes::historiesAvailable() const
-{
-    if(!d->mIsLocalHost)
-        return QList< QPair<QDateTime,uint> >();
-    if(!d->mHistoricProcesses)
-        d->mHistoricProcesses = new ProcessesATop();
-
-    return d->mHistoricProcesses->historiesAvailable();
-}
-
-void Processes::useCurrentData()
-{
-    if(d->mUsingHistoricalData) {
-        delete d->mHistoricProcesses;
-        d->mHistoricProcesses = NULL;
-        connect( d->mAbstractProcesses, SIGNAL(processesUpdated()), SLOT(processesUpdated()));
-        d->mUsingHistoricalData = false;
-    }
-}
-
-bool Processes::setViewingTime(const QDateTime &when)
-{
-    d->mAbstractProcesses->errorCode = Unknown;
-    if(!d->mIsLocalHost) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
-    if(!d->mUsingHistoricalData) {
-        if(!d->mHistoricProcesses)
-            d->mHistoricProcesses = new ProcessesATop();
-        disconnect( d->mAbstractProcesses, SIGNAL(processesUpdated()), this, SLOT(processesUpdated()));
-        connect( d->mHistoricProcesses, SIGNAL(processesUpdated()), SLOT(processesUpdated()));
-        d->mUsingHistoricalData = true;
-    }
-    return d->mHistoricProcesses->setViewingTime(when);
-}
-
-bool Processes::loadHistoryFile(const QString &filename)
-{
-    d->mAbstractProcesses->errorCode = Unknown;
-    if(!d->mIsLocalHost) {
-        d->mAbstractProcesses->errorCode = NotSupported;
-        return false;
-    }
-    if(!d->mHistoricProcesses)
-        d->mHistoricProcesses = new ProcessesATop(false);
-
-    return d->mHistoricProcesses->loadHistoryFile(filename);
-}
-
-QString Processes::historyFileName() const
-{
-    if(!d->mIsLocalHost || !d->mHistoricProcesses)
-        return QString();
-    return d->mHistoricProcesses->historyFileName();
-}
-QDateTime Processes::viewingTime() const
-{
-    if(!d->mIsLocalHost || !d->mHistoricProcesses)
-        return QDateTime();
-    return d->mHistoricProcesses->viewingTime();
-}
-
-bool Processes::isHistoryAvailable() const
-{
-    if(!d->mIsLocalHost)
-        return false;
-    if(!d->mHistoricProcesses)
-        d->mHistoricProcesses = new ProcessesATop();
-
-    return d->mHistoricProcesses->isHistoryAvailable();
 }
 
 }

@@ -7,15 +7,10 @@ set(ksysguard_LIB_SRCS
     processes_local_p.cpp
     processes_remote_p.cpp
     processes_base_p.cpp
-    processes_atop_p.cpp
 )
 
 add_library(processcore SHARED ${ksysguard_LIB_SRCS})
 
-target_link_libraries(processcore PRIVATE
-    ${KDE4_KDECORE_LIBS}
-    ${ZLIB_LIBRARIES}
-)
 target_link_libraries(processcore PUBLIC
     ${KDE4_KDECORE_LIBS}
 )

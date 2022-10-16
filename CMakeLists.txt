@@ -10,13 +10,6 @@ include(KDE4Defaults)
 
 set(LIBRARY_TYPE SHARED)
 
-find_package(ZLIB)
-set_package_properties(ZLIB PROPERTIES
-    DESCRIPTION "Support for gzip compressed files and data streams"
-    URL "http://www.zlib.net"
-    TYPE REQUIRED
-)
-
 find_package(PNG)
 set_package_properties(PNG PROPERTIES
     DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"

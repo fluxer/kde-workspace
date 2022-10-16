@@ -36,8 +36,6 @@ class testProcess : public QObject
         void testProcesses();
         void testProcessesTreeStructure();
         void testProcessesModification();
-        void testHistories();
-        void testHistoriesWithWidget();
         void testUpdateOrAddProcess();
 };
 #endif
