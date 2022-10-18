@@ -60,9 +60,6 @@ SwapFile::SwapFile(KateDocument *document)
   , m_recovered(false)
   , m_needSync(false)
 {
-  // fixed version of serialisation
-  m_stream.setVersion (QDataStream::Qt_4_6);
-
   // conect the timer
   connect(syncTimer(), SIGNAL(timeout()), this, SLOT(writeFileToDisk()), Qt::DirectConnection);
   

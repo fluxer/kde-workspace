@@ -99,22 +99,6 @@ extern "C"
         if (exportKDEColors)
             flags |= KRdbExportColors;
         runRdb( flags );
-
-        // Write some Qt root property.
-#ifdef Q_WS_X11
-        QByteArray properties;
-        QDataStream d(&properties, QIODevice::WriteOnly);
-        d.setVersion(QDataStream::Qt_4_8);
-        d << kapp->palette() << KGlobalSettings::generalFont();
-        Atom a = XInternAtom(QX11Info::display(), "_QT_DESKTOP_PROPERTIES", false);
-
-        // do it for all root windows - multihead support
-        int screen_count = ScreenCount(QX11Info::display());
-        for (int i = 0; i < screen_count; i++)
-            XChangeProperty(QX11Info::display(), RootWindow(QX11Info::display(), i),
-                            a, a, 8, PropModeReplace,
-                            (unsigned char*) properties.data(), properties.size());
-#endif
     }
 }
 
