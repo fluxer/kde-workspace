@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "utils.h"
 
-#include <kxerrorhandler.h>
 #include <X11/Xatom.h>
 
 #ifndef KCMRULES
@@ -37,6 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <X11/Xlib.h>
 #include <X11/extensions/shape.h>
+#include <QtGui/qwidget.h>
 #include <QtGui/qx11info_x11.h>
 
 #include <stdio.h>
