@@ -165,7 +165,7 @@ void KStart::sendRule()
         }
     }
 
-    msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1, false);
+    msg.broadcastMessage("_KDE_NET_WM_TEMPORARY_RULES", message, -1);
     qApp->flush();
 }
 
