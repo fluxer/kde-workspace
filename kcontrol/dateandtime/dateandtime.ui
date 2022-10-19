@@ -158,6 +158,9 @@
        </item>
        <item>
         <widget class="KTimeZoneWidget" name="tzonelist">
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
         </widget>
        </item>
       </layout>
