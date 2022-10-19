@@ -21,6 +21,7 @@
 #include <KApplication>
 #include <KLocale>
 #include <KEMailDialog>
+#include <KHelpMenu>
 #include <KDebug>
 
 static QStringList splitMailArg(const QString &arg)
@@ -54,6 +55,9 @@ int main(int argc, char **argv) {
     KApplication *kapplication = new KApplication();
     KEMailDialog kemaildialog;
     kemaildialog.show();
+    kemaildialog.setButtons(KDialog::Ok | KDialog::Close | KDialog::Help);
+    KHelpMenu *khelpmenu = new KHelpMenu(&kemaildialog, &aboutData, true);
+    kemaildialog.setButtonMenu(KDialog::Help, (QMenu*)khelpmenu->menu());
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     for (int pos = 0; pos < args->count(); pos++) {
