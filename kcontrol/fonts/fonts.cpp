@@ -60,76 +60,21 @@
 #undef None
 #endif
 
-static const char * const aa_rgb_xpm[]={
-"12 12 3 1",
-"a c #0000ff",
-"# c #00ff00",
-". c #ff0000",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa"};
-static const char * const aa_bgr_xpm[]={
-"12 12 3 1",
-". c #0000ff",
-"# c #00ff00",
-"a c #ff0000",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa",
-"....####aaaa"};
-static const char * const aa_vrgb_xpm[]={
-"12 12 3 1",
-"a c #0000ff",
-"# c #00ff00",
-". c #ff0000",
-"............",
-"............",
-"............",
-"............",
-"############",
-"############",
-"############",
-"############",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa"};
-static const char * const aa_vbgr_xpm[]={
-"12 12 3 1",
-". c #0000ff",
-"# c #00ff00",
-"a c #ff0000",
-"............",
-"............",
-"............",
-"............",
-"############",
-"############",
-"############",
-"############",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa",
-"aaaaaaaaaaaa"};
-
-static const char* const * const aaPixmaps[]={ aa_rgb_xpm, aa_bgr_xpm, aa_vrgb_xpm, aa_vbgr_xpm };
+static QPixmap aaPixmap(const int t)
+{
+    static const char* const aaPixmaps[] = {
+        "kcminput/pics/aa_rgb.png",
+        "kcminput/pics/aa_bgr.png",
+        "kcminput/pics/aa_vrgb.png",
+        "kcminput/pics/aa_vbgr.png",
+    };
+    const QString pixmapfilepath = KGlobal::dirs()->findResource("data", aaPixmaps[t]);
+    if (pixmapfilepath.isEmpty()) {
+        kWarning() << "No image for" << aaPixmaps[t];
+        return QPixmap();
+    }
+    return QPixmap(pixmapfilepath);
+}
 
 /**** DLL Interface ****/
 K_PLUGIN_FACTORY(FontFactory, registerPlugin<KFonts>(); )
@@ -264,7 +209,7 @@ FontAASettings::FontAASettings(QWidget *parent)
   subPixelType->setWhatsThis( subPixelWhatsThis );
 
   for(int t=KXftConfig::SubPixel::None+1; t<=KXftConfig::SubPixel::Vbgr; ++t)
-    subPixelType->addItem(QPixmap(aaPixmaps[t-1]), i18n(KXftConfig::description((KXftConfig::SubPixel::Type)t).toUtf8()));
+    subPixelType->addItem(aaPixmap(t-1), i18n(KXftConfig::description((KXftConfig::SubPixel::Type)t).toUtf8()));
 
   QLabel *hintingLabel=new QLabel(i18n("Hinting style: "), mw);
   hintingStyle=new QComboBox(mw);
