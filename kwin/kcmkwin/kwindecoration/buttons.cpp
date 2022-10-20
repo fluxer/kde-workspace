@@ -30,7 +30,6 @@
 */
 
 #include "buttons.h"
-#include "pixmaps.h"
 #include "config-kwin.h"
 
 #include <QApplication>
@@ -43,6 +42,9 @@
 #include <KLocalizedString>
 #include <kglobalsettings.h>
 #include <kdecorationfactory.h>
+#include <kglobal.h>
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 #define BUTTONDRAGMIMETYPE "application/x-kde_kwindecoration_buttons"
 
@@ -50,17 +52,21 @@ namespace KWin
 {
 
 // helper functions to deal with the Button's bitmaps more easily...
-static QBitmap buttonBitmap(const char* const bits[])
+static QBitmap buttonBitmap(const char* const bitmapname)
 {
-#ifndef QT_NO_IMAGEFORMAT_XPM
-    const QImage image(bits);
+    QByteArray bitmapnamebytes("kwin/kcm_kwindecoration/buttons/");
+    bitmapnamebytes.append(bitmapname);
+    bitmapnamebytes.append(".png");
+    const QString bitmapfilepath = KGlobal::dirs()->findResource("data", bitmapnamebytes.constData());
+    if (bitmapfilepath.isEmpty()) {
+        kWarning() << "No button image for" << bitmapname;
+        return QBitmap();
+    }
+
+    const QImage image(bitmapfilepath);
     QBitmap bmp = QBitmap::fromImage(image);
     bmp.createMaskFromColor(Qt::white);
     return bmp;
-#else
-#warning XPM is not supported
-    return QBitmap();
-#endif
 }
 
 static QPixmap bitmapPixmap(const QBitmap& bm, const QColor& color)
@@ -717,27 +723,27 @@ Button ButtonPositionWidget::getButton(QChar type, bool& success)
     success = true;
 
     if (type == 'R') {
-        return Button(i18n("Resize"), buttonBitmap(resize_bits), 'R', false, m_supportedButtons.contains('R'));
+        return Button(i18n("Resize"), buttonBitmap("resize"), 'R', false, m_supportedButtons.contains('R'));
     } else if (type == 'L') {
-        return Button(i18n("Shade"), buttonBitmap(shade_bits), 'L', false, m_supportedButtons.contains('L'));
+        return Button(i18n("Shade"), buttonBitmap("shade"), 'L', false, m_supportedButtons.contains('L'));
     } else if (type == 'B') {
-        return Button(i18n("Keep Below Others"), buttonBitmap(keepbelowothers_bits), 'B', false, m_supportedButtons.contains('B'));
+        return Button(i18n("Keep Below Others"), buttonBitmap("keepbelowothers"), 'B', false, m_supportedButtons.contains('B'));
     } else if (type == 'F') {
-        return Button(i18n("Keep Above Others"), buttonBitmap(keepaboveothers_bits), 'F', false, m_supportedButtons.contains('F'));
+        return Button(i18n("Keep Above Others"), buttonBitmap("keepaboveothers"), 'F', false, m_supportedButtons.contains('F'));
     } else if (type == 'X') {
-        return Button(i18n("Close"), buttonBitmap(close_bits), 'X', false, m_supportedButtons.contains('X'));
+        return Button(i18n("Close"), buttonBitmap("close"), 'X', false, m_supportedButtons.contains('X'));
     } else if (type == 'A') {
-        return Button(i18n("Maximize"), buttonBitmap(maximize_bits), 'A', false, m_supportedButtons.contains('A'));
+        return Button(i18n("Maximize"), buttonBitmap("maximize"), 'A', false, m_supportedButtons.contains('A'));
     } else if (type == 'I') {
-        return Button(i18n("Minimize"), buttonBitmap(minimize_bits), 'I', false, m_supportedButtons.contains('I'));
+        return Button(i18n("Minimize"), buttonBitmap("minimize"), 'I', false, m_supportedButtons.contains('I'));
     } else if (type == 'H') {
-        return Button(i18n("Help"), buttonBitmap(help_bits), 'H', false, m_supportedButtons.contains('H'));
+        return Button(i18n("Help"), buttonBitmap("help"), 'H', false, m_supportedButtons.contains('H'));
     } else if (type == 'S') {
-        return Button(i18n("On All Desktops"), buttonBitmap(onalldesktops_bits), 'S', false, m_supportedButtons.contains('S'));
+        return Button(i18n("On All Desktops"), buttonBitmap("onalldesktops"), 'S', false, m_supportedButtons.contains('S'));
     } else if (type == 'M') {
-        return Button(i18nc("Button showing window actions menu", "Window Menu"), buttonBitmap(menu_bits), 'M', false, m_supportedButtons.contains('M'));
+        return Button(i18nc("Button showing window actions menu", "Window Menu"), buttonBitmap("menu"), 'M', false, m_supportedButtons.contains('M'));
     } else if (type == '_') {
-        return Button(i18n("--- spacer ---"), buttonBitmap(spacer_bits), '_', true, m_supportedButtons.contains('_'));
+        return Button(i18n("--- spacer ---"), buttonBitmap("spacer"), '_', true, m_supportedButtons.contains('_'));
     } else {
         success = false;
         return Button();
@@ -801,5 +807,3 @@ void ButtonPositionWidget::setButtonsRight(const QString &buttons)
 } // namespace KWin
 
 #include "moc_buttons.cpp"
-// vim: ts=4
-// kate: space-indent off; tab-width 4;
