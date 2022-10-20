@@ -38,9 +38,15 @@
 #include <QTreeWidget>
 #include "moc_themepage.cpp"
 
-#include "bitmaps.h"
-
-
+static QPixmap findPixmap(const char* const filepath)
+{
+    const QString pixmapfilepath = KGlobal::dirs()->findResource("data", filepath);
+    if (pixmapfilepath.isEmpty()) {
+        kWarning() << "No image for" << filepath;
+        return QPixmap();
+    }
+    return QPixmap(pixmapfilepath);
+}
 
 ThemePage::ThemePage( QWidget* parent, const char* name )
 	: QWidget( parent )
@@ -147,28 +153,28 @@ void ThemePage::insertThemes()
 
     item->setData( 0, Qt::DisplayRole,i18n("Small black")  );
     item->setData( 1, Qt::DisplayRole, i18n("Small black cursors") );
-    item->setData( 0, Qt::DecorationRole, QPixmap( arrow_small_black_xpm ) );
+    item->setData( 0, Qt::DecorationRole, findPixmap("kcminput/pics/arrow_small_black.png") );
     item->setData( 0, Qt::UserRole + 1,"SmallBlack" );
     lstChildren<<item;
 
     item = new QTreeWidgetItem(listview );
     item->setData( 0, Qt::DisplayRole, i18n("Large black") );
     item->setData( 1, Qt::DisplayRole, i18n("Large black cursors") );
-    item->setData( 0, Qt::DecorationRole, QPixmap( arrow_large_black_xpm ) );
+    item->setData( 0, Qt::DecorationRole, findPixmap("kcminput/pics/arrow_large_black.png") );
     item->setData( 0, Qt::UserRole + 1,"LargeBlack"  );
     lstChildren<<item;
 
     item = new QTreeWidgetItem(listview );
     item->setData( 0, Qt::DisplayRole, i18n("Small white") );
     item->setData( 1, Qt::DisplayRole, i18n("Small white cursors") );
-    item->setData( 0, Qt::DecorationRole, QPixmap(arrow_small_white_xpm  ) );
+    item->setData( 0, Qt::DecorationRole, findPixmap("kcminput/pics/arrow_small_white.png") );
     item->setData( 0, Qt::UserRole + 1,"SmallWhite" );
     lstChildren<<item;
 
     item = new QTreeWidgetItem(listview );
     item->setData( 0, Qt::DisplayRole, i18n("Large white") );
     item->setData( 1, Qt::DisplayRole, i18n("Large white cursors") );
-    item->setData( 0, Qt::DecorationRole, QPixmap( arrow_large_white_xpm ) );
+    item->setData( 0, Qt::DecorationRole, findPixmap("kcminput/pics/arrow_large_white.png") );
     item->setData( 0, Qt::UserRole + 1, "LargeWhite" );
     lstChildren<<item;
 
