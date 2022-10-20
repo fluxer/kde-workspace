@@ -20,25 +20,25 @@
 #include "mouse.h"
 
 #include <QLabel>
-#include <KComboBox>
-
 #include <QLayout>
 #include <QSizePolicy>
 #include <QBitmap>
-
 #include <QGroupBox>
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
+#include <QtDBus/QtDBus>
 
 #include <kconfig.h>
 #include <kdialog.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kiconeffect.h>
 #include <kcolorscheme.h>
+#include <kstandarddirs.h>
 #include <kseparator.h>
-#include <QtDBus/QtDBus>
+#include <kcombobox.h>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
@@ -68,64 +68,25 @@ QPixmap maxButtonPixmaps[3];
 
 void createMaxButtonPixmaps()
 {
-    char const * maxButtonXpms[][3 + 13] = {
-        {
-            0, 0, 0,
-            "...............",
-            ".......#.......",
-            "......###......",
-            ".....#####.....",
-            "..#....#....#..",
-            ".##....#....##.",
-            "###############",
-            ".##....#....##.",
-            "..#....#....#..",
-            ".....#####.....",
-            "......###......",
-            ".......#.......",
-            "..............."
-        },
-        {
-            0, 0, 0,
-            "...............",
-            ".......#.......",
-            "......###......",
-            ".....#####.....",
-            ".......#.......",
-            ".......#.......",
-            ".......#.......",
-            ".......#.......",
-            ".......#.......",
-            ".....#####.....",
-            "......###......",
-            ".......#.......",
-            "..............."
-        },
-        {
-            0, 0, 0,
-            "...............",
-            "...............",
-            "...............",
-            "...............",
-            "..#.........#..",
-            ".##.........##.",
-            "###############",
-            ".##.........##.",
-            "..#.........#..",
-            "...............",
-            "...............",
-            "...............",
-            "..............."
-        },
+    static const char* imagefilepaths[] = {
+        "kwin/kcm_kwinoptions/buttons/max1.png",
+        "kwin/kcm_kwinoptions/buttons/max2.png",
+        "kwin/kcm_kwinoptions/buttons/max3.png",
     };
-
-    QByteArray baseColor(". c " + KColorScheme(QPalette::Active, KColorScheme::View).background().color().name().toAscii());
-    QByteArray textColor("# c " + KColorScheme(QPalette::Active, KColorScheme::View).foreground().color().name().toAscii());
     for (int t = 0; t < 3; ++t) {
-        maxButtonXpms[t][0] = "15 13 2 1";
-        maxButtonXpms[t][1] = baseColor.constData();
-        maxButtonXpms[t][2] = textColor.constData();
-        maxButtonPixmaps[t] = QPixmap(maxButtonXpms[t]);
+        const QString imagefilepath = KGlobal::dirs()->findResource("data", imagefilepaths[t]);
+        if (imagefilepath.isEmpty()) {
+            kWarning() << "No button image for" << imagefilepaths[t];
+            continue;
+        }
+        QImage image(imagefilepath);
+        KIconEffect::toMonochrome(
+            image,
+            KColorScheme(QPalette::Active, KColorScheme::View).foreground().color(),
+            KColorScheme(QPalette::Active, KColorScheme::View).background().color(),
+            float(1.0)
+        );
+        maxButtonPixmaps[t] = QPixmap::fromImage(image);
         maxButtonPixmaps[t].setMask(maxButtonPixmaps[t].createHeuristicMask());
     }
 }
