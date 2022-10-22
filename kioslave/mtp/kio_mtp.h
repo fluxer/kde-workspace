@@ -39,7 +39,7 @@
 #include "devicecache.h"
 
 #define MAX_XFER_BUF_SIZE           16348
-#define KIO_MTP                     7000
+#define KIO_MTP                     7132
 
 using namespace KIO;
 
