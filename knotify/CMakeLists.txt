@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=901)
+
 add_subdirectory( sounds  )
 
 ########### next target ###############

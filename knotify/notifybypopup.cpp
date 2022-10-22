@@ -499,12 +499,12 @@ QStringList NotifyByPopup::popupServerCapabilities()
 				                  dbusInterfaceName, "GetCapabilities" );
 		QDBusMessage replyMsg = QDBusConnection::sessionBus().call(m);
 		if (replyMsg.type() != QDBusMessage::ReplyMessage) {
-			kWarning(300) << "Error while calling popup server GetCapabilities()";
+			kWarning() << "Error while calling popup server GetCapabilities()";
 			return QStringList();
 		}
 
 		if (replyMsg.arguments().isEmpty()) {
-			kWarning(300) << "popup server GetCapabilities() returned an empty reply";
+			kWarning() << "popup server GetCapabilities() returned an empty reply";
 			return QStringList();
 		}
 
@@ -559,8 +559,8 @@ QString NotifyByPopup::stripHtml( const QString &text )
 	if(r.hasError())
 	{
 		// XML error in the given text, just return the original string
-		kWarning(300) << "Notification to send to backend which does "
-		                 "not support HTML, contains invalid XML:"
+		kWarning() << "Notification to send to backend which does "
+		              "not support HTML, contains invalid XML:"
 		              << r.errorString() << "line" << r.lineNumber()
 		              << "col" << r.columnNumber();
 		return text;
@@ -579,8 +579,8 @@ QString NotifyByPopup::HtmlEntityResolver::resolveUndeclaredEntity(
 
 	QChar ent = KCharsets::fromEntity( '&' + name );
 	if( ent.isNull() ) {
-		kWarning(300) << "Notification to send to backend which does "
-		                 "not support HTML, contains invalid entity: "
+		kWarning() << "Notification to send to backend which does "
+		              "not support HTML, contains invalid entity: "
 		              << name;
 		ent = ' ';
 	}
