@@ -500,13 +500,13 @@ void Task::toggleIconified()
 
 void Task::raise()
 {
-//    kDebug(1210) << "Task::raise(): " << name();
+//    kDebug() << "Task::raise(): " << name();
     KWindowSystem::raiseWindow(d->win);
 }
 
 void Task::lower()
 {
-//    kDebug(1210) << "Task::lower(): " << name();
+//    kDebug() << "Task::lower(): " << name();
     KWindowSystem::lowerWindow(d->win);
 }
 
@@ -532,7 +532,7 @@ void Task::activate()
     }
 
 
-    //kDebug(1210) << "Task::activate():" << name() << d->win << w;
+    //kDebug() << "Task::activate():" << name() << d->win << w;
     KWindowSystem::forceActiveWindow(w);
 }
 
