@@ -66,7 +66,6 @@ int initLocale()
     setenv("KDEHOME", QFile::encodeName( QDir::homePath() + QString::fromLatin1("/.kde-unit-test") ), 1);
     setenv("XDG_DATA_HOME", QFile::encodeName( QDir::homePath() + QString::fromLatin1("/.kde-unit-test/xdg/local") ), 1);
     setenv("XDG_CONFIG_HOME", QFile::encodeName( QDir::homePath() + QString::fromLatin1("/.kde-unit-test/xdg/config") ), 1);
-    unsetenv("KDE_COLOR_DEBUG");
     return 0;
 }
 Q_CONSTRUCTOR_FUNCTION(initLocale)
