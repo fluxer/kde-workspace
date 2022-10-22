@@ -486,7 +486,7 @@ void TrashProtocol::special( const QByteArray & data )
         break;
     }
     default:
-        kWarning(7116) << "Unknown command in special(): " << cmd ;
+        kWarning() << "Unknown command in special(): " << cmd ;
         error( KIO::ERR_UNSUPPORTED_ACTION, QString::number(cmd) );
         break;
     }
