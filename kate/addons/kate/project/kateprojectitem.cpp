@@ -120,7 +120,7 @@ QVariant KateProjectItem::data (int role) const
           if (m_emblem) {
             emblems<<*m_emblem;
           }
-          kDebug( 13035 ) << emblems;
+          kDebug() << emblems;
           m_icon = new QIcon (KIconLoader::global ()->loadMimeTypeIcon (iconName, KIconLoader::Small,0,KIconLoader::DefaultState,emblems));
           break;
         }
