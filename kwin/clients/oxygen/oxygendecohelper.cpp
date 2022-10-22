@@ -34,7 +34,7 @@ namespace Oxygen
     //______________________________________________________________________________
     DecoHelper::DecoHelper(const QByteArray &componentName):
         Helper(componentName),
-        _debugArea( KDebug::registerArea( "Oxygen (decoration)" ) )
+        _debugArea( 90240 ) // see kdebug.areas
 
     {}
 

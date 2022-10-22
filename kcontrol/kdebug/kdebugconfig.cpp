@@ -57,7 +57,7 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
                         ki18n("KDE Debug Module"),
                         0, KLocalizedString(), KAboutData::License_GPL,
                         ki18n("Copyright 1999-2009, David Faure <email>faure@kde.org</email>\n"
-                            "Copyright 2014-2019, Ivailo Monev <email>xakepa10@gmail.com</email>"
+                            "Copyright 2014, Ivailo Monev <email>xakepa10@gmail.com</email>"
                         ));
 
     about->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
@@ -158,18 +158,13 @@ void KCMDebug::readAreas()
         }
     }
 
-    KConfig config("kdebugrc", KConfig::NoGlobals);
-    Q_FOREACH(const QString& groupName, config.groupList()) {
-        mAreaMap.insert(groupName, groupName); // ID == description
-    }
-
     return;
 }
 
 void KCMDebug::load()
 {
     KConfigGroup topGroup(pConfig, QString());
-    m_disableAll->setChecked(topGroup.readEntry("DisableAll", true));
+    m_disableAll->setChecked(topGroup.readEntry("DisableAll", false));
     mLoaded = true;
     emit changed( false );
 }
@@ -215,17 +210,17 @@ void KCMDebug::showArea(const QString& areaName)
     /* Fill dialog fields with values from config data */
     mCurrentDebugArea = areaName;
     KConfigGroup group = pConfig->group(areaName);
-    pInfoCombo->setCurrentIndex( group.readEntry( "InfoOutput", 2 ) );
-    pInfoFile->setText( group.readPathEntry( "InfoFilename","kdebug.dbg" ) );
+    pInfoCombo->setCurrentIndex( group.readEntry( "InfoOutput", 4 ) );
+    pInfoFile->setText( group.readPathEntry( "InfoFilename","kdebug.log" ) );
     //pInfoShow->setText( group.readEntry( "InfoShow" ) );
     pWarnCombo->setCurrentIndex( group.readEntry( "WarnOutput", 2 ) );
-    pWarnFile->setText( group.readPathEntry( "WarnFilename","kdebug.dbg" ) );
+    pWarnFile->setText( group.readPathEntry( "WarnFilename","kdebug.log" ) );
     //pWarnShow->setText( group.readEntry( "WarnShow" ) );
     pErrorCombo->setCurrentIndex( group.readEntry( "ErrorOutput", 2 ) );
-    pErrorFile->setText( group.readPathEntry( "ErrorFilename","kdebug.dbg") );
+    pErrorFile->setText( group.readPathEntry( "ErrorFilename","kdebug.log") );
     //pErrorShow->setText( group.readEntry( "ErrorShow" ) );
     pFatalCombo->setCurrentIndex( group.readEntry( "FatalOutput", 2 ) );
-    pFatalFile->setText( group.readPathEntry("FatalFilename","kdebug.dbg") );
+    pFatalFile->setText( group.readPathEntry("FatalFilename","kdebug.log") );
     //pFatalShow->setText( group.readEntry( "FatalShow" ) );
     pAbortFatal->setChecked( group.readEntry( "AbortFatal", 1 ) );
     slotDestinationChanged();

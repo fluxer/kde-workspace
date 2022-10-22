@@ -41,7 +41,7 @@ namespace Oxygen
     //______________________________________________________________________________
     StyleHelper::StyleHelper( const QByteArray &componentName ):
         Helper( componentName ),
-        _debugArea( KDebug::registerArea( "Oxygen ( style )" ) ),
+        _debugArea( 90230 ), // see kdebug.areas
         _useBackgroundGradient( true )
     {
 

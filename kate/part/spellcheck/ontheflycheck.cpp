@@ -75,10 +75,10 @@ KateOnTheFlyChecker::~KateOnTheFlyChecker()
   freeDocument();
 }
 
+// see kdebug.areas
 int KateOnTheFlyChecker::debugArea()
 {
-  static int s_area = KDebug::registerArea("Kate (On-The-Fly Spellcheck)");
-  return s_area;
+  return 13070;
 }
 
 QPair<KTextEditor::Range, QString> KateOnTheFlyChecker::getMisspelledItem(const KTextEditor::Cursor &cursor) const

@@ -21,10 +21,10 @@
 
 #include <KDebug>
 
+// see kdebug.areas
 inline int debugArea()
 {
-	static int s_area = KDebug::registerArea("kate-filetree");
-	return s_area;
+    return 13080;
 }
 
 #endif /* KATE_FILETREEDEBUG_H */

@@ -40,14 +40,7 @@
 
 #include "moc_main.cpp"
 
-using namespace std;
-
 KService::List m_modules;
-
-static int debugArea() {
-    static int s_area = KDebug::registerArea("kcmshell");
-    return s_area;
-}
 
 static bool caseInsensitiveLessThan(const KService::Ptr s1, const KService::Ptr s2)
 {
@@ -88,7 +81,7 @@ static KService::Ptr locateModule(const QString& module)
     }
 
     if ( service->noDisplay() ) {
-        kDebug(debugArea()) << module << " should not be loaded.";
+        kDebug() << module << " should not be loaded.";
         return KService::Ptr();
     }
 
@@ -101,14 +94,14 @@ bool KCMShell::isRunning()
     if( owner == QDBusConnection::sessionBus().baseService() )
         return false; // We are the one and only.
 
-    kDebug(debugArea()) << "kcmshell4 with modules '" <<
+    kDebug() << "kcmshell4 with modules '" <<
         m_serviceName << "' is already running." << endl;
 
     QDBusInterface iface(m_serviceName, "/KCModule/dialog", "org.kde.KCMShellMultiDialog");
     QDBusReply<void> reply = iface.call("activate", kapp->startupId());
     if (!reply.isValid())
     {
-        kDebug(debugArea()) << "Calling D-Bus function dialog::activate() failed.";
+        kDebug() << "Calling D-Bus function dialog::activate() failed.";
         return false; // Error, we have to do it ourselves.
     }
 
@@ -126,7 +119,7 @@ KCMShellMultiDialog::KCMShellMultiDialog(KPageDialog::FaceType dialogFace, QWidg
 
 void KCMShellMultiDialog::activate( const QByteArray& asn_id )
 {
-    kDebug(debugArea()) ;
+    kDebug() ;
 
 #ifdef Q_WS_X11
     KStartupInfo::setNewStartupId( this, asn_id );
@@ -141,7 +134,7 @@ void KCMShell::setServiceName(const QString &dbusName )
 
 void KCMShell::waitForExit()
 {
-    kDebug(debugArea());
+    kDebug();
 
     QDBusServiceWatcher *watcher = new QDBusServiceWatcher(this);
     watcher->setConnection(QDBusConnection::sessionBus());
@@ -156,11 +149,11 @@ void KCMShell::appExit(const QString &appId, const QString &oldName, const QStri
 {
     Q_UNUSED(appId);
     Q_UNUSED(newName);
-    kDebug(debugArea());
+    kDebug();
 
     if (!oldName.isEmpty())
     {
-        kDebug(debugArea()) << "'" << appId << "' closed, dereferencing.";
+        kDebug() << "'" << appId << "' closed, dereferencing.";
         KGlobal::deref();
     }
 }
@@ -200,7 +193,7 @@ int main(int _argc, char *_argv[])
 
     if (args->isSet("list"))
     {
-        cout << i18n("The following modules are available:").toLocal8Bit().data() << endl;
+        std::cout << i18n("The following modules are available:").toLocal8Bit().data() << endl;
 
         listModules();
 
@@ -221,7 +214,7 @@ int main(int _argc, char *_argv[])
                          .arg(!(*it)->comment().isEmpty() ? (*it)->comment()
                                  : i18n("No description available"));
 
-            cout << entry.toLocal8Bit().data() << endl;
+            std::cout << entry.toLocal8Bit().data() << endl;
         }
         return 0;
     }
