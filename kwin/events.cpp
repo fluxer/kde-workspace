@@ -123,7 +123,7 @@ bool Workspace::workspaceEvent(XEvent * e)
         was_user_interaction = true;
         int keyQt;
         KKeyServer::xEventToQt(e, &keyQt);
-//            kDebug(125) << "Workspace::keyPress( " << keyQt << " )";
+        // kDebug(1212) << "Workspace::keyPress( " << keyQt << " )";
         if (movingClient) {
             movingClient->keyPressEvent(keyQt);
             return true;
