@@ -840,6 +840,7 @@ void TabBox::grabbedKeyEvent(QKeyEvent* event)
  */
 static bool areKeySymXsDepressed(bool bAll, const uint keySyms[], int nKeySyms) {
     char keymap[32];
+    ::memset(keymap, 0, sizeof(keymap) * sizeof(char));
 
     kDebug(125) << "areKeySymXsDepressed: " << (bAll ? "all of " : "any of ") << nKeySyms;
 
