@@ -247,7 +247,7 @@ void ApplicationModelPrivate::fillNode(const QString &_relPath, AppNode *node)
                 continue;
             }
 
-            kDebug(250) << "Service group" << serviceGroup->entryPath() << serviceGroup->icon()
+            kDebug() << "Service group" << serviceGroup->entryPath() << serviceGroup->icon()
             << serviceGroup->relPath() << serviceGroup->directoryEntryPath();
 
             icon = serviceGroup->icon();
@@ -263,7 +263,7 @@ void ApplicationModelPrivate::fillNode(const QString &_relPath, AppNode *node)
         } else if (p->isType(KST_KServiceSeparator)) {
             isSeparator = true;
         } else {
-            kWarning(250) << "KServiceGroup: Unexpected object in list!";
+            kWarning() << "KServiceGroup: Unexpected object in list!";
             continue;
         }
 
