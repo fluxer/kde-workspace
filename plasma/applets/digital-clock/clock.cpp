@@ -134,12 +134,12 @@ void Clock::updateSize()
             QSize s = metrics.size(Qt::TextSingleLine, m_dateString);
             w = s.width() + metrics.width(" ");
             h = f.pointSize();
-            //kDebug(96669) << "uS: singleline" << w;
+            //kDebug() << "uS: singleline" << w;
         } else {
             QSize s = metrics.size(Qt::TextWordWrap, m_dateString);
             w = s.width();
             h = f.pointSize();
-            //kDebug(96669) << "uS: wordwrap" << w;
+            //kDebug() << "uS: wordwrap" << w;
         }
 
         if (!m_dateTimezoneBesides) {
@@ -158,7 +158,7 @@ void Clock::updateSize()
         // We have a fixed height, set some sensible width
         setMinimumSize(QSize(w, 0));
         //kDebug() << "DR" << m_dateRect.width() << "CR" << contentsRect().height() * aspect;
-        // kDebug(96669) << contentsRect();
+        // kDebug() << contentsRect();
     } else {
         // We have a fixed width, set some sensible height
         setMinimumSize(QSize(0, h));
@@ -166,7 +166,7 @@ void Clock::updateSize()
 
     setPreferredSize(QSize(w, h));
     emit sizeHintChanged(Qt::PreferredSize);
-    //kDebug(96669) << "minZize: " << minimumSize() << preferredSize();
+    //kDebug() << "minZize: " << minimumSize() << preferredSize();
 
     if (m_isDefaultFont) {
         const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_showSeconds);
@@ -421,7 +421,7 @@ QRectF Clock::sideBySideLayout(int subtitleWidth, int subtitleHeight, const QRec
                            contentsRect.top() + (contentsRect.height()-subtitleHeight)/2,
                            subtitleWidth,
                            subtitleHeight);
-    // kDebug(96669) << "myRect: " << myRect;
+    // kDebug() << "myRect: " << myRect;
     // p->fillRect(myRect, QBrush(QColor("grey")));
 
     // Now find out how much space is left for painting the time
@@ -534,32 +534,32 @@ void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, 
             m_dateRect = preparePainter(p, contentsRect, smallFont, dateString);
         }
 
-        // kDebug(96669) << "m_dateRect: " << m_dateRect;
+        // kDebug() << "m_dateRect: " << m_dateRect;
 
         const int subtitleHeight = m_dateRect.height();
         const int subtitleWidth = m_dateRect.width();
-        // kDebug(96669) << "subtitleWitdh: " << subtitleWitdh;
-        // kDebug(96669) << "subtitleHeight: " << subtitleHeight;
+        // kDebug() << "subtitleWitdh: " << subtitleWitdh;
+        // kDebug() << "subtitleHeight: " << subtitleHeight;
 
         if (m_dateTimezoneBesides) {
-            //kDebug(96669) << contentsRect.height() << subtitleHeight << smallFont.pixelSize();
+            //kDebug() << contentsRect.height() << subtitleHeight << smallFont.pixelSize();
             if (contentsRect.height() - subtitleHeight >= smallFont.pixelSize() || formFactor() != Plasma::Horizontal) {
                 // to small to display the time on top of the date/timezone
                 // put them side by side
-                // kDebug(96669) << "switching to normal";
+                // kDebug() << "switching to normal";
                 m_dateTimezoneBesides = false;
                 dateRect = normalLayout(subtitleWidth, subtitleHeight, contentsRect);
             } else {
                 dateRect = sideBySideLayout(subtitleWidth, subtitleHeight, contentsRect);
             }
         } else {
-            /* kDebug(96669) << "checking timezone placement"
+            /* kDebug() << "checking timezone placement"
                           << contentsRect.height() << dateRect.height() << subtitleHeight
                           << smallFont.pixelSize() << smallFont.pointSize();*/
             if (contentsRect.height() - subtitleHeight < smallFont.pixelSize() && formFactor() == Plasma::Horizontal) {
                 // to small to display the time on top of the date/timezone
                 // put them side by side
-                // kDebug(96669) << "switching to s-b-s";
+                // kDebug() << "switching to s-b-s";
                 m_dateTimezoneBesides = true;
                 dateRect = sideBySideLayout(subtitleWidth, subtitleHeight, contentsRect);
             } else {
@@ -569,10 +569,10 @@ void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, 
     } else {
         m_timeRect = contentsRect;
     }
-    // kDebug(96669) << "timeRect: " << m_timeRect;
+    // kDebug() << "timeRect: " << m_timeRect;
     // p->fillRect(timeRect, QBrush(QColor("red")));
 
-    // kDebug(96669) << m_time;
+    // kDebug() << m_time;
     // Choose a relatively big font size to start with
     m_plainClockFont.setPointSizeF(qMax(m_timeRect.height(), KGlobalSettings::smallestReadableFont().pointSize()));
     preparePainter(p, m_timeRect, m_plainClockFont, fakeTimeString, true);
