@@ -16,6 +16,8 @@ include_directories(
     ${KDE4_KDEUI_INCLUDES}
 )
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=900)
+
 set(KDESUDO_SRC
     main.cpp
     kdesudo.cpp

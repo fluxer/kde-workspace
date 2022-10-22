@@ -41,7 +41,7 @@ namespace KDESu
 #ifdef Q_WS_X11
             d->m_Display = qgetenv("DISPLAY");
             if (d->m_Display.isEmpty()) {
-                kError(900) << "$DISPLAY is not set.\n";
+                kError() << "$DISPLAY is not set.\n";
                 return;
             }
             QByteArray disp = d->m_Display;
@@ -52,18 +52,18 @@ namespace KDESu
             QProcess proc;
             proc.start("xauth", QStringList() << "list" << disp);
             if (!proc.waitForStarted()) {
-                kError(900) << "Could not run xauth.\n";
+                kError() << "Could not run xauth.\n";
                 return;
             }
             proc.waitForReadyRead(100);
             QByteArray output = proc.readLine().simplified();
             if (output.isEmpty()) {
-                kWarning(900) << "No X authentication info set for display " <<
+                kWarning() << "No X authentication info set for display " <<
                               d->m_Display << endl; return;
             }
             QList<QByteArray> lst = output.split(' ');
             if (lst.count() != 3) {
-                kError(900) << "parse error.\n";
+                kError() << "parse error.\n";
                 return;
             }
             d->m_DisplayAuth = (lst[1] + ' ' + lst[2]);
