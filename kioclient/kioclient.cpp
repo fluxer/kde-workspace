@@ -287,7 +287,7 @@ bool ClientApp::doIt()
 
     // KIO needs dbus (for uiserver communication)
     if (!QDBusConnection::sessionBus().isConnected())
-        kFatal(101) << "Session bus not found" ;
+        kFatal() << "Session bus not found" ;
 
 #ifdef KIOCLIENT_AS_KDEOPEN
     return app.kde_open(args->url(0), QByteArray(), false);

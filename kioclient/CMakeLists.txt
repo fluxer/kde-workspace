@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=101)
+
 set(kioclient_SRCS kioclient.cpp )
 add_executable(kioclient ${kioclient_SRCS})
 target_compile_definitions(kioclient PRIVATE -DKIOCLIENT_AS_KIOCLIENT)
