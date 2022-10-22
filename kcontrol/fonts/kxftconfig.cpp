@@ -229,7 +229,7 @@ KXftConfig::KXftConfig()
           : m_doc("fontconfig")
           , m_file(getConfigFile())
 {
-    kDebug(1208) << "Using fontconfig file:" << m_file;
+    kDebug() << "Using fontconfig file:" << m_file;
     m_antiAliasing = aliasingEnabled();
     reset();
 }
