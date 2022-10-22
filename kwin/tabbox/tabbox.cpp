@@ -842,7 +842,7 @@ static bool areKeySymXsDepressed(bool bAll, const uint keySyms[], int nKeySyms) 
     char keymap[32];
     ::memset(keymap, 0, sizeof(keymap) * sizeof(char));
 
-    kDebug(125) << "areKeySymXsDepressed: " << (bAll ? "all of " : "any of ") << nKeySyms;
+    kDebug(1212) << "areKeySymXsDepressed: " << (bAll ? "all of " : "any of ") << nKeySyms;
 
     XQueryKeymap(display(), keymap);
 
@@ -856,7 +856,7 @@ static bool areKeySymXsDepressed(bool bAll, const uint keySyms[], int nKeySyms) 
         if (i < 0 || i >= 32)
             return false;
 
-        kDebug(125) << iKeySym << ": keySymX=0x" << QString::number(keySymX, 16)
+        kDebug(1212) << iKeySym << ": keySymX=0x" << QString::number(keySymX, 16)
                     << " i=" << i << " mask=0x" << QString::number(mask, 16)
                     << " keymap[i]=0x" << QString::number(keymap[i], 16) << endl;
 
@@ -1339,7 +1339,7 @@ void TabBox::keyPress(int keyQt)
                 backwardShortcut = m_cutWalkThroughCurrentAppWindowsAlternativeReverse;
                 break;
             default:
-                kDebug(125) << "Invalid TabBoxMode";
+                kDebug(1212) << "Invalid TabBoxMode";
                 return;
         }
         forward = forwardShortcut.contains(keyQt);
@@ -1369,7 +1369,7 @@ void TabBox::keyPress(int keyQt)
             }
         }
         if (forward || backward) {
-            kDebug(125) << "== " << forwardShortcut.toString()
+            kDebug(1212) << "== " << forwardShortcut.toString()
                         << " or " << backwardShortcut.toString() << endl;
             KDEWalkThroughWindows(forward);
         }
