@@ -84,13 +84,13 @@ bool KCMInit::runModule(const QString &libName, KService::Ptr service)
         void *init = lib.resolve(kcminit.toUtf8());
         if (init) {
             // initialize the module
-            kDebug(1208) << "Initializing " << libName << ": " << kcminit;
+            kDebug() << "Initializing " << libName << ": " << kcminit;
 
             void (*func)() = (void(*)())init;
             func();
             return true;
         } else {
-            kDebug(1208) << "Module" << libName << "does not actually have a kcminit function";
+            kDebug() << "Module" << libName << "does not actually have a kcminit function";
         }
     }
     return false;
@@ -170,7 +170,7 @@ KCMInit::KCMInit( KCmdLineArgs* args )
 
     KService::Ptr serv = KService::serviceByStorageId( module );
     if ( !serv || serv->library().isEmpty() ) {
-      kError(1208) << i18n("Module %1 not found", module) << endl;
+      kError() << i18n("Module %1 not found", module) << endl;
       return;
     } else
       list.append(serv);

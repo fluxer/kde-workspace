@@ -1,5 +1,7 @@
 ########### next target ###############
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=90250)
+
 add_executable(kcminit main.cpp)
 
 target_link_libraries(kcminit
