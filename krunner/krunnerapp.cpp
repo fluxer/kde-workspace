@@ -217,7 +217,7 @@ void KRunnerApp::showTaskManager()
 
 void KRunnerApp::showTaskManagerWithFilter(const QString &filterText)
 {
-    //kDebug(1204) << "Launching KSysGuard...";
+    //kDebug() << "Launching KSysGuard...";
     if (!m_tasks) {
         m_tasks = new KSystemActivityDialog;
         connect(m_tasks, SIGNAL(finished()),
