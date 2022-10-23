@@ -19,6 +19,7 @@
 
 
 #include "filecache.h"
+#include "kio_mtp.h"
 
 #include <KDebug>
 

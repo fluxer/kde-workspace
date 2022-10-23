@@ -21,8 +21,6 @@
 #ifndef FILECACHE_H
 #define FILECACHE_H
 
-#define KIO_MTP                     7000
-
 #include <stdint.h>
 
 #include <QDateTime>
