@@ -193,7 +193,7 @@ int main(int _argc, char *_argv[])
 
     if (args->isSet("list"))
     {
-        std::cout << i18n("The following modules are available:").toLocal8Bit().data() << endl;
+        std::cout << i18n("The following modules are available:").toLocal8Bit().data() << std::endl;
 
         listModules();
 
@@ -214,7 +214,7 @@ int main(int _argc, char *_argv[])
                          .arg(!(*it)->comment().isEmpty() ? (*it)->comment()
                                  : i18n("No description available"));
 
-            std::cout << entry.toLocal8Bit().data() << endl;
+            std::cout << entry.toLocal8Bit().data() << std::endl;
         }
         return 0;
     }
