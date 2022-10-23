@@ -44,13 +44,12 @@
 #include <QDBusConnectionInterface>
 #include <QDesktopWidget>
 
+#include <unistd.h>
 #include <iostream>
 
 #if defined Q_WS_X11 && ! defined K_WS_QTONLY
 #include <netwm.h>
 #endif
-
-#include <unistd.h>
 
 using namespace std;
 
@@ -146,14 +145,14 @@ bool sendVisualNotification(const QString &text, const QString &title, const QSt
 static void outputStringList(const QStringList &list, bool separateOutput)
 {
     if ( separateOutput) {
-	for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
-	    cout << (*it).toLocal8Bit().data() << endl;
-	}
+        for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+            cout << (*it).toLocal8Bit().data() << endl;
+        }
     } else {
-	for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
-	    cout << (*it).toLocal8Bit().data() << " ";
-	}
-	cout << endl;
+        for ( QStringList::ConstIterator it = list.begin(); it != list.end(); ++it ) {
+            cout << (*it).toLocal8Bit().data() << " ";
+        }
+        cout << endl;
     }
 }
 
@@ -434,25 +433,24 @@ static int directCommand(KCmdLineArgs *args)
     }
 
     // --textinputbox file [width] [height]
-    if (args->isSet("textinputbox"))
-    {
-      int w = 400;
-      int h = 200;
+    if (args->isSet("textinputbox")) {
+        int w = 400;
+        int h = 200;
 
-      if (args->count() >= 3) {
-	w = args->arg(1).toInt();
-	h = args->arg(2).toInt();
-      }
+        if (args->count() >= 3) {
+            w = args->arg(1).toInt();
+            h = args->arg(2).toInt();
+        }
 
-      QString init;
-      if (args->count() >= 1) {
-	  init = Widgets::parseString(args->arg(0));
-      }
+        QString init;
+        if (args->count() >= 1) {
+            init = Widgets::parseString(args->arg(0));
+        }
 
-      QString result;
-      int ret = Widgets::textInputBox(0, w, h, title, Widgets::parseString(args->getOption("textinputbox")), init, result);
-      cout << qPrintable(result) << endl;
-      return ret;
+        QString result;
+        int ret = Widgets::textInputBox(0, w, h, title, Widgets::parseString(args->getOption("textinputbox")), init, result);
+        cout << qPrintable(result) << endl;
+        return ret;
     }
 
     // --combobox <text> item [item] ..."
@@ -463,11 +461,11 @@ static int directCommand(KCmdLineArgs *args)
                 list.append(args->arg(i));
             }
             const QString text = Widgets::parseString(args->getOption("combobox"));
-	    if (args->isSet("default")) {
-	        defaultEntry = args->getOption("default");
-	    }
+            if (args->isSet("default")) {
+                defaultEntry = args->getOption("default");
+            }
             QString result;
-	    const bool retcode = Widgets::comboBox(0, title, text, list, defaultEntry, result);
+            const bool retcode = Widgets::comboBox(0, title, text, list, defaultEntry, result);
             cout << result.toLocal8Bit().data() << endl;
             return retcode ? 0 : 1;
         }
@@ -482,14 +480,14 @@ static int directCommand(KCmdLineArgs *args)
                 list.append(args->arg(i));
             }
             const QString text = Widgets::parseString(args->getOption("menu"));
-	    if (args->isSet("default")) {
-	        defaultEntry = args->getOption("default");
-	    }
+            if (args->isSet("default")) {
+                defaultEntry = args->getOption("default");
+            }
             QString result;
             const bool retcode = Widgets::listBox(0, title, text, list, defaultEntry, result);
             if (1 == retcode) { // OK was selected
-	        cout << result.toLocal8Bit().data() << endl;
-	    }
+                cout << result.toLocal8Bit().data() << endl;
+            }
             return retcode ? 0 : 1;
         }
         return -1;
@@ -508,10 +506,11 @@ static int directCommand(KCmdLineArgs *args)
 
             const bool retcode = Widgets::checkList(0, title, text, list, separateOutput, result);
 
-            for (int i=0; i<result.count(); i++)
+            for (int i=0; i<result.count(); i++) {
                 if (!result.at(i).toLocal8Bit().isEmpty()) {
-		    cout << result.at(i).toLocal8Bit().data() << endl;
-		}
+                    cout << result.at(i).toLocal8Bit().data() << endl;
+                }
+            }
             exit( retcode ? 0 : 1 );
         }
         return -1;
@@ -542,32 +541,32 @@ static int directCommand(KCmdLineArgs *args)
         if (args->count() >= 1)  {
             filter = Widgets::parseString(args->arg(0));
         }
-	KFileDialog dlg( startDir, filter, 0 );
-	dlg.setOperationMode( KFileDialog::Opening );
-
-	if (args->isSet("multiple")) {
-	    dlg.setMode(KFile::Files | KFile::LocalOnly);
-	} else {
-	    dlg.setMode(KFile::File | KFile::LocalOnly);
-	}
-	Widgets::handleXGeometry(&dlg);
-	kapp->setTopWidget( &dlg );
-	dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Open") : title);
-	dlg.exec();
+        KFileDialog dlg( startDir, filter, 0 );
+        dlg.setOperationMode( KFileDialog::Opening );
 
         if (args->isSet("multiple")) {
-	    QStringList result = dlg.selectedFiles();
-	    if ( !result.isEmpty() ) {
-		outputStringList( result, separateOutput );
-		return 0;
-	    }
-	} else {
-	    QString result = dlg.selectedFile();
-	    if (!result.isEmpty())  {
-		cout << result.toLocal8Bit().data() << endl;
-		return 0;
-	    }
-	}
+            dlg.setMode(KFile::Files | KFile::LocalOnly);
+        } else {
+            dlg.setMode(KFile::File | KFile::LocalOnly);
+        }
+        Widgets::handleXGeometry(&dlg);
+        kapp->setTopWidget( &dlg );
+        dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Open") : title);
+        dlg.exec();
+
+        if (args->isSet("multiple")) {
+            QStringList result = dlg.selectedFiles();
+            if ( !result.isEmpty() ) {
+                outputStringList( result, separateOutput );
+                return 0;
+            }
+        } else {
+            QString result = dlg.selectedFile();
+            if (!result.isEmpty())  {
+                cout << result.toLocal8Bit().data() << endl;
+                return 0;
+            }
+        }
         return 1; // canceled
     }
 
@@ -577,44 +576,43 @@ static int directCommand(KCmdLineArgs *args)
     if ( (args->isSet("getsavefilename") ) || (args->isSet("getsaveurl") ) ) {
         QString startDir;
         QString filter;
-	if ( args->isSet("getsavefilename") ) {
-	    startDir = args->getOption("getsavefilename");
-	} else {
-	    startDir = args->getOption("getsaveurl");
-	}
+        if ( args->isSet("getsavefilename") ) {
+            startDir = args->getOption("getsavefilename");
+        } else {
+            startDir = args->getOption("getsaveurl");
+        }
         if (args->count() >= 1)  {
             filter = Widgets::parseString(args->arg(0));
         }
-	// copied from KFileDialog::getSaveFileName(), so we can add geometry
-	bool specialDir = ( startDir.at(0) == ':' );
-	if ( !specialDir ) {
-	    KFileItem kfi(KFileItem::Unknown, KFileItem::Unknown, KUrl(startDir));
-	    specialDir = kfi.isDir();
-	}
-	KFileDialog dlg( specialDir ? startDir : QString(), filter, 0 );
-	if ( !specialDir )
-	    dlg.setSelection( startDir );
-	dlg.setOperationMode( KFileDialog::Saving );
-	Widgets::handleXGeometry(&dlg);
-	kapp->setTopWidget( &dlg );
-	dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Save As") : title);
-	dlg.exec();
+        // copied from KFileDialog::getSaveFileName(), so we can add geometry
+        bool specialDir = ( startDir.at(0) == ':' );
+        if ( !specialDir ) {
+            KFileItem kfi(KFileItem::Unknown, KFileItem::Unknown, KUrl(startDir));
+            specialDir = kfi.isDir();
+        }
+        KFileDialog dlg( specialDir ? startDir : QString(), filter, 0 );
+        if ( !specialDir )
+            dlg.setSelection( startDir );
+        dlg.setOperationMode( KFileDialog::Saving );
+        Widgets::handleXGeometry(&dlg);
+        kapp->setTopWidget( &dlg );
+        dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Save As") : title);
+        dlg.exec();
 
-	if ( args->isSet("getsaveurl") ) {
-	    KUrl result = dlg.selectedUrl();
-	    if ( result.isValid())  {
-
-		cout << result.url().toLocal8Bit().data() << endl;
-		return 0;
-	    }
-	} else { // getsavefilename
-	    QString result = dlg.selectedFile();
-	    if (!result.isEmpty())  {
-		KRecentDocument::add(result);
-		cout << result.toLocal8Bit().data() << endl;
-		return 0;
-	    }
-	}
+        if ( args->isSet("getsaveurl") ) {
+            KUrl result = dlg.selectedUrl();
+            if ( result.isValid())  {
+                cout << result.url().toLocal8Bit().data() << endl;
+                return 0;
+            }
+        } else { // getsavefilename
+            QString result = dlg.selectedFile();
+            if (!result.isEmpty())  {
+                KRecentDocument::add(result);
+                cout << result.toLocal8Bit().data() << endl;
+                return 0;
+            }
+        }
         return 1; // canceled
     }
 
@@ -652,32 +650,32 @@ static int directCommand(KCmdLineArgs *args)
         if (args->count() >= 1)  {
             filter = Widgets::parseString(args->arg(0));
         }
-	KFileDialog dlg( startDir, filter, 0 );
-	dlg.setOperationMode( KFileDialog::Opening );
-
-	if (args->isSet("multiple")) {
-	    dlg.setMode(KFile::Files);
-	} else {
-	    dlg.setMode(KFile::File);
-	}
-	Widgets::handleXGeometry(&dlg);
-	kapp->setTopWidget( &dlg );
-	dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Open") : title);
-	dlg.exec();
+        KFileDialog dlg( startDir, filter, 0 );
+        dlg.setOperationMode( KFileDialog::Opening );
 
         if (args->isSet("multiple")) {
-	    KUrl::List result = dlg.selectedUrls();
-	    if ( !result.isEmpty() ) {
-		outputStringList( result.toStringList(), separateOutput );
-		return 0;
-	    }
-	} else {
-	    KUrl result = dlg.selectedUrl();
-	    if (!result.isEmpty())  {
-		cout << result.url().toLocal8Bit().data() << endl;
-		return 0;
-	    }
-	}
+            dlg.setMode(KFile::Files);
+        } else {
+            dlg.setMode(KFile::File);
+        }
+        Widgets::handleXGeometry(&dlg);
+        kapp->setTopWidget( &dlg );
+        dlg.setCaption(title.isEmpty() ? i18nc("@title:window", "Open") : title);
+        dlg.exec();
+
+        if (args->isSet("multiple")) {
+            KUrl::List result = dlg.selectedUrls();
+            if ( !result.isEmpty() ) {
+                outputStringList( result.toStringList(), separateOutput );
+                return 0;
+            }
+        } else {
+            KUrl result = dlg.selectedUrl();
+            if (!result.isEmpty())  {
+                cout << result.url().toLocal8Bit().data() << endl;
+                return 0;
+            }
+        }
         return 1; // canceled
     }
 
@@ -712,17 +710,17 @@ static int directCommand(KCmdLineArgs *args)
             ( contextStr == QLatin1String( "StatusIcon" ) ) ?    KIconLoader::StatusIcon :
             /* else */                                           KIconLoader::Any;
 
-	KIconDialog dlg((QWidget*)0L);
-	kapp->setTopWidget( &dlg );
-	dlg.setup( group, context);
+        KIconDialog dlg((QWidget*)0L);
+        kapp->setTopWidget( &dlg );
+        dlg.setup( group, context);
         dlg.setIconSize(KIconLoader::SizeHuge);
 
-	if (!title.isEmpty())
-	    dlg.setCaption(title);
+        if (!title.isEmpty())
+            dlg.setCaption(title);
 
-	Widgets::handleXGeometry(&dlg);
+        Widgets::handleXGeometry(&dlg);
 
-	QString result = dlg.openDialog();
+        QString result = dlg.openDialog();
 
         if (!result.isEmpty())  {
             cout << result.toLocal8Bit().data() << endl;
