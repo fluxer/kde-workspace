@@ -29,7 +29,6 @@
 #include <QtCore/QProcess>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QTemporaryFile>
 #include <QtCore/QTextCodec>
 
 #include <kapplication.h>
@@ -42,6 +41,7 @@
 #include <kshell.h>
 #include <kstandarddirs.h>
 #include <kwindowsystem.h>
+#include <ktemporaryfile.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -137,11 +137,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
     // set the environment variables to reflect that.
     // Default cookie-timeout is 60 sec. .
     // 'man xauth' for more info on xauth cookies.
-
-    QTemporaryFile *tmpFile = new QTemporaryFile("/tmp/kdesudo-XXXXXX-xauth");
-    tmpFile->open();
-    QString m_tmpName = tmpFile->fileName();
-    delete tmpFile;
+    QString m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
     QByteArray disp = m_pCookie->display();
 
