@@ -137,7 +137,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
     // set the environment variables to reflect that.
     // Default cookie-timeout is 60 sec. .
     // 'man xauth' for more info on xauth cookies.
-    QString m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
+    m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
     QByteArray disp = m_pCookie->display();
 
