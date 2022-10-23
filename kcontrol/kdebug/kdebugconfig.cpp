@@ -192,6 +192,8 @@ void KCMDebug::save()
     topGroup.writeEntry("DisableAll", m_disableAll->isChecked());
     pConfig->sync();
 
+    kClearDebugConfig();
+
     QDBusMessage msg = QDBusMessage::createSignal("/", "org.kde.KDebug", "configChanged");
     if (!QDBusConnection::sessionBus().send(msg))
     {
