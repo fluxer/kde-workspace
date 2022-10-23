@@ -39,18 +39,15 @@
 #include <kiconloader.h>
 #include <klocale.h>
 
-#include <QtCore/QTimer>
+#include <QTimer>
+#include <QDBusConnection>
+#include <QDBusConnectionInterface>
 #include <QDesktopWidget>
 
 #include <iostream>
 
 #if defined Q_WS_X11 && ! defined K_WS_QTONLY
 #include <netwm.h>
-#endif
-
-#ifdef QT_DBUS_LIB
-#include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusConnectionInterface>
 #endif
 
 #include <unistd.h>
@@ -98,7 +95,6 @@ bool WinIdEmbedder::eventFilter(QObject *o, QEvent *e)
  */
 bool sendVisualNotification(const QString &text, const QString &title, const QString &icon, int timeout)
 {
-#ifdef QT_DBUS_LIB
   const QString dbusServiceName = "org.freedesktop.Notifications";
   const QString dbusInterfaceName = "org.freedesktop.Notifications";
   const QString dbusPath = "/org/freedesktop/Notifications";
@@ -144,7 +140,6 @@ bool sendVisualNotification(const QString &text, const QString &title, const QSt
   } else {
     //kDebug() << "Unexpected reply type";
   }
-#endif
   return false;
 }
 
