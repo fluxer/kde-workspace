@@ -119,6 +119,13 @@
       <string>User Information</string>
      </property>
      <layout class="QGridLayout">
+      <item row="0" column="1">
+       <widget class="KLineEdit" name="leRealname">
+        <property name="showClearButton" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="lblRealName">
         <property name="text">
@@ -132,13 +139,6 @@
         </property>
         <property name="buddy">
          <cstring>leRealname</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="KLineEdit" name="leRealname">
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -165,6 +165,23 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="KLineEdit" name="leEmail">
+        <property name="showClearButton" stdset="0">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1">
+       <widget class="QLabel" name="lblUID">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="wordWrap">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="lblEmail">
         <property name="text">
@@ -178,13 +195,6 @@
         </property>
         <property name="buddy">
          <cstring>leEmail</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="KLineEdit" name="leEmail">
-        <property name="showClearButton" stdset="0">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -211,7 +221,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="0">
+      <item row="5" column="0">
        <widget class="QLabel" name="lblUIDTell">
         <property name="text">
          <string>User ID:</string>
@@ -225,12 +235,31 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QLabel" name="lblUID">
+       <widget class="QComboBox" name="leSSL">
+        <item>
+         <property name="text">
+          <string>No</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Try</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Yes</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lblSSL">
         <property name="text">
-         <string/>
+         <string>Use SSL:</string>
         </property>
-        <property name="wordWrap">
-         <bool>false</bool>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>

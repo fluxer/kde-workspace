@@ -76,6 +76,7 @@ KCMUserAccount::KCMUserAccount( QWidget *parent, const QVariantList &)
     connect( _mw->leOrganization, SIGNAL(textChanged(QString)), SLOT(changed()));
     connect( _mw->leEmail, SIGNAL(textChanged(QString)), SLOT(changed()));
     connect( _mw->leSMTP, SIGNAL(textChanged(QString)), SLOT(changed()));
+    connect( _mw->leSSL, SIGNAL(currentIndexChanged(QString)), SLOT(changed()));
 
     _ku = new KUser();
     _kes = new KEMailSettings();
@@ -152,6 +153,14 @@ void KCMUserAccount::load()
     _mw->leEmail->setText( _kes->getSetting( KEMailSettings::EmailAddress ));
     _mw->leOrganization->setText( _kes->getSetting( KEMailSettings::Organization ));
     _mw->leSMTP->setText( _kes->getSetting( KEMailSettings::OutServer ));
+    const QString serverssl = _kes->getSetting( KEMailSettings::OutServerSSL );
+    const int sslmatchindex = _mw->leSSL->findText(serverssl, Qt::MatchFixedString);
+    if (sslmatchindex >= 0) {
+        _mw->leSSL->setCurrentIndex( sslmatchindex );
+    } else {
+        // try, same default as KEMail
+        _mw->leSSL->setCurrentIndex( 1 );
+    }
 
     // load user face
     _facePixmap = QPixmap( KCFGUserAccount::faceFile() );
@@ -239,6 +248,7 @@ void KCMUserAccount::save()
     _kes->setSetting( KEMailSettings::EmailAddress, _mw->leEmail->text() );
     _kes->setSetting( KEMailSettings::Organization, _mw->leOrganization->text() );
     _kes->setSetting( KEMailSettings::OutServer, _mw->leSMTP->text() );
+    _kes->setSetting( KEMailSettings::OutServerSSL, _mw->leSSL->currentText().toLower() );
 }
 
 void KCMUserAccount::changeFace(const QPixmap &pix)
