@@ -217,13 +217,12 @@ private:
     QList<KSMListener*> listener;
     QList<KSMClient*> clients;
 
-    enum State
-        {
+    enum State {
         Idle,
         LaunchingWM, AutoStart0, KcmInitPhase1, AutoStart1, Restoring, FinishingStartup, // startup
         Shutdown, Checkpoint, Killing, KillingWM, WaitingForKNotify, // shutdown
         ClosingSubSession, KillingSubSession, RestoringSubSession
-        };
+    };
     State state;
     bool dialogActive;
     bool saveSession;

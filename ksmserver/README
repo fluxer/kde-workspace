@@ -63,18 +63,7 @@ should be in startup.cpp and going down in that source file should
 follow the startup order (but note that this is just a documentation
 which may get outdated, so in case of doubts the source wins ;) ).
 
-The startkde scripts already launches kdeinit, which in turns launches
-KDE daemons like dbus daemon, klauncher and kded. Kded loads autoloaded
-kded modules, i.e. those that have X-KDE-Kded-autoload=true in .desktop
-files. The exact way autoloading works is controlled by X-KDE-Kded-phase=,
-which may be 0, 1 or 2 (the default). Kded phase 0 means the module is
-always loaded by kded, even outside of KDE session. It should used only
-by kded modules which must be always running. Kded phase 1 modules are
-loaded right after kded startup, but only during KDE startup, i.e. it is
-for modules that are always needed by the KDE session. Phase 2 modules
-will be loaded later. [More information about kded modules could be
-found in kdelibs/kded/HOWTO]
-
+The startkde scripts already launches kdeinit, which owns klauncher.
 Startkde also launches kcminit, which performs initialization done by kcontrol
 modules. There are three kcminit phases, 0, 1 and 2, controlled
 by X-KDE-Init-Phase= in the .desktop file, which defaults to 1. Phase 0 kcminit
@@ -85,7 +74,18 @@ modules kcminit returns and waits.
 
 When ksmserver is launched, the first thing it does is launching
 the window manager, as the WM is necessary before any windows are possibly
-shown. When the WM is ready, ksmserver tells klauncher to perform autostart
+shown. When the WM is ready, ksmserver launchers kded. Kded loads autoloaded
+kded modules, i.e. those that have X-KDE-Kded-autoload=true in .desktop
+files. The exact way autoloading works is controlled by X-KDE-Kded-phase=,
+which may be 0, 1 or 2 (the default). Kded phase 0 means the module is
+always loaded by kded, even outside of KDE session. It should used only
+by kded modules which must be always running. Kded phase 1 modules are
+loaded right after kded startup, but only during KDE startup, i.e. it is
+for modules that are always needed by the KDE session. Phase 2 modules
+will be loaded later. [More information about kded modules could be
+found in kdelibs/kded/HOWTO]
+
+The next thing ksmserver does is to tell klauncher to perform autostart
 phase 0 ($KDEHOME/share/autostart). There are 3 autostart phases, 0, 1 and 2,
 defined by X-KDE-autostart-phase, defaulting to 2. Phase 0 is reserved only
 for the actual visible base components of KDE, i.e. Plasma, in order to make

@@ -206,9 +206,16 @@ void KSMServer::autoStart0()
     if( !checkStartupSuspend())
         return;
     state = AutoStart0;
+
+    static const QString kdedInterface = QString::fromLatin1("org.kde.kded");
+    QDBusConnectionInterface* sessionInterface = QDBusConnection::sessionBus().interface();
+    if (!sessionInterface->isServiceRegistered(kdedInterface)) {
+        sessionInterface->startService(kdedInterface);
+    }
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << t.elapsed();
 #endif
+
     org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
     klauncher.autoStart((int)0);
 }
