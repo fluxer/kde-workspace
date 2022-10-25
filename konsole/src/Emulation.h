@@ -453,7 +453,7 @@ protected:
     //decodes an incoming C-style character stream into a unicode QString using
     //the current text codec.  (this allows for rendering of non-ASCII characters in text files etc.)
     const QTextCodec* _codec;
-    QTextDecoder* _decoder;
+    QTextConverter* _decoder;
     const KeyboardTranslator* _keyTranslator; // the keyboard layout
 
 protected slots:

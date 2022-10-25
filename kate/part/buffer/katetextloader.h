@@ -50,7 +50,7 @@ class TextLoader
       , m_eol (TextBuffer::eolUnknown) // no eol type detected atm
       , m_buffer (KATE_FILE_LOADER_BS, 0)
       , m_digest (KATE_HASH_ALGORITHM)
-      , m_converterState (0)
+      , m_converter (0)
       , m_bomFound (false)
       , m_firstRead (true)
     {
@@ -64,7 +64,7 @@ class TextLoader
     ~TextLoader ()
     {
       delete m_file;
-      delete m_converterState;
+      delete m_converter;
     }
 
     /**
@@ -82,8 +82,8 @@ class TextLoader
       m_lastLineStart = 0;
       m_eol = TextBuffer::eolUnknown;
       m_text.clear ();
-      delete m_converterState;
-      m_converterState = new QTextCodec::ConverterState (QTextCodec::ConvertInvalidToNull);
+      delete m_converter;
+      m_converter = 0;
       m_bomFound = false;
       m_firstRead = true;
 
@@ -208,7 +208,11 @@ class TextLoader
               }
 
               Q_ASSERT (m_codec);
-              QString unicode = m_codec->toUnicode (m_buffer.constData() + bomBytes, c - bomBytes, m_converterState);
+              if (!m_converter) {
+                m_converter = new QTextConverter(m_codec->name());
+                m_converter->setFlags(QTextConverter::ConvertInvalidToNull);
+              }
+              QString unicode = m_converter->toUnicode (m_buffer.constData() + bomBytes, c - bomBytes);
 
               // detect broken encoding
               for (int i = 0; i < unicode.size(); ++i) {
@@ -336,7 +340,7 @@ class TextLoader
     QByteArray m_buffer;
     QCryptographicHash m_digest;
     QString m_text;
-    QTextCodec::ConverterState *m_converterState;
+    QTextConverter *m_converter;
     bool m_bomFound;
     bool m_firstRead;
 };

@@ -1225,7 +1225,7 @@
     <item> QTextBrowser </item>
     <item> QTextCharFormat </item>
     <item> QTextCodec </item>
-    <item> QTextCodecPlugin </item>
+    <item> QTextConverter </item>
     <item> QTextCursor </item>
     <item> QTextDecoder </item>
     <item> QTextDocument </item>
