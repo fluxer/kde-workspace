@@ -26,10 +26,12 @@
 
 #include <kio/slavebase.h>
 
-// NOTE: keep in sync with kdelibs/kio/kio/previewjob.cpp
+// NOTE: keep in sync with:
+// kde-workspace/dolphin/src/settings/general/previewssettingspage.cpp
+// kdelibs/kio/kio/previewjob.cpp
 enum MaxPreviewSizes {
-    MaxLocalSize = 5, // 5 MB
-    MaxRemoteSize = 1 // 1 MB
+    MaxLocalSize = 20, // 20 MB
+    MaxRemoteSize = 5 // 5 MB
 };
 
 class ThumbCreator;

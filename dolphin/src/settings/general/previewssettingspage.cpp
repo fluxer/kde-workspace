@@ -46,10 +46,12 @@
 #include <QVBoxLayout>
 
 // default settings
-// NOTE: keep in sync with kdelibs/kio/kio/previewjob.cpp
+// NOTE: keep in sync with:
+// kdelibs/kio/kio/previewjob.cpp
+// kde-workspace/kioslave/thumbnail/thumbnail.h
 enum MaxPreviewSizes {
-    MaxLocalSize = 5, // 5 MB
-    MaxRemoteSize = 1 // 1 MB
+    MaxLocalSize = 20, // 20 MB
+    MaxRemoteSize = 5 // 5 MB
 };
 
 PreviewsSettingsPage::PreviewsSettingsPage(QWidget* parent) :
