@@ -236,6 +236,9 @@
       </item>
       <item row="4" column="1">
        <widget class="QComboBox" name="leSSL">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;No:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;No attempt to encrypt the connection will be made.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Try:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;An attempt to encrypt the connection will be made, proceeding even if that cannot be done.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Yes:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Connection will be encrypted or error will occurr.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
         <item>
          <property name="text">
           <string>No</string>
