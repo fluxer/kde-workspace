@@ -1255,7 +1255,7 @@ void KateViewConfig::readConfig ( const KConfigGroup &config)
   setDynWordWrapIndicators (config.readEntry( KEY_DYN_WORD_WRAP_INDICATORS, 1 ));
   setDynWordWrapAlignIndent (config.readEntry( KEY_DYN_WORD_WRAP_ALIGN_INDENT, 80 ));
 
-  setLineNumbers (config.readEntry( KEY_LINE_NUMBERS,  false));
+  setLineNumbers (config.readEntry( KEY_LINE_NUMBERS,  true));
 
   setScrollBarMarks (config.readEntry( KEY_SCROLL_BAR_MARKS,  false));
 
@@ -1269,7 +1269,7 @@ void KateViewConfig::readConfig ( const KConfigGroup &config)
 
   setIconBar (config.readEntry( KEY_ICON_BAR, false ));
 
-  setFoldingBar (config.readEntry( KEY_FOLDING_BAR, true));
+  setFoldingBar (config.readEntry( KEY_FOLDING_BAR, false));
 
   setLineModification (config.readEntry( KEY_LINE_MODIFICATION, false));
 
