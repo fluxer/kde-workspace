@@ -158,14 +158,14 @@ LaunchConfig::load()
   cb_taskbarButton->setChecked(taskbarButton);
 
   c= conf.group( "BusyCursorSettings" );
-  sb_cursorTimeout->setValue( c.readEntry( "Timeout", 30 ));
+  sb_cursorTimeout->setValue( c.readEntry( "Timeout", 10 ));
   if ( !busyCursor )
      cb_busyCursor->setCurrentIndex(0);
   else
      cb_busyCursor->setCurrentIndex(1);
 
   c= conf.group( "TaskbarButtonSettings" );
-  sb_taskbarTimeout->setValue( c.readEntry( "Timeout", 30 ));
+  sb_taskbarTimeout->setValue( c.readEntry( "Timeout", 10 ));
 
   slotBusyCursor( cb_busyCursor->currentIndex() );
   slotTaskbarButton( taskbarButton );
@@ -206,8 +206,8 @@ LaunchConfig::defaults()
   cb_busyCursor->setCurrentIndex(2);
   cb_taskbarButton->setChecked( (bool)(Default & TaskbarButton) );
 
-  sb_cursorTimeout->setValue( 30 );
-  sb_taskbarTimeout->setValue( 30 );
+  sb_cursorTimeout->setValue( 10 );
+  sb_taskbarTimeout->setValue( 10 );
 
   slotBusyCursor( 2 );
   slotTaskbarButton( (bool)(Default & TaskbarButton) );
@@ -228,10 +228,10 @@ LaunchConfig::checkChanged()
     c.readEntry("TaskbarButton", (bool)(Default & TaskbarButton));
 
   c = conf.group("BusyCursorSettings");
-  unsigned int savedCursorTimeout = c.readEntry( "Timeout", 30 );
+  unsigned int savedCursorTimeout = c.readEntry( "Timeout", 10 );
 
   c = conf.group("TaskbarButtonSettings");
-  unsigned int savedTaskbarTimeout = c.readEntry( "Timeout", 30 );
+  unsigned int savedTaskbarTimeout = c.readEntry( "Timeout", 10 );
 
   bool newBusyCursor =cb_busyCursor->currentIndex()!=0;
 

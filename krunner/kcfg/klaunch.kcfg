@@ -8,25 +8,11 @@
   
   <group name="BusyCursorSettings">
     <entry key="Timeout" type="Int">
-      <default>30</default>
+      <default>10</default>
       <label></label>
       <whatsthis></whatsthis>
       <!-- startupid.cpp:58 -->
-      <!--     startup_info.setTimeout( c.readUnsignedNumEntry( "Timeout", 30 )); -->
-    </entry>
-    <entry key="Blinking" type="Bool">
-      <default>false</default>
-      <label></label>
-      <whatsthis></whatsthis>
-      <!-- startupid.cpp:59 -->
-      <!--     blinking = c.readEntry( "Blinking", QVariant(false )).toBool(); -->
-    </entry>
-    <entry key="Bouncing" type="Bool">
-      <default>true</default>
-      <label></label>
-      <whatsthis></whatsthis>
-      <!-- startupid.cpp:60 -->
-      <!--     bouncing = c.readEntry( "Bouncing", QVariant(true )).toBool(); -->
+      <!--     startup_info.setTimeout( c.readUnsignedNumEntry( "Timeout", 10 )); -->
     </entry>
   </group>
   <group name="FeedbackStyle">

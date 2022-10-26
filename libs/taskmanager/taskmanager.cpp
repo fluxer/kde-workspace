@@ -172,7 +172,7 @@ void TaskManager::configureStartup()
     }
 
     c = KConfigGroup(&_c, "TaskbarButtonSettings");
-    d->startupInfo->setTimeout(c.readEntry("Timeout", 30));
+    d->startupInfo->setTimeout(c.readEntry("Timeout", 10));
 }
 
 Task *TaskManager::findTask(WId w)
