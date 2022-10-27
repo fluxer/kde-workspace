@@ -71,11 +71,12 @@ public:
     Private(ClockApplet *clockapplet)
         : q(clockapplet),
           timezone(ClockApplet::localTimezoneUntranslated()),
-          clipboardMenu(0),
-          adjustSystemTimeAction(0),
-          label(0),
-          calendarWidget(0),
-          forceTzDisplay(false)
+          clipboardMenu(nullptr),
+          adjustSystemTimeAction(nullptr),
+          label(nullptr),
+          calendarWidget(nullptr),
+          forceTzDisplay(false),
+          kspeech(nullptr)
     {}
 
     ClockApplet *q;
@@ -94,6 +95,7 @@ public:
     QTime lastTimeSeen;
     bool forceTzDisplay : 1;
     bool kttsAvailable;
+    KSpeech *kspeech;
 
     QDate addTzToTipText(QString &subText, const Plasma::DataEngine::Data &data, const QDate &prevDate, bool highlight)
     {
@@ -227,9 +229,11 @@ void ClockApplet::speakTime(const QTime &time)
                                 time.minute());
             }
         }
-        KSpeech kspeech(this);
-        kspeech.setSpeechID(QString::fromLatin1("plasmaclock"));
-        kspeech.say(text);
+        if (!d->kspeech) {
+            d->kspeech = new KSpeech(this);
+            d->kspeech->setSpeechID(QString::fromLatin1("plasmaclock"));
+        }
+        d->kspeech->say(text);
     }
 }
 
