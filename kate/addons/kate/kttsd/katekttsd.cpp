@@ -51,7 +51,8 @@ Kate::PluginView *KateKttsdPlugin::createView (Kate::MainWindow *mainWindow)
 
 KateKttsdPluginView::KateKttsdPluginView( Kate::MainWindow *mw )
     : Kate::PluginView (mw),
-    Kate::XMLGUIClient(KateKttsdFactory::componentData())
+    Kate::XMLGUIClient(KateKttsdFactory::componentData()),
+    m_kspeech(nullptr)
 {
     KGlobal::locale()->insertCatalog("kttsd");
     KAction *a = actionCollection()->addAction("tools_kttsd");
@@ -90,8 +91,11 @@ void KateKttsdPluginView::slotReadOut()
         return;
     }
 
-    KSpeech kspeech(this);
-    kspeech.setSpeechID(QString::fromLatin1("kate"));
-    kspeech.say(text);
+    if (!m_kspeech) {
+        m_kspeech = new KSpeech(this);
+        m_kspeech->setSpeechID(QString::fromLatin1("kate"));
+    }
+
+    m_kspeech->say(text);
 }
 

@@ -23,29 +23,32 @@
 #include <ktexteditor/plugin.h>
 #include <ktexteditor/view.h>
 #include <kate/plugin.h>
+#include <kspeech.h>
 
 #include <QtCore/QObject>
 
 class KateKttsdPlugin : public Kate::Plugin
 {
     Q_OBJECT
+public:
+    explicit KateKttsdPlugin( QObject* parent = 0, const QList<QVariant>& = QList<QVariant>() );
+    virtual ~KateKttsdPlugin() {};
 
-    public:
-        explicit KateKttsdPlugin( QObject* parent = 0, const QList<QVariant>& = QList<QVariant>() );
-        virtual ~KateKttsdPlugin() {};
-        Kate::PluginView *createView(Kate::MainWindow *mainWindow);
+    Kate::PluginView *createView(Kate::MainWindow *mainWindow);
 };
 
 class KateKttsdPluginView : public Kate::PluginView, public Kate::XMLGUIClient
 {
     Q_OBJECT
-
-    public:
-        explicit KateKttsdPluginView(Kate::MainWindow *mw );
+public:
+    explicit KateKttsdPluginView(Kate::MainWindow *mw );
     ~KateKttsdPluginView();
 
-    public slots:
-        void slotReadOut();
+public slots:
+    void slotReadOut();
+
+private:
+    KSpeech *m_kspeech;
 };
 
 #endif      // _KATEKTTSD_H_
