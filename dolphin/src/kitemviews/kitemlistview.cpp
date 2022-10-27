@@ -1105,7 +1105,8 @@ void KItemListView::slotItemsRemoved(const KItemRangeList& itemRanges)
         QVector<int> itemsToMove;
 
         // Remove all KItemListWidget instances that got deleted
-        foreach (KItemListWidget* widget, m_visibleItems) {
+        const QHash<int, KItemListWidget*> prevVisibleItems(m_visibleItems);
+        foreach (KItemListWidget* widget, prevVisibleItems) {
             const int i = widget->index();
             if (i < firstRemovedIndex) {
                 continue;
