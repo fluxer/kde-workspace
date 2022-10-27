@@ -50,7 +50,7 @@ KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const
 
 KMediaPlayerPart::~KMediaPlayerPart()
 {
-    m_player->deleteLater();
+    delete m_player;
 }
 
 bool KMediaPlayerPart::openUrl(const KUrl &url)
