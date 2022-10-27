@@ -26,14 +26,6 @@
 #include <config-workspace.h>
 
 #include "krunnerapp.h"
-#ifdef Q_WS_X11
-#include "startupid.h"
-#endif
-#include "klaunchsettings.h" // contains startup config
-
-#ifdef Q_WS_X11
-#include <X11/extensions/Xrender.h>
-#endif
 
 static const char description[] = I18N_NOOP( "KDE run command interface" );
 

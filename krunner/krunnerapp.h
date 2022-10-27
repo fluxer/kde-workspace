@@ -31,7 +31,6 @@ namespace Plasma
 
 class KRunnerDialog;
 class KSystemActivityDialog;
-class StartupId;
 
 class KRunnerApp : public KUniqueApplication
 {
@@ -50,7 +49,6 @@ public:
 public Q_SLOTS:
     // DBUS interface. if you change these methods, you MUST run:
     // qdbuscpp2xml -m krunnerapp.h -o dbus/org.kde.krunner.App.xml
-    Q_SCRIPTABLE void initializeStartupNotification();
 
     /** Show taskmanager */
     Q_SCRIPTABLE void showTaskManager();
@@ -98,7 +96,6 @@ private:
     KActionCollection *m_actionCollection;
     KRunnerDialog *m_interface;
     KSystemActivityDialog *m_tasks;
-    StartupId *m_startupId;
     bool m_firstTime;
 };
 

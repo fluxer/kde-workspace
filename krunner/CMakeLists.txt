@@ -10,7 +10,7 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
 
-set(krunner_KCFG_SRCS kcfg/krunnersettings.kcfgc kcfg/klaunchsettings.kcfgc)
+set(krunner_KCFG_SRCS kcfg/krunnersettings.kcfgc)
 set(krunner_dbusAppXML dbus/org.kde.krunner.App.xml)
 
 
@@ -50,7 +50,6 @@ kde4_add_dbus_service(dbus/org.kde.krunner.service.in)
 set(krunner_SRCS
     ${krunner_SRCS}
     ksystemactivitydialog.cpp
-    startupid.cpp
 )
 
 add_executable(krunner ${krunner_SRCS})
@@ -74,5 +73,4 @@ endif()
 install(TARGETS krunner         ${INSTALL_TARGETS_DEFAULT_ARGS} )
 
 install(FILES krunner.desktop  DESTINATION  ${KDE4_AUTOSTART_INSTALL_DIR})
-install(FILES kcfg/klaunch.kcfg  DESTINATION  ${KDE4_KCFG_INSTALL_DIR})
 install(FILES ${krunner_dbusAppXML} DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR} )

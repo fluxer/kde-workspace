@@ -41,10 +41,6 @@
 #include "ksystemactivitydialog.h"
 #include "interfaces/default/interface.h"
 #include "interfaces/quicksand/qs_dialog.h"
-#ifdef Q_WS_X11
-#include "startupid.h"
-#endif
-#include "klaunchsettings.h"
 #include "krunnersettings.h"
 
 #ifdef Q_WS_X11
@@ -64,7 +60,6 @@ KRunnerApp::KRunnerApp()
     : KUniqueApplication(),
       m_interface(0),
       m_tasks(0),
-      m_startupId(NULL),
       m_firstTime(true)
 {
     initialize();
@@ -99,7 +94,6 @@ void KRunnerApp::initialize()
 
     setQuitOnLastWindowClosed(false);
     KCrash::setFlags(KCrash::AutoRestart);
-    initializeStartupNotification();
 
     connect(KRunnerSettings::self(), SIGNAL(configChanged()), this, SLOT(reloadConfig()));
 
@@ -190,24 +184,6 @@ void KRunnerApp::querySingleRunner(const QString& runnerId, const QString &term)
 QStringList KRunnerApp::singleModeAdvertisedRunnerIds() const
 {
     return m_runnerManager->singleModeAdvertisedRunnerIds();
-}
-
-void KRunnerApp::initializeStartupNotification()
-{
-    // Startup notification
-    KLaunchSettings::self()->readConfig();
-#ifdef Q_WS_X11
-    if (!KLaunchSettings::busyCursor()) {
-        delete m_startupId;
-        m_startupId = NULL;
-    } else {
-        if (m_startupId == NULL ) {
-            m_startupId = new StartupId;
-        }
-
-        m_startupId->configure();
-    }
-#endif
 }
 
 void KRunnerApp::showTaskManager()

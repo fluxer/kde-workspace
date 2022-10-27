@@ -192,9 +192,6 @@ LaunchConfig::save()
 
   emit changed( false );
 
-  org::kde::krunner::App desktop("org.kde.krunner", "/App", QDBusConnection::sessionBus());
-  desktop.initializeStartupNotification();
-
   org::kde::KWin kwin("org.kde.kwin", "/KWin", QDBusConnection::sessionBus());
   kwin.reconfigureEffect("kwin4_effect_startupfeedback");
   
