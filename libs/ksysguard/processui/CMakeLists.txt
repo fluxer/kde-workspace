@@ -6,7 +6,6 @@ set(processui_LIB_SRCS
    ProcessFilter.cpp
    ProcessModel.cpp
    ReniceDlg.cpp
-   KTextEditVT.cpp
    ReniceDlgUi.ui
    ProcessWidgetUI.ui
 )
@@ -49,7 +48,6 @@ install(
     FILES
     ProcessModel.h
     ProcessFilter.h
-    KTextEditVT.h
     ksysguardprocesslist.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard
     COMPONENT Devel
