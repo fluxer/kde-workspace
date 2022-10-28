@@ -33,13 +33,12 @@ class Ui_LsofSearchWidget;
  */
 class LsofSearchWidget : public KDialog
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	LsofSearchWidget(QWidget *parent);
+    LsofSearchWidget(QWidget *parent);
 
 private:
-	Ui_LsofSearchWidget *ui;
+    Ui_LsofSearchWidget *ui;
 };
 
 #endif

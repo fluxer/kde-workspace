@@ -29,17 +29,17 @@
 #include "ui_LsofSearchWidget.h"
 
 LsofSearchWidget::LsofSearchWidget(QWidget* parent, int pid )
-	: KDialog( parent )
+    : KDialog( parent )
 {
-	setObjectName( "Renice Dialog" );
-	setModal( true );
-	setCaption( i18n("Renice Process") );
-	setButtons( Close );
-	QWidget *widget = new QWidget(this);
-	setMainWidget(widget);
-	ui = new Ui_LsofSearchWidget();
-	ui->setupUi(widget);
-	ui->klsofwidget->setPid(pid);
-	ktreewidgetsearchline
+    setObjectName( "Renice Dialog" );
+    setModal( true );
+    setCaption( i18n("Renice Process") );
+    setButtons( Close );
+    QWidget *widget = new QWidget(this);
+    setMainWidget(widget);
+    ui = new Ui_LsofSearchWidget();
+    ui->setupUi(widget);
+    ui->klsofwidget->setPid(pid);
+    ktreewidgetsearchline
 }
 
