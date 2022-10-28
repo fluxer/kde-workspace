@@ -324,12 +324,14 @@ void Component::loadSettings(KConfigGroup &configGroup)
         shortcut->setDefaultKeys(keysFromString(entry[1]));
         shortcut->setIsFresh(false);
 
-        Q_FOREACH (int key, keys) {
+        QMutableListIterator<int> keysit(keys);
+        while (keysit.hasNext()) {
+            int key = keysit.next();
             if (key != 0) {
                 if (GlobalShortcutsRegistry::self()->getShortcutByKey(key)) {
                     // The shortcut is already used. The config file is
                     // broken. Ignore the request.
-                    keys.removeAll(key);
+                    keysit.remove();
                     kWarning() << "Shortcut found twice in kglobalshortcutsrc.";
                 }
             }
