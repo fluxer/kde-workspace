@@ -259,6 +259,12 @@ add_feature_info(locate
     "Search indexing support in KFind"
 )
 
+find_program(LSOF_EXECUTABLE lsof)
+add_feature_info(lsof
+    LSOF_EXECUTABLE
+    "Open files widget (KLsofWidget)"
+)
+
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
