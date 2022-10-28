@@ -40,11 +40,13 @@ public:
 
     bool update();
 
+public Q_SLOTS:
+    qlonglong pid() const;
+    void setPid(qlonglong pid);
+
 private Q_SLOTS:
     /* For QProcess *process */
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
-    qlonglong pid() const;
-    void setPid(qlonglong pid);
 private:
     KLsofWidgetPrivate* const d;
 };
