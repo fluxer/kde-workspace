@@ -145,7 +145,9 @@ bool Component::cleanUp()
 {
     bool changed = false;;
 
-    Q_FOREACH (GlobalShortcut *shortcut, _current->_actions) {
+    // unregistration changes the actions hash thus deep-copy
+    const QHash<QString, GlobalShortcut*> actionscopy = _current->_actions;
+    Q_FOREACH (GlobalShortcut *shortcut, actionscopy) {
         kDebug() << _current->_actions.size();
         if (!shortcut->isPresent()) {
             changed = true;
