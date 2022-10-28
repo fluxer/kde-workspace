@@ -64,27 +64,33 @@ void KLsofWidget::finished(int exitCode, QProcess::ExitStatus exitStatus)
     while (true) {
         qint64 lineLength = d->process->readLine(buf, sizeof(buf));
 
-        if (lineLength <= 0)
+        if (lineLength <= 0) {
             break;
-        if (buf[lineLength-1] == '\n')
+        }
+        if (buf[lineLength-1] == '\n') {
             lineLength--;
+        }
 
         switch(buf[0]) {
             /* Process related stuff */
-            case 'f':
+            case 'f': {
                 process = new QTreeWidgetItem(this);
                 process->setText(0,QString::fromUtf8(buf+1, lineLength - 1));
                 break;
-            case 't':
+            }
+            case 't': {
                 if (process)
                     process->setText(1,QString::fromUtf8(buf+1, lineLength - 1));
                 break;
-            case 'n':
+            }
+            case 'n': {
                 if (process)
                     process->setText(2,QString::fromUtf8(buf+1, lineLength - 1));
                 break;
-            default:
+            }
+            default: {
                 break;
+            }
         }
     }
 }
