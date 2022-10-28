@@ -62,6 +62,7 @@ void KLsofWidget::finished(int exitCode, QProcess::ExitStatus exitStatus)
     char buf[1024];
     QTreeWidgetItem *process = NULL;
     while (true) {
+        ::memset(buf, '\0', sizeof(buf) * sizeof(char));
         qint64 lineLength = d->process->readLine(buf, sizeof(buf));
 
         if (lineLength <= 0) {
