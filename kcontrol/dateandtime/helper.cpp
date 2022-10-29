@@ -45,7 +45,10 @@
 
 static QString findNtpUtility()
 {
-    foreach(const QString &possible_ntputility, QStringList() << "ntpdate" << "rdate" ) {
+    static const QStringList possible_ntputilities = QStringList()
+        << QString::fromLatin1("ntpdate")
+        << QString::fromLatin1("rdate");
+    foreach(const QString &possible_ntputility, possible_ntputilities) {
         const QString ntpUtility = KStandardDirs::findRootExe(possible_ntputility);
         if (!ntpUtility.isEmpty()) {
             return ntpUtility;

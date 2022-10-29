@@ -29,14 +29,13 @@
 #include <QTimer>
 #include <QWidget>
 #include <QCheckBox>
-//Added by qt3to4:
 #include <QtGui/qevent.h>
+#include <QTimeEdit>
 
 #include <kdatepicker.h>
 #include <knuminput.h>
 
 class Kclock;
-#include <QTimeEdit>
 
 namespace Plasma {
     class Svg;
