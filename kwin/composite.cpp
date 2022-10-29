@@ -149,7 +149,8 @@ void Compositor::setup()
     }
 
     char selection_name[ 100 ];
-    sprintf(selection_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
+    ::memset(selection_name, '\0', sizeof(selection_name) * sizeof(char));
+    ::sprintf(selection_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
     if (!cm_selection) {
         cm_selection = new CompositorSelectionOwner(selection_name);
         connect(cm_selection, SIGNAL(lostOwnership()), SLOT(finish()));
