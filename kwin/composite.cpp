@@ -527,9 +527,11 @@ void Compositor::performCompositing()
     // TODO ?
     // this cannot be used so carelessly - needs protections against broken clients, the window
     // should not get focus before it's displayed, handle unredirected windows properly and so on.
-    foreach (Toplevel *t, windows) {
+    QMutableListIterator<Toplevel*> windows_it(windows);
+    while (windows_it.hasNext()) {
+        const Toplevel *t = windows_it.next();
         if (!t->readyForPainting())
-            windows.removeAll(t);
+            windows_it.remove();
     }
 
     QRegion repaints = repaints_region;
