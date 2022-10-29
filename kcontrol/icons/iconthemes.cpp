@@ -349,7 +349,10 @@ void IconThemesConfig::updateRemoveButton()
 void loadPreview(QLabel *label, KIconTheme& icontheme, const QStringList& iconnames)
 {
     const int size = qMin(48, icontheme.defaultSize(KIconLoader::Desktop));
-    foreach(const QString &iconthemename, QStringList() << icontheme.internalName() << icontheme.inherits()) {
+    const QStringList iconthemenames = QStringList()
+      << icontheme.internalName()
+      << icontheme.inherits();
+    foreach(const QString &iconthemename, iconthemenames) {
       foreach(const QString &name, iconnames) {
         K3Icon icon = KIconTheme(iconthemename).iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
         if (icon.isValid()) {
