@@ -82,7 +82,6 @@ namespace Oxygen
             connect( button( Reset ), SIGNAL(clicked()), _stylePluginObject, SLOT(reset()) );
             connect( button( Default ), SIGNAL(clicked()), _stylePluginObject, SLOT(defaults()) );
             connect( this, SIGNAL(pluginSave()), _stylePluginObject, SLOT(save()) );
-            connect( this, SIGNAL(pluginToggleExpertMode(bool)), _stylePluginObject, SLOT(toggleExpertMode(bool)) );
 
         }
 
@@ -102,12 +101,8 @@ namespace Oxygen
             connect( button( Default ), SIGNAL(clicked()), _decorationPluginObject, SLOT(defaults()) );
 
             connect( this, SIGNAL(pluginSave()), _decorationPluginObject, SLOT(save()) );
-            connect( this, SIGNAL(pluginToggleExpertMode(bool)), _decorationPluginObject, SLOT(toggleExpertMode(bool)) );
 
         }
-
-        // expert mode
-        emit pluginToggleExpertMode( true );
 
         // button connections
         connect( button( Apply ), SIGNAL(clicked()), SLOT(save()) );

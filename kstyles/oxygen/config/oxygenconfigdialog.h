@@ -51,9 +51,6 @@ namespace Oxygen
         //! save local changes
         void pluginSave( void );
 
-        //! expert mode
-        void pluginToggleExpertMode( bool );
-
         public slots:
 
         //! save local changes
