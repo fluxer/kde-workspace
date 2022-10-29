@@ -356,7 +356,7 @@ KFileItem KFileItemModel::fileItem(int index) const
 KFileItem KFileItemModel::fileItem(const KUrl& url) const
 {
     const int indexForUrl = index(url);
-    if (indexForUrl >= 0) {
+    if (indexForUrl >= 0 && indexForUrl < count()) {
         return m_itemData.at(indexForUrl)->item;
     }
     return KFileItem();
