@@ -31,8 +31,6 @@ DEALINGS IN THE SOFTWARE.
 
 namespace Oxygen
 {
-    class AnimationConfigWidget;
-
     class StyleConfig: public QWidget, Ui::OxygenStyleConfig
     {
 
@@ -95,9 +93,6 @@ namespace Oxygen
         int tabStyle( void ) const;
         int windowDragMode( void ) const;
         int triangularExpanderSize( void ) const;
-
-        private:
-
     };
 
 }
