@@ -551,19 +551,19 @@ void Compositor::performCompositing()
 
 bool Compositor::windowRepaintsPending() const
 {
-    foreach (Toplevel * c, Workspace::self()->clientList()) {
+    foreach (const Toplevel * c, Workspace::self()->clientList()) {
         if (!c->repaints().isEmpty())
             return true;
     }
-    foreach (Toplevel * c, Workspace::self()->desktopList()) {
+    foreach (const Toplevel * c, Workspace::self()->desktopList()) {
         if (!c->repaints().isEmpty())
             return true;
     }
-    foreach (Toplevel * c, Workspace::self()->unmanagedList()) {
+    foreach (const Toplevel * c, Workspace::self()->unmanagedList()) {
         if (!c->repaints().isEmpty())
             return true;
     }
-    foreach (Toplevel * c, Workspace::self()->deletedList()) {
+    foreach (const Toplevel * c, Workspace::self()->deletedList()) {
         if (!c->repaints().isEmpty())
             return true;
     }

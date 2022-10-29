@@ -1276,7 +1276,7 @@ QStringList EffectsHandlerImpl::loadedEffects() const
 
 QStringList EffectsHandlerImpl::listOfEffects() const
 {
-    KService::List offers = KServiceTypeTrader::self()->query("KWin/Effect");
+    const KService::List offers = KServiceTypeTrader::self()->query("KWin/Effect");
     QStringList listOfModules;
     // First unload necessary effects
     foreach (const KService::Ptr & service, offers) {
@@ -1435,8 +1435,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         // Make sure all depenedencies have been loaded
         // TODO: detect circular deps
         KPluginInfo plugininfo(service);
-        QStringList dependencies = plugininfo.dependencies();
-        foreach (const QString & depName, dependencies) {
+        foreach (const QString & depName, plugininfo.dependencies()) {
             if (!loadEffect(depName)) {
                 kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name << endl;
                 library->unload();
