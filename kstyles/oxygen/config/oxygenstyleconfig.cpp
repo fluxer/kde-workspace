@@ -155,12 +155,12 @@ namespace Oxygen
         {
 
             case QEvent::ShowToParent:
-            object->event( event );
-            updateLayout();
-            return true;
+                object->event( event );
+                updateLayout();
+                return true;
 
             default:
-            return false;
+                return false;
         }
     }
 
@@ -172,10 +172,11 @@ namespace Oxygen
         {
             case QEvent::Show:
             case QEvent::ShowToParent:
-            updateMinimumSize();
-            break;
+                updateMinimumSize();
+                break;
 
-            default: break;
+            default:
+                break;
         }
 
         return result;
@@ -184,7 +185,9 @@ namespace Oxygen
 
     //__________________________________________________________________
     void StyleConfig::updateMinimumSize( void )
-    { setMinimumSize( minimumSizeHint() ); }
+    {
+        setMinimumSize( minimumSizeHint() );
+    }
 
     //__________________________________________________________________
     void StyleConfig::updateLayout( void )
