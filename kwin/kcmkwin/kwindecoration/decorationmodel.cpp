@@ -124,8 +124,8 @@ void DecorationModel::findDecorations()
             }
         }
     }
-    KService::List offers = KServiceTypeTrader::self()->query("KWin/Decoration");
-    foreach (KService::Ptr service, offers) {
+    const KService::List offers = KServiceTypeTrader::self()->query("KWin/Decoration");
+    foreach (const KService::Ptr service, offers) {
         DecorationModelData data;
         data.name = service->name();
         data.libraryName = "kwin3_aurorae";

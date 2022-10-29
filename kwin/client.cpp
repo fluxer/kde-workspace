@@ -894,7 +894,7 @@ QRect Client::iconGeometry() const
         return geom;
     else {
         // Check all mainwindows of this window (recursively)
-        foreach (Client * mainwin, mainClients()) {
+        foreach (const Client * mainwin, mainClients()) {
             geom = mainwin->iconGeometry();
             if (geom.isValid())
                 return geom;

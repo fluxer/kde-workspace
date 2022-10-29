@@ -183,8 +183,8 @@ static QString attributeString(KWin::AnimationEffect::Attribute attribute)
 QList<AniData> AniData::list(const QString &str)
 {
     QList<AniData> newList;
-    QStringList list = str.split(';', QString::SkipEmptyParts);
-    foreach (const QString &astr, list) {
+    QStringList strlist = str.split(';', QString::SkipEmptyParts);
+    foreach (const QString &astr, strlist) {
         newList << AniData(astr);
         if (newList.last().duration < 0)
             newList.removeLast();

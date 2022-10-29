@@ -115,10 +115,16 @@ void StartupFeedbackEffect::start(const QString& icon)
     QCursor cursor = QCursor(Qt::WaitCursor);
 
     xcb_connection_t *c = connection();
-    ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(xcb_grab_pointer_reply(c, xcb_grab_pointer_unchecked(c, false, rootWindow(),
-        XCB_EVENT_MASK_NO_EVENT,
-        XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
-        cursor.handle(), XCB_TIME_CURRENT_TIME), NULL));
+    ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(
+        xcb_grab_pointer_reply(
+            c,
+            xcb_grab_pointer_unchecked(c, false, rootWindow(),
+                XCB_EVENT_MASK_NO_EVENT,
+                XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
+                cursor.handle(), XCB_TIME_CURRENT_TIME),
+            NULL
+        )
+    );
     if (grabPointer.isNull() || grabPointer->status != XCB_GRAB_STATUS_SUCCESS) {
         kWarning() << "could not grab pointer";
         return;
