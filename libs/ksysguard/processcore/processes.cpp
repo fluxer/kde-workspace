@@ -360,7 +360,7 @@ void Processes::deleteProcess(long pid)
     Process *process = d->mProcesses.value(pid);
     if(!process)
         return;
-    Q_FOREACH( Process *it, process->children) {
+    Q_FOREACH(const Process *it, process->children) {
         d->mProcessedLastTime.remove(it->pid);
         deleteProcess(it->pid);
     }

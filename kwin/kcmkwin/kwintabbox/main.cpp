@@ -159,7 +159,7 @@ void KWinTabBoxConfig::initLayoutLists()
 
     KService::List offers = trader->query("KWin/WindowSwitcher");
     QStringList layoutNames, layoutPlugins, layoutPaths;
-    foreach (KService::Ptr service, offers) {
+    foreach (const KService::Ptr service, offers) {
         const QString pluginName = service->property("X-KDE-PluginInfo-Name").toString();
         if (service->property("X-Plasma-API").toString() != "declarativeappletscript") {
             continue;
