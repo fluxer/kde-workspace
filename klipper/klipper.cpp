@@ -367,7 +367,7 @@ bool Klipper::loadHistory() {
     static const char* const failed_load_warning =
         "Failed to load history resource. Clipboard history cannot be read.";
     // don't use "appdata", klipper is also a kicker applet
-    QString history_file_name = KStandardDirs::locateLocal( "data", "klipper/history3.lst" );
+    QString history_file_name = KStandardDirs::locateLocal( "data", "klipper/history4.lst" );
     QFile history_file( history_file_name );
     if ( !history_file.exists() ) {
         kWarning() << failed_load_warning << ": " << "History file does not exist" ;
@@ -391,9 +391,8 @@ bool Klipper::loadHistory() {
     }
     QDataStream history_stream( &data, QIODevice::ReadOnly );
 
-    char* version;
+    qint8 version;
     history_stream >> version;
-    delete[] version;
 
     // The list needs to be reversed, as it is saved
     // youngest-first to keep the most important clipboard
@@ -427,7 +426,7 @@ void Klipper::saveHistory(bool empty) {
     static const char* const failed_save_warning =
         "Failed to save history. Clipboard history cannot be saved.";
     // don't use "appdata", klipper is also a kicker applet
-    QString history_file_name( KStandardDirs::locateLocal( "data", "klipper/history3.lst" ) );
+    QString history_file_name( KStandardDirs::locateLocal( "data", "klipper/history4.lst" ) );
     if ( history_file_name.isNull() || history_file_name.isEmpty() ) {
         kWarning() << failed_save_warning ;
         return;
@@ -439,7 +438,7 @@ void Klipper::saveHistory(bool empty) {
     }
     QByteArray data;
     QDataStream history_stream( &data, QIODevice::WriteOnly );
-    history_stream << klipper_version; // const char*
+    history_stream << klipper_version_int;
 
     if (!empty) {
         const HistoryItem *item = history()->first();

@@ -20,6 +20,6 @@
 #define VERSION_H
 
 static const char * const klipper_version = "0.9.7";
-
+static const qint8 klipper_version_int = 97;
 
 #endif
