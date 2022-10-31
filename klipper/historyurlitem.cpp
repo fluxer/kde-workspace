@@ -32,7 +32,7 @@ namespace {
         }
         QByteArray buffer;
         QDataStream out(&buffer, QIODevice::WriteOnly);
-        out << _metaData << "\0" << _cut;
+        out << _metaData << _cut;
         hash.addData(buffer);
         return hash.result();
     }
