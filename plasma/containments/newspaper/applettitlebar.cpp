@@ -27,14 +27,14 @@
 #include <QParallelAnimationGroup>
 #include <QTimer>
 
-
 #include <KIconLoader>
-
 #include <plasma/animations/animation.h>
 #include <plasma/applet.h>
 #include <plasma/svg.h>
 #include <plasma/theme.h>
 #include <Plasma/PaintUtils>
+
+#include <limits.h>
 
 AppletTitleBar::AppletTitleBar(Plasma::Applet *applet)
        : QGraphicsWidget(applet),

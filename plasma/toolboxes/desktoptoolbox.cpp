@@ -32,7 +32,6 @@
 
 #include <KDebug>
 #include <KIconLoader>
-
 #include <Plasma/Animation>
 #include <Plasma/Applet>
 #include <Plasma/Containment>
@@ -42,9 +41,9 @@
 #include <Plasma/ToolTipContent>
 #include <Plasma/ToolTipManager>
 #include <Plasma/ItemBackground>
-
 #include <kworkspace/kworkspace.h>
 
+#include <limits.h>
 
 class EmptyGraphicsItem : public QGraphicsWidget
 {
