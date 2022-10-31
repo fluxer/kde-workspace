@@ -861,10 +861,12 @@ void KFileItemModel::slotCompleted()
         // Note that the parent folder must be expanded before any of its subfolders become visible.
         // Therefore, some URLs in m_restoredExpandedUrls might not be visible yet
         // -> we expand the first visible URL we find in m_restoredExpandedUrls.
-        foreach (const KUrl& url, m_urlsToExpand) {
+        QMutableSetIterator<KUrl> expandit(m_urlsToExpand);
+        while (expandit.hasNext()) {
+            const KUrl& url = expandit.next();
             const int indexForUrl = index(url);
             if (indexForUrl >= 0) {
-                m_urlsToExpand.remove(url);
+                expandit.remove();
                 if (setExpanded(indexForUrl, true)) {
                     // The dir lister has been triggered. This slot will be called
                     // again after the directory has been expanded.
