@@ -208,7 +208,7 @@ void UserActionsMenu::helperDialog(const QString& message, const QWeakPointer<Cl
 }
 
 
-QStringList configModules()
+static QStringList configModules()
 {
     QStringList args;
     args << "kwindecoration";
