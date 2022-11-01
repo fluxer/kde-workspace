@@ -352,7 +352,9 @@ void KateCompletionWidget::startCompletion(const KTextEditor::Range& word, const
     deleteCompletionRanges();
   }
 
-  foreach (KTextEditor::CodeCompletionModel* model, models) {
+  QMutableListIterator<KTextEditor::CodeCompletionModel*> modelsit(models);
+  while (modelsit.hasNext()) {
+  KTextEditor::CodeCompletionModel* model = modelsit.next();
     KTextEditor::Range range;
     if (word.isValid()) {
       range = word;
@@ -369,7 +371,7 @@ void KateCompletionWidget::startCompletion(const KTextEditor::Range& word, const
         m_completionRanges.remove(model);
         delete oldRange;
       }
-      models.removeAll(model);
+      modelsit.remove();
       continue;
     }
     if(m_completionRanges.contains(model)) {
