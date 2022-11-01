@@ -22,7 +22,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config-unix.h"
 #include "main.h"
 
-#include <signal.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,6 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QEvent>
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QFile>
 
 #include <ksharedconfig.h>
 #include <kglobal.h>
@@ -48,7 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kdialog.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kde_file.h>
 #include <KComboBox>
 #include <QtGui/qx11info_x11.h>
 #include <fixx11h.h>
@@ -323,6 +322,7 @@ Application::Application()
     }
     connect(&owner, SIGNAL(lostOwnership()), SLOT(lostSelection()));
 
+    KApplication::quitOnSignal();
     KCrash::setEmergencySaveFunction(Application::crashHandler);
     crashes = args->getOption("crashes").toInt();
     if (crashes >= 4) {
@@ -419,11 +419,6 @@ bool Application::notify(QObject* o, QEvent* e)
     if (Workspace::self()->workspaceEvent(e))
         return true;
     return KApplication::notify(o, e);
-}
-
-static void sighandler(int)
-{
-    QApplication::exit();
 }
 
 void Application::crashHandler(int signal)
@@ -525,13 +520,6 @@ int main(int argc, char * argv[])
     args.add("replace", ki18n("Replace already-running ICCCM2.0-compliant window manager"));
     args.add("crashes <n>", ki18n("Indicate that KWin has recently crashed n times"));
     KCmdLineArgs::addCmdLineOptions(args);
-
-    if (KDE_signal(SIGTERM, KWin::sighandler) == SIG_IGN)
-        KDE_signal(SIGTERM, SIG_IGN);
-    if (KDE_signal(SIGINT, KWin::sighandler) == SIG_IGN)
-        KDE_signal(SIGINT, SIG_IGN);
-    if (KDE_signal(SIGHUP, KWin::sighandler) == SIG_IGN)
-        KDE_signal(SIGHUP, SIG_IGN);
 
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
     ksmserver.suspendStartup("kwin");
