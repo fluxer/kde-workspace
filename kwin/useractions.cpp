@@ -208,30 +208,26 @@ void UserActionsMenu::helperDialog(const QString& message, const QWeakPointer<Cl
 }
 
 
-QStringList configModules(bool controlCenter)
+QStringList configModules()
 {
     QStringList args;
     args << "kwindecoration";
-    if (controlCenter) {
-        args << "kwinoptions";
-    } else {
-        args << "kwinactions" << "kwinfocus" <<  "kwinmoving" << "kwinadvanced"
-             << "kwinrules" << "kwincompositing"
+    args << "kwinactions" << "kwinfocus" <<  "kwinmoving" << "kwinadvanced"
+         << "kwinrules" << "kwincompositing"
 #ifdef KWIN_BUILD_TABBOX
-             << "kwintabbox"
+         << "kwintabbox"
 #endif
 #ifdef KWIN_BUILD_SCREENEDGES
-             << "kwinscreenedges"
+         << "kwinscreenedges"
 #endif
-             ;
-    }
+        ;
     return args;
 }
 
 void UserActionsMenu::configureWM()
 {
     QStringList args;
-    args << "--icon" << "preferences-system-windows" << configModules(false);
+    args << "--icon" << "preferences-system-windows" << configModules();
     KToolInvocation::kdeinitExec("kcmshell4", args);
 }
 
