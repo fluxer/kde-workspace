@@ -127,7 +127,10 @@ Compositor::~Compositor()
 {
     finish();
     deleteUnusedSupportProperties();
-    delete cm_selection;
+    if (cm_selection) {
+        disconnect(cm_selection, 0, this, 0);
+        delete cm_selection;
+    }
     s_compositor = NULL;
 }
 
