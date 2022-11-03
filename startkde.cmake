@@ -203,14 +203,22 @@ export XDG_CURRENT_DESKTOP
 # For session services that require X11
 dbus-update-activation-environment DISPLAY XAUTHORITY
 
-# We set LD_BIND_NOW to increase the efficiency of kdeinit.
-# kdeinit unsets this variable before loading applications.
-LD_BIND_NOW=true @KDE4_BIN_INSTALL_DIR@/kdeinit4 +kcminit_startup
+# Start kdeinit4 + kcminit_startup
+kdeinit4
 if test $? -ne 0; then
     # Startup error
     echo 'startkde: Could not start kdeinit4. Check your installation.'  1>&2
     test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
     xmessage -geometry 500x100 "Could not start kdeinit4. Check your installation."
+    exit 1
+fi
+
+kcminit_startup
+if test $? -ne 0; then
+    # Startup error
+    echo 'startkde: Could not start kcminit_startup. Check your installation.'  1>&2
+    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
+    xmessage -geometry 500x100 "Could not start kcminit_startup. Check your installation."
     exit 1
 fi
 
