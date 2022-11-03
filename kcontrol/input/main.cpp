@@ -68,7 +68,7 @@ extern "C"
         XcursorSetTheme(QX11Info::display(), QFile::encodeName(theme));
 
     if (!size.isEmpty())
-    	XcursorSetDefaultSize(QX11Info::display(), size.toUInt());
+        XcursorSetDefaultSize(QX11Info::display(), size.toUInt());
 
     // Load the default cursor from the theme and apply it to the root window.
     Cursor handle = XcursorLibraryLoadCursor(QX11Info::display(), "left_ptr");
