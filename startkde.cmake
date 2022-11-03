@@ -59,32 +59,8 @@ export XDG_DATA_DIRS
 kdehome=$HOME/@KDE_DEFAULT_HOME@
 test -n "$KDEHOME" && kdehome=`echo "$KDEHOME"|sed "s,^~/,$HOME/,"`
 
-# see kstartupconfig source for usage
-mkdir -m 700 -p $kdehome
-mkdir -m 700 -p $kdehome/share
-mkdir -m 700 -p $kdehome/share/config
-cat >$kdehome/share/config/startupconfigkeys <<EOF
-kcminputrc Mouse cursorTheme 'Oxygen_White'
-kcminputrc Mouse cursorSize ''
-ksplashrc KSplash Theme Default
-ksplashrc KSplash Engine KSplashX
-krandrrc Display ApplyOnStartup false
-krandrrc Display StartupCommands ''
-krandrrc [Screen0]
-krandrrc [Screen1]
-krandrrc [Screen2]
-krandrrc [Screen3]
-kcmfonts General forceFontDPI 0
-kdeglobals Locale Language '' # trigger requesting languages from KLocale
-EOF
-kstartupconfig4
-returncode=$?
-if test $returncode -ne 0; then
-    xmessage -geometry 500x100 "kstartupconfig4 does not exist or fails. The error code is $returncode. Check your installation."
-    exit 1
-fi
-[ -r $kdehome/share/config/startupconfig ] && . $kdehome/share/config/startupconfig
-
+kcminputrc_mouse_cursortheme=`kreadconfig --file kcminputrc --group Mouse --key cursorTheme --default Oxygen_White`
+kcminputrc_mouse_cursorsize=`kreadconfig --file kcminputrc --group Mouse --key cursorSize`
 # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
 if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
     @EXPORT_XCURSOR_PATH@
@@ -99,35 +75,8 @@ if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" 
         export XCURSOR_SIZE
     fi
 fi
-
-[ -r @KDE4_BIN_INSTALL_DIR@/krandrstartup ] && . @KDE4_BIN_INSTALL_DIR@/krandrstartup
-
-if test "$kcmfonts_general_forcefontdpi" -ne 0; then
-    xrdb -quiet -merge -nocpp <<EOF
-Xft.dpi: $kcmfonts_general_forcefontdpi
-EOF
-fi
-
-ksplash_pid=
-# languages as resolved by KLocale, for the splash screens use
-# klocale_languages is assembled by kdostartupconfig4 calling KLocale
-KLOCALE_LANGUAGES="$klocale_languages"
-export KLOCALE_LANGUAGES
-# the splashscreen and progress indicator
-case "$ksplashrc_ksplash_engine" in
-    KSplashX)
-        ksplash_pid=`ksplashx "${ksplashrc_ksplash_theme}" --pid`
-        ;;
-    KSplashQML)
-        ksplash_pid=`ksplashqml "${ksplashrc_ksplash_theme}" --pid`
-        ;;
-    None)
-        ;;
-    *)
-        ;;
-esac
-# no longer needed in the environment
-unset KLOCALE_LANGUAGES
+unset kcminputrc_mouse_cursortheme
+unset kcminputrc_mouse_cursorsize
 
 # Set a left cursor instead of the standard X11 "X" cursor, since I've heard
 # from some users that they're confused and don't know what to do. This is
@@ -156,7 +105,6 @@ if $qdbus >/dev/null 2>/dev/null; then
     : # ok
 else
     echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
     xmessage -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
     exit 1
 fi
@@ -205,7 +153,6 @@ kdeinit4
 if test $? -ne 0; then
     # Startup error
     echo 'startkde: Could not start kdeinit4. Check your installation.'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
     xmessage -geometry 500x100 "Could not start kdeinit4. Check your installation."
     exit 1
 fi
@@ -214,7 +161,6 @@ kcminit_startup
 if test $? -ne 0; then
     # Startup error
     echo 'startkde: Could not start kcminit_startup. Check your installation.'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
     xmessage -geometry 500x100 "Could not start kcminit_startup. Check your installation."
     exit 1
 fi
@@ -229,7 +175,6 @@ ksmserver $KDEWM
 if test $? -ne 0; then
     # Startup error
     echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
-    test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
     xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
 fi
 
@@ -253,8 +198,6 @@ if test x"$wait_drkonqi"x = x"true"x ; then
 fi
 
 echo 'startkde: Shutting down...'  1>&2
-# just in case
-test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 
 # Clean up
 kdeinit4 --shutdown

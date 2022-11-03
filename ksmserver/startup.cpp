@@ -98,7 +98,6 @@ void KSMServer::restoreSession( const QString &sessionName )
 
     int count =  configSessionGroup.readEntry( "count", 0 );
     appsToStart = count;
-    upAndRunning( "ksmserver" );
     connect( klauncherSignals, SIGNAL(autoStart0Done()), SLOT(autoStart0Done()));
     connect( klauncherSignals, SIGNAL(autoStart1Done()), SLOT(autoStart1Done()));
     connect( klauncherSignals, SIGNAL(autoStart2Done()), SLOT(autoStart2Done()));
@@ -133,7 +132,6 @@ void KSMServer::startDefaultSession()
     t.start();
 #endif
     sessionGroup = "";
-    upAndRunning( "ksmserver" );
     connect( klauncherSignals, SIGNAL(autoStart0Done()), SLOT(autoStart0Done()));
     connect( klauncherSignals, SIGNAL(autoStart1Done()), SLOT(autoStart1Done()));
     connect( klauncherSignals, SIGNAL(autoStart2Done()), SLOT(autoStart2Done()));
@@ -231,7 +229,6 @@ void KSMServer::autoStart0Done()
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << t.elapsed();
 #endif
-    upAndRunning( "desktop" );
     state = KcmInitPhase1;
     kcminitSignals = new QDBusInterface("org.kde.kcminit", "/kcminit", "org.kde.KCMInit", QDBusConnection::sessionBus(), this );
     if( !kcminitSignals->isValid()) {
@@ -465,7 +462,6 @@ void KSMServer::finishStartup()
     if( waitAutoStart2 || waitKcmInit2 )
         return;
 
-    upAndRunning( "ready" );
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << t.elapsed();
 #endif
@@ -533,19 +529,6 @@ void KSMServer::resumeStartupInternal()
             kWarning( 1218 ) << "Unknown resume startup state" ;
             break;
     }
-}
-
-void KSMServer::upAndRunning( const QString& msg )
-{
-    XEvent e;
-    e.xclient.type = ClientMessage;
-    e.xclient.message_type = XInternAtom( QX11Info::display(), "_KDE_SPLASH_PROGRESS", False );
-    e.xclient.display = QX11Info::display();
-    e.xclient.window = QX11Info::appRootWindow();
-    e.xclient.format = 8;
-    assert( strlen( msg.toLatin1()) < 20 );
-    strcpy( e.xclient.data.b, msg.toLatin1());
-    XSendEvent( QX11Info::display(), QX11Info::appRootWindow(), False, SubstructureNotifyMask, &e );
 }
 
 void KSMServer::restoreSubSession( const QString& name )

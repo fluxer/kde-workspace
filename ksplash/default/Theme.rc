@@ -1,9 +1,0 @@
-[KSplash Theme: Default]
-Name = Default Splash Screen
-Description = Ariya Splash Screen
-Version = 1.0
-Author = Ivailo Monev <xakepa10@gmail.com>
-Homepage = http://www.kde.org
-
-# Theme behaviour settings.
-Engine = KSplashX

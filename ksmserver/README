@@ -68,9 +68,7 @@ Startkde also launches kcminit, which performs initialization done by kcontrol
 modules. There are three kcminit phases, 0, 1 and 2, controlled
 by X-KDE-Init-Phase= in the .desktop file, which defaults to 1. Phase 0 kcminit
 modules should be only those that really need to be run early in the startup
-process (and those should probably actually use kstartupconfig in startkde
-to be done even before kdeinit and daemons). After executing phase 0
-modules kcminit returns and waits.
+process. After executing phase 0 modules kcminit returns and waits.
 
 When ksmserver is launched, the first thing it does is launching
 the window manager, as the WM is necessary before any windows are possibly

@@ -252,9 +252,6 @@ private:
     KWorkSpace::ShutdownType pendingShutdown_sdtype;
     KWorkSpace::ShutdownMode pendingShutdown_sdmode;
 
-    // ksplash interface
-    void upAndRunning( const QString& msg );
-
     // sequential startup
     int appsToStart;
     int lastAppStarted;

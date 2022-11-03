@@ -377,15 +377,6 @@ Application::Application()
     syncX(); // Trigger possible errors, there's still a chance to abort
 
     initting = false; // Startup done, we are up and running now.
-
-    XEvent e;
-    e.xclient.type = ClientMessage;
-    e.xclient.message_type = XInternAtom(display(), "_KDE_SPLASH_PROGRESS", False);
-    e.xclient.display = display();
-    e.xclient.window = rootWindow();
-    e.xclient.format = 8;
-    strcpy(e.xclient.data.b, "wm");
-    XSendEvent(display(), rootWindow(), False, SubstructureNotifyMask, &e);
 }
 
 Application::~Application()

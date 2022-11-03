@@ -26,6 +26,7 @@
 #include <QFile>
 #include <QTimer>
 #include <QLibrary>
+#include <QtDBus/QtDBus>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -36,14 +37,13 @@
 #include <kconfiggroup.h>
 #include <klocale.h>
 #include <ktoolinvocation.h>
+#include <kservicetypetrader.h>
 #include <klauncher_iface.h>
-#include <QtDBus/QtDBus>
+
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <QtGui/qx11info_x11.h>
 #endif
-
-#include <kservicetypetrader.h>
 
 static int ready[ 2 ];
 static bool startup = false;
@@ -199,14 +199,6 @@ KCMInit::KCMInit( KCmdLineArgs* args )
   if( startup )
   {
      runModules( 0 );
-     XEvent e;
-     e.xclient.type = ClientMessage;
-     e.xclient.message_type = XInternAtom( QX11Info::display(), "_KDE_SPLASH_PROGRESS", False );
-     e.xclient.display = QX11Info::display();
-     e.xclient.window = QX11Info::appRootWindow();
-     e.xclient.format = 8;
-     strcpy( e.xclient.data.b, "kcminit" );
-     XSendEvent( QX11Info::display(), QX11Info::appRootWindow(), False, SubstructureNotifyMask, &e );
      sendReady();
      QTimer::singleShot( 300 * 1000, qApp, SLOT(quit())); // just in case
      qApp->exec(); // wait for runPhase1() and runPhase2()

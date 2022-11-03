@@ -18,14 +18,12 @@ check_function_exists(nice HAVE_NICE)
 check_include_files(malloc.h HAVE_MALLOC_H)
 kde4_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/fonts
 kde4_bool_to_01(FREETYPE_FOUND HAVE_FREETYPE) # kcontrol/fonts
-kde4_bool_to_01(X11_XShm_FOUND HAVE_XSHM) # ksplash
 kde4_bool_to_01(X11_XTest_FOUND HAVE_XTEST) # khotkeys, kxkb
 kde4_bool_to_01(X11_Xcomposite_FOUND HAVE_XCOMPOSITE) # plasma, kwin
 kde4_bool_to_01(X11_Xcursor_FOUND HAVE_XCURSOR) # many uses
 kde4_bool_to_01(X11_Xdamage_FOUND HAVE_XDAMAGE) # kwin
 kde4_bool_to_01(X11_Xfixes_FOUND HAVE_XFIXES) # klipper, kicker, kwin
 kde4_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kglobalaccel, kcontrol/keyboard
-kde4_bool_to_01(X11_Xinerama_FOUND HAVE_XINERAMA)
 kde4_bool_to_01(X11_Xrandr_FOUND HAVE_XRANDR) # kwin
 kde4_bool_to_01(X11_Xrender_FOUND HAVE_XRENDER) # kcontrol/style, kicker
 kde4_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard

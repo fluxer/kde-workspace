@@ -10,13 +10,6 @@ include(KDE4Defaults)
 
 set(LIBRARY_TYPE SHARED)
 
-find_package(PNG)
-set_package_properties(PNG PROPERTIES
-    DESCRIPTION "An Open, Extensible Image Format with Lossless Compression"
-    URL "http://www.libpng.org/"
-    TYPE REQUIRED
-)
-
 # kdelibs requires 0.91
 find_package(SharedMimeInfo 0.91)
 set_package_properties(SharedMimeInfo PROPERTIES
@@ -57,11 +50,9 @@ if(Q_WS_X11)
 
     add_feature_info("libXTest" X11_XTest_FOUND "The X11 Testing Resource extension library is useful for automated testing of X clients")
     add_feature_info("libXcomposite" X11_Xcomposite_FOUND "The X11 Composite extension library may be used by Plasma and KWin")
-    add_feature_info("libXShm" X11_XShm_FOUND "The X11 shared-memory fences library may be used by ksplash")
     add_feature_info("libxf86misc" X11_xf86misc_FOUND "The X11 miscellaneous library may be used by keyboard KCM") # TODO: unused?
     add_feature_info("libXSync" X11_XSync_FOUND "The X11 synchronization may be used by KWin")
     add_feature_info("libXinput" X11_Xinput_FOUND "The X11 XINPUT extension library may be used by keyboard KCM")
-    add_feature_info("libXinerama" X11_Xinerama_FOUND "The X11 XINERAMA extension library may be used by ksplash")
     add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
     add_feature_info("libXext" X11_dpms_FOUND "The X extensions library may be used by kscreensaver")
 
@@ -287,8 +278,6 @@ add_subdirectory(kwin)
 add_subdirectory(ksmserver)
 add_subdirectory(kscreensaver)
 
-add_subdirectory(ksplash)
-
 add_subdirectory(qguiplatformplugin_kde)
 add_subdirectory(ksysguard)
 
@@ -296,7 +285,6 @@ add_subdirectory(kcontrol)
 add_subdirectory(klipper)
 add_subdirectory(kmenuedit)
 add_subdirectory(krunner)
-add_subdirectory(kstartupconfig)
 add_subdirectory(freespacenotifier)
 add_subdirectory(kinfocenter)
 

@@ -28,6 +28,8 @@
 #include <KPluginLoader>
 #include <KDebug>
 #include <KApplication>
+#include <KProcess>
+#include <kdemacros.h>
 #include <config-X11.h>
 
 #include "randr.h"
@@ -35,6 +37,28 @@
 // DLL Interface for kcontrol
 K_PLUGIN_FACTORY(KSSFactory, registerPlugin<KRandRModule>();)
 K_EXPORT_PLUGIN(KSSFactory("krandr"))
+
+extern "C"
+{
+    KDE_EXPORT void kcminit_randr()
+    {
+        // TODO: drop legacy config support
+        KConfig config("krandrrc");
+        KConfigGroup group = config.group("Display");
+        const bool applyonstartup = group.readEntry("ApplyOnStartup", false);
+        if (applyonstartup) {
+            const QStringList commands = group.readEntry("StartupCommands").split("\n");
+            foreach (const QString &command, commands) {
+                KProcess kproc;
+                kproc.setShellCommand(command);
+                kproc.start();
+                if (!kproc.waitForStarted() || !kproc.waitForFinished()) {
+                    kWarning() << kproc.readAllStandardError();
+                }
+            }
+        }
+    }
+}
 
 KRandRModule::KRandRModule(QWidget *parent, const QVariantList&)
     : KCModule(KSSFactory::componentData(), parent)

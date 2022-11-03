@@ -13,12 +13,6 @@
 /* Define if you have the XKB extension */
 #cmakedefine HAVE_XKB 1
 
-/* Define if you have the Xinerama extension */
-#cmakedefine HAVE_XINERAMA 1
-
-/* Define if you have the XSHM (MIT SHM) extension */
-#cmakedefine HAVE_XSHM 1
-
 /* Define if you have the XComposite extension */
 #cmakedefine HAVE_XCOMPOSITE 1
 
