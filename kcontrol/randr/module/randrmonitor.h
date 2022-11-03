@@ -39,10 +39,12 @@ class RandrMonitorModule
     : public KDEDModule
 {
     Q_OBJECT
+
 public:
     RandrMonitorModule(QObject* parent, const QList<QVariant>&);
     virtual ~RandrMonitorModule();
     void processX11Event( XEvent* e );
+
 private slots:
     void poll();
     void switchDisplay();
@@ -51,6 +53,7 @@ private slots:
     void checkResumeFromSuspend();
     void showKcm();
     void tryAutoConfig();
+
 private:
     void initRandr();
     QStringList connectedMonitors() const;

@@ -22,179 +22,174 @@
 #include "randrmode.h"
 
 RandRCrtc::RandRCrtc(RandRScreen *parent, RRCrtc id)
-	: QObject(parent),
-	  m_currentRect(0, 0, 0, 0),
-	  m_originalRect(m_currentRect),
-	  m_proposedRect(m_originalRect)
+    : QObject(parent),
+    m_currentRect(0, 0, 0, 0),
+    m_originalRect(m_currentRect),
+    m_proposedRect(m_originalRect)
 {
-	m_screen = parent;
-	Q_ASSERT(m_screen);
+    m_screen = parent;
+    Q_ASSERT(m_screen);
 
-	m_currentRotation = m_originalRotation = m_proposedRotation = RandR::Rotate0;
-	m_currentRate = m_originalRate = m_proposedRate = 0;
-	m_currentMode = 0;
-	m_rotations = RandR::Rotate0;
-	
-	m_id = id;
+    m_currentRotation = m_originalRotation = m_proposedRotation = RandR::Rotate0;
+    m_currentRate = m_originalRate = m_proposedRate = 0;
+    m_currentMode = 0;
+    m_rotations = RandR::Rotate0;
+    
+    m_id = id;
 }
 
 RandRCrtc::~RandRCrtc()
 {
-	// do nothing for now
+    // do nothing for now
 }
 
 RRCrtc RandRCrtc::id() const
 {
-	return m_id;
+    return m_id;
 }
 
 int RandRCrtc::rotations() const
 {
-	return m_rotations;
+    return m_rotations;
 }
 
 int RandRCrtc::rotation() const
 {
-	return m_currentRotation;
+    return m_currentRotation;
 }
 
 bool RandRCrtc::isValid(void) const
 {
-	return m_id != None;
+    return m_id != None;
 }
 
 void RandRCrtc::loadSettings(bool notify)
 {
-	if(m_id == None)
-		return;
-	
-	kDebug() << "Querying information about CRTC" << m_id;
-	
-	int changes = 0;
-	XRRCrtcInfo *info = XRRGetCrtcInfo(QX11Info::display(), m_screen->resources(), m_id);
-	Q_ASSERT(info);
+    if (m_id == None) {
+        return;
+    }
+    
+    kDebug() << "Querying information about CRTC" << m_id;
+    
+    int changes = 0;
+    XRRCrtcInfo *info = XRRGetCrtcInfo(QX11Info::display(), m_screen->resources(), m_id);
+    Q_ASSERT(info);
 
-	if (RandR::timestamp != info->timestamp)
-		RandR::timestamp = info->timestamp;
+    if (RandR::timestamp != info->timestamp) {
+        RandR::timestamp = info->timestamp;
+    }
 
-	QRect rect = QRect(info->x, info->y, info->width, info->height);
-	if (rect != m_currentRect)
-	{
-		m_currentRect = rect;
-		changes |= RandR::ChangeRect;
-	}
+    QRect rect = QRect(info->x, info->y, info->width, info->height);
+    if (rect != m_currentRect) {
+        m_currentRect = rect;
+        changes |= RandR::ChangeRect;
+    }
 
-	// get all connected outputs 
-	// and create a list of modes that are available in all connected outputs
-	OutputList outputs;
+    // get all connected outputs 
+    // and create a list of modes that are available in all connected outputs
+    OutputList outputs;
 
-	for (int i = 0; i < info->noutput; ++i) {
-		outputs.append(info->outputs[i]);
-	}
+    for (int i = 0; i < info->noutput; ++i) {
+        outputs.append(info->outputs[i]);
+    }
 
-	// check if the list changed from the original one
-	if (outputs != m_connectedOutputs)
-	{
-		changes |= RandR::ChangeOutputs;
-		m_connectedOutputs = outputs;	
-	}
-	
-	// get all outputs this crtc can be connected to
-	outputs.clear();
-	for (int i = 0; i < info->npossible; ++i)
-		outputs.append(info->possible[i]);
+    // check if the list changed from the original one
+    if (outputs != m_connectedOutputs) {
+        changes |= RandR::ChangeOutputs;
+        m_connectedOutputs = outputs;	
+    }
+    
+    // get all outputs this crtc can be connected to
+    outputs.clear();
+    for (int i = 0; i < info->npossible; ++i) {
+        outputs.append(info->possible[i]);
+    }
 
-	if (outputs != m_possibleOutputs)
-	{
-		changes |= RandR::ChangeOutputs;
-		m_possibleOutputs = outputs;
-	}
+    if (outputs != m_possibleOutputs) {
+        changes |= RandR::ChangeOutputs;
+        m_possibleOutputs = outputs;
+    }
 
-	// get all rotations
-	m_rotations = info->rotations;
-	if (m_currentRotation != info->rotation)
-	{
-		m_currentRotation = info->rotation;
-		changes |= RandR::ChangeRotation;
-	}
+    // get all rotations
+    m_rotations = info->rotations;
+    if (m_currentRotation != info->rotation) {
+        m_currentRotation = info->rotation;
+        changes |= RandR::ChangeRotation;
+    }
 
-	// check if the current mode has changed
-	if (m_currentMode != info->mode)
-	{
-		m_currentMode = info->mode;
-		changes |= RandR::ChangeMode;
-	}
+    // check if the current mode has changed
+    if (m_currentMode != info->mode) {
+        m_currentMode = info->mode;
+        changes |= RandR::ChangeMode;
+    }
 
-	RandRMode m = m_screen->mode(m_currentMode);
-	if (m_currentRate != m.refreshRate())
-	{
-		m_currentRate = m.refreshRate();
-		changes |= RandR::ChangeRate;
-	}
+    RandRMode m = m_screen->mode(m_currentMode);
+    if (m_currentRate != m.refreshRate()) {
+        m_currentRate = m.refreshRate();
+        changes |= RandR::ChangeRate;
+    }
 
-	// just to make sure it gets initialized
-	m_proposedRect = m_currentRect;
-	m_proposedRotation = m_currentRotation;
-	m_proposedRate = m_currentRate;
-		
-	// free the info
-	XRRFreeCrtcInfo(info);
+    // just to make sure it gets initialized
+    m_proposedRect = m_currentRect;
+    m_proposedRotation = m_currentRotation;
+    m_proposedRate = m_currentRate;
+            
+    // free the info
+    XRRFreeCrtcInfo(info);
 
-	if (changes && notify)
-		emit crtcChanged(m_id, changes);
+    if (changes && notify) {
+        emit crtcChanged(m_id, changes);
+    }
 }
 
 void RandRCrtc::handleEvent(XRRCrtcChangeNotifyEvent *event)
 {
-	kDebug() << "[CRTC] Event...";
-	int changed = 0;
+    kDebug() << "[CRTC] Event...";
+    int changed = 0;
 
-	if (event->mode != m_currentMode)
-	{
-		kDebug() << "   Changed mode";
-		changed |= RandR::ChangeMode;
-		m_currentMode = event->mode;
-	}
-	
-	if (event->rotation != m_currentRotation)
-	{
-		kDebug() << "   Changed rotation: " << event->rotation;
-		changed |= RandR::ChangeRotation;
-		m_currentRotation = event->rotation;
-	}
-	if (event->x != m_currentRect.x() || event->y != m_currentRect.y())
-	{
-		kDebug() << "   Changed position: " << event->x << "," << event->y;
-		changed |= RandR::ChangeRect;
-		m_currentRect.moveTopLeft(QPoint(event->x, event->y));
-	}
+    if (event->mode != m_currentMode) {
+        kDebug() << "   Changed mode";
+        changed |= RandR::ChangeMode;
+        m_currentMode = event->mode;
+    }
 
-	RandRMode mode = m_screen->mode(m_currentMode);
-	if (mode.size() != m_currentRect.size())
-	{
-		kDebug() << "   Changed size: " << mode.size();
-		changed |= RandR::ChangeRect;
-		m_currentRect.setSize(mode.size());
-		//Do NOT use event->width and event->height here, as it is being returned wrongly
-	}
+    if (event->rotation != m_currentRotation) {
+        kDebug() << "   Changed rotation: " << event->rotation;
+        changed |= RandR::ChangeRotation;
+        m_currentRotation = event->rotation;
+    }
+    if (event->x != m_currentRect.x() || event->y != m_currentRect.y()) {
+        kDebug() << "   Changed position: " << event->x << "," << event->y;
+        changed |= RandR::ChangeRect;
+        m_currentRect.moveTopLeft(QPoint(event->x, event->y));
+    }
 
-	if (changed)
-		emit crtcChanged(m_id, changed);
+    RandRMode mode = m_screen->mode(m_currentMode);
+    if (mode.size() != m_currentRect.size()) {
+        kDebug() << "   Changed size: " << mode.size();
+        changed |= RandR::ChangeRect;
+        m_currentRect.setSize(mode.size());
+        //Do NOT use event->width and event->height here, as it is being returned wrongly
+    }
+
+    if (changed) {
+        emit crtcChanged(m_id, changed);
+    }
 }
 
 RandRMode RandRCrtc::mode() const
 {
-	return m_screen->mode(m_currentMode);
+    return m_screen->mode(m_currentMode);
 }
 
 QRect RandRCrtc::rect() const
 {
-	return m_currentRect;
+    return m_currentRect;
 }
 
 float RandRCrtc::refreshRate() const
 {
-	return m_currentRate;
+    return m_currentRate;
 }
 
 bool RandRCrtc::applyProposed()
@@ -334,53 +329,54 @@ bool RandRCrtc::applyProposed()
 
 bool RandRCrtc::proposeSize(const QSize &s)
 {
-	m_proposedRect.setSize(s);
-	m_proposedRate = 0;
-	return true;
+    m_proposedRect.setSize(s);
+    m_proposedRate = 0;
+    return true;
 }
 
 bool RandRCrtc::proposePosition(const QPoint &p)
 {
-	m_proposedRect.moveTopLeft(p);
-	return true;
+    m_proposedRect.moveTopLeft(p);
+    return true;
 }
 
 bool RandRCrtc::proposeRotation(int rotation)
 {
-	// check if this crtc supports the asked rotation
-	if (!rotation && m_rotations)
-		return false;
+    // check if this crtc supports the asked rotation
+    if (!rotation && m_rotations) {
+        return false;
+    }
 
-	m_proposedRotation = rotation;
-	return true;
+    m_proposedRotation = rotation;
+    return true;
 
 }
 
 bool RandRCrtc::proposeRefreshRate(float rate)
 {
-	m_proposedRate = rate;
-	return true;
+    m_proposedRate = rate;
+    return true;
 }
 
 void RandRCrtc::proposeOriginal()
 {
-	m_proposedRotation = m_originalRotation;
-	m_proposedRect = m_originalRect;
-	m_proposedRate = m_originalRate;
+    m_proposedRotation = m_originalRotation;
+    m_proposedRect = m_originalRect;
+    m_proposedRate = m_originalRate;
 }
 
 void RandRCrtc::setOriginal()
 {
-	m_originalRotation = m_currentRotation;
-	m_originalRect = m_currentRect;
-	m_originalRate = m_currentRate;
+    m_originalRotation = m_currentRotation;
+    m_originalRect = m_currentRect;
+    m_originalRate = m_currentRate;
 }
 
 bool RandRCrtc::proposedChanged()
 {
-	return (m_proposedRotation != m_currentRotation ||
-		m_proposedRect != m_currentRect ||
-		m_proposedRate != m_currentRate);
+    return (m_proposedRotation != m_currentRotation ||
+            m_proposedRect != m_currentRect ||
+            m_proposedRate != m_currentRate);
 }
 
 bool RandRCrtc::addOutput(RROutput output, const QSize &s)
@@ -406,44 +402,41 @@ bool RandRCrtc::addOutput(RROutput output, const QSize &s)
 
 bool RandRCrtc::removeOutput(RROutput output)
 {
-	int index = m_connectedOutputs.indexOf(output);
-	if (index == -1)
-		return false;
+    int index = m_connectedOutputs.indexOf(output);
+    if (index == -1) {
+        return false;
+    }
 
-	m_connectedOutputs.removeAt(index);
-	return true;
+    m_connectedOutputs.removeAt(index);
+    return true;
 }	
 
 OutputList RandRCrtc::connectedOutputs() const
 {
-	return m_connectedOutputs;
+    return m_connectedOutputs;
 }
 
 ModeList RandRCrtc::modes() const
-{	
-	ModeList modeList;
+{
+    ModeList modeList;
 
-	bool first = true;
+    bool first = true;
 
-	foreach(RROutput o, m_connectedOutputs)
-	{
-		RandROutput *output = m_screen->output(o);
-		if (first)
-		{
-			modeList = output->modes();
-			first = false;
-		}
-		else
-		{
-			foreach(RRMode m, modeList)
-			{
-				if (output->modes().indexOf(m) == -1)
-					modeList.removeAll(m);
-			}
-		}
-	}
+    foreach(RROutput o, m_connectedOutputs) {
+        RandROutput *output = m_screen->output(o);
+        if (first) {
+            modeList = output->modes();
+            first = false;
+        } else {
+            foreach(RRMode m, modeList) {
+                if (output->modes().indexOf(m) == -1) {
+                    modeList.removeAll(m);
+                }
+            }
+        }
+    }
 
-	return modeList;
+    return modeList;
 }
 
 #include "moc_randrcrtc.cpp"

@@ -285,33 +285,33 @@ void OutputGraphicsItem::disconnect()
 
 void OutputGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	// disconnect from the current layout
-	disconnect();
+    // disconnect from the current layout
+    disconnect();
 
-	QGraphicsRectItem::mousePressEvent(event);
+    QGraphicsRectItem::mousePressEvent(event);
 }
 
 void OutputGraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-   QGraphicsRectItem::mouseReleaseEvent(event);
-   emit itemChanged(this);
+    QGraphicsRectItem::mouseReleaseEvent(event);
+    emit itemChanged(this);
 }
 
 bool OutputGraphicsItem::isConnected()
 {
-	return (m_top != NULL || m_bottom != NULL || m_left != NULL || m_right != NULL);
+    return (m_top != NULL || m_bottom != NULL || m_left != NULL || m_right != NULL);
 }
 
 void OutputGraphicsItem::setPrimary(bool primary)
 {
-	QPen p=pen();
-	p.setWidth(primary ? rect().width()/100 : 0);
-	setPen(p);
+    QPen p=pen();
+    p.setWidth(primary ? rect().width()/100 : 0);
+    setPen(p);
 }
 
 bool OutputGraphicsItem::isPrimary() const
 {
-	return pen().width()>0;
+    return pen().width()>0;
 }
 
 #include "moc_outputgraphicsitem.cpp"

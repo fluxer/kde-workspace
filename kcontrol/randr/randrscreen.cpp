@@ -26,9 +26,9 @@
 #include <QAction>
 
 RandRScreen::RandRScreen(int screenIndex)
-: m_originalPrimaryOutput(0),
-  m_proposedPrimaryOutput(0),
-  m_resources(0)
+    : m_originalPrimaryOutput(0),
+    m_proposedPrimaryOutput(0),
+    m_resources(0)
 {
     m_index = screenIndex;
     m_rect = QRect(0, 0, XDisplayWidth(QX11Info::display(), m_index), XDisplayHeight(QX11Info::display(), m_index));
@@ -78,85 +78,81 @@ Window RandRScreen::rootWindow() const
 
 void RandRScreen::loadSettings(bool notify)
 {
-	bool changed = false;
-	int minW, minH, maxW, maxH;
+    bool changed = false;
+    int minW, minH, maxW, maxH;
 
-	Status status = XRRGetScreenSizeRange(QX11Info::display(), rootWindow(), &minW, &minH, &maxW, &maxH);
-	//FIXME: we should check the status here
-	Q_UNUSED(status);
-	QSize minSize = QSize(minW, minH);
-	QSize maxSize = QSize(maxW, maxH);
+    Status status = XRRGetScreenSizeRange(QX11Info::display(), rootWindow(), &minW, &minH, &maxW, &maxH);
+    //FIXME: we should check the status here
+    Q_UNUSED(status);
+    QSize minSize = QSize(minW, minH);
+    QSize maxSize = QSize(maxW, maxH);
 
-	if (minSize != m_minSize || maxSize != m_maxSize)
-	{
-		m_minSize = minSize;
-		m_maxSize = maxSize;
-		changed = true;
-	}
+    if (minSize != m_minSize || maxSize != m_maxSize) {
+        m_minSize = minSize;
+        m_maxSize = maxSize;
+        changed = true;
+    }
 
-	if (m_resources)
-		XRRFreeScreenResources(m_resources);
+    if (m_resources) {
+        XRRFreeScreenResources(m_resources);
+    }
 
-	m_resources = XRRGetScreenResources(QX11Info::display(), rootWindow());
-	Q_ASSERT(m_resources);
+    m_resources = XRRGetScreenResources(QX11Info::display(), rootWindow());
+    Q_ASSERT(m_resources);
 
-	RandR::timestamp = m_resources->timestamp;
+    RandR::timestamp = m_resources->timestamp;
 
-	// get all modes
-	for (int i = 0; i < m_resources->nmode; ++i)
-	{
-		if (!m_modes.contains(m_resources->modes[i].id))
-		{
-			m_modes[m_resources->modes[i].id] = RandRMode(&m_resources->modes[i]);
-			changed = true;
-		}
-	}
+    // get all modes
+    for (int i = 0; i < m_resources->nmode; ++i)
+    {
+        if (!m_modes.contains(m_resources->modes[i].id)) {
+            m_modes[m_resources->modes[i].id] = RandRMode(&m_resources->modes[i]);
+            changed = true;
+        }
+    }
 
-	//get all crtcs
-	kDebug() << "Creating CRTC object for XID 0 (\"None\")";
-	RandRCrtc *c_none = new RandRCrtc(this, None);
-	m_crtcs[None] = c_none;
-	
-	for (int i = 0; i < m_resources->ncrtc; ++i)
-	{
-		if (m_crtcs.contains(m_resources->crtcs[i]))
-			m_crtcs[m_resources->crtcs[i]]->loadSettings(notify);
-		else
-		{
-			kDebug() << "Creating CRTC object for XID" << m_resources->crtcs[i];
-			RandRCrtc *c = new RandRCrtc(this, m_resources->crtcs[i]);
-			connect(c, SIGNAL(crtcChanged(RRCrtc,int)), this, SIGNAL(configChanged()));
-			connect(c, SIGNAL(crtcChanged(RRCrtc,int)), this, SLOT(save()));
-			c->loadSettings(notify);
-			m_crtcs[m_resources->crtcs[i]] = c;
-			changed = true;
-		}
-	}
+    //get all crtcs
+    kDebug() << "Creating CRTC object for XID 0 (\"None\")";
+    RandRCrtc *c_none = new RandRCrtc(this, None);
+    m_crtcs[None] = c_none;
 
-	//get all outputs
-	for (int i = 0; i < m_resources->noutput; ++i)
-	{
-		if (m_outputs.contains(m_resources->outputs[i]))
-			;//m_outputs[m_resources->outputs[i]]->loadSettings(notify);
-		else
-		{
-			kDebug() << "Creating output object for XID" << m_resources->outputs[i];
-			RandROutput *o = new RandROutput(this, m_resources->outputs[i]);
-			connect(o, SIGNAL(outputChanged(RROutput,int)), this,
-				      SLOT(slotOutputChanged(RROutput,int)));
-			m_outputs[m_resources->outputs[i]] = o;
-			if (o->isConnected())
-				m_connectedCount++;
-			if (o->isActive())
-				m_activeCount++;
+    for (int i = 0; i < m_resources->ncrtc; ++i) {
+        if (m_crtcs.contains(m_resources->crtcs[i])) {
+                m_crtcs[m_resources->crtcs[i]]->loadSettings(notify);
+        } else {
+            kDebug() << "Creating CRTC object for XID" << m_resources->crtcs[i];
+            RandRCrtc *c = new RandRCrtc(this, m_resources->crtcs[i]);
+            connect(c, SIGNAL(crtcChanged(RRCrtc,int)), this, SIGNAL(configChanged()));
+            connect(c, SIGNAL(crtcChanged(RRCrtc,int)), this, SLOT(save()));
+            c->loadSettings(notify);
+            m_crtcs[m_resources->crtcs[i]] = c;
+            changed = true;
+        }
+    }
 
-			changed = true;
-		}
-	}
+    //get all outputs
+    for (int i = 0; i < m_resources->noutput; ++i) {
+        if (m_outputs.contains(m_resources->outputs[i])) {
+            ; // m_outputs[m_resources->outputs[i]]->loadSettings(notify);
+        } else {
+            kDebug() << "Creating output object for XID" << m_resources->outputs[i];
+            RandROutput *o = new RandROutput(this, m_resources->outputs[i]);
+            connect(o, SIGNAL(outputChanged(RROutput,int)), this, SLOT(slotOutputChanged(RROutput,int)));
+            m_outputs[m_resources->outputs[i]] = o;
+            if (o->isConnected()) {
+                m_connectedCount++;
+            }
+            if (o->isActive()) {
+                m_activeCount++;
+            }
 
-	if (notify && changed)
-		emit configChanged();
+            changed = true;
+        }
+    }
 
+    if (notify && changed) {
+        emit configChanged();
+    }
 }
 
 void RandRScreen::handleEvent(XRRScreenChangeNotifyEvent* event)
@@ -412,24 +408,24 @@ QRect RandRScreen::rect() const
 
 void RandRScreen::load(KConfig& config, bool skipOutputs)
 {
-	KConfigGroup group = config.group("Screen_" + QString::number(m_index));
-	m_outputsUnified = group.readEntry("OutputsUnified", false);
-	m_unifiedRect = (group.readEntry("UnifiedRect", "0,0,0,0") == "0,0,0,0")
-		? QRect() // "0,0,0,0" (serialization for QRect()) does not convert to a QRect
-		: group.readEntry("UnifiedRect", QRect());
-	m_unifiedRotation = group.readEntry("UnifiedRotation", (int) RandR::Rotate0);
+    KConfigGroup group = config.group("Screen_" + QString::number(m_index));
+    m_outputsUnified = group.readEntry("OutputsUnified", false);
+    m_unifiedRect = (group.readEntry("UnifiedRect", "0,0,0,0") == "0,0,0,0")
+        ? QRect() // "0,0,0,0" (serialization for QRect()) does not convert to a QRect
+        : group.readEntry("UnifiedRect", QRect());
+    m_unifiedRotation = group.readEntry("UnifiedRotation", (int) RandR::Rotate0);
 
-//	slotUnifyOutputs(m_outputsUnified);
+    // slotUnifyOutputs(m_outputsUnified);
 
-	if (skipOutputs) {
-		return;
-	}
+    if (skipOutputs) {
+            return;
+    }
 
-	foreach(RandROutput *output, m_outputs)
-	{
-		if (output->isConnected())
-			output->load(config);
-	}
+    foreach(RandROutput *output, m_outputs) {
+        if (output->isConnected()) {
+            output->load(config);
+        }
+    }
 }
 
 void RandRScreen::save(KConfig &config)
@@ -454,19 +450,19 @@ void RandRScreen::save()
 
 QStringList RandRScreen::startupCommands() const
 {
-	QStringList commands;
-	foreach(RandROutput *output, m_outputs)
-	{
-		if (output->isConnected())
-			commands += output->startupCommands();
-	}
-	return commands;
+    QStringList commands;
+    foreach(RandROutput *output, m_outputs) {
+        if (output->isConnected()) {
+            commands += output->startupCommands();
+        }
+    }
+    return commands;
 }
 
 void RandRScreen::load()
 {
-	KConfig cfg("krandrrc");
-	load(cfg);
+    KConfig cfg("krandrrc");
+    load(cfg);
 }
 
 bool RandRScreen::applyProposed(bool confirm)
@@ -601,8 +597,8 @@ void RandRScreen::unifyOutputs()
 
 void RandRScreen::slotResizeUnified(QAction *action)
 {
-	m_unifiedRect.setSize(action->data().toSize()); 
-	unifyOutputs();
+    m_unifiedRect.setSize(action->data().toSize()); 
+    unifyOutputs();
 }
 
 void RandRScreen::slotUnifyOutputs(bool unified)
@@ -637,31 +633,33 @@ void RandRScreen::slotUnifyOutputs(bool unified)
 
 void RandRScreen::slotRotateUnified(QAction *action)
 {
-	m_unifiedRotation = action->data().toInt(); 
-	
-	unifyOutputs();
+    m_unifiedRotation = action->data().toInt();
+
+    unifyOutputs();
 }
 
 void RandRScreen::slotOutputChanged(RROutput id, int changes)
 {
-	Q_UNUSED(id);
-	Q_UNUSED(changes);
+    Q_UNUSED(id);
+    Q_UNUSED(changes);
 
-	int connected = 0, active = 0;
-	foreach(RandROutput *output, m_outputs)
-	{
-		if (output->isConnected())
-			connected++;
-		if (output->isActive())
-			active++;
-	}
+    int connected = 0, active = 0;
+    foreach(RandROutput *output, m_outputs) {
+        if (output->isConnected()) {
+            connected++;
+        }
+        if (output->isActive()) {
+            active++;
+        }
+    }
 
-	m_connectedCount = connected;
-	m_activeCount = active;
+    m_connectedCount = connected;
+    m_activeCount = active;
 
-	// if there is less than 2 outputs connected, there is no need to unify
-	if (connected <= 1)
-		return;
+    // if there is less than 2 outputs connected, there is no need to unify
+    if (connected <= 1) {
+        return;
+    }
 }
 
 #include "moc_randrscreen.cpp"

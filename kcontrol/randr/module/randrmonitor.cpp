@@ -69,8 +69,7 @@ RandrMonitorModule::RandrMonitorModule( QObject* parent, const QList<QVariant>& 
 
 RandrMonitorModule::~RandrMonitorModule()
 {
-    if( have_randr )
-    {
+    if( have_randr ) {
         Display* dpy = QX11Info::display();
         XDestroyWindow( dpy, window );
         delete helper;
@@ -81,8 +80,9 @@ RandrMonitorModule::~RandrMonitorModule()
 void RandrMonitorModule::initRandr()
 {
     Display* dpy = QX11Info::display();
-    if( !XRRQueryExtension( dpy, &randr_base, &randr_error ))
+    if( !XRRQueryExtension( dpy, &randr_base, &randr_error )) {
         return;
+    }
     int major = 1;
     int minor = 2;
     if( !XRRQueryVersion( dpy, &major, &minor ) || major < 1 || (major == 1 && minor < 2 ))
@@ -206,12 +206,12 @@ QStringList RandrMonitorModule::activeMonitors() const
     QStringList ret;
     Display* dpy = QX11Info::display();
     XRRScreenResources* resources = XRRGetScreenResources( dpy, window );
-    for( int i = 0; i < resources->noutput; ++i )
-    {
+    for( int i = 0; i < resources->noutput; ++i ) {
         XRROutputInfo* info = XRRGetOutputInfo( dpy, resources, resources->outputs[ i ] );
         QString name = QString::fromUtf8( info->name );
-        if(info->crtc != None)
+        if(info->crtc != None) {
             ret.append( name );
+        }
         XRRFreeOutputInfo( info );
     }
     XRRFreeScreenResources( resources );

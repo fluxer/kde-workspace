@@ -233,48 +233,50 @@ QString RandROutput::name() const
 
 QString RandROutput::icon() const
 {
-	// http://www.thinkwiki.org/wiki/Xorg_RandR_1.2#Output_port_names has a
-	// list of possible output names, at least for the intel and radeon drivers
-	// that support RandR 1.2. (nVidia drivers are not yet there at the time
-	// of writing, 2008.)
-	// FIXME: It would also be interesting to be able to get the monitor name
-	// using EDID or something like that, just don't know if it is even possible.
-	if (m_name.contains("VGA") || m_name.contains("DVI") || m_name.contains("TMDS"))
-		return "video-display";
-	else if (m_name.contains("LVDS"))
-		return "video-display";
-	else if (m_name.contains("TV") || m_name.contains("S-video"))
-		return "video-television";
+    // http://www.thinkwiki.org/wiki/Xorg_RandR_1.2#Output_port_names has a
+    // list of possible output names, at least for the intel and radeon drivers
+    // that support RandR 1.2. (nVidia drivers are not yet there at the time
+    // of writing, 2008.)
+    // FIXME: It would also be interesting to be able to get the monitor name
+    // using EDID or something like that, just don't know if it is even possible.
+    if (m_name.contains("VGA") || m_name.contains("DVI") || m_name.contains("TMDS")) {
+        return "video-display";
+    } else if (m_name.contains("LVDS")) {
+        return "video-display";
+    } else if (m_name.contains("TV") || m_name.contains("S-video")) {
+        return "video-television";
+    }
 
-	return "video-display";
+    return "video-display";
 }
 
 CrtcList RandROutput::possibleCrtcs() const
 {
-	return m_possibleCrtcs;
+    return m_possibleCrtcs;
 }
 
 RandRCrtc *RandROutput::crtc() const
 {
-	return m_crtc;
+    return m_crtc;
 }
 
 ModeList RandROutput::modes() const
 {
-	return m_modes;
+    return m_modes;
 }
 
 RandRMode RandROutput::mode() const
 {
-	if (!isConnected() || !m_crtc)
-		return RandRMode();
+    if (!isConnected() || !m_crtc) {
+        return RandRMode();
+    }
 
-	return m_crtc->mode();
+    return m_crtc->mode();
 }
 
 RandRMode RandROutput::preferredMode(void) const
 {
-	return m_preferredMode;
+    return m_preferredMode;
 }
 
 SizeList RandROutput::sizes() const
@@ -294,10 +296,11 @@ SizeList RandROutput::sizes() const
 
 QRect RandROutput::rect() const
 {
-	if (!m_crtc->isValid())
-		return QRect(0, 0, 0, 0);
+    if (!m_crtc->isValid()) {
+        return QRect(0, 0, 0, 0);
+    }
 
-	return m_crtc->rect();
+    return m_crtc->rect();
 }
 
 RateList RandROutput::refreshRates(const QSize &s) const
