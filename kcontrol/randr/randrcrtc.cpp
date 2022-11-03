@@ -428,9 +428,11 @@ ModeList RandRCrtc::modes() const
             modeList = output->modes();
             first = false;
         } else {
-            foreach(RRMode m, modeList) {
+            QMutableListIterator<RRMode> it(modeList);
+            while (it.hasNext()) {
+                const RRMode m = it.next();
                 if (output->modes().indexOf(m) == -1) {
-                    modeList.removeAll(m);
+                    it.remove();
                 }
             }
         }
