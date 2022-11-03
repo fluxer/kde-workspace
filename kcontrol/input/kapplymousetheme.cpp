@@ -45,7 +45,6 @@ int main( int argc, char* argv[] )
 {
     if( argc != 3 )
         return 1;
-    int ret = 0;
 #ifdef HAVE_XCURSOR
     Display* dpy = XOpenDisplay( NULL );
     if( dpy == NULL )
@@ -61,8 +60,7 @@ int main( int argc, char* argv[] )
         && isEmpty( XGetDefault( dpy, "Xcursor", "theme" ))
         && isEmpty( XcursorGetTheme( dpy)))
     {
-        theme = "default";
-        ret = 10; // means to switch to default
+        theme = "Oxygen_White";
     }
 
      // Apply the KDE cursor theme to ourselves
@@ -81,5 +79,5 @@ int main( int argc, char* argv[] )
 #else
     Q_UNUSED(argv);
 #endif
-    return ret;
+    return 0;
 }
