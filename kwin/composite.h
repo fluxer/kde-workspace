@@ -271,7 +271,7 @@ private:
     QTimer m_releaseSelectionTimer;
     QList<xcb_atom_t> m_unusedSupportProperties;
     QTimer m_unusedSupportPropertyTimer;
-    qint64 vBlankInterval, fpsInterval;
+    qint64 fpsInterval;
     int m_xrrRefreshRate;
     QElapsedTimer nextPaintReference;
     QRegion repaints_region;

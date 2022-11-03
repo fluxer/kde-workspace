@@ -97,8 +97,6 @@ public:
     enum ImageFilterType { ImageFilterFast, ImageFilterGood };
     // there's nothing to paint (adjust time_diff later)
     virtual void idle();
-    virtual bool blocksForRetrace() const;
-    virtual bool syncsToVBlank() const;
     virtual OverlayWindow* overlayWindow() = 0;
 public Q_SLOTS:
     // a window has been destroyed

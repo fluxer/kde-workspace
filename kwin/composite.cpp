@@ -84,7 +84,6 @@ Compositor::Compositor(QObject* workspace)
     : QObject(workspace)
     , m_suspended(options->isUseCompositing() ? NoReasonSuspend : UserSuspend)
     , cm_selection(NULL)
-    , vBlankInterval(0)
     , fpsInterval(0)
     , m_xrrRefreshRate(0)
     , forceUnredirectCheck(false)
@@ -197,11 +196,6 @@ void Compositor::setup()
     }
     m_xrrRefreshRate = KWin::currentRefreshRate();
     fpsInterval = options->maxFpsInterval();
-    if (m_scene->syncsToVBlank()) {  // if we do vsync, set the fps to the next multiple of the vblank rate
-        vBlankInterval = milliToNano(1000) / m_xrrRefreshRate;
-        fpsInterval = qMax((fpsInterval / vBlankInterval) * vBlankInterval, vBlankInterval);
-    } else
-        vBlankInterval = milliToNano(1); // no sync - DO NOT set "0", would cause div-by-zero segfaults.
     m_timeSinceLastVBlank = fpsInterval - (options->vBlankTime() + 1); // means "start now" - we don't have even a slight idea when the first vsync will occur
     scheduleRepaint();
     xcb_composite_redirect_subwindows(connection(), rootWindow(), XCB_COMPOSITE_REDIRECT_MANUAL);
@@ -587,52 +581,14 @@ void Compositor::setCompositeTimer()
         return;
 
     uint waitTime = 1;
-
-    if (m_scene->blocksForRetrace()) {
-
-        // TODO: make vBlankTime dynamic?!
-        // It's required because glXWaitVideoSync will *likely* block a full frame if one enters
-        // a retrace pass which can last a variable amount of time, depending on the actual screen
-        // Now, my ooold 19" CRT can do such retrace so that 2ms are entirely sufficient,
-        // while another ooold 15" TFT requires about 6ms
-
-        qint64 padding = m_timeSinceLastVBlank;
-        if (padding > fpsInterval) {
-            // we're at low repaints or spent more time in painting than the user wanted to wait for that frame
-            padding = vBlankInterval - (padding%vBlankInterval); // -> align to next vblank
-        } else {  // -> align to the next maxFps tick
-            padding = ((vBlankInterval - padding%vBlankInterval) + (fpsInterval/vBlankInterval-1)*vBlankInterval);
-            //               "remaining time of the first vsync" + "time for the other vsyncs of the frame"
+    // w/o blocking vsync we just jump to the next demanded tick
+    if (fpsInterval > m_timeSinceLastVBlank) {
+        waitTime = nanoToMilli(fpsInterval - m_timeSinceLastVBlank);
+        if (!waitTime) {
+            waitTime = 1; // will ensure we don't block out the eventloop - the system's just not faster ...
         }
-
-        if (padding < options->vBlankTime()) { // we'll likely miss this frame
-            waitTime = nanoToMilli(padding + vBlankInterval - options->vBlankTime()); // so we add one
-        } else {
-            waitTime = nanoToMilli(padding - options->vBlankTime());
-        }
-    }
-    else { // w/o blocking vsync we just jump to the next demanded tick
-        if (fpsInterval > m_timeSinceLastVBlank) {
-            waitTime = nanoToMilli(fpsInterval - m_timeSinceLastVBlank);
-            if (!waitTime) {
-                waitTime = 1; // will ensure we don't block out the eventloop - the system's just not faster ...
-            }
-        }/* else if (m_scene->syncsToVBlank() && m_timeSinceLastVBlank - fpsInterval < (vBlankInterval<<1)) {
-            // NOTICE - "for later" ------------------------------------------------------------------
-            // It can happen that we push two frames within one refresh cycle.
-            // Swapping will then block even with triple buffering when the GPU does not discard but
-            // queues frames
-            // now here's the mean part: if we take that as "OMG, we're late - next frame ASAP",
-            // there'll immediately be 2 frames in the pipe, swapping will block, we think we're
-            // late ... ewww
-            // so instead we pad to the clock again and add 2ms safety to ensure the pipe is really
-            // free
-            // NOTICE: obviously m_timeSinceLastVBlank can be too big because we're too slow as well
-            // So if this code was enabled, we'd needlessly half the framerate once more (15 instead of 30)
-            waitTime = nanoToMilli(vBlankInterval - (m_timeSinceLastVBlank - fpsInterval)%vBlankInterval) + 2;
-        }*/ else {
-            waitTime = 1; // ... "0" would be sufficient, but the compositor isn't the WMs only task
-        }
+    } else {
+        waitTime = 1; // ... "0" would be sufficient, but the compositor isn't the WMs only task
     }
     compositeTimer.start(qMin(waitTime, 250u), this); // force 4fps minimum
 }
