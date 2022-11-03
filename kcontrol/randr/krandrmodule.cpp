@@ -18,8 +18,6 @@
  */
 
 #include "krandrmodule.h"
-#include "legacyrandrconfig.h"
-#include "legacyrandrscreen.h"
 #include "randrdisplay.h"
 #include "randrconfig.h"
 
@@ -42,7 +40,6 @@ extern "C"
 {
     KDE_EXPORT void kcminit_randr()
     {
-        // TODO: drop legacy config support
         KConfig config("krandrrc");
         KConfigGroup group = config.group("Display");
         const bool applyonstartup = group.readEntry("ApplyOnStartup", false);
@@ -63,118 +60,84 @@ extern "C"
 KRandRModule::KRandRModule(QWidget *parent, const QVariantList&)
     : KCModule(KSSFactory::componentData(), parent)
 {
-	m_display = new RandRDisplay();
-	if (!m_display->isValid())
-	{
-		QVBoxLayout *topLayout = new QVBoxLayout(this);
-		QLabel *label =
-		    new QLabel(i18n("Your X server does not support resizing and "
-		                    "rotating the display. Please update to version 4.3 "
-						"or greater. You need the X Resize, Rotate, and Reflect "
-						"extension (RANDR) version 1.1 or greater to use this "
-						"feature."), this);
-						
-		label->setWordWrap(true);
-		topLayout->addWidget(label);
-		kWarning() << "Error: " << m_display->errorCode() ;
-		return;
-	}
+    m_display = new RandRDisplay();
+    if (!m_display->isValid()) {
+            QVBoxLayout *topLayout = new QVBoxLayout(this);
+            QLabel *label = new QLabel(i18n("Your X server does not support resizing and "
+                                            "rotating the display. Please update to version 4.3 "
+                                            "or greater. You need the X Resize, Rotate, and Reflect "
+                                            "extension (RANDR) version 1.1 or greater to use this "
+                                            "feature."), this);
+                                            
+            label->setWordWrap(true);
+            topLayout->addWidget(label);
+            kWarning() << "Error: " << m_display->errorCode() ;
+            return;
+    }
 
-	QVBoxLayout* topLayout = new QVBoxLayout(this);
-	topLayout->setMargin(0);
-	topLayout->setSpacing(KDialog::spacingHint());
+    QVBoxLayout* topLayout = new QVBoxLayout(this);
+    topLayout->setMargin(0);
+    topLayout->setSpacing(KDialog::spacingHint());
 
-#ifdef HAS_RANDR_1_2
-	if (RandR::has_1_2)
-	{
-		m_config = new RandRConfig(this, m_display);
-		connect(m_config, SIGNAL(changed(bool)), SIGNAL(changed(bool)));
-		topLayout->addWidget(m_config);
-	}
-	else
-#endif
-	{
-		m_legacyConfig = new LegacyRandRConfig(this, m_display);
-		connect(m_legacyConfig, SIGNAL(changed(bool)), SIGNAL(changed(bool)));
-		topLayout->addWidget(m_legacyConfig);
-	}
+    m_config = new RandRConfig(this, m_display);
+    connect(m_config, SIGNAL(changed(bool)), SIGNAL(changed(bool)));
+    topLayout->addWidget(m_config);
 
-	//topLayout->addStretch(1);
+    // topLayout->addStretch(1);
 
-	setButtons(KCModule::Apply);
+    setButtons(KCModule::Apply);
 
-	kapp->installX11EventFilter( this );
+    kapp->installX11EventFilter( this );
 }
 
 KRandRModule::~KRandRModule(void)
 {
-	delete m_display;
+    delete m_display;
 }
 
 void KRandRModule::defaults()
 {
-        if (!m_display->isValid()) {
-                return;
-        }
-#ifdef HAS_RANDR_1_2
-	if (RandR::has_1_2)
-		m_config->defaults();
-	else
-#endif
-		m_legacyConfig->defaults();
+    if (!m_display->isValid()) {
+        return;
+    }
+    m_config->defaults();
 }
 
 void KRandRModule::load()
 {
-	kDebug() << "Loading KRandRModule...";
-	
-        if (!m_display->isValid()) {
-                return;
-        }
-#ifdef HAS_RANDR_1_2
-	if (RandR::has_1_2)
-		m_config->load();
-	else
-#endif
-		m_legacyConfig->load();
+    kDebug() << "Loading KRandRModule...";
 
-	emit changed(false);
+    if (!m_display->isValid()) {
+        return;
+    }
+    m_config->load();
+
+    emit changed(false);
 }
 
 void KRandRModule::save()
 {
-        if (!m_display->isValid()) {
-                return;
-        }
-#ifdef HAS_RANDR_1_2
-	if (RandR::has_1_2)
-		m_config->save();
-	else
-#endif
-		m_legacyConfig->save();
+    if (!m_display->isValid()) {
+        return;
+    }
+    m_config->save();
 
 }
 
 void KRandRModule::apply()
 {
-        if (!m_display->isValid()) {
-                return;
-        }
-#ifdef HAS_RANDR_1_2
-	if (RandR::has_1_2)
-		m_config->apply();
-	else
-#endif
-		m_legacyConfig->apply();
+    if (!m_display->isValid()) {
+        return;
+    }
+    m_config->apply();
 }
 
 bool KRandRModule::x11Event(XEvent* e)
 {
-	if (m_display->canHandle(e)) {
-		m_display->handleEvent(e);
-	}
-	return QWidget::x11Event(e);
+    if (m_display->canHandle(e)) {
+        m_display->handleEvent(e);
+    }
+    return QWidget::x11Event(e);
 }
-
 
 #include "moc_krandrmodule.cpp"

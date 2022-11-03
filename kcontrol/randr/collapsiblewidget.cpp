@@ -52,18 +52,18 @@ ArrowButton::~ArrowButton()
 
 void ArrowButton::paintEvent( QPaintEvent *event )
 {
-  Q_UNUSED( event );
-  QPainter p( this );
-  QStyleOption opt;
-  int h = sizeHint().height();
-  opt.rect = QRect(0,( height()- h )/2, h, h);
-  opt.palette = palette();
-  opt.state = QStyle::State_Children;
-  if (isChecked())
-    opt.state |= QStyle::State_Open;
+    Q_UNUSED( event );
+    QPainter p( this );
+    QStyleOption opt;
+    int h = sizeHint().height();
+    opt.rect = QRect(0,( height()- h )/2, h, h);
+    opt.palette = palette();
+    opt.state = QStyle::State_Children;
+    if (isChecked())
+        opt.state |= QStyle::State_Open;
 
-  style()->drawPrimitive(QStyle::PE_IndicatorBranch, &opt, &p);
-  p.end();
+    style()->drawPrimitive(QStyle::PE_IndicatorBranch, &opt, &p);
+    p.end();
 }
 
 
@@ -73,7 +73,7 @@ void ArrowButton::paintEvent( QPaintEvent *event )
 
 class CollapsibleWidget::Private
 {
-  public:
+public:
     QGridLayout    *gridLayout;
     QWidget        *innerWidget;
     ClickableLabel *label;
@@ -85,7 +85,7 @@ class CollapsibleWidget::Private
 
 class SettingsContainer::Private
 {
-  public:
+public:
     QVBoxLayout *layout;
 };
 
@@ -94,186 +94,181 @@ class SettingsContainer::Private
  *****************************************************************/
 
 SettingsContainer::SettingsContainer(QWidget *parent)
- : QScrollArea( parent ), d(new SettingsContainer::Private)
+    : QScrollArea( parent ), d(new SettingsContainer::Private)
 {
-  QWidget *w = new QWidget;
-  QVBoxLayout *helperLay = new QVBoxLayout(w);
-  helperLay->setMargin(0);
-  d->layout = new QVBoxLayout;
-  helperLay->addLayout( d->layout );
-  helperLay->addStretch(1);
-  setWidget(w);
-  setWidgetResizable(true);
+    QWidget *w = new QWidget;
+    QVBoxLayout *helperLay = new QVBoxLayout(w);
+    helperLay->setMargin(0);
+    d->layout = new QVBoxLayout;
+    helperLay->addLayout( d->layout );
+    helperLay->addStretch(1);
+    setWidget(w);
+    setWidgetResizable(true);
 }
 
 SettingsContainer::~SettingsContainer()
 {
-  delete d;
+    delete d;
 }
 
 CollapsibleWidget* SettingsContainer::insertWidget( QWidget *w, const QString& name )
 {
-   if (w && w->layout()) {
-     QLayout *lay = w->layout();
-     lay->setMargin(2);
-     lay->setSpacing(2);
-   }
+    if (w && w->layout()) {
+        QLayout *lay = w->layout();
+        lay->setMargin(2);
+        lay->setSpacing(2);
+    }
 
-   CollapsibleWidget *cw = new CollapsibleWidget( name );
-   d->layout->addWidget( cw );
-   cw->setInnerWidget( w );
-   return cw;
+    CollapsibleWidget *cw = new CollapsibleWidget( name );
+    d->layout->addWidget( cw );
+    cw->setInnerWidget( w );
+    return cw;
 }
 
 CollapsibleWidget::CollapsibleWidget(QWidget *parent)
- : QWidget(parent), d(new CollapsibleWidget::Private)
+    : QWidget(parent), d(new CollapsibleWidget::Private)
 {
   init();
 }
 CollapsibleWidget::CollapsibleWidget(const QString& caption, QWidget *parent)
- : QWidget(parent), d(new CollapsibleWidget::Private)
+    : QWidget(parent), d(new CollapsibleWidget::Private)
 {
-  init();
-  setCaption(caption);
+    init();
+    setCaption(caption);
 }
 
 void CollapsibleWidget::init()
 {
-  d->expander = 0;
-  d->expanderLayout = 0;
-  d->timeline = new QTimeLine( 150, this );
-  d->timeline->setEasingCurve( QEasingCurve(QEasingCurve::InOutSine) );
-  connect( d->timeline, SIGNAL(valueChanged(qreal)),
-           this, SLOT(animateCollapse(qreal)) );
+    d->expander = 0;
+    d->expanderLayout = 0;
+    d->timeline = new QTimeLine( 150, this );
+    d->timeline->setEasingCurve( QEasingCurve(QEasingCurve::InOutSine) );
+    connect( d->timeline, SIGNAL(valueChanged(qreal)), this, SLOT(animateCollapse(qreal)) );
 
-  d->innerWidget = 0;
-  d->gridLayout = new QGridLayout( this );
-  d->gridLayout->setMargin(0);
+    d->innerWidget = 0;
+    d->gridLayout = new QGridLayout( this );
+    d->gridLayout->setMargin(0);
 
-  d->colButton = new ArrowButton;
-  d->colButton->setCheckable(true);
+    d->colButton = new ArrowButton;
+    d->colButton->setCheckable(true);
 
-  d->label = new ClickableLabel;
-  d->label->setSizePolicy(QSizePolicy::MinimumExpanding, 
-                        QSizePolicy::Preferred);
+    d->label = new ClickableLabel;
+    d->label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
 
-  d->gridLayout->addWidget(d->colButton, 1, 1);
-  d->gridLayout->addWidget(d->label, 1, 2);
+    d->gridLayout->addWidget(d->colButton, 1, 1);
+    d->gridLayout->addWidget(d->label, 1, 2);
 
 
-  connect(d->label, SIGNAL(clicked()), 
-          d->colButton, SLOT(click()));
+    connect(d->label, SIGNAL(clicked()), d->colButton, SLOT(click()));
 
-  connect(d->colButton, SIGNAL(toggled(bool)), 
-          SLOT(setExpanded(bool)));
+    connect(d->colButton, SIGNAL(toggled(bool)), SLOT(setExpanded(bool)));
 
-  setExpanded(false);
-  setEnabled(false);
+    setExpanded(false);
+    setEnabled(false);
 }
 
 CollapsibleWidget::~CollapsibleWidget()
 {
-  delete d;
+    delete d;
 }
 
 QWidget* CollapsibleWidget::innerWidget() const
 {
-  return d->innerWidget;
+    return d->innerWidget;
 }
 
 #define SIMPLE
 
 void CollapsibleWidget::setInnerWidget(QWidget *w)
 {
-  if (!w) {
-    return;
-  }
+    if (!w) {
+        return;
+    }
 
-  d->innerWidget = w;
+    d->innerWidget = w;
 
 #ifdef SIMPLE
-  if ( !isExpanded() ) {
-      d->innerWidget->hide();
-  }
-  d->gridLayout->addWidget( d->innerWidget, 2, 2 );
-  d->gridLayout->setRowStretch( 2, 1 );
+    if ( !isExpanded() ) {
+        d->innerWidget->hide();
+    }
+    d->gridLayout->addWidget( d->innerWidget, 2, 2 );
+    d->gridLayout->setRowStretch( 2, 1 );
 #else
-  if ( !d->expander ) {
-      d->expander = new QWidget( this );
-      d->gridLayout->addWidget( d->expander, 2, 2 );
-      d->gridLayout->setRowStretch( 2, 1 );
-      d->expanderLayout = new QVBoxLayout( d->expander );
-      d->expanderLayout->setMargin( 0 );
-      d->expanderLayout->setSpacing( 0 );
-      d->expander->setFixedHeight( 0 );
-  }
+    if ( !d->expander ) {
+        d->expander = new QWidget( this );
+        d->gridLayout->addWidget( d->expander, 2, 2 );
+        d->gridLayout->setRowStretch( 2, 1 );
+        d->expanderLayout = new QVBoxLayout( d->expander );
+        d->expanderLayout->setMargin( 0 );
+        d->expanderLayout->setSpacing( 0 );
+        d->expander->setFixedHeight( 0 );
+    }
 
-  d->innerWidget->setParent( d->expander );
-  d->innerWidget->show();
-  d->expanderLayout->addWidget( d->innerWidget );
+    d->innerWidget->setParent( d->expander );
+    d->innerWidget->show();
+    d->expanderLayout->addWidget( d->innerWidget );
 #endif
 
-  setEnabled( true );
+    setEnabled( true );
 
-  if ( isExpanded() ) {
-    setExpanded( true );
-  }
+    if ( isExpanded() ) {
+        setExpanded( true );
+    }
 }
 
 void CollapsibleWidget::setCaption(const QString& caption)
 {
-  d->label->setText(QString("<b>%1</b>").arg(caption));
+    d->label->setText(QString("<b>%1</b>").arg(caption));
 }
 
 QString CollapsibleWidget::caption() const
 {
-  return d->label->text();
+    return d->label->text();
 }
 
 
 void CollapsibleWidget::setExpanded(bool expanded)
 {
-  if ( !d->innerWidget ) {
-    return;
-  }
+    if ( !d->innerWidget ) {
+        return;
+    }
 
 #ifdef SIMPLE
-  if ( !expanded ) {
-    d->innerWidget->setVisible( false );
-  }
+    if ( !expanded ) {
+        d->innerWidget->setVisible( false );
+    }
 #else
-  if ( expanded ) {
-      d->expander->setVisible( true );
-  }
-  d->innerWidget->setVisible( expanded );
+    if ( expanded ) {
+        d->expander->setVisible( true );
+    }
+    d->innerWidget->setVisible( expanded );
 #endif
-  d->colButton->setChecked( expanded );
-  d->timeline->setDirection( expanded ? QTimeLine::Forward
-                                      : QTimeLine::Backward );
-  if (d->timeline->state() != QTimeLine::Running)
-      d->timeline->start();
+    d->colButton->setChecked( expanded );
+    d->timeline->setDirection( expanded ? QTimeLine::Forward : QTimeLine::Backward );
+    if (d->timeline->state() != QTimeLine::Running) {
+        d->timeline->start();
+    }
 }
 
 void CollapsibleWidget::animateCollapse( qreal showAmount )
 {
-  int pixels = d->innerWidget->sizeHint().height() * showAmount;
-  d->gridLayout->setRowMinimumHeight( 2, pixels );
+    int pixels = d->innerWidget->sizeHint().height() * showAmount;
+    d->gridLayout->setRowMinimumHeight( 2, pixels );
 
 #ifdef SIMPLE
-  d->gridLayout->setRowMinimumHeight( 2, pixels );
+    d->gridLayout->setRowMinimumHeight( 2, pixels );
 
-  if ( showAmount == 1 ) {
-      d->innerWidget->setVisible( true );
-  }
+    if ( showAmount == 1 ) {
+        d->innerWidget->setVisible( true );
+    }
 #else
-  d->expander->setFixedHeight( pixels );
+    d->expander->setFixedHeight( pixels );
 #endif
 }
 
 bool CollapsibleWidget::isExpanded() const
 {
-  return d->colButton->isChecked();
+    return d->colButton->isChecked();
 }
-
 
 #include "moc_collapsiblewidget.cpp"

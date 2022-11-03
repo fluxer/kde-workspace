@@ -39,7 +39,6 @@ extern "C"
 
 #include <fixx11h.h>
 
-#ifdef HAS_RANDR_1_2
 class RandRScreen;
 class RandRCrtc;
 class RandROutput;
@@ -55,53 +54,46 @@ typedef QList<RandRScreen*> ScreenList;
 typedef QList<RROutput> OutputList;
 typedef QList<RRCrtc> CrtcList;
 typedef QList<RRMode> ModeList;
-#endif
 
 typedef QList<float> RateList;
 typedef QList<QSize> SizeList;
 
-class LegacyRandRScreen;
-typedef QList<LegacyRandRScreen*> LegacyScreenList;
-
 class RandR
 {
 public:
-	static bool has_1_2;
-	static bool has_1_3;
-	static Time timestamp;
-	
-	static const int OrientationCount = 6;
-	static const int RotationCount    = 4;
-	
-	enum Orientations {
-		Rotate0        = RR_Rotate_0,
-		Rotate90       = RR_Rotate_90,
-		Rotate180      = RR_Rotate_180,
-		Rotate270      = RR_Rotate_270,
-		RotateMask     = (RR_Rotate_0 | RR_Rotate_90 | RR_Rotate_180 | RR_Rotate_270),
-		ReflectX       = RR_Reflect_X,
-		ReflectY       = RR_Reflect_Y,
-		ReflectMask    = (RR_Reflect_X | RR_Reflect_Y),
-		OrientationMask = (RotateMask | ReflectMask)
-	};
-	
-	enum Changes 
-	{
-		ChangeCrtc       = 0x01,
-		ChangeOutputs    = 0x02,
-		ChangeMode       = 0x04,
-		ChangeRotation   = 0x08,
-		ChangeConnection = 0x10,
-		ChangeRect       = 0x20,
-		ChangeRate       = 0x40
-	};
+    static Time timestamp;
+    
+    static const int OrientationCount = 6;
+    static const int RotationCount    = 4;
+    
+    enum Orientations {
+        Rotate0         = RR_Rotate_0,
+        Rotate90        = RR_Rotate_90,
+        Rotate180       = RR_Rotate_180,
+        Rotate270       = RR_Rotate_270,
+        RotateMask      = (RR_Rotate_0 | RR_Rotate_90 | RR_Rotate_180 | RR_Rotate_270),
+        ReflectX        = RR_Reflect_X,
+        ReflectY        = RR_Reflect_Y,
+        ReflectMask     = (RR_Reflect_X | RR_Reflect_Y),
+        OrientationMask = (RotateMask | ReflectMask)
+    };
+    
+    enum Changes {
+        ChangeCrtc       = 0x01,
+        ChangeOutputs    = 0x02,
+        ChangeMode       = 0x04,
+        ChangeRotation   = 0x08,
+        ChangeConnection = 0x10,
+        ChangeRect       = 0x20,
+        ChangeRate       = 0x40
+    };
 
-	static QString rotationName(int rotation, bool pastTense = false, bool capitalised = true);
-	static QPixmap rotationIcon(int rotation, int currentRotation);
+    static QString rotationName(int rotation, bool pastTense = false, bool capitalised = true);
+    static QPixmap rotationIcon(int rotation, int currentRotation);
 
-	static bool confirm(const QRect &rect = QRect());
+    static bool confirm(const QRect &rect = QRect());
 
-	static SizeList sortSizes(const SizeList &sizes);
+    static SizeList sortSizes(const SizeList &sizes);
 };
 
 #endif

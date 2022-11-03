@@ -28,47 +28,44 @@ class OutputConfig;
 
 class OutputGraphicsItem : public QObject, public QGraphicsRectItem
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	OutputGraphicsItem(OutputConfig *config);
-	~OutputGraphicsItem();
+    OutputGraphicsItem(OutputConfig *config);
+    ~OutputGraphicsItem();
 
-	void configUpdated(); // updates from OutputConfig
+    void configUpdated(); // updates from OutputConfig
 
-	OutputGraphicsItem *left() const;
-	OutputGraphicsItem *right() const;
-	OutputGraphicsItem *top() const;
-	OutputGraphicsItem *bottom() const;
+    OutputGraphicsItem *left() const;
+    OutputGraphicsItem *right() const;
+    OutputGraphicsItem *top() const;
+    OutputGraphicsItem *bottom() const;
 
-	void setLeft(OutputGraphicsItem *output);
-	void setRight(OutputGraphicsItem *output);
-	void setTop(OutputGraphicsItem *output);
-	void setBottom(OutputGraphicsItem *output);
+    void setLeft(OutputGraphicsItem *output);
+    void setRight(OutputGraphicsItem *output);
+    void setTop(OutputGraphicsItem *output);
+    void setBottom(OutputGraphicsItem *output);
 
-	bool isConnected();
-	bool isPrimary() const;
-	void setPrimary(bool);
+    bool isConnected();
+    bool isPrimary() const;
+    void setPrimary(bool);
     
 protected:
-	void disconnect();
-	virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
-	virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void disconnect();
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
-	void itemChanged(OutputGraphicsItem *item);
+    void itemChanged(OutputGraphicsItem *item);
 
 private:
-        void calculateSetRect( OutputConfig* config );
-	OutputGraphicsItem *m_left;
-	OutputGraphicsItem *m_right;
-	OutputGraphicsItem *m_top;
-	OutputGraphicsItem *m_bottom;
+    void calculateSetRect( OutputConfig* config );
+    OutputGraphicsItem *m_left;
+    OutputGraphicsItem *m_right;
+    OutputGraphicsItem *m_top;
+    OutputGraphicsItem *m_bottom;
 
-	OutputConfig *m_config;
-	QGraphicsTextItem *m_text;
-
-
+    OutputConfig *m_config;
+    QGraphicsTextItem *m_text;
 };
 
-#endif
-
+#endif // OUTPUTGRAPHICSITEM_H

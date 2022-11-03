@@ -30,66 +30,56 @@
 class RandRDisplay
 {
 public:
-	RandRDisplay();
-	~RandRDisplay();
+    RandRDisplay();
+    ~RandRDisplay();
 
-	bool isValid() const;
-	const QString& errorCode() const;
-	const QString& version() const;
+    bool isValid() const;
+    const QString& errorCode() const;
+    const QString& version() const;
 
-	int eventBase() const;
-	int errorBase() const;
+    int eventBase() const;
+    int errorBase() const;
 
-	int screenIndexOfWidget(QWidget* widget);
+    int screenIndexOfWidget(QWidget* widget);
 
-	int numScreens() const;
-	LegacyRandRScreen* legacyScreen(int index);
-	LegacyRandRScreen* currentLegacyScreen();
-#ifdef HAS_RANDR_1_2
-	RandRScreen* screen(int index);
-	RandRScreen* currentScreen();
-#endif
-	void setCurrentScreen(int index);
-	int	currentScreenIndex() const;
+    int numScreens() const;
+    RandRScreen* screen(int index);
+    RandRScreen* currentScreen();
+    void setCurrentScreen(int index);
+    int	currentScreenIndex() const;
 
-	bool needsRefresh() const;
-	void refresh();
+    bool needsRefresh() const;
+    void refresh();
 
-	/**
-	 * Loads saved settings.
-	 *
-	 * @param config the KConfig object to load from
-	 * @param loadScreens whether to call LegacyRandRScreen::load() for each screen
-	 * @retuns true if the settings should be applied on KDE startup.
-	 */
-	bool loadDisplay(KConfig& config, bool loadScreens = true);
-	void saveDisplay(KConfig& config, bool syncTrayApp);
-	void saveStartup(KConfig& config);
-	void disableStartup(KConfig& config);
+    /**
+     * Loads saved settings.
+     *
+     * @param config the KConfig object to load from
+     * @retuns true if the settings should be applied on KDE startup.
+     */
+    void saveStartup(KConfig& config);
+    void disableStartup(KConfig& config);
 
-	static bool applyOnStartup(KConfig& config);
-	static bool syncTrayApp(KConfig& config);
+    static bool applyOnStartup(KConfig& config);
+    static bool syncTrayApp(KConfig& config);
 
-	void applyProposed(bool confirm = true);
+    void applyProposed(bool confirm = true);
 
-	bool canHandle(const XEvent *e) const;
-	void handleEvent(XEvent *e);
+    bool canHandle(const XEvent *e) const;
+    void handleEvent(XEvent *e);
 
 private:
-	Display *m_dpy;
-	int	m_numScreens;
-	int	m_currentScreenIndex;
-	LegacyScreenList m_legacyScreens;
-#ifdef HAS_RANDR_1_2
-	ScreenList m_screens;
-#endif
+    Display *m_dpy;
+    int m_numScreens;
+    int m_currentScreenIndex;
+    ScreenList m_screens;
 
-	bool m_valid;
-	QString	m_errorCode;
-	QString	m_version;
+    bool m_valid;
+    QString m_errorCode;
+    QString m_version;
 
-	int	m_eventBase;
-	int m_errorBase;
+    int m_eventBase;
+    int m_errorBase;
 };
 
-#endif
+#endif // __RANDRDISPLAY_H__

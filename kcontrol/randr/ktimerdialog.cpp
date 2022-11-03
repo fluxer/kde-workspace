@@ -64,10 +64,11 @@ KTimerDialog::KTimerDialog( int msec, TimerStyle style, QWidget *parent,
     msecTotal = msecRemaining = msec;
     updateInterval = 1000;
     tStyle = style;
-	KWindowSystem::setIcons( winId(), DesktopIcon("preferences-desktop-display-randr"), SmallIcon("preferences-desktop-display-randr") );
+    KWindowSystem::setIcons( winId(), DesktopIcon("preferences-desktop-display-randr"), SmallIcon("preferences-desktop-display-randr") );
     // default to canceling the dialog on timeout
-    if ( buttonMask & Cancel )
+    if ( buttonMask & Cancel ) {
         buttonOnTimeout = Cancel;
+    }
 
     connect( totalTimer, SIGNAL(timeout()), SLOT(slotInternalTimeout()) );
     connect( updateTimer, SIGNAL(timeout()), SLOT(slotUpdateTime()) );
@@ -124,8 +125,9 @@ void KTimerDialog::setMainWidget( QWidget *widget )
 void KTimerDialog::setRefreshInterval( int msec )
 {
     updateInterval = msec;
-    if ( updateTimer->isActive() )
+    if ( updateTimer->isActive() ) {
         updateTimer->start( updateInterval );
+    }
 }
 
 int KTimerDialog::timeoutButton() const

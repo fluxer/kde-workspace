@@ -28,16 +28,15 @@ class RandRDisplay;
 
 class KRandRApp : public KUniqueApplication
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	KRandRApp();
+    KRandRApp();
 
-	virtual bool x11EventFilter(XEvent * e);
+    virtual bool x11EventFilter(XEvent * e);
 
 private:
-	KRandRSystemTray *m_tray;
-	RandRDisplay *m_display;
+    KRandRSystemTray *m_tray;
+    RandRDisplay *m_display;
 };
 
-#endif
+#endif // KRANDRAPP_H

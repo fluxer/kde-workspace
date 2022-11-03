@@ -25,8 +25,8 @@
 
 #include <QWidget>
 #include <QTimer>
-
 #include <QGraphicsScene>
+
 class SettingsContainer;
 class CollapsibleWidget;
 class RandRDisplay;
@@ -38,50 +38,49 @@ typedef QList<OutputConfig*> OutputConfigList;
 
 class RandRConfig : public QWidget, public Ui::RandRConfigBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	RandRConfig(QWidget *parent, RandRDisplay *display);
-	virtual ~RandRConfig();
+    RandRConfig(QWidget *parent, RandRDisplay *display);
+    virtual ~RandRConfig();
 
-	void load(void);
-	void save(void);
-	void defaults(void);
+    void load(void);
+    void save(void);
+    void defaults(void);
 
-	void apply();
-	void update();
+    void apply();
+    void update();
 
 public slots:
-	void slotUpdateView();
-	void slotDelayedUpdateView();
-	void updatePrimaryDisplay();
+    void slotUpdateView();
+    void slotDelayedUpdateView();
+    void updatePrimaryDisplay();
 
 protected slots:
-	void slotAdjustOutput(OutputGraphicsItem *o);
-	void identifyOutputs();
-	void clearIndicators();
-	void saveStartup();
-	void disableStartup();
-	void unifiedOutputChanged(bool checked);
-	void outputConnectedChanged(bool);
+    void slotAdjustOutput(OutputGraphicsItem *o);
+    void identifyOutputs();
+    void clearIndicators();
+    void saveStartup();
+    void disableStartup();
+    void unifiedOutputChanged(bool checked);
+    void outputConnectedChanged(bool);
 
 signals:
-	void changed(bool change=true);
+    void changed(bool change=true);
 
 protected:
-	virtual bool eventFilter(QObject *obj, QEvent *event);
-	
+    virtual bool eventFilter(QObject *obj, QEvent *event);
+
 private:
-	RandRDisplay *m_display;
-	
-	SettingsContainer *m_container;
-	QList<CollapsibleWidget*> m_outputList;
-	QGraphicsScene *m_scene;
-	LayoutManager *m_layoutManager;
-	QList<QWidget*> m_indicators;
-	QTimer identifyTimer;
-	OutputConfigList m_configs;
-	QTimer compressUpdateViewTimer;
+    RandRDisplay *m_display;
+    
+    SettingsContainer *m_container;
+    QList<CollapsibleWidget*> m_outputList;
+    QGraphicsScene *m_scene;
+    LayoutManager *m_layoutManager;
+    QList<QWidget*> m_indicators;
+    QTimer identifyTimer;
+    OutputConfigList m_configs;
+    QTimer compressUpdateViewTimer;
 };
 
-
-#endif
+#endif // __RANDRCONFIG_H__

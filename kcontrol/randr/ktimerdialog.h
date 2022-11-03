@@ -27,9 +27,10 @@
 #include <kvbox.h>
 
 #include <QTimer>
-class KHBox;
 #include <QProgressBar>
 #include <QLabel>
+
+class KHBox;
 
 /**
  * Provides a dialog that is only available for a specified amount
@@ -47,9 +48,8 @@ class KHBox;
  */
 class KTimerDialog : public KDialog
 {
-  Q_OBJECT
-
-  public:
+    Q_OBJECT
+public:
 
     /**
      * @li @p CountDown - The timer counts downwards from the seconds given.
@@ -122,19 +122,19 @@ class KTimerDialog : public KDialog
      */
     void setMainWidget( QWidget *widget );
 
-  Q_SIGNALS:
+Q_SIGNALS:
     /**
      * Signal which is emitted once the timer has timed out.
      */
     void timerTimeout();
 
-  public Q_SLOTS:
+public Q_SLOTS:
     /**
      * Execute the dialog modally - see @see QDialog .
      */
     int exec();
 
-  private Q_SLOTS:
+private Q_SLOTS:
     /**
      * Updates the dialog with the current progress levels.
      */
@@ -145,7 +145,7 @@ class KTimerDialog : public KDialog
      */
     void slotInternalTimeout();
 
-  private:
+private:
     /**
      * Prepares the layout that manages the widgets of the dialog
      */
@@ -167,7 +167,4 @@ class KTimerDialog : public KDialog
     KTimerDialogPrivate *d;
 };
 
-#endif
-
-
-
+#endif // _KTIMERDIALOG_H_

@@ -32,29 +32,27 @@
 
 class ClickableLabel : public QLabel
 {
-  Q_OBJECT
-  public:
+    Q_OBJECT
+public:
     ClickableLabel( QWidget* parent = 0 );
     ~ClickableLabel();
 
     void mouseReleaseEvent( QMouseEvent *e );
 
-  signals:
+signals:
     void clicked();
 };
 
 class ArrowButton : public QAbstractButton
 {
-  public:
+public:
     ArrowButton(QWidget *parent = 0);
     ~ArrowButton();
 
     QSize sizeHint() const { return QSize(16, 16); }
 
-  protected:
+protected:
     void paintEvent( QPaintEvent* );
-
-  private:
 };
 
 /**
@@ -64,7 +62,7 @@ class ArrowButton : public QAbstractButton
 class Q_GUI_EXPORT CollapsibleWidget : public QWidget
 {
     Q_OBJECT
-  public:
+public:
     CollapsibleWidget(QWidget *parent = 0);
     explicit CollapsibleWidget(const QString& caption, QWidget *parent = 0);
     ~CollapsibleWidget();
@@ -75,23 +73,20 @@ class Q_GUI_EXPORT CollapsibleWidget : public QWidget
     QWidget* innerWidget() const;
     void setInnerWidget( QWidget *w);
 
-  public slots:
+public slots:
     void setExpanded(bool collapsed);
     void setCaption(const QString& caption);
 
-
-  protected:
+protected:
     void init();
 
-  private slots:
+private slots:
     void animateCollapse(qreal);
 
-  private:
+private:
     Q_DISABLE_COPY( CollapsibleWidget )
     class Private;
     Private *d;
-
-
 };
 
 
@@ -104,20 +99,18 @@ class Q_GUI_EXPORT SettingsContainer : public QScrollArea
 {
     Q_ENUMS( CollapseState )
     Q_OBJECT
-  public:
+public:
     enum CollapseState { Collapsed, Uncollapsed };
     SettingsContainer( QWidget *parent = 0 );
     ~SettingsContainer();
 
     CollapsibleWidget* insertWidget( QWidget* w, const QString& name );
 
- private:
+private:
     Q_DISABLE_COPY( SettingsContainer )
     class Private;
     Private *d;
 };
-
-
 
 #endif // COLLAPSIBLEWIDGET_H
 

@@ -20,29 +20,29 @@
 #define __LAYOUTMANAGER_H__
 
 #include <QObject>
+#include <QGraphicsScene>
 #include "randr.h"
 
 class RandRScreen;
-#include <QGraphicsScene>
 class OutputGraphicsItem;
 
 class LayoutManager : public QObject
 {
-   Q_OBJECT
+    Q_OBJECT
 public:
-	LayoutManager(RandRScreen *screen, QGraphicsScene *scene);
-	~LayoutManager();
+    LayoutManager(RandRScreen *screen, QGraphicsScene *scene);
+    ~LayoutManager();
 
 public slots:
-	void slotAdjustOutput(OutputGraphicsItem *output);
+    void slotAdjustOutput(OutputGraphicsItem *output);
 
 protected:
-	void adjustScene(OutputGraphicsItem *current, QList<OutputGraphicsItem*> &visited);
+    void adjustScene(OutputGraphicsItem *current, QList<OutputGraphicsItem*> &visited);
 
 private:
-	RandRScreen *m_screen;
-	QGraphicsScene *m_scene;
+    RandRScreen *m_screen;
+    QGraphicsScene *m_scene;
 
 };
 
-#endif
+#endif // __LAYOUTMANAGER_H__

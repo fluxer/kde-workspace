@@ -26,30 +26,27 @@
 #include <KCModule>
 
 class RandRDisplay;
-class LegacyRandRConfig;
 class RandRConfig;
 
 class KRandRModule : public KCModule
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	KRandRModule(QWidget *parent, const QVariantList& _args);
-	~KRandRModule(void);
+    KRandRModule(QWidget *parent, const QVariantList& _args);
+    ~KRandRModule(void);
 
-	virtual void load();
-	virtual void save();
-	virtual void defaults();
-	virtual bool x11Event(XEvent* );
+    virtual void load();
+    virtual void save();
+    virtual void defaults();
+    virtual bool x11Event(XEvent* );
 
 protected:
-	void apply();
-	void update();
+    void apply();
+    void update();
 
 private:
-	LegacyRandRConfig *m_legacyConfig;
-	RandRConfig *m_config;
-	RandRDisplay *m_display;
+    RandRConfig *m_config;
+    RandRDisplay *m_display;
 };
 
-#endif
+#endif // KRANDRMODULE_H

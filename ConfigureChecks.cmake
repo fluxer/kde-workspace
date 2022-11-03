@@ -30,12 +30,3 @@ kde4_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard
 kde4_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 kde4_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard
 kde4_bool_to_01(X11_dpms_FOUND HAVE_DPMS) # kscreensaver
-
-cmake_reset_check_state()
-set(CMAKE_REQUIRED_INCLUDES ${X11_Xrandr_INCLUDE_PATH})
-set(CMAKE_REQUIRED_LIBRARIES ${X11_Xrandr_LIB})
-check_function_exists(XRRGetScreenSizeRange XRANDR_1_2_FOUND)
-kde4_bool_to_01(XRANDR_1_2_FOUND HAS_RANDR_1_2)
-check_function_exists(XRRGetScreenResourcesCurrent XRANDR_1_3_FOUND)
-kde4_bool_to_01(XRANDR_1_3_FOUND HAS_RANDR_1_3)
-cmake_reset_check_state()

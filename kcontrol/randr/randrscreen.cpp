@@ -30,52 +30,50 @@ RandRScreen::RandRScreen(int screenIndex)
   m_proposedPrimaryOutput(0),
   m_resources(0)
 {
-	m_index = screenIndex;
-	m_rect = QRect(0, 0, XDisplayWidth(QX11Info::display(), m_index),
-				 XDisplayHeight(QX11Info::display(), m_index));
+    m_index = screenIndex;
+    m_rect = QRect(0, 0, XDisplayWidth(QX11Info::display(), m_index), XDisplayHeight(QX11Info::display(), m_index));
 
-	m_connectedCount = 0;
-	m_activeCount = 0;
+    m_connectedCount = 0;
+    m_activeCount = 0;
 
-	loadSettings();
-	KConfig cfg("krandrrc");
-	load(cfg, true);
+    loadSettings();
+    KConfig cfg("krandrrc");
+    load(cfg, true);
 
-	m_originalPrimaryOutput = primaryOutput();
+    m_originalPrimaryOutput = primaryOutput();
 
-	// select for randr input events
-	int mask = RRScreenChangeNotifyMask | 
-		   RRCrtcChangeNotifyMask   | 
-		   RROutputChangeNotifyMask | 
-		   RROutputPropertyNotifyMask;
-	
-	XRRSelectInput(QX11Info::display(), rootWindow(), 0);
-	XRRSelectInput(QX11Info::display(), rootWindow(), mask); 
+    // select for randr input events
+    int mask = RRScreenChangeNotifyMask | RRCrtcChangeNotifyMask;
+    mask |= RROutputChangeNotifyMask | RROutputPropertyNotifyMask;
+
+    XRRSelectInput(QX11Info::display(), rootWindow(), 0);
+    XRRSelectInput(QX11Info::display(), rootWindow(), mask); 
 }
 
 RandRScreen::~RandRScreen()
 {
-	if (m_resources)
-		XRRFreeScreenResources(m_resources);
+    if (m_resources) {
+        XRRFreeScreenResources(m_resources);
+    }
 
-	//qDeleteAll(m_crtcs);
-	//qDeleteAll(m_outputs);
-	//qDeleteAll(m_modes);
+    //qDeleteAll(m_crtcs);
+    //qDeleteAll(m_outputs);
+    //qDeleteAll(m_modes);
 }
 
 int RandRScreen::index() const
 {
-	return m_index;
+    return m_index;
 }
 
 XRRScreenResources* RandRScreen::resources() const
 {
-	return m_resources;
+    return m_resources;
 }
 
 Window RandRScreen::rootWindow() const
 {
-	return RootWindow(QX11Info::display(), m_index);
+    return RootWindow(QX11Info::display(), m_index);
 }
 
 void RandRScreen::loadSettings(bool notify)
@@ -83,8 +81,7 @@ void RandRScreen::loadSettings(bool notify)
 	bool changed = false;
 	int minW, minH, maxW, maxH;
 
-	Status status = XRRGetScreenSizeRange(QX11Info::display(), rootWindow(),
-					 &minW, &minH, &maxW, &maxH);
+	Status status = XRRGetScreenSizeRange(QX11Info::display(), rootWindow(), &minW, &minH, &maxW, &maxH);
 	//FIXME: we should check the status here
 	Q_UNUSED(status);
 	QSize minSize = QSize(minW, minH);
@@ -164,258 +161,253 @@ void RandRScreen::loadSettings(bool notify)
 
 void RandRScreen::handleEvent(XRRScreenChangeNotifyEvent* event)
 {
-	m_rect.setWidth(event->width);
-	m_rect.setHeight(event->height);
+    m_rect.setWidth(event->width);
+    m_rect.setHeight(event->height);
 
-	emit configChanged();
+    emit configChanged();
 }
 
 void RandRScreen::handleRandREvent(XRRNotifyEvent* event)
 {
-	RandRCrtc *c;
-	RandROutput *o;
-	XRRCrtcChangeNotifyEvent *crtcEvent;
-	XRROutputChangeNotifyEvent *outputEvent;
-	XRROutputPropertyNotifyEvent *propertyEvent;
+    RandRCrtc *c;
+    RandROutput *o;
+    XRRCrtcChangeNotifyEvent *crtcEvent;
+    XRROutputChangeNotifyEvent *outputEvent;
+    XRROutputPropertyNotifyEvent *propertyEvent;
 
-	// forward events to crtcs and outputs
-	switch (event->subtype) {
-		case RRNotify_CrtcChange:
-			crtcEvent = (XRRCrtcChangeNotifyEvent*)event;
-			c = crtc(crtcEvent->crtc);
-			Q_ASSERT(c);
-			c->handleEvent(crtcEvent);
-			return;
-
-		case RRNotify_OutputChange:
-			outputEvent = (XRROutputChangeNotifyEvent*)event;
-			o = output(outputEvent->output);
-			Q_ASSERT(o);
-			o->handleEvent(outputEvent);
-			return;
-
-		case RRNotify_OutputProperty:
-			propertyEvent = (XRROutputPropertyNotifyEvent*)event;
-			o = output(propertyEvent->output);
-			Q_ASSERT(o);
-			o->handlePropertyEvent(propertyEvent);
-			return;
-	}	
+    // forward events to crtcs and outputs
+    switch (event->subtype) {
+        case RRNotify_CrtcChange: {
+            crtcEvent = (XRRCrtcChangeNotifyEvent*)event;
+            c = crtc(crtcEvent->crtc);
+            Q_ASSERT(c);
+            c->handleEvent(crtcEvent);
+            return;
+        }
+        case RRNotify_OutputChange: {
+            outputEvent = (XRROutputChangeNotifyEvent*)event;
+            o = output(outputEvent->output);
+            Q_ASSERT(o);
+            o->handleEvent(outputEvent);
+            return;
+        }
+        case RRNotify_OutputProperty: {
+            propertyEvent = (XRROutputPropertyNotifyEvent*)event;
+            o = output(propertyEvent->output);
+            Q_ASSERT(o);
+            o->handlePropertyEvent(propertyEvent);
+            return;
+        }
+    }
 }
 
 QSize RandRScreen::minSize() const
 {
-	return m_minSize;
+    return m_minSize;
 }
 
 QSize RandRScreen::maxSize() const
 {
-	return m_maxSize;
+    return m_maxSize;
 }
 
 CrtcMap RandRScreen::crtcs() const
 {
-	return m_crtcs;
+    return m_crtcs;
 }
 
 RandRCrtc* RandRScreen::crtc(RRCrtc id) const
 {
-	if (m_crtcs.contains(id))
-		return m_crtcs[id];
-
-	return 0;
+    if (m_crtcs.contains(id)) {
+        return m_crtcs[id];
+    }
+    return 0;
 }
 
 OutputMap RandRScreen::outputs() const
 {
-	return m_outputs;
+    return m_outputs;
 }
 
 RandROutput* RandRScreen::output(RROutput id) const
 {
-	if (m_outputs.contains(id))
-		return m_outputs[id];
-
-	return 0;
+    if (m_outputs.contains(id)) {
+        return m_outputs[id];
+    }
+    return 0;
 }
 
-#ifdef HAS_RANDR_1_3
 void RandRScreen::setPrimaryOutput(RandROutput* output)
 {
-	if (RandR::has_1_3)
-	{
-		RROutput id = None;
-		if (output)
-			id = output->id();
-		XRRSetOutputPrimary(QX11Info::display(), rootWindow(), id);
-	}
+    RROutput id = None;
+    if (output) {
+        id = output->id();
+    }
+    XRRSetOutputPrimary(QX11Info::display(), rootWindow(), id);
 }
 
 void RandRScreen::proposePrimaryOutput(RandROutput* output)
 {
-	m_proposedPrimaryOutput = output;
+    m_proposedPrimaryOutput = output;
 }
 
 RandROutput* RandRScreen::primaryOutput()
 {
-	if (RandR::has_1_3)
-	{
-		return output(XRRGetOutputPrimary(QX11Info::display(), rootWindow()));
-	}
-	return 0;
+    return output(XRRGetOutputPrimary(QX11Info::display(), rootWindow()));
 }
-#endif
 
 ModeMap RandRScreen::modes() const
 {
-	return m_modes;
+    return m_modes;
 }
 
 RandRMode RandRScreen::mode(RRMode id) const
 {
-	if (m_modes.contains(id))
-		return m_modes[id];
+    if (m_modes.contains(id)) {
+        return m_modes[id];
+    }
 
-	return RandRMode(0);
+    return RandRMode(0);
 }
 
 bool RandRScreen::adjustSize(const QRect &minimumSize)
 {
-	//try to find a size in which all outputs fit
-	
-	//start with a given minimum rect
-	QRect rect = QRect(0, 0, 0, 0).united(minimumSize);
+    //try to find a size in which all outputs fit
+    
+    //start with a given minimum rect
+    QRect rect = QRect(0, 0, 0, 0).united(minimumSize);
 
-	foreach(RandROutput *output, m_outputs)
-	{
-		// outputs that are not active should not be taken into account
-		// when calculating the screen size
-		if (!output->isActive())
-			continue;
-		rect = rect.united(output->rect());
-	}
+    foreach(RandROutput *output, m_outputs) {
+        // outputs that are not active should not be taken into account
+        // when calculating the screen size
+        if (!output->isActive()) {
+            continue;
+        }
+        rect = rect.united(output->rect());
+    }
 
 
-	// check bounds
-	if (rect.width() < m_minSize.width())
-		rect.setWidth(m_minSize.width());
-	if (rect.height() < m_minSize.height())
-		rect.setHeight(m_minSize.height());
+    // check bounds
+    if (rect.width() < m_minSize.width()) {
+        rect.setWidth(m_minSize.width());
+    }
+    if (rect.height() < m_minSize.height()) {
+        rect.setHeight(m_minSize.height());
+    }
+    if (rect.width() > m_maxSize.width()) {
+        return false;
+    }
+    if (rect.height() > m_maxSize.height()) {
+        return false;
+    }
 
-	if (rect.width() > m_maxSize.width())
-		return false;
-	if (rect.height() > m_maxSize.height())
-		return false;
-
-	return setSize(rect.size());
+    return setSize(rect.size());
 }
 
 bool RandRScreen::setSize(const QSize &s)
 {
-	if (s == m_rect.size())
-		return true;
+    if (s == m_rect.size()) {
+        return true;
+    }
 
-	if (s.width() < m_minSize.width() || 
-	    s.height() < m_minSize.height() ||
-	    s.width() > m_maxSize.width() ||
-	    s.height() > m_maxSize.height())
-		return false;
+    if (s.width() < m_minSize.width() || 
+        s.height() < m_minSize.height() ||
+        s.width() > m_maxSize.width() ||
+        s.height() > m_maxSize.height()) {
+        return false;
+    }
 
-	int widthMM, heightMM;
-	float dpi;
+    int widthMM, heightMM;
+    float dpi;
 
-	/* values taken from xrandr */
-	dpi = (25.4 * DisplayHeight(QX11Info::display(), m_index)) / DisplayHeightMM(QX11Info::display(), m_index);
-	widthMM =  (int) ((25.4 * s.width()) / dpi);
-	heightMM = (int) ((25.4 * s.height()) / dpi);
+    /* values taken from xrandr */
+    dpi = (25.4 * DisplayHeight(QX11Info::display(), m_index)) / DisplayHeightMM(QX11Info::display(), m_index);
+    widthMM =  (int) ((25.4 * s.width()) / dpi);
+    heightMM = (int) ((25.4 * s.height()) / dpi);
 
-	XRRSetScreenSize(QX11Info::display(), rootWindow(), s.width(), s.height(), widthMM, heightMM);
-	m_rect.setSize(s);
+    XRRSetScreenSize(QX11Info::display(), rootWindow(), s.width(), s.height(), widthMM, heightMM);
+    m_rect.setSize(s);
 
-	return true;
+    return true;
 }
 
 int RandRScreen::connectedCount() const
 {
-	return m_connectedCount;
+    return m_connectedCount;
 }
 
 int RandRScreen::activeCount() const
 {
-	return m_activeCount;
+    return m_activeCount;
 }
 
 bool RandRScreen::outputsUnified() const
 {
-	return m_outputsUnified;
+    return m_outputsUnified;
 }
 
 void RandRScreen::setOutputsUnified(bool unified)
 {
-	m_outputsUnified = unified;
-	
-	// should this be called here?
-	slotUnifyOutputs(unified);
+    m_outputsUnified = unified;
+    
+    // should this be called here?
+    slotUnifyOutputs(unified);
 }
 
 int RandRScreen::unifiedRotations() const
 {
 
-	bool first = true;
-	int rotations = RandR::Rotate0;
+    bool first = true;
+    int rotations = RandR::Rotate0;
 
-	foreach(RandRCrtc *crtc, m_crtcs)
-	{
-		if (!crtc->connectedOutputs().count())
-			continue;
+    foreach(RandRCrtc *crtc, m_crtcs)  {
+        if (!crtc->connectedOutputs().count()) {
+            continue;
+        }
 
-		if (first)
-		{
-			rotations = crtc->rotations();
-			first = false;
-		}
-		else
-			rotations &= crtc->rotations();
-	}
+        if (first)  {
+            rotations = crtc->rotations();
+            first = false;
+        } else {
+            rotations &= crtc->rotations();
+        }
+    }
 
-	return rotations;
+    return rotations;
 }
 
 SizeList RandRScreen::unifiedSizes() const
 {
-	SizeList sizeList;
-	bool first = true;
+    SizeList sizeList;
+    bool first = true;
 
-	foreach(RandROutput *output, m_outputs)
-	{
-		if (!output->isConnected())
-			continue;
+    foreach(RandROutput *output, m_outputs) {
+        if (!output->isConnected()) {
+            continue;
+        }
 
-		if (first)
-		{
-			// we start using the list from the first output
-			sizeList = output->sizes();
-			first = false;
-		}
-		else
-		{
-			SizeList outputSizes = output->sizes();
-			for (int i = sizeList.count() - 1; i >=0; --i)
-			{
-				// check if the current output has the i-th size of the sizeList
-				// if not, remove from the list
-				if (outputSizes.indexOf(sizeList[i]) == -1)
-					sizeList.removeAt(i);
-			}
-		}
-	}
+        if (first) {
+                // we start using the list from the first output
+                sizeList = output->sizes();
+                first = false;
+        }  else {
+            SizeList outputSizes = output->sizes();
+            for (int i = sizeList.count() - 1; i >=0; --i) {
+                // check if the current output has the i-th size of the sizeList
+                // if not, remove from the list
+                if (outputSizes.indexOf(sizeList[i]) == -1) {
+                    sizeList.removeAt(i);
+                }
+            }
+        }
+    }
 
-	return sizeList;
+    return sizeList;
 }
 
 QRect RandRScreen::rect() const
 {
-	return m_rect;
+    return m_rect;
 }
 
 void RandRScreen::load(KConfig& config, bool skipOutputs)
@@ -442,22 +434,22 @@ void RandRScreen::load(KConfig& config, bool skipOutputs)
 
 void RandRScreen::save(KConfig &config)
 {
-	KConfigGroup group = config.group("Screen_" + QString::number(m_index));
-	group.writeEntry("OutputsUnified", m_outputsUnified);
-	group.writeEntry("UnifiedRect", m_unifiedRect);
-	group.writeEntry("UnifiedRotation", m_unifiedRotation);
+    KConfigGroup group = config.group("Screen_" + QString::number(m_index));
+    group.writeEntry("OutputsUnified", m_outputsUnified);
+    group.writeEntry("UnifiedRect", m_unifiedRect);
+    group.writeEntry("UnifiedRotation", m_unifiedRotation);
 
-	foreach(RandROutput *output, m_outputs)
-	{
-		if (output->isConnected())
-			output->save(config);
-	}
+    foreach(RandROutput *output, m_outputs) {
+        if (output->isConnected()) {
+            output->save(config);
+        }
+    }
 }
 
 void RandRScreen::save()
 {
-	KConfig cfg("krandrrc");
-	save(cfg);
+    KConfig cfg("krandrrc");
+    save(cfg);
 }
 
 QStringList RandRScreen::startupCommands() const
@@ -530,12 +522,10 @@ bool RandRScreen::applyProposed(bool confirm)
 			break;
 		}
 	}*/
-#ifdef HAS_RANDR_1_3
 	if (succeed)
 	{
 		setPrimaryOutput(m_proposedPrimaryOutput);
 	}
-#endif //HAS_RANDR_1_3
 
 	kDebug() << "Changes have been applied to all outputs.";
 
@@ -560,10 +550,8 @@ bool RandRScreen::applyProposed(bool confirm)
 		}
 	}
 
-#ifdef HAS_RANDR_1_3
 	m_proposedPrimaryOutput = m_originalPrimaryOutput;
 	setPrimaryOutput(m_proposedPrimaryOutput);
-#endif //HAS_RANDR_1_3
 	return false;
 }
 

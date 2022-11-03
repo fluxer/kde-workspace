@@ -22,32 +22,27 @@
 #include <config-X11.h>
 #include "krandrapp.h"
 #include "moc_krandrapp.cpp"
-
 #include "krandrtray.h"
-
-#ifdef HAS_RANDR_1_2
 #include "randrscreen.h"
-#endif
-#include "legacyrandrscreen.h"
 #include <X11/Xlib.h>
 
 KRandRApp::KRandRApp()
 {
-	m_display = new RandRDisplay();
-	m_tray = new KRandRSystemTray(m_display);
-	m_tray->setObjectName("RANDRTray");
+    m_display = new RandRDisplay();
+    m_tray = new KRandRSystemTray(m_display);
+    m_tray->setObjectName("RANDRTray");
 
-	// do not close when the last window is closed:
-	// the system tray is not considered a window, so when the confirm dialog is
-	// closed, the application exits
-	setQuitOnLastWindowClosed(false);
+    // do not close when the last window is closed:
+    // the system tray is not considered a window, so when the confirm dialog is
+    // closed, the application exits
+    setQuitOnLastWindowClosed(false);
 }
 
 bool KRandRApp::x11EventFilter(XEvent* e)
 {
+    if (m_display->canHandle(e)) {
+        m_display->handleEvent(e);
+    }
 
-	if (m_display->canHandle(e))
-		m_display->handleEvent(e);
-
-	return KApplication::x11EventFilter(e);
+    return KApplication::x11EventFilter(e);
 }

@@ -24,116 +24,111 @@
 #include <QtGui/qx11info_x11.h>
 #include <QObject>
 #include <QMap>
-
 #include <QSize>
 #include <QAction>
+
 class KConfig;
 
 class RandRScreen : public QObject
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	RandRScreen(int screenIndex);
-	~RandRScreen();
+    RandRScreen(int screenIndex);
+    ~RandRScreen();
 
-	int index() const;
+    int index() const;
 
-	XRRScreenResources* resources() const;
-	Window rootWindow() const;
+    XRRScreenResources* resources() const;
+    Window rootWindow() const;
 
-	QSize minSize() const;
-	QSize maxSize() const;
+    QSize minSize() const;
+    QSize maxSize() const;
 
-	void loadSettings(bool notify = false);
+    void loadSettings(bool notify = false);
 
-	void handleEvent(XRRScreenChangeNotifyEvent* event);
-	void handleRandREvent(XRRNotifyEvent* event);
+    void handleEvent(XRRScreenChangeNotifyEvent* event);
+    void handleRandREvent(XRRNotifyEvent* event);
 
-	CrtcMap  crtcs() const;
-	RandRCrtc *crtc(RRCrtc id) const;
-	
-	OutputMap outputs() const;
-	RandROutput *output(RROutput id) const;
+    CrtcMap  crtcs() const;
+    RandRCrtc *crtc(RRCrtc id) const;
+    
+    OutputMap outputs() const;
+    RandROutput *output(RROutput id) const;
 
-#ifdef HAS_RANDR_1_3
-	void setPrimaryOutput(RandROutput* output);
-	RandROutput* primaryOutput();
+    void setPrimaryOutput(RandROutput* output);
+    RandROutput* primaryOutput();
 
-	void proposePrimaryOutput(RandROutput* output);
-#endif
+    void proposePrimaryOutput(RandROutput* output);
 
-	ModeMap modes() const;
-	RandRMode mode(RRMode id) const;
+    ModeMap modes() const;
+    RandRMode mode(RRMode id) const;
 
-	bool adjustSize(const QRect &minimumSize = QRect(0,0,0,0));
-	bool setSize(const QSize &s);
+    bool adjustSize(const QRect &minimumSize = QRect(0,0,0,0));
+    bool setSize(const QSize &s);
 
-	/**
-	 * Return the number of connected outputs
-	 */
-	int connectedCount() const;
+    /**
+     * Return the number of connected outputs
+     */
+    int connectedCount() const;
 
-	/**
-	 * Return the number of active outputs
-	 */
-	int activeCount() const;
+    /**
+     * Return the number of active outputs
+     */
+    int activeCount() const;
 
-	bool outputsUnified() const;
-	void setOutputsUnified(bool unified);
+    bool outputsUnified() const;
+    void setOutputsUnified(bool unified);
 
-	int unifiedRotations() const;
-	SizeList unifiedSizes() const;
+    int unifiedRotations() const;
+    SizeList unifiedSizes() const;
 
-	QRect rect() const;
+    QRect rect() const;
 
-	bool applyProposed(bool confirm);
+    bool applyProposed(bool confirm);
 
-	void load(KConfig &config, bool skipOutputs = false);
-	void save(KConfig &config);
-	QStringList startupCommands() const;
+    void load(KConfig &config, bool skipOutputs = false);
+    void save(KConfig &config);
+    QStringList startupCommands() const;
 
 public slots:
-	void slotUnifyOutputs(bool unify);
-	void slotResizeUnified(QAction *action);
-	void slotRotateUnified(QAction *action);
+    void slotUnifyOutputs(bool unify);
+    void slotResizeUnified(QAction *action);
+    void slotRotateUnified(QAction *action);
 
-	void slotOutputChanged(RROutput id, int changes);
+    void slotOutputChanged(RROutput id, int changes);
 
-	void save();
-	void load();
+    void save();
+    void load();
 
 signals:
-	void configChanged();
+    void configChanged();
 
 protected slots:
-	void unifyOutputs();
+    void unifyOutputs();
 
 private:
-	int m_index;
-	QSize m_minSize;
-	QSize m_maxSize;
-	QRect m_rect;
+    int m_index;
+    QSize m_minSize;
+    QSize m_maxSize;
+    QRect m_rect;
 
-	bool m_outputsUnified;
-	QRect m_unifiedRect;
-	int m_unifiedRotation;
+    bool m_outputsUnified;
+    QRect m_unifiedRect;
+    int m_unifiedRotation;
 
-	int m_connectedCount;
-	int m_activeCount;
+    int m_connectedCount;
+    int m_activeCount;
 
-#ifdef HAS_RANDR_1_3
-	RandROutput* m_originalPrimaryOutput;
-	RandROutput* m_proposedPrimaryOutput;
-#endif //HAS_RANDR_1_3
+    RandROutput* m_originalPrimaryOutput;
+    RandROutput* m_proposedPrimaryOutput;
 
-	XRRScreenResources* m_resources;
+    XRRScreenResources* m_resources;
 
-	CrtcMap m_crtcs;
-	OutputMap m_outputs;
-	ModeMap m_modes;
-		
+    CrtcMap m_crtcs;
+    OutputMap m_outputs;
+    ModeMap m_modes;
 };
 
-#endif
+#endif // __RANDRSCREEN_H__
+
 // vim:noet:sts=8:sw=8:

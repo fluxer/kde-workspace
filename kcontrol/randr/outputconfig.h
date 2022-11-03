@@ -34,69 +34,67 @@ typedef QList<OutputConfig*> OutputConfigList;
 
 class OutputConfig : public QWidget, public Ui::OutputConfigBase 
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	OutputConfig(QWidget *parent, RandROutput *output, OutputConfigList preceding, bool unified);
-	~OutputConfig();
-	
-	/** Enumeration describing two related outputs (i.e. VGA LeftOf TMDS) */
-	enum Relation {
-		Absolute = -1,
-		SameAs = 0,
-		LeftOf = 1,
-		RightOf,
-		Over,
-		Under
-	};
-	// NOTE: I'd love to have used Above and Below but Xlib already defines them
-	// and that confuses GCC.
+    OutputConfig(QWidget *parent, RandROutput *output, OutputConfigList preceding, bool unified);
+    ~OutputConfig();
+    
+    /** Enumeration describing two related outputs (i.e. VGA LeftOf TMDS) */
+    enum Relation {
+            Absolute = -1,
+            SameAs = 0,
+            LeftOf = 1,
+            RightOf,
+            Over,
+            Under
+    };
+    // NOTE: I'd love to have used Above and Below but Xlib already defines them
+    // and that confuses GCC.
 
-	bool isActive() const;
-	QPoint position(void) const;
-	QSize resolution(void) const;
-	QRect rect() const;
-	float refreshRate(void) const;
-	int rotation(void) const;
-	
-	static QString positionName(Relation position);
-	RandROutput *output(void) const;
+    bool isActive() const;
+    QPoint position(void) const;
+    QSize resolution(void) const;
+    QRect rect() const;
+    float refreshRate(void) const;
+    int rotation(void) const;
+    
+    static QString positionName(Relation position);
+    RandROutput *output(void) const;
 
-	bool hasPendingChanges( const QPoint& normalizePos ) const;
-	void setUnifyOutput(bool unified);
+    bool hasPendingChanges( const QPoint& normalizePos ) const;
+    void setUnifyOutput(bool unified);
 public slots:
-	void load();
-	void updateSizeList(void);
+    void load();
+    void updateSizeList(void);
 
 protected slots:
-	void setConfigDirty(void);
-	
-	void updatePositionList(void);
-	void updatePositionListDelayed(void);
-	void updateRotationList(void);
-	void updateRateList(void);
-	void updateRateList(int resolutionIndex);
-	
-	void positionComboChanged(int item);	
-	void outputChanged(RROutput output, int changed);
+    void setConfigDirty(void);
+    
+    void updatePositionList(void);
+    void updatePositionListDelayed(void);
+    void updateRotationList(void);
+    void updateRateList(void);
+    void updateRateList(int resolutionIndex);
+    
+    void positionComboChanged(int item);	
+    void outputChanged(RROutput output, int changed);
 
 signals:
-	void updateView();
-	void optionChanged();
-	void connectedChanged(bool);
-
+    void updateView();
+    void optionChanged();
+    void connectedChanged(bool);
 
 private:
-	static bool isRelativeTo( QRect rect, QRect to, Relation rel );
-	bool m_changed;
-	bool m_unified;
-	QPoint m_pos;
-	QTimer updatePositionListTimer;
-	
-	RandROutput *m_output;
-	// List of configs shown before this one. Relative positions may be given only
-	// relative to these in order to avoid cycles.
-	OutputConfigList precedingOutputConfigs;
+    static bool isRelativeTo( QRect rect, QRect to, Relation rel );
+    bool m_changed;
+    bool m_unified;
+    QPoint m_pos;
+    QTimer updatePositionListTimer;
+    
+    RandROutput *m_output;
+    // List of configs shown before this one. Relative positions may be given only
+    // relative to these in order to avoid cycles.
+    OutputConfigList precedingOutputConfigs;
 };
 
-
-#endif
+#endif // __OUTPUTCONFIG_H__

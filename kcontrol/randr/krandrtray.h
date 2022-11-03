@@ -21,52 +21,47 @@
 
 #include <QtGui/qevent.h>
 #include <QtCore/qsharedpointer.h>
+#include <QAction>
+#include <QActionGroup>
 
 #include <KStatusNotifierItem>
 
 #include "randrdisplay.h"
 
-#include <QAction>
-#include <QActionGroup>
 class KCMultiDialog;
 class KHelpMenu;
 class KMenu;
 
 class KRandRSystemTray : public KStatusNotifierItem
 {
-	Q_OBJECT
-
+    Q_OBJECT
 public:
-	explicit KRandRSystemTray(RandRDisplay *dpy, QWidget* parent = 0);
-	~KRandRSystemTray();
+    explicit KRandRSystemTray(RandRDisplay *dpy, QWidget* parent = 0);
+    ~KRandRSystemTray();
 
-	void configChanged();
-	void activate(const QPoint &pos);
+    void configChanged();
+    void activate(const QPoint &pos);
 
 protected Q_SLOTS:
-	void slotScreenActivated();
-	void slotResolutionChanged(QAction *action);
-	void slotOrientationChanged(QAction *action);
-	void slotRefreshRateChanged(QAction *action);
-	void slotPrefs();
+    void slotScreenActivated();
+    void slotPrefs();
 
-	void slotPrepareMenu();
-	void updateToolTip();
+    void slotPrepareMenu();
+    void updateToolTip();
 
 private:
-	void populateMenu(KMenu* menu);
-	void populateLegacyMenu(KMenu* menu);
+    void populateMenu(KMenu* menu);
 
-	// helper functions
-	QActionGroup *populateRotations(KMenu *menu, int rotations, int rotation);
-	QActionGroup *populateSizes(KMenu *menu, const SizeList &sizes, const QSize &size);
-	QActionGroup *populateRates(KMenu *menu, const RateList &rates, float rate);
+    // helper functions
+    QActionGroup *populateRotations(KMenu *menu, int rotations, int rotation);
+    QActionGroup *populateSizes(KMenu *menu, const SizeList &sizes, const QSize &size);
+    QActionGroup *populateRates(KMenu *menu, const RateList &rates, float rate);
 
-	KHelpMenu* m_help;
-	QList<KMenu*> m_screenPopups;
-	KMenu* m_menu;
-	RandRDisplay *m_display;
-	QWeakPointer<KCMultiDialog> m_kcm;
+    KHelpMenu* m_help;
+    QList<KMenu*> m_screenPopups;
+    KMenu* m_menu;
+    RandRDisplay *m_display;
+    QWeakPointer<KCMultiDialog> m_kcm;
 };
 
-#endif
+#endif // KRANDRTRAY_H
