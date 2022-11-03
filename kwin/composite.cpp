@@ -63,7 +63,9 @@ namespace KWin
 
 extern int currentRefreshRate();
 
-CompositorSelectionOwner::CompositorSelectionOwner(const char *selection) : KSelectionOwner(selection), owning(false)
+CompositorSelectionOwner::CompositorSelectionOwner(const char *selection, const int screen, QObject* parent)
+    : KSelectionOwner(selection, screen, parent),
+    owning(false)
 {
     connect (this, SIGNAL(lostOwnership()), SLOT(looseOwnership()));
 }
@@ -148,11 +150,12 @@ void Compositor::setup()
         options->reloadCompositingSettings(true);
     }
 
-    char selection_name[ 100 ];
-    ::memset(selection_name, '\0', sizeof(selection_name) * sizeof(char));
-    ::sprintf(selection_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
     if (!cm_selection) {
-        cm_selection = new CompositorSelectionOwner(selection_name);
+        const int selection_sreen = DefaultScreen(display());
+        char selection_name[ 100 ];
+        ::memset(selection_name, '\0', sizeof(selection_name) * sizeof(char));
+        ::sprintf(selection_name, "_NET_WM_CM_S%d", selection_sreen);
+        cm_selection = new CompositorSelectionOwner(selection_name, selection_sreen, this);
         connect(cm_selection, SIGNAL(lostOwnership()), SLOT(finish()));
     }
     if (!cm_selection->owning) {

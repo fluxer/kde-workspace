@@ -41,7 +41,7 @@ class CompositorSelectionOwner : public KSelectionOwner
 {
     Q_OBJECT
 public:
-    CompositorSelectionOwner(const char *selection);
+    CompositorSelectionOwner(const char *selection, const int screen, QObject* parent);
 private:
     friend class Compositor;
     bool owning;
