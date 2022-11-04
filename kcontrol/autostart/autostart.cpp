@@ -76,7 +76,8 @@ K_PLUGIN_FACTORY(AutostartFactory, registerPlugin<Autostart>();)
                                        KAboutData::License_GPL,
                                        ki18n("Copyright © 2006–2010 Autostart Manager team"));
     about->addAuthor(ki18n("Stephen Leaf"), KLocalizedString(), "smileaf@gmail.com");
-    about->addAuthor(ki18n("Montel Laurent"), ki18n( "Maintainer" ), "montel@kde.org");
+    about->addAuthor(ki18n("Montel Laurent"), KLocalizedString(), "montel@kde.org");
+    about->addAuthor(ki18n("Ivailo Monev"), ki18n( "Maintainer" ), "xakepa10@gmail.com");
     setAboutData( about );
 
 }
@@ -137,8 +138,9 @@ void Autostart::load()
     widget->listCMD->expandItem( m_programItem );
 
     foreach (const QString& path, m_paths) {
-        if (! KGlobal::dirs()->exists(path))
-            KStandardDirs::makeDir(path);
+        if (! KGlobal::dirs()->exists(path)) {
+            continue;
+        }
 
         QDir autostartdir( path );
         autostartdir.setFilter( QDir::Files );
@@ -174,7 +176,7 @@ void Autostart::load()
 
                 int indexPath = m_paths.indexOf((item->fileName().directory()+'/' ) );
                 if ( indexPath > 0 )
-                    indexPath = 0; //.kde/share/autostart and .config/autostart load destkop at startup
+                    indexPath = 0; // .config/autostart load destkop at startup
                 addItem(item, config.readName(), grp.readEntry("Exec"), disabled );
             }
         }
