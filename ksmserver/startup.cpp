@@ -102,12 +102,12 @@ void KSMServer::restoreSession( const QString &sessionName )
     // find all commands to launch the wm in the session
     QList<QStringList> wmStartCommands;
     if ( !wm.isEmpty() ) {
-	for ( int i = 1; i <= count; i++ ) {
-	    QString n = QString::number(i);
-	    if ( wm == configSessionGroup.readEntry( QString("program")+n, QString() ) ) {
-		wmStartCommands << configSessionGroup.readEntry( QString("restartCommand")+n, QStringList() );
-	    }
-	}
+        for ( int i = 1; i <= count; i++ ) {
+            QString n = QString::number(i);
+            if ( wm == configSessionGroup.readEntry( QString("program")+n, QString() ) ) {
+                wmStartCommands << configSessionGroup.readEntry( QString("restartCommand")+n, QStringList() );
+            }
+        }
     } 
     if( wmStartCommands.isEmpty()) // otherwise use the configured default
         wmStartCommands << wmCommands;
@@ -146,7 +146,8 @@ void KSMServer::launchWM( const QList< QStringList >& wmStartCommands )
     wmProcess = startApplication( wmStartCommands[ 0 ], QString(), QString(), true );
     connect( wmProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(wmProcessChange()));
     connect( wmProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(wmProcessChange()));
-    QTimer::singleShot( 4000, this, SLOT(autoStart0()) );
+    wmProcess->waitForStarted(4000);
+    QMetaObject::invokeMethod(this, "autoStart0", Qt::QueuedConnection);
 }
 
 void KSMServer::clientSetProgram( KSMClient* client )
@@ -232,7 +233,7 @@ void KSMServer::autoStart0Done()
         kWarning() << "kcminit not running? If we are running with mobile profile or in another platform other than X11 this is normal.";
         delete kcminitSignals;
         kcminitSignals = 0;
-        QTimer::singleShot(0, this, SLOT(kcmPhase1Done()));
+        QMetaObject::invokeMethod(this, "kcmPhase1Done", Qt::QueuedConnection);
         return;
     }
     connect( kcminitSignals, SIGNAL(phase1Done()), SLOT(kcmPhase1Done()));
@@ -387,7 +388,7 @@ void KSMServer::autoStart2()
         org::kde::KCMInit kcminit("org.kde.kcminit", "/kcminit" , QDBusConnection::sessionBus());
         kcminit.runPhase2();
     } else {
-        QTimer::singleShot(0, this, SLOT(kcmPhase2Done()));
+        QMetaObject::invokeMethod(this, "kcmPhase2Done", Qt::QueuedConnection);
     }
     if( !defaultSession())
         restoreLegacySession(KGlobal::config().data());
