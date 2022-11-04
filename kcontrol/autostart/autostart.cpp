@@ -222,7 +222,8 @@ void Autostart::slotAddProgram()
         desktopTemplate = KUrl(desktopPath);
         KConfig kc(desktopTemplate.path(), KConfig::SimpleConfig);
         KConfigGroup kcg = kc.group("Desktop Entry");
-        kcg.writeEntry("Exec" ,service->exec());
+        kcg.writeEntry("Name", service->exec());
+        kcg.writeEntry("Exec", service->exec());
         kcg.writeEntry("Icon", "system-run");
         kcg.writeEntry("Path", "");
         kcg.writeEntry("Terminal", false);
@@ -243,8 +244,8 @@ void Autostart::slotAddProgram()
             return;
         }
     }
-    DesktopStartItem * item = new DesktopStartItem( desktopPath, m_programItem,this );
-    addItem( item, service->name(), service->exec() , false);
+    DesktopStartItem * item = new DesktopStartItem(desktopPath, m_programItem, this);
+    addItem(item, service->name(), service->exec(), false);
 }
 
 void Autostart::slotRemoveCMD()
