@@ -222,14 +222,6 @@ namespace Oxygen
 
         }
 
-        // adjust layout for K3B themed headers
-        // FIXME: to be removed when fixed upstream
-        if( widget->inherits( "K3b::ThemedHeader" ) && widget->layout() )
-        {
-            widget->layout()->setMargin( 0 );
-            frameShadowFactory().setHasContrast( widget, true );
-        }
-
         // adjust flags for windows and dialogs
         switch( widget->windowFlags() & Qt::WindowType_Mask )
         {
@@ -7709,19 +7701,6 @@ namespace Oxygen
     {
 
         if( !scrollArea ) return;
-
-        // HACK: add exception for KPIM transactionItemView, which is an overlay widget
-        // and must have filled background. This is a temporary workaround until a more
-        // robust solution is found.
-        if( scrollArea->inherits( "KPIM::TransactionItemView" ) )
-        {
-            // also need to make the scrollarea background plain ( using autofill background )
-            // so that optional vertical scrollbar background is not transparent either.
-            // TODO: possibly add an event filter to use the "normal" window background
-            // instead of something flat.
-            scrollArea->setAutoFillBackground( true );
-            return;
-        }
 
         // check frame style and background role
         if( !(scrollArea->frameShape() == QFrame::NoFrame || scrollArea->backgroundRole() == QPalette::Window ) )

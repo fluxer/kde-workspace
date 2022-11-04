@@ -332,9 +332,6 @@ namespace Oxygen
             !isDockWidgetTitle( widget ) )
         { return true; }
 
-        if( widget->inherits( "KScreenSaver" ) && widget->inherits( "KCModule" ) )
-        { return true; }
-
         if( isWhiteListed( widget ) )
         { return true; }
 
