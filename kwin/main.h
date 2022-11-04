@@ -33,7 +33,7 @@ class KWinSelectionOwner
 {
     Q_OBJECT
 public:
-    explicit KWinSelectionOwner(int screen);
+    explicit KWinSelectionOwner(int screen, QObject *parent);
 protected:
     virtual bool genericReply(Atom target, Atom property, Window requestor);
     virtual void replyTargets(Atom property, Window requestor);
@@ -60,7 +60,7 @@ private slots:
     void resetCrashesCount();
 
 private:
-    KWinSelectionOwner owner;
+    KWinSelectionOwner* owner;
     static int crashes;
 };
 

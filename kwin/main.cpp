@@ -96,8 +96,8 @@ static bool kwin_sync = false;
 // KWinSelectionOwner
 //************************************
 
-KWinSelectionOwner::KWinSelectionOwner(int screen_P)
-    : KSelectionOwner(make_selection_atom(screen_P), screen_P)
+KWinSelectionOwner::KWinSelectionOwner(int screen_P, QObject *parent)
+    : KSelectionOwner(make_selection_atom(screen_P), screen_P, parent)
 {
 }
 
@@ -137,9 +137,9 @@ bool KWinSelectionOwner::genericReply(Atom target_P, Atom property_P, Window req
         long version[] = { 2, 0 };
         XChangeProperty(display(), requestor_P, property_P, XA_INTEGER, 32,
         PropModeReplace, reinterpret_cast< unsigned char* >(&version), 2);
-    } else
-        return KSelectionOwner::genericReply(target_P, property_P, requestor_P);
-    return true;
+        return true;
+    }
+    return KSelectionOwner::genericReply(target_P, property_P, requestor_P);
 }
 
 Atom KWinSelectionOwner::xa_version = None;
@@ -297,7 +297,7 @@ int Application::crashes = 0;
 
 Application::Application()
     : KApplication()
-    , owner(screen_number)
+    , owner(new KWinSelectionOwner(screen_number, this))
 {
     if (KCmdLineArgs::parsedArgs("qt")->isSet("sync")) {
         kwin_sync = true;
@@ -316,11 +316,11 @@ Application::Application()
     if (screen_number == -1)
         screen_number = DefaultScreen(display());
 
-    if (!owner.claim(args->isSet("replace"), true)) {
+    if (!owner->claim(args->isSet("replace"), true)) {
         fputs(i18n("kwin: unable to claim manager selection, another wm running? (try using --replace)\n").toLocal8Bit(), stderr);
         ::exit(1);
     }
-    connect(&owner, SIGNAL(lostOwnership()), SLOT(lostSelection()));
+    connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()));
 
     KApplication::quitOnSignal();
     KCrash::setEmergencySaveFunction(Application::crashHandler);
@@ -381,9 +381,12 @@ Application::Application()
 
 Application::~Application()
 {
+    disconnect(owner, 0, this, 0);
+    owner->release();
     delete Workspace::self();
-    if (owner.ownerWindow() != None)   // If there was no --replace (no new WM)
+    if (owner->ownerWindow() != None) { // If there was no --replace (no new WM)
         XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
+    }
     delete options;
     delete effects;
     delete atoms;
