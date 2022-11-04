@@ -109,11 +109,7 @@ static xcb_render_picture_t createPicture(xcb_pixmap_t pix, int depth)
 
 XRenderPicture::XRenderPicture(const QPixmap &pix)
 {
-    if (Extensions::nonNativePixmaps()) {
-        fromImage(pix.toImage());
-    } else {
-        d = new XRenderPictureData(createPicture(pix.handle(), pix.depth()));
-    }
+    fromImage(pix.toImage());
 }
 
 XRenderPicture::XRenderPicture(const QImage &img)
