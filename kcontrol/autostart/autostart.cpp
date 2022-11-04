@@ -88,30 +88,31 @@ Autostart::~Autostart()
 }
 
 
-void Autostart::slotItemClicked( QTreeWidgetItem *item, int col)
+void Autostart::slotItemClicked(QTreeWidgetItem *item, int col)
 {
     if ( item && col == COL_STATUS ) {
-        DesktopStartItem *entry = dynamic_cast<DesktopStartItem*>( item );
-        if ( entry ) {
-            bool disable = ( item->checkState( col ) == Qt::Unchecked );
+        AutoStartItem *entry = dynamic_cast<AutoStartItem*>(item);
+        if (entry) {
+            bool disable = (item->checkState(col) == Qt::Unchecked );
             KDesktopFile kc(entry->fileName().path());
             KConfigGroup grp = kc.desktopGroup();
-            if ( grp.hasKey( "Hidden" ) && !disable) {
-                grp.deleteEntry( "Hidden" );
-            }
-            else
+            if (grp.hasKey("Hidden") && !disable) {
+                grp.deleteEntry("Hidden");
+            } else {
                 grp.writeEntry("Hidden", disable);
+            }
 
             kc.sync();
-            if ( disable )
-                item->setText( COL_STATUS, i18nc( "The program won't be run", "Disabled" ) );
-            else
-                item->setText( COL_STATUS, i18nc( "The program will be run", "Enabled" ) );
+            if (disable) {
+                item->setText(COL_STATUS, i18nc("The program won't be run", "Disabled"));
+            } else {
+                item->setText(COL_STATUS, i18nc("The program will be run", "Enabled"));
+            }
         }
     }
 }
 
-void Autostart::addItem( DesktopStartItem* item, const QString& name, const QString& command, bool disabled )
+void Autostart::addItem(AutoStartItem* item, const QString& name, const QString& command, bool disabled)
 {
     Q_ASSERT( item );
     item->setText(COL_NAME, name);
@@ -138,7 +139,7 @@ void Autostart::load()
 
     widget->listCMD->clear();
 
-    m_programItem = new QTreeWidgetItem( widget->listCMD);
+    m_programItem = new QTreeWidgetItem(widget->listCMD);
     m_programItem->setText(0, i18n( "Desktop File"));
     m_programItem->setFlags(m_programItem->flags() ^ Qt::ItemIsSelectable);
 
@@ -149,7 +150,7 @@ void Autostart::load()
     widget->listCMD->expandItem(m_programItem);
 
     foreach (const QString& path, m_paths) {
-        if (! KGlobal::dirs()->exists(path)) {
+        if (!KGlobal::dirs()->exists(path)) {
             continue;
         }
 
@@ -160,8 +161,7 @@ void Autostart::load()
             QFileInfo fi = list.at(i);
             QString filename = fi.fileName();
             bool desktopFile = filename.endsWith(".desktop");
-            if ( desktopFile )
-            {
+            if (desktopFile) {
                 KDesktopFile config(fi.absoluteFilePath());
                 // kDebug() << fi.absoluteFilePath() << "trying" << config.desktopGroup().readEntry("Exec");
                 QStringList commandLine = KShell::splitArgs(config.desktopGroup().readEntry("Exec"));
@@ -174,7 +174,7 @@ void Autostart::load()
                     continue;
                 }
 
-                DesktopStartItem *item = new DesktopStartItem( fi.absoluteFilePath(), m_programItem, this );
+                AutoStartItem *item = new AutoStartItem(fi.absoluteFilePath(), m_programItem);
 
                 const KConfigGroup grp = config.desktopGroup();
                 const bool hidden = grp.readEntry("Hidden", false);
@@ -185,10 +185,11 @@ void Autostart::load()
                                       notShowList.contains("KDE") ||
                                       (!onlyShowList.isEmpty() && !onlyShowList.contains("KDE"));
 
-                int indexPath = m_paths.indexOf((item->fileName().directory()+'/' ) );
-                if ( indexPath > 0 )
+                int indexPath = m_paths.indexOf(item->fileName().directory() + '/');
+                if (indexPath > 0) {
                     indexPath = 0; // .config/autostart load destkop at startup
-                addItem(item, config.readName(), grp.readEntry("Exec"), disabled );
+                }
+                addItem(item, config.readName(), grp.readEntry("Exec"), disabled);
             }
         }
     }
@@ -202,8 +203,9 @@ void Autostart::load()
 void Autostart::slotAddProgram()
 {
     KOpenWithDialog owdlg( this );
-    if (owdlg.exec() != QDialog::Accepted)
+    if (owdlg.exec() != QDialog::Accepted) {
         return;
+    }
 
     KService::Ptr service = owdlg.service();
 
@@ -244,7 +246,7 @@ void Autostart::slotAddProgram()
             return;
         }
     }
-    DesktopStartItem * item = new DesktopStartItem(desktopPath, m_programItem, this);
+    AutoStartItem * item = new AutoStartItem(desktopPath, m_programItem);
     addItem(item, service->name(), service->exec(), false);
 }
 
@@ -254,7 +256,7 @@ void Autostart::slotRemoveCMD()
     if (!item) {
         return;
     }
-    DesktopStartItem *startItem = dynamic_cast<DesktopStartItem*>(item);
+    AutoStartItem *startItem = dynamic_cast<AutoStartItem*>(item);
     if (startItem) {
         m_programItem->takeChild(m_programItem->indexOfChild(startItem));
         KIO::DeleteJob* deljob = KIO::del(startItem->fileName().path());
@@ -262,7 +264,7 @@ void Autostart::slotRemoveCMD()
         if (!deljob->exec()) {
             KMessageBox::detailedError(
                 this,
-                i18n("Could not remove the program."),
+                i18n("Could not remove the autostart file."),
                 deljob->errorString()
             );
             delete deljob;
@@ -282,11 +284,9 @@ void Autostart::slotEditCMD(QTreeWidgetItem* ent)
         if (!slotEditCMD(kfi)) {
             return;
         }
-        DesktopStartItem *desktopEntry = dynamic_cast<DesktopStartItem*>(entry);
-        if (desktopEntry) {
-            KService service(desktopEntry->fileName().path());
-            addItem(desktopEntry, service.name(), service.exec(), false);
-        }
+
+        KService service(entry->fileName().path());
+        addItem(entry, service.name(), service.exec(), false);
     }
 }
 
@@ -310,7 +310,7 @@ void Autostart::slotAdvanced()
         return;
     }
 
-    DesktopStartItem *entry = static_cast<DesktopStartItem *>( widget->listCMD->currentItem() );
+    AutoStartItem *entry = static_cast<AutoStartItem *>(widget->listCMD->currentItem());
     KDesktopFile kc(entry->fileName().path());
     KConfigGroup grp = kc.desktopGroup();
     bool status = false;
@@ -336,10 +336,8 @@ void Autostart::slotAdvanced()
 
 void Autostart::slotSelectionChanged()
 {
-    const bool hasItems = (dynamic_cast<AutoStartItem*>(widget->listCMD->currentItem()) != 0);
-    widget->btnRemove->setEnabled(hasItems);
-
-    const bool isDesktopItem = (dynamic_cast<DesktopStartItem*>(widget->listCMD->currentItem()) != 0);
+    const bool isDesktopItem = (dynamic_cast<AutoStartItem*>(widget->listCMD->currentItem()) != 0);
+    widget->btnRemove->setEnabled(isDesktopItem);
     widget->btnProperties->setEnabled(isDesktopItem);
     widget->btnAdvanced->setEnabled(isDesktopItem) ;
 }

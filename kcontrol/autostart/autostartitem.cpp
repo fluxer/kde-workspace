@@ -20,24 +20,22 @@
 #include "autostartitem.h"
 #include "autostart.h"
 
-#include <QComboBox>
-#include <QtGui/qtreewidget.h>
+#include <QTreeWidgetItem>
 #include <QTreeWidget>
 #include <QDir>
 
-#include <KLocale>
 #include <KDebug>
 #include <KIO/CopyJob>
 
-AutoStartItem::AutoStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* )
-    : QTreeWidgetItem( parent )
+AutoStartItem::AutoStartItem(const QString &service, QTreeWidgetItem *parent)
+    : QTreeWidgetItem(parent)
 {
     m_fileName = KUrl(service);
+    setCheckState(Autostart::COL_STATUS, Qt::Checked);
 }
 
 AutoStartItem::~AutoStartItem()
 {
-
 }
 
 KUrl AutoStartItem::fileName() const
@@ -47,25 +45,16 @@ KUrl AutoStartItem::fileName() const
 
 void AutoStartItem::setPath(const QString &path)
 {
-    Q_ASSERT( path.endsWith(QDir::separator()) );
+    Q_ASSERT(path.endsWith(QDir::separator()));
 
-    if (path == m_fileName.directory(KUrl::AppendTrailingSlash))
+    if (path == m_fileName.directory(KUrl::AppendTrailingSlash)) {
         return;
+    }
 
     const QString& newFileName = path + m_fileName.fileName();
     KIO::move(m_fileName, KUrl(newFileName));
 
     m_fileName = KUrl(newFileName);
-}
-
-DesktopStartItem::DesktopStartItem( const QString &service, QTreeWidgetItem *parent, Autostart*autostart )
-    : AutoStartItem( service, parent,autostart )
-{
-    setCheckState ( Autostart::COL_STATUS,Qt::Checked );
-}
-
-DesktopStartItem::~DesktopStartItem()
-{
 }
 
 #include "moc_autostartitem.cpp"

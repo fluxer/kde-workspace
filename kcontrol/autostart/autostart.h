@@ -32,12 +32,11 @@
 #include "ui_autostartconfig.h"
 #include "autostartitem.h"
 
-class Autostart: public KCModule
+class Autostart : public KCModule
 {
     Q_OBJECT
-
 public:
-    Autostart( QWidget* parent, const QVariantList&  );
+    Autostart(QWidget* parent, const QVariantList&);
     ~Autostart();
     enum COL_TYPE { COL_NAME = 0, COL_COMMAND=1, COL_STATUS=2 };
     void load();
@@ -45,7 +44,7 @@ public:
     void defaults();
 
 protected:
-    void addItem(DesktopStartItem *item, const QString& name, const QString& command, bool disabled );
+    void addItem(AutoStartItem *item, const QString& name, const QString& command, bool disabled);
 
 private slots:
     void slotAddProgram();

@@ -20,18 +20,15 @@
 #ifndef AUTOSTARTITEM_H
 #define AUTOSTARTITEM_H
 
-#include <QtGui/qtreewidget.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 #include <QObject>
 #include <KUrl>
-
-#include <QComboBox>
-#include <QTreeWidget>
-class Autostart;
 
 class AutoStartItem : public QTreeWidgetItem, public QObject
 {
 public:
-    AutoStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* );
+    AutoStartItem(const QString &service, QTreeWidgetItem *parent);
     ~AutoStartItem();
 
     KUrl fileName() const;
@@ -42,11 +39,4 @@ private:
     KUrl m_fileName;
 };
 
-class DesktopStartItem : public AutoStartItem
-{
-public:
-    DesktopStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* );
-    ~DesktopStartItem();
-};
-
-#endif
+#endif // AUTOSTARTITEM_H
