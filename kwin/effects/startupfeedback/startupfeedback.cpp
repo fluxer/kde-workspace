@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KIconLoader>
 #include <KStandardDirs>
 #include <KStartupInfo>
-#include <KSelectionOwner>
 
 // based on StartupId in KRunner by Lubos Lunak
 // Copyright (C) 2001 Lubos Lunak <l.lunak@kde.org>
@@ -39,11 +38,9 @@ namespace KWin
 
 StartupFeedbackEffect::StartupFeedbackEffect()
     : m_startupInfo(new KStartupInfo(KStartupInfo::CleanOnCantDetect, this))
-    , m_selection(new KSelectionOwner("_KDE_STARTUP_FEEDBACK", -1, this))
     , m_active(false)
     , m_type(PassiveFeedback)
 {
-    m_selection->claim(true);
     connect(m_startupInfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData)));
     connect(m_startupInfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotRemoveStartup(KStartupInfoId,KStartupInfoData)));
     connect(m_startupInfo, SIGNAL(gotStartupChange(KStartupInfoId,KStartupInfoData)), SLOT(gotStartupChange(KStartupInfoId,KStartupInfoData)));

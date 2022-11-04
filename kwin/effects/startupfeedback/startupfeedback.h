@@ -20,11 +20,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef KWIN_STARTUPFEEDBACK_H
 #define KWIN_STARTUPFEEDBACK_H
+
 #include <QObject>
 #include <kwineffects.h>
 #include <KStartupInfo>
 
-class KSelectionOwner;
 namespace KWin
 {
 
@@ -53,7 +53,6 @@ private:
     void stop();
 
     KStartupInfo* m_startupInfo;
-    KSelectionOwner* m_selection;
     KStartupInfoId m_currentStartup;
     QMap< KStartupInfoId, QString > m_startups; // QString == pixmap
     bool m_active;
