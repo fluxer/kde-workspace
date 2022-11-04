@@ -46,11 +46,9 @@ public:
 
 protected:
     void addItem(DesktopStartItem *item, const QString& name, const QString& command, bool disabled );
-    void addItem(ScriptStartItem *item, const QString& name, const QString& command );
 
 private slots:
     void slotAddProgram();
-    void slotAddScript();
     void slotRemoveCMD();
     void slotEditCMD(QTreeWidgetItem*);
     bool slotEditCMD(const KFileItem&);
@@ -60,7 +58,7 @@ private slots:
     void slotAdvanced();
 
 private:
-    QTreeWidgetItem *m_programItem, *m_scriptItem;
+    QTreeWidgetItem *m_programItem;
     QStringList m_paths;
 
     Ui_AutostartConfig *widget;

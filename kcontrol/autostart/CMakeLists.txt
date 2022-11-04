@@ -6,7 +6,6 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 
 set(kcm_autostart_PART_SRCS
    autostartitem.cpp
-   addscriptdialog.cpp
    advanceddialog.cpp
    autostart.cpp
 )

@@ -49,14 +49,4 @@ public:
     ~DesktopStartItem();
 };
 
-
-class ScriptStartItem : public AutoStartItem
-{
-    Q_OBJECT
-
-public:
-    ScriptStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* );
-    ~ScriptStartItem();
-};
-
 #endif

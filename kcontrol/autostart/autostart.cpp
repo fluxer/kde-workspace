@@ -21,7 +21,6 @@
 
 #include "autostart.h"
 #include "autostartitem.h"
-#include "addscriptdialog.h"
 #include "advanceddialog.h"
 
 #include <QDir>
@@ -63,7 +62,6 @@ K_PLUGIN_FACTORY(AutostartFactory, registerPlugin<Autostart>();)
 
     setButtons(Help);
 
-    connect( widget->btnAddScript, SIGNAL(clicked()), SLOT(slotAddScript()) );
     connect( widget->btnAddProgram, SIGNAL(clicked()), SLOT(slotAddProgram()) );
     connect( widget->btnRemove, SIGNAL(clicked()), SLOT(slotRemoveCMD()) );
     connect( widget->btnAdvanced, SIGNAL(clicked()), SLOT(slotAdvanced()) );
@@ -121,23 +119,10 @@ void Autostart::addItem( DesktopStartItem* item, const QString& name, const QStr
     item->setText( COL_STATUS, disabled ? i18nc( "The program won't be run", "Disabled" ) : i18nc( "The program will be run", "Enabled" ));
 }
 
-void Autostart::addItem(ScriptStartItem* item, const QString& name, const QString& command )
-{
-    Q_ASSERT( item );
-    item->setText( COL_NAME, name );
-    item->setText( COL_COMMAND, command );
-}
-
-
 void Autostart::load()
 {
     // share/autostart may *only* contain .desktop files
-    // shutdown and env may *only* contain scripts, links or binaries
-    // autostart on the otherhand may contain all of the above.
-    // share/autostart is special as it overrides entries found in $KDEDIR/share/autostart
-    m_paths << KGlobalSettings::autostartPath()	// All new entries should go here
-            << componentData().dirs()->localkdedir() + "share/autostart/"	// For Importing purposes
-            << componentData().dirs()->localxdgconfdir() + "autostart/" ; //xdg-config autostart dir
+    m_paths << componentData().dirs()->resourceDirs("autostart"); //xdg-config autostart dir
 
     widget->listCMD->clear();
 
@@ -149,13 +134,7 @@ void Autostart::load()
     boldFont.setBold( true );
     m_programItem->setData ( 0, Qt::FontRole, boldFont );
 
-    m_scriptItem = new QTreeWidgetItem( widget->listCMD );
-    m_scriptItem->setText( 0, i18n( "Script File" ));
-    m_scriptItem->setFlags(m_scriptItem->flags()^Qt::ItemIsSelectable);
-    m_scriptItem->setData ( 0, Qt::FontRole, boldFont);
-
     widget->listCMD->expandItem( m_programItem );
-    widget->listCMD->expandItem( m_scriptItem );
 
     foreach (const QString& path, m_paths) {
         if (! KGlobal::dirs()->exists(path))
@@ -197,18 +176,6 @@ void Autostart::load()
                 if ( indexPath > 0 )
                     indexPath = 0; //.kde/share/autostart and .config/autostart load destkop at startup
                 addItem(item, config.readName(), grp.readEntry("Exec"), disabled );
-            }
-            else
-            {
-                ScriptStartItem *item = new ScriptStartItem( fi.absoluteFilePath(), m_scriptItem,this );
-                if ( fi.isSymLink() ) {
-                    QString link = fi.readLink();
-                    addItem(item, filename, link );
-                }
-                else
-                {
-                    addItem( item, filename, filename );
-                }
             }
         }
     }
@@ -272,22 +239,6 @@ void Autostart::slotAddProgram()
     addItem( item, service->name(), service->exec() , false);
 }
 
-void Autostart::slotAddScript()
-{
-    AddScriptDialog * addDialog = new AddScriptDialog(this);
-    int result = addDialog->exec();
-    if (result == QDialog::Accepted) {
-        if (addDialog->symLink())
-            KIO::link(addDialog->importUrl(), m_paths[0]);
-        else
-            KIO::copy(addDialog->importUrl(), m_paths[0]);
-
-        ScriptStartItem * item = new ScriptStartItem( m_paths[0] + addDialog->importUrl().fileName(), m_scriptItem,this );
-        addItem( item,  addDialog->importUrl().fileName(), addDialog->importUrl().fileName() );
-    }
-    delete addDialog;
-}
-
 void Autostart::slotRemoveCMD()
 {
     QTreeWidgetItem* item = widget->listCMD->currentItem();
@@ -299,16 +250,6 @@ void Autostart::slotRemoveCMD()
         m_programItem->takeChild( m_programItem->indexOfChild( startItem ) );
         KIO::del(startItem->fileName().path() );
         delete item;
-    }
-    else
-    {
-        ScriptStartItem * scriptItem = dynamic_cast<ScriptStartItem*>( item );
-        if ( scriptItem )
-        {
-            m_scriptItem->takeChild( m_scriptItem->indexOfChild( scriptItem ) );
-            KIO::del(scriptItem->fileName().path() );
-            delete item;
-        }
     }
 }
 

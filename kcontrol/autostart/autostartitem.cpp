@@ -68,14 +68,4 @@ DesktopStartItem::~DesktopStartItem()
 {
 }
 
-ScriptStartItem::ScriptStartItem( const QString &service, QTreeWidgetItem *parent, Autostart* autostart )
-    : AutoStartItem( service, parent,autostart )
-{
-}
-
-ScriptStartItem::~ScriptStartItem()
-{
-}
-
-
 #include "moc_autostartitem.cpp"
