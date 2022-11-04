@@ -207,35 +207,34 @@ void Autostart::slotAddProgram()
     // https://bugs.launchpad.net/ubuntu/+source/kde-workspace/+bug/923360
     QString desktopPath;
     KUrl desktopTemplate;
-    if ( service->desktopEntryName().isEmpty() ) {
+    const QString localautostartdir = KGlobal::dirs()->saveLocation("autostart");
+    if (service->desktopEntryName().isEmpty() ) {
         // Build custom desktop file (e.g. when the user entered an executable
         // name in the OpenWithDialog).
-        desktopPath = m_paths[4] + service->name() + ".desktop";
-        desktopTemplate = KUrl( desktopPath );
+        desktopPath = localautostartdir + service->name() + ".desktop";
+        desktopTemplate = KUrl(desktopPath);
         KConfig kc(desktopTemplate.path(), KConfig::SimpleConfig);
         KConfigGroup kcg = kc.group("Desktop Entry");
-        kcg.writeEntry("Exec",service->exec());
-        kcg.writeEntry("Icon","system-run");
-        kcg.writeEntry("Path","");
-        kcg.writeEntry("Terminal",false);
-        kcg.writeEntry("Type","Application");
+        kcg.writeEntry("Exec" ,service->exec());
+        kcg.writeEntry("Icon", "system-run");
+        kcg.writeEntry("Path", "");
+        kcg.writeEntry("Terminal", false);
+        kcg.writeEntry("Type", "Application");
         kc.sync();
 
-        KPropertiesDialog dlg( desktopTemplate, this );
-        if ( dlg.exec() != QDialog::Accepted )
-        {
+        KPropertiesDialog dlg(desktopTemplate, this);
+        if (dlg.exec() != QDialog::Accepted) {
             return;
         }
-    }
-    else
-    {
+    } else {
         // Use existing desktop file and use same file name to enable overrides.
-        desktopPath = m_paths[4] + service->desktopEntryName() + ".desktop";
+        desktopPath = localautostartdir + service->desktopEntryName() + ".desktop";
         desktopTemplate = KUrl( KStandardDirs::locate("apps", service->entryPath()) );
 
-        KPropertiesDialog dlg( desktopTemplate, KUrl(m_paths[4]), service->desktopEntryName() + ".desktop", this );
-        if ( dlg.exec() != QDialog::Accepted )
+        KPropertiesDialog dlg( desktopTemplate, KUrl(localautostartdir), service->desktopEntryName() + ".desktop", this );
+        if (dlg.exec() != QDialog::Accepted) {
             return;
+        }
     }
     DesktopStartItem * item = new DesktopStartItem( desktopPath, m_programItem,this );
     addItem( item, service->name(), service->exec() , false);
