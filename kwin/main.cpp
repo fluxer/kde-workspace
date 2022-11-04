@@ -382,11 +382,11 @@ Application::Application()
 Application::~Application()
 {
     disconnect(owner, 0, this, 0);
-    owner->release();
     delete Workspace::self();
     if (owner->ownerWindow() != None) { // If there was no --replace (no new WM)
         XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
     }
+    owner->release();
     delete options;
     delete effects;
     delete atoms;
