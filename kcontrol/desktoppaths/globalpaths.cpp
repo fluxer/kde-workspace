@@ -84,13 +84,6 @@ DesktopPathConfig::DesktopPathConfig(QWidget *parent, const QVariantList &)
                           " folder if you want to, and the contents will move automatically"
                           " to the new location as well."));
 
-  urAutostart = addRow(lay, i18n("Autostart path:"),
-                       i18n("This folder contains applications or"
-                            " links to applications (shortcuts) that you want to have started"
-                            " automatically whenever KDE starts. You can change the location of this"
-                            " folder if you want to, and the contents will move automatically"
-                            " to the new location as well."));
-
   urDocument = addRow(lay, i18n("Documents path:"),
                       i18n("This folder will be used by default to "
                            "load or save documents from or to."));
@@ -127,7 +120,6 @@ void DesktopPathConfig::load()
 {
     // Desktop Paths
     urDesktop->setUrl( KGlobalSettings::desktopPath() );
-    urAutostart->setUrl( KGlobalSettings::autostartPath() );
     urDocument->setUrl( KGlobalSettings::documentPath() );
     urDownload->setUrl( KGlobalSettings::downloadPath() );
     urMovie->setUrl( KGlobalSettings::videosPath() );
@@ -140,7 +132,6 @@ void DesktopPathConfig::defaults()
 {
     // Desktop Paths - keep defaults in sync with kglobalsettings.cpp
     urDesktop->setUrl( QString(QDir::homePath() + "/Desktop") );
-    urAutostart->setUrl( QString(KGlobal::dirs()->localkdedir() + "Autostart/") );
     urDocument->setUrl( QString(QDir::homePath() + "/Documents") );
     urDownload->setUrl( QString(QDir::homePath() + "/Downloads") );
     urMovie->setUrl( QString(QDir::homePath() + "/Movies") );
@@ -194,12 +185,8 @@ void DesktopPathConfig::save()
     KConfigGroup configGroup( config, "Paths" );
 
     bool pathChanged = false;
-    bool autostartMoved = false;
 
     KUrl desktopURL( KGlobalSettings::desktopPath() );
-
-    KUrl autostartURL( KGlobalSettings::autostartPath() );
-    KUrl newAutostartURL = urAutostart->url();
 
     if ( !urDesktop->url().equals( desktopURL, KUrl::CompareWithoutTrailingSlash ) )
     {
@@ -213,30 +200,6 @@ void DesktopPathConfig::save()
         if ( !urlDesktop.endsWith('/'))
             urlDesktop+='/';
 
-        if ( desktopURL.isParentOf( autostartURL ) )
-        {
-            kDebug() << "Autostart is on the desktop";
-
-            // Either the Autostart field wasn't changed (-> need to update it)
-            if ( newAutostartURL.equals( autostartURL, KUrl::CompareWithoutTrailingSlash ) )
-            {
-                // Hack. It could be in a subdir inside desktop. Hmmm... Argl.
-                urAutostart->setUrl( QString(urlDesktop + "Autostart/") );
-                kDebug() << "Autostart is moved with the desktop";
-                autostartMoved = true;
-            }
-            // or it has been changed (->need to move it from here)
-            else
-            {
-                KUrl futureAutostartURL;
-                futureAutostartURL.setUrl( urlDesktop + "Autostart/" );
-                if ( newAutostartURL.equals( futureAutostartURL, KUrl::CompareWithoutTrailingSlash ) )
-                    autostartMoved = true;
-                else
-                    autostartMoved = moveDir( KUrl( KGlobalSettings::autostartPath() ), KUrl( urAutostart->url() ), i18n("Autostart") );
-            }
-        }
-
         if ( moveDir( KUrl( KGlobalSettings::desktopPath() ), KUrl( urlDesktop ), i18n("Desktop") ) )
         {
             //save in XDG path
@@ -244,17 +207,6 @@ void DesktopPathConfig::save()
             KConfig xdgUserConf( userDirsFile, KConfig::SimpleConfig );
             KConfigGroup g( &xdgUserConf, "" );
             g.writeEntry( "XDG_DESKTOP_DIR", QString("\"" + translatePath( urlDesktop ) + "\"") );
-            pathChanged = true;
-        }
-    }
-
-    if ( !newAutostartURL.equals( autostartURL, KUrl::CompareWithoutTrailingSlash ) )
-    {
-        if (!autostartMoved)
-            autostartMoved = moveDir( KUrl( KGlobalSettings::autostartPath() ), KUrl( urAutostart->url() ), i18n("Autostart") );
-        if (autostartMoved)
-        {
-            configGroup.writePathEntry( "Autostart", urAutostart->url().toLocalFile(), KConfigBase::Normal | KConfigBase::Global );
             pathChanged = true;
         }
     }

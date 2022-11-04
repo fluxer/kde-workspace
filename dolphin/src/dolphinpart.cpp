@@ -27,7 +27,6 @@
 #include <KActionCollection>
 #include <KConfigGroup>
 #include <KDebug>
-#include <KGlobalSettings>
 #include <KIconLoader>
 #include <KLocale>
 #include <KMessageBox>
@@ -195,9 +194,6 @@ void DolphinPart::createActions()
                    goActionGroup);
     createGoAction("go_trash", "user-trash",
                    i18nc("@action:inmenu Go", "Trash"), QString("trash:/"),
-                   goActionGroup);
-    createGoAction("go_autostart", "",
-                   i18nc("@action:inmenu Go", "Autostart"), KGlobalSettings::autostartPath(),
                    goActionGroup);
 
     // Tools menu

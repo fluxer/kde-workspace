@@ -64,7 +64,6 @@ private:
 
     // Desktop Paths
     KUrlRequester *urDesktop;
-    KUrlRequester *urAutostart;
     KUrlRequester *urDocument;
     KUrlRequester *urDownload;
     KUrlRequester *urMovie;

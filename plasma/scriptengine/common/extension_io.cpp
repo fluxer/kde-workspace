@@ -171,8 +171,6 @@ QScriptValue ScriptEnv::userDataPath(QScriptContext *context, QScriptEngine *eng
 
     if (type.compare("desktop", Qt::CaseInsensitive) == 0) {
         return KGlobalSettings::desktopPath();
-    } else if (type.compare("autostart", Qt::CaseInsensitive) == 0) {
-        return KGlobalSettings::autostartPath();
     } else if (type.compare("documents", Qt::CaseInsensitive) == 0) {
         return KGlobalSettings::documentPath();
     } else if (type.compare("music", Qt::CaseInsensitive) == 0) {
