@@ -250,7 +250,18 @@ void Autostart::slotRemoveCMD()
     if ( startItem )
     {
         m_programItem->takeChild( m_programItem->indexOfChild( startItem ) );
-        KIO::del(startItem->fileName().path() );
+        KIO::DeleteJob* deljob = KIO::del(startItem->fileName().path());
+        deljob->setAutoDelete(false);
+        if (!deljob->exec()) {
+            KMessageBox::detailedError(
+                this,
+                i18n("Could not remove the program."),
+                deljob->errorString()
+            );
+            delete deljob;
+            return;
+        }
+        delete deljob;
         delete item;
     }
 }
