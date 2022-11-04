@@ -114,10 +114,21 @@ void Autostart::slotItemClicked( QTreeWidgetItem *item, int col)
 void Autostart::addItem( DesktopStartItem* item, const QString& name, const QString& command, bool disabled )
 {
     Q_ASSERT( item );
-    item->setText( COL_NAME, name );
-    item->setText( COL_COMMAND, command );
-    item->setCheckState( COL_STATUS, disabled ? Qt::Unchecked : Qt::Checked );
-    item->setText( COL_STATUS, disabled ? i18nc( "The program won't be run", "Disabled" ) : i18nc( "The program will be run", "Enabled" ));
+    item->setText(COL_NAME, name);
+    item->setText(COL_COMMAND, command);
+    item->setCheckState( COL_STATUS, disabled ? Qt::Unchecked : Qt::Checked);
+    item->setText(COL_STATUS, disabled ? i18nc("The program won't be run", "Disabled") : i18nc("The program will be run", "Enabled"));
+
+    // It is important to ensure that we make an exact copy of an existing
+    // desktop file (if selected) to enable users to override global autostarts.
+    // Also see:
+    // https://bugs.launchpad.net/ubuntu/+source/kde-workspace/+bug/923360
+    //
+    // However, if program that has non-local .desktop file is uninstalled the
+    // local autostart .desktop will be invalid which is why it is not done and
+    // if the file is not writable it is simply disabled
+    const QFileInfo fileinfo(item->fileName().path());
+    item->setDisabled(!fileinfo.isWritable());
 }
 
 void Autostart::load()
@@ -127,15 +138,15 @@ void Autostart::load()
 
     widget->listCMD->clear();
 
-    m_programItem = new QTreeWidgetItem( widget->listCMD );
-    m_programItem->setText( 0, i18n( "Desktop File" ));
-    m_programItem->setFlags(m_programItem->flags()^Qt::ItemIsSelectable );
+    m_programItem = new QTreeWidgetItem( widget->listCMD);
+    m_programItem->setText(0, i18n( "Desktop File"));
+    m_programItem->setFlags(m_programItem->flags() ^ Qt::ItemIsSelectable);
 
     QFont boldFont =  m_programItem->font(0);
-    boldFont.setBold( true );
-    m_programItem->setData ( 0, Qt::FontRole, boldFont );
+    boldFont.setBold(true);
+    m_programItem->setData(0, Qt::FontRole, boldFont);
 
-    widget->listCMD->expandItem( m_programItem );
+    widget->listCMD->expandItem(m_programItem);
 
     foreach (const QString& path, m_paths) {
         if (! KGlobal::dirs()->exists(path)) {
@@ -152,7 +163,7 @@ void Autostart::load()
             if ( desktopFile )
             {
                 KDesktopFile config(fi.absoluteFilePath());
-                //kDebug() << fi.absoluteFilePath() << "trying" << config.desktopGroup().readEntry("Exec");
+                // kDebug() << fi.absoluteFilePath() << "trying" << config.desktopGroup().readEntry("Exec");
                 QStringList commandLine = KShell::splitArgs(config.desktopGroup().readEntry("Exec"));
                 if (commandLine.isEmpty()) {
                     continue;
@@ -181,10 +192,10 @@ void Autostart::load()
             }
         }
     }
-    //Update button
+    // Update button
     slotSelectionChanged();
     widget->listCMD->resizeColumnToContents(COL_NAME);
-    //widget->listCMD->resizeColumnToContents(COL_COMMAND);
+    // widget->listCMD->resizeColumnToContents(COL_COMMAND);
     widget->listCMD->resizeColumnToContents(COL_STATUS);
 }
 
@@ -201,10 +212,6 @@ void Autostart::slotAddProgram()
         return; // Don't crash if KOpenWith wasn't able to create service.
     }
 
-    // It is important to ensure that we make an exact copy of an existing
-    // desktop file (if selected) to enable users to override global autostarts.
-    // Also see
-    // https://bugs.launchpad.net/ubuntu/+source/kde-workspace/+bug/923360
     QString desktopPath;
     KUrl desktopTemplate;
     const QString localautostartdir = KGlobal::dirs()->saveLocation("autostart");
@@ -243,12 +250,12 @@ void Autostart::slotAddProgram()
 void Autostart::slotRemoveCMD()
 {
     QTreeWidgetItem* item = widget->listCMD->currentItem();
-    if (!item)
+    if (!item) {
         return;
-    DesktopStartItem *startItem = dynamic_cast<DesktopStartItem*>( item );
-    if ( startItem )
-    {
-        m_programItem->takeChild( m_programItem->indexOfChild( startItem ) );
+    }
+    DesktopStartItem *startItem = dynamic_cast<DesktopStartItem*>(item);
+    if (startItem) {
+        m_programItem->takeChild(m_programItem->indexOfChild(startItem));
         KIO::DeleteJob* deljob = KIO::del(startItem->fileName().path());
         deljob->setAutoDelete(false);
         if (!deljob->exec()) {
@@ -269,62 +276,58 @@ void Autostart::slotEditCMD(QTreeWidgetItem* ent)
 {
     if (!ent) return;
     AutoStartItem *entry = dynamic_cast<AutoStartItem*>( ent );
-    if ( entry )
-    {
-        const KFileItem kfi = KFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl( entry->fileName() ), true );
-        if (! slotEditCMD( kfi ))
+    if (entry) {
+        const KFileItem kfi = KFileItem( KFileItem::Unknown, KFileItem::Unknown, KUrl(entry->fileName()), true);
+        if (!slotEditCMD(kfi)) {
             return;
-        DesktopStartItem *desktopEntry = dynamic_cast<DesktopStartItem*>( entry );
+        }
+        DesktopStartItem *desktopEntry = dynamic_cast<DesktopStartItem*>(entry);
         if (desktopEntry) {
             KService service(desktopEntry->fileName().path());
-            addItem( desktopEntry, service.name(), service.exec(),false );
+            addItem(desktopEntry, service.name(), service.exec(), false);
         }
     }
 }
 
-bool Autostart::slotEditCMD( const KFileItem &item)
+bool Autostart::slotEditCMD(const KFileItem &item)
 {
-    KPropertiesDialog dlg( item, this );
-    bool c = ( dlg.exec() == QDialog::Accepted );
-    return c;
+    KPropertiesDialog dlg(item, this);
+    return (dlg.exec() == QDialog::Accepted);
 }
 
 void Autostart::slotEditCMD()
 {
-    if ( widget->listCMD->currentItem() == 0 )
+    if (widget->listCMD->currentItem() == 0) {
         return;
-    slotEditCMD( (AutoStartItem*)widget->listCMD->currentItem() );
+    }
+    slotEditCMD((AutoStartItem*)widget->listCMD->currentItem());
 }
 
 void Autostart::slotAdvanced()
 {
-    if ( widget->listCMD->currentItem() == 0 )
+    if (widget->listCMD->currentItem() == 0) {
         return;
+    }
 
     DesktopStartItem *entry = static_cast<DesktopStartItem *>( widget->listCMD->currentItem() );
     KDesktopFile kc(entry->fileName().path());
     KConfigGroup grp = kc.desktopGroup();
     bool status = false;
     QStringList lstEntry;
-    if (grp.hasKey("OnlyShowIn"))
-    {
+    if (grp.hasKey("OnlyShowIn")) {
         lstEntry = grp.readXdgListEntry("OnlyShowIn");
         status = lstEntry.contains("KDE");
     }
 
     AdvancedDialog *dlg = new AdvancedDialog( this,status );
-    if ( dlg->exec() )
-    {
+    if (dlg->exec()) {
         status = dlg->onlyInKde();
-        if ( lstEntry.contains( "KDE" ) && !status )
-        {
+        if (lstEntry.contains( "KDE" ) && !status) {
             lstEntry.removeAll( "KDE" );
-            grp.writeXdgListEntry( "OnlyShowIn", lstEntry );
-        }
-        else if ( !lstEntry.contains( "KDE" ) && status )
-        {
+            grp.writeXdgListEntry( "OnlyShowIn", lstEntry);
+        } else if (!lstEntry.contains( "KDE" ) && status) {
             lstEntry.append( "KDE" );
-            grp.writeXdgListEntry( "OnlyShowIn", lstEntry );
+            grp.writeXdgListEntry("OnlyShowIn", lstEntry);
         }
     }
     delete dlg;
@@ -332,10 +335,10 @@ void Autostart::slotAdvanced()
 
 void Autostart::slotSelectionChanged()
 {
-    const bool hasItems = ( dynamic_cast<AutoStartItem*>( widget->listCMD->currentItem() )!=0 ) ;
+    const bool hasItems = (dynamic_cast<AutoStartItem*>(widget->listCMD->currentItem()) != 0);
     widget->btnRemove->setEnabled(hasItems);
 
-    const bool isDesktopItem = (dynamic_cast<DesktopStartItem*>(widget->listCMD->currentItem() ) != 0) ;
+    const bool isDesktopItem = (dynamic_cast<DesktopStartItem*>(widget->listCMD->currentItem()) != 0);
     widget->btnProperties->setEnabled(isDesktopItem);
     widget->btnAdvanced->setEnabled(isDesktopItem) ;
 }
