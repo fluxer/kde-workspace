@@ -109,8 +109,9 @@ void StartupFeedbackEffect::gotStartupChange(const KStartupInfoId& id, const KSt
 void StartupFeedbackEffect::start(const QString& icon)
 {
     Q_UNUSED(icon);
-    if (m_type == NoFeedback)
+    if (m_type == NoFeedback) {
         return;
+    }
 
     QCursor cursor = QCursor(Qt::WaitCursor);
 
@@ -127,6 +128,7 @@ void StartupFeedbackEffect::start(const QString& icon)
     );
     if (grabPointer.isNull() || grabPointer->status != XCB_GRAB_STATUS_SUCCESS) {
         kWarning() << "could not grab pointer";
+        m_active = false;
         return;
     }
 
