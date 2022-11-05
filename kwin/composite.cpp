@@ -66,7 +66,7 @@ CompositorSelectionOwner::CompositorSelectionOwner(const char *selection, const 
     : KSelectionOwner(selection, screen, parent),
     owning(false)
 {
-    connect (this, SIGNAL(lostOwnership()), SLOT(looseOwnership()));
+    connect (this, SIGNAL(lostOwnership()), SLOT(looseOwnership()), Qt::DirectConnection);
 }
 
 void CompositorSelectionOwner::looseOwnership()

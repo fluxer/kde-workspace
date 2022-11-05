@@ -295,7 +295,7 @@ bool Application::setup()
         fputs(i18n("kwin: unable to claim manager selection, another wm running? (try using --replace)\n").toLocal8Bit(), stderr);
         return false;
     }
-    connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()));
+    connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()), Qt::DirectConnection);
 
     KApplication::quitOnSignal();
     KCrash::setEmergencySaveFunction(Application::crashHandler);
