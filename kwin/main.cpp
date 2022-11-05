@@ -479,9 +479,9 @@ int main(int argc, char * argv[])
     args.add("crashes <n>", ki18n("Indicate that KWin has recently crashed n times"));
     KCmdLineArgs::addCmdLineOptions(args);
 
+    KWin::Application a;
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
     ksmserver.suspendStartup("kwin");
-    KWin::Application a;
     if (!a.setup()) {
         ksmserver.resumeStartup("kwin");
         a.exit(1);
