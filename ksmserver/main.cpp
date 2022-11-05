@@ -43,7 +43,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kmanagerselection.h>
+#include <kselectionowner.h>
 #include <kwindowsystem.h>
 #include <QtGui/qx11info_x11.h>
 #include <QtCore/qfile.h>

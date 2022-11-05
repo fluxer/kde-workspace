@@ -92,57 +92,14 @@ bool initting = false;
  */
 static bool kwin_sync = false;
 
-//************************************
-// KWinSelectionOwner
-//************************************
-
-KWinSelectionOwner::KWinSelectionOwner(int screen_P, QObject *parent)
-    : KSelectionOwner(make_selection_atom(screen_P), screen_P, parent)
-{
-}
-
-Atom KWinSelectionOwner::make_selection_atom(int screen_P)
+static QByteArray make_selection_atom(int screen_P)
 {
     if (screen_P < 0)
         screen_P = DefaultScreen(display());
     char tmp[ 30 ];
     sprintf(tmp, "WM_S%d", screen_P);
-    return XInternAtom(display(), tmp, False);
+    return QByteArray(tmp);
 }
-
-void KWinSelectionOwner::getAtoms()
-{
-    KSelectionOwner::getAtoms();
-    if (xa_version == None) {
-        Atom atoms[ 1 ];
-        const char* const names[] =
-        { "VERSION" };
-        XInternAtoms(display(), const_cast< char** >(names), 1, False, atoms);
-        xa_version = atoms[ 0 ];
-    }
-}
-
-void KWinSelectionOwner::replyTargets(Atom property_P, Window requestor_P)
-{
-    KSelectionOwner::replyTargets(property_P, requestor_P);
-    Atom atoms[ 1 ] = { xa_version };
-    // PropModeAppend !
-    XChangeProperty(display(), requestor_P, property_P, XA_ATOM, 32, PropModeAppend,
-    reinterpret_cast< unsigned char* >(atoms), 1);
-}
-
-bool KWinSelectionOwner::genericReply(Atom target_P, Atom property_P, Window requestor_P)
-{
-    if (target_P == xa_version) {
-        long version[] = { 2, 0 };
-        XChangeProperty(display(), requestor_P, property_P, XA_INTEGER, 32,
-        PropModeReplace, reinterpret_cast< unsigned char* >(&version), 2);
-        return true;
-    }
-    return KSelectionOwner::genericReply(target_P, property_P, requestor_P);
-}
-
-Atom KWinSelectionOwner::xa_version = None;
 
 // errorMessage is only used ifndef NDEBUG, and only in one place.
 // it might be worth reevaluating why this is used? I don't know.
@@ -297,7 +254,7 @@ int Application::crashes = 0;
 
 Application::Application()
     : KApplication()
-    , owner(new KWinSelectionOwner(screen_number, this))
+    , owner(new KSelectionOwner(make_selection_atom(screen_number), screen_number, this))
 {
     if (KCmdLineArgs::parsedArgs("qt")->isSet("sync")) {
         kwin_sync = true;
@@ -316,7 +273,7 @@ Application::Application()
     if (screen_number == -1)
         screen_number = DefaultScreen(display());
 
-    if (!owner->claim(args->isSet("replace"), true)) {
+    if (!owner->claim(args->isSet("replace"))) {
         fputs(i18n("kwin: unable to claim manager selection, another wm running? (try using --replace)\n").toLocal8Bit(), stderr);
         ::exit(1);
     }
@@ -387,6 +344,7 @@ Application::~Application()
         XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
     }
     owner->release();
+    delete owner;
     delete options;
     delete effects;
     delete atoms;

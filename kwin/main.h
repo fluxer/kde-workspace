@@ -23,25 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MAIN_H
 
 #include <kapplication.h>
-#include <KSelectionWatcher>
+#include <KSelectionOwner>
 
 namespace KWin
 {
-
-class KWinSelectionOwner
-    : public KSelectionOwner
-{
-    Q_OBJECT
-public:
-    explicit KWinSelectionOwner(int screen, QObject *parent);
-protected:
-    virtual bool genericReply(Atom target, Atom property, Window requestor);
-    virtual void replyTargets(Atom property, Window requestor);
-    virtual void getAtoms();
-private:
-    Atom make_selection_atom(int screen);
-    static Atom xa_version;
-};
 
 class Application : public  KApplication
 {
@@ -60,7 +45,7 @@ private slots:
     void resetCrashesCount();
 
 private:
-    KWinSelectionOwner* owner;
+    KSelectionOwner* owner;
     static int crashes;
 };
 
