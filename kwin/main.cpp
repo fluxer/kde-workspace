@@ -262,6 +262,27 @@ Application::Application()
         kDebug(1212) << "Running KWin in sync mode";
     }
     setQuitOnLastWindowClosed(false);
+
+    if (screen_number == -1)
+        screen_number = DefaultScreen(display());
+}
+
+Application::~Application()
+{
+    disconnect(owner, 0, this, 0);
+    delete Workspace::self();
+    if (owner->ownerWindow() != None) { // If there was no --replace (no new WM)
+        XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
+    }
+    owner->release();
+    delete owner;
+    delete options;
+    delete effects;
+    delete atoms;
+}
+
+bool Application::setup()
+{
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     KSharedConfig::Ptr config = KGlobal::config();
     if (!config->isImmutable() && args->isSet("lock")) {
@@ -270,12 +291,9 @@ Application::Application()
         config->reparseConfiguration();
     }
 
-    if (screen_number == -1)
-        screen_number = DefaultScreen(display());
-
     if (!owner->claim(args->isSet("replace"))) {
         fputs(i18n("kwin: unable to claim manager selection, another wm running? (try using --replace)\n").toLocal8Bit(), stderr);
-        ::exit(1);
+        return false;
     }
     connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()));
 
@@ -286,10 +304,11 @@ Application::Application()
         // Something has gone seriously wrong
         AlternativeWMDialog dialog;
         QString cmd = "kwin";
-        if (dialog.exec() == QDialog::Accepted)
+        if (dialog.exec() == QDialog::Accepted) {
             cmd = dialog.selectedWM();
-        else
-            ::exit(1);
+        } else {
+            return false;
+        }
         if (cmd.length() > 500) {
             kDebug(1212) << "Command is too long, truncating";
             cmd = cmd.left(500);
@@ -298,7 +317,7 @@ Application::Application()
         char buf[1024];
         sprintf(buf, "%s &", cmd.toAscii().data());
         system(buf);
-        ::exit(1);
+        return false;
     }
     if (crashes >= 2) {
         // Disable compositing if we have had too many crashes
@@ -334,20 +353,7 @@ Application::Application()
     syncX(); // Trigger possible errors, there's still a chance to abort
 
     initting = false; // Startup done, we are up and running now.
-}
-
-Application::~Application()
-{
-    disconnect(owner, 0, this, 0);
-    delete Workspace::self();
-    if (owner->ownerWindow() != None) { // If there was no --replace (no new WM)
-        XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
-    }
-    owner->release();
-    delete owner;
-    delete options;
-    delete effects;
-    delete atoms;
+    return true;
 }
 
 void Application::lostSelection()
@@ -476,6 +482,11 @@ int main(int argc, char * argv[])
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
     ksmserver.suspendStartup("kwin");
     KWin::Application a;
+    if (!a.setup()) {
+        ksmserver.resumeStartup("kwin");
+        a.exit(1);
+        return 1;
+    }
 
     ksmserver.resumeStartup("kwin");
     KWin::SessionManager weAreIndeed;

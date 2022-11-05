@@ -35,6 +35,9 @@ public:
     Application();
     ~Application();
 
+public:
+    bool setup();
+
 protected:
     bool x11EventFilter(XEvent*);
     bool notify(QObject* o, QEvent* e);
