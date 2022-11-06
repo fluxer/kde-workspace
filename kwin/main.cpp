@@ -374,7 +374,7 @@ bool Application::x11EventFilter(XEvent* e)
 
 bool Application::notify(QObject* o, QEvent* e)
 {
-    if (Workspace::self()->workspaceEvent(e))
+    if (Workspace::self() && Workspace::self()->workspaceEvent(e))
         return true;
     return KApplication::notify(o, e);
 }
