@@ -54,7 +54,8 @@ public:
 protected Q_SLOTS:
     void slotDisableAllChanged(const int);
     void slotDebugAreaChanged(QTreeWidgetItem*);
-    void slotDestinationChanged();
+    void slotOutputChanged();
+    void slotOutputFileChanged(const QString &);
     void slotAbortFatalChanged();
     void slotApply();
 

@@ -87,25 +87,59 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
     destList.append( i18n("Syslog") );
     destList.append( i18n("None") );
 
-    connect( m_areaWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
-            SLOT(slotDebugAreaChanged(QTreeWidgetItem*)) );
-    connect(pInfoCombo, SIGNAL(activated(int)),
-            this, SLOT(slotDestinationChanged()));
-    pInfoCombo->addItems( destList );
-    connect(pWarnCombo, SIGNAL(activated(int)),
-            this, SLOT(slotDestinationChanged()));
-    pWarnCombo->addItems( destList );
-    connect(pErrorCombo, SIGNAL(activated(int)),
-            this, SLOT(slotDestinationChanged()));
-    pErrorCombo->addItems( destList );
-    connect(pFatalCombo, SIGNAL(activated(int)),
-            this, SLOT(slotDestinationChanged()));
-    pFatalCombo->addItems( destList );
-    connect(pAbortFatal, SIGNAL(stateChanged(int)),
-            this, SLOT(slotAbortFatalChanged()));
+    connect(
+        m_areaWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)),
+        this, SLOT(slotDebugAreaChanged(QTreeWidgetItem*))
+    );
 
-    connect(m_disableAll, SIGNAL(stateChanged(int)),
-            this, SLOT(slotDisableAllChanged(int)));
+    connect(
+        pInfoCombo, SIGNAL(activated(int)),
+        this, SLOT(slotOutputChanged())
+    );
+    connect(
+        pInfoFile, SIGNAL(textEdited(QString)),
+        this, SLOT(slotOutputFileChanged(QString))
+    );
+    pInfoCombo->addItems(destList);
+
+    connect(
+        pWarnCombo, SIGNAL(activated(int)),
+        this, SLOT(slotOutputChanged())
+    );
+    connect(
+        pWarnFile, SIGNAL(textEdited(QString)),
+        this, SLOT(slotOutputFileChanged(QString))
+    );
+    pWarnCombo->addItems(destList);
+
+    connect(
+        pErrorCombo, SIGNAL(activated(int)),
+        this, SLOT(slotOutputChanged())
+    );
+    connect(
+        pErrorFile, SIGNAL(textEdited(QString)),
+        this, SLOT(slotOutputFileChanged(QString))
+    );
+    pErrorCombo->addItems(destList);
+
+    connect(
+        pFatalCombo, SIGNAL(activated(int)),
+        this, SLOT(slotOutputChanged())
+    );
+    connect(
+        pFatalFile, SIGNAL(textEdited(QString)),
+        this, SLOT(slotOutputFileChanged(QString))
+    );
+    pFatalCombo->addItems(destList);
+    connect(
+        pAbortFatal, SIGNAL(stateChanged(int)),
+        this, SLOT(slotAbortFatalChanged())
+    );
+
+    connect(
+        m_disableAll, SIGNAL(stateChanged(int)),
+        this, SLOT(slotDisableAllChanged(int))
+    );
 
     // Get initial values
     load();
@@ -225,7 +259,7 @@ void KCMDebug::showArea(const QString& areaName)
     pFatalFile->setText( group.readPathEntry("FatalFilename","kdebug.log") );
     //pFatalShow->setText( group.readEntry( "FatalShow" ) );
     pAbortFatal->setChecked( group.readEntry( "AbortFatal", 1 ) );
-    slotDestinationChanged();
+    slotOutputChanged();
 }
 
 void KCMDebug::slotDisableAllChanged(const int checked)
@@ -257,12 +291,18 @@ void KCMDebug::slotDebugAreaChanged(QTreeWidgetItem* item)
     showArea(areaName);
 }
 
-void KCMDebug::slotDestinationChanged()
+void KCMDebug::slotOutputChanged()
 {
     pInfoFile->setEnabled(pInfoCombo->currentIndex() == 0);
     pWarnFile->setEnabled(pWarnCombo->currentIndex() == 0);
     pErrorFile->setEnabled(pErrorCombo->currentIndex() == 0);
     pFatalFile->setEnabled(pFatalCombo->currentIndex() == 0);
+    save();
+}
+
+void KCMDebug::slotOutputFileChanged(const QString &text)
+{
+    Q_UNUSED(text);
     save();
 }
 
