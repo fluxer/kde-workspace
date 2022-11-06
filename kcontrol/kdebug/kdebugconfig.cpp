@@ -263,6 +263,7 @@ void KCMDebug::slotDestinationChanged()
     pWarnFile->setEnabled(pWarnCombo->currentIndex() == 0);
     pErrorFile->setEnabled(pErrorCombo->currentIndex() == 0);
     pFatalFile->setEnabled(pFatalCombo->currentIndex() == 0);
+    save();
 }
 
 void KCMDebug::slotAbortFatalChanged()
