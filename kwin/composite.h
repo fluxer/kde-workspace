@@ -37,18 +37,6 @@ namespace KWin {
 class Client;
 class Scene;
 
-class CompositorSelectionOwner : public KSelectionOwner
-{
-    Q_OBJECT
-public:
-    CompositorSelectionOwner(const char *selection, const int screen, QObject* parent);
-private:
-    friend class Compositor;
-    bool owning;
-private slots:
-    void looseOwnership();
-};
-
 class Compositor : public QObject {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "org.kde.kwin.Compositing")
@@ -267,7 +255,7 @@ private:
     SuspendReasons m_suspended;
 
     QBasicTimer compositeTimer;
-    CompositorSelectionOwner* cm_selection;
+    KSelectionOwner* cm_selection;
     QTimer m_releaseSelectionTimer;
     QList<xcb_atom_t> m_unusedSupportProperties;
     QTimer m_unusedSupportPropertyTimer;

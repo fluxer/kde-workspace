@@ -62,18 +62,6 @@ namespace KWin
 
 extern int currentRefreshRate();
 
-CompositorSelectionOwner::CompositorSelectionOwner(const char *selection, const int screen, QObject* parent)
-    : KSelectionOwner(selection, screen, parent),
-    owning(false)
-{
-    connect (this, SIGNAL(lostOwnership()), SLOT(looseOwnership()), Qt::DirectConnection);
-}
-
-void CompositorSelectionOwner::looseOwnership()
-{
-    owning = false;
-}
-
 KWIN_SINGLETON_FACTORY_VARIABLE(Compositor, s_compositor)
 
 static inline qint64 milliToNano(int milli) { return milli * 1000 * 1000; }
@@ -156,12 +144,11 @@ void Compositor::setup()
         char selection_name[ 100 ];
         ::memset(selection_name, '\0', sizeof(selection_name) * sizeof(char));
         ::sprintf(selection_name, "_NET_WM_CM_S%d", selection_sreen);
-        cm_selection = new CompositorSelectionOwner(selection_name, selection_sreen, this);
+        cm_selection = new KSelectionOwner(selection_name, selection_sreen, this);
         connect(cm_selection, SIGNAL(lostOwnership()), SLOT(finish()));
     }
-    if (!cm_selection->owning) {
+    if (cm_selection->ownerWindow() == XNone) {
         cm_selection->claim(true);   // force claiming
-        cm_selection->owning = true;
     }
 
     // There might still be a deleted around, needs to be cleared before creating the scene (BUG 333275)
@@ -179,7 +166,6 @@ void Compositor::setup()
     default:
         kDebug(1212) << "No compositing enabled";
         m_starting = false;
-        cm_selection->owning = false;
         cm_selection->release();
         return;
     }
@@ -189,7 +175,6 @@ void Compositor::setup()
         delete m_scene;
         m_scene = NULL;
         m_starting = false;
-        cm_selection->owning = false;
         cm_selection->release();
         return;
     }
@@ -292,7 +277,6 @@ void Compositor::releaseCompositorSelection()
         return;
     }
     kDebug(1212) << "Releasing compositor selection";
-    cm_selection->owning = false;
     cm_selection->release();
 }
 
