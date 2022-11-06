@@ -61,7 +61,7 @@ KCMDebug::KCMDebug( QWidget* parent, const QVariantList& )
                         ));
 
     about->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
-    about->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
+    about->addAuthor(ki18n("Ivailo Monev"), ki18n("Maintainer"), "xakepa10@gmail.com");
     setAboutData( about );
 
     this->layout()->setContentsMargins(0, 0, 0, 0);
