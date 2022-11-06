@@ -29,10 +29,11 @@
 #include "randrmode.h"
 
 class KConfig;
-	
+
 /** Class representing an RROutput identifier. This class is used
  * to control a particular output's configuration (i.e., the mode or
- * refresh rate of a DVI-I port, or the resolution of a VGA port). */
+ * refresh rate of a DVI-I port, or the resolution of a VGA port).
+ */
 class RandROutput : public QObject
 {
     Q_OBJECT
@@ -49,14 +50,15 @@ public:
     void loadSettings(bool notify = false);
     
     /** Handle an event from RANDR signifying a change in this output's
-        * configuration. */
+     * configuration.
+     */
     void handleEvent(XRROutputChangeNotifyEvent *event);
     void handlePropertyEvent(XRROutputPropertyNotifyEvent *event);
 
     /** The name of this output, as returned by the X device driver.
-        * Examples may be VGA, TMDS, DVI-I_2/digital, etc. Note:
-        * this is usually NOT the name returned in the EDID of your
-        * display. */
+     * Examples may be VGA, TMDS, DVI-I_2/digital, etc. Note:
+     * this is usually NOT the name returned in the EDID of your
+     * display. */
     QString name() const;
 
     /** Return the icon name according to the device type. */
@@ -77,7 +79,8 @@ public:
     RandRMode mode() const;
 
     /** Returns the preferred mode for this output,
-        * or an invalid mode if no preferred mode is known. */
+     * or an invalid mode if no preferred mode is known.
+     */
     RandRMode preferredMode() const;
     
     /** The list of supported sizes */
@@ -85,7 +88,8 @@ public:
     QRect rect() const;
 
     /** The list of refresh rates for the given size.
-        * If no size is specified, it will use the current size */
+      * If no size is specified, it will use the current size
+      */
     RateList refreshRates(const QSize &s = QSize()) const;
 
     /** The current refresh rate. */
@@ -96,15 +100,18 @@ public:
     int rotations() const;
 
     /** Returns the curent rotation of the CRTC this output is currently 
-        * connected to */
+     * connected to
+     */
     int rotation() const;
 
     /** Determines whether this output is connected to a display device.
-        * It is not necessarily active. */
+     * It is not necessarily active.
+     */
     bool isConnected() const;
     
     /** Determines whether this output is currently driving a display
-        * device. */
+      * device.
+      */
     bool isActive() const;
 
     bool applyProposed(int changes = 0xffffff, bool confirm = false);
@@ -133,7 +140,8 @@ private slots:
 signals:
     /** This signal is emitted when any relevant change
      * occurs in an output (mode, CRTC, resolution,
-     * connection, etc.) */
+     * connection, etc.)
+     */
     void outputChanged(RROutput o, int changes);
 
 protected:

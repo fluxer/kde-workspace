@@ -38,7 +38,7 @@ public:
     virtual void load();
     virtual void save();
     virtual void defaults();
-    virtual bool x11Event(XEvent* );
+    virtual bool x11Event(XEvent*);
 
 protected:
     void apply();

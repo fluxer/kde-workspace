@@ -36,7 +36,7 @@ RandRDisplay::RandRDisplay()
     m_dpy = QX11Info::display();
     
     // Check extension
-    if(XRRQueryExtension(m_dpy, &m_eventBase, &m_errorBase) == False) {
+    if (XRRQueryExtension(m_dpy, &m_eventBase, &m_errorBase) == False) {
         m_valid = false;
         return;
     }
@@ -173,8 +173,8 @@ void RandRDisplay::handleEvent(XEvent *e)
 
 int RandRDisplay::numScreens() const
 {
-	Q_ASSERT(ScreenCount(QX11Info::display()) == m_numScreens);
-	return m_numScreens;
+    Q_ASSERT(ScreenCount(QX11Info::display()) == m_numScreens);
+    return m_numScreens;
 }
 
 RandRScreen* RandRDisplay::screen(int index)

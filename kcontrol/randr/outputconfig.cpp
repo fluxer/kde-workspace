@@ -172,11 +172,11 @@ void OutputConfig::outputChanged(RROutput output, int changes)
     
     disconnect(absolutePosX, SIGNAL(valueChanged(int)), this, SLOT(setConfigDirty()));
     disconnect(absolutePosY, SIGNAL(valueChanged(int)), this, SLOT(setConfigDirty()));
-    if(changes & RandR::ChangeOutputs) {
+    if (changes & RandR::ChangeOutputs) {
         kDebug() << "Outputs changed.";
     }
     
-    if(changes & RandR::ChangeCrtc) {
+    if (changes & RandR::ChangeCrtc) {
         kDebug() << "Output CRTC changed.";
         
         updateSizeList();
@@ -184,29 +184,29 @@ void OutputConfig::outputChanged(RROutput output, int changes)
         updateRotationList();
     }
     
-    if(changes & RandR::ChangeRect) {
+    if (changes & RandR::ChangeRect) {
         QRect r = m_output->rect();
         kDebug() << "Output rect changed:" << r;
         updatePositionList();
     }
     
-    if(changes & RandR::ChangeRotation) {
+    if (changes & RandR::ChangeRotation) {
         kDebug() << "Output rotation changed.";
         updateRotationList();
     }
     
-    if(changes & RandR::ChangeConnection) {
+    if (changes & RandR::ChangeConnection) {
         kDebug() << "Output connection status changed.";
         setEnabled(m_output->isConnected());
         emit connectedChanged(m_output->isConnected());
     }
     
-    if(changes & RandR::ChangeRate) {
+    if (changes & RandR::ChangeRate) {
         kDebug() << "Output rate changed.";
         updateRateList();
     }
     
-    if(changes & RandR::ChangeMode) {
+    if (changes & RandR::ChangeMode) {
         kDebug() << "Output mode changed.";
         updateSizeList();
         
@@ -281,16 +281,15 @@ bool OutputConfig::isRelativeTo( QRect rect, QRect to, Relation rel )
 
 void OutputConfig::positionComboChanged(int item)
 {
-    Relation rel;
-    rel = (Relation)positionCombo->itemData(item).toInt();
+    Relation rel = (Relation)positionCombo->itemData(item).toInt();
     
     bool isAbsolute = (rel == Absolute);
     
     positionOutputCombo->setVisible(!isAbsolute);
     absolutePosX->setVisible(isAbsolute);
     absolutePosY->setVisible(isAbsolute);
-	
-    if(isAbsolute) {
+
+    if (isAbsolute) {
         int posX = m_output->rect().topLeft().x();
         int posY = m_output->rect().topLeft().y();
         
@@ -309,7 +308,7 @@ void OutputConfig::updatePositionList(void)
     // a) this is an optimization
     // b) this can be called in the middle of changing configuration and can
     //    lead to the comboboxes being setup to wrong values
-    updatePositionListTimer.start( 0 );
+    updatePositionListTimer.start(0);
 }
 
 void OutputConfig::updatePositionListDelayed()
@@ -336,7 +335,7 @@ void OutputConfig::updatePositionListDelayed()
     positionOutputCombo->clear();
 
     OutputConfigList cleanList;
-    foreach(OutputConfig *config, precedingOutputConfigs) {
+    foreach (OutputConfig *config, precedingOutputConfigs) {
         if ( config->resolution().isEmpty()) {
             continue; // ignore disabled outputs
         }
@@ -393,8 +392,8 @@ void OutputConfig::updatePositionListDelayed()
                 positionOutputCombo->setCurrentIndex(index);
     }*/
 
-    connect(positionCombo,    SIGNAL(currentIndexChanged(int)), this, SLOT(setConfigDirty()));
-    connect(positionOutputCombo,    SIGNAL(currentIndexChanged(int)), this, SLOT(setConfigDirty()));
+    connect(positionCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setConfigDirty()));
+    connect(positionOutputCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(setConfigDirty()));
     connect(absolutePosX, SIGNAL(valueChanged(int)), this, SLOT(setConfigDirty()));
     connect(absolutePosY, SIGNAL(valueChanged(int)), this, SLOT(setConfigDirty()));
 }
@@ -416,7 +415,7 @@ void OutputConfig::updateRotationList(void)
     orientationLabel->setEnabled( enable );
     orientationCombo->clear();
     int rotations = m_output->rotations();
-    for(int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 6; ++i) {
         int rot = (1 << i);
         if (rot & rotations) {
             orientationCombo->addItem(QIcon(RandR::rotationIcon(rot, RandR::Rotate0)),  RandR::rotationName(rot), rot);
@@ -453,7 +452,7 @@ void OutputConfig::updateSizeList(void)
         if (preferredMode.isValid() && s == preferredMode.size()) {
             sizeDesc = i18nc("Automatic screen size (native resolution)", "%1 (Auto)", sizeDesc);
         }
-        sizeCombo->addItem( sizeDesc, s );
+        sizeCombo->addItem(sizeDesc, s);
     }
     
     int index = -1;
@@ -482,7 +481,7 @@ void OutputConfig::updateSizeList(void)
 void OutputConfig::updateRateList(int resolutionIndex)
 {
     QSize resolution = sizeCombo->itemData(resolutionIndex).toSize();
-    if((resolution == QSize(0, 0)) || !resolution.isValid()) {
+    if ((resolution == QSize(0, 0)) || !resolution.isValid()) {
         refreshCombo->setEnabled(false);
         rateLabel->setEnabled(false);
         return;

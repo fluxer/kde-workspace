@@ -467,132 +467,132 @@ void RandRScreen::load()
 
 bool RandRScreen::applyProposed(bool confirm)
 {
-	kDebug() << "Applying proposed changes for screen" << m_index << "...";
-	
-	bool succeed = true;
-	QRect r;
-	
-	foreach(RandROutput *output, m_outputs) {
-		/*
-		r = output->rect();
-		RandROutput::Relation outputRelation;
-		RandROutput *related = output->relation(&outputRelation);
-		
-		if(!related) {
-			r.setTopLeft(QPoint(0, 0));
-		}
-		QRect relativeRect = related->rect();
-	
-		switch(outputRelation) {
-		case RandROutput::LeftOf:
-			r.setTopLeft(QPoint(relativeRect.x() - r.x(),
-			                    relativeRect.y()));
-		case RandROutput::RightOf:
-			r.setTopLeft(QPoint(relativeRect.x() + r.x(),
-			                    relativeRect.y()));
-		case RandROutput::Over:
-			r.setTopLeft(QPoint(relativeRect.x(),
-			                    relativeRect.y() - r.y()));
-		case RandROutput::Under:
-			r.setTopLeft(QPoint(relativeRect.x(),
-			                    relativeRect.y() + r.y()));
-							
-		case RandROutput::SameAs:
-			r.setTopLeft(related->rect().topLeft());
-			break;
-		}
-		output->proposeRect(r);
-		*/
-		if(!output->applyProposed()) {
-			succeed = false;
-			break;
-		}
-	}
-	/*
-	foreach(RandROutput *output, m_outputs)
-	{
-		r = output->rect();
-		if (!output->applyProposed())
-		{
-			succeed = false;
-			break;
-		}
-	}*/
-	if (succeed)
-	{
-		setPrimaryOutput(m_proposedPrimaryOutput);
-	}
+    kDebug() << "Applying proposed changes for screen" << m_index << "...";
+    
+    bool succeed = true;
+    QRect r;
+    
+    foreach(RandROutput *output, m_outputs) {
+#if 0
+        r = output->rect();
+        RandROutput::Relation outputRelation;
+        RandROutput *related = output->relation(&outputRelation);
+        
+        if (!related) {
+            r.setTopLeft(QPoint(0, 0));
+        }
+        QRect relativeRect = related->rect();
+    
+        switch(outputRelation) {
+            case RandROutput::LeftOf:
+                r.setTopLeft(QPoint(relativeRect.x() - r.x(), relativeRect.y()));
+                break;
+            case RandROutput::RightOf:
+                r.setTopLeft(QPoint(relativeRect.x() + r.x(), relativeRect.y()));
+                break;
+            case RandROutput::Over:
+                r.setTopLeft(QPoint(relativeRect.x(), relativeRect.y() - r.y()));
+                break;
+            case RandROutput::Under:
+                r.setTopLeft(QPoint(relativeRect.x(), relativeRect.y() + r.y()));
+                break;
+            case RandROutput::SameAs:
+                r.setTopLeft(related->rect().topLeft());
+                break;
+            }
+            output->proposeRect(r);
+#endif // 0
+        if(!output->applyProposed()) {
+            succeed = false;
+            break;
+        }
+    }
+#if 0
+    foreach(RandROutput *output, m_outputs) {
+        r = output->rect();
+        if (!output->applyProposed()) {
+            succeed = false;
+            break;
+        }
+    }
+#endif
+    if (succeed) {
+        setPrimaryOutput(m_proposedPrimaryOutput);
+    }
 
-	kDebug() << "Changes have been applied to all outputs.";
+    kDebug() << "Changes have been applied to all outputs.";
 
-	// if we could apply the config clean, ask for confirmation
-	if (succeed && confirm)
-		succeed = RandR::confirm(r);
+    // if we could apply the config clean, ask for confirmation
+    if (succeed && confirm) {
+        succeed = RandR::confirm(r);
+    }
 
-	// if we succeeded applying and the user confirmed the changes,
-	// just return from here 
-	if (succeed)
-		return true;
+    // if we succeeded applying and the user confirmed the changes,
+    // just return from here 
+    if (succeed) {
+        return true;
+    }
 
-	kDebug() << "Changes canceled, reverting to original setup.";
+    kDebug() << "Changes canceled, reverting to original setup.";
 
-	//Revert changes if not succeed
-	foreach(RandROutput *o, m_outputs)
-	{
-		if (o->isConnected())
-		{
-			o->proposeOriginal();
-			o->applyProposed();
-		}
-	}
+    //Revert changes if not succeed
+    foreach(RandROutput *o, m_outputs) {
+        if (o->isConnected()) {
+            o->proposeOriginal();
+            o->applyProposed();
+        }
+    }
 
-	m_proposedPrimaryOutput = m_originalPrimaryOutput;
-	setPrimaryOutput(m_proposedPrimaryOutput);
-	return false;
+    m_proposedPrimaryOutput = m_originalPrimaryOutput;
+    setPrimaryOutput(m_proposedPrimaryOutput);
+    return false;
 }
 
 void RandRScreen::unifyOutputs()
 {
-	KConfig cfg("krandrrc");
-	SizeList sizes = unifiedSizes();
+    KConfig cfg("krandrrc");
+    SizeList sizes = unifiedSizes();
 
-	//FIXME: better handle this
-	if (!sizes.count())
-		return;
+    //FIXME: better handle this
+    if (!sizes.count()) {
+        return;
+    }
 
-	// if there is only one output connected, there is no way to unify it
-	if (m_connectedCount <= 1)
-		return;
+    // if there is only one output connected, there is no way to unify it
+    if (m_connectedCount <= 1) {
+        return;
+    }
 
-	if (sizes.indexOf(m_unifiedRect.size()) == -1)
-		m_unifiedRect.setSize(sizes.first());
+    if (sizes.indexOf(m_unifiedRect.size()) == -1) {
+        m_unifiedRect.setSize(sizes.first());
+    }
 
-	kDebug() << "Unifying outputs using rect " << m_unifiedRect;
-	// iterate over all outputs and make sure all connected outputs get activated
-	// and use the right size
-	foreach(RandROutput *o, m_outputs)
-	{
-		// if the output is not connected we don't need to do anything
-		if (!o->isConnected())
-		       continue;
+    kDebug() << "Unifying outputs using rect " << m_unifiedRect;
+    // iterate over all outputs and make sure all connected outputs get activated
+    // and use the right size
+    foreach(RandROutput *o, m_outputs) {
+        // if the output is not connected we don't need to do anything
+        if (!o->isConnected()) {
+            continue;
+        }
 
-		// if the output is connected and already has the same rect and rotation
-		// as the unified ones, continue
-		if (o->isActive() && o->rect() == m_unifiedRect 
-				  && o->rotation() == m_unifiedRotation)
-			continue;
+        // if the output is connected and already has the same rect and rotation
+        // as the unified ones, continue
+        if (o->isActive() && o->rect() == m_unifiedRect && o->rotation() == m_unifiedRotation) {
+            continue;
+        }
 
-		// this is to get the refresh rate to use
-		//o->load(cfg);
-		o->proposeRect(m_unifiedRect);
-		o->proposeRotation(m_unifiedRotation);
-		o->applyProposed(RandR::ChangeRect | RandR::ChangeRotation, false);
-	}
+        // this is to get the refresh rate to use
+        //o->load(cfg);
+        o->proposeRect(m_unifiedRect);
+        o->proposeRotation(m_unifiedRotation);
+        o->applyProposed(RandR::ChangeRect | RandR::ChangeRotation, false);
+    }
 
-	// FIXME: if by any reason we were not able to unify the outputs, we should 
-	// do something
-	save();
-	emit configChanged();
+    // FIXME: if by any reason we were not able to unify the outputs, we should 
+    // do something
+    save();
+    emit configChanged();
 }
 
 void RandRScreen::slotResizeUnified(QAction *action)
@@ -603,32 +603,28 @@ void RandRScreen::slotResizeUnified(QAction *action)
 
 void RandRScreen::slotUnifyOutputs(bool unified)
 {
-	m_outputsUnified = unified;
-	KConfig cfg("krandrrc");
+    m_outputsUnified = unified;
+    KConfig cfg("krandrrc");
 
-	if (!unified || m_connectedCount <= 1)
-	{
-		foreach(RandROutput *output, m_outputs)
-			if (output->isConnected())
-			{
-				output->load(cfg);
-				output->applyProposed();
-			}
-	}
-	else
-	{
-		SizeList sizes = unifiedSizes();
+    if (!unified || m_connectedCount <= 1) {
+        foreach(RandROutput *output, m_outputs) {
+            if (output->isConnected()) {
+                output->load(cfg);
+                output->applyProposed();
+            }
+        }
+    } else {
+        SizeList sizes = unifiedSizes();
 
-		if (!sizes.count())
-		{
-			// FIXME: this should be better handle
-			return;
-		}
+        if (!sizes.count()) {
+            // FIXME: this should be better handle
+            return;
+        }
 
-		m_unifiedRect.setTopLeft(QPoint(0,0));
-		m_unifiedRect.setSize(sizes.first());
-		unifyOutputs();
-	}
+        m_unifiedRect.setTopLeft(QPoint(0,0));
+        m_unifiedRect.setSize(sizes.first());
+        unifyOutputs();
+    }
 }
 
 void RandRScreen::slotRotateUnified(QAction *action)
@@ -644,7 +640,7 @@ void RandRScreen::slotOutputChanged(RROutput id, int changes)
     Q_UNUSED(changes);
 
     int connected = 0, active = 0;
-    foreach(RandROutput *output, m_outputs) {
+    foreach (RandROutput *output, m_outputs) {
         if (output->isConnected()) {
             connected++;
         }

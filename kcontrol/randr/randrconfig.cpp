@@ -34,7 +34,7 @@
 #include <qmenu.h>
 
 QT_BEGIN_NAMESPACE
-uint qHash( const QPoint& p )
+uint qHash(const QPoint& p)
 {
     return p.x() * 10000 + p.y();
 }
@@ -343,7 +343,7 @@ void RandRConfig::slotDelayedUpdateView()
     bool first = true;
 
     // updates the graphics view so that all outputs fit inside of it
-    foreach(OutputConfig *config, m_configs) {
+    foreach (OutputConfig *config, m_configs) {
         if (first) {
             first = false;
             r = config->rect();
@@ -380,7 +380,7 @@ void RandRConfig::identifyOutputs()
     OutputMap outputs = m_display->currentScreen()->outputs();
     foreach(RandROutput *output, outputs) {
         if( !output->isConnected() || output->rect().isEmpty()) {
-        continue;
+            continue;
         }
         ids[ output->rect().center() ].append( output->name());
     }

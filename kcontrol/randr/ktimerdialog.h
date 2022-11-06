@@ -70,14 +70,14 @@ public:
      *
      * For the rest of the arguments, See @see KDialog .
      */
-    explicit KTimerDialog( int msec, TimerStyle style=CountDown, QWidget *parent=0,
-                           const char *name=0, bool modal=true,
-                           const QString &caption=QString(),
-                           int buttonMask=Ok|Apply|Cancel, ButtonCode defaultButton=Ok,
-                           bool separator=false,
-                           const KGuiItem &user1=KGuiItem(),
-                           const KGuiItem &user2=KGuiItem(),
-                           const KGuiItem &user3=KGuiItem() );
+    explicit KTimerDialog(int msec, TimerStyle style=CountDown, QWidget *parent = 0,
+                          const char *name = 0, bool modal=true,
+                          const QString &caption = QString(),
+                          int buttonMask = Ok|Apply|Cancel, ButtonCode defaultButton=Ok,
+                          bool separator = false,
+                          const KGuiItem &user1 = KGuiItem(),
+                          const KGuiItem &user2 = KGuiItem(),
+                          const KGuiItem &user3 = KGuiItem());
 
     /**
      * Destructor.
@@ -87,12 +87,12 @@ public:
     /**
      * Execute the dialog modelessly - see @see QDialog .
      */
-    virtual void setVisible( bool visible );
+    virtual void setVisible(bool visible);
 
     /**
      * Set the refresh interval for the timer progress. Defaults to one second.
      */
-    void setRefreshInterval( int msec );
+    void setRefreshInterval(int msec);
 
     /**
      * Retrieves the @ref ButtonCode which will be activated once the timer
@@ -104,7 +104,7 @@ public:
      * Sets the @ref ButtonCode to determine which button will be activated
      * once the timer times out. @see timeoutButton
      */
-    void setTimeoutButton( ButtonCode newButton );
+    void setTimeoutButton(ButtonCode newButton);
 
     /**
      * Retrieves the current @ref TimerStyle. @see setTimerStyle
@@ -114,13 +114,13 @@ public:
     /**
      * Sets the @ref TimerStyle. @see timerStyle
      */
-    void setTimerStyle( TimerStyle newStyle );
+    void setTimerStyle(TimerStyle newStyle);
 
     /**
      * Overridden function which is used to set the main widget of the dialog.
      * @see KDialog::setMainWidget.
      */
-    void setMainWidget( QWidget *widget );
+    void setMainWidget(QWidget *widget);
 
 Q_SIGNALS:
     /**

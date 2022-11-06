@@ -41,12 +41,12 @@ public:
     
     /** Enumeration describing two related outputs (i.e. VGA LeftOf TMDS) */
     enum Relation {
-            Absolute = -1,
-            SameAs = 0,
-            LeftOf = 1,
-            RightOf,
-            Over,
-            Under
+        Absolute = -1,
+        SameAs = 0,
+        LeftOf = 1,
+        RightOf,
+        Over,
+        Under
     };
     // NOTE: I'd love to have used Above and Below but Xlib already defines them
     // and that confuses GCC.
@@ -85,7 +85,7 @@ signals:
     void connectedChanged(bool);
 
 private:
-    static bool isRelativeTo( QRect rect, QRect to, Relation rel );
+    static bool isRelativeTo(QRect rect, QRect to, Relation rel);
     bool m_changed;
     bool m_unified;
     QPoint m_pos;

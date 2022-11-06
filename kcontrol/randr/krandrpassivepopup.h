@@ -21,9 +21,9 @@
 
 #include <kpassivepopup.h>
 #include <QTimer>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QEvent>
+
 #include <X11/Xlib.h>
 #include <fixx11h.h>
 
@@ -32,19 +32,19 @@ class KRandrPassivePopup
 {
     Q_OBJECT
 public:
-    static KRandrPassivePopup *message( const QString &caption, const QString &text,
-                                        const QPixmap &icon, QWidget *parent, int timeout = -1 );
+    static KRandrPassivePopup *message(const QString &caption, const QString &text,
+                                       const QPixmap &icon, QWidget *parent, int timeout = -1 );
 
 protected:
     virtual bool eventFilter( QObject* o, QEvent* e );
-    virtual bool x11Event( XEvent* e );
+    virtual bool x11Event(XEvent* e);
 
 private Q_SLOTS:
     void slotPositionSelf();
 
 private:
-    KRandrPassivePopup( QWidget *parent=0, Qt::WFlags f=0 );
-    void startWatchingWidget( QWidget* w );
+    KRandrPassivePopup(QWidget *parent = 0, Qt::WFlags f = 0);
+    void startWatchingWidget(QWidget* w);
     QList< QWidget* > watched_widgets;
     QList< Window > watched_windows;
     QTimer update_timer;

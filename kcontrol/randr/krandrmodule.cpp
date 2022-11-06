@@ -62,17 +62,17 @@ KRandRModule::KRandRModule(QWidget *parent, const QVariantList&)
 {
     m_display = new RandRDisplay();
     if (!m_display->isValid()) {
-            QVBoxLayout *topLayout = new QVBoxLayout(this);
-            QLabel *label = new QLabel(i18n("Your X server does not support resizing and "
-                                            "rotating the display. Please update to version 4.3 "
-                                            "or greater. You need the X Resize, Rotate, and Reflect "
-                                            "extension (RANDR) version 1.1 or greater to use this "
-                                            "feature."), this);
-                                            
-            label->setWordWrap(true);
-            topLayout->addWidget(label);
-            kWarning() << "Error: " << m_display->errorCode() ;
-            return;
+        QVBoxLayout *topLayout = new QVBoxLayout(this);
+        QLabel *label = new QLabel(i18n("Your X server does not support resizing and "
+                                        "rotating the display. Please update to version 4.3 "
+                                        "or greater. You need the X Resize, Rotate, and Reflect "
+                                        "extension (RANDR) version 1.1 or greater to use this "
+                                        "feature."), this);
+                                        
+        label->setWordWrap(true);
+        topLayout->addWidget(label);
+        kWarning() << "Error: " << m_display->errorCode();
+        return;
     }
 
     QVBoxLayout* topLayout = new QVBoxLayout(this);
@@ -87,10 +87,10 @@ KRandRModule::KRandRModule(QWidget *parent, const QVariantList&)
 
     setButtons(KCModule::Apply);
 
-    kapp->installX11EventFilter( this );
+    kapp->installX11EventFilter(this);
 }
 
-KRandRModule::~KRandRModule(void)
+KRandRModule::~KRandRModule()
 {
     delete m_display;
 }
@@ -121,7 +121,6 @@ void KRandRModule::save()
         return;
     }
     m_config->save();
-
 }
 
 void KRandRModule::apply()
