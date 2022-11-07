@@ -5,7 +5,7 @@ set(testsh_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../shutdowndlg.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../logouteffect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../curtaineffect.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../fadeeffect.cpp)
+)
 
 kde4_add_manual_test(testsh ${testsh_SRCS})
 

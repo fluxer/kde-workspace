@@ -26,15 +26,8 @@ set(ksmserver_SRCS
    shutdown.cpp
    client.cpp
    logouteffect.cpp
-   fadeeffect.cpp
-   curtaineffect.cpp)
-
-INCLUDE(CheckCCompilerFlag)
-CHECK_CXX_COMPILER_FLAG(-mmmx HAVE_MMMX)
-
-if (HAVE_MMMX)
-   SET_SOURCE_FILES_PROPERTIES(fadeeffect.cpp PROPERTIES COMPILE_FLAGS -mmmx)
-endif (HAVE_MMMX)
+   curtaineffect.cpp
+)
 
 set(kcminit_adaptor ${CMAKE_SOURCE_DIR}/kcminit/main.h)
 set(kcminit_xml ${CMAKE_CURRENT_BINARY_DIR}/org.kde.KCMinit.xml)

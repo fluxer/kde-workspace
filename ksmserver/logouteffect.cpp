@@ -21,77 +21,11 @@
 
 #include <QWidget>
 #include <QPixmap>
-#include <QtGui/qx11info_x11.h>
-#include <X11/Xlib.h>
 
 #include "logouteffect.h"
-#include "fadeeffect.h"
 #include "curtaineffect.h"
 
-#include <unistd.h> // for gethostname()
-#include <string.h> // for memset()
-
-static bool localDisplay(Display *dpy)
-{
-    QByteArray display(XDisplayString(dpy));
-    QByteArray hostPart = display.left(display.indexOf(':'));
-
-    if (hostPart.isEmpty())
-        return true;
-
-    if (hostPart == "localhost")
-        return true;
-
-    if (hostPart == "127.0.0.1")
-        return true;
-
-    char name[2048];
-    ::memset(name, '\0', sizeof(name));
-    ::gethostname(name, sizeof(name));
-
-    if (hostPart == name)
-       return true;
-
-    return false;
-}
-
-static bool supportedFormat(const QPixmap *pixmap)
-{
-    int depth = pixmap->depth();
-    Visual *visual = (Visual*)pixmap->x11Info().visual();
-
-    if (ImageByteOrder(pixmap->x11Info().display()) != LSBFirst)
-        return false;
-
-    // Assume this means the pixmap is ARGB32
-    if (pixmap->hasAlphaChannel())
-        return true;
-
-    // 24/34 bit x8a8r8g8b8
-    if ((depth == 24 || depth == 32) &&
-        visual->red_mask   == 0x00ff0000 &&
-        visual->green_mask == 0x0000ff00 &&
-        visual->blue_mask  == 0x000000ff)
-    {
-        return true;
-    }
-
-    // 16 bit r5g6b5
-    if (depth == 16 &&
-        visual->red_mask   == 0xf800 &&
-        visual->green_mask == 0x07e0 &&
-        visual->blue_mask  == 0x001f)
-    {
-        return true;
-    }
-
-    return false;
-}
-
-
-
 // ----------------------------------------------------------------------------
-
 
 
 LogoutEffect::LogoutEffect(QWidget *parent, QPixmap *pixmap)
@@ -105,12 +39,7 @@ LogoutEffect::~LogoutEffect()
 
 LogoutEffect *LogoutEffect::create(QWidget *parent, QPixmap *pixmap)
 {
-    Display *dpy = parent->x11Info().display();
-
-    if (!localDisplay(dpy) || !supportedFormat(pixmap))
-        return new CurtainEffect(parent, pixmap);
-    else
-        return new FadeEffect(parent, pixmap);
+    return new CurtainEffect(parent, pixmap);
 }
 
 
