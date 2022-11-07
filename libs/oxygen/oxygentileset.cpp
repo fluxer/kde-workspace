@@ -38,12 +38,11 @@ namespace Oxygen
 
         } else if( size != rect.size() ) {
 
-            const QPixmap tile( pix.copy(rect) );
             QPixmap pixmap( w, h );
 
             pixmap.fill(Qt::transparent);
             QPainter p(&pixmap);
-            p.drawTiledPixmap(0, 0, w, h, tile);
+            p.drawTiledPixmap(0, 0, w, h, pix.copy(rect));
 
             pixmaps.push_back( pixmap );
 
