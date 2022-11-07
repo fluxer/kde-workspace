@@ -36,12 +36,6 @@
 
 #include <limits.h>
 
-#ifdef Q_WS_X11
-#  include <qx11info_x11.h>
-#  include <X11/Xlib.h>
-#endif
-
-
 static const int sSmoothScrollTime = 140;
 static const int sSmoothScrollTick = 14;
 
@@ -189,38 +183,7 @@ QRect AbstractItemView::scrollBackBuffer()
         return visibleArea();
     }
 
-    int sy, dy, h;
-    QRect dirty;
-    if (delta < 0) {
-        dy = 0;
-        sy = -delta;
-        h = m_pixmap.height() - sy;
-        dirty = QRect(0, m_pixmap.height() - sy, m_pixmap.width(), sy);
-    } else {
-        dy = delta;
-        sy = 0;
-        h = m_pixmap.height() - dy;
-        dirty = QRect(0, 0, m_pixmap.width(), dy);
-    }
-
-#if defined(Q_WS_X11)
-    const QPaintEngine::Type type = m_pixmap.paintEngine()->type();
-    if (type == QPaintEngine::X11) {
-        Display *dpy = QX11Info::display();
-        GC gc = XCreateGC(dpy, m_pixmap.handle(), 0, 0);
-        XCopyArea(dpy, m_pixmap.handle(), m_pixmap.handle(), gc, 0, sy, m_pixmap.width(), h, 0, dy);
-        XFreeGC(dpy, gc);
-    } else if (type == QPaintEngine::Raster) {
-        // Hack to prevent the image from detaching
-        const QImage image = m_pixmap.toImage();
-        const uchar *src = image.scanLine(sy);
-        uchar *dst = const_cast<uchar*>(image.scanLine(dy));
-        memmove((void*)dst, (const void*)src, h * image.bytesPerLine());
-    } else
-#endif
-    {
-        dirty = m_pixmap.rect();
-    }
+    QRect dirty = m_pixmap.rect();
 
     return mapToViewport(dirty.translated(contentsRect().topLeft().toPoint())).toAlignedRect();
 }
@@ -235,14 +198,6 @@ void AbstractItemView::prepareBackBuffer()
         pixmap.fill(Qt::transparent);
         if (!m_pixmap.isNull()) {
             // Static content optimization
-#ifdef Q_WS_X11
-            if (m_pixmap.paintEngine()->type() == QPaintEngine::X11) {
-                GC gc = XCreateGC(QX11Info::display(), pixmap.handle(), 0, NULL);
-                XCopyArea(QX11Info::display(), m_pixmap.handle(), pixmap.handle(), gc, 0, 0,
-                          m_pixmap.width(), m_pixmap.height(), 0, 0);
-                XFreeGC(QX11Info::display(), gc);
-            } else
-#endif
             {
                 QPainter p(&pixmap);
                 p.setCompositionMode(QPainter::CompositionMode_Source);
