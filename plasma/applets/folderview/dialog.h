@@ -25,6 +25,7 @@
 namespace Plasma {
     class Applet;
     class FrameSvg;
+    class DialogShadows;
 }
 
 #include <QGraphicsView>
@@ -47,6 +48,7 @@ protected:
     void paintEvent(QPaintEvent *event);
 
 private:
+    Plasma::DialogShadows *m_dialogshadows;
     Plasma::FrameSvg *m_background;
     QGraphicsScene *m_scene;
     QGraphicsView *m_view;

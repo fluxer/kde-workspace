@@ -22,7 +22,11 @@
 
 #include <QBasicTimer>
 #include <QWidget>
-#include <QtCore/qdatetime.h>
+#include <QDateTime>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QItemSelectionModel>
+#include <QModelIndex>
 
 #include <KActionCollection>
 #include <KUrl>
@@ -30,17 +34,14 @@
 namespace Plasma {
     class FrameSvg;
     class BusyWidget;
+    class DialogShadows;
 }
 
-#include <QGraphicsView>
-#include <QGraphicsScene>
 class KDirModel;
 class KFileItemDelegate;
 class KFilePreviewGenerator;
 class KNewFileMenu;
 class KFileItemActions;
-#include <QItemSelectionModel>
-#include <QModelIndex>
 class ProxyModel;
 class IconView;
 
@@ -104,6 +105,7 @@ private slots:
     void renameSelectedIcon();
  
 private:
+    Plasma::DialogShadows *m_dialogshadows;
     Plasma::FrameSvg *m_background;
     QGraphicsScene *m_scene;
     QGraphicsView *m_view;

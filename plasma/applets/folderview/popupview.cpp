@@ -18,7 +18,6 @@
  */
 
 #include "popupview.h"
-#include "dialogshadows_p.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -59,6 +58,7 @@
 #include <Plasma/FrameSvg>
 #include <Plasma/Theme>
 #include <Plasma/WindowEffects>
+#include <Plasma/DialogShadows>
 
 
 QTime PopupView::s_lastOpenClose;
@@ -67,6 +67,8 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
                      const bool &showPreview, const QStringList &previewPlugins,
                      const IconView *parentView)
     : QWidget(0, Qt::X11BypassWindowManagerHint),
+      m_dialogshadows(0),
+      m_background(0),
       m_view(0),
       m_parentView(parentView),
       m_busyWidget(0),
@@ -108,6 +110,7 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
         m_url = item.targetUrl();
     }
 
+    m_dialogshadows = new Plasma::DialogShadows(this, "dialogs/background");
     m_background = new Plasma::FrameSvg(this);
     m_background->setImagePath("dialogs/background");
 
@@ -146,6 +149,7 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
 
 PopupView::~PopupView()
 {
+    m_dialogshadows->removeWindow(this);
     delete m_newMenu;
     s_lastOpenClose.restart();
 }
@@ -534,7 +538,7 @@ void PopupView::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
 
-    DialogShadows::self()->addWindow(this);
+    m_dialogshadows->addWindow(this);
 }
 
 void PopupView::paintEvent(QPaintEvent *event)

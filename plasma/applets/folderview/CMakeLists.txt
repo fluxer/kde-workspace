@@ -10,7 +10,6 @@ set(folderview_SRCS
     abstractitemview.cpp
     listview.cpp
     dialog.cpp
-    dialogshadows.cpp
     label.cpp
     iconview.cpp
     popupview.cpp

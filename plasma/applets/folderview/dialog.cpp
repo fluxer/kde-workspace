@@ -18,7 +18,6 @@
  */
 
 #include "dialog.h"
-#include "dialogshadows_p.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -30,6 +29,7 @@
 
 #include <Plasma/Applet>
 #include <Plasma/FrameSvg>
+#include <Plasma/DialogShadows>
 
 #ifdef Q_WS_X11
 #  include <qx11info_x11.h>
@@ -38,7 +38,10 @@
 
 
 Dialog::Dialog(QWidget *parent)
-    : QWidget(parent, Qt::Popup), m_widget(0)
+    : QWidget(parent, Qt::Popup),
+    m_dialogshadows(0),
+    m_background(0),
+    m_widget(0)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
@@ -52,7 +55,8 @@ Dialog::Dialog(QWidget *parent)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);    
-    
+
+    m_dialogshadows = new Plasma::DialogShadows(this, "dialogs/background");
     m_background = new Plasma::FrameSvg(this);
     m_background->setImagePath("dialogs/background");
 
@@ -66,6 +70,7 @@ Dialog::Dialog(QWidget *parent)
 
 Dialog::~Dialog()
 {
+    m_dialogshadows->removeWindow(this);
 }
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
@@ -139,7 +144,7 @@ void Dialog::show(Plasma::Applet *applet)
     move(pos);
 
     QWidget::show();
-    DialogShadows::self()->addWindow(this, borders);
+    m_dialogshadows->addWindow(this, borders);
 }
 
 void Dialog::resizeEvent(QResizeEvent *event)
