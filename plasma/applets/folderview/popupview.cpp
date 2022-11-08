@@ -149,7 +149,6 @@ PopupView::PopupView(const QModelIndex &index, const QPoint &pos,
 
 PopupView::~PopupView()
 {
-    m_dialogshadows->removeWindow(this);
     delete m_newMenu;
     s_lastOpenClose.restart();
 }
@@ -539,6 +538,13 @@ void PopupView::showEvent(QShowEvent *event)
     Q_UNUSED(event)
 
     m_dialogshadows->addWindow(this);
+}
+
+void PopupView::hideEvent(QHideEvent *event)
+{
+    Q_UNUSED(event)
+
+    m_dialogshadows->removeWindow(this);
 }
 
 void PopupView::paintEvent(QPaintEvent *event)

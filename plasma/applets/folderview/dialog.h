@@ -43,6 +43,7 @@ public:
     void show(Plasma::Applet *applet);
 
 protected:
+    void hideEvent(QHideEvent *event);
     void mousePressEvent(QMouseEvent *event);
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);

@@ -70,7 +70,6 @@ Dialog::Dialog(QWidget *parent)
 
 Dialog::~Dialog()
 {
-    m_dialogshadows->removeWindow(this);
 }
 
 void Dialog::setGraphicsWidget(QGraphicsWidget *widget)
@@ -145,6 +144,13 @@ void Dialog::show(Plasma::Applet *applet)
 
     QWidget::show();
     m_dialogshadows->addWindow(this, borders);
+}
+
+void Dialog::hideEvent(QHideEvent *event)
+{
+    Q_UNUSED(event)
+
+    m_dialogshadows->removeWindow(this);
 }
 
 void Dialog::resizeEvent(QResizeEvent *event)
