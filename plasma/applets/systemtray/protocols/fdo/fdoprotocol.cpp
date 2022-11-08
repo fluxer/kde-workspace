@@ -43,8 +43,6 @@ void FdoProtocol::init()
     m_selectionManager = new FdoSelectionManager;
     connect(m_selectionManager, SIGNAL(taskCreated(SystemTray::Task*)),
             this, SIGNAL(taskCreated(SystemTray::Task*)));
-    connect(m_selectionManager, SIGNAL(notificationCreated(SystemTray::Notification*)),
-            this, SIGNAL(notificationCreated(SystemTray::Notification*)));
 }
 
 }

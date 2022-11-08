@@ -27,7 +27,6 @@
 namespace SystemTray
 {
 
-class Notification;
 class Task;
 class X11EmbedPainter;
 class FdoSelectionManagerPrivate;
@@ -49,7 +48,6 @@ public:
 
 signals:
     void taskCreated(SystemTray::Task *task);
-    void notificationCreated(SystemTray::Notification *notification);
 
 protected:
     bool x11Event(XEvent *event);
