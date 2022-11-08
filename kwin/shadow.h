@@ -113,8 +113,8 @@ protected:
         ShadowElementsCount
     };
 
-    inline QImage shadowImage(ShadowElements element) const {
-        return m_shadowElements[element].toImage();
+    inline const QImage& shadowImage(ShadowElements element) const {
+        return m_shadowElements[element];
     };
 
     int topOffset() const {
@@ -144,8 +144,8 @@ private:
     static QVector<long> readX11ShadowProperty(WId id);
     bool init(const QVector<long> &data);
     Toplevel *m_topLevel;
-    // shadow pixmaps
-    QPixmap m_shadowElements[ShadowElementsCount];
+    // shadow images
+    QImage m_shadowElements[ShadowElementsCount];
     // shadow offsets
     int m_topOffset;
     int m_rightOffset;
