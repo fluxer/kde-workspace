@@ -25,6 +25,7 @@
 
 // KDE
 #include <KDebug>
+#include <KPixmap>
 
 // Qt
 #include <QtGui/QPainter>
@@ -60,12 +61,16 @@ public:
         if (picture) {
            XRenderFreePicture(QX11Info::display(), picture);
         }
+        if (!kpixmap.isNull()) {
+           kpixmap.release();
+        }
     }
 
     X11EmbedContainer *q;
 
     XWindowAttributes attr;
     Picture picture;
+    KPixmap kpixmap;
     bool updatesEnabled;
     QImage oldBackgroundImage;
 };
@@ -221,7 +226,11 @@ void X11EmbedContainer::setBackgroundPixmap(QPixmap background)
     d->oldBackgroundImage = image;
 
     Display* display = QX11Info::display();
-    XSetWindowBackgroundPixmap(display, clientWinId(), toX11Pixmap(background).handle());
+    if (!d->kpixmap.isNull()) {
+        d->kpixmap.release();
+    }
+    d->kpixmap = KPixmap(background);
+    XSetWindowBackgroundPixmap(display, clientWinId(), d->kpixmap.handle());
     XClearArea(display, clientWinId(), 0, 0, 0, 0, True);
 }
 
