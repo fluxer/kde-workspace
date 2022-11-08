@@ -113,8 +113,8 @@ protected:
         ShadowElementsCount
     };
 
-    inline const QPixmap &shadowPixmap(ShadowElements element) const {
-        return m_shadowElements[element];
+    inline QImage shadowImage(ShadowElements element) const {
+        return m_shadowElements[element].toImage();
     };
 
     int topOffset() const {

@@ -860,7 +860,7 @@ void SceneXrender::EffectFrame::render(QRegion region, double opacity, double fr
         QPoint topLeft(m_effectFrame->geometry().x(), m_effectFrame->geometry().center().y() - m_effectFrame->iconSize().height() / 2);
 
         if (!m_iconPicture)   // lazy creation
-            m_iconPicture = new XRenderPicture(m_effectFrame->icon());
+            m_iconPicture = new XRenderPicture(m_effectFrame->icon().toImage());
         QRect geom = QRect(topLeft, m_effectFrame->iconSize());
         xcb_render_composite(connection(), XCB_RENDER_PICT_OP_OVER, *m_iconPicture, fill,
                              effects->xrenderBufferPicture(),
@@ -994,15 +994,15 @@ void SceneXrender::EffectFrame::updateTextPicture()
         text = metrics.elidedText(text, Qt::ElideRight, rect.width());
     }
 
-    QPixmap pixmap(m_effectFrame->geometry().size());
-    pixmap.fill(Qt::transparent);
-    QPainter p(&pixmap);
+    QImage image(m_effectFrame->geometry().size(), QImage::Format_ARGB32_Premultiplied);
+    image.fill(Qt::transparent);
+    QPainter p(&image);
     p.setFont(m_effectFrame->font());
     // TODO: What about no frame? Custom color setting required
     p.setPen(Qt::white);
     p.drawText(rect, m_effectFrame->alignment(), text);
     p.end();
-    m_textPicture = new XRenderPicture(pixmap);
+    m_textPicture = new XRenderPicture(image);
 }
 
 SceneXRenderShadow::SceneXRenderShadow(Toplevel *toplevel)
@@ -1067,7 +1067,7 @@ bool SceneXRenderShadow::prepareBackend()
     const uint32_t values[] = {XCB_RENDER_REPEAT_NORMAL};
     for (int i=0; i<ShadowElementsCount; ++i) {
         delete m_pictures[i];
-        m_pictures[i] = new XRenderPicture(shadowPixmap(ShadowElements(i)));
+        m_pictures[i] = new XRenderPicture(shadowImage(ShadowElements(i)));
         xcb_render_change_picture(connection(), *m_pictures[i], XCB_RENDER_CP_REPEAT, values);
     }
     return true;

@@ -173,7 +173,7 @@ void ZoomEffect::recreateTexture()
         QImage img((uchar*)ximg->pixels, imageWidth, imageHeight, QImage::Format_ARGB32_Premultiplied);
 #ifdef KWIN_BUILD_COMPOSITE
         if (effects->compositingType() == XRenderCompositing)
-            xrenderPicture.reset(new XRenderPicture(QPixmap::fromImage(img)));
+            xrenderPicture.reset(new XRenderPicture(img));
 #endif
         XcursorImageDestroy(ximg);
     }

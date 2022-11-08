@@ -181,7 +181,7 @@ public:
     using Shadow::ShadowElementLeft;
     using Shadow::ShadowElementTopLeft;
     using Shadow::ShadowElementsCount;
-    using Shadow::shadowPixmap;
+    using Shadow::shadowImage;
     virtual ~SceneXRenderShadow();
 
     void layoutShadowRects(QRect& top, QRect& topRight,
