@@ -197,14 +197,34 @@ void X11EmbedContainer::paintEvent(QPaintEvent *event)
         return;
     }
 
-    // Taking a detour via a QPixmap is unfortunately the only way we can get
-    // the window contents into Qt's backing store.
-    QPixmap pixmap = toX11Pixmap(QPixmap(size()));
-    pixmap.fill(Qt::transparent);
-    XRenderComposite(x11Info().display(), PictOpSrc, d->picture, None, pixmap.x11PictureHandle(),
-                     0, 0, 0, 0, 0, 0, width(), height());
+    // Taking a detour via a KPixmap is unfortunately the only way we can get
+    // the window contents into Katie's backing store.
+    KPixmap kpixmap(size());
+    Picture kpixmapicture = XRenderCreatePicture(
+        x11Info().display(),
+        kpixmap.handle(),
+        XRenderFindVisualFormat(x11Info().display(), (Visual *)x11Info().visual()),
+        0, 0
+    );
+    if (!kpixmapicture) {
+        // if this happens it may result in incorrect rendering but it should not happen
+        kWarning() << "XRenderCreatePicture() failed";
+        kpixmap.release();
+        FdoSelectionManager::painter()->updateContainer(this);
+        return;
+    }
+
+    XRenderComposite(
+        x11Info().display(), PictOpSrc,
+        d->picture, None, kpixmapicture,
+        0, 0, 0, 0, 0, 0, width(), height()
+    );
+
     QPainter p(this);
-    p.drawPixmap(0, 0, pixmap);
+    p.drawImage(0, 0, kpixmap.toImage());
+
+    XRenderFreePicture(x11Info().display(), kpixmapicture);
+    kpixmap.release();
 }
 
 void X11EmbedContainer::setBackgroundPixmap(QPixmap background)
@@ -232,28 +252,6 @@ void X11EmbedContainer::setBackgroundPixmap(QPixmap background)
     d->kpixmap = KPixmap(background);
     XSetWindowBackgroundPixmap(display, clientWinId(), d->kpixmap.handle());
     XClearArea(display, clientWinId(), 0, 0, 0, 0, True);
-}
-
-// Qt has qt_toX11Pixmap(), but that's sadly not public API. So the only
-// option seems to be to create X11-based QPixmap using QPixmap::fromX11Pixmap()
-// and draw the non-native pixmap to it.
-// NOTE: The alpha-channel is not preserved if it exists, but for X pixmaps it generally should not be needed anyway.
-QPixmap X11EmbedContainer::toX11Pixmap(const QPixmap& pix)
-{
-    if (pix.handle() != 0)   // X11 pixmap
-        return pix;
-    QPixmap ret;
-    Pixmap xpix = XCreatePixmap(pix.x11Info().display(), RootWindow(pix.x11Info().display(), pix.x11Info().screen()),
-                                pix.width(), pix.height(), QX11Info::appDepth());
-    {
-        QPixmap wrk = QPixmap::fromX11Pixmap(xpix, QPixmap::ExplicitlyShared);
-        QPainter paint(&wrk);
-        paint.drawPixmap(0, 0, pix);
-        paint.end();
-        ret = wrk.copy();
-    } // free resources so that xpix can be freed (QPixmap does not own it)
-    XFreePixmap(pix.x11Info().display(), xpix);
-    return ret;
 }
 
 }
