@@ -29,6 +29,8 @@ DEALINGS IN THE SOFTWARE.
 #include <kglobalsettings.h>
 #include <QPalette>
 #include <QApplication>
+#include <QX11Info>
+
 #include <assert.h>
 
 KDecorationOptionsPrivate::KDecorationOptionsPrivate()
@@ -77,7 +79,7 @@ unsigned long KDecorationOptionsPrivate::updateSettings(KConfig* config)
     colors[ColorHandle] = wmConfig.readEntry("handle", colors[ColorHandle]);
 
     // full button configuration (background, blend, and foreground
-    if (QPixmap::defaultDepth() > 8)
+    if (QX11Info::appDepth() > 8)
         colors[ColorButtonBg] = colors[ColorFrame].light(130);
     else
         colors[ColorButtonBg] = colors[ColorFrame];
@@ -86,7 +88,7 @@ unsigned long KDecorationOptionsPrivate::updateSettings(KConfig* config)
     colors[ColorTitleBar] = appPal.color(QPalette::Active, QPalette::Highlight);
     colors[ColorTitleBar] = wmConfig.readEntry("activeBackground",
                             colors[ColorTitleBar]);
-    if (QPixmap::defaultDepth() > 8)
+    if (QX11Info::appDepth() > 8)
         colors[ColorTitleBlend] = colors[ ColorTitleBar ].dark(110);
     else
         colors[ColorTitleBlend] = colors[ ColorTitleBar ];
@@ -103,7 +105,7 @@ unsigned long KDecorationOptionsPrivate::updateSettings(KConfig* config)
     colors[ColorTitleBar+NUM_COLORS] = wmConfig.
                                        readEntry("inactiveBackground", colors[ColorTitleBar+NUM_COLORS]);
 
-    if (QPixmap::defaultDepth() > 8)
+    if (QX11Info::appDepth() > 8)
         colors[ColorTitleBlend+NUM_COLORS] = colors[ ColorTitleBar+NUM_COLORS ].dark(110);
     else
         colors[ColorTitleBlend+NUM_COLORS] = colors[ ColorTitleBar+NUM_COLORS ];
@@ -111,7 +113,7 @@ unsigned long KDecorationOptionsPrivate::updateSettings(KConfig* config)
         wmConfig.readEntry("inactiveBlend", colors[ColorTitleBlend+NUM_COLORS]);
 
     // full button configuration
-    if (QPixmap::defaultDepth() > 8)
+    if (QX11Info::appDepth() > 8)
         colors[ColorButtonBg+NUM_COLORS] = colors[ColorFrame+NUM_COLORS].light(130);
     else
         colors[ColorButtonBg+NUM_COLORS] = colors[ColorFrame+NUM_COLORS];
