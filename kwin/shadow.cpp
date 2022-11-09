@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "scene_xrender.h"
 #endif
 
+#include <kpixmap.h>
+
 namespace KWin
 {
 
@@ -95,8 +97,8 @@ QVector< long > Shadow::readX11ShadowProperty(WId id)
 bool Shadow::init(const QVector< long > &data)
 {
     for (int i=0; i<ShadowElementsCount; ++i) {
-        QPixmap pix = QPixmap::fromX11Pixmap(data[i], QPixmap::ExplicitlyShared);
-        if (pix.isNull() || pix.depth() != 32) {
+        const KPixmap pix(Qt::HANDLE(data[i]));
+        if (pix.isNull()) {
             return false;
         }
         m_shadowElements[i] = pix.toImage();

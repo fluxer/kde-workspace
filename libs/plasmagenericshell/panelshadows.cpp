@@ -29,6 +29,7 @@
 #endif
 
 #include <KDebug>
+#include <KPixmap>
 
 class PanelShadows::Private
 {
@@ -57,7 +58,7 @@ public:
     void windowDestroyed(QObject *deletedObject);
 
     PanelShadows *q;
-    QList<QPixmap> m_shadowPixmaps;
+    QList<KPixmap> m_shadowPixmaps;
     QVector<unsigned long> data;
     QSet<const QWidget *> m_windows;
     bool m_managePixmaps;
@@ -120,20 +121,7 @@ void PanelShadows::Private::updateShadows()
 
 void PanelShadows::Private::initPixmap(const QString &element)
 {
-#ifdef Q_WS_X11
-    QPixmap pix = q->pixmap(element);
-    if (!pix.isNull() && pix.handle() == 0) {
-        Pixmap xPix = XCreatePixmap(QX11Info::display(), QX11Info::appRootWindow(), pix.width(), pix.height(), 32);
-        QPixmap tempPix = QPixmap::fromX11Pixmap(xPix, QPixmap::ExplicitlyShared);
-        tempPix.fill(Qt::transparent);
-        QPainter p(&tempPix);
-        p.drawPixmap(QPoint(0, 0), pix);
-        m_shadowPixmaps << tempPix;
-        m_managePixmaps = true;
-    } else {
-        m_shadowPixmaps << pix;
-    }
-#endif
+    m_shadowPixmaps << KPixmap(q->pixmap(element));
 }
 
 void PanelShadows::Private::setupPixmaps()
@@ -148,11 +136,9 @@ void PanelShadows::Private::setupPixmaps()
     initPixmap("shadow-left");
     initPixmap("shadow-topleft");
 
-#ifdef Q_WS_X11
-    foreach (const QPixmap &pixmap, m_shadowPixmaps) {
+    foreach (const KPixmap &pixmap, m_shadowPixmaps) {
         data << pixmap.handle();
     }
-#endif
 
     QSize marginHint = q->elementSize("shadow-hint-top-margin");
     kDebug() << "top margin hint is:" << marginHint;
@@ -197,14 +183,13 @@ void PanelShadows::getMargins(int &top, int &right, int &bottom, int &left)
 
 void PanelShadows::Private::clearPixmaps()
 {
-#ifdef Q_WS_X11
+#warning FIXME: pixmaps are leaked
     if (m_managePixmaps) {
-        foreach (const QPixmap &pixmap, m_shadowPixmaps) {
-            XFreePixmap(QX11Info::display(), pixmap.handle());
+        foreach (KPixmap &pixmap, m_shadowPixmaps) {
+            pixmap.release();
         }
         m_managePixmaps = false;
     }
-#endif
     m_shadowPixmaps.clear();
     data.clear();
 }

@@ -35,6 +35,7 @@
 #include <QtGui/QToolBar>
 #include <QtCore/QTextStream>
 #include <QtCore/QEvent>
+#include <KPixmap>
 
 #ifdef Q_WS_X11
 #include <QtGui/qx11info_x11.h>
@@ -324,20 +325,9 @@ namespace Oxygen
         const int height( source.height() );
 
         // create X11 pixmap
-        Pixmap pixmap = XCreatePixmap( QX11Info::display(), QX11Info::appRootWindow(), width, height, 32 );
-
-        // create explicitly shared QPixmap from it
-        QPixmap dest( QPixmap::fromX11Pixmap( pixmap, QPixmap::ExplicitlyShared ) );
-
-        // create surface for pixmap
-        {
-            QPainter painter( &dest );
-            painter.setCompositionMode( QPainter::CompositionMode_Source );
-            painter.drawPixmap( 0, 0, source );
-        }
-
-
-        return pixmap;
+        KPixmap pixmap(source);
+        // handle not released, safe to return
+        return pixmap.handle();
         #else
         return 0;
         #endif
