@@ -490,7 +490,6 @@ namespace Oxygen
 
         } else if( widget->inherits( "QTipLabel" ) ) {
 
-            widget->setAttribute( Qt::WA_PaintOnScreen, false );
             widget->setAttribute( Qt::WA_NoSystemBackground, false );
             widget->clearMask();
 
@@ -511,7 +510,6 @@ namespace Oxygen
 
         } else if( qobject_cast<QMenu*>( widget ) ) {
 
-            widget->setAttribute( Qt::WA_PaintOnScreen, false );
             widget->setAttribute( Qt::WA_NoSystemBackground, false );
             widget->clearMask();
 
