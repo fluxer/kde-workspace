@@ -242,7 +242,6 @@ private Q_SLOTS:
     void performCompositing();
     void delayedCheckUnredirect();
     void slotConfigChanged();
-    void releaseCompositorSelection();
     void deleteUnusedSupportProperties();
 
 private:
@@ -256,7 +255,6 @@ private:
 
     QBasicTimer compositeTimer;
     KSelectionOwner* cm_selection;
-    QTimer m_releaseSelectionTimer;
     QList<xcb_atom_t> m_unusedSupportProperties;
     QTimer m_unusedSupportPropertyTimer;
     qint64 fpsInterval;

@@ -94,10 +94,6 @@ Compositor::Compositor(QObject* workspace)
     // 2 sec which should be enough to restart the compositor
     static const int compositorLostMessageDelay = 2000;
 
-    m_releaseSelectionTimer.setSingleShot(true);
-    m_releaseSelectionTimer.setInterval(compositorLostMessageDelay);
-    connect(&m_releaseSelectionTimer, SIGNAL(timeout()), SLOT(releaseCompositorSelection()));
-
     m_unusedSupportPropertyTimer.setInterval(compositorLostMessageDelay);
     m_unusedSupportPropertyTimer.setSingleShot(true);
     connect(&m_unusedSupportPropertyTimer, SIGNAL(timeout()), SLOT(deleteUnusedSupportProperties()));
@@ -145,10 +141,10 @@ void Compositor::setup()
         ::memset(selection_name, '\0', sizeof(selection_name) * sizeof(char));
         ::sprintf(selection_name, "_NET_WM_CM_S%d", selection_sreen);
         cm_selection = new KSelectionOwner(selection_name, selection_sreen, this);
-        connect(cm_selection, SIGNAL(lostOwnership()), SLOT(finish()));
     }
     if (cm_selection->ownerWindow() == XNone) {
         cm_selection->claim(true);   // force claiming
+        connect(cm_selection, SIGNAL(lostOwnership()), SLOT(finish()));
     }
 
     // There might still be a deleted around, needs to be cleared before creating the scene (BUG 333275)
@@ -200,9 +196,6 @@ void Compositor::setup()
     emit compositingToggled(true);
 
     m_starting = false;
-    if (m_releaseSelectionTimer.isActive()) {
-        m_releaseSelectionTimer.stop();
-    }
 
     // render at least once
     performCompositing();
@@ -219,7 +212,6 @@ void Compositor::finish()
     if (!hasScene())
         return;
     m_finishing = true;
-    m_releaseSelectionTimer.start();
     foreach (Client * c, Workspace::self()->clientList())
         m_scene->windowClosed(c, NULL);
     foreach (Client * c, Workspace::self()->desktopList())
@@ -257,27 +249,13 @@ void Compositor::finish()
         Workspace::self()->deletedList().first()->discard();
     m_finishing = false;
     emit compositingToggled(false);
-}
-
-void Compositor::releaseCompositorSelection()
-{
-    if (hasScene() && !m_finishing) {
-        // compositor is up and running again, no need to release the selection
-        return;
+    if (cm_selection) {
+        kDebug(1212) << "Releasing compositor selection";
+        disconnect(cm_selection, 0, this, 0);
+        cm_selection->release();
+        delete cm_selection;
+        cm_selection = 0;
     }
-    if (m_starting) {
-        // currently still starting the compositor, it might fail, so restart the timer to test again
-        m_releaseSelectionTimer.start();
-        return;
-    }
-
-    if (m_finishing) {
-        // still shutting down, a restart might follow, so restart the timer to test again
-        m_releaseSelectionTimer.start();
-        return;
-    }
-    kDebug(1212) << "Releasing compositor selection";
-    cm_selection->release();
 }
 
 void Compositor::keepSupportProperty(xcb_atom_t atom)
