@@ -162,7 +162,6 @@ protected:
     // time since last repaint
     int time_diff;
     QElapsedTimer last_time;
-    Workspace* wspace;
 private:
     void paintWindowThumbnails(Scene::Window *w, QRegion region, qreal opacity, qreal brightness, qreal saturation);
     void paintDesktopThumbnails(Scene::Window *w);

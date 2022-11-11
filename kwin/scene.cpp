@@ -93,7 +93,6 @@ namespace KWin
 
 Scene::Scene(Workspace* ws)
     : QObject(ws)
-    , wspace(ws)
 {
     last_time.invalidate(); // Initialize the timer
     connect(Workspace::self(), SIGNAL(deletedRemoved(KWin::Deleted*)), SLOT(windowDeleted(KWin::Deleted*)));
