@@ -27,8 +27,6 @@
 #include "oxygenexceptionlist.h"
 #include "oxygenutil.h"
 
-#include <QTextStream>
-
 namespace Oxygen
 {
 
@@ -95,9 +93,7 @@ namespace Oxygen
     //_______________________________________________________________________
     QString ExceptionList::exceptionGroupName( int index )
     {
-      QString out;
-      QTextStream( &out ) << "Windeco Exception " << index;
-      return out;
+        return (QString::fromLatin1("Windeco Exception ") + QString::number(index));
     }
 
 }
