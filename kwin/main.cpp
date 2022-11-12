@@ -488,6 +488,7 @@ int main(int argc, char * argv[])
         return 1;
     }
 
+    a.processEvents(); // trigger any events before resuming such as compositor setup
     ksmserver.resumeStartup("kwin");
     KWin::SessionManager weAreIndeed;
     KWin::SessionSaveDoneHelper helper;
