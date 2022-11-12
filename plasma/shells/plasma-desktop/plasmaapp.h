@@ -97,8 +97,6 @@ public Q_SLOTS:
     // qdbuscpp2xml plasmaapp.h -o dbus/org.kde.plasma.App.xml
     void showInteractiveConsole();
     void loadScriptInInteractiveConsole(const QString &script);
-    void showInteractiveKWinConsole();
-    void loadKWinScriptInInteractiveConsole(const QString &script);
 
     Q_SCRIPTABLE void quit();
 

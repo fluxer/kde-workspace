@@ -42,7 +42,6 @@ class PlasmaDesktopRunner : public Plasma::AbstractRunner
 
     private:
         const QString m_desktopConsoleKeyword;
-        const QString m_kwinConsoleKeyword;
         bool m_enabled;
 };
 
