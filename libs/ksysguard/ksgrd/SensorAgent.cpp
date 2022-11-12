@@ -76,7 +76,7 @@ void SensorAgent::sendRequest( const QString &req, SensorClient *client, int id 
 
 #if SA_TRACE
   kDebug(1215) << "-> " << req << "(" << mInputFIFO.count() << "/"
-                << mProcessingFIFO.count() << ")" << endl;
+                << mProcessingFIFO.count() << ")";
 #endif
   executeCommand();
 }
@@ -138,7 +138,7 @@ void SensorAgent::processAnswer( const char *buf, int buflen )
 #if SA_TRACE
 	kDebug(1215) << "<= " << mAnswerBuffer
 		<< "(" << mInputFIFO.count() << "/"
-		<< mProcessingFIFO.count() << ")" << endl;
+		<< mProcessingFIFO.count() << ")";
 #endif
 	if(buffer.at(i) == '\n')
 		i++;
@@ -163,7 +163,7 @@ void SensorAgent::processAnswer( const char *buf, int buflen )
 	// remove pending request from FIFO
 	if ( mProcessingFIFO.isEmpty() ) {
 		kDebug(1215)	<< "ERROR: Received answer but have no pending "
-				<< "request!" << endl;
+				<< "request!";
 		mAnswerBuffer.clear();
 		continue;
 	}
@@ -209,7 +209,7 @@ void SensorAgent::executeCommand()
 
 #if SA_TRACE
     kDebug(1215) << ">> " << req->request().toAscii() << "(" << mInputFIFO.count()
-                  << "/" << mProcessingFIFO.count() << ")" << endl;
+                  << "/" << mProcessingFIFO.count() << ")";
 #endif
     // send request to daemon
     QString cmdWithNL = req->request() + '\n';

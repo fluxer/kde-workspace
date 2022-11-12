@@ -23,6 +23,7 @@
 #include "katedocument.h"
 
 #include <qprocess.h>
+#include <qtextstream.h>
 #include <kmessagebox.h>
 #include <krun.h>
 #include <klocale.h>

@@ -75,7 +75,7 @@ bool Chart::drawChart(t_memsize total, const QList<t_memsize>& used, const QList
 		else
 			localheight = startline;
 
-		//kDebug() << "Count : " <<  count << " Percent : " << percent << "%" << " Localheight:" << localheight << endl;
+		//kDebug() << "Count : " <<  count << " Percent : " << percent << "%" << " Localheight:" << localheight;
 		
 		if (localheight>0) {
 			QLinearGradient gradient(QPointF(1, startline), QPointF(width()-2, -localheight));

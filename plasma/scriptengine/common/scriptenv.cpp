@@ -22,6 +22,7 @@
 #include <iostream>
 
 #include <QFile>
+#include <QTextStream>
 #include <QtCore/qmetaobject.h>
 
 #include <KDebug>

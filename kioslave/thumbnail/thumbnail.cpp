@@ -111,7 +111,7 @@ int kdemain(int argc, char **argv)
 
 
     if (argc != 4) {
-        kError(7115) << "Usage: kio_thumbnail protocol domain-socket1 domain-socket2" << endl;
+        kError(7115) << "Usage: kio_thumbnail protocol domain-socket1 domain-socket2";
         exit(-1);
     }
 

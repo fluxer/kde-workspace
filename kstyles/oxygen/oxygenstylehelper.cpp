@@ -24,6 +24,7 @@
 #include <KColorUtils>
 #include <KColorScheme>
 
+#include <QtCore/QTextStream>
 #include <QtGui/QPainter>
 #include <QtGui/QBrush>
 #include <QtGui/QPen>

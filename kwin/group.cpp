@@ -71,15 +71,15 @@ bool performTransiencyCheck()
         if ((*it1)->deleting)
             continue;
         if ((*it1)->in_group == NULL) {
-            kDebug(1212) << "TC: " << *it1 << " in not in a group" << endl;
+            kDebug(1212) << "TC: " << *it1 << " in not in a group";
             ret = false;
         } else if (!(*it1)->in_group->members().contains(*it1)) {
-            kDebug(1212) << "TC: " << *it1 << " has a group " << (*it1)->in_group << " but group does not contain it" << endl;
+            kDebug(1212) << "TC: " << *it1 << " has a group " << (*it1)->in_group << " but group does not contain it";
             ret = false;
         }
         if (!(*it1)->isTransient()) {
             if (!(*it1)->mainClients().isEmpty()) {
-                kDebug(1212) << "TC: " << *it1 << " is not transient, has main clients:" << (*it1)->mainClients() << endl;
+                kDebug(1212) << "TC: " << *it1 << " is not transient, has main clients:" << (*it1)->mainClients();
                 ret = false;
             }
         } else {
@@ -96,7 +96,7 @@ bool performTransiencyCheck()
                     continue;
                 }
                 if (!(*it2)->transients_list.contains(*it1)) {
-                    kdDebug(1212) << "TC:" << *it1 << " has main client " << *it2 << " but main client does not have it as a transient" << endl;
+                    kDebug(1212) << "TC:" << *it1 << " has main client " << *it2 << " but main client does not have it as a transient";
                     ret = false;
                 }
             }
@@ -114,7 +114,7 @@ bool performTransiencyCheck()
                 continue;
             }
             if (!(*it2)->mainClients().contains(*it1)) {
-                kdDebug(1212) << "TC:" << *it1 << " has transient " << *it2 << " but transient does not have it as a main client" << endl;
+                kDebug(1212) << "TC:" << *it1 << " has transient " << *it2 << " but transient does not have it as a main client";
                 ret = false;
             }
         }
@@ -128,7 +128,7 @@ bool performTransiencyCheck()
                 it2 != members.constEnd();
                 ++it2) {
             if ((*it2)->in_group != *it1) {
-                kDebug(1212) << "TC: Group " << *it1 << " contains client " << *it2 << " but client is not in that group" << endl;
+                kDebug(1212) << "TC: Group " << *it1 << " contains client " << *it2 << " but client is not in that group";
                 ret = false;
             }
         }
@@ -153,8 +153,8 @@ static void checkTransiency()
 {
     if (--transiencyCheck == 0) {
         if (!performTransiencyCheck()) {
-            kDebug(1212) << "BT:" << transiencyCheckStartBt << endl;
-            kDebug(1212) << "CLIENT:" << transiencyCheckClient << endl;
+            kDebug(1212) << "BT:" << transiencyCheckStartBt;
+            kDebug(1212) << "CLIENT:" << transiencyCheckClient;
             abort();
         }
         transiencyCheckNonExistent = false;
@@ -790,7 +790,7 @@ xcb_window_t Client::verifyTransientFor(xcb_window_t new_transient_for, bool set
     if (Client* new_transient_for_client = workspace()->findClient(WindowMatchPredicate(new_transient_for))) {
         if (new_transient_for != before_search) {
             kDebug(1212) << "Client " << this << " has WM_TRANSIENT_FOR poiting to non-toplevel window "
-                         << before_search << ", child of " << new_transient_for_client << ", adjusting." << endl;
+                         << before_search << ", child of " << new_transient_for_client << ", adjusting.";
             new_property_value = new_transient_for; // also fix the property
         }
     } else

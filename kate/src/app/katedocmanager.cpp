@@ -128,7 +128,7 @@ void KateDocManager::setSuppressOpeningErrorDialogs (bool suppress)
 
 KTextEditor::Document *KateDocManager::createDoc (const KateDocumentInfo& docInfo)
 {
-  kDebug()<<"createDoc"<<endl;
+  kDebug()<<"createDoc";
 
   KTextEditor::Document *doc = (KTextEditor::Document *) m_editor->createDocument(this);
   

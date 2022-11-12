@@ -370,7 +370,7 @@ QString KateCTagsView::currentWord( )
 {
     KTextEditor::View *kv = mainWindow()->activeView();
     if (!kv) {
-        kDebug() << "no KTextEditor::View" << endl;
+        kDebug() << "no KTextEditor::View";
         return QString();
     }
 
@@ -379,7 +379,7 @@ QString KateCTagsView::currentWord( )
     }
 
     if (!kv->cursorPosition().isValid()) {
-        kDebug() << "cursor not valid!" << endl;
+        kDebug() << "cursor not valid!";
         return QString();
     }
 
@@ -404,7 +404,7 @@ QString KateCTagsView::currentWord( )
         endPos++;
     }
     if  (startPos == endPos) {
-        kDebug() << "no word found!" << endl;
+        kDebug() << "no word found!";
         return QString();
     }
 

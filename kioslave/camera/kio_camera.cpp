@@ -70,7 +70,7 @@ int kdemain(int argc, char **argv)
 
     if (argc != 4) {
         kDebug(7123) << "Usage: kio_kamera protocol "
-                        "domain-socket1 domain-socket2" << endl;
+                        "domain-socket1 domain-socket2";
         exit(-1);
     }
 

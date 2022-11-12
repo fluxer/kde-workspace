@@ -132,7 +132,7 @@ int ResultScene::viewableHeight() const
 
 void ResultScene::setQueryMatches(const QList<Plasma::QueryMatch> &m)
 {
-    //kDebug() << "============================" << endl << "matches retrieved: " << m.count();
+    //kDebug() << "============================\n" << "matches retrieved: " << m.count();
     /*
     foreach (const Plasma::QueryMatch &match, m) {
         kDebug() << "    " << match.id() << match.text();

@@ -110,7 +110,7 @@ void AuroraeFactory::initQML(const KConfigGroup &group)
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(internalname);
     KService::List offers = KServiceTypeTrader::self()->query("KWin/Decoration", constraint);
     if (offers.isEmpty()) {
-        kError(1212) << "Couldn't find QML Decoration " << themeName << endl;
+        kError(1212) << "Couldn't find QML Decoration " << themeName;
         // TODO: what to do in error case?
         return;
     }

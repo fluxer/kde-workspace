@@ -504,16 +504,14 @@ void KSMServer::startKilling()
         SmsDie( c->connection() );
     }
 
-    kDebug( 1218 ) << " We killed all clients. We have now clients.count()=" <<
-    clients.count() << endl;
+    kDebug( 1218 ) << " We killed all clients. We have now clients.count()=" << clients.count();
     completeKilling();
     QTimer::singleShot( 10000, this, SLOT(timeoutQuit()) );
 }
 
 void KSMServer::completeKilling()
 {
-    kDebug( 1218 ) << "KSMServer::completeKilling clients.count()=" <<
-        clients.count() << endl;
+    kDebug( 1218 ) << "KSMServer::completeKilling clients.count()=" << clients.count();
     if( state == Killing ) {
         bool wait = false;
         foreach( KSMClient* c, clients ) {
@@ -552,8 +550,7 @@ void KSMServer::killWM()
 
 void KSMServer::completeKillingWM()
 {
-    kDebug( 1218 ) << "KSMServer::completeKillingWM clients.count()=" <<
-        clients.count() << endl;
+    kDebug( 1218 ) << "KSMServer::completeKillingWM clients.count()=" << clients.count();
     if( state == KillingWM ) {
         if( clients.isEmpty())
             killingCompleted();
@@ -657,16 +654,14 @@ void KSMServer::startKillingSubSession()
         SmsDie( c->connection() );
     }
 
-    kDebug( 1218 ) << " We killed some clients. We have now clients.count()=" <<
-    clients.count() << endl;
+    kDebug( 1218 ) << " We killed some clients. We have now clients.count()=" << clients.count();
     completeKillingSubSession();
     QTimer::singleShot( 10000, this, SLOT(signalSubSessionClosed()) );
 }
 
 void KSMServer::completeKillingSubSession()
 {
-    kDebug( 1218 ) << "KSMServer::completeKillingSubSession clients.count()=" <<
-        clients.count() << endl;
+    kDebug( 1218 ) << "KSMServer::completeKillingSubSession clients.count()=" << clients.count();
     if( state == KillingSubSession ) {
         bool wait = false;
         foreach( KSMClient* c, clientsToKill ) {

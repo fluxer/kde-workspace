@@ -83,7 +83,7 @@ void TestLinkItr::slotJobResult(KJob *job)
     const QString modDate = transfer->queryMetaData("modified");
 
     if (transfer->error() != 0) {
-        kDebug()<<"***********"<<transfer->error()<<endl;
+        kDebug()<<"***********"<<transfer->error();
         // can we assume that errorString will contain no entities?
         QString err = transfer->errorString();
         err.replace("\n", " ");

@@ -640,7 +640,8 @@ void KonqOperations::doDropFileCopy()
         setOperation( job, LINK, m_destUrl );
         KIO::FileUndoManager::self()->recordCopyJob(job);
         break;
-    default : kError(1203) << "Unknown action " << (int)action << endl;
+    default :
+        kError(1203) << "Unknown action " << (int)action;
     }
     if (job) {
         connect(job, SIGNAL(copyingDone(KIO::Job*,KUrl,KUrl,time_t,bool,bool)),

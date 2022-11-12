@@ -53,7 +53,7 @@ int main( int argc, char**argv )
 
 	KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 	if ( args->count() != 1 ) {
-		kError() << "No directory to scan for bookmarks specified." << endl;
+		kError() << "No directory to scan for bookmarks specified.";
 		return 1;
 	}
 
@@ -78,7 +78,7 @@ int main( int argc, char**argv )
 	QString extraBookmarksDirName = args->arg( 0 );
 	QDir extraBookmarksDir( extraBookmarksDirName, "*.xml" );
 	if ( !extraBookmarksDir.isReadable() ) {
-		kError() << "Failed to read files in directory " << extraBookmarksDirName << endl;
+		kError() << "Failed to read files in directory " << extraBookmarksDirName;
 		return 1;
 	}
 

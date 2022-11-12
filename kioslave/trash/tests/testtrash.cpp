@@ -187,7 +187,7 @@ void TestTrash::initTestCase()
             m_otherPartitionTrashDir = trashdir;
             m_otherPartitionId = *it;
             kDebug() << "OK, found another writable partition: topDir=" << m_otherPartitionTopDir
-                      << " trashDir=" << m_otherPartitionTrashDir << " id=" << m_otherPartitionId << endl;
+                      << " trashDir=" << m_otherPartitionTrashDir << " id=" << m_otherPartitionId;
             break;
         }
     }
@@ -313,7 +313,7 @@ void TestTrash::trashFile( const QString& origFilePath, const QString& fileId )
     QMap<QString, QString> metaData;
     bool ok = KIO::NetAccess::synchronousRun( job, 0, 0, 0, &metaData );
     if ( !ok )
-        kError() << "moving " << u << " to trash failed with error " << KIO::NetAccess::lastError() << " " << KIO::NetAccess::lastErrorString() << endl;
+        kError() << "moving " << u << " to trash failed with error " << KIO::NetAccess::lastError() << " " << KIO::NetAccess::lastErrorString();
     QVERIFY( ok );
     if (origFilePath.startsWith(QLatin1String("/tmp")) && m_tmpIsWritablePartition) {
         kDebug() << " TESTS SKIPPED";

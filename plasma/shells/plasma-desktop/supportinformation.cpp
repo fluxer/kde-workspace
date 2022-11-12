@@ -20,6 +20,7 @@
 
 #include "supportinformation.h"
 
+#include <QBuffer>
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -31,14 +32,14 @@
 
 QString SupportInformation::generateSupportInformation(Plasma::Corona *corona)
 {
-    QString infoString;
-    QDebug stream(&infoString);
+    QBuffer infoBuffer;
+    QDebug stream(&infoBuffer);
     SupportInformation info(stream);
 
-    info.addHeader();;
+    info.addHeader();
     info.addInformationForCorona(corona);
 
-    return infoString;
+    return QString(infoBuffer.data());
 }
 
 SupportInformation::SupportInformation(const QDebug &outputStream) :
@@ -48,20 +49,20 @@ SupportInformation::SupportInformation(const QDebug &outputStream) :
 
 void SupportInformation::addHeader()
 {
-    m_stream << "Plasma-desktop Support Information:" << endl
-             << "The following information should be used when requesting support on e.g. http://forum.kde.org" << endl
-             << "It provides information about the currently running instance and which applets are used." << endl
+    m_stream << "Plasma-desktop Support Information:\n"
+             << "The following information should be used when requesting support on e.g. http://forum.kde.org\n"
+             << "It provides information about the currently running instance and which applets are used.\n"
              << "Please post the information provided underneath this introductory text to a paste bin service "
-             << "like http://paste.kde.org instead of pasting into support threads." << endl << endl;
+             << "like http://paste.kde.org instead of pasting into support threads.\n\n";
 
-    m_stream << "Version" << endl;
-    m_stream << "=======" << endl;
-    m_stream << "KDE SC version (runtime): " << endl;
-    m_stream << KDE::versionString() << endl;
-    m_stream << "KDE SC version (compile): " << endl;
-    m_stream << KDE_VERSION_STRING << endl;
-    m_stream << "Qt Version: " << endl;
-    m_stream << qVersion() << endl;
+    m_stream << "Version\n";
+    m_stream << "=======\n";
+    m_stream << "KDE SC version (runtime):\n";
+    m_stream << KDE::versionString() << '\n';
+    m_stream << "KDE SC version (compile):\n";
+    m_stream << KDE_VERSION_STRING << '\n';
+    m_stream << "Katie Version:\n";
+    m_stream << qVersion() << '\n';
 
     addSeperator();
 }
@@ -90,31 +91,31 @@ void SupportInformation::addInformationForApplet(Plasma::Applet *applet)
     } else {
         m_stream << "Applet - ";
     }
-    m_stream << applet->name() << ':' << endl;
+    m_stream << applet->name() << ":\n";
 
-    m_stream << "Plugin Name: " << applet->pluginName() << endl;
-    m_stream << "Category: " << applet->category() << endl;
+    m_stream << "Plugin Name: " << applet->pluginName() << '\n';
+    m_stream << "Category: " << applet->category() << '\n';
 
 
     if (applet->package()) {
-        m_stream << "API: " << applet->package()->metadata().implementationApi() << endl;
-        m_stream << "Type: " << applet->package()->metadata().type() << endl;
-        m_stream << "Version: " << applet->package()->metadata().version() << endl;
-        m_stream << "Author: " << applet->package()->metadata().author() << endl;
+        m_stream << "API: " << applet->package()->metadata().implementationApi() << '\n';
+        m_stream << "Type: " << applet->package()->metadata().type() << '\n';
+        m_stream << "Version: " << applet->package()->metadata().version() << '\n';
+        m_stream << "Author: " << applet->package()->metadata().author() << '\n';
     }
 
     //runtime info
-    m_stream << "Failed To Launch: " << applet->hasFailedToLaunch() << endl;
-    m_stream << "ScreenRect: " << applet->screenRect() << endl;
-    m_stream << "FormFactor: " << applet->formFactor() << endl;
+    m_stream << "Failed To Launch: " << applet->hasFailedToLaunch() << '\n';
+    m_stream << "ScreenRect: " << applet->screenRect() << '\n';
+    m_stream << "FormFactor: " << applet->formFactor() << '\n';
 
-    m_stream << "Config Group Name: " << applet->config().name() << endl;
+    m_stream << "Config Group Name: " << applet->config().name() << '\n';
 
-    m_stream << endl; //insert a blank line
+    m_stream << '\n'; //insert a blank line
 }
 
 void SupportInformation::addSeperator()
 {
-    m_stream << endl << "=========" << endl;
+    m_stream << '\n' << "=========" << '\n';
 }
 

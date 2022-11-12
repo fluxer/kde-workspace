@@ -510,7 +510,7 @@ KUrl KateBuildView::docUrl()
 {
     KTextEditor::View *kv = mainWindow()->activeView();
     if (!kv) {
-        kDebug() << "no KTextEditor::View" << endl;
+        kDebug() << "no KTextEditor::View";
         return KUrl();
     }
 

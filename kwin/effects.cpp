@@ -1250,7 +1250,7 @@ QLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
     QLibrary* library = new QLibrary(service->library());
     if (!library) {
         kError(1212) << "couldn't open library for effect '" <<
-                     service->name() << "'" << endl;
+                     service->name() << "'";
         return 0;
     }
 
@@ -1308,7 +1308,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     QString constraint = QString("[X-KDE-PluginInfo-Name] == '%1'").arg(internalname);
     KService::List offers = KServiceTypeTrader::self()->query("KWin/Effect", constraint);
     if (offers.isEmpty()) {
-        kError(1212) << "Couldn't find effect " << name << endl;
+        kError(1212) << "Couldn't find effect " << name;
         return false;
     }
     KService::Ptr service = offers.first();
@@ -1424,7 +1424,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         }
 
         if (!create_func) {
-            kError(1212) << "EffectsHandler::loadEffect : effect_create function not found" << endl;
+            kError(1212) << "EffectsHandler::loadEffect : effect_create function not found";
             library->unload();
             return false;
         }
@@ -1437,7 +1437,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         KPluginInfo plugininfo(service);
         foreach (const QString & depName, plugininfo.dependencies()) {
             if (!loadEffect(depName)) {
-                kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name << endl;
+                kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name;
                 library->unload();
                 return false;
             }

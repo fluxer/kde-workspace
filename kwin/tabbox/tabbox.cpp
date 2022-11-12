@@ -858,7 +858,7 @@ static bool areKeySymXsDepressed(bool bAll, const uint keySyms[], int nKeySyms) 
 
         kDebug(1212) << iKeySym << ": keySymX=0x" << QString::number(keySymX, 16)
                     << " i=" << i << " mask=0x" << QString::number(mask, 16)
-                    << " keymap[i]=0x" << QString::number(keymap[i], 16) << endl;
+                    << " keymap[i]=0x" << QString::number(keymap[i], 16);
 
         // If ALL keys passed need to be depressed,
         if (bAll) {
@@ -1370,7 +1370,7 @@ void TabBox::keyPress(int keyQt)
         }
         if (forward || backward) {
             kDebug(1212) << "== " << forwardShortcut.toString()
-                        << " or " << backwardShortcut.toString() << endl;
+                        << " or " << backwardShortcut.toString();
             KDEWalkThroughWindows(forward);
         }
     } else if (m_desktopGrab) {

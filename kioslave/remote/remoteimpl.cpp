@@ -262,7 +262,7 @@ bool RemoteImpl::renameFolders(const QString &src, const QString &dest,
                                bool overwrite) const
 {
 	kDebug(1220) << "RemoteImpl::renameFolders: "
-	          << src << ", " << dest << endl;
+	          << src << ", " << dest;
 
 	QString directory;
 	if (findDirectory(src+".desktop", directory))
@@ -290,7 +290,7 @@ bool RemoteImpl::changeFolderTarget(const QString &src, const QString &target,
                                     bool overwrite) const
 {
 	kDebug(1220) << "RemoteImpl::changeFolderTarget: "
-	          << src << ", " << target << endl;
+	          << src << ", " << target;
 
 	QString directory;
 	if (findDirectory(src+".desktop", directory))

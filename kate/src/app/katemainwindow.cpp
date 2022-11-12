@@ -986,7 +986,7 @@ void KateMainWindow::restoreWindowConfig(const KConfigGroup &config)
 
 void KateMainWindow::slotUpdateBottomViewBar()
 {
-  //kDebug()<<"slotUpdateHorizontalViewBar()"<<endl;
+  //kDebug()<<"slotUpdateHorizontalViewBar()";
   KTextEditor::View *view=m_viewManager->activeView();
   BarState bs=m_bottomViewBarMapping[view];
   if (bs.bar() && bs.state()) {
@@ -996,7 +996,7 @@ void KateMainWindow::slotUpdateBottomViewBar()
   } else {
     QWidget *wid=m_bottomContainerStack->currentWidget();
     if (wid) wid->hide();
-    //kDebug()<<wid<<"hiding container"<<endl;
+    //kDebug()<<wid<<"hiding container";
     m_bottomViewBarContainer->hide();
   }
 }
@@ -1004,7 +1004,7 @@ void KateMainWindow::slotUpdateBottomViewBar()
 
 void KateMainWindow::slotUpdateTopViewBar()
 {
-  //kDebug()<<"slotUpdateHorizontalViewBar()"<<endl;
+  //kDebug()<<"slotUpdateHorizontalViewBar()";
   KTextEditor::View *view=m_viewManager->activeView();
   BarState bs=m_topViewBarMapping[view];
   if (bs.bar() && bs.state()) {
@@ -1014,7 +1014,7 @@ void KateMainWindow::slotUpdateTopViewBar()
   } else {
     QWidget *wid=m_topContainerStack->currentWidget();
     if (wid) wid->hide();
-    //kDebug()<<wid<<"hiding container"<<endl;
+    //kDebug()<<wid<<"hiding container";
     m_topViewBarContainer->hide();
   }
 }

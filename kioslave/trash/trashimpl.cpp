@@ -73,7 +73,7 @@ TrashImpl::TrashImpl() :
     if ( KDE_lstat( QFile::encodeName( QDir::homePath() ), &buff ) == 0 ) {
         m_homeDevice = buff.st_dev;
     } else {
-        kError() << "Should never happen: couldn't stat $HOME " << strerror( errno ) << endl;
+        kError() << "Should never happen: couldn't stat $HOME " << strerror( errno );
     }
 }
 

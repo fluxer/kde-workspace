@@ -76,11 +76,11 @@ static void filter( const char* u, const char * expectedResult = 0, int expected
             case KUriFilterData::LocalFile:
             case KUriFilterData::LocalDir:
                 kDebug() << "*** Result: Local Resource =>  '"
-                          << filterData->uri().toLocalFile() << "'" << endl;
+                          << filterData->uri().toLocalFile() << "'";
                 break;
             case KUriFilterData::NetProtocol:
                 kDebug() << "*** Result: Network Resource => '"
-                          << filterData->uri().url() << "'" << endl;
+                          << filterData->uri().url() << "'";
                 break;
             case KUriFilterData::Shell:
             case KUriFilterData::Executable:

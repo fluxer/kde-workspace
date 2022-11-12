@@ -30,6 +30,7 @@
 #include <QFileInfo>
 #include <QPlainTextEdit>
 #include <QJsonDocument>
+#include <QTextStream>
 
 KateProject::KateProject ()
   : QObject ()

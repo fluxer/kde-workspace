@@ -112,7 +112,7 @@ int MacroExpander::expandEscapedMacro(const QString &str, int pos, QStringList &
             ret << m_device.as<Solid::StorageAccess>()->filePath();
         } else {
             kWarning() << "DeviceServiceAction::execute: " << m_device.udi()
-                       << " is not a StorageAccess device" << endl;
+                       << " is not a StorageAccess device";
         }
         break;
     case 'd': // Device node
@@ -121,7 +121,7 @@ int MacroExpander::expandEscapedMacro(const QString &str, int pos, QStringList &
             ret << m_device.as<Solid::Block>()->device();
         } else {
             kWarning() << "DeviceServiceAction::execute: " << m_device.udi()
-                       << " is not a Block device" << endl;
+                       << " is not a Block device";
         }
         break;
     case 'i': // UDI

@@ -103,7 +103,7 @@ void SensorShellAgent::errMsgRcvd( )
   QString buf = QString::fromUtf8( buffer );
 
   kDebug(1215) << "SensorShellAgent: Warning, received text over stderr!"
-                << endl << buf << endl;
+                << '\n' << buf;
 }
 
 void SensorShellAgent::daemonExited(  int exitCode, QProcess::ExitStatus exitStatus )

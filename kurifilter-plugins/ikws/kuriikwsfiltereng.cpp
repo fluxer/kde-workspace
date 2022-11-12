@@ -416,7 +416,7 @@ QString KURISearchFilterEngine::formatResult( const QString& url,
 
 void KURISearchFilterEngine::loadConfig()
 {
-  kDebug(7023) << "Keywords Engine: Loading config..." << endl;
+  kDebug(7023) << "Keywords Engine: Loading config...";
 
   // Load the config.
   KConfig config( name() + QLatin1String("rc"), KConfig::NoGlobals );
@@ -436,7 +436,7 @@ void KURISearchFilterEngine::loadConfig()
   if (strchr (" :", m_cKeywordDelimiter) == 0)
     m_cKeywordDelimiter = ':';
 
-  kDebug(7023) << "Web Shortcuts Enabled: " << m_bWebShortcutsEnabled << endl;
-  kDebug(7023) << "Default Shortcut: " << m_defaultWebShortcut << endl;
-  kDebug(7023) << "Keyword Delimiter: " << m_cKeywordDelimiter << endl;
+  kDebug(7023) << "Web Shortcuts Enabled: " << m_bWebShortcutsEnabled;
+  kDebug(7023) << "Default Shortcut: " << m_defaultWebShortcut;
+  kDebug(7023) << "Keyword Delimiter: " << m_cKeywordDelimiter;
 }

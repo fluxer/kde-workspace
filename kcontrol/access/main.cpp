@@ -22,7 +22,7 @@ int main(int argc, char * argv[] )
   int minor = XkbMinorVersion;
   if (!XkbLibraryVersion(&major, &minor))
     {
-      kError() << "Xlib XKB extension does not match" << endl;
+      kError() << "Xlib XKB extension does not match";
       return 1;
     }
   kDebug() << "Xlib XKB extension major=" << major << " minor=" << minor;
@@ -38,7 +38,7 @@ int main(int argc, char * argv[] )
   if (!XkbQueryExtension(QX11Info::display(), &opcode_rtrn, &xkb_opcode, &error_rtrn,
 			 &major, &minor))
     {
-      kError() << "X server has not matching XKB extension" << endl;
+      kError() << "X server has not matching XKB extension";
       return 1;
     }
   kDebug() << "X server XKB extension major=" << major << " minor=" << minor;

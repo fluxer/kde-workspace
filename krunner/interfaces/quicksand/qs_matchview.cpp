@@ -244,7 +244,7 @@ void QsMatchView::setItems(const QList<MatchItem*> &items, bool popup, bool appe
     setItemCount(d->m_items.size());
 
     if (d->m_selectionMade) {
-        //kDebug() << "A user selection was already made" << endl;
+        //kDebug() << "A user selection was already made";
         return;
     }
 

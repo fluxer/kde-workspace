@@ -676,8 +676,7 @@ void Klipper::checkClipData( bool selectionMode )
 
     kDebug() << "====== c h e c k C l i p D a t a ============================"
               << kBacktrace()
-              << "====== c h e c k C l i p D a t a ============================"
-              << endl;;
+              << "====== c h e c k C l i p D a t a ============================";
 
 
     if ( sender() ) {
@@ -688,7 +687,7 @@ void Klipper::checkClipData( bool selectionMode )
 
     kDebug() << "\nselectionMode=" << selectionMode
               << "\nowning (sel,cli)=(" << m_clip->ownsSelection() << "," << m_clip->ownsClipboard() << ")"
-              << "\ntext=" << m_clip->text( selectionMode ? QClipboard::Selection : QClipboard::Clipboard) << endl;
+              << "\ntext=" << m_clip->text( selectionMode ? QClipboard::Selection : QClipboard::Clipboard);
 #endif
 
     const QMimeData* data = m_clip->mimeData( selectionMode ? QClipboard::Selection : QClipboard::Clipboard );

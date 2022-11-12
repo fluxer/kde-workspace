@@ -30,6 +30,7 @@
 // fdatasync
 #include <kde_file.h>
 
+#include <QTextStream>
 #include <KSaveFile>
 #include <kdeversion.h>
 

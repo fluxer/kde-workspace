@@ -47,7 +47,7 @@ KInfoListWidget::KInfoListWidget(const KComponentData &inst, const QString &_tit
 
 	KGlobal::locale()->insertCatalog("kcm_infobase");
 	
-	kDebug() << "Constructing a KInfoListWidget..." << endl;
+	kDebug() << "Constructing a KInfoListWidget...";
 
 	//setButtons(KCModule::Help);
 	getlistbox = _getlistbox;
@@ -75,7 +75,7 @@ KInfoListWidget::KInfoListWidget(const KComponentData &inst, const QString &_tit
 }
 
 void KInfoListWidget::load() {
-	kDebug() << "Loading KInfoListWidget..." << endl;
+	kDebug() << "Loading KInfoListWidget...";
 
 	//TODO Remove tree content before clear it
 	tree->clear();

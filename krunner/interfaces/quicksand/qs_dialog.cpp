@@ -250,7 +250,7 @@ void QsDialog::setMatches(const QList<Plasma::QueryMatch> &matches)
         temp.insert(match.id(), match);
         // Do not create new MatchItems for existing matches when the query hasn't changed
         if (!m_newQuery && m_matches.find(match.id()) != end) {
-            // kDebug() << "A match with id " << match.id() << " already exists." << endl;
+            // kDebug() << "A match with id " << match.id() << " already exists.";
             QList<Plasma::QueryMatch> duplicates = m_matches.values(match.id());
             bool exists = false;
             foreach (const Plasma::QueryMatch &m, duplicates) {
@@ -285,7 +285,7 @@ void QsDialog::setMatches(const QList<Plasma::QueryMatch> &matches)
 
         items.append(m);
     }
-    // kDebug() << "Add " << items.size() << " matches. Append?" << !m_newQuery << endl;
+    // kDebug() << "Add " << items.size() << " matches. Append?" << !m_newQuery;
     m_matchView->setItems(items, true, !m_newQuery);
     m_matches = temp;
     // If new matches are obtained for the same query, append them to the list

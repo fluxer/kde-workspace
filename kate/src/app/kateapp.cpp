@@ -40,6 +40,7 @@
 
 #include <QFileInfo>
 #include <QTextCodec>
+#include <QTextStream>
 #include <QDBusConnection>
 
 #include <stdlib.h>

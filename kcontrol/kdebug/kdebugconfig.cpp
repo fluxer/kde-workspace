@@ -176,12 +176,12 @@ void KCMDebug::readAreas()
 
             const int space = data.indexOf(' ');
             if (space == -1)
-                kError() << "No space:" << data << endl;
+                kError() << "No space:" << data;
 
             bool longOK;
             unsigned long number = data.left(space).toULong(&longOK);
             if (!longOK)
-                kError() << "The first part wasn't a number : " << data << endl;
+                kError() << "The first part wasn't a number : " << data;
 
             const QByteArray description = data.mid(space).simplified();
             const QString descriptionStr = QString::fromLatin1(description.constData(), description.size());
@@ -231,7 +231,7 @@ void KCMDebug::save()
     QDBusMessage msg = QDBusMessage::createSignal("/", "org.kde.KDebug", "configChanged");
     if (!QDBusConnection::sessionBus().send(msg))
     {
-        kError() << "Unable to send D-BUS message" << endl;
+        kError() << "Unable to send D-BUS message";
     }
     emit changed( false );
 }

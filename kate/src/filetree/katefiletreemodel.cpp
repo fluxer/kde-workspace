@@ -892,7 +892,7 @@ void KateFileTreeModel::updateBackgrounds(bool force)
     double t = double(hc - it.value().view + 1) / double(hc);
 
     m_brushes[it.key()] = QBrush(KColorUtils::mix(QPalette().color(QPalette::Base), shade, t));
-//     kdDebug()<<"m_brushes[it.key()]"<<it.key()<<m_brushes[it.key()];
+//     kDebug()<<"m_brushes[it.key()]"<<it.key()<<m_brushes[it.key()];
   }
 
   foreach(ProxyItem *item, m_brushes.keys())

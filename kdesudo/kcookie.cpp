@@ -59,7 +59,7 @@ namespace KDESu
             QByteArray output = proc.readLine().simplified();
             if (output.isEmpty()) {
                 kWarning() << "No X authentication info set for display " <<
-                              d->m_Display << endl; return;
+                              d->m_Display; return;
             }
             QList<QByteArray> lst = output.split(' ');
             if (lst.count() != 3) {

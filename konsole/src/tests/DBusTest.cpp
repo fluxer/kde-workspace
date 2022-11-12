@@ -189,7 +189,7 @@ void DBusTest::testSessions()
 
     QStringList prevEnv = listReply.value();
     //for (int i = 0; i < prevEnv.size(); ++i)
-    //    kDebug()<< prevEnv.at(i).toLocal8Bit().constData() << endl;
+    //    kDebug()<< prevEnv.at(i).toLocal8Bit().constData();
 
     voidReply = iface.call("setEnvironment", QStringList());
     QVERIFY(voidReply.isValid());

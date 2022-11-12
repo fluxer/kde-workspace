@@ -28,6 +28,7 @@
 #include <KStartupInfo>
 #include <kdebug.h>
 
+#include <QTextStream>
 #include <QTextCodec>
 #include <QByteArray>
 #include <QCoreApplication>

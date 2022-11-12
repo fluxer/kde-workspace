@@ -58,7 +58,7 @@ ImportCommand* ImportCommand::importerFactory(KBookmarkModel* model, const QStri
 {
     if (type == "KDE2") return new KDE2ImportCommand(model);
     else {
-        kError() << "ImportCommand::importerFactory() - invalid type (" << type << ")!" << endl;
+        kError() << "ImportCommand::importerFactory() - invalid type (" << type << ")!";
         return 0;
     }
 }

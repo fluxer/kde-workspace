@@ -29,6 +29,7 @@
 #include <KColorDialog>
 #include <KDebug>
 #include <QtCore/QHash>
+#include <QtCore/QTextStream>
 #include <QtCore/QTimer>
 #include <QtGui/QFileDialog>
 #include <QtGui/QColorDialog>

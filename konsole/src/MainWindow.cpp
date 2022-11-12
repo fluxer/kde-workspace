@@ -21,6 +21,7 @@
 #include "MainWindow.h"
 
 // Qt
+#include <QTextStream>
 #include <QVBoxLayout>
 #include <QMenuBar>
 

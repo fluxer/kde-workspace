@@ -74,7 +74,7 @@ KCMPci::~KCMPci() {
 }
 
 void KCMPci::load() {
-    kDebug() << "Loading PCI information..." << endl;
+    kDebug() << "Loading PCI information...";
 
     bool fallback = true;
 #ifdef HAVE_PCIUTILS

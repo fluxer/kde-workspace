@@ -1201,7 +1201,7 @@ void PresentWindowsEffect::calculateWindowTransformationsKompose(EffectWindowLis
 
             //kDebug(1212) << "Window '" << window->caption() << "' gets moved to (" <<
             //        mWindowData[window].area.left() << "; " << mWindowData[window].area.right() <<
-            //        "), scale: " << mWindowData[window].scale << endl;
+            //        "), scale: " << mWindowData[window].scale;
         }
         if (maxRowHeights[i] - h > 0)
             topOffset += maxRowHeights[i] - h;
