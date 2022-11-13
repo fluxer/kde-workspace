@@ -60,6 +60,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "utils.h"
 #include "effects.h"
 #include "workspace.h"
+#include "composite.h"
 #include "xcbutils.h"
 
 #include <X11/Xproto.h>
@@ -488,7 +489,17 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    a.processEvents(); // trigger any events before resuming such as compositor setup
+    // wait for the workspace initialization to complete before resuming
+    while (KWin::Workspace::self() && KWin::Workspace::self()->initializing()) {
+        a.processEvents();
+    }
+    // and the compositor
+    while (KWin::Compositor::starting()) {
+        a.processEvents();
+    }
+    // and one more iteration just in case
+    a.processEvents();
+
     ksmserver.resumeStartup("kwin");
     KWin::SessionManager weAreIndeed;
     KWin::SessionSaveDoneHelper helper;

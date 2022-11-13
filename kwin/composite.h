@@ -122,6 +122,14 @@ public:
     static bool compositing() {
         return s_compositor != NULL && s_compositor->isActive();
     }
+    /**
+     * @brief Static check to test whether the Compositor is still starting.
+     *
+     * @return bool @c true if there is a Compositor and it is still starting, @c false otherwise
+     **/
+    static bool starting() {
+        return s_compositor != NULL && s_compositor->m_starting;
+    }
 
     // for delayed supportproperty management of effects
     void keepSupportProperty(xcb_atom_t atom);
