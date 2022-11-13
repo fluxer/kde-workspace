@@ -33,6 +33,7 @@
 QString SupportInformation::generateSupportInformation(Plasma::Corona *corona)
 {
     QBuffer infoBuffer;
+    infoBuffer.open(QIODevice::WriteOnly);
     QDebug stream(&infoBuffer);
     SupportInformation info(stream);
 
