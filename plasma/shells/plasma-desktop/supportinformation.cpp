@@ -40,7 +40,8 @@ QString SupportInformation::generateSupportInformation(Plasma::Corona *corona)
     info.addHeader();
     info.addInformationForCorona(corona);
 
-    return QString(infoBuffer.data());
+    const QByteArray infoData = infoBuffer.data();
+    return QString::fromAscii(infoData.constData(), infoData.size());
 }
 
 SupportInformation::SupportInformation(const QDebug &outputStream) :
