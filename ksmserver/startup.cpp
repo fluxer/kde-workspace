@@ -143,9 +143,12 @@ void KSMServer::launchWM( const QList< QStringList >& wmStartCommands )
     // when we have a window manager, we start it first and give
     // it some time before launching other processes. Results in a
     // visually more appealing startup.
-    wmProcess = startApplication( wmStartCommands[ 0 ], QString(), QString(), true );
-    connect( wmProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(wmProcessChange()));
-    connect( wmProcess, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(wmProcessChange()));
+    QStringList wmCommand = wmStartCommands[0];
+    QString program = wmCommand.takeAt(0);
+    wmProcess = new QProcess( this );
+    connect( wmProcess, SIGNAL(error(QProcess::ProcessError)), this, SLOT(wmProcessChange()));
+    connect( wmProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(wmProcessChange()));
+    wmProcess->start(program, wmCommand);
     wmProcess->waitForStarted(4000);
     QMetaObject::invokeMethod(this, "autoStart0", Qt::QueuedConnection);
 }
@@ -176,13 +179,14 @@ void KSMServer::clientSetProgram( KSMClient* client )
 
 void KSMServer::wmProcessChange()
 {
-    if( state != LaunchingWM )
-    { // don't care about the process when not in the wm-launching state anymore
+    if( state != LaunchingWM ) {
+        // don't care about the process when not in the wm-launching state anymore
+        disconnect(wmProcess, 0, this, 0);
         wmProcess = NULL;
         return;
     }
-    if( wmProcess->state() == QProcess::NotRunning )
-    { // wm failed to launch for some reason, go with kwin instead
+    if( wmProcess && wmProcess->state() == QProcess::NotRunning ) {
+        // wm failed to launch for some reason, go with kwin instead
         kWarning( 1218 ) << "Window manager" << wm << "failed to launch";
         if( wm == "kwin" )
             return; // uhoh, kwin itself failed

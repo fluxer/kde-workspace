@@ -166,10 +166,9 @@ private:
     void startProtection();
     void endProtection();
 
-    QProcess* startApplication( const QStringList& command,
-        const QString& clientMachine = QString(),
-        const QString& userId = QString(),
-        bool wm = false );
+    bool startApplication( const QStringList& command,
+                           const QString& clientMachine = QString(),
+                           const QString& userId = QString());
     void executeCommand( const QStringList& command );
 
     bool isWM( const KSMClient* client ) const;
