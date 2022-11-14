@@ -97,7 +97,7 @@ QVector< long > Shadow::readX11ShadowProperty(WId id)
 bool Shadow::init(const QVector< long > &data)
 {
     for (int i=0; i<ShadowElementsCount; ++i) {
-        const KPixmap pix(Qt::HANDLE(data[i]));
+        const KPixmap pix(static_cast<Qt::HANDLE>(data[i]));
         if (pix.isNull()) {
             return false;
         }
