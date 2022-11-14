@@ -65,15 +65,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <X11/Xproto.h>
 
-static bool isMultiHead()
-{
-    QByteArray multiHead = qgetenv("KDE_MULTIHEAD");
-    if (!multiHead.isEmpty()) {
-        return (multiHead.toLower() == "true");
-    }
-    return true;
-}
-
 namespace KWin
 {
 
@@ -426,7 +417,7 @@ int main(int argc, char * argv[])
     int number_of_screens = ScreenCount(dpy);
 
     // multi head
-    if (number_of_screens != 1 && isMultiHead()) {
+    if (number_of_screens != 1 && KGlobalSettings::isMultiHead()) {
         KWin::is_multihead = true;
         KWin::screen_number = DefaultScreen(dpy);
         int pos; // Temporarily needed to reconstruct DISPLAY var if multi-head
