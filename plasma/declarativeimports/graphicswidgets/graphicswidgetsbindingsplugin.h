@@ -44,6 +44,6 @@ public:
     void registerTypes(const char *uri);
 };
 
-Q_EXPORT_PLUGIN2(graphicswidgetsbindingsplugin, GraphicsWidgetsBindingsPlugin)
+Q_EXPORT_PLUGIN(GraphicsWidgetsBindingsPlugin)
 
 #endif

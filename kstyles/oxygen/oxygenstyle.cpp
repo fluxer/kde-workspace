@@ -123,7 +123,7 @@ namespace Oxygen
 
 }
 
-Q_EXPORT_PLUGIN2( oxygen-qt, Oxygen::StylePlugin )
+Q_EXPORT_PLUGIN( Oxygen::StylePlugin )
 
 namespace Oxygen
 {

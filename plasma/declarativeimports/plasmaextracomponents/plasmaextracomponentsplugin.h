@@ -34,6 +34,6 @@ public:
     void registerTypes(const char *uri);
 };
 
-Q_EXPORT_PLUGIN2(plasmaexracomponentsplugin, PlasmaExtraComponentsPlugin);
+Q_EXPORT_PLUGIN(PlasmaExtraComponentsPlugin);
 
 #endif

@@ -38,7 +38,7 @@
 #include "fullscreensheet.h"
 #include "units.h"
 
-Q_EXPORT_PLUGIN2(plasmacomponentsplugin, PlasmaComponentsPlugin)
+Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 
 class BKSingleton
 {

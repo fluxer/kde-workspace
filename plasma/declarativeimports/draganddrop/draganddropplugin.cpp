@@ -39,5 +39,5 @@ void DragAndDropPlugin::registerTypes(const char *uri)
     qmlRegisterUncreatableType<DeclarativeDragDropEvent>(uri, 1, 0, "DragDropEvent", "DragDropEvent cannot be created from QML.");
 }
 
-Q_EXPORT_PLUGIN2(draganddropplugin, DragAndDropPlugin)
+Q_EXPORT_PLUGIN(DragAndDropPlugin)
 

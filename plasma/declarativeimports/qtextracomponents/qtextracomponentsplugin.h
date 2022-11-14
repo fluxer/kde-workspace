@@ -33,6 +33,6 @@ public:
     void registerTypes(const char *uri);
 };
 
-Q_EXPORT_PLUGIN2(qtextracomponentsplugin, QtExtraComponentsPlugin);
+Q_EXPORT_PLUGIN(QtExtraComponentsPlugin);
 
 #endif
