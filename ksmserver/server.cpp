@@ -576,7 +576,7 @@ extern "C" int _IceTransNoListen(const char * protocol);
 #endif
 
 KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool lockscreen )
-  : wmProcess( NULL )
+  : wmProcess( new QProcess( this ) )
   , sessionGroup( "" )
   , logoutEffectWidget( NULL )
 {
@@ -706,6 +706,12 @@ void KSMServer::cleanUp()
 {
     if (clean) return;
     clean = true;
+
+    if (wmProcess && wmProcess->state() != QProcess::NotRunning) {
+        wmProcess->kill();
+        wmProcess->waitForFinished();
+    }
+
     IceFreeListenObjs (numTransports, listenObjs);
 
     QByteArray fName = QFile::encodeName(KStandardDirs::locateLocal("tmp", "KSMserver"));
@@ -835,7 +841,7 @@ void KSMServer::discardSession()
 {
     KConfigGroup config(KGlobal::config(), sessionGroup );
     int count =  config.readEntry( "count", 0 );
-	foreach ( KSMClient *c, clients ) {
+    foreach ( KSMClient *c, clients ) {
         QStringList discardCommand = c->discardCommand();
         if ( discardCommand.isEmpty())
             continue;
@@ -875,7 +881,7 @@ void KSMServer::storeSession()
         executeCommand( discardCommand );
     }
     config->deleteGroup( sessionGroup ); //### does not work with global config object...
-	KConfigGroup cg( config, sessionGroup);
+    KConfigGroup cg( config, sessionGroup);
     count =  0;
 
     if (state != ClosingSubSession) {
