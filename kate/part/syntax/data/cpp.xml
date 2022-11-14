@@ -103,6 +103,7 @@
     <item> Q_ATOMIC_INT_TEST_AND_SET_IS_WAIT_FREE </item>
     <item> Q_DECLARE_EXTENSION_INTERFACE </item>
     <item> Q_DECLARE_INTERFACE </item>
+    <item> Q_EXPORT_PLUGIN </item>
     <item> Q_EXPORT_PLUGIN2 </item>
     <item> Q_IMPORT_PLUGIN </item>
     <item> Q_NOREPLY </item>
