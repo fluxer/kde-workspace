@@ -265,12 +265,14 @@ Application::~Application()
     delete Workspace::self();
     if (owner->ownerWindow() != None) { // If there was no --replace (no new WM)
         XSetInputFocus(display(), PointerRoot, RevertToPointerRoot, xTime());
+        // Remove windowmanager privileges
+        XSelectInput(display(), rootWindow(), PropertyChangeMask);
     }
-    owner->release();
-    delete owner;
     delete options;
     delete effects;
     delete atoms;
+    owner->release();
+    delete owner;
 }
 
 bool Application::setup()
@@ -350,10 +352,6 @@ bool Application::setup()
 
 void Application::lostSelection()
 {
-    sendPostedEvents();
-    delete Workspace::self();
-    // Remove windowmanager privileges
-    XSelectInput(display(), rootWindow(), PropertyChangeMask);
     quit();
 }
 
