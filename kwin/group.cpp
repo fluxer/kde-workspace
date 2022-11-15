@@ -25,18 +25,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-//#define QT_CLEAN_NAMESPACE
-
 #include "group.h"
-#include <QTextStream>
 #include "workspace.h"
 #include "client.h"
 #include "effects.h"
 
-#include <assert.h>
 #include <kstartupinfo.h>
 #include <QtGui/qx11info_x11.h>
+#include <QTextStream>
 
+#include <assert.h>
 
 /*
  TODO

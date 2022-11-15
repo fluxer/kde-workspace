@@ -25,18 +25,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef SERVER_H
 #define SERVER_H
 
-// needed to avoid clash with INT8 defined in X11/Xmd.h on solaris
-#define QT_CLEAN_NAMESPACE 1
 #include <QStringList>
 #include <QObject>
 #include <QProcess>
+#include <QTimer>
+#include <QDateTime>
+#include <QDBusInterface>
+#include <QMap>
 
 #include <kapplication.h>
 #include <kworkspace/kworkspace.h>
 #include <kmessagebox.h>
-#include <QTimer>
-#include <QtCore/qdatetime.h>
-#include <QMap>
 
 #define INT32 QINT32
 #include <X11/Xlib.h>
@@ -60,7 +59,6 @@ class KSMConnection;
 class KSMClient;
 
 class OrgKdeKLauncherInterface;
-#include <QDBusInterface>
 
 enum SMType { SM_ERROR, SM_WMCOMMAND, SM_WMSAVEYOURSELF };
 struct SMData
