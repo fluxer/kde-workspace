@@ -53,10 +53,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 static const char version[] = "0.4";
 static const char description[] = I18N_NOOP( "The reliable KDE session manager that talks the standard X11R6 \nsession management protocol (XSMP)." );
 
-Display* dpy = 0;
-Colormap colormap = 0;
-Visual *visual = 0;
-
 extern KSMServer* the_server;
 
 void IoErrorHandler ( IceConn iceConn)
@@ -81,55 +77,6 @@ bool writeTest(QByteArray path)
    close(fd);
    unlink(path.data());
    return true;
-}
-
-void checkComposite()
-{
-    if( qgetenv( "KDE_SKIP_ARGB_VISUALS" ) == "1" )
-        return;
-    // thanks to zack rusin and frederik for pointing me in the right direction
-    // for the following bits of X11 code
-    dpy = XOpenDisplay(0); // open default display
-    if (!dpy)
-    {
-        kError() << "Cannot connect to the X server";
-        return;
-    }
-
-    int screen = DefaultScreen(dpy);
-    int eventBase, errorBase;
-
-    if (XRenderQueryExtension(dpy, &eventBase, &errorBase))
-    {
-        int nvi;
-        XVisualInfo templ;
-        templ.screen  = screen;
-        templ.depth   = 32;
-        templ.c_class = TrueColor;
-        XVisualInfo *xvi = XGetVisualInfo(dpy, VisualScreenMask |
-                                                VisualDepthMask |
-                                                VisualClassMask,
-                                            &templ, &nvi);
-        for (int i = 0; i < nvi; ++i)
-        {
-            XRenderPictFormat *format = XRenderFindVisualFormat(dpy,
-                                                                xvi[i].visual);
-            if (format->type == PictTypeDirect && format->direct.alphaMask)
-            {
-                visual = xvi[i].visual;
-                colormap = XCreateColormap(dpy, RootWindow(dpy, screen),
-                                            visual, AllocNone);
-
-                XFree(xvi);
-                return;
-            }
-        }
-
-        XFree(xvi);
-
-    }
-    XCloseDisplay( dpy );
-    dpy = NULL;
 }
 
 void sanity_check( int argc, char* argv[], KAboutData* aboutDataPtr )
@@ -252,13 +199,7 @@ int main( int argc, char* argv[] )
     KCmdLineArgs::addCmdLineOptions( options );
 
     ::unsetenv("SESSION_MANAGER");
-    checkComposite();
-    KApplication *a;
-
-    if( dpy != NULL && DefaultDepth(dpy, DefaultScreen(dpy)) >= 24) // 16bpp breaks the software logout effect for some reason???
-        a = new KApplication(dpy, visual ? Qt::HANDLE(visual) : 0, colormap ? Qt::HANDLE(colormap) : 0);
-    else
-        a = new KApplication();
+    KApplication *a = new KApplication();
     fcntl(ConnectionNumber(QX11Info::display()), F_SETFD, 1);
 
     a->setQuitOnLastWindowClosed(false); // #169486

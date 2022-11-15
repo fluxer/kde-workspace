@@ -27,13 +27,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QDialog>
 #include <QPushButton>
-#include <kworkspace/kworkspace.h>
-
 #include <QMenu>
 #include <QTimer>
 #include <QTimeLine>
 #include <QLabel>
-class LogoutEffect;
+#include <QDeclarativeView>
+#include <kworkspace/kworkspace.h>
 
 namespace Plasma
 {
@@ -41,34 +40,14 @@ namespace Plasma
     class FrameSvg;
 }
 
-// The (singleton) widget that makes the desktop gray.
-class KSMShutdownFeedback : public QWidget
+// The methods that make the desktop gray if compositor is active.
+class KSMShutdownFeedback
 {
-    Q_OBJECT
-
 public:
     static void start();
     static void stop();
     static void logoutCanceled();
-
-protected:
-    ~KSMShutdownFeedback() {}
-
-    virtual void paintEvent( QPaintEvent* );
-
-private Q_SLOTS:
-    void slotPaintEffect();
-    void slotPaintEffectInitialized();
-
-private:
-    static KSMShutdownFeedback * s_pSelf;
-    KSMShutdownFeedback();
-    QPixmap m_pixmap;
-    LogoutEffect *effect;
-    bool initialized;
 };
-
-#include <QDeclarativeView>
 
 // The confirmation dialog
 class KSMShutdownDlg : public QDialog

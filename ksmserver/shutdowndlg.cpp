@@ -56,49 +56,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <kworkspace/kdisplaymanager.h>
 
-#include "logouteffect.h"
 #include "moc_shutdowndlg.cpp"
-
-#define FONTCOLOR "#bfbfbf"
-
-KSMShutdownFeedback * KSMShutdownFeedback::s_pSelf = 0L;
-
-KSMShutdownFeedback::KSMShutdownFeedback()
- : QWidget( 0L, Qt::Popup ),
-    initialized( false )
-{
-    setObjectName( "feedbackwidget" );
-    setAttribute( Qt::WA_NoSystemBackground );
-    setAttribute( Qt::WA_PaintOnScreen );
-    setGeometry( QApplication::desktop()->geometry() );
-    m_pixmap = QPixmap( size() );
-    QTimer::singleShot( 10, this, SLOT(slotPaintEffect()) );
-}
-
-
-void KSMShutdownFeedback::paintEvent( QPaintEvent* )
-{
-    if ( !initialized )
-        return;
-
-    QPainter painter( this );
-    painter.setCompositionMode( QPainter::CompositionMode_Source );
-    painter.drawPixmap( 0, 0, m_pixmap );
-}
-
-void KSMShutdownFeedback::slotPaintEffect()
-{
-    effect = LogoutEffect::create(this, &m_pixmap);
-    connect(effect, SIGNAL(initialized()),
-            this,   SLOT  (slotPaintEffectInitialized()));
-
-    effect->start();
-}
-
-void KSMShutdownFeedback::slotPaintEffectInitialized()
-{
-    initialized = true;
-}
 
 void KSMShutdownFeedback::start()
 {
@@ -131,14 +89,10 @@ void KSMShutdownFeedback::start()
             return;
         }
     }
-    s_pSelf = new KSMShutdownFeedback();
-    s_pSelf->show();
 }
 
 void KSMShutdownFeedback::stop()
 {
-    delete s_pSelf;
-    s_pSelf = NULL;
 }
 
 void KSMShutdownFeedback::logoutCanceled()

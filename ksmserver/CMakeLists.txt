@@ -25,8 +25,6 @@ set(ksmserver_SRCS
    startup.cpp
    shutdown.cpp
    client.cpp
-   logouteffect.cpp
-   curtaineffect.cpp
 )
 
 set(kcminit_adaptor ${CMAKE_SOURCE_DIR}/kcminit/main.h)
