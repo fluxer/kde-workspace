@@ -22,9 +22,10 @@
 
 #include <settings/settingspagebase.h>
 
-class KIntSpinBox;
 #include <QListView>
 #include <QModelIndex>
+
+class KIntSpinBox;
 
 /**
  * @brief Allows the configuration of file previews.
@@ -63,6 +64,7 @@ private:
     QStringList m_enabledPreviewPlugins;
     KIntSpinBox* m_localFileSizeBox;
     KIntSpinBox* m_remoteFileSizeBox;
+    KIntSpinBox* m_iconAlphaBox;
 };
 
 #endif

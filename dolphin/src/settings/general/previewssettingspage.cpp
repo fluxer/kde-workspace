@@ -49,9 +49,10 @@
 // NOTE: keep in sync with:
 // kdelibs/kio/kio/previewjob.cpp
 // kde-workspace/kioslave/thumbnail/thumbnail.h
-enum MaxPreviewSizes {
+enum PreviewDefaults {
     MaxLocalSize = 20, // 20 MB
-    MaxRemoteSize = 5 // 5 MB
+    MaxRemoteSize = 5, // 5 MB
+    IconAlpha = 70
 };
 
 PreviewsSettingsPage::PreviewsSettingsPage(QWidget* parent) :
@@ -60,7 +61,8 @@ PreviewsSettingsPage::PreviewsSettingsPage(QWidget* parent) :
     m_listView(0),
     m_enabledPreviewPlugins(),
     m_localFileSizeBox(0),
-    m_remoteFileSizeBox(0)
+    m_remoteFileSizeBox(0),
+    m_iconAlphaBox(0)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
 
@@ -100,16 +102,28 @@ PreviewsSettingsPage::PreviewsSettingsPage(QWidget* parent) :
     fileSizeLayout->addWidget(remoteFileSizeLabel, 1, 0);
     fileSizeLayout->addWidget(m_remoteFileSizeBox, 1, 1, Qt::AlignRight);
 
+    QLabel* iconAlphaLabel = new QLabel(i18nc("@label", "Icon alpha:"), this);
+
+    m_iconAlphaBox = new KIntSpinBox(this);
+    m_iconAlphaBox->setSingleStep(1);
+    m_iconAlphaBox->setRange(0, 255);
+
+    QGridLayout* iconAlphaLayout = new QGridLayout(this);
+    iconAlphaLayout->addWidget(iconAlphaLabel, 0, 0);
+    iconAlphaLayout->addWidget(m_iconAlphaBox, 0, 1, Qt::AlignRight);
+
     topLayout->addSpacing(KDialog::spacingHint());
     topLayout->addWidget(showPreviewsLabel);
     topLayout->addWidget(m_listView);
     topLayout->addLayout(fileSizeLayout);
+    topLayout->addLayout(iconAlphaLayout);
 
     loadSettings();
 
     connect(m_listView, SIGNAL(clicked(QModelIndex)), this, SIGNAL(changed()));
     connect(m_localFileSizeBox, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
     connect(m_remoteFileSizeBox, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
+    connect(m_iconAlphaBox, SIGNAL(valueChanged(int)), this, SIGNAL(changed()));
 }
 
 PreviewsSettingsPage::~PreviewsSettingsPage()
@@ -145,13 +159,18 @@ void PreviewsSettingsPage::applySettings()
     globalConfig.writeEntry("MaximumRemoteSize",
                             maximumRemoteSize,
                             KConfigBase::Normal | KConfigBase::Global);
+    const int iconAlpha = m_iconAlphaBox->value();
+    globalConfig.writeEntry("IconAlpha",
+                            iconAlpha,
+                            KConfigBase::Normal | KConfigBase::Global);
     globalConfig.sync();
 }
 
 void PreviewsSettingsPage::restoreDefaults()
 {
-    m_localFileSizeBox->setValue(MaxPreviewSizes::MaxLocalSize);
-    m_remoteFileSizeBox->setValue(MaxPreviewSizes::MaxRemoteSize);
+    m_localFileSizeBox->setValue(PreviewDefaults::MaxLocalSize);
+    m_remoteFileSizeBox->setValue(PreviewDefaults::MaxRemoteSize);
+    m_remoteFileSizeBox->setValue(PreviewDefaults::IconAlpha);
 }
 
 void PreviewsSettingsPage::showEvent(QShowEvent* event)
@@ -209,14 +228,17 @@ void PreviewsSettingsPage::loadSettings()
 
     m_enabledPreviewPlugins = globalConfig.readEntry("Plugins", enabledByDefault);
 
-    const qulonglong defaultLocalPreview = static_cast<qulonglong>(MaxPreviewSizes::MaxLocalSize) * 1024 * 1024;
-    const qulonglong defaultRemotePreview = static_cast<qulonglong>(MaxPreviewSizes::MaxRemoteSize) * 1024 * 1024;
+    const qulonglong defaultLocalPreview = static_cast<qulonglong>(PreviewDefaults::MaxLocalSize) * 1024 * 1024;
+    const qulonglong defaultRemotePreview = static_cast<qulonglong>(PreviewDefaults::MaxRemoteSize) * 1024 * 1024;
     const qulonglong maxLocalByteSize = globalConfig.readEntry("MaximumSize", defaultLocalPreview);
     const qulonglong maxRemoteByteSize = globalConfig.readEntry("MaximumRemoteSize", defaultRemotePreview);
     const int maxLocalMByteSize = maxLocalByteSize / (1024 * 1024);
     const int maxRemoteMByteSize = maxRemoteByteSize / (1024 * 1024);
     m_localFileSizeBox->setValue(maxLocalMByteSize);
     m_remoteFileSizeBox->setValue(maxRemoteMByteSize);
+    const int defaultIconAlpha = static_cast<int>(PreviewDefaults::IconAlpha);
+    const int iconAlpha = globalConfig.readEntry("IconAlpha", defaultIconAlpha);
+    m_iconAlphaBox->setValue(iconAlpha);
 }
 
 #include "moc_previewssettingspage.cpp"
