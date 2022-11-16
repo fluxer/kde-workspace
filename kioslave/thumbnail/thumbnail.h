@@ -29,9 +29,10 @@
 // NOTE: keep in sync with:
 // kde-workspace/dolphin/src/settings/general/previewssettingspage.cpp
 // kdelibs/kio/kio/previewjob.cpp
-enum MaxPreviewSizes {
+enum PreviewDefaults {
     MaxLocalSize = 20, // 20 MB
-    MaxRemoteSize = 5 // 5 MB
+    MaxRemoteSize = 5, // 5 MB
+    IconAlpha = 70
 };
 
 class ThumbCreator;
