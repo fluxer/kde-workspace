@@ -84,14 +84,14 @@ namespace Oxygen
             switch( _configuration->separatorMode() )
             {
                 case Configuration::SeparatorAlways:
-                return true;
+                    return true;
 
                 case Configuration::SeparatorActive:
-                return ( isActive() );
+                    return ( isActive() );
 
                 default:
                 case Configuration::SeparatorNever:
-                return false;
+                    return false;
             }
 
         }
@@ -437,7 +437,7 @@ Qt::Alignment Oxygen::Client::titleAlignment( void ) const
         default:
         case Configuration::AlignCenter:
         case Configuration::AlignCenterFullWidth:
-        return Qt::AlignCenter;
+            return Qt::AlignCenter;
     }
 
 }
