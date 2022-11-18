@@ -330,16 +330,6 @@ void KDecoration::setKeepBelow(bool set)
     bridge_->setKeepBelow(set);
 }
 
-void KDecoration::emitKeepAboveChanged(bool above)
-{
-    keepAboveChanged(above);
-}
-
-void KDecoration::emitKeepBelowChanged(bool below)
-{
-    keepBelowChanged(below);
-}
-
 void KDecoration::reset(unsigned long)
 {
 }
