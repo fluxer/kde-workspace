@@ -117,7 +117,7 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
     KSharedConfig::Ptr config = KGlobal::config();
     config->reparseConfiguration(); // config may have changed in the KControl module
 
-	KConfigGroup cg( config, "General");
+    KConfigGroup cg( config, "General");
 
     bool logoutConfirmed =
         (confirm == KWorkSpace::ShutdownConfirmYes) ? false :
@@ -214,7 +214,7 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
         if ( clients.isEmpty() )
             completeShutdownOrCheckpoint();
     } else {
-        KSMShutdownFeedback::logoutCanceled(); // make the screen become normal again
+        KSMShutdownFeedback::stop(); // make the screen become normal again
     }
     dialogActive = false;
 }
@@ -374,7 +374,7 @@ void KSMServer::cancelShutdown( KSMClient* c )
     } else {
         Solid::PowerManagement::stopSuppressingSleep(inhibitCookie);
         kDebug( 1218 ) << "Client " << c->program() << " (" << c->clientId() << ") canceled shutdown.";
-        KSMShutdownFeedback::logoutCanceled(); // make the screen become normal again
+        KSMShutdownFeedback::stop(); // make the screen become normal again
         KNotification::event( "cancellogout" , i18n( "Logout canceled by '%1'", c->program()),
                               QPixmap() , 0l , KNotification::DefaultEvent  );
         foreach( KSMClient* c, clients ) {

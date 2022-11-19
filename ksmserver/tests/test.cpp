@@ -5,8 +5,8 @@
 #include <kiconloader.h>
 #include <kworkspace/kworkspace.h>
 #include <Plasma/Theme>
-int
-main(int argc, char *argv[])
+
+int main(int argc, char *argv[])
 {
     KAboutData about("kapptest", 0, ki18n("kapptest"), "version");
     KCmdLineArgs::init(argc, argv, &about);
@@ -20,7 +20,9 @@ main(int argc, char *argv[])
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     KApplication a;
+    KApplication::quitOnSignal();
     KIconLoader::global()->addAppDir("ksmserver");
+    qAddPostRoutine(KSMShutdownFeedback::stop);
     KSMShutdownFeedback::start();
 
     QString sdtypeOption = args->getOption("type").toLower();
@@ -42,5 +44,5 @@ main(int argc, char *argv[])
     (void)KSMShutdownDlg::confirmShutdown( true, true, sdtype, "default" );
 /*   (void)KSMShutdownDlg::confirmShutdown( false, false, sdtype ); */
 
-    KSMShutdownFeedback::stop();
+    return a.exec();
 }

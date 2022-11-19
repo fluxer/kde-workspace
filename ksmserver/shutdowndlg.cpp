@@ -93,10 +93,6 @@ void KSMShutdownFeedback::start()
 
 void KSMShutdownFeedback::stop()
 {
-}
-
-void KSMShutdownFeedback::logoutCanceled()
-{
     if( KWindowSystem::compositingActive()) {
         // We are no longer logging out, announce (Intended for the compositor)
         Display* dpy = QX11Info::display();

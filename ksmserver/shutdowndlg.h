@@ -46,7 +46,6 @@ class KSMShutdownFeedback
 public:
     static void start();
     static void stop();
-    static void logoutCanceled();
 };
 
 // The confirmation dialog
