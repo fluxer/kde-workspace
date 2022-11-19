@@ -144,7 +144,6 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
     dialogActive = true;
     if ( !logoutConfirmed ) {
         KApplication::kApplication()->updateUserTimestamp();
-        KSMShutdownFeedback::start(); // make the screen gray
         QString theme = cg.readEntry( "theme", "default" );
         logoutConfirmed = KSMShutdownDlg::confirmShutdown( maysd, choose, sdtype, theme);
         // ###### We can't make the screen remain gray while talking to the apps,
@@ -213,8 +212,6 @@ void KSMServer::shutdown( KWorkSpace::ShutdownConfirm confirm,
         }
         if ( clients.isEmpty() )
             completeShutdownOrCheckpoint();
-    } else {
-        KSMShutdownFeedback::stop(); // make the screen become normal again
     }
     dialogActive = false;
 }

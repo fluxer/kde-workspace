@@ -112,6 +112,8 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     // this is a WType_Popup on purpose. Do not change that! Not
     // having a popup here has severe side effects.
 {
+    KSMShutdownFeedback::start(); // make the screen gray
+
     KDialog::centerOnScreen(this, -3);
 
     //kDebug() << "Creating QML view";
@@ -167,7 +169,7 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     connect(rootObject, SIGNAL(suspendRequested(int)), SLOT(slotSuspend(int)) );
     connect(rootObject, SIGNAL(rebootRequested()), SLOT(slotReboot()));
     connect(rootObject, SIGNAL(rebootRequested2(int)), SLOT(slotReboot(int)) );
-    connect(rootObject, SIGNAL(cancelRequested()), SLOT(reject()));
+    connect(rootObject, SIGNAL(cancelRequested()), SLOT(slotCancel()));
     connect(rootObject, SIGNAL(lockScreenRequested()), SLOT(slotLockScreen()));
     m_view->show();
     m_view->setFocus();
@@ -213,7 +215,6 @@ void KSMShutdownDlg::slotReboot(int opt)
     accept();
 }
 
-
 void KSMShutdownDlg::slotLockScreen()
 {
     QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver",
@@ -230,7 +231,6 @@ void KSMShutdownDlg::slotHalt()
     accept();
 }
 
-
 void KSMShutdownDlg::slotSuspend(int spdMethod)
 {
     switch (spdMethod) {
@@ -242,6 +242,12 @@ void KSMShutdownDlg::slotSuspend(int spdMethod)
             Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, 0, 0);
             break;
     }
+    reject();
+}
+
+void KSMShutdownDlg::slotCancel()
+{
+    KSMShutdownFeedback::stop(); // make the screen become normal again
     reject();
 }
 

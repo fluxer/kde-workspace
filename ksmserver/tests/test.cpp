@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
     KApplication::quitOnSignal();
     KIconLoader::global()->addAppDir("ksmserver");
     qAddPostRoutine(KSMShutdownFeedback::stop);
-    KSMShutdownFeedback::start();
 
     QString sdtypeOption = args->getOption("type").toLower();
 

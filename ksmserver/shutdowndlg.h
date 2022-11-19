@@ -65,6 +65,7 @@ public Q_SLOTS:
     void slotReboot(int);
     void slotSuspend(int);
     void slotLockScreen();
+    void slotCancel();
 
 protected:
     void resizeEvent(QResizeEvent *e);
