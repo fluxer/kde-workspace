@@ -110,7 +110,6 @@ set(katepart_PART_SRCS
     view/kateviewinternal.cpp
     view/kateviewhelpers.cpp
     view/katemessagewidget.cpp
-    view/katefadeeffect.cpp
     view/kateanimation.cpp
     view/katetextanimation.cpp
 

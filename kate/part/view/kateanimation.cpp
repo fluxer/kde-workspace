@@ -20,23 +20,17 @@
 
 #include "kateanimation.h"
 #include "moc_kateanimation.cpp"
-#include <katefadeeffect.h>
 
-#include <KMessageWidget>
 #include <QTimer>
+#include <KMessageWidget>
 #include <kglobalsettings.h>
 
-KateAnimation::KateAnimation(KMessageWidget* widget, EffectType effect)
+KateAnimation::KateAnimation(KMessageWidget* widget, bool applyEffect)
   : QObject(widget)
   , m_widget(widget)
-  , m_fadeEffect(0)
+  , m_applyEffect(applyEffect)
 {
   Q_ASSERT(m_widget != 0);
-
-  // create wanted effect
-  if (effect == FadeEffect) {
-    m_fadeEffect = new KateFadeEffect(widget);
-  }
 
   // create tracking timer for hiding the widget
   m_hideTimer = new QTimer(this);
@@ -71,17 +65,13 @@ void KateAnimation::show()
   }
 
   // show according to effects config
-  if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+  if (!m_applyEffect || !(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
     m_widget->show();
     emit widgetShown();
   } else {
     // launch show effect
     // NOTE: use a singleShot timer to avoid resizing issues when showing the message widget the first time (bug #316666)
-    if (m_fadeEffect) {
-      QTimer::singleShot(0, m_fadeEffect, SLOT(fadeIn()));
-    } else {
-      QTimer::singleShot(0, m_widget, SLOT(animatedShow()));
-    }
+    QTimer::singleShot(0, m_widget, SLOT(animatedShow()));
 
     // start timer in order to track when showing is done (this effectively works
     // around the fact, that KMessageWidget does not have a hidden signal)
@@ -99,16 +89,12 @@ void KateAnimation::hide()
   }
   
   // hide according to effects config
-  if (!(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
+  if (!m_applyEffect || !(KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects)) {
     m_widget->hide();
     emit widgetHidden();
   } else {
     // hide depending on effect
-    if (m_fadeEffect) {
-      m_fadeEffect->fadeOut();
-    } else {
-      m_widget->animatedHide();
-    }
+    m_widget->animatedHide();
 
     // start timer in order to track when hiding is done (this effectively works
     // around the fact, that KMessageWidget does not have a hidden signal)

@@ -23,11 +23,10 @@
 
 #include <QObject>
 #include <QPointer>
-
 #include <QTimer>
 
 class KMessageWidget;
-class KateFadeEffect;
+
 /**
  * This class provides a fade in/out effect for KMessageWidget%s.
  * Example:
@@ -44,18 +43,9 @@ class KateAnimation : public QObject
 
   public:
     /**
-     * The type of supported animation effects
-     */
-    enum EffectType{
-      FadeEffect = 0, ///< fade in/out
-      GrowEffect      ///< grow / shrink
-    };
-
-  public:
-    /**
      * Constructor.
      */
-    KateAnimation(KMessageWidget* widget, EffectType effect);
+    KateAnimation(KMessageWidget* widget, bool applyEffect);
 
     /**
      * Returns true, if the hide animation is running, otherwise false.
@@ -93,9 +83,9 @@ class KateAnimation : public QObject
 
   private:
     QPointer<KMessageWidget> m_widget; ///< the widget to animate
-    KateFadeEffect * m_fadeEffect;     ///< the fade effect
     QTimer * m_hideTimer;              ///< timer to track hide animation
     QTimer * m_showTimer;              ///< timer to track show animation
+    bool m_applyEffect;
 };
 
 #endif

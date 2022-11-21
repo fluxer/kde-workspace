@@ -62,7 +62,7 @@ KateMessageWidget::KateMessageWidget(QWidget* parent, bool applyFadeEffect)
   hide();
 
   // create animation controller, and connect widgetHidden() to showNextMessage()
-  m_animation = new KateAnimation(m_messageWidget, applyFadeEffect ? KateAnimation::FadeEffect : KateAnimation::GrowEffect);
+  m_animation = new KateAnimation(m_messageWidget, applyFadeEffect);
   connect(m_animation, SIGNAL(widgetHidden()), this, SLOT(showNextMessage()));
 
   // setup autoHide timer details
