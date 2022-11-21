@@ -131,11 +131,10 @@ static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
   settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
 
   /* export effects settings */
-  KConfigGroup kdeCfgGroup(kglobalcfg, "General");
-  bool effectsEnabled = kdeCfgGroup.readEntry("EffectsEnabled", false);
-  bool fadeMenus = kdeCfgGroup.readEntry("EffectFadeMenu", false);
-  bool fadeTooltips = kdeCfgGroup.readEntry("EffectFadeTooltip", false);
-  bool animateCombobox = kdeCfgGroup.readEntry("EffectAnimateCombo", false);
+  bool effectsEnabled = (KGlobalSettings::graphicEffectsLevel() > KGlobalSettings::NoEffects);
+  bool fadeMenus = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::ComplexAnimationEffects);
+  bool fadeTooltips = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::ComplexAnimationEffects);
+  bool animateCombobox = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::SimpleAnimationEffects);
 
   QStringList guieffects;
   if (effectsEnabled) {
