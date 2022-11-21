@@ -146,8 +146,8 @@ export KDE_SESSION_UID
 XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
 
-# For session services that require X11
-dbus-update-activation-environment DISPLAY XAUTHORITY
+# For session services that require X11, check for XDG_CURRENT_DESKTOP, etc.
+dbus-update-activation-environment --all
 
 # Start kdeinit4 + kcminit_startup
 kdeinit4
