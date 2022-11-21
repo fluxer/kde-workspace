@@ -24,6 +24,7 @@ elif test $kcheckrunning_result -eq 2 ; then
     echo "\$DISPLAY is not set or cannot connect to the X server."
     exit 1
 fi
+unset kcheckrunning_result
 
 # Set the path for Katie plugins provided by KDE
 QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
