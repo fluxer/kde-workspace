@@ -136,20 +136,24 @@ static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
   int graphicEffects = kglobalgrp.readEntry("GraphicEffectsLevel", int(KGlobalSettings::graphicEffectsLevelDefault()));
   KGlobalSettings::GraphicEffects graphicEffectsFlags = KGlobalSettings::GraphicEffects(graphicEffects);
   bool effectsEnabled = (graphicEffectsFlags != KGlobalSettings::NoEffects);
-  bool fadeMenus = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
-  bool fadeTooltips = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
-  bool animateCombobox = (graphicEffectsFlags & KGlobalSettings::SimpleAnimationEffects);
-  // qDebug() << Q_FUNC_INFO << effectsEnabled << fadeMenus << fadeTooltips << animateCombobox;
+  bool complexEffects = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
+  bool simpleEffects = (graphicEffectsFlags & KGlobalSettings::SimpleAnimationEffects);
+  // qDebug() << Q_FUNC_INFO << effectsEnabled << complexEffects << simpleEffects;
 
   QStringList guieffects;
   if (effectsEnabled) {
     guieffects << QString("general");
-    if (fadeMenus)
+    if (complexEffects) {
       guieffects << QString("fademenu");
-    if (animateCombobox)
       guieffects << QString("animatecombo");
-    if (fadeTooltips)
       guieffects << QString("fadetooltip");
+      guieffects << QString("animatetoolbox");
+    } else if (simpleEffects) {
+      guieffects << QString("animatemenu");
+      guieffects << QString("animatecombo");
+      guieffects << QString("animatetooltip");
+      guieffects << QString("animatetoolbox");
+    }
   } else {
     guieffects << QString("none");
   }
