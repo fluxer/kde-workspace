@@ -231,11 +231,8 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
     fineTuningUi.comboGraphicEffectsLevel->setObjectName( "cbGraphicEffectsLevel" );
     fineTuningUi.comboGraphicEffectsLevel->setEditable( false );
     fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("Low display resolution and Low CPU"), KGlobalSettings::NoEffects);
-    fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("High display resolution and Low CPU"), KGlobalSettings::GradientEffects);
     fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("Low display resolution and High CPU"), KGlobalSettings::SimpleAnimationEffects);
-    fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("High display resolution and High CPU"), (int) (KGlobalSettings::SimpleAnimationEffects | KGlobalSettings::GradientEffects));
-    fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("Low display resolution and Very High CPU"), KGlobalSettings::ComplexAnimationEffects);
-    fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("High display resolution and Very High CPU"), (int) (KGlobalSettings::ComplexAnimationEffects | KGlobalSettings::GradientEffects));
+    fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("High display resolution and High CPU"), static_cast<int>(KGlobalSettings::SimpleAnimationEffects | KGlobalSettings::ComplexAnimationEffects));
 
     connect(cbStyle, SIGNAL(activated(int)), this, SLOT(setStyleDirty()));
     connect(fineTuningUi.cbIconsOnButtons,     SIGNAL(toggled(bool)),   this, SLOT(setEffectsDirty()));
@@ -390,13 +387,14 @@ void KCMStyle::save()
     }
 
     // Save effects.
-        KConfig      _config("kdeglobals", KConfig::NoGlobals);
-        KConfigGroup config(&_config, "KDE");
+    KConfig      _config("kdeglobals", KConfig::NoGlobals);
+    KConfigGroup config(&_config, "KDE");
     // Effects page
     config.writeEntry( "ShowIconsOnPushButtons", fineTuningUi.cbIconsOnButtons->isChecked());
     config.writeEntry( "ShowIconsInMenuItems", fineTuningUi.cbIconsInMenus->isChecked());
     KConfigGroup g( &_config, "KDE-Global GUI Settings" );
     g.writeEntry( "GraphicEffectsLevel", fineTuningUi.comboGraphicEffectsLevel->itemData(fineTuningUi.comboGraphicEffectsLevel->currentIndex()));
+
 
     KConfigGroup generalGroup(&_config, "General");
     generalGroup.writeEntry("widgetStyle", currentStyle());
@@ -415,8 +413,6 @@ void KCMStyle::save()
 
     if ( m_bEffectsDirty ) {
         KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_STYLE);
-        // ##### FIXME - Doesn't apply all settings correctly due to bugs in
-        // KApplication/KToolbar
         KGlobalSettings::self()->emitChange(KGlobalSettings::ToolbarStyleChanged);
 
 #ifdef Q_WS_X11
@@ -494,7 +490,7 @@ void KCMStyle::defaults()
     fineTuningUi.comboSecondaryToolbarIcons->setCurrentIndex(toolbarButtonIndex("TextBesideIcon"));
     fineTuningUi.cbIconsOnButtons->setChecked(true);
     fineTuningUi.cbIconsInMenus->setChecked(true);
-    fineTuningUi.comboGraphicEffectsLevel->setCurrentIndex(fineTuningUi.comboGraphicEffectsLevel->findData(((int) KGlobalSettings::graphicEffectsLevelDefault())));
+    fineTuningUi.comboGraphicEffectsLevel->setCurrentIndex(fineTuningUi.comboGraphicEffectsLevel->findData(static_cast<int>(KGlobalSettings::graphicEffectsLevelDefault())));
     emit changed(true);
 }
 

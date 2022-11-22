@@ -53,7 +53,7 @@ void HoverAnimation::updateCurrentTime(int currentTime)
 Animator::Animator(AbstractItemView *view)
     : QObject(view)
 {
-    m_effectsOn = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::SimpleAnimationEffects); //do not animate if the graphics effects are set to Low CPU
+    m_effectsOn = (KGlobalSettings::graphicEffectsLevel() != KGlobalSettings::NoEffects); //do not animate if the graphics effects are set to Low CPU
     connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(graphicsEffectsToggled(int)));
     connect(view, SIGNAL(entered(QModelIndex)), SLOT(entered(QModelIndex)));
     connect(view, SIGNAL(left(QModelIndex)), SLOT(left(QModelIndex)));

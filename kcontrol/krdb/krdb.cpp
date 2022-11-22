@@ -131,10 +131,10 @@ static void applyQtSettings( QSettings& settings )
   settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
 
   /* export effects settings */
-  bool effectsEnabled = (KGlobalSettings::graphicEffectsLevel() > KGlobalSettings::NoEffects);
-  bool fadeMenus = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::ComplexAnimationEffects);
-  bool fadeTooltips = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::ComplexAnimationEffects);
-  bool animateCombobox = (KGlobalSettings::graphicEffectsLevel() >= KGlobalSettings::SimpleAnimationEffects);
+  bool effectsEnabled = (KGlobalSettings::graphicEffectsLevel() != KGlobalSettings::NoEffects);
+  bool fadeMenus = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::ComplexAnimationEffects);
+  bool fadeTooltips = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::ComplexAnimationEffects);
+  bool animateCombobox = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects);
 
   QStringList guieffects;
   if (effectsEnabled) {
@@ -145,9 +145,9 @@ static void applyQtSettings( QSettings& settings )
       guieffects << QString("animatecombo");
     if (fadeTooltips)
       guieffects << QString("fadetooltip");
-  }
-  else
+  } else {
     guieffects << QString("none");
+  }
 
   settings.setValue("Qt/GUIEffects", guieffects);
 }
