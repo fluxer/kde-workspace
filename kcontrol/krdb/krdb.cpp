@@ -125,16 +125,21 @@ static void applyQtColors( QSettings& settings, QPalette& newPal )
 
 // -----------------------------------------------------------------------------
 
-static void applyQtSettings( QSettings& settings )
+static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
 {
+#warning FIXME: KGlobalSettings race, settings may not be reloaded yet
   /* export font settings */
   settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
 
   /* export effects settings */
-  bool effectsEnabled = (KGlobalSettings::graphicEffectsLevel() != KGlobalSettings::NoEffects);
-  bool fadeMenus = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::ComplexAnimationEffects);
-  bool fadeTooltips = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::ComplexAnimationEffects);
-  bool animateCombobox = (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects);
+  KConfigGroup kglobalgrp( kglobalcfg, "KDE-Global GUI Settings" );
+  int graphicEffects = kglobalgrp.readEntry("GraphicEffectsLevel", int(KGlobalSettings::graphicEffectsLevelDefault()));
+  KGlobalSettings::GraphicEffects graphicEffectsFlags = KGlobalSettings::GraphicEffects(graphicEffects);
+  bool effectsEnabled = (graphicEffectsFlags != KGlobalSettings::NoEffects);
+  bool fadeMenus = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
+  bool fadeTooltips = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
+  bool animateCombobox = (graphicEffectsFlags & KGlobalSettings::SimpleAnimationEffects);
+  // qDebug() << Q_FUNC_INFO << effectsEnabled << fadeMenus << fadeTooltips << animateCombobox;
 
   QStringList guieffects;
   if (effectsEnabled) {
@@ -449,7 +454,7 @@ void runRdb( uint flags )
         applyQtColors( settings, newPal );    // For kcmcolors
 
       if ( exportQtSettings )
-        applyQtSettings( settings );          // For kcmstyle
+        applyQtSettings( kglobalcfg, settings );          // For kcmstyle
     }
 
     QApplication::flush();
