@@ -103,7 +103,7 @@ static void applyGtkStyles(bool active, int version)
 
 // -----------------------------------------------------------------------------
 
-static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPalette& newPal )
+static void applyQtColors( QSettings& settings, QPalette& newPal )
 {
   QStringList actcg, inactcg, discg;
   /* export kde color settings */
@@ -125,7 +125,7 @@ static void applyQtColors( KSharedConfigPtr kglobalcfg, QSettings& settings, QPa
 
 // -----------------------------------------------------------------------------
 
-static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
+static void applyQtSettings( QSettings& settings )
 {
   /* export font settings */
   settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
@@ -446,10 +446,10 @@ void runRdb( uint flags )
       QSettings settings(QLatin1String("Katie"), QSettings::NativeFormat);
 
       if ( exportQtColors )
-        applyQtColors( kglobalcfg, settings, newPal );    // For kcmcolors
+        applyQtColors( settings, newPal );    // For kcmcolors
 
       if ( exportQtSettings )
-        applyQtSettings( kglobalcfg, settings );          // For kcmstyle
+        applyQtSettings( settings );          // For kcmstyle
     }
 
     QApplication::flush();
