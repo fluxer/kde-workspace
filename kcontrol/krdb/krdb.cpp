@@ -127,13 +127,14 @@ static void applyQtColors( QSettings& settings, QPalette& newPal )
 
 static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
 {
-#warning FIXME: KGlobalSettings race, settings may not be reloaded yet
   /* export font settings */
-  settings.setValue("Qt/font", KGlobalSettings::generalFont().toString());
+  KConfigGroup fontgrp( kglobalcfg, "General" );
+  QString font = fontgrp.readEntry("font", QString());
+  settings.setValue("Qt/font", font);
 
   /* export effects settings */
-  KConfigGroup kglobalgrp( kglobalcfg, "KDE-Global GUI Settings" );
-  int graphicEffects = kglobalgrp.readEntry("GraphicEffectsLevel", int(KGlobalSettings::graphicEffectsLevelDefault()));
+  KConfigGroup guigrp( kglobalcfg, "KDE-Global GUI Settings" );
+  int graphicEffects = guigrp.readEntry("GraphicEffectsLevel", int(KGlobalSettings::graphicEffectsLevelDefault()));
   KGlobalSettings::GraphicEffects graphicEffectsFlags = KGlobalSettings::GraphicEffects(graphicEffects);
   bool effectsEnabled = (graphicEffectsFlags != KGlobalSettings::NoEffects);
   bool complexEffects = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
@@ -314,6 +315,7 @@ void runRdb( uint flags )
     KGlobal::dirs()->addResourceType("appdefaults", "data", "kdisplay/app-defaults/");
     KGlobal::locale()->insertCatalog("krdb");
 
+#warning FIXME: KGlobalSettings race, palette settings may not be reloaded yet
     QString preproc;
     QColor backCol = newPal.color( QPalette::Active, QPalette::Background );
     addColorDef(preproc, "FOREGROUND"         , newPal.color( QPalette::Active, QPalette::Foreground ) );
