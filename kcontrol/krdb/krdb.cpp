@@ -442,13 +442,15 @@ void runRdb( uint flags )
   /* Katie exports */
   if ( exportQtColors || exportQtSettings )
   {
-    QSettings settings(QLatin1String("Katie"), QSettings::NativeFormat);
+    {
+      QSettings settings(QLatin1String("Katie"), QSettings::NativeFormat);
 
-    if ( exportQtColors )
-      applyQtColors( kglobalcfg, settings, newPal );    // For kcmcolors
+      if ( exportQtColors )
+        applyQtColors( kglobalcfg, settings, newPal );    // For kcmcolors
 
-    if ( exportQtSettings )
-      applyQtSettings( kglobalcfg, settings );          // For kcmstyle
+      if ( exportQtSettings )
+        applyQtSettings( kglobalcfg, settings );          // For kcmstyle
+    }
 
     QApplication::flush();
 #ifdef Q_WS_X11
