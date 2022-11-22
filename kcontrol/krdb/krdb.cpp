@@ -137,22 +137,14 @@ static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
   KGlobalSettings::GraphicEffects graphicEffectsFlags = KGlobalSettings::GraphicEffects(graphicEffects);
   bool effectsEnabled = (graphicEffectsFlags != KGlobalSettings::NoEffects);
   bool complexEffects = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
-  bool simpleEffects = (graphicEffectsFlags & KGlobalSettings::SimpleAnimationEffects);
-  // qDebug() << Q_FUNC_INFO << effectsEnabled << complexEffects << simpleEffects;
 
   QStringList guieffects;
   if (effectsEnabled) {
     guieffects << QString("general");
+    // the fade effect requires compositor and as such is enabled only when complex animation is on
     if (complexEffects) {
       guieffects << QString("fademenu");
-      guieffects << QString("animatecombo");
       guieffects << QString("fadetooltip");
-      guieffects << QString("animatetoolbox");
-    } else if (simpleEffects) {
-      guieffects << QString("animatemenu");
-      guieffects << QString("animatecombo");
-      guieffects << QString("animatetooltip");
-      guieffects << QString("animatetoolbox");
     }
   } else {
     guieffects << QString("none");
