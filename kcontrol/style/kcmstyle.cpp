@@ -409,20 +409,6 @@ void KCMStyle::save()
 
     _config.sync();
 
-    // Export the changes we made to qtrc, and update all qt-only
-    // applications on the fly, ensuring that we still follow the user's
-    // export fonts/colors settings.
-    if (m_bStyleDirty | m_bEffectsDirty)    // Export only if necessary
-    {
-        uint flags = KRdbExportQtSettings;
-        KConfig _kconfig( "kcmdisplayrc", KConfig::NoGlobals  );
-        KConfigGroup kconfig(&_kconfig, "X11");
-        bool exportKDEColors = kconfig.readEntry("exportKDEColors", true);
-        if (exportKDEColors)
-            flags |= KRdbExportColors;
-        runRdb( flags );
-    }
-
     // Now allow KDE apps to reconfigure themselves.
     if ( m_bStyleDirty )
         KGlobalSettings::self()->emitChange(KGlobalSettings::StyleChanged);
@@ -439,6 +425,20 @@ void KCMStyle::save()
         QDBusMessage::createSignal("/KWin", "org.kde.KWin", "reloadConfig");
         QDBusConnection::sessionBus().send(message);
 #endif
+    }
+
+    // Export the changes we made to qtrc, and update all qt-only
+    // applications on the fly, ensuring that we still follow the user's
+    // export fonts/colors settings.
+    if (m_bStyleDirty | m_bEffectsDirty)    // Export only if necessary
+    {
+        uint flags = KRdbExportQtSettings;
+        KConfig _kconfig( "kcmdisplayrc", KConfig::NoGlobals  );
+        KConfigGroup kconfig(&_kconfig, "X11");
+        bool exportKDEColors = kconfig.readEntry("exportKDEColors", true);
+        if (exportKDEColors)
+            flags |= KRdbExportColors;
+        runRdb( flags );
     }
 
     // Clean up
