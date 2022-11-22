@@ -842,6 +842,7 @@
     <item> QGridLayout </item>
     <item> QGroupBox </item>
     <item> QGtkStyle </item>
+    <item> QGuiPlatformPlugin </item>
     <item> QHBoxLayout </item>
     <item> QHash </item>
     <item> QHashIterator </item>
