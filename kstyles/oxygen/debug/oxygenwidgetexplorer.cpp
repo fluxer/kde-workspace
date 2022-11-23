@@ -35,6 +35,11 @@
 namespace Oxygen
 {
 
+    static inline QString ptrString(const void *ptr)
+    {
+        return (QString::fromLatin1("0x") + QString::number(quintptr(ptr), 16));
+    }
+
     //________________________________________________
     WidgetExplorer::WidgetExplorer( QObject* parent ):
         QObject( parent ),
@@ -79,7 +84,7 @@ namespace Oxygen
             QString type( _eventTypes[event->type()] );
             if( !type.isEmpty() )
             {
-                QTextStream( stdout ) << "Oxygen::WidgetExplorer::eventFilter - widget: " << object << " (" << object->metaObject()->className() << ")";
+                QTextStream( stdout ) << "Oxygen::WidgetExplorer::eventFilter - widget: " << ptrString(object) << " (" << object->metaObject()->className() << ")";
                 QTextStream( stdout ) << " type: " << type  << endl;
             }
         }
@@ -114,7 +119,7 @@ namespace Oxygen
 
                 QTextStream( stdout )
                     << "Oxygen::WidgetExplorer::eventFilter -"
-                    << " event: " << event << " type: " << eventType( event->type() )
+                    << " event: " << ptrString(event) << " type: " << eventType( event->type() )
                     << " widget: " << widgetInformation( widget )
                     << endl;
 
@@ -158,7 +163,7 @@ namespace Oxygen
         QRect r( widget->geometry() );
         QString className( widget->metaObject()->className() );
         QString out;
-        QTextStream( &out ) << widget << " (" << className << ")"
+        QTextStream( &out ) << ptrString(widget) << " (" << className << ")"
             << " position: " << r.x() << "," << r.y()
             << " size: " << r.width() << "," << r.height()
             << " hover: " << widget->testAttribute( Qt::WA_Hover );
