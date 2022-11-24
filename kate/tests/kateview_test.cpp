@@ -98,7 +98,7 @@ void KateViewTest::testReloadMultipleViews()
     for ( int i = 0; i < 200; ++i ) {
         stream << line;
     }
-    stream << flush;
+    stream.flush();
     file.close();
 
     KateDocument doc(false, false, false);
@@ -152,7 +152,7 @@ void KateViewTest::testFolding()
     stream << "int main() {\n"
            << "  asdf;\n"
            << "}\n";
-    stream << flush;
+    stream.flush();
     file.close();
 
     KateDocument doc(false, false, false);
@@ -197,7 +197,7 @@ void KateViewTest::testBug287291()
     stream << "int main() {\n"
            << "  asdf;\n"
            << "}\n";
-    stream << flush;
+    stream.flush();
     file.close();
 
     KateDocument doc(false, false, false);
@@ -266,7 +266,7 @@ void KateViewTest::testSelection()
     stream << "A\n"
            << "B\n"
            << "C";
-    stream << flush;
+    stream.flush();
     file.close();
 
     KateDocument doc(false, false, false);
