@@ -28,7 +28,6 @@
 #include "processcore/processes.h"
 #include "processcore/process.h"
 
-#include <kapplication.h>
 #include <kcolorscheme.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -57,8 +56,6 @@
 #ifdef HAVE_XRES
 #include <X11/extensions/XRes.h>
 #endif
-
-extern KApplication* Kapp;
 
 static QString formatByteSize(qlonglong amountInKB, int units) {
     enum { UnitsAuto, UnitsKB, UnitsMB, UnitsGB, UnitsTB, UnitsPB };
