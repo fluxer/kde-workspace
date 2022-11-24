@@ -667,7 +667,7 @@ bool TextBuffer::load (const QString &filename, bool &encodingErrors, bool &tooL
   Q_ASSERT (m_lines > 0);
 
   // report CODEC + ERRORS
-  kDebug (13020) << "Loaded file " << filename << "with codec" << m_textCodec->name()
+  kDebug (13020) << "Loaded file " << filename << "with codec" << file.textCodec()->name()
     << (encodingErrors ? "with" : "without") << "encoding errors";
 
   // report BOM
