@@ -35,14 +35,20 @@ qt4_add_dbus_interface(plasma_SRCS ${ksmserver_xml} ksmserver_interface)
 
 add_executable(plasma-desktop ${plasma_SRCS})
 
-target_link_libraries(plasma-desktop ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KTEXTEDITOR_LIBS} ${KDE4_KIDLETIME_LIBS} ${QT_QTSCRIPT_LIBRARY} kworkspace plasmagenericshell ${QT_QTDECLARATIVE_LIBRARY})
+target_link_libraries(plasma-desktop
+    ${KDE4_PLASMA_LIBS}
+    ${KDE4_KIO_LIBS}
+    ${KDE4_KFILE_LIBS}
+    ${KDE4_KTEXTEDITOR_LIBS}
+    ${KDE4_KIDLETIME_LIBS}
+    ${QT_QTSCRIPT_LIBRARY}
+    ${QT_QTDECLARATIVE_LIBRARY}
+    kworkspace
+    plasmagenericshell
+)
 
 if(UNIX AND Q_WS_X11)
     target_link_libraries(plasma-desktop ${X11_LIBRARIES})
-
-    if(X11_Xrender_FOUND)
-       target_link_libraries(plasma-desktop ${X11_Xrender_LIB})
-    endif(X11_Xrender_FOUND)
 endif(UNIX AND Q_WS_X11)
 
 install(TARGETS plasma-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})

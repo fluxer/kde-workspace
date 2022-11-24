@@ -48,7 +48,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QtGui/qx11info_x11.h>
 #include <QtCore/qfile.h>
 
-#include <X11/extensions/Xrender.h>
+#include <X11/Xlib.h>
 
 static const char version[] = "0.4";
 static const char description[] = I18N_NOOP( "The reliable KDE session manager that talks the standard X11R6 \nsession management protocol (XSMP)." );

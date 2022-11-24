@@ -22,9 +22,6 @@
 /* Define if you have the XTest extension */
 #cmakedefine HAVE_XTEST 1
 
-/* Define if your system has XRender support */
-#cmakedefine HAVE_XRENDER 1
-
 /* Define if you have the XSync extension */
 #cmakedefine HAVE_XSYNC 1
 

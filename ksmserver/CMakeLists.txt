@@ -53,7 +53,6 @@ target_link_libraries(ksmserver
     ${KDE4_KDECLARATIVE_LIBS}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${X11_LIBRARIES}
-    ${X11_Xrender_LIB}
     kworkspace
 )
 

@@ -45,7 +45,6 @@ add_executable(kapplymousetheme ${kapplymousetheme_SRCS})
 
 target_link_libraries(kapplymousetheme
     ${KDE4_KDEUI_LIBS}
-    ${X11_Xrender_LIB}
     ${X11_X11_LIB}
 )
 if (X11_Xcursor_FOUND)

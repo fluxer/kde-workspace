@@ -62,8 +62,7 @@ target_link_libraries(krunner
     ${KDE4_SOLID_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KCMUTILS_LIBS}
-    ${X11_Xrender_LIB}
-    ${X11_LIBRARIES}
+    ${X11_X11_LIB}
 )
 
 if(X11_Xcursor_FOUND)

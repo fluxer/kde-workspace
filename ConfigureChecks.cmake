@@ -25,7 +25,6 @@ kde4_bool_to_01(X11_Xdamage_FOUND HAVE_XDAMAGE) # kwin
 kde4_bool_to_01(X11_Xfixes_FOUND HAVE_XFIXES) # klipper, kicker, kwin
 kde4_bool_to_01(X11_Xkb_FOUND HAVE_XKB) # kglobalaccel, kcontrol/keyboard
 kde4_bool_to_01(X11_Xrandr_FOUND HAVE_XRANDR) # kwin
-kde4_bool_to_01(X11_Xrender_FOUND HAVE_XRENDER) # kcontrol/style, kicker
 kde4_bool_to_01(X11_xf86misc_FOUND HAVE_XF86MISC) # kcontrol/keyboard
 kde4_bool_to_01(X11_XSync_FOUND HAVE_XSYNC) # kwin
 kde4_bool_to_01(X11_XRes_FOUND HAVE_XRES) # ksysguard

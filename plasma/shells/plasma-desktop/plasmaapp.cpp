@@ -83,7 +83,7 @@
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
-#include <X11/extensions/Xrender.h>
+#include <X11/Xutil.h>
 #endif
 
 extern QString plasmaLocale;
@@ -755,9 +755,6 @@ void PlasmaApp::createView(Plasma::Containment *containment)
 void PlasmaApp::setWmClass(WId id)
 {
 #ifdef Q_WS_X11
-    //FIXME: if argb visuals enabled Qt will always set WM_CLASS as "qt-subapplication" no matter what
-    //the application name is we set the proper XClassHint here, hopefully won't be necessary anymore when
-    //qapplication will manage apps with argvisuals in a better way
     XClassHint classHint;
     classHint.res_name = const_cast<char*>("Plasma");
     classHint.res_class = const_cast<char*>("Plasma");

@@ -56,16 +56,16 @@ namespace Oxygen
         _helper( helper ),
         _shadowCache( new ShadowCache( helper ) ),
         _size( 0 )
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         ,_atom( None )
-        #endif
+#endif
     {}
 
     //_______________________________________________________
     ShadowHelper::~ShadowHelper( void )
     {
 
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         foreach( const Qt::HANDLE& value, _pixmaps ) {
             if (value != 0) {
                 XFreePixmap( QX11Info::display(), value );
@@ -76,7 +76,7 @@ namespace Oxygen
                 XFreePixmap( QX11Info::display(), value );
             }
         }
-        #endif
+#endif // Q_WS_X11
 
         delete _shadowCache;
 
@@ -85,7 +85,7 @@ namespace Oxygen
     //______________________________________________
     void ShadowHelper::reset( void )
     {
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         // round pixmaps
         foreach( const Qt::HANDLE& value, _pixmaps ) {
             if (value != 0) {
@@ -97,7 +97,7 @@ namespace Oxygen
                 XFreePixmap( QX11Info::display(), value );
             }
         }
-        #endif
+#endif // Q_WS_X11
 
         _pixmaps.clear();
         _dockPixmaps.clear();
@@ -264,9 +264,9 @@ namespace Oxygen
         */
 
         // create atom
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         if( !_atom ) _atom = XInternAtom( QX11Info::display(), netWMShadowAtomName, False);
-        #endif
+#endif
 
         // make sure size is valid
         if( _size <= 0 ) return _pixmaps;
@@ -320,7 +320,7 @@ namespace Oxygen
         explicitly and draw the source pixmap on it.
         */
 
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         const int width( source.width() );
         const int height( source.height() );
 
@@ -328,9 +328,9 @@ namespace Oxygen
         KPixmap pixmap(source);
         // handle not released, safe to return
         return pixmap.handle();
-        #else
+#else
         return 0;
-        #endif
+#endif // Q_WS_X11
 
     }
 
@@ -341,9 +341,7 @@ namespace Oxygen
         // check widget and shadow
         if( !widget ) return false;
 
-        #ifdef Q_WS_X11
-        #ifndef QT_NO_XRENDER
-
+#ifdef Q_WS_X11
         // TODO: also check for NET_WM_SUPPORTED atom, before installing shadow
 
         /*
@@ -408,9 +406,7 @@ namespace Oxygen
             reinterpret_cast<const unsigned char *>(data.constData()), data.size() );
 
         return true;
-
-        #endif
-        #endif
+#endif // Q_WS_X11
 
         return false;
 
@@ -420,10 +416,10 @@ namespace Oxygen
     void ShadowHelper::uninstallX11Shadows( QWidget* widget ) const
     {
 
-        #ifdef Q_WS_X11
+#ifdef Q_WS_X11
         if( !( widget && widget->testAttribute(Qt::WA_WState_Created) ) ) return;
         XDeleteProperty(QX11Info::display(), widget->winId(), _atom);
-        #endif
+#endif
 
     }
 
