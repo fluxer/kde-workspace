@@ -244,8 +244,7 @@ void ThumbnailProtocol::get(const KUrl &url)
 QString ThumbnailProtocol::pluginForMimeType(const QString& mimeType) {
     KService::List offers = KMimeTypeTrader::self()->query( mimeType, QLatin1String("ThumbCreator"));
     if (!offers.isEmpty()) {
-        KService::Ptr serv;
-        serv = offers.first();
+        const KService::Ptr serv = offers.first();
         return serv->library();
     }
 
