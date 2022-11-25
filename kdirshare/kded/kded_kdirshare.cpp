@@ -26,6 +26,7 @@
 #include <kconfiggroup.h>
 #include <knotification.h>
 #include <kdirnotify.h>
+#include <krandom.h>
 #include <kpluginfactory.h>
 #include <kdebug.h>
 
@@ -35,8 +36,9 @@ static quint16 getPort(const quint16 portmin, const quint16 portmax)
         return portmax;
     }
     quint16 portnumber = 0;
-    while (portnumber < portmin || portnumber > portmax) {
-        portnumber = quint16(qrand());
+    while (portnumber < portmin) {
+        portnumber = quint16(KRandom::randomMax(portmax));
+        Q_ASSERT(portnumber <= portmax);
     }
     return portnumber;
 }
