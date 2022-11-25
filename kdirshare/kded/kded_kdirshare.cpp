@@ -204,7 +204,7 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
     m_passwdstore.setStoreID("KDirShare");
-    // HACK: kpasswdstore uses on-demand service so doing delayed restore
+    // delayed restore without blocking
     QTimer::singleShot(2000, this, SLOT(slotDelayedRestore()));
 }
 
