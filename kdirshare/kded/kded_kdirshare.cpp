@@ -212,16 +212,6 @@ KDirShareModule::KDirShareModule(QObject *parent, const QList<QVariant>&)
 
 KDirShareModule::~KDirShareModule()
 {
-    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-    foreach (const KDirShareThread *kdirsharethread, m_dirshares) {
-        const QByteArray kdirsharekey = getDirShareKey(kdirsharethread->directory());
-        KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
-        // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharethread->directory() << kdirsharethread->portMin() << kdirsharethread->portMax();
-        kdirsharegroup.writeEntry("dirpath", kdirsharethread->directory());
-        kdirsharegroup.writeEntry("portmin", uint(kdirsharethread->portMin()));
-        kdirsharegroup.writeEntry("portmax", uint(kdirsharethread->portMax()));
-        kdirsharegroup.writeEntry("user", kdirsharethread->user());
-    }
     qDeleteAll(m_dirshares);
     m_dirshares.clear();
 }
@@ -253,6 +243,14 @@ QString KDirShareModule::share(const QString &dirpath,
     }
     m_dirshares.append(kdirsharethread);
     org::kde::KDirNotify::emitFilesAdded(QString::fromLatin1("network:/"));
+    KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
+    const QByteArray kdirsharekey = getDirShareKey(kdirsharethread->directory());
+    KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
+    // qDebug() << Q_FUNC_INFO << kdirsharekey << kdirsharethread->directory() << kdirsharethread->portMin() << kdirsharethread->portMax();
+    kdirsharegroup.writeEntry("dirpath", kdirsharethread->directory());
+    kdirsharegroup.writeEntry("portmin", uint(kdirsharethread->portMin()));
+    kdirsharegroup.writeEntry("portmax", uint(kdirsharethread->portMax()));
+    kdirsharegroup.writeEntry("user", kdirsharethread->user());
     return QString();
 }
 
@@ -328,7 +326,8 @@ void KDirShareModule::slotDelayedRestore()
 {
     bool requiresauth = false;
     KConfig kdirshareconfig("kdirsharerc", KConfig::SimpleConfig);
-    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
+    const QStringList kdirshareconfiggroups = kdirshareconfig.groupList();
+    foreach (const QString &kdirsharekey, kdirshareconfiggroups) {
         // qDebug() << Q_FUNC_INFO << kdirsharekey;
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
         const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
@@ -353,7 +352,7 @@ void KDirShareModule::slotDelayedRestore()
     }
 
     bool shareerror = false;
-    foreach (const QString &kdirsharekey, kdirshareconfig.groupList()) {
+    foreach (const QString &kdirsharekey, kdirshareconfiggroups) {
         // qDebug() << Q_FUNC_INFO << kdirsharekey;
         KConfigGroup kdirsharegroup = kdirshareconfig.group(kdirsharekey);
         const QString kdirsharedirpath = kdirsharegroup.readEntry("dirpath", QString());
