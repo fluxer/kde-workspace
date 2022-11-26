@@ -352,7 +352,6 @@ void KRunnerDialog::updateMask()
 
     if (KWindowSystem::compositingActive()) {
         clearMask();
-        const QRegion mask = m_background->mask();
     } else {
         setMask(m_background->mask());
     }
