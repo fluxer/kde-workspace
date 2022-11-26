@@ -40,10 +40,11 @@ K_EXPORT_PLUGIN(KMediaPlayerPartFactory(KAboutData(
                setCatalogName("kmediaplayer")))
 
 KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const QList<QVariant> &arguments)
-    : ReadOnlyPart(parent)
+    : KParts::ReadOnlyPart(parent)
     , m_player(new KMediaWidget(parentWidget, KMediaWidget::HiddenControls))
 {
     Q_UNUSED(arguments);
+    setObjectName(QString::fromLatin1("KMediaPlayerPart"));
     setComponentData(KMediaPlayerPartFactory::componentData());
     setWidget(m_player);
     setAutoDeleteWidget(false); // will be deleted in destructor, if still valid
