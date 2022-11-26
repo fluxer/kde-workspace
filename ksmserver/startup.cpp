@@ -378,7 +378,10 @@ void KSMServer::autoStart2()
 #endif
 
     QDBusInterface kded( "org.kde.kded", "/kded", "org.kde.kded" );
-    kded.call( "loadSecondPhase" );
+    QDBusPendingCall pendingcall = kded.asyncCall( "loadSecondPhase" );
+    while (!pendingcall.isFinished()) {
+        QApplication::processEvents();
+    }
 
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << "kded" << t.elapsed();
