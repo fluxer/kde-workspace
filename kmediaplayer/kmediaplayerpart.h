@@ -19,6 +19,7 @@
 #ifndef KMEDIAPART_H
 #define KMEDIAPART_H
 
+#include <QPointer>
 #include <KParts/Part>
 #include <KMediaWidget>
 #include <KUrl>
@@ -37,7 +38,7 @@ public Q_SLOTS:
     bool openUrl(const KUrl &url) final;
 
 private:
-    KMediaWidget *m_player;
+    QPointer<KMediaWidget> m_player;
 };
 
 #endif // KMEDIAPART_H

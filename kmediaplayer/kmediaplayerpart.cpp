@@ -22,6 +22,7 @@
 #include <KLocale>
 #include <KMessageBox>
 #include <KPluginFactory>
+#include <KDebug>
 
 K_PLUGIN_FACTORY(KMediaPlayerPartFactory, registerPlugin<KMediaPlayerPart>();)  // produce a factory
 K_EXPORT_PLUGIN(KMediaPlayerPartFactory(KAboutData(
@@ -45,12 +46,15 @@ KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const
     Q_UNUSED(arguments);
     setComponentData(KMediaPlayerPartFactory::componentData());
     setWidget(m_player);
+    setAutoDeleteWidget(false); // will be deleted in destructor, if still valid
     m_player->player()->setPlayerID("kmediaplayerpart");
 }
 
 KMediaPlayerPart::~KMediaPlayerPart()
 {
-    delete m_player;
+    if (m_player) {
+        delete m_player.data();
+    }
 }
 
 bool KMediaPlayerPart::openUrl(const KUrl &url)
