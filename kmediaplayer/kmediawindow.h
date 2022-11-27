@@ -47,8 +47,8 @@ private slots:
     void slotHideMenuBar(bool hidden);
 
 protected:
-    virtual void showEvent(QShowEvent *event);
-    virtual bool eventFilter(QObject *object, QEvent *event);
+    void showEvent(QShowEvent *event) final;
+    bool eventFilter(QObject *object, QEvent *event) final;
 
 private:
     KConfig *m_config;
