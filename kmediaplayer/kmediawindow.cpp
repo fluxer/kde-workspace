@@ -45,39 +45,39 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
 
     setCentralWidget(m_player);
 
-    KAction *a = actionCollection()->addAction("file_open_path", this, SLOT(slotOpenPath()));
-    a->setText(i18n("Open"));
-    a->setIcon(KIcon("document-open"));
-    a->setShortcut(KStandardShortcut::open());
-    a->setWhatsThis(i18n("Open a path."));
+    KAction *action = actionCollection()->addAction("file_open_path", this, SLOT(slotOpenPath()));
+    action->setText(i18n("Open"));
+    action->setIcon(KIcon("document-open"));
+    action->setShortcut(KStandardShortcut::open());
+    action->setWhatsThis(i18n("Open a path."));
 
-    KAction *b = actionCollection()->addAction("file_open_url", this, SLOT(slotOpenURL()));
-    b->setText(i18n("Open URL"));
-    b->setIcon(KIcon("document-open-remote"));
-    b->setWhatsThis(i18n("Open a URL."));
+    action = actionCollection()->addAction("file_open_url", this, SLOT(slotOpenURL()));
+    action->setText(i18n("Open URL"));
+    action->setIcon(KIcon("document-open-remote"));
+    action->setWhatsThis(i18n("Open a URL."));
 
-    KAction *c = actionCollection()->addAction("file_close", this, SLOT(slotClosePath()));
-    c->setText(i18n("Close"));
-    c->setIcon(KIcon("document-close"));
-    c->setShortcut(KStandardShortcut::close());
-    c->setWhatsThis(i18n("Close the current path/URL."));
+    action = actionCollection()->addAction("file_close", this, SLOT(slotClosePath()));
+    action->setText(i18n("Close"));
+    action->setIcon(KIcon("document-close"));
+    action->setShortcut(KStandardShortcut::close());
+    action->setWhatsThis(i18n("Close the current path/URL."));
 
-    KAction *d = actionCollection()->addAction("file_quit", this, SLOT(slotQuit()));
-    d->setText(i18n("Quit"));
-    d->setIcon(KIcon("application-exit"));
-    d->setShortcut(KStandardShortcut::quit());
-    d->setWhatsThis(i18n("Close the application."));
+    action = actionCollection()->addAction("file_quit", this, SLOT(slotQuit()));
+    action->setText(i18n("Quit"));
+    action->setIcon(KIcon("application-exit"));
+    action->setShortcut(KStandardShortcut::quit());
+    action->setWhatsThis(i18n("Close the application."));
 
-    KAction *e = actionCollection()->addAction("player_fullscreen", this, SLOT(slotFullscreen()));
-    e->setText(i18n("Fullscreen"));
-    e->setIcon(KIcon("view-fullscreen"));
-    e->setShortcut(KStandardShortcut::fullScreen());
-    e->setWhatsThis(i18n("Set the player view to fullscreen/non-fullscreen"));
+    action = actionCollection()->addAction("player_fullscreen", this, SLOT(slotFullscreen()));
+    action->setText(i18n("Fullscreen"));
+    action->setIcon(KIcon("view-fullscreen"));
+    action->setShortcut(KStandardShortcut::fullScreen());
+    action->setWhatsThis(i18n("Set the player view to fullscreen/non-fullscreen"));
 
-    KAction *g = actionCollection()->addAction("settings_player", this, SLOT(slotConfigure()));
-    g->setText(i18n("Configure KMediaPlayer"));
-    g->setIcon(KIcon("preferences-desktop-sound"));
-    g->setWhatsThis(i18n("Configure KMediaPlayer and applications that use it."));
+    action = actionCollection()->addAction("settings_player", this, SLOT(slotConfigure()));
+    action->setText(i18n("Configure KMediaPlayer"));
+    action->setIcon(KIcon("preferences-desktop-sound"));
+    action->setWhatsThis(i18n("Configure KMediaPlayer and applications that use it."));
 
     m_recentfiles = new KRecentFilesAction(KIcon("document-open-recent"), "Open recent", this);
     m_recentfiles->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::OpenRecent));
@@ -212,7 +212,8 @@ void KMediaWindow::slotConfigure()
     kcmdialg.exec();
 }
 
-void KMediaWindow::slotMenubar() {
+void KMediaWindow::slotMenubar()
+{
     menuBar()->setVisible(!menuBar()->isVisible());
     m_menuvisible = menuBar()->isVisible();
 }
