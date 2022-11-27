@@ -159,9 +159,6 @@ void InformationPanelContent::showItem(const KFileItem& item)
         if (m_playerWidget->player()->isMimeSupported(mimeType)) {
             m_playerWidget->show();
             m_playerWidget->open(item.targetUrl().url());
-            if (m_preview->isVisible()) {
-                m_playerWidget->setMaximumSize(m_preview->size());
-            }
             m_preview->setVisible(false);
         } else {
             m_playerWidget->player()->stop();
