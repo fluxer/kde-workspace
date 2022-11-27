@@ -75,6 +75,7 @@ InformationPanelContent::InformationPanelContent(QWidget* parent) :
     m_playerWidget->player()->setPlayerID("informationpanel");
     m_playerWidget->hide();
     m_playerWidget->setMinimumWidth(minPreviewWidth);
+    m_playerWidget->setMinimumHeight(KIconLoader::SizeEnormous);
 
     // name
     m_nameLabel = new QLabel(parent);
@@ -351,7 +352,7 @@ void InformationPanelContent::adjustWidgetSizes(int width)
     m_preview->setMaximumSize(QSize(maxWidth, maxWidth));
 
     if (m_playerWidget->isVisible()) {
-        // assure that the size of the video player is the same as the preview size
+        // the size of the video player should match that of the preview size
         m_playerWidget->setMaximumSize(maxWidth, maxWidth);
     }
 }
