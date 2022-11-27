@@ -60,7 +60,7 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     c->setText(i18n("Close"));
     c->setIcon(KIcon("document-close"));
     c->setShortcut(KStandardShortcut::close());
-    c->setWhatsThis(i18n("Close the the current path/URL."));
+    c->setWhatsThis(i18n("Close the current path/URL."));
 
     KAction *d = actionCollection()->addAction("file_quit", this, SLOT(slotQuit()));
     d->setText(i18n("Quit"));
