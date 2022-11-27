@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     for (int pos = 0; pos < args->count(); ++pos) {
-        window->openURL(args->url(pos));
+        window->slotOpenURL(args->url(pos));
     }
 
     return app->exec();

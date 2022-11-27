@@ -45,36 +45,36 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
 
     setCentralWidget(m_player);
 
-    KAction *a = actionCollection()->addAction("file_open_path", this, SLOT(openPath()));
+    KAction *a = actionCollection()->addAction("file_open_path", this, SLOT(slotOpenPath()));
     a->setText(i18n("Open"));
     a->setIcon(KIcon("document-open"));
     a->setShortcut(KStandardShortcut::open());
     a->setWhatsThis(i18n("Open a path."));
 
-    KAction *b = actionCollection()->addAction("file_open_url", this, SLOT(openURL()));
+    KAction *b = actionCollection()->addAction("file_open_url", this, SLOT(slotOpenURL()));
     b->setText(i18n("Open URL"));
     b->setIcon(KIcon("document-open-remote"));
     b->setWhatsThis(i18n("Open a URL."));
 
-    KAction *c = actionCollection()->addAction("file_close", this, SLOT(closePath()));
+    KAction *c = actionCollection()->addAction("file_close", this, SLOT(slotClosePath()));
     c->setText(i18n("Close"));
     c->setIcon(KIcon("document-close"));
     c->setShortcut(KStandardShortcut::close());
     c->setWhatsThis(i18n("Close the the current path/URL."));
 
-    KAction *d = actionCollection()->addAction("file_quit", this, SLOT(quit()));
+    KAction *d = actionCollection()->addAction("file_quit", this, SLOT(slotQuit()));
     d->setText(i18n("Quit"));
     d->setIcon(KIcon("application-exit"));
     d->setShortcut(KStandardShortcut::quit());
     d->setWhatsThis(i18n("Close the application."));
 
-    KAction *e = actionCollection()->addAction("player_fullscreen", this, SLOT(fullscreen()));
+    KAction *e = actionCollection()->addAction("player_fullscreen", this, SLOT(slotFullscreen()));
     e->setText(i18n("Fullscreen"));
     e->setIcon(KIcon("view-fullscreen"));
     e->setShortcut(KStandardShortcut::fullScreen());
     e->setWhatsThis(i18n("Set the player view to fullscreen/non-fullscreen"));
 
-    KAction *g = actionCollection()->addAction("settings_player", this, SLOT(configure()));
+    KAction *g = actionCollection()->addAction("settings_player", this, SLOT(slotConfigure()));
     g->setText(i18n("Configure KMediaPlayer"));
     g->setIcon(KIcon("preferences-desktop-sound"));
     g->setWhatsThis(i18n("Configure KMediaPlayer and applications that use it."));
@@ -82,7 +82,7 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     m_recentfiles = new KRecentFilesAction(KIcon("document-open-recent"), "Open recent", this);
     m_recentfiles->setShortcut(KStandardShortcut::shortcut(KStandardShortcut::OpenRecent));
     m_recentfiles->setWhatsThis(i18n("Open recently opened files."));
-    connect(m_recentfiles, SIGNAL(urlSelected(KUrl)), this, SLOT(openURL(KUrl)));
+    connect(m_recentfiles, SIGNAL(urlSelected(KUrl)), this, SLOT(slotOpenURL(KUrl)));
     actionCollection()->addAction("file_open_recent", m_recentfiles);
 
     KConfigGroup firstrungroup(m_config, "KMediaPlayer");
@@ -94,11 +94,11 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
         resize(640, 480);
     }
 
-    connect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(hideMenuBar(bool)));
+    connect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideMenuBar(bool)));
     m_menu = new QMenu();
-    m_menu->addAction(KIcon("show-menu"), i18n("Show/hide menubar"), this, SLOT(menubar()));
+    m_menu->addAction(KIcon("show-menu"), i18n("Show/hide menubar"), this, SLOT(slotMenubar()));
     setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(menu(QPoint)));
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotMenu(QPoint)));
 
     setupGUI(KXmlGuiWindow::Keys | KXmlGuiWindow::StatusBar | KXmlGuiWindow::Save | KXmlGuiWindow::Create);
     setAutoSaveSettings();
@@ -112,8 +112,8 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
 
 KMediaWindow::~KMediaWindow()
 {
-    hideMenuBar(true);
-    disconnect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(hideMenuBar(bool)));
+    slotHideMenuBar(true);
+    disconnect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideMenuBar(bool)));
     saveAutoSaveSettings();
 
     KConfigGroup recentfilesgroup(m_config, "RecentFiles");
@@ -142,7 +142,7 @@ bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
     return KXmlGuiWindow::eventFilter(object, event);
 }
 
-void KMediaWindow::hideMenuBar(bool visible)
+void KMediaWindow::slotHideMenuBar(bool visible)
 {
     if (!visible) {
         m_menuvisible = menuBar()->isVisible();
@@ -155,7 +155,7 @@ void KMediaWindow::hideMenuBar(bool visible)
     }
 }
 
-void KMediaWindow::openPath()
+void KMediaWindow::slotOpenPath()
 {
     const QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, i18n("Select paths"));
     if (!path.isEmpty()) {
@@ -169,7 +169,7 @@ void KMediaWindow::openPath()
     }
 }
 
-void KMediaWindow::openURL()
+void KMediaWindow::slotOpenURL()
 {
     bool dummy;
     QString protocols = m_player->player()->protocols().join(", ");
@@ -188,43 +188,43 @@ void KMediaWindow::openURL()
     }
 }
 
-void KMediaWindow::openURL(KUrl url)
+void KMediaWindow::slotOpenURL(KUrl url)
 {
     m_player->open(url.prettyUrl());
     m_recentfiles->addUrl(url);
 }
 
-void KMediaWindow::closePath()
+void KMediaWindow::slotClosePath()
 {
     m_player->player()->stop();
     statusBar()->showMessage("");
 }
 
-void KMediaWindow::fullscreen()
+void KMediaWindow::slotFullscreen()
 {
     m_player->setFullscreen();
 }
 
-void KMediaWindow::configure()
+void KMediaWindow::slotConfigure()
 {
     KCMultiDialog kcmdialg(this);
     kcmdialg.addModule("kcmplayer");
     kcmdialg.exec();
 }
 
-void KMediaWindow::menubar() {
+void KMediaWindow::slotMenubar() {
     menuBar()->setVisible(!menuBar()->isVisible());
     m_menuvisible = menuBar()->isVisible();
 }
 
-void KMediaWindow::menu(QPoint position)
+void KMediaWindow::slotMenu(QPoint position)
 {
     // it is bogus, just ignore it
     Q_UNUSED(position);
     m_menu->exec(QCursor::pos());
 }
 
-void KMediaWindow::quit()
+void KMediaWindow::slotQuit()
 {
     KMediaWindow::close();
     qApp->quit();

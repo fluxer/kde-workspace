@@ -33,18 +33,18 @@ public:
     ~KMediaWindow();
 
 public slots:
-    void openPath();
-    void openURL();
-    void openURL(KUrl url);
-    void closePath();
-    void fullscreen();
-    void configure();
-    void menubar();
-    void menu(QPoint position);
-    void quit();
+    void slotOpenPath();
+    void slotOpenURL();
+    void slotOpenURL(KUrl url);
+    void slotClosePath();
+    void slotFullscreen();
+    void slotConfigure();
+    void slotMenubar();
+    void slotMenu(QPoint position);
+    void slotQuit();
 
 private slots:
-    void hideMenuBar(bool hidden);
+    void slotHideMenuBar(bool hidden);
 
 protected:
     virtual void showEvent(QShowEvent *event);
