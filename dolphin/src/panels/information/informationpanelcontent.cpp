@@ -67,18 +67,18 @@ InformationPanelContent::InformationPanelContent(QWidget* parent) :
     // preview
     const int minPreviewWidth = KIconLoader::SizeEnormous + KIconLoader::SizeMedium;
 
-    m_preview = new KImageFilePreview(parent);
+    m_preview = new KImageFilePreview(this);
     m_preview->setMinimumWidth(minPreviewWidth);
     m_preview->setMinimumHeight(KIconLoader::SizeEnormous);
 
-    m_playerWidget = new KMediaWidget(parent);
+    m_playerWidget = new KMediaWidget(this);
     m_playerWidget->player()->setPlayerID("informationpanel");
     m_playerWidget->hide();
     m_playerWidget->setMinimumWidth(minPreviewWidth);
     m_playerWidget->setMinimumHeight(KIconLoader::SizeEnormous);
 
     // name
-    m_nameLabel = new QLabel(parent);
+    m_nameLabel = new QLabel(this);
     QFont font = m_nameLabel->font();
     font.setBold(true);
     m_nameLabel->setFont(font);
@@ -88,7 +88,7 @@ InformationPanelContent::InformationPanelContent(QWidget* parent) :
 
     m_preview->setVisible(InformationPanelSettings::previewsShown());
 
-    m_metaDataWidget = new KFileMetaDataWidget(parent);
+    m_metaDataWidget = new KFileMetaDataWidget(this);
     m_metaDataWidget->setFont(KGlobalSettings::smallestReadableFont());
     m_metaDataWidget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     connect(m_metaDataWidget, SIGNAL(urlActivated(KUrl)), this, SIGNAL(urlActivated(KUrl)));
@@ -96,14 +96,14 @@ InformationPanelContent::InformationPanelContent(QWidget* parent) :
     // Encapsulate the MetaDataWidget inside a container that has a dummy widget
     // at the bottom. This prevents that the meta data widget gets vertically stretched
     // in the case where the height of m_metaDataArea > m_metaDataWidget.
-    QWidget* metaDataWidgetContainer = new QWidget(parent);
+    QWidget* metaDataWidgetContainer = new QWidget(this);
     QVBoxLayout* containerLayout = new QVBoxLayout(metaDataWidgetContainer);
     containerLayout->setContentsMargins(0, 0, 0, 0);
     containerLayout->setSpacing(0);
     containerLayout->addWidget(m_metaDataWidget);
     containerLayout->addStretch();
 
-    m_metaDataArea = new QScrollArea(parent);
+    m_metaDataArea = new QScrollArea(this);
     m_metaDataArea->setWidget(metaDataWidgetContainer);
     m_metaDataArea->setWidgetResizable(true);
     m_metaDataArea->setFrameShape(QFrame::NoFrame);
