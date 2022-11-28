@@ -157,13 +157,13 @@ void InformationPanelContent::showItem(const KFileItem& item)
     if (InformationPanelSettings::previewsShown()) {
         const QString mimeType = item.mimetype();
         if (m_playerWidget->player()->isMimeSupported(mimeType)) {
+            m_preview->hide();
             m_playerWidget->show();
             m_playerWidget->open(item.targetUrl().url());
-            m_preview->setVisible(false);
         } else {
             m_playerWidget->player()->stop();
             m_playerWidget->hide();
-            m_preview->setVisible(true);
+            m_preview->show();
         }
     } else {
         m_playerWidget->player()->stop();
