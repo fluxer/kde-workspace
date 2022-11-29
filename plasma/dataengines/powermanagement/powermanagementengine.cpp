@@ -177,13 +177,10 @@ QString PowermanagementEngine::batteryType(const Solid::Battery* battery)
   switch(battery->type()) {
       case Solid::Battery::PrimaryBattery:
           return QLatin1String("Battery");
-          break;
       case Solid::Battery::UpsBattery:
           return QLatin1String("Ups");
-          break;
       case Solid::Battery::UsbBattery:
           return QLatin1String("Usb");
-          break;
       default:
           return QLatin1String("Unknown");
   }
