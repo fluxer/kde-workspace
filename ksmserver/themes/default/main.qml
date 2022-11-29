@@ -264,7 +264,7 @@ PlasmaCore.FrameSvgItem {
                     iconSource: "system-shutdown"
                     anchors.right: parent.right
                     visible: (choose || sdtype == ShutdownType.ShutdownTypeHalt)
-                    menu: spdMethods.StandbyState | spdMethods.SuspendState | spdMethods.HibernateState
+                    menu: spdMethods.StandbyState | spdMethods.SuspendState | spdMethods.HibernateState | spdMethods.HybridSuspendState
                     tabStopNext: rebootButton
                     tabStopBack: logoutButton
 
@@ -290,6 +290,10 @@ PlasmaCore.FrameSvgItem {
                             if (spdMethods.HibernateState) {
                                 // 4 == Solid::PowerManagement::HibernateState
                                 contextMenu.append({itemIndex: 4, itemText: i18n("Suspend to &Disk"), itemSubMenu: null, itemAllowAmpersand: false})
+                            }
+                            if (spdMethods.HybridSuspendState) {
+                                // 8 == Solid::PowerManagement::HybridSuspendState
+                                contextMenu.append({itemIndex: 8, itemText: i18n("&Hybrid Suspend"), itemSubMenu: null, itemAllowAmpersand: false})
                             }
                             contextMenu.clicked.connect(shutdownUi.suspendRequested)
                         }

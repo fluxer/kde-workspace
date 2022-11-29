@@ -123,7 +123,11 @@ PlasmaCore.FrameSvgItem {
                 onClicked: {
                     //console.log("contour.qml: sleep requested")
                     timer.running = false
-                    if (spdMethods.SuspendState) {
+                    if (spdMethods.HybridSuspendState) {
+                        suspendRequested(8); // Solid::PowerManagement::HybridSuspendState
+                    } else if (spdMethods.HibernateState) {
+                        suspendRequested(4); // Solid::PowerManagement::HibernateState
+                    } else if (spdMethods.SuspendState) {
                         suspendRequested(2); // Solid::PowerManagement::SuspendState
                     } else if (spdMethods.StandbyState) {
                         suspendRequested(1); // Solid::PowerManagement::StandbyState

@@ -235,11 +235,16 @@ void KSMShutdownDlg::slotSuspend(int spdMethod)
 {
     switch (spdMethod) {
         case Solid::PowerManagement::StandbyState:
+            Solid::PowerManagement::requestSleep(Solid::PowerManagement::StandbyState, 0, 0);
+            break;
         case Solid::PowerManagement::SuspendState:
             Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, 0, 0);
             break;
         case Solid::PowerManagement::HibernateState:
             Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, 0, 0);
+            break;
+        case Solid::PowerManagement::HybridSuspendState:
+            Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, 0, 0);
             break;
     }
     reject();
