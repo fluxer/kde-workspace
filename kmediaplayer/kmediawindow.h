@@ -37,7 +37,6 @@ public slots:
     void slotOpenURL();
     void slotOpenURL(KUrl url);
     void slotClosePath();
-    void slotFullscreen();
     void slotConfigure();
     void slotMenubar();
     void slotMenu(QPoint position);

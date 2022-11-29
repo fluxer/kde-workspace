@@ -74,12 +74,6 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     action->setShortcut(KStandardShortcut::quit());
     action->setWhatsThis(i18n("Close the application."));
 
-    action = actionCollection()->addAction("player_fullscreen", this, SLOT(slotFullscreen()));
-    action->setText(i18n("Fullscreen"));
-    action->setIcon(KIcon("view-fullscreen"));
-    action->setShortcut(KStandardShortcut::fullScreen());
-    action->setWhatsThis(i18n("Set the player view to fullscreen/non-fullscreen"));
-
     action = actionCollection()->addAction("settings_player", this, SLOT(slotConfigure()));
     action->setText(i18n("Configure KMediaPlayer"));
     action->setIcon(KIcon("preferences-desktop-sound"));
@@ -172,11 +166,6 @@ void KMediaWindow::slotClosePath()
     statusBar()->showMessage("");
 }
 
-void KMediaWindow::slotFullscreen()
-{
-    m_player->setFullscreen();
-}
-
 void KMediaWindow::slotConfigure()
 {
     KCMultiDialog kcmdialg(this);
@@ -205,8 +194,8 @@ void KMediaWindow::slotQuit()
 void KMediaWindow::slotDelayedRestore()
 {
     disconnect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedRestore()));
+    m_player->setPlay(int(m_playing));
     m_player->setPosition(m_currenttime);
-    m_player->setPlay(int(!m_playing));
 }
 
 void KMediaWindow::saveProperties(KConfigGroup &configgroup)
