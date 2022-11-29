@@ -78,7 +78,7 @@ void PowerManagementJob::start()
         setResult(true);
         return;
     } else if (operation == "requestShutDown") {
-        requestShutDown();
+        KWorkSpace::requestShutDown();
         setResult(true);
         return;
     } else if (operation == "switchUser") {
@@ -103,11 +103,6 @@ void PowerManagementJob::start()
 
     kDebug() << "don't know what to do with " << operation;
     setResult(false);
-}
-
-void PowerManagementJob::requestShutDown()
-{
-    KWorkSpace::requestShutDown();
 }
 
 #include "moc_powermanagementjob.cpp"
