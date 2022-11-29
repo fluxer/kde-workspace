@@ -36,7 +36,6 @@ class PanelShadows::Private
 public:
     Private(PanelShadows *shadows)
         : q(shadows),
-          m_managePixmaps(true),
           top(0),
           right(0),
           bottom(0),
@@ -61,7 +60,6 @@ public:
     QList<KPixmap> m_shadowPixmaps;
     QVector<unsigned long> data;
     QSet<const QWidget *> m_windows;
-    bool m_managePixmaps;
     int top;
     int right;
     int bottom;
