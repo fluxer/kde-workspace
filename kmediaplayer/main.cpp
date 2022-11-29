@@ -48,14 +48,17 @@ int main(int argc, char **argv) {
     option.add("+[url]", ki18n("URL to be opened"));
     KCmdLineArgs::addCmdLineOptions(option);
 
-    KApplication *app = new KApplication();
-    KMediaWindow *window = new KMediaWindow();
-    window->show();
-
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-    for (int pos = 0; pos < args->count(); ++pos) {
-        window->slotOpenURL(args->url(pos));
+    KApplication app;
+    if (app.isSessionRestored()) {
+        kRestoreMainWindows<KMediaWindow>();
+    } else {
+        KMediaWindow *window = new KMediaWindow();
+        window->show();
+        KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
+        for (int pos = 0; pos < args->count(); ++pos) {
+            window->slotOpenURL(args->url(pos));
+        }
     }
 
-    return app->exec();
+    return app.exec();
 }

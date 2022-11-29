@@ -47,8 +47,12 @@ private slots:
     void slotHideBars(bool hidden);
 
 protected:
+    // QMainWindow reimplementations
     void showEvent(QShowEvent *event) final;
     bool eventFilter(QObject *object, QEvent *event) final;
+    // KMainWindow reimplementations
+    void saveProperties(KConfigGroup &configgroup) final;
+    void readProperties(const KConfigGroup &configgroup) final;
 
 private:
     KConfig *m_config;

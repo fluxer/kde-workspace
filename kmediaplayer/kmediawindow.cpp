@@ -127,21 +127,6 @@ KMediaWindow::~KMediaWindow()
     delete m_config;
 }
 
-void KMediaWindow::showEvent(QShowEvent *event)
-{
-    KXmlGuiWindow::showEvent(event);
-    m_menuvisible = menuBar()->isVisible();
-    m_statusvisible = statusBar()->isVisible();
-}
-
-bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
-{
-    if (event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {
-        m_player->resetControlsTimer();
-    }
-    return KXmlGuiWindow::eventFilter(object, event);
-}
-
 void KMediaWindow::slotHideBars(bool visible)
 {
     if (!visible) {
@@ -229,4 +214,37 @@ void KMediaWindow::slotQuit()
 {
     KMediaWindow::close();
     qApp->quit();
+}
+
+void KMediaWindow::showEvent(QShowEvent *event)
+{
+    KXmlGuiWindow::showEvent(event);
+    m_menuvisible = menuBar()->isVisible();
+    m_statusvisible = statusBar()->isVisible();
+}
+
+bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
+{
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {
+        m_player->resetControlsTimer();
+    }
+    return KXmlGuiWindow::eventFilter(object, event);
+}
+
+void KMediaWindow::saveProperties(KConfigGroup &configgroup)
+{
+    const QString path = m_player->player()->path();
+    const float currenttime = m_player->player()->currentTime();
+    configgroup.writeEntry("Path", path);
+    configgroup.writeEntry("Position", currenttime);
+}
+
+void KMediaWindow::readProperties(const KConfigGroup &configgroup)
+{
+    const QString path = configgroup.readEntry("Path", QString());
+    const float currenttime = configgroup.readEntry("Position", float(0.0));
+    if (!path.isEmpty()) {
+         m_player->open(path);
+         m_player->setPosition(currenttime);
+    }
 }
