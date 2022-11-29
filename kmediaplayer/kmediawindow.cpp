@@ -213,7 +213,7 @@ void KMediaWindow::readProperties(const KConfigGroup &configgroup)
     const QString path = configgroup.readEntry("Path", QString());
     m_currenttime = configgroup.readEntry("Position", float(0.0));
     m_playing = configgroup.readEntry("Playing", true);
-    kDebug() << path << m_currenttime;
+    kDebug() << path << m_currenttime << m_playing;
     if (!path.isEmpty()) {
         connect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedRestore()));
         m_player->open(path);
