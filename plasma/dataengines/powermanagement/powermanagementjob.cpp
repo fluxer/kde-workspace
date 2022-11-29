@@ -47,8 +47,8 @@ void PowerManagementJob::start()
     //kDebug() << "starting operation  ... " << operation;
 
     if (operation == "lockScreen") {
-#warning TODO: error check, also what about inhibitions?
-        const QString interface("org.freedesktop.ScreenSaver");
+#warning TODO: error check
+        static const QString interface("org.freedesktop.ScreenSaver");
         QDBusInterface screensaver(interface, "/ScreenSaver");
         screensaver.asyncCall("Lock");
         setResult(true);
@@ -78,6 +78,10 @@ void PowerManagementJob::start()
         setResult(true);
         return;
     } else if (operation == "requestShutDown") {
+        if (!KWorkSpace::canShutDown()) {
+            setResult(false);
+            return;
+        }
         KWorkSpace::requestShutDown();
         setResult(true);
         return;
