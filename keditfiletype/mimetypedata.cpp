@@ -99,8 +99,6 @@ MimeTypeData::AutoEmbed MimeTypeData::readAutoEmbed() const
     } else {
         if (group.hasKey(key))
             return group.readEntry(key, false) ? Yes : No;
-        // TODO if ( !mimetype->property( "X-KDE-LocalProtocol" ).toString().isEmpty() )
-        // TODO    return MimeTypeData::Yes; // embed by default for zip, tar etc.
         return MimeTypeData::UseGroupSetting;
     }
 }
