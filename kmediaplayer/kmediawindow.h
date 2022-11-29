@@ -45,6 +45,7 @@ public slots:
 
 private slots:
     void slotHideBars(bool hidden);
+    void slotDelayedPosition();
 
 protected:
     // QMainWindow reimplementations
@@ -61,6 +62,7 @@ private:
     QMenu *m_menu;
     bool m_menuvisible;
     bool m_statusvisible;
+    float m_currenttime;
 };
 
 #endif // KMEDIAWINDOW_H

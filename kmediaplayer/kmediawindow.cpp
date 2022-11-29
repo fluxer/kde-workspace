@@ -36,7 +36,14 @@
 #include "kmediawindow.h"
 
 KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
-    : KXmlGuiWindow(parent, flags)
+    : KXmlGuiWindow(parent, flags),
+    m_config(nullptr),
+    m_player(nullptr),
+    m_recentfiles(nullptr),
+    m_menu(nullptr),
+    m_menuvisible(false),
+    m_statusvisible(false),
+    m_currenttime(float(0.0))
 {
     m_config = new KConfig("kmediaplayerrc", KConfig::SimpleConfig);
 
@@ -231,6 +238,12 @@ bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
     return KXmlGuiWindow::eventFilter(object, event);
 }
 
+void KMediaWindow::slotDelayedPosition()
+{
+    disconnect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedPosition()));
+    m_player->setPosition(m_currenttime);
+}
+
 void KMediaWindow::saveProperties(KConfigGroup &configgroup)
 {
     const QString path = m_player->player()->path();
@@ -242,9 +255,10 @@ void KMediaWindow::saveProperties(KConfigGroup &configgroup)
 void KMediaWindow::readProperties(const KConfigGroup &configgroup)
 {
     const QString path = configgroup.readEntry("Path", QString());
-    const float currenttime = configgroup.readEntry("Position", float(0.0));
+    m_currenttime = configgroup.readEntry("Position", float(0.0));
+    kDebug() << path << m_currenttime;
     if (!path.isEmpty()) {
-         m_player->open(path);
-         m_player->setPosition(currenttime);
+        connect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedPosition()));
+        m_player->open(path);
     }
 }
