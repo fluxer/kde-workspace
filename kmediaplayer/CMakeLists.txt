@@ -11,7 +11,7 @@ target_link_libraries(kmediaplayer
     KDE4::kmediaplayer
 )
 
-## part
+# part
 kde4_add_plugin(kmediaplayerpart kmediaplayerpart.cpp)
 
 target_link_libraries(kmediaplayerpart
@@ -21,7 +21,7 @@ target_link_libraries(kmediaplayerpart
     KDE4::kmediaplayer
 )
 
-## install everything
+# install everything
 install(
     TARGETS kmediaplayer
     DESTINATION ${KDE4_BIN_INSTALL_DIR}

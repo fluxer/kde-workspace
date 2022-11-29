@@ -123,7 +123,13 @@ KMediaWindow::~KMediaWindow()
 
 void KMediaWindow::slotOpenPath()
 {
-    const QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, i18n("Select paths"));
+#warning TODO: implement MIME list to filter converter and use it here
+    const QString path = KFileDialog::getOpenFileName(
+        KUrl("kfiledialog:///kmediaplayer"),
+        QString(),
+        this,
+        i18n("Select paths")
+    );
     if (!path.isEmpty()) {
         if (!m_player->player()->isPathSupported(path)) {
             KMessageBox::error(this, i18n("The path <filename>%1</filename> is not supported.", path), i18n("Invalid path"));
