@@ -91,7 +91,7 @@ Name[wa]=Båze di dnêyes des brevets U.S.
 Name[x-test]=xxU.S. Patent Databasexx
 Name[zh_CN]=美国专利数据库
 Name[zh_TW]=U.S. 專利權資料庫
-Query=http://patft.uspto.gov/netacgi/nph-Parser?TERM1=\\{@}&Sect1=PTO1&Sect2=HITOFF&d=PALL&p=1&u=/netahtml/srchnum.htm&r=0&f=S&l=50
-Query[x-test]=xxhttp://patft.uspto.gov/netacgi/nph-Parser?TERM1=\\{@}&Sect1=PTO1&Sect2=HITOFF&d=PALL&p=1&u=/netahtml/srchnum.htm&r=0&f=S&l=50xx
+Query=https://search.uspto.gov/search?query=\\{@}&op=Search&affiliate=web-sdmg-uspto.gov
+Query[x-test]=xxhttps://search.uspto.gov/search?query=\\{@}&op=Search&affiliate=web-sdmg-uspto.govxx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
