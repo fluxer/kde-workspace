@@ -28,8 +28,8 @@
 #include <KFileDialog>
 #include <KToolBar>
 #include <KStatusBar>
+#include <KMessageBox>
 #include <KConfigGroup>
-#include <QMessageBox>
 #include <QApplication>
 #include <QMenuBar>
 
@@ -94,7 +94,7 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
         resize(640, 480);
     }
 
-    m_menu = new QMenu();
+    m_menu = new QMenu(this);
     m_menu->addAction(KIcon("show-menu"), i18n("Show/hide menubar"), this, SLOT(slotMenubar()));
     setContextMenuPolicy(Qt::CustomContextMenu);
     connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotMenu(QPoint)));
@@ -126,8 +126,7 @@ void KMediaWindow::slotOpenPath()
     const QString path = KFileDialog::getOpenFileName(KUrl(), QString(), this, i18n("Select paths"));
     if (!path.isEmpty()) {
         if (!m_player->player()->isPathSupported(path)) {
-            QMessageBox::warning(this, i18n("Invalid path"),
-                i18n("The path is invalid:\n%1", path));
+            KMessageBox::error(this, i18n("The path <filename>%1</filename> is not supported.", path), i18n("Invalid path"));
         } else {
             m_player->open(path);
             m_recentfiles->addUrl(KUrl(path));
@@ -138,15 +137,16 @@ void KMediaWindow::slotOpenPath()
 void KMediaWindow::slotOpenURL()
 {
     bool dummy;
-    QString protocols = m_player->player()->protocols().join(", ");
-    KUrl url = KInputDialog::getText(i18n("Input URL"),
+    QString protocols = m_player->player()->protocols().join(QLatin1String(", "));
+    KUrl url = KInputDialog::getText(
+        i18n("Input URL"),
         i18n("Supported protocols are:\n\n%1", protocols),
-        QString(), &dummy, this);
+        QString(), &dummy, this
+    );
     if (!url.isEmpty()) {
-        QString urlstring = url.prettyUrl();
+        const QString urlstring = url.prettyUrl();
         if (!m_player->player()->isPathSupported(urlstring)) {
-            QMessageBox::warning(this, i18n("Invalid URL"),
-                i18n("Invalid URL:\n%1", urlstring));
+            KMessageBox::error(this, i18n("The URL <filename>%1</filename> is not supported.", urlstring), i18n("Invalid URL"));
         } else {
             m_player->open(urlstring);
             m_recentfiles->addUrl(url);
