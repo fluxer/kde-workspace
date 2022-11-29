@@ -91,7 +91,7 @@ Name[xh]=Uphendlo Lwesitshixo se OpenPGP
 Name[x-test]=xxOpenPGP Key Searchxx
 Name[zh_CN]=OpenPGP 密钥搜索
 Name[zh_TW]=OpenPGP 金鑰搜尋
-Query=http://pgp.mit.edu/pks/lookup?search=\\{@}&op=index
-Query[x-test]=xxhttp://pgp.mit.edu/pks/lookup?search=\\{@}&op=indexxx
+Query=https://pgp.mit.edu/pks/lookup?search=\\{@}&op=index
+Query[x-test]=xxhttps://pgp.mit.edu/pks/lookup?search=\\{@}&op=indexxx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
