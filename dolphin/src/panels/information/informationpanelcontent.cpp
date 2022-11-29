@@ -160,13 +160,14 @@ void InformationPanelContent::showItem(const KFileItem& item)
             m_preview->hide();
             m_playerWidget->show();
             m_playerWidget->open(item.targetUrl().url());
+            m_playerWidget->setPlay(int(1));
         } else {
-            m_playerWidget->player()->stop();
+            m_playerWidget->setPlay(int(0));
             m_playerWidget->hide();
             m_preview->show();
         }
     } else {
-        m_playerWidget->player()->stop();
+        m_playerWidget->setPlay(int(0));
         m_playerWidget->hide();
     }
 
@@ -187,7 +188,7 @@ void InformationPanelContent::showItems(const KFileItemList& items)
         m_metaDataWidget->setItems(items);
     }
 
-    m_playerWidget->player()->stop();
+    m_playerWidget->setPlay(int(0));
     m_playerWidget->hide();
 
     m_item = KFileItem();
@@ -218,7 +219,7 @@ bool InformationPanelContent::eventFilter(QObject* obj, QEvent* event)
 
     case QEvent::Hide:
         if (m_playerWidget)
-            m_playerWidget->player()->stop();
+            m_playerWidget->setPlay(int(0));
         break;
 
     default:
@@ -255,7 +256,7 @@ void InformationPanelContent::configureSettings(const QList<QAction*>& customCon
     const bool isChecked = action->isChecked();
     if (action == previewAction) {
         if (!isChecked) {
-            m_playerWidget->player()->stop();
+            m_playerWidget->setPlay(int(0));
             m_playerWidget->hide();
         }
         m_preview->setVisible(isChecked);
