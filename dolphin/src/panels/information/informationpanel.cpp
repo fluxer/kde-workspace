@@ -341,6 +341,13 @@ void InformationPanel::init()
     Q_ASSERT(m_urlChangedTimer->interval() < m_infoTimer->interval());
     Q_ASSERT(m_urlChangedTimer->interval() < m_resetUrlTimer->interval());
 
+    m_content = new InformationPanelContent(this);
+    connect(m_content, SIGNAL(urlActivated(KUrl)), this, SIGNAL(urlActivated(KUrl)));
+
+    QVBoxLayout* layout = new QVBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->addWidget(m_content);
+
     org::kde::KDirNotify* dirNotify = new org::kde::KDirNotify(QString(), QString(),
                                                                QDBusConnection::sessionBus(), this);
     connect(dirNotify, SIGNAL(FileRenamed(QString,QString)), SLOT(slotFileRenamed(QString,QString)));
@@ -349,13 +356,6 @@ void InformationPanel::init()
     connect(dirNotify, SIGNAL(FilesRemoved(QStringList)), SLOT(slotFilesRemoved(QStringList)));
     connect(dirNotify, SIGNAL(enteredDirectory(QString)), SLOT(slotEnteredDirectory(QString)));
     connect(dirNotify, SIGNAL(leftDirectory(QString)), SLOT(slotLeftDirectory(QString)));
-
-    m_content = new InformationPanelContent(this);
-    connect(m_content, SIGNAL(urlActivated(KUrl)), this, SIGNAL(urlActivated(KUrl)));
-
-    QVBoxLayout* layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->addWidget(m_content);
 
     m_initialized = true;
 }
