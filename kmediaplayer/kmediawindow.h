@@ -44,7 +44,7 @@ public slots:
     void slotQuit();
 
 private slots:
-    void slotDelayedPosition();
+    void slotDelayedRestore();
 
 protected:
     // KMainWindow reimplementations
@@ -57,6 +57,7 @@ private:
     KRecentFilesAction *m_recentfiles;
     QMenu *m_menu;
     float m_currenttime;
+    bool m_playing;
 };
 
 #endif // KMEDIAWINDOW_H

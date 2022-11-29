@@ -41,7 +41,8 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     m_player(nullptr),
     m_recentfiles(nullptr),
     m_menu(nullptr),
-    m_currenttime(float(0.0))
+    m_currenttime(float(0.0)),
+    m_playing(true)
 {
     m_config = new KConfig("kmediaplayerrc", KConfig::SimpleConfig);
 
@@ -201,27 +202,31 @@ void KMediaWindow::slotQuit()
     qApp->quit();
 }
 
-void KMediaWindow::slotDelayedPosition()
+void KMediaWindow::slotDelayedRestore()
 {
-    disconnect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedPosition()));
+    disconnect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedRestore()));
     m_player->setPosition(m_currenttime);
+    m_player->setPlay(int(!m_playing));
 }
 
 void KMediaWindow::saveProperties(KConfigGroup &configgroup)
 {
     const QString path = m_player->player()->path();
     const float currenttime = m_player->player()->currentTime();
+    const bool playing = m_player->player()->isPlaying();
     configgroup.writeEntry("Path", path);
     configgroup.writeEntry("Position", currenttime);
+    configgroup.writeEntry("Playing", playing);
 }
 
 void KMediaWindow::readProperties(const KConfigGroup &configgroup)
 {
     const QString path = configgroup.readEntry("Path", QString());
     m_currenttime = configgroup.readEntry("Position", float(0.0));
+    m_playing = configgroup.readEntry("Playing", true);
     kDebug() << path << m_currenttime;
     if (!path.isEmpty()) {
-        connect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedPosition()));
+        connect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotDelayedRestore()));
         m_player->open(path);
     }
 }
