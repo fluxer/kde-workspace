@@ -87,7 +87,7 @@ Name[xh]=Izicelo Zogqabazo ze IETF
 Name[x-test]=xxIETF Requests for Commentsxx
 Name[zh_CN]=IETF 评论请求
 Name[zh_TW]=IETF RFC 文件
-Query=https://tools.ietf.org/id/\\{@}
-Query[x-test]=xxhttps://tools.ietf.org/id/\\{@}xx
+Query=https://datatracker.ietf.org/doc/search?name=\\{@}&rfcs=on&activedrafts=on
+Query[x-test]=xxhttps://datatracker.ietf.org/doc/search?name=\\{@}&rfcs=on&activedrafts=onxx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
