@@ -47,7 +47,7 @@ void PowerManagementJob::start()
     //kDebug() << "starting operation  ... " << operation;
 
     if (operation == "lockScreen") {
-#warning TODO: error check
+#warning TODO: error check, also what about inhibitions?
         const QString interface("org.freedesktop.ScreenSaver");
         QDBusInterface screensaver(interface, "/ScreenSaver");
         screensaver.asyncCall("Lock");
