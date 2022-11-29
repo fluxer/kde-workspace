@@ -30,7 +30,7 @@
 
 int main(int argc, char **argv) {
     KAboutData aboutData("kmediaplayer", 0, ki18n("KMediaPlayer"),
-                         "1.0.0", ki18n("Simple media player for KDE."),
+                         "1.1.0", ki18n("Simple media player for KDE."),
                          KAboutData::License_GPL_V2,
                          ki18n("(c) 2016 Ivailo Monev"),
                          KLocalizedString(),
