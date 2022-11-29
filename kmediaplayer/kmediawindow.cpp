@@ -94,7 +94,7 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
         resize(640, 480);
     }
 
-    connect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideMenuBar(bool)));
+    connect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideBars(bool)));
     m_menu = new QMenu();
     m_menu->addAction(KIcon("show-menu"), i18n("Show/hide menubar"), this, SLOT(slotMenubar()));
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -112,8 +112,8 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
 
 KMediaWindow::~KMediaWindow()
 {
-    slotHideMenuBar(true);
-    disconnect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideMenuBar(bool)));
+    slotHideBars(true);
+    disconnect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideBars(bool)));
     saveAutoSaveSettings();
 
     KConfigGroup recentfilesgroup(m_config, "RecentFiles");
@@ -129,9 +129,9 @@ KMediaWindow::~KMediaWindow()
 
 void KMediaWindow::showEvent(QShowEvent *event)
 {
+    KXmlGuiWindow::showEvent(event);
     m_menuvisible = menuBar()->isVisible();
     m_statusvisible = statusBar()->isVisible();
-    KXmlGuiWindow::showEvent(event);
 }
 
 bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
@@ -142,7 +142,7 @@ bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
     return KXmlGuiWindow::eventFilter(object, event);
 }
 
-void KMediaWindow::slotHideMenuBar(bool visible)
+void KMediaWindow::slotHideBars(bool visible)
 {
     if (!visible) {
         m_menuvisible = menuBar()->isVisible();

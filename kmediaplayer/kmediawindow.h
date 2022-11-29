@@ -44,7 +44,7 @@ public slots:
     void slotQuit();
 
 private slots:
-    void slotHideMenuBar(bool hidden);
+    void slotHideBars(bool hidden);
 
 protected:
     void showEvent(QShowEvent *event) final;
