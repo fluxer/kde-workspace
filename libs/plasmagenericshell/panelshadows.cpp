@@ -36,7 +36,7 @@ class PanelShadows::Private
 public:
     Private(PanelShadows *shadows)
         : q(shadows),
-          m_managePixmaps(false),
+          m_managePixmaps(true),
           top(0),
           right(0),
           bottom(0),
@@ -74,6 +74,11 @@ PanelShadows::PanelShadows(QObject *parent)
 {
     setImagePath("widgets/panel-background");
     connect(this, SIGNAL(repaintNeeded()), this, SLOT(updateShadows()));
+}
+
+PanelShadows::~PanelShadows()
+{
+    delete d;
 }
 
 void PanelShadows::addWindow(const QWidget *window)
@@ -121,11 +126,13 @@ void PanelShadows::Private::updateShadows()
 
 void PanelShadows::Private::initPixmap(const QString &element)
 {
+    kDebug() << "Initializing pixmap" << element;
     m_shadowPixmaps << KPixmap(q->pixmap(element));
 }
 
 void PanelShadows::Private::setupPixmaps()
 {
+    kDebug() << "Setting up pixmaps";
     clearPixmaps();
     initPixmap("shadow-top");
     initPixmap("shadow-topright");
@@ -183,12 +190,9 @@ void PanelShadows::getMargins(int &top, int &right, int &bottom, int &left)
 
 void PanelShadows::Private::clearPixmaps()
 {
-#warning FIXME: pixmaps are leaked
-    if (m_managePixmaps) {
-        foreach (KPixmap &pixmap, m_shadowPixmaps) {
-            pixmap.release();
-        }
-        m_managePixmaps = false;
+    kDebug() << "Clearing pixmaps";
+    foreach (KPixmap &pixmap, m_shadowPixmaps) {
+        pixmap.release();
     }
     m_shadowPixmaps.clear();
     data.clear();

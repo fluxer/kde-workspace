@@ -31,6 +31,7 @@ class PLASMAGENERICSHELL_EXPORT PanelShadows : public Plasma::Svg
 
 public:
     explicit PanelShadows(QObject *parent = 0);
+    ~PanelShadows();
 
     void addWindow(const QWidget *window);
     void removeWindow(const QWidget *window);
