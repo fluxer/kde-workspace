@@ -69,9 +69,9 @@ bool KMediaPlayerPart::openFile()
     const KUrl kurl = url();
     const QString kurlstring = kurl.prettyUrl();
     if (!kurl.isValid()) {
-        KMessageBox::information(widget(), i18n("The URL is not valid: %1", kurlstring));
+        KMessageBox::error(widget(), i18n("The URL is not valid: %1", kurlstring));
     } else if (!m_player->player()->isProtocolSupported(kurl.protocol())) {
-        KMessageBox::information(widget(), i18n("The URL protocol is not valid: %1", kurl.protocol()));
+        KMessageBox::error(widget(), i18n("The URL protocol is not valid: %1", kurl.protocol()));
     } else {
         m_player->open(kurlstring);
         return true;
