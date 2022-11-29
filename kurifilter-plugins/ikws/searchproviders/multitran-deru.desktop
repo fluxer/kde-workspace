@@ -87,5 +87,5 @@ Name[zh_CN]=Multitran - 在德语和俄语之间互译
 Name[zh_TW]=Multitran - 翻譯德語和俄語
 X-KDE-ServiceTypes=SearchProvider
 Keys=mt,mtde
-Query=https://www.multitran.com/c/m.exe?l1=3&s=\\{@}
-Query[x-test]=xxhttps://www.multitran.com/c/m.exe?l1=3&s=\\{@}xx
+Query=https://www.multitran.com/m.exe?l1=3&l2=2&CL=1&s=\\{@}
+Query[x-test]=xxhttps://www.multitran.com/m.exe?l1=3&l2=2&CL=1&s=\\{@}xx
