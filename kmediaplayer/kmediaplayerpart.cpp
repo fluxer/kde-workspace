@@ -41,7 +41,7 @@ K_EXPORT_PLUGIN(KMediaPlayerPartFactory(KAboutData(
 
 KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const QList<QVariant> &arguments)
     : KParts::ReadOnlyPart(parent)
-    , m_player(new KMediaWidget(parentWidget, KMediaWidget::HiddenControls))
+    , m_player(new KMediaWidget(parentWidget, KMediaWidget::SmoothVolume))
 {
     Q_UNUSED(arguments);
     setObjectName(QString::fromLatin1("KMediaPlayerPart"));

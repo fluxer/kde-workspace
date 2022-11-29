@@ -41,8 +41,6 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     m_player(nullptr),
     m_recentfiles(nullptr),
     m_menu(nullptr),
-    m_menuvisible(false),
-    m_statusvisible(false),
     m_currenttime(float(0.0))
 {
     m_config = new KConfig("kmediaplayerrc", KConfig::SimpleConfig);
@@ -101,7 +99,6 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
         resize(640, 480);
     }
 
-    connect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideBars(bool)));
     m_menu = new QMenu();
     m_menu->addAction(KIcon("show-menu"), i18n("Show/hide menubar"), this, SLOT(slotMenubar()));
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -112,15 +109,10 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
 
     KConfigGroup recentfilesgroup(m_config, "RecentFiles");
     m_recentfiles->loadEntries(recentfilesgroup);
-
-    setMouseTracking(true);
-    qApp->installEventFilter(this);
 }
 
 KMediaWindow::~KMediaWindow()
 {
-    slotHideBars(true);
-    disconnect(m_player, SIGNAL(controlsHidden(bool)), this, SLOT(slotHideBars(bool)));
     saveAutoSaveSettings();
 
     KConfigGroup recentfilesgroup(m_config, "RecentFiles");
@@ -132,19 +124,6 @@ KMediaWindow::~KMediaWindow()
     m_recentfiles->deleteLater();
     m_menu->deleteLater();
     delete m_config;
-}
-
-void KMediaWindow::slotHideBars(bool visible)
-{
-    if (!visible) {
-        m_menuvisible = menuBar()->isVisible();
-        m_statusvisible = statusBar()->isVisible();
-        menuBar()->setVisible(false);
-        statusBar()->setVisible(false);
-    } else {
-        menuBar()->setVisible(m_menuvisible);
-        statusBar()->setVisible(m_statusvisible);
-    }
 }
 
 void KMediaWindow::slotOpenPath()
@@ -207,7 +186,6 @@ void KMediaWindow::slotConfigure()
 void KMediaWindow::slotMenubar()
 {
     menuBar()->setVisible(!menuBar()->isVisible());
-    m_menuvisible = menuBar()->isVisible();
 }
 
 void KMediaWindow::slotMenu(QPoint position)
@@ -221,21 +199,6 @@ void KMediaWindow::slotQuit()
 {
     KMediaWindow::close();
     qApp->quit();
-}
-
-void KMediaWindow::showEvent(QShowEvent *event)
-{
-    KXmlGuiWindow::showEvent(event);
-    m_menuvisible = menuBar()->isVisible();
-    m_statusvisible = statusBar()->isVisible();
-}
-
-bool KMediaWindow::eventFilter(QObject *object, QEvent *event)
-{
-    if (event->type() == QEvent::MouseMove || event->type() == QEvent::KeyPress) {
-        m_player->resetControlsTimer();
-    }
-    return KXmlGuiWindow::eventFilter(object, event);
 }
 
 void KMediaWindow::slotDelayedPosition()

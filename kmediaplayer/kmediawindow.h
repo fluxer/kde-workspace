@@ -44,13 +44,9 @@ public slots:
     void slotQuit();
 
 private slots:
-    void slotHideBars(bool hidden);
     void slotDelayedPosition();
 
 protected:
-    // QMainWindow reimplementations
-    void showEvent(QShowEvent *event) final;
-    bool eventFilter(QObject *object, QEvent *event) final;
     // KMainWindow reimplementations
     void saveProperties(KConfigGroup &configgroup) final;
     void readProperties(const KConfigGroup &configgroup) final;
@@ -60,8 +56,6 @@ private:
     KMediaWidget *m_player;
     KRecentFilesAction *m_recentfiles;
     QMenu *m_menu;
-    bool m_menuvisible;
-    bool m_statusvisible;
     float m_currenttime;
 };
 
