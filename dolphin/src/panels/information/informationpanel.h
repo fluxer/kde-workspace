@@ -21,13 +21,10 @@
 #define INFORMATIONPANEL_H
 
 #include <QTimer>
+#include <KIO/Job>
 #include <panels/panel.h>
 
 class InformationPanelContent;
-namespace KIO
-{
-    class Job;
-}
 
 /**
  * @brief Panel for showing meta information of one ore more selected items.
@@ -152,7 +149,7 @@ private:
     KFileItem m_fileItem; // file item for m_shownUrl if available (otherwise null)
     KFileItemList m_selection;
 
-    KIO::Job* m_folderStatJob;
+    KIO::StatJob* m_folderStatJob;
 
     InformationPanelContent* m_content;
 };
