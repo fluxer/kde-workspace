@@ -178,7 +178,7 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true
 
 [Wallpaper]
-defaultWallpaperTheme=Elarun
+defaultWallpaperTheme=Auros
 defaultFileSuffix=.png
 defaultWidth=1024
 defaultHeight=768
