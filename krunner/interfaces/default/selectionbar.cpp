@@ -73,11 +73,11 @@ QVariant SelectionBar::itemChange(QGraphicsItem::GraphicsItemChange change, cons
             if (newScene) {
                 connect(newScene, SIGNAL(selectionChanged()), this, SLOT(acquireTarget()));
             }
+            break;
         }
-        break;
 
         default:
-        break;
+            break;
     }
 
     return QGraphicsWidget::itemChange(change, value);
