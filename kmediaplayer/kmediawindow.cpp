@@ -30,6 +30,7 @@
 #include <KStatusBar>
 #include <KMessageBox>
 #include <KConfigGroup>
+#include <Solid/PowerManagement>
 #include <QApplication>
 #include <QMenuBar>
 
@@ -42,12 +43,16 @@ KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     m_recentfiles(nullptr),
     m_menu(nullptr),
     m_currenttime(float(0.0)),
-    m_playing(true)
+    m_playing(true),
+    m_inhibition(0)
 {
     m_config = new KConfig("kmediaplayerrc", KConfig::SimpleConfig);
 
     m_player = new KMediaWidget(this, KMediaWidget::AllOptions);
     m_player->player()->setPlayerID("kmediaplayer");
+    connect(m_player->player(), SIGNAL(loaded()), this, SLOT(slotInhibit()));
+    connect(m_player->player(), SIGNAL(paused(bool)), this, SLOT(slotMaybeInhibit(bool)));
+    connect(m_player->player(), SIGNAL(finished()), this, SLOT(slotUninhibit()));
 
     setCentralWidget(m_player);
 
@@ -115,7 +120,7 @@ KMediaWindow::~KMediaWindow()
     KConfigGroup firstrungroup(m_config, "KMediaPlayer");
     firstrungroup.writeEntry("firstrun", false);
 
-    m_player->deleteLater();
+    delete m_player;
     m_recentfiles->deleteLater();
     m_menu->deleteLater();
     delete m_config;
@@ -193,8 +198,41 @@ void KMediaWindow::slotMenu(QPoint position)
 
 void KMediaWindow::slotQuit()
 {
+    slotUninhibit();
+
     KMediaWindow::close();
     qApp->quit();
+}
+
+void KMediaWindow::slotInhibit()
+{
+    if (!m_inhibition) {
+        m_inhibition = Solid::PowerManagement::beginSuppressingScreenPowerManagement(QString::fromLatin1("KMediaPlayer playing"));
+        if (!m_inhibition) {
+            kWarning() << "Could not inhibit";
+        }
+    }
+}
+
+void KMediaWindow::slotMaybeInhibit(bool paused)
+{
+    if (paused) {
+        slotUninhibit();
+    } else {
+        slotInhibit();
+    }
+}
+
+void KMediaWindow::slotUninhibit()
+{
+    if (m_inhibition) {
+        const bool diduninhibit = Solid::PowerManagement::stopSuppressingScreenPowerManagement(m_inhibition);
+        if (diduninhibit) {
+            m_inhibition = 0;
+        } else {
+            kWarning() << "Could not uninhibit";
+        }
+    }
 }
 
 void KMediaWindow::slotDelayedRestore()

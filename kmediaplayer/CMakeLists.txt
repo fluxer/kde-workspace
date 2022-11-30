@@ -9,6 +9,7 @@ target_link_libraries(kmediaplayer
     KDE4::kfile
     KDE4::kcmutils
     KDE4::kmediaplayer
+    KDE4::solid
 )
 
 # part
