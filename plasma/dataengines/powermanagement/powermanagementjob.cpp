@@ -47,10 +47,13 @@ void PowerManagementJob::start()
     //kDebug() << "starting operation  ... " << operation;
 
     if (operation == "lockScreen") {
-#warning TODO: error check
         static const QString interface("org.freedesktop.ScreenSaver");
         QDBusInterface screensaver(interface, "/ScreenSaver");
-        screensaver.asyncCall("Lock");
+        QDBusPendingReply<void> reply = screensaver.asyncCall("Lock");
+        if (reply.isError()) {
+            setResult(false);
+            return;
+        }
         setResult(true);
         return;
     } else if (operation == "suspend" || operation == "suspendToRam") {
