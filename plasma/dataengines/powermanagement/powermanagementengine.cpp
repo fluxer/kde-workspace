@@ -146,17 +146,17 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
         const QSet<Solid::PowerManagement::SleepState> sleepstates =
                                 Solid::PowerManagement::supportedSleepStates();
         // We first set all possible sleepstates to false, then enable the ones that are available
-        setData("Sleep States", "Standby", false);
         setData("Sleep States", "Suspend", false);
         setData("Sleep States", "Hibernate", false);
+        setData("Sleep States", "Hybrid Suspend", false);
 
         foreach (const Solid::PowerManagement::SleepState &sleepstate, sleepstates) {
-            if (sleepstate == Solid::PowerManagement::StandbyState) {
-                setData("Sleep States", "Standby", true);
-            } else if (sleepstate == Solid::PowerManagement::SuspendState) {
+            if (sleepstate == Solid::PowerManagement::SuspendState) {
                 setData("Sleep States", "Suspend", true);
             } else if (sleepstate == Solid::PowerManagement::HibernateState) {
                 setData("Sleep States", "Hibernate", true);
+            } else if (sleepstate == Solid::PowerManagement::HybridSuspendState) {
+                setData("Sleep States", "Hybrid Suspend", true);
             }
             //kDebug() << "Sleepstate \"" << sleepstate << "\" supported.";
         }

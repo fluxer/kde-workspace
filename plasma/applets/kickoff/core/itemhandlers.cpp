@@ -71,11 +71,15 @@ bool LeaveItemHandler::openUrl(const KUrl& url)
     if (m_logoutAction == "sleep") {
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(suspendRAM()));
-            return true;
+        return true;
     } else if (m_logoutAction == "hibernate") {
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(suspendDisk()));
-            return true;
+        return true;
+    } else if (m_logoutAction == "hybrid") {
+        // decouple dbus call, otherwise we'll run into a dead-lock
+        QTimer::singleShot(0, this, SLOT(suspendHybrid()));
+        return true;
     } else if (m_logoutAction == "lock") {
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(lock()));
@@ -93,10 +97,6 @@ bool LeaveItemHandler::openUrl(const KUrl& url)
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(saveSession()));
         return true;
-    } else if (m_logoutAction == "standby") {
-        // decouple dbus call, otherwise we'll run into a dead-lock
-        QTimer::singleShot(0, this, SLOT(standby()));
-        return true;
     } else if (m_logoutAction == "suspendram") {
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(suspendRAM()));
@@ -104,6 +104,10 @@ bool LeaveItemHandler::openUrl(const KUrl& url)
     } else if (m_logoutAction == "suspenddisk") {
         // decouple dbus call, otherwise we'll run into a dead-lock
         QTimer::singleShot(0, this, SLOT(suspendDisk()));
+        return true;
+    } else if (m_logoutAction == "suspendhybrid") {
+        // decouple dbus call, otherwise we'll run into a dead-lock
+        QTimer::singleShot(0, this, SLOT(suspendHybrid()));
         return true;
     } else if (m_logoutAction == "run") {
         // decouple dbus call, otherwise we'll run into a dead-lock
@@ -165,11 +169,6 @@ void LeaveItemHandler::saveSession()
     }
 }
 
-void LeaveItemHandler::standby()
-{
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::StandbyState, 0, 0);
-}
-
 void LeaveItemHandler::suspendRAM()
 {
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, 0, 0);
@@ -178,4 +177,9 @@ void LeaveItemHandler::suspendRAM()
 void LeaveItemHandler::suspendDisk()
 {
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, 0, 0);
+}
+
+void LeaveItemHandler::suspendHybrid()
+{
+    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, 0, 0);
 }

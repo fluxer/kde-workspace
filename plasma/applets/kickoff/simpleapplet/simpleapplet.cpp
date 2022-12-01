@@ -200,9 +200,9 @@ public:
             case SwitchUser:               return i18n("Switch User");
             case SaveSession:              return i18n("Save Session");
             case LockScreen:               return i18n("Lock Screen");
-            case Standby:                  return i18nc("Puts the system on standby", "Standby");
             case SuspendDisk:              return i18n("Hibernate");
             case SuspendRAM:               return i18n("Sleep");
+            case HybridSuspend:            return i18n("Hybrid Suspend");
             case Restart:                  return i18nc("Restart Computer", "Restart");
             case Shutdown:                 return i18n("Shut down");
             case Logout:                   return i18n("Log out");
@@ -225,9 +225,9 @@ public:
             case SwitchUser:               return "system-switch-user";
             case SaveSession:              return "document-save";
             case LockScreen:               return "system-lock-screen";
-            case Standby:                  return "system-suspend";
             case SuspendDisk:              return "system-suspend-hibernate";
             case SuspendRAM:               return "system-suspend-hibernate";
+            case HybridSuspend:            return "system-suspend";
             case Restart:                  return "system-reboot";
             case Shutdown:                 return "system-shutdown";
             case Logout:                   return "system-log-out";
@@ -756,15 +756,15 @@ void MenuLauncherApplet::showMenu(bool pressed)
                 d->addModel(leavemodel, Leave, Kickoff::MenuView::MergeFirstLevel, Kickoff::MenuView::Name);
             } else {
                 QSet< Solid::PowerManagement::SleepState > spdMethods = Solid::PowerManagement::supportedSleepStates();
-                if (vtname == "Standby") {
-                    if (spdMethods.contains(Solid::PowerManagement::StandbyState))
-                        menuview->addAction(KIcon(d->viewIcon(Standby)), d->viewText(Standby))->setData(KUrl("leave:/standby"));
-                } else if(vtname == "SuspendDisk") {
+                if(vtname == "SuspendDisk") {
                     if (spdMethods.contains(Solid::PowerManagement::HibernateState))
                         menuview->addAction(KIcon(d->viewIcon(SuspendDisk)), d->viewText(SuspendDisk))->setData(KUrl("leave:/suspenddisk"));
                 } else if(vtname == "SuspendRAM") {
                     if (spdMethods.contains(Solid::PowerManagement::SuspendState))
                         menuview->addAction(KIcon(d->viewIcon(SuspendRAM)), d->viewText(SuspendRAM))->setData(KUrl("leave:/suspendram"));
+                } else if (vtname == "HybridSuspend") {
+                    if (spdMethods.contains(Solid::PowerManagement::HybridSuspendState))
+                        menuview->addAction(KIcon(d->viewIcon(HybridSuspend)), d->viewText(HybridSuspend))->setData(KUrl("leave:/suspendhybrid"));
                 } else if(vtname == "Restart") {
                     if (KWorkSpace::canShutDown(KWorkSpace::ShutdownConfirmDefault, KWorkSpace::ShutdownTypeReboot))
                         menuview->addAction(KIcon(d->viewIcon(Restart)), d->viewText(Restart))->setData(KUrl("leave:/restart"));

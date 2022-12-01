@@ -56,7 +56,7 @@ void PowerManagementJob::start()
         }
         setResult(true);
         return;
-    } else if (operation == "suspend" || operation == "suspendToRam") {
+    } else if (operation == "suspendToRam") {
         if (!Solid::PowerManagement::supportedSleepStates().contains(Solid::PowerManagement::SuspendState)) {
             setResult(false);
             return;
@@ -98,13 +98,13 @@ void PowerManagementJob::start()
         setResult(Solid::PowerManagement::beginSuppressingSleep(parameters().value("reason").toString()));
         return;
     } else if (operation == "stopSuppressingSleep") {
-        setResult(Solid::PowerManagement::stopSuppressingSleep(parameters().value("cookie").toInt()));
+        setResult(Solid::PowerManagement::stopSuppressingSleep(parameters().value("cookie").toUInt()));
         return;
     } else if (operation == "beginSuppressingScreenPowerManagement") {
         setResult(Solid::PowerManagement::beginSuppressingScreenPowerManagement(parameters().value("reason").toString()));
         return;
     } else if (operation == "stopSuppressingScreenPowerManagement") {
-        setResult(Solid::PowerManagement::stopSuppressingScreenPowerManagement(parameters().value("cookie").toInt()));
+        setResult(Solid::PowerManagement::stopSuppressingScreenPowerManagement(parameters().value("cookie").toUInt()));
         return;
     }
 

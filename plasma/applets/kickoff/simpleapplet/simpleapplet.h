@@ -53,9 +53,9 @@ public:
         SwitchUser, ///< Switch User Action
         SaveSession, ///< Save Session Action (only enabled if restoreSavedSession is enabled)
         LockScreen, ///< Lock Screen Action
-        Standby, ///< Standby Action
         SuspendDisk, ///< Suspend to Disk Action
         SuspendRAM, ///< Suspend to RAM Action
+        HybridSuspend, ///< Hybrid Suspend Action
         Restart, ///< Restart Action
         Shutdown, ///< Shutdown Action
         Logout, ///< Logout Action

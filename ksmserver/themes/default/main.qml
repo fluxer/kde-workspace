@@ -264,7 +264,7 @@ PlasmaCore.FrameSvgItem {
                     iconSource: "system-shutdown"
                     anchors.right: parent.right
                     visible: (choose || sdtype == ShutdownType.ShutdownTypeHalt)
-                    menu: spdMethods.StandbyState | spdMethods.SuspendState | spdMethods.HibernateState | spdMethods.HybridSuspendState
+                    menu: spdMethods.SuspendState | spdMethods.HibernateState | spdMethods.HybridSuspendState
                     tabStopNext: rebootButton
                     tabStopBack: logoutButton
 
@@ -279,21 +279,15 @@ PlasmaCore.FrameSvgItem {
                         }
                         if (!contextMenu) {
                             contextMenu = shutdownOptionsComponent.createObject(shutdownButton)
-                            if (spdMethods.StandbyState) {
-                                // 1 == Solid::PowerManagement::StandbyState
-                                contextMenu.append({itemIndex: 1, itemText: i18n("&Standby"), itemSubMenu: null, itemAllowAmpersand: false})
-                            }
                             if (spdMethods.SuspendState) {
-                                // 2 == Solid::PowerManagement::SuspendState
-                                contextMenu.append({itemIndex: 2, itemText: i18n("Suspend to &RAM"), itemSubMenu: null, itemAllowAmpersand: false})
-                            }
-                            if (spdMethods.HibernateState) {
-                                // 4 == Solid::PowerManagement::HibernateState
-                                contextMenu.append({itemIndex: 4, itemText: i18n("Suspend to &Disk"), itemSubMenu: null, itemAllowAmpersand: false})
-                            }
-                            if (spdMethods.HybridSuspendState) {
-                                // 8 == Solid::PowerManagement::HybridSuspendState
-                                contextMenu.append({itemIndex: 8, itemText: i18n("&Hybrid Suspend"), itemSubMenu: null, itemAllowAmpersand: false})
+                                // 1 == Solid::PowerManagement::SuspendState
+                                contextMenu.append({itemIndex: 1, itemText: i18n("Suspend to &RAM"), itemSubMenu: null, itemAllowAmpersand: false})
+                            } else if (spdMethods.HibernateState) {
+                                // 2 == Solid::PowerManagement::HibernateState
+                                contextMenu.append({itemIndex: 2, itemText: i18n("Suspend to &Disk"), itemSubMenu: null, itemAllowAmpersand: false})
+                            } else if (spdMethods.HybridSuspendState) {
+                                // 4 == Solid::PowerManagement::HybridSuspendState
+                                contextMenu.append({itemIndex: 4, itemText: i18n("&Hybrid Suspend"), itemSubMenu: null, itemAllowAmpersand: false})
                             }
                             contextMenu.clicked.connect(shutdownUi.suspendRequested)
                         }

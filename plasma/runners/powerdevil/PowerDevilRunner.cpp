@@ -45,8 +45,8 @@ PowerDevilRunner::PowerDevilRunner(QObject *parent, const QVariantList &args)
     // Let's define all the words that will eventually trigger a match in the runner.
     QStringList commands;
     commands << i18nc("Note this is a KRunner keyword", "suspend")
-             << i18nc("Note this is a KRunner keyword", "sleep")
              << i18nc("Note this is a KRunner keyword", "hibernate")
+             << i18nc("Note this is a KRunner keyword", "hybrid")
              << i18nc("Note this is a KRunner keyword", "to disk")
              << i18nc("Note this is a KRunner keyword", "to ram");
 
@@ -107,6 +107,12 @@ void PowerDevilRunner::updateStatus()
         syntaxes.append(hibernateSyntax);
     }
 
+    if (states.contains(Solid::PowerManagement::HybridSuspendState)) {
+        Plasma::RunnerSyntax hybridSyntax(i18nc("Note this is a KRunner keyword", "hybrid"),
+                                          i18n("Suspends the system to RAM and put the system in sleep mode"));
+        syntaxes.append(hybridSyntax);
+    }
+
     setSyntaxes(syntaxes);
 }
 
@@ -128,12 +134,18 @@ void PowerDevilRunner::match(Plasma::RunnerContext &context)
         if (states.contains(Solid::PowerManagement::HibernateState)) {
             addSuspendMatch(Solid::PowerManagement::HibernateState, matches);
         }
+
+        if (states.contains(Solid::PowerManagement::HybridSuspendState)) {
+            addSuspendMatch(Solid::PowerManagement::HybridSuspendState, matches);
+        }
     } else if (term.compare(i18nc("Note this is a KRunner keyword", "sleep"), Qt::CaseInsensitive) == 0 ||
                term.compare(i18nc("Note this is a KRunner keyword", "to ram"), Qt::CaseInsensitive) == 0) {
         addSuspendMatch(Solid::PowerManagement::SuspendState, matches);
     } else if (term.compare(i18nc("Note this is a KRunner keyword", "hibernate"), Qt::CaseInsensitive) == 0 ||
                term.compare(i18nc("Note this is a KRunner keyword", "to disk"), Qt::CaseInsensitive) == 0) {
         addSuspendMatch(Solid::PowerManagement::HibernateState, matches);
+    } else if (term.compare(i18nc("Note this is a KRunner keyword", "hybrid"), Qt::CaseInsensitive) == 0) {
+        addSuspendMatch(Solid::PowerManagement::HybridSuspendState, matches);
     }
 
     if (!matches.isEmpty()) {
@@ -148,7 +160,6 @@ void PowerDevilRunner::addSuspendMatch(int value, QList<Plasma::QueryMatch> &mat
 
     switch ((Solid::PowerManagement::SleepState)value) {
         case Solid::PowerManagement::SuspendState:
-        case Solid::PowerManagement::StandbyState:
             match.setIcon(KIcon("system-suspend"));
             match.setText(i18n("Suspend to RAM"));
             match.setRelevance(1);
@@ -157,6 +168,11 @@ void PowerDevilRunner::addSuspendMatch(int value, QList<Plasma::QueryMatch> &mat
             match.setIcon(KIcon("system-suspend-hibernate"));
             match.setText(i18n("Suspend to Disk"));
             match.setRelevance(0.99);
+            break;
+        case Solid::PowerManagement::HybridSuspendState:
+            match.setIcon(KIcon("system-suspend"));
+            match.setText(i18n("Hybrid Suspend"));
+            match.setRelevance(0.98);
             break;
     }
 
@@ -175,11 +191,13 @@ void PowerDevilRunner::run(const Plasma::RunnerContext &context, const Plasma::Q
     if (match.id().startsWith("PowerDevil_Suspend")) {
         switch ((Solid::PowerManagement::SleepState)match.data().toInt()) {
             case Solid::PowerManagement::SuspendState:
-            case Solid::PowerManagement::StandbyState:
                 Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, 0, 0);
                 break;
             case Solid::PowerManagement::HibernateState:
                 Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, 0, 0);
+                break;
+            case Solid::PowerManagement::HybridSuspendState:
+                Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, 0, 0);
                 break;
         }
     }

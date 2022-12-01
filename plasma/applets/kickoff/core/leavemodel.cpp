@@ -69,10 +69,6 @@ QStandardItem* LeaveModel::createStandardItem(const QString& url)
         item->setText(i18n("Save Session"));
         item->setIcon(KIcon("document-save"));
         item->setData(i18n("Save current session for next login"), Kickoff::SubTitleRole);
-    } else if (basename == "standby") {
-        item->setText(i18nc("Puts the system on standby", "Standby"));
-        item->setIcon(KIcon("system-suspend"));
-        item->setData(i18n("Pause without logging out"), Kickoff::SubTitleRole);
     } else if (basename == "suspenddisk") {
         item->setText(i18n("Hibernate"));
         item->setIcon(KIcon("system-suspend-hibernate"));
@@ -81,6 +77,10 @@ QStandardItem* LeaveModel::createStandardItem(const QString& url)
         item->setText(i18n("Sleep"));
         item->setIcon(KIcon("system-suspend"));
         item->setData(i18n("Suspend to RAM"), Kickoff::SubTitleRole);
+    } else if (basename == "suspendhybrid") {
+        item->setText(i18nc("Suspend to RAM and put the system in sleep mode", "Hybrid Suspend"));
+        item->setIcon(KIcon("system-suspend"));
+        item->setData(i18n("Hybrid Suspend"), Kickoff::SubTitleRole);
     } else {
         item->setText(basename);
         item->setData(url, Kickoff::SubTitleRole);
@@ -142,14 +142,7 @@ void LeaveModel::updateModel()
     QStandardItem *systemOptions = new QStandardItem(i18n("System"));
     bool addSystemSession = false;
 
-//FIXME: the proper fix is to implement the KWorkSpace methods for Windows
     QSet< Solid::PowerManagement::SleepState > spdMethods = Solid::PowerManagement::supportedSleepStates();
-    if (spdMethods.contains(Solid::PowerManagement::StandbyState)) {
-        QStandardItem *standbyOption = createStandardItem("leave:/standby");
-        systemOptions->appendRow(standbyOption);
-        addSystemSession = true;
-    }
-
     if (spdMethods.contains(Solid::PowerManagement::SuspendState)) {
         QStandardItem *suspendramOption = createStandardItem("leave:/suspendram");
         systemOptions->appendRow(suspendramOption);
@@ -159,6 +152,12 @@ void LeaveModel::updateModel()
     if (spdMethods.contains(Solid::PowerManagement::HibernateState)) {
         QStandardItem *suspenddiskOption = createStandardItem("leave:/suspenddisk");
         systemOptions->appendRow(suspenddiskOption);
+        addSystemSession = true;
+    }
+
+    if (spdMethods.contains(Solid::PowerManagement::HybridSuspendState)) {
+        QStandardItem *suspendhybridOption = createStandardItem("leave:/suspendhybrid");
+        systemOptions->appendRow(suspendhybridOption);
         addSystemSession = true;
     }
 

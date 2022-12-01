@@ -49,7 +49,7 @@ RandrMonitorModule::RandrMonitorModule( QObject* parent, const QList<QVariant>& 
     , have_randr( false )
     , dialog(0)
 {
-    m_inhibitionCookie = -1;
+    m_inhibitionCookie = 0;
     setModuleName( "randrmonitor" );
     initRandr();
 
@@ -247,7 +247,7 @@ void RandrMonitorModule::checkInhibition()
     if (m_inhibitionCookie > 0 && !inhibit) {
         kDebug() << "Stopping: " << m_inhibitionCookie;
         Solid::PowerManagement::stopSuppressingSleep(m_inhibitionCookie);
-        m_inhibitionCookie = -1;
+        m_inhibitionCookie = 0;
     } else if (m_inhibitionCookie < 0 && inhibit) { // If we are NOT inhibiting and we should, do it
         m_inhibitionCookie = Solid::PowerManagement::beginSuppressingSleep();
         kDebug() << "Inhibing: " << m_inhibitionCookie;

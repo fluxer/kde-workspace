@@ -60,7 +60,7 @@ private:
     QMenu *m_menu;
     float m_currenttime;
     bool m_playing;
-    int m_inhibition;
+    uint m_inhibition;
 };
 
 #endif // KMEDIAWINDOW_H

@@ -579,6 +579,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
   : wmProcess( new QProcess( this ) )
   , sessionGroup( "" )
   , logoutEffectWidget( NULL )
+  , inhibitCookie(0)
 {
     if (lockscreen) {
         QDBusInterface screensaver("org.freedesktop.ScreenSaver", "/ScreenSaver", "org.freedesktop.ScreenSaver");

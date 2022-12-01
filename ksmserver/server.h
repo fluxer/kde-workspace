@@ -259,7 +259,7 @@ private:
     OrgKdeKLauncherInterface* klauncherSignals;
     QDBusInterface* kcminitSignals;
 
-    int inhibitCookie;
+    uint inhibitCookie;
 
     //subSession stuff
     QList<KSMClient*> clientsToKill;

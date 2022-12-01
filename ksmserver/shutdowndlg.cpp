@@ -133,9 +133,9 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
 
     QDeclarativePropertyMap *mapSpdMethods = new QDeclarativePropertyMap(this);
     QSet<Solid::PowerManagement::SleepState> spdMethods = Solid::PowerManagement::supportedSleepStates();
-    mapSpdMethods->insert("StandbyState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::StandbyState)));
     mapSpdMethods->insert("SuspendState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::SuspendState)));
     mapSpdMethods->insert("HibernateState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::HibernateState)));
+    mapSpdMethods->insert("HybridSuspendState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::HybridSuspendState)));
     context->setContextProperty("spdMethods", mapSpdMethods);
 
     setModal( true );
@@ -234,9 +234,6 @@ void KSMShutdownDlg::slotHalt()
 void KSMShutdownDlg::slotSuspend(int spdMethod)
 {
     switch (spdMethod) {
-        case Solid::PowerManagement::StandbyState:
-            Solid::PowerManagement::requestSleep(Solid::PowerManagement::StandbyState, 0, 0);
-            break;
         case Solid::PowerManagement::SuspendState:
             Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, 0, 0);
             break;

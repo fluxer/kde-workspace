@@ -67,7 +67,7 @@ private:
     bool have_randr;
     int randr_base;
     int randr_error;
-    int m_inhibitionCookie;
+    uint m_inhibitionCookie;
     Window window;
     QStringList currentMonitors;
     RandrMonitorHelper* helper;
