@@ -40,6 +40,7 @@ class KateFactory : public KTextEditor::Factory
       : KTextEditor::Factory (parent)
     {
       KateGlobal::incRef ();
+      registerPlugin<KateDocument>();
     }
 
     /**

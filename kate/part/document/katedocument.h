@@ -103,6 +103,7 @@ class KATEPARTINTERFACES_EXPORT KateDocument : public KTextEditor::Document,
   friend class KateBuffer;
 
   public:
+    explicit KateDocument (QWidget *parentWidget, QObject *, const QVariantList &args);
     explicit KateDocument (bool bSingleViewMode=false, bool bBrowserView=false, bool bReadOnly=false,
                   QWidget *parentWidget = 0, QObject * = 0);
     ~KateDocument ();

@@ -105,6 +105,12 @@ inline bool isBracket     ( const QChar& c ) { return isStartBracket( c ) || isE
 //
 // KateDocument Constructor
 //
+KateDocument::KateDocument ( QWidget *parentWidget, QObject *parent, const QVariantList &args)
+: KateDocument (true, false, true, parentWidget, parent)
+{
+  Q_UNUSED(args);
+}
+
 KateDocument::KateDocument ( bool bSingleViewMode, bool bBrowserView,
                              bool bReadOnly, QWidget *parentWidget,
                              QObject *parent)
