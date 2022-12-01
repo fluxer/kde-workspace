@@ -1,3 +1,5 @@
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1600)
+
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
 )

@@ -1,5 +1,7 @@
 project(kscreensaver)
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1601)
+
 set(kded_kscreensaver_SRCS
     kded_kscreensaver.cpp
     kscreensaver.cpp
