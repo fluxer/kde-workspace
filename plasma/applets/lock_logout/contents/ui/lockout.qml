@@ -188,7 +188,7 @@ Flow {
         QueryDialog {
             titleIcon: "system-suspend-hibernate"
             titleText: i18n("Hibernate")
-            message: i18n("Do you want to suspend to disk (hibernate)?")
+            message: i18n("Do you want to suspend to disk?")
 
             acceptButtonText: i18n("Yes")
             rejectButtonText: i18n("No")
@@ -203,7 +203,7 @@ Flow {
         QueryDialog {
             titleIcon: "system-suspend"
             titleText: i18n("Suspend")
-            message: i18n("Do you want to suspend to RAM (sleep)?")
+            message: i18n("Do you want to suspend to RAM?")
 
             acceptButtonText: i18n("Yes")
             rejectButtonText: i18n("No")
@@ -218,7 +218,7 @@ Flow {
         QueryDialog {
             titleIcon: "system-suspend"
             titleText: i18n("Hybrid Suspend")
-            message: i18n("Do you want to suspend hybrid (sleep)?")
+            message: i18n("Do you want to hybrid suspend?")
 
             acceptButtonText: i18n("Yes")
             rejectButtonText: i18n("No")
