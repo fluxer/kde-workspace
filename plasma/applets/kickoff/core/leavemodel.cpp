@@ -78,7 +78,7 @@ QStandardItem* LeaveModel::createStandardItem(const QString& url)
         item->setIcon(KIcon("system-suspend"));
         item->setData(i18n("Suspend to RAM"), Kickoff::SubTitleRole);
     } else if (basename == "suspendhybrid") {
-        item->setText(i18nc("Suspend to RAM and put the system in sleep mode", "Hybrid Suspend"));
+        item->setText(i18n("Hybrid Suspend"));
         item->setIcon(KIcon("system-suspend"));
         item->setData(i18n("Hybrid Suspend"), Kickoff::SubTitleRole);
     } else {
