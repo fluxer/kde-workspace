@@ -132,10 +132,10 @@ static const int scrnum = 0;
 static bool IsDirect = false;
 
 static struct {
-    QString module;
-    QString vendor;
-    QString device;
-    QString rev;
+    QString name;
+    QString description;
+    QString version;
+    QString bus;
 } dri_info;
 
 static struct {
@@ -196,27 +196,14 @@ static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *aft
 
     const bool drmAvailable = get_dri_device();
     if (drmAvailable)  {
-        l2 = newItem(l1, i18n("3D Accelerator"));
-        l2->setExpanded(true);
-        l3 = newItem(l2, l3, i18n("Vendor"), dri_info.vendor);
-        l3 = newItem(l2, l3, i18n("Device"), dri_info.device);
-        l3 = newItem(l2, l3, i18n("Revision"), dri_info.rev);
-    } else {
-        l2 = newItem(l1, l2, i18n("3D Accelerator"), i18n("unknown"));
-    }
-
-    if (l2) {
-        l2 = newItem(l1, l2, i18n("Driver"));
-    } else {
         l2 = newItem(l1, i18n("Driver"));
-    }
-
-    if (drmAvailable) {
-        if (dri_info.module.isEmpty())
-            dri_info.module = i18n("unknown");
-        l3 = newItem(l2, l3, i18n("Kernel module"), dri_info.module);
-
         l2->setExpanded(true);
+        l3 = newItem(l2, l3, i18n("Name"), dri_info.name);
+        l3 = newItem(l2, l3, i18n("Description"), dri_info.description);
+        l3 = newItem(l2, l3, i18n("Version"), dri_info.version);
+        l3 = newItem(l2, l3, i18n("Bus"), dri_info.bus);
+    } else {
+        l2 = newItem(l1, l2, i18n("Driver"), i18n("unknown"));
     }
 
     return l1;
@@ -252,10 +239,10 @@ static bool get_dri_device()
 
     const char* driBus = drmGetBusid(driFd);
 
-    dri_info.module = QString::fromLatin1(driVer->name, driVer->name_len);
-    dri_info.vendor = QString::fromLatin1(driVer->desc, driVer->desc_len);
-    dri_info.device = QString::fromLatin1(driBus);
-    dri_info.rev = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
+    dri_info.name = QString::fromLatin1(driVer->name, driVer->name_len);
+    dri_info.description = QString::fromLatin1(driVer->desc, driVer->desc_len);
+    dri_info.version = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
+    dri_info.bus = QString::fromLatin1(driBus);
 
     drmFreeBusid(driBus);
     drmFreeVersion(driVer);
