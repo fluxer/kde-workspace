@@ -214,7 +214,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
         }
 
         if (args->isSet("dbus")) {
-            processArgs << "dbus-launch";
+            processArgs << "dbus-run-session";
         }
 
         if (args->isSet("c")) {
