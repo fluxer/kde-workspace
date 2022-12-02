@@ -73,7 +73,6 @@ void NetworkManagerStatus::nmStateChanged(uint nmState)
     switch (nmState) {
     case 0:
     case 10:
-        break;
     case 20:
         m_status = Solid::Networking::Unconnected;
         break;
