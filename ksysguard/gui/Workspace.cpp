@@ -298,8 +298,8 @@ bool Workspace::restoreWorkSheet( const QString &fileName, bool switchToTab)
   QString baseName = fileName.right( fileName.length() - fileName.lastIndexOf( '/' ) - 1 );
 
   foreach( WorkSheet *sheet, mSheetList ) {
-	  if(sheet->fileName() == baseName)
-		  return false; //Don't add the same sheet twice
+    if(sheet->fileName() == baseName)
+      return false; //Don't add the same sheet twice
   }
 
   WorkSheet *sheet = new WorkSheet( 0 );
