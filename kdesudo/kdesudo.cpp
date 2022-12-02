@@ -208,10 +208,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
             int intn = atoi(n.toUtf8());
             intn = (intn * 40 / 100) - (20 + 0.5);
 
-            QString strn;
-            strn.sprintf("%d", intn);
-
-            processArgs << "nice" << "-n" << strn;
+            processArgs << "nice" << "-n" << QString::number(intn);
             m_dialog->addCommentLine(i18n("Priority:"), n + QString("/100"));
             processArgs << "--";
         }
