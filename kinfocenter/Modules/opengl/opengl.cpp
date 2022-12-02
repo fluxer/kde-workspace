@@ -22,6 +22,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#include "config-infocenter.h" // HAVE_DRMISKMS
 #include "opengl.h"
 
 #include <KPluginFactory>
@@ -219,7 +220,9 @@ static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *aft
         QString dri_description = QString::fromLatin1(driVer->desc, driVer->desc_len);
         QString dri_version = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
         QString dri_bus = QString::fromLatin1(driBus);
+#ifdef HAVE_DRMISKMS
         bool dri_kms = (drmIsKMS(driFd) == 1);
+#endif
 
         drmFreeBusid(driBus);
         drmFreeVersion(driVer);
@@ -231,7 +234,9 @@ static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *aft
         l3 = newItem(l2, l3, i18n("Description"), dri_description);
         l3 = newItem(l2, l3, i18n("Version"), dri_version);
         l3 = newItem(l2, l3, i18n("Bus"), dri_bus);
+#ifdef HAVE_DRMISKMS
         l3 = newItem(l2, l3, i18n("Kernel mode-setting"), dri_kms ? i18n("Yes") : i18n("No"));
+#endif
     }
 
 #ifdef UNDEFINE_MAX3

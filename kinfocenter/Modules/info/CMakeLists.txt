@@ -1,7 +1,5 @@
 
 # OS Base includes
-include(../base/CMakeLists.txt)
-
 include_directories( 
     ${CMAKE_CURRENT_SOURCE_DIR}/../base
 )
