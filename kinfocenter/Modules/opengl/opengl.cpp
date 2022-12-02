@@ -133,14 +133,6 @@ static const int scrnum = 0;
 static bool IsDirect = false;
 
 static struct {
-    QString name;
-    QString description;
-    QString version;
-    QString bus;
-    bool kms;
-} dri_info;
-
-static struct {
 #ifdef KCM_ENABLE_OPENGL
     const char *serverVendor;
     const char *serverVersion;
@@ -182,10 +174,9 @@ static void print_extension_list(const char *ext, QTreeWidgetItem *l1)
     }
 }
 
-static bool get_dri_device();
-
 static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *after, const QString &title)
 {
+#ifdef KCM_ENABLE_DRM
     QTreeWidgetItem *l2 = NULL, *l3 = NULL;
 
     if (after) {
@@ -196,68 +187,60 @@ static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *aft
 
     l1->setExpanded(true);
 
-    const bool drmAvailable = get_dri_device();
-    if (drmAvailable)  {
-        l2 = newItem(l1, i18n("Driver"));
+#ifndef MAX3
+// libdrm DRM_NODE_NAME_MAX() macro references MAX3() macro that is not defined anywhere
+#  define MAX3(A, B, C) A + B + C
+#  define UNDEFINE_MAX3
+#endif
+    for (int i = 0; i < DRM_NODE_MAX; i++) {
+        char driDevBuff[DRM_NODE_NAME_MAX];
+        ::snprintf(driDevBuff, sizeof(driDevBuff), DRM_DEV_NAME, DRM_DIR_NAME, i);
+#ifdef O_CLOEXEC
+        int driFd = QT_OPEN(driDevBuff, O_RDWR | O_CLOEXEC, 0);
+#else
+        int driFd = QT_OPEN(driDevBuff, O_RDWR, 0);
+#endif
+        if (driFd < 0) {
+            // depends on how many devices are available
+            kDebug() << "QT_OPEN() failed for" << i;
+            continue;
+        }
+
+        drmVersionPtr driVer = drmGetVersion(driFd);
+        if (!driVer) {
+            kWarning() << "drmGetVersion() failed for" << i;
+            drmClose(driFd);
+            continue;
+        }
+
+        const char* driBus = drmGetBusid(driFd);
+
+        QString dri_name = QString::fromLatin1(driVer->name, driVer->name_len);
+        QString dri_description = QString::fromLatin1(driVer->desc, driVer->desc_len);
+        QString dri_version = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
+        QString dri_bus = QString::fromLatin1(driBus);
+        bool dri_kms = (drmIsKMS(driFd) == 1);
+
+        drmFreeBusid(driBus);
+        drmFreeVersion(driVer);
+        drmClose(driFd);
+
+        l2 = newItem(l1, i18n("Device %1", i));
         l2->setExpanded(true);
-        l3 = newItem(l2, l3, i18n("Name"), dri_info.name);
-        l3 = newItem(l2, l3, i18n("Description"), dri_info.description);
-        l3 = newItem(l2, l3, i18n("Version"), dri_info.version);
-        l3 = newItem(l2, l3, i18n("Bus"), dri_info.bus);
-        l3 = newItem(l2, l3, i18n("Kernel mode-setting"), dri_info.kms ? i18n("Yes") : i18n("No"));
-    } else {
-        l2 = newItem(l1, l2, i18n("Driver"), i18n("unknown"));
+        l3 = newItem(l2, l3, i18n("Name"), dri_name);
+        l3 = newItem(l2, l3, i18n("Description"), dri_description);
+        l3 = newItem(l2, l3, i18n("Version"), dri_version);
+        l3 = newItem(l2, l3, i18n("Bus"), dri_bus);
+        l3 = newItem(l2, l3, i18n("Kernel mode-setting"), dri_kms ? i18n("Yes") : i18n("No"));
     }
+
+#ifdef UNDEFINE_MAX3
+#  undef MAX3
+#endif
+#endif // KCM_ENABLE_DRM
 
     return l1;
 }
-
-#if defined(KCM_ENABLE_DRM)
-static bool get_dri_device()
-{
-    const int driAvail = drmAvailable();
-    // qDebug() << "driAvail" << driAvail;
-    if (!driAvail) {
-        return false;
-    }
-
-    char driDevBuff[128];
-    snprintf(driDevBuff, sizeof(driDevBuff), DRM_DEV_NAME, DRM_DIR_NAME, 0);
-#ifdef O_CLOEXEC
-    int driFd = QT_OPEN(driDevBuff, O_RDWR | O_CLOEXEC, 0);
-#else
-    int driFd = QT_OPEN(driDevBuff, O_RDWR, 0);
-#endif
-    if (driFd < 0) {
-        kWarning() << "get_dri_device: QT_OPEN() fail";
-        return false;
-    }
-
-    drmVersionPtr driVer = drmGetVersion(driFd);
-    if (!driVer) {
-        kWarning() << "get_dri_device: drmGetVersion() fail";
-        drmClose(driFd);
-        return false;
-    }
-
-    const char* driBus = drmGetBusid(driFd);
-
-    dri_info.name = QString::fromLatin1(driVer->name, driVer->name_len);
-    dri_info.description = QString::fromLatin1(driVer->desc, driVer->desc_len);
-    dri_info.version = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
-    dri_info.bus = QString::fromLatin1(driBus);
-    dri_info.kms = (drmIsKMS(driFd) == 1);
-
-    drmFreeBusid(driBus);
-    drmFreeVersion(driVer);
-    drmClose(driFd);
-
-    return true;
-}
-#else
-static bool get_dri_device() { return false; }
-#endif // KCM_ENABLE_DRM
-
 #ifdef KCM_ENABLE_OPENGL
 #if defined(GLX_ARB_get_proc_address) && defined(__GLXextFuncPtr)
 extern "C" {
@@ -724,7 +707,14 @@ bool GetInfo_OpenGL(QTreeWidget *treeWidget)
     l1->setExpanded(true);
     l1->setFlags(Qt::ItemIsEnabled);
 
-    l2 = print_drm_info(l1, l2, i18n("Direct Rendering"));
+
+#if defined(KCM_ENABLE_DRM)
+    const int driAvail = drmAvailable();
+    // qDebug() << "driAvail" << driAvail;
+    if (driAvail) {
+        l2 = print_drm_info(l1, l2, i18n("Direct Rendering"));
+    }
+#endif
 
     // TODO: print_visual_info(dpy, mode);
 
