@@ -76,7 +76,7 @@ PlasmaKPart::~PlasmaKPart()
     delete m_view;
     m_view = 0;
 
-    if (!m_configFile.isEmpty()) {
+    if (m_corona && !m_configFile.isEmpty()) {
         m_corona->saveLayout();
     }
 
