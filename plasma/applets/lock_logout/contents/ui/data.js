@@ -23,4 +23,9 @@ var data = [{
     operation: "suspendToDisk",
     tooltip_mainText: i18n("Hibernate"),
     tooltip_subText: i18n("Hibernate (suspend to disk)")
+}, {
+    icon: "system-suspend",
+    operation: "suspendHybrid",
+    tooltip_mainText: i18n("Hybrid Suspend"),
+    tooltip_subText: i18n("Hybrid Suspend (Suspend to RAM and put the system in sleep mode)")
 }]

@@ -35,6 +35,7 @@ Flow {
     property bool show_leave: true
     property bool show_suspend: false
     property bool show_hibernate: false
+    property bool show_hybrid: false
     property int visibleButtons: 2
     property int orientation: Qt.Vertical
 
@@ -100,14 +101,16 @@ Flow {
         show_leave = plasmoid.readConfig("show_leave");
         show_suspend = plasmoid.readConfig("show_suspend");
         show_hibernate = plasmoid.readConfig("show_hibernate");
+        show_hybrid = plasmoid.readConfig("show_hybrid");
 
-        visibleButtons = show_lock+show_switchUser+show_leave+show_suspend+show_hibernate;
+        visibleButtons = show_lock+show_switchUser+show_leave+show_suspend+show_hibernate+show_hybrid;
 
         showModel.get(0).show = show_lock;
         showModel.get(1).show = show_switchUser;
         showModel.get(2).show = show_leave;
         showModel.get(3).show = show_suspend;
         showModel.get(4).show = show_hibernate;
+        showModel.get(5).show = show_hybrid;
 
         checkLayout();
     }
@@ -123,6 +126,7 @@ Flow {
         ListElement { show: true } // leave
         ListElement { show: false} // suspend
         ListElement { show: false} // hibernate
+        ListElement { show: false} // hybrid
     }
 
     Repeater {
@@ -209,6 +213,21 @@ Flow {
     }
     property QueryDialog sleepDialog
 
+    Component {
+        id: hybridDialogComponent
+        QueryDialog {
+            titleIcon: "system-suspend"
+            titleText: i18n("Hybrid Suspend")
+            message: i18n("Do you want to suspend hybrid (sleep)?")
+
+            acceptButtonText: i18n("Yes")
+            rejectButtonText: i18n("No")
+
+            onAccepted: performOperation("suspendHybrid")
+        }
+    }
+    property QueryDialog hybridDialog
+
     function clickHandler(what) {
         if (what == "suspendToDisk") {
             if (!hibernateDialog) {
@@ -223,6 +242,13 @@ Flow {
             }
 
             sleepDialog.open();
+
+        } else if (what == "suspendHybrid") {
+            if (!hybridDialog) {
+                hybridDialog = hybridDialogComponent.createObject(lockout);
+            }
+
+            hybridDialog.open();
 
         } else {
             performOperation(what);
