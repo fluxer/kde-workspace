@@ -42,6 +42,7 @@
 
 #ifdef KCM_ENABLE_DRM
 #include <xf86drm.h>
+#include <xf86drmMode.h>
 #endif
 
 #ifdef KCM_ENABLE_OPENGL
@@ -136,6 +137,7 @@ static struct {
     QString description;
     QString version;
     QString bus;
+    bool kms;
 } dri_info;
 
 static struct {
@@ -202,6 +204,7 @@ static QTreeWidgetItem *print_drm_info(QTreeWidgetItem *l1, QTreeWidgetItem *aft
         l3 = newItem(l2, l3, i18n("Description"), dri_info.description);
         l3 = newItem(l2, l3, i18n("Version"), dri_info.version);
         l3 = newItem(l2, l3, i18n("Bus"), dri_info.bus);
+        l3 = newItem(l2, l3, i18n("Kernel mode-setting"), dri_info.kms ? i18n("Yes") : i18n("No"));
     } else {
         l2 = newItem(l1, l2, i18n("Driver"), i18n("unknown"));
     }
@@ -243,6 +246,7 @@ static bool get_dri_device()
     dri_info.description = QString::fromLatin1(driVer->desc, driVer->desc_len);
     dri_info.version = QString::fromLatin1("%1.%2.%3").arg(driVer->version_major).arg(driVer->version_minor).arg(driVer->version_patchlevel);
     dri_info.bus = QString::fromLatin1(driBus);
+    dri_info.kms = (drmIsKMS(driFd) == 1);
 
     drmFreeBusid(driBus);
     drmFreeVersion(driVer);
