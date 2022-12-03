@@ -256,6 +256,30 @@ add_feature_info(lsof
     "Open files widget (KLsofWidget)"
 )
 
+find_program(BZR_EXECUTABLE bzr)
+add_feature_info(bzr
+    BZR_EXECUTABLE
+    "Bazaar support in Dolphin"
+)
+
+find_program(GIT_EXECUTABLE git)
+add_feature_info(git
+    GIT_EXECUTABLE
+    "Git support in Dolphin"
+)
+
+find_program(HG_EXECUTABLE hg)
+add_feature_info(hg
+    HG_EXECUTABLE
+    "Mercurial support in Dolphin"
+)
+
+find_program(SVN_EXECUTABLE svn)
+add_feature_info(svn
+    SVN_EXECUTABLE
+    "Subversion support in Dolphin"
+)
+
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
