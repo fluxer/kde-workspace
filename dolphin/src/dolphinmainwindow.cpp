@@ -86,11 +86,9 @@
 #include <QToolButton>
 #include <QMenuBar>
 
-namespace {
-    // Used for GeneralSettings::version() to determine whether
-    // an updated version of Dolphin is running.
-    const int CurrentDolphinVersion = 200;
-};
+// Used for GeneralSettings::version() to determine whether
+// an updated version of Dolphin is running.
+static const int CurrentDolphinVersion = 200;
 
 DolphinMainWindow::DolphinMainWindow() :
     KXmlGuiWindow(0),
@@ -125,7 +123,7 @@ DolphinMainWindow::DolphinMainWindow() :
             this, SLOT(showCommand(CommandType)));
 
     GeneralSettings* generalSettings = GeneralSettings::self();
-    const bool firstRun = (generalSettings->version() < 200);
+    const bool firstRun = (generalSettings->version() < CurrentDolphinVersion);
     if (firstRun) {
         generalSettings->setViewPropsTimestamp(QDateTime::currentDateTime());
     }
@@ -1492,7 +1490,7 @@ void DolphinMainWindow::setupDockWidgets()
     connect(this, SIGNAL(urlChanged(KUrl)),
             terminalPanel, SLOT(setUrl(KUrl)));
 
-    if (GeneralSettings::version() < 200) {
+    if (GeneralSettings::version() < CurrentDolphinVersion) {
         infoDock->hide();
         foldersDock->hide();
         terminalDock->hide();
