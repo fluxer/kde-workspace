@@ -36,6 +36,7 @@
 #include <kurlcompletion.h>
 #include <klineedit.h>
 #include <klocale.h>
+#include <kuser.h>
 #include <kmessagebox.h>
 #include <KNumInput>
 #include <kfiledialog.h>
@@ -212,17 +213,21 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     sizeUnitBox->setObjectName( QLatin1String( "sizeUnitBox" ) );
 
     m_usernameBox = new KComboBox( pages[1] );
+    m_usernameBox->addItem( QLatin1String("*") );
+    m_usernameBox->addItems( KUser::allUserNames() );
     m_usernameBox->setEditable( true );
     m_usernameBox->setObjectName( QLatin1String( "m_combo1" ));
     QLabel *usernameLabel= new QLabel(i18n("Files owned by &user:"),pages[1]);
     usernameLabel->setBuddy( m_usernameBox );
     m_groupBox = new KComboBox( pages[1] );
+    m_groupBox->addItem( QLatin1String("*") );
+    m_groupBox->addItems( KUserGroup::allGroupNames() );
     m_groupBox->setEditable( true );
     m_groupBox->setObjectName( QLatin1String( "m_combo2" ) );
     QLabel *groupLabel= new QLabel(i18n("Owned by &group:"),pages[1]);
     groupLabel->setBuddy( m_groupBox );
 
-    sizeBox ->addItem( i18nc("file size isn't considered in the search","(none)") );
+    sizeBox ->addItem( i18nc("file size isn't considered in the search", "(none)") );
     sizeBox ->addItem( i18n("At Least") );
     sizeBox ->addItem( i18n("At Most") );
     sizeBox ->addItem( i18n("Equal To") );
@@ -748,8 +753,18 @@ void KfindTabWidget::setQuery(KQuery *query)
   else
     query->setTimeRange(0, 0);
 
-  query->setUsername( m_usernameBox->currentText() );
-  query->setGroupname( m_groupBox->currentText() );
+  const QString currentuser = m_usernameBox->currentText();
+  if (currentuser == QLatin1String("*")) {
+    query->setUsername( QString() );
+  } else {
+    query->setUsername( currentuser );
+  }
+  const QString currentgroup = m_groupBox->currentText();
+  if (currentgroup == QLatin1String("*")) {
+    query->setGroupname( QString() );
+  } else {
+    query->setGroupname( currentgroup );
+  }
 
   query->setFileType(typeBox->currentIndex());
 
