@@ -45,16 +45,6 @@ else
 fi
 export XDG_DATA_DIRS
 
-# Boot sequence:
-#
-# kdeinit is used to fork off processes which improves memory usage
-# and startup time.
-#
-# * kdeinit starts klauncher first.
-# * Then kdeinit starts kcminit. kcminit performs initialisation of
-#   certain devices according to the user's settings
-# * Then ksmserver is started which takes control of the rest of the startup sequence
-
 # The user's personal KDE directory is usually ~/.kde, but this setting
 # may be overridden by setting KDEHOME.
 kdehome=$HOME/@KDE_DEFAULT_HOME@
@@ -149,15 +139,7 @@ export XDG_CURRENT_DESKTOP
 # For session services that require X11, check for XDG_CURRENT_DESKTOP, etc.
 dbus-update-activation-environment --all
 
-# Start kdeinit4 + kcminit_startup
-kdeinit4
-if test $? -ne 0; then
-    # Startup error
-    echo 'startkde: Could not start kdeinit4. Check your installation.'  1>&2
-    xmessage -geometry 500x100 "Could not start kdeinit4. Check your installation."
-    exit 1
-fi
-
+# Start kcminit_startup
 kcminit_startup
 if test $? -ne 0; then
     # Startup error
@@ -201,7 +183,7 @@ fi
 echo 'startkde: Shutting down...'  1>&2
 
 # Clean up
-kdeinit4 --shutdown
+kquitapp klauncher
 
 unset KDE_FULL_SESSION
 xprop -root -remove KDE_FULL_SESSION

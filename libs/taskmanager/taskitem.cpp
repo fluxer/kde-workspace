@@ -469,7 +469,7 @@ static KService::List getServicesViaPid(int pid)
     return services;
 }
 
-static KUrl getServiceLauncherUrl(int pid, const QString &type, const QStringList &cmdRemovals = QStringList())
+static KUrl getServiceLauncherUrl(int pid, const QString &type)
 {
     if (pid == 0) {
         return KUrl();
@@ -483,10 +483,6 @@ static KUrl getServiceLauncherUrl(int pid, const QString &type, const QStringLis
 
     if (cmdline.isEmpty()) {
         return KUrl();
-    }
-
-    foreach (const QString & r, cmdRemovals) {
-        cmdline.replace(r, "");
     }
 
     KService::List services = KServiceTypeTrader::self()->query(type, QString("exist Exec and ('%1' =~ Exec)").arg(cmdline));
@@ -543,10 +539,9 @@ KUrl TaskItem::launcherUrl() const
     if (d->task && !(d->task.data()->classClass().isEmpty() && d->task.data()->className().isEmpty())) {
 
         // For KCModules, if we matched on window class, etc, we would end up matching to kcmshell4 - but we are more than likely
-        // interested in the actual control module. Therefore we obtain this via the commandline. This commandline may contain
-        // "kdeinit4:" or "[kdeinit]", so we remove these first.
+        // interested in the actual control module. Therefore we obtain this via the commandline.
         if ("Kcmshell4" == d->task.data()->classClass()) {
-            d->launcherUrl = getServiceLauncherUrl(d->task.data()->pid(), "KCModule", QStringList() << "kdeinit4:" << "[kdeinit]");
+            d->launcherUrl = getServiceLauncherUrl(d->task.data()->pid(), "KCModule");
             if (!d->launcherUrl.isEmpty()) {
                 return d->launcherUrl;
             }

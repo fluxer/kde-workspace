@@ -52,13 +52,9 @@ QFileInfo CrashedApplication::executable() const
     return m_executable;
 }
 
-QString CrashedApplication::fakeExecutableBaseName() const
+QString CrashedApplication::executableBaseName() const
 {
-    if (!m_fakeBaseName.isEmpty()) {
-        return m_fakeBaseName;
-    } else {
-        return m_executable.baseName();
-    }
+    return m_executable.baseName();
 }
 
 QString CrashedApplication::version() const
@@ -129,17 +125,9 @@ void CrashedApplication::restart()
         return;
     }
 
-    int ret = -1;
-
-    //start the application via kdeinit, as it needs to have a pristine environment and
+    //start the application via klauncher, as it needs to have a pristine environment and
     //QProcess::startDetached() can't start a new process with custom environment variables.
-    if (!m_fakeBaseName.isEmpty()) {
-        // if m_fakeBaseName is set, this means m_executable is the path to kdeinit4
-        // so we need to use the fakeBaseName to restart the app
-        ret = KToolInvocation::kdeinitExec(m_fakeBaseName);
-    } else {
-        ret = KToolInvocation::kdeinitExec(m_executable.absoluteFilePath());
-    }
+    int ret = KToolInvocation::kdeinitExec(m_executable.absoluteFilePath());
 
     const bool success = (ret == 0);
 
@@ -149,7 +137,7 @@ void CrashedApplication::restart()
 
 QString getSuggestedKCrashFilename(const CrashedApplication* app)
 {
-    QString filename = app->fakeExecutableBaseName() + '-' +
+    QString filename = app->executableBaseName() + '-' +
                        app->datetime().toString("yyyyMMdd-hhmmss") +
                        ".kcrash.txt";
 

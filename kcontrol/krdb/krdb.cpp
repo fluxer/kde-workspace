@@ -95,7 +95,7 @@ static void applyGtkStyles(bool active, int version)
    list.removeAll(gtkkde);
    list.append(gtkkde);
 
-   // Pass env. var to kdeinit.
+   // Pass env. var to klauncher.
    QString name = gtkEnvVar(version);
    QString value = list.join(":");
    KToolInvocation::klauncher()->setLaunchEnv(name, value);

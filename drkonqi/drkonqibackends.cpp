@@ -32,6 +32,7 @@
 #include <KGlobal>
 #include <KStartupInfo>
 #include <KCrash>
+#include <kde_file.h>
 
 #include "crashedapplication.h"
 #include "debugger.h"
@@ -100,17 +101,17 @@ bool KCrashBackend::init()
         connect(debuggerManager(), SIGNAL(debuggerStarting()), SLOT(onDebuggerStarting()));
         connect(debuggerManager(), SIGNAL(debuggerFinished()), SLOT(onDebuggerFinished()));
 
-        //stop the process to avoid high cpu usage by other threads (bug 175362).
-        //if the process was started by kdeinit, we need to wait a bit for KCrash
-        //to reach the alarm(0); call in kdeui/util/kcrash.cpp line 406 or else
-        //if we stop it before this call, pending alarm signals will kill the
-        //process when we try to continue it.
+        // stop the process to avoid high cpu usage by other threads (bug 175362).
+        // if the process was started by kaluncher, we need to wait a bit for KCrash
+        // to reach the exit(0); call in kdeui/util/kcrash.cpp or else
+        // if we stop it before this call, pending alarm signals will kill the
+        // process when we try to continue it.
         QTimer::singleShot(2000, this, SLOT(stopAttachedProcess()));
     }
 
     //Handle drkonqi crashes
     s_pid = crashedApplication()->pid(); //copy pid for use by the crash handler, so that it is safer
-    KCrash::setEmergencySaveFunction(emergencySaveFunction);
+    KCrash::setCrashHandler(emergencySaveFunction);
 
     return true;
 }
@@ -133,24 +134,15 @@ CrashedApplication *KCrashBackend::constructCrashedApplication()
         //on linux, the fastest and most reliable way is to get the path from /proc
         kDebug() << "Using /proc to determine executable path";
         a->m_executable.setFile(QFile::readLink(QString("/proc/%1/exe").arg(a->m_pid)));
-
-        if (args->isSet("kdeinit") || a->m_executable.fileName().startsWith("python") ) {
-            a->m_fakeBaseName = args->getOption("appname");
-        }
     } else {
-        if ( args->isSet("kdeinit") ) {
-            a->m_executable = QFileInfo(KStandardDirs::findExe("kdeinit4"));
-            a->m_fakeBaseName = args->getOption("appname");
+        QFileInfo execPath(args->getOption("appname"));
+        if ( execPath.isAbsolute() ) {
+            a->m_executable = execPath;
+        } else if ( !args->getOption("apppath").isEmpty() ) {
+            QDir execDir(args->getOption("apppath"));
+            a->m_executable = execDir.absoluteFilePath(execPath.fileName());
         } else {
-            QFileInfo execPath(args->getOption("appname"));
-            if ( execPath.isAbsolute() ) {
-                a->m_executable = execPath;
-            } else if ( !args->getOption("apppath").isEmpty() ) {
-                QDir execDir(args->getOption("apppath"));
-                a->m_executable = execDir.absoluteFilePath(execPath.fileName());
-            } else {
-                a->m_executable = QFileInfo(KStandardDirs::findExe(execPath.fileName()));
-            }
+            a->m_executable = QFileInfo(KStandardDirs::findExe(execPath.fileName()));
         }
     }
 
@@ -226,10 +218,13 @@ qint64 KCrashBackend::s_pid = 0;
 //static
 void KCrashBackend::emergencySaveFunction(int signal)
 {
+    KDE_signal(signal, SIG_DFL);
+
     // In case drkonqi itself crashes, we need to get rid of the process being debugged,
     // so we kill it, no matter what its state was.
-    Q_UNUSED(signal);
     ::kill(s_pid, SIGKILL);
+
+    ::exit(signal);
 }
 
 #include "moc_drkonqibackends.cpp"

@@ -47,6 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kxerrorhandler.h>
 #include <kdialog.h>
 #include <kstandarddirs.h>
+#include <kde_file.h>
 #include <kdebug.h>
 #include <KComboBox>
 #include <QtGui/qx11info_x11.h>
@@ -63,6 +64,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "composite.h"
 #include "xcbutils.h"
 
+#include <signal.h>
 #include <X11/Xproto.h>
 
 namespace KWin
@@ -292,7 +294,7 @@ bool Application::setup()
     connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()), Qt::DirectConnection);
 
     KApplication::quitOnSignal();
-    KCrash::setEmergencySaveFunction(Application::crashHandler);
+    KCrash::setCrashHandler(Application::crashHandler);
     crashes = args->getOption("crashes").toInt();
     if (crashes >= 4) {
         // Something has gone seriously wrong
@@ -371,15 +373,18 @@ bool Application::notify(QObject* o, QEvent* e)
 
 void Application::crashHandler(int signal)
 {
+    KDE_signal(signal, SIG_DFL);
+
     crashes++;
 
-    fprintf(stderr, "Application::crashHandler() called with signal %d; recent crashes: %d\n", signal, crashes);
+    ::fprintf(stderr, "Application::crashHandler() called with signal %d; recent crashes: %d\n", signal, crashes);
     char cmd[1024];
-    sprintf(cmd, "%s --crashes %d &",
-            QFile::encodeName(QCoreApplication::applicationFilePath()).constData(), crashes);
+    ::sprintf(cmd, "%s --crashes %d &",
+              QFile::encodeName(QCoreApplication::applicationFilePath()).constData(), crashes);
 
-    sleep(1);
-    system(cmd);
+    ::sleep(1);
+    ::system(cmd);
+    ::exit(signal);
 }
 
 void Application::resetCrashesCount()

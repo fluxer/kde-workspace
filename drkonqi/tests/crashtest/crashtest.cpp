@@ -158,8 +158,7 @@ int main(int argc, char *argv[])
   KApplication app;
   KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-  //start drkonqi directly so that drkonqi's output goes to the console
-  KCrash::CrashFlags flags = KCrash::AlwaysDirectly;
+  KCrash::CrashFlags flags;
   if (args->isSet("autorestart"))
     flags |= KCrash::AutoRestart;
   KCrash::setFlags(flags);

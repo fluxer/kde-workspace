@@ -661,7 +661,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
         fclose(f);
         setenv( "SESSION_MANAGER", session_manager, true  );
 
-       // Pass env. var to kdeinit.
+       // Pass env. var to klauncher.
        org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
        klauncher.setLaunchEnv( "SESSION_MANAGER", (const char*) session_manager );
 

@@ -63,9 +63,8 @@ should be in startup.cpp and going down in that source file should
 follow the startup order (but note that this is just a documentation
 which may get outdated, so in case of doubts the source wins ;) ).
 
-The startkde scripts already launches kdeinit, which owns klauncher.
-Startkde also launches kcminit, which performs initialization done by kcontrol
-modules. There are three kcminit phases, 0, 1 and 2, controlled
+The startkde script launches kcminit, which performs initialization done by
+kcontrol modules. There are three kcminit phases, 0, 1 and 2, controlled
 by X-KDE-Init-Phase= in the .desktop file, which defaults to 1. Phase 0 kcminit
 modules should be only those that really need to be run early in the startup
 process. After executing phase 0 modules kcminit returns and waits.

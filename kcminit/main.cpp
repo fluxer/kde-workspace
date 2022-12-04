@@ -190,7 +190,7 @@ KCMInit::KCMInit( KCmdLineArgs* args )
 #else
   bool multihead = false;
 #endif
-  // Pass env. var to kdeinit.
+  // Pass env. var to klauncher.
   QString name = "KDE_MULTIHEAD";
   QString value = multihead ? "true" : "false";
   KToolInvocation::klauncher()->setLaunchEnv(name, value);
@@ -227,8 +227,7 @@ void KCMInit::runPhase2()
 
 int main(int argc, char *argv[])
 {
-  // kdeinit waits for kcminit to finish, but during KDE startup
-  // only important kcm's are started very early in the login process,
+  // during KDE startup only important kcm's are started very early in the login process,
   // the rest is delayed, so fork and make parent return after the initial phase
   pipe( ready );
   if( fork() != 0 )

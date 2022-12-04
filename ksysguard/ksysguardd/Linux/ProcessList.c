@@ -40,7 +40,6 @@
 
 #define BUFSIZE 1024
 #define TAGSIZE 32
-#define KDEINITLEN sizeof( "kdeinit: " )
 
 #ifndef bool
 #define bool char
@@ -304,23 +303,6 @@ static bool getProcess( int pid, ProcessInfo *ps )
   if ( fclose( fd ) )
     return false;
 
-  /* Ugly hack to "fix" program name for kdeinit launched programs. */
-  if ( strcmp( ps->name, "kdeinit" ) == 0 &&
-       strncmp( ps->cmdline, "kdeinit: ", KDEINITLEN ) == 0 &&
-       strcmp( ps->cmdline + KDEINITLEN, "Running..." ) != 0 ) {
-    size_t len;
-    char* end = strchr( ps->cmdline + KDEINITLEN, ' ' );
-    if ( end )
-      len = ( end - ps->cmdline ) - KDEINITLEN;
-    else
-      len = strlen( ps->cmdline + KDEINITLEN );
-    if ( len > 0 ) {
-      if ( len > sizeof( ps->name ) - 1 )
-        len = sizeof( ps->name ) - 1;
-      strncpy( ps->name, ps->cmdline + KDEINITLEN, len );
-      ps->name[ len ] = '\0';
-    }
-  }
   /* find out user name with the process uid */
   uName = getCachedPWUID( ps->uid );
   strncpy( ps->userName, uName, sizeof( ps->userName ) - 1 );

@@ -87,7 +87,7 @@ public:
 protected:
     void timerEvent(QTimerEvent *event) {
         kDebug() << "Enabling drkonqi crash catching";
-        KCrash::setDrKonqiEnabled(true);
+        KCrash::setFlags(KCrash::flags() | KCrash::DrKonqi);
         killTimer(event->timerId());
         this->deleteLater();
     }
@@ -102,9 +102,9 @@ bool DrKonqi::init()
         // Set drkonqi to handle its own crashes, but only if the crashed app
         // is not drkonqi already. If it is drkonqi, delay enabling crash catching
         // to prevent recursive crashes (in case it crashes at startup)
-        if (crashedApplication()->fakeExecutableBaseName() != "drkonqi") {
+        if (crashedApplication()->executableBaseName() != "drkonqi") {
             kDebug() << "Enabling drkonqi crash catching";
-            KCrash::setDrKonqiEnabled(true);
+            KCrash::setFlags(KCrash::flags() | KCrash::DrKonqi);
         } else {
             new EnableCrashCatchingDelayed;
         }

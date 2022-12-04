@@ -89,7 +89,7 @@ void DrKonqiDialog::buildIntroWidget()
 
     QString reportMessage;
     if (!crashedApp->bugReportAddress().isEmpty()) {
-        if (crashedApp->fakeExecutableBaseName() == QLatin1String("drkonqi")) { //Handle own crashes
+        if (crashedApp->executableBaseName() == QLatin1String("drkonqi")) { //Handle own crashes
             reportMessage = i18nc("@info", "<para>As the Crash Handler itself has failed, the "
                                            "automatic reporting process is disabled to reduce the "
                                            "risks of failing again.<nl /><nl />"
@@ -132,7 +132,7 @@ void DrKonqiDialog::buildIntroWidget()
                                             "<para>Executable: <application>%1"
                                             "</application> PID: <numid>%2</numid> Signal: %3 (%4) "
                                             "Time: %5 %6</para>",
-                                             crashedApp->fakeExecutableBaseName(),
+                                             crashedApp->executableBaseName(),
                                              crashedApp->pid(),
                                              crashedApp->signalName(),
                                              crashedApp->signalNumber(),
@@ -156,7 +156,7 @@ void DrKonqiDialog::buildDialogButtons()
                                                      "Starts the bug report assistant.")));
 
     bool enableReportAssistant = !crashedApp->bugReportAddress().isEmpty() &&
-                                 crashedApp->fakeExecutableBaseName() != QLatin1String("drkonqi") &&
+                                 crashedApp->executableBaseName() != QLatin1String("drkonqi") &&
                                  !KCmdLineArgs::parsedArgs()->isSet("safer");
     enableButton(KDialog::User1, enableReportAssistant);
     connect(this, SIGNAL(user1Clicked()), this, SLOT(startBugReportAssistant()));
@@ -190,7 +190,7 @@ void DrKonqiDialog::buildDialogButtons()
                                                i18nc("@info:tooltip", "Use this button to restart "
                                                      "the crashed application.")));
     enableButton(KDialog::User3, !crashedApp->hasBeenRestarted() &&
-                                 crashedApp->fakeExecutableBaseName() != QLatin1String("drkonqi"));
+                                 crashedApp->executableBaseName() != QLatin1String("drkonqi"));
     connect(this, SIGNAL(user3Clicked()), crashedApp, SLOT(restart()));
     connect(crashedApp, SIGNAL(restarted(bool)), this, SLOT(applicationRestarted(bool)));
 
