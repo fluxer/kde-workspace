@@ -64,13 +64,6 @@ KHostName::KHostName()
    if (oldName == newName)
       exit(0);
 
-   const QByteArray home = qgetenv("HOME");
-   if (home.isEmpty())
-   {
-      fprintf(stderr, "%s", i18n("Error: HOME environment variable not set.\n").toLocal8Bit().data());
-      exit(1);
-   }
-
    display = QString::fromLocal8Bit(qgetenv("DISPLAY"));
    // strip the screen number from the display
    display.remove(QRegExp("\\.[0-9]+$"));
