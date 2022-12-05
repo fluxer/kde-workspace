@@ -98,6 +98,7 @@ Name[x-test]=xxMenu Editorxx
 Name[zh_CN]=菜单编辑器
 Name[zh_TW]=選單編輯器
 
+X-DBUS-ServiceName=org.kde.kmenuedit
 X-DBUS-StartupType=Unique
 Categories=Qt;KDE;Settings;
 NoDisplay=true

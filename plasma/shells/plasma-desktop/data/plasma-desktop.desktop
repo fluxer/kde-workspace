@@ -1,5 +1,6 @@
 [Desktop Entry]
 Exec=plasma-desktop
+X-DBUS-ServiceName=org.kde.plasma-desktop
 X-DBUS-StartupType=multi
 Name=Plasma Desktop Workspace
 Name[ar]=مساحة عمل بلازما

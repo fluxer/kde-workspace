@@ -174,5 +174,6 @@ MimeType=application/x-ksysguard;
 X-DocPath=ksysguard/index.html
 Terminal=false
 X-KDE-StartupNotify=true
+X-DBUS-ServiceName=org.kde.ksysguard
 X-DBUS-StartupType=Multi
 Categories=Qt;KDE;System;
