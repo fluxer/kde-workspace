@@ -42,21 +42,21 @@ public:
 private Q_SLOTS:
     void gotNewStartup(const KStartupInfoId& id, const KStartupInfoData& data);
     void gotRemoveStartup(const KStartupInfoId& id, const KStartupInfoData& data);
-    void gotStartupChange(const KStartupInfoId& id, const KStartupInfoData& data);
 
 private:
     enum FeedbackType {
         NoFeedback = 0,
         PassiveFeedback = 1
     };
-    void start(const QString& icon);
+
+    void start();
     void stop();
 
     KStartupInfo* m_startupInfo;
-    KStartupInfoId m_currentStartup;
-    QMap< KStartupInfoId, QString > m_startups; // QString == icon
+    int m_startups;
     bool m_active;
     FeedbackType m_type;
+    QCursor m_cursor;
 };
 } // namespace
 

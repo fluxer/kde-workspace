@@ -38,12 +38,13 @@ namespace KWin
 
 StartupFeedbackEffect::StartupFeedbackEffect()
     : m_startupInfo(new KStartupInfo(KStartupInfo::CleanOnCantDetect, this))
+    , m_startups(0)
     , m_active(false)
     , m_type(PassiveFeedback)
+    , m_cursor(Qt::WaitCursor)
 {
     connect(m_startupInfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData)));
     connect(m_startupInfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotRemoveStartup(KStartupInfoId,KStartupInfoData)));
-    connect(m_startupInfo, SIGNAL(gotStartupChange(KStartupInfoId,KStartupInfoData)), SLOT(gotStartupChange(KStartupInfoId,KStartupInfoData)));
     reconfigure(ReconfigureAll);
 }
 
@@ -71,50 +72,38 @@ void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
         m_type = PassiveFeedback;
     }
     if (oldactive) {
-        start(m_startups[ m_currentStartup ]);
+        start();
     }
 }
 
 void StartupFeedbackEffect::gotNewStartup(const KStartupInfoId& id, const KStartupInfoData& data)
 {
-    const QString& icon = data.findIcon();
-    m_currentStartup = id;
-    m_startups[ id ] = icon;
-    start(icon);
+    Q_UNUSED(id);
+    Q_UNUSED(data);
+
+    m_startups++;
+    if (!m_active) {
+        start();
+    }
 }
 
 void StartupFeedbackEffect::gotRemoveStartup(const KStartupInfoId& id, const KStartupInfoData& data)
 {
-    Q_UNUSED( data )
-    m_startups.remove(id);
-    if (m_startups.count() == 0) {
-        m_currentStartup = KStartupInfoId(); // null
+    Q_UNUSED(id);
+    Q_UNUSED(data);
+
+    m_startups--;
+    if (m_startups <= 0) {
+        m_startups = 0;
         stop();
-        return;
-    }
-    m_currentStartup = m_startups.begin().key();
-    start(m_startups[ m_currentStartup ]);
-}
-
-void StartupFeedbackEffect::gotStartupChange(const KStartupInfoId& id, const KStartupInfoData& data)
-{
-    if (m_currentStartup == id) {
-        const QString& icon = data.findIcon();
-        if (!icon.isEmpty() && icon != m_startups[ m_currentStartup ]) {
-            m_startups[ id ] = icon;
-            start(icon);
-        }
     }
 }
 
-void StartupFeedbackEffect::start(const QString& icon)
+void StartupFeedbackEffect::start()
 {
-    Q_UNUSED(icon);
     if (m_type == NoFeedback) {
         return;
     }
-
-    QCursor cursor = QCursor(Qt::WaitCursor);
 
     xcb_connection_t *c = connection();
     ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(
@@ -123,7 +112,7 @@ void StartupFeedbackEffect::start(const QString& icon)
             xcb_grab_pointer_unchecked(c, false, rootWindow(),
                 XCB_EVENT_MASK_NO_EVENT,
                 XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
-                cursor.handle(), XCB_TIME_CURRENT_TIME),
+                m_cursor.handle(), XCB_TIME_CURRENT_TIME),
             NULL
         )
     );
@@ -132,7 +121,6 @@ void StartupFeedbackEffect::start(const QString& icon)
         m_active = false;
         return;
     }
-
     m_active = true;
 }
 
