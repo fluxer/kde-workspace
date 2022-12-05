@@ -43,9 +43,10 @@ StartupFeedbackEffect::StartupFeedbackEffect()
     , m_type(PassiveFeedback)
     , m_cursor(Qt::WaitCursor)
 {
+    reconfigure(ReconfigureAll);
+
     connect(m_startupInfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData)));
     connect(m_startupInfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotRemoveStartup(KStartupInfoId,KStartupInfoData)));
-    reconfigure(ReconfigureAll);
 }
 
 StartupFeedbackEffect::~StartupFeedbackEffect()
@@ -63,9 +64,9 @@ void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
     KConfig conf("klaunchrc", KConfig::NoGlobals);
     KConfigGroup c = conf.group("FeedbackStyle");
     const bool busyCursor = c.readEntry("BusyCursor", true);
-
     c = conf.group("BusyCursorSettings");
-    m_startupInfo->setTimeout(c.readEntry("Timeout", 10));
+    const int timeout = c.readEntry("Timeout", 10);
+    m_startupInfo->setTimeout(timeout);
     if (!busyCursor) {
         m_type = NoFeedback;
     } else {
