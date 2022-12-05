@@ -54,7 +54,7 @@ private:
 
     KStartupInfo* m_startupInfo;
     KStartupInfoId m_currentStartup;
-    QMap< KStartupInfoId, QString > m_startups; // QString == pixmap
+    QMap< KStartupInfoId, QString > m_startups; // QString == icon
     bool m_active;
     FeedbackType m_type;
 };

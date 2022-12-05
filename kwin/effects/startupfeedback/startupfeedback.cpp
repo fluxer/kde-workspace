@@ -54,6 +54,11 @@ StartupFeedbackEffect::~StartupFeedbackEffect()
 void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
 {
     Q_UNUSED(flags)
+    const bool oldactive = m_active;
+    if (oldactive) {
+        stop();
+    }
+
     KConfig conf("klaunchrc", KConfig::NoGlobals);
     KConfigGroup c = conf.group("FeedbackStyle");
     const bool busyCursor = c.readEntry("BusyCursor", true);
@@ -65,8 +70,7 @@ void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
     } else {
         m_type = PassiveFeedback;
     }
-    if (m_active) {
-        stop();
+    if (oldactive) {
         start(m_startups[ m_currentStartup ]);
     }
 }
@@ -142,7 +146,7 @@ void StartupFeedbackEffect::stop()
             }
             break;
         case NoFeedback:
-            return; // don't want the full repaint
+            return;
         default:
             break; // impossible
     }
