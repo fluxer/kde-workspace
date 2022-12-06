@@ -321,9 +321,6 @@ namespace Oxygen
         */
 
 #ifdef Q_WS_X11
-        const int width( source.width() );
-        const int height( source.height() );
-
         // create X11 pixmap
         KPixmap pixmap(source);
         // handle not released, safe to return

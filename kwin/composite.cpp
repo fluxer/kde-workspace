@@ -64,7 +64,7 @@ extern int currentRefreshRate();
 
 KWIN_SINGLETON_FACTORY_VARIABLE(Compositor, s_compositor)
 
-static inline qint64 milliToNano(int milli) { return milli * 1000 * 1000; }
+// static inline qint64 milliToNano(int milli) { return milli * 1000 * 1000; }
 static inline qint64 nanoToMilli(int nano) { return nano / (1000*1000); }
 
 Compositor::Compositor(QObject* workspace)

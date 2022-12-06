@@ -3742,14 +3742,6 @@ namespace Oxygen
         const QPalette& palette( option->palette );
         const bool reverseLayout( option->direction == Qt::RightToLeft );
 
-        // in fact with current version of Qt ( 4.6.0 ) the cast fails and document mode is always false
-        // this will hopefully be fixed in later versions
-        const QStyleOptionTabV3* tabOptV3( qstyleoption_cast<const QStyleOptionTabV3*>( option ) );
-        bool documentMode( tabOptV3 ? tabOptV3->documentMode : false );
-
-        const QTabWidget *tabWidget = ( widget && widget->parentWidget() ) ? qobject_cast<const QTabWidget *>( widget->parentWidget() ) : NULL;
-        documentMode |= ( tabWidget ? tabWidget->documentMode() : true );
-
         QRect gradientRect( r );
         switch( tabOpt->shape )
         {

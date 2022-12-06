@@ -23,7 +23,7 @@
 */
 
 #include <sys/time.h> /* for gettimeofday */
-#include <string.h> /* for strcmp */
+#include <string.h> /* for strcmp and memset */
 #include <stdlib.h> /* for malloc */
 
 #include <sys/types.h>
@@ -144,6 +144,7 @@ static int process26DiskIO( const char* buf ) {
 	*/
 	int                      major, minor;
 	char                     devname[DISKDEVNAMELEN];
+	memset(devname, 0, sizeof(devname) * sizeof(char));
 	unsigned long            total,
 				rio, rmrg, rblk, rtim,
 				wio, wmrg, wblk, wtim,
@@ -151,6 +152,7 @@ static int process26DiskIO( const char* buf ) {
 	DiskIOInfo               *ptr = DiskIO;
 	DiskIOInfo               *last = 0;
 	char                     sensorName[128];
+        memset(sensorName, 0, sizeof(sensorName) * sizeof(char));
 	
 	/*
 	From kernel 2.6.22.1's Documentation/iostats.txt:
