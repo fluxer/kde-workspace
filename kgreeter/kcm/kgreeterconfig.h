@@ -52,6 +52,7 @@ private Q_SLOTS:
     void slotURLChanged(const KUrl &url);
 
     void slotTest();
+    void slotProcessFinished(const int exitcode);
 
 private:
     void loadSettings(const QString &font, const QString &style, const QString &color,
@@ -60,7 +61,7 @@ private:
     void killLightDM();
 
     QString m_lightdmexe;
-    Q_PID m_lightdmpid;
+    QProcess* m_lightdmproc;
 };
 
 #endif // KGREETERCONFIG_H

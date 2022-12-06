@@ -34,9 +34,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <sys/types.h>
-#include <signal.h>
-
 #include "config-workspace.h"
 
 K_PLUGIN_FACTORY(KCMGreeterFactory, registerPlugin<KCMGreeter>();)
@@ -45,7 +42,7 @@ K_EXPORT_PLUGIN(KCMGreeterFactory("kcmgreeterconfig", "kcm_greeterconfig"))
 KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     : KCModule(KCMGreeterFactory::componentData(), parent),
     m_lightdmexe(KStandardDirs::findRootExe("lightdm")),
-    m_lightdmpid(0)
+    m_lightdmproc(nullptr)
 {
     Q_UNUSED(args);
 
@@ -117,6 +114,8 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     connect(rectanglerequester, SIGNAL(textChanged(QString)), this, SLOT(slotURLChanged(QString)));
     connect(rectanglerequester, SIGNAL(urlSelected(KUrl)), this, SLOT(slotURLChanged(KUrl)));
 
+    m_lightdmproc = new QProcess(this);
+    connect(m_lightdmproc, SIGNAL(finished(int)), this, SLOT(slotProcessFinished(int)));
     testbutton->setIcon(KIcon("debug-run"));
     connect(testbutton, SIGNAL(pressed()), this, SLOT(slotTest()));
 }
@@ -229,14 +228,19 @@ void KCMGreeter::slotTest()
 {
     killLightDM();
 
-    const bool result = QProcess::startDetached(
+    m_lightdmproc->start(
         m_lightdmexe,
-        QStringList() << QString::fromLatin1("--test-mode"),
-        QDir::currentPath(),
-        &m_lightdmpid
+        QStringList() << QString::fromLatin1("--test-mode")
     );
-    if (!result) {
+    if (!m_lightdmproc->waitForStarted(10000)) {
         KMessageBox::error(this, i18n("Could not start LightDM"));
+    }
+}
+
+void KCMGreeter::slotProcessFinished(const int exitcode)
+{
+    if (exitcode != 0) {
+        KMessageBox::error(this, i18n("LightDM finished with error: %1", exitcode));
     }
 }
 
@@ -292,8 +296,11 @@ void KCMGreeter::enableTest(const bool enable)
 
 void KCMGreeter::killLightDM()
 {
-    if (m_lightdmpid > 0) {
-        ::kill(pid_t(m_lightdmpid), SIGTERM);
+    if (m_lightdmproc) {
+        m_lightdmproc->terminate();
+        if (!m_lightdmproc->waitForFinished(3000)) {
+            m_lightdmproc->kill();
+        }
     }
 }
 
