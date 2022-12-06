@@ -27,6 +27,7 @@
 #include <KGlobalSettings>
 #include <KSharedConfig>
 #include <KLocale>
+#include <KDebug>
 
 #include <glib.h>
 #include <lightdm-gobject-1/lightdm.h>
@@ -40,6 +41,14 @@ static const int gliblooppolltime = 400;
 static GMainLoop *glibloop = NULL;
 
 static QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
+
+static QString glibErrorString(const GError *const gliberror)
+{
+    if (!gliberror) {
+        return i18n("Unknown error");
+    }
+    return QString::fromUtf8(gliberror->message);
+}
 
 class KGreeter : public QMainWindow
 {
@@ -82,7 +91,6 @@ private:
     void setUser(const QString &user);
     void setSession(const QString &session);
     bool isUserLogged() const;
-    static QString glibErrorString(const GError *const gliberror);
 
     Ui::KGreeter m_ui;
     LightDMGreeter *m_ldmgreeter;
@@ -339,7 +347,7 @@ void KGreeter::showPromptCb(LightDMGreeter *ldmgreeter, const char *ldmtext, Lig
 
         g_autoptr(GError) gliberror = NULL;
         if (!lightdm_greeter_respond(ldmgreeter, kgreeterpass.constData(), &gliberror)) {
-            kgreeter->statusBar()->showMessage(i18n("Failed to respond: %1", KGreeter::glibErrorString(gliberror)));
+            kgreeter->statusBar()->showMessage(i18n("Failed to respond: %1", glibErrorString(gliberror)));
         }
     }
 }
@@ -361,7 +369,7 @@ void KGreeter::authenticationCompleteCb(LightDMGreeter *ldmgreeter, gpointer ldm
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_greeter_start_session_sync(ldmgreeter, kgreetersession.constData(), &gliberror)) {
-        kgreeter->statusBar()->showMessage(i18n("Failed to start session: %1", KGreeter::glibErrorString(gliberror)));
+        kgreeter->statusBar()->showMessage(i18n("Failed to start session: %1", glibErrorString(gliberror)));
         kgreeter->clearPass();
         return;
     }
@@ -385,7 +393,7 @@ void KGreeter::slotSuspend()
 {
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_suspend(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not suspend: %1", KGreeter::glibErrorString(gliberror)));
+        statusBar()->showMessage(i18n("Could not suspend: %1", glibErrorString(gliberror)));
     }
 }
 
@@ -393,7 +401,7 @@ void KGreeter::slotHibernate()
 {
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_hibernate(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not hibernate: %1", KGreeter::glibErrorString(gliberror)));
+        statusBar()->showMessage(i18n("Could not hibernate: %1", glibErrorString(gliberror)));
     }
 }
 
@@ -411,7 +419,7 @@ void KGreeter::slotPoweroff()
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_shutdown(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not poweroff: %1", KGreeter::glibErrorString(gliberror)));
+        statusBar()->showMessage(i18n("Could not poweroff: %1", glibErrorString(gliberror)));
     }
 }
 
@@ -429,7 +437,7 @@ void KGreeter::slotReboot()
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_restart(&gliberror)) {
-        statusBar()->showMessage(i18n("Could not reboot: %1", KGreeter::glibErrorString(gliberror)));
+        statusBar()->showMessage(i18n("Could not reboot: %1", glibErrorString(gliberror)));
     }
 }
 
@@ -528,16 +536,10 @@ bool KGreeter::isUserLogged() const
     return false;
 }
 
-QString KGreeter::glibErrorString(const GError *const gliberror)
-{
-    if (!gliberror) {
-        return i18n("Unknown error");
-    }
-    return QString::fromUtf8(gliberror->message);
-}
-
 int main(int argc, char**argv)
 {
+    kDebug() << "starting kgreeter";
+
     QApplication app(argc, argv);
 
     const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
@@ -582,10 +584,11 @@ int main(int argc, char**argv)
 
     g_autoptr(GError) gliberror = NULL;
     if (!lightdm_greeter_connect_to_daemon_sync(ldmgreeter, &gliberror)) {
-        ::fprintf(stderr, "%s: %s\n", "Could not connect to daemon", gliberror->message);
+        kError() << "Could not connect to daemon" << glibErrorString(gliberror);
         return 1;
     }
 
+    kDebug() << "kgreeter is connected to daemon";
     return app.exec();
 }
 
