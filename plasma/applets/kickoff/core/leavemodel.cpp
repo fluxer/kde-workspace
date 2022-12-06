@@ -36,10 +36,6 @@
 
 using namespace Kickoff;
 
-class LeaveModel::Private
-{
-};
-
 QStandardItem* LeaveModel::createStandardItem(const QString& url)
 {
     //Q_ASSERT(KUrl(url).scheme() == "leave");
@@ -90,8 +86,7 @@ QStandardItem* LeaveModel::createStandardItem(const QString& url)
 }
 
 LeaveModel::LeaveModel(QObject *parent)
-        : QStandardItemModel(parent)
-        , d(0)
+    : QStandardItemModel(parent)
 {
 }
 
@@ -183,10 +178,4 @@ void LeaveModel::updateModel()
     }
 }
 
-LeaveModel::~LeaveModel()
-{
-    delete d;
-}
-
 #include "moc_leavemodel.cpp"
-

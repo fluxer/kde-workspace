@@ -33,16 +33,11 @@ class KICKOFF_EXPORT LeaveModel : public QStandardItemModel
 
 public:
     LeaveModel(QObject *parent);
-    ~LeaveModel();
 
     static QStandardItem* createStandardItem(const QString& url);
     virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
 
     void updateModel();
-
-private:
-    class Private;
-    Private * const d;
 };
 
 }
