@@ -1,5 +1,7 @@
 project(kgreeter)
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1603)
+
 find_package(GLIB2)
 set_package_properties(GLIB2 PROPERTIES
     DESCRIPTION "Low-level core library that forms the basis for projects such as GTK and GNOME"
