@@ -1009,7 +1009,7 @@ bool KSysGuardProcessList::reniceProcesses(const QList<long long> &pids, int nic
     if (reply == KAuthorization::NoError) {
         updateList();
     } else if (reply == KAuthorization::AuthorizationError) {
-        KMessageBox::sorry(this, i18n("You do not have the permission to crenice the process."));
+        KMessageBox::sorry(this, i18n("You do not have the permission to renice the process."));
         return false;
     } else {
         KMessageBox::sorry(this, i18n("There was a problem trying to renice the process"));
