@@ -2,6 +2,11 @@ project(kgreeter)
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1603)
 
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/lightdm-kgreeter-greeter.desktop.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/lightdm-kgreeter-greeter.desktop
+)
+
 find_package(GLIB2)
 set_package_properties(GLIB2 PROPERTIES
     DESCRIPTION "Low-level core library that forms the basis for projects such as GTK and GNOME"
@@ -46,7 +51,7 @@ install(
 )
 
 install(
-    FILES lightdm-kgreeter-greeter.desktop
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/lightdm-kgreeter-greeter.desktop
     DESTINATION ${KDE4_SHARE_INSTALL_PREFIX}/xgreeters
 )
 
