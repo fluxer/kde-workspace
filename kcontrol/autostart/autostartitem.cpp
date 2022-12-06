@@ -56,5 +56,3 @@ void AutoStartItem::setPath(const QString &path)
 
     m_fileName = KUrl(newFileName);
 }
-
-#include "moc_autostartitem.cpp"

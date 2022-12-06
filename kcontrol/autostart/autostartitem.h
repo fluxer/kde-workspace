@@ -25,7 +25,7 @@
 #include <QObject>
 #include <KUrl>
 
-class AutoStartItem : public QTreeWidgetItem, public QObject
+class AutoStartItem : public QTreeWidgetItem
 {
 public:
     AutoStartItem(const QString &service, QTreeWidgetItem *parent);

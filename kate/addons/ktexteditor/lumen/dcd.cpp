@@ -344,14 +344,9 @@ bool DCD::stopServer()
     return false;
 }
 
-
-
 DCD::~DCD()
 {
     if (running()) {
         stopServer();
     }
 }
-
-
-#include "moc_dcd.cpp"
