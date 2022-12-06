@@ -1,7 +1,4 @@
 add_subdirectory( kdedmodule )
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
 
 set(libkioremote_SRCS kio_remote.cpp remoteimpl.cpp)
 
