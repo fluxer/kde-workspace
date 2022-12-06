@@ -40,7 +40,7 @@ class ThumbCreator;
 class ThumbnailProtocol : public KIO::SlaveBase
 {
 public:
-    ThumbnailProtocol(const QByteArray &pool, const QByteArray &app);
+    ThumbnailProtocol(const QByteArray &app);
     virtual ~ThumbnailProtocol();
 
     virtual void get(const KUrl &url);

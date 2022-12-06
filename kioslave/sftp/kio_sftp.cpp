@@ -65,27 +65,25 @@
 #define MAX_TRANSFER_SIZE (14 * 1024 * 1024)
 
 using namespace KIO;
-extern "C"
+
+int main( int argc, char **argv )
 {
-    int KDE_EXPORT kdemain( int argc, char **argv )
-    {
-        QApplication app(argc, argv);
-        KComponentData componentData( "kio_sftp" );
-        (void) KGlobal::locale();
-
-        kDebug(KIO_SFTP_DB) << "*** Starting kio_sftp ";
-
-        if (argc != 4) {
-            kDebug(KIO_SFTP_DB) << "Usage: kio_sftp  protocol domain-socket1 domain-socket2";
-            exit(-1);
-        }
-
-        sftpProtocol slave(argv[2], argv[3]);
-        slave.dispatchLoop();
-
-        kDebug(KIO_SFTP_DB) << "*** kio_sftp Done";
-        return 0;
+    if (argc != 2) {
+        kDebug(KIO_SFTP_DB) << "Usage: kio_sftp app-socket";
+        exit(-1);
     }
+
+    QApplication app(argc, argv);
+    KComponentData componentData( "kio_sftp" );
+    (void) KGlobal::locale();
+
+    kDebug(KIO_SFTP_DB) << "*** Starting kio_sftp ";
+
+    sftpProtocol slave(argv[1]);
+    slave.dispatchLoop();
+
+    kDebug(KIO_SFTP_DB) << "*** kio_sftp Done";
+    return 0;
 }
 
 // Converts SSH error into KIO error
@@ -451,8 +449,8 @@ QString sftpProtocol::canonicalizePath(const QString &path)
     return cPath;
 }
 
-sftpProtocol::sftpProtocol(const QByteArray &pool_socket, const QByteArray &app_socket)
-    : SlaveBase("kio_sftp", pool_socket, app_socket),
+sftpProtocol::sftpProtocol(const QByteArray &app_socket)
+    : SlaveBase("kio_sftp", app_socket),
     mConnected(false), mPort(-1), mSession(NULL), mSftp(NULL), mPublicKeyAuthInfo(0)
 {
     kDebug(KIO_SFTP_DB) << "pid = " << getpid();

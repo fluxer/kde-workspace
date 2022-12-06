@@ -43,20 +43,18 @@
 
 using namespace KIO;
 
-extern "C" { KDE_EXPORT int kdemain(int argc, char **argv); }
-
-int kdemain( int argc, char **argv )
+int main( int argc, char **argv )
 {
   KComponentData componentData( "kio_floppy" );
 
-  if (argc != 4)
+  if (argc != 2)
   {
-     fprintf(stderr, "Usage: kio_floppy protocol domain-socket1 domain-socket2\n");
+     fprintf(stderr, "Usage: kio_floppy app-socket\n");
      exit(-1);
   }
-  kDebug(7104) << "Floppy: kdemain: starting";
+  kDebug(7104) << "Floppy: starting";
 
-  FloppyProtocol slave(argv[2], argv[3]);
+  FloppyProtocol slave(argv[1]);
   slave.dispatchLoop();
   return 0;
 }
@@ -75,15 +73,15 @@ void getDriveAndPath(const QString& path, QString& drive, QString& rest)
    }
 }
 
-FloppyProtocol::FloppyProtocol (const QByteArray &pool, const QByteArray &app )
-:SlaveBase( "floppy", pool, app )
+FloppyProtocol::FloppyProtocol (const QByteArray &app )
+:SlaveBase( "floppy", app )
 ,m_mtool(0)
 ,m_stdoutBuffer(0)
 ,m_stderrBuffer(0)
 ,m_stdoutSize(0)
 ,m_stderrSize(0)
 {
-   kDebug(7104)<<"Floppy::Floppy: -"<<pool<<"-";
+   kDebug(7104)<<"Floppy::Floppy: -"<<app<<"-";
 }
 
 FloppyProtocol::~FloppyProtocol()

@@ -80,14 +80,13 @@ using namespace KIO;
 static const QByteArray thumbFormat = QImageWriter::defaultImageFormat();
 static const QString thumbExt = QLatin1String(".") + thumbFormat;
 
-extern "C"
+int main(int argc, char **argv)
 {
-    KDE_EXPORT int kdemain(int argc, char **argv);
-}
+    if (argc != 2) {
+        kError(7115) << "Usage: kio_thumbnail app-socket";
+        exit(-1);
+    }
 
-
-int kdemain(int argc, char **argv)
-{
 #ifdef HAVE_NICE
     nice( 5 );
 #endif
@@ -109,20 +108,14 @@ int kdemain(int argc, char **argv)
     KApplication app;
 #endif
 
-
-    if (argc != 4) {
-        kError(7115) << "Usage: kio_thumbnail protocol domain-socket1 domain-socket2";
-        exit(-1);
-    }
-
-    ThumbnailProtocol slave(argv[2], argv[3]);
+    ThumbnailProtocol slave(argv[1]);
     slave.dispatchLoop();
 
     return 0;
 }
 
-ThumbnailProtocol::ThumbnailProtocol(const QByteArray &pool, const QByteArray &app)
-    : SlaveBase("thumbnail", pool, app),
+ThumbnailProtocol::ThumbnailProtocol(const QByteArray &app)
+    : SlaveBase("thumbnail", app),
       m_iconSize(0),
       m_maxFileSize(0)
 {

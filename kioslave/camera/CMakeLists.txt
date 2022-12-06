@@ -2,7 +2,7 @@ include_directories(
     ${GPHOTO2_INCLUDE_DIR}
 )
 
-kde4_add_plugin(kio_camera kio_camera.cpp)
+add_executable(kio_camera kio_camera.cpp)
 
 target_link_libraries(kio_camera
     ${KDE4_KIO_LIBS}
@@ -11,7 +11,7 @@ target_link_libraries(kio_camera
 
 install(
     TARGETS kio_camera
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
 install(

@@ -31,7 +31,7 @@ class KConfig;
 class KameraProtocol : public KIO::SlaveBase
 {
 public:
-    KameraProtocol(const QByteArray &pool, const QByteArray &app);
+    KameraProtocol(const QByteArray &app);
     virtual ~KameraProtocol();
 
     virtual void get(const KUrl &url);

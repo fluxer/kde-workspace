@@ -40,7 +40,7 @@ class sftpProtocol : public KIO::SlaveBase
 {
 
 public:
-  sftpProtocol(const QByteArray &pool_socket, const QByteArray &app_socket);
+  sftpProtocol(const QByteArray &app_socket);
   virtual ~sftpProtocol();
   virtual void setHost(const QString &h, quint16 port, const QString& user, const QString& pass);
   virtual void get(const KUrl &url);

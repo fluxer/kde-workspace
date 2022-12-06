@@ -30,7 +30,7 @@
 class NetworkSlave : public KIO::SlaveBase
 {
 public:
-    NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket);
+    NetworkSlave(const QByteArray &programSocket);
     virtual ~NetworkSlave();
 
 public: // KIO::SlaveBase API

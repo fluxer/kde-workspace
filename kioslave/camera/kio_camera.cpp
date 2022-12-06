@@ -57,25 +57,21 @@ using namespace KIO;
 
 extern "C"
 {
-    Q_DECL_EXPORT int kdemain(int argc, char **argv);
-
     static void frontendCameraStatus(GPContext *context, const char *status, void *data);
     static unsigned int frontendProgressStart(GPContext *context, float totalsize, const char *status, void *data);
     static void frontendProgressUpdate(GPContext *context, unsigned int id, float current, void *data);
 }
 
-int kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
     KComponentData componentData("kio_kamera");
 
-    if (argc != 4) {
-        kDebug(7123) << "Usage: kio_kamera protocol "
-                        "domain-socket1 domain-socket2";
+    if (argc != 2) {
+        kDebug(7123) << "Usage: kio_kamera app-socket";
         exit(-1);
     }
 
-    KameraProtocol slave(argv[2], argv[3]);
-
+    KameraProtocol slave(argv[1]);
     slave.dispatchLoop();
 
     return 0;
@@ -84,8 +80,8 @@ int kdemain(int argc, char **argv)
 static QString path_quote(QString path)   { return path.replace("/","%2F").replace(" ","%20"); }
 static QString path_unquote(QString path) { return path.replace("%2F","/").replace("%20"," "); }
 
-KameraProtocol::KameraProtocol(const QByteArray &pool, const QByteArray &app)
-    : SlaveBase("camera", pool, app),
+KameraProtocol::KameraProtocol(const QByteArray &app)
+    : SlaveBase("camera", app),
     m_camera(NULL)
 {
     // attempt to initialize libgphoto2 and chosen camera (requires locking)

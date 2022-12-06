@@ -15,14 +15,12 @@ set(trashcommon_PART_SRCS
 
 set(kio_trash_PART_SRCS kio_trash.cpp ${trashcommon_PART_SRCS})
 
-if(NOT MINGW)
-kde4_add_plugin(kio_trash ${kio_trash_PART_SRCS})
-
+add_executable(kio_trash ${kio_trash_PART_SRCS})
 
 target_link_libraries(kio_trash  ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS})
 
-install(TARGETS kio_trash  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
-endif(NOT MINGW)
+install(TARGETS kio_trash  DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR} )
+
 ########### next target ###############
 
 set(ktrash_SRCS ktrash.cpp )

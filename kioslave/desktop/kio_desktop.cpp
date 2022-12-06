@@ -27,6 +27,7 @@
 #include <KStandardDirs>
 #include <kdeversion.h>
 #include <kdemacros.h>
+#include <kdebug.h>
 
 #include <kio/udsentry.h>
 
@@ -37,24 +38,26 @@
 
 #include <sys/stat.h>
 
-extern "C"
+int main(int argc, char **argv)
 {
-    int KDE_EXPORT kdemain(int argc, char **argv)
-    {
-        // necessary to use other kio slaves
-        QCoreApplication app(argc, argv);
-        KComponentData("kio_desktop", "kdelibs4");
-        KGlobal::locale();
-
-        // start the slave
-        DesktopProtocol slave(argv[1], argv[2], argv[3]);
-        slave.dispatchLoop();
-        return 0;
+    if (argc != 2) {
+        fprintf(stderr, "Usage: kio_desktop app-socket\n");
+        exit(-1);
     }
+
+    // necessary to use other kio slaves
+    QCoreApplication app(argc, argv);
+    KComponentData("kio_desktop", "kdelibs4");
+    KGlobal::locale();
+
+    // start the slave
+    DesktopProtocol slave(argv[1]);
+    slave.dispatchLoop();
+    return 0;
 }
 
-DesktopProtocol::DesktopProtocol(const QByteArray& protocol, const QByteArray &pool, const QByteArray &app)
-    : KIO::ForwardingSlaveBase(protocol, pool, app)
+DesktopProtocol::DesktopProtocol(const QByteArray &app)
+    : KIO::ForwardingSlaveBase("desktop", app)
 {
     checkLocalInstall();
 

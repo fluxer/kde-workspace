@@ -32,8 +32,8 @@
 #include <QRegExp>
 #include <QTextStream>
 
-FileNameSearchProtocol::FileNameSearchProtocol( const QByteArray &pool, const QByteArray &app ) :
-    SlaveBase("search", pool, app),
+FileNameSearchProtocol::FileNameSearchProtocol( const QByteArray &app ) :
+    SlaveBase("search", app),
     m_checkContent(""),
     m_checkType(""),
     m_regExp(0),
@@ -193,17 +193,17 @@ void FileNameSearchProtocol::cleanup()
     m_iteratedDirs.clear();
 }
 
-extern "C" int Q_DECL_EXPORT kdemain( int argc, char **argv )
+int main( int argc, char **argv )
 {
     KComponentData instance("kio_search");
     QCoreApplication app(argc, argv);
 
-    if (argc != 4) {
+    if (argc != 2) {
         fprintf(stderr, "Usage: kio_filenamesearch protocol domain-socket1 domain-socket2\n");
         exit(-1);
     }
 
-    FileNameSearchProtocol slave(argv[2], argv[3]);
+    FileNameSearchProtocol slave(argv[1]);
     slave.dispatchLoop();
 
     return 0;

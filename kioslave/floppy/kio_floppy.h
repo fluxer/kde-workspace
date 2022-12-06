@@ -42,7 +42,7 @@ struct StatInfo
 class FloppyProtocol : public KIO::SlaveBase
 {
    public:
-      FloppyProtocol (const QByteArray &pool, const QByteArray &app );
+      FloppyProtocol (const QByteArray &app );
       virtual ~FloppyProtocol();
 
       virtual void listDir( const KUrl& url);

@@ -28,26 +28,28 @@
 #include <kglobal.h>
 #include <kdemacros.h>
 
-extern "C" {
-	int KDE_EXPORT kdemain( int argc, char **argv )
-	{
-        // necessary to use other kio slaves
-        KComponentData componentData("kio_remote" );
-        QCoreApplication app(argc, argv);
+int main( int argc, char **argv )
+{
+    if (argc != 2) {
+        fprintf(stderr, "Usage: kio_remote app-socket\n");
+        exit(-1);
+    }
 
-        KGlobal::locale();
+    // necessary to use other kio slaves
+    KComponentData componentData("kio_remote" );
+    QCoreApplication app(argc, argv);
 
-        // start the slave
-        RemoteProtocol slave( argv[1], argv[2], argv[3] );
-        slave.dispatchLoop();
-        return 0;
-	}
+    KGlobal::locale();
+
+    // start the slave
+    RemoteProtocol slave( argv[1] );
+    slave.dispatchLoop();
+    return 0;
 }
 
 
-RemoteProtocol::RemoteProtocol(const QByteArray &protocol,
-                               const QByteArray &pool, const QByteArray &app)
-	: SlaveBase(protocol, pool, app)
+RemoteProtocol::RemoteProtocol(const QByteArray &app)
+	: SlaveBase("remote", app)
 {
 }
 

@@ -64,8 +64,8 @@ static QString iconForService(const QString &servicemimetype)
     return kmimetypeptr->iconName();
 }
 
-NetworkSlave::NetworkSlave(const QByteArray &name, const QByteArray &poolSocket, const QByteArray &programSocket)
-    : SlaveBase(name, poolSocket, programSocket),
+NetworkSlave::NetworkSlave(const QByteArray &programSocket)
+    : SlaveBase("network", programSocket),
     m_kdnssd(nullptr)
 {
 }

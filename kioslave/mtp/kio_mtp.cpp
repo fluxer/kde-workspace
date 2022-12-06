@@ -37,22 +37,20 @@
 ///////////////////////////// Slave Implementation ///////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
-extern "C"
-int KDE_EXPORT kdemain(int argc, char **argv)
+int main(int argc, char **argv)
 {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: kio_mtp app-socket\n");
+        exit(-1);
+    }
+
     KComponentData instance("kio_mtp");
 
     KGlobal::locale();
 
     QCoreApplication app(argc, argv);
 
-    if (argc != 4) {
-        fprintf(stderr, "Usage: kio_mtp protocol domain-socket1 domain-socket2\n");
-        exit(-1);
-    }
-
-    MTPSlave slave(argv[2], argv[3]);
-    
+    MTPSlave slave(argv[1]);
     slave.dispatchLoop();
     
     kDebug(KIO_MTP) << "Slave EventLoop ended";
@@ -60,8 +58,8 @@ int KDE_EXPORT kdemain(int argc, char **argv)
     return 0;
 }
 
-MTPSlave::MTPSlave(const QByteArray& pool, const QByteArray& app)
-    : SlaveBase("mtp", pool, app)
+MTPSlave::MTPSlave(const QByteArray& app)
+    : SlaveBase("mtp", app)
 {
     LIBMTP_Init();
 

@@ -294,13 +294,13 @@ install(
 
 #########################################
 
-kde4_add_plugin(kio_filenamesearch search/filenamesearchprotocol.cpp)
+add_executable(kio_filenamesearch search/filenamesearchprotocol.cpp)
 
 target_link_libraries(kio_filenamesearch ${KDE4_KIO_LIBS})
 
 install(
     TARGETS kio_filenamesearch
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
 ########### install files ###############

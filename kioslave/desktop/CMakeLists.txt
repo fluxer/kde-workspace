@@ -6,11 +6,11 @@ endif()
 
 set(kio_desktop_PART_SRCS kio_desktop.cpp)
 
-kde4_add_plugin(kio_desktop  ${kio_desktop_PART_SRCS})
+add_executable(kio_desktop  ${kio_desktop_PART_SRCS})
 
 target_link_libraries(kio_desktop  ${KDE4_KIO_LIBS})
 
-install(TARGETS kio_desktop DESTINATION  ${KDE4_PLUGIN_INSTALL_DIR} )
+install(TARGETS kio_desktop DESTINATION  ${KDE4_LIBEXEC_INSTALL_DIR} )
 
 ########### next target ###############
 

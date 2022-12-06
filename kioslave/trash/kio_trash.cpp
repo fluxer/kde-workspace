@@ -40,18 +40,21 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-extern "C" {
-    int KDE_EXPORT kdemain( int argc, char **argv )
-    {
-        // necessary to use other kio slaves
-        KComponentData componentData("kio_trash" );
-        QCoreApplication app(argc, argv);
-
-        // start the slave
-        TrashProtocol slave( argv[1], argv[2], argv[3] );
-        slave.dispatchLoop();
-        return 0;
+int main( int argc, char **argv )
+{
+    if (argc != 2) {
+        fprintf(stderr, "Usage: kio_trash app-socket\n");
+        exit(-1);
     }
+
+    // necessary to use other kio slaves
+    KComponentData componentData("kio_trash" );
+    QCoreApplication app(argc, argv);
+
+    // start the slave
+    TrashProtocol slave( argv[1] );
+    slave.dispatchLoop();
+    return 0;
 }
 
 #define INIT_IMPL \
@@ -60,8 +63,8 @@ extern "C" {
         return; \
     }
 
-TrashProtocol::TrashProtocol( const QByteArray& protocol, const QByteArray &pool, const QByteArray &app)
-    : SlaveBase(protocol, pool, app )
+TrashProtocol::TrashProtocol( const QByteArray &app)
+    : SlaveBase("trash", app )
 {
     m_userName = KUser(::getuid()).loginName();
     m_groupName = KUserGroup(::getgid()).name();

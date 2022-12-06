@@ -22,10 +22,11 @@
 
 #include <kio/slavebase.h>
 
-class KFileItem;
-class KUrl;
 #include <QRegExp>
 #include <QSet>
+
+class KFileItem;
+class KUrl;
 
 /**
  * @brief Lists files where the filename matches do a given query.
@@ -37,7 +38,7 @@ class KUrl;
  */
 class FileNameSearchProtocol : public KIO::SlaveBase {
 public:
-    FileNameSearchProtocol(const QByteArray& pool, const QByteArray& app);
+    FileNameSearchProtocol(const QByteArray& app);
     virtual ~FileNameSearchProtocol();
 
     virtual void listDir(const KUrl& url);

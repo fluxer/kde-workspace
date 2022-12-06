@@ -5,7 +5,7 @@ set(kio_network_SRCS
   main.cpp
 )
 
-kde4_add_plugin(kio_network ${kio_network_SRCS})
+add_executable(kio_network ${kio_network_SRCS})
 
 target_link_libraries(kio_network
     ${KDE4_KIO_LIBS}
@@ -14,7 +14,7 @@ target_link_libraries(kio_network
 
 install(
     TARGETS kio_network
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
 install(

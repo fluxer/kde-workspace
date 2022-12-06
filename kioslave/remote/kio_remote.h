@@ -26,8 +26,7 @@
 class RemoteProtocol : public KIO::SlaveBase
 {
 public:
-	RemoteProtocol(const QByteArray &protocol, const QByteArray &pool,
-	               const QByteArray &app);
+	RemoteProtocol(const QByteArray &app);
 	virtual ~RemoteProtocol();
 	virtual void listDir(const KUrl &url);
 	virtual void stat(const KUrl &url);

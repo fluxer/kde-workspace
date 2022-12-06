@@ -26,7 +26,7 @@ class DesktopProtocol : public KIO::ForwardingSlaveBase
 {
     Q_OBJECT
 public:
-    DesktopProtocol(const QByteArray& protocol, const QByteArray &pool, const QByteArray &app);
+    DesktopProtocol(const QByteArray &app);
     virtual ~DesktopProtocol();
 
 protected:

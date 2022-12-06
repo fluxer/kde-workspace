@@ -69,7 +69,7 @@ public:
     /*
      * Overwritten KIO-functions, see "kio_mtp.cpp"
      */
-    MTPSlave(const QByteArray& pool, const QByteArray& app);
+    MTPSlave(const QByteArray& app);
     virtual ~MTPSlave();
 
     virtual void listDir(const KUrl& url);

@@ -28,18 +28,18 @@
 // Qt
 #include <QCoreApplication>
 
-extern "C"
+int main(int argc, char** argv)
 {
+    if (argc != 2) {
+        fprintf(stderr, "Usage: kio_network app-socket\n");
+        exit(-1);
+    }
 
-int KDE_EXPORT kdemain(int argc, char** argv)
-{
     KComponentData componentData("kio_network");
     QCoreApplication app(argc, argv);
 
-    NetworkSlave slave(argv[1], argv[2], argv[3]);
+    NetworkSlave slave(argv[1]);
     slave.dispatchLoop();
 
     return 0;
-}
-
 }
