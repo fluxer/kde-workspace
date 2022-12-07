@@ -253,7 +253,7 @@ void KSMSetPropertiesProc (
             SmFreeProperty( p );
         }
         client->properties.append( props[i] );
-        if ( !qstrcmp( props[i]->name, SmProgram ) )
+        if ( qstrcmp( props[i]->name, SmProgram ) == 0 )
             the_server->clientSetProgram( client );
     }
 
@@ -376,7 +376,7 @@ Status SetAuthentication_local (int count, IceListenObj *listenObjs)
             }
         }
         kDebug() << "KSMServer: SetAProc_loc: conn " << (unsigned)i << ", prot=" << prot << ", file=" << sock;
-        if (sock && !strcmp(prot, "local")) {
+        if (sock && strcmp(prot, "local") == 0) {
             chmod(sock, 0700);
         }
         IceSetHostBasedAuthProc (listenObjs[i], HostBasedAuthProc);
