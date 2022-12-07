@@ -815,23 +815,6 @@ void Workspace::setClientIsMoving(Client *c)
         --block_focus;
 }
 
-// When kwin crashes, windows will not be gravitated back to their original position
-// and will remain offset by the size of the decoration. So when restarting, fix this
-// (the property with the size of the frame remains on the window after the crash).
-void Workspace::fixPositionAfterCrash(xcb_window_t w, const xcb_get_geometry_reply_t *geometry)
-{
-    NETWinInfo i(display(), w, rootWindow(), NET::WMFrameExtents);
-    NETStrut frame = i.frameExtents();
-
-    if (frame.left != 0 || frame.top != 0) {
-        // left and top needed due to narrowing conversations restrictions in C++11
-        const uint32_t left = frame.left;
-        const uint32_t top = frame.top;
-        const uint32_t values[] = { geometry->x - left, geometry->y - top };
-        xcb_configure_window(connection(), w, XCB_CONFIG_WINDOW_X | XCB_CONFIG_WINDOW_Y, values);
-    }
-}
-
 //********************************************
 // Client
 //********************************************

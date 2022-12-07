@@ -293,8 +293,6 @@ void Workspace::init()
         // Begin updates blocker block
         StackingUpdatesBlocker blocker(this);
 
-        bool fixoffset = KCmdLineArgs::parsedArgs()->getOption("crashes").toInt() > 0;
-
         Xcb::Tree tree(rootWindow());
         xcb_window_t *wins = xcb_query_tree_children(tree.data());
 
@@ -321,9 +319,6 @@ void Workspace::init()
                     // ### This will request the attributes again
                     createUnmanaged(wins[i]);
             } else if (attr->map_state != XCB_MAP_STATE_UNMAPPED) {
-                if (fixoffset) {
-                    fixPositionAfterCrash(wins[i], windowGeometries[i].data());
-                }
 
                 // ### This will request the attributes again
                 createClient(wins[i], true);

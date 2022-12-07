@@ -201,51 +201,6 @@ static int x11ErrorHandler(Display* d, XErrorEvent* e)
     return 0;
 }
 
-class AlternativeWMDialog : public KDialog
-{
-public:
-    AlternativeWMDialog()
-        : KDialog() {
-        setButtons(KDialog::Ok | KDialog::Cancel);
-
-        QWidget* mainWidget = new QWidget(this);
-        QVBoxLayout* layout = new QVBoxLayout(mainWidget);
-        QString text = i18n(
-                           "KWin is unstable.\n"
-                           "It seems to have crashed several times in a row.\n"
-                           "You can select another window manager to run:");
-        QLabel* textLabel = new QLabel(text, mainWidget);
-        layout->addWidget(textLabel);
-        wmList = new KComboBox(mainWidget);
-        wmList->setEditable(true);
-        layout->addWidget(wmList);
-
-        addWM("metacity");
-        addWM("openbox");
-        addWM("fvwm2");
-        addWM("kwin");
-
-        setMainWidget(mainWidget);
-
-        raise();
-        centerOnScreen(this);
-    }
-
-    void addWM(const QString& wm) {
-        // TODO: Check if WM is installed
-        if (!KStandardDirs::findExe(wm).isEmpty())
-            wmList->addItem(wm);
-    }
-    QString selectedWM() const {
-        return wmList->currentText();
-    }
-
-private:
-    KComboBox* wmList;
-};
-
-int Application::crashes = 0;
-
 Application::Application()
     : KApplication()
     , owner(new KSelectionOwner(make_selection_atom(screen_number), screen_number, this))
@@ -294,35 +249,7 @@ bool Application::setup()
     connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()), Qt::DirectConnection);
 
     KApplication::quitOnSignal();
-    KCrash::setCrashHandler(Application::crashHandler);
-    crashes = args->getOption("crashes").toInt();
-    if (crashes >= 4) {
-        // Something has gone seriously wrong
-        AlternativeWMDialog dialog;
-        QString cmd = "kwin";
-        if (dialog.exec() == QDialog::Accepted) {
-            cmd = dialog.selectedWM();
-        } else {
-            return false;
-        }
-        if (cmd.length() > 500) {
-            kDebug(1212) << "Command is too long, truncating";
-            cmd = cmd.left(500);
-        }
-        kDebug(1212) << "Starting" << cmd << "and exiting";
-        char buf[1024];
-        sprintf(buf, "%s &", cmd.toAscii().data());
-        system(buf);
-        return false;
-    }
-    if (crashes >= 2) {
-        // Disable compositing if we have had too many crashes
-        kDebug(1212) << "Too many crashes recently, disabling compositing";
-        KConfigGroup compgroup(config, "Compositing");
-        compgroup.writeEntry("Enabled", false);
-    }
-    // Reset crashes count if we stay up for more that 15 seconds
-    QTimer::singleShot(15 * 1000, this, SLOT(resetCrashesCount()));
+    KCrash::setFlags(KCrash::AutoRestart);
 
     initting = true; // Startup...
     // first load options - done internally by a different thread
@@ -369,27 +296,6 @@ bool Application::notify(QObject* o, QEvent* e)
     if (Workspace::self() && Workspace::self()->workspaceEvent(e))
         return true;
     return KApplication::notify(o, e);
-}
-
-void Application::crashHandler(int signal)
-{
-    KDE_signal(signal, SIG_DFL);
-
-    crashes++;
-
-    ::fprintf(stderr, "Application::crashHandler() called with signal %d; recent crashes: %d\n", signal, crashes);
-    char cmd[1024];
-    ::sprintf(cmd, "%s --crashes %d &",
-              QFile::encodeName(QCoreApplication::applicationFilePath()).constData(), crashes);
-
-    ::sleep(1);
-    ::system(cmd);
-    ::exit(signal);
-}
-
-void Application::resetCrashesCount()
-{
-    crashes = 0;
 }
 
 } // namespace
@@ -471,7 +377,6 @@ int main(int argc, char * argv[])
     KCmdLineOptions args;
     args.add("lock", ki18n("Disable configuration options"));
     args.add("replace", ki18n("Replace already-running ICCCM2.0-compliant window manager"));
-    args.add("crashes <n>", ki18n("Indicate that KWin has recently crashed n times"));
     KCmdLineArgs::addCmdLineOptions(args);
 
     KWin::Application a;

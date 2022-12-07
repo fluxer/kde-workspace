@@ -41,15 +41,12 @@ public:
 protected:
     bool x11EventFilter(XEvent*);
     bool notify(QObject* o, QEvent* e);
-    static void crashHandler(int signal);
 
 private slots:
     void lostSelection();
-    void resetCrashesCount();
 
 private:
     KSelectionOwner* owner;
-    static int crashes;
 };
 
 } // namespace
