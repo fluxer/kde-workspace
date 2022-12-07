@@ -228,6 +228,8 @@ int main( int argc, char* argv[] )
 
     KSMServer *server = new KSMServer( wm, only_local, args->isSet("lockscreen") );
 
+    KApplication::quitOnSignal();
+
     // for the KDE-already-running check in startkde
     KSelectionOwner kde_running( "_KDE_RUNNING", 0 );
     kde_running.claim( false );

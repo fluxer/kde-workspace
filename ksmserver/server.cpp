@@ -496,27 +496,6 @@ void KSMServer::setupXIOErrorHandler()
     XSetIOErrorHandler(Xio_ErrorHandler);
 }
 
-static void sighandler(int sig)
-{
-    if (sig == SIGHUP) {
-        signal(SIGHUP, sighandler);
-        return;
-    }
-
-    if (the_server)
-    {
-       KSMServer *server = the_server;
-       the_server = 0;
-       server->cleanUp();
-       delete server;
-    }
-
-    if (kapp)
-        kapp->quit();
-    //::exit(0);
-}
-
-
 void KSMWatchProc ( IceConn iceConn, IcePointer client_data, Bool opening, IcePointer* watch_data)
 {
     KSMServer* ds = ( KSMServer*) client_data;
@@ -686,9 +665,6 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
         connect( con, SIGNAL(activated(int)), this, SLOT(newConnection(int)) );
     }
 
-    KDE_signal(SIGHUP, sighandler);
-    KDE_signal(SIGTERM, sighandler);
-    KDE_signal(SIGINT, sighandler);
     KDE_signal(SIGPIPE, SIG_IGN);
 
     connect( &protectionTimer, SIGNAL(timeout()), this, SLOT(protectionTimeout()) );
@@ -729,9 +705,6 @@ void KSMServer::cleanUp()
     ::unlink(fName.data());
 
     FreeAuthenticationData(numTransports, authDataEntries);
-
-    KDE_signal(SIGTERM, SIG_DFL);
-    KDE_signal(SIGINT, SIG_DFL);
 
     KDisplayManager().shutdown( shutdownType, shutdownMode );
 }
