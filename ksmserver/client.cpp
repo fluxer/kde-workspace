@@ -62,7 +62,7 @@ KSMClient::~KSMClient()
 SmProp* KSMClient::property( const char* name ) const
 {
     foreach ( SmProp *prop, properties ) {
-        if ( !qstrcmp( prop->name, name ) )
+        if ( qstrcmp( prop->name, name ) == 0)
             return prop;
     }
     return 0;
@@ -141,7 +141,7 @@ void KSMClient::registerClient( const char* previousId )
 QString KSMClient::program() const
 {
     SmProp* p = property( SmProgram );
-    if ( !p || qstrcmp( p->type, SmARRAY8) || p->num_vals < 1)
+    if ( !p || qstrcmp( p->type, SmARRAY8) != 0 || p->num_vals < 1)
         return QString();
     return QLatin1String( (const char*) p->vals[0].value );
 }
@@ -150,7 +150,7 @@ QStringList KSMClient::restartCommand() const
 {
     QStringList result;
     SmProp* p = property( SmRestartCommand );
-    if ( !p || qstrcmp( p->type, SmLISTofARRAY8) || p->num_vals < 1)
+    if ( !p || qstrcmp( p->type, SmLISTofARRAY8) != 0 || p->num_vals < 1)
         return result;
     for ( int i = 0; i < p->num_vals; i++ )
         result +=QLatin1String( (const char*) p->vals[i].value );
@@ -161,7 +161,7 @@ QStringList KSMClient::discardCommand() const
 {
     QStringList result;
     SmProp* p = property( SmDiscardCommand );
-    if ( !p || qstrcmp( p->type, SmLISTofARRAY8) || p->num_vals < 1)
+    if ( !p || qstrcmp( p->type, SmLISTofARRAY8) != 0 || p->num_vals < 1)
         return result;
     for ( int i = 0; i < p->num_vals; i++ )
         result +=QLatin1String( (const char*) p->vals[i].value );
@@ -171,7 +171,7 @@ QStringList KSMClient::discardCommand() const
 int KSMClient::restartStyleHint() const
 {
     SmProp* p = property( SmRestartStyleHint );
-    if ( !p || qstrcmp( p->type, SmCARD8) || p->num_vals < 1)
+    if ( !p || qstrcmp( p->type, SmCARD8) != 0 || p->num_vals < 1)
         return SmRestartIfRunning;
     return *((unsigned char*)p->vals[0].value);
 }
@@ -179,7 +179,7 @@ int KSMClient::restartStyleHint() const
 QString KSMClient::userId() const
 {
     SmProp* p = property( SmUserID );
-    if ( !p || qstrcmp( p->type, SmARRAY8) || p->num_vals < 1)
+    if ( !p || qstrcmp( p->type, SmARRAY8) != 0 || p->num_vals < 1)
         return QString();
     return QLatin1String( (const char*) p->vals[0].value );
 }
