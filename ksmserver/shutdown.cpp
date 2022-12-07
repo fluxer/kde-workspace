@@ -370,7 +370,7 @@ void KSMServer::cancelShutdown( KSMClient* c )
         emit subSessionCloseCanceled();
     } else {
         Solid::PowerManagement::stopSuppressingSleep(inhibitCookie);
-        kDebug( 1218 ) << "Client " << c->program() << " (" << c->clientId() << ") canceled shutdown.";
+        kDebug() << "Client " << c->program() << " (" << c->clientId() << ") canceled shutdown.";
         KSMShutdownFeedback::stop(); // make the screen become normal again
         KNotification::event( "cancellogout" , i18n( "Logout canceled by '%1'", c->program()),
                               QPixmap() , 0l , KNotification::DefaultEvent  );
@@ -415,7 +415,7 @@ void KSMServer::protectionTimeout()
 
     foreach( KSMClient* c, clients ) {
         if ( !c->saveYourselfDone && !c->waitForPhase2 ) {
-            kDebug( 1218 ) << "protectionTimeout: client " << c->program() << "(" << c->clientId() << ")";
+            kDebug() << "protectionTimeout: client " << c->program() << "(" << c->clientId() << ")";
             c->saveYourselfDone = true;
         }
     }
@@ -465,8 +465,8 @@ void KSMServer::completeShutdownOrCheckpoint()
         // and logoutSoundFinished() never gets called. Add this timer to make
         // sure the shutdown procedure continues even if sound system is broken.
         QTimer::singleShot(5000, this, SLOT(logoutSoundTimeout()));
-        kDebug( 1218 ) << "Starting logout event";
-	state = WaitingForKNotify;
+        kDebug() << "Starting logout event";
+        state = WaitingForKNotify;
         createLogoutEffectWidget();
 
     } else if ( state == Checkpoint ) {
@@ -485,30 +485,30 @@ void KSMServer::logoutSoundTimeout()
     if (state != WaitingForKNotify) {
         return;
     }
-    kDebug( 1218 ) << "logout sound timeout";
+    kDebug() << "logout sound timeout";
     logoutSoundFinished();
 }
 
 void KSMServer::startKilling()
 {
-    kDebug( 1218 ) << "Starting killing clients";
+    kDebug() << "Starting killing clients";
     // kill all clients
     state = Killing;
     foreach( KSMClient* c, clients ) {
         if( isWM( c )) // kill the WM as the last one in order to reduce flicker
             continue;
-        kDebug( 1218 ) << "completeShutdown: client " << c->program() << "(" << c->clientId() << ")";
+        kDebug() << "completeShutdown: client " << c->program() << "(" << c->clientId() << ")";
         SmsDie( c->connection() );
     }
 
-    kDebug( 1218 ) << " We killed all clients. We have now clients.count()=" << clients.count();
+    kDebug() << " We killed all clients. We have now clients.count()=" << clients.count();
     completeKilling();
     QTimer::singleShot( 10000, this, SLOT(timeoutQuit()) );
 }
 
 void KSMServer::completeKilling()
 {
-    kDebug( 1218 ) << "KSMServer::completeKilling clients.count()=" << clients.count();
+    kDebug() << "KSMServer::completeKilling clients.count()=" << clients.count();
     if( state == Killing ) {
         bool wait = false;
         foreach( KSMClient* c, clients ) {
@@ -527,13 +527,13 @@ void KSMServer::killWM()
     if( state != Killing )
         return;
     delete logoutEffectWidget;
-    kDebug( 1218 ) << "Starting killing WM";
+    kDebug() << "Starting killing WM";
     state = KillingWM;
     bool iswm = false;
     foreach( KSMClient* c, clients ) {
         if( isWM( c )) {
             iswm = true;
-            kDebug( 1218 ) << "killWM: client " << c->program() << "(" << c->clientId() << ")";
+            kDebug() << "killWM: client " << c->program() << "(" << c->clientId() << ")";
             SmsDie( c->connection() );
         }
     }
@@ -547,7 +547,7 @@ void KSMServer::killWM()
 
 void KSMServer::completeKillingWM()
 {
-    kDebug( 1218 ) << "KSMServer::completeKillingWM clients.count()=" << clients.count();
+    kDebug() << "KSMServer::completeKillingWM clients.count()=" << clients.count();
     if( state == KillingWM ) {
         if( clients.isEmpty())
             killingCompleted();
@@ -564,14 +564,14 @@ void KSMServer::logoutSoundFinished(  )
 {
     if( state != WaitingForKNotify )
         return;
-    kDebug( 1218 ) << "Logout event finished";
+    kDebug() << "Logout event finished";
     startKilling();
 }
 
 void KSMServer::timeoutQuit()
 {
     foreach( KSMClient* c, clients ) {
-        kWarning( 1218 ) << "SmsDie timeout, client " << c->program() << "(" << c->clientId() << ")" ;
+        kWarning() << "SmsDie timeout, client " << c->program() << "(" << c->clientId() << ")" ;
     }
     killWM();
 }
@@ -579,7 +579,7 @@ void KSMServer::timeoutQuit()
 void KSMServer::timeoutWMQuit()
 {
     if( state == KillingWM ) {
-        kWarning( 1218 ) << "SmsDie WM timeout" ;
+        kWarning() << "SmsDie WM timeout" ;
     }
     killingCompleted();
 }
@@ -643,22 +643,22 @@ void KSMServer::saveSubSession(const QString &name, QStringList saveAndClose, QS
 
 void KSMServer::startKillingSubSession()
 {
-    kDebug( 1218 ) << "Starting killing clients";
+    kDebug() << "Starting killing clients";
     // kill all clients
     state = KillingSubSession;
     foreach( KSMClient* c, clientsToKill ) {
-        kDebug( 1218 ) << "completeShutdown: client " << c->program() << "(" << c->clientId() << ")";
+        kDebug() << "completeShutdown: client " << c->program() << "(" << c->clientId() << ")";
         SmsDie( c->connection() );
     }
 
-    kDebug( 1218 ) << " We killed some clients. We have now clients.count()=" << clients.count();
+    kDebug() << " We killed some clients. We have now clients.count()=" << clients.count();
     completeKillingSubSession();
     QTimer::singleShot( 10000, this, SLOT(signalSubSessionClosed()) );
 }
 
 void KSMServer::completeKillingSubSession()
 {
-    kDebug( 1218 ) << "KSMServer::completeKillingSubSession clients.count()=" << clients.count();
+    kDebug() << "KSMServer::completeKillingSubSession clients.count()=" << clients.count();
     if( state == KillingSubSession ) {
         bool wait = false;
         foreach( KSMClient* c, clientsToKill ) {

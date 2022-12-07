@@ -87,7 +87,7 @@ void KSMServer::restoreSession( const QString &sessionName )
 #endif
     state = LaunchingWM;
 
-    kDebug( 1218 ) << "KSMServer::restoreSession " << sessionName;
+    kDebug() << "KSMServer::restoreSession " << sessionName;
     KSharedConfig::Ptr config = KGlobal::config();
 
     sessionGroup = "Session: " + sessionName;
@@ -185,10 +185,10 @@ void KSMServer::wmProcessChange()
     }
     if( wmProcess->state() == QProcess::NotRunning ) {
         // wm failed to launch for some reason, go with kwin instead
-        kWarning( 1218 ) << "Window manager" << wm << "failed to launch";
+        kWarning() << "Window manager" << wm << "failed to launch";
         if( wm == "kwin" )
             return; // uhoh, kwin itself failed
-        kDebug( 1218 ) << "Launching KWin";
+        kDebug() << "Launching KWin";
         wm = "kwin";
         wmCommands = ( QStringList() << "kwin" ); 
         // launch it
@@ -225,7 +225,7 @@ void KSMServer::autoStart0Done()
     disconnect( klauncherSignals, SIGNAL(autoStart0Done()), this, SLOT(autoStart0Done()));
     if( !checkStartupSuspend())
         return;
-    kDebug( 1218 ) << "Autostart 0 done";
+    kDebug() << "Autostart 0 done";
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << t.elapsed();
 #endif
@@ -249,7 +249,7 @@ void KSMServer::kcmPhase1Done()
 {
     if( state != KcmInitPhase1 )
         return;
-    kDebug( 1218 ) << "Kcminit phase 1 done";
+    kDebug() << "Kcminit phase 1 done";
     if (kcminitSignals) {
         disconnect( kcminitSignals, SIGNAL(phase1Done()), this, SLOT(kcmPhase1Done()));
     }
@@ -260,7 +260,7 @@ void KSMServer::kcmPhase1Timeout()
 {
     if( state != KcmInitPhase1 )
         return;
-    kDebug( 1218 ) << "Kcminit phase 1 timeout";
+    kDebug() << "Kcminit phase 1 timeout";
     kcmPhase1Done();
 }
 
@@ -283,7 +283,7 @@ void KSMServer::autoStart1Done()
     disconnect( klauncherSignals, SIGNAL(autoStart1Done()), this, SLOT(autoStart1Done()));
     if( !checkStartupSuspend())
         return;
-    kDebug( 1218 ) << "Autostart 1 done";
+    kDebug() << "Autostart 1 done";
     setupShortcuts(); // done only here, because it needs kglobalaccel :-/
     lastAppStarted = 0;
     lastIdStarted.clear();
@@ -405,7 +405,7 @@ void KSMServer::autoStart2Done()
     if( state != FinishingStartup )
         return;
     disconnect( klauncherSignals, SIGNAL(autoStart2Done()), this, SLOT(autoStart2Done()));
-    kDebug( 1218 ) << "Autostart 2 done";
+    kDebug() << "Autostart 2 done";
     waitAutoStart2 = false;
     finishStartup();
 }
@@ -414,7 +414,7 @@ void KSMServer::kcmPhase2Done()
 {
     if( state != FinishingStartup )
         return;
-    kDebug( 1218 ) << "Kcminit phase 2 done";
+    kDebug() << "Kcminit phase 2 done";
     if (kcminitSignals) {
         disconnect( kcminitSignals, SIGNAL(phase2Done()), this, SLOT(kcmPhase2Done()));
         delete kcminitSignals;
@@ -428,7 +428,7 @@ void KSMServer::kcmPhase2Timeout()
 {
     if( !waitKcmInit2 )
         return;
-    kDebug( 1218 ) << "Kcminit phase 2 timeout";
+    kDebug() << "Kcminit phase 2 timeout";
     kcmPhase2Done();
 }
 
@@ -482,7 +482,7 @@ void KSMServer::resumeStartup( const QString &app )
 
 void KSMServer::startupSuspendTimeout()
 {
-    kDebug( 1218 ) << "Startup suspend timeout:" << state;
+    kDebug() << "Startup suspend timeout:" << state;
     resumeStartupInternal();
 }
 
@@ -503,7 +503,7 @@ void KSMServer::resumeStartupInternal()
             autoStart2();
             break;
         default:
-            kWarning( 1218 ) << "Unknown resume startup state" ;
+            kWarning() << "Unknown resume startup state" ;
             break;
     }
 }
