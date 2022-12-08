@@ -34,7 +34,6 @@
 #include <QProcess>
 
 #include <ktoolinvocation.h>
-#include <klauncher_iface.h>
 #include <kapplication.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -98,7 +97,7 @@ static void applyGtkStyles(bool active, int version)
    // Pass env. var to klauncher.
    QString name = gtkEnvVar(version);
    QString value = list.join(":");
-   KToolInvocation::klauncher()->setLaunchEnv(name, value);
+   KToolInvocation::self()->setLaunchEnv(name, value);
 }
 
 // -----------------------------------------------------------------------------

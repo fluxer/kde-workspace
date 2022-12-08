@@ -33,7 +33,6 @@
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <ktoolinvocation.h>
-#include <klauncher_iface.h>
 #include <kde_file.h>
 #include <QtDBus/QtDBus>
 
@@ -168,7 +167,7 @@ void KHostName::changeSessionManager()
       return;
    }
    sm = "local/"+newName+sm.mid(i);
-   KToolInvocation::klauncher()->setLaunchEnv(QString::fromLatin1("SESSION_MANAGER"), sm);
+   KToolInvocation::self()->setLaunchEnv(QString::fromLatin1("SESSION_MANAGER"), sm);
 }
 
 int main(int argc, char **argv)

@@ -32,7 +32,6 @@
 #include <QtGui/qx11info_x11.h>
 
 #include <ktoolinvocation.h>
-#include <klauncher_iface.h>
 
 #include <X11/Xlib.h>
 #ifdef HAVE_XCURSOR
@@ -78,9 +77,9 @@ extern "C"
     // Tell klauncher to set the XCURSOR_THEME and XCURSOR_SIZE environment
     // variables when launching applications.
     if(!theme.isEmpty())
-       KToolInvocation::klauncher()->setLaunchEnv("XCURSOR_THEME", theme);
+       KToolInvocation::self()->setLaunchEnv("XCURSOR_THEME", theme);
     if( !size.isEmpty())
-       KToolInvocation::klauncher()->setLaunchEnv("XCURSOR_SIZE", size);
+       KToolInvocation::self()->setLaunchEnv("XCURSOR_SIZE", size);
 
 #endif
 

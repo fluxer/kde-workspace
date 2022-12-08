@@ -38,7 +38,6 @@
 #include <klocale.h>
 #include <ktoolinvocation.h>
 #include <kservicetypetrader.h>
-#include <klauncher_iface.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -193,7 +192,7 @@ KCMInit::KCMInit( KCmdLineArgs* args )
   // Pass env. var to klauncher.
   QString name = "KDE_MULTIHEAD";
   QString value = multihead ? "true" : "false";
-  KToolInvocation::klauncher()->setLaunchEnv(name, value);
+  KToolInvocation::self()->setLaunchEnv(name, value);
   setenv( name.toLatin1().constData(), value.toLatin1().constData(), 1 ); // apply effect also to itself
 
   if( startup )
