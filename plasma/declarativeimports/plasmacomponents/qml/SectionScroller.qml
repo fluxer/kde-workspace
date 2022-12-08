@@ -171,8 +171,6 @@ Item {
 
             if (listView.model.itemsRemoved)
                 listView.model.itemsRemoved.connect(dirtyObserver);
-
-            sectionsRepeater.model = Sections._sections.length
         }
     }
 }
