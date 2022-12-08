@@ -16,8 +16,6 @@
 #include "componentchooserterminal.h"
 #include "moc_componentchooserterminal.cpp"
 
-#include <ktoolinvocation.h>
-#include <klauncher_iface.h>
 #include <QtDBus/QtDBus>
 #include <QCheckBox>
 
@@ -31,8 +29,7 @@
 #include <kmimetypetrader.h>
 #include <kurlrequester.h>
 #include <kconfiggroup.h>
-
-#include <KUrl>
+#include <kurl.h>
 
 CfgTerminalEmulator::CfgTerminalEmulator(QWidget *parent)
     : QWidget(parent), Ui::TerminalEmulatorConfig_UI(), CfgPlugin()
@@ -84,7 +81,6 @@ void CfgTerminalEmulator::save(KConfig *)
 	config.sync();
 
 	KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged);
-	KToolInvocation::klauncher()->reparseConfiguration();
 
 	emit changed(false);
 }

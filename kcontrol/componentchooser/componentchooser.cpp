@@ -34,8 +34,6 @@
 #include <kstandarddirs.h>
 #include <kmimetypetrader.h>
 #include <kurlrequester.h>
-#include <ktoolinvocation.h>
-#include <klauncher_iface.h>
 #include <kconfiggroup.h>
 #include <KServiceTypeTrader>
 
