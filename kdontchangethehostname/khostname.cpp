@@ -168,7 +168,7 @@ void KHostName::changeSessionManager()
       return;
    }
    sm = "local/"+newName+sm.mid(i);
-   KToolInvocation::klauncher()->call(QDBus::NoBlock, "setLaunchEnv", QByteArray("SESSION_MANAGER"), sm);
+   KToolInvocation::klauncher()->setLaunchEnv(QString::fromLatin1("SESSION_MANAGER"), sm);
 }
 
 int main(int argc, char **argv)
