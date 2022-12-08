@@ -220,6 +220,18 @@ void KCMUserAccount::save()
             KMessageBox::error(this, i18n("There was an error setting the name: %1", name));
         }
     }
+
+    if ( _mw->leEmail->isModified() ) {
+        // save e-mail with accountsservice
+        const QString email = _mw->leEmail->text();
+        const bool result = setASProp(
+            this, qlonglong(_ku->uid()),
+            QString::fromLatin1("SetEmail"), email
+        );
+        if (!result) {
+            KMessageBox::error(this, i18n("There was an error setting the Email: %1", email));
+        }
+    }
 #endif
 
     /* Save the image */
