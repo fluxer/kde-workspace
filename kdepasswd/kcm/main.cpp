@@ -56,6 +56,32 @@
 K_PLUGIN_FACTORY(Factory, registerPlugin<KCMUserAccount>();)
 K_EXPORT_PLUGIN(Factory("useraccount"))
 
+static bool setASProp(KCMUserAccount* kcmua, const qlonglong uid, const QString &prop, const QString &value)
+{
+    QDBusInterface ainterface(
+        "org.freedesktop.Accounts",
+        "/org/freedesktop/Accounts",
+        "org.freedesktop.Accounts",
+        QDBusConnection::systemBus()
+    );
+    QDBusReply<QDBusObjectPath> reply = ainterface.call("FindUserById", uid);
+    if (reply.isValid()) {
+        QDBusInterface uinterface(
+            "org.freedesktop.Accounts",
+            reply.value().path(),
+            "org.freedesktop.Accounts.User",
+            QDBusConnection::systemBus(),
+            kcmua
+        );
+        QDBusReply<void> ureply = uinterface.call(prop, value);
+        if (!ureply.isValid()) {
+            kWarning() << ureply.error().message();
+            return false;
+        }
+    }
+    return true;
+}
+
 KCMUserAccount::KCMUserAccount( QWidget *parent, const QVariantList &)
     : KCModule( Factory::componentData(), parent)
 {
@@ -185,24 +211,13 @@ void KCMUserAccount::save()
     /* Save realname to /etc/passwd */
     if ( _mw->leRealname->isModified() ) {
         // save icon file also with accountsservice
-        QDBusInterface ainterface("org.freedesktop.Accounts",
-            "/org/freedesktop/Accounts",
-            "org.freedesktop.Accounts",
-            QDBusConnection::systemBus());
-        QDBusReply<QDBusObjectPath> reply = ainterface.call("FindUserById", qlonglong(_ku->uid()));
-        if (reply.isValid() && !reply.error().isValid()) {
-            QDBusInterface uinterface("org.freedesktop.Accounts",
-                reply.value().path(),
-                "org.freedesktop.Accounts.User",
-                QDBusConnection::systemBus(),
-                this);
-
-            QString name = _mw->leRealname->text();
-            QDBusReply<void> ureply = uinterface.call("SetRealName", name);
-            if (!ureply.isValid() || ureply.error().isValid()) {
-                kDebug() << ureply.error().message();
-                KMessageBox::error( this, i18n("There was an error setting the name: %1", name) );
-            }
+        const QString name = _mw->leRealname->text();
+        const bool result = setASProp(
+            this, qlonglong(_ku->uid()),
+            QString::fromLatin1("SetRealName"), name
+        );
+        if (!result) {
+            KMessageBox::error(this, i18n("There was an error setting the name: %1", name));
         }
     }
 #endif
@@ -210,28 +225,16 @@ void KCMUserAccount::save()
     /* Save the image */
     if( !_facePixmap.isNull() )
     {
-        if( !_facePixmap.save( KCFGUserAccount::faceFile(), "PNG" )) {
-                KMessageBox::error( this, i18n("There was an error saving the image: %1",
-                    KCFGUserAccount::faceFile()) );
+        if( !_facePixmap.save(KCFGUserAccount::faceFile(), "PNG")) {
+            KMessageBox::error(this, i18n("There was an error saving the image: %1", KCFGUserAccount::faceFile()));
         }
         // save icon file also with accountsservice
-        QDBusInterface ainterface("org.freedesktop.Accounts",
-                                "/org/freedesktop/Accounts",
-                                "org.freedesktop.Accounts",
-                                QDBusConnection::systemBus());
-        QDBusReply<QDBusObjectPath> reply = ainterface.call("FindUserById", qlonglong(_ku->uid()));
-        if (reply.isValid()) {
-            QDBusInterface uinterface("org.freedesktop.Accounts",
-                reply.value().path(),
-                "org.freedesktop.Accounts.User",
-                QDBusConnection::systemBus(),
-                this);
-            QDBusReply<void> ureply = uinterface.call("SetIconFile", KCFGUserAccount::faceFile());
-            if (!ureply.isValid()) {
-                kDebug() << ureply.error().message();
-                KMessageBox::error( this, i18n("There was an error setting the image: %1",
-                    KCFGUserAccount::faceFile()) );
-            }
+        const bool result = setASProp(
+            this, qlonglong(_ku->uid()),
+            QString::fromLatin1("SetIconFile"), KCFGUserAccount::faceFile()
+        );
+        if (!result) {
+            KMessageBox::error(this, i18n("There was an error setting the image: %1", KCFGUserAccount::faceFile()));
         }
     } else {
         // delete existing image
