@@ -66,7 +66,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include <QtGui/qx11info_x11.h>
 
-#include <klauncher_iface.h>
 #include "kcminit_interface.h"
 
 //#define KSMSERVER_STARTUP_DEBUG1
@@ -214,8 +213,7 @@ void KSMServer::autoStart0()
     kDebug() << t.elapsed();
 #endif
 
-    org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
-    klauncher.autoStart((int)0);
+    klauncherSignals->asyncCall("autoStart", int(0));
 }
 
 void KSMServer::autoStart0Done()
@@ -272,8 +270,7 @@ void KSMServer::autoStart1()
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << t.elapsed();
 #endif
-    org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
-    klauncher.autoStart((int)1);
+    klauncherSignals->asyncCall("autoStart", int(1));
 }
 
 void KSMServer::autoStart1Done()
@@ -370,8 +367,7 @@ void KSMServer::autoStart2()
 #endif
     waitAutoStart2 = true;
     waitKcmInit2 = true;
-    org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
-    klauncher.autoStart((int)2);
+    klauncherSignals->asyncCall("autoStart", int(2));
 
 #ifdef KSMSERVER_STARTUP_DEBUG1
     kDebug() << "klauncher" << t.elapsed();

@@ -58,8 +58,6 @@ class KSMListener;
 class KSMConnection;
 class KSMClient;
 
-class OrgKdeKLauncherInterface;
-
 enum SMType { SM_ERROR, SM_WMCOMMAND, SM_WMSAVEYOURSELF };
 struct SMData
     {
@@ -256,7 +254,7 @@ private:
 
     WindowMap legacyWindows;
 
-    OrgKdeKLauncherInterface* klauncherSignals;
+    QDBusInterface* klauncherSignals;
     QDBusInterface* kcminitSignals;
 
     uint inhibitCookie;

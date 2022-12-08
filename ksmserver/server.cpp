@@ -78,7 +78,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kuser.h>
 #include <kworkspace/kdisplaymanager.h>
 #include <krandom.h>
-#include <klauncher_iface.h>
 #include <kde_file.h>
 
 KSMServer* the_server = 0;
@@ -113,12 +112,11 @@ bool KSMServer::startApplication( const QStringList& cmd, const QString& clientM
 
 
     int n = command.count();
-    org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
     QString app = command[0];
     QStringList argList;
     for ( int i=1; i < n; i++)
         argList.append( command[i]);
-    klauncher.exec_blind(app, argList );
+    klauncherSignals->call("exec_blind", app, argList);
     return true;
 }
 
@@ -567,8 +565,15 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
 
     new KSMServerInterfaceAdaptor( this );
     QDBusConnection::sessionBus().registerObject("/KSMServer", this);
-    klauncherSignals = new OrgKdeKLauncherInterface(QLatin1String("org.kde.klauncher"),
-            QLatin1String("/KLauncher"), QDBusConnection::sessionBus());
+
+    klauncherSignals = new QDBusInterface(
+        QLatin1String("org.kde.klauncher"),
+        QLatin1String("/KLauncher"),
+        QLatin1String("org.kde.KLauncher"),
+        QDBusConnection::sessionBus(),
+        this
+    );
+
     kcminitSignals = NULL;
     the_server = this;
     clean = false;
@@ -640,9 +645,8 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
         fclose(f);
         setenv( "SESSION_MANAGER", session_manager, true  );
 
-       // Pass env. var to klauncher.
-       org::kde::KLauncher klauncher("org.kde.klauncher", "/KLauncher", QDBusConnection::sessionBus());
-       klauncher.setLaunchEnv( "SESSION_MANAGER", (const char*) session_manager );
+        // Pass env. var to klauncher.
+        klauncherSignals->call( "setLaunchEnv", "SESSION_MANAGER", (const char*) session_manager );
 
         free(session_manager);
     }
