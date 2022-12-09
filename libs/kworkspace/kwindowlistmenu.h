@@ -52,6 +52,13 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
      */
     void init();
 
+    /**
+     * Returns true if window placement can be changed, false otherwise.
+     * If this methods returns false then @p slotUnclutterWindows and
+     * @p slotCascadeWindows do nothing.
+     */
+    static bool canChangePlacement();
+
   public Q_SLOTS:
     /**
      * Pre-selects the active window in the popup menu, for faster

@@ -176,6 +176,25 @@ void KWindowListMenu::init()
   }
 }
 
+bool KWindowListMenu::canChangePlacement()
+{
+    org::kde::KWin kwin("org.kde.kwin", "/KWin", QDBusConnection::sessionBus());
+    return kwin.isValid();
+}
+
+// This popup is much more useful from keyboard if it has the active
+// window active by default - however, QPopupMenu tries hard to resist.
+// QPopupMenu::popup() resets the active item, so this needs to be
+// called after popup().
+void KWindowListMenu::selectActiveWindow()
+{
+    foreach (QAction* action, actions())
+        if (action->isChecked()) {
+            setActiveAction(action);
+            break;
+        }
+}
+
 void KWindowListMenu::slotForceActiveWindow()
 {
     QAction* window = qobject_cast<QAction*>(sender());
@@ -192,19 +211,6 @@ void KWindowListMenu::slotSetCurrentDesktop()
         return;
 
     KWindowSystem::setCurrentDesktop(window->data().toUInt());
-}
-
-// This popup is much more useful from keyboard if it has the active
-// window active by default - however, QPopupMenu tries hard to resist.
-// QPopupMenu::popup() resets the active item, so this needs to be
-// called after popup().
-void KWindowListMenu::selectActiveWindow()
-{
-    foreach (QAction* action, actions())
-        if (action->isChecked()) {
-            setActiveAction(action);
-            break;
-        }
 }
 
 void KWindowListMenu::slotUnclutterWindows()
