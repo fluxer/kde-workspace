@@ -165,7 +165,6 @@ void Placement::placeAtRandom(Client* c, const QRect& area, Policy /*next*/)
     c->move(tx, ty);
 }
 
-// TODO: one day, there'll be C++11 ...
 static inline bool isIrrelevant(const Client *client, const Client *regarding, int desktop)
 {
     if (!client)
