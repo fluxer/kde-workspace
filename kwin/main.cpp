@@ -281,6 +281,7 @@ bool Application::setup()
 
 void Application::lostSelection()
 {
+    KCrash::setFlags(0); // too late to restart now
     quit();
 }
 
