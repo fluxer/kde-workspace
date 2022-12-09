@@ -156,6 +156,7 @@ bool CfgWm::tryWmLaunch()
         "the configured one." ), i18n( "Window Manager Change" ), "windowmanagerchange" );
 
     bool ret = false;
+    setEnabled(false);
     killWM();
     if (QProcess::startDetached( currentWmData().exec )) {
         // it's forked into background
@@ -214,6 +215,7 @@ bool CfgWm::tryWmLaunch()
         }
     }
 
+    setEnabled(true);
     return ret;
 }
 
