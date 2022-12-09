@@ -52,6 +52,7 @@ private Q_SLOTS:
     void slotURLChanged(const KUrl &url);
 
     void slotTest();
+    void slotProcessStateChanged(QProcess::ProcessState state);
     void slotProcessFinished(const int exitcode);
 
 private:
@@ -59,6 +60,7 @@ private:
                       const QString &cursor, const QString &background, const QString &rectangle);
     void enableTest(const bool enable);
     void killLightDM();
+    void setProcessRunning(const bool running);
 
     QString m_lightdmexe;
     QProcess* m_lightdmproc;

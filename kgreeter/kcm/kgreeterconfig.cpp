@@ -115,8 +115,12 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     connect(rectanglerequester, SIGNAL(urlSelected(KUrl)), this, SLOT(slotURLChanged(KUrl)));
 
     m_lightdmproc = new QProcess(this);
+    connect(
+        m_lightdmproc, SIGNAL(stateChanged(QProcess::ProcessState)),
+        this, SLOT(slotProcessStateChanged(QProcess::ProcessState))
+    );
     connect(m_lightdmproc, SIGNAL(finished(int)), this, SLOT(slotProcessFinished(int)));
-    testbutton->setIcon(KIcon("debug-run"));
+    setProcessRunning(false);
     connect(testbutton, SIGNAL(pressed()), this, SLOT(slotTest()));
 }
 
@@ -226,7 +230,10 @@ void KCMGreeter::slotURLChanged(const KUrl &url)
 
 void KCMGreeter::slotTest()
 {
-    killLightDM();
+    if (m_lightdmproc->state() == QProcess::Running) {
+        killLightDM();
+        return;
+    }
 
     m_lightdmproc->start(
         m_lightdmexe,
@@ -235,6 +242,11 @@ void KCMGreeter::slotTest()
     if (!m_lightdmproc->waitForStarted(10000)) {
         KMessageBox::error(this, i18n("Could not start LightDM"));
     }
+}
+
+void KCMGreeter::slotProcessStateChanged(QProcess::ProcessState state)
+{
+    setProcessRunning(state == QProcess::Running);
 }
 
 void KCMGreeter::slotProcessFinished(const int exitcode)
@@ -301,6 +313,19 @@ void KCMGreeter::killLightDM()
         if (!m_lightdmproc->waitForFinished(3000)) {
             m_lightdmproc->kill();
         }
+    }
+}
+
+void KCMGreeter::setProcessRunning(const bool running)
+{
+    if (running) {
+        testbutton->setText(i18n("Kill"));
+        testbutton->setIcon(KIcon("process-stop"));
+        testbutton->setToolTip(i18n("Press this button if LightDM refuses to stop when closing its window"));
+    } else {
+        testbutton->setText(i18n("Test"));
+        testbutton->setIcon(KIcon("debug-run"));
+        testbutton->setToolTip(i18n("Press this button to test the LightDM greeter"));
     }
 }
 
