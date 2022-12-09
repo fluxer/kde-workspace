@@ -86,4 +86,3 @@ Name[zh_CN]=Metacity(GNOME)
 Name[zh_TW]=Metacity（GNOME）
 Exec=metacity
 TryExec=metacity
-X-KDE-WindowManagerRestartArgument=--replace

@@ -92,4 +92,3 @@ Name[zh_CN]=Openbox
 Name[zh_TW]=Openbox
 Exec=openbox
 TryExec=openbox
-X-KDE-WindowManagerRestartArgument=--replace

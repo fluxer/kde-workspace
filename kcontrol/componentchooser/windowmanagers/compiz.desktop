@@ -85,4 +85,3 @@ Name[zh_TW]=Compiz
 Exec=compiz
 TryExec=compiz
 X-KDE-WindowManagerConfigure=simple-ccsm
-X-KDE-WindowManagerRestartArgument=--replace

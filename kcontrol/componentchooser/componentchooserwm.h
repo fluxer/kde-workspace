@@ -45,7 +45,6 @@ private:
         QString internalName;
         QString exec;
         QString configureCommand;
-        QString restartArgument;
         QString parentArgument;
     };
     WmData currentWmData() const;

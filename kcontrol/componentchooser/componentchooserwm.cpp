@@ -21,12 +21,39 @@
 #include <kmessagebox.h>
 #include <kstandarddirs.h>
 #include <ktimerdialog.h>
+#include <kselectionowner.h>
 #include <qprocess.h>
+#include <qthread.h>
 #include <qelapsedtimer.h>
 #include <qdbusinterface.h>
 #include <qdbusconnectioninterface.h>
 #include <netwm.h>
 #include <qx11info_x11.h>
+
+static const int s_eventstime = 250;
+static const int s_sleeptime = 250;
+
+// TODO: kill and start WM on each screen?
+static int getWMScreen()
+{
+    return QX11Info::appScreen();
+}
+
+static QByteArray getWMAtom()
+{
+    char snprintfbuff[30];
+    ::memset(snprintfbuff, '\0', sizeof(snprintfbuff));
+    ::sprintf(snprintfbuff, "WM_S%d", getWMScreen());
+    return QByteArray(snprintfbuff);
+}
+
+void killWM()
+{
+    const QByteArray wmatom = getWMAtom();
+    KSelectionOwner kselectionowner(wmatom.constData(), getWMScreen());
+    kselectionowner.claim(true);
+    kselectionowner.release();
+}
 
 CfgWm::CfgWm(QWidget *parent)
 : QWidget(parent)
@@ -80,53 +107,41 @@ bool CfgWm::saveAndConfirm()
     emit changed(false);
     if( oldwm == currentWm())
         return true;
-    QString restartArgument = currentWmData().restartArgument;
-    if( restartArgument.isEmpty())
+    if( tryWmLaunch())
     {
-        KMessageBox::information( this,
-            i18n( "The new window manager will be used when KDE is started the next time." ),
-            i18n( "Window Manager Change" ), "windowmanagerchange" );
         oldwm = currentWm();
+        cfg.sync();
+        QDBusInterface ksmserver("org.kde.ksmserver", "/KSMServer" );
+        ksmserver.call( QDBus::NoBlock, "wmChanged" );
+        KMessageBox::information( window(),
+            i18n( "A new window manager is running.\n"
+                "It is still recommended to restart this KDE session to make sure "
+                "all running applications adjust for this change." ),
+                i18n( "Window Manager Replaced" ), "restartafterwmchange" );
         return true;
     }
     else
-    {
-        if( tryWmLaunch())
+    { // revert config
+        emit changed(true);
+        c.writeEntry("windowManager", oldwm);
+        if( oldwm == "kwin" )
         {
-            oldwm = currentWm();
-            cfg.sync();
-            QDBusInterface ksmserver("org.kde.ksmserver", "/KSMServer" );
-            ksmserver.call( QDBus::NoBlock, "wmChanged" );
-            KMessageBox::information( window(),
-                i18n( "A new window manager is running.\n"
-                    "It is still recommended to restart this KDE session to make sure "
-                    "all running applications adjust for this change." ),
-                    i18n( "Window Manager Replaced" ), "restartafterwmchange" );
-            return true;
+            kwinRB->setChecked( true );
+            wmCombo->setEnabled( false );
         }
         else
-        { // revert config
-            emit changed(true);
-            c.writeEntry("windowManager", oldwm);
-            if( oldwm == "kwin" )
+        {
+            differentRB->setChecked( true );
+            wmCombo->setEnabled( true );
+            for( QHash< QString, WmData >::ConstIterator it = wms.constBegin();
+                    it != wms.constEnd();
+                    ++it )
             {
-                kwinRB->setChecked( true );
-                wmCombo->setEnabled( false );
+                if( (*it).internalName == oldwm ) // make it selected
+                    wmCombo->setCurrentIndex( wmCombo->findText( it.key()));
             }
-            else
-            {
-                differentRB->setChecked( true );
-                wmCombo->setEnabled( true );
-                for( QHash< QString, WmData >::ConstIterator it = wms.constBegin();
-                     it != wms.constEnd();
-                     ++it )
-                {
-                    if( (*it).internalName == oldwm ) // make it selected
-                        wmCombo->setCurrentIndex( wmCombo->findText( it.key()));
-                }
-            }
-            return false;
         }
+        return false;
     }
 }
 
@@ -141,19 +156,21 @@ bool CfgWm::tryWmLaunch()
         "the configured one." ), i18n( "Window Manager Change" ), "windowmanagerchange" );
 
     bool ret = false;
-    if (QProcess::startDetached( currentWmData().exec, QStringList() << currentWmData().restartArgument )) {
-        // assume it's forked into background
+    killWM();
+    if (QProcess::startDetached( currentWmData().exec )) {
+        // it's forked into background
         ret = true;
 
-        if (currentWmData().internalName == "openbox") {
-            // HACK: forked but not operational yet, wait 2sec otherwise the timer dialog may not
-            // show up and the configuration window becomes non-interactive until the timeout is
-            // reached
-            QElapsedTimer workaround;
-            workaround.start();
-            while (workaround.elapsed() < 2000) {
-                QCoreApplication::processEvents();
-            }
+        // NOTE: wait for the WM to be operational otherwise the timer dialog may not
+        // show up and the configuration window becomes non-interactive until the timeout is
+        // reached
+        const QByteArray wmatom = getWMAtom();
+        KSelectionOwner kselectionowner(wmatom.constData(), getWMScreen());
+        QElapsedTimer workaround;
+        workaround.start();
+        while (workaround.elapsed() < 10000 && kselectionowner.currentOwnerWindow() == XNone) {
+            QCoreApplication::processEvents(QEventLoop::AllEvents, s_eventstime);
+            QThread::msleep(s_sleeptime);
         }
 
         KTimerDialog* wmDialog = new KTimerDialog( 20000, KTimerDialog::CountDown, window(), i18n( "Config Window Manager Change" ),
@@ -190,8 +207,8 @@ bool CfgWm::tryWmLaunch()
         foreach (const QString &wmkey, wms.keys()) {
             if (wmkey.toLower() == oldwm) {
                 WmData oldwmdata = wms.value(wmkey);
-                QProcess::startDetached( oldwmdata.exec, QStringList() << oldwmdata.restartArgument );
-
+                killWM();
+                QProcess::startDetached( oldwmdata.exec );
                 break;
             }
         }
@@ -206,7 +223,6 @@ void CfgWm::loadWMs( const QString& current )
     kwin.internalName = "kwin";
     kwin.exec = "kwin";
     kwin.configureCommand = "";
-    kwin.restartArgument = "--replace";
     kwin.parentArgument = "";
     wms[ "KWin" ] = kwin;
     oldwm = "kwin";
@@ -242,7 +258,6 @@ void CfgWm::loadWMs( const QString& current )
         if( data.exec.isEmpty())
             continue;
         data.configureCommand = file.desktopGroup().readEntry( "X-KDE-WindowManagerConfigure" );
-        data.restartArgument = file.desktopGroup().readEntry( "X-KDE-WindowManagerRestartArgument" );
         data.parentArgument = file.desktopGroup().readEntry( "X-KDE-WindowManagerConfigureParentArgument" );
         wms[ name ] = data;
         wmCombo->addItem( name );

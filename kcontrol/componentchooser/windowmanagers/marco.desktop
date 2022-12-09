@@ -73,4 +73,3 @@ Name[zh_CN]=Marco(MATE)
 Name[zh_TW]=Marco（MATE）
 Exec=marco
 TryExec=marco
-X-KDE-WindowManagerRestartArgument=--replace

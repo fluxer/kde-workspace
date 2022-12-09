@@ -2,4 +2,3 @@
 Name=XFWM4
 Exec=xfwm4
 TryExec=xfwm4
-X-KDE-WindowManagerRestartArgument=--replace
