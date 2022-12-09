@@ -2,3 +2,4 @@
 Name=XFWM4
 Exec=xfwm4
 TryExec=xfwm4
+X-KDE-WindowManagerConfigure=xfwm4-settings
