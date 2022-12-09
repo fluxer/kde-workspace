@@ -61,10 +61,6 @@ KWindowListMenu::KWindowListMenu( QWidget *parent )
 {
 }
 
-KWindowListMenu::~KWindowListMenu()
-{
-}
-
 static bool standaloneDialog( const KWindowInfo* info, const QList<KWindowInfo*>& list )
 {
 #ifdef Q_WS_X11

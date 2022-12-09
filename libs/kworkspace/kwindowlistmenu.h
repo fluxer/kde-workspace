@@ -47,11 +47,6 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
     explicit KWindowListMenu( QWidget *parent = 0 );
 
     /**
-     * Destroys the window list menu.
-     */
-    virtual ~KWindowListMenu();
-
-    /**
      * Initializes the menu by filling it with actions
      * for managing a window.
      */
