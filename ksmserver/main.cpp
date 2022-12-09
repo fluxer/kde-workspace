@@ -45,6 +45,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <kconfig.h>
 #include <kselectionowner.h>
 #include <kwindowsystem.h>
+#include <kcrash.h>
 #include <QtGui/qx11info_x11.h>
 #include <QtCore/qfile.h>
 
@@ -229,6 +230,8 @@ int main( int argc, char* argv[] )
     KSMServer *server = new KSMServer( wm, only_local, args->isSet("lockscreen") );
 
     KApplication::quitOnSignal();
+
+    KCrash::setFlags(KCrash::Backtrace);
 
     // for the KDE-already-running check in startkde
     KSelectionOwner kde_running( "_KDE_RUNNING", 0 );
