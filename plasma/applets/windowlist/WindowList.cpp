@@ -192,7 +192,7 @@ void WindowList::showMenu(bool onlyCurrentDesktop)
     qDeleteAll(m_listMenu->actions());
     //m_listMenu->clear();
 
-    if (!onlyCurrentDesktop) {
+    if (!onlyCurrentDesktop && m_listMenu->canChangePlacement()) {
         m_listMenu->addTitle(i18n("Actions"));
 
         QAction *unclutterAction = m_listMenu->addAction(i18n("Unclutter Windows"));
