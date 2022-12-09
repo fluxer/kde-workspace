@@ -70,10 +70,6 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
     void slotSetCurrentDesktop();
     void slotUnclutterWindows();
     void slotCascadeWindows();
-
-  private:
-    class Private;
-    Private* const d;
 };
 
 #endif

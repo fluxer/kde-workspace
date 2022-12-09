@@ -56,18 +56,13 @@ static bool compareKWinWindowInfo( KWindowInfo* firstInfo, KWindowInfo* secondIn
   return firstTitle.compare( secondTitle ) >= 0;
 }
 
-class KWindowListMenu::Private
-{
-};
-
 KWindowListMenu::KWindowListMenu( QWidget *parent )
-  : KMenu( parent ), d( new Private )
+  : KMenu( parent )
 {
 }
 
 KWindowListMenu::~KWindowListMenu()
 {
-  delete d;
 }
 
 static bool standaloneDialog( const KWindowInfo* info, const QList<KWindowInfo*>& list )
