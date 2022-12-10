@@ -22,7 +22,7 @@
 #include <kstandarddirs.h>
 #include <ktimerdialog.h>
 #include <kselectionowner.h>
-#include <qprocess.h>
+#include <kprocess.h>
 #include <qthread.h>
 #include <qdbusinterface.h>
 #include <qdbusconnectioninterface.h>
@@ -156,7 +156,9 @@ bool CfgWm::tryWmLaunch()
     bool ret = false;
     setEnabled(false);
     killWM();
-    if (QProcess::startDetached( currentWmData().exec )) {
+    KProcess kproc(this);
+    kproc.setShellCommand(currentWmData().exec);
+    if (kproc.startDetached()) {
         // it's forked into background
         ret = true;
 
@@ -210,7 +212,8 @@ bool CfgWm::tryWmLaunch()
             if (wmkey.toLower() == oldwm) {
                 WmData oldwmdata = wms.value(wmkey);
                 killWM();
-                QProcess::startDetached(oldwmdata.exec);
+                kproc.setShellCommand(oldwmdata.exec);
+                kproc.startDetached();
                 break;
             }
         }
