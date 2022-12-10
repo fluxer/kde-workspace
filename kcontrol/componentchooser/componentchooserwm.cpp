@@ -24,6 +24,7 @@
 #include <kselectionowner.h>
 #include <kprocess.h>
 #include <qthread.h>
+#include <qfileinfo.h>
 #include <qdbusinterface.h>
 #include <qdbusconnectioninterface.h>
 #include <netwm.h>
@@ -112,11 +113,14 @@ bool CfgWm::saveAndConfirm()
         cfg.sync();
         QDBusInterface ksmserver("org.kde.ksmserver", "/KSMServer");
         ksmserver.call(QDBus::NoBlock, "wmChanged");
-        KMessageBox::information( window(),
+        KMessageBox::information(
+            window(),
             i18n("A new window manager is running.\n"
                  "It is still recommended to restart this KDE session to make sure "
                  "all running applications adjust for this change."),
-                 i18n( "Window Manager Replaced"), "restartafterwmchange");
+            i18n("Window Manager Replaced"),
+            "restartafterwmchange"
+        );
         return true;
     } else {
         // revert config
@@ -131,7 +135,7 @@ bool CfgWm::saveAndConfirm()
             for (QHash< QString, WmData >::ConstIterator it = wms.constBegin(); it != wms.constEnd(); ++it) {
                 if ((*it).internalName == oldwm) {
                     // make it selected
-                    wmCombo->setCurrentIndex( wmCombo->findText( it.key()));
+                    wmCombo->setCurrentIndex(wmCombo->findText(it.key()));
                 }
             }
         }
@@ -143,7 +147,7 @@ bool CfgWm::tryWmLaunch()
 {
     if (currentWm() == "kwin"
         && qstrcmp(NETRootInfo(QX11Info::display(), NET::SupportingWMCheck).wmName(), "KWin") == 0) {
-         // it is already running, don't necessarily restart e.g. after a failure with other WM
+        // it is already running, don't necessarily restart e.g. after a failure with other WM
         return true;
     }
     KMessageBox::information(
@@ -174,8 +178,11 @@ bool CfgWm::tryWmLaunch()
             counter++;
         }
 
-        KTimerDialog* wmDialog = new KTimerDialog( 20000, KTimerDialog::CountDown, window(), i18n( "Config Window Manager Change" ),
-            KTimerDialog::Ok | KTimerDialog::Cancel, KTimerDialog::Cancel );
+        KTimerDialog* wmDialog = new KTimerDialog(
+            20000, KTimerDialog::CountDown, window(),
+            i18n("Config Window Manager Change"),
+            KTimerDialog::Ok | KTimerDialog::Cancel, KTimerDialog::Cancel
+        );
         wmDialog->setButtonGuiItem(KDialog::Ok, KGuiItem(i18n("&Accept Change"), "dialog-ok"));
         wmDialog->setButtonGuiItem(KDialog::Cancel, KGuiItem(i18n("&Revert to Previous"), "dialog-cancel"));
         QLabel *label = new QLabel(
@@ -223,22 +230,21 @@ bool CfgWm::tryWmLaunch()
     return ret;
 }
 
-void CfgWm::loadWMs(const QString& current)
+void CfgWm::loadWMs(const QString &current)
 {
     WmData kwin;
     kwin.internalName = "kwin";
     kwin.exec = "kwin";
     kwin.configureCommand = "";
     kwin.parentArgument = "";
-    wms[ "KWin" ] = kwin;
+    wms["KWin"] = kwin;
     oldwm = "kwin";
-    kwinRB->setChecked( true );
-    wmCombo->setEnabled( false );
+    kwinRB->setChecked(true);
+    wmCombo->setEnabled(false);
 
     QStringList list = KGlobal::dirs()->findAllResources("windowmanagers", QString(), KStandardDirs::NoDuplicates);
-    QRegExp reg( ".*/([^/\\.]*)\\.[^/\\.]*");
     foreach (const QString& wmfile, list) {
-        KDesktopFile file( wmfile );
+        KDesktopFile file(wmfile);
         if (file.noDisplay())
             continue;
         if (!file.tryExec())
@@ -252,21 +258,19 @@ void CfgWm::loadWMs(const QString& current)
         QString name = file.readName();
         if (name.isEmpty())
             continue;
-        if (!reg.exactMatch(wmfile))
-            continue;
-        QString wm = reg.cap(1);
+        QString wm = QFileInfo(file.name()).baseName();
         if (wms.contains(name))
             continue;
         WmData data;
         data.internalName = wm;
-        data.exec = file.desktopGroup().readEntry( "Exec" );
+        data.exec = file.desktopGroup().readEntry("Exec");
         if (data.exec.isEmpty())
             continue;
         data.configureCommand = file.desktopGroup().readEntry("X-KDE-WindowManagerConfigure");
         data.parentArgument = file.desktopGroup().readEntry("X-KDE-WindowManagerConfigureParentArgument");
         wms[name] = data;
         wmCombo->addItem(name);
-        if (wms[ name ].internalName == current) {
+        if (wms[name].internalName == current) {
              // make it selected
             wmCombo->setCurrentIndex(wmCombo->count() - 1);
             oldwm = wm;
