@@ -24,14 +24,13 @@
 #include <kselectionowner.h>
 #include <qprocess.h>
 #include <qthread.h>
-#include <qelapsedtimer.h>
 #include <qdbusinterface.h>
 #include <qdbusconnectioninterface.h>
 #include <netwm.h>
 #include <qx11info_x11.h>
 
-static const int s_eventstime = 250;
-static const int s_sleeptime = 250;
+static const int s_eventstime = 500;
+static const int s_sleeptime = 500;
 
 // TODO: kill and start WM on each screen?
 static int getWMScreen()
@@ -167,11 +166,11 @@ bool CfgWm::tryWmLaunch()
         // reached
         const QByteArray wmatom = getWMAtom();
         KSelectionOwner kselectionowner(wmatom.constData(), getWMScreen());
-        QElapsedTimer workaround;
-        workaround.start();
-        while (workaround.elapsed() < 10000 && kselectionowner.currentOwnerWindow() == XNone) {
+        ushort counter = 0;
+        while (counter < 10 && kselectionowner.currentOwnerWindow() == XNone) {
             QCoreApplication::processEvents(QEventLoop::AllEvents, s_eventstime);
             QThread::msleep(s_sleeptime);
+            counter++;
         }
 
         KTimerDialog* wmDialog = new KTimerDialog( 20000, KTimerDialog::CountDown, window(), i18n( "Config Window Manager Change" ),
