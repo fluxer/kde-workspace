@@ -2,7 +2,6 @@
 
 install(
     FILES
-    compiz-custom.desktop
     compiz.desktop
     marco.desktop
     metacity.desktop
