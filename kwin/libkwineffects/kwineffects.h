@@ -38,7 +38,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <QList>
 #include <QHash>
 #include <QStack>
-#include <QLibrary>
 
 #include <KPluginFactory>
 #include <KShortcutsEditor>
@@ -1113,8 +1112,6 @@ Q_SIGNALS:
 
 protected:
     QVector< EffectPair > loaded_effects;
-    QHash< QString, QLibrary* > effect_libraries;
-    QHash< QString, Effect* > effect_factories;
     CompositingType compositing_type;
 };
 
