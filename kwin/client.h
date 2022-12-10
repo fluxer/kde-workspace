@@ -43,6 +43,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // TODO: Cleanup the order of things in this .h file
 
 #include <QTimer>
+#include <QProcess>
+
 class KStartupInfoData;
 class KStartupInfoId;
 
@@ -899,7 +901,7 @@ private:
     TabGroup* tab_group;
     Layer in_layer;
     QTimer* ping_timer;
-    qint64 m_killHelperPID;
+    QProcess* m_killHelperProc;
     xcb_timestamp_t m_pingTimestamp;
     xcb_timestamp_t m_userTime;
     unsigned long allowed_actions;

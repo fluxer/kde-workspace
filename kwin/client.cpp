@@ -102,7 +102,7 @@ Client::Client()
     , tab_group(NULL)
     , in_layer(UnknownLayer)
     , ping_timer(NULL)
-    , m_killHelperPID(0)
+    , m_killHelperProc(0)
     , m_pingTimestamp(XCB_TIME_CURRENT_TIME)
     , m_userTime(XCB_TIME_CURRENT_TIME)   // Not known yet
     , allowed_actions(0)
@@ -206,9 +206,8 @@ Client::Client()
  */
 Client::~Client()
 {
-    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) { // means the process is alive
-        ::kill(m_killHelperPID, SIGTERM);
-        m_killHelperPID = 0;
+    if (m_killHelperProc) { // means the process is alive
+        m_killHelperProc->terminate();
     }
     //SWrapper::Client::clientRelease(this);
 #ifdef HAVE_XSYNC
@@ -1316,9 +1315,9 @@ void Client::gotPing(xcb_timestamp_t timestamp)
         return;
     delete ping_timer;
     ping_timer = NULL;
-    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) { // means the process is alive
-        ::kill(m_killHelperPID, SIGTERM);
-        m_killHelperPID = 0;
+    if (m_killHelperProc) { // means the process is alive
+        m_killHelperProc->terminate();
+        m_killHelperProc = nullptr;
     }
 }
 
@@ -1332,7 +1331,7 @@ void Client::pingTimeout()
 
 void Client::killProcess(bool ask, xcb_timestamp_t timestamp)
 {
-    if (m_killHelperPID && ::kill(m_killHelperPID, 0) == -1) // means the process is alive
+    if (m_killHelperProc && m_killHelperProc->state() == QProcess::Running) // means the process is alive
         return;
     Q_ASSERT(!ask || timestamp != XCB_TIME_CURRENT_TIME);
     pid_t pid = info->pid();
@@ -1349,13 +1348,13 @@ void Client::killProcess(bool ask, xcb_timestamp_t timestamp)
         }
     } else {
         QString hostname = clientMachine()->isLocal() ? "localhost" : clientMachine()->hostName();
-        QProcess::startDetached(KStandardDirs::findExe("kwin_killer_helper"),
+        m_killHelperProc = new QProcess(this);
+        m_killHelperProc->start(KStandardDirs::findExe("kwin_killer_helper"),
                                 QStringList() << "--pid" << QByteArray::number(qulonglong(pid)) << "--hostname" << hostname
                                 << "--windowname" << caption()
                                 << "--applicationname" << resourceClass()
                                 << "--wid" << QString::number(window())
-                                << "--timestamp" << QString::number(timestamp),
-                                QString(), &m_killHelperPID);
+                                << "--timestamp" << QString::number(timestamp));
     }
 }
 
