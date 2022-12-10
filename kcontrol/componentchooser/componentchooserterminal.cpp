@@ -34,69 +34,68 @@
 CfgTerminalEmulator::CfgTerminalEmulator(QWidget *parent)
     : QWidget(parent), Ui::TerminalEmulatorConfig_UI(), CfgPlugin()
 {
-	setupUi(this);
-	connect(terminalLE,SIGNAL(textChanged(QString)), this, SLOT(configChanged()));
-	connect(terminalCB,SIGNAL(toggled(bool)),this,SLOT(configChanged()));
-	connect(otherCB,SIGNAL(toggled(bool)),this,SLOT(configChanged()));
-	connect(btnSelectTerminal,SIGNAL(clicked()),this,SLOT(selectTerminalApp()));
-
+    setupUi(this);
+    connect(terminalLE, SIGNAL(textChanged(QString)), this, SLOT(configChanged()));
+    connect(terminalCB, SIGNAL(toggled(bool)), this, SLOT(configChanged()));
+    connect(otherCB, SIGNAL(toggled(bool)), this, SLOT(configChanged()));
+    connect(btnSelectTerminal, SIGNAL(clicked()), this, SLOT(selectTerminalApp()));
 }
 
-CfgTerminalEmulator::~CfgTerminalEmulator() {
+CfgTerminalEmulator::~CfgTerminalEmulator()
+{
 }
 
 void CfgTerminalEmulator::configChanged()
 {
-	emit changed(true);
+    emit changed(true);
 }
 
 void CfgTerminalEmulator::defaults()
 {
-	load(0);
+    load(0);
 }
 
 
-void CfgTerminalEmulator::load(KConfig *) {
-        KConfigGroup config(KSharedConfig::openConfig("kdeglobals"), "General");
-	QString terminal = config.readPathEntry("TerminalApplication","konsole");
-	if (terminal == "konsole")
-	{
-	   terminalLE->setText("xterm");
-	   terminalCB->setChecked(true);
-	}
-	else
-	{
-	  terminalLE->setText(terminal);
-	  otherCB->setChecked(true);
-	}
+void CfgTerminalEmulator::load(KConfig *)
+{
+    KConfigGroup config(KSharedConfig::openConfig("kdeglobals"), "General");
+    QString terminal = config.readPathEntry("TerminalApplication","konsole");
+    if (terminal == "konsole") {
+        terminalLE->setText("xterm");
+        terminalCB->setChecked(true);
+    } else {
+        terminalLE->setText(terminal);
+        otherCB->setChecked(true);
+    }
 
-	emit changed(false);
+    emit changed(false);
 }
 
 void CfgTerminalEmulator::save(KConfig *)
 {
-	KConfigGroup config(KSharedConfig::openConfig("kdeglobals"), "General");
-	const QString terminal = terminalCB->isChecked() ? "konsole" : terminalLE->text();
-	config.writePathEntry("TerminalApplication", terminal); // KConfig::Normal|KConfig::Global);
-	config.sync();
+    KConfigGroup config(KSharedConfig::openConfig("kdeglobals"), "General");
+    const QString terminal = terminalCB->isChecked() ? "konsole" : terminalLE->text();
+    config.writePathEntry("TerminalApplication", terminal); // KConfig::Normal|KConfig::Global);
+    config.sync();
 
-	KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged);
 
-	emit changed(false);
+    emit changed(false);
 }
 
 void CfgTerminalEmulator::selectTerminalApp()
 {
-	KUrl::List urlList;
-	KOpenWithDialog dlg(urlList, i18n("Select preferred terminal application:"), QString(), this);
-	// hide "Run in &terminal" here, we don't need it for a Terminal Application
-	dlg.hideRunInTerminal();
-	if (dlg.exec() != QDialog::Accepted) return;
-	QString client = dlg.text();
+    KUrl::List urlList;
+    KOpenWithDialog dlg(urlList, i18n("Select preferred terminal application:"), QString(), this);
+    // hide "Run in &terminal" here, we don't need it for a Terminal Application
+    dlg.hideRunInTerminal();
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
+    QString client = dlg.text();
 
-	if (!client.isEmpty())
-	{
-		terminalLE->setText(client);
-	}
+    if (!client.isEmpty()) {
+        terminalLE->setText(client);
+    }
 }
 // vim: sw=4 ts=4 noet

@@ -65,7 +65,6 @@ void CfgEmailClient::load(KConfig *)
     chkRunTerminal->setChecked((pSettings->getSetting(KEMailSettings::ClientTerminal) == "true"));
 
     emit changed(false);
-
 }
 
 void CfgEmailClient::configChanged()
@@ -79,7 +78,9 @@ void CfgEmailClient::selectEmailClient()
     KOpenWithDialog dlg(urlList, i18n("Select preferred email client:"), QString(), this);
     // hide "Do not &close when command exits" here, we don't need it for a mail client
     dlg.hideNoCloseOnExit();
-    if (dlg.exec() != QDialog::Accepted) return;
+    if (dlg.exec() != QDialog::Accepted) {
+        return;
+    }
     QString client = dlg.text();
 
     // get the preferred Terminal Application
@@ -89,34 +90,31 @@ void CfgEmailClient::selectEmailClient()
 
     int len = preferredTerminal.length();
     bool b = client.left(len) == preferredTerminal;
-    if (b) client = client.mid(len);
-    if (!client.isEmpty())
-    {
+    if (b) {
+        client = client.mid(len);
+    }
+    if (!client.isEmpty()) {
         chkRunTerminal->setChecked(b);
         txtEMailClient->setText(client);
     }
 }
 
-
 void CfgEmailClient::save(KConfig *)
 {
-    if (kmailCB->isChecked())
-    {
+    if (kmailCB->isChecked()) {
         pSettings->setSetting(KEMailSettings::ClientProgram, QString());
         pSettings->setSetting(KEMailSettings::ClientTerminal, "false");
-    }
-    else
-    {
+    } else {
         pSettings->setSetting(KEMailSettings::ClientProgram, txtEMailClient->text());
         pSettings->setSetting(KEMailSettings::ClientTerminal, (chkRunTerminal->isChecked()) ? "true" : "false");
     }
 
     // insure proper permissions -- contains sensitive data
     QString cfgName(KGlobal::dirs()->findResource("config", "emails"));
-    if (!cfgName.isEmpty())
+    if (!cfgName.isEmpty()) {
         ::chmod(QFile::encodeName(cfgName), 0600);
-    QDBusMessage message = QDBusMessage::createSignal("/Component", "org.kde.Kcontrol", "KDE_emailSettingsChanged" );
+    }
+    QDBusMessage message = QDBusMessage::createSignal("/Component", "org.kde.Kcontrol", "KDE_emailSettingsChanged");
     QDBusConnection::sessionBus().send(message);
     emit changed(false);
 }
-

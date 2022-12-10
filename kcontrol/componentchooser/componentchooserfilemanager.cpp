@@ -28,10 +28,10 @@
 #include <kconfiggroup.h>
 
 CfgFileManager::CfgFileManager(QWidget *parent)
-    : QWidget(parent), Ui::FileManagerConfig_UI(),CfgPlugin()
+    : QWidget(parent), Ui::FileManagerConfig_UI(), CfgPlugin()
 {
     setupUi(this);
-    connect(btnSelectFileManager,SIGNAL(clicked()),this, SLOT(slotAddFileManager()));
+    connect(btnSelectFileManager, SIGNAL(clicked()), this, SLOT(slotAddFileManager()));
 }
 
 CfgFileManager::~CfgFileManager() {
@@ -52,13 +52,13 @@ static KService::List appOffers()
     return KMimeTypeTrader::self()->query("inode/directory", "Application");
 }
 
-void CfgFileManager::load(KConfig *) {
+void CfgFileManager::load(KConfig *)
+{
     qDeleteAll(mDynamicWidgets);
     mDynamicWidgets.clear();
     const KService::List apps = appOffers();
     bool first = true;
-    Q_FOREACH(const KService::Ptr& service, apps)
-    {
+    Q_FOREACH(const KService::Ptr& service, apps) {
         QRadioButton* button = new QRadioButton(service->name(), this);
         connect(button,SIGNAL(toggled(bool)),this,SLOT(configChanged()));
         button->setProperty("storageId", service->storageId());
@@ -86,8 +86,10 @@ void CfgFileManager::save(KConfig *)
     if (!storageId.isEmpty()) {
         // This is taken from filetypes/mimetypedata.cpp
         KSharedConfig::Ptr profile = KSharedConfig::openConfig("mimeapps.list", KConfig::NoGlobals, "xdgdata-apps");
-        if (!profile->isConfigWritable(true)) // warn user if mimeapps.list is root-owned (#155126/#94504)
+        if (!profile->isConfigWritable(true)) {
+            // warn user if mimeapps.list is root-owned (#155126/#94504)
             return;
+        }
         KConfigGroup addedApps(profile, "Added Associations");
         QStringList userApps = addedApps.readXdgListEntry("inode/directory");
         userApps.removeAll(storageId); // remove if present, to make it first in the list

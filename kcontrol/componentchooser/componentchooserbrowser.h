@@ -21,23 +21,23 @@
 
 class CfgBrowser: public QWidget, public Ui::BrowserConfig_UI, public CfgPlugin
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	CfgBrowser(QWidget *parent);
-	virtual ~CfgBrowser();
-	virtual void load(KConfig *cfg);
-	virtual void save(KConfig *cfg);
-	virtual void defaults();
+    CfgBrowser(QWidget *parent);
+    virtual ~CfgBrowser();
+    virtual void load(KConfig *cfg);
+    virtual void save(KConfig *cfg);
+    virtual void defaults();
 
 protected Q_SLOTS:
-	void selectBrowser();
-	void configChanged();
+    void selectBrowser();
+    void configChanged();
 
 Q_SIGNALS:
-	void changed(bool);
+    void changed(bool);
 private:
-	QString m_browserExec;
-	KService::Ptr m_browserService;
+    QString m_browserExec;
+    KService::Ptr m_browserService;
 };
 
 #endif /* COMPONENTCHOOSERBROWSER_H */

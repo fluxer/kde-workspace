@@ -18,72 +18,68 @@
 
 #include "ui_componentchooser_ui.h"
 #include "ui_componentconfig_ui.h"
-#include <QHash>
 
-//Added by qt3to4:
+#include <QHash>
 #include <QVBoxLayout>
+#include <QListWidgetItem>
 
 #include <kservice.h>
 
-#include <QListWidgetItem>
 class KConfig;
 
-/* The CfgPlugin  class is an exception. It is LGPL. It will be parted of the plugin interface
-	which I plan for KDE 3.2.
+/*
+ The CfgPlugin  class is an exception. It is LGPL. It will be parted of the plugin interface
+ which I plan for KDE 3.2.
 */
 class CfgPlugin
 {
 public:
-	CfgPlugin(){}
-	virtual ~CfgPlugin(){}
-	virtual void load(KConfig *cfg)=0;
-	virtual void save(KConfig *cfg)=0;
-	virtual void defaults()=0;
+    CfgPlugin(){}
+    virtual ~CfgPlugin(){}
+    virtual void load(KConfig *cfg)=0;
+    virtual void save(KConfig *cfg)=0;
+    virtual void defaults()=0;
 };
 
 class CfgComponent: public QWidget, public Ui::ComponentConfig_UI, public CfgPlugin
 {
-Q_OBJECT
+    Q_OBJECT
 public:
-	CfgComponent(QWidget *parent);
-	virtual ~CfgComponent();
-	virtual void load(KConfig *cfg);
-	virtual void save(KConfig *cfg);
-	virtual void defaults();
+    CfgComponent(QWidget *parent);
+    virtual ~CfgComponent();
+    virtual void load(KConfig *cfg);
+    virtual void save(KConfig *cfg);
+    virtual void defaults();
 
 protected:
-	QHash<QString, QString>  m_lookupDict,m_revLookupDict;
+    QHash<QString, QString>  m_lookupDict,m_revLookupDict;
 
 protected Q_SLOTS:
-	void slotComponentChanged(const QString&);
+    void slotComponentChanged(const QString&);
 Q_SIGNALS:
-	void changed(bool);
+    void changed(bool);
 };
 
 class ComponentChooser : public QWidget, public Ui::ComponentChooser_UI
 {
-
-Q_OBJECT
-
+    Q_OBJECT
 public:
-	ComponentChooser(QWidget *parent=0);
-	virtual ~ComponentChooser();
-	void load();
-	void save();
-	void restoreDefault();
+    ComponentChooser(QWidget *parent=0);
+    virtual ~ComponentChooser();
+    void load();
+    void save();
+    void restoreDefault();
 
 private:
-	QString latestEditedService;
-	bool somethingChanged;
-	QWidget *configWidget;
+    QString latestEditedService;
+    bool somethingChanged;
+    QWidget *configWidget;
 protected Q_SLOTS:
-	void emitChanged(bool);
-	void slotServiceSelected(QListWidgetItem *);
+    void emitChanged(bool);
+    void slotServiceSelected(QListWidgetItem *);
 
 Q_SIGNALS:
-	void changed(bool);
-
+    void changed(bool);
 };
-
 
 #endif

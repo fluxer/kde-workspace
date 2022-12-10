@@ -48,7 +48,7 @@ private:
         QString parentArgument;
     };
     WmData currentWmData() const;
-    QHash< QString, WmData > wms; // i18n text -> data
+    QHash<QString, WmData> wms; // i18n text -> data
     QString oldwm; // the original value
 };
 
