@@ -231,7 +231,6 @@ protected Q_SLOTS:
     void slotPropertyNotify(long atom);
 
 protected:
-    QLibrary* findEffectLibrary(KService* service);
     void effectsChanged();
     void setupClientConnections(const KWin::Client *c);
     void setupUnmanagedConnections(const KWin::Unmanaged *u);
@@ -239,7 +238,6 @@ protected:
     Effect* keyboard_grab_effect;
     Effect* fullscreen_effect;
     QList<EffectWindow*> elevated_windows;
-    QMultiMap< int, EffectPair > effect_order;
     QHash< long, int > registered_atoms;
     int next_window_quad_type;
 

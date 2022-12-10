@@ -246,8 +246,12 @@ EffectsHandlerImpl::~EffectsHandlerImpl()
     if (keyboard_grab_effect != NULL) {
         ungrabKeyboard();
     }
-    foreach (const EffectPair & ep, loaded_effects) {
-        unloadEffect(ep.first);
+    QStringList loaded_names;
+    foreach (const EffectPair &ep, loaded_effects) {
+        loaded_names.append(ep.first);
+    }
+    foreach (const QString &en, loaded_names) {
+        unloadEffect(en);
     }
 }
 
@@ -1245,18 +1249,6 @@ unsigned long EffectsHandlerImpl::xrenderBufferPicture()
     return None;
 }
 
-QLibrary* EffectsHandlerImpl::findEffectLibrary(KService* service)
-{
-    QLibrary* library = new QLibrary(service->library());
-    if (!library) {
-        kError(1212) << "couldn't open library for effect '" <<
-                     service->name() << "'";
-        return 0;
-    }
-
-    return library;
-}
-
 void EffectsHandlerImpl::toggleEffect(const QString& name)
 {
     if (isEffectLoaded(name))
@@ -1361,128 +1353,47 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     }
 
     if (effect) {
-        kDebug(1212) << "Effect is internal" << name;
         bool enabledByDefault = service->property("X-KDE-PluginInfo-EnabledByDefault").toBool();
         if (checkDefault && !enabledByDefault) {
+            kDebug(1212) << "Disabled internal effect" << name;
             delete effect;
             return false;
         }
-    // external second
-    } else {
-        kDebug(1212) << "Effect is external" << name;
-        library = findEffectLibrary(service.data());
-        if (!library) {
-            return false;
-        }
 
-        QString version_symbol = "effect_version_" + name;
-        void *version_func = library->resolve(version_symbol.toAscii());
-        if (version_func == NULL) {
-            kWarning(1212) << "Effect " << name << " does not provide required API version, ignoring.";
-            delete library;
-            return false;
-        }
-        typedef int (*t_versionfunc)();
-        int version = reinterpret_cast< t_versionfunc >(version_func)();   // call it
-        // Version must be the same or less, but major must be the same.
-        // With major 0 minor must match exactly.
-        if (version > KWIN_EFFECT_API_VERSION
-                || (version >> 8) != KWIN_EFFECT_API_VERSION_MAJOR
-                || (KWIN_EFFECT_API_VERSION_MAJOR == 0 && version != KWIN_EFFECT_API_VERSION)) {
-            kWarning(1212) << "Effect " << name << " requires unsupported API version " << version;
-            delete library;
-            return false;
-        }
-
-        const QString enabledByDefault_symbol = "effect_enabledbydefault_" + name;
-        void *enabledByDefault_func = library->resolve(enabledByDefault_symbol.toAscii().data());
-
-        const QString supported_symbol = "effect_supported_" + name;
-        void *supported_func = library->resolve(supported_symbol.toAscii().data());
-
-        const QString create_symbol = "effect_create_" + name;
-        void *create_func = library->resolve(create_symbol.toAscii().data());
-
-        if (supported_func) {
-            typedef bool (*t_supportedfunc)();
-            t_supportedfunc supported = reinterpret_cast<t_supportedfunc>(supported_func);
-            if (!supported()) {
-                kWarning(1212) << "EffectsHandler::loadEffect : Effect " << name << " is not supported" ;
-                library->unload();
-                return false;
-            }
-        }
-
-        if (checkDefault && enabledByDefault_func) {
-            typedef bool (*t_enabledByDefaultfunc)();
-            t_enabledByDefaultfunc enabledByDefault = reinterpret_cast<t_enabledByDefaultfunc>(enabledByDefault_func);
-
-            if (!enabledByDefault()) {
-                library->unload();
-                return false;
-            }
-        }
-
-        if (!create_func) {
-            kError(1212) << "EffectsHandler::loadEffect : effect_create function not found";
-            library->unload();
-            return false;
-        }
-
-        typedef Effect*(*t_createfunc)();
-        t_createfunc create = reinterpret_cast<t_createfunc>(create_func);
-
-        // Make sure all depenedencies have been loaded
-        // TODO: detect circular deps
-        KPluginInfo plugininfo(service);
-        foreach (const QString & depName, plugininfo.dependencies()) {
-            if (!loadEffect(depName)) {
-                kError(1212) << "EffectsHandler::loadEffect : Couldn't load dependencies for effect " << name;
-                library->unload();
-                return false;
-            }
-        }
-
-        effect = create();
-    }
-
-    effect_order.insert(service->property("X-KDE-Ordering").toInt(), EffectPair(name, effect));
-    effectsChanged();
-    if (effect) {
         kDebug(1212) << "Internal effect has been loaded" << name;
-        effect_factories[ name ] = effect;
-    } else if (library) {
-        kDebug(1212) << "External effect has been loaded" << name;
-        effect_libraries[ name ] = library;
+
+        // order does not matter really
+        loaded_effects.append(EffectPair(name, effect));
+        effectsChanged();
+        return true;
     }
 
-    return true;
+    kWarning() << "Invalid effect" << name;
+    return false;
 }
 
 void EffectsHandlerImpl::unloadEffect(const QString& name)
 {
     m_compositor->addRepaintFull();
 
-    for (QMap< int, EffectPair >::iterator it = effect_order.begin(); it != effect_order.end(); ++it) {
-        if (it.value().first == name) {
+    QMutableVectorIterator<EffectPair> it(loaded_effects);
+    while (it.hasNext()) {
+        const EffectPair &effect = it.next();
+        if (effect.first == name) {
+            Effect* effectptr = effect.second;
             kDebug(1212) << "EffectsHandler::unloadEffect : Unloading Effect : " << name;
-            if (activeFullScreenEffect() == it.value().second) {
+            if (activeFullScreenEffect() == effectptr) {
                 setActiveFullScreenEffect(0);
             }
-            stopMouseInterception(it.value().second);
+            stopMouseInterception(effectptr);
             // remove support properties for the effect
             const QList<QByteArray> properties = m_propertiesForEffects.keys();
             foreach (const QByteArray &property, properties) {
-                removeSupportProperty(property, it.value().second);
+                removeSupportProperty(property, effectptr);
             }
-            delete it.value().second;
-            effect_order.remove(it.key());
+            it.remove();
+            delete effectptr;
             effectsChanged();
-            if (effect_factories.contains(name)) {
-                delete effect_libraries[ name ];
-            } else if (effect_libraries.contains(name)) {
-                effect_libraries[ name ]->unload();
-            }
             return;
         }
     }
@@ -1492,11 +1403,12 @@ void EffectsHandlerImpl::unloadEffect(const QString& name)
 
 void EffectsHandlerImpl::reconfigureEffect(const QString& name)
 {
-    for (QVector< EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it)
-        if ((*it).first == name) {
-            (*it).second->reconfigure(Effect::ReconfigureAll);
-            return;
+    foreach (EffectPair &it, loaded_effects) {
+        if (it.first == name) {
+            it.second->reconfigure(Effect::ReconfigureAll);
+            break;
         }
+    }
 }
 
 bool EffectsHandlerImpl::isEffectLoaded(const QString& name) const
@@ -1511,13 +1423,13 @@ bool EffectsHandlerImpl::isEffectLoaded(const QString& name) const
 void EffectsHandlerImpl::reloadEffect(Effect *effect)
 {
     QString effectName;
-    for (QVector< EffectPair >::const_iterator it = loaded_effects.constBegin(); it != loaded_effects.constEnd(); ++it) {
-        if ((*it).second == effect) {
-            effectName = (*it).first;
+    foreach (const EffectPair &it, loaded_effects) {
+        if (it.second == effect) {
+            effectName = it.first;
             break;
         }
     }
-    if (!effectName.isNull()) {
+    if (!effectName.isEmpty()) {
         unloadEffect(effectName);
         loadEffect(effectName);
     }
@@ -1525,20 +1437,15 @@ void EffectsHandlerImpl::reloadEffect(Effect *effect)
 
 void EffectsHandlerImpl::effectsChanged()
 {
-    loaded_effects.clear();
-    m_activeEffects.clear(); // it's possible to have a reconfigure and a quad rebuild between two paint cycles - bug #308201
-//    kDebug(1212) << "Recreating effects' list:";
-    foreach (const EffectPair & effect, effect_order) {
-//        kDebug(1212) << effect.first;
-        loaded_effects.append(effect);
-    }
+    // it's possible to have a reconfigure and a quad rebuild between two paint cycles - bug #308201
+    m_activeEffects.clear();
     m_activeEffects.reserve(loaded_effects.count());
 }
 
 QStringList EffectsHandlerImpl::activeEffects() const
 {
     QStringList ret;
-    foreach(const KWin::EffectPair it, loaded_effects) {
+    foreach (const EffectPair &it, loaded_effects) {
         if (it.second->isActive()) {
             ret << it.first;
         }
