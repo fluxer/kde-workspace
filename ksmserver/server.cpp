@@ -944,6 +944,7 @@ bool KSMServer::defaultSession() const
 // - if that fails, just use KWin
 void KSMServer::selectWm( const QString& kdewm )
 {
+    kDebug() << "window manager changed" << kdewm;
     wm = "kwin"; // defaults
     wmCommands = ( QStringList() << "kwin" ); 
     if( qstrcmp( getenv( "KDE_FAILSAFE" ), "1" ) == 0 )
