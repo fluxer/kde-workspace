@@ -2,7 +2,7 @@
  KWin - the KDE window manager
  This file is part of the KDE project.
 
- Copyright (C) 2010 Martin Gräßlin <mgraesslin@kde.org>
+ Copyright (C) 2019 Ivailo Monev <xakepa10@gmail.com>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -25,13 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KConfigGroup>
 #include <KDebug>
 #include <KGlobal>
-#include <KIconLoader>
-#include <KStandardDirs>
 #include <KStartupInfo>
-
-// based on StartupId in KRunner by Lubos Lunak
-// Copyright (C) 2001 Lubos Lunak <l.lunak@kde.org>
-// Copyright (C) 2019 Ivailo Monev <xakepa10@gmail.com>
 
 namespace KWin
 {
