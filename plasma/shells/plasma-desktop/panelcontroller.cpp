@@ -960,27 +960,27 @@ void PanelController::maximizePanel()
         case Plasma::LeftEdge: {
             QRect r = availGeom.intersected(QRect(0, 0, w, length)).boundingRect();
             offset = r.top();
+            break;
         }
-        break;
 
         case Plasma::RightEdge: {
             QRect r = availGeom.intersected(QRect(screenGeom.right() - w, 0, w, length)).boundingRect();
             offset = r.top();
+            break;
         }
-        break;
 
         case Plasma::TopEdge: {
             QRect r = availGeom.intersected(QRect(0, 0, length, h)).boundingRect();
             offset = r.left();
+            break;
         }
-        break;
 
         case Plasma::BottomEdge:
         default: {
             QRect r = availGeom.intersected(QRect(0, screenGeom.bottom() - h, length, h)).boundingRect();
             offset = r.left();
+            break;
         }
-        break;
     }
 
     rulersMoved(offset, length, length);
