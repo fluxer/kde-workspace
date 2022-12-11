@@ -930,7 +930,16 @@ bool KSMServer::isWM( const KSMClient* client ) const
 
 bool KSMServer::isWM( const QString& command ) const
 {
-    return command == wm;
+    if (command == wm) {
+        kDebug() << "the window manager is" << command;
+        return true;
+    }
+    // both the command and window manager may or may not be absolute path thus the filename match
+    if (QFileInfo(command).fileName() == QFileInfo(wm).fileName()) {
+        kDebug() << "the window manager is" << command;
+        return true;
+    }
+    return false;
 }
 
 bool KSMServer::defaultSession() const
