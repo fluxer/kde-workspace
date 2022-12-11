@@ -54,7 +54,6 @@ endif(UNIX AND Q_WS_X11)
 install(TARGETS plasma-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES data/plasma.desktop data/plasma-desktop.desktop DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR})
 install(FILES data/plasma-shell-desktop.kcfg  DESTINATION  ${KDE4_KCFG_INSTALL_DIR})
-install(FILES data/plasma-desktop.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma-desktop)
 install(FILES data/plasma-desktop-js.xml DESTINATION ${KDE4_DATA_INSTALL_DIR}/katepart/syntax/)
 install(
     FILES data/plasma-desktoprc
