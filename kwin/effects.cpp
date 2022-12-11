@@ -1361,8 +1361,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         }
 
         kDebug(1212) << "Internal effect has been loaded" << name;
-
-        // order does not matter really
         loaded_effects.append(EffectPair(name, effect));
         effectsChanged();
         return true;

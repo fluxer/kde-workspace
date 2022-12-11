@@ -125,6 +125,3 @@ X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Depends=
 # Whether this effect should be enabled by default
 X-KDE-PluginInfo-EnabledByDefault=false
-# The plugin (library) which contains the effect. One library may contain more effects.
-# The order in which this effect is loaded.  Lower numbers are loaded first.
-X-KDE-Ordering=90
