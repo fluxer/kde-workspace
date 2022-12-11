@@ -23,6 +23,7 @@
 #include <ktimerdialog.h>
 #include <kselectionowner.h>
 #include <kprocess.h>
+#include <kshell.h>
 #include <qthread.h>
 #include <qfileinfo.h>
 #include <qdbusinterface.h>
@@ -53,6 +54,28 @@ void killWM()
     KSelectionOwner kselectionowner(wmatom.constData(), getWMScreen());
     kselectionowner.claim(true);
     kselectionowner.release();
+}
+
+bool startWM(const QString &wmexec)
+{
+    // HACK: openbox crashes shortly after it is started if started from this process so start it
+    // via klauncher
+    if (wmexec.contains(QLatin1String("openbox"))) {
+        QDBusInterface klauncher(
+            "org.kde.klauncher", "/KLauncher","org.kde.KLauncher",
+            QDBusConnection::sessionBus()
+        );
+        QStringList wmcommand = KShell::splitArgs(wmexec);
+        if (wmcommand.isEmpty()) {
+            return false;
+        }
+        const QString wmprog = wmcommand.takeFirst();
+        QDBusReply<void> reply = klauncher.call("exec_blind", wmprog, wmcommand);
+        return reply.isValid();
+    }
+    KProcess kproc;
+    kproc.setShellCommand(wmexec);
+    return (kproc.startDetached() > 0);
 }
 
 CfgWm::CfgWm(QWidget *parent)
@@ -160,9 +183,7 @@ bool CfgWm::tryWmLaunch()
     bool ret = false;
     setEnabled(false);
     killWM();
-    KProcess kproc(this);
-    kproc.setShellCommand(currentWmData().exec);
-    if (kproc.startDetached()) {
+    if (startWM(currentWmData().exec)) {
         // it's forked into background
         ret = true;
 
@@ -219,8 +240,7 @@ bool CfgWm::tryWmLaunch()
             if (wmkey.toLower() == oldwm) {
                 WmData oldwmdata = wms.value(wmkey);
                 killWM();
-                kproc.setShellCommand(oldwmdata.exec);
-                kproc.startDetached();
+                startWM(oldwmdata.exec);
                 break;
             }
         }
