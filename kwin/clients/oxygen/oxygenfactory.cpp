@@ -129,19 +129,19 @@ namespace Oxygen
 
             // compositing
             case AbilityProvidesShadow:
-            return true;
+                return true;
 
             case AbilityUsesAlphaChannel:
             case AbilityAnnounceAlphaChannel:
-            return true;
+                return true;
 
             // tabs
             case AbilityTabbing:
-            return true;
+                return true;
 
             // no colors supported at this time
             default:
-            return false;
+                return false;
         };
     }
 
