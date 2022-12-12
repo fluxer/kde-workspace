@@ -37,13 +37,17 @@ install(TARGETS textthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-set(djvuthumbnail_PART_SRCS djvucreator.cpp)
+if(DJVULIBRE_FOUND)
+    include_directories(${DJVULIBRE_INCLUDE_DIR})
 
-kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
+    set(djvuthumbnail_PART_SRCS djvucreator.cpp)
 
-target_link_libraries(djvuthumbnail ${KDE4_KIO_LIBS})
+    kde4_add_plugin(djvuthumbnail ${djvuthumbnail_PART_SRCS})
 
-install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+    target_link_libraries(djvuthumbnail ${KDE4_KIO_LIBS} ${DJVULIBRE_LIBRARY})
+
+    install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+endif()
 
 ########### next target ###############
 

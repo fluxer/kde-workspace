@@ -19,10 +19,15 @@
 #include "djvucreator.h"
 
 #include <QImage>
-#include <QProcess>
-#include <kstandarddirs.h>
+#include <QCoreApplication>
+#include <QThread>
 #include <kdebug.h>
 #include <kdemacros.h>
+
+#include <libdjvu/ddjvuapi.h>
+
+static const int s_eventstime = 250;
+static const int s_sleeptime = 100;
 
 extern "C"
 {
@@ -38,30 +43,73 @@ DjVuCreator::DjVuCreator()
 
 bool DjVuCreator::create(const QString &path, int width, int height, QImage &img)
 {
-    const QString ddjvuexe = KStandardDirs::findExe("ddjvu");
-    if (ddjvuexe.isEmpty()) {
-        kWarning() << "DjVu is not available";
+    const QByteArray pathbytes = path.toUtf8();
+    ddjvu_context_t* djvuctx = ddjvu_context_create("djvucreator");
+    if (!djvuctx) {
+        kWarning() << "Could not create DjVu context";
         return false;
     }
-
-    const QStringList ddjvuargs = QStringList()
-        << QLatin1String("-page=1")
-        << QLatin1String("-format=ppm")
-        << (QLatin1String("-size=") + QString::number(width) + QLatin1Char('x') + QString::number(height))
-        << path;
-    QProcess ddjvuprocess;
-    ddjvuprocess.start(ddjvuexe, ddjvuargs);
-    if (ddjvuprocess.waitForFinished() == false || ddjvuprocess.exitCode() != 0) {
-        kWarning() << ddjvuprocess.readAllStandardError();
+    ddjvu_document_t* djvudoc = ddjvu_document_create_by_filename_utf8(djvuctx, pathbytes.constData(), FALSE);
+    if (!djvudoc) {
+        kWarning() << "Could not create DjVu document";
+        ddjvu_context_release(djvuctx);
         return false;
     }
-    const QByteArray ddjvuimage = ddjvuprocess.readAllStandardOutput();
-
-    if (img.loadFromData(ddjvuimage, "PPM") == false) {
-        kWarning() << "Could not load ddjvu image";
+    ddjvu_page_t* djvupage = ddjvu_page_create_by_pageno(djvudoc, 0);
+    if (!djvupage) {
+        kWarning() << "Could not create DjVu page";
+        ddjvu_document_release(djvudoc);
+        ddjvu_context_release(djvuctx);
+        img = QImage();
         return false;
     }
-
+    kDebug() << "Waiting for page decoding to complete";
+    while (!ddjvu_page_decoding_done(djvupage)) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, s_eventstime);
+        QThread::msleep(s_sleeptime);
+    }
+    kDebug() << "Done waiting for page decoding to complete";
+    img = QImage(width, height, QImage::Format_RGB32);
+    uint djvumask[4] = { 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 };
+    int djvumasksize = 3; // sizeof(djvumask);
+    ddjvu_format_t* djvuformat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, djvumasksize, djvumask);
+    if (!djvuformat) {
+        kWarning() << "Could not create DjVu format";
+        ddjvu_page_release(djvupage);
+        ddjvu_document_release(djvudoc);
+        ddjvu_context_release(djvuctx);
+        img = QImage();
+        return false;
+    }
+    ddjvu_format_set_row_order(djvuformat, 1);
+    ddjvu_format_set_y_direction(djvuformat, 1);
+    ddjvu_rect_t djvupagerect;
+    djvupagerect.x = 0;
+    djvupagerect.y = 0;
+    djvupagerect.w = width;
+    djvupagerect.h = height;
+    ddjvu_rect_t djvurenderrect;
+    djvurenderrect = djvupagerect;
+    const int djvustatus = ddjvu_page_render(
+        djvupage,
+        DDJVU_RENDER_COLOR,
+        &djvupagerect, &djvurenderrect,
+        djvuformat,
+        img.bytesPerLine(), reinterpret_cast<char*>(img.bits())
+    );
+    if (djvustatus == FALSE) {
+        kWarning() << "Could not render DjVu page";
+        ddjvu_format_release(djvuformat);
+        ddjvu_page_release(djvupage);
+        ddjvu_document_release(djvudoc);
+        ddjvu_context_release(djvuctx);
+        img = QImage();
+        return false;
+    }
+    ddjvu_page_release(djvupage);
+    ddjvu_format_release(djvuformat);
+    ddjvu_document_release(djvudoc);
+    ddjvu_context_release(djvuctx);
     return true;
 }
 

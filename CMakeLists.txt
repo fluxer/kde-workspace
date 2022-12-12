@@ -178,6 +178,14 @@ set_package_properties(EPub PROPERTIES
     PURPOSE "Provides support for eBook in the thumbnail KIO slave"
 )
 
+kde4_optional_find_package(DjVuLibre)
+set_package_properties(DjVuLibre PROPERTIES
+    DESCRIPTION "Open source DjVu library"
+    URL "https://djvu.sourceforge.net/"
+    TYPE RECOMMENDED
+    PURPOSE "Provides support for DjVu in the thumbnail KIO slave"
+)
+
 kde4_optional_find_package(Sensors)
 set_package_properties(Sensors PROPERTIES
     DESCRIPTION "Linux hardware monitoring"
