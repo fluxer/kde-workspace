@@ -57,6 +57,34 @@ static QString findNtpUtility()
     return QString();
 }
 
+ClockHelper::ClockHelper(const char* const helper, QObject *parent)
+    : KAuthorization(helper, parent)
+{
+}
+
+int ClockHelper::save(const QVariantMap &args)
+{
+  bool _ntp = args.value("ntp").toBool();
+  bool _date = args.value("date").toBool();
+  bool _tz = args.value("tz").toBool();
+  bool _tzreset = args.value("tzreset").toBool();
+
+  KComponentData data( "kcmdatetimehelper" );
+
+  int ret = NoError; // error code
+  // The order here is important
+  if( _ntp )
+    ret |= ntp( args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
+  if( _date )
+    ret |= date( args.value("newdate").toString(), args.value("olddate").toString() );
+  if( _tz )
+    ret |= tz( args.value("tzone").toString() );
+  if( _tzreset )
+    ret |= tzreset();
+
+  return ret;
+}
+
 ClockHelper::CH_Error ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
 {
   // write to the system config file
@@ -140,29 +168,6 @@ ClockHelper::CH_Error ClockHelper::tzreset()
     setenv("TZ", "", 1);
     tzset();
     return NoError;
-}
-
-int ClockHelper::save(const QVariantMap &args)
-{
-  bool _ntp = args.value("ntp").toBool();
-  bool _date = args.value("date").toBool();
-  bool _tz = args.value("tz").toBool();
-  bool _tzreset = args.value("tzreset").toBool();
-
-  KComponentData data( "kcmdatetimehelper" );
-
-  int ret = NoError; // error code
-  // The order here is important
-  if( _ntp )
-    ret |= ntp( args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
-  if( _date )
-    ret |= date( args.value("newdate").toString(), args.value("olddate").toString() );
-  if( _tz )
-    ret |= tz( args.value("tzone").toString() );
-  if( _tzreset )
-    ret |= tzreset();
-
-  return ret;
 }
 
 K_AUTH_MAIN("org.kde.kcontrol.kcmclock", ClockHelper)

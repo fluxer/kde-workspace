@@ -24,6 +24,8 @@
 class SolidUiServerHelper : public KAuthorization
 {
     Q_OBJECT
+public:
+    SolidUiServerHelper(const char* const helper, QObject *parent = nullptr);
 public Q_SLOTS:
     int cryptopen(const QVariantMap &parameters);
     int cryptclose(const QVariantMap &parameters);

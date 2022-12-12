@@ -23,6 +23,11 @@
 
 #include "config-workspace.h"
 
+KGreeterHelper::KGreeterHelper(const char* const helper, QObject *parent)
+    : KAuthorization(helper, parent)
+{
+}
+
 int KGreeterHelper::save(const QVariantMap &parameters)
 {
     if (!parameters.contains("font") || !parameters.contains("style")

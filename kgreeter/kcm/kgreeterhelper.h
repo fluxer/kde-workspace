@@ -24,6 +24,8 @@
 class KGreeterHelper : public KAuthorization
 {
     Q_OBJECT
+public:
+    KGreeterHelper(const char* const helper, QObject *parent = nullptr);
 public slots:
     int save(const QVariantMap &parameters);
 };

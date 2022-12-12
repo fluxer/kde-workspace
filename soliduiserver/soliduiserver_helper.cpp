@@ -30,6 +30,11 @@
 #  include <errno.h>
 #endif
 
+SolidUiServerHelper::SolidUiServerHelper(const char* const helper, QObject *parent)
+    : KAuthorization(helper, parent)
+{
+}
+
 int SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
 {
     if (!parameters.contains("device") || !parameters.contains("name") || !parameters.contains("password")) {

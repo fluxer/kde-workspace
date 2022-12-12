@@ -28,8 +28,7 @@ class KSysGuardProcessListHelper : public KAuthorization
 {
     Q_OBJECT
 public:
-    KSysGuardProcessListHelper();
-
+    KSysGuardProcessListHelper(const char* const helper, QObject *parent = nullptr);
 public Q_SLOTS:
     int renice(QVariantMap parameters);
     int changecpuscheduler(QVariantMap parameters);

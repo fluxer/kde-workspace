@@ -27,23 +27,25 @@ class ClockHelper : public KAuthorization
 {
     Q_OBJECT
 
-    public:
-        enum CH_Error {
-            NoError         = 0,
-            CallError       = 1,
-            TimezoneError   = 2,
-            NTPError        = 4,
-            DateError       = 8
-        };
+public:
+    enum CH_Error {
+        NoError         = 0,
+        CallError       = 1,
+        TimezoneError   = 2,
+        NTPError        = 4,
+        DateError       = 8
+    };
 
-    public slots:
-        int save(const QVariantMap &map);
+    ClockHelper(const char* const helper, QObject *parent = nullptr);
 
-    private:
-        CH_Error ntp(const QStringList& ntpServers, bool ntpEnabled);
-        CH_Error date(const QString& newdate, const QString& olddate);
-        CH_Error tz(const QString& selectedzone);
-        CH_Error tzreset();
+public slots:
+    int save(const QVariantMap &map);
+
+private:
+    CH_Error ntp(const QStringList& ntpServers, bool ntpEnabled);
+    CH_Error date(const QString& newdate, const QString& olddate);
+    CH_Error tz(const QString& selectedzone);
+    CH_Error tzreset();
 };
 
 #endif // CLOCK_HELPER_H

@@ -23,7 +23,8 @@
 #include "helper.h"
 #include "processes_local_p.h"
 
-KSysGuardProcessListHelper::KSysGuardProcessListHelper()
+KSysGuardProcessListHelper::KSysGuardProcessListHelper(const char* const helper, QObject *parent)
+    : KAuthorization(helper, parent)
 {
     qRegisterMetaType<QList<long long> >();
 }
