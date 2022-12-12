@@ -68,14 +68,22 @@ public:
     }
     void resizePixmaps();
 
-    template <typename T>
-    T topDecoPixmap() const;
-    template <typename T>
-    T leftDecoPixmap() const;
-    template <typename T>
-    T bottomDecoPixmap() const;
-    template <typename T>
-    T rightDecoPixmap() const;
+    inline xcb_render_picture_t topDecoPixmap() const
+    {
+        return picture(TopPixmap);
+    }
+    inline xcb_render_picture_t leftDecoPixmap() const
+    {
+        return picture(LeftPixmap);
+    }
+    inline xcb_render_picture_t bottomDecoPixmap() const
+    {
+        return picture(BottomPixmap);
+    }
+    inline xcb_render_picture_t rightDecoPixmap() const
+    {
+        return picture(RightPixmap);
+    }
 
     /**
      * Used by Deleted::copyToDeleted() to move the PaintRedirector to the Deleted.
@@ -140,34 +148,6 @@ private:
     XRenderPicture* m_pictures[PixmapCount];
     QImage m_scratchImage;
 };
-
-template <>
-inline
-xcb_render_picture_t PaintRedirector::bottomDecoPixmap() const
-{
-    return picture(BottomPixmap);
-}
-
-template <>
-inline
-xcb_render_picture_t PaintRedirector::leftDecoPixmap() const
-{
-    return picture(LeftPixmap);
-}
-
-template <>
-inline
-xcb_render_picture_t PaintRedirector::rightDecoPixmap() const
-{
-    return picture(RightPixmap);
-}
-
-template <>
-inline
-xcb_render_picture_t PaintRedirector::topDecoPixmap() const
-{
-    return picture(TopPixmap);
-}
 
 } // namespace
 

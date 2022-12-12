@@ -555,10 +555,10 @@ void SceneXrender::Window::performPaint(int mask, QRegion region, WindowPaintDat
         }
         if (redirector) {
             redirector->ensurePixmapsPainted();
-            left   = redirector->leftDecoPixmap<xcb_render_picture_t>();
-            top    = redirector->topDecoPixmap<xcb_render_picture_t>();
-            right  = redirector->rightDecoPixmap<xcb_render_picture_t>();
-            bottom = redirector->bottomDecoPixmap<xcb_render_picture_t>();
+            left   = redirector->leftDecoPixmap();
+            top    = redirector->topDecoPixmap();
+            right  = redirector->rightDecoPixmap();
+            bottom = redirector->bottomDecoPixmap();
         }
         if (!noBorder) {
             MAP_RECT_TO_TARGET(dtr);
