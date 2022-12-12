@@ -33,13 +33,10 @@ public:
     AniData(AnimationEffect::Attribute a, int meta, int ms, const FPx2 &to,
             QEasingCurve curve, int delay, const FPx2 &from, bool waitAtSource, bool keepAtTarget = false);
     AniData(const AniData &other);
-    explicit AniData(const QString &str);
     inline void addTime(int t) { time += t; }
     inline bool isOneDimensional() const {
         return from[0] == from[1] && to[0] == to[1];
     }
-    static QList<AniData> list(const QString &str);
-    QString toString() const;
     QString debugInfo() const;
     AnimationEffect::Attribute attribute;
     QEasingCurve curve;
