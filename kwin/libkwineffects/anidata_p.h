@@ -38,9 +38,9 @@ public:
         return from[0] == from[1] && to[0] == to[1];
     }
     QString debugInfo() const;
+
     AnimationEffect::Attribute attribute;
     QEasingCurve curve;
-    int customCurve;
     FPx2 from, to;
     int time, duration;
     uint meta;

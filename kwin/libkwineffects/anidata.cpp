@@ -61,7 +61,6 @@ AniData::AniData(const AniData &other)
     time = other.time;
     duration = other.duration;
     curve = other.curve;
-    customCurve = other.customCurve;
     windowType = other.windowType;
     meta = other.meta;
     waitAtSource = other.waitAtSource;
