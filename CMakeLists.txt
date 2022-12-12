@@ -280,6 +280,12 @@ add_feature_info(svn
     "Subversion support in Dolphin"
 )
 
+find_program(XKILL_EXECUTABLE xkill)
+add_feature_info(xkill
+    XKILL_EXECUTABLE
+    "Window killing support in KWin"
+)
+
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
