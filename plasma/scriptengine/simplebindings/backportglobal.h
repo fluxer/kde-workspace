@@ -16,10 +16,15 @@
 **
 ** Copyright (C)  2011 Nokia. All rights reserved
 ****************************************************************************/
+
 #ifndef QTSCRIPTEXTENSIONS_GLOBAL_H
 #define QTSCRIPTEXTENSIONS_GLOBAL_H
 
-#include <QtGui/QPixmap>
+#include <QScriptValue>
+#include <QScriptContext>
+#include <QScriptEngine>
+#include <QPixmap>
+
 Q_DECLARE_METATYPE(QPixmap*)
 Q_DECLARE_METATYPE(QPixmap)
 
@@ -30,5 +35,8 @@ Q_DECLARE_METATYPE(QPixmap)
             QString::fromLatin1("%0.prototype.%1: this object is not a %0") \
             .arg(#Class).arg(#__fn__)); \
     }
+
+#define ADD_ENUM_VALUE(__c__, __ns__, __v__) \
+    __c__.setProperty(#__v__, QScriptValue(__c__.engine(), __ns__::__v__))
 
 #endif // QTSCRIPTEXTENSIONS_GLOBAL_H
