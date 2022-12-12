@@ -1199,11 +1199,11 @@ bool Client::performMouseCommand(Options::MouseCommand command, const QPoint &gl
     case Options::MousePreviousTab:
         if (tabGroup())
             tabGroup()->activatePrev();
-    break;
+        break;
     case Options::MouseNextTab:
         if (tabGroup())
             tabGroup()->activateNext();
-    break;
+        break;
     case Options::MouseClose:
         closeWindow();
         break;
