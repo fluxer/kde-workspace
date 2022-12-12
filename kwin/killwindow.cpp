@@ -29,14 +29,13 @@ namespace KWin
 {
 
 KillWindow::KillWindow(QObject *parent)
-    : QObject(parent),
-    m_active(false)
+    : QObject(parent)
 {
     m_xkill = KStandardDirs::findExe("xkill");
     m_proc = new QProcess(this);
     connect(
-        m_proc, SIGNAL(stateChanged(QProcess::ProcessState)),
-        this, SLOT(slotProcessStateChanged(QProcess::ProcessState))
+        m_proc, SIGNAL(finished(int)),
+        this, SLOT(slotProcessFinished(int))
     );
 }
 
@@ -47,7 +46,8 @@ KillWindow::~KillWindow()
 
 void KillWindow::start()
 {
-    if (m_active) {
+    if (m_proc->state() == QProcess::Running) {
+        kDebug(1212) << "xkill already started";
         return;
     }
     if (m_xkill.isEmpty()) {
@@ -55,12 +55,13 @@ void KillWindow::start()
         return;
     }
     m_proc->start(m_xkill);
-    m_active = m_proc->waitForStarted(5000);
 }
 
-void KillWindow::slotProcessStateChanged(QProcess::ProcessState state)
+void KillWindow::slotProcessFinished(const int exitcode)
 {
-    m_active = (state == QProcess::Running);
+    if (exitcode != 0) {
+        kWarning(1212) << "xkill exited abnormally" << exitcode;
+    }
 }
 
 } // namespace

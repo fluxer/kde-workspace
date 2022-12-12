@@ -38,12 +38,11 @@ public:
     void start();
 
 private Q_SLOTS:
-    void slotProcessStateChanged(QProcess::ProcessState state);
+    void slotProcessFinished(const int exitcode);
 
 private:
     QString m_xkill;
     QProcess* m_proc;
-    bool m_active;
 };
 
 } // namespace
