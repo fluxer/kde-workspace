@@ -208,11 +208,6 @@ void PaintRedirector::updatePixmaps(const QRect *rects, const QRegion &region)
     }
 }
 
-void PaintRedirector::preparePaint(const QPixmap &pending)
-{
-    Q_UNUSED(pending)
-}
-
 void PaintRedirector::resizePixmaps()
 {
     QRect rects[PixmapCount];
@@ -300,11 +295,6 @@ void RasterXRenderPaintRedirector::resize(PaintRedirector::DecorationPixmap bord
     // fill transparent
     xcb_rectangle_t rect = {0, 0, uint16_t(size.width()), uint16_t(size.height())};
     xcb_render_fill_rectangles(connection(), XCB_RENDER_PICT_OP_SRC, *m_pictures[border], preMultiply(Qt::transparent), 1, &rect);
-}
-
-void RasterXRenderPaintRedirector::preparePaint(const QPixmap &pending)
-{
-    m_tempImage = pending.toImage();
 }
 
 void RasterXRenderPaintRedirector::paint(PaintRedirector::DecorationPixmap border, const QRect &r, const QRect &b, const QRegion &reg)

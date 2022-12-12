@@ -42,7 +42,7 @@ class Deleted;
 class XRenderPicture;
 
 // This class redirects all painting of a given widget (including its children)
-// into a paint device (QPixmap).
+// into a paint device (QImage).
 class PaintRedirector
     : public QObject
 {
@@ -92,7 +92,6 @@ protected:
     virtual xcb_render_picture_t picture(DecorationPixmap border) const;
     virtual void resizePixmaps(const QRect *rects);
     virtual void resize(DecorationPixmap border, const QSize &size);
-    virtual void preparePaint(const QPixmap &pending);
     virtual void updatePixmaps(const QRect *rects, const QRegion &region);
     virtual void paint(DecorationPixmap border, const QRect& r, const QRect &b, const QRegion &reg);
     virtual QPaintDevice *scratch() = 0;
@@ -129,7 +128,6 @@ protected:
     virtual xcb_render_picture_t picture(DecorationPixmap border) const;
     virtual void resize(DecorationPixmap border, const QSize &size);
     virtual void paint(DecorationPixmap border, const QRect &r, const QRect &b, const QRegion &reg);
-    virtual void preparePaint(const QPixmap &pending);
 
     virtual QPaintDevice *recreateScratch(const QSize &size);
     virtual QPaintDevice *scratch();
@@ -140,7 +138,6 @@ private:
     xcb_pixmap_t m_pixmaps[PixmapCount];
     xcb_gcontext_t m_gc;
     XRenderPicture* m_pictures[PixmapCount];
-    QImage m_tempImage;
     QImage m_scratchImage;
 };
 
