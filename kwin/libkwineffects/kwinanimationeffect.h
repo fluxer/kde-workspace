@@ -132,16 +132,6 @@ public:
     virtual void paintWindow( EffectWindow* w, int mask, QRegion region, WindowPaintData& data );
     virtual void postPaintScreen();
 
-    /**
-     * Gaussian (bumper) animation curve for QEasingCurve
-     */
-    static qreal qecGaussian(qreal progress)
-    {
-        progress = 2*progress - 1;
-        progress *= -5*progress;
-        return qExp(progress);
-    }
-
     static inline qint64 clock() {
         return s_clock.elapsed();
     }

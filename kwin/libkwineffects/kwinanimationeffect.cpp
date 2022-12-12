@@ -634,15 +634,6 @@ float AnimationEffect::progress( const AniData &a ) const
     return 1.0; // we're done and "waiting" at the target value
 }
 
-
-// TODO - get this out of the header - the functionpointer usage of QEasingCurve somehow sucks ;-)
-// qreal AnimationEffect::qecGaussian(qreal progress) // exp(-5*(2*x-1)^2)
-// {
-//     progress = 2*progress - 1;
-//     progress *= -5*progress;
-//     return qExp(progress);
-// }
-
 int AnimationEffect::metaData( MetaType type, uint meta )
 {
     switch (type) {
