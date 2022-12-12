@@ -19,205 +19,48 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+
 #include "killwindow.h"
-#include "client.h"
-#include "cursor.h"
-#include "workspace.h"
-// Qt
-#include <QCursor>
-// XLib
-#include <X11/cursorfont.h>
-#include <X11/Xcursor/Xcursor.h>
-// XCB
-#include <xcb/xcb_keysyms.h>
+
+#include <kstandarddirs.h>
+#include <kdebug.h>
 
 namespace KWin
 {
 
-KillWindow::KillWindow()
-    : m_active(false)
+KillWindow::KillWindow(QObject *parent)
+    : QObject(parent),
+    m_active(false)
 {
+    m_xkill = KStandardDirs::findExe("xkill");
+    m_proc = new QProcess(this);
+    connect(
+        m_proc, SIGNAL(stateChanged(QProcess::ProcessState)),
+        this, SLOT(slotProcessStateChanged(QProcess::ProcessState))
+    );
 }
 
 KillWindow::~KillWindow()
 {
+    m_proc->terminate();
 }
 
 void KillWindow::start()
 {
-    static xcb_cursor_t kill_cursor = XCB_CURSOR_NONE;
-    if (kill_cursor == XCB_CURSOR_NONE) {
-        kill_cursor = createCursor();
-    }
     if (m_active) {
         return;
     }
-
-    xcb_connection_t *c = connection();
-    ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(xcb_grab_pointer_reply(c, xcb_grab_pointer_unchecked(c, false, rootWindow(),
-        XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE |
-        XCB_EVENT_MASK_POINTER_MOTION |
-        XCB_EVENT_MASK_ENTER_WINDOW | XCB_EVENT_MASK_LEAVE_WINDOW,
-        XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
-        kill_cursor, XCB_TIME_CURRENT_TIME), NULL));
-    if (grabPointer.isNull() || grabPointer->status != XCB_GRAB_STATUS_SUCCESS) {
+    if (m_xkill.isEmpty()) {
+        kWarning(1212) << "xkill not found";
         return;
     }
-    m_active = grabXKeyboard();
-    if (!m_active) {
-        xcb_ungrab_pointer(connection(), XCB_TIME_CURRENT_TIME);
-        return;
-    }
-    grabXServer();
+    m_proc->start(m_xkill);
+    m_active = m_proc->waitForStarted(5000);
 }
 
-xcb_cursor_t KillWindow::createCursor()
+void KillWindow::slotProcessStateChanged(QProcess::ProcessState state)
 {
-    // XCursor is an XLib only lib
-    const char *theme = XcursorGetTheme(display());
-    const int size = XcursorGetDefaultSize(display());
-    XcursorImage *ximg = XcursorLibraryLoadImage("pirate", theme, size);
-    if (ximg) {
-        xcb_cursor_t cursor = XcursorImageLoadCursor(display(), ximg);
-        XcursorImageDestroy(ximg);
-        return cursor;
-    }
-    // fallback on font
-    xcb_connection_t *c = connection();
-    const xcb_font_t cursorFont = xcb_generate_id(c);
-    xcb_open_font(c, cursorFont, strlen ("cursor"), "cursor");
-    xcb_cursor_t cursor = xcb_generate_id(c);
-    xcb_create_glyph_cursor(c, cursor, cursorFont, cursorFont,
-                            XC_pirate,         /* source character glyph */
-                            XC_pirate + 1,     /* mask character glyph */
-                            0, 0, 0, 0, 0, 0);  /* r b g r b g */
-    return cursor;
-}
-
-bool KillWindow::isResponsibleForEvent(int eventType) const
-{
-    switch (eventType) {
-        case XCB_BUTTON_PRESS:
-        case XCB_BUTTON_RELEASE:
-        case XCB_MOTION_NOTIFY:
-        case XCB_ENTER_NOTIFY:
-        case XCB_LEAVE_NOTIFY:
-        case XCB_KEY_PRESS:
-        case XCB_KEY_RELEASE:
-        case XCB_FOCUS_IN:
-        case XCB_FOCUS_OUT:
-            return true;
-        default:
-            return false;
-    }
-}
-
-void KillWindow::processEvent(XEvent *event)
-{
-    if (event->type == XCB_BUTTON_RELEASE) {
-        handleButtonRelease(event->xbutton.button, event->xbutton.subwindow);
-    } else if (event->type == XCB_KEY_PRESS) {
-        handleKeyPress(event->xkey.keycode, event->xkey.state);
-    }
-}
-
-void KillWindow::processEvent(xcb_generic_event_t *event)
-{
-    if (event->response_type == XCB_BUTTON_RELEASE) {
-        xcb_button_release_event_t *buttonEvent = reinterpret_cast<xcb_button_release_event_t*>(event);
-        handleButtonRelease(buttonEvent->detail, buttonEvent->child);
-    } else if (event->response_type == XCB_KEY_PRESS) {
-        xcb_key_press_event_t *keyEvent = reinterpret_cast<xcb_key_press_event_t*>(event);
-        handleKeyPress(keyEvent->detail, keyEvent->state);
-    }
-}
-
-void KillWindow::handleButtonRelease(xcb_button_t button, xcb_window_t window)
-{
-    if (button == XCB_BUTTON_INDEX_3) {
-        release();
-        return;
-    }
-    if (button == XCB_BUTTON_INDEX_1 || button == XCB_BUTTON_INDEX_2) {
-        killWindowId(window);
-        release();
-        return;
-    }
-}
-
-void KillWindow::handleKeyPress(xcb_keycode_t keycode, uint16_t state)
-{
-    xcb_key_symbols_t *symbols = xcb_key_symbols_alloc(connection());
-    xcb_keysym_t kc = xcb_key_symbols_get_keysym(symbols, keycode, 0);
-    int mx = 0;
-    int my = 0;
-    const bool returnPressed = (kc == XK_Return) || (kc == XK_space);
-    const bool escapePressed = (kc == XK_Escape);
-    if (kc == XK_Left) {
-        mx = -10;
-    }
-    if (kc == XK_Right) {
-        mx = 10;
-    }
-    if (kc == XK_Up) {
-        my = -10;
-    }
-    if (kc == XK_Down) {
-        my = 10;
-    }
-    if (state & XCB_MOD_MASK_CONTROL) {
-        mx /= 10;
-        my /= 10;
-    }
-    Cursor::setPos(Cursor::pos() + QPoint(mx, my));
-    if (returnPressed) {
-        performKill();
-    }
-    if (returnPressed || escapePressed) {
-        release();
-    }
-    xcb_key_symbols_free(symbols);
-}
-
-void KillWindow::performKill()
-{
-    xcb_connection_t *c = connection();
-    ScopedCPointer<xcb_query_pointer_reply_t> pointer(xcb_query_pointer_reply(c, xcb_query_pointer_unchecked(c, rootWindow()), NULL));
-    if (!pointer.isNull() && pointer->child != XCB_WINDOW_NONE) {
-        killWindowId(pointer->child);
-    }
-}
-
-void KillWindow::release()
-{
-    ungrabXKeyboard();
-    xcb_ungrab_pointer(connection(), XCB_TIME_CURRENT_TIME);
-    ungrabXServer();
-    m_active = false;
-}
-
-void KillWindow::killWindowId(xcb_window_t window_to_kill)
-{
-    if (window_to_kill == XCB_WINDOW_NONE)
-        return;
-    xcb_window_t window = window_to_kill;
-    Client* client = NULL;
-    while (true) {
-        client = Workspace::self()->findClient(FrameIdMatchPredicate(window));
-        if (client) {
-            break; // Found the client
-        }
-        Xcb::Tree tree(window);
-        if (window == tree->root) {
-            // We didn't find the client, probably an override-redirect window
-            break;
-        }
-        window = tree->parent;  // Go up
-    }
-    if (client)
-        client->killWindow();
-    else
-        xcb_kill_client(connection(), window_to_kill);
+    m_active = (state == QProcess::Running);
 }
 
 } // namespace

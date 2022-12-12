@@ -1545,7 +1545,7 @@ void Workspace::slotUntab()
 void Workspace::slotKillWindow()
 {
     if (m_windowKiller.isNull()) {
-        m_windowKiller.reset(new KillWindow());
+        m_windowKiller.reset(new KillWindow(this));
     }
     m_windowKiller->start();
 }

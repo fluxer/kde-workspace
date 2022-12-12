@@ -23,36 +23,26 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef KWIN_KILLWINDOW_H
 #define KWIN_KILLWINDOW_H
 
-#include <xcb/xcb.h>
-
-typedef union  _XEvent XEvent;
+#include <QProcess>
 
 namespace KWin
 {
 
-class KillWindow
+class KillWindow : QObject
 {
+    Q_OBJECT
 public:
-
-    KillWindow();
+    KillWindow(QObject *parent);
     ~KillWindow();
 
     void start();
-    bool isActive() const {
-        return m_active;
-    }
-    bool isResponsibleForEvent(int eventType) const;
-    // TODO: remove once event handling is ported to XCB
-    void processEvent(XEvent *event);
-    void processEvent(xcb_generic_event_t *event);
+
+private Q_SLOTS:
+    void slotProcessStateChanged(QProcess::ProcessState state);
 
 private:
-    xcb_cursor_t createCursor();
-    void release();
-    void performKill();
-    void handleKeyPress(xcb_keycode_t keycode, uint16_t state);
-    void handleButtonRelease(xcb_button_t button, xcb_window_t window);
-    void killWindowId(xcb_window_t window_to_kill);
+    QString m_xkill;
+    QProcess* m_proc;
     bool m_active;
 };
 

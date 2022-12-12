@@ -80,12 +80,6 @@ bool Workspace::workspaceEvent(XEvent * e)
             && (e->type == KeyPress || e->type == KeyRelease))
         return false; // let Qt process it, it'll be intercepted again in eventFilter()
 
-    if (!m_windowKiller.isNull() && m_windowKiller->isActive() && m_windowKiller->isResponsibleForEvent(e->type)) {
-        m_windowKiller->processEvent(e);
-        // filter out the event
-        return true;
-    }
-
     if (e->type == PropertyNotify || e->type == ClientMessage) {
         unsigned long dirty[ NETRootInfo::PROPERTIES_SIZE ];
         rootInfo()->event(e, dirty, NETRootInfo::PROPERTIES_SIZE);
