@@ -634,7 +634,7 @@ float AnimationEffect::progress( const AniData &a ) const
     return 1.0; // we're done and "waiting" at the target value
 }
 
-int AnimationEffect::metaData( MetaType type, uint meta )
+uint AnimationEffect::metaData( MetaType type, uint meta )
 {
     switch (type) {
         case SourceAnchor:

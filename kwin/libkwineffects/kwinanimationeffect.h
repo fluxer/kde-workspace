@@ -103,8 +103,10 @@ public:
         Position, Size, Translation, Clip, Generic, CrossFadePrevious,
         NonFloatBase = Position
     };
-    enum MetaType { SourceAnchor, TargetAnchor,
-                    RelativeSourceX, RelativeSourceY, RelativeTargetX, RelativeTargetY, Axis };
+    enum MetaType {
+        SourceAnchor = 0, TargetAnchor,
+        RelativeSourceX, RelativeSourceY, RelativeTargetX, RelativeTargetY, Axis
+    };
     /**
      * Whenever you intend to connect to the EffectsHandler::windowClosed() signal, do so when reimplementing the constructor.
      * Do *not* add private slots named _windowClosed( EffectWindow* w ) or _windowDeleted( EffectWindow* w ) !!
@@ -120,7 +122,7 @@ public:
      * The first 24 bits are reserved for the AnimationEffect class - you can use the last 8 bits for custom hints.
      * In case you transform a Generic attribute, all 32 bits are yours and you can use them as you want and read them in your genericAnimation() implementation.
      */
-    static int metaData(MetaType type, uint meta );
+    static uint metaData(MetaType type, uint meta );
     static void setMetaData(MetaType type, uint value, uint &meta );
 
     /**
