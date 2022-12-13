@@ -80,6 +80,9 @@ using namespace KIO;
 static const QByteArray thumbFormat = QImageWriter::defaultImageFormat();
 static const QString thumbExt = QLatin1String(".") + thumbFormat;
 
+// Minimum thumbnail icon ratio
+static const qreal s_iconratio = 4.0;
+
 int main(int argc, char **argv)
 {
     if (argc != 2) {
@@ -210,14 +213,19 @@ void ThumbnailProtocol::get(const KUrl &url)
     if ((flags & ThumbCreator::BlendIcon) && KIconLoader::global()->alphaBlending(KIconLoader::Desktop)) {
         // blending the mimetype icon in
         QImage icon = getIcon();
+        const qreal widthratio = (qreal(img.width()) / icon.width());
+        const qreal heightratio = (qreal(img.height()) / icon.height());
+        // but only if it will not cover too much of the thumbnail
+        if (widthratio >= s_iconratio && heightratio >= s_iconratio) {
 
-        int x = img.width() - icon.width() - 4;
-        x = qMax( x, 0 );
-        int y = img.height() - icon.height() - 6;
-        y = qMax( y, 0 );
-        QPainter p(&img);
-        p.setOpacity(m_iconAlpha/255.0);
-        p.drawImage(x, y, icon);
+            int x = img.width() - icon.width() - 4;
+            x = qMax( x, 0 );
+            int y = img.height() - icon.height() - 6;
+            y = qMax( y, 0 );
+            QPainter p(&img);
+            p.setOpacity(m_iconAlpha/255.0);
+            p.drawImage(x, y, icon);
+        }
     }
 
     if (img.isNull()) {
