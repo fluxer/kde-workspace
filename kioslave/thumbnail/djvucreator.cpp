@@ -55,12 +55,18 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
         ddjvu_context_release(djvuctx);
         return false;
     }
+    kDebug() << "Waiting for document decoding to complete";
+    while (!ddjvu_document_decoding_done(djvudoc)) {
+        QCoreApplication::processEvents(QEventLoop::AllEvents, s_eventstime);
+        QThread::msleep(s_sleeptime);
+    }
+    kDebug() << "Done waiting for document decoding to complete";
+
     ddjvu_page_t* djvupage = ddjvu_page_create_by_pageno(djvudoc, 0);
     if (!djvupage) {
         kWarning() << "Could not create DjVu page";
         ddjvu_document_release(djvudoc);
         ddjvu_context_release(djvuctx);
-        img = QImage();
         return false;
     }
     kDebug() << "Waiting for page decoding to complete";
@@ -69,7 +75,7 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
         QThread::msleep(s_sleeptime);
     }
     kDebug() << "Done waiting for page decoding to complete";
-    img = QImage(width, height, QImage::Format_RGB32);
+
     uint djvumask[4] = { 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 };
     int djvumasksize = 3; // sizeof(djvumask);
     ddjvu_format_t* djvuformat = ddjvu_format_create(DDJVU_FORMAT_RGBMASK32, djvumasksize, djvumask);
@@ -78,11 +84,11 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
         ddjvu_page_release(djvupage);
         ddjvu_document_release(djvudoc);
         ddjvu_context_release(djvuctx);
-        img = QImage();
         return false;
     }
     ddjvu_format_set_row_order(djvuformat, 1);
     ddjvu_format_set_y_direction(djvuformat, 1);
+
     ddjvu_rect_t djvupagerect;
     djvupagerect.x = 0;
     djvupagerect.y = 0;
@@ -90,6 +96,7 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
     djvupagerect.h = height;
     ddjvu_rect_t djvurenderrect;
     djvurenderrect = djvupagerect;
+    img = QImage(width, height, QImage::Format_RGB32);
     const int djvustatus = ddjvu_page_render(
         djvupage,
         DDJVU_RENDER_COLOR,
@@ -106,6 +113,7 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
         img = QImage();
         return false;
     }
+
     ddjvu_page_release(djvupage);
     ddjvu_format_release(djvuformat);
     ddjvu_document_release(djvudoc);
