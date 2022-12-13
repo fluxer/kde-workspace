@@ -52,7 +52,7 @@
 enum PreviewDefaults {
     MaxLocalSize = 20, // 20 MB
     MaxRemoteSize = 5, // 5 MB
-    IconAlpha = 70
+    IconAlpha = 125
 };
 
 PreviewsSettingsPage::PreviewsSettingsPage(QWidget* parent) :
