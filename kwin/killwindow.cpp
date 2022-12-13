@@ -46,14 +46,15 @@ KillWindow::~KillWindow()
 
 void KillWindow::start()
 {
-    if (m_proc->state() == QProcess::Running) {
-        kDebug(1212) << "xkill already started";
-        return;
-    }
     if (m_xkill.isEmpty()) {
         kWarning(1212) << "xkill not found";
         return;
     }
+    if (m_proc->state() == QProcess::Running) {
+        kDebug(1212) << "xkill already started";
+        return;
+    }
+    kDebug(1212) << "starting xkill";
     m_proc->start(m_xkill);
 }
 
