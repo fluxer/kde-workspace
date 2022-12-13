@@ -47,6 +47,7 @@ if(DJVULIBRE_FOUND)
     target_link_libraries(djvuthumbnail ${KDE4_KIO_LIBS} ${DJVULIBRE_LIBRARY})
 
     install(TARGETS djvuthumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+    install(FILES djvuthumbnail.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 endif()
 
 ########### next target ###############
@@ -108,7 +109,6 @@ install(
     thumbnail.protocol
     imagethumbnail.desktop
     textthumbnail.desktop
-    djvuthumbnail.desktop
     desktopthumbnail.desktop
     comicbookthumbnail.desktop
     windowsimagethumbnail.desktop
