@@ -16,8 +16,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef _DJVUCREATOR_H_
-#define _DJVUCREATOR_H_
+#ifndef DJVUCREATOR_H
+#define DJVUCREATOR_H
 
 #include <kio/thumbcreator.h>
 
@@ -30,4 +30,4 @@ public:
     ThumbCreator::Flags flags() const final;
 };
 
-#endif // _DJVUCREATOR_H_
+#endif // DJVUCREATOR_H

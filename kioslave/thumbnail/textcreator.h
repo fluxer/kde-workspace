@@ -17,8 +17,8 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef _TEXTCREATOR_H_
-#define _TEXTCREATOR_H_
+#ifndef TEXTCREATOR_H
+#define TEXTCREATOR_H
 
 #include <QPixmap>
 #include <kio/thumbcreator.h>
@@ -27,9 +27,10 @@ class TextCreator : public ThumbCreator
 {
 public:
     TextCreator();
-    virtual ~TextCreator();
-    virtual bool create(const QString &path, int width, int height, QImage &img);
-    virtual Flags flags() const;
+    ~TextCreator();
+
+    bool create(const QString &path, int width, int height, QImage &img) final;
+    ThumbCreator::Flags flags() const final;
 
 private:
     char *m_data;
@@ -37,4 +38,4 @@ private:
     QPixmap m_pixmap;
 };
 
-#endif
+#endif // TEXTCREATOR_H
