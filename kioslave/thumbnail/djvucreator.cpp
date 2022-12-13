@@ -89,14 +89,16 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
     ddjvu_format_set_row_order(djvuformat, 1);
     ddjvu_format_set_y_direction(djvuformat, 1);
 
+    QSize pagesize(ddjvu_page_get_width(djvupage), ddjvu_page_get_height(djvupage));
+    pagesize.scale(width, height, Qt::KeepAspectRatio);
     ddjvu_rect_t djvupagerect;
     djvupagerect.x = 0;
     djvupagerect.y = 0;
-    djvupagerect.w = width;
-    djvupagerect.h = height;
+    djvupagerect.w = pagesize.width();
+    djvupagerect.h = pagesize.height();
     ddjvu_rect_t djvurenderrect;
     djvurenderrect = djvupagerect;
-    img = QImage(width, height, QImage::Format_RGB32);
+    img = QImage(djvurenderrect.w, djvurenderrect.h, QImage::Format_RGB32);
     const int djvustatus = ddjvu_page_render(
         djvupage,
         DDJVU_RENDER_COLOR,
