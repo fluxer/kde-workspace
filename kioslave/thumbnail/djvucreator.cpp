@@ -116,8 +116,8 @@ bool DjVuCreator::create(const QString &path, int width, int height, QImage &img
         return false;
     }
 
-    ddjvu_page_release(djvupage);
     ddjvu_format_release(djvuformat);
+    ddjvu_page_release(djvupage);
     ddjvu_document_release(djvudoc);
     ddjvu_context_release(djvuctx);
     return true;
