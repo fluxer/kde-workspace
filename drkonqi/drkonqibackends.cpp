@@ -91,8 +91,8 @@ bool KCrashBackend::init()
         debuggerManager()->backtraceGenerator()->start();
     }
 
-    //Handle drkonqi crashes
-    s_pid = crashedApplication()->pid(); //copy pid for use by the crash handler, so that it is safer
+    // Handle drkonqi crashes
+    s_pid = crashedApplication()->pid(); // copy pid for use by the crash handler, so that it is safer
     KCrash::setCrashHandler(emergencySaveFunction);
 
     return true;
@@ -117,7 +117,7 @@ CrashedApplication *KCrashBackend::constructCrashedApplication()
     } else if (!args->getOption("appname").isEmpty() ) {
         a->m_executable = QFileInfo(KStandardDirs::findExe(args->getOption("appname")));
     } else {
-        kError() << "Neither apppath nor appname are set";
+        kError() << "Neither apppath nor appname is set";
     }
 
     kDebug() << "Executable is:" << a->m_executable.absoluteFilePath();
