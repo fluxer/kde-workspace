@@ -18,8 +18,6 @@
 
  */
 
-#include <KPluginFactory>
-
 #include "knotifyplugin.h"
 
 KNotifyPlugin::KNotifyPlugin(QObject *parent, const QVariantList &args)

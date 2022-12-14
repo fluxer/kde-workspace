@@ -24,9 +24,7 @@
 #define KNOTIFYPLUGIN_H
 
 #include <QtCore/QObject>
-#include <KPluginFactory>
-
-#include "knotify_export.h"
+#include <QtCore/QVariant>
 
 class KNotifyConfig;
 
@@ -40,7 +38,7 @@ class KNotifyConfig;
  *
  * @author Olivier Goffart <ogoffart at kde.org>
 */
-class KNOTIFY_EXPORT KNotifyPlugin : public QObject
+class KNotifyPlugin : public QObject
 { Q_OBJECT
 	public:
 	        KNotifyPlugin(QObject *parent=0l, const QVariantList &args=QVariantList());
@@ -99,9 +97,5 @@ class KNOTIFY_EXPORT KNotifyPlugin : public QObject
 		void actionInvoked(int id , int action);
 
 };
-
-#define K_EXPORT_KNOTIFY_METHOD(libname,classname) \
-K_PLUGIN_FACTORY(KNotifyMethodPluginFactory, registerPlugin<classname>();) \
-K_EXPORT_PLUGIN(KNotifyMethodPluginFactory("knotify_method_" #libname))
 
 #endif

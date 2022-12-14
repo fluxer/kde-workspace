@@ -27,7 +27,6 @@
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
-#include <kservicetypetrader.h>
 
 #include <config-workspace.h>
 
@@ -68,24 +67,6 @@ void KNotify::loadConfig()
 	addPlugin(new NotifyByLogfile(this));
 	addPlugin(new NotifyByTaskbar(this));
 	addPlugin(new NotifyByKTTS(this));
-
-	KService::List offers = KServiceTypeTrader::self()->query("KNotify/NotifyMethod");
-
-	QVariantList args;
-	QString error;
-	
-	foreach (const KService::Ptr service, offers)
-	{
-		KNotifyPlugin *plugin = service->createInstance<KNotifyPlugin>(this, args, &error);
-		if (plugin)
-		{
-			addPlugin(plugin);
-		}
-		else
-		{
-			kDebug() << "Could not load plugin" << service->name() << "due to:" << error;
-		}
-	}
 }
 
 void KNotify::addPlugin( KNotifyPlugin * p )
