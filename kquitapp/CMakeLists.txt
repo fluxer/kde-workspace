@@ -1,8 +1,6 @@
 set(kquitapp_SRCS kquitapp.cpp)
 
-set(kquitapp_OUTPUT_NAME kquitapp)
-add_executable(kquitapp_executable ${kquitapp_SRCS})
-set_target_properties(kquitapp_executable PROPERTIES OUTPUT_NAME kquitapp)
-target_link_libraries(kquitapp_executable  ${KDE4_KDECORE_LIBS})
+add_executable(kquitapp ${kquitapp_SRCS})
+target_link_libraries(kquitapp ${KDE4_KDECORE_LIBS})
 
-install(TARGETS kquitapp_executable ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS kquitapp ${INSTALL_TARGETS_DEFAULT_ARGS})
