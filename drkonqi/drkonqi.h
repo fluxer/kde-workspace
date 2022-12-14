@@ -22,7 +22,7 @@
 
 class DebuggerManager;
 class CrashedApplication;
-class AbstractDrKonqiBackend;
+class KCrashBackend;
 
 class DrKonqi
 {
@@ -40,7 +40,7 @@ private:
     ~DrKonqi();
     static DrKonqi *instance();
 
-    AbstractDrKonqiBackend *m_backend;
+    KCrashBackend *m_backend;
 };
 
 #endif

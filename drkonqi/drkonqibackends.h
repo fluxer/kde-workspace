@@ -22,11 +22,14 @@
 class CrashedApplication;
 class DebuggerManager;
 
-class AbstractDrKonqiBackend
+class KCrashBackend : public QObject
 {
+    Q_OBJECT
 public:
-    virtual ~AbstractDrKonqiBackend();
-    virtual bool init();
+    KCrashBackend();
+    ~KCrashBackend();
+
+    bool init();
 
     inline CrashedApplication *crashedApplication() const {
         return m_crashedApplication;
@@ -36,39 +39,19 @@ public:
         return m_debuggerManager;
     }
 
-protected:
-    virtual CrashedApplication *constructCrashedApplication() = 0;
-    virtual DebuggerManager *constructDebuggerManager() = 0;
-
-private:
-    CrashedApplication *m_crashedApplication;
-    DebuggerManager *m_debuggerManager;
-};
-
-class KCrashBackend : public QObject, public AbstractDrKonqiBackend
-{
-    Q_OBJECT
-public:
-    KCrashBackend();
-    virtual ~KCrashBackend();
-    virtual bool init();
-
-protected:
-    virtual CrashedApplication *constructCrashedApplication();
-    virtual DebuggerManager *constructDebuggerManager();
-
 private slots:
     void stopAttachedProcess();
     void continueAttachedProcess();
-    void onDebuggerStarting();
-    void onDebuggerFinished();
 
 private:
+    CrashedApplication *constructCrashedApplication();
+    DebuggerManager *constructDebuggerManager();
+
     static void emergencySaveFunction(int signal);
     static qint64 s_pid; //for use by the emergencySaveFunction
 
-    enum State { ProcessRunning, ProcessStopped, DebuggerRunning };
-    State m_state;
+    CrashedApplication *m_crashedApplication;
+    DebuggerManager *m_debuggerManager;
 };
 
 #endif // DRKONQIBACKENDS_H

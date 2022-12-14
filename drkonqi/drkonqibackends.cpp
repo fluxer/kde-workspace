@@ -39,20 +39,8 @@
 #include "debuggermanager.h"
 #include "backtracegenerator.h"
 
-AbstractDrKonqiBackend::~AbstractDrKonqiBackend()
-{
-}
-
-bool AbstractDrKonqiBackend::init()
-{
-    m_crashedApplication = constructCrashedApplication();
-    m_debuggerManager = constructDebuggerManager();
-    return true;
-}
-
-
 KCrashBackend::KCrashBackend()
-    : QObject(), AbstractDrKonqiBackend(), m_state(ProcessRunning)
+    : QObject()
 {
 }
 
@@ -63,7 +51,8 @@ KCrashBackend::~KCrashBackend()
 
 bool KCrashBackend::init()
 {
-    AbstractDrKonqiBackend::init();
+    m_crashedApplication = constructCrashedApplication();
+    m_debuggerManager = constructDebuggerManager();
 
     QString startupId(KCmdLineArgs::parsedArgs()->getOption("startupid"));
     if (!startupId.isEmpty()) { // stop startup notification
@@ -92,21 +81,14 @@ bool KCrashBackend::init()
         return false;
     }
 
-    //--keeprunning means: generate backtrace instantly and let the process continue execution
-    if(KCmdLineArgs::parsedArgs()->isSet("keeprunning")) {
-        stopAttachedProcess();
-        debuggerManager()->backtraceGenerator()->start();
-        connect(debuggerManager(), SIGNAL(debuggerFinished()), SLOT(continueAttachedProcess()));
-    } else {
-        connect(debuggerManager(), SIGNAL(debuggerStarting()), SLOT(onDebuggerStarting()));
-        connect(debuggerManager(), SIGNAL(debuggerFinished()), SLOT(onDebuggerFinished()));
+    // stop the process to avoid high cpu usage by other threads (bug 175362), also to get a
+    // backtrace the process must not exit
+    stopAttachedProcess();
 
-        // stop the process to avoid high cpu usage by other threads (bug 175362).
-        // if the process was started by kaluncher, we need to wait a bit for KCrash
-        // to reach the exit(0); call in kdeui/util/kcrash.cpp or else
-        // if we stop it before this call, pending alarm signals will kill the
-        // process when we try to continue it.
-        QTimer::singleShot(2000, this, SLOT(stopAttachedProcess()));
+    // --keeprunning means: generate backtrace instantly and let the process continue execution
+    if (KCmdLineArgs::parsedArgs()->isSet("keeprunning")) {
+        connect(debuggerManager(), SIGNAL(debuggerFinished()), SLOT(continueAttachedProcess()));
+        debuggerManager()->backtraceGenerator()->start();
     }
 
     //Handle drkonqi crashes
@@ -176,32 +158,14 @@ DebuggerManager *KCrashBackend::constructDebuggerManager()
 
 void KCrashBackend::stopAttachedProcess()
 {
-    if (m_state == ProcessRunning) {
-        kDebug() << "Sending SIGSTOP to process";
-        ::kill(crashedApplication()->pid(), SIGSTOP);
-        m_state = ProcessStopped;
-    }
+    kDebug() << "Sending SIGSTOP to process";
+    ::kill(crashedApplication()->pid(), SIGSTOP);
 }
 
 void KCrashBackend::continueAttachedProcess()
 {
-    if (m_state == ProcessStopped) {
-        kDebug() << "Sending SIGCONT to process";
-        ::kill(crashedApplication()->pid(), SIGCONT);
-        m_state = ProcessRunning;
-    }
-}
-
-void KCrashBackend::onDebuggerStarting()
-{
-    continueAttachedProcess();
-    m_state = DebuggerRunning;
-}
-
-void KCrashBackend::onDebuggerFinished()
-{
-    m_state = ProcessRunning;
-    stopAttachedProcess();
+    kDebug() << "Sending SIGCONT to process";
+    ::kill(crashedApplication()->pid(), SIGCONT);
 }
 
 //static
