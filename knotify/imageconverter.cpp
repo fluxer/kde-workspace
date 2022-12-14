@@ -64,7 +64,7 @@ QVariant variantForImage(const QImage &_image)
 {
 	qDBusRegisterMetaType<SpecImage>();
 
-	QImage image = _image.convertToFormat(QImage::Format_ARGB32);
+	const QImage image = _image.convertToFormat(QImage::Format_ARGB32);
 
 	int rowStride = image.width() * 4;
 
@@ -78,8 +78,8 @@ QVariant variantForImage(const QImage &_image)
 	data.resize(rowStride * image.height());
 	char* dst = data.data();
 	for (int y=0; y<image.height(); ++y) {
-		QRgb* src = (QRgb*)image.scanLine(y);
-		QRgb* end = src + image.width();
+		const QRgb* src = (const QRgb*)image.constScanLine(y);
+		const QRgb* end = src + image.width();
 		for (;src != end; ++src) {
 			// Probably slow, but free of endianess issues
 			*dst++ = qRed(*src);
