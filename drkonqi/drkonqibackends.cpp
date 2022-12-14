@@ -130,20 +130,12 @@ CrashedApplication *KCrashBackend::constructCrashedApplication()
     a->m_thread = args->getOption("thread").toInt();
 
     //try to determine the executable that crashed
-    if ( QFileInfo(QString("/proc/%1/exe").arg(a->m_pid)).exists() ) {
-        //on linux, the fastest and most reliable way is to get the path from /proc
-        kDebug() << "Using /proc to determine executable path";
-        a->m_executable.setFile(QFile::readLink(QString("/proc/%1/exe").arg(a->m_pid)));
+    if (!args->getOption("apppath").isEmpty()) {
+        a->m_executable = QFileInfo(args->getOption("apppath"));
+    } else if (!args->getOption("appname").isEmpty() ) {
+        a->m_executable = QFileInfo(KStandardDirs::findExe(args->getOption("appname")));
     } else {
-        QFileInfo execPath(args->getOption("appname"));
-        if ( execPath.isAbsolute() ) {
-            a->m_executable = execPath;
-        } else if ( !args->getOption("apppath").isEmpty() ) {
-            QDir execDir(args->getOption("apppath"));
-            a->m_executable = execDir.absoluteFilePath(execPath.fileName());
-        } else {
-            a->m_executable = QFileInfo(KStandardDirs::findExe(execPath.fileName()));
-        }
+        kError() << "Neither apppath nor appname are set";
     }
 
     kDebug() << "Executable is:" << a->m_executable.absoluteFilePath();
