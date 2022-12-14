@@ -79,6 +79,7 @@ KclockModule::KclockModule(QWidget *parent, const QVariantList &)
     if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmclock")) {
         setUseRootOnlyMessage(true);
         setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
+        setDisabled(true);
     }
 
     m_tz = KSystemTimeZones::local().name();
@@ -102,18 +103,18 @@ void KclockModule::save()
         } else {
             dtime->processHelperErrors(reply);
         }
+        setDisabled(false);
     } else {
+        // setDisabled(false) happens in load()
         QDBusMessage msg = QDBusMessage::createSignal("/org/kde/kcmshell_clock", "org.kde.kcmshell_clock", "clockUpdated");
         QDBusConnection::sessionBus().send(msg);
     }
-
-    // setDisabled(false) happens in load()
 }
 
 void KclockModule::load()
 {
     dtime->load();
-    setDisabled(false);
+    setDisabled(useRootOnlyMessage());
     emit changed(false);
 }
 

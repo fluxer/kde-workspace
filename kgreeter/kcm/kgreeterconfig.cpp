@@ -62,6 +62,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     if (!KAuthorization::isAuthorized("org.kde.kcontrol.kcmkgreeter")) {
         setUseRootOnlyMessage(true);
         setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
+        setDisabled(true);
     }
 
     load();
