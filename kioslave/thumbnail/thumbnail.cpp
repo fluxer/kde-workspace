@@ -61,9 +61,6 @@
 
 #include <iostream>
 
-// Use correctly KComponentData instead of KApplication (but then no QPixmap)
-#undef USE_KINSTANCE
-
 // Recognized metadata entries:
 // mimeType     - the mime type of the file, used for the overlay icon if any
 // width        - maximum width for the thumbnail
@@ -94,26 +91,16 @@ int main(int argc, char **argv)
     nice( 5 );
 #endif
 
-#ifdef USE_KINSTANCE
-    KComponentData componentData("kio_thumbnail");
-#else
-    // creating KApplication in a slave in not a very good idea,
-    // as dispatchLoop() doesn't allow it to process its messages,
-    // so it for example wouldn't reply to ksmserver - on the other
-    // hand, this slave uses QPixmaps for some reason, and they
-    // need QApplication
-    // and HTML previews need even KApplication :(
-    putenv(strdup("SESSION_MANAGER="));
-    //KApplication::disableAutoDcopRegistration();
-    KAboutData about("kio_thumbnail", 0, ki18n("kio_thumbmail"), "KDE 4.x.x");
-    KCmdLineArgs::init(&about);
+    kDebug(7115) << "Starting" << ::getpid();
 
-    KApplication app;
-#endif
+    QApplication app(argc, argv);
+    KComponentData("kio_thumbnail", "kdelibs4");
+    KGlobal::locale();
 
     ThumbnailProtocol slave(argv[1]);
     slave.dispatchLoop();
 
+    kDebug(7115) << "Done";
     return 0;
 }
 
