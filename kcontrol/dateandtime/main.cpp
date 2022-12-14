@@ -40,9 +40,10 @@
 #include "dtime.h"
 #include "helper.h"
 
+static const int s_checktime = 1000; // 1secs
+
 K_PLUGIN_FACTORY(KlockModuleFactory, registerPlugin<KclockModule>();)
 K_EXPORT_PLUGIN(KlockModuleFactory("kcmkclock"))
-
 
 KclockModule::KclockModule(QWidget *parent, const QVariantList &)
   : KCModule(KlockModuleFactory::componentData(), parent/*, name*/)
@@ -83,7 +84,7 @@ KclockModule::KclockModule(QWidget *parent, const QVariantList &)
     }
 
     m_tz = KSystemTimeZones::local().name();
-    QTimer::singleShot(3000, this, SLOT(checkTZ()));
+    QTimer::singleShot(s_checktime, this, SLOT(checkTZ()));
 }
 
 void KclockModule::save()
@@ -127,5 +128,5 @@ void KclockModule::checkTZ()
 
         load();
     }
-    QTimer::singleShot(1000, this, SLOT(checkTZ()));
+    QTimer::singleShot(s_checktime, this, SLOT(checkTZ()));
 }
