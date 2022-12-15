@@ -42,7 +42,7 @@ namespace {
 // #define DEBUG_EVENTS__
 
 #ifdef DEBUG_EVENTS__
-kdbgstream& operator<<( kdbgstream& stream, const QKeyEvent& e ) {
+QDebug& operator<<( QDebug& stream, const QKeyEvent& e ) {
     stream << "(QKeyEvent(text=" << e.text() << ",key=" << e.key() << ( e.isAccepted()?",accepted":",ignored)" ) << ",count=" << e.count();
     if ( e.modifiers() & Qt::AltModifier ) {
         stream << ",ALT";
