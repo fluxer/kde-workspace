@@ -88,16 +88,12 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     subdirsCb  = new QCheckBox(i18n("Include &subfolders"), pages[0]);
     caseSensCb  = new QCheckBox(i18n("Case s&ensitive search"), pages[0]);
     browseB    = new QPushButton(i18n("&Browse..."), pages[0]);
-    useLocateCb = new QCheckBox(i18n("&Use files index"), pages[0]);
     hiddenFilesCb = new QCheckBox(i18n("Show &hidden files"), pages[0]);
     // Setup
 
     subdirsCb->setChecked(true);
     caseSensCb->setChecked(false);
-    useLocateCb->setChecked(false);
     hiddenFilesCb->setChecked(false);
-    if(KStandardDirs::findExe("locate").isEmpty())
-        useLocateCb->setEnabled(false);
 
     nameBox->setDuplicatesEnabled(false);
     nameBox->setFocus();
@@ -127,12 +123,6 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
 	     "</ul></qt>");
     nameBox->setWhatsThis(nameWhatsThis);
     namedL->setWhatsThis(nameWhatsThis);
-    const QString whatsfileindex
-        = i18n("<qt>This lets you use the files' index created by the <i>slocate</i> "
-               "package to speed-up the search; remember to update the index from time to time "
-               "(using <i>updatedb</i>)."
-               "</qt>");
-    useLocateCb->setWhatsThis(whatsfileindex);
 
     // Layout
 
@@ -154,7 +144,6 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     
     QHBoxLayout * layoutTwo = new QHBoxLayout();
     layoutTwo->addWidget( caseSensCb);
-    layoutTwo->addWidget( useLocateCb );
     
     subgrid->addLayout( layoutOne );
     subgrid->addLayout( layoutTwo );
@@ -795,13 +784,10 @@ void KfindTabWidget::setQuery(KQuery *query)
   //Metainfo
   query->setMetaInfo(metainfoEdit->text(), metainfokeyEdit->text());
 
-  //Use locate to speed-up search ?
-  query->setUseFileIndex(useLocateCb->isChecked());
-
   query->setShowHiddenFiles(hiddenFilesCb->isChecked());
   
   query->setContext(textEdit->text(), caseContextCb->isChecked(),
-  	binaryContextCb->isChecked(), regexpContentCb->isChecked());
+                    binaryContextCb->isChecked(), regexpContentCb->isChecked());
 }
 
 QString KfindTabWidget::date2String(const QDate & date) {

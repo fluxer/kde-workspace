@@ -56,7 +56,6 @@ class KQuery : public QObject
   void setUsername( const QString &username );
   void setGroupname( const QString &groupname );
   void setMetaInfo(const QString &metainfo, const QString &metainfokey);
-  void setUseFileIndex(bool);
   void setShowHiddenFiles(bool);
 
   void start();
@@ -67,19 +66,15 @@ class KQuery : public QObject
   /* Check if file meets the find's requirements*/
   inline void processQuery(const KFileItem &);
 
- public Q_SLOTS:
-  /* List of files found using slocate */
+public Q_SLOTS:
+  /* New files notification by KDirWatch */
   void slotListEntries(QStringList);
-  
+
  protected Q_SLOTS:
   /* List of files found using KIO */
   void slotListEntries(KIO::Job *, const KIO::UDSEntryList &);
   void slotResult(KJob *);
   void slotCanceled(KJob *);
-  
-  void slotreadyReadStandardOutput();
-  void slotreadyReadStandardError();
-  void slotendProcessLocate(int, QProcess::ExitStatus);
 
  Q_SIGNALS:
     void foundFileList( QList< QPair<KFileItem,QString> >);
@@ -106,11 +101,7 @@ class KQuery : public QObject
   bool m_casesensitive;
   bool m_search_binary;
   bool m_regexpForContent;
-  bool m_useLocate;
   bool m_showHiddenFiles;
-  QByteArray bufferLocate;
-  QStringList locateList;
-  QProcess *processLocate;
   QList<QRegExp*> m_regexps;// regexps for file name
 //  QValueList<bool> m_regexpsContainsGlobs;  // what should this be good for ? Alex
   KIO::ListJob *job;

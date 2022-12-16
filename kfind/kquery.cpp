@@ -40,14 +40,9 @@ KQuery::KQuery(QObject *parent)
     m_sizeboundary2(0), m_timeFrom(0), m_timeTo(0),
     m_recursive(false),m_casesensitive(false),
     m_search_binary(false), m_regexpForContent(false),
-    m_useLocate(false), m_showHiddenFiles(false),
+    m_showHiddenFiles(false),
     job(0), m_insideCheckEntries(false), m_result(0)
 {
-  processLocate = new QProcess(this);
-  connect(processLocate,SIGNAL(readyReadStandardOutput()),this,SLOT(slotreadyReadStandardOutput()));
-  connect(processLocate,SIGNAL(readyReadStandardError()),this,SLOT(slotreadyReadStandardError()));
-  connect(processLocate,SIGNAL(finished(int,QProcess::ExitStatus)),this,SLOT(slotendProcessLocate(int,QProcess::ExitStatus)));
-
   // Files with these mime types can be ignored, even if
   // findFormatByFileContent() in some cases may claim that
   // these are text files:
@@ -82,47 +77,27 @@ KQuery::~KQuery()
   while (!m_regexps.isEmpty())
     delete m_regexps.takeFirst();
   m_fileItems.clear();
-  if( processLocate->state() == QProcess::Running)
-  {
-    disconnect( processLocate );
-    processLocate->kill();
-    processLocate->waitForFinished( 5000 );
-    delete processLocate;
-  }
 }
 
 void KQuery::kill()
 {
   if (job)
     job->kill(KJob::EmitResult);
-  if (processLocate->state() == QProcess::Running)
-    processLocate->kill();
   m_fileItems.clear();
 }
 
 void KQuery::start()
 {
   m_fileItems.clear();
-  if( m_useLocate ) //Use "locate" instead of the internal search method
-  {
-    bufferLocate.clear();
-    m_url.cleanPath();
+  if (m_recursive)
+    job = KIO::listRecursive( m_url, KIO::HideProgressInfo );
+  else
+    job = KIO::listDir( m_url, KIO::HideProgressInfo );
 
-    processLocate->setProcessChannelMode(QProcess::SeparateChannels);
-    processLocate->start("locate", QStringList() <<  m_url.path( KUrl::AddTrailingSlash ));
-  }
-  else //Use KIO
-  {
-    if (m_recursive)
-      job = KIO::listRecursive( m_url, KIO::HideProgressInfo );
-    else
-      job = KIO::listDir( m_url, KIO::HideProgressInfo );
-
-    connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
-        SLOT(slotListEntries(KIO::Job*,KIO::UDSEntryList)));
-    connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
-    connect(job, SIGNAL(canceled(KJob*)), SLOT(slotCanceled(KJob*)));
-  }
+  connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
+          SLOT(slotListEntries(KIO::Job*,KIO::UDSEntryList)));
+  connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
+  connect(job, SIGNAL(canceled(KJob*)), SLOT(slotCanceled(KJob*)));
 }
 
 void KQuery::slotResult( KJob * _job )
@@ -196,7 +171,7 @@ void KQuery::checkEntries()
   m_insideCheckEntries=false;
 }
 
-/* List of files found using slocate */
+/* New files notification by KDirWatch */
 void KQuery::slotListEntries( QStringList list )
 {
   metaKeyRx = QRegExp(m_metainfokey);
@@ -536,38 +511,9 @@ void KQuery::setPath(const KUrl &url)
   m_url = url;
 }
 
-void KQuery::setUseFileIndex(bool useLocate)
-{
-  m_useLocate=useLocate;
-}
-
 void KQuery::setShowHiddenFiles(bool showHidden)
 {
   m_showHiddenFiles = showHidden;
-}
-
-void KQuery::slotreadyReadStandardError()
-{
-  KMessageBox::error(NULL, QString::fromLocal8Bit(processLocate->readAllStandardOutput()), i18nc("@title:window", "Error while using locate"));
-}
-
-void KQuery::slotreadyReadStandardOutput()
-{
-  bufferLocate += processLocate->readAllStandardOutput();
-}
-
-void KQuery::slotendProcessLocate(int code, QProcess::ExitStatus)
-{
-  if (code == 0 )
-  {
-    if( !bufferLocate.isEmpty() )
-    {
-      QString str = QString::fromLocal8Bit(bufferLocate);
-      bufferLocate.clear();
-      slotListEntries(str.split('\n', QString::SkipEmptyParts));
-    }
-  }
-  emit result(0);
 }
 
 #include "moc_kquery.cpp"

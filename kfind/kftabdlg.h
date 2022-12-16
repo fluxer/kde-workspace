@@ -85,7 +85,6 @@ public:
   KUrlComboBox   *dirBox;
   // for first page
   QCheckBox   *subdirsCb;
-  QCheckBox *useLocateCb;
   QCheckBox *hiddenFilesCb;
   // for third page
   KComboBox *typeBox;

@@ -252,12 +252,6 @@ add_feature_info(rzsz
     "ZModem support in Konsole"
 )
 
-find_program(LOCALE_EXECUTABLE NAMES locate)
-add_feature_info(locate
-    LOCALE_EXECUTABLE
-    "Search indexing support in KFind"
-)
-
 find_program(LSOF_EXECUTABLE lsof)
 add_feature_info(lsof
     LSOF_EXECUTABLE
