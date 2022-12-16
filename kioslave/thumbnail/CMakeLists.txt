@@ -65,16 +65,11 @@ endif()
 
 ########### next target ###############
 
-set(windowsexethumbnail_SRCS windowsexecreator.cpp icoutils.cpp)
-set(windowsimagethumbnail_SRCS windowsimagecreator.cpp icoutils.cpp)
+set(windowsexethumbnail_SRCS windowsexecreator.cpp)
 
 kde4_add_plugin(windowsexethumbnail ${windowsexethumbnail_SRCS})
 target_link_libraries( windowsexethumbnail ${KDE4_KIO_LIBS} )
 install(TARGETS windowsexethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
-
-kde4_add_plugin(windowsimagethumbnail ${windowsimagethumbnail_SRCS})
-target_link_libraries(windowsimagethumbnail ${KDE4_KIO_LIBS})
-install(TARGETS windowsimagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -111,7 +106,6 @@ install(
     textthumbnail.desktop
     desktopthumbnail.desktop
     comicbookthumbnail.desktop
-    windowsimagethumbnail.desktop
     windowsexethumbnail.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
