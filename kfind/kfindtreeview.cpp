@@ -43,7 +43,6 @@
 #include <kio/copyjob.h>
 #include <kio/deletejob.h>
 #include <kjobuidelegate.h>
-
 #include <konq_operations.h>
 #include <knewfilemenu.h>
 

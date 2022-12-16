@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Service
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,inode/directory
+Actions=findhere;
+
+[Desktop Action findhere]
+Name=Find Here
+Icon=kfind
+Exec=kfind %u

@@ -32,4 +32,9 @@ install(
     DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR}
 )
 
+install(
+    FILES findhere.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/ServiceMenus
+)
+
 kde4_install_icons(${KDE4_ICON_INSTALL_DIR})
