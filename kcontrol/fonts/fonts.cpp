@@ -25,6 +25,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QFormLayout>
+#include <QFontDatabase>
 #include <qplatformdefs.h>
 
 #include <KFontDialog>
@@ -149,7 +150,9 @@ void FontUseItem::applyFontDiff( const QFont &fnt, int fontDiffFlags )
     _font.setPointSizeF( fnt.pointSizeF() );
   }
   if (fontDiffFlags & KFontChooser::FontDiffFamily) {
-    if (!isFixedOnly() || QFontInfo(fnt).fixedPitch()) _font.setFamily( fnt.family() );
+    QFontDatabase fdb;
+    if (!isFixedOnly() || fdb.isFixedPitch(fnt.family(), fnt.styleName()))
+      _font.setFamily( fnt.family() );
   }
   if (fontDiffFlags & KFontChooser::FontDiffStyle) {
     _font.setWeight( fnt.weight() );

@@ -22,7 +22,6 @@
 */
 
 #include "katerenderer.h"
-
 #include "katedocument.h"
 #include "kateconfig.h"
 #include "katehighlight.h"
@@ -31,16 +30,14 @@
 #include "katetextlayout.h"
 #include "katebuffer.h"
 
-#include <limits.h>
-
 #include <kdebug.h>
-
+#include <ktexteditor/highlightinterface.h>
 #include <QtGui/QPainter>
 #include <QtGui/qtextlayout.h>
 #include <QtCore/QStack>
 #include <QtGui/QBrush>
 
-#include <ktexteditor/highlightinterface.h>
+#include <limits.h>
 
 static const QChar tabChar('\t');
 static const QChar spaceChar(' ');
@@ -791,7 +788,7 @@ void KateRenderer::paintTextLine(QPainter& paint, KateLineLayoutPtr range, int x
   }
 
   // show word wrap marker if desirable
-  if ((!isPrinterFriendly()) && config()->wordWrapMarker() && QFontInfo(config()->font()).fixedPitch())
+  if ((!isPrinterFriendly()) && config()->wordWrapMarker() && config()->currentFontIsFixed())
   {
     const QPainter::RenderHints backupRenderHints = paint.renderHints();
     paint.setRenderHint(QPainter::Antialiasing, false);

@@ -24,12 +24,14 @@
 
 #include <ktexteditor/markinterface.h>
 
-#include <QtCore/qbitarray.h>
-#include <QtGui/QColor>
+#include <QtCore/QTextCodec>
+#include <QtCore/QBitArray>
 #include <QtCore/QObject>
 #include <QtCore/QVector>
-#include <QtCore/qrect.h>
-#include <QtGui/qfontmetrics.h>
+#include <QtCore/QRect>
+#include <QtGui/QColor>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QFontDatabase>
 #include <QStringListModel>
 
 class KConfigGroup;
@@ -38,9 +40,6 @@ class KateDocument;
 class KateRenderer;
 
 class KConfig;
-
-#include <QTextCodec>
-
 
 /**
  * Base Class for the Kate Config Classes
@@ -728,6 +727,8 @@ class KATEPARTINTERFACES_EXPORT KateRendererConfig : public KateConfig
     const QColor& replaceHighlightColor() const;
     void setReplaceHighlightColor(const QColor &col);
 
+    bool currentFontIsFixed() const;
+
   private:
     /**
      * Read the schema properties from the config file.
@@ -783,6 +784,8 @@ class KATEPARTINTERFACES_EXPORT KateRendererConfig : public KateConfig
     bool m_searchHighlightColorSet : 1;
     bool m_replaceHighlightColorSet : 1;
     QBitArray m_lineMarkerColorSet;
+
+    QFontDatabase m_fontDatabase;
 
   private:
     static KateRendererConfig *s_global;

@@ -2669,6 +2669,10 @@ void KateRendererConfig::setReplaceHighlightColor(const QColor &col)
   configEnd ();
 }
 
+bool KateRendererConfig::currentFontIsFixed () const
+{
+  return m_fontDatabase.isFixedPitch(m_font.family(), m_font.styleName());
+}
 
 bool KateRendererConfig::showIndentationLines () const
 {

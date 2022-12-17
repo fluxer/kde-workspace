@@ -10,16 +10,15 @@
 
 #include <QLabel>
 #include <QList>
-
+#include <QCheckBox>
+#include <QComboBox>
+#include <QSpinBox>
 #include <KCModule>
 #include <KDialog>
 #include <KFontRequester>
 
 #include "kxftconfig.h"
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QSpinBox>
 class KDoubleNumInput;
 class FontAASettings;
 

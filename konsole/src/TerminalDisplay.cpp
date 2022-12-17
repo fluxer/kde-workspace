@@ -37,6 +37,7 @@
 #include <QStyle>
 #include <QTimer>
 #include <QToolTip>
+#include <QFontDatabase>
 #include <QPen>
 
 // KDE
@@ -196,10 +197,10 @@ void TerminalDisplay::fontChange(const QFont&)
 void TerminalDisplay::setVTFont(const QFont& f)
 {
     QFont font = f;
-
     QFontMetrics metrics(font);
 
-    if (!QFontInfo(font).fixedPitch()) {
+    QFontDatabase fdb;
+    if (!fdb.isFixedPitch(font.family(), font.styleName())) {
         kWarning() << "Using an unsupported variable-width font in the terminal.  This may produce display errors.";
     }
 
