@@ -27,7 +27,7 @@
 #include <KDebug>
 #include <KJob>
 #include <KService>
-#include <KToolInvocation>
+#include <KRun>
 #include <KUrl>
 #include <Solid/PowerManagement>
 
@@ -48,20 +48,17 @@ using namespace Kickoff;
 
 bool ServiceItemHandler::openUrl(const KUrl& url)
 {
-    int result = KToolInvocation::startServiceByDesktopPath(url.pathOrUrl(), QStringList(), 0, 0, 0, "", true);
+    KService::Ptr service = KService::serviceByDesktopPath(url.pathOrUrl());
 
-    if (result == 0) {
-        KService::Ptr service = KService::serviceByDesktopPath(url.pathOrUrl());
-
-        if (!service.isNull()) {
-            RecentApplications::self()->add(service);
-        } else {
-            qWarning() << "Failed to find service for" << url;
-            return false;
-        }
+    if (!service.isNull()) {
+        RecentApplications::self()->add(service);
+    } else {
+        qWarning() << "Failed to find service for" << url;
+        return false;
     }
 
-    return result == 0;
+    new KRun(url, 0);
+    return true;
 }
 
 bool LeaveItemHandler::openUrl(const KUrl& url)
