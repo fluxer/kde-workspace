@@ -4,7 +4,6 @@ set(plasmaclock_LIB_SRCS
     calendartable.cpp
     wheelytoolbutton.cpp
     timezonesConfig.ui
-    generalConfig.ui
     calendarConfig.ui
 )
 
@@ -14,7 +13,6 @@ target_link_libraries(plasmaclock
     ${KDE4_PLASMA_LIBS}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KIO_LIBS}
-    ${KDE4_KSPEECH_LIBS}
 )
 
 set_target_properties(plasmaclock PROPERTIES

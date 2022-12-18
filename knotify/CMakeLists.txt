@@ -12,7 +12,6 @@ set(knotify_SRCS
     notifybylogfile.cpp
     notifybytaskbar.cpp
     notifybyexecute.cpp
-    notifybyktts.cpp
     imageconverter.cpp
     ksolidnotify.cpp
     knotifyplugin.cpp
@@ -24,7 +23,6 @@ add_executable(knotify4 ${knotify_SRCS})
 target_link_libraries(knotify4
     ${KDE4_KDEUI_LIBS}
     ${KDE4_SOLID_LIBS}
-    ${KDE4_KSPEECH_LIBS}
     ${KDE4_KMEDIAPLAYER_LIBS}
 )
 

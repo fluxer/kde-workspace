@@ -37,7 +37,6 @@
 #include "notifybyexecute.h"
 #include "notifybylogfile.h"
 #include "notifybytaskbar.h"
-#include "notifybyktts.h"
 
 KNotify::KNotify( QObject *parent )
     : QObject( parent ),
@@ -66,7 +65,6 @@ void KNotify::loadConfig()
 	addPlugin(new NotifyByExecute(this));
 	addPlugin(new NotifyByLogfile(this));
 	addPlugin(new NotifyByTaskbar(this));
-	addPlugin(new NotifyByKTTS(this));
 }
 
 void KNotify::addPlugin( KNotifyPlugin * p )

@@ -86,7 +86,6 @@ class PLASMACLOCK_EXPORT ClockApplet : public Plasma::PopupApplet
         void setCurrentTimezone(const QString &tz);
         void configAccepted();
         void updateClockDefaultsTo();
-        void speakTime(const QTime &);
         void launchTimeControlPanel();
 
     private Q_SLOTS:

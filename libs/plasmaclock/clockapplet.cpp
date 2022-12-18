@@ -51,7 +51,6 @@
 #include <KTimeZone>
 #include <KToolInvocation>
 #include <KMessageBox>
-#include <KSpeech>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -63,7 +62,6 @@
 #include "calendar.h"
 
 #include "ui_timezonesConfig.h"
-#include "ui_generalConfig.h"
 
 class ClockApplet::Private
 {
@@ -75,13 +73,11 @@ public:
           adjustSystemTimeAction(nullptr),
           label(nullptr),
           calendarWidget(nullptr),
-          forceTzDisplay(false),
-          kspeech(nullptr)
+          forceTzDisplay(false)
     {}
 
     ClockApplet *q;
     Ui::timezonesConfig timezonesUi;
-    Ui::generalConfig generalUi;
     QString timezone;
     QString defaultTimezone;
     QPoint clicked;
@@ -91,11 +87,8 @@ public:
     QString prettyTimezone;
     Plasma::Label *label;
     Plasma::Calendar *calendarWidget;
-    int announceInterval;
     QTime lastTimeSeen;
-    bool forceTzDisplay : 1;
-    bool kttsAvailable;
-    KSpeech *kspeech;
+    bool forceTzDisplay;
 
     QDate addTzToTipText(QString &subText, const Plasma::DataEngine::Data &data, const QDate &prevDate, bool highlight)
     {
@@ -177,64 +170,6 @@ ClockApplet::~ClockApplet()
 {
     delete d->clipboardMenu;
     delete d;
-}
-
-void ClockApplet::speakTime(const QTime &time)
-{
-    if (!d->announceInterval) {
-        return;
-    }
-
-    if ((time.minute() % d->announceInterval) == 0) {
-        QString text;
-        if (time.minute() == 0) {
-            if (KGlobal::locale()->use12Clock()) {
-                if (time.hour() < 12) {
-                    text = i18ncp("Text sent to the text to speech service "
-                                     "when minutes==0 and it is AM",
-                                 "It is 1 o clock a m",
-                                 "It is %1 o clock a m",
-                                 time.hour());
-                } else {
-                    text = i18ncp("Text sent to the text to speech service "
-                                     "when minutes==0 and it is PM",
-                                 "It is 1 o clock p m",
-                                 "It is %1 o clock p m",
-                                 time.hour()-12);
-                }
-            } else {
-                text = i18ncp("Text sent to the text to speech service "
-                                 "when minutes==0 and it is the 24 hour clock",
-                                 "It is 1 o clock",
-                                 "It is %1 o clock",
-                                 time.hour());
-            }
-        } else {
-            if (KGlobal::locale()->use12Clock()) {
-                if (time.hour() < 12) {
-                    text = i18nc("Text sent to the text to speech service for AM",
-                                "It is %1:%2 a m",
-                                time.hour(),
-                                time.minute());
-                } else {
-                    text = i18nc("Text sent to the text to speech service for PM",
-                                "It is %1:%2 p m",
-                                time.hour()-12,
-                                time.minute());
-                }
-            } else {
-                text = i18nc("Text sent to the text to speech service for the 24 hour clock",
-                                "It is %1:%2",
-                                time.hour(),
-                                time.minute());
-            }
-        }
-        if (!d->kspeech) {
-            d->kspeech = new KSpeech(this);
-            d->kspeech->setSpeechID(QString::fromLatin1("plasmaclock"));
-        }
-        d->kspeech->say(text);
-    }
 }
 
 void ClockApplet::toolTipAboutToShow()
@@ -332,11 +267,7 @@ void ClockApplet::updateClockApplet(const Plasma::DataEngine::Data &data)
         }
     }
 
-    const QTime t = d->lastTimeSeen;
     d->lastTimeSeen = data["Time"].toTime();
-    if (d->lastTimeSeen.minute() != t.minute() || d->lastTimeSeen.hour() != t.hour()) {
-        speakTime(d->lastTimeSeen);
-    }
 }
 
 QTime ClockApplet::lastTimeSeen() const
@@ -357,32 +288,6 @@ Plasma::ToolTipContent ClockApplet::toolTipContent()
 void ClockApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     createClockConfigurationInterface(parent);
-
-    d->kttsAvailable = KSpeech::isSupported();
-
-    if (d->kttsAvailable) {
-        QWidget *generalWidget = new QWidget();
-        d->generalUi.setupUi(generalWidget);
-        parent->addPage(generalWidget, i18nc("General configuration page", "General"), Applet::icon());
-
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Never"), QVariant(0));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every minute"), QVariant(1));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every 2 minutes"), QVariant(2));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every 5 minutes"), QVariant(5));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every 10 minutes"), QVariant(10));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every 15 minutes"), QVariant(15));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every 30 minutes"), QVariant(30));
-        d->generalUi.intervalCombo->addItem(i18nc("@inmenu interval between speaking clock", "Every hour"), QVariant(60));
-
-        for (int i=0; i< d->generalUi.intervalCombo->count() ; i++) {
-            if (d->generalUi.intervalCombo->itemData(i).toInt() == d->announceInterval) {
-                d->generalUi.intervalCombo->setCurrentIndex(i);
-                break;
-            }
-        }
-
-        connect(d->generalUi.intervalCombo, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
-    }
 
     if (d->calendarWidget) {
         d->calendarWidget->createConfigurationInterface(parent);
@@ -435,7 +340,6 @@ void ClockApplet::configChanged()
     d->defaultTimezone = cg.readEntry("defaultTimezone", d->timezone);
     d->forceTzDisplay = d->timezone != d->defaultTimezone;
     d->setPrettyTimezone();
-    d->announceInterval = cg.readEntry("announceInterval", 0);
 
     clockConfigChanged();
 
@@ -478,12 +382,6 @@ void ClockApplet::configAccepted()
 
     if (d->calendarWidget) {
         d->calendarWidget->configAccepted(cg);
-    }
-
-    if (d->kttsAvailable) {
-        cg.writeEntry("announceInterval", d->generalUi.intervalCombo->itemData(d->generalUi.intervalCombo->currentIndex()));
-    } else {
-        cg.writeEntry("announceInterval", 0);
     }
 
     clockConfigAccepted();
