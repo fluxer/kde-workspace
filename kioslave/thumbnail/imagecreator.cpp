@@ -58,18 +58,13 @@ bool ImageCreator::create(const QString &path, int width, int height, QImage &im
         exiv.rotateImage(img);
     }
 
-    if (img.depth() != 32) {
-        img = img.convertToFormat(img.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32);
-    }
-
     return true;
 }
 
 ThumbCreator::Flags ImageCreator::flags() const
 {
-    return None;
+    return ThumbCreator::None;
 }
-
 
 QWidget *ImageCreator::createConfigurationWidget()
 {
