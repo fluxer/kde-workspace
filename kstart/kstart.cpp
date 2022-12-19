@@ -95,11 +95,7 @@ KStart::KStart()
         }
     } else {
         QString error;
-        QString dbusService;
-        qint64 pid;
-        if (KToolInvocation::startServiceByDesktopPath(exe, url, &error, &dbusService, &pid) == 0) {
-            printf("%s\n", qPrintable(dbusService));
-        } else {
+        if (KToolInvocation::startServiceByDesktopPath(exe, url, &error) != 0) {
             kError() << error;
         }
     }
