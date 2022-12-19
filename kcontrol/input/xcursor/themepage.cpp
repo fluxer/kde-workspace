@@ -258,7 +258,7 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
     QByteArray themeName = QFile::encodeName(theme->name());
 
     // Set up the proper launch environment for newly started apps
-    KToolInvocation::self()->setLaunchEnv("XCURSOR_THEME", themeName);
+    KToolInvocation::setLaunchEnv("XCURSOR_THEME", themeName);
 
     // Update the Xcursor X resources
     runRdb(0);

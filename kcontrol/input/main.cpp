@@ -77,9 +77,9 @@ extern "C"
     // Tell klauncher to set the XCURSOR_THEME and XCURSOR_SIZE environment
     // variables when launching applications.
     if(!theme.isEmpty())
-       KToolInvocation::self()->setLaunchEnv("XCURSOR_THEME", theme);
+       KToolInvocation::setLaunchEnv("XCURSOR_THEME", theme);
     if( !size.isEmpty())
-       KToolInvocation::self()->setLaunchEnv("XCURSOR_SIZE", size);
+       KToolInvocation::setLaunchEnv("XCURSOR_SIZE", size);
 
 #endif
 

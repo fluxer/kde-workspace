@@ -167,7 +167,7 @@ void KHostName::changeSessionManager()
       return;
    }
    sm = "local/"+newName+sm.mid(i);
-   KToolInvocation::self()->setLaunchEnv(QString::fromLatin1("SESSION_MANAGER"), sm);
+   KToolInvocation::setLaunchEnv(QString::fromLatin1("SESSION_MANAGER"), sm);
 }
 
 int main(int argc, char **argv)

@@ -97,7 +97,7 @@ static void applyGtkStyles(bool active, int version)
    // Pass env. var to klauncher.
    QString name = gtkEnvVar(version);
    QString value = list.join(":");
-   KToolInvocation::self()->setLaunchEnv(name, value);
+   KToolInvocation::setLaunchEnv(name, value);
 }
 
 // -----------------------------------------------------------------------------
