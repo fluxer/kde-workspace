@@ -40,10 +40,6 @@
       <default>true</default>
       <whatsthis><qt>When an area of the screen is selected with mouse or keyboard, this is called "the selection".&lt;br/&gt;If this option is selected, only text selections are stored in the history, while images and other selections are not.</qt></whatsthis>
     </entry>
-    <entry name="UseGUIRegExpEditor" type="Bool">
-      <label>Use graphical regexp editor</label>
-      <default>true</default>
-    </entry>
     <entry name="URLGrabberEnabled" type="Bool">
         <label>URL grabber enabled</label>
         <default>false</default>
