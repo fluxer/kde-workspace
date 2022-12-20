@@ -100,14 +100,11 @@ KfindDlg::KfindDlg(const KUrl & url, QWidget *parent)
 
   KHelpMenu *helpMenu = new KHelpMenu(this, KGlobal::mainComponent().aboutData(), true);
   setButtonMenu( Help, helpMenu->menu() );
-  dirwatch=NULL;
 }
 
 KfindDlg::~KfindDlg()
 {
   stopSearch();
-   
-  delete dirwatch;
 }
 
 void KfindDlg::finishAndClose()
@@ -143,33 +140,6 @@ void KfindDlg::startSearch()
   enableButton(User3, false); // Disable "Find"
   enableButton(User2, true); // Enable "Stop"
   enableButton(User1, false); // Disable "Save As..."
-
-  delete dirwatch;
-  dirwatch=new KDirWatch();
-  connect(dirwatch, SIGNAL(created(QString)), this, SLOT(slotNewItems(QString)));
-  connect(dirwatch, SIGNAL(deleted(QString)), this, SLOT(slotDeleteItem(QString)));
-  dirwatch->addDir(query->url().path(), KDirWatch::WatchFiles);
-
-#if 0
-  // waba: Watching for updates is disabled for now because even with FAM it causes too
-  // much problems. See BR68220, BR77854, BR77846, BR79512 and BR85802
-  // There are 3 problems:
-  // 1) addDir() keeps looping on recursive symlinks
-  // 2) addDir() scans all subdirectories, so it basically does the same as the process that
-  // is started by KQuery but in-process, undoing the advantages of using a separate find process
-  // A solution could be to let KQuery emit all the directories it has searched in.
-  // Either way, putting dirwatchers on a whole file system is probably just too much.
-  // 3) FAM has a tendency to deadlock with so many files (See BR77854) This has hopefully
-  // been fixed in KDirWatch, but that has not yet been confirmed.
-
-  //Getting a list of all subdirs
-  if(tabWidget->isSearchRecursive() && (dirwatch->internalMethod() == KDirWatch::FAM))
-  {
-    const QStringList subdirs=getAllSubdirs(query->url().path());
-    for(QStringList::const_iterator it = subdirs.constBegin(); it != subdirs.constEnd(); ++it)
-      dirwatch->addDir(*it,true);
-  }
-#endif
 
   win->beginSearch(query->url());
   tabWidget->beginSearch();
@@ -256,32 +226,6 @@ void  KfindDlg::about ()
 {
   KAboutApplicationDialog dlg(0, this);
   dlg.exec ();
-}
-
-void KfindDlg::slotDeleteItem(const QString& file)
-{
-  kDebug()<<QString("Will remove one item: %1").arg(file);
-  
-  KUrl url;
-  url.setPath( file );
-  
-  win->removeItem( url );
-  
-  QString str = i18np("one file found", "%1 files found", win->itemCount());
-  setProgressMsg( str );
-}
-
-void KfindDlg::slotNewItems( const QString& file )
-{
-    kDebug()<<QString("Will add this item") << file;
-    
-    if( file.indexOf(query->url().path(KUrl::AddTrailingSlash))==0 )
-    {
-        KUrl url;
-        url.setPath ( file );
-        if ( !win->isInserted( url ) )
-            query->slotListEntries( QStringList() << file );
-    }
 }
 
 QStringList KfindDlg::getAllSubdirs(QDir d)

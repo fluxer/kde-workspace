@@ -21,7 +21,6 @@
 
 #include <kdialog.h>
 #include <kdirlister.h>
-#include <kdirwatch.h>
 
 #include <QString>
 #include <QDir>
@@ -58,8 +57,6 @@ public Q_SLOTS:
   void slotResult(int);
 //  void slotSearchDone();
   void  about ();
-  void slotDeleteItem(const QString&);
-  void slotNewItems( const QString&  );
   
   void finishAndClose();
 
@@ -74,7 +71,6 @@ private:
   bool isResultReported;
   KQuery *query;
   KStatusBar *mStatusBar;
-  KDirWatch *dirwatch;
 };
 
 #endif

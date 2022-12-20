@@ -904,8 +904,6 @@ Q_SIGNALS:
 
   private Q_SLOTS:
     void slotModOnHdDirty (const QString &path);
-    void slotModOnHdCreated (const QString &path);
-    void slotModOnHdDeleted (const QString &path);
 
   private:
     /**

@@ -128,8 +128,6 @@ TaskManager::TaskManager()
     d->watcher = new KDirWatch(this);
     d->watcher->addFile(KGlobal::dirs()->locateLocal("config", "klaunchrc"));
     connect(d->watcher, SIGNAL(dirty(QString)), this, SLOT(configureStartup()));
-    connect(d->watcher, SIGNAL(created(QString)), this, SLOT(configureStartup()));
-    connect(d->watcher, SIGNAL(deleted(QString)), this, SLOT(configureStartup()));
 
     configureStartup();
 }

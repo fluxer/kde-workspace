@@ -183,12 +183,6 @@ KateDocument::KateDocument ( bool bSingleViewMode, bool bBrowserView,
   connect( KateGlobal::self()->dirWatch(), SIGNAL(dirty(QString)),
            this, SLOT(slotModOnHdDirty(QString)) );
 
-  connect( KateGlobal::self()->dirWatch(), SIGNAL(created(QString)),
-           this, SLOT(slotModOnHdCreated(QString)) );
-
-  connect( KateGlobal::self()->dirWatch(), SIGNAL(deleted(QString)),
-           this, SLOT(slotModOnHdDeleted(QString)) );
-
   /**
    * load handling
    * this is needed to ensure we signal the user if a file ist still loading
@@ -4363,36 +4357,6 @@ void KateDocument::slotModOnHdDirty (const QString &path)
   }
 }
 
-void KateDocument::slotModOnHdCreated (const QString &path)
-{
-  if ((path == m_dirWatchFile) && (!m_modOnHd || m_modOnHdReason != OnDiskCreated))
-  {
-    m_modOnHd = true;
-    m_modOnHdReason = OnDiskCreated;
-
-    // reenable dialog if not running atm
-    if (m_isasking == -1)
-      m_isasking = false;
-
-    emit modifiedOnDisk (this, m_modOnHd, m_modOnHdReason);
-  }
-}
-
-void KateDocument::slotModOnHdDeleted (const QString &path)
-{
-  if ((path == m_dirWatchFile) && (!m_modOnHd || m_modOnHdReason != OnDiskDeleted))
-  {
-    m_modOnHd = true;
-    m_modOnHdReason = OnDiskDeleted;
-
-    // reenable dialog if not running atm
-    if (m_isasking == -1)
-      m_isasking = false;
-
-    emit modifiedOnDisk (this, m_modOnHd, m_modOnHdReason);
-  }
-}
-
 const QByteArray &KateDocument::digest () const
 {
   return m_buffer->digest();
@@ -4427,13 +4391,10 @@ QString KateDocument::reasonedMOHString() const
   {
     case OnDiskModified:
       return i18n("The file '%1' was modified by another program.", str );
-      break;
     case OnDiskCreated:
       return i18n("The file '%1' was created by another program.", str );
-      break;
     case OnDiskDeleted:
       return i18n("The file '%1' was deleted by another program.", str );
-      break;
     default:
       return QString();
   }

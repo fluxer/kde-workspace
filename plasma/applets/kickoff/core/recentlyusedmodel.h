@@ -61,8 +61,7 @@ public Q_SLOTS:
     void clearRecentDocumentsAndApplications();
 
 private Q_SLOTS:
-    void recentDocumentAdded(const QString& path);
-    void recentDocumentRemoved(const QString& path);
+    void recentDocumentDirty(const QString& path);
     void recentApplicationAdded(KService::Ptr, int startCount);
     void recentApplicationRemoved(KService::Ptr);
     void recentApplicationsCleared();

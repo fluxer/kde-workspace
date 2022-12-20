@@ -399,9 +399,12 @@ void Image::updateDirWatch(const QStringList &newDirs)
 
     if (!m_dirWatch) {
         m_dirWatch = new KDirWatch(this);
-        connect(m_dirWatch, SIGNAL(created(QString)), SLOT(pathCreated(QString)));
         connect(m_dirWatch, SIGNAL(dirty(QString)),   SLOT(pathDirty(QString)));
+#warning FIXME: update the whole list on dirty() signal
+#if 0
+        connect(m_dirWatch, SIGNAL(created(QString)), SLOT(pathCreated(QString)));
         connect(m_dirWatch, SIGNAL(deleted(QString)), SLOT(pathDeleted(QString)));
+#endif
     }
 
     foreach (const QString &oldDir, m_dirs) {
@@ -412,7 +415,7 @@ void Image::updateDirWatch(const QStringList &newDirs)
 
     foreach (const QString &newDir, newDirs) {
         if (!m_dirWatch->contains(newDir)) {
-            m_dirWatch->addDir(newDir, KDirWatch::WatchSubDirs | KDirWatch::WatchFiles);
+            m_dirWatch->addDir(newDir);
         }
     }
 

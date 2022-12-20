@@ -198,7 +198,7 @@ void PluginView::slotModifiedOnDisc( KTextEditor::Document* document, bool modif
     case KTextEditor::ModificationInterface::OnDiskCreated:
       tabbar->setTabIcon( tabID, KIconLoader::global()
             ->loadIcon( "document-save", KIconLoader::Small, 16 ) );
-    break;
+      break;
     case KTextEditor::ModificationInterface::OnDiskDeleted:
       tabbar->setTabIcon( tabID, KIconLoader::global()
           ->loadIcon( "dialog-warning", KIconLoader::Small, 16 ) );

@@ -36,12 +36,10 @@ FileBrowserEngine::FileBrowserEngine(QObject* parent, const QVariantList& args) 
     Q_UNUSED(args)
 
     m_dirWatch = new KDirWatch(this);
-    connect(m_dirWatch, SIGNAL(created(
-        const QString &)), this, SLOT(dirCreated(QString)));
-    connect(m_dirWatch, SIGNAL(deleted(
-        const QString &)), this, SLOT(dirDeleted(QString)));
-    connect(m_dirWatch, SIGNAL(dirty(
-        const QString &)), this, SLOT(dirDirty(QString)));
+    connect(
+        m_dirWatch, SIGNAL(dirty(QString)),
+        this, SLOT(updateData(QString))
+    );
 }
 
 FileBrowserEngine::~FileBrowserEngine()
@@ -59,29 +57,12 @@ bool FileBrowserEngine::sourceRequestEvent(const QString &path)
     kDebug() << "source requested() called: "<< path;
     m_dirWatch->addDir(path);
     setData(path, "type", QVariant("unknown"));
-    updateData (path, INIT);
+    updateData(path);
     return true;
 }
 
-void FileBrowserEngine::dirDirty(const QString &path)
+void FileBrowserEngine::updateData(const QString &path)
 {
-    updateData(path, DIRTY);
-}
-
-void FileBrowserEngine::dirCreated(const QString &path)
-{
-    updateData(path, CREATED);
-}
-
-void FileBrowserEngine::dirDeleted(const QString &path)
-{
-    updateData(path, DELETED);
-}
-
-void FileBrowserEngine::updateData(const QString &path, EventType event)
-{
-    Q_UNUSED(event)
-
     ObjectType type = NOTHING;
     if (QDir(path).exists()) {
         type = DIRECTORY;

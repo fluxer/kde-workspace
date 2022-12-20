@@ -47,7 +47,7 @@ HotplugEngine::HotplugEngine(QObject* parent, const QVariantList& args)
 {
     QStringList folders = KGlobal::dirs()->findDirs("data", "solid/actions/");
     foreach (const QString &folder, folders) {
-        m_dirWatch->addDir(folder, KDirWatch::WatchFiles);
+        m_dirWatch->addDir(folder);
     }
     connect(m_dirWatch, SIGNAL(dirty(QString)), this, SLOT(updatePredicates(QString)));
 }

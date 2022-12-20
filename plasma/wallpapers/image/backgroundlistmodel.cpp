@@ -46,7 +46,7 @@ BackgroundListModel::BackgroundListModel(Image *listener, QObject *parent)
       m_size(0,0),
       m_resizeMethod(Plasma::Wallpaper::ScaledResize)
 {
-    connect(&m_dirwatch, SIGNAL(deleted(QString)), this, SLOT(removeBackground(QString)));
+    connect(&m_dirwatch, SIGNAL(dirty(QString)), this, SLOT(reload()));
     m_previewUnavailablePix.fill(Qt::transparent);
     //m_previewUnavailablePix = KIcon("unknown").pixmap(m_previewUnavailablePix.size());
 }
@@ -54,20 +54,6 @@ BackgroundListModel::BackgroundListModel(Image *listener, QObject *parent)
 BackgroundListModel::~BackgroundListModel()
 {
     qDeleteAll(m_packages);
-}
-
-void BackgroundListModel::removeBackground(const QString &path)
-{
-    QModelIndex index;
-    while ((index = indexOf(path)).isValid()) {
-        beginRemoveRows(QModelIndex(), index.row(), index.row());
-        Plasma::Package *package = m_packages.at(index.row());
-        m_packages.removeAt(index.row());
-        m_sizeCache.remove(package);
-        m_previews.remove(package);
-        delete package;
-        endRemoveRows();
-    }
 }
 
 void BackgroundListModel::reload()
@@ -96,6 +82,12 @@ void BackgroundListModel::reload(const QStringList &selected)
 
     const QStringList dirs = KGlobal::dirs()->findDirs("wallpaper", "");
     kDebug() << "going looking in" << dirs;
+    
+    // add wallpaper dirs to dirwatch (recursively)
+    foreach (const QString &dir, dirs) {
+        m_dirwatch.addDir(dir);
+    }
+
     BackgroundFinder *finder = new BackgroundFinder(m_structureParent.data(), dirs);
     connect(finder, SIGNAL(backgroundsFound(QStringList)), this, SLOT(processPaths(QStringList)));
     finder->start();
@@ -117,13 +109,6 @@ void BackgroundListModel::processPaths(const QStringList &paths)
             } else {
                 delete package;
             }
-        }
-    }
-
-    // add new files to dirwatch
-    foreach (Plasma::Package *b, newPackages) {
-        if (!m_dirwatch.contains(b->path())) {
-            m_dirwatch.addFile(b->path());
         }
     }
 
@@ -195,8 +180,7 @@ QSize BackgroundListModel::bestSize(Plasma::Package *package) const
     QSize size(-1, -1);
     m_sizeCache.insert(package, size);
     ImageSizeFinder *finder = new ImageSizeFinder(image, const_cast<BackgroundListModel *>(this));
-    connect(finder, SIGNAL(sizeFound(QString,QSize)), this,
-            SLOT(sizeFound(QString,QSize)));
+    connect(finder, SIGNAL(sizeFound(QString,QSize)), this, SLOT(sizeFound(QString,QSize)));
     finder->start();
     return size;
 }

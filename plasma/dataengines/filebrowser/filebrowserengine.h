@@ -40,16 +40,13 @@ protected:
     void init();
 
 protected slots:
-    void dirDirty (const QString &path);
-    void dirCreated(const QString &path);
-    void dirDeleted(const QString &path);
+    void dirDirty(const QString &path);
 
 private:
-    enum EventType {INIT, DIRTY, CREATED, DELETED};
-    enum ObjectType {NOTHING, FILE, DIRECTORY};
+    enum ObjectType { NOTHING, FILE, DIRECTORY };
 
     KDirWatch * m_dirWatch;
-    void updateData(const QString &path, EventType event);
+    void updateData(const QString &path);
     void clearData(const QString &path);
 
     //QMap < QString, QStringList > m_regiteredListeners;

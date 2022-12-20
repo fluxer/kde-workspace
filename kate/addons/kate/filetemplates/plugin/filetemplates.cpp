@@ -148,14 +148,10 @@ KateFileTemplates::KateFileTemplates( QObject* parent, const QList<QVariant> &du
   const QStringList dirs = KGlobal::dirs()->findDirs("data", "kate/plugins/katefiletemplates/templates");
   for ( QStringList::const_iterator it = dirs.begin(); it != dirs.end(); ++it )
   {
-    m_dw->addDir( *it, KDirWatch::WatchFiles );
+    m_dw->addDir( *it );
   }
 
   connect( m_dw, SIGNAL(dirty(QString)),
-           this, SLOT(updateTemplateDirs(QString)) );
-  connect( m_dw, SIGNAL(created(QString)),
-           this, SLOT(updateTemplateDirs(QString)) );
-  connect( m_dw, SIGNAL(deleted(QString)),
            this, SLOT(updateTemplateDirs(QString)) );
 
 //   m_templates.setAutoDelete( true );

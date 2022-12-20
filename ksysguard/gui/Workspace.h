@@ -22,12 +22,12 @@
 #ifndef KSG_WORKSPACE_H
 #define KSG_WORKSPACE_H
 
+#include <QString>
 #include <KTabWidget>
 #include <kdirwatch.h>
 
 class KConfig;
 class KUrl;
-#include <QString>
 class WorkSheet;
 
 class Workspace : public KTabWidget
@@ -67,6 +67,7 @@ class Workspace : public KTabWidget
 
   private Q_SLOTS:
     virtual void contextMenu (int, const QPoint &);
+    void maybeRemoveWorkSheet( const QString &fileName );
 
   Q_SIGNALS:
     void setCaption( const QString &text);

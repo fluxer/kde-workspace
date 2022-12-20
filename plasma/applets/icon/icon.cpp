@@ -155,7 +155,7 @@ void IconApplet::setUrl(const KUrl& url, bool fromConfigDialog)
     if (m_url.isLocalFile()) {
         m_watcher = new KDirWatch;
         m_watcher->addFile(m_url.toLocalFile());
-        connect(m_watcher, SIGNAL(deleted(QString)), this, SLOT(delayedDestroy()));
+        connect(m_watcher, SIGNAL(dirty(QString)), this, SLOT(delayedDestroy()));
 
         QFileInfo fi(m_url.toLocalFile());
         KFileItem fileItem(KFileItem::Unknown, KFileItem::Unknown, m_url.toLocalFile());

@@ -44,7 +44,7 @@ Workspace::Workspace( QWidget* parent)
   KAcceleratorManager::setNoAccel(this);
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
   setDocumentMode(true);
-  connect(&mDirWatch, SIGNAL(deleted(QString)), this, SLOT(removeWorkSheet(QString)));
+  connect(&mDirWatch, SIGNAL(dirty(QString)), this, SLOT(maybeRemoveWorkSheet(QString)));
 }
 
 Workspace::~Workspace()
@@ -143,20 +143,26 @@ void Workspace::newWorkSheet()
     insertTab(-1, sheet, dlg.sheetTitle() );
     mSheetList.append( sheet );
     setCurrentIndex(indexOf( sheet ));
-    connect( sheet, SIGNAL(titleChanged(QWidget*)),
-	     SLOT(updateSheetTitle(QWidget*)));
+    connect( sheet, SIGNAL(titleChanged(QWidget*)), SLOT(updateSheetTitle(QWidget*)));
   }
 }
-void Workspace::contextMenu (int index, const QPoint &point) {
-//  KMenu pm;
+void Workspace::contextMenu (int index, const QPoint &point)
+{
+  //  KMenu pm;
   Q_UNUSED(index);
   Q_UNUSED(point);
-//  QAction *new_worksheet = pm.addAction( Toplevel->actionCollection()->action("new_worksheet") );
+  //  QAction *new_worksheet = pm.addAction( Toplevel->actionCollection()->action("new_worksheet") );
 
- // QAction *action = pm.exec( point );
-
-
+  // QAction *action = pm.exec( point );
 }
+
+void Workspace::maybeRemoveWorkSheet( const QString &fileName )
+{
+    if (!QFile::exists(fileName)) {
+        removeWorkSheet(fileName);
+    }
+}
+
 void Workspace::updateSheetTitle( QWidget* wdg )
 {
   if ( wdg )
@@ -239,7 +245,7 @@ void Workspace::exportWorkSheet( WorkSheet *sheet )
   QString fileName;
   do {
     fileName = KFileDialog::getSaveFileName( QString(tabText(indexOf( currentWidget() ))+ ".sgrd"),
-		                    QLatin1String("*.sgrd"), this, i18n("Export Tab") );
+                                             QLatin1String("*.sgrd"), this, i18n("Export Tab") );
     if ( fileName.isEmpty() )
       return;
 

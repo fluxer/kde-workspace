@@ -163,9 +163,8 @@ RecentlyUsedModel::RecentlyUsedModel(QObject *parent, RecentType recenttype, int
 
         // listen for changes to the list of recent documents
         KDirWatch *recentDocWatch = new KDirWatch(this);
-        recentDocWatch->addDir(KRecentDocument::recentDocumentDirectory(), KDirWatch::WatchFiles);
-        connect(recentDocWatch, SIGNAL(created(QString)), this, SLOT(recentDocumentAdded(QString)));
-        connect(recentDocWatch, SIGNAL(deleted(QString)), this, SLOT(recentDocumentRemoved(QString)));
+        recentDocWatch->addDir(KRecentDocument::recentDocumentDirectory());
+        connect(recentDocWatch, SIGNAL(dirty(QString)), this, SLOT(recentDocumentDirty(QString)));
     }
 }
 
@@ -219,15 +218,20 @@ DisplayOrder RecentlyUsedModel::nameDisplayOrder() const
    return d->displayOrder;
 }
 
-void RecentlyUsedModel::recentDocumentAdded(const QString& path)
+void RecentlyUsedModel::recentDocumentDirty(const QString& path)
 {
-    kDebug() << "Recent document added" << path;
-    d->addRecentDocument(path, false);
-}
-void RecentlyUsedModel::recentDocumentRemoved(const QString& path)
-{
-    kDebug() << "Recent document removed" << path;
-    d->removeExistingItem(path);
+    kDebug() << "Recent document dirty" << path;
+
+    d->itemsByPath.clear();
+    clear();
+
+    if (d->recenttype != DocumentsOnly) {
+        d->loadRecentApplications();
+    }
+
+    if (d->recenttype != ApplicationsOnly) {
+        d->loadRecentDocuments();
+    }
 }
 
 void RecentlyUsedModel::recentApplicationAdded(KService::Ptr service, int)
