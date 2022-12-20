@@ -313,8 +313,6 @@ void Klipper::loadSettings()
     m_bIgnoreSelection = KlipperSettings::ignoreSelection();
     m_bIgnoreImages = KlipperSettings::ignoreImages();
     m_bSynchronize = KlipperSettings::syncClipboards();
-    // NOTE: not used atm - kregexpeditor is not ported to kde4
-    m_bUseGUIRegExpEditor = KlipperSettings::useGUIRegExpEditor();
     m_bSelectionTextOnly = KlipperSettings::selectionTextOnly();
 
     m_bURLGrabber = KlipperSettings::uRLGrabberEnabled();

@@ -71,14 +71,6 @@ ActionsWidget::ActionsWidget(QWidget* parent)
         m_ui.kcfg_ActionList->header()->resizeSection(0, 250);
     }
 
-#if 0
-    if ( /*KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty()*/ true) // see notice in configdialog.cpp about KRegExpEditor
-    {
-        cbUseGUIRegExpEditor->hide();
-        cbUseGUIRegExpEditor->setChecked( false );
-    }
-#endif
-
     connect(m_ui.kcfg_ActionList, SIGNAL(itemSelectionChanged()), SLOT(onSelectionChanged()));
     connect(m_ui.kcfg_ActionList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)),
             SLOT(onEditAction()));
@@ -341,37 +333,6 @@ void ConfigDialog::updateWidgetsDefault()
 
     m_shortcutsWidget->allDefault();
 }
-
-// it does not make sense to port / enable this since KRegExpEditor is in a very bad shape. just keep this
-// code here because it will probably help at a later point to port it when KRegExpEditor is again usable.
-// 2007-10-20, uwolfer
-#if 0
-void ListView::rename( Q3ListViewItem* item, int c )
-{
-  bool gui = false;
-  if ( item->childCount() != 0 && c == 0) {
-    // This is the regular expression
-    if ( _configWidget->useGUIRegExpEditor() ) {
-      gui = true;
-    }
-  }
-
-  if ( gui ) {
-    if ( ! _regExpEditor )
-      _regExpEditor = KServiceTypeTrader::createInstanceFromQuery<QDialog>( "KRegExpEditor/KRegExpEditor", QString(), this );
-    KRegExpEditorInterface *iface = qobject_cast<KRegExpEditorInterface *>(_regExpEditor);
-
-    Q_ASSERT( iface );
-    iface->setRegExp( item->text( 0 ) );
-
-    bool ok = _regExpEditor->exec();
-    if ( ok )
-      item->setText( 0, iface->regExp() );
-  }
-  else
-    K3ListView::rename( item ,c );
-}
-#endif
 
 AdvancedWidget::AdvancedWidget( QWidget *parent )
     : QWidget(parent)
