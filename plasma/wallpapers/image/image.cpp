@@ -415,7 +415,7 @@ void Image::updateDirWatch(const QStringList &newDirs)
 
     foreach (const QString &newDir, newDirs) {
         if (!m_dirWatch->contains(newDir)) {
-            m_dirWatch->addDir(newDir);
+            m_dirWatch->addDir(newDir, true);
         }
     }
 
