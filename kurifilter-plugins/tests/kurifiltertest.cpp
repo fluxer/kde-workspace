@@ -307,8 +307,14 @@ void KUriFilterTest::executables()
     filter( "/I/dont/exist", 0, KUriFilterData::Error, minicliFilters );         //krazy:exclude=spelling
     filter( "/I/dont/exist#a", 0, KUriFilterData::Error, minicliFilters );       //krazy:exclude=spelling
     filter( "ktraderclient --help", "ktraderclient --help", KUriFilterData::Executable, minicliFilters ); // the args are in argsAndOptions()
-    filter( "/usr/bin/gs", "/usr/bin/gs", KUriFilterData::Executable, minicliFilters );
-    filter( "/usr/bin/gs -q -option arg1", "/usr/bin/gs -q -option arg1", KUriFilterData::Executable, minicliFilters ); // the args are in argsAndOptions()
+    const QByteArray kde4configexe = QFile::encodeName(KStandardDirs::findExe("kde4-config"));
+    if (kde4configexe.isEmpty()) {
+        kWarning() << "kde4-config not found";
+    } else {
+        filter( kde4configexe.constData(), kde4configexe.constData(), KUriFilterData::Executable, minicliFilters );
+        const QByteArray kde4configexeandargs = kde4configexe + " --path tmp";
+        filter( kde4configexeandargs.constData(), kde4configexeandargs.constData(), KUriFilterData::Executable, minicliFilters ); // the args are in argsAndOptions()
+    }
 
     // Typing 'cp' or any other valid unix command in konq's location bar should result in
     // a search using the default search engine
