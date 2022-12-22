@@ -2122,12 +2122,6 @@ void sftpProtocol::del(const KUrl &url, bool isfile)
     finished();
 }
 
-void sftpProtocol::slave_status()
-{
-    kDebug(KIO_SFTP_DB) << "connected to " << mHost << "?: " << mConnected;
-    slaveStatus((mConnected ? mHost : QString()), mConnected);
-}
-
 sftpProtocol::GetRequest::GetRequest(sftp_file file, sftp_attributes sb, ushort maxPendingRequests)
     : mFile(file), mSb(sb), mMaxPendingRequests(maxPendingRequests)
 {

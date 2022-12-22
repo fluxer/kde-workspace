@@ -50,7 +50,6 @@ public:
   virtual void copy(const KUrl &src, const KUrl &dest, int permissions, KIO::JobFlags flags);
   virtual void put(const KUrl &url, int permissions, KIO::JobFlags flags);
   virtual void closeConnection();
-  virtual void slave_status();
   virtual void del(const KUrl &url, bool isfile);
   virtual void chmod(const KUrl &url, int permissions);
   virtual void symlink(const QString &target, const KUrl &dest, KIO::JobFlags flags);
