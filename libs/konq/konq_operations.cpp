@@ -285,7 +285,7 @@ KonqOperations *KonqOperations::doDrop( const KFileItem & destItem, const KUrl &
                                         const QList<QAction*> & userActions  )
 {
     kDebug(1203) << "dest:" << dest;
-    QMap<QString, QString> metaData;
+    KIO::MetaData metaData;
     // Prefer local urls if possible, to avoid problems with desktop:/ urls from other users (#184403)
     const KUrl::List lst = KUrl::List::fromMimeData(ev->mimeData(), &metaData, KUrl::List::PreferLocalUrls);
     if (!lst.isEmpty()) { // Are they urls ?
