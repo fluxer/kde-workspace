@@ -229,8 +229,6 @@ int main( int argc, char* argv[] )
 
     KSMServer *server = new KSMServer( wm, only_local, args->isSet("lockscreen") );
 
-    KApplication::quitOnSignal();
-
     KCrash::setFlags(KCrash::Backtrace);
 
     // for the KDE-already-running check in startkde

@@ -68,7 +68,6 @@ int main(int argc, char **argv)
     // This app is started automatically, no need for session management
     app.disableSessionManagement();
     app.setQuitOnLastWindowClosed(false);
-    app.quitOnSignal();
 
     QDBusConnection session = QDBusConnection::sessionBus();
     if (!session.isConnected()) {

@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     KApplication a;
-    KApplication::quitOnSignal();
     KIconLoader::global()->addAppDir("ksmserver");
     qAddPostRoutine(KSMShutdownFeedback::stop);
 

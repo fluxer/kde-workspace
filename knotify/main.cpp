@@ -57,7 +57,6 @@ int main(int argc, char **argv)
     // in which case there is a deadlock with ksmserver waiting for knotify to finish
     // startup and knotify waiting to register with ksmserver
     app.disableSessionManagement();
-    app.quitOnSignal();
 
     QDBusConnection session = QDBusConnection::sessionBus();
     if (!session.isConnected()) {

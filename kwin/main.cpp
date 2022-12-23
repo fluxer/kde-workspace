@@ -248,7 +248,6 @@ bool Application::setup()
     }
     connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()), Qt::DirectConnection);
 
-    KApplication::quitOnSignal();
     KCrash::setFlags(KCrash::AutoRestart);
 
     initting = true; // Startup...
