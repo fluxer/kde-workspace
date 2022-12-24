@@ -202,18 +202,10 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
         outdata->append(contentForDirectory(pathinfo.filePath(), m_directory));
     } else if (pathinfo.isFile()) {
-        QFile pathfile(pathinfo.filePath());
-        if (!pathfile.open(QFile::ReadOnly)) {
-            kWarning() << "Could not open" << pathinfo.filePath() << pathfile.errorString();
-            outdata->append(s_data500);
-            *outhttpstatus = 500;
-            outheaders->insert("Content-Type", "text/html; charset=UTF-8");
-        } else {
-            const QString filemime = getFileMIME(pathinfo.filePath());
-            *outhttpstatus = 200;
-            outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
-            outfilepath->append(pathinfo.filePath());
-        };
+        const QString filemime = getFileMIME(pathinfo.filePath());
+        *outhttpstatus = 200;
+        outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
+        outfilepath->append(pathinfo.filePath());
     } else {
         outdata->append(s_data404);
         *outhttpstatus = 404;
