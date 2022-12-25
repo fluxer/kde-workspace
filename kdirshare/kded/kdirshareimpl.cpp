@@ -248,7 +248,7 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
     } else if (pathinfo.isFile()) {
         const QString filemime = getFileMIME(pathinfo.filePath());
         *outhttpstatus = 200;
-        outheaders->insert("Content-Type", QString::fromLatin1("%1; charset=UTF-8").arg(filemime).toAscii());
+        outheaders->insert("Content-Type", filemime.toAscii());
         outfilepath->append(pathinfo.filePath());
     } else {
         outdata->append(s_data404);
