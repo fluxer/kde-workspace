@@ -175,7 +175,7 @@ QString KDirShareImpl::serve(const QString &dirpath,
         return m_error;
     }
     if (!m_user.isEmpty() && !m_password.isEmpty()) {
-        if (!setAuthenticate(m_user.toUtf8(), m_password.toUtf8(), i18n("Not authorized"))) {
+        if (!setAuthenticate(m_user.toUtf8(), m_password.toUtf8())) {
             m_error = i18n("Could not set authentication: %1", errorString());
             return m_error;
         }
