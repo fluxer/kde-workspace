@@ -29,11 +29,14 @@ public:
     KDirShareImpl(QObject *parent = nullptr);
     ~KDirShareImpl();
 
-    bool setDirectory(const QString &dirpath);
-    bool serve(const QHostAddress &address, const quint16 port);
-    bool publish();
-
-    QString publishError() const;
+    QString serve(const QString &dirpath,
+                  const quint16 portmin, const quint16 portmax,
+                  const QString &username, const QString &password);
+    QString directory() const;
+    quint16 portMin() const;
+    quint16 portMax() const;
+    QString user() const;
+    QString password() const;
 
 protected:
     void respond(
@@ -43,7 +46,11 @@ protected:
 
 private:
     QString m_directory;
-    quint16 m_port;
+    quint16 m_portmin;
+    quint16 m_portmax;
+    QString m_user;
+    QString m_password;
+    QString m_error;
     KDNSSD m_kdnssd;
 };
 

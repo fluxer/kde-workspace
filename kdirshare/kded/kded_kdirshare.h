@@ -25,7 +25,7 @@
 #include <kdedmodule.h>
 #include <kpasswdstore.h>
 
-class KDirShareThread;
+class KDirShareImpl;
 
 class KDirShareModule: public KDEDModule
 {
@@ -53,7 +53,7 @@ private Q_SLOTS:
     void slotDelayedRestore();
 
 private:
-    QList<KDirShareThread*> m_dirshares;
+    QList<KDirShareImpl*> m_dirshares;
     KPasswdStore m_passwdstore;
 };
 
