@@ -150,6 +150,7 @@ KDirShareImpl::KDirShareImpl(QObject *parent)
     m_portmin(s_kdirshareportmin),
     m_portmax(s_kdirshareportmax)
 {
+    setServerID(QString::fromLatin1("KDirShare"));
 }
 
 KDirShareImpl::~KDirShareImpl()
@@ -223,9 +224,6 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
                             QString *outfilepath)
 {
     // qDebug() << Q_FUNC_INFO << url;
-
-    outheaders->insert("Server", "KDirShare");
-
     const QString normalizedpath = QUrl::fromPercentEncoding(url);
     QFileInfo pathinfo(m_directory + QLatin1Char('/') + normalizedpath);
     // qDebug() << Q_FUNC_INFO << normalizedpath << pathinfo.filePath();
