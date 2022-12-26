@@ -19,6 +19,7 @@
 #include "kdirshareimpl.h"
 #include "kdirshare.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QBuffer>
 #include <QPixmap>
@@ -144,84 +145,25 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     return data;
 }
 
-KDirShareImpl::KDirShareImpl(QObject *parent)
-    : KHTTP(parent),
-    m_directory(QDir::currentPath()),
-    m_portmin(s_kdirshareportmin),
-    m_portmax(s_kdirshareportmax)
+KDirServer::KDirServer(QObject *parent)
+    : KHTTP(parent)
 {
-    setServerID(QString::fromLatin1("KDirShare"));
 }
 
-KDirShareImpl::~KDirShareImpl()
+bool KDirServer::setDirectory(const QString &directory)
 {
-    m_kdnssd.unpublishService();
-    stop();
-}
-
-QString KDirShareImpl::serve(const QString &dirpath,
-                             const quint16 portmin, const quint16 portmax,
-                             const QString &username, const QString &password)
-{
-    // qDebug() << Q_FUNC_INFO << dirpath << portmin << portmax << username << password;
-    const quint16 port = getPort(portmin, portmax);
-    m_directory = dirpath;
-    m_portmin = portmin;
-    m_portmax = portmax;
-    m_user = username;
-    m_password = password;
-    m_error.clear();
     if (!QDir(m_directory).exists()) {
-        m_error = i18n("Directory does not exist: %1", m_directory);
-        return m_error;
+        return false;
     }
-    if (!m_user.isEmpty() && !m_password.isEmpty()) {
-        if (!setAuthenticate(m_user.toUtf8(), m_password.toUtf8())) {
-            m_error = i18n("Could not set authentication: %1", errorString());
-            return m_error;
-        }
-    }
-    if (!start(QHostAddress(QHostAddress::Any), port)) {
-        m_error = i18n("Could not serve: %1", errorString());
-        return m_error;
-    }
-    if (!m_kdnssd.publishService("_http._tcp", port, getTitle(m_directory))) {
-        stop();
-        m_error = i18n("Could not publish service: %1", m_kdnssd.errorString());
-        return m_error;
-    }
-    return m_error;
-}
-QString KDirShareImpl::directory() const
-{
-    return m_directory;
-}
-
-quint16 KDirShareImpl::portMin() const
-{
-    return m_portmin;
-}
-
-quint16 KDirShareImpl::portMax() const
-{
-    return m_portmax;
-}
-
-QString KDirShareImpl::user() const
-{
-    return m_user;
-}
-
-QString KDirShareImpl::password() const
-{
-    return m_password;
+    m_directory = directory;
+    return true;
 }
 
 // for reference:
 // https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
-                            ushort *outhttpstatus, KHTTPHeaders *outheaders,
-                            QString *outfilepath)
+void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
+                         ushort *outhttpstatus, KHTTPHeaders *outheaders,
+                         QString *outfilepath)
 {
     // qDebug() << Q_FUNC_INFO << url;
     const QString normalizedpath = QUrl::fromPercentEncoding(url);
@@ -255,6 +197,119 @@ void KDirShareImpl::respond(const QByteArray &url, QByteArray *outdata,
         *outhttpstatus = 404;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
     }
+}
+
+
+KDirShareImpl::KDirShareImpl(QObject *parent)
+    : QThread(parent),
+    m_directory(QDir::currentPath()),
+    m_portmin(s_kdirshareportmin),
+    m_portmax(s_kdirshareportmax),
+    m_starting(false),
+    m_kdirserver(nullptr)
+{
+    connect(
+        this, SIGNAL(unblock()),
+        this, SLOT(slotUnblock())
+    );
+    connect(
+        this, SIGNAL(serveError(QString)),
+        this, SLOT(slotServeError(QString))
+    );
+}
+
+KDirShareImpl::~KDirShareImpl()
+{
+    m_kdnssd.unpublishService();
+    delete m_kdirserver;
+}
+
+QString KDirShareImpl::serve(const QString &dirpath,
+                             const quint16 portmin, const quint16 portmax,
+                             const QString &username, const QString &password)
+{
+    // qDebug() << Q_FUNC_INFO << dirpath << portmin << portmax << username << password;
+    m_directory = dirpath;
+    m_portmin = portmin;
+    m_portmax = portmax;
+    m_user = username;
+    m_password = password;
+    m_error.clear();
+    m_starting = true;
+    m_error.clear();
+    start();
+    while (m_starting) {
+        QCoreApplication::processEvents();
+    }
+    return m_error;
+}
+QString KDirShareImpl::directory() const
+{
+    return m_directory;
+}
+
+quint16 KDirShareImpl::portMin() const
+{
+    return m_portmin;
+}
+
+quint16 KDirShareImpl::portMax() const
+{
+    return m_portmax;
+}
+
+QString KDirShareImpl::user() const
+{
+    return m_user;
+}
+
+QString KDirShareImpl::password() const
+{
+    return m_password;
+}
+
+void KDirShareImpl::run()
+{
+    m_kdirserver = new KDirServer();
+    m_kdirserver->setServerID(QString::fromLatin1("KDirShare"));
+
+    if (!m_kdirserver->setDirectory(m_directory)) {
+        emit serveError(i18n("Directory does not exist: %1", m_directory));
+        emit unblock();
+        return;
+    }
+    if (!m_user.isEmpty() && !m_password.isEmpty()) {
+        if (!m_kdirserver->setAuthenticate(m_user.toUtf8(), m_password.toUtf8())) {
+            emit serveError(i18n("Could not set authentication: %1", m_kdirserver->errorString()));
+            emit unblock();
+            return;
+        }
+    }
+    const quint16 port = getPort(m_portmin, m_portmax);
+    if (!m_kdirserver->start(QHostAddress(QHostAddress::Any), port)) {
+        emit serveError(i18n("Could not serve: %1", m_kdirserver->errorString()));
+        emit unblock();
+        return;
+    }
+    if (!m_kdnssd.publishService("_http._tcp", port, getTitle(m_directory))) {
+        m_kdirserver->stop();
+        emit serveError(i18n("Could not publish service: %1", m_kdnssd.errorString()));
+        emit unblock();
+        return;
+    }
+    emit unblock();
+
+    exec();
+}
+
+void KDirShareImpl::slotUnblock()
+{
+    m_starting = false;
+}
+
+void KDirShareImpl::slotServeError(const QString &error)
+{
+    m_error = error;
 }
 
 #include "moc_kdirshareimpl.cpp"

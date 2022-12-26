@@ -19,10 +19,29 @@
 #ifndef KDIRSHAREIMPL_H
 #define KDIRSHAREIMPL_H
 
+#include <QThread>
 #include <khttp.h>
 #include <kdnssd.h>
 
-class KDirShareImpl : public KHTTP
+class KDirServer : public KHTTP
+{
+public:
+    KDirServer(QObject *parent = nullptr);
+
+    bool setDirectory(const QString &directory);
+
+protected:
+    void respond(
+        const QByteArray &url,
+        QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders, QString *outfilepath
+    ) final;
+
+private:
+    QString m_directory;
+};
+
+
+class KDirShareImpl : public QThread
 {
     Q_OBJECT
 public:
@@ -39,10 +58,15 @@ public:
     QString password() const;
 
 protected:
-    void respond(
-        const QByteArray &url,
-        QByteArray *outdata, ushort *outhttpstatus, KHTTPHeaders *outheaders, QString *outfilepath
-    ) final;
+    void run() final;
+
+Q_SIGNALS:
+    void unblock();
+    void serveError(const QString &error);
+
+private Q_SLOTS:
+    void slotUnblock();
+    void slotServeError(const QString &error);
 
 private:
     QString m_directory;
@@ -51,6 +75,8 @@ private:
     QString m_user;
     QString m_password;
     QString m_error;
+    bool m_starting;
+    KDirServer* m_kdirserver;
     KDNSSD m_kdnssd;
 };
 
