@@ -32,7 +32,7 @@
 
 class ProfileBookmarks {
 public:
-    ProfileBookmarks(Profile &profile) : m_profile(profile) {}
+    ProfileBookmarks(const Profile &profile) : m_profile(profile) {}
     inline QList<QVariantMap> bookmarks() { return m_bookmarks; }
     inline Profile profile() { return m_profile; }
     void tearDown() { m_profile.favicon()->teardown(); m_bookmarks.clear(); }
@@ -45,14 +45,14 @@ private:
 Chrome::Chrome( FindProfile* findProfile, QObject* parent )
     : QObject(parent)
 {
-    foreach(Profile profile, findProfile->find()) {
+    foreach (const Profile &profile, findProfile->find()) {
         m_profileBookmarks << new ProfileBookmarks(profile);
     }
 }
 
 Chrome::~Chrome()
 {
-    foreach(ProfileBookmarks *profileBookmark, m_profileBookmarks) {
+    foreach (ProfileBookmarks *profileBookmark, m_profileBookmarks) {
         delete profileBookmark;
     }
 }
@@ -60,7 +60,7 @@ Chrome::~Chrome()
 QList<BookmarkMatch> Chrome::match(const QString &term, bool addEveryThing)
 {
     QList<BookmarkMatch> results;
-    foreach(ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
+    foreach (ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
         results << match(term, addEveryThing, profileBookmarks);
     }
     return results;
@@ -80,7 +80,7 @@ QList<BookmarkMatch> Chrome::match(const QString &term, bool addEveryThing, Prof
 
 void Chrome::prepare()
 {
-    foreach(ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
+    foreach (ProfileBookmarks *profileBookmarks, m_profileBookmarks) {
         Profile profile = profileBookmarks->profile();
         QFile bookmarksFile(profile.path());
         if (!bookmarksFile.open(QFile::ReadOnly)) {
@@ -89,11 +89,11 @@ void Chrome::prepare()
 
         QJsonDocument jsondoc = QJsonDocument::fromJson(bookmarksFile.readAll());
         QVariant result = jsondoc.toVariant();
-        if(jsondoc.isNull() || !result.toMap().contains("roots")) {
+        if (jsondoc.isNull() || !result.toMap().contains("roots")) {
             return;
         }
         QVariantMap entries = result.toMap().value("roots").toMap();
-        foreach(QVariant folder, entries.values()) {
+        foreach (const QVariant &folder, entries.values()) {
             parseFolder(folder.toMap(), profileBookmarks);
         }
         profile.favicon()->prepare();
@@ -110,7 +110,7 @@ void Chrome::teardown()
 void Chrome::parseFolder(const QVariantMap &entry, ProfileBookmarks *profile)
 {
     QVariantList children = entry.value("children").toList();
-    foreach(QVariant child, children) {
+    foreach (const QVariant &child, children) {
         QVariantMap entry = child.toMap();
         if(entry.value("type").toString() == "folder") {
             parseFolder(entry, profile);

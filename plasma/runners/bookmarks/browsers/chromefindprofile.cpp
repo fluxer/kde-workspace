@@ -47,7 +47,7 @@ QList<Profile> FindChromeProfile::find()
     }
 
     QJsonDocument jsondoc = QJsonDocument::fromJson(localStateFile.readAll());
-    if(jsondoc.isNull()) {
+    if (jsondoc.isNull()) {
         kDebug(kdbg_code) << "error opening " << QFileInfo(localStateFile).absoluteFilePath();
         return profiles;
     }
@@ -55,7 +55,7 @@ QList<Profile> FindChromeProfile::find()
     QVariantMap localState = jsondoc.toVariant().toMap();
     QVariantMap profilesConfig = localState.value("profile").toMap().value("info_cache").toMap();
 
-    foreach(QString profile, profilesConfig.keys()) {
+    foreach (const QString &profile, profilesConfig.keys()) {
         QString profilePath = QString("%1/%2").arg(configDirectory).arg(profile);
         QString profileBookmarksPath = QString("%1/%2").arg(profilePath).arg("Bookmarks");
         profiles << Profile(profileBookmarksPath, new Favicon(this));
