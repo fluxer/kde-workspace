@@ -169,11 +169,24 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
     const QString normalizedpath = QUrl::fromPercentEncoding(url);
     QFileInfo pathinfo(m_directory + QLatin1Char('/') + normalizedpath);
     // qDebug() << Q_FUNC_INFO << normalizedpath << pathinfo.filePath();
-    if (normalizedpath.startsWith(QLatin1String("/kdirshare_icons/"))) {
-        const QPixmap iconpixmap = KIcon(normalizedpath.mid(17)).pixmap(20);
+    if (normalizedpath == QLatin1String("/favicon.ico")
+        || normalizedpath.startsWith(QLatin1String("/kdirshare_icons/"))) {
+        const bool isfavicon = (normalizedpath == QLatin1String("/favicon.ico"));
+        QPixmap iconpixmap;
+        QByteArray iconformat;
+        QByteArray iconmime;
+        if (isfavicon) {
+            iconpixmap = KIcon("folder-html").pixmap(32);
+            iconformat = "ICO";
+            iconmime = "image/vnd.microsoft.icon";
+        } else {
+            iconpixmap = KIcon(normalizedpath.mid(17)).pixmap(20);
+            iconformat = "PNG";
+            iconmime = "image/PNG";
+        }
         QBuffer iconbuffer;
         iconbuffer.open(QBuffer::WriteOnly);
-        if (!iconpixmap.save(&iconbuffer, "PNG")) {
+        if (!iconpixmap.save(&iconbuffer, iconformat)) {
             kWarning() << "Could not save image";
             outdata->append(s_data500);
             *outhttpstatus = 500;
@@ -181,7 +194,7 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
         } else {
             outdata->append(iconbuffer.data());
             *outhttpstatus = 200;
-            outheaders->insert("Content-Type", "image/png");
+            outheaders->insert("Content-Type", iconmime);
         }
     } else if (pathinfo.isDir()) {
         *outhttpstatus = 200;
