@@ -3,9 +3,7 @@ exec=kio_trash
 protocol=trash
 input=none
 output=filesystem
-# AccessDate doesn't make sense.
-# OTOH we need deletion date :)
-listing=Name,Type,Size,Date,Access,Owner,Group,Link
+listing=true
 reading=true
 writing=true
 makedir=false

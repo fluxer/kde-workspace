@@ -2,8 +2,8 @@
 exec=kio_sftp
 protocol=sftp
 input=none
-listing=Name,Type,Size,Date,AccessDate,Access,Owner,Group,Link,MimeType
 output=filesystem
+listing=true
 reading=true
 writing=true
 makedir=true
