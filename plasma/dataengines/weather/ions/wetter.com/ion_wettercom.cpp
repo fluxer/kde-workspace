@@ -329,13 +329,11 @@ void WetterComIon::findPlace(const QString& place, const QString& source)
 
 void WetterComIon::setup_slotDataArrived(KIO::Job *job, const QByteArray &data)
 {
-    QByteArray local = data;
-
     if (data.isEmpty() || !m_searchJobXml.contains(job)) {
         return;
     }
 
-    m_searchJobXml[job]->addData(local);
+    m_searchJobXml[job]->addData(data);
 }
 
 void WetterComIon::setup_slotJobFinished(KJob *job)
