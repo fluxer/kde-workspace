@@ -1,9 +1,6 @@
 [Protocol]
 protocol=network
 
-input=none
-output=filesystem
-
 X-DocPath=kioslave/network/index.html
 
 Icon=network-workgroup

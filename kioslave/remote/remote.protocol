@@ -1,8 +1,6 @@
 [Protocol]
 exec=kio_remote
 protocol=remote
-input=none
-output=filesystem
 listing=true
 reading=true
 writing=false

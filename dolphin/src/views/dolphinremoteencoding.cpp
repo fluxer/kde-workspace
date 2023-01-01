@@ -79,11 +79,8 @@ void DolphinRemoteEncoding::slotAboutToOpenUrl()
     m_currentURL = m_actionHandler->currentView()->url();
 
     if (m_currentURL.protocol() != oldURL.protocol()) {
-        // This plugin works on ftp, fish, etc.
-        // everything whose type is T_FILESYSTEM except for local files
-        if (!m_currentURL.isLocalFile() &&
-            KProtocolManager::outputType(m_currentURL) == KProtocolInfo::T_FILESYSTEM) {
-
+        // This works on ftp, sftp, etc.
+        if (!m_currentURL.isLocalFile() && KProtocolManager::isSourceProtocol(m_currentURL)) {
             m_menu->setEnabled(true);
             loadSettings();
         } else {
