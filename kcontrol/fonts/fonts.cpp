@@ -64,10 +64,10 @@
 static QPixmap aaPixmap(const int t)
 {
     static const char* const aaPixmaps[] = {
-        "kcminput/pics/aa_rgb.png",
-        "kcminput/pics/aa_bgr.png",
-        "kcminput/pics/aa_vrgb.png",
-        "kcminput/pics/aa_vbgr.png",
+        "kcmfonts/pics/aa_rgb.png",
+        "kcmfonts/pics/aa_bgr.png",
+        "kcmfonts/pics/aa_vrgb.png",
+        "kcmfonts/pics/aa_vbgr.png",
     };
     const QString pixmapfilepath = KGlobal::dirs()->findResource("data", aaPixmaps[t]);
     if (pixmapfilepath.isEmpty()) {
