@@ -27,18 +27,21 @@
 #include <Plasma/Package>
 #include <Plasma/PackageMetadata>
 
-//this is deliberately _not_ in i18n, the information is for uploading to a bug report so should always be in
-//English so as to be useful for developers
+// this is deliberately _not_ in i18n, the information is for uploading to a bug report so should always be in
+// English so as to be useful for developers
 
 QString SupportInformation::generateSupportInformation(Plasma::Corona *corona)
 {
     QBuffer infoBuffer;
     infoBuffer.open(QIODevice::WriteOnly);
-    QDebug stream(&infoBuffer);
-    SupportInformation info(stream);
 
-    info.addHeader();
-    info.addInformationForCorona(corona);
+    {
+        QDebug stream(&infoBuffer);
+        SupportInformation info(stream);
+
+        info.addHeader();
+        info.addInformationForCorona(corona);
+    }
 
     const QByteArray infoData = infoBuffer.data();
     return QString::fromAscii(infoData.constData(), infoData.size());
@@ -52,10 +55,10 @@ SupportInformation::SupportInformation(const QDebug &outputStream) :
 void SupportInformation::addHeader()
 {
     m_stream << "Plasma-desktop Support Information:\n"
-             << "The following information should be used when requesting support on e.g. http://forum.kde.org\n"
+             << "The following information should be used when requesting support.\n"
              << "It provides information about the currently running instance and which applets are used.\n"
-             << "Please post the information provided underneath this introductory text to a paste bin service "
-             << "like http://paste.kde.org instead of pasting into support threads.\n\n";
+             << "Please include the information provided underneath this introductory text along with "
+             << "whatever you think may be relevant to the issue.\n\n";
 
     m_stream << "Version\n";
     m_stream << "=======\n";
@@ -78,7 +81,7 @@ void SupportInformation::addInformationForCorona(Plasma::Corona *corona)
 
 void SupportInformation::addInformationForContainment(Plasma::Containment *containment)
 {
-    //a containment is also an applet so print standard applet information out
+    // a containment is also an applet so print standard applet information out
     addInformationForApplet(containment);
 
     foreach (Plasma::Applet *applet, containment->applets()) {
@@ -106,14 +109,14 @@ void SupportInformation::addInformationForApplet(Plasma::Applet *applet)
         m_stream << "Author: " << applet->package()->metadata().author() << '\n';
     }
 
-    //runtime info
+    // runtime info
     m_stream << "Failed To Launch: " << applet->hasFailedToLaunch() << '\n';
     m_stream << "ScreenRect: " << applet->screenRect() << '\n';
     m_stream << "FormFactor: " << applet->formFactor() << '\n';
 
     m_stream << "Config Group Name: " << applet->config().name() << '\n';
 
-    m_stream << '\n'; //insert a blank line
+    m_stream << '\n'; // insert a blank line
 }
 
 void SupportInformation::addSeperator()
