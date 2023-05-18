@@ -56,7 +56,6 @@
 // use text editor KPart for syntax highlighting?
 // interative help?
 static const QString s_autosaveFileName("interactiveconsoleautosave.js");
-static const QString s_kwinService = "org.kde.kwin.Scripting";
 
 InteractiveConsole::InteractiveConsole(Plasma::Corona *corona, QWidget *parent)
     : KDialog(parent),
