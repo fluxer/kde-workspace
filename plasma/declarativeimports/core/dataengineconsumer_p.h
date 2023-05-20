@@ -68,5 +68,3 @@ private:
 } // namespace Plasma
 
 #endif
-
-

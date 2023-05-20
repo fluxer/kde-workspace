@@ -42,8 +42,8 @@ ServiceMonitor::~ServiceMonitor()
 
 void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
 {
-    QString engineName = job->parameters()["EngineName"].toString();
-    QString location = job->destination();
+    const QString engineName = job->parameters()["EngineName"].toString();
+    const QString location = job->destination();
     kDebug() << "engine ready!" << engineName << location;
 }
 
@@ -103,5 +103,3 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 } // namespace Plasma
 
 #include "moc_dataengineconsumer_p.cpp"
-
-

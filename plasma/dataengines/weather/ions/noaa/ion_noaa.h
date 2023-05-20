@@ -26,13 +26,9 @@
 #include <QStringList>
 #include <QDateTime>
 
-class KJob;
-namespace KIO
-{
-    class Job;
-} // namespace KIO
 #include <kdemacros.h>
-
+#include <KJob>
+#include <KIO/Job>
 #include <Plasma/DataEngine>
 
 #include "../dataengineconsumer_p.h"
