@@ -42,24 +42,14 @@ ServiceMonitor::~ServiceMonitor()
 
 void ServiceMonitor::slotJobFinished(Plasma::ServiceJob *job)
 {
-    //kDebug() << "engine ready!";
     QString engineName = job->parameters()["EngineName"].toString();
     QString location = job->destination();
-    QPair<QString, QString> pair(location, engineName);
-    //kDebug() << "pair = " << pair;
-    if (!m_consumer->m_remoteEngines.contains(pair)) {
-        kDebug() << "engine does not exist yet!";
-    } else {
-        KUrl engineLocation(location);
-        engineLocation.setFileName(job->result().toString());
-        //kDebug() << "setting location : " << engineLocation.prettyUrl();
-      //  m_consumer->m_remoteEngines[pair]->setLocation(engineLocation);
-    }
+    kDebug() << "engine ready!" << engineName << location;
 }
 
 void ServiceMonitor::slotServiceReady(Plasma::Service *plasmoidService)
 {
-    //kDebug() << "service ready!";
+    kDebug() << "service ready!";
     if (!m_consumer->m_engineNameForService.contains(plasmoidService)) {
         kDebug() << "no engine name for service!";
         kDebug() << "amount of services in map: " << m_consumer->m_engineNameForService.count();
@@ -109,14 +99,6 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 
     return engine;
 }
-
-DataEngine *DataEngineConsumer::remoteDataEngine(const KUrl &location, const QString &name)
-{
-    Q_UNUSED(location);
-    Q_UNUSED(name);
-    return 0;
-}
-
 
 } // namespace Plasma
 
