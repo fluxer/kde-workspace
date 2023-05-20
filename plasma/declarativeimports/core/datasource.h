@@ -37,7 +37,6 @@
 
 namespace Plasma
 {
-class DataEngine;
 
 class DataSource : public QObject, DataEngineConsumer
 {
@@ -129,15 +128,11 @@ Q_SIGNALS:
     void sourcesChanged();
 
 private:
-    QString m_id;
     int m_interval;
     QString m_engine;
     QVariantHash m_data;
     Plasma::DataEngine* m_dataEngine;
     QStringList m_connectedSources;
-    QStringList m_oldSources;
-    QStringList m_newSources;
-    Changes m_changes;
     QHash<QString, Plasma::Service *> m_services;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(DataSource::Changes)
