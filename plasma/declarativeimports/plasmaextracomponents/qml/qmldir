@@ -7,6 +7,3 @@ Paragraph 0.1 Paragraph.qml
 PageRow 0.1 PageRow.qml
 ScrollArea 0.1 ScrollArea.qml
 Title 0.1 Title.qml
-
-PressedAnimation 0.1 animations/PressedAnimation.qml
-ReleasedAnimation 0.1 animations/ReleasedAnimation.qml

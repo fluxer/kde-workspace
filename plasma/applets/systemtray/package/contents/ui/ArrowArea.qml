@@ -23,7 +23,6 @@
 
 import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.plasma.extras 0.1 as PlasmaExtras
 
 Item {
     id: arrow_area
@@ -34,8 +33,6 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: togglePopup()
-        onPressed: PlasmaExtras.PressedAnimation { targetItem: arrow_widget }
-        onReleased: PlasmaExtras.ReleasedAnimation { targetItem: arrow_widget }
     }
 
     PlasmaCore.SvgItem {
@@ -129,7 +126,22 @@ Item {
                 target: arrow_widget
                 elementId: dialog.visible ? "down-arrow" : "up-arrow"
             }
+        },
+ 
+        State {
+            name: "NORMAL"
+            PropertyChanges { target: arrow_widget; scale: 1.0 }
+        },
+
+        State {
+            name: "PRESSED"
+            PropertyChanges { target: arrow_widget; scale: 0.9 }
         }
     ]
 
+    transitions: [
+        Transition {
+            NumberAnimation { properties: "scale"; duration: 50 }
+        }
+    ]
 }
