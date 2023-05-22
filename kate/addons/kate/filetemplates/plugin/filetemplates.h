@@ -132,8 +132,6 @@ class KateFileTemplates : public Kate::Plugin
     class KAction *mActionAny;
     QList<class TemplateInfo*> m_templates;
     class KDirWatch *m_dw;
-    class KUser *m_user;
-    class KConfig *m_emailstuff;
     class KActionMenu *m_menu;
 };
 

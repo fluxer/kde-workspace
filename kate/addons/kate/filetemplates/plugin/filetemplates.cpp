@@ -154,11 +154,8 @@ KateFileTemplates::KateFileTemplates( QObject* parent, const QList<QVariant> &du
   connect( m_dw, SIGNAL(dirty(QString)),
            this, SLOT(updateTemplateDirs(QString)) );
 
-//   m_templates.setAutoDelete( true );
+  // m_templates.setAutoDelete( true );
   updateTemplateDirs();
-
-  m_user = 0;
-  m_emailstuff = 0;
 }
 
 /**
@@ -166,7 +163,7 @@ KateFileTemplates::KateFileTemplates( QObject* parent, const QList<QVariant> &du
  */
 void KateFileTemplates::updateTemplateDirs(const QString &d)
 {
-  kDebug()<<"updateTemplateDirs called with arg "<<d;
+  kDebug() << "updateTemplateDirs called with arg" << d;
 
   const QStringList templates = KGlobal::dirs()->findAllResources(
       "data","kate/plugins/katefiletemplates/templates/*.katetemplate",
@@ -232,9 +229,7 @@ void KateFileTemplates::updateTemplateDirs(const QString &d)
 
 KateFileTemplates::~KateFileTemplates()
 {
-//   m_acRecentTemplates->saveEntries( KGlobal::config(), "Recent Templates" );
-  delete m_emailstuff;
-  delete m_user;
+  // m_acRecentTemplates->saveEntries( KGlobal::config(), "Recent Templates" );
 }
 
 Kate::PluginView *KateFileTemplates::createView (Kate::MainWindow *mainWindow)
@@ -277,7 +272,7 @@ void KateFileTemplates::refreshMenu( KMenu *menu )
       QMenu *sm=menu->addMenu(m_templates[ i ]->group);
       submenus.insert( m_templates[ i ]->group, sm );
     }
-//     kDebug()<<"=== ICON: '"<<m_templates[ i ].icon<<"'";
+    // kDebug() << "=== ICON: '" << m_templates[ i ].icon << "'";
     QMenu *sm=submenus[m_templates.at(i)->group];
     QAction *a;
     if ( ! m_templates[ i ]->icon.isEmpty() )
@@ -331,7 +326,7 @@ void KateFileTemplates::slotAny()
 void KateFileTemplates::slotOpenTemplate()
 {
   int index=static_cast<QAction*>(sender())->data().toInt();
-  kDebug()<<"slotOpenTemplate( "<<index<<" )";
+  kDebug() << "slotOpenTemplate(" << index << ")";
   if ( index < 0 || index > m_templates.count() ) return;
   slotOpenTemplate( KUrl( m_templates.at( index )->filename ) );
 }
@@ -341,7 +336,7 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
   // check if the file can be opened
   QString tmpfile;
   QString filename = url.fileName();
-  kDebug()<<"file: "<<filename;
+  kDebug() << "file:" << filename;
   if ( KIO::NetAccess::download( url, tmpfile, 0L ) )
   {
     bool isTemplate ( filename.endsWith( ".katetemplate" ) );
@@ -392,10 +387,10 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
         {
           QRegExp reHl( "\\bhighlight\\s*=\\s*(.+)(?:\\s+\\w+\\s*=|$)", Qt::CaseInsensitive );
           reHl.setMinimal( true );
-            kDebug()<<"looking for a hl mode";
+            kDebug() << "looking for a hl mode";
           if ( reHl.indexIn( tmp ) > -1 )
           {
-            kDebug()<<"looking for a hl mode -- "<<reHl.cap();
+            kDebug() << "looking for a hl mode -- " << reHl.cap();
             // this is overly complex, too bad the interface is
             // not providing a reasonable method..
             QString hlmode = reHl.cap( 1 );
@@ -453,16 +448,12 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
     doc->setModified( false );
 
     QApplication::restoreOverrideCursor();
-//     m_acRecentTemplates->addUrl( url );
+    // m_acRecentTemplates->addUrl( url );
 
     // clean up
-    delete m_user;
-    m_user = 0;
-    delete m_emailstuff;
-    m_emailstuff = 0;
     if (isTemplate) {
-	    KTextEditor::TemplateInterface *ti=qobject_cast<KTextEditor::TemplateInterface*>(doc->activeView());
-	    ti->insertTemplateText(KTextEditor::Cursor(0,0),str,QMap<QString,QString>());
+      KTextEditor::TemplateInterface *ti=qobject_cast<KTextEditor::TemplateInterface*>(doc->activeView());
+      ti->insertTemplateText(KTextEditor::Cursor(0,0),str,QMap<QString,QString>());
     } else {
       doc->insertText( KTextEditor::Cursor(0, 0), str );
       view->setCursorPosition(KTextEditor::Cursor(line, col));
@@ -836,14 +827,15 @@ void KateTemplateWizard::slotStateChanged()
     case 0: // origin
     {
       int _t = bgOrigin->checkedId();
-      kDebug()<<"selected button:"<<_t;
+      kDebug() << "selected button:" <<_t;
       sane = ( _t == 1 ||
                ( _t == 2 && ! urOrigin->url().isEmpty() ) ||
                ( _t == 3 && ! btnTmpl->text().isEmpty() ) );
-//       setAppropriate( page(3), _t == 2 );
+      // setAppropriate( page(3), _t == 2 );
+      break;
     }
-    break;
     case 1: // template properties
+    {
       // if origin is a existing template, let us try setting some of the properties
       if ( bgOrigin->checkedId() == 3 )
       {
@@ -855,7 +847,8 @@ void KateTemplateWizard::slotStateChanged()
             kti->cmbGroup->setEditText( info->group );
         }
       }
-    break;
+      break;
+    }
     case 2: // location
     {
       // If there is a template name, and the user did not enter text into
@@ -864,12 +857,13 @@ void KateTemplateWizard::slotStateChanged()
       int _t = bgLocation->checkedId();
       sane = ( ( _t == 1 && (! leTemplateFileName->text().isEmpty() || ! kti->leTemplate->text().isEmpty() ) ) ||
           ( _t == 2 && ! urLocation->url().isEmpty() ) );
+      break;
     }
-    break;
-    default:
-    break;
+    default: {
+      break;
+    }
   }
-  kDebug()<<"enabling 'next' button:"<<sane;
+  kDebug() << "enabling 'next' button:" << sane;
   button( QWizard::NextButton )->setEnabled( sane );
 }
 
@@ -953,7 +947,7 @@ void KateTemplateWizard::accept()
 
   //   2) If a file or template is chosen, open that. and fill the data into a string
   int toid = bgOrigin->checkedId(); // 1 = blank, 2 = file, 3 = template
-  kDebug()<<"=== create template: origin type "<<toid;
+  kDebug() << "=== create template: origin type" << toid;
   if ( toid > 1 )
   {
     KUrl u;
@@ -1025,7 +1019,7 @@ void KateTemplateWizard::accept()
       QFile file( templateUrl.toLocalFile() );
          if ( file.open(QIODevice::WriteOnly) )
       {
-        kDebug()<<"file opened with succes";
+        kDebug() << "file opened with succes";
         QTextStream stream( &file );
         stream << str;
         file.close();
