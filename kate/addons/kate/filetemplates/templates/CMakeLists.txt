@@ -8,6 +8,5 @@ install(
     cppgpl.cpp.katetemplate
     cppgpl.hh.katetemplate
     language.xml.katetemplate
-    FindXXX.cmake.katetemplate
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kate/plugins/katefiletemplates/templates
 )

@@ -43,6 +43,7 @@
 #include <kurlrequester.h>
 #include <kuser.h>
 #include <kxmlguifactory.h>
+#include <kemailsettings.h>
 
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
@@ -456,7 +457,6 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
       ti->insertTemplateText(KTextEditor::Cursor(0,0),str,QMap<QString,QString>());
     } else {
       doc->insertText( KTextEditor::Cursor(0, 0), str );
-      view->setCursorPosition(KTextEditor::Cursor(line, col));
     }
   }
 }
@@ -701,14 +701,10 @@ KateTemplateWizard::KateTemplateWizard( QWidget *parent, KateFileTemplates *kft 
   glo->addWidget( kti, 1, 1 );
   addPage( page );
 
-  // get liekly values from KTE
-  QMap<QString, QString> map;
-  map[ "fullname" ] = "";
-  map[ "email" ] = "";
-
-  KTextEditor::TemplateInterface::expandMacros( map, parent );
-  QString sFullname = map["fullname"];
-  QString sEmail = map["email"];
+  // get liekly values from KEMailSettings
+  KEMailSettings mailsettings;
+  QString sFullname = mailsettings.getSetting(KEMailSettings::RealName);
+  QString sEmail = mailsettings.getSetting(KEMailSettings::EmailAddress);
   QString _s = sFullname;
   if ( ! sEmail.isEmpty() )
     _s += " <" + sEmail + '>';

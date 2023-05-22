@@ -2126,6 +2126,18 @@ bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
   if (!m_doc->isReadWrite())
     return false;
 
+  QString docText = templateString;
+  QMap<QString,QString>::const_iterator it = initialValues.constBegin();
+  while (it != initialValues.constEnd()) {
+    const QString toreplace = QString::fromLatin1("%{%1}").arg(it.key());
+    docText.replace(toreplace, it.value());
+    it++;
+  }
+  // TODO: handle %{cursor} and %{selection}
+  // TODO: ${foo} references in templates could be Shell variable - what now?
+
+  m_doc->insertText( c, docText );
+
   return true;
 }
 
