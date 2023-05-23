@@ -40,7 +40,7 @@
 #include <kaboutdata.h>
 
 K_PLUGIN_FACTORY(KateMailFilesFactory, registerPlugin<KateMailFilesPlugin>();)
-K_EXPORT_PLUGIN(KateMailFilesFactory(KAboutData("katemailfilesplugin","katemailfilesplugin",ki18n("Mail Files"), "0.1", ki18n("Support mailing files"), KAboutData::License_LGPL_V2)) )
+K_EXPORT_PLUGIN(KateMailFilesFactory(KAboutData("katemailfiles","katemailfilesplugin",ki18n("Mail Files"), "0.1", ki18n("Support mailing files"), KAboutData::License_LGPL_V2)) )
 
 KateMailFilesPlugin::KateMailFilesPlugin( QObject* parent, const QList<QVariant>& ):
     Kate::Plugin ( (Kate::Application*)parent )
