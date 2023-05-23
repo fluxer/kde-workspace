@@ -1065,14 +1065,17 @@ KateTemplateManager::KateTemplateManager( KateFileTemplates *kft, QWidget *paren
   connect( lvTemplates, SIGNAL(itemSelectionChanged()), this, SLOT(slotUpdateState()) );
 
   btnNew = new QPushButton( i18nc("@action:button Template", "New..."), this );
+  btnNew->setIcon( KIcon("list-add") );
   connect( btnNew, SIGNAL(clicked()), kft, SLOT(slotCreateTemplate()) );
   lo->addWidget( btnNew, 2, 2 );
 
   btnEdit = new QPushButton( i18nc("@action:button Template", "Edit..."), this );
+  btnEdit->setIcon( KIcon("document-edit") );
   connect( btnEdit, SIGNAL(clicked()), this, SLOT(slotEditTemplate()) );
   lo->addWidget( btnEdit, 2, 3 );
 
   btnRemove = new QPushButton( i18nc("@action:button Template", "Remove"), this );
+  btnRemove->setIcon( KIcon("edit-delete") );
   connect( btnRemove, SIGNAL(clicked()), this, SLOT(slotRemoveTemplate()) );
   lo->addWidget( btnRemove, 2, 4 );
 
