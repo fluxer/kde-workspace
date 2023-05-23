@@ -417,7 +417,7 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
     if ( ! isTemplate )
     {
       int d = filename.lastIndexOf('.');
-// ### warning i18n: Hack to have localized number later...
+      // ### warning i18n: Hack to have localized number later...
       docname = i18n("Untitled %1", QString("%1"));
       if ( d > 0 ) docname += filename.mid( d );
     } else if ( docname.isEmpty() )
@@ -438,11 +438,12 @@ void KateFileTemplates::slotOpenTemplate( const KUrl &url )
       if ( ( reName.indexIn( doc->documentName() ) > -1 ) )
         count++;
     }
-    if ( docname.contains( "%1" ) )
-//### warning i18n: ...localized number here
-
+    if ( docname.contains( "%1" ) ) {
+      // TODO: i18n: ...localized number here
       docname = docname.arg( i18n("%1", count) );
-//### warning FIXME, setDocName is gone
+    }
+
+#warning FIXME: KTextEditor::Document::setDocName is gone
 #if 0
     doc->setDocName( docname );
 #endif
@@ -520,9 +521,16 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplat
   leTemplate->setToolTip( i18n("<p>This string is used as the template's name "
       "and is displayed, for example, in the Template menu. It should describe the "
       "meaning of the template, for example 'HTML Document'.</p>") );
+  lo->addWidget( l, 1, 1 );
+  lo->addWidget( hb, 1, 2 );
+
+  l = new QLabel( i18n("&Icon:"), this );
   ibIcon = new KIconButton( hb );
+  l->setBuddy( ibIcon );
   ibIcon->setToolTip(i18n(
       "Press to select or change the icon for this template") );
+  lo->addWidget( l, 2, 1 );
+  lo->addWidget( ibIcon, 2, 2 );
 
   l = new QLabel( i18n("&Group:"), this );
   cmbGroup = new KComboBox( true, this );
@@ -531,6 +539,8 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplat
   cmbGroup->setToolTip(i18n("<p>The group is used for choosing a "
       "submenu for the plugin. If it is empty, 'Other' is used.</p>"
       "<p>You can type any string to add a new group to your menu.</p>") );
+  lo->addWidget( l, 3, 1 );
+  lo->addWidget( cmbGroup, 3, 2 );
 
   l = new QLabel( i18n("Document &name:"), this );
   leDocumentName = new KLineEdit( this );
@@ -542,12 +552,16 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplat
       "Document Name is 'New shellscript (%N).sh', the first document will be "
       "named 'New shellscript (1).sh', the second 'New shellscipt (2).sh', and "
       "so on.</p>") );
+  lo->addWidget( l, 4, 1);
+  lo->addWidget( leDocumentName, 4, 2 );
 
   l = new QLabel( i18n( "&Highlight:"), this );
   btnHighlight = new QPushButton( i18n("None"), this );
   l->setBuddy( btnHighlight );
   btnHighlight->setToolTip( i18n("<p>Select the highlight to use for the "
     "template. If 'None' is chosen, the property will not be set.</p>") );
+  lo->addWidget( l, 5, 1 );
+  lo->addWidget( btnHighlight, 5, 2 );
 
   l = new QLabel( i18n("&Description:"), this );
   leDescription = new KLineEdit( this );
@@ -555,6 +569,8 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplat
   leDescription->setToolTip(i18n("<p>This string is used, for example, as "
       "context help for this template (such as the 'whatsthis' help for the "
       "menu item.)</p>") );
+  lo->addWidget( l, 6, 1 );
+  lo->addWidget( leDescription, 6, 2 );
 
   l = new QLabel( i18n("&Author:"), this );
   leAuthor = new KLineEdit( this );
@@ -563,6 +579,8 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplat
       "template with other users.</p>"
       "<p>the recommended form is like an Email "
       "address: 'Anders Lund &lt;anders@alweb.dk&gt;'</p>") );
+  lo->addWidget( l, 7, 1);
+  lo->addWidget( leAuthor, 7, 2 );
 
   // fill in the Hl menu
   KTextEditor::Document *doc = kft->application()->activeMainWindow()->activeView()->document();
