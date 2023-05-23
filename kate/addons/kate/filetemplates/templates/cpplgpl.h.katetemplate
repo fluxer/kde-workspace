@@ -1,5 +1,5 @@
-katetemplate: template=C++ Source File (LGPL) group=Source Code documentname=New%N.cpp highlight=C++
-katetemplate: description=A very simple LGPL C++ source file
+katetemplate: template=C++ Header (LGPL) group=Source Code documentname=New%N.h highlight=C++
+katetemplate: description=A very simple LGPL C++ header file
 katetemplate: author=Ivailo Monev <xakepa10@gmail.com>
 /* This file is part of the KDE project
    Copyright (C) %{year} %{fullname} <%{email}>

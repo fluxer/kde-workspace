@@ -2133,10 +2133,26 @@ bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
     docText.replace(toreplace, it.value());
     it++;
   }
-  // TODO: handle %{cursor} and %{selection}
-  // TODO: ${foo} references in templates could be Shell variable - what now?
 
+  KTextEditor::Cursor viewCursor = cursorPosition();
   m_doc->insertText( c, docText );
+
+  const QStringList docLines = docText.split(QLatin1Char('\n'));
+  for (int i = 0; i < docLines.size(); i++) {
+    const int cursorIndex = docLines.at(i).indexOf(QLatin1String("%{cursor}"));
+    if (cursorIndex != -1) {
+      m_doc->editRemoveText(i, cursorIndex, 9);
+
+      const int viewLine = viewCursor.line();
+      viewCursor.setLine(viewLine + i);
+      viewCursor.setColumn(cursorIndex);
+      setCursorPosition(viewCursor);
+
+      break;
+    }
+  }
+
+  // TODO: handle %{selection}, selection begin and end?
 
   return true;
 }
