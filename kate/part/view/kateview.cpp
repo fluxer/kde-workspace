@@ -2152,8 +2152,6 @@ bool KateView::insertTemplateTextImplementation ( const KTextEditor::Cursor& c,
     }
   }
 
-  // TODO: handle %{selection}, selection begin and end?
-
   return true;
 }
 
