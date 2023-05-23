@@ -670,7 +670,7 @@ void KateBuildView::slotSelectTarget() {
 /******************************************************************/
 KateBuildView::TargetSet* KateBuildView::currentTargetSet()
 {
-    if (m_targetIndex >= m_targetList.size()) {
+    if (m_targetIndex >= m_targetList.size() || m_targetList.isEmpty()) {
         return 0;
     }
 
