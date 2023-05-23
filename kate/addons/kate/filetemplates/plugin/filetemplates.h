@@ -144,10 +144,8 @@ class KateTemplateInfoWidget : public QWidget
 {
   Q_OBJECT
   public:
-    explicit KateTemplateInfoWidget( QWidget *parent=0, TemplateInfo *info=0, KateFileTemplates *kft=0 );
+    explicit KateTemplateInfoWidget( QWidget *parent=0, KateFileTemplates *kft=0 );
     ~KateTemplateInfoWidget() {}
-
-    TemplateInfo *info;
 
     class KLineEdit *leTemplate, *leDocumentName, *leDescription, *leAuthor;
     class KComboBox *cmbGroup;

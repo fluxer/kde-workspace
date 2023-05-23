@@ -505,9 +505,8 @@ void KateFileTemplates::slotEditTemplate()
 
 //BEGIN KateTemplateInfoWidget
 // This widget can be used to change the data of a TemplateInfo object
-KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, TemplateInfo *info, KateFileTemplates *kft )
+KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, KateFileTemplates *kft )
   : QWidget( parent ),
-    info( info ),
     kft( kft )
 {
   QGridLayout *lo = new QGridLayout( this );
@@ -564,24 +563,6 @@ KateTemplateInfoWidget::KateTemplateInfoWidget( QWidget *parent, TemplateInfo *i
       "template with other users.</p>"
       "<p>the recommended form is like an Email "
       "address: 'Anders Lund &lt;anders@alweb.dk&gt;'</p>") );
-
-  // if we have a object ! null
-  if ( info )
-  {
-    if ( ! info->icon.isEmpty() )
-      ibIcon->setIcon( info->icon );
-    leTemplate->setText( info->tmplate );
-    int i = cmbGroup->findText( info->group );
-    if ( i != -1 ) {
-        cmbGroup->setCurrentIndex( i );
-    } else {
-        cmbGroup->setEditText( info->group );
-    }
-    leDescription->setText( info->description );
-    leAuthor->setText( info->author );
-    if ( ! info->highlight.isEmpty() )
-      btnHighlight->setText( info->highlight );
-  }
 
   // fill in the Hl menu
   KTextEditor::Document *doc = kft->application()->activeMainWindow()->activeView()->document();
@@ -697,7 +678,7 @@ KateTemplateWizard::KateTemplateWizard( QWidget *parent, KateFileTemplates *kft 
   page->setTitle( i18n("Edit Template Properties") );
   page->setSubTitle( i18n("Specify the main properties of your plugin. You can leave fields empty for which you have no meaningful value.") );
   glo = new QGridLayout( page );
-  kti = new KateTemplateInfoWidget( page, 0, kft );
+  kti = new KateTemplateInfoWidget( page, kft );
   glo->addWidget( kti, 1, 1 );
   addPage( page );
 
