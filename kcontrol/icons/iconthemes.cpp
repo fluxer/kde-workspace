@@ -43,7 +43,6 @@
 #include <kurlrequesterdialog.h>
 #include <kmessagebox.h>
 #include <kiconloader.h>
-#include <k3icon_p.h>  // this private header is only installed for us!
 #include <kprogressdialog.h>
 #include <kio/job.h>
 #include <kio/deletejob.h>
@@ -354,17 +353,18 @@ void loadPreview(QLabel *label, KIconTheme& icontheme, const QStringList& iconna
       << icontheme.inherits();
     foreach(const QString &iconthemename, iconthemenames) {
       foreach(const QString &name, iconnames) {
-        K3Icon icon = KIconTheme(iconthemename).iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
-        if (icon.isValid()) {
-            label->setPixmap(QPixmap(icon.path).scaled(size, size));
+        KIconTheme kicontheme(iconthemename);
+        QString icon = kicontheme.iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
+        if (!icon.isEmpty()) {
+            label->setPixmap(QPixmap(icon).scaled(size, size));
             return;
         }
-        icon = KIconTheme(iconthemename).iconPath(QString("%1.svg").arg(name), size, KIconLoader::MatchBest);
-        if(!icon.isValid() ) {
-            icon = KIconTheme(iconthemename).iconPath(QString("%1.svgz").arg(name), size, KIconLoader::MatchBest);
+        icon = kicontheme.iconPath(QString("%1.svg").arg(name), size, KIconLoader::MatchBest);
+        if (icon.isEmpty() ) {
+            icon = kicontheme.iconPath(QString("%1.svgz").arg(name), size, KIconLoader::MatchBest);
         }
-        if (icon.isValid()) {
-            label->setPixmap(QPixmap(icon.path).scaled(size, size));
+        if (!icon.isEmpty()) {
+            label->setPixmap(QPixmap(icon).scaled(size, size));
             return;
         }
       }
