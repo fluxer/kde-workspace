@@ -333,7 +333,7 @@ void KateBuildView::readSessionConfig (KConfigBase* config, const QString& group
         tmpIndex = cg.readEntry(QString("Active Target Index"), 0);
     }
 
-    for(int i=0; i<m_targetList.size(); i++) {
+    for(int i = 0; i < m_targetList.size(); i++) {
         m_targetsUi->targetCombo->addItem(m_targetList[i].name);
     }
 
@@ -353,7 +353,7 @@ void KateBuildView::writeSessionConfig (KConfigBase* config, const QString& grou
 {
     KConfigGroup cg(config, groupPrefix + ":build-plugin");
     cg.writeEntry("NumTargets", m_targetList.size());
-    for (int i=0; i<m_targetList.size(); i++) {
+    for (int i = 0; i < m_targetList.size(); i++) {
         cg.writeEntry(QString("%1 Target").arg(i), m_targetList[i].name);
         cg.writeEntry(QString("%1 Target Default").arg(i), m_targetList[i].defaultTarget);
         cg.writeEntry(QString("%1 Target Clean").arg(i), m_targetList[i].cleanTarget);
@@ -670,7 +670,7 @@ void KateBuildView::slotSelectTarget() {
 /******************************************************************/
 KateBuildView::TargetSet* KateBuildView::currentTargetSet()
 {
-    if (m_targetIndex >= m_targetList.size() || m_targetList.isEmpty()) {
+    if (m_targetIndex >= m_targetList.size() || m_targetIndex < 0) {
         return 0;
     }
 
@@ -1128,7 +1128,7 @@ void KateBuildView::slotDeleteTargetClicked()
 /******************************************************************/
 void KateBuildView::targetSelected(int index)
 {
-    if (index >= m_targetList.size() || (index < 0)) {
+    if (index >= m_targetList.size() || index < 0) {
         kDebug() << "Invalid target";
         return;
     }
@@ -1524,7 +1524,7 @@ void KateBuildView::slotAddProjectTarget()
 void KateBuildView::slotRemoveProjectTarget()
 {
     int i;
-    for (i=0; i<m_targetList.size(); i++) {
+    for (i = 0; i < m_targetList.size(); i++) {
         if (m_targetList[i].name == i18n("Project Plugin Targets")) {
             break;
         }
