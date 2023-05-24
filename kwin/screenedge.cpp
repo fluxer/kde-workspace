@@ -555,7 +555,7 @@ ScreenEdges::ScreenEdges(QObject *parent)
     , m_actionLeft(ElectricActionNone)
 {
     QWidget w;
-    m_cornerOffset = (w.physicalDpiX() + w.physicalDpiY() + 5) / 6;
+    m_cornerOffset = (w.logicalDpiX() + w.logicalDpiY() + 5) / 6;
 }
 
 ScreenEdges::~ScreenEdges()

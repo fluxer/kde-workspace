@@ -49,7 +49,7 @@ qreal Units::dp(qreal value) const
 {
     //Usual "default" is 96 dpi
     //that magic ratio follows the definition of "device independent pixel" by Microsoft
-    const qreal ratio = (qreal)QApplication::desktop()->physicalDpiX() / (qreal)96;
+    const qreal ratio = (qreal)QApplication::desktop()->logicalDpiX() / (qreal)96;
 
     if (value <= 2.0) {
         return qRound(value * floor(ratio));
