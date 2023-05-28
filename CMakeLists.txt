@@ -76,13 +76,6 @@ if(Q_WS_X11)
     endif()
 endif(Q_WS_X11)
 
-kde4_optional_find_package(DBusMenuQt 0.6.0)
-set_package_properties(DBusMenuQt PROPERTIES
-    DESCRIPTION "Support for notification area menus via the DBusMenu protocol"
-    URL "https://launchpad.net/libdbusmenu-qt"
-    TYPE RECOMMENDED
-)
-
 kde4_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
     DESCRIPTION "The OpenGL libraries"

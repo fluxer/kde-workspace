@@ -30,6 +30,7 @@
 #include <KIcon>
 #include <KIconLoader>
 #include <KStandardDirs>
+#include <KDBusMenuImporter>
 #include <QPainter>
 #include <QDBusMessage>
 #include <QDBusPendingCall>
@@ -38,17 +39,14 @@
 #include <QImage>
 #include <QMenu>
 #include <QPixmap>
-#include <QtCore/qglobal.h>
 
 #include <netinet/in.h>
 
-#include <dbusmenuimporter.h>
-
-class PlasmaDBusMenuImporter : public DBusMenuImporter
+class PlasmaDBusMenuImporter : public KDBusMenuImporter
 {
 public:
     PlasmaDBusMenuImporter(const QString &service, const QString &path, KIconLoader *iconLoader, QObject *parent)
-    : DBusMenuImporter(service, path, parent)
+    : KDBusMenuImporter(service, path, parent)
     , m_iconLoader(iconLoader)
     {}
 

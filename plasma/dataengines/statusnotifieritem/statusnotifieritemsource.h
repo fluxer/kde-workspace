@@ -29,8 +29,7 @@
 #include "statusnotifieritem_interface.h"
 
 class KIconLoader;
-
-class DBusMenuImporter;
+class KDBusMenuImporter;
 
 class StatusNotifierItemSource : public Plasma::DataContainer
 {
@@ -72,7 +71,7 @@ private:
     QString m_name;
     QTimer m_refreshTimer;
     KIconLoader *m_customIconLoader;
-    DBusMenuImporter *m_menuImporter;
+    KDBusMenuImporter *m_menuImporter;
     org::kde::StatusNotifierItem *m_statusNotifierItemInterface;
     bool m_refreshing : 1;
     bool m_needsReRefreshing : 1;
