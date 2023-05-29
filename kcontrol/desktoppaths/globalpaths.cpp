@@ -269,7 +269,7 @@ bool DesktopPathConfig::moveDir( const KUrl & src, const KUrl & dest, const QStr
 {
     if (!src.isLocalFile() || !dest.isLocalFile())
         return true;
-    if (!QFile::exists(src.toLocalFile()))
+    if (!QDir(src.toLocalFile()).exists())
         return true;
     // Do not move $HOME! #193057
     const QString translatedPath = translatePath(src.toLocalFile());
@@ -282,7 +282,8 @@ bool DesktopPathConfig::moveDir( const KUrl & src, const KUrl & dest, const QStr
     QString question;
     KGuiItem yesItem;
     KGuiItem noItem;
-    if (QFile::exists(dest.toLocalFile())) {
+    const bool destExists = QDir(dest.toLocalFile()).exists();
+    if (destExists) {
         // TODO: check if the src dir is empty? Nothing to move, then...
         question = i18n("The path for '%1' has been changed.\nDo you want the files to be moved from '%2' to '%3'?",
                         type, src.toLocalFile(),
@@ -302,7 +303,7 @@ bool DesktopPathConfig::moveDir( const KUrl & src, const KUrl & dest, const QStr
                                    yesItem, noItem)
             == KMessageBox::Yes )
     {
-        if (QFile::exists(dest.toLocalFile())) {
+        if (destExists) {
             // Destination already exists -- should always be the case, for most types,
             // but maybe not for the complex autostart case (to be checked...)
             m_copyToDest = dest;
