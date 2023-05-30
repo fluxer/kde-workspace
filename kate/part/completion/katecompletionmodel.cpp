@@ -1759,7 +1759,7 @@ bool KateCompletionModel::shouldMatchHideCompletionList() const {
   return doHide;
 }
 
-static inline bool matchesAbbreviationHelper(const QString& word, const QString& typed, const QVarLengthArray<int, 32>& offsets,
+static inline bool matchesAbbreviationHelper(const QString& word, const QString& typed, const QVarLengthArray<int>& offsets,
                                              int& depth, int atWord = -1, int i = 0) {
   int atLetter = 1;
   for ( ; i < typed.size(); i++ ) {
@@ -1822,7 +1822,7 @@ bool KateCompletionModel::matchesAbbreviation(const QString& word, const QString
   }
 
   bool haveUnderscore = true;
-  QVarLengthArray<int, 32> offsets;
+  QVarLengthArray<int> offsets;
   // We want to make "KComplM" match "KateCompletionModel"; this means we need
   // to allow parts of the typed text to be not part of the actual abbreviation,
   // which consists only of the uppercased / underscored letters (so "KCM" in this case).

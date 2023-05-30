@@ -656,7 +656,7 @@ private:
 
     int _droppedLines;
 
-    QVarLengthArray<LineProperty, 64> _lineProperties;
+    QVarLengthArray<LineProperty> _lineProperties;
 
     // history buffer ---------------
     HistoryScroll* _history;
