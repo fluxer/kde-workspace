@@ -84,7 +84,7 @@ bool KSysTrayCmd::start()
 
   // Run the command and watch for its window
   if ( !startClient() ) {
-    errStr = i18n( "KSysTrayCmd: K3ShellProcess cannot find a shell." );
+    errStr = i18n( "Cannot start client." );
     clientExited();
     return false;
   }
