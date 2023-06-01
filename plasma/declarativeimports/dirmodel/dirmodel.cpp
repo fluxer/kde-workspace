@@ -22,21 +22,12 @@
 #include <KDirLister>
 #include <KDebug>
 #include <KIO/PreviewJob>
-#include <QtCore/qtimer.h>
+#include <QTimer>
 
 DirModel::DirModel(QObject *parent)
     : KDirModel(parent),
       m_screenshotSize(180, 120)
 {
-    KMimeType::List mimeList = KMimeType::allMimeTypes();
-
-    m_mimeTypes << "inode/directory";
-    foreach (KMimeType::Ptr mime, mimeList) {
-        if (mime->name().startsWith(QLatin1String("image/"))) {
-            m_mimeTypes << mime->name();
-        }
-    }
-
     //TODO: configurable mime filter
     //dirLister()->setMimeFilter(m_mimeTypes);
 

@@ -75,8 +75,6 @@ Q_SIGNALS:
     void urlChanged();
 
 private:
-    QStringList m_mimeTypes;
-
     //previews
     QTimer *m_previewTimer;
     QHash<KUrl, QPersistentModelIndex> m_filesToPreview;
