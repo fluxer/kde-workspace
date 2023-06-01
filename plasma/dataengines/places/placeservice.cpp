@@ -41,7 +41,7 @@ PlaceService::PlaceService(QObject* parent,
 }
 
 Plasma::ServiceJob* PlaceService::createJob(const QString& operation,
-                                            QMap<QString,QVariant>& parameters)
+                                            const QMap<QString,QVariant>& parameters)
 {
     kDebug() << "Job" << operation << "with arguments" << parameters << "requested";
     if (operation == "Add") {

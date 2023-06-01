@@ -20,7 +20,7 @@
 #include "statusnotifieritemjob.h"
 #include <iostream>
 
-StatusNotifierItemJob::StatusNotifierItemJob(StatusNotifierItemSource *source, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent) :
+StatusNotifierItemJob::StatusNotifierItemJob(StatusNotifierItemSource *source, const QString &operation, const QMap<QString, QVariant> &parameters, QObject *parent) :
     ServiceJob(source->objectName(), operation, parameters, parent),
     m_source(source)
 {

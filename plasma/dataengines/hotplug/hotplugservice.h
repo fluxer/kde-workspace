@@ -32,7 +32,7 @@ public:
 
 protected:
     Plasma::ServiceJob* createJob (const QString& operation,
-                                   QMap<QString, QVariant>& parameters);
+                                   const QMap<QString, QVariant>& parameters);
 
 private:
     QString m_dest;

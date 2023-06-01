@@ -29,7 +29,7 @@ SolidDeviceService::SolidDeviceService (SolidDeviceEngine* parent, const QString
 }
 
 Plasma::ServiceJob* SolidDeviceService::createJob (const QString& operation,
-                                                   QMap <QString, QVariant>& parameters)
+                                                   const QMap <QString, QVariant>& parameters)
 {
     if (operation == "updateFreespace") {
         m_engine->updateFreeSpace(destination());

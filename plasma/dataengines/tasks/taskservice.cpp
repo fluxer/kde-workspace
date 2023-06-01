@@ -32,7 +32,7 @@ TaskService::~TaskService()
 {
 }
 
-Plasma::ServiceJob *TaskService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
+Plasma::ServiceJob *TaskService::createJob(const QString &operation, const QMap<QString, QVariant> &parameters)
 {
     return new TaskJob(m_source, operation, parameters, this);
 }

@@ -32,7 +32,7 @@ class NotificationService : public Plasma::Service
 
     protected:
         Plasma::ServiceJob* createJob(const QString& operation,
-                                      QMap<QString,QVariant>& parameters);
+                                      const QMap<QString,QVariant>& parameters);
 
     private:
         NotificationsEngine* m_notificationEngine;

@@ -34,7 +34,7 @@ class StatusNotifierItemJob : public Plasma::ServiceJob
     Q_OBJECT
 
 public:
-    StatusNotifierItemJob(StatusNotifierItemSource *source, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent = NULL);
+    StatusNotifierItemJob(StatusNotifierItemSource *source, const QString &operation, const QMap<QString, QVariant> &parameters, QObject *parent = NULL);
     ~StatusNotifierItemJob();
 
 protected:

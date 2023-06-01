@@ -18,7 +18,7 @@
 
 #include "taskjob.h"
 
-TaskJob::TaskJob(TaskSource *source, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent) :
+TaskJob::TaskJob(TaskSource *source, const QString &operation, const QMap<QString, QVariant> &parameters, QObject *parent) :
     ServiceJob(source->objectName(), operation, parameters, parent),
     m_source(source)
 {

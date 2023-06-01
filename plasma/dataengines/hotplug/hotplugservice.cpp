@@ -28,7 +28,7 @@ HotplugService::HotplugService (HotplugEngine* parent, const QString& source)
 }
 
 Plasma::ServiceJob* HotplugService::createJob (const QString& operation,
-                                                   QMap <QString, QVariant>& parameters)
+                                               const QMap <QString, QVariant>& parameters)
 {
     return new HotplugJob (destination(), operation, parameters, this);
 }

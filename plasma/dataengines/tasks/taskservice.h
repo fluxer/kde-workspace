@@ -39,7 +39,7 @@ class TaskService : public Plasma::Service
         ~TaskService();
 
     protected:
-        Plasma::ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters);
+        Plasma::ServiceJob *createJob(const QString &operation, const QMap<QString, QVariant> &parameters);
 
     private:
         TaskSource *m_source;

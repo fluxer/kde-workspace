@@ -32,7 +32,7 @@ AppService::~AppService()
 {
 }
 
-Plasma::ServiceJob *AppService::createJob(const QString &operation, QMap<QString, QVariant> &parameters)
+Plasma::ServiceJob *AppService::createJob(const QString &operation, const QMap<QString, QVariant> &parameters)
 {
     return new AppJob(m_source, operation, parameters, this);
 }

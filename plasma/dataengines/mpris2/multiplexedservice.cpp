@@ -36,7 +36,7 @@ MultiplexedService::MultiplexedService(Multiplexer *multiplexer, QObject *parent
 }
 
 Plasma::ServiceJob* MultiplexedService::createJob(const QString& operation,
-                              QMap<QString,QVariant>& parameters)
+                                                  const QMap<QString,QVariant>& parameters)
 {
     if (m_control) {
         return m_control.data()->createJob(operation, parameters);

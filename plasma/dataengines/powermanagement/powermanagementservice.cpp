@@ -27,7 +27,7 @@ PowerManagementService::PowerManagementService(QObject *parent)
 }
 
 ServiceJob *PowerManagementService::createJob(const QString &operation,
-                                           QMap<QString, QVariant> &parameters)
+                                              const QMap<QString, QVariant> &parameters)
 {
     return new PowerManagementJob(operation, parameters, this);
 }

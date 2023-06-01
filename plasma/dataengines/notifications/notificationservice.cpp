@@ -29,7 +29,7 @@ NotificationService::NotificationService(NotificationsEngine* parent, const QStr
 }
 
 Plasma::ServiceJob* NotificationService::createJob(const QString& operation,
-                                                   QMap<QString,QVariant>& parameters)
+                                                   const QMap<QString,QVariant>& parameters)
 {
     return new NotificationAction(m_notificationEngine, destination(), operation, parameters, this);
 }

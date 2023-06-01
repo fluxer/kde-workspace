@@ -34,7 +34,7 @@ class TaskJob : public Plasma::ServiceJob
     Q_OBJECT
 
     public:
-        TaskJob(TaskSource *source, const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent = NULL);
+        TaskJob(TaskSource *source, const QString &operation, const QMap<QString, QVariant> &parameters, QObject *parent = NULL);
         ~TaskJob();
 
     protected:

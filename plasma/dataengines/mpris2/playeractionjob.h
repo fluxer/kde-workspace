@@ -33,7 +33,7 @@ class PlayerActionJob : public Plasma::ServiceJob
 
 public:
     PlayerActionJob(const QString& operation,
-                    QMap<QString,QVariant>& parameters,
+                    const QMap<QString,QVariant>& parameters,
                     PlayerControl* parent);
 
     enum {

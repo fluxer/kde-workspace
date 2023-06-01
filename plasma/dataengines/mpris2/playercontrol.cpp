@@ -82,7 +82,7 @@ void PlayerControl::containerDestroyed()
 }
 
 Plasma::ServiceJob* PlayerControl::createJob(const QString& operation,
-                                             QMap<QString,QVariant>& parameters)
+                                             const QMap<QString,QVariant>& parameters)
 {
     if (!m_container)
         return 0;

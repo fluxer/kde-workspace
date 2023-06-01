@@ -30,7 +30,7 @@ class JobAction : public Plasma::ServiceJob
     public:
         JobAction(JobView *jobView,
                   const QString& operation,
-                  QMap<QString,QVariant>& parameters,
+                  const QMap<QString,QVariant>& parameters,
                   QObject* parent = 0)
         : ServiceJob(jobView->objectName(), operation, parameters, parent),
           m_jobView(jobView)

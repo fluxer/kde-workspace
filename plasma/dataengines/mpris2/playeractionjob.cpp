@@ -32,7 +32,7 @@
 #include <kdebug.h>
 
 PlayerActionJob::PlayerActionJob(const QString& operation,
-                                 QMap<QString,QVariant>& parameters,
+                                 const QMap<QString,QVariant>& parameters,
                                  PlayerControl* parent)
     : ServiceJob(parent->name() + ": " + operation, operation, parameters, parent)
     , m_controller(parent)

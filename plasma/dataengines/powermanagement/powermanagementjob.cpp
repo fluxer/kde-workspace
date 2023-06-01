@@ -32,7 +32,7 @@
 
 #include <Solid/PowerManagement>
 
-PowerManagementJob::PowerManagementJob(const QString &operation, QMap<QString, QVariant> &parameters, QObject *parent) :
+PowerManagementJob::PowerManagementJob(const QString &operation, const QMap<QString, QVariant> &parameters, QObject *parent) :
     ServiceJob(parent->objectName(), operation, parameters, parent)
 {
 }

@@ -28,7 +28,7 @@ class PowerManagementJob : public Plasma::ServiceJob
     Q_OBJECT
 
     public:
-        PowerManagementJob(const QString &operation, QMap<QString, QVariant> &parameters,
+        PowerManagementJob(const QString &operation, const QMap<QString, QVariant> &parameters,
                            QObject *parent = 0);
         ~PowerManagementJob();
 

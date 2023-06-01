@@ -39,7 +39,7 @@ class AppService : public Plasma::Service
         ~AppService();
 
     protected:
-        Plasma::ServiceJob *createJob(const QString &operation, QMap<QString, QVariant> &parameters);
+        Plasma::ServiceJob *createJob(const QString &operation, const QMap<QString, QVariant> &parameters);
 
     private:
         AppSource *m_source;

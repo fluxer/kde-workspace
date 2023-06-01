@@ -31,7 +31,7 @@ public:
     SolidDeviceJob (SolidDeviceEngine* engine,
                     const QString& destination,
                     const QString& operation,
-                    QMap<QString, QVariant>& parameters,
+                    const QMap<QString, QVariant>& parameters,
                     QObject* parent = 0)
     : ServiceJob (destination, operation, parameters, parent),
       m_engine (engine),

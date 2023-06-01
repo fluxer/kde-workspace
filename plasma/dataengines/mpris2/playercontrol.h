@@ -45,7 +45,7 @@ public:
     QDBusObjectPath trackId() const;
 
     Plasma::ServiceJob* createJob(const QString& operation,
-                                  QMap<QString,QVariant>& parameters);
+                                  const QMap<QString,QVariant>& parameters);
 
 signals:
     void enabledOperationsChanged();

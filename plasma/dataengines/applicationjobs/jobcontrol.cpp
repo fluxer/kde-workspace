@@ -29,7 +29,7 @@ JobControl::JobControl(QObject* parent, JobView *jobView)
 }
 
 Plasma::ServiceJob* JobControl::createJob(const QString& operation,
-                                          QMap<QString,QVariant>& parameters)
+                                          const QMap<QString,QVariant>& parameters)
 {
     return new JobAction(m_jobView, operation, parameters, this);
 }
