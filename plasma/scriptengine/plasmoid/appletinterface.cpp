@@ -167,7 +167,7 @@ void AppletInterface::writeConfig(const QString &entry, const QVariant &value)
     }
 
     if (config) {
-        KConfigSkeletonItem *item = config->findItemByName(entry);
+        KConfigSkeletonItem *item = config->findItem(entry);
         if (item) {
             item->setProperty(value);
             config->blockSignals(true);
