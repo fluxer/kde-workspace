@@ -26,7 +26,7 @@ HotplugService::HotplugService (HotplugEngine* parent, const QString& source)
     setName ("hotplug");
     setOperationNames(
         QStringList()
-        << "invokeAction"
+            << "invokeAction"
     );
     setDestination (source);
 }

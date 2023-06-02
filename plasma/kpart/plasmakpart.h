@@ -31,7 +31,6 @@ Q_DECLARE_METATYPE(Plasma::Containment *)
 namespace Plasma
 {
     class Applet;
-    class PluginLoader;
 }
 
 #include <KParts/Part>
@@ -49,10 +48,6 @@ class PlasmaKPart : public KParts::ReadOnlyPart
 public:
     /**
      * The default constructor.
-     * The args may contain a pointer to a Plasma::PluginLoader as the first parameter.
-     * Note that only one Plasma::PluginLoader can be active at a time, and that the
-     * prefered mechanism for registering the plugin loader is via
-     * Plasma::PluginLoader::setPluginLoader
      */
     PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantList &args);
     ~PlasmaKPart();

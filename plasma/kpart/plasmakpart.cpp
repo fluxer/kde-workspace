@@ -36,7 +36,6 @@
 #include <Plasma/Theme>
 #include <Plasma/Applet>
 #include <Plasma/Wallpaper>
-#include <plasma/pluginloader.h>
 
 #include "plasmakpartcorona.h"
 #include "plasmakpartview.h"
@@ -49,6 +48,8 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
       m_corona(0),
       m_view(new PlasmaKPartView(0, 1))
 {
+    Q_UNUSED(args);
+
     setComponentData(plasmaKPartFactory::componentData());
 
     KGlobal::locale()->insertCatalog("libplasma");
@@ -58,14 +59,6 @@ PlasmaKPart::PlasmaKPart(QWidget *parentWidget, QObject *parent, const QVariantL
     setThemeDefaults();
 
     setWidget(m_view);
-
-    // initialize the plugin loader
-    if (args.length() > 0) {
-        Plasma::PluginLoader *loader = qvariant_cast<Plasma::PluginLoader *>(args.first());
-        if (loader) {
-            Plasma::PluginLoader::setPluginLoader(loader);
-        }
-    }
 
     setAutoDeletePart(false);
     QTimer::singleShot(0, this, SLOT(initCorona()));
