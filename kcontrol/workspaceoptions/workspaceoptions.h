@@ -39,7 +39,7 @@ public:
     void defaults();
 
 private Q_SLOTS:
-    void formFactorChanged(int newFormFactorIndex);
+    void cacheThemeChanged(bool cacheTheme);
 
 private:
     KSharedConfigPtr m_kwinConfig;
@@ -47,6 +47,7 @@ private:
     KAutostart m_plasmaDesktopAutostart;
     KAutostart m_krunnerAutostart;
     bool m_currentlyIsDesktop;
+    bool m_plasmaFound;
 
     Ui_MainPage *m_ui;
 };

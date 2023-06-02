@@ -41,7 +41,9 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     m_ownConfig( KSharedConfig::openConfig("workspaceoptionsrc")),
     m_plasmaDesktopAutostart("plasma-desktop"),
     m_krunnerAutostart("krunner"),
-    m_ui(new Ui_MainPage)
+    m_currentlyIsDesktop(false),
+    m_plasmaFound(false),
+    m_ui(new Ui_MainPage())
 {
     KAboutData *about =
     new KAboutData("kcmworkspaceoptions", 0, ki18n("Global options for the Plasma Workspace"),
@@ -54,14 +56,21 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
 
     setButtons(Help|Apply);
 
+    m_plasmaFound = KStandardDirs::findExe("plasma-desktop").isNull();
+
     m_ui->setupUi(this);
+    m_ui->themeCacheSize->setSuffix(i18n("%1 MB", ""));
 
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(m_ui->showToolTips, SIGNAL(toggled(bool)), this, SLOT(changed()));
-    connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(formFactorChanged(int)));
+    connect(m_ui->cacheTheme, SIGNAL(toggled(bool)), this, SLOT(changed()));
+    connect(m_ui->cacheTheme, SIGNAL(toggled(bool)), this, SLOT(cacheThemeChanged(bool)));
+    connect(m_ui->themeCacheSize, SIGNAL(valueChanged(int)), this, SLOT(changed()));
 
-    if (KStandardDirs::findExe("plasma-desktop").isNull()) {
+    if (m_plasmaFound) {
         m_ui->formFactor->setEnabled(false);
+        m_ui->cacheTheme->setEnabled(false);
+        m_ui->themeCacheSize->setEnabled(false);
     }
 }
 
@@ -70,13 +79,15 @@ WorkspaceOptionsModule::~WorkspaceOptionsModule()
     delete m_ui;
 }
 
-
 void WorkspaceOptionsModule::save()
 {
     {
         KConfig config("plasmarc");
         KConfigGroup cg(&config, "PlasmaToolTips");
         cg.writeEntry("Delay", m_ui->showToolTips->isChecked() ? 0.7 : -1);
+        KConfigGroup cg2(&config, "CachePolicies");
+        cg2.writeEntry("CacheTheme", m_ui->cacheTheme->isChecked());
+        cg2.writeEntry("ThemeCacheKb", m_ui->themeCacheSize->value() * 1024);
     }
 
     const bool isDesktop = m_ui->formFactor->currentIndex() == 0;
@@ -201,6 +212,10 @@ void WorkspaceOptionsModule::load()
     KConfig config("plasmarc");
     KConfigGroup cg(&config, "PlasmaToolTips");
     m_ui->showToolTips->setChecked(cg.readEntry("Delay", 0.7) > 0);
+    KConfigGroup cg2(&config, "CachePolicies");
+    m_ui->cacheTheme->setChecked(cg2.readEntry("CacheTheme", true));
+    const int themeCacheKb = cg2.readEntry("ThemeCacheKb", 81920);
+    m_ui->themeCacheSize->setValue(themeCacheKb / 1024);
 }
 
 void WorkspaceOptionsModule::defaults()
@@ -208,9 +223,10 @@ void WorkspaceOptionsModule::defaults()
     m_ui->formFactor->setCurrentIndex(0);
 }
 
-void WorkspaceOptionsModule::formFactorChanged(int newFormFactorIndex)
+void WorkspaceOptionsModule::cacheThemeChanged(bool cacheTheme)
 {
-    Q_UNUSED(newFormFactorIndex);
+    Q_ASSERT(m_plasmaFound);
+    m_ui->themeCacheSize->setEnabled(cacheTheme);
 }
 
 #include "moc_workspaceoptions.cpp"
