@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Exec=keditbookmarks
-NoDisplay=true
+Icon=bookmarks-organize
 Name=Bookmark Editor
 Name[ar]=محرِّر العلامات
 Name[ast]=Editor de marcadores
