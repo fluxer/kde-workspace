@@ -61,18 +61,20 @@ void PlayerActionJob::start()
                || operation == QLatin1String("Previous")) {
         listenToCall(m_controller->playerInterface()->asyncCall(operation));
     } else if (operation == "Seek") {
-        if (parameters().value("microseconds").type() == QVariant::LongLong) {
-            listenToCall(m_controller->playerInterface()->Seek(parameters()["microseconds"].toLongLong()));
+        const QVariant microseconds = parameters().value("microseconds");
+        if (microseconds.canConvert<qlonglong>()) {
+            listenToCall(m_controller->playerInterface()->Seek(microseconds.toLongLong()));
         } else {
             setErrorText("microseconds");
             setError(MissingArgument);
             emitResult();
         }
     } else if (operation == "SetPosition") {
-        if (parameters().value("microseconds").type() == QVariant::LongLong) {
+        const QVariant microseconds = parameters().value("microseconds");
+        if (microseconds.canConvert<qlonglong>()) {
             listenToCall(m_controller->playerInterface()->SetPosition(
                              m_controller->trackId(),
-                             parameters()["microseconds"].toLongLong()));
+                             microseconds.toLongLong()));
         } else {
             setErrorText("microseconds");
             setError(MissingArgument);
