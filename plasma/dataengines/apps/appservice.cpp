@@ -26,6 +26,10 @@ AppService::AppService(AppSource *source) :
     m_source(source)
 {
     setName("apps");
+    setOperationNames(
+        QStringList()
+            << "launch"
+    );
 }
 
 AppService::~AppService()

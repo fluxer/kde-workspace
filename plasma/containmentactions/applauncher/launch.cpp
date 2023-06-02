@@ -128,7 +128,7 @@ void AppLauncher::switchTo(QAction *action)
     kDebug() << source;
     Plasma::Service *service = dataEngine("apps")->serviceForSource(source);
     if (service) {
-        Plasma::ServiceJob *job = service->startOperationCall(service->operationDescription("launch"));
+        Plasma::ServiceJob *job = service->startOperationCall("launch", service->operationParameters("launch"));
         connect(job, SIGNAL(finished(KJob*)), service, SLOT(deleteLater()));
     }
 }

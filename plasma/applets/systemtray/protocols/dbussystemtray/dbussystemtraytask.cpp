@@ -99,24 +99,28 @@ QIcon DBusSystemTrayTask::icon() const
 
 void DBusSystemTrayTask::activate1(int x, int y) const
 {
-    KConfigGroup params;
+    QMap<QString, QVariant> params;
+    KJob *job = nullptr;
     if (m_isMenu) {
-        params = m_service->operationDescription("ContextMenu");
+        params = m_service->operationParameters("ContextMenu");
+        params["x"] = x;
+        params["y"] = y;
+        job = m_service->startOperationCall("ContextMenu", params);
     } else {
-        params = m_service->operationDescription("Activate");
+        params = m_service->operationParameters("Activate");
+        params["x"] = x;
+        params["y"] = y;
+        job = m_service->startOperationCall("Activate", params);
     }
-    params.writeEntry("x", x);
-    params.writeEntry("y", y);
-    KJob *job = m_service->startOperationCall(params);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(_onContextMenu(KJob*)));
 }
 
 void DBusSystemTrayTask::activate2(int x, int y) const
 {
-    KConfigGroup params = m_service->operationDescription("SecondaryActivate");
-    params.writeEntry("x", x);
-    params.writeEntry("y", y);
-    m_service->startOperationCall(params);
+    QMap<QString, QVariant> params = m_service->operationParameters("SecondaryActivate");
+    params["x"] = x;
+    params["y"] = y;
+    m_service->startOperationCall("SecondaryActivate", params);
 }
 
 void DBusSystemTrayTask::activateHorzScroll(int delta) const
@@ -177,18 +181,18 @@ void DBusSystemTrayTask::activateVertScroll(int delta) const
 
 void DBusSystemTrayTask::_activateScroll(int delta, QString direction) const
 {
-    KConfigGroup params = m_service->operationDescription("Scroll");
-    params.writeEntry("delta", delta);
-    params.writeEntry("direction", direction);
-    m_service->startOperationCall(params);
+    QMap<QString, QVariant> params = m_service->operationParameters("Scroll");
+    params["delta"] = delta;
+    params["direction"] = direction;
+    m_service->startOperationCall("Scroll", params);
 }
 
 void DBusSystemTrayTask::activateContextMenu(int x, int y) const
 {
-    KConfigGroup params = m_service->operationDescription("ContextMenu");
-    params.writeEntry("x", x);
-    params.writeEntry("y", y);
-    KJob *job = m_service->startOperationCall(params);
+    QMap<QString, QVariant> params = m_service->operationParameters("ContextMenu");
+    params["x"] = x;
+    params["y"] = y;
+    KJob *job = m_service->startOperationCall("ContextMenu", params);
     connect(job, SIGNAL(result(KJob*)), this, SLOT(_onContextMenu(KJob*)));
 }
 

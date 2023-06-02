@@ -26,6 +26,32 @@ TaskService::TaskService(TaskSource *source) :
     m_source(source)
 {
     setName("tasks");
+    setOperationNames(
+        QStringList()
+            << "setMaximized"
+            << "setMinimized"
+            << "setShaded"
+            << "setFullScreen"
+            << "setAlwaysOnTop"
+            << "setKeptBelowOthers"
+            << "toggleMaximized"
+            << "toggleMinimized"
+            << "toggleShaded"
+            << "toggleFullScreen"
+            << "toggleAlwaysOnTop"
+            << "toggleKeptBelowOthers"
+            << "restore"
+            << "resize"
+            << "move"
+            << "raise"
+            << "lower"
+            << "activate"
+            << "activateRaiseOrIconify"
+            << "close"
+            << "toDesktop"
+            << "toCurrentDesktop"
+            << "publishIconGeometry"
+    );
 }
 
 TaskService::~TaskService()

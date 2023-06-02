@@ -117,33 +117,33 @@ Item {
         onPowermanagementChanged: {
             service = pmSource.serviceForSource("PowerDevil");
             if (checked) {
-                var op1 = service.operationDescription("stopSuppressingSleep");
-                op1.cookie = cookie1;
-                var op2 = service.operationDescription("stopSuppressingScreenPowerManagement");
-                op2.cookie = cookie2;
+                var op1 = service.operationParameters("stopSuppressingSleep");
+                op1["cookie"] = cookie1;
+                var op2 = service.operationParameters("stopSuppressingScreenPowerManagement");
+                op2["cookie"] = cookie2;
 
-                var job1 = service.startOperationCall(op1);
+                var job1 = service.startOperationCall("stopSuppressingSleep", op1);
                 job1.finished.connect(function(job) {
                     cookie1 = -1;
                 });
 
-                var job2 = service.startOperationCall(op2);
+                var job2 = service.startOperationCall("stopSuppressingScreenPowerManagement", op2);
                 job2.finished.connect(function(job) {
                     cookie2 = -1;
                 });
             } else {
                 var reason = i18n("The battery applet has enabled system-wide inhibition");
-                var op1 = service.operationDescription("beginSuppressingSleep");
-                op1.reason = reason;
-                var op2 = service.operationDescription("beginSuppressingScreenPowerManagement");
-                op2.reason = reason;
+                var op1 = service.operationParameters("beginSuppressingSleep");
+                op1["reason"] = reason;
+                var op2 = service.operationParameters("beginSuppressingScreenPowerManagement");
+                op2["reason"] = reason;
 
-                var job1 = service.startOperationCall(op1);
+                var job1 = service.startOperationCall("beginSuppressingSleep", op1);
                 job1.finished.connect(function(job) {
                     cookie1 = job.result;
                 });
 
-                var job2 = service.startOperationCall(op2);
+                var job2 = service.startOperationCall("beginSuppressingScreenPowerManagement", op2);
                 job2.finished.connect(function(job) {
                     cookie2 = job.result;
                 });

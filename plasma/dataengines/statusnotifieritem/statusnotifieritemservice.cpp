@@ -27,6 +27,13 @@ StatusNotifierItemService::StatusNotifierItemService(StatusNotifierItemSource *s
     m_source(source)
 {
     setName("statusnotifieritem");
+    setOperationNames(
+        QStringList()
+            << "Activate"
+            << "SecondaryActivate"
+            << "Scroll"
+            << "ContextMenu"
+    );
 }
 
 StatusNotifierItemService::~StatusNotifierItemService()

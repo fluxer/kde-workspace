@@ -78,10 +78,10 @@ Column {
         //try to use the service
         if (source.indexOf("notification") !== -1) {
             var service = notificationsSource.serviceForSource(source)
-            var op = service.operationDescription("invokeAction")
+            var op = service.operationParameters("invokeAction")
             op["actionId"] = id
 
-            service.startOperationCall(op)
+            service.startOperationCall("invokeAction", op)
         //try to open the id as url
         } else if (source.indexOf("Job") !== -1) {
             plasmoid.openUrl(id)
@@ -90,15 +90,15 @@ Column {
 
     function configureNotification(appRealName) {
       var service = notificationsSource.serviceForSource("notification")
-      var op = service.operationDescription("configureNotification")
+      var op = service.operationParameters("configureNotification")
       op["appRealName"] = appRealName;
-      service.startOperationCall(op)
+      service.startOperationCall("configureNotification", op)
     }
 
     function closeNotification(source) {
       var service = notificationsSource.serviceForSource(source)
-      var op = service.operationDescription("userClosed")
-      service.startOperationCall(op)
+      var op = service.operationParameters("userClosed")
+      service.startOperationCall("userClosed", op)
     }
 
     property QtObject lastNotificationPopup

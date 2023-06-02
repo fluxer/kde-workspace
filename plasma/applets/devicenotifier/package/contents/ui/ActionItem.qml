@@ -72,9 +72,9 @@ Item {
         }
         onClicked: {
             service = hpSource.serviceForSource(udi);
-            operation = service.operationDescription("invokeAction");
-            operation.predicate = predicate;
-            service.startOperationCall(operation);
+            operation = service.operationParameters("invokeAction");
+            operation["predicate"] = predicate;
+            service.startOperationCall("invokeAction", operation);
             notifierDialog.currentExpanded = -1;
             notifierDialog.currentIndex = -1;
         }

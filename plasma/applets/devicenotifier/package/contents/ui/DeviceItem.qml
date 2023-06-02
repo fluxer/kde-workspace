@@ -60,8 +60,8 @@ Item {
             notifierDialog.currentIndex = index;
             notifierDialog.highlightItem.opacity = 1;
             service = sdSource.serviceForSource(udi);
-            operation = service.operationDescription("updateFreespace");
-            service.startOperationCall(operation);
+            operation = service.operationParameters("updateFreespace");
+            service.startOperationCall("updateFreespace", operation);
         }
         onExited: {
             notifierDialog.highlightItem.opacity = expanded ? 1 : 0;
@@ -72,9 +72,9 @@ Item {
             var actions = hpSource.data[udi]["actions"];
             if (actions.length == 1) {
                 service = hpSource.serviceForSource(udi);
-                operation = service.operationDescription("invokeAction");
-                operation.predicate = actions[0]["predicate"];
-                service.startOperationCall(operation);
+                operation = service.operationParameters("invokeAction");
+                operation["predicate"] = actions[0]["predicate"];
+                service.startOperationCall("invokeAction", operation);
             } else {
                 notifierDialog.currentExpanded = expanded ? -1 : index;
             }

@@ -25,6 +25,12 @@ SolidDeviceService::SolidDeviceService (SolidDeviceEngine* parent, const QString
       m_engine(parent)
 {
     setName ("soliddevice");
+    setOperationNames(
+        QStringList()
+            << "mount"
+            << "unmount"
+            << "updateFreespace"
+    );
     setDestination (source);
 }
 

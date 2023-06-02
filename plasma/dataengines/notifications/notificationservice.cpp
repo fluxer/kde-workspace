@@ -25,6 +25,13 @@ NotificationService::NotificationService(NotificationsEngine* parent, const QStr
       m_notificationEngine(parent)
 {
     setName("notifications");
+    setOperationNames(
+        QStringList()
+            << "invokeAction"
+            << "userClosed"
+            << "createNotification"
+            << "configureNotification"
+    );
     setDestination(source);
 }
 

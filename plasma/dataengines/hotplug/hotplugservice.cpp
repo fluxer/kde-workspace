@@ -24,6 +24,10 @@ HotplugService::HotplugService (HotplugEngine* parent, const QString& source)
     : Plasma::Service (parent)
 {
     setName ("hotplug");
+    setOperationNames(
+        QStringList()
+        << "invokeAction"
+    );
     setDestination (source);
 }
 

@@ -257,8 +257,8 @@ Flow {
 
     function performOperation(what) {
         var service = dataEngine.serviceForSource("PowerDevil");
-        var operation = service.operationDescription(what);
-        service.startOperationCall(operation);
+        var operation = service.operationParameters(what);
+        service.startOperationCall(what, operation);
     }
 }
 

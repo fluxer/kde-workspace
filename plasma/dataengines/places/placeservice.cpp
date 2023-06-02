@@ -31,6 +31,17 @@ PlaceService::PlaceService(QObject* parent,
       m_index(index)
 {
     setName("org.kde.places");
+    setOperationNames(
+        QStringList()
+            << "Update"
+            << "Add"
+            // FIXME: no move, cos we don't have drag-n-drop.  Can we fake it?
+            << "Remove"
+            << "Hide"
+            << "Show"
+            << "Setup Device"
+            << "Teardown Device"
+    );
     if (m_index.isValid()) {
         Q_ASSERT(m_index.model() == model);
         setDestination(QString::number(m_index.row()));

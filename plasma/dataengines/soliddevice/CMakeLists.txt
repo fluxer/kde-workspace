@@ -17,5 +17,3 @@ target_link_libraries(plasma_engine_soliddevice
 
 install(TARGETS plasma_engine_soliddevice DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-dataengine-soliddevice.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(FILES soliddevice.operations DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)
-

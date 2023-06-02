@@ -28,5 +28,3 @@ target_link_libraries(plasma_engine_statusnotifieritem ${KDE4_KDEUI_LIBS} ${KDE4
 
 install(TARGETS plasma_engine_statusnotifieritem DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma_engine_statusnotifieritem.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(FILES statusnotifieritem.operations DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)
-

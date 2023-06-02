@@ -21,4 +21,3 @@ target_link_libraries(plasma_engine_tasks
 
 install(TARGETS plasma_engine_tasks DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 install(FILES plasma-dataengine-tasks.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(FILES tasks.operations DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services)

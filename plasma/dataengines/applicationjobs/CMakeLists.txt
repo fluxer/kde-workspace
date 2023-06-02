@@ -36,8 +36,3 @@ install(
     FILES plasma-dataengine-applicationjobs.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
-install(
-    FILES applicationjobs.operations
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services
-)
-

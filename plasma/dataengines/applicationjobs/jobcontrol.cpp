@@ -25,6 +25,12 @@ JobControl::JobControl(QObject* parent, JobView *jobView)
       m_jobView(jobView)
 {
     setName("applicationjobs");
+    setOperationNames(
+        QStringList()
+            << "resume"
+            << "suspend"
+            << "stop"
+    );
     setDestination(jobView->objectName());
 }
 

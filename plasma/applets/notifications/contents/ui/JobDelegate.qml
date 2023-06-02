@@ -146,8 +146,8 @@ PlasmaComponents.ListItem {
                                 operationName = "resume"
                             }
                             var service = jobsSource.serviceForSource(modelData)
-                            var operation = service.operationDescription(operationName)
-                            service.startOperationCall(operation)
+                            var operation = service.operationParameters(operationName)
+                            service.startOperationCall(operationName, operation)
                         }
                     }
                     PlasmaComponents.ToolButton {
@@ -158,8 +158,8 @@ PlasmaComponents.ListItem {
                         flat: false
                         onClicked: {
                             var service = jobsSource.serviceForSource(modelData)
-                            var operation = service.operationDescription("stop")
-                            service.startOperationCall(operation)
+                            var operation = service.operationParameters("stop")
+                            service.startOperationCall("stop", operation)
                         }
                     }
                 }

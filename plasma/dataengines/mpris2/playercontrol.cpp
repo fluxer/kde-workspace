@@ -35,6 +35,26 @@ PlayerControl::PlayerControl(PlayerContainer* container, QObject* parent)
 {
     setObjectName(container->objectName() + QLatin1String(" controller"));
     setName("mpris2");
+    setOperationNames(
+        QStringList()
+            << "Quit"
+            << "Raise"
+            << "SetFullscreen"
+            << "Play"
+            << "Pause"
+            << "PlayPause"
+            << "Stop"
+            << "Previous"
+            << "Next"
+            << "Seek"
+            << "SetPosition"
+            << "OpenUri"
+            << "SetLoopStatus"
+            << "SetShuffle"
+            << "SetRate"
+            << "SetVolume"
+            
+    );
     setDestination(container->objectName());
 
     connect(container, SIGNAL(dataUpdated(QString,Plasma::DataEngine::Data)),

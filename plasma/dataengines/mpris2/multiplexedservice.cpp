@@ -27,6 +27,26 @@ MultiplexedService::MultiplexedService(Multiplexer *multiplexer, QObject *parent
 {
     setObjectName(Multiplexer::sourceName + QLatin1String(" controller"));
     setName("mpris2");
+    setOperationNames(
+        QStringList()
+            << "Quit"
+            << "Raise"
+            << "SetFullscreen"
+            << "Play"
+            << "Pause"
+            << "PlayPause"
+            << "Stop"
+            << "Previous"
+            << "Next"
+            << "Seek"
+            << "SetPosition"
+            << "OpenUri"
+            << "SetLoopStatus"
+            << "SetShuffle"
+            << "SetRate"
+            << "SetVolume"
+            
+    );
     setDestination(Multiplexer::sourceName);
 
     connect(multiplexer, SIGNAL(activePlayerChanged(PlayerContainer*)),

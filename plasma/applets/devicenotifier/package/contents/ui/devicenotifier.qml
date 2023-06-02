@@ -335,8 +335,8 @@ Item {
                 onLeftActionTriggered: {
                     operationName = mounted ? "unmount" : "mount";
                     service = sdSource.serviceForSource(udi);
-                    operation = service.operationDescription(operationName);
-                    service.startOperationCall(operation);
+                    operation = service.operationParameters(operationName);
+                    service.startOperationCall(operationName, operation);
                 }
                 property bool isLast: (expandedDevice == udi)
                 property int operationResult: (model["Operation result"])

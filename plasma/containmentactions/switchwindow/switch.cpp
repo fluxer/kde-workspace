@@ -196,7 +196,7 @@ void SwitchWindow::switchTo(QAction *action)
     kDebug() << source;
     Plasma::Service *service = dataEngine("tasks")->serviceForSource(source);
     if (service) {
-        service->startOperationCall(service->operationDescription("activateRaiseOrIconify"));
+        service->startOperationCall("activateRaiseOrIconify", service->operationParameters("activateRaiseOrIconify"));
     }
 }
 

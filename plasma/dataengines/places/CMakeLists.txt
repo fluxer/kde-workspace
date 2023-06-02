@@ -13,10 +13,12 @@ target_link_libraries(plasma_engine_places
     ${KDE4_SOLID_LIBS}
 )
 
-install(TARGETS plasma_engine_places
-        DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-install(FILES plasma-dataengine-places.desktop
-        DESTINATION ${KDE4_SERVICES_INSTALL_DIR} )
-install(FILES org.kde.places.operations
-        DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/services )
+install(
+    TARGETS plasma_engine_places
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
+install(
+    FILES plasma-dataengine-places.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
 

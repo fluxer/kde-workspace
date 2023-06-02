@@ -394,23 +394,24 @@ void FdoSelectionManagerPrivate::createNotification(WId winId)
     if (!notificationsEngine) {
         notificationsEngine = Plasma::DataEngineManager::self()->loadEngine("notifications");
     }
-    //FIXME: who is the source in this case?
     Plasma::Service *service = notificationsEngine->serviceForSource("notification");
-    KConfigGroup op = service->operationDescription("createNotification");
 
-    if (op.isValid()) {
-        op.writeEntry("appName", task->name());
+    if (!service) {
+        kDebug() << "invalid service for notification";
+    } else if (service->isOperationEnabled("createNotification")) {
+        QMap<QString, QVariant> params = service->operationParameters("createNotification");
+        params["appName"] = task->name();
         //FIXME: find a way to pass icons trough here
-        op.writeEntry("appIcon", task->name());
+        params["appIcon"] = task->name();
 
-        //op.writeEntry("summary", task->name());
-        op.writeEntry("body", message);
-        op.writeEntry("timeout", (int)request.timeout);
-        KJob *job = service->startOperationCall(op);
+        //params["summary"] = task->name();
+        params["body"] = message;
+        params["timeout"] = (int)request.timeout;
+        KJob *job = service->startOperationCall("createNotification", params);
         QObject::connect(job, SIGNAL(finished(KJob*)), service, SLOT(deleteLater()));
     } else {
         delete service;
-        kDebug() << "invalid operation";
+        kDebug() << "invalid operation or disabled";
     }
 }
 

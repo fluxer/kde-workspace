@@ -24,6 +24,19 @@ PowerManagementService::PowerManagementService(QObject *parent)
     : Plasma::Service(parent)
 {
     setName("powermanagementservice");
+    setOperationNames(
+        QStringList()
+            << "lockScreen"
+            << "suspendToRam"
+            << "suspendToDisk"
+            << "suspendHybrid"
+            << "requestShutDown"
+            << "switchUser"
+            << "beginSuppressingSleep"
+            << "stopSuppressingSleep"
+            << "beginSuppressingScreenPowerManagement"
+            << "stopSuppressingScreenPowerManagement"
+    );
 }
 
 ServiceJob *PowerManagementService::createJob(const QString &operation,
