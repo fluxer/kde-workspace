@@ -49,8 +49,6 @@ JavascriptAddonPackageStructure::JavascriptAddonPackageStructure(QObject *parent
 
     addDirectoryDefinition("translations", "locale", i18n("Translations"));
 
-    addDirectoryDefinition("animations", "animations/", i18n("Animation scripts"));
-
     addFileDefinition("mainscript", "code/main.js", i18n("Main Script File"));
     setRequired("mainscript", true);
 }
