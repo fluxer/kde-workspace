@@ -44,10 +44,9 @@ Column {
                 return
             }
             var message = runningJobs[source]["label1"] ? runningJobs[source]["label1"] : runningJobs[source]["label0"]
-            notifications.addNotification(
+            notifications.addJobNotification(
                 source,
                 runningJobs[source]["appIconName"],
-                0,
                 runningJobs[source]["appName"],
                 i18n("%1 [Finished]", runningJobs[source]["infoMessage"]),
                 message,

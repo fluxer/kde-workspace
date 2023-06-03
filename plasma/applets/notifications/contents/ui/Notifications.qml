@@ -51,17 +51,19 @@ Column {
         if (notificationsModel.count > 20) {
             notificationsModel.remove(notificationsModel.count-1)
         }
-        var notification = {"source"  : source,
-                "appIcon" : appIcon,
-                "image"   : image,
-                "appName" : appName,
-                "summary" : summary,
-                "body"    : body,
-                "expireTimeout": expireTimeout,
-                "urgency" : urgency,
-                "configurable": configurable,
-                "appRealName": appRealName,
-                "actions" : actions}
+        var notification = {
+            "source"  : source,
+            "appIcon" : appIcon,
+            "image"   : image,
+            "appName" : appName,
+            "summary" : summary,
+            "body"    : body,
+            "expireTimeout": expireTimeout,
+            "urgency" : urgency,
+            "configurable": configurable,
+            "appRealName": appRealName,
+            "actions" : actions
+        }
         notificationsModel.inserting = true;
         notificationsModel.insert(0, notification);
         notificationsModel.inserting = false;
@@ -72,6 +74,10 @@ Column {
             lastNotificationPopup = lastNotificationPopupComponent.createObject(notificationsRoot)
         }
         lastNotificationPopup.popup(notification)
+    }
+
+    function addJobNotification(source, appIcon, appName, summary, body, expireTimeout, urgency, actions) {
+        addNotification(source, appIcon, new QImage, appName, summary, body, expireTimeout, urgency, appName, false, actions)
     }
 
     function executeAction(source, id) {
