@@ -56,7 +56,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
 
     setButtons(Help|Apply);
 
-    m_plasmaFound = KStandardDirs::findExe("plasma-desktop").isNull();
+    m_plasmaFound = !KStandardDirs::findExe("plasma-desktop").isNull();
 
     m_ui->setupUi(this);
     m_ui->themeCacheSize->setSuffix(i18n("%1 MB", ""));
@@ -67,7 +67,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     connect(m_ui->cacheTheme, SIGNAL(toggled(bool)), this, SLOT(cacheThemeChanged(bool)));
     connect(m_ui->themeCacheSize, SIGNAL(valueChanged(int)), this, SLOT(changed()));
 
-    if (m_plasmaFound) {
+    if (!m_plasmaFound) {
         m_ui->formFactor->setEnabled(false);
         m_ui->cacheTheme->setEnabled(false);
         m_ui->themeCacheSize->setEnabled(false);
