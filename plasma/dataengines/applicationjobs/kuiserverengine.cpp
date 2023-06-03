@@ -230,7 +230,7 @@ void JobView::setSpeed(qlonglong bytesPerSecond)
 
 QString JobView::speedString() const
 {
-    return i18nc("Byes per second", "%1/s", KGlobal::locale()->formatByteSize(m_speed));
+    return i18nc("Bytes per second", "%1/s", KGlobal::locale()->formatByteSize(m_speed));
 }
 
 void JobView::setInfoMessage(const QString &infoMessage)
