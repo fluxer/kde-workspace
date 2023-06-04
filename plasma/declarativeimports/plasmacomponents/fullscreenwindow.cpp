@@ -152,7 +152,7 @@ void FullScreenWindow::init(const QString &componentName)
     QDeclarativeContext *creationContext = component->creationContext();
     m_rootObject = component->create(creationContext);
     if (component->status() == QDeclarativeComponent::Error) {
-        kWarning()<<component->errors();
+        kWarning() << component->errors();
     }
 
     if (m_rootObject) {

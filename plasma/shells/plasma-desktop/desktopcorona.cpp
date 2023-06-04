@@ -47,7 +47,6 @@
 #include "panelview.h"
 #include "plasmaapp.h"
 #include "plasma-shell-desktop.h"
-#include "scripting/desktopscriptengine.h"
 
 DesktopCorona::DesktopCorona(QObject *parent)
     : Plasma::Corona(parent),
