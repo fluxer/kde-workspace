@@ -310,7 +310,7 @@ void TestTrash::trashFile( const QString& origFilePath, const QString& fileId )
 
     // test
     KIO::Job* job = KIO::move( u, KUrl("trash:/"), KIO::HideProgressInfo );
-    QMap<QString, QString> metaData;
+    KIO::MetaData metaData;
     bool ok = KIO::NetAccess::synchronousRun( job, 0, 0, 0, &metaData );
     if ( !ok )
         kError() << "moving " << u << " to trash failed with error " << KIO::NetAccess::lastError() << " " << KIO::NetAccess::lastErrorString();
@@ -330,7 +330,7 @@ void TestTrash::trashFile( const QString& origFilePath, const QString& fileId )
 
     QVERIFY( !metaData.isEmpty() );
     bool found = false;
-    QMap<QString, QString>::ConstIterator it = metaData.constBegin();
+    KIO::MetaData::ConstIterator it = metaData.constBegin();
     for ( ; it != metaData.constEnd() ; ++it ) {
         if (it.key().startsWith(QLatin1String("trashURL"))) {
             const QString origPath = it.key().mid( 9 );
@@ -412,7 +412,7 @@ void TestTrash::trashFileIntoOtherPartition()
 
     // test
     KIO::Job* job = KIO::move( u, KUrl("trash:/"), KIO::HideProgressInfo );
-    QMap<QString, QString> metaData;
+    KIO::MetaData metaData;
     bool ok = KIO::NetAccess::synchronousRun( job, 0, 0, 0, &metaData );
     QVERIFY( ok );
     // Note that the Path stored in the info file is relative, on other partitions (#95652)
@@ -427,7 +427,7 @@ void TestTrash::trashFileIntoOtherPartition()
 
     QVERIFY( !metaData.isEmpty() );
     bool found = false;
-    QMap<QString, QString>::ConstIterator it = metaData.constBegin();
+    KIO::MetaData::ConstIterator it = metaData.constBegin();
     for ( ; it != metaData.constEnd() ; ++it ) {
         if (it.key().startsWith( QLatin1String("trashURL"))) {
             const QString origPath = it.key().mid( 9 );
@@ -453,7 +453,7 @@ void TestTrash::trashFileOwnedByRoot()
 
     KIO::CopyJob* job = KIO::move( u, KUrl("trash:/"), KIO::HideProgressInfo );
     job->setUiDelegate(0); // no skip dialog, thanks
-    QMap<QString, QString> metaData;
+    KIO::MetaData metaData;
     bool ok = KIO::NetAccess::synchronousRun( job, 0, 0, 0, &metaData );
     QVERIFY( !ok );
     QVERIFY( KIO::NetAccess::lastError() == KIO::ERR_ACCESS_DENIED );
@@ -870,7 +870,7 @@ void TestTrash::trashDirectoryOwnedByRoot()
 
     KIO::CopyJob* job = KIO::move( u, KUrl("trash:/"), KIO::HideProgressInfo );
     job->setUiDelegate(0); // no skip dialog, thanks
-    QMap<QString, QString> metaData;
+    KIO::MetaData metaData;
     bool ok = KIO::NetAccess::synchronousRun( job, 0, 0, 0, &metaData );
     QVERIFY( !ok );
     const int err = KIO::NetAccess::lastError();
