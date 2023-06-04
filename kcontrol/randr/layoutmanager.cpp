@@ -23,8 +23,7 @@
 #include "outputgraphicsitem.h"
 
 #include <QGraphicsScene>
-#include <cmath>
-#include <math.h>
+#include <qmath.h>
 
 LayoutManager::LayoutManager(RandRScreen *screen, QGraphicsScene *scene)
     : QObject(screen)
@@ -40,7 +39,7 @@ LayoutManager::~LayoutManager()
 void LayoutManager::slotAdjustOutput(OutputGraphicsItem *output)
 {
     QPointF p = output->pos();
-    float nearest = m_scene->width() * m_scene->height();
+    qreal nearest = m_scene->width() * m_scene->height();
     OutputGraphicsItem *selected = NULL;
 
     OutputGraphicsItem *mouseGrabber = dynamic_cast<OutputGraphicsItem*>(m_scene->mouseGrabberItem());
@@ -54,7 +53,7 @@ void LayoutManager::slotAdjustOutput(OutputGraphicsItem *output)
         }
 
         QPointF pos = cur->pos();
-        float distance = (p.x() - pos.x())*(p.x()-pos.x()) + (p.y() - pos.y())*(p.y() - pos.y());
+        qreal distance = (p.x() - pos.x())*(p.x()-pos.x()) + (p.y() - pos.y())*(p.y() - pos.y());
         if (distance <=nearest) {
             nearest = distance;
             selected  = cur;
@@ -70,10 +69,10 @@ void LayoutManager::slotAdjustOutput(OutputGraphicsItem *output)
         i.translate(output->scenePos());
 
         // calculate the distances
-        float top = fabsf(i.top() - s.bottom());
-        float bottom = fabsf(i.bottom() - s.top());
-        float left = fabsf(i.left() - s.right());
-        float right = fabsf(i.right() - s.left());
+        qreal top = qAbs(i.top() - s.bottom());
+        qreal bottom = qAbs(i.bottom() - s.top());
+        qreal left = qAbs(i.left() - s.right());
+        qreal right = qAbs(i.right() - s.left());
 
         // choose top
         if (top <= bottom && top <= left && top <= right) {

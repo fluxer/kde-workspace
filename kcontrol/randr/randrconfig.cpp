@@ -353,9 +353,9 @@ void RandRConfig::slotDelayedUpdateView()
     }
     // scale the total bounding rectangle for all outputs to fit
     // 80% of the containing QGraphicsView
-    float scaleX = (float)screenView->width() / r.width();
-    float scaleY = (float)screenView->height() / r.height();
-    float scale = (scaleX < scaleY) ? scaleX : scaleY;
+    qreal scaleX = qreal(screenView->width()) / r.width();
+    qreal scaleY = qreal(screenView->height()) / r.height();
+    qreal scale = (scaleX < scaleY) ? scaleX : scaleY;
     scale *= 0.80f;
     
     screenView->resetMatrix();

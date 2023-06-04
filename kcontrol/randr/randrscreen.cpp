@@ -313,13 +313,10 @@ bool RandRScreen::setSize(const QSize &s)
         return false;
     }
 
-    int widthMM, heightMM;
-    float dpi;
-
     /* values taken from xrandr */
-    dpi = (25.4 * DisplayHeight(QX11Info::display(), m_index)) / DisplayHeightMM(QX11Info::display(), m_index);
-    widthMM =  (int) ((25.4 * s.width()) / dpi);
-    heightMM = (int) ((25.4 * s.height()) / dpi);
+    float dpi = (25.4 * DisplayHeight(QX11Info::display(), m_index)) / DisplayHeightMM(QX11Info::display(), m_index);
+    int widthMM =  (int) ((25.4 * s.width()) / dpi);
+    int heightMM = (int) ((25.4 * s.height()) / dpi);
 
     XRRSetScreenSize(QX11Info::display(), rootWindow(), s.width(), s.height(), widthMM, heightMM);
     m_rect.setSize(s);
