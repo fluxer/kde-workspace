@@ -114,7 +114,7 @@ void SettingsBase::initApplication()
         }
     }
     searchText->completionObject()->setIgnoreCase( true );
-    searchText->completionObject()->setItems( BaseData::instance()->menuItem()->keywords() );
+    searchText->completionObject()->setItems( rootModule->keywords() );
     changePlugin();
 }
 
