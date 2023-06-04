@@ -20,17 +20,18 @@
 #ifndef BASEMODE_H
 #define BASEMODE_H
 
-#include <QtCore/QObject>
 #include "systemsettingsview_export.h"
 
 #include <KService>
 
+#include <QObject>
 #include <QAction>
+#include <QAbstractItemView>
+#include <QList>
+
 class MenuItem;
 class ModuleView;
 class KConfigDialog;
-#include <QAbstractItemView>
-#include <QList>
 
 /**
  * @brief Provides a interface for System Settings views
