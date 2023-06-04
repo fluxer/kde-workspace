@@ -40,14 +40,6 @@ public:
 
 protected:
     void loadDefaultLayout();
-    void evaluateScripts(const QStringList &scripts);
-
-private Q_SLOTS:
-    void printScriptError(const QString &error);
-    void printScriptMessage(const QString &error);
-
-private:
-    Plasma::Applet *loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
 };
 
 #endif

@@ -282,36 +282,8 @@ int DesktopCorona::screenId(const QPoint &pos) const
     return QApplication::desktop()->screenNumber(pos);
 }
 
-void DesktopCorona::evaluateScripts(const QStringList &scripts, bool isStartup)
-{
-    foreach (const QString &script, scripts) {
-        WorkspaceScripting::DesktopScriptEngine scriptEngine(this, isStartup);
-        connect(&scriptEngine, SIGNAL(printError(QString)), this, SLOT(printScriptError(QString)));
-        connect(&scriptEngine, SIGNAL(print(QString)), this, SLOT(printScriptMessage(QString)));
-        connect(&scriptEngine, SIGNAL(createPendingPanelViews()), PlasmaApp::self(), SLOT(createWaitingPanels()));
-
-        QFile file(script);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-            QString code = file.readAll();
-            kDebug() << "evaluating startup script:" << script;
-            scriptEngine.evaluateScript(code);
-        }
-    }
-}
-
-void DesktopCorona::printScriptError(const QString &error)
-{
-    kWarning() << "Startup script errror:" << error;
-}
-
-void DesktopCorona::printScriptMessage(const QString &error)
-{
-    kDebug() << "Startup script: " << error;
-}
-
 void DesktopCorona::loadDefaultLayout()
 {
-    evaluateScripts(WorkspaceScripting::ScriptEngine::defaultLayoutScripts());
     if (containments().isEmpty()) {
         QString defaultConfig = KStandardDirs::locate("config", "plasma-desktoprc");
         if (!defaultConfig.isEmpty()) {
@@ -328,18 +300,6 @@ void DesktopCorona::saveDefaultSetup()
 {
     saveLayout(KStandardDirs::locateLocal("config", "plasma-desktoprc"));
     requestConfigSync();
-}
-
-Plasma::Applet *DesktopCorona::loadDefaultApplet(const QString &pluginName, Plasma::Containment *c)
-{
-    QVariantList args;
-    Plasma::Applet *applet = Plasma::Applet::load(pluginName, 0, args);
-
-    if (applet) {
-        c->addApplet(applet);
-    }
-
-    return applet;
 }
 
 void DesktopCorona::screenAdded(const DesktopTracker::Screen &screen)

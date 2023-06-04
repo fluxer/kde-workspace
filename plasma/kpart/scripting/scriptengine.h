@@ -41,8 +41,6 @@ public:
     explicit ScriptEngine(Plasma::Corona *corona, QObject *parent = 0);
     ~ScriptEngine();
 
-    static QStringList defaultLayoutScripts();
-
     bool evaluateScript(const QString &script, const QString &path = QString());
     QScriptValue wrap(Plasma::Applet *w);
 

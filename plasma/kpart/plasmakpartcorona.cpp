@@ -49,34 +49,7 @@ void PlasmaKPartCorona::loadDefaultLayout()
         return;
     }
 
-    evaluateScripts(PlasmaKPartScripting::ScriptEngine::defaultLayoutScripts());
     requestConfigSync();
-}
-
-void PlasmaKPartCorona::evaluateScripts(const QStringList &scripts)
-{
-    foreach (const QString &script, scripts) {
-        PlasmaKPartScripting::ScriptEngine scriptEngine(this);
-        connect(&scriptEngine, SIGNAL(printError(QString)), this, SLOT(printScriptError(QString)));
-        connect(&scriptEngine, SIGNAL(print(QString)), this, SLOT(printScriptMessage(QString)));
-
-        QFile file(script);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text) ) {
-            QString code = file.readAll();
-            kDebug() << "evaluating startup script:" << script;
-            scriptEngine.evaluateScript(code);
-        }
-    }
-}
-
-void PlasmaKPartCorona::printScriptError(const QString &error)
-{
-    kWarning() << "Startup script error:" << error;
-}
-
-void PlasmaKPartCorona::printScriptMessage(const QString &error)
-{
-    kDebug() << "Startup script: " << error;
 }
 
 #include "moc_plasmakpartcorona.cpp"

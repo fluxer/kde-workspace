@@ -59,28 +59,21 @@ public:
     QRegion availableScreenRegion(int id) const;
     int screenId(const QPoint &pos) const;
 
-    bool loadDefaultLayoutScripts();
-
 public Q_SLOTS:
     QRect availableScreenRect(int id) const;
     void addPanel();
     void addPanel(QAction *action);
     void addPanel(const QString &plugin);
     void populateAddPanelsMenu();
-    void evaluateScripts(const QStringList &scripts, bool isStartup = true);
 
 protected Q_SLOTS:
     void screenAdded(const DesktopTracker::Screen &screen);
     void saveDefaultSetup();
-    void printScriptError(const QString &error);
-    void printScriptMessage(const QString &error);
     void updateImmutability(Plasma::ImmutabilityType immutability);
     void checkAddPanelAction(const QStringList &sycocaChanges = QStringList());
 
 private:
     void init();
-
-    Plasma::Applet *loadDefaultApplet(const QString &pluginName, Plasma::Containment *c);
 
     QAction *m_addPanelAction;
     QMenu *m_addPanelsMenu;

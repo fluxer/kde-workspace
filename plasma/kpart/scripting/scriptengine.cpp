@@ -160,38 +160,6 @@ void ScriptEngine::exception(const QScriptValue &value)
     emit printError(value.toVariant().toString());
 }
 
-QStringList ScriptEngine::defaultLayoutScripts()
-{
-    const QString appName = KGlobal::activeComponent().aboutData()->appName();
-    QStringList scripts = KGlobal::dirs()->findAllResources("data", appName + "/plasma/layout/init/*.js");
-    QStringList scriptPaths;
-
-    if (scripts.isEmpty()) {
-        //kDebug() << "no javascript based layouts";
-        return scriptPaths;
-    }
-
-    const QString localDir = KGlobal::dirs()->localkdedir();
-    const QString localXdgDir = KGlobal::dirs()->localxdgdatadir();
-
-    QSet<QString> scriptNames;
-    foreach (const QString &script, scripts) {
-        if (script.startsWith(localDir) || script.startsWith(localXdgDir)) {
-            kDebug() << "skipping user local script: " << script;
-            continue;
-        }
-
-        QFileInfo f(script);
-        QString filename = f.fileName();
-        if (!scriptNames.contains(filename)) {
-            scriptNames.insert(filename);
-            scriptPaths.append(script);
-        }
-    }
-
-    return scriptPaths;
-}
-
 QScriptValue ScriptEngine::widgets(QScriptContext *context, QScriptEngine *engine)
 {
     ScriptEngine *env = ScriptEngine::envFor(engine);
