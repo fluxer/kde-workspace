@@ -28,12 +28,11 @@
 #include <KServiceTypeTrader>
 
 #include "MenuItem.h"
-#include "BaseData.h"
 #include "ModuleView.h"
 
 class BaseMode::Private {
 public:
-    Private() {}
+    Private() : rootItem(nullptr) {}
 
     QList<QAction*> actionsList;
     KService::Ptr service;
@@ -52,9 +51,9 @@ BaseMode::~BaseMode()
     delete d;
 }
 
-void BaseMode::init( const KService::Ptr modeService )
+void BaseMode::init( MenuItem *rootItem, const KService::Ptr modeService )
 {
-    d->rootItem = BaseData::instance()->menuItem();
+    d->rootItem = rootItem;
     d->service = modeService;
     d->config = KGlobal::config()->group( modeService->library() );
     initEvent();

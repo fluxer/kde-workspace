@@ -3,7 +3,6 @@ set(systemsettingsview_LIB_SRCS
     MenuModel.cpp
     MenuProxyModel.cpp
     ModuleView.cpp
-    BaseData.cpp
     BaseMode.cpp
     ExternalAppModule.cpp
     externalModule.ui
@@ -14,7 +13,6 @@ set(systemsettingsview_LIB_HDRS
     MenuItem.h
     MenuModel.h
     MenuProxyModel.h
-    BaseData.h
     BaseMode.h
     ModuleView.h
 )

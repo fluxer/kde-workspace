@@ -36,7 +36,6 @@
 #include <KActionCollection>
 #include <KServiceTypeTrader>
 
-#include "BaseData.h"
 #include "ModuleView.h"
 
 SettingsBase::SettingsBase( QWidget * parent )
@@ -93,8 +92,6 @@ void SettingsBase::initApplication()
         }
     }
 
-    // Prepare the Base Data
-    BaseData::instance()->setMenuItem( rootModule );
     // Load all possible views
     const KService::List pluginObjects = KServiceTypeTrader::self()->query( "SystemSettingsView" );
     const int nbPlugins = pluginObjects.count();
@@ -104,7 +101,7 @@ void SettingsBase::initApplication()
         BaseMode * controller = activeService->createInstance<BaseMode>(this, QVariantList(), &error);
         if( error.isEmpty() ) {
             possibleViews.insert( activeService->library(), controller );
-            controller->init( activeService );
+            controller->init( rootModule, activeService );
             connect(controller, SIGNAL(changeToolBarItems(BaseMode::ToolBarItems)), this, SLOT(changeToolBar(BaseMode::ToolBarItems)));
             connect(controller, SIGNAL(actionsChanged()), this, SLOT(updateViewActions()));
             connect(searchText, SIGNAL(textChanged(QString)), controller, SLOT(searchChanged(QString)));
