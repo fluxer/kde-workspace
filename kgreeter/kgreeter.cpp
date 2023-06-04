@@ -257,13 +257,13 @@ void KGreeter::paintEvent(QPaintEvent *event)
     }
 
     if (!m_rectangle.isNull()) {
-        m_ui.groupframe->setFrameShape(QFrame::NoFrame);
         QSize kgreeterrectanglesize(m_ui.groupframe->size());
         kgreeterrectanglesize.rwidth() = kgreeterrectanglesize.width() * 1.06;
         kgreeterrectanglesize.rheight() = kgreeterrectanglesize.height() * 1.65;
         QPointF kgreeterrectanglepoint(m_ui.groupframe->pos());
         kgreeterrectanglepoint -= QPointF(kgreeterrectanglepoint.x() * 0.03 , 0);
         if (m_rectanglescaled.isNull() || kgreeterrectanglesize != m_rectanglescaled.size()) {
+            m_ui.groupframe->setFrameShape(QFrame::NoFrame);
             m_rectanglescaled = m_rectangle.scaled(kgreeterrectanglesize);
         }
         painter.drawImage(kgreeterrectanglepoint, m_rectanglescaled);
