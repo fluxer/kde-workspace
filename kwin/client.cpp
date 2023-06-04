@@ -1498,11 +1498,10 @@ void Client::takeActivity(int flags, bool handled)
     static Time previous_activity_timestamp;
     static Client* previous_client;
 
-    //if ( previous_activity_timestamp == xTime() && previous_client != this )
-    //    {
-    //    kDebug( 1212 ) << "Repeated use of the same X timestamp for activity";
-    //    kDebug( 1212 ) << kBacktrace();
-    //    }
+    if ( previous_activity_timestamp == xTime() && previous_client != this ) {
+        kDebug( 1212 ) << "Repeated use of the same X timestamp for activity";
+        kDebug( 1212 ) << kBacktrace();
+    }
 
     previous_activity_timestamp = xTime();
     previous_client = this;
@@ -1520,15 +1519,15 @@ void Client::takeFocus()
     static Time previous_focus_timestamp;
     static Client* previous_client;
 
-    //if ( previous_focus_timestamp == xTime() && previous_client != this )
-    //    {
-    //    kDebug( 1212 ) << "Repeated use of the same X timestamp for focus";
-    //    kDebug( 1212 ) << kBacktrace();
-    //    }
+    if ( previous_focus_timestamp == xTime() && previous_client != this ) {
+        kDebug( 1212 ) << "Repeated use of the same X timestamp for focus";
+        kDebug( 1212 ) << kBacktrace();
+    }
 
     previous_focus_timestamp = xTime();
     previous_client = this;
 #endif
+
     if (rules()->checkAcceptFocus(input))
         XSetInputFocus(display(), window(), RevertToPointerRoot, xTime());
     else
