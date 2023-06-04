@@ -59,5 +59,3 @@ DataEngine *DataEngineConsumer::dataEngine(const QString &name)
 }
 
 } // namespace Plasma
-
-#include "moc_dataengineconsumer_p.cpp"
