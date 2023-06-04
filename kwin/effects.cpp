@@ -41,25 +41,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "thumbnailitem.h"
 #include "virtualdesktops.h"
 #include "workspace.h"
-
-#include <QFile>
-#include <QDBusServiceWatcher>
-#include <QtDBus/qdbuspendingcall.h>
-#include <QLibrary>
-
-#include <KDebug>
-#include <KDesktopFile>
-#include <KConfigGroup>
-#include <KGlobal>
-#include <KStandardDirs>
-#include <KService>
-#include <KServiceTypeTrader>
-#include <KPluginInfo>
-
-#include <assert.h>
 #include "composite.h"
 #include "xcbutils.h"
-
 // dbus generated
 #include "screenlocker_interface.h"
 
@@ -84,6 +67,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "effects/windowgeometry/windowgeometry.h"
 #include "effects/zoom/zoom.h"
 #include "effects/startupfeedback/startupfeedback.h"
+
+#include <QFile>
+#include <QDBusServiceWatcher>
+#include <QtDBus/qdbuspendingcall.h>
+
+#include <KDebug>
+#include <KDesktopFile>
+#include <KConfigGroup>
+#include <KGlobal>
+#include <KStandardDirs>
+#include <KService>
+#include <KServiceTypeTrader>
+#include <KPluginInfo>
+
+#include <assert.h>
 
 namespace KWin
 {
@@ -1306,7 +1304,6 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
     KService::Ptr service = offers.first();
 
     Effect* effect = 0;
-    QLibrary* library = 0;
     // builtins first
     if (internalname == "kwin4_effect_presentwindows") {
         effect = new PresentWindowsEffect();
