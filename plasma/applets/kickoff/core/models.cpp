@@ -61,7 +61,8 @@ QStandardItem *StandardItemFactory::createItemForUrl(const QString& urlString, D
     // Match files ending with ".desktop" and being local or having a relative
     // path. For instance applications that still installs .desktop files at
     // /usr/share/applnk, like KVirc 3
-    if (urlString.endsWith(QLatin1String(".desktop")) && (url.isLocalFile() || url.isRelative())) {
+    const bool isDesktopFile = urlString.endsWith(QLatin1String(".desktop"));
+    if (isDesktopFile && (url.isLocalFile() || url.isRelative())) {
         // .desktop files may be services (type field == 'Application' or 'Service')
         // or they may be other types such as links.
         //
@@ -72,9 +73,13 @@ QStandardItem *StandardItemFactory::createItemForUrl(const QString& urlString, D
             return createItemForService(service, displayOrder);
         }
 
-        item = new QStandardItem;
+        item = new QStandardItem();
         KDesktopFile desktopFile(url.toLocalFile());
-        item->setText(QFileInfo(urlString.mid(0, urlString.lastIndexOf('.'))).completeBaseName());
+        QString urlFileName = QFileInfo(urlString).fileName();
+        if (isDesktopFile) {
+            urlFileName = urlFileName.mid(0, urlFileName.size() - 8);
+        }
+        item->setText(urlFileName);
         item->setIcon(KIcon(desktopFile.readIcon()));
 
         //FIXME: desktopUrl is a hack around borkage in KRecentDocuments which
@@ -96,9 +101,9 @@ QStandardItem *StandardItemFactory::createItemForUrl(const QString& urlString, D
     } else if (url.scheme() == "leave") {
         item = LeaveModel::createStandardItem(urlString);
     } else {
-        item = new QStandardItem;
+        item = new QStandardItem();
         const QString subTitle = url.isLocalFile() ? url.toLocalFile() : url.prettyUrl();
-        QString basename = QFileInfo(url.prettyUrl()).completeBaseName();
+        QString basename = QFileInfo(url.prettyUrl()).fileName();
         if (basename.isNull()) {
             basename = subTitle;
         }
