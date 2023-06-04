@@ -37,7 +37,6 @@
 
 #include <klocale.h>
 #include <kfiledialog.h>
-#include <kimagefilepreview.h>
 #include <kimageio.h>
 #include <kmessagebox.h>
 #include <konq_operations.h>
@@ -149,11 +148,10 @@ void ChFaceDlg::slotGetCustomImage(  )
                   this, checkWidget);
 
   dlg.setOperationMode( KFileDialog::Opening );
+  dlg.setInlinePreviewShown( true );
   dlg.setCaption( i18nc("@title:window", "Choose Image") );
   dlg.setMode( KFile::File | KFile::LocalOnly );
 
-  KImageFilePreview *ip = new KImageFilePreview( &dlg );
-  dlg.setPreviewWidget( ip );
   if (dlg.exec() == QDialog::Accepted)
       addCustomPixmap( dlg.selectedFile(), checkWidget->isChecked() );
 }
