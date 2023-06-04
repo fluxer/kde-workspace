@@ -61,7 +61,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
     m_ui->setupUi(this);
     // NOTE: the i18n() bellow is using translation from:
     // kdelibs/kdecore/localization/klocale_kde.cpp
-    m_ui->themeCacheSize->setSuffix(i18n("%1 MB", ""));
+    m_ui->themeCacheSize->setSuffix(i18n("%1 MB", QLatin1String("")));
 
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
     connect(m_ui->showToolTips, SIGNAL(toggled(bool)), this, SLOT(changed()));
