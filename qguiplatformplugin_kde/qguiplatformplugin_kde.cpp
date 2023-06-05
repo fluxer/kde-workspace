@@ -100,14 +100,12 @@ public:
 
     virtual void accept()
     {
-        kDebug();
         KFileDialog::accept();
         QMetaObject::invokeMethod(original, "accept"); //workaround protected
     }
 
     virtual void reject()
     {
-        kDebug();
         KFileDialog::reject();
         QMetaObject::invokeMethod(original, "reject"); //workaround protected
     }
