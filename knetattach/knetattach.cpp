@@ -215,7 +215,7 @@ bool KNetAttach::validateCurrentPage()
             desktopFile.writeEntry("Icon", "folder-remote");
             desktopFile.writeEntry("Name", name);
             desktopFile.writeEntry("Type", "Link");
-            desktopFile.writeEntry("URL", url.prettyUrl());
+            desktopFile.writeEntry("URL", url.url());
             desktopFile.writeEntry("Charset", url.fileEncoding());
             desktopFile.sync();
             org::kde::KDirNotify::emitFilesAdded( "remote:/" );
@@ -241,7 +241,7 @@ bool KNetAttach::validateCurrentPage()
                 recent.writeEntry("Index", idx);
             }
             recent = KConfigGroup(&_recent,name);
-            recent.writeEntry("URL", url.prettyUrl());
+            recent.writeEntry("URL", url.url());
             if (_type == "FTP" || _type == "SFTP") {
                 recent.writeEntry("Port", _port->value());
             }
