@@ -151,33 +151,28 @@ public:
         QMetaObject::invokeMethod(this, "init", Qt::QueuedConnection);
     }
 
-    virtual QStringList keys() const
-    {
-        return QStringList() << QLatin1String("kde");
-    }
-
-    virtual QString styleName()
+    QString styleName() final
     {
         const KConfigGroup pConfig(KGlobal::config(), "General");
         return pConfig.readEntry("widgetStyle", KStyle::defaultStyle());
     }
 
-    virtual QPalette palette()
+    QPalette palette() final
     {
         return KGlobalSettings::createApplicationPalette();
     }
 
-    virtual QString systemIconThemeName()
+    QString systemIconThemeName() final
     {
         return KIconTheme::current();
     }
 
-    virtual QStringList iconThemeSearchPaths()
+    QStringList iconThemeSearchPaths() final
     {
         return KGlobal::dirs()->resourceDirs("icon");
     }
 
-    virtual QIcon fileSystemIcon(const QFileInfo &file)
+    QIcon fileSystemIcon(const QFileInfo &file) final
     {
         KMimeType::Ptr mime = KMimeType::findByPath(file.filePath(), 0, true);
         if (!mime)
@@ -185,7 +180,7 @@ public:
         return KIcon(mime->iconName());
     }
 
-    virtual int platformHint(QGuiPlatformPlugin::PlatformHint hint)
+    int platformHint(QGuiPlatformPlugin::PlatformHint hint) final
     {
         switch(hint) {
             case PH_ToolButtonStyle: {
@@ -215,13 +210,13 @@ public:
 
 public: // File Dialog integration
 #define K_FD(QFD) KFileDialogBridge *kdefd = qvariant_cast<KFileDialogBridge *>(QFD->property("_k_bridge"))
-    virtual void fileDialogDelete(QFileDialog *qfd)
+    void fileDialogDelete(QFileDialog *qfd) final
     {
         K_FD(qfd);
         delete kdefd;
     }
 
-    virtual bool fileDialogSetVisible(QFileDialog *qfd, bool visible)
+    bool fileDialogSetVisible(QFileDialog *qfd, bool visible) final
     {
         K_FD(qfd);
         if (!kdefd && visible) {
@@ -266,27 +261,27 @@ public: // File Dialog integration
         return true;
     }
 
-    virtual QDialog::DialogCode fileDialogResultCode(QFileDialog *qfd)
+    QDialog::DialogCode fileDialogResultCode(QFileDialog *qfd) final
     {
         K_FD(qfd);
         Q_ASSERT(kdefd);
         return QDialog::DialogCode(kdefd->result());
     }
 
-    virtual void fileDialogSetDirectory(QFileDialog *qfd, const QString &directory)
+    void fileDialogSetDirectory(QFileDialog *qfd, const QString &directory) final
     {
         K_FD(qfd);
         kdefd->setUrl(KUrl::fromPath(directory));
     }
 
-    virtual QString fileDialogDirectory(const QFileDialog *qfd) const
+    QString fileDialogDirectory(const QFileDialog *qfd) const final
     {
         K_FD(qfd);
         Q_ASSERT(kdefd);
         return kdefd->baseUrl().pathOrUrl();
     }
 
-    virtual void fileDialogSelectFile(QFileDialog *qfd, const QString &filename)
+    void fileDialogSelectFile(QFileDialog *qfd, const QString &filename) final
     {
         K_FD(qfd);
         Q_ASSERT(kdefd);
@@ -307,7 +302,7 @@ public: // File Dialog integration
     }
 #endif
 
-    virtual void fileDialogSetNameFilters(QFileDialog *qfd, const QStringList &filters)
+    void fileDialogSetNameFilters(QFileDialog *qfd, const QStringList &filters) final
     {
         K_FD(qfd);
         Q_ASSERT(kdefd);
@@ -315,13 +310,13 @@ public: // File Dialog integration
     }
 
 #if 0
-    virtual void fileDialogSelectNameFilter(QFileDialog *qfd, const QString &filter)
+    void fileDialogSelectNameFilter(QFileDialog *qfd, const QString &filter) final
     {
         K_FD(qfd);
     }
 #endif
 
-    virtual QString fileDialogSelectedNameFilter(const QFileDialog *qfd) const
+    QString fileDialogSelectedNameFilter(const QFileDialog *qfd) const final
     {
         K_FD(qfd);
         Q_ASSERT(kdefd);
@@ -332,13 +327,14 @@ public: // File Dialog integration
 
 public: // ColorDialog
 #define K_CD(QCD) KColorDialogBridge *kdecd = qvariant_cast<KColorDialogBridge *>(QCD->property("_k_bridge"))
-    virtual void colorDialogDelete(QColorDialog *qcd)
+    void colorDialogDelete(QColorDialog *qcd) final
     {
         K_CD(qcd);
         delete kdecd;
 
     }
-    virtual bool colorDialogSetVisible(QColorDialog *qcd, bool visible)
+
+    bool colorDialogSetVisible(QColorDialog *qcd, bool visible) final
     {
         K_CD(qcd);
         if (!kdecd) {
@@ -358,7 +354,7 @@ public: // ColorDialog
         return true;
     }
 
-    virtual void colorDialogSetCurrentColor(QColorDialog *qcd, const QColor &color)
+    void colorDialogSetCurrentColor(QColorDialog *qcd, const QColor &color) final
     {
         K_CD(qcd);
         if (kdecd) {
