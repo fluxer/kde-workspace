@@ -75,7 +75,7 @@ KNetAttach::KNetAttach( QWidget* parent )
 
 void KNetAttach::slotPageChanged(int)
 {
-    updateFinishButtonText(true);
+    _createIcon->setChecked(true);
 }
 
 void KNetAttach::slotHelpClicked()
@@ -103,13 +103,7 @@ void KNetAttach::updateParametersPageStatus()
         !_path->text().trimmed().isEmpty() &&
         !_connectionName->text().trimmed().isEmpty()
     );
-    if (_createIcon->isChecked() && !_pass->text().trimmed().isEmpty()) {
-        _createIcon->setIcon(KIcon("dialog-warning"));
-        _createIcon->setToolTip(i18n("The plain password will be stored"));
-    } else {
-        _createIcon->setIcon(QIcon());
-        _createIcon->setToolTip(QString());
-    }
+    updateFinishButtonText(_createIcon->isChecked());
 }
 
 bool KNetAttach::validateCurrentPage()
@@ -296,6 +290,13 @@ void KNetAttach::updateFinishButtonText(bool save)
         button(FinishButton)->setText(i18n("Save && C&onnect"));
     } else {
         button(FinishButton)->setText(i18n("C&onnect"));
+    }
+    if (save && !_pass->text().trimmed().isEmpty()) {
+        _createIcon->setIcon(KIcon("dialog-warning"));
+        _createIcon->setToolTip(i18n("The plain password will be stored"));
+    } else {
+        _createIcon->setIcon(QIcon());
+        _createIcon->setToolTip(QString());
     }
 }
 
