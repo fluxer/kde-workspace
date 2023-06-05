@@ -49,20 +49,12 @@ public:
   virtual void stat(const KUrl &url);
   virtual void copy(const KUrl &src, const KUrl &dest, int permissions, KIO::JobFlags flags);
   virtual void put(const KUrl &url, int permissions, KIO::JobFlags flags);
-  virtual void closeConnection();
   virtual void del(const KUrl &url, bool isfile);
   virtual void chmod(const KUrl &url, int permissions);
   virtual void symlink(const QString &target, const KUrl &dest, KIO::JobFlags flags);
   virtual void rename(const KUrl &src, const KUrl &dest, KIO::JobFlags flags);
   virtual void mkdir(const KUrl &url, int permissions);
-  virtual void openConnection();
 
-  // KIO::FileJob interface
-  virtual void open(const KUrl &url, QIODevice::OpenMode mode);
-  virtual void read(KIO::filesize_t size);
-  virtual void write(const QByteArray &data);
-  virtual void seek(KIO::filesize_t offset);
-  virtual void close();
   virtual void special(const QByteArray &data);
 
   // libssh authentication callback (note that this is called by the
@@ -174,6 +166,10 @@ private: // Private variables
 
 
 private: // private methods
+  void openConnection();
+  void closeConnection();
+  void open(const KUrl &url, QIODevice::OpenMode mode);
+  void close();
 
   int authenticateKeyboardInteractive(KIO::AuthInfo &info);
 

@@ -906,7 +906,6 @@ void sftpProtocol::openConnection()
     setTimeoutSpecialCommand(KIO_SFTP_SPECIAL_TIMEOUT);
 
     mConnected = true;
-    connected();
 
     info.password.fill('x');
     info.password.clear();
@@ -965,6 +964,8 @@ void sftpProtocol::special(const QByteArray &)
 
 void sftpProtocol::open(const KUrl &url, QIODevice::OpenMode mode)
 {
+    close();
+
     kDebug(KIO_SFTP_DB) << "open: " << url;
 
     if (!sftpLogin()) {
@@ -1058,61 +1059,6 @@ void sftpProtocol::open(const KUrl &url, QIODevice::OpenMode mode)
 
     openOffset = 0;
     totalSize(fileSize);
-    position(0);
-    opened();
-}
-
-void sftpProtocol::read(KIO::filesize_t bytes)
-{
-    kDebug(KIO_SFTP_DB) << "read, offset = " << openOffset << ", bytes = " << bytes;
-
-    Q_ASSERT(mOpenFile != NULL);
-
-    QVarLengthArray<char> buffer(bytes);
-
-    ssize_t bytesRead = sftp_read(mOpenFile, buffer.data(), bytes);
-    Q_ASSERT(bytesRead <= static_cast<ssize_t>(bytes));
-
-    if (bytesRead < 0) {
-        kDebug(KIO_SFTP_DB) << "Could not read " << mOpenUrl;
-        error(KIO::ERR_COULD_NOT_READ, mOpenUrl.prettyUrl());
-        close();
-        return;
-    }
-
-    const QByteArray fileData = QByteArray::fromRawData(buffer.data(), bytesRead);
-    data(fileData);
-}
-
-void sftpProtocol::write(const QByteArray &data)
-{
-    kDebug(KIO_SFTP_DB) << "write, offset = " << openOffset << ", bytes = " << data.size();
-
-    Q_ASSERT(mOpenFile != NULL);
-
-    ssize_t bytesWritten = sftp_write(mOpenFile, data.data(), data.size());
-    if (bytesWritten < 0) {
-        kDebug(KIO_SFTP_DB) << "Could not write to " << mOpenUrl;
-        error(KIO::ERR_COULD_NOT_WRITE, mOpenUrl.prettyUrl());
-        close();
-        return;
-    }
-
-    written(bytesWritten);
-}
-
-void sftpProtocol::seek(KIO::filesize_t offset)
-{
-    kDebug(KIO_SFTP_DB) << "seek, offset = " << offset;
-
-    Q_ASSERT(mOpenFile != NULL);
-
-    if (sftp_seek64(mOpenFile, static_cast<uint64_t>(offset)) < 0) {
-        error(KIO::ERR_COULD_NOT_SEEK, mOpenUrl.path());
-        close();
-    }
-
-    position(sftp_tell64(mOpenFile));
 }
 
 void sftpProtocol::close()
