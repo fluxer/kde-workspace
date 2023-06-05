@@ -48,6 +48,7 @@ KNetAttach::KNetAttach( QWidget* parent )
     connect(_recent, SIGNAL(toggled(bool)), _recentConnectionName, SLOT(setEnabled(bool)));
     connect(_connectionName, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_user, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
+    connect(_pass, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_host, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_path, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_createIcon, SIGNAL(toggled(bool)), this, SLOT(updateFinishButtonText(bool)));
@@ -102,6 +103,13 @@ void KNetAttach::updateParametersPageStatus()
         !_path->text().trimmed().isEmpty() &&
         !_connectionName->text().trimmed().isEmpty()
     );
+    if (_createIcon->isChecked() && !_pass->text().trimmed().isEmpty()) {
+        _createIcon->setIcon(KIcon("dialog-warning"));
+        _createIcon->setToolTip(i18n("The plain password will be stored"));
+    } else {
+        _createIcon->setIcon(QIcon());
+        _createIcon->setToolTip(QString());
+    }
 }
 
 bool KNetAttach::validateCurrentPage()
@@ -146,6 +154,7 @@ bool KNetAttach::validateCurrentPage()
             KUrl u(group.readEntry("URL"));
             _host->setText(u.host());
             _user->setText(u.user());
+            _pass->setText(u.password());
             _path->setText(u.path());
             if (group.hasKey("Port")) {
                 _port->setValue(group.readEntry("Port",0));
@@ -175,6 +184,7 @@ bool KNetAttach::validateCurrentPage()
 
         url.setHost(_host->text().trimmed());
         url.setUser(_user->text().trimmed());
+        url.setPassword(_pass->text().trimmed());
         QString path = _path->text().trimmed();
         // could a relative path really be made absolute by simply prepending a '/' ?
         if (!path.startsWith('/')) {
@@ -194,6 +204,7 @@ bool KNetAttach::validateCurrentPage()
 
         QString name = _connectionName->text().trimmed();
 
+        // SECURITY: plain password will be stored
         if (_createIcon->isChecked()) {
             KGlobal::dirs()->addResourceType("remote_entries", "data", "remoteview");
 
@@ -259,6 +270,8 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
         _port->show();
         _userText->show();
         _user->show();
+        _passText->show();
+        _pass->show();
         _encodingText->show();
         _encoding->show();
     } else if (protocol == "SFTP") {
@@ -266,6 +279,8 @@ bool KNetAttach::updateForProtocol(const QString& protocol)
         _port->show();
         _userText->show();
         _user->show();
+        _passText->show();
+        _pass->show();
         _encodingText->hide();
         _encoding->hide();
     } else {

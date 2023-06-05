@@ -144,6 +144,25 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="2">
+     <spacer name="spacer20_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeType">
+       <enum>QSizePolicy::Fixed</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>282</width>
+        <height>18</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="KLineEdit" name="_connectionName"/>
+    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="textLabel4_2">
       <property name="text">
@@ -176,25 +195,6 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1" colspan="2">
-     <widget class="KLineEdit" name="_connectionName"/>
-    </item>
-    <item row="1" column="2">
-     <spacer name="spacer20_2">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Fixed</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>282</width>
-        <height>18</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
     <item row="3" column="1" colspan="2">
      <widget class="KLineEdit" name="_user">
       <property name="sizePolicy">
@@ -206,6 +206,35 @@
      </widget>
     </item>
     <item row="4" column="0">
+     <widget class="QLabel" name="_passText">
+      <property name="text">
+       <string>&amp;Password:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <property name="buddy">
+       <cstring>_pass</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="KLineEdit" name="_pass">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>10</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="passwordMode">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
      <widget class="QLabel" name="textLabel1">
       <property name="text">
        <string>Se&amp;rver:</string>
@@ -221,7 +250,7 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" colspan="2">
+    <item row="5" column="1" colspan="2">
      <widget class="KLineEdit" name="_host">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -231,7 +260,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="_portText">
       <property name="text">
        <string>&amp;Port:</string>
@@ -247,23 +276,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="0">
-     <widget class="QLabel" name="textLabel3">
-      <property name="text">
-       <string>&amp;Folder:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-      <property name="wordWrap">
-       <bool>false</bool>
-      </property>
-      <property name="buddy">
-       <cstring>_path</cstring>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <widget class="KIntSpinBox" name="_port">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -282,10 +295,26 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="1" colspan="2">
+    <item row="7" column="0">
+     <widget class="QLabel" name="textLabel3">
+      <property name="text">
+       <string>&amp;Folder:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+      <property name="wordWrap">
+       <bool>false</bool>
+      </property>
+      <property name="buddy">
+       <cstring>_path</cstring>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="2">
      <widget class="KLineEdit" name="_path"/>
     </item>
-    <item row="7" column="0">
+    <item row="8" column="0">
      <widget class="QLabel" name="_encodingText">
       <property name="enabled">
        <bool>true</bool>
@@ -301,10 +330,10 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
+    <item row="8" column="1">
      <widget class="KComboBox" name="_encoding"/>
     </item>
-    <item row="8" column="1" colspan="2">
+    <item row="9" column="1" colspan="2">
      <widget class="QCheckBox" name="_createIcon">
       <property name="text">
        <string>Cr&amp;eate an icon for this remote folder</string>
@@ -314,7 +343,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="0" colspan="3">
+    <item row="10" column="0" colspan="3">
      <spacer name="spacer5">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
