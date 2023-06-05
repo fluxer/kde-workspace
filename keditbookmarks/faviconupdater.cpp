@@ -66,13 +66,6 @@ FavIconUpdater::~FavIconUpdater()
 {
 }
 
-// webkit callback
-void FavIconUpdater::setIconUrl(const KUrl &iconURL)
-{
-    m_favIconModule.setIconForUrl(m_bk.url().url(), iconURL.url());
-    // The above call will make the kded module start the download and emit iconChanged or error.
-}
-
 bool FavIconUpdater::isFavIconSignalRelevant(bool isHost, const QString& hostOrURL) const
 {
     // Is this signal interesting to us? (Don't react on an unrelated favicon)

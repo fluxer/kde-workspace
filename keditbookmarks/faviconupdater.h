@@ -33,7 +33,6 @@ public:
     void downloadIcon(const KBookmark &bk);
 
 private Q_SLOTS:
-    void setIconUrl(const KUrl &iconURL);
     void notifyChange(bool isHost, const QString& hostOrURL, const QString& iconName);
     void slotFavIconError(bool isHost, const QString& hostOrURL, const QString& errorString);
 
