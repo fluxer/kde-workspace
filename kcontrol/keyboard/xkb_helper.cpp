@@ -68,7 +68,7 @@ void executeXmodmap(const QString& configFileName)
         return;
     }
 
-    if( QFile(configFileName).exists() ) {
+    if( QFile::exists(configFileName) ) {
         if( xmodmapExe.isEmpty() ) {
             xmodmapExe = KStandardDirs::findExe(XMODMAP_EXEC);
             if( xmodmapExe.isEmpty() ) {
