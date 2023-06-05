@@ -95,4 +95,4 @@ X-KDE-ServiceTypes=SearchProvider
 Keys=blog,rss,feedster
 Query=https://www.feedster.com/?s=\\{@}
 Query[x-test]=xxhttps://www.feedster.com/?s=\\{@}xx
-Charset=utf8
+Charset=UTF-8

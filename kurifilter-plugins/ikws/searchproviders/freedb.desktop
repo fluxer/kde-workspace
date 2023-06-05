@@ -95,4 +95,4 @@ X-KDE-ServiceTypes=SearchProvider
 Keys=fdb,freedb,gnudb
 Query=https://gnudb.org/search/\\{@}
 Query[x-test]=xxhttps://gnudb.org/search/\\{@}xx
-Charset=utf8
+Charset=UTF-8

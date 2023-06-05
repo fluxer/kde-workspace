@@ -73,4 +73,4 @@ Query=https://www.youtube.com/results?search_query=\\{@}
 Query[x-test]=xxhttps://www.youtube.com/results?search_query=\\{@}xx
 ServiceTypes=SearchProvider
 Type=Service
-Charset=utf8
+Charset=UTF-8

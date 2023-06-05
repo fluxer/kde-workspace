@@ -89,6 +89,6 @@ Name[zh_CN]=Technorati 标签
 Name[zh_TW]=Technorati Tags
 X-KDE-ServiceTypes=SearchProvider
 Keys=tags,tag,technoratitags
-Query=http://technorati.com/tag/\\{@}?sourceid=kde-search
-Query[x-test]=xxhttp://technorati.com/tag/\\{@}?sourceid=kde-searchxx
-Charset=utf8
+Query=https://technorati.com/tag/\\{@}?sourceid=kde-search
+Query[x-test]=xxhttps://technorati.com/tag/\\{@}?sourceid=kde-searchxx
+Charset=UTF-8

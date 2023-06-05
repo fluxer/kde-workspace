@@ -93,4 +93,4 @@ X-KDE-ServiceTypes=SearchProvider
 Keys=wt,wikt
 Query=https://en.wiktionary.org/wiki/Special:Search?search=\\{@}
 Query[x-test]=xxhttps://en.wiktionary.org/wiki/Special:Search?search=\\{@}xx
-Charset=utf8
+Charset=UTF-8

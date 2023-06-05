@@ -95,4 +95,4 @@ X-KDE-ServiceTypes=SearchProvider
 Keys=wp
 Query=https://en.wikipedia.org/wiki/Special:Search?search=\\{@}
 Query[x-test]=xxhttps://en.wikipedia.org/wiki/Special:Search?search=\\{@}xx
-Charset=utf8
+Charset=UTF-8
