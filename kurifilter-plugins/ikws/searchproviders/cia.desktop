@@ -86,7 +86,8 @@ Name[wa]=World Fact Book del CIA
 Name[x-test]=xxCIA World Fact Bookxx
 Name[zh_CN]=CIA World Fact Book
 Name[zh_TW]=CIA World Fact Book
-Query=https://www.cia.gov/search?q=\\{@}&site=WORLD_FACTBOOK&btnG=Search&client=CIA&myAction=/search&proxystylesheet=CIA&submitMethod=get&oe=UTF-8&ie=UTF-8&ud=1
-Query[x-test]=xxhttps://www.cia.gov/search?q=\\{@}&site=WORLD_FACTBOOK&btnG=Search&client=CIA&myAction=/search&proxystylesheet=CIA&submitMethod=get&oe=UTF-8&ie=UTF-8&ud=1xx
+Query=https://www.cia.gov/search/?q=\\{@}&oe=UTF-8&ie=UTF-8
+Query[x-test]=xxhttps://www.cia.gov/search/?q=\\{@}&oe=UTF-8&ie=UTF-8xx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
+Charset=UTF-8

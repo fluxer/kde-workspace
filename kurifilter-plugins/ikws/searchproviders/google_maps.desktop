@@ -72,3 +72,4 @@ X-KDE-ServiceTypes=SearchProvider
 Keys=googlemaps,ggmaps,ggm
 Query=https://maps.google.com/maps?q=\\{@}&ie=UTF8&iwloc=addr
 Query[x-test]=xxhttps://maps.google.com/maps?q=\\{@}&ie=UTF8&iwloc=addrxx
+Charset=UTF-8
