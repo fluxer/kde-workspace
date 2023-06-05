@@ -23,8 +23,6 @@
 
 #include <Plasma/DataEngine>
 
-class FaviconProvider;
-
 /**
  * This class provides favicons for websites
  *
@@ -35,20 +33,15 @@ class FaviconsEngine : public Plasma::DataEngine
     Q_OBJECT
 
     public:
-        FaviconsEngine( QObject* parent, const QVariantList& args );
-        ~FaviconsEngine();
+        FaviconsEngine(QObject* parent, const QVariantList& args);
 
     protected:
-        bool sourceRequestEvent( const QString &identifier );
+        bool sourceRequestEvent(const QString &identifier);
 
     protected Q_SLOTS:
-        bool updateSourceEvent( const QString &identifier );
-
-    private Q_SLOTS:
-        void finished( FaviconProvider* );
-        void error( FaviconProvider* );
+        bool updateSourceEvent(const QString &identifier);
 };
 
 K_EXPORT_PLASMA_DATAENGINE(favicons, FaviconsEngine)
 
-#endif
+#endif // FAVICONS_DATAENGINE_H

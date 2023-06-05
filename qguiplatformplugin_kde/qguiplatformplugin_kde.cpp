@@ -55,7 +55,7 @@ static QString qt2KdeFilter(const QString &f)
 
         if (cb != -1 && ob < cb) {
             if (first) {
-                first=false;
+                first = false;
             } else {
                 str << '\n';
             }

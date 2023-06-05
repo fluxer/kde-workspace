@@ -19,47 +19,45 @@
 
 #include "favicons.h"
 
-#include "faviconprovider.h"
+#include <KMimeType>
+#include <KStandardDirs>
+#include <KDebug>
 
 FaviconsEngine::FaviconsEngine(QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args)
 {
 }
 
-FaviconsEngine::~FaviconsEngine()
+bool FaviconsEngine::updateSourceEvent(const QString &identifier)
 {
-}
-
-bool FaviconsEngine::updateSourceEvent( const QString &identifier )
-{
-    FaviconProvider *provider = new FaviconProvider(this, identifier);
-
-    connect(provider, SIGNAL(finished(FaviconProvider*)), this, SLOT(finished(FaviconProvider*)));
-    connect(provider, SIGNAL(error(FaviconProvider*)), this, SLOT(error(FaviconProvider*)));
-
-    if (provider->image() != QImage()) {
-        setData(provider->identifier(), "Icon", provider->image());
+    KUrl faviconUrl(identifier);
+    if (faviconUrl.protocol().isEmpty()) {
+        faviconUrl = KUrl("http://" + identifier);
     }
 
+    const QString fileName = KMimeType::favIconForUrl(faviconUrl.url(), true);
+    if (fileName.isEmpty()) {
+        kDebug() << "No icon available for " << identifier;
+        setData(identifier, QImage());
+        return false;
+    }
+
+    const QString cachePath = KStandardDirs::locateLocal("cache",  fileName + ".png");
+    const QImage image(cachePath, "PNG");
+    if (image.isNull()) {
+        kWarning() << "Could not load the image" << cachePath;
+        setData(identifier, QImage());
+        return false;
+    }
+
+    setData(identifier, image);
     return true;
 }
 
 bool FaviconsEngine::sourceRequestEvent(const QString &identifier)
 {
-    setData(identifier, QPixmap());
+    setData(identifier, QImage());
     return updateSourceEvent(identifier);
-}
-
-void FaviconsEngine::finished(FaviconProvider *provider)
-{
-    setData(provider->identifier(), "Icon", provider->image());
-    provider->deleteLater();
-}
-
-void FaviconsEngine::error(FaviconProvider *provider)
-{
-    setData(provider->identifier(), QImage());
-    provider->deleteLater();
 }
 
 #include "moc_favicons.cpp"
