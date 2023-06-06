@@ -77,6 +77,8 @@ void KEBApp::createActions() {
     if (m_browser) {
         (void) KStandardAction::open(
             m_actionsImpl, SLOT(slotLoad()), actionCollection());
+        (void) KStandardAction::save(
+            m_actionsImpl, SLOT(slotSave()), actionCollection());
         (void) KStandardAction::saveAs(
             m_actionsImpl, SLOT(slotSaveAs()), actionCollection());
     }
@@ -201,16 +203,23 @@ ActionsImpl::ActionsImpl(QObject* parent, KBookmarkModel* model)
 void ActionsImpl::slotLoad()
 {
     QString bookmarksFile
-        = KFileDialog::getOpenFileName(QString(), "*.xml", KEBApp::self());
+        = KFileDialog::getOpenFileName(KEBApp::self()->bookmarkFilename(), "*.xml", KEBApp::self());
     if (bookmarksFile.isNull())
         return;
     KEBApp::self()->reset(QString(), bookmarksFile);
 }
 
+void ActionsImpl::slotSave() {
+    KEBApp::self()->bkInfo()->commitChanges();
+    QString saveFilename = KEBApp::self()->bookmarkFilename();
+    if (!saveFilename.isEmpty())
+        GlobalBookmarkManager::self()->saveAs(saveFilename);
+}
+
 void ActionsImpl::slotSaveAs() {
     KEBApp::self()->bkInfo()->commitChanges();
     QString saveFilename
-        = KFileDialog::getSaveFileName(QString(), "*.xml", KEBApp::self());
+        = KFileDialog::getSaveFileName(KEBApp::self()->bookmarkFilename(), "*.xml", KEBApp::self());
     if (!saveFilename.isEmpty())
         GlobalBookmarkManager::self()->saveAs(saveFilename);
 }

@@ -41,6 +41,7 @@ public:
 
 public Q_SLOTS:
    void slotLoad();
+   void slotSave();
    void slotSaveAs();
    void slotCut();
    void slotCopy();

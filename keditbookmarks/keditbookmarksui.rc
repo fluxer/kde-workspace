@@ -1,10 +1,11 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="keditbookmarks" version="31">
+<kpartgui name="keditbookmarks" version="32">
 
 <MenuBar>
 
 <Menu name="file" noMerge="1"><text>&amp;File</text>
   <Action name="file_open"/>
+  <Action name="file_save"/>
   <Action name="file_save_as"/>
   <Separator/>
   <Menu name="import" noMerge="1"><text>&amp;Import</text>
@@ -125,13 +126,7 @@
 
 <State name="notreadonly">
   <Enable>
-    <Action name="importGaleon"/>
     <Action name="importKDE2"/>
-    <Action name="importOpera"/>
-    <Action name="importCrashes"/>
-    <Action name="importIE"/>
-    <Action name="importNS"/>
-    <Action name="importMoz"/>
     <Action name="settings_showNS"/>
     <Action name="settings_saveonclose"/>
   </Enable>
@@ -140,6 +135,7 @@
 <State name="normal">
   <Enable>
     <Action name="file_open"/>
+    <Action name="file_save"/>
     <Action name="file_save_as"/>
     <Action name="file_quit"/>
     <Action name="expandall"/>
