@@ -36,7 +36,6 @@
 #include <kbookmark.h>
 #include <kbookmarkmanager.h>
 #include <kbookmarkimporter.h>
-#include <kbookmarkdombuilder.h>
 
 
 ImportCommand::ImportCommand(KBookmarkModel* model)
