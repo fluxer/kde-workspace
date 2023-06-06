@@ -27,13 +27,36 @@
 #include "usbdevices.h"
 #include "moc_kcmusb.cpp"
 
+class KScopedStop
+{
+public:
+    KScopedStop(QTimer *timer);
+    ~KScopedStop();
+private:
+    QTimer *m_timer;
+};
+
+KScopedStop::KScopedStop(QTimer *timer)
+    : m_timer(timer)
+{
+    m_timer->stop();
+}
+
+KScopedStop::~KScopedStop()
+{
+    // 1 sec seems to be a good compromise between latency and polling load.
+    m_timer->start(1000);
+}
+
 K_PLUGIN_FACTORY(USBFactory, registerPlugin<USBViewer>();)
 K_EXPORT_PLUGIN(USBFactory("kcmusb"))
 
-USBViewer::USBViewer(QWidget *parent, const QVariantList &)
+USBViewer::USBViewer(QWidget *parent, const QVariantList &args)
     : KCModule(USBFactory::componentData(), parent),
-    _lastdevicecount(0)
+    _lastdevicecount(0),
+    _refreshTimer(nullptr)
 {
+    Q_UNUSED(args);
 
     setQuickHelp(i18n("This module allows you to see the devices attached to your USB bus(es)."));
     setButtons(KCModule::Help | KCModule::Export);
@@ -46,6 +69,7 @@ USBViewer::USBViewer(QWidget *parent, const QVariantList &)
     splitter->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);
     mainLayout->addWidget(splitter);
 
+    _refreshTimer = new QTimer(this);
     _devices = new QTreeWidget(splitter);
     
     QStringList headers;
@@ -62,11 +86,7 @@ USBViewer::USBViewer(QWidget *parent, const QVariantList &)
     _details = new QTextEdit(splitter);
     _details->setReadOnly(true);
 
-    QTimer *refreshTimer = new QTimer(this);
-    // 1 sec seems to be a good compromise between latency and polling load.
-    refreshTimer->start(1000);
-
-    connect(refreshTimer, SIGNAL(timeout()), SLOT(refresh()));
+    connect(_refreshTimer, SIGNAL(timeout()), SLOT(refresh()));
     connect(_devices, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this, SLOT(selectionChanged(QTreeWidgetItem*)));
 
     KAboutData *about = new KAboutData(I18N_NOOP("kcmusb"), 0, ki18n("KDE USB Viewer"),
@@ -76,22 +96,25 @@ USBViewer::USBViewer(QWidget *parent, const QVariantList &)
     about->addAuthor(ki18n("Matthias Hoelzer-Kluepfel"), KLocalizedString(), "mhk@kde.org");
     about->addCredit(ki18n("Leo Savernik"), ki18n("Live Monitoring of USB Bus"), "l.savernik@aon.at");
     setAboutData(about);
-
 }
 
-void USBViewer::load() {
+void USBViewer::load()
+{
     refresh();
 }
 
-static quint32 key(USBDevice &dev) {
+static quint32 key(USBDevice &dev)
+{
     return dev.bus()*256 + dev.device();
 }
 
-static quint32 key_parent(USBDevice &dev) {
+static quint32 key_parent(USBDevice &dev)
+{
     return dev.bus()*256 + dev.parent();
 }
 
-static void delete_recursive(QTreeWidgetItem *item, const QMap<int, QTreeWidgetItem*> &new_items) {
+static void delete_recursive(QTreeWidgetItem *item, const QMap<int, QTreeWidgetItem*> &new_items)
+{
     if (!item) {
         return;
     }
@@ -109,6 +132,8 @@ static void delete_recursive(QTreeWidgetItem *item, const QMap<int, QTreeWidgetI
 
 void USBViewer::refresh()
 {
+    KScopedStop kscopedstop(_refreshTimer);
+
     USBDevice::init();
     const int currentdevicecount = USBDevice::devices().size();
     if (currentdevicecount == _lastdevicecount) {
@@ -174,7 +199,8 @@ void USBViewer::refresh()
     // qDebug() << Q_FUNC_INFO << _details->toPlainText();
 }
 
-void USBViewer::selectionChanged(QTreeWidgetItem *item) {
+void USBViewer::selectionChanged(QTreeWidgetItem *item)
+{
     if (item) {
         quint32 busdev = item->text(1).toUInt();
         USBDevice *dev = USBDevice::find(busdev>>8, busdev&255);

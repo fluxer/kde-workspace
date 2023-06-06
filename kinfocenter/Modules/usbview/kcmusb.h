@@ -12,12 +12,12 @@
 #define KCMUSB_H
 
 #include <QMap>
-
-#include <kcmodule.h>
-
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QTextEdit>
+#include <QTimer>
+
+#include <kcmodule.h>
 
 class USBViewer : public KCModule
 {
@@ -36,6 +36,7 @@ private:
     QMap<int, QTreeWidgetItem*> _items;
     QTreeWidget *_devices;
     QTextEdit *_details;
+    QTimer *_refreshTimer;
 };
 
 #endif
