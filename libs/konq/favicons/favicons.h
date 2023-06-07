@@ -19,14 +19,14 @@
 #ifndef _FAVICONS_H_
 #define _FAVICONS_H_
 
-#include <QString>
 #include <kdedmodule.h>
 #include <kjob.h>
 
+class FavIconsModulePrivate;
+
 /**
- * KDED Module to handle shortcut icons ("favicons")
- * FavIconsModule implements a KDED Module that handles the association of
- * URLs with shortcut icons and downloads such on demand.
+ * FavIconsModule implements a KDED Module that downloads shortcut icons for
+ * URLs and stores them on disk for later use.
  *
  * @author Malte Starostik <malte@kde.org>
  */
@@ -73,7 +73,9 @@ public Q_SLOTS:
 
 Q_SIGNALS: // D-Bus signals
     /**
-     * Emitted once a new icon is available, for a host or url
+     * Emitted once a new icon is available for a URL (after download request).
+     * Empty @p iconName means an error occured. The @p url is same as the one
+     * passed to @p downloadUrlIcon() or @p forceDownloadUrlIcon()
      */
     void iconChanged(QString url, QString iconName);
 
@@ -86,7 +88,7 @@ private:
     void downloadError(const QString &url);
 
 private:
-    class FavIconsModulePrivate *d;
+    FavIconsModulePrivate *d;
 };
 
 #endif // _FAVICONS_H_
