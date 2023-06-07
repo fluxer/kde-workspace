@@ -31,19 +31,14 @@ public:
 
 private Q_SLOTS:
     void initTestCase();
-    void testSetIconForURL_data();
-    void testSetIconForURL();
     void testIconForURL_data();
     void testIconForURL();
 
-    void slotIconChanged(const bool isHost, const QString &hostOrURL, const QString &iconName);
-    void slotInfoMessage(const QString &iconURL, const QString &msg);
-    void slotError(const bool isHost, const QString &hostOrURL, const QString &errorString);
+    void slotIconChanged(const QString &url, const QString &iconName);
 
 private:
     bool m_iconChanged;
-    bool m_isHost;
-    QString m_hostOrURL;
+    QString m_url;
     QString m_iconName;
 
     org::kde::FavIcon m_favIconModule;

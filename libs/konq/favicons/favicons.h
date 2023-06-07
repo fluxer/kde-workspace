@@ -19,28 +19,15 @@
 #ifndef _FAVICONS_H_
 #define _FAVICONS_H_
 
+#include <QString>
 #include <kdedmodule.h>
-#include <kurl.h>
-
-class KJob;
-namespace KIO { class Job; }
+#include <kjob.h>
 
 /**
  * KDED Module to handle shortcut icons ("favicons")
  * FavIconsModule implements a KDED Module that handles the association of
- * URLs and hosts with shortcut icons and the icons' downloads in a central
- * place.
+ * URLs with shortcut icons and downloads such on demand.
  *
- * After a successful download, the D-Bus signal iconChanged() is emitted.
- * It has the signature void iconChanged(bool, QString, QString);
- * The first parameter is true if the icon is a "host" icon, that is it is
- * the default icon for all URLs on the given host. In this case, the
- * second parameter is a host name, otherwise the second parameter is the
- * URL which is associated with the icon. The third parameter is the
- * @ref KIconLoader friendly name of the downloaded icon, the same as
- * @ref iconForUrl will from now on return for any matching URL.
- *
- * @short KDED Module for favicons
  * @author Malte Starostik <malte@kde.org>
  */
 class FavIconsModule : public KDEDModule
@@ -49,10 +36,10 @@ class FavIconsModule : public KDEDModule
     Q_CLASSINFO("D-Bus Interface", "org.kde.FavIcon")
 
 public:
-    FavIconsModule(QObject* parent, const QList<QVariant>&);
-    virtual ~FavIconsModule();
+    FavIconsModule(QObject* parent, const QList<QVariant> &args);
+    ~FavIconsModule();
 
-public Q_SLOTS: // dbus methods, called by the adaptor
+public Q_SLOTS:
     /**
      * Looks up an icon name for a given URL. This function does not
      * initiate any download. If no icon for the URL or its host has
@@ -62,18 +49,8 @@ public Q_SLOTS: // dbus methods, called by the adaptor
      * @return the icon name suitable to pass to @ref KIconLoader or
      *         QString() if no icon for this URL was found.
      */
-    QString iconForUrl(const KUrl &url);
+    QString iconForUrl(const QString &url);
 
-    /**
-     * Associates an icon with the given URL. If the icon was not
-     * downloaded before or the downloaded was too long ago, a
-     * download attempt will be started and the iconChanged() D-Bus
-     * signal is emitted after the download finished successfully.
-     *
-     * @param url the URL which will be associated with the icon
-     * @param iconURL the URL of the icon to be downloaded
-     */
-    void setIconForUrl(const KUrl &url, const KUrl &iconURL);
     /**
      * Downloads the icon for a given host if it was not downloaded before
      * or the download was too long ago. If the download finishes
@@ -81,7 +58,7 @@ public Q_SLOTS: // dbus methods, called by the adaptor
      *
      * @param url any URL on the host for which the icon is to be downloaded
      */
-    void downloadHostIcon(const KUrl &url);
+    void downloadUrlIcon(const QString &url);
 
     /**
      * Downloads the icon for a given host, even if we tried very recently.
@@ -92,37 +69,25 @@ public Q_SLOTS: // dbus methods, called by the adaptor
      *
      * @param url any URL on the host for which the icon is to be downloaded
      */
-    void forceDownloadHostIcon(const KUrl &url);
+    void forceDownloadUrlIcon(const QString &url);
 
-signals: // D-Bus signals
+Q_SIGNALS: // D-Bus signals
     /**
      * Emitted once a new icon is available, for a host or url
      */
-    void iconChanged(bool isHost, QString hostOrURL, QString iconName);
-    /**
-     * Progress info while downloading an icon
-     */
-    void infoMessage(QString iconURL, QString msg);
-    /**
-     * Emitted if an error occurred while downloading the icon for the given host or url.
-     * You can usually ignore this (e.g. web browsers don't need to do anything if
-     * no favicon was found), but this signal can be useful in some cases, e.g.
-     * to let keditbookmarks know that it should move on to the next bookmark.
-     */
-    void error(bool isHost, QString hostOrURL, QString errorString);
-
-private:
-    void startDownload(const QString &, bool, const KUrl &);
+    void iconChanged(QString url, QString iconName);
 
 private Q_SLOTS:
-    void slotData(KIO::Job *, const QByteArray &);
-    void slotResult(KJob *);
-    void slotInfoMessage(KJob *, const QString &);
+    void slotFinished(KJob *kjob);
 
 private:
-    struct FavIconsModulePrivate *d;
+    void startDownload(const QString &url, const QString &iconFile);
+    void startJob(const QString &url, const QString &faviconUrl, const QString &iconFile);
+    void downloadSuccess(const QString &url);
+    void downloadError(const QString &url);
+
+private:
+    class FavIconsModulePrivate *d;
 };
 
-#endif
-
-// vim: ts=4 sw=4 et
+#endif // _FAVICONS_H_

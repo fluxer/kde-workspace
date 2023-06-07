@@ -38,10 +38,10 @@ FavIconUpdater::FavIconUpdater(QObject *parent)
     : QObject(parent),
       m_favIconModule("org.kde.kded", "/modules/favicons", QDBusConnection::sessionBus())
 {
-    connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)),
-            this, SLOT(notifyChange(bool,QString,QString)) );
-    connect(&m_favIconModule, SIGNAL(error(bool,QString,QString)),
-            this, SLOT(slotFavIconError(bool,QString,QString)) );
+    connect(
+        &m_favIconModule, SIGNAL(iconChanged(QString,QString)),
+        this, SLOT(notifyChange(QString,QString))
+    );
 }
 
 void FavIconUpdater::downloadIcon(const KBookmark &bk)
@@ -54,45 +54,25 @@ void FavIconUpdater::downloadIcon(const KBookmark &bk)
         m_bk.setIcon(favicon);
         KEBApp::self()->notifyCommandExecuted();
         // kDebug() << "emit done(true)";
-        emit done(true, QString());
+        emit done(true);
 
     } else {
         kDebug() << "no favicon found";
-        m_favIconModule.forceDownloadHostIcon(url);
+        m_favIconModule.forceDownloadUrlIcon(url);
     }
 }
 
-FavIconUpdater::~FavIconUpdater()
+void FavIconUpdater::notifyChange(const QString &url, const QString &iconName)
 {
-}
-
-bool FavIconUpdater::isFavIconSignalRelevant(bool isHost, const QString& hostOrURL) const
-{
-    // Is this signal interesting to us? (Don't react on an unrelated favicon)
-    return (isHost && hostOrURL == m_bk.url().host()) ||
-        (!isHost && hostOrURL == m_bk.url().url()); // should we use the api that ignores trailing slashes?
-}
-
-void FavIconUpdater::notifyChange(bool isHost,
-                                  const QString& hostOrURL,
-                                  const QString& iconName)
-{
-    kDebug() << hostOrURL << iconName;
-    if (isFavIconSignalRelevant(isHost, hostOrURL)) {
-        if (iconName.isEmpty()) { // old version of the kded module could emit with an empty iconName on error
-            slotFavIconError(isHost, hostOrURL, QString());
+    kDebug() << url << iconName;
+    if (m_bk.url().url() == url) {
+        // kded module emits empty iconName on error
+        if (iconName.isEmpty()) {
+            emit done(false);
         } else {
             m_bk.setIcon(iconName);
-            emit done(true, QString());
+            emit done(true);
         }
-    }
-}
-
-void FavIconUpdater::slotFavIconError(bool isHost, const QString& hostOrURL, const QString& errorString)
-{
-    kDebug() << hostOrURL << errorString;
-    if (isFavIconSignalRelevant(isHost, hostOrURL)) {
-        emit done(false, errorString);
     }
 }
 

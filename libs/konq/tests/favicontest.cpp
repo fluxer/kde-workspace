@@ -89,98 +89,16 @@ static void cleanCache()
 FavIconTest::FavIconTest()
     : QObject(),
     m_iconChanged(false),
-    m_isHost(false),
     m_favIconModule("org.kde.kded", "/modules/favicons", QDBusConnection::sessionBus())
 {
     connect(
-        &m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)),
-        this, SLOT(slotIconChanged(bool,QString,QString))
-    );
-    connect(
-        &m_favIconModule, SIGNAL(infoMessage(QString,QString)),
-        this, SLOT(slotInfoMessage(QString,QString))
-    );
-    connect(
-        &m_favIconModule, SIGNAL(error(bool,QString,QString)),
-        this, SLOT(slotError(bool,QString,QString))
+        &m_favIconModule, SIGNAL(iconChanged(QString,QString)),
+        this, SLOT(slotIconChanged(QString,QString))
     );
 }
 
 void FavIconTest::initTestCase()
 {
-}
-
-void FavIconTest::testSetIconForURL_data()
-{
-    QTest::addColumn<QString>("url");
-    QTest::addColumn<QString>("icon");
-    QTest::addColumn<QString>("result");
-
-    QTest::newRow("https://www.google.com")
-        << QString::fromLatin1("https://www.google.com") << QString::fromLatin1("https://www.google.com/favicon.ico")
-        << QString::fromLatin1("favicons/www.google.com");
-    QTest::newRow("https://www.ibm.com")
-        << QString::fromLatin1("https://www.ibm.com") << QString::fromLatin1("https://www.ibm.com/favicon.ico")
-        << QString::fromLatin1("favicons/www.ibm.com");
-    QTest::newRow("https://github.com/")
-        << QString::fromLatin1("https://github.com/") << QString::fromLatin1("https://github.com/favicon.ico")
-        << QString::fromLatin1("favicons/github.com");
-    // lb-140-82-121-3-fra.github.com if not address
-    QTest::newRow("https://140.82.121.3/")
-        << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("https://140.82.121.3/favicon.ico")
-        << QString::fromLatin1("favicons/lb-140-82-121-3-fra.github.com");
-}
-
-void FavIconTest::testSetIconForURL()
-{
-    QFETCH(QString, url);
-    QFETCH(QString, icon);
-    QFETCH(QString, result);
-
-    if (!checkICOReadable()) {
-        QSKIP("ico not readable", SkipAll);
-    }
-
-    if (!checkNetworkAccess()) {
-        QSKIP("no network access", SkipAll);
-    }
-
-    cleanCache();
-
-#if USE_EVENT_LOOP
-    QEventLoop eventLoop;
-    connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
-    QSignalSpy spy(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)));
-    QVERIFY(spy.isValid());
-    QCOMPARE(spy.count(), 0);
-    m_favIconModule.setIconForUrl(url, icon);
-    qDebug("called setIconForUrl, waiting");
-    if (spy.count() < 1) {
-        QTimer::singleShot(s_waitTime, &eventLoop, SLOT(quit()));
-        eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
-    }
-
-    QCOMPARE(spy.count(), 1);
-    QCOMPARE(spy[0][0].toBool(), false);
-    QCOMPARE(spy[0][1].toString(), url);
-    QCOMPARE(spy[0][2].toString(), result);
-#else
-    m_iconChanged = false;
-    m_favIconModule.setIconForUrl(url, icon);
-    qDebug("called setIconForUrl, waiting");
-    QElapsedTimer elapsedTimer;
-    elapsedTimer.start();
-    while (!m_iconChanged && elapsedTimer.elapsed() < s_waitTime) {
-        QTest::qWait(400);
-    }
-    QVERIFY(m_iconChanged);
-    if (m_isHost) {
-        QCOMPARE(m_hostOrURL, KUrl(url).host());
-    } else {
-        QCOMPARE(m_hostOrURL, url);
-    }
-    QCOMPARE(m_iconName, result);
-#endif
 }
 
 void FavIconTest::testIconForURL_data()
@@ -190,10 +108,10 @@ void FavIconTest::testIconForURL_data()
 
     QTest::newRow("https://www.google.com")
         << QString::fromLatin1("https://www.google.com") << QString::fromLatin1("favicons/www.google.com");
-    QTest::newRow("https://www.ibm.com")
+    QTest::newRow("https://www.ibm.com/foo?bar=baz")
         << QString::fromLatin1("https://www.ibm.com") << QString::fromLatin1("favicons/www.ibm.com");
-    QTest::newRow("https://github.com/")
-        << QString::fromLatin1("https://github.com/") << QString::fromLatin1("favicons/github.com");
+    QTest::newRow("https://www.wpoven.com/") // NOTE: favicon.png
+        << QString::fromLatin1("https://www.wpoven.com/") << QString::fromLatin1("favicons/www.wpoven.com");
     QTest::newRow("https://140.82.121.3/")
         << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("favicons/140.82.121.3");
 }
@@ -219,11 +137,11 @@ void FavIconTest::testIconForURL()
 
 #if USE_EVENT_LOOP
     QEventLoop eventLoop;
-    connect(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)), &eventLoop, SLOT(quit()));
-    QSignalSpy spy(&m_favIconModule, SIGNAL(iconChanged(bool,QString,QString)));
+    connect(&m_favIconModule, SIGNAL(iconChanged(QString,QString)), &eventLoop, SLOT(quit()));
+    QSignalSpy spy(&m_favIconModule, SIGNAL(iconChanged(QString,QString)));
     QVERIFY(spy.isValid());
     QCOMPARE(spy.count(), 0);
-    m_favIconModule.downloadHostIcon(url);
+    m_favIconModule.downloadUrlIcon(url);
     qDebug("called downloadHostIcon, waiting");
     if (spy.count() < 1) {
         QTimer::singleShot(s_waitTime, &eventLoop, SLOT(quit()));
@@ -232,7 +150,7 @@ void FavIconTest::testIconForURL()
     QCOMPARE(spy.count(), 1);
 #else
     m_iconChanged = false;
-    m_favIconModule.downloadHostIcon(url);
+    m_favIconModule.downloadUrlIcon(url);
     qDebug("called downloadHostIcon, waiting");
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
@@ -246,23 +164,12 @@ void FavIconTest::testIconForURL()
     QCOMPARE(favicon, icon);
 }
 
-void FavIconTest::slotIconChanged(const bool isHost, const QString &hostOrURL, const QString &iconName)
+void FavIconTest::slotIconChanged(const QString &url, const QString &iconName)
 {
-    qDebug() << isHost << hostOrURL << iconName;
+    qDebug() << url << iconName;
     m_iconChanged = true;
-    m_isHost = isHost;
-    m_hostOrURL = hostOrURL;
+    m_url = url;
     m_iconName = iconName;
-}
-
-void FavIconTest::slotInfoMessage(const QString &iconURL, const QString &msg)
-{
-    qDebug() << iconURL << msg;
-}
-
-void FavIconTest::slotError(const bool isHost, const QString &hostOrURL, const QString &errorString)
-{
-    qWarning() << isHost << hostOrURL << errorString;
 }
 
 #include "moc_favicontest.cpp"

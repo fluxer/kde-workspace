@@ -50,10 +50,10 @@ void FavIconsItr::setStatus(const QString & status)
     model()->emitDataChanged(currentBookmark());
 }
 
-void FavIconsItr::slotDone(bool succeeded, const QString& errorString)
+void FavIconsItr::slotDone(bool succeeded)
 {
     // kDebug() << "FavIconsItr::slotDone()";
-    setStatus(succeeded ? i18n("OK") : errorString);
+    setStatus(succeeded ? i18n("OK") : i18n("Download failed"));
     holder()->addAffectedBookmark(KBookmark::parentAddress(currentBookmark().address()));
     delayedEmitNextOne();
 }
@@ -72,8 +72,8 @@ void FavIconsItr::doAction()
     setStatus(i18n("Updating favicon..."));
     if (!m_updater) {
         m_updater = new FavIconUpdater(this);
-        connect(m_updater, SIGNAL(done(bool,QString)),
-                this,      SLOT(slotDone(bool,QString)) );
+        connect(m_updater, SIGNAL(done(bool)),
+                this,      SLOT(slotDone(bool)) );
     }
     m_updater->downloadIcon(currentBookmark());
 }

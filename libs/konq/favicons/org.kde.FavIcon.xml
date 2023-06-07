@@ -2,31 +2,17 @@
 <node>
   <interface name="org.kde.FavIcon">
     <signal name="iconChanged">
-      <arg name="isHost" type="b" direction="out"/>
-      <arg name="hostOrUrl" type="s" direction="out"/>
-      <arg name="iconName" type="s" direction="out"/>
-    </signal>
-    <signal name="infoMessage">
-      <arg name="iconUrl" type="s" direction="out"/>
-      <arg name="msg" type="s" direction="out"/>
-    </signal>
-    <signal name="error">
-      <arg name="isHost" type="b" direction="out"/>
-      <arg name="hostOrUrl" type="s" direction="out"/>
+      <arg name="url" type="s" direction="out"/>
       <arg name="iconName" type="s" direction="out"/>
     </signal>
     <method name="iconForUrl">
       <arg type="s" direction="out"/>
       <arg name="url" type="s" direction="in"/>
     </method>
-    <method name="setIconForUrl">
-      <arg name="url" type="s" direction="in"/>
-      <arg name="iconUrl" type="s" direction="in"/>
-    </method>
-    <method name="downloadHostIcon">
+    <method name="downloadUrlIcon">
       <arg name="url" type="s" direction="in"/>
     </method>
-    <method name="forceDownloadHostIcon">
+    <method name="forceDownloadUrlIcon">
       <arg name="url" type="s" direction="in"/>
     </method>
   </interface>

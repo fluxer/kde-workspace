@@ -29,18 +29,13 @@ class FavIconUpdater : public QObject
 
 public:
     FavIconUpdater(QObject *parent);
-    ~FavIconUpdater();
     void downloadIcon(const KBookmark &bk);
 
 private Q_SLOTS:
-    void notifyChange(bool isHost, const QString& hostOrURL, const QString& iconName);
-    void slotFavIconError(bool isHost, const QString& hostOrURL, const QString& errorString);
+    void notifyChange(const QString &url, const QString& iconName);
 
 Q_SIGNALS:
-    void done(bool succeeded, const QString& error);
-
-private:
-    bool isFavIconSignalRelevant(bool isHost, const QString& hostOrURL) const;
+    void done(bool succeeded);
 
 private:
     KBookmark m_bk;

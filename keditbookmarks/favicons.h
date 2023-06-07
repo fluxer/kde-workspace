@@ -43,7 +43,7 @@ public:
    virtual void cancel();
 
 public Q_SLOTS:
-   void slotDone(bool succeeded, const QString& errorString);
+   void slotDone(bool succeeded);
 
 protected:
    virtual void doAction();
