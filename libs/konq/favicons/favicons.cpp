@@ -20,22 +20,16 @@
 #include "favicons.h"
 #include "favicons_adaptor.h"
 
-#include <kicontheme.h>
-#include <kconfig.h>
-#include <klocale.h>
-#include <kde_file.h>
 #include <kstandarddirs.h>
 #include <kio/job.h>
-#include <kconfiggroup.h>
 #include <kdebug.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
-#include <QtCore/QBuffer>
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QMap>
-#include <QtCore/QDateTime>
+#include <QBuffer>
+#include <QFile>
+#include <QFileInfo>
+#include <QDateTime>
 #include <QImage>
 #include <QImageReader>
 
