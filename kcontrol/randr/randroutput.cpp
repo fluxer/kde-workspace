@@ -456,18 +456,17 @@ QStringList RandROutput::startupCommands() const
     // when the outputs are not unified.
     if (!m_screen->outputsUnified() || m_screen->connectedCount() <= 1) {
         command += QString(" --pos %1x%2").arg( m_crtc->rect().x()).arg( m_crtc->rect().y());
-        QSize modeSize = m_crtc->rect().size();
+        const QSize modeSize = m_crtc->rect().size();
+        // NOTE: the mode has to be one of the modes X11 server knows about
         switch (m_crtc->rotation()) {
             case RandR::Rotate90:
                 command += " --rotate left";
-                modeSize.transpose();
                 break;
             case RandR::Rotate180:
                 command += " --rotate inverted";
                 break;
             case RandR::Rotate270:
                 command += " --rotate right";
-                modeSize.transpose();
                 break;
         }
         command += QString(" --mode %1x%2").arg(modeSize.width()).arg(modeSize.height());
