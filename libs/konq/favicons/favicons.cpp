@@ -124,22 +124,6 @@ void FavIconsModule::downloadUrlIcon(const QString &url)
         emit iconChanged(url, iconName);
         return;
     }
-
-    startDownload(url, iconFile);
-}
-
-void FavIconsModule::forceDownloadUrlIcon(const QString &url)
-{
-    d->failedDownloads.removeAll(url); // force a download to happen
-    const QString iconName = iconNameFromURL(url);
-    const QString iconFile = iconFilePath(iconName);
-    QFile::remove(iconFile);
-    downloadUrlIcon(url);
-}
-
-void FavIconsModule::startDownload(const QString &url, const QString &iconFile)
-{
-    const QString iconName = iconNameFromURL(url);
     if (d->queuedDownloads.contains(iconName)) {
         kDebug() << "Icon download queued for" << url;
         return;
@@ -153,6 +137,15 @@ void FavIconsModule::startDownload(const QString &url, const QString &iconFile)
     d->queuedDownloads.append(iconName);
     const QString faviconUrl = faviconFromUrl(url, QLatin1String("ico"));
     startJob(url, faviconUrl, iconFile);
+}
+
+void FavIconsModule::forceDownloadUrlIcon(const QString &url)
+{
+    d->failedDownloads.removeAll(url); // force a download to happen
+    const QString iconName = iconNameFromURL(url);
+    const QString iconFile = iconFilePath(iconName);
+    QFile::remove(iconFile);
+    downloadUrlIcon(url);
 }
 
 void FavIconsModule::startJob(const QString &url, const QString &faviconUrl, const QString &iconFile)

@@ -81,7 +81,6 @@ private Q_SLOTS:
     void slotFinished(KJob *kjob);
 
 private:
-    void startDownload(const QString &url, const QString &iconFile);
     void startJob(const QString &url, const QString &faviconUrl, const QString &iconFile);
     void downloadSuccess(const QString &url);
     void downloadError(const QString &url);
