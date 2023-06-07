@@ -56,7 +56,6 @@ bool FaviconsEngine::updateSourceEvent(const QString &identifier)
 
 bool FaviconsEngine::sourceRequestEvent(const QString &identifier)
 {
-    setData(identifier, QImage());
     return updateSourceEvent(identifier);
 }
 
