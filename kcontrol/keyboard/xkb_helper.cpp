@@ -22,7 +22,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QDateTime>
+#include <QtCore/QElapsedTimer>
 #include <QtCore/QProcess>
 #include <QtGui/qx11info_x11.h>
 
@@ -101,7 +101,7 @@ void restoreXmodmap()
 //TODO: make private
 bool XkbHelper::runConfigLayoutCommand(const QStringList& setxkbmapCommandArguments)
 {
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
 
     const QString setxkbmapProgram = getSetxkbmapExe();

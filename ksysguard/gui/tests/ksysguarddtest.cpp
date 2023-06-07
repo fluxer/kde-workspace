@@ -25,9 +25,11 @@ void TestKsysguardd::initTestCase()
     client = new SensorClientTest;
     nextId = 0;
 }
+
 void TestKsysguardd::init()
 {
 }
+
 void TestKsysguardd::cleanup()
 {
 }
@@ -198,7 +200,7 @@ void TestKsysguardd::testFormatting()
     id = nextId++;
     success = manager.sendRequest("", monitorName, client, id);
     QVERIFY(success);
-    QTime timer;
+    QElapsedTimer timer;
     timer.start();
     timeout = 300; //Wait up to 30 seconds
     while( !client->haveAnswer && !client->isSensorLost && timeout--)

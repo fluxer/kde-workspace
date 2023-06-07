@@ -120,8 +120,7 @@ void ShowFpsEffect::prePaintScreen(ScreenPrePaintData& data, int time)
     if (time == 0) {
         // TODO optimized away
     }
-    t.start();
-    frames[ frames_pos ] = t.minute() * 60000 + t.second() * 1000 + t.msec();
+    frames[ frames_pos ] = t.restart();
     if (++frames_pos == MAX_FPS)
         frames_pos = 0;
     effects->prePaintScreen(data, time);
@@ -151,7 +150,7 @@ void ShowFpsEffect::paintScreen(int mask, QRegion region, ScreenPaintData& data)
     for (int i = 0;
             i < MAX_FPS;
             ++i)
-        if (abs(t.minute() * 60000 + t.second() * 1000 + t.msec() - frames[ i ]) < 1000)
+        if (abs(t.elapsed() - frames[ i ]) < 1000)
             ++fps; // count all frames in the last second
     if (fps > MAX_TIME)
         fps = MAX_TIME; // keep it the same height
@@ -238,10 +237,6 @@ void ShowFpsEffect::paintFPSGraph(int x, int y)
 
 void ShowFpsEffect::paintDrawSizeGraph(int x, int y)
 {
-    int max_drawsize = 0;
-    for (int i = 0; i < NUM_PAINTS; i++)
-        max_drawsize = qMax(max_drawsize, paint_size[ i ]);
-
     // Log of min/max values shown on graph
     const float max_pixels_log = 7.2f;
     const float min_pixels_log = 2.0f;

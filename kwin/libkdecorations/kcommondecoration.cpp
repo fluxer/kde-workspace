@@ -28,7 +28,7 @@
 #include <QApplication>
 #include <QBasicTimer>
 #include <QCursor>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QLabel>
 
 #include <QWidget>
@@ -709,10 +709,10 @@ void KCommonDecoration::menuButtonPressed()
             timer->start(150, this);
         }
         // double click behavior
-        static QTime* t = NULL;
+        static QElapsedTimer* t = NULL;
         static KCommonDecoration* lastClient = NULL;
         if (t == NULL) {
-            t = new QTime;
+            t = new QElapsedTimer();
         }
         if (lastClient == this && t->elapsed() <= QApplication::doubleClickInterval()) {
             closing = true;

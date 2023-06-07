@@ -24,8 +24,7 @@
 #include <kdemacros.h>
 
 #include <QtCore/QList>
-#include <QtCore/qdatetime.h>
-#include <QtCore/qglobal.h>
+#include <QtCore/QElapsedTimer>
 
 #include <klocale.h>
 
@@ -145,7 +144,7 @@ namespace KSysGuard
     long ioCharactersActuallyWrittenRate;
 
     QList<Process *> children;  ///< A list of all the direct children that the process has.  Children of children are not listed here, so note that children_pids <= numChildren
-    QTime timeKillWasSent; ///< This is usually a NULL time.  When trying to kill a process, this is the time that the kill signal was sent to the process.
+    QElapsedTimer timeKillWasSent; ///< This is usually a NULL time.  When trying to kill a process, this is the time that the kill signal was sent to the process.
 
     QString translatedStatus() const;  ///< Returns a translated string of the status. e.g. "Running" etc
     QString niceLevelAsString() const; ///< Returns a simple translated string of the nice priority.  e.g. "Normal", "High", etc

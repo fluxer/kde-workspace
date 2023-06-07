@@ -27,7 +27,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "task.h"
 
-#include <QtCore/qdatetime.h>
+#include <QElapsedTimer>
 #include <NETWinInfo>
 
 namespace TaskManager
@@ -66,7 +66,7 @@ public:
 
     QRect iconGeometry;
 
-    QTime lastUpdate;
+    QElapsedTimer lastUpdate;
     Task::WindowProperties cachedChanges;
     int cachedChangesTimerId;
     QPixmap pixmap;

@@ -19,7 +19,7 @@
 
 #include "interactiveconsole.h"
 
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QDBusConnection>
 #include <QDBusMessage>
 #include <QFile>
@@ -396,7 +396,7 @@ void InteractiveConsole::evaluateScript()
     QTextBlockFormat block = cursor.blockFormat();
     block.setLeftMargin(10);
     cursor.insertBlock(block, format);
-    QTime t;
+    QElapsedTimer t;
     t.start();
 
     WorkspaceScripting::DesktopScriptEngine scriptEngine(m_corona, false, this);

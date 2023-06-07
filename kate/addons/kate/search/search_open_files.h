@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include <QRegExp>
-#include <QtCore/qdatetime.h>
+#include <QElapsedTimer>
 #include <ktexteditor/document.h>
 
 class SearchOpenFiles: public QObject
@@ -62,7 +62,7 @@ private:
     bool                          m_cancelSearch;
     QString                       m_fullDoc;
     QVector<int>                  m_lineStart;
-    QTime                         m_statusTime;
+    QElapsedTimer                 m_statusTime;
 };
 
 

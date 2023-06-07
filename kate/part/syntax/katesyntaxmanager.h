@@ -38,7 +38,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QStringList>
 #include <QtCore/QPointer>
-#include <QtCore/QDateTime>
+#include <QtCore/QElapsedTimer>
 #include <QtCore/QList>
 
 class KateSyntaxDocument;
@@ -106,7 +106,7 @@ class KateHlManager : public QObject
     KateSyntaxDocument *syntax;
 
     int dynamicCtxsCount;
-    QTime lastCtxsReset;
+    QElapsedTimer lastCtxsReset;
     bool forceNoDCReset;
 };
 

@@ -24,17 +24,18 @@
 #ifndef _KSysGuardProcessList_h_
 #define _KSysGuardProcessList_h_
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QMetaType>
-#include <kapplication.h>
-#include "ProcessModel.h"
-#include "ProcessFilter.h"
-#include "processes.h"
-
 #include <QShowEvent>
 #include <QHideEvent>
 #include <QLineEdit>
 #include <QTreeView>
+#include <kapplication.h>
+
+#include "ProcessModel.h"
+#include "ProcessFilter.h"
+#include "processes.h"
+
 struct KSysGuardProcessListPrivate;
 
 /**

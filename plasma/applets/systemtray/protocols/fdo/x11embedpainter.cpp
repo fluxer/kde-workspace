@@ -22,7 +22,7 @@
 #include "x11embedpainter.h"
 
 #include <QtCore/QSet>
-#include <QtCore/qdatetime.h>
+#include <QtCore/QElapsedTimer>
 #include <QtCore/QTimer>
 
 #include <KDebug>
@@ -40,18 +40,15 @@ class X11EmbedPainter::Private
 public:
     Private(X11EmbedPainter *parent)
         : q(parent),
-          lastPaintTime(QTime::currentTime()),
           fastPaints(0)
     {
-        lastPaintTime.addMSecs(-MIN_TIME_BETWEEN_PAINTS);
-
         delayedPaintTimer.setSingleShot(true);
         connect(&delayedPaintTimer, SIGNAL(timeout()), q, SLOT(performUpdates()));
     }
 
     X11EmbedPainter *q;
     QSet<X11EmbedContainer*> containers;
-    QTime lastPaintTime;
+    QElapsedTimer lastPaintTime;
     QTimer delayedPaintTimer;
     int fastPaints;
 };
@@ -81,12 +78,12 @@ void X11EmbedPainter::updateContainer(X11EmbedContainer *container)
             this, SLOT(removeContainer(QObject*)));
 
     if (!d->delayedPaintTimer.isActive()) {
-        int msecsToNextPaint = MIN_TIME_BETWEEN_PAINTS - d->lastPaintTime.elapsed();
-        if (msecsToNextPaint > 0 && msecsToNextPaint < MIN_TIME_BETWEEN_PAINTS) {
+        const qint64 msecsElapsed = d->lastPaintTime.elapsed();
+        if (msecsElapsed > MIN_TIME_BETWEEN_PAINTS) {
             ++d->fastPaints;
             if (d->fastPaints > 2) {
                 //kDebug() << "Delaying paint by" << msecsToNextPaint << "msecs";
-                d->delayedPaintTimer.start(msecsToNextPaint);
+                d->delayedPaintTimer.start(msecsElapsed - MIN_TIME_BETWEEN_PAINTS);
             } else {
                 d->delayedPaintTimer.start(0);
             }

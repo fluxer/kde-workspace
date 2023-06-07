@@ -22,7 +22,7 @@
 
 #include <QBasicTimer>
 #include <QWidget>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QItemSelectionModel>
@@ -58,7 +58,7 @@ public:
     void delayedHide();
     bool dragInProgress();
 
-    static QTime lastOpenCloseTime() { return s_lastOpenClose; }
+    static QElapsedTimer lastOpenCloseTime() { return s_lastOpenClose; }
 
 protected:
     void showEvent(QShowEvent *event);
@@ -129,7 +129,7 @@ private:
     bool m_busy;
     bool m_delayedClose;
     QStringList m_previewPlugins;
-    static QTime s_lastOpenClose;
+    static QElapsedTimer s_lastOpenClose;
 };
 
 #endif

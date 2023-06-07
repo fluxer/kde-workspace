@@ -25,7 +25,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QMimeData>
-#include <QDateTime>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <QClipboard>
 #include <QCryptographicHash>
@@ -156,7 +156,7 @@ private:
 
     QClipboard* m_clip;
 
-    QTime m_showTimer;
+    QElapsedTimer m_showTimer;
 
     History* m_history;
     int m_overflowCounter;

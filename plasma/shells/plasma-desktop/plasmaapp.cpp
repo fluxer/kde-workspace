@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QPixmapCache>
 #include <QtDBus/QtDBus>
+#include <QElapsedTimer>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QtCore/qsignalmapper.h>
@@ -640,7 +641,7 @@ DesktopView* PlasmaApp::viewForScreen(int screen, int desktop) const
 DesktopCorona* PlasmaApp::corona(bool createIfMissing)
 {
     if (!m_corona && createIfMissing) {
-        QTime t;
+        QElapsedTimer t;
         t.start();
         DesktopCorona *c = new DesktopCorona(this);
         connect(c, SIGNAL(containmentAdded(Plasma::Containment*)),

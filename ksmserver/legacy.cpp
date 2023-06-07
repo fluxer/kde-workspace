@@ -37,6 +37,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "server.h"
 
+#include <QElapsedTimer>
+
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kshell.h>
@@ -159,7 +161,8 @@ void KSMServer::performLegacySessionSave()
     }
     // Wait for change in WM_COMMAND with timeout
     XFlush(newdisplay);
-    QTime start = QTime::currentTime();
+    QElapsedTimer start;
+    start.start();
     while (awaiting_replies > 0) {
         if (XPending(newdisplay)) {
             /* Process pending event */
@@ -175,7 +178,7 @@ void KSMServer::performLegacySessionSave()
             }
         } else {
             /* Check timeout */
-            int msecs = start.elapsed();
+            qint64 msecs = start.elapsed();
             if (msecs >= wmSaveYourselfTimeout) {
                 kDebug() << "legacy timeout expired";
                 break;

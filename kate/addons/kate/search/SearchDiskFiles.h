@@ -27,7 +27,7 @@
 #include <QVector>
 #include <QMutex>
 #include <QStringList>
-#include <QtCore/qdatetime.h>
+#include <QElapsedTimer>
 
 class SearchDiskFiles: public QThread
 {
@@ -61,7 +61,7 @@ private:
     QStringList      m_files;
     bool             m_cancelSearch;
     int              m_matchCount;
-    QTime            m_statusTime;
+    QElapsedTimer    m_statusTime;
 };
 
 

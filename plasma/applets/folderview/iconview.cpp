@@ -26,13 +26,14 @@
 #include <QApplication>
 #include <QDrag>
 #include <QGraphicsView>
-#include <QtGui/qgraphicssceneevent.h>
 #include <QGraphicsProxyWidget>
 #include <QImageReader>
 #include <QItemSelectionModel>
 #include <QPainter>
-#include <QtGui/qstyleoption.h>
+#include <QElapsedTimer>
 #include <QtCore/qmath.h>
+#include <QtGui/qstyleoption.h>
+#include <QtGui/qgraphicssceneevent.h>
 
 #include <KDirModel>
 #include <KGlobalSettings>
@@ -760,7 +761,7 @@ void IconView::layoutItems()
     }
 
     // Do a 20 millisecond layout pass
-    QTime time;
+    QElapsedTimer time;
     time.start();
     do {
         const int count = qMin(m_validRows + 50, m_items.size());

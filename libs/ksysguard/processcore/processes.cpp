@@ -31,7 +31,7 @@
 
 #include <QHash>
 #include <QSet>
-#include <QtCore/qset.h>
+#include <QElapsedTimer>
 #include <QByteArray>
 
 //for sysconf
@@ -70,7 +70,7 @@ namespace KSysGuard
       AbstractProcesses *mAbstractProcesses; ///< The OS specific code to get the process information
       bool mIsLocalHost; ///< Whether this is localhost or not
 
-      QTime mLastUpdated; ///< This is the time we last updated.  Used to calculate cpu usage.
+      QElapsedTimer mLastUpdated; ///< This is the time we last updated.  Used to calculate cpu usage.
       long mElapsedTimeMilliSeconds; ///< The number of milliseconds  (1000ths of a second) that passed since the last update
 
       Processes::UpdateFlags mUpdateFlags;

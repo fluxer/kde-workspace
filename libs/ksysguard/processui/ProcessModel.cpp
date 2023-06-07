@@ -695,8 +695,8 @@ void ProcessModelPrivate::processChanged(KSysGuard::Process *process, bool onlyT
     else
         row = process->parent->children.indexOf(process);
 
-    if (!process->timeKillWasSent.isNull()) {
-        int elapsed = process->timeKillWasSent.elapsed();
+    if (process->timeKillWasSent.isValid()) {
+        qint64 elapsed = process->timeKillWasSent.elapsed();
         if (elapsed < MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS) {
             if (!mPidsToUpdate.contains(process->pid))
                 mPidsToUpdate.append(process->pid);
@@ -1727,8 +1727,8 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
             if (!d->mHaveTimer) //If there is no timer, then no processes are being killed, so no point looking for one
                 return QVariant();
             KSysGuard::Process *process = reinterpret_cast< KSysGuard::Process * > (index.internalPointer());
-            if (!process->timeKillWasSent.isNull()) {
-                int elapsed = process->timeKillWasSent.elapsed();
+            if (process->timeKillWasSent.isValid()) {
+                qint64 elapsed = process->timeKillWasSent.elapsed();
                 if (elapsed < MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS) {//Only show red for about 7 seconds
                     int transparency = 255 - elapsed*250/MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS;
 
@@ -2053,7 +2053,7 @@ void ProcessModelPrivate::timerEvent( QTimerEvent * event )
     Q_UNUSED(event);
     foreach (qlonglong pid, mPidsToUpdate) {
         KSysGuard::Process *process = mProcesses->getProcess(pid);
-        if (process && !process->timeKillWasSent.isNull() && process->timeKillWasSent.elapsed() < MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS) {
+        if (process && process->timeKillWasSent.isValid() && process->timeKillWasSent.elapsed() < MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS) {
             int row;
             if(mSimple)
                 row = process->index;

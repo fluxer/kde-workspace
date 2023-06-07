@@ -29,19 +29,13 @@
 #include <QAbstractItemDelegate>
 #include <QPointer>
 #include <QCache>
-#include <QtCore/qdatetime.h>
 #include <QBasicTimer>
-
+#include <QActionGroup>
+#include <QStyleOptionViewItem>
 
 class KUrl;
 class KFileItemList;
 class KonqOperations;
-#include <QActionGroup>
-#ifndef QT_KATIE
-#include <QStyleOptionViewItemV4>
-#else
-#include <QStyleOptionViewItem>
-#endif
 class ToolTipWidget;
 class Animator;
 
@@ -269,7 +263,6 @@ private:
     QRect m_rubberBand;
     QPointF m_buttonDownPos;
     QPointF m_mouseMovedPos;
-    QTime m_pressTime;
     Layout m_layout;
     Alignment m_alignment;
     QString m_errorMessage;

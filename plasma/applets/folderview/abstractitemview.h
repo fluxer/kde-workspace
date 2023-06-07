@@ -26,7 +26,9 @@
 #include <QPointer>
 #include <QCache>
 #include <QTextLayout>
-#include <QtCore/qdatetime.h>
+#include <QItemSelectionModel>
+#include <QScrollBar>
+#include <QElapsedTimer>
 #include <QBasicTimer>
 
 #include <plasma/widgets/scrollbar.h>
@@ -35,9 +37,7 @@
 
 class KDirModel;
 class KFileItemDelegate;
-#include <QItemSelectionModel>
 class ProxyModel;
-#include <QScrollBar>
 
 
 // The abstract base class for IconView and ListView
@@ -155,8 +155,8 @@ protected:
     bool m_smoothScrolling;
     QBasicTimer m_smoothScrollTimer;
     QBasicTimer m_autoScrollTimer;
-    QTime m_smoothScrollStopwatch;
-    QTime m_autoScrollTime;
+    QElapsedTimer m_smoothScrollStopwatch;
+    QElapsedTimer m_autoScrollTime;
     ScrollDirection m_scrollDirection;
     int m_autoScrollSpeed;
     int m_autoScrollSetSpeed;

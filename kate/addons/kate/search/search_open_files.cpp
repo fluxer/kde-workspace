@@ -93,7 +93,7 @@ int SearchOpenFiles::searchOpenFile(KTextEditor::Document *doc, const QRegExp &r
 int SearchOpenFiles::searchSingleLineRegExp(KTextEditor::Document *doc, const QRegExp &regExp, int startLine)
 {
     int column;
-    QTime time;
+    QElapsedTimer time;
 
     time.start();
     for (int line = startLine; line < doc->lines(); line++) {
@@ -116,7 +116,7 @@ int SearchOpenFiles::searchMultiLineRegExp(KTextEditor::Document *doc, const QRe
 {
     int column = 0;
     int line = 0;
-    QTime time;
+    QElapsedTimer time;
     time.start();
     QRegExp tmpRegExp = regExp;
 

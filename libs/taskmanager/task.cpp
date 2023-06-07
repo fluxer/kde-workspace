@@ -60,7 +60,7 @@ Task::~Task()
 void Task::timerEvent(QTimerEvent *)
 {
     if (d->cachedChanges.netWindowInfoProperties || d->cachedChanges.netWindowInfoProperties2) {
-        d->lastUpdate = QTime();
+        d->lastUpdate.invalidate();
         refresh(d->cachedChanges);
         d->cachedChanges.netWindowInfoProperties = 0;
         d->cachedChanges.netWindowInfoProperties2 = 0;
@@ -96,7 +96,7 @@ void Task::refreshIcon()
 
 ::TaskManager::TaskChanges Task::refresh(WindowProperties dirty)
 {
-    if (!d->lastUpdate.isNull() && d->lastUpdate.elapsed() < 200) {
+    if (d->lastUpdate.isValid() && d->lastUpdate.elapsed() < 200) {
         d->cachedChanges.netWindowInfoProperties |= dirty.netWindowInfoProperties;
         d->cachedChanges.netWindowInfoProperties2 |= dirty.netWindowInfoProperties2;
 
