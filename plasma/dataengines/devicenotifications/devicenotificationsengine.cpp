@@ -41,10 +41,6 @@ DeviceNotificationsEngine::~DeviceNotificationsEngine()
     dbus.unregisterService( "org.kde.DeviceNotifications" );
 }
 
-void DeviceNotificationsEngine::init()
-{
-}
-
 void DeviceNotificationsEngine::notify(int solidError, const QString& error, const QString& errorDetails, const QString &udi)
 {
     kDebug() << error << errorDetails << udi;

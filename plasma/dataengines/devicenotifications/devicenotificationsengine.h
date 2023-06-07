@@ -36,8 +36,6 @@ public:
     DeviceNotificationsEngine( QObject* parent, const QVariantList& args );
     ~DeviceNotificationsEngine();
 
-    virtual void init();
-
     /**
      *  This function implements part of Notifications DBus interface.
      *  Once called, will add notification source to the engine
