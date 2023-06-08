@@ -143,11 +143,6 @@ void KEBApp::createActions() {
     m_actionsImplSort->setText(i18n("&Sort Alphabetically"));
     connect(m_actionsImplSort, SIGNAL(triggered()), m_actionsImpl, SLOT(slotSort()));
 
-    KAction* m_actionsImplSetAsToolbar = actionCollection()->addAction("setastoolbar");
-    m_actionsImplSetAsToolbar->setIcon(KIcon("bookmark-toolbar"));
-    m_actionsImplSetAsToolbar->setText(i18n("Set as T&oolbar Folder"));
-    connect(m_actionsImplSetAsToolbar, SIGNAL(triggered()), m_actionsImpl, SLOT(slotSetAsToolbar()));
-
     KAction* m_actionsImplExpandAll = actionCollection()->addAction("expandall");
     m_actionsImplExpandAll->setText(i18n("&Expand All Folders"));
     connect(m_actionsImplExpandAll, SIGNAL(triggered()), m_actionsImpl, SLOT(slotExpandAll()));
@@ -431,14 +426,6 @@ void ActionsImpl::slotChangeURL() {
 void ActionsImpl::slotChangeComment() {
     KEBApp::self()->bkInfo()->commitChanges();
     KEBApp::self()->startEdit( KEBApp::CommentColumn );
-}
-
-void ActionsImpl::slotSetAsToolbar() {
-    KEBApp::self()->bkInfo()->commitChanges();
-    KBookmark bk = KEBApp::self()->firstSelected();
-    Q_ASSERT(bk.isGroup());
-    QUndoCommand *mcmd = CmdGen::setAsToolbar(m_model, bk);
-    commandHistory()->addCommand(mcmd);
 }
 
 void ActionsImpl::slotChangeIcon() {

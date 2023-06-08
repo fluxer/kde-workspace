@@ -55,7 +55,6 @@ public Q_SLOTS:
    void slotNewBookmark();
    void slotInsertSeparator();
    void slotSort();
-   void slotSetAsToolbar();
    void slotOpenLink();
    void slotTestSelection();
    void slotTestAll();

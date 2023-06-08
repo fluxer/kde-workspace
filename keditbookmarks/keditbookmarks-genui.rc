@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="keditbookmarks" version="27">
+<kpartgui name="keditbookmarks" version="28">
 
 <MenuBar>
 
@@ -56,7 +56,6 @@
 
 <Menu name="popup_folder">
   <!-- Stuff for folders -->
-  <Action name="setastoolbar"/>
   <Action name="sort"/>
   <Action name="recursivesort"/>
    <Separator/>
@@ -134,7 +133,6 @@
     <Action name="nexthit"/>
     <Action name="openlink"/>
     <Action name="rename"/>
-    <Action name="setastoolbar"/>
     <Action name="sort"/>
     <Action name="recursivesort"/>
     <Action name="settings_saveonclose"/>

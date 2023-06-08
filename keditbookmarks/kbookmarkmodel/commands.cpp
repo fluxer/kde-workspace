@@ -178,7 +178,6 @@ EditCommand::EditCommand(KBookmarkModel* model, const QString & address, int col
     else
         mNewValue = newValue;
 
-    // -2 is "toolbar" attribute change, but that's only used internally.
     if (mCol == -1)
         setText(i18nc("(qtundo-format)", "Icon Change"));
     else if (mCol == 0)
@@ -192,13 +191,7 @@ EditCommand::EditCommand(KBookmarkModel* model, const QString & address, int col
 void EditCommand::redo()
 {
     KBookmark bk = m_model->bookmarkManager()->findByAddress(mAddress);
-    if(mCol==-2)
-    {
-        if (mOldValue.isEmpty())
-            mOldValue = bk.internalElement().attribute("toolbar");
-        bk.internalElement().setAttribute("toolbar", mNewValue);
-    }
-    else if(mCol==-1)
+    if(mCol==-1)
     {
         if (mOldValue.isEmpty())
             mOldValue = bk.icon();
@@ -232,11 +225,7 @@ void EditCommand::undo()
 {
     kDebug() << "Setting old value" << mOldValue << "in bk" << mAddress << "col" << mCol;
     KBookmark bk = m_model->bookmarkManager()->findByAddress(mAddress);
-    if(mCol==-2)
-    {
-        bk.internalElement().setAttribute("toolbar", mOldValue);
-    }
-    else if(mCol==-1)
+    if(mCol==-1)
     {
         bk.setIcon(mOldValue);
     }
@@ -475,24 +464,6 @@ QString SortCommand::affectedBookmarks() const
 }
 
 /* -------------------------------------- */
-
-KEBMacroCommand* CmdGen::setAsToolbar(KBookmarkModel* model, const KBookmark &bk)
-{
-    KEBMacroCommand *mcmd = new KEBMacroCommand(i18nc("(qtundo-format)", "Set as Bookmark Toolbar"));
-
-    KBookmarkGroup oldToolbar = model->bookmarkManager()->toolbar();
-    if (!oldToolbar.isNull())
-    {
-        new EditCommand(model, oldToolbar.address(), -2, "no", mcmd); //toolbar
-        new EditCommand(model, oldToolbar.address(), -1, "", mcmd); //icon
-    }
-
-    new EditCommand(model, bk.address(), -2, "yes", mcmd);
-    new EditCommand(model, bk.address(), -1, "bookmark-toolbar", mcmd);
-
-    return mcmd;
-}
-
 KEBMacroCommand* CmdGen::insertMimeSource(KBookmarkModel* model, const QString &cmdName, const QMimeData *data, const QString &addr)
 {
     KEBMacroCommand *mcmd = new KEBMacroCommand(cmdName);

@@ -259,7 +259,7 @@ void KEBApp::setActionsEnabled(SelcAbilities sa) {
         if (sa.singleSelect) {
             toEnable << "newfolder" << "newbookmark" << "insertseparator";
             if (sa.group)
-                toEnable << "sort" << "recursivesort" << "setastoolbar";
+                toEnable << "sort" << "recursivesort";
         }
     }
 
