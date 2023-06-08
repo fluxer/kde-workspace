@@ -243,7 +243,7 @@ void ActionsImpl::slotCopy()
     KEBApp::self()->bkInfo()->commitChanges();
     // this is not a command, because it can't be undone
     KBookmark::List bookmarks = KEBApp::self()->selectedBookmarksExpanded();
-    QMimeData *mimeData = new QMimeData;
+    QMimeData *mimeData = new QMimeData();
     bookmarks.populateMimeData(mimeData);
     QApplication::clipboard()->setMimeData( mimeData );
 }
