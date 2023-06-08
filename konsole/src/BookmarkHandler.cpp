@@ -31,6 +31,7 @@
 #include <KShell>
 #include <KBookmarkMenu>
 #include <KStandardDirs>
+#include <KLocale>
 
 // Konsole
 #include "ViewProperties.h"
