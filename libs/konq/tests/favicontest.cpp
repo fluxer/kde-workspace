@@ -19,12 +19,10 @@
 #include "favicontest.h"
 
 #include <qtest_kde.h>
-#include <kio/job.h>
-#include <kconfiggroup.h>
-#include <kio/netaccess.h>
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
+#include <solid/networking.h>
 
 #include <QImageReader>
 #include <QElapsedTimer>
@@ -32,48 +30,20 @@
 
 QTEST_KDEMAIN(FavIconTest, NoGUI)
 
-// D-Bus and QEventLoop don't get along
-// #define USE_EVENT_LOOP
-
-static const char s_hostUrl[] = "https://www.google.com/";
 static const char s_icoPath[] = KDESRCDIR "designer.ico";
 static const int s_waitTime = 20000; // in ms
 
-enum CheckStatus { Unknown, Yes, No };
-CheckStatus s_networkAccess = CheckStatus::Unknown;
-static bool checkNetworkAccess()
-{
-    if (s_networkAccess == CheckStatus::Unknown) {
-        QElapsedTimer networkTimer;
-        networkTimer.start();
-        KIO::Job* job = KIO::get(KUrl(s_hostUrl), KIO::NoReload, KIO::HideProgressInfo);
-        if (KIO::NetAccess::synchronousRun(job, nullptr)) {
-            s_networkAccess = Yes;
-            qDebug("Network access OK. Download time %lld", networkTimer.elapsed());
-        } else {
-            qWarning("%s", qPrintable(KIO::NetAccess::lastErrorString()));
-            s_networkAccess = CheckStatus::No;
-        }
-    }
-    return s_networkAccess == CheckStatus::Yes;
-}
-
-CheckStatus s_icoReadable = CheckStatus::Unknown;
 static bool checkICOReadable()
 {
-    if (s_icoReadable == CheckStatus::Unknown) {
-        QFile icofile(s_icoPath);
-        icofile.open(QFile::ReadOnly);
-        QImageReader icoimagereader(&icofile);
-        if (icoimagereader.canRead()) {
-            s_icoReadable = Yes;
-            qDebug("ICO is readable");
-        } else {
-            qWarning("%s", qPrintable(icoimagereader.errorString()));
-            s_icoReadable = CheckStatus::No;
-        }
+    QFile icofile(s_icoPath);
+    icofile.open(QFile::ReadOnly);
+    QImageReader icoimagereader(&icofile);
+    if (!icoimagereader.canRead()) {
+        qWarning("%s", qPrintable(icoimagereader.errorString()));
+        return false;
     }
-    return s_icoReadable == CheckStatus::Yes;
+    qDebug("ICO is readable");
+    return true;
 }
 
 static void cleanCache()
@@ -99,6 +69,13 @@ FavIconTest::FavIconTest()
 
 void FavIconTest::initTestCase()
 {
+    if (Solid::Networking::status() != Solid::Networking::Connected) {
+        QSKIP("Network status is not connected", SkipAll);
+    }
+
+    if (!checkICOReadable()) {
+        QSKIP("ICO not readable", SkipAll);
+    }
 }
 
 void FavIconTest::testIconForURL_data()
@@ -108,9 +85,11 @@ void FavIconTest::testIconForURL_data()
 
     QTest::newRow("https://www.google.com")
         << QString::fromLatin1("https://www.google.com") << QString::fromLatin1("favicons/www.google.com");
-    QTest::newRow("https://www.ibm.com/foo?bar=baz")
-        << QString::fromLatin1("https://www.ibm.com") << QString::fromLatin1("favicons/www.ibm.com");
-    QTest::newRow("https://www.wpoven.com/") // NOTE: favicon.png
+    // NOTE: 256x256
+    QTest::newRow("https://ci.appveyor.com/foo?bar=baz")
+        << QString::fromLatin1("https://ci.appveyor.com/foo?bar=baz") << QString::fromLatin1("favicons/ci.appveyor.com");
+     // NOTE: favicon.png
+    QTest::newRow("https://www.wpoven.com/")
         << QString::fromLatin1("https://www.wpoven.com/") << QString::fromLatin1("favicons/www.wpoven.com");
     QTest::newRow("https://140.82.121.3/")
         << QString::fromLatin1("https://140.82.121.3/") << QString::fromLatin1("favicons/140.82.121.3");
@@ -121,44 +100,21 @@ void FavIconTest::testIconForURL()
     QFETCH(QString, url);
     QFETCH(QString, icon);
 
-    if (!checkICOReadable()) {
-        QSKIP("ico not readable", SkipAll);
-    }
-
-    if (!checkNetworkAccess()) {
-        QSKIP("no network access", SkipAll);
-    }
-
     cleanCache();
 
     const KUrl favUrl(url);
     QString favicon = KMimeType::favIconForUrl(favUrl);
     QCOMPARE(favicon, QString());
 
-#if USE_EVENT_LOOP
-    QEventLoop eventLoop;
-    connect(&m_favIconModule, SIGNAL(iconChanged(QString,QString)), &eventLoop, SLOT(quit()));
-    QSignalSpy spy(&m_favIconModule, SIGNAL(iconChanged(QString,QString)));
-    QVERIFY(spy.isValid());
-    QCOMPARE(spy.count(), 0);
-    m_favIconModule.downloadUrlIcon(url);
-    qDebug("called downloadHostIcon, waiting");
-    if (spy.count() < 1) {
-        QTimer::singleShot(s_waitTime, &eventLoop, SLOT(quit()));
-        eventLoop.exec(QEventLoop::ExcludeUserInputEvents);
-    }
-    QCOMPARE(spy.count(), 1);
-#else
     m_iconChanged = false;
     m_favIconModule.downloadUrlIcon(url);
-    qDebug("called downloadHostIcon, waiting");
+    qDebug("called downloadUrlIcon, waiting..");
     QElapsedTimer elapsedTimer;
     elapsedTimer.start();
     while (!m_iconChanged && elapsedTimer.elapsed() < s_waitTime) {
         QTest::qWait(400);
     }
     QVERIFY(m_iconChanged);
-#endif
 
     favicon = KMimeType::favIconForUrl(favUrl);
     QCOMPARE(favicon, icon);
@@ -166,7 +122,7 @@ void FavIconTest::testIconForURL()
 
 void FavIconTest::slotIconChanged(const QString &url, const QString &iconName)
 {
-    qDebug() << url << iconName;
+    // qDebug() << Q_FUNC_INFO << url << iconName;
     m_iconChanged = true;
     m_url = url;
     m_iconName = iconName;
