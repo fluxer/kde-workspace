@@ -158,7 +158,7 @@ void KEBApp::createActions() {
 
     KAction* m_actionsImplOpenLink = actionCollection()->addAction("openlink");
     m_actionsImplOpenLink->setIcon(KIcon("document-open"));
-    m_actionsImplOpenLink->setText(i18n("&Open in Konqueror"));
+    m_actionsImplOpenLink->setText(i18n("&Open Location"));
     connect(m_actionsImplOpenLink, SIGNAL(triggered()), m_actionsImpl, SLOT(slotOpenLink()));
 
     KAction* m_actionsImplTestSelection = actionCollection()->addAction("testlink");
