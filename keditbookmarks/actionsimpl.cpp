@@ -50,8 +50,6 @@
 #include <kstandarddirs.h>
 #include <kbookmark.h>
 #include <kbookmarkmanager.h>
-#include <kbookmarkimporter.h>
-#include <kbookmarkexporter.h>
 
 #include <stdlib.h>
 

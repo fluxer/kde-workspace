@@ -39,7 +39,6 @@
 #include <unistd.h>
 
 #include <kbookmarkmanager.h>
-#include <kbookmarkexporter.h>
 #include <toplevel_interface.h>
 
 // TODO - make this register() or something like that and move dialog into main
