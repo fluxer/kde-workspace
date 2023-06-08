@@ -24,12 +24,8 @@
 #include "abstractitemview.h"
 
 #include <QCache>
-
-#ifndef QT_KATIE
-#include <QStyleOptionViewItemV4>
-#else
 #include <QStyleOptionViewItem>
-#endif
+
 class Animator;
 
 namespace Plasma {

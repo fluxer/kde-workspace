@@ -348,11 +348,6 @@ TerminalDisplay::TerminalDisplay(QWidget* parent)
 
     setFocusPolicy(Qt::WheelFocus);
 
-#ifndef QT_KATIE
-    // enable input method support
-    setAttribute(Qt::WA_InputMethodEnabled, true);
-#endif
-
     // this is an important optimization, it tells Qt
     // that TerminalDisplay will handle repainting its entire area.
     setAttribute(Qt::WA_OpaquePaintEvent);
@@ -2722,61 +2717,6 @@ void TerminalDisplay::pasteFromX11Selection(bool appendEnter)
     QString text = QApplication::clipboard()->text(QClipboard::Selection);
     doPaste(text, appendEnter);
 }
-
-/* ------------------------------------------------------------------------- */
-/*                                                                           */
-/*                                Input Method                               */
-/*                                                                           */
-/* ------------------------------------------------------------------------- */
-#ifndef QT_KATIE
-void TerminalDisplay::inputMethodEvent(QInputMethodEvent* event)
-{
-    if (!event->commitString().isEmpty()) {
-        QKeyEvent keyEvent(QEvent::KeyPress, 0, Qt::NoModifier, event->commitString());
-        emit keyPressedSignal(&keyEvent);
-    }
-
-    _inputMethodData.preeditString = event->preeditString();
-    update(preeditRect() | _inputMethodData.previousPreeditRect);
-
-    event->accept();
-}
-
-QVariant TerminalDisplay::inputMethodQuery(Qt::InputMethodQuery query) const
-{
-    const QPoint cursorPos = cursorPosition();
-    switch (query) {
-    case Qt::ImMicroFocus:
-        return imageToWidget(QRect(cursorPos.x(), cursorPos.y(), 1, 1));
-        break;
-    case Qt::ImFont:
-        return font();
-        break;
-    case Qt::ImCursorPosition:
-        // return the cursor position within the current line
-        return cursorPos.x();
-        break;
-    case Qt::ImSurroundingText: {
-        // return the text from the current line
-        QString lineText;
-        QTextStream stream(&lineText);
-        PlainTextDecoder decoder;
-        decoder.begin(&stream);
-        decoder.decodeLine(&_image[loc(0, cursorPos.y())], _usedColumns, _lineProperties[cursorPos.y()]);
-        decoder.end();
-        return lineText;
-    }
-    break;
-    case Qt::ImCurrentSelection:
-        return QString();
-        break;
-    default:
-        break;
-    }
-
-    return QVariant();
-}
-#endif
 
 QRect TerminalDisplay::preeditRect() const
 {

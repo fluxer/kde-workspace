@@ -656,12 +656,6 @@ protected:
     void mouseTripleClickEvent(QMouseEvent* event);
     void selectLine(QPoint pos, bool entireLine);
 
-#ifndef QT_KATIE
-    // reimplemented
-    virtual void inputMethodEvent(QInputMethodEvent* event);
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
-#endif
-
 protected slots:
 
     void scrollBarPositionChanged(int value);

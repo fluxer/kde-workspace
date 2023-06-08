@@ -98,9 +98,6 @@ KateViewInternal::KateViewInternal(KateView *view)
 {
   setMinimumSize (0,0);
   setAttribute(Qt::WA_OpaquePaintEvent);
-#ifndef QT_KATIE
-  setAttribute(Qt::WA_InputMethodEnabled);
-#endif
 
   // invalidate m_selectionCached.start(), or keyb selection is screwed initially
   m_selectionCached = KTextEditor::Range::invalid();
@@ -1880,10 +1877,6 @@ void KateViewInternal::updateCursor( const KTextEditor::Cursor& newCursor, bool 
   tagLine(oldDisplayCursor);
   tagLine(m_displayCursor);
 
-#ifndef QT_KATIE
-  updateMicroFocus();
-#endif
-
   if (m_cursorTimer.isActive ())
   {
     if ( KApplication::cursorFlashTime() > 0 )
@@ -3447,160 +3440,6 @@ bool KateViewInternal::rangeAffectsView(const KTextEditor::Range& range, bool re
 
   return (range.end().line() >= startLine) || (range.start().line() <= endLine);
 }
-
-//BEGIN IM INPUT STUFF
-#ifndef QT_KATIE
-QVariant KateViewInternal::inputMethodQuery ( Qt::InputMethodQuery query ) const
-{
-  switch (query) {
-    case Qt::ImMicroFocus: {
-      // Cursor placement code is changed for Asian input method that
-      // shows candidate window. This behavior is same as Qt/E 2.3.7
-      // which supports Asian input methods. Asian input methods need
-      // start point of IM selection text to place candidate window as
-      // adjacent to the selection text.
-      return QRect (cursorToCoordinate(m_cursor, true, false), QSize(0, renderer()->lineHeight()));
-    }
-
-    case Qt::ImFont:
-      return renderer()->currentFont();
-
-    case Qt::ImCursorPosition:
-      return m_cursor.column();
-
-    case Qt::ImAnchorPosition:
-      // If selectAnchor is at the same line, return the real anchor position
-      // Otherwise return the same position of cursor
-      if (m_view->selection() && m_selectAnchor.line() == m_cursor.line())
-        return m_selectAnchor.column();
-      else
-        return m_cursor.column();
-
-    case Qt::ImSurroundingText:
-      if (Kate::TextLine l = doc()->kateTextLine(m_cursor.line()))
-        return l->string();
-      else
-        return QString();
-
-    case Qt::ImCurrentSelection:
-      if (m_view->selection())
-        return m_view->selectionText();
-      else
-        return QString();
-    default:
-      /* values: ImMaximumTextLength */
-      break;
-  }
-
-  return QWidget::inputMethodQuery(query);
-}
-
-void KateViewInternal::inputMethodEvent(QInputMethodEvent* e)
-{
-  if ( doc()->readOnly() ) {
-    e->ignore();
-    return;
-  }
-
-  //kDebug( 13030 ) << "Event: cursor" << m_cursor << "commit" << e->commitString() << "preedit" << e->preeditString() << "replacement start" << e->replacementStart() << "length" << e->replacementLength();
-
-  if (!m_imPreeditRange) {
-    m_imPreeditRange = doc()->newMovingRange (KTextEditor::Range(m_cursor.toCursor(), m_cursor.toCursor()), KTextEditor::MovingRange::ExpandLeft | KTextEditor::MovingRange::ExpandRight);
-  }
-
-  if (!m_imPreeditRange->toRange().isEmpty()) {
-    doc()->inputMethodStart();
-    doc()->removeText(*m_imPreeditRange);
-    doc()->inputMethodEnd();
-  }
-
-  if (!e->commitString().isEmpty() || e->replacementLength()) {
-    m_view->removeSelectedText();
-
-    KTextEditor::Range preeditRange = *m_imPreeditRange;
-
-    KTextEditor::Cursor start(m_imPreeditRange->start().line(), m_imPreeditRange->start().column() + e->replacementStart());
-    KTextEditor::Cursor removeEnd = start + KTextEditor::Cursor(0, e->replacementLength());
-
-    doc()->editStart();
-    if (start != removeEnd)
-      doc()->removeText(KTextEditor::Range(start, removeEnd));
-    if (!e->commitString().isEmpty()) {
-      // if the input method event is text that should be inserted, call KateDocument::typeChars()
-      // with the text. that method will handle the input and take care of overwrite mode, etc.
-      doc()->typeChars(m_view, e->commitString());
-    }
-    doc()->editEnd();
-
-    // Revert to the same range as above
-    m_imPreeditRange->setRange(preeditRange);
-  }
-
-  if (!e->preeditString().isEmpty()) {
-    doc()->inputMethodStart();
-    doc()->insertText(m_imPreeditRange->start(), e->preeditString());
-    doc()->inputMethodEnd();
-    // The preedit range gets automatically repositioned
-  }
-
-  // Finished this input method context?
-  if (m_imPreeditRange && e->preeditString().isEmpty()) {
-    // delete the range and reset the pointer
-    delete m_imPreeditRange;
-    m_imPreeditRange = 0L;
-    qDeleteAll (m_imPreeditRangeChildren);
-    m_imPreeditRangeChildren.clear ();
-
-    if ( KApplication::cursorFlashTime() > 0 )
-      renderer()->setDrawCaret(false);
-    renderer()->setCaretOverrideColor(QColor());
-
-    e->accept();
-    return;
-  }
-
-  KTextEditor::Cursor newCursor = m_cursor;
-  bool hideCursor = false;
-  QColor caretColor;
-
-  if (m_imPreeditRange) {
-    qDeleteAll (m_imPreeditRangeChildren);
-    m_imPreeditRangeChildren.clear ();
-
-    int decorationColumn = 0;
-    foreach (const QInputMethodEvent::Attribute &a, e->attributes()) {
-      if (a.type == QInputMethodEvent::Cursor) {
-        newCursor = m_imPreeditRange->start() + KTextEditor::Cursor(0, a.start);
-        hideCursor = !a.length;
-        QColor c = qvariant_cast<QColor>(a.value);
-        if (c.isValid())
-          caretColor = c;
-
-      } else if (a.type == QInputMethodEvent::TextFormat) {
-        QTextCharFormat f = qvariant_cast<QTextFormat>(a.value).toCharFormat();
-        if (f.isValid() && decorationColumn <= a.start) {
-          KTextEditor::Range fr(m_imPreeditRange->start().line(),  m_imPreeditRange->start().column() + a.start, m_imPreeditRange->start().line(), m_imPreeditRange->start().column() + a.start + a.length);
-          KTextEditor::MovingRange* formatRange = doc()->newMovingRange (fr);
-          KTextEditor::Attribute::Ptr attribute(new KTextEditor::Attribute());
-          attribute->merge(f);
-          formatRange->setAttribute(attribute);
-          decorationColumn = a.start + a.length;
-          m_imPreeditRangeChildren.push_back (formatRange);
-        }
-      }
-    }
-  }
-
-  renderer()->setDrawCaret(hideCursor);
-  renderer()->setCaretOverrideColor(caretColor);
-
-  if (newCursor != m_cursor.toCursor())
-    updateCursor(newCursor);
-
-  e->accept();
-}
-#endif
-//END IM INPUT STUFF
 
 void KateViewInternal::flashChar(const KTextEditor::Cursor & pos, KTextEditor::Attribute::Ptr attribute)
 {

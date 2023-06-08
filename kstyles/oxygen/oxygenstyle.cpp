@@ -626,10 +626,6 @@ namespace Oxygen
             case PM_IndicatorHeight: return CheckBox_Size;
             case PM_ExclusiveIndicatorWidth: return CheckBox_Size;
             case PM_ExclusiveIndicatorHeight: return CheckBox_Size;
-#ifndef QT_KATIE
-            case PM_CheckListControllerSize: return CheckBox_Size;
-            case PM_CheckListButtonSize: return CheckBox_Size;
-#endif
 
             // splitters and dock widgets
             case PM_SplitterWidth: return Splitter_Width;
@@ -806,9 +802,6 @@ namespace Oxygen
 
             case SH_TitleBar_NoBorder: return 0;
             case SH_GroupBox_TextLabelVerticalAlignment: return Qt::AlignVCenter;
-#ifndef QT_KATIE
-            case SH_DialogButtonLayout: return QDialogButtonBox::KdeLayout;
-#endif
             case SH_ScrollBar_MiddleClickAbsolutePosition: return true;
             case SH_ItemView_ShowDecorationSelected: return false;
             case SH_ItemView_ArrowKeysNavigateIntoChildren: return true;
@@ -7418,11 +7411,7 @@ namespace Oxygen
     }
 
     //____________________________________________________________________
-#ifndef QT_KATIE
-    QIcon Style::standardIconImplementation(
-#else
     QIcon Style::standardIcon(
-#endif
         StandardPixmap standardIcon,
         const QStyleOption *option,
         const QWidget *widget ) const
@@ -7650,11 +7639,7 @@ namespace Oxygen
             }
 
             default:
-#ifndef QT_KATIE
-            return QCommonStyle::standardIconImplementation( standardIcon, option, widget );
-#else
-            return QCommonStyle::standardIcon( standardIcon, option, widget );
-#endif
+                return QCommonStyle::standardIcon( standardIcon, option, widget );
         }
     }
 

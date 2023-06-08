@@ -22,14 +22,9 @@
 
 #include <QGraphicsProxyWidget>
 #include <QAbstractItemDelegate>
+#include <QStyleOptionViewItem>
 #include <QtCore/qabstractitemmodel.h>
 #include <KTextEdit>
-
-#ifndef QT_KATIE
-#include <QStyleOptionViewItemV4>
-#else
-#include <QStyleOptionViewItem>
-#endif
 
 
 class ItemEditor : public QGraphicsProxyWidget

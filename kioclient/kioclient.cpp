@@ -418,11 +418,7 @@ void ClientApp::slotPrintData(KIO::Job*, const QByteArray &data)
 }
 
 ClientApp::ClientApp(int &argc, char **argv )
-#ifndef QT_KATIE
-    : QApplication( argc, argv, s_interactive /*-> bool GUIenabled*/ )
-#else
     : QApplication( argc, argv )
-#endif
 {
 }
 

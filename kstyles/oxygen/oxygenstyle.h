@@ -196,21 +196,13 @@ namespace Oxygen
         void globalPaletteChanged( void );
 
         //! copied from kstyle
-#ifndef QT_KATIE
-        int layoutSpacingImplementation(
-#else
         virtual int layoutSpacing(
-#endif
             QSizePolicy::ControlType, QSizePolicy::ControlType, Qt::Orientation,
             const QStyleOption* option, const QWidget* widget ) const
         { return pixelMetric(PM_DefaultLayoutSpacing, option, widget); }
 
         //! standard icons
-#ifndef QT_KATIE
-        virtual QIcon standardIconImplementation(
-#else
         virtual QIcon standardIcon(
-#endif
             StandardPixmap standardIcon,
             const QStyleOption *option,
             const QWidget *widget) const;
