@@ -176,15 +176,14 @@ void FavIconsModule::slotFinished(KJob *kjob)
     QBuffer buffer;
     buffer.setData(tjob->data());
     buffer.open(QIODevice::ReadOnly);
+    tjob->deleteLater();
     QImageReader ir(&buffer);
     if (!ir.canRead()) {
         kWarning() << "Image reader cannot read the data" << ir.errorString();
         downloadError(faviconsUrl);
-        tjob->deleteLater();
         return;
     }
     const QImage img = ir.read();
-    tjob->deleteLater();
     if (img.isNull()) {
         kWarning() << "Image reader returned null image" << ir.errorString();
         downloadError(faviconsUrl);
