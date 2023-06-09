@@ -49,7 +49,6 @@
 #include "katekeywordcompletion.h"
 #include "katelayoutcache.h"
 #include "spellcheck/spellcheck.h"
-#include "spellcheck/spellcheckdialog.h"
 #include "spellcheck/spellingmenu.h"
 #include "katebuffer.h"
 #include "katemessagewidget.h"
@@ -121,7 +120,6 @@ KateView::KateView( KateDocument *doc, QWidget *parent )
     , m_config( new KateViewConfig( this ) )
     , m_renderer( new KateRenderer( doc, m_textFolding, this ) )
     , m_viewInternal( new KateViewInternal( this ) )
-    , m_spell( new KateSpellCheckDialog( this ) )
     , m_bookmarks( new KateBookmarks( this ) )
     , m_startingUp (true)
     , m_updatingDocumentConfig (false)
@@ -647,7 +645,6 @@ void KateView::setupActions()
   a = ac->addAction( KStandardAction::Replace, this, SLOT(replace()) );
   a->setWhatsThis(i18n("Look up a piece of text or regular expression and replace the result with some given text."));
 
-  m_spell->createActions( ac );
   m_toggleOnTheFlySpellCheck = new KToggleAction(i18n("Automatic Spell Checking"), this);
   m_toggleOnTheFlySpellCheck->setWhatsThis(i18n("Enable/disable automatic spell checking"));
   m_toggleOnTheFlySpellCheck->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_O));
@@ -1497,8 +1494,6 @@ void KateView::slotSelectionChanged ()
     return;
 
   m_cut->setEnabled (selection() || m_config->smartCopyCut() );
-
-  m_spell->updateActions ();
 }
 
 void KateView::switchToCmdLine ()

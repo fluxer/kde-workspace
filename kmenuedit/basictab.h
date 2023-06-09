@@ -23,16 +23,15 @@
 #include <KTabWidget>
 #include <KShortcut>
 #include <KService>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QLabel>
 
 class KKeySequenceWidget;
 class KLineEdit;
 class KIconButton;
-#include <QCheckBox>
-#include <QGroupBox>
-#include <QLabel>
 class KUrlRequester;
 class KService;
-class KLineSpellChecking;
 
 class MenuFolderInfo;
 class MenuEntryInfo;
@@ -73,8 +72,8 @@ protected:
 
 protected:
     KLineEdit    *_nameEdit;
-    KLineSpellChecking*_commentEdit;
-    KLineSpellChecking   *_descriptionEdit;
+    KLineEdit *_commentEdit;
+    KLineEdit   *_descriptionEdit;
     KKeySequenceWidget *_keyEdit;
     KUrlRequester *_execEdit, *_pathEdit;
     KLineEdit    *_termOptEdit, *_uidEdit;

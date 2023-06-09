@@ -38,7 +38,6 @@
 
 #include "khotkeys.h"
 
-#include "klinespellchecking.h"
 #include "menuinfo.h"
 
 #include "moc_basictab.cpp"
@@ -60,9 +59,9 @@ BasicTab::BasicTab( QWidget *parent )
     // setup line inputs
     _nameEdit = new KLineEdit(general_group);
     _nameEdit->setAcceptDrops(false);
-    _descriptionEdit = new KLineSpellChecking(general_group);
+    _descriptionEdit = new KLineEdit(general_group);
     _descriptionEdit->setAcceptDrops(false);
-    _commentEdit = new KLineSpellChecking(general_group);
+    _commentEdit = new KLineEdit(general_group);
     _commentEdit->setAcceptDrops(false);
     _execEdit = new KUrlRequester(general_group);
     _execEdit->lineEdit()->setAcceptDrops(false);

@@ -2,7 +2,6 @@ add_subdirectory(pixmaps)
 
 set(kmenueditcommon_STAT_SRCS
     preferencesdlg.cpp
-    klinespellchecking.cpp
     basictab.cpp
     treeview.cpp
     kmenuedit.cpp

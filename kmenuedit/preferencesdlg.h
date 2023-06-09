@@ -22,9 +22,7 @@
 
 #include <QCheckBox>
 #include <KPageDialog>
-#include <KSpellConfigWidget>
 
-class SpellCheckingPage;
 class MiscPage;
 
 class PreferencesDialog : public KPageDialog
@@ -37,18 +35,7 @@ protected slots:
     void slotSave();
 
 private:
-    SpellCheckingPage *m_pageSpellChecking;
     MiscPage *m_pageMisc;
-};
-
-class SpellCheckingPage : public QWidget
-{
-    Q_OBJECT
-public:
-    SpellCheckingPage( QWidget * );
-    void saveOptions();
-private:
-    KSpellConfigWidget *m_confPage;
 };
 
 class MiscPage : public QWidget

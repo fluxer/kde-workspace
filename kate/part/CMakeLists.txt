@@ -120,8 +120,6 @@ set(katepart_PART_SRCS
     spellcheck/ontheflycheck.cpp
     spellcheck/spellcheck.h
     spellcheck/spellcheck.cpp
-    spellcheck/spellcheckdialog.h
-    spellcheck/spellcheckdialog.cpp
     spellcheck/spellingmenu.h
     spellcheck/spellingmenu.cpp
 

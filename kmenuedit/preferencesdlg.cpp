@@ -37,33 +37,12 @@ PreferencesDialog::PreferencesDialog( QWidget *parent )
     page->setIcon( KIcon( "kmenuedit" ) );
     addPage(page);
 
-    m_pageSpellChecking = new SpellCheckingPage( this );
-    page = new KPageWidgetItem( m_pageSpellChecking , i18n( "Spell Checking" ) );
-    page->setHeader( i18n( "Spell checking Options" ) );
-    page->setIcon( KIcon( "tools-check-spelling" ) );
-    addPage(page);
-
     connect( this, SIGNAL(okClicked()), this, SLOT(slotSave()) );
 }
 
 void PreferencesDialog::slotSave()
 {
-    m_pageSpellChecking->saveOptions();
     m_pageMisc->saveOptions();
-}
-
-SpellCheckingPage::SpellCheckingPage( QWidget *parent )
-    : QWidget( parent )
-{
-    QHBoxLayout *lay = new QHBoxLayout( this );
-    m_confPage = new KSpellConfigWidget(KGlobal::config().data(), this );
-    lay->addWidget( m_confPage );
-    setLayout( lay );
-}
-
-void SpellCheckingPage::saveOptions()
-{
-    m_confPage->save();
 }
 
 MiscPage::MiscPage( QWidget *parent )
