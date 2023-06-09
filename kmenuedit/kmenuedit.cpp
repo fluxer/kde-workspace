@@ -34,7 +34,6 @@
 #include <KStandardAction>
 #include <KStandardShortcut>
 #include <KXMLGUIFactory>
-#include <sonnet/configdialog.h>
 
 #include "treeview.h"
 #include "basictab.h"

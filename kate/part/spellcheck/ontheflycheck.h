@@ -30,13 +30,9 @@
 #include <QSet>
 #include <QTimer>
 
-#include <sonnet/speller.h>
+#include <kspellbackgroundchecker.h>
 
 #include "katedocument.h"
-
-namespace Sonnet {
-  class BackgroundChecker;
-}
 
 class KateOnTheFlyChecker : public QObject, private KTextEditor::MovingRangeFeedback {
   Q_OBJECT
@@ -73,9 +69,8 @@ class KateOnTheFlyChecker : public QObject, private KTextEditor::MovingRangeFeed
 
   protected:
     KateDocument *const m_document;
-    Sonnet::Speller m_speller;
     QList<SpellCheckItem> m_spellCheckQueue;
-    Sonnet::BackgroundChecker *m_backgroundChecker;
+    KSpellBackgroundChecker *m_backgroundChecker;
     SpellCheckItem m_currentlyCheckedItem;
     static const SpellCheckItem invalidSpellCheckQueueItem;
     MisspelledList m_misspelledList;

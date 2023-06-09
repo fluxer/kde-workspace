@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "spellchecking.h"
 
 #include <kpluginfactory.h>
-#include <sonnet/configwidget.h>
+#include <kspellconfigwidget.h>
 
 #include <QBoxLayout>
 
@@ -33,17 +33,17 @@ K_EXPORT_PLUGIN(SpellFactory( "kcmspellchecking" ))
 SonnetSpellCheckingModule::SonnetSpellCheckingModule(QWidget* parent, const QVariantList&):
     KCModule(SpellFactory::componentData(), parent)
 {
-  QBoxLayout *layout = new QVBoxLayout( this );
-  layout->setMargin(0);
-  m_config = new KConfig("sonnetrc");
-  m_configWidget = new Sonnet::ConfigWidget( m_config, this );
-  layout->addWidget(m_configWidget);
-  connect(m_configWidget, SIGNAL(configChanged()), this, SLOT(changed()));
+    QBoxLayout *layout = new QVBoxLayout( this );
+    layout->setMargin(0);
+    m_config = new KConfig("kdeglobals");
+    m_configWidget = new KSpellConfigWidget( m_config, this );
+    layout->addWidget(m_configWidget);
+    connect(m_configWidget, SIGNAL(configChanged()), this, SLOT(changed()));
 }
 
 SonnetSpellCheckingModule::~SonnetSpellCheckingModule()
 {
-  delete m_config;
+    delete m_config;
 }
 
 void SonnetSpellCheckingModule::save()

@@ -42,7 +42,7 @@
 
 #include <kdialog.h>
 #include <klocale.h>
-#include <sonnet/speller.h>
+#include <kspeller.h>
 
 VariableLineEdit::VariableLineEdit(QWidget* parent)
   : QWidget(parent)
@@ -179,8 +179,7 @@ void VariableLineEdit::addKateItems(VariableListView* listview)
   listview->addItem(item);
 
   // Add 'default-dictionary' to list
-  Sonnet::Speller speller;
-  item = new VariableSpellCheckItem("default-dictionary", speller.defaultLanguage());
+  item = new VariableSpellCheckItem("default-dictionary", KSpeller::defaultLanguage());
   item->setHelpText(i18nc("short translation please", "Set the default dictionary used for spell checking."));
   listview->addItem(item);
 

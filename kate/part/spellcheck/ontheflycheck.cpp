@@ -61,7 +61,7 @@ KateOnTheFlyChecker::KateOnTheFlyChecker(KateDocument *document)
   connect(&document->buffer(), SIGNAL(respellCheckBlock(int,int)),
           this, SLOT(handleRespellCheckBlock(int,int)));
 
-  // load the settings for the speller
+  // creates speller and loads the settings for it
   updateConfig();
 
   foreach(KTextEditor::View* view, document->views()) {
@@ -394,24 +394,14 @@ void KateOnTheFlyChecker::performSpellCheck()
                                               m_currentDecToEncOffsetList,
                                               encToDecOffsetList);
   ON_THE_FLY_DEBUG << "next spell checking" << text;
-  if(text.isEmpty()) { // passing an empty string to Sonnet can lead to a bad allocation exception
+  if(text.isEmpty()) { // passing an empty string to speller can lead to a bad allocation exception
     spellCheckDone();  // (bug 225867)
     return;
   }
-  if(m_speller.language() != language) {
-    m_speller.setLanguage(language);
-  }
   if(!m_backgroundChecker) {
-    m_backgroundChecker = new Sonnet::BackgroundChecker(m_speller, this);
-    connect(m_backgroundChecker,
-            SIGNAL(misspelling(QString,int)),
-            this,
-            SLOT(misspelling(QString,int)));
-    connect(m_backgroundChecker, SIGNAL(done()), this, SLOT(spellCheckDone()));
-
-    m_backgroundChecker->restore(KGlobal::config().data());
+    updateConfig();
   }
-  m_backgroundChecker->setSpeller(m_speller);
+  m_backgroundChecker->changeLanguage(language);
   m_backgroundChecker->setText(text); // don't call 'start()' after this!
 }
 
@@ -628,10 +618,6 @@ void KateOnTheFlyChecker::misspelling(const QString &word, int start)
 
   movingRange->setAttribute(KTextEditor::Attribute::Ptr(attribute));
   m_misspelledList.push_back(MisspelledItem(movingRange, m_currentlyCheckedItem.second));
-
-  if(m_backgroundChecker) {
-    m_backgroundChecker->continueChecking();
-  }
 }
 
 void KateOnTheFlyChecker::spellCheckDone()
@@ -667,11 +653,17 @@ QList<KTextEditor::MovingRange*> KateOnTheFlyChecker::installedMovingRanges(cons
 void KateOnTheFlyChecker::updateConfig()
 {
   ON_THE_FLY_DEBUG;
-  m_speller.restore(KGlobal::config().data());
-
   if(m_backgroundChecker) {
-    m_backgroundChecker->restore(KGlobal::config().data());
+    delete m_backgroundChecker;
+    m_backgroundChecker = nullptr;
   }
+
+  m_backgroundChecker = new KSpellBackgroundChecker(KGlobal::config().data(), this);
+  connect(m_backgroundChecker,
+          SIGNAL(misspelling(QString,int)),
+          this,
+          SLOT(misspelling(QString,int)));
+  connect(m_backgroundChecker, SIGNAL(done()), this, SLOT(spellCheckDone()));
 }
 
 void KateOnTheFlyChecker::refreshSpellCheck(const KTextEditor::Range &range)

@@ -38,9 +38,8 @@
 #include <kdialog.h>
 #include <kfiledialog.h>
 #include <kmimetype.h>
-
-#include <sonnet/configwidget.h>
-#include <sonnet/dictionarycombobox.h>
+#include <kspellconfigwidget.h>
+#include <kspelldictionarycombobox.h>
 
 #include <QtCore/QProcess>
 #include <QtCore/QStringList>
@@ -148,7 +147,7 @@ class KateDictionaryBar : public KateViewBarWidget
 
   private:
     KateView* m_view;
-    Sonnet::DictionaryComboBox *m_dictionaryComboBox;
+    KSpellDictionaryComboBox *m_dictionaryComboBox;
 };
 
 class KateIndentConfigTab : public KateConfigPage
@@ -240,7 +239,7 @@ class KateSpellCheckConfigTab : public KateConfigPage
 
   protected:
     Ui::SpellCheckConfigWidget *ui;
-    Sonnet::ConfigWidget *m_sonnetConfigWidget;
+    KSpellConfigWidget *m_spellConfigWidget;
 
   public Q_SLOTS:
     void apply ();

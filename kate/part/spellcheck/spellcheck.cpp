@@ -30,7 +30,7 @@
 
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
-#include <sonnet/speller.h>
+#include <kspeller.h>
 
 #include "katedocument.h"
 #include "katehighlight.h"
@@ -46,22 +46,22 @@ KateSpellCheckManager::~KateSpellCheckManager()
 
 QStringList KateSpellCheckManager::suggestions(const QString& word, const QString& dictionary)
 {
-  Sonnet::Speller speller;
-  speller.setLanguage(dictionary);
+  KSpeller speller(KGlobal::config().data());
+  speller.setDictionary(dictionary);
   return speller.suggest(word);
 }
 
 void KateSpellCheckManager::ignoreWord(const QString& word, const QString& dictionary)
 {
-  Sonnet::Speller speller;
-  speller.setLanguage(dictionary);
+  KSpeller speller(KGlobal::config().data());
+  speller.setDictionary(dictionary);
   speller.addToSession(word);
 }
 
 void KateSpellCheckManager::addToDictionary(const QString& word, const QString& dictionary)
 {
-  Sonnet::Speller speller;
-  speller.setLanguage(dictionary);
+  KSpeller speller(KGlobal::config().data());
+  speller.setDictionary(dictionary);
   speller.addToPersonal(word);
 }
 

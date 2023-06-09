@@ -20,15 +20,12 @@
 #ifndef PREFERENCESDLG_H
 #define PREFERENCESDLG_H
 
+#include <QCheckBox>
 #include <KPageDialog>
+#include <KSpellConfigWidget>
 
 class SpellCheckingPage;
 class MiscPage;
-#include <QCheckBox>
-
-namespace Sonnet {
-    class ConfigWidget;
-}
 
 class PreferencesDialog : public KPageDialog
 {
@@ -51,7 +48,7 @@ public:
     SpellCheckingPage( QWidget * );
     void saveOptions();
 private:
-    Sonnet::ConfigWidget *m_confPage;
+    KSpellConfigWidget *m_confPage;
 };
 
 class MiscPage : public QWidget

@@ -21,7 +21,12 @@
 #ifndef VARIABLE_EDITOR_H
 #define VARIABLE_EDITOR_H
 
-#include <QtGui/QWidget>
+#include <QWidget>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSpinBox>
 
 class KateHelpButton;
 
@@ -37,15 +42,7 @@ class VariableRemoveSpacesItem;
 
 class KColorCombo;
 class KFontComboBox;
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QLineEdit>
-#include <QSpinBox>
-
-namespace Sonnet {
-  class DictionaryComboBox;
-}
+class KSpellDictionaryComboBox;
 
 class VariableEditor : public QWidget
 {
@@ -169,7 +166,7 @@ protected Q_SLOTS:
   void setItemValue(const QString& newValue);
 
 private:
-  Sonnet::DictionaryComboBox *m_dictionaryCombo;
+  KSpellDictionaryComboBox *m_dictionaryCombo;
 };
 
 

@@ -59,7 +59,6 @@
 #include <kio/job.h>
 #include <kio/jobclasses.h>
 #include <kio/netaccess.h>
-
 #include <kapplication.h>
 #include <kcharsets.h>
 #include <kcolorbutton.h>
@@ -88,6 +87,7 @@
 #include <kactioncollection.h>
 #include <kplugininfo.h>
 #include <ktabwidget.h>
+#include <kspeller.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QMap>
@@ -342,9 +342,9 @@ KateSpellCheckConfigTab::KateSpellCheckConfigTab(QWidget *parent)
   //
   // after initial reload, connect the stuff for the changed () signal
 
-  m_sonnetConfigWidget = new Sonnet::ConfigWidget(KGlobal::config().data(), this);
-  connect(m_sonnetConfigWidget, SIGNAL(configChanged()), this, SLOT(slotChanged()));
-  layout->addWidget(m_sonnetConfigWidget);
+  m_spellConfigWidget = new KSpellConfigWidget(KGlobal::config().data(), this);
+  connect(m_spellConfigWidget, SIGNAL(configChanged()), this, SLOT(slotChanged()));
+  layout->addWidget(m_spellConfigWidget);
 
   layout->addWidget(newWidget);
   setLayout(layout);
@@ -369,7 +369,7 @@ void KateSpellCheckConfigTab::apply()
   m_changed = false;
 
   KateDocumentConfig::global()->configStart();
-  m_sonnetConfigWidget->save();
+  m_spellConfigWidget->save();
   KateDocumentConfig::global()->configEnd();
   foreach (KateDocument *doc, KateGlobal::self()->kateDocuments()) {
     doc->refreshOnTheFlyCheck();
@@ -1062,7 +1062,7 @@ KateDictionaryBar::KateDictionaryBar(KateView* view, QWidget *parent)
   QHBoxLayout *topLayout = new QHBoxLayout(centralWidget());
   topLayout->setMargin(0);
   //topLayout->setSpacing(spacingHint());
-  m_dictionaryComboBox = new Sonnet::DictionaryComboBox(centralWidget());
+  m_dictionaryComboBox = new KSpellDictionaryComboBox(centralWidget());
   connect(m_dictionaryComboBox, SIGNAL(dictionaryChanged(QString)),
           this, SLOT(dictionaryChanged(QString)));
   connect(view->doc(), SIGNAL(defaultDictionaryChanged(KateDocument*)),
@@ -1085,7 +1085,7 @@ void KateDictionaryBar::updateData()
   KateDocument *document = m_view->doc();
   QString dictionary = document->defaultDictionary();
   if(dictionary.isEmpty()) {
-    dictionary = Sonnet::Speller().defaultLanguage();
+    dictionary = KSpeller::defaultLanguage();
   }
   m_dictionaryComboBox->setCurrentByDictionary(dictionary);
 }

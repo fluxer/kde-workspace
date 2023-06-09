@@ -27,8 +27,6 @@
 #include <QString>
 
 #include <ktexteditor/document.h>
-#include <sonnet/backgroundchecker.h>
-#include <sonnet/speller.h>
 
 class KateDocument;
 class KateView;

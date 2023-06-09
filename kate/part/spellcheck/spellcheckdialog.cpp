@@ -36,16 +36,12 @@
 #include <kactioncollection.h>
 #include <kicon.h>
 #include <kstandardaction.h>
-#include <sonnet/dialog.h>
-#include <sonnet/backgroundchecker.h>
-#include <sonnet/speller.h>
+#include <kspelldialog.h>
 
 KateSpellCheckDialog::KateSpellCheckDialog( KateView* view )
   : QObject( view )
   , m_view (view)
-  , m_speller (NULL)
-  , m_backgroundChecker(NULL)
-  , m_sonnetDialog(NULL)
+  , m_spellDialog(NULL)
   , m_globalSpellCheckRange(NULL)
   , m_spellCheckCancelledByUser(false)
 {
@@ -54,9 +50,7 @@ KateSpellCheckDialog::KateSpellCheckDialog( KateView* view )
 KateSpellCheckDialog::~KateSpellCheckDialog()
 {
     delete m_globalSpellCheckRange;
-    delete m_sonnetDialog;
-    delete m_backgroundChecker;
-    delete m_speller;
+    delete m_spellDialog;
 }
 
 void KateSpellCheckDialog::createActions( KActionCollection* ac )
@@ -106,41 +100,27 @@ void KateSpellCheckDialog::spellcheck( const KTextEditor::Cursor &from, const KT
     end = m_view->doc()->documentEnd();
   }
 
-  if ( !m_speller )
+  if ( !m_spellDialog )
   {
-    m_speller = new Sonnet::Speller();
-  }
-  m_speller->restore(KGlobal::config().data());
+    m_spellDialog = new KSpellDialog(KGlobal::config().data(), m_view);
+    m_spellDialog->showSpellCheckCompletionMessage();
+    m_spellDialog->setSpellCheckContinuedAfterReplacement(false);
 
-  if ( !m_backgroundChecker )
-  {
-    m_backgroundChecker = new Sonnet::BackgroundChecker(*m_speller);
-  }
+    connect(m_spellDialog,SIGNAL(accepted()),this,SLOT(installNextSpellCheckRange()));
 
-  m_backgroundChecker->restore(KGlobal::config().data());
-  
-  if ( !m_sonnetDialog )
-  {
-    m_sonnetDialog = new Sonnet::Dialog(m_backgroundChecker, m_view);
-    m_sonnetDialog->showProgressDialog(200);
-    m_sonnetDialog->showSpellCheckCompletionMessage();
-    m_sonnetDialog->setSpellCheckContinuedAfterReplacement(false);
-
-    connect(m_sonnetDialog,SIGNAL(done(QString)),this,SLOT(installNextSpellCheckRange()));
-
-    connect(m_sonnetDialog,SIGNAL(replace(QString,int,QString)),
+    connect(m_spellDialog,SIGNAL(replace(QString,int,QString)),
         this,SLOT(corrected(QString,int,QString)));
 
-    connect(m_sonnetDialog,SIGNAL(misspelling(QString,int)),
+    connect(m_spellDialog,SIGNAL(misspelling(QString,int)),
         this,SLOT(misspelling(QString,int)));
 
-    connect(m_sonnetDialog,SIGNAL(cancel()),
+    connect(m_spellDialog,SIGNAL(rejected()),
         this,SLOT(cancelClicked()));
 
-    connect(m_sonnetDialog,SIGNAL(destroyed(QObject*)),
+    connect(m_spellDialog,SIGNAL(destroyed(QObject*)),
             this,SLOT(objectDestroyed(QObject*)));
 
-    connect(m_sonnetDialog,SIGNAL(languageChanged(QString)),
+    connect(m_spellDialog,SIGNAL(languageChanged(QString)),
             this,SLOT(languageChanged(QString)));
   }
 
@@ -206,7 +186,7 @@ void KateSpellCheckDialog::corrected( const QString& word, int pos, const QStrin
   m_currentSpellCheckRange.setRange( KTextEditor::Range( replacementStartCursor, m_currentSpellCheckRange.end() ) );
   // we have to be careful here: due to static word wrapping the text might change in addition to simply
   // the misspelled word being replaced, i.e. new line breaks might be inserted as well. As such, the text
-  // in the 'Sonnet::Dialog' might be eventually out of sync with the visible text. Therefore, we 'restart'
+  // in the 'KSpellDialog' might be eventually out of sync with the visible text. Therefore, we 'restart'
   // spell checking from the current position.
   performSpellCheck( KTextEditor::Range( replacementStartCursor, m_globalSpellCheckRange->end().toCursor() ) );
 }
@@ -222,7 +202,7 @@ void KateSpellCheckDialog::performSpellCheck(const KTextEditor::Range& range)
   installNextSpellCheckRange();
   // first check if there is really something to spell check
   if(m_currentSpellCheckRange.isValid()) {
-    m_sonnetDialog->show();
+    m_spellDialog->show();
   }
 }
 
@@ -283,19 +263,15 @@ void KateSpellCheckDialog::installNextSpellCheckRange()
       QString text = m_view->doc()->decodeCharacters(m_currentSpellCheckRange,
                                                      m_currentDecToEncOffsetList,
                                                      encToDecOffsetList);
-      // ensure that no empty string is passed on to Sonnet as this can lead to a crash
+      // ensure that no empty string is passed on to speller as this can lead to a crash
       // (bug 228789)
       if(text.isEmpty()) {
         nextRangeBegin = m_currentSpellCheckRange.end();
         continue;
       }
 
-      if(m_speller->language() != dictionary) {
-        m_speller->setLanguage(dictionary);
-        m_backgroundChecker->setSpeller(*m_speller);
-      }
-
-      m_sonnetDialog->setBuffer(text);
+      m_spellDialog->changeLanguage(dictionary);
+      m_spellDialog->setBuffer(text);
       break;
     }
   }
@@ -321,7 +297,7 @@ void KateSpellCheckDialog::spellCheckDone()
 void KateSpellCheckDialog::objectDestroyed(QObject *object)
 {
   Q_UNUSED(object);
-  m_sonnetDialog = NULL;
+  m_spellDialog = NULL;
 }
 
 void KateSpellCheckDialog::languageChanged(const QString &language)

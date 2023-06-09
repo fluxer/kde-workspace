@@ -35,7 +35,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kcolorcombo.h>
-#include <sonnet/dictionarycombobox.h>
+#include <kspelldictionarycombobox.h>
 
 //BEGIN VariableEditor
 VariableEditor::VariableEditor(VariableItem* item, QWidget* parent)
@@ -316,7 +316,7 @@ VariableSpellCheckEditor::VariableSpellCheckEditor(VariableSpellCheckItem *item,
 {
   QGridLayout *l = (QGridLayout*) layout();
 
-  m_dictionaryCombo = new Sonnet::DictionaryComboBox(this);
+  m_dictionaryCombo = new KSpellDictionaryComboBox(this);
   m_dictionaryCombo->setCurrentByDictionary(item->value());
   l->addWidget(m_dictionaryCombo, 0, 2, Qt::AlignLeft);
 

@@ -37,10 +37,8 @@ protected:
 
 private slots:
     void slotCheckSpelling();
-    void slotSpellCheckDone( const QString &s );
     void spellCheckerMisspelling( const QString &text, int pos);
     void spellCheckerCorrected( const QString &, int, const QString &);
-    void spellCheckerFinished();
 
 private:
     KAction *m_spellAction;

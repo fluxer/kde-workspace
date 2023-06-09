@@ -34,11 +34,7 @@ class KateView;
 class KAction;
 class KActionCollection;
 class KProgressDialog;
-namespace Sonnet {
-    class Dialog;
-    class BackgroundChecker;
-    class Speller;
-}
+class KSpellDialog;
 
 #include "ktexteditor/range.h"
 
@@ -93,9 +89,7 @@ class KateSpellCheckDialog : public QObject
     KateView *m_view;
     KAction *m_spellcheckSelection;
 
-    Sonnet::Speller *m_speller;
-    Sonnet::BackgroundChecker *m_backgroundChecker;
-    Sonnet::Dialog *m_sonnetDialog;
+    KSpellDialog *m_spellDialog;
 
     // define the part of the text that is to be checked
     KTextEditor::Range m_currentSpellCheckRange;

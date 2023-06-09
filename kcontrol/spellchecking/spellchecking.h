@@ -26,11 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "kcmodule.h"
 
 class KConfig;
-
-namespace Sonnet
-{
-    class ConfigWidget;
-}
+class KSpellConfigWidget;
 
 class SonnetSpellCheckingModule : public KCModule
 {
@@ -44,7 +40,7 @@ class SonnetSpellCheckingModule : public KCModule
   void defaults();
 
  private:
-  Sonnet::ConfigWidget *m_configWidget;
+  KSpellConfigWidget *m_configWidget;
   KConfig *m_config;
 };
 

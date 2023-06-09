@@ -24,7 +24,6 @@
 
 #include <KLocale>
 #include <KConfigGroup>
-#include <sonnet/configwidget.h>
 
 PreferencesDialog::PreferencesDialog( QWidget *parent )
     : KPageDialog( parent )
@@ -57,7 +56,7 @@ SpellCheckingPage::SpellCheckingPage( QWidget *parent )
     : QWidget( parent )
 {
     QHBoxLayout *lay = new QHBoxLayout( this );
-    m_confPage = new Sonnet::ConfigWidget(&( *KGlobal::config() ), this );
+    m_confPage = new KSpellConfigWidget(KGlobal::config().data(), this );
     lay->addWidget( m_confPage );
     setLayout( lay );
 }

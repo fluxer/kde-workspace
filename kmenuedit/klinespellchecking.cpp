@@ -24,8 +24,7 @@
 #include <KStandardAction>
 #include <KActionCollection>
 #include <KAction>
-#include <sonnet/dialog.h>
-#include <sonnet/backgroundchecker.h>
+#include <KSpellDialog>
 
 KLineSpellChecking::KLineSpellChecking(QWidget* parent)
     : KLineEdit(parent)
@@ -43,12 +42,9 @@ void KLineSpellChecking::slotCheckSpelling()
     if ( text().isEmpty() ) {
         return;
     }
-    Sonnet::Dialog *spellDialog = new Sonnet::Dialog(new Sonnet::BackgroundChecker(this), 0);
+    KSpellDialog *spellDialog = new KSpellDialog(KGlobal::config().data(), 0);
     connect(spellDialog, SIGNAL(replace(QString,int,QString)), this, SLOT(spellCheckerCorrected(QString,int,QString)));
     connect(spellDialog, SIGNAL(misspelling(QString,int)), this, SLOT(spellCheckerMisspelling(QString,int)));
-    connect(spellDialog, SIGNAL(done(QString)), this, SLOT(slotSpellCheckDone(QString)));
-    connect(spellDialog, SIGNAL(cancel()), this, SLOT(spellCheckerFinished()));
-    connect(spellDialog, SIGNAL(stop()), this, SLOT(spellCheckerFinished()));
     spellDialog->setBuffer(text());
     spellDialog->show();
 }
@@ -71,16 +67,6 @@ void KLineSpellChecking::spellCheckerCorrected( const QString &old, int pos, con
         insert( corr );
         setSelection ( pos, corr.length() );
     }
-}
-
-void KLineSpellChecking::spellCheckerFinished()
-{
-}
-
-void KLineSpellChecking::slotSpellCheckDone( const QString &s )
-{
-    if( s != text() )
-        setText( s );
 }
 
 void KLineSpellChecking::contextMenuEvent(QContextMenuEvent *e)
