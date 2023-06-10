@@ -633,10 +633,6 @@ bool ThumbnailProtocol::drawSubThumbnail(QPainter& p, const QString& filePath, i
         return false;
     }
 
-    // Seed the random number generator so that it always returns the same result
-    // for the same directory and sequence-item
-    qsrand(qHash(filePath));
-
     // Apply fake smooth scaling, as seen on several blogs
     if (subThumbnail.width() > width * 4 || subThumbnail.height() > height * 4) {
         subThumbnail = subThumbnail.scaled(width*4, height*4, Qt::KeepAspectRatio, Qt::FastTransformation);
