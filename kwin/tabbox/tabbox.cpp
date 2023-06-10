@@ -712,7 +712,7 @@ void TabBox::reconfigure()
     QList<ElectricBorder> *borders = &m_borderActivate;
     QString borderConfig = "BorderActivate";
     for (int i = 0; i < 2; ++i) {
-        foreach (ElectricBorder border, *borders) {
+        foreach (const ElectricBorder border, *borders) {
             ScreenEdges::self()->unreserve(border, this);
         }
         borders->clear();
@@ -1102,9 +1102,10 @@ void TabBox::modalActionsSwitch(bool enabled)
     collections.append(Workspace::self()->actionCollection());
     collections.append(Workspace::self()->disableShortcutsKeys());
     collections.append(Workspace::self()->clientKeys());
-    foreach (KActionCollection * collection, collections)
-    foreach (QAction * action, collection->actions())
-    action->setEnabled(enabled);
+    foreach (KActionCollection * collection, collections) {
+        foreach (QAction * action, collection->actions())
+            action->setEnabled(enabled);
+    }
 }
 
 bool TabBox::toggle(ElectricBorder eb)
