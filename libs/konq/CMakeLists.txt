@@ -31,11 +31,12 @@ set_target_properties(konq PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
-install(TARGETS konq ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS konq EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
-install(FILES
+install(
+    FILES
     directory_bookmarkbar.desktop
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kbookmark
 )
