@@ -56,7 +56,8 @@ static QString iconNameFromURL(const QString &url)
 
 static QString iconFilePath(const QString &iconName)
 {
-    return QString::fromLatin1("%1/%2.png").arg(KGlobal::dirs()->saveLocation("cache"), iconName);
+    const QString iconDir = KGlobal::dirs()->saveLocation("cache", "favicons/");
+    return QString::fromLatin1("%1/%2.png").arg(iconDir.mid(0, iconDir.size() - 9), iconName);
 }
 
 static QString faviconFromUrl(const QString &url, const QLatin1String &extension)
