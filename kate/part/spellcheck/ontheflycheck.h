@@ -30,7 +30,7 @@
 #include <QSet>
 #include <QTimer>
 
-#include <kspellbackgroundchecker.h>
+#include <kspeller.h>
 
 #include "katedocument.h"
 
@@ -70,7 +70,7 @@ class KateOnTheFlyChecker : public QObject, private KTextEditor::MovingRangeFeed
   protected:
     KateDocument *const m_document;
     QList<SpellCheckItem> m_spellCheckQueue;
-    KSpellBackgroundChecker *m_backgroundChecker;
+    KSpeller *m_speller;
     SpellCheckItem m_currentlyCheckedItem;
     static const SpellCheckItem invalidSpellCheckQueueItem;
     MisspelledList m_misspelledList;

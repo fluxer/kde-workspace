@@ -40,7 +40,7 @@
 KateOnTheFlyChecker::KateOnTheFlyChecker(KateDocument *document)
 : QObject(document),
   m_document(document),
-  m_backgroundChecker(NULL),
+  m_speller(NULL),
   m_currentlyCheckedItem(invalidSpellCheckQueueItem),
   m_refreshView(NULL)
 {
@@ -398,11 +398,11 @@ void KateOnTheFlyChecker::performSpellCheck()
     spellCheckDone();  // (bug 225867)
     return;
   }
-  if(!m_backgroundChecker) {
+  if(!m_speller) {
     updateConfig();
   }
-  m_backgroundChecker->changeLanguage(language);
-  m_backgroundChecker->setText(text); // don't call 'start()' after this!
+  m_speller->setDictionary(language);
+  m_speller->setText(text); // don't call 'start()' after this!
 }
 
 void KateOnTheFlyChecker::removeRangeFromEverything(KTextEditor::MovingRange *movingRange)
@@ -444,8 +444,8 @@ void KateOnTheFlyChecker::stopCurrentSpellCheck()
 {
   m_currentDecToEncOffsetList.clear();
   m_currentlyCheckedItem = invalidSpellCheckQueueItem;
-  if(m_backgroundChecker) {
-    m_backgroundChecker->stop();
+  if(m_speller) {
+    m_speller->stop();
   }
 }
 
@@ -653,17 +653,14 @@ QList<KTextEditor::MovingRange*> KateOnTheFlyChecker::installedMovingRanges(cons
 void KateOnTheFlyChecker::updateConfig()
 {
   ON_THE_FLY_DEBUG;
-  if(m_backgroundChecker) {
-    delete m_backgroundChecker;
-    m_backgroundChecker = nullptr;
+  if(m_speller) {
+    delete m_speller;
+    m_speller = nullptr;
   }
 
-  m_backgroundChecker = new KSpellBackgroundChecker(KGlobal::config().data(), this);
-  connect(m_backgroundChecker,
-          SIGNAL(misspelling(QString,int)),
-          this,
-          SLOT(misspelling(QString,int)));
-  connect(m_backgroundChecker, SIGNAL(done()), this, SLOT(spellCheckDone()));
+  m_speller = new KSpeller(KGlobal::config().data(), this);
+  connect(m_speller, SIGNAL(misspelling(QString,int)), this, SLOT(misspelling(QString,int)));
+  connect(m_speller, SIGNAL(done()), this, SLOT(spellCheckDone()));
 }
 
 void KateOnTheFlyChecker::refreshSpellCheck(const KTextEditor::Range &range)
