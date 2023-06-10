@@ -83,7 +83,7 @@ private Q_SLOTS:
 private:
     void startJob(const QString &url, const QString &faviconUrl, const QString &iconFile);
     void downloadSuccess(const QString &url);
-    void downloadError(const QString &url);
+    void downloadError(const QString &url, const QString &faviconUrl, const QString &iconFile);
 
 private:
     FavIconsModulePrivate *d;

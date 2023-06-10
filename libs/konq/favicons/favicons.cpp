@@ -40,13 +40,15 @@ static bool isIconOld(const QString &iconFile)
     const QFileInfo iconInfo(iconFile);
     const QDateTime iconLastModified = iconInfo.lastModified();
     if (!iconInfo.isFile() || !iconLastModified.isValid()) {
-        // kDebug() << "isIconOld" << iconFile << "yes, no such file";
-        return true; // Trigger a new download on error
+        kDebug() << "Icon file too old or does not exist" << iconFile;
+        return true;
     }
 
-    // kDebug() << "isIconOld" << iconFile << "?";
     const QDateTime currentTime = QDateTime::currentDateTime();
-    return ((currentTime.toTime_t() - iconLastModified.toTime_t()) > 604800); // arbitrary value (one week)
+     // arbitrary value (one week)
+    const bool isOld = ((currentTime.toTime_t() - iconLastModified.toTime_t()) > 604800);
+    kDebug() << "isIconOld" << iconFile << isOld;
+    return isOld;
 }
 
 static QString iconNameFromURL(const QString &url)
@@ -122,7 +124,7 @@ void FavIconsModule::downloadUrlIcon(const QString &url)
         kDebug() << "Icon download queued for" << url;
         return;
     }
-    if (d->failedDownloads.contains(url)) {
+    if (d->failedDownloads.contains(iconName)) {
         kDebug() << "Icon download already failed for" << url;
         emit iconChanged(url, QString());
         return;
@@ -135,8 +137,8 @@ void FavIconsModule::downloadUrlIcon(const QString &url)
 
 void FavIconsModule::forceDownloadUrlIcon(const QString &url)
 {
-    d->failedDownloads.removeAll(url); // force a download to happen
     const QString iconName = iconNameFromURL(url);
+    d->failedDownloads.removeAll(iconName); // force a download to happen
     const QString iconFile = iconFilePath(iconName);
     QFile::remove(iconFile);
     downloadUrlIcon(url);
@@ -157,20 +159,13 @@ void FavIconsModule::startJob(const QString &url, const QString &faviconUrl, con
 void FavIconsModule::slotFinished(KJob *kjob)
 {
     KIO::StoredTransferJob* tjob = qobject_cast<KIO::StoredTransferJob*>(kjob);
+    const QString faviconUrl = tjob->url().url();
     const QString faviconsUrl = tjob->property("faviconsUrl").toString();
     const QString faviconsFile = tjob->property("faviconsFile").toString();
     if (tjob->error()) {
-        const QString tjoburl = tjob->url().url();
-        if (tjoburl.endsWith(QLatin1String(".ico"))) {
-            const QString faviconUrl = faviconFromUrl(faviconsUrl, QLatin1String("png"));
-            kDebug() << "Attempting alternative icon" << faviconUrl;
-            tjob->deleteLater();
-            startJob(faviconsUrl, faviconUrl, faviconsFile);
-            return;
-        }
         kWarning() << "Job error" << tjob->errorString();
-        downloadError(faviconsUrl);
         tjob->deleteLater();
+        downloadError(faviconsUrl, faviconUrl, faviconsFile);
         return;
     }
     QBuffer buffer;
@@ -180,18 +175,18 @@ void FavIconsModule::slotFinished(KJob *kjob)
     QImageReader ir(&buffer);
     if (!ir.canRead()) {
         kWarning() << "Image reader cannot read the data" << ir.errorString();
-        downloadError(faviconsUrl);
+        downloadError(faviconsUrl, faviconUrl, faviconsFile);
         return;
     }
     const QImage img = ir.read();
     if (img.isNull()) {
         kWarning() << "Image reader returned null image" << ir.errorString();
-        downloadError(faviconsUrl);
+        downloadError(faviconsUrl, faviconUrl, faviconsFile);
         return;
     }
     if (!img.save(faviconsFile, "PNG")) {
         kWarning() << "Error saving image to" << faviconsFile;
-        downloadError(faviconsUrl);
+        downloadError(faviconsUrl, faviconUrl, faviconsFile);
         return;
     }
     downloadSuccess(faviconsUrl);
@@ -205,13 +200,20 @@ void FavIconsModule::downloadSuccess(const QString &url)
     emit iconChanged(url, iconName);
 }
 
-void FavIconsModule::downloadError(const QString &url)
+void FavIconsModule::downloadError(const QString &url, const QString &faviconUrl, const QString &iconFile)
 {
-    if (!d->failedDownloads.contains(url)) {
-        kDebug() << "Adding" << url << "to failed downloads";
-        d->failedDownloads.append(url);
+    if (faviconUrl.endsWith(QLatin1String(".ico"))) {
+        const QString alternativeFaviconUrl = faviconFromUrl(url, QLatin1String("png"));
+        kDebug() << "Attempting alternative icon" << alternativeFaviconUrl;
+        startJob(url, alternativeFaviconUrl, iconFile);
+        return;
     }
+
     const QString iconName = iconNameFromURL(url);
+    if (!d->failedDownloads.contains(iconName)) {
+        kDebug() << "Adding" << url << "to failed downloads";
+        d->failedDownloads.append(iconName);
+    }
     d->queuedDownloads.removeAll(iconName);
     emit iconChanged(url, QString());
 }
