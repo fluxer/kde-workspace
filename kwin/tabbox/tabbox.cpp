@@ -718,7 +718,7 @@ void TabBox::reconfigure()
         borders->clear();
         QStringList list = config.readEntry(borderConfig, QStringList());
         foreach (const QString &s, list) {
-            bool ok;
+            bool ok = false;
             const int i = s.toInt(&ok);
             if (!ok)
                 continue;
