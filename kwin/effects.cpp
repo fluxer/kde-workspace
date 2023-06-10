@@ -444,7 +444,7 @@ void EffectsHandlerImpl::startPaint()
 {
     m_activeEffects.clear();
     m_activeEffects.reserve(loaded_effects.count());
-    foreach (const KWin::EffectPair it, loaded_effects) {
+    foreach (const KWin::EffectPair &it, loaded_effects) {
         if (it.second->isActive()) {
             m_activeEffects << it.second;
         }
@@ -716,7 +716,7 @@ void* EffectsHandlerImpl::getProxy(QString name)
     // All effects start with "kwin4_effect_", prepend it to the name
     name.prepend("kwin4_effect_");
 
-    foreach (const EffectPair it, loaded_effects) {
+    foreach (const EffectPair &it, loaded_effects) {
         if (it.first == name) {
             return it.second->proxy();
         }
@@ -1258,7 +1258,7 @@ void EffectsHandlerImpl::toggleEffect(const QString& name)
 QStringList EffectsHandlerImpl::loadedEffects() const
 {
     QStringList listModules;
-    foreach (const EffectPair it, loaded_effects) {
+    foreach (const EffectPair &it, loaded_effects) {
         listModules << it.first;
     }
     return listModules;
@@ -1284,7 +1284,7 @@ bool EffectsHandlerImpl::loadEffect(const QString& name, bool checkDefault)
         kWarning(1212) << "Effect names usually have kwin4_effect_ prefix" ;
 
     // Make sure a single effect won't be loaded multiple times
-    foreach (const EffectPair it, loaded_effects) {
+    foreach (const EffectPair &it, loaded_effects) {
         if (it.first == name) {
             kDebug(1212) << "EffectsHandler::loadEffect : Effect already loaded : " << name;
             return true;

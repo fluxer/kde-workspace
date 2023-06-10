@@ -237,7 +237,7 @@ QVariant DecorationModel::data(const QModelIndex& index, int role) const
         QList< QVariant > sizes;
         const bool mustDisablePreview = m_plugins->factory() && m_plugins->factory() == m_preview->factory();
         if (m_plugins->loadPlugin(m_decorations[index.row()].libraryName) && m_plugins->factory()) {
-            foreach (KDecorationDefines::BorderSize size, m_plugins->factory()->borderSizes())   // krazy:exclude=foreach
+            foreach (const KDecorationDefines::BorderSize size, m_plugins->factory()->borderSizes())   // krazy:exclude=foreach
                 sizes << int(size);
             if (mustDisablePreview) // it's nuked with destroyPreviousPlugin()
                 m_preview->disablePreview(); // so we need to get rid of m_preview->deco first

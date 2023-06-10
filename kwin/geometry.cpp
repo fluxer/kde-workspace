@@ -2854,9 +2854,10 @@ void Client::handleMoveResize(int x, int y, int x_root, int y_root)
                 // Now we have a region of all the visible areas of the titlebar
                 // Count the visible pixels and check to see if it's enough
                 int visiblePixels = 0;
-                foreach (const QRect & rect, titlebarRegion.rects())
-                if (rect.height() >= frameTop)   // Only the full height regions, prevents long slim areas
-                    visiblePixels += rect.width() * rect.height();
+                foreach (const QRect & rect, titlebarRegion.rects()) {
+                    if (rect.height() >= frameTop)   // Only the full height regions, prevents long slim areas
+                        visiblePixels += rect.width() * rect.height();
+                }
                 if (visiblePixels >= titlebarArea)
                     break; // We have reached a valid position
 
@@ -2975,9 +2976,10 @@ void Client::handleMoveResize(int x, int y, int x_root, int y_root)
                     // Now we have a region of all the visible areas of the titlebar
                     // Count the visible pixels and check to see if it's enough
                     int visiblePixels = 0;
-                    foreach (const QRect & rect, titlebarRegion.rects())
+                    foreach (const QRect & rect, titlebarRegion.rects()) {
                         if (rect.height() >= frameTop)   // Only the full height regions, prevents long slim areas
                             visiblePixels += rect.width() * rect.height();
+                    }
                     if (visiblePixels >= titlebarArea)
                         break; // We have reached a valid position
 
