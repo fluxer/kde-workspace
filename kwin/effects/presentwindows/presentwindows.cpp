@@ -108,23 +108,23 @@ PresentWindowsEffect::~PresentWindowsEffect()
 void PresentWindowsEffect::reconfigure(ReconfigureFlags)
 {
     PresentWindowsConfig::self()->readConfig();
-    foreach (ElectricBorder border, m_borderActivate) {
+    foreach (const ElectricBorder border, m_borderActivate) {
         effects->unreserveElectricBorder(border, this);
     }
-    foreach (ElectricBorder border, m_borderActivateAll) {
+    foreach (const ElectricBorder border, m_borderActivateAll) {
         effects->unreserveElectricBorder(border, this);
     }
     m_borderActivate.clear();
     m_borderActivateAll.clear();
-    foreach (int i, PresentWindowsConfig::borderActivate()) {
+    foreach (const int i, PresentWindowsConfig::borderActivate()) {
         m_borderActivate.append(ElectricBorder(i));
         effects->reserveElectricBorder(ElectricBorder(i), this);
     }
-    foreach (int i, PresentWindowsConfig::borderActivateAll()) {
+    foreach (const int i, PresentWindowsConfig::borderActivateAll()) {
         m_borderActivateAll.append(ElectricBorder(i));
         effects->reserveElectricBorder(ElectricBorder(i), this);
     }
-    foreach (int i, PresentWindowsConfig::borderActivateClass()) {
+    foreach (const int i, PresentWindowsConfig::borderActivateClass()) {
         m_borderActivateClass.append(ElectricBorder(i));
         effects->reserveElectricBorder(ElectricBorder(i), this);
     }

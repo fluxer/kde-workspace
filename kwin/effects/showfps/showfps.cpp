@@ -138,8 +138,9 @@ void ShowFpsEffect::paintWindow(EffectWindow* w, int mask, QRegion region, Windo
     QRegion r2 = region & QRect(w->x(), w->y(), w->width(), w->height());
     r2 -= fps_rect;
     int winsize = 0;
-    foreach (const QRect & r, r2.rects())
-    winsize += r.width() * r.height();
+    foreach (const QRect & r, r2.rects()) {
+        winsize += r.width() * r.height();
+    }
     paint_size[ paints_pos ] += winsize;
 }
 
@@ -313,7 +314,7 @@ void ShowFpsEffect::paintGraph(int x, int y, QList<int> values, QList<int> lines
         // Then the lines
         col.red = col.green = col.blue = 0;  // black
         QVector<xcb_rectangle_t> rects;
-        foreach (int h, lines) {
+        foreach (const int h, lines) {
             xcb_rectangle_t rect = {0, int16_t(MAX_TIME - h), uint16_t(values.count()), 1};
             rects << rect;
         }

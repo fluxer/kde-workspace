@@ -231,21 +231,21 @@ void KWinScreenEdgesConfig::monitorLoad()
     // PresentWindows BorderActivateAll
     list.append(ElectricTopLeft);
     list = presentWindowsConfig.readEntry("BorderActivateAll", list);
-    foreach (int i, list) {
+    foreach (const int i, list) {
         monitorChangeEdge(ElectricBorder(i), PresentWindowsAll);
     }
     // PresentWindows BorderActivate
     list.clear();
     list.append(ElectricNone);
     list = presentWindowsConfig.readEntry("BorderActivate", list);
-    foreach (int i, list) {
+    foreach (const int i, list) {
         monitorChangeEdge(ElectricBorder(i), PresentWindowsCurrent);
     }
     // PresentWindows BorderActivateClass
     list.clear();
     list.append(ElectricNone);
     list = presentWindowsConfig.readEntry("BorderActivateClass", list);
-    foreach (int i, list) {
+    foreach (const int i, list) {
         monitorChangeEdge(ElectricBorder(i), PresentWindowsClass);
     }
 
@@ -255,14 +255,14 @@ void KWinScreenEdgesConfig::monitorLoad()
     // TabBox
     list.append(ElectricNone);
     list = tabBoxConfig.readEntry("BorderActivate", list);
-    foreach (int i, list) {
+    foreach (const int i, list) {
         monitorChangeEdge(ElectricBorder(i), TabBox);
     }
     // Alternative TabBox
     list.clear();
     list.append(ElectricNone);
     list = tabBoxConfig.readEntry("BorderAlternativeActivate", list);
-    foreach (int i, list) {
+    foreach (const int i, list) {
         monitorChangeEdge(ElectricBorder(i), TabBoxAlternative);
     }
 }
