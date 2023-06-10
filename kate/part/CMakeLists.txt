@@ -151,7 +151,7 @@ set(katepart_PART_SRCS
 
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=13000)
 
-add_library(katepartinterfaces ${LIBRARY_TYPE} ${katepart_PART_SRCS})
+add_library(katepartinterfaces SHARED ${katepart_PART_SRCS})
 
 target_link_libraries(katepartinterfaces
     ${KDE4_KDECORE_LIBS}

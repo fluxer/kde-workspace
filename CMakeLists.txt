@@ -8,8 +8,6 @@ include(FeatureSummary)
 find_package(KDE4 4.23.0 REQUIRED)
 include(KDE4Defaults)
 
-set(LIBRARY_TYPE SHARED)
-
 # kdelibs requires 0.91
 find_package(SharedMimeInfo 0.91)
 set_package_properties(SharedMimeInfo PROPERTIES

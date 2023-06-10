@@ -16,7 +16,7 @@ set(konq_LIB_SRCS
    kversioncontrolplugin.cpp  # used by dolphin and its version control plugins
 )
 
-add_library(konq ${LIBRARY_TYPE} ${konq_LIB_SRCS})
+add_library(konq SHARED ${konq_LIB_SRCS})
 
 target_link_libraries(konq PRIVATE
     ${X11_X11_LIB}

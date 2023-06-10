@@ -28,7 +28,7 @@ set(kateinterfaces_LIB_SRCS
 
 
 
-add_library(kateinterfaces ${LIBRARY_TYPE} ${kateinterfaces_LIB_SRCS})
+add_library(kateinterfaces SHARED ${kateinterfaces_LIB_SRCS})
 
 target_link_libraries(kateinterfaces PUBLIC
     ${QT_QTXML_LIBRARY}
