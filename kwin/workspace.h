@@ -506,8 +506,6 @@ private:
      **/
     UserActionsMenu *m_userActionsMenu;
 
-    void modalActionsSwitch(bool enabled);
-
     KActionCollection* keys;
     KActionCollection* client_keys;
     KActionCollection* disable_shortcuts_keys;
