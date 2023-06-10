@@ -424,7 +424,6 @@ void TabBoxHandler::createModel(bool partialReset)
     switch(d->config.tabBoxMode()) {
     case TabBoxConfig::ClientTabBox: {
         d->clientModel()->createClientList(partialReset);
-        // TODO: C++11 use lambda function
         bool lastRaised = false;
         bool lastRaisedSucc = false;
         foreach (const QWeakPointer<TabBoxClient> &clientPointer, stackingOrder()) {
