@@ -153,7 +153,7 @@ static void checkTransiency()
         if (!performTransiencyCheck()) {
             kDebug(1212) << "BT:" << transiencyCheckStartBt;
             kDebug(1212) << "CLIENT:" << transiencyCheckClient;
-            abort();
+            kFatal() << "Something strange happened";
         }
         transiencyCheckNonExistent = false;
     }

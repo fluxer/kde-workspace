@@ -193,8 +193,9 @@ void UserActionsMenu::helperDialog(const QString& message, const QWeakPointer<Cl
                  "activated using the %1 keyboard shortcut.",
                  shortcut);
         type = "altf3warning";
-    } else
-        abort();
+    } else {
+        kFatal() << "Something strange happened";
+    }
     if (!type.isEmpty()) {
         KConfig cfg("kwin_dialogsrc");
         KConfigGroup cg(&cfg, "Notification Messages");  // Depends on KMessageBox

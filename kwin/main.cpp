@@ -265,10 +265,6 @@ bool Application::setup()
 
 //    initting = false; // TODO
 
-    // This tries to detect compositing options and can use GLX. GLX problems
-    // (X errors) shouldn't cause kwin to abort, so this is out of the
-    // critical startup section where x errors cause kwin to abort.
-
     // create workspace.
     (void) new Workspace(isSessionRestored());
 

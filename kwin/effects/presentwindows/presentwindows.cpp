@@ -1863,7 +1863,8 @@ EffectWindow* PresentWindowsEffect::relativeWindow(EffectWindow *w, int xdiff, i
         }
     }
 
-    abort(); // Should never get here
+    // Should never get here
+    kFatal() << "Something strange happened";
 }
 
 EffectWindow* PresentWindowsEffect::findFirstWindow() const

@@ -313,7 +313,7 @@ QRect Workspace::clientArea(clientAreaOption opt, int screen, int desktop) const
     case FullArea:
         return QRect(0, 0, displayWidth(), displayHeight());
     }
-    abort();
+    kFatal() << "Something strange happened";
 }
 
 
@@ -650,7 +650,7 @@ QRect Workspace::adjustClientSize(Client* c, QRect moveResizeGeom, int mode)
                 SNAP_BORDER_LEFT
                 break;
             default:
-                abort();
+                kFatal() << "Something strange happened";
                 break;
             }
 
@@ -779,7 +779,7 @@ QRect Workspace::adjustClientSize(Client* c, QRect moveResizeGeom, int mode)
                         SNAP_WINDOW_C_LEFT
                         break;
                     default:
-                        abort();
+                        kFatal() << "Something strange happened";
                         break;
                     }
                 }
@@ -987,7 +987,7 @@ StrutRect Client::strutRect(StrutArea area) const
                              ), StrutAreaLeft);
         break;
     default:
-        abort(); // Not valid
+        kFatal() << "Something strange happened"; // Not valid
     }
     return StrutRect(); // Null rect
 }
@@ -2836,7 +2836,7 @@ void Client::handleMoveResize(int x, int y, int x_root, int y_root)
             break;
         case PositionCenter:
         default:
-            abort();
+            kFatal() << "Something strange happened";
             break;
         }
         // adjust new size to snap to other windows/borders
@@ -2936,7 +2936,7 @@ void Client::handleMoveResize(int x, int y, int x_root, int y_root)
             break;
         case PositionCenter:
         default:
-            abort();
+            kFatal() << "Something strange happened";
             break;
         }
 
@@ -3026,8 +3026,9 @@ void Client::handleMoveResize(int x, int y, int x_root, int y_root)
         }
         if (moveResizeGeom.topLeft() != previousMoveResizeGeom.topLeft())
             update = true;
-    } else
-        abort();
+    } else {
+        kFatal() << "Something strange happened";
+    }
 
     if (!update)
         return;

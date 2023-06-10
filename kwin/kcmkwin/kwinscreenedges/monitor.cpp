@@ -167,7 +167,7 @@ int Monitor::selectedEdgeItem(int edge) const
         if (act->isChecked())
             return popup_actions[ edge ].indexOf(act);
     }
-    abort();
+    kFatal() << "Something strange happened";
 }
 
 void Monitor::popup(Corner* c, QPoint pos)
@@ -187,7 +187,7 @@ void Monitor::popup(Corner* c, QPoint pos)
             return;
         }
     }
-    abort();
+    kFatal() << "Something strange happened";
 }
 
 void Monitor::flip(Corner* c, QPoint pos)
@@ -203,7 +203,7 @@ void Monitor::flip(Corner* c, QPoint pos)
             return;
         }
     }
-    abort();
+    kFatal() << "Something strange happened";
 }
 
 Monitor::Corner::Corner(Monitor* m)

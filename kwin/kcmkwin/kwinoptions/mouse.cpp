@@ -273,7 +273,8 @@ static const char* tbl_num_lookup(const char* const arr[], int pos)
             return arr[ i ];
         --pos;
     }
-    abort(); // should never happen this way
+    // should never happen this way
+    kFatal() << "Something strange happened";
 }
 
 static int tbl_txt_lookup(const char* const arr[], const char* txt)
@@ -291,20 +292,21 @@ static int tbl_txt_lookup(const char* const arr[], const char* txt)
 
 void KTitleBarActionsConfig::setComboText(KComboBox* combo, const char*txt)
 {
-    if (combo == m_ui->coTiDbl)
+    if (combo == m_ui->coTiDbl) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_TiDbl, txt));
-    else if (combo == m_ui->coTiAct1 || combo == m_ui->coTiAct2 || combo == m_ui->coTiAct3)
+    } else if (combo == m_ui->coTiAct1 || combo == m_ui->coTiAct2 || combo == m_ui->coTiAct3) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_TiAc, txt));
-    else if (combo == m_ui->coTiInAct1 || combo == m_ui->coTiInAct2 || combo == m_ui->coTiInAct3)
+    } else if (combo == m_ui->coTiInAct1 || combo == m_ui->coTiInAct2 || combo == m_ui->coTiInAct3) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_TiInAc, txt));
-    else if (combo == m_ui->coTiAct4)
+    } else if (combo == m_ui->coTiAct4) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_TiWAc, txt));
-    else if (combo == m_ui->leftClickMaximizeButton ||
+    } else if (combo == m_ui->leftClickMaximizeButton ||
                 combo == m_ui->middleClickMaximizeButton ||
                 combo == m_ui->rightClickMaximizeButton) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_Max, txt));
-    } else
-        abort();
+    } else {
+        kFatal() << "Something strange happened";
+    }
 }
 
 const char* KTitleBarActionsConfig::functionTiDbl(int i)
@@ -427,18 +429,19 @@ KWindowActionsConfig::~KWindowActionsConfig()
 
 void KWindowActionsConfig::setComboText(KComboBox* combo, const char*txt)
 {
-    if (combo == m_ui->coWin1 || combo == m_ui->coWin2 || combo == m_ui->coWin3)
+    if (combo == m_ui->coWin1 || combo == m_ui->coWin2 || combo == m_ui->coWin3) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_Win, txt));
-    else if (combo == m_ui->coWinWheel)
+    } else if (combo == m_ui->coWinWheel) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_WinWheel, txt));
-    else if (combo == m_ui->coAllKey)
+    } else if (combo == m_ui->coAllKey) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_AllKey, txt));
-    else if (combo == m_ui->coAll1 || combo == m_ui->coAll2 || combo == m_ui->coAll3)
+    } else if (combo == m_ui->coAll1 || combo == m_ui->coAll2 || combo == m_ui->coAll3) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_All, txt));
-    else if (combo == m_ui->coAllW)
+    } else if (combo == m_ui->coAllW) {
         combo->setCurrentIndex(tbl_txt_lookup(tbl_AllW, txt));
-    else
-        abort();
+    } else {
+        kFatal() << "Something strange happened";
+    }
 }
 
 const char* KWindowActionsConfig::functionWin(int i)

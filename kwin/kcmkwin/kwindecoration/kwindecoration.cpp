@@ -46,6 +46,7 @@
 #include <QScrollBar>
 #include <QUiLoader>
 // KDE
+#include <KDebug>
 #include <KAboutData>
 #include <KDialog>
 #include <KLocalizedString>
@@ -54,7 +55,6 @@
 #include <KConfigDialogManager>
 #include <KPluginFactory>
 #include <Plasma/ConfigLoader>
-#include <qdeclarative.h>
 
 // KCModule plugin interface
 // =========================
@@ -124,7 +124,7 @@ void KWinDecorationModule::init()
         "The resource<h2>kwin/kcm_kwindecoration/main.qml</h2>could not be located in any application data path."
         "<h2>Please contact your distribution</h2>"
         "The application will now abort", "Installation Error");
-        abort();
+        kFatal() << "Something strange happened";
     }
     KConfigGroup style(kwinConfig, "Style");
 

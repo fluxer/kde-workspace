@@ -1223,7 +1223,7 @@ bool PaintClipper::Iterator::isDone()
     if (effects->compositingType() == XRenderCompositing)
         return data->index == 1; // run once
 #endif
-    abort();
+    kFatal() << "Something strange happened";
 }
 
 void PaintClipper::Iterator::next()
@@ -1239,7 +1239,7 @@ QRect PaintClipper::Iterator::boundingRect() const
     if (effects->compositingType() == XRenderCompositing)
         return paintArea().boundingRect();
 #endif
-    abort();
+    kFatal() << "Something strange happened";
     return infiniteRegion();
 }
 
@@ -1429,8 +1429,11 @@ void WindowMotionManager::apply(EffectWindow *w, WindowPaintData &data)
 void WindowMotionManager::moveWindow(EffectWindow *w, QPoint target, double scale, double yScale)
 {
     QHash<EffectWindow*, WindowMotion>::iterator it = m_managedWindows.find(w);
-    if (it == m_managedWindows.end())
-        abort(); // Notify the effect author that they did something wrong
+    if (it == m_managedWindows.end()) {
+        // Notify the effect author that they did something wrong
+        kFatal() << "Something strange happened";
+        return;
+    }
 
     WindowMotion *motion = &it.value();
 

@@ -601,7 +601,7 @@ void Client::detectNoBorder()
         noborder = false;
         break;
     default:
-        abort();
+        kFatal() << "Something strange happened";
     }
 }
 

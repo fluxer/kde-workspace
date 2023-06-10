@@ -1543,21 +1543,24 @@ const EffectWindowGroup* EffectWindowImpl::group() const
 {
     if (Client* c = qobject_cast< Client* >(toplevel))
         return c->group()->effectGroup();
-    return NULL; // TODO
+     // TODO
+    return NULL;
 }
 
 void EffectWindowImpl::refWindow()
 {
     if (Deleted* d = qobject_cast< Deleted* >(toplevel))
         return d->refWindow();
-    abort(); // TODO
+    // TODO
+    kFatal() << "Something strange happened";
 }
 
 void EffectWindowImpl::unrefWindow()
 {
     if (Deleted* d = qobject_cast< Deleted* >(toplevel))
         return d->unrefWindow();   // delays deletion in case
-    abort(); // TODO
+    // TODO
+    kFatal() << "Something strange happened";
 }
 
 void EffectWindowImpl::setWindow(Toplevel* w)

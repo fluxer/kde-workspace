@@ -997,7 +997,7 @@ bool Client::shouldUnredirect() const
             if (c->geometry().intersects(geometry()))
                 return false;
         }
-        abort();
+        kFatal() << "Something strange happened";
     }
     return false;
 }
@@ -1023,7 +1023,7 @@ bool Unmanaged::shouldUnredirect() const
             if (c->geometry().intersects(geometry()))
                 return false;
         }
-        abort();
+        kFatal() << "Something strange happened";
     }
     return false;
 }
