@@ -1784,7 +1784,7 @@ void Client::setShortcut(const QString& _cut)
     }
     QList< KShortcut > keys;
     QStringList groups = cut.split(" - ");
-    foreach (const QString it, groups) {
+    foreach (const QString &it, groups) {
         QRegExp reg("(.*\\+)\\((.*)\\)");
         if (reg.indexIn(it) > -1) {
             QString base = reg.cap(1);
@@ -1804,7 +1804,7 @@ void Client::setShortcut(const QString& _cut)
             }
         }
     }
-    foreach (const KShortcut it, keys) {
+    foreach (const KShortcut &it, keys) {
         if (_shortcut == it)   // current one is in the list
             return;
         if (workspace()->shortcutAvailable(it, this)) {

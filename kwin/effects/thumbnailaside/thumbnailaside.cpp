@@ -175,8 +175,9 @@ void ThumbnailAsideEffect::arrange()
 
 void ThumbnailAsideEffect::repaintAll()
 {
-    foreach (const Data & d, windows)
+    foreach (const Data & d, windows) {
         effects->addRepaint(d.rect);
+    }
 }
 
 bool ThumbnailAsideEffect::isActive() const
