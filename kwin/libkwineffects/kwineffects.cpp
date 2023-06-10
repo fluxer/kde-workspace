@@ -1119,17 +1119,19 @@ WindowQuadList WindowQuadList::filterOut(WindowQuadType type) const
 
 bool WindowQuadList::smoothNeeded() const
 {
-    foreach (const WindowQuad & q, *this)
-    if (q.smoothNeeded())
-        return true;
+    foreach (const WindowQuad & q, *this) {
+        if (q.smoothNeeded())
+            return true;
+    }
     return false;
 }
 
 bool WindowQuadList::isTransformed() const
 {
-    foreach (const WindowQuad & q, *this)
-    if (q.isTransformed())
-        return true;
+    foreach (const WindowQuad & q, *this) {
+        if (q.isTransformed())
+            return true;
+    }
     return false;
 }
 
@@ -1181,8 +1183,9 @@ QRegion PaintClipper::paintArea()
 {
     assert(areas != NULL);   // can be called only with clip() == true
     QRegion ret = QRegion(0, 0, displayWidth(), displayHeight());
-    foreach (const QRegion & r, *areas)
-    ret &= r;
+    foreach (const QRegion & r, *areas) {
+        ret &= r;
+    }
     return ret;
 }
 
