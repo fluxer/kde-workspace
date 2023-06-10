@@ -127,6 +127,7 @@ void testProcess::testTimeToUpdateAllProcesses() {
     QBENCHMARK {
         processController->updateAllProcesses();
     }
+    delete processController;
 }
 
 void testProcess::testTimeToUpdateModel() {
@@ -156,6 +157,7 @@ void testProcess::testUpdateOrAddProcess() {
     processController->updateOrAddProcess(1);
     processController->updateOrAddProcess(0);
     processController->updateOrAddProcess(-1);
+    delete processController;
 }
 
 QTEST_KDEMAIN(testProcess,GUI)
