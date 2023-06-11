@@ -56,17 +56,26 @@ set(Applet_SRCS
     applet/kickoffConfig.ui
 )
 
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/contextmenufactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/launcher.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 kde4_add_plugin(plasma_applet_launcher ${Applet_SRCS})
+
 target_link_libraries(plasma_applet_launcher
     ${KDE4_PLASMA_LIBS}
     ${QT_QTNETWORK_LIBRARY}
     ${Kickoff_LIBS}
     kickoff
 )
+
 install(
     TARGETS plasma_applet_launcher
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
+
 install(
     FILES applet/plasma-applet-launcher.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
@@ -80,6 +89,13 @@ set(SimpleApplet_SRCS
     simpleapplet/menuview.cpp
     simpleapplet/simpleapplet.cpp
 )
+
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui/contextmenufactory.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/simpleapplet/menuview.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 kde4_add_plugin(plasma_applet_simplelauncher ${SimpleApplet_SRCS})
 target_link_libraries(plasma_applet_simplelauncher
     ${KDE4_KCMUTILS_LIBS}
@@ -87,10 +103,12 @@ target_link_libraries(plasma_applet_simplelauncher
     ${Kickoff_LIBS}
     kickoff
 )
+
 install(
     TARGETS plasma_applet_simplelauncher
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
+
 install(
     FILES simpleapplet/plasma-applet-simplelauncher.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}

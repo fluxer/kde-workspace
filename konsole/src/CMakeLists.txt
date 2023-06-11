@@ -115,6 +115,11 @@ set(konsoleprivate_SRCS
 
 ### Konsole Application
 
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/TerminalDisplay.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 add_library(konsoleprivate SHARED ${konsoleprivate_SRCS})
 
 target_link_libraries(konsoleprivate

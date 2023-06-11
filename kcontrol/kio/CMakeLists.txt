@@ -8,6 +8,15 @@ set(kcm_kio_PART_SRCS
     ksaveioconfig.cpp
 )
 
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/kproxydlg.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/netpref.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/bookmarks.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ksaveioconfig.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 kde4_add_plugin(kcm_kio ${kcm_kio_PART_SRCS})
 
 target_link_libraries(kcm_kio

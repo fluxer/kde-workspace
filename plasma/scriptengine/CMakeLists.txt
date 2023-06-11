@@ -23,6 +23,13 @@ set(declarative_appletscript_SRCS
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/common)
 
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/extension_launchapp.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/simplebindings/qscriptbookkeeping.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/simplebindings/bytearrayprototype.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 kde4_add_plugin(plasma_appletscript_declarative ${declarative_appletscript_SRCS})
 target_link_libraries(plasma_appletscript_declarative
     ${KDE4_PLASMA_LIBS}
