@@ -46,10 +46,13 @@
 #include <kstyle.h>
 
 #include "krdb.h"
+
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
+#include <fixx11h.h>
 #include <QtGui/qx11info_x11.h>
 #endif
+
 inline const char * gtkEnvVar(int version)
 {
     return 2==version ? "GTK2_RC_FILES" : "GTK_RC_FILES";

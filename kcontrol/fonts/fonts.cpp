@@ -52,13 +52,7 @@
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
-#endif
-
-#ifdef Q_WS_X11
-// X11 headers
-#undef Bool
-#undef Unsorted
-#undef None
+#include <fixx11h.h>
 #endif
 
 static QPixmap aaPixmap(const int t)
