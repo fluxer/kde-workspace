@@ -147,8 +147,8 @@ public:
          * See Enum::ScrollBarPositionEnum
          */
         ScrollBarPosition,
-	/** (bool) Specifies whether the PageUp/Down will scroll the full 
-	 * height or half height.
+        /** (bool) Specifies whether the PageUp/Down will scroll the full
+         * height or half height.
          */
         ScrollFullPage,
         /** (bool) Specifies whether the terminal will enable Bidirectional
@@ -548,6 +548,14 @@ private:
         QVariant::Type type;
     };
     static const PropertyInfo DefaultPropertyNames[];
+    static const char* const GENERAL_GROUP;
+    static const char* const KEYBOARD_GROUP;
+    static const char* const APPEARANCE_GROUP;
+    static const char* const SCROLLING_GROUP;
+    static const char* const TERMINAL_GROUP;
+    static const char* const CURSOR_GROUP;
+    static const char* const INTERACTION_GROUP;
+    static const char* const ENCODING_GROUP;
 };
 
 inline bool Profile::canInheritProperty(Property aProperty)

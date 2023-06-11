@@ -42,14 +42,14 @@ using namespace Konsole;
 //
 // the other names are usually shorter versions for convenience
 // when parsing konsoleprofile commands
-static const char GENERAL_GROUP[]     = "General";
-static const char KEYBOARD_GROUP[]    = "Keyboard";
-static const char APPEARANCE_GROUP[]  = "Appearance";
-static const char SCROLLING_GROUP[]   = "Scrolling";
-static const char TERMINAL_GROUP[]    = "Terminal Features";
-static const char CURSOR_GROUP[]      = "Cursor Options";
-static const char INTERACTION_GROUP[] = "Interaction Options";
-static const char ENCODING_GROUP[]    = "Encoding Options";
+const char* const Profile::GENERAL_GROUP     = "General";
+const char* const Profile::KEYBOARD_GROUP    = "Keyboard";
+const char* const Profile::APPEARANCE_GROUP  = "Appearance";
+const char* const Profile::SCROLLING_GROUP   = "Scrolling";
+const char* const Profile::TERMINAL_GROUP    = "Terminal Features";
+const char* const Profile::CURSOR_GROUP      = "Cursor Options";
+const char* const Profile::INTERACTION_GROUP = "Interaction Options";
+const char* const Profile::ENCODING_GROUP    = "Encoding Options";
 
 const Profile::PropertyInfo Profile::DefaultPropertyNames[] = {
     // General

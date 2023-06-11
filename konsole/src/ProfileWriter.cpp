@@ -36,9 +36,6 @@
 
 using namespace Konsole;
 
-// FIXME: A dup line from Profile.cpp - redo these
-static const char GENERAL_GROUP[]     = "General";
-
 QString KDE4ProfileWriter::getPath(const Profile::Ptr profile)
 {
     // both location have trailing slash
@@ -107,7 +104,7 @@ bool KDE4ProfileWriter::writeProfile(const QString& path , const Profile::Ptr pr
 {
     KConfig config(path, KConfig::NoGlobals);
 
-    KConfigGroup general = config.group(GENERAL_GROUP);
+    KConfigGroup general = config.group(Profile::GENERAL_GROUP);
 
     // Parent profile if set, when loading the profile in future, the parent
     // must be loaded as well if it exists.

@@ -36,9 +36,6 @@
 
 using namespace Konsole;
 
-// FIXME: A dup line from Profile.cpp - redo these
-static const char GENERAL_GROUP[]     = "General";
-
 QStringList KDE4ProfileReader::findProfiles()
 {
     return KGlobal::dirs()->findAllResources("data", "konsole/*.profile",
@@ -75,7 +72,7 @@ bool KDE4ProfileReader::readProfile(const QString& path , Profile::Ptr profile ,
 
     KConfig config(path, KConfig::NoGlobals);
 
-    KConfigGroup general = config.group(GENERAL_GROUP);
+    KConfigGroup general = config.group(Profile::GENERAL_GROUP);
     if (general.hasKey("Parent"))
         parentProfile = general.readEntry("Parent");
 
