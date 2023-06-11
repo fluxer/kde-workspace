@@ -25,7 +25,7 @@
 Q_DECLARE_METATYPE(KUrl*)
 //Q_DECLARE_METATYPE(KUrl) unneeded; found in kurl.h
 
-static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlCtor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 1)
     {
@@ -36,13 +36,13 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
     return qScriptValueFromValue(eng, KUrl());
 }
 
-static QScriptValue toString(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlToString(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, toString);
     return QScriptValue(eng, self->prettyUrl());
 }
 
-static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlProtocol(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, protocol);
     if (ctx->argumentCount()) {
@@ -53,7 +53,7 @@ static QScriptValue protocol(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->protocol());
 }
 
-static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlHost(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, protocol);
     if (ctx->argumentCount()) {
@@ -64,7 +64,7 @@ static QScriptValue host(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->host());
 }
 
-static QScriptValue path(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlPath(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, path);
     if (ctx->argumentCount()) {
@@ -75,7 +75,7 @@ static QScriptValue path(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->path());
 }
 
-static QScriptValue user(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlUser(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, user);
     if (ctx->argumentCount()) {
@@ -86,7 +86,7 @@ static QScriptValue user(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->user());
 }
 
-static QScriptValue password(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue urlPassword(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(KUrl, password);
     if (ctx->argumentCount()) {
@@ -103,15 +103,15 @@ QScriptValue constructKUrlClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
-    proto.setProperty("toString", eng->newFunction(toString), getter);
-    proto.setProperty("protocol", eng->newFunction(protocol), getter | setter);
-    proto.setProperty("host", eng->newFunction(host), getter | setter);
-    proto.setProperty("path", eng->newFunction(path), getter | setter);
-    proto.setProperty("user", eng->newFunction(user), getter | setter);
-    proto.setProperty("password", eng->newFunction(password), getter | setter);
+    proto.setProperty("toString", eng->newFunction(urlToString), getter);
+    proto.setProperty("protocol", eng->newFunction(urlProtocol), getter | setter);
+    proto.setProperty("host", eng->newFunction(urlHost), getter | setter);
+    proto.setProperty("path", eng->newFunction(urlPath), getter | setter);
+    proto.setProperty("user", eng->newFunction(urlUser), getter | setter);
+    proto.setProperty("password", eng->newFunction(urlPassword), getter | setter);
 
     eng->setDefaultPrototype(qMetaTypeId<KUrl*>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<KUrl>(), proto);
 
-    return eng->newFunction(ctor, proto);
+    return eng->newFunction(urlCtor, proto);
 }

@@ -25,7 +25,7 @@
 Q_DECLARE_METATYPE(QPoint*)
 Q_DECLARE_METATYPE(QPoint)
 
-static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue pointCtor(QScriptContext *ctx, QScriptEngine *eng)
 {
     if (ctx->argumentCount() == 2)
     {
@@ -37,19 +37,19 @@ static QScriptValue ctor(QScriptContext *ctx, QScriptEngine *eng)
     return qScriptValueFromValue(eng, QPoint());
 }
 
-static QScriptValue null(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue pointNull(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, null);
     return QScriptValue(eng, self->isNull());
 }
 
-static QScriptValue manhattanLength(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue pointManhattanLength(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, manhattanLength);
     return QScriptValue(eng, self->manhattanLength());
 }
 
-static QScriptValue x(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue pointX(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, x);
 
@@ -61,7 +61,7 @@ static QScriptValue x(QScriptContext *ctx, QScriptEngine *eng)
     return QScriptValue(eng, self->x());
 }
 
-static QScriptValue y(QScriptContext *ctx, QScriptEngine *eng)
+static QScriptValue pointY(QScriptContext *ctx, QScriptEngine *eng)
 {
     DECLARE_SELF(QPoint, y);
 
@@ -79,13 +79,13 @@ QScriptValue constructQPointClass(QScriptEngine *eng)
     QScriptValue::PropertyFlags getter = QScriptValue::PropertyGetter;
     QScriptValue::PropertyFlags setter = QScriptValue::PropertySetter;
 
-    proto.setProperty("null", eng->newFunction(null), getter);
-    proto.setProperty("manhattanLength", eng->newFunction(manhattanLength), getter);
-    proto.setProperty("x", eng->newFunction(x), getter | setter);
-    proto.setProperty("y", eng->newFunction(y), getter | setter);
+    proto.setProperty("null", eng->newFunction(pointNull), getter);
+    proto.setProperty("manhattanLength", eng->newFunction(pointManhattanLength), getter);
+    proto.setProperty("x", eng->newFunction(pointX), getter | setter);
+    proto.setProperty("y", eng->newFunction(pointY), getter | setter);
 
     eng->setDefaultPrototype(qMetaTypeId<QPoint>(), proto);
     eng->setDefaultPrototype(qMetaTypeId<QPoint*>(), proto);
 
-    return eng->newFunction(ctor, proto);
+    return eng->newFunction(pointCtor, proto);
 }
