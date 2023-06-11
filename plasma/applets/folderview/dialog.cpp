@@ -26,16 +26,9 @@
 #include <QGraphicsScene>
 
 #include <KWindowSystem>
-
 #include <Plasma/Applet>
 #include <Plasma/FrameSvg>
 #include <Plasma/DialogShadows>
-
-#ifdef Q_WS_X11
-#  include <qx11info_x11.h>
-#  include <X11/Xlib.h>
-#endif
-
 
 Dialog::Dialog(QWidget *parent)
     : QWidget(parent, Qt::Popup),
