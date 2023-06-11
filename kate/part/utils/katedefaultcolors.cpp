@@ -24,8 +24,6 @@
 
 #include <KColorUtils>
 
-using namespace Kate;
-
 KateDefaultColors::KateDefaultColors()
   : m_view(QPalette::Active, KColorScheme::View)
   , m_window(QPalette::Active, KColorScheme::Window)
@@ -38,72 +36,72 @@ KateDefaultColors::KateDefaultColors()
 {
 }
 
-QColor KateDefaultColors::color(ColorRole role) const
+QColor KateDefaultColors::color(Kate::ColorRole role) const
 {
   switch(role) {
-    case Background:
+    case Kate::ColorRole::Background:
       return m_background;
-    case SelectionBackground:
+    case Kate::ColorRole::SelectionBackground:
       return m_selection.background().color();
-    case HighlightedLineBackground:
+    case Kate::ColorRole::HighlightedLineBackground:
       return m_view.background(KColorScheme::AlternateBackground).color();
-    case HighlightedBracket:
+    case Kate::ColorRole::HighlightedBracket:
       return KColorUtils::tint(m_background, m_view.decoration(KColorScheme::HoverColor).color());
-    case WordWrapMarker:
+    case Kate::ColorRole::WordWrapMarker:
       return KColorUtils::shade(m_background, m_backgroundLuma > 0.3 ? -0.15 : 0.03);
-    case TabMarker:
+    case Kate::ColorRole::TabMarker:
       return KColorUtils::shade(m_background, m_backgroundLuma > 0.7 ? -0.35 : 0.3);
-    case IndentationLine:
+    case Kate::ColorRole::IndentationLine:
       return KColorUtils::shade(m_background, m_backgroundLuma > 0.7 ? -0.35 : 0.3);
-    case IconBar:
+    case Kate::ColorRole::IconBar:
       return m_window.background().color();
-    case CodeFolding:
+    case Kate::ColorRole::CodeFolding:
       return m_inactiveSelection.background().color();
-    case LineNumber:
+    case Kate::ColorRole::LineNumber:
       return m_window.foreground().color();
-    case Separator:
+    case Kate::ColorRole::Separator:
       return m_view.foreground(KColorScheme::InactiveText).color();
-    case SpellingMistakeLine:
+    case Kate::ColorRole::SpellingMistakeLine:
       return m_view.foreground(KColorScheme::NegativeText).color();
-    case ModifiedLine:
+    case Kate::ColorRole::ModifiedLine:
       return m_view.background(KColorScheme::NegativeBackground).color();
-    case SavedLine:
+    case Kate::ColorRole::SavedLine:
       return m_view.background(KColorScheme::PositiveBackground).color();
-    case SearchHighlight:
+    case Kate::ColorRole::SearchHighlight:
       return adaptToScheme(Qt::yellow, BackgroundColor);
-    case ReplaceHighlight:
+    case Kate::ColorRole::ReplaceHighlight:
       return adaptToScheme(Qt::green, BackgroundColor);
-    case TemplateBackground:
+    case Kate::ColorRole::TemplateBackground:
       return m_window.background().color();
-    case TemplateFocusedEditablePlaceholder:
+    case Kate::ColorRole::TemplateFocusedEditablePlaceholder:
       return m_view.background(KColorScheme::PositiveBackground).color();
-    case TemplateEditablePlaceholder:
+    case Kate::ColorRole::TemplateEditablePlaceholder:
       return m_view.background(KColorScheme::PositiveBackground).color();
-    case TemplateNotEditablePlaceholder:
+    case Kate::ColorRole::TemplateNotEditablePlaceholder:
       return m_view.background(KColorScheme::NegativeBackground).color();
   }
   qFatal("Unhandled color requested: %d\n", role);
   return QColor();
 }
 
-QColor KateDefaultColors::mark(Mark mark) const
+QColor KateDefaultColors::mark(Kate::Mark mark) const
 {
   // note: the mark color is used as background color at very low opacity (around 0.1)
   // hence, make sure the color returned here has a high saturation
   switch (mark) {
-    case Bookmark:
-      return adaptToScheme(Qt::blue, BackgroundColor);
-    case ActiveBreakpoint:
-      return adaptToScheme(Qt::red, BackgroundColor);
-    case ReachedBreakpoint:
-      return adaptToScheme(Qt::yellow, BackgroundColor);
-    case DisabledBreakpoint:
-      return adaptToScheme(Qt::magenta, BackgroundColor);
-    case Execution:
-      return adaptToScheme(Qt::gray, BackgroundColor);
-    case Warning:
+    case Kate::Bookmark:
+      return adaptToScheme(Qt::blue, KateDefaultColors::BackgroundColor);
+    case Kate::ActiveBreakpoint:
+      return adaptToScheme(Qt::red, KateDefaultColors::BackgroundColor);
+    case Kate::ReachedBreakpoint:
+      return adaptToScheme(Qt::yellow, KateDefaultColors::BackgroundColor);
+    case Kate::DisabledBreakpoint:
+      return adaptToScheme(Qt::magenta, KateDefaultColors::BackgroundColor);
+    case Kate::Execution:
+      return adaptToScheme(Qt::gray, KateDefaultColors::BackgroundColor);
+    case Kate::Warning:
       return m_view.foreground(KColorScheme::NeutralText).color();
-    case Error:
+    case Kate::Error:
       return m_view.foreground(KColorScheme::NegativeText).color();
   }
   qFatal("Unhandled color for mark requested: %d\n", mark);
@@ -113,7 +111,7 @@ QColor KateDefaultColors::mark(Mark mark) const
 QColor KateDefaultColors::mark(int i) const
 {
   Q_ASSERT(i >= FIRST_MARK && i <= LAST_MARK);
-  return mark(static_cast<Mark>(i));
+  return mark(static_cast<Kate::Mark>(i));
 }
 
 QColor KateDefaultColors::adaptToScheme(const QColor& color, ColorType type) const
