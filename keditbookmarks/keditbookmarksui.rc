@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="keditbookmarks" version="33">
+<kpartgui name="keditbookmarks" version="34">
 
 <MenuBar>
 
@@ -125,7 +125,6 @@
 <State name="notreadonly">
   <Enable>
     <Action name="importKDE2"/>
-    <Action name="settings_showNS"/>
     <Action name="settings_saveonclose"/>
   </Enable>
 </State>
@@ -164,7 +163,6 @@
     <Action name="testlink"/>
     <Action name="updateallfavicons"/>
     <Action name="updatefavicon"/>
-    <Action name="settings_showNS"/>
     <Action name="settings_saveonclose"/>
   </Disable>
 </State>
