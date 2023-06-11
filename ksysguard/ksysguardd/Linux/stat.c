@@ -54,33 +54,6 @@ typedef struct {
 	unsigned long waitTicks;
 } CPULoadInfo;
 
-typedef struct {
-	unsigned long delta;
-	unsigned long old;
-} DiskLoadSample;
-
-typedef struct {
-	/* 5 types of samples are taken:
-	total, rio, wio, rBlk, wBlk */
-	DiskLoadSample s[ 5 ];
-} DiskLoadInfo;
-
-typedef struct DiskIOInfo {
-	int major;
-	int minor;
-	char* devname;
-	
-	int alive;
-	DiskLoadSample total;
-	DiskLoadSample rio;
-	DiskLoadSample wio;
-	DiskLoadSample rblk;
-	DiskLoadSample wblk;
-	struct DiskIOInfo* next;
-} DiskIOInfo;
-
-#define DISKDEVNAMELEN 16
-
 static int StatDirty = 0;
 
 /* We have observed deviations of up to 5% in the accuracy of the timer
@@ -94,9 +67,6 @@ static struct SensorModul* StatSM;
 static CPULoadInfo CPULoad;
 static CPULoadInfo* SMPLoad = 0;
 static unsigned CPUCount = 0;
-static DiskLoadInfo* DiskLoad = 0;
-static unsigned DiskCount = 0;
-static DiskIOInfo* DiskIO = 0;
 static unsigned long PageIn = 0;
 static unsigned long OldPageIn = 0;
 static unsigned long PageOut = 0;
@@ -107,38 +77,8 @@ static unsigned int NumOfInts = 0;
 static unsigned long* OldIntr = 0;
 static unsigned long* Intr = 0;
 
-static int initStatDisk( char* tag, char* buf, const char* label, const char* shortLabel,
-			int idx, cmdExecutor ex, cmdExecutor iq );
 static void updateCPULoad( const char* line, CPULoadInfo* load );
-static int process24Disk( char* tag, char* buf, const char* label, int idx );
 static void processStat( void );
-static int process24DiskIO( const char* buf );
-static void cleanup24DiskList( void );
-	
-static int initStatDisk( char* tag, char* buf, const char* label,
-			const char* shortLabel, int idx, cmdExecutor ex, cmdExecutor iq )
-{
-	char sensorName[ 128 ];
-	
-	gettimeofday( &lastSampling, 0 );
-	
-	if ( strcmp( label, tag ) == 0 ) {
-		unsigned int i;
-		buf = buf + strlen( label ) + 1;
-		
-		for ( i = 0; i < DiskCount; ++i ) {
-			sscanf( buf, "%lu", &DiskLoad[ i ].s[ idx ].old );
-			while ( *buf && isblank( *buf++ ) );
-			while ( *buf && isdigit( *buf++ ) );
-			sprintf( sensorName, "disk/disk%d/%s", i, shortLabel );
-			registerMonitor( sensorName, "float", ex, iq, StatSM );
-		}
-		
-		return 1;
-	}
-	
-	return 0;
-}
 
 /**
  * updateCPULoad
@@ -176,161 +116,6 @@ static void updateCPULoad( const char* line, CPULoadInfo* load ) {
 	load->idleTicks = currIdleTicks;
 	load->waitTicks = currWaitTicks;
 }
-	
-static int process24Disk( char* tag, char* buf, const char* label, int idx ) {
-	if ( strcmp( label, tag ) == 0 ) {
-		unsigned long val;
-		unsigned int i;
-		buf = buf + strlen( label ) + 1;
-		
-		for ( i = 0; i < DiskCount; ++i ) {
-			sscanf( buf, "%lu", &val );
-			while ( *buf && isblank( *buf++ ) );
-			while ( *buf && isdigit( *buf++ ) );
-			DiskLoad[ i ].s[ idx ].delta = val - DiskLoad[ i ].s[ idx ].old;
-			DiskLoad[ i ].s[ idx ].old = val;
-		}
-		
-		return 1;
-	}
-	
-	return 0;
-}
-
-static int process24DiskIO( const char* buf ) {
-	/* Process disk_io lines as provided by 2.4.x kernels.
-	* disk_io: (2,0):(3,3,6,0,0) (3,0):(1413012,511622,12155382,901390,26486215) */
-	int major, minor;
-	unsigned long total, rblk, rio, wblk, wio;
-	DiskIOInfo* ptr = DiskIO;
-	DiskIOInfo* last = 0;
-	char sensorName[ 128 ];
-	const char* p;
-	
-	p = buf + strlen( "disk_io: " );
-	while ( p && *p ) {
-		if ( sscanf( p, "(%d,%d):(%lu,%lu,%lu,%lu,%lu)", &major, &minor,
-				&total, &rio, &rblk, &wio, &wblk ) != 7 )
-			return -1;
-		
-		last = 0;
-		ptr = DiskIO;
-		while ( ptr ) {
-			if ( ptr->major == major && ptr->minor == minor ) {
-				/* The IO device has already been registered. */
-				ptr->total.delta = total - ptr->total.old;
-				ptr->total.old = total;
-				ptr->rio.delta = rio - ptr->rio.old;
-				ptr->rio.old = rio;
-				ptr->wio.delta = wio - ptr->wio.old;
-				ptr->wio.old = wio;
-				ptr->rblk.delta = rblk - ptr->rblk.old;
-				ptr->rblk.old = rblk;
-				ptr->wblk.delta = wblk - ptr->wblk.old;
-				ptr->wblk.old = wblk;
-				ptr->alive = 1;
-				break;
-			}
-
-			last = ptr;
-			ptr = ptr->next;
-		}
-		
-		if ( !ptr ) {
-			/* The IO device has not been registered yet. We need to add it. */
-			ptr = (DiskIOInfo*)malloc( sizeof( DiskIOInfo ) );
-			ptr->major = major;
-			ptr->minor = minor;
-			
-			/* 2.6 gives us a nice device name. On 2.4 we get nothing */
-			ptr->devname = (char *)malloc( DISKDEVNAMELEN );
-			memset( ptr->devname, 0, DISKDEVNAMELEN );
-			
-			ptr->total.delta = 0;
-			ptr->total.old = total;
-			ptr->rio.delta = 0;
-			ptr->rio.old = rio;
-			ptr->wio.delta = 0;
-			ptr->wio.old = wio;
-			ptr->rblk.delta = 0;
-			ptr->rblk.old = rblk;
-			ptr->wblk.delta = 0;
-			ptr->wblk.old = wblk;
-			ptr->alive = 1;
-			ptr->next = 0;
-			if ( last ) {
-				/* Append new entry at end of list. */
-				last->next = ptr;
-			}
-			else {
-				/* List is empty, so we insert the fist element into the list. */
-				DiskIO = ptr;
-			}
-			
-			sprintf( sensorName, "disk/%s_(%d:%d)24/total", ptr->devname, major, minor );
-			registerMonitor( sensorName, "float", print24DiskIO, print24DiskIOInfo, StatSM );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/rio", ptr->devname, major, minor );
-			registerMonitor( sensorName, "float", print24DiskIO, print24DiskIOInfo, StatSM );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/wio", ptr->devname, major, minor );
-			registerMonitor( sensorName, "float", print24DiskIO, print24DiskIOInfo, StatSM );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/rblk", ptr->devname, major, minor );
-			registerMonitor( sensorName, "float", print24DiskIO, print24DiskIOInfo, StatSM );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/wblk", ptr->devname, major, minor );
-			registerMonitor( sensorName, "float", print24DiskIO, print24DiskIOInfo, StatSM );
-		}
-
-		/* Move p after the second ')'. We can safely assume that
-		* those two ')' exist. */
-		p = strchr( p, ')' ) + 1;
-		p = strchr( p, ')' ) + 1;
-		if ( p && *p )
-			p = strchr( p, '(' );
-	}
-	
-	return 0;
-}
-
-static void cleanup24DiskList( void ) {
-	DiskIOInfo* ptr = DiskIO;
-	DiskIOInfo* last = 0;
-	
-	while ( ptr ) {
-		if ( ptr->alive == 0 ) {
-			DiskIOInfo* newPtr;
-			char sensorName[ 128 ];
-			
-			/* Disk device has disappeared. We have to remove it from
-			* the list and unregister the monitors. */
-			sprintf( sensorName, "disk/%s_(%d:%d)24/total", ptr->devname, ptr->major, ptr->minor );
-			removeMonitor( sensorName );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/rio", ptr->devname, ptr->major, ptr->minor );
-			removeMonitor( sensorName );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/wio", ptr->devname, ptr->major, ptr->minor );
-			removeMonitor( sensorName );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/rblk", ptr->devname, ptr->major, ptr->minor );
-			removeMonitor( sensorName );
-			sprintf( sensorName, "disk/%s_(%d:%d)24/wblk", ptr->devname, ptr->major, ptr->minor );
-			removeMonitor( sensorName );
-			if ( last ) {
-				last->next = ptr->next;
-				newPtr = ptr->next;
-			}
-			else {
-				DiskIO = ptr->next;
-				newPtr = DiskIO;
-				last = 0;
-			}
-			
-			free ( ptr );
-			ptr = newPtr;
-		}
-		else {
-			ptr->alive = 0;
-			last = ptr;
-			ptr = ptr->next;
-		}
-	}
-}
 
 static void processStat( void ) {
 	char format[ 32 ];
@@ -365,19 +150,6 @@ static void processStat( void ) {
 			int id;
 			sscanf( tag + 3, "%d", &id );
 			updateCPULoad( buf, &SMPLoad[ id ]  );
-		}
-		else if ( process24Disk( tag, buf, "disk", 0 ) ) {
-		}
-		else if ( process24Disk( tag, buf, "disk_rio", 1 ) ) {
-		}
-		else if ( process24Disk( tag, buf, "disk_wio", 2 ) ) {
-		}
-		else if ( process24Disk( tag, buf, "disk_rblk", 3 ) ) {
-		}
-		else if ( process24Disk( tag, buf, "disk_wblk", 4 ) ) {
-		}
-		else if ( strcmp( "disk_io:", tag ) == 0 ) {
-			process24DiskIO( buf );
 		}
 		else if ( strcmp( "page", tag ) == 0 ) {
 			unsigned long v1, v2;
@@ -439,9 +211,6 @@ static void processStat( void ) {
 	timeInterval = currSampling.tv_sec - lastSampling.tv_sec +
 			( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
 	lastSampling = currSampling;
-	
-	cleanup24DiskList();
-
 }
 
 /*
@@ -538,27 +307,6 @@ void initStat( struct SensorModul* sm ) {
 			sprintf( cmdName, "cpu/cpu%d/wait", id );
 			registerMonitor( cmdName, "float", printCPUxWait, printCPUxWaitInfo, StatSM );
 		}
-		else if ( strcmp( "disk", tag ) == 0 ) {
-			unsigned long val;
-			char* b = buf + 5;
-			
-			/* Count the number of registered disks */
-			for ( DiskCount = 0; *b && sscanf( b, "%lu", &val ) == 1; DiskCount++ ) {
-				while ( *b && isblank( *b++ ) );
-				while ( *b && isdigit( *b++ ) );
-			}
-			
-			if ( DiskCount > 0 )
-				DiskLoad = (DiskLoadInfo*)malloc( sizeof( DiskLoadInfo ) * DiskCount );
-
-			initStatDisk( tag, buf, "disk", "disk", 0, print24DiskTotal, print24DiskTotalInfo );
-		}
-		else if ( initStatDisk( tag, buf, "disk_rio", "rio", 1, print24DiskRIO, print24DiskRIOInfo ) );
-		else if ( initStatDisk( tag, buf, "disk_wio", "wio", 2, print24DiskWIO, print24DiskWIOInfo ) );
-		else if ( initStatDisk( tag, buf, "disk_rblk", "rblk", 3, print24DiskRBlk, print24DiskRBlkInfo ) );
-		else if ( initStatDisk( tag, buf, "disk_wblk", "wblk", 4, print24DiskWBlk, print24DiskWBlkInfo ) );
-		else if ( strcmp( "disk_io:", tag ) == 0 )
-			process24DiskIO( buf );
 		else if ( strcmp( "page", tag ) == 0 ) {
 			sscanf( buf + 5, "%lu %lu", &OldPageIn, &OldPageOut );
 			registerMonitor( "cpu/pageIn", "float", printPageIn, printPageInInfo, StatSM );
@@ -627,9 +375,6 @@ void initStat( struct SensorModul* sm ) {
 }
 	
 void exitStat( void ) {
-	free( DiskLoad );
-	DiskLoad = 0;
-	
 	free( SMPLoad );
 	SMPLoad = 0;
 	
@@ -854,96 +599,6 @@ void printCPUxWaitInfo( const char* cmd )
 	output( "CPU %d Wait Load\t0\t100\t%%\n", id+1 );
 }
 
-void print24DiskTotal( const char* cmd ) {
-	int id;
-	
-	if ( StatDirty )
-		processStat();
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "%f\n", (float)( DiskLoad[ id ].s[ 0 ].delta
-							/ timeInterval ) );
-}
-
-void print24DiskTotalInfo( const char* cmd ) {
-	int id;
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "Disk %d Total Load\t0\t0\tKB/s\n", id );
-}
-
-void print24DiskRIO( const char* cmd ) {
-	int id;
-	
-	if ( StatDirty )
-		processStat();
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "%f\n", (float)( DiskLoad[ id ].s[ 1 ].delta
-							/ timeInterval ) );
-}
-
-void print24DiskRIOInfo( const char* cmd ) {
-	int id;
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "Disk %d Read\t0\t0\tKB/s\n", id );
-}
-
-void print24DiskWIO( const char* cmd ) {
-	int id;
-	
-	if ( StatDirty )
-		processStat();
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "%f\n", (float)( DiskLoad[ id ].s[ 2 ].delta
-							/ timeInterval ) );
-}
-
-void print24DiskWIOInfo( const char* cmd ) {
-	int id;
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "Disk %d Write\t0\t0\tKB/s\n", id );
-}
-
-void print24DiskRBlk( const char* cmd ) {
-	int id;
-	
-	if ( StatDirty )
-		processStat();
-	
-	sscanf( cmd + 9, "%d", &id );
-	/* a block is 512 bytes or 1/2 kBytes */
-	output( "%f\n", (float)( DiskLoad[ id ].s[ 3 ].delta / timeInterval * 2 ) );
-}
-
-void print24DiskRBlkInfo( const char* cmd ) {
-	int id;
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "Disk %d Read Data\t0\t0\tKB/s\n", id );
-}
-
-void print24DiskWBlk( const char* cmd ) {
-	int id;
-	
-	if ( StatDirty )
-		processStat();
-	
-	sscanf( cmd + 9, "%d", &id );
-	/* a block is 512 bytes or 1/2 kBytes */
-	output( "%f\n", (float)( DiskLoad[ id ].s[ 4 ].delta / timeInterval * 2 ) );
-}
-
-void print24DiskWBlkInfo( const char* cmd ) {
-	int id;
-	
-	sscanf( cmd + 9, "%d", &id );
-	output( "Disk %d Write Data\t0\t0\tKB/s\n", id );
-}
-
 void printPageIn( const char* cmd ) {
 	(void)cmd;
 	
@@ -1004,84 +659,4 @@ void printCtxtInfo( const char* cmd ) {
 	(void)cmd;
 
 	output( "Context switches\t0\t0\t1/s\n" );
-}
-
-void print24DiskIO( const char* cmd ) {
-	int major, minor;
-	char devname[DISKDEVNAMELEN];
-	char name[ 17 ];
-	DiskIOInfo* ptr;
-	
-	sscanf( cmd, "disk/%[^_]_(%d:%d)/%16s", devname, &major, &minor, name );
-	
-	if ( StatDirty )
-		processStat();
-	
-	ptr = DiskIO;
-	while ( ptr && ( ptr->major != major || ptr->minor != minor ) )
-		ptr = ptr->next;
-	
-	if ( !ptr ) {
-		print_error( "RECONFIGURE" );
-		output( "0\n" );
-		
-		log_error( "Disk device disappeared" );
-		return;
-	}
-	
-	if ( strcmp( name, "total" ) == 0 )
-		output( "%f\n", (float)( ptr->total.delta / timeInterval ) );
-	else if ( strcmp( name, "rio" ) == 0 )
-		output( "%f\n", (float)( ptr->rio.delta / timeInterval ) );
-	else if ( strcmp( name, "wio" ) == 0 )
-		output( "%f\n", (float)( ptr->wio.delta / timeInterval ) );
-	else if ( strcmp( name, "rblk" ) == 0 )
-		output( "%f\n", (float)( ptr->rblk.delta / ( timeInterval * 2 ) ) );
-	else if ( strcmp( name, "wblk" ) == 0 )
-		output( "%f\n", (float)( ptr->wblk.delta / ( timeInterval * 2 ) ) );
-	else {
-		output( "0\n" );
-		log_error( "Unknown disk device property \'%s\'", name );
-	}
-}
-
-void print24DiskIOInfo( const char* cmd ) {
-	int major, minor;
-	char devname[DISKDEVNAMELEN];
-	char name[ 17 ];
-	DiskIOInfo* ptr = DiskIO;
-	
-	sscanf( cmd, "disk/%[^_]_(%d:%d)/%16s", devname, &major, &minor, name );
-	
-	while ( ptr && ( ptr->major != major || ptr->minor != minor ) )
-		ptr = ptr->next;
-	
-	if ( !ptr ) {
-		/* Disk device has disappeared. Print a dummy answer. */
-		output( "Dummy\t0\t0\t\n" );
-		return;
-	}
-	
-	/* remove trailing '?' */
-	name[ strlen( name ) - 1 ] = '\0';
-	
-	if ( strcmp( name, "total" ) == 0 )
-		output( "Total accesses device %s (%d:%d)\t0\t0\t1/s\n",
-			 devname, major, minor );
-	else if ( strcmp( name, "rio" ) == 0 )
-		output( "Read data device %s (%d:%d)\t0\t0\t1/s\n",
-			 devname, major, minor );
-	else if ( strcmp( name, "wio" ) == 0 )
-		output( "Write data device %s (%d:%d)\t0\t0\t1/s\n",
-			 devname, major, minor );
-	else if ( strcmp( name, "rblk" ) == 0 )
-		output( "Read accesses device %s (%d:%d)\t0\t0\tKB/s\n",
-			 devname, major, minor );
-	else if ( strcmp( name, "wblk" ) == 0 )
-		output( "Write accesses device %s (%d:%d)\t0\t0\tKB/s\n",
-			 devname, major, minor );
-	else {
-		output( "Dummy\t0\t0\t\n" );
-		log_error( "Request for unknown device property \'%s\'",	name );
-	}
 }
