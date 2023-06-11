@@ -59,7 +59,7 @@ static int StatDirty = 0;
 /* We have observed deviations of up to 5% in the accuracy of the timer
 * interrupts. So we try to measure the interrupt interval and use this
 * value to calculate timing dependant values. */
-static float timeInterval = 0;
+static float StatTimeInterval = 0;
 static struct timeval lastSampling;
 static struct timeval currSampling;
 static struct SensorModul* StatSM;
@@ -208,8 +208,8 @@ static void processStat( void ) {
     }
 	
 	/* save exact time interval between this and the last read of /proc/stat */
-	timeInterval = currSampling.tv_sec - lastSampling.tv_sec +
-			( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
+	StatTimeInterval = currSampling.tv_sec - lastSampling.tv_sec +
+			   ( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
 	lastSampling = currSampling;
 }
 
@@ -605,7 +605,7 @@ void printPageIn( const char* cmd ) {
 	if ( StatDirty )
 		processStat();
 	
-	output( "%f\n", (float)( PageIn / timeInterval ) );
+	output( "%f\n", (float)( PageIn / StatTimeInterval ) );
 }
 
 void printPageInInfo( const char* cmd ) {
@@ -620,7 +620,7 @@ void printPageOut( const char* cmd ) {
 	if ( StatDirty )
 		processStat();
 	
-	output( "%f\n", (float)( PageOut / timeInterval ) );
+	output( "%f\n", (float)( PageOut / StatTimeInterval ) );
 }
 
 void printPageOutInfo( const char* cmd ) {
@@ -636,7 +636,7 @@ void printInterruptx( const char* cmd ) {
 		processStat();
 	
 	sscanf( cmd + strlen( "cpu/interrupts/int" ), "%d", &id );
-	output( "%f\n", (float)( Intr[ id ] / timeInterval ) );
+	output( "%f\n", (float)( Intr[ id ] / StatTimeInterval ) );
 }
 
 void printInterruptxInfo( const char* cmd ) {
@@ -652,7 +652,7 @@ void printCtxt( const char* cmd ) {
 	if ( StatDirty )
 		processStat();
 	
-	output( "%f\n", (float)( Ctxt / timeInterval ) );
+	output( "%f\n", (float)( Ctxt / StatTimeInterval ) );
 }
 
 void printCtxtInfo( const char* cmd ) {

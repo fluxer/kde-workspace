@@ -141,7 +141,7 @@ typedef struct
 /* We have observed deviations of up to 5% in the accuracy of the timer
  * interrupts. So we try to measure the interrupt interval and use this
  * value to calculate timing dependant values. */
-static float timeInterval = 0;
+static float NetTimeInterval = 0;
 static struct timeval lastSampling;
 static struct timeval currSampling;
 static struct SensorModul* NetDevSM;
@@ -150,7 +150,7 @@ static struct SensorModul* NetDevSM;
 static char NetDevBuf[ NETDEVBUFSIZE ];
 static char NetDevWifiBuf[ NETDEVBUFSIZE ];
 static int NetDevCnt = 0;
-static int Dirty = 0;
+static int NetDirty = 0;
 static long OldHash = 0;
 
 #define MAXNETDEVS 64
@@ -258,10 +258,10 @@ static int processNetDev_( void )
 
   /* save exact time inverval between this and the last read of
    * /proc/net/dev */
-  timeInterval = currSampling.tv_sec - lastSampling.tv_sec +
+  NetTimeInterval = currSampling.tv_sec - lastSampling.tv_sec +
                  ( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
   lastSampling = currSampling;
-  Dirty = 0;
+  NetDirty = 0;
 
   return 0;
 }
@@ -448,7 +448,7 @@ int updateNetDev( void )
 	close( fd );
 	NetDevWifiBuf[ n ] = '\0';
   }
-  Dirty = 1;
+  NetDirty = 1;
 
   return 0;
 }
@@ -472,17 +472,17 @@ void printNetDev##a##0( const char* cmd ) \
   strncpy( dev, beg + 1, end - beg - 1 ); \
   dev[ end - beg - 1 ] = '\0'; \
  \
-  if ( Dirty ) \
+  if ( NetDirty ) \
     processNetDev(); \
  \
   for ( i = 0; i < MAXNETDEVS; ++i ) \
     if ( strcmp( NetDevs[ i ].name, dev ) == 0) { \
-      if (f && timeInterval < 0.01) \
+      if (f && NetTimeInterval < 0.01) \
 	 /*Time interval is very small.  Can we really get an accurate value from this? Assume not*/ \
          output( "0\n"); \
       else if(f) \
          output( "%li\n", (long) \
-                ( NetDevs[ i ].delta##a / ( NetDevs[ i ].a##Scale * timeInterval ) ) ); \
+                ( NetDevs[ i ].delta##a / ( NetDevs[ i ].a##Scale * NetTimeInterval ) ) ); \
       else \
          output( "%li\n", (long) NetDevs[ i ].a ); \
       return; \
@@ -523,7 +523,7 @@ void printNetDev##a##1( const char* cmd ) \
   strncpy( dev, beg + 1, end - beg - 1 ); \
   dev[ end - beg - 1 ] = '\0'; \
  \
-  if ( Dirty ) \
+  if ( NetDirty ) \
     processNetDev(); \
  \
   for ( i = 0; i < MAXNETDEVS; ++i ) \

@@ -126,7 +126,7 @@ typedef struct {
 static NetDevInfo IfInfo[MAXNETDEVS];
 
 static int NetDevCount;
-static float timeInterval = 0;
+static float NetTimeInterval = 0;
 static struct timeval lastSampling;
 static struct timeval currSampling;
 
@@ -454,7 +454,7 @@ int updateNetDev( void ) {
 	}
 
 	kstat_close( kctl );
-	timeInterval = currSampling.tv_sec - lastSampling.tv_sec +
+	NetTimeInterval = currSampling.tv_sec - lastSampling.tv_sec +
 	    ( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
 	lastSampling = currSampling;
 #endif /* ! HAVE_KSTAT */
@@ -542,7 +542,7 @@ void printRBytes( const char *cmd ) {
 	for( i = 0; i < NetDevCount; i++ ) {
 		if( (IfInfo[i].OLDrbytes > 0)
 				&& (strcmp( IfInfo[i].Name, name ) == 0) ) {
-			long rate = ((float)(IfInfo[i].rbytes - IfInfo[i].OLDrbytes) / timeInterval) / 1024;
+			long rate = ((float)(IfInfo[i].rbytes - IfInfo[i].OLDrbytes) / NetTimeInterval) / 1024;
 			fprintf(CurrentClient, "%ld\n", rate);
 			free( cmdcopy );
 			return;
@@ -572,7 +572,7 @@ void printOBytes( const char *cmd ) {
 	for( i = 0; i < NetDevCount; i++ ) {
 		if( (IfInfo[i].OLDobytes > 0)
 				&& (strcmp( IfInfo[i].Name, name ) == 0) ) {
-			long rate = ((float)(IfInfo[i].obytes - IfInfo[i].OLDobytes) / timeInterval) / 1024;
+			long rate = ((float)(IfInfo[i].obytes - IfInfo[i].OLDobytes) / NetTimeInterval) / 1024;
 			fprintf(CurrentClient, "%ld\n", rate);
 			free( cmdcopy );
 			return;

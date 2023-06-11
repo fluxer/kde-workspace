@@ -42,7 +42,7 @@ static float* Clocks = 0; /* Array with one entry per core */
 
 #define CPUINFOBUFSIZE (32 * 1024)
 static char CpuInfoBuf[ CPUINFOBUFSIZE ];
-static int Dirty = 0;
+static int CpuDirty = 0;
 static struct SensorModul *CpuInfoSM;
 
 static void processCpuInfo( void )
@@ -122,7 +122,7 @@ static void processCpuInfo( void )
 
     numCores = coreUniqueId + 1;
 
-    Dirty = 0;
+    CpuDirty = 0;
 }
 
 /*
@@ -194,7 +194,7 @@ int updateCpuInfo( void )
     close( fd );
     CpuInfoOK = 1;
     CpuInfoBuf[ n ] = '\0';
-    Dirty = 1;
+    CpuDirty = 1;
 
     return 0;
 }
@@ -203,7 +203,7 @@ void printCPUxClock( const char* cmd )
 {
     int id;
 
-    if ( Dirty )
+    if ( CpuDirty )
         processCpuInfo();
 
     sscanf( cmd + 7, "%d", &id );
@@ -215,7 +215,7 @@ void printCPUClock( const char* cmd )
     int id;
     float clock = 0;
 
-    if ( Dirty ) {
+    if ( CpuDirty ) {
         processCpuInfo();
     }
 
@@ -243,7 +243,7 @@ void printNumCpus( const char* cmd )
 {
     (void) cmd;
 
-    if ( Dirty )
+    if ( CpuDirty )
         processCpuInfo();
 
     output( "%d\n", numProcessors );
@@ -260,7 +260,7 @@ void printNumCores( const char* cmd )
 {
     (void) cmd;
 
-    if ( Dirty )
+    if ( CpuDirty )
         processCpuInfo();
 
     output( "%d\n", numCores );

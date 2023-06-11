@@ -34,13 +34,13 @@ static int BatFill, BatTime;
 
 #define APMBUFSIZE 128
 static char ApmBuf[ APMBUFSIZE ];
-static int Dirty = 0;
+static int ApmDirty = 0;
 
 static void processApm( void )
 {
   sscanf( ApmBuf, "%*f %*f %*x %*x %*x %*x %d%% %d min",
           &BatFill, &BatTime );
-  Dirty = 0;
+  ApmDirty = 0;
 }
 
 /*
@@ -89,7 +89,7 @@ int updateApm( void )
 
   close( fd );
   ApmBuf[ n ] = '\0';
-  Dirty = 1;
+  ApmDirty = 1;
 
   return 0;
 }
@@ -98,7 +98,7 @@ void printApmBatFill( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( ApmDirty )
     processApm();
 
   output( "%d\n", BatFill );
@@ -114,7 +114,7 @@ void printApmBatTime( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( ApmDirty )
     processApm();
 
   output( "%d\n", BatTime );

@@ -34,12 +34,12 @@ static double LoadAvg1, LoadAvg5, LoadAvg15;
 
 #define LOADAVGBUFSIZE 128
 static char LoadAvgBuf[ LOADAVGBUFSIZE ];
-static int Dirty = 0;
+static int LoadDirty = 0;
 
 static void processLoadAvg( void )
 {
   sscanf( LoadAvgBuf, "%lf %lf %lf", &LoadAvg1, &LoadAvg5, &LoadAvg15 );
-  Dirty = 0;
+  LoadDirty = 0;
 }
 
 /*
@@ -95,7 +95,7 @@ int updateLoadAvg( void )
 
   close( fd );
   LoadAvgBuf[ n ] = '\0';
-  Dirty = 1;
+  LoadDirty = 1;
 
   return 0;
 }
@@ -104,7 +104,7 @@ void printLoadAvg1( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( LoadDirty )
     processLoadAvg();
 
   output( "%f\n", LoadAvg1 );
@@ -120,7 +120,7 @@ void printLoadAvg5( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( LoadDirty )
     processLoadAvg();
 
   output( "%f\n", LoadAvg5 );
@@ -136,7 +136,7 @@ void printLoadAvg15( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( LoadDirty )
     processLoadAvg();
 
   output( "%f\n", LoadAvg15 );

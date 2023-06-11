@@ -34,7 +34,7 @@
 #define MEMINFOBUFSIZE (2 * 1024)
 
 static char MemInfoBuf[ MEMINFOBUFSIZE ];
-static int Dirty = 1;
+static int MemDirty = 1;
 
 static unsigned long long Total = 0;
 static unsigned long long MFree = 0;
@@ -70,7 +70,7 @@ static void processMemInfo()
   else
     SUsed = STotal - SFree;
 
-  Dirty = 0;
+  MemDirty = 0;
 }
 
 /*
@@ -148,7 +148,7 @@ int updateMemory( void )
 
   close( fd );
   MemInfoBuf[ n ] = '\0';
-  Dirty = 1;
+  MemDirty = 1;
 
   return 0;
 }
@@ -157,7 +157,7 @@ void printMFree( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", MFree );
@@ -167,7 +167,7 @@ void printMFreeInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Free Memory\t0\t%llu\tKB\n", Total );
@@ -177,7 +177,7 @@ void printUsed( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", Used );
@@ -187,7 +187,7 @@ void printUsedInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Used Memory\t0\t%llu\tKB\n", Total );
@@ -197,7 +197,7 @@ void printAppl( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", Appl );
@@ -207,7 +207,7 @@ void printApplInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Application Memory\t0\t%llu\tKB\n", Total );
@@ -217,7 +217,7 @@ void printBuffers( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", Buffers );
@@ -227,7 +227,7 @@ void printBuffersInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Buffer Memory\t0\t%llu\tKB\n", Total );
@@ -237,7 +237,7 @@ void printCached( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", Cached );
@@ -247,7 +247,7 @@ void printCachedInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Cached Memory\t0\t%llu\tKB\n", Total );
@@ -257,7 +257,7 @@ void printSwapUsed( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", SUsed );
@@ -267,7 +267,7 @@ void printSwapUsedInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Used Swap Memory\t0\t%llu\tKB\n", STotal );
@@ -277,7 +277,7 @@ void printSwapFree( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "%llu\n", SFree );
@@ -287,7 +287,7 @@ void printSwapFreeInfo( const char* cmd )
 {
   (void)cmd;
 
-  if ( Dirty )
+  if ( MemDirty )
     processMemInfo();
 
   output( "Free Swap Memory\t0\t%llu\tKB\n", STotal );

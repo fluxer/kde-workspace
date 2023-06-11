@@ -77,7 +77,7 @@ typedef struct DiskIOInfo
 /* We have observed deviations of up to 5% in the accuracy of the timer
 * interrupts. So we try to measure the interrupt interval and use this
 * value to calculate timing dependant values. */
-static float timeInterval = 0;
+static float DisktimeInterval = 0;
 static struct timeval lastSampling;
 static struct timeval currSampling;
 static struct SensorModul* StatSM;
@@ -85,7 +85,7 @@ static struct SensorModul* StatSM;
 static DiskLoadInfo* DiskLoad = 0;
 static DiskIOInfo* DiskIO = 0;
 
-static int Dirty = 0;
+static int DiskDirty = 0;
 
 static void cleanup26DiskList( void );
 static int process26DiskIO( const char* buf );
@@ -101,7 +101,7 @@ void exitDiskstats( void ) {
 }
 
 int updateDiskstats( void ) {
-    Dirty = 1;
+    DiskDirty = 1;
     return 0;
 }
 void processDiskstats( void ) {
@@ -122,11 +122,11 @@ void processDiskstats( void ) {
 	fclose( file );
 
 	/* save exact time interval between this and the last read of /proc/stat */
-	timeInterval = currSampling.tv_sec - lastSampling.tv_sec +
+	DisktimeInterval = currSampling.tv_sec - lastSampling.tv_sec +
 			( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
 	lastSampling = currSampling;
 	cleanup26DiskList();
-	Dirty = 0;
+	DiskDirty = 0;
 }
 
 static int process26DiskIO( const char* buf ) {
@@ -396,7 +396,7 @@ void print26DiskIO( const char* cmd ) {
 	char name[ 17 ];
 	DiskIOInfo* ptr;
 	
-	if ( Dirty )
+	if ( DiskDirty )
 		processDiskstats();
 
 	if(sscanf( cmd, "disk/%[^_]_(%d:%d)/Rate/%16s", devname, &major, &minor, name ) == 4) {
@@ -415,15 +415,15 @@ void print26DiskIO( const char* cmd ) {
 		}
 		
 		if ( strcmp( name, "totalio" ) == 0 )
-			output( "%f\n", (float)( ptr->total.delta / timeInterval ) );
+			output( "%f\n", (float)( ptr->total.delta / DisktimeInterval ) );
 		else if ( strcmp( name, "rio" ) == 0 )
-			output( "%f\n", (float)( ptr->rio.delta / timeInterval ) );
+			output( "%f\n", (float)( ptr->rio.delta / DisktimeInterval ) );
 		else if ( strcmp( name, "wio" ) == 0 )
-			output( "%f\n", (float)( ptr->wio.delta / timeInterval ) );
+			output( "%f\n", (float)( ptr->wio.delta / DisktimeInterval ) );
 		else if ( strcmp( name, "rblk" ) == 0 )
-			output( "%f\n", (float)( ptr->rblk.delta / ( timeInterval * 2 ) ) );
+			output( "%f\n", (float)( ptr->rblk.delta / ( DisktimeInterval * 2 ) ) );
 		else if ( strcmp( name, "wblk" ) == 0 )
-			output( "%f\n", (float)( ptr->wblk.delta / ( timeInterval * 2 ) ) );
+			output( "%f\n", (float)( ptr->wblk.delta / ( DisktimeInterval * 2 ) ) );
 		else {
 			output( "0\n" );
 			log_error( "Unknown disk device property \'%s\'", name );
