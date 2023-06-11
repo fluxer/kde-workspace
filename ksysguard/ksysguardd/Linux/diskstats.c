@@ -121,7 +121,7 @@ void processDiskstats( void ) {
 	}
 	fclose( file );
 
-	/* save exact time interval between this and the last read of /proc/stat */
+	/* save exact time interval between this and the last read of /proc/diskstats */
 	DisktimeInterval = currSampling.tv_sec - lastSampling.tv_sec +
 			( currSampling.tv_usec - lastSampling.tv_usec ) / 1000000.0;
 	lastSampling = currSampling;
