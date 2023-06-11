@@ -1865,6 +1865,7 @@ EffectWindow* PresentWindowsEffect::relativeWindow(EffectWindow *w, int xdiff, i
 
     // Should never get here
     kFatal() << "Something strange happened";
+    return nullptr;
 }
 
 EffectWindow* PresentWindowsEffect::findFirstWindow() const

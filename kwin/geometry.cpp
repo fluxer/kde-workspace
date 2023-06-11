@@ -314,6 +314,7 @@ QRect Workspace::clientArea(clientAreaOption opt, int screen, int desktop) const
         return QRect(0, 0, displayWidth(), displayHeight());
     }
     kFatal() << "Something strange happened";
+    return QRect();
 }
 
 
