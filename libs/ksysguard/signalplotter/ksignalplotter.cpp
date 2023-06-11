@@ -19,16 +19,7 @@
 
 */
 
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-#define KSignalPlotter KGraphicsSignalPlotter
-#define KSignalPlotterPrivate KGraphicsSignalPlotterPrivate
-#include "kgraphicssignalplotter.h"
-#else
-#undef KSignalPlotter
-#undef KSignalPlotterPrivate
 #include "ksignalplotter.h"
-#endif
-
 #include "ksignalplotter_p.h"
 
 #include <QtGui/QPainter>
@@ -37,12 +28,6 @@
 #include <QtGui/QPen>
 #include <QtGui/qevent.h>
 #include <QEvent>
-
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qstyleoption.h>
-#include <plasma/theme.h>
-#endif
 
 #include <kdebug.h>
 #include <kglobal.h>
@@ -61,13 +46,8 @@
 //Never store less 1000 samples if not visible.  This is kinda arbituary
 #define NUM_SAMPLES_WHEN_INVISIBLE ((uint)1000)
 
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-KGraphicsSignalPlotter::KGraphicsSignalPlotter( QGraphicsItem *parent)
-  : QGraphicsWidget(parent), d(new KGraphicsSignalPlotterPrivate(this))
-#else
 KSignalPlotter::KSignalPlotter( QWidget *parent)
   : QWidget(parent), d(new KSignalPlotterPrivate(this))
-#endif
 {
     qRegisterMetaType<KLocalizedString>("KLocalizedString");
     // Anything smaller than this does not make sense.
@@ -75,10 +55,6 @@ KSignalPlotter::KSignalPlotter( QWidget *parent)
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     sizePolicy.setHeightForWidth(false);
     setSizePolicy( sizePolicy );
-
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-    setFlag(QGraphicsItem::ItemClipsToShape);
-#endif
 }
 
 KSignalPlotter::~KSignalPlotter()
@@ -131,11 +107,7 @@ int KSignalPlotter::numBeams() const {
 void KSignalPlotter::addSample( const QList<qreal>& sampleBuf )
 {
     d->addSample(sampleBuf);
-#ifdef USE_SEPERATE_WIDGET
     d->mGraphWidget->update();
-#else
-    update(d->mPlottingArea);
-#endif
 }
 void KSignalPlotter::reorderBeams( const QList<int>& newOrder )
 {
@@ -388,17 +360,11 @@ void KSignalPlotter::changeEvent ( QEvent * event )
             break;
     }
 }
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-void KGraphicsSignalPlotter::resizeEvent( QGraphicsSceneResizeEvent* event )
-{
-    QRect boundingBox(QPoint(0,0), event->newSize().toSize());
-    int fontHeight = QFontMetrics(font()).height();
-#else
+
 void KSignalPlotter::resizeEvent( QResizeEvent* event )
 {
     QRect boundingBox(QPoint(0,0), event->size());
     int fontHeight = fontMetrics().height();
-#endif
     if( d->mShowAxis && d->mAxisTextWidth != 0 && boundingBox.width() > (d->mAxisTextWidth*1.10+2) && boundingBox.height() > fontHeight ) {  //if there's room to draw the labels, then draw them!
         //We want to adjust the size of plotter bit inside so that the axis text aligns nicely at the top and bottom
         //but we don't want to sacrifice too much of the available room, so don't use it if it will take more than 20% of the available space
@@ -436,10 +402,8 @@ void KSignalPlotter::resizeEvent( QResizeEvent* event )
     d->mScrollableImage = QPixmap();
 #endif
 
-#ifdef USE_SEPERATE_WIDGET
     d->mGraphWidget->setVisible(true);
     d->mGraphWidget->setGeometry(boundingBox);
-#endif
 
     d->updateDataBuffers();
 }
@@ -472,11 +436,9 @@ KSignalPlotterPrivate::KSignalPlotterPrivate(KSignalPlotter *q_ptr_) : q(q_ptr_)
     mUnit = ki18n("%1");
     mAxisTextOverlapsPlotter = false;
     mActualAxisTextWidth = 0;
-#ifdef USE_SEPERATE_WIDGET
     mGraphWidget = new GraphWidget(q); ///< This is the widget that draws the actual graph
     mGraphWidget->signalPlotterPrivate = this;
     mGraphWidget->setVisible(false);
-#endif
 }
 
 void KSignalPlotterPrivate::recalculateMaxMinValueForSample(const QList<qreal>&sampleBuf, int time )
@@ -591,18 +553,12 @@ void KSignalPlotterPrivate::updateDataBuffers()
         mMaxSamples = qMin((uint)(q->size().width() / mHorizontalScale + 4), NUM_SAMPLES_WHEN_INVISIBLE);
 }
 
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-void KGraphicsSignalPlotter::paint( QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
-{
-    Q_UNUSED(widget);
-#else
 void KSignalPlotter::paintEvent( QPaintEvent* event)
 {
     if (testAttribute(Qt::WA_PendingResizeEvent))
         return; // lets not do this more than necessary, shall we?
     QPainter p(this);
     QPainter *painter = &p;
-#endif
 
     uint w = size().width();
     uint h = size().height();
@@ -610,36 +566,21 @@ void KSignalPlotter::paintEvent( QPaintEvent* event)
     if ( w <= 2 || h <= 2 )
         return;
 
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-    bool onlyDrawPlotter = option && d->mPlottingArea.contains(option->exposedRect.toRect());
-#else
     bool onlyDrawPlotter = event && d->mPlottingArea.contains(event->rect());
-#endif
-
-#ifdef USE_SEPERATE_WIDGET
     if(onlyDrawPlotter)
         return; //The painting will be handled entirely by GraphWidget::paintEvent
-#endif
 
     if(!onlyDrawPlotter && d->mShowThinFrame)
         d->drawThinFrame(painter, d->mPlottingArea.adjusted(0,0,1,1)); //We have a 'frame' in the bottom and right - so subtract them from the view
 
-#ifndef USE_SEPERATE_WIDGET
-    d->drawWidget(painter, d->mPlottingArea); //Draw the widget only if we don't have a GraphWidget to draw it for us
-#endif
-
     if(d->mShowAxis) {
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-        int fontheight = QFontMetrics(font()).height();
-#else
         int fontheight = fontMetrics().height();
-#endif
         if( d->mPlottingArea.height() > fontheight ) {  //if there's room to draw the labels, then draw them!
             d->drawAxisText(painter, QRect(0,0,w,h));
         }
     }
 }
-#ifdef USE_SEPERATE_WIDGET
+
 void GraphWidget::paintEvent( QPaintEvent*)
 {
     if (testAttribute(Qt::WA_PendingResizeEvent))
@@ -662,7 +603,7 @@ void GraphWidget::paintEvent( QPaintEvent*)
         }
     }
 }
-#endif
+
 void KSignalPlotterPrivate::drawWidget(QPainter *p, const QRect &boundingBox)
 {
 #ifdef SVG_SUPPORT
@@ -1123,33 +1064,13 @@ void KSignalPlotter::setFillOpacity(int fill)
 
 }
 
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-QPainterPath KGraphicsSignalPlotter::opaqueArea() const
-{
-    return shape(); //The whole thing is opaque
-}
-
-QSizeF KGraphicsSignalPlotter::sizeHint( Qt::SizeHint which, const QSizeF & constraint ) const
-{
-    Q_UNUSED(constraint);
-    if(which == Qt::PreferredSize)
-        return QSizeF(200,200);
-    return QGraphicsWidget::sizeHint(which, constraint);
-}
-#else
 QSize KSignalPlotter::sizeHint() const
 {
     return QSize(200,200); //Just a random size which would usually look okay
 }
-#endif
 
-#ifdef USE_SEPERATE_WIDGET
 GraphWidget::GraphWidget(QWidget *parent) : QWidget(parent)
 {
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_OpaquePaintEvent);
 }
-#endif
-
-#undef KSignalPlotter
-#undef KSignalPlotterPrivate

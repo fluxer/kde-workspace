@@ -1,6 +1,5 @@
 set(ksignalplotter_LIB_SRCS
     ksignalplotter.cpp
-    kgraphicssignalplotter.cpp
 )
 
 add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})

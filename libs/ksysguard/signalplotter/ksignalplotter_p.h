@@ -19,17 +19,17 @@
 
 */
 
+#ifndef KSIGNALPLOTTER_P_H
+#define KSIGNALPLOTTER_P_H
+
 //#define USE_QIMAGE
 
 // SVG support causes it to crash at the moment :(
 //#define SVG_SUPPORT
 // Use a seperate child widget to draw the graph in
 
-#ifndef GRAPHICS_SIGNAL_PLOTTER
-#define USE_SEPERATE_WIDGET
 #include <QWidget>
 #include <QtGui/qevent.h>
-#endif
 
 #ifdef SVG_SUPPORT
 namespace Plasma
@@ -38,10 +38,7 @@ namespace Plasma
 }
 #endif
 
-#ifdef USE_SEPERATE_WIDGET
 class GraphWidget;
-#endif
-
 class KSignalPlotter;
 
 class KSignalPlotterPrivate {
@@ -64,9 +61,6 @@ public:
     void rescale();
     void updateDataBuffers();
     void setupStyle();
-#ifdef GRAPHICS_SIGNAL_PLOTTER
-    void themeChanged();
-#endif
 
     /** Return the given value as a string, with the given precision */
     QString scaledValueAsString( qreal value, int precision) const;
@@ -132,12 +126,9 @@ public:
     bool mSmoothGraph; /// Whether to smooth the graph by averaging using the formula (value*2 + last_value)/3.
     KSignalPlotter *q;
     bool mAxisTextOverlapsPlotter; // Whether we need to redraw the axis text on every update
-#ifdef USE_SEPERATE_WIDGET
     GraphWidget *mGraphWidget; ///< This is the widget that draws the actual graph
-#endif
 };
 
-#ifdef USE_SEPERATE_WIDGET
 /* A class to draw the actual widget.  This is used for the QWidget version of KSignalPlotter in order to speed up redraws */
 class GraphWidget : public QWidget {
   public:
@@ -146,5 +137,5 @@ class GraphWidget : public QWidget {
 
     KSignalPlotterPrivate *signalPlotterPrivate;
 };
-#endif
 
+#endif // KSIGNALPLOTTER_P_H

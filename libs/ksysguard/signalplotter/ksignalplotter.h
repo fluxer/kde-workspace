@@ -22,24 +22,21 @@
 #ifndef KSIGNALPLOTTER_H
 #define KSIGNALPLOTTER_H
 
-#include <QtCore/QList>
-#include <QtCore/QString>
-#include <QtGui/QColor>
-#include <QtGui/QFont>
-#include <QtGui/QWidget>
+#include <QList>
+#include <QString>
+#include <QColor>
+#include <QFont>
+#include <QWidget>
+#include <QPaintEvent>
+#include <QResizeEvent>
+#include <QGraphicsSceneResizeEvent>
 #include <klocalizedstring.h>
 #include <kcomponentdata.h>
 #include <kdemacros.h>
 
-#include <QPaintEvent>
-#include <QResizeEvent>
-#include <QGraphicsSceneResizeEvent>
 class KSignalPlotterPrivate;
 
-//Make sure only declare KLocalizedString once
-#ifndef KGRAPHICSSIGNALPLOTTER_H
 Q_DECLARE_METATYPE(KLocalizedString)
-#endif
 
 /** \class KSignalPlotter
  * \brief The KSignalPlotter widget draws a real time graph of data that updates continually.
