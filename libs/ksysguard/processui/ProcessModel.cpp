@@ -410,7 +410,7 @@ void ProcessModelPrivate::queryForAndUpdateAllXWindows() {
 //    qDebug() << "updating xres info:" << QTime::currentTime().toString("hh:mm:ss.zzz");
     updateXResClientData();
     Window       *children, dummy;
-    unsigned int  count;
+    unsigned int  count = 0;
     Status result = XQueryTree(QX11Info::display(), QX11Info::appRootWindow(), &dummy, &dummy, &children, &count);
     if(!result)
         return;

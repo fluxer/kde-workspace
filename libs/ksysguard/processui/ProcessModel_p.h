@@ -33,7 +33,7 @@
 #include <QVariant>
 #include <QHash>
 #include <QSet>
-#include <QtCore/qdatetime.h>
+#include <QDateTime>
 #include <QDebug>
 
 #ifdef Q_WS_X11
