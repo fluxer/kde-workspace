@@ -17,6 +17,9 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
+#ifndef KLISTCONFIRMATIONDIALOG_H
+#define KLISTCONFIRMATIONDIALOG_H
+
 class KListConfirmationDialogPrivate;
 
 #include <QtCore/qvariant.h>
@@ -60,3 +63,5 @@ private:
 
     class KListConfirmationDialogPrivate * const d;
 };
+
+#endif // KLISTCONFIRMATIONDIALOG_H
