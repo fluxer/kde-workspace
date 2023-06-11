@@ -54,13 +54,13 @@ int main(int argc, char* argv[])
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
     QString hostname = args->getOption("hostname");
     bool pid_ok = false;
-    pid_t pid = QString(args->getOption("pid")).toULong(&pid_ok);
+    pid_t pid = args->getOption("pid").toULong(&pid_ok);
     QString caption = args->getOption("windowname");
     QString appname = args->getOption("applicationname");
     bool id_ok = false;
-    Window id = QString(args->getOption("wid")).toULong(&id_ok);
+    Window id = args->getOption("wid").toULong(&id_ok);
     bool time_ok = false;
-    Time timestamp = QString(args->getOption("timestamp")).toULong(&time_ok);
+    Time timestamp = args->getOption("timestamp").toULong(&time_ok);
     args->clear();
     if (!pid_ok || pid == 0 || !id_ok || id == None || !time_ok || timestamp == CurrentTime
             || hostname.isEmpty() || caption.isEmpty() || appname.isEmpty()) {
