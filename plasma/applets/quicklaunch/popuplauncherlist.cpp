@@ -57,39 +57,11 @@
 // Own
 #include "launcherdata.h"
 #include "launcher.h"
+#include "dropmarker.h"
 
 using Plasma::Theme;
 
 namespace Quicklaunch {
-
-class DropMarker : public Launcher {
-
-public:
-    DropMarker(PopupLauncherList *parent)
-        : Launcher(LauncherData(), parent)
-    {
-        hide();
-    }
-
-protected:
-    void paint(
-        QPainter *painter,
-        const QStyleOptionGraphicsItem *option,
-        QWidget *widget)
-    {
-        // This mirrors the behavior of the panel spacer committed by mart
-        // workspace/plasma/desktop/containments/panel/panel.cpp R875513)
-        QColor brushColor(Theme::defaultTheme()->color(Theme::TextColor));
-        brushColor.setAlphaF(0.3);
-
-        painter->setRenderHint(QPainter::Antialiasing);
-        painter->setPen(Qt::NoPen);
-        painter->setBrush(QBrush(brushColor));
-
-        painter->drawRoundedRect(contentsRect(), 4, 4);
-        Launcher::paint(painter, option, widget);
-    }
-};
 
 PopupLauncherList::PopupLauncherList(QGraphicsItem *parent)
 :

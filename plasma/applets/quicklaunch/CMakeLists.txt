@@ -8,6 +8,7 @@ set(quicklaunch_SRCS
     popup.cpp
     popuplauncherlist.cpp
     quicklaunch.cpp
+    dropmarker.cpp
     quicklaunchConfig.ui
 )
 
