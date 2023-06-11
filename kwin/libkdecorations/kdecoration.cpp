@@ -24,19 +24,15 @@ DEALINGS IN THE SOFTWARE.
 
 #include "kdecoration.h"
 #include "kdecoration_p.h"
+#include "kdecorationfactory.h"
+#include "kdecorationbridge.h"
 
 #include <kdebug.h>
 #include <QApplication>
 #include <QMenu>
 #include <kglobal.h>
+
 #include <assert.h>
-#include <X11/Xlib.h>
-#include <fixx11h.h>
-#include <qx11info_x11.h>
-
-#include "kdecorationfactory.h"
-#include "kdecorationbridge.h"
-
 
 /*
 

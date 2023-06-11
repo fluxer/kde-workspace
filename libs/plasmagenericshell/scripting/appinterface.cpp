@@ -204,4 +204,3 @@ QStringList AppInterface::knownContainmentTypes(const QString &type) const
 }
 
 #include "moc_appinterface.cpp"
-

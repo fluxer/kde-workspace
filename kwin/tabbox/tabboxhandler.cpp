@@ -28,10 +28,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // Qt
 #include <QProcess>
 #include <QtGui/qevent.h>
-#include <QtCore/qabstractitemmodel.h>
 #include <QTimer>
-#include <QtGui/qx11info_x11.h>
+#include <QX11Info>
 #include <X11/Xlib.h>
+#include <fixx11h.h>
 // KDE
 #include <KDebug>
 #include <KWindowSystem>

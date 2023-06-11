@@ -23,12 +23,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "tabboxconfig.h"
 
-#include <QtCore/qabstractitemmodel.h>
+#include <QModelIndex>
 #include <QPixmap>
 #include <QString>
-#include <X11/Xlib.h>
-#include <fixx11h.h>
-#include <xcb/xcb.h>
+#include <QKeyEvent>
 
 /**
 * @file
@@ -39,8 +37,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * @author Martin Gräßlin <mgraesslin@kde.org>
 * @since 4.4
 */
-
-#include <QKeyEvent>
 
 namespace KWin
 {
