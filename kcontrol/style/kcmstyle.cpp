@@ -62,23 +62,8 @@
 #include <QtGui/QStandardItemModel>
 #include <QtGui/QStyle>
 #include <QtDBus/QtDBus>
-#include <QtCore/qlibraryinfo.h>
-
-#ifdef Q_WS_X11
-#include <QtGui/qx11info_x11.h>
-#endif
 
 #include "../krdb/krdb.h"
-
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#endif
-
-// X11 namespace cleanup
-#undef Below
-#undef KeyPress
-#undef KeyRelease
-
 
 /**** DLL Interface for kcontrol ****/
 
