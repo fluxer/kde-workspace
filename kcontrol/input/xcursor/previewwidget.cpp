@@ -17,44 +17,34 @@
  */
 
 #include <QPainter>
-#include <QtGui/qevent.h>
+#include <QResizeEvent>
 
 #include "previewwidget.h"
-
-#include <X11/Xlib.h>
-#include <X11/Xcursor/Xcursor.h>
-
 #include "cursortheme.h"
 
+// Preview cursors
+const char * const cursor_names[] =
+{
+    "left_ptr",
+    "left_ptr_watch",
+    "wait",
+    "pointing_hand",
+    "whats_this",
+    "ibeam",
+    "size_all",
+    "size_fdiag",
+    "cross",
+    "split_h",
+    "size_ver",
+    "size_hor",
+    "size_bdiag",
+    "split_v",
+};
 
-
-namespace {
-
-    // Preview cursors
-    const char * const cursor_names[] =
-    {
-        "left_ptr",
-        "left_ptr_watch",
-        "wait",
-        "pointing_hand",
-        "whats_this",
-        "ibeam",
-        "size_all",
-        "size_fdiag",
-        "cross",
-        "split_h",
-        "size_ver",
-        "size_hor",
-        "size_bdiag",
-        "split_v",
-    };
-
-    const int numCursors      = 9;     // The number of cursors from the above list to be previewed
-    const int cursorSpacing   = 20;    // Spacing between preview cursors
-    const int widgetMinWidth  = 10;    // The minimum width of the preview widget
-    const int widgetMinHeight = 48;    // The minimum height of the preview widget
-}
-
+const int numCursors      = 9;     // The number of cursors from the above list to be previewed
+const int cursorSpacing   = 20;    // Spacing between preview cursors
+const int widgetMinWidth  = 10;    // The minimum width of the preview widget
+const int widgetMinHeight = 48;    // The minimum height of the preview widget
 
 class PreviewCursor
 {
@@ -62,16 +52,14 @@ class PreviewCursor
         PreviewCursor( const CursorTheme *theme, const QString &name, int size );
         ~PreviewCursor() {}
 
+        const QCursor &cursor() const { return m_cursor; }
         const QPixmap &pixmap() const { return m_pixmap; }
-        Cursor handle() const { return m_cursor.handle(); }
         int width() const { return m_pixmap.width(); }
         int height() const { return m_pixmap.height(); }
         inline QRect rect() const;
         void setPosition( const QPoint &p ) { m_pos = p; }
         void setPosition( int x, int y ) { m_pos = QPoint(x, y); }
         QPoint position() const { return m_pos; }
-        operator const QCursor& () const { return m_cursor; }
-        operator const QPixmap& () const { return pixmap(); }
 
     private:
         QPixmap m_pixmap;
@@ -193,7 +181,7 @@ void PreviewWidget::paintEvent(QPaintEvent *)
         if (c->pixmap().isNull())
             continue;
 
-        p.drawPixmap(c->position(), *c);
+        p.drawPixmap(c->position(), c->pixmap());
     }
 }
 
@@ -209,7 +197,7 @@ void PreviewWidget::mouseMoveEvent(QMouseEvent *e)
         {
             if (c != current)
             {
-                setCursor(*c);
+                setCursor(c->cursor());
                 current = c;
             }
             return;
