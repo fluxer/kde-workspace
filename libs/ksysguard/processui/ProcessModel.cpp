@@ -709,7 +709,6 @@ void ProcessModelPrivate::processChanged(KSysGuard::Process *process, bool onlyT
             }
         }
     }
-    int totalUpdated = 0;
     Q_ASSERT(row != -1);  //Something has gone very wrong
     if(onlyTotalCpu) {
         if(mShowChildTotals) {
@@ -723,17 +722,14 @@ void ProcessModelPrivate::processChanged(KSysGuard::Process *process, bool onlyT
             return; //Nothing changed
         }
         if(process->changes & KSysGuard::Process::Uids) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingUser, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::Tty) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingTty, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & (KSysGuard::Process::Usage | KSysGuard::Process::Status) || (process->changes & KSysGuard::Process::TotalUsage && mShowChildTotals)) {
-            totalUpdated+=2;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingCPUUsage, process);
             emit q->dataChanged(index, index);
             index = q->createIndex(row, ProcessModel::HeadingCPUTime, process);
@@ -743,17 +739,14 @@ void ProcessModelPrivate::processChanged(KSysGuard::Process *process, bool onlyT
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::NiceLevels) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingNiceness, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::VmSize) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingVmSize, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & (KSysGuard::Process::VmSize | KSysGuard::Process::VmRSS | KSysGuard::Process::VmURSS)) {
-            totalUpdated+=2;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingMemory, process);
             emit q->dataChanged(index, index);
             QModelIndex index2 = q->createIndex(row, ProcessModel::HeadingSharedMemory, process);
@@ -763,22 +756,18 @@ void ProcessModelPrivate::processChanged(KSysGuard::Process *process, bool onlyT
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::Name) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingName, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::Command) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingCommand, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::Login) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingUser, process);
             emit q->dataChanged(index, index);
         }
         if(process->changes & KSysGuard::Process::IO) {
-            totalUpdated++;
             QModelIndex index = q->createIndex(row, ProcessModel::HeadingIoRead, process);
             emit q->dataChanged(index, index);
             index = q->createIndex(row, ProcessModel::HeadingIoWrite, process);
@@ -1936,8 +1925,8 @@ QString ProcessModel::formatMemoryInfo(qlonglong amountInKB, Units units, bool r
         float percentage = amountInKB*100.0/d->mMemTotal;
         if(percentage < 0.1) percentage = 0.1;
         return percentageString.arg(percentage, 0, 'f', 1);
-    } else
-        return formatByteSize(amountInKB, units);
+    }
+    return formatByteSize(amountInKB, units);
 }
 
 QString ProcessModel::hostName() const {
