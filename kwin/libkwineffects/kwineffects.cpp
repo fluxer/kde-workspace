@@ -1224,6 +1224,7 @@ bool PaintClipper::Iterator::isDone()
         return data->index == 1; // run once
 #endif
     kFatal() << "Something strange happened";
+    return true;
 }
 
 void PaintClipper::Iterator::next()
