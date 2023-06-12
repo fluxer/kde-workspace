@@ -113,7 +113,7 @@ Item {
 
         property Item tabBar: Utils.findParent(root, "currentTab")
         property Item tabGroup: Utils.findParent(tab, "currentTab")
-        property bool portrait: root.height >= label.paintedHeight + 16
+        property bool portrait: root.height >= label.height + 16
 
         function click() {
             root.clicked()
@@ -143,7 +143,7 @@ Item {
         }
 
         elide: Text.ElideRight
-        horizontalAlignment: !internal.portrait && iconSource != null ? Text.AlignLeft : Text.AlignHCenter
+        horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
 
         color: root.checked ? theme.buttonTextColor : theme.textColor
