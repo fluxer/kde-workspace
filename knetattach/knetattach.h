@@ -42,6 +42,7 @@ private slots:
     void updateParametersPageStatus();
     bool validateCurrentPage();
     void updateFinishButtonText( bool save );
+    void updateSavePasswordBox( bool save );
     void slotHelpClicked();
     void slotPageChanged( int );
 };
