@@ -52,6 +52,7 @@ KNetAttach::KNetAttach( QWidget* parent )
     connect(_host, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_path, SIGNAL(textChanged(QString)), this, SLOT(updateParametersPageStatus()));
     connect(_createIcon, SIGNAL(toggled(bool)), this, SLOT(updateFinishButtonText(bool)));
+    connect(_savePass, SIGNAL(toggled(bool)), this, SLOT(updateSavePasswordBox(bool)));
     connect( this, SIGNAL(helpRequested()), this, SLOT(slotHelpClicked()) );
     connect( this, SIGNAL(currentIdChanged(int)), this, SLOT(slotPageChanged(int)) );
     setWindowIcon(KIcon("knetattach"));
@@ -198,7 +199,9 @@ bool KNetAttach::validateCurrentPage()
 
         QString name = _connectionName->text().trimmed();
 
-        // SECURITY: plain password will be stored
+        // SECURITY: plain password may be stored
+        const QString remoteUrl = (_savePass->isChecked() ? url.url() : url.prettyUrl());
+
         if (_createIcon->isChecked()) {
             KGlobal::dirs()->addResourceType("remote_entries", "data", "remoteview");
 
@@ -209,7 +212,7 @@ bool KNetAttach::validateCurrentPage()
             desktopFile.writeEntry("Icon", "folder-remote");
             desktopFile.writeEntry("Name", name);
             desktopFile.writeEntry("Type", "Link");
-            desktopFile.writeEntry("URL", url.url());
+            desktopFile.writeEntry("URL", remoteUrl);
             desktopFile.writeEntry("Charset", url.fileEncoding());
             desktopFile.sync();
             org::kde::KDirNotify::emitFilesAdded( "remote:/" );
@@ -235,7 +238,7 @@ bool KNetAttach::validateCurrentPage()
                 recent.writeEntry("Index", idx);
             }
             recent = KConfigGroup(&_recent,name);
-            recent.writeEntry("URL", url.url());
+            recent.writeEntry("URL", remoteUrl);
             if (_type == "FTP" || _type == "SFTP") {
                 recent.writeEntry("Port", _port->value());
             }
@@ -291,12 +294,17 @@ void KNetAttach::updateFinishButtonText(bool save)
     } else {
         button(FinishButton)->setText(i18n("C&onnect"));
     }
+    updateSavePasswordBox(_savePass->isChecked());
+}
+
+void KNetAttach::updateSavePasswordBox(bool save)
+{
     if (save && !_pass->text().trimmed().isEmpty()) {
-        _createIcon->setIcon(KIcon("dialog-warning"));
-        _createIcon->setToolTip(i18n("The plain password will be stored"));
+        _savePass->setIcon(KIcon("dialog-warning"));
+        _savePass->setToolTip(i18n("The plain password will be stored"));
     } else {
-        _createIcon->setIcon(QIcon());
-        _createIcon->setToolTip(QString());
+        _savePass->setIcon(QIcon());
+        _savePass->setToolTip(QString());
     }
 }
 
