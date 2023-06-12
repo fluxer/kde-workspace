@@ -49,10 +49,8 @@ QRect FolderViewAdapter::visualRect(const QModelIndex &index) const
     return m_view->visualRect(index);
 }
 
-void FolderViewAdapter::connect(Signal signal, QObject *receiver, const char *slot)
+void FolderViewAdapter::connectScrollBar(QObject *receiver, const char *slot)
 {
-    if (signal == ScrollBarValueChanged) {
-        QObject::connect(m_view->verticalScrollBar(), SIGNAL(valueChanged(int)), receiver, slot);
-    }
+    QObject::connect(m_view->verticalScrollBar(), SIGNAL(valueChanged(int)), receiver, slot);
 }
 

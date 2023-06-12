@@ -20,9 +20,9 @@
 #ifndef FOLDERVIEWADAPTER_H
 #define FOLDERVIEWADAPTER_H
 
-#include "kabstractviewadapter_p.h"
 #include "abstractitemview.h"
 
+#include <kabstractviewadapter.h>
 
 class FolderViewAdapter : public KAbstractViewAdapter
 {
@@ -33,7 +33,7 @@ public:
     QPalette palette() const;
     QRect visibleArea() const;
     QRect visualRect(const QModelIndex &index) const;
-    void connect(Signal signal, QObject *receiver, const char *slot);
+    void connectScrollBar(QObject *receiver, const char *slot);
 
 private:
     AbstractItemView *m_view;
