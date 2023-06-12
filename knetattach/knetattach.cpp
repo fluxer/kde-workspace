@@ -76,6 +76,9 @@ KNetAttach::KNetAttach( QWidget* parent )
 
 void KNetAttach::slotPageChanged(int)
 {
+     // force emision of the toggled() signal
+    _createIcon->setChecked(false);
+    // and the check state
     _createIcon->setChecked(true);
 }
 
