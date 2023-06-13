@@ -41,7 +41,7 @@ AcAdapterSignalMapper::~AcAdapterSignalMapper()
 
 void AcAdapterSignalMapper::plugStateChanged(bool newState)
 {
-    emit(deviceChanged(signalmap[sender()], "Plugged In", newState));
+    emit deviceChanged(signalmap[sender()], "Plugged In", newState);
 }
 
 
@@ -56,7 +56,7 @@ ButtonSignalMapper::~ButtonSignalMapper()
 void ButtonSignalMapper::pressed(Solid::Button::ButtonType type)
 {
     Q_UNUSED(type)
-    emit(deviceChanged(signalmap[sender()], "Pressed", true));
+    emit deviceChanged(signalmap[sender()], "Pressed", true);
 }
 
 BatterySignalMapper::BatterySignalMapper(QObject *parent) : DeviceSignalMapper(parent)
@@ -69,19 +69,19 @@ BatterySignalMapper::~BatterySignalMapper()
 
 void BatterySignalMapper::chargePercentChanged(int value)
 {
-    emit(deviceChanged(signalmap[sender()], "Charge Percent", value));
+    emit deviceChanged(signalmap[sender()], "Charge Percent", value);
 }
 
 void BatterySignalMapper::chargeStateChanged(int newState)
 {
     QStringList chargestate;
     chargestate << "Fully Charged" << "Charging" << "Discharging";
-    emit(deviceChanged(signalmap[sender()], "Charge State", chargestate.at(newState)));
+    emit deviceChanged(signalmap[sender()], "Charge State", chargestate.at(newState));
 }
 
 void BatterySignalMapper::plugStateChanged(bool newState)
 {
-    emit(deviceChanged(signalmap[sender()], "Plugged In", newState));
+    emit deviceChanged(signalmap[sender()], "Plugged In", newState);
 }
 
 StorageAccessSignalMapper::StorageAccessSignalMapper(QObject *parent) : DeviceSignalMapper(parent)
@@ -94,7 +94,7 @@ StorageAccessSignalMapper::~StorageAccessSignalMapper()
 
 void StorageAccessSignalMapper::accessibilityChanged(bool accessible)
 {
-    emit(deviceChanged(signalmap[sender()], "Accessible", accessible));
+    emit deviceChanged(signalmap[sender()], "Accessible", accessible);
 }
 
 #include "moc_devicesignalmapper.cpp"
