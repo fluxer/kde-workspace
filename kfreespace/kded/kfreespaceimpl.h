@@ -35,7 +35,7 @@ public:
 
 protected:
     // reimplementation
-    void timerEvent(QTimerEvent *event);
+    void timerEvent(QTimerEvent *event) final;
 
 private:
     Solid::Device m_soliddevice;
