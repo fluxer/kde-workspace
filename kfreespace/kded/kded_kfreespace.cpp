@@ -65,10 +65,6 @@ void KFreeSpaceModule::slotInit()
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     bool watcherror = false;
     foreach (const Solid::Device soliddevice, Solid::Device::allDevices()) {
-        const Solid::StorageVolume* solidstorage = soliddevice.as<Solid::StorageVolume>();
-        if (!solidstorage) {
-            continue;
-        }
         const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
         if (!solidaccess) {
             continue;
@@ -91,8 +87,8 @@ void KFreeSpaceModule::slotInit()
             continue;
         }
 
-        const qulonglong kfreespacechecktime = kfreespacegroup.readEntry("checktime", qulonglong(s_kfreespacechecktime));
-        const qulonglong kfreespacefreespace = kfreespacegroup.readEntry("freespace", qulonglong(s_kfreespacefreespace));
+        const qulonglong kfreespacechecktime = kfreespacegroup.readEntry("checktime", s_kfreespacechecktime);
+        const qulonglong kfreespacefreespace = kfreespacegroup.readEntry("freespace", s_kfreespacefreespace);
         KFreeSpaceImpl* kfreespaceimpl = new KFreeSpaceImpl(this);
         const bool kfreespacestatus = kfreespaceimpl->watch(
             kfreespacedirpath,

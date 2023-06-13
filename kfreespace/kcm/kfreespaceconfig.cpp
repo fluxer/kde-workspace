@@ -203,10 +203,6 @@ void KCMFreeSpace::load()
 
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     foreach (const Solid::Device soliddevice, Solid::Device::allDevices()) {
-        const Solid::StorageVolume* solidstorage = soliddevice.as<Solid::StorageVolume>();
-        if (!solidstorage) {
-            continue;
-        }
         const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
         if (!solidaccess) {
             continue;
@@ -224,8 +220,8 @@ void KCMFreeSpace::load()
         // qDebug() << Q_FUNC_INFO << soliddevice.udi();
         KConfigGroup kfreespacegroup = kfreespaceconfig.group(soliddevice.udi());
         const bool kfreespacewatch = kfreespacegroup.readEntry("watch", s_kfreespacewatch);
-        const qulonglong kfreespacechecktime = kfreespacegroup.readEntry("checktime", qlonglong(s_kfreespacechecktime));
-        const qulonglong kfreespacefreespace = kfreespacegroup.readEntry("freespace", qlonglong(s_kfreespacefreespace));
+        const qulonglong kfreespacechecktime = kfreespacegroup.readEntry("checktime", s_kfreespacechecktime);
+        const qulonglong kfreespacefreespace = kfreespacegroup.readEntry("freespace", s_kfreespacefreespace);
 
         KFreeSpaceBox* devicebox = new KFreeSpaceBox(
             this,
