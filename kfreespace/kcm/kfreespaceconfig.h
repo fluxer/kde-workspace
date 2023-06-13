@@ -28,7 +28,7 @@
 class KFreeSpaceBox;
 
 /**
- * Control look of KDE greeter
+ * Control KDE free space notifier
  *
  * @author Ivailo Monev (xakepa10@gmail.com)
  */

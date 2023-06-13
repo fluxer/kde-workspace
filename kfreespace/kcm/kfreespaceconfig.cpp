@@ -196,10 +196,11 @@ void KCMFreeSpace::load()
         const QLayoutItem* layoutitem = m_layout->itemAt(i);
         if (layoutitem == m_spacer) {
             delete m_layout->takeAt(i);
+            m_spacer = nullptr;
             break;
         }
     }
-    m_spacer = nullptr;
+    Q_ASSERT(m_spacer == nullptr);
 
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     foreach (const Solid::Device soliddevice, Solid::Device::allDevices()) {
