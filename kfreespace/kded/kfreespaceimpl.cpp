@@ -66,6 +66,11 @@ void KFreeSpaceImpl::timerEvent(QTimerEvent *event)
         const Solid::StorageAccess* solidaccess = m_soliddevice.as<Solid::StorageAccess>();
         Q_ASSERT(solidaccess);
         const QString mountpoint = solidaccess->filePath();
+        if (mountpoint.isEmpty()) {
+            kDebug() << "Device not mounted" << m_soliddevice.udi();
+            return;
+        }
+
         const KDiskFreeSpaceInfo kdiskinfo = KDiskFreeSpaceInfo::freeSpaceInfo(mountpoint);
         if (!kdiskinfo.isValid()) {
             kDebug() << "Disk info is not valid for" << mountpoint;

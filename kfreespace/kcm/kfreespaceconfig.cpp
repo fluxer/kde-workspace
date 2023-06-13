@@ -30,7 +30,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <solid/device.h>
-#include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
 
 class KFreeSpaceBox : public QGroupBox

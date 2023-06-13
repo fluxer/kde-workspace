@@ -19,7 +19,6 @@
 #include "kded_kfreespace.h"
 #include "kfreespace.h"
 
-#include <QTimer>
 #include <klocale.h>
 #include <kstandarddirs.h>
 #include <kconfiggroup.h>
@@ -27,7 +26,6 @@
 #include <kpluginfactory.h>
 #include <kdebug.h>
 #include <solid/device.h>
-#include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
 #include <solid/devicenotifier.h>
 
