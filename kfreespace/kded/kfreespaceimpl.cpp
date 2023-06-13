@@ -43,7 +43,8 @@ KFreeSpaceImpl::~KFreeSpaceImpl()
 }
 
 bool KFreeSpaceImpl::watch(const QString &dirpath,
-                           const qulonglong checktime, const qulonglong freespace)
+                           const qulonglong checktime, const qulonglong freespace,
+                           const QString &description)
 {
     // qDebug() << Q_FUNC_INFO << dirpath << checktime << freespace;
     m_directory = dirpath;
@@ -51,6 +52,7 @@ bool KFreeSpaceImpl::watch(const QString &dirpath,
     m_checktime = (qBound(s_kfreespacechecktimemin, checktime, s_kfreespacechecktimemax) * 1000);
     // NOTE: size from config is in MB, has to be in bytes here
     m_freespace = (qBound(s_kfreespacefreespacemin, freespace, s_kfreespacefreespacemax) * 1024 * 1024);
+    m_description = description;
     if (!QDir(m_directory).exists()) {
         kWarning() << "Directory does not exist" << m_directory;
         return false;
@@ -76,13 +78,14 @@ void KFreeSpaceImpl::timerEvent(QTimerEvent *event)
         }
 
         const qulonglong freespace = kdiskinfo.available();
+        const QString freespacestring = KGlobal::locale()->formatByteSize(freespace);
         kDebug() << "Current" << m_directory
-                 << "space is" << KGlobal::locale()->formatByteSize(freespace);
+                 << "space is" << freespacestring;
         if (freespace <= m_freespace) {
             KNotification *knotification = new KNotification("WatchLow");
             knotification->setComponentData(KComponentData("kfreespace"));
-            knotification->setTitle(i18n("Disk space watch"));
-            knotification->setText(i18n("Low Disk Space"));
+            knotification->setTitle(i18n("Low Disk Space"));
+            knotification->setText(i18n("%1 has %2 free space", m_description, freespacestring));
             knotification->sendEvent();
         }
     } else {

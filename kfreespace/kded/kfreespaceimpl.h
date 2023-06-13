@@ -30,7 +30,8 @@ public:
     ~KFreeSpaceImpl();
 
     bool watch(const QString &dirpath,
-               const qulonglong checktime, const qulonglong freespace);
+               const qulonglong checktime, const qulonglong freespace,
+               const QString &description);
 
 protected:
     // reimplementation
@@ -40,6 +41,7 @@ private:
     QString m_directory;
     qulonglong m_checktime;
     qulonglong m_freespace;
+    QString m_description;
     int m_timerid;
 };
 

@@ -20,9 +20,9 @@
 #define KFREESPACE_H
 
 static const bool s_kfreespacewatch = true;
-static const qulonglong s_kfreespacechecktime = 60;
+static const qulonglong s_kfreespacechecktime = 60; // 1 minute
 static const qulonglong s_kfreespacechecktimemin = 1;
-static const qulonglong s_kfreespacechecktimemax = 60; // 1 minute
+static const qulonglong s_kfreespacechecktimemax = 60;
 static const qulonglong s_kfreespacefreespace = 1024; // 1 GB
 static const qulonglong s_kfreespacefreespacemin = 10;
 static const qulonglong s_kfreespacefreespacemax = 1024;

@@ -29,6 +29,7 @@
 #include <solid/device.h>
 #include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
+#include <solid/devicenotifier.h>
 
 K_PLUGIN_FACTORY(KFreeSpaceModuleFactory, registerPlugin<KFreeSpaceModule>();)
 K_EXPORT_PLUGIN(KFreeSpaceModuleFactory("kfreespace"))
@@ -46,7 +47,18 @@ KFreeSpaceModule::KFreeSpaceModule(QObject *parent, const QList<QVariant> &args)
     m_dirwatch->addFile(kfreespacercfile);
     connect(m_dirwatch, SIGNAL(dirty(QString)), this, SLOT(slotInit()));
 
-    // TODO: watch storage devices to reinit
+    // TODO: test it
+#if 0
+    Solid::DeviceNotifier* solidnotifier = Solid::DeviceNotifier::instance();
+    connect(
+        solidnotifier, SIGNAL(deviceAdded(QString)),
+        this, SLOT(slotDeviceAdded(QString))
+    );
+    connect(
+        solidnotifier, SIGNAL(deviceRemoved(QString)),
+        this, SLOT(slotDeviceRemoved(QString))
+    );
+#endif
 }
 
 KFreeSpaceModule::~KFreeSpaceModule()
@@ -92,7 +104,8 @@ void KFreeSpaceModule::slotInit()
         KFreeSpaceImpl* kfreespaceimpl = new KFreeSpaceImpl(this);
         const bool kfreespacestatus = kfreespaceimpl->watch(
             kfreespacedirpath,
-            kfreespacechecktime, kfreespacefreespace
+            kfreespacechecktime, kfreespacefreespace,
+            soliddevice.description()
         );
         if (!kfreespacestatus) {
             delete kfreespaceimpl;
@@ -104,8 +117,37 @@ void KFreeSpaceModule::slotInit()
     if (watcherror) {
         KNotification *knotification = new KNotification("WatchError");
         knotification->setComponentData(KComponentData("kfreespace"));
-        knotification->setTitle(i18n("Disk space watch"));
+        knotification->setTitle(i18n("Free Space Notifier"));
         knotification->setText(i18n("Unable to watch one or more devices"));
         knotification->sendEvent();
     }
+}
+
+void KFreeSpaceModule::slotDeviceAdded(const QString &udi)
+{
+    Solid::Device soliddevice(udi);
+    const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
+    if (solidaccess) {
+        kDebug() << "Storage access added" << udi;
+        connect(
+            solidaccess, SIGNAL(accessibilityChanged(bool,QString)),
+            this, SLOT(slotAccessibilityChanged(bool,QString))
+        );
+    }
+}
+
+void KFreeSpaceModule::slotDeviceRemoved(const QString &udi)
+{
+    Solid::Device soliddevice(udi);
+    const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
+    if (solidaccess) {
+        kDebug() << "Storage access removed" << udi;
+        disconnect(solidaccess, 0, this, 0);
+    }
+}
+
+void KFreeSpaceModule::slotAccessibilityChanged(bool accessible, const QString &udi)
+{
+    kDebug() << "Storage accessibility changed" << udi << accessible;
+    slotInit();
 }
