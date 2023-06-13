@@ -308,7 +308,6 @@ add_subdirectory(kcontrol)
 add_subdirectory(klipper)
 add_subdirectory(kmenuedit)
 add_subdirectory(krunner)
-add_subdirectory(freespacenotifier)
 add_subdirectory(kinfocenter)
 
 if(Q_WS_X11 AND X11_Xinput_FOUND)
@@ -330,7 +329,7 @@ add_subdirectory(plasma)
 add_subdirectory(statusnotifierwatcher)
 add_subdirectory(kstyles)
 
-# imported from kde-runtime and other sub-projects
+# Imported from kde-runtime and other sub-projects
 add_subdirectory(menu)
 add_subdirectory(knotify)
 add_subdirectory(kuiserver)
@@ -347,7 +346,7 @@ add_subdirectory(kquitapp)
 if (Q_WS_X11)
     add_subdirectory(kstart)
 endif (Q_WS_X11)
-# imported from kde-baseapps
+# Imported from kde-baseapps
 add_subdirectory(dolphin)
 add_subdirectory(kate)
 add_subdirectory(kdepasswd)
@@ -355,9 +354,11 @@ add_subdirectory(kdesudo)
 add_subdirectory(kdialog)
 add_subdirectory(keditbookmarks)
 add_subdirectory(kfind)
+add_subdirectory(konsole)
+# Goodies
 add_subdirectory(kmediaplayer)
 add_subdirectory(kmail)
-add_subdirectory(konsole)
+add_subdirectory(kfreespace)
 # Background processes
 add_subdirectory(kdontchangethehostname)
 add_subdirectory(kglobalaccel)

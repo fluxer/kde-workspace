@@ -1,0 +1,16 @@
+[Global]
+Name=kfreespace
+Comment=Free Space Notifier
+IconName=drive-harddisk
+
+[Event/WatchError]
+Name=Unable to watch one or more devices
+Action=Sound|Popup
+Sound=KDE-Sys-App-Error-Serious.ogg
+IconName=dialog-error
+
+[Event/WatchLow]
+Name=Low Disk Space
+Action=Sound|Popup
+Sound=KDE-Sys-App-Error-Serious.ogg
+IconName=dialog-warning

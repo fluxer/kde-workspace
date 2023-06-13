@@ -1,0 +1,16 @@
+[Desktop Entry]
+Exec=kcmshell4 kfreespaceconfig
+Icon=drive-harddisk
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_kfreespaceconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=hardware
+X-KDE-System-Settings-Parent-Category-V2=hardware
+X-DocPath=kcontrol/kfreespaceconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-hardware;
+
+Name=Free Space Notifier
+Comment=Change free space notifier options
+X-KDE-Keywords=Free,Disk,Notify
