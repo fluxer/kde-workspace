@@ -72,7 +72,7 @@ void KFreeSpaceModule::slotInit()
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     bool watcherror = false;
     const QList<Solid::Device> storagedevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
-    foreach (const Solid::Device soliddevice, storagedevices) {
+    foreach (const Solid::Device &soliddevice, storagedevices) {
         const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
         if (!solidaccess) {
             continue;
