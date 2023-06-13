@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QTimerEvent>
+#include <solid/device.h>
 
 class KFreeSpaceImpl : public QObject
 {
@@ -29,19 +30,17 @@ public:
     KFreeSpaceImpl(QObject *parent = nullptr);
     ~KFreeSpaceImpl();
 
-    bool watch(const QString &dirpath,
-               const qulonglong checktime, const qulonglong freespace,
-               const QString &description);
+    bool watch(const Solid::Device &soliddevice,
+               const qulonglong checktime, const qulonglong freespace);
 
 protected:
     // reimplementation
     void timerEvent(QTimerEvent *event);
 
 private:
-    QString m_directory;
+    Solid::Device m_soliddevice;
     qulonglong m_checktime;
     qulonglong m_freespace;
-    QString m_description;
     int m_timerid;
 };
 

@@ -47,8 +47,6 @@ KFreeSpaceModule::KFreeSpaceModule(QObject *parent, const QList<QVariant> &args)
     m_dirwatch->addFile(kfreespacercfile);
     connect(m_dirwatch, SIGNAL(dirty(QString)), this, SLOT(slotInit()));
 
-    // TODO: test it
-#if 0
     Solid::DeviceNotifier* solidnotifier = Solid::DeviceNotifier::instance();
     connect(
         solidnotifier, SIGNAL(deviceAdded(QString)),
@@ -58,7 +56,6 @@ KFreeSpaceModule::KFreeSpaceModule(QObject *parent, const QList<QVariant> &args)
         solidnotifier, SIGNAL(deviceRemoved(QString)),
         this, SLOT(slotDeviceRemoved(QString))
     );
-#endif
 }
 
 KFreeSpaceModule::~KFreeSpaceModule()
@@ -76,18 +73,13 @@ void KFreeSpaceModule::slotInit()
 
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     bool watcherror = false;
-    foreach (const Solid::Device soliddevice, Solid::Device::allDevices()) {
+    const QList<Solid::Device> storagedevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
+    foreach (const Solid::Device soliddevice, storagedevices) {
         const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
         if (!solidaccess) {
             continue;
         } else if (solidaccess->isIgnored()) {
             kDebug() << "Ignored" << soliddevice.udi();
-            continue;
-        }
-
-        const QString kfreespacedirpath = solidaccess->filePath();
-        if (kfreespacedirpath.isEmpty()) {
-            kDebug() << "Not accessible" << soliddevice.udi();
             continue;
         }
 
@@ -103,9 +95,8 @@ void KFreeSpaceModule::slotInit()
         const qulonglong kfreespacefreespace = kfreespacegroup.readEntry("freespace", s_kfreespacefreespace);
         KFreeSpaceImpl* kfreespaceimpl = new KFreeSpaceImpl(this);
         const bool kfreespacestatus = kfreespaceimpl->watch(
-            kfreespacedirpath,
-            kfreespacechecktime, kfreespacefreespace,
-            soliddevice.description()
+            soliddevice,
+            kfreespacechecktime, kfreespacefreespace
         );
         if (!kfreespacestatus) {
             delete kfreespaceimpl;
@@ -129,25 +120,13 @@ void KFreeSpaceModule::slotDeviceAdded(const QString &udi)
     const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
     if (solidaccess) {
         kDebug() << "Storage access added" << udi;
-        connect(
-            solidaccess, SIGNAL(accessibilityChanged(bool,QString)),
-            this, SLOT(slotAccessibilityChanged(bool,QString))
-        );
+        slotInit();
     }
 }
 
 void KFreeSpaceModule::slotDeviceRemoved(const QString &udi)
 {
-    Solid::Device soliddevice(udi);
-    const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
-    if (solidaccess) {
-        kDebug() << "Storage access removed" << udi;
-        disconnect(solidaccess, 0, this, 0);
-    }
-}
-
-void KFreeSpaceModule::slotAccessibilityChanged(bool accessible, const QString &udi)
-{
-    kDebug() << "Storage accessibility changed" << udi << accessible;
+    // NOTE: at that point obtaining valid device is impossible
+    kDebug() << "Solid device removed" << udi;
     slotInit();
 }

@@ -38,7 +38,7 @@ class KFreeSpaceBox : public QGroupBox
     Q_OBJECT
 public:
     KFreeSpaceBox(QWidget *parent,
-                  const QString &udi, const QString &title,
+                  const Solid::Device &soliddevice,
                   bool watch, qulonglong checktime, qulonglong freespace);
 
 
@@ -59,22 +59,23 @@ private Q_SLOTS:
     void slotFreeSpace();
 
 private:
-    QString m_udi;
+    Solid::Device m_soliddevice;
     QCheckBox* m_watchbox;
     KIntNumInput* m_checktimeinput;
     KIntNumInput* m_freespaceinput;
 };
 
 KFreeSpaceBox::KFreeSpaceBox(QWidget *parent,
-                             const QString &udi, const QString &title,
+                             const Solid::Device &soliddevice,
                              bool watch, qulonglong checktime, qulonglong freespace)
     : QGroupBox(parent),
-    m_udi(udi),
+    m_soliddevice(soliddevice),
     m_watchbox(nullptr),
     m_checktimeinput(nullptr),
     m_freespaceinput(nullptr)
 {
-    setTitle(title);
+    setTitle(m_soliddevice.description());
+
     QGridLayout* devicelayout = new QGridLayout(this);
 
     m_watchbox = new QCheckBox(i18n("Notify when the device free space is low"), this);
@@ -114,7 +115,7 @@ KFreeSpaceBox::KFreeSpaceBox(QWidget *parent,
 
 QString KFreeSpaceBox::udi() const
 {
-    return m_udi;
+    return m_soliddevice.udi();
 }
 
 bool KFreeSpaceBox::watch() const
@@ -203,18 +204,13 @@ void KCMFreeSpace::load()
     Q_ASSERT(m_spacer == nullptr);
 
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
-    foreach (const Solid::Device soliddevice, Solid::Device::allDevices()) {
+    const QList<Solid::Device> storagedevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
+    foreach (const Solid::Device soliddevice, storagedevices) {
         const Solid::StorageAccess* solidaccess = soliddevice.as<Solid::StorageAccess>();
         if (!solidaccess) {
             continue;
         } else if (solidaccess->isIgnored()) {
             kDebug() << "Ignored" << soliddevice.udi();
-            continue;
-        }
-
-        const QString kfreespacedirpath = solidaccess->filePath();
-        if (kfreespacedirpath.isEmpty()) {
-            kDebug() << "Not accessible" << soliddevice.udi();
             continue;
         }
 
@@ -226,7 +222,7 @@ void KCMFreeSpace::load()
 
         KFreeSpaceBox* devicebox = new KFreeSpaceBox(
             this,
-            soliddevice.udi(), soliddevice.description(),
+            soliddevice,
             kfreespacewatch, kfreespacechecktime, kfreespacefreespace
         );
         m_deviceboxes.append(devicebox);

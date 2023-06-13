@@ -40,7 +40,6 @@ private Q_SLOTS:
     void slotInit();
     void slotDeviceAdded(const QString &udi);
     void slotDeviceRemoved(const QString &udi);
-    void slotAccessibilityChanged(bool accessible, const QString &udi);
 
 private:
     KDirWatch* m_dirwatch;

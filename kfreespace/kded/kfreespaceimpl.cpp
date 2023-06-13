@@ -24,10 +24,10 @@
 #include <kdiskfreespaceinfo.h>
 #include <knotification.h>
 #include <kdebug.h>
+#include <solid/storageaccess.h>
 
 KFreeSpaceImpl::KFreeSpaceImpl(QObject *parent)
     : QObject(parent),
-    m_directory(QDir::homePath()),
     m_checktime(s_kfreespacechecktime),
     m_freespace(s_kfreespacefreespace),
     m_timerid(0)
@@ -42,23 +42,17 @@ KFreeSpaceImpl::~KFreeSpaceImpl()
     }
 }
 
-bool KFreeSpaceImpl::watch(const QString &dirpath,
-                           const qulonglong checktime, const qulonglong freespace,
-                           const QString &description)
+bool KFreeSpaceImpl::watch(const Solid::Device &soliddevice,
+                           const qulonglong checktime, const qulonglong freespace)
 {
-    // qDebug() << Q_FUNC_INFO << dirpath << checktime << freespace;
-    m_directory = dirpath;
+    // qDebug() << Q_FUNC_INFO << soliddevice.udi() << checktime << freespace;
+    m_soliddevice = soliddevice;
     // NOTE: time from config is in seconds, has to be in ms here
     m_checktime = (qBound(s_kfreespacechecktimemin, checktime, s_kfreespacechecktimemax) * 1000);
     // NOTE: size from config is in MB, has to be in bytes here
     m_freespace = (qBound(s_kfreespacefreespacemin, freespace, s_kfreespacefreespacemax) * 1024 * 1024);
-    m_description = description;
-    if (!QDir(m_directory).exists()) {
-        kWarning() << "Directory does not exist" << m_directory;
-        return false;
-    }
     m_timerid = startTimer(m_checktime);
-    kDebug() << "Checking" << m_directory
+    kDebug() << "Checking" << m_soliddevice.udi()
              << "every" << (m_checktime / 1000)
              << "if space is less or equal to" << KGlobal::locale()->formatByteSize(m_freespace);
     return true;
@@ -69,23 +63,24 @@ void KFreeSpaceImpl::timerEvent(QTimerEvent *event)
     if (event->timerId() == m_timerid) {
         event->accept();
 
-        const KDiskFreeSpaceInfo kdiskinfo = KDiskFreeSpaceInfo::freeSpaceInfo(m_directory);
+        const Solid::StorageAccess* solidaccess = m_soliddevice.as<Solid::StorageAccess>();
+        Q_ASSERT(solidaccess);
+        const QString mountpoint = solidaccess->filePath();
+        const KDiskFreeSpaceInfo kdiskinfo = KDiskFreeSpaceInfo::freeSpaceInfo(mountpoint);
         if (!kdiskinfo.isValid()) {
-            kWarning() << "Disk info is not valid for" << m_directory;
-            killTimer(m_timerid);
-            m_timerid = 0;
+            kDebug() << "Disk info is not valid for" << mountpoint;
             return;
         }
 
         const qulonglong freespace = kdiskinfo.available();
         const QString freespacestring = KGlobal::locale()->formatByteSize(freespace);
-        kDebug() << "Current" << m_directory
+        kDebug() << "Current" << m_soliddevice.udi()
                  << "space is" << freespacestring;
         if (freespace <= m_freespace) {
             KNotification *knotification = new KNotification("WatchLow");
             knotification->setComponentData(KComponentData("kfreespace"));
             knotification->setTitle(i18n("Low Disk Space"));
-            knotification->setText(i18n("%1 has %2 free space", m_description, freespacestring));
+            knotification->setText(i18n("%1 has %2 free space", m_soliddevice.description(), freespacestring));
             knotification->sendEvent();
         }
     } else {
