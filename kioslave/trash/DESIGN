@@ -3,7 +3,7 @@ DESIGN
 kio_trash implements the XDG trash standard currently at http://www.ramendik.ru/docs/trashspec.html
 
 The concurrency that comes from having multiple kioslaves running at the same time
-on top of the same set of files, is solved by the KInterProcessLock class, which
+on top of the same set of files, is solved by the KLockFile class, which
 synchronizes access to shared resources (like the file storing the size of the
 trash directory).
 

@@ -8,7 +8,6 @@ set(trashcommon_PART_SRCS
     trashimpl.cpp
     discspaceutil.cpp
     trashsizecache.cpp
-    kinterprocesslock.cpp
 )
 
 ########### next target ###############
