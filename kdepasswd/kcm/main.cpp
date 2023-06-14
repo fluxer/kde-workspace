@@ -172,7 +172,7 @@ void KCMUserAccount::load()
     QString realName = _kes->getSetting( KEMailSettings::RealName );
 
     if (realName.isEmpty()) {
-        realName = _ku->property(KUser::FullName).toString();
+        realName = _ku->property(KUser::FullName);
     }
 
     _mw->leRealname->setText( realName );

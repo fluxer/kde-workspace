@@ -552,7 +552,7 @@ void Launcher::init()
 
     const QString hostname = QHostInfo::localHostName();
     KUser user;
-    QString fullName = user.property(KUser::FullName).toString();
+    QString fullName = user.property(KUser::FullName);
     QString labelText;
     if (fullName.isEmpty()) {
         labelText = i18nc("login name, hostname", "User <b>%1</b> on <b>%2</b>", user.loginName(), hostname);

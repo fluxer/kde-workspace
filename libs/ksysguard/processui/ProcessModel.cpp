@@ -1100,13 +1100,13 @@ QString ProcessModelPrivate::getTooltipForUser(const KSysGuard::Process *ps) con
         if(!user.isValid())
             userTooltip += i18n("This user is not recognized for some reason.");
         else {
-            if(!user.property(KUser::FullName).isValid())
-                userTooltip += i18n("<b>%1</b><br/>", user.property(KUser::FullName).toString());
+            if(!user.property(KUser::FullName).isEmpty())
+                userTooltip += i18n("<b>%1</b><br/>", user.property(KUser::FullName));
             userTooltip += i18n("Login Name: %1 (uid: %2)<br/>", user.loginName(), QString::number(ps->uid));
-            if(!user.property(KUser::RoomNumber).isValid())
-                userTooltip += i18n("  Room Number: %1<br/>", user.property(KUser::RoomNumber).toString());
-            if(!user.property(KUser::WorkPhone).isValid())
-                userTooltip += i18n("  Work Phone: %1<br/>", user.property(KUser::WorkPhone).toString());
+            if(!user.property(KUser::RoomNumber).isEmpty())
+                userTooltip += i18n("  Room Number: %1<br/>", user.property(KUser::RoomNumber));
+            if(!user.property(KUser::WorkPhone).isEmpty())
+                userTooltip += i18n("  Work Phone: %1<br/>", user.property(KUser::WorkPhone));
         }
     }
     if( (ps->uid != ps->euid && ps->euid != -1) ||
