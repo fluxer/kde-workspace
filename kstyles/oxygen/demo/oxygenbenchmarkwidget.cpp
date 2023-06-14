@@ -64,7 +64,7 @@ namespace Oxygen
 
             // get header and widget
             QString header = model->data( index, Qt::DisplayRole ).toString();
-            QWidget* widget( qvariant_cast<QWidget*>( model->data( index, KPageModel::WidgetRole ) ) );
+            QWidget* widget( qvariant_cast<QWidget*>( model->data( index, KPageView::WidgetRole ) ) );
             DemoWidget* demoWidget( qobject_cast<DemoWidget*>( widget ) );
             if( !demoWidget ) continue;
 
