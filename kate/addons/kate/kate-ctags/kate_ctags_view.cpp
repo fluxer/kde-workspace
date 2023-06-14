@@ -547,7 +547,7 @@ void KateCTagsView::updateSessionDB()
     QString command = QString("%1 -f %2 %3").arg(m_ctagsUi.cmdEdit->text()).arg(m_ctagsUi.tagsFile->text()).arg(targets);
 
     m_proc.setShellCommand(command);
-    m_proc.setOutputChannelMode(KProcess::SeparateChannels);
+    m_proc.setProcessChannelMode(QProcess::SeparateChannels);
     m_proc.start();
 
     if(!m_proc.waitForStarted(500)) {

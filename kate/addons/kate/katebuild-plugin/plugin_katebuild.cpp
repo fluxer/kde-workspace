@@ -616,7 +616,7 @@ bool KateBuildView::startProcess(const KUrl &dir, const QString &command)
     m_make_dir_stack.push(m_make_dir);
     m_proc->setWorkingDirectory(m_make_dir.toLocalFile(KUrl::AddTrailingSlash));
     m_proc->setShellCommand(command);
-    m_proc->setOutputChannelMode(KProcess::SeparateChannels);
+    m_proc->setProcessChannelMode(QProcess::SeparateChannels);
     m_proc->start();
 
     if(!m_proc->waitForStarted(500)) {

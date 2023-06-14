@@ -47,7 +47,7 @@ ClipCommandProcess::ClipCommandProcess(const ClipAction& action, const ClipComma
         map.insert( QChar( '0' + i ), matches.at( i ) );
     }
 
-    setOutputChannelMode(OnlyStdoutChannel);
+    setReadChannel(QProcess::StandardOutput);
     setShellCommand(KMacroExpander::expandMacrosShellQuote( command.command, map ).trimmed());
 
     connect(this, SIGNAL(finished(int,QProcess::ExitStatus)), SLOT(slotFinished(int,QProcess::ExitStatus)));

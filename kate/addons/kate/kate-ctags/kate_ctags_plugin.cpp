@@ -221,7 +221,7 @@ void KateCTagsConfigPage::updateGlobalDB()
     QString command = QString("%1 -f %2 %3").arg(m_confUi.cmdEdit->text()).arg(file).arg(targets) ;
 
     m_proc.setShellCommand(command);
-    m_proc.setOutputChannelMode(KProcess::SeparateChannels);
+    m_proc.setProcessChannelMode(QProcess::SeparateChannels);
     m_proc.start();
 
     if(!m_proc.waitForStarted(500)) {

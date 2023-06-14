@@ -241,8 +241,8 @@ void PluginKateTextFilter::runFilter(KTextEditor::View *kv, const QString &filte
     connect (m_pFilterProcess, SIGNAL(finished(int,QProcess::ExitStatus)),
              this, SLOT(slotFilterProcessExited(int,QProcess::ExitStatus)));
   }
-  m_pFilterProcess->setOutputChannelMode(
-      mergeOutput ? KProcess::MergedChannels : KProcess::SeparateChannels
+  m_pFilterProcess->setProcessChannelMode(
+      mergeOutput ? QProcess::MergedChannels : QProcess::SeparateChannels
     );
 
   slipInFilter(*m_pFilterProcess, *kv, filter);
