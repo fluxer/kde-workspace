@@ -408,8 +408,7 @@ void KonqOperations::asyncDrop( const KFileItem & destItem )
                 else
                 {
                     const bool ro = desktopGroup.readEntry( "ReadOnly", false );
-                    const QByteArray fstype = desktopGroup.readEntry( "FSType" ).toLatin1();
-                    KAutoMount* am = new KAutoMount( ro, fstype, dev, point, m_destUrl.path(), false );
+                    KAutoMount* am = new KAutoMount( ro, dev, point, m_destUrl.path(), false );
                     connect( am, SIGNAL(finished()), this, SLOT(doDropFileCopy()) );
                 }
                 return;

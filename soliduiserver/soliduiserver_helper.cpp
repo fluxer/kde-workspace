@@ -102,47 +102,23 @@ int SolidUiServerHelper::cryptclose(const QVariantMap &parameters)
 int SolidUiServerHelper::mount(const QVariantMap &parameters)
 {
     if (!parameters.contains("device") || !parameters.contains("mountpoint")
-        || !parameters.contains("fstype")) {
+        || !parameters.contains("readonly")) {
         return KAuthorization::HelperError;
     }
 
     const QString device = parameters.value("device").toString();
     const QString mountpoint = parameters.value("mountpoint").toString();
-    const QString fstype = parameters.value("fstype").toString();
-    // qDebug() << Q_FUNC_INFO << device << mountpoint << fstype;
+    const bool readonly = parameters.value("readonly").toBool();
+    // qDebug() << Q_FUNC_INFO << device << mountpoint << readonly;
 
-#ifdef Q_OS_LINUX
-    // NOTE: if the filesystem type is not listed in /proc/filesystems then mount() will fail
-    bool isknownfs = false;
-    const QByteArray fstypebytes = fstype.toLocal8Bit();
-    QFile filesystemsfile(QString::fromLatin1("/proc/filesystems"));
-    if (filesystemsfile.open(QFile::ReadOnly)) {
-        const QByteArray filesystemmatch = QByteArray(" ") + fstypebytes;
-        while (!filesystemsfile.atEnd()) {
-            const QByteArray filesystemsline = filesystemsfile.readLine().trimmed();
-            if (filesystemsline.endsWith(filesystemmatch)) {
-                isknownfs = true;
-                break;
-            }
-        }
+    QStringList mountargs = QStringList() << device << mountpoint;
+    if (readonly) {
+#if defined(Q_OS_SOLARIS)
+        mountargs << QString::fromLatin1("-oro");
+#else
+        mountargs << QString::fromLatin1("-r");
+#endif
     }
-    if (isknownfs) {
-        const QByteArray devicebytes = device.toLocal8Bit();
-        const QByteArray mountpointbytes = mountpoint.toLocal8Bit();
-        const int mountresult = ::mount(
-            devicebytes.constData(), mountpointbytes.constData(), fstypebytes.constData(),
-            0, NULL
-        );
-        if (mountresult == 0) {
-            return KAuthorization::NoError;
-        }
-        const int savederrno = errno;
-        kWarning() << qt_error_string(savederrno);
-        return KAuthorization::HelperError;
-    }
-#endif // Q_OS_LINUX
-
-    const QStringList mountargs = QStringList() << device << mountpoint;
     QProcess mountproc;
     mountproc.start("mount", mountargs);
     mountproc.waitForStarted();
