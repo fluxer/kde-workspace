@@ -33,7 +33,6 @@
 #include <klocale.h>
 
 #include <solid/device.h>
-#include <solid/genericinterface.h>
 #include <solid/storageaccess.h>
 #include <solid/opticaldrive.h>
 #include <solid/devicenotifier.h>
@@ -209,11 +208,8 @@ int main(int argc, char **argv)
 
       std::cout << std::endl << i18n("Syntax:") << std::endl << std::endl;
 
-      std::cout << "  solid-hardware list [details|nonportableinfo]" << std::endl;
+      std::cout << "  solid-hardware list [details]" << std::endl;
       std::cout << i18n("             # List the hardware available in the system.\n"
-                    "             # - If the 'nonportableinfo' option is specified, the device\n"
-                    "             # properties are listed (be careful, in this case property names\n"
-                    "             # are backend dependent),\n"
                     "             # - If the 'details' option is specified, the device interfaces\n"
                     "             # and the corresponding properties are listed in a platform\n"
                     "             # neutral fashion,\n"
@@ -223,9 +219,8 @@ int main(int argc, char **argv)
       std::cout << i18n("             # Display all the interfaces and properties of the device\n"
                     "             # corresponding to 'udi' in a platform neutral fashion.\n") << std::endl;
 
-      std::cout << "  solid-hardware nonportableinfo 'udi'" << std::endl;
-      std::cout << i18n("             # Display all the properties of the device corresponding to 'udi'\n"
-                    "             # (be careful, in this case property names are backend dependent).\n") << std::endl;
+      std::cout << "  solid-hardware 'udi'" << std::endl;
+      std::cout << i18n("             # Display all the properties of the device corresponding to 'udi'.\n") << std::endl;
 
       std::cout << "  solid-hardware query 'predicate' ['parentUdi']" << std::endl;
       std::cout << i18n("             # List the UDI of devices corresponding to 'predicate'.\n"
@@ -266,19 +261,13 @@ bool SolidHardware::doIt()
     {
         checkArgumentCount(1, 2);
         QByteArray extra(args->count()==2 ? args->arg(1).toLocal8Bit() : "");
-        return shell.hwList(extra=="details", extra=="nonportableinfo");
+        return shell.hwList(extra=="details");
     }
     else if (command == "details")
     {
         checkArgumentCount(2, 2);
         QString udi(args->arg(1));
         return shell.hwCapabilities(udi);
-    }
-    else if (command == "nonportableinfo")
-    {
-        checkArgumentCount(2, 2);
-        QString udi(args->arg(1));
-        return shell.hwProperties(udi);
     }
     else if (command == "query")
     {
@@ -324,7 +313,7 @@ bool SolidHardware::doIt()
     return false;
 }
 
-bool SolidHardware::hwList(bool interfaces, bool system)
+bool SolidHardware::hwList(bool interfaces)
 {
     const QList<Solid::Device> all = Solid::Device::allDevices();
 
@@ -335,11 +324,6 @@ bool SolidHardware::hwList(bool interfaces, bool system)
         if (interfaces)
         {
             std::cout << device << std::endl;
-        }
-        else if (system && device.is<Solid::GenericInterface>())
-        {
-            QMap<QString,QVariant> properties = device.as<Solid::GenericInterface>()->allProperties();
-            std::cout << properties << std::endl;
         }
     }
 
@@ -352,19 +336,6 @@ bool SolidHardware::hwCapabilities(const QString &udi)
 
     std::cout << "udi = '" << device.udi() << "'" << std::endl;
     std::cout << device << std::endl;
-
-    return true;
-}
-
-bool SolidHardware::hwProperties(const QString &udi)
-{
-    const Solid::Device device(udi);
-
-    std::cout << "udi = '" << device.udi() << "'" << std::endl;
-    if (device.is<Solid::GenericInterface>()) {
-        QMap<QString,QVariant> properties = device.as<Solid::GenericInterface>()->allProperties();
-        std::cout << properties << std::endl;
-    }
 
     return true;
 }
