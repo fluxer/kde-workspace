@@ -136,8 +136,6 @@ void SolStorageDevice::setDefaultDeviceText()
       deviceText = i18n("Optical Drive"); break;
     case Solid::StorageDrive::MemoryStick:
       deviceText = i18n("Memory Stick Reader"); break;
-    case Solid::StorageDrive::Xd:
-      deviceText = i18n("xD Reader"); break;
     default:
       deviceText = i18n("Unknown Drive");
   }

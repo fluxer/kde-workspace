@@ -176,7 +176,7 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         QStringList bus;
         bus << I18N_NOOP("Ide") << I18N_NOOP("Usb") << I18N_NOOP("Ieee1394") << I18N_NOOP("Scsi") << I18N_NOOP("Sata") << I18N_NOOP("Platform");
         QStringList drivetype;
-        drivetype << I18N_NOOP("Hard Disk") <<  I18N_NOOP("Cdrom Drive") <<  I18N_NOOP("Floppy") <<  I18N_NOOP("Tape") <<  I18N_NOOP("Compact Flash") <<  I18N_NOOP("Memory Stick") <<  I18N_NOOP("Smart Media") <<  I18N_NOOP("SdMmc") <<  I18N_NOOP("Xd");
+        drivetype << I18N_NOOP("Hard Disk") <<  I18N_NOOP("Cdrom Drive") <<  I18N_NOOP("Floppy") <<  I18N_NOOP("Tape") <<  I18N_NOOP("Compact Flash") <<  I18N_NOOP("Memory Stick") <<  I18N_NOOP("Smart Media") <<  I18N_NOOP("SdMmc");
 
         setData(name, I18N_NOOP("Bus"), bus.at((int)storagedrive->bus()));
         setData(name, I18N_NOOP("Drive Type"), drivetype.at((int)storagedrive->driveType()));
