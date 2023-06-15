@@ -35,7 +35,6 @@
 #include <Solid/Block>
 #include <Solid/Button>
 #include <Solid/Camera>
-#include <Solid/GenericInterface>
 #include <Solid/NetworkInterface>
 #include <Solid/PortableMediaPlayer>
 #include <Solid/Processor>
