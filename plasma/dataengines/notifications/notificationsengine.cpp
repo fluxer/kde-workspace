@@ -26,14 +26,13 @@
 #include <KGlobal>
 #include <KNotifyConfigWidget>
 #include <KStandardDirs>
+#include <KIconLoader>
 
 #include <Plasma/DataContainer>
 #include <Plasma/Service>
 
 #include <QImage>
-#include <QtCore/qcoreevent.h>
-
-#include <kiconloader.h>
+#include <QTimerEvent>
 
 // for reference:
 // https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
@@ -282,7 +281,7 @@ QStringList NotificationsEngine::GetCapabilities()
 QString NotificationsEngine::GetServerInformation(QString& vendor, QString& version, QString& specVersion)
 {
     vendor = "KDE";
-    version = "1.0"; // FIXME
+    version = KDE_VERSION_STRING;
     specVersion = "1.2";
     return "Plasma";
 }
