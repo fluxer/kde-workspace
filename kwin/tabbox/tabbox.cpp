@@ -62,8 +62,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
-extern QPixmap* kwin_get_menu_pix_hack();
-
 namespace TabBox
 {
 

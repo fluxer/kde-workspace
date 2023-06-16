@@ -2178,14 +2178,6 @@ void Client::debug(QDebug& stream) const
     print<QDebug>(stream);
 }
 
-QPixmap* kwin_get_menu_pix_hack()
-{
-    static QPixmap p;
-    if (p.isNull())
-        p = SmallIcon("bx2");
-    return &p;
-}
-
 void Client::setSessionInteract(bool needed)
 {
     needsSessionInteract = needed;
