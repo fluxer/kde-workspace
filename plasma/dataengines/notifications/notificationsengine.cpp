@@ -35,6 +35,9 @@
 
 #include <kiconloader.h>
 
+// for reference:
+// https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
+
 NotificationsEngine::NotificationsEngine( QObject* parent, const QVariantList& args )
     : Plasma::DataEngine( parent, args ), m_nextId( 1 )
 {
@@ -195,18 +198,23 @@ uint NotificationsEngine::Notify(const QString &app_name, uint replaces_id,
     notificationData.insert("configurable", configurable);
 
     QImage image;
-    if (hints.contains("image_data")) {
+    if (hints.contains("image_data")) { // v1.1
         QDBusArgument arg = hints["image_data"].value<QDBusArgument>();
         image = decodeNotificationSpecImageHint(arg);
-    } else if (hints.contains("image_path")) {
+    } else if (hints.contains("image-data")) { // v1.2
+        QDBusArgument arg = hints["image-data"].value<QDBusArgument>();
+        image = decodeNotificationSpecImageHint(arg);
+    } else if (hints.contains("image_path")) { // v1.1
         QString path = findImageForSpecImagePath(hints["image_path"].toString());
         if (!path.isEmpty()) {
             image.load(path);
         }
-    } else if (hints.contains("icon_data")) {
-        // This hint was in use in version 1.0 of the spec but has been
-        // replaced by "image_data" in version 1.1. We need to support it for
-        // users of the 1.0 version of the spec.
+    } else if (hints.contains("image-path")) { // v1.2
+        QString path = findImageForSpecImagePath(hints["image-path"].toString());
+        if (!path.isEmpty()) {
+            image.load(path);
+        }
+    } else if (hints.contains("icon_data")) { // v1.0
         QDBusArgument arg = hints["icon_data"].value<QDBusArgument>();
         image = decodeNotificationSpecImageHint(arg);
     }
@@ -275,7 +283,7 @@ QString NotificationsEngine::GetServerInformation(QString& vendor, QString& vers
 {
     vendor = "KDE";
     version = "1.0"; // FIXME
-    specVersion = "1.1";
+    specVersion = "1.2";
     return "Plasma";
 }
 
