@@ -73,15 +73,18 @@ inline void copyLineARGB32(QRgb* dst, const char* src, int width)
 
 static QImage decodeNotificationSpecImageHint(const QDBusArgument& arg)
 {
-    int width, height, rowStride, hasAlpha, bitsPerSample, channels;
+    int width = 0;
+    int height = 0;
+    int rowStride = 0;
+    bool hasAlpha = false;
+    int bitsPerSample = 0;
+    int channels = 0;
     QByteArray pixels;
-    char* ptr;
-    char* end;
 
     arg.beginStructure();
     arg >> width >> height >> rowStride >> hasAlpha >> bitsPerSample >> channels >> pixels;
     arg.endStructure();
-    //kDebug() << width << height << rowStride << hasAlpha << bitsPerSample << channels;
+    // kDebug() << width << height << rowStride << hasAlpha << bitsPerSample << channels;
 
     #define SANITY_CHECK(condition) \
     if (!(condition)) { \
@@ -114,8 +117,8 @@ static QImage decodeNotificationSpecImageHint(const QDBusArgument& arg)
     }
 
     QImage image(width, height, format);
-    ptr = pixels.data();
-    end = ptr + pixels.length();
+    const char* ptr = pixels.constData();
+    const char* end = ptr + pixels.length();
     for (int y=0; y<height; ++y, ptr += rowStride) {
         if (ptr + channels * width > end) {
             kWarning() << "Image data is incomplete. y:" << y << "height:" << height;
