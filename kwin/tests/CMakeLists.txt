@@ -32,6 +32,11 @@ target_link_libraries(kwin-testVirtualDesktops
 ########################################################
 # Test ClientMachine
 ########################################################
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cursor.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION TRUE
+)
+
 set( testClientMachine_SRCS
      test_client_machine.cpp
      ../client_machine.cpp
