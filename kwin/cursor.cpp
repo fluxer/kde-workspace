@@ -245,11 +245,6 @@ xcb_cursor_t X11Cursor::getX11Cursor(Qt::CursorShape shape)
     if (it != m_cursors.constEnd()) {
         return it.value();
     }
-    return createCursor(shape);
-}
-
-xcb_cursor_t X11Cursor::createCursor(Qt::CursorShape shape)
-{
     const QByteArray name = cursorName(shape);
     if (name.isEmpty()) {
         return XCB_CURSOR_NONE;

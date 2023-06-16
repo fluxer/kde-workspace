@@ -199,7 +199,6 @@ private slots:
     void mousePolled();
 private:
     X11Cursor(QObject *parent);
-    xcb_cursor_t createCursor(Qt::CursorShape shape);
     QByteArray cursorName(Qt::CursorShape shape) const;
     QHash<Qt::CursorShape, xcb_cursor_t > m_cursors;
     xcb_timestamp_t m_timeStamp;
