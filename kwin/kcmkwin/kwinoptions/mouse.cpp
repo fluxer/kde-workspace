@@ -275,6 +275,7 @@ static const char* tbl_num_lookup(const char* const arr[], int pos)
     }
     // should never happen this way
     kFatal() << "Something strange happened";
+    return nullptr;
 }
 
 static int tbl_txt_lookup(const char* const arr[], const char* txt)
