@@ -27,19 +27,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <QtGui/QApplication>
 #include <QtGui/QDesktopWidget>
 #include <QtGui/QPainter>
-#include <QtGui/qx11info_x11.h>
+#include <QtGui/QX11Info>
 
 #include <QtDBus/QtDBus>
 #include <klocale.h>
 #include <kstringhandler.h>
-#ifdef Q_WS_X11
-#include <fixx11h.h>
-#endif
 #include <kstyle.h>
 #include <kwindowsystem.h>
 #include <netwm.h>
 
-#undef Bool
 #include "moc_kwindowlistmenu.cpp"
 #include "kwin_interface.h"
 
