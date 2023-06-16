@@ -168,6 +168,7 @@ int Monitor::selectedEdgeItem(int edge) const
             return popup_actions[ edge ].indexOf(act);
     }
     kFatal() << "Something strange happened";
+    return 0;
 }
 
 void Monitor::popup(Corner* c, QPoint pos)

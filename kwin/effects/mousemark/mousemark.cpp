@@ -136,8 +136,8 @@ void MouseMarkEffect::paintScreen(int mask, QRegion region, ScreenPaintData& dat
 }
 
 void MouseMarkEffect::slotMouseChanged(const QPoint& pos, const QPoint&,
-                                   Qt::MouseButtons, Qt::MouseButtons,
-                                   Qt::KeyboardModifiers modifiers, Qt::KeyboardModifiers)
+                                       Qt::MouseButtons, Qt::MouseButtons,
+                                       Qt::KeyboardModifiers modifiers, Qt::KeyboardModifiers)
 {
     if (modifiers == (Qt::META | Qt::SHIFT | Qt::CTRL)) {  // start/finish arrow
         if (arrow_start != NULL_POINT) {
