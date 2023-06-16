@@ -74,8 +74,7 @@ QVariant variantForImage(const QImage &_image)
 	// endianess:
 	// - In big endian the order is A,R,G,B
 	// - In little endian the order is B,G,R,A
-	QByteArray data;
-	data.resize(rowStride * image.height());
+	QByteArray data(rowStride * image.height(), 0);
 	char* dst = data.data();
 	for (int y=0; y<image.height(); ++y) {
 		const QRgb* src = (const QRgb*)image.constScanLine(y);
