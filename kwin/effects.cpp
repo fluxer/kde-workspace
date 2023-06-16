@@ -285,8 +285,7 @@ void EffectsHandlerImpl::reconfigure()
     const KService::List offers = KServiceTypeTrader::self()->query(QString("KWin/Effect"), QString());
     QStringList effectsToBeLoaded;
     QStringList checkDefault;
-    KSharedConfig::Ptr _config = KGlobal::config();
-    KConfigGroup conf(_config, "Plugins");
+    KConfigGroup conf(KGlobal::config(), "Plugins");
 
     // First unload necessary effects
     foreach (const KService::Ptr & service, offers) {
