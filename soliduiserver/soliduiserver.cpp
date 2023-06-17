@@ -268,4 +268,9 @@ int SolidUiServer::unmountUdi(const QString &udi)
     return int(Solid::ErrorType::NoError);
 }
 
+QString SolidUiServer::errorString(const int error)
+{
+    return Solid::errorString(static_cast<Solid::ErrorType>(error));
+}
+
 #include "moc_soliduiserver.cpp"

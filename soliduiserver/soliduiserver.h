@@ -45,6 +45,8 @@ public Q_SLOTS:
     Q_SCRIPTABLE int mountUdi(const QString &udi);
     Q_SCRIPTABLE int unmountUdi(const QString &udi);
 
+    Q_SCRIPTABLE QString errorString(const int error);
+
 private Q_SLOTS:
     void onActionDialogFinished();
 
