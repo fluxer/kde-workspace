@@ -28,7 +28,8 @@ set_target_properties(processui
 
 install(
     TARGETS processui
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 #----------------------
@@ -50,6 +51,5 @@ install(
     ProcessFilter.h
     ksysguardprocesslist.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard
-    COMPONENT Devel
 )
 

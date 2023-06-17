@@ -44,7 +44,8 @@ add_executable(kuiserver ${kuiserver_SRCS})
 target_link_libraries(kuiserver ${KDE4_KIO_LIBS})
 
 install(
-    TARGETS kuiserver ${INSTALL_TARGETS_DEFAULT_ARGS}
+    TARGETS kuiserver
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 install(

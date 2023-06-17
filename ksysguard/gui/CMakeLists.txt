@@ -8,7 +8,8 @@ include_directories(
    ${CMAKE_SOURCE_DIR}/libs
    ${CMAKE_SOURCE_DIR}/libs/ksysguard
    ${CMAKE_SOURCE_DIR}/libs/ksysguard/signalplotter
-   ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore )
+   ${CMAKE_SOURCE_DIR}/libs/ksysguard/processcore
+)
 
 
 ########### next target ###############
@@ -48,19 +49,34 @@ set(ksysguard_SRCS ${libsensordisplays_SRCS}
    Workspace.cpp
    HostConnector.cpp
    StyleEngine.cpp
-   ksysguard.cpp )
-
-
+   ksysguard.cpp
+)
 
 add_executable(ksysguard ${ksysguard_SRCS})
+target_link_libraries(ksysguard
+    ${KDE4_KIO_LIBS}
+    processui ksignalplotter
+    ksgrd
+)
 
-target_link_libraries(ksysguard processui ksignalplotter ${KDE4_KIO_LIBS} ksgrd)
-
-install(TARGETS ksysguard         ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS ksysguard
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install( PROGRAMS ksysguard.desktop  DESTINATION  ${KDE4_XDG_APPS_INSTALL_DIR} )
-install( FILES ProcessTable.sgrd SystemLoad2.sgrd DESTINATION  ${KDE4_DATA_INSTALL_DIR}/ksysguard )
-install( FILES ksysguardui.rc  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/ksysguard )
+install(
+    PROGRAMS ksysguard.desktop
+    DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR}
+)
+install(
+    FILES
+    ProcessTable.sgrd SystemLoad2.sgrd
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksysguard
+)
+install(
+    FILES ksysguardui.rc
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksysguard
+)
 

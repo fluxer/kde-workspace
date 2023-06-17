@@ -27,7 +27,7 @@ endif()
 
 install(
     TARGETS kdialog
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 install(
     FILES org.kde.kdialog.ProgressDialog.xml

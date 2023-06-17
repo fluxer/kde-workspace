@@ -49,7 +49,8 @@ generate_export_header(taskmanager)
 
 install(
     TARGETS taskmanager
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 install(FILES
@@ -65,7 +66,7 @@ install(FILES
     taskitem.h
     taskmanager.h
     ${CMAKE_CURRENT_BINARY_DIR}/taskmanager_export.h
-    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager COMPONENT Devel
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/taskmanager
 )
 
 

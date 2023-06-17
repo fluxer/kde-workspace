@@ -93,7 +93,7 @@ generate_export_header(dolphinprivate)
 
 install(
     TARGETS dolphinprivate
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 ##########################################
@@ -213,7 +213,7 @@ target_link_libraries(dolphin
 
 install(
     TARGETS dolphin
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 ##########################################

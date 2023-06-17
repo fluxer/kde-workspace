@@ -171,7 +171,7 @@ generate_export_header(katepartinterfaces)
 # install kate part interfaces
 install(
     TARGETS katepartinterfaces
-    EXPORT kdelibsLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 # kate part itself just is interfaces + the factory

@@ -30,7 +30,7 @@ target_link_libraries(kaccess
 
 install(
     TARGETS kaccess
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 ########### install files ###############

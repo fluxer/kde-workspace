@@ -43,18 +43,27 @@ target_link_libraries(plasma-desktop
     ${KDE4_KIDLETIME_LIBS}
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
+    ${X11_LIBRARIES}
     kworkspace
     plasmagenericshell
 )
 
-if(UNIX AND Q_WS_X11)
-    target_link_libraries(plasma-desktop ${X11_LIBRARIES})
-endif(UNIX AND Q_WS_X11)
-
-install(TARGETS plasma-desktop ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES data/plasma-desktop.desktop DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR})
-install(FILES data/plasma-shell-desktop.kcfg  DESTINATION  ${KDE4_KCFG_INSTALL_DIR})
-install(FILES data/plasma-desktop-js.xml DESTINATION ${KDE4_DATA_INSTALL_DIR}/katepart/syntax/)
+install(
+    TARGETS plasma-desktop
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
+install(
+    FILES data/plasma-desktop.desktop
+    DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR}
+)
+install(
+    FILES data/plasma-shell-desktop.kcfg
+    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
+)
+install(
+    FILES data/plasma-desktop-js.xml
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/katepart/syntax/
+)
 install(
     FILES data/plasma-desktoprc
     DESTINATION ${KDE4_CONFIG_INSTALL_DIR}

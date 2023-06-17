@@ -25,5 +25,5 @@ generate_export_header(kbookmarkmodel_private BASE_NAME KBOOKMARKMODEL)
 
 install(
     TARGETS kbookmarkmodel_private
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )

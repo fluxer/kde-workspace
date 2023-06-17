@@ -37,7 +37,8 @@ generate_export_header(kworkspace)
 
 install(
     TARGETS kworkspace
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 install(
@@ -47,5 +48,4 @@ install(
     kworkspace.h
     ${CMAKE_CURRENT_BINARY_DIR}/kworkspace_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/kworkspace
-    COMPONENT Devel
 )

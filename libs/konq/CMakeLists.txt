@@ -31,7 +31,11 @@ set_target_properties(konq PROPERTIES
     SOVERSION ${GENERIC_LIB_SOVERSION}
 )
 
-install(TARGETS konq EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS konq
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
 
 ########### install files ###############
 
@@ -53,9 +57,9 @@ install(FILES
     konqmimedata.h
     kversioncontrolplugin.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}
-    COMPONENT Devel
 )
-install(FILES
+install(
+    FILES
     konqpopupmenuplugin.desktop
     konqdndpopupmenuplugin.desktop
     DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR}

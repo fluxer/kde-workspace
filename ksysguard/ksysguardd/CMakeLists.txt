@@ -49,5 +49,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "DragonFly")
 endif()
 
 install(
-    TARGETS ksysguardd ${INSTALL_TARGETS_DEFAULT_ARGS}
+    TARGETS ksysguardd
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )

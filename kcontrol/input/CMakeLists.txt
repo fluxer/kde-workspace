@@ -8,11 +8,10 @@ configure_file (
     ${CMAKE_CURRENT_BINARY_DIR}/config-kcontrol-input.h
 )
 
-include_directories( ${KDE4_INCLUDES} )
-
+include_directories(${KDE4_INCLUDES})
 
 if (LIBUSB_FOUND)
-  include_directories( ${LIBUSB_INCLUDES} )
+  include_directories(${LIBUSB_INCLUDES})
 endif (LIBUSB_FOUND)
 
 
@@ -51,7 +50,10 @@ if (X11_Xcursor_FOUND)
    target_link_libraries(kapplymousetheme ${X11_Xcursor_LIB})
 endif (X11_Xcursor_FOUND)
 
-install(TARGETS kapplymousetheme ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS kapplymousetheme
+    DESTINATION ${KDE_BIN_INSTALL_DIR}
+)
 
 
 ########### next target ###############

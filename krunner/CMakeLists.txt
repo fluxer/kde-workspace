@@ -55,21 +55,30 @@ set(krunner_SRCS
 add_executable(krunner ${krunner_SRCS})
 
 target_link_libraries(krunner
-    kworkspace
-    plasmagenericshell
-    processui
     ${KDE4_PLASMA_LIBS}
     ${KDE4_SOLID_LIBRARIES}
     ${KDE4_KDEUI_LIBS}
     ${KDE4_KCMUTILS_LIBS}
     ${X11_X11_LIB}
+    kworkspace
+    plasmagenericshell
+    processui
 )
 
 if(X11_Xcursor_FOUND)
     target_link_libraries(krunner ${X11_Xcursor_LIB})
 endif()
 
-install(TARGETS krunner         ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install(
+    TARGETS krunner
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
-install(FILES krunner.desktop  DESTINATION  ${KDE4_AUTOSTART_INSTALL_DIR})
-install(FILES ${krunner_dbusAppXML} DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR} )
+install(
+    FILES krunner.desktop
+    DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR}
+)
+install(
+    FILES ${krunner_dbusAppXML}
+    DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR}
+)

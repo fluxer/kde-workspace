@@ -38,7 +38,10 @@ target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
 
 generate_export_header(kickoff)
 
-install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS kickoff
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
 
 #######################################################################################
 # Kickoff Plasma Applet
@@ -119,5 +122,5 @@ install(
 #    set(Application_SRCS ${Kickoff_SRCS} main.cpp)
 #    add_executable(kickoff ${Application_SRCS})
 #    target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
-#    install(TARGETS kickoff ${INSTALL_TARGETS_DEFAULT_ARGS})
+#    install(TARGETS kickoff DESTINATION ${KDE4_BIN_INSTALL_DIR})
 #ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)

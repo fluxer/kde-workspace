@@ -22,7 +22,7 @@ target_link_libraries(kfind
 
 install(
     TARGETS kfind
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 ########### install files ###############

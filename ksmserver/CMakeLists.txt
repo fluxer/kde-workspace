@@ -21,13 +21,13 @@ configure_file(config-ksmserver.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksmse
 ########### next target ###############
 
 set(ksmserver_SRCS
-   main.cpp
-   server.cpp
-   shutdowndlg.cpp
-   legacy.cpp
-   startup.cpp
-   shutdown.cpp
-   client.cpp
+    main.cpp
+    server.cpp
+    shutdowndlg.cpp
+    legacy.cpp
+    startup.cpp
+    shutdown.cpp
+    client.cpp
 )
 
 set(kcminit_adaptor ${CMAKE_SOURCE_DIR}/kcminit/main.h)
@@ -44,9 +44,9 @@ qt4_add_dbus_interface( ksmserver_SRCS ${kcminit_xml} kcminit_interface )
 # set(klauncher_xml  ${KDE4_DBUS_INTERFACES_INSTALL_DIR}/org.kde.KLauncher.xml)
 # qt4_add_dbus_interface( ksmserver_SRCS ${klauncher_xml} klauncher_interface )
 
-qt4_add_dbus_adaptor( ksmserver_SRCS org.kde.KSMServerInterface.xml server.h KSMServer )
+qt4_add_dbus_adaptor(ksmserver_SRCS org.kde.KSMServerInterface.xml server.h KSMServer)
 
-add_executable( ksmserver ${ksmserver_SRCS})
+add_executable(ksmserver ${ksmserver_SRCS})
 
 target_link_libraries(ksmserver
     ${KDE4_PLASMA_LIBS}
@@ -59,20 +59,32 @@ target_link_libraries(ksmserver
     kworkspace
 )
 
-install(TARGETS ksmserver ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS ksmserver
+        DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
 ########### next target ###############
 
 set(kcheckrunning_SRCS
-   kcheckrunning.cpp)
+   kcheckrunning.cpp
+)
 
-add_executable( kcheckrunning ${kcheckrunning_SRCS})
-
+add_executable(kcheckrunning ${kcheckrunning_SRCS})
 target_link_libraries(kcheckrunning ${X11_LIBRARIES})
 
-install(TARGETS kcheckrunning ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS kcheckrunning
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install( FILES org.kde.KSMServerInterface.xml DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
-install( DIRECTORY themes/ DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/themes )
+install(
+    FILES org.kde.KSMServerInterface.xml
+    DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR}
+)
+install(
+    DIRECTORY themes/
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/themes
+)

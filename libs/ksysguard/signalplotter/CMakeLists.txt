@@ -3,7 +3,6 @@ set(ksignalplotter_LIB_SRCS
 )
 
 add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})
-
 target_link_libraries(ksignalplotter PUBLIC ${KDE4_KDEUI_LIBS})
 
 set_target_properties(ksignalplotter
@@ -13,7 +12,8 @@ set_target_properties(ksignalplotter
 
 install(
     TARGETS ksignalplotter
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 #----------------------
@@ -22,7 +22,10 @@ kde4_add_widget(ksignalplotterwidgets_SRCS ksignalplotter.widgets)
 
 kde4_add_plugin(ksignalplotterwidgets ${ksignalplotterwidgets_SRCS} ${ksignalplotterwidgets_PART_SRCS})
 
-target_link_libraries(ksignalplotterwidgets ${KDE4_KDEUI_LIBS} ksignalplotter)
+target_link_libraries(ksignalplotterwidgets
+    ${KDE4_KDEUI_LIBS}
+    ksignalplotter
+)
 
 install(
     TARGETS ksignalplotterwidgets
@@ -32,5 +35,4 @@ install(
 install(
     FILES ksignalplotter.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard
-    COMPONENT Devel
 )

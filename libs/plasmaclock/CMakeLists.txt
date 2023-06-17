@@ -30,9 +30,9 @@ install(
     calendartable.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaclock_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasmaclock
-    COMPONENT Devel
 )
 install(
     TARGETS plasmaclock
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )

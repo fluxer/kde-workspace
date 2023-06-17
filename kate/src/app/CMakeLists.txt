@@ -26,8 +26,6 @@ set(kateinterfaces_LIB_SRCS
     katequickopen.cpp
 )
 
-
-
 add_library(kateinterfaces SHARED ${kateinterfaces_LIB_SRCS})
 
 target_link_libraries(kateinterfaces PUBLIC
@@ -54,14 +52,16 @@ target_link_libraries(kate
 generate_export_header(kateinterfaces BASE_NAME kate)
 
 install(
-    TARGETS
-    kateinterfaces
-    kate
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    TARGETS kateinterfaces
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
+
+install(
+    TARGETS kate
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/kate_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}
-    COMPONENT Devel
 )

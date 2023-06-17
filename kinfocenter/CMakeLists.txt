@@ -46,12 +46,23 @@ set( kinfocenter_SRCS
     ToolTips/tooltipmanager.cpp
 )
 
-add_executable( kinfocenter ${kinfocenter_SRCS} )
+add_executable(kinfocenter ${kinfocenter_SRCS} )
 
-target_link_libraries( kinfocenter ${KDE4_KFILE_LIBS} ${KDE4_KCMUTILS_LIBS} )
+target_link_libraries(kinfocenter
+    ${KDE4_KFILE_LIBS}
+    ${KDE4_KCMUTILS_LIBS}
+)
 
 ##install
-
-install( TARGETS kinfocenter          ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( PROGRAMS kinfocenter.desktop  DESTINATION  ${KDE4_XDG_APPS_INSTALL_DIR} )
-INSTALL( FILES kinfocenterui.rc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kinfocenter )
+install(
+    TARGETS kinfocenter
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
+install(
+    PROGRAMS kinfocenter.desktop
+    DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR}
+)
+INSTALL(
+    FILES kinfocenterui.rc
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kinfocenter
+)

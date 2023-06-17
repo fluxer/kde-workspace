@@ -195,13 +195,25 @@ if(X11_xf86vmode_FOUND)
     target_link_libraries(kwin ${X11_Xxf86vm_LIB})
 endif()
 
-install(TARGETS kwin ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS kwin
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install(FILES kwin.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
-install(FILES kwin.notifyrc DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin)
-install(FILES org.kde.KWin.xml DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR})
+install(
+    FILES kwin.kcfg
+    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
+)
+install(
+    FILES kwin.notifyrc
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin
+)
+install(
+    FILES org.kde.KWin.xml
+    DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR}
+)
 
 kde4_install_icons(${KDE4_ICON_INSTALL_DIR})
 

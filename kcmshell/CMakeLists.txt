@@ -9,5 +9,6 @@ target_link_libraries(kcmshell4
 
 install(
     TARGETS kcmshell4
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+    COMPONENT RUNTIME
 )

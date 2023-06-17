@@ -69,6 +69,13 @@ install(
     PATTERN "Messages.sh" EXCLUDE
 )
 
-install(TARGETS plasmagenericshell EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
-INSTALL(FILES plasma-layout-template.desktop DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR})
+install(
+    TARGETS plasmagenericshell
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
+install(
+    FILES plasma-layout-template.desktop
+    DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR}
+)
 

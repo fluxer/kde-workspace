@@ -17,7 +17,7 @@ generate_export_header(weather_ion BASE_NAME ion)
 install(
     TARGETS weather_ion
     EXPORT kdeworkspaceLibraryTargets
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 install(
@@ -25,13 +25,11 @@ install(
     ion.h
     ${CMAKE_CURRENT_BINARY_DIR}/ion_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/weather
-    COMPONENT Devel
 )
 
 install(
     FILES includes/Ion
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Weather
-    COMPONENT Devel
 )
 
 # the individual ion plugins

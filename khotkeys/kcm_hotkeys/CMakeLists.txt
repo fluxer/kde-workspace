@@ -60,35 +60,31 @@ set(
 
     # ACTION_DATA WIDGETS
     hotkeys_widget_base.ui
-    )
+)
 
 qt4_add_dbus_interface(
     kcm_hotkeys_PART_SRCS
     ${CMAKE_CURRENT_BINARY_DIR}/../app/org.kde.khotkeys.xml
-    khotkeys_interface)
+    khotkeys_interface
+)
 
-
-kde4_add_plugin(
-    kcm_hotkeys
-    ${kcm_hotkeys_PART_SRCS}
-    )
+kde4_add_plugin(kcm_hotkeys ${kcm_hotkeys_PART_SRCS})
 
 add_dependencies(kcm_hotkeys kded_khotkeys)
 
-target_link_libraries(
-    kcm_hotkeys
-    khotkeysprivate
+target_link_libraries(kcm_hotkeys
     ${KDE4_KIO_LIBS}
     ${QT_QTGUI_LIBRARY}
     ${X11_X11_LIB}
-    )
+    khotkeysprivate
+)
 
 install(
     TARGETS kcm_hotkeys
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
-    )
+)
 
 install(
     FILES khotkeys.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
-    )
+)

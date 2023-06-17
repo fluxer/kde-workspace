@@ -26,7 +26,10 @@ target_link_libraries(knotify4
     ${KDE4_KMEDIAPLAYER_LIBS}
 )
 
-install(TARGETS knotify4 ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS knotify4
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 

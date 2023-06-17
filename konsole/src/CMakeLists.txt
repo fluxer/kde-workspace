@@ -161,8 +161,13 @@ target_link_libraries(konsole PRIVATE konsoleprivate)
 generate_export_header(konsoleprivate)
 
 install(
-    TARGETS konsole konsoleprivate
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    TARGETS konsole
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
+
+install(
+    TARGETS konsoleprivate
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 ### Embedded Konsole KPart

@@ -27,7 +27,13 @@ target_link_libraries(kwin3_oxygen
     oxygenstyle
 )
 
-install(TARGETS kwin3_oxygen DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(
+    TARGETS kwin3_oxygen
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
 
 ########### install files ###############
-install(FILES oxygenclient.desktop DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin)
+install(
+    FILES oxygenclient.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin
+)

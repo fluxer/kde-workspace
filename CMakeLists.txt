@@ -5,8 +5,7 @@ include(CheckFunctionExists)
 include(GenerateExportHeader)
 include(FeatureSummary)
 
-find_package(KDE4 4.23.0 REQUIRED)
-include(KDE4Defaults)
+find_package(KDELibs4 4.23.0 REQUIRED)
 
 # kdelibs requires 0.91
 find_package(SharedMimeInfo 0.91)
@@ -392,16 +391,16 @@ configure_file(
     @ONLY
 )
 configure_file(
-    KDE4WorkspaceVersion.cmake.in
-    "${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake"
+    KDE4WorkspaceConfigVersion.cmake.in
+    "${CMAKE_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake"
     @ONLY
 )
 
 install(
     FILES
     ${CMAKE_BINARY_DIR}/KDE4WorkspaceConfig.cmake
-    ${CMAKE_BINARY_DIR}/KDE4WorkspaceVersion.cmake
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules
+    ${CMAKE_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/KDE4Workspace
 )
 
 install(

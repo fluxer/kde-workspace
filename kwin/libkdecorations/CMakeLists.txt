@@ -13,15 +13,21 @@ target_link_libraries(kdecorations PRIVATE ${KDE4_KDEUI_LIBS})
 target_link_libraries(kdecorations PUBLIC ${KDE4_KDEUI_LIBS})
 
 set_target_properties(kdecorations PROPERTIES
-   VERSION ${GENERIC_LIB_VERSION}
-   SOVERSION ${GENERIC_LIB_SOVERSION}
-   )
-install(TARGETS kdecorations EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS} )
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
+install(
+    TARGETS kdecorations
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install( FILES
+install(
+    FILES
     kdecoration.h
     kdecorationfactory.h
     kcommondecoration.h
-    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} COMPONENT Devel )
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}
+)

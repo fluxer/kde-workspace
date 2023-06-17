@@ -21,4 +21,7 @@ target_link_libraries(oxygen-shadow-demo
 )
 
 ########### install files ###############
-install(TARGETS oxygen-shadow-demo ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS oxygen-shadow-demo
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)

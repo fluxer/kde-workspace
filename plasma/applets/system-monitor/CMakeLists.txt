@@ -98,7 +98,7 @@ target_link_libraries(plasma_applet_system-monitor ${KDE4_PLASMA_LIBS} ${KDE4_KD
 # Install
 install(
     TARGETS plasma_applet-system-monitor
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 install(
     TARGETS

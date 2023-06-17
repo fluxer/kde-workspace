@@ -21,7 +21,7 @@ target_link_libraries(kdepasswd
 
 install(
     TARGETS kdepasswd
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 install(
     PROGRAMS kdepasswd.desktop

@@ -30,10 +30,19 @@ target_link_libraries(klipper
     ${X11_LIBRARIES}
 )
 if (X11_Xfixes_FOUND)
-  target_link_libraries(klipper ${X11_Xfixes_LIB})
+    target_link_libraries(klipper ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
 
-install(TARGETS klipper ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS klipper
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
+)
 
-install(PROGRAMS klipper.desktop DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR})
-install(PROGRAMS klipper.desktop DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR})
+install(
+    PROGRAMS klipper.desktop
+    DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR}
+)
+install(
+    PROGRAMS klipper.desktop
+    DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR}
+)

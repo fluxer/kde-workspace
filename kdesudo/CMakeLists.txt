@@ -32,5 +32,5 @@ target_link_libraries(kdesudo
 
 install(
     TARGETS kdesudo
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )

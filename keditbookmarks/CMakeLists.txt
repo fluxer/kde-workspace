@@ -10,9 +10,8 @@ target_link_libraries(kbookmarkmerger ${KDE4_KIO_LIBS})
 
 install(
     TARGETS kbookmarkmerger
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
-
 
 ########### next target ###############
 
@@ -58,7 +57,7 @@ target_link_libraries(keditbookmarks
 
 install(
     TARGETS keditbookmarks
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 ########### install files ###############

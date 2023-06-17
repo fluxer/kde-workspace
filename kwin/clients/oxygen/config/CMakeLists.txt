@@ -1,4 +1,6 @@
-include_directories( ${CMAKE_SOURCE_DIR}/libs/oxygen)
+include_directories(
+    ${CMAKE_SOURCE_DIR}/libs/oxygen
+)
 
 set(kwin_oxygen_config_PART_SRCS
     oxygenconfig.cpp
@@ -10,7 +12,7 @@ set(kwin_oxygen_config_PART_SRCS
     ../oxygenexceptionlist.cpp
 )
 
-kde4_add_kcfg_files(kwin_oxygen_config_PART_SRCS ../oxygenconfiguration.kcfgc )
+kde4_add_kcfg_files(kwin_oxygen_config_PART_SRCS ../oxygenconfiguration.kcfgc)
 
 kde4_add_plugin(kwin_oxygen_config ${kwin_oxygen_config_PART_SRCS})
 
@@ -22,4 +24,7 @@ target_link_libraries(kwin_oxygen_config
     oxygenstyleconfig
 )
 
-install(TARGETS kwin_oxygen_config DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(
+    TARGETS kwin_oxygen_config
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)

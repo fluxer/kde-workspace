@@ -16,19 +16,20 @@ set_target_properties(plasma-geolocation-interface PROPERTIES
 
 generate_export_header(plasma-geolocation-interface BASE_NAME geolocation)
 
-install(TARGETS plasma-geolocation-interface ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS plasma-geolocation-interface
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
 
 install(
     FILES
     geolocationprovider.h
     ${CMAKE_CURRENT_BINARY_DIR}/geolocation_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/geolocation
-    COMPONENT Devel
 )
 
 #install(FILES includes/Interface
-#        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Geolocation
-#        COMPONENT Devel)
+#        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Geolocation)
 # -------------------------------------------------------------------------------------------------
 
 set(plasma_dataengine_geolocation_SRCS geolocation.cpp)

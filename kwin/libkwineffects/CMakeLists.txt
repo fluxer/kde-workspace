@@ -38,13 +38,22 @@ target_link_libraries(kwineffects PRIVATE
     ${kwineffects_XLIB_LIBS}
     ${kwineffects_XCB_LIBS}
 )
-set_target_properties(kwineffects PROPERTIES VERSION ${GENERIC_LIB_VERSION} SOVERSION ${GENERIC_LIB_SOVERSION})
+set_target_properties(kwineffects PROPERTIES
+    VERSION ${GENERIC_LIB_VERSION}
+    SOVERSION ${GENERIC_LIB_SOVERSION}
+)
 
-install(TARGETS kwineffects EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(
+    TARGETS kwineffects
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+)
 
-install( FILES
+install(
+    FILES
     kwinglobals.h
     kwineffects.h
     kwinanimationeffect.h
     kwinxrenderutils.h
-    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR} COMPONENT Devel)
+    DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}
+)

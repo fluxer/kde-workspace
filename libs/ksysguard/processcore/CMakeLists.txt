@@ -26,7 +26,8 @@ set_target_properties(processcore PROPERTIES
 
 install(
     TARGETS processcore
-    EXPORT kdeworkspaceLibraryTargets ${INSTALL_TARGETS_DEFAULT_ARGS}
+    EXPORT kdeworkspaceLibraryTargets
+    DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
 ########### install files ###############
@@ -36,7 +37,6 @@ install(
     processes.h
     process.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/ksysguard
-    COMPONENT Devel
 )
 
 #------ KAuth stuff

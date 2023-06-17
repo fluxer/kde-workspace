@@ -12,7 +12,7 @@ target_link_libraries(kcminit
 
 install(
     TARGETS kcminit
-    ${INSTALL_TARGETS_DEFAULT_ARGS}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 # write a cmake script file which creates the symlink
