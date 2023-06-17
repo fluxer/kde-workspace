@@ -10,10 +10,10 @@ qt4_generate_dbus_interface(kded_kfreespace.h org.kde.kfreespace.xml )
 
 kde4_add_plugin(kded_kfreespace ${kded_kfreespace_SRCS})
 target_link_libraries(kded_kfreespace PRIVATE
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kdecore
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::solid
 )
 
 install(

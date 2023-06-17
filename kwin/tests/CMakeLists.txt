@@ -24,7 +24,7 @@ set( testVirtualDesktops_SRCS
 kde4_add_test(kwin-testVirtualDesktops ${testVirtualDesktops_SRCS})
 
 target_link_libraries(kwin-testVirtualDesktops
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${QT_QTCORE_LIBRARY}
     ${QT_QTTEST_LIBRARY}
 )
@@ -49,7 +49,7 @@ kde4_add_test(kwin-testClientMachine ${testClientMachine_SRCS})
 target_link_libraries(kwin-testClientMachine
     ${QT_QTTEST_LIBRARY}
     ${QT_QTCORE_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${XCB_XCB_LIBRARIES}
     ${XCB_XFIXES_LIBRARIES}
     ${X11_XCB_LIBRARIES}

@@ -13,7 +13,7 @@ include_directories(
 
 add_library(graphicswidgetsbindingsplugin SHARED ${graphicswidgetsbindings_SRCS})
 target_link_libraries(graphicswidgetsbindingsplugin
-    ${KDE4_PLASMA_LIBS}
+    KDE4::plasma
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
 )

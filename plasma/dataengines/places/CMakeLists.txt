@@ -8,9 +8,9 @@ kde4_add_plugin(plasma_engine_places ${places_engine_SRCS})
 
 target_link_libraries(plasma_engine_places
     plasma
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kio
+    KDE4::kfile
+    KDE4::solid
 )
 
 install(

@@ -13,7 +13,7 @@ kde4_add_kcfg_files(kstyle_oxygen_config_PART_SRCS ../oxygenstyleconfigdata.kcfg
 kde4_add_plugin(kstyle_oxygen_config ${kstyle_oxygen_config_PART_SRCS})
 
 target_link_libraries(kstyle_oxygen_config
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     oxygenstyleconfig
 )
 
@@ -30,7 +30,7 @@ set(oxygen_settings_SOURCES
 
 add_executable(oxygen-settings ${oxygen_settings_SOURCES})
 target_link_libraries(oxygen-settings
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
 )

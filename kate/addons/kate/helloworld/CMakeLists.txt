@@ -1,7 +1,7 @@
 kde4_add_plugin(katehelloworldplugin plugin_katehelloworld.cpp)
 
 target_link_libraries(katehelloworldplugin
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     kateinterfaces
 )
 

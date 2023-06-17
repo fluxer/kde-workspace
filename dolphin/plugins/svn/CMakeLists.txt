@@ -6,7 +6,7 @@ kde4_add_kcfg_files(fileviewsvnplugin_SRCS fileviewsvnpluginsettings.kcfgc)
 
 kde4_add_plugin(fileviewsvnplugin  ${fileviewsvnplugin_SRCS})
 
-target_link_libraries(fileviewsvnplugin ${KDE4_KIO_LIBS} konq)
+target_link_libraries(fileviewsvnplugin KDE4::kio konq)
 
 install(
     FILES fileviewsvnplugin.desktop

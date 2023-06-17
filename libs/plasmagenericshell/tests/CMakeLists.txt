@@ -13,9 +13,9 @@ set(appletexplorer_SRCS
 )
 add_executable(plasmaappletexplorer ${appletexplorer_SRCS})
 target_link_libraries(plasmaappletexplorer
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::plasma
+    KDE4::kdeui
+    KDE4::kfile
     ${QT_QTDECLARATIVE_LIBRARY}
 )
 
@@ -34,5 +34,5 @@ set(backgrounddialog_SRCS
 kde4_add_kcfg_files(backgrounddialog_SRCS ${CMAKE_SOURCE_DIR}/plasma/shells/plasma-desktop/data/plasma-shell-desktop.kcfgc)
 
 add_executable(plasmabackgrounddialog ${backgrounddialog_SRCS})
-target_link_libraries(plasmabackgrounddialog ${KDE4_PLASMA_LIBS} ${QT_QTUITOOLS_LIBRARY} ${KDE4_KFILE_LIBS} kworkspace)
+target_link_libraries(plasmabackgrounddialog KDE4::plasma ${QT_QTUITOOLS_LIBRARY} KDE4::kfile kworkspace)
 

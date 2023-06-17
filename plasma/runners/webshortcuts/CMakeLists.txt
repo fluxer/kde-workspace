@@ -3,7 +3,7 @@ set(krunner_webshortcuts_SRCS
 )
 
 kde4_add_plugin(krunner_webshortcuts ${krunner_webshortcuts_SRCS})
-target_link_libraries(krunner_webshortcuts ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS})
+target_link_libraries(krunner_webshortcuts KDE4::kio KDE4::plasma)
 
 install(TARGETS krunner_webshortcuts DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 

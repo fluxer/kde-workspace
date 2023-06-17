@@ -20,8 +20,8 @@ set_source_files_properties(
 kde4_add_plugin(kcm_kio ${kcm_kio_PART_SRCS})
 
 target_link_libraries(kcm_kio
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kcmutils
+    KDE4::kio
 )
 
 install(

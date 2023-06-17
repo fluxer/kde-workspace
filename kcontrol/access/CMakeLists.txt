@@ -3,8 +3,8 @@
 kde4_add_plugin(kcm_access kcmaccess.cpp)
 
 target_link_libraries(kcm_access
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
+    KDE4::kio
+    KDE4::knotifyconfig
     ${X11_LIBRARIES}
 )
 
@@ -24,7 +24,7 @@ set(kaccess_SRCS
 add_executable(kaccess ${kaccess_SRCS})
 
 target_link_libraries(kaccess
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${X11_LIBRARIES}
 )
 

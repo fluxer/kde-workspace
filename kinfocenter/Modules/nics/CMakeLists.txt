@@ -5,7 +5,7 @@ set(kcm_nic_PART_SRCS nic.cpp )
 kde4_add_plugin(kcm_nic ${kcm_nic_PART_SRCS})
 
 target_link_libraries(kcm_nic
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTNETWORK_LIBRARY}
 )
 

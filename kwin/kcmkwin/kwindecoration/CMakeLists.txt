@@ -22,7 +22,7 @@ set(kcm_kwindecoration_PART_SRCS
 
 kde4_add_plugin(kcm_kwindecoration ${kcm_kwindecoration_PART_SRCS})
 target_link_libraries(kcm_kwindecoration
-    ${KDE4_PLASMA_LIBS}
+    KDE4::plasma
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
     ${X11_LIBRARIES}

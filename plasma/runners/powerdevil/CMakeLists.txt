@@ -7,7 +7,7 @@ set(krunner_powerdevil_SRCS
 )
 
 kde4_add_plugin(krunner_powerdevil ${krunner_powerdevil_SRCS})
-target_link_libraries(krunner_powerdevil ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${KDE4_PLASMA_LIBS} ${KDE4_SOLID_LIBS})
+target_link_libraries(krunner_powerdevil KDE4::kdeui KDE4::kio KDE4::plasma KDE4::solid)
 
 install(TARGETS krunner_powerdevil DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 

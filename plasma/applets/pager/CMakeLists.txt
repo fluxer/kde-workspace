@@ -14,9 +14,9 @@ set(pager_SRCS
 
 kde4_add_plugin(plasma_applet_pager ${pager_SRCS})
 target_link_libraries(plasma_applet_pager
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kio
+    KDE4::plasma
+    KDE4::kcmutils
     ${QT_QTDECLARATIVE_LIBRARY}
     taskmanager
 )

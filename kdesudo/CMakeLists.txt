@@ -22,7 +22,7 @@ set(KDESUDO_SRC
 add_executable(kdesudo ${KDESUDO_SRC})
 
 target_link_libraries(kdesudo
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
 )
 
 install(

@@ -6,7 +6,7 @@ add_subdirectory(kbookmarkmodel)
 
 add_executable(kbookmarkmerger kbookmarkmerger.cpp)
 
-target_link_libraries(kbookmarkmerger ${KDE4_KIO_LIBS})
+target_link_libraries(kbookmarkmerger KDE4::kio)
 
 install(
     TARGETS kbookmarkmerger
@@ -50,7 +50,7 @@ kde4_add_kcfg_files(keditbookmarks_SRCS settings.kcfgc)
 add_executable(keditbookmarks ${keditbookmarks_SRCS})
 
 target_link_libraries(keditbookmarks
-    ${KDE4_KPARTS_LIBS}
+    KDE4::kparts
     kbookmarkmodel_private
     konq
 )

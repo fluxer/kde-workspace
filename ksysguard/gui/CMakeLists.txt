@@ -54,7 +54,7 @@ set(ksysguard_SRCS ${libsensordisplays_SRCS}
 
 add_executable(ksysguard ${ksysguard_SRCS})
 target_link_libraries(ksysguard
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     processui ksignalplotter
     ksgrd
 )

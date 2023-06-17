@@ -7,7 +7,7 @@ set(kdebugconfig_SRCS
 
 kde4_add_plugin(kcm_kdebugconfig ${kdebugconfig_SRCS})
 
-target_link_libraries(kcm_kdebugconfig ${KDE4_KDEUI_LIBS} ${KDE4_KCMUTILS_LIBS})
+target_link_libraries(kcm_kdebugconfig KDE4::kdeui KDE4::kcmutils)
 
 install(TARGETS kcm_kdebugconfig DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 

@@ -7,8 +7,8 @@ set(kdirshareplugin_PART_SRCS
 
 kde4_add_plugin(kdirshareplugin ${kdirshareplugin_PART_SRCS})
 target_link_libraries(kdirshareplugin
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
+    KDE4::kio
     ${QT_QTDBUS_LIBRARY}
 )
 

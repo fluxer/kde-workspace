@@ -24,8 +24,8 @@ target_link_libraries(kworkspace PRIVATE
 )
 
 target_link_libraries(kworkspace PUBLIC
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
 )
 
 set_target_properties(kworkspace PROPERTIES

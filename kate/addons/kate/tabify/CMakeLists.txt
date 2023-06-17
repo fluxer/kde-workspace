@@ -1,8 +1,8 @@
 kde4_add_plugin(katetabifyplugin tabify.cpp)
 
 target_link_libraries(katetabifyplugin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KDE4::kdeui
+    KDE4::kparts
     kateinterfaces
 )
 

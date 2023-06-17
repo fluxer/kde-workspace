@@ -19,15 +19,15 @@ endif( QALCULATE_FOUND )
 
 kde4_add_plugin(krunner_calculatorrunner ${krunner_calculatorrunner_SRCS})
 target_link_libraries(krunner_calculatorrunner
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
     ${QT_QTSCRIPT_LIBRARY}
 )
 
 if ( QALCULATE_FOUND )
     target_link_libraries(krunner_calculatorrunner
-        ${KDE4_SOLID_LIBS}
-        ${KDE4_KIO_LIBS}
+        KDE4::solid
+        KDE4::kio
         ${QALCULATE_LIBRARIES}
     )
 endif ( QALCULATE_FOUND )

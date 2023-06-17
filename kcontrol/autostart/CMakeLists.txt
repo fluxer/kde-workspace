@@ -12,7 +12,7 @@ set(kcm_autostart_PART_SRCS
 
 kde4_add_plugin(kcm_autostart ${kcm_autostart_PART_SRCS})
 
-target_link_libraries(kcm_autostart ${KDE4_KIO_LIBS})
+target_link_libraries(kcm_autostart KDE4::kio)
 
 ########### install files ###############
 

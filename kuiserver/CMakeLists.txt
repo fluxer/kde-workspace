@@ -39,7 +39,7 @@ kde4_add_kcfg_files(kuiserver_SRCS kuiserversettings.kcfgc)
 
 add_executable(kuiserver ${kuiserver_SRCS})
 
-target_link_libraries(kuiserver ${KDE4_KIO_LIBS})
+target_link_libraries(kuiserver KDE4::kio)
 
 install(
     TARGETS kuiserver

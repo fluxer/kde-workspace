@@ -31,10 +31,10 @@ QT4_ADD_DBUS_INTERFACE(libkickoff_SRCS ${krunner_xml} krunner_interface)
 set(ksmserver_xml ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
 QT4_ADD_DBUS_INTERFACE(libkickoff_SRCS ${ksmserver_xml} ksmserver_interface)
 
-set(Kickoff_LIBS ${KDE4_KIO_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_SOLID_LIBS} kworkspace)
+set(Kickoff_LIBS KDE4::kio KDE4::kfile KDE4::solid kworkspace)
 
 add_library(kickoff SHARED ${libkickoff_SRCS})
-target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
+target_link_libraries(kickoff KDE4::plasma ${Kickoff_LIBS})
 
 generate_export_header(kickoff)
 
@@ -68,7 +68,7 @@ set_source_files_properties(
 kde4_add_plugin(plasma_applet_launcher ${Applet_SRCS})
 
 target_link_libraries(plasma_applet_launcher
-    ${KDE4_PLASMA_LIBS}
+    KDE4::plasma
     ${QT_QTNETWORK_LIBRARY}
     ${Kickoff_LIBS}
     kickoff
@@ -101,8 +101,8 @@ set_source_files_properties(
 
 kde4_add_plugin(plasma_applet_simplelauncher ${SimpleApplet_SRCS})
 target_link_libraries(plasma_applet_simplelauncher
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kcmutils
+    KDE4::plasma
     ${Kickoff_LIBS}
     kickoff
 )
@@ -121,6 +121,6 @@ install(
 #IF (CMAKE_BUILD_TYPE MATCHES Debug)
 #    set(Application_SRCS ${Kickoff_SRCS} main.cpp)
 #    add_executable(kickoff ${Application_SRCS})
-#    target_link_libraries(kickoff ${KDE4_PLASMA_LIBS} ${Kickoff_LIBS})
+#    target_link_libraries(kickoff KDE4::plasma ${Kickoff_LIBS})
 #    install(TARGETS kickoff DESTINATION ${KDE4_BIN_INSTALL_DIR})
 #ENDIF (CMAKE_BUILD_TYPE MATCHES Debug)

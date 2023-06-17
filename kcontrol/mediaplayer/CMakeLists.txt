@@ -4,7 +4,7 @@
 kde4_add_plugin(kcm_kmediaplayer kcmplayer.cpp)
 
 target_link_libraries(kcm_kmediaplayer
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     KDE4::kmediaplayer
 )
 

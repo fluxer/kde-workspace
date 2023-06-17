@@ -8,7 +8,7 @@ qt4_generate_dbus_interface(kded.h org.kde.khotkeys.xml )
 
 kde4_add_plugin(kded_khotkeys ${kded_khotkeys_PART_SRCS})
 target_link_libraries(kded_khotkeys
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     # I'm not sure if this is needed anymore. Check it
     ${X11_XTest_LIB}
     khotkeysprivate

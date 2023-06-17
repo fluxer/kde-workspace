@@ -1,7 +1,7 @@
 macro(KEYBOARD_DAEMON_UNIT_TESTS _testname)
     kde4_add_test(kcm-keyboard-${_testname} ${_testname}_test.cpp ../${_testname}.cpp)
     target_link_libraries(kcm-keyboard-${_testname}
-        ${KDE4_KDEUI_LIBS}
+        KDE4::kdeui
         ${QT_QTXML_LIBRARY}
         ${QT_QTTEST_LIBRARY}
         ${X11_Xkbfile_LIB}
@@ -18,7 +18,7 @@ macro(KEYBOARD_DAEMON_UNIT_TESTS2 _testname _src1 _src2 _src3)
         ../${_src3}
     )
     target_link_libraries(kcm-keyboard-${_testname}
-        ${KDE4_KDEUI_LIBS}
+        KDE4::kdeui
         ${QT_QTXML_LIBRARY}
         ${QT_QTTEST_LIBRARY}
         ${X11_Xkbfile_LIB}
@@ -37,8 +37,8 @@ kde4_add_test(kcm-keyboard-flags_test
     ../xkb_rules.cpp
 )
 target_link_libraries(kcm-keyboard-flags_test
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
     ${QT_QTXML_LIBRARY}
     ${QT_QTTEST_LIBRARY}
     ${X11_Xkbfile_LIB}
@@ -68,8 +68,8 @@ if(X11_XTest_FOUND)
         ../numlockx.c
     )
     target_link_libraries(kcm-keyboard-keyboard_daemon_test
-        ${KDE4_KDEUI_LIBS}
-        ${KDE4_PLASMA_LIBS}
+        KDE4::kdeui
+        KDE4::plasma
         ${QT_QTXML_LIBRARY}
         ${QT_QTTEST_LIBRARY}
         ${X11_Xkbfile_LIB}

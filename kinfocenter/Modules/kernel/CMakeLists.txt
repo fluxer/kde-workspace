@@ -7,7 +7,7 @@ set(kcm_kernel_PART_SRCS kernel.cpp )
 kde4_add_plugin(kcm_kernel ${kcm_kernel_PART_SRCS})
 
 target_link_libraries(kcm_kernel
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${KMOD_LIBRARIES}
 )
 

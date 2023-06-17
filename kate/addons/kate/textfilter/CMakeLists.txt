@@ -3,8 +3,8 @@
 kde4_add_plugin(katetextfilterplugin plugin_katetextfilter.cpp)
 
 target_link_libraries(katetextfilterplugin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdeui
+    KDE4::ktexteditor
     kateinterfaces
 )
 

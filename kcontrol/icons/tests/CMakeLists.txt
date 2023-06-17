@@ -9,4 +9,4 @@ set(testicons_SRCS
 
 kde4_add_manual_test(testicons ${testicons_SRCS})
 
-target_link_libraries(testicons ${KDE4_KDEUI_LIBS})
+target_link_libraries(testicons KDE4::kdeui)

@@ -23,9 +23,9 @@ target_link_libraries(plasmacomponentsplugin
     ${QT_QTCORE_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDECLARATIVE_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::kdeclarative
+    KDE4::plasma
 )
 
 install(TARGETS plasmacomponentsplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/components)

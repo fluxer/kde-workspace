@@ -12,8 +12,8 @@ set(krunner_bookmarksrunner_SRCS
 
 kde4_add_plugin(krunner_bookmarksrunner ${krunner_bookmarksrunner_SRCS})
 target_link_libraries(krunner_bookmarksrunner
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kio
+    KDE4::plasma
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
 )

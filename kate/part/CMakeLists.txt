@@ -153,10 +153,10 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=13000)
 add_library(katepartinterfaces SHARED ${katepart_PART_SRCS})
 
 target_link_libraries(katepartinterfaces
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdecore
+    KDE4::kparts
+    KDE4::kcmutils
+    KDE4::ktexteditor
 )
 
 set_target_properties(
@@ -178,10 +178,10 @@ kde4_add_plugin(katepart utils/katefactory.cpp)
 
 # link the part, use kate part interfaces + kde stuff
 target_link_libraries(katepart
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdecore
+    KDE4::kparts
+    KDE4::kcmutils
+    KDE4::ktexteditor
     katepartinterfaces
 )
 

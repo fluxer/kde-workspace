@@ -12,7 +12,7 @@ set(ksysguard_LIB_SRCS
 add_library(processcore SHARED ${ksysguard_LIB_SRCS})
 
 target_link_libraries(processcore PUBLIC
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
 )
 if(CMAKE_SYSTEM_NAME MATCHES "NetBSD")
     message(STATUS "Adding kvm library on NetBSD")
@@ -51,7 +51,7 @@ set(ksysguardprocesslist_helper_srcs
 
 add_executable(ksysguardprocesslist_helper ${ksysguardprocesslist_helper_srcs})
 target_link_libraries(ksysguardprocesslist_helper PUBLIC
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
 )
 if(CMAKE_SYSTEM_NAME MATCHES "NetBSD" )
     message(STATUS "Adding kvm library on NetBSD")

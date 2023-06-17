@@ -9,12 +9,12 @@ set(kcmdesktoptheme_SRCS
 kde4_add_plugin(kcm_desktoptheme ${kcmdesktoptheme_SRCS})
 target_link_libraries(kcm_desktoptheme
     ${X11_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KARCHIVE_LIBS}
+    KDE4::kdeui
+    KDE4::kparts
+    KDE4::kcmutils
+    KDE4::plasma
+    KDE4::kio
+    KDE4::karchive
 )
 
 install(

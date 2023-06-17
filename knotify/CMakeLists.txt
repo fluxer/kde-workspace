@@ -21,9 +21,9 @@ set(knotify_SRCS
 add_executable(knotify4 ${knotify_SRCS})
 
 target_link_libraries(knotify4
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_KMEDIAPLAYER_LIBS}
+    KDE4::kdeui
+    KDE4::solid
+    KDE4::kmediaplayer
 )
 
 install(

@@ -34,8 +34,8 @@ kde4_add_plugin(plasma_applet_systemtray ${systemtray_SRCS})
 include_directories(${CMAKE_SOURCE_DIR})
 target_link_libraries(plasma_applet_systemtray
     ${QT_QTDECLARATIVE_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
     ${X11_LIBRARIES}
     ${X11_Xrender_LIB}
     ${X11_Xfixes_LIB}

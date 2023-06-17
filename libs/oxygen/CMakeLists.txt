@@ -13,7 +13,7 @@ kde4_add_kcfg_files(oxygenstyle_LIB_SRCS
 
 add_library(oxygenstyle SHARED ${oxygenstyle_LIB_SRCS})
 target_link_libraries(oxygenstyle PUBLIC
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
 )
 target_link_libraries(oxygenstyle PRIVATE ${X11_LIBRARIES})
 
@@ -41,7 +41,7 @@ kde4_add_kcfg_files(oxygenstyleconfig_LIB_SRCS
 add_library(oxygenstyleconfig SHARED ${oxygenstyleconfig_LIB_SRCS})
 
 target_link_libraries(oxygenstyleconfig PUBLIC
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     oxygenstyle
 )
 target_link_libraries(oxygenstyleconfig PRIVATE ${X11_LIBRARIES})

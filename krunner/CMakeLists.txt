@@ -55,10 +55,10 @@ set(krunner_SRCS
 add_executable(krunner ${krunner_SRCS})
 
 target_link_libraries(krunner
-    ${KDE4_PLASMA_LIBS}
+    KDE4::plasma
     ${KDE4_SOLID_LIBRARIES}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kdeui
+    KDE4::kcmutils
     ${X11_X11_LIB}
     kworkspace
     plasmagenericshell

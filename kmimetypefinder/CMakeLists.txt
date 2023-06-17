@@ -1,6 +1,6 @@
 add_executable(kmimetypefinder kmimetypefinder.cpp)
 
-target_link_libraries(kmimetypefinder ${KDE4_KDECORE_LIBS})
+target_link_libraries(kmimetypefinder KDE4::kdecore)
 
 install(
     TARGETS kmimetypefinder

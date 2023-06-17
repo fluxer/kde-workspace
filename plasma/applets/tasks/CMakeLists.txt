@@ -18,8 +18,8 @@ set(tasks_SRCS
 kde4_add_plugin(plasma_applet_tasks ${tasks_SRCS})
 
 target_link_libraries(plasma_applet_tasks
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
     ${QT_QTDECLARATIVE_LIBRARY}
     taskmanager
 )

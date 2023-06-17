@@ -1,6 +1,6 @@
 add_executable(kiconfinder kiconfinder.cpp)
 
-target_link_libraries(kiconfinder ${KDE4_KDEUI_LIBS})
+target_link_libraries(kiconfinder KDE4::kdeui)
 
 install(
     TARGETS kiconfinder

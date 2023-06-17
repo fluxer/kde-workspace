@@ -43,7 +43,7 @@ set(kapplymousetheme_SRCS kapplymousetheme.cpp )
 add_executable(kapplymousetheme ${kapplymousetheme_SRCS})
 
 target_link_libraries(kapplymousetheme
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${X11_X11_LIB}
 )
 if (X11_Xcursor_FOUND)
@@ -63,7 +63,7 @@ set(kcm_input_PART_SRCS mouse.cpp main.cpp logitechmouse.cpp kmousedlg.ui logite
 kde4_add_plugin(kcm_input ${kcm_input_PART_SRCS})
 
 
-target_link_libraries(kcm_input ${KDE4_KIO_LIBS} ${X11_LIBRARIES})
+target_link_libraries(kcm_input KDE4::kio ${X11_LIBRARIES})
 if (LIBUSB_FOUND)
    target_link_libraries(kcm_input ${LIBUSB_LIBRARIES})
 endif (LIBUSB_FOUND)
@@ -85,8 +85,8 @@ kde4_add_plugin(kcm_cursortheme ${kcm_cursortheme_PART_SRCS})
 
 
 target_link_libraries(kcm_cursortheme
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KARCHIVE_LIBS}
+    KDE4::kio
+    KDE4::karchive
     ${X11_LIBRARIES}
 )
 

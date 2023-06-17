@@ -30,7 +30,7 @@ set(kcm_randr_PART_SRCS
 kde4_add_plugin(kcm_randr ${kcm_randr_PART_SRCS})
 
 target_link_libraries(kcm_randr
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${X11_Xrandr_LIB}
     ${X11_LIBRARIES}
 )
@@ -53,7 +53,7 @@ set(krandrtray_SRCS
 add_executable(krandrtray ${krandrtray_SRCS})
 
 target_link_libraries(krandrtray
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kcmutils
     ${X11_Xrandr_LIB}
     ${X11_LIBRARIES}
 )

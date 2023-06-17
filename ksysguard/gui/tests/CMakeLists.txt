@@ -9,7 +9,7 @@ set( ksysguarddtest_SRCS
 kde4_add_test(ksysguard-ksysguarddtest ${ksysguarddtest_SRCS})
 
 target_link_libraries(ksysguard-ksysguarddtest
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${QT_QTTEST_LIBRARY}
     ${QT_QTNETWORK_LIBRARY}
 )

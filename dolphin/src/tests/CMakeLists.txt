@@ -12,7 +12,7 @@ set(kitemsettest_SRCS
 kde4_add_test(dolphin-kitemsettest ${kitemsettest_SRCS})
 target_link_libraries(dolphin-kitemsettest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -20,7 +20,7 @@ target_link_libraries(dolphin-kitemsettest
 kde4_add_test(dolphin-kitemrangetest kitemrangetest.cpp)
 target_link_libraries(dolphin-kitemrangetest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -34,7 +34,7 @@ set(kitemlistselectionmanagertest_SRCS
 kde4_add_test(dolphin-kitemlistselectionmanagertest ${kitemlistselectionmanagertest_SRCS})
 target_link_libraries(dolphin-kitemlistselectionmanagertest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -56,7 +56,7 @@ set(kitemlistcontrollertest_SRCS
 kde4_add_test(dolphin-kitemlistcontrollertest ${kitemlistcontrollertest_SRCS})
 target_link_libraries(dolphin-kitemlistcontrollertest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -77,7 +77,7 @@ set(kfileitemlistviewtest_SRCS
 kde4_add_test(dolphin-kfileitemlistviewtest ${kfileitemlistviewtest_SRCS})
 target_link_libraries(dolphin-kfileitemlistviewtest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -92,7 +92,7 @@ set(kfileitemmodeltest_SRCS
 kde4_add_test(dolphin-kfileitemmodeltest ${kfileitemmodeltest_SRCS})
 target_link_libraries(dolphin-kfileitemmodeltest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -106,7 +106,7 @@ set(kfileitemmodelbenchmark_SRCS
 kde4_add_manual_test(dolphin-kfileitemmodelbenchmark ${kfileitemmodelbenchmark_SRCS})
 target_link_libraries(dolphin-kfileitemmodelbenchmark
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -117,7 +117,7 @@ set(kitemlistkeyboardsearchmanagertest_SRCS
 )
 kde4_add_test(dolphin-kitemlistkeyboardsearchmanagertest ${kitemlistkeyboardsearchmanagertest_SRCS})
 target_link_libraries(dolphin-kitemlistkeyboardsearchmanagertest
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -131,7 +131,7 @@ set(kstandarditemmodeltest_SRCS
 kde4_add_test(dolphin-kstandarditemmodeltest ${kstandarditemmodeltest_SRCS})
 target_link_libraries(dolphin-kstandarditemmodeltest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )
 
@@ -148,6 +148,6 @@ kde4_add_kcfg_files(viewpropertiestest_SRCS
 kde4_add_test(dolphin-viewpropertiestest ${viewpropertiestest_SRCS})
 target_link_libraries(dolphin-viewpropertiestest
     dolphinprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
 )

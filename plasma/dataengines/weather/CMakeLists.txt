@@ -7,9 +7,9 @@ ADD_SUBDIRECTORY(ions)
 SET(weather_SRCS weatherengine.cpp)
 kde4_add_plugin(plasma_engine_weather ${weather_SRCS})
 TARGET_LINK_LIBRARIES(plasma_engine_weather
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kio
+    KDE4::solid
+    KDE4::plasma
     weather_ion
 )
 

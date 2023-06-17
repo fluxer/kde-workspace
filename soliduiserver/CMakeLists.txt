@@ -5,7 +5,7 @@ set(soliduiserver_helper_srcs
 )
 
 add_executable(soliduiserver_helper ${soliduiserver_helper_srcs})
-target_link_libraries(soliduiserver_helper PUBLIC ${KDE4_KDECORE_LIBS})
+target_link_libraries(soliduiserver_helper PUBLIC KDE4::kdecore)
 
 ########### next target ###############
 
@@ -20,7 +20,7 @@ set(kded_soliduiserver_SRCS
 
 kde4_add_plugin(kded_soliduiserver ${kded_soliduiserver_SRCS})
 
-target_link_libraries(kded_soliduiserver ${KDE4_SOLID_LIBS}  ${KDE4_KIO_LIBS})
+target_link_libraries(kded_soliduiserver KDE4::solid  KDE4::kio)
 
 
 ########### install files ###############

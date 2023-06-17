@@ -11,9 +11,9 @@ set(KATE_CLOSE_EXCEPT_PLUGIN_SOURCES
 kde4_add_plugin(katecloseexceptplugin ${KATE_CLOSE_EXCEPT_PLUGIN_SOURCES})
 
 target_link_libraries(katecloseexceptplugin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdeui
+    KDE4::kfile
+    KDE4::ktexteditor
     kateinterfaces
 )
 

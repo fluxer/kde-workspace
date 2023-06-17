@@ -14,7 +14,7 @@ set(kuriikwsfilter_PART_SRCS
 
 kde4_add_plugin(kuriikwsfilter ${kuriikwsfilter_PART_SRCS})
 
-target_link_libraries(kuriikwsfilter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kuriikwsfilter KDE4::kdeui KDE4::kio)
 
 install(TARGETS kuriikwsfilter DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
@@ -31,7 +31,7 @@ set(kurisearchfilter_PART_SRCS
 
 kde4_add_plugin(kurisearchfilter ${kurisearchfilter_PART_SRCS})
 
-target_link_libraries(kurisearchfilter ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kurisearchfilter KDE4::kdeui KDE4::kio)
 
 install(TARGETS kurisearchfilter DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 

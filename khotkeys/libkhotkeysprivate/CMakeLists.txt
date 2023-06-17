@@ -63,7 +63,7 @@ set(khotkeysprivate_SRCS
 
 add_library(khotkeysprivate SHARED ${khotkeysprivate_SRCS})
 target_link_libraries(khotkeysprivate
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${X11_LIBRARIES}
     kworkspace
 )

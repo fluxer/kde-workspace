@@ -3,7 +3,7 @@ set(ksignalplotter_LIB_SRCS
 )
 
 add_library(ksignalplotter SHARED ${ksignalplotter_LIB_SRCS})
-target_link_libraries(ksignalplotter PUBLIC ${KDE4_KDEUI_LIBS})
+target_link_libraries(ksignalplotter PUBLIC KDE4::kdeui)
 
 set_target_properties(ksignalplotter
     PROPERTIES VERSION ${GENERIC_LIB_VERSION}
@@ -23,7 +23,7 @@ kde4_add_widget(ksignalplotterwidgets_SRCS ksignalplotter.widgets)
 kde4_add_plugin(ksignalplotterwidgets ${ksignalplotterwidgets_SRCS} ${ksignalplotterwidgets_PART_SRCS})
 
 target_link_libraries(ksignalplotterwidgets
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ksignalplotter
 )
 

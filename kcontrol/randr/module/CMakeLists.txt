@@ -19,8 +19,8 @@ set(kded_randrmonitor_PART_SRCS
 kde4_add_plugin(kded_randrmonitor ${kded_randrmonitor_PART_SRCS})
 
 target_link_libraries(kded_randrmonitor
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kdeui
+    KDE4::solid
     ${X11_Xrandr_LIB}
     ${X11_LIBRARIES}
 )

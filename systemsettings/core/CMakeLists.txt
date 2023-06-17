@@ -19,9 +19,9 @@ set(systemsettingsview_LIB_HDRS
 
 add_library(systemsettingsview SHARED ${systemsettingsview_LIB_SRCS})
 target_link_libraries(systemsettingsview
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kdecore
+    KDE4::kio
+    KDE4::kcmutils
 )
 
 generate_export_header(systemsettingsview)

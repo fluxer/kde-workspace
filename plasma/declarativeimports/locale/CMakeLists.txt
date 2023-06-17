@@ -14,7 +14,7 @@ INCLUDE_DIRECTORIES(
 
 add_library(localebindingsplugin SHARED ${localebindings_SRCS})
 
-target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY} ${KDE4_KDECORE_LIBS})
+target_link_libraries(localebindingsplugin ${QT_QTDECLARATIVE_LIBRARY} KDE4::kdecore)
 
 install(TARGETS localebindingsplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/locale)
 install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/locale)

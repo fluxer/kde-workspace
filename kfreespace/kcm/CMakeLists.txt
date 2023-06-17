@@ -7,9 +7,9 @@ set(kfreespaceconfig_SRCS
 kde4_add_plugin(kcm_kfreespaceconfig ${kfreespaceconfig_SRCS})
 
 target_link_libraries(kcm_kfreespaceconfig
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kdeui
+    KDE4::kcmutils
+    KDE4::solid
 )
 
 install(

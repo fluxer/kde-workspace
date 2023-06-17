@@ -28,7 +28,7 @@ kde4_add_kcfg_files(oxygen_PART_SRCS oxygenstyleconfigdata.kcfgc)
 
 kde4_add_plugin(oxygen ${oxygen_PART_SRCS})
 
-target_link_libraries(oxygen  ${KDE4_KDEUI_LIBS} oxygenstyle)
+target_link_libraries(oxygen  KDE4::kdeui oxygenstyle)
 
 if ( X11_FOUND )
    target_link_libraries(oxygen ${X11_LIBRARIES})

@@ -9,7 +9,7 @@ add_library(dirmodelplugin SHARED ${dirmodel_SRCS})
 target_link_libraries(dirmodelplugin
     ${QT_QTCORE_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
 )
 
 install(TARGETS dirmodelplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/dirmodel)

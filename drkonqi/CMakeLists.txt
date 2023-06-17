@@ -38,7 +38,7 @@ set(backtrace_parser_SRCS
 
 if(ENABLE_TESTING)
     add_library(drkonqi_backtrace_parser STATIC ${backtrace_parser_SRCS})
-    target_link_libraries(drkonqi_backtrace_parser ${KDE4_KDECORE_LIBS})
+    target_link_libraries(drkonqi_backtrace_parser KDE4::kdecore)
     add_subdirectory(tests)
 endif()
 
@@ -50,7 +50,7 @@ endif()
 add_executable(drkonqi ${drkonqi_SRCS} ${backtrace_parser_SRCS})
 
 target_link_libraries(drkonqi
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
 )
 
 install(TARGETS drkonqi DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})

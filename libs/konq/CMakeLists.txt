@@ -22,8 +22,8 @@ target_link_libraries(konq PRIVATE
     ${X11_X11_LIB}
 )
 target_link_libraries(konq PUBLIC
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::kparts
+    KDE4::kfile
 )
 
 set_target_properties(konq PROPERTIES

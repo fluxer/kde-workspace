@@ -5,7 +5,7 @@ set(KCM_MEMORY_PART_SRCS memory.cpp chartWidget.cpp totalMemoryChart.cpp physica
 
 kde4_add_plugin(kcm_memory ${KCM_MEMORY_PART_SRCS})
 
-target_link_libraries(kcm_memory ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kcm_memory KDE4::kdeui ${QT_QTGUI_LIBRARY})
 
 if (CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
    target_link_libraries(kcm_memory kvm)

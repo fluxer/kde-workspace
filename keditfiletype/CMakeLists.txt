@@ -19,7 +19,7 @@ set(kcm_filetypes_SRCS filetypesview.cpp ${libfiletypes_SRCS})
 
 kde4_add_plugin(kcm_filetypes ${kcm_filetypes_SRCS})
 
-target_link_libraries(kcm_filetypes ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS})
+target_link_libraries(kcm_filetypes KDE4::kdeui KDE4::kio)
 
 install(
     TARGETS kcm_filetypes
@@ -33,7 +33,7 @@ set(keditfiletype_SRCS keditfiletype.cpp ${libfiletypes_SRCS})
 add_executable(keditfiletype ${keditfiletype_SRCS})
 
 target_link_libraries(keditfiletype
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${X11_X11_LIB}
 )
 

@@ -13,8 +13,8 @@ set(kcm_icons_PART_SRCS
 kde4_add_plugin(kcm_icons ${kcm_icons_PART_SRCS})
 
 target_link_libraries(kcm_icons
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KARCHIVE_LIBS}
+    KDE4::kio
+    KDE4::karchive
     ${QT_QTGUI_LIBRARY}
 )
 

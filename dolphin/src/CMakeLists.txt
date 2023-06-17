@@ -80,7 +80,7 @@ kde4_add_kcfg_files(dolphinprivate_LIB_SRCS
 add_library(dolphinprivate SHARED ${dolphinprivate_LIB_SRCS})
 
 target_link_libraries(dolphinprivate
-    ${KDE4_KFILE_LIBS}
+    KDE4::kfile
     konq
 )
 
@@ -106,8 +106,8 @@ set(dolphinpart_SRCS
 kde4_add_plugin(dolphinpart ${dolphinpart_SRCS})
 
 target_link_libraries(dolphinpart
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::kparts
+    KDE4::kfile
     dolphinprivate
     konq
 )
@@ -202,11 +202,11 @@ set(dolphin_SRCS ${dolphin_SRCS} panels/terminal/terminalpanel.cpp)
 add_executable(dolphin ${dolphin_SRCS})
 
 target_link_libraries(dolphin
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_KMEDIAPLAYER_LIBS}
+    KDE4::kfile
+    KDE4::kparts
+    KDE4::kcmutils
+    KDE4::solid
+    KDE4::kmediaplayer
     konq
     dolphinprivate
 )
@@ -278,10 +278,10 @@ kde4_add_plugin(kcm_dolphinnavigation ${kcm_dolphinnavigation_PART_SRCS})
 kde4_add_plugin(kcm_dolphinservices ${kcm_dolphinservices_PART_SRCS})
 kde4_add_plugin(kcm_dolphingeneral ${kcm_dolphingeneral_PART_SRCS})
 
-target_link_libraries(kcm_dolphinviewmodes  ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} dolphinprivate)
-target_link_libraries(kcm_dolphinnavigation  ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} dolphinprivate)
-target_link_libraries(kcm_dolphinservices  ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} dolphinprivate)
-target_link_libraries(kcm_dolphingeneral ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} dolphinprivate)
+target_link_libraries(kcm_dolphinviewmodes KDE4::kdeui KDE4::kfile dolphinprivate)
+target_link_libraries(kcm_dolphinnavigation  KDE4::kdeui KDE4::kfile dolphinprivate)
+target_link_libraries(kcm_dolphinservices KDE4::kdeui KDE4::kfile KDE4::kio dolphinprivate)
+target_link_libraries(kcm_dolphingeneral KDE4::kdeui KDE4::kfile KDE4::kio dolphinprivate)
 
 install(
     TARGETS
@@ -296,7 +296,7 @@ install(
 
 add_executable(kio_filenamesearch search/filenamesearchprotocol.cpp)
 
-target_link_libraries(kio_filenamesearch ${KDE4_KIO_LIBS})
+target_link_libraries(kio_filenamesearch KDE4::kio)
 
 install(
     TARGETS kio_filenamesearch

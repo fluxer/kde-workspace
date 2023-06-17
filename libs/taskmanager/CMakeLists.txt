@@ -31,8 +31,8 @@ set(taskmanager_LIB_SRCS ${taskmanager_LIB_SRCS} task_x11.cpp)
 add_library(taskmanager SHARED ${taskmanager_LIB_SRCS})
 
 target_link_libraries(taskmanager PUBLIC
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kdeui
+    KDE4::kio
     processcore
 )
 
@@ -77,6 +77,6 @@ install(FILES
 #)
 
 #add_executable(tasksmodeltest ${tasksmodel_SRCS})
-#target_link_libraries(tasksmodeltest ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_LIBRARIES} taskmanager)
+#target_link_libraries(tasksmodeltest KDE4::kdeui KDE4::kio ${X11_LIBRARIES} taskmanager)
 
 

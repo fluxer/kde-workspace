@@ -30,8 +30,8 @@ add_library(kateinterfaces SHARED ${kateinterfaces_LIB_SRCS})
 
 target_link_libraries(kateinterfaces PUBLIC
     ${QT_QTXML_LIBRARY}
-    ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KDE4::ktexteditor
+    KDE4::kparts
 )
 
 set_target_properties(kateinterfaces PROPERTIES
@@ -45,7 +45,7 @@ add_executable(kate katemain.cpp)
 
 target_link_libraries(kate
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
     kateinterfaces
 )
 

@@ -5,7 +5,7 @@ include_directories(
 add_executable(kio_camera kio_camera.cpp)
 
 target_link_libraries(kio_camera
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${GPHOTO2_LIBRARIES}
 )
 

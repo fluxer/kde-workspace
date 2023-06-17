@@ -11,9 +11,9 @@ set(ctagsplugin_SRC
 kde4_add_plugin(katectagsplugin ${ctagsplugin_SRC})
 
 target_link_libraries(katectagsplugin
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
     kateinterfaces
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::ktexteditor
 )
 
 install(

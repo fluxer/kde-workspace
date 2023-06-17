@@ -27,9 +27,9 @@ set(kded_keyboard_SRCS
 kde4_add_plugin(kded_keyboard ${kded_keyboard_SRCS})
 
 target_link_libraries(kded_keyboard
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdecore
+    KDE4::kdeui
+    KDE4::plasma
     ${QT_QTXML_LIBRARY}
     ${X11_LIBRARIES}
     ${X11_Xkbfile_LIB}
@@ -62,8 +62,8 @@ set( plasma_applet_keyboard_SRCS
 kde4_add_plugin(plasma_applet_keyboard ${plasma_applet_keyboard_SRCS})
 
 target_link_libraries(plasma_applet_keyboard
-     ${KDE4_KDEUI_LIBS}
-     ${KDE4_PLASMA_LIBS}
+     KDE4::kdeui
+     KDE4::plasma
      ${QT_QTXML_LIBRARY}
      ${X11_Xkbfile_LIB}
      ${X11_LIBRARIES}
@@ -87,8 +87,8 @@ set( keyboard_layout_widget_SRCS
 kde4_add_plugin(keyboard_layout_widget ${keyboard_layout_widget_SRCS})
 
 target_link_libraries(keyboard_layout_widget
-     ${KDE4_KDEUI_LIBS}
-     ${KDE4_PLASMA_LIBS}
+     KDE4::kdeui
+     KDE4::plasma
      ${QT_QTXML_LIBRARY}
      ${X11_LIBRARIES}
      ${X11_Xkbfile_LIB}
@@ -128,8 +128,8 @@ set(kcm_keyboard_PART_SRCS
 kde4_add_plugin(kcm_keyboard ${kcm_keyboard_PART_SRCS})
 
 target_link_libraries(kcm_keyboard
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kio
     ${X11_Xkbfile_LIB}
     ${X11_LIBRARIES}
 )

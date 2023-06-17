@@ -7,9 +7,9 @@ set(katebuild_SRCS
 kde4_add_plugin(katebuildplugin ${katebuild_SRCS})
 
 target_link_libraries(katebuildplugin
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
     kateinterfaces
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::ktexteditor
 )
 
 install(

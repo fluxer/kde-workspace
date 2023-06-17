@@ -1,7 +1,7 @@
 kde4_add_plugin(kcm_kurifilt main.cpp)
 
 target_link_libraries(kcm_kurifilt
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
 )
 
 install(

@@ -4,5 +4,5 @@ qt4_add_dbus_interface(networkingservice_SRCS ../org.kde.Solid.Networking.Servic
 
 add_executable(networkingservice ${networkingservice_SRCS})
 
-target_link_libraries(networkingservice ${KDE4_KIO_LIBS})
+target_link_libraries(networkingservice KDE4::kio)
 

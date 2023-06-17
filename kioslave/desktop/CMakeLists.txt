@@ -8,7 +8,7 @@ set(kio_desktop_PART_SRCS kio_desktop.cpp)
 
 add_executable(kio_desktop  ${kio_desktop_PART_SRCS})
 
-target_link_libraries(kio_desktop  ${KDE4_KIO_LIBS})
+target_link_libraries(kio_desktop  KDE4::kio)
 
 install(TARGETS kio_desktop DESTINATION  ${KDE4_LIBEXEC_INSTALL_DIR} )
 
@@ -18,7 +18,7 @@ set(kded_desktopnotifier_PART_SRCS  desktopnotifier.cpp )
 
 kde4_add_plugin(kded_desktopnotifier  ${kded_desktopnotifier_PART_SRCS})
 
-target_link_libraries(kded_desktopnotifier  ${KDE4_KIO_LIBS})
+target_link_libraries(kded_desktopnotifier  KDE4::kio)
 
 install(TARGETS kded_desktopnotifier  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 

@@ -16,9 +16,9 @@ QT4_ADD_DBUS_ADAPTOR( systemsettings_SRCS org.kde.systemsettings.xml SystemSetti
 add_executable(systemsettings ${systemsettings_SRCS})
 
 target_link_libraries(systemsettings
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::plasma
+    KDE4::kio
+    KDE4::kcmutils
     systemsettingsview
 )
 

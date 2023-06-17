@@ -7,8 +7,8 @@ set(kcm_clock_PART_SRCS
 kde4_add_plugin(kcm_clock ${kcm_clock_PART_SRCS})
 
 target_link_libraries(kcm_clock
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kio
+    KDE4::plasma
 )
 
 install(
@@ -20,7 +20,7 @@ install(
 
 add_executable(kcmdatetimehelper helper.cpp)
 
-target_link_libraries(kcmdatetimehelper ${KDE4_KDECORE_LIBS})
+target_link_libraries(kcmdatetimehelper KDE4::kdecore)
 
 install(
     TARGETS kcmdatetimehelper

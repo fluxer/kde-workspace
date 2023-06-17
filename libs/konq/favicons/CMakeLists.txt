@@ -10,7 +10,7 @@ qt4_add_dbus_adaptor(kded_favicons_SRCS
 
 kde4_add_plugin(kded_favicons ${kded_favicons_SRCS})
 
-target_link_libraries(kded_favicons ${KDE4_KIO_LIBS})
+target_link_libraries(kded_favicons KDE4::kio)
 
 
 install(

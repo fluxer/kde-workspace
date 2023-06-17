@@ -6,8 +6,8 @@ include_directories(
 
 set(KONSOLE_TEST_LIBS
     ${QT_QTTEST_LIBRARY}
-    ${KDE4_KPARTS_LIBS}
-    ${KDE4_KPTY_LIBS}
+    KDE4::kparts
+    KDE4::kpty
     konsoleprivate
 )
 

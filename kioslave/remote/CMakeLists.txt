@@ -8,7 +8,7 @@ set(kio_remote_PART_SRCS ${libkioremote_SRCS})
 
 add_executable(kio_remote ${kio_remote_PART_SRCS})
 
-target_link_libraries(kio_remote  ${KDE4_KIO_LIBS})
+target_link_libraries(kio_remote  KDE4::kio)
 
 install(TARGETS kio_remote  DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 

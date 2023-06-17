@@ -6,7 +6,7 @@ set(kcm_usb_PART_SRCS kcmusb.cpp usbdevices.cpp )
 kde4_add_plugin(kcm_usb ${kcm_usb_PART_SRCS})
 
 target_link_libraries(kcm_usb
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${QT_QTGUI_LIBRARY}
 )
 

@@ -12,8 +12,8 @@ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
 
 kde4_add_plugin(plasma_applet_calendar ${calendar_SRCS})
 target_link_libraries(plasma_applet_calendar
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kio
     plasmaclock
 )
 

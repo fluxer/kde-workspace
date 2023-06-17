@@ -12,7 +12,7 @@ set(kcm_kwinoptions_PART_SRCS
 )
 
 kde4_add_plugin(kcm_kwinoptions ${kcm_kwinoptions_PART_SRCS})
-target_link_libraries(kcm_kwinoptions ${KDE4_KDEUI_LIBS})
+target_link_libraries(kcm_kwinoptions KDE4::kdeui)
 
 install(
     TARGETS kcm_kwinoptions

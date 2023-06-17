@@ -27,8 +27,8 @@ endif()
 kde4_add_plugin(kcm_componentchooser ${kcm_componentchooser_SRCS})
 
 target_link_libraries(kcm_componentchooser
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KEMAIL_LIBS}
+    KDE4::kio
+    KDE4::kemail
 )
 
 install(

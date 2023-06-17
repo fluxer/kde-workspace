@@ -36,7 +36,7 @@ kde4_add_kcfg_files(fileviewhgplugin_SRCS fileviewhgpluginsettings.kcfgc)
 
 kde4_add_plugin(fileviewhgplugin ${fileviewhgplugin_SRCS})
 
-target_link_libraries(fileviewhgplugin ${KDE4_KIO_LIBS} ${KDE4_KTEXTEDITOR_LIBS} konq)
+target_link_libraries(fileviewhgplugin KDE4::kio KDE4::ktexteditor konq)
 
 install(
     FILES fileviewhgplugin.desktop

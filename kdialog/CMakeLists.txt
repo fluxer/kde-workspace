@@ -14,8 +14,8 @@ add_executable(kdialog ${kdialog_SRCS})
 
 # Need libkfile due to the code that adjusts the geometry of the KDirSelectDialog
 target_link_libraries(kdialog
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kfile
+    KDE4::kio
 )
 
 if(Q_WS_X11)

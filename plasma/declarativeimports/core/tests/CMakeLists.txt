@@ -10,7 +10,7 @@ kde4_add_test(sortfiltermodeltest
 )
 
 target_link_libraries(sortfiltermodeltest
-    ${KDE4_PLASMA_LIBS}
+    KDE4::plasma
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
 )
@@ -24,4 +24,4 @@ set(runnermodeltest_SRCS
 
 #add_library(datamodelsplugin SHARED ${datamodels_SRCS})
 add_executable(runnermodeltest ${runnermodeltest_SRCS})
-target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} ${KDE4_PLASMA_LIBS})
+target_link_libraries(runnermodeltest ${QT_QTTEST_LIBRARY} KDE4::plasma)

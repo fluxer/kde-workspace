@@ -16,8 +16,8 @@ set(kateprojectplugin_PART_SRCS
 kde4_add_plugin(kateprojectplugin ${kateprojectplugin_PART_SRCS})
 
 target_link_libraries(kateprojectplugin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdeui
+    KDE4::ktexteditor
     kateinterfaces
 )
 

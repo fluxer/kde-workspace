@@ -29,8 +29,8 @@ add_executable(lightdm-kgreeter-greeter kgreeter.cpp)
 target_link_libraries(lightdm-kgreeter-greeter
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::plasma
     ${LIGHTDM_LIBRARIES}
     ${GLIB2_LIBRARIES}
 )

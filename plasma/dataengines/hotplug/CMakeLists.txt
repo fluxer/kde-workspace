@@ -6,10 +6,10 @@ set(hotplug_engine_SRCS
 
 kde4_add_plugin(plasma_engine_hotplug ${hotplug_engine_SRCS})
 target_link_libraries(plasma_engine_hotplug
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kdecore
+    KDE4::solid
+    KDE4::kio
 )
 
 install(

@@ -43,9 +43,9 @@ set(plasmagenericshell_LIB_SRCS
 add_library(plasmagenericshell SHARED ${plasmagenericshell_LIB_SRCS})
 
 target_link_libraries(plasmagenericshell PUBLIC
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::plasma
+    KDE4::kdeui
+    KDE4::kfile
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}

@@ -5,8 +5,8 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=90250)
 add_executable(kcminit main.cpp)
 
 target_link_libraries(kcminit
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kcmutils
+    KDE4::kdeui
     ${X11_LIBRARIES}
 )
 

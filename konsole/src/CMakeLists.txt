@@ -20,7 +20,7 @@ option(KONSOLE_BUILD_FONTEMBEDDER "Konsole: build fontembedder executable" OFF)
 if(KONSOLE_BUILD_FONTEMBEDDER)
     ### Font Embedder
     add_executable(fontembedder fontembedder.cpp)
-    target_link_libraries(fontembedder ${KDE4_KIO_LIBS})
+    target_link_libraries(fontembedder KDE4::kio)
 
     ### Line graphics font
     ### The below cmake doesn't work; it might be possible to automate it
@@ -123,9 +123,9 @@ set_source_files_properties(
 add_library(konsoleprivate SHARED ${konsoleprivate_SRCS})
 
 target_link_libraries(konsoleprivate
-    ${KDE4_KPTY_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KNOTIFYCONFIG_LIBS}
+    KDE4::kpty
+    KDE4::kio
+    KDE4::knotifyconfig
     ${QT_QTXML_LIBRARY}
     konq
 )
@@ -174,7 +174,7 @@ install(
 
 kde4_add_plugin(konsolepart Part.cpp)
 target_link_libraries(konsolepart
-    ${KDE4_KPARTS_LIBS}
+    KDE4::kparts
     konsoleprivate
 )
 install(

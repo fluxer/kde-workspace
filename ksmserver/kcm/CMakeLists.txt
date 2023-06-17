@@ -8,7 +8,7 @@ set(kcm_smserver_PART_SRCS
 kde4_add_plugin(kcm_smserver ${kcm_smserver_PART_SRCS})
 
 
-target_link_libraries(kcm_smserver ${KDE4_KDEUI_LIBS})
+target_link_libraries(kcm_smserver KDE4::kdeui)
 
 install(TARGETS kcm_smserver DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 

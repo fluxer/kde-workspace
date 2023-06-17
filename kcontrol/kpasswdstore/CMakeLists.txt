@@ -8,8 +8,8 @@ set(kpasswdstoreconfig_SRCS
 kde4_add_plugin(kcm_kpasswdstoreconfig ${kpasswdstoreconfig_SRCS})
 
 target_link_libraries(kcm_kpasswdstoreconfig
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kdeui
+    KDE4::kcmutils
 )
 
 install(

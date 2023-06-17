@@ -13,9 +13,9 @@ include_directories(
 kde4_add_test(plasma-runner-bookmarks-TestChromeBookmarks ${testChromeBookmarks_SRCS})
 
 target_link_libraries(plasma-runner-bookmarks-TestChromeBookmarks
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kdecore
+    KDE4::plasma
+    KDE4::kio
     ${QT_QTTEST_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
 )

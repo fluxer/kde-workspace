@@ -2,7 +2,7 @@ project(fileviewbazaarplugin)
 
 kde4_add_plugin(fileviewbazaarplugin fileviewbazaarplugin.cpp)
 
-target_link_libraries(fileviewbazaarplugin ${KDE4_KIO_LIBS} konq)
+target_link_libraries(fileviewbazaarplugin KDE4::kio konq)
 
 install(
     FILES

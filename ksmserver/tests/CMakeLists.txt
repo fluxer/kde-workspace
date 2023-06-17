@@ -9,10 +9,10 @@ kde4_add_manual_test(testsh ${testsh_SRCS})
 
 target_link_libraries(testsh
     kworkspace
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_KDECLARATIVE_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::solid
+    KDE4::kdeclarative
+    KDE4::plasma
     ${X11_X11_LIB}
     ${QT_QTDECLARATIVE_LIBRARY}
 )

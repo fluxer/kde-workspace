@@ -2,7 +2,7 @@ project(fileviewdropboxplugin)
 
 kde4_add_plugin(fileviewdropboxplugin fileviewdropboxplugin.cpp)
 
-target_link_libraries(fileviewdropboxplugin ${KDE4_KIO_LIBS} konq)
+target_link_libraries(fileviewdropboxplugin KDE4::kio konq)
 
 install(
     FILES fileviewdropboxplugin.desktop

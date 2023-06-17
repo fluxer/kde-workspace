@@ -2,7 +2,7 @@ set(knetattach_SRCS main.cpp knetattach.cpp knetattach.ui )
 
 add_executable(knetattach ${knetattach_SRCS})
 
-target_link_libraries(knetattach ${KDE4_KIO_LIBS})
+target_link_libraries(knetattach KDE4::kio)
 
 install(
     TARGETS knetattach

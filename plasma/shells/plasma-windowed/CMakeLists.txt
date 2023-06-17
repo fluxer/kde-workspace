@@ -14,10 +14,10 @@ set(plasma-windowed_SRCS
 add_executable(plasma-windowed ${plasma-windowed_SRCS})
 
 target_link_libraries(plasma-windowed
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kio
     ${X11_LIBRARIES}
-    ${KDE4_KFILE_LIBS}
+    KDE4::kfile
     kworkspace
 )
 

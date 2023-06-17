@@ -2,9 +2,9 @@
 set(ionlib_SRCS ion.cpp)
 add_library(weather_ion SHARED ${ionlib_SRCS})
 target_link_libraries(weather_ion PUBLIC
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::plasma
 )
 
 set_target_properties(weather_ion PROPERTIES

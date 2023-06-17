@@ -33,10 +33,10 @@ set(folderview_SRCS
 kde4_add_plugin(plasma_applet_folderview ${folderview_SRCS})
 
 target_link_libraries(plasma_applet_folderview
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KFILE_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::plasma
+    KDE4::kio
+    KDE4::kfile
+    KDE4::solid
     ${X11_LIBRARIES}
     konq
 )

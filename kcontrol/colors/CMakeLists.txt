@@ -7,8 +7,8 @@ set(kcm_colors_PART_SRCS
 
 kde4_add_plugin(kcm_colors ${kcm_colors_PART_SRCS})
 target_link_libraries(kcm_colors
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kio
+    KDE4::kdeui
     ${X11_LIBRARIES}
 )
 

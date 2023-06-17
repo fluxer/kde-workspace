@@ -9,7 +9,7 @@ set(kshorturifilter_PART_SRCS kshorturifilter.cpp )
 kde4_add_plugin(kshorturifilter ${kshorturifilter_PART_SRCS})
 
 
-target_link_libraries(kshorturifilter  ${KDE4_KIO_LIBS})
+target_link_libraries(kshorturifilter  KDE4::kio)
 
 install(TARGETS kshorturifilter  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 

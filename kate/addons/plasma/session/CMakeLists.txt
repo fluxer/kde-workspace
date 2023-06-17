@@ -3,8 +3,8 @@ project(katesessionapplet)
 kde4_add_plugin(plasma_applet_katesession katesessionapplet.cpp)
 
 target_link_libraries(plasma_applet_katesession
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kio
 )
 
 install(

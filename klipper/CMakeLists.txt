@@ -24,8 +24,8 @@ set(klipper_SRCS ${libklipper_common_SRCS} main.cpp tray.cpp)
 add_executable(klipper ${klipper_SRCS})
 
 target_link_libraries(klipper
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::kdeui
+    KDE4::kfile
     ${QT_QTNETWORK_LIBRARY}
     ${X11_LIBRARIES}
 )

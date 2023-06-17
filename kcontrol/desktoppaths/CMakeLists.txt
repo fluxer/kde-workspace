@@ -6,8 +6,8 @@ set(kcm_desktoppaths_PART_SRCS
 kde4_add_plugin(kcm_desktoppaths ${kcm_desktoppaths_PART_SRCS})
 
 target_link_libraries(kcm_desktoppaths
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kcmutils
+    KDE4::kio
 )
 
 install(

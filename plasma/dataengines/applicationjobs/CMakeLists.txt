@@ -23,9 +23,9 @@ qt4_add_dbus_adaptor(kuiserver_engine_SRCS
 
 kde4_add_plugin(plasma_engine_applicationjobs ${kuiserver_engine_SRCS})
 target_link_libraries(plasma_engine_applicationjobs
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::plasma
 )
 
 install(

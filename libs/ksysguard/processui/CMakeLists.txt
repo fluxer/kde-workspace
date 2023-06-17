@@ -18,7 +18,7 @@ if(X11_XRes_FOUND)
 endif()
 
 target_link_libraries(processui PRIVATE ${QT_QTSCRIPT_LIBRARY})
-target_link_libraries(processui PUBLIC ${KDE4_KDEUI_LIBS} processcore)
+target_link_libraries(processui PUBLIC KDE4::kdeui processcore)
 
 
 set_target_properties(processui
@@ -38,7 +38,7 @@ kde4_add_widget(ksysguardwidgets_SRCS ksysguard.widgets)
 
 kde4_add_plugin(ksysguardwidgets ${ksysguardwidgets_SRCS} ${ksysguardwidgets_PART_SRCS})
 
-target_link_libraries(ksysguardwidgets ${KDE4_KDEUI_LIBS} processui)
+target_link_libraries(ksysguardwidgets KDE4::kdeui processui)
 
 install(
     TARGETS ksysguardwidgets

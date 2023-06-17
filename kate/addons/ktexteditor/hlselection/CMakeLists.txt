@@ -4,10 +4,10 @@
 kde4_add_plugin(ktexteditor_hlselection hlselectionplugin.cpp)
 
 target_link_libraries(ktexteditor_hlselection
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KFILE_LIBS}
+    KDE4::kio
+    KDE4::ktexteditor
+    KDE4::kdeui
+    KDE4::kfile
 )
 
 install(

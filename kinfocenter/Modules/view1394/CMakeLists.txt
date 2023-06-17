@@ -4,7 +4,7 @@ set(kcm_view1394_PART_SRCS view1394.cpp view1394widget.ui)
 
 kde4_add_plugin(kcm_view1394 ${kcm_view1394_PART_SRCS})
 
-target_link_libraries(kcm_view1394 ${KDE4_KDEUI_LIBS} ${RAW1394_LIBRARIES})
+target_link_libraries(kcm_view1394 KDE4::kdeui ${RAW1394_LIBRARIES})
 
 install(TARGETS kcm_view1394  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 

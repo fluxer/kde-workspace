@@ -3,9 +3,9 @@
 kde4_add_plugin(kcm_display display.cpp)
 
 target_link_libraries(kcm_display
-    ${KDE4_KCMUTILS_LIBS}
+    KDE4::kcmutils
     ${QT_QTGUI_LIBRARY}
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
 )
 
 install(

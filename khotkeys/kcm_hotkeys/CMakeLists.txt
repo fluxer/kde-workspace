@@ -73,7 +73,7 @@ kde4_add_plugin(kcm_hotkeys ${kcm_hotkeys_PART_SRCS})
 add_dependencies(kcm_hotkeys kded_khotkeys)
 
 target_link_libraries(kcm_hotkeys
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTGUI_LIBRARY}
     ${X11_X11_LIB}
     khotkeysprivate

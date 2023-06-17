@@ -11,4 +11,4 @@ set(testtrash_SRCS
 
 kde4_add_test(testtrash ${testtrash_SRCS})
 
-target_link_libraries(testtrash ${KDE4_KIO_LIBS} ${KDE4_SOLID_LIBS} ${QT_QTTEST_LIBRARY})
+target_link_libraries(testtrash KDE4::kio KDE4::solid ${QT_QTTEST_LIBRARY})

@@ -4,7 +4,7 @@ set(kde_SOURCES  qguiplatformplugin_kde.cpp)
 
 kde4_add_plugin(kde ${kde_SOURCES})
 
-target_link_libraries(kde ${KDE4_KIO_LIBS} ${QT_QTGUI_LIBRARY})
+target_link_libraries(kde KDE4::kio ${QT_QTGUI_LIBRARY})
 
 install(
     TARGETS kde LIBRARY

@@ -8,7 +8,7 @@ include_directories(
 kde4_add_test(libkonq-konqmimedatatest konqmimedatatest.cpp)
 
 target_link_libraries(libkonq-konqmimedatatest konq
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
     ${QT_QTGUI_LIBRARY}
     ${QT_QTCORE_LIBRARY}
     ${QT_QTTEST_LIBRARY}
@@ -19,7 +19,7 @@ target_link_libraries(libkonq-konqmimedatatest konq
 kde4_add_test(libkonq-konqpopupmenutest konqpopupmenutest.cpp)
 
 target_link_libraries(libkonq-konqpopupmenutest
-    ${KDE4_KFILE_LIBS}
+    KDE4::kfile
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}
@@ -38,12 +38,12 @@ qt4_add_dbus_interface(favicontest_SRCS
 kde4_add_test(libkonq-favicontest ${favicontest_SRCS})
 
 target_link_libraries(libkonq-favicontest
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kdecore
+    KDE4::kio
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
     ${QT_QTTEST_LIBRARY}
-    ${KDE4_SOLID_LIBS}
+    KDE4::solid
     konq
 )

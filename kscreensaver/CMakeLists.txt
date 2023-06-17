@@ -22,8 +22,8 @@ qt4_generate_dbus_interface(kded_kscreensaver.h org.kde.kscreensaver.xml)
 
 kde4_add_plugin(kded_kscreensaver ${kded_kscreensaver_SRCS})
 target_link_libraries(kded_kscreensaver PRIVATE
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIDLETIME_LIBS}
+    KDE4::kdecore
+    KDE4::kidletime
     ${QT_QTCORE_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
 )

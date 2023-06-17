@@ -3,7 +3,7 @@ set(krunner_windows_SRCS
 )
 
 kde4_add_plugin(krunner_windows ${krunner_windows_SRCS})
-target_link_libraries(krunner_windows ${KDE4_KDEUI_LIBS} ${KDE4_PLASMA_LIBS})
+target_link_libraries(krunner_windows KDE4::kdeui KDE4::plasma)
 
 install(TARGETS krunner_windows DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 

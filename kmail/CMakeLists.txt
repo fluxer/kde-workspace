@@ -3,8 +3,8 @@ project(KMail)
 add_executable(kmail main.cpp)
 
 target_link_libraries(kmail
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KEMAIL_LIBS}
+    KDE4::kdecore
+    KDE4::kemail
 )
 
 install(

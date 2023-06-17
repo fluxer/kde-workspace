@@ -21,8 +21,8 @@ set(kglobalaccel_SRCS
 add_executable(kglobalaccel ${kglobalaccel_SRCS})
 
 target_link_libraries(kglobalaccel
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::kdeui
+    KDE4::kio
     ${X11_LIBRARIES}
 )
 

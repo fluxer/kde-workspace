@@ -8,9 +8,9 @@ set(kgreeterconfig_SRCS
 kde4_add_plugin(kcm_kgreeterconfig ${kgreeterconfig_SRCS})
 
 target_link_libraries(kcm_kgreeterconfig
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KCMUTILS_LIBS}
-    ${KDE4_PLASMA_LIBS}
+    KDE4::kdeui
+    KDE4::kcmutils
+    KDE4::plasma
 )
 
 install(
@@ -26,7 +26,7 @@ install(
 ########### next target ###############
 
 add_executable(kcmkgreeterhelper kgreeterhelper.cpp)
-target_link_libraries(kcmkgreeterhelper ${KDE4_KDECORE_LIBS})
+target_link_libraries(kcmkgreeterhelper KDE4::kdecore)
 
 install(
     TARGETS kcmkgreeterhelper

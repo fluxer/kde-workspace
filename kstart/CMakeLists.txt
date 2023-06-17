@@ -4,7 +4,7 @@ set(kstart_SRCS kstart.cpp)
 add_executable(kstart ${kstart_SRCS})
 
 target_link_libraries(kstart
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
     ${X11_X11_LIB}
 )
 

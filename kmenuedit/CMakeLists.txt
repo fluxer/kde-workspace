@@ -29,7 +29,7 @@ set(kmenuedit_SRCS main.cpp ${kmenueditcommon_STAT_SRCS})
 add_executable(kmenuedit ${kmenuedit_SRCS})
 
 target_link_libraries(kmenuedit
-    ${KDE4_KIO_LIBS}
+    KDE4::kio
     ${QT_QTXML_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
 )

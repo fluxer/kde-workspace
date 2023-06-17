@@ -1,8 +1,8 @@
 kde4_add_plugin(ktexteditor_iconinserter iconinserterplugin.cpp)
 
 target_link_libraries(ktexteditor_iconinserter
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kdeui
+    KDE4::ktexteditor
 )
 
 install(

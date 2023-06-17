@@ -4,8 +4,8 @@ kde4_add_plugin(katefiletemplates filetemplates.cpp)
 
 target_link_libraries(katefiletemplates
     kateinterfaces
-    ${KDE4_KEMAIL_LIBS}
-    ${KDE4_KTEXTEDITOR_LIBS}
+    KDE4::kemail
+    KDE4::ktexteditor
 )
 
 install(

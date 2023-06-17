@@ -10,8 +10,8 @@ set(clock_SRCS
 
 kde4_add_plugin(plasma_applet_clock ${clock_SRCS})
 target_link_libraries(plasma_applet_clock
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KIO_LIBS}
+    KDE4::plasma
+    KDE4::kio
     plasmaclock
 )
 

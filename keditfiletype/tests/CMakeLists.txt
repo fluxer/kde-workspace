@@ -8,9 +8,9 @@ kde4_add_test(keditfiletype-filetypestest
     ../mimetypewriter.cpp
 )
 target_link_libraries(keditfiletype-filetypestest
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdecore
+    KDE4::kio
+    KDE4::kdeui
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTTEST_LIBRARY}

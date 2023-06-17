@@ -14,7 +14,7 @@ kde4_add_kcfg_files(fileviewgitplugin_SRCS fileviewgitpluginsettings.kcfgc)
 
 kde4_add_plugin(fileviewgitplugin  ${fileviewgitplugin_SRCS})
 
-target_link_libraries(fileviewgitplugin ${KDE4_KIO_LIBS} konq)
+target_link_libraries(fileviewgitplugin KDE4::kio konq)
 
 install(
     FILES fileviewgitplugin.desktop

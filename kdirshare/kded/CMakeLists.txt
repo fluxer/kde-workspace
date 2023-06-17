@@ -10,11 +10,11 @@ qt4_generate_dbus_interface(kded_kdirshare.h org.kde.kdirshare.xml )
 
 kde4_add_plugin(kded_kdirshare ${kded_kdirshare_SRCS})
 target_link_libraries(kded_kdirshare PRIVATE
-    ${KDE4_KDECORE_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDNSSD_LIBS}
-    ${KDE4_KPASSWDSTORE_LIBS}
+    KDE4::kdecore
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::kdnssd
+    KDE4::kpasswdstore
 )
 
 if(OPENSSL_FOUND)

@@ -25,8 +25,8 @@ include_directories(
 
 add_library(corebindingsplugin SHARED ${corebindings_SRCS})
 target_link_libraries(corebindingsplugin
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KDECLARATIVE_LIBS}
+    KDE4::plasma
+    KDE4::kdeclarative
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
 )

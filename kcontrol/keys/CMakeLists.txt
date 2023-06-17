@@ -21,7 +21,7 @@ set_source_files_properties(${kglobalaccel_component_xml} PROPERTIES INCLUDE "kg
 qt4_add_dbus_interface(kdeui_LIB_SRCS ${kglobalaccel_component_xml} kglobalaccel_component_interface )
 
 kde4_add_plugin(kcm_keys ${kcm_keys_PART_SRCS})
-target_link_libraries(kcm_keys  ${KDE4_KDEUI_LIBS} ${KDE4_KIO_LIBS} ${X11_X11_LIB})
+target_link_libraries(kcm_keys  KDE4::kdeui KDE4::kio ${X11_X11_LIB})
 
 install(TARGETS kcm_keys  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
 

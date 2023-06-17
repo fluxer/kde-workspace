@@ -49,11 +49,11 @@ qt4_add_dbus_adaptor(ksmserver_SRCS org.kde.KSMServerInterface.xml server.h KSMS
 add_executable(ksmserver ${ksmserver_SRCS})
 
 target_link_libraries(ksmserver
-    ${KDE4_PLASMA_LIBS}
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
-    ${KDE4_KDECLARATIVE_LIBS}
+    KDE4::plasma
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::solid
+    KDE4::kdeclarative
     ${QT_QTDECLARATIVE_LIBRARY}
     ${X11_LIBRARIES}
     kworkspace

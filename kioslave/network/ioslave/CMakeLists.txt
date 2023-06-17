@@ -8,8 +8,8 @@ set(kio_network_SRCS
 add_executable(kio_network ${kio_network_SRCS})
 
 target_link_libraries(kio_network
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KDNSSD_LIBS}
+    KDE4::kio
+    KDE4::kdnssd
 )
 
 install(

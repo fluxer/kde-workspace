@@ -9,8 +9,8 @@ set(kdecorations_LIB_SRCS
 
 add_library(kdecorations SHARED ${kdecorations_LIB_SRCS})
 
-target_link_libraries(kdecorations PRIVATE ${KDE4_KDEUI_LIBS})
-target_link_libraries(kdecorations PUBLIC ${KDE4_KDEUI_LIBS})
+target_link_libraries(kdecorations PRIVATE KDE4::kdeui)
+target_link_libraries(kdecorations PUBLIC KDE4::kdeui)
 
 set_target_properties(kdecorations PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}

@@ -73,7 +73,7 @@ set_source_files_properties(
 )
 
 kde4_add_plugin(kcm_kwin4_effect_builtins ${kwin4_effect_builtins_config_sources})
-target_link_libraries(kcm_kwin4_effect_builtins kwineffects ${KDE4_KIO_LIBS} ${KDE4_KDEUI_LIBS})
+target_link_libraries(kcm_kwin4_effect_builtins kwineffects KDE4::kio KDE4::kdeui)
 install(TARGETS kcm_kwin4_effect_builtins DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
@@ -166,8 +166,8 @@ endif()
 add_executable(kwin ${kwin_SRCS} ${kwin4_effect_builtins_sources})
 
 target_link_libraries(kwin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KDECLARATIVE_LIBS}
+    KDE4::kdeui
+    KDE4::kdeclarative
     ${X11_X11_LIB}
     ${X11_Xext_LIB}
     ${X11_ICE_LIB}

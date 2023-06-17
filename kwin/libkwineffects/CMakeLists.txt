@@ -14,7 +14,7 @@ set(kwineffects_QT_LIBS
 )
 
 set(kwineffects_KDE_LIBS
-    ${KDE4_KDEUI_LIBS}
+    KDE4::kdeui
 )
 
 set(kwineffects_XLIB_LIBS

@@ -15,8 +15,8 @@ set(kdepasswd_SRCS
 add_executable(kdepasswd ${kdepasswd_SRCS})
 
 target_link_libraries(kdepasswd
-    ${KDE4_KIO_LIBS}
-    ${KDE4_KPTY_LIBS}
+    KDE4::kio
+    KDE4::kpty
 )
 
 install(

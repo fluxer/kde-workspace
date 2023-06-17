@@ -17,8 +17,8 @@ set(kio_trash_PART_SRCS kio_trash.cpp ${trashcommon_PART_SRCS})
 add_executable(kio_trash ${kio_trash_PART_SRCS})
 
 target_link_libraries(kio_trash
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kio
+    KDE4::solid
 )
 
 install(
@@ -32,7 +32,7 @@ set(ktrash_SRCS ktrash.cpp)
 
 add_executable(ktrash ${ktrash_SRCS})
 
-target_link_libraries(ktrash ${KDE4_KIO_LIBS})
+target_link_libraries(ktrash KDE4::kio)
 
 install(
     TARGETS ktrash
@@ -44,9 +44,9 @@ install(
 set(kcm_trash_PART_SRCS kcmtrash.cpp ${trashcommon_PART_SRCS})
 kde4_add_plugin(kcm_trash ${kcm_trash_PART_SRCS})
 target_link_libraries(kcm_trash
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KIO_LIBS}
-    ${KDE4_SOLID_LIBS}
+    KDE4::kdeui
+    KDE4::kio
+    KDE4::solid
 )
 
 install(

@@ -11,8 +11,8 @@ set(katetabbarextensionplugin_PART_SRCS
 kde4_add_plugin(katetabbarextensionplugin ${katetabbarextensionplugin_PART_SRCS})
 
 target_link_libraries(katetabbarextensionplugin
-    ${KDE4_KDEUI_LIBS}
-    ${KDE4_KPARTS_LIBS}
+    KDE4::kdeui
+    KDE4::kparts
     kateinterfaces
 )
 

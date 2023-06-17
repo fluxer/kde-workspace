@@ -17,7 +17,7 @@ endif()
 
 kde4_add_plugin(kcm_opengl opengl.cpp)
 
-target_link_libraries(kcm_opengl ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${X11_X11_LIB})
+target_link_libraries(kcm_opengl KDE4::kdeui ${QT_QTGUI_LIBRARY} ${X11_X11_LIB})
 
 if(LIBDRM_FOUND)
     target_link_libraries(kcm_opengl ${LIBDRM_LIBRARIES})

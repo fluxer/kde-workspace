@@ -7,7 +7,7 @@ set(lsofui_LIB_SRCS
 )
 
 add_library(lsofui SHARED ${lsofui_LIB_SRCS})
-target_link_libraries(lsofui ${KDE4_KIO_LIBS})
+target_link_libraries(lsofui KDE4::kio)
 
 set_target_properties(lsofui PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
@@ -32,7 +32,7 @@ kde4_add_widget(ksysguardlsofwidgets_SRCS ksysguardlsof.widgets)
 kde4_add_plugin(ksysguardlsofwidgets ${ksysguardlsofwidgets_SRCS})
 
 target_link_libraries(ksysguardlsofwidgets
-    ${KDE4_KDECORE_LIBS}
+    KDE4::kdecore
     ${QT_QTGUI_LIBRARY}
     lsofui
 )
