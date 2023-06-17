@@ -406,7 +406,7 @@ install(
 install(
     EXPORT kdeworkspaceLibraryTargets 
     NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/modules
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/KDE4Workspace
     FILE KDE4WorkspaceLibraryTargets.cmake
 )
 
