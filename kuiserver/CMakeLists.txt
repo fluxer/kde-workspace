@@ -2,8 +2,6 @@ if(ENABLE_TESTING)
     add_subdirectory(tests)
 endif()
 
-include_directories(${KDE4_KIO_INCLUDES})
-
 set(kuiserver_SRCS
     main.cpp
     jobview.cpp

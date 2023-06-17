@@ -1,5 +1,3 @@
-include_directories(${KDE4_KDEUI_INCLUDES})
-
 ########### next target ###############
 set(oxygen_demo_SOURCES
     oxygenbenchmarkwidget.cpp

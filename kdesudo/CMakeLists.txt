@@ -11,11 +11,6 @@ add_feature_info("procctl" HAVE_PROCCTL "Used to disallow process tracing")
 
 configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-include_directories(
-    ${KDE4_KDECORE_INCLUDES}
-    ${KDE4_KDEUI_INCLUDES}
-)
-
 add_definitions(-DKDE_DEFAULT_DEBUG_AREA=900)
 
 set(KDESUDO_SRC

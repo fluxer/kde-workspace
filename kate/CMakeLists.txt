@@ -14,7 +14,6 @@ configure_file(
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/src/app
-    ${KDE4_KIO_INCLUDES}
 )
 
 # kate part

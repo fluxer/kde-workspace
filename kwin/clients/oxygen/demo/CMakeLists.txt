@@ -1,6 +1,5 @@
 include_directories(
     ${CMAKE_SOURCE_DIR}/libs/oxygen
-    ${KDE4_KDEUI_INCLUDES}
 )
 
 

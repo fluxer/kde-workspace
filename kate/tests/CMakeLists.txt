@@ -13,7 +13,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/kate/part/view
     ${CMAKE_SOURCE_DIR}/kate/part/kte5 # KDE5 remove
     ${CMAKE_BINARY_DIR}/kate/part
-    ${KDE4_KIO_INCLUDES}
 )
 
 set(KATE_TEST_LINK_LIBS
