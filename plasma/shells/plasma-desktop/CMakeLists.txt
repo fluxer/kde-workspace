@@ -22,7 +22,6 @@ set(plasma_SRCS
     plasmaapp.cpp
     positioningruler.cpp
     klistconfirmationdialog.cpp
-    ${wallpaper_SRCS}
 )
 
 kde4_add_kcfg_files(plasma_SRCS data/plasma-shell-desktop.kcfgc)
