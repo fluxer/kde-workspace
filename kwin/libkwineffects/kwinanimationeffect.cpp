@@ -812,14 +812,14 @@ region_creation:
             const QRect geo = entry.key()->expandedGeometry();
             if (rects.isEmpty())
                 rects << geo;
-            QList<QRect>::const_iterator r, rEnd = rects.constEnd();
-            for ( r = rects.constBegin(); r != rEnd; ++r) { // transform
-                const_cast<QRect*>(&(*r))->setSize(QSize(qRound(r->width()*f[0]), qRound(r->height()*f[1])));
-                const_cast<QRect*>(&(*r))->translate(t[0], t[1]); // "const_cast" - don't do that at home, kids ;-)
+            QList<QRect>::iterator r, rEnd = rects.end();
+            for ( r = rects.begin(); r != rEnd; ++r) { // transform
+                r->setSize(QSize(qRound(r->width()*f[0]), qRound(r->height()*f[1])));
+                r->translate(t[0], t[1]);
             }
             QRect rect = rects.at(0);
             if (rects.count() > 1) {
-                for ( r = rects.constBegin() + 1; r != rEnd; ++r) // unite
+                for ( r = rects.begin() + 1; r != rEnd; ++r) // unite
                     rect |= *r;
                 const int dx = 110*(rect.width() - geo.width())/100 + 1 - rect.width() + geo.width();
                 const int dy = 110*(rect.height() - geo.height())/100 + 1 - rect.height() + geo.height();
