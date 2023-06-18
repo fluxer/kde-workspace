@@ -377,6 +377,7 @@ QRect AnimationEffect::clipRect(const QRect &geo, const AniData &anim) const
 
 void AnimationEffect::clipWindow(const EffectWindow *w, const AniData &anim, WindowQuadList &quads) const
 {
+    // FIXME: what's this doing here?
     return;
     const QRect geo = w->expandedGeometry();
     QRect clip = AnimationEffect::clipRect(geo, anim);
