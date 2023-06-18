@@ -120,18 +120,18 @@ void KDisplayManager::shutdown(KWorkSpace::ShutdownType shutdownType,
 
     if (d->m_login1.isValid()) {
         if (shutdownType == KWorkSpace::ShutdownTypeReboot) {
-            d->m_login1.asyncCall("Reboot", interactive);
+            d->m_login1.call("Reboot", interactive);
         } else if (shutdownType == KWorkSpace::ShutdownTypeHalt) {
-            d->m_login1.asyncCall("PowerOff", interactive);
+            d->m_login1.call("PowerOff", interactive);
         }
         return;
     }
 
     if (d->m_consolekit.isValid()) {
         if (shutdownType == KWorkSpace::ShutdownTypeReboot) {
-            d->m_consolekit.asyncCall("Reboot", interactive);
+            d->m_consolekit.call("Reboot", interactive);
         } else if (shutdownType == KWorkSpace::ShutdownTypeHalt) {
-            d->m_consolekit.asyncCall("PowerOff", interactive);
+            d->m_consolekit.call("PowerOff", interactive);
         }
         return;
     }
