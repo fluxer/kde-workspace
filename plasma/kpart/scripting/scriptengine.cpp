@@ -123,7 +123,7 @@ void ScriptEngine::setupEngine()
     QScriptValue v = globalObject();
     v.setProperty("print", newFunction(ScriptEngine::print));
     v.setProperty("QRectF", constructQRectFClass(this));
-    v.setProperty("knownWidgetTypes", newFunction(ScriptEngine::fileExists));
+    v.setProperty("knownWidgetTypes", newFunction(ScriptEngine::knownWidgetTypes));
     v.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
     v.setProperty("widgets", newFunction(ScriptEngine::widgets));
     v.setProperty("addWidget", newFunction(ScriptEngine::addWidget));
