@@ -26,7 +26,7 @@ set_target_properties(processcore PROPERTIES
 
 install(
     TARGETS processcore
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

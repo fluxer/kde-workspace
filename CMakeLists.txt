@@ -404,10 +404,10 @@ install(
 )
 
 install(
-    EXPORT kdeworkspaceLibraryTargets 
+    EXPORT kdeworkspaceTargets 
     NAMESPACE ${KDE4WORKSPACE_TARGET_PREFIX}
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/cmake/KDE4Workspace
-    FILE KDE4WorkspaceLibraryTargets.cmake
+    FILE KDE4WorkspaceTargets.cmake
 )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

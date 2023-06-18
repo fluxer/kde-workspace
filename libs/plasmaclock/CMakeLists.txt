@@ -33,6 +33,6 @@ install(
 )
 install(
     TARGETS plasmaclock
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )

@@ -22,7 +22,7 @@ set_target_properties(ksgrd PROPERTIES
 
 install(
     TARGETS ksgrd
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

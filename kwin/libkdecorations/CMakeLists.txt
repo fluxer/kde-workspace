@@ -18,7 +18,7 @@ set_target_properties(kdecorations PROPERTIES
 )
 install(
     TARGETS kdecorations
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

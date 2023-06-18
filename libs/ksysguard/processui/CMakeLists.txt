@@ -1,5 +1,8 @@
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../  ../processcore/)
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}/../
+    ../processcore/
+)
 
 set(processui_LIB_SRCS
    ksysguardprocesslist.cpp
@@ -20,7 +23,6 @@ endif()
 target_link_libraries(processui PRIVATE ${QT_QTSCRIPT_LIBRARY})
 target_link_libraries(processui PUBLIC KDE4::kdeui processcore)
 
-
 set_target_properties(processui
     PROPERTIES VERSION ${GENERIC_LIB_VERSION}
     SOVERSION ${GENERIC_LIB_SOVERSION}
@@ -28,7 +30,7 @@ set_target_properties(processui
 
 install(
     TARGETS processui
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

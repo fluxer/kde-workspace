@@ -16,7 +16,7 @@ set_target_properties(lsofui PROPERTIES
 
 install(
     TARGETS lsofui
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

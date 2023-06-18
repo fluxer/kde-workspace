@@ -12,7 +12,7 @@ set_target_properties(ksignalplotter
 
 install(
     TARGETS ksignalplotter
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

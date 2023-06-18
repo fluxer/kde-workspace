@@ -37,7 +37,7 @@ generate_export_header(kworkspace)
 
 install(
     TARGETS kworkspace
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 

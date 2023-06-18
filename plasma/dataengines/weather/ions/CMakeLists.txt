@@ -16,7 +16,7 @@ generate_export_header(weather_ion BASE_NAME ion)
 
 install(
     TARGETS weather_ion
-    EXPORT kdeworkspaceLibraryTargets
+    EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
