@@ -19,13 +19,14 @@
 #ifndef KCMPLAYER_H
 #define KCMPLAYER_H
 
+#include <QVBoxLayout>
+#include <QSpacerItem>
+#include <QList>
 #include <kcmodule.h>
 #include <kmediaplayer.h>
 #include <ksettings.h>
 
-QT_BEGIN_NAMESPACE
-class Ui_KCMPlayer;
-QT_END_NAMESPACE
+class KMediaBox;
 
 class KCMPlayer : public KCModule
 {
@@ -40,19 +41,12 @@ public slots:
     void save();
     void load();
 
-    void setGlobalOutput(QString output);
-    void setGlobalVolume(int volume);
-    void setGlobalMute(int mute);
-
-    void setApplicationSettings(QString application);
-    void setApplicationOutput(QString output);
-    void setApplicationVolume(int volume);
-    void setApplicationMute(int mute);
+    void slotMediaChanged();
 
 private:
-    Ui_KCMPlayer *m_ui;
-    KSettings *m_settings;
-    QString m_application;
+    QVBoxLayout* m_layout;
+    QSpacerItem* m_spacer;
+    QList<KMediaBox*> m_mediaboxes;
 };
 
 #endif // KCMPLAYER_H

@@ -16,6 +16,12 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include <QCoreApplication>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QComboBox>
+#include <knuminput.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -27,194 +33,245 @@
 #include <kicon.h>
 
 #include "kcmplayer.h"
-#include "ui_kcmplayer.h"
+
+// NOTE: keep in sync with:
+// kdelibs/kutils/kmediaplayer/kmediaplayer.cpp
+static const QString s_kmediaoutput = QString::fromLatin1("auto");
+static const bool s_kmediamute = false;
+static const int s_kmediavolume = 90;
+
+class KMediaBox : public QGroupBox
+{
+    Q_OBJECT
+public:
+    KMediaBox(QWidget *parent,
+              const QString &id, const QString &description,
+              const QString &output, bool mute, int volume,
+              const QStringList &audiooutputs);
+
+public:
+    QString id() const;
+    QString output() const;
+    bool mute() const;
+    int volume() const;
+
+    void setDefault();
+
+Q_SIGNALS:
+    void changed();
+
+private Q_SLOTS:
+    void slotOutput();
+    void slotMute();
+    void slotVolume();
+
+private:
+    void setOutput(const QString &output);
+
+    QString m_id;
+    QComboBox* m_outputbox;
+    QCheckBox* m_mutebox;
+    KIntNumInput* m_volumeinput;
+};
+
+KMediaBox::KMediaBox(QWidget *parent,
+                     const QString &id, const QString &name,
+                     const QString &output, bool mute, int volume,
+                     const QStringList &audiooutputs)
+    : QGroupBox(parent),
+    m_id(id),
+    m_outputbox(nullptr),
+    m_mutebox(nullptr),
+    m_volumeinput(nullptr)
+{
+    const QString title = QString::fromLatin1("%1 (%2)").arg(name, id);
+    setTitle(title);
+
+    QGridLayout* medialayout = new QGridLayout(this);
+
+    QLabel* outputlabel = new QLabel(i18n("Output:"), this);
+    medialayout->addWidget(outputlabel, 0, 0);
+    m_outputbox = new QComboBox(this);
+    m_outputbox->addItems(audiooutputs);
+    setOutput(output);
+    connect(m_outputbox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotOutput()));
+    medialayout->addWidget(m_outputbox, 0, 1);
+    
+    m_mutebox = new QCheckBox(i18n("Mute"), this);
+    m_mutebox->setChecked(mute);
+    connect(m_mutebox, SIGNAL(stateChanged(int)), this, SLOT(slotMute()));
+    medialayout->addWidget(m_mutebox, 1, 0, 1, 2);
+
+    QLabel* volumelabel = new QLabel(i18n("Volume:"), this);
+    medialayout->addWidget(volumelabel, 2, 0);
+    m_volumeinput = new KIntNumInput(this);
+    m_volumeinput->setRange(0, 100);
+    m_volumeinput->setValue(volume);
+    m_volumeinput->setSliderEnabled(true);
+    m_volumeinput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(m_volumeinput, SIGNAL(valueChanged(int)), this, SLOT(slotVolume()));
+    medialayout->addWidget(m_volumeinput, 2, 1);
+}
+
+QString KMediaBox::id() const
+{
+    return m_id;
+}
+
+QString KMediaBox::output() const
+{
+    return m_outputbox->currentText();
+}
+
+bool KMediaBox::mute() const
+{
+    return m_mutebox->isChecked();
+}
+
+int KMediaBox::volume() const
+{
+    return m_volumeinput->value();
+}
+
+void KMediaBox::setDefault()
+{
+    setOutput(s_kmediaoutput);
+    m_mutebox->setChecked(s_kmediamute);
+    m_volumeinput->setValue(s_kmediavolume);
+}
+
+void KMediaBox::setOutput(const QString &output)
+{
+    for (int i = 0; i < m_outputbox->count(); i++) {
+        if (m_outputbox->itemText(i) == output) {
+            m_outputbox->setCurrentIndex(i);
+            break;
+        }
+    }
+}
+
+void KMediaBox::slotOutput()
+{
+    emit changed();
+}
+
+void KMediaBox::slotMute()
+{
+    emit changed();
+}
+
+void KMediaBox::slotVolume()
+{
+    emit changed();
+}
+
 
 K_PLUGIN_FACTORY(PlayerFactory, registerPlugin<KCMPlayer>();)
 K_EXPORT_PLUGIN(PlayerFactory("kcmplayer"))
 
 KCMPlayer::KCMPlayer(QWidget *parent, const QVariantList &arguments)
-    : KCModule(PlayerFactory::componentData(), parent)
+    : KCModule(PlayerFactory::componentData(), parent),
+    m_layout(nullptr),
+    m_spacer(nullptr)
 {
-    m_ui = new Ui_KCMPlayer();
-    m_ui->setupUi(this);
-    m_settings = new KSettings("kmediaplayer", KSettings::FullConfig);
-
-    setButtons(KCModule::Default | KCModule::Apply);
-
-    KAboutData* ab = new KAboutData(
-        "kcmplayer", 0, ki18n("KMediaPlayer"), "1.0",
-        ki18n("System Media Player Configuration"),
-        KAboutData::License_GPL, ki18n("(c) 2016 Ivailo Monev"));
-
-    ab->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
-    setAboutData(ab);
-
     Q_UNUSED(arguments);
 
-    const QString globalaudio = m_settings->value("global/audiooutput", "auto").toString();
-    const int globalvolume = m_settings->value("global/volume", 90).toInt();
-    const bool globalmute = m_settings->value("global/mute", false).toBool();
+    setButtons(KCModule::Default | KCModule::Apply);
+    setQuickHelp(i18n("<h1>Media Player</h1> This module allows you to change KDE media player options."));
 
-    KAudioPlayer player(this);
-    const QStringList audiooutputs = player.audiooutputs();
-    player.deleteLater();
-    m_ui->w_audiooutput->addItems(audiooutputs);
-    m_ui->w_appaudiooutput->addItems(audiooutputs);
-    const int audioindex = m_ui->w_audiooutput->findText(globalaudio);
-    m_ui->w_audiooutput->setCurrentIndex(audioindex);
-    m_ui->w_volume->setValue(globalvolume);
-    m_ui->w_mute->setChecked(globalmute);
+    KAboutData *about = new KAboutData(
+        I18N_NOOP("kcmplayer"), 0,
+        ki18n("KDE Media Player Module"),
+        "2.0", KLocalizedString(), KAboutData::License_GPL,
+        ki18n("Copyright 2016, Ivailo Monev <email>xakepa10@gmail.com</email>")
+    );
+    about->addAuthor(ki18n("Ivailo Monev"), KLocalizedString(), "xakepa10@gmail.com");
+    setAboutData(about);
 
-    connect(m_ui->w_audiooutput, SIGNAL(currentIndexChanged(QString)),
-        this, SLOT(setGlobalOutput(QString)));
-    connect(m_ui->w_volume, SIGNAL(valueChanged(int)),
-        this, SLOT(setGlobalVolume(int)));
-    connect(m_ui->w_mute, SIGNAL(stateChanged(int)),
-        this, SLOT(setGlobalMute(int)));
-
-    // NOTE: this catches all .desktop files
-    const KService::List servicefiles = KService::allServices();
-    foreach (const KService::Ptr service, servicefiles ) {
-        const QStringList servids = service.data()->property("X-KDE-MediaPlayer", QVariant::StringList).toStringList();
-        const KIcon servicon = KIcon(service.data()->icon());
-        foreach (const QString &id, servids) {
-            m_ui->w_application->addItem(servicon, id);
-        }
-    }
-
-    connect(m_ui->w_application, SIGNAL(currentIndexChanged(QString)),
-        this, SLOT(setApplicationSettings(QString)));
-    connect(m_ui->w_appaudiooutput, SIGNAL(currentIndexChanged(QString)),
-        this, SLOT(setApplicationOutput(QString)));
-    connect(m_ui->w_appvolume, SIGNAL(valueChanged(int)),
-        this, SLOT(setApplicationVolume(int)));
-    connect(m_ui->w_appmute, SIGNAL(stateChanged(int)),
-        this, SLOT(setApplicationMute(int)));
+    m_layout = new QVBoxLayout(this);
+    setLayout(m_layout);
 }
 
 KCMPlayer::~KCMPlayer()
 {
-    m_settings->sync();
-    delete m_settings;
-    delete m_ui;
 }
 
 void KCMPlayer::defaults()
 {
-    // TODO:
+    foreach (KMediaBox* mediabox, m_mediaboxes) {
+        mediabox->setDefault();
+    }
+    emit changed(true);
 }
+
 void KCMPlayer::load()
 {
-    // Qt::MatchFixedString is basicly case-insensitive
-    const int appindex = m_ui->w_application->findText(QCoreApplication::applicationName(), Qt::MatchFixedString);
-    if (appindex >= 0) {
-        m_ui->w_application->setCurrentIndex(appindex);
-    } else {
-        // just to load the appplication values
-        m_ui->w_application->setCurrentIndex(1);
-        m_ui->w_application->setCurrentIndex(0);
+    qDeleteAll(m_mediaboxes);
+    m_mediaboxes.clear();
+    for (int i = 0; i < m_layout->count(); i++) {
+        const QLayoutItem* layoutitem = m_layout->itemAt(i);
+        if (layoutitem == m_spacer) {
+            delete m_layout->takeAt(i);
+            m_spacer = nullptr;
+            break;
+        }
     }
+    Q_ASSERT(m_spacer == nullptr);
 
+    // HACK: if application starts the KCM (like kmediaplayer does) show only the application settings
+    const QString appname = QCoreApplication::applicationName();
+    const bool issystemsettings = (appname == QLatin1String("systemsettings"));
+
+    KAudioPlayer kaudioplayer(this);
+    const QStringList audiooutputs = kaudioplayer.audiooutputs();
+    KSettings ksettings("kmediaplayer", KSettings::FullConfig);
+    // NOTE: this catches all .desktop files
+    const KService::List servicefiles = KService::allServices();
+    foreach (const KService::Ptr service, servicefiles) {
+        if (!issystemsettings && service->desktopEntryName() != appname) {
+            continue;
+        }
+
+        const QString medianame = service->name();
+        const QStringList mediaids = service->property("X-KDE-MediaPlayer", QVariant::StringList).toStringList();
+        foreach (const QString &id, mediaids) {
+            const QString output = ksettings.value(id + "/audiooutput", s_kmediaoutput).toString();
+            const bool mute = ksettings.value(id + "/mute", s_kmediamute).toBool();
+            const int volume = ksettings.value(id + "/volume", s_kmediavolume).toInt();
+
+            // const KIcon servicon = KIcon(service.data()->icon());
+            KMediaBox* mediabox = new KMediaBox(
+                this,
+                id, medianame,
+                output, mute, volume,
+                audiooutputs
+            );
+            m_mediaboxes.append(mediabox);
+            connect(mediabox, SIGNAL(changed()), this, SLOT(slotMediaChanged()));
+            m_layout->addWidget(mediabox);
+        }
+    }
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_layout->addSpacerItem(m_spacer);
     emit changed(false);
 }
 
 void KCMPlayer::save()
 {
-    if (m_settings && m_settings->isWritable()) {
-        m_settings->setValue("global/audiooutput", m_ui->w_audiooutput->currentText());
-        m_settings->setValue("global/volume", m_ui->w_volume->value());
-        m_settings->setValue("global/mute", m_ui->w_mute->isChecked());
-        m_settings->sync();
-    } else {
-        kWarning() << i18n("Could not save global state");
+    KSettings ksettings("kmediaplayer", KSettings::FullConfig);
+    foreach (const KMediaBox* mediabox, m_mediaboxes) {
+        const QString id = mediabox->id();
+        ksettings.setValue(id + "/audiooutput", mediabox->output());
+        ksettings.setValue(id + "/mute", mediabox->mute());
+        ksettings.setValue(id + "/volume", mediabox->volume());
     }
-
-    if (!m_application.isEmpty()) {
-        if (m_settings && m_settings->isWritable()) {
-            m_settings->setValue(m_application + "/audiooutput", m_ui->w_appaudiooutput->currentText());
-            m_settings->setValue(m_application + "/volume", m_ui->w_appvolume->value());
-            m_settings->setValue(m_application + "/mute", m_ui->w_appmute->isChecked());
-            m_settings->sync();
-        } else {
-            kWarning() << i18n("Could not save application state");
-        }
-    }
-
     emit changed(false);
 }
 
-void KCMPlayer::setGlobalOutput(QString output)
+void KCMPlayer::slotMediaChanged()
 {
-    kDebug() << output;
-    if (m_settings->value("global/audiooutput").toString() != output) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
-}
-
-void KCMPlayer::setGlobalVolume(int volume)
-{
-    kDebug() << volume;
-    if (m_settings->value("global/volume").toInt() != volume) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
-}
-
-void KCMPlayer::setGlobalMute(int mute)
-{
-    kDebug() << mute;
-    if (m_settings->value("global/mute").toBool() != bool(mute)) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
-}
-
-void KCMPlayer::setApplicationSettings(QString application)
-{
-    m_application = application;
-
-    QString appaudio = m_settings->value(m_application + "/audiooutput", "auto").toString();
-    int appvolume = m_settings->value(m_application + "/volume", 90).toInt();
-    bool appmute = m_settings->value(m_application +"/mute", false).toBool();
-
-    const int audioindex = m_ui->w_appaudiooutput->findText(appaudio);
-    m_ui->w_appaudiooutput->setCurrentIndex(audioindex);
-    m_ui->w_appvolume->setValue(appvolume);
-    m_ui->w_appmute->setChecked(appmute);
-}
-
-void KCMPlayer::setApplicationOutput(QString output)
-{
-    kDebug() << output;
-    if (m_settings->value(m_application + "/audiooutput").toString() != output) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
-}
-
-void KCMPlayer::setApplicationVolume(int volume)
-{
-    kDebug() << volume;
-    if (m_settings->value(m_application + "/volume").toInt() != volume) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
-}
-
-void KCMPlayer::setApplicationMute(int mute)
-{
-    kDebug() << mute;
-    if (m_settings->value(m_application + "/mute").toBool() != bool(mute)) {
-        emit changed(true);
-    } else {
-        emit changed(false);
-    }
+    emit changed(true);
 }
 
 #include "moc_kcmplayer.cpp"
+#include "kcmplayer.moc"

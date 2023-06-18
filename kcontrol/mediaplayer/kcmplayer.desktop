@@ -11,6 +11,6 @@ X-KDE-System-Settings-Parent-Category=audio-and-video
 X-KDE-Weight=50
 
 Name=Media Player
-Comment=System Media Player Configuration
+Comment=Change media player options
 X-KDE-Keywords=AudioVideo,Audio,Video
 Categories=Qt;KDE;X-KDE-settings-sound;
