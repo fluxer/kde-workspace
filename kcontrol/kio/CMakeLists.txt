@@ -24,12 +24,12 @@ target_link_libraries(kcm_kio
     KDE4::kio
 )
 
+########### install files ###############
+
 install(
     TARGETS kcm_kio
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
-
-########### install files ###############
 
 install(
     FILES

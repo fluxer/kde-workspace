@@ -18,7 +18,8 @@ set(randrinternal_PART_SRCS
     randrcrtc.cpp 
     randrmode.cpp
     randroutput.cpp
-    randrscreen.cpp)
+    randrscreen.cpp
+)
 
 set(kcm_randr_PART_SRCS 
     ${randrinternal_PART_SRCS}
