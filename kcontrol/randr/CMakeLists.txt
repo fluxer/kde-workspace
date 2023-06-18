@@ -60,7 +60,7 @@ target_link_libraries(krandrtray
 
 install(
     TARGETS krandrtray
-    DESTINATION ${KDE4_LIB_INSTALL_DIR}
+    DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
 
 ########### next target ###############
