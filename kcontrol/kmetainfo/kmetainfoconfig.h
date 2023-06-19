@@ -31,11 +31,12 @@
 class KCMMetaInfo : public KCModule, public Ui_KMetaInfoDialog
 {
     Q_OBJECT
-
 public:
     KCMMetaInfo(QWidget* parent, const QVariantList&);
     ~KCMMetaInfo();
 
+    // KCModule reimplementations
+public Q_SLOTS:
     void load() final;
     void save() final;
 

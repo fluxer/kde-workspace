@@ -36,10 +36,10 @@ class KCMFreeSpace : public KCModule
 {
     Q_OBJECT
 public:
-    // KCModule reimplementations
     KCMFreeSpace(QWidget *parent, const QVariantList &args);
     ~KCMFreeSpace();
 
+    // KCModule reimplementations
 public Q_SLOTS:
     void load() final;
     void save() final;
