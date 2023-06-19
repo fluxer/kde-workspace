@@ -30,18 +30,20 @@ class KSpellConfigWidget;
 
 class SonnetSpellCheckingModule : public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
 
- public:
-  SonnetSpellCheckingModule(QWidget* parent, const QVariantList&);
-  ~SonnetSpellCheckingModule();
+public:
+    SonnetSpellCheckingModule(QWidget* parent, const QVariantList&);
+    ~SonnetSpellCheckingModule();
 
-  void save();
-  void defaults();
+    // KCModule reimplementations
+public Q_SLOTS:
+    void save() final;
+    void defaults() final;
 
- private:
-  KSpellConfigWidget *m_configWidget;
-  KConfig *m_config;
+private:
+    KSpellConfigWidget *m_configWidget;
+    KConfig *m_config;
 };
 
 #endif
