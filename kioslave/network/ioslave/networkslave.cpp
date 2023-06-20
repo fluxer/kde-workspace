@@ -105,6 +105,18 @@ void NetworkSlave::stat(const KUrl &url)
         error(KIO::ERR_UNSUPPORTED_ACTION, url.prettyUrl());
         return;
     }
+    const QString urlpath = url.path();
+    if (urlpath.isEmpty() || urlpath == QLatin1String("/")) {
+        // fake the root entry, whenever listed it will list all services
+        KIO::UDSEntry kioudsentry;
+        kioudsentry.insert(KIO::UDSEntry::UDS_NAME, "root");
+        kioudsentry.insert(KIO::UDSEntry::UDS_FILE_TYPE, S_IFDIR);
+        kioudsentry.insert(KIO::UDSEntry::UDS_ACCESS, S_IRWXU | S_IRWXG | S_IRWXO);
+        kioudsentry.insert(KIO::UDSEntry::UDS_MIME_TYPE, "inode/directory");
+        statEntry(kioudsentry);
+        finished();
+        return;
+    }
     if (!m_kdnssd) {
         m_kdnssd = new KDNSSD();
     }
