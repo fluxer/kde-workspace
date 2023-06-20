@@ -40,7 +40,7 @@ static bool isIconOld(const QString &iconFile)
     const QFileInfo iconInfo(iconFile);
     const QDateTime iconLastModified = iconInfo.lastModified();
     if (!iconInfo.isFile() || !iconLastModified.isValid()) {
-        kDebug() << "Icon file too old or does not exist" << iconFile;
+        kDebug() << "Icon file does not exist or its modification time is invalid" << iconFile;
         return true;
     }
 
