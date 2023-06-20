@@ -58,11 +58,8 @@ int main(int argc, char **argv)
         "kdesudo", 0, ki18n("KdeSudo"),
         "3.4.2.3", ki18n("Sudo frontend for KDE"),
         KAboutData::License_GPL,
-        ki18n("(C) 2007 - 2008 Anthony Mercatante"),
-        KLocalizedString(),
-        "https://code.launchpad.net/kdesudo/");
-
-    about.setBugAddress("https://launchpad.net/kdesudo/+filebug");
+        ki18n("(C) 2007 - 2008 Anthony Mercatante")
+    );
 
     about.addAuthor(ki18n("Robert Gruber"), KLocalizedString(),
                     "rgruber@users.sourceforge.net", "http://test.com");
