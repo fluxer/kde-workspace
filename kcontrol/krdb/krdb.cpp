@@ -21,7 +21,6 @@
 #include <string.h>
 #include <unistd.h>
 
-#undef Unsorted
 #include <QBuffer>
 #include <QDir>
 #include <QtCore/QSettings>
