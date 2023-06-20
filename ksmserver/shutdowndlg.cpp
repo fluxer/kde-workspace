@@ -168,7 +168,6 @@ KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
     connect(rootObject, SIGNAL(haltRequested()), SLOT(slotHalt()));
     connect(rootObject, SIGNAL(suspendRequested(int)), SLOT(slotSuspend(int)) );
     connect(rootObject, SIGNAL(rebootRequested()), SLOT(slotReboot()));
-    connect(rootObject, SIGNAL(rebootRequested2(int)), SLOT(slotReboot(int)) );
     connect(rootObject, SIGNAL(cancelRequested()), SLOT(slotCancel()));
     connect(rootObject, SIGNAL(lockScreenRequested()), SLOT(slotLockScreen()));
     m_view->show();
@@ -204,12 +203,6 @@ void KSMShutdownDlg::slotLogout()
 }
 
 void KSMShutdownDlg::slotReboot()
-{
-    m_shutdownType = KWorkSpace::ShutdownTypeReboot;
-    accept();
-}
-
-void KSMShutdownDlg::slotReboot(int opt)
 {
     m_shutdownType = KWorkSpace::ShutdownTypeReboot;
     accept();

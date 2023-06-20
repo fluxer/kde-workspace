@@ -39,7 +39,6 @@ PlasmaCore.FrameSvgItem {
     signal haltRequested()
     signal suspendRequested(int spdMethod)
     signal rebootRequested()
-    signal rebootRequested2(int opt)
     signal cancelRequested()
     signal lockScreenRequested()
 
