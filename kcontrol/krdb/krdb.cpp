@@ -171,7 +171,7 @@ static void addColorDef(QString& s, const char* n, const QColor& col)
 
 // -----------------------------------------------------------------------------
 
-static void copyFile(QFile& tmp, QString const& filename, bool )
+static void copyFile(QFile& tmp, QString const& filename )
 {
   QFile f( filename );
   if ( f.open(QIODevice::ReadOnly) ) {
@@ -351,7 +351,7 @@ void runRdb( uint flags )
     }
 
     for (QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
-      copyFile(tmpFile, KStandardDirs::locate("appdefaults", *it ), true);
+      copyFile(tmpFile, KStandardDirs::locate("appdefaults", *it ));
   }
 
   // Merge ~/.Xresources or fallback to ~/.Xdefaults
@@ -360,9 +360,9 @@ void runRdb( uint flags )
 
   // very primitive support for ~/.Xresources by appending it
   if ( QFile::exists( xResources ) )
-    copyFile(tmpFile, xResources, true);
+    copyFile(tmpFile, xResources);
   else
-    copyFile(tmpFile, homeDir + "/.Xdefaults", true);
+    copyFile(tmpFile, homeDir + "/.Xdefaults");
 
   // Export the Xcursor theme & size settings
   KConfigGroup mousecfg(KSharedConfig::openConfig( "kcminputrc" ), "Mouse" );
