@@ -47,7 +47,7 @@ KCMPasswdStore::KCMPasswdStore(QWidget* parent, const QVariantList& args)
     m_retriesinput(nullptr),
     m_timeoutinput(nullptr),
     m_storesbox(nullptr),
-    m_useredit(nullptr),
+    m_keyedit(nullptr),
     m_passedit(nullptr),
     m_storebutton(nullptr)
 {
@@ -142,15 +142,15 @@ KCMPasswdStore::KCMPasswdStore(QWidget* parent, const QVariantList& args)
     QLabel* userlabel = new QLabel(i18n("Key:"), storesgroup);
     userlabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
     storeslayout->addWidget(userlabel, 1, 0);
-    m_useredit = new KLineEdit(storesgroup);
-    m_useredit->setPlaceholderText(i18n("Enter key..."));
-    m_useredit->setToolTip(
+    m_keyedit = new KLineEdit(storesgroup);
+    m_keyedit->setPlaceholderText(i18n("Enter key..."));
+    m_keyedit->setToolTip(
         i18nc("@info:tooltip",
             "<p>The key can be anything - URL to website, URL to encrypted PDF document or just a string.<p>"
-            "<p>If key the exists in the password store <b>it will be overwritten</b>.<p>"
+            "<p>If the key exists in the password store <b>it will be overwritten</b>.<p>"
         )
     );
-    storeslayout->addWidget(m_useredit, 1, 1);
+    storeslayout->addWidget(m_keyedit, 1, 1);
 
     QLabel* passlabel = new QLabel(i18n("Password:"), storesgroup);
     passlabel->setAlignment(Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
@@ -239,7 +239,7 @@ void KCMPasswdStore::slotTimeoutChanged(const int timeout)
 
 void KCMPasswdStore::slotStorePressed()
 {
-    const QString key = m_useredit->text();
+    const QString key = m_keyedit->text();
     if (key.isEmpty()) {
         KMessageBox::error(this, i18n("No key specified"));
         return;

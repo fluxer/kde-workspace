@@ -55,7 +55,7 @@ private:
     KIntNumInput* m_retriesinput;
     KIntNumInput* m_timeoutinput;
     QComboBox* m_storesbox;
-    KLineEdit* m_useredit;
+    KLineEdit* m_keyedit;
     KLineEdit* m_passedit;
     KPushButton* m_storebutton;
 };
