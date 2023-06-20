@@ -58,16 +58,6 @@ class KSMListener;
 class KSMConnection;
 class KSMClient;
 
-enum SMType { SM_ERROR, SM_WMCOMMAND, SM_WMSAVEYOURSELF };
-struct SMData
-    {
-    SMType type;
-    QStringList wmCommand;
-    QString wmClientMachine;
-    QString wmclass1, wmclass2;
-    };
-typedef QMap<WId,SMData> WindowMap;
-
 class KSMServer : public QObject
 {
 Q_OBJECT
@@ -173,15 +163,6 @@ private:
     bool defaultSession() const; // empty session
     void setupXIOErrorHandler();
 
-    void performLegacySessionSave();
-    void storeLegacySession( KConfig* config );
-    void restoreLegacySession( KConfig* config );
-    void restoreLegacySessionInternal( KConfigGroup* config, char sep = ',' );
-    QStringList windowWmCommand(WId w);
-    QString windowWmClientMachine(WId w);
-    WId windowWmClientLeader(WId w);
-    QByteArray windowSessionId(WId w, WId leader);
-
     bool checkStartupSuspend();
     void finishStartup();
     void resumeStartupInternal();
@@ -251,8 +232,6 @@ private:
     QString lastIdStarted;
 
     QStringList excludeApps;
-
-    WindowMap legacyWindows;
 
     QDBusInterface* klauncherSignals;
     QDBusInterface* kcminitSignals;

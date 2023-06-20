@@ -41,10 +41,11 @@ public:
     SmsConn connection() const { return smsConn; }
 
     void resetState();
-    uint saveYourselfDone : 1;
-    uint pendingInteraction : 1;
-    uint waitForPhase2 : 1;
-    uint wasPhase2 : 1;
+
+    bool saveYourselfDone;
+    bool pendingInteraction;
+    bool waitForPhase2;
+    bool wasPhase2;
 
     QList<SmProp*> properties;
     SmProp* property( const char* name ) const;

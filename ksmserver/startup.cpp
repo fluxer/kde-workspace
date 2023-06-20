@@ -373,8 +373,6 @@ void KSMServer::autoStart2()
     } else {
         QMetaObject::invokeMethod(this, "kcmPhase2Done", Qt::QueuedConnection);
     }
-    if( !defaultSession())
-        restoreLegacySession(KGlobal::config().data());
     KNotification::event( "startkde" , QString() , QPixmap() , 0l , KNotification::DefaultEvent  ); // this is the time KDE is up, more or less
 }
 

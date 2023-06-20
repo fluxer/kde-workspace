@@ -87,8 +87,6 @@ void Workspace::storeSession(KConfig* config, SMSavePhase phase)
         QByteArray sessionId = c->sessionId();
         QByteArray wmCommand = c->wmCommand();
         if (sessionId.isEmpty())
-            // remember also applications that are not XSMP capable
-            // and use the obsolete WM_COMMAND / WM_SAVE_YOURSELF
             if (wmCommand.isEmpty())
                 continue;
         count++;
@@ -161,8 +159,6 @@ void Workspace::storeSubSession(const QString &name, QSet<QByteArray> sessionIds
         QByteArray sessionId = c->sessionId();
         QByteArray wmCommand = c->wmCommand();
         if (sessionId.isEmpty())
-            // remember also applications that are not XSMP capable
-            // and use the obsolete WM_COMMAND / WM_SAVE_YOURSELF
             if (wmCommand.isEmpty())
                 continue;
         if (!sessionIds.contains(sessionId))

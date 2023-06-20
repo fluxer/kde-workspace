@@ -24,7 +24,6 @@ set(ksmserver_SRCS
     main.cpp
     server.cpp
     shutdowndlg.cpp
-    legacy.cpp
     startup.cpp
     shutdown.cpp
     client.cpp
