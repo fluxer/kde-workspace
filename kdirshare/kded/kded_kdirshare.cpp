@@ -154,6 +154,16 @@ QString KDirShareModule::getPassword(const QString &dirpath) const
     return QString();
 }
 
+QString KDirShareModule::getAddress(const QString &dirpath) const
+{
+    foreach (const KDirShareImpl *kdirshareimpl, m_dirshares) {
+        if (kdirshareimpl->directory() == dirpath) {
+            return kdirshareimpl->address();
+        }
+    }
+    return QString();
+}
+
 void KDirShareModule::slotDelayedRestore()
 {
     bool requiresauth = false;

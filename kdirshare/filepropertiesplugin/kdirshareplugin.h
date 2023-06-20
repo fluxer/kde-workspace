@@ -43,6 +43,8 @@ private Q_SLOTS:
     void slotPasswordEdited(const QString &value);
 
 private:
+    void updateServerLabel();
+
     Ui_KDirShareUI m_ui;
     QDBusInterface m_kdirshareiface;
     QString m_url;

@@ -61,10 +61,12 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
             m_ui.sharebox->setChecked(false);
             m_ui.portgroup->setEnabled(false);
             m_ui.authgroup->setEnabled(false);
+            m_ui.serverlabel->setVisible(false);
         } else {
             m_ui.sharebox->setChecked(kdirsharereply.value());
             m_ui.portgroup->setEnabled(kdirsharereply.value());
             m_ui.authgroup->setEnabled(kdirsharereply.value());
+            m_ui.serverlabel->setVisible(true);
         }
 
         QDBusReply<quint16> kdirsharereply2 = m_kdirshareiface.call("getPortMin", m_url);
@@ -106,6 +108,8 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
         }
         m_ui.useredit->setEnabled(m_ui.authbox->isChecked());
         m_ui.passwordedit->setEnabled(m_ui.authbox->isChecked());
+
+        updateServerLabel();
     } else {
         kWarning() << "kdirshare module interface is not valid";
         m_ui.sharebox->setEnabled(false);
@@ -162,6 +166,7 @@ void KDirSharePlugin::slotShare(const bool value)
     // qDebug() << Q_FUNC_INFO << value;
     m_ui.portgroup->setEnabled(value);
     m_ui.authgroup->setEnabled(value);
+    updateServerLabel();
     emit changed();
 }
 
@@ -215,6 +220,18 @@ void KDirSharePlugin::slotPasswordEdited(const QString &value)
 {
     // qDebug() << Q_FUNC_INFO << value;
     emit changed();
+}
+
+void KDirSharePlugin::updateServerLabel()
+{
+    QDBusReply<QString> kdirsharereply = m_kdirshareiface.call("getAddress", m_url);
+    if (!kdirsharereply.isValid()) {
+        kWarning() << "Invalid kdirshare module reply for getAddress()";
+        m_ui.serverlabel->setText(QString());
+    } else {
+        const QString kdirshareaddress = kdirsharereply.value();
+        m_ui.serverlabel->setText(i18n("<html>The directory can be accessed at <a href=\"%1\">%1</a>.</html>", kdirshareaddress));
+    }
 }
 
 #include "moc_kdirshareplugin.cpp"

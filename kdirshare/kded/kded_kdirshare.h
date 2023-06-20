@@ -48,6 +48,7 @@ public Q_SLOTS:
     Q_SCRIPTABLE quint16 getPortMax(const QString &dirpath) const;
     Q_SCRIPTABLE QString getUser(const QString &dirpath) const;
     Q_SCRIPTABLE QString getPassword(const QString &dirpath) const;
+    Q_SCRIPTABLE QString getAddress(const QString &dirpath) const;
 
 private Q_SLOTS:
     void slotDelayedRestore();

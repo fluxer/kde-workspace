@@ -281,6 +281,14 @@ QString KDirShareImpl::password() const
     return m_password;
 }
 
+QString KDirShareImpl::address() const
+{
+    if (!m_kdirserver) {
+        return QString();
+    }
+    return m_kdirserver->address();
+}
+
 void KDirShareImpl::run()
 {
     m_kdirserver = new KDirServer();

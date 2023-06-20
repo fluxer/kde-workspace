@@ -56,6 +56,7 @@ public:
     quint16 portMax() const;
     QString user() const;
     QString password() const;
+    QString address() const;
 
 protected:
     void run() final;
