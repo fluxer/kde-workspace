@@ -131,7 +131,7 @@ static void applyQtSettings( KSharedConfigPtr kglobalcfg, QSettings& settings )
 {
   /* export font settings */
   KConfigGroup fontgrp( kglobalcfg, "General" );
-  QString font = fontgrp.readEntry("font", QString());
+  QString font = fontgrp.readEntry("font", KGlobalSettings::generalFont().toString());
   settings.setValue("Qt/font", font);
 
   /* export effects settings */
