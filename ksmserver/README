@@ -131,12 +131,12 @@ desparately trying to connect to something, try setting it to some
 bogus value.
 
 In addition, ksmserver propagates both its network address and its
-process id in ~/.kde/socket-$HOSTNAME/KSMserver-$DISPLAY. A
-utility function KWorkSpace::propagateSessionManager() reads this
-setting and sets SESSION_MANAGER accordingly, so that child processes
-can pick it up.  The function is called by clients that are started
-outside the session (i.e. before ksmserver is started), but want to
-launch other processes that should participate in the session.
+process id in /run/user/<uid>/KSMserver_$DISPLAY. A utility function
+KWorkSpace::propagateSessionManager() reads this setting and sets
+SESSION_MANAGER accordingly, so that child processes can pick it up.
+The function is called by clients that are started outside the session
+(i.e. before ksmserver is started), but want to launch other processes
+that should participate in the session.
 
 Authorization
 -------------
