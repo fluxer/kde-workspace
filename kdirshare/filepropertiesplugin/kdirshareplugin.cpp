@@ -66,7 +66,7 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
             m_ui.sharebox->setChecked(kdirsharereply.value());
             m_ui.portgroup->setEnabled(kdirsharereply.value());
             m_ui.authgroup->setEnabled(kdirsharereply.value());
-            m_ui.serverlabel->setVisible(true);
+            m_ui.serverlabel->setVisible(kdirsharereply.value());
         }
 
         QDBusReply<quint16> kdirsharereply2 = m_kdirshareiface.call("getPortMin", m_url);
@@ -225,11 +225,16 @@ void KDirSharePlugin::slotPasswordEdited(const QString &value)
 void KDirSharePlugin::updateServerLabel()
 {
     QDBusReply<QString> kdirsharereply = m_kdirshareiface.call("getAddress", m_url);
+    QString kdirshareaddress;
     if (!kdirsharereply.isValid()) {
         kWarning() << "Invalid kdirshare module reply for getAddress()";
         m_ui.serverlabel->setText(QString());
     } else {
-        const QString kdirshareaddress = kdirsharereply.value();
+        kdirshareaddress = kdirsharereply.value();
+    }
+    if (kdirshareaddress.isEmpty()) {
+        m_ui.serverlabel->setText(QString());
+    } else {
         m_ui.serverlabel->setText(i18n("<html>The directory can be accessed at <a href=\"%1\">%1</a>.</html>", kdirshareaddress));
     }
 }
