@@ -1422,7 +1422,6 @@ sftpProtocol::StatusCode sftpProtocol::sftpPut(const KUrl& url, int permissions,
             sftp_attributes_free(attr);
         }
 
-        //::exit(255);
         return cs;
     }
 
