@@ -164,7 +164,8 @@ K_EXPORT_PLUGIN(KCMFreeSpaceFactory("kcmfreespaceconfig", "kcm_freespaceconfig")
 KCMFreeSpace::KCMFreeSpace(QWidget *parent, const QVariantList &args)
     : KCModule(KCMFreeSpaceFactory::componentData(), parent),
     m_layout(nullptr),
-    m_spacer(nullptr)
+    m_spacer(nullptr),
+    m_message(nullptr)
 {
     Q_UNUSED(args);
 
@@ -201,7 +202,12 @@ void KCMFreeSpace::load()
         }
     }
     Q_ASSERT(m_spacer == nullptr);
+    if (m_message) {
+        delete m_message;
+        m_message = nullptr;
+    }
 
+    bool hasdevices = false;
     KConfig kfreespaceconfig("kfreespacerc", KConfig::SimpleConfig);
     const QList<Solid::Device> storagedevices = Solid::Device::listFromType(Solid::DeviceInterface::StorageAccess);
     foreach (const Solid::Device &soliddevice, storagedevices) {
@@ -214,6 +220,7 @@ void KCMFreeSpace::load()
         }
 
         // qDebug() << Q_FUNC_INFO << soliddevice.udi();
+        hasdevices = true;
         KConfigGroup kfreespacegroup = kfreespaceconfig.group(soliddevice.udi());
         const bool kfreespacewatch = kfreespacegroup.readEntry("watch", s_kfreespacewatch);
         const qulonglong kfreespacechecktime = kfreespacegroup.readEntry("checktime", s_kfreespacechecktime);
@@ -228,8 +235,20 @@ void KCMFreeSpace::load()
         connect(devicebox, SIGNAL(changed()), this, SLOT(slotDeviceChanged()));
         m_layout->addWidget(devicebox);
     }
+
+    if (!hasdevices) {
+        m_message = new KMessageWidget(this);
+        m_message->setMessageType(KMessageWidget::Error);
+        m_message->setCloseButtonVisible(false);
+        m_message->setText(
+            i18n("No storage device found on this computer.")
+        );
+        m_layout->addWidget(m_message);
+    }
+
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_layout->addSpacerItem(m_spacer);
+
     emit changed(false);
 }
 

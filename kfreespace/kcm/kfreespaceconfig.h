@@ -24,6 +24,7 @@
 #include <QSpacerItem>
 #include <QList>
 #include <kcmodule.h>
+#include <kmessagewidget.h>
 
 class KFreeSpaceBox;
 
@@ -50,6 +51,7 @@ public Q_SLOTS:
 private:
     QVBoxLayout* m_layout;
     QSpacerItem* m_spacer;
+    KMessageWidget* m_message;
     QList<KFreeSpaceBox*> m_deviceboxes;
 };
 
