@@ -102,19 +102,7 @@ void KCMInit::runModules( int phase )
       ++it) {
       KService::Ptr service = (*it);
 
-      QVariant tmp = service->property("X-KDE-Init-Library", QVariant::String);
-      QString library;
-      if( tmp.isValid() )
-      {
-          library = tmp.toString();
-          if( !library.startsWith( QLatin1String( "kcminit_" ) ) )
-              library = QLatin1String( "kcminit_" ) + library;
-      }
-      else
-      {
-          library = service->library();
-      }
-
+      QString library = service->library();
       if (library.isEmpty()) {
           continue; // Skip
       }
