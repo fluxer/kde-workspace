@@ -1,4 +1,3 @@
-add_subdirectory(desktop)
 add_subdirectory(floppy)
 add_subdirectory(network)
 add_subdirectory(remote)

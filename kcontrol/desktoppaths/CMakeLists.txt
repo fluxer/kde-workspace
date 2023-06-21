@@ -19,3 +19,10 @@ install(
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
 
+install(
+    FILES
+    data/directory.desktop
+    data/Trash.desktop
+    data/Home.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kcm_desktoppaths
+)

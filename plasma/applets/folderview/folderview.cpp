@@ -431,7 +431,7 @@ void FolderView::init()
             const QDir desktopFolder(desktopPath);
 
             if (desktopPath != QDir::homePath() && desktopFolder.exists()) {
-                path = QString("desktop:/");
+                path = desktopPath;
             }
         }
         setUrl(cg.readEntry("url", KUrl(path)));
@@ -653,9 +653,9 @@ void FolderView::addUrls(const KUrl::List& urls)
 
 void FolderView::createConfigurationInterface(KConfigDialog *parent)
 {
-    QWidget *widgetFilter = new QWidget;
-    QWidget *widgetDisplay = new QWidget;
-    QWidget *widgetLocation = new QWidget;
+    QWidget *widgetFilter = new QWidget();
+    QWidget *widgetDisplay = new QWidget();
+    QWidget *widgetLocation = new QWidget();
     uiFilter.setupUi(widgetFilter);
     uiDisplay.setupUi(widgetDisplay);
     uiLocation.setupUi(widgetLocation);
@@ -674,7 +674,7 @@ void FolderView::createConfigurationInterface(KConfigDialog *parent)
     const bool desktopVisible = desktopPath != QDir::homePath() && desktopFolder.exists();
     uiLocation.showDesktopFolder->setVisible(desktopVisible);
 
-    if (desktopVisible && m_url == KUrl("desktop:/")) {
+    if (desktopVisible && m_url == KUrl(desktopPath)) {
         uiLocation.showDesktopFolder->setChecked(true);
         uiLocation.placesCombo->setEnabled(false);
         uiLocation.lineEdit->setEnabled(false);
@@ -835,7 +835,7 @@ void FolderView::configAccepted()
     KUrl url;
 
     if (uiLocation.showDesktopFolder->isChecked()) {
-        url = KUrl("desktop:/");
+        url = KUrl(KGlobalSettings::desktopPath());
     } else if (uiLocation.showPlace->isChecked()) {
         PlacesFilterModel *filter = static_cast<PlacesFilterModel*>(uiLocation.placesCombo->model());
         KFilePlacesModel *model = static_cast<KFilePlacesModel*>(filter->sourceModel());
@@ -1418,7 +1418,7 @@ void FolderView::setUrl(const KUrl &url)
     }
 
     // Only parse desktop files when sorting if we're showing the desktop folder
-    m_model->setParseDesktopFiles(m_url.protocol() == "desktop");
+    m_model->setParseDesktopFiles(m_url == KUrl(KGlobalSettings::desktopPath()));
     setAppletTitle();
 }
 
@@ -1429,7 +1429,7 @@ void FolderView::setAppletTitle()
     } else if (m_labelType == FolderView::FullPath) {
         m_titleText = m_url.path();
     } else if (m_labelType == FolderView::PlaceName) {
-        if (m_url == KUrl("desktop:/")) {
+        if (m_url == KUrl(KGlobalSettings::desktopPath())) {
             m_titleText = i18n("Desktop Folder");
         } else {
             m_titleText = m_url.pathOrUrl();
@@ -2185,7 +2185,7 @@ void FolderView::updateIconWidget()
     KFileItem item = m_dirModel->itemForIndex(QModelIndex());
     if (!item.isNull() && item.iconName() != "inode-directory") {
         m_icon = KIcon(item.iconName(), 0, item.overlays());
-    } else if (m_url.protocol() == "desktop") {
+    } else if (m_url == KUrl(KGlobalSettings::desktopPath())) {
         m_icon = KIcon("user-desktop");
     } else if (m_url.protocol() == "trash") {
         m_icon = m_model->rowCount() > 0 ? KIcon("user-trash-full") : KIcon("user-trash");

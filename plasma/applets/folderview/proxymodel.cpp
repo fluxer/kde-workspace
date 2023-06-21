@@ -23,13 +23,12 @@
 #include <KDesktopFile>
 #include <KDirModel>
 #include <KStringHandler>
+#include <KDebug>
+#include <kde_file.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include <kde_file.h>
-
 
 ProxyModel::ProxyModel(QObject *parent)
     : QSortFilterProxyModel(parent),
@@ -145,7 +144,6 @@ bool ProxyModel::isDir(const QModelIndex &index, const KDirModel *dirModel) cons
     return false;
 }
 
-#include <KDebug>
 bool ProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const
 {
     const KDirModel *dirModel = static_cast<KDirModel*>(sourceModel());
