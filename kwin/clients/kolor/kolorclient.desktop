@@ -1,0 +1,15 @@
+# KDE Desktop Entry
+[Desktop Entry]
+Name=Kolor
+
+Comment=Styling of the Katana desktop
+
+X-KDE-Library=kwin3_kolor
+
+X-KDE-PluginInfo-Author=Ivailo Monev
+X-KDE-PluginInfo-Email=xakepa10@gmail.com
+X-KDE-PluginInfo-Name=Kolor
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=false

@@ -1,4 +1,5 @@
 add_subdirectory( aurorae )
+add_subdirectory( kolor )
 if(KWIN_BUILD_OXYGEN)
     add_subdirectory( oxygen )
 endif()
