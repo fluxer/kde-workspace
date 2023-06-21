@@ -489,7 +489,7 @@ QString KDecorationDefines::tabDragMimeType()
 }
 
 KDecorationOptions::KDecorationOptions()
-    : d(new KDecorationOptionsPrivate)
+    : d(new KDecorationOptionsPrivate())
 {
     assert(KDecoration::options_ == NULL);
     KDecoration::options_ = this;
