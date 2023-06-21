@@ -43,11 +43,12 @@ class KDecorationBridge;
 class KDecorationFactory;
 
 class KWIN_EXPORT KDecorationPlugins
-    : public KDecorationProvides
+    : public KDecorationDefines
 {
 public:
     explicit KDecorationPlugins(const KSharedConfigPtr &cfg);
     virtual ~KDecorationPlugins();
+
     /** Whether the plugin with @p name can be loaded
      * if @p loadedLib is passed, the library is NOT unloaded and freed
      * what is now your resposibility (intended for and used by below loadPlugin mainly) */
@@ -59,9 +60,11 @@ public:
     KDecoration* createDecoration(KDecorationBridge*);
     QString currentPlugin();
     bool reset(unsigned long changed);   // returns true if decorations need to be recreated
+
 protected:
     virtual void error(const QString& error_msg);
     QString defaultPlugin; // FRAME normalne protected?
+
 private:
     KDecorationFactory*(*create_ptr)();
     QLibrary *library;

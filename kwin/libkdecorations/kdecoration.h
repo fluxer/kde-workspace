@@ -247,13 +247,6 @@ public:
 
 };
 
-class KDecorationProvides
-    : public KDecorationDefines
-{
-public:
-    virtual ~KDecorationProvides() {}
-};
-
 /**
  * This class holds various configuration settings for the decoration.
  * It is accessible from the decorations either as KDecoration::options()
