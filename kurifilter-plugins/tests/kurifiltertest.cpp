@@ -161,7 +161,6 @@ KUriFilterTest::KUriFilterTest()
 void KUriFilterTest::init()
 {
     kDebug() ;
-    setenv( "KDE_FORK_SLAVES", "yes", true ); // simpler, for the final cleanup
 
     // Allow testing of the search engine using both delimiters...
     const char* envDelimiter = ::getenv( "KURIFILTERTEST_DELIMITER" );

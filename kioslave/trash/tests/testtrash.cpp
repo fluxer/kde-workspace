@@ -133,8 +133,6 @@ static void removeDirRecursive( const QString& dir )
 void TestTrash::initTestCase()
 {
     qDebug() << qgetenv("LC_ALL");
-    setenv( "KDE_FORK_SLAVES", "yes", true );
-
 
     m_trashDir = KGlobal::dirs()->localxdgdatadir() + QString::fromLatin1("Trash");
     kDebug() << "setup: using trash directory " << m_trashDir;
