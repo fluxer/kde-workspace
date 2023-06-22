@@ -66,7 +66,7 @@ static QString faviconFromUrl(const QString &url, const QLatin1String &extension
 {
     KUrl faviconUrl(url);
     faviconUrl.setPath(QString::fromLatin1("/favicon.%1").arg(extension));
-    faviconUrl.setEncodedQuery(QByteArray());
+    faviconUrl.setQuery(QString());
     return faviconUrl.url();
 }
 
