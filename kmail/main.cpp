@@ -54,8 +54,8 @@ int main(int argc, char **argv) {
 
     KApplication *kapplication = new KApplication();
     KEMailDialog kemaildialog;
-    kemaildialog.show();
     kemaildialog.setButtons(KDialog::Ok | KDialog::Close | KDialog::Help);
+    kemaildialog.show();
     KHelpMenu khelpmenu(&kemaildialog, &aboutData, true);
     kemaildialog.setButtonMenu(KDialog::Help, (QMenu*)khelpmenu.menu());
 
