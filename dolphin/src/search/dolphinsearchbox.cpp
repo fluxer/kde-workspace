@@ -140,11 +140,10 @@ KUrl DolphinSearchBox::urlForSearching() const
 void DolphinSearchBox::fromSearchUrl(const KUrl& url)
 {
     if (url.protocol() == "filenamesearch") {
-        const QMap<QString, QString>& queryItems = url.queryItems();
-        setText(queryItems.value("search"));
-        setSearchPath(queryItems.value("url"));
-        m_contentButton->setChecked(queryItems.value("checkContent") == "yes");
-        m_literalBox->setChecked(queryItems.value("literal") == "yes");
+        setText(url.queryItem("search"));
+        setSearchPath(url.queryItem("url"));
+        m_contentButton->setChecked(url.queryItem("checkContent") == "yes");
+        m_literalBox->setChecked(url.queryItem("literal") == "yes");
     } else {
         setText(QString());
         setSearchPath(url);
