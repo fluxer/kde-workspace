@@ -211,7 +211,7 @@ int MTPSlave::checkUrl(const KUrl& url, bool redirect)
 
         if (deviceCache->contains(udi, true)) {
             KUrl newUrl;
-            newUrl.setProtocol(QLatin1String("mtp"));
+            newUrl.setScheme(QLatin1String("mtp"));
             newUrl.setPath(QLatin1Char('/') + deviceCache->get(udi, true)->getName());
             redirection(newUrl);
             

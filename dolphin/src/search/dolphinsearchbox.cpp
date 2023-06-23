@@ -109,7 +109,7 @@ KUrl DolphinSearchBox::searchPath() const
 KUrl DolphinSearchBox::urlForSearching() const
 {
     KUrl url;
-    url.setProtocol("filenamesearch");
+    url.setScheme("filenamesearch");
     url.addQueryItem("search", m_searchInput->text());
     if (m_contentButton->isChecked()) {
         url.addQueryItem("checkContent", "yes");
@@ -140,10 +140,10 @@ KUrl DolphinSearchBox::urlForSearching() const
 void DolphinSearchBox::fromSearchUrl(const KUrl& url)
 {
     if (url.protocol() == "filenamesearch") {
-        setText(url.queryItem("search"));
-        setSearchPath(url.queryItem("url"));
-        m_contentButton->setChecked(url.queryItem("checkContent") == "yes");
-        m_literalBox->setChecked(url.queryItem("literal") == "yes");
+        setText(url.queryItemValue("search"));
+        setSearchPath(url.queryItemValue("url"));
+        m_contentButton->setChecked(url.queryItemValue("checkContent") == "yes");
+        m_literalBox->setChecked(url.queryItemValue("literal") == "yes");
     } else {
         setText(QString());
         setSearchPath(url);

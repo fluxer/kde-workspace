@@ -322,7 +322,7 @@ void SessionController::openUrl(const KUrl& url)
             sshCommand += QString("-p %1 ").arg(url.port());
         }
         if (url.hasUser()) {
-            sshCommand += (url.user() + '@');
+            sshCommand += (url.userName() + '@');
         }
         if (url.hasHost()) {
             sshCommand += url.host();
@@ -334,7 +334,7 @@ void SessionController::openUrl(const KUrl& url)
         QString telnetCommand = "telnet ";
 
         if (url.hasUser()) {
-            telnetCommand += QString("-l %1 ").arg(url.user());
+            telnetCommand += QString("-l %1 ").arg(url.userName());
         }
         if (url.hasHost()) {
             telnetCommand += (url.host() + ' ');

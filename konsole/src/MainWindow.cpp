@@ -500,7 +500,7 @@ Session* MainWindow::createSSHSession(Profile::Ptr profile, const KUrl& url)
         sshCommand += QString("-p %1 ").arg(url.port());
     }
     if (url.hasUser()) {
-        sshCommand += (url.user() + '@');
+        sshCommand += (url.userName() + '@');
     }
     if (url.hasHost()) {
         sshCommand += url.host();

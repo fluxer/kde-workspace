@@ -151,7 +151,7 @@ bool KNetAttach::validateCurrentPage()
             }
             KUrl u(group.readEntry("URL"));
             _host->setText(u.host());
-            _user->setText(u.user());
+            _user->setText(u.userName());
             _pass->setText(u.password());
             _path->setText(u.path());
             if (group.hasKey("Port")) {
@@ -168,20 +168,20 @@ bool KNetAttach::validateCurrentPage()
         button(FinishButton)->setEnabled(false);
         KUrl url;
         if (_type == "FTP") {
-            url.setProtocol("ftp");
+            url.setScheme("ftp");
             url.setPort(_port->value());
             KConfig config("kio_ftprc");
             KConfigGroup cg(&config, _host->text().trimmed());
             cg.writeEntry("Charset", KGlobal::charsets()->encodingForName(_encoding->currentText()));
             config.sync();
         } else if (_type == "SFTP") {
-            url.setProtocol("sftp");
+            url.setScheme("sftp");
             url.setPort(_port->value());
         } else { // recent
         }
 
         url.setHost(_host->text().trimmed());
-        url.setUser(_user->text().trimmed());
+        url.setUserName(_user->text().trimmed());
         url.setPassword(_pass->text().trimmed());
         QString path = _path->text().trimmed();
         // could a relative path really be made absolute by simply prepending a '/' ?

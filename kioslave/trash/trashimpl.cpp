@@ -1033,7 +1033,7 @@ QString TrashImpl::topDirectoryPath( int trashId ) const
 KUrl TrashImpl::makeURL( int trashId, const QString& fileId, const QString& relativePath )
 {
     KUrl url;
-    url.setProtocol(QString::fromLatin1("trash"));
+    url.setScheme(QString::fromLatin1("trash"));
     QString path = QString::fromLatin1("/");
     path += QString::number( trashId );
     path += QLatin1Char('-');

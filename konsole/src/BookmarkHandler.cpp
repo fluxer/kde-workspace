@@ -115,7 +115,7 @@ QString BookmarkHandler::titleForView(ViewProperties* view) const
         return path;
     } else if (url.hasHost()) {
         if (url.hasUser())
-            return i18nc("@item:inmenu The user's name and host they are connected to via ssh", "%1 on %2", url.user(), url.host());
+            return i18nc("@item:inmenu The user's name and host they are connected to via ssh", "%1 on %2", url.userName(), url.host());
         else
             return i18nc("@item:inmenu The host the user is connected to via ssh", "%1", url.host());
     }

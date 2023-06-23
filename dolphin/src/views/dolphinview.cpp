@@ -1627,7 +1627,7 @@ KUrl DolphinView::viewPropertiesUrl() const
     }
 
     KUrl url;
-    url.setProtocol(m_url.protocol());
+    url.setScheme(m_url.protocol());
     url.setPath(m_viewPropertiesContext);
     return url;
 }

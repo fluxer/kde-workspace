@@ -155,7 +155,7 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
       (protocol[3]=='p'))
   {
      // Handle "encrypted" URLs like: h++p://www.kde.org
-     url.setProtocol( QLatin1String("http"));
+     url.setScheme( QLatin1String("http"));
      setFilteredUri( data, url);
      setUriType( data, KUriFilterData::NetProtocol );
      return true;
@@ -191,15 +191,15 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
   } else {
     if (url.isLocalFile())
     {
-      //kDebug(7023) << "hasRef=" << url.hasRef();
+      //kDebug(7023) << "hasFragment=" << url.hasFragment();
       // Split path from ref/query
       // but not for "/tmp/a#b", if "a#b" is an existing file,
       // or for "/tmp/a?b" (#58990)
-      if( ( url.hasRef() || !url.query().isEmpty() )
+      if( ( url.hasFragment() || !url.query().isEmpty() )
            && !url.path().endsWith(QL1S("/")) ) // /tmp/?foo is a namefilter, not a query
       {
         path = url.path();
-        ref = url.ref();
+        ref = url.fragment();
         //kDebug(7023) << "isLocalFile set path to " << stringDetails( path );
         //kDebug(7023) << "isLocalFile set ref to " << stringDetails( ref );
         query = url.query();
@@ -343,7 +343,7 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     KUrl u;
     u.setPath(path);
     //kDebug(7023) << "ref=" << stringDetails(ref) << " query=" << stringDetails(query);
-    u.setRef(ref);
+    u.setFragment(ref);
     u.setQuery(query);
 
     // Can be abs path to file or directory, or to executable with args
@@ -465,7 +465,7 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
   {
     KUrl u;
     u.setPath(path);
-    u.setRef(ref);
+    u.setFragment(ref);
 
     //kDebug(7023) << "fileNotFound -> ERROR";
     setErrorMsg( data, i18n( "<qt>The file or folder <b>%1</b> does not exist.</qt>", data.uri().prettyUrl() ) );

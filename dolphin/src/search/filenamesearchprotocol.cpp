@@ -50,14 +50,14 @@ void FileNameSearchProtocol::listDir(const KUrl& url)
 {
     cleanup();
 
-    m_checkContent = url.queryItem("checkContent");
+    m_checkContent = url.queryItemValue("checkContent");
 
-    m_literal = url.queryItem("literal");
+    m_literal = url.queryItemValue("literal");
 
-    m_checkType = url.queryItem("checkType");
+    m_checkType = url.queryItemValue("checkType");
 
 
-    QString search = url.queryItem("search");
+    QString search = url.queryItemValue("search");
     if (!search.isEmpty() && m_literal == "yes") {
         search = QRegExp::escape(search);
     }
@@ -66,7 +66,7 @@ void FileNameSearchProtocol::listDir(const KUrl& url)
         m_regExp = new QRegExp(search, Qt::CaseInsensitive);
     }
 
-    const QString urlString = url.queryItem("url");
+    const QString urlString = url.queryItemValue("url");
     searchDirectory(KUrl(urlString));
 
     cleanup();

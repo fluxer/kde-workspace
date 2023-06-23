@@ -928,9 +928,9 @@ void KonqMultiRestoreJob::slotStart()
           && new_url.path().startsWith("/trash") )
         {
             QString path = new_url.path();
-	    path.remove(0, 6);
-	    new_url.setProtocol("trash");
-	    new_url.setPath(path);
+            path.remove(0, 6);
+            new_url.setScheme("trash");
+            new_url.setPath(path);
         }
 
         Q_ASSERT( new_url.protocol() == "trash" );

@@ -185,8 +185,8 @@ static void setProxyInformation(const QString& value,
             }
 
             url.setPort(-1);
-            url.setUser(QString());
-            url.setPass(QString());
+            url.setUserName(QString());
+            url.setPassword(QString());
             url.setPath(QString());
 
             manEdit->setText(url.url());

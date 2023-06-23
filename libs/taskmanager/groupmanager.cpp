@@ -785,7 +785,7 @@ void GroupManager::readLauncherConfig(const KConfigGroup &cg)
     d->readingLauncherConfig = true;
     QSet<KUrl> urls;
     foreach (KUrl l, launchers) {
-        QString wmClass(l.queryItem("wmClass"));
+        QString wmClass(l.queryItemValue("wmClass"));
         l.setQuery(QString());
 
         if (addLauncher(l, QIcon(), QString(), QString(), wmClass)) {

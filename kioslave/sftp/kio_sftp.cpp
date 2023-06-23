@@ -204,12 +204,12 @@ int sftpProtocol::auth_callback(const char *prompt, char *buf, size_t len,
         errMsg = i18n("Incorrect or invalid passphrase");
     }
 
-    mPublicKeyAuthInfo->url.setProtocol(QLatin1String("sftp"));
+    mPublicKeyAuthInfo->url.setScheme(QLatin1String("sftp"));
     mPublicKeyAuthInfo->url.setHost(mHost);
     if (mPort > 0 && mPort != DEFAULT_SFTP_PORT) {
         mPublicKeyAuthInfo->url.setPort(mPort);
     }
-    mPublicKeyAuthInfo->url.setUser(mUsername);
+    mPublicKeyAuthInfo->url.setUserName(mUsername);
 
     KUrl u (mPublicKeyAuthInfo->url);
     u.setPath(QString());
@@ -264,7 +264,7 @@ int sftpProtocol::authenticateKeyboardInteractive(AuthInfo &info) {
                 // See RFC4256 Section 3.3 User Interface
                 KIO::AuthInfo infoKbdInt;
 
-                infoKbdInt.url.setProtocol("sftp");
+                infoKbdInt.url.setScheme("sftp");
                 infoKbdInt.url.setHost(mHost);
                 if (mPort > 0 && mPort != DEFAULT_SFTP_PORT) {
                     infoKbdInt.url.setPort(mPort);
@@ -625,12 +625,12 @@ void sftpProtocol::openConnection()
     }
 
     AuthInfo info;
-    info.url.setProtocol("sftp");
+    info.url.setScheme("sftp");
     info.url.setHost(mHost);
     if ( mPort > 0 && mPort != DEFAULT_SFTP_PORT ) {
         info.url.setPort(mPort);
     }
-    info.url.setUser(mUsername);
+    info.url.setUserName(mUsername);
     info.username = mUsername;
 
     // Check for cached authentication info if no password is specified...
@@ -841,8 +841,8 @@ void sftpProtocol::openConnection()
             // since the user name must always be set before calling ssh_connect.
             if (wasUsernameChanged(username, info)) {
                 kDebug(KIO_SFTP_DB) << "Username changed to" << info.username;
-                if (!info.url.user().isEmpty()) {
-                    info.url.setUser(info.username);
+                if (!info.url.userName().isEmpty()) {
+                    info.url.setUserName(info.username);
                 }
                 closeConnection();
                 if (!sftpOpenConnection(info)) {
@@ -2191,9 +2191,9 @@ sftpProtocol::GetRequest::~GetRequest()
 void sftpProtocol::requiresUserNameRedirection()
 {
     KUrl redirectUrl;
-    redirectUrl.setProtocol( QLatin1String("sftp") );
-    redirectUrl.setUser( mUsername );
-    redirectUrl.setPass( mPassword );
+    redirectUrl.setScheme( QLatin1String("sftp") );
+    redirectUrl.setUserName( mUsername );
+    redirectUrl.setPassword( mPassword );
     redirectUrl.setHost( mHost );
     if (mPort > 0 && mPort != DEFAULT_SFTP_PORT) {
         redirectUrl.setPort( mPort );

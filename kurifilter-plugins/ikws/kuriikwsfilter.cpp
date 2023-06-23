@@ -149,7 +149,7 @@ bool KAutoWebSearch::filterUri( KUriFilterData &data ) const
     return true;
   }
 
-  if ( data.uriType() == KUriFilterData::Unknown && data.uri().pass().isEmpty() )
+  if ( data.uriType() == KUriFilterData::Unknown && data.uri().password().isEmpty() )
   {
     KURISearchFilterEngine *filter = KURISearchFilterEngine::self();
     SearchProvider *provider = filter->autoWebSearchQuery( data.typedString(), data.alternateDefaultSearchProvider() );
