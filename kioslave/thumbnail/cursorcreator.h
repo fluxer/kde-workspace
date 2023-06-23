@@ -17,17 +17,17 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef _CURSORCREATOR_H_
-#define _CURSORCREATOR_H_
+#ifndef CURSORCREATOR_H
+#define CURSORCREATOR_H
 
 #include <kio/thumbcreator.h>
 
 class CursorCreator : public ThumbCreator
 {
-	public:
-		CursorCreator() {}
-		bool create( const QString &path, int, int, QImage &img );
+public:
+    CursorCreator();
+
+    bool create(const QString &path, int width, int height, QImage &img) final;
 };
 
-#endif
-
+#endif // CURSORCREATOR_H

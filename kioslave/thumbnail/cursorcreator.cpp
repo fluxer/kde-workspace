@@ -35,19 +35,28 @@ extern "C"
     }
 }
 
-bool CursorCreator::create( const QString &path, int width, int height, QImage &img )
+CursorCreator::CursorCreator()
 {
-    XcursorImage *cursor = XcursorFilenameLoadImage(
-		    QFile::encodeName( path ).data(),
-		    width > height ? height : width );
+}
 
-    if ( cursor ) {
-        img = QImage( reinterpret_cast<uchar *>( cursor->pixels ),
-                      cursor->width, cursor->height, QImage::Format_ARGB32_Premultiplied );
+bool CursorCreator::create(const QString &path, int width, int height, QImage &img)
+{
+    const QByteArray pathbytes = QFile::encodeName(path);
+    XcursorImage *cursor = XcursorFilenameLoadImage(
+        pathbytes.constData(),
+        width > height ? height : width
+    );
+
+    if (cursor) {
+        img = QImage(
+            reinterpret_cast<uchar*>(cursor->pixels),
+            cursor->width, cursor->height,
+            QImage::Format_ARGB32_Premultiplied
+        );
 
         // Create a deep copy of the image so the image data is preserved
         img = img.copy();
-        XcursorImageDestroy( cursor );
+        XcursorImageDestroy(cursor);
         return true;
     }
 
