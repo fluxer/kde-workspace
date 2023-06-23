@@ -213,7 +213,7 @@ void KateFileBrowser::setDir(KUrl u)
   newurl.setPath(pathstr);
 
   if (!kateFileSelectorIsReadable (newurl))
-    newurl.cd(QString::fromLatin1(".."));
+    newurl = newurl.upUrl();
 
   if (!kateFileSelectorIsReadable (newurl))
     newurl.setPath(QDir::homePath());
