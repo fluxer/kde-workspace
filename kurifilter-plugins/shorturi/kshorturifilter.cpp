@@ -118,6 +118,13 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
   KUrl url = data.uri();
   QString cmd = data.typedString();
 
+  /*
+   * Extra match to be performed on the path for mailto:foo@bar.baz, the
+   * pattern for it requires fully qualified mail link (without the scheme) but
+   * the URL includes the scheme
+   */
+  QString cmd2 = url.path();
+
   // WORKAROUND: Allow the use of '@' in the username component of a URL since
   // other browsers such as firefox in their infinite wisdom allow such blatant
   // violations of RFC 3986. BR# 69326/118413.
@@ -416,8 +423,25 @@ bool KShortUriFilter::filterUri( KUriFilterData& data ) const
     {
       if (hint.regexp.indexIn(cmd) == 0)
       {
-        //kDebug(7023) << "match - prepending" << (*it).prepend;
+        //kDebug(7023) << "match - prepending" << hint.prepend;
         const QString cmdStr = hint.prepend + cmd;
+        KUrl url(cmdStr);
+        if (KProtocolInfo::isKnownProtocol(url))
+        {
+          setFilteredUri( data, url );
+          setUriType( data, hint.type );
+          return true;
+        }
+      }
+    }
+
+    // NOTE: match for mailto:foo@bar.baz
+    Q_FOREACH(const URLHint& hint, m_urlHints)
+    {
+      if (hint.regexp.indexIn(cmd2) == 0)
+      {
+        //kDebug(7023) << "match - prepending" << hint.prepend;
+        const QString cmdStr = hint.prepend + cmd2;
         KUrl url(cmdStr);
         if (KProtocolInfo::isKnownProtocol(url))
         {
