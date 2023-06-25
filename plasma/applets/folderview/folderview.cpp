@@ -682,7 +682,7 @@ void FolderView::createConfigurationInterface(KConfigDialog *parent)
         QModelIndex index;
         for (int i = 0; i < placesFilter->rowCount(); i++) {
             const KUrl url = m_placesModel->url(placesFilter->mapToSource(placesFilter->index(i, 0)));
-            if (url.equals(m_url, KUrl::CompareWithoutTrailingSlash)) {
+            if (url.equals(m_url, KUrl::RemoveTrailingSlash)) {
                 index = placesFilter->index(i, 0);
                 break;
             }

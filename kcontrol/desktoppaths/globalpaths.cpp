@@ -188,7 +188,7 @@ void DesktopPathConfig::save()
 
     KUrl desktopURL( KGlobalSettings::desktopPath() );
 
-    if ( !urDesktop->url().equals( desktopURL, KUrl::CompareWithoutTrailingSlash ) )
+    if ( !urDesktop->url().equals( desktopURL, KUrl::RemoveTrailingSlash ) )
     {
         // Test which other paths were inside this one (as it is by default)
         // and for each, test where it should go.
@@ -241,7 +241,7 @@ bool DesktopPathConfig::xdgSavePath(KUrlRequester* ur, const KUrl& currentUrl, c
     if (!newUrl.isValid()) {
         newUrl = KUrl(QDir::homePath());
     }
-    if (!newUrl.equals(currentUrl, KUrl::CompareWithoutTrailingSlash)) {
+    if (!newUrl.equals(currentUrl, KUrl::RemoveTrailingSlash)) {
         const QString path = newUrl.toLocalFile();
         if (!QDir(path).exists()) {
             // Check permissions

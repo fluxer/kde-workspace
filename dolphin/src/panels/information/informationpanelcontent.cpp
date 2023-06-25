@@ -286,7 +286,7 @@ bool InformationPanelContent::applyPlace(const KUrl& url)
     const int count = m_placesItemModel->count();
     for (int i = 0; i < count; ++i) {
         const PlacesItem* item = m_placesItemModel->placesItem(i);
-        if (item->url().equals(url, KUrl::CompareWithoutTrailingSlash)) {
+        if (item->url().equals(url, KUrl::RemoveTrailingSlash)) {
             setNameLabelText(item->text());
             m_preview->clearPreview();
             QString iconPath = KIconLoader::global()->iconPath(item->icon(), -KIconLoader::SizeEnormous, false);

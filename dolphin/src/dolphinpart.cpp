@@ -450,7 +450,7 @@ void DolphinPart::slotOpenContextMenu(const QPoint& pos,
 void DolphinPart::slotDirectoryRedirection(const KUrl& oldUrl, const KUrl& newUrl)
 {
     //kDebug() << oldUrl << newUrl << "currentUrl=" << url();
-    if (oldUrl.equals(url(), KUrl::CompareWithoutTrailingSlash /* #207572 */)) {
+    if (oldUrl.equals(url(), KUrl::RemoveTrailingSlash /* #207572 */)) {
         KParts::ReadOnlyPart::setUrl(newUrl);
         const QString prettyUrl = newUrl.pathOrUrl();
         emit m_extension->setLocationBarUrl(prettyUrl);

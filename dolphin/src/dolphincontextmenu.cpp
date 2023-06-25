@@ -416,7 +416,7 @@ bool DolphinContextMenu::placeExists(const KUrl& url) const
     const int count = model.count();
     for (int i = 0; i < count; ++i) {
         const KUrl placeUrl = model.placesItem(i)->url();
-        if (placeUrl.equals(url, KUrl::CompareWithoutTrailingSlash)) {
+        if (placeUrl.equals(url, KUrl::RemoveTrailingSlash)) {
             return true;
         }
     }

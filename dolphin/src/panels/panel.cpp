@@ -59,7 +59,7 @@ QSize Panel::sizeHint() const
 
 void Panel::setUrl(const KUrl& url)
 {
-    if (url.equals(m_url, KUrl::CompareWithoutTrailingSlash)) {
+    if (url.equals(m_url, KUrl::RemoveTrailingSlash)) {
         return;
     }
 

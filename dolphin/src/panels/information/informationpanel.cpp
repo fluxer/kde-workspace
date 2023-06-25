@@ -308,7 +308,7 @@ void InformationPanel::cancelRequest()
 
 bool InformationPanel::isEqualToShownUrl(const KUrl& url) const
 {
-    return m_shownUrl.equals(url, KUrl::CompareWithoutTrailingSlash);
+    return m_shownUrl.equals(url, KUrl::RemoveTrailingSlash);
 }
 
 void InformationPanel::markUrlAsInvalid()

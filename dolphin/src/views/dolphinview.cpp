@@ -1224,7 +1224,7 @@ void DolphinView::observeCreatedItem(const KUrl& url)
 
 void DolphinView::slotDirectoryRedirection(const KUrl& oldUrl, const KUrl& newUrl)
 {
-    if (oldUrl.equals(url(), KUrl::CompareWithoutTrailingSlash)) {
+    if (oldUrl.equals(url(), KUrl::RemoveTrailingSlash)) {
         emit redirection(oldUrl, newUrl);
         m_url = newUrl; // #186947
     }

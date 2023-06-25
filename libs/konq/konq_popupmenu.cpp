@@ -203,7 +203,7 @@ void KonqPopupMenuPrivate::init(KonqPopupMenu::Flags kpf, KParts::BrowserExtensi
         firstPopupURL.cleanPath();
         //kDebug(1203) << "View path is " << url.url();
         //kDebug(1203) << "First popup path is " << firstPopupURL.url();
-        currentDir = firstPopupURL.equals( url, KUrl::CompareWithoutTrailingSlash );
+        currentDir = firstPopupURL.equals( url, KUrl::RemoveTrailingSlash );
         if ( firstPopupItem.isDesktopFile() ) {
             KDesktopFile desktopFile( firstPopupItem.localPath() );
             const KConfigGroup cfg = desktopFile.desktopGroup();

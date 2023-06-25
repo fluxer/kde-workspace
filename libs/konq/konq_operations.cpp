@@ -292,7 +292,7 @@ KonqOperations *KonqOperations::doDrop( const KFileItem & destItem, const KUrl &
         KUrl::List::ConstIterator it = lst.begin();
         for (; it != lst.end() ; it++) {
             kDebug(1203) << "URL:" << (*it);
-            if (dest.equals(*it, KUrl::CompareWithoutTrailingSlash)) {
+            if (dest.equals(*it, KUrl::RemoveTrailingSlash)) {
                 // The event source may be the view or an item (icon)
                 // Note: ev->source() can be 0L! (in case of kdesktop) (Simon)
                 if ( !ev->source() || ( ev->source() != parent && ev->source()->parent() != parent ) )
