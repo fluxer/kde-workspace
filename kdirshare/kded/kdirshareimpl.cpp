@@ -118,7 +118,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
 
         // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
         data.append("        <td><a href=\"");
-        data.append(cleanpath.toUtf8());
+        data.append(QUrl::toPercentEncoding(cleanpath));
         data.append("\">");
         data.append(fileinfo.fileName().toUtf8());
         data.append("</a><br></td>\n");
