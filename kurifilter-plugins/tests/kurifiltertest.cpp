@@ -65,7 +65,7 @@ static void filter( const char* u, const char * expectedResult = 0, int expected
         QString cmd;
         KUrl uri = filterData->uri();
 
-        if ( uri.isLocalFile() && !uri.hasRef() && uri.query().isEmpty() &&
+        if ( uri.isLocalFile() && !uri.hasFragment() && !uri.hasQuery() &&
              (filterData->uriType() != KUriFilterData::NetProtocol))
             cmd = uri.toLocalFile();
         else

@@ -216,7 +216,7 @@ bool KNetAttach::validateCurrentPage()
             desktopFile.writeEntry("Name", name);
             desktopFile.writeEntry("Type", "Link");
             desktopFile.writeEntry("URL", remoteUrl);
-            desktopFile.writeEntry("Charset", url.fileEncoding());
+            desktopFile.writeEntry("Charset", url.queryItemValue("charset"));
             desktopFile.sync();
             org::kde::KDirNotify::emitFilesAdded( "remote:/" );
         }
