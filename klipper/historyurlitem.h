@@ -29,7 +29,7 @@
 class HistoryURLItem : public HistoryItem
 {
 public:
-    HistoryURLItem( const KUrl::List& urls, KUrl::MetaDataMap metaData, bool cut );
+    HistoryURLItem( const KUrl::List& urls, bool cut );
     virtual QString text() const;
     virtual bool operator==( const HistoryItem& rhs) const;
     virtual QMimeData* mimeData() const;
@@ -40,7 +40,6 @@ public:
     virtual void write( QDataStream& stream ) const;
 private:
     KUrl::List m_urls;
-    KUrl::MetaDataMap m_metaData;
     bool m_cut;
 };
 

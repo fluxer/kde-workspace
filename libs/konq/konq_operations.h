@@ -243,13 +243,12 @@ private:
 
     struct DropInfo
     {
-        DropInfo( Qt::KeyboardModifiers k, const KUrl::List & u, KIO::MetaData &m,
+        DropInfo( Qt::KeyboardModifiers k, const KUrl::List & u,
                   const QPoint& pos, Qt::DropAction a, const QList<QAction *> &actions) :
-            keyboardModifiers(k), urls(u), metaData(m), mousePos(pos), action(a), userActions(actions)
+            keyboardModifiers(k), urls(u), mousePos(pos), action(a), userActions(actions)
         {}
         Qt::KeyboardModifiers keyboardModifiers;
         KUrl::List urls;
-        KIO::MetaData metaData;
         QPoint mousePos;
         Qt::DropAction action;
         QList<QAction*> userActions;

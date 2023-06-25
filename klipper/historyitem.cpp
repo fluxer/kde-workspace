@@ -27,15 +27,16 @@
 #include "historyimageitem.h"
 #include "historyurlitem.h"
 
-HistoryItem::HistoryItem(const QByteArray& uuid) : m_uuid(uuid) {
-
+HistoryItem::HistoryItem(const QByteArray &uuid)
+    : m_uuid(uuid)
+{
 }
 
-HistoryItem::~HistoryItem() {
-
+HistoryItem::~HistoryItem()
+{
 }
 
-HistoryItem* HistoryItem::create( const QMimeData* data )
+HistoryItem* HistoryItem::create(const QMimeData *data)
 {
 #if 0
     int i=0;
@@ -45,11 +46,10 @@ HistoryItem* HistoryItem::create( const QMimeData* data )
 #endif
     if (KUrl::List::canDecode(data))
     {
-        KUrl::MetaDataMap metaData;
-        KUrl::List urls = KUrl::List::fromMimeData(data, &metaData);
+        KUrl::List urls = KUrl::List::fromMimeData(data);
         QByteArray bytes = data->data("application/x-kde-cutselection");
         bool cut = !bytes.isEmpty() && (bytes.at(0) == '1'); // true if 1
-        return new HistoryURLItem(urls, metaData, cut);
+        return new HistoryURLItem(urls, cut);
     }
     if (data->hasText())
     {
@@ -64,7 +64,8 @@ HistoryItem* HistoryItem::create( const QMimeData* data )
     return 0; // Failed.
 }
 
-HistoryItem* HistoryItem::create( QDataStream& dataStream ) {
+HistoryItem* HistoryItem::create(QDataStream &dataStream)
+{
     if ( dataStream.atEnd() ) {
         return 0;
     }
@@ -72,12 +73,10 @@ HistoryItem* HistoryItem::create( QDataStream& dataStream ) {
     dataStream >> type;
     if ( type == "url" ) {
         KUrl::List urls;
-        QMap< QString, QString > metaData;
-        int cut;
+        int cut = 0;
         dataStream >> urls;
-        dataStream >> metaData;
         dataStream >> cut;
-        return new HistoryURLItem( urls, metaData, cut );
+        return new HistoryURLItem( urls, cut );
     }
     if ( type == "string" ) {
         QString text;

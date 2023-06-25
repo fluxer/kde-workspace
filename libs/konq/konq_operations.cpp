@@ -285,15 +285,9 @@ KonqOperations *KonqOperations::doDrop( const KFileItem & destItem, const KUrl &
                                         const QList<QAction*> & userActions  )
 {
     kDebug(1203) << "dest:" << dest;
-    KIO::MetaData metaData;
     // Prefer local urls if possible, to avoid problems with desktop:/ urls from other users (#184403)
-    const KUrl::List lst = KUrl::List::fromMimeData(ev->mimeData(), &metaData, KUrl::List::PreferLocalUrls);
+    const KUrl::List lst = KUrl::List::fromMimeData(ev->mimeData(), KUrl::List::PreferLocalUrls);
     if (!lst.isEmpty()) { // Are they urls ?
-        //kDebug(1203) << "metaData:" << metaData.count() << "entries.";
-        //QMap<QString,QString>::ConstIterator mit;
-        //for( mit = metaData.begin(); mit != metaData.end(); ++mit ) {
-        //    kDebug(1203) << "metaData: key=" << mit.key() << "value=" << mit.value();
-        //}
         // Check if we dropped something on itself
         KUrl::List::ConstIterator it = lst.begin();
         for (; it != lst.end() ; it++) {
@@ -322,7 +316,7 @@ KonqOperations *KonqOperations::doDrop( const KFileItem & destItem, const KUrl &
         }
 
         KonqOperations * op = new KonqOperations(parent);
-        op->setDropInfo( new DropInfo( modifiers, lst, metaData, QCursor::pos(), action, userActions ) );
+        op->setDropInfo( new DropInfo( modifiers, lst, QCursor::pos(), action, userActions ) );
 
         // Ok, now we need destItem.
         if ( !destItem.isNull() )
@@ -620,7 +614,6 @@ void KonqOperations::doDropFileCopy()
     switch ( action ) {
     case Qt::MoveAction :
         job = KIO::move( lst, m_destUrl );
-        job->setMetaData( m_info->metaData );
         setOperation( job, m_method == TRASH ? TRASH : MOVE, m_destUrl );
         KIO::FileUndoManager::self()->recordJob(
             m_method == TRASH ? KIO::FileUndoManager::Trash : KIO::FileUndoManager::Move,
@@ -628,14 +621,12 @@ void KonqOperations::doDropFileCopy()
         break;
     case Qt::CopyAction :
         job = KIO::copy( lst, m_destUrl );
-        job->setMetaData( m_info->metaData );
         setOperation( job, COPY, m_destUrl );
         KIO::FileUndoManager::self()->recordCopyJob(job);
         break;
     case Qt::LinkAction :
         kDebug(1203) << "lst.count=" << lst.count();
         job = KIO::link( lst, m_destUrl );
-        job->setMetaData( m_info->metaData );
         setOperation( job, LINK, m_destUrl );
         KIO::FileUndoManager::self()->recordCopyJob(job);
         break;

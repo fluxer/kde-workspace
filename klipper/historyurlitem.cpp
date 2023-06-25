@@ -24,24 +24,19 @@
 #include <QCryptographicHash>
 
 namespace {
-    QByteArray compute_uuid(const KUrl::List& _urls, KUrl::MetaDataMap _metaData, bool _cut ) {
+    QByteArray compute_uuid(const KUrl::List& _urls, bool _cut ) {
         QCryptographicHash hash(KlipperHashAlgorithm);
         foreach(const KUrl& url, _urls) {
             hash.addData(url.toEncoded());
             hash.addData("\0", 1); // Use binary zero as that is not a valid path character
         }
-        QByteArray buffer;
-        QDataStream out(&buffer, QIODevice::WriteOnly);
-        out << _metaData << _cut;
-        hash.addData(buffer);
         return hash.result();
     }
 }
 
-HistoryURLItem::HistoryURLItem( const KUrl::List& _urls, KUrl::MetaDataMap _metaData, bool _cut )
-    : HistoryItem(compute_uuid(_urls, _metaData, _cut))
+HistoryURLItem::HistoryURLItem( const KUrl::List& _urls, bool _cut )
+    : HistoryItem(compute_uuid(_urls, _cut))
     , m_urls( _urls )
-    , m_metaData( _metaData )
     , m_cut( _cut )
 {
 }
@@ -49,7 +44,7 @@ HistoryURLItem::HistoryURLItem( const KUrl::List& _urls, KUrl::MetaDataMap _meta
 /* virtual */
 void HistoryURLItem::write( QDataStream& stream ) const
 {
-    stream << QString( "url" ) << m_urls << m_metaData << (int)m_cut;
+    stream << QString( "url" ) << m_urls << (int)m_cut;
 }
 
 QString HistoryURLItem::text() const {
@@ -58,7 +53,7 @@ QString HistoryURLItem::text() const {
 
 QMimeData* HistoryURLItem::mimeData() const {
     QMimeData *data = new QMimeData();
-    m_urls.populateMimeData(data, m_metaData);
+    m_urls.populateMimeData(data);
     data->setData("application/x-kde-cutselection", QByteArray(m_cut ? "1" : "0"));
     return data;
 }
@@ -66,10 +61,7 @@ QMimeData* HistoryURLItem::mimeData() const {
 bool HistoryURLItem::operator==( const HistoryItem& rhs) const
 {
     if ( const HistoryURLItem* casted_rhs = dynamic_cast<const HistoryURLItem*>( &rhs ) ) {
-        return casted_rhs->m_urls == m_urls
-            && casted_rhs->m_metaData.count() == m_metaData.count()
-            && qEqual( casted_rhs->m_metaData.begin(), casted_rhs->m_metaData.end(), m_metaData.begin())
-            && casted_rhs->m_cut == m_cut;
+        return casted_rhs->m_urls == m_urls && casted_rhs->m_cut == m_cut;
     }
     return false;
 }
