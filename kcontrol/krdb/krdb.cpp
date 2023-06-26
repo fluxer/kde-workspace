@@ -16,6 +16,7 @@
 *****************************************************************************/
 
 #include <config-workspace.h>
+
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,8 +24,8 @@
 
 #include <QBuffer>
 #include <QDir>
-#include <QtCore/QSettings>
-#include <QtCore/QTextCodec>
+#include <QSettings>
+#include <QTextCodec>
 #include <QToolTip>
 #include <QPixmap>
 #include <QByteArray>
@@ -46,11 +47,9 @@
 
 #include "krdb.h"
 
-#ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <fixx11h.h>
 #include <QtGui/qx11info_x11.h>
-#endif
 
 inline const char * gtkEnvVar(int version)
 {
@@ -60,13 +59,7 @@ inline const char * gtkEnvVar(int version)
 inline const char * sysGtkrc(int version)
 {
     if (version == 2) {
-        if (access("/etc/opt/gnome/gtk-2.0", F_OK) == 0) {
-            return "/etc/opt/gnome/gtk-2.0/gtkrc";
-        }
         return "/etc/gtk-2.0/gtkrc";
-    }
-    if (access("/etc/opt/gnome/gtk", F_OK) == 0) {
-        return "/etc/opt/gnome/gtk/gtkrc";
     }
     return "/etc/gtk/gtkrc";
 }
@@ -84,7 +77,7 @@ static void applyGtkStyles(bool active, int version)
 {
     QString gtkkde = KStandardDirs::locateLocal("config", version == 2 ? "gtkrc-2.0" : "gtkrc");
     QByteArray gtkrc = qgetenv(gtkEnvVar(version));
-    QStringList list = QFile::decodeName(gtkrc).split(':');
+    QStringList list = QFile::decodeName(gtkrc).split(':', QString::SkipEmptyParts);
     QString userHomeGtkrc = QDir::homePath() + userGtkrc(version);
     if (!list.contains(userHomeGtkrc)) {
         list.prepend(userHomeGtkrc);
@@ -93,7 +86,6 @@ static void applyGtkStyles(bool active, int version)
     if (!list.contains(systemGtkrc)) {
         list.prepend(systemGtkrc);
     }
-    list.removeAll("");
     list.removeAll(gtkkde);
     list.append(gtkkde);
 
