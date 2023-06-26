@@ -52,7 +52,8 @@ Column {
                 message,
                 0,
                 0,
-                [{"id": message, "text": i18n("Open")}])
+                // TODO: [{"id": message, "text": i18n("Open")}]
+                [])
             delete runningJobs[source]
         }
         Component.onCompleted: {
