@@ -47,7 +47,7 @@ void AutoStartItem::setPath(const QString &path)
 {
     Q_ASSERT(path.endsWith(QDir::separator()));
 
-    if (path == m_fileName.directory(KUrl::AppendTrailingSlash)) {
+    if (path == m_fileName.directory(KUrl::AddTrailingSlash)) {
         return;
     }
 

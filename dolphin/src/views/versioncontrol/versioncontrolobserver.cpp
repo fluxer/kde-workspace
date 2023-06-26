@@ -251,7 +251,7 @@ int VersionControlObserver::createItemStatesList(QMap<QString, QVector<ItemState
 
     if (items.count() > 0) {
         const KUrl& url = items.first().item.url();
-        itemStates.insert(url.directory(KUrl::AppendTrailingSlash), items);
+        itemStates.insert(url.directory(KUrl::AddTrailingSlash), items);
     }
 
     return index - firstIndex; // number of processed items

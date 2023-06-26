@@ -833,7 +833,7 @@ void KonqOperations::slotResult(KJob *job)
 KonqOperations *KonqOperations::rename( QWidget * parent, const KUrl & oldurl, const QString & name )
 {
     KUrl newurl( oldurl );
-    newurl.setPath( oldurl.directory( KUrl::AppendTrailingSlash ) + name );
+    newurl.setPath( oldurl.directory( KUrl::AddTrailingSlash ) + name );
     kDebug(1203) << "KonqOperations::rename("<<name<<") called. newurl=" << newurl;
     return rename( parent, oldurl, newurl );
 }

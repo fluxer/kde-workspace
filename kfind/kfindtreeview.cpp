@@ -101,7 +101,7 @@ void KFindItemModel::insertFileItems( const QList< QPair<KFileItem,QString> > & 
         {
             QPair<KFileItem,QString> pair = *it;
 
-            QString subDir = m_view->reducedDir(pair.first.url().directory(KUrl::AppendTrailingSlash));
+            QString subDir = m_view->reducedDir(pair.first.url().directory(KUrl::AddTrailingSlash));
             m_itemList.append( KFindItem( pair.first, subDir, pair.second ) );
         }
 
@@ -258,7 +258,7 @@ QVariant KFindItem::data( int column, int role ) const
         switch( column )
         {
             case 0:
-                return m_fileItem.url().fileName(KUrl::ObeyTrailingSlash);
+                return m_fileItem.url().fileName(KUrl::LeaveTrailingSlash);
             case 1:
                 return m_subDir;
             case 2:

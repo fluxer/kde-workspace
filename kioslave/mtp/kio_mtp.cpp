@@ -615,7 +615,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         }
 
         kDebug(KIO_MTP) << "Copy file" << src.fileName() << "from filesystem to device"
-            << src.directory(KUrl::AppendTrailingSlash) << dest.directory(KUrl::AppendTrailingSlash);
+            << src.directory(KUrl::AddTrailingSlash) << dest.directory(KUrl::AddTrailingSlash);
 
         if (!(flags & KIO::Overwrite) && getPath(dest.path()).first) {
             error(ERR_FILE_ALREADY_EXIST, dest.path());
@@ -627,7 +627,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         QPair<void*, LIBMTP_mtpdevice_t*> pair = getPath(dest.directory());
 
         if (!pair.first) {
-            error(ERR_DOES_NOT_EXIST, dest.directory(KUrl::AppendTrailingSlash));
+            error(ERR_DOES_NOT_EXIST, dest.directory(KUrl::AddTrailingSlash));
             return;
         }
 
@@ -688,7 +688,7 @@ void MTPSlave::copy(const KUrl& src, const KUrl& dest, int, JobFlags flags)
         }
 
         kDebug(KIO_MTP) << "Copy file" << src.fileName() << "from device to filesystem"
-            << dest.directory(KUrl::AppendTrailingSlash) << dest.directory(KUrl::AppendTrailingSlash);
+            << dest.directory(KUrl::AddTrailingSlash) << dest.directory(KUrl::AddTrailingSlash);
 
         QFileInfo destination(dest.path());
 
