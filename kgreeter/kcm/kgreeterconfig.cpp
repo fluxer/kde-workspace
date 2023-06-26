@@ -42,7 +42,8 @@ K_EXPORT_PLUGIN(KCMGreeterFactory("kcmgreeterconfig", "kcm_greeterconfig"))
 KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     : KCModule(KCMGreeterFactory::componentData(), parent),
     m_lightdmexe(KStandardDirs::findRootExe("lightdm")),
-    m_lightdmproc(nullptr)
+    m_lightdmproc(nullptr),
+    m_changed(false)
 {
     Q_UNUSED(args);
 
@@ -64,6 +65,8 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
         setRootOnlyMessage(i18n("You are not allowed to save the configuration"));
         setDisabled(true);
     }
+
+    connect(this, SIGNAL(changed(bool)), this, SLOT(slotChanged(bool)));
 
     load();
 
@@ -248,6 +251,7 @@ void KCMGreeter::slotTest()
 void KCMGreeter::slotProcessStateChanged(QProcess::ProcessState state)
 {
     setProcessRunning(state == QProcess::Running);
+    enableTest(!m_changed);
 }
 
 void KCMGreeter::slotProcessFinished(const int exitcode)
@@ -255,6 +259,11 @@ void KCMGreeter::slotProcessFinished(const int exitcode)
     if (exitcode != 0) {
         KMessageBox::error(this, i18n("LightDM finished with error: %1", exitcode));
     }
+}
+
+void KCMGreeter::slotChanged(bool state)
+{
+    m_changed = state;
 }
 
 void KCMGreeter::loadSettings(const QString &font, const QString &style, const QString &color,
@@ -303,7 +312,7 @@ void KCMGreeter::enableTest(const bool enable)
     if (enable) {
         testbutton->setEnabled(!m_lightdmexe.isEmpty());
     } else {
-        testbutton->setEnabled(false);
+        testbutton->setEnabled(m_lightdmproc->state() == QProcess::Running);
     }
 }
 

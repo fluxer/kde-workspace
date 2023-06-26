@@ -55,6 +55,8 @@ private Q_SLOTS:
     void slotProcessStateChanged(QProcess::ProcessState state);
     void slotProcessFinished(const int exitcode);
 
+    void slotChanged(bool state);
+
 private:
     void loadSettings(const QString &font, const QString &style, const QString &color,
                       const QString &cursor, const QString &background, const QString &rectangle);
@@ -64,6 +66,7 @@ private:
 
     QString m_lightdmexe;
     QProcess* m_lightdmproc;
+    bool m_changed;
 };
 
 #endif // KGREETERCONFIG_H
