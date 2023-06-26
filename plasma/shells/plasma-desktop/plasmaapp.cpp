@@ -42,7 +42,7 @@
 #include <QElapsedTimer>
 #include <QTimer>
 #include <QVBoxLayout>
-#include <QtCore/qsignalmapper.h>
+#include <QTextStream>
 
 #include <KAction>
 #include <KCrash>
@@ -65,6 +65,7 @@
 #include <Plasma/Theme>
 #include <Plasma/Wallpaper>
 #include <Plasma/WindowEffects>
+#include <Plasma/Package>
 
 #include <plasmagenericshell/backgrounddialog.h>
 
@@ -80,14 +81,43 @@
 #include "toolbutton.h"
 #include "klistconfirmationdialog.h"
 
-#include "supportinformation.h"
-
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #endif
 
 extern QString plasmaLocale;
+
+static void addInformationForApplet(QTextStream &stream, Plasma::Applet *applet)
+{
+    if (applet->isContainment()) {
+        stream << "Containment - ";
+    } else {
+        stream << "Applet - ";
+    }
+    stream << applet->name() << ":\n";
+
+    stream << "Plugin Name: " << applet->pluginName() << '\n';
+    stream << "Category: " << applet->category() << '\n';
+
+
+    if (applet->package()) {
+        stream << "API: " << applet->package()->metadata().implementationApi() << '\n';
+        stream << "Type: " << applet->package()->metadata().type() << '\n';
+        stream << "Version: " << applet->package()->metadata().version() << '\n';
+        stream << "Author: " << applet->package()->metadata().author() << '\n';
+    }
+
+    // runtime info
+    stream << "Failed To Launch: " << applet->hasFailedToLaunch() << '\n';
+    const QRect rect = applet->screenRect();
+    stream << "ScreenRect: " << rect.x() << ',' << rect.y() << ' ' << rect.width() << 'x' << rect.height() << '\n';
+    stream << "FormFactor: " << applet->formFactor() << '\n';
+
+    stream << "Config Group Name: " << applet->config().name() << '\n';
+
+    stream << '\n'; // insert a blank line
+}
 
 PlasmaApp* PlasmaApp::self()
 {
@@ -1006,7 +1036,35 @@ void PlasmaApp::panelRemoved(QObject *panel)
 
 QString PlasmaApp::supportInformation() const
 {
-    return SupportInformation::generateSupportInformation(m_corona);
+    QString streambuffer;
+    QTextStream stream(&streambuffer);
+    stream << "Plasma-desktop Support Information:\n"
+           << "The following information should be used when requesting support.\n"
+           << "It provides information about the currently running instance and which applets are used.\n"
+           << "Please include the information provided underneath this introductory text along with "
+           << "whatever you think may be relevant to the issue.\n\n";
+
+    stream << "Version\n";
+    stream << "=======\n";
+    stream << "KDE SC version (runtime):\n";
+    stream << KDE::versionString() << '\n';
+    stream << "KDE SC version (compile):\n";
+    stream << KDE_VERSION_STRING << '\n';
+    stream << "Katie Version:\n";
+    stream << qVersion() << '\n';
+
+    stream << '\n' << "=========" << '\n';
+
+    foreach (Plasma::Containment *containment, m_corona->containments()) {
+        // a containment is also an applet so print standard applet information out
+        addInformationForApplet(stream, containment);
+
+        foreach (Plasma::Applet *applet, containment->applets()) {
+            addInformationForApplet(stream, applet);
+        }
+    }
+
+    return streambuffer;
 }
 
 void PlasmaApp::executeCommands(const QList < QVariant > & commands)

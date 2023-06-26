@@ -14,7 +14,6 @@ set(plasma_SRCS
     desktoptracker.cpp
     interactiveconsole.cpp
     main.cpp
-    supportinformation.cpp
     panelcontroller.cpp
     panelview.cpp
     panelapplethandle.cpp
