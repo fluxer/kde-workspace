@@ -2040,7 +2040,9 @@ void ProcessModel::setNormalizedCPUUsage(bool normalizeCPUUsage)
 void ProcessModelPrivate::timerEvent( QTimerEvent * event )
 {
     Q_UNUSED(event);
-    foreach (qlonglong pid, mPidsToUpdate) {
+    QMutableListIterator<long> it(mPidsToUpdate);
+    while (it.hasNext()) {
+        const long pid = it.next();
         KSysGuard::Process *process = mProcesses->getProcess(pid);
         if (process && process->timeKillWasSent.isValid() && process->timeKillWasSent.elapsed() < MILLISECONDS_TO_SHOW_RED_FOR_KILLED_PROCESS) {
             int row;
@@ -2053,7 +2055,7 @@ void ProcessModelPrivate::timerEvent( QTimerEvent * event )
             QModelIndex index2 = q->createIndex(row, mHeadings.count()-1, process);
             emit q->dataChanged(index1, index2);
         } else {
-            mPidsToUpdate.removeAll(pid);
+            it.remove();
         }
     }
 

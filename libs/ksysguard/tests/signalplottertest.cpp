@@ -9,7 +9,7 @@
 
 void TestSignalPlotter::init()
 {
-    s = new KSignalPlotter;
+    s = new KSignalPlotter();
 }
 void TestSignalPlotter::cleanup()
 {
