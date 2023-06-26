@@ -191,9 +191,9 @@ void KUriFilterTest::noFiltering()
     // URI that should require no filtering
     filter( "http://www.kde.org", "http://www.kde.org", KUriFilterData::NetProtocol );
     filter( "http://www.kde.org/developer//index.html", "http://www.kde.org/developer//index.html", KUriFilterData::NetProtocol );
-    filter( "file:///", "file:///", KUriFilterData::NetProtocol );
-    filter( "file:///etc", "file:///etc", KUriFilterData::NetProtocol );
-    filter( "file:///etc/passwd", "file:///etc/passwd", KUriFilterData::NetProtocol );
+    filter( "file:///", "/", KUriFilterData::NetProtocol );
+    filter( "file:///etc", "/etc", KUriFilterData::NetProtocol );
+    filter( "file:///etc/passwd", "/etc/passwd", KUriFilterData::NetProtocol );
 }
 
 void KUriFilterTest::localFiles()
@@ -220,11 +220,11 @@ void KUriFilterTest::refOrQuery()
     // URL with reference
     filter( "http://www.kde.org/index.html#q8", "http://www.kde.org/index.html#q8", KUriFilterData::NetProtocol );
     // local file with reference
-    filter( "file:/etc/passwd#q8", "file:///etc/passwd#q8", KUriFilterData::LocalFile );
-    filter( "file:///etc/passwd#q8", "file:///etc/passwd#q8", KUriFilterData::LocalFile );
-    filter( "/etc/passwd#q8", "file:///etc/passwd#q8", KUriFilterData::LocalFile );
+    filter( "file:/etc/passwd#q8", "/etc/passwd#q8", KUriFilterData::LocalFile );
+    filter( "file:///etc/passwd#q8", "/etc/passwd#q8", KUriFilterData::LocalFile );
+    filter( "/etc/passwd#q8", "/etc/passwd#q8", KUriFilterData::LocalFile );
     // local file with query (can be used by javascript)
-    filter( "file:/etc/passwd?foo=bar", "file:///etc/passwd?foo=bar", KUriFilterData::LocalFile );
+    filter( "file:/etc/passwd?foo=bar", "/etc/passwd?foo=bar", KUriFilterData::LocalFile );
     testLocalFile( "/tmp/kurifiltertest?foo" ); // local file with ? in the name (#58990)
     testLocalFile( "/tmp/kurlfiltertest#foo" ); // local file with '#' in the name
     testLocalFile( "/tmp/kurlfiltertest#foo?bar" ); // local file with both
