@@ -114,12 +114,6 @@ QVariant ProgressListModel::data(const QModelIndex &index, int role) const
     case JobView::SizeProcessed:
         result = jobView->sizeProcessed();
         break;
-    case JobView::TimeTotal:
-
-        break;
-    case JobView::TimeElapsed:
-
-        break;
     case JobView::Speed:
         result = jobView->speed();
         break;

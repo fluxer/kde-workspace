@@ -52,16 +52,6 @@ QString ProgressListDelegate::Private::getSizeProcessed(const QModelIndex &index
     return index.model()->data(index, JobView::SizeProcessed).toString();
 }
 
-qlonglong ProgressListDelegate::Private::getTimeTotal(const QModelIndex &index) const
-{
-    return index.model()->data(index, JobView::TimeTotal).toLongLong();
-}
-
-qlonglong ProgressListDelegate::Private::getTimeProcessed(const QModelIndex &index) const
-{
-    return index.model()->data(index, JobView::TimeElapsed).toLongLong();
-}
-
 QString ProgressListDelegate::Private::getSpeed(const QModelIndex &index) const
 {
     return index.model()->data(index, JobView::Speed).toString();

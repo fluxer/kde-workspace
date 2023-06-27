@@ -44,8 +44,6 @@ public:
         Icon,
         SizeTotal,
         SizeProcessed,
-        TimeTotal,
-        TimeElapsed,
         Speed,
         Percent,
         InfoMessage,

@@ -55,8 +55,6 @@ public:
     QString getIcon(const QModelIndex &index) const;
     QString getSizeTotal(const QModelIndex &index) const;
     QString getSizeProcessed(const QModelIndex &index) const;
-    qlonglong getTimeTotal(const QModelIndex &index) const;
-    qlonglong getTimeProcessed(const QModelIndex &index) const;
     QString getSpeed(const QModelIndex &index) const;
     int getPercent(const QModelIndex &index) const;
     QString getInfoMessage(const QModelIndex &index) const;
