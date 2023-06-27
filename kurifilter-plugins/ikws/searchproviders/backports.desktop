@@ -87,7 +87,7 @@ Name[wa]=Cweraedje di backports Debian
 Name[x-test]=xxDebian Backports Searchxx
 Name[zh_CN]=Debian 仓库搜索
 Name[zh_TW]=Debian Backports 搜尋
-Query=https://packages.debian.org/search?suite=bullseye-backports&section=all&arch=any&searchon=names&keywords=\\{@}
-Query[x-test]=xxhttps://packages.debian.org/search?suite=bullseye-backports&section=all&arch=any&searchon=names&keywords=\\{@}xx
+Query=https://packages.debian.org/search?suite=bookworm-backports&section=all&arch=any&searchon=names&keywords=\\{@}
+Query[x-test]=xxhttps://packages.debian.org/search?suite=bookworm-backports&section=all&arch=any&searchon=names&keywords=\\{@}xx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
