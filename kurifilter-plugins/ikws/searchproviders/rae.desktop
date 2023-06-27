@@ -92,7 +92,7 @@ Name[wa]=Diccionaire del Royåle Academeye Espagnole (RAE)
 Name[x-test]=xxDictionary of the Spanish Academy (RAE)xx
 Name[zh_CN]=西班牙学院的字典(RAE)
 Name[zh_TW]=西班牙金像獎字典 (RAE)
-Query=https://dle.rae.es/\\{@}?m=form
-Query[x-test]=xxhttps://dle.rae.es/\\{@}?m=formxx
+Query=https://www.rae.es/search/node?keys=\\{@}
+Query[x-test]=xxhttps://www.rae.es/search/node?keys=\\{@}xx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
