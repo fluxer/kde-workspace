@@ -74,7 +74,6 @@ Name[x-test]=xxWolfram Alphaxx
 Name[zh_CN]=Wolfram Alpha
 Name[zh_TW]=Wolfram Alpha
 Query=https://www.wolframalpha.com/input/?i=\\{@}
-Query[ar]=https://www.wolframalpha.com/input/?i=\\{@}
 Query[x-test]=xxhttps://www.wolframalpha.com/input/?i=\\{@}xx
 X-KDE-ServiceTypes=SearchProvider
 Type=Service
