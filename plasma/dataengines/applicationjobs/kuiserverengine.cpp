@@ -22,10 +22,10 @@
 #include "jobcontrol.h"
 
 #include <QDBusConnection>
-#include <QtCore/qcoreevent.h>
+#include <QTimerEvent>
+#include <QDebug>
 
 #include <KJob>
-
 #include <Plasma/DataEngine>
 
 
@@ -199,9 +199,12 @@ void JobView::setProcessedAmount(qlonglong amount, const QString &unit)
     }
 }
 
-void JobView::setDestUrl(const QDBusVariant & destUrl)
+void JobView::setDestUrl(const QString &destUrl)
 {
-    Q_UNUSED(destUrl);
+    if (m_destUrl != destUrl) {
+        setData("destUrl", destUrl);
+        scheduleUpdate();
+    }
 }
 
 void JobView::setPercent(uint percent)
@@ -363,9 +366,8 @@ Plasma::Service* KuiserverEngine::serviceForSource(const QString& source)
     JobView *jobView = qobject_cast<JobView *>(containerForSource(source));
     if (jobView) {
         return new JobControl(this, jobView);
-    } else {
-        return DataEngine::serviceForSource(source);
     }
+    return DataEngine::serviceForSource(source);
 }
 
 void KuiserverEngine::init()

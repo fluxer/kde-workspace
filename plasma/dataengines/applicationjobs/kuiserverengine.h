@@ -96,8 +96,8 @@ public:
     void setPercent(uint percent);
     void setSuspended(bool suspended);
 
-    //vestigal, required to implement this dbus interface
-    void setDestUrl(const QDBusVariant &destUrl);
+    // vestigal, required to implement this dbus interface
+    void setDestUrl(const QString &destUrl);
 
     void terminate(const QString &errorMessage);
 
@@ -135,6 +135,7 @@ private:
 
     State m_state;
 
+    QString m_destUrl;
     QMap<QString, int> m_unitMap;
     int m_bytesUnitId;
     int m_unitId;

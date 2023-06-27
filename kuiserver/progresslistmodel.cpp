@@ -216,7 +216,7 @@ QStringList ProgressListModel::gatherJobUrls()
     QStringList jobUrls;
 
     foreach(JobView* jobView, m_jobViews) {
-        jobUrls.append(jobView->destUrl().toString());
+        jobUrls.append(jobView->destUrl());
     }
     return jobUrls;
 }

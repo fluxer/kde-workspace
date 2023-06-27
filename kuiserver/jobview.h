@@ -105,14 +105,14 @@ public:
      /**
      * Set the dest Url of the job...
      * sent from the jobtracker (once upon construction)
-     * @param destUrl will be a QVariant, likely to have 1
+     * @param destUrl will be a QString, likely to have 1
      * dest Url...OR it can be non-existent (only srcUrl would
      * be there), in that case it is a delete a directory job
      * etc..
      */
-    void setDestUrl(const QDBusVariant& destUrl);
+    void setDestUrl(const QString& destUrl);
 
-    QVariant destUrl() const;
+    QString destUrl() const;
 
     /**
      *  The below methods force an emission of the respective signal.
@@ -194,7 +194,7 @@ private:
 
     QHash<uint, QPair<QString, QString> > m_descFields;
 
-    QVariant m_destUrl;
+    QString m_destUrl;
 
     QDBusObjectPath m_objectPath;
 

@@ -289,13 +289,16 @@ QDBusObjectPath JobView::objectPath() const
     return m_objectPath;
 }
 
-void JobView::setDestUrl(const QDBusVariant &destUrl)
+void JobView::setDestUrl(const QString &destUrl)
 {
-    m_destUrl = destUrl.variant();
+    foreach(const iFacePair &pair, m_objectPaths) {
+        pair.second->asyncCall(QLatin1String("setDestUrl"), destUrl);
+    }
+    m_destUrl = destUrl;
     emit destUrlSet();
 }
 
-QVariant JobView::destUrl() const
+QString JobView::destUrl() const
 {
     return m_destUrl;
 }
@@ -353,6 +356,10 @@ void JobView::addJobContact(const QString& objectPath, const QString& address)
 
     if (m_totalAmount > 0) {
         client->asyncCall(QLatin1String("setTotalAmount"), m_totalAmount, m_totalUnit);
+    }
+
+    if (!m_destUrl.isEmpty()) {
+        client->asyncCall(QLatin1String("setDestUrl"), m_destUrl);
     }
 }
 

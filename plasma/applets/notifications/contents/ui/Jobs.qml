@@ -52,8 +52,7 @@ Column {
                 message,
                 0,
                 0,
-                // TODO: [{"id": message, "text": i18n("Open")}]
-                [])
+                runningJobs[source]["destUrl"] ? [{"id": message, "text": i18n("Open")}] : [])
             delete runningJobs[source]
         }
         Component.onCompleted: {
