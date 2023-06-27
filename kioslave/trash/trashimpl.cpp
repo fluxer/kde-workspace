@@ -168,48 +168,6 @@ bool TrashImpl::init()
     return true;
 }
 
-void TrashImpl::migrateOldTrash()
-{
-    kDebug() ;
-
-    KConfigGroup g( KGlobal::config(), "Paths" );
-    const QString oldTrashDir = g.readPathEntry( "Trash", QString() );
-
-    if ( oldTrashDir.isEmpty() )
-        return;
-
-    const QStringList entries = listDir( oldTrashDir );
-    bool allOK = true;
-    for ( QStringList::const_iterator entryIt = entries.begin(), entryEnd = entries.end();
-          entryIt != entryEnd ; ++entryIt )
-    {
-        QString srcPath = *entryIt;
-        if ( srcPath == QLatin1String(".") || srcPath == QLatin1String("..") || srcPath == QLatin1String(".directory") )
-            continue;
-        srcPath.prepend( oldTrashDir ); // make absolute
-        int trashId;
-        QString fileId;
-        if ( !createInfo( srcPath, trashId, fileId ) ) {
-            kWarning() << "Trash migration: failed to create info for " << srcPath ;
-            allOK = false;
-        } else {
-            bool ok = moveToTrash( srcPath, trashId, fileId );
-            if ( !ok ) {
-                (void)deleteInfo( trashId, fileId );
-                kWarning() << "Trash migration: failed to create info for " << srcPath ;
-                allOK = false;
-            } else {
-                kDebug() << "Trash migration: moved " << srcPath;
-            }
-        }
-    }
-    if ( allOK ) {
-        // We need to remove the old one, otherwise the desktop will have two trashcans...
-        kDebug() << "Trash migration: all OK, removing old trash directory";
-        synchronousDel( oldTrashDir, false, true );
-    }
-}
-
 bool TrashImpl::createInfo( const QString& origPath, int& trashId, QString& fileId )
 {
     kDebug() << origPath;

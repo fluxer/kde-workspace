@@ -927,7 +927,7 @@ void KonqMultiRestoreJob::slotStart()
         Q_ASSERT( new_url.protocol() == "trash" );
         QByteArray packedArgs;
         QDataStream stream( &packedArgs, QIODevice::WriteOnly );
-        stream << (int)3 << new_url;
+        stream << (int)2 << new_url;
         KIO::Job* job = KIO::special( new_url, packedArgs, KIO::HideProgressInfo );
         addSubjob( job );
         setProcessedAmount(KJob::Files, processedAmount(KJob::Files) + 1);

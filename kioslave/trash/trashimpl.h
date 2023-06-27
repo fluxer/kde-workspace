@@ -92,9 +92,6 @@ public:
     /// encapsulates the call to infoForFile. Don't use if you need more info from TrashedFileInfo.
     QString physicalPath( int trashId, const QString& fileId, const QString& relativePath );
 
-    /// Move data from the old trash system to the new one
-    void migrateOldTrash();
-
     /// KIO error code
     int lastErrorCode() const { return m_lastErrorCode; }
     QString lastErrorMessage() const { return m_lastErrorMessage; }

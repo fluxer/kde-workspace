@@ -927,7 +927,7 @@ void TestTrash::restoreFile()
 
     QByteArray packedArgs;
     QDataStream stream( &packedArgs, QIODevice::WriteOnly );
-    stream << (int)3 << url;
+    stream << (int)2 << url;
     KIO::Job* job = KIO::special( url, packedArgs, KIO::HideProgressInfo );
     bool ok = KIO::NetAccess::synchronousRun( job, 0 );
     QVERIFY( ok );
@@ -953,7 +953,7 @@ void TestTrash::restoreFileFromSubDir()
 
     QByteArray packedArgs;
     QDataStream stream( &packedArgs, QIODevice::WriteOnly );
-    stream << (int)3 << url;
+    stream << (int)2 << url;
     KIO::Job* job = KIO::special( url, packedArgs, KIO::HideProgressInfo );
     bool ok = KIO::NetAccess::synchronousRun( job, 0 );
     QVERIFY( !ok );
@@ -987,7 +987,7 @@ void TestTrash::restoreFileToDeletedDirectory()
 
     QByteArray packedArgs;
     QDataStream stream( &packedArgs, QIODevice::WriteOnly );
-    stream << (int)3 << url;
+    stream << (int)2 << url;
     KIO::Job* job = KIO::special( url, packedArgs, KIO::HideProgressInfo );
     bool ok = KIO::NetAccess::synchronousRun( job, 0 );
     QVERIFY( !ok );

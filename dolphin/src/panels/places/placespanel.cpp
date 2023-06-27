@@ -112,7 +112,7 @@ void PlacesPanel::showEvent(QShowEvent* event)
         m_controller->setSelectionBehavior(KItemListController::SingleSelection);
         m_controller->setSingleClickActivationEnforced(true);
 
-	readSettings();
+        readSettings();
 
         connect(m_controller, SIGNAL(itemActivated(int)), this, SLOT(slotItemActivated(int)));
         connect(m_controller, SIGNAL(itemMiddleClicked(int)), this, SLOT(slotItemMiddleClicked(int)));

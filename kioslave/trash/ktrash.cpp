@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
 
         QByteArray packedArgs;
         QDataStream stream(&packedArgs, QIODevice::WriteOnly);
-        stream << (int)3 << trashURL;
-        KIO::Job* job = KIO::special( trashURL, packedArgs );
+        stream << (int)2 << trashURL;
+        KIO::Job* job = KIO::special(trashURL, packedArgs);
         bool ok = KIO::NetAccess::synchronousRun(job, 0);
         if (!ok) {
             kError() << KIO::NetAccess::lastErrorString();

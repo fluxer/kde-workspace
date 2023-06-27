@@ -471,27 +471,24 @@ void TrashProtocol::special( const QByteArray & data )
     stream >> cmd;
 
     switch (cmd) {
-    case 1:
-        if ( impl.emptyTrash() )
-            finished();
-        else
-            error( impl.lastErrorCode(), impl.lastErrorMessage() );
-        break;
-    case 2:
-        impl.migrateOldTrash();
-        finished();
-        break;
-    case 3:
-    {
-        KUrl url;
-        stream >> url;
-        restore( url );
-        break;
-    }
-    default:
-        kWarning() << "Unknown command in special(): " << cmd ;
-        error( KIO::ERR_UNSUPPORTED_ACTION, QString::number(cmd) );
-        break;
+        case 1: {
+            if ( impl.emptyTrash() )
+                finished();
+            else
+                error( impl.lastErrorCode(), impl.lastErrorMessage() );
+            break;
+        }
+        case 2: {
+            KUrl url;
+            stream >> url;
+            restore( url );
+            break;
+        }
+        default: {
+            kWarning() << "Unknown command in special(): " << cmd ;
+            error( KIO::ERR_UNSUPPORTED_ACTION, QString::number(cmd) );
+            break;
+        }
     }
 }
 
