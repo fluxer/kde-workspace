@@ -42,12 +42,10 @@
 #include <kdeversion.h>
 
 #include <QEvent>
-//Added by qt3to4:
-#include <QtGui/qevent.h>
+#include <QContextMenuEvent>
 #include <QPixmap>
-#include <QtCore/qcoreevent.h>
 #include <QSizePolicy>
-#include <QtXml/qdom.h>
+
 namespace KateMDI
 {
 

@@ -109,7 +109,6 @@
 #include <QtGui/QToolButton>
 #include <QtGui/QWhatsThis>
 #include <QtGui/qevent.h>
-#include <QtXml/qdom.h>
 
 //END
 
