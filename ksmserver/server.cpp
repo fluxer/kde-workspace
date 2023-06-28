@@ -688,6 +688,10 @@ void KSMServer::cleanUp()
     if (clean) return;
     clean = true;
 
+    if (klauncherSignals) {
+        klauncherSignals->call("cleanup");
+    }
+
     if (wmProcess && wmProcess->state() != QProcess::NotRunning) {
         wmProcess->kill();
         wmProcess->waitForFinished();

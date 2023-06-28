@@ -163,9 +163,6 @@ fi
 
 echo 'startkde: Shutting down...'  1>&2
 
-# Clean up
-kquitapp klauncher
-
 unset KDE_FULL_SESSION
 xprop -root -remove KDE_FULL_SESSION
 unset KDE_SESSION_VERSION
