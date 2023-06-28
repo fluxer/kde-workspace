@@ -74,7 +74,6 @@ private Q_SLOTS:
   void getDirectory();
   void fixLayout();
   void slotSizeBoxChanged(int);
-  void slotEditRegExp();
 
 Q_SIGNALS:
     void startSearch();

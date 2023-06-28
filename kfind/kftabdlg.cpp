@@ -40,7 +40,6 @@
 #include <kmessagebox.h>
 #include <KNumInput>
 #include <kfiledialog.h>
-#include <kregexpeditorinterface.h>
 #include <kservicetypetrader.h>
 #include <kstandarddirs.h>
 
@@ -301,12 +300,12 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
 
     connect( textEdit, SIGNAL(returnPressed(QString)), SIGNAL(startSearch()));
 
-    const QString containingtext
-      = i18n("<qt>If specified, only files that contain this text"
-	      " are found. Note that not all file types from the list"
-		  " above are supported. Please refer to the documentation"
-		  " for a list of supported file types."
-	      "</qt>");
+    const QString containingtext = i18n(
+        "<qt>If specified, only files that contain this text"
+        " are found. Note that not all file types from the list"
+        " above are supported. Please refer to the documentation"
+        " for a list of supported file types.</qt>"
+    );
     textEdit->setToolTip(containingtext);
     textL->setWhatsThis(containingtext);
 
@@ -314,18 +313,18 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     binaryContextCb  =new QCheckBox(i18n("Include &binary files"), pages[2]);
     regexpContentCb  =new QCheckBox(i18n("Regular e&xpression"), pages[2]);
 
-    const QString binaryTooltip
-      = i18n("<qt>This lets you search in any type of file, "
-       "even those that usually do not contain text (for example "
-	   "program files and images).</qt>");
+    const QString binaryTooltip = i18n(
+        "<qt>This lets you search in any type of file, "
+        "even those that usually do not contain text (for example "
+        "program files and images).</qt>"
+    );
     binaryContextCb->setToolTip(binaryTooltip);
 
-    QPushButton* editRegExp = 0;
-    if ( !KServiceTypeTrader::self()->query("KRegExpEditor/KRegExpEditor").isEmpty() ) {
-        // The editor is available, so lets use it.
-        editRegExp = new QPushButton(i18n("&Edit..."), pages[2]);
-        editRegExp->setObjectName( QLatin1String( "editRegExp" ) );
-    }
+    const QString regexpTooltip = i18n(
+        "<qt>If enabled the containing text will be matched as if it is regular "
+        "expression, otherwise as wildcard.</qt>"
+    );
+    regexpContentCb->setToolTip(regexpTooltip);
 
     metainfokeyEdit=new KLineEdit(pages[2]);
     metainfoEdit=new KLineEdit(pages[2]);
@@ -359,15 +358,6 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
       typeBox->addItem(typ->comment());
     }
 
-    if ( editRegExp ) {
-      // The editor was available, so lets use it.
-      connect( regexpContentCb, SIGNAL(toggled(bool)), editRegExp, SLOT(setEnabled(bool)) );
-      editRegExp->setEnabled(false);
-      connect( editRegExp, SIGNAL(clicked()), this, SLOT(slotEditRegExp()) );
-    }
-    else
-        regexpContentCb->hide();
-
     // Layout
     tmp = sizeEdit->fontMetrics().width(" 00000 ");
     sizeEdit->setMinimumSize(tmp, sizeEdit->sizeHint().height());
@@ -389,11 +379,6 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     grid2->addWidget( metainfoEdit, 4, 3 );
 
     metainfokeyEdit->setText("*");
-
-    if ( editRegExp ) {
-      // The editor was available, so lets use it.
-      grid2->addWidget( editRegExp, 2, 3 );
-    }
 
     addTab( pages[0], i18n("Name/&Location") );
     addTab( pages[2], i18nc("tab name: search by contents","C&ontents") );
@@ -545,21 +530,6 @@ void KfindTabWidget::loadHistory()
     dirBox ->addItem( "file:/mnt" );
     dirBox ->setCurrentIndex(0);
   }
-}
-
-void KfindTabWidget::slotEditRegExp()
-{
-  if ( ! regExpDialog )
-    regExpDialog = KServiceTypeTrader::createInstanceFromQuery<KDialog>( "KRegExpEditor/KRegExpEditor", QString(), this );
-
-  KRegExpEditorInterface *iface = qobject_cast<KRegExpEditorInterface *>( regExpDialog );
-  if ( !iface )
-       return;
-
-  iface->setRegExp( textEdit->text() );
-  bool ok = regExpDialog->exec();
-  if ( ok )
-    textEdit->setText( iface->regExp() );
 }
 
 void KfindTabWidget::setFocus()
