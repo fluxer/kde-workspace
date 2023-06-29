@@ -26,12 +26,6 @@
 #include <solid/storageaccess.h>
 #include <solid/opticaldrive.h>
 
-namespace Solid {
-namespace Control {
-    class Authentication;
-}
-}
-
 class SolidHardware : public QCoreApplication
 {
     Q_OBJECT
