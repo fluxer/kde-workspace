@@ -19,17 +19,14 @@
 
 #include "solid-hardware.h"
 
-
 #include <QString>
 #include <QStringList>
 #include <QMetaProperty>
 #include <QMetaEnum>
-#include <QTimer>
 
 #include <kcomponentdata.h>
 #include <kcmdlineargs.h>
 #include <kdebug.h>
-#include <kjob.h>
 #include <klocale.h>
 
 #include <solid/device.h>
@@ -419,28 +416,6 @@ bool SolidHardware::listen()
     return true;
 }
 
-void SolidHardware::connectJob(KJob *job)
-{
-    connect(job, SIGNAL(result(KJob *)),
-             this, SLOT(slotResult(KJob *)));
-    connect(job, SIGNAL(percent(KJob *, unsigned long)),
-             this, SLOT(slotPercent(KJob *, unsigned long)));
-    connect(job, SIGNAL(infoMessage(KJob *, const QString &, const QString &)),
-             this, SLOT(slotInfoMessage(KJob *, const QString &)));
-}
-
-void SolidHardware::slotPercent(KJob *job, unsigned long percent)
-{
-    Q_UNUSED(job)
-    std::cout << i18n("Progress: %1%" , percent) << std::endl;
-}
-
-void SolidHardware::slotInfoMessage(KJob *job, const QString &message)
-{
-    Q_UNUSED(job)
-    std::cout << i18n("Info: %1" , message) << std::endl;
-}
-
 void SolidHardware::deviceAdded(const QString &udi)
 {
     std::cout << "Device Added:" << std::endl;
@@ -451,20 +426,6 @@ void SolidHardware::deviceRemoved(const QString &udi)
 {
     std::cout << "Device Removed:" << std::endl;
     std::cout << "udi = '" << udi << "'" << std::endl;
-}
-
-
-void SolidHardware::slotResult(KJob *job)
-{
-    m_error = 0;
-
-    if (job->error())
-    {
-        m_error = job->error();
-        m_errorString = job->errorString();
-    }
-
-    m_loop.exit();
 }
 
 void SolidHardware::slotStorageResult(Solid::ErrorType error, const QVariant &errorData)
