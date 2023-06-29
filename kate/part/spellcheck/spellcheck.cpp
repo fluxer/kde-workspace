@@ -31,6 +31,7 @@
 #include <kactioncollection.h>
 #include <ktexteditor/view.h>
 #include <kspeller.h>
+#include <kglobal.h>
 
 #include "katedocument.h"
 #include "katehighlight.h"

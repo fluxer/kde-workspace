@@ -28,6 +28,7 @@
 #include <klocale.h>
 #include <kmimetype.h>
 #include <krandom.h>
+#include <kglobal.h>
 #include <kdebug.h>
 
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);

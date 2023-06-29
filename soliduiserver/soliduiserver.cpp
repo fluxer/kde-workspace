@@ -121,7 +121,6 @@ void SolidUiServer::onActionDialogFinished()
     }
 }
 
-
 int SolidUiServer::mountDevice(const QString &device, const QString &mountpoint, bool readonly)
 {
     QVariantMap mountarguments;
