@@ -164,10 +164,12 @@ int SolidUiServer::mountUdi(const QString &udi)
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     Solid::Block *block = device.as<Solid::Block>();
     if (!storagevolume || !block) {
+        kWarning() << "invalid storage device" << udi;
         return int(Solid::ErrorType::InvalidOption);
     } else if (storagevolume->fsType() == "zfs_member") {
         // create pool on USB stick, put some bad stuff on it, set mount point to / and watch it
         // unfold when mounted
+        kWarning() << "storage device is insecure" << udi;
         return int(Solid::ErrorType::Insecure);
     }
 
@@ -214,6 +216,7 @@ int SolidUiServer::mountUdi(const QString &udi)
     const QString mountpoint = mountbase + QLatin1Char('/') + deviceuuid;
     QDir mountdir(mountbase);
     if (!mountdir.exists(mountpoint) && !mountdir.mkdir(mountpoint)) {
+        kWarning() << "could not create" << mountpoint;
         if (didcryptopen) {
             QVariantMap cryptclosearguments;
             cryptclosearguments.insert("name", deviceuuid);
@@ -221,7 +224,6 @@ int SolidUiServer::mountUdi(const QString &udi)
                 "org.kde.soliduiserver.mountunmounthelper", "cryptclose", cryptclosearguments
             );
         }
-        kWarning() << "could not create" << mountpoint;
         return int(Solid::ErrorType::OperationFailed);
     }
 
@@ -242,6 +244,7 @@ int SolidUiServer::unmountUdi(const QString &udi)
     Solid::StorageAccess *storageaccess = device.as<Solid::StorageAccess>();
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     if (!storagevolume || !storageaccess) {
+        kWarning() << "invalid storage device" << udi;
         return int(Solid::ErrorType::InvalidOption);
     }
 
