@@ -193,7 +193,7 @@ public slots:
     void selectLastIcon();
 
 private slots:
-    void listingStarted(const KUrl &url);
+    void listingStarted();
     void listingClear();
     void listingCompleted();
     void listingCanceled();

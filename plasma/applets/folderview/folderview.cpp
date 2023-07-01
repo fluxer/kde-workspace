@@ -1820,7 +1820,7 @@ void FolderView::pasteTo()
 
 void FolderView::refreshIcons()
 {
-    m_dirModel->dirLister()->updateDirectory(m_url);
+    m_dirModel->dirLister()->updateDirectory();
 }
 
 void FolderView::toggleIconsLocked(bool locked)

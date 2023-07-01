@@ -70,16 +70,16 @@ KFileItemModel::KFileItemModel(QObject* parent) :
         m_dirLister->setMainWindow(parentWidget->window());
     }
 
-    connect(m_dirLister, SIGNAL(started(KUrl)), this, SIGNAL(directoryLoadingStarted()));
+    connect(m_dirLister, SIGNAL(started()), this, SIGNAL(directoryLoadingStarted()));
     connect(m_dirLister, SIGNAL(canceled()), this, SLOT(slotCanceled()));
-    connect(m_dirLister, SIGNAL(completed(KUrl)), this, SLOT(slotCompleted()));
-    connect(m_dirLister, SIGNAL(itemsAdded(KUrl,KFileItemList)), this, SLOT(slotItemsAdded(KUrl,KFileItemList)));
+    connect(m_dirLister, SIGNAL(completed()), this, SLOT(slotCompleted()));
+    connect(m_dirLister, SIGNAL(itemsAdded(KFileItemList)), this, SLOT(slotItemsAdded(KFileItemList)));
     connect(m_dirLister, SIGNAL(itemsDeleted(KFileItemList)), this, SLOT(slotItemsDeleted(KFileItemList)));
     connect(m_dirLister, SIGNAL(refreshItems(QList<QPair<KFileItem,KFileItem> >)), this, SLOT(slotRefreshItems(QList<QPair<KFileItem,KFileItem> >)));
     connect(m_dirLister, SIGNAL(clear()), this, SLOT(slotClear()));
     connect(m_dirLister, SIGNAL(infoMessage(QString)), this, SIGNAL(infoMessage(QString)));
     connect(m_dirLister, SIGNAL(errorMessage(QString)), this, SIGNAL(errorMessage(QString)));
-    connect(m_dirLister, SIGNAL(redirection(KUrl,KUrl)), this, SIGNAL(directoryRedirection(KUrl,KUrl)));
+    connect(m_dirLister, SIGNAL(redirection(KUrl)), this, SIGNAL(directoryRedirection(KUrl)));
     connect(m_dirLister, SIGNAL(urlIsFileError(KUrl)), this, SIGNAL(urlIsFileError(KUrl)));
 
     // Apply default roles that should be determined
@@ -216,7 +216,7 @@ bool KFileItemModel::sortDirectoriesFirst() const
 void KFileItemModel::setShowHiddenFiles(bool show)
 {
     m_dirLister->setShowingDotFiles(show);
-    m_dirLister->emitChanges();
+    m_dirLister->updateDirectory();
     if (show) {
         dispatchPendingItemsToInsert();
     }
@@ -535,7 +535,7 @@ bool KFileItemModel::setExpanded(int index, bool expanded)
         }
 
         m_expandedDirs.remove(targetUrl);
-        m_dirLister->stop(url);
+        m_dirLister->stop();
 
         const int parentLevel = expandedParentsCount(index);
         const int itemCount = m_itemData.count();
@@ -550,7 +550,6 @@ bool KFileItemModel::setExpanded(int index, bool expanded)
                 const KUrl targetUrl = itemData->item.targetUrl();
                 const KUrl url = itemData->item.url();
                 m_expandedDirs.remove(targetUrl);
-                m_dirLister->stop(url);     // TODO: try to unit-test this, see https://bugs.kde.org/show_bug.cgi?id=332102#c11
                 expandedChildren.append(targetUrl);
             }
             ++childIndex;
@@ -891,10 +890,12 @@ void KFileItemModel::slotCanceled()
     emit directoryLoadingCanceled();
 }
 
-void KFileItemModel::slotItemsAdded(const KUrl& directoryUrl, const KFileItemList& items)
+void KFileItemModel::slotItemsAdded(const KFileItemList& items)
 {
     Q_ASSERT(!items.isEmpty());
 
+    const KDirLister* lister = qobject_cast<KDirLister*>(sender());
+    const KUrl directoryUrl = lister->url();
     KUrl parentUrl;
     if (m_expandedDirs.contains(directoryUrl)) {
         parentUrl = m_expandedDirs.value(directoryUrl);

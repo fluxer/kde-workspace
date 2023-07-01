@@ -99,7 +99,7 @@ void Trash::init()
     m_dirLister = new KDirLister();
     connect(m_dirLister, SIGNAL(clear()), this, SLOT(clear()));
     connect(m_dirLister, SIGNAL(completed()), this, SLOT(completed()));
-    connect(m_dirLister, SIGNAL(deleteItem(KFileItem)), this, SLOT(deleteItem(KFileItem)));
+    connect(m_dirLister, SIGNAL(itemsDeleted(KFileItemList)), this, SLOT(itemsDeleted(KFileItemList)));
 
     m_dirLister->openUrl(KUrl("trash:/"));
 
@@ -289,8 +289,9 @@ void Trash::completed()
     updateIcon();
 }
 
-void Trash::deleteItem(const KFileItem &)
+void Trash::itemsDeleted(const KFileItemList &items)
 {
+    Q_UNUSED(items);
     m_count--;
     updateIcon();
 }

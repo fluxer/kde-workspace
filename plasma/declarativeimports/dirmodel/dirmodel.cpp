@@ -67,7 +67,7 @@ void DirModel::setUrl(const QString& url)
         return;
     }
     if (dirLister()->url().path() == url) {
-        dirLister()->updateDirectory(url);
+        dirLister()->updateDirectory();
         return;
     }
 

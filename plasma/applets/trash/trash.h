@@ -67,7 +67,7 @@ class Trash : public Plasma::Applet
         void empty();
         void clear();
         void completed();
-        void deleteItem(const KFileItem &);
+        void itemsDeleted(const KFileItemList &items);
         void applyConfig();
         void emptyTrash();
         void emptyFinished(int exitCode, QProcess::ExitStatus exitStatus);

@@ -153,7 +153,7 @@ DolphinView::DolphinView(const KUrl& url, QWidget* parent) :
     connect(m_model, SIGNAL(itemsInserted(KItemRangeList)),   this, SIGNAL(itemCountChanged()));
     connect(m_model, SIGNAL(infoMessage(QString)),            this, SIGNAL(infoMessage(QString)));
     connect(m_model, SIGNAL(errorMessage(QString)),           this, SIGNAL(errorMessage(QString)));
-    connect(m_model, SIGNAL(directoryRedirection(KUrl,KUrl)), this, SLOT(slotDirectoryRedirection(KUrl,KUrl)));
+    connect(m_model, SIGNAL(directoryRedirection(KUrl)), this, SLOT(slotDirectoryRedirection(KUrl)));
     connect(m_model, SIGNAL(urlIsFileError(KUrl)),            this, SIGNAL(urlIsFileError(KUrl)));
 
     m_view->installEventFilter(this);
@@ -1222,8 +1222,9 @@ void DolphinView::observeCreatedItem(const KUrl& url)
     }
 }
 
-void DolphinView::slotDirectoryRedirection(const KUrl& oldUrl, const KUrl& newUrl)
+void DolphinView::slotDirectoryRedirection(const KUrl& newUrl)
 {
+    const KUrl oldUrl = m_model->directory();
     if (oldUrl.equals(url(), KUrl::RemoveTrailingSlash)) {
         emit redirection(oldUrl, newUrl);
         m_url = newUrl; // #186947

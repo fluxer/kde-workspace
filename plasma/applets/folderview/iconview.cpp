@@ -31,6 +31,8 @@
 #include <QItemSelectionModel>
 #include <QPainter>
 #include <QElapsedTimer>
+#include <QDBusConnection>
+#include <QDBusMessage>
 #include <QtCore/qmath.h>
 #include <QtGui/qstyleoption.h>
 #include <QtGui/qgraphicssceneevent.h>
@@ -133,7 +135,7 @@ void IconView::setModel(QAbstractItemModel *model)
     AbstractItemView::setModel(model);
 
     KDirLister *lister = m_dirModel->dirLister();
-    connect(lister, SIGNAL(started(KUrl)), SLOT(listingStarted(KUrl)));
+    connect(lister, SIGNAL(started()), SLOT(listingStarted()));
     connect(lister, SIGNAL(clear()), SLOT(listingClear()));
     connect(lister, SIGNAL(completed()), SLOT(listingCompleted()));
     connect(lister, SIGNAL(canceled()), SLOT(listingCanceled()));
@@ -563,10 +565,8 @@ void IconView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
     }
 }
 
-void IconView::listingStarted(const KUrl &url)
+void IconView::listingStarted()
 {
-    Q_UNUSED(url)
-
     // Reset any error message that may have resulted from an earlier listing
     if (!m_errorMessage.isEmpty() || m_folderIsEmpty) {
         m_errorMessage.clear();

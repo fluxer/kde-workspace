@@ -658,7 +658,7 @@ private slots:
      * Called when a redirection happens.
      * Testcase: fish://localhost
      */
-    void slotDirectoryRedirection(const KUrl& oldUrl, const KUrl& newUrl);
+    void slotDirectoryRedirection(const KUrl& newUrl);
 
     /**
      * Applies the state that has been restored by restoreViewState()

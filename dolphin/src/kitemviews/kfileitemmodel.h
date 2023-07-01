@@ -244,10 +244,10 @@ signals:
     void errorMessage(const QString& message);
 
     /**
-     * Is emitted if a redirection from the current URL \a oldUrl
+     * Is emitted if a redirection from the current URL
      * to the new URL \a newUrl has been done.
      */
-    void directoryRedirection(const KUrl& oldUrl, const KUrl& newUrl);
+    void directoryRedirection(const KUrl& newUrl);
 
     /**
      * Is emitted when the URL passed by KFileItemModel::setUrl() represents a file.
@@ -269,7 +269,7 @@ private slots:
 
     void slotCompleted();
     void slotCanceled();
-    void slotItemsAdded(const KUrl& directoryUrl, const KFileItemList& items);
+    void slotItemsAdded(const KFileItemList& items);
     void slotItemsDeleted(const KFileItemList& items);
     void slotRefreshItems(const QList<QPair<KFileItem, KFileItem> >& items);
     void slotClear();
