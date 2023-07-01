@@ -235,6 +235,46 @@ PlasmaApp::PlasmaApp()
 
 PlasmaApp::~PlasmaApp()
 {
+    if (m_corona) {
+        m_corona->saveLayout(KStandardDirs::locateLocal("config", "plasma-desktoprc"));
+
+        // save the mapping of Views to Containments at the moment
+        // of application exit so we can restore that when we start again.
+        KConfigGroup viewIds(KGlobal::config(), "ViewIds");
+        viewIds.deleteGroup();
+
+        foreach (PanelView *v, m_panels) {
+            if (v->containment()) {
+                viewIds.writeEntry(QString::number(v->containment()->id()), v->id());
+            }
+        }
+
+        foreach (DesktopView *v, m_desktops) {
+            if (v->containment()) {
+                viewIds.writeEntry(QString::number(v->containment()->id()), v->id());
+            }
+        }
+
+        QList<DesktopView*> desktops = m_desktops;
+        m_desktops.clear();
+        qDeleteAll(desktops);
+
+        QList<PanelView*> panels = m_panels;
+        m_panels.clear();
+        qDeleteAll(panels);
+
+        delete m_console.data();
+        delete m_corona;
+        m_corona = 0;
+
+        delete m_panelShadows;
+        m_panelShadows = 0;
+
+        //TODO: This manual sync() should not be necessary. Remove it when
+        // KConfig was fixed
+        KGlobal::config()->sync();
+    }
+    KGlobal::deref();
 }
 
 void PlasmaApp::setupDesktop()
@@ -270,7 +310,6 @@ void PlasmaApp::setupDesktop()
     palette.setColor(desktop()->backgroundRole(), Qt::black);
     desktop()->setPalette(palette);
 
-    connect(this, SIGNAL(aboutToQuit()), this, SLOT(cleanup()));
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "Plasma App SetupDesktop()" << "(line:" << __LINE__ << ")";
 
     // now connect up the creation timers and start them to get the views created
@@ -278,59 +317,6 @@ void PlasmaApp::setupDesktop()
     connect(&m_desktopViewCreationTimer, SIGNAL(timeout()), this, SLOT(createWaitingDesktops()));
     m_panelViewCreationTimer.start();
     m_desktopViewCreationTimer.start();
-}
-
-void PlasmaApp::quit()
-{
-    if (m_corona) {
-        cleanup();
-        KGlobal::deref();
-    }
-}
-
-void PlasmaApp::cleanup()
-{
-    if (!m_corona) {
-        return;
-    }
-
-    m_corona->saveLayout(KStandardDirs::locateLocal("config", "plasma-desktoprc"));
-
-    // save the mapping of Views to Containments at the moment
-    // of application exit so we can restore that when we start again.
-    KConfigGroup viewIds(KGlobal::config(), "ViewIds");
-    viewIds.deleteGroup();
-
-    foreach (PanelView *v, m_panels) {
-        if (v->containment()) {
-            viewIds.writeEntry(QString::number(v->containment()->id()), v->id());
-        }
-    }
-
-    foreach (DesktopView *v, m_desktops) {
-        if (v->containment()) {
-            viewIds.writeEntry(QString::number(v->containment()->id()), v->id());
-        }
-    }
-
-    QList<DesktopView*> desktops = m_desktops;
-    m_desktops.clear();
-    qDeleteAll(desktops);
-
-    QList<PanelView*> panels = m_panels;
-    m_panels.clear();
-    qDeleteAll(panels);
-
-    delete m_console.data();
-    delete m_corona;
-    m_corona = 0;
-
-    delete m_panelShadows;
-    m_panelShadows = 0;
-
-    //TODO: This manual sync() should not be necessary. Remove it when
-    // KConfig was fixed
-    KGlobal::config()->sync();
 }
 
 void PlasmaApp::syncConfig()

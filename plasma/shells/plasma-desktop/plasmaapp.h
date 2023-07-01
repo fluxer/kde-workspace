@@ -97,8 +97,6 @@ public Q_SLOTS:
     void showInteractiveConsole();
     void loadScriptInInteractiveConsole(const QString &script);
 
-    Q_SCRIPTABLE void quit();
-
     void createWaitingPanels();
     void createWaitingDesktops();
     void createView(Plasma::Containment *containment);
@@ -121,7 +119,6 @@ private:
 
 private Q_SLOTS:
     void setupDesktop();
-    void cleanup();
     void containmentAdded(Plasma::Containment *containment);
     void containmentScreenOwnerChanged(int, int, Plasma::Containment*);
     void syncConfig();
