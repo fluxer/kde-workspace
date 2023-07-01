@@ -40,7 +40,6 @@
 
 namespace Plasma
 {
-    class AccessAppletJob;
     class Containment;
     class Corona;
     class Dialog;
