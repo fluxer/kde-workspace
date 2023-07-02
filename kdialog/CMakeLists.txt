@@ -12,7 +12,6 @@ qt4_add_dbus_adaptor(kdialog_SRCS
 
 add_executable(kdialog ${kdialog_SRCS})
 
-# Need libkfile due to the code that adjusts the geometry of the KDirSelectDialog
 target_link_libraries(kdialog
     KDE4::kfile
     KDE4::kio

@@ -20,7 +20,6 @@
 #include <QTimer>
 
 #include <KDebug>
-#include <KDirSelectDialog>
 #include <KDirWatch>
 #include <KFileDialog>
 #include <KRandom>
@@ -344,16 +343,19 @@ void Image::timeChanged(const QTime& time)
 void Image::addDir()
 {
     KUrl empty;
-    KDirSelectDialog *dialog = new KDirSelectDialog(empty, true, m_configWidget);
+    QString empty2;
+    KFileDialog *dialog = new KFileDialog(empty, empty2, m_configWidget);
+    dialog->setOperationMode(KFileDialog::Opening);
+    dialog->setMode(KFile::Directory | KFile::LocalOnly | KFile::ExistingOnly);
     connect(dialog, SIGNAL(accepted()), this, SLOT(addDirFromSelectionDialog()));
     dialog->show();
 }
 
 void Image::addDirFromSelectionDialog()
 {
-    KDirSelectDialog *dialog = qobject_cast<KDirSelectDialog *>(sender());
+    KFileDialog *dialog = qobject_cast<KFileDialog *>(sender());
     if (dialog) {
-        QString urlDir = dialog->url().path();
+        QString urlDir = dialog->selectedUrl().toLocalFile();
         if (!urlDir.isEmpty() && m_uiSlideshow.m_dirlist->findItems(urlDir, Qt::MatchExactly).isEmpty()) {
             m_uiSlideshow.m_dirlist->addItem(urlDir);
             updateDirs();

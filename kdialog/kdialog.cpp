@@ -33,7 +33,6 @@
 #include <kfiledialog.h>
 #include <kfileitem.h>
 #include <kicondialog.h>
-#include <kdirselectdialog.h>
 #include <kcolordialog.h>
 #include <kwindowsystem.h>
 #include <kiconloader.h>
@@ -620,21 +619,20 @@ static int directCommand(KCmdLineArgs *args)
     if (args->isSet("getexistingdirectory")) {
         QString startDir;
         startDir = args->getOption("getexistingdirectory");
-	QString result;
-	KUrl url;
-	KDirSelectDialog myDialog( startDir, true, 0 );
+        QString result;
+        KFileDialog dlg( startDir, QString(), 0 );
+        dlg.setOperationMode( KFileDialog::Opening );
+        dlg.setMode(KFile::Directory | KFile::ExistingOnly | KFile::LocalOnly);
 
-	kapp->setTopWidget( &myDialog );
+        kapp->setTopWidget( &dlg );
 
-	Widgets::handleXGeometry(&myDialog);
-	if ( !title.isEmpty() )
-	    myDialog.setCaption( title );
+        Widgets::handleXGeometry(&dlg);
+        if ( !title.isEmpty() )
+            dlg.setCaption( title );
 
-	if ( myDialog.exec() == QDialog::Accepted )
-	    url =  myDialog.url();
+        dlg.exec();
 
-	if ( url.isValid() )
-	    result = url.path();
+        result = dlg.selectedUrl().toLocalFile();
         if (!result.isEmpty())  {
             cout << result.toLocal8Bit().data() << endl;
             return 0;
