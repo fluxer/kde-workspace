@@ -44,8 +44,7 @@ ViewSettingsTab::ViewSettingsTab(Mode mode, QWidget* parent) :
     m_previewSizeSlider(0),
     m_fontRequester(0),
     m_widthBox(0),
-    m_maxLinesBox(0),
-    m_expandableFolders(0)
+    m_maxLinesBox(0)
 {
     QVBoxLayout* topLayout = new QVBoxLayout(this);
 
@@ -125,7 +124,6 @@ ViewSettingsTab::ViewSettingsTab(Mode mode, QWidget* parent) :
         break;
     }
     case DetailsMode:
-        m_expandableFolders = new QCheckBox(i18nc("@option:check", "Expandable folders"), this);
         break;
     default:
         break;
@@ -133,9 +131,6 @@ ViewSettingsTab::ViewSettingsTab(Mode mode, QWidget* parent) :
 
     topLayout->addWidget(iconSizeGroup);
     topLayout->addWidget(textGroup);
-    if (m_expandableFolders) {
-        topLayout->addWidget(m_expandableFolders);
-    }
     topLayout->addStretch(1);
 
     loadSettings();
@@ -153,7 +148,6 @@ ViewSettingsTab::ViewSettingsTab(Mode mode, QWidget* parent) :
         connect(m_widthBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(changed()));
         break;
     case DetailsMode:
-        connect(m_expandableFolders, SIGNAL(toggled(bool)), this, SIGNAL(changed()));
         break;
     default:
         break;
@@ -178,7 +172,6 @@ void ViewSettingsTab::applySettings()
         CompactModeSettings::setMaximumTextWidthIndex(m_widthBox->currentIndex());
         break;
     case DetailsMode:
-        DetailsModeSettings::setExpandableFolders(m_expandableFolders->isChecked());
         break;
     default:
         break;
@@ -226,7 +219,6 @@ void ViewSettingsTab::loadSettings()
         m_widthBox->setCurrentIndex(CompactModeSettings::maximumTextWidthIndex());
         break;
     case DetailsMode:
-        m_expandableFolders->setChecked(DetailsModeSettings::expandableFolders());
         break;
     default:
         break;

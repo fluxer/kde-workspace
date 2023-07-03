@@ -45,9 +45,6 @@
  * One item consists of a variable number of role/value-pairs.
  *
  * A model can optionally provide sorting- and grouping-capabilities.
- *
- * Also optionally it is possible to provide a tree of items by implementing the methods
- * setExpanded(), isExpanded(), isExpandable() and expandedParentsCount().
  */
 class DOLPHINPRIVATE_EXPORT KItemModelBase : public QObject
 {
@@ -110,38 +107,6 @@ public:
      *         Per default an empty list is returned.
      */
     virtual QList<QPair<int, QVariant> > groups() const;
-
-    /**
-     * Expands the item with the index \a index if \a expanded is true.
-     * If \a expanded is false the item will be collapsed.
-     *
-     * Per default no expanding of items is implemented. When implementing
-     * this method it is mandatory to overwrite KItemModelBase::isExpandable()
-     * and KItemListView::supportsExpandableItems() to return true.
-     *
-     * @return True if the operation has been successful.
-     */
-    virtual bool setExpanded(int index, bool expanded);
-
-    /**
-     * @return True if the item with the index \a index is expanded.
-     *         Per default no expanding of items is implemented. When implementing
-     *         this method it is mandatory to overwrite KItemModelBase::isExpandable()
-     *         and KItemListView::supportsExpandableItems() to return true.
-     */
-    virtual bool isExpanded(int index) const;
-
-    /**
-     * @return True if expanding and collapsing of the item with the index \a index
-     *         is supported. Per default false is returned.
-     */
-    virtual bool isExpandable(int index) const;
-
-    /**
-     * @return Number of expanded parent items for the item with the given index.
-     *         Per default 0 is returned.
-     */
-    virtual int expandedParentsCount(int index) const;
 
     /**
      * @return MIME-data for the items given by \a indexes. The default implementation

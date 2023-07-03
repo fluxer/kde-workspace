@@ -60,7 +60,6 @@ KItemListView::KItemListView(QGraphicsWidget* parent) :
     QGraphicsWidget(parent),
     m_enabledSelectionToggles(false),
     m_grouped(false),
-    m_supportsItemExpanding(false),
     m_editingRole(false),
     m_activeTransactions(0),
     m_endTransactionAnimationHint(Animation),
@@ -415,19 +414,6 @@ bool KItemListView::isAboveSelectionToggle(int index, const QPointF& pos) const
     return false;
 }
 
-bool KItemListView::isAboveExpansionToggle(int index, const QPointF& pos) const
-{
-    const KItemListWidget* widget = m_visibleItems.value(index);
-    if (widget) {
-        const QRectF expansionToggleRect = widget->expansionToggleRect();
-        if (!expansionToggleRect.isEmpty()) {
-            const QPointF mappedPos = widget->mapFromItem(this, pos);
-            return expansionToggleRect.contains(mappedPos);
-        }
-    }
-    return false;
-}
-
 int KItemListView::firstVisibleIndex() const
 {
     return m_layouter->firstVisibleIndex();
@@ -441,20 +427,6 @@ int KItemListView::lastVisibleIndex() const
 void KItemListView::calculateItemSizeHints(QVector<qreal>& logicalHeightHints, qreal& logicalWidthHint) const
 {
     widgetCreator()->calculateItemSizeHints(logicalHeightHints, logicalWidthHint, this);
-}
-
-void KItemListView::setSupportsItemExpanding(bool supportsExpanding)
-{
-    if (m_supportsItemExpanding != supportsExpanding) {
-        m_supportsItemExpanding = supportsExpanding;
-        updateSiblingsInformation();
-        onSupportsItemExpandingChanged(supportsExpanding);
-    }
-}
-
-bool KItemListView::supportsItemExpanding() const
-{
-    return m_supportsItemExpanding;
 }
 
 QRectF KItemListView::itemRect(int index) const
@@ -858,11 +830,6 @@ void KItemListView::onStyleOptionChanged(const KItemListStyleOption& current, co
     Q_UNUSED(previous);
 }
 
-void KItemListView::onSupportsItemExpandingChanged(bool supportsExpanding)
-{
-    Q_UNUSED(supportsExpanding);
-}
-
 void KItemListView::onTransactionBegin()
 {
 }
@@ -1045,7 +1012,6 @@ void KItemListView::slotItemsInserted(const KItemRangeList& itemRanges)
 
         if (!hasMultipleRanges) {
             doLayout(animateChangedItemCount(count) ? Animation : NoAnimation, index, count);
-            updateSiblingsInformation();
         }
     }
 
@@ -1056,8 +1022,6 @@ void KItemListView::slotItemsInserted(const KItemRangeList& itemRanges)
     if (hasMultipleRanges) {
         m_endTransactionAnimationHint = NoAnimation;
         endTransaction();
-
-        updateSiblingsInformation();
     }
 
     if (m_grouped && (hasMultipleRanges || itemRanges.first().count < m_model->count())) {
@@ -1163,7 +1127,6 @@ void KItemListView::slotItemsRemoved(const KItemRangeList& itemRanges)
             m_activeTransactions = 0;
             doLayout(animateChangedItemCount(count) ? Animation : NoAnimation, index, -count);
             m_activeTransactions = activeTransactions;
-            updateSiblingsInformation();
         }
     }
 
@@ -1174,7 +1137,6 @@ void KItemListView::slotItemsRemoved(const KItemRangeList& itemRanges)
     if (hasMultipleRanges) {
         m_endTransactionAnimationHint = NoAnimation;
         endTransaction();
-        updateSiblingsInformation();
     }
 
     if (m_grouped && (hasMultipleRanges || m_model->count() > 0)) {
@@ -1209,7 +1171,6 @@ void KItemListView::slotItemsMoved(const KItemRange& itemRange, const QList<int>
     }
 
     doLayout(NoAnimation);
-    updateSiblingsInformation();
 }
 
 void KItemListView::slotItemsChanged(const KItemRangeList& itemRanges,
@@ -1255,7 +1216,6 @@ void KItemListView::slotGroupsChanged()
 {
     updateVisibleGroupHeaders();
     doLayout(NoAnimation);
-    updateSiblingsInformation();
 }
 
 void KItemListView::slotGroupedSortingChanged(bool current)
@@ -1283,7 +1243,6 @@ void KItemListView::slotGroupedSortingChanged(bool current)
         // group item.
         updateAlternateBackgrounds();
     }
-    updateSiblingsInformation();
     doLayout(NoAnimation);
 }
 
@@ -1643,7 +1602,6 @@ void KItemListView::doLayout(LayoutAnimationHint hint, int changedIndex, int cha
 
     int firstSibblingIndex = -1;
     int lastSibblingIndex = -1;
-    const bool supportsExpanding = supportsItemExpanding();
 
     QList<int> reusableItems = recycleInvisibleItems(firstVisibleIndex, lastVisibleIndex, hint);
 
@@ -1690,13 +1648,6 @@ void KItemListView::doLayout(LayoutAnimationHint hint, int changedIndex, int cha
                     }
                     applyNewPos = false;
                 }
-            }
-
-            if (supportsExpanding && changedCount == 0) {
-                if (firstSibblingIndex < 0) {
-                    firstSibblingIndex = i;
-                }
-                lastSibblingIndex = i;
             }
         }
 
@@ -1768,11 +1719,6 @@ void KItemListView::doLayout(LayoutAnimationHint hint, int changedIndex, int cha
     // Delete invisible KItemListWidget instances that have not been reused
     foreach (int index, reusableItems) {
         recycleWidget(m_visibleItems.value(index));
-    }
-
-    if (supportsExpanding && firstSibblingIndex >= 0) {
-        Q_ASSERT(lastSibblingIndex >= 0);
-        updateSiblingsInformation(firstSibblingIndex, lastSibblingIndex);
     }
 
     if (m_grouped) {
@@ -2371,7 +2317,7 @@ bool KItemListView::animateChangedItemCount(int changedItemCount) const
     if (m_itemSize.isEmpty()) {
         // We have only columns or only rows, but no grid: An animation is usually
         // welcome when inserting or removing items.
-        return !supportsItemExpanding();
+        return true;
     }
 
     if (m_layouter->size().isEmpty() || m_layouter->itemSize().isEmpty()) {
@@ -2467,133 +2413,6 @@ void KItemListView::updateGroupHeaderHeight()
     m_layouter->setGroupHeaderMargin(groupHeaderMargin);
 
     updateVisibleGroupHeaders();
-}
-
-void KItemListView::updateSiblingsInformation(int firstIndex, int lastIndex)
-{
-    if (!supportsItemExpanding() || !m_model) {
-        return;
-    }
-
-    if (firstIndex < 0 || lastIndex < 0) {
-        firstIndex = m_layouter->firstVisibleIndex();
-        lastIndex  = m_layouter->lastVisibleIndex();
-    } else {
-        const bool isRangeVisible = (firstIndex <= m_layouter->lastVisibleIndex() &&
-                                     lastIndex  >= m_layouter->firstVisibleIndex());
-        if (!isRangeVisible) {
-            return;
-        }
-    }
-
-    int previousParents = 0;
-    QBitArray previousSiblings;
-
-    // The rootIndex describes the first index where the siblings get
-    // calculated from. For the calculation the upper most parent item
-    // is required. For performance reasons it is checked first whether
-    // the visible items before or after the current range already
-    // contain a siblings information which can be used as base.
-    int rootIndex = firstIndex;
-
-    KItemListWidget* widget = m_visibleItems.value(firstIndex - 1);
-    if (!widget) {
-        // There is no visible widget before the range, check whether there
-        // is one after the range:
-        widget = m_visibleItems.value(lastIndex + 1);
-        if (widget) {
-            // The sibling information of the widget may only be used if
-            // all items of the range have the same number of parents.
-            const int parents = m_model->expandedParentsCount(lastIndex + 1);
-            for (int i = lastIndex; i >= firstIndex; --i) {
-                if (m_model->expandedParentsCount(i) != parents) {
-                    widget = 0;
-                    break;
-                }
-            }
-        }
-    }
-
-    if (widget) {
-        // Performance optimization: Use the sibling information of the visible
-        // widget beside the given range.
-        previousSiblings = widget->siblingsInformation();
-        if (previousSiblings.isEmpty()) {
-            return;
-        }
-        previousParents = previousSiblings.count() - 1;
-        previousSiblings.truncate(previousParents);
-    } else {
-        // Potentially slow path: Go back to the upper most parent of firstIndex
-        // to be able to calculate the initial value for the siblings.
-        while (rootIndex > 0 && m_model->expandedParentsCount(rootIndex) > 0) {
-            --rootIndex;
-        }
-    }
-
-    Q_ASSERT(previousParents >= 0);
-    for (int i = rootIndex; i <= lastIndex; ++i) {
-        // Update the parent-siblings in case if the current item represents
-        // a child or an upper parent.
-        const int currentParents = m_model->expandedParentsCount(i);
-        Q_ASSERT(currentParents >= 0);
-        if (previousParents < currentParents) {
-            previousParents = currentParents;
-            previousSiblings.resize(currentParents);
-            previousSiblings.setBit(currentParents - 1, hasSiblingSuccessor(i - 1));
-        } else if (previousParents > currentParents) {
-            previousParents = currentParents;
-            previousSiblings.truncate(currentParents);
-        }
-
-        if (i >= firstIndex) {
-            // The index represents a visible item. Apply the parent-siblings
-            // and update the sibling of the current item.
-            KItemListWidget* widget = m_visibleItems.value(i);
-            if (!widget) {
-                continue;
-            }
-
-            QBitArray siblings = previousSiblings;
-            siblings.resize(siblings.count() + 1);
-            siblings.setBit(siblings.count() - 1, hasSiblingSuccessor(i));
-
-            widget->setSiblingsInformation(siblings);
-        }
-    }
-}
-
-bool KItemListView::hasSiblingSuccessor(int index) const
-{
-    bool hasSuccessor = false;
-    const int parentsCount = m_model->expandedParentsCount(index);
-    int successorIndex = index + 1;
-
-    // Search the next sibling
-    const int itemCount = m_model->count();
-    while (successorIndex < itemCount) {
-        const int currentParentsCount = m_model->expandedParentsCount(successorIndex);
-        if (currentParentsCount == parentsCount) {
-            hasSuccessor = true;
-            break;
-        } else if (currentParentsCount < parentsCount) {
-            break;
-        }
-        ++successorIndex;
-    }
-
-    if (m_grouped && hasSuccessor) {
-        // If the sibling is part of another group, don't mark it as
-        // successor as the group header is between the sibling connections.
-        for (int i = index + 1; i <= successorIndex; ++i) {
-            if (m_layouter->isFirstGroupItem(i)) {
-                hasSuccessor = false;
-                break;
-            }
-        }
-    }
-
-    return hasSuccessor;
 }
 
 void KItemListView::disconnectRoleEditingSignals(int index)

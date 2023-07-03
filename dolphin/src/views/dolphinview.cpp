@@ -1141,11 +1141,6 @@ void DolphinView::restoreState(QDataStream& stream)
 
     // Restore the view position
     stream >> m_restoredContentsPosition;
-
-    // Restore expanded folders (only relevant for the details view - will be ignored by the view in other view modes)
-    QSet<KUrl> urls;
-    stream >> urls;
-    m_model->restoreExpandedDirectories(urls);
 }
 
 void DolphinView::saveState(QDataStream& stream)
@@ -1165,9 +1160,6 @@ void DolphinView::saveState(QDataStream& stream)
     const qreal x = m_container->horizontalScrollBar()->value();
     const qreal y = m_container->verticalScrollBar()->value();
     stream << QPoint(x, y);
-
-    // Save expanded folders (only relevant for the details view - the set will be empty in other view modes)
-    stream << m_model->expandedDirectories();
 }
 
 KFileItem DolphinView::rootItem() const

@@ -221,13 +221,6 @@ qreal KStandardItemListWidgetInformant::preferredRoleColumnWidth(const QByteArra
     width += fontMetrics.width(text);
 
     if (role == "text") {
-        if (view->supportsItemExpanding()) {
-            // Increase the width by the expansion-toggle and the current expansion level
-            const int expandedParentsCount = values.value("expandedParentsCount", 0).toInt();
-            const qreal height = option.padding * 2 + qMax(option.iconSize, fontMetrics.height());
-            width += (expandedParentsCount + 1) * height;
-        }
-
         // Increase the width by the required space for the icon
         width += option.padding * 2 + option.iconSize;
     }
@@ -372,8 +365,6 @@ KStandardItemListWidget::KStandardItemListWidget(KItemListWidgetInformant* infor
     m_isHidden(false),
     m_customizedFont(),
     m_customizedFontMetrics(m_customizedFont),
-    m_isExpandable(false),
-    m_supportsItemExpanding(false),
     m_dirtyLayout(true),
     m_dirtyContent(true),
     m_dirtyContentRoles(),
@@ -386,7 +377,6 @@ KStandardItemListWidget::KStandardItemListWidget(KItemListWidgetInformant* infor
     m_textInfo(),
     m_textRect(),
     m_sortedVisibleRoles(),
-    m_expansionArea(),
     m_customTextColor(),
     m_additionalInfoTextColor(),
     m_overlay(),
@@ -424,29 +414,11 @@ KStandardItemListWidget::Layout KStandardItemListWidget::layout() const
     return m_layout;
 }
 
-void KStandardItemListWidget::setSupportsItemExpanding(bool supportsItemExpanding)
-{
-    if (m_supportsItemExpanding != supportsItemExpanding) {
-        m_supportsItemExpanding = supportsItemExpanding;
-        m_dirtyLayout = true;
-        update();
-    }
-}
-
-bool KStandardItemListWidget::supportsItemExpanding() const
-{
-    return m_supportsItemExpanding;
-}
-
 void KStandardItemListWidget::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
 {
     const_cast<KStandardItemListWidget*>(this)->triggerCacheRefreshing();
 
     KItemListWidget::paint(painter, option, widget);
-
-    if (!m_expansionArea.isEmpty()) {
-        drawSiblingsInformation(painter);
-    }
 
     const KItemListStyleOption& itemListStyleOption = styleOption();
     if (isHovered()) {
@@ -509,29 +481,12 @@ void KStandardItemListWidget::paint(QPainter* painter, const QStyleOptionGraphic
 
     textInfo->staticText.paint(painter, textInfo->pos, m_customizedFontMetrics, itemListStyleOption.maxTextLines);
 
-    bool clipAdditionalInfoBounds = false;
-    if (m_supportsItemExpanding) {
-        // Prevent a possible overlapping of the additional-information texts
-        // with the icon. This can happen if the user has minimized the width
-        // of the name-column to a very small value.
-        const qreal minX = m_pixmapPos.x() + m_pixmap.width() + 4 * itemListStyleOption.padding;
-        if (textInfo->pos.x() + columnWidth("text") > minX) {
-            clipAdditionalInfoBounds = true;
-            painter->save();
-            painter->setClipRect(minX, 0, size().width() - minX, size().height(), Qt::IntersectClip);
-        }
-    }
-
     painter->setPen(m_additionalInfoTextColor);
     painter->setFont(m_customizedFont);
 
     for (int i = 1; i < m_sortedVisibleRoles.count(); ++i) {
         const TextInfo* textInfo = m_textInfo.value(m_sortedVisibleRoles[i]);
         textInfo->staticText.paint(painter, textInfo->pos, m_customizedFontMetrics);
-    }
-
-    if (clipAdditionalInfoBounds) {
-        painter->restore();
     }
 
 #ifdef KSTANDARDITEMLISTWIDGET_DEBUG
@@ -622,12 +577,6 @@ QRectF KStandardItemListWidget::selectionRect() const
     }
 
     return m_textRect;
-}
-
-QRectF KStandardItemListWidget::expansionToggleRect() const
-{
-    const_cast<KStandardItemListWidget*>(this)->triggerCacheRefreshing();
-    return m_isExpandable ? m_expansionArea : QRectF();
 }
 
 QRectF KStandardItemListWidget::selectionToggleRect() const
@@ -992,37 +941,16 @@ void KStandardItemListWidget::triggerCacheRefreshing()
     refreshCache();
 
     const QHash<QByteArray, QVariant> values = data();
-    m_isExpandable = m_supportsItemExpanding && values["isExpandable"].toBool();
     m_isHidden = isHidden();
     m_customizedFont = customizedFont(styleOption().font);
     m_customizedFontMetrics = QFontMetrics(m_customizedFont);
 
-    updateExpansionArea();
     updateTextsCache();
     updatePixmapCache();
 
     m_dirtyLayout = false;
     m_dirtyContent = false;
     m_dirtyContentRoles.clear();
-}
-
-void KStandardItemListWidget::updateExpansionArea()
-{
-    if (m_supportsItemExpanding) {
-        const QHash<QByteArray, QVariant> values = data();
-        const int expandedParentsCount = values.value("expandedParentsCount", 0).toInt();
-        if (expandedParentsCount >= 0) {
-            const KItemListStyleOption& option = styleOption();
-            const qreal widgetHeight = size().height();
-            const qreal inc = (widgetHeight - option.iconSize) / 2;
-            const qreal x = expandedParentsCount * widgetHeight + inc;
-            const qreal y = inc;
-            m_expansionArea = QRectF(x, y, option.iconSize, option.iconSize);
-            return;
-        }
-    }
-
-    m_expansionArea = QRectF();
 }
 
 void KStandardItemListWidget::updatePixmapCache()
@@ -1343,9 +1271,6 @@ void KStandardItemListWidget::updateCompactLayoutTextCache()
 
 void KStandardItemListWidget::updateDetailsLayoutTextCache()
 {
-    // Precondition: Requires already updated m_expansionArea
-    // to determine the left position.
-
     // +------+
     // | Icon |  Name role   Additional role 1   Additional role 2
     // +------+
@@ -1359,12 +1284,7 @@ void KStandardItemListWidget::updateDetailsLayoutTextCache()
     const int fontHeight = m_customizedFontMetrics.height();
 
     const qreal columnWidthInc = columnPadding(option);
-    qreal firstColumnInc = scaledIconSize;
-    if (m_supportsItemExpanding) {
-        firstColumnInc += (m_expansionArea.left() + m_expansionArea.right() + widgetHeight) / 2;
-    } else {
-        firstColumnInc += option.padding;
-    }
+    qreal firstColumnInc = (scaledIconSize + option.padding);
 
     qreal x = firstColumnInc;
     const qreal y = qMax(qreal(option.padding), (widgetHeight - fontHeight) / 2);
@@ -1442,38 +1362,6 @@ void KStandardItemListWidget::drawPixmap(QPainter* painter, const QPixmap& pixma
 #endif
     } else {
         painter->drawPixmap(m_pixmapPos, pixmap);
-    }
-}
-
-void KStandardItemListWidget::drawSiblingsInformation(QPainter* painter)
-{
-    const int siblingSize = size().height();
-    const int x = (m_expansionArea.left() + m_expansionArea.right() - siblingSize) / 2;
-    QRect siblingRect(x, 0, siblingSize, siblingSize);
-
-    QStyleOption option;
-    option.palette.setColor(QPalette::Text, option.palette.color(normalTextColorRole()));
-    bool isItemSibling = true;
-
-    const QBitArray siblings = siblingsInformation();
-    for (int i = siblings.count() - 1; i >= 0; --i) {
-        option.rect = siblingRect;
-        option.state = siblings.at(i) ? QStyle::State_Sibling : QStyle::State_None;
-
-        if (isItemSibling) {
-            option.state |= QStyle::State_Item;
-            if (m_isExpandable) {
-                option.state |= QStyle::State_Children;
-            }
-            if (data()["isExpanded"].toBool()) {
-                option.state |= QStyle::State_Open;
-            }
-            isItemSibling = false;
-        }
-
-        style()->drawPrimitive(QStyle::PE_IndicatorBranch, &option, painter);
-
-        siblingRect.translate(-siblingRect.width(), 0);
     }
 }
 

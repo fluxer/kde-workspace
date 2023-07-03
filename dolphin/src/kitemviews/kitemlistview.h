@@ -179,7 +179,6 @@ public:
      */
     int itemAt(const QPointF& pos) const;
     bool isAboveSelectionToggle(int index, const QPointF& pos) const;
-    bool isAboveExpansionToggle(int index, const QPointF& pos) const;
 
     /**
      * @return Index of the first item that is at least partly visible.
@@ -202,18 +201,6 @@ public:
      *         width (height) if the scroll orientation is Qt::Vertical!
      */
     void calculateItemSizeHints(QVector<qreal>& logicalHeightHints, qreal& logicalWidthHint) const;
-
-    /**
-     * If set to true, items having child-items can be expanded to show the child-items as
-     * part of the view. Per default the expanding of items is is disabled. If expanding of
-     * items is enabled, the methods KItemModelBase::setExpanded(), KItemModelBase::isExpanded(),
-     * KItemModelBase::isExpandable() and KItemModelBase::expandedParentsCount()
-     * must be reimplemented. The view-implementation
-     * has to take care itself how to visually represent the expanded items provided
-     * by the model.
-     */
-    void setSupportsItemExpanding(bool supportsExpanding);
-    bool supportsItemExpanding() const;
 
     /**
      * @return The rectangle of the item relative to the top/left of
@@ -375,7 +362,6 @@ protected:
     virtual void onScrollOffsetChanged(qreal current, qreal previous);
     virtual void onVisibleRolesChanged(const QList<QByteArray>& current, const QList<QByteArray>& previous);
     virtual void onStyleOptionChanged(const KItemListStyleOption& current, const KItemListStyleOption& previous);
-    virtual void onSupportsItemExpandingChanged(bool supportsExpanding);
 
     virtual void onTransactionBegin();
     virtual void onTransactionEnd();
@@ -662,22 +648,6 @@ private:
     void updateGroupHeaderHeight();
 
     /**
-     * Updates the siblings-information for all visible items that are inside
-     * the range of \p firstIndex and \p lastIndex. If firstIndex or lastIndex
-     * is smaller than 0, the siblings-information for all visible items gets
-     * updated.
-     * @see KItemListWidget::setSiblingsInformation()
-     */
-    void updateSiblingsInformation(int firstIndex = -1, int lastIndex = -1);
-
-    /**
-     * Helper method for updateExpansionIndicators().
-     * @return True if the item with the index \a index has a sibling successor
-     *         (= the item is not the last item of the current hierarchy).
-     */
-    bool hasSiblingSuccessor(int index) const;
-
-    /**
      * Helper method for slotRoleEditingCanceled() and slotRoleEditingFinished().
      * Disconnects the two Signals "roleEditingCanceled" and
      * "roleEditingFinished"
@@ -706,7 +676,6 @@ private:
 private:
     bool m_enabledSelectionToggles;
     bool m_grouped;
-    bool m_supportsItemExpanding;
     bool m_editingRole;
     int m_activeTransactions; // Counter for beginTransaction()/endTransaction()
     LayoutAnimationHint m_endTransactionAnimationHint;

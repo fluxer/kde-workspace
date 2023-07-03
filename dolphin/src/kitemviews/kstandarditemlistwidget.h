@@ -132,16 +132,12 @@ public:
     void setLayout(Layout layout);
     Layout layout() const;
 
-    void setSupportsItemExpanding(bool supportsItemExpanding);
-    bool supportsItemExpanding() const;
-
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
     virtual QRectF iconRect() const;
     virtual QRectF textRect() const;
     virtual QRectF textFocusRect() const;
     virtual QRectF selectionRect() const;
-    virtual QRectF expansionToggleRect() const;
     virtual QRectF selectionToggleRect() const;
     virtual QPixmap createDragPixmap(const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
@@ -222,7 +218,6 @@ private slots:
 
 private:
     void triggerCacheRefreshing();
-    void updateExpansionArea();
     void updatePixmapCache();
 
     void updateTextsCache();
@@ -233,7 +228,6 @@ private:
     void updateAdditionalInfoTextColor();
 
     void drawPixmap(QPainter* painter, const QPixmap& pixmap);
-    void drawSiblingsInformation(QPainter* painter);
 
     QRectF roleEditingRect(const QByteArray &role) const;
 
@@ -256,8 +250,6 @@ private:
     bool m_isHidden;
     QFont m_customizedFont;
     QFontMetrics m_customizedFontMetrics;
-    bool m_isExpandable;
-    bool m_supportsItemExpanding;
 
     bool m_dirtyLayout;
     bool m_dirtyContent;
@@ -281,8 +273,6 @@ private:
     QRectF m_textRect;
 
     QList<QByteArray> m_sortedVisibleRoles;
-
-    QRectF m_expansionArea;
 
     QColor m_customTextColor;
     QColor m_additionalInfoTextColor;

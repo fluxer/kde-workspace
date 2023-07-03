@@ -90,7 +90,6 @@ void DolphinItemListView::readSettings()
     beginTransaction();
 
     setEnabledSelectionToggles(GeneralSettings::showSelectionToggle());
-    setSupportsItemExpanding(itemLayoutSupportsItemExpanding(itemLayout()));
 
     updateFont();
     updateGridSize();
@@ -121,11 +120,6 @@ void DolphinItemListView::writeSettings()
 KItemListWidgetCreatorBase* DolphinItemListView::defaultWidgetCreator() const
 {
     return new KItemListWidgetCreator<DolphinFileItemListWidget>();
-}
-
-bool DolphinItemListView::itemLayoutSupportsItemExpanding(ItemLayout layout) const
-{
-    return layout == DetailsLayout && DetailsModeSettings::expandableFolders();
 }
 
 void DolphinItemListView::onItemLayoutChanged(ItemLayout current, ItemLayout previous)

@@ -158,25 +158,6 @@ public:
     void setRoles(const QSet<QByteArray>& roles);
     QSet<QByteArray> roles() const;
 
-    virtual bool setExpanded(int index, bool expanded);
-    virtual bool isExpanded(int index) const;
-    virtual bool isExpandable(int index) const;
-    virtual int expandedParentsCount(int index) const;
-
-    QSet<KUrl> expandedDirectories() const;
-
-    /**
-     * Marks the URLs in \a urls as sub-directories which were expanded previously.
-     * After calling loadDirectory() or refreshDirectory() the marked sub-directories
-     * will be expanded step-by-step.
-     */
-    void restoreExpandedDirectories(const QSet<KUrl>& urls);
-
-    /**
-     * Expands all parent-directories of the item \a url.
-     */
-    void expandParentDirectories(const KUrl& url);
-
     void setNameFilter(const QString& nameFilter);
     QString nameFilter() const;
 
@@ -283,7 +264,7 @@ private:
         NoRole, NameRole, SizeRole, DateRole, PermissionsRole, OwnerRole,
         GroupRole, TypeRole, DestinationRole, PathRole,
         // Non-visible roles:
-        IsDirRole, IsLinkRole, IsExpandedRole, IsExpandableRole, ExpandedParentsCountRole,
+        IsDirRole, IsLinkRole,
         // Mandatory last entry:
         RolesCount
     };
@@ -317,10 +298,6 @@ private:
      * sort role data is stored in 'values'.
      */
     void prepareItemsForSorting(QList<ItemData*>& itemDataList);
-
-    static int expandedParentsCount(const ItemData* data);
-
-    void removeExpandedItems();
 
     /**
      * This function is called by setData() and slotRefreshItems(). It emits
@@ -367,9 +344,9 @@ private:
     void sort(QList<ItemData*>::iterator begin, QList<ItemData*>::iterator end) const;
 
     /**
-     * Helper method for lessThan() and expandedParentsCountCompare(): Compares
-     * the passed item-data using m_sortRole as criteria. Both items must
-     * have the same parent item, otherwise the comparison will be wrong.
+     * Helper method for lessThan(): Compares the passed item-data using
+     * m_sortRole as criteria. Both items must have the same parent item,
+     * otherwise the comparison will be wrong.
      */
     int sortRoleCompare(const ItemData* a, const ItemData* b) const;
 
@@ -403,12 +380,6 @@ private:
      * Applies the filters set through @ref setNameFilter and @ref setMimeTypeFilters.
      */
     void applyFilters();
-
-    /**
-     * Removes filtered items whose expanded parents have been deleted
-     * or collapsed via setExpanded(parentIndex, false).
-     */
-    void removeFilteredChildren(const KItemRangeList& parents);
 
     /**
      * Maps the QByteArray-roles to RoleTypes and provides translation- and
@@ -474,13 +445,6 @@ private:
 
     // Cache for KFileItemModel::groups()
     mutable QList<QPair<int, QVariant> > m_groups;
-
-    // Stores the URLs (key: target url, value: url) of the expanded directories.
-    QHash<KUrl, KUrl> m_expandedDirs;
-
-    // URLs that must be expanded. The expanding is initially triggered in setExpanded()
-    // and done step after step in slotCompleted().
-    QSet<KUrl> m_urlsToExpand;
 
     friend class KFileItemModelLessThan;       // Accesses lessThan() method
     friend class KFileItemModelRolesUpdater;   // Accesses emitSortProgress() method

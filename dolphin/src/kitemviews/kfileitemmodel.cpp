@@ -58,9 +58,7 @@ KFileItemModel::KFileItemModel(QObject* parent) :
     m_maximumUpdateIntervalTimer(0),
     m_resortAllItemsTimer(0),
     m_pendingItemsToInsert(),
-    m_groups(),
-    m_expandedDirs(),
-    m_urlsToExpand()
+    m_groups()
 {
     m_dirLister = new KFileItemModelDirLister(this);
     m_dirLister->setDelayedMimeTypes(true);
@@ -124,13 +122,6 @@ void KFileItemModel::loadDirectory(const KUrl& url)
 
 void KFileItemModel::refreshDirectory(const KUrl& url)
 {
-    // Refresh all expanded directories first (Bug 295300)
-    QHashIterator<KUrl, KUrl> expandedDirs(m_expandedDirs);
-    while (expandedDirs.hasNext()) {
-        expandedDirs.next();
-        m_dirLister->openUrl(expandedDirs.value(), KDirLister::Reload);
-    }
-
     m_dirLister->openUrl(url, KDirLister::Reload);
 }
 
@@ -454,16 +445,6 @@ void KFileItemModel::setRoles(const QSet<QByteArray>& roles)
     const QSet<QByteArray> changedRoles = (roles - m_roles) + (m_roles - roles);
     m_roles = roles;
 
-    if (count() > 0) {
-        const bool supportedExpanding = m_requestRole[ExpandedParentsCountRole];
-        const bool willSupportExpanding = roles.contains("expandedParentsCount");
-        if (supportedExpanding && !willSupportExpanding) {
-            // No expanding is supported anymore. Take care to delete all items that have an expansion level
-            // that is not 0 (and hence are part of an expanded item).
-            removeExpandedItems();
-        }
-    }
-
     m_groups.clear();
     resetRoles();
 
@@ -496,137 +477,6 @@ void KFileItemModel::setRoles(const QSet<QByteArray>& roles)
 QSet<QByteArray> KFileItemModel::roles() const
 {
     return m_roles;
-}
-
-bool KFileItemModel::setExpanded(int index, bool expanded)
-{
-    if (!isExpandable(index) || isExpanded(index) == expanded) {
-        return false;
-    }
-
-    QHash<QByteArray, QVariant> values;
-    values.insert(sharedValue("isExpanded"), expanded);
-    if (!setData(index, values)) {
-        return false;
-    }
-
-    const KFileItem item = m_itemData.at(index)->item;
-    const KUrl url = item.url();
-    const KUrl targetUrl = item.targetUrl();
-    if (expanded) {
-        m_expandedDirs.insert(targetUrl, url);
-        m_dirLister->openUrl(url, KDirLister::Keep);
-
-        const KUrl::List previouslyExpandedChildren = m_itemData.at(index)->values.value("previouslyExpandedChildren").value<KUrl::List>();
-        foreach (const KUrl& url, previouslyExpandedChildren) {
-            m_urlsToExpand.insert(url);
-        }
-    } else {
-        // Note that there might be (indirect) children of the folder which is to be collapsed in
-        // m_pendingItemsToInsert. To prevent that they will be inserted into the model later,
-        // possibly without a parent, which might result in a crash, we insert all pending items
-        // right now. All new items which would be without a parent will then be removed.
-        dispatchPendingItemsToInsert();
-
-        // Check if the index of the collapsed folder has changed. If that is the case, then items
-        // were inserted before the collapsed folder, and its index needs to be updated.
-        if (m_itemData.at(index)->item != item) {
-            index = this->index(item);
-        }
-
-        m_expandedDirs.remove(targetUrl);
-        m_dirLister->stop();
-
-        const int parentLevel = expandedParentsCount(index);
-        const int itemCount = m_itemData.count();
-        const int firstChildIndex = index + 1;
-
-        KUrl::List expandedChildren;
-
-        int childIndex = firstChildIndex;
-        while (childIndex < itemCount && expandedParentsCount(childIndex) > parentLevel) {
-            ItemData* itemData = m_itemData.at(childIndex);
-            if (itemData->values.value("isExpanded").toBool()) {
-                const KUrl targetUrl = itemData->item.targetUrl();
-                const KUrl url = itemData->item.url();
-                m_expandedDirs.remove(targetUrl);
-                expandedChildren.append(targetUrl);
-            }
-            ++childIndex;
-        }
-        const int childrenCount = childIndex - firstChildIndex;
-
-        removeFilteredChildren(KItemRangeList() << KItemRange(index, 1 + childrenCount));
-        removeItems(KItemRangeList() << KItemRange(firstChildIndex, childrenCount), DeleteItemData);
-
-        m_itemData.at(index)->values.insert("previouslyExpandedChildren", expandedChildren);
-    }
-
-    return true;
-}
-
-bool KFileItemModel::isExpanded(int index) const
-{
-    if (index >= 0 && index < count()) {
-        return m_itemData.at(index)->values.value("isExpanded").toBool();
-    }
-    return false;
-}
-
-bool KFileItemModel::isExpandable(int index) const
-{
-    if (index >= 0 && index < count()) {
-        // Call data (instead of accessing m_itemData directly)
-        // to ensure that the value is initialized.
-        return data(index).value("isExpandable").toBool();
-    }
-    return false;
-}
-
-int KFileItemModel::expandedParentsCount(int index) const
-{
-    if (index >= 0 && index < count()) {
-        return expandedParentsCount(m_itemData.at(index));
-    }
-    return 0;
-}
-
-QSet<KUrl> KFileItemModel::expandedDirectories() const
-{
-    return m_expandedDirs.values().toSet();
-}
-
-void KFileItemModel::restoreExpandedDirectories(const QSet<KUrl>& urls)
-{
-    m_urlsToExpand = urls;
-}
-
-void KFileItemModel::expandParentDirectories(const KUrl& url)
-{
-    const int pos = m_dirLister->url().path().length();
-
-    // Assure that each sub-path of the URL that should be
-    // expanded is added to m_urlsToExpand. KDirLister
-    // does not care whether the parent-URL has already been
-    // expanded.
-    KUrl urlToExpand = m_dirLister->url();
-    const QStringList subDirs = url.path().mid(pos).split(QDir::separator());
-    for (int i = 0; i < subDirs.count() - 1; ++i) {
-        urlToExpand.addPath(subDirs.at(i));
-        m_urlsToExpand.insert(urlToExpand);
-    }
-
-    // KDirLister::open() must called at least once to trigger an initial
-    // loading. The pending URLs that must be restored are handled
-    // in slotCompleted().
-    QSetIterator<KUrl> it2(m_urlsToExpand);
-    while (it2.hasNext()) {
-        const int idx = index(it2.next());
-        if (idx >= 0 && !isExpanded(idx)) {
-            setExpanded(idx, true);
-            break;
-        }
-    }
 }
 
 void KFileItemModel::setNameFilter(const QString& nameFilter)
@@ -697,32 +547,6 @@ void KFileItemModel::applyFilters()
     }
 
     insertItems(newVisibleItems);
-}
-
-void KFileItemModel::removeFilteredChildren(const KItemRangeList& itemRanges)
-{
-    if (m_filteredItems.isEmpty() || !m_requestRole[ExpandedParentsCountRole]) {
-        // There are either no filtered items, or it is not possible to expand
-        // folders -> there cannot be any filtered children.
-        return;
-    }
-
-    QSet<ItemData*> parents;
-    foreach (const KItemRange& range, itemRanges) {
-        for (int index = range.index; index < range.index + range.count; ++index) {
-            parents.insert(m_itemData.at(index));
-        }
-    }
-
-    QHash<KFileItem, ItemData*>::iterator it = m_filteredItems.begin();
-    while (it != m_filteredItems.end()) {
-        if (parents.contains(it.value()->parent)) {
-            delete it.value();
-            it = m_filteredItems.erase(it);
-        } else {
-            ++it;
-        }
-    }
 }
 
 QList<KFileItemModel::RoleInfo> KFileItemModel::rolesInformation()
@@ -855,30 +679,6 @@ void KFileItemModel::slotCompleted()
 {
     dispatchPendingItemsToInsert();
 
-    if (!m_urlsToExpand.isEmpty()) {
-        // Try to find a URL that can be expanded.
-        // Note that the parent folder must be expanded before any of its subfolders become visible.
-        // Therefore, some URLs in m_restoredExpandedUrls might not be visible yet
-        // -> we expand the first visible URL we find in m_restoredExpandedUrls.
-        QMutableSetIterator<KUrl> expandit(m_urlsToExpand);
-        while (expandit.hasNext()) {
-            const KUrl& url = expandit.next();
-            const int indexForUrl = index(url);
-            if (indexForUrl >= 0) {
-                expandit.remove();
-                if (setExpanded(indexForUrl, true)) {
-                    // The dir lister has been triggered. This slot will be called
-                    // again after the directory has been expanded.
-                    return;
-                }
-            }
-        }
-
-        // None of the URLs in m_restoredExpandedUrls could be found in the model. This can happen
-        // if these URLs have been deleted in the meantime.
-        m_urlsToExpand.clear();
-    }
-
     emit directoryLoadingCompleted();
 }
 
@@ -894,42 +694,9 @@ void KFileItemModel::slotItemsAdded(const KFileItemList& items)
 {
     Q_ASSERT(!items.isEmpty());
 
-    const KDirLister* lister = qobject_cast<KDirLister*>(sender());
-    const KUrl directoryUrl = lister->url();
-    KUrl parentUrl;
-    if (m_expandedDirs.contains(directoryUrl)) {
-        parentUrl = m_expandedDirs.value(directoryUrl);
-    } else {
-        parentUrl = directoryUrl;
-        parentUrl.adjustPath(KUrl::RemoveTrailingSlash);
-    }
-
-    if (m_requestRole[ExpandedParentsCountRole]) {
-        // If the expanding of items is enabled, the call
-        // dirLister->openUrl(url, KDirLister::Keep) in KFileItemModel::setExpanded()
-        // might result in emitting the same items twice due to the Keep-parameter.
-        // This case happens if an item gets expanded, collapsed and expanded again
-        // before the items could be loaded for the first expansion.
-        if (index(items.first().url()) >= 0) {
-            // The items are already part of the model.
-            return;
-        }
-
-        if (directoryUrl != directory()) {
-            // To be able to compare whether the new items may be inserted as children
-            // of a parent item the pending items must be added to the model first.
-            dispatchPendingItemsToInsert();
-        }
-
-        // KDirLister keeps the children of items that got expanded once even if
-        // they got collapsed again with KFileItemModel::setExpanded(false). So it must be
-        // checked whether the parent for new items is still expanded.
-        const int parentIndex = index(parentUrl);
-        if (parentIndex >= 0 && !m_itemData[parentIndex]->values.value("isExpanded").toBool()) {
-            // The parent is not expanded.
-            return;
-        }
-    }
+    const KUrl directoryUrl = m_dirLister->url();
+    KUrl parentUrl = directoryUrl;
+    parentUrl.adjustPath(KUrl::RemoveTrailingSlash);
 
     QList<ItemData*> itemDataList = createItemDataList(parentUrl, items);
 
@@ -978,28 +745,7 @@ void KFileItemModel::slotItemsDeleted(const KFileItemList& items)
 
     std::sort(indexesToRemove.begin(), indexesToRemove.end());
 
-    if (m_requestRole[ExpandedParentsCountRole] && !m_expandedDirs.isEmpty()) {
-        // Assure that removing a parent item also results in removing all children
-        QVector<int> indexesToRemoveWithChildren;
-        indexesToRemoveWithChildren.reserve(m_itemData.count());
-
-        const int itemCount = m_itemData.count();
-        foreach (int index, indexesToRemove) {
-            indexesToRemoveWithChildren.append(index);
-
-            const int parentLevel = expandedParentsCount(index);
-            int childIndex = index + 1;
-            while (childIndex < itemCount && expandedParentsCount(childIndex) > parentLevel) {
-                indexesToRemoveWithChildren.append(childIndex);
-                ++childIndex;
-            }
-        }
-
-        indexesToRemove = indexesToRemoveWithChildren;
-    }
-
     const KItemRangeList itemRanges = KItemRangeList::fromSortedContainer(indexesToRemove);
-    removeFilteredChildren(itemRanges);
     removeItems(itemRanges, DeleteItemData);
 }
 
@@ -1093,8 +839,6 @@ void KFileItemModel::slotClear()
         m_items.clear();
         emit itemsRemoved(KItemRangeList() << KItemRange(0, removedCount));
     }
-
-    m_expandedDirs.clear();
 }
 
 void KFileItemModel::slotNaturalSortingChanged()
@@ -1311,52 +1055,6 @@ void KFileItemModel::prepareItemsForSorting(QList<ItemData*>& itemDataList)
     }
 }
 
-int KFileItemModel::expandedParentsCount(const ItemData* data)
-{
-    // The hash 'values' is only guaranteed to contain the key "expandedParentsCount"
-    // if the corresponding item is expanded, and it is not a top-level item.
-    const ItemData* parent = data->parent;
-    if (parent) {
-        if (parent->parent) {
-            Q_ASSERT(parent->values.contains("expandedParentsCount"));
-            return parent->values.value("expandedParentsCount").toInt() + 1;
-        } else {
-            return 1;
-        }
-    } else {
-        return 0;
-    }
-}
-
-void KFileItemModel::removeExpandedItems()
-{
-    QVector<int> indexesToRemove;
-
-    const int maxIndex = m_itemData.count() - 1;
-    for (int i = 0; i <= maxIndex; ++i) {
-        const ItemData* itemData = m_itemData.at(i);
-        if (itemData->parent) {
-            indexesToRemove.append(i);
-        }
-    }
-
-    removeItems(KItemRangeList::fromSortedContainer(indexesToRemove), DeleteItemData);
-    m_expandedDirs.clear();
-
-    // Also remove all filtered items which have a parent.
-    QHash<KFileItem, ItemData*>::iterator it = m_filteredItems.begin();
-    const QHash<KFileItem, ItemData*>::iterator end = m_filteredItems.end();
-
-    while (it != end) {
-        if (it.value()->parent) {
-            delete it.value();
-            it = m_filteredItems.erase(it);
-        } else {
-            ++it;
-        }
-    }
-}
-
 void KFileItemModel::emitItemsChangedAndTriggerResorting(const KItemRangeList& itemRanges, const QSet<QByteArray>& changedRoles)
 {
     emit itemsChanged(itemRanges, changedRoles);
@@ -1432,9 +1130,6 @@ KFileItemModel::RoleType KFileItemModel::typeForRole(const QByteArray& role) con
         // with KFileItemModel::roleForType() in case if a change is done).
         roles.insert("isDir", IsDirRole);
         roles.insert("isLink", IsLinkRole);
-        roles.insert("isExpanded", IsExpandedRole);
-        roles.insert("isExpandable", IsExpandableRole);
-        roles.insert("expandedParentsCount", ExpandedParentsCountRole);
 
         Q_ASSERT(roles.count() == RolesCount);
     }
@@ -1458,9 +1153,6 @@ QByteArray KFileItemModel::roleForType(RoleType roleType) const
         // with KFileItemModel::typeForRole() in case if a change is done).
         roles.insert(IsDirRole, "isDir");
         roles.insert(IsLinkRole, "isLink");
-        roles.insert(IsExpandedRole, "isExpanded");
-        roles.insert(IsExpandableRole, "isExpandable");
-        roles.insert(ExpandedParentsCountRole, "expandedParentsCount");
 
         Q_ASSERT(roles.count() == RolesCount);
     };
@@ -1539,17 +1231,6 @@ QHash<QByteArray, QVariant> KFileItemModel::retrieveData(const KFileItem& item, 
         data.insert(sharedValue("path"), path);
     }
 
-    if (m_requestRole[IsExpandableRole] && isDir) {
-        data.insert(sharedValue("isExpandable"), true);
-    }
-
-    if (m_requestRole[ExpandedParentsCountRole]) {
-        if (parent) {
-            const int level = expandedParentsCount(parent) + 1;
-            data.insert(sharedValue("expandedParentsCount"), level);
-        }
-    }
-
     if (item.isMimeTypeKnown()) {
         data.insert(sharedValue("iconName"), item.iconName());
 
@@ -1569,29 +1250,6 @@ bool KFileItemModel::lessThan(const ItemData* a, const ItemData* b) const
     int result = 0;
 
     if (a->parent != b->parent) {
-        const int expansionLevelA = expandedParentsCount(a);
-        const int expansionLevelB = expandedParentsCount(b);
-
-        // If b has a higher expansion level than a, check if a is a parent
-        // of b, and make sure that both expansion levels are equal otherwise.
-        for (int i = expansionLevelB; i > expansionLevelA; --i) {
-            if (b->parent == a) {
-                return true;
-            }
-            b = b->parent;
-        }
-
-        // If a has a higher expansion level than a, check if b is a parent
-        // of a, and make sure that both expansion levels are equal otherwise.
-        for (int i = expansionLevelA; i > expansionLevelB; --i) {
-            if (a->parent == b) {
-                return false;
-            }
-            a = a->parent;
-        }
-
-        Q_ASSERT(expandedParentsCount(a) == expandedParentsCount(b));
-
         // Compare the last parents of a and b which are different.
         while (a->parent != b->parent) {
             a = a->parent;
@@ -2155,11 +1813,6 @@ bool KFileItemModel::isConsistent() const
         const ItemData* data = m_itemData.at(i);
         const ItemData* parent = data->parent;
         if (parent) {
-            if (expandedParentsCount(data) != expandedParentsCount(parent) + 1) {
-                qWarning() << "expandedParentsCount is inconsistent for parent" << parent->item << "and child" << data->item;
-                return false;
-            }
-
             const int parentIndex = index(parent->item);
             if (parentIndex >= i) {
                 qWarning() << "Index" << parentIndex << "of parent" << parent->item << "is not smaller than index" << i << "of child" << data->item;

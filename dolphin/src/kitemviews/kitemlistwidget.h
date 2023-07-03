@@ -138,8 +138,7 @@ public:
 
     /**
      * @return True if \a point is inside KItemListWidget::hoverRect(),
-     *         KItemListWidget::textRect(), KItemListWidget::selectionToggleRect()
-     *         or KItemListWidget::expansionToggleRect().
+     *         KItemListWidget::textRect(), KItemListWidget::selectionToggleRect().
      * @reimp
      */
     virtual bool contains(const QPointF& point) const;
@@ -174,13 +173,6 @@ public:
      *         is available.
      */
     virtual QRectF selectionToggleRect() const;
-
-    /**
-     * @return Rectangle for the expansion-toggle that is used to open a sub-tree of the model.
-     *         Per default an empty rectangle is returned which means that no opening of sub-trees
-     *         is supported.
-     */
-    virtual QRectF expansionToggleRect() const;
 
     /**
      * @return Pixmap that is used when dragging an item. Per default the current state of the

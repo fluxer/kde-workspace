@@ -257,13 +257,6 @@ void KFileItemListView::onStyleOptionChanged(const KItemListStyleOption& current
     triggerIconSizeUpdate();
 }
 
-void KFileItemListView::onSupportsItemExpandingChanged(bool supportsExpanding)
-{
-    applyRolesToModel();
-    KStandardItemListView::onSupportsItemExpandingChanged(supportsExpanding);
-    triggerVisibleIndexRangeUpdate();
-}
-
 void KFileItemListView::onTransactionBegin()
 {
     if (m_modelRolesUpdater) {
@@ -383,11 +376,6 @@ void KFileItemListView::applyRolesToModel()
     roles.insert("text");
     roles.insert("isDir");
     roles.insert("isLink");
-    if (supportsItemExpanding()) {
-        roles.insert("isExpanded");
-        roles.insert("isExpandable");
-        roles.insert("expandedParentsCount");
-    }
 
     // Assure that the role that is used for sorting will be determined
     roles.insert(fileItemModel->sortRole());

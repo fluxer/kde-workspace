@@ -50,7 +50,6 @@ public:
 
 protected:
     virtual KItemListWidgetCreatorBase* defaultWidgetCreator() const;
-    virtual bool itemLayoutSupportsItemExpanding(ItemLayout layout) const;
     virtual void onItemLayoutChanged(ItemLayout current, ItemLayout previous);
     virtual void onPreviewsShownChanged(bool shown);
     virtual void onVisibleRolesChanged(const QList<QByteArray>& current,

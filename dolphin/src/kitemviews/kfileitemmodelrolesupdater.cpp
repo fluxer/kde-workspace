@@ -117,7 +117,6 @@ KFileItemModelRolesUpdater::KFileItemModelRolesUpdater(KFileItemModel* model, QO
 
     m_resolvableRoles.insert("size");
     m_resolvableRoles.insert("type");
-    m_resolvableRoles.insert("isExpandable");
 
     m_directoryContentsCounter = new KDirectoryContentsCounter(m_model, this);
     connect(m_directoryContentsCounter, SIGNAL(result(QString,int)),
@@ -596,18 +595,14 @@ void KFileItemModelRolesUpdater::resolveRecentlyChangedItems()
 void KFileItemModelRolesUpdater::slotDirectoryContentsCountReceived(const QString& path, int count)
 {
     const bool getSizeRole = m_roles.contains("size");
-    const bool getIsExpandableRole = m_roles.contains("isExpandable");
 
-    if (getSizeRole || getIsExpandableRole) {
+    if (getSizeRole) {
         const int index = m_model->index(KUrl(path));
         if (index >= 0) {
             QHash<QByteArray, QVariant> data;
 
             if (getSizeRole) {
                 data.insert("size", count);
-            }
-            if (getIsExpandableRole) {
-                data.insert("isExpandable", count > 0);
             }
 
             disconnect(m_model, SIGNAL(itemsChanged(KItemRangeList,QSet<QByteArray>)),
@@ -907,9 +902,8 @@ QHash<QByteArray, QVariant> KFileItemModelRolesUpdater::rolesData(const KFileIte
     QHash<QByteArray, QVariant> data;
 
     const bool getSizeRole = m_roles.contains("size");
-    const bool getIsExpandableRole = m_roles.contains("isExpandable");
 
-    if ((getSizeRole || getIsExpandableRole) && item.isDir()) {
+    if (getSizeRole && item.isDir()) {
         if (item.isLocalFile()) {
             // Tell m_directoryContentsCounter that we want to count the items
             // inside the directory. The result will be received in slotDirectoryContentsCountReceived.

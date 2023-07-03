@@ -119,11 +119,7 @@ public:
      * otherwise the automatic activation is not available.
      *
      * After activating the item the signal itemActivated() will be
-     * emitted. If the view supports the expanding of items
-     * (KItemListView::supportsItemExpanding() returns true) and the item
-     * itself is expandable (see KItemModelBase::isExpandable()) then instead
-     * of activating the item it gets expanded instead (see
-     * KItemModelBase::setExpanded()).
+     * emitted.
      */
     void setAutoActivationDelay(int delay);
     int autoActivationDelay() const;
@@ -211,8 +207,6 @@ signals:
      * above the viewport.
      */
     void mouseButtonReleased(int itemIndex, Qt::MouseButtons buttons);
-
-    void itemExpansionToggleClicked(int index);
 
     /**
      * Is emitted if a drop event is done above the item with the index

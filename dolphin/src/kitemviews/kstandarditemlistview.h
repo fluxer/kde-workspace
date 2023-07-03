@@ -63,10 +63,8 @@ protected:
     virtual KItemListGroupHeaderCreatorBase* defaultGroupHeaderCreator() const;
     virtual void initializeItemListWidget(KItemListWidget* item);
     virtual bool itemSizeHintUpdateRequired(const QSet<QByteArray>& changedRoles) const;
-    virtual bool itemLayoutSupportsItemExpanding(ItemLayout layout) const;
     virtual void onItemLayoutChanged(ItemLayout current, ItemLayout previous);
     virtual void onScrollOrientationChanged(Qt::Orientation current, Qt::Orientation previous);
-    virtual void onSupportsItemExpandingChanged(bool supportsExpanding);
     virtual void polishEvent();
 
 private:

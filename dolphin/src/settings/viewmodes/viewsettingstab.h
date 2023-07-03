@@ -70,7 +70,6 @@ private:
     DolphinFontRequester* m_fontRequester;
     KComboBox* m_widthBox;
     KComboBox* m_maxLinesBox;
-    QCheckBox* m_expandableFolders;
 };
 
 #endif

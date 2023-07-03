@@ -216,19 +216,6 @@ bool KItemListController::keyPressEvent(QKeyEvent* event)
     int index = m_selectionManager->currentItem();
     int key = event->key();
 
-    // Handle the expanding/collapsing of items
-    if (m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
-        if (key == Qt::Key_Right) {
-            if (m_model->setExpanded(index, true)) {
-                return true;
-            }
-        } else if (key == Qt::Key_Left) {
-            if (m_model->setExpanded(index, false)) {
-                return true;
-            }
-        }
-    }
-
     const bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     const bool controlPressed = event->modifiers() & Qt::ControlModifier;
     const bool shiftOrControlPressed = shiftPressed || controlPressed;
@@ -273,15 +260,7 @@ bool KItemListController::keyPressEvent(QKeyEvent* event)
 
     case Qt::Key_Left:
         if (index > 0) {
-            const int expandedParentsCount = m_model->expandedParentsCount(index);
-            if (expandedParentsCount == 0) {
-                --index;
-            } else {
-                // Go to the parent of the current item.
-                do {
-                    --index;
-                } while (index > 0 && m_model->expandedParentsCount(index) == expandedParentsCount);
-            }
+            --index;
             m_keyboardAnchorIndex = index;
             m_keyboardAnchorPos = keyboardAnchorPos(index);
         }
@@ -512,10 +491,7 @@ void KItemListController::slotAutoActivationTimeout()
      * See Bug 293200 and 305783
      */
     if (m_model->supportsDropping(index) && m_view->isUnderMouse()) {
-        if (m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
-            const bool expanded = m_model->isExpanded(index);
-            m_model->setExpanded(index, !expanded);
-        } else if (m_autoActivationBehavior != ExpansionOnly) {
+        if (m_autoActivationBehavior != ExpansionOnly) {
             emit itemActivated(index);
         }
     }
@@ -530,13 +506,6 @@ bool KItemListController::mousePressEvent(QGraphicsSceneMouseEvent* event, const
     m_pressedMousePos = transform.map(event->pos());
     m_pressedIndex = m_view->itemAt(m_pressedMousePos);
     emit mouseButtonPressed(m_pressedIndex, event->buttons());
-
-    if (m_view->isAboveExpansionToggle(m_pressedIndex, m_pressedMousePos)) {
-        m_selectionManager->endAnchoredSelection();
-        m_selectionManager->setCurrentItem(m_pressedIndex);
-        m_selectionManager->beginAnchoredSelection(m_pressedIndex);
-        return true;
-    }
 
     m_selectionTogglePressed = m_view->isAboveSelectionToggle(m_pressedIndex, m_pressedMousePos);
     if (m_selectionTogglePressed) {
@@ -751,13 +720,7 @@ bool KItemListController::mouseReleaseEvent(QGraphicsSceneMouseEvent* event, con
 
         if (event->button() & Qt::LeftButton) {
             bool emitItemActivated = true;
-            if (m_view->isAboveExpansionToggle(index, pos)) {
-                const bool expanded = m_model->isExpanded(index);
-                m_model->setExpanded(index, !expanded);
-
-                emit itemExpansionToggleClicked(index);
-                emitItemActivated = false;
-            } else if (shiftOrControlPressed) {
+            if (shiftOrControlPressed) {
                 // The mouse click should only update the selection, not trigger the item
                 emitItemActivated = false;
             } else if (!(KGlobalSettings::singleClick() || m_singleClickActivationEnforced)) {
@@ -781,14 +744,6 @@ bool KItemListController::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event,
 {
     const QPointF pos = transform.map(event->pos());
     const int index = m_view->itemAt(pos);
-
-    // Expand item if desired - See Bug 295573
-    if (m_mouseDoubleClickAction != ActivateItemOnly) {
-        if (m_view && m_model && m_view->supportsItemExpanding() && m_model->isExpandable(index)) {
-            const bool expanded = m_model->isExpanded(index);
-            m_model->setExpanded(index, !expanded);
-        }
-    }
 
     bool emitItemActivated = !(KGlobalSettings::singleClick() || m_singleClickActivationEnforced) &&
                              (event->button() & Qt::LeftButton) &&
@@ -1178,8 +1133,7 @@ KItemListWidget* KItemListController::widgetForPos(const QPointF& pos) const
     foreach (KItemListWidget* widget, m_view->visibleItemListWidgets()) {
         const QPointF mappedPos = widget->mapFromItem(m_view, pos);
 
-        const bool hovered = widget->contains(mappedPos) &&
-                             !widget->expansionToggleRect().contains(mappedPos);
+        const bool hovered = widget->contains(mappedPos);
         if (hovered) {
             return widget;
         }

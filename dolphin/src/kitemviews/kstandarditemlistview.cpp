@@ -48,7 +48,6 @@ void KStandardItemListView::setItemLayout(ItemLayout layout)
     const ItemLayout previous = m_itemLayout;
     m_itemLayout = layout;
 
-    setSupportsItemExpanding(itemLayoutSupportsItemExpanding(layout));
     setScrollOrientation(layout == CompactLayout ? Qt::Horizontal : Qt::Vertical);
 
     onItemLayoutChanged(layout, previous);
@@ -82,8 +81,6 @@ void KStandardItemListView::initializeItemListWidget(KItemListWidget* item)
     case DetailsLayout: standardItemListWidget->setLayout(KStandardItemListWidget::DetailsLayout); break;
     default:            Q_ASSERT(false); break;
     }
-
-    standardItemListWidget->setSupportsItemExpanding(supportsItemExpanding());
 }
 
 
@@ -102,11 +99,6 @@ bool KStandardItemListView::itemSizeHintUpdateRequired(const QSet<QByteArray>& c
     return false;
 }
 
-bool KStandardItemListView::itemLayoutSupportsItemExpanding(ItemLayout layout) const
-{
-    return layout == DetailsLayout;
-}
-
 void KStandardItemListView::onItemLayoutChanged(ItemLayout current, ItemLayout previous)
 {
     Q_UNUSED(current);
@@ -120,13 +112,6 @@ void KStandardItemListView::onScrollOrientationChanged(Qt::Orientation current, 
     Q_UNUSED(previous);
     updateLayoutOfVisibleItems();
 }
-
-void KStandardItemListView::onSupportsItemExpandingChanged(bool supportsExpanding)
-{
-    Q_UNUSED(supportsExpanding);
-    updateLayoutOfVisibleItems();
-}
-
 
 void KStandardItemListView::polishEvent()
 {

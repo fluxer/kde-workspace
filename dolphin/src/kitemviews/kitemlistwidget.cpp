@@ -348,7 +348,6 @@ bool KItemListWidget::contains(const QPointF& point) const
 
     return iconRect().contains(point) ||
            textRect().contains(point) ||
-           expansionToggleRect().contains(point) ||
            selectionToggleRect().contains(point);
 }
 
@@ -358,11 +357,6 @@ QRectF KItemListWidget::textFocusRect() const
 }
 
 QRectF KItemListWidget::selectionToggleRect() const
-{
-    return QRectF();
-}
-
-QRectF KItemListWidget::expansionToggleRect() const
 {
     return QRectF();
 }

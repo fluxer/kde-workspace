@@ -226,27 +226,17 @@ int VersionControlObserver::createItemStatesList(QMap<QString, QVector<ItemState
                                                  const int firstIndex)
 {
     const int itemCount = m_model->count();
-    const int currentExpansionLevel = m_model->expandedParentsCount(firstIndex);
 
     QVector<ItemState> items;
     items.reserve(itemCount - firstIndex);
 
     int index;
     for (index = firstIndex; index < itemCount; ++index) {
-        const int expansionLevel = m_model->expandedParentsCount(index);
+        ItemState itemState;
+        itemState.item = m_model->fileItem(index);
+        itemState.version = KVersionControlPlugin::UnversionedVersion;
 
-        if (expansionLevel == currentExpansionLevel) {
-            ItemState itemState;
-            itemState.item = m_model->fileItem(index);
-            itemState.version = KVersionControlPlugin::UnversionedVersion;
-
-            items.append(itemState);
-        } else if (expansionLevel > currentExpansionLevel) {
-            // Sub folder
-            index += createItemStatesList(itemStates, index) - 1;
-        } else {
-            break;
-        }
+        items.append(itemState);
     }
 
     if (items.count() > 0) {
