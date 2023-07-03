@@ -120,11 +120,6 @@ void KFileItemModel::loadDirectory(const KUrl& url)
     m_dirLister->openUrl(url);
 }
 
-void KFileItemModel::refreshDirectory(const KUrl& url)
-{
-    m_dirLister->openUrl(url, KDirLister::Reload);
-}
-
 KUrl KFileItemModel::directory() const
 {
     return m_dirLister->url();

@@ -679,7 +679,7 @@ private slots:
     void calculateItemCount(int& fileCount, int& folderCount, KIO::filesize_t& totalFileSize) const;
 
 private:
-    void loadDirectory(const KUrl& url, bool reload = false);
+    void loadDirectory(const KUrl& url);
 
     /**
      * Applies the view properties which are defined by the current URL

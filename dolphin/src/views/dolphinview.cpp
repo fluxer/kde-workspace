@@ -460,7 +460,7 @@ void DolphinView::reload()
     m_selectedUrls = itemList.urlList();
 
     setUrl(url());
-    loadDirectory(url(), true);
+    loadDirectory(url());
 
     QDataStream restoreStream(viewState);
     restoreState(restoreStream);
@@ -1429,7 +1429,7 @@ void DolphinView::slotRoleEditingFinished(int index, const QByteArray& role, con
     }
 }
 
-void DolphinView::loadDirectory(const KUrl& url, bool reload)
+void DolphinView::loadDirectory(const KUrl& url)
 {
     if (!url.isValid()) {
         const QString location(url.pathOrUrl());
@@ -1441,11 +1441,7 @@ void DolphinView::loadDirectory(const KUrl& url, bool reload)
         return;
     }
 
-    if (reload) {
-        m_model->refreshDirectory(url);
-    } else {
-        m_model->loadDirectory(url);
-    }
+    m_model->loadDirectory(url);
 }
 
 void DolphinView::applyViewProperties()

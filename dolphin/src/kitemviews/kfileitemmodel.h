@@ -59,12 +59,6 @@ public:
     void loadDirectory(const KUrl& url);
 
     /**
-     * Throws away all currently loaded items and refreshes the directory
-     * by reloading all items again.
-     */
-    void refreshDirectory(const KUrl& url);
-
-    /**
      * @return Parent directory of the items that are shown. In case
      *         if a directory tree is shown, KFileItemModel::dir() returns
      *         the root-parent of all items.
@@ -74,7 +68,7 @@ public:
 
     /**
      * Cancels the loading of a directory which has been started by either
-     * loadDirectory() or refreshDirectory().
+     * loadDirectory().
      */
     void cancelDirectoryLoading();
 

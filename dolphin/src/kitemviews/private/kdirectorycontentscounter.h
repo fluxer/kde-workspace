@@ -25,10 +25,10 @@
 
 #include <QSet>
 #include <QQueue>
+#include <QString>
 
 class KDirWatch;
 class KFileItemModel;
-#include <QString>
 
 class KDirectoryContentsCounter : public QObject
 {
