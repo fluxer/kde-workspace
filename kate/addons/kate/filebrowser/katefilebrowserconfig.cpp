@@ -132,7 +132,6 @@ void KateFileBrowserConfigPage::init()
   allActions << "up" << "back" << "forward" << "home"
              << "reload" << "mkdir" << "delete"
              << "short view" << "detailed view"
-             << "tree view" << "detailed tree view"
              << "show hidden" /*<< "view menu" << "properties"*/
              << "bookmarks" << "sync_dir" << "configure";
   QRegExp re("&(?=[^&])");

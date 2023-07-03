@@ -318,8 +318,6 @@ void KateFileBrowser::setupActions()
   optionsMenu->setDelayed(false);
   optionsMenu->addAction(m_dirOperator->actionCollection()->action("short view"));
   optionsMenu->addAction(m_dirOperator->actionCollection()->action("detailed view"));
-  optionsMenu->addAction(m_dirOperator->actionCollection()->action("tree view"));
-  optionsMenu->addAction(m_dirOperator->actionCollection()->action("detailed tree view"));
   optionsMenu->addSeparator();
   optionsMenu->addAction(m_dirOperator->actionCollection()->action("show hidden"));
 
