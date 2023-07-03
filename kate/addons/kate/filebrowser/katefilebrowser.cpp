@@ -200,14 +200,14 @@ bool kateFileSelectorIsReadable (const KUrl& url)
   return dir.exists ();
 }
 
-void KateFileBrowser::setDir(KUrl u)
+void KateFileBrowser::setDir(const KUrl& url)
 {
   KUrl newurl;
 
-  if (!u.isValid())
+  if (!url.isValid())
     newurl.setPath(QDir::homePath());
   else
-    newurl = u;
+    newurl = url;
 
   QString pathstr = newurl.path(KUrl::AddTrailingSlash);
   newurl.setPath(pathstr);
