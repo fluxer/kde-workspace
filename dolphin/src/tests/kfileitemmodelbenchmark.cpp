@@ -49,7 +49,6 @@ namespace {
     const int DefaultTimeout = 5000;
 };
 
-Q_DECLARE_METATYPE(KFileItemList)
 Q_DECLARE_METATYPE(KItemRangeList)
 
 class KFileItemModelBenchmark : public QObject
@@ -174,12 +173,12 @@ void KFileItemModelBenchmark::insertAndRemoveManyItems()
 
     QBENCHMARK {
         model.slotClear();
-        model.slotItemsAdded(model.directory(), initialItems);
+        model.slotItemsAdded(initialItems);
         model.slotCompleted();
         QCOMPARE(model.count(), initialItems.count());
 
         if (!newItems.isEmpty()) {
-            model.slotItemsAdded(model.directory(), newItems);
+            model.slotItemsAdded(newItems);
             model.slotCompleted();
         }
         QCOMPARE(model.count(), initialItems.count() + newItems.count());

@@ -188,7 +188,7 @@ void KFileItemModelTest::testRemoveItems()
     QVERIFY(m_model->isConsistent());
 
     m_testDir->removeFile("a.txt");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsRemoved(KItemRangeList)), DefaultTimeout));
     QCOMPARE(m_model->count(), 1);
     QVERIFY(m_model->isConsistent());
@@ -210,7 +210,7 @@ void KFileItemModelTest::testDirLoadingCompleted()
     QCOMPARE(m_model->count(), 3);
 
     m_testDir->createFiles(QStringList() << "d.txt" << "e.txt");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(directoryLoadingCompleted()), DefaultTimeout));
     QCOMPARE(loadingCompletedSpy.count(), 2);
     QCOMPARE(itemsInsertedSpy.count(), 2);
@@ -219,7 +219,7 @@ void KFileItemModelTest::testDirLoadingCompleted()
 
     m_testDir->removeFile("a.txt");
     m_testDir->createFile("f.txt");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(directoryLoadingCompleted()), DefaultTimeout));
     QCOMPARE(loadingCompletedSpy.count(), 3);
     QCOMPARE(itemsInsertedSpy.count(), 3);
@@ -227,7 +227,7 @@ void KFileItemModelTest::testDirLoadingCompleted()
     QCOMPARE(m_model->count(), 5);
 
     m_testDir->removeFile("b.txt");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsRemoved(KItemRangeList)), DefaultTimeout));
     QCOMPARE(loadingCompletedSpy.count(), 4);
     QCOMPARE(itemsInsertedSpy.count(), 3);
@@ -364,7 +364,7 @@ void KFileItemModelTest::testModelConsistencyWhenInsertingItems()
             m_testDir->createFile(QString::number(itemName));
         }
 
-        m_model->m_dirLister->updateDirectory(m_testDir->url());
+        m_model->m_dirLister->updateDirectory();
         if (spy.count() == 0) {
             QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsInserted(KItemRangeList)), DefaultTimeout));
         }
@@ -409,7 +409,7 @@ void KFileItemModelTest::testItemRangeConsistencyWhenInsertingItems()
     m_testDir->createFiles(files);
 
     QSignalSpy spy2(m_model, SIGNAL(itemsInserted(KItemRangeList)));
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsInserted(KItemRangeList)), DefaultTimeout));
 
     QCOMPARE(spy2.count(), 1);
@@ -947,7 +947,7 @@ void KFileItemModelTest::testEmptyPath()
 
     KFileItemList items;
     items << KFileItem(emptyUrl, QString(), KFileItem::Unknown) << KFileItem(url, QString(), KFileItem::Unknown);
-    m_model->slotItemsAdded(emptyUrl, items);
+    m_model->slotItemsAdded(items);
     m_model->slotCompleted();
 }
 
@@ -1175,23 +1175,23 @@ void KFileItemModelTest::testGeneralParentChildRelationships()
     const KUrl realChild1 = m_model->fileItem(1).url();
     const KUrl realChild2 = m_model->fileItem(4).url();
 
-    m_model->slotItemsAdded(parent1, KFileItemList() << KFileItem(KUrl("child1"), QString(), KFileItem::Unknown));
+    m_model->slotItemsAdded(KFileItemList() << KFileItem(KUrl("child1"), QString(), KFileItem::Unknown));
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "realGrandChild1" << "child1" << "parent2" << "realChild2" << "realGrandChild2");
 
-    m_model->slotItemsAdded(parent2, KFileItemList() << KFileItem(KUrl("child2"), QString(), KFileItem::Unknown));
+    m_model->slotItemsAdded(KFileItemList() << KFileItem(KUrl("child2"), QString(), KFileItem::Unknown));
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "realGrandChild1" << "child1" << "parent2" << "realChild2" << "realGrandChild2" << "child2");
 
-    m_model->slotItemsAdded(realChild1, KFileItemList() << KFileItem(KUrl("grandChild1"), QString(), KFileItem::Unknown));
+    m_model->slotItemsAdded(KFileItemList() << KFileItem(KUrl("grandChild1"), QString(), KFileItem::Unknown));
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "grandChild1" << "realGrandChild1" << "child1" << "parent2" << "realChild2" << "realGrandChild2" << "child2");
 
-    m_model->slotItemsAdded(realChild1, KFileItemList() << KFileItem(KUrl("grandChild1"), QString(), KFileItem::Unknown));
+    m_model->slotItemsAdded(KFileItemList() << KFileItem(KUrl("grandChild1"), QString(), KFileItem::Unknown));
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "grandChild1" << "realGrandChild1" << "child1" << "parent2" << "realChild2" << "realGrandChild2" << "child2");
 
-    m_model->slotItemsAdded(realChild2, KFileItemList() << KFileItem(KUrl("grandChild2"), QString(), KFileItem::Unknown));
+    m_model->slotItemsAdded(KFileItemList() << KFileItem(KUrl("grandChild2"), QString(), KFileItem::Unknown));
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "grandChild1" << "realGrandChild1" << "child1" << "parent2" << "realChild2" << "grandChild2" << "realGrandChild2" << "child2");
 
@@ -1369,7 +1369,7 @@ void KFileItemModelTest::testInconsistentModel()
 
     KFileItemList items;
     items << newItem << m_model->fileItem(2) << m_model->fileItem(3);
-    m_model->slotItemsAdded(m_model->directory(), items);
+    m_model->slotItemsAdded(items);
     m_model->slotCompleted();
     QCOMPARE(itemsInModel(), QStringList() << "a" << "b" << "c1.txt" << "c2.txt" << "a2" << "c1.txt" << "c2.txt");
 
@@ -1466,7 +1466,7 @@ void KFileItemModelTest::testChangeSortRoleWhileFiltering()
     entry.insert(KIO::UDSEntry::UDS_USER, "user-a");
     items.append(KFileItem(entry, m_testDir->url(), false, true));
 
-    m_model->slotItemsAdded(m_testDir->url(), items);
+    m_model->slotItemsAdded(items);
     m_model->slotCompleted();
 
     QCOMPARE(itemsInModel(), QStringList() << "a.txt" << "b.txt" << "c.txt");
@@ -1573,8 +1573,7 @@ void KFileItemModelTest::testCollapseFolderWhileLoading()
     urlC2.setFileName("c2.txt");
     fileItemC2.setUrl(urlC2);
 
-    const KUrl urlB = m_model->fileItem(1).url();
-    m_model->slotItemsAdded(urlB, KFileItemList() << fileItemC2);
+    m_model->slotItemsAdded(KFileItemList() << fileItemC2);
     QCOMPARE(itemsInModel(), QStringList() << "a2" << "b" << "c1.txt");
 
     // Collapse "a2/". This should also remove all its (indirect) children from
@@ -1604,7 +1603,7 @@ void KFileItemModelTest::testCollapseFolderWhileLoading()
     urlA1.setFileName("a1");
     fileItemA1.setUrl(urlA1);
 
-    m_model->slotItemsAdded(m_model->directory(), KFileItemList() << fileItemA1);
+    m_model->slotItemsAdded(KFileItemList() << fileItemA1);
     QCOMPARE(itemsInModel(), QStringList() << "a2" << "b");
 
     // Collapse "a2/". Note that this will cause "a1/" to be added to the model,

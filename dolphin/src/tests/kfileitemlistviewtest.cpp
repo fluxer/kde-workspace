@@ -100,14 +100,14 @@ void KFileItemListViewTest::testGroupedItemChanges()
     QCOMPARE(m_model->count(), 3);
 
     m_testDir->createFiles(QStringList() << "2" << "4");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsInserted(KItemRangeList)), DefaultTimeout));
     QCOMPARE(m_model->count(), 5);
 
     m_testDir->removeFile("1");
     m_testDir->removeFile("3");
     m_testDir->removeFile("5");
-    m_model->m_dirLister->updateDirectory(m_testDir->url());
+    m_model->m_dirLister->updateDirectory();
     QVERIFY(QTest::kWaitForSignal(m_model, SIGNAL(itemsRemoved(KItemRangeList)), DefaultTimeout));
     QCOMPARE(m_model->count(), 2);
 }
