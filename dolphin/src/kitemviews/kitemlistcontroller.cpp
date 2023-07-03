@@ -47,8 +47,6 @@ KItemListController::KItemListController(KItemModelBase* model, KItemListView* v
     m_selectionTogglePressed(false),
     m_clearSelectionIfItemsAreNotDragged(false),
     m_selectionBehavior(NoSelection),
-    m_autoActivationBehavior(ActivationAndExpansion),
-    m_mouseDoubleClickAction(ActivateItemOnly),
     m_model(0),
     m_view(0),
     m_selectionManager(new KItemListSelectionManager(this)),
@@ -157,26 +155,6 @@ void KItemListController::setSelectionBehavior(SelectionBehavior behavior)
 KItemListController::SelectionBehavior KItemListController::selectionBehavior() const
 {
     return m_selectionBehavior;
-}
-
-void KItemListController::setAutoActivationBehavior(AutoActivationBehavior behavior)
-{
-    m_autoActivationBehavior = behavior;
-}
-
-KItemListController::AutoActivationBehavior KItemListController::autoActivationBehavior() const
-{
-    return m_autoActivationBehavior;
-}
-
-void KItemListController::setMouseDoubleClickAction(MouseDoubleClickAction action)
-{
-    m_mouseDoubleClickAction = action;
-}
-
-KItemListController::MouseDoubleClickAction KItemListController::mouseDoubleClickAction() const
-{
-    return m_mouseDoubleClickAction;
 }
 
 void KItemListController::setAutoActivationDelay(int delay)
@@ -491,9 +469,7 @@ void KItemListController::slotAutoActivationTimeout()
      * See Bug 293200 and 305783
      */
     if (m_model->supportsDropping(index) && m_view->isUnderMouse()) {
-        if (m_autoActivationBehavior != ExpansionOnly) {
-            emit itemActivated(index);
-        }
+        emit itemActivated(index);
     }
 }
 
