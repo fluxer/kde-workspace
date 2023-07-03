@@ -10,18 +10,12 @@ add_subdirectory(konsole)
 add_subdirectory(filebrowser)
 add_subdirectory(mailfiles)
 
-add_subdirectory(tabbarextension)
-
 add_subdirectory(filetemplates)
 
 add_subdirectory(kate-ctags)
 add_subdirectory(katebuild-plugin)
 add_subdirectory(search)
 
-add_subdirectory(openheader)
-
 add_subdirectory(tabify)
-
-add_subdirectory(close-except-like)
 
 add_subdirectory(project)
