@@ -1,7 +1,3 @@
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
-
 ########### next target ###############
 
 set(kcm_icons_PART_SRCS

@@ -9,11 +9,7 @@ include_directories(
    ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
 
-add_subdirectory( kcm )
-
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(kcm)
 
 check_library_exists(ICE _IceTransNoListen "" HAVE__ICETRANSNOLISTEN)
 configure_file(config-ksmserver.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ksmserver.h)

@@ -21,7 +21,7 @@
 #include <QtCore/qsettings.h>
 
 #include "fakebacktracegenerator.h"
-#include "../../parser/backtraceparser.h"
+#include "../parser/backtraceparser.h"
 
 class BacktraceParserTest : public QObject
 {

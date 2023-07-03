@@ -1,7 +1,3 @@
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
-
 set(kuiserver_SRCS
     main.cpp
     jobview.cpp

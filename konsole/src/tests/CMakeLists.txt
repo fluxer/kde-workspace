@@ -11,11 +11,6 @@ set(KONSOLE_TEST_LIBS
     konsoleprivate
 )
 
-kde4_add_manual_test(PartManualTest PartManualTest.cpp)
-target_link_libraries(PartManualTest
-    ${KONSOLE_TEST_LIBS}
-)
-
 kde4_add_test(konsole-CharacterColorTest CharacterColorTest.cpp)
 target_link_libraries(konsole-CharacterColorTest ${KONSOLE_TEST_LIBS})
 

@@ -21,6 +21,7 @@
 #ifndef PLACESPANEL_H
 #define PLACESPANEL_H
 
+#include <QGraphicsSceneDragDropEvent>
 #include <KUrl>
 #include <panels/panel.h>
 
@@ -29,7 +30,6 @@ class PlacesItemEditDialog;
 class PlacesItem;
 class PlacesItemModel;
 class PlacesView;
-#include <QGraphicsSceneDragDropEvent>
 
 /**
  * @brief Combines bookmarks and mounted devices as list.
