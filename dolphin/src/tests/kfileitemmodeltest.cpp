@@ -389,7 +389,7 @@ void KFileItemModelTest::testItemRangeConsistencyWhenInsertingItems()
 
     QCOMPARE(spy1.count(), 1);
     QList<QVariant> arguments = spy1.takeFirst();
-    KItemRangeList itemRangeList = arguments.at(0).value<KItemRangeList>();
+    KItemRangeList itemRangeList = arguments[0].value<KItemRangeList>();
     QCOMPARE(itemRangeList, KItemRangeList() << KItemRange(0, 3));
 
     // The indexes of the item-ranges must always be related to the model before
@@ -414,7 +414,7 @@ void KFileItemModelTest::testItemRangeConsistencyWhenInsertingItems()
 
     QCOMPARE(spy2.count(), 1);
     arguments = spy2.takeFirst();
-    itemRangeList = arguments.at(0).value<KItemRangeList>();
+    itemRangeList = arguments[0].value<KItemRangeList>();
     QCOMPARE(itemRangeList, KItemRangeList() << KItemRange(0, 1) << KItemRange(1, 2) << KItemRange(2, 1));
 }
 
@@ -1201,7 +1201,7 @@ void KFileItemModelTest::testGeneralParentChildRelationships()
     QCOMPARE(itemsInModel(), QStringList() << "parent1" << "realChild1" << "parent2" << "realChild2");
     QCOMPARE(itemsRemovedSpy.count(), 1);
     QList<QVariant> arguments = itemsRemovedSpy.takeFirst();
-    KItemRangeList itemRangeList = arguments.at(0).value<KItemRangeList>();
+    KItemRangeList itemRangeList = arguments[0].value<KItemRangeList>();
     QCOMPARE(itemRangeList, KItemRangeList() << KItemRange(2, 3) << KItemRange(7, 3));
 
     // Collapse "parent1".

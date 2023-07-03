@@ -28,9 +28,9 @@
 
 #include <QHash>
 #include <QSet>
+#include <QTimer>
 
 class KFileItemModelDirLister;
-#include <QTimer>
 
 /**
  * @brief KItemModelBase implementation for KFileItems.
