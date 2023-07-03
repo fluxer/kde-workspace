@@ -28,7 +28,6 @@
 #include "dolphinrecenttabsmenu.h"
 #include "dolphinviewcontainer.h"
 #include "dolphintabpage.h"
-#include "panels/folders/folderspanel.h"
 #include "panels/places/placespanel.h"
 #include "panels/information/informationpanel.h"
 #include "settings/dolphinsettingsdialog.h"
@@ -1447,28 +1446,6 @@ void DolphinMainWindow::setupDockWidgets()
     connect(this, SIGNAL(requestItemInfo(KFileItem)),
             infoPanel, SLOT(requestDelayedItemInfo(KFileItem)));
 
-    // Setup "Folders"
-    DolphinDockWidget* foldersDock = new DolphinDockWidget(i18nc("@title:window", "Folders"));
-    foldersDock->setLocked(lock);
-    foldersDock->setObjectName("foldersDock");
-    foldersDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    FoldersPanel* foldersPanel = new FoldersPanel(foldersDock);
-    foldersPanel->setCustomContextMenuActions(QList<QAction*>() << lockLayoutAction);
-    foldersDock->setWidget(foldersPanel);
-
-    QAction* foldersAction = foldersDock->toggleViewAction();
-    createPanelAction(KIcon("folder"), Qt::Key_F7, foldersAction, "show_folders_panel");
-
-    addDockWidget(Qt::LeftDockWidgetArea, foldersDock);
-    connect(this, SIGNAL(urlChanged(KUrl)),
-            foldersPanel, SLOT(setUrl(KUrl)));
-    connect(foldersPanel, SIGNAL(folderActivated(KUrl)),
-            this, SLOT(changeUrl(KUrl)));
-    connect(foldersPanel, SIGNAL(folderMiddleClicked(KUrl)),
-            this, SLOT(openNewTab(KUrl)));
-    connect(foldersPanel, SIGNAL(errorMessage(QString)),
-            this, SLOT(slotPanelErrorMessage(QString)));
-
     // Setup "Terminal"
     DolphinDockWidget* terminalDock = new DolphinDockWidget(i18nc("@title:window Shell terminal", "Terminal"));
     terminalDock->setLocked(lock);
@@ -1492,7 +1469,6 @@ void DolphinMainWindow::setupDockWidgets()
 
     if (GeneralSettings::version() < CurrentDolphinVersion) {
         infoDock->hide();
-        foldersDock->hide();
         terminalDock->hide();
     }
 
@@ -1530,7 +1506,6 @@ void DolphinMainWindow::setupDockWidgets()
     const KActionCollection* ac = actionCollection();
     panelsMenu->addAction(ac->action("show_places_panel"));
     panelsMenu->addAction(ac->action("show_information_panel"));
-    panelsMenu->addAction(ac->action("show_folders_panel"));
     panelsMenu->addAction(ac->action("show_terminal_panel"));
     panelsMenu->addSeparator();
     panelsMenu->addAction(lockLayoutAction);
