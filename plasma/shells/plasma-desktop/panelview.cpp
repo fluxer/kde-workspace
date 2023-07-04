@@ -1463,7 +1463,7 @@ void PanelView::appletAdded(Plasma::Applet *applet)
 
 bool PanelView::shouldHintHide() const
 {
-    return m_visibilityMode == AutoHide && PlasmaApp::hasComposite();
+    return m_visibilityMode == AutoHide && KWindowSystem::compositingActive();
 }
 
 void PanelView::recreateUnhideTrigger()

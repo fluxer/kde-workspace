@@ -217,12 +217,6 @@ Plasma::Corona* PlasmaApp::corona()
     return m_corona;
 }
 
-bool PlasmaApp::hasComposite()
-{
-    return KWindowSystem::compositingActive();
-}
-
-
 void PlasmaApp::storeApplet(Plasma::Applet *applet)
 {
     m_storedApplets.insert(applet->name(), applet->id());

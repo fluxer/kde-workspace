@@ -52,10 +52,8 @@ public:
     int newInstance();
 
     static PlasmaApp* self();
-    static bool hasComposite();
 
     Plasma::Corona* corona();
-
 
 private:
     PlasmaApp();

@@ -59,7 +59,6 @@ public:
     ~PlasmaApp();
 
     static PlasmaApp *self();
-    static bool hasComposite();
 
     void suspendStartup(bool completed);
     DesktopCorona *corona(bool createIfMissing = true);

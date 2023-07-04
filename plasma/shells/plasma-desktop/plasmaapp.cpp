@@ -626,16 +626,6 @@ void PlasmaApp::wallpaperCheckedIn()
     }
 }
 
-bool PlasmaApp::hasComposite()
-{
-//    return true;
-#ifdef Q_WS_X11
-    return KWindowSystem::compositingActive();
-#else
-    return false;
-#endif
-}
-
 void PlasmaApp::suspendStartup(bool suspend)
 {
     org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
