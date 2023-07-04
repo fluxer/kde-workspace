@@ -512,15 +512,10 @@ void KFileItemModel::applyFilters()
     const int itemCount = m_itemData.count();
     for (int index = 0; index < itemCount; ++index) {
         ItemData* itemData = m_itemData.at(index);
-
-        // Only filter non-expanded items as child items may never
-        // exist without a parent item
-        if (!itemData->values.value("isExpanded").toBool()) {
-            const KFileItem item = itemData->item;
-            if (!m_filter.matches(item)) {
-                newFilteredIndexes.append(index);
-                m_filteredItems.insert(item, itemData);
-            }
+        const KFileItem item = itemData->item;
+        if (!m_filter.matches(item)) {
+            newFilteredIndexes.append(index);
+            m_filteredItems.insert(item, itemData);
         }
     }
 
