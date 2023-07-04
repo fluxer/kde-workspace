@@ -20,11 +20,6 @@
 
 #include "plasmaapp.h"
 
-#include <unistd.h>
-
-#include <QPixmapCache>
-#include <QtDBus/QtDBus>
-
 #include <KCrash>
 #include <KColorUtils>
 #include <KDebug>
