@@ -26,14 +26,14 @@
 #include <QHash>
 #include <QList>
 #include <QSet>
+#include <QAction>
+#include <QTimer>
 #include <Solid/Predicate>
 #include <Solid/StorageAccess>
 
 class KBookmark;
 class KBookmarkManager;
 class PlacesItem;
-#include <QAction>
-#include <QTimer>
 
 // #define PLACESITEMMODEL_DEBUG
 
@@ -127,8 +127,8 @@ private slots:
     void slotDeviceAdded(const QString& udi);
     void slotDeviceRemoved(const QString& udi);
     void slotContentChanged(const QString& udi, const bool hascontent);
-    void slotStorageTeardownDone(Solid::ErrorType error, const QVariant& errorData);
-    void slotStorageSetupDone(Solid::ErrorType error, const QVariant& errorData, const QString& udi);
+    void slotStorageTeardownDone(Solid::ErrorType error, const QString& errorData, const QString& udi);
+    void slotStorageSetupDone(Solid::ErrorType error, const QString& errorData, const QString& udi);
     void hideItem();
 
     /**

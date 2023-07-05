@@ -77,7 +77,7 @@ public Q_SLOTS:
     bool openUrl(const QString& url);
 
 private Q_SLOTS:
-    void onSetupDone(Solid::ErrorType error, QVariant errorData, const QString &udi);
+    void onSetupDone(Solid::ErrorType error, const QString &errorData, const QString &udi);
 
 private:
     class Private;

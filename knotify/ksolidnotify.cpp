@@ -119,20 +119,20 @@ void KSolidNotify::connectSignals(Solid::Device* device)
 	Solid::StorageAccess *access = device->as<Solid::StorageAccess>();
 	if (access)
 	{
-		connect(access, SIGNAL(teardownDone(Solid::ErrorType, QVariant, const QString &)),
-					this, SLOT(storageTeardownDone(Solid::ErrorType, QVariant , const QString &)));
-		connect(access, SIGNAL(setupDone(Solid::ErrorType, QVariant, const QString &)),
-					this, SLOT(storageSetupDone(Solid::ErrorType, QVariant , const QString &)));
+		connect(access, SIGNAL(teardownDone(Solid::ErrorType, const QString&, const QString &)),
+					this, SLOT(storageTeardownDone(Solid::ErrorType, const QString& , const QString &)));
+		connect(access, SIGNAL(setupDone(Solid::ErrorType, const QString&, const QString &)),
+					this, SLOT(storageSetupDone(Solid::ErrorType, const QString& , const QString &)));
 	}	
 	if (device->is<Solid::OpticalDisc>())
 	{
 		Solid::OpticalDrive *drive = device->as<Solid::OpticalDrive>();
-		connect(drive, SIGNAL(ejectDone(Solid::ErrorType, QVariant, const QString &)),
-				this, SLOT(storageEjectDone(Solid::ErrorType, QVariant , const QString &)));
+		connect(drive, SIGNAL(ejectDone(Solid::ErrorType, const QString&, const QString &)),
+				this, SLOT(storageEjectDone(Solid::ErrorType, const QString& , const QString &)));
 	}
 }
 
-void KSolidNotify::notifySolidEvent(QString event, Solid::ErrorType error, QVariant errorData, const QString & udi, const QString & errorMessage)
+void KSolidNotify::notifySolidEvent(QString event, Solid::ErrorType error, const QString &errorData, const QString & udi, const QString & errorMessage)
 {
 	ContextList context;
 	if (m_dbusServiceExists)
@@ -141,7 +141,7 @@ void KSolidNotify::notifySolidEvent(QString event, Solid::ErrorType error, QVari
 		if (mountConfig.readEntry("Action").split('|').contains("Popup"))
 		{
 			QDBusMessage m = QDBusMessage::createMethodCall( dbusDeviceNotificationsName, dbusDeviceNotificationsPath, dbusDeviceNotificationsName, "notify" );
-			m << error << errorMessage << errorData.toString().simplified() << udi;
+			m << error << errorMessage << errorData.simplified() << udi;
 			QDBusConnection::sessionBus().call(m);
 		}
 	context << QPair<QString, QString>("devnotifier", "present");
@@ -151,7 +151,7 @@ void KSolidNotify::notifySolidEvent(QString event, Solid::ErrorType error, QVari
 
 }
 
-void KSolidNotify::storageSetupDone(Solid::ErrorType error, QVariant errorData, const QString &udi)
+void KSolidNotify::storageSetupDone(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
 	if (error)
 	{
@@ -161,7 +161,7 @@ void KSolidNotify::storageSetupDone(Solid::ErrorType error, QVariant errorData, 
 	}
 }
 
-void KSolidNotify::storageTeardownDone(Solid::ErrorType error, QVariant errorData, const QString &udi)
+void KSolidNotify::storageTeardownDone(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
 	if (error)
 	{
@@ -175,7 +175,7 @@ void KSolidNotify::storageTeardownDone(Solid::ErrorType error, QVariant errorDat
 	}
 }
 
-void KSolidNotify::storageEjectDone(Solid::ErrorType error, QVariant errorData, const QString &udi)
+void KSolidNotify::storageEjectDone(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
 	if (error)
 	{

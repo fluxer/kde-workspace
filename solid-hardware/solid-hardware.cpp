@@ -369,23 +369,23 @@ bool SolidHardware::hwVolumeCall(SolidHardware::VolumeCallType type, const QStri
     {
     case Mount:
         connect(device.as<Solid::StorageAccess>(),
-                SIGNAL(setupDone(Solid::ErrorType, QVariant, const QString &)),
+                SIGNAL(setupDone(Solid::ErrorType, const QString &, const QString &)),
                 this,
-                SLOT(slotStorageResult(Solid::ErrorType, QVariant)));
+                SLOT(slotStorageResult(Solid::ErrorType, const QString &, const QString &)));
         device.as<Solid::StorageAccess>()->setup();
         break;
     case Unmount:
         connect(device.as<Solid::StorageAccess>(),
-                SIGNAL(teardownDone(Solid::ErrorType, QVariant, const QString &)),
+                SIGNAL(teardownDone(Solid::ErrorType, const QString &, const QString &)),
                 this,
-                SLOT(slotStorageResult(Solid::ErrorType, QVariant)));
+                SLOT(slotStorageResult(Solid::ErrorType, const QString &, const QString &)));
         device.as<Solid::StorageAccess>()->teardown();
         break;
     case Eject:
         connect(device.as<Solid::OpticalDrive>(),
-                SIGNAL(ejectDone(Solid::ErrorType, QVariant, const QString &)),
+                SIGNAL(ejectDone(Solid::ErrorType, const QString &, const QString &)),
                 this,
-                SLOT(slotStorageResult(Solid::ErrorType, QVariant)));
+                SLOT(slotStorageResult(Solid::ErrorType, const QString &, const QString &)));
         device.as<Solid::OpticalDrive>()->eject();
         break;
     }
@@ -428,11 +428,12 @@ void SolidHardware::deviceRemoved(const QString &udi)
     std::cout << "udi = '" << udi << "'" << std::endl;
 }
 
-void SolidHardware::slotStorageResult(Solid::ErrorType error, const QVariant &errorData)
+void SolidHardware::slotStorageResult(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
+    Q_UNUSED(udi);
     if (error) {
         m_error = 1;
-        m_errorString = errorData.toString();
+        m_errorString = errorData;
     }
     m_loop.exit();
 }

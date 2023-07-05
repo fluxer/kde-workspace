@@ -545,20 +545,20 @@ void SolidDeviceEngine::deviceAdded(const QString& udi)
         if (drive) {
             connect(drive, SIGNAL(ejectRequested(QString)),
                     this, SLOT(setUnmountingState(QString)));
-            connect(drive, SIGNAL(ejectDone(Solid::ErrorType,QVariant,QString)),
-                    this, SLOT(setIdleState(Solid::ErrorType,QVariant,QString)));
+            connect(drive, SIGNAL(ejectDone(Solid::ErrorType,QString,QString)),
+                    this, SLOT(setIdleState(Solid::ErrorType,QString,QString)));
         }
     } else if (device.is<Solid::StorageVolume>()) {
         Solid::StorageAccess *access = device.as<Solid::StorageAccess>();
         if (access) {
             connect(access, SIGNAL(setupRequested(QString)),
                     this, SLOT(setMountingState(QString)));
-            connect(access, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
-                    this, SLOT(setIdleState(Solid::ErrorType,QVariant,QString)));
+            connect(access, SIGNAL(setupDone(Solid::ErrorType,QString,QString)),
+                    this, SLOT(setIdleState(Solid::ErrorType,QString,QString)));
             connect(access, SIGNAL(teardownRequested(QString)),
                     this, SLOT(setUnmountingState(QString)));
-            connect(access, SIGNAL(teardownDone(Solid::ErrorType,QVariant,QString)),
-                    this, SLOT(setIdleState(Solid::ErrorType,QVariant,QString)));
+            connect(access, SIGNAL(teardownDone(Solid::ErrorType,QString,QString)),
+                    this, SLOT(setIdleState(Solid::ErrorType,QString,QString)));
         }
     }
 }
@@ -575,7 +575,7 @@ void SolidDeviceEngine::setUnmountingState(const QString &udi)
     setData(udi, I18N_NOOP("Operation result"), Working);
 }
 
-void SolidDeviceEngine::setIdleState(Solid::ErrorType error, QVariant errorData, const QString &udi)
+void SolidDeviceEngine::setIdleState(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
     Q_UNUSED(errorData)
 

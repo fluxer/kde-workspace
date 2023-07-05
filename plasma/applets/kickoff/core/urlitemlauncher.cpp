@@ -114,8 +114,8 @@ bool UrlItemLauncher::openItem(const QModelIndex& index)
             Solid::StorageAccess *access = device.as<Solid::StorageAccess>();
 
             if (access && !access->isAccessible()) {
-                connect(access, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
-                        this, SLOT(onSetupDone(Solid::ErrorType,QVariant,QString)));
+                connect(access, SIGNAL(setupDone(Solid::ErrorType,QString,QString)),
+                        this, SLOT(onSetupDone(Solid::ErrorType,QString,QString)));
                 access->setup();
                 return true;
             }
@@ -133,7 +133,7 @@ bool UrlItemLauncher::openUrl(const QString& url)
     return Private::openUrl(url);
 }
 
-void UrlItemLauncher::onSetupDone(Solid::ErrorType error, QVariant errorData, const QString &udi)
+void UrlItemLauncher::onSetupDone(Solid::ErrorType error, const QString &errorData, const QString &udi)
 {
     Q_UNUSED(errorData);
 

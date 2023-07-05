@@ -296,8 +296,8 @@ void PlacesItemModel::requestEject(int index)
     if (item) {
         Solid::OpticalDrive* drive = item->device().as<Solid::OpticalDrive>();
         if (drive) {
-            connect(drive, SIGNAL(ejectDone(Solid::ErrorType,QVariant,QString)),
-                    this, SLOT(slotStorageTeardownDone(Solid::ErrorType,QVariant)));
+            connect(drive, SIGNAL(ejectDone(Solid::ErrorType,QString,QString)),
+                    this, SLOT(slotStorageTeardownDone(Solid::ErrorType,QString,QString)));
             drive->eject();
         } else {
             const QString label = item->text();
@@ -313,8 +313,8 @@ void PlacesItemModel::requestTeardown(int index)
     if (item) {
         Solid::StorageAccess* access = item->device().as<Solid::StorageAccess>();
         if (access) {
-            connect(access, SIGNAL(teardownDone(Solid::ErrorType,QVariant,QString)),
-                    this, SLOT(slotStorageTeardownDone(Solid::ErrorType,QVariant)));
+            connect(access, SIGNAL(teardownDone(Solid::ErrorType,QString,QString)),
+                    this, SLOT(slotStorageTeardownDone(Solid::ErrorType,QString,QString)));
             access->teardown();
         }
     }
@@ -342,8 +342,8 @@ void PlacesItemModel::requestStorageSetup(int index)
 
         m_storageSetupInProgress[access] = index;
 
-        connect(access, SIGNAL(setupDone(Solid::ErrorType,QVariant,QString)),
-                this, SLOT(slotStorageSetupDone(Solid::ErrorType,QVariant,QString)));
+        connect(access, SIGNAL(setupDone(Solid::ErrorType,QString,QString)),
+                this, SLOT(slotStorageSetupDone(Solid::ErrorType,QString,QString)));
 
         access->setup();
     }
@@ -568,15 +568,19 @@ void PlacesItemModel::slotContentChanged(const QString& udi, const bool hasconte
     }
 }
 
-void PlacesItemModel::slotStorageTeardownDone(Solid::ErrorType error, const QVariant& errorData)
+void PlacesItemModel::slotStorageTeardownDone(Solid::ErrorType error,
+                                              const QString& errorData,
+                                              const QString& udi)
 {
-    if (error && errorData.isValid()) {
-        emit errorMessage(errorData.toString());
+    Q_UNUSED(udi);
+
+    if (error && !errorData.isEmpty()) {
+        emit errorMessage(errorData);
     }
 }
 
 void PlacesItemModel::slotStorageSetupDone(Solid::ErrorType error,
-                                           const QVariant& errorData,
+                                           const QString& errorData,
                                            const QString& udi)
 {
     Q_UNUSED(udi);
@@ -588,10 +592,10 @@ void PlacesItemModel::slotStorageSetupDone(Solid::ErrorType error,
     }
 
     if (error) {
-        if (errorData.isValid()) {
+        if (!errorData.isEmpty()) {
             emit errorMessage(i18nc("@info", "An error occurred while accessing '%1', the system responded: %2",
                                     item->text(),
-                                    errorData.toString()));
+                                    errorData));
         } else {
             emit errorMessage(i18nc("@info", "An error occurred while accessing '%1'",
                                     item->text()));

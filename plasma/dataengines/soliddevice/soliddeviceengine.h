@@ -90,7 +90,7 @@ private Q_SLOTS:
     void sourceWasRemoved(const QString &source);
     void setMountingState(const QString &udi);
     void setUnmountingState(const QString &udi);
-    void setIdleState(Solid::ErrorType error, QVariant errorData, const QString &udi);
+    void setIdleState(Solid::ErrorType error, const QString &errorData, const QString &udi);
     void deviceContentChanged(const QString &udi, const bool hascontent);
 };
 

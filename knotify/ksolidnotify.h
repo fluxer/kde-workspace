@@ -52,16 +52,16 @@ class KSolidNotify : public QObject
 
 	private slots:
 
-		void storageEjectDone(Solid::ErrorType error, QVariant errorData, const QString & udi);
-		void storageTeardownDone(Solid::ErrorType error, QVariant errorData, const QString & udi);
-		void storageSetupDone(Solid::ErrorType error, QVariant errorData, const QString & udi);
+		void storageEjectDone(Solid::ErrorType error, const QString &errorData, const QString &udi);
+		void storageTeardownDone(Solid::ErrorType error, const QString &errorData, const QString &udi);
+		void storageSetupDone(Solid::ErrorType error, const QString &errorData, const QString &udi);
 
 		void slotServiceOwnerChanged(const QString &, const QString &, const QString &);
 
 	private:
 		void connectSignals(Solid::Device* device);
 		bool isSafelyRemovable(const QString &udi);
-		void notifySolidEvent(QString event, Solid::ErrorType error, QVariant errorData, const QString & udi, const QString & errorMessage);
+		void notifySolidEvent(QString event, Solid::ErrorType error, const QString &errorData, const QString & udi, const QString & errorMessage);
 
 		KNotify* m_kNotify;
 		QHash<QString, Solid::Device> m_devices;

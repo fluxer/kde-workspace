@@ -48,7 +48,7 @@ public:
     DelayedExecutor(const KServiceAction &service, Solid::Device &device);
 
 private slots:
-    void _k_storageSetupDone(Solid::ErrorType error, QVariant errorData, const QString &udi);
+    void _k_storageSetupDone(Solid::ErrorType error, const QString &errorData, const QString &udi);
 
 private:
     void delayedExecute(const QString &udi);
@@ -77,7 +77,7 @@ void DeviceServiceAction::execute(Solid::Device &device)
     new DelayedExecutor(m_service, device);
 }
 
-void DelayedExecutor::_k_storageSetupDone(Solid::ErrorType error, QVariant errorData,
+void DelayedExecutor::_k_storageSetupDone(Solid::ErrorType error, const QString &errorData,
                                           const QString &udi)
 {
     Q_UNUSED(errorData);
@@ -144,8 +144,8 @@ DelayedExecutor::DelayedExecutor(const KServiceAction &service, Solid::Device &d
      && !device.as<Solid::StorageAccess>()->isAccessible()) {
         Solid::StorageAccess *access = device.as<Solid::StorageAccess>();
 
-        connect(access, SIGNAL(setupDone(Solid::ErrorType, QVariant, const QString &)),
-                this, SLOT(_k_storageSetupDone(Solid::ErrorType, QVariant, const QString &)));
+        connect(access, SIGNAL(setupDone(Solid::ErrorType, const QString &, const QString &)),
+                this, SLOT(_k_storageSetupDone(Solid::ErrorType, const QString &, const QString &)));
 
         access->setup();
 
