@@ -321,7 +321,7 @@ void Processes::processesUpdated() {
 
     {
         QMutableSetIterator<long> i(d->mToBeProcessed);
-        while( i.hasNext()) {
+        while(i.hasNext()) {
             pid = i.next();
             i.remove();
             d->mProcessedLastTime.remove(pid); //It may or may not be here - remove it if it is there
@@ -360,9 +360,13 @@ void Processes::deleteProcess(long pid)
     Process *process = d->mProcesses.value(pid);
     if(!process)
         return;
-    Q_FOREACH(const Process *it, process->children) {
-        d->mProcessedLastTime.remove(it->pid);
-        deleteProcess(it->pid);
+    {
+        QListIterator<Process *> i(process->children);
+        while (i.hasNext()) {
+            const Process *it = i.next();
+            d->mProcessedLastTime.remove(it->pid);
+            deleteProcess(it->pid);
+        }
     }
 
     emit beginRemoveProcess(process);
