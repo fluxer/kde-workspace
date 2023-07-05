@@ -949,6 +949,7 @@
     <item> QMimeData </item>
     <item> QMimeSource </item>
     <item> QModelIndex </item>
+    <item> QModelIndexList </item>
     <item> QMotifStyle </item>
     <item> QMouseDriverFactory </item>
     <item> QMouseDriverPlugin </item>
