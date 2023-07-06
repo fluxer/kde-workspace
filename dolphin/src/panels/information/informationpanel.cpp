@@ -272,25 +272,6 @@ void InformationPanel::slotFilesRemoved(const QStringList& files)
     }
 }
 
-void InformationPanel::slotEnteredDirectory(const QString& directory)
-{
-    if (m_shownUrl == KUrl(directory)) {
-        KFileItem item(KFileItem::Unknown, KFileItem::Unknown, KUrl(directory));
-        requestDelayedItemInfo(item);
-    }
-}
-
-void InformationPanel::slotLeftDirectory(const QString& directory)
-{
-    if (m_shownUrl == KUrl(directory)) {
-        // The signal 'leftDirectory' is also emitted when a media
-        // has been unmounted. In this case no directory change will be
-        // done in Dolphin, but the Information Panel must be updated to
-        // indicate an invalid directory.
-        markUrlAsInvalid();
-    }
-}
-
 void InformationPanel::cancelRequest()
 {
     delete m_folderStatJob;
@@ -353,8 +334,6 @@ void InformationPanel::init()
     connect(dirNotify, SIGNAL(FilesAdded(QString)), SLOT(slotFilesAdded(QString)));
     connect(dirNotify, SIGNAL(FilesChanged(QStringList)), SLOT(slotFilesChanged(QStringList)));
     connect(dirNotify, SIGNAL(FilesRemoved(QStringList)), SLOT(slotFilesRemoved(QStringList)));
-    connect(dirNotify, SIGNAL(enteredDirectory(QString)), SLOT(slotEnteredDirectory(QString)));
-    connect(dirNotify, SIGNAL(leftDirectory(QString)), SLOT(slotLeftDirectory(QString)));
 
     m_initialized = true;
 }
