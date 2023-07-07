@@ -53,18 +53,19 @@ bool DictEngine::sourceRequestEvent(const QString &query)
         return true;
     }
 
-    m_data.clear();
     const KUrl queryurl = QString::fromLatin1("https://api.dictionaryapi.dev/api/v2/entries/en/") + queryword;
-    KIO::TransferJob *kiojob = KIO::get(queryurl, KIO::Reload, KIO::HideProgressInfo);
-    connect(kiojob, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(slotKIOData(KIO::Job*,QByteArray)));
+    KIO::StoredTransferJob *kiojob = KIO::storedGet(queryurl, KIO::Reload, KIO::HideProgressInfo);
+    kiojob->setAutoDelete(false);
     const bool kioresult = KIO::NetAccess::synchronousRun(kiojob, nullptr);
     if (!kioresult) {
         kWarning() << "KIO job failed";
         setError(query, QLatin1String("Cannot get meaning"));
+        kiojob->deleteLater();
         return true;
     }
 
-    const QJsonDocument jsondocument = QJsonDocument::fromJson(m_data);
+    const QJsonDocument jsondocument = QJsonDocument::fromJson(kiojob->data());
+    kiojob->deleteLater();
     if (jsondocument.isNull()) {
         kWarning() << jsondocument.errorString();
         setError(query, QLatin1String("Cannot parse JSON"));
@@ -99,12 +100,6 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     setData(query, QString("text"), meaning);
     setData(QString("list-dictionaries"), QString("dictionaries"), QString("en"));
     return true;
-}
-
-void DictEngine::slotKIOData(KIO::Job *kiojob, const QByteArray &kiodata)
-{
-    Q_UNUSED(kiojob);
-    m_data.append(kiodata);
 }
 
 void DictEngine::setError(const QString &query, const QString &message)

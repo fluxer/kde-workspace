@@ -38,13 +38,8 @@ class DictEngine: public Plasma::DataEngine
     protected:
         bool sourceRequestEvent(const QString &word);
 
-    private Q_SLOTS:
-        void slotKIOData(KIO::Job *kiojob, const QByteArray &kiodata);
-
     private:
         void setError(const QString &query, const QString &message);
-
-        QByteArray m_data;
 };
 
 K_EXPORT_PLASMA_DATAENGINE(dict, DictEngine)
