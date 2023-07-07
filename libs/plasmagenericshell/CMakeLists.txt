@@ -4,10 +4,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
 
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
-
 set(appletbrowserdialog_SRCS
     widgetsexplorer/kcategorizeditemsviewmodels.cpp
     widgetsexplorer/plasmaappletitemmodel.cpp
@@ -51,10 +47,7 @@ target_link_libraries(plasmagenericshell PUBLIC
     ${QT_QTUITOOLS_LIBRARY}
     kworkspace
 )
-
-if(Q_WS_X11)
-    target_link_libraries(plasmagenericshell PRIVATE ${X11_LIBRARIES})
-endif(Q_WS_X11)
+target_link_libraries(plasmagenericshell PRIVATE ${X11_LIBRARIES})
 
 set_target_properties(plasmagenericshell PROPERTIES
     VERSION ${GENERIC_LIB_VERSION}
