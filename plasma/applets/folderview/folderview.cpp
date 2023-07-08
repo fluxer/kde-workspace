@@ -472,9 +472,13 @@ void FolderView::init()
 
 void FolderView::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
-    if (status == KNetworkManager::ConnectedStatus
-        && KProtocolInfo::protocolClass(m_url.protocol()) != ":local") {
-        m_dirLister->openUrl(m_url);
+    if (KProtocolInfo::protocolClass(m_url.protocol()) != ":local") {
+        if (status == KNetworkManager::ConnectedStatus) {
+            m_dirLister->openUrl(m_url);
+        } else {
+            QString networkStatus(i18n("Network is not reachable"));
+            showMessage(KIcon("dialog-warning"), networkStatus, Plasma::ButtonOk);
+        }
     }
 }
 
