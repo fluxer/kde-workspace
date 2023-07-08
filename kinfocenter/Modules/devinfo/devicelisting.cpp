@@ -27,10 +27,6 @@
 DeviceListing::DeviceListing(QWidget *parent, InfoPanel *info, DevInfoPlugin *stat) : 
   QTreeWidget(parent), iPanel(info), status(stat) 
 {  
-//     // Check nic changes
-//    nicSig = new NicSignals();
-//    connect(nicSig,SIGNAL(nicActivatedOrDisconnected()),this,SLOT(networkingChangedSlot()));
-//
     // Check if clicked
     connect(this,SIGNAL(itemActivated(QTreeWidgetItem*,int)),this,SLOT(itemActivatedSlot(QTreeWidgetItem*,int)));
     
@@ -236,15 +232,4 @@ void DeviceListing::showAllDevicesSlot()
 void DeviceListing::showRelevantDevicesSlot() 
 { 
   populateListing(RELEVANT);
-}
-
-void DeviceListing::networkingChangedSlot() 
-{ 
-  QTreeWidgetItemIterator treeWidget(this);
-  while (*treeWidget) 
-  {
-    SolDevice *item = static_cast<SolDevice *>(*treeWidget);
-    if(item->deviceType() == Solid::DeviceInterface::NetworkInterface) item->refreshName();
-    ++treeWidget;
-  } 
 }

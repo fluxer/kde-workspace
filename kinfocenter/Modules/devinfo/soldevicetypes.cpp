@@ -208,8 +208,7 @@ void SolNetworkDevice::setDefaultListing(const Solid::DeviceInterface::Type &typ
 }
 
 void SolNetworkDevice::setDefaultDeviceText() 
-{    
-  QString actTog = i18n("Connected");
+{
   const Solid::NetworkInterface *netdev = interface<const Solid::NetworkInterface>(); 
   if(!netdev) return;
   
