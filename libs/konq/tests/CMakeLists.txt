@@ -40,10 +40,10 @@ kde4_add_test(libkonq-favicontest ${favicontest_SRCS})
 target_link_libraries(libkonq-favicontest
     KDE4::kdecore
     KDE4::kio
+    KDE4::knetworkmanager
     ${QT_QTCORE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     ${QT_QTDBUS_LIBRARY}
     ${QT_QTTEST_LIBRARY}
-    KDE4::solid
     konq
 )

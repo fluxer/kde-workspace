@@ -22,7 +22,7 @@
 #include <kmimetype.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <solid/networking.h>
+#include <knetworkmanager.h>
 
 #include <QImageReader>
 #include <QElapsedTimer>
@@ -69,7 +69,8 @@ FavIconTest::FavIconTest()
 
 void FavIconTest::initTestCase()
 {
-    if (Solid::Networking::status() != Solid::Networking::Connected) {
+    KNetworkManager knetworkmanager;
+    if (knetworkmanager.status() != KNetworkManager::ConnectedStatus) {
         QSKIP("Network status is not connected", SkipAll);
     }
 

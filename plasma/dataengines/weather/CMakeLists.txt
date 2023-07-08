@@ -8,7 +8,7 @@ SET(weather_SRCS weatherengine.cpp)
 kde4_add_plugin(plasma_engine_weather ${weather_SRCS})
 TARGET_LINK_LIBRARIES(plasma_engine_weather
     KDE4::kio
-    KDE4::solid
+    KDE4::knetworkmanager
     KDE4::plasma
     weather_ion
 )

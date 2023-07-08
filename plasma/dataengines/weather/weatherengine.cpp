@@ -34,10 +34,13 @@
 
 // Constructor
 WeatherEngine::WeatherEngine(QObject *parent, const QVariantList& args)
-        :  Plasma::DataEngine(parent, args),
-           m_networkAvailable(false)
+    :  Plasma::DataEngine(parent, args),
+    m_networkAvailable(false),
+    m_networkManager(nullptr)
 {
     Q_UNUSED(args)
+
+    m_networkManager = new KNetworkManager(this);
 
     m_reconnectTimer.setSingleShot(true);
     connect(&m_reconnectTimer, SIGNAL(timeout()), this, SLOT(startReconnect()));
@@ -97,12 +100,16 @@ void WeatherEngine::unloadIon(const QString &name)
 void WeatherEngine::init()
 {
     // Get the list of available plugins but don't load them
-    Solid::Networking::Status status = Solid::Networking::status();
-    m_networkAvailable = (status == Solid::Networking::Connected ||
-                             status == Solid::Networking::Unknown);
-    connect(Solid::Networking::notifier(), SIGNAL(statusChanged(Solid::Networking::Status)),
-            this, SLOT(networkStatusChanged(Solid::Networking::Status)));
-    connect(KSycoca::self(), SIGNAL(databaseChanged(QStringList)), this, SLOT(updateIonList(QStringList)));
+    KNetworkManager::KNetworkStatus status = m_networkManager->status();
+    m_networkAvailable = (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus);
+    connect(
+        m_networkManager, SIGNAL(statusChanged(KNetworkManager::KNetworkStatus)),
+        this, SLOT(networkStatusChanged(KNetworkManager::KNetworkStatus))
+    );
+    connect(
+        KSycoca::self(), SIGNAL(databaseChanged(QStringList)),
+        this, SLOT(updateIonList(QStringList))
+    );
 
     updateIonList();
     kDebug() << "init()";
@@ -217,10 +224,10 @@ bool WeatherEngine::updateSourceEvent(const QString& source)
     return ion->updateSourceEvent(source);
 }
 
-void WeatherEngine::networkStatusChanged(Solid::Networking::Status status)
+void WeatherEngine::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
     kDebug() << status;
-    m_networkAvailable = status == Solid::Networking::Connected || status == Solid::Networking::Unknown;
+    m_networkAvailable = (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus);
     if (m_networkAvailable) {
         // allow the network to settle down and actually come up
         m_reconnectTimer.start(5000);

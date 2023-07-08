@@ -26,11 +26,11 @@
 #include <QStyleOption>
 #include <QPointer>
 #include <QBasicTimer>
+#include <QItemSelectionModel>
 
 #include <KActionCollection>
 #include <KMimeType>
-
-#include <Solid/Networking>
+#include <KNetworkManager>
 
 #include <plasma/containment.h>
 
@@ -50,7 +50,6 @@ class KFilePreviewGenerator;
 class KNewFileMenu;
 class KFileItemActions;
 class KJob;
-#include <QItemSelectionModel>
 class FolderView;
 class ProxyModel;
 class IconView;
@@ -158,7 +157,7 @@ protected slots:
     void showPreviewConfigDialog();
 
 private slots:
-    void networkAvailable();
+    void networkStatusChanged(const KNetworkManager::KNetworkStatus status);
     void setTitleEditEnabled(int);
 
 private:
@@ -232,6 +231,7 @@ private:
     IconView::Alignment m_alignment;
     QBasicTimer m_delayedSaveTimer;
     DirLister *m_dirLister;
+    KNetworkManager *m_networkManager;
 };
 
 

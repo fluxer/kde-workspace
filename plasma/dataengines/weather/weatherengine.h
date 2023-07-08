@@ -22,8 +22,7 @@
 
 #include <QTimer>
 
-#include <Solid/Networking>
-
+#include <KNetworkManager>
 #include <Plasma/DataEngine>
 
 #include "ions/ion.h"
@@ -101,7 +100,7 @@ protected Q_SLOTS:
     /**
      * Whenever networking changes, take action
      */
-    void networkStatusChanged(Solid::Networking::Status);
+    void networkStatusChanged(const KNetworkManager::KNetworkStatus status);
     void startReconnect();
 
     /**
@@ -130,6 +129,7 @@ private:
     QStringList m_ions;
     bool m_networkAvailable;
     QTimer m_reconnectTimer;
+    KNetworkManager* m_networkManager;
 };
 
 K_EXPORT_PLASMA_DATAENGINE(weather, WeatherEngine)

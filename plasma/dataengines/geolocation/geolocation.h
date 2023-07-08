@@ -21,7 +21,7 @@
 #include <QTimer>
 
 #include <Plasma/DataEngine>
-#include <Solid/Networking>
+#include <KNetworkManager>
 
 #include "geolocationprovider.h"
 
@@ -43,7 +43,7 @@ class Geolocation : public Plasma::DataEngine
         bool updatePlugins(GeolocationProvider::UpdateTriggers triggers);
 
     protected slots:
-        void networkStatusChanged();
+        void networkStatusChanged(const KNetworkManager::KNetworkStatus status);
         void pluginAvailabilityChanged(GeolocationProvider *provider);
         void pluginUpdated();
         void actuallySetData();
@@ -53,6 +53,7 @@ class Geolocation : public Plasma::DataEngine
         EntryAccuracy m_accuracy;
         QList<GeolocationProvider *> m_plugins;
         QTimer m_updateTimer;
+        KNetworkManager *m_networkManager;
 };
 
 K_EXPORT_PLASMA_DATAENGINE(geolocation, Geolocation)

@@ -39,7 +39,7 @@ target_link_libraries(plasma_engine_geolocation
     KDE4::plasma
     KDE4::kdecore
     KDE4::kio
-    KDE4::solid
+    KDE4::knetworkmanager
 )
 
 install(TARGETS plasma_engine_geolocation DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})

@@ -25,12 +25,16 @@
 static const char SOURCE[] = "location";
 
 Geolocation::Geolocation(QObject* parent, const QVariantList& args)
-    : Plasma::DataEngine(parent, args)
+    : Plasma::DataEngine(parent, args),
+    m_networkManager(nullptr)
 {
     Q_UNUSED(args)
     setMinimumPollingInterval(500);
-    connect(Solid::Networking::notifier(), SIGNAL(statusChanged(Solid::Networking::Status)),
-            this, SLOT(networkStatusChanged()));
+    m_networkManager = new KNetworkManager(this);
+    connect(
+        m_networkManager, SIGNAL(statusChanged(KNetworkManager::KNetworkStatus)),
+        this, SLOT(networkStatusChanged(KNetworkManager::KNetworkStatus))
+    );
     m_updateTimer.setInterval(100);
     m_updateTimer.setSingleShot(true);
     connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(actuallySetData()));
@@ -104,11 +108,10 @@ bool Geolocation::sourceRequestEvent(const QString &name)
     return false;
 }
 
-void Geolocation::networkStatusChanged()
+void Geolocation::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
     kDebug() << "network status changed";
-    const Solid::Networking::Status netStatus = Solid::Networking::status();
-    if ((netStatus == Solid::Networking::Connected) || (netStatus == Solid::Networking::Unknown)) {
+    if (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus) {
         updatePlugins(GeolocationProvider::NetworkConnected);
     }
 }

@@ -315,17 +315,18 @@ static Qt::SortOrder sortOrderStringToEnum(const QString& order)
 
 FolderView::FolderView(QObject *parent, const QVariantList &args)
     : Plasma::Containment(parent, args),
-      m_previewGenerator(0),
-      m_placesModel(0),
+      m_previewGenerator(nullptr),
+      m_placesModel(nullptr),
       m_itemActions(new KFileItemActions(this)),
-      m_openWithAction(0),
-      m_iconView(0),
-      m_listView(0),
-      m_label(0),
-      m_iconWidget(0),
-      m_dialog(0),
-      m_newMenu(0),
-      m_actionCollection(this)
+      m_openWithAction(nullptr),
+      m_iconView(nullptr),
+      m_listView(nullptr),
+      m_label(nullptr),
+      m_iconWidget(nullptr),
+      m_dialog(nullptr),
+      m_newMenu(nullptr),
+      m_actionCollection(this),
+      m_networkManager(nullptr)
 {
     setAspectRatioMode(Plasma::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
@@ -368,7 +369,11 @@ void FolderView::init()
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(plasmaThemeChanged()));
 
     // Find out about network availability changes
-    connect(Solid::Networking::notifier(), SIGNAL(shouldConnect()), SLOT(networkAvailable()));
+    m_networkManager = new KNetworkManager(this);
+    connect(
+        m_networkManager, SIGNAL(statusChanged(KNetworkManager::KNetworkStatus)),
+        this, SLOT(networkStatusChanged(KNetworkManager::KNetworkStatus))
+    );
 
     // Find out which thumbnail plugins are enabled by default
     QStringList enabledByDefault;
@@ -465,9 +470,10 @@ void FolderView::init()
     */
 }
 
-void FolderView::networkAvailable()
+void FolderView::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
-    if (KProtocolInfo::protocolClass(m_url.protocol()) != ":local") {
+    if (status == KNetworkManager::ConnectedStatus
+        && KProtocolInfo::protocolClass(m_url.protocol()) != ":local") {
         m_dirLister->openUrl(m_url);
     }
 }
@@ -1411,9 +1417,10 @@ void FolderView::setUrl(const KUrl &url)
 
     if (KProtocolInfo::protocolClass(m_url.protocol()) == ":local") {
         m_dirLister->openUrl(m_url);
-    } else if (Solid::Networking::status() == Solid::Networking::Connected) {
+    } else if (m_networkManager->status() != KNetworkManager::ConnectedStatus) {
         QString networkStatus(i18n("Network is not reachable"));
         showMessage(KIcon("dialog-warning"), networkStatus, Plasma::ButtonOk);
+    } else {
         m_dirLister->openUrl(m_url);
     }
 

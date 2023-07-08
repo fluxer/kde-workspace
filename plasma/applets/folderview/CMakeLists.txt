@@ -36,7 +36,7 @@ target_link_libraries(plasma_applet_folderview
     KDE4::plasma
     KDE4::kio
     KDE4::kfile
-    KDE4::solid
+    KDE4::knetworkmanager
     ${X11_LIBRARIES}
     konq
 )
