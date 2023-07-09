@@ -29,6 +29,7 @@
 #include <kmimetype.h>
 #include <krandom.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <kdebug.h>
 
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
@@ -73,12 +74,37 @@ static QString getTitle(const QString &dirpath)
     return title;
 }
 
+// for reference:
+// https://www.w3schools.com/css/css_link.asp
+static QByteArray styleSheetForPalette(const QPalette &palette)
+{
+    QByteArray stylesheet;
+    const QByteArray foregroundcolor = palette.color(QPalette::Active, QPalette::Foreground).name().toLatin1();
+    const QByteArray backgroundcolor = palette.color(QPalette::Active, QPalette::Background).name().toLatin1();
+    stylesheet.append("body {\n");
+    stylesheet.append("  color: " + foregroundcolor + ";\n");
+    stylesheet.append("  background-color: " + backgroundcolor + ";\n");
+    stylesheet.append("}\n");
+    const QByteArray linkcolor = palette.color(QPalette::Active, QPalette::Link).name().toLatin1();
+    stylesheet.append("a:link {\n");
+    stylesheet.append("  color: " + linkcolor + ";\n");
+    stylesheet.append("}\n");
+    const QByteArray visitedlinkcolor = palette.color(QPalette::Active, QPalette::LinkVisited).name().toLatin1();
+    stylesheet.append("a:visited {\n");
+    stylesheet.append("  color: " + visitedlinkcolor + ";\n");
+    stylesheet.append("}\n");
+    return stylesheet;
+}
+
 static QByteArray contentForDirectory(const QString &path, const QString &basedir)
 {
     const QString pathtitle = getTitle(path);
 
     QByteArray data;
     data.append("<html>\n");
+    data.append("  <head>\n");
+    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">");
+    data.append("  </head>\n");
     data.append("  <body>\n");
     data.append("    <title>");
     data.append(pathtitle.toUtf8());
@@ -197,6 +223,10 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
             *outhttpstatus = 200;
             outheaders->insert("Content-Type", iconmime);
         }
+    } else if (normalizedpath == QLatin1String("/kdirsharestyle.css")) {
+        *outhttpstatus = 200;
+        outheaders->insert("Content-Type", "text/css");
+        outdata->append(styleSheetForPalette(KGlobalSettings::createApplicationPalette()));
     } else if (pathinfo.isDir()) {
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
