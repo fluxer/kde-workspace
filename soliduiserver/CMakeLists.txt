@@ -31,4 +31,4 @@ install(FILES soliduiserver.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kde
 
 install(TARGETS soliduiserver_helper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
 
-kde4_install_auth_helper_files(soliduiserver_helper org.kde.soliduiserver.mountunmounthelper root)
+kde4_install_auth_helper_files(soliduiserver_helper org.kde.soliduiserver.mountunmounthelper)

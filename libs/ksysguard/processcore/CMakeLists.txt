@@ -63,4 +63,4 @@ install(
     DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
-kde4_install_auth_helper_files(ksysguardprocesslist_helper org.kde.ksysguard.processlisthelper root)
+kde4_install_auth_helper_files(ksysguardprocesslist_helper org.kde.ksysguard.processlisthelper)

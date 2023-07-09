@@ -33,4 +33,4 @@ install(
     DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 
-kde4_install_auth_helper_files(kcmkgreeterhelper org.kde.kcontrol.kcmkgreeter root)
+kde4_install_auth_helper_files(kcmkgreeterhelper org.kde.kcontrol.kcmkgreeter)
