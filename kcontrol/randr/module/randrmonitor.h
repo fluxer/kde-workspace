@@ -50,7 +50,6 @@ private slots:
     void switchDisplay();
     void resumedFromSuspend();
     void checkInhibition();
-    void checkResumeFromSuspend();
     void showKcm();
     void tryAutoConfig();
 

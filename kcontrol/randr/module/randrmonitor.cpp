@@ -53,18 +53,10 @@ RandrMonitorModule::RandrMonitorModule( QObject* parent, const QList<QVariant>& 
     setModuleName( "randrmonitor" );
     initRandr();
 
-    QDBusReply <bool> re =  QDBusConnection::systemBus().interface()->isServiceRegistered("org.freedesktop.PowerManagement");
-    if (!re.value()) {
-        kDebug() << "PowerManagement not loaded, waiting for it";
-        QDBusServiceWatcher *serviceWatcher = new QDBusServiceWatcher("org.freedesktop.PowerManagement", QDBusConnection::sessionBus(),
-                QDBusServiceWatcher::WatchForRegistration, this);
-        connect(serviceWatcher, SIGNAL(serviceRegistered(QString)), this, SLOT(checkInhibition()));
-        connect(serviceWatcher, SIGNAL(serviceRegistered(QString)), this, SLOT(checkResumeFromSuspend()));
-        return;
-    }
+    connect( Solid::PowerManagement::notifier(), SIGNAL(resumingFromSuspend()),
+             this, SLOT(resumedFromSuspend()) );
 
     checkInhibition();
-    checkResumeFromSuspend();
 }
 
 RandrMonitorModule::~RandrMonitorModule()
@@ -264,13 +256,6 @@ bool RandrMonitorModule::isLidPresent()
         }
     }
     return false;
-}
-
-
-void RandrMonitorModule::checkResumeFromSuspend()
-{
-    connect( Solid::PowerManagement::notifier(), SIGNAL(resumingFromSuspend()),
-             this, SLOT(resumedFromSuspend()) );
 }
 
 void RandrMonitorModule::switchDisplay()
