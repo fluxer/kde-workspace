@@ -21,6 +21,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QDirIterator>
 #include <QBuffer>
 #include <QPixmap>
 #include <QHostInfo>
@@ -96,7 +97,59 @@ static QByteArray styleSheetForPalette(const QPalette &palette)
     return stylesheet;
 }
 
-static QByteArray contentForDirectory(const QString &path, const QString &basedir)
+static QByteArray contentForFile(const QString &basedir, const QFileInfo &fileinfo)
+{
+    QByteArray data;
+
+    const QString fullpath = fileinfo.absoluteFilePath();
+
+    // chromium does weird stuff if the link starts with two slashes - removes, the host and
+    // port part of the link (or rather does not prepend them) and converts the first directory
+    // to lower-case
+    const QString cleanpath = QDir::cleanPath(fullpath.mid(basedir.size()));
+
+    data.append("      <tr>\n");
+
+    const bool isdotdot = (fileinfo.fileName() == QLatin1String(".."));
+    if (isdotdot) {
+        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/go-previous\" width=\"20\" height=\"20\">");
+        data.append("        <td>");
+        data.append(fileicon.toUtf8());
+        data.append("</td>\n");
+    } else {
+        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
+        data.append("        <td>");
+        data.append(fileicon.toUtf8());
+        data.append("</td>\n");
+    }
+
+    // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
+    data.append("        <td><a href=\"");
+    data.append(QUrl::toPercentEncoding(cleanpath));
+    data.append("\">");
+    data.append(fileinfo.fileName().toUtf8());
+    data.append("</a><br></td>\n");
+
+    data.append("        <td>");
+    if (!isdotdot) {
+        const QString filemime = getFileMIME(fullpath);
+        data.append(filemime.toUtf8());
+    }
+    data.append("</td>\n");
+
+    data.append("        <td>");
+    if (fileinfo.isFile()) {
+        const QString filesize = KGlobal::locale()->formatByteSize(fileinfo.size(), 1);
+        data.append(filesize.toUtf8());
+    }
+    data.append("</td>\n");
+
+    data.append("      </tr>\n");
+
+    return data;
+}
+
+static QByteArray contentForMatch(const QString &path, const QString &match)
 {
     const QString pathtitle = getTitle(path);
 
@@ -116,55 +169,55 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     data.append("        <th>MIME</th>\n");
     data.append("        <th>Size</th>\n");
     data.append("      </tr>\n");
+    const QDir::Filters dirfilters = (QDir::Files | QDir::NoDotAndDotDot);
+    QDirIterator diriterator(path, QStringList() << match, dirfilters, QDirIterator::Subdirectories);
+    while (diriterator.hasNext()) {
+        (void)diriterator.next();
+        const QFileInfo dirinfo = diriterator.fileInfo();
+        if (dirinfo.isDir()) {
+            // sub-directory
+            continue;
+        }
+        data.append(contentForFile(path, dirinfo));
+    }
+    data.append("    </table>\n");
+    data.append("  </body>\n");
+    data.append("</html>");
+    return data;
+}
+
+static QByteArray contentForDirectory(const QString &path, const QString &basedir)
+{
+    const QString pathtitle = getTitle(path);
+
+    QByteArray data;
+    data.append("<html>\n");
+    data.append("  <head>\n");
+    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">");
+    data.append("  </head>\n");
+    data.append("  <form action=\"/kdirsharesearch.html\">\n");
+    data.append("    <label for=\"match\">Search for:</label>\n");
+    data.append("    <input type=\"text\" name=\"match\" value=\"\">\n");
+    data.append("    <input type=\"submit\" value=\"Search\">\n");
+    data.append("  </form>\n");
+    data.append("  <body>\n");
+    data.append("    <title>");
+    data.append(pathtitle.toUtf8());
+    data.append("</title>\n");
+    data.append("    <table>\n");
+    data.append("      <tr>\n");
+    data.append("        <th></th>\n"); // icon
+    data.append("        <th>Filename</th>\n");
+    data.append("        <th>MIME</th>\n");
+    data.append("        <th>Size</th>\n");
+    data.append("      </tr>\n");
     QDir::Filters dirfilters = (QDir::Files | QDir::AllDirs | QDir::NoDot);
     if (QDir::cleanPath(path) == QDir::cleanPath(basedir)) {
         dirfilters = (QDir::Files | QDir::AllDirs | QDir::NoDotAndDotDot);
     }
     QDir dir(path);
     foreach (const QFileInfo &fileinfo, dir.entryInfoList(dirfilters, s_dirsortflags)) {
-        const QString fullpath = path + QLatin1Char('/') + fileinfo.fileName();
-        // chromium does weird stuff if the link starts with two slashes - removes, the host and
-        // port part of the link (or rather does not prepend them) and converts the first directory
-        // to lower-case
-        const QString cleanpath = QDir::cleanPath(fullpath.mid(basedir.size()));
-
-        data.append("      <tr>\n");
-
-        const bool isdotdot = (fileinfo.fileName() == QLatin1String(".."));
-        if (isdotdot) {
-            const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/go-previous\" width=\"20\" height=\"20\">");
-            data.append("        <td>");
-            data.append(fileicon.toUtf8());
-            data.append("</td>\n");
-        } else {
-            const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
-            data.append("        <td>");
-            data.append(fileicon.toUtf8());
-            data.append("</td>\n");
-        }
-
-        // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
-        data.append("        <td><a href=\"");
-        data.append(QUrl::toPercentEncoding(cleanpath));
-        data.append("\">");
-        data.append(fileinfo.fileName().toUtf8());
-        data.append("</a><br></td>\n");
-
-        data.append("        <td>");
-        if (!isdotdot) {
-            const QString filemime = getFileMIME(fullpath);
-            data.append(filemime.toUtf8());
-        }
-        data.append("</td>\n");
-
-        data.append("        <td>");
-        if (fileinfo.isFile()) {
-            const QString filesize = KGlobal::locale()->formatByteSize(fileinfo.size(), 1);
-            data.append(filesize.toUtf8());
-        }
-        data.append("</td>\n");
-
-        data.append("      </tr>\n");
+        data.append(contentForFile(basedir, fileinfo));
     }
     data.append("    </table>\n");
     data.append("  </body>\n");
@@ -227,6 +280,11 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "text/css");
         outdata->append(styleSheetForPalette(KGlobalSettings::createApplicationPalette()));
+    } else if (normalizedpath.startsWith(QLatin1String("/kdirsharesearch.html"))) {
+        const QString match = QUrl::fromEncoded(url).queryItemValue("match");
+        *outhttpstatus = 200;
+        outheaders->insert("Content-Type", "text/html; charset=UTF-8");
+        outdata->append(contentForMatch(m_directory, match));
     } else if (pathinfo.isDir()) {
         *outhttpstatus = 200;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
