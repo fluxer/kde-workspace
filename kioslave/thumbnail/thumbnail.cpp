@@ -79,6 +79,8 @@ static const QString thumbExt = QLatin1String(".") + thumbFormat;
 
 // Minimum thumbnail icon ratio
 static const qreal s_iconratio = 4.0;
+static const int s_maxdirectoryfiles = 500;
+static const int s_maxsubdirectories = 50;
 
 int main(int argc, char **argv)
 {
@@ -407,26 +409,35 @@ QImage ThumbnailProtocol::thumbForDirectory(const KUrl& directory)
 
     int validThumbnails = 0;
 
+    QList<QPair<QString,QString>> subDirectoriesToPropagate;
     while ((skipped <= skipValidItems) && (yPos <= maxYPos) && validThumbnails == 0) {
-        QDirIterator dir(localFile, QDir::Files | QDir::Readable);
+        QDirIterator dir(localFile, QDir::Dirs | QDir::Files | QDir::Readable);
         if (!dir.hasNext()) {
             break;
         }
 
         while (dir.hasNext() && (yPos <= maxYPos)) {
             ++iterations;
-            if (iterations > 500) {
+            if (iterations > s_maxdirectoryfiles) {
                 skipValidItems = skipped = 0;
                 break;
             }
 
             dir.next();
 
-            if (validThumbnails > 0 && hadFirstThumbnail == dir.filePath()) {
-                break; // Never show the same thumbnail twice
+            const QFileInfo dirInfo = dir.fileInfo();
+            if (dirInfo.isDir()) {
+                // To be propagated later if necessary
+                subDirectoriesToPropagate.append(qMakePair(dir.filePath(), dir.fileName()));
+                continue;
             }
 
-            if (dir.fileInfo().size() > m_maxFileSize) {
+            if (validThumbnails > 0 && hadFirstThumbnail == dir.filePath()) {
+                // Never show the same thumbnail twice
+                break;
+            }
+
+            if (dirInfo.size() > m_maxFileSize) {
                 // don't create thumbnails for files that exceed
                 // the maximum set file size
                 continue;
@@ -480,13 +491,10 @@ QImage ThumbnailProtocol::thumbForDirectory(const KUrl& directory)
 
     if (validThumbnails == 0) {
         // Eventually propagate the contained items from a sub-directory
-        QDirIterator dir(localFile, QDir::Dirs);
-        int max = 50;
-        while (dir.hasNext() && max > 0) {
-            --max;
-            dir.next();
-            if (m_propagationDirectories.contains(dir.fileName())) {
-                return thumbForDirectory(KUrl(dir.filePath()));
+        for (int i = 0; i < s_maxsubdirectories && i < subDirectoriesToPropagate.size(); i++) {
+            const QPair<QString,QString> subDirectoryPair = subDirectoriesToPropagate.at(i);
+            if (m_propagationDirectories.contains(subDirectoryPair.second)) {
+                return thumbForDirectory(KUrl(subDirectoryPair.first));
             }
         }
 
