@@ -63,11 +63,6 @@ install(
 ########### install files ###############
 
 install(
-    FILES keditbookmarks.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
-
-install(
     FILES
     keditbookmarksui.rc
     keditbookmarks-genui.rc

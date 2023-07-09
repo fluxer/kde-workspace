@@ -14,11 +14,6 @@ install(
 )
 
 install(
-    FILES fileviewsvnpluginsettings.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
-
-install(
     TARGETS fileviewsvnplugin
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )

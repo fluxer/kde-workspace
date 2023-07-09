@@ -22,11 +22,6 @@ install(
 )
 
 install(
-    FILES fileviewgitpluginsettings.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
-
-install(
     TARGETS fileviewgitplugin
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )

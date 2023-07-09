@@ -18,8 +18,6 @@ kde4_add_plugin(imagethumbnail ${imagethumbnail_PART_SRCS})
 target_link_libraries(imagethumbnail KDE4::kio KDE4::kexiv2)
 
 install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-install(FILES imagecreatorsettings.kcfg DESTINATION ${KDE4_KCFG_INSTALL_DIR})
-install(TARGETS imagethumbnail DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 

@@ -305,20 +305,12 @@ install(
     PROGRAMS dolphin.desktop
     DESTINATION ${KDE4_XDG_APPS_INSTALL_DIR}
 )
-install(
-    FILES
-    settings/dolphin_directoryviewpropertysettings.kcfg
-    settings/dolphin_generalsettings.kcfg
-    settings/dolphin_compactmodesettings.kcfg
-    settings/dolphin_iconsmodesettings.kcfg
-    settings/dolphin_detailsmodesettings.kcfg
-    settings/dolphin_versioncontrolsettings.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
+
 install(
     FILES dolphinui.rc
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/dolphin
 )
+
 install(
     FILES
     search/filenamesearch.protocol

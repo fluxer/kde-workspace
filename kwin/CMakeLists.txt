@@ -203,13 +203,10 @@ install(
 ########### install files ###############
 
 install(
-    FILES kwin.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
-install(
     FILES kwin.notifyrc
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin
 )
+
 install(
     FILES org.kde.KWin.xml
     DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR}

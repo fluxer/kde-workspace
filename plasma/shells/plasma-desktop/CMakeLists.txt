@@ -50,18 +50,17 @@ install(
     TARGETS plasma-desktop
     DESTINATION ${KDE4_BIN_INSTALL_DIR}
 )
+
 install(
     FILES data/plasma-desktop.desktop
     DESTINATION ${KDE4_AUTOSTART_INSTALL_DIR}
 )
-install(
-    FILES data/plasma-shell-desktop.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
+
 install(
     FILES data/plasma-desktop-js.xml
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/katepart/syntax/
 )
+
 install(
     FILES data/plasma-desktoprc
     DESTINATION ${KDE4_CONFIG_INSTALL_DIR}

@@ -44,11 +44,6 @@ install(
 )
 
 install(
-    FILES fileviewhgpluginsettings.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
-)
-
-install(
     TARGETS fileviewhgplugin
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )

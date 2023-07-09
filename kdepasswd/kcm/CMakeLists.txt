@@ -21,13 +21,8 @@ install(
     TARGETS kcm_useraccount
     DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
 )
+
 install(
     FILES kcm_useraccount.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
-)
-install(
-    FILES
-    kcm_useraccount.kcfg
-    kcm_useraccount_pass.kcfg
-    DESTINATION ${KDE4_KCFG_INSTALL_DIR}
 )
