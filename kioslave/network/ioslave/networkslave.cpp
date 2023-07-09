@@ -168,6 +168,7 @@ void NetworkSlave::listDir(const KUrl &url)
         kioudsentry.insert(KIO::UDSEntry::UDS_TARGET_URL, urlForService(kdnssdservice));
         listEntry(kioudsentry, false);
     }
+    kioudsentry.clear();
     listEntry(kioudsentry, true);
     finished();
 }
