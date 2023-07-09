@@ -61,7 +61,7 @@ void PowerManagementJob::start()
             setResult(false);
             return;
         }
-        Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, nullptr, nullptr);
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
         setResult(true);
         return;
     } else if (operation == "suspendToDisk") {
@@ -69,7 +69,7 @@ void PowerManagementJob::start()
             setResult(false);
             return;
         }
-        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, nullptr, nullptr);
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
         setResult(true);
         return;
     } else if (operation == "suspendHybrid") {
@@ -77,7 +77,7 @@ void PowerManagementJob::start()
             setResult(false);
             return;
         }
-        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, nullptr, nullptr);
+        Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
         setResult(true);
         return;
     } else if (operation == "requestShutDown") {

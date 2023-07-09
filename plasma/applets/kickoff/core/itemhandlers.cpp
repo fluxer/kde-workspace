@@ -168,15 +168,15 @@ void LeaveItemHandler::saveSession()
 
 void LeaveItemHandler::suspendRAM()
 {
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState, 0, 0);
+    Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
 }
 
 void LeaveItemHandler::suspendDisk()
 {
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState, 0, 0);
+    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
 }
 
 void LeaveItemHandler::suspendHybrid()
 {
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState, 0, 0);
+    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
 }
