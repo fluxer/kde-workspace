@@ -185,9 +185,6 @@ void PowerDevilRunner::run(const Plasma::RunnerContext &context, const Plasma::Q
 {
     Q_UNUSED(context)
 
-    QDBusInterface iface("org.freedesktop.PowerManagement",
-                         "/org/freedesktop/PowerManagement",
-                         "org.freedesktop.PowerManagement");
     if (match.id().startsWith("PowerDevil_Suspend")) {
         switch ((Solid::PowerManagement::SleepState)match.data().toInt()) {
             case Solid::PowerManagement::SuspendState:
