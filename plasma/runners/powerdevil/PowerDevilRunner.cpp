@@ -20,10 +20,6 @@
 
 #include "PowerDevilRunner.h"
 
-#include <QDBusInterface>
-#include <QDBusConnectionInterface>
-#include <QDBusConnection>
-
 #include <KIcon>
 #include <KLocale>
 #include <KDebug>
@@ -56,28 +52,11 @@ PowerDevilRunner::PowerDevilRunner(QObject *parent, const QVariantList &args)
         }
     }
 
-    // Also receive updates triggered through the DBus
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    if (dbus.interface()->isServiceRegistered("org.freedesktop.PowerManagement")) {
-        if (!dbus.connect("org.freedesktop.PowerManagement",
-                          "/org/freedesktop/PowerManagement",
-                          "org.freedesktop.PowerManagement",
-                          "CanSuspendChanged", this, SLOT(updateStatus()))) {
-            kDebug() << "error!";
-        }
-        if (!dbus.connect("org.freedesktop.PowerManagement",
-                          "/org/freedesktop/PowerManagement",
-                          "org.freedesktop.PowerManagement",
-                          "CanHibernateChanged", this, SLOT(updateStatus()))) {
-            kDebug() << "error!";
-        }
-        if (!dbus.connect("org.freedesktop.PowerManagement",
-                          "/org/freedesktop/PowerManagement",
-                          "org.freedesktop.PowerManagement",
-                          "CanHybridSuspendChanged", this, SLOT(updateStatus()))) {
-            kDebug() << "error!";
-        }
-    }
+    // Also receive state updates
+    connect(
+        Solid::PowerManagement::notifier(), SIGNAL(supportedSleepStatesChanged()),
+        this, SLOT(updateStatus())
+    );
 }
 
 PowerDevilRunner::~PowerDevilRunner()
@@ -159,21 +138,24 @@ void PowerDevilRunner::addSuspendMatch(int value, QList<Plasma::QueryMatch> &mat
     match.setType(Plasma::QueryMatch::ExactMatch);
 
     switch ((Solid::PowerManagement::SleepState)value) {
-        case Solid::PowerManagement::SuspendState:
+        case Solid::PowerManagement::SuspendState: {
             match.setIcon(KIcon("system-suspend"));
             match.setText(i18n("Suspend to RAM"));
             match.setRelevance(1);
             break;
-        case Solid::PowerManagement::HibernateState:
+        }
+        case Solid::PowerManagement::HibernateState: {
             match.setIcon(KIcon("system-suspend-hibernate"));
             match.setText(i18n("Suspend to Disk"));
             match.setRelevance(0.99);
             break;
-        case Solid::PowerManagement::HybridSuspendState:
+        }
+        case Solid::PowerManagement::HybridSuspendState: {
             match.setIcon(KIcon("system-suspend"));
             match.setText(i18n("Hybrid Suspend"));
             match.setRelevance(0.98);
             break;
+        }
     }
 
     match.setData(value);
@@ -187,15 +169,18 @@ void PowerDevilRunner::run(const Plasma::RunnerContext &context, const Plasma::Q
 
     if (match.id().startsWith("PowerDevil_Suspend")) {
         switch ((Solid::PowerManagement::SleepState)match.data().toInt()) {
-            case Solid::PowerManagement::SuspendState:
+            case Solid::PowerManagement::SuspendState: {
                 Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
                 break;
-            case Solid::PowerManagement::HibernateState:
+            }
+            case Solid::PowerManagement::HibernateState: {
                 Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
                 break;
-            case Solid::PowerManagement::HybridSuspendState:
+            }
+            case Solid::PowerManagement::HybridSuspendState: {
                 Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
                 break;
+            }
         }
     }
 }
