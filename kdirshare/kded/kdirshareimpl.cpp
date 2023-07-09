@@ -156,7 +156,7 @@ static QByteArray contentForMatch(const QString &path, const QString &match)
     QByteArray data;
     data.append("<html>\n");
     data.append("  <head>\n");
-    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">");
+    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">\n");
     data.append("  </head>\n");
     data.append("  <body>\n");
     data.append("    <title>");
@@ -193,7 +193,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     QByteArray data;
     data.append("<html>\n");
     data.append("  <head>\n");
-    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">");
+    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">\n");
     data.append("  </head>\n");
     data.append("  <form action=\"/kdirsharesearch.html\">\n");
     data.append("    <label for=\"match\">Search for:</label>\n");
