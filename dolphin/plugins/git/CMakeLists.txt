@@ -1,20 +1,23 @@
 project(fileviewgitplugin)
 
-set(fileviewgitplugin_SRCS
-    fileviewgitplugin.cpp
-    checkoutdialog.cpp
-    commitdialog.cpp
-    tagdialog.cpp
-    pushdialog.cpp
-    pulldialog.cpp
-    gitwrapper.cpp
+include_directories(
+    ${LIBGIT2_INCLUDE_DIR}
 )
 
-kde4_add_kcfg_files(fileviewgitplugin_SRCS fileviewgitpluginsettings.kcfgc)
+set(fileviewgitplugin_SRCS
+    fileviewgitplugin.cpp
+    gitcommitdialog.cpp
+)
 
-kde4_add_plugin(fileviewgitplugin  ${fileviewgitplugin_SRCS})
+kde4_add_plugin(fileviewgitplugin ${fileviewgitplugin_SRCS})
 
-target_link_libraries(fileviewgitplugin KDE4::kio konq)
+target_link_libraries(fileviewgitplugin
+    KDE4::kdecore
+    KDE4::kdeui
+    KDE4::kpasswdstore
+    konq
+    ${LIBGIT2_LIBRARIES}
+)
 
 install(
     FILES fileviewgitplugin.desktop

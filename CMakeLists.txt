@@ -200,6 +200,14 @@ set_package_properties(LightDM PROPERTIES
     PURPOSE "Needed for the LightDM greeter"
 )
 
+kde4_optional_find_package(LibGit2)
+set_package_properties(LibGit2 PROPERTIES
+    DESCRIPTION "Portable, pure C implementation of the Git core methods"
+    URL "https://libgit2.org/"
+    TYPE OPTIONAL
+    PURPOSE "Needed for the Dolphin Git plugin"
+)
+
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE
@@ -252,24 +260,6 @@ find_program(BZR_EXECUTABLE bzr)
 add_feature_info(bzr
     BZR_EXECUTABLE
     "Bazaar support in Dolphin"
-)
-
-find_program(GIT_EXECUTABLE git)
-add_feature_info(git
-    GIT_EXECUTABLE
-    "Git support in Dolphin"
-)
-
-find_program(HG_EXECUTABLE hg)
-add_feature_info(hg
-    HG_EXECUTABLE
-    "Mercurial support in Dolphin"
-)
-
-find_program(SVN_EXECUTABLE svn)
-add_feature_info(svn
-    SVN_EXECUTABLE
-    "Subversion support in Dolphin"
 )
 
 find_program(XKILL_EXECUTABLE xkill)

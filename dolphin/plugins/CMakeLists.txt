@@ -3,8 +3,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/konq
 )
 
-add_subdirectory(svn)
-add_subdirectory(git)
-add_subdirectory(hg)
-add_subdirectory(bazaar)
-add_subdirectory(dropbox)
+if (LIBGIT2_FOUND)
+    add_subdirectory(git)
+endif()

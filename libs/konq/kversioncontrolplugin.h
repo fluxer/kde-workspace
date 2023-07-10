@@ -135,14 +135,7 @@ public:
          * in the ignore list of the version control system.
          * @since 4.8
          */
-        IgnoredVersion,
-        /**
-         * The file is is tracked by the version control system, but
-         * is missing in the directory (e.g. by deleted without using
-         * a version control command).
-         * @since 4.8
-         */
-        MissingVersion
+        IgnoredVersion
     };
 
     KVersionControlPlugin(QObject* parent = 0);

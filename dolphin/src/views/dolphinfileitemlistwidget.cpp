@@ -58,7 +58,6 @@ void DolphinFileItemListWidget::refreshCache()
         case KVersionControlPlugin::RemovedVersion:                 tintColor = Qt::darkRed; break;
         case KVersionControlPlugin::ConflictingVersion:             tintColor = Qt::red; break;
         case KVersionControlPlugin::IgnoredVersion:                 tintColor = Qt::white; break;
-        case KVersionControlPlugin::MissingVersion:                 tintColor = Qt::red; break;
         case KVersionControlPlugin::NormalVersion:
         case KVersionControlPlugin::UnversionedVersion:
         default:
@@ -116,7 +115,6 @@ QPixmap DolphinFileItemListWidget::overlayForState(KVersionControlPlugin::ItemVe
         break;
     case KVersionControlPlugin::UnversionedVersion:
     case KVersionControlPlugin::IgnoredVersion:
-    case KVersionControlPlugin::MissingVersion:
         break;
     default:
         Q_ASSERT(false);

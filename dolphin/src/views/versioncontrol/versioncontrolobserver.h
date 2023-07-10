@@ -28,11 +28,11 @@
 #include <QMutex>
 #include <QObject>
 #include <QString>
+#include <QAction>
+#include <QTimer>
 
 class KFileItemList;
 class KFileItemModel;
-#include <QAction>
-#include <QTimer>
 class UpdateItemStatesThread;
 
 /**
