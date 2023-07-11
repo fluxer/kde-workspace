@@ -101,7 +101,7 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
     m_pullaction(nullptr)
 {
     Q_UNUSED(args);
-    
+
     git_libgit2_init();
 
     m_addaction = new KAction(this);
@@ -516,8 +516,6 @@ void FileViewGitPlugin::slotCommit()
     if (gitdialog.exec() != QDialog::Accepted) {
         return;
     }
-
-    static const char* gitspec = "HEAD"; // TODO: option for it, detached HEAD?
     const QByteArray gitmessage = gitdialog.message();
 
     Q_ASSERT(m_gitrepo != nullptr);
@@ -543,9 +541,22 @@ void FileViewGitPlugin::slotCommit()
         return;
     }
 
+    emit infoMessage(i18n("Getting repository head"));
+    git_reference* gitreference = nullptr;
+    gitresult = git_repository_head(&gitreference, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+        kWarning() << "Could not get repository head" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_index_free(gitindex);
+        return;
+    }
+    const QByteArray gitspec = git_reference_name(gitreference);
+    git_reference_free(gitreference);
+
     emit infoMessage(i18n("Parsing revision"));
     git_object *gitparent = nullptr;
-    gitresult = git_revparse_single(&gitparent, m_gitrepo, gitspec);
+    gitresult = git_revparse_single(&gitparent, m_gitrepo, gitspec.constData());
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
         kWarning() << "Could not parse revision" << m_directory << giterror;
@@ -603,7 +614,7 @@ void FileViewGitPlugin::slotCommit()
     emit infoMessage(i18n("Commiting changes"));
     git_oid gitcommitobjectid;
     gitresult = git_commit_create_v(
-        &gitcommitobjectid, m_gitrepo, gitspec,
+        &gitcommitobjectid, m_gitrepo, gitspec.constData(),
         gitsignature, gitsignature,
         "UTF-8", gitmessage.constData(),
         gittree,
