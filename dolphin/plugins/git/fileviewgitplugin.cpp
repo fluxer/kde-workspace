@@ -274,7 +274,7 @@ QStringList FileViewGitPlugin::changedGitFiles() const
         kWarning() << "Could not initialize status options" << m_directory << giterror;
         return result;
     }
-    gitstatusoptions.flags = GIT_STATUS_OPT_DEFAULTS | GIT_STATUS_OPT_UPDATE_INDEX;
+    gitstatusoptions.flags = GIT_STATUS_OPT_UPDATE_INDEX;
 
     GitStatusPayload gitstatuspayload;
     gitstatuspayload.result = &result;
