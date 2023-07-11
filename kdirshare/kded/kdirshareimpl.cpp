@@ -106,7 +106,11 @@ static QByteArray contentForFile(const QString &basedir, const QFileInfo &filein
     // chromium does weird stuff if the link starts with two slashes - removes, the host and
     // port part of the link (or rather does not prepend them) and converts the first directory
     // to lower-case
-    const QString cleanpath = QDir::cleanPath(fullpath.mid(basedir.size()));
+    QString cleanpath = QDir::cleanPath(fullpath.mid(basedir.size()));
+    if (fileinfo.isDir()) {
+        cleanpath.append(QDir::separator());
+    }
+    // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
 
     data.append("      <tr>\n");
 
@@ -123,7 +127,6 @@ static QByteArray contentForFile(const QString &basedir, const QFileInfo &filein
         data.append("</td>\n");
     }
 
-    // qDebug() << Q_FUNC_INFO << fullpath << basedir << cleanpath;
     data.append("        <td><a href=\"");
     data.append(QUrl::toPercentEncoding(cleanpath));
     data.append("\">");
