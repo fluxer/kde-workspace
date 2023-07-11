@@ -15,6 +15,7 @@ target_link_libraries(fileviewgitplugin
     KDE4::kdecore
     KDE4::kdeui
     KDE4::kpasswdstore
+    KDE4::kio
     konq
     ${LIBGIT2_LIBRARIES}
 )

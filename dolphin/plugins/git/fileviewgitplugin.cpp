@@ -686,6 +686,7 @@ void FileViewGitPlugin::slotPush()
 
 void FileViewGitPlugin::slotPull()
 {
+    // TODO:
     emit errorMessage(QString::fromLatin1("Not implemented"));
 }
 
