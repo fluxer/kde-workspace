@@ -17,8 +17,14 @@
 */
 
 #include "gitcommitdialog.h"
+#include "fileviewgitplugin.h"
 
 #include <klocale.h>
+#include <kdebug.h>
+
+#include <git2/buffer.h>
+#include <git2/message.h>
+#include <git2/errors.h>
 
 GitCommitDialog::GitCommitDialog(QWidget *parent)
     : KDialog(parent),
@@ -34,6 +40,8 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     setMainWidget(m_vbox);
 
     m_commit = new KTextEdit(m_vbox);
+    m_commit->setLineWrapMode(QTextEdit::FixedColumnWidth);
+    m_commit->setLineWrapColumnOrWidth(72);
 }
 
 GitCommitDialog::~GitCommitDialog()
@@ -42,7 +50,16 @@ GitCommitDialog::~GitCommitDialog()
 
 QByteArray GitCommitDialog::message() const
 {
-    return m_commit->toPlainText().toUtf8();
+    const QByteArray gitmessage = m_commit->toPlainText().toUtf8();
+    git_buf gitbuffer = GIT_BUF_INIT;
+    int gitresult = git_message_prettify(&gitbuffer, gitmessage.constData(), 1, '#');
+    if (gitresult != GIT_OK) {
+        kWarning() << "Could not prettify message" << gitmessage << FileViewGitPlugin::getGitError();
+        return gitmessage;
+    }
+    const QByteArray gitprettymessage(gitbuffer.ptr, gitbuffer.size);
+    git_buf_dispose(&gitbuffer);
+    return gitprettymessage;
 }
 
 #include "moc_gitcommitdialog.cpp"

@@ -47,6 +47,8 @@ public:
                                      const char *url, const char *username_from_url, unsigned int allowed_types,
                                      void *payload);
 
+    static QByteArray getGitError();
+
 private Q_SLOTS:
     void slotAdd();
     void slotRemove();
