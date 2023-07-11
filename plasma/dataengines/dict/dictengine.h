@@ -31,19 +31,17 @@
 class DictEngine: public Plasma::DataEngine
 {
     Q_OBJECT
+public:
+    DictEngine( QObject* parent, const QVariantList& args );
 
-    public:
-        DictEngine( QObject* parent, const QVariantList& args );
-        ~DictEngine();
+protected:
+    bool sourceRequestEvent(const QString &word);
 
-    protected:
-        bool sourceRequestEvent(const QString &word);
+private:
+    void setError(const QString &query, const QString &message);
 
-    private:
-        void setError(const QString &query, const QString &message);
-
-    private Q_SLOTS:
-        void slotFinished(KJob *kjob);
+private Q_SLOTS:
+    void slotFinished(KJob *kjob);
 };
 
 K_EXPORT_PLASMA_DATAENGINE(dict, DictEngine)

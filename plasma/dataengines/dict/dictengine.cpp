@@ -29,10 +29,6 @@ DictEngine::DictEngine(QObject* parent, const QVariantList& args)
 {
 }
 
-DictEngine::~DictEngine()
-{
-}
-
 bool DictEngine::sourceRequestEvent(const QString &query)
 {
     // qDebug() << Q_FUNC_INFO << query;
