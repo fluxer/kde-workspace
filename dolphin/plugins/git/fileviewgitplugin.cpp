@@ -28,6 +28,7 @@
 #include <kpassworddialog.h>
 #include <kicon.h>
 #include <klocale.h>
+#include <kdirnotify.h>
 #include <kdebug.h>
 #include <QDir>
 
@@ -44,11 +45,29 @@
 K_PLUGIN_FACTORY(FileViewGitPluginFactory, registerPlugin<FileViewGitPlugin>();)
 K_EXPORT_PLUGIN(FileViewGitPluginFactory("fileviewgitplugin"))
 
+static char* s_gitupdatestrings[1] = { (char*)"*\0" }; // stack corruption? nah..
+
+struct GitStatusPayload
+{
+    QStringList *result;
+    QByteArray gitdirectory;
+};
+
 // path passed to git_status_file() has to be relative to the main git directory
 static QByteArray getGitFile(const KFileItem &item, const QByteArray &gitdir)
 {
     const QByteArray result = QFile::encodeName(item.localPath());
     return result.mid(gitdir.size(), result.size() - gitdir.size());
+}
+
+static QString getCompleteGitFile(const char* gitfile, const QByteArray &gitdir)
+{
+    QString result = QFile::decodeName(gitdir);
+    if (!result.endsWith(QDir::separator())) {
+        result.append(QDir::separator());
+    }
+    result.append(QFile::decodeName(gitfile));
+    return result;
 }
 
 static QByteArray getSSHKey()
@@ -228,8 +247,10 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         }
     }
     if (hasdir) {
-        // TODO: commit should be conditional
-        result.append(m_commitaction);
+        const QStringList changedgitfiles = changedGitFiles();
+        if (!changedgitfiles.isEmpty()) {
+            result.append(m_commitaction);
+        }
         result.append(m_pushaction);
         // result.append(m_pullaction);
     } else {
@@ -239,265 +260,49 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
     return result;
 }
 
-void FileViewGitPlugin::slotAdd()
+QStringList FileViewGitPlugin::changedGitFiles() const
 {
-    Q_ASSERT(!m_actionitems.isEmpty());
-    git_index* gitindex = nullptr;
-    int gitresult = git_repository_index(&gitindex, m_gitrepo);
+    QStringList result;
+    if (!m_gitrepo) {
+        kWarning() << "Not initialized" << m_directory;
+        return result;
+    }
+    git_status_options gitstatusoptions;
+    int gitresult = git_status_options_init(&gitstatusoptions, GIT_STATUS_OPTIONS_VERSION);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not get repository index" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
+        kWarning() << "Could not initialize status options" << m_directory << giterror;
+        return result;
     }
+    gitstatusoptions.flags = GIT_STATUS_OPT_DEFAULTS | GIT_STATUS_OPT_UPDATE_INDEX;
 
-    foreach (const KFileItem &item, m_actionitems) {
-        const QByteArray gitfile = getGitFile(item, m_directory);
-        emit infoMessage(i18n("Adding: %1", QFile::decodeName(gitfile)));
-        gitresult = git_index_add_bypath(gitindex, gitfile.constData());
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError();
-            kWarning() << "Could not add path to repository" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_index_free(gitindex);
-            return;
-        }
-    }
-
-    emit infoMessage(i18n("Writing changes"));
-    gitresult = git_index_write(gitindex);
+    GitStatusPayload gitstatuspayload;
+    gitstatuspayload.result = &result;
+    gitstatuspayload.gitdirectory = m_directory;
+    // NOTE: the callback is called only for paths the status of which has changed
+    gitresult = git_status_foreach_ext(m_gitrepo, &gitstatusoptions, FileViewGitPlugin::gitStatusCallback, &gitstatuspayload);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not write changes to repository" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_index_free(gitindex);
-        return;
+        kWarning() << "Could not get repository status" << m_directory << giterror;
+        return result;
     }
-
-    kDebug() << "Done adding to" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_index_free(gitindex);
+    // qDebug() << Q_FUNC_INFO << m_directory << result;
+    return result;
 }
 
-void FileViewGitPlugin::slotRemove()
+int FileViewGitPlugin::gitStatusCallback(const char *path, unsigned int status_flags, void *payload)
 {
-    Q_ASSERT(!m_actionitems.isEmpty());
-    git_index* gitindex = nullptr;
-    int gitresult = git_repository_index(&gitindex, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not get repository index" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
+    GitStatusPayload* gitstatuspayload = static_cast<GitStatusPayload*>(payload);
+    // qDebug() << Q_FUNC_INFO << path << status_flags;
+    // check flags disregarding the ignored and conflicting files
+    if (status_flags & GIT_STATUS_INDEX_NEW || status_flags & GIT_STATUS_WT_NEW) {
+        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
+    } else if (status_flags & GIT_STATUS_INDEX_MODIFIED || status_flags & GIT_STATUS_WT_MODIFIED) {
+        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
+    } else if (status_flags & GIT_STATUS_INDEX_DELETED || status_flags & GIT_STATUS_WT_DELETED) {
+        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
     }
-
-    foreach (const KFileItem &item, m_actionitems) {
-        const QByteArray gitfile = getGitFile(item, m_directory);
-        emit infoMessage(i18n("Removing: %1", QFile::decodeName(gitfile)));
-        gitresult = git_index_remove_bypath(gitindex, gitfile.constData());
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError();
-            kWarning() << "Could not remove path from repository" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_index_free(gitindex);
-            return;
-        }
-    }
-
-    emit infoMessage(i18n("Writing changes"));
-    gitresult = git_index_write(gitindex);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not write index changes to repository" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_index_free(gitindex);
-        return;
-    }
-
-    kDebug() << "Done removing from" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_index_free(gitindex);
-}
-
-void FileViewGitPlugin::slotCommit()
-{
-    GitCommitDialog gitdialog;
-    if (gitdialog.exec() != QDialog::Accepted) {
-        return;
-    }
-
-    static const char* gitspec = "HEAD"; // TODO: option for it, detached HEAD?
-    const QByteArray gitmessage = gitdialog.message();
-
-    Q_ASSERT(m_gitrepo != nullptr);
-    git_index* gitindex = nullptr;
-    int gitresult = git_repository_index(&gitindex, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not get repository index" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-
-    emit infoMessage(i18n("Updating index"));
-    static char* s_gitupdatestrings[1] = { (char*)"*\0" }; // stack corruption? nah..
-    git_strarray gitupdatearray;
-    gitupdatearray.strings = s_gitupdatestrings;
-    gitupdatearray.count = 1;
-    gitresult = git_index_update_all(gitindex, &gitupdatearray, NULL, NULL);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not update index" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_index_free(gitindex);
-        return;
-    }
-
-    emit infoMessage(i18n("Parsing revision"));
-    git_object *gitparent = nullptr;
-    gitresult = git_revparse_single(&gitparent, m_gitrepo, gitspec);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not parse revision" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_index_free(gitindex);
-        return;
-    }
-
-    emit infoMessage(i18n("Writing changes"));
-    git_oid gittreeobjectid;
-    gitresult = git_index_write_tree(&gittreeobjectid, gitindex);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not write tree changes to repository" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_object_free(gitparent);
-        git_index_free(gitindex);
-        return;
-    }
-    gitresult = git_index_write(gitindex);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not write index changes to repository" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_object_free(gitparent);
-        git_index_free(gitindex);
-        return;
-    }
-
-    emit infoMessage(i18n("Looking for the tree"));
-    git_tree *gittree = nullptr;
-    gitresult = git_tree_lookup(&gittree, m_gitrepo, &gittreeobjectid);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not lookup tree" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_object_free(gitparent);
-        git_index_free(gitindex);
-        return;
-    }
-
-    emit infoMessage(i18n("Getting default signature"));
-    git_signature* gitsignature = nullptr;
-    gitresult = git_signature_default(&gitsignature, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not get signature" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_tree_free(gittree);
-        git_object_free(gitparent);
-        git_index_free(gitindex);
-        return;
-    }
-
-    emit infoMessage(i18n("Commiting changes"));
-    git_oid gitcommitobjectid;
-    gitresult = git_commit_create_v(
-        &gitcommitobjectid, m_gitrepo, gitspec,
-        gitsignature, gitsignature,
-        "UTF-8", gitmessage.constData(),
-        gittree,
-        gitparent ? 1 : 0, gitparent
-    );
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not commit" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_signature_free(gitsignature);
-        git_tree_free(gittree);
-        git_object_free(gitparent);
-        git_index_free(gitindex);
-        return;
-    }
-
-    kDebug() << "Done commiting" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_signature_free(gitsignature);
-    git_tree_free(gittree);
-    git_object_free(gitparent);
-    git_index_free(gitindex);
-}
-
-void FileViewGitPlugin::slotPush()
-{
-    emit infoMessage(i18n("Setting up push options"));
-    git_push_options gitpushoptions;
-    int gitresult = git_push_options_init(&gitpushoptions, GIT_PUSH_OPTIONS_VERSION);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not initialize push options" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-    gitpushoptions.callbacks.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitpushoptions.callbacks.credentials = FileViewGitPlugin::gitCredentialCallback;
-    gitpushoptions.callbacks.payload = this;
-    gitpushoptions.follow_redirects = GIT_REMOTE_REDIRECT_ALL;
-    // NOTE: proxy settings may be taken from the environment
-    gitpushoptions.proxy_opts.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitpushoptions.proxy_opts.credentials = FileViewGitPlugin::gitCredentialCallback;
-
-    emit infoMessage(i18n("Listing remotes"));
-    git_strarray gitremotes;
-    gitresult = git_remote_list(&gitremotes, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not list remotes" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-
-    emit infoMessage(i18n("Pushing remotes"));
-    for (int i = 0; i < gitremotes.count; i++) {
-        git_remote* gitremote = nullptr;
-        gitresult = git_remote_lookup(&gitremote, m_gitrepo, gitremotes.strings[i]);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError();
-            kWarning() << "Could not lookup remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            return;
-        }
-
-        gitresult = git_remote_push(gitremote, NULL, &gitpushoptions);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError();
-            kWarning() << "Could not push remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_remote_free(gitremote);
-            git_strarray_dispose(&gitremotes);
-            return;
-        }
-        git_remote_free(gitremote);
-    }
-
-    kDebug() << "Done pushing" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_strarray_dispose(&gitremotes);
-}
-
-void FileViewGitPlugin::slotPull()
-{
-    emit errorMessage(QString::fromLatin1("Not implemented"));
+    return GIT_OK;
 }
 
 int FileViewGitPlugin::gitCertificateCallback(git_cert *cert, int valid, const char *host, void *payload)
@@ -601,6 +406,287 @@ QByteArray FileViewGitPlugin::getGitError()
         return QByteArray();
     }
     return QByteArray(giterror->message);
+}
+
+void FileViewGitPlugin::slotAdd()
+{
+    Q_ASSERT(!m_actionitems.isEmpty());
+    git_index* gitindex = nullptr;
+    int gitresult = git_repository_index(&gitindex, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not get repository index" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+
+    foreach (const KFileItem &item, m_actionitems) {
+        const QByteArray gitfile = getGitFile(item, m_directory);
+        emit infoMessage(i18n("Adding: %1", QFile::decodeName(gitfile)));
+        gitresult = git_index_add_bypath(gitindex, gitfile.constData());
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not add path to repository" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_index_free(gitindex);
+            return;
+        }
+    }
+
+    emit infoMessage(i18n("Writing changes"));
+    gitresult = git_index_write(gitindex);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not write changes to repository" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_index_free(gitindex);
+        return;
+    }
+
+    kDebug() << "Done adding to" << m_directory << m_actionitems;
+    emit operationCompletedMessage(i18n("Done"));
+    git_index_free(gitindex);
+
+    // notify KDirLister about changes (to refresh the icons)
+    QStringList changedgitfiles;
+    changedgitfiles.reserve(m_actionitems.size());
+    foreach (const KFileItem &item, m_actionitems) {
+        changedgitfiles.append(item.localPath());
+    }
+    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+}
+
+void FileViewGitPlugin::slotRemove()
+{
+    Q_ASSERT(!m_actionitems.isEmpty());
+    git_index* gitindex = nullptr;
+    int gitresult = git_repository_index(&gitindex, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not get repository index" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+
+    foreach (const KFileItem &item, m_actionitems) {
+        const QByteArray gitfile = getGitFile(item, m_directory);
+        emit infoMessage(i18n("Removing: %1", QFile::decodeName(gitfile)));
+        gitresult = git_index_remove_bypath(gitindex, gitfile.constData());
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not remove path from repository" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_index_free(gitindex);
+            return;
+        }
+    }
+
+    emit infoMessage(i18n("Writing changes"));
+    gitresult = git_index_write(gitindex);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not write index changes to repository" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_index_free(gitindex);
+        return;
+    }
+
+    kDebug() << "Done removing from" << m_directory << m_actionitems;
+    emit operationCompletedMessage(i18n("Done"));
+    git_index_free(gitindex);
+
+    QStringList changedgitfiles;
+    changedgitfiles.reserve(m_actionitems.size());
+    foreach (const KFileItem &item, m_actionitems) {
+        changedgitfiles.append(item.localPath());
+    }
+    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+}
+
+void FileViewGitPlugin::slotCommit()
+{
+    emit infoMessage(i18n("Determening changed files"));
+    const QStringList changedgitfiles = changedGitFiles();
+    Q_ASSERT(!changedgitfiles.isEmpty());
+
+    GitCommitDialog gitdialog;
+    if (gitdialog.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    static const char* gitspec = "HEAD"; // TODO: option for it, detached HEAD?
+    const QByteArray gitmessage = gitdialog.message();
+
+    Q_ASSERT(m_gitrepo != nullptr);
+    git_index* gitindex = nullptr;
+    int gitresult = git_repository_index(&gitindex, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not get repository index" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+
+    emit infoMessage(i18n("Updating index"));
+    git_strarray gitupdatearray;
+    gitupdatearray.strings = s_gitupdatestrings;
+    gitupdatearray.count = 1;
+    gitresult = git_index_update_all(gitindex, &gitupdatearray, NULL, NULL);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not update index" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_index_free(gitindex);
+        return;
+    }
+
+    emit infoMessage(i18n("Parsing revision"));
+    git_object *gitparent = nullptr;
+    gitresult = git_revparse_single(&gitparent, m_gitrepo, gitspec);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not parse revision" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_index_free(gitindex);
+        return;
+    }
+
+    emit infoMessage(i18n("Writing changes"));
+    git_oid gittreeobjectid;
+    gitresult = git_index_write_tree(&gittreeobjectid, gitindex);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not write tree changes to repository" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_object_free(gitparent);
+        git_index_free(gitindex);
+        return;
+    }
+    gitresult = git_index_write(gitindex);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not write index changes to repository" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_object_free(gitparent);
+        git_index_free(gitindex);
+        return;
+    }
+
+    emit infoMessage(i18n("Looking for the tree"));
+    git_tree *gittree = nullptr;
+    gitresult = git_tree_lookup(&gittree, m_gitrepo, &gittreeobjectid);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not lookup tree" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_object_free(gitparent);
+        git_index_free(gitindex);
+        return;
+    }
+
+    emit infoMessage(i18n("Getting default signature"));
+    git_signature* gitsignature = nullptr;
+    gitresult = git_signature_default(&gitsignature, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not get signature" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_tree_free(gittree);
+        git_object_free(gitparent);
+        git_index_free(gitindex);
+        return;
+    }
+
+    emit infoMessage(i18n("Commiting changes"));
+    git_oid gitcommitobjectid;
+    gitresult = git_commit_create_v(
+        &gitcommitobjectid, m_gitrepo, gitspec,
+        gitsignature, gitsignature,
+        "UTF-8", gitmessage.constData(),
+        gittree,
+        gitparent ? 1 : 0, gitparent
+    );
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not commit" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_signature_free(gitsignature);
+        git_tree_free(gittree);
+        git_object_free(gitparent);
+        git_index_free(gitindex);
+        return;
+    }
+
+    kDebug() << "Done commiting" << m_directory << m_actionitems;
+    emit operationCompletedMessage(i18n("Done"));
+    git_signature_free(gitsignature);
+    git_tree_free(gittree);
+    git_object_free(gitparent);
+    git_index_free(gitindex);
+
+    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+}
+
+void FileViewGitPlugin::slotPush()
+{
+    emit infoMessage(i18n("Setting up push options"));
+    git_push_options gitpushoptions;
+    int gitresult = git_push_options_init(&gitpushoptions, GIT_PUSH_OPTIONS_VERSION);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not initialize push options" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+    gitpushoptions.callbacks.certificate_check = FileViewGitPlugin::gitCertificateCallback;
+    gitpushoptions.callbacks.credentials = FileViewGitPlugin::gitCredentialCallback;
+    gitpushoptions.callbacks.payload = this;
+    gitpushoptions.follow_redirects = GIT_REMOTE_REDIRECT_ALL;
+    // NOTE: proxy settings may be taken from the environment
+    gitpushoptions.proxy_opts.certificate_check = FileViewGitPlugin::gitCertificateCallback;
+    gitpushoptions.proxy_opts.credentials = FileViewGitPlugin::gitCredentialCallback;
+
+    emit infoMessage(i18n("Listing remotes"));
+    git_strarray gitremotes;
+    gitresult = git_remote_list(&gitremotes, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not list remotes" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+
+    emit infoMessage(i18n("Pushing remotes"));
+    for (int i = 0; i < gitremotes.count; i++) {
+        git_remote* gitremote = nullptr;
+        gitresult = git_remote_lookup(&gitremote, m_gitrepo, gitremotes.strings[i]);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not lookup remote" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            return;
+        }
+
+        gitresult = git_remote_push(gitremote, NULL, &gitpushoptions);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not push remote" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_remote_free(gitremote);
+            git_strarray_dispose(&gitremotes);
+            return;
+        }
+        git_remote_free(gitremote);
+    }
+
+    kDebug() << "Done pushing" << m_directory << m_actionitems;
+    emit operationCompletedMessage(i18n("Done"));
+    git_strarray_dispose(&gitremotes);
+}
+
+void FileViewGitPlugin::slotPull()
+{
+    emit errorMessage(QString::fromLatin1("Not implemented"));
 }
 
 #include "moc_fileviewgitplugin.cpp"

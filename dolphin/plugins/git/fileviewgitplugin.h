@@ -42,6 +42,9 @@ public:
     KVersionControlPlugin::ItemVersion itemVersion(const KFileItem& item) const final;
     QList<QAction*> actions(const KFileItemList &items) const final;
 
+    QStringList changedGitFiles() const;
+
+    static int gitStatusCallback(const char *path, unsigned int status_flags, void *payload);
     static int gitCertificateCallback(git_cert *cert, int valid, const char *host, void *payload);
     static int gitCredentialCallback(git_credential **out,
                                      const char *url, const char *username_from_url, unsigned int allowed_types,
