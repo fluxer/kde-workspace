@@ -116,12 +116,12 @@ static QByteArray contentForFile(const QString &basedir, const QFileInfo &filein
 
     const bool isdotdot = (fileinfo.fileName() == QLatin1String(".."));
     if (isdotdot) {
-        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/go-previous\" width=\"20\" height=\"20\">");
+        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshareicons/go-previous\" width=\"20\" height=\"20\">");
         data.append("        <td>");
         data.append(fileicon.toUtf8());
         data.append("</td>\n");
     } else {
-        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshare_icons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
+        const QString fileicon = QString::fromLatin1("<img src=\"/kdirshareicons/%1\" width=\"20\" height=\"20\">").arg(KMimeType::iconNameForUrl(KUrl(fullpath)));
         data.append("        <td>");
         data.append(fileicon.toUtf8());
         data.append("</td>\n");
@@ -253,7 +253,7 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
     QFileInfo pathinfo(m_directory + QLatin1Char('/') + normalizedpath);
     // qDebug() << Q_FUNC_INFO << normalizedpath << pathinfo.filePath();
     if (normalizedpath == QLatin1String("/favicon.ico")
-        || normalizedpath.startsWith(QLatin1String("/kdirshare_icons/"))) {
+        || normalizedpath.startsWith(QLatin1String("/kdirshareicons/"))) {
         const bool isfavicon = (normalizedpath == QLatin1String("/favicon.ico"));
         QPixmap iconpixmap;
         QByteArray iconformat;
