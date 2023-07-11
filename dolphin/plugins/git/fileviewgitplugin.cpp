@@ -240,7 +240,7 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         // TODO: commit should be conditional
         result.append(m_commitaction);
         result.append(m_pushaction);
-        result.append(m_pullaction);
+        // result.append(m_pullaction);
     } else {
         result.append(m_addaction);
         result.append(m_removeaction);
