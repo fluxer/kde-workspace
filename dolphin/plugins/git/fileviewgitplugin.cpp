@@ -252,7 +252,7 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             result.append(m_commitaction);
         }
         result.append(m_pushaction);
-        // result.append(m_pullaction);
+        result.append(m_pullaction);
     } else {
         result.append(m_addaction);
         result.append(m_removeaction);
@@ -686,8 +686,61 @@ void FileViewGitPlugin::slotPush()
 
 void FileViewGitPlugin::slotPull()
 {
-    // TODO:
-    emit errorMessage(QString::fromLatin1("Not implemented"));
+    emit infoMessage(i18n("Setting up fetch options"));
+    git_fetch_options gitfetchoptions;
+    int gitresult = git_fetch_options_init(&gitfetchoptions, GIT_FETCH_OPTIONS_VERSION);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not initialize fetch options" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+    gitfetchoptions.callbacks.certificate_check = FileViewGitPlugin::gitCertificateCallback;
+    gitfetchoptions.callbacks.credentials = FileViewGitPlugin::gitCredentialCallback;
+    gitfetchoptions.callbacks.payload = this;
+    gitfetchoptions.follow_redirects = GIT_REMOTE_REDIRECT_ALL;
+    // NOTE: proxy settings may be taken from the environment
+    gitfetchoptions.proxy_opts.certificate_check = FileViewGitPlugin::gitCertificateCallback;
+    gitfetchoptions.proxy_opts.credentials = FileViewGitPlugin::gitCredentialCallback;
+
+    emit infoMessage(i18n("Listing remotes"));
+    git_strarray gitremotes;
+    gitresult = git_remote_list(&gitremotes, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not list remotes" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+
+    emit infoMessage(i18n("Fetching remotes"));
+    for (int i = 0; i < gitremotes.count; i++) {
+        git_remote* gitremote = nullptr;
+        gitresult = git_remote_lookup(&gitremote, m_gitrepo, gitremotes.strings[i]);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not lookup remote" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            return;
+        }
+
+        gitresult = git_remote_fetch(gitremote, NULL, &gitfetchoptions, NULL);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not fetch remote" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_remote_free(gitremote);
+            git_strarray_dispose(&gitremotes);
+            return;
+        }
+        git_remote_free(gitremote);
+    }
+
+    // TODO: merge
+
+    kDebug() << "Done pulling" << m_directory << m_actionitems;
+    emit operationCompletedMessage(i18n("Done"));
+    git_strarray_dispose(&gitremotes);
 }
 
 #include "moc_fileviewgitplugin.cpp"
