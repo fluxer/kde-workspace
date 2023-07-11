@@ -58,12 +58,20 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     const KUrl queryurl = QString::fromLatin1("https://api.dictionaryapi.dev/api/v2/entries/en/") + queryword;
     KIO::StoredTransferJob *kiojob = KIO::storedGet(queryurl, KIO::Reload, KIO::HideProgressInfo);
     kiojob->setAutoDelete(false);
-    const bool kioresult = KIO::NetAccess::synchronousRun(kiojob, nullptr);
-    if (!kioresult) {
+    kiojob->setProperty("dictquery", query);
+    connect(kiojob, SIGNAL(finished(KJob*)), this, SLOT(slotFinished(KJob*)));
+    return true;
+}
+
+void DictEngine::slotFinished(KJob *kjob)
+{
+    KIO::StoredTransferJob *kiojob = qobject_cast<KIO::StoredTransferJob*>(kjob);
+    const QString query = kiojob->property("dictquery").toString();
+    if (kiojob->error() != KJob::NoError) {
         kWarning() << "KIO job failed";
         setError(query, QLatin1String("Cannot get meaning"));
         kiojob->deleteLater();
-        return true;
+        return;
     }
 
     const QJsonDocument jsondocument = QJsonDocument::fromJson(kiojob->data());
@@ -71,24 +79,24 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     if (jsondocument.isNull()) {
         kWarning() << jsondocument.errorString();
         setError(query, QLatin1String("Cannot parse JSON"));
-        return true;
+        return;
     }
 
     const QVariantList rootlist = jsondocument.toVariant().toList();
     if (rootlist.isEmpty()) {
         setError(query, QLatin1String("Unexpected JSON data"));
-        return true;
+        return;
     }
     const QVariantList meaningslist = rootlist.first().toMap().value("meanings").toList();
     if (meaningslist.isEmpty()) {
         setError(query, QLatin1String("Unexpected meanings data"));
-        return true;
+        return;
     }
     // qDebug() << Q_FUNC_INFO << "meanings" << meaningslist;
     const QVariantList definitionslist = meaningslist.first().toMap().value("definitions").toList();
     if (definitionslist.isEmpty()) {
         setError(query, QLatin1String("Unexpected definitions data"));
-        return true;
+        return;
     }
     // qDebug() << Q_FUNC_INFO << "definitions" << definitionslist;
     const QString definition = definitionslist.first().toMap().value("definition").toString();
@@ -105,7 +113,6 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     setData(query, QString("definition"), definition);
     setData(query, QString("example"), example);
     setData(QString("list-dictionaries"), QString("dictionaries"), QString("en"));
-    return true;
 }
 
 void DictEngine::setError(const QString &query, const QString &message)

@@ -20,6 +20,7 @@
 #define DICTENGINE_H
 
 #include <Plasma/DataEngine>
+#include <KJob>
 #include <KIO/Job>
 
 /**
@@ -40,6 +41,9 @@ class DictEngine: public Plasma::DataEngine
 
     private:
         void setError(const QString &query, const QString &message);
+
+    private Q_SLOTS:
+        void slotFinished(KJob *kjob);
 };
 
 K_EXPORT_PLASMA_DATAENGINE(dict, DictEngine)
