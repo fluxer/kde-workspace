@@ -38,6 +38,8 @@ bool DictEngine::sourceRequestEvent(const QString &query)
     // qDebug() << Q_FUNC_INFO << query;
 
     setData(query, QString("text"), QString());
+    setData(query, QString("definition"), QString());
+    setData(query, QString("example"), QString());
     setData(QString("list-dictionaries"), QString("dictionaries"), QString());
 
     const QStringList splitquery = query.split(QLatin1Char(':'));
@@ -89,15 +91,19 @@ bool DictEngine::sourceRequestEvent(const QString &query)
         return true;
     }
     // qDebug() << Q_FUNC_INFO << "definitions" << definitionslist;
+    const QString definition = definitionslist.first().toMap().value("definition").toString();
+    const QString example = definitionslist.first().toMap().value("example").toString();
     QString meaning = "<p>\n<dl><b>Definition:</b> ";
-    meaning.append(definitionslist.first().toMap().value("definition").toString());
+    meaning.append(definition);
     meaning.append("\n</dl>");
     meaning.append("<dl>\n<b>Example:</b> ");
-    meaning.append(definitionslist.first().toMap().value("example").toString());
+    meaning.append(example);
     meaning.append("\n</dl>\n</p>\n");
     // qDebug() << Q_FUNC_INFO << "meaning" << meaning;
 
     setData(query, QString("text"), meaning);
+    setData(query, QString("definition"), definition);
+    setData(query, QString("example"), example);
     setData(QString("list-dictionaries"), QString("dictionaries"), QString("en"));
     return true;
 }
@@ -105,6 +111,8 @@ bool DictEngine::sourceRequestEvent(const QString &query)
 void DictEngine::setError(const QString &query, const QString &message)
 {
     setData(query, QString("text"), QString::fromLatin1("<p>\n<dl><b>%1</b>\n</dl></p>\n").arg(message));
+    setData(query, QString("definition"), QString());
+    setData(query, QString("example"), QString());
     setData(QString("list-dictionaries"), QString("dictionaries"), QString("en"));
 }
 
