@@ -50,7 +50,7 @@ public:
                                      const char *url, const char *username_from_url, unsigned int allowed_types,
                                      void *payload);
 
-    static QByteArray getGitError();
+    static QByteArray getGitError(const int gitresult);
 
 private Q_SLOTS:
     void slotAdd();

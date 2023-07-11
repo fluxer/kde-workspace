@@ -54,7 +54,7 @@ QByteArray GitCommitDialog::message() const
     git_buf gitbuffer = GIT_BUF_INIT;
     int gitresult = git_message_prettify(&gitbuffer, gitmessage.constData(), 1, '#');
     if (gitresult != GIT_OK) {
-        kWarning() << "Could not prettify message" << gitmessage << FileViewGitPlugin::getGitError();
+        kWarning() << "Could not prettify message" << gitmessage << FileViewGitPlugin::getGitError(gitresult);
         return gitmessage;
     }
     const QByteArray gitprettymessage(gitbuffer.ptr, gitbuffer.size);
