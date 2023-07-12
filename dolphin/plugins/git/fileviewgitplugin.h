@@ -44,7 +44,7 @@ public:
 
     static int gitStatusCallback(const char *path, unsigned int status_flags, void *payload);
 
-    static QByteArray getGitError(const int gitresult);
+    static QByteArray getGitError();
 
 private Q_SLOTS:
     void slotAdd();
