@@ -62,6 +62,7 @@ GitCommitDialog::~GitCommitDialog()
 {
     KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
     saveDialogSize(kconfiggroup);
+    KGlobal::config()->sync();
 }
 
 QByteArray GitCommitDialog::message() const
