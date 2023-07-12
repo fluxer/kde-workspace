@@ -33,8 +33,6 @@
 #include <KProtocolManager>
 #include <KDebug>
 #include <KLocale>
-#include <KIO/Job>
-#include <KIO/NetAccess>
 
 QAtomicInt QalculateEngine::s_counter;
 
