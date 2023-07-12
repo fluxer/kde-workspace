@@ -41,6 +41,9 @@
 #include <git2/revparse.h>
 #include <git2/commit.h>
 #include <git2/remote.h>
+#include <git2/merge.h>
+#include <git2/annotated_commit.h>
+#include <git2/checkout.h>
 
 K_PLUGIN_FACTORY(FileViewGitPluginFactory, registerPlugin<FileViewGitPlugin>();)
 K_EXPORT_PLUGIN(FileViewGitPluginFactory("fileviewgitplugin"))
@@ -749,12 +752,94 @@ void FileViewGitPlugin::slotPull()
         }
         git_remote_free(gitremote);
     }
+    git_strarray_dispose(&gitremotes);
 
-    // TODO: merge
+    emit infoMessage(i18n("Getting annotated commits"));
+    git_annotated_commit* gitannotatedcommithead = nullptr;
+    gitresult = git_annotated_commit_from_revspec(&gitannotatedcommithead, m_gitrepo, "HEAD");
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+        kWarning() << "Could not get HEAD annotated commit" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        return;
+    }
+    git_annotated_commit* gitannotatedcommitfetch = nullptr;
+    gitresult = git_annotated_commit_from_revspec(&gitannotatedcommitfetch, m_gitrepo, "FETCH_HEAD");
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+        kWarning() << "Could not get FETCH_HEAD annotated commit" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_annotated_commit_free(gitannotatedcommithead);
+        return;
+    }
+
+    emit infoMessage(i18n("Analyzing merge"));
+    git_merge_preference_t gitmergepreferences;
+    git_merge_analysis_t gitmergeanalysis;
+    const git_annotated_commit* gitannotatedcommitarray[2] = {
+        gitannotatedcommitfetch,
+        gitannotatedcommithead
+    };
+    gitresult = git_merge_analysis(&gitmergeanalysis, &gitmergepreferences, m_gitrepo, gitannotatedcommitarray, 2);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+        kWarning() << "Could not analyze merge" << m_directory << giterror;
+        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+        git_annotated_commit_free(gitannotatedcommitfetch);
+        git_annotated_commit_free(gitannotatedcommithead);
+        return;
+    }
+
+    qDebug() << Q_FUNC_INFO << gitmergeanalysis << bool(gitmergeanalysis & GIT_MERGE_ANALYSIS_UP_TO_DATE);
+    if (gitmergeanalysis & GIT_MERGE_ANALYSIS_UP_TO_DATE) {
+        emit infoMessage(i18n("Already up-to-date"));
+    } else if (gitmergeanalysis & GIT_MERGE_ANALYSIS_NORMAL) {
+        emit infoMessage(i18n("Setting up merge options"));
+        git_merge_options gitmergeoptions;
+        gitresult = git_merge_options_init(&gitmergeoptions, GIT_MERGE_OPTIONS_VERSION);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+            kWarning() << "Could not initialize merge options" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_annotated_commit_free(gitannotatedcommitfetch);
+            git_annotated_commit_free(gitannotatedcommithead);
+            return;
+        }
+
+        emit infoMessage(i18n("Setting up checkout options"));
+        git_checkout_options gitcheckoptions;
+        gitresult = git_checkout_options_init(&gitcheckoptions, GIT_CHECKOUT_OPTIONS_VERSION);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+            kWarning() << "Could not initialize checkout options" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_annotated_commit_free(gitannotatedcommitfetch);
+            git_annotated_commit_free(gitannotatedcommithead);
+            return;
+        }
+
+        emit infoMessage(i18n("Merging"));
+        gitresult = git_merge(m_gitrepo, gitannotatedcommitarray, 2, &gitmergeoptions, &gitcheckoptions);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
+            kWarning() << "Could not merge" << m_directory << giterror;
+            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
+            git_annotated_commit_free(gitannotatedcommitfetch);
+            git_annotated_commit_free(gitannotatedcommithead);
+            return;
+        }
+    } else {
+        // fast-foward (most likely)
+        emit errorMessage(i18n("Merge strategy not implemented"));
+        git_annotated_commit_free(gitannotatedcommitfetch);
+        git_annotated_commit_free(gitannotatedcommithead);
+        return;
+    }
 
     kDebug() << "Done pulling" << m_directory << m_actionitems;
     emit operationCompletedMessage(i18n("Done"));
-    git_strarray_dispose(&gitremotes);
+    git_annotated_commit_free(gitannotatedcommitfetch);
+    git_annotated_commit_free(gitannotatedcommithead);
 }
 
 #include "moc_fileviewgitplugin.cpp"
