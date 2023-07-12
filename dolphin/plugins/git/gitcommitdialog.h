@@ -22,19 +22,24 @@
 #include <kdialog.h>
 #include <kvbox.h>
 #include <ktextedit.h>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 class GitCommitDialog : public KDialog
 {
     Q_OBJECT
 public:
-    GitCommitDialog(QWidget *parent = nullptr);
+    GitCommitDialog(const QStringList &changedfiles, QWidget *parent = nullptr);
     ~GitCommitDialog();
 
     QByteArray message() const;
 
 private:
-    KVBox* m_vbox;
+    KVBox* m_mainvbox;
     KTextEdit* m_commit;
+    QGroupBox* m_detailsvbox;
+    QVBoxLayout* m_detailslayout;
+    KTextEdit* m_changedfiles;
 };
 
 #endif // GITCOMMITDIALOG_H

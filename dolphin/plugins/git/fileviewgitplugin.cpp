@@ -369,7 +369,7 @@ void FileViewGitPlugin::slotCommit()
     const QStringList changedgitfiles = changedGitFiles();
     Q_ASSERT(!changedgitfiles.isEmpty());
 
-    GitCommitDialog gitdialog;
+    GitCommitDialog gitdialog(changedgitfiles, nullptr);
     if (gitdialog.exec() != QDialog::Accepted) {
         return;
     }
