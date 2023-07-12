@@ -53,10 +53,15 @@ GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, QWidget *paren
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
     m_detailslayout->addWidget(m_changedfiles);
     setDetailsWidget(m_detailsvbox);
+
+    KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
+    restoreDialogSize(kconfiggroup);
 }
 
 GitCommitDialog::~GitCommitDialog()
 {
+    KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
+    saveDialogSize(kconfiggroup);
 }
 
 QByteArray GitCommitDialog::message() const
