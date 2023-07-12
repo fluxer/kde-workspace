@@ -22,10 +22,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kaction.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <kpasswdstore.h>
-#include <kpassworddialog.h>
 #include <kicon.h>
 #include <klocale.h>
 #include <kdirnotify.h>
@@ -40,10 +36,6 @@
 #include <git2/tree.h>
 #include <git2/revparse.h>
 #include <git2/commit.h>
-#include <git2/remote.h>
-#include <git2/merge.h>
-#include <git2/annotated_commit.h>
-#include <git2/checkout.h>
 
 K_PLUGIN_FACTORY(FileViewGitPluginFactory, registerPlugin<FileViewGitPlugin>();)
 K_EXPORT_PLUGIN(FileViewGitPluginFactory("fileviewgitplugin"))
@@ -73,35 +65,12 @@ static QString getCompleteGitFile(const char* gitfile, const QByteArray &gitdir)
     return result;
 }
 
-static QByteArray getSSHKey()
-{
-    static const QString homepath = QDir::homePath();
-    static const QStringList possiblekeys = QStringList()
-        << QString::fromLatin1("id_ed25519")
-        << QString::fromLatin1("id_rsa");
-    foreach (const QString &key, possiblekeys) {
-        const QString fullpath = homepath + QLatin1String("/.ssh/") + key;
-        if (QFile::exists(fullpath)) {
-            return QFile::encodeName(fullpath);
-        }
-    }
-    const QString manualkey = KFileDialog::getOpenFileName(
-        KUrl("kfiledialog:///FileViewGitPlugin"),
-        QString(),
-        nullptr,
-        i18n("Select SSH key")
-    );
-    return QFile::encodeName(manualkey);
-}
-
 FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &args)
     : KVersionControlPlugin(parent),
     m_gitrepo(nullptr),
     m_addaction(nullptr),
     m_removeaction(nullptr),
-    m_commitaction(nullptr),
-    m_pushaction(nullptr),
-    m_pullaction(nullptr)
+    m_commitaction(nullptr)
 {
     Q_UNUSED(args);
 
@@ -129,22 +98,6 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
     connect(
         m_commitaction, SIGNAL(triggered()),
         this, SLOT(slotCommit())
-    );
-
-    m_pushaction = new KAction(this);
-    m_pushaction->setIcon(KIcon("go-top"));
-    m_pushaction->setText(i18nc("@action:inmenu", "<application>Git</application> Push..."));
-    connect(
-        m_pushaction, SIGNAL(triggered()),
-        this, SLOT(slotPush())
-    );
-
-    m_pullaction = new KAction(this);
-    m_pullaction->setIcon(KIcon("go-bottom"));
-    m_pullaction->setText(i18nc("@action:inmenu", "<application>Git</application> Pull..."));
-    connect(
-        m_pullaction, SIGNAL(triggered()),
-        this, SLOT(slotPull())
     );
 }
 
@@ -254,8 +207,6 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         if (!changedgitfiles.isEmpty()) {
             result.append(m_commitaction);
         }
-        result.append(m_pushaction);
-        result.append(m_pullaction);
     } else {
         result.append(m_addaction);
         result.append(m_removeaction);
@@ -306,100 +257,6 @@ int FileViewGitPlugin::gitStatusCallback(const char *path, unsigned int status_f
         gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
     }
     return GIT_OK;
-}
-
-int FileViewGitPlugin::gitCertificateCallback(git_cert *cert, int valid, const char *host, void *payload)
-{
-    Q_UNUSED(cert);
-    Q_UNUSED(payload);
-    // qDebug() << Q_FUNC_INFO << valid;
-    if (valid) {
-        // not asking for valid certs
-        return GIT_OK;
-    }
-    const int kmessageresult = KMessageBox::warningYesNo(
-        nullptr,
-        i18n("Certificate for %1 is not valid, continue anyway?", QString::fromUtf8(host))
-    );
-    if (kmessageresult == KMessageBox::Yes) {
-        return GIT_OK;
-    }
-    return GIT_ERROR;
-}
-
-int FileViewGitPlugin::gitCredentialCallback(git_credential **out,
-                                             const char *url, const char *username_from_url, unsigned int allowed_types,
-                                             void *payload)
-{
-    // qDebug() << Q_FUNC_INFO << allowed_types;
-
-    QByteArray gitsshkey;
-    if (allowed_types & GIT_CREDENTIAL_SSH_KEY) {
-        gitsshkey = getSSHKey();
-        if (gitsshkey.isEmpty()) {
-            kWarning() << "No SSH key found";
-            return GIT_ERROR;
-        }
-    }
-
-    FileViewGitPlugin* fileviewgitplugin = static_cast<FileViewGitPlugin*>(payload);
-    KPasswdStore kpasswdstore(fileviewgitplugin);
-    kpasswdstore.setStoreID(QString::fromLatin1("FileViewGitPlugin"));
-    QByteArray kpasswdstorekey;
-    const QString kpassworddialogcomment = QString::fromUtf8(url);
-    const QString kpassworddialoguser = QString::fromUtf8(username_from_url);
-    QString kpassworddialogpass;
-    KPasswordDialog::KPasswordDialogFlags kpassworddialogflags = KPasswordDialog::ShowUsernameLine;
-    if (!kpassworddialoguser.isEmpty()) {
-        kpassworddialogflags |= KPasswordDialog::UsernameReadOnly;
-    }
-    if (!kpassworddialogcomment.isEmpty()) {
-        kpassworddialogflags |= KPasswordDialog::ShowKeepPassword;
-        kpasswdstorekey = KPasswdStore::makeKey(kpassworddialogcomment);
-        kpassworddialogpass = kpasswdstore.getPasswd(kpasswdstorekey);
-    }
-    if (allowed_types & GIT_CREDENTIAL_USERPASS_PLAINTEXT || allowed_types & GIT_CREDENTIAL_SSH_KEY) {
-        KPasswordDialog kpassworddialog(nullptr, kpassworddialogflags);
-        kpassworddialog.addCommentLine(i18n("URL:"), kpassworddialogcomment);
-        kpassworddialog.setUsername(kpassworddialoguser);
-        kpassworddialog.setPassword(kpassworddialogpass);
-        if (!kpassworddialogpass.isEmpty()) {
-            kpassworddialog.setKeepPassword(true);
-        }
-        if (kpassworddialog.exec() != QDialog::Accepted) {
-            return GIT_EUSER;
-        }
-        const QByteArray gituser = kpassworddialog.username().toUtf8();
-        const QByteArray gitpass = kpassworddialog.password().toUtf8();
-        if (!kpasswdstorekey.isEmpty() && !gitpass.isEmpty()) {
-            kpasswdstore.storePasswd(kpasswdstorekey, kpassworddialog.password());
-        }
-        if (allowed_types & GIT_CREDENTIAL_SSH_KEY) {
-            QByteArray gitsshkeypub = gitsshkey;
-            gitsshkeypub.append(".pub");
-            return git_credential_ssh_key_new(
-                out,
-                gituser.constData(),
-                gitsshkeypub.constData(), gitsshkey.constData(),
-                gitpass.constData()
-            );
-        }
-        return git_credential_userpass_plaintext_new(
-            out,
-            gituser.constData(), gitpass.constData()
-        );
-    }
-    if (allowed_types & GIT_CREDENTIAL_USERNAME) {
-        KPasswordDialog kpassworddialog(nullptr, kpassworddialogflags);
-        kpassworddialog.addCommentLine(i18n("URL:"), kpassworddialogcomment);
-        kpassworddialog.setUsername(kpassworddialoguser);
-        if (kpassworddialog.exec() != QDialog::Accepted) {
-            return GIT_EUSER;
-        }
-        const QByteArray gituser = kpassworddialog.username().toUtf8();
-        return git_credential_username_new(out, gituser.constData());
-    }
-    return 1;
 }
 
 QByteArray FileViewGitPlugin::getGitError(const int gitresult)
@@ -642,204 +499,6 @@ void FileViewGitPlugin::slotCommit()
     git_index_free(gitindex);
 
     org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
-}
-
-void FileViewGitPlugin::slotPush()
-{
-    emit infoMessage(i18n("Setting up push options"));
-    git_push_options gitpushoptions;
-    int gitresult = git_push_options_init(&gitpushoptions, GIT_PUSH_OPTIONS_VERSION);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not initialize push options" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-    gitpushoptions.callbacks.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitpushoptions.callbacks.credentials = FileViewGitPlugin::gitCredentialCallback;
-    gitpushoptions.callbacks.payload = this;
-    gitpushoptions.follow_redirects = GIT_REMOTE_REDIRECT_ALL;
-    // NOTE: proxy settings may be taken from the environment
-    gitpushoptions.proxy_opts.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitpushoptions.proxy_opts.credentials = FileViewGitPlugin::gitCredentialCallback;
-
-    emit infoMessage(i18n("Listing remotes"));
-    git_strarray gitremotes;
-    gitresult = git_remote_list(&gitremotes, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not list remotes" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-
-    emit infoMessage(i18n("Pushing remotes"));
-    for (int i = 0; i < gitremotes.count; i++) {
-        git_remote* gitremote = nullptr;
-        gitresult = git_remote_lookup(&gitremote, m_gitrepo, gitremotes.strings[i]);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not lookup remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            return;
-        }
-
-        gitresult = git_remote_push(gitremote, NULL, &gitpushoptions);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not push remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_remote_free(gitremote);
-            git_strarray_dispose(&gitremotes);
-            return;
-        }
-        git_remote_free(gitremote);
-    }
-
-    kDebug() << "Done pushing" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_strarray_dispose(&gitremotes);
-}
-
-void FileViewGitPlugin::slotPull()
-{
-    emit infoMessage(i18n("Setting up fetch options"));
-    git_fetch_options gitfetchoptions;
-    int gitresult = git_fetch_options_init(&gitfetchoptions, GIT_FETCH_OPTIONS_VERSION);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not initialize fetch options" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-    gitfetchoptions.callbacks.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitfetchoptions.callbacks.credentials = FileViewGitPlugin::gitCredentialCallback;
-    gitfetchoptions.callbacks.payload = this;
-    gitfetchoptions.follow_redirects = GIT_REMOTE_REDIRECT_ALL;
-    // NOTE: proxy settings may be taken from the environment
-    gitfetchoptions.proxy_opts.certificate_check = FileViewGitPlugin::gitCertificateCallback;
-    gitfetchoptions.proxy_opts.credentials = FileViewGitPlugin::gitCredentialCallback;
-
-    emit infoMessage(i18n("Listing remotes"));
-    git_strarray gitremotes;
-    gitresult = git_remote_list(&gitremotes, m_gitrepo);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not list remotes" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-
-    emit infoMessage(i18n("Fetching remotes"));
-    for (int i = 0; i < gitremotes.count; i++) {
-        git_remote* gitremote = nullptr;
-        gitresult = git_remote_lookup(&gitremote, m_gitrepo, gitremotes.strings[i]);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not lookup remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            return;
-        }
-
-        gitresult = git_remote_fetch(gitremote, NULL, &gitfetchoptions, NULL);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not fetch remote" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_remote_free(gitremote);
-            git_strarray_dispose(&gitremotes);
-            return;
-        }
-        git_remote_free(gitremote);
-    }
-    git_strarray_dispose(&gitremotes);
-
-    emit infoMessage(i18n("Getting annotated commits"));
-    git_annotated_commit* gitannotatedcommithead = nullptr;
-    gitresult = git_annotated_commit_from_revspec(&gitannotatedcommithead, m_gitrepo, "HEAD");
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not get HEAD annotated commit" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        return;
-    }
-    git_annotated_commit* gitannotatedcommitfetch = nullptr;
-    gitresult = git_annotated_commit_from_revspec(&gitannotatedcommitfetch, m_gitrepo, "FETCH_HEAD");
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not get FETCH_HEAD annotated commit" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_annotated_commit_free(gitannotatedcommithead);
-        return;
-    }
-
-    emit infoMessage(i18n("Analyzing merge"));
-    git_merge_preference_t gitmergepreferences;
-    git_merge_analysis_t gitmergeanalysis;
-    const git_annotated_commit* gitannotatedcommitarray[2] = {
-        gitannotatedcommitfetch,
-        gitannotatedcommithead
-    };
-    gitresult = git_merge_analysis(&gitmergeanalysis, &gitmergepreferences, m_gitrepo, gitannotatedcommitarray, 2);
-    if (gitresult != GIT_OK) {
-        const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-        kWarning() << "Could not analyze merge" << m_directory << giterror;
-        emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-        git_annotated_commit_free(gitannotatedcommitfetch);
-        git_annotated_commit_free(gitannotatedcommithead);
-        return;
-    }
-
-    qDebug() << Q_FUNC_INFO << gitmergeanalysis << bool(gitmergeanalysis & GIT_MERGE_ANALYSIS_UP_TO_DATE);
-    if (gitmergeanalysis & GIT_MERGE_ANALYSIS_UP_TO_DATE) {
-        emit infoMessage(i18n("Already up-to-date"));
-    } else if (gitmergeanalysis & GIT_MERGE_ANALYSIS_NORMAL) {
-        emit infoMessage(i18n("Setting up merge options"));
-        git_merge_options gitmergeoptions;
-        gitresult = git_merge_options_init(&gitmergeoptions, GIT_MERGE_OPTIONS_VERSION);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not initialize merge options" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_annotated_commit_free(gitannotatedcommitfetch);
-            git_annotated_commit_free(gitannotatedcommithead);
-            return;
-        }
-
-        emit infoMessage(i18n("Setting up checkout options"));
-        git_checkout_options gitcheckoptions;
-        gitresult = git_checkout_options_init(&gitcheckoptions, GIT_CHECKOUT_OPTIONS_VERSION);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not initialize checkout options" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_annotated_commit_free(gitannotatedcommitfetch);
-            git_annotated_commit_free(gitannotatedcommithead);
-            return;
-        }
-
-        emit infoMessage(i18n("Merging"));
-        gitresult = git_merge(m_gitrepo, gitannotatedcommitarray, 2, &gitmergeoptions, &gitcheckoptions);
-        if (gitresult != GIT_OK) {
-            const QByteArray giterror = FileViewGitPlugin::getGitError(gitresult);
-            kWarning() << "Could not merge" << m_directory << giterror;
-            emit errorMessage(QString::fromLocal8Bit(giterror.constData(), giterror.size()));
-            git_annotated_commit_free(gitannotatedcommitfetch);
-            git_annotated_commit_free(gitannotatedcommithead);
-            return;
-        }
-    } else {
-        // fast-foward (most likely)
-        emit errorMessage(i18n("Merge strategy not implemented"));
-        git_annotated_commit_free(gitannotatedcommitfetch);
-        git_annotated_commit_free(gitannotatedcommithead);
-        return;
-    }
-
-    kDebug() << "Done pulling" << m_directory << m_actionitems;
-    emit operationCompletedMessage(i18n("Done"));
-    git_annotated_commit_free(gitannotatedcommitfetch);
-    git_annotated_commit_free(gitannotatedcommithead);
 }
 
 #include "moc_fileviewgitplugin.cpp"

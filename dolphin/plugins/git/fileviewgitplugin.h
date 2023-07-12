@@ -23,8 +23,6 @@
 #include <kversioncontrolplugin.h>
 
 #include <git2/repository.h>
-#include <git2/cert.h>
-#include <git2/credential.h>
 
 /**
  * @brief Git implementation for the KVersionControlPlugin interface.
@@ -45,10 +43,6 @@ public:
     QStringList changedGitFiles() const;
 
     static int gitStatusCallback(const char *path, unsigned int status_flags, void *payload);
-    static int gitCertificateCallback(git_cert *cert, int valid, const char *host, void *payload);
-    static int gitCredentialCallback(git_credential **out,
-                                     const char *url, const char *username_from_url, unsigned int allowed_types,
-                                     void *payload);
 
     static QByteArray getGitError(const int gitresult);
 
@@ -56,8 +50,6 @@ private Q_SLOTS:
     void slotAdd();
     void slotRemove();
     void slotCommit();
-    void slotPush();
-    void slotPull();
 
 private:
     QByteArray m_directory;
@@ -65,8 +57,6 @@ private:
     QAction* m_addaction;
     QAction* m_removeaction;
     QAction* m_commitaction;
-    QAction* m_pushaction;
-    QAction* m_pullaction;
     mutable KFileItemList m_actionitems;
 };
 
