@@ -263,7 +263,7 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
             iconformat = "ICO";
             iconmime = "image/vnd.microsoft.icon";
         } else {
-            iconpixmap = KIcon(normalizedpath.mid(17)).pixmap(20);
+            iconpixmap = KIcon(normalizedpath.mid(16)).pixmap(20);
             iconformat = "PNG";
             iconmime = "image/PNG";
         }
