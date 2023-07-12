@@ -29,6 +29,28 @@ static QStringList splitMailArg(const QString &arg)
     return arg.split(QLatin1Char(','));
 }
 
+class KMailDialog : public KEMailDialog
+{
+    Q_OBJECT
+public:
+    KMailDialog(QWidget *parent = nullptr, Qt::WindowFlags flags = 0);
+    ~KMailDialog();
+};
+
+KMailDialog::KMailDialog(QWidget *parent, Qt::WindowFlags flags)
+    : KEMailDialog(parent, flags)
+{
+    KConfigGroup kconfiggroup(KGlobal::config(), "KMailDialog");
+    restoreDialogSize(kconfiggroup);
+}
+
+KMailDialog::~KMailDialog()
+{
+    KConfigGroup kconfiggroup(KGlobal::config(), "KMailDialog");
+    saveDialogSize(kconfiggroup);
+    KGlobal::config()->sync();
+}
+
 int main(int argc, char **argv) {
     KAboutData aboutData(
         "kmail", 0, ki18n("KMail"),
@@ -53,18 +75,18 @@ int main(int argc, char **argv) {
     KCmdLineArgs::addCmdLineOptions(option);
 
     KApplication *kapplication = new KApplication();
-    KEMailDialog kemaildialog;
-    kemaildialog.setButtons(KDialog::Ok | KDialog::Close | KDialog::Help);
-    kemaildialog.show();
-    KHelpMenu khelpmenu(&kemaildialog, &aboutData, true);
-    kemaildialog.setButtonMenu(KDialog::Help, (QMenu*)khelpmenu.menu());
+    KMailDialog kmaildialog;
+    kmaildialog.setButtons(KDialog::Ok | KDialog::Close | KDialog::Help);
+    kmaildialog.show();
+    KHelpMenu khelpmenu(&kmaildialog, &aboutData, true);
+    kmaildialog.setButtonMenu(KDialog::Help, (QMenu*)khelpmenu.menu());
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
     for (int pos = 0; pos < args->count(); pos++) {
         const KUrl argurl = args->url(pos);
 
         if (argurl.hasQueryItem("subject")) {
-            kemaildialog.setSubject(argurl.queryItemValue("subject"));
+            kmaildialog.setSubject(argurl.queryItemValue("subject"));
         }
 
         QStringList mailto;
@@ -77,17 +99,19 @@ int main(int argc, char **argv) {
         if (mailto.isEmpty()) {
             mailto.append(argurl.path());
         }
-        kemaildialog.setTo(mailto);
+        kmaildialog.setTo(mailto);
 
         if (argurl.hasQueryItem("body")) {
-            kemaildialog.setMessage(argurl.queryItemValue("body"));
+            kmaildialog.setMessage(argurl.queryItemValue("body"));
         }
 
         if (argurl.hasQueryItem("attach")) {
-            kemaildialog.setAttach(splitMailArg(argurl.queryItemValue("attach")));
+            kmaildialog.setAttach(splitMailArg(argurl.queryItemValue("attach")));
         }
         break;
     }
 
     return kapplication->exec();
 }
+
+#include "main.moc"
