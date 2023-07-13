@@ -136,7 +136,7 @@ bool FileViewGitPlugin::beginRetrieval(const QString &directory)
     m_directory.clear();
     const QByteArray directorybytes = QFile::encodeName(directory);
     // NOTE: git_repository_open_ext() will look for .git in parent directories
-    const int gitresult = git_repository_open_ext(&m_gitrepo, directorybytes.constData(), 0 , "/");
+    const int gitresult = git_repository_open_ext(&m_gitrepo, directorybytes.constData(), 0 , NULL);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
         kWarning() << "Could not open" << directory << giterror;
@@ -454,6 +454,8 @@ void FileViewGitPlugin::slotCommit()
     }
     m_commitdialog->setupWidgets(changedgitfiles, diffgitfiles);
     m_commitdialog->show();
+    // if the dialog was minimized - raise it
+    m_commitdialog->activateWindow();
 }
 
 void FileViewGitPlugin::slotCommitFinished(const int result)
