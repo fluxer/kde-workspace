@@ -23,6 +23,7 @@
 #include <kdebug.h>
 #include <KTextEditor/View>
 #include <KTextEditor/ConfigInterface>
+#include <KTextEditor/Cursor>
 
 #include <git2/buffer.h>
 #include <git2/message.h>
@@ -86,8 +87,11 @@ void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QStrin
 {
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
     if (m_diffdocument) {
+        // NOTE: can't set the text in read-only mode
         m_diffdocument->setReadWrite(true);
         m_diffdocument->setText(diff);
+        // NOTE: after KTextEditor::Document::setText() the cursor is at the end
+        m_diffdocument->activeView()->setCursorPosition(KTextEditor::Cursor::start());
         m_diffdocument->setReadWrite(false);
     } else {
         m_difffiles->setText(diff);
