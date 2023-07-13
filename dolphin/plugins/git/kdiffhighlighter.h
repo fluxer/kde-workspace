@@ -16,33 +16,27 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef GITCOMMITDIALOG_H
-#define GITCOMMITDIALOG_H
+#ifndef KDIFFHIGHLIGHTER_H
+#define KDIFFHIGHLIGHTER_H
 
-#include "kdiffhighlighter.h"
+#include <QSyntaxHighlighter>
+#include <QTextEdit>
+#include <QTextCharFormat>
 
-#include <kdialog.h>
-#include <kvbox.h>
-#include <ktextedit.h>
-#include <ktabwidget.h>
-
-class GitCommitDialog : public KDialog
+class KDiffHighlighter : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    GitCommitDialog(QWidget *parent = nullptr);
-    ~GitCommitDialog();
+    KDiffHighlighter(QTextEdit *parent);
 
-    void setupWidgets(const QStringList &changedfiles, const QString &diff);
-    QByteArray message() const;
+protected:
+    // QSyntaxHighlighter reimplementation
+    void highlightBlock(const QString &text) final;
 
 private:
-    KVBox* m_mainvbox;
-    KTextEdit* m_commit;
-    KTabWidget* m_detailstab;
-    KTextEdit* m_changedfiles;
-    KTextEdit* m_difffiles;
-    KDiffHighlighter* m_diffhighlighter;
+    QTextCharFormat m_oldformat;
+    QTextCharFormat m_newformat;
 };
 
-#endif // GITCOMMITDIALOG_H
+#endif // KDIFFHIGHLIGHTER_H
+

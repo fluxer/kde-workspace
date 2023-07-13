@@ -7,6 +7,7 @@ include_directories(
 set(fileviewgitplugin_SRCS
     fileviewgitplugin.cpp
     gitcommitdialog.cpp
+    kdiffhighlighter.cpp
 )
 
 kde4_add_plugin(fileviewgitplugin ${fileviewgitplugin_SRCS})

@@ -32,7 +32,8 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_commit(nullptr),
     m_detailstab(nullptr),
     m_changedfiles(nullptr),
-    m_difffiles(nullptr)
+    m_difffiles(nullptr),
+    m_diffhighlighter(nullptr)
 {
     setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
     setButtons(KDialog::Details | KDialog::Ok | KDialog::Cancel);
@@ -52,7 +53,7 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_detailstab->addTab(m_changedfiles, KIcon("folder-documents"), i18n("Staged files"));
     m_difffiles = new KTextEdit(m_detailstab);
     m_difffiles->setReadOnly(true);
-    // TODO: syntax highlighter for the diff
+    m_diffhighlighter = new KDiffHighlighter(m_difffiles);
     m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
     setDetailsWidget(m_detailstab);
 
