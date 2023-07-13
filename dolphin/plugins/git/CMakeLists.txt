@@ -7,7 +7,6 @@ include_directories(
 set(fileviewgitplugin_SRCS
     fileviewgitplugin.cpp
     gitcommitdialog.cpp
-    kdiffhighlighter.cpp
 )
 
 kde4_add_plugin(fileviewgitplugin ${fileviewgitplugin_SRCS})
@@ -15,6 +14,7 @@ kde4_add_plugin(fileviewgitplugin ${fileviewgitplugin_SRCS})
 target_link_libraries(fileviewgitplugin
     KDE4::kdecore
     KDE4::kdeui
+    KDE4::ktexteditor
     konq
     ${LIBGIT2_LIBRARIES}
 )

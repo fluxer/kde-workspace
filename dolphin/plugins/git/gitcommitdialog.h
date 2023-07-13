@@ -19,12 +19,11 @@
 #ifndef GITCOMMITDIALOG_H
 #define GITCOMMITDIALOG_H
 
-#include "kdiffhighlighter.h"
-
 #include <kdialog.h>
 #include <kvbox.h>
 #include <ktextedit.h>
 #include <ktabwidget.h>
+#include <KTextEditor/EditorChooser>
 
 class GitCommitDialog : public KDialog
 {
@@ -42,7 +41,7 @@ private:
     KTabWidget* m_detailstab;
     KTextEdit* m_changedfiles;
     KTextEdit* m_difffiles;
-    KDiffHighlighter* m_diffhighlighter;
+    KTextEditor::Document* m_diffdocument;
 };
 
 #endif // GITCOMMITDIALOG_H

@@ -33,7 +33,7 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_detailstab(nullptr),
     m_changedfiles(nullptr),
     m_difffiles(nullptr),
-    m_diffhighlighter(nullptr)
+    m_diffdocument(nullptr)
 {
     setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
     setButtons(KDialog::Details | KDialog::Ok | KDialog::Cancel);
@@ -51,10 +51,17 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_changedfiles = new KTextEdit(m_detailstab);
     m_changedfiles->setReadOnly(true);
     m_detailstab->addTab(m_changedfiles, KIcon("folder-documents"), i18n("Staged files"));
-    m_difffiles = new KTextEdit(m_detailstab);
-    m_difffiles->setReadOnly(true);
-    m_diffhighlighter = new KDiffHighlighter(m_difffiles);
-    m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
+    m_diffdocument = KTextEditor::EditorChooser::editor()->createDocument(m_detailstab);
+    if (m_diffdocument) {
+        m_diffdocument->setHighlightingMode("Diff");
+        KTextEditor::View* diffview = m_diffdocument->createView(m_detailstab);
+        m_detailstab->addTab((QWidget*)diffview, KIcon("text-x-patch"), i18n("Staged changes"));
+    } else {
+        kWarning() << "Could not create text editor, using fallback";
+        m_difffiles = new KTextEdit(m_detailstab);
+        m_difffiles->setReadOnly(true);
+        m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
+    }
     setDetailsWidget(m_detailstab);
 
     KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
@@ -71,7 +78,13 @@ GitCommitDialog::~GitCommitDialog()
 void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QString &diff)
 {
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
-    m_difffiles->setText(diff);
+    if (m_diffdocument) {
+        m_diffdocument->setReadWrite(true);
+        m_diffdocument->setText(diff);
+        m_diffdocument->setReadWrite(false);
+    } else {
+        m_difffiles->setText(diff);
+    }
 }
 
 QByteArray GitCommitDialog::message() const
