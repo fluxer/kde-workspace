@@ -26,7 +26,7 @@
 #include <git2/message.h>
 #include <git2/errors.h>
 
-GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, const QString &diff, QWidget *parent)
+GitCommitDialog::GitCommitDialog(QWidget *parent)
     : KDialog(parent),
     m_mainvbox(nullptr),
     m_commit(nullptr),
@@ -49,11 +49,9 @@ GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, const QString 
     m_detailstab = new KTabWidget(m_mainvbox);
     m_changedfiles = new KTextEdit(m_detailstab);
     m_changedfiles->setReadOnly(true);
-    m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
     m_detailstab->addTab(m_changedfiles, KIcon("folder-documents"), i18n("Staged files"));
     m_difffiles = new KTextEdit(m_detailstab);
     m_difffiles->setReadOnly(true);
-    m_difffiles->setText(diff);
     // TODO: syntax highlighter for the diff
     m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
     setDetailsWidget(m_detailstab);
@@ -67,6 +65,12 @@ GitCommitDialog::~GitCommitDialog()
     KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
     saveDialogSize(kconfiggroup);
     KGlobal::config()->sync();
+}
+
+void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QString &diff)
+{
+    m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
+    m_difffiles->setText(diff);
 }
 
 QByteArray GitCommitDialog::message() const

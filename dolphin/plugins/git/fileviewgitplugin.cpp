@@ -17,7 +17,6 @@
 */
 
 #include "fileviewgitplugin.h"
-#include "gitcommitdialog.h"
 
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -75,7 +74,8 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
     m_gitrepo(nullptr),
     m_addaction(nullptr),
     m_removeaction(nullptr),
-    m_commitaction(nullptr)
+    m_commitaction(nullptr),
+    m_commitdialog(nullptr)
 {
     Q_UNUSED(args);
 
@@ -108,6 +108,10 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
 
 FileViewGitPlugin::~FileViewGitPlugin()
 {
+    if (!m_commitdialog.isNull()) {
+        delete m_commitdialog;
+    }
+
     if (m_gitrepo) {
         kDebug() << "Done with" << m_directory;
         git_repository_free(m_gitrepo);
@@ -436,11 +440,20 @@ void FileViewGitPlugin::slotCommit()
     const QString diffgitfiles = diffGitFiles();
     Q_ASSERT(!diffgitfiles.isEmpty());
 
-    GitCommitDialog gitdialog(changedgitfiles, diffgitfiles, nullptr);
-    if (gitdialog.exec() != QDialog::Accepted) {
+    if (m_commitdialog.isNull()) {
+        m_commitdialog = new GitCommitDialog(nullptr);
+        connect(m_commitdialog, SIGNAL(finished(int)), this, SLOT(slotCommitFinished(int)));
+    }
+    m_commitdialog->setupWidgets(changedgitfiles, diffgitfiles);
+    m_commitdialog->show();
+}
+
+void FileViewGitPlugin::slotCommitFinished(const int result)
+{
+    if (result != QDialog::Accepted) {
         return;
     }
-    const QByteArray gitmessage = gitdialog.message();
+    const QByteArray gitmessage = m_commitdialog->message();
 
     Q_ASSERT(m_gitrepo != nullptr);
     git_index* gitindex = nullptr;

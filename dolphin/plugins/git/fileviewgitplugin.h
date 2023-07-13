@@ -19,8 +19,11 @@
 #ifndef FILEVIEWGITPLUGIN_H
 #define FILEVIEWGITPLUGIN_H
 
+#include "gitcommitdialog.h"
+
 #include <kfileitem.h>
 #include <kversioncontrolplugin.h>
+#include <QPointer>
 
 #include <git2/repository.h>
 #include <git2/diff.h>
@@ -56,6 +59,7 @@ private Q_SLOTS:
     void slotAdd();
     void slotRemove();
     void slotCommit();
+    void slotCommitFinished(const int result);
 
 private:
     QByteArray m_directory;
@@ -64,6 +68,7 @@ private:
     QAction* m_removeaction;
     QAction* m_commitaction;
     mutable KFileItemList m_actionitems;
+    QPointer<GitCommitDialog> m_commitdialog;
 };
 
 #endif // FILEVIEWGITPLUGIN_H

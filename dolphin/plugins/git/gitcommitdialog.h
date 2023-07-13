@@ -28,9 +28,10 @@ class GitCommitDialog : public KDialog
 {
     Q_OBJECT
 public:
-    GitCommitDialog(const QStringList &changedfiles, const QString &diff, QWidget *parent = nullptr);
+    GitCommitDialog(QWidget *parent = nullptr);
     ~GitCommitDialog();
 
+    void setupWidgets(const QStringList &changedfiles, const QString &diff);
     QByteArray message() const;
 
 private:
