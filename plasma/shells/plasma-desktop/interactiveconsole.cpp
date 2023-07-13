@@ -52,9 +52,7 @@
 #include "plasmaapp.h"
 #include "scripting/desktopscriptengine.h"
 
-//TODO:
-// use text editor KPart for syntax highlighting?
-// interative help?
+// TODO: interative help?
 static const QString s_autosaveFileName("interactiveconsoleautosave.js");
 
 InteractiveConsole::InteractiveConsole(Plasma::Corona *corona, QWidget *parent)

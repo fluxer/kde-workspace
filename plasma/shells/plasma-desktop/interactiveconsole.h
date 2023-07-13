@@ -20,17 +20,16 @@
 #ifndef INTERACTIVECONSOLE
 #define INTERACTIVECONSOLE
 
-#include <QtScript/qscriptvalue.h>
-
 #include <KDialog>
 #include <KIO/Job>
-
 #include <QSplitter>
+#include <QTextBrowser>
+#include <QScriptValue>
+
 class KAction;
 class KFileDialog;
 class KMenu;
 class KTextEdit;
-#include <QTextBrowser>
 
 namespace KTextEditor
 {
