@@ -22,14 +22,13 @@
 #include <kdialog.h>
 #include <kvbox.h>
 #include <ktextedit.h>
-#include <QGroupBox>
-#include <QVBoxLayout>
+#include <ktabwidget.h>
 
 class GitCommitDialog : public KDialog
 {
     Q_OBJECT
 public:
-    GitCommitDialog(const QStringList &changedfiles, QWidget *parent = nullptr);
+    GitCommitDialog(const QStringList &changedfiles, const QString &diff, QWidget *parent = nullptr);
     ~GitCommitDialog();
 
     QByteArray message() const;
@@ -37,9 +36,9 @@ public:
 private:
     KVBox* m_mainvbox;
     KTextEdit* m_commit;
-    QGroupBox* m_detailsvbox;
-    QVBoxLayout* m_detailslayout;
+    KTabWidget* m_detailstab;
     KTextEdit* m_changedfiles;
+    KTextEdit* m_difffiles;
 };
 
 #endif // GITCOMMITDIALOG_H

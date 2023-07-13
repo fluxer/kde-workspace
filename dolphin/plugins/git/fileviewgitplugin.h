@@ -23,6 +23,7 @@
 #include <kversioncontrolplugin.h>
 
 #include <git2/repository.h>
+#include <git2/diff.h>
 
 /**
  * @brief Git implementation for the KVersionControlPlugin interface.
@@ -41,8 +42,13 @@ public:
     QList<QAction*> actions(const KFileItemList &items) const final;
 
     QStringList changedGitFiles() const;
+    QString diffGitFiles() const;
 
     static int gitStatusCallback(const char *path, unsigned int status_flags, void *payload);
+    static int gitDiffCallback(const git_diff_delta *delta,
+                               const git_diff_hunk *hunk,
+                               const git_diff_line *line,
+                               void *payload);
 
     static QByteArray getGitError();
 

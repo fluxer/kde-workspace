@@ -26,12 +26,13 @@
 #include <git2/message.h>
 #include <git2/errors.h>
 
-GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, QWidget *parent)
+GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, const QString &diff, QWidget *parent)
     : KDialog(parent),
     m_mainvbox(nullptr),
     m_commit(nullptr),
-    m_detailsvbox(nullptr),
-    m_changedfiles(nullptr)
+    m_detailstab(nullptr),
+    m_changedfiles(nullptr),
+    m_difffiles(nullptr)
 {
     setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
     setButtons(KDialog::Details| KDialog::Ok | KDialog::Cancel);
@@ -45,14 +46,17 @@ GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, QWidget *paren
     m_commit->setLineWrapMode(QTextEdit::FixedColumnWidth);
     m_commit->setLineWrapColumnOrWidth(72);
 
-    m_detailsvbox = new QGroupBox(m_mainvbox);
-    m_detailsvbox->setTitle(i18n("The following files are staged for commit"));
-    m_detailslayout = new QVBoxLayout(m_detailsvbox);
-    m_changedfiles = new KTextEdit(m_detailsvbox);
+    m_detailstab = new KTabWidget(m_mainvbox);
+    m_changedfiles = new KTextEdit(m_detailstab);
     m_changedfiles->setReadOnly(true);
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
-    m_detailslayout->addWidget(m_changedfiles);
-    setDetailsWidget(m_detailsvbox);
+    m_detailstab->addTab(m_changedfiles, KIcon("folder-documents"), i18n("Staged files"));
+    m_difffiles = new KTextEdit(m_detailstab);
+    m_difffiles->setReadOnly(true);
+    m_difffiles->setText(diff);
+    // TODO: syntax highlighter for the diff
+    m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
+    setDetailsWidget(m_detailstab);
 
     KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
     restoreDialogSize(kconfiggroup);

@@ -48,6 +48,12 @@ struct GitStatusPayload
     QByteArray gitdirectory;
 };
 
+struct GitDiffPayload
+{
+    QString *result;
+    QByteArray gitdirectory;
+};
+
 // path passed to git_status_file() has to be relative to the main git directory
 static QByteArray getGitFile(const KFileItem &item, const QByteArray &gitdir)
 {
@@ -221,6 +227,7 @@ QStringList FileViewGitPlugin::changedGitFiles() const
         kWarning() << "Not initialized" << m_directory;
         return result;
     }
+
     git_status_options gitstatusoptions;
     int gitresult = git_status_options_init(&gitstatusoptions, GIT_STATUS_OPTIONS_VERSION);
     if (gitresult != GIT_OK) {
@@ -240,7 +247,61 @@ QStringList FileViewGitPlugin::changedGitFiles() const
         kWarning() << "Could not get repository status" << m_directory << giterror;
         return result;
     }
+
     // qDebug() << Q_FUNC_INFO << m_directory << result;
+    return result;
+}
+
+QString FileViewGitPlugin::diffGitFiles() const
+{
+    QString result;
+    if (!m_gitrepo) {
+        kWarning() << "Not initialized" << m_directory;
+        return result;
+    }
+
+    git_index* gitindex = nullptr;
+    int gitresult = git_repository_index(&gitindex, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not get repository index" << m_directory << giterror;
+        return result;
+    }
+
+    git_diff_options gitdiffoptions;
+    gitresult = git_diff_options_init(&gitdiffoptions, GIT_DIFF_OPTIONS_VERSION);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not initialize diff options" << m_directory << giterror;
+        git_index_free(gitindex);
+        return result;
+    }
+    gitdiffoptions.flags = GIT_DIFF_UPDATE_INDEX;
+
+    git_diff* gitdiff = nullptr;
+    gitresult = git_diff_index_to_workdir(&gitdiff, m_gitrepo, gitindex, &gitdiffoptions);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not diff repository" << m_directory << giterror;
+        git_diff_free(gitdiff);
+        git_index_free(gitindex);
+        return result;
+    }
+
+    GitDiffPayload gitdiffpayload;
+    gitdiffpayload.result = &result;
+    gitdiffpayload.gitdirectory = m_directory;
+    gitresult = git_diff_print(gitdiff, GIT_DIFF_FORMAT_PATCH, FileViewGitPlugin::gitDiffCallback, &gitdiffpayload);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not diff repository" << m_directory << giterror;
+        git_diff_free(gitdiff);
+        git_index_free(gitindex);
+        return result;
+    }
+    git_diff_free(gitdiff);
+    git_index_free(gitindex);
+
     return result;
 }
 
@@ -256,6 +317,20 @@ int FileViewGitPlugin::gitStatusCallback(const char *path, unsigned int status_f
     } else if (status_flags & GIT_STATUS_INDEX_DELETED || status_flags & GIT_STATUS_WT_DELETED) {
         gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
     }
+    return GIT_OK;
+}
+
+int FileViewGitPlugin::gitDiffCallback(const git_diff_delta *delta,
+                                       const git_diff_hunk *hunk,
+                                       const git_diff_line *line,
+                                       void *payload)
+{
+    GitDiffPayload* gitdiffpayload = static_cast<GitDiffPayload*>(payload);
+    // qDebug() << Q_FUNC_INFO << delta->old_file.path << delta->new_file.path;
+    if (line->origin != GIT_DIFF_LINE_FILE_HDR) {
+        gitdiffpayload->result->append(QChar::fromLatin1(line->origin));
+    }
+    gitdiffpayload->result->append(QString::fromLocal8Bit(line->content, line->content_len));
     return GIT_OK;
 }
 
@@ -369,7 +444,11 @@ void FileViewGitPlugin::slotCommit()
     const QStringList changedgitfiles = changedGitFiles();
     Q_ASSERT(!changedgitfiles.isEmpty());
 
-    GitCommitDialog gitdialog(changedgitfiles, nullptr);
+    emit infoMessage(i18n("Determening files differences"));
+    const QString diffgitfiles = diffGitFiles();
+    Q_ASSERT(!diffgitfiles.isEmpty());
+
+    GitCommitDialog gitdialog(changedgitfiles, diffgitfiles, nullptr);
     if (gitdialog.exec() != QDialog::Accepted) {
         return;
     }
