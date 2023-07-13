@@ -40,33 +40,11 @@ K_EXPORT_PLUGIN(FileViewGitPluginFactory("fileviewgitplugin"))
 
 static char* s_gitupdatestrings[1] = { (char*)"*\0" }; // stack corruption? nah..
 
-struct GitStatusPayload
-{
-    QStringList *result;
-    QByteArray gitdirectory;
-};
-
-struct GitDiffPayload
-{
-    QString *result;
-    QByteArray gitdirectory;
-};
-
 // path passed to git_status_file() has to be relative to the main git repository directory
 static QByteArray getGitFile(const KFileItem &item, const QByteArray &gitdir)
 {
     const QByteArray result = QFile::encodeName(item.localPath());
     return result.mid(gitdir.size(), result.size() - gitdir.size());
-}
-
-static QString getCompleteGitFile(const char* gitfile, const QByteArray &gitdir)
-{
-    QString result = QFile::decodeName(gitdir);
-    if (!result.endsWith(QDir::separator())) {
-        result.append(QDir::separator());
-    }
-    result.append(QFile::decodeName(gitfile));
-    return result;
 }
 
 FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &args)
@@ -240,11 +218,8 @@ QStringList FileViewGitPlugin::changedGitFiles() const
     }
     gitstatusoptions.flags = GIT_STATUS_OPT_UPDATE_INDEX;
 
-    GitStatusPayload gitstatuspayload;
-    gitstatuspayload.result = &result;
-    gitstatuspayload.gitdirectory = m_directory;
     // NOTE: the callback is called only for paths the status of which has changed
-    gitresult = git_status_foreach_ext(m_gitrepo, &gitstatusoptions, FileViewGitPlugin::gitStatusCallback, &gitstatuspayload);
+    gitresult = git_status_foreach_ext(m_gitrepo, &gitstatusoptions, FileViewGitPlugin::gitStatusCallback, &result);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
         kWarning() << "Could not get repository status" << m_directory << giterror;
@@ -291,10 +266,7 @@ QString FileViewGitPlugin::diffGitFiles() const
         return result;
     }
 
-    GitDiffPayload gitdiffpayload;
-    gitdiffpayload.result = &result;
-    gitdiffpayload.gitdirectory = m_directory;
-    gitresult = git_diff_print(gitdiff, GIT_DIFF_FORMAT_PATCH, FileViewGitPlugin::gitDiffCallback, &gitdiffpayload);
+    gitresult = git_diff_print(gitdiff, GIT_DIFF_FORMAT_PATCH, FileViewGitPlugin::gitDiffCallback, &result);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
         kWarning() << "Could not print repository diff" << m_directory << giterror;
@@ -310,15 +282,15 @@ QString FileViewGitPlugin::diffGitFiles() const
 
 int FileViewGitPlugin::gitStatusCallback(const char *path, unsigned int status_flags, void *payload)
 {
-    GitStatusPayload* gitstatuspayload = static_cast<GitStatusPayload*>(payload);
+    QStringList* gitstatuspayload = static_cast<QStringList*>(payload);
     // qDebug() << Q_FUNC_INFO << path << status_flags;
     // check flags disregarding the ignored and conflicting files
     if (status_flags & GIT_STATUS_INDEX_NEW || status_flags & GIT_STATUS_WT_NEW) {
-        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
+        gitstatuspayload->append(QFile::decodeName(path));
     } else if (status_flags & GIT_STATUS_INDEX_MODIFIED || status_flags & GIT_STATUS_WT_MODIFIED) {
-        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
+        gitstatuspayload->append(QFile::decodeName(path));
     } else if (status_flags & GIT_STATUS_INDEX_DELETED || status_flags & GIT_STATUS_WT_DELETED) {
-        gitstatuspayload->result->append(getCompleteGitFile(path, gitstatuspayload->gitdirectory));
+        gitstatuspayload->append(QFile::decodeName(path));
     }
     return GIT_OK;
 }
@@ -328,7 +300,7 @@ int FileViewGitPlugin::gitDiffCallback(const git_diff_delta *delta,
                                        const git_diff_line *line,
                                        void *payload)
 {
-    GitDiffPayload* gitdiffpayload = static_cast<GitDiffPayload*>(payload);
+    QString* gitdiffpayload = static_cast<QString*>(payload);
     // qDebug() << Q_FUNC_INFO << delta->old_file.path << delta->new_file.path;
     switch (line->origin) {
         case GIT_DIFF_LINE_FILE_HDR:
@@ -337,11 +309,11 @@ int FileViewGitPlugin::gitDiffCallback(const git_diff_delta *delta,
             break;
         }
         default: {
-            gitdiffpayload->result->append(QChar::fromLatin1(line->origin));
+            gitdiffpayload->append(QChar::fromLatin1(line->origin));
             break;
         }
     }
-    gitdiffpayload->result->append(QString::fromLocal8Bit(line->content, line->content_len));
+    gitdiffpayload->append(QString::fromLocal8Bit(line->content, line->content_len));
     return GIT_OK;
 }
 
