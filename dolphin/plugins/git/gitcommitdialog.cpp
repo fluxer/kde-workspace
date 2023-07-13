@@ -21,6 +21,8 @@
 
 #include <klocale.h>
 #include <kdebug.h>
+#include <KTextEditor/View>
+#include <KTextEditor/ConfigInterface>
 
 #include <git2/buffer.h>
 #include <git2/message.h>
@@ -55,6 +57,11 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     if (m_diffdocument) {
         m_diffdocument->setHighlightingMode("Diff");
         KTextEditor::View* diffview = m_diffdocument->createView(m_detailstab);
+        KTextEditor::ConfigInterface* diffconfig = qobject_cast<KTextEditor::ConfigInterface*>(diffview);
+        if (diffconfig) {
+            // line numbers will not represent the line number in the changed file, disable them
+            diffconfig->setConfigValue("line-numbers", false);
+        }
         m_detailstab->addTab((QWidget*)diffview, KIcon("text-x-patch"), i18n("Staged changes"));
     } else {
         kWarning() << "Could not create text editor, using fallback";
