@@ -24,7 +24,6 @@
 #include <kaction.h>
 #include <kicon.h>
 #include <klocale.h>
-#include <kdirnotify.h>
 #include <kdebug.h>
 #include <QDir>
 
@@ -54,7 +53,7 @@ struct GitDiffPayload
     QByteArray gitdirectory;
 };
 
-// path passed to git_status_file() has to be relative to the main git directory
+// path passed to git_status_file() has to be relative to the main git repository directory
 static QByteArray getGitFile(const KFileItem &item, const QByteArray &gitdir)
 {
     const QByteArray result = QFile::encodeName(item.localPath());
@@ -294,7 +293,7 @@ QString FileViewGitPlugin::diffGitFiles() const
     gitresult = git_diff_print(gitdiff, GIT_DIFF_FORMAT_PATCH, FileViewGitPlugin::gitDiffCallback, &gitdiffpayload);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could not diff repository" << m_directory << giterror;
+        kWarning() << "Could not print repository diff" << m_directory << giterror;
         git_diff_free(gitdiff);
         git_index_free(gitindex);
         return result;
@@ -382,13 +381,7 @@ void FileViewGitPlugin::slotAdd()
     emit operationCompletedMessage(i18n("Done"));
     git_index_free(gitindex);
 
-    // notify KDirLister about changes (to refresh the icons)
-    QStringList changedgitfiles;
-    changedgitfiles.reserve(m_actionitems.size());
-    foreach (const KFileItem &item, m_actionitems) {
-        changedgitfiles.append(item.localPath());
-    }
-    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+    emit itemVersionsChanged();
 }
 
 void FileViewGitPlugin::slotRemove()
@@ -430,12 +423,7 @@ void FileViewGitPlugin::slotRemove()
     emit operationCompletedMessage(i18n("Done"));
     git_index_free(gitindex);
 
-    QStringList changedgitfiles;
-    changedgitfiles.reserve(m_actionitems.size());
-    foreach (const KFileItem &item, m_actionitems) {
-        changedgitfiles.append(item.localPath());
-    }
-    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+    emit itemVersionsChanged();
 }
 
 void FileViewGitPlugin::slotCommit()
@@ -574,7 +562,7 @@ void FileViewGitPlugin::slotCommit()
     git_object_free(gitparent);
     git_index_free(gitindex);
 
-    org::kde::KDirNotify::emitFilesChanged(changedgitfiles);
+    emit itemVersionsChanged();
 }
 
 #include "moc_fileviewgitplugin.cpp"

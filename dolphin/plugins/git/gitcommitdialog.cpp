@@ -35,7 +35,7 @@ GitCommitDialog::GitCommitDialog(const QStringList &changedfiles, const QString 
     m_difffiles(nullptr)
 {
     setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
-    setButtons(KDialog::Details| KDialog::Ok | KDialog::Cancel);
+    setButtons(KDialog::Details | KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     setButtonText(KDialog::Ok, i18nc("@action:button", "Commit"));
 
