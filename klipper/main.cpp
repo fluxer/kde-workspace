@@ -33,7 +33,6 @@ int main(int argc, char *argv[])
 {
   Klipper::createAboutData();
   KCmdLineArgs::init( argc, argv, Klipper::aboutData());
-  KUniqueApplication::addCmdLineOptions();
 
   if (!KUniqueApplication::start()) {
        fprintf(stderr, "Klipper is already running! Check it in the system tray in the panel.\n");

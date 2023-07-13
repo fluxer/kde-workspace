@@ -50,8 +50,6 @@ int main(int argc, char **argv)
     KCmdLineOptions options;
     options.add("+[user]", ki18n("Change password of this user"));
     KCmdLineArgs::addCmdLineOptions(options);
-    KUniqueApplication::addCmdLineOptions();
-
 
     if (!KUniqueApplication::start()) {
         kDebug() << "kdepasswd is already running";

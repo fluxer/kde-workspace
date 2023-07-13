@@ -65,7 +65,6 @@ int main( int argc, char **argv )
     aboutData.addAuthor(ki18n("Montel Laurent"), KLocalizedString(), "montel@kde.org");
 
     KCmdLineArgs::init( argc, argv, &aboutData );
-    KUniqueApplication::addCmdLineOptions();
 
     KCmdLineOptions options;
     options.add("+[menu]", ki18n("Sub menu to pre-select"));
