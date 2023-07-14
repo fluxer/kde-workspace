@@ -51,11 +51,9 @@ void DolphinFileItemListWidget::refreshCache()
         // as tint colors and are mixed with the current set text color. The tint colors
         // have been optimized for the base colors of the corresponding Oxygen emblems.
         switch (version) {
-        case KVersionControlPlugin::UpdateRequiredVersion:          tintColor = Qt::yellow; break;
-        case KVersionControlPlugin::LocallyModifiedUnstagedVersion: tintColor = Qt::green; break;
-        case KVersionControlPlugin::LocallyModifiedVersion:         tintColor = Qt::green; break;
         case KVersionControlPlugin::AddedVersion:                   tintColor = Qt::green; break;
         case KVersionControlPlugin::RemovedVersion:                 tintColor = Qt::darkRed; break;
+        case KVersionControlPlugin::LocallyModifiedVersion:         tintColor = Qt::yellow; break;
         case KVersionControlPlugin::ConflictingVersion:             tintColor = Qt::red; break;
         case KVersionControlPlugin::IgnoredVersion:                 tintColor = Qt::white; break;
         case KVersionControlPlugin::NormalVersion:
@@ -95,14 +93,8 @@ QPixmap DolphinFileItemListWidget::overlayForState(KVersionControlPlugin::ItemVe
     case KVersionControlPlugin::NormalVersion:
         iconName = "vcs-normal";
         break;
-    case KVersionControlPlugin::UpdateRequiredVersion:
-        iconName = "vcs-update-required";
-        break;
     case KVersionControlPlugin::LocallyModifiedVersion:
         iconName = "vcs-locally-modified";
-        break;
-    case KVersionControlPlugin::LocallyModifiedUnstagedVersion:
-        iconName = "vcs-locally-modified-unstaged";
         break;
     case KVersionControlPlugin::AddedVersion:
         iconName = "vcs-added";

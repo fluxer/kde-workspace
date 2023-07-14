@@ -151,12 +151,9 @@ KVersionControlPlugin::ItemVersion FileViewGitPlugin::itemVersion(const KFileIte
         kDebug() << "New file" << item;
         return KVersionControlPlugin::AddedVersion;
     }
-    if (gitstatusflags & GIT_STATUS_INDEX_MODIFIED) {
+    if (gitstatusflags & GIT_STATUS_INDEX_MODIFIED || gitstatusflags & GIT_STATUS_WT_MODIFIED) {
         kDebug() << "Modified file" << item;
         return KVersionControlPlugin::LocallyModifiedVersion;
-    } else if (gitstatusflags & GIT_STATUS_WT_MODIFIED) {
-        kDebug() << "Modified unstaged file" << item;
-        return KVersionControlPlugin::LocallyModifiedUnstagedVersion;
     }
     if (gitstatusflags & GIT_STATUS_INDEX_DELETED || gitstatusflags & GIT_STATUS_WT_DELETED) {
         kDebug() << "Deleted file" << item;

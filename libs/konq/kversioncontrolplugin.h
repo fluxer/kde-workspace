@@ -97,11 +97,6 @@ public:
          */
         NormalVersion,
         /**
-         * The file is under version control and a newer
-         * version exists on the main branch.
-         */
-        UpdateRequiredVersion,
-        /**
          * The file is under version control and has been
          * modified locally. All modifications will be part
          * of the next commit.
@@ -123,13 +118,6 @@ public:
          * branch.
          */
         ConflictingVersion,
-        /**
-         * The file is under version control and has local
-         * modifications, which will not be part of the next
-         * commit (or are "unstaged" in git jargon).
-         * @since 4.6
-         */
-        LocallyModifiedUnstagedVersion,
         /**
          * The file is not under version control and is listed
          * in the ignore list of the version control system.
