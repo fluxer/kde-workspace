@@ -214,12 +214,6 @@ add_feature_info(wrestool
     "ICO thumbnails support in KIO slave"
 )
 
-find_program(MTOOLS_EXECUTABLES NAMES mdir mmd mdel mrd mren mcopy)
-add_feature_info(mtools
-    MTOOLS_EXECUTABLES
-    "KIO floppy support"
-)
-
 find_program(QRENCODE_EXECUTABLE qrencode)
 add_feature_info(qrencode
     QRENCODE_EXECUTABLE

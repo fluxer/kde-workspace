@@ -1,4 +1,3 @@
-add_subdirectory(floppy)
 add_subdirectory(network)
 add_subdirectory(remote)
 add_subdirectory(thumbnail)
