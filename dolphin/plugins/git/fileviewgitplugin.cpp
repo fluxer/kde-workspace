@@ -350,7 +350,7 @@ QString FileViewGitPlugin::gitCommits() const
     int gitresult = git_revwalk_new(&gitrevwalk, m_gitrepo);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
-        kWarning() << "Could create revision walker" << m_directory << giterror;
+        kWarning() << "Could not create revision walker" << m_directory << giterror;
         return result;
     }
 

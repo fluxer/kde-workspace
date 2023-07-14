@@ -113,13 +113,6 @@ void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QStrin
             m_difffiles->setPlainText(diff);
         }
     }
-#if 0
-    int longestcommitline = 1;
-    foreach (const QString &commitline, commits.split(QLatin1Char('\n'))) {
-        longestcommitline = qMax(longestcommitline, commitline.size());
-    }
-    m_commits->setLineWrapColumnOrWidth(longestcommitline);
-#endif
     if (m_commits->toPlainText() != commits) {
         m_commits->setPlainText(commits);
     }
