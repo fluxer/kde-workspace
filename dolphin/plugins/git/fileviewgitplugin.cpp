@@ -304,6 +304,25 @@ QString FileViewGitPlugin::diffGitFiles() const
         return result;
     }
 
+    git_diff_find_options gitdifffindoptions;
+    gitresult = git_diff_find_options_init(&gitdifffindoptions, GIT_DIFF_FIND_OPTIONS_VERSION);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not initilize diff find options" << m_directory << giterror;
+        git_diff_free(gitdiff);
+        git_index_free(gitindex);
+        return result;
+    }
+
+    gitresult = git_diff_find_similar(gitdiff, &gitdifffindoptions);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not find diff similarities" << m_directory << giterror;
+        git_diff_free(gitdiff);
+        git_index_free(gitindex);
+        return result;
+    }
+
     gitresult = git_diff_print(gitdiff, GIT_DIFF_FORMAT_PATCH, FileViewGitPlugin::gitDiffCallback, &result);
     if (gitresult != GIT_OK) {
         const QByteArray giterror = FileViewGitPlugin::getGitError();
@@ -338,6 +357,8 @@ int FileViewGitPlugin::gitDiffCallback(const git_diff_delta *delta,
                                        const git_diff_line *line,
                                        void *payload)
 {
+    Q_UNUSED(delta);
+    Q_UNUSED(hunk);
     QString* gitdiffpayload = static_cast<QString*>(payload);
     // qDebug() << Q_FUNC_INFO << delta->old_file.path << delta->new_file.path;
     switch (line->origin) {
