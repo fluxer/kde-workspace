@@ -179,6 +179,8 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         return result;
     }
     bool hasdir = false;
+    bool shouldadd = false;
+    bool shouldremove = false;
     foreach (const KFileItem &item, items) {
         if (item.isDir()) {
             m_actionitems.clear();
@@ -186,6 +188,43 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             hasdir = true;
             break;
         } else {
+            const KVersionControlPlugin::ItemVersion itemversion = itemVersion(item);
+            switch (itemversion) {
+                // nothing for such, unless other item version differs
+                case KVersionControlPlugin::UnversionedVersion: {
+                    break;
+                }
+                // becomes untracked on remove
+                case KVersionControlPlugin::NormalVersion:
+                case KVersionControlPlugin::LocallyModifiedVersion:
+                case KVersionControlPlugin::LocallyModifiedUnstagedVersion: {
+                    shouldremove = true;
+                    break;
+                }
+                // solve conflict by removing it?
+                case KVersionControlPlugin::ConflictingVersion: {
+                    shouldremove = true;
+                    break;
+                }
+                // untracked file
+                case KVersionControlPlugin::AddedVersion: {
+                    shouldadd = true;
+                    break;
+                }
+                // automatically staged
+                case KVersionControlPlugin::RemovedVersion: {
+                    break;
+                }
+                // can be force-added
+                case KVersionControlPlugin::IgnoredVersion: {
+                    shouldadd = true;
+                    break;
+                }
+                // not supported
+                case KVersionControlPlugin::UpdateRequiredVersion: {
+                    break;
+                }
+            }
             m_actionitems.append(item);
         }
     }
@@ -195,8 +234,12 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             result.append(m_commitaction);
         }
     } else {
-        result.append(m_addaction);
-        result.append(m_removeaction);
+        if (shouldadd) {
+            result.append(m_addaction);
+        }
+        if (shouldremove) {
+            result.append(m_removeaction);
+        }
     }
     return result;
 }
