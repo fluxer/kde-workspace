@@ -24,14 +24,19 @@
 #include <KLocale>
 #include <KService>
 #include <KServiceTypeTrader>
+#include <kde_file.h>
 #include <kitemviews/kfileitemmodel.h>
 #include <kversioncontrolplugin.h>
 
 #include "updateitemstatesthread.h"
 
-#include <QDir>
-#include <QMutex>
 #include <QTimer>
+
+static bool kVersionDirExists(const QString &fileName)
+{
+    KDE_struct_stat statbuff;
+    return (KDE::stat(fileName, &statbuff) == 0 && S_ISDIR(statbuff.st_mode));
+}
 
 VersionControlObserver::VersionControlObserver(QObject* parent) :
     QObject(parent),
@@ -287,7 +292,7 @@ KVersionControlPlugin* VersionControlObserver::searchPlugin(const KUrl& director
     // like .svn, .git, ...
     foreach (KVersionControlPlugin* plugin, plugins) {
         const QString fileName = directory.path(KUrl::AddTrailingSlash) + plugin->fileName();
-        if (QFileInfo(fileName).exists()) {
+        if (kVersionDirExists(fileName)) {
             // The score of this plugin is 0 (best), so we can just return this plugin,
             // instead of going through the plugin scoring procedure, we can't find a better one ;)
             return plugin;
@@ -301,7 +306,7 @@ KVersionControlPlugin* VersionControlObserver::searchPlugin(const KUrl& director
         int upUrlCounter = 1;
         while ((upUrlCounter < bestScore) && (upUrl != dirUrl)) {
             const QString fileName = dirUrl.path(KUrl::AddTrailingSlash) + plugin->fileName();
-            if (QDir(fileName).exists()) {
+            if (kVersionDirExists(fileName)) {
                 if (upUrlCounter < bestScore) {
                     bestPlugin = plugin;
                     bestScore = upUrlCounter;
