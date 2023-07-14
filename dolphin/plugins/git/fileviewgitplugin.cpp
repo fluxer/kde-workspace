@@ -148,20 +148,26 @@ KVersionControlPlugin::ItemVersion FileViewGitPlugin::itemVersion(const KFileIte
         return KVersionControlPlugin::UnversionedVersion;
     }
     if (gitstatusflags & GIT_STATUS_INDEX_NEW || gitstatusflags & GIT_STATUS_WT_NEW) {
+        kDebug() << "New file" << item;
         return KVersionControlPlugin::AddedVersion;
     }
     if (gitstatusflags & GIT_STATUS_INDEX_MODIFIED) {
+        kDebug() << "Modified file" << item;
         return KVersionControlPlugin::LocallyModifiedVersion;
     } else if (gitstatusflags & GIT_STATUS_WT_MODIFIED) {
+        kDebug() << "Modified unstaged file" << item;
         return KVersionControlPlugin::LocallyModifiedUnstagedVersion;
     }
     if (gitstatusflags & GIT_STATUS_INDEX_DELETED || gitstatusflags & GIT_STATUS_WT_DELETED) {
+        kDebug() << "Deleted file" << item;
         return KVersionControlPlugin::RemovedVersion;
     }
     if (gitstatusflags & GIT_STATUS_IGNORED) {
+        kDebug() << "Ignored file" << item;
         return KVersionControlPlugin::IgnoredVersion;
     }
     if (gitstatusflags & GIT_STATUS_CONFLICTED) {
+        kDebug() << "Conflicting file" << item;
         return KVersionControlPlugin::ConflictingVersion;
     }
     return KVersionControlPlugin::NormalVersion;
@@ -179,8 +185,6 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         return result;
     }
     bool hasdir = false;
-    bool shouldadd = false;
-    bool shouldremove = false;
     foreach (const KFileItem &item, items) {
         if (item.isDir()) {
             kDebug() << "Items include directory" << item;
@@ -189,47 +193,6 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             hasdir = true;
             break;
         } else {
-            const KVersionControlPlugin::ItemVersion itemversion = itemVersion(item);
-            switch (itemversion) {
-                // nothing for such, unless other item version differs
-                case KVersionControlPlugin::UnversionedVersion: {
-                    break;
-                }
-                // becomes untracked on remove
-                case KVersionControlPlugin::NormalVersion:
-                case KVersionControlPlugin::LocallyModifiedVersion:
-                case KVersionControlPlugin::LocallyModifiedUnstagedVersion: {
-                    kDebug() << "Items include normal or locally modified item" << item;
-                    shouldremove = true;
-                    break;
-                }
-                // solve conflict by removing it?
-                case KVersionControlPlugin::ConflictingVersion: {
-                    kDebug() << "Items include conflicting item" << item;
-                    shouldremove = true;
-                    break;
-                }
-                // untracked file
-                case KVersionControlPlugin::AddedVersion: {
-                    kDebug() << "Items include untracked item" << item;
-                    shouldadd = true;
-                    break;
-                }
-                // automatically staged
-                case KVersionControlPlugin::RemovedVersion: {
-                    break;
-                }
-                // can be force-added
-                case KVersionControlPlugin::IgnoredVersion: {
-                    kDebug() << "Items include ignored item" << item;
-                    shouldadd = true;
-                    break;
-                }
-                // not supported
-                case KVersionControlPlugin::UpdateRequiredVersion: {
-                    break;
-                }
-            }
             m_actionitems.append(item);
         }
     }
@@ -239,12 +202,8 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             result.append(m_commitaction);
         }
     } else {
-        if (shouldadd) {
-            result.append(m_addaction);
-        }
-        if (shouldremove) {
-            result.append(m_removeaction);
-        }
+        result.append(m_addaction);
+        result.append(m_removeaction);
     }
     return result;
 }
