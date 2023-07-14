@@ -57,4 +57,3 @@ X-KDE-ServiceTypes=ThumbCreator
 X-KDE-PluginInfo-EnabledByDefault=true
 MimeType=inode/directory;
 CacheThumbnail=false
-HandleSequences=true

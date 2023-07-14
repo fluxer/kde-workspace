@@ -54,8 +54,6 @@ protected:
     QImage thumbForDirectory(const KUrl& directory);
     QString pluginForMimeType(const QString& mimeType);
 
-    float sequenceIndex() const;
-
 private:
     /**
      * Creates a sub thumbnail for the directory thumbnail. If a cached

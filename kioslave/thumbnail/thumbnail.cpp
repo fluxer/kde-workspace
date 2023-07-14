@@ -56,7 +56,6 @@
 
 #include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
-#include <kio/thumbsequencecreator.h>
 #include <kconfiggroup.h>
 
 #include <iostream>
@@ -171,10 +170,6 @@ void ThumbnailProtocol::get(const KUrl &url)
             return;
         }
 
-        ThumbSequenceCreator* sequenceCreator = dynamic_cast<ThumbSequenceCreator*>(creator);
-        if(sequenceCreator)
-            sequenceCreator->setSequenceIndex(sequenceIndex());
-
         if (!creator->create(url.path(), m_width, m_height, img)) {
             error(KIO::ERR_INTERNAL, i18n("Cannot create thumbnail for %1", url.path()));
             return;
@@ -253,10 +248,6 @@ QString ThumbnailProtocol::pluginForMimeType(const QString& mimeType) {
     }
 
     return QString();
-}
-
-float ThumbnailProtocol::sequenceIndex() const {
-    return metaData("sequence-index").toFloat();
 }
 
 bool ThumbnailProtocol::isOpaque(const QImage &image) const
@@ -371,9 +362,6 @@ QImage ThumbnailProtocol::thumbForDirectory(const KUrl& directory)
 
     QString localFile = directory.path();
 
-    // Multiply with a high number, so we get some semi-random sequence
-    int skipValidItems = ((int)sequenceIndex()) * tiles * tiles;
-
     img = QImage(QSize(folderWidth, folderHeight), QImage::Format_ARGB32);
     img.fill(0);
 
@@ -392,6 +380,7 @@ QImage ThumbnailProtocol::thumbForDirectory(const KUrl& directory)
     int iterations = 0;
     QString hadFirstThumbnail;
     int skipped = 0;
+    int skipValidItems = 0;
 
     const int maxYPos = folderHeight - bottomMargin - segmentHeight;
 
