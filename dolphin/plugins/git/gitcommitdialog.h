@@ -32,7 +32,7 @@ public:
     GitCommitDialog(QWidget *parent = nullptr);
     ~GitCommitDialog();
 
-    void setupWidgets(const QStringList &changedfiles, const QString &diff);
+    void setupWidgets(const QStringList &changedfiles, const QString &diff, const QString &commits);
     QByteArray message() const;
 
 private:
@@ -42,6 +42,7 @@ private:
     KTextEdit* m_changedfiles;
     KTextEdit* m_difffiles;
     KTextEditor::Document* m_diffdocument;
+    KTextEdit* m_commits;
 };
 
 #endif // GITCOMMITDIALOG_H

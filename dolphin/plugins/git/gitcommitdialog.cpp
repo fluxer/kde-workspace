@@ -19,6 +19,7 @@
 #include "gitcommitdialog.h"
 #include "fileviewgitplugin.h"
 
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kdebug.h>
 #include <KTextEditor/View>
@@ -36,7 +37,8 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_detailstab(nullptr),
     m_changedfiles(nullptr),
     m_difffiles(nullptr),
-    m_diffdocument(nullptr)
+    m_diffdocument(nullptr),
+    m_commits(nullptr)
 {
     setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
     setButtons(KDialog::Details | KDialog::Ok | KDialog::Cancel);
@@ -70,6 +72,11 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
         m_difffiles->setReadOnly(true);
         m_detailstab->addTab(m_difffiles, KIcon("text-x-patch"), i18n("Staged changes"));
     }
+    m_commits = new KTextEdit(m_detailstab);
+    m_commits->setReadOnly(true);
+    // fixed font for correct spacing
+    m_commits->setFont(KGlobalSettings::fixedFont());
+    m_detailstab->addTab(m_commits, KIcon ("text-x-changelog"), i18n("Commits"));
     setDetailsWidget(m_detailstab);
 
     KConfigGroup kconfiggroup(KGlobal::config(), "GitCommitDialog");
@@ -83,7 +90,7 @@ GitCommitDialog::~GitCommitDialog()
     KGlobal::config()->sync();
 }
 
-void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QString &diff)
+void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QString &diff, const QString &commits)
 {
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
     if (m_diffdocument) {
@@ -99,6 +106,7 @@ void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QStrin
     } else {
         m_difffiles->setText(diff);
     }
+    m_commits->setText(commits);
 }
 
 QByteArray GitCommitDialog::message() const

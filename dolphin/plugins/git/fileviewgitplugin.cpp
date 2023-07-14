@@ -34,6 +34,7 @@
 #include <git2/tree.h>
 #include <git2/revparse.h>
 #include <git2/commit.h>
+#include <git2/revwalk.h>
 
 K_PLUGIN_FACTORY(FileViewGitPluginFactory, registerPlugin<FileViewGitPlugin>();)
 K_EXPORT_PLUGIN(FileViewGitPluginFactory("fileviewgitplugin"))
@@ -224,8 +225,8 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         }
     }
     if (hasdir) {
-        const QStringList changedgitfiles = changedGitFiles();
-        if (!changedgitfiles.isEmpty()) {
+        const QStringList gitfileschanged = gitFilesChanged();
+        if (!gitfileschanged.isEmpty()) {
             result.append(m_commitaction);
         }
     } else {
@@ -239,7 +240,7 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
     return result;
 }
 
-QStringList FileViewGitPlugin::changedGitFiles() const
+QStringList FileViewGitPlugin::gitFilesChanged() const
 {
     QStringList result;
     if (!m_gitrepo) {
@@ -268,7 +269,7 @@ QStringList FileViewGitPlugin::changedGitFiles() const
     return result;
 }
 
-QString FileViewGitPlugin::diffGitFiles() const
+QString FileViewGitPlugin::gitFilesDiff() const
 {
     QString result;
     if (!m_gitrepo) {
@@ -333,6 +334,89 @@ QString FileViewGitPlugin::diffGitFiles() const
     }
     git_diff_free(gitdiff);
     git_index_free(gitindex);
+
+    return result;
+}
+
+QString FileViewGitPlugin::gitCommits() const
+{
+    QString result;
+    if (!m_gitrepo) {
+        kWarning() << "Not initialized" << m_directory;
+        return result;
+    }
+
+    git_revwalk* gitrevwalk = nullptr;
+    int gitresult = git_revwalk_new(&gitrevwalk, m_gitrepo);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could create revision walker" << m_directory << giterror;
+        return result;
+    }
+
+    gitresult = git_revwalk_push_head(gitrevwalk);
+    if (gitresult != GIT_OK) {
+        const QByteArray giterror = FileViewGitPlugin::getGitError();
+        kWarning() << "Could not push revision walker" << m_directory << giterror;
+        git_revwalk_free(gitrevwalk);
+        return result;
+    }
+
+    git_oid gitoid;
+    git_commit* gitcommit = nullptr;
+    char gitcommitbuffer[1024];
+    while (true) {
+        gitresult = git_revwalk_next(&gitoid, gitrevwalk);
+        if (gitresult == GIT_ITEROVER) {
+            break;
+        }
+
+        git_commit_lookup(&gitcommit, m_gitrepo, &gitoid);
+        if (gitresult != GIT_OK) {
+            const QByteArray giterror = FileViewGitPlugin::getGitError();
+            kWarning() << "Could not lookup commit" << m_directory << giterror;
+            git_revwalk_free(gitrevwalk);
+            return result;
+        }
+
+        ::memset(gitcommitbuffer, 0, sizeof(gitcommitbuffer) * sizeof(char));
+        git_oid_tostr(gitcommitbuffer, sizeof(gitcommitbuffer), git_commit_id(gitcommit));
+        result.append(QString::fromLatin1("commit %1\n").arg(QString::fromLatin1(gitcommitbuffer)));
+
+        const git_signature* gitsignature = git_commit_author(gitcommit);
+        if (gitsignature) {
+            const QString gitsignaturename = QString::fromUtf8(gitsignature->name);
+            const QString gitsignatureemail = QString::fromUtf8(gitsignature->email);
+            result.append(QString::fromLatin1("Author: %1 <%2>\n").arg(gitsignaturename, gitsignatureemail));
+            QDateTime gitsignaturewhen = QDateTime::fromTime_t(gitsignature->when.time);
+            gitsignaturewhen.setUtcOffset(gitsignature->when.offset);
+            result.append(QString::fromLatin1("Date:   %1\n").arg(gitsignaturewhen.toString()));
+            result.append(QLatin1Char('\n'));
+        }
+
+        const QByteArray gitmessage = git_commit_message(gitcommit);
+        if (!gitmessage.isEmpty()) {
+            QByteArray gitmessageencoding = git_commit_message_encoding(gitcommit);
+            if (gitmessageencoding.isEmpty()) {
+                // as documented
+                gitmessageencoding = "UTF-8";
+            }
+            QTextCodec* gitmessagecodec = QTextCodec::codecForName(gitmessageencoding);
+            if (!gitmessagecodec) {
+                kWarning() << "No codec for message encoding" << gitmessageencoding;
+                gitmessagecodec = QTextCodec::codecForName("UTF-8");
+            }
+            const QList<QByteArray> gitmessagelines = gitmessage.split('\n');
+            foreach (const QByteArray &gitmessageline, gitmessagelines) {
+                result.append(QLatin1String("    "));
+                result.append(gitmessagecodec->toUnicode(gitmessageline));
+                result.append(QLatin1Char('\n'));
+            }
+        }
+
+        git_commit_free(gitcommit);
+    }
+    git_revwalk_free(gitrevwalk);
 
     return result;
 }
@@ -472,18 +556,22 @@ void FileViewGitPlugin::slotRemove()
 void FileViewGitPlugin::slotCommit()
 {
     emit infoMessage(i18n("Determening changed files"));
-    const QStringList changedgitfiles = changedGitFiles();
-    Q_ASSERT(!changedgitfiles.isEmpty());
+    const QStringList gitfileschanged = gitFilesChanged();
+    Q_ASSERT(!gitfileschanged.isEmpty());
 
     emit infoMessage(i18n("Determening files differences"));
-    const QString diffgitfiles = diffGitFiles();
-    Q_ASSERT(!diffgitfiles.isEmpty());
+    const QString gitfilesdiff = gitFilesDiff();
+    Q_ASSERT(!gitfilesdiff.isEmpty());
+
+    emit infoMessage(i18n("Determening commits"));
+    const QString gitcommits = gitCommits();
+    Q_ASSERT(!gitcommits.isEmpty());
 
     if (m_commitdialog.isNull()) {
         m_commitdialog = new GitCommitDialog(nullptr);
         connect(m_commitdialog, SIGNAL(finished(int)), this, SLOT(slotCommitFinished(int)));
     }
-    m_commitdialog->setupWidgets(changedgitfiles, diffgitfiles);
+    m_commitdialog->setupWidgets(gitfileschanged, gitfilesdiff, gitcommits);
     m_commitdialog->show();
     // if the dialog was minimized - raise it
     m_commitdialog->activateWindow();

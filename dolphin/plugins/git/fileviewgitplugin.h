@@ -44,8 +44,9 @@ public:
     KVersionControlPlugin::ItemVersion itemVersion(const KFileItem& item) const final;
     QList<QAction*> actions(const KFileItemList &items) const final;
 
-    QStringList changedGitFiles() const;
-    QString diffGitFiles() const;
+    QStringList gitFilesChanged() const;
+    QString gitFilesDiff() const;
+    QString gitCommits() const;
 
     static int gitStatusCallback(const char *path, unsigned int status_flags, void *payload);
     static int gitDiffCallback(const git_diff_delta *delta,
