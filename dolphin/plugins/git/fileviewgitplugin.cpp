@@ -194,6 +194,8 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
         return result;
     }
     bool hasdir = false;
+    bool shouldadd = false;
+    bool shouldremove = false;
     foreach (const KFileItem &item, items) {
         if (item.isDir()) {
             kDebug() << "Items include directory" << item;
@@ -202,6 +204,22 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             hasdir = true;
             break;
         } else {
+            const QByteArray gitfile = getGitFile(item, m_directory);
+            unsigned int gitstatusflags = 0;
+            const int gitresult = git_status_file(&gitstatusflags, m_gitrepo, gitfile.constData());
+            if (gitresult != GIT_OK) {
+                kWarning() << "Could not get status" << gitfile << FileViewGitPlugin::getGitError();
+                gitstatusflags = 0;
+            }
+            if (gitstatusflags & GIT_STATUS_INDEX_NEW || gitstatusflags & GIT_STATUS_CONFLICTED
+                || gitstatusflags == GIT_STATUS_CURRENT) {
+                shouldremove = true;
+            }
+            // NOTE: git_index_add_bypath() force-adds ignored files
+            if (gitstatusflags & GIT_STATUS_WT_NEW || gitstatusflags & GIT_STATUS_INDEX_DELETED
+                || gitstatusflags & GIT_STATUS_IGNORED) {
+                shouldadd = true;
+            }
             m_actionitems.append(item);
         }
     }
@@ -211,8 +229,12 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
             result.append(m_commitaction);
         }
     } else {
-        result.append(m_addaction);
-        result.append(m_removeaction);
+        if (shouldadd) {
+            result.append(m_addaction);
+        }
+        if (shouldremove) {
+            result.append(m_removeaction);
+        }
     }
     return result;
 }

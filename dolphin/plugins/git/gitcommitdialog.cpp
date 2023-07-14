@@ -87,7 +87,7 @@ void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QStrin
 {
     m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
     if (m_diffdocument) {
-        // by not re-setting the text the cursor position and selection is preserved
+        // by not re-setting the text the cursor position and selection are preserved
         if (m_diffdocument->text() != diff) {
             // NOTE: can't set the text in read-only mode
             m_diffdocument->setReadWrite(true);
