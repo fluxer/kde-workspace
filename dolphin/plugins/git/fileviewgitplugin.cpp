@@ -183,6 +183,7 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
     bool shouldremove = false;
     foreach (const KFileItem &item, items) {
         if (item.isDir()) {
+            kDebug() << "Items include directory" << item;
             m_actionitems.clear();
             m_actionitems.append(item);
             hasdir = true;
@@ -198,16 +199,19 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
                 case KVersionControlPlugin::NormalVersion:
                 case KVersionControlPlugin::LocallyModifiedVersion:
                 case KVersionControlPlugin::LocallyModifiedUnstagedVersion: {
+                    kDebug() << "Items include normal or locally modified item" << item;
                     shouldremove = true;
                     break;
                 }
                 // solve conflict by removing it?
                 case KVersionControlPlugin::ConflictingVersion: {
+                    kDebug() << "Items include conflicting item" << item;
                     shouldremove = true;
                     break;
                 }
                 // untracked file
                 case KVersionControlPlugin::AddedVersion: {
+                    kDebug() << "Items include untracked item" << item;
                     shouldadd = true;
                     break;
                 }
@@ -217,6 +221,7 @@ QList<QAction*> FileViewGitPlugin::actions(const KFileItemList &items) const
                 }
                 // can be force-added
                 case KVersionControlPlugin::IgnoredVersion: {
+                    kDebug() << "Items include ignored item" << item;
                     shouldadd = true;
                     break;
                 }
