@@ -55,6 +55,7 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_detailstab = new KTabWidget(m_mainvbox);
     m_changedfiles = new KTextEdit(m_detailstab);
     m_changedfiles->setReadOnly(true);
+    m_changedfiles->setLineWrapMode(QTextEdit::NoWrap);
     m_detailstab->addTab(m_changedfiles, KIcon("folder-documents"), i18n("Staged files"));
     m_diffdocument = KTextEditor::EditorChooser::editor()->createDocument(m_detailstab);
     if (m_diffdocument) {
@@ -74,6 +75,7 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     }
     m_commits = new KTextEdit(m_detailstab);
     m_commits->setReadOnly(true);
+    m_commits->setLineWrapMode(QTextEdit::NoWrap);
     // fixed font for correct spacing
     m_commits->setFont(KGlobalSettings::fixedFont());
     m_detailstab->addTab(m_commits, KIcon ("text-x-changelog"), i18n("Commits"));
@@ -92,9 +94,12 @@ GitCommitDialog::~GitCommitDialog()
 
 void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QString &diff, const QString &commits)
 {
-    m_changedfiles->setText(changedfiles.join(QLatin1String("\n")));
+    // by not re-setting the text the cursor position and selection are preserved
+    const QString changedfilesstring = changedfiles.join(QLatin1String("\n"));
+    if (m_changedfiles->toPlainText() != changedfilesstring) {
+        m_changedfiles->setPlainText(changedfilesstring);
+    }
     if (m_diffdocument) {
-        // by not re-setting the text the cursor position and selection are preserved
         if (m_diffdocument->text() != diff) {
             // NOTE: can't set the text in read-only mode
             m_diffdocument->setReadWrite(true);
@@ -104,9 +109,20 @@ void GitCommitDialog::setupWidgets(const QStringList &changedfiles, const QStrin
             m_diffdocument->setReadWrite(false);
         }
     } else {
-        m_difffiles->setText(diff);
+        if (m_difffiles->toPlainText() != diff) {
+            m_difffiles->setPlainText(diff);
+        }
     }
-    m_commits->setText(commits);
+#if 0
+    int longestcommitline = 1;
+    foreach (const QString &commitline, commits.split(QLatin1Char('\n'))) {
+        longestcommitline = qMax(longestcommitline, commitline.size());
+    }
+    m_commits->setLineWrapColumnOrWidth(longestcommitline);
+#endif
+    if (m_commits->toPlainText() != commits) {
+        m_commits->setPlainText(commits);
+    }
 }
 
 QByteArray GitCommitDialog::message() const
