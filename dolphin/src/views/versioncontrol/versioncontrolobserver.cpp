@@ -295,27 +295,22 @@ KVersionControlPlugin* VersionControlObserver::searchPlugin(const KUrl& director
 
         // Version control systems like Git provide the version information
         // file only in the root directory. Check whether the version information file can
-        // be found in one of the parent directories. For performance reasons this
-        // step is only done, if the previous directory was marked as versioned by
-        // m_versionedDirectory. Drawback: Until e. g. Git is recognized, the root directory
-        // must be shown at least once.
-        if (m_versionedDirectory) {
-            KUrl dirUrl(directory);
-            KUrl upUrl = dirUrl.upUrl();
-            int upUrlCounter = 1;
-            while ((upUrlCounter < bestScore) && (upUrl != dirUrl)) {
-                const QString fileName = dirUrl.path(KUrl::AddTrailingSlash) + plugin->fileName();
-                if (QDir(fileName).exists()) {
-                    if (upUrlCounter < bestScore) {
-                        bestPlugin = plugin;
-                        bestScore = upUrlCounter;
-                    }
-                    break;
+        // be found in one of the parent directories.
+        KUrl dirUrl(directory);
+        KUrl upUrl = dirUrl.upUrl();
+        int upUrlCounter = 1;
+        while ((upUrlCounter < bestScore) && (upUrl != dirUrl)) {
+            const QString fileName = dirUrl.path(KUrl::AddTrailingSlash) + plugin->fileName();
+            if (QDir(fileName).exists()) {
+                if (upUrlCounter < bestScore) {
+                    bestPlugin = plugin;
+                    bestScore = upUrlCounter;
                 }
-                dirUrl = upUrl;
-                upUrl = dirUrl.upUrl();
-                ++upUrlCounter;
+                break;
             }
+            dirUrl = upUrl;
+            upUrl = dirUrl.upUrl();
+            ++upUrlCounter;
         }
     }
 
