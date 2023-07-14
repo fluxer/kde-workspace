@@ -147,16 +147,28 @@ KVersionControlPlugin::ItemVersion FileViewGitPlugin::itemVersion(const KFileIte
         kWarning() << "Could not get status" << gitfile << FileViewGitPlugin::getGitError();
         return KVersionControlPlugin::UnversionedVersion;
     }
-    if (gitstatusflags & GIT_STATUS_INDEX_NEW || gitstatusflags & GIT_STATUS_WT_NEW) {
-        kDebug() << "New file" << item;
+    if (gitstatusflags & GIT_STATUS_INDEX_NEW) {
+        kDebug() << "New staged file" << item;
         return KVersionControlPlugin::AddedVersion;
     }
-    if (gitstatusflags & GIT_STATUS_INDEX_MODIFIED || gitstatusflags & GIT_STATUS_WT_MODIFIED) {
-        kDebug() << "Modified file" << item;
+    if (gitstatusflags & GIT_STATUS_INDEX_MODIFIED) {
+        kDebug() << "Modified staged file" << item;
         return KVersionControlPlugin::LocallyModifiedVersion;
     }
-    if (gitstatusflags & GIT_STATUS_INDEX_DELETED || gitstatusflags & GIT_STATUS_WT_DELETED) {
-        kDebug() << "Deleted file" << item;
+    if (gitstatusflags & GIT_STATUS_INDEX_DELETED) {
+        kDebug() << "Deleted staged file" << item;
+        return KVersionControlPlugin::RemovedVersion;
+    }
+    if (gitstatusflags & GIT_STATUS_WT_NEW) {
+        kDebug() << "New unstaged file" << item;
+        return KVersionControlPlugin::AddedVersion;
+    }
+    if (gitstatusflags & GIT_STATUS_WT_MODIFIED) {
+        kDebug() << "Modified unstaged file" << item;
+        return KVersionControlPlugin::LocallyModifiedVersion;
+    }
+    if (gitstatusflags & GIT_STATUS_WT_DELETED) {
+        kDebug() << "Deleted unstaged file" << item;
         return KVersionControlPlugin::RemovedVersion;
     }
     if (gitstatusflags & GIT_STATUS_IGNORED) {
