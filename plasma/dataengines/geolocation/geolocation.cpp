@@ -96,7 +96,7 @@ bool Geolocation::updateSourceEvent(const QString &name)
 void Geolocation::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
     kDebug() << "network status changed";
-    if (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus) {
+    if (status == KNetworkManager::ConnectedStatus) {
         updatePlugins();
     }
 }

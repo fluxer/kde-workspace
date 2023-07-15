@@ -101,7 +101,7 @@ void WeatherEngine::init()
 {
     // Get the list of available plugins but don't load them
     KNetworkManager::KNetworkStatus status = m_networkManager->status();
-    m_networkAvailable = (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus);
+    m_networkAvailable = (status == KNetworkManager::ConnectedStatus);
     connect(
         m_networkManager, SIGNAL(statusChanged(KNetworkManager::KNetworkStatus)),
         this, SLOT(networkStatusChanged(KNetworkManager::KNetworkStatus))
@@ -227,7 +227,7 @@ bool WeatherEngine::updateSourceEvent(const QString& source)
 void WeatherEngine::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
     kDebug() << status;
-    m_networkAvailable = (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus);
+    m_networkAvailable = (status == KNetworkManager::ConnectedStatus);
     if (m_networkAvailable) {
         // allow the network to settle down and actually come up
         m_reconnectTimer.start(5000);
