@@ -39,18 +39,17 @@ Geolocation::Geolocation(QObject* parent, const QVariantList& args)
 
 void Geolocation::init()
 {
-    const KService::List offers = KServiceTypeTrader::self()->query("Plasma/GeolocationProvider");
     QVariantList args;
-
+    const KService::List offers = KServiceTypeTrader::self()->query("Plasma/GeolocationProvider");
     foreach (const KService::Ptr service, offers) {
         QString error;
-        GeolocationProvider *plugin = service->createInstance<GeolocationProvider>(0, args, &error);
+        GeolocationProvider *plugin = service->createInstance<GeolocationProvider>(nullptr, args, &error);
         if (plugin) {
             m_plugins << plugin;
             plugin->init(&m_data);
             connect(plugin, SIGNAL(updated()), this, SLOT(pluginUpdated()));
         } else {
-            kWarning() << "Failed to load GeolocationProvider:" << error;
+            kWarning() << "failed to load GeolocationProvider" << error;
         }
     }
 }
@@ -87,7 +86,11 @@ bool Geolocation::sourceRequestEvent(const QString &name)
 
 bool Geolocation::updateSourceEvent(const QString &name)
 {
-    return sourceRequestEvent(name);
+    if (name == SOURCE) {
+        updatePlugins();
+        return true;
+    }
+    return false;
 }
 
 void Geolocation::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
