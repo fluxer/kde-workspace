@@ -28,10 +28,6 @@ install(
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasma/geolocation
 )
 
-#install(FILES includes/Interface
-#        DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/KDE/Plasma/Geolocation)
-# -------------------------------------------------------------------------------------------------
-
 set(plasma_dataengine_geolocation_SRCS geolocation.cpp)
 kde4_add_plugin(plasma_engine_geolocation ${plasma_dataengine_geolocation_SRCS})
 target_link_libraries(plasma_engine_geolocation
@@ -77,3 +73,10 @@ kde4_add_plugin(plasma-geolocation-mozilla ${plasma_geolocation_mozilla_SRCS})
 target_link_libraries(plasma-geolocation-mozilla plasma-geolocation-interface)
 install(FILES plasma-geolocation-mozilla.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
 install(TARGETS plasma-geolocation-mozilla DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+# -------------------------------------------------------------------------------------------------
+
+set(plasma_geolocation_timezone_SRCS location_timezone.cpp)
+kde4_add_plugin(plasma-geolocation-timezone ${plasma_geolocation_timezone_SRCS})
+target_link_libraries(plasma-geolocation-timezone plasma-geolocation-interface)
+install(FILES plasma-geolocation-timezone.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
+install(TARGETS plasma-geolocation-timezone DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})

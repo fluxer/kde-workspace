@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Geolocation Timezone Location Service
+Comment=Geolocation from the local timezone.
+X-KDE-ServiceTypes=Plasma/GeolocationProvider
+X-KDE-ParentApp=geolocation
+Type=Service
+Icon=applications-internet
+X-KDE-Library=plasma-geolocation-timezone
+X-KDE-PluginInfo-Name=timezone
