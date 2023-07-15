@@ -50,8 +50,8 @@ void geoPlugin::result(KJob* job)
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
         // for reference:
         // http://www.geoplugin.com/quickstart
-        outd["accuracy"] = 50000;
-        outd["country"] = jsonmap["geoplugin_countryName"];;
+        outd["accuracy"] = jsonmap["geoplugin_locationAccuracyRadius"];
+        outd["country"] = jsonmap["geoplugin_countryName"];
         outd["country code"] = jsonmap["geoplugin_countryCode"];
         outd["city"] = jsonmap["geoplugin_city"];
         outd["latitude"] = jsonmap["geoplugin_latitude"];
