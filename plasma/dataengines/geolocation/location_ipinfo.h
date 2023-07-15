@@ -28,17 +28,11 @@ class IPinfo : public GeolocationProvider
     Q_OBJECT
 public:
     explicit IPinfo(QObject *parent = 0, const QVariantList &args = QVariantList());
-    ~IPinfo();
 
     virtual void update();
 
 protected slots:
-    void readData(KIO::Job *, const QByteArray& data);
     void result(KJob* job);
-
-private:
-    class Private;
-    Private *const d;
 };
 
-#endif
+#endif // IPINFO_H

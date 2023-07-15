@@ -20,109 +20,76 @@
 
 #include <KDebug>
 #include <KJob>
-#include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 #include <QJsonDocument>
 
 static const QString s_geolocateurl = QString::fromLatin1("https://location.services.mozilla.com/v1/geolocate?key=b9255e08-838f-4d4e-b270-bec2cc89719b");
 static const QString s_regionurl = QString::fromLatin1("https://location.services.mozilla.com/v1/country?key=b9255e08-838f-4d4e-b270-bec2cc89719b");
 
-class Mozilla::Private
-{
-public:
-    QByteArray payload;
-
-    void populateGeoDataEngineData()
-    {
-        const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
-        const QVariantMap jsonmap = jsondoc.toVariant().toMap();
-        const QVariantMap jsonlocationmap = jsonmap["location"].toMap();
-        // for reference:
-        // https://ichnaea.readthedocs.io/en/latest/api/geolocate.html
-        outd["accuracy"] = jsonmap["accuracy"];
-        outd["latitude"] = jsonlocationmap["lat"];
-        outd["longitude"] = jsonlocationmap["lng"];
-        //qDebug() << Q_FUNC_INFO << jsonmap << jsonlocationmap;
-    }
-
-    void populateRegionDataEngineData()
-    {
-        const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
-        const QVariantMap jsonmap = jsondoc.toVariant().toMap();
-        // for reference:
-        // https://ichnaea.readthedocs.io/en/latest/api/region.html
-        outd["country code"] = jsonmap["country_code"];
-        outd["country"] = jsonmap["country_name"];
-        // qDebug() << Q_FUNC_INFO << jsonmap;
-    }
-
-    Plasma::DataEngine::Data outd;
-};
-
 Mozilla::Mozilla(QObject* parent, const QVariantList& args)
-    : GeolocationProvider(parent, args), d(new Private())
+    : GeolocationProvider(parent, args)
 {
     setUpdateTriggers(SourceEvent | NetworkConnected);
 }
 
-Mozilla::~Mozilla()
-{
-    delete d;
-}
-
 void Mozilla::update()
 {
-    d->outd.clear();
-    d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl(s_geolocateurl), KIO::NoReload, KIO::HideProgressInfo);
-    if (datajob) {
-        kDebug() << "Fetching" << s_geolocateurl;
-        connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(readData(KIO::Job*,QByteArray)));
-        connect(datajob, SIGNAL(result(KJob*)), this, SLOT(resultGeo(KJob*)));
-    } else {
-        kDebug() << "Could not create geo job";
-    }
-}
-
-void Mozilla::readData(KIO::Job* job, const QByteArray &data)
-{
-    Q_UNUSED(job)
-
-    if (data.isEmpty()) {
-        return;
-    }
-    d->payload.append(data);
+    kDebug() << "Fetching" << s_geolocateurl;
+    KIO::StoredTransferJob *datajob = KIO::storedGet(
+        KUrl(s_geolocateurl),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    datajob->setAutoDelete(false);
+    connect(datajob, SIGNAL(result(KJob*)), this, SLOT(resultGeo(KJob*)));
 }
 
 void Mozilla::resultGeo(KJob* job)
 {
-    if (job && !job->error()) {
-        d->populateGeoDataEngineData();
+    if (job->error() == KJob::NoError) {
+        KIO::StoredTransferJob *datajob = qobject_cast<KIO::StoredTransferJob*>(job);
+        const QJsonDocument jsondoc = QJsonDocument::fromJson(datajob->data());
+        const QVariantMap jsonmap = jsondoc.toVariant().toMap();
+        const QVariantMap jsonlocationmap = jsonmap["location"].toMap();
+        // for reference:
+        // https://ichnaea.readthedocs.io/en/latest/api/geolocate.html
+        setData("accuracy", jsonmap["accuracy"]);
+        setData("latitude", jsonlocationmap["lat"]);
+        setData("longitude", jsonlocationmap["lng"]);
+        //qDebug() << Q_FUNC_INFO << jsonmap << jsonlocationmap;
     } else {
-        kDebug() << "error" << job->errorString();
+        kWarning() << "mozilla job error" << job->errorString();
+        setData("accuracy", QVariant());
+        setData("latitude", QVariant());
+        setData("longitude", QVariant());
     }
+    job->deleteLater();
 
-    d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl(s_regionurl), KIO::NoReload, KIO::HideProgressInfo);
-    if (datajob) {
-        kDebug() << "Fetching" << s_regionurl;
-        connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this, SLOT(readData(KIO::Job*,QByteArray)));
-        connect(datajob, SIGNAL(result(KJob*)), this, SLOT(resultRegion(KJob*)));
-    } else {
-        kDebug() << "Could not create region job";
-        setData(d->outd);
-        // qDebug() << Q_FUNC_INFO << d->outd;
-    }
+    kDebug() << "Fetching" << s_regionurl;
+    KIO::StoredTransferJob *datajob = KIO::storedGet(
+        KUrl(s_regionurl),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    datajob->setAutoDelete(false);
+    connect(datajob, SIGNAL(result(KJob*)), this, SLOT(resultRegion(KJob*)));
 }
 
 void Mozilla::resultRegion(KJob* job)
 {
-    if (job && !job->error()) {
-        d->populateRegionDataEngineData();
+    if (job->error() == KJob::NoError) {
+        KIO::StoredTransferJob *datajob = qobject_cast<KIO::StoredTransferJob*>(job);
+        const QJsonDocument jsondoc = QJsonDocument::fromJson(datajob->data());
+        const QVariantMap jsonmap = jsondoc.toVariant().toMap();
+        // for reference:
+        // https://ichnaea.readthedocs.io/en/latest/api/region.html
+        setData("country code", jsonmap["country_code"]);
+        setData("country", jsonmap["country_name"]);
+        // qDebug() << Q_FUNC_INFO << jsonmap;
     } else {
-        kDebug() << "error" << job->errorString();
+        kWarning() << "mozilla job error" << job->errorString();
+        setData("country code", QVariant());
+        setData("country", QVariant());
     }
-    setData(d->outd);
-    // qDebug() << Q_FUNC_INFO << d->outd;
+    job->deleteLater();
 }
 
 K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(mozilla, Mozilla)

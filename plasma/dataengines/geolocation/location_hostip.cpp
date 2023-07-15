@@ -21,18 +21,34 @@
 #include "location_hostip.h"
 #include <KDebug>
 #include <KJob>
-#include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 
-class HostIP::Private
+HostIP::HostIP(QObject* parent, const QVariantList& args)
+    : GeolocationProvider(parent, args)
 {
-public:
-    QByteArray payload;
+    setUpdateTriggers(SourceEvent | NetworkConnected);
+}
 
-    void populateDataEngineData(Plasma::DataEngine::Data & outd)
-    {
+void HostIP::update()
+{
+    kDebug() << "Fetching https://api.hostip.info/get_html.php?position=true";
+    KIO::StoredTransferJob *datajob = KIO::storedGet(
+        KUrl("https://api.hostip.info/get_html.php?position=true"),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    datajob->setAutoDelete(false);
+    connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
+}
+
+void HostIP::result(KJob* job)
+{
+    Plasma::DataEngine::Data outd;
+
+    if (job->error() == KJob::NoError) {
+        KIO::StoredTransferJob *datajob = qobject_cast<KIO::StoredTransferJob*>(job);
+
         QString country, countryCode, city, latitude, longitude, ip;
-        const QList<QByteArray> &bl = payload.split('\n');
-        payload.clear();
+        const QList<QByteArray> &bl = datajob->data().split('\n');
         foreach (const QByteArray &b, bl) {
             const QList<QByteArray> &t = b.split(':');
             if (t.count() > 1) {
@@ -75,55 +91,10 @@ public:
         outd["longitude"] = longitude;
         outd["ip"] = ip;
         // qDebug() << Q_FUNC_INFO << outd;
-    }
-};
-
-HostIP::HostIP(QObject* parent, const QVariantList& args)
-    : GeolocationProvider(parent, args), d(new Private())
-{
-    setUpdateTriggers(SourceEvent | NetworkConnected);
-}
-
-HostIP::~HostIP()
-{
-    delete d;
-}
-
-void HostIP::update()
-{
-    d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("https://api.hostip.info/get_html.php?position=true"),
-                                         KIO::NoReload, KIO::HideProgressInfo);
-
-    if (datajob) {
-        kDebug() << "Fetching https://api.hostip.info/get_html.php?position=true";
-        connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
-                SLOT(readData(KIO::Job*,QByteArray)));
-        connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
     } else {
-        kDebug() << "Could not create job";
+        kWarning() << "hostip job error" << job->errorString();
     }
-}
-
-void HostIP::readData(KIO::Job* job, const QByteArray& data)
-{
-    Q_UNUSED(job)
-
-    if (data.isEmpty()) {
-        return;
-    }
-    d->payload.append(data);
-}
-
-void HostIP::result(KJob* job)
-{
-    Plasma::DataEngine::Data outd;
-
-    if(job && !job->error()) {
-        d->populateDataEngineData(outd);
-    } else {
-        kDebug() << "error" << job->errorString();
-    }
+    job->deleteLater();
 
     setData(outd);
 }

@@ -28,17 +28,11 @@ class geoPlugin : public GeolocationProvider
     Q_OBJECT
 public:
     explicit geoPlugin(QObject *parent = 0, const QVariantList &args = QVariantList());
-    ~geoPlugin();
 
     virtual void update();
 
 protected slots:
-    void readData(KIO::Job *, const QByteArray& data);
     void result(KJob* job);
-
-private:
-    class Private;
-    Private *const d;
 };
 
 #endif // GEOPLUGIN_H

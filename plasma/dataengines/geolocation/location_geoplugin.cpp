@@ -20,17 +20,33 @@
 
 #include <KDebug>
 #include <KJob>
-#include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 #include <QJsonDocument>
 
-class geoPlugin::Private
+geoPlugin::geoPlugin(QObject* parent, const QVariantList& args)
+    : GeolocationProvider(parent, args)
 {
-public:
-    QByteArray payload;
+    setUpdateTriggers(SourceEvent | NetworkConnected);
+}
 
-    void populateDataEngineData(Plasma::DataEngine::Data & outd)
-    {
-        const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
+void geoPlugin::update()
+{
+    kDebug() << "Fetching http://www.geoplugin.net/json.gp";
+    KIO::StoredTransferJob *datajob = KIO::storedGet(
+        KUrl("http://www.geoplugin.net/json.gp"),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    datajob->setAutoDelete(false);
+    connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
+}
+
+void geoPlugin::result(KJob* job)
+{
+    Plasma::DataEngine::Data outd;
+
+    if (job->error() == KJob::NoError) {
+        KIO::StoredTransferJob *datajob = qobject_cast<KIO::StoredTransferJob*>(job);
+        const QJsonDocument jsondoc = QJsonDocument::fromJson(datajob->data());
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
         // for reference:
         // http://www.geoplugin.com/quickstart
@@ -42,55 +58,10 @@ public:
         outd["longitude"] = jsonmap["geoplugin_longitude"];
         outd["ip"] = jsonmap["geoplugin_request"];
         // qDebug() << Q_FUNC_INFO << outd;
-    }
-};
-
-geoPlugin::geoPlugin(QObject* parent, const QVariantList& args)
-    : GeolocationProvider(parent, args), d(new Private())
-{
-    setUpdateTriggers(SourceEvent | NetworkConnected);
-}
-
-geoPlugin::~geoPlugin()
-{
-    delete d;
-}
-
-void geoPlugin::update()
-{
-    d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("http://www.geoplugin.net/json.gp"),
-                                         KIO::NoReload, KIO::HideProgressInfo);
-
-    if (datajob) {
-        kDebug() << "Fetching http://www.geoplugin.net/json.gp";
-        connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
-                SLOT(readData(KIO::Job*,QByteArray)));
-        connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
     } else {
-        kDebug() << "Could not create job";
+        kWarning() << "geoplugin job error" << job->errorString();
     }
-}
-
-void geoPlugin::readData(KIO::Job* job, const QByteArray& data)
-{
-    Q_UNUSED(job)
-
-    if (data.isEmpty()) {
-        return;
-    }
-    d->payload.append(data);
-}
-
-void geoPlugin::result(KJob* job)
-{
-    Plasma::DataEngine::Data outd;
-
-    if(job && !job->error()) {
-        d->populateDataEngineData(outd);
-    } else {
-        kDebug() << "error" << job->errorString();
-    }
+    job->deleteLater();
 
     setData(outd);
 }

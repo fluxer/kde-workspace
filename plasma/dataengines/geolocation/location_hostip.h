@@ -27,18 +27,11 @@ class HostIP : public GeolocationProvider
     Q_OBJECT
 public:
     explicit HostIP(QObject *parent = 0, const QVariantList &args = QVariantList());
-    ~HostIP();
 
     virtual void update();
 
 protected slots:
-    void readData(KIO::Job *, const QByteArray& data);
     void result(KJob* job);
-
-private:
-    class Private;
-    Private *const d;
-
 };
 
-#endif
+#endif // HOSTIP_H

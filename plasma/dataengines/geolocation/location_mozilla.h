@@ -28,18 +28,12 @@ class Mozilla : public GeolocationProvider
     Q_OBJECT
 public:
     explicit Mozilla(QObject *parent = 0, const QVariantList &args = QVariantList());
-    ~Mozilla();
 
     virtual void update();
 
 protected slots:
-    void readData(KIO::Job *, const QByteArray &data);
     void resultGeo(KJob* job);
     void resultRegion(KJob* job);
-
-private:
-    class Private;
-    Private *const d;
 };
 
-#endif
+#endif // MOZILLA_H

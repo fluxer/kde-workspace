@@ -20,18 +20,34 @@
 
 #include <KDebug>
 #include <KJob>
-#include <KIO/TransferJob>
+#include <KIO/StoredTransferJob>
 #include <QJsonDocument>
 #include <QLocale>
 
-class IPinfo::Private
+IPinfo::IPinfo(QObject* parent, const QVariantList& args)
+    : GeolocationProvider(parent, args)
 {
-public:
-    QByteArray payload;
+    setUpdateTriggers(SourceEvent | NetworkConnected);
+}
 
-    void populateDataEngineData(Plasma::DataEngine::Data & outd)
-    {
-        const QJsonDocument jsondoc = QJsonDocument::fromJson(payload);
+void IPinfo::update()
+{
+    kDebug() << "Fetching https://ipinfo.io/json";
+    KIO::StoredTransferJob *datajob = KIO::storedGet(
+        KUrl("https://ipinfo.io/json"),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    datajob->setAutoDelete(false);
+    connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
+}
+
+void IPinfo::result(KJob* job)
+{
+    Plasma::DataEngine::Data outd;
+
+    if (job->error() == KJob::NoError) {
+        KIO::StoredTransferJob *datajob = qobject_cast<KIO::StoredTransferJob*>(job);
+        const QJsonDocument jsondoc = QJsonDocument::fromJson(datajob->data());
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
         const QStringList location = jsonmap["loc"].toString().split(QLatin1Char(','));
         const QString latitude = (location.size() == 2 ? location.at(0) : QString());
@@ -47,55 +63,10 @@ public:
         outd["longitude"] = longitude;
         outd["ip"] = jsonmap["ip"];
         // qDebug() << Q_FUNC_INFO << outd;
-    }
-};
-
-IPinfo::IPinfo(QObject* parent, const QVariantList& args)
-    : GeolocationProvider(parent, args), d(new Private())
-{
-    setUpdateTriggers(SourceEvent | NetworkConnected);
-}
-
-IPinfo::~IPinfo()
-{
-    delete d;
-}
-
-void IPinfo::update()
-{
-    d->payload.clear();
-    KIO::TransferJob *datajob = KIO::get(KUrl("https://ipinfo.io/json"),
-                                         KIO::NoReload, KIO::HideProgressInfo);
-
-    if (datajob) {
-        kDebug() << "Fetching https://ipinfo.io/json";
-        connect(datajob, SIGNAL(data(KIO::Job*,QByteArray)), this,
-                SLOT(readData(KIO::Job*,QByteArray)));
-        connect(datajob, SIGNAL(result(KJob*)), this, SLOT(result(KJob*)));
     } else {
-        kDebug() << "Could not create job";
+        kWarning() << "ipinfo job error" << job->errorString();
     }
-}
-
-void IPinfo::readData(KIO::Job* job, const QByteArray& data)
-{
-    Q_UNUSED(job)
-
-    if (data.isEmpty()) {
-        return;
-    }
-    d->payload.append(data);
-}
-
-void IPinfo::result(KJob* job)
-{
-    Plasma::DataEngine::Data outd;
-
-    if(job && !job->error()) {
-        d->populateDataEngineData(outd);
-    } else {
-        kDebug() << "error" << job->errorString();
-    }
+    job->deleteLater();
 
     setData(outd);
 }
