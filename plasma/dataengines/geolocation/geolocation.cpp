@@ -35,14 +35,10 @@ Geolocation::Geolocation(QObject* parent, const QVariantList& args)
         m_networkManager, SIGNAL(statusChanged(KNetworkManager::KNetworkStatus)),
         this, SLOT(networkStatusChanged(KNetworkManager::KNetworkStatus))
     );
-    m_updateTimer.setInterval(100);
-    m_updateTimer.setSingleShot(true);
-    connect(&m_updateTimer, SIGNAL(timeout()), this, SLOT(actuallySetData()));
 }
 
 void Geolocation::init()
 {
-    //TODO: should this be delayed even further, e.g. when the source is requested?
     const KService::List offers = KServiceTypeTrader::self()->query("Plasma/GeolocationProvider");
     QVariantList args;
 
@@ -51,12 +47,10 @@ void Geolocation::init()
         GeolocationProvider *plugin = service->createInstance<GeolocationProvider>(0, args, &error);
         if (plugin) {
             m_plugins << plugin;
-            plugin->init(&m_data, &m_accuracy);
+            plugin->init(&m_data);
             connect(plugin, SIGNAL(updated()), this, SLOT(pluginUpdated()));
-            connect(plugin, SIGNAL(availabilityChanged(GeolocationProvider*)),
-                    this, SLOT(pluginAvailabilityChanged(GeolocationProvider*)));
         } else {
-            kDebug() << "Failed to load GeolocationProvider:" << error;
+            kWarning() << "Failed to load GeolocationProvider:" << error;
         }
     }
 }
@@ -64,6 +58,7 @@ void Geolocation::init()
 Geolocation::~Geolocation()
 {
     qDeleteAll(m_plugins);
+    m_plugins.clear();
 }
 
 QStringList Geolocation::sources() const
@@ -71,75 +66,46 @@ QStringList Geolocation::sources() const
     return QStringList() << SOURCE;
 }
 
-bool Geolocation::updateSourceEvent(const QString &name)
+void Geolocation::updatePlugins()
 {
-    //kDebug() << name;
-    if (name == SOURCE) {
-        return updatePlugins(GeolocationProvider::SourceEvent);
-    }
-
-    return false;
-}
-
-bool Geolocation::updatePlugins(GeolocationProvider::UpdateTriggers triggers)
-{
-    bool changed = false;
-
+    kDebug() << "started update";
     foreach (GeolocationProvider *plugin, m_plugins) {
-        changed = plugin->requestUpdate(triggers) || changed;
+        plugin->requestUpdate();
     }
-
-    if (changed) {
-        m_updateTimer.start();
-    }
-
-    return changed;
 }
 
 bool Geolocation::sourceRequestEvent(const QString &name)
 {
-    kDebug() << name;
     if (name == SOURCE) {
-        updatePlugins(GeolocationProvider::ForcedUpdate);
-        setData(SOURCE, m_data);
+        m_data.clear();
+        setData(SOURCE, Plasma::DataEngine::Data());
+        updatePlugins();
         return true;
     }
-
     return false;
+}
+
+bool Geolocation::updateSourceEvent(const QString &name)
+{
+    return sourceRequestEvent(name);
 }
 
 void Geolocation::networkStatusChanged(const KNetworkManager::KNetworkStatus status)
 {
     kDebug() << "network status changed";
     if (status == KNetworkManager::ConnectedStatus || status == KNetworkManager::UnknownStatus) {
-        updatePlugins(GeolocationProvider::NetworkConnected);
-    }
-}
-
-void Geolocation::pluginAvailabilityChanged(GeolocationProvider *provider)
-{
-    m_data.clear();
-    m_accuracy.clear();
-
-    provider->requestUpdate(GeolocationProvider::ForcedUpdate);
-
-    bool changed = false;
-    foreach (GeolocationProvider *plugin, m_plugins) {
-        changed = plugin->populateSharedData() || changed;
-    }
-
-    if (changed) {
-        m_updateTimer.start();
+        updatePlugins();
     }
 }
 
 void Geolocation::pluginUpdated()
 {
-    m_updateTimer.start();
-}
-
-void Geolocation::actuallySetData()
-{
+    foreach (const GeolocationProvider *plugin, m_plugins) {
+        if (plugin->isUpdating()) {
+            return;
+        }
+    }
+    kDebug() << "finished update";
     setData(SOURCE, m_data);
 }
 

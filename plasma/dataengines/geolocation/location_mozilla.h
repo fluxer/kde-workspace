@@ -22,6 +22,7 @@
 #include "geolocationprovider.h"
 
 #include <KIO/Job>
+#include <Plasma/DataEngine>
 
 class Mozilla : public GeolocationProvider
 {
@@ -34,6 +35,9 @@ public:
 protected slots:
     void resultGeo(KJob* job);
     void resultRegion(KJob* job);
+
+private:
+    Plasma::DataEngine::Data m_outdata;
 };
 
 #endif // MOZILLA_H

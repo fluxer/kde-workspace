@@ -26,7 +26,7 @@
 HostIP::HostIP(QObject* parent, const QVariantList& args)
     : GeolocationProvider(parent, args)
 {
-    setUpdateTriggers(SourceEvent | NetworkConnected);
+    setObjectName("location_hostip");
 }
 
 void HostIP::update()
@@ -78,19 +78,17 @@ void HostIP::result(KJob* job)
         if (city.contains(QLatin1String("Unknown City"))) {
             city = QString();
         }
-        if (country.isEmpty() && city.isEmpty()) {
-            return;
+        if (!country.isEmpty() && !city.isEmpty()) {
+            // ordering of first three to preserve backwards compatibility
+            outd["accuracy"] = 40000;
+            outd["country"] = country;
+            outd["country code"] = countryCode;
+            outd["city"] = city;
+            outd["latitude"] = latitude;
+            outd["longitude"] = longitude;
+            outd["ip"] = ip;
+            // qDebug() << Q_FUNC_INFO << outd;
         }
-
-        // ordering of first three to preserve backwards compatibility
-        outd["accuracy"] = 40000;
-        outd["country"] = country;
-        outd["country code"] = countryCode;
-        outd["city"] = city;
-        outd["latitude"] = latitude;
-        outd["longitude"] = longitude;
-        outd["ip"] = ip;
-        // qDebug() << Q_FUNC_INFO << outd;
     } else {
         kWarning() << "hostip job error" << job->errorString();
     }

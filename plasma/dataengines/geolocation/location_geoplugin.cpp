@@ -26,7 +26,7 @@
 geoPlugin::geoPlugin(QObject* parent, const QVariantList& args)
     : GeolocationProvider(parent, args)
 {
-    setUpdateTriggers(SourceEvent | NetworkConnected);
+    setObjectName("location_geoplugin");
 }
 
 void geoPlugin::update()

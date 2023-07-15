@@ -30,30 +30,27 @@ class GeolocationProvider;
 class Geolocation : public Plasma::DataEngine
 {
     Q_OBJECT
+public:
+    Geolocation(QObject* parent, const QVariantList& args);
+    virtual ~Geolocation();
 
-    public:
-        Geolocation(QObject* parent, const QVariantList& args);
-        virtual ~Geolocation();
-        virtual void init();
-        virtual QStringList sources() const;
+    void init() final;
+    QStringList sources() const final;
 
-    protected:
-        bool sourceRequestEvent(const QString &name);
-        bool updateSourceEvent(const QString& name);
-        bool updatePlugins(GeolocationProvider::UpdateTriggers triggers);
+protected:
+    bool sourceRequestEvent(const QString &name) final;
+    bool updateSourceEvent(const QString &name) final;
 
-    protected slots:
-        void networkStatusChanged(const KNetworkManager::KNetworkStatus status);
-        void pluginAvailabilityChanged(GeolocationProvider *provider);
-        void pluginUpdated();
-        void actuallySetData();
+private slots:
+    void networkStatusChanged(const KNetworkManager::KNetworkStatus status);
+    void pluginUpdated();
 
-    private:
-        Data m_data;
-        EntryAccuracy m_accuracy;
-        QList<GeolocationProvider *> m_plugins;
-        QTimer m_updateTimer;
-        KNetworkManager *m_networkManager;
+private:
+    void updatePlugins();
+
+    Plasma::DataEngine::Data m_data;
+    QList<GeolocationProvider *> m_plugins;
+    KNetworkManager *m_networkManager;
 };
 
 K_EXPORT_PLASMA_DATAENGINE(geolocation, Geolocation)

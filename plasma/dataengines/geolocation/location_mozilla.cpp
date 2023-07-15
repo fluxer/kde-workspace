@@ -29,11 +29,12 @@ static const QString s_regionurl = QString::fromLatin1("https://location.service
 Mozilla::Mozilla(QObject* parent, const QVariantList& args)
     : GeolocationProvider(parent, args)
 {
-    setUpdateTriggers(SourceEvent | NetworkConnected);
+    setObjectName("location_mozilla");
 }
 
 void Mozilla::update()
 {
+    m_outdata.clear();
     kDebug() << "Fetching" << s_geolocateurl;
     KIO::StoredTransferJob *datajob = KIO::storedGet(
         KUrl(s_geolocateurl),
@@ -52,15 +53,12 @@ void Mozilla::resultGeo(KJob* job)
         const QVariantMap jsonlocationmap = jsonmap["location"].toMap();
         // for reference:
         // https://ichnaea.readthedocs.io/en/latest/api/geolocate.html
-        setData("accuracy", jsonmap["accuracy"]);
-        setData("latitude", jsonlocationmap["lat"]);
-        setData("longitude", jsonlocationmap["lng"]);
+        m_outdata["accuracy"] = jsonmap["accuracy"];
+        m_outdata["latitude"] = jsonlocationmap["lat"];
+        m_outdata["longitude"] = jsonlocationmap["lng"];
         //qDebug() << Q_FUNC_INFO << jsonmap << jsonlocationmap;
     } else {
         kWarning() << "mozilla job error" << job->errorString();
-        setData("accuracy", QVariant());
-        setData("latitude", QVariant());
-        setData("longitude", QVariant());
     }
     job->deleteLater();
 
@@ -81,15 +79,14 @@ void Mozilla::resultRegion(KJob* job)
         const QVariantMap jsonmap = jsondoc.toVariant().toMap();
         // for reference:
         // https://ichnaea.readthedocs.io/en/latest/api/region.html
-        setData("country code", jsonmap["country_code"]);
-        setData("country", jsonmap["country_name"]);
+        m_outdata["country code"] = jsonmap["country_code"];
+        m_outdata["country"] = jsonmap["country_name"];
         // qDebug() << Q_FUNC_INFO << jsonmap;
     } else {
         kWarning() << "mozilla job error" << job->errorString();
-        setData("country code", QVariant());
-        setData("country", QVariant());
     }
     job->deleteLater();
+    setData(m_outdata);
 }
 
 K_EXPORT_PLASMA_GEOLOCATIONPROVIDER(mozilla, Mozilla)
