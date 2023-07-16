@@ -266,7 +266,7 @@ private Q_SLOTS:
         QVERIFY(data.isDirty());
         QVERIFY(data.sync());
         MimeTypeWriter::runUpdateMimeDatabase();
-        //runKBuildSycoca();
+        runKBuildSycoca();
         KMimeType::Ptr mime = KMimeType::mimeType(mimeTypeName);
         QVERIFY(mime);
         QCOMPARE(mime->comment(), QString("Fake MimeType"));
