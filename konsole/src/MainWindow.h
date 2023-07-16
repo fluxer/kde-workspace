@@ -105,8 +105,6 @@ public:
 
     void setNavigationVisibility(int visibility);
     void setNavigationPosition(int position);
-    void setNavigationStyleSheet(const QString& stylesheet);
-    void setNavigationStyleSheetFromFile(const KUrl& stylesheetfile);
     void setNavigationBehavior(int behavior);
     void setShowQuickButtons(bool show);
 

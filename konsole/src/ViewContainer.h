@@ -165,14 +165,6 @@ public:
      */
     void setNavigationTextMode(bool mode);
 
-    /** Sets the stylesheet for visual appearance
-     *
-     * The default implementation does nothing.
-     */
-    virtual void setStyleSheet(const QString& styleSheet) {
-        Q_UNUSED(styleSheet);
-    }
-
     /** Adds a new view to the container widget */
     void addView(QWidget* view , ViewProperties* navigationItem, int index = -1);
 
@@ -379,7 +371,6 @@ public:
     virtual void setFeatures(Features features);
     virtual Features supportedFeatures() const;
     virtual void setNewViewMenu(QMenu* menu);
-    virtual void setStyleSheet(const QString& styleSheet);
 
     // return associated view manager
     ViewManager* connectedViewManager();

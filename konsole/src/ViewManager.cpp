@@ -62,7 +62,6 @@ ViewManager::ViewManager(QObject* parent , KActionCollection* collection)
     , _navigationPosition(ViewContainer::NavigationPositionTop)
     , _showQuickButtons(false)
     , _newTabBehavior(PutNewTabAtTheEnd)
-    , _navigationStyleSheet(QString())
     , _managerId(0)
 {
     // create main view area
@@ -610,7 +609,6 @@ ViewContainer* ViewManager::createContainer()
     // FIXME: these code feels duplicated
     container->setNavigationVisibility(_navigationVisibility);
     container->setNavigationPosition(_navigationPosition);
-    container->setStyleSheet(_navigationStyleSheet);
     if (_showQuickButtons) {
         container->setFeatures(container->features()
                                | ViewContainer::QuickNewView
@@ -1075,15 +1073,6 @@ void ViewManager::setNavigationPosition(int position)
     foreach(ViewContainer* container, _viewSplitter->containers()) {
         Q_ASSERT(container->supportedNavigationPositions().contains(_navigationPosition));
         container->setNavigationPosition(_navigationPosition);
-    }
-}
-
-void ViewManager::setNavigationStyleSheet(const QString& styleSheet)
-{
-    _navigationStyleSheet = styleSheet;
-
-    foreach(ViewContainer* container, _viewSplitter->containers()) {
-        container->setStyleSheet(_navigationStyleSheet);
     }
 }
 

@@ -418,19 +418,12 @@ void TabbedViewContainer::dynamicTabBarVisibility()
         setTabBarVisible(false);
 }
 
-void TabbedViewContainer::setStyleSheet(const QString& styleSheet)
-{
-    _tabBar->setStyleSheet(styleSheet);
-}
-
 void TabbedViewContainer::navigationTextModeChanged(bool useTextWidth)
 {
     if (useTextWidth) {
-        _tabBar->setStyleSheet("QTabBar::tab { }");
         _tabBar->setExpanding(false);
         _tabBar->setElideMode(Qt::ElideNone);
     } else {
-        _tabBar->setStyleSheet("QTabBar::tab { min-width: 2em; max-width: 25em }");
         _tabBar->setExpanding(true);
         _tabBar->setElideMode(Qt::ElideLeft);
     }

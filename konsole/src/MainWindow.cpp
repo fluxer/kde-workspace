@@ -705,13 +705,6 @@ void MainWindow::applyKonsoleSettings()
     setNavigationBehavior(KonsoleSettings::newTabBehavior());
     setShowQuickButtons(KonsoleSettings::showQuickButtons());
 
-    if (KonsoleSettings::tabBarUseUserStyleSheet()) {
-        setNavigationStyleSheetFromFile(KonsoleSettings::tabBarUserStyleSheetFile());
-    } else {
-        // Apply default values
-        setNavigationStyleSheet(KonsoleSettings::tabBarStyleSheet());
-    }
-
     setAutoSaveSettings("MainWindow", KonsoleSettings::saveGeometryOnExit());
 
     updateWindowCaption();
@@ -727,36 +720,9 @@ void MainWindow::setNavigationPosition(int position)
     _viewManager->setNavigationPosition(position);
 }
 
-void MainWindow::setNavigationStyleSheet(const QString& styleSheet)
-{
-    _viewManager->setNavigationStyleSheet(styleSheet);
-}
-
 void MainWindow::setNavigationBehavior(int behavior)
 {
     _viewManager->setNavigationBehavior(behavior);
-}
-
-void MainWindow::setNavigationStyleSheetFromFile(const KUrl& styleSheetFile)
-{
-    // Let's only deal w/ local files for now
-    if (!styleSheetFile.isLocalFile()) {
-        setNavigationStyleSheet(KonsoleSettings::tabBarStyleSheet());
-    }
-
-    QFile file(styleSheetFile.toLocalFile());
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        setNavigationStyleSheet(KonsoleSettings::tabBarStyleSheet());
-    }
-
-    QString styleSheetText;
-    QTextStream in(&file);
-    while (!in.atEnd()) {
-        styleSheetText.append(in.readLine());
-    }
-
-    // Replace current style sheet w/ loaded file
-    setNavigationStyleSheet(styleSheetText);
 }
 
 void MainWindow::setShowQuickButtons(bool show)

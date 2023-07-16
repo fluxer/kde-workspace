@@ -169,7 +169,6 @@ public:
     void setNavigationVisibility(int visibility);
     void setNavigationPosition(int position);
     void setNavigationBehavior(int behavior);
-    void setNavigationStyleSheet(const QString& styleSheet);
     void setShowQuickButtons(bool show);
 
     int managerId() const;
@@ -382,7 +381,6 @@ private:
     ViewContainer::NavigationPosition _navigationPosition;
     bool _showQuickButtons;
     NewTabBehavior _newTabBehavior;
-    QString _navigationStyleSheet;
 
     int _managerId;
     static int lastManagerId;
