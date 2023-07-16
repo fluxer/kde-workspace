@@ -79,9 +79,6 @@ Atoms::Atoms()
     atoms[n] = &kde_net_wm_user_creation_time;
     names[n++] = (char *) "_KDE_NET_WM_USER_CREATION_TIME";
 
-    atoms[n] = &kde_system_tray_embedding;
-    names[n++] = (char*) "_KDE_SYSTEM_TRAY_EMBEDDING";
-
     atoms[n] = &net_wm_take_activity;
     names[n++] = (char*) "_NET_WM_TAKE_ACTIVITY";
 
@@ -102,8 +99,6 @@ Atoms::Atoms()
 
     atoms[n] = &net_frame_extents;
     names[n++] = (char*) "_NET_FRAME_EXTENTS";
-    atoms[n] = &kde_net_wm_frame_strut;
-    names[n++] = (char*) "_KDE_NET_WM_FRAME_STRUT";
 
     atoms[n] = &net_wm_sync_request_counter;
     names[n++] = (char*) "_NET_WM_SYNC_REQUEST_COUNTER";

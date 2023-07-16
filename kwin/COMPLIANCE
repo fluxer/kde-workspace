@@ -236,9 +236,7 @@ KDE-specific extensions (for completeness):
 Property Name				Type
 ==========================================================================
 _KDE_WM_CHANGE_STATE			root window message
-_KDE_NET_SYSTEM_TRAY_WINDOWS		root window property
 _KDE_NET_WM_SYSTEM_TRAY_WINDOW_FOR	window property
-_KDE_NET_WM_FRAME_STRUT			window property
 _NET_WM_CONTEXT_HELP
     - Qt extension
     - has no vendor prefix even though it's not part of the spec
