@@ -54,15 +54,16 @@ K_PLUGIN_FACTORY_DECLARATION (KioConfigFactory)
 class InputValidator : public QValidator
 {
 public:
-    State validate(QString& input, int& pos) const {
+    QValidator::State validate(QString& input, int& pos) const
+    {
         if (input.isEmpty())
-            return Acceptable;
+            return QValidator::Acceptable;
 
         const QChar ch = input.at((pos > 0 ? pos - 1 : pos));
         if (ch.isSpace())
-            return Invalid;
+            return QValidator::Invalid;
 
-        return Acceptable;
+        return QValidator::Acceptable;
     }
 };
 
