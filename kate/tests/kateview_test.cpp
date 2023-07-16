@@ -28,6 +28,7 @@
 #include <kateconfig.h>
 #include <ktemporaryfile.h>
 #include <katebuffer.h>
+#include <QTextStream>
 
 using namespace KTextEditor;
 
