@@ -150,9 +150,7 @@ static void setProxyInformation(const QString& value,
                              !value.contains(QL1C(':')));
 
     if (proxyType == KProtocolManager::EnvVarProxy || isSysProxy) {
-#if defined(Q_OS_LINUX) || defined (Q_OS_UNIX)
         sysEdit->setText(value);
-#endif
         return;
     }
 
@@ -220,12 +218,7 @@ KProxyDialog::KProxyDialog(QWidget* parent, const QVariantList& args)
     mUi.manualProxySocksEdit->setValidator(v);
     mUi.manualNoProxyEdit->setValidator(v);
 
-#if defined(Q_OS_LINUX) || defined (Q_OS_UNIX)
     connect(mUi.systemProxyRadioButton, SIGNAL(toggled(bool)), mUi.systemProxyGroupBox, SLOT(setVisible(bool)));
-#else
-    mUi.autoDetectButton->setVisible(false);
-    connect(mUi.systemProxyRadioButton, SIGNAL(clicked()), SLOT(slotChanged()));
-#endif
 
     // signals and slots connections
     connect(mUi.noProxyRadioButton, SIGNAL(clicked()), SLOT(slotChanged()));
