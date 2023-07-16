@@ -250,12 +250,6 @@ add_feature_info(lsof
     "Open files widget (KLsofWidget)"
 )
 
-find_program(BZR_EXECUTABLE bzr)
-add_feature_info(bzr
-    BZR_EXECUTABLE
-    "Bazaar support in Dolphin"
-)
-
 find_program(XKILL_EXECUTABLE xkill)
 add_feature_info(xkill
     XKILL_EXECUTABLE
