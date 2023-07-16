@@ -34,7 +34,7 @@ mailing list <kwin@kde.org>, or on the Window Manager Spec list <wm-spec-list@gn
     - = none,
     / = partial,
     + = complete,
-    * = KWin is compliant, but something else needs checking (e.g. Qt)
+    * = KWin is compliant, but something else needs checking (e.g. Katie)
     ? = unknown
 )
   
@@ -96,11 +96,6 @@ version 1.2
         UTILITY should get better placement.
         TOOLBAR - many parts in KDE still treat this as "tool" window.
             - should the decoration be shown for the toolbars?
-        KDE extensions:
-            _KDE_NET_WM_WINDOW_TYPE_OVERRIDE - this seems to mean "this window
-            should be borderless", but it's actually used also for other
-            things, like fullscreen windows. The plan is to get rid of this
-            flawed thing as soon as possible.
 / 5.7.
         The handling of _NET_WM_STATE itself is correct and complete.
         Supported states: MODAL, MAXIMIZED_VERT, MAXIMIZED_HORZ, SHADED,
@@ -114,9 +109,6 @@ version 1.2
             that windows can hide Kicker, but Kicker can be also raised
             above the windows. A bit hacky, but it's not really against
             the spec, and I have no better idea.
-        KDE extensions:
-            _NET_WM_STATE_STAYS_ON_TOP - has the same meaning like ABOVE,
-                and is deprecated in favour of it; it lacks the _KDE prefix
 * 5.8.
         The handling of _NET_WM_ALLOWED_ACTIONS itself is correct and complete.
         Supported actions: MOVE, RESIZE, MINIMIZE, SHADE, MAXIMIZE_HORZ,
@@ -129,7 +121,7 @@ version 1.2
         Kicker needs to be checked.
 * 5.11.
         KWin's handling of the property is correct.
-        Qt should be checked.
+        Katie should be checked.
 + 5.12.
 - 5.13.
         Property is not used in KWin, KWin never provides icons for iconified windows.
@@ -140,7 +132,7 @@ version 1.2
 + 7.4.
         The urgency hint is mapped to the _NET_WM_DEMANDS_ATTENTION flag.
 * 7.5.
-        Qt often sets maximum size smaller than minimum size. This seems to be caused
+        Katie often sets maximum size smaller than minimum size. This seems to be caused
         by delayed layout calculations.
 * 7.6.
         Kicker should be checked.
@@ -182,7 +174,7 @@ version 2.0
         Used as a fallback for _NET_WM_ICON_NAME.
 ? 4.1.2.3
 ?    - PSize, PPosition, USize, UPosition
-?	- clients - Qt simply sets both
+?	- clients - Katie simply sets both
 +    - PWinGravity - window geometry constraints have higher priority than gravity
 /    - PBaseSize - PMinSize is not used as a fallback for size increments
 +    - (the rest)
@@ -202,7 +194,7 @@ version 2.0
 + 4.1.3.1
 + 4.1.3.2
         Feature not supported (4.1.2.4 - icons)
-* 4.1.4 it should be checked Qt/KDE clients handle this properly
+* 4.1.4 it should be checked Katie/KDE clients handle this properly
 / 4.1.5
         This needs fixing.
 + 4.1.6
@@ -216,7 +208,7 @@ version 2.0
         Window groups are only used for supporting NETWM section 7.3.
 + 4.2.5
 / 4.2.7
-        Qt doesn't set revert-to to Parent.
+        Katie doesn't set revert-to to Parent.
 + 4.2.8.1 frozen clients may be XKill-ed upon a user request though
 + 4.3
 ? 4.4
@@ -224,7 +216,7 @@ version 2.0
 + 5.3. not KWin related
 + 5. (rest of the section )
 ? 6.1. clients thing
-? 6.2. clients thing - Qt perhaps should force rule 2.
+? 6.2. clients thing - Katie perhaps should force rule 2.
 + 6.3.
 ? 6. (rest of the section)
 + 7. - no idea what it is, but it doesn't seem to be KWin related
@@ -233,20 +225,18 @@ version 2.0
 
 KDE-specific extensions (for completeness):
 
-Property Name				Type
+Property Name                           Type
 ==========================================================================
-_KDE_WM_CHANGE_STATE			root window message
-_KDE_NET_WM_SYSTEM_TRAY_WINDOW_FOR	window property
+_KDE_WM_CHANGE_STATE                    root window message
+_KDE_NET_WM_SKIP_CLOSE_ANIMATION        window property
+_KDE_NET_WM_USER_CREATION_TIME          window property
+_KDE_NET_WM_BLOCK_COMPOSITING           window property
+_KDE_NET_WM_SHADOW                      window property
+_KDE_NET_WM_TAB_GROUP                   window property
+_KDE_FIRST_IN_WINDOWLIST                window property
+_KDE_NET_WM_TEMPORARY_RULES             window property
 _NET_WM_CONTEXT_HELP
-    - Qt extension
+    - Katie extension
     - has no vendor prefix even though it's not part of the spec
-_NET_WM_STATE_STAYS_ON_TOP
-    - KDE extension
-    - has no vendor prefix even though it's not part of the spec
-    - deprecated in favor of _NET_WM_STATE_KEEP_ABOVE
-_KDE_NET_WM_WINDOW_TYPE_OVERRIDE
-    - window type, makes the window borderless
-    - unclear semantics, used also for fullscreen windows
-    - deprecated in favor of other window types
 
 ==========================================================================
