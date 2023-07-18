@@ -110,7 +110,7 @@ void FileBrowserEngine::updateData(const QString &path)
         }
     } else if (type == FILE) {
         kDebug() << "file info processing: "<< path;
-        KFileMetaInfo kfmi(path, KFileMetaInfo::Everything);
+        KFileMetaInfo kfmi(path);
         if (kfmi.isValid()) {
             kDebug() << "METAINFO: " << kfmi.keys();
 

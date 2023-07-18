@@ -84,7 +84,7 @@ QString ToolTipWidget::metaInfo() const
         return QString();
     }
 
-    const KFileMetaInfo info = m_item.metaInfo(true, KFileMetaInfo::TechnicalInfo | KFileMetaInfo::ContentInfo);
+    const KFileMetaInfo info = m_item.metaInfo(true);
     const QStringList preferredinfo = info.preferredKeys();
     QString text = "<p><table border='0' cellspacing='0' cellpadding='0'>";
     foreach (const KFileMetaInfoItem &it, info.items()) {

@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
         for (int pos = 0; pos < args->count(); ++pos) {
             const KUrl url = args->url(pos);
-            const KFileMetaInfo metainfo(url, KFileMetaInfo::Everything);
+            const KFileMetaInfo metainfo(url);
             if (listavailable) {
                 foreach (const QString &key, metainfo.keys()) {
                     qDebug() << key;
