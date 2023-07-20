@@ -16,11 +16,12 @@
 */
 #include "debuggerlaunchers.h"
 
-#include <QtDBus/QDBusConnection>
+#include <QProcess>
+#include <QDir>
+#include <QDBusConnection>
 
 #include <KShell>
 #include <KDebug>
-#include <KProcess>
 
 #include "detachedprocessmonitor.h"
 #include "drkonqi.h"
@@ -51,8 +52,9 @@ void DefaultDebuggerLauncher::start()
     emit starting();
     QStringList procargs = KShell::splitArgs(str);
     QString procprog = procargs.takeAt(0);
-    qint64 procpid = KProcess::startDetached(procprog, procargs);
-    if ( procpid > 0 ) {
+    Q_PID procpid = 0;
+    const bool started = QProcess::startDetached(procprog, procargs, QDir::currentPath(), &procpid);
+    if ( started && procpid > 0 ) {
         m_monitor->startMonitoring(procpid);
     } else {
         kError() << "Could not start debugger:" << name();
