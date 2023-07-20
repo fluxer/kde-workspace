@@ -749,11 +749,6 @@ void KonqOperations::setOperation( KIO::Job * job, Operation method, const KUrl 
         slotResult( 0L );
 }
 
-void KonqOperations::slotAboutToCreate(KIO::Job *, const QList<KIO::CopyInfo> &files)
-{
-    emit aboutToCreate( m_info ? m_info->mousePos : m_pasteInfo ? m_pasteInfo->mousePos : QPoint(), files);
-}
-
 void KonqOperations::statUrl( const KUrl & url, const QObject *receiver, const char *member, QWidget* parent )
 {
     KonqOperations * op = new KonqOperations( parent );
