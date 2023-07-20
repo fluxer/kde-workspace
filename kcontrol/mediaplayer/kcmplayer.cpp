@@ -221,6 +221,7 @@ void KCMPlayer::load()
     // HACK: if application starts the KCM (like kmediaplayer does) show only the application settings
     const QString appname = QCoreApplication::applicationName();
     const bool issystemsettings = (appname == QLatin1String("systemsettings"));
+    bool showall = true;
 
     KAudioPlayer kaudioplayer(this);
     const QStringList audiooutputs = kaudioplayer.audiooutputs();
@@ -228,18 +229,21 @@ void KCMPlayer::load()
     // NOTE: this catches all .desktop files
     const KService::List servicefiles = KService::allServices();
     foreach (const KService::Ptr service, servicefiles) {
-        if (!issystemsettings && service->desktopEntryName() != appname) {
+        if (!issystemsettings && service->desktopEntryName() == appname) {
+            showall = false;
+            break;
+        }
+    }
+    foreach (const KService::Ptr service, servicefiles) {
+        if (!showall && service->desktopEntryName() != appname) {
             continue;
         }
-
         const QString medianame = service->name();
         const QStringList mediaids = service->property("X-KDE-MediaPlayer", QVariant::StringList).toStringList();
         foreach (const QString &id, mediaids) {
             const QString output = ksettings.value(id + "/audiooutput", s_kmediaoutput).toString();
             const bool mute = ksettings.value(id + "/mute", s_kmediamute).toBool();
             const int volume = ksettings.value(id + "/volume", s_kmediavolume).toInt();
-
-            // const KIcon servicon = KIcon(service.data()->icon());
             KMediaBox* mediabox = new KMediaBox(
                 this,
                 id, medianame,
