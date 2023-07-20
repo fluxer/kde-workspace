@@ -33,11 +33,12 @@
 #include <QTimer>
 #include <QDesktopWidget>
 #include <QApplication>
+#include <QProcess>
+#include <QDir>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <kcomponentdata.h>
-#include <kprocess.h>
 #include <kwindowsystem.h>
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
@@ -83,8 +84,9 @@ KStart::KStart()
 
     //finally execute the comand
     if (proc) {
-        qint64 pid = KProcess::startDetached(exe, exeArgs);
-        if (pid) {
+        Q_PID pid = 0;
+        const bool started = QProcess::startDetached(exe, exeArgs, QDir::currentPath(), &pid);
+        if (started) {
             KStartupInfoData data;
             data.addPid(pid);
             data.setName(exe);
