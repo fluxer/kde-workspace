@@ -25,6 +25,7 @@
 #include <QtGui/qgraphicssceneevent.h>
 #include <QtCore/qabstractitemmodel.h>
 
+#include <KFileMetaInfo>
 #include <KDesktopFile>
 #include <KDirModel>
 #include <KLocale>
@@ -84,7 +85,7 @@ QString ToolTipWidget::metaInfo() const
         return QString();
     }
 
-    const KFileMetaInfo info = m_item.metaInfo(true);
+    const KFileMetaInfo info(m_item.url());
     const QStringList preferredinfo = info.preferredKeys();
     QString text = "<p><table border='0' cellspacing='0' cellpadding='0'>";
     foreach (const KFileMetaInfoItem &it, info.items()) {
