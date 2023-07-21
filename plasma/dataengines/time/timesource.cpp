@@ -99,7 +99,7 @@ void TimeSource::updateTime()
     }
 
     QDateTime dt = m_userDateTime ? data()["DateTime"].toDateTime()
-                                  : KDateTime::currentDateTime(tz).dateTime();
+                                  : KDateTime::currentDateTime(tz);
 
     if (m_solarPosition || m_moonPosition) {
         const QDate prev = data()["Date"].toDate();

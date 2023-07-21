@@ -1180,7 +1180,7 @@ QHash<QByteArray, QVariant> KFileItemModel::retrieveData(const KFileItem& item, 
         // having several thousands of items. Instead the formatting of the
         // date-time will be done on-demand by the view when the date will be shown.
         const KDateTime dateTime = item.time(KFileItem::ModificationTime);
-        data.insert(sharedValue("date"), dateTime.dateTime());
+        data.insert(sharedValue("date"), QDateTime(dateTime));
     }
 
     if (m_requestRole[PermissionsRole]) {
