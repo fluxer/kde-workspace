@@ -1535,53 +1535,7 @@ QList<QPair<int, QVariant> > KFileItemModel::dateRoleGroups() const
 
         const int daysDistance = modifiedDate.daysTo(currentDate);
 
-        QString newGroupValue;
-        if (currentDate.year() == modifiedDate.year() && currentDate.month() == modifiedDate.month()) {
-            switch (daysDistance / 7) {
-            case 0:
-                switch (daysDistance) {
-                case 0:  newGroupValue = i18nc("@title:group Date", "Today"); break;
-                case 1:  newGroupValue = i18nc("@title:group Date", "Yesterday"); break;
-                default: newGroupValue = modifiedTime.toString(i18nc("@title:group The week day name: %A", "%A"));
-                }
-                break;
-            case 1:
-                newGroupValue = i18nc("@title:group Date", "One Week Ago");
-                break;
-            case 2:
-                newGroupValue = i18nc("@title:group Date", "Two Weeks Ago");
-                break;
-            case 3:
-                newGroupValue = i18nc("@title:group Date", "Three Weeks Ago");
-                break;
-            case 4:
-            case 5:
-                newGroupValue = i18nc("@title:group Date", "Earlier this Month");
-                break;
-            default:
-                Q_ASSERT(false);
-            }
-        } else {
-            const QDate lastMonthDate = currentDate.addMonths(-1);
-            if  (lastMonthDate.year() == modifiedDate.year() && lastMonthDate.month() == modifiedDate.month()) {
-                if (daysDistance == 1) {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group Date: %B is full month name in current locale, and %Y is full year number", "Yesterday (%B, %Y)"));
-                } else if (daysDistance <= 7) {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group The week day name: %A, %B is full month name in current locale, and %Y is full year number", "%A (%B, %Y)"));
-                } else if (daysDistance <= 7 * 2) {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group Date: %B is full month name in current locale, and %Y is full year number", "One Week Ago (%B, %Y)"));
-                } else if (daysDistance <= 7 * 3) {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group Date: %B is full month name in current locale, and %Y is full year number", "Two Weeks Ago (%B, %Y)"));
-                } else if (daysDistance <= 7 * 4) {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group Date: %B is full month name in current locale, and %Y is full year number", "Three Weeks Ago (%B, %Y)"));
-                } else {
-                    newGroupValue = modifiedTime.toString(i18nc("@title:group Date: %B is full month name in current locale, and %Y is full year number", "Earlier on %B, %Y"));
-                }
-            } else {
-                newGroupValue = modifiedTime.toString(i18nc("@title:group The month and year: %B is full month name in current locale, and %Y is full year number", "%B, %Y"));
-            }
-        }
-
+        QString newGroupValue = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::FancyLongDate);
         if (newGroupValue != groupValue) {
             groupValue = newGroupValue;
             groups.append(QPair<int, QVariant>(i, newGroupValue));
