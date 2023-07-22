@@ -85,9 +85,14 @@ void TimeEngine::checkTZ()
 
 QStringList TimeEngine::sources() const
 {
-    QStringList timezones(KSystemTimeZones::zones().keys());
-    timezones << "Local";
-    return timezones;
+    const KTimeZoneList timezones = KSystemTimeZones::zones();
+    QStringList timezonenames;
+    timezonenames.reserve(timezones.size());
+    foreach (const KTimeZone &zone, timezones) {
+        timezonenames.append(zone.name());
+    }
+    timezonenames << QString::fromLatin1("Local");
+    return timezonenames;
 }
 
 bool TimeEngine::sourceRequestEvent(const QString &name)
