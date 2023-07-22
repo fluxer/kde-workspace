@@ -130,7 +130,7 @@ void CalendarApplet::updateDate()
     const int updateIn = (secsInDay) - (sinceEpoch % secsInDay);
     if (updateIn > secsInDay - 60) {
         // after midnight, we try and update right away again in case of odd clock drifting
-        // that could cause us to miss (or delay) the date chagne
+        // that could cause us to miss (or delay) the date change
         m_dateUpdater->setInterval(60 * 1000);
     } else if (updateIn < m_dateUpdater->interval()) {
         m_dateUpdater->setInterval(updateIn * 1000);
