@@ -20,15 +20,15 @@
 
 #include "moc_kdatecombo.cpp"
 
-#include <QtCore/QTimer>
+#include <QTimer>
 //Added by qt3to4:
 #include <QtGui/qevent.h>
-#include <QtCore/QEvent>
+#include <QEvent>
+#include <QWidgetAction>
 
 #include <kglobal.h>
 #include <klocale.h>
-#include <kdatepicker.h>
-#include <kdatetable.h>
+#include <kcalendarwidget.h>
 #include <kdebug.h>
 
 KDateCombo::KDateCombo(QWidget *parent) : KComboBox(parent)
@@ -49,16 +49,18 @@ KDateCombo::KDateCombo(const QDate & date, QWidget *parent) : KComboBox(parent)
 void KDateCombo::initObject(const QDate & date)
 {
   setValidator(0);
-  popupFrame = new KPopupFrame(this);
+  popupFrame = new QMenu(this);
   popupFrame->installEventFilter(this);
-  datePicker = new KDatePicker(date, popupFrame);
+  datePicker = new KCalendarWidget(date, popupFrame);
   datePicker->setMinimumSize(datePicker->sizeHint());
   datePicker->installEventFilter(this);
-  popupFrame->setMainWidget(datePicker);
+  QWidgetAction* popupAction = new QWidgetAction(popupFrame);
+  popupAction->setDefaultWidget(datePicker);
+  popupFrame->addAction(popupAction);
   setDate(date);
 
-  connect(datePicker, SIGNAL(dateSelected(QDate)), this, SLOT(dateEnteredEvent(QDate)));
-  connect(datePicker, SIGNAL(dateEntered(QDate)), this, SLOT(dateEnteredEvent(QDate)));
+  connect(datePicker, SIGNAL(activated(QDate)), this, SLOT(dateEnteredEvent(QDate)));
+  connect(datePicker, SIGNAL(clicked(QDate)), this, SLOT(dateEnteredEvent(QDate)));
 }
 
 KDateCombo::~KDateCombo()
@@ -98,7 +100,7 @@ void KDateCombo::dateEnteredEvent(const QDate &newDate)
 {
   QDate tempDate = newDate;
   if (!tempDate.isValid())
-     tempDate = datePicker->date();
+     tempDate = datePicker->selectedDate();
   popupFrame->hide();
   setDate(tempDate);
 }
@@ -111,7 +113,7 @@ void KDateCombo::mousePressEvent (QMouseEvent * e)
     {
       QDate tempDate;
       getDate(& tempDate);
-      datePicker->setDate(tempDate);
+      datePicker->setSelectedDate(tempDate);
       popupFrame->popup(mapToGlobal(QPoint(0, height())));
     }
   }

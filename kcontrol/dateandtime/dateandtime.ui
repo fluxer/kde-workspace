@@ -78,7 +78,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="KDatePicker" name="cal">
+          <widget class="KCalendarWidget" name="cal">
            <property name="whatsThis">
             <string>Here you can change the system date's day of the month, month and year.</string>
            </property>
@@ -191,9 +191,9 @@
    <header>kseparator.h</header>
   </customwidget>
   <customwidget>
-   <class>KDatePicker</class>
-   <extends>QFrame</extends>
-   <header>kdatepicker.h</header>
+   <class>KCalendarWidget</class>
+   <extends>QCalendarWidget</extends>
+   <header>kcalendarwidget.h</header>
   </customwidget>
  </customwidgets>
  <connections/>

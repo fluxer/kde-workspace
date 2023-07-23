@@ -38,7 +38,6 @@
 #include <KColorScheme>
 #include <KConfigDialog>
 #include <KConfigGroup>
-#include <KDatePicker>
 #include <KMenu>
 #include <KDebug>
 #include <KDialog>

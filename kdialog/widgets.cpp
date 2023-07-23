@@ -20,7 +20,6 @@
 
 // Own
 #include "widgets.h"
-#include <kdatepicker.h>
 
 // Qt
 #include <QtCore/QFile>
@@ -40,6 +39,7 @@
 #include <kcmdlineargs.h>
 #include <ktextedit.h>
 #include <kvbox.h>
+#include <kcalendarwidget.h>
 
 // Local
 #include "klistboxdialog.h"
@@ -356,14 +356,15 @@ bool Widgets::calendar( QWidget *parent, const QString &title, const QString &te
 
     QLabel label (vbox);
     label.setText (text);
-    KDatePicker dateWidget( vbox );
+    KCalendarWidget dateWidget( vbox );
+    dateWidget.setContentsMargins(2, 2, 2, 2);
     dateWidget.setFocus();
     handleXGeometry(&dlg);
 
     const bool retcode = (dlg.exec() == QDialog::Accepted);
 
     if (retcode)
-        result = dateWidget.date();
+        result = dateWidget.selectedDate();
 
     return retcode;
 }

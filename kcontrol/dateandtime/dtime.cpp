@@ -106,7 +106,9 @@ Dtime::Dtime(QWidget * parent)
   timeEdit->setWhatsThis( wtstr );
 
   connect( timeEdit, SIGNAL(timeChanged(QTime)), SLOT(set_time()) );
-  connect( cal, SIGNAL(dateChanged(QDate)), SLOT(changeDate(QDate)));
+  cal->setContentsMargins(2, 2, 2, 2);
+  connect( cal, SIGNAL(activated(QDate)), SLOT(changeDate(QDate)));
+  connect( cal, SIGNAL(clicked(QDate)), SLOT(changeDate(QDate)));
 
   connect( &internalTimer, SIGNAL(timeout()), SLOT(timeout()) );
 
@@ -193,7 +195,7 @@ oceania.pool.ntp.org")).split(',', QString::SkipEmptyParts));
   // Reset to the current date and time
   time = QTime::currentTime();
   date = QDate::currentDate();
-  cal->setDate(date);
+  cal->setSelectedDate(date);
 
   // start internal timer
   internalTimer.start( 1000 );

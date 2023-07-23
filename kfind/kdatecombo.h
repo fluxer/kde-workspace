@@ -20,7 +20,8 @@
 #define KDATECOMBO_H
 
 #include <QWidget>
-#include <QtCore/qdatetime.h>
+#include <QDateTime>
+#include <QMenu>
 
 #include <kcombobox.h>
 
@@ -28,8 +29,7 @@
   *@author Beppe Grimaldi
   */
 
-class KDatePicker;
-class KPopupFrame;
+class KCalendarWidget;
 
 class KDateCombo : public KComboBox  {
    Q_OBJECT
@@ -43,8 +43,8 @@ public:
 	bool setDate(const QDate & newDate);
 
 private:
-   KPopupFrame * popupFrame;
-   KDatePicker * datePicker;
+   QMenu * popupFrame;
+   KCalendarWidget * datePicker;
 
    void initObject(const QDate & date);
 
