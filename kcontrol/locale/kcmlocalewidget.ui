@@ -60,43 +60,6 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="m_labelCountryDivision">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Subdivision:</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_comboCountryDivision</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_34">
-         <item>
-          <widget class="KComboBox" name="m_comboCountryDivision">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="m_buttonDefaultCountryDivision">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="m_tabTranslations">
@@ -630,123 +593,6 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="m_labelWorkingWeekStartDay">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="text">
-          <string>First working day of week:</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_comboWorkingWeekStartDay</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_24">
-         <item>
-          <widget class="KComboBox" name="m_comboWorkingWeekStartDay">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="m_buttonDefaultWorkingWeekStartDay"/>
-         </item>
-        </layout>
-       </item>
-       <item row="6" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_25">
-         <item>
-          <widget class="KComboBox" name="m_comboWorkingWeekEndDay">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="m_buttonDefaultWorkingWeekEndDay"/>
-         </item>
-        </layout>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="m_labelWorkingWeekEndDay">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Last working day of week:</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_comboWorkingWeekEndDay</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <layout class="QHBoxLayout" name="horizontalLayout_26">
-         <item>
-          <widget class="KComboBox" name="m_comboWeekDayOfPray">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string/>
-           </property>
-           <property name="whatsThis">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="KPushButton" name="m_buttonDefaultWeekDayOfPray"/>
-         </item>
-        </layout>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="m_labelWeekDayOfPray">
-         <property name="toolTip">
-          <string/>
-         </property>
-         <property name="whatsThis">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Week day for special religious observance:</string>
-         </property>
-         <property name="buddy">
-          <cstring>m_comboWeekDayOfPray</cstring>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="m_tabDateTime">
@@ -1265,8 +1111,6 @@
   <tabstop>m_tabWidgetSettings</tabstop>
   <tabstop>m_comboCountry</tabstop>
   <tabstop>m_buttonDefaultCountry</tabstop>
-  <tabstop>m_comboCountryDivision</tabstop>
-  <tabstop>m_buttonDefaultCountryDivision</tabstop>
   <tabstop>m_buttonDefaultThousandsSeparator</tabstop>
   <tabstop>m_buttonDefaultDecimalSymbol</tabstop>
   <tabstop>m_intDecimalPlaces</tabstop>

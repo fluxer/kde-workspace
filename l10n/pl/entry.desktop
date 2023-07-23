@@ -102,6 +102,5 @@ DateFormat[pl]=%A, %e %B %Y
 DateFormatShort=%d/%m/%Y
 DateFormat[eo]=%A, la %ea de %B %Y
 TimeFormat=%H:%M:%S
-NounDeclension=true
 DateMonthNamePossessive=true
 #DecimalPlaces=2

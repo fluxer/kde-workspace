@@ -150,9 +150,6 @@ private:
     void initCountry();
     void setCountry( const QString &newValue );
 
-    void initCountryDivision();
-    void setCountryDivision( const QString &newValue );
-
     //Translations/Languages tab
 
     void initTranslations();
@@ -198,15 +195,6 @@ private:
     void initWeekStartDay();
     void setWeekStartDay( int newValue );
 
-    void initWorkingWeekStartDay();
-    void setWorkingWeekStartDay( int newValue );
-
-    void initWorkingWeekEndDay();
-    void setWorkingWeekEndDay( int newValue );
-
-    void initWeekDayOfPray();
-    void setWeekDayOfPray( int newValue );
-
     //Date/Time tab
 
     void initTimeFormat();
@@ -246,9 +234,6 @@ private Q_SLOTS:
 
     void defaultCountry();
     void changedCountryIndex( int index );
-
-    void defaultCountryDivision();
-    void changedCountryDivisionIndex( int index );
 
     //Translations/Languages tab
 
@@ -296,15 +281,6 @@ private Q_SLOTS:
 
     void defaultWeekStartDay();
     void changedWeekStartDayIndex( int index );
-
-    void defaultWorkingWeekStartDay();
-    void changedWorkingWeekStartDayIndex( int index );
-
-    void defaultWorkingWeekEndDay();
-    void changedWorkingWeekEndDayIndex( int index );
-
-    void defaultWeekDayOfPray();
-    void changedWeekDayOfPrayIndex( int index );
 
     //Date/Time tab
 

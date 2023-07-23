@@ -95,7 +95,6 @@ Name[zh_TW]=預設
 
 Region=
 Languages=en_US
-NounDeclension=false
 LanguageSensitiveDigits=true
 
 DecimalPlaces=2
@@ -114,9 +113,6 @@ DateFormat=%A %d %B %Y
 DateFormatShort=%Y-%m-%d
 DateMonthNamePossessive=false
 WeekStartDay=1
-WorkingWeekStartDay=1
-WorkingWeekEndDay=5
-WeekDayOfPray=7
 WeekNumberSystem=0
 DateTimeDigitSet=0
 

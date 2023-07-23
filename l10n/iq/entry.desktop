@@ -97,6 +97,4 @@ Languages=ar
 DecimalSymbol=,
 DateFormatShort=%y/%m/%d
 WeekStartDay=7
-WorkingWeekStartDay=4
-WorkingWeekEndDay=5
 #DecimalPlaces=2

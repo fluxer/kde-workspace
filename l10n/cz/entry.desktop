@@ -97,7 +97,6 @@ DateFormat[cs]=%a %e. %B %Y
 DateFormat[eo]=%A, la %ea de %B %Y
 DateFormatShort=%e. %n. %Y
 TimeFormat=%H:%M:%S
-NounDeclension=true
 DateMonthNamePossessive=true
 AddressFormat=%0(%cm\n)%0(%n\n)%0(p. p. %p\n)%0(%s\n)%z%w%w%l
 AddressCountryPosition=BELOW

@@ -96,7 +96,4 @@ Region=northafrica
 Languages=ar
 DecimalSymbol=,
 DateFormatShort=%y/%m/%d
-WorkingWeekStartDay=6
-WorkingWeekEndDay=4
-WeekDayOfPray=5
 #DecimalPlaces=2

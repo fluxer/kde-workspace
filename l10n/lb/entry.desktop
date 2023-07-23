@@ -96,7 +96,4 @@ Region=middleeast
 Languages=ar
 DecimalSymbol=,
 DateFormatShort=%y/%m/%d
-#WorkingWeekStartDay=
-#WorkingWeekEndDay=
-WeekDayOfPray=5
 #DecimalPlaces=2

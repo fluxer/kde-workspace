@@ -74,11 +74,6 @@ KCMLocale::KCMLocale( QWidget *parent, const QVariantList &args )
     connect( m_ui->m_buttonDefaultCountry, SIGNAL( clicked() ),
              this,                       SLOT( defaultCountry() ) );
 
-    connect( m_ui->m_comboCountryDivision,       SIGNAL( activated( int ) ),
-             this,                               SLOT( changedCountryDivisionIndex( int ) ) );
-    connect( m_ui->m_buttonDefaultCountryDivision, SIGNAL( clicked() ),
-             this,                               SLOT( defaultCountryDivision() ) );
-
     // Translations tab
 
     // User has changed the translations selection in some way
@@ -157,21 +152,6 @@ KCMLocale::KCMLocale( QWidget *parent, const QVariantList &args )
              this,                            SLOT( changedWeekStartDayIndex( int ) ) );
     connect( m_ui->m_buttonDefaultWeekStartDay, SIGNAL( clicked() ),
              this,                            SLOT( defaultWeekStartDay() ) );
-
-    connect( m_ui->m_comboWorkingWeekStartDay,       SIGNAL( currentIndexChanged( int ) ),
-             this,                                   SLOT( changedWorkingWeekStartDayIndex( int ) ) );
-    connect( m_ui->m_buttonDefaultWorkingWeekStartDay, SIGNAL( clicked() ),
-             this,                                   SLOT( defaultWorkingWeekStartDay() ) );
-
-    connect( m_ui->m_comboWorkingWeekEndDay,       SIGNAL( currentIndexChanged( int ) ),
-             this,                                 SLOT( changedWorkingWeekEndDayIndex( int ) ) );
-    connect( m_ui->m_buttonDefaultWorkingWeekEndDay, SIGNAL( clicked() ),
-             this,                                 SLOT( defaultWorkingWeekEndDay() ) );
-
-    connect( m_ui->m_comboWeekDayOfPray,       SIGNAL( currentIndexChanged( int ) ),
-             this,                             SLOT( changedWeekDayOfPrayIndex( int ) ) );
-    connect( m_ui->m_buttonDefaultWeekDayOfPray, SIGNAL( clicked() ),
-             this,                             SLOT( defaultWeekDayOfPray() ) );
 
     // Date / Time tab
 
@@ -443,7 +423,6 @@ void KCMLocale::defaults()
 void KCMLocale::copySettings( KConfigGroup *fromGroup, KConfigGroup *toGroup, KConfig::WriteConfigFlags flags )
 {
     copySetting( fromGroup, toGroup, "Country", flags );
-    copySetting( fromGroup, toGroup, "CountryDivision", flags );
     copySetting( fromGroup, toGroup, "Language", flags );
     copySetting( fromGroup, toGroup, "DecimalPlaces", flags );
     copySetting( fromGroup, toGroup, "DecimalSymbol", flags );
@@ -466,9 +445,6 @@ void KCMLocale::copySettings( KConfigGroup *fromGroup, KConfigGroup *toGroup, KC
     copySetting( fromGroup, toGroup, "DateMonthNamePossessive", flags );
     copySetting( fromGroup, toGroup, "WeekNumberSystem", flags );
     copySetting( fromGroup, toGroup, "WeekStartDay", flags );
-    copySetting( fromGroup, toGroup, "WorkingWeekStartDay", flags );
-    copySetting( fromGroup, toGroup, "WorkingWeekEndDay", flags );
-    copySetting( fromGroup, toGroup, "WeekDayOfPray", flags );
     copySetting( fromGroup, toGroup, "DateTimeDigitSet", flags );
     copySetting( fromGroup, toGroup, "BinaryUnitDialect", flags );
     copySetting( fromGroup, toGroup, "PageSize", flags );
@@ -618,7 +594,6 @@ void KCMLocale::initAllWidgets()
 
     //Country tab
     initCountry();
-    initCountryDivision();
 
     //Translations tab
     initTranslations();
@@ -665,7 +640,6 @@ void KCMLocale::initResetButtons()
 
     //Country tab
     m_ui->m_buttonDefaultCountry->setGuiItem( defaultItem );
-    m_ui->m_buttonDefaultCountryDivision->setGuiItem( defaultItem );
 
     //Translations tab
     m_ui->m_buttonDefaultTranslations->setGuiItem( defaultItem );
@@ -685,9 +659,6 @@ void KCMLocale::initResetButtons()
     m_ui->m_buttonDefaultShortYearWindow->setGuiItem( defaultItem );
     m_ui->m_buttonDefaultWeekNumberSystem->setGuiItem( defaultItem );
     m_ui->m_buttonDefaultWeekStartDay->setGuiItem( defaultItem );
-    m_ui->m_buttonDefaultWorkingWeekStartDay->setGuiItem( defaultItem );
-    m_ui->m_buttonDefaultWorkingWeekEndDay->setGuiItem( defaultItem );
-    m_ui->m_buttonDefaultWeekDayOfPray->setGuiItem( defaultItem );
 
     //Date/Time tab
     m_ui->m_buttonDefaultTimeFormat->setGuiItem( defaultItem );
@@ -1024,44 +995,6 @@ void KCMLocale::setCountry( const QString &newValue )
 {
     setComboItem( "Country", newValue,
                   m_ui->m_comboCountry, m_ui->m_buttonDefaultCountry );
-}
-
-void KCMLocale::initCountryDivision()
-{
-    m_ui->m_comboCountryDivision->blockSignals( true );
-
-    m_ui->m_labelCountryDivision->setText( ki18n( "Subdivision:" ).toString( m_kcmLocale ) );
-    QString helpText = ki18n( "<p>This is the country subdivision where you live, e.g. your state "
-                              "or province.  The KDE Workspace will use this setting for local "
-                              "information services such as holidays.</p>" ).toString( m_kcmLocale );
-    m_ui->m_comboCountryDivision->setToolTip( helpText );
-    m_ui->m_comboCountryDivision->setWhatsThis( helpText );
-
-    setCountryDivision( m_kcmSettings.readEntry( "CountryDivision", QString() ) );
-
-    m_ui->m_labelCountryDivision->setHidden( true );
-    m_ui->m_comboCountryDivision->setHidden( true );
-    m_ui->m_buttonDefaultCountryDivision->setEnabled( false );
-    m_ui->m_buttonDefaultCountryDivision->setHidden( true );
-
-    m_ui->m_comboCountryDivision->blockSignals( false );
-}
-
-void KCMLocale::defaultCountryDivision()
-{
-    setCountryDivision( m_defaultSettings.readEntry( "CountryDivision", QString() ) );
-}
-
-void KCMLocale::changedCountryDivisionIndex( int index )
-{
-    setCountryDivision( m_ui->m_comboCountryDivision->itemData( index ).toString() );
-}
-
-void KCMLocale::setCountryDivision( const QString &newValue )
-{
-    setComboItem( "CountryDivision", newValue,
-                m_ui->m_comboCountryDivision, m_ui->m_buttonDefaultCountryDivision );
-    m_kcmLocale->setCountryDivisionCode( m_kcmSettings.readEntry( "CountryDivision", QString() ) );
 }
 
 void KCMLocale::initTranslations()
@@ -1541,9 +1474,6 @@ void KCMLocale::setCalendarSystem( const QString &newValue )
     initShortYearWindow();
     initWeekNumberSystem();
     initWeekStartDay();
-    initWorkingWeekStartDay();
-    initWorkingWeekEndDay();
-    initWeekDayOfPray();
     updateSample();
 }
 
@@ -1728,109 +1658,6 @@ void KCMLocale::setWeekStartDay( int newValue )
     setComboItem( "WeekStartDay", newValue,
                   m_ui->m_comboWeekStartDay, m_ui->m_buttonDefaultWeekStartDay );
     m_kcmLocale->setWeekStartDay( m_kcmSettings.readEntry( "WeekStartDay", 0 ) );
-}
-
-void KCMLocale::initWorkingWeekStartDay()
-{
-    m_ui->m_comboWorkingWeekStartDay->blockSignals( true );
-
-    m_ui->m_labelWorkingWeekStartDay->setText( ki18n( "First working day of week:" ).toString( m_kcmLocale ) );
-    QString helpText = ki18n( "<p>This option determines which day will be considered as the first "
-                              "working day of the week.</p>" ).toString( m_kcmLocale );
-    m_ui->m_comboWorkingWeekStartDay->setToolTip( helpText );
-    m_ui->m_comboWorkingWeekStartDay->setWhatsThis( helpText );
-
-    initWeekDayCombo( m_ui->m_comboWorkingWeekStartDay );
-
-    setWorkingWeekStartDay( m_kcmSettings.readEntry( "WorkingWeekStartDay", 0 ) );
-
-    m_ui->m_comboWorkingWeekStartDay->blockSignals( false );
-}
-
-void KCMLocale::defaultWorkingWeekStartDay()
-{
-    setWorkingWeekStartDay( m_defaultSettings.readEntry( "WorkingWeekStartDay", 0 ) );
-}
-
-void KCMLocale::changedWorkingWeekStartDayIndex( int index )
-{
-    setWorkingWeekStartDay( m_ui->m_comboWorkingWeekStartDay->itemData( index ).toInt() );
-}
-
-void KCMLocale::setWorkingWeekStartDay( int newValue )
-{
-    setComboItem( "WorkingWeekStartDay", newValue,
-                  m_ui->m_comboWorkingWeekStartDay, m_ui->m_buttonDefaultWorkingWeekStartDay );
-    m_kcmLocale->setWorkingWeekStartDay( m_kcmSettings.readEntry( "WorkingWeekStartDay", 0 ) );
-}
-
-void KCMLocale::initWorkingWeekEndDay()
-{
-    m_ui->m_comboWorkingWeekEndDay->blockSignals( true );
-
-    m_ui->m_labelWorkingWeekEndDay->setText( ki18n( "Last working day of week:" ).toString( m_kcmLocale ) );
-    QString helpText = ki18n( "<p>This option determines which day will be considered as the last "
-                              "working day of the week.</p>" ).toString( m_kcmLocale );
-    m_ui->m_comboWorkingWeekEndDay->setToolTip( helpText );
-    m_ui->m_comboWorkingWeekEndDay->setWhatsThis( helpText );
-
-    initWeekDayCombo( m_ui->m_comboWorkingWeekEndDay );
-
-    setWorkingWeekEndDay( m_kcmSettings.readEntry( "WorkingWeekEndDay", 0 ) );
-
-    m_ui->m_comboWorkingWeekEndDay->blockSignals( false );
-}
-
-void KCMLocale::defaultWorkingWeekEndDay()
-{
-    setWorkingWeekEndDay( m_defaultSettings.readEntry( "WorkingWeekEndDay", 0 ) );
-}
-
-void KCMLocale::changedWorkingWeekEndDayIndex( int index )
-{
-    setWorkingWeekEndDay( m_ui->m_comboWorkingWeekEndDay->itemData( index ).toInt() );
-}
-
-void KCMLocale::setWorkingWeekEndDay( int newValue )
-{
-    setComboItem( "WorkingWeekEndDay", newValue,
-                  m_ui->m_comboWorkingWeekEndDay, m_ui->m_buttonDefaultWorkingWeekEndDay );
-    m_kcmLocale->setWorkingWeekEndDay( m_kcmSettings.readEntry( "WorkingWeekEndDay", 0 ) );
-}
-
-void KCMLocale::initWeekDayOfPray()
-{
-    m_ui->m_comboWeekDayOfPray->blockSignals( true );
-
-    m_ui->m_labelWeekDayOfPray->setText( ki18n( "Week day for special religious observance:" ).toString( m_kcmLocale ) );
-    QString helpText = ki18n( "<p>This option determines which day if any will be considered as "
-                              "the day of the week for special religious observance.</p>" ).toString( m_kcmLocale );
-    m_ui->m_comboWeekDayOfPray->setToolTip( helpText );
-    m_ui->m_comboWeekDayOfPray->setWhatsThis( helpText );
-
-    initWeekDayCombo( m_ui->m_comboWeekDayOfPray );
-    m_ui->m_comboWeekDayOfPray->insertItem( 0, ki18nc( "Day name list, option for no special day of religious observance", "None / None in particular" ).toString( m_kcmLocale ) );
-
-    setWeekDayOfPray( m_kcmSettings.readEntry( "WeekDayOfPray", 0 ) );
-
-    m_ui->m_comboWeekDayOfPray->blockSignals( false );
-}
-
-void KCMLocale::defaultWeekDayOfPray()
-{
-    setWeekDayOfPray( m_defaultSettings.readEntry( "WeekDayOfPray", 0 ) );
-}
-
-void KCMLocale::changedWeekDayOfPrayIndex( int index )
-{
-    setWeekDayOfPray( m_ui->m_comboWeekDayOfPray->itemData( index ).toInt() );
-}
-
-void KCMLocale::setWeekDayOfPray( int newValue )
-{
-    setComboItem( "WeekDayOfPray", newValue,
-                  m_ui->m_comboWeekDayOfPray, m_ui->m_buttonDefaultWeekDayOfPray );
-    m_kcmLocale->setWeekDayOfPray( m_kcmSettings.readEntry( "WeekDayOfPray", 0 ) );
 }
 
 void KCMLocale::initTimeFormat()

@@ -98,7 +98,6 @@ DecimalSymbol=,
 ThousandsSeparator=.
 PositiveSign=
 NegativeSign=-
-NounDeclension=true
 DateMonthNamePossessive=true
 DateFormat[el]=%a %d %b %Y
 DateFormat[eo]=%A, la %ea de %B %Y

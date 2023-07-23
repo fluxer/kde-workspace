@@ -30,13 +30,6 @@ Locale::Locale(QObject* parent)
     m_locale = KGlobal::locale();
 }
 
-bool Locale::setCountryDivisionCode(const QString &countryDivisionCode)
-{
-    bool ok = m_locale->setCountryDivisionCode(countryDivisionCode);
-    emit countryDivisionCodeChanged();
-    return ok;
-}
-
 bool Locale::isApplicationTranslatedInto(const QString &lang)
 {
     return m_locale->isApplicationTranslatedInto(lang);
@@ -56,11 +49,6 @@ QString Locale::language() const
 QString Locale::country() const
 {
     return m_locale->country();
-}
-
-QString Locale::countryDivisionCode() const
-{
-    return m_locale->countryDivisionCode();
 }
 
 QString Locale::translateQt(const char *context, const char *sourceText) const
@@ -97,21 +85,6 @@ bool Locale::dateMonthNamePossessive() const
 int Locale::weekStartDay() const
 {
     return m_locale->weekStartDay();
-}
-
-int Locale::workingWeekStartDay() const
-{
-    return m_locale->workingWeekStartDay();
-}
-
-int Locale::workingWeekEndDay() const
-{
-    return m_locale->workingWeekEndDay();
-}
-
-int Locale::weekDayOfPray() const
-{
-    return m_locale->weekDayOfPray();
 }
 
 int Locale::decimalPlaces() const
@@ -264,24 +237,6 @@ void Locale::setWeekStartDay(int day)
 {
     m_locale->setWeekStartDay(day);
     emit weekStartDayChanged();
-}
-
-void Locale::setWorkingWeekStartDay(int day)
-{
-    m_locale->setWorkingWeekStartDay(day);
-    emit workingWeekStartDayChanged();
-}
-
-void Locale::setWorkingWeekEndDay(int day)
-{
-    m_locale->setWorkingWeekEndDay(day);
-    emit workingWeekEndDayChanged();
-}
-
-void Locale::setWeekDayOfPray(int day)
-{
-    m_locale->setWeekDayOfPray(day);
-    emit weekDayOfPrayChanged();
 }
 
 QString Locale::dateFormat() const

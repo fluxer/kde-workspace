@@ -102,5 +102,4 @@ DateFormat[tr]=%d %B %Y %A
 DateFormat[eo]=%A,la %ea de %B %Y
 DateFormatShort=%d-%m-%Y
 TimeFormat=%H:%M:%S
-WeekDayOfPray=0
 #DecimalPlaces=2

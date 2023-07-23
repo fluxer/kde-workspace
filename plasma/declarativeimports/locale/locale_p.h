@@ -82,7 +82,6 @@ Q_ENUMS(WeekNumberSystem)
 Q_PROPERTY(BinaryUnitDialect binaryUnitDialect READ binaryUnitDialect WRITE setBinaryUnitDialect NOTIFY binaryUnitDialectChanged)
 Q_PROPERTY(Locale::CalendarSystem calendarSystem READ calendarSystem WRITE setCalendarSystem NOTIFY calendarSystemChanged)
 Q_PROPERTY(QString country READ country CONSTANT) //read-only
-Q_PROPERTY(QString countryDivisionCode READ countryDivisionCode WRITE setCountryDivisionCode NOTIFY countryDivisionCodeChanged)
 Q_PROPERTY(QString dateFormat READ dateFormat WRITE setDateFormat NOTIFY dateFormatChanged)
 Q_PROPERTY(QString dateFormatShort READ dateFormatShort WRITE setDateFormat NOTIFY dateFormatShortChanged)
 Q_PROPERTY(QString timeFormat READ timeFormat WRITE setTimeFormat NOTIFY timeFormatChanged)
@@ -97,11 +96,8 @@ Q_PROPERTY(QString negativeSign READ negativeSign WRITE setNegativeSign NOTIFY n
 Q_PROPERTY(int pageSize READ pageSize WRITE setPageSize NOTIFY pageSizeChanged)
 Q_PROPERTY(QString positiveSign READ positiveSign WRITE setPositiveSign NOTIFY positiveSignChanged)
 Q_PROPERTY(QString thousandsSeparator READ thousandsSeparator WRITE setThousandsSeparator NOTIFY thousandsSeparatorChanged)
-Q_PROPERTY(int weekDayOfPray READ weekDayOfPray WRITE setWeekDayOfPray NOTIFY weekDayOfPrayChanged)
 Q_PROPERTY(Locale::WeekNumberSystem weekNumberSystem READ weekNumberSystem WRITE setWeekNumberSystem NOTIFY WeekNumberSystemChanged)
 Q_PROPERTY(int weekStartDay READ weekStartDay WRITE setWeekStartDay NOTIFY weekStartDayChanged)
-Q_PROPERTY(int workingWeekEndDay READ workingWeekEndDay WRITE setWorkingWeekEndDay NOTIFY workingWeekEndDayChanged)
-Q_PROPERTY(int workingWeekStartDay READ workingWeekStartDay WRITE setWorkingWeekStartDay NOTIFY workingWeekStartDayChanged)
 Q_PROPERTY(bool use12Clock READ use12Clock CONSTANT)
 Q_PROPERTY(QString defaultLanguage READ defaultLanguage CONSTANT)//read-only
 Q_PROPERTY(QString defaultCountry READ defaultCountry CONSTANT)//read-only
@@ -663,27 +659,6 @@ public:
     int weekStartDay() const;
 
     /**
-     * Use this to determine which day is the first working day of the week.
-     *
-     * @return an integer (Monday=1..Sunday=7)
-     */
-    int workingWeekStartDay() const;
-
-    /**
-     * Use this to determine which day is the last working day of the week.
-     *
-     * @return an integer (Monday=1..Sunday=7)
-     */
-    int workingWeekEndDay() const;
-
-    /**
-     * Use this to determine which day is reserved for religious observance
-     *
-     * @return day number (None = 0, Monday = 1, ..., Sunday = 7)
-     */
-    int weekDayOfPray() const;
-
-    /**
      *
      * Returns the type of Calendar System used in this Locale
      *
@@ -844,25 +819,6 @@ public:
     QString country() const;
 
     /**
-     *
-     * Returns the Country Division Code of the Country where the user lives.
-     * When no value is set, then the Country Code will be returned.
-     *
-     * The returned code complies with the ISO 3166-2 standard.
-     * See http://en.wikipedia.org/wiki/ISO_3166-2 for details.
-     *
-     * Note that unlike country() this method will return the correct case,
-     * i.e. normally uppercase..
-     *
-     * In KDE 4.6 it is the apps responsibility to obtain a translation for the
-     * code, translation and other services will be priovided in KDE 4.7.
-     *
-     * @return the Country Division Code for the user
-     * @see setCountryDivisionCode
-     */
-    QString countryDivisionCode() const;
-
-    /**
      * Returns the language codes selected by user, ordered by decreasing
      * priority.
      *
@@ -966,27 +922,6 @@ public:
      * @param day first day of the week (Monday=1..Sunday=7) as integer
      */
     void setWeekStartDay(int day);
-
-    /**
-     * Changes how KLocale defines the first working day in week.
-     *
-     * @param day first working day of the week (Monday=1..Sunday=7) as integer
-     */
-    void setWorkingWeekStartDay(int day);
-
-    /**
-     * Changes how KLocale defines the last working day in week.
-     *
-     * @param day last working day of the week (Monday=1..Sunday=7) as integer
-     */
-    void setWorkingWeekEndDay(int day);
-
-    /**
-     * Changes how KLocale defines the day reserved for religious observance.
-     *
-     * @param day day of the week for religious observance (None=0,Monday=1..Sunday=7) as integer
-     */
-    void setWeekDayOfPray(int day);
 
     /**
      * Returns the currently selected date format.
@@ -1215,22 +1150,6 @@ public:
 
     /**
      *
-     * Sets the Country Division Code of the Country where the user lives.
-     *
-     * The code must comply with the ISO 3166-2 standard.
-     * See http://en.wikipedia.org/wiki/ISO_3166-2 for details.
-     *
-     * In KDE 4.6 it is the apps responsibility to validate the input,
-     * full validation and other services will be provided in KDE 4.7.
-     *
-     * @param countryDivision the Country Division Code for the user
-     * @return @c true on success, @c false on failure
-     * @see countryDivisionCode
-     */
-    bool setCountryDivisionCode(const QString & countryDivision);
-
-    /**
-     *
      * Removes accelerator marker from a UI text label.
      *
      * Accelerator marker is not always a plain ampersand (&),
@@ -1279,7 +1198,6 @@ private:
 Q_SIGNALS:
     void binaryUnitDialectChanged();
     void calendarSystemChanged();
-    void countryDivisionCodeChanged();
     void decimalSymbolChanged();
     void dateFormatChanged();
     void dateFormatShortChanged();
@@ -1293,11 +1211,8 @@ Q_SIGNALS:
     void positiveSignChanged();
     void thousandsSeparatorChanged();
     void timeFormatChanged();
-    void weekDayOfPrayChanged();
     void WeekNumberSystemChanged();
     void weekStartDayChanged();
-    void workingWeekEndDayChanged();
-    void workingWeekStartDayChanged();
 };
 
 #endif

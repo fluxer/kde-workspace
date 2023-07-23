@@ -104,9 +104,6 @@ DateFormat[eo]=%A, la %ea de %B %Y
 DateFormatShort=%e/%n/%Y
 TimeFormat=%H:%M:%S
 WeekStartDay=7
-WorkingWeekStartDay=7
-WorkingWeekEndDay=4
-WeekDayOfPray=6
 #PageSize=
 #MeasureSystem=
 #Civil calendar is Gregorian, religious is Hebrew
