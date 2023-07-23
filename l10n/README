@@ -216,12 +216,8 @@ between the entry name and the value.
 	This defines which calendar system to use. Available systems are:
 
 	gregorian
-	hebrew
-	hijri
-	jalali
-    indian-national
-    ethiopian
-    coptic
+	gregorian-proleptic
+	julian
 
 	Default: gregorian
 

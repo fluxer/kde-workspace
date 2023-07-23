@@ -95,5 +95,5 @@ Region=middleeast
 Languages=ar
 DecimalSymbol=,
 DateFormatShort=%y/%m/%d
-CalendarSystem=hijri
+#CalendarSystem=
 #DecimalPlaces=2

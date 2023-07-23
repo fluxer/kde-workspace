@@ -103,5 +103,5 @@ TimeFormat=%H:%M:%S
 MeasureSystem=0
 PageSize=0
 WeekStartDay=6
-CalendarSystem=jalali
+#CalendarSystem=
 #DecimalPlaces=2
