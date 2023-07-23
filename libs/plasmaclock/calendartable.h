@@ -63,9 +63,6 @@ public:
     void setDate(const QDate &date);
     const QDate& date() const;
 
-    void clearHolidays();
-    void addHoliday(Plasma::DataEngine::Data holidayData);
-
     void setAutomaticUpdateEnabled(bool enabled);
     bool isAutomaticUpdateEnabled() const;
 

@@ -98,7 +98,6 @@ class CalendarPrivate
         Plasma::ToolButton *forward;
         Plasma::CalendarTable *calendarTable;
         Plasma::LineEdit *dateText;
-        Plasma::TextBrowser *eventsDisplay;
         ToolButton *jumpToday;
         QMenu *monthMenu;
         Plasma::SpinBox *weekSpinBox;
