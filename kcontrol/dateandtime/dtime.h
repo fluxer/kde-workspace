@@ -32,7 +32,6 @@
 #include <QtGui/qevent.h>
 #include <QTimeEdit>
 
-#include <kdatepicker.h>
 #include <knuminput.h>
 
 class Kclock;
