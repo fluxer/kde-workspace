@@ -67,7 +67,6 @@ Q_SIGNALS:
     void dateChanged(const QDate &newDate);
 
 protected:
-    void keyPressEvent(QKeyEvent * event);
     void showEvent(QShowEvent * event);
 
 private Q_SLOTS:

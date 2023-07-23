@@ -126,35 +126,6 @@ void CalendarPrivate::init(const QDate &initialDate)
     updateSize();
 }
 
-void Calendar::keyPressEvent(QKeyEvent* event)
-{
-    switch(event->key()) {
-        case Qt::Key_Right :
-            setDate(date().addDays(1));
-            break;
-        case Qt::Key_Left :
-            setDate(date().addDays(-1));
-            break;
-        case Qt::Key_Up :
-            setDate(date().addDays(-7));
-            break;
-        case Qt::Key_Down :
-            setDate(date().addDays(7));
-            break;
-        case Qt::Key_PageUp:
-            setDate(date().addMonths(1));
-            break;
-        case Qt::Key_PageDown:
-            setDate(date().addMonths(-1));
-            break;
-        case Qt::Key_Home:
-            setDate(QDate::currentDate());
-            break;
-        default:
-            break;
-    }
-}
-
 void Calendar::showEvent(QShowEvent * event)
 {
     if (d->automaticUpdates) {
