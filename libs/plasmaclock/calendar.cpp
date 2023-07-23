@@ -45,6 +45,7 @@
 #include <KLocale>
 #include <KConfigDialog>
 #include <KConfigGroup>
+#include <KNotification>
 
 //Plasma
 #include <Plasma/Label>
@@ -167,6 +168,9 @@ void Calendar::setDate(const QDate &toDate)
 {
     // New date must be valid in the current calendar system
     if (!calendar()->isValid(toDate)) {
+        if (!toDate.isNull()) {
+            KNotification::beep();
+        }
         return;
     }
 
