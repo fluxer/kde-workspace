@@ -1,7 +1,6 @@
 set(plasmaclock_LIB_SRCS
     clockapplet.cpp
     calendar.cpp
-    calendartable.cpp
     wheelytoolbutton.cpp
     timezonesConfig.ui
     calendarConfig.ui
@@ -27,7 +26,6 @@ install(
     FILES
     clockapplet.h
     calendar.h
-    calendartable.h
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaclock_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/plasmaclock
 )

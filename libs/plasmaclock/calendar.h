@@ -25,8 +25,6 @@
 
 #include "plasmaclock_export.h"
 
-#include "calendartable.h"
-
 class KCalendarSystem;
 class KConfigDialog;
 class KConfigGroup;
@@ -34,7 +32,6 @@ class KConfigGroup;
 namespace Plasma
 {
 
-class CalendarTable;
 class CalendarPrivate;
 class DataEngine;
 
@@ -47,22 +44,18 @@ public:
     explicit Calendar(const QDate &, QGraphicsWidget *parent = 0);
     ~Calendar();
 
-    CalendarTable *calendarTable() const;
-
     void setCalendar(int newCalendarType = -1);
     void setCalendar(const KCalendarSystem *calendar);
     const KCalendarSystem *calendar() const;
 
-    void setDate(const QDate &date);
-    const QDate& date() const;
-
-    bool isDisplayingDateDetails() const;
-
     void setAutomaticUpdateEnabled(bool automatic);
     bool isAutomaticUpdateEnabled() const;
 
+    void setDate(const QDate &date);
+    QDate date() const;
+
     void setCurrentDate(const QDate &date);
-    const QDate& currentDate() const;
+    QDate currentDate() const;
 
     void applyConfiguration(KConfigGroup cg);
     void writeConfiguration(KConfigGroup cg);
@@ -72,30 +65,19 @@ public:
 Q_SIGNALS:
     void dateChanged(const QDate &newDate, const QDate &oldDate);
     void dateChanged(const QDate &newDate);
-    void dateHovered(const QDate &date);
 
 protected:
     void keyPressEvent(QKeyEvent * event);
     void focusInEvent(QFocusEvent * event);
     void focusOutEvent(QFocusEvent * event);
+    void showEvent(QShowEvent * event);
 
 private Q_SLOTS:
-    void prevMonth();
-    void nextMonth();
-    void prevYear();
-    void nextYear();
     void dateUpdated();
-    void goToToday();
-    void goToWeek(int week);
     void manualDateChange();
-    void monthTriggered();
-    void showYearSpinBox();
-    void hideYearSpinBox();
 
 private:
     CalendarPrivate* const d;
-
-    Q_PRIVATE_SLOT(d, void popupMonthsMenu())
 };
 
 }

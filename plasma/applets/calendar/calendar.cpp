@@ -28,6 +28,7 @@
 #include <KSystemTimeZones>
 #include <KConfigDialog>
 #include <KConfigGroup>
+#include <KCalendarSystem>
 
 #include <Plasma/Svg>
 #include <Plasma/Theme>

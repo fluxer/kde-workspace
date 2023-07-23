@@ -50,6 +50,7 @@
 #include <KTimeZone>
 #include <KToolInvocation>
 #include <KMessageBox>
+#include <KCalendarSystem>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
