@@ -71,7 +71,6 @@ protected:
 
 private Q_SLOTS:
     void dateUpdated();
-    void manualDateChange();
 
 private:
     CalendarPrivate* const d;
