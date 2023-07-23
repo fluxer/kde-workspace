@@ -126,18 +126,6 @@ void CalendarPrivate::init(const QDate &initialDate)
     updateSize();
 }
 
-void Calendar::focusInEvent(QFocusEvent* event)
-{
-    Q_UNUSED(event);
-    grabKeyboard();
-}
-
-void Calendar::focusOutEvent(QFocusEvent* event)
-{
-    Q_UNUSED(event);
-    ungrabKeyboard();
-}
-
 void Calendar::keyPressEvent(QKeyEvent* event)
 {
     switch(event->key()) {

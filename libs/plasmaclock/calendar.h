@@ -68,8 +68,6 @@ Q_SIGNALS:
 
 protected:
     void keyPressEvent(QKeyEvent * event);
-    void focusInEvent(QFocusEvent * event);
-    void focusOutEvent(QFocusEvent * event);
     void showEvent(QShowEvent * event);
 
 private Q_SLOTS:
