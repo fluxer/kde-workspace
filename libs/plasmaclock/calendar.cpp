@@ -229,8 +229,8 @@ void Calendar::configAccepted(KConfigGroup cg)
 
 void CalendarPrivate::updateSize()
 {
-    QSize minSize = QSize(200, 200);
-    QSize prefSize = calendarWidget ? calendarWidget->size().toSize() : QSize(250, 250);
+    QSize minSize = QSize(300, 250);
+    QSize prefSize = calendarWidget ? calendarWidget->size().toSize() : QSize(300, 250);
 
     q->setMinimumSize(minSize);
     q->setPreferredSize(prefSize);
