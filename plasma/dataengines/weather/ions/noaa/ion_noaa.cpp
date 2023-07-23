@@ -22,7 +22,7 @@
 #include "ion_noaa.h"
 
 #include <KIO/Job>
-#include <KLocalizedDate>
+#include <KCalendarSystem>
 #include <kunitconversion.h>
 
 QMap<QString, IonInterface::WindDirections> NOAAIon::setupWindIconMappings(void) const
@@ -905,7 +905,7 @@ void NOAAIon::readForecast(const QString& source, QXmlStreamReader& xml)
                         QDateTime date = QDateTime::fromString(data, Qt::ISODate);
 
                         WeatherData::Forecast forecast;
-                        forecast.day = KLocalizedDate(date.date()).formatDate(KLocale::DayName, KLocale::ShortName);
+                        forecast.day = KGlobal::locale()->calendar()->weekDayName(date.date(), KCalendarSystem::ShortDayName);
                         forecasts.append(forecast);
                         //kDebug() << forecast.day;
                     }

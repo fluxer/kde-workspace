@@ -30,7 +30,7 @@
 
 #include <KDebug>
 #include <KDateTime>
-#include <KLocalizedDate>
+#include <KCalendarSystem>
 #include <kunitconversion.h>
 
 /*
@@ -713,7 +713,7 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
 
                 data.insert(QString::fromLatin1("Short Forecast Day %1").arg(i),
                             QString::fromLatin1("%1|%2|%3|%4|%5|%6")
-                            .arg(KLocalizedDate(weather.period.date()).formatDate(KLocale::DayName, KLocale::ShortName))
+                            .arg(KGlobal::locale()->calendar()->weekDayName(weather.period.date(), KCalendarSystem::ShortDayName))
                             .arg(weather.iconName).arg(weather.summary)
                             .arg(weather.tempHigh).arg(weather.tempLow)
                             .arg(weather.probability));
