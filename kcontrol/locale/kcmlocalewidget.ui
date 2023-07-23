@@ -1130,12 +1130,6 @@
   <tabstop>m_buttonDefaultShortYearWindow</tabstop>
   <tabstop>m_comboWeekStartDay</tabstop>
   <tabstop>m_buttonDefaultWeekStartDay</tabstop>
-  <tabstop>m_comboWorkingWeekStartDay</tabstop>
-  <tabstop>m_buttonDefaultWorkingWeekStartDay</tabstop>
-  <tabstop>m_comboWorkingWeekEndDay</tabstop>
-  <tabstop>m_buttonDefaultWorkingWeekEndDay</tabstop>
-  <tabstop>m_comboWeekDayOfPray</tabstop>
-  <tabstop>m_buttonDefaultWeekDayOfPray</tabstop>
   <tabstop>m_comboTimeFormat</tabstop>
   <tabstop>m_buttonDefaultTimeFormat</tabstop>
   <tabstop>m_comboAmSymbol</tabstop>
