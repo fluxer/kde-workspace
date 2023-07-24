@@ -1159,7 +1159,7 @@ void KColorCm::save()
     displayGroup.writeEntry("exportKDEColors", applyToAlien->isChecked());
     cfg.sync();
 
-    runRdb(KRdbExportQtColors | ( applyToAlien->isChecked() ? KRdbExportColors : 0 ) );
+    runRdb();
 
     emit changed(false);
 }

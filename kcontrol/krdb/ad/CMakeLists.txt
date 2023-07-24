@@ -22,8 +22,3 @@ install(
     Xpdf.ad
     DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kdisplay/app-defaults
 )
-
-install(
-    PROGRAMS krdb
-    DESTINATION ${KDE4_BIN_INSTALL_DIR}
-)

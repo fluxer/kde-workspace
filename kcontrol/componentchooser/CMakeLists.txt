@@ -9,20 +9,10 @@ set(kcm_componentchooser_SRCS
     componentchooserfilemanager.cpp
     componentchooseremail.cpp
     kcm_componentchooser.cpp
-)
-
-set(kcm_componentchooser_SRCS
-    ${kcm_componentchooser_SRCS}
     componentchooserterminal.cpp
     ktimerdialog.cpp
+    componentchooserwm.cpp
 )
-
-if(Q_WS_X11)
-    set(kcm_componentchooser_SRCS
-        ${kcm_componentchooser_SRCS}
-        componentchooserwm.cpp
-    )
-endif()
 
 kde4_add_plugin(kcm_componentchooser ${kcm_componentchooser_SRCS})
 

@@ -75,15 +75,7 @@ extern "C"
 {
     KDE_EXPORT void kcminit_style()
     {
-        uint flags = KRdbExportQtSettings | KRdbExportQtColors | KRdbExportXftSettings;
-        KConfig _config( "kcmdisplayrc", KConfig::NoGlobals  );
-        KConfigGroup config(&_config, "X11");
-
-        // This key is written by the "colors" module.
-        bool exportKDEColors = config.readEntry("exportKDEColors", true);
-        if (exportKDEColors)
-            flags |= KRdbExportColors;
-        runRdb( flags );
+        runRdb();
     }
 }
 
@@ -413,13 +405,7 @@ void KCMStyle::save()
     // export fonts/colors settings.
     if (m_bStyleDirty | m_bEffectsDirty)    // Export only if necessary
     {
-        uint flags = KRdbExportQtSettings;
-        KConfig _kconfig( "kcmdisplayrc", KConfig::NoGlobals  );
-        KConfigGroup kconfig(&_kconfig, "X11");
-        bool exportKDEColors = kconfig.readEntry("exportKDEColors", true);
-        if (exportKDEColors)
-            flags |= KRdbExportColors;
-        runRdb( flags );
+        runRdb();
     }
 
     // Clean up

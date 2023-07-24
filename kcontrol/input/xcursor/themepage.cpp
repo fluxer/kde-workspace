@@ -261,7 +261,7 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
     KToolInvocation::setLaunchEnv("XCURSOR_THEME", themeName);
 
     // Update the Xcursor X resources
-    runRdb(0);
+    runRdb();
 
     // Notify all applications that the cursor theme has changed
     KGlobalSettings::self()->emitChange(KGlobalSettings::CursorChanged);
