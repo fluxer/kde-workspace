@@ -126,7 +126,6 @@ public:
             if (!calendarWidget) {
                 calendarWidget = new Plasma::Calendar();
                 calendarWidget->setAutomaticUpdateEnabled(false);
-                calendarWidget->setMinimumSize(QSize(230, 220));
             }
         } else {
             delete calendarWidget;
@@ -163,7 +162,6 @@ ClockApplet::ClockApplet(QObject *parent, const QVariantList &args)
       d(new Private(this))
 {
     setPopupIcon(QIcon());
-    setPassivePopup(true);
 }
 
 ClockApplet::~ClockApplet()
