@@ -174,9 +174,10 @@ void Calendar::setDate(const QDate &toDate)
         return;
     }
 
-    // If new date is the same as old date don't actually need to do anything
-    if (toDate == date()) {
-        return;
+    // NOTE: this method is called by Plasma::ClockApplet::popupEvent() on show so updating as if
+    // show event ocurred
+    if (d->automaticUpdates) {
+        d->currentDate = QDate::currentDate();
     }
 
     d->calendarWidget->setSelectedDate(toDate);
