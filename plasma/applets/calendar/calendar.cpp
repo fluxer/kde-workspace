@@ -54,7 +54,6 @@ void CalendarApplet::init()
 {
     setPopupIcon("view-pim-calendar");
     m_calendarWidget = new Plasma::Calendar(this);
-    m_calendarWidget->setMinimumSize(220, 250);
     updateDate();
     configChanged();
     setFocusPolicy(Qt::StrongFocus);
