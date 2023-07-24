@@ -68,6 +68,7 @@ Q_SIGNALS:
 
 protected:
     void showEvent(QShowEvent * event);
+    void focusInEvent(QFocusEvent* event);
 
 private Q_SLOTS:
     void dateUpdated();

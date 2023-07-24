@@ -126,6 +126,7 @@ public:
             if (!calendarWidget) {
                 calendarWidget = new Plasma::Calendar();
                 calendarWidget->setAutomaticUpdateEnabled(false);
+                calendarWidget->setFlag(QGraphicsItem::ItemIsFocusable);
             }
         } else {
             delete calendarWidget;
@@ -508,7 +509,6 @@ void ClockApplet::focusInEvent(QFocusEvent* event)
 {
     Q_UNUSED(event);
     if (d->calendarWidget) {
-        d->calendarWidget->setFlag(QGraphicsItem::ItemIsFocusable);
         d->calendarWidget->setFocus();
     }
 }

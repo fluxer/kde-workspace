@@ -135,6 +135,12 @@ void Calendar::showEvent(QShowEvent * event)
     QGraphicsWidget::showEvent(event);
 }
 
+void Calendar::focusInEvent(QFocusEvent* event)
+{
+    Q_UNUSED(event);
+    d->calendarWidget->setFocus();
+}
+
 void Calendar::setCalendar(int newCalendarType)
 {
     d->calendar = KCalendarSystem::create(static_cast<KLocale::CalendarSystem>(newCalendarType));
