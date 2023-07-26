@@ -25,7 +25,6 @@
 
 #include "plasmaclock_export.h"
 
-class KCalendarSystem;
 class KConfigDialog;
 class KConfigGroup;
 
@@ -44,10 +43,6 @@ public:
     explicit Calendar(const QDate &, QGraphicsWidget *parent = 0);
     ~Calendar();
 
-    void setCalendar(int newCalendarType = -1);
-    void setCalendar(const KCalendarSystem *calendar);
-    const KCalendarSystem *calendar() const;
-
     void setAutomaticUpdateEnabled(bool automatic);
     bool isAutomaticUpdateEnabled() const;
 
@@ -56,11 +51,6 @@ public:
 
     void setCurrentDate(const QDate &date);
     QDate currentDate() const;
-
-    void applyConfiguration(KConfigGroup cg);
-    void writeConfiguration(KConfigGroup cg);
-    void createConfigurationInterface(KConfigDialog *parent);
-    void configAccepted(KConfigGroup cg);
 
 Q_SIGNALS:
     void dateChanged(const QDate &newDate, const QDate &oldDate);

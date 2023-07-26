@@ -136,9 +136,9 @@ void DrKonqiDialog::buildIntroWidget()
                                              crashedApp->pid(),
                                              crashedApp->signalName(),
                                              crashedApp->signalNumber(),
-                                             KGlobal::locale()->formatDate(crashedApp->datetime().date(), KLocale::ShortDate),
+                                             KGlobal::locale()->formatDate(crashedApp->datetime().date()),
 
-                                             KGlobal::locale()->formatTime(crashedApp->datetime().time(), true)
+                                             KGlobal::locale()->formatTime(crashedApp->datetime().time())
                                              ));
 }
 

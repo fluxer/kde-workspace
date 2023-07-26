@@ -100,8 +100,8 @@ QString GlobalBookmarkManager::makeTimeStr(int b)
     QDateTime dt;
     dt.setTime_t(b);
     return (dt.daysTo(QDateTime::currentDateTime()) > 31)
-        ? KGlobal::locale()->formatDate(dt.date(), KLocale::LongDate)
-        : KGlobal::locale()->formatDateTime(dt, KLocale::LongDate);
+        ? KGlobal::locale()->formatDate(dt.date())
+        : KGlobal::locale()->formatDateTime(dt);
 }
 
 #include "moc_globalbookmarkmanager.cpp"

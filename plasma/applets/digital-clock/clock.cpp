@@ -38,7 +38,6 @@
 #include <KColorScheme>
 #include <KGlobalSettings>
 #include <KConfigDialog>
-#include <KCalendarSystem>
 #include <KServiceTypeTrader>
 #include <KRun>
 #include <Plasma/Theme>
@@ -47,6 +46,12 @@
 #include <Plasma/PaintUtils>
 #include <Plasma/ToolTipManager>
 
+// TODO: no AM/PM, no locale format awareness
+static QString makeTime(const KLocale* locale, const QTime &time, const bool seconds)
+{
+    const QLocale qlocale = locale->toLocale();
+    return (seconds ? qlocale.toString(time, "hh:mm:ss") : qlocale.toString(time, "hh:mm"));
+}
 
 Clock::Clock(QObject *parent, const QVariantList &args)
     : ClockApplet(parent, args),
@@ -115,7 +120,7 @@ void Clock::updateSize()
     if (f != Plasma::Vertical && f != Plasma::Horizontal) {
         const QFontMetricsF metrics(KGlobalSettings::smallestReadableFont());
         // calculates based on size of "23:59"!
-        const QString timeString = KGlobal::locale()->formatTime(QTime(23, 59), m_showSeconds);
+        const QString timeString = makeTime(KGlobal::locale(), QTime(23, 59), m_showSeconds);
         setMinimumSize(metrics.size(Qt::TextSingleLine, timeString));
     }
 
@@ -169,7 +174,7 @@ void Clock::updateSize()
     //kDebug() << "minZize: " << minimumSize() << preferredSize();
 
     if (m_isDefaultFont) {
-        const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_showSeconds);
+        const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
         expandFontToMax(m_plainClockFont, fakeTimeString);
     }
 
@@ -226,7 +231,7 @@ void Clock::clockConfigChanged()
     }
 
     const QFontMetricsF metrics(KGlobalSettings::smallestReadableFont());
-    const QString timeString = KGlobal::locale()->formatTime(QTime(23, 59), m_showSeconds);
+    const QString timeString = makeTime(KGlobal::locale(), QTime(23, 59), m_showSeconds);
     setMinimumSize(metrics.size(Qt::TextSingleLine, timeString));
 
     if (isUserConfiguring()) {
@@ -277,8 +282,7 @@ void Clock::createClockConfigurationInterface(KConfigDialog *parent)
     dateStyles << i18nc("A kind of date representation", "No date")
                << i18nc("A kind of date representation", "Compact date")
                << i18nc("A kind of date representation", "Short date")
-               << i18nc("A kind of date representation", "Long date")
-               << i18nc("A kind of date representation", "ISO date");
+               << i18nc("A kind of date representation", "Long date");
 
     ui.dateStyle->addItems(dateStyles);
     ui.dateStyle->setCurrentIndex(m_dateStyle);
@@ -455,8 +459,8 @@ void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, 
     // Paint the date, conditionally, and let us know afterwards how much
     // space is left for painting the time on top of it.
     QRectF dateRect;
-    const QString timeString = KGlobal::locale()->formatTime(m_time, m_showSeconds);
-    const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_showSeconds);
+    const QString timeString = makeTime(KGlobal::locale(), m_time, m_showSeconds);
+    const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
     QFont smallFont = KGlobalSettings::smallestReadableFont();
 
     //create the string for the date and/or the timezone
@@ -465,22 +469,14 @@ void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, 
 
         //Create the localized date string if needed
         if (m_dateStyle) {
-            // JPL This needs a complete rewrite for l10n issues
-            QString day = KGlobal::locale()->calendar()->formatDate(m_date, KLocale::Day, KLocale::ShortNumber);
-            QString month = KGlobal::locale()->calendar()->formatDate(m_date, KLocale::Month, KLocale::LongNumber);
-
             if (m_dateStyle == 1) {         //compact date
-                dateString = i18nc("@label Compact date: "
-                        "%1 day in the month, %2 month number",
-                        "%1/%2", day, month);
+                dateString = KGlobal::locale()->formatDate(m_date, QLocale::NarrowFormat);
             } else if (m_dateStyle == 2) {    //short date
-                dateString = KGlobal::locale()->formatDate(m_date, KLocale::ShortDate);
+                dateString = KGlobal::locale()->formatDate(m_date, QLocale::ShortFormat);
             } else if (m_dateStyle == 3) {    //long date
-                dateString = KGlobal::locale()->formatDate(m_date, KLocale::LongDate);
-            } else if (m_dateStyle == 4) {    //ISO date
-                dateString = KGlobal::locale()->formatDate(m_date, KLocale::IsoDate);
+                dateString = KGlobal::locale()->formatDate(m_date, QLocale::LongFormat);
             } else {                          //shouldn't happen
-                dateString = KGlobal::locale()->formatDate(m_date, KLocale::ShortDate);
+                dateString = KGlobal::locale()->formatDate(m_date, QLocale::ShortFormat);
             }
 
             if (showTimezone()) {
@@ -666,8 +662,8 @@ void Clock::generatePixmap()
         m_svg->setContainsMultipleImages(true);
     }
 
-    const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_showSeconds);
-    const QString timeString = KGlobal::locale()->formatTime(m_time, m_showSeconds);
+    const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
+    const QString timeString = makeTime(KGlobal::locale(), m_time, m_showSeconds);
 
     QRect rect(contentsRect().toRect());
     QFont font(m_plainClockFont);

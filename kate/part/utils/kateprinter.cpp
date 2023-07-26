@@ -235,11 +235,11 @@ bool KatePrinter::print (KateDocument *doc)
         KUser u (KUser::UseRealUserID);
         tags["u"] = u.loginName();
 
-        tags["d"] = KGlobal::locale()->formatDateTime(dt, KLocale::ShortDate);
-        tags["D"] =  KGlobal::locale()->formatDateTime(dt, KLocale::LongDate);
-        tags["h"] =  KGlobal::locale()->formatTime(dt.time(), false);
-        tags["y"] =  KGlobal::locale()->formatDate(dt.date(), KLocale::ShortDate);
-        tags["Y"] =  KGlobal::locale()->formatDate(dt.date(), KLocale::LongDate);
+        tags["d"] = KGlobal::locale()->formatDateTime(dt, QLocale::ShortFormat);
+        tags["D"] =  KGlobal::locale()->formatDateTime(dt, QLocale::LongFormat);
+        tags["h"] =  KGlobal::locale()->formatTime(dt.time(), QLocale::ShortFormat);
+        tags["y"] =  KGlobal::locale()->formatDate(dt.date(), QLocale::ShortFormat);
+        tags["Y"] =  KGlobal::locale()->formatDate(dt.date(), QLocale::LongFormat);
         tags["f"] =  doc->url().fileName();
         tags["U"] =  doc->url().pathOrUrl();
         if ( selectionOnly )

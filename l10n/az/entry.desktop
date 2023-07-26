@@ -92,15 +92,3 @@ Name[xh]=Azerbaijan
 Name[x-test]=xxAzerbaijanxx
 Name[zh_CN]=阿塞拜疆
 Name[zh_TW]=亞塞拜然
-
-Region=middleeast
-Languages=az
-DecimalSymbol=,
-ThousandsSeparator=
-PositiveSign=
-NegativeSign=-
-DateFormat[az]=%A %d %B %Y
-DateFormat[eo]=%A, la %ea de %B %Y
-DateFormatShort=%d-%m-%Y
-TimeFormat=%H:%M:%S
-#DecimalPlaces=2

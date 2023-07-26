@@ -71,7 +71,7 @@ KDateCombo::~KDateCombo()
 
 QString KDateCombo::date2String(const QDate & date)
 {
-  return(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
+  return(KGlobal::locale()->formatDate(date));
 }
 
 QDate & KDateCombo::string2Date(const QString & str, QDate *qd)

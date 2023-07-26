@@ -50,7 +50,6 @@
 #include <KTimeZone>
 #include <KToolInvocation>
 #include <KMessageBox>
-#include <KCalendarSystem>
 
 #include <Plasma/Containment>
 #include <Plasma/Corona>
@@ -97,7 +96,7 @@ public:
         if (date != prevDate) {
             subText.append("<tr><td>&nbsp;</td></tr>")
                    .append("<tr><th colspan=2 align=left>")
-                   .append(q->calendar()->formatDate(data["Date"].toDate()).replace(' ', "&nbsp;"))
+                   .append(KGlobal::locale()->formatDate(data["Date"].toDate()).replace(' ', "&nbsp;"))
                    .append("</th></tr>");
         }
 
@@ -112,7 +111,7 @@ public:
 
         // now the time
         subText.append("<td>")
-               .append(KGlobal::locale()->formatTime(data["Time"].toTime(), false).replace(' ', "&nbsp;"))
+               .append(KGlobal::locale()->formatTime(data["Time"].toTime()).replace(' ', "&nbsp;"))
                .append("</td>");
 
         // and close out the row.
@@ -288,10 +287,6 @@ void ClockApplet::createConfigurationInterface(KConfigDialog *parent)
 {
     createClockConfigurationInterface(parent);
 
-    if (d->calendarWidget) {
-        d->calendarWidget->createConfigurationInterface(parent);
-    }
-
     QWidget *widget = new QWidget();
     d->timezonesUi.setupUi(widget);
     d->timezonesUi.searchLine->addTreeWidget(d->timezonesUi.timeZones);
@@ -346,11 +341,9 @@ void ClockApplet::configChanged()
         constraintsEvent(Plasma::SizeConstraint);
         update();
     } else if (d->calendarWidget) {
-        // d->calendarWidget->configAccepted(cg); is called in configAccepted(),
-        // as is setCurrentTimezone
+        // setCurrentTimezone() is called in configAccepted(),
         // so we only need to do this in the case where the user hasn't been
         // configuring things
-        d->calendarWidget->applyConfiguration(cg);
         Plasma::DataEngine::Data data = dataEngine("time")->query(d->timezone);
         d->calendarWidget->setDate(data["Date"].toDate());
     }
@@ -378,10 +371,6 @@ void ClockApplet::configAccepted()
     QString cur = currentTimezone();
     setCurrentTimezone(d->defaultTimezone);
     changeEngineTimezone(cur, d->defaultTimezone);
-
-    if (d->calendarWidget) {
-        d->calendarWidget->configAccepted(cg);
-    }
 
     clockConfigAccepted();
 
@@ -584,52 +573,27 @@ void ClockApplet::updateClipboardMenu()
     Plasma::DataEngine::Data data = dataEngine("time")->query(currentTimezone());
     QDateTime dateTime = QDateTime(data["Date"].toDate(), data["Time"].toTime());
 
-    d->clipboardMenu->addAction(calendar()->formatDate(dateTime.date(), KLocale::LongDate));
-    d->clipboardMenu->addAction(calendar()->formatDate(dateTime.date(), KLocale::ShortDate));
-    // Display ISO Date format if not already displayed
-    if (KGlobal::locale()->dateFormatShort() != "%Y-%m-%d") {
-        d->clipboardMenu->addAction(calendar()->formatDate(dateTime.date(), "%Y-%m-%d"));
-    }
+    d->clipboardMenu->addAction(KGlobal::locale()->formatDate(dateTime.date(), QLocale::LongFormat));
+    d->clipboardMenu->addAction(KGlobal::locale()->formatDate(dateTime.date(), QLocale::ShortFormat));
 
     QAction *sep0 = new QAction(this);
     sep0->setSeparator(true);
     d->clipboardMenu->addAction(sep0);
 
-    d->clipboardMenu->addAction(KGlobal::locale()->formatTime(dateTime.time(), false));
-    d->clipboardMenu->addAction(KGlobal::locale()->formatTime(dateTime.time(), true));
+    d->clipboardMenu->addAction(KGlobal::locale()->formatTime(dateTime.time(), QLocale::LongFormat));
+    d->clipboardMenu->addAction(KGlobal::locale()->formatTime(dateTime.time(), QLocale::ShortFormat));
 
     QAction *sep1 = new QAction(this);
     sep1->setSeparator(true);
     d->clipboardMenu->addAction(sep1);
 
-    KLocale tempLocale(*KGlobal::locale());
-    tempLocale.setCalendarSystem(calendar()->calendarSystem());
-    d->clipboardMenu->addAction(tempLocale.formatDateTime(dateTime, KLocale::LongDate));
-    d->clipboardMenu->addAction(tempLocale.formatDateTime(dateTime, KLocale::LongDate, true));
-    d->clipboardMenu->addAction(tempLocale.formatDateTime(dateTime, KLocale::ShortDate));
-    d->clipboardMenu->addAction(tempLocale.formatDateTime(dateTime, KLocale::ShortDate, true));
-    // Display ISO DateTime format if not already displayed
-    if (tempLocale.dateFormatShort() != "%Y-%m-%d") {
-        tempLocale.setDateFormatShort("%Y-%m-%d");
-        d->clipboardMenu->addAction(tempLocale.formatDateTime(dateTime, KLocale::ShortDate, true));
-    }
+    d->clipboardMenu->addAction(KGlobal::locale()->formatDateTime(dateTime, QLocale::LongFormat));
+    d->clipboardMenu->addAction(KGlobal::locale()->formatDateTime(dateTime, QLocale::ShortFormat));
+    d->clipboardMenu->addAction(KGlobal::locale()->formatDateTime(dateTime, QLocale::NarrowFormat));
 
     QAction *sep2 = new QAction(this);
     sep2->setSeparator(true);
     d->clipboardMenu->addAction(sep2);
-
-    QMenu *calendarMenu = d->clipboardMenu->addMenu( i18nc( "@item:inmenu Submenu for alternative calendar dates", "Other Calendars" ) );
-    QList<KLocale::CalendarSystem> calendars = KCalendarSystem::calendarSystemsList();
-    foreach (const KLocale::CalendarSystem &cal, calendars) {
-        if (cal != calendar()->calendarSystem()) {
-            KCalendarSystem *tempCal = KCalendarSystem::create(cal);
-            QString text = tempCal->formatDate(dateTime.date(), KLocale::LongDate) + " (" + KCalendarSystem::calendarLabel(cal) + ')';
-            calendarMenu->addAction(text);
-            text = tempCal->formatDate(dateTime.date(), KLocale::ShortDate) + " (" + KCalendarSystem::calendarLabel(cal) + ')';
-            calendarMenu->addAction(text);
-            delete tempCal;
-        }
-    }
 }
 
 void ClockApplet::copyToClipboard(QAction* action)
@@ -638,15 +602,6 @@ void ClockApplet::copyToClipboard(QAction* action)
     text.remove(QChar('&'));
 
     QApplication::clipboard()->setText(text);
-}
-
-const KCalendarSystem *ClockApplet::calendar() const
-{
-    if (d->calendarWidget) {
-        return d->calendarWidget->calendar();
-    } else {
-        return KGlobal::locale()->calendar();
-    }
 }
 
 #include "moc_clockapplet.cpp"

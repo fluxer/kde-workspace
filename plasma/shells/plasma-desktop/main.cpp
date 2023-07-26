@@ -41,13 +41,11 @@
 #include <unistd.h>
 
 static const char description[] = I18N_NOOP( "The KDE desktop, panels and widgets workspace application." );
-QString plasmaLocale;
 
 int main(int argc, char **argv)
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "START" << "(line:" << __LINE__ << ")";
 
-    plasmaLocale = KLocale("libplasma").language();
     // dual head support
     int associatedScreen = 0;
 #ifdef Q_WS_X11

@@ -1,4 +1,5 @@
 [KCM Locale]
+Author=lugos-slo@lugos.si
 Name=Slovenia
 Name[af]=Slovenië
 Name[ar]=سلوفينيا
@@ -92,17 +93,3 @@ Name[xh]=Slovenia
 Name[x-test]=xxSloveniaxx
 Name[zh_CN]=斯洛文尼亚
 Name[zh_TW]=斯洛維尼亞
-Author=lugos-slo@lugos.si
-Region=centraleurope
-Languages=sl
-DecimalSymbol=,
-ThousandsSeparator=.
-PositiveSign=
-NegativeSign=−
-DateFormat[sl]=%A, %e. %B %Y
-DateFormat[eo]=%A, la %ea de %B %Y
-DateFormatShort=%d. %m. %y
-TimeFormat=%H:%M:%S
-DateMonthNamePossessive=true
-#DecimalPlaces=2
-AddressFormat=%n\n%s\n%0(p.p. %p\n)%z %l

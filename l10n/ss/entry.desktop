@@ -1,4 +1,5 @@
 [KCM Locale]
+Author=John Layt <jlayt@kde.org>
 Name=South Sudan
 Name[ar]=جنوب السودان
 Name[ast]=Sur de Sudán
@@ -63,6 +64,3 @@ Name[wa]=Soudan Nonnrece
 Name[x-test]=xxSouth Sudanxx
 Name[zh_CN]=南苏丹
 Name[zh_TW]=南蘇丹
-Region=eastafrica
-Languages=en_US
-Author=John Layt <jlayt@kde.org>

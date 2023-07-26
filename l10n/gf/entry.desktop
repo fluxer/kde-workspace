@@ -70,17 +70,3 @@ Name[wa]=Guyane francesse
 Name[x-test]=xxFrench Guianaxx
 Name[zh_CN]=法属圭亚那
 Name[zh_TW]=法屬圭亞那
-
-Region=southamerica
-Languages=fr
-#DecimalSymbol=,
-#ThousandsSeparator=
-#PositiveSign=
-#NegativeSign=-
-#DateFormat[??]=
-#DateFormatShort=
-#TimeFormat=
-#WeekStartDay=
-#PageSize=
-#MeasureSystem=
-#DecimalPlaces=2

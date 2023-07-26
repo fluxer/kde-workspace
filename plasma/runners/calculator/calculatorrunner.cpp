@@ -80,7 +80,7 @@ void CalculatorRunner::powSubstitutions(QString& cmd)
         int postIndex = where + 1;
         int count = 0;
 
-        QChar decimalSymbol = KGlobal::locale()->decimalSymbol().at(0);
+        QChar decimalSymbol = KGlobal::locale()->toLocale().decimalPoint();
         //avoid out of range on weird commands
         preIndex = qMax(0, preIndex);
         postIndex = qMin(postIndex, cmd.length()-1);
@@ -175,8 +175,9 @@ void CalculatorRunner::hexSubstitutions(QString& cmd)
 
 void CalculatorRunner::userFriendlySubstitutions(QString& cmd)
 {
-    if (cmd.contains(KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive)) {
-         cmd=cmd.replace(KGlobal::locale()->decimalSymbol(), QChar('.'), Qt::CaseInsensitive);
+    const QChar decimalSymbol = KGlobal::locale()->toLocale().decimalPoint();
+    if (cmd.contains(decimalSymbol, Qt::CaseInsensitive)) {
+         cmd=cmd.replace(decimalSymbol, QChar('.'), Qt::CaseInsensitive);
     }
 
     // the following substitutions are not needed with libqalculate
@@ -260,9 +261,10 @@ void CalculatorRunner::match(Plasma::RunnerContext &context)
 
 QString CalculatorRunner::calculate(const QString& term)
 {
+    const QChar decimalSymbol = KGlobal::locale()->toLocale().decimalPoint();
 #ifdef ENABLE_QALCULATE
     QString result = m_engine->evaluate(term);
-    return result.replace('.', KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive);
+    return result.replace('.', decimalSymbol, Qt::CaseInsensitive);
 #else
     //kDebug() << "calculating" << term;
     QScriptEngine eng;
@@ -287,7 +289,7 @@ QString CalculatorRunner::calculate(const QString& term)
                                                 var order=Math.pow(10,exponent);\
                                                 (order > 0? Math.round(result*order)/order : 0)").toString();
 
-    roundedResultString.replace('.', KGlobal::locale()->decimalSymbol(), Qt::CaseInsensitive);
+    roundedResultString.replace('.', decimalSymbol, Qt::CaseInsensitive);
 
     return roundedResultString;
 #endif // ENABLE_QALCULATE

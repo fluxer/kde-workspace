@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <QDir>
+#include <QTextCodec>
 
 #include <git2/errors.h>
 #include <git2/global.h>

@@ -239,7 +239,6 @@ int main(int argc, char *argv[])
   KApplication app;
   QDBusConnection::sessionBus().interface()->registerService( "org.kde.kcminit",
       QDBusConnectionInterface::DontQueueService );
-  KLocale::setMainCatalog(0);
   KCMInit kcminit( KCmdLineArgs::parsedArgs());
   return 0;
 }

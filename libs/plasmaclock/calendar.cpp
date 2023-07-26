@@ -36,7 +36,6 @@
 #include <QtGui/QDesktopWidget>
 
 //KDECore
-#include <KCalendarSystem>
 #include <KCalendarWidget>
 #include <KDebug>
 #include <KGlobal>
@@ -58,7 +57,6 @@
 #include <Plasma/DataEngine>
 
 #include "wheelytoolbutton.h"
-#include "ui_calendarConfig.h"
 
 namespace Plasma
 {
@@ -72,7 +70,6 @@ class CalendarPrivate
             : q(calendar),
               calendarWidget(nullptr),
               layout(nullptr),
-              calendar(nullptr),
               currentDate(QDate::currentDate()),
               automaticUpdates(true)
         {
@@ -85,10 +82,8 @@ class CalendarPrivate
         Calendar *q;
         Plasma::CalendarWidget *calendarWidget;
         QGraphicsLinearLayout *layout;
-        const KCalendarSystem *calendar;
         QDate currentDate;
         bool automaticUpdates;
-        Ui::calendarConfig calendarConfigUi;
 };
 
 Calendar::Calendar(const QDate &date, QGraphicsWidget *parent)
@@ -141,25 +136,6 @@ void Calendar::focusInEvent(QFocusEvent* event)
     d->calendarWidget->setFocus();
 }
 
-void Calendar::setCalendar(int newCalendarType)
-{
-    d->calendar = KCalendarSystem::create(static_cast<KLocale::CalendarSystem>(newCalendarType));
-}
-
-void Calendar::setCalendar(const KCalendarSystem *newCalendar)
-{
-    d->calendar = newCalendar;
-    d->calendarWidget->nativeWidget()->setCalendar(newCalendar);
-}
-
-const KCalendarSystem *Calendar::calendar() const
-{
-    if (d->calendar) {
-        return d->calendar;
-    }
-    return KGlobal::locale()->calendar();
-}
-
 void Calendar::setAutomaticUpdateEnabled(bool automatic)
 {
     d->automaticUpdates = automatic;
@@ -172,8 +148,8 @@ bool Calendar::isAutomaticUpdateEnabled() const
 
 void Calendar::setDate(const QDate &toDate)
 {
-    // New date must be valid in the current calendar system
-    if (!calendar()->isValid(toDate)) {
+    // New date must be valid one
+    if (!toDate.isValid()) {
         if (!toDate.isNull()) {
             KNotification::beep();
         }
@@ -204,36 +180,6 @@ QDate Calendar::currentDate() const
     return d->currentDate;
 }
 
-void Calendar::writeConfiguration(KConfigGroup cg)
-{
-    const int calendarType = (d->calendar ? d->calendar->calendarSystem() : -1);
-    cg.writeEntry("calendarType", calendarType);
-}
-
-void Calendar::createConfigurationInterface(KConfigDialog *parent)
-{
-    QWidget *calendarConfigWidget = new QWidget();
-    d->calendarConfigUi.setupUi(calendarConfigWidget);
-    parent->addPage(calendarConfigWidget, i18n("Calendar"), "view-pim-calendar");
-
-    const QList<KLocale::CalendarSystem> calendars = KCalendarSystem::calendarSystemsList();
-    d->calendarConfigUi.calendarComboBox->addItem( i18n("Local"), QVariant( -1 ) );
-    for (int  i = 0; i < calendars.count(); ++i) {
-        d->calendarConfigUi.calendarComboBox->addItem( KCalendarSystem::calendarLabel( calendars.at(i) ), QVariant( calendars.at(i) ) );
-    }
-    const int calendarType = (d->calendar ? d->calendar->calendarSystem() : -1);
-    d->calendarConfigUi.calendarComboBox->setCurrentIndex(d->calendarConfigUi.calendarComboBox->findData( QVariant( calendarType ) ) );
-
-    connect(d->calendarConfigUi.calendarComboBox, SIGNAL(activated(int)), parent, SLOT(settingsModified()));
-}
-
-void Calendar::configAccepted(KConfigGroup cg)
-{
-    setCalendar(d->calendarConfigUi.calendarComboBox->itemData(d->calendarConfigUi.calendarComboBox->currentIndex()).toInt());
-    writeConfiguration(cg);
-    applyConfiguration(cg);
-}
-
 void CalendarPrivate::updateSize()
 {
     QSize minSize = QSize(300, 250);
@@ -241,12 +187,6 @@ void CalendarPrivate::updateSize()
 
     q->setMinimumSize(minSize);
     q->setPreferredSize(prefSize);
-}
-
-void Calendar::applyConfiguration(KConfigGroup cg)
-{
-    setCalendar(cg.readEntry("calendarType", -1));
-    d->updateSize();
 }
 
 void Calendar::dateUpdated()

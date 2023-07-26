@@ -3,7 +3,6 @@ project(localebindings)
 set(localebindings_SRCS
     locale.cpp
     localebindingsplugin.cpp
-    calendarsystem.cpp
 )
 
 INCLUDE_DIRECTORIES(

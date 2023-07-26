@@ -3,7 +3,6 @@ set(plasmaclock_LIB_SRCS
     calendar.cpp
     wheelytoolbutton.cpp
     timezonesConfig.ui
-    calendarConfig.ui
 )
 
 add_library(plasmaclock SHARED ${plasmaclock_LIB_SRCS})

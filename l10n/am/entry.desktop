@@ -91,17 +91,3 @@ Name[wa]=Årmeneye
 Name[x-test]=xxArmeniaxx
 Name[zh_CN]=亚美尼亚
 Name[zh_TW]=亞美尼亞
-Region=middleeast
-Languages=hy
-DecimalSymbol=,
-ThousandsSeparator=.
-# FIXME Name is Dram, symbol is unknown
-PositiveSign=
-NegativeSign=-
-DateFormat[hy]=%A,%B %e, %Y
-DateFormatShort=%m/%d/%y
-TimeFormat=%H:%M:%S
-WeekStartDay=7
-#PageSize=
-#MeasureSystem=
-#DecimalPlaces=2

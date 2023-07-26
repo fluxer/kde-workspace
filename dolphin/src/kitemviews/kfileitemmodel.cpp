@@ -1533,9 +1533,7 @@ QList<QPair<int, QVariant> > KFileItemModel::dateRoleGroups() const
         }
         previousModifiedDate = modifiedDate;
 
-        const int daysDistance = modifiedDate.daysTo(currentDate);
-
-        QString newGroupValue = KGlobal::locale()->formatDateTime(modifiedDate, KLocale::FancyLongDate);
+        QString newGroupValue = KGlobal::locale()->formatDate(modifiedDate, QLocale::NarrowFormat);
         if (newGroupValue != groupValue) {
             groupValue = newGroupValue;
             groups.append(QPair<int, QVariant>(i, newGroupValue));

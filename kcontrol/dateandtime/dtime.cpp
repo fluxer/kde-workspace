@@ -95,7 +95,7 @@ Dtime::Dtime(QWidget * parent)
 
   timeEdit = new QTimeEdit( timeBox );
   timeEdit->setWrapping(true);
-  timeEdit->setDisplayFormat(KGlobal::locale()->use12Clock() ? "hh:mm:ss ap" : "HH:mm:ss");
+  timeEdit->setDisplayFormat(KGlobal::locale()->timeFormat(QLocale::ShortFormat));
   v3->addWidget(timeEdit);
 
   v3->addStretch();

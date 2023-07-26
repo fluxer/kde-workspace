@@ -174,7 +174,7 @@ bool Temperature::addVisualization(const QString& source)
     plotter->setTitle(temperatureTitle(source));
     plotter->setAnalog(mode() != SM::Applet::Panel);
 
-    if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
+    if (KGlobal::locale()->measureSystem() == QLocale::MetricSystem) {
         plotter->setMinMax(0, 110);
         plotter->setUnit(QString::fromUtf8("°C"));
     } else {
@@ -201,7 +201,7 @@ void Temperature::dataUpdated(const QString& source,
     KTemperature value(doubleValue, unit);
 
     QString stringValue;
-    if (KGlobal::locale()->measureSystem() == KLocale::Metric) {
+    if (KGlobal::locale()->measureSystem() == QLocale::MetricSystem) {
         doubleValue = value.convertTo(KTemperature::Celsius);
         stringValue = KTemperature(doubleValue, KTemperature::Celsius).toString();
     } else {

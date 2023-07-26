@@ -28,7 +28,6 @@
 #include <KSystemTimeZones>
 #include <KConfigDialog>
 #include <KConfigGroup>
-#include <KCalendarSystem>
 
 #include <Plasma/Svg>
 #include <Plasma/Theme>
@@ -64,11 +63,6 @@ void CalendarApplet::focusInEvent(QFocusEvent* event)
     Q_UNUSED(event);
     m_calendarWidget->setFlag(QGraphicsItem::ItemIsFocusable);
     m_calendarWidget->setFocus();
-}
-
-void CalendarApplet::configChanged()
-{
-    m_calendarWidget->applyConfiguration(config());
 }
 
 QGraphicsWidget *CalendarApplet::graphicsWidget()
@@ -110,16 +104,10 @@ void CalendarApplet::paintIcon()
     font.setPixelSize(icon.size().height() / 2);
     p.setFont(font);
     p.drawText(icon.rect().adjusted(0, icon.size().height()/4, 0, 0), Qt::AlignCenter,
-               QString::number(m_calendarWidget->calendar()->day(m_calendarWidget->date())));
+               QString::number(m_calendarWidget->date().day()));
     m_theme->resize();
     p.end();
     setPopupIcon(icon);
-}
-
-void CalendarApplet::configAccepted()
-{
-    m_calendarWidget->configAccepted(config());
-    update();
 }
 
 void CalendarApplet::updateDate()
@@ -141,14 +129,6 @@ void CalendarApplet::updateDate()
     //kDebug() << "updating in" << m_dateUpdater->interval();
     m_dateUpdater->start();
     paintIcon();
-}
-
-void CalendarApplet::createConfigurationInterface(KConfigDialog *parent)
-{
-    m_calendarWidget->createConfigurationInterface(parent);
-    parent->setButtons( KDialog::Ok | KDialog::Cancel | KDialog::Apply );
-    connect(parent, SIGNAL(applyClicked()), this, SLOT(configAccepted()));
-    connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
 }
 
 #include "moc_calendar.cpp"

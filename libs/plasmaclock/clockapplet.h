@@ -58,8 +58,6 @@ class PLASMACLOCK_EXPORT ClockApplet : public Plasma::PopupApplet
         static QString localTimezone();
         static QString localTimezoneUntranslated();
 
-        const KCalendarSystem *calendar () const;
-
     public Q_SLOTS:
         void configChanged();
         void toolTipAboutToShow();

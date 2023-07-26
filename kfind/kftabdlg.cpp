@@ -29,7 +29,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-#include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <kcombobox.h>
 #include <kurlcombobox.h>
@@ -177,7 +176,7 @@ KfindTabWidget::KfindTabWidget(QWidget *parent)
     betweenType->setCurrentIndex(1);
     updateDateLabels(1, 1);
 
-    QDate dt = KGlobal::locale()->calendar()->addYears(QDate::currentDate(), -1);
+    QDate dt = QDate::currentDate().addYears(-1);
 
     fromDate = new KDateCombo(dt, pages[1] );
     fromDate->setObjectName( QLatin1String( "fromDate" ) );
@@ -546,7 +545,7 @@ void KfindTabWidget::slotSizeBoxChanged(int index)
 
 void KfindTabWidget::setDefaults()
 {
-    QDate dt = KGlobal::locale()->calendar()->addYears(QDate::currentDate(), -1);
+    QDate dt = QDate::currentDate().addYears(-1);
 
     fromDate ->setDate(dt);
     toDate ->setDate(QDate::currentDate());
@@ -761,7 +760,7 @@ void KfindTabWidget::setQuery(KQuery *query)
 }
 
 QString KfindTabWidget::date2String(const QDate & date) {
-  return(KGlobal::locale()->formatDate(date, KLocale::ShortDate));
+  return(KGlobal::locale()->formatDate(date));
 }
 
 QDate &KfindTabWidget::string2Date(const QString & str, QDate *qd) {

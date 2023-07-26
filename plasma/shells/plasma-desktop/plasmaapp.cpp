@@ -70,8 +70,6 @@
 #include <X11/Xutil.h>
 #endif
 
-extern QString plasmaLocale;
-
 static void addInformationForApplet(QTextStream &stream, Plasma::Applet *applet)
 {
     if (applet->isContainment()) {
@@ -122,10 +120,6 @@ PlasmaApp::PlasmaApp()
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "plasma app ctor start" << "(line:" << __LINE__ << ")";
     suspendStartup(true);
-
-    if (KGlobalSettings::isMultiHead()) {
-        KGlobal::locale()->setLanguage(plasmaLocale, KGlobal::config().data());
-    }
 
     KGlobal::locale()->insertCatalog("libplasma");
     KGlobal::locale()->insertCatalog("plasmagenericshell");
