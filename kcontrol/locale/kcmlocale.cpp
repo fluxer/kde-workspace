@@ -30,6 +30,7 @@
 K_PLUGIN_FACTORY(KCMLocaleFactory, registerPlugin<KCMLocale>();)
 K_EXPORT_PLUGIN(KCMLocaleFactory("kcmlocale"))
 
+static const Qt::Alignment s_labelsalignment = (Qt::AlignRight | Qt::AlignTrailing | Qt::AlignVCenter);
 // NOTE: keep in sync with:
 // kdelibs/kdecore/localization/klocale.cpp
 static const QString s_defaultlanguage = KLocale::defaultLanguage();
@@ -78,7 +79,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
 
     m_languagelabel = new QLabel(this);
     m_languagelabel->setText(i18n("Language:"));
-    m_layout->addWidget(m_languagelabel, 0, 0);
+    m_layout->addWidget(m_languagelabel, 0, 0, s_labelsalignment);
     m_languagebox = new KComboBox(this);
     foreach (const QString &language, KLocale::allLanguagesList()) {
         QString languagelang;
@@ -111,7 +112,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
 
     m_binarylabel = new QLabel(this);
     m_binarylabel->setText(i18n("Byte size units:"));
-    m_layout->addWidget(m_binarylabel, 1, 0);
+    m_layout->addWidget(m_binarylabel, 1, 0, s_labelsalignment);
     m_binarybox = new KComboBox(this);
     Q_ASSERT(int(KLocale::LastBinaryDialect) == int(KLocale::MetricBinaryDialect));
     m_binarybox->addItem(
@@ -147,7 +148,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
 
     m_measurelabel = new QLabel(this);
     m_measurelabel->setText(i18n("Measurement system:"));
-    m_layout->addWidget(m_measurelabel, 2, 0);
+    m_layout->addWidget(m_measurelabel, 2, 0, s_labelsalignment);
     m_measurebox = new KComboBox(this);
     Q_ASSERT(int(QLocale::MetricSystem) == 0);
     Q_ASSERT(int(QLocale::UKSystem) == 2);
@@ -169,26 +170,31 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     connect(m_measurebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotMeasureChanged(int)));
     m_layout->addWidget(m_measurebox, 2, 1);
 
-    // TODO: tooltips and whatsthis, groups alignment
+    // TODO: tooltips and whatsthis
+    int groupsalignment = 0;
     QGroupBox* dategroup = new QGroupBox(this);
+    QFontMetrics groupsmetrics = QFontMetrics(dategroup->font());
     dategroup->setTitle(i18n("Date format"));
     QGridLayout* datelayout = new QGridLayout(dategroup);
     dategroup->setLayout(datelayout);
     m_dateshortlabel = new QLabel(dategroup);
-    m_dateshortlabel->setText(i18n("Short date format:"));
-    datelayout->addWidget(m_dateshortlabel, 0, 0);
+    m_dateshortlabel->setText(i18n("Short date:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_dateshortlabel->text()));
+    datelayout->addWidget(m_dateshortlabel, 0, 0, s_labelsalignment);
     m_dateshortedit = new KLineEdit(dategroup);
     connect(m_dateshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_dateshortedit, 0, 1);
     m_datelonglabel = new QLabel(dategroup);
-    m_datelonglabel->setText(i18n("Long date format:"));
-    datelayout->addWidget(m_datelonglabel, 1, 0);
+    m_datelonglabel->setText(i18n("Long date:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datelonglabel->text()));
+    datelayout->addWidget(m_datelonglabel, 1, 0, s_labelsalignment);
     m_datelongedit = new KLineEdit(dategroup);
     connect(m_datelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_datelongedit, 1, 1);
     m_datenarrowlabel = new QLabel(dategroup);
-    m_datenarrowlabel->setText(i18n("Narrow date format:"));
-    datelayout->addWidget(m_datenarrowlabel, 2, 0);
+    m_datenarrowlabel->setText(i18n("Narrow date:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datenarrowlabel->text()));
+    datelayout->addWidget(m_datenarrowlabel, 2, 0, s_labelsalignment);
     m_datenarrowedit = new KLineEdit(dategroup);
     connect(m_datenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_datenarrowedit, 2, 1);
@@ -199,20 +205,23 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     QGridLayout* timelayout = new QGridLayout(timegroup);
     timegroup->setLayout(timelayout);
     m_timeshortlabel = new QLabel(timegroup);
-    m_timeshortlabel->setText(i18n("Short time format:"));
-    timelayout->addWidget(m_timeshortlabel, 0, 0);
+    m_timeshortlabel->setText(i18n("Short time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timeshortlabel->text()));
+    timelayout->addWidget(m_timeshortlabel, 0, 0, s_labelsalignment);
     m_timeshortedit = new KLineEdit(timegroup);
     connect(m_timeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timeshortedit, 0, 1);
     m_timelonglabel = new QLabel(timegroup);
-    m_timelonglabel->setText(i18n("Long time format:"));
-    timelayout->addWidget(m_timelonglabel, 1, 0);
+    m_timelonglabel->setText(i18n("Long time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timelonglabel->text()));
+    timelayout->addWidget(m_timelonglabel, 1, 0, s_labelsalignment);
     m_timelongedit = new KLineEdit(timegroup);
     connect(m_timelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timelongedit, 1, 1);
     m_timenarrowlabel = new QLabel(timegroup);
-    m_timenarrowlabel->setText(i18n("Narrow time format:"));
-    timelayout->addWidget(m_timenarrowlabel, 2, 0);
+    m_timenarrowlabel->setText(i18n("Narrow time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timenarrowlabel->text()));
+    timelayout->addWidget(m_timenarrowlabel, 2, 0, s_labelsalignment);
     m_timenarrowedit = new KLineEdit(timegroup);
     connect(m_timenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timenarrowedit, 2, 1);
@@ -223,24 +232,31 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     QGridLayout* datetimelayout = new QGridLayout(datetimegroup);
     datetimegroup->setLayout(datetimelayout);
     m_datetimeshortlabel = new QLabel(datetimegroup);
-    m_datetimeshortlabel->setText(i18n("Short date and time format:"));
-    datetimelayout->addWidget(m_datetimeshortlabel, 0, 0);
+    m_datetimeshortlabel->setText(i18n("Short date and time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimeshortlabel->text()));
+    datetimelayout->addWidget(m_datetimeshortlabel, 0, 0, s_labelsalignment);
     m_datetimeshortedit = new KLineEdit(datetimegroup);
     connect(m_datetimeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimeshortedit, 0, 1);
     m_datetimelonglabel = new QLabel(datetimegroup);
-    m_datetimelonglabel->setText(i18n("Long date and timeformat:"));
-    datetimelayout->addWidget(m_datetimelonglabel, 1, 0);
+    m_datetimelonglabel->setText(i18n("Long date and time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimelonglabel->text()));
+    datetimelayout->addWidget(m_datetimelonglabel, 1, 0, s_labelsalignment);
     m_datetimelongedit = new KLineEdit(datetimegroup);
     connect(m_datetimelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimelongedit, 1, 1);
     m_datetimenarrowlabel = new QLabel(datetimegroup);
-    m_datetimenarrowlabel->setText(i18n("Narrow date and time format:"));
-    datetimelayout->addWidget(m_datetimenarrowlabel, 2, 0);
+    m_datetimenarrowlabel->setText(i18n("Narrow date and time:"));
+    groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimenarrowlabel->text()));
+    datetimelayout->addWidget(m_datetimenarrowlabel, 2, 0, s_labelsalignment);
     m_datetimenarrowedit = new KLineEdit(datetimegroup);
     connect(m_datetimenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimenarrowedit, 2, 1);
     m_layout->addWidget(datetimegroup, 5, 0, 1, 2);
+
+    datelayout->setColumnMinimumWidth(0, groupsalignment);
+    timelayout->setColumnMinimumWidth(0, groupsalignment);
+    datetimelayout->setColumnMinimumWidth(0, groupsalignment);
 
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_layout->addItem(m_spacer, 6, 1, 2);
