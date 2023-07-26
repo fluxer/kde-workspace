@@ -63,6 +63,18 @@ private:
     KLineEdit* m_datelongedit;
     QLabel* m_datenarrowlabel;
     KLineEdit* m_datenarrowedit;
+    QLabel* m_timeshortlabel;
+    KLineEdit* m_timeshortedit;
+    QLabel* m_timelonglabel;
+    KLineEdit* m_timelongedit;
+    QLabel* m_timenarrowlabel;
+    KLineEdit* m_timenarrowedit;
+    QLabel* m_datetimeshortlabel;
+    KLineEdit* m_datetimeshortedit;
+    QLabel* m_datetimelonglabel;
+    KLineEdit* m_datetimelongedit;
+    QLabel* m_datetimenarrowlabel;
+    KLineEdit* m_datetimenarrowedit;
     QSpacerItem* m_spacer;
 };
 

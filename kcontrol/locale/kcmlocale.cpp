@@ -50,6 +50,18 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_datelongedit(nullptr),
     m_datenarrowlabel(nullptr),
     m_datenarrowedit(nullptr),
+    m_timeshortlabel(nullptr),
+    m_timeshortedit(nullptr),
+    m_timelonglabel(nullptr),
+    m_timelongedit(nullptr),
+    m_timenarrowlabel(nullptr),
+    m_timenarrowedit(nullptr),
+    m_datetimeshortlabel(nullptr),
+    m_datetimeshortedit(nullptr),
+    m_datetimelonglabel(nullptr),
+    m_datetimelongedit(nullptr),
+    m_datetimenarrowlabel(nullptr),
+    m_datetimenarrowedit(nullptr),
     m_spacer(nullptr)
 {
     KAboutData *about = new KAboutData(
@@ -157,7 +169,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     connect(m_measurebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotMeasureChanged(int)));
     m_layout->addWidget(m_measurebox, 2, 1);
 
-    // TODO: tooltips and whatsthis
+    // TODO: tooltips and whatsthis, groups alignment
     QGroupBox* dategroup = new QGroupBox(this);
     dategroup->setTitle(i18n("Date format"));
     QGridLayout* datelayout = new QGridLayout(dategroup);
@@ -182,10 +194,56 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     datelayout->addWidget(m_datenarrowedit, 2, 1);
     m_layout->addWidget(dategroup, 3, 0, 1, 2);
 
-    // TODO: time and datetime format
+    QGroupBox* timegroup = new QGroupBox(this);
+    timegroup->setTitle(i18n("Time format"));
+    QGridLayout* timelayout = new QGridLayout(timegroup);
+    timegroup->setLayout(timelayout);
+    m_timeshortlabel = new QLabel(timegroup);
+    m_timeshortlabel->setText(i18n("Short time format:"));
+    timelayout->addWidget(m_timeshortlabel, 0, 0);
+    m_timeshortedit = new KLineEdit(timegroup);
+    connect(m_timeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    timelayout->addWidget(m_timeshortedit, 0, 1);
+    m_timelonglabel = new QLabel(timegroup);
+    m_timelonglabel->setText(i18n("Long time format:"));
+    timelayout->addWidget(m_timelonglabel, 1, 0);
+    m_timelongedit = new KLineEdit(timegroup);
+    connect(m_timelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    timelayout->addWidget(m_timelongedit, 1, 1);
+    m_timenarrowlabel = new QLabel(timegroup);
+    m_timenarrowlabel->setText(i18n("Narrow time format:"));
+    timelayout->addWidget(m_timenarrowlabel, 2, 0);
+    m_timenarrowedit = new KLineEdit(timegroup);
+    connect(m_timenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    timelayout->addWidget(m_timenarrowedit, 2, 1);
+    m_layout->addWidget(timegroup, 4, 0, 1, 2);
+
+    QGroupBox* datetimegroup = new QGroupBox(this);
+    datetimegroup->setTitle(i18n("Date and time format"));
+    QGridLayout* datetimelayout = new QGridLayout(datetimegroup);
+    datetimegroup->setLayout(datetimelayout);
+    m_datetimeshortlabel = new QLabel(datetimegroup);
+    m_datetimeshortlabel->setText(i18n("Short date and time format:"));
+    datetimelayout->addWidget(m_datetimeshortlabel, 0, 0);
+    m_datetimeshortedit = new KLineEdit(datetimegroup);
+    connect(m_datetimeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    datetimelayout->addWidget(m_datetimeshortedit, 0, 1);
+    m_datetimelonglabel = new QLabel(datetimegroup);
+    m_datetimelonglabel->setText(i18n("Long date and timeformat:"));
+    datetimelayout->addWidget(m_datetimelonglabel, 1, 0);
+    m_datetimelongedit = new KLineEdit(datetimegroup);
+    connect(m_datetimelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    datetimelayout->addWidget(m_datetimelongedit, 1, 1);
+    m_datetimenarrowlabel = new QLabel(datetimegroup);
+    m_datetimenarrowlabel->setText(i18n("Narrow date and time format:"));
+    datetimelayout->addWidget(m_datetimenarrowlabel, 2, 0);
+    m_datetimenarrowedit = new KLineEdit(datetimegroup);
+    connect(m_datetimenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
+    datetimelayout->addWidget(m_datetimenarrowedit, 2, 1);
+    m_layout->addWidget(datetimegroup, 5, 0, 1, 2);
 
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_layout->addItem(m_spacer, 4, 1, 2);
+    m_layout->addItem(m_spacer, 6, 1, 2);
 
     setLayout(m_layout);
 }
@@ -235,6 +293,20 @@ void KCMLocale::load()
     const QString localedatenarrow = localegroup.readEntry("NarrowDateFormat", locale.dateFormat(QLocale::NarrowFormat));
     m_datenarrowedit->setText(localedatenarrow);
 
+    const QString localetimeshort = localegroup.readEntry("ShortTimeFormat", locale.timeFormat(QLocale::ShortFormat));
+    m_timeshortedit->setText(localetimeshort);
+    const QString localetimelong = localegroup.readEntry("LongTimeFormat", locale.timeFormat(QLocale::LongFormat));
+    m_timelongedit->setText(localetimelong);
+    const QString localetimenarrow = localegroup.readEntry("NarrowTimeFormat", locale.timeFormat(QLocale::NarrowFormat));
+    m_timenarrowedit->setText(localetimenarrow);
+
+    const QString localedatetimeshort = localegroup.readEntry("ShortDateTimeFormat", locale.dateTimeFormat(QLocale::ShortFormat));
+    m_datetimeshortedit->setText(localedatetimeshort);
+    const QString localedatetimelong = localegroup.readEntry("LongDateTimeFormat", locale.dateTimeFormat(QLocale::LongFormat));
+    m_datetimelongedit->setText(localedatetimelong);
+    const QString localedatetimenarrow = localegroup.readEntry("NarrowDateTimeFormat", locale.dateTimeFormat(QLocale::NarrowFormat));
+    m_datetimenarrowedit->setText(localedatetimenarrow);
+
     emit changed(false);
 }
 
@@ -252,6 +324,12 @@ void KCMLocale::save()
     localegroup.writeEntry("ShortDateFormat", m_dateshortedit->text());
     localegroup.writeEntry("LongDateFormat", m_datelongedit->text());
     localegroup.writeEntry("NarrowDateFormat", m_datenarrowedit->text());
+    localegroup.writeEntry("ShortTimeFormat", m_timeshortedit->text());
+    localegroup.writeEntry("LongTimeFormat", m_timelongedit->text());
+    localegroup.writeEntry("NarrowTimeFormat", m_timenarrowedit->text());
+    localegroup.writeEntry("ShortDateTimeFormat", m_datetimeshortedit->text());
+    localegroup.writeEntry("LongDateTimeFormat", m_datetimelongedit->text());
+    localegroup.writeEntry("NarrowDateTimeFormat", m_datetimenarrowedit->text());
     localegroup.sync();
     emit changed(false);
 
@@ -312,6 +390,12 @@ void KCMLocale::loadLocaleSettings()
     m_dateshortedit->setText(locale.dateFormat(QLocale::ShortFormat));
     m_datelongedit->setText(locale.dateFormat(QLocale::LongFormat));
     m_datenarrowedit->setText(locale.dateFormat(QLocale::NarrowFormat));
+    m_timeshortedit->setText(locale.timeFormat(QLocale::ShortFormat));
+    m_timelongedit->setText(locale.timeFormat(QLocale::LongFormat));
+    m_timenarrowedit->setText(locale.timeFormat(QLocale::NarrowFormat));
+    m_datetimeshortedit->setText(locale.dateTimeFormat(QLocale::ShortFormat));
+    m_datetimelongedit->setText(locale.dateTimeFormat(QLocale::LongFormat));
+    m_datetimenarrowedit->setText(locale.dateTimeFormat(QLocale::NarrowFormat));
 }
 
 void KCMLocale::slotLanguageChanged(const int index)
