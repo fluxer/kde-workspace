@@ -387,6 +387,7 @@ void KCMLocale::loadLocaleSettings()
 {
     const QString localelanguage = m_languagebox->itemData(m_languagebox->currentIndex()).toString();
     const QLocale locale(localelanguage);
+    m_measurebox->setCurrentIndex(int(locale.measurementSystem()));
     m_dateshortedit->setText(locale.dateFormat(QLocale::ShortFormat));
     m_datelongedit->setText(locale.dateFormat(QLocale::LongFormat));
     m_datenarrowedit->setText(locale.dateFormat(QLocale::NarrowFormat));
