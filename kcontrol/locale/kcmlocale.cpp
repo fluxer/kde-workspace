@@ -281,7 +281,7 @@ KCMLocale::~KCMLocale()
 
 void KCMLocale::load()
 {
-    KConfig localeconfig = KConfig("kdeglobals", KConfig::FullConfig);
+    KConfig localeconfig("kdeglobals", KConfig::FullConfig);
     KConfigGroup localegroup = localeconfig.group("Locale");
 
     const QString localelanguage = localegroup.readEntry("Language", s_defaultlanguage);
@@ -339,7 +339,7 @@ void KCMLocale::load()
 
 void KCMLocale::save()
 {
-    KConfig localeconfig = KConfig("kdeglobals", KConfig::FullConfig);
+    KConfig localeconfig("kdeglobals", KConfig::FullConfig);
     KConfigGroup localegroup = localeconfig.group("Locale");
     const QString localelanguage = m_languagebox->itemData(m_languagebox->currentIndex()).toString();
     localegroup.writeEntry("Language", localelanguage);
