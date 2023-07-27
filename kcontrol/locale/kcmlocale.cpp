@@ -171,6 +171,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_layout->addWidget(m_measurebox, 2, 1);
 
     // TODO: tooltips and whatsthis
+    // TODO: validate date and time format, user usually has no clue what to enter and invalid
+    // format will result in all sorts of bad stuff
     int groupsalignment = 0;
     QGroupBox* dategroup = new QGroupBox(this);
     QFontMetrics groupsmetrics = QFontMetrics(dategroup->font());
