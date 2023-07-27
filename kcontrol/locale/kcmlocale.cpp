@@ -84,6 +84,10 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     // temporary map to sort by the displayed text
     QMap<QString, QString> languagesmap;
     foreach (const QString &language, KLocale::allLanguagesList()) {
+        if (language == QLatin1String("C")) {
+            // when the locale is "C" KLocale uses KLocale::defaultLanguage() instead
+            continue;
+        }
         QString languagelang;
         QString languagecntry;
         QString languagemod;
