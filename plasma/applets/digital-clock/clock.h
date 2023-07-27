@@ -86,7 +86,7 @@ class Clock : public ClockApplet
         QRect m_dateRect;
 
         int m_dateStyle; //0 = don't show a date
-        bool m_showSeconds;
+        QLocale::FormatType m_timeFormat;
         bool m_showTimezone;
         bool m_dateTimezoneBesides;
 

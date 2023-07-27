@@ -310,22 +310,16 @@
       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
      </property>
      <property name="buddy">
-      <cstring>secondsCheckbox</cstring>
+      <cstring>timeFormatBox</cstring>
      </property>
     </widget>
    </item>
    <item row="9" column="2">
     <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QCheckBox" name="secondsCheckbox">
-       <property name="toolTip">
-        <string>Show the seconds</string>
-       </property>
+      <widget class="QComboBox" name="timeFormatBox">
        <property name="whatsThis">
-        <string>Check this if you want to show the seconds.</string>
-       </property>
-       <property name="text">
-        <string/>
+        <string>Choose the format you want to show the time in.</string>
        </property>
       </widget>
      </item>

@@ -46,13 +46,6 @@
 #include <Plasma/PaintUtils>
 #include <Plasma/ToolTipManager>
 
-// TODO: no AM/PM, no locale format awareness
-static QString makeTime(const KLocale* locale, const QTime &time, const bool seconds)
-{
-    const QLocale qlocale = locale->toLocale();
-    return (seconds ? qlocale.toString(time, "hh:mm:ss") : qlocale.toString(time, "hh:mm"));
-}
-
 Clock::Clock(QObject *parent, const QVariantList &args)
     : ClockApplet(parent, args),
       m_plainClockFont(KGlobalSettings::generalFont()),
@@ -60,7 +53,7 @@ Clock::Clock(QObject *parent, const QVariantList &args)
       m_useCustomShadowColor(false),
       m_drawShadow(true),
       m_dateStyle(0),
-      m_showSeconds(false),
+      m_timeFormat(QLocale::ShortFormat),
       m_showTimezone(false),
       m_dateTimezoneBesides(false),
       m_svg(0)
@@ -120,13 +113,13 @@ void Clock::updateSize()
     if (f != Plasma::Vertical && f != Plasma::Horizontal) {
         const QFontMetricsF metrics(KGlobalSettings::smallestReadableFont());
         // calculates based on size of "23:59"!
-        const QString timeString = makeTime(KGlobal::locale(), QTime(23, 59), m_showSeconds);
+        const QString timeString = KGlobal::locale()->formatTime(QTime(23, 59), m_timeFormat);
         setMinimumSize(metrics.size(Qt::TextSingleLine, timeString));
     }
 
     // more magic numbers
     int aspect = 2;
-    if (m_showSeconds) {
+    if (m_timeFormat == QLocale::LongFormat) {
         aspect = 3;
     }
 
@@ -174,7 +167,7 @@ void Clock::updateSize()
     //kDebug() << "minZize: " << minimumSize() << preferredSize();
 
     if (m_isDefaultFont) {
-        const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
+        const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_timeFormat);
         expandFontToMax(m_plainClockFont, fakeTimeString);
     }
 
@@ -204,13 +197,9 @@ void Clock::clockConfigChanged()
         cg.deleteEntry("showYear");
     }
 
-    m_showSeconds = cg.readEntry("showSeconds", false);
-    if (m_showSeconds) {
-        //We don't need to cache the applet if it update every seconds
-        setCacheMode(QGraphicsItem::NoCache);
-    } else {
-        setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-    }
+    m_timeFormat = static_cast<QLocale::FormatType>(cg.readEntry("timeFormat", int(QLocale::ShortFormat)));
+    //We don't need to cache the applet if it update every seconds
+    setCacheMode(QGraphicsItem::NoCache);
 
     QFont f = cg.readEntry("plainClockFont", m_plainClockFont);
     m_isDefaultFont = f == m_plainClockFont;
@@ -231,7 +220,7 @@ void Clock::clockConfigChanged()
     }
 
     const QFontMetricsF metrics(KGlobalSettings::smallestReadableFont());
-    const QString timeString = makeTime(KGlobal::locale(), QTime(23, 59), m_showSeconds);
+    const QString timeString = KGlobal::locale()->formatTime(QTime(23, 59), m_timeFormat);
     setMinimumSize(metrics.size(Qt::TextSingleLine, timeString));
 
     if (isUserConfiguring()) {
@@ -266,7 +255,11 @@ void Clock::createClockConfigurationInterface(KConfigDialog *parent)
     ui.setupUi(widget);
     parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
 
-    ui.secondsCheckbox->setChecked(m_showSeconds);
+    ui.timeFormatBox->addItem(i18nc("A kind of time representation", "Compact time"), QVariant(int(QLocale::NarrowFormat)));
+    ui.timeFormatBox->addItem(i18nc("A kind of time representation", "Short time"), QVariant(int(QLocale::ShortFormat)));
+    ui.timeFormatBox->addItem(i18nc("A kind of time representation", "Long time"), QVariant(int(QLocale::LongFormat)));
+    ui.timeFormatBox->setCurrentIndex(ui.timeFormatBox->findData(int(m_timeFormat)));
+
     ui.showTimeZone->setChecked(m_showTimezone);
     ui.plainClockFontBold->setChecked(m_plainClockFont.bold());
     ui.plainClockFontItalic->setChecked(m_plainClockFont.italic());
@@ -311,7 +304,7 @@ void Clock::createClockConfigurationInterface(KConfigDialog *parent)
             parent, SLOT(settingsModified()));
     connect(ui.showTimeZone, SIGNAL(stateChanged(int)),
             parent, SLOT(settingsModified()));
-    connect(ui.secondsCheckbox, SIGNAL(stateChanged(int)),
+    connect(ui.timeFormatBox, SIGNAL(currentIndexChanged(int)),
             parent, SLOT(settingsModified()));
     connect(ui.dateStyle, SIGNAL(currentIndexChanged(int)),
             parent, SLOT(settingsModified()));
@@ -336,27 +329,11 @@ void Clock::clockConfigAccepted()
     }
     m_plainClockFont = ui.plainClockFont->currentFont();
 
-    //We need this to happen before we disconnect/reconnect sources to ensure
-    //that the update interval is set properly.
-    if (m_showSeconds != ui.secondsCheckbox->isChecked()) {
-        m_showSeconds = !m_showSeconds;
-        cg.writeEntry("showSeconds", m_showSeconds);
-
-        if (m_showSeconds) {
-            //We don't need to cache the applet if it update every second
-            setCacheMode(QGraphicsItem::NoCache);
-        } else {
-            setCacheMode(QGraphicsItem::DeviceCoordinateCache);
-        }
-
-        changeEngineTimezone(currentTimezone(), currentTimezone());
-    }
-
     m_dateStyle = ui.dateStyle->currentIndex();
     cg.writeEntry("dateStyle", m_dateStyle);
 
-    m_showSeconds = ui.secondsCheckbox->checkState() == Qt::Checked;
-    cg.writeEntry("showSeconds", m_showSeconds);
+    m_timeFormat = static_cast<QLocale::FormatType>(ui.timeFormatBox->itemData(ui.timeFormatBox->currentIndex()).toInt());
+    cg.writeEntry("timeFormat", int(m_timeFormat));
 
     m_useCustomColor = ui.useCustomColor->isChecked();
     cg.writeEntry("useCustomColor", m_useCustomColor);
@@ -459,8 +436,8 @@ void Clock::paintInterface(QPainter *p, const QStyleOptionGraphicsItem *option, 
     // Paint the date, conditionally, and let us know afterwards how much
     // space is left for painting the time on top of it.
     QRectF dateRect;
-    const QString timeString = makeTime(KGlobal::locale(), m_time, m_showSeconds);
-    const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
+    const QString timeString = KGlobal::locale()->formatTime(m_time, m_timeFormat);
+    const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_timeFormat);
     QFont smallFont = KGlobalSettings::smallestReadableFont();
 
     //create the string for the date and/or the timezone
@@ -662,8 +639,8 @@ void Clock::generatePixmap()
         m_svg->setContainsMultipleImages(true);
     }
 
-    const QString fakeTimeString = makeTime(KGlobal::locale(), QTime(23,59,59), m_showSeconds);
-    const QString timeString = makeTime(KGlobal::locale(), m_time, m_showSeconds);
+    const QString fakeTimeString = KGlobal::locale()->formatTime(QTime(23,59,59), m_timeFormat);
+    const QString timeString = KGlobal::locale()->formatTime(m_time, m_timeFormat);
 
     QRect rect(contentsRect().toRect());
     QFont font(m_plainClockFont);
@@ -741,12 +718,13 @@ QRect Clock::preparePainter(QPainter *p, const QRect &rect, const QFont &font, c
 
 int Clock::updateInterval() const
 {
-    return m_showSeconds ? 1000 : 60000;
+    // even the short format can include seconds
+    return 1000;
 }
 
 Plasma::IntervalAlignment Clock::intervalAlignment() const
 {
-    return m_showSeconds ? Plasma::NoAlignment : Plasma::AlignToMinute;
+    return Plasma::NoAlignment;
 }
 
 void Clock::updateColors()
