@@ -81,6 +81,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_languagelabel->setText(i18n("Language:"));
     m_layout->addWidget(m_languagelabel, 0, 0, s_labelsalignment);
     m_languagebox = new KComboBox(this);
+    // temporary map to sort by the displayed text
+    QMap<QString, QString> languagesmap;
     foreach (const QString &language, KLocale::allLanguagesList()) {
         QString languagelang;
         QString languagecntry;
@@ -88,15 +90,18 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
         QString languagechar;
         KLocale::splitLocale(language, languagelang, languagecntry, languagemod, languagechar);
         if (languagecntry.isEmpty()) {
-            const QString languagetext = KGlobal::locale()->languageCodeToName(language);
-            m_languagebox->addItem(languagetext, language);
+            const QString languagetext = KGlobal::locale()->languageCodeToName(languagelang);
+            languagesmap.insert(languagetext, language);
         } else {
             const QString languagetext = QString::fromLatin1("%1 - %2").arg(
                 KGlobal::locale()->languageCodeToName(languagelang),
                 KGlobal::locale()->countryCodeToName(languagecntry)
             );
-            m_languagebox->addItem(languagetext, language);
+            languagesmap.insert(languagetext, language);
         }
+    }
+    foreach (const QString &languagetext, languagesmap.keys()) {
+        m_languagebox->addItem(languagetext, languagesmap.value(languagetext));
     }
     const QString languagehelp = i18n(
         "<p>This is the list of languages KDE Workspace can use for converting "
