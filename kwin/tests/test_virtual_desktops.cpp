@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #include "../virtualdesktops.h"
 // KDE
+#include <KLocale>
 #include <KAction>
 #include <KActionCollection>
 #include <KConfigGroup>
@@ -534,11 +535,11 @@ void TestVirtualDesktops::name_data()
     QTest::addColumn<uint>("desktop");
     QTest::addColumn<QString>("desktopName");
 
-    QTest::newRow("desktop 1") << (uint)4 << (uint)1 << "Desktop 1";
-    QTest::newRow("desktop 2") << (uint)4 << (uint)2 << "Desktop 2";
-    QTest::newRow("desktop 3") << (uint)4 << (uint)3 << "Desktop 3";
-    QTest::newRow("desktop 4") << (uint)4 << (uint)4 << "Desktop 4";
-    QTest::newRow("desktop 5") << (uint)4 << (uint)5 << "Desktop 5";
+    QTest::newRow("desktop 1") << (uint)4 << (uint)1 << i18n("Desktop %1", 1);
+    QTest::newRow("desktop 2") << (uint)4 << (uint)2 << i18n("Desktop %1", 2);
+    QTest::newRow("desktop 3") << (uint)4 << (uint)3 << i18n("Desktop %1", 3);
+    QTest::newRow("desktop 4") << (uint)4 << (uint)4 << i18n("Desktop %1", 4);
+    QTest::newRow("desktop 5") << (uint)4 << (uint)5 << i18n("Desktop %1", 5);
 }
 
 void TestVirtualDesktops::name()
