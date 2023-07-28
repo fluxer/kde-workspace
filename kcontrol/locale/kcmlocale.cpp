@@ -109,7 +109,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     }
     const QString languagehelp = i18n(
         "<p>This is the list of languages KDE Workspace can use for converting "
-        "date, time and numbers. Changing the language will also change the "
+        "date, time and numbers.</p"
+        "<p>Changing the language will also change the "
         "translations language, however each application can specify additional "
         "translation languages."
         "</p>"
@@ -179,9 +180,11 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     connect(m_measurebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotMeasureChanged(int)));
     m_layout->addWidget(m_measurebox, 2, 1);
 
-    // TODO: tooltips and whatsthis
     // TODO: validate date and time format, user usually has no clue what to enter and invalid
     // format will result in all sorts of bad stuff
+    const QString datetimehelp = i18n(
+        "<p>For the format details see the QDateTime documentation.</p>"
+    );
     int groupsalignment = 0;
     QGroupBox* dategroup = new QGroupBox(this);
     QFontMetrics groupsmetrics = QFontMetrics(dategroup->font());
@@ -193,6 +196,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_dateshortlabel->text()));
     datelayout->addWidget(m_dateshortlabel, 0, 0, s_labelsalignment);
     m_dateshortedit = new KLineEdit(dategroup);
+    m_dateshortedit->setToolTip(datetimehelp);
+    m_dateshortedit->setWhatsThis(datetimehelp);
     connect(m_dateshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_dateshortedit, 0, 1);
     m_datelonglabel = new QLabel(dategroup);
@@ -200,6 +205,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datelonglabel->text()));
     datelayout->addWidget(m_datelonglabel, 1, 0, s_labelsalignment);
     m_datelongedit = new KLineEdit(dategroup);
+    m_datelongedit->setToolTip(datetimehelp);
+    m_datelongedit->setWhatsThis(datetimehelp);
     connect(m_datelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_datelongedit, 1, 1);
     m_datenarrowlabel = new QLabel(dategroup);
@@ -207,6 +214,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datenarrowlabel->text()));
     datelayout->addWidget(m_datenarrowlabel, 2, 0, s_labelsalignment);
     m_datenarrowedit = new KLineEdit(dategroup);
+    m_datenarrowedit->setToolTip(datetimehelp);
+    m_datenarrowedit->setWhatsThis(datetimehelp);
     connect(m_datenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_datenarrowedit, 2, 1);
     m_layout->addWidget(dategroup, 3, 0, 1, 2);
@@ -220,6 +229,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timeshortlabel->text()));
     timelayout->addWidget(m_timeshortlabel, 0, 0, s_labelsalignment);
     m_timeshortedit = new KLineEdit(timegroup);
+    m_timeshortedit->setToolTip(datetimehelp);
+    m_timeshortedit->setWhatsThis(datetimehelp);
     connect(m_timeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timeshortedit, 0, 1);
     m_timelonglabel = new QLabel(timegroup);
@@ -227,6 +238,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timelonglabel->text()));
     timelayout->addWidget(m_timelonglabel, 1, 0, s_labelsalignment);
     m_timelongedit = new KLineEdit(timegroup);
+    m_timelongedit->setToolTip(datetimehelp);
+    m_timelongedit->setWhatsThis(datetimehelp);
     connect(m_timelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timelongedit, 1, 1);
     m_timenarrowlabel = new QLabel(timegroup);
@@ -234,6 +247,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_timenarrowlabel->text()));
     timelayout->addWidget(m_timenarrowlabel, 2, 0, s_labelsalignment);
     m_timenarrowedit = new KLineEdit(timegroup);
+    m_timenarrowedit->setToolTip(datetimehelp);
+    m_timenarrowedit->setWhatsThis(datetimehelp);
     connect(m_timenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timenarrowedit, 2, 1);
     m_layout->addWidget(timegroup, 4, 0, 1, 2);
@@ -247,6 +262,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimeshortlabel->text()));
     datetimelayout->addWidget(m_datetimeshortlabel, 0, 0, s_labelsalignment);
     m_datetimeshortedit = new KLineEdit(datetimegroup);
+    m_datetimeshortedit->setToolTip(datetimehelp);
+    m_datetimeshortedit->setWhatsThis(datetimehelp);
     connect(m_datetimeshortedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimeshortedit, 0, 1);
     m_datetimelonglabel = new QLabel(datetimegroup);
@@ -254,6 +271,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimelonglabel->text()));
     datetimelayout->addWidget(m_datetimelonglabel, 1, 0, s_labelsalignment);
     m_datetimelongedit = new KLineEdit(datetimegroup);
+    m_datetimelongedit->setToolTip(datetimehelp);
+    m_datetimelongedit->setWhatsThis(datetimehelp);
     connect(m_datetimelongedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimelongedit, 1, 1);
     m_datetimenarrowlabel = new QLabel(datetimegroup);
@@ -261,6 +280,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     groupsalignment = qMax(groupsalignment, groupsmetrics.width(m_datetimenarrowlabel->text()));
     datetimelayout->addWidget(m_datetimenarrowlabel, 2, 0, s_labelsalignment);
     m_datetimenarrowedit = new KLineEdit(datetimegroup);
+    m_datetimenarrowedit->setToolTip(datetimehelp);
+    m_datetimenarrowedit->setWhatsThis(datetimehelp);
     connect(m_datetimenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimenarrowedit, 2, 1);
     m_layout->addWidget(datetimegroup, 5, 0, 1, 2);
