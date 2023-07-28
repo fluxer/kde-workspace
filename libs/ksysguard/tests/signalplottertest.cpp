@@ -395,17 +395,17 @@ void TestSignalPlotter::testSetBeamColor() {
 
 void TestSignalPlotter::testSetUnit() {
     //Test default
-    QCOMPARE(s->valueAsString(3e20,1), QString("3e+20"));
-    QCOMPARE(s->valueAsString(-3e20,1), QString("-3e+20"));
+    QCOMPARE(s->valueAsString(3e20,1), QString("3E+20"));
+    QCOMPARE(s->valueAsString(-3e20,1), QString("-3E+20"));
 
     s->setUnit(ki18ncp("Units", "%1 second", "%1 seconds") );
 
-    QCOMPARE(s->valueAsString(3e20,1), QString("3e+20 seconds"));
-    QCOMPARE(s->valueAsString(-3e20,1), QString("-3e+20 seconds"));
+    QCOMPARE(s->valueAsString(3e20,1), QString("3E+20 seconds"));
+    QCOMPARE(s->valueAsString(-3e20,1), QString("-3E+20 seconds"));
     QCOMPARE(s->valueAsString(3.4,1), QString("3.4 seconds"));
     QCOMPARE(s->valueAsString(-3.4,1), QString("-3.4 seconds"));
-    QCOMPARE(s->valueAsString(1), QString("1.0 seconds"));
-    QCOMPARE(s->valueAsString(-1), QString("-1.0 seconds"));
+    QCOMPARE(s->valueAsString(1, 1), QString("1.0 seconds"));
+    QCOMPARE(s->valueAsString(-1, 1), QString("-1.0 seconds"));
     QCOMPARE(s->valueAsString(1,0), QString("1 second"));
     QCOMPARE(s->valueAsString(-1,0), QString("-1 second"));
 
