@@ -79,7 +79,7 @@ public:
         DefaultBinaryUnits = -1,
 
         // The first real unit must be 0 for the current implementation!
-        UnitByte = 0,      ///<  B         1 byte
+        UnitByte = 0,  ///<  B         1 byte
         UnitKiloByte,  ///<  KiB/KB/kB 1024/1000 bytes.
         UnitMegaByte,  ///<  MiB/MB/MB 2^20/10^06 bytes.
         UnitGigaByte,  ///<  GiB/GB/GB 2^30/10^09 bytes.
@@ -92,7 +92,7 @@ public:
     };
 
     enum BinaryUnitDialect {
-        IECBinaryDialect = 0,          ///< KDE Default, KiB, MiB, etc. 2^(10*n)
+        IECBinaryDialect = 0,      ///< KDE Default, KiB, MiB, etc. 2^(10*n)
         JEDECBinaryDialect,        ///< KDE 3.5 default, KB, MB, etc. 2^(10*n)
         MetricBinaryDialect,       ///< SI Units, kB, MB, etc. 10^(3*n)
         LastBinaryDialect = MetricBinaryDialect
@@ -116,8 +116,8 @@ public:
     Q_INVOKABLE QString formatTime(const QTime &time, QLocale::FormatType format = QLocale::ShortFormat) const;
 
     Q_INVOKABLE double readNumber(const QString &numStr) const;
-    Q_INVOKABLE QDate readDate(const QString &str) const;
-    Q_INVOKABLE QTime readTime(const QString &str) const;
+    Q_INVOKABLE QDate readDate(const QString &str, QLocale::FormatType format = QLocale::ShortFormat) const;
+    Q_INVOKABLE QTime readTime(const QString &str, QLocale::FormatType format = QLocale::ShortFormat) const;
 
     Q_INVOKABLE QString language() const;
 

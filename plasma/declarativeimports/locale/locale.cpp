@@ -96,22 +96,20 @@ QString Locale::formatDateTime(const QDateTime &dateTime, QLocale::FormatType fo
     return m_locale->formatDateTime(dateTime, format);
 }
 
-double Locale::readNumber(const QString &_str) const
+double Locale::readNumber(const QString &str) const
 {
     bool ok = false;
-    return m_locale->readNumber(_str, &ok);
+    return m_locale->readNumber(str, &ok);
 }
 
-QDate Locale::readDate(const QString &intstr) const
+QDate Locale::readDate(const QString &intstr, QLocale::FormatType format) const
 {
-    bool ok = false;
-    return m_locale->readDate(intstr, &ok);
+    return m_locale->readDate(intstr, format);
 }
 
-QTime Locale::readTime(const QString &intstr) const
+QTime Locale::readTime(const QString &intstr, QLocale::FormatType format) const
 {
-    bool ok = false;
-    return m_locale->readTime(intstr, &ok);
+    return m_locale->readTime(intstr, format);
 }
 
 QStringList Locale::languageList() const
@@ -125,7 +123,7 @@ bool Locale::isApplicationTranslatedInto(const QString &lang)
 }
 
 void Locale::splitLocale(const QString &locale, QString &language, QString &country, QString &modifier,
-                          QString &charset)
+                         QString &charset)
 {
     KLocale::splitLocale(locale, language, country, modifier, charset);
 }
