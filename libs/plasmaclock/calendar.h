@@ -57,7 +57,6 @@ Q_SIGNALS:
     void dateChanged(const QDate &newDate);
 
 protected:
-    void showEvent(QShowEvent * event);
     void focusInEvent(QFocusEvent* event);
 
 private Q_SLOTS:

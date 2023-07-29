@@ -70,8 +70,7 @@ class CalendarPrivate
             : q(calendar),
               calendarWidget(nullptr),
               layout(nullptr),
-              currentDate(QDate::currentDate()),
-              automaticUpdates(true)
+              currentDate(QDate::currentDate())
         {
         }
 
@@ -83,7 +82,6 @@ class CalendarPrivate
         Plasma::CalendarWidget *calendarWidget;
         QGraphicsLinearLayout *layout;
         QDate currentDate;
-        bool automaticUpdates;
 };
 
 Calendar::Calendar(const QDate &date, QGraphicsWidget *parent)
@@ -122,28 +120,10 @@ void CalendarPrivate::init(const QDate &initialDate)
     updateSize();
 }
 
-void Calendar::showEvent(QShowEvent * event)
-{
-    if (d->automaticUpdates) {
-        d->currentDate = QDate::currentDate();
-    }
-    QGraphicsWidget::showEvent(event);
-}
-
 void Calendar::focusInEvent(QFocusEvent* event)
 {
     Q_UNUSED(event);
     d->calendarWidget->setFocus();
-}
-
-void Calendar::setAutomaticUpdateEnabled(bool automatic)
-{
-    d->automaticUpdates = automatic;
-}
- 
-bool Calendar::isAutomaticUpdateEnabled() const
-{
-    return d->automaticUpdates;
 }
 
 void Calendar::setDate(const QDate &toDate)
@@ -156,10 +136,9 @@ void Calendar::setDate(const QDate &toDate)
         return;
     }
 
-    // NOTE: this method is called by Plasma::ClockApplet::popupEvent() on show so updating as if
-    // show event ocurred
-    if (d->automaticUpdates) {
-        d->currentDate = QDate::currentDate();
+    // If new date is the same as old date don't actually need to do anything
+    if (toDate == d->currentDate) {
+        return;
     }
 
     d->calendarWidget->setSelectedDate(toDate);

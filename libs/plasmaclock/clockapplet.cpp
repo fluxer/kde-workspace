@@ -124,7 +124,6 @@ public:
         if (q->config().readEntry("ShowCalendarPopup", true)) {
             if (!calendarWidget) {
                 calendarWidget = new Plasma::Calendar();
-                calendarWidget->setAutomaticUpdateEnabled(false);
                 calendarWidget->setFlag(QGraphicsItem::ItemIsFocusable);
             }
         } else {
@@ -257,12 +256,7 @@ void ClockApplet::updateClockApplet()
 void ClockApplet::updateClockApplet(const Plasma::DataEngine::Data &data)
 {
     if (d->calendarWidget) {
-        bool updateSelectedDate = (d->calendarWidget->currentDate() == d->calendarWidget->date());
-        d->calendarWidget->setCurrentDate(data["Date"].toDate());
-
-        if (updateSelectedDate){
-            d->calendarWidget->setDate(d->calendarWidget->currentDate());
-        }
+        d->calendarWidget->setDate(data["Date"].toDate());
     }
 
     d->lastTimeSeen = data["Time"].toTime();
@@ -506,7 +500,10 @@ void ClockApplet::popupEvent(bool show)
 {
     if (show && d->calendarWidget) {
         Plasma::DataEngine::Data data = dataEngine("time")->query(currentTimezone());
-        d->calendarWidget->setDate(data["Date"].toDate());
+        const QDate date = data["Date"].toDate();
+        d->calendarWidget->setCurrentDate(date.addDays(-1));
+        d->calendarWidget->setDate(date);
+        d->calendarWidget->setCurrentDate(date);
     }
 }
 
