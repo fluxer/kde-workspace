@@ -29,6 +29,7 @@
 #include <KToggleAction>
 #include <KWindowSystem>
 #include <NETRootInfo>
+#include <KDebug>
 
 #include <Plasma/Applet>
 #include <Plasma/Corona>
@@ -39,7 +40,6 @@
 
 #include "desktopcorona.h"
 #include "plasmaapp.h"
-#include "plasma-shell-desktop.h"
 
 
 DesktopView::DesktopView(Plasma::Containment *containment, int id, QWidget *parent)
