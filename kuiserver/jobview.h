@@ -26,7 +26,6 @@
 #include <QtDBus/qdbusextratypes.h>
 
 #include <kio/global.h>
-#include <kuiserversettings.h>
 
 class RequestViewCallWatcher;
 class OrgKdeJobViewInterface;
