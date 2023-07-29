@@ -46,7 +46,6 @@
 #include <Plasma/AbstractToolBox>
 #include <Plasma/Containment>
 #include <Plasma/Dialog>
-#include <Plasma/Theme>
 #include <Plasma/Wallpaper>
 #include <Plasma/WindowEffects>
 #include <Plasma/Package>
@@ -61,7 +60,6 @@
 #include "interactiveconsole.h"
 #include "panelshadows.h"
 #include "panelview.h"
-#include "plasma-shell-desktop.h"
 #include "toolbutton.h"
 #include "klistconfirmationdialog.h"
 
@@ -200,9 +198,6 @@ void PlasmaApp::setupDesktop()
     m_XdndVersionAtom = (Atom)xdndversion;
 #endif
 
-    // intialize the default theme and set the font
-    Plasma::Theme *theme = Plasma::Theme::defaultTheme();
-    theme->setFont(AppSettings::desktopFont());
     m_panelShadows = new PanelShadows();
 
     // this line initializes the corona.

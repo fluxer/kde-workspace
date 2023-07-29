@@ -23,8 +23,6 @@ set(plasma_SRCS
     klistconfirmationdialog.cpp
 )
 
-kde4_add_kcfg_files(plasma_SRCS data/plasma-shell-desktop.kcfgc)
-
 set(plasmaapp_dbusXML dbus/org.kde.plasma.App.xml)
 qt4_add_dbus_adaptor(plasma_SRCS ${plasmaapp_dbusXML} plasmaapp.h PlasmaApp)
 
