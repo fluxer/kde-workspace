@@ -1,3 +1,3 @@
 #!/bin/bash
-$EXTRACTRC *.ui *.kcfg >> rc.cpp
+$EXTRACTRC *.ui >> rc.cpp
 $XGETTEXT *.cpp -o $podir/kuiserver.pot
