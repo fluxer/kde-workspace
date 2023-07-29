@@ -26,7 +26,6 @@
 
 #include "bookmarkinfowidget.h"
 #include "actionsimpl.h"
-#include "settings.h"
 #include "kbookmarkmodel/commands.h"
 #include "kbookmarkmodel/commandhistory.h"
 #include "kebsearchline.h"

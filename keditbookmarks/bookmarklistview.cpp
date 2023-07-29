@@ -21,7 +21,6 @@
 #include "globalbookmarkmanager.h"
 #include "kbookmarkmodel/model.h"
 #include "toplevel.h" // for KEBApp
-#include "settings.h"
 #include "kbookmarkmodel/commands.h"
 
 #include <QHeaderView>
@@ -31,7 +30,11 @@
 #include <QBrush>
 #include <QPalette>
 
+#include <kglobal.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
+
+static const int s_defaultcolumnsize = 300;
 
 BookmarkFolderView::BookmarkFolderView( BookmarkListView * view, QWidget * parent )
     : KBookmarkView(parent), mview(view)
@@ -131,19 +134,21 @@ void BookmarkListView::contextMenuEvent ( QContextMenuEvent * e )
 
 void BookmarkListView::loadColumnSetting()
 {
-    header()->resizeSection(KEBApp::NameColumn, KEBSettings::name());
-    header()->resizeSection(KEBApp::UrlColumn, KEBSettings::uRL());
-    header()->resizeSection(KEBApp::CommentColumn, KEBSettings::comment());
-    header()->resizeSection(KEBApp::StatusColumn, KEBSettings::status());
+    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Column");
+    header()->resizeSection(KEBApp::NameColumn, columngroup.readEntry("Name", s_defaultcolumnsize));
+    header()->resizeSection(KEBApp::UrlColumn, columngroup.readEntry("URL", s_defaultcolumnsize));
+    header()->resizeSection(KEBApp::CommentColumn, columngroup.readEntry("Comment", s_defaultcolumnsize));
+    header()->resizeSection(KEBApp::StatusColumn, columngroup.readEntry("Status", s_defaultcolumnsize));
 }
 
 void BookmarkListView::saveColumnSetting()
 {
-    KEBSettings::setName( header()->sectionSize(KEBApp::NameColumn));
-    KEBSettings::setURL( header()->sectionSize(KEBApp::UrlColumn));
-    KEBSettings::setComment( header()->sectionSize(KEBApp::CommentColumn));
-    KEBSettings::setStatus( header()->sectionSize(KEBApp::StatusColumn));
-    KEBSettings::self()->writeConfig();
+    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Column");
+    columngroup.writeEntry("Name", header()->sectionSize(KEBApp::NameColumn));
+    columngroup.writeEntry("URL", header()->sectionSize(KEBApp::UrlColumn));
+    columngroup.writeEntry("Comment", header()->sectionSize(KEBApp::CommentColumn));
+    columngroup.writeEntry("Status", header()->sectionSize(KEBApp::StatusColumn));
+    KGlobal::config()->sync();
 }
 
 /************/
