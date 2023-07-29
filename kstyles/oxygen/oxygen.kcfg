@@ -28,9 +28,6 @@
     <entry name="MaxCacheSize" type = "Int">
        <default>512</default>
     </entry>
-    <entry name="AnimationSteps" type = "Int">
-       <default>10</default>
-    </entry>
 
     <entry name="MnemonicsMode" type="Enum">
       <choices>
