@@ -134,7 +134,7 @@ void BookmarkListView::contextMenuEvent ( QContextMenuEvent * e )
 
 void BookmarkListView::loadColumnSetting()
 {
-    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Column");
+    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Columns");
     header()->resizeSection(KEBApp::NameColumn, columngroup.readEntry("Name", s_defaultcolumnsize));
     header()->resizeSection(KEBApp::UrlColumn, columngroup.readEntry("URL", s_defaultcolumnsize));
     header()->resizeSection(KEBApp::CommentColumn, columngroup.readEntry("Comment", s_defaultcolumnsize));
@@ -143,7 +143,7 @@ void BookmarkListView::loadColumnSetting()
 
 void BookmarkListView::saveColumnSetting()
 {
-    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Column");
+    KConfigGroup columngroup = KConfigGroup(KGlobal::config(), "Columns");
     columngroup.writeEntry("Name", header()->sectionSize(KEBApp::NameColumn));
     columngroup.writeEntry("URL", header()->sectionSize(KEBApp::UrlColumn));
     columngroup.writeEntry("Comment", header()->sectionSize(KEBApp::CommentColumn));
