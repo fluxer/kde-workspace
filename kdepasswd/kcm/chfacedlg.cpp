@@ -44,8 +44,6 @@
 
 #include "settings.h" // KConfigXT
 
-
-
 /**
  * TODO: It would be nice if the widget were in a .ui
  */
@@ -87,17 +85,17 @@ ChFaceDlg::ChFaceDlg(const QString& picsdir, QWidget *parent)
     if (facesDir.exists()) {
         const QStringList picslist = facesDir.entryList( QDir::Files );
         foreach (const QString &it, picslist) {
-            new QListWidgetItem(QIcon(picsdir + it), it.section('.',0,0), ui.m_FacesWidget);
+            new QListWidgetItem(QIcon(picsdir + it), it.section('.', 0, 0), ui.m_FacesWidget);
         }
     }
-    facesDir.setPath( KCFGUserAccount::userFaceDir() );
+    facesDir.setPath(KCFGUserAccount::userFaceDir());
     if (facesDir.exists()) {
-        const QStringList picslist = facesDir.entryList( QDir::Files );
+        const QStringList picslist = facesDir.entryList(QDir::Files);
         foreach (const QString &it, picslist) {
             new QListWidgetItem(
                 QIcon(KCFGUserAccount::userFaceDir() + it),
                 QString('/'+ it) == KCFGUserAccount::customFaceFile() ? 
-                i18n("(Custom)") : it.section('.',0,0),
+                i18n("(Custom)") : it.section('.', 0, 0),
                 ui.m_FacesWidget
             );
         }
@@ -137,12 +135,13 @@ void ChFaceDlg::addCustomPixmap(const QString &imPath, bool saveCopy)
             KonqOperations::COPY,
             KUrl::List(
                 KUrl(userfaces.absolutePath() + "/.userinfo-tmp")),
-                KUrl(userfaces.absolutePath() + '/' + QFileInfo(imPath).fileName().section('.',0,0)
+                KUrl(userfaces.absolutePath() + '/' + QFileInfo(imPath).fileName().section('.', 0, 0)
             )
         );
 #if 0
-    if (!pix.save(userfaces.absolutePath() + '/' + imPath , "PNG"))
+    if (!pix.save(userfaces.absolutePath() + '/' + imPath , "PNG")) {
         KMessageBox::sorry(this, i18n("There was an error saving the image:\n%1", userfaces.absolutePath()));
+    }
 #endif
   }
 

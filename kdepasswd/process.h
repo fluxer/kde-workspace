@@ -180,7 +180,6 @@ protected:
                                newlines to be printed after output. Set to @c false
                                in constructor. @see setTerminal()  */
     int m_Pid;             /**< PID of child process */
-    QByteArray m_Command;  /**< Unused */
     QByteArray m_Exit;     /**< String to scan for in output that indicates child has exited. */
 
 private:
