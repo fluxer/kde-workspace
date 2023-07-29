@@ -21,30 +21,34 @@
 #define DEVICEAUTOMOUNTERKCM_H
 
 #include <KCModule>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 #include "ui_DeviceAutomounterKCM.h"
 
-#include <QStandardItemModel>
-#include <QStandardItem>
 class DeviceModel;
 
-class DeviceAutomounterKCM : public KCModule, public Ui::DeviceAutomounterKCM {
+class DeviceAutomounterKCM : public KCModule, public Ui::DeviceAutomounterKCM
+{
     Q_OBJECT
-    public:
-        explicit DeviceAutomounterKCM(QWidget *parent = 0, const QVariantList &args = QVariantList());
-        virtual ~DeviceAutomounterKCM();
-    public slots:
-        void load();
-        void save();
-    private slots:
-        void emitChanged();
-        void enabledChanged();
-        void updateForgetDeviceButton();
-        void forgetSelectedDevices();
-    private:
-        DeviceModel* m_devices;
-        void saveLayout();
-        void loadLayout();
+public:
+    explicit DeviceAutomounterKCM(QWidget *parent = 0, const QVariantList &args = QVariantList());
+    virtual ~DeviceAutomounterKCM();
+
+public slots:
+    void load();
+    void save();
+
+private slots:
+    void emitChanged();
+    void enabledChanged();
+    void updateForgetDeviceButton();
+    void forgetSelectedDevices();
+
+private:
+    DeviceModel* m_devices;
+    void saveLayout();
+    void loadLayout();
 };
 
 #endif
