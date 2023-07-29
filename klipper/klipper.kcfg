@@ -57,10 +57,6 @@
         <min>1</min>
         <max>2048</max>
     </entry>
-    <entry key="ActionListChanged" name="ActionList" type="Int">
-        <label>Dummy entry for indicating changes in an action's tree widget</label>
-        <default>-1</default>
-    </entry>
   </group>
   <group name="Actions">
     <entry name="StripWhiteSpace" type="Bool">
