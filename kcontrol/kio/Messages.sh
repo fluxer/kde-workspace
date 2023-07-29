@@ -1,3 +1,3 @@
 #! /usr/bin/env bash
-$EXTRACTRC *.ui *.kcfg >> rc.cpp
+$EXTRACTRC *.ui >> rc.cpp
 $XGETTEXT *.cpp -o $podir/kcmkio.pot
