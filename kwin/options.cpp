@@ -646,14 +646,6 @@ void Options::reparseConfiguration()
 unsigned long Options::updateSettings()
 {
     unsigned long changed = loadConfig();
-    // Read button tooltip animation effect from kdeglobals
-    // Since we want to allow users to enable window decoration tooltips
-    // and not kstyle tooltips and vise-versa, we don't read the
-    // "EffectNoTooltip" setting from kdeglobals.
-
-
-//    QToolTip::setGloballyEnabled( d->show_tooltips );
-// KDE4 this probably needs to be done manually in clients
 
     // Driver-specific config detection
     setCompositingInitialized(false);
