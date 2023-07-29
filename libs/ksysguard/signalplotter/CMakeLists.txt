@@ -24,6 +24,7 @@ kde4_add_plugin(ksignalplotterwidgets ${ksignalplotterwidgets_SRCS} ${ksignalplo
 
 target_link_libraries(ksignalplotterwidgets
     KDE4::kdeui
+    ${QT_QTUITOOLS_LIBRARY}
     ksignalplotter
 )
 

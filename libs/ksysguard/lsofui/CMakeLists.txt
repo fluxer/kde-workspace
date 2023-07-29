@@ -34,6 +34,7 @@ kde4_add_plugin(ksysguardlsofwidgets ${ksysguardlsofwidgets_SRCS})
 target_link_libraries(ksysguardlsofwidgets
     KDE4::kdecore
     ${QT_QTGUI_LIBRARY}
+    ${QT_QTUITOOLS_LIBRARY}
     lsofui
 )
 

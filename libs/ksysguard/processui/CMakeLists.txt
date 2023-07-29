@@ -40,7 +40,11 @@ kde4_add_widget(ksysguardwidgets_SRCS ksysguard.widgets)
 
 kde4_add_plugin(ksysguardwidgets ${ksysguardwidgets_SRCS} ${ksysguardwidgets_PART_SRCS})
 
-target_link_libraries(ksysguardwidgets KDE4::kdeui processui)
+target_link_libraries(ksysguardwidgets
+    KDE4::kdeui
+    ${QT_QTUITOOLS_LIBRARY}
+    processui
+)
 
 install(
     TARGETS ksysguardwidgets
