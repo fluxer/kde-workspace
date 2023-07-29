@@ -97,7 +97,6 @@ void KQuery::start()
   connect(job, SIGNAL(entries(KIO::Job*,KIO::UDSEntryList)),
           SLOT(slotListEntries(KIO::Job*,KIO::UDSEntryList)));
   connect(job, SIGNAL(result(KJob*)), SLOT(slotResult(KJob*)));
-  connect(job, SIGNAL(canceled(KJob*)), SLOT(slotCanceled(KJob*)));
 }
 
 void KQuery::slotResult( KJob * _job )
@@ -106,17 +105,6 @@ void KQuery::slotResult( KJob * _job )
   job = 0;
 
   m_result=_job->error();
-  checkEntries();
-}
-
-void KQuery::slotCanceled( KJob * _job )
-{
-  if (job != _job) return;
-  job = 0;
-
-  m_fileItems.clear();
-
-  m_result=KIO::ERR_USER_CANCELED;
   checkEntries();
 }
 

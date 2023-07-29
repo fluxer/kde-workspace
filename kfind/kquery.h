@@ -74,7 +74,6 @@ public Q_SLOTS:
   /* List of files found using KIO */
   void slotListEntries(KIO::Job *, const KIO::UDSEntryList &);
   void slotResult(KJob *);
-  void slotCanceled(KJob *);
 
  Q_SIGNALS:
     void foundFileList( QList< QPair<KFileItem,QString> >);
