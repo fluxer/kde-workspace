@@ -1,11 +1,9 @@
-/*  This file is part of the KDE libraries
-    Copyright (C) 2000 Carsten Pfeiffer <pfeiffer@kde.org>
-                  2000 Malte Starostik <malte@kde.org>
+/*  This file is part of the KDE project
+    Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    License version 2, as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,8 +29,12 @@ extern "C"
 {
     KDE_EXPORT ThumbCreator *new_creator()
     {
-        return new ImageCreator;
+        return new ImageCreator();
     }
+}
+
+ImageCreator::ImageCreator()
+{
 }
 
 bool ImageCreator::create(const QString &path, int width, int height, QImage &img)

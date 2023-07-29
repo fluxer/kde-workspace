@@ -1,10 +1,9 @@
-/*  This file is part of the KDE libraries
-    Copyright (C) 2000 Malte Starostik <malte@kde.org>
+/*  This file is part of the KDE project
+    Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+    License version 2, as published by the Free Software Foundation.
 
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,19 +16,20 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef _IMAGECREATOR_H_
-#define _IMAGECREATOR_H_
+#ifndef IMAGECREATOR_H
+#define IMAGECREATOR_H
 
 #include <kio/thumbcreator.h>
 
 class ImageCreator : public ThumbCreator
 {
 public:
-    ImageCreator() {}
-    virtual bool create(const QString &path, int width, int height, QImage &img);
-    virtual Flags flags() const;
-    virtual QWidget *createConfigurationWidget();
-    virtual void writeConfiguration(const QWidget *configurationWidget);
+    ImageCreator();
+
+    bool create(const QString &path, int width, int height, QImage &img) final;
+    ThumbCreator::Flags flags() const final;
+    QWidget *createConfigurationWidget() final;
+    void writeConfiguration(const QWidget *configurationWidget) final;
 };
 
-#endif
+#endif // IMAGECREATOR_H
