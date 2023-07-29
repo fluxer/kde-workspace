@@ -49,14 +49,14 @@
 */
 int PtyProcess::waitMS(int fd,int ms)
 {
-	struct timeval tv;
-	tv.tv_sec = 0;
-	tv.tv_usec = 1000*ms;
+    struct timeval tv;
+    tv.tv_sec = 0;
+    tv.tv_usec = 1000*ms;
 
-	fd_set fds;
-	FD_ZERO(&fds);
-	FD_SET(fd,&fds);
-	return select(fd+1, &fds, 0L, 0L, &tv);
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(fd,&fds);
+    return select(fd+1, &fds, 0L, 0L, &tv);
 }
 
 // XXX this function is nonsense:
@@ -74,9 +74,8 @@ bool PtyProcess::checkPid(pid_t pid)
     //sudo does not accept signals from user so we except it
     if (superUserCommand == "sudo") {
         return true;
-    } else {
-        return kill(pid, 0) == 0;
     }
+    return kill(pid, 0) == 0;
 }
 
 /*
@@ -89,33 +88,37 @@ bool PtyProcess::checkPid(pid_t pid)
 
 int PtyProcess::checkPidExited(pid_t pid)
 {
-	int state, ret;
-	ret = waitpid(pid, &state, WNOHANG);
+    int state, ret;
+    ret = waitpid(pid, &state, WNOHANG);
 
-	if (ret < 0)
-	{
-		kError(1512) << "waitpid():" << ::strerror(errno);
-		return Error;
-	}
-	if (ret == pid)
-	{
-		if (WIFEXITED(state))
-			return WEXITSTATUS(state);
-		return Killed;
-	}
+    if (ret < 0) {
+        kError(1512) << "waitpid():" << ::strerror(errno);
+        return Error;
+    }
+    if (ret == pid) {
+        if (WIFEXITED(state)) {
+            return WEXITSTATUS(state);
+        }
+        return Killed;
+    }
 
-	return NotExited;
+    return NotExited;
 }
 
 
 class PtyProcess::PtyProcessPrivate
 {
 public:
-    PtyProcessPrivate() : m_pPTY(0L) {}
+    PtyProcessPrivate()
+        : m_pPTY(0L)
+    {
+    }
+
     ~PtyProcessPrivate()
     {
         delete m_pPTY;
     }
+
     QList<QByteArray> env;
     KPty *m_pPTY;
     QByteArray m_Inbuf;
@@ -123,7 +126,7 @@ public:
 
 
 PtyProcess::PtyProcess()
-    :d(new PtyProcessPrivate)
+    : d(new PtyProcessPrivate())
 {
     m_bTerminal = false;
     m_bErase = false;
@@ -134,8 +137,7 @@ int PtyProcess::init()
 {
     delete d->m_pPTY;
     d->m_pPTY = new KPty();
-    if (!d->m_pPTY->open())
-    {
+    if (!d->m_pPTY->open()) {
         kError(1512) << "Failed to open PTY.";
         return -1;
     }
@@ -150,14 +152,17 @@ PtyProcess::~PtyProcess()
 }
 
 /** Set additional environment variables. */
-void PtyProcess::setEnvironment( const QList<QByteArray> &env )
+void PtyProcess::setEnvironment(const QList<QByteArray> &env)
 {
     d->env = env;
 }
 
 int PtyProcess::fd() const
 {
-    return d->m_pPTY ? d->m_pPTY->masterFd() : -1;
+    if (d->m_pPTY) {
+        return d->m_pPTY->masterFd();
+    }
+    return -1;
 }
 
 int PtyProcess::pid() const
@@ -175,8 +180,7 @@ QList<QByteArray> PtyProcess::environment() const
 QByteArray PtyProcess::readAll(bool block)
 {
     QByteArray ret;
-    if (!d->m_Inbuf.isEmpty())
-    {
+    if (!d->m_Inbuf.isEmpty()) {
         // if there is still something in the buffer, we need not block.
         // we should still try to read any further output, from the fd, though.
         block = false;
@@ -185,36 +189,37 @@ QByteArray PtyProcess::readAll(bool block)
     }
 
     int flags = fcntl(fd(), F_GETFL);
-    if (flags < 0)
-    {
+    if (flags < 0) {
         kError(1512) << "fcntl(F_GETFL):" << ::strerror(errno);
         return ret;
     }
     int oflags = flags;
-    if (block)
+    if (block) {
         flags &= ~O_NONBLOCK;
-    else
+    } else {
         flags |= O_NONBLOCK;
+    }
 
-    if ((flags != oflags) && (fcntl(fd(), F_SETFL, flags) < 0))
-    {
+    if ((flags != oflags) && (fcntl(fd(), F_SETFL, flags) < 0)) {
        // We get an error here when the child process has closed
        // the file descriptor already.
        return ret;
     }
 
-    while (1)
-    {
+    while (1) {
         ret.reserve(ret.size() + 0x8000);
         int nbytes = read(fd(), ret.data() + ret.size(), 0x8000);
-        if (nbytes == -1)
-        {
-            if (errno == EINTR)
+        if (nbytes == -1) {
+            if (errno == EINTR) {
                 continue;
-            else break;
+            } else {
+                break;
+            }
         }
-        if (nbytes == 0)
-            break;        // nothing available / eof
+        if (nbytes == 0) {
+            // nothing available / eof
+            break;
+        }
 
         ret.resize(ret.size() + nbytes);
         break;
@@ -229,16 +234,13 @@ QByteArray PtyProcess::readLine(bool block)
     d->m_Inbuf = readAll(block);
 
     QByteArray ret;
-    if (!d->m_Inbuf.isEmpty())
-    {
+    if (!d->m_Inbuf.isEmpty()) {
         int pos = d->m_Inbuf.indexOf('\n');
-        if (pos == -1)
-        {
+        if (pos == -1) {
             // NOTE: this means we return something even if there in no full line!
             ret = d->m_Inbuf;
             d->m_Inbuf.resize(0);
-        } else
-        {
+        } else {
             ret = d->m_Inbuf.left(pos);
             d->m_Inbuf.remove(0, pos+1);
         }
@@ -247,23 +249,26 @@ QByteArray PtyProcess::readLine(bool block)
     return ret;
 }
 
-
 void PtyProcess::writeLine(const QByteArray &line, bool addnl)
 {
-    if (!line.isEmpty())
+    if (!line.isEmpty()) {
         write(fd(), line, line.length());
-    if (addnl)
+    }
+    if (addnl) {
         write(fd(), "\n", 1);
+    }
 }
 
 
 void PtyProcess::unreadLine(const QByteArray &line, bool addnl)
 {
     QByteArray tmp = line;
-    if (addnl)
+    if (addnl) {
         tmp += '\n';
-    if (!tmp.isEmpty())
+    }
+    if (!tmp.isEmpty()) {
         d->m_Inbuf.prepend(tmp);
+    }
 }
 
 void PtyProcess::setExitString(const QByteArray &exit)
@@ -282,25 +287,23 @@ int PtyProcess::exec(const QByteArray &command, const QList<QByteArray> &args)
     if (init() < 0)
         return -1;
 
-    if ((m_Pid = fork()) == -1)
-    {
+    if ((m_Pid = fork()) == -1) {
         kError(1512) << "fork():" << ::strerror(errno);
         return -1;
     }
 
     // Parent
-    if (m_Pid)
-    {
+    if (m_Pid) {
         d->m_pPTY->closeSlave();
         return 0;
     }
 
     // Child
-    if (setupTTY() < 0)
+    if (setupTTY() < 0) {
         _exit(1);
+    }
 
-    for (int i = 0; i < d->env.count(); ++i)
-    {
+    for (int i = 0; i < d->env.count(); ++i) {
         putenv(const_cast<char *>(d->env.at(i).constData()));
     }
     unsetenv("KDE_FULL_SESSION");
@@ -311,11 +314,12 @@ int PtyProcess::exec(const QByteArray &command, const QList<QByteArray> &args)
     unsetenv("DBUS_SESSION_BUS_ADDRESS");
 
     // set temporarily LC_ALL to C, for su (to be able to parse "Password:")
-    const QByteArray old_lc_all = qgetenv( "LC_ALL" );
-    if( !old_lc_all.isEmpty() )
-        qputenv( "KDESU_LC_ALL", old_lc_all );
-    else
-        unsetenv( "KDESU_LC_ALL" );
+    const QByteArray old_lc_all = qgetenv("LC_ALL");
+    if (!old_lc_all.isEmpty()) {
+        qputenv("KDESU_LC_ALL", old_lc_all);
+    } else {
+        unsetenv("KDESU_LC_ALL");
+    }
     qputenv("LC_ALL", "C");
 
     // From now on, terminal output goes through the tty.
@@ -365,20 +369,16 @@ int PtyProcess::WaitSlave()
     kDebug(1512) << "Child pid" << m_Pid;
 
     struct termios tio;
-    while (1)
-    {
-        if (!checkPid(m_Pid))
-        {
+    while (1) {
+        if (!checkPid(m_Pid)) {
             kError(1512) << "process has exited while waiting for password.";
             return -1;
         }
-        if (!d->m_pPTY->tcGetAttr(&tio))
-        {
+        if (!d->m_pPTY->tcGetAttr(&tio)) {
             kError(1512) << "tcgetattr():" << ::strerror(errno);
             return -1;
         }
-        if (tio.c_lflag & ECHO)
-        {
+        if (tio.c_lflag & ECHO) {
             kDebug(1512) << "Echo mode still on.";
             usleep(10000);
             continue;
@@ -419,8 +419,7 @@ int PtyProcess::waitForChild()
     FD_ZERO(&fds);
     QByteArray remainder;
 
-    while (1)
-    {
+    while (1) {
         FD_SET(fd(), &fds);
 
         // specify timeout to make sure select() does not block, even if the
@@ -431,29 +430,25 @@ int PtyProcess::waitForChild()
         timeout.tv_sec = 0;
         timeout.tv_usec = 100000;
         int ret = select(fd()+1, &fds, 0L, 0L, &timeout);
-        if (ret == -1)
-        {
-            if (errno != EINTR)
-            {
+        if (ret == -1) {
+            if (errno != EINTR) {
                 kError(1512) << "select():" << ::strerror(errno);
                 return -1;
             }
             ret = 0;
         }
 
-        if (ret)
-        {
+        if (ret) {
             forever {
                 QByteArray output = readAll(false);
-                if (output.isEmpty())
+                if (output.isEmpty()) {
                     break;
-                if (m_bTerminal)
-                {
+                }
+                if (m_bTerminal) {
                     fwrite(output.constData(), output.size(), 1, stdout);
                     fflush(stdout);
                 }
-                if (!m_Exit.isEmpty())
-                {
+                if (!m_Exit.isEmpty()) {
                     // match exit string only at line starts
                     remainder += output;
                     while (remainder.length() >= m_Exit.length()) {
@@ -462,8 +457,9 @@ int PtyProcess::waitForChild()
                             remainder.remove(0, m_Exit.length());
                         }
                         int off = remainder.indexOf('\n');
-                        if (off < 0)
+                        if (off < 0) {
                             break;
+                        }
                         remainder.remove(0, off + 1);
                     }
                 }
@@ -471,21 +467,16 @@ int PtyProcess::waitForChild()
         }
 
         ret = checkPidExited(m_Pid);
-        if (ret == Error)
-        {
-            if (errno == ECHILD) return 0;
-            else return 1;
-        }
-        else if (ret == Killed)
-        {
+        if (ret == Error) {
+            if (errno == ECHILD) {
+                return 0;
+            }
+            return 1;
+        } else if (ret == Killed) {
             return 0;
-        }
-        else if (ret == NotExited)
-        {
+        } else if (ret == NotExited) {
             // keep checking
-        }
-        else
-        {
+        } else {
             return ret;
         }
     }
@@ -501,35 +492,37 @@ int PtyProcess::waitForChild()
 int PtyProcess::setupTTY()
 {
     // Reset signal handlers
-    for (int sig = 1; sig < NSIG; sig++)
+    for (int sig = 1; sig < NSIG; sig++) {
         KDE_signal(sig, SIG_DFL);
+    }
     KDE_signal(SIGHUP, SIG_IGN);
 
     d->m_pPTY->setCTty();
 
     // Connect stdin, stdout and stderr
     int slave = d->m_pPTY->slaveFd();
-    dup2(slave, 0); dup2(slave, 1); dup2(slave, 2);
+    dup2(slave, 0);
+    dup2(slave, 1);
+    dup2(slave, 2);
 
     // Close all file handles
     // XXX this caused problems in KProcess - not sure why anymore. -- ???
     // Because it will close the start notification pipe. -- ossi
     struct rlimit rlp;
     getrlimit(RLIMIT_NOFILE, &rlp);
-    for (int i = 3; i < (int)rlp.rlim_cur; i++)
+    for (int i = 3; i < (int)rlp.rlim_cur; i++) {
         close(i);
+    }
 
     // Disable OPOST processing. Otherwise, '\n' are (on Linux at least)
     // translated to '\r\n'.
     struct ::termios tio;
-    if (tcgetattr(0, &tio) < 0)
-    {
+    if (tcgetattr(0, &tio) < 0) {
         kError(1512) << "tcgetattr():" << ::strerror(errno);
         return -1;
     }
     tio.c_oflag &= ~OPOST;
-    if (tcsetattr(0, TCSANOW, &tio) < 0)
-    {
+    if (tcsetattr(0, TCSANOW, &tio) < 0) {
         kError(1512) << "tcsetattr():" << ::strerror(errno);
         return -1;
     }

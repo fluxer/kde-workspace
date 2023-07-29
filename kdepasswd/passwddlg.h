@@ -29,8 +29,7 @@
 #include <knewpassworddialog.h>
 #include <QString>
 
-class KDEpasswd1Dialog
-    : public KPasswordDialog
+class KDEpasswd1Dialog : public KPasswordDialog
 {
     Q_OBJECT
 

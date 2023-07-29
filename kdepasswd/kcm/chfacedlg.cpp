@@ -50,130 +50,148 @@
  * TODO: It would be nice if the widget were in a .ui
  */
 ChFaceDlg::ChFaceDlg(const QString& picsdir, QWidget *parent)
-  : KDialog( parent )
+    : KDialog(parent)
 {
-  setCaption( i18nc("@title:window", "Change your Face") );
-  setButtons( Ok|Cancel|User1|User2 );
-  setDefaultButton( Ok );
+    setCaption(i18nc("@title:window", "Change your Face") );
+    setButtons(KDialog::Ok | KDialog::Cancel | KDialog::User1| KDialog::User2);
+    setDefaultButton(KDialog::Ok);
 
-  setButtonText( User1, i18n("Custom Image...") );
-  setButtonText( User2, i18n("Remove Image") );
+    setButtonText(KDialog::User1, i18n("Custom Image..."));
+    setButtonText(KDialog::User2, i18n("Remove Image"));
 
-  QWidget *faceDlg = new QWidget;
-  ui.setupUi(faceDlg);
+    QWidget *faceDlg = new QWidget;
+    ui.setupUi(faceDlg);
 
-  setMainWidget(faceDlg);
+    setMainWidget(faceDlg);
 
-  connect( ui.m_FacesWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), SLOT(slotFaceWidgetSelectionChanged(QListWidgetItem*)) );
+    connect(
+        ui.m_FacesWidget, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
+        this, SLOT(slotFaceWidgetSelectionChanged(QListWidgetItem*))
+    );
 
-  connect( ui.m_FacesWidget, SIGNAL(doubleClicked(QModelIndex)), SLOT(accept()) );
-  connect( this, SIGNAL(okClicked()), this, SLOT(accept()));
+    connect(ui.m_FacesWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(accept()));
+    connect(this, SIGNAL(okClicked()), this, SLOT(accept()));
 
-  connect( this, SIGNAL(user1Clicked()), this, SLOT(slotGetCustomImage()) );
+    connect(this, SIGNAL(user1Clicked()), this, SLOT(slotGetCustomImage()));
 
-  connect( this, SIGNAL(user2Clicked()), this, SLOT(slotRemoveImage()) );
+    connect(this, SIGNAL(user2Clicked()), this, SLOT(slotRemoveImage()));
 
 #if 0
-  QPushButton *acquireBtn = new QPushButton( i18n("&Acquire Image..."), page );
-  acquireBtn->setEnabled( false );
-  morePics->addWidget( acquireBtn );
+    QPushButton *acquireBtn = new QPushButton( i18n("&Acquire Image..."), page );
+    acquireBtn->setEnabled( false );
+    morePics->addWidget( acquireBtn );
 #endif
 
-  // Filling the icon view
-  QDir facesDir( picsdir );
-  if ( facesDir.exists() )
-  {
-    const QStringList picslist = facesDir.entryList( QDir::Files );
-    for ( QStringList::const_iterator it = picslist.constBegin(); it != picslist.constEnd(); ++it )
-      new QListWidgetItem( QIcon( picsdir + *it ), (*it).section('.',0,0), ui.m_FacesWidget );
-  }
-  facesDir.setPath( KCFGUserAccount::userFaceDir() );
-  if ( facesDir.exists() )
-  {
-    const QStringList picslist = facesDir.entryList( QDir::Files );
-    for ( QStringList::const_iterator it = picslist.constBegin(); it != picslist.constEnd(); ++it )
-      new QListWidgetItem( QIcon( KCFGUserAccount::userFaceDir() + *it ),
-                           QString('/'+(*it)) == KCFGUserAccount::customFaceFile() ? 
-                           i18n("(Custom)") : (*it).section('.',0,0),
-                           ui.m_FacesWidget );
-  }
+    // Filling the icon view
+    QDir facesDir(picsdir);
+    if (facesDir.exists()) {
+        const QStringList picslist = facesDir.entryList( QDir::Files );
+        foreach (const QString &it, picslist) {
+            new QListWidgetItem(QIcon(picsdir + it), it.section('.',0,0), ui.m_FacesWidget);
+        }
+    }
+    facesDir.setPath( KCFGUserAccount::userFaceDir() );
+    if (facesDir.exists()) {
+        const QStringList picslist = facesDir.entryList( QDir::Files );
+        foreach (const QString &it, picslist) {
+            new QListWidgetItem(
+                QIcon(KCFGUserAccount::userFaceDir() + it),
+                QString('/'+ it) == KCFGUserAccount::customFaceFile() ? 
+                i18n("(Custom)") : it.section('.',0,0),
+                ui.m_FacesWidget
+            );
+        }
+    }
 
+    enableButtonOk(false); // since no item is pre-selected, we must only enable the Ok button once a selection is done!
+    // connect(this, SIGNAL(okClicked()), SLOT(slotSaveCustomImage()));
 
-  enableButtonOk( false ); // since no item is pre-selected, we must only enable the Ok button once a selection is done!
-  //connect( this, SIGNAL(okClicked()), SLOT(slotSaveCustomImage()) );
-
-  resize( 420, 400 );
+    resize( 420, 400 );
 }
 
-void ChFaceDlg::addCustomPixmap( const QString &imPath, bool saveCopy )
+void ChFaceDlg::addCustomPixmap(const QString &imPath, bool saveCopy)
 {
-  QImage pix( imPath );
-  // TODO: save pix to TMPDIR/userinfo-tmp,
-  // then scale and copy *that* to ~/.faces
+    QImage pix(imPath);
+    // TODO: save pix to TMPDIR/userinfo-tmp,
+    // then scale and copy *that* to ~/.faces
 
-  if (pix.isNull())
-  {
-    KMessageBox::sorry( this, i18n("There was an error loading the image.") );
-    return;
-  }
-  if ( (pix.width() > KCFGUserAccount::faceSize())
-	|| (pix.height() > KCFGUserAccount::faceSize()) )
-    pix = pix.scaled( KCFGUserAccount::faceSize(), KCFGUserAccount::faceSize(), Qt::KeepAspectRatio );// Should be no bigger than certain size.
+    if (pix.isNull()) {
+        KMessageBox::sorry( this, i18n("There was an error loading the image.") );
+        return;
+    }
+    if ((pix.width() > KCFGUserAccount::faceSize()) || (pix.height() > KCFGUserAccount::faceSize())) {
+        // Should be no bigger than certain size.
+        pix = pix.scaled(KCFGUserAccount::faceSize(), KCFGUserAccount::faceSize(), Qt::KeepAspectRatio);
+    }
 
-  if ( saveCopy )
-  {
-    // If we should save a copy:
-    QDir userfaces( KCFGUserAccount::userFaceDir() );
-    if ( !userfaces.exists( ) )
-      userfaces.mkdir( userfaces.absolutePath() );
+    if (saveCopy) {
+        // If we should save a copy:
+        QDir userfaces(KCFGUserAccount::userFaceDir());
+        if (!userfaces.exists()) {
+            userfaces.mkdir( userfaces.absolutePath());
+        }
 
-    pix.save( userfaces.absolutePath() + "/.userinfo-tmp" , "PNG" );
-    KonqOperations::copy( this, KonqOperations::COPY, KUrl::List( KUrl( userfaces.absolutePath() + "/.userinfo-tmp" ) ), KUrl( userfaces.absolutePath() + '/' + QFileInfo(imPath).fileName().section('.',0,0) ) );
+        pix.save(userfaces.absolutePath() + "/.userinfo-tmp" , "PNG" );
+        KonqOperations::copy(
+            this,
+            KonqOperations::COPY,
+            KUrl::List(
+                KUrl(userfaces.absolutePath() + "/.userinfo-tmp")),
+                KUrl(userfaces.absolutePath() + '/' + QFileInfo(imPath).fileName().section('.',0,0)
+            )
+        );
 #if 0
-  if ( !pix.save( userfaces.absolutePath() + '/' + imPath , "PNG" ) )
-    KMessageBox::sorry(this, i18n("There was an error saving the image:\n%1", userfaces.absolutePath() ) );
+    if (!pix.save(userfaces.absolutePath() + '/' + imPath , "PNG"))
+        KMessageBox::sorry(this, i18n("There was an error saving the image:\n%1", userfaces.absolutePath()));
 #endif
   }
 
-  QListWidgetItem* newface = new QListWidgetItem( QIcon(QPixmap::fromImage(pix)), QFileInfo(imPath).fileName().section('.',0,0), ui.m_FacesWidget );
-  ui.m_FacesWidget->scrollToItem( newface );
-  ui.m_FacesWidget->setCurrentItem( newface );
+    QListWidgetItem* newface = new QListWidgetItem(
+        QIcon(QPixmap::fromImage(pix)),
+        QFileInfo(imPath).fileName().section('.',0,0), ui.m_FacesWidget
+    );
+    ui.m_FacesWidget->scrollToItem(newface);
+    ui.m_FacesWidget->setCurrentItem(newface);
 }
 
-void ChFaceDlg::slotGetCustomImage(  )
+void ChFaceDlg::slotGetCustomImage()
 {
-  QCheckBox* checkWidget = new QCheckBox( i18n("&Save copy in custom faces folder for future use"), 0 );
+    QCheckBox* checkWidget = new QCheckBox(i18n("&Save copy in custom faces folder for future use"), nullptr);
 
-  KFileDialog dlg( QDir::homePath(), KImageIO::pattern( KImageIO::Reading ),
-                  this, checkWidget);
+    KFileDialog dlg(
+        QDir::homePath(), KImageIO::pattern(KImageIO::Reading),
+        this, checkWidget
+    );
 
-  dlg.setOperationMode( KFileDialog::Opening );
-  dlg.setInlinePreviewShown( true );
-  dlg.setCaption( i18nc("@title:window", "Choose Image") );
-  dlg.setMode( KFile::File | KFile::LocalOnly );
+    dlg.setOperationMode(KFileDialog::Opening);
+    dlg.setInlinePreviewShown(true);
+    dlg.setCaption( i18nc("@title:window", "Choose Image"));
+    dlg.setMode(KFile::File | KFile::LocalOnly);
 
-  if (dlg.exec() == QDialog::Accepted)
-      addCustomPixmap( dlg.selectedFile(), checkWidget->isChecked() );
+    if (dlg.exec() == QDialog::Accepted) {
+        addCustomPixmap(dlg.selectedFile(), checkWidget->isChecked());
+    }
 }
 
 void ChFaceDlg::slotRemoveImage()
 {
-  ui.m_FacesWidget->clearSelection();
-  accept();
+    ui.m_FacesWidget->clearSelection();
+    accept();
 }
 
 #if 0
 void ChFaceDlg::slotSaveCustomImage()
 {
-  if ( m_FacesWidget->currentItem()->key() ==  USER_CUSTOM_KEY)
-  {
-    QDir userfaces( QDir::homePath() + USER_FACES_DIR );
-    if ( !userfaces.exists( ) )
-      userfaces.mkdir( userfaces.absolutePath() );
+    if (m_FacesWidget->currentItem()->key() ==  USER_CUSTOM_KEY) {
+        QDir userfaces(QDir::homePath() + USER_FACES_DIR);
+        if (!userfaces.exists()) {
+            userfaces.mkdir(userfaces.absolutePath());
+        }
 
-    if ( !m_FacesWidget->currentItem()->pixmap()->save( userfaces.absolutePath() + USER_CUSTOM_FILE , "PNG" ) )
-      KMessageBox::sorry(this, i18n("There was an error saving the image:\n%1", userfaces.absolutePath() ) );
-  }
+        if (!m_FacesWidget->currentItem()->pixmap()->save(userfaces.absolutePath() + USER_CUSTOM_FILE, "PNG")) {
+            KMessageBox::sorry(this, i18n("There was an error saving the image:\n%1", userfaces.absolutePath()));
+        }
+    }
 }
 #endif
 

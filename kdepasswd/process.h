@@ -54,7 +54,7 @@ public:
      * @param block Block until a full line is read?
      * @return The output string.
      */
-    QByteArray readLine(bool block=true);
+    QByteArray readLine(bool block = true);
 
     /**
      * Read all available output from the program's standard out.
@@ -69,14 +69,14 @@ public:
      * @param line The text to write.
      * @param addNewline Adds a '\n' to the line.
      */
-    void writeLine(const QByteArray &line, bool addNewline=true);
+    void writeLine(const QByteArray &line, bool addNewline = true);
 
     /**
      * Puts back a line of input.
      * @param line The line to put back.
      * @param addNewline Adds a '\n' to the line.
      */
-    void unreadLine(const QByteArray &line, bool addNewline=true);
+    void unreadLine(const QByteArray &line, bool addNewline = true);
 
     /**
      * Sets the exit string. If a line of program output matches this,
@@ -99,7 +99,7 @@ public:
     /**
      * Enables/disables local echo on the pseudo tty.
      */
-    int enableLocalEcho(bool enable=true);
+    int enableLocalEcho(bool enable = true);
 
     /**
      * Enables/disables terminal output. Relevant only to some subclasses.
@@ -115,7 +115,7 @@ public:
     /**
      * Set additinal environment variables.
      */
-    void setEnvironment( const QList<QByteArray> &env );
+    void setEnvironment(const QList<QByteArray> &env);
 
     /**
      * Returns the filedescriptor of the process.
@@ -144,7 +144,7 @@ public /* static */:
     ** @p ms must be in the range 0..999 (i.e. the maximum wait
     ** duration is 999ms, almost one second).
     */
-    static int waitMS(int fd,int ms);
+    static int waitMS(int fd, int ms);
 
 
     /**
@@ -156,9 +156,10 @@ public /* static */:
 
 
     /** Error return values for checkPidExited() */
-    enum checkPidStatus { Error=-1,  /**< No child */
-        NotExited=-2,                /**< Child hasn't exited */
-        Killed=-3                    /**< Child terminated by signal */
+    enum checkPidStatus {
+        Error = -1,     /**< No child */
+        NotExited = -2, /**< Child hasn't exited */
+        Killed = -3     /**< Child terminated by signal */
     } ;
 
     /**
@@ -174,14 +175,13 @@ public /* static */:
 protected:
     QList<QByteArray> environment() const;
 
-    bool m_bErase,   /**< @see setErase() */
-	m_bTerminal; /**< Indicates running in a terminal, causes additional
-                          newlines to be printed after output. Set to @c false
-                          in constructor. @see setTerminal()  */
-    int m_Pid; /**< PID of child process */
-    QByteArray m_Command,  /**< Unused */
-        m_Exit;            /**< String to scan for in output that indicates
-                                child has exited. */
+    bool m_bErase,         /**< @see setErase() */
+    m_bTerminal;          /**< Indicates running in a terminal, causes additional
+                               newlines to be printed after output. Set to @c false
+                               in constructor. @see setTerminal()  */
+    int m_Pid;             /**< PID of child process */
+    QByteArray m_Command;  /**< Unused */
+    QByteArray m_Exit;     /**< String to scan for in output that indicates child has exited. */
 
 private:
     int init();
