@@ -20,22 +20,15 @@
 #ifndef TEXTCREATOR_H
 #define TEXTCREATOR_H
 
-#include <QPixmap>
 #include <kio/thumbcreator.h>
 
 class TextCreator : public ThumbCreator
 {
 public:
     TextCreator();
-    ~TextCreator();
 
     bool create(const QString &path, int width, int height, QImage &img) final;
     ThumbCreator::Flags flags() const final;
-
-private:
-    char *m_data;
-    int m_dataSize;
-    QPixmap m_pixmap;
 };
 
 #endif // TEXTCREATOR_H

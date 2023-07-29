@@ -36,19 +36,12 @@ extern "C"
 {
     KDE_EXPORT ThumbCreator *new_creator()
     {
-        return new TextCreator;
+        return new TextCreator();
     }
 }
 
 TextCreator::TextCreator()
-    : m_data(0),
-      m_dataSize(0)
 {
-}
-
-TextCreator::~TextCreator()
-{
-    delete [] m_data;
 }
 
 static QTextCodec *codecFromContent(const char *data, int dataSize)
@@ -70,8 +63,7 @@ bool TextCreator::create(const QString &path, int width, int height, QImage &img
     else
         pixmapSize.setWidth( height * 3 / 4 );
 
-    if ( pixmapSize != m_pixmap.size() )
-        m_pixmap = QPixmap( pixmapSize );
+    QPixmap pixmap( pixmapSize );
 
     // one pixel for the rectangle, the rest. whitespace
     int xborder = 1 + pixmapSize.width()/16;  // minimum x-border
@@ -91,22 +83,16 @@ bool TextCreator::create(const QString &path, int width, int height, QImage &img
     const int bytesToRead = 120 * numLines;
 
     // create text-preview
+    QByteArray data(bytesToRead + 1, '\0');
     QFile file( path );
     if ( file.open( QIODevice::ReadOnly ))
     {
-        if ( !m_data || m_dataSize < bytesToRead + 1 )
-        {
-            delete [] m_data;
-            m_data = new char[bytesToRead+1];
-            m_dataSize = bytesToRead + 1;
-        }
-
-        int read = file.read( m_data, bytesToRead );
+        int read = file.read( data.data(), bytesToRead );
         if ( read > 0 )
         {
             ok = true;
-            m_data[read] = '\0';
-            QString text = codecFromContent( m_data, read )->toUnicode( m_data, read ).trimmed();
+            data[read] = '\0';
+            QString text = codecFromContent( data, read )->toUnicode( data, read ).trimmed();
             // FIXME: maybe strip whitespace and read more?
 
             // If the text contains tabs or consecutive spaces, it is probably
@@ -133,9 +119,9 @@ bool TextCreator::create(const QString &path, int width, int height, QImage &img
             QColor bgColor = QColor ( 245, 245, 245 ); // light-grey background
             QColor fgColor = Qt::black;
 #endif
-            m_pixmap.fill( bgColor );
+            pixmap.fill( bgColor );
 
-            QPainter painter( &m_pixmap );
+            QPainter painter( &pixmap );
             painter.setFont( font );
             painter.setPen( fgColor );
 
@@ -145,7 +131,7 @@ bool TextCreator::create(const QString &path, int width, int height, QImage &img
             painter.drawText( QRect( xborder, yborder, canvasWidth, canvasHeight ), text, textOption );
             painter.end();
 
-            img = m_pixmap.toImage();
+            img = pixmap.toImage();
         }
 
         file.close();
