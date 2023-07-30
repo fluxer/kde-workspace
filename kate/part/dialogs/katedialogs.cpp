@@ -926,13 +926,11 @@ KatePartPluginConfigPage::KatePartPluginConfigPage (QWidget *parent)
 
   plugins.clear();
 
-  int i = 0;
   foreach (const KatePartPluginInfo &info, KatePartPluginManager::self()->pluginList())
   {
     KPluginInfo it(info.service());
     it.setPluginEnabled(info.load);
     plugins.append(it);
-    i++;
   }
 
   selector = new KPluginSelector(0);
