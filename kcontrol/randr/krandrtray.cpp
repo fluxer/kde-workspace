@@ -434,7 +434,7 @@ void KRandRSystemTray::slotPrefs()
         KCMultiDialog *kcm = new KCMultiDialog( associatedWidget() );
         kcm->setFaceType( KCMultiDialog::Plain );
         kcm->setWindowTitle( i18n( "Configure Display" ) );
-        kcm->addModule( "display" );
+        kcm->addModule( "randr" );
         kcm->setAttribute(Qt::WA_DeleteOnClose);
         m_kcm = kcm;
     } else if (KWindowSystem::activeWindow() == m_kcm.data()->winId()) {

@@ -37,7 +37,6 @@ add_subdirectory( kdebug )
 add_subdirectory( kmetainfo )
 add_subdirectory( kpasswdstore )
 
-add_subdirectory( hardware )
 add_subdirectory( desktoppaths )
 
 if(FONTCONFIG_FOUND AND FREETYPE_FOUND)
@@ -46,3 +45,8 @@ endif()
 
 add_subdirectory( ebrowsing )
 add_subdirectory( kio )
+
+if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    # this one doesn't seem to be very portable, Alex
+    add_subdirectory(joystick)
+endif()
