@@ -39,6 +39,7 @@ static const int s_defaultbinary = static_cast<int>(KLocale::IECBinaryDialect);
 KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     : KCModule(KCMLocaleFactory::componentData(), parent, args),
     m_layout(nullptr),
+    m_messagewidget(nullptr),
     m_languagelabel(nullptr),
     m_languagebox(nullptr),
     m_binarylabel(nullptr),
@@ -77,9 +78,15 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
 
     m_layout = new QGridLayout(this);
 
+    m_messagewidget = new KMessageWidget(this);
+    m_messagewidget->setMessageType(KMessageWidget::Error);
+    m_messagewidget->setCloseButtonVisible(false);
+    m_messagewidget->hide();
+    m_layout->addWidget(m_messagewidget, 0, 0, 1, 2);
+
     m_languagelabel = new QLabel(this);
     m_languagelabel->setText(i18n("Language:"));
-    m_layout->addWidget(m_languagelabel, 0, 0, s_labelsalignment);
+    m_layout->addWidget(m_languagelabel, 1, 0, s_labelsalignment);
     m_languagebox = new KComboBox(this);
     // temporary map to sort by the displayed text
     QMap<QString, QString> languagesmap;
@@ -118,11 +125,11 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_languagebox->setToolTip(languagehelp);
     m_languagebox->setWhatsThis(languagehelp);
     connect(m_languagebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotLanguageChanged(int)));
-    m_layout->addWidget(m_languagebox, 0, 1);
+    m_layout->addWidget(m_languagebox, 1, 1);
 
     m_binarylabel = new QLabel(this);
     m_binarylabel->setText(i18n("Byte size units:"));
-    m_layout->addWidget(m_binarylabel, 1, 0, s_labelsalignment);
+    m_layout->addWidget(m_binarylabel, 2, 0, s_labelsalignment);
     m_binarybox = new KComboBox(this);
     Q_ASSERT(int(KLocale::LastBinaryDialect) == int(KLocale::MetricBinaryDialect));
     m_binarybox->addItem(
@@ -154,11 +161,11 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_binarybox->setToolTip(binaryhelp);
     m_binarybox->setWhatsThis(binaryhelp);
     connect(m_binarybox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotBinaryChanged(int)));
-    m_layout->addWidget(m_binarybox, 1, 1);
+    m_layout->addWidget(m_binarybox, 2, 1);
 
     m_measurelabel = new QLabel(this);
     m_measurelabel->setText(i18n("Measurement system:"));
-    m_layout->addWidget(m_measurelabel, 2, 0, s_labelsalignment);
+    m_layout->addWidget(m_measurelabel, 3, 0, s_labelsalignment);
     m_measurebox = new KComboBox(this);
     Q_ASSERT(int(QLocale::MetricSystem) == 0);
     Q_ASSERT(int(QLocale::UKSystem) == 2);
@@ -178,10 +185,8 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_measurebox->setToolTip(measurehelp);
     m_measurebox->setWhatsThis(measurehelp);
     connect(m_measurebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotMeasureChanged(int)));
-    m_layout->addWidget(m_measurebox, 2, 1);
+    m_layout->addWidget(m_measurebox, 3, 1);
 
-    // TODO: validate date and time format, user usually has no clue what to enter and invalid
-    // format will result in all sorts of bad stuff
     const QString datetimehelp = i18n(
         "<p>For the format details see the QDateTime documentation.</p>"
     );
@@ -218,7 +223,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_datenarrowedit->setWhatsThis(datetimehelp);
     connect(m_datenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datelayout->addWidget(m_datenarrowedit, 2, 1);
-    m_layout->addWidget(dategroup, 3, 0, 1, 2);
+    m_layout->addWidget(dategroup, 4, 0, 1, 2);
 
     QGroupBox* timegroup = new QGroupBox(this);
     timegroup->setTitle(i18n("Time format"));
@@ -251,7 +256,7 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_timenarrowedit->setWhatsThis(datetimehelp);
     connect(m_timenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     timelayout->addWidget(m_timenarrowedit, 2, 1);
-    m_layout->addWidget(timegroup, 4, 0, 1, 2);
+    m_layout->addWidget(timegroup, 5, 0, 1, 2);
 
     QGroupBox* datetimegroup = new QGroupBox(this);
     datetimegroup->setTitle(i18n("Date and time format"));
@@ -284,14 +289,14 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_datetimenarrowedit->setWhatsThis(datetimehelp);
     connect(m_datetimenarrowedit, SIGNAL(textChanged(QString)), this, SLOT(slotDateOrTimeChanged(QString)));
     datetimelayout->addWidget(m_datetimenarrowedit, 2, 1);
-    m_layout->addWidget(datetimegroup, 5, 0, 1, 2);
+    m_layout->addWidget(datetimegroup, 6, 0, 1, 2);
 
     datelayout->setColumnMinimumWidth(0, groupsalignment);
     timelayout->setColumnMinimumWidth(0, groupsalignment);
     datetimelayout->setColumnMinimumWidth(0, groupsalignment);
 
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_layout->addItem(m_spacer, 6, 1, 2);
+    m_layout->addItem(m_spacer, 7, 1, 2);
 
     setLayout(m_layout);
 }
@@ -509,8 +514,23 @@ void KCMLocale::slotMeasureChanged(const int index)
 
 void KCMLocale::slotDateOrTimeChanged(const QString &text)
 {
-    Q_UNUSED(text);
-    emit changed(true);
+    // validate date and time format, user usually has no clue what to enter and invalid format
+    // (such as empty one) will result in all sorts of bad stuff
+    bool valid = true;
+    QString message;
+    if (text.isEmpty()) {
+        valid = false;
+        message = i18n("Date/time format cannot be empty");
+    }
+    if (!valid) {
+        m_messagewidget->show();
+        m_messagewidget->setText(message);
+        // disallow saving invalid formats
+        emit changed(false);
+    } else {
+        m_messagewidget->hide();
+        emit changed(true);
+    }
 }
 
 #include "moc_kcmlocale.cpp"

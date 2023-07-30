@@ -20,6 +20,7 @@
 #define KCMLOCALE_H
 
 #include <KCModule>
+#include <KMessageWidget>
 #include <KComboBox>
 #include <KLineEdit>
 #include <QGridLayout>
@@ -51,6 +52,7 @@ private:
     void loadLocaleSettings();
 
     QGridLayout* m_layout;
+    KMessageWidget* m_messagewidget;
     QLabel* m_languagelabel;
     KComboBox* m_languagebox;
     QLabel* m_binarylabel;
