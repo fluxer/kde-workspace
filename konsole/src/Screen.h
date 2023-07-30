@@ -28,7 +28,6 @@
 #include <QtCore/QSet>
 #include <QtCore/QVector>
 #include <QtCore/QBitArray>
-#include <QtCore/QVarLengthArray>
 
 // Konsole
 #include "Character.h"
@@ -656,7 +655,7 @@ private:
 
     int _droppedLines;
 
-    QVarLengthArray<LineProperty> _lineProperties;
+    QVector<LineProperty> _lineProperties;
 
     // history buffer ---------------
     HistoryScroll* _history;

@@ -22,10 +22,8 @@
 #include "katecompletionmodel.h"
 
 #include <QTextEdit>
-#include <QtCore/qmap.h>
+#include <QMap>
 #include <QTimer>
-#include <QVarLengthArray>
-
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kapplication.h>
@@ -38,6 +36,8 @@
 #include "katerenderer.h"
 #include "kateconfig.h"
 #include "codecompletionmodelcontrollerinterfacev4.h"
+
+#include <vector>
 
 using namespace KTextEditor;
 
@@ -1759,7 +1759,7 @@ bool KateCompletionModel::shouldMatchHideCompletionList() const {
   return doHide;
 }
 
-static inline bool matchesAbbreviationHelper(const QString& word, const QString& typed, const QVarLengthArray<int>& offsets,
+static inline bool matchesAbbreviationHelper(const QString& word, const QString& typed, const std::vector<int>& offsets,
                                              int& depth, int atWord = -1, int i = 0) {
   int atLetter = 1;
   for ( ; i < typed.size(); i++ ) {
@@ -1822,7 +1822,7 @@ bool KateCompletionModel::matchesAbbreviation(const QString& word, const QString
   }
 
   bool haveUnderscore = true;
-  QVarLengthArray<int> offsets;
+  std::vector<int> offsets;
   // We want to make "KComplM" match "KateCompletionModel"; this means we need
   // to allow parts of the typed text to be not part of the actual abbreviation,
   // which consists only of the uppercased / underscored letters (so "KCM" in this case).
@@ -1834,7 +1834,7 @@ bool KateCompletionModel::matchesAbbreviation(const QString& word, const QString
     if ( c == QLatin1Char('_') ) {
       haveUnderscore = true;
     } else if ( haveUnderscore || c.isUpper() ) {
-      offsets.append(i);
+      offsets.push_back(i);
       haveUnderscore = false;
     }
   }

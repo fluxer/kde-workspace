@@ -33,7 +33,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QObject>
 #include <QtCore/QString>
-#include <QtCore/QVarLengthArray>
 #include <QtCore/QDateTime>
 #include <QtGui/QApplication>
 
@@ -52,6 +51,7 @@
 #include <kio/ioslave_defaults.h>
 #include <kdemacros.h>
 
+#include <vector>
 
 #define KIO_SFTP_SPECIAL_TIMEOUT 30
 #define ZERO_STRUCTP(x) do { if ((x) != NULL) memset((char *)(x), 0, sizeof(*(x))); } while(0)
@@ -1038,7 +1038,7 @@ void sftpProtocol::open(const KUrl &url, QIODevice::OpenMode mode)
     if (mode & QIODevice::ReadOnly) {
         size_t bytesRequested = 1024;
         ssize_t bytesRead = 0;
-        QVarLengthArray<char> buffer(bytesRequested);
+        std::vector<char> buffer(bytesRequested);
 
         bytesRead = sftp_read(mOpenFile, buffer.data(), bytesRequested);
         if (bytesRead < 0) {

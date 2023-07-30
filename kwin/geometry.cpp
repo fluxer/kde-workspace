@@ -32,11 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "cursor.h"
 #include "netinfo.h"
 #include "workspace.h"
-
-#include <kapplication.h>
-#include <kglobal.h>
-#include <kwindowsystem.h>
-
 #include "placement.h"
 #include "geometrytip.h"
 #include "rules.h"
@@ -45,12 +40,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifdef KWIN_BUILD_SCREENEDGES
 #include "screenedge.h"
 #endif
+
+#include <KApplication>
+#include <KGlobal>
+#include <KWindowSystem>
+#include <KGlobalSettings>
 #include <QDesktopWidget>
 #include <QPainter>
-#include <QVarLengthArray>
-#include <QtGui/qx11info_x11.h>
 
-#include <KGlobalSettings>
+#include <vector>
 
 namespace KWin
 {
@@ -3191,7 +3189,7 @@ void Client::setQuickTileMode(QuickTileMode mode, bool keyboard)
             const int numScreens = screens()->count();
             const int curScreen = screen();
             int nextScreen = curScreen;
-            QVarLengthArray<QRect> screens(numScreens);
+            std::vector<QRect> screens(numScreens);
             for (int i = 0; i < numScreens; ++i)   // Cache
                 screens[i] = Screens::self()->geometry(i);
             for (int i = 0; i < numScreens; ++i) {
