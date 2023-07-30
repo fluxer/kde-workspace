@@ -169,27 +169,16 @@ KCMLocale::KCMLocale(QWidget *parent, const QVariantList &args)
     m_measurebox = new KComboBox(this);
     Q_ASSERT(int(QLocale::MetricSystem) == 0);
     Q_ASSERT(int(QLocale::UKSystem) == 2);
-    m_measurebox->addItem(
-        i18n("Metric System"),
-        static_cast<int>(QLocale::MetricSystem)
-    );
-    m_measurebox->addItem(
-        i18n("Imperial System"),
-        static_cast<int>(QLocale::ImperialSystem)
-    );
-    m_measurebox->addItem(
-        i18n("UK System"),
-        static_cast<int>(QLocale::UKSystem)
-    );
+    m_measurebox->addItem(i18n("Metric System"), static_cast<int>(QLocale::MetricSystem));
+    m_measurebox->addItem(i18n("Imperial System"), static_cast<int>(QLocale::ImperialSystem));
+    m_measurebox->addItem(i18n("UK System"), static_cast<int>(QLocale::UKSystem));
     const QString measurehelp = i18n("<p>Here you can define the measurement system to use.</p>");
     m_measurebox->setToolTip(measurehelp);
     m_measurebox->setWhatsThis(measurehelp);
     connect(m_measurebox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotMeasureChanged(int)));
     m_layout->addWidget(m_measurebox, 3, 1);
 
-    const QString datetimehelp = i18n(
-        "<p>For the format details see the QDateTime documentation.</p>"
-    );
+    const QString datetimehelp = i18n("<p>For the format details see the QDateTime documentation.</p>");
     int groupsalignment = 0;
     QGroupBox* dategroup = new QGroupBox(this);
     QFontMetrics groupsmetrics = QFontMetrics(dategroup->font());
