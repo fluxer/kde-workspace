@@ -366,18 +366,59 @@ void KCMLocale::save()
     localegroup.writeEntry("Language", localelanguage);
     const int localebinary = m_binarybox->itemData(m_binarybox->currentIndex()).toInt();
     localegroup.writeEntry("BinaryUnitDialect", localebinary);
+    // when the value is same as the default do not store it in the config (it may change)
+    const QLocale locale(localelanguage);
     const int localemeasure = m_measurebox->itemData(m_measurebox->currentIndex()).toInt();
-    localegroup.writeEntry("MeasurementSystem", localemeasure);
-    // TODO: when the format is same as the default do not write it to the config (it may change)
-    localegroup.writeEntry("ShortDateFormat", m_dateshortedit->text());
-    localegroup.writeEntry("LongDateFormat", m_datelongedit->text());
-    localegroup.writeEntry("NarrowDateFormat", m_datenarrowedit->text());
-    localegroup.writeEntry("ShortTimeFormat", m_timeshortedit->text());
-    localegroup.writeEntry("LongTimeFormat", m_timelongedit->text());
-    localegroup.writeEntry("NarrowTimeFormat", m_timenarrowedit->text());
-    localegroup.writeEntry("ShortDateTimeFormat", m_datetimeshortedit->text());
-    localegroup.writeEntry("LongDateTimeFormat", m_datetimelongedit->text());
-    localegroup.writeEntry("NarrowDateTimeFormat", m_datetimenarrowedit->text());
+    if (localemeasure != int(locale.measurementSystem())) {
+        localegroup.writeEntry("MeasurementSystem", localemeasure);
+    } else {
+        localegroup.deleteEntry("MeasurementSystem");
+    }
+    if (m_dateshortedit->text() != locale.dateFormat(QLocale::ShortFormat)) {
+        localegroup.writeEntry("ShortDateFormat", m_dateshortedit->text());
+    } else {
+        localegroup.deleteEntry("ShortDateFormat");
+    }
+    if (m_datelongedit->text() != locale.dateFormat(QLocale::LongFormat)) {
+        localegroup.writeEntry("LongDateFormat", m_datelongedit->text());
+    } else {
+        localegroup.deleteEntry("LongDateFormat");
+    }
+    if (m_datenarrowedit->text() != locale.dateFormat(QLocale::NarrowFormat)) {
+        localegroup.writeEntry("NarrowDateFormat", m_datenarrowedit->text());
+    } else {
+        localegroup.deleteEntry("NarrowDateFormat");
+    }
+    if (m_timeshortedit->text() != locale.timeFormat(QLocale::ShortFormat)) {
+        localegroup.writeEntry("ShortTimeFormat", m_timeshortedit->text());
+    } else {
+        localegroup.deleteEntry("ShortTimeFormat");
+    }
+    if (m_timelongedit->text() != locale.timeFormat(QLocale::LongFormat)) {
+        localegroup.writeEntry("LongTimeFormat", m_timelongedit->text());
+    } else {
+        localegroup.deleteEntry("LongTimeFormat");
+    }
+    if (m_timenarrowedit->text() != locale.timeFormat(QLocale::NarrowFormat)) {
+        localegroup.writeEntry("NarrowTimeFormat", m_timenarrowedit->text());
+    } else {
+        localegroup.deleteEntry("NarrowTimeFormat");
+    }
+    if (m_datetimeshortedit->text() != locale.dateTimeFormat(QLocale::ShortFormat)) {
+        localegroup.writeEntry("ShortDateTimeFormat", m_datetimeshortedit->text());
+    } else {
+        localegroup.deleteEntry("ShortDateTimeFormat");
+    }
+    if (m_datetimelongedit->text() != locale.dateTimeFormat(QLocale::LongFormat)) {
+        localegroup.writeEntry("LongDateTimeFormat", m_datetimelongedit->text());
+    } else {
+        localegroup.deleteEntry("LongDateTimeFormat");
+    }
+    if (m_datetimenarrowedit->text() != locale.dateTimeFormat(QLocale::NarrowFormat)) {
+        localegroup.writeEntry("NarrowDateTimeFormat", m_datetimenarrowedit->text());
+    } else {
+        localegroup.deleteEntry("NarrowDateTimeFormat");
+    }
     localegroup.sync();
     emit changed(false);
 
