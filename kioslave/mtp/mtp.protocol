@@ -6,7 +6,6 @@ reading=true
 writing=true
 makedir=true
 deleting=true
-opening=true
 moving=false
 linking=false
 copyFromFile=true

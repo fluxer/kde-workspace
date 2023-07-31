@@ -7,7 +7,6 @@ writing=true
 makedir=true
 deleting=true
 moving=true
-opening=true
 linking=true
 copyToFile=true
 copyFromFile=true
