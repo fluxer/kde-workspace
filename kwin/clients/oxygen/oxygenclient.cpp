@@ -591,24 +591,6 @@ namespace Oxygen
 
         }
 
-        // background pixmap
-        if( isPreview() || helper().hasBackgroundPixmap( windowId() ) )
-        {
-            int offset = layoutMetric( LM_OuterPaddingTop );
-
-            // radial gradient positionning
-            const int height = hideTitleBar() ? 0:layoutMetric(LM_TitleHeight);
-            if( isMaximized() ) offset -= 3;
-
-            // background pixmap
-            const QPoint backgroundPixmapOffset( layoutMetric( LM_OuterPaddingLeft ) + layoutMetric( LM_BorderLeft ), 0 );
-            helper().setBackgroundPixmapOffset( backgroundPixmapOffset );
-
-            const QWidget* window( isPreview() ? this->widget() : widget->window() );
-            helper().renderBackgroundPixmap(painter, rect, widget, window, offset, height );
-
-        }
-
     }
 
     //_________________________________________________________

@@ -68,7 +68,6 @@ namespace Oxygen
 
         // create background atoms
         _backgroundGradientAtom = XInternAtom( QX11Info::display(), "_KDE_OXYGEN_BACKGROUND_GRADIENT", False);
-        _backgroundPixmapAtom = XInternAtom( QX11Info::display(), "_KDE_OXYGEN_BACKGROUND_PIXMAP", False);
 
         #endif
 
@@ -184,59 +183,6 @@ namespace Oxygen
 
         if ( clipRect.isValid() )
         { p->restore(); }
-    }
-
-
-    //____________________________________________________________________
-    void Helper::renderBackgroundPixmap( QPainter* p, const QRect& clipRect, const QWidget* widget, const QWidget* window, int yShift, int gradientHeight )
-    {
-
-        // background pixmap
-        if( _backgroundPixmap.isNull() ) return;
-
-        // get coordinates relative to the client area
-        // this is stupid. One could use mapTo if this was taking const QWidget* and not
-        // QWidget* as argument.
-        const QWidget* w( widget );
-        int x( 0 );
-        int y( -yShift );
-
-        while ( w != window && !w->isWindow() && w != w->parentWidget() )
-        {
-            x += w->geometry().x();
-            y += w->geometry().y();
-            w = w->parentWidget();
-        }
-
-        if ( clipRect.isValid() )
-        {
-            p->save();
-            p->setClipRegion( clipRect,Qt::IntersectClip );
-        }
-
-        // calculate upper part height
-        // special tricks are needed
-        // to handle both window contents and window decoration
-        int height( window->frameGeometry().height() );
-        int width( window->frameGeometry().width() );
-
-        // account for vertical shift
-        if( yShift > 0 ) height -= 2*yShift;
-
-        // calculate source rect
-        QPoint offset( 40, 48 - 20 );
-        QRect source( 0, 0, width + offset.x(), height + offset.y() );
-
-        offset -= _backgroundPixmapOffset;
-        source.translate( offset.x(), offset.y() );
-        source.translate( 0, 20 - gradientHeight );
-
-        // draw
-        p->drawPixmap( QPoint( -x, -y ), _backgroundPixmap, source );
-
-        if ( clipRect.isValid() )
-        { p->restore(); }
-
     }
 
     //_____________________________________________________________
@@ -914,31 +860,6 @@ namespace Oxygen
 
         #ifdef Q_WS_X11
         return hasHint( id, _backgroundGradientAtom );
-        #else
-        Q_UNUSED( id );
-        return false;
-        #endif
-    }
-
-    //____________________________________________________________________
-    void Helper::setHasBackgroundPixmap( WId id, bool value ) const
-    {
-
-        #ifdef Q_WS_X11
-        setHasHint( id, _backgroundPixmapAtom, value );
-        #else
-        Q_UNUSED( id );
-        Q_UNUSED( value );
-        #endif
-        return;
-    }
-
-    //____________________________________________________________________
-    bool Helper::hasBackgroundPixmap( WId id ) const
-    {
-
-        #ifdef Q_WS_X11
-        return hasHint( id, _backgroundPixmapAtom );
         #else
         Q_UNUSED( id );
         return false;

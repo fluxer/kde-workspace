@@ -130,10 +130,6 @@ namespace Oxygen
 
             p->fillRect( widget->rect(), color );
         }
-
-        // background pixmap
-        Helper::renderBackgroundPixmap( p, clipRect, widget, widget->window(), y_shift, gradientHeight );
-
     }
 
     //____________________________________________________________________

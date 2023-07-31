@@ -102,12 +102,6 @@ namespace Oxygen
         // read shadowCache configuration
         _shadowCache.readConfig();
 
-        // background pixmap
-        {
-            KConfigGroup group( config->group("Common") );
-            helper().setBackgroundPixmap( group.readEntry( "BackgroundPixmap", "" ) );
-        }
-
     }
 
     //_________________________________________________________________
