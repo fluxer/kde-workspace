@@ -256,6 +256,12 @@ add_feature_info(xkill
     "Window killing support in KWin"
 )
 
+find_program(NTPDATE_OR_RDATE_EXECUTABLE NAMES ntpdate rdate)
+add_feature_info(ntpdate_or_rdate
+    NTPDATE_OR_RDATE_EXECUTABLE
+    "Set date and time automatically"
+)
+
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
