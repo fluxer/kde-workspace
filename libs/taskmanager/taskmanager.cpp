@@ -46,6 +46,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 namespace TaskManager
 {
 
+static const KCatalogLoader loader("libtaskmanager");
+
 class TaskManagerSingleton
 {
 public:
@@ -99,7 +101,6 @@ TaskManager::TaskManager()
     : QObject(),
       d(new Private(this))
 {
-    KGlobal::locale()->insertCatalog("libtaskmanager");
     connect(KWindowSystem::self(), SIGNAL(windowAdded(WId)),
             this,       SLOT(windowAdded(WId)));
     connect(KWindowSystem::self(), SIGNAL(windowRemoved(WId)),
@@ -142,7 +143,6 @@ TaskManager::~TaskManager()
     d->startups.clear();
     qDeleteAll(startups);
 
-    KGlobal::locale()->removeCatalog("libtaskmanager");
     delete d;
 }
 
