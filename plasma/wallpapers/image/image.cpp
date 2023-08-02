@@ -217,9 +217,7 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
         QTime time(0, 0, 0);
         time = time.addSecs(m_delay);
         m_uiSlideshow.m_slideshowDelay->setTime(time);
-        m_uiSlideshow.m_slideshowDelay->setTimeRange(
-            QTime(0, 0, 10), m_uiSlideshow.m_slideshowDelay->maximumTime()
-        );
+        m_uiSlideshow.m_slideshowDelay->setMinimumTime(QTime(0, 0, 10));
         connect(m_uiSlideshow.m_slideshowDelay, SIGNAL(timeChanged(QTime)),
                 this, SLOT(timeChanged(QTime)));
 
@@ -251,7 +249,7 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
         connect(m_uiSlideshow.m_resizeMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(modified()));
         connect(m_uiSlideshow.m_addDir, SIGNAL(clicked()), this, SLOT(modified()));
         connect(m_uiSlideshow.m_removeDir, SIGNAL(clicked()), this, SLOT(modified()));
-        connect(m_uiSlideshow.m_slideshowDelay, SIGNAL(dateTimeChanged(QDateTime)), this, SLOT(modified()));
+        connect(m_uiSlideshow.m_slideshowDelay, SIGNAL(timeChanged(QDateTime)), this, SLOT(modified()));
         connect(m_uiSlideshow.m_dirlist, SIGNAL(currentRowChanged(int)), SLOT(updateDirs()));
     }
 
