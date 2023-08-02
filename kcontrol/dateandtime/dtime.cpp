@@ -94,6 +94,7 @@ Dtime::Dtime(QWidget * parent)
   v3->addStretch();
 
   timeEdit = new QTimeEdit( timeBox );
+  timeEdit->setLocale(KGlobal::locale()->toLocale());
   v3->addWidget(timeEdit);
 
   v3->addStretch();
