@@ -249,7 +249,7 @@ QWidget* Image::createConfigurationInterface(QWidget* parent)
         connect(m_uiSlideshow.m_resizeMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(modified()));
         connect(m_uiSlideshow.m_addDir, SIGNAL(clicked()), this, SLOT(modified()));
         connect(m_uiSlideshow.m_removeDir, SIGNAL(clicked()), this, SLOT(modified()));
-        connect(m_uiSlideshow.m_slideshowDelay, SIGNAL(timeChanged(QDateTime)), this, SLOT(modified()));
+        connect(m_uiSlideshow.m_slideshowDelay, SIGNAL(timeChanged(QTime)), this, SLOT(modified()));
         connect(m_uiSlideshow.m_dirlist, SIGNAL(currentRowChanged(int)), SLOT(updateDirs()));
     }
 
