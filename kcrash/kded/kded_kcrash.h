@@ -21,7 +21,8 @@
 
 #include "kdedmodule.h"
 
-#include <KDirWatch>
+#include <kdirwatch.h>
+#include <knotification.h>
 
 class KCrashModule: public KDEDModule
 {
@@ -34,11 +35,13 @@ public:
 
 private Q_SLOTS:
     void slotDirty(const QString &path);
+    void slotClosed();
     void slotReport();
 
 private:
     QString m_kcrashpath;
     KDirWatch *m_dirwatch;
+    QList<KNotification*> m_notifications;
 };
 
 #endif // KCRASH_KDED_H

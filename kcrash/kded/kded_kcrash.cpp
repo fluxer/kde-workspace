@@ -18,7 +18,6 @@
 
 #include "kded_kcrash.h"
 #include <kpluginfactory.h>
-#include <knotification.h>
 #include <kglobal.h>
 #include <kstandarddirs.h>
 #include <klocale.h>
@@ -56,7 +55,15 @@ KCrashModule::KCrashModule(QObject *parent, const QList<QVariant> &args)
 
 KCrashModule::~KCrashModule()
 {
-    m_dirwatch->deleteLater();
+    delete m_dirwatch;
+    kDebug() << "Closing notifications" << m_notifications.size();
+    QMutableListIterator<KNotification*> iter(m_notifications);
+    while (iter.hasNext()) {
+        KNotification* knotification = iter.next();
+        disconnect(knotification, 0, this, 0);
+        knotification->close();
+        iter.remove();
+    }
 }
 
 void KCrashModule::slotDirty(const QString &path)
@@ -94,11 +101,14 @@ void KCrashModule::slotDirty(const QString &path)
                 kcrashappname = kcrashdata["appname"].toString();
             }
             kDebug() << "Sending notification for" << kcrashfilepath;
-            KNotification* knotification = new KNotification("Crash");
+            // NOTE: when the notification is closed/deleted the actions become non-operational
+            KNotification* knotification = new KNotification("Crash", KNotification::Persistent, this);
             knotification->setComponentData(KComponentData("kcrash"));
             knotification->setTitle(i18n("%1 crashed", kcrashappname));
             knotification->setText(i18n("For details about the crash look into the system log."));
             knotification->setActions(QStringList() << i18n("Report"));
+            m_notifications.append(knotification);
+            connect(knotification, SIGNAL(closed()), this, SLOT(slotClosed()));
             connect(knotification, SIGNAL(action1Activated()), this, SLOT(slotReport()));
             knotification->sendEvent();
         }
@@ -116,8 +126,17 @@ void KCrashModule::slotDirty(const QString &path)
     }
 }
 
+void KCrashModule::slotClosed()
+{
+    KNotification* knotification = qobject_cast<KNotification*>(sender());
+    kDebug() << "Notification closed" << knotification;
+    m_notifications.removeAll(knotification);
+}
+
 void KCrashModule::slotReport()
 {
+    KNotification* knotification = qobject_cast<KNotification*>(sender());
+    knotification->close();
     const QString kcrashreporturl = KDE_BUG_REPORT_URL;
     KToolInvocation::invokeBrowser(kcrashreporturl);
 }
