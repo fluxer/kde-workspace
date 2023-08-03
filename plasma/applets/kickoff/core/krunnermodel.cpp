@@ -64,25 +64,19 @@ Plasma::RunnerManager * runnerManager() {
 
         conf.sync();
 
-        // runner:  "konquerorsessions"   "Konqueror Sessions"
-        // runner:  "desktopsessions"   "Desktop Sessions"
+        // runner:  "sessions"   "Desktop Sessions"
         // runner:  "places"   "Places"
         // runner:  "windows"   "Windows"
         // runner:  "plasma-desktop"   "Plasma Desktop Shell"
         // runner:  "services"   "Applications"
-        // runner:  "PowerDevil"   "PowerDevil"
-        // runner:  "browserhistory"   "Web Browser History"
+        // runner:  "powerdevil"   "PowerDevil"
         // runner:  "shell"   "Command Line"
         // runner:  "katesessions"   "Kate Sessions"
         // runner:  "locations"   "Locations"
         // runner:  "webshortcuts"   "Web Shortcuts"
-        // runner:  "kabccontacts"   "Contacts"
         // runner:  "konsolesessions"   "Konsole Sessions"
         // runner:  "recentdocuments"   "Recent Documents"
         // runner:  "calculator"   "Calculator"
-        // runner:  "amarok"   "Amarok"
-        // runner:  "wikipedia"   "Wikipedia"
-        // runner:  "kopete"   "Kopete Contact Runner"
         // runner:  "bookmarks"   "Bookmarks"
         // runner:  "unitconverter"   "Unit Converter"
     }
