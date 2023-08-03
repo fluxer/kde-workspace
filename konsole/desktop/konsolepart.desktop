@@ -4,11 +4,6 @@ X-KDE-ServiceTypes=KParts/ReadOnlyPart,inode/directory,TerminalEmulator
 Icon=utilities-terminal
 
 X-KDE-Library=konsolepart
-X-KDE-BrowserView-AllowAsDefault=false
-X-KDE-BrowserView-HideFromMenus=true
-X-KDE-BrowserView-Toggable=true
-X-KDE-BrowserView-ToggableView-Orientation=horizontal
-X-KDE-BrowserView-FollowActive=true
 
 Name=Terminal Emulator
 Name[af]=Terminaal Emulasie

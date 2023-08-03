@@ -85,9 +85,6 @@ Name[zh_TW]=Dolphin 檢視
 MimeType=inode/directory;
 X-KDE-ServiceTypes=KParts/ReadOnlyPart
 X-KDE-Library=dolphinpart
-#X-KDE-BrowserView-Args=Icon
-X-KDE-BrowserView-HideFromMenus=true
-X-KDE-BrowserView-Built-Into=konqueror
 Icon=view-icon
 InitialPreference=7
 
