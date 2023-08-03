@@ -31,7 +31,6 @@
 #include <knuminput.h>
 
 #include "kcmlaunch.h"
-#include "krunner_interface.h"
 #include "kwin_interface.h"
 #include <KPluginFactory>
 #include <KPluginLoader>
