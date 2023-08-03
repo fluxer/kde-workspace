@@ -1,0 +1,10 @@
+[Global]
+Name=kcrash
+Comment=Crash notifier
+IconName=tools-report-bug
+
+[Event/Crash]
+Name=Application crashed
+Action=Sound|Popup
+Sound=KDE-Sys-App-Error-Serious-Very.ogg
+IconName=tools-report-bug

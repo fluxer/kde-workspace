@@ -1,0 +1,11 @@
+[Desktop Entry]
+Icon=tools-report-bug
+Name=Crash Notifier
+Comment=Notifies about crashed applications
+Type=Service
+X-KDE-ServiceTypes=KDEDModule
+X-KDE-Library=kcrash
+X-KDE-DBus-ModuleName=kcrash
+X-KDE-Kded-autoload=true
+X-KDE-Kded-load-on-demand=true
+OnlyShowIn=KDE;

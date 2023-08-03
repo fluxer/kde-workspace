@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
+    Copyright (C) 2023 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,25 +16,29 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef BACKTRACEPARSERLLDB_H
-#define BACKTRACEPARSERLLDB_H
+#ifndef KCRASH_KDED_H
+#define KCRASH_KDED_H
 
-#include "backtraceparser.h"
+#include "kdedmodule.h"
 
-class BacktraceParserLldbPrivate;
+#include <KDirWatch>
 
-class BacktraceParserLldb : public BacktraceParser
+class KCrashModule: public KDEDModule
 {
     Q_OBJECT
-    Q_DECLARE_PRIVATE(BacktraceParserLldb)
+    Q_CLASSINFO("D-Bus Interface", "org.kde.kcrash")
+
 public:
-    explicit BacktraceParserLldb(QObject *parent = 0);
+    KCrashModule(QObject *parent, const QList<QVariant> &args);
+    ~KCrashModule();
 
-protected:
-    virtual BacktraceParserPrivate *constructPrivate() const;
+private Q_SLOTS:
+    void slotDirty(const QString &path);
+    void slotReport();
 
-protected Q_SLOTS:
-    virtual void newLine(const QString &line);
+private:
+    QString m_kcrashpath;
+    KDirWatch *m_dirwatch;
 };
 
-#endif // BACKTRACEPARSERLLDB_H
+#endif // KCRASH_KDED_H

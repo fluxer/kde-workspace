@@ -1,8 +1,0 @@
-[General]
-Name=lldb
-TryExec=lldb
-Backends=KCrash
-
-[KCrash]
-Exec=lldb --batch --source %tempfile --attach-pid %pid
-BatchCommands=settings set use-color no\nthread backtrace all

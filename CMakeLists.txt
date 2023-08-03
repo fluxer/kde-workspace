@@ -220,12 +220,6 @@ add_feature_info(qrencode
     "QR Code support in klipper"
 )
 
-find_program(GDB_OR_LLDB_EXECUTABLE NAMES gdb lldb)
-add_feature_info(gdb_or_lldb
-    GDB_OR_LLDB_EXECUTABLE
-    "Backtraces support"
-)
-
 find_program(CTAGS_EXECUTABLE ctags ctags-universal ctags-exuberant exctags uctags)
 add_feature_info(ctags
     CTAGS_EXECUTABLE
@@ -354,7 +348,7 @@ add_subdirectory(ktraderclient)
 add_subdirectory(kreadconfig)
 add_subdirectory(kmimetypefinder)
 # UI Helper applications
-add_subdirectory(drkonqi)
+add_subdirectory(kcrash)
 add_subdirectory(knetattach)
 add_subdirectory(kdirshare)
 add_subdirectory(keditfiletype)
