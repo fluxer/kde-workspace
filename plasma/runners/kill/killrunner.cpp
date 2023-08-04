@@ -42,6 +42,7 @@ KillRunner::~KillRunner()
 
 void KillRunner::reloadConfiguration()
 {
+#warning TODO: untranslated keyword match, why is it even translated when it is configurable?
     KConfigGroup grp = config();
     m_triggerWord.clear();
     if (grp.readEntry(CONFIG_USE_TRIGGERWORD, true)) {

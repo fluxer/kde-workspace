@@ -134,31 +134,37 @@ void SolidRunner::createOrUpdateMatches(const QStringList &udiList)
     bool onlyOptical = false;
     bool forceEject = false;
     bool showDevices = false;
-    if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "device") , Qt::CaseInsensitive)) {
+    if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "device"), Qt::CaseInsensitive) ||
+        keywords[0].startsWith(QLatin1String("device"), Qt::CaseInsensitive)) {
         showDevices = true;
         keywords.removeFirst();
     }
 
     if (!keywords.isEmpty()) {
-        if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "mount") , Qt::CaseInsensitive)) {
+        if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "mount"), Qt::CaseInsensitive) ||
+            keywords[0].startsWith(QLatin1String("mount"), Qt::CaseInsensitive)) {
             showDevices = true;
             onlyMountable = true;
             keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unmount") , Qt::CaseInsensitive)) {
+        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unmount"), Qt::CaseInsensitive) ||
+            keywords[0].startsWith(QLatin1String("unmount"), Qt::CaseInsensitive)) {
             showDevices = true;
             onlyMounted = true;
             keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "eject") , Qt::CaseInsensitive)) {
+        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "eject"), Qt::CaseInsensitive) ||
+            keywords[0].startsWith(QLatin1String("eject"), Qt::CaseInsensitive)) {
             showDevices = true;
             onlyOptical = true;
             forceEject = true;
             keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unlock") , Qt::CaseInsensitive)) {
+        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unlock"), Qt::CaseInsensitive) ||
+            keywords[0].startsWith(QLatin1String("unlock"), Qt::CaseInsensitive)) {
             showDevices = true;
             onlyMountable = true;
             onlyEncrypted = true;
             keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "lock") , Qt::CaseInsensitive)) {
+        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "lock"), Qt::CaseInsensitive) ||
+            keywords[0].startsWith(QLatin1String("lock"), Qt::CaseInsensitive)) {
             showDevices = true;
             onlyMounted = true;
             onlyEncrypted = true;

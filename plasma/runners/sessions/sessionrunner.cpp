@@ -31,7 +31,7 @@ SessionRunner::SessionRunner(QObject *parent, const QVariantList &args)
 {
     Q_UNUSED(args)
 
-    setObjectName( QLatin1String("Sessions" ));
+    setObjectName(QLatin1String("Sessions"));
     setPriority(LowPriority);
     setIgnoredTypes(Plasma::RunnerContext::Directory | Plasma::RunnerContext::File | 
                     Plasma::RunnerContext::NetworkLocation);
@@ -67,10 +67,12 @@ SessionRunner::~SessionRunner()
 {
 }
 
-void SessionRunner::matchCommands(QList<Plasma::QueryMatch> &matches, const QString& term)
+void SessionRunner::matchCommands(QList<Plasma::QueryMatch> &matches, const QString &term)
 {
-    if (term.compare(i18nc("log out command","logout"), Qt::CaseInsensitive) == 0 ||
-            term.compare(i18n("log out"), Qt::CaseInsensitive) == 0) {
+    if (term.compare(i18nc("log out command", "logout"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("logout"), Qt::CaseInsensitive) == 0 ||
+        term.compare(i18n("log out"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("log out"), Qt::CaseInsensitive) == 0) {
         Plasma::QueryMatch match(this);
         match.setText(i18nc("log out command","Logout"));
         match.setIcon(KIcon("system-log-out"));
@@ -79,7 +81,9 @@ void SessionRunner::matchCommands(QList<Plasma::QueryMatch> &matches, const QStr
         match.setRelevance(0.9);
         matches << match;
     } else if (term.compare(i18nc("restart computer command", "restart"), Qt::CaseInsensitive) == 0 ||
-            term.compare(i18nc("restart computer command", "reboot"), Qt::CaseInsensitive) == 0) {
+        term.compare(QLatin1String("restart"), Qt::CaseInsensitive) == 0 ||
+        term.compare(i18nc("restart computer command", "reboot"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("reboot"), Qt::CaseInsensitive) == 0) {
         Plasma::QueryMatch match(this);
         match.setText(i18n("Restart the computer"));
         match.setIcon(KIcon("system-reboot"));
@@ -87,7 +91,8 @@ void SessionRunner::matchCommands(QList<Plasma::QueryMatch> &matches, const QStr
         match.setType(Plasma::QueryMatch::ExactMatch);
         match.setRelevance(0.9);
         matches << match;
-    } else if (term.compare(i18nc("shutdown computer command","shutdown"), Qt::CaseInsensitive) == 0) {
+    } else if (term.compare(i18nc("shutdown computer command", "shutdown"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("shutdown"), Qt::CaseInsensitive) == 0) {
         Plasma::QueryMatch match(this);
         match.setText(i18n("Shutdown the computer"));
         match.setIcon(KIcon("system-shutdown"));
@@ -95,7 +100,8 @@ void SessionRunner::matchCommands(QList<Plasma::QueryMatch> &matches, const QStr
         match.setType(Plasma::QueryMatch::ExactMatch);
         match.setRelevance(0.9);
         matches << match;
-    } else if (term.compare(i18nc("lock screen command","lock"), Qt::CaseInsensitive) == 0) {
+    } else if (term.compare(i18nc("lock screen command", "lock"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("lock"), Qt::CaseInsensitive) == 0) {
         Plasma::QueryMatch match(this);
         match.setText(i18n("Lock the screen"));
         match.setIcon(KIcon("system-lock-screen"));
@@ -121,8 +127,10 @@ void SessionRunner::match(Plasma::RunnerContext &context)
     // first compare with SESSIONS. this must *NOT* be translated (i18n)
     // as it is used as an internal command trigger (e.g. via d-bus),
     // not as a user supplied query. and yes, "Ugh, magic strings"
-    bool listAll = term.compare("SESSIONS", Qt::CaseInsensitive) == 0 ||
-                   term.compare(i18nc("User sessions", "sessions"), Qt::CaseInsensitive) == 0;
+    bool listAll = (
+        term.compare("SESSIONS", Qt::CaseInsensitive) == 0 ||
+        term.compare(i18nc("User sessions", "sessions"), Qt::CaseInsensitive) == 0
+    );
 
     if (!listAll) {
         //no luck, try the "switch" user command

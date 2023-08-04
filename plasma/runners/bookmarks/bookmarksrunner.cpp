@@ -42,8 +42,10 @@ BookmarksRunner::BookmarksRunner( QObject* parent, const QVariantList &args )
     kDebug(kdbg_code) << "Creating BookmarksRunner";
     setObjectName( QLatin1String("Bookmarks" ));
     addSyntax(Plasma::RunnerSyntax(":q:", i18n("Finds web browser bookmarks matching :q:.")));
-    setDefaultSyntax(Plasma::RunnerSyntax(i18nc("list of all web browser bookmarks", "bookmarks"),
-                                   i18n("List all web browser bookmarks")));
+    setDefaultSyntax(
+        Plasma::RunnerSyntax(i18nc("list of all web browser bookmarks", "bookmarks"),
+        i18n("List all web browser bookmarks"))
+    );
 
     connect(this, SIGNAL(prepare()), this, SLOT(prep()));
 }

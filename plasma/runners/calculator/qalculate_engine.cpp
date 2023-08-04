@@ -30,7 +30,6 @@
 #include <QApplication>
 #include <QClipboard>
 
-#include <KProtocolManager>
 #include <KDebug>
 #include <KLocale>
 

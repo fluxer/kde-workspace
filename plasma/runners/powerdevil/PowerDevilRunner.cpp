@@ -103,7 +103,8 @@ void PowerDevilRunner::match(Plasma::RunnerContext &context)
     }
 
     QList<Plasma::QueryMatch> matches;
-    if (term.compare(i18nc("Note this is a KRunner keyword", "suspend"), Qt::CaseInsensitive) == 0) {
+    if (term.compare(i18nc("Note this is a KRunner keyword", "suspend"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("suspend"), Qt::CaseInsensitive) == 0) {
         QSet< Solid::PowerManagement::SleepState > states = Solid::PowerManagement::supportedSleepStates();
 
         if (states.contains(Solid::PowerManagement::SuspendState)) {
@@ -117,13 +118,19 @@ void PowerDevilRunner::match(Plasma::RunnerContext &context)
         if (states.contains(Solid::PowerManagement::HybridSuspendState)) {
             addSuspendMatch(Solid::PowerManagement::HybridSuspendState, matches);
         }
+#warning TODO: do not match these when not supported by the system
     } else if (term.compare(i18nc("Note this is a KRunner keyword", "sleep"), Qt::CaseInsensitive) == 0 ||
-               term.compare(i18nc("Note this is a KRunner keyword", "to ram"), Qt::CaseInsensitive) == 0) {
+        term.compare(QLatin1String("sleep"), Qt::CaseInsensitive) == 0 ||
+        term.compare(i18nc("Note this is a KRunner keyword", "to ram"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("to ram"), Qt::CaseInsensitive) == 0) {
         addSuspendMatch(Solid::PowerManagement::SuspendState, matches);
     } else if (term.compare(i18nc("Note this is a KRunner keyword", "hibernate"), Qt::CaseInsensitive) == 0 ||
-               term.compare(i18nc("Note this is a KRunner keyword", "to disk"), Qt::CaseInsensitive) == 0) {
+        term.compare(QLatin1String("hibernate"), Qt::CaseInsensitive) == 0 ||
+        term.compare(i18nc("Note this is a KRunner keyword", "to disk"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("to disk"), Qt::CaseInsensitive) == 0) {
         addSuspendMatch(Solid::PowerManagement::HibernateState, matches);
-    } else if (term.compare(i18nc("Note this is a KRunner keyword", "hybrid"), Qt::CaseInsensitive) == 0) {
+    } else if (term.compare(i18nc("Note this is a KRunner keyword", "hybrid"), Qt::CaseInsensitive) == 0 ||
+        term.compare(QLatin1String("hybrid"), Qt::CaseInsensitive) == 0) {
         addSuspendMatch(Solid::PowerManagement::HybridSuspendState, matches);
     }
 

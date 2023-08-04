@@ -30,10 +30,11 @@
 #include <plasma/theme.h>
 
 static const QString s_plasmaService = "org.kde.plasma-desktop";
+static const char* s_desktopConsole = "desktop console";
 
 PlasmaDesktopRunner::PlasmaDesktopRunner(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args),
-      m_desktopConsoleKeyword(i18nc("Note this is a KRunner keyword", "desktop console")),
+      m_desktopConsoleKeyword(i18nc("Note this is a KRunner keyword", s_desktopConsole)),
       m_enabled(false)
 {
     setObjectName( QLatin1String("Plasma-Desktop" ));
@@ -53,7 +54,12 @@ PlasmaDesktopRunner::~PlasmaDesktopRunner()
 
 void PlasmaDesktopRunner::match(Plasma::RunnerContext &context)
 {
-    if (m_enabled && context.query().startsWith(m_desktopConsoleKeyword, Qt::CaseInsensitive)) {
+    const QString query = context.query();
+    bool matches = query.startsWith(m_desktopConsoleKeyword, Qt::CaseInsensitive);
+    if (!matches) {
+        matches = query.startsWith(QLatin1String(s_desktopConsole), Qt::CaseInsensitive);
+    }
+    if (m_enabled && matches) {
         Plasma::QueryMatch match(this);
         match.setId("plasma-desktop-console");
         match.setType(Plasma::QueryMatch::ExactMatch);
@@ -72,7 +78,8 @@ void PlasmaDesktopRunner::run(const Plasma::RunnerContext &context, const Plasma
         QDBusMessage message;
 
         QString query = context.query();
-        if (query.compare(m_desktopConsoleKeyword, Qt::CaseInsensitive) == 0) {
+        if (query.compare(m_desktopConsoleKeyword, Qt::CaseInsensitive) == 0
+            || query.compare(QLatin1String(s_desktopConsole), Qt::CaseInsensitive) == 0) {
             message = QDBusMessage::createMethodCall(s_plasmaService, "/MainApplication",
                                                      QString(), "showInteractiveConsole");
         } else if (query.startsWith(m_desktopConsoleKeyword)) {

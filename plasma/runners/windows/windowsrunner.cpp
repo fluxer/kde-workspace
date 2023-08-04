@@ -125,41 +125,72 @@ void WindowsRunner::match(Plasma::RunnerContext& context)
 
     // check if the search term ends with an action keyword
     WindowAction action = ActivateAction;
-    if (term.endsWith(i18nc("Note this is a KRunner keyword", "activate") , Qt::CaseInsensitive)) {
+    if (term.endsWith(i18nc("Note this is a KRunner keyword", "activate"), Qt::CaseInsensitive)) {
         action = ActivateAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "activate")) - 1);
+    } else if (term.endsWith(QLatin1String("activate"), Qt::CaseInsensitive)) {
+        action = ActivateAction;
+        term = term.left(term.lastIndexOf(QLatin1String("activate")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "close") , Qt::CaseInsensitive)) {
         action = CloseAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "close")) - 1);
+    } else if (term.endsWith(QLatin1String("close") , Qt::CaseInsensitive)) {
+        action = CloseAction;
+        term = term.left(term.lastIndexOf(QLatin1String("close")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "min") , Qt::CaseInsensitive)) {
         action = MinimizeAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "min")) - 1);
+    } else if (term.endsWith(QLatin1String("min") , Qt::CaseInsensitive)) {
+        action = MinimizeAction;
+        term = term.left(term.lastIndexOf(QLatin1String("min")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "minimize") , Qt::CaseInsensitive)) {
         action = MinimizeAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "minimize")) - 1);
+    } else if (term.endsWith(QLatin1String("minimize") , Qt::CaseInsensitive)) {
+        action = MinimizeAction;
+        term = term.left(term.lastIndexOf(QLatin1String("minimize")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "max") , Qt::CaseInsensitive)) {
         action = MaximizeAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "max")) - 1);
+    } else if (term.endsWith(QLatin1String("max") , Qt::CaseInsensitive)) {
+        action = MaximizeAction;
+        term = term.left(term.lastIndexOf(QLatin1String("max")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "maximize") , Qt::CaseInsensitive)) {
         action = MaximizeAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "maximize")) - 1);
+    } else if (term.endsWith(QLatin1String("maximize") , Qt::CaseInsensitive)) {
+        action = MaximizeAction;
+        term = term.left(term.lastIndexOf(QLatin1String("maximize")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "fullscreen") , Qt::CaseInsensitive)) {
         action = FullscreenAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "fullscreen")) - 1);
+    } else if (term.endsWith(QLatin1String("fullscreen") , Qt::CaseInsensitive)) {
+        action = FullscreenAction;
+        term = term.left(term.lastIndexOf(QLatin1String("fullscreen")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "shade") , Qt::CaseInsensitive)) {
         action = ShadeAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "shade")) - 1);
+    } else if (term.endsWith(QLatin1String("shade") , Qt::CaseInsensitive)) {
+        action = ShadeAction;
+        term = term.left(term.lastIndexOf(QLatin1String("shade")) - 1);
     } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "keep above") , Qt::CaseInsensitive)) {
         action = KeepAboveAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "keep above")) - 1);
-    } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "keep below") , Qt::CaseInsensitive)) {
+    } else if (term.endsWith(QLatin1String("keep above") , Qt::CaseInsensitive)) {
+        action = KeepAboveAction;
+        term = term.left(term.lastIndexOf(QLatin1String("keep above")) - 1);
+    } else if (term.endsWith(i18nc("Note this is a KRunner keyword", "keep below"), Qt::CaseInsensitive)) {
         action = KeepBelowAction;
         term = term.left(term.lastIndexOf(i18nc("Note this is a KRunner keyword", "keep below")) - 1);
+    } else if (term.endsWith(QLatin1String("keep below") , Qt::CaseInsensitive)) {
+        action = KeepBelowAction;
+        term = term.left(term.lastIndexOf(QLatin1String("keep below")) - 1);
     }
 
     // keyword match: when term starts with "window" we list all windows
     // the list can be restricted to windows matching a given name, class, role or desktop
-    if (term.startsWith(i18nc("Note this is a KRunner keyword", "window") , Qt::CaseInsensitive)) {
+    if (term.startsWith(i18nc("Note this is a KRunner keyword", "window"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("window"), Qt::CaseInsensitive)) {
         const QStringList keywords = term.split(" ");
         QString windowName;
         QString windowClass;
@@ -169,13 +200,17 @@ void WindowsRunner::match(Plasma::RunnerContext& context)
             if (keyword.endsWith('=')) {
                 continue;
             }
-            if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "name") + "=" , Qt::CaseInsensitive)) {
+            if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "name") + "=" , Qt::CaseInsensitive) ||
+                keyword.startsWith(QLatin1String("name="), Qt::CaseInsensitive)) {
                 windowName = keyword.split("=")[1];
-            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "class") + "=" , Qt::CaseInsensitive)) {
+            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "class") + "=" , Qt::CaseInsensitive) ||
+                keyword.startsWith(QLatin1String("class="), Qt::CaseInsensitive)) {
                 windowClass = keyword.split("=")[1];
-            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "role") + "=" , Qt::CaseInsensitive)) {
+            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "role") + "=" , Qt::CaseInsensitive) ||
+                keyword.startsWith(QLatin1String("role="), Qt::CaseInsensitive)) {
                 windowRole = keyword.split("=")[1];
-            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "desktop") + "=" , Qt::CaseInsensitive)) {
+            } else if (keyword.startsWith(i18nc("Note this is a KRunner keyword", "desktop") + "=", Qt::CaseInsensitive) ||
+                keyword.startsWith(QLatin1String("desktop="), Qt::CaseInsensitive)) {
                 bool ok;
                 desktop = keyword.split("=")[1].toInt(&ok);
                 if (!ok || desktop > KWindowSystem::numberOfDesktops()) {
@@ -237,7 +272,8 @@ void WindowsRunner::match(Plasma::RunnerContext& context)
 
     bool desktopAdded = false;
     // check for desktop keyword
-    if (term.startsWith(i18nc("Note this is a KRunner keyword", "desktop") , Qt::CaseInsensitive)) {
+    if (term.startsWith(i18nc("Note this is a KRunner keyword", "desktop") , Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("desktop") , Qt::CaseInsensitive)) {
         const QStringList parts = term.split(" ");
         if (parts.size() == 1) {
             // only keyword - list all desktops

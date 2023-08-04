@@ -86,7 +86,10 @@ void PlacesRunnerHelper::match(Plasma::RunnerContext *c)
     }
 
     QList<Plasma::QueryMatch> matches;
-    const bool all = term.compare(i18n("places"), Qt::CaseInsensitive) == 0;
+    bool all = term.compare(i18n("places"), Qt::CaseInsensitive) == 0;
+    if (!all) {
+        all = term.compare(QLatin1String("places"), Qt::CaseInsensitive) == 0;
+    }
     for (int i = 0; i <= m_places.rowCount(); i++) {
         QModelIndex current_index = m_places.index(i, 0);
         Plasma::QueryMatch::Type type = Plasma::QueryMatch::NoMatch;
