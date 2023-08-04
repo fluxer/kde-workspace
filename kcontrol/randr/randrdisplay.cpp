@@ -198,7 +198,7 @@ bool RandRDisplay::syncTrayApp(KConfig& config)
 }
 
 // to be used during desktop startup, make all screens provide the shell commands
-// (using xrandr cli tool), save them here and a script will perform these commands
+// (using xrandr cli tool), save them here and the KCM will execute these commands
 // early during desktop startup
 void RandRDisplay::saveStartup(KConfig& config)
 {
