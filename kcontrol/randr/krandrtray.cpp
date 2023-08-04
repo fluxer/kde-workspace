@@ -20,7 +20,6 @@
 #include <config-X11.h>
 
 #include "krandrtray.h"
-#include "krandrpassivepopup.h"
 #include "moc_krandrtray.cpp"
 #include "randrscreen.h"
 #include "randroutput.h"
@@ -219,26 +218,6 @@ void KRandRSystemTray::updateToolTip()
     }
 
     setToolTip(icon, title, subTitle);
-}
-
-void KRandRSystemTray::configChanged()
-{
-    m_display->refresh();
-    updateToolTip();
-    static bool first = true;
-
-    if (!first) {
-        // TODO: display config changed message
-        QString message = "Screen config changed";
-
-        KRandrPassivePopup::message(
-            i18n("Screen configuration has changed"),
-            message, SmallIcon("view-fullscreen"),
-            associatedWidget()
-        );
-    }
-
-    first = false;
 }
 
 void KRandRSystemTray::populateMenu(KMenu* menu)

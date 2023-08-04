@@ -118,7 +118,7 @@ void RandRScreen::loadSettings(bool notify)
 
     for (int i = 0; i < m_resources->ncrtc; ++i) {
         if (m_crtcs.contains(m_resources->crtcs[i])) {
-                m_crtcs[m_resources->crtcs[i]]->loadSettings(notify);
+            m_crtcs[m_resources->crtcs[i]]->loadSettings(notify);
         } else {
             kDebug() << "Creating CRTC object for XID" << m_resources->crtcs[i];
             RandRCrtc *c = new RandRCrtc(this, m_resources->crtcs[i]);

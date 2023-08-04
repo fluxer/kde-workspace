@@ -48,7 +48,6 @@ set(krandrtray_SRCS
     main.cpp
     krandrtray.cpp
     krandrapp.cpp
-    krandrpassivepopup.cpp
 )
 
 add_executable(krandrtray ${krandrtray_SRCS})

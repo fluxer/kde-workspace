@@ -39,7 +39,6 @@ public:
     explicit KRandRSystemTray(RandRDisplay *dpy, QWidget* parent = 0);
     ~KRandRSystemTray();
 
-    void configChanged();
     void activate(const QPoint &pos);
 
 protected Q_SLOTS:
