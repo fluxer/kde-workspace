@@ -229,7 +229,7 @@ int main( int argc, char* argv[] )
 
     KSMServer *server = new KSMServer( wm, only_local, args->isSet("lockscreen") );
 
-    KCrash::setFlags(KCrash::Backtrace);
+    KCrash::setFlags(KCrash::Log);
 
     // for the KDE-already-running check in startkde
     KSelectionOwner kde_running( "_KDE_RUNNING", 0 );

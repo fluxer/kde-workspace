@@ -79,7 +79,7 @@ void KCrashModule::slotDirty(const QString &path)
         }
 
         kDebug() << "Reading" << kcrashfilepath;
-        QVariantMap kcrashdata;
+        QMap<QByteArray,QString> kcrashdata;
         int kcrashsignal;
         QByteArray kcrashbacktrace;
         {
@@ -95,11 +95,11 @@ void KCrashModule::slotDirty(const QString &path)
         const KCrash::CrashFlags kcrashflags = static_cast<KCrash::CrashFlags>(
             kcrashdata["flags"].toInt()
         );
-        if (kcrashflags & KCrash::DrKonqi) {
-            QString kcrashappname = kcrashdata["programname"].toString();
-            if (kcrashappname.isEmpty()) {
-                kcrashappname = kcrashdata["appname"].toString();
-            }
+        QString kcrashappname = kcrashdata["programname"];
+        if (kcrashappname.isEmpty()) {
+            kcrashappname = kcrashdata["appname"];
+        }
+        if (kcrashflags & KCrash::Notify) {
             kDebug() << "Sending notification for" << kcrashfilepath;
             // NOTE: when the notification is closed/deleted the actions become non-operational
             KNotification* knotification = new KNotification("Crash", KNotification::Persistent, this);
@@ -112,9 +112,13 @@ void KCrashModule::slotDirty(const QString &path)
             connect(knotification, SIGNAL(action1Activated()), this, SLOT(slotReport()));
             knotification->sendEvent();
         }
+        if (kcrashflags & KCrash::Log) {
+            // NOTE: this goes to the system log by default
+            kError() << kcrashappname << "crashed" << kcrashbacktrace;
+        }
         if (kcrashflags & KCrash::AutoRestart) {
-            const QString kcrashdisplay = kcrashdata["display"].toString();
-            const QString kcrashapppath = kcrashdata["apppath"].toString();
+            const QString kcrashdisplay = kcrashdata["display"];
+            const QString kcrashapppath = kcrashdata["apppath"];
             QStringList kcrashargs;
             if (!kcrashdisplay.isEmpty()) {
                 kcrashargs.append(QString::fromLatin1("--display"));
