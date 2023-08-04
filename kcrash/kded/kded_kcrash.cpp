@@ -81,7 +81,7 @@ void KCrashModule::slotDirty(const QString &path)
         kDebug() << "Reading" << kcrashfilepath;
         QVariantMap kcrashdata;
         int kcrashsignal;
-        QString kcrashbacktrace;
+        QByteArray kcrashbacktrace;
         {
             QDataStream crashstream(&kcrashfile);
             crashstream >> kcrashdata;

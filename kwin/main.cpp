@@ -195,8 +195,10 @@ static int x11ErrorHandler(Display* d, XErrorEvent* e)
     kWarning(1212) << "kwin: X Error (" << errorMessage(*e, d) << ")";
 #endif
 
-    if (kwin_sync)
-        fprintf(stderr, "%s\n", kBacktrace().toLocal8Bit().data());
+    if (kwin_sync) {
+        const QByteArray trace = kBacktrace();
+        fprintf(stderr, "%s\n", trace.constData());
+    }
 
     return 0;
 }
