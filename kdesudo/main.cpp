@@ -90,12 +90,6 @@ int main(int argc, char **argv)
     options.add("attach <winid>", ki18n("Makes the dialog transient for an X app specified by winid"));
     options.add("desktop <desktop file>", ki18n("Manual override for "
                 "automatic desktop file detection"));
-    options.add("noignorebutton", ki18n("Fake option for KDE's KdeSu compatibility"));
-    options.add("t", ki18n("Fake option for KDE's KdeSu compatibility"));
-    // nothing is making use of it AFAICT
-    // options.add("nonewdcop", ki18n("Fake option for compatibility"));
-    options.add("s", ki18n("Fake option for compatibility"));
-    options.add("n", ki18n("Fake option for compatibility"));
 
     options.add("+command", ki18n("The command to execute"));
 
