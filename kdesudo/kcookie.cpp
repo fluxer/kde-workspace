@@ -25,26 +25,15 @@ namespace KDESu
     namespace KDESuPrivate
     {
 
-        class KCookie::KCookiePrivate
-        {
-        public:
-            QByteArray m_Display;
-#ifdef Q_WS_X11
-            QByteArray m_DisplayAuth;
-#endif
-        };
-
-
         KCookie::KCookie()
-            : d(new KCookiePrivate)
         {
 #ifdef Q_WS_X11
-            d->m_Display = qgetenv("DISPLAY");
-            if (d->m_Display.isEmpty()) {
+            m_Display = qgetenv("DISPLAY");
+            if (m_Display.isEmpty()) {
                 kError() << "$DISPLAY is not set.\n";
                 return;
             }
-            QByteArray disp = d->m_Display;
+            QByteArray disp = m_Display;
             if (disp.startsWith("localhost:")) {
                 disp.remove(0, 9);
             }
@@ -58,33 +47,28 @@ namespace KDESu
             proc.waitForReadyRead(100);
             QByteArray output = proc.readLine().simplified();
             if (output.isEmpty()) {
-                kWarning() << "No X authentication info set for display " <<
-                              d->m_Display; return;
+                kWarning() << "No X authentication info set for display " << m_Display;
+                return;
             }
             QList<QByteArray> lst = output.split(' ');
             if (lst.count() != 3) {
                 kError() << "parse error.\n";
                 return;
             }
-            d->m_DisplayAuth = (lst[1] + ' ' + lst[2]);
+            m_DisplayAuth = (lst[1] + ' ' + lst[2]);
             proc.waitForFinished(100); // give QProcess a chance to clean up gracefully
 #endif
         }
 
-        KCookie::~KCookie()
-        {
-            delete d;
-        }
-
         QByteArray KCookie::display() const
         {
-            return d->m_Display;
+            return m_Display;
         }
 
 #ifdef Q_WS_X11
         QByteArray KCookie::displayAuth() const
         {
-            return d->m_DisplayAuth;
+            return m_DisplayAuth;
         }
 #endif
     }

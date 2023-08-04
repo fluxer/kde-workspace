@@ -30,7 +30,6 @@ namespace KDESu
         {
         public:
             KCookie();
-            ~KCookie();
 
             /**
              * Returns the X11 display.
@@ -45,8 +44,10 @@ namespace KDESu
 #endif
 
         private:
-            class KCookiePrivate;
-            KCookiePrivate *const d;
+            QByteArray m_Display;
+#ifdef Q_WS_X11
+            QByteArray m_DisplayAuth;
+#endif
         };
 
     }
