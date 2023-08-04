@@ -70,8 +70,11 @@ void BookmarksRunner::match(Plasma::RunnerContext &context)
         return;
     }
 
-    bool allBookmarks = term.compare(i18nc("list of all konqueror bookmarks", "bookmarks"),
-                                     Qt::CaseInsensitive) == 0;
+    bool allBookmarks = (term.compare(i18nc("list of all konqueror bookmarks", "bookmarks"), Qt::CaseInsensitive) == 0);
+    if (!allBookmarks) {
+        // how about untranslated match?
+        allBookmarks = (term.compare(QLatin1String("bookmarks"), Qt::CaseInsensitive) == 0);
+    }
                                      
     QList<BookmarkMatch> matches = m_browser->match(term, allBookmarks);
     foreach(BookmarkMatch match, matches) {
