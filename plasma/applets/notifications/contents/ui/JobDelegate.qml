@@ -179,7 +179,7 @@ PlasmaComponents.ListItem {
             }
             PlasmaComponents.Label {
                 id: speedLabel
-                text: eta > 0 ? i18nc("Speed and estimated time to completition", "%1 (%2 remaining)", speed, locale.prettyFormatDuration(eta)) : speed
+                text: eta > 0 ? i18nc("Speed and estimated time to completition", "%1 (%2 remaining)", speed, locale.formatDuration(eta)) : speed
             }
         }
 
