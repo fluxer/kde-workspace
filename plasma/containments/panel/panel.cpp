@@ -696,7 +696,7 @@ void Panel::restore(KConfigGroup &group)
 
         if (order > -1) {
             oderedApplets[order] = applet;
-        //if LayoutInformation is not available use the usual way, as a bonus makes it retrocompatible with oler configs
+        //if LayoutInformation is not available use the usual way, as a bonus makes it retrocompatible with older configs
         } else {
             unoderedApplets.append(applet);
         }

@@ -148,7 +148,7 @@ void DesktopCorona::updateImmutability(Plasma::ImmutabilityType immutability)
 
 void DesktopCorona::checkScreen(int screen)
 {
-    //note: hte signal actually triggers view creation only for panels, atm.
+    //note: the signal actually triggers view creation only for panels, atm.
     //desktop views are created in response to containment's screenChanged signal instead, which is
     //buggy (sometimes the containment thinks it's already on the screen, so no view is created)
 
