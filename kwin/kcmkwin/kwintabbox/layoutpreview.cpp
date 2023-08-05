@@ -46,7 +46,7 @@ LayoutPreview::LayoutPreview(QWidget* parent)
     QPalette pal = palette();
     pal.setColor(backgroundRole(), Qt::transparent);
     setPalette(pal);
-    setMinimumSize(QSize(480, 300));
+    setMinimumSize(QSize(480, 310));
     setResizeMode(QDeclarativeView::SizeRootObjectToView);
     foreach (const QString &importPath, KGlobal::dirs()->findDirs("module", "imports")) {
         engine()->addImportPath(importPath);
