@@ -289,9 +289,9 @@ void RandRConfig::saveStartup()
         QString primaryOutput = primaryDisplayBox->itemText(primaryOutputIndex);
         commands += QString("xrandr --output %1 --primary").arg( KShell::quoteArg( primaryOutput ));
     } else {
-        commands += "xrandr --noprimary";
-        group.writeEntry("StartupCommands",commands.join("\n"));
+        commands += QString("xrandr --noprimary");
     }
+    group.writeEntry("StartupCommands",commands.join("\n"));
     KMessageBox::information( window(), i18n( "Configuration has been set as the desktop default." ));
 }
 
