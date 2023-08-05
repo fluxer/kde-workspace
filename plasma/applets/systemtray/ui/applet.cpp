@@ -707,7 +707,7 @@ void Applet::checkDefaultApplets()
         return;
     }
 
-
+    // TODO: applets configuration is not saved
     QStringList applets = s_manager->applets(this);
 
     if (!applets.contains("notifier")) {
