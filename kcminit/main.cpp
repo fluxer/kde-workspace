@@ -38,6 +38,7 @@
 #include <klocale.h>
 #include <ktoolinvocation.h>
 #include <kservicetypetrader.h>
+#include <kglobalsettings.h>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -168,18 +169,9 @@ KCMInit::KCMInit( KCmdLineArgs* args )
     list = KServiceTypeTrader::self()->query( "KCModuleInit" );
 
   }
-  // This key has no GUI apparently
-  KConfig _config( "kcmdisplayrc" );
-  KConfigGroup config(&_config, "X11");
-#ifdef Q_WS_X11
-  bool multihead = !config.readEntry( "disableMultihead", false) &&
-                    (ScreenCount(QX11Info::display()) > 1);
-#else
-  bool multihead = false;
-#endif
   // Pass env. var to klauncher.
   QString name = "KDE_MULTIHEAD";
-  QString value = multihead ? "true" : "false";
+  QString value = KGlobalSettings::isMultiHead() ? "true" : "false";
   KToolInvocation::setLaunchEnv(name, value);
   setenv( name.toLatin1().constData(), value.toLatin1().constData(), 1 ); // apply effect also to itself
 
