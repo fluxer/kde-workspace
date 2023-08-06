@@ -97,6 +97,7 @@ int main(int argc, char **argv)
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     KApplication a;
+    a.disableSessionManagement();
 
     QString executable, arg, command, icon;
     QStringList executableList, commandlist;
