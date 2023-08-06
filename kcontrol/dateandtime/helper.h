@@ -42,9 +42,9 @@ public slots:
     int save(const QVariantMap &map);
 
 private:
-    CH_Error ntp(const QStringList& ntpServers, bool ntpEnabled);
-    CH_Error date(const QString& newdate, const QString& olddate);
-    CH_Error tz(const QString& selectedzone);
+    CH_Error ntp(const QStringList &ntpServers, bool ntpEnabled);
+    CH_Error date(const QString &newdate, const QString &olddate);
+    CH_Error tz(const QString &selectedzone);
     CH_Error tzreset();
 };
 

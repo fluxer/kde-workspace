@@ -43,75 +43,75 @@ namespace Plasma {
 class Dtime : public QWidget, public Ui::DateAndTime
 {
   Q_OBJECT
- public:
-  Dtime( QWidget *parent=0 );
+public:
+    Dtime( QWidget *parent = nullptr);
 
-  void	save( QVariantMap &helperargs );
-  void processHelperErrors( int code );
-  void	load();
+    void save(QVariantMap &helperargs);
+    void processHelperErrors(int code);
+    void load();
 
-  QString quickHelp() const;
+    QString quickHelp() const;
 
 Q_SIGNALS:
-  void	timeChanged(bool);
+    void timeChanged(bool);
 
- private Q_SLOTS:
-  void	configChanged();
-  void	serverTimeCheck();
-  void	timeout();
-  void	set_time();
-  void	changeDate(const QDate&);
+private Q_SLOTS:
+    void configChanged();
+    void serverTimeCheck();
+    void timeout();
+    void set_time();
+    void changeDate(const QDate &d);
 
 private:
-  void currentZone();
-  void	findNTPutility();
-  QString	ntpUtility;
+    void currentZone();
+    void findNTPutility();
+    QString ntpUtility;
 
-  QTimeEdit	*timeEdit;
+    QTimeEdit *timeEdit;
 
-  Kclock	*kclock;
+    Kclock *kclock;
 
-  QTime		time;
-  QDate		date;
-  QTimer	internalTimer;
+    QTime time;
+    QDate date;
+    QTimer internalTimer;
 
-  QString       timeServer;
-  bool		ontimeout;
+    QString timeServer;
+    bool ontimeout;
 };
 
 class Kclock : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  Kclock( QWidget *parent=0 );
-  ~Kclock();
+    Kclock(QWidget *parent = nullptr);
+    ~Kclock();
 
-  void setTime(const QTime&);
+    void setTime(const QTime &t);
 
 protected:
-  virtual void	paintEvent( QPaintEvent *event );
-  virtual void	showEvent( QShowEvent *event );
-  virtual void	resizeEvent( QResizeEvent *event );
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void showEvent(QShowEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
 
 private:
-  void setClockSize(const QSize &size);
-  void drawHand(QPainter *p, const QRect &rect, const qreal verticalTranslation, const qreal rotation, const QString &handName);
-  void paintInterface(QPainter *p, const QRect &rect);
+    void setClockSize(const QSize &size);
+    void drawHand(QPainter *p, const QRect &rect, const qreal verticalTranslation, const qreal rotation, const QString &handName);
+    void paintInterface(QPainter *p, const QRect &rect);
 
 private:
-  QTime		time;
-  Plasma::Svg	*m_theme;
-  enum RepaintCache {
-      RepaintNone,
-      RepaintAll,
-      RepaintHands
-  };
-  RepaintCache	m_repaintCache;
-  QPixmap	m_faceCache;
-  QPixmap	m_handsCache;
-  QPixmap	m_glassCache;
-  qreal		m_verticalTranslation;
+    QTime time;
+    Plasma::Svg *m_theme;
+    enum RepaintCache {
+        RepaintNone,
+        RepaintAll,
+        RepaintHands
+    };
+    RepaintCache m_repaintCache;
+    QPixmap m_faceCache;
+    QPixmap m_handsCache;
+    QPixmap m_glassCache;
+    qreal m_verticalTranslation;
 };
 
 #endif // dtime_included

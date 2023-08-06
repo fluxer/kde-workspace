@@ -64,63 +64,66 @@ ClockHelper::ClockHelper(const char* const helper, QObject *parent)
 
 int ClockHelper::save(const QVariantMap &args)
 {
-  bool _ntp = args.value("ntp").toBool();
-  bool _date = args.value("date").toBool();
-  bool _tz = args.value("tz").toBool();
-  bool _tzreset = args.value("tzreset").toBool();
+    bool _ntp = args.value("ntp").toBool();
+    bool _date = args.value("date").toBool();
+    bool _tz = args.value("tz").toBool();
+    bool _tzreset = args.value("tzreset").toBool();
 
-  KComponentData data( "kcmdatetimehelper" );
+    KComponentData data("kcmdatetimehelper");
 
-  int ret = NoError; // error code
-  // The order here is important
-  if( _ntp )
-    ret |= ntp( args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
-  if( _date )
-    ret |= date( args.value("newdate").toString(), args.value("olddate").toString() );
-  if( _tz )
-    ret |= tz( args.value("tzone").toString() );
-  if( _tzreset )
-    ret |= tzreset();
+    int ret = NoError; // error code
+    // The order here is important
+    if (_ntp) {
+        ret |= ntp(args.value("ntpServers").toStringList(), args.value("ntpEnabled").toBool());
+    }
+    if (_date) {
+        ret |= date(args.value("newdate").toString(), args.value("olddate").toString());
+    }
+    if (_tz) {
+        ret |= tz(args.value("tzone").toString());
+    }
+    if (_tzreset) {
+        ret |= tzreset();
+    }
 
-  return ret;
+    return ret;
 }
 
-ClockHelper::CH_Error ClockHelper::ntp( const QStringList& ntpServers, bool ntpEnabled )
+ClockHelper::CH_Error ClockHelper::ntp(const QStringList &ntpServers, bool ntpEnabled)
 {
-  // write to the system config file
-  QFile config_file(KDE_CONFDIR "/kcmclockrc");
-  if(!config_file.exists()) {
-    config_file.open(QIODevice::WriteOnly);
-    config_file.close();
-    config_file.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
-  }
-  KConfig _config(config_file.fileName(), KConfig::SimpleConfig);
-  KConfigGroup config(&_config, "NTP");
-  config.writeEntry("servers", ntpServers );
-  config.writeEntry("enabled", ntpEnabled );
+    // write to the system config file
+    QFile config_file(KDE_CONFDIR "/kcmclockrc");
+    if(!config_file.exists()) {
+        config_file.open(QIODevice::WriteOnly);
+        config_file.close();
+        config_file.setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
+    }
+    KConfig _config(config_file.fileName(), KConfig::SimpleConfig);
+    KConfigGroup config(&_config, "NTP");
+    config.writeEntry("servers", ntpServers);
+    config.writeEntry("enabled", ntpEnabled);
 
-  QString ntpUtility(findNtpUtility());
+    const QString ntpUtility = findNtpUtility();
+    if (ntpEnabled && !ntpUtility.isEmpty()) {
+        // NTP Time setting
+        QString timeServer = ntpServers.first();
+        if(timeServer.indexOf(QRegExp(".*\\(.*\\)$")) != -1) {
+            timeServer.replace(QRegExp(".*\\("), "");
+            timeServer.replace(QRegExp("\\).*"), "");
+            // Would this be better?: s/^.*\(([^)]*)\).*$/\1/
+        }
 
-  if ( ntpEnabled && !ntpUtility.isEmpty() ) {
-    // NTP Time setting
-    QString timeServer = ntpServers.first();
-    if( timeServer.indexOf( QRegExp(".*\\(.*\\)$") ) != -1 ) {
-      timeServer.replace( QRegExp(".*\\("), "" );
-      timeServer.replace( QRegExp("\\).*"), "" );
-      // Would this be better?: s/^.*\(([^)]*)\).*$/\1/
+        if (QProcess::execute(ntpUtility, QStringList() << timeServer) != 0) {
+        return NTPError;
+        }
+    } else if(ntpEnabled) {
+        return NTPError;
     }
 
-    if ( QProcess::execute(ntpUtility, QStringList() << timeServer) != 0) {
-      return NTPError;
-    }
-  } else if( ntpEnabled ) {
-    return NTPError;
-  }
-
-  return NoError;
+    return NoError;
 }
 
-ClockHelper::CH_Error ClockHelper::date( const QString& newdate, const QString& olddate )
+ClockHelper::CH_Error ClockHelper::date(const QString &newdate, const QString &olddate)
 {
     struct timeval tv;
     tv.tv_sec = newdate.toULong() - olddate.toULong() + time(0);

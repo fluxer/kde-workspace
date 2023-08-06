@@ -56,66 +56,72 @@
 #include "helper.h"
 
 Dtime::Dtime(QWidget * parent)
-  : QWidget(parent)
+    : QWidget(parent)
 {
-  KGlobal::locale()->insertCatalog( "timezones4" );
-  setupUi(this);
+    KGlobal::locale()->insertCatalog( "timezones4" );
+    setupUi(this);
 
-  connect(setDateTimeAuto, SIGNAL(toggled(bool)), this, SLOT(serverTimeCheck()));
-  connect(setDateTimeAuto, SIGNAL(toggled(bool)), SLOT(configChanged()));
+    connect(setDateTimeAuto, SIGNAL(toggled(bool)), this, SLOT(serverTimeCheck()));
+    connect(setDateTimeAuto, SIGNAL(toggled(bool)), this, SLOT(configChanged()));
 
-  timeServerList->setEditable(false);
-  connect(timeServerList, SIGNAL(activated(int)), SLOT(configChanged()));
-  connect(timeServerList, SIGNAL(editTextChanged(QString)), SLOT(configChanged()));
-  connect(setDateTimeAuto, SIGNAL(toggled(bool)), timeServerList, SLOT(setEnabled(bool)));
-  timeServerList->setEnabled(false);
-  timeServerList->setEditable(true);
-  findNTPutility();
-  if (ntpUtility.isEmpty()) {
-      setDateTimeAuto->setEnabled(false);
-      setDateTimeAuto->setToolTip(i18n("No NTP utility has been found. "
-                                       "Install 'ntpdate' or 'rdate' command to enable automatic "
-                                       "updating of date and time."));
-  }
+    timeServerList->setEditable(false);
+    connect(timeServerList, SIGNAL(activated(int)), this, SLOT(configChanged()));
+    connect(timeServerList, SIGNAL(editTextChanged(QString)), this, SLOT(configChanged()));
+    connect(setDateTimeAuto, SIGNAL(toggled(bool)), timeServerList, SLOT(setEnabled(bool)));
+    timeServerList->setEnabled(false);
+    timeServerList->setEditable(true);
+    findNTPutility();
+    if (ntpUtility.isEmpty()) {
+        setDateTimeAuto->setEnabled(false);
+        setDateTimeAuto->setToolTip(
+            i18n(
+                "No NTP utility has been found. "
+                "Install 'ntpdate' or 'rdate' command to enable automatic "
+                "updating of date and time."
+            )
+        );
+    }
 
-  QVBoxLayout *v2 = new QVBoxLayout( timeBox );
-  v2->setMargin( 0 );
+    QVBoxLayout *v2 = new QVBoxLayout(timeBox);
+    v2->setMargin(0);
 
-  kclock = new Kclock( timeBox );
-  kclock->setObjectName("Kclock");
-  kclock->setMinimumSize(150,150);
-  v2->addWidget( kclock );
+    kclock = new Kclock(timeBox);
+    kclock->setObjectName("Kclock");
+    kclock->setMinimumSize(150,150);
+    v2->addWidget(kclock);
 
-  v2->addSpacing( KDialog::spacingHint() );
+    v2->addSpacing(KDialog::spacingHint());
 
-  QHBoxLayout *v3 = new QHBoxLayout( );
-  v2->addLayout( v3 );
+    QHBoxLayout *v3 = new QHBoxLayout();
+    v2->addLayout(v3);
 
-  v3->addStretch();
+    v3->addStretch();
 
-  timeEdit = new QTimeEdit( timeBox );
-  timeEdit->setLocale(KGlobal::locale()->toLocale());
-  v3->addWidget(timeEdit);
+    timeEdit = new QTimeEdit(timeBox);
+    timeEdit->setLocale(KGlobal::locale()->toLocale());
+    v3->addWidget(timeEdit);
 
-  v3->addStretch();
+    v3->addStretch();
 
-  QString wtstr = i18n("Here you can change the system time. Click into the"
-    " hours, minutes or seconds field to change the relevant value, either"
-    " using the up and down buttons to the right or by entering a new value.");
-  timeEdit->setWhatsThis( wtstr );
+    QString wtstr = i18n(
+        "Here you can change the system time. Click into the"
+        " hours, minutes or seconds field to change the relevant value, either"
+        " using the up and down buttons to the right or by entering a new value."
+    );
+    timeEdit->setWhatsThis(wtstr);
 
-  connect( timeEdit, SIGNAL(timeChanged(QTime)), SLOT(set_time()) );
-  cal->setContentsMargins(2, 2, 2, 2);
-  connect( cal, SIGNAL(activated(QDate)), SLOT(changeDate(QDate)));
-  connect( cal, SIGNAL(clicked(QDate)), SLOT(changeDate(QDate)));
+    connect(timeEdit, SIGNAL(timeChanged(QTime)), this, SLOT(set_time()));
+    cal->setContentsMargins(2, 2, 2, 2);
+    connect(cal, SIGNAL(activated(QDate)), this, SLOT(changeDate(QDate)));
+    connect(cal, SIGNAL(clicked(QDate)), this, SLOT(changeDate(QDate)));
 
-  connect( &internalTimer, SIGNAL(timeout()), SLOT(timeout()) );
+    connect(&internalTimer, SIGNAL(timeout()), this, SLOT(timeout()));
 
-  kclock->setEnabled(false);
+    kclock->setEnabled(false);
 
-  //Timezone
-  connect( tzonelist, SIGNAL(itemSelectionChanged()), SLOT(configChanged()) );
-  tzonesearch->setTreeWidget(tzonelist);
+    //Timezone
+    connect(tzonelist, SIGNAL(itemSelectionChanged()), this, SLOT(configChanged()));
+    tzonesearch->setTreeWidget(tzonelist);
 }
 
 void Dtime::currentZone()
@@ -123,21 +129,30 @@ void Dtime::currentZone()
     KTimeZone localZone = KSystemTimeZones::local();
 
     if (localZone.abbreviations().isEmpty()) {
-        m_local->setText(i18nc("%1 is name of time zone", "Current local time zone: %1",
-                              KTimeZoneWidget::displayName(localZone)));
+        m_local->setText(
+            i18nc(
+                "%1 is name of time zone", "Current local time zone: %1",
+                KTimeZoneWidget::displayName(localZone)
+            )
+        );
     } else {
-        m_local->setText(i18nc("%1 is name of time zone, %2 is its abbreviation",
-                               "Current local time zone: %1 (%2)",
-                              KTimeZoneWidget::displayName(localZone),
-                              QString::fromUtf8(localZone.abbreviations().first())));
+        m_local->setText(
+            i18nc(
+                "%1 is name of time zone, %2 is its abbreviation",
+                "Current local time zone: %1 (%2)",
+                KTimeZoneWidget::displayName(localZone),
+                QString::fromUtf8(localZone.abbreviations().first())
+            )
+        );
     }
 }
 
-void Dtime::serverTimeCheck() {
-  bool enabled = !setDateTimeAuto->isChecked();
-  cal->setEnabled(enabled);
-  timeEdit->setEnabled(enabled);
-  //kclock->setEnabled(enabled);
+void Dtime::serverTimeCheck()
+{
+    bool enabled = !setDateTimeAuto->isChecked();
+    cal->setEnabled(enabled);
+    timeEdit->setEnabled(enabled);
+    // kclock->setEnabled(enabled);
 }
 
 void Dtime::findNTPutility()
@@ -155,143 +170,151 @@ void Dtime::findNTPutility()
 
 void Dtime::set_time()
 {
-  if( ontimeout )
-    return;
+    if (ontimeout) {
+        return;
+    }
 
-  internalTimer.stop();
+    internalTimer.stop();
 
-  time = timeEdit->time();
-  kclock->setTime( time );
+    time = timeEdit->time();
+    kclock->setTime(time);
 
-  emit timeChanged( true );
+    emit timeChanged(true);
 }
 
 void Dtime::changeDate(const QDate &d)
 {
-  date = d;
-  emit timeChanged( true );
+    date = d;
+    emit timeChanged(true);
 }
 
-void Dtime::configChanged(){
-  emit timeChanged( true );
+void Dtime::configChanged()
+{
+    emit timeChanged(true);
 }
 
 void Dtime::load()
 {
-  // The config is actually written to the system config, but the user does not have any local config,
-  // since there is nothing writing it.
-  KConfig _config( "kcmclockrc", KConfig::NoGlobals );
-  KConfigGroup config(&_config, "NTP");
-  timeServerList->clear();
-  timeServerList->addItems(config.readEntry("servers",
-    i18n("Public Time Server (pool.ntp.org),\
+    // The config is actually written to the system config, but the user does not have any local config,
+    // since there is nothing writing it.
+    KConfig _config( "kcmclockrc", KConfig::NoGlobals );
+    KConfigGroup config(&_config, "NTP");
+    timeServerList->clear();
+    timeServerList->addItems(
+        config.readEntry(
+            "servers",
+            i18n("Public Time Server (pool.ntp.org),\
 asia.pool.ntp.org,\
 europe.pool.ntp.org,\
 north-america.pool.ntp.org,\
-oceania.pool.ntp.org")).split(',', QString::SkipEmptyParts));
-  setDateTimeAuto->setChecked(config.readEntry("enabled", false));
+oceania.pool.ntp.org")
+        ).split(',', QString::SkipEmptyParts)
+    );
+    setDateTimeAuto->setChecked(config.readEntry("enabled", false));
 
-  // Reset to the current date and time
-  time = QTime::currentTime();
-  date = QDate::currentDate();
-  cal->setSelectedDate(date);
+    // Reset to the current date and time
+    time = QTime::currentTime();
+    date = QDate::currentDate();
+    cal->setSelectedDate(date);
 
-  // start internal timer
-  internalTimer.start( 1000 );
+    // start internal timer
+    internalTimer.start(1000);
 
-  timeout();
+    timeout();
 
-  //Timezone
-  currentZone();
+    // Timezone
+    currentZone();
 
-  // read the currently set time zone
-  tzonelist->setSelected(KSystemTimeZones::local().name(), true);
+    // read the currently set time zone
+    tzonelist->setSelected(KSystemTimeZones::local().name(), true);
 }
 
 void Dtime::save( QVariantMap& helperargs )
 {
-  // Save the order, but don't duplicate!
-  QStringList list;
-  if( timeServerList->count() != 0)
-    list.append(timeServerList->currentText());
-  for ( int i=0; i<timeServerList->count();i++ ) {
-    QString text = timeServerList->itemText(i);
-    if( !list.contains(text) )
-      list.append(text);
-    // Limit so errors can go away and not stored forever
-    if( list.count() == 10)
-      break;
-  }
+    // Save the order, but don't duplicate!
+    QStringList list;
+    if (timeServerList->count() != 0) {
+        list.append(timeServerList->currentText());
+    }
+    for (int i = 0; i < timeServerList->count(); i++) {
+        QString text = timeServerList->itemText(i);
+        if (!list.contains(text)) {
+            list.append(text);
+        }
+        // Limit so errors can go away and not stored forever
+        if (list.count() == 10) {
+            break;
+        }
+    }
 
-  helperargs["ntp"] = true;
-  helperargs["ntpServers"] = list;
-  helperargs["ntpEnabled"] = setDateTimeAuto->isChecked();
+    helperargs["ntp"] = true;
+    helperargs["ntpServers"] = list;
+    helperargs["ntpEnabled"] = setDateTimeAuto->isChecked();
 
-  if(setDateTimeAuto->isChecked() && !ntpUtility.isEmpty()){
-    // NTP Time setting - done in helper
-    timeServer = timeServerList->currentText();
-    kDebug() << "Setting date from time server " << timeServer;
-  }
-  else {
-    // User time setting
-    QDateTime dt(date, QTime(timeEdit->time()));
+    if (setDateTimeAuto->isChecked() && !ntpUtility.isEmpty()){
+        // NTP Time setting - done in helper
+        timeServer = timeServerList->currentText();
+        kDebug() << "Setting date from time server " << timeServer;
+    } else {
+        // User time setting
+        QDateTime dt(date, QTime(timeEdit->time()));
 
-    kDebug() << "Set date " << dt;
+        kDebug() << "Set date " << dt;
 
-    helperargs["date"] = true;
-    helperargs["newdate"] = QString::number(dt.toTime_t());
-    helperargs["olddate"] = QString::number(::time(0));
-  }
+        helperargs["date"] = true;
+        helperargs["newdate"] = QString::number(dt.toTime_t());
+        helperargs["olddate"] = QString::number(::time(0));
+    }
 
-  // restart time
-  internalTimer.start( 1000 );
+    // restart time
+    internalTimer.start(1000);
 
-  QStringList selectedZones(tzonelist->selection());
+    QStringList selectedZones(tzonelist->selection());
+    if (selectedZones.count() > 0) {
+        helperargs["tz"] = true;
+        helperargs["tzone"] = selectedZones[0];
+    } else {
+        helperargs["tzreset"] = true; // make the helper reset the timezone
+    }
 
-  if (selectedZones.count() > 0) {
-    QString selectedzone(selectedZones[0]);
-    helperargs["tz"] = true;
-    helperargs["tzone"] = selectedzone;
-  } else {
-    helperargs["tzreset"] = true; // // make the helper reset the timezone
-  }
-
-  currentZone();
+    currentZone();
 }
 
-void Dtime::processHelperErrors( int code )
+void Dtime::processHelperErrors(int code)
 {
-  if( code & ClockHelper::NTPError ) {
-    KMessageBox::error( this, i18n("Unable to contact time server: %1.", timeServer) );
-    setDateTimeAuto->setChecked( false );
-  }
-  if( code & ClockHelper::DateError ) {
-    KMessageBox::error( this, i18n("Can not set date."));
-  }
-  if( code & ClockHelper::TimezoneError)
-    KMessageBox::error( this, i18n("Error setting new time zone."),
-                        i18n("Time zone Error"));
+    if (code & ClockHelper::NTPError) {
+        KMessageBox::error(this, i18n("Unable to contact time server: %1.", timeServer));
+        setDateTimeAuto->setChecked(false);
+    }
+    if (code & ClockHelper::DateError) {
+        KMessageBox::error(this, i18n("Can not set date."));
+    }
+    if (code & ClockHelper::TimezoneError) {
+        KMessageBox::error(this, i18n("Error setting new time zone."), i18n("Time zone Error"));
+    }
 }
 
 void Dtime::timeout()
 {
-  // get current time
-  time = QTime::currentTime();
+    // get current time
+    time = QTime::currentTime();
 
-  ontimeout = true;
-  timeEdit->setTime(time);
-  ontimeout = false;
+    ontimeout = true;
+    timeEdit->setTime(time);
+    ontimeout = false;
 
-  kclock->setTime( time );
+    kclock->setTime(time);
 }
 
 QString Dtime::quickHelp() const
 {
-  return i18n("<h1>Date & Time</h1> This system settings module can be used to set the system date and"
-    " time. As these settings do not only affect you as a user, but rather the whole system, you"
-    " can only change these settings when you start the System Settings as root. If you do not have"
-    " the root password, but feel the system time should be corrected, please contact your system"
-    " administrator.");
+    return i18n(
+        "<h1>Date & Time</h1> This system settings module can be used to set the system date and"
+        " time. As these settings do not only affect you as a user, but rather the whole system, you"
+        " can only change these settings when you start the System Settings as root. If you do not have"
+        " the root password, but feel the system time should be corrected, please contact your system"
+        " administrator."
+    );
 }
 
 Kclock::Kclock(QWidget *parent)
@@ -307,15 +330,16 @@ Kclock::~Kclock()
     delete m_theme;
 }
 
-void Kclock::showEvent( QShowEvent *event )
+void Kclock::showEvent(QShowEvent *event)
 {
-    setClockSize( size() );
-    QWidget::showEvent( event );
+    setClockSize(size());
+    QWidget::showEvent(event);
 }
 
-void Kclock::resizeEvent( QResizeEvent * )
+void Kclock::resizeEvent(QResizeEvent *event)
 {
-    setClockSize( size() );
+    Q_UNUSED(event);
+    setClockSize(size());
 }
 
 void Kclock::setClockSize(const QSize &size)
@@ -333,14 +357,14 @@ void Kclock::setClockSize(const QSize &size)
     }
 }
 
-void Kclock::setTime(const QTime &time)
+void Kclock::setTime(const QTime &t)
 {
-    if (time.minute() != this->time.minute() || time.hour() != this->time.hour()) {
+    if (t.minute() != time.minute() || t.hour() != time.hour()) {
         if (m_repaintCache == RepaintNone) {
             m_repaintCache = RepaintHands;
         }
     }
-    this->time = time;
+    time = t;
     update();
 }
 
@@ -357,8 +381,9 @@ void Kclock::drawHand(QPainter *p, const QRect &rect, const qreal verticalTransl
         p->save();
 
         elementRect = m_theme->elementRect(name);
-        if( rect.height() < 64 )
-            elementRect.setWidth( elementRect.width() * 2.5 );
+        if (rect.height() < 64) {
+            elementRect.setWidth(elementRect.width() * 2.5);
+        }
         static const QPoint offset = QPoint(2, 3);
 
         p->translate(rect.x() + (rect.width() / 2) + offset.x(), rect.y() + (rect.height() / 2) + offset.y());
@@ -391,8 +416,7 @@ void Kclock::paintInterface(QPainter *p, const QRect &rect)
 
     // compute hand angles
     const qreal minutes = 6.0 * time.minute() - 180;
-    const qreal hours = 30.0 * time.hour() - 180 +
-            ((time.minute() / 59.0) * 30.0);
+    const qreal hours = 30.0 * time.hour() - 180 + ((time.minute() / 59.0) * 30.0);
     qreal seconds = 0;
     if (m_showSecondHand) {
         static const double anglePerSec = 6;
@@ -453,11 +477,10 @@ void Kclock::paintInterface(QPainter *p, const QRect &rect)
     p->drawPixmap(targetRect, m_glassCache, faceRect);
 }
 
-void Kclock::paintEvent( QPaintEvent * )
+void Kclock::paintEvent(QPaintEvent *event)
 {
-  QPainter paint(this);
-
-  paint.setRenderHint(QPainter::Antialiasing);
-  paintInterface(&paint, rect());
+    Q_UNUSED(event);
+    QPainter paint(this);
+    paint.setRenderHint(QPainter::Antialiasing);
+    paintInterface(&paint, rect());
 }
-
