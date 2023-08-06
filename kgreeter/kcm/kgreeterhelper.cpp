@@ -45,13 +45,13 @@ int KGreeterHelper::save(const QVariantMap &parameters)
         cursortheme = QString();
     }
 
-    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
-    kgreetersettings.setValue("greeter/font", parameters.value("font"));
-    kgreetersettings.setValue("greeter/style", parameters.value("style"));
-    kgreetersettings.setValue("greeter/colorscheme", colorscheme);
-    kgreetersettings.setValue("greeter/cursortheme", cursortheme);
-    kgreetersettings.setValue("greeter/background", parameters.value("background"));
-    kgreetersettings.setValue("greeter/rectangle", parameters.value("rectangle"));
+    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf");
+    kgreetersettings.setString("greeter/font", parameters.value("font").toString());
+    kgreetersettings.setString("greeter/style", parameters.value("style").toString());
+    kgreetersettings.setString("greeter/colorscheme", colorscheme);
+    kgreetersettings.setString("greeter/cursortheme", cursortheme);
+    kgreetersettings.setString("greeter/background", parameters.value("background").toString());
+    kgreetersettings.setString("greeter/rectangle", parameters.value("rectangle").toString());
     if (kgreetersettings.status() != QSettings::NoError) {
         kWarning() << "Could not save settings";
         return KAuthorization::HelperError;

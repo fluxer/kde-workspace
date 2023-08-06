@@ -90,7 +90,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     colorsbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
     const QStringList kcolorschemes = KGlobal::dirs()->findAllResources("data", "color-schemes/*.colors");
     foreach (const QString &kcolorscheme, kcolorschemes) {
-        const QString kcolorschemename = QSettings(kcolorscheme, QSettings::IniFormat).value("General/Name").toString();
+        const QString kcolorschemename = QSettings(kcolorscheme).string("General/Name");
         const QString kcolorschemebasename = QFileInfo(kcolorscheme).baseName();
         colorsbox->addItem(kcolorschemename, QVariant(kcolorschemebasename));
     }
@@ -99,7 +99,7 @@ KCMGreeter::KCMGreeter(QWidget* parent, const QVariantList& args)
     cursorbox->addItem(i18n("Default"), QVariant(QString::fromLatin1("default")));
     const QStringList cursorthemes = KGlobal::dirs()->findAllResources("icon", "*/index.theme");
     foreach (const QString &cursortheme, cursorthemes) {
-        const QString cursorthemename = QSettings(cursortheme, QSettings::IniFormat).value("Icon Theme/Name").toString();
+        const QString cursorthemename = QSettings(cursortheme).string("Icon Theme/Name");
         QDir cursorthemedir(cursortheme);
         cursorthemedir.cdUp();
         if (!cursorthemedir.exists(QString::fromLatin1("cursors"))) {
@@ -135,13 +135,13 @@ KCMGreeter::~KCMGreeter()
 
 void KCMGreeter::load()
 {
-    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
-    const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
-    const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
-    const QString kgreetercolor = kgreetersettings.value("greeter/colorscheme").toString();
-    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme", KGreeterDefaultCursorTheme()).toString();
-    const QString kgreeterbackground = kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString();
-    const QString kgreeterrectangle = kgreetersettings.value("greeter/rectangle", KGreeterDefaultRectangle()).toString();
+    QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf");
+    const QString kgreeterfontstring = kgreetersettings.string("greeter/font");
+    const QString kgreeterstyle = kgreetersettings.string("greeter/style", KGreeterDefaultStyle());
+    const QString kgreetercolor = kgreetersettings.string("greeter/colorscheme");
+    const QString kgreetercursortheme = kgreetersettings.string("greeter/cursortheme", KGreeterDefaultCursorTheme());
+    const QString kgreeterbackground = kgreetersettings.string("greeter/background", KGreeterDefaultBackground());
+    const QString kgreeterrectangle = kgreetersettings.string("greeter/rectangle", KGreeterDefaultRectangle());
     loadSettings(
         kgreeterfontstring,
         kgreeterstyle,

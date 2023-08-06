@@ -241,9 +241,9 @@ void KCMPlayer::load()
         const QString medianame = service->name();
         const QStringList mediaids = service->property("X-KDE-MediaPlayer", QVariant::StringList).toStringList();
         foreach (const QString &id, mediaids) {
-            const QString output = ksettings.value(id + "/audiooutput", s_kmediaoutput).toString();
-            const bool mute = ksettings.value(id + "/mute", s_kmediamute).toBool();
-            const int volume = ksettings.value(id + "/volume", s_kmediavolume).toInt();
+            const QString output = ksettings.string(id + "/audiooutput", s_kmediaoutput);
+            const bool mute = ksettings.boolean(id + "/mute", s_kmediamute);
+            const int volume = ksettings.integer(id + "/volume", s_kmediavolume);
             KMediaBox* mediabox = new KMediaBox(
                 this,
                 id, medianame,
@@ -265,9 +265,9 @@ void KCMPlayer::save()
     KSettings ksettings("kmediaplayer", KSettings::FullConfig);
     foreach (const KMediaBox* mediabox, m_mediaboxes) {
         const QString id = mediabox->id();
-        ksettings.setValue(id + "/audiooutput", mediabox->output());
-        ksettings.setValue(id + "/mute", mediabox->mute());
-        ksettings.setValue(id + "/volume", mediabox->volume());
+        ksettings.setString(id + "/audiooutput", mediabox->output());
+        ksettings.setBoolean(id + "/mute", mediabox->mute());
+        ksettings.setInteger(id + "/volume", mediabox->volume());
     }
     emit changed(false);
 }

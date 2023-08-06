@@ -145,7 +145,7 @@ void DolphinContextMenu::openTrashContextMenu()
 
     QAction* emptyTrashAction = new QAction(KIcon("trash-empty"), i18nc("@action:inmenu", "Empty Trash"), this);
     KSettings trashConfig("trashrc", KSettings::SimpleConfig);
-    emptyTrashAction->setEnabled(!trashConfig.value("Status/Empty", true).toBool());
+    emptyTrashAction->setEnabled(!trashConfig.boolean("Status/Empty", true));
     addAction(emptyTrashAction);
 
     addCustomActions();

@@ -112,9 +112,9 @@ static void applyQtColors(QSettings &settings, QPalette&newPal)
         discg << newPal.color(QPalette::Disabled, (QPalette::ColorRole) i).name();
     }
 
-    settings.setValue("Qt/Palette/active", actcg);
-    settings.setValue("Qt/Palette/inactive", inactcg);
-    settings.setValue("Qt/Palette/disabled", discg);
+    settings.setStringList("Qt/Palette/active", actcg);
+    settings.setStringList("Qt/Palette/inactive", inactcg);
+    settings.setStringList("Qt/Palette/disabled", discg);
 }
 
 // -----------------------------------------------------------------------------
@@ -124,7 +124,7 @@ static void applyQtSettings(KSharedConfigPtr kglobalcfg, QSettings &settings)
     /* export font settings */
     KConfigGroup fontgrp(kglobalcfg, "General");
     QString font = fontgrp.readEntry("font", KGlobalSettings::generalFont().toString());
-    settings.setValue("Qt/font", font);
+    settings.setString("Qt/font", font);
 
     /* export effects settings */
     KConfigGroup guigrp(kglobalcfg, "KDE-Global GUI Settings");
@@ -145,7 +145,7 @@ static void applyQtSettings(KSharedConfigPtr kglobalcfg, QSettings &settings)
         guieffects << QString("none");
     }
 
-    settings.setValue("Qt/GUIEffects", guieffects);
+    settings.setStringList("Qt/GUIEffects", guieffects);
 }
 
 // -----------------------------------------------------------------------------
@@ -438,7 +438,7 @@ int main(int argc, char *argv[])
     /* Katie exports */
     if (exportQtColors || exportQtSettings) {
         {
-            QSettings settings(QLatin1String("Katie"), QSettings::NativeFormat);
+            QSettings settings(QLatin1String("Katie"));
 
             if (exportQtColors) {
                 applyQtColors(settings, newPal); // For kcmcolors

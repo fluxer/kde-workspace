@@ -40,7 +40,7 @@
 static const int gliblooppolltime = 400;
 static GMainLoop *glibloop = NULL;
 
-static QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf", QSettings::IniFormat);
+static QSettings kgreetersettings(KDE_SYSCONFDIR "/lightdm/lightdm-kgreeter-greeter.conf");
 
 static QString glibErrorString(const GError *const gliberror)
 {
@@ -114,8 +114,8 @@ KGreeter::KGreeter(QWidget *parent)
 
     m_ui.setupUi(this);
 
-    m_background = QImage(kgreetersettings.value("greeter/background", KGreeterDefaultBackground()).toString());
-    m_rectangle = QImage(kgreetersettings.value("greeter/rectangle", KGreeterDefaultRectangle()).toString());
+    m_background = QImage(kgreetersettings.string("greeter/background", KGreeterDefaultBackground()));
+    m_rectangle = QImage(kgreetersettings.string("greeter/rectangle", KGreeterDefaultRectangle()));
 
     m_ldmgreeter = lightdm_greeter_new();
 
@@ -187,11 +187,11 @@ KGreeter::KGreeter(QWidget *parent)
     }
 
     QSettings kgreeterstate("lightdm-kgreeter-state");
-    const QString lastuser = kgreeterstate.value("state/lastuser").toString();
+    const QString lastuser = kgreeterstate.string("state/lastuser");
     if (!lastuser.isEmpty()) {
         setUser(lastuser);
     }
-    const QString lastsession = kgreeterstate.value("state/lastsession").toString();
+    const QString lastsession = kgreeterstate.string("state/lastsession");
     if (!lastsession.isEmpty()) {
         setSession(lastsession);
     }
@@ -493,8 +493,8 @@ void KGreeter::slotLogin()
     // the trick is to save before lightdm_greeter_authenticate()
     {
         QSettings kgreeterstate("lightdm-kgreeter-state");
-        kgreeterstate.setValue("state/lastsession", kgreetersession);
-        kgreeterstate.setValue("state/lastuser", kgreeterusername);
+        kgreeterstate.setString("state/lastsession", kgreetersession);
+        kgreeterstate.setString("state/lastuser", kgreeterusername);
     }
 
     g_autoptr(GError) gliberror = NULL;
@@ -542,7 +542,7 @@ int main(int argc, char**argv)
 
     QApplication app(argc, argv);
 
-    const QString kgreeterfontstring = kgreetersettings.value("greeter/font").toString();
+    const QString kgreeterfontstring = kgreetersettings.string("greeter/font");
     QFont kgreeterfont;
     if (!kgreeterfont.fromString(kgreeterfontstring)) {
         kgreeterfont = KGreeterDefaultFont();
@@ -555,10 +555,10 @@ int main(int argc, char**argv)
         app.addPluginPath(path);
     }
 
-    const QString kgreeterstyle = kgreetersettings.value("greeter/style", KGreeterDefaultStyle()).toString();
+    const QString kgreeterstyle = kgreetersettings.string("greeter/style", KGreeterDefaultStyle());
     app.setStyle(kgreeterstyle);
 
-    const QString kgreetercolorscheme = kgreetersettings.value("greeter/colorscheme").toString();
+    const QString kgreetercolorscheme = kgreetersettings.string("greeter/colorscheme");
     if (!kgreetercolorscheme.isEmpty()) {
         KSharedConfigPtr kcolorschemeconfig = KSharedConfig::openConfig(
             QString::fromLatin1("color-schemes/%1.colors").arg(kgreetercolorscheme),
@@ -569,7 +569,7 @@ int main(int argc, char**argv)
         app.setPalette(KGlobalSettings::createApplicationPalette());
     }
 
-    const QString kgreetercursortheme = kgreetersettings.value("greeter/cursortheme", KGreeterDefaultCursorTheme()).toString();
+    const QString kgreetercursortheme = kgreetersettings.string("greeter/cursortheme", KGreeterDefaultCursorTheme());
     if (!kgreetercursortheme.isEmpty()) {
         const QByteArray xcursorthemebytes = kgreetercursortheme.toAscii();
         ::setenv("XCURSOR_THEME", xcursorthemebytes.constData(), 1);

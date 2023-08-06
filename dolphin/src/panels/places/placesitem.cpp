@@ -270,7 +270,7 @@ void PlacesItem::onTrashConfigChange(const QString &config)
     Q_ASSERT(url().protocol() == QLatin1String("trash"));
 
     KSettings trashConfig("trashrc", KSettings::SimpleConfig);
-    const bool isTrashEmpty = trashConfig.value("Status/Empty", true).toBool();
+    const bool isTrashEmpty = trashConfig.boolean("Status/Empty", true);
     setIcon(isTrashEmpty ? "user-trash" : "user-trash-full");
 }
 

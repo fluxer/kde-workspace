@@ -328,7 +328,7 @@ void KonqPopupMenuPrivate::init(KonqPopupMenu::Flags kpf, KParts::BrowserExtensi
         act->setIcon( KIcon("trash-empty") );
         act->setText( i18n( "&Empty Trash Bin" ) );
         KSettings trashConfig("trashrc", KSettings::SimpleConfig);
-        act->setEnabled( !trashConfig.value("Status/Empty", true).toBool() );
+        act->setEnabled( !trashConfig.boolean("Status/Empty", true) );
         QObject::connect(act, SIGNAL(triggered()), q, SLOT(slotPopupEmptyTrashBin()));
         q->addAction(act);
     }
