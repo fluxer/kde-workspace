@@ -156,6 +156,7 @@ void ChFaceDlg::addCustomPixmap(const QString &imPath, bool saveCopy)
 void ChFaceDlg::slotGetCustomImage()
 {
     QCheckBox* checkWidget = new QCheckBox(i18n("&Save copy in custom faces folder for future use"), nullptr);
+    checkWidget->setChecked(true);
 
     KFileDialog dlg(
         QDir::homePath(), KImageIO::pattern(KImageIO::Reading),
