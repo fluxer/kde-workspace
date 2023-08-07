@@ -1430,6 +1430,7 @@
     <item> qLn </item>
     <item> qExp </item>
     <item> qPow </item>
+    <item> qFmod </item>
     <item> qVersion </item>
     <item> qWarning </item>
     <item> q_check_ptr </item>
