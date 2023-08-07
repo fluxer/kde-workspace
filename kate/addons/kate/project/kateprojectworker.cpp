@@ -189,7 +189,7 @@ void KateProjectWorker::loadFilesEntry (QStandardItem *parent, const QVariantMap
     /**
      * prepend the directory path
      */
-    foreach (QString relFile, relFiles) {
+    foreach (const QString &relFile, relFiles) {
       /**
        * skip non-direct files if not recursive
        */
@@ -223,7 +223,7 @@ void KateProjectWorker::loadFilesEntry (QStandardItem *parent, const QVariantMap
     /**
      * prepend the directory path
      */
-    foreach (QString relFile, relFiles) {
+    foreach (const QString &relFile, relFiles) {
       /**
        * skip non-direct files if not recursive
        */
@@ -263,7 +263,7 @@ void KateProjectWorker::loadFilesEntry (QStandardItem *parent, const QVariantMap
      */
     bool first = true;
     int prefixLength = -1;
-    foreach (QString line, lines) {
+    foreach (const QString &line, lines) {
         /**
          * get length of stuff to cut
          */
@@ -339,7 +339,7 @@ void KateProjectWorker::loadFilesEntry (QStandardItem *parent, const QVariantMap
   QMap<QString, QStandardItem *> dir2Item;
   dir2Item[""] = parent;
   QList<QPair<QStandardItem *, QStandardItem *> > item2ParentPath;
-  foreach (QString filePath, files) {
+  foreach (const QString &filePath, files) {
     /**
      * get file info and skip NON-files
      */
