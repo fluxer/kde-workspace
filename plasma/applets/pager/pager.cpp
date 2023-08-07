@@ -139,33 +139,33 @@ void Pager::updatePagerStyle()
 
     // Desktop background
     QColor defaultTextColor = Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
-    m_pagerStyle["textColor"] = QString("#%1").arg(defaultTextColor.rgba(), 0, 16);
+    m_pagerStyle["textColor"] = defaultTextColor.name();
     defaultTextColor.setAlpha(64);
 
     // Inactive windows
     QColor drawingColor = plasmaColorTheme()->foreground(KColorScheme::InactiveText).color();
     drawingColor.setAlpha(45);
-    m_pagerStyle["windowInactiveColor"] = QString("#%1").arg(drawingColor.rgba(), 0, 16);
+    m_pagerStyle["windowInactiveColor"] = drawingColor.name();
 
     // Inactive windows Active desktop
     drawingColor.setAlpha(90);
-    m_pagerStyle["windowInactiveOnActiveDesktopColor"] = QString("#%1").arg(drawingColor.rgba(), 0, 16);
+    m_pagerStyle["windowInactiveOnActiveDesktopColor"] = drawingColor.name();
 
     // Inactive window borders
     drawingColor = defaultTextColor;
     drawingColor.setAlpha(130);
-    m_pagerStyle["windowInactiveBorderColor"] = QString("#%1").arg(drawingColor.rgba(), 0, 16);
+    m_pagerStyle["windowInactiveBorderColor"] = drawingColor.name();
 
     // Active window borders
-    m_pagerStyle["windowActiveBorderColor"] = QString("#%1").arg(defaultTextColor.rgba(), 0, 16);
+    m_pagerStyle["windowActiveBorderColor"] = defaultTextColor.name();
 
     // Active windows
     drawingColor.setAlpha(130);
-    m_pagerStyle["windowActiveColor"] = QString("#%1").arg(drawingColor.rgba(), 0, 16);
+    m_pagerStyle["windowActiveColor"] = drawingColor.name();
 
     // Active windows Active desktop
     drawingColor.setAlpha(155);
-    m_pagerStyle["windowActiveOnActiveDesktopColor"] = QString("#%1").arg(drawingColor.rgba(), 0, 16);
+    m_pagerStyle["windowActiveOnActiveDesktopColor"] = drawingColor.name();
 
     emit styleChanged();
 }
