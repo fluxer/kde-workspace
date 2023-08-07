@@ -121,7 +121,7 @@ PlasmaApp::PlasmaApp()
 
     KGlobal::locale()->insertCatalog("libplasma");
     KGlobal::locale()->insertCatalog("plasmagenericshell");
-    KCrash::setFlags(KCrash::AutoRestart);
+    KCrash::setFlags(KCrash::AutoRestart | KCrash::Log);
 
     m_panelViewCreationTimer.setSingleShot(true);
     m_panelViewCreationTimer.setInterval(0);

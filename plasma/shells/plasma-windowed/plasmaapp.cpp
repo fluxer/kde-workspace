@@ -52,7 +52,7 @@ PlasmaApp::PlasmaApp()
       m_maxId(0)
 {
     KGlobal::locale()->insertCatalog("plasma-standaloneplasmoids");
-    KCrash::setFlags(KCrash::AutoRestart);
+    KCrash::setFlags(KCrash::AutoRestart | KCrash::Log);
 
     KConfigGroup cg(KGlobal::config(), "General");
     Plasma::Theme::defaultTheme()->setFont(cg.readEntry("desktopFont", font()));

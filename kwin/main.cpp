@@ -250,7 +250,7 @@ bool Application::setup()
     }
     connect(owner, SIGNAL(lostOwnership()), this, SLOT(lostSelection()), Qt::DirectConnection);
 
-    KCrash::setFlags(KCrash::AutoRestart);
+    KCrash::setFlags(KCrash::AutoRestart | KCrash::Log);
 
     initting = true; // Startup...
     // first load options - done internally by a different thread

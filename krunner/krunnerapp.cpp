@@ -94,7 +94,7 @@ void KRunnerApp::initialize()
     setWindowIcon(KIcon(QLatin1String("system-run")));
 
     setQuitOnLastWindowClosed(false);
-    KCrash::setFlags(KCrash::AutoRestart);
+    KCrash::setFlags(KCrash::AutoRestart | KCrash::Log);
 
     connect(KRunnerSettings::self(), SIGNAL(configChanged()), this, SLOT(reloadConfig()));
 
