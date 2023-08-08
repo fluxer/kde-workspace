@@ -93,5 +93,6 @@ Name[zh_TW]=游標檔案
 X-KDE-ServiceTypes=ThumbCreator
 MimeType=image/x-xcursor;
 X-KDE-Library=cursorthumbnail
+X-KDE-PluginInfo-EnabledByDefault=true
 CacheThumbnail=false
 InitialPreference=2
