@@ -85,11 +85,7 @@ KIconConfig::KIconConfig(const KComponentData &inst, QWidget *parent)
     connect(mpSizeBox, SIGNAL(activated(int)), SLOT(slotSize(int)));
     lbl->setBuddy(mpSizeBox);
     grid->addWidget(mpSizeBox, 0, 1, Qt::AlignLeft);
-
-    mpAnimatedCheck = new QCheckBox(i18n("Animate icons"), m_pTab1);
-    connect(mpAnimatedCheck, SIGNAL(toggled(bool)), this, SLOT(slotAnimatedCheck(bool)));
-    grid->addWidget(mpAnimatedCheck, 2, 0, 1, 2, Qt::AlignLeft);
-    grid->setRowStretch(3, 10);
+    grid->setRowStretch(2, 10);
 
     top->activate();
 
@@ -173,7 +169,6 @@ void KIconConfig::initDefaults()
     QStringList::ConstIterator it;
     for(it = mGroups.constBegin(), i= KIconLoader::FirstGroup; it != mGroups.constEnd(); ++it, i++) {
         mbChanged[i] = true;
-        mbAnimated[i] = false;
         if (mpLoader->theme()) {
             mSizes[i] = mpLoader->theme()->defaultSize(i);
         } else {
@@ -183,11 +178,6 @@ void KIconConfig::initDefaults()
         mEffects[i][0] = mDefaultEffect[0];
         mEffects[i][1] = mDefaultEffect[1];
         mEffects[i][2] = mDefaultEffect[2];
-    }
-    // Animate desktop icons by default
-    int group = mGroups.indexOf("Desktop");
-    if (group != -1) {
-        mbAnimated[group] = true;
     }
 
     // This is the new default in KDE 2.2, in sync with the kiconeffect of kdelibs Nolden 2001/06/11
@@ -239,7 +229,6 @@ void KIconConfig::read()
 
         KConfigGroup iconGroup(mpConfig, *it + "Icons");
         mSizes[i] = iconGroup.readEntry("Size", mSizes[i]);
-        mbAnimated[i] = iconGroup.readEntry("Animated", mbAnimated[i]);
 
         for (it2 = mStates.constBegin(), j = 0; it2 != mStates.constEnd(); ++it2, j++) {
             QString tmp = iconGroup.readEntry(*it2 + "Effect", QString());
@@ -289,7 +278,6 @@ void KIconConfig::apply()
             mpSizeBox->setCurrentIndex(index);
             mSizes[mUsage] = size; // best or exact match
         }
-        mpAnimatedCheck->setChecked(mbAnimated[mUsage]);
     }
 }
 
@@ -335,7 +323,6 @@ void KIconConfig::save()
     for (it = mGroups.constBegin(), i = 0; it!=mGroups.constEnd(); ++it, i++) {
         KConfigGroup cg(mpConfig, *it + "Icons");
         cg.writeEntry("Size", mSizes[i], KConfig::Normal|KConfig::Global);
-        cg.writeEntry("Animated", mbAnimated[i], KConfig::Normal|KConfig::Global);
         for (it2 = mStates.constBegin(), j = 0; it2 != mStates.constEnd(); ++it2, j++) {
             QString tmp;
             switch (mEffects[i][j].type) {
@@ -402,10 +389,8 @@ void KIconConfig::slotUsage(int index)
     mUsage = index;
     if (mUsage == KIconLoader::LastGroup) {
         mpSizeBox->setEnabled(false);
-        mpAnimatedCheck->setEnabled(false);
     } else {
         mpSizeBox->setEnabled(true);
-        mpAnimatedCheck->setEnabled(mUsage == KIconLoader::Desktop);
     }
 
     apply();
@@ -459,16 +444,6 @@ void KIconConfig::slotSize(int index)
     preview();
     emit changed(true);
     mbChanged[mUsage] = true;
-}
-
-void KIconConfig::slotAnimatedCheck(bool check)
-{
-    Q_ASSERT(mUsage < KIconLoader::LastGroup);
-    if (mbAnimated[mUsage] != check) {
-        mbAnimated[mUsage] = check;
-        emit changed(true);
-        mbChanged[mUsage] = true;
-    }
 }
 
 KIconEffectSetupDialog::KIconEffectSetupDialog(const Effect &effect,
