@@ -56,7 +56,7 @@ KIconConfig::KIconConfig(const KComponentData &inst, QWidget *parent)
     top->addWidget(sep, 1, 1);
     // Preview at (2,0) - (2, 1)
     QGridLayout *g_lay = new QGridLayout();
-    g_lay->setSpacing( 0);
+    g_lay->setSpacing(0);
     top->addLayout(g_lay, 2, 0, 1, 2 );
     g_lay->addItem(new QSpacerItem(0, fontMetrics().lineSpacing()), 0, 0);
 
@@ -70,13 +70,12 @@ KIconConfig::KIconConfig(const KComponentData &inst, QWidget *parent)
     connect(push, SIGNAL(clicked()), SLOT(slotEffectSetup2()));
 
     m_pTab1 = new QWidget(this);
-    m_pTab1->setObjectName( QLatin1String("General Tab" ));
+    m_pTab1->setObjectName(QLatin1String("General Tab"));
     top->addWidget(m_pTab1, 0, 1);
 
     QGridLayout *grid = new QGridLayout(m_pTab1);
     grid->setColumnStretch(1, 1);
     grid->setColumnStretch(2, 1);
-
 
     // Size
     QLabel *lbl = new QLabel(i18n("Size:"), m_pTab1);
@@ -88,7 +87,7 @@ KIconConfig::KIconConfig(const KComponentData &inst, QWidget *parent)
     grid->addWidget(mpSizeBox, 0, 1, Qt::AlignLeft);
 
     mpAnimatedCheck = new QCheckBox(i18n("Animate icons"), m_pTab1);
-    connect(mpAnimatedCheck, SIGNAL(toggled(bool)), SLOT(slotAnimatedCheck(bool)));
+    connect(mpAnimatedCheck, SIGNAL(toggled(bool)), this, SLOT(slotAnimatedCheck(bool)));
     grid->addWidget(mpAnimatedCheck, 2, 0, 1, 2, Qt::AlignLeft);
     grid->setRowStretch(3, 10);
 
@@ -102,7 +101,7 @@ KIconConfig::KIconConfig(const KComponentData &inst, QWidget *parent)
 
 KIconConfig::~KIconConfig()
 {
-  delete mpEffect;
+    delete mpEffect;
 }
 
 QPushButton *KIconConfig::addPreviewIcon(int i, const QString &str, QWidget *parent, QGridLayout *lay)
@@ -124,8 +123,9 @@ void KIconConfig::init()
     mpConfig = KGlobal::config();
     mpEffect = new KIconEffect;
     mUsage = 0;
-    for (int i=0; i<KIconLoader::LastGroup; i++)
-	mbChanged[i] = false;
+    for (int i = 0; i < KIconLoader::LastGroup; i++) {
+        mbChanged[i] = false;
+    }
 
     // Fill list/checkboxen
     mpUsageList->addItem(i18n("Desktop"));
@@ -171,66 +171,60 @@ void KIconConfig::initDefaults()
 
     KIconLoader::Group i;
     QStringList::ConstIterator it;
-    for(it=mGroups.constBegin(), i=KIconLoader::FirstGroup; it!=mGroups.constEnd(); ++it, i++)
-    {
-	mbChanged[i] = true;
-	mbAnimated[i] = false;
-	if (mpLoader->theme())
-	    mSizes[i] = mpLoader->theme()->defaultSize(i);
-	else
-	    mSizes[i] = defDefSizes[i];
-
-	mEffects[i][0] = mDefaultEffect[0];
-	mEffects[i][1] = mDefaultEffect[1];
-	mEffects[i][2] = mDefaultEffect[2];
-    }
-    // Animate desktop icons by default
-    int group = mGroups.indexOf( "Desktop" );
-    if ( group != -1 )
-        mbAnimated[group] = true;
-
-    // This is the new default in KDE 2.2, in sync with the kiconeffect of kdelibs Nolden 2001/06/11
-    int activeState = mStates.indexOf( "Active" );
-    if ( activeState != -1 )
-    {
-        int group = mGroups.indexOf( "Desktop" );
-        if ( group != -1 )
-        {
-            mEffects[ group ][ activeState ].type = KIconEffect::ToGamma;
-            mEffects[ group ][ activeState ].value = 0.7f;
+    for(it = mGroups.constBegin(), i= KIconLoader::FirstGroup; it != mGroups.constEnd(); ++it, i++) {
+        mbChanged[i] = true;
+        mbAnimated[i] = false;
+        if (mpLoader->theme()) {
+            mSizes[i] = mpLoader->theme()->defaultSize(i);
+        } else {
+            mSizes[i] = defDefSizes[i];
         }
 
-        group = mGroups.indexOf( "Panel" );
-        if ( group != -1 )
-        {
-            mEffects[ group ][ activeState ].type = KIconEffect::ToGamma;
-            mEffects[ group ][ activeState ].value = 0.7f;
+        mEffects[i][0] = mDefaultEffect[0];
+        mEffects[i][1] = mDefaultEffect[1];
+        mEffects[i][2] = mDefaultEffect[2];
+    }
+    // Animate desktop icons by default
+    int group = mGroups.indexOf("Desktop");
+    if (group != -1) {
+        mbAnimated[group] = true;
+    }
+
+    // This is the new default in KDE 2.2, in sync with the kiconeffect of kdelibs Nolden 2001/06/11
+    int activeState = mStates.indexOf("Active");
+    if (activeState != -1) {
+        int group = mGroups.indexOf("Desktop");
+        if (group != -1) {
+            mEffects[group][activeState].type = KIconEffect::ToGamma;
+            mEffects[group][activeState].value = 0.7f;
+        }
+
+        group = mGroups.indexOf("Panel");
+        if (group != -1) {
+            mEffects[group][activeState].type = KIconEffect::ToGamma;
+            mEffects[group][activeState].value = 0.7f;
         }
     }
 }
 
 void KIconConfig::read()
 {
-    if (mpLoader->theme())
-    {
-        for (KIconLoader::Group i=KIconLoader::FirstGroup; i<KIconLoader::LastGroup; i++)
-        {
+    if (mpLoader->theme()) {
+        for (KIconLoader::Group i=KIconLoader::FirstGroup; i<KIconLoader::LastGroup; i++) {
             mAvSizes[i] = mpLoader->theme()->querySizes(i);
 
             // ### Themes need to be fixed to include available sizes for Dialog icons
-            if (i == KIconLoader::Dialog && mAvSizes[i].isEmpty())
-            {
+            if (i == KIconLoader::Dialog && mAvSizes[i].isEmpty()) {
                 mAvSizes[i] = mAvSizes[KIconLoader::Desktop];
             }
         }
 
         mTheme = mpLoader->theme()->current();
         mExample = mpLoader->theme()->example();
-    }
-    else
-    {
-        for (KIconLoader::Group i=KIconLoader::FirstGroup; i<KIconLoader::LastGroup; i++)
+    } else {
+        for (KIconLoader::Group i=KIconLoader::FirstGroup; i<KIconLoader::LastGroup; i++) {
             mAvSizes[i] = QList<int>();
+        }
 
         mTheme.clear();
         mExample.clear();
@@ -240,36 +234,36 @@ void KIconConfig::read()
 
     int i, j, effect;
     QStringList::ConstIterator it, it2;
-    for (it=mGroups.constBegin(), i=0; it!=mGroups.constEnd(); ++it, i++)
-    {
+    for (it = mGroups.constBegin(), i = 0; it != mGroups.constEnd(); ++it, i++) {
         mbChanged[i] = false;
 
         KConfigGroup iconGroup(mpConfig, *it + "Icons");
-	mSizes[i] = iconGroup.readEntry("Size", mSizes[i]);
-	mbAnimated[i] = iconGroup.readEntry("Animated", mbAnimated[i]);
+        mSizes[i] = iconGroup.readEntry("Size", mSizes[i]);
+        mbAnimated[i] = iconGroup.readEntry("Animated", mbAnimated[i]);
 
-	for (it2=mStates.constBegin(), j=0; it2!=mStates.constEnd(); ++it2, j++)
-	{
-	    QString tmp = iconGroup.readEntry(*it2 + "Effect", QString());
-	    if (tmp == "togray")
-		effect = KIconEffect::ToGray;
-	    else if (tmp == "colorize")
-		effect = KIconEffect::Colorize;
-	    else if (tmp == "togamma")
-		effect = KIconEffect::ToGamma;
-	    else if (tmp == "desaturate")
-		effect = KIconEffect::DeSaturate;
-	    else if (tmp == "tomonochrome")
-		effect = KIconEffect::ToMonochrome;
-	    else if (tmp == "none")
-		effect = KIconEffect::NoEffect;
-	    else continue;
-	    mEffects[i][j].type = effect;
-	    mEffects[i][j].value = iconGroup.readEntry(*it2 + "Value", 0.0);
-	    mEffects[i][j].color = iconGroup.readEntry(*it2 + "Color",QColor());
-	    mEffects[i][j].color2 = iconGroup.readEntry(*it2 + "Color2", QColor());
-	    mEffects[i][j].transparent = iconGroup.readEntry(*it2 + "SemiTransparent", false);
-	}
+        for (it2 = mStates.constBegin(), j = 0; it2 != mStates.constEnd(); ++it2, j++) {
+            QString tmp = iconGroup.readEntry(*it2 + "Effect", QString());
+            if (tmp == "togray") {
+                effect = KIconEffect::ToGray;
+            } else if (tmp == "colorize") {
+                effect = KIconEffect::Colorize;
+            } else if (tmp == "togamma") {
+                effect = KIconEffect::ToGamma;
+            } else if (tmp == "desaturate") {
+                effect = KIconEffect::DeSaturate;
+            } else if (tmp == "tomonochrome") {
+                effect = KIconEffect::ToMonochrome;
+            } else if (tmp == "none") {
+                effect = KIconEffect::NoEffect;
+            } else {
+                continue;
+            }
+            mEffects[i][j].type = effect;
+            mEffects[i][j].value = iconGroup.readEntry(*it2 + "Value", 0.0);
+            mEffects[i][j].color = iconGroup.readEntry(*it2 + "Color", QColor());
+            mEffects[i][j].color2 = iconGroup.readEntry(*it2 + "Color2", QColor());
+            mEffects[i][j].transparent = iconGroup.readEntry(*it2 + "SemiTransparent", false);
+        }
     }
 }
 
@@ -281,20 +275,17 @@ void KIconConfig::apply()
     QList<int>::Iterator it;
     mpSizeBox->clear();
     if (mUsage < KIconLoader::LastGroup) {
-        for (it=mAvSizes[mUsage].begin(), i=0; it!=mAvSizes[mUsage].end(); ++it, i++)
-        {
+        for (it = mAvSizes[mUsage].begin(), i=0; it!=mAvSizes[mUsage].end(); ++it, i++) {
             mpSizeBox->addItem(QString().setNum(*it));
             dw = abs(mSizes[mUsage] - *it);
-            if (dw < delta)
-            {
+            if (dw < delta) {
                 delta = dw;
                 index = i;
                 size = *it;
             }
 
         }
-        if (index != -1)
-        {
+        if (index != -1) {
             mpSizeBox->setCurrentIndex(index);
             mSizes[mUsage] = size; // best or exact match
         }
@@ -314,8 +305,7 @@ void KIconConfig::preview(int i)
 
     Effect &effect = mEffects[viewedGroup][i];
 
-    img = mpEffect->apply(img, effect.type,
-	    effect.value, effect.color, effect.color2, effect.transparent);
+    img = mpEffect->apply(img, effect.type, effect.value, effect.color, effect.color2, effect.transparent);
     pm = QPixmap::fromImage(img);
     mpPreview[i]->setPixmap(pm);
 }
@@ -332,65 +322,66 @@ void KIconConfig::load()
     read();
     apply();
     emit changed(false);
-    for (int i=0; i<KIconLoader::LastGroup; i++)
-	mbChanged[i] = false;
+    for (int i = 0; i < KIconLoader::LastGroup; i++) {
+        mbChanged[i] = false;
+    }
     preview();
 }
-
 
 void KIconConfig::save()
 {
     int i, j;
     QStringList::ConstIterator it, it2;
-    for (it=mGroups.constBegin(), i=0; it!=mGroups.constEnd(); ++it, i++)
-    {
-	KConfigGroup cg(mpConfig, *it + "Icons");
-	cg.writeEntry("Size", mSizes[i], KConfig::Normal|KConfig::Global);
-	cg.writeEntry("Animated", mbAnimated[i], KConfig::Normal|KConfig::Global);
-	for (it2=mStates.constBegin(), j=0; it2!=mStates.constEnd(); ++it2, j++)
-	{
-	    QString tmp;
-	    switch (mEffects[i][j].type)
-	    {
-	    case KIconEffect::ToGray:
-		tmp = "togray";
-		break;
-	    case KIconEffect::ToGamma:
-		tmp = "togamma";
-		break;
-	    case KIconEffect::Colorize:
-		tmp = "colorize";
-		break;
-	    case KIconEffect::DeSaturate:
-		tmp = "desaturate";
-		break;
-	    case KIconEffect::ToMonochrome:
-		tmp = "tomonochrome";
-		break;
-	    default:
-		tmp = "none";
-		break;
-	    }
-	    cg.writeEntry(*it2 + "Effect", tmp, KConfig::Normal|KConfig::Global);
-	    cg.writeEntry(*it2 + "Value", mEffects[i][j].value, KConfig::Normal|KConfig::Global);
+    for (it = mGroups.constBegin(), i = 0; it!=mGroups.constEnd(); ++it, i++) {
+        KConfigGroup cg(mpConfig, *it + "Icons");
+        cg.writeEntry("Size", mSizes[i], KConfig::Normal|KConfig::Global);
+        cg.writeEntry("Animated", mbAnimated[i], KConfig::Normal|KConfig::Global);
+        for (it2 = mStates.constBegin(), j = 0; it2 != mStates.constEnd(); ++it2, j++) {
+            QString tmp;
+            switch (mEffects[i][j].type) {
+                case KIconEffect::ToGray: {
+                    tmp = "togray";
+                    break;
+                }
+                case KIconEffect::ToGamma: {
+                    tmp = "togamma";
+                    break;
+                }
+                case KIconEffect::Colorize: {
+                    tmp = "colorize";
+                    break;
+                }
+                case KIconEffect::DeSaturate: {
+                    tmp = "desaturate";
+                    break;
+                }
+                case KIconEffect::ToMonochrome: {
+                    tmp = "tomonochrome";
+                    break;
+                }
+                default: {
+                    tmp = "none";
+                    break;
+                }
+            }
+            cg.writeEntry(*it2 + "Effect", tmp, KConfig::Normal|KConfig::Global);
+            cg.writeEntry(*it2 + "Value", mEffects[i][j].value, KConfig::Normal|KConfig::Global);
             cg.writeEntry(*it2 + "Color", mEffects[i][j].color, KConfig::Normal|KConfig::Global);
             cg.writeEntry(*it2 + "Color2", mEffects[i][j].color2, KConfig::Normal|KConfig::Global);
             cg.writeEntry(*it2 + "SemiTransparent", mEffects[i][j].transparent, KConfig::Normal|KConfig::Global);
-	}
+        }
     }
 
     mpConfig->sync();
 
     emit changed(false);
 
-    // Emit KIPC change message.
-    for (int i=0; i<KIconLoader::LastGroup; i++)
-    {
-	if (mbChanged[i])
-	{
-	    KGlobalSettings::self()->emitChange(KGlobalSettings::IconChanged, i);
-	    mbChanged[i] = false;
-	}
+    // Emit IPC change message.
+    for (int i = 0; i<KIconLoader::LastGroup; i++) {
+        if (mbChanged[i]) {
+            KGlobalSettings::self()->emitChange(KGlobalSettings::IconChanged, i);
+            mbChanged[i] = false;
+        }
     }
 }
 
@@ -404,19 +395,17 @@ void KIconConfig::defaults()
 
 void KIconConfig::slotUsage(int index)
 {
-    if (index == -1)
+    if (index == -1) {
         return;
+    }
 
     mUsage = index;
-    if ( mUsage == KIconLoader::LastGroup )
-    {
+    if (mUsage == KIconLoader::LastGroup) {
         mpSizeBox->setEnabled(false);
         mpAnimatedCheck->setEnabled(false);
-    }
-    else
-    {
+    } else {
         mpSizeBox->setEnabled(true);
-        mpAnimatedCheck->setEnabled( mUsage == KIconLoader::Desktop );
+        mpAnimatedCheck->setEnabled(mUsage == KIconLoader::Desktop);
     }
 
     apply();
@@ -431,32 +420,31 @@ void KIconConfig::EffectSetup(int state)
     QImage img = pm.toImage();
 
     QString caption;
-    switch (state)
-    {
-    case 0 : caption = i18n("Setup Default Icon Effect"); break;
-    case 1 : caption = i18n("Setup Active Icon Effect"); break;
-    case 2 : caption = i18n("Setup Disabled Icon Effect"); break;
+    switch (state) {
+        case 0 : caption = i18n("Setup Default Icon Effect"); break;
+        case 1 : caption = i18n("Setup Active Icon Effect"); break;
+        case 2 : caption = i18n("Setup Disabled Icon Effect"); break;
     }
 
     KIconEffectSetupDialog dlg(mEffects[viewedGroup][state], mDefaultEffect[state], caption, img, this);
 
-    if (dlg.exec() == QDialog::Accepted)
-    {
+    if (dlg.exec() == QDialog::Accepted) {
         if (mUsage == KIconLoader::LastGroup) {
-            for (int i=0; i<KIconLoader::LastGroup; i++)
+            for (int i = 0; i < KIconLoader::LastGroup; i++) {
                 mEffects[i][state] = dlg.effect();
+            }
         } else {
             mEffects[mUsage][state] = dlg.effect();
         }
 
         // AK - can this call be moved therefore removing
         //      code duplication?
-
         emit changed(true);
 
         if (mUsage == KIconLoader::LastGroup) {
-            for (int i=0; i<KIconLoader::LastGroup; i++)
+            for (int i=0; i<KIconLoader::LastGroup; i++) {
                 mbChanged[i] = true;
+            }
         } else {
             mbChanged[mUsage] = true;
         }
@@ -476,8 +464,7 @@ void KIconConfig::slotSize(int index)
 void KIconConfig::slotAnimatedCheck(bool check)
 {
     Q_ASSERT(mUsage < KIconLoader::LastGroup);
-    if (mbAnimated[mUsage] != check)
-    {
+    if (mbAnimated[mUsage] != check) {
         mbAnimated[mUsage] = check;
         emit changed(true);
         mbChanged[mUsage] = true;
@@ -485,18 +472,18 @@ void KIconConfig::slotAnimatedCheck(bool check)
 }
 
 KIconEffectSetupDialog::KIconEffectSetupDialog(const Effect &effect,
-    const Effect &defaultEffect,
-    const QString &caption, const QImage &image,
-    QWidget *parent, char *name)
-    : KDialog( parent ),
-      mEffect(effect),
-      mDefaultEffect(defaultEffect),
-      mExample(image)
+                                               const Effect &defaultEffect,
+                                               const QString &caption, const QImage &image,
+                                               QWidget *parent, char *name)
+    : KDialog(parent),
+    mEffect(effect),
+    mDefaultEffect(defaultEffect),
+    mExample(image)
 {
-    setObjectName( name );
-    setModal( true );
-    setCaption( caption );
-    setButtons( Default|Ok|Cancel );
+    setObjectName(name);
+    setModal(true);
+    setCaption(caption);
+    setButtons(KDialog::Default | KDialog::Ok | KDialog::Cancel);
 
     mpEffect = new KIconEffect;
 
@@ -509,9 +496,9 @@ KIconEffectSetupDialog::KIconEffectSetupDialog(const Effect &effect,
 
     QGridLayout *top = new QGridLayout(page);
     top->setMargin(0);
-    top->setColumnStretch(0,1);
-    top->setColumnStretch(1,2);
-    top->setRowStretch(1,1);
+    top->setColumnStretch(0, 1);
+    top->setColumnStretch(1, 2);
+    top->setRowStretch(1, 1);
 
     lbl = new QLabel(i18n("&Effect:"), page);
     top->addWidget(lbl, 0, 0, Qt::AlignLeft);
@@ -551,19 +538,17 @@ KIconEffectSetupDialog::KIconEffectSetupDialog(const Effect &effect,
     mpEffectSlider->setPageStep(5);
     connect(mpEffectSlider, SIGNAL(valueChanged(int)), SLOT(slotEffectValue(int)));
     form->addRow(i18n("&Amount:"), mpEffectSlider);
-    mpEffectLabel = static_cast<QLabel *>(form->labelForField(mpEffectSlider));
+    mpEffectLabel = static_cast<QLabel*>(form->labelForField(mpEffectSlider));
 
     mpEColButton = new KColorButton(mpEffectGroup);
-    connect(mpEColButton, SIGNAL(changed(const QColor &)),
-		SLOT(slotEffectColor(const QColor &)));
+    connect(mpEColButton, SIGNAL(changed(QColor)), this, SLOT(slotEffectColor(QColor)));
     form->addRow(i18n("Co&lor:"), mpEColButton);
-    mpEffectColor = static_cast<QLabel *>(form->labelForField(mpEColButton));
+    mpEffectColor = static_cast<QLabel*>(form->labelForField(mpEColButton));
 
     mpECol2Button = new KColorButton(mpEffectGroup);
-    connect(mpECol2Button, SIGNAL(changed(const QColor &)),
-		SLOT(slotEffectColor2(const QColor &)));
+    connect(mpECol2Button, SIGNAL(changed(QColor)), this, SLOT(slotEffectColor2(QColor)));
     form->addRow(i18n("&Second color:"), mpECol2Button);
-    mpEffectColor2 = static_cast<QLabel *>(form->labelForField(mpECol2Button));
+    mpEffectColor2 = static_cast<QLabel*>(form->labelForField(mpECol2Button));
 
     init();
     preview();
@@ -571,7 +556,7 @@ KIconEffectSetupDialog::KIconEffectSetupDialog(const Effect &effect,
 
 KIconEffectSetupDialog::~KIconEffectSetupDialog()
 {
-  delete mpEffect;
+    delete mpEffect;
 }
 
 void KIconEffectSetupDialog::init()
@@ -606,8 +591,9 @@ void KIconEffectSetupDialog::slotEffectColor2(const QColor &col)
 
 void KIconEffectSetupDialog::slotEffectType(int type)
 {
-    if (type == -1)
+    if (type == -1) {
         return;
+    }
 
     mEffect.type = type;
     mpEffectGroup->setEnabled(mEffect.type != KIconEffect::NoEffect);
@@ -636,8 +622,7 @@ void KIconEffectSetupDialog::preview()
 {
     QPixmap pm;
     QImage img = mExample.copy();
-    img = mpEffect->apply(img, mEffect.type,
-          mEffect.value, mEffect.color, mEffect.color2, mEffect.transparent);
+    img = mpEffect->apply(img, mEffect.type, mEffect.value, mEffect.color, mEffect.color2, mEffect.transparent);
     pm  = QPixmap::fromImage(img);
     mpPreview->setPixmap(pm);
 }

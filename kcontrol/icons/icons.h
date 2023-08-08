@@ -111,7 +111,7 @@ class KIconEffectSetupDialog: public KDialog
 public:
     KIconEffectSetupDialog(const Effect &, const Effect &,
                            const QString &, const QImage &,
-			   QWidget *parent=0L, char *name=0L);
+                           QWidget *parent = nullptr, char *name = nullptr);
     ~KIconEffectSetupDialog();
     Effect effect() { return mEffect; }
 

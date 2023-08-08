@@ -31,25 +31,24 @@
 
 class IconModule : public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  IconModule(QWidget *parent, const QVariantList &);
+    IconModule(QWidget *parent, const QVariantList &);
 
-  void load();
-  void save();
-  void defaults();
-  QString quickHelp() const;
+    void load();
+    void save();
+    void defaults();
+    QString quickHelp() const;
 
 protected Q_SLOTS:
-  void moduleChanged(bool state);
+    void moduleChanged(bool state);
 
 private:
-  QTabWidget   *tab;
+    QTabWidget   *tab;
 
-  KCModule *tab1;
-  KCModule *tab2;
+    KCModule *tab1;
+    KCModule *tab2;
 };
-
 
 #endif

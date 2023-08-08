@@ -30,40 +30,40 @@
 
 class IconThemesConfig : public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
 
 public:
-  IconThemesConfig(const KComponentData &inst, QWidget *parent);
-  virtual ~IconThemesConfig();
+    IconThemesConfig(const KComponentData &inst, QWidget *parent);
+    virtual ~IconThemesConfig();
 
-  void loadThemes();
-  bool installThemes(const QStringList &themes, const QString &archiveName);
-  QStringList findThemeDirs(const QString &archiveName);
+    void loadThemes();
+    bool installThemes(const QStringList &themes, const QString &archiveName);
+    QStringList findThemeDirs(const QString &archiveName);
 
-  void updateRemoveButton();
+    void updateRemoveButton();
 
-  void load();
-  void save();
-  void defaults();
+    void load();
+    void save();
+    void defaults();
 
-  int buttons();
+    int buttons();
 
 protected Q_SLOTS:
-  void themeSelected(QTreeWidgetItem *item);
-  void installNewTheme();
-  void removeSelectedTheme();
+    void themeSelected(QTreeWidgetItem *item);
+    void installNewTheme();
+    void removeSelectedTheme();
 
 private:
-  QTreeWidgetItem *iconThemeItem(const QString &name);
+    QTreeWidgetItem *iconThemeItem(const QString &name);
 
-  QTreeWidget *m_iconThemes;
-  KPushButton *m_removeButton;
+    QTreeWidget *m_iconThemes;
+    KPushButton *m_removeButton;
 
-  QLabel *m_previewExec;
-  QLabel *m_previewFolder;
-  QLabel *m_previewDocument;
-  QTreeWidgetItem *m_defaultTheme;
-  bool m_bChanged;
+    QLabel *m_previewExec;
+    QLabel *m_previewFolder;
+    QLabel *m_previewDocument;
+    QTreeWidgetItem *m_defaultTheme;
+    bool m_bChanged;
 };
 
 #endif // ICONTHEMES_H
