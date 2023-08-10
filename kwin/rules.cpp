@@ -134,6 +134,7 @@ static int limit0to4(int i)
 
 void Rules::readFromCfg(const KConfigGroup& cfg)
 {
+    ruleid = cfg.readEntry("id", QByteArray());
     description = cfg.readEntry("Description");
     if (description.isEmpty())  // capitalized first, lowercase for backwards compatibility
         description = cfg.readEntry("description");
@@ -232,6 +233,7 @@ void Rules::readFromCfg(const KConfigGroup& cfg)
 
 void Rules::write(KConfigGroup& cfg) const
 {
+    cfg.writeEntry("id", ruleid);
     cfg.writeEntry("Description", description);
     // always write wmclass
     WRITE_MATCH_STRING(wmclass, (const char*), true);
@@ -972,21 +974,32 @@ void RuleBook::edit(Client* c, bool whole_app)
 void RuleBook::load()
 {
     deleteAll();
+    QList<QByteArray> ruleids;
     KConfig cfg("kwinrulesrc", KConfig::NoGlobals);
     int count = cfg.group("General").readEntry("count", 0);
     for (int i = 1; i <= count; ++i) {
         KConfigGroup cg(&cfg, QString::number(i));
+        const QByteArray id = cg.readEntry("id", QByteArray());
+        if (ruleids.contains(id)) {
+            continue;
+        }
         Rules* rule = new Rules(cg);
         m_rules.append(rule);
+        ruleids.append(id);
     }
     const QStringList kwinrules = KGlobal::dirs()->findAllResources("data", "kwin/default_rules/*.kwinrules");
     foreach (const QString &kwinrule, kwinrules) {
         KConfig cfg(kwinrule, KConfig::NoGlobals);
-        int count = cfg.group("General").readEntry("count", 0);
+        count = cfg.group("General").readEntry("count", 0);
         for (int i = 1; i <= count; ++i) {
             KConfigGroup cg(&cfg, QString::number(i));
+            const QByteArray id = cg.readEntry("id", QByteArray());
+            if (ruleids.contains(id)) {
+                continue;
+            }
             Rules* rule = new Rules(cg);
             m_rules.append(rule);
+            ruleids.append(id);
         }
     }
 }

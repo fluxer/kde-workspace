@@ -199,6 +199,7 @@ private:
     static bool checkForceStop(ForceRule rule);
 #endif
     int temporary_state; // e.g. for kstart
+    QByteArray ruleid;
     QString description;
     QByteArray wmclass;
     StringMatch wmclassmatch;
