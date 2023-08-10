@@ -21,12 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "rules.h"
 
 #include <fixx11h.h>
+#include <QRegExp>
+#include <QFile>
 #include <kconfig.h>
 #include <KXMessages>
-#include <QRegExp>
 #include <ktemporaryfile.h>
-#include <QFile>
 #include <ktoolinvocation.h>
+#include <kstandarddirs.h>
 
 #ifndef KCMRULES
 #include "client.h"
@@ -973,12 +974,20 @@ void RuleBook::load()
     deleteAll();
     KConfig cfg("kwinrulesrc", KConfig::NoGlobals);
     int count = cfg.group("General").readEntry("count", 0);
-    for (int i = 1;
-            i <= count;
-            ++i) {
+    for (int i = 1; i <= count; ++i) {
         KConfigGroup cg(&cfg, QString::number(i));
         Rules* rule = new Rules(cg);
         m_rules.append(rule);
+    }
+    const QStringList kwinrules = KGlobal::dirs()->findAllResources("data", "kwin/default_rules/*.kwinrules");
+    foreach (const QString &kwinrule, kwinrules) {
+        KConfig cfg(kwinrule, KConfig::NoGlobals);
+        int count = cfg.group("General").readEntry("count", 0);
+        for (int i = 1; i <= count; ++i) {
+            KConfigGroup cg(&cfg, QString::number(i));
+            Rules* rule = new Rules(cg);
+            m_rules.append(rule);
+        }
     }
 }
 
