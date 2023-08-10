@@ -56,9 +56,7 @@ int main(int argc, char **argv) {
         "kmail", 0, ki18n("KMail"),
         "1.0.0", ki18n("Simple e-mail sender for KDE."),
         KAboutData::License_GPL_V2,
-        ki18n("(c) 2022 Ivailo Monev"),
-        KLocalizedString(),
-        "https://osdn.net/projects/kde/"
+        ki18n("(c) 2022 Ivailo Monev")
     );
 
     aboutData.addAuthor(

@@ -490,7 +490,8 @@ void KWinDesktopConfig::slotAboutEffectClicked()
     const QString license = pluginInfo.license();
     const QString icon    = pluginInfo.icon();
 
-    KAboutData aboutData(name.toUtf8(), name.toUtf8(), ki18n(name.toUtf8()), version.toUtf8(), ki18n(comment.toUtf8()), KAboutLicense::byKeyword(license).key(), ki18n(QByteArray()), ki18n(QByteArray()), website.toLatin1());
+    KAboutData aboutData(name.toUtf8(), name.toUtf8(), ki18n(name.toUtf8()), version.toUtf8(), ki18n(comment.toUtf8()), KAboutLicense::byKeyword(license).key());
+    aboutData.setHomepage(website.toLatin1());
     aboutData.setProgramIconName(icon);
     const QStringList authors = author.split(',');
     const QStringList emails = email.split(',');

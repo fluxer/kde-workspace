@@ -310,8 +310,9 @@ void MousePluginWidget::showAbout()
             m_plugin.name().toUtf8(),
             ki18n(m_plugin.name().toUtf8()),
             m_plugin.version().toUtf8(), ki18n(m_plugin.comment().toUtf8()),
-            m_plugin.fullLicense().key(), ki18n(QByteArray()), ki18n(QByteArray()), m_plugin.website().toLatin1(),
-            m_plugin.email().toLatin1());
+            m_plugin.fullLicense().key());
+    aboutData->setHomepage(m_plugin.website().toLatin1());
+    aboutData->setBugAddress(m_plugin.email().toLatin1());
 
     aboutData->setProgramIconName(m_plugin.icon());
 

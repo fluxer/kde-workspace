@@ -47,8 +47,7 @@ Joystick::Joystick(QWidget *parent, const QVariantList &)
   setButtons(Help);
   setAboutData(new KAboutData("kcmjoystick", 0, ki18n("KDE Joystick Control Module"), "1.0",
                                ki18n("KDE System Settings Module to test Joysticks"),
-                               KAboutData::License_GPL, ki18n("(c) 2004, Martin Koller"),
-                               KLocalizedString(), "kollix@aon.at"));
+                               KAboutData::License_GPL, ki18n("(c) 2004, Martin Koller")));
 
   setQuickHelp( i18n("<h1>Joystick</h1>"
               "This module helps to check if your joystick is working correctly.<br />"

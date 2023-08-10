@@ -27,17 +27,13 @@
 K_PLUGIN_FACTORY(KMediaPlayerPartFactory, registerPlugin<KMediaPlayerPart>();)  // produce a factory
 K_EXPORT_PLUGIN(KMediaPlayerPartFactory(KAboutData(
                "kmediaplayerpart",
-               0,
+               "kmediaplayer",
                ki18n("KMediaPlayerPart"),
                "1.1.0",
                ki18n("Simple media player part for KDE."),
                KAboutData::License_GPL_V2,
-               ki18n("(c) 2016 Ivailo Monev"),
-               KLocalizedString(),
-               "https://osdn.net/projects/kde/",
-               "xakepa10@gmail.com").
-               setProgramIconName(QLatin1String("KMediaPlayerPart")).
-               setCatalogName("kmediaplayer")))
+               ki18n("(c) 2016 Ivailo Monev")).
+               setProgramIconName(QLatin1String("KMediaPlayerPart"))))
 
 KMediaPlayerPart::KMediaPlayerPart(QWidget *parentWidget, QObject *parent, const QList<QVariant> &arguments)
     : KParts::ReadOnlyPart(parent)

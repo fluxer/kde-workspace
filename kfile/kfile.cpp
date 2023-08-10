@@ -29,9 +29,7 @@ int main(int argc, char **argv)
     KAboutData aboutData("kfile", 0, ki18n("kfile4"),
                          "1.0.0", ki18n("A command-line tool to read metadata of files."),
                          KAboutData::License_GPL_V2,
-                         ki18n("(c) 2022 Ivailo Monev"),
-                         KLocalizedString(),
-                        "https://osdn.net/projects/kde/"
+                         ki18n("(c) 2022 Ivailo Monev")
                         );
     aboutData.addAuthor(ki18n("Ivailo Monev"),
                         ki18n("Maintainer"),
