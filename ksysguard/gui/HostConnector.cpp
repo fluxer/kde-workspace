@@ -152,7 +152,7 @@ QStringList HostConnector::hostNames() const
 {
   QStringList list;
 
-	for ( int i = 0; i < mHostNames->count(); ++i )
+  for ( int i = 0; i < mHostNames->count(); ++i )
     list.append( mHostNames->itemText( i ) );
 
   return list;
@@ -167,7 +167,7 @@ QStringList HostConnector::commands() const
 {
   QStringList list;
 
-	for ( int i = 0; i < mCommands->count(); ++i )
+  for ( int i = 0; i < mCommands->count(); ++i )
     list.append( mCommands->itemText( i ) );
 
   return list;
