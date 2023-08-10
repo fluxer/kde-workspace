@@ -427,8 +427,7 @@ void KStandardItemListWidget::paint(QPainter* painter, const QStyleOptionGraphic
              * Linear interpolation between m_pixmap and m_hoverPixmap.
              *
              * Note that this cannot be achieved by painting m_hoverPixmap over
-             * m_pixmap, even if the opacities are adjusted. For details see
-             * https://git.reviewboard.kde.org/r/109614/
+             * m_pixmap, even if the opacities are adjusted.
              */
             // Paint pixmap1 so that pixmap1 = m_pixmap * (1.0 - hoverOpacity())
             QPixmap pixmap1(m_pixmap.size());

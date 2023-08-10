@@ -25,14 +25,11 @@
 #include <KUrl>
 #include <konq_copytomenu.h>
 #include <KMenu>
-
 #include <QObject>
-
 #include <QVector>
-
 #include <QScopedPointer>
-
 #include <QAction>
+
 class DolphinMainWindow;
 class KFileItemActions;
 class KFileItemListProperties;
@@ -122,7 +119,6 @@ private:
 
     /**
      * Adds actions that have been installed as service-menu.
-     * (see http://techbase.kde.org/index.php?title=Development/Tutorials/Creating_Konqueror_Service_Menus)
      */
     void addServiceActions(KFileItemActions& fileItemActions);
 

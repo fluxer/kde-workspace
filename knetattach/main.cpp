@@ -28,8 +28,7 @@ int main(int argc, char **argv) {
 	KAboutData about("knetattach", 0, ki18n("KDE Network Wizard"), "1.0",
 		ki18n("KDE Network Wizard"),
 		KAboutData::License_GPL,
-		ki18n("(c) 2004 George Staikos"), KLocalizedString(),
-		"http://www.kde.org/");
+		ki18n("(c) 2004 George Staikos"));
 
 	about.addAuthor(ki18n("George Staikos"), ki18n("Primary author and maintainer"), "staikos@kde.org");
 

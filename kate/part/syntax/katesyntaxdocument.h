@@ -27,9 +27,7 @@
 class KConfig;
 
 /**
- * Information about each syntax hl Mode. This is documented in Kate's
- * <a href="http://docs.kde.org/stable/en/kdebase/kate/katehighlight-xml-format.html">user guide</a>
- * and repeated briefly here.
+ * Information about each syntax hl Mode. This is documented briefly here.
  */
 class KateSyntaxModeListItem
 {

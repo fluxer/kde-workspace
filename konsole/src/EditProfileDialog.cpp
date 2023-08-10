@@ -1222,8 +1222,6 @@ void EditProfileDialog::showFontDialog()
     dialog.data()->setCaption(i18n("Select Fixed Width Font"));
     dialog.data()->setFont(currentFont, true);
 
-    // TODO (hindenburg): When https://git.reviewboard.kde.org/r/103357 is
-    // committed, change the below.
     // Use text more fitting to show font differences in a terminal
     QList<KFontChooser*> chooserList = dialog.data()->findChildren<KFontChooser*>();
     if (!chooserList.isEmpty())

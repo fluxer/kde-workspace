@@ -1230,15 +1230,11 @@ QString Workspace::supportInformation() const
 
     support.append(ki18nc("Introductory text shown in the support information.",
         "KWin Support Information:\n"
-        "The following information should be used when requesting support on e.g. http://forum.kde.org.\n"
-        "It provides information about the currently running instance, which options are used,\n"
-        "what OpenGL driver and which effects are running.\n"
-        "Please post the information provided underneath this introductory text to a paste bin service\n"
-        "like http://paste.kde.org instead of pasting into support threads.\n").toString());
+        "The following information should be used when requesting support.\n").toString());
     support.append("\n==========================\n\n");
-    // all following strings are intended for support. They need to be pasted to e.g forums.kde.org
-    // it is expected that the support will happen in English language or that the people providing
-    // help understand English. Because of that all texts are not translated
+    // all following strings are intended for support. It is expected that the support will happen
+    // in English language or that the people providing help understand English. Because of that
+    // all texts are not translated
     support.append("Version\n");
     support.append("=======\n");
     support.append("KWin version: ");
@@ -1250,7 +1246,7 @@ QString Workspace::supportInformation() const
     support.append("KDE SC version (compile): ");
     support.append(KDE_VERSION_STRING);
     support.append('\n');
-    support.append("Qt Version: ");
+    support.append("Katie Version: ");
     support.append(qVersion());
     support.append("\n\n");
     support.append("Options\n");

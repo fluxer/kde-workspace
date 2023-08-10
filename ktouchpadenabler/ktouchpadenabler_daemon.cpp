@@ -67,7 +67,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
     
     m_display = QX11Info::display();
     if (!m_display) {
-        kWarning() << "Did not find a display to use. This should never happen, thus doing nothing. Please report a bug against ktouchpadenabler in http://bugs.kde.org";
+        kWarning() << "Did not find a display to use. This should never happen, thus doing nothing";
         return;
     }
     
@@ -99,7 +99,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
             XIFreeDeviceInfo(devices);
         }
     } else {
-        kWarning() << "Could not get atoms for 'Synaptics Off' or 'Device Enabled'. This should never happen, thus doing nothing. Please report a bug against ktouchpadenabler in http://bugs.kde.org";
+        kWarning() << "Could not get atoms for 'Synaptics Off' or 'Device Enabled'. This should never happen, thus doing nothing";
     }
     
     if (foundTouchpad) {
@@ -111,7 +111,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
                 if (m_keyCode[i] != 0) {
                     const int grabResult = XGrabKey(m_display, m_keyCode[i], AnyModifier, QX11Info::appRootWindow(), False, GrabModeAsync, GrabModeAsync);
                     if (grabResult == BadAccess || grabResult == BadValue || grabResult == BadWindow) {
-                        kDebug() << "Could not grab ktouchpadenabler key index" << i <<". You probably have some other program grabbig it, if you are sure you don't have any, please report a bug against ktouchpadenabler in http://bugs.kde.org";
+                        kDebug() << "Could not grab ktouchpadenabler key index" << i <<". You probably have some other program grabbig it";
                         m_keyCode[i] = 0;
                     } else {
                         bool currentlyEnabled;
@@ -123,7 +123,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
                         }
                     }
                 } else {
-                    kWarning() << "Could not match ktouchpadenabler key index" << i << "to a Keycode. This should never happen. Please report a bug against ktouchpadenabler in http://bugs.kde.org";
+                    kWarning() << "Could not match ktouchpadenabler key index" << i << "to a Keycode. This should never happen";
                 }
             }
         } else {
@@ -131,7 +131,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
             notification->sendEvent();
         }
     } else {
-        kDebug() << "Did not find a touchpad. If you have one, please report a bug against ktouchpadenabler in http://bugs.kde.org";
+        kDebug() << "Did not find a touchpad";
     }
 }
 

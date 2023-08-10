@@ -115,10 +115,6 @@ namespace Oxygen
         Qt::HANDLE createPixmap( const QPixmap& ) const;
 
         //! install shadow X11 property on given widget
-        /*!
-        shadow atom and property specification available at
-        http://community.kde.org/KWin/Shadow
-        */
         bool installX11Shadows( QWidget* );
 
         //! uninstall shadow X11 property on given widget

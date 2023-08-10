@@ -258,11 +258,6 @@ namespace Oxygen
     const QVector<Qt::HANDLE>& ShadowHelper::createPixmapHandles( bool isDockWidget )
     {
 
-        /*!
-        shadow atom and property specification available at
-        http://community.kde.org/KWin/Shadow
-        */
-
         // create atom
 #ifdef Q_WS_X11
         if( !_atom ) _atom = XInternAtom( QX11Info::display(), netWMShadowAtomName, False);

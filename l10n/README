@@ -1,12 +1,9 @@
 GENERAL
 =======
 
-In KDE we support localization of calendars, dates, time, numbers.
-KDE will use this when displaying such information, giving you
-a feeling that KDE was written to fit your national standards. To make
-this possible, we need to gather some information on your national
-standards. Currently there are some 237 countries supported. If your
-country is missing, please let us know.
+In KDE we support localization of calendars, dates, time, numbers. KDE will use
+this when displaying your language . Currently there are some 237 countries
+supported. If your country is missing, please let us know.
 
 The official ISO codes unsupported as at 18/11/2008 are:
 
@@ -28,8 +25,7 @@ The other codes are unlikely to be considered due to lack of population.
 HOW TO ADD INFORMATION
 ======================
 First you have to write a file called "entry.desktop". This file will
-describe your national standards. Please read the section below for
-more information on that. Please use the file "country.template" as
+be used to translate the language. Please use the file "country.template" as
 template.
 
 You will need a nice flag for your country. The size should be 21x14

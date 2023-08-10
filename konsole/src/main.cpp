@@ -119,7 +119,6 @@ void fillCommandLineOptions(KCmdLineOptions& options)
 void fillAboutData(KAboutData& aboutData)
 {
     aboutData.setProgramIconName("utilities-terminal");
-    aboutData.setHomepage("http://konsole.kde.org");
 
     aboutData.addAuthor(ki18nc("@info:credit", "Kurt Hindenburg"),
                         ki18nc("@info:credit", "General maintainer, bug fixes and general"

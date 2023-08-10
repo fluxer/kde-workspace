@@ -7,8 +7,7 @@ for configuring the theme details.
 
 This theme engine uses Plasma technologie to render the window decoration. Every detail can be
 themed by the usage of SVG. The theme engine uses Plasma's FrameSvg, so you can provide SVG files
-containing borders. This is described in more detail in techbase:
-http://techbase.kde.org/Projects/Plasma/Theme#Backgrounds
+containing borders.
 
 The theme consists of one folder containing svgz files for decoration and buttons, one KConfig file
 for the theme details and one metadata.desktop file which you can use to name your theme, author
@@ -117,11 +116,11 @@ TextShadowOffsetX=0             # Offset of shadow in x direction
 TextShadowOffsetY=0             # Offset of shadow in y direction
 HaloActive=false                # Draw halo behing title of active window (since 4.5)
 HaloInactive=false              # Draw halo behing title of inactive window (since 4.5)
-LeftButtons=MS                  # buttons in left button group (see http://api.kde.org/4.x-api/kdebase-workspace-apidocs/kwin/lib/html/classKDecorationOptions.html#8ad12d76c93c5f1a12ea07b30f92d2fa)
+LeftButtons=MS                  # buttons in left button group
 RightButtons=HIAX               # buttons in right button group
 Shadow=true                     # decoration provides shadows: you have to add padding
 
-[Layout]                        # uses Layout Manager (see http://api.kde.org/4.x-api/kdebase-workspace-apidocs/kwin/lib/html/classKCommonDecoration.html#7932f74c28432ad8de232f1c6e8751ce)
+[Layout]                        # uses Layout Manager
 BorderLeft=5
 BorderRight=5
 BorderBottom=5

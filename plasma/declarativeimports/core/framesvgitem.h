@@ -81,8 +81,6 @@ class FrameSvgItem : public QDeclarativeItem
 
     /**
      * prefix for the 9 piece svg, like "pushed" or "normal" for the button
-     * see http://techbase.kde.org/Development/Tutorials/Plasma/ThemeDetails
-     * for a list of paths and prefixes
      */
     Q_PROPERTY(QString prefix READ prefix WRITE setPrefix NOTIFY prefixChanged)
 

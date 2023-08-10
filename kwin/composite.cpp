@@ -167,7 +167,6 @@ void Compositor::setup()
     }
     if (m_scene == NULL || m_scene->initFailed()) {
         kError(1212) << "Failed to initialize compositing, compositing disabled";
-        kError(1212) << "Consult http://techbase.kde.org/Projects/KWin/4.0-release-notes#Setting_up";
         delete m_scene;
         m_scene = NULL;
         m_starting = false;

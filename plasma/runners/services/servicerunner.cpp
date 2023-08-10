@@ -53,8 +53,6 @@ void ServiceRunner::match(Plasma::RunnerContext &context)
 
     if (term.length() > 1) {
         // Search for applications which are executable and case-insensitively match the search term
-        // See http://techbase.kde.org/Development/Tutorials/Services/Traders#The_KTrader_Query_Language
-        // if the following is unclear to you.
         query = QString("exist Exec and ('%1' =~ Name)").arg(term);
         KService::List services = KServiceTypeTrader::self()->query("Application", query);
 

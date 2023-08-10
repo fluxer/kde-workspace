@@ -5,8 +5,6 @@ The applications and plugins that provide the panels/desktop/dashboard parts of
 the primary user interface for the KDE Plasma workspaces (Plasma Desktop, Netbook, etc).
 Much of the functionality is provided by libplasma, which is found in kdelibs/plasma/.
 
-For more information, please visit the Plasma website at http://plasma.kde.org.
-
 Directory Structure
 ===================
 

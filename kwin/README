@@ -1,34 +1,14 @@
-- A collection of various documents and links related to KWin is at http://techbase.kde.org/Projects/KWin .
+If you want to check KWin's compliance with specifications, see file
+COMPLIANCE. File CONFIGURATION includes some details on configuring KWin. Below
+is someinfo for application developers about application interaction with the
+window manager, but it'd need some cleanup.
 
-
-- The mailing list for KWin is kwin@kde.org (https://mail.kde.org/mailman/listinfo/kwin).
-
-- If you want to develop KWin, see file HACKING.
-
-- If you want to check KWin's compliance with specifications, see file COMPLIANCE.
-
-- File CONFIGURATION includes some details on configuring KWin.
-
-- Below is some info for application developers about application interaction
-  with the window manager, but it'd need some cleanup.
-
-
-
-
-
-
-
-
- This README is meant as an explanation of various window manager related
+This README is meant as an explanation of various window manager related
 mechanisms that application developers need to be aware of. As some of these
 concepts may be difficult to understand for people not having the required
 background knowledge (since sometimes it's difficult even for people who
 do have the knowledge), the mechanisms are first briefly explained, and
 then an example of fixing the various problems is given.
-
- For comments, questions, suggestions and whatever use the kwin@kde.org
-mailing list.
-
 
 Table of contents:
 ==================
@@ -90,9 +70,9 @@ should be pointing to it instead of using one of these special values.
 (The explanation why is beyond the scope of this document - just accept it
 as a fact.)
 
- With Qt, the WM_TRANSIENT_FOR property is set by Qt automatically, based
+ With Katie, the WM_TRANSIENT_FOR property is set by Katie automatically, based
 on the toplevel widget's parent. If the toplevel widget is of a normal
-type (i.e. not a dialog, toolbar, etc.), Qt doesn't set WM_TRANSIENT_FOR
+type (i.e. not a dialog, toolbar, etc.), Katie doesn't set WM_TRANSIENT_FOR
 on it. For special widgets, such as dialogs, WM_TRANSIENT_FOR is set
 to point to the widget's parent, if it has a specific parent, otherwise
 WM_TRANSIENT_FOR points to the root window.
@@ -121,7 +101,7 @@ recent user activity wins. Any window of an application will become active
 when being shown only if this application was the most recently used one.
 KWin itself, and some of the related kdecore classes should take care
 of the common cases, so usually there's no need for any special handling
-in applications. Qt/KDE applications, that is. Applications using other
+in applications. Katie/KDE applications, that is. Applications using other
 toolkits should in most cases work fine too. If they don't support
 the window property _NET_WM_USER_TIME, the window manager may fail to detect
 the user timestamp properly, resulting either in other windows becoming active

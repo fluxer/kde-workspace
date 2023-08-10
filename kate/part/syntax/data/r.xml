@@ -4,7 +4,6 @@
 	based on an earlier version by E.L. Willighagen. Code folding code by Ben Goodrich
 	version 2.0: (c) 2006 Thomas Friedrichsmeier, Arne Henningsen, and the RKWard Team
 	license: GPL v2
-	Kate   : http://kate.kde.org/
 	R      : http://www.r-project.org/
 	RKWard : http://rkward.sourceforge.net/
 	-->
@@ -120,7 +119,6 @@
 	</contexts>
 
 	<itemDatas>
-	<!-- KDE default colors: http://accessibility.kde.org/oxygen.php?color=white -->
 		<itemData name="Normal Text" defStyleNum="dsNormal"/>
 		<itemData name="Symbol" defStyleNum="dsNormal"/>
 		<itemData name="Keyword" defStyleNum="dsKeyword"/>

@@ -528,7 +528,7 @@ KUrl TaskItem::launcherUrl() const
     }
 
     // Search for applications which are executable and case-insensitively match the windowclass of the task and
-    // See http://techbase.kde.org/Development/Tutorials/Services/Traders#The_KTrader_Query_Language
+    // the service properties
     KService::List services;
     bool triedPid = false;
 

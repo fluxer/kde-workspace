@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE language SYSTEM "language.dtd">
-<!--
-        You'll find the "Writing a Kate Highlighting XML File HOWTO" at http://kate.kde.org/doc/hlhowto.php
-        This is a template for the XML format used for syntax highlight descriptions
-        for the Kate text editor (http://kate.kde.org), which is part of the KDE
-        desktop environment (http://www.kde.org).
-
-        Use it as the base for your own syntax files.
-
-        Look at language.dtd for some documentation of the allowed elements and their attributes.
-        There is also a description of how to validate your syntax file.
-
-        You'll find the "Writing a Kate Highlighting XML File HOWTO" at http://kate.kde.org/doc/hlhowto.php
--->
 <language name="ASN.1" section="Markup" version="1.01" kateversion="2.3" extensions="*.asn;*.asn1" mimetype="" author="Philippe Rigault" license="GPL">
   <highlighting>
     <list name="keywords">

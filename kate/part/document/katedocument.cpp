@@ -4114,14 +4114,12 @@ void KateDocument::readVariableLine( QString t, bool onlyViewAndRenderer )
       }
       else if ( var == "remove-trailing-space" && checkBoolValue( val, &state ) ) {
         kWarning() << i18n("Using deprecated modeline 'remove-trailing-space'. "
-          "Please replace with 'remove-trailing-spaces modified;', see "
-          "http://docs.kde.org/stable/en/applications/kate/config-variables.html#variable-remove-trailing-spaces");
+          "Please replace with 'remove-trailing-spaces modified;'");
         m_config->setRemoveSpaces( state ? 1 : 0 );
       }
       else if ( var == "replace-trailing-space-save" && checkBoolValue( val, &state ) ) {
         kWarning() << i18n("Using deprecated modeline 'replace-trailing-space-save'. "
-          "Please replace with 'remove-trailing-spaces all;', see "
-          "http://docs.kde.org/stable/en/applications/kate/config-variables.html#variable-remove-trailing-spaces");
+          "Please replace with 'remove-trailing-spaces all;'");
         m_config->setRemoveSpaces( state ? 2 : 0 );
       }
       else if ( var == "overwrite-mode" && checkBoolValue( val, &state ) )
