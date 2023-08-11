@@ -89,8 +89,6 @@ void PlacesEngine::sendData(int start, int end)
     for (int row = start; row <= end; ++row) {
         const QModelIndex index = m_placesModel.index(row, 0);
 
-        Data map;
-
         const QString source = QString::number(row);
 
         setData(source, "name", m_placesModel.text(index));
