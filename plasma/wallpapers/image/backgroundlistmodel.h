@@ -10,17 +10,14 @@
 #ifndef BACKGROUNDLISTMODEL_H
 #define BACKGROUNDLISTMODEL_H
 
-#include <QtCore/qabstractitemmodel.h>
+#include <QAbstractListModel>
 #include <QPixmap>
-#include <QRunnable>
+#include <QEventLoop>
 #include <QThread>
-
 #include <KDirWatch>
 #include <KFileItem>
-
 #include <Plasma/Wallpaper>
 
-#include <QEventLoop>
 class KProgressDialog;
 
 namespace Plasma
@@ -29,20 +26,6 @@ namespace Plasma
 } // namespace Plasma
 
 class Image;
-
-class ImageSizeFinder : public QThread
-{
-    Q_OBJECT
-    public:
-        ImageSizeFinder(const QString &path, QObject *parent = 0);
-        void run();
-
-    Q_SIGNALS:
-        void sizeFound(const QString &path, const QSize &size);
-
-    private:
-        QString m_path;
-};
 
 class BackgroundListModel : public QAbstractListModel
 {
@@ -68,7 +51,6 @@ protected Q_SLOTS:
     void reload();
     void showPreview(const KFileItem &item, const QPixmap &preview);
     void previewFailed(const KFileItem &item);
-    void sizeFound(const QString &path, const QSize &s);
     void processPaths(const QStringList &paths);
 
 private:

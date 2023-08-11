@@ -13,6 +13,7 @@
 
 #include <QFile>
 #include <QDir>
+#include <QImageReader>
 
 #include <KDebug>
 #include <KGlobal>
@@ -26,19 +27,6 @@
 
 #include "backgrounddelegate.h"
 #include "image.h"
-
-ImageSizeFinder::ImageSizeFinder(const QString &path, QObject *parent)
-    : QThread(parent),
-      m_path(path)
-{
-}
-
-void ImageSizeFinder::run()
-{
-    QImage image(m_path);
-    emit sizeFound(m_path, image.size());
-}
-
 
 BackgroundListModel::BackgroundListModel(Image *listener, QObject *parent)
     : QAbstractListModel(parent),
@@ -177,26 +165,22 @@ QSize BackgroundListModel::bestSize(Plasma::Package *package) const
         return QSize();
     }
 
-    QSize size(-1, -1);
+    QImageReader imagereader(image);
+    QSize size = imagereader.size();
+    // backup solution if image handler does not provide size option
+    if (size.width() == 0 || size.height() == 0) {
+        size = imagereader.read().size();
+    }
     m_sizeCache.insert(package, size);
-    ImageSizeFinder *finder = new ImageSizeFinder(image, const_cast<BackgroundListModel *>(this));
-    connect(finder, SIGNAL(sizeFound(QString,QSize)), this, SLOT(sizeFound(QString,QSize)));
-    finder->start();
+    if (m_structureParent) {
+        QModelIndex index = indexOf(image);
+        if (index.isValid()) {
+            Plasma::Package *package = m_packages.at(index.row());
+            m_structureParent.data()->updateScreenshot(index);
+        }
+    }
+
     return size;
-}
-
-void BackgroundListModel::sizeFound(const QString &path, const QSize &s)
-{
-    if (!m_structureParent) {
-        return;
-    }
-
-    QModelIndex index = indexOf(path);
-    if (index.isValid()) {
-        Plasma::Package *package = m_packages.at(index.row());
-        m_sizeCache.insert(package, s);
-        m_structureParent.data()->updateScreenshot(index);
-    }
 }
 
 QVariant BackgroundListModel::data(const QModelIndex &index, int role) const
