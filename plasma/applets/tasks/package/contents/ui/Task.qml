@@ -20,7 +20,6 @@
 import QtQuick 1.1
 
 import org.kde.plasma.core 0.1 as PlasmaCore
-import org.kde.draganddrop 1.0
 import org.kde.qtextracomponents 0.1
 
 import Tasks 0.1 as Tasks
