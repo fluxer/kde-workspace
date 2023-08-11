@@ -16,7 +16,6 @@ set(scripting_SRC
     scripting/containment.cpp
     scripting/configgroup.cpp
     scripting/i18n.cpp
-    scripting/layouttemplatepackagestructure.cpp
     scripting/rect.cpp
     scripting/scriptengine.cpp
     scripting/widget.cpp
@@ -67,8 +66,3 @@ install(
     EXPORT kdeworkspaceTargets
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
-install(
-    FILES plasma-layout-template.desktop
-    DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR}
-)
-

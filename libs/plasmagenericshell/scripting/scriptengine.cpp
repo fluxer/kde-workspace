@@ -44,7 +44,6 @@
 #include "containment.h"
 #include "configgroup.h"
 #include "i18n.h"
-#include "layouttemplatepackagestructure.h"
 #include "widget.h"
 
 QScriptValue constructQRectFClass(QScriptEngine *engine);
@@ -213,70 +212,6 @@ QScriptValue ScriptEngine::fileExists(QScriptContext *context, QScriptEngine *en
 
     QFile f(KShell::tildeExpand(path));
     return f.exists();
-}
-
-QScriptValue ScriptEngine::loadTemplate(QScriptContext *context, QScriptEngine *engine)
-{
-    Q_UNUSED(engine)
-    if (context->argumentCount() == 0) {
-        kDebug() << "no arguments";
-        return false;
-    }
-
-    const QString layout = context->argument(0).toString();
-    if (layout.isEmpty() || layout.contains("'")) {
-        kDebug() << "layout is empty";
-        return false;
-    }
-
-    const QString constraint = QString("[X-Plasma-Shell] == '%1' and [X-KDE-PluginInfo-Name] == '%2'")
-                                      .arg(KGlobal::mainComponent().componentName(),layout);
-    KService::List offers = KServiceTypeTrader::self()->query("Plasma/LayoutTemplate", constraint);
-
-    if (offers.isEmpty()) {
-        kDebug() << "offers fail" << constraint;
-        return false;
-    }
-
-    Plasma::PackageStructure::Ptr structure(new LayoutTemplatePackageStructure);
-    KPluginInfo info(offers.first());
-    const QString path = KStandardDirs::locate("data", structure->defaultPackageRoot() + '/' + info.pluginName() + '/');
-    if (path.isEmpty()) {
-        kDebug() << "script path is empty";
-        return false;
-    }
-
-    Plasma::Package package(path, structure);
-    const QString scriptFile = package.filePath("mainscript");
-    if (scriptFile.isEmpty()) {
-        kDebug() << "scriptfile is empty";
-        return false;
-    }
-
-    QFile file(scriptFile);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        kWarning() << i18n("Unable to load script file: %1", path);
-        return false;
-    }
-
-    QString script = file.readAll();
-    if (script.isEmpty()) {
-        kDebug() << "script is empty";
-        return false;
-    }
-
-    ScriptEngine *env = envFor(engine);
-    env->globalObject().setProperty("templateName", env->newVariant(info.name()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-    env->globalObject().setProperty("templateComment", env->newVariant(info.comment()), QScriptValue::ReadOnly | QScriptValue::Undeletable);
-
-    QScriptValue rv = env->newObject();
-    QScriptContext *ctx = env->pushContext();
-    ctx->setThisObject(rv);
-
-    env->evaluateScript(script, path);
-
-    env->popContext();
-    return rv;
 }
 
 QScriptValue ScriptEngine::applicationExists(QScriptContext *context, QScriptEngine *engine)
@@ -477,7 +412,6 @@ void ScriptEngine::setupEngine()
     m_scriptSelf.setProperty("panelById", newFunction(ScriptEngine::panelById));
     m_scriptSelf.setProperty("panels", newFunction(ScriptEngine::panels));
     m_scriptSelf.setProperty("fileExists", newFunction(ScriptEngine::fileExists));
-    m_scriptSelf.setProperty("loadTemplate", newFunction(ScriptEngine::loadTemplate));
     m_scriptSelf.setProperty("applicationExists", newFunction(ScriptEngine::applicationExists));
     m_scriptSelf.setProperty("userDataPath", newFunction(ScriptEngine::userDataPath));
     m_scriptSelf.setProperty("applicationPath", newFunction(ScriptEngine::applicationPath));
