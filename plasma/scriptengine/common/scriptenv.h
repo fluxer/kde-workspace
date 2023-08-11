@@ -90,9 +90,6 @@ private:
     static QScriptValue getUrl(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue download(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue listAddons(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue loadAddon(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue registerAddon(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue hasExtension(QScriptContext *context, QScriptEngine *engine);

@@ -2,7 +2,6 @@
 set(declarative_appletscript_SRCS
     common/extension_launchapp.cpp
     common/extension_io.cpp
-    common/javascriptaddonpackagestructure.cpp
     common/scriptenv.cpp
     declarative/toolboxproxy.cpp
     declarative/appletcontainer.cpp
