@@ -31,7 +31,6 @@
 #include "oxygeninputdemowidget.h"
 #include "oxygenframedemowidget.h"
 #include "oxygenlistdemowidget.h"
-#include "oxygenmdidemowidget.h"
 #include "oxygensliderdemowidget.h"
 #include "oxygentabdemowidget.h"
 
@@ -133,16 +132,6 @@ namespace Oxygen
             page->setName( i18n("Frames") );
             page->setIcon( KIcon( "draw-rectangle" ) );
             page->setHeader( i18n("Shows the appearance of various framed widgets") );
-            _pageWidget->addPage( page );
-            _widgets.append( widget );
-        }
-
-        // mdi
-        {
-            page = new KPageWidgetItem( widget = new MdiDemoWidget() );
-            page->setName( "MDI Windows" );
-            page->setIcon( KIcon( "preferences-system-windows" ) );
-            page->setHeader( "Shows the appearance of MDI windows" );
             _pageWidget->addPage( page );
             _widgets.append( widget );
         }

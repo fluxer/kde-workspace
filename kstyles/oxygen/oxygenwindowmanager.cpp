@@ -43,7 +43,6 @@
 #include <QtGui/QLabel>
 #include <QtGui/QListView>
 #include <QtGui/QMainWindow>
-#include <QtGui/QMdiSubWindow>
 #include <QtGui/QMenuBar>
 #include <QtGui/qevent.h>
 #include <QtGui/QProgressBar>
@@ -465,9 +464,6 @@ namespace Oxygen
         // check menubar
         if( QMenuBar* menuBar = qobject_cast<QMenuBar*>( widget ) )
         {
-
-            // do not drag from menubars embedded in Mdi windows
-            if( findParent<QMdiSubWindow*>( widget ) ) return false;
 
             // check if there is an active action
             if( menuBar->activeAction() && menuBar->activeAction()->isEnabled() ) return false;

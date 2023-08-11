@@ -7,7 +7,6 @@ set(oxygen_demo_SOURCES
     oxygenframedemowidget.cpp
     oxygeninputdemowidget.cpp
     oxygenlistdemowidget.cpp
-    oxygenmdidemowidget.cpp
     oxygensimulator.cpp
     oxygensliderdemowidget.cpp
     oxygentabdemowidget.cpp
@@ -17,7 +16,6 @@ set(oxygen_demo_SOURCES
     oxygenframedemowidget.ui
     oxygeninputdemowidget.ui
     oxygenlistdemowidget.ui
-    oxygenmdidemowidget.ui
     oxygensliderdemowidget.ui
     oxygentabdemowidget.ui
 )

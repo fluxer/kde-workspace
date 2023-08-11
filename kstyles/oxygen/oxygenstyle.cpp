@@ -50,7 +50,6 @@
 #include "moc_oxygenstyle.cpp"
 
 #include "oxygenframeshadow.h"
-#include "oxygenmdiwindowshadow.h"
 #include "oxygenmnemonics.h"
 #include "oxygenshadowhelper.h"
 #include "oxygenstyleconfigdata.h"
@@ -75,7 +74,6 @@
 #include <QtGui/QLayout>
 #include <QtGui/QLineEdit>
 #include <QtGui/QMainWindow>
-#include <QtGui/QMdiSubWindow>
 #include <QtGui/QPushButton>
 #include <QtGui/QRadioButton>
 #include <QtGui/QScrollBar>
@@ -159,7 +157,6 @@ namespace Oxygen
         _windowManager( new WindowManager( this ) ),
         _topLevelManager( new TopLevelManager( this, *_helper ) ),
         _frameShadowFactory( new FrameShadowFactory( this ) ),
-        _mdiWindowShadowFactory( new MdiWindowShadowFactory( this, *_helper ) ),
         _mnemonics( new Mnemonics( this ) ),
         _widgetExplorer( new WidgetExplorer( this ) ),
         _tabBarData( new TabBarData( this ) ),
@@ -195,7 +192,6 @@ namespace Oxygen
         // register widget to animations
         windowManager().registerWidget( widget );
         frameShadowFactory().registerWidget( widget, helper() );
-        mdiWindowShadowFactory().registerWidget( widget );
         shadowHelper().registerWidget( widget );
 
         // scroll areas
@@ -368,11 +364,6 @@ namespace Oxygen
             widget->setContentsMargins( 3,3,3,3 );
             addEventFilter( widget );
 
-        } else if( qobject_cast<QMdiSubWindow*>( widget ) ) {
-
-            widget->setAutoFillBackground( false );
-            addEventFilter( widget );
-
         } else if( qobject_cast<QToolBox*>( widget ) ) {
 
             widget->setBackgroundRole( QPalette::NoRole );
@@ -418,7 +409,6 @@ namespace Oxygen
         // register widget to animations
         windowManager().unregisterWidget( widget );
         frameShadowFactory().unregisterWidget( widget );
-        mdiWindowShadowFactory().unregisterWidget( widget );
         shadowHelper().unregisterWidget( widget );
 
         if( isKTextEditFrame( widget ) )
@@ -1146,7 +1136,6 @@ namespace Oxygen
         if( QToolBar* toolBar = qobject_cast<QToolBar*>( object ) ) { return eventFilterToolBar( toolBar, event ); }
         if( QDockWidget* dockWidget = qobject_cast<QDockWidget*>( object ) ) { return eventFilterDockWidget( dockWidget, event ); }
         if( QToolBox* toolBox = qobject_cast<QToolBox*>( object ) ) { return eventFilterToolBox( toolBox, event ); }
-        if( QMdiSubWindow* subWindow = qobject_cast<QMdiSubWindow*>( object ) ) { return eventFilterMdiSubWindow( subWindow, event ); }
         if( QScrollBar* scrollBar = qobject_cast<QScrollBar*>( object ) ) { return eventFilterScrollBar( scrollBar, event ); }
         if( QProgressBar* progressBar = qobject_cast<QProgressBar*>( object ) ) { return eventFilterProgressBar( progressBar, event ); }
 
@@ -1260,36 +1249,6 @@ namespace Oxygen
             default: return false;
 
         }
-
-    }
-
-    //____________________________________________________________________________
-    bool Style::eventFilterMdiSubWindow( QMdiSubWindow* subWindow, QEvent* event )
-    {
-
-        if( event->type() == QEvent::Paint )
-        {
-
-            QPainter painter( subWindow );
-            QRect clip( static_cast<QPaintEvent*>( event )->rect() );
-            if( subWindow->isMaximized() ) helper().renderWindowBackground( &painter, clip, subWindow, subWindow->palette() );
-            else {
-
-                painter.setClipRect( clip );
-
-                const QRect r( subWindow->rect() );
-                TileSet *tileSet( helper().roundCorner( subWindow->palette().color( subWindow->backgroundRole() ) ) );
-                tileSet->render( r, &painter );
-
-                painter.setClipRegion( helper().roundedMask( r.adjusted( 1, 1, -1, -1 ) ), Qt::IntersectClip );
-                helper().renderWindowBackground( &painter, clip, subWindow, subWindow, subWindow->palette(), 0, 58 );
-
-            }
-
-        }
-
-        // continue with normal painting
-        return false;
 
     }
 

@@ -36,8 +36,6 @@
 #include <QtGui/QComboBox>
 #include <QtGui/QCursor>
 #include <QtGui/qevent.h>
-#include <QtGui/qevent.h>
-#include <QtGui/QMdiSubWindow>
 #include <QtGui/QMenu>
 #include <QtGui/qevent.h>
 #include <QtGui/QPushButton>
@@ -45,7 +43,6 @@
 #include <QtGui/QScrollBar>
 #include <QtGui/QSlider>
 #include <QtGui/QStyle>
-#include <QtGui/qstyleoption.h>
 #include <QtGui/qstyleoption.h>
 #include <QtGui/QToolButton>
 
@@ -92,15 +89,6 @@ namespace Oxygen
                 QStyle::SE_RadioButtonIndicator,
                 &option,
                 radiobutton).center();
-
-        } else if( const QMdiSubWindow* window = qobject_cast<QMdiSubWindow*>( receiver ) ) {
-
-            QStyleOptionTitleBar option;
-            option.initFrom( window );
-            int titleBarHeight( window->style()->pixelMetric( QStyle::PM_TitleBarHeight, &option, window ) );
-            QRect titleBarRect( QPoint(0,0), QSize( window->width(), titleBarHeight ) );
-            if( !titleBarRect.isValid() ) return;
-            position = titleBarRect.center();
 
         } else {
 
@@ -364,15 +352,6 @@ namespace Oxygen
 
                     if( !handleRect.isValid() ) break;
                     begin = handleRect.center();
-
-                } else if( const QMdiSubWindow* window = qobject_cast<QMdiSubWindow*>( receiver ) ) {
-
-                    QStyleOptionTitleBar option;
-                    option.initFrom( window );
-                    int titleBarHeight( window->style()->pixelMetric( QStyle::PM_TitleBarHeight, &option, window ) );
-                    QRect titleBarRect( QPoint(0,0), QSize( window->width(), titleBarHeight ) );
-                    if( !titleBarRect.isValid() ) break;
-                    begin = titleBarRect.center();
 
                 } else {
 

@@ -15,7 +15,6 @@ add_subdirectory( demo )
 set(oxygen_PART_SRCS
     debug/oxygenwidgetexplorer.cpp
     oxygenframeshadow.cpp
-    oxygenmdiwindowshadow.cpp
     oxygenmnemonics.cpp
     oxygenpropertynames.cpp
     oxygenshadowhelper.cpp

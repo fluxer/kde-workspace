@@ -54,7 +54,6 @@
 #include <QtGui/QAbstractScrollArea>
 #include <QtGui/QCommonStyle>
 #include <QtGui/QDockWidget>
-#include <QtGui/QMdiSubWindow>
 #include <QtGui/QStyleOption>
 #include <QtGui/qstyleoption.h>
 #include <QtGui/QToolBar>
@@ -69,7 +68,6 @@ namespace Oxygen
 
     class Animations;
     class FrameShadowFactory;
-    class MdiWindowShadowFactory;
     class Mnemonics;
     class ShadowHelper;
     class StyleHelper;
@@ -171,7 +169,6 @@ namespace Oxygen
         //@{
         bool eventFilterComboBoxContainer( QWidget*, QEvent* );
         bool eventFilterDockWidget( QDockWidget*, QEvent* );
-        bool eventFilterMdiSubWindow( QMdiSubWindow*, QEvent* );
         bool eventFilterScrollBar( QWidget*, QEvent* );
         bool eventFilterTabBar( QWidget*, QEvent* );
         bool eventFilterToolBar( QToolBar*, QEvent* );
@@ -341,10 +338,6 @@ namespace Oxygen
         //! frame shadows
         FrameShadowFactory& frameShadowFactory( void ) const
         { return *_frameShadowFactory; }
-
-        //! mdi window shadows
-        MdiWindowShadowFactory& mdiWindowShadowFactory( void ) const
-        { return *_mdiWindowShadowFactory; }
 
         //! mdi window shadows
         Mnemonics& mnemonics( void ) const
@@ -819,9 +812,6 @@ namespace Oxygen
 
         //! frame shadows
         FrameShadowFactory* _frameShadowFactory;
-
-        //! mdi window shadows
-        MdiWindowShadowFactory* _mdiWindowShadowFactory;
 
         //! keyboard accelerators
         Mnemonics* _mnemonics;
