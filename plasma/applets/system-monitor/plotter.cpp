@@ -30,13 +30,14 @@ namespace SM {
 
 Plotter::Plotter(QGraphicsItem* parent, Qt::WindowFlags wFlags)
     : QGraphicsWidget(parent, wFlags)
-    , m_layout(0)
-    , m_plotter(0)
-    , m_meter(0)
+    , m_layout(nullptr)
+    , m_plotter(nullptr)
+    , m_meter(nullptr)
     , m_plotCount(1)
     , m_min(0.0)
     , m_max(0.0)
-    , m_overlayFrame(0)
+    , m_overlayFrame(nullptr)
+    , m_showAnalogValue(false)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     createWidgets();
