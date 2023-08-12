@@ -203,17 +203,7 @@ void DolphinView::setActive(bool active)
 
     m_active = active;
 
-    QColor color = KColorScheme(QPalette::Active, KColorScheme::View).background().color();
-    if (!active) {
-        color.setAlpha(150);
-    }
-
-    QWidget* viewport = m_container->viewport();
-    if (viewport) {
-        QPalette palette;
-        palette.setColor(viewport->backgroundRole(), color);
-        viewport->setPalette(palette);
-    }
+    updatePalette();
 
     update();
 
@@ -760,6 +750,10 @@ void DolphinView::hideEvent(QHideEvent* event)
 
 bool DolphinView::event(QEvent* event)
 {
+    if (event->type() == QEvent::PaletteChange) {
+        updatePalette();
+    }
+
     /* See Bug 297355
      * Dolphin leaves file preview tooltips open even when is not visible.
      *
@@ -1274,6 +1268,21 @@ void DolphinView::updateViewState()
         }
 
         selectionManager->setSelectedItems(selectedItems);
+    }
+}
+
+void DolphinView::updatePalette()
+{
+    QColor color = KColorScheme(QPalette::Active, KColorScheme::View).background().color();
+    if (!m_active) {
+        color.setAlpha(150);
+    }
+
+    QWidget* viewport = m_container->viewport();
+    if (viewport) {
+        QPalette palette;
+        palette.setColor(viewport->backgroundRole(), color);
+        viewport->setPalette(palette);
     }
 }
 

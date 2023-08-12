@@ -666,6 +666,11 @@ private slots:
      */
     void updateViewState();
 
+    /**
+     * Applies the palette to the viewport
+     */
+    void updatePalette();
+
     void hideToolTip();
 
     /**
