@@ -204,8 +204,7 @@ bool Temperature::addVisualization(const QString& source)
             break;
         }
         case KTemperature::Kelvin: {
-            // TODO: limits?
-            plotter->setMinMax(0, 500);
+            plotter->setMinMax(64, 384);
             plotter->setUnit(QString::fromUtf8("K"));
             break;
         }
