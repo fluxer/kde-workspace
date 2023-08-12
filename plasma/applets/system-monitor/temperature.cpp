@@ -20,16 +20,16 @@
  */
 
 #include "temperature.h"
+#include "plotter.h"
+#include "temperature-offset-delegate.h"
 #include <Plasma/Meter>
 #include <Plasma/Containment>
 #include <Plasma/Theme>
 #include <KConfigDialog>
-#include <kunitconversion.h>
 #include <QGraphicsLinearLayout>
 #include <QTimer>
+
 #include <cmath>
-#include "plotter.h"
-#include "temperature-offset-delegate.h"
 
 Temperature::Temperature(QObject *parent, const QVariantList &args)
     : SM::Applet(parent, args)
@@ -114,6 +114,11 @@ void Temperature::createConfigurationInterface(KConfigDialog *parent)
 
     ui.intervalSpinBox->setValue(interval() / 1000.0);
     ui.intervalSpinBox->setSuffix(i18nc("second", " s"));
+    for (int i = 0; i < KTemperature::UnitCount; i++) {
+        KTemperature::KTempUnit unit = static_cast<KTemperature::KTempUnit>(i);
+        ui.unitComboBox->addItem(KTemperature::unitDescription(unit), unit);
+    }
+    ui.unitComboBox->setCurrentIndex(static_cast<int>(temperatureUnit()));
     parent->setButtons(KDialog::Ok | KDialog::Cancel | KDialog::Apply);
     parent->addPage(widget, i18n("Temperature"), "view-statistics");
 
@@ -121,6 +126,7 @@ void Temperature::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(configAccepted()));
     connect(ui.treeView, SIGNAL(clicked(QModelIndex)), parent, SLOT(settingsModified()));
     connect(ui.intervalSpinBox, SIGNAL(valueChanged(QString)), parent, SLOT(settingsModified()));
+    connect(ui.unitComboBox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void Temperature::configAccepted()
@@ -146,6 +152,8 @@ void Temperature::configAccepted()
     cg.writeEntry("temps", sources());
     uint interval = ui.intervalSpinBox->value();
     cg.writeEntry("interval", interval);
+    KTemperature temp(0.0, static_cast<KTemperature::KTempUnit>(ui.unitComboBox->currentIndex()));
+    cg.writeEntry("unit", temp.unit());
 
     emit configNeedsSaving();
 }
@@ -162,6 +170,21 @@ double Temperature::temperatureOffset(const QString& source)
     return cg.readEntry(source + "_offset", 0.0);
 }
 
+KTemperature::KTempUnit Temperature::temperatureUnit()
+{
+    // TODO: optimize, this is called on data update
+    QString defaultunit;
+    if (KGlobal::locale()->measureSystem() == QLocale::MetricSystem) {
+        defaultunit = QString::fromUtf8("°C");
+    } else {
+        defaultunit = QString::fromUtf8("°F");
+    }
+    KConfigGroup cg = config();
+    const QString unit = cg.readEntry("unit", defaultunit);
+    KTemperature temp(0.0, unit);
+    return temp.unitEnum();
+}
+
 bool Temperature::addVisualization(const QString& source)
 {
     Plasma::DataEngine *engine = dataEngine("systemmonitor");
@@ -174,13 +197,26 @@ bool Temperature::addVisualization(const QString& source)
     plotter->setTitle(temperatureTitle(source));
     plotter->setAnalog(mode() != SM::Applet::Panel);
 
-    if (KGlobal::locale()->measureSystem() == QLocale::MetricSystem) {
-        plotter->setMinMax(0, 110);
-        plotter->setUnit(QString::fromUtf8("°C"));
-    } else {
-        plotter->setMinMax(32, 230);
-        plotter->setUnit(QString::fromUtf8("°F"));
+    switch (temperatureUnit()) {
+        case KTemperature::Celsius: {
+            plotter->setMinMax(0, 110);
+            plotter->setUnit(QString::fromUtf8("°C"));
+            break;
+        }
+        case KTemperature::Kelvin: {
+            // TODO: limits?
+            plotter->setMinMax(0, 500);
+            plotter->setUnit(QString::fromUtf8("K"));
+            break;
+        }
+        case KTemperature::Fahrenheit:
+        default: {
+            plotter->setMinMax(32, 230);
+            plotter->setUnit(QString::fromUtf8("°F"));
+            break;
+        }
     }
+
     appendVisualization(source, plotter);
 
     Plasma::DataEngine::Data data = engine->query(source);
@@ -197,26 +233,21 @@ void Temperature::dataUpdated(const QString& source,
     }
     SM::Plotter *plotter = qobject_cast<SM::Plotter*>(visualization(source));
     const QString unit = data["units"].toString();
-    double doubleValue = data["value"].toDouble() + temperatureOffset(source);
-    KTemperature value(doubleValue, unit);
+    const double doubleValue = data["value"].toDouble() + temperatureOffset(source);
+    KTemperature temp(doubleValue, unit);
+    const KTemperature::KTempUnit tempunit = temperatureUnit();
+    const double sampleValue = KTemperature::round(temp.convertTo(tempunit), 1);
 
-    QString stringValue;
-    if (KGlobal::locale()->measureSystem() == QLocale::MetricSystem) {
-        doubleValue = value.convertTo(KTemperature::Celsius);
-        stringValue = KTemperature(doubleValue, KTemperature::Celsius).toString();
-    } else {
-        doubleValue = value.convertTo(KTemperature::Fahrenheit);
-        stringValue = KTemperature(doubleValue, KTemperature::Fahrenheit).toString();
-    }
-
-    doubleValue = KTemperature::round(doubleValue, 1);
     if (plotter) {
-        plotter->addSample(QList<double>() << doubleValue);
+        plotter->addSample(QList<double>() << sampleValue);
     }
 
     if (mode() == SM::Applet::Panel) {
-        setToolTip(source,
-                   QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(stringValue));
+        const QString stringSample = KTemperature(sampleValue, tempunit).toString();
+        setToolTip(
+            source,
+            QString("<tr><td>%1</td><td>%2</td></tr>").arg(temperatureTitle(source)).arg(stringSample)
+        );
     }
 }
 

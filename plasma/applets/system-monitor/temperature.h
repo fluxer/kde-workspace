@@ -22,6 +22,7 @@
 
 #include <applet.h>
 #include "ui_temperature-config.h"
+#include <KUnitConversion>
 #include <Plasma/DataEngine>
 #include <QStandardItemModel>
 #include <QTimer>
@@ -58,6 +59,7 @@ class Temperature : public SM::Applet
 
         QString temperatureTitle(const QString& source);
         double temperatureOffset(const QString& source);
+        KTemperature::KTempUnit temperatureUnit();
         bool addVisualization(const QString& source);
         bool isValidDevice(const QString& uuid, Plasma::DataEngine::Data* data);
 };
