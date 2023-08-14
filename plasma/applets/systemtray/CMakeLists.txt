@@ -11,8 +11,6 @@ set(systemtray_SRCS
 
     protocols/fdo/fdoprotocol.cpp
     protocols/fdo/fdotask.cpp
-    #FIXME: we should find another way to achieve that
-    #protocols/fdo/fdonotification.cpp
     protocols/fdo/fdographicswidget.cpp
     protocols/fdo/fdoselectionmanager.cpp
     protocols/fdo/x11embedcontainer.cpp
