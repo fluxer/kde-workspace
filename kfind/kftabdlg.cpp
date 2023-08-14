@@ -850,10 +850,9 @@ void KfindTabWidget::slotUpdateDateLabelsForType(int index)
 
 void KfindTabWidget::updateDateLabels(int type, int value)
 {
-  QString typeKey(type == 0 ? 'i' : type == 1 ? 'h' : type == 2 ? 'd' : type == 3 ? 'm' : 'y');
   rb[1]->setText(ki18ncp("during the previous minute(s)/hour(s)/...; "
                          "dynamic context 'type': 'i' minutes, 'h' hours, 'd' days, 'm' months, 'y' years",
-                         "&during the previous", "&during the previous").subs(value).inContext("type", typeKey).toString());
+                         "&during the previous", "&during the previous").subs(value).toString());
   betweenType->setItemText(0, i18ncp("use date ranges to search files by modified time", "minute", "minutes", value));
   betweenType->setItemText(1, i18ncp("use date ranges to search files by modified time", "hour", "hours", value));
   betweenType->setItemText(2, i18ncp("use date ranges to search files by modified time", "day", "days", value));
