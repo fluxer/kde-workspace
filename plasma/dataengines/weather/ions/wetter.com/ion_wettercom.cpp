@@ -28,15 +28,24 @@
 
 #include "ion_wettercom.h"
 
+#include <QDateTime>
 #include <KDebug>
-#include <KDateTime>
 #include <KLocale>
-#include <kunitconversion.h>
+#include <KUnitConversion>
+
+static bool kIsNightTime(const QDateTime &dt)
+{
+    const int month = dt.date().month();
+    const int hour = dt.time().hour();
+    if (month <= 3 || month >= 9) {
+        return (hour >= 19 || hour <= 6);
+    }
+    return (hour >= 20 || hour <= 5);
+}
 
 /*
  * Initialization
  */
-
 WetterComIon::WetterComIon(QObject *parent, const QVariantList &args)
         : IonInterface(parent, args)
 
@@ -739,8 +748,8 @@ void WetterComIon::updateWeather(const QString& source, bool parseError)
                                 .arg(nightWeather.tempLow)
                                 .arg(nightWeather.probability));
                     i++;
-                    const KDateTime localdt = KDateTime::currentLocalDateTime();
-                    if (localdt.isNightTime()) {
+                    const QDateTime localdt = QDateTime::currentDateTime();
+                    if (kIsNightTime(localdt)) {
                         conditionIcon = nightWeather.iconName;
                     }
                 }

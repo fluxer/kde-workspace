@@ -1179,8 +1179,7 @@ QHash<QByteArray, QVariant> KFileItemModel::retrieveData(const KFileItem& item, 
         // Don't use KFileItem::timeString() as this is too expensive when
         // having several thousands of items. Instead the formatting of the
         // date-time will be done on-demand by the view when the date will be shown.
-        const KDateTime dateTime = item.time(KFileItem::ModificationTime);
-        data.insert(sharedValue("date"), QDateTime(dateTime));
+        data.insert(sharedValue("date"), item.time(KFileItem::ModificationTime));
     }
 
     if (m_requestRole[PermissionsRole]) {
@@ -1337,8 +1336,8 @@ int KFileItemModel::sortRoleCompare(const ItemData* a, const ItemData* b) const
     }
 
     case DateRole: {
-        const KDateTime dateTimeA = itemA.time(KFileItem::ModificationTime);
-        const KDateTime dateTimeB = itemB.time(KFileItem::ModificationTime);
+        const QDateTime dateTimeA = itemA.time(KFileItem::ModificationTime);
+        const QDateTime dateTimeB = itemB.time(KFileItem::ModificationTime);
         if (dateTimeA < dateTimeB) {
             result = -1;
         } else if (dateTimeA > dateTimeB) {
@@ -1516,7 +1515,7 @@ QList<QPair<int, QVariant> > KFileItemModel::dateRoleGroups() const
     const int maxIndex = count() - 1;
     QList<QPair<int, QVariant> > groups;
 
-    const QDate currentDate = KDateTime::currentLocalDateTime().date();
+    const QDate currentDate = QDateTime::currentDateTime().date();
 
     QDate previousModifiedDate;
     QString groupValue;
@@ -1525,7 +1524,7 @@ QList<QPair<int, QVariant> > KFileItemModel::dateRoleGroups() const
             continue;
         }
 
-        const KDateTime modifiedTime = m_itemData.at(i)->item.time(KFileItem::ModificationTime);
+        const QDateTime modifiedTime = m_itemData.at(i)->item.time(KFileItem::ModificationTime);
         const QDate modifiedDate = modifiedTime.date();
         if (modifiedDate == previousModifiedDate) {
             // The current item is in the same group as the previous item

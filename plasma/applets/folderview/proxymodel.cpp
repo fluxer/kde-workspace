@@ -171,8 +171,8 @@ bool ProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) con
             // fall through to the naturalCompare call
             break;
         case KDirModel::ModifiedTime: {
-            const KDateTime leftTime = leftItem.time(KFileItem::ModificationTime);
-            const KDateTime rightTime = rightItem.time(KFileItem::ModificationTime);
+            const QDateTime leftTime = leftItem.time(KFileItem::ModificationTime);
+            const QDateTime rightTime = rightItem.time(KFileItem::ModificationTime);
             if (leftTime < rightTime)
                 result = -1;
             else if (leftTime > rightTime)
