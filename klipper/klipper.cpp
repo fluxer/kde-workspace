@@ -819,15 +819,8 @@ QString Klipper::getClipboardHistoryItem(int i)
 bool Klipper::ignoreClipboardChanges() const
 {
     QWidget *focusWidget = qApp->focusWidget();
-    if ( focusWidget )
-    {
-        if ( focusWidget->inherits( "QSpinBox" ) ||
-             (focusWidget->parentWidget() &&
-              focusWidget->inherits("QLineEdit") &&
-              focusWidget->parentWidget()->inherits("QSpinWidget")) )
-        {
-            return true;
-        }
+    if ( focusWidget && focusWidget->inherits( "QSpinBox" ) ) {
+        return true;
     }
 
     return false;
