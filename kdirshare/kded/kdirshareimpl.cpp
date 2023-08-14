@@ -34,8 +34,6 @@
 #include <kdebug.h>
 
 static const QDir::SortFlags s_dirsortflags = (QDir::Name | QDir::DirsFirst);
-static const QByteArray s_data404("<html>404 Not Found</html>");
-static const QByteArray s_data500("<html>500 Internal Server Error</html>");
 // AVAHI_LABEL_MAX - 3 (for dots) - 1 (for null terminator)
 static const int s_sharenamelimit = 60;
 
@@ -95,6 +93,38 @@ static QByteArray styleSheetForPalette(const QPalette &palette)
     stylesheet.append("  color: " + visitedlinkcolor + ";\n");
     stylesheet.append("}\n");
     return stylesheet;
+}
+
+static QByteArray contentForError(const QString &path, const ushort status)
+{
+    const QString pathtitle = getTitle(path);
+
+    QByteArray data;
+    data.append("<html>\n");
+    data.append("  <head>\n");
+    data.append("    <link rel=\"stylesheet\" href=\"/kdirsharestyle.css\">\n");
+    data.append("  </head>\n");
+    data.append("  <body>\n");
+    data.append("    <title>");
+    data.append(pathtitle.toUtf8());
+    data.append("</title>\n");
+    switch (status) {
+        case 404: {
+            data.append("    <center>404 Not Found</center>\n");
+            break;
+        }
+        case 500: {
+            data.append("    <center>500 Internal Server Error</center>\n");
+            break;
+        }
+        default: {
+            Q_ASSERT(false);
+            break;
+        }
+    }
+    data.append("  </body>\n");
+    data.append("</html>");
+    return data;
 }
 
 static QByteArray contentForFile(const QString &basedir, const QFileInfo &fileinfo)
@@ -271,7 +301,7 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
         iconbuffer.open(QBuffer::WriteOnly);
         if (!iconpixmap.save(&iconbuffer, iconformat)) {
             kWarning() << "Could not save image";
-            outdata->append(s_data500);
+            outdata->append(contentForError(normalizedpath, 500));
             *outhttpstatus = 500;
             outheaders->insert("Content-Type", "text/html; charset=UTF-8");
         } else {
@@ -298,7 +328,7 @@ void KDirServer::respond(const QByteArray &url, QByteArray *outdata,
         outheaders->insert("Content-Type", filemime.toAscii());
         outfilepath->append(pathinfo.filePath());
     } else {
-        outdata->append(s_data404);
+        outdata->append(contentForError(normalizedpath, 404));
         *outhttpstatus = 404;
         outheaders->insert("Content-Type", "text/html; charset=UTF-8");
     }
