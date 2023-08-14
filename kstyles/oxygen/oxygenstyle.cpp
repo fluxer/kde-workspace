@@ -955,6 +955,7 @@ namespace Oxygen
 
             // register primitives for which nothing is done
             case PE_FrameStatusBar: fcn = &Style::emptyPrimitive; break;
+            case PE_PanelScrollAreaCorner: fcn = &Style::emptyPrimitive; break;
 
             case PE_Frame: fcn = &Style::drawFramePrimitive; break;
 
@@ -986,7 +987,6 @@ namespace Oxygen
             case PE_PanelItemViewItem: fcn = &Style::drawPanelItemViewItemPrimitive; break;
             case PE_PanelLineEdit: fcn = &Style::drawPanelLineEditPrimitive; break;
             case PE_PanelMenu: fcn = &Style::drawPanelMenuPrimitive; break;
-            case PE_PanelScrollAreaCorner: fcn = &Style::drawPanelScrollAreaCornerPrimitive; break;
             case PE_PanelTipLabel: fcn = &Style::drawPanelTipLabelPrimitive; break;
 
             case PE_IndicatorMenuCheckMark: fcn = &Style::drawIndicatorMenuCheckMarkPrimitive; break;
@@ -3250,17 +3250,6 @@ namespace Oxygen
 
         return true;
 
-    }
-
-    //___________________________________________________________________________________
-    bool Style::drawPanelScrollAreaCornerPrimitive( const QStyleOption*, QPainter*, const QWidget* widget ) const
-    {
-        // disable painting of PE_PanelScrollAreaCorner
-        // the default implementation fills the rect with the window background color
-        // which does not work for windows that have gradients.
-        // unfortunately, this does not work when scrollbars are children of QWebView,
-        // in which case, false is returned, in order to fall back to the parent style implementation
-        return !( widget && widget->inherits( "QWebView" ) );
     }
 
     //___________________________________________________________________________________

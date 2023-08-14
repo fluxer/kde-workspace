@@ -486,7 +486,6 @@ namespace Oxygen
         bool drawPanelButtonCommandPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
         bool drawPanelMenuPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
         bool drawPanelButtonToolPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
-        bool drawPanelScrollAreaCornerPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
         bool drawPanelTipLabelPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
         bool drawPanelItemViewItemPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
         bool drawPanelLineEditPrimitive( const QStyleOption*, QPainter*, const QWidget* ) const;
