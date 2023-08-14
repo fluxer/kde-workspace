@@ -382,7 +382,7 @@ void ThemePage::load()
 void ThemePage::defaults()
 {
     view->selectionModel()->clear();
-    QModelIndex defaultIndex = proxy->findIndex("Oxygen_White");
+    QModelIndex defaultIndex = proxy->findIndex(KDE_DEFAULT_CURSOR_THEME);
     view->setCurrentIndex(defaultIndex);
     preferredSize = 0;
     updateSizeComboBox();

@@ -36,7 +36,7 @@ static QString KGreeterDefaultStyle()
 
 static QString KGreeterDefaultCursorTheme()
 {
-    return QString::fromLatin1("Oxygen_White");
+    return QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME);
 }
 
 static QString KGreeterDefaultBackground()

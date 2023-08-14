@@ -31,6 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
+#include <kglobalsettings.h>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KDebug>
@@ -152,7 +153,7 @@ void ZoomEffect::recreateTexture()
 {
     // read details about the mouse-cursor theme define per default
     KConfigGroup mousecfg(KSharedConfig::openConfig("kcminputrc"), "Mouse");
-    QString theme = mousecfg.readEntry("cursorTheme", QString());
+    QString theme = mousecfg.readEntry("cursorTheme", QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME));
     QString size  = mousecfg.readEntry("cursorSize", QString());
 
     // fetch a reasonable size for the cursor-theme image

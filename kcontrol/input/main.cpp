@@ -59,7 +59,7 @@ extern "C"
         && QByteArray( XGetDefault( QX11Info::display(), "Xcursor", "theme" )).isEmpty()
         && QByteArray( XcursorGetTheme( QX11Info::display())).isEmpty())
     {
-        theme = "Oxygen_White";
+        theme = QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME);
     }
 
      // Apply the KDE cursor theme to ourselves

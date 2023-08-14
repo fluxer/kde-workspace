@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
 
     // Export the Xcursor theme & size settings
     KConfigGroup mousecfg(KSharedConfig::openConfig("kcminputrc"), "Mouse");
-    QString theme = mousecfg.readEntry("cursorTheme", QString("Oxygen_White"));
+    QString theme = mousecfg.readEntry("cursorTheme", QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME));
     QString size  = mousecfg.readEntry("cursorSize", QString());
     QString contents;
 

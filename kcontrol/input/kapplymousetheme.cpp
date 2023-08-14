@@ -24,6 +24,8 @@
 
 #include <config-X11.h>
 
+#include <kglobalsettings.h>
+
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -60,7 +62,7 @@ int main( int argc, char* argv[] )
         && isEmpty( XGetDefault( dpy, "Xcursor", "theme" ))
         && isEmpty( XcursorGetTheme( dpy)))
     {
-        theme = "Oxygen_White";
+        theme = KDE_DEFAULT_CURSOR_THEME;
     }
 
      // Apply the KDE cursor theme to ourselves
