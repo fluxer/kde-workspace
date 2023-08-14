@@ -19,15 +19,16 @@
  */
 
 #include "iconview.h"
+
 #ifdef Q_WS_X11
 #include <fixx11h.h>
 #endif
+
 #include <QActionGroup>
 #include <QApplication>
 #include <QDrag>
 #include <QGraphicsView>
 #include <QGraphicsProxyWidget>
-#include <QImageReader>
 #include <QItemSelectionModel>
 #include <QPainter>
 #include <QElapsedTimer>
@@ -44,9 +45,8 @@
 #include <KStringHandler>
 #include <KFileItemDelegate>
 #include <KServiceTypeTrader>
-
+#include <KImageIO>
 #include <KIO/NetAccess>
-
 #include <konqmimedata.h>
 #include <konq_operations.h>
 
@@ -2280,13 +2280,7 @@ void IconView::createDropActions(const KUrl::List &urls, QActionGroup *actions)
             }
         }
 
-        // Since it is possible that the URL is a remote URL, we have to rely on the file
-        // extension to decide if URL refers to a file we can use as a wallpaper.
-        // Unfortunately QImageReader::supportedImageFormats() returns some formats in upper case
-        // and others in lower case, but all the important ones are in lower case.
-        const QByteArray suffix = QFileInfo(urls.first().fileName()).suffix().toLower().toUtf8();
-        if (mimeName.startsWith(QLatin1String("image/")) ||
-                QImageReader::supportedImageFormats().contains(suffix)) {
+        if (KImageIO::isSupported(mimeName, KImageIO::Reading)) {
             QAction *action = new QAction(i18n("Set as &Wallpaper"), actions);
             action->setData("internal:folderview:set-as-wallpaper");
             action->setIcon(KIcon("preferences-desktop-wallpaper"));
