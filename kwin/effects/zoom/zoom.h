@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <kwineffects.h>
 #include <QScopedPointer>
-#include <QDateTime>
 #include <QTimeLine>
 
 namespace KWin
@@ -78,9 +77,9 @@ private slots:
     void moveZoomDown();
     void moveMouseToCenter();
     void timelineFrameChanged(int frame);
-    void slotMouseChanged(const QPoint& pos, const QPoint& old,
-                              Qt::MouseButtons buttons, Qt::MouseButtons oldbuttons,
-                              Qt::KeyboardModifiers modifiers, Qt::KeyboardModifiers oldmodifiers);
+    void slotMouseChanged(const QPoint &pos, const QPoint &old,
+                          Qt::MouseButtons buttons, Qt::MouseButtons oldbuttons,
+                          Qt::KeyboardModifiers modifiers, Qt::KeyboardModifiers oldmodifiers);
 private:
     void showCursor();
     void hideCursor();
@@ -99,8 +98,6 @@ private:
     QPoint cursorPoint;
     QPoint cursorHotSpot;
     QPoint prevPoint;
-    QTime lastMouseEvent;
-    QTime lastFocusEvent;
 #ifdef KWIN_BUILD_COMPOSITE
     QScopedPointer<XRenderPicture> xrenderPicture;
 #endif
