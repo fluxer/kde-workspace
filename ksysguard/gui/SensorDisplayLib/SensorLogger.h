@@ -23,11 +23,11 @@
 #define SENSORLOGGER_H
 
 #include <QtGui/QTreeView>
+#include <QDomElement>
 
 #include <SensorDisplay.h>
 
 class LogSensorModel;
-#include <QDomElement>
 
 class LogSensor : public QObject, public KSGRD::SensorClient
 {

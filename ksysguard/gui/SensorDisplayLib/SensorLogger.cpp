@@ -28,9 +28,7 @@
 #include <QtGui/QMenu>
 #include <QtGui/QTreeView>
 #include <QtGui/QHBoxLayout>
-#include <QtXml/qdom.h>
-#include <QtXml/qdom.h>
-#include <QtXml/qdom.h>
+#include <QtXml/QDomElement>
 
 #include <kapplication.h>
 #include <kiconloader.h>
@@ -386,8 +384,9 @@ void LogSensor::answerReceived( int id, const QList<QByteArray>& answer ) //virt
         mLimitReached = false;
       }
 
-      const QDate date = QDateTime::currentDateTime().date();
-      const QTime time = QDateTime::currentDateTime().time();
+      const QDateTime datetime = QDateTime::currentDateTime();
+      const QDate date = datetime.date();
+      const QTime time = datetime.time();
 
       stream << QString( "%1 %2 %3 %4 %5: %6\n" ).arg( date.shortMonthName( date.month() ) )
                                                  .arg( date.day() ).arg( time.toString() )
