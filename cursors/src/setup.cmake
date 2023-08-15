@@ -1,4 +1,4 @@
-set(setuptools tar xcursorgen)
+set(setuptools tar xcursorgen inkscape)
 foreach(tool ${setuptools})
     string(TOUPPER ${tool} uppertool)
     find_program(${uppertool} ${tool})
