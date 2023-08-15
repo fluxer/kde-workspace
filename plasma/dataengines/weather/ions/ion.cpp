@@ -96,45 +96,69 @@ void IonInterface::setInitialized(bool initialized)
  */
 QString IonInterface::getWindDirectionIcon(const QMap<QString, WindDirections> &windDirList, const QString& windDirection) const
 {
+    // NOTE: the direction strings have to match the elements in:
+    // kde-extraapps/kdeplasma-addons/applets/weatherstation/wind_arrows.svgz
+    // that means only no-op translation here!
+    const char* noop_directions[]={
+        I18N_NOOP("N"),
+        I18N_NOOP("NNE"),
+        I18N_NOOP("NE"),
+        I18N_NOOP("ENE"),
+        I18N_NOOP("E"),
+        I18N_NOOP("SSE"),
+        I18N_NOOP("SE"),
+        I18N_NOOP("ESE"),
+        I18N_NOOP("S"),
+        I18N_NOOP("NNW"),
+        I18N_NOOP("NW"),
+        I18N_NOOP("WNW"),
+        I18N_NOOP("W"),
+        I18N_NOOP("SSW"),
+        I18N_NOOP("SW"),
+        I18N_NOOP("WSW"),
+        I18N_NOOP("N/A")
+    };
+    Q_UNUSED(noop_directions);
+
     switch (windDirList[windDirection.toLower()]) {
     case N:
-        return i18n("N");
+        return QString::fromLatin1("N");
     case NNE:
-        return i18n("NNE");
+        return QString::fromLatin1("NNE");
     case NE:
-        return i18n("NE");
+        return QString::fromLatin1("NE");
     case ENE:
-        return i18n("ENE");
+        return QString::fromLatin1("ENE");
     case E:
-        return i18n("E");
+        return QString::fromLatin1("E");
     case SSE:
-        return i18n("SSE");
+        return QString::fromLatin1("SSE");
     case SE:
-        return i18n("SE");
+        return QString::fromLatin1("SE");
     case ESE:
-        return i18n("ESE");
+        return QString::fromLatin1("ESE");
     case S:
-        return i18n("S");
+        return QString::fromLatin1("S");
     case NNW:
-        return i18n("NNW");
+        return QString::fromLatin1("NNW");
     case NW:
-        return i18n("NW");
+        return QString::fromLatin1("NW");
     case WNW:
-        return i18n("WNW");
+        return QString::fromLatin1("WNW");
     case W:
-        return i18n("W");
+        return QString::fromLatin1("W");
     case SSW:
-        return i18n("SSW");
+        return QString::fromLatin1("SSW");
     case SW:
-        return i18n("SW");
+        return QString::fromLatin1("SW");
     case WSW:
-        return i18n("WSW");
+        return QString::fromLatin1("WSW");
     case VR:
-        return i18n("N/A"); // For now, we'll make a variable wind icon later on
+        return QString::fromLatin1("N/A"); // For now, we'll make a variable wind icon later on
     }
 
     // No icon available, use 'X'
-    return i18n("N/A");
+    return QString::fromLatin1("N/A");
 }
 
 /**
