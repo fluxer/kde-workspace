@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+
+project(cursors)
 
 include(cursors.cmake)
 include(config.cmake)
