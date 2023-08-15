@@ -25,13 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // KConfigSkeleton
 #include "zoomconfig.h"
 
-#include <QApplication>
-#include <QStyle>
 #include <QVector2D>
 #include <kaction.h>
 #include <kactioncollection.h>
 #include <kstandardaction.h>
-#include <kglobalsettings.h>
 #include <KConfigGroup>
 #include <KLocalizedString>
 #include <KDebug>
@@ -151,21 +148,16 @@ void ZoomEffect::hideCursor()
 
 void ZoomEffect::recreateTexture()
 {
-    // read details about the mouse-cursor theme define per default
-    KConfigGroup mousecfg(KSharedConfig::openConfig("kcminputrc"), "Mouse");
-    QString theme = mousecfg.readEntry("cursorTheme", QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME));
-    QString size  = mousecfg.readEntry("cursorSize", QString());
-
-    // fetch a reasonable size for the cursor-theme image
-    bool ok;
-    int iconSize = size.toInt(&ok);
-    if (!ok)
-        iconSize = QApplication::style()->pixelMetric(QStyle::PM_LargeIconSize);
+    // same code as in kwin/cursor.cpp
+    const char *cursortheme = XcursorGetTheme(KWin::display());
+    const int cursorsize = XcursorGetDefaultSize(KWin::display());
 
     // load the cursor-theme image from the Xcursor-library
-    XcursorImage *ximg = XcursorLibraryLoadImage("left_ptr", theme.toLocal8Bit(), iconSize);
-    if (!ximg) // default is better then nothing, so keep it as backup
-        ximg = XcursorLibraryLoadImage("left_ptr", "default", iconSize);
+    XcursorImage *ximg = XcursorLibraryLoadImage("left_ptr", cursortheme, cursorsize);
+    if (!ximg) {
+        // default is better then nothing, so keep it as backup
+        ximg = XcursorLibraryLoadImage("left_ptr", "default", cursorsize);
+    }
     if (ximg) {
         // turn the XcursorImage into a QImage that will be used to create the XRenderPicture.
         imageWidth = ximg->width;
@@ -177,9 +169,8 @@ void ZoomEffect::recreateTexture()
             xrenderPicture.reset(new XRenderPicture(img));
 #endif
         XcursorImageDestroy(ximg);
-    }
-    else {
-        kDebug(1212) << "Loading cursor image (" << theme << ") FAILED -> falling back to proportional mouse tracking!";
+    } else {
+        kDebug(1212) << "Loading cursor image (" << cursortheme << ") FAILED -> falling back to proportional mouse tracking!";
         mouseTracking = MouseTrackingProportional;
     }
 }
