@@ -63,8 +63,10 @@ void ThemeModel::reload()
 
     // get all desktop themes
     KStandardDirs dirs;
-    const QStringList themes = dirs.findAllResources("data", "desktoptheme/*/metadata.desktop",
-                                               KStandardDirs::NoDuplicates);
+    const QStringList themes = dirs.findAllResources(
+        "data", "desktoptheme/*/metadata.desktop",
+        KStandardDirs::NoDuplicates
+    );
     foreach (const QString &theme, themes) {
         int themeSepIndex = theme.lastIndexOf('/', -1);
         QString themeRoot = theme.left(themeSepIndex);
@@ -82,8 +84,8 @@ void ThemeModel::reload()
             name = packageName;
         }
         const QString comment = df.readComment();
-        const QString author = df.desktopGroup().readEntry("X-KDE-PluginInfo-Author",QString());
-        const QString version = df.desktopGroup().readEntry("X-KDE-PluginInfo-Version",QString());
+        const QString author = df.desktopGroup().readEntry("X-KDE-PluginInfo-Author", QString());
+        const QString version = df.desktopGroup().readEntry("X-KDE-PluginInfo-Version", QString());
 
 
         Plasma::FrameSvg *svg = new Plasma::FrameSvg(this);
@@ -180,9 +182,6 @@ void ThemeDelegate::paint(QPainter *painter,
     Plasma::FrameSvg *svg = static_cast<Plasma::FrameSvg *>(
             index.model()->data(index, ThemeModel::SvgRole).value<void *>());
     svg->resizeFrame(QSize(option.rect.width() - (2 * MARGIN), 100 - (2 * MARGIN)));
-    QRect imgRect = QRect(option.rect.topLeft(),
-            QSize(option.rect.width() - (2 * MARGIN), 100 - (2 * MARGIN)))
-            .translated(MARGIN, MARGIN);
     svg->paintFrame(painter, QPoint(option.rect.left() + MARGIN, option.rect.top() + MARGIN));
 
     // draw text

@@ -106,7 +106,7 @@ void KCMDesktopTheme::load()
 void KCMDesktopTheme::save()
 {
     // Don't do anything if we don't need to.
-    if (!( m_bDesktopThemeDirty) && !(m_bDetailsDirty)) {
+    if (!(m_bDesktopThemeDirty) && !(m_bDetailsDirty)) {
         return;
     }
 
@@ -123,7 +123,7 @@ void KCMDesktopTheme::save()
     // Clean up
     m_bDesktopThemeDirty = false;
     m_bDetailsDirty = false;
-    emit changed( false );
+    emit changed(false);
 }
 
 void KCMDesktopTheme::defaults()
