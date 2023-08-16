@@ -21,7 +21,6 @@
 
 #include <kcmodule.h>
 #include <ksharedconfig.h>
-#include <kautostart.h>
 
 QT_BEGIN_NAMESPACE
 class Ui_MainPage;

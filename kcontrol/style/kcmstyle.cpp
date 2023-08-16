@@ -40,7 +40,6 @@
 #include <kmessagebox.h>
 #include <kstyle.h>
 #include <kstandarddirs.h>
-#include <kautostart.h>
 #include <KDebug>
 #include <KNotification>
 #include <KColorScheme>

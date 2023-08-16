@@ -26,20 +26,15 @@
  */
 
 #include "kcmdesktoptheme.h"
-
 #include "thememodel.h"
 
-
 #include <kaboutdata.h>
-#include <kautostart.h>
-#include <KStandardDirs>
-
+#include <kstandarddirs.h>
+#include <kpluginfactory.h>
+#include <kpluginloader.h>
 #include <Plasma/Theme>
 
 /**** DLL Interface for kcontrol ****/
-
-#include <kpluginfactory.h>
-#include <kpluginloader.h>
 
 K_PLUGIN_FACTORY(KCMDesktopThemeFactory, registerPlugin<KCMDesktopTheme>();)
 K_EXPORT_PLUGIN(KCMDesktopThemeFactory("kcmdesktoptheme","kcm_desktopthemedetails"))
