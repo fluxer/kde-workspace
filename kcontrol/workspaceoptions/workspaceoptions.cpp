@@ -90,7 +90,7 @@ void WorkspaceOptionsModule::save()
         cg2.writeEntry("ThemeCacheKb", m_ui->themeCacheSize->value() * 1024);
     }
 
-    const bool isDesktop = m_ui->formFactor->currentIndex() == 0;
+    const bool isDesktop = (m_ui->formFactor->currentIndex() == 0);
 
     KConfigGroup winCg(m_kwinConfig, "Windows");
 
@@ -102,81 +102,33 @@ void WorkspaceOptionsModule::save()
     }
     winCg.sync();
 
-    KConfigGroup ownButtonsCg(m_ownConfig, "TitleBarButtons");
-    KConfigGroup ownPresentWindowsCg(m_ownConfig, "Effect-PresentWindows");
-    KConfigGroup ownCompositingCg(m_ownConfig, "Compositing");
     KConfigGroup kwinStyleCg(m_kwinConfig, "Style");
     KConfigGroup kwinPresentWindowsCg(m_kwinConfig, "Effect-PresentWindows");
     KConfigGroup kwinCompositingCg(m_kwinConfig, "Compositing");
 
-
-    QString desktopTitleBarButtonsLeft = ownButtonsCg.readEntry("DesktopLeft", "MS");
-    QString desktopTitleBarButtonsRight = ownButtonsCg.readEntry("DesktopRight", "HIAX");
-
-    QString netbookTitleBarButtonsLeft = ownButtonsCg.readEntry("NetbookLeft", "MS");
-    QString netbookTitleBarButtonsRight = ownButtonsCg.readEntry("NetbookRight", "HAX");
-
-
-    int desktopPresentWindowsLayoutMode = 0;
-    int netbookPresentWindowsLayoutMode = 1;
-
-    bool desktopUnredirectFullscreen = ownCompositingCg.readEntry("DesktopUnredirectFullscreen", true);
-    bool netbookUnredirectFullscreen = ownCompositingCg.readEntry("NetbookUnredirectFullscreen", false);
-
-    if (m_currentlyIsDesktop) {
-        //save the user preferences on titlebar buttons
-        desktopTitleBarButtonsLeft = kwinStyleCg.readEntry("ButtonsOnLeft", "MS");
-        desktopTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HIAX");
-        ownButtonsCg.writeEntry("DesktopLeft", desktopTitleBarButtonsLeft);
-        ownButtonsCg.writeEntry("DesktopRight", desktopTitleBarButtonsRight);
-
-        //Unredirect fullscreen
-        desktopUnredirectFullscreen = kwinCompositingCg.readEntry("UnredirectFullscreen", true);
-        ownCompositingCg.writeEntry("DesktopUnredirectFullscreen", desktopUnredirectFullscreen);
-
-        //desktop grid effect
-        desktopPresentWindowsLayoutMode = kwinPresentWindowsCg.readEntry("LayoutMode", 0);
-        ownPresentWindowsCg.writeEntry("DesktopLayoutMode", desktopPresentWindowsLayoutMode);
-    } else {
-        //save the user preferences on titlebar buttons
-        netbookTitleBarButtonsLeft = kwinStyleCg.readEntry("ButtonsOnLeft", "MS");
-        netbookTitleBarButtonsRight = kwinStyleCg.readEntry("ButtonsOnRight", "HAX");
-        ownButtonsCg.writeEntry("NetbookLeft", netbookTitleBarButtonsLeft);
-        ownButtonsCg.writeEntry("NetbookRight", netbookTitleBarButtonsRight);
-
-        //Unredirect fullscreen
-        netbookUnredirectFullscreen = kwinCompositingCg.readEntry("UnredirectFullscreen", true);
-        ownCompositingCg.writeEntry("NetbookUnredirectFullscreen", netbookUnredirectFullscreen);
-
-        //desktop grid effect
-        desktopPresentWindowsLayoutMode = kwinPresentWindowsCg.readEntry("LayoutMode", 0);
-        ownPresentWindowsCg.writeEntry("NetbookLayoutMode", desktopPresentWindowsLayoutMode);
-    }
-
-    ownButtonsCg.sync();
-    ownPresentWindowsCg.sync();
-    ownCompositingCg.sync();
+    static const QString desktopTitleBarButtonsLeft = "MS";
+    static const QString desktopTitleBarButtonsRight = "HIAX";
+    static const QString netbookTitleBarButtonsLeft = "MS";
+    static const QString netbookTitleBarButtonsRight = "HAX";
+    static const int desktopPresentWindowsLayoutMode = 0;
+    static const int netbookPresentWindowsLayoutMode = 1;
+    static const bool desktopUnredirectFullscreen = true;
+    static const bool netbookUnredirectFullscreen = false;
 
     kwinStyleCg.writeEntry("CustomButtonPositions", true);
     if (isDesktop) {
-        //kill/enable the minimize button, unless configured differently
         kwinStyleCg.writeEntry("ButtonsOnLeft", desktopTitleBarButtonsLeft);
         kwinStyleCg.writeEntry("ButtonsOnRight", desktopTitleBarButtonsRight);
 
-        // enable unredirect fullscreen, unless configured differently
         kwinCompositingCg.writeEntry("UnredirectFullscreen", desktopUnredirectFullscreen);
 
-        //present windows mode
         kwinPresentWindowsCg.writeEntry("LayoutMode", desktopPresentWindowsLayoutMode);
     } else {
-        //kill/enable the minimize button, unless configured differently
         kwinStyleCg.writeEntry("ButtonsOnLeft", netbookTitleBarButtonsLeft);
         kwinStyleCg.writeEntry("ButtonsOnRight", netbookTitleBarButtonsRight);
 
-        // disable unredirect fullscreen, unless configured differently
         kwinCompositingCg.writeEntry("UnredirectFullscreen", netbookUnredirectFullscreen);
 
-        //present windows mode
         kwinPresentWindowsCg.writeEntry("LayoutMode", netbookPresentWindowsLayoutMode);
     }
 
