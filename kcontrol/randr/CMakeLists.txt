@@ -7,7 +7,6 @@ include_directories(${X11_Xrandr_INCLUDE_PATH})
 
 
 set(randrinternal_PART_SRCS 
-    ktimerdialog.cpp
     randr.cpp 
     randrdisplay.cpp
     collapsiblewidget.cpp

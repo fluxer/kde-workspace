@@ -28,8 +28,6 @@
 #include <QString>
 #include <QPixmap>
 
-#include "ktimerdialog.h"
-
 extern "C"
 {
 #include <X11/Xlib.h>

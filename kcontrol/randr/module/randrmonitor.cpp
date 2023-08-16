@@ -35,6 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <qdbusservicewatcher.h>
 #include <qdbusconnection.h>
 #include <qdbusconnectioninterface.h>
+#include <qlabel.h>
 #include <qtimer.h>
 #include <qx11info_x11.h>
 #include <qlayout.h>

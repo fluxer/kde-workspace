@@ -13,7 +13,6 @@ set(kded_randrmonitor_PART_SRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/../randrcrtc.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../randrmode.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/../randr.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/../ktimerdialog.cpp
 )
 
 kde4_add_plugin(kded_randrmonitor ${kded_randrmonitor_PART_SRCS})

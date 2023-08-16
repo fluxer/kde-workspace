@@ -31,6 +31,7 @@
 #include <kglobalsettings.h>
 #include <kmessagebox.h>
 #include <kshell.h>
+#include <kconfiggroup.h>
 #include <qmenu.h>
 
 QT_BEGIN_NAMESPACE

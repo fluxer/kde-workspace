@@ -18,7 +18,11 @@
  */
 
 #include "randr.h"
+
+#include <QLabel>
 #include <KIconLoader>
+#include <KTimerDialog>
+#include <KWindowSystem>
 
 Time RandR::timestamp = 0;
 
@@ -129,12 +133,15 @@ bool RandR::confirm(const QRect &rect)
 
     KTimerDialog acceptDialog(
         15000, KTimerDialog::CountDown,
-        0, "mainKTimerDialog", true,
+        nullptr,
         i18n("Confirm Display Setting Change"),
         KTimerDialog::Ok|KTimerDialog::Cancel,
         KTimerDialog::Cancel
     );
 
+    acceptDialog.setModal(true);
+    acceptDialog.setObjectName("mainKTimerDialog");
+    KWindowSystem::setIcons(acceptDialog.winId(), DesktopIcon("preferences-desktop-display-randr"), SmallIcon("preferences-desktop-display-randr"));
     acceptDialog.setButtonGuiItem(KDialog::Ok, KGuiItem(i18n("&Accept Configuration"), "dialog-ok"));
     acceptDialog.setButtonGuiItem(KDialog::Cancel, KGuiItem(i18n("&Revert to Previous Configuration"), "dialog-cancel"));
 

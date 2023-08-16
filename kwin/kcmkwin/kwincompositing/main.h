@@ -24,13 +24,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <kcmodule.h>
 #include <ksharedconfig.h>
 #include <ktemporaryfile.h>
+#include <ktimerdialog.h>
 
 #include <QLabel>
 
 #include "kwin_interface.h"
 
 #include "ui_main.h"
-#include "ktimerdialog.h"
 
 class KPluginSelector;
 class KActionCollection;

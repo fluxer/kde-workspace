@@ -10,7 +10,6 @@ set(kcm_componentchooser_SRCS
     componentchooseremail.cpp
     kcm_componentchooser.cpp
     componentchooserterminal.cpp
-    ktimerdialog.cpp
     componentchooserwm.cpp
 )
 
