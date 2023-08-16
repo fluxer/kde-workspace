@@ -99,7 +99,7 @@ QString IonInterface::getWindDirectionIcon(const QMap<QString, WindDirections> &
     // NOTE: the direction strings have to match the elements in:
     // kde-extraapps/kdeplasma-addons/applets/weatherstation/wind_arrows.svgz
     // that means only no-op translation here!
-    const char* noop_directions[]={
+    const char* noop_directions[] = {
         I18N_NOOP("N"),
         I18N_NOOP("NNE"),
         I18N_NOOP("NE"),

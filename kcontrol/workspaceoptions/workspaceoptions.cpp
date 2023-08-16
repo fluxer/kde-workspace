@@ -39,8 +39,6 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
   : KCModule(WorkspaceOptionsModuleFactory::componentData(), parent),
     m_kwinConfig( KSharedConfig::openConfig("kwinrc")),
     m_ownConfig( KSharedConfig::openConfig("workspaceoptionsrc")),
-    m_plasmaDesktopAutostart("plasma-desktop"),
-    m_krunnerAutostart("krunner"),
     m_currentlyIsDesktop(false),
     m_plasmaFound(false),
     m_ui(new Ui_MainPage())
@@ -60,7 +58,7 @@ WorkspaceOptionsModule::WorkspaceOptionsModule(QWidget *parent, const QVariantLi
 
     m_ui->setupUi(this);
     // NOTE: the i18n() bellow is using translation from:
-    // kdelibs/kdecore/localization/klocale_kde.cpp
+    // kdelibs/kdecore/localization/klocale.cpp
     m_ui->themeCacheSize->setSuffix(i18n("%1 MB", QLatin1String("")));
 
     connect(m_ui->formFactor, SIGNAL(currentIndexChanged(int)), this, SLOT(changed()));
@@ -93,16 +91,6 @@ void WorkspaceOptionsModule::save()
     }
 
     const bool isDesktop = m_ui->formFactor->currentIndex() == 0;
-
-    m_plasmaDesktopAutostart.setAutostarts(true);
-    m_plasmaDesktopAutostart.setStartPhase(KAutostart::BaseDesktop);
-    m_plasmaDesktopAutostart.setCommand("plasma-desktop");
-    m_plasmaDesktopAutostart.setAllowedEnvironments(QStringList()<<"KDE");
-
-    m_krunnerAutostart.setAutostarts(true);
-    m_krunnerAutostart.setStartPhase(KAutostart::BaseDesktop);
-    m_krunnerAutostart.setCommand("krunner");
-    m_krunnerAutostart.setAllowedEnvironments(QStringList()<<"KDE");
 
     KConfigGroup winCg(m_kwinConfig, "Windows");
 
@@ -205,7 +193,9 @@ void WorkspaceOptionsModule::save()
 
 void WorkspaceOptionsModule::load()
 {
-    if (m_plasmaDesktopAutostart.autostarts()) {
+    KConfigGroup winCg(m_kwinConfig, "Windows");
+    m_currentlyIsDesktop = !winCg.readEntry("BorderlessMaximizedWindows", false);
+    if (m_currentlyIsDesktop) {
         m_ui->formFactor->setCurrentIndex(0);
     } else {
         m_ui->formFactor->setCurrentIndex(1);

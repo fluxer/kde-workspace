@@ -102,7 +102,7 @@ KFreeSpaceBox::KFreeSpaceBox(QWidget *parent,
     m_freespaceinput->setSliderEnabled(true);
     m_freespaceinput->setToolTip(i18n("When the free space on the devices is equal to or less than that a notification will be shown"));
     // NOTE: the i18n() bellow is using translation from:
-    // kdelibs/kdecore/localization/klocale_kde.cpp
+    // kdelibs/kdecore/localization/klocale.cpp
     m_freespaceinput->setSuffix(i18n("%1 MB", QLatin1String("")));
     m_freespaceinput->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     connect(m_freespaceinput, SIGNAL(valueChanged(int)), this, SLOT(slotFreeSpace()));
