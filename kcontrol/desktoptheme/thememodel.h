@@ -50,12 +50,13 @@ public:
 class ThemeModel : public QAbstractListModel
 {
 public:
-    enum { PackageNameRole = Qt::UserRole,
-           SvgRole = Qt::UserRole + 1,
-           PackageDescriptionRole = Qt::UserRole + 2,
-           PackageAuthorRole = Qt::UserRole + 3,
-           PackageVersionRole = Qt::UserRole + 4
-         };
+    enum {
+        PackageNameRole = Qt::UserRole,
+        SvgRole = Qt::UserRole + 1,
+        PackageDescriptionRole = Qt::UserRole + 2,
+        PackageAuthorRole = Qt::UserRole + 3,
+        PackageVersionRole = Qt::UserRole + 4
+    };
 
     ThemeModel(QObject *parent = 0);
     virtual ~ThemeModel();
@@ -72,7 +73,7 @@ private:
 class ThemeDelegate : public QAbstractItemDelegate
 {
 public:
-    ThemeDelegate(QObject * parent = 0);
+    ThemeDelegate(QObject *parent = nullptr);
 
     virtual void paint(QPainter *painter,
                        const QStyleOptionViewItem &option,

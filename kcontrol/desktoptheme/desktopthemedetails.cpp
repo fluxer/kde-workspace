@@ -28,10 +28,10 @@
 #include <kio/job.h>
 
 struct ThemeItemNameType {
-        const char* m_type;
-        const char* m_displayItemName;
-        const char* m_themeItemPath;
-        const char* m_iconName;
+    const char* m_type;
+    const char* m_displayItemName;
+    const char* m_themeItemPath;
+    const char* m_iconName;
 };
 
 const ThemeItemNameType themeCollectionName[] = {
@@ -53,10 +53,9 @@ const ThemeItemNameType themeCollectionName[] = {
 };
 
 
-DesktopThemeDetails::DesktopThemeDetails(QWidget* parent)
+DesktopThemeDetails::DesktopThemeDetails(QWidget *parent)
     : QWidget(parent),
-      m_themeModel(0)
-
+    m_themeModel(nullptr)
 {
     setWindowIcon(KIcon("preferences-desktop"));
     setupUi(this);
@@ -76,7 +75,10 @@ DesktopThemeDetails::DesktopThemeDetails(QWidget* parent)
 
     reloadConfig();
 
-    connect(m_theme->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(themeSelectionChanged(QItemSelection,QItemSelection)));
+    connect(
+        m_theme->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
+        this, SLOT(themeSelectionChanged(QItemSelection,QItemSelection))
+    );
 
     connect(m_enableAdvanced, SIGNAL(toggled(bool)), this, SLOT(toggleAdvancedVisible()));
     connect(m_removeThemeButton, SIGNAL(clicked()), this, SLOT(removeTheme()));
@@ -133,7 +135,11 @@ void DesktopThemeDetails::save()
         //Copy all files from the base theme
         QString baseSource = dirs.locate("data", "desktoptheme/" + m_baseTheme + "/metadata.desktop");
         baseSource = baseSource.left(baseSource.lastIndexOf('/', -1));
-        KIO::CopyJob *copyBaseTheme = KIO::copyAs(KUrl(baseSource), KUrl(dirs.locateLocal("data", "desktoptheme/" + themeRoot, true)), KIO::HideProgressInfo);
+        KIO::CopyJob *copyBaseTheme = KIO::copyAs(
+            KUrl(baseSource),
+            KUrl(dirs.locateLocal("data", "desktoptheme/" + themeRoot, true)),
+            KIO::HideProgressInfo
+        );
         KIO::NetAccess::synchronousRun(copyBaseTheme, this);
 
         //Prepare settings file for customized theme
@@ -173,8 +179,10 @@ void DesktopThemeDetails::save()
 
 
             //Delete item files at destination before copying (possibly there from base theme copy)
-            const QStringList deleteFiles = dirs.findAllResources("data", "desktoptheme/" + themeRoot + '/' + m_itemPaths[i.key()] + '*',
-                                            KStandardDirs::NoDuplicates);
+            const QStringList deleteFiles = dirs.findAllResources(
+                "data", "desktoptheme/" + themeRoot + '/' + m_itemPaths[i.key()] + '*',
+                KStandardDirs::NoDuplicates
+            );
             for (int j = 0; j < deleteFiles.size(); ++j) {
                 KIO::DeleteJob *dj = KIO::del(KUrl(deleteFiles.at(j)), KIO::HideProgressInfo);
                 KIO::NetAccess::synchronousRun(dj, this);
@@ -247,7 +255,7 @@ void DesktopThemeDetails::removeTheme()
             KMessageBox::information(this, i18n("Removal of the default desktop theme is not allowed."), i18n("Remove Desktop Theme"));
             removeTheme = false;
         } else {
-            if(KMessageBox::questionYesNo(this, i18n("Are you sure you wish remove the \"%1\" theme?", themeName), i18n("Remove Desktop Theme")) == KMessageBox::No) {
+            if (KMessageBox::questionYesNo(this, i18n("Are you sure you wish remove the \"%1\" theme?", themeName), i18n("Remove Desktop Theme")) == KMessageBox::No) {
                 removeTheme = false;
             }
         }
@@ -260,7 +268,10 @@ void DesktopThemeDetails::removeTheme()
             activeTheme = "default";
         }
         if (QDir(dirs.locateLocal("data", "desktoptheme/" + theme, false)).exists()) {
-            KIO::DeleteJob *deleteTheme = KIO::del(KUrl(dirs.locateLocal("data", "desktoptheme/" + theme, false)), KIO::HideProgressInfo);
+            KIO::DeleteJob *deleteTheme = KIO::del(
+                KUrl(dirs.locateLocal("data", "desktoptheme/" + theme, false)),
+                KIO::HideProgressInfo
+            );
             KIO::NetAccess::synchronousRun(deleteTheme, this);
         }
     }
@@ -275,7 +286,11 @@ void DesktopThemeDetails::exportTheme()
 
     if (m_themeCustomized ||
         (isCustomized(theme) && m_newThemeName->text() == "")) {
-        KMessageBox::information(this, i18n("Please apply theme item changes (with a new theme name) before attempting to export theme."), i18n("Export Desktop Theme"));
+        KMessageBox::information(
+            this,
+            i18n("Please apply theme item changes (with a new theme name) before attempting to export theme."),
+            i18n("Export Desktop Theme")
+        );
     } else {
         QString themeStoragePath = theme;
 
@@ -319,10 +334,12 @@ void DesktopThemeDetails::loadThemeItems()
     m_themes.clear(); // clear installed theme list
     m_themeRoots.clear(); // clear installed theme root paths
     KStandardDirs dirs;
-    QStringList themes = dirs.findAllResources("data", "desktoptheme/*/metadata.desktop",
-                                               KStandardDirs::NoDuplicates);
+    QStringList themes = dirs.findAllResources(
+        "data", "desktoptheme/*/metadata.desktop",
+        KStandardDirs::NoDuplicates
+    );
     themes.sort();
-    int j=0;
+    int j = 0;
     for (int i = 0; i < themes.size(); ++i) {
         QString theme = themes.at(i);
         int themeSepIndex = theme.lastIndexOf('/', -1);
@@ -404,7 +421,7 @@ void DesktopThemeDetails::loadThemeItems()
     m_themeItemList->setCurrentCell(0, 1);
 }
 
-void DesktopThemeDetails::updateReplaceItemList(const int& item)
+void DesktopThemeDetails::updateReplaceItemList(const int item)
 {
     QString currentTheme = m_theme->currentIndex().data(ThemeModel::PackageNameRole).toString();
 
@@ -446,7 +463,9 @@ void DesktopThemeDetails::replacementItemChanged()
             if (itemComboBox->currentText() == i18n("File...")) {
                 //Get the filename for the replacement item
                 QString translated_key = i18nc("plasma name", qPrintable( i.key() ) );
-                QString fileReplacement = KFileDialog::getOpenFileName(KUrl(), QString(), this, i18n("Select File to Use for %1",translated_key));
+                QString fileReplacement = KFileDialog::getOpenFileName(
+                    KUrl(), QString(), this, i18n("Select File to Use for %1", translated_key)
+                );
                 if (!fileReplacement.isEmpty()) {
                     m_itemFileReplacements[i.value()] = fileReplacement;
                     int index = itemComboBox->findText(fileReplacement);
@@ -524,15 +543,16 @@ void DesktopThemeDetails::toggleAdvancedVisible()
     m_advancedLine->setVisible(m_enableAdvanced->isChecked());
 }
 
-bool DesktopThemeDetails::isCustomized(const QString& theme) {
+bool DesktopThemeDetails::isCustomized(const QString &theme)
+{
     if (theme == ".customized" || theme == ".customized1") {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
-void DesktopThemeDetails::clearCustomized(const QString& themeRoot) {
+void DesktopThemeDetails::clearCustomized(const QString &themeRoot)
+{
     KStandardDirs dirs;
 
     if ((isCustomized(themeRoot))) {
@@ -553,7 +573,8 @@ void DesktopThemeDetails::clearCustomized(const QString& themeRoot) {
     }
 }
 
-QString DesktopThemeDetails::displayedItemText(int item) {
+QString DesktopThemeDetails::displayedItemText(int item)
+{
     QString displayedText = m_items.key(item);
     for (int i = 0; themeCollectionName[i].m_type; ++i) {
         if (themeCollectionName[i].m_type == m_items.key(item)) {

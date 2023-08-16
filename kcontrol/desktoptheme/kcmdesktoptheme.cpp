@@ -40,12 +40,18 @@ K_PLUGIN_FACTORY(KCMDesktopThemeFactory, registerPlugin<KCMDesktopTheme>();)
 K_EXPORT_PLUGIN(KCMDesktopThemeFactory("kcmdesktoptheme","kcm_desktopthemedetails"))
 
 
-KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
-    : KCModule( KCMDesktopThemeFactory::componentData(), parent )
+KCMDesktopTheme::KCMDesktopTheme(QWidget *parent, const QVariantList &args)
+    : KCModule(KCMDesktopThemeFactory::componentData(), parent)
 {
-    setQuickHelp( i18n("<h1>Desktop Theme</h1>"
+    Q_UNUSED(args);
+
+    setQuickHelp(
+        i18n(
+            "<h1>Desktop Theme</h1>"
             "This module allows you to modify the visual appearance "
-            "of the desktop."));
+            "of the desktop."
+        )
+    );
 
     setupUi(this);
 
@@ -54,16 +60,17 @@ KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
 
     KGlobal::dirs()->addResourceType("themes", "data", "kstyle/themes");
 
-    KAboutData *about =
-        new KAboutData( I18N_NOOP("KCMDesktopTheme"), 0,
-                        ki18n("KDE Desktop Theme Module"),
-                        0, KLocalizedString(), KAboutData::License_GPL,
-                        ki18n("(c) 2002 Karol Szwed, Daniel Molkentin"));
+    KAboutData *about = new KAboutData(
+        I18N_NOOP("KCMDesktopTheme"), 0,
+        ki18n("KDE Desktop Theme Module"),
+        0, KLocalizedString(), KAboutData::License_GPL,
+        ki18n("(c) 2002 Karol Szwed, Daniel Molkentin")
+    );
 
     about->addAuthor(ki18n("Karol Szwed"), KLocalizedString(), "gallium@kde.org");
     about->addAuthor(ki18n("Daniel Molkentin"), KLocalizedString(), "molkentin@kde.org");
     about->addAuthor(ki18n("Ralf Nolden"), KLocalizedString(), "nolden@kde.org");
-    setAboutData( about );
+    setAboutData(about);
 
     m_themeModel = new ThemeModel(this);
     m_theme->setModel(m_themeModel);
@@ -72,8 +79,10 @@ KCMDesktopTheme::KCMDesktopTheme( QWidget* parent, const QVariantList& )
 
     connect(m_detailsWidget, SIGNAL(changed()), this, SLOT(detailChanged()));
 
-    connect(m_theme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-            this, SLOT(setDesktopThemeDirty()));
+    connect(
+        m_theme->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+        this, SLOT(setDesktopThemeDirty())
+    );
 }
 
 
@@ -97,18 +106,17 @@ void KCMDesktopTheme::load()
 void KCMDesktopTheme::save()
 {
     // Don't do anything if we don't need to.
-    if ( !( m_bDesktopThemeDirty) && !(m_bDetailsDirty) )
+    if (!( m_bDesktopThemeDirty) && !(m_bDetailsDirty)) {
         return;
+    }
 
     //Desktop theme
-    if ( m_bDesktopThemeDirty )
-    {
+    if (m_bDesktopThemeDirty) {
         QString theme = m_themeModel->data(m_theme->currentIndex(), ThemeModel::PackageNameRole).toString();
         Plasma::Theme::defaultTheme()->setThemeName(theme);
     }
 
-    if (m_bDetailsDirty)
-    {
+    if (m_bDetailsDirty) {
         m_detailsWidget->save();
     }
 

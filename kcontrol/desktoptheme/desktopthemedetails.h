@@ -39,11 +39,11 @@ Q_SIGNALS:
     void changed();
 
 private:
-    void updateReplaceItemList(const int& item);
+    void updateReplaceItemList(const int item);
     void loadThemeItems();
     QString displayedItemText(int item);
-    bool isCustomized(const QString& theme);
-    void clearCustomized(const QString& themeRoot);
+    bool isCustomized(const QString &theme);
+    void clearCustomized(const QString &themeRoot);
     void setDesktopTheme(QString themeRoot);
 
 private slots:

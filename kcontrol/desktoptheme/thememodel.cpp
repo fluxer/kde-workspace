@@ -27,19 +27,18 @@
 
 #include "thememodel.h"
 
-#include <QtGui/QApplication>
 #include <QtCore/QFile>
+#include <QtGui/QApplication>
 #include <QtGui/QPainter>
 
 #include <KDesktopFile>
 #include <KColorScheme>
 #include <KStandardDirs>
-
 #include <Plasma/FrameSvg>
 #include <Plasma/Theme>
 
-ThemeModel::ThemeModel( QObject *parent )
-: QAbstractListModel( parent )
+ThemeModel::ThemeModel(QObject *parent)
+    : QAbstractListModel(parent)
 {
     reload();
 }
@@ -162,7 +161,7 @@ QModelIndex ThemeModel::indexOf(const QString &name) const
 }
 
 ThemeDelegate::ThemeDelegate(QObject* parent)
-: QAbstractItemDelegate(parent)
+    : QAbstractItemDelegate(parent)
 {
 }
 
