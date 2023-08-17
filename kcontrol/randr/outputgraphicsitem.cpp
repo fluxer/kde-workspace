@@ -72,7 +72,9 @@ void OutputGraphicsItem::configUpdated()
     m_text->setPlainText(
         i18nc(
             "Configuration options. Output name, width x height (refresh rate Hz)", "%1\n%2x%3 (%4 Hz)",
-            m_config->output()->name(), m_config->rect().width(), m_config->rect().height(), refresh
+            m_config->output()->name(),
+            QString::number(m_config->rect().width()), QString::number(m_config->rect().height()),
+            refresh
         )
     );
     // more accurate text centering
