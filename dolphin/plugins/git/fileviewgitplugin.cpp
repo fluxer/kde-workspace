@@ -63,7 +63,7 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
 
     m_addaction = new KAction(this);
     m_addaction->setIcon(KIcon("svn-commit"));
-    m_addaction->setText(i18nc("@action:inmenu", "<application>Git</application> Add"));
+    m_addaction->setText(i18nc("@action:inmenu", "Git Add"));
     connect(
         m_addaction, SIGNAL(triggered()),
         this, SLOT(slotAdd())
@@ -71,7 +71,7 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
 
     m_removeaction = new KAction(this);
     m_removeaction->setIcon(KIcon("list-remove"));
-    m_removeaction->setText(i18nc("@action:inmenu", "<application>Git</application> Remove"));
+    m_removeaction->setText(i18nc("@action:inmenu", "Git Remove"));
     connect(
         m_removeaction, SIGNAL(triggered()),
         this, SLOT(slotRemove())
@@ -79,7 +79,7 @@ FileViewGitPlugin::FileViewGitPlugin(QObject *parent, const QList<QVariant> &arg
 
     m_commitaction = new KAction(this);
     m_commitaction->setIcon(KIcon("svn-commit"));
-    m_commitaction->setText(i18nc("@action:inmenu", "<application>Git</application> Commit..."));
+    m_commitaction->setText(i18nc("@action:inmenu", "Git Commit..."));
     connect(
         m_commitaction, SIGNAL(triggered()),
         this, SLOT(slotCommit())

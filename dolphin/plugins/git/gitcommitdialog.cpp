@@ -40,7 +40,7 @@ GitCommitDialog::GitCommitDialog(QWidget *parent)
     m_diffdocument(nullptr),
     m_commits(nullptr)
 {
-    setCaption(i18nc("@title:window", "<application>Git</application> Commit"));
+    setCaption(i18nc("@title:window", "Git Commit"));
     setButtons(KDialog::Details | KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
     setButtonText(KDialog::Ok, i18nc("@action:button", "Commit"));
