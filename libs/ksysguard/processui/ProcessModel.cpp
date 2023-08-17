@@ -1137,14 +1137,17 @@ QString ProcessModelPrivate::getTooltipForUser(const KSysGuard::Process *ps) con
 }
 
 QString ProcessModel::getStringForProcess(KSysGuard::Process *process) const {
-    return i18nc("Short description of a process. PID, name, user", "<numid>%1</numid>: %2, owned by user %3", (long)(process->pid), process->name, d->getUsernameForUser(process->uid, false));
+    return i18nc(
+        "Short description of a process. PID, name, user", "%1: %2, owned by user %3",
+        QString::number(process->pid), process->name, d->getUsernameForUser(process->uid, false)
+    );
 }
 
 QString ProcessModelPrivate::getGroupnameForGroup(long gid) const {
     if(mIsLocalhost) {
         QString groupname = KUserGroup(gid).name();
         if(!groupname.isEmpty())
-            return i18n("%1 (gid: <numid>%2</numid>)", groupname, gid);
+            return i18n("%1 (gid: %2)", groupname, QString::number(gid));
     }
     return QString::number(gid);
 }
@@ -1338,7 +1341,7 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
         if(process->tracerpid >= 0) {
             KSysGuard::Process *process_tracer = d->mProcesses->getProcess(process->tracerpid);
             if(process_tracer) //it is possible for this to be not the case in certain race conditions
-                tracer = i18nc("tooltip. name,pid ","This process is being debugged by %1 (<numid>%2</numid>)", process_tracer->name, (long int)process->tracerpid);
+                tracer = i18nc("tooltip. name,pid ","This process is being debugged by %1 (%2)", process_tracer->name, QString::number(process->tracerpid));
         }
         switch(index.column()) {
         case HeadingName: {
@@ -1363,14 +1366,23 @@ QVariant ProcessModel::data(const QModelIndex &index, int role) const
                 } else if(process->name == "kthreadd") {
                     tooltip += i18n("<b>KThreadd</b> manages kernel threads. The children processes run in the kernel, controlling hard disk access, etc.<br/>");
                 }
-                tooltip    += i18nc("name column tooltip. first item is the name","<b>%1</b><br />Process ID: <numid>%2</numid>", process->name, (long int)process->pid);
+                tooltip += i18nc(
+                    "name column tooltip. first item is the name","<b>%1</b><br />Process ID: %2",
+                    process->name, QString::number(process->pid)
+                );
             }
             else {
                 KSysGuard::Process *parent_process = d->mProcesses->getProcess(process->parent_pid);
                 if(parent_process) { //In race conditions, it's possible for this process to not exist
-                    tooltip    = i18nc("name column tooltip. first item is the name","<b>%1</b><br />Process ID: <numid>%2</numid><br />Parent: %3<br />Parent's ID: <numid>%4</numid>", process->name, (long int)process->pid, parent_process->name, (long int)process->parent_pid);
+                    tooltip = i18nc(
+                        "name column tooltip. first item is the name","<b>%1</b><br />Process ID: %2<br />Parent: %3<br />Parent's ID: %4",
+                        process->name, QString::number(process->pid), parent_process->name, QString::number(process->parent_pid)
+                    );
                 } else {
-                    tooltip    = i18nc("name column tooltip. first item is the name","<b>%1</b><br />Process ID: <numid>%2</numid><br />Parent's ID: <numid>%3</numid>", process->name, (long int)process->pid, (long int)process->parent_pid);
+                    tooltip = i18nc(
+                        "name column tooltip. first item is the name","<b>%1</b><br />Process ID: %2<br />Parent's ID: %3",
+                        process->name, QString::number(process->pid), QString::number(process->parent_pid)
+                    );
                 }
             }
             if(process->numThreads >= 1)
