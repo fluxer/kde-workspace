@@ -52,7 +52,7 @@ ViewContainerTabBar::ViewContainerTabBar(QWidget* parent, TabbedViewContainer* c
 
     setWhatsThis(i18nc("@info:whatsthis",
                        "<title>Tab Bar</title>"
-                       "<para>The tab bar allows you to switch and move tabs. You can double-click a tab to change its name.</para>"));
+                       "<p>The tab bar allows you to switch and move tabs. You can double-click a tab to change its name.</p>"));
 }
 
 void ViewContainerTabBar::dragEnterEvent(QDragEnterEvent* event)

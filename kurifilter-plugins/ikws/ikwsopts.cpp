@@ -259,15 +259,17 @@ FilterOptions::FilterOptions(const KComponentData &componentData, QWidget *paren
 
 QString FilterOptions::quickHelp() const
 {
-  return i18nc("@info:whatsthis", "<para>In this module you can configure the web shortcuts feature. "
-              "Web shortcuts allow you to quickly search or lookup words on "
-              "the Internet. For example, to search for information about the "
-              "KDE project using the Google engine, you simply type <emphasis>gg:KDE</emphasis> "
-              "or <emphasis>google:KDE</emphasis>.</para>"
-              "<para>If you select a default search engine, then you can search for "
-              "normal words or phrases by simply typing them into the input widget "
-              "of applications that have built-in support for such a feature, e.g "
-              "Konqueror.</para>");
+  return i18nc(
+    "@info:whatsthis", "<p>In this module you can configure the web shortcuts feature. "
+    "Web shortcuts allow you to quickly search or lookup words on "
+    "the Internet. For example, to search for information about the "
+    "KDE project using the Google engine, you simply type <emphasis>gg:KDE</emphasis> "
+    "or <emphasis>google:KDE</emphasis>.</p>"
+    "<p>If you select a default search engine, then you can search for "
+    "normal words or phrases by simply typing them into the input widget "
+    "of applications that have built-in support for such a feature, e.g "
+    "Konqueror.</p>"
+  );
 }
 
 void FilterOptions::setDefaultEngine(int index)
