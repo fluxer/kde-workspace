@@ -123,7 +123,7 @@ void PluginKateTextFilter::slotFilterProcessExited(int, QProcess::ExitStatus)
       QPointer<KTextEditor::Message> message = new KTextEditor::Message(
           i18nc(
               "@info"
-            , "<title>Result of:</title><nl /><pre><code>$ %1\n<nl />%2</code></pre>"
+            , "<title>Result of:</title><br /><pre><code>$ %1\n<br />%2</code></pre>"
             , m_last_command
             , m_stderrOutput
             )
