@@ -176,5 +176,5 @@ Comment[zh_TW]=KDE Notification 伺服程式
 Icon=preferences-desktop-notification
 X-DBUS-ServiceName=org.kde.knotify
 X-DBUS-StartupType=Unique
-X-KDE-StartupNotify=false
+StartupNotify=false
 X-KDE-MediaPlayer=knotify

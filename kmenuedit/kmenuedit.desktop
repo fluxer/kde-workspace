@@ -3,7 +3,7 @@ Exec=kmenuedit --icon '%i' --caption '%c'
 Icon=kmenuedit
 X-DocPath=kmenuedit/index.html
 Type=Application
-X-KDE-StartupNotify=true
+StartupNotify=true
 OnlyShowIn=KDE;
 
 Name=Menu Editor

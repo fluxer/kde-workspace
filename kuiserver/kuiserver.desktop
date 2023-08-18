@@ -168,4 +168,4 @@ X-KDE-ServiceTypes=
 X-DBUS-ServiceName=org.kde.kuiserver
 # It is a server
 X-DBUS-StartupType=Unique
-X-KDE-StartupNotify=false
+StartupNotify=false

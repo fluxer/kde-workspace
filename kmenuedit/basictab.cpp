@@ -385,10 +385,7 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
     _termOptEdit->setText(df->desktopGroup().readEntry("TerminalOptions"));
     _uidEdit->setText(df->desktopGroup().readEntry("X-KDE-Username"));
 
-    if( df->desktopGroup().hasKey( "StartupNotify" ))
-        _launchCB->setChecked(df->desktopGroup().readEntry("StartupNotify", true));
-    else // backwards comp.
-        _launchCB->setChecked(df->desktopGroup().readEntry("X-KDE-StartupNotify", true));
+    _launchCB->setChecked(df->desktopGroup().readEntry("StartupNotify", true));
 
     _onlyShowInKdeCB->setChecked( df->desktopGroup().readXdgListEntry("OnlyShowIn").contains( "KDE" ) ); // or maybe enable only if it contains nothing but KDE?
 

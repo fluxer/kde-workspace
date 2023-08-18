@@ -9,7 +9,7 @@ Actions=NewWindow;
 X-DocPath=konsole/index.html
 X-DBUS-ServiceName=org.kde.konsole
 X-DBUS-StartupType=Multi
-X-KDE-StartupNotify=true
+StartupNotify=true
 
 Name=Konsole
 Name[af]=Konsole

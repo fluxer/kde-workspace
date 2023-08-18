@@ -73,7 +73,7 @@ Name[x-test]=xxPlasma Desktop Workspacexx
 Name[zh_CN]=Plasma 桌面工作空间
 Name[zh_TW]=Plasma 桌面工作空間
 Type=Service
-X-KDE-StartupNotify=false
+StartupNotify=false
 OnlyShowIn=KDE;
 X-KDE-autostart-phase=0
 

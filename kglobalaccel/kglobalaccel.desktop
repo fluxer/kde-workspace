@@ -6,7 +6,7 @@ X-KDE-autostart-phase=1
 X-DBUS-ServiceName=org.kde.kglobalaccel
 X-DBUS-StartupType=Unique
 X-KDE-ServiceTypes=
-X-KDE-StartupNotify=false
+StartupNotify=false
 
 Name=KDED Global Shortcuts Server
 Name[ar]=خادم اختصارات كدي دي العمومية
