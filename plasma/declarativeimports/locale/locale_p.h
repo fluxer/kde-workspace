@@ -135,6 +135,8 @@ public:
 
     Q_INVOKABLE void reparseConfiguration();
 
+    Q_INVOKABLE QLocale toLocale() const;
+
 private:
     KLocale *m_locale;
 };

@@ -172,3 +172,8 @@ void Locale::reparseConfiguration()
 {
     m_locale->reparseConfiguration();
 }
+
+QLocale Locale::toLocale() const
+{
+    return m_locale->toLocale();
+}
