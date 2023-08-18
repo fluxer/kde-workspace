@@ -22,7 +22,6 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as Components
 import org.kde.qtextracomponents 0.1
-import org.kde.locale 0.1 as KLocale
 import "../code/logic.js" as Logic
 
 Item {
@@ -39,8 +38,6 @@ Item {
     // NOTE: According to the UPower spec this property is only valid for primary batteries, however
     // UPower seems to set the Present property false when a device is added but not probed yet
     property bool isPresent: model["Plugged in"]
-
-    KLocale.Locale { id: locale }
 
     function updateSelection() {
         var hasFocus = batteryList.activeFocus && batteryList.activeIndex == index;
