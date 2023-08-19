@@ -186,4 +186,5 @@ GenericName[zh_TW]=檔案管理員
 Terminal=false
 MimeType=inode/directory;
 InitialPreference=10
+StartupNotify=true
 X-KDE-MediaPlayer=informationpanel
