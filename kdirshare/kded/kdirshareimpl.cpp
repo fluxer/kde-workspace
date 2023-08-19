@@ -95,6 +95,16 @@ static QByteArray styleSheetForPalette(const QPalette &palette)
     return stylesheet;
 }
 
+static QByteArray footerForContent()
+{
+    QByteArray data;
+    data.append("    <footer>\n");
+    data.append("      <hr>\n");
+    data.append("      <center>Copyright (C) 2022 Ivailo Monev <a href=\"mailto:xakepa10@gmail.com\">xakepa10@gmail.com</a></center>\n");
+    data.append("    </footer>\n");
+    return data;
+}
+
 static QByteArray contentForError(const QString &path, const ushort status)
 {
     const QString pathtitle = getTitle(path);
@@ -108,6 +118,7 @@ static QByteArray contentForError(const QString &path, const ushort status)
     data.append("    <title>");
     data.append(pathtitle.toUtf8());
     data.append("</title>\n");
+    data.append("    <hr>\n");
     switch (status) {
         case 404: {
             data.append("    <center>404 Not Found</center>\n");
@@ -122,6 +133,7 @@ static QByteArray contentForError(const QString &path, const ushort status)
             break;
         }
     }
+    data.append(footerForContent());
     data.append("  </body>\n");
     data.append("</html>");
     return data;
@@ -161,7 +173,7 @@ static QByteArray contentForFile(const QString &basedir, const QFileInfo &filein
     data.append(QUrl::toPercentEncoding(cleanpath));
     data.append("\">");
     data.append(fileinfo.fileName().toUtf8());
-    data.append("</a><br></td>\n");
+    data.append("</a></td>\n");
 
     data.append("        <td>");
     if (!isdotdot) {
@@ -195,6 +207,7 @@ static QByteArray contentForMatch(const QString &path, const QString &match)
     data.append("    <title>");
     data.append(pathtitle.toUtf8());
     data.append("</title>\n");
+    data.append("    <hr>\n");
     data.append("    <table>\n");
     data.append("      <tr>\n");
     data.append("        <th></th>\n"); // icon
@@ -214,6 +227,7 @@ static QByteArray contentForMatch(const QString &path, const QString &match)
         data.append(contentForFile(path, dirinfo));
     }
     data.append("    </table>\n");
+    data.append(footerForContent());
     data.append("  </body>\n");
     data.append("</html>");
     return data;
@@ -237,6 +251,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
     data.append("    <title>");
     data.append(pathtitle.toUtf8());
     data.append("</title>\n");
+    data.append("    <hr>\n");
     data.append("    <table>\n");
     data.append("      <tr>\n");
     data.append("        <th></th>\n"); // icon
@@ -253,6 +268,7 @@ static QByteArray contentForDirectory(const QString &path, const QString &basedi
         data.append(contentForFile(basedir, fileinfo));
     }
     data.append("    </table>\n");
+    data.append(footerForContent());
     data.append("  </body>\n");
     data.append("</html>");
     return data;
