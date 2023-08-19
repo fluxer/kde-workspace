@@ -4,6 +4,8 @@ Icon=preferences-system
 Type=Application
 X-DocPath=systemsettings/index.html
 StartupNotify=true
+Implements=org.kde.systemsettings
+SingleMainWindow=true
 OnlyShowIn=KDE;
 
 GenericName=System Settings

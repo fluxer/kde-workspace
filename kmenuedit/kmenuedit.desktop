@@ -4,6 +4,8 @@ Icon=kmenuedit
 X-DocPath=kmenuedit/index.html
 Type=Application
 StartupNotify=true
+Implements=org.kde.kmenuedit
+SingleMainWindow=true
 OnlyShowIn=KDE;
 
 Name=Menu Editor

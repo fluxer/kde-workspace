@@ -3,6 +3,8 @@ Exec=systemsettings --icon '%i' --caption '%c'
 Icon=preferences-system
 Type=Application
 StartupNotify=true
+Implements=org.kde.systemsettings
+SingleMainWindow=true
 NotShowIn=KDE;
 
 GenericName=KDE System Settings
