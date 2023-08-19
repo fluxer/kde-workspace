@@ -536,7 +536,7 @@ int main( int argc, char** argv )
   options.add("+[worksheet]", ki18n( "Optional worksheet files to load" ));
   KCmdLineArgs::addCmdLineOptions( options );
   // initialize KDE application
-  KApplication *app = new KApplication;
+  KApplication *app = new KApplication();
 
   KSGRD::SensorMgr = new KSGRD::SensorManager();
   KSGRD::Style = new KSGRD::StyleEngine();

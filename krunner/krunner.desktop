@@ -1,6 +1,6 @@
 [Desktop Entry]
 Exec=krunner
-X-DBUS-StartupType=none
+StartupNotify=false
 Name=Command Runner
 Name[ar]=منفّذ الأوامر
 Name[ast]=Execución d'órdenes
