@@ -26,14 +26,6 @@ elif test $kcheckrunning_result -eq 2 ; then
 fi
 unset kcheckrunning_result
 
-# Set the path for Katie plugins provided by KDE
-QT_PLUGIN_PATH=${QT_PLUGIN_PATH+$QT_PLUGIN_PATH:}`kde4-config --path qtplugins`
-export QT_PLUGIN_PATH
-
-# Set the platform plugin for Katie to the one provided by KDE
-QT_PLATFORM_PLUGIN=kde
-export QT_PLATFORM_PLUGIN
-
 # Make sure that the KDE prefix is first in XDG_DATA_DIRS and that it's set at all.
 # The spec allows XDG_DATA_DIRS to be not set, but X session startup scripts tend
 # to set it to a list of paths *not* including the KDE prefix if it's not /usr or
