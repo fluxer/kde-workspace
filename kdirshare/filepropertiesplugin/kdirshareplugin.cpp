@@ -105,6 +105,11 @@ KDirSharePlugin::KDirSharePlugin(QObject *parent, const QList<QVariant> &args)
         }
         if (!m_ui.useredit->text().isEmpty()) {
             m_ui.authbox->setChecked(true);
+        } else {
+            m_ui.userlabel->setEnabled(false);
+            m_ui.useredit->setEnabled(false);
+            m_ui.passwordedit->setEnabled(false);
+            m_ui.passlabel->setEnabled(false);
         }
         m_ui.useredit->setEnabled(m_ui.authbox->isChecked());
         m_ui.passwordedit->setEnabled(m_ui.authbox->isChecked());
@@ -201,8 +206,10 @@ void KDirSharePlugin::slotPortMax(const int value)
 void KDirSharePlugin::slotAuthorization(const bool value)
 {
     // qDebug() << Q_FUNC_INFO << value;
+    m_ui.userlabel->setEnabled(value);
     m_ui.useredit->setEnabled(value);
     m_ui.passwordedit->setEnabled(value);
+    m_ui.passlabel->setEnabled(value);
     if (!value) {
         m_ui.useredit->clear();
         m_ui.passwordedit->clear();
