@@ -129,7 +129,8 @@ XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
 
 # For session services that require X11, check for XDG_CURRENT_DESKTOP, etc.
-dbus-update-activation-environment --all
+dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP \
+    KDE_FULL_SESSION KDE_SESSION_VERSION KDE_SESSION_UID
 
 # Start kcminit_startup
 kcminit_startup
@@ -160,5 +161,8 @@ xprop -root -remove KDE_FULL_SESSION
 unset KDE_SESSION_VERSION
 xprop -root -remove KDE_SESSION_VERSION
 unset KDE_SESSION_UID
+
+dbus-update-activation-environment XDG_CURRENT_DESKTOP="" \
+    KDE_FULL_SESSION="" KDE_SESSION_VERSION="" KDE_SESSION_UID=""
 
 echo 'startkde: Done.'  1>&2
