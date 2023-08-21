@@ -119,8 +119,10 @@ static void applyQtColors(QSettings &settings, QPalette&newPal)
 
 // -----------------------------------------------------------------------------
 
-static void applyQtSettings(KSharedConfigPtr kglobalcfg, QSettings &settings)
+static void applyQtSettings(KSharedConfigPtr kglobalcfg)
 {
+    QSettings settings(QLatin1String("Katie"));
+
     /* export font settings */
     KConfigGroup fontgrp(kglobalcfg, "General");
     QString font = fontgrp.readEntry("font", KGlobalSettings::generalFont().toString());
@@ -284,7 +286,6 @@ int main(int argc, char *argv[])
 
     // This key is written by the "colors" module.
     bool exportColors      = kcmdisplayx11.readEntry("exportKDEColors", true);
-    bool exportQtColors    = true;
     bool exportQtSettings  = true;
     bool exportXftSettings = true;
 
@@ -436,18 +437,8 @@ int main(int argc, char *argv[])
     applyGtkStyles(exportColors, 2);
 
     /* Katie exports */
-    if (exportQtColors || exportQtSettings) {
-        {
-            QSettings settings(QLatin1String("Katie"));
-
-            if (exportQtColors) {
-                applyQtColors(settings, newPal); // For kcmcolors
-            }
-
-            if (exportQtSettings) {
-                applyQtSettings(kglobalcfg, settings); // For kcmstyle
-            }
-        }
+    if (exportQtSettings) {
+        applyQtSettings(kglobalcfg); // For kcmstyle
 
         QApplication::flush();
         // We let KIPC take care of ourselves, as we are in a KDE app with
