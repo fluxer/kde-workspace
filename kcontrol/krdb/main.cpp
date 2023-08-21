@@ -97,28 +97,6 @@ static void applyGtkStyles(bool active, int version)
 
 // -----------------------------------------------------------------------------
 
-static void applyQtColors(QSettings &settings, QPalette&newPal)
-{
-    QStringList actcg, inactcg, discg;
-    /* export kde color settings */
-    int i;
-    for (i = 0; i < QPalette::NColorRoles; i++) {
-        actcg << newPal.color(QPalette::Active, (QPalette::ColorRole) i).name();
-    }
-    for (i = 0; i < QPalette::NColorRoles; i++) {
-        inactcg << newPal.color(QPalette::Inactive, (QPalette::ColorRole) i).name();
-    }
-    for (i = 0; i < QPalette::NColorRoles; i++) {
-        discg << newPal.color(QPalette::Disabled, (QPalette::ColorRole) i).name();
-    }
-
-    settings.setStringList("Qt/Palette/active", actcg);
-    settings.setStringList("Qt/Palette/inactive", inactcg);
-    settings.setStringList("Qt/Palette/disabled", discg);
-}
-
-// -----------------------------------------------------------------------------
-
 static void applyQtSettings(KSharedConfigPtr kglobalcfg)
 {
     QSettings settings(QLatin1String("Katie"));
