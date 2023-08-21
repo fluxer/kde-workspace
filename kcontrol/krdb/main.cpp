@@ -105,27 +105,6 @@ static void applyQtSettings(KSharedConfigPtr kglobalcfg)
     KConfigGroup fontgrp(kglobalcfg, "General");
     QString font = fontgrp.readEntry("font", KGlobalSettings::generalFont().toString());
     settings.setString("Qt/font", font);
-
-    /* export effects settings */
-    KConfigGroup guigrp(kglobalcfg, "KDE-Global GUI Settings");
-    int graphicEffects = guigrp.readEntry("GraphicEffectsLevel", int(KGlobalSettings::graphicEffectsLevelDefault()));
-    KGlobalSettings::GraphicEffects graphicEffectsFlags = KGlobalSettings::GraphicEffects(graphicEffects);
-    bool effectsEnabled = (graphicEffectsFlags != KGlobalSettings::NoEffects);
-    bool complexEffects = (graphicEffectsFlags & KGlobalSettings::ComplexAnimationEffects);
-
-    QStringList guieffects;
-    if (effectsEnabled) {
-        guieffects << QString("general");
-        // the fade effect requires compositor and as such is enabled only when complex animation is on
-        if (complexEffects) {
-            guieffects << QString("fademenu");
-            guieffects << QString("fadetooltip");
-        }
-    } else {
-        guieffects << QString("none");
-    }
-
-    settings.setStringList("Qt/GUIEffects", guieffects);
 }
 
 // -----------------------------------------------------------------------------
@@ -416,16 +395,9 @@ int main(int argc, char *argv[])
 
     /* Katie exports */
     if (exportQtSettings) {
-        applyQtSettings(kglobalcfg); // For kcmstyle
+        applyQtSettings(kglobalcfg);
 
         QApplication::flush();
-        // We let KIPC take care of ourselves, as we are in a KDE app with
-        // QApp::setDesktopSettingsAware(false);
-        // Instead of calling QApp::x11_apply_settings() directly, we instead
-        // modify the timestamp which propagates the settings changes onto
-        // Katie-only apps without adversely affecting ourselves.
-
-        // Cheat and use the current timestamp, since we just saved to qtrc.
         QDateTime settingsstamp = QDateTime::currentDateTime();
 
         static const QByteArray atomname("_QT_SETTINGS_TIMESTAMP");

@@ -363,15 +363,16 @@ public: // ColorDialog
 private slots:
     void init()
     {
+        updateEffects();
+
         connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(updateToolbarIcons()));
         connect(KGlobalSettings::self(), SIGNAL(toolbarAppearanceChanged(int)), this, SLOT(updateToolbarStyle()));
-        connect(KGlobalSettings::self(), SIGNAL(kdisplayStyleChanged()), this, SLOT(updateWidgetStyle()));
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayStyleChanged()), this, SLOT(updateStyle()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(updatePalette()));
     }
 
     void updateToolbarStyle()
     {
-        //from gtksymbol.cpp
         QWidgetList widgets = QApplication::allWidgets();
         for (int i = 0; i < widgets.size(); ++i) {
             QWidget *widget = widgets.at(i);
@@ -394,13 +395,34 @@ private slots:
         }
     }
 
-    void updateWidgetStyle()
+    void updateEffects()
+    {
+        KGlobalSettings::GraphicEffects graphicEffects = KGlobalSettings::graphicEffectsLevel();
+        bool effectsEnabled = (graphicEffects != KGlobalSettings::NoEffects);
+        bool complexEffects = (graphicEffects & KGlobalSettings::ComplexAnimationEffects);
+        if (effectsEnabled) {
+            QApplication::setEffectEnabled(Qt::UI_General, true);
+            // the fade effect requires compositor and as such is enabled only when complex animation is on
+            if (complexEffects) {
+                QApplication::setEffectEnabled(Qt::UI_FadeMenu, true);
+                QApplication::setEffectEnabled(Qt::UI_FadeTooltip, true);
+            }
+        } else {
+            QApplication::setEffectEnabled(Qt::UI_General, false);
+            QApplication::setEffectEnabled(Qt::UI_FadeMenu, false);
+            QApplication::setEffectEnabled(Qt::UI_FadeTooltip, false);
+        }
+    }
+
+    void updateStyle()
     {
         if (qApp) {
             if (qApp->style()->objectName() != styleName()) {
                 qApp->setStyle(styleName());
             }
         }
+
+        updateEffects();
     }
 
     void updatePalette()
