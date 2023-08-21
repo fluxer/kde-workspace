@@ -361,6 +361,7 @@ private slots:
         connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(updateToolbarIcons()));
         connect(KGlobalSettings::self(), SIGNAL(toolbarAppearanceChanged(int)), this, SLOT(updateToolbarStyle()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayStyleChanged()), this, SLOT(updateWidgetStyle()));
+        connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(updatePalette()));
     }
 
     void updateToolbarStyle()
@@ -395,6 +396,11 @@ private slots:
                 qApp->setStyle(styleName());
             }
         }
+    }
+
+    void updatePalette()
+    {
+        QApplication::setPalette(palette());
     }
 };
 
