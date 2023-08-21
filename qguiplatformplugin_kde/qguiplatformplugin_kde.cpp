@@ -170,6 +170,11 @@ public:
         return KGlobal::dirs()->resourceDirs("icon");
     }
 
+    QIcon systemIcon(const QString &name) final
+    {
+        return KIcon(name);
+    }
+
     QIcon fileSystemIcon(const QFileInfo &file) final
     {
         KMimeType::Ptr mime = KMimeType::findByPath(file.filePath(), 0, true);
