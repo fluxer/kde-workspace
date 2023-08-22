@@ -228,17 +228,15 @@ void ThemePage::updatePreview()
 bool ThemePage::haveXfixes()
 {
     bool result = false;
-
 #ifdef HAVE_XFIXES
     int event_base, error_base;
-    if (XFixesQueryExtension(QX11Info::display(), &event_base, &error_base))
-    {
-        int major, minor;
+    if (XFixesQueryExtension(QX11Info::display(), &event_base, &error_base)) {
+        int major = 0;
+        int minor = 0;
         XFixesQueryVersion(QX11Info::display(), &major, &minor);
         result = (major >= 2);
     }
 #endif
-
     return result;
 }
 
@@ -249,16 +247,16 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
     // in previous versions the Xfixes code wasn't enabled due to a bug in the
     // build system (freedesktop bug #975).
 #if HAVE_XFIXES && XFIXES_MAJOR >= 2 && XCURSOR_LIB_VERSION >= 10105
-    if (!theme)
+    if (!theme) {
         return false;
+    }
 
-    if (!haveXfixes())
+    if (!haveXfixes()) {
         return false;
-
-    QByteArray themeName = QFile::encodeName(theme->name());
+    }
 
     // Set up the proper launch environment for newly started apps
-    KToolInvocation::setLaunchEnv("XCURSOR_THEME", themeName);
+    KToolInvocation::setLaunchEnv("XCURSOR_THEME", theme->name());
 
     // Update the Xcursor X resources
     runRdb();
@@ -269,7 +267,7 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
     // Reload the standard cursors
     QStringList names;
 
-    // Qt cursors
+    // Katie cursors
     names << "left_ptr"       << "up_arrow"      << "cross"      << "wait"
           << "left_ptr_watch" << "ibeam"         << "size_ver"   << "size_hor"
           << "size_bdiag"     << "size_fdiag"    << "size_all"   << "split_v"
@@ -286,10 +284,10 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
           << "bottom_left_corner"  << "left_side"           << "question_arrow"
           << "pirate";
 
-    foreach (const QString &name, names)
-    {
+    foreach (const QString &name, names) {
+        const QByteArray xname = QFile::encodeName(name);
         QCursor cursor = theme->loadCursor(name, size);
-        XFixesChangeCursorByName(x11Info().display(), cursor.handle(), QFile::encodeName(name));
+        XFixesChangeCursorByName(x11Info().display(), cursor.handle(), xname.constData());
     }
 
     return true;
