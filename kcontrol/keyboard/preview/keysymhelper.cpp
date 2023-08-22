@@ -37,7 +37,7 @@ QString KeySymHelper::getKeySymbol(const QString& opton)
     if( keySymbolMap.contains(opton) )
         return keySymbolMap[opton];
 
-    const char* str = opton.toAscii().data();
+    const QByteArray str = opton.toAscii();
     
 #if 0
     //TODO: figure out how to use this so we don't need our own symkey2ucs mapping
