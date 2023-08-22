@@ -82,8 +82,7 @@ public:
         NoSorting = 0,
         ManualSorting = 1,
         AlphaSorting = 2,
-        DesktopSorting = 3,
-        ActivitySorting = 4
+        DesktopSorting = 3
     };
 
     TaskSortingStrategy sortingStrategy() const;

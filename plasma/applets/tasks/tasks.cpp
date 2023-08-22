@@ -539,9 +539,6 @@ void Tasks::createConfigurationInterface(KConfigDialog *parent)
         case TaskManager::GroupManager::DesktopSorting:
             m_ui.sortingStrategy->setCurrentIndex(3);
             break;
-        case TaskManager::GroupManager::ActivitySorting:
-            m_ui.sortingStrategy->setCurrentIndex(4);
-            break;
         default:
              m_ui.sortingStrategy->setCurrentIndex(-1);
     }
