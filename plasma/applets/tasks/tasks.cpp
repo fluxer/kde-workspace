@@ -434,8 +434,7 @@ void Tasks::configChanged()
 
     TaskManager::GroupManager::TaskSortingStrategy sortingStrategy =
         static_cast<TaskManager::GroupManager::TaskSortingStrategy>(
-            cg.readEntry("sortingStrategy",
-                         static_cast<int>(TaskManager::GroupManager::AlphaSorting))
+            cg.readEntry("sortingStrategy", static_cast<int>(TaskManager::GroupManager::ManualSorting))
         );
 
     if (sortingStrategy != m_groupManager->sortingStrategy()) {
