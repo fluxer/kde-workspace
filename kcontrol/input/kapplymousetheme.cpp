@@ -34,50 +34,49 @@
 #  include <X11/Xcursor/Xcursor.h>
 #endif
 
-static bool isEmpty( const char* str )
+static bool isEmpty(const char* str)
 {
-    if( str == NULL )
+    if (str == NULL) {
         return true;
-    while( isspace( *str ))
+    }
+    while (isspace(*str)) {
         ++str;
-    return *str == '\0';
+    }
+    return (*str == '\0');
 }
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-    if( argc != 3 )
+    if (argc != 3) {
         return 1;
+    }
 #ifdef HAVE_XCURSOR
-    Display* dpy = XOpenDisplay( NULL );
-    if( dpy == NULL )
+    Display* dpy = XOpenDisplay(NULL);
+    if (!dpy) {
         return 2;
-
-    const char* theme = argv[ 1 ];
-    const char* size = argv[ 2 ];
-
-    // Note: If you update this code, update kapplymousetheme as well.
-
-    // use a default value for theme only if it's not configured at all, not even in X resources
-    if( isEmpty( theme )
-        && isEmpty( XGetDefault( dpy, "Xcursor", "theme" ))
-        && isEmpty( XcursorGetTheme( dpy)))
-    {
-        theme = KDE_DEFAULT_CURSOR_THEME;
     }
 
-     // Apply the KDE cursor theme to ourselves
-    if( !isEmpty( theme ))
-        XcursorSetTheme(dpy, theme );
+    // NOTE: keep in sync with:
+    // kcontrol/input/main.cpp
+    const char* theme = argv[1];
+    const char* size = argv[2];
 
-    if (!isEmpty( size ))
-        XcursorSetDefaultSize(dpy, atoi( size ));
+    if (isEmpty(theme)) {
+        return 3;
+    }
+
+    // Apply the cursor theme to ourselves
+    XcursorSetTheme(dpy, theme);
+    if (!isEmpty(size)) {
+        XcursorSetDefaultSize(dpy, atoi(size));
+    }
 
     // Load the default cursor from the theme and apply it to the root window.
     Cursor handle = XcursorLibraryLoadCursor(dpy, "left_ptr");
-    XDefineCursor(dpy, DefaultRootWindow( dpy ), handle);
+    XDefineCursor(dpy, DefaultRootWindow(dpy), handle);
     XFreeCursor(dpy, handle); // Don't leak the cursor
 
-    XCloseDisplay( dpy );
+    XCloseDisplay(dpy);
 #else
     Q_UNUSED(argv);
 #endif
