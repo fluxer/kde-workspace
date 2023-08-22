@@ -36,6 +36,63 @@
 
 #include "kmediawindow.h"
 
+// NOTE: even tho the MIME type for some of these is different the comment is the same
+static const char* s_mimetypes =
+    "application/x-ogg "
+    "application/sdp "
+    "application/x-smil "
+    "application/x-streamingmedia "
+    "application/vnd.rn-realmedia "
+    "application/vnd.rn-realmedia-vbr "
+    "audio/x-aac "
+    "audio/x-m4a "
+    "audio/x-mp1 "
+    "audio/x-mp2 "
+    "audio/x-mp3 "
+    "audio/x-mpeg "
+    "audio/x-mpegurl "
+    "audio/x-mpg "
+    "audio/rn-mpeg "
+    "audio/ogg "
+    "audio/x-scpls "
+    "audio/vnd.rn-realaudio "
+    "audio/x-pn-windows-pcm "
+    "audio/x-realaudio "
+    "audio/x-pn-realaudio "
+    "audio/x-ms-wma "
+    "audio/x-pls "
+    "audio/x-wav "
+    "video/x-mpeg "
+    "video/x-mpeg2 "
+    "video/mp4 "
+    "video/x-msvideo "
+    "video/ogg "
+    "video/quicktime "
+    "video/vnd.rn-realvideo "
+    "video/x-ms-afs "
+    "video/x-ms-asf "
+    "video/x-ms-wmv "
+    "video/x-ms-wmx "
+    "video/x-ms-wvxvideo "
+    "video/x-avi "
+    "video/x-fli "
+    "video/x-flv "
+    "video/x-theora "
+    "video/x-matroska "
+    "video/webm "
+    "audio/x-flac "
+    "audio/x-vorbis+ogg "
+    "video/x-ogm+ogg "
+    "audio/x-shorten "
+    "audio/x-ape "
+    "audio/x-wavpack "
+    "audio/x-tta "
+    "audio/AMR "
+    "audio/ac3 "
+    "video/mp2t "
+    "audio/mp4";
+
+
 KMediaWindow::KMediaWindow(QWidget *parent, Qt::WindowFlags flags)
     : KXmlGuiWindow(parent, flags),
     m_config(nullptr),
@@ -128,10 +185,9 @@ KMediaWindow::~KMediaWindow()
 
 void KMediaWindow::slotOpenPath()
 {
-#warning TODO: implement MIME list to filter converter and use it here
     const QString path = KFileDialog::getOpenFileName(
         KUrl("kfiledialog:///kmediaplayer"),
-        QString(),
+        QString::fromLatin1(s_mimetypes),
         this,
         i18n("Select paths")
     );
