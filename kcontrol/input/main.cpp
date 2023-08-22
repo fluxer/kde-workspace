@@ -40,51 +40,41 @@
 
 extern "C"
 {
-  Q_DECL_EXPORT void kcminit_mouse()
-  {
-      KConfig *config = new KConfig("kcminputrc", KConfig::NoGlobals );
-    MouseSettings settings;
-    settings.load(config);
-    settings.apply(true); // force
-
-#ifdef HAVE_XCURSOR
-    KConfigGroup group = config->group("Mouse");
-    QString theme = group.readEntry("cursorTheme", QString());
-    QString size = group.readEntry("cursorSize", QString());
-
-    // Note: If you update this code, update kapplymousetheme as well.
-
-    // use a default value for theme only if it's not configured at all, not even in X resources
-    if( theme.isEmpty()
-        && QByteArray( XGetDefault( QX11Info::display(), "Xcursor", "theme" )).isEmpty()
-        && QByteArray( XcursorGetTheme( QX11Info::display())).isEmpty())
+    Q_DECL_EXPORT void kcminit_mouse()
     {
-        theme = QString::fromLatin1(KDE_DEFAULT_CURSOR_THEME);
-    }
+        KConfig *config = new KConfig("kcminputrc", KConfig::NoGlobals );
+        MouseSettings settings;
+        settings.load(config);
+        settings.apply(true); // force
 
-     // Apply the KDE cursor theme to ourselves
-    if( !theme.isEmpty())
-        XcursorSetTheme(QX11Info::display(), QFile::encodeName(theme));
+        // NOTE: keep in sync with:
+        // kcontrol/input/kapplymousetheme.cpp
+#ifdef HAVE_XCURSOR
+        KConfigGroup group = config->group("Mouse");
+        const QByteArray theme = group.readEntry("cursorTheme", QByteArray(KDE_DEFAULT_CURSOR_THEME));
+        const QByteArray size = group.readEntry("cursorSize", QByteArray());
 
-    if (!size.isEmpty())
-        XcursorSetDefaultSize(QX11Info::display(), size.toUInt());
+        // Apply the KDE cursor theme to ourselves
+        XcursorSetTheme(QX11Info::display(), theme.constData());
 
-    // Load the default cursor from the theme and apply it to the root window.
-    Cursor handle = XcursorLibraryLoadCursor(QX11Info::display(), "left_ptr");
-    XDefineCursor(QX11Info::display(), QX11Info::appRootWindow(), handle);
-    XFreeCursor(QX11Info::display(), handle); // Don't leak the cursor
+        if (!size.isEmpty()) {
+            XcursorSetDefaultSize(QX11Info::display(), size.toUInt());
+        }
 
-    // Tell klauncher to set the XCURSOR_THEME and XCURSOR_SIZE environment
-    // variables when launching applications.
-    if(!theme.isEmpty())
-       KToolInvocation::setLaunchEnv("XCURSOR_THEME", theme);
-    if( !size.isEmpty())
-       KToolInvocation::setLaunchEnv("XCURSOR_SIZE", size);
+        // Load the default cursor from the theme and apply it to the root window.
+        Cursor handle = XcursorLibraryLoadCursor(QX11Info::display(), "left_ptr");
+        XDefineCursor(QX11Info::display(), QX11Info::appRootWindow(), handle);
+        XFreeCursor(QX11Info::display(), handle); // Don't leak the cursor
 
+        // Tell klauncher to set the XCURSOR_THEME and XCURSOR_SIZE environment
+        // variables when launching applications.
+        KToolInvocation::setLaunchEnv("XCURSOR_THEME", theme);
+        if (!size.isEmpty()) {
+            KToolInvocation::setLaunchEnv("XCURSOR_SIZE", size);
+        }
 #endif
-
-    delete config;
-  }
+        delete config;
+    }
 }
 
 
