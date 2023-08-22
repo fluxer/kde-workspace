@@ -40,7 +40,7 @@
 #include <QtGui/QGuiPlatformPlugin>
 
 /*
- * Map a Qt filter string into a KDE one.
+ * Map a Katie filter string into a KDE one.
  * (from kfiledialog.cpp)
 */
 static QString qt2KdeFilter(const QString &f)
