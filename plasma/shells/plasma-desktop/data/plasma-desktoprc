@@ -55,7 +55,7 @@ showOnlyCurrentDesktop=true
 showOnlyCurrentScreen=false
 showOnlyMinimized=false
 showToolTip=true
-sortingStrategy=2
+sortingStrategy=1
 
 [Containments][1][Applets][4][LayoutInformation]
 Order=2
