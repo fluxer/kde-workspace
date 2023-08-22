@@ -188,7 +188,7 @@ public:
         switch(hint) {
             case PH_ToolButtonStyle: {
                 KConfigGroup group(KGlobal::config(), "Toolbar style");
-                QString style = group.readEntry("ToolButtonStyle", "TextUnderIcon").toLower();
+                const QByteArray style = group.readEntry("ToolButtonStyle", QByteArray("TextUnderIcon")).toLower();
                 if (style == "textbesideicon" || style == "icontextright") {
                     return Qt::ToolButtonTextBesideIcon;
                 } else if (style == "textundericon" || style == "icontextbottom") {
