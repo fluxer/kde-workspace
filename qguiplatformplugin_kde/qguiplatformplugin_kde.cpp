@@ -18,6 +18,8 @@
     Boston, MA 02110-1301, USA.
 */
 
+#include "config-X11.h"
+
 #include <KStandardDirs>
 #include <KGlobal>
 #include <KComponentData>
@@ -38,6 +40,13 @@
 #include <QtGui/QToolBar>
 #include <QtGui/QMainWindow>
 #include <QtGui/QGuiPlatformPlugin>
+#include <QtGui/QX11Info>
+
+#ifdef HAVE_XCURSOR
+#  include <X11/Xlib.h>
+#  include <X11/Xcursor/Xcursor.h>
+#  include <fixx11h.h>
+#endif
 
 /*
  * Map a Katie filter string into a KDE one.
@@ -434,19 +443,32 @@ private slots:
 
     void updateMouse()
     {
-        KConfigGroup cg(KGlobal::config(), "KDE");
-        int num = cg.readEntry("CursorBlinkRate", QApplication::cursorFlashTime());
+#if defined(HAVE_XCURSOR)
+        {
+            KConfig inputconfig("kcminputrc");
+            KConfigGroup mousegroup = inputconfig.group("Mouse");
+            const QByteArray cursortheme = mousegroup.readEntry("cursorTheme", QByteArray(KDE_DEFAULT_CURSOR_THEME));
+            const int cursorsize = mousegroup.readEntry("cursorSize", -1);
+            XcursorSetTheme(QX11Info::display(), cursortheme);
+            if (cursorsize > 0) {
+                XcursorSetDefaultSize(QX11Info::display(), cursorsize);
+            }
+        }
+#endif
+
+        KConfigGroup kdegroup(KGlobal::config(), "KDE");
+        int num = kdegroup.readEntry("CursorBlinkRate", QApplication::cursorFlashTime());
         num = qBound(200, num, 2000);
         QApplication::setCursorFlashTime(num);
-        num = cg.readEntry("DoubleClickInterval", QApplication::doubleClickInterval());
+        num = kdegroup.readEntry("DoubleClickInterval", QApplication::doubleClickInterval());
         QApplication::setDoubleClickInterval(num);
-        num = cg.readEntry("StartDragTime", QApplication::startDragTime());
+        num = kdegroup.readEntry("StartDragTime", QApplication::startDragTime());
         QApplication::setStartDragTime(num);
-        num = cg.readEntry("StartDragDist", QApplication::startDragDistance());
+        num = kdegroup.readEntry("StartDragDist", QApplication::startDragDistance());
         QApplication::setStartDragDistance(num);
-        num = cg.readEntry("WheelScrollLines", QApplication::wheelScrollLines());
+        num = kdegroup.readEntry("WheelScrollLines", QApplication::wheelScrollLines());
         QApplication::setWheelScrollLines(num);
-        bool showIcons = cg.readEntry("ShowIconsInMenuItems", !QApplication::testAttribute(Qt::AA_DontShowIconsInMenus));
+        bool showIcons = kdegroup.readEntry("ShowIconsInMenuItems", !QApplication::testAttribute(Qt::AA_DontShowIconsInMenus));
         QApplication::setAttribute(Qt::AA_DontShowIconsInMenus, !showIcons);
     }
 };
