@@ -428,7 +428,7 @@ void KCMLocale::save()
     );
 
     KBuildSycocaProgressDialog::rebuildKSycoca(this);
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_LOCALE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::LocaleChanged);
 }
 
 void KCMLocale::defaults()

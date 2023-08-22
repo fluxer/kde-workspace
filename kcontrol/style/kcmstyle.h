@@ -80,7 +80,7 @@ protected Q_SLOTS:
     void updateConfigButton();
 
     void setStyleDirty();
-    void setEffectsDirty();
+    void setToolbarDirty();
 
     void styleChanged();
 
@@ -89,7 +89,7 @@ private:
     static QString toolbarButtonText(int index);
     static int toolbarButtonIndex(const QString &text);
 
-    bool m_bStyleDirty, m_bEffectsDirty;
+    bool m_bStyleDirty, m_bToolbarDirty;
     QHash <QString,StyleEntry*> styleEntries;
     QMap  <QString,QString>     nameToStyleKey;
 

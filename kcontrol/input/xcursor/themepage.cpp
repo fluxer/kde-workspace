@@ -264,7 +264,7 @@ bool ThemePage::applyTheme(const CursorTheme *theme, const int size)
     runRdb();
 
     // Notify all applications that the cursor theme has changed
-    KGlobalSettings::self()->emitChange(KGlobalSettings::CursorChanged);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     // Reload the standard cursors
     QStringList names;

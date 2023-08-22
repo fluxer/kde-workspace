@@ -230,7 +230,7 @@ void DesktopPathConfig::save()
 
     if (pathChanged) {
         kDebug() << "sending message SettingsChanged";
-        KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_PATHS);
+        KGlobalSettings::self()->emitChange(KGlobalSettings::PathsChanged);
     }
 }
 

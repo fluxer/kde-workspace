@@ -126,7 +126,7 @@ void KCMKeyboardWidget::save()
 	actionCollection->setLayoutShortcuts(keyboardConfig->layouts, rules);
 
 	//TODO: skip if no change in shortcuts?
-    KGlobalSettings::emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_SHORTCUTS);
+    KGlobalSettings::emitChange(KGlobalSettings::ShortcutsChanged);
 }
 
 void KCMKeyboardWidget::updateUI()

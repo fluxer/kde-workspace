@@ -70,7 +70,7 @@ private slots:
     void entered(const QModelIndex &index);
     void left(const QModelIndex &index);
     void animationDestroyed(QObject *object);
-    void graphicsEffectsToggled(int category);
+    void graphicsEffectsToggled();
 
 private:
     QList<HoverAnimation*> m_list;

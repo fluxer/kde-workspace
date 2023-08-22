@@ -76,7 +76,7 @@ void Clock::init()
     dataEngine("time")->connectSource(currentTimezone(), this, updateInterval(), intervalAlignment());
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), this, SLOT(updateColors()));
     connect(KGlobalSettings::self(), SIGNAL(appearanceChanged()), SLOT(resetSize()));
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(updateClock(int)));
+    connect(KGlobalSettings::self(), SIGNAL(localeChanged()), SLOT(updateClock()));
 }
 
 void Clock::constraintsEvent(Plasma::Constraints constraints)
@@ -89,12 +89,8 @@ void Clock::constraintsEvent(Plasma::Constraints constraints)
 }
 
 // In case time format has changed, e.g. from 24h to 12h format.
-void Clock::updateClock(int category)
+void Clock::updateClock()
 {
-    if (category != KGlobalSettings::SETTINGS_LOCALE) {
-        return;
-    }
-
     generatePixmap();
     update();
 }

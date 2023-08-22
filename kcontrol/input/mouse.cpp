@@ -809,7 +809,7 @@ void MouseSettings::save(KConfig *config)
   }
 #endif
   config->sync();
-  KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+  KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 }
 
 void MouseConfig::slotScrollPolarityChanged()

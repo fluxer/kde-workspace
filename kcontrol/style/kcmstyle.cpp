@@ -128,7 +128,7 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
             "and effects."));
 
     m_bStyleDirty= false;
-    m_bEffectsDirty = false;
+    m_bToolbarDirty = false;
 
 
     KGlobal::dirs()->addResourceType("themes", "data", "kstyle/themes");
@@ -211,11 +211,11 @@ KCMStyle::KCMStyle( QWidget* parent, const QVariantList& )
     fineTuningUi.comboGraphicEffectsLevel->addItem(i18n("High display resolution and High CPU"), static_cast<int>(KGlobalSettings::SimpleAnimationEffects | KGlobalSettings::ComplexAnimationEffects));
 
     connect(cbStyle, SIGNAL(activated(int)), this, SLOT(setStyleDirty()));
-    connect(fineTuningUi.cbIconsOnButtons,     SIGNAL(toggled(bool)),   this, SLOT(setEffectsDirty()));
-    connect(fineTuningUi.cbIconsInMenus,     SIGNAL(toggled(bool)),   this, SLOT(setEffectsDirty()));
-    connect(fineTuningUi.comboGraphicEffectsLevel, SIGNAL(activated(int)),   this, SLOT(setEffectsDirty()));
-    connect(fineTuningUi.comboToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
-    connect(fineTuningUi.comboSecondaryToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setEffectsDirty()));
+    connect(fineTuningUi.cbIconsOnButtons,     SIGNAL(toggled(bool)),   this, SLOT(setToolbarDirty()));
+    connect(fineTuningUi.cbIconsInMenus,     SIGNAL(toggled(bool)),   this, SLOT(setToolbarDirty()));
+    connect(fineTuningUi.comboGraphicEffectsLevel, SIGNAL(activated(int)),   this, SLOT(setStyleDirty()));
+    connect(fineTuningUi.comboToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setToolbarDirty()));
+    connect(fineTuningUi.comboSecondaryToolbarIcons,    SIGNAL(activated(int)), this, SLOT(setToolbarDirty()));
 
     // Page1
     cbStyle->setWhatsThis( i18n("Here you can choose from a list of"
@@ -341,7 +341,7 @@ void KCMStyle::load()
     loadEffects( config );
 
     m_bStyleDirty= false;
-    m_bEffectsDirty = false;
+    m_bToolbarDirty = false;
     //Enable/disable the button for the initial style
     updateConfigButton();
 
@@ -352,7 +352,7 @@ void KCMStyle::load()
 void KCMStyle::save()
 {
     // Don't do anything if we don't need to.
-    if ( !(m_bStyleDirty | m_bEffectsDirty ) )
+    if ( !(m_bStyleDirty | m_bToolbarDirty ) )
         return;
 
     const bool showMenuIcons = !QApplication::testAttribute(Qt::AA_DontShowIconsInMenus);
@@ -384,11 +384,10 @@ void KCMStyle::save()
     _config.sync();
 
     // Now allow KDE apps to reconfigure themselves.
-    if ( m_bStyleDirty )
+    if ( m_bStyleDirty)
         KGlobalSettings::self()->emitChange(KGlobalSettings::StyleChanged);
 
-    if ( m_bEffectsDirty ) {
-        KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_STYLE);
+    if ( m_bToolbarDirty ) {
         KGlobalSettings::self()->emitChange(KGlobalSettings::ToolbarStyleChanged);
 
 #ifdef Q_WS_X11
@@ -402,14 +401,14 @@ void KCMStyle::save()
     // Export the changes we made to qtrc, and update all qt-only
     // applications on the fly, ensuring that we still follow the user's
     // export fonts/colors settings.
-    if (m_bStyleDirty | m_bEffectsDirty)    // Export only if necessary
+    if (m_bStyleDirty | m_bToolbarDirty)    // Export only if necessary
     {
         runRdb();
     }
 
     // Clean up
     m_bStyleDirty    = false;
-    m_bEffectsDirty  = false;
+    m_bToolbarDirty  = false;
     emit changed( false );
 }
 
@@ -464,9 +463,9 @@ void KCMStyle::defaults()
     emit changed(true);
 }
 
-void KCMStyle::setEffectsDirty()
+void KCMStyle::setToolbarDirty()
 {
-    m_bEffectsDirty = true;
+    m_bToolbarDirty = true;
     emit changed(true);
 }
 
@@ -688,7 +687,7 @@ void KCMStyle::loadEffects( KConfig& config )
     KConfigGroup graphicConfigGroup = config.group("KDE-Global GUI Settings");
     fineTuningUi.comboGraphicEffectsLevel->setCurrentIndex(fineTuningUi.comboGraphicEffectsLevel->findData(graphicConfigGroup.readEntry("GraphicEffectsLevel", ((int) KGlobalSettings::graphicEffectsLevel()))));
 
-    m_bEffectsDirty = false;
+    m_bToolbarDirty = false;
 }
 
 #include "moc_kcmstyle.cpp"

@@ -54,7 +54,7 @@ Animator::Animator(AbstractItemView *view)
     : QObject(view)
 {
     m_effectsOn = (KGlobalSettings::graphicEffectsLevel() != KGlobalSettings::NoEffects); //do not animate if the graphics effects are set to Low CPU
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(graphicsEffectsToggled(int)));
+    connect(KGlobalSettings::self(), SIGNAL(kdisplayStyleChanged()), SLOT(graphicsEffectsToggled()));
     connect(view, SIGNAL(entered(QModelIndex)), SLOT(entered(QModelIndex)));
     connect(view, SIGNAL(left(QModelIndex)), SLOT(left(QModelIndex)));
 }
@@ -126,9 +126,9 @@ void Animator::left(const QModelIndex &index)
     }
 }
 
-void Animator::graphicsEffectsToggled(int category)
+void Animator::graphicsEffectsToggled()
 {
-    if ( (category == KGlobalSettings::SETTINGS_STYLE) && (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) ) {
+    if (KGlobalSettings::graphicEffectsLevel() & KGlobalSettings::SimpleAnimationEffects) {
         m_effectsOn = true;
     } else {
         m_effectsOn = false;

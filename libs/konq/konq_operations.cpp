@@ -729,7 +729,7 @@ KonqOperations *KonqOperations::rename( QWidget * parent, const KUrl & oldurl, c
         KConfig xdgUserConf( userDirsFile, KConfig::SimpleConfig );
         KConfigGroup g( &xdgUserConf, "" );
         g.writeEntry( "XDG_DESKTOP_DIR", QString("\"" + translatePath( newurl.path() ) + "\"") );
-        KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_PATHS);
+        KGlobalSettings::self()->emitChange(KGlobalSettings::PathsChanged);
     }
 
     return op;

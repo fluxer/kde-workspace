@@ -55,7 +55,7 @@ class Clock : public ClockApplet
         void clockConfigChanged();
         void constraintsEvent(Plasma::Constraints constraints);
         void resetSize();
-        void updateClock(int category);
+        void updateClock();
 
     protected:
         void createClockConfigurationInterface(KConfigDialog *parent);

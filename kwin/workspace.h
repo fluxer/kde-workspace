@@ -357,7 +357,7 @@ public slots:
     void slotWindowToDesktopUp();
     void slotWindowToDesktopDown();
 
-    void slotSettingsChanged(int category);
+    void slotShortcutsChanged();
 
     void reconfigure();
     void slotReconfigure();

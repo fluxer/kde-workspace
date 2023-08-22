@@ -364,11 +364,13 @@ private slots:
     void init()
     {
         updateEffects();
+        updateMouse();
 
         connect(KIconLoader::global(), SIGNAL(iconLoaderSettingsChanged()), this, SLOT(updateToolbarIcons()));
         connect(KGlobalSettings::self(), SIGNAL(toolbarAppearanceChanged(int)), this, SLOT(updateToolbarStyle()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayStyleChanged()), this, SLOT(updateStyle()));
         connect(KGlobalSettings::self(), SIGNAL(kdisplayPaletteChanged()), this, SLOT(updatePalette()));
+        connect(KGlobalSettings::self(), SIGNAL(mouseChanged()), this, SLOT(updateMouse()));
     }
 
     void updateToolbarStyle()
@@ -428,6 +430,24 @@ private slots:
     void updatePalette()
     {
         QApplication::setPalette(palette());
+    }
+
+    void updateMouse()
+    {
+        KConfigGroup cg(KGlobal::config(), "KDE");
+        int num = cg.readEntry("CursorBlinkRate", QApplication::cursorFlashTime());
+        num = qBound(200, num, 2000);
+        QApplication::setCursorFlashTime(num);
+        num = cg.readEntry("DoubleClickInterval", QApplication::doubleClickInterval());
+        QApplication::setDoubleClickInterval(num);
+        num = cg.readEntry("StartDragTime", QApplication::startDragTime());
+        QApplication::setStartDragTime(num);
+        num = cg.readEntry("StartDragDist", QApplication::startDragDistance());
+        QApplication::setStartDragDistance(num);
+        num = cg.readEntry("WheelScrollLines", QApplication::wheelScrollLines());
+        QApplication::setWheelScrollLines(num);
+        bool showIcons = cg.readEntry("ShowIconsInMenuItems", !QApplication::testAttribute(Qt::AA_DontShowIconsInMenus));
+        QApplication::setAttribute(Qt::AA_DontShowIconsInMenus, !showIcons);
     }
 };
 

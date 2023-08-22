@@ -137,7 +137,7 @@ void KeyboardDaemon::registerShortcut()
 		actionCollection->loadLayoutShortcuts(keyboardConfig.layouts, rules);
 		connect(actionCollection, SIGNAL(actionTriggered(QAction*)), this, SLOT(setLayout(QAction*)));
 
-		connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(globalSettingsChanged(int)));
+		connect(KGlobalSettings::self(), SIGNAL(shortcutsChanged()), this, SLOT(globalShortcutsChanged()));
     }
 }
 
@@ -145,7 +145,7 @@ void KeyboardDaemon::unregisterShortcut()
 {
 	// register KDE keyboard shortcut for switching layouts
     if( actionCollection != NULL ) {
-        disconnect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(globalSettingsChanged(int)));
+        disconnect(KGlobalSettings::self(), SIGNAL(shortcutsChanged()), this, SLOT(globalShortcutsChanged()));
 
 		disconnect(actionCollection, SIGNAL(actionTriggered(QAction*)), this, SLOT(setLayout(QAction*)));
         disconnect(actionCollection->getToggeAction(), SIGNAL(triggered()), this, SLOT(switchToNextLayout()));
@@ -178,13 +178,11 @@ void KeyboardDaemon::unregisterListeners()
 	}
 }
 
-void KeyboardDaemon::globalSettingsChanged(int category)
+void KeyboardDaemon::globalShortcutsChanged()
 {
-	if ( category == KGlobalSettings::SETTINGS_SHORTCUTS) {
 //TODO: optimize this? seems like we'll get configReload and globalShortcuts from kcm so we'll reconfigure twice
-		unregisterShortcut();
-		registerShortcut();
-	}
+	unregisterShortcut();
+	registerShortcut();
 }
 
 void KeyboardDaemon::layoutChanged()

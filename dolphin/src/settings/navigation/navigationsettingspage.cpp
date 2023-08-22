@@ -80,7 +80,7 @@ void NavigationSettingsPage::applySettings()
     KConfigGroup group = config.group("KDE");
     group.writeEntry("SingleClick", m_singleClick->isChecked(), KConfig::Persistent|KConfig::Global);
     config.sync();
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     GeneralSettings* settings = GeneralSettings::self();
     settings->setAutoExpandFolders(m_autoExpandFolders->isChecked());

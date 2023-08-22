@@ -554,7 +554,7 @@ void KItemListControllerTest::testMouseClickActivation()
     // Default setting: single click activation.
     group.writeEntry("SingleClick", true, KConfig::Persistent|KConfig::Global);
     config.sync();
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     int iterations = 0;
     const int maxIterations = 20;
@@ -576,7 +576,7 @@ void KItemListControllerTest::testMouseClickActivation()
     // Set the global setting to "double click activation".
     group.writeEntry("SingleClick", false, KConfig::Persistent|KConfig::Global);
     config.sync();
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     iterations = 0;
     while (KGlobalSettings::singleClick() && iterations < maxIterations) {
@@ -611,7 +611,7 @@ void KItemListControllerTest::testMouseClickActivation()
     // Set the global setting back to "single click activation".
     group.writeEntry("SingleClick", true, KConfig::Persistent|KConfig::Global);
     config.sync();
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     iterations = 0;
     while (!KGlobalSettings::singleClick() && iterations < maxIterations) {
@@ -640,7 +640,7 @@ void KItemListControllerTest::testMouseClickActivation()
     m_controller->setSingleClickActivationEnforced(true);
     group.writeEntry("SingleClick", restoreKGlobalSettingsSingleClick, KConfig::Persistent|KConfig::Global);
     config.sync();
-    KGlobalSettings::self()->emitChange(KGlobalSettings::SettingsChanged, KGlobalSettings::SETTINGS_MOUSE);
+    KGlobalSettings::self()->emitChange(KGlobalSettings::MouseChanged);
 
     iterations = 0;
     while (KGlobalSettings::singleClick() != restoreKGlobalSettingsSingleClick && iterations < maxIterations) {

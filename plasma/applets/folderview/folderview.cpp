@@ -363,7 +363,7 @@ void FolderView::init()
     // Find out about icon and font settings changes
     connect(KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()), SLOT(fontSettingsChanged()));
     connect(KGlobalSettings::self(), SIGNAL(iconChanged(int)), SLOT(iconSettingsChanged(int)));
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), SLOT(clickSettingsChanged(int)));
+    connect(KGlobalSettings::self(), SIGNAL(mouseChanged()), SLOT(clickSettingsChanged()));
 
     // Find out about theme changes
     connect(Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()), SLOT(plasmaThemeChanged()));
@@ -1189,9 +1189,9 @@ void FolderView::iconSettingsChanged(int group)
     }
 }
 
-void FolderView::clickSettingsChanged(int category)
+void FolderView::clickSettingsChanged()
 {
-  if (category == KGlobalSettings::SETTINGS_MOUSE && m_iconView) {
+  if (m_iconView) {
     m_iconView->setShowSelectionMarker(KGlobalSettings::singleClick());
   }
 }

@@ -150,7 +150,7 @@ protected slots:
     void deselectAllMimeTypes();
     void fontSettingsChanged();
     void iconSettingsChanged(int group);
-    void clickSettingsChanged(int category);
+    void clickSettingsChanged();
     void plasmaThemeChanged();
     //void clipboardDataChanged();
     void updateScreenRegion();

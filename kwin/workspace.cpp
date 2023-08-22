@@ -280,7 +280,7 @@ void Workspace::init()
     connect(&updateToolWindowsTimer, SIGNAL(timeout()), this, SLOT(slotUpdateToolWindows()));
 
     connect(KGlobalSettings::self(), SIGNAL(appearanceChanged()), this, SLOT(reconfigure()));
-    connect(KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(slotSettingsChanged(int)));
+    connect(KGlobalSettings::self(), SIGNAL(shortcutsChanged()), this, SLOT(slotShortcutsChanged()));
     connect(KGlobalSettings::self(), SIGNAL(blockShortcuts(int)), this, SLOT(slotBlockShortcuts(int)));
 
     active_client = NULL;
@@ -735,11 +735,10 @@ bool Workspace::waitForCompositingSetup()
     return false;
 }
 
-void Workspace::slotSettingsChanged(int category)
+void Workspace::slotShortcutsChanged()
 {
-    kDebug(1212) << "Workspace::slotSettingsChanged()";
-    if (category == KGlobalSettings::SETTINGS_SHORTCUTS)
-        m_userActionsMenu->discard();
+    kDebug(1212) << "Workspace::slotShortcutsChanged()";
+    m_userActionsMenu->discard();
 }
 
 /**
