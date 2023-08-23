@@ -333,7 +333,7 @@ KFindTreeView::KFindTreeView( QWidget *parent,  KfindDlg * findDialog )
                  this, SLOT(contextMenuRequested(QPoint)));
            
     //Mouse single/double click settings
-    connect( KGlobalSettings::self(), SIGNAL(settingsChanged(int)), this, SLOT(reconfigureMouseSettings()) );
+    connect( KGlobalSettings::self(), SIGNAL(mouseChanged()), this, SLOT(reconfigureMouseSettings()) );
     reconfigureMouseSettings();
     
     // TODO: this is a workaround until  Qt-issue 176832 has been fixed (from Dolphin)
