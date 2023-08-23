@@ -34,7 +34,7 @@ function updateCumulative() {
             sum += b["Percent"];
             plugged = true;
         }
-        if (b["State"] != "FullyCharge") {
+        if (b["State"] != "FullyCharged") {
             charged = false;
         }
         count++;
