@@ -121,6 +121,7 @@ MimeType=text/plain;
 Exec=kate --icon '%i' --caption '%c' -b %U
 StartupNotify=true
 X-KDE-HasTempFileOption=true
+X-KDE-SysTray=true
 Icon=kate
 X-DocPath=kate/index.html
 Type=Application

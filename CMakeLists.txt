@@ -293,7 +293,6 @@ endif(Q_WS_X11 AND X11_Xinput_FOUND)
 
 add_subdirectory(kcminit)
 add_subdirectory(khotkeys)
-add_subdirectory(ksystraycmd)
 
 if (LightDM_FOUND)
     add_subdirectory(kgreeter)

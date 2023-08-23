@@ -35,6 +35,7 @@
 #include <KDesktopFile>
 #include <KUrlRequester>
 #include <KShell>
+#include <KDebug>
 
 #include "khotkeys.h"
 
@@ -269,9 +270,9 @@ void BasicTab::enableWidgets(bool isDF, bool isDeleted)
     _iconButton->setEnabled(!isDeleted);
     _execEdit->setEnabled(isDF && !isDeleted);
     _launchCB->setEnabled(isDF && !isDeleted);
-    _systrayCB->setEnabled(isDF && !isDeleted);
-    _onlyShowInKdeCB->setEnabled( isDF && !isDeleted );
-    _hiddenEntryCB->setEnabled( isDF && !isDeleted );
+    // _systrayCB->setEnabled(isDF && !isDeleted);
+    _onlyShowInKdeCB->setEnabled(isDF && !isDeleted);
+    _hiddenEntryCB->setEnabled(isDF && !isDeleted);
     _nameLabel->setEnabled(!isDeleted);
     _descriptionLabel->setEnabled(!isDeleted);
     _commentLabel->setEnabled(!isDeleted);
@@ -280,7 +281,7 @@ void BasicTab::enableWidgets(bool isDF, bool isDeleted)
     _path_group->setEnabled(isDF && !isDeleted);
     _term_group->setEnabled(isDF && !isDeleted);
     _uid_group->setEnabled(isDF && !isDeleted);
-    general_group_keybind->setEnabled( isDF && !isDeleted );
+    general_group_keybind->setEnabled(isDF && !isDeleted);
 
     _termOptEdit->setEnabled(isDF && !isDeleted && _terminalCB->isChecked());
     _termOptLabel->setEnabled(isDF && !isDeleted && _terminalCB->isChecked());
@@ -369,10 +370,11 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
         else
             _keyEdit->clearKeySequence();
     }
+
     QString temp = df->desktopGroup().readEntry("Exec");
-    if (temp.startsWith(QLatin1String("ksystraycmd ")))
+    if (temp.endsWith(QLatin1String(" -tray")))
     {
-      _execEdit->lineEdit()->setText(temp.right(temp.length()-12));
+      _execEdit->lineEdit()->setText(temp.left(temp.length()-6));
       _systrayCB->setChecked(true);
     }
     else
@@ -380,6 +382,7 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
       _execEdit->lineEdit()->setText(temp);
       _systrayCB->setChecked(false);
     }
+    _systrayCB->setEnabled(df->desktopGroup().readEntry("X-KDE-SysTray", false));
 
     _pathEdit->lineEdit()->setText(df->readPath());
     _termOptEdit->setText(df->desktopGroup().readEntry("TerminalOptions"));
@@ -387,12 +390,13 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
 
     _launchCB->setChecked(df->desktopGroup().readEntry("StartupNotify", false));
 
-    _onlyShowInKdeCB->setChecked( df->desktopGroup().readXdgListEntry("OnlyShowIn").contains( "KDE" ) ); // or maybe enable only if it contains nothing but KDE?
+    // or maybe enable only if it contains nothing but KDE?
+    _onlyShowInKdeCB->setChecked( df->desktopGroup().readXdgListEntry("OnlyShowIn").contains("KDE"));
 
-    if ( df->desktopGroup().hasKey( "NoDisplay" ) )
-        _hiddenEntryCB->setChecked( df->desktopGroup().readEntry( "NoDisplay", true ) );
+    if ( df->desktopGroup().hasKey("NoDisplay"))
+        _hiddenEntryCB->setChecked(df->desktopGroup().readEntry("NoDisplay", true));
     else
-        _hiddenEntryCB->setChecked( false );
+        _hiddenEntryCB->setChecked(false);
 
     if(df->desktopGroup().readEntry("Terminal", 0) == 1)
         _terminalCB->setChecked(true);
@@ -417,8 +421,8 @@ void BasicTab::apply()
         KDesktopFile *df = _menuEntryInfo->desktopFile();
         KConfigGroup dg = df->desktopGroup();
         dg.writeEntry("Comment", _commentEdit->text());
-        if (_systrayCB->isChecked())
-          dg.writeEntry("Exec", _execEdit->lineEdit()->text().prepend("ksystraycmd "));
+        if (_systrayCB->isEnabled() && _systrayCB->isChecked())
+          dg.writeEntry("Exec", _execEdit->lineEdit()->text().append(" -tray"));
         else
           dg.writeEntry("Exec", _execEdit->lineEdit()->text());
 
