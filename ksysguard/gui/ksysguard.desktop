@@ -175,3 +175,4 @@ X-DocPath=ksysguard/index.html
 Terminal=false
 StartupNotify=true
 Categories=Qt;KDE;System;
+X-KDE-HasTrayOption=true

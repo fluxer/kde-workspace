@@ -29,17 +29,15 @@
 #include "kmediawindow.h"
 
 int main(int argc, char **argv) {
-    KAboutData aboutData("kmediaplayer", 0, ki18n("KMediaPlayer"),
-                         "1.1.0", ki18n("Simple media player for KDE."),
-                         KAboutData::License_GPL_V2,
-                         ki18n("(c) 2016 Ivailo Monev")
-                        );
+    KAboutData aboutData(
+        "kmediaplayer", 0, ki18n("KMediaPlayer"),
+        "1.1.0", ki18n("Simple media player for KDE."),
+        KAboutData::License_GPL_V2,
+        ki18n("(c) 2016 Ivailo Monev")
+    );
 
-    aboutData.addAuthor(ki18n("Ivailo Monev"),
-                        ki18n("Maintainer"),
-                        "xakepa10@gmail.com");
+    aboutData.addAuthor(ki18n("Ivailo Monev"), ki18n("Maintainer"), "xakepa10@gmail.com");
     aboutData.setProgramIconName(QLatin1String("applications-multimedia"));
-    aboutData.setOrganizationDomain("kde.org");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions option;

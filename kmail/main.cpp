@@ -59,13 +59,8 @@ int main(int argc, char **argv) {
         ki18n("(c) 2022 Ivailo Monev")
     );
 
-    aboutData.addAuthor(
-        ki18n("Ivailo Monev"),
-        ki18n("Maintainer"),
-        "xakepa10@gmail.com"
-    );
+    aboutData.addAuthor(ki18n("Ivailo Monev"), ki18n("Maintainer"), "xakepa10@gmail.com");
     aboutData.setProgramIconName(QLatin1String("internet-mail"));
-    aboutData.setOrganizationDomain("kde.org");
 
     KCmdLineArgs::init(argc, argv, &aboutData);
     KCmdLineOptions option;

@@ -382,7 +382,7 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
       _execEdit->lineEdit()->setText(temp);
       _systrayCB->setChecked(false);
     }
-    _systrayCB->setEnabled(df->desktopGroup().readEntry("X-KDE-SysTray", false));
+    _systrayCB->setEnabled(df->desktopGroup().readEntry("X-KDE-HasTrayOption", false));
 
     _pathEdit->lineEdit()->setText(df->readPath());
     _termOptEdit->setText(df->desktopGroup().readEntry("TerminalOptions"));

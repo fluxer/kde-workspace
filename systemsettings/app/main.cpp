@@ -31,7 +31,7 @@
 #include "SystemSettingsApp.h"
 #include "SettingsBase.h"
 
-int main( int argc, char *argv[] )
+int main(int argc, char *argv[])
 {
     // About data
     KAboutData aboutData("systemsettings", 0, ki18n("System Settings"), KDE_VERSION_STRING, ki18n("Central configuration center for KDE."), KAboutData::License_GPL, ki18n("(c) 2009, Ben Cooksley"));
