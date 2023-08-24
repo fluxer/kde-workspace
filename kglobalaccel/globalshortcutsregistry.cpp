@@ -181,10 +181,6 @@ bool GlobalShortcutsRegistry::keyPressed(int keyQt)
 
     kDebug() << QKeySequence(keyQt).toString() << "=" << shortcut->uniqueName();
 
-    QStringList data(shortcut->context()->component()->uniqueName());
-    data.append(shortcut->uniqueName());
-    data.append(shortcut->context()->component()->friendlyName());
-    data.append(shortcut->friendlyName());
 #ifdef Q_WS_X11
     // Make sure kglobalacceld has ungrabbed the keyboard after receiving the
     // keypress, otherwise actions in application that try to grab the
