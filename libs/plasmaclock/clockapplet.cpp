@@ -44,7 +44,6 @@
 #include <KGlobalSettings>
 #include <KRun>
 #include <KLocale>
-#include <KPassivePopup>
 #include <KService>
 #include <KServiceTypeTrader>
 #include <KTimeZone>
