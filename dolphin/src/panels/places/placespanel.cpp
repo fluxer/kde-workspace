@@ -455,7 +455,7 @@ void PlacesPanel::emptyTrash()
         QDataStream stream(&packedArgs, QIODevice::WriteOnly);
         stream << int(1);
         KIO::Job *job = KIO::special(KUrl("trash:/"), packedArgs);
-        KNotification::event("Trash: emptied", QString() , QPixmap() , 0, KNotification::DefaultEvent);
+        KNotification::event("kde/TrashEmptied");
         job->ui()->setWindow(parentWidget());
         connect(job, SIGNAL(result(KJob*)), SLOT(slotTrashUpdated(KJob*)));
     }

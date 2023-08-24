@@ -40,7 +40,7 @@
 #include <KStandardGuiItem>
 #include <KWindowSystem>
 #include <KXMLGUIFactory>
-#include <KNotifyConfigWidget>
+#include <KNotificationConfigWidget>
 #include <KConfigDialog>
 #include <KApplication>
 
@@ -766,7 +766,7 @@ void MainWindow::setupMainWidget()
 
 void MainWindow::configureNotifications()
 {
-    KNotifyConfigWidget::configure(this);
+    KNotificationConfigWidget::configure("konsole", this);
 }
 
 void MainWindow::setMenuBarInitialVisibility(bool visible)

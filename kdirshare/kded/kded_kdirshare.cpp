@@ -184,11 +184,7 @@ void KDirShareModule::slotDelayedRestore()
     }
     if (requiresauth) {
         if (!m_passwdstore.openStore()) {
-            KNotification *knotification = new KNotification("AuthError");
-            knotification->setComponentData(KComponentData("kdirshare"));
-            knotification->setTitle(i18n("Directory share"));
-            knotification->setText(i18n("Authorization is required but could not open password store"));
-            knotification->sendEvent();
+            KNotification::event("kdirshare/AuthError");
             return;
         }
     }
@@ -220,10 +216,6 @@ void KDirShareModule::slotDelayedRestore()
         }
     }
     if (shareerror) {
-        KNotification *knotification = new KNotification("ShareError");
-        knotification->setComponentData(KComponentData("kdirshare"));
-        knotification->setTitle(i18n("Directory share"));
-        knotification->setText(i18n("Unable to share one or more directories"));
-        knotification->sendEvent();
+        KNotification::event("kdirshare/ShareError");
     }
 }

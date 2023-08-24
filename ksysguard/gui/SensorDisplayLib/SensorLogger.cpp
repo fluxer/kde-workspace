@@ -367,8 +367,11 @@ void LogSensor::answerReceived( int id, const QList<QByteArray>& answer ) //virt
         mLimitReached = true;
 
         // send notification
-        KNotification::event( "sensor_alarm", QString( "sensor '%1' at '%2' reached lower limit" )
-                            .arg( mSensorName ).arg( mHostName), QPixmap(), 0 );
+        KNotification::event(
+            "ksysguard/sensor_alarm",
+            QString(),
+            QString("sensor '%1' at '%2' reached lower limit").arg(mSensorName).arg(mHostName)
+        );
 
         timerOn();
       } else if ( mUpperLimitActive && value > mUpperLimit ) {
@@ -376,8 +379,11 @@ void LogSensor::answerReceived( int id, const QList<QByteArray>& answer ) //virt
         mLimitReached = true;
 
         // send notification
-        KNotification::event( "sensor_alarm", QString( "sensor '%1' at '%2' reached upper limit" )
-                            .arg( mSensorName).arg( mHostName), QPixmap(), 0 );
+        KNotification::event(
+            "ksysguard/sensor_alarm",
+            QString(),
+            QString( "sensor '%1' at '%2' reached upper limit" ).arg(mSensorName).arg(mHostName)
+        );
 
         timerOn();
       } else {

@@ -31,5 +31,5 @@ install(
 
 install(
     FILES kcrash.notifyrc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kcrash
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )

@@ -24,7 +24,7 @@
 #include <KDebug>
 #include <KConfigGroup>
 #include <KGlobal>
-#include <KNotifyConfigWidget>
+#include <KNotificationConfigWidget>
 #include <KStandardDirs>
 #include <KIconLoader>
 
@@ -305,7 +305,7 @@ int NotificationsEngine::createNotification(const QString &appName, const QStrin
 
 void NotificationsEngine::configureNotification(const QString &appName)
 {
-    KNotifyConfigWidget::configure(0, appName);
+    KNotificationConfigWidget::configure(appName, nullptr);
 }
 
 K_EXPORT_PLASMA_DATAENGINE(notifications, NotificationsEngine)

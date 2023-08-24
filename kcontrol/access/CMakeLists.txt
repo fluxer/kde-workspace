@@ -4,7 +4,7 @@ kde4_add_plugin(kcm_access kcmaccess.cpp)
 
 target_link_libraries(kcm_access
     KDE4::kio
-    KDE4::knotifyconfig
+    KDE4::kdeui
     ${X11_LIBRARIES}
 )
 
@@ -43,5 +43,5 @@ install(
 )
 install(
     FILES kaccess.notifyrc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kaccess
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )

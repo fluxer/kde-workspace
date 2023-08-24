@@ -69,9 +69,9 @@ void KlipperTray::slotPassivePopup(const QString& caption, const QString& text)
     if (m_notification) {
         m_notification->setTitle(caption);
         m_notification->setText(text);
+        m_notification->send();
     } else {
-        m_notification = KNotification::event(KNotification::Notification, caption, text,
-                                              KIcon("klipper").pixmap(QSize(16, 16)));
+        m_notification = KNotification::event("kde/notification", caption, text, "klipper");
     }
 }
 

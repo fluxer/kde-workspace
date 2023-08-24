@@ -234,7 +234,7 @@ void Trash::emptyFinished(int exitCode, QProcess::ExitStatus exitStatus)
     Q_UNUSED(exitCode)
     Q_UNUSED(exitStatus)
 
-    KNotification::event("Trash: emptied", QString() , QPixmap() , 0l, KNotification::DefaultEvent );
+    KNotification::event("kde/TrashEmptied");
 
     //TODO: check the exit status and let the user know if it fails
     delete m_emptyProcess;

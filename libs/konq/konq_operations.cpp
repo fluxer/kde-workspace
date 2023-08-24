@@ -226,7 +226,7 @@ void KonqOperations::_del( Operation method, const KUrl::List & _selectedUrls, C
             QDataStream stream( &packedArgs, QIODevice::WriteOnly );
             stream << (int)1;
             job = KIO::special( KUrl("trash:/"), packedArgs );
-            KNotification::event("Trash: emptied", QString() , QPixmap() , 0l, KNotification::DefaultEvent );
+            KNotification::event("kde/TrashEmptied");
             break;
         }
         case DEL:

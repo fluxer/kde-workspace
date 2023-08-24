@@ -22,9 +22,13 @@ install(
 
 install(
     FILES
-    konsole.notifyrc
     konsoleui.rc
     sessionui.rc
     partui.rc
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/konsole
+)
+
+install(
+    FILES konsole.notifyrc
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )

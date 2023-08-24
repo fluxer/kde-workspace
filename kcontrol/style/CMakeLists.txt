@@ -26,5 +26,7 @@ install(TARGETS kcm_style  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES kcmstyle.notifyrc  DESTINATION  ${KDE4_DATA_INSTALL_DIR}/kcmstyle )
-install( FILES style.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install(
+    FILES style.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)

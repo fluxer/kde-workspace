@@ -1,2 +1,9 @@
-install( FILES ksysguarddrc  DESTINATION  ${KDE4_SYSCONF_INSTALL_DIR} )
-install( FILES ksysguard.notifyrc DESTINATION  ${KDE4_DATA_INSTALL_DIR}/ksysguard )
+install(
+    FILES ksysguarddrc
+    DESTINATION ${KDE4_SYSCONF_INSTALL_DIR}
+)
+
+install(
+    FILES ksysguard.notifyrc
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
+)

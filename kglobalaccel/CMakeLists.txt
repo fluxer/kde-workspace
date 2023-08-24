@@ -39,7 +39,7 @@ install(
 # KNotify configuration
 install(
     FILES kglobalaccel.notifyrc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kglobalaccel
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )
 
 kde4_add_dbus_service(org.kde.kglobalaccel.service.in)

@@ -102,15 +102,16 @@ void KCrashModule::slotDirty(const QString &path)
         if (kcrashflags & KCrash::Notify) {
             kDebug() << "Sending notification for" << kcrashfilepath;
             // NOTE: when the notification is closed/deleted the actions become non-operational
-            KNotification* knotification = new KNotification("Crash", KNotification::Persistent, this);
-            knotification->setComponentData(KComponentData("kcrash"));
+            KNotification* knotification = new KNotification(this);
+            knotification->setEventID("kcrash/Crash");
+            knotification->setFlags(KNotification::Persistent);
             knotification->setTitle(i18n("%1 crashed", kcrashappname));
             knotification->setText(i18n("For details about the crash look into the system log."));
             knotification->setActions(QStringList() << i18n("Report"));
             m_notifications.append(knotification);
             connect(knotification, SIGNAL(closed()), this, SLOT(slotClosed()));
             connect(knotification, SIGNAL(action1Activated()), this, SLOT(slotReport()));
-            knotification->sendEvent();
+            knotification->send();
         }
         if (kcrashflags & KCrash::Log) {
             // NOTE: this goes to the system log by default

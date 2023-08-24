@@ -1,4 +1,4 @@
-[Global]
+[kaccess]
 IconName=preferences-desktop-accessibility
 Comment=Accessibility
 Comment[af]=Toeganklikheid
@@ -92,7 +92,7 @@ Comment[x-test]=xxAccessibilityxx
 Comment[zh_CN]=辅助
 Comment[zh_TW]=無障礙輔助
 
-[Event/modifierkey-latched]
+[kaccess/modifierkey-latched]
 Name=A modifier key has become active
 Name[af]='n Verandering sleutel was geaktiveer
 Name[ar]=تم تفعيل مفتاح مغيِّر
@@ -249,9 +249,7 @@ Comment[zh_CN]=修饰键(如 Shift 或 Ctrl)更改了其状态，现已激活
 Comment[zh_TW]=一個組合鍵（如 Shift 或 Ctrl 等）已改變了它的狀態成為啟動
 Sound=KDE-Sys-Special.ogg
 
-nopresentation=236
-
-[Event/modifierkey-unlatched]
+[kaccess/modifierkey-unlatched]
 Name=A modifier key has become inactive
 Name[af]='n Verandering sleutel was gedeaktiveer
 Name[ar]=تم إلغاء مفتاح مغيِّر
@@ -408,9 +406,7 @@ Comment[zh_CN]=修饰键(如 Shift 或 Ctrl)更改了其状态，现已停用
 Comment[zh_TW]=一個組合鍵（如 Shift 或 Ctrl 等）已改變了它的狀態成為放開
 Sound=KDE-Sys-Special.ogg
 
-nopresentation=236
-
-[Event/modifierkey-locked]
+[kaccess/modifierkey-locked]
 Name=A modifier key has been locked
 Name[af]='n Verandering sleutel was gesluit
 Name[ar]=تم قفل مفتاح مغيِّر
@@ -567,9 +563,7 @@ Comment[zh_CN]=修饰键(如 Shift 或 Ctrl)已被锁定，现在将适用于后
 Comment[zh_TW]=一個組合鍵（如 Shift 或 Ctrl 等）已被鎖定，現在再按任何鍵都視為快捷鍵組合
 Sound=KDE-Sys-Special.ogg
 
-nopresentation=236
-
-[Event/lockkey-locked]
+[kaccess/lockkey-locked]
 Name=A lock key has been activated
 Name[af]='n Sluitsleutel is geaktiveer
 Name[ar]=تم تفعيل مفتاح قفل
@@ -727,9 +721,7 @@ Comment[zh_CN]=锁定键(如 Caps Lock 或 Num Lock)更改了其状态，现已�
 Comment[zh_TW]=一個鎖定鍵（如 CapsLock 或 NumLock）已改變它的狀態為啟用
 Sound=KDE-Sys-Special.ogg
 
-nopresentation=236
-
-[Event/lockkey-unlocked]
+[kaccess/lockkey-unlocked]
 Name=A lock key has been deactivated
 Name[af]='n Sluit sleutel was gedeaktiveer
 Name[ar]=تم إلغاء تفعيل مفتاح قفل
@@ -887,9 +879,7 @@ Comment[zh_CN]=锁定键(如 Caps Lock 或 Num Lock)更改了其状态，现已�
 Comment[zh_TW]=一個鎖定鍵（如 CapsLock 或 NumLock）已改變它的狀態成為未啟用
 Sound=KDE-Sys-Special.ogg
 
-nopresentation=236
-
-[Event/stickykeys]
+[kaccess/stickykeys]
 Name=Sticky keys has been enabled or disabled
 Name[af]=Sticky sleutels was geaktiveer of gedeaktiveer
 Name[ar]=تم تفعيل أو إلغاء تفعيل المفاتيح المثبتة
@@ -1047,10 +1037,9 @@ Comment[x-test]=xxSticky keys has been enabled or disabledxx
 Comment[zh_CN]=启用或禁用了粘滞键
 Comment[zh_TW]=相黏鍵已啟動或關閉。
 Sound=KDE-Sys-Special.ogg
-Action=Popup
-nopresentation=236
+Actions=Popup
 
-[Event/slowkeys]
+[kaccess/slowkeys]
 Name=Slow keys has been enabled or disabled
 Name[af]=Stadige sleutels was geaktiveer of gedeaktiveer
 Name[ar]=تم تفعيل أو إلغاء تفعيل المفاتيح البطيئة
@@ -1206,10 +1195,9 @@ Comment[x-test]=xxSlow keys has been enabled or disabledxx
 Comment[zh_CN]=启用或禁用了筛选键
 Comment[zh_TW]=慢速鍵已啟動或關閉。
 Sound=KDE-Sys-Special.ogg
-Action=Popup
-nopresentation=236
+Actions=Popup
 
-[Event/bouncekeys]
+[kaccess/bouncekeys]
 Name=Bounce keys has been enabled or disabled
 Name[af]=Hopsleutels is geaktiveer of gedeaktiveer
 Name[ar]=تم تفعيل أو إلغاء تفعيل المفاتيح المكررة
@@ -1367,10 +1355,9 @@ Comment[x-test]=xxBounce keys has been enabled or disabledxx
 Comment[zh_CN]=启用或禁用了撞击键
 Comment[zh_TW]=彈回鍵已啟動或關閉。
 Sound=KDE-Sys-Special.ogg
-Action=PassivePopup
-nopresentation=236
+Actions=PassivePopup
 
-[Event/mousekeys]
+[kaccess/mousekeys]
 Name=Mouse keys has been enabled or disabled
 Name[af]=Muis sleutels was geaktiveer of gedeaktiveer
 Name[ar]=تم تفعيل أو إلغاء تفعيل فأرة لوحة المفاتيح
@@ -1528,5 +1515,4 @@ Comment[x-test]=xxMouse keys has been enabled or disabledxx
 Comment[zh_CN]=启用或禁用了鼠标键
 Comment[zh_TW]=滑鼠鍵已啟動或關閉。
 Sound=KDE-Sys-Special.ogg
-Action=PassivePopup
-nopresentation=236
+Actions=PassivePopup

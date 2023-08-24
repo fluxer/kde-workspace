@@ -11,5 +11,5 @@ add_subdirectory(kded)
 
 install(
     FILES kfreespace.notifyrc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kfreespace
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )

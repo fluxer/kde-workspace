@@ -1,7 +1,7 @@
 /*
     KSysGuard, the KDE System Guard
 
-	Copyright (c) 2001 Tobias Koenig <tokoe@kde.org>
+    Copyright (c) 2001 Tobias Koenig <tokoe@kde.org>
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -267,7 +267,7 @@ LogFile::answerReceived(int id, const QList<QByteArray>& answer)
 				for (QStringList::Iterator it = filterRules.begin(); it != filterRules.end(); ++it) {
 					QRegExp *expr = new QRegExp((*it).toLatin1());
 					if (expr->indexIn(s) != -1) {
-						KNotification::event("pattern_match", QString("rule '%1' matched").arg(*it),QPixmap(),this);
+						KNotification::event("ksysguard/pattern_match", QString(), QString("rule '%1' matched").arg(*it),QString(),this);
 					}
 					delete expr;
 				}

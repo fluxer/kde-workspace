@@ -576,7 +576,7 @@ void Session::silenceTimerDone()
 
     //FIXME: Make message text for this notification and the activity notification more descriptive.
     if (_monitorSilence) {
-        KNotification::event("Silence", i18n("Silence in session '%1'", _nameTitle), QPixmap(),
+        KNotification::event("konsole/Silence", QString(), i18n("Silence in session '%1'", _nameTitle), QString(),
                              QApplication::activeWindow(),
                              KNotification::CloseWhenWidgetActivated);
         emit stateChanged(NOTIFYSILENCE);
@@ -620,9 +620,11 @@ void Session::activityStateSet(int state)
         emit bellRequest(i18n("Bell in session '%1'", _nameTitle));
     } else if (state == NOTIFYACTIVITY) {
         if (_monitorActivity  && !_notifiedActivity) {
-            KNotification::event("Activity", i18n("Activity in session '%1'", _nameTitle), QPixmap(),
-                                 QApplication::activeWindow(),
-                                 KNotification::CloseWhenWidgetActivated);
+            KNotification::event(
+                "konsole/Activity", QString(), i18n("Activity in session '%1'", _nameTitle), QString(),
+                QApplication::activeWindow(),
+                KNotification::CloseWhenWidgetActivated
+            );
 
             // mask activity notification for a while to avoid flooding
             _notifiedActivity = true;
@@ -821,9 +823,11 @@ void Session::done(int exitCode, QProcess::ExitStatus exitStatus)
             message = i18n("Program '%1' exited with status %2.", _program, exitCode);
 
         //FIXME: See comments in Session::silenceTimerDone()
-        KNotification::event("Finished", message , QPixmap(),
-                             QApplication::activeWindow(),
-                             KNotification::CloseWhenWidgetActivated);
+        KNotification::event(
+            "konsole/Finished", QString(), message , QString(),
+            QApplication::activeWindow(),
+            KNotification::CloseWhenWidgetActivated
+        );
     }
 
     if (exitStatus != QProcess::NormalExit) {

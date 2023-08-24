@@ -1,4 +1,4 @@
-[Global]
+[kwin]
 IconName=kwin
 Comment=KWin Window Manager
 Comment[ar]=مدير النوافذ كوين
@@ -65,7 +65,7 @@ Comment[x-test]=xxKWin Window Managerxx
 Comment[zh_CN]=KWin 窗口管理器
 Comment[zh_TW]=KWin 視窗管理員
 
-[Event/compositingsuspendeddbus]
+[kwin/compositingsuspendeddbus]
 Name=Compositing has been suspended
 Name[ar]=عُلِّق التركيب
 Name[ast]=Finóse la composición
@@ -193,4 +193,4 @@ Comment[wa]=Èn ôte programe a dmandé d' djoker l' môde compôzite.
 Comment[x-test]=xxAnother application has requested to suspend compositing.xx
 Comment[zh_CN]=另一个应用程序已经请求中断混成操作。
 Comment[zh_TW]=另一個應用程式要求暫停組合效能。
-Action=Popup
+Actions=Popup

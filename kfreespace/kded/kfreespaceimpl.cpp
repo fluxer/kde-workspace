@@ -82,11 +82,10 @@ void KFreeSpaceImpl::timerEvent(QTimerEvent *event)
         kDebug() << "Current" << m_soliddevice.udi()
                  << "space is" << freespacestring;
         if (freespace <= m_freespace) {
-            KNotification *knotification = new KNotification("WatchLow");
-            knotification->setComponentData(KComponentData("kfreespace"));
-            knotification->setTitle(i18n("Low Disk Space"));
+            KNotification *knotification = new KNotification();
+            knotification->setEventID("kfreespace/WatchLow");
             knotification->setText(i18n("%1 has %2 free space", m_soliddevice.description(), freespacestring));
-            knotification->sendEvent();
+            knotification->send();
         }
     } else {
         event->ignore();

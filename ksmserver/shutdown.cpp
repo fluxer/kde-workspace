@@ -366,8 +366,10 @@ void KSMServer::cancelShutdown( KSMClient* c )
         Solid::PowerManagement::stopSuppressingSleep(inhibitCookie);
         kDebug() << "Client " << c->program() << " (" << c->clientId() << ") canceled shutdown.";
         KSMShutdownFeedback::stop(); // make the screen become normal again
-        KNotification::event( "cancellogout" , i18n( "Logout canceled by '%1'", c->program()),
-                              QPixmap() , 0l , KNotification::DefaultEvent  );
+        KNotification::event(
+            "kde/cancellogout" , QString(),
+            i18n("Logout canceled by '%1'", c->program())
+        );
         foreach( KSMClient* c, clients ) {
             SmsShutdownCancelled( c->connection() );
             if( c->saveYourselfDone ) {
@@ -452,7 +454,8 @@ void KSMServer::completeShutdownOrCheckpoint()
 
     if ( state == Shutdown ) {
         // KDE says good bye
-        KNotification *n = KNotification::event( "exitkde" , QString() , QPixmap() , 0l ,  KNotification::DefaultEvent  );
+        KNotification *n = new KNotification(this);
+        n->setEventID("kde/exitkde");
         connect(n, SIGNAL(closed()) , this, SLOT(logoutSoundFinished()) );
         // https://bugs.kde.org/show_bug.cgi?id=228005
         // if sound is not working for some reason the closed() signal never happens
@@ -462,6 +465,7 @@ void KSMServer::completeShutdownOrCheckpoint()
         kDebug() << "Starting logout event";
         state = WaitingForKNotify;
         createLogoutEffectWidget();
+        n->send();
 
     } else if ( state == Checkpoint ) {
         foreach( KSMClient* c, clients ) {

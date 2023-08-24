@@ -127,8 +127,11 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
                 }
             }
         } else {
-            KNotification *notification = KNotification::event(KNotification::Warning, i18n("Touchpad status"), i18n("More than one touchpad detected. Touchpad Enabler Daemon does not handle this configuration"));
-            notification->sendEvent();
+            KNotification::event(
+                "ktouchpadenabler",
+                i18n("Touchpad status"),
+                i18n("More than one touchpad detected. Touchpad Enabler Daemon does not handle this configuration")
+            );
         }
     } else {
         kDebug() << "Did not find a touchpad";
@@ -169,8 +172,11 @@ bool TouchpadEnablerDaemonPrivate::x11Event(XEvent *event)
                     if (newValue != currentlyEnabled) {
                         setEnabled(newValue);
                         
-                        KNotification *notification = KNotification::event(KNotification::Notification, i18n("Touchpad status"), newValue ? i18n("Touchpad enabled") : i18n("Touchpad disabled"));
-                        notification->sendEvent();
+                        KNotification::event(
+                            "ktouchpadenabler",
+                            i18n("Touchpad status"),
+                            newValue ? i18n("Touchpad enabled") : i18n("Touchpad disabled")
+                        );
                         
                         ktouchpadenabler::Settings::self()->setTouchpadEnabled(newValue);
                         ktouchpadenabler::Settings::self()->writeConfig();

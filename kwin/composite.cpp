@@ -338,7 +338,7 @@ void Compositor::toggleCompositing()
             // display notification only if there is the shortcut
             message = i18n("Desktop effects have been suspended by another application.<br/>"
                            "You can resume using the '%1' shortcut.", shortcut);
-            KNotification::event("compositingsuspendeddbus", message);
+            KNotification::event("kwin/compositingsuspendeddbus", message);
         }
     }
 }

@@ -1,4 +1,4 @@
-[Global]
+[konsole]
 IconName=utilities-terminal
 Comment=Konsole
 Comment[af]=Konsole
@@ -91,7 +91,7 @@ Comment[x-test]=xxKonsolexx
 Comment[zh_CN]=Konsole
 Comment[zh_TW]=Konsole
 
-[Event/BellVisible]
+[konsole/BellVisible]
 Name=Bell in Visible Session
 Name[af]=Klokkie in die sigbare sessie 
 Name[ar]=جرس في جلسة ظاهرة
@@ -257,9 +257,9 @@ Comment[wa]=Cloke ki sone divins ene veyåve session
 Comment[x-test]=xxBell emitted within a visible sessionxx
 Comment[zh_CN]=可见会话中发生的响铃
 Comment[zh_TW]=可見工作階段中的響鈴行為
-Action=None
+Actions=
 
-[Event/BellInvisible]
+[konsole/BellInvisible]
 Name=Bell in Non-Visible Session
 Name[af]=Klokkie in nie-sigbare sessie 
 Name[ar]=جرس في جلسة غير ظاهرة
@@ -425,9 +425,9 @@ Comment[x-test]=xxBell emitted within a non-visible sessionxx
 Comment[zh_CN]=不可见会话中发生的响铃
 Comment[zh_TW]=非可見工作階段中的響鈴行為
 Sound=KDE-Sys-App-Message.ogg
-Action=Popup
+Actions=Popup
 
-[Event/Activity]
+[konsole/Activity]
 Name=Activity in Monitored Session
 Name[af]=Aktiwiteit in gemonitorde sessie
 Name[ar]=نشاط في الجلسة المُراقبة
@@ -590,10 +590,10 @@ Comment[wa]=Activité detectêye dins ene corwaiteye session
 Comment[x-test]=xxActivity detected in a monitored sessionxx
 Comment[zh_CN]=被监视会话中检测到的活动
 Comment[zh_TW]=監控工作階段中偵測到的活動
-Action=Popup
+Actions=Popup
 
 
-[Event/Silence]
+[konsole/Silence]
 Name=Silence in Monitored Session
 Name[af]=Stilte in gemonitorde sessie 
 Name[ar]=لسكون في الجلسة المُراقبة
@@ -756,9 +756,9 @@ Comment[wa]=Silince detecté dins ene corwaiteye session
 Comment[x-test]=xxSilence detected in a monitored sessionxx
 Comment[zh_CN]=被监视会话中检测到的缄默
 Comment[zh_TW]=監控工作階段中偵測到靜默時的行為
-Action=Popup
+Actions=Popup
 
-[Event/Finished]
+[konsole/Finished]
 Name=Session Finished With Non-Zero Status
 Name[af]=Sessie het geëindig met nie-zero status 
 Name[ar]=انتهت الجلسة بحالة غير الصِفر
@@ -927,4 +927,4 @@ Comment[wa]=Ene session a moussî foû avou on statut nén zero
 Comment[x-test]=xxA session has exited with non-zero statusxx
 Comment[zh_CN]=会话以非零状态退出
 Comment[zh_TW]=工作階段以不正常狀態（非零值）結束
-Action=None
+Actions=

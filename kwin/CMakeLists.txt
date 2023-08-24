@@ -204,7 +204,7 @@ install(
 
 install(
     FILES kwin.notifyrc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
 )
 
 install(

@@ -125,7 +125,7 @@ add_library(konsoleprivate SHARED ${konsoleprivate_SRCS})
 target_link_libraries(konsoleprivate
     KDE4::kpty
     KDE4::kio
-    KDE4::knotifyconfig
+    KDE4::kdeui
     ${QT_QTXML_LIBRARY}
     konq
 )

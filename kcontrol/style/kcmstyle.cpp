@@ -41,7 +41,6 @@
 #include <kstyle.h>
 #include <kstandarddirs.h>
 #include <KDebug>
-#include <KNotification>
 #include <KColorScheme>
 #include <KStandardDirs>
 #ifdef Q_WS_X11

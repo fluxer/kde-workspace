@@ -104,11 +104,7 @@ void KFreeSpaceModule::slotInit()
         }
     }
     if (watcherror) {
-        KNotification *knotification = new KNotification("WatchError");
-        knotification->setComponentData(KComponentData("kfreespace"));
-        knotification->setTitle(i18n("Free Space Notifier"));
-        knotification->setText(i18n("Unable to watch one or more devices"));
-        knotification->sendEvent();
+        KNotification::event("kfreespace/WatchError");
     }
 }
 

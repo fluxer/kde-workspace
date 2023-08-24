@@ -193,10 +193,10 @@ bool GlobalShortcutsRegistry::keyPressed(int keyQt)
     shortcut->context()->component()->emitGlobalShortcutPressed( *shortcut );
 
     // Then do anything else
-    KNotification *notification = new KNotification("globalshortcutpressed", KNotification::CloseOnTimeout);
+    KNotification *notification = new KNotification(this);
+    notification->setEventID("kglobalaccel/globalshortcutpressed");
     notification->setText(i18n("The global shortcut for %1 was issued.", shortcut->friendlyName()));
-    notification->addContext( "application", shortcut->context()->component()->friendlyName() );
-    notification->sendEvent();
+    notification->send();
 
     return true;
 }

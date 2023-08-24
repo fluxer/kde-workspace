@@ -1,4 +1,4 @@
-[Global]
+[ksysguard]
 IconName=utilities-system-monitor
 Comment=System Monitor
 Comment[ar]=مراقب النظام
@@ -65,7 +65,7 @@ Comment[x-test]=xxSystem Monitorxx
 Comment[zh_CN]=系统监视器
 Comment[zh_TW]=系統監視器
 
-[Event/pattern_match]
+[ksysguard/pattern_match]
 Name=Pattern Matched
 Name[af]=Patroon gevind
 Name[ar]=تطابق النموذج
@@ -227,7 +227,7 @@ Comment[x-test]=xxSearch pattern matchedxx
 Comment[zh_CN]=搜索匹配的模式
 Comment[zh_TW]=搜尋樣式比對符合
 
-[Event/sensor_alarm]
+[ksysguard/sensor_alarm]
 Name=Sensor Alarm
 Name[af]=Sensor Alarm
 Name[ar]=إنذار المِجَسّ

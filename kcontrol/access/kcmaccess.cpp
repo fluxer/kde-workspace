@@ -32,7 +32,7 @@
 #include <kapplication.h>
 #include <kaboutdata.h>
 #include <kshortcut.h>
-#include <knotifyconfigwidget.h>
+#include <knotificationconfigwidget.h>
 #include <kkeyserver.h>
 
 #include <X11/Xlib.h>
@@ -538,7 +538,7 @@ KAccessConfig::~KAccessConfig()
 
 void KAccessConfig::configureKNotify()
 {
-	KNotifyConfigWidget::configure (this, "kaccess");
+	KNotificationConfigWidget::configure("kaccess", this);
 }
 
 void KAccessConfig::changeFlashScreenColor()

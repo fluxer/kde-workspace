@@ -373,7 +373,7 @@ void KSMServer::autoStart2()
     } else {
         QMetaObject::invokeMethod(this, "kcmPhase2Done", Qt::QueuedConnection);
     }
-    KNotification::event( "startkde" , QString() , QPixmap() , 0l , KNotification::DefaultEvent  ); // this is the time KDE is up, more or less
+    KNotification::event("kde/startkde"); // this is the time KDE is up, more or less
 }
 
 void KSMServer::autoStart2Done()

@@ -394,23 +394,23 @@ void KAccessApp::xkbStateNotify () {
                 && ( (((mods >> i) & 0x101) != 0) != (((state >> i) & 0x101) != 0) ))
             {
                if ((mods >> i) & 1) {
-                  KNotification::event ("lockkey-locked", i18n(modifierKeys[keys[i]].lockedText));
+                  KNotification::event("kaccess/lockkey-locked", QString(), i18n(modifierKeys[keys[i]].lockedText));
                }
                else {
-                  KNotification::event ("lockkey-unlocked", i18n(modifierKeys[keys[i]].unlatchedText));
+                  KNotification::event("kaccess/lockkey-unlocked", QString(), i18n(modifierKeys[keys[i]].unlatchedText));
                }
             }
             else if (strcmp(modifierKeys[keys[i]].latchedText, "")
                 && ( ((mods >> i) & 0x101) != ((state >> i) & 0x101) ))
             {
                if ((mods >> i) & 0x100) {
-                  KNotification::event ("modifierkey-locked", i18n(modifierKeys[keys[i]].lockedText));
+                  KNotification::event ("kaccess/modifierkey-locked", QString(), i18n(modifierKeys[keys[i]].lockedText));
                }
                else if ((mods >> i) & 1) {
-                  KNotification::event ( "modifierkey-latched", i18n(modifierKeys[keys[i]].latchedText));
+                  KNotification::event("kaccess/modifierkey-latched", QString(), i18n(modifierKeys[keys[i]].latchedText));
                }
                else {
-                  KNotification::event ("modifierkey-unlatched", i18n(modifierKeys[keys[i]].unlatchedText));
+                  KNotification::event("kaccess/modifierkey-unlatched", QString(), i18n(modifierKeys[keys[i]].unlatchedText));
                }
             }
          }
@@ -789,24 +789,24 @@ void KAccessApp::notifyChanges() {
    unsigned int disabled = features & ~requestedFeatures;
 
    if (enabled & XkbSlowKeysMask)
-      KNotification::event ("slowkeys", i18n("Slow keys has been enabled. From now on, you need to press each key for a certain length of time before it gets accepted."));
+      KNotification::event("kaccess/slowkeys", QString(), i18n("Slow keys has been enabled. From now on, you need to press each key for a certain length of time before it gets accepted."));
    else if (disabled & XkbSlowKeysMask)
-      KNotification::event ("slowkeys", i18n("Slow keys has been disabled."));
+      KNotification::event("kaccess/slowkeys", QString(), i18n("Slow keys has been disabled."));
 
    if (enabled & XkbBounceKeysMask)
-      KNotification::event ("bouncekeys", i18n("Bounce keys has been enabled. From now on, each key will be blocked for a certain length of time after it was used."));
+      KNotification::event("kaccess/bouncekeys", QString(), i18n("Bounce keys has been enabled. From now on, each key will be blocked for a certain length of time after it was used."));
    else if (disabled & XkbBounceKeysMask)
-      KNotification::event ("bouncekeys", i18n("Bounce keys has been disabled."));
+      KNotification::event("kaccess/bouncekeys", QString(), i18n("Bounce keys has been disabled."));
 
    if (enabled & XkbStickyKeysMask)
-      KNotification::event ("stickykeys", i18n("Sticky keys has been enabled. From now on, modifier keys will stay latched after you have released them."));
+      KNotification::event("kaccess/stickykeys", QString(), i18n("Sticky keys has been enabled. From now on, modifier keys will stay latched after you have released them."));
    else if (disabled & XkbStickyKeysMask)
-      KNotification::event ("stickykeys", i18n("Sticky keys has been disabled."));
+      KNotification::event("kaccess/stickykeys", QString(), i18n("Sticky keys has been disabled."));
 
    if (enabled & XkbMouseKeysMask)
-      KNotification::event ("mousekeys", i18n("Mouse keys has been enabled. From now on, you can use the number pad of your keyboard in order to control the mouse."));
+      KNotification::event("kaccess/mousekeys", QString(), i18n("Mouse keys has been enabled. From now on, you can use the number pad of your keyboard in order to control the mouse."));
    else if (disabled & XkbMouseKeysMask)
-      KNotification::event ("mousekeys", i18n("Mouse keys has been disabled."));
+      KNotification::event("kaccess/mousekeys", QString(), i18n("Mouse keys has been disabled."));
 }
 
 void KAccessApp::applyChanges() {

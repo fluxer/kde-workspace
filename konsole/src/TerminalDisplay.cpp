@@ -2952,8 +2952,8 @@ void TerminalDisplay::bell(const QString& message)
         //     Please note that these event names, "BellVisible" and "BellInvisible",
         //     should not change and should be kept stable, because other applications
         //     that use this code via KPart rely on these names for notifications.
-        KNotification::event(hasFocus() ? "BellVisible" : "BellInvisible",
-                             message, QPixmap(), this);
+        KNotification::event(hasFocus() ? "konsole/BellVisible" : "konsole/BellInvisible",
+                             QString(), message, QString(), this);
         break;
     case Enum::VisualBell:
         visualBell();
