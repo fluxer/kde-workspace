@@ -91,7 +91,12 @@ KCMNotification::~KCMNotification()
 
 void KCMNotification::load()
 {
-    m_notificationswidget->setNotification(s_kdenotification);
+    const int kdeindex = m_notificationsbox->findData(s_kdenotification);
+    if (kdeindex >= 0) {
+        m_notificationsbox->setCurrentIndex(kdeindex);
+    } else {
+        kWarning() << "could not find the index of" << s_kdenotification;
+    }
     emit changed(false);
 }
 
