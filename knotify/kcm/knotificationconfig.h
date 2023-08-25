@@ -26,7 +26,7 @@
 #include <knotificationconfigwidget.h>
 
 /**
- * Control KDE free space notifier
+ * Control KDE notifications
  *
  * @author Ivailo Monev (xakepa10@gmail.com)
  */
@@ -41,7 +41,10 @@ public:
 public Q_SLOTS:
     void load() final;
     void save() final;
-    void defaults() final;
+
+private Q_SLOTS:
+    void slotSourceIndexChanged(int index);
+    void slotNotificationChanged(bool state);
 
 private:
     QGridLayout* m_layout;

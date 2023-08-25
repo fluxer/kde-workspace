@@ -31,6 +31,8 @@
 K_PLUGIN_FACTORY(KCMNotificationFactory, registerPlugin<KCMNotification>();)
 K_EXPORT_PLUGIN(KCMNotificationFactory("kcmknotificationconfig", "kcm_knotificationconfig"))
 
+static const QString s_kdenotification = QString::fromLatin1("kde");
+
 KCMNotification::KCMNotification(QWidget *parent, const QVariantList &args)
     : KCModule(KCMNotificationFactory::componentData(), parent),
     m_layout(nullptr),
@@ -40,11 +42,11 @@ KCMNotification::KCMNotification(QWidget *parent, const QVariantList &args)
 {
     Q_UNUSED(args);
 
-    setButtons(KCModule::Default | KCModule::Apply);
+    setButtons(KCModule::Apply);
     setQuickHelp(i18n("<h1>Notifications Configuration</h1> This module allows you to change KDE notification options."));
 
     KAboutData *about = new KAboutData(
-        I18N_NOOP("kcmkgreeter"), 0,
+        I18N_NOOP("kcmknotificationconfig"), 0,
         ki18n("KDE Notifications Configuration Module"),
         0, KLocalizedString(), KAboutData::License_GPL,
         ki18n("Copyright 2023, Ivailo Monev <email>xakepa10@gmail.com</email>")
@@ -75,9 +77,11 @@ KCMNotification::KCMNotification(QWidget *parent, const QVariantList &args)
         }
     }
     m_notificationsbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(m_notificationsbox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSourceIndexChanged(int)));
     m_layout->addWidget(m_notificationsbox, 0, 1);
 
-    m_notificationswidget = new KNotificationConfigWidget(QString(), this);
+    m_notificationswidget = new KNotificationConfigWidget(s_kdenotification, this);
+    connect(m_notificationswidget, SIGNAL(changed(bool)), this, SLOT(slotNotificationChanged(bool)));
     m_layout->addWidget(m_notificationswidget, 1, 0, 1, 2);
 }
 
@@ -87,20 +91,25 @@ KCMNotification::~KCMNotification()
 
 void KCMNotification::load()
 {
-    // TODO:
+    m_notificationswidget->setNotification(s_kdenotification);
     emit changed(false);
 }
 
 void KCMNotification::save()
 {
-    // TODO:
+    m_notificationswidget->save();
     emit changed(false);
 }
 
-void KCMNotification::defaults()
+void KCMNotification::slotSourceIndexChanged(int index)
 {
-    // TODO:
-    emit changed(true);
+    const QString notification = m_notificationsbox->itemData(index).toString();
+    m_notificationswidget->setNotification(notification);
+}
+
+void KCMNotification::slotNotificationChanged(bool state)
+{
+    emit changed(state);
 }
 
 #include "moc_knotificationconfig.cpp"
