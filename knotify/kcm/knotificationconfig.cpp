@@ -18,8 +18,12 @@
 
 #include "knotificationconfig.h"
 
+#include <QFileInfo>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kstandarddirs.h>
+#include <kconfiggroup.h>
+#include <kicon.h>
 #include <kaboutdata.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
@@ -55,9 +59,26 @@ KCMNotification::KCMNotification(QWidget *parent, const QVariantList &args)
     m_notificationslabel->setText(i18n("Event source:"));
     m_layout->addWidget(m_notificationslabel, 0, 0);
     m_notificationsbox = new KComboBox(this);
+    const QStringList notifyconfigs = KGlobal::dirs()->findAllResources("config", "notifications/*.notifyrc");
+    foreach (const QString &notifyconfig, notifyconfigs) {
+        KConfig eventsconfig(notifyconfig, KConfig::NoGlobals);
+        foreach (const QString &eventgroup, eventsconfig.groupList()) {
+            if (eventgroup.contains(QLatin1Char('/'))) {
+                continue;
+            }
+            KConfigGroup eventgroupconfig(&eventsconfig, eventgroup);
+            m_notificationsbox->addItem(
+                KIcon(eventgroupconfig.readEntry("IconName")),
+                eventgroupconfig.readEntry("Comment"),
+                QFileInfo(notifyconfig).baseName()
+            );
+        }
+    }
+    m_notificationsbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_layout->addWidget(m_notificationsbox, 0, 1);
 
     m_notificationswidget = new KNotificationConfigWidget(QString(), this);
+    m_layout->addWidget(m_notificationswidget, 1, 0, 1, 2);
 }
 
 KCMNotification::~KCMNotification()
