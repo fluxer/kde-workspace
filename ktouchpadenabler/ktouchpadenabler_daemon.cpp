@@ -128,7 +128,7 @@ TouchpadEnablerDaemonPrivate::TouchpadEnablerDaemonPrivate()
             }
         } else {
             KNotification::event(
-                "ktouchpadenabler",
+                "kde/warning",
                 i18n("Touchpad status"),
                 i18n("More than one touchpad detected. Touchpad Enabler Daemon does not handle this configuration")
             );
@@ -173,7 +173,7 @@ bool TouchpadEnablerDaemonPrivate::x11Event(XEvent *event)
                         setEnabled(newValue);
                         
                         KNotification::event(
-                            "ktouchpadenabler",
+                            "kde/notification",
                             i18n("Touchpad status"),
                             newValue ? i18n("Touchpad enabled") : i18n("Touchpad disabled")
                         );
