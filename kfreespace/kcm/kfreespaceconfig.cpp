@@ -173,7 +173,7 @@ KCMFreeSpace::KCMFreeSpace(QWidget *parent, const QVariantList &args)
     setQuickHelp(i18n("<h1>Free Space Notifier</h1> This module allows you to change KDE free space notifier options."));
 
     KAboutData *about = new KAboutData(
-        I18N_NOOP("kcmkgreeter"), 0,
+        I18N_NOOP("kcmfreespaceconfig"), 0,
         ki18n("KDE Free Space Notifier Module"),
         0, KLocalizedString(), KAboutData::License_GPL,
         ki18n("Copyright 2023, Ivailo Monev <email>xakepa10@gmail.com</email>")
