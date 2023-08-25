@@ -1,0 +1,17 @@
+[Desktop Entry]
+Exec=kcmshell4 knotificationconfig
+Icon=preferences-desktop-notification
+Type=Service
+
+X-KDE-ServiceTypes=KCModule
+X-KDE-Library=kcm_knotificationconfig
+X-KDE-ParentApp=kcontrol
+X-KDE-System-Settings-Parent-Category=application-and-system-notifications
+X-KDE-System-Settings-Parent-Category-V2=application-and-system-notifications
+X-KDE-Weight=50
+X-DocPath=kcontrol/knotificationconfig/index.html
+Categories=Qt;KDE;X-KDE-settings-sound;
+
+Name=Notifications Configuration
+Comment=System Notification Configuration
+X-KDE-Keywords=System sounds,Audio,Sound,Notify,Alerts,Notification,popups
