@@ -874,11 +874,11 @@ void Workspace::setupWindowShortcutDone(bool ok)
 
 void Workspace::clientShortcutUpdated(Client* c)
 {
-    QString key = QString("_k_session:%1").arg(c->window());
-    QAction* action = client_keys->action(key.toLatin1().constData());
+    QString key = QString::fromLatin1("_k_session:%1").arg(c->window());
+    QAction* action = client_keys->action(key);
     if (!c->shortcut().isEmpty()) {
         if (action == NULL) { // new shortcut
-            action = client_keys->addAction(QString(key));
+            action = client_keys->addAction(key);
             action->setText(i18n("Activate Window (%1)", c->caption()));
             connect(action, SIGNAL(triggered(bool)), c, SLOT(shortcutActivated()));
         }
