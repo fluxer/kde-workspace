@@ -254,15 +254,15 @@ int SolidUiServer::unmountUdi(const QString &udi)
         return int(Solid::ErrorType::InvalidOption);
     }
 
-    const int unmountresult = unmountDevice(storageaccess->filePath());
-    if (unmountresult != int(Solid::ErrorType::NoError)) {
-        return unmountresult;
-    }
-
     bool isremovable = false;
     Solid::StorageDrive *storagedrive = device.as<Solid::StorageDrive>();
     if (storagedrive) {
         isremovable = (storagedrive->isHotpluggable() || storagedrive->isRemovable());
+    }
+
+    const int unmountresult = unmountDevice(storageaccess->filePath());
+    if (unmountresult != int(Solid::ErrorType::NoError)) {
+        return unmountresult;
     }
 
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
