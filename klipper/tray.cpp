@@ -66,13 +66,14 @@ void KlipperTray::slotSetToolTipFromHistory()
 
 void KlipperTray::slotPassivePopup(const QString& caption, const QString& text)
 {
-    if (m_notification) {
-        m_notification->setTitle(caption);
-        m_notification->setText(text);
-        m_notification->send();
-    } else {
-        m_notification = KNotification::event("kde/notification", caption, text, "klipper");
+    if (!m_notification) {
+        m_notification = new KNotification(this);
+        m_notification->setEventID("kde/notification");
+        m_notification->setIcon("klipper");
     }
+    m_notification->setTitle(caption);
+    m_notification->setText(text);
+    m_notification->send();
 }
 
 #include "moc_tray.cpp"
