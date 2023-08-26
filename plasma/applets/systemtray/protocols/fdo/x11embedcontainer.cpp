@@ -227,20 +227,16 @@ void X11EmbedContainer::paintEvent(QPaintEvent *event)
     kpixmap.release();
 }
 
-void X11EmbedContainer::setBackgroundPixmap(QPixmap background)
+void X11EmbedContainer::setBackgroundPixmap(const QPixmap &background)
 {
     if (!clientWinId()) {
         return;
     }
 
-    //Prevent updating the background-image if possible. Updating can cause a very annoying flicker due to the XClearArea, and thus has to be kept to a minimum
-    QImage image;
-    if (background.paintEngine()->type() != QPaintEngine::X11)
-      image = background.toImage(); // With the raster graphics system this call just returns the backing image, so the image data isn't copied.
-    else
-      image = background.copy().toImage(); //With the X11 graphics engine, we have to create a copy first, else we get a crash
-
-    if(d->oldBackgroundImage == image) {
+    // Prevent updating the background-image if possible. Updating can cause a very annoying
+    // flicker due to the XClearArea, and thus has to be kept to a minimum
+    const QImage image = background.toImage();
+    if (d->oldBackgroundImage == image) {
       return;
     }
     d->oldBackgroundImage = image;
