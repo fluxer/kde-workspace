@@ -28,11 +28,13 @@
 #include <kdesktopfileactions.h>
 #include <kpassworddialog.h>
 #include <kauthorization.h>
+#include <knotification.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <solid/block.h>
 #include <solid/storagevolume.h>
 #include <solid/storageaccess.h>
+#include <solid/storagedrive.h>
 #include <solid/solidnamespace.h>
 
 #include "deviceactionsdialog.h"
@@ -134,7 +136,9 @@ int SolidUiServer::mountDevice(const QString &device, const QString &mountpoint,
 
     if (mountreply == KAuthorization::NoError) {
         return int(Solid::ErrorType::NoError);
-    } else if (mountreply == KAuthorization::AuthorizationError) {
+    }
+    KNotification::event("soliduiserver/mounterror");
+    if (mountreply == KAuthorization::AuthorizationError) {
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
     return int(Solid::ErrorType::OperationFailed);
@@ -151,7 +155,9 @@ int SolidUiServer::unmountDevice(const QString &mountpoint)
 
     if (unmountreply == KAuthorization::NoError) {
         return int(Solid::ErrorType::NoError);
-    } else if (unmountreply == KAuthorization::AuthorizationError) {
+    }
+    KNotification::event("soliduiserver/mounterror");
+    if (unmountreply == KAuthorization::AuthorizationError) {
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
     return int(Solid::ErrorType::OperationFailed);
@@ -244,12 +250,19 @@ int SolidUiServer::unmountUdi(const QString &udi)
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     if (!storagevolume || !storageaccess) {
         kWarning() << "invalid storage device" << udi;
+        KNotification::event("soliduiserver/mounterror");
         return int(Solid::ErrorType::InvalidOption);
     }
 
     const int unmountresult = unmountDevice(storageaccess->filePath());
     if (unmountresult != int(Solid::ErrorType::NoError)) {
         return unmountresult;
+    }
+
+    bool isremovable = false;
+    Solid::StorageDrive *storagedrive = device.as<Solid::StorageDrive>();
+    if (storagedrive) {
+        isremovable = (storagedrive->isHotpluggable() || storagedrive->isRemovable());
     }
 
     if (storagevolume->usage() == Solid::StorageVolume::Encrypted) {
@@ -261,12 +274,17 @@ int SolidUiServer::unmountUdi(const QString &udi)
         // qDebug() << "cryptclose" << cryptclosereply;
 
         if (cryptclosereply == KAuthorization::AuthorizationError) {
+            KNotification::event("soliduiserver/mounterror");
             return int(Solid::ErrorType::UnauthorizedOperation);
         } else if (cryptclosereply != KAuthorization::NoError) {
+            KNotification::event("soliduiserver/mounterror");
             return int(Solid::ErrorType::OperationFailed);
         }
     }
 
+    if (isremovable) {
+        KNotification::event("soliduiserver/safetoremove");
+    }
     return int(Solid::ErrorType::NoError);
 }
 

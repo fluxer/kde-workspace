@@ -20,15 +20,31 @@ set(kded_soliduiserver_SRCS
 
 kde4_add_plugin(kded_soliduiserver ${kded_soliduiserver_SRCS})
 
-target_link_libraries(kded_soliduiserver KDE4::solid  KDE4::kio)
-
+target_link_libraries(kded_soliduiserver
+    KDE4::solid
+    KDE4::kio
+)
 
 ########### install files ###############
 
-install(TARGETS kded_soliduiserver DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
+install(
+    TARGETS kded_soliduiserver
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
 
-install(FILES soliduiserver.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded)
+install(
+    FILES soliduiserver.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kded
+)
 
-install(TARGETS soliduiserver_helper DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR})
+install(
+    FILES soliduiserver.notifyrc
+    DESTINATION ${KDE4_CONFIG_INSTALL_DIR}/notifications
+)
+
+install(
+    TARGETS soliduiserver_helper
+    DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
+)
 
 kde4_install_auth_helper_files(soliduiserver_helper org.kde.soliduiserver.mountunmounthelper)
