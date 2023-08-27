@@ -41,8 +41,9 @@ static QList<int> keysFromString(const QString &str)
     }
     const QStringList strList = str.split('\t');
     foreach (const QString &s, strList) {
-        int key = QKeySequence(s)[0];
-        if (key != -1) {     //sanity check just in case
+        const int key = QKeySequence(s)[0];
+        if (key != 0) {
+            // sanity check just in case
             ret.append(key);
         }
     }
@@ -56,7 +57,7 @@ static QString stringFromKeys(const QList<int> &keys)
         return QString::fromLatin1("none");
     }
     QString ret;
-    foreach (int key, keys) {
+    foreach (const int key, keys) {
         ret.append(QKeySequence(key).toString());
         ret.append('\t');
     }
