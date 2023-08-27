@@ -36,7 +36,7 @@
 static QList<int> keysFromString(const QString &str)
 {
     QList<int> ret;
-    if (str == "none") {
+    if (str == QLatin1String("none")) {
         return ret;
     }
     const QStringList strList = str.split('\t');
@@ -53,7 +53,7 @@ static QList<int> keysFromString(const QString &str)
 static QString stringFromKeys(const QList<int> &keys)
 {
     if (keys.isEmpty()) {
-        return "none";
+        return QString::fromLatin1("none");
     }
     QString ret;
     foreach (int key, keys) {
