@@ -8,6 +8,8 @@ configure_file(
     ${CMAKE_CURRENT_BINARY_DIR}/config-kglobalaccel.h
 )
 
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1219)
+
 set(kglobalaccel_SRCS
     main.cpp
     kglobalacceld.cpp
