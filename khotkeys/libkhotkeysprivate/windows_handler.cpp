@@ -95,7 +95,7 @@ QString WindowsHandler::get_window_class( WId id_P )
     {
     XClassHint hints_ret;
     if( XGetClassHint( QX11Info::display(), id_P, &hints_ret ) == 0 ) // 0 means error
-	return "";
+        return "";
     QString ret( hints_ret.res_name );
     ret += ' ';
     ret += hints_ret.res_class;
