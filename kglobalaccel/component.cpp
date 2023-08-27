@@ -72,7 +72,7 @@ Component::Component(const QString &uniqueName, const QString &friendlyName, Glo
     _registry(registry)
 {
     // Make sure we do no get uniquenames still containing the context
-    Q_ASSERT(uniqueName.indexOf("|")==-1);
+    Q_ASSERT(uniqueName.indexOf("|") == -1);
 
     // Register ourselve with the registry
     if (_registry) {
@@ -120,12 +120,11 @@ void Component::activateShortcuts()
 QList<GlobalShortcut*> Component::allShortcuts(const QString &contextName) const
 {
     GlobalShortcutContext *context = _contexts.value(contextName);
-    if (context) {
-        return context->_actions.values();
-    } else {
+    if (!context) {
         Q_ASSERT(false); // Unknown context
         return QList<GlobalShortcut*> ();
     }
+    return context->_actions.values();
 }
 
 QList<KGlobalShortcutInfo> Component::allShortcutInfos(const QString &contextName) const
@@ -201,7 +200,7 @@ void Component::deactivateShortcuts(bool temporarily)
     }
 }
 
-void Component::emitGlobalShortcutPressed( const GlobalShortcut &shortcut )
+void Component::emitGlobalShortcutPressed(const GlobalShortcut &shortcut)
 {
 #ifdef Q_WS_X11
     // pass X11 timestamp
@@ -259,13 +258,13 @@ QList<GlobalShortcut *> Component::getShortcutsByKey(int key) const
     return rc;
 }
 
-GlobalShortcut *Component::getShortcutByName(const QString &uniqueName, const QString &context) const
+GlobalShortcut *Component::getShortcutByName(const QString &uniqueName, const QString &contextName) const
 {
-    if (!_contexts.value(context)) {
-        return NULL;
+    GlobalShortcutContext *context = _contexts.value(contextName);
+    if (!context) {
+        return nullptr;
     }
-
-    return _contexts.value(context)->_actions.value(uniqueName);
+    return context->_actions.value(uniqueName);
 }
 
 QStringList Component::getShortcutContexts() const
