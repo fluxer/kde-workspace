@@ -17,10 +17,10 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
+
 #include "startupfeedback.h"
 #include "client.h"
-// Qt
-#include <QCursor>
+#include "effects.h"
 // KDE
 #include <KConfigGroup>
 #include <KDebug>
@@ -34,7 +34,7 @@ StartupFeedbackEffect::StartupFeedbackEffect()
     : m_startupInfo(new KStartupInfo(KStartupInfo::CleanOnCantDetect, this))
     , m_startups(0)
     , m_active(false)
-    , m_type(PassiveFeedback)
+    , m_type(StartupFeedbackEffect::PassiveFeedback)
     , m_cursor(Qt::WaitCursor)
 {
     reconfigure(ReconfigureAll);
@@ -62,9 +62,9 @@ void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
     const int timeout = c.readEntry("Timeout", 10);
     m_startupInfo->setTimeout(timeout);
     if (!busyCursor) {
-        m_type = NoFeedback;
+        m_type = StartupFeedbackEffect::NoFeedback;
     } else {
-        m_type = PassiveFeedback;
+        m_type = StartupFeedbackEffect::PassiveFeedback;
     }
     if (oldactive) {
         start();
@@ -96,48 +96,72 @@ void StartupFeedbackEffect::gotRemoveStartup(const KStartupInfoId& id, const KSt
 
 void StartupFeedbackEffect::start()
 {
-    if (m_type == NoFeedback) {
+    if (m_type == StartupFeedbackEffect::NoFeedback) {
         return;
     }
 
-    xcb_connection_t *c = connection();
+    effects->startMouseInterception(this, Qt::WaitCursor);
+    xcb_window_t interceptionwindow = effects->mouseInterceptionWindow();
+    if (interceptionwindow == XCB_WINDOW_NONE) {
+        kWarning() << "no mouse interception window";
+        effects->stopMouseInterception(this);
+        m_active = false;
+        return;
+    }
+
     ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(
         xcb_grab_pointer_reply(
-            c,
-            xcb_grab_pointer_unchecked(c, false, rootWindow(),
-                XCB_EVENT_MASK_NO_EVENT,
+            connection(),
+            xcb_grab_pointer_unchecked(
+                connection(), true, interceptionwindow,
+                XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_POINTER_MOTION,
                 XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
-                m_cursor.handle(), XCB_TIME_CURRENT_TIME),
+                m_cursor.handle(), XCB_TIME_CURRENT_TIME
+            ),
             NULL
         )
     );
     if (grabPointer.isNull() || grabPointer->status != XCB_GRAB_STATUS_SUCCESS) {
         kWarning() << "could not grab pointer";
+        effects->stopMouseInterception(this);
         m_active = false;
         return;
     }
+
     m_active = true;
 }
 
 void StartupFeedbackEffect::stop()
 {
     switch(m_type) {
-        case PassiveFeedback:
+        case StartupFeedbackEffect::PassiveFeedback: {
             if (m_active) {
                 xcb_ungrab_pointer(connection(), XCB_TIME_CURRENT_TIME);
+                effects->stopMouseInterception(this);
                 m_active = false;
             }
             break;
-        case NoFeedback:
+        }
+        case StartupFeedbackEffect::NoFeedback: {
             return;
-        default:
-            break; // impossible
+        }
+        default: {
+            // impossible
+            break;
+        }
     }
 }
 
 bool StartupFeedbackEffect::isActive() const
 {
     return m_active;
+}
+
+void StartupFeedbackEffect::windowInputMouseEvent(QEvent* e)
+{
+    if (e->type() == QEvent::MouseButtonRelease) {
+        stop();
+    }
 }
 
 } // namespace

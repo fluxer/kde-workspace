@@ -582,6 +582,7 @@ public:
     virtual QPoint cursorPos() const = 0;
     virtual bool grabKeyboard(Effect* effect) = 0;
     virtual void ungrabKeyboard() = 0;
+    virtual xcb_window_t mouseInterceptionWindow() const = 0;
     /**
      * Ensures that all mouse events are sent to the @p effect.
      * No window will get the mouse events. Only fullscreen effects providing a custom user interface should

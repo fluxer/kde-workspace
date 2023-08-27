@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define KWIN_STARTUPFEEDBACK_H
 
 #include <QObject>
+#include <QCursor>
 #include <kwineffects.h>
 #include <KStartupInfo>
 
@@ -38,6 +39,7 @@ public:
 
     virtual void reconfigure(ReconfigureFlags flags);
     virtual bool isActive() const;
+    virtual void windowInputMouseEvent(QEvent* e);
 
 private Q_SLOTS:
     void gotNewStartup(const KStartupInfoId& id, const KStartupInfoData& data);

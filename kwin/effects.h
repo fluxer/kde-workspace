@@ -191,6 +191,12 @@ public:
     int currentRenderedDesktop() const {
         return m_currentRenderedDesktop;
     }
+    /**
+     * @returns the mouse interception window.
+     **/
+    virtual xcb_window_t mouseInterceptionWindow() const {
+        return m_mouseInterceptionWindow;
+    }
 
 public Q_SLOTS:
     void slotCurrentTabAboutToChange(EffectWindow* from, EffectWindow* to);
