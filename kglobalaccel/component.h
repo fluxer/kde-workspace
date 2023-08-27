@@ -47,7 +47,7 @@ class Component : public QObject
 public:
     //! Creates a new component. The component will be registered with @p
     //! registry if specified and registered with dbus.
-    Component(const QString &uniqueName, const QString &friendlyName, GlobalShortcutsRegistry *registry = NULL);
+    Component(const QString &uniqueName, const QString &friendlyName, GlobalShortcutsRegistry *registry = nullptr);
     ~Component();
 
     bool activateGlobalShortcutContext(const QString &uniqueName);
@@ -67,7 +67,7 @@ public:
     QDBusObjectPath dbusPath() const;
 
     //! Deactivate all currently active shortcuts
-    void deactivateShortcuts(bool temporarily=false);
+    void deactivateShortcuts(bool temporarily = false);
 
     //! Returns the friendly name
     QString friendlyName() const;
@@ -98,7 +98,7 @@ public:
     void loadSettings(KConfigGroup &config);
 
     //! Sets the human readable name for this component.
-    void setFriendlyName(const QString &);
+    void setFriendlyName(const QString &name);
 
     QString uniqueName() const;
 

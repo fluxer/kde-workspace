@@ -142,7 +142,7 @@ QList<int> GlobalShortcut::keys() const
     return _keys;
 }
 
-void GlobalShortcut::setKeys(const QList<int> newKeys)
+void GlobalShortcut::setKeys(const QList<int> &newKeys)
 {
     bool active = _isRegistered;
     if (active) {
@@ -151,7 +151,7 @@ void GlobalShortcut::setKeys(const QList<int> newKeys)
 
     _keys = QList<int>();
 
-    Q_FOREACH(int key, newKeys)  {
+    Q_FOREACH(const int key, newKeys)  {
         if (key !=0 && !GlobalShortcutsRegistry::self()->getShortcutByKey(key)) {
             _keys.append(key);
         } else {
@@ -183,7 +183,7 @@ void GlobalShortcut::setActive()
         return;
     }
 
-    Q_FOREACH (int key, _keys) {
+    Q_FOREACH (const int key, _keys) {
         if (key != 0 && !GlobalShortcutsRegistry::self()->registerKey(key, this)) {
             kDebug() << uniqueName() << ": Failed to register " << QKeySequence(key).toString();
         }
@@ -199,7 +199,7 @@ void GlobalShortcut::setInactive()
         return;
     }
 
-    Q_FOREACH (int key, _keys) {
+    Q_FOREACH (const int key, _keys) {
         if (key != 0 && !GlobalShortcutsRegistry::self()->unregisterKey(key, this)) {
             kDebug() << uniqueName() << ": Failed to unregister " << QKeySequence(key).toString();
         }

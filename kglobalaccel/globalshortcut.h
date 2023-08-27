@@ -85,7 +85,7 @@ public:
     void setIsFresh(bool);
 
     //! Sets the keys activated with this shortcut. The old keys are freed.
-    void setKeys(const QList<int>);
+    void setKeys(const QList<int> &newKeys);
 
     //! Returns the unique name aka id for the shortcuts.
     QString uniqueName() const;

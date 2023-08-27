@@ -249,7 +249,7 @@ GlobalShortcut *Component::getShortcutByKey(int key) const
 QList<GlobalShortcut *> Component::getShortcutsByKey(int key) const
 {
     QList <GlobalShortcut *> rc;
-    Q_FOREACH(GlobalShortcutContext *context, _contexts) {
+    Q_FOREACH (GlobalShortcutContext *context, _contexts) {
         GlobalShortcut *sc = context->getShortcutByKey(key);
         if (sc) {
             rc.append(sc);
@@ -291,14 +291,14 @@ bool Component::isShortcutAvailable(int key, const QString &component, const QSt
     // if this component asks for the key. only check the keys in the same
     // context
     if (component==uniqueName()) {
-        Q_FOREACH(GlobalShortcut *sc, shortcutContext(context)->_actions) {
+        Q_FOREACH (GlobalShortcut *sc, shortcutContext(context)->_actions) {
             if (sc->keys().contains(key)) {
                 return false;
             }
         }
     } else {
-        Q_FOREACH(GlobalShortcutContext *ctx, _contexts) {
-            Q_FOREACH(GlobalShortcut *sc, ctx->_actions) {
+        Q_FOREACH (GlobalShortcutContext *ctx, _contexts) {
+            Q_FOREACH (GlobalShortcut *sc, ctx->_actions) {
                 if (sc->keys().contains(key)) {
                     return false;
                 }
@@ -327,7 +327,7 @@ void Component::loadSettings(KConfigGroup &configGroup)
 
         QMutableListIterator<int> keysit(keys);
         while (keysit.hasNext()) {
-            int key = keysit.next();
+            const int key = keysit.next();
             if (key != 0) {
                 if (GlobalShortcutsRegistry::self()->getShortcutByKey(key)) {
                     // The shortcut is already used. The config file is
@@ -347,24 +347,23 @@ void Component::setFriendlyName(const QString &name)
     _friendlyName = name;
 }
 
-GlobalShortcutContext *Component::shortcutContext( const QString &contextName )
+GlobalShortcutContext *Component::shortcutContext(const QString &contextName)
 {
     return _contexts.value(contextName);
 }
 
-GlobalShortcutContext const *Component::shortcutContext( const QString &contextName ) const
+GlobalShortcutContext const *Component::shortcutContext(const QString &contextName) const
 {
     return _contexts.value(contextName);
 }
 
-QStringList Component::shortcutNames( const QString &contextName) const
+QStringList Component::shortcutNames(const QString &contextName) const
 {
     GlobalShortcutContext *context = _contexts.value(contextName);
     if (!context) {
         Q_ASSERT(false); // Unknown context
         return QStringList();
     }
-
     return context->_actions.keys();
 }
 
