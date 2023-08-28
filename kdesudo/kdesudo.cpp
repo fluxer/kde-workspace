@@ -48,7 +48,6 @@
 
 #include <cstdio>
 #include <cstdlib>
-#include <csignal>
 
 KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
     QObject(),
@@ -343,23 +342,6 @@ void KdeSudo::slotUser1()
 {
     m_dialog->done(AsUser);
 }
-
-void KdeSudo::blockSigChild()
-{
-    sigset_t sset;
-    sigemptyset(&sset);
-    sigaddset(&sset, SIGCHLD);
-    sigprocmask(SIG_BLOCK, &sset, 0L);
-}
-
-void KdeSudo::unblockSigChild()
-{
-    sigset_t sset;
-    sigemptyset(&sset);
-    sigaddset(&sset, SIGCHLD);
-    sigprocmask(SIG_UNBLOCK, &sset, 0L);
-}
-
 
 QString KdeSudo::validArg(QString arg)
 {

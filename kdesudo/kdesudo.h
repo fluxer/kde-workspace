@@ -79,13 +79,8 @@ private:
     void error(const QString &);
     QProcess *m_process;
     bool m_error;
-    bool useTerm;
-    bool noExec;
     QString m_tmpName;
-    QString iceauthorityFile;
     KDESu::KDESuPrivate::KCookie *m_pCookie;
-    void blockSigChild();
-    void unblockSigChild();
 
     KPasswordDialog *m_dialog;
 };
