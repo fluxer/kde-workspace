@@ -44,7 +44,7 @@ namespace KDESu
                 kError() << "Could not run xauth.\n";
                 return;
             }
-            proc.waitForReadyRead(100);
+            proc.waitForReadyRead(3000);
             QByteArray output = proc.readLine().simplified();
             if (output.isEmpty()) {
                 kWarning() << "No X authentication info set for display " << m_Display;
@@ -56,7 +56,7 @@ namespace KDESu
                 return;
             }
             m_DisplayAuth = (lst[1] + ' ' + lst[2]);
-            proc.waitForFinished(100); // give QProcess a chance to clean up gracefully
+            proc.waitForFinished(3000); // give QProcess a chance to clean up gracefully
 #endif
         }
 
