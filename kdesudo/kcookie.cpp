@@ -12,13 +12,10 @@
 
 #include "kcookie.h"
 
-#include <stdlib.h>
-
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtCore/QProcess>
-
-#include <kdebug.h>
+#include <QString>
+#include <QStringList>
+#include <QProcess>
+#include <KDebug>
 
 namespace KDESu
 {
