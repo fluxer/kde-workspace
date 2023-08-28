@@ -74,7 +74,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
         exit(0);
     }
 
-    m_dialog = new KPasswordDialog;
+    m_dialog = new KPasswordDialog();
     m_dialog->setDefaultButton(KDialog::Ok);
 
     if (attach) {
@@ -82,7 +82,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
         KWindowSystem::setMainWindow(m_dialog, (WId)winid);
     }
 
-    m_process = new QProcess;
+    m_process = new QProcess(this);
 
     /* load the icon */
     m_dialog->setPixmap(icon);
@@ -275,6 +275,10 @@ KdeSudo::~KdeSudo()
 {
     delete m_dialog;
     delete m_cookie;
+    if (m_process) {
+        m_process->terminate();
+        m_process->waitForFinished(3000);
+    }
 }
 
 void KdeSudo::error(const QString &msg)
