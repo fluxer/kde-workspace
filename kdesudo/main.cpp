@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     KApplication a;
     a.disableSessionManagement();
 
-    QString executable, arg, command, icon;
+    QString executable, icon;
     QStringList executableList, commandlist;
     KDesktopFile *desktopFile;
 
@@ -108,12 +108,12 @@ int main(int argc, char **argv)
     }
 
     if (args->count() && executable.isEmpty()) {
-        command = args->arg(0);
+        QString command = args->arg(0);
         commandlist = command.split(" ");
         executable = commandlist[0];
     }
 
-    /* We have to make sure the executable is only the binary name */
+    /* Have to make sure the executable is only the binary name */
     executableList = executable.split(" ");
     executable = executableList[0];
 
