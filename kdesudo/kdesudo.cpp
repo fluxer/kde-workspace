@@ -280,7 +280,7 @@ KdeSudo::~KdeSudo()
 void KdeSudo::error(const QString &msg)
 {
     m_error = true;
-    KMessageBox::error(0, msg);
+    KMessageBox::error(nullptr, msg);
     KApplication::kApplication()->exit(1);
 }
 
@@ -315,7 +315,8 @@ void KdeSudo::parseOutput()
         m_dialog->setPassword(QString());
         m_dialog->show();
     } else {
-        fprintf(stdout, "%s", strOut.toLocal8Bit().constData());
+        const QByteArray bytesOut = strOut.toLocal8Bit();
+        fprintf(stdout, "%s", bytesOut.constData());
     }
 }
 
