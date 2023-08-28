@@ -423,9 +423,11 @@ void TaskManager::gotStartupChange(const KStartupInfoId& id, const KStartupInfoD
 
 void TaskManager::killStartup(const KStartupInfoId& id)
 {
-    foreach (Startup *startup, d->startups) {
+    QMutableListIterator<Startup*> it(d->startups);
+    while (it.hasNext()) {
+        Startup *startup = it.next();
         if (startup->id() == id) {
-            d->startups.removeAll(startup);
+            it.remove();
             emit startupRemoved(startup);
             delete startup;
         }
