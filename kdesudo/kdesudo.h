@@ -79,7 +79,7 @@ private:
     QProcess *m_process;
     bool m_error;
     QString m_tmpName;
-    KDESu::KDESuPrivate::KCookie *m_pCookie;
+    KDESu::KDESuPrivate::KCookie *m_cookie;
 
     KPasswordDialog *m_dialog;
 };

@@ -49,11 +49,11 @@
 #include <cstdio>
 #include <cstdlib>
 
-KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
-    QObject(),
-    m_process(0),
+KdeSudo::KdeSudo(const QString &icon, const QString &appname)
+    : QObject(),
+    m_process(nullptr),
     m_error(false),
-    m_pCookie(new KDESu::KDESuPrivate::KCookie)
+    m_cookie(new KDESu::KDESuPrivate::KCookie())
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -138,7 +138,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
     // 'man xauth' for more info on xauth cookies.
     m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
-    QByteArray disp = m_pCookie->display();
+    QByteArray disp = m_cookie->display();
 
     // Create two processes, one for each xauth call
     QProcess xauth_ext;
@@ -274,6 +274,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname) :
 KdeSudo::~KdeSudo()
 {
     delete m_dialog;
+    delete m_cookie;
 }
 
 void KdeSudo::error(const QString &msg)
