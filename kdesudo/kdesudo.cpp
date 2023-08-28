@@ -177,6 +177,8 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     }
 
     QProcessEnvironment processEnv = QProcessEnvironment::systemEnvironment();
+    processEnv.insert("LANG", "C");
+    processEnv.insert("LC_ALL", "C");
     processEnv.insert("DISPLAY", disp);
     processEnv.insert("XAUTHORITY", m_tmpName);
     m_process->setProcessEnvironment(processEnv);
@@ -316,7 +318,7 @@ void KdeSudo::parseOutput()
         error(i18n("Your user is not allowed to run sudo on this host!"));
     } else if (strOut.contains("may not run sudo on")) {
         error(i18n("Your user is not allowed to run sudo on this host!"));
-    } else if ((strOut.contains("passprompt")) || (strOut.contains("PIN (CHV2)"))) {
+    } else if (strOut.contains("passprompt") || strOut.contains("PIN (CHV2)")) {
         m_dialog->setPassword(QString());
         m_dialog->show();
     } else {
