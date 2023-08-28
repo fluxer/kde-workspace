@@ -244,7 +244,7 @@ void KRandRSystemTray::populateMenu(KMenu* menu)
             currentSize = screen->rect().size();
 
             menu->addTitle(SmallIcon("view-fullscreen"), i18n("Screen Size"));
-            actionGroup = populateSizes(menu, sizes, currentSize);	
+            actionGroup = populateSizes(menu, sizes, currentSize);
             connect(actionGroup, SIGNAL(triggered(QAction*)), screen, SLOT(slotResizeUnified(QAction*)));
 
             // if the outputs are unified, we can rotate the screen on all outputs
@@ -290,7 +290,11 @@ void KRandRSystemTray::populateMenu(KMenu* menu)
                 }
 
                 actionGroup = populateSizes(outputMenu, output->sizes(), currentSize);
-                connect(actionGroup, SIGNAL(triggered(QAction*)), output, SLOT(slotChangeSize(QAction*)));
+                connect(
+                    actionGroup, SIGNAL(triggered(QAction*)),
+                    output, SLOT(slotChangeSize(QAction*)),
+                    Qt::QueuedConnection
+                );
                 
                 // if there is only one output active, do not show the disable option
                 // this prevents the user from doing wrong things ;)
@@ -312,7 +316,11 @@ void KRandRSystemTray::populateMenu(KMenu* menu)
                 if (rotations != RandR::Rotate0)  {
                     outputMenu->addTitle(SmallIcon("view-refresh"), i18n("Orientation"));
                     actionGroup = populateRotations(outputMenu, rotations, output->rotation());
-                    connect(actionGroup, SIGNAL(triggered(QAction*)), output, SLOT(slotChangeRotation(QAction*)));
+                    connect(
+                        actionGroup, SIGNAL(triggered(QAction*)),
+                        output, SLOT(slotChangeRotation(QAction*)),
+                        Qt::QueuedConnection
+                    );
                 }
 
                 // refresh rate
@@ -320,7 +328,11 @@ void KRandRSystemTray::populateMenu(KMenu* menu)
                 if (rates.count()) {
                     outputMenu->addTitle(SmallIcon("chronometer"), i18n("Refresh Rate"));
                     actionGroup = populateRates(outputMenu, rates, output->refreshRate());
-                    connect(actionGroup, SIGNAL(triggered(QAction*)), output, SLOT(slotChangeRefreshRate(QAction*)));
+                    connect(
+                        actionGroup, SIGNAL(triggered(QAction*)),
+                        output, SLOT(slotChangeRefreshRate(QAction*)),
+                        Qt::QueuedConnection
+                    );
                 }
 
                 if (screen->connectedCount() != 1) {
