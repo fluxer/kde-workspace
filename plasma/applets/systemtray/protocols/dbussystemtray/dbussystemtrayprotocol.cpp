@@ -84,8 +84,7 @@ void DBusSystemTrayProtocol::initedTask(DBusSystemTrayTask *task)
 void DBusSystemTrayProtocol::initRegisteredServices()
 {
     if (m_dataEngine->isValid()) {
-        QStringList registeredItems = m_dataEngine->sources();
-        foreach (const QString &service, registeredItems) {
+        foreach (const QString &service, m_dataEngine->sources()) {
             newTask(service);
         }
     }
