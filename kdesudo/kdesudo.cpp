@@ -304,8 +304,9 @@ void KdeSudo::parseOutput()
         } else {
             error(i18n("Wrong password! Exiting..."));
         }
-
-    } else if (strOut.contains("command not found")) {
+    // NOTE: "command not found" comes from `sudo` while "No such file or directory" comes from
+    // either `nice` or `dbus-run-session`
+    } else if (strOut.contains("command not found") || strOut.contains("No such file or directory")) {
         error(i18n("Command not found!"));
     } else if (strOut.contains("is not in the sudoers file")) {
         error(i18n("Your username is unknown to sudo!"));
@@ -330,8 +331,8 @@ void KdeSudo::procExited(int exitCode)
         if (!m_tmpName.isEmpty()) {
             QFile::remove(m_tmpName);
         }
+        KApplication::kApplication()->exit(exitCode);
     }
-    KApplication::kApplication()->exit(exitCode);
 }
 
 void KdeSudo::pushPassword(const QString &pwd)
