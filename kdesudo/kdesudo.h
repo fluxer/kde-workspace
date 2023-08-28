@@ -72,7 +72,6 @@ private slots:
      **/
     void pushPassword(const QString &);
     void slotCancel();
-    void slotUser1();
     QString validArg(QString arg);
 
 private:

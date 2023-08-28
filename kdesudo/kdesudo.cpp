@@ -338,11 +338,6 @@ void KdeSudo::slotCancel()
     KApplication::kApplication()->exit(1);
 }
 
-void KdeSudo::slotUser1()
-{
-    m_dialog->done(AsUser);
-}
-
 QString KdeSudo::validArg(QString arg)
 {
     QChar firstChar = arg.at(0);
