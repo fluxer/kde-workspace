@@ -86,9 +86,6 @@ zvalue=0
 DialogHeight=102
 DialogWidth=372
 
-[Containments][1][Applets][5][Configuration][Shortcuts]
-SystemTray-Klipper-5=Ctrl+Alt+V
-
 [Containments][1][Applets][5][LayoutInformation]
 Order=3
 

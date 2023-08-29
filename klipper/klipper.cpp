@@ -216,7 +216,7 @@ Klipper::Klipper(QObject* parent, const KSharedConfigPtr& config)
     // Action to show Klipper popup on mouse position
     m_showOnMousePos = m_collection->addAction("show-on-mouse-pos");
     m_showOnMousePos->setText(i18n("Open Klipper at Mouse Position"));
-    m_showOnMousePos->setGlobalShortcut(KShortcut());
+    m_showOnMousePos->setGlobalShortcut(KShortcut(Qt::CTRL+Qt::ALT+Qt::Key_V));
     connect(m_showOnMousePos, SIGNAL(triggered(bool)), this, SLOT(slotPopupMenu()));
 
     KlipperPopup* popup = history()->popup();

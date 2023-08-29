@@ -59,7 +59,6 @@ static const bool DEFAULT_SHOW_COMMUNICATION = true;
 static const bool DEFAULT_SHOW_SERVICES = true;
 static const bool DEFAULT_SHOW_HARDWARE = true;
 static const bool DEFAULT_SHOW_UNKNOWN = true;
-static const char KlipperName[] = "Klipper";
 
 namespace SystemTray
 {
@@ -212,40 +211,11 @@ void Applet::_onAddedTask(Task *task)
     DBusSystemTrayTask *dbus_task = qobject_cast<DBusSystemTrayTask*>(task);
     if (dbus_task && !dbus_task->objectName().isEmpty() && dbus_task->shortcut().isEmpty()) {
         // try to set shortcut
-        bool is_klipper = false;
-        QString default_shortcut;
-        if (dbus_task->name() == KlipperName) {
-            // for klipper we have to read its default hotkey from its config
-            is_klipper = true;
-            QString file = KStandardDirs::locateLocal("config", "kglobalshortcutsrc");
-            KConfig config(file);
-            KConfigGroup cg(&config, "klipper");
-            QStringList shortcutTextList = cg.readEntry("show_klipper_popup", QStringList());
-
-            if (shortcutTextList.size() >= 2) {
-                default_shortcut = shortcutTextList.first();
-                if (default_shortcut.isEmpty()) {
-                    default_shortcut = shortcutTextList[1];
-                }
-            }
-            if (default_shortcut.isEmpty()) {
-                default_shortcut = "Ctrl+Alt+V";
-            }
-        }
-
         QString action_name = _getActionName(task);
         KConfigGroup cg = config();
         KConfigGroup shortcutsConfig = KConfigGroup(&cg, "Shortcuts");
-        QString shortcut = shortcutsConfig.readEntryUntranslated(action_name, default_shortcut);
+        QString shortcut = shortcutsConfig.readEntryUntranslated(action_name);
         dbus_task->setShortcut(shortcut);
-
-        if (is_klipper && shortcut == default_shortcut) {
-            // we have to write klipper's hotkey to config
-            if (shortcut.isEmpty())
-                shortcutsConfig.deleteEntry(action_name);
-            else
-                shortcutsConfig.writeEntry(action_name, shortcut);
-        }
     }
 }
 
