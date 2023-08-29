@@ -292,7 +292,6 @@ if(Q_WS_X11 AND X11_Xinput_FOUND)
 endif(Q_WS_X11 AND X11_Xinput_FOUND)
 
 add_subdirectory(kcminit)
-add_subdirectory(khotkeys)
 
 if (LightDM_FOUND)
     add_subdirectory(kgreeter)

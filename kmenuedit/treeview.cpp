@@ -1891,11 +1891,6 @@ bool TreeView::dirty()
     return m_layoutDirty || m_rootFolder->hasDirt() || m_menuFile->dirty() || isLayoutDirty();
 }
 
-void TreeView::findServiceShortcut(const KShortcut&cut, KService::Ptr &service)
-{
-    service = m_rootFolder->findServiceShortcut(cut);
-}
-
 void TreeView::restoreMenuSystem()
 {
     if ( KMessageBox::warningYesNo( this, i18n( "Do you want to restore the system menu? Warning: This will remove all custom menus." ) )==KMessageBox::No )

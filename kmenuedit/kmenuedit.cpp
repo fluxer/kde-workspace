@@ -163,9 +163,6 @@ void KMenuEdit::setupView()
     connect(m_basicTab, SIGNAL(changed(MenuEntryInfo*)),
             m_tree, SLOT(currentDataChanged(MenuEntryInfo*)));
 
-    connect(m_basicTab, SIGNAL(findServiceShortcut(KShortcut,KService::Ptr&)),
-            m_tree, SLOT(findServiceShortcut(KShortcut,KService::Ptr&)));
-
     // restore splitter sizes
     KSharedConfig::Ptr config = KGlobal::config();
     KConfigGroup group(config, "General");

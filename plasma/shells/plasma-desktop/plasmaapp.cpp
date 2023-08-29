@@ -40,6 +40,8 @@
 #include <KService>
 #include <KIconLoader>
 #include <KStandardDirs>
+#include <KActionCollection>
+#include <KToolInvocation>
 
 #include <ksmserver_interface.h>
 
@@ -134,6 +136,17 @@ PlasmaApp::PlasmaApp()
 
     KGlobal::setAllowQuit(true);
     KGlobal::ref();
+
+    KActionCollection* actionCollection = new KActionCollection(this);
+    KAction* action = actionCollection->addAction("Capture the desktop");
+    action->setText(i18n("Capture the desktop"));
+    action->setGlobalShortcut(KShortcut(Qt::Key_Print));
+    connect(action, SIGNAL(triggered(bool)), SLOT(captureDesktop()));
+
+    action = actionCollection->addAction("Capture the current window");
+    action->setText(i18n("Capture the current window"));
+    action->setGlobalShortcut(KShortcut(Qt::CTRL+Qt::Key_Print));
+    connect(action, SIGNAL(triggered(bool)), SLOT(captureCurrentWindow()));
 
     QTimer::singleShot(0, this, SLOT(setupDesktop()));
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "plasma app ctor end" << "(line:" << __LINE__ << ")";
@@ -951,6 +964,16 @@ void PlasmaApp::executeCommands(const QList < QVariant > & commands)
     foreach (const QVariant & command, commands) {
         KRun::runCommand(command.toString(), 0);
     }
+}
+
+void PlasmaApp::captureDesktop()
+{
+    KToolInvocation::kdeinitExec("ksnapshot", QStringList() << "--fullscreen");
+}
+
+void PlasmaApp::captureCurrentWindow()
+{
+    KToolInvocation::kdeinitExec("ksnapshot", QStringList() << "--current");
 }
 
 #include "moc_plasmaapp.cpp"

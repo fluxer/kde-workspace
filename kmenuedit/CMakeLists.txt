@@ -7,7 +7,6 @@ set(kmenueditcommon_STAT_SRCS
     kmenuedit.cpp
     menufile.cpp
     menuinfo.cpp
-    khotkeys.cpp
 )
 
 ########### next target ###############
@@ -18,11 +17,6 @@ qt4_add_dbus_adaptor(
     kmenuedit.h
     KMenuEdit
 )
-
-qt4_add_dbus_interface(
-    kmenueditcommon_STAT_SRCS
-    ${CMAKE_CURRENT_BINARY_DIR}/../khotkeys/app/org.kde.khotkeys.xml
-    khotkeys_interface)
 
 set(kmenuedit_SRCS main.cpp ${kmenueditcommon_STAT_SRCS})
 
@@ -49,7 +43,5 @@ install(
     FILES kmenueditui.rc
     DESTINATION ${KDE4_DATA_INSTALL_DIR}/kmenuedit
 )
-
-add_dependencies(kmenuedit kded_khotkeys)
 
 kde4_install_icons(${KDE4_ICON_INSTALL_DIR})

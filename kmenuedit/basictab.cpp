@@ -37,8 +37,6 @@
 #include <KShell>
 #include <KDebug>
 
-#include "khotkeys.h"
-
 #include "menuinfo.h"
 
 #include "moc_basictab.cpp"
@@ -213,27 +211,9 @@ BasicTab::BasicTab( QWidget *parent )
 
     _uidEdit->setEnabled(false);
 
-    // key binding group
-    general_group_keybind = new QGroupBox(this);
-    QHBoxLayout *keybindLayout = new QHBoxLayout(general_group_keybind);
-    keybindLayout->setMargin( KDialog::marginHint() );
-    keybindLayout->setSpacing( KDialog::spacingHint());
-
-    _keyEdit = new KKeySequenceWidget(general_group_keybind);
-    _keyEdit->setMultiKeyShortcutsAllowed(false);
-    QLabel *l = new QLabel( i18n("Current shortcut &key:"), general_group_keybind);
-    l->setBuddy( _keyEdit );
-    keybindLayout->addWidget(l);
-    connect( _keyEdit, SIGNAL(keySequenceChanged(QKeySequence)),
-             this, SLOT(slotCapturedKeySequence(QKeySequence)));
-    keybindLayout->addWidget(_keyEdit);
-    advancedLayout->addWidget( general_group_keybind );
-
     advancedLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     addTab(advanced, i18n("Advanced"));
-    if (!KHotKeys::present())
-        general_group_keybind->hide();
     slotDisableAction();
 }
 
@@ -257,8 +237,6 @@ void BasicTab::slotDisableAction()
     _term_group->setEnabled(false);
     _uid_group->setEnabled(false);
     _iconButton->setEnabled(false);
-    // key binding part
-    general_group_keybind->setEnabled( false );
 }
 
 void BasicTab::enableWidgets(bool isDF, bool isDeleted)
@@ -281,7 +259,6 @@ void BasicTab::enableWidgets(bool isDF, bool isDeleted)
     _path_group->setEnabled(isDF && !isDeleted);
     _term_group->setEnabled(isDF && !isDeleted);
     _uid_group->setEnabled(isDF && !isDeleted);
-    general_group_keybind->setEnabled(isDF && !isDeleted);
 
     _termOptEdit->setEnabled(isDF && !isDeleted && _terminalCB->isChecked());
     _termOptLabel->setEnabled(isDF && !isDeleted && _terminalCB->isChecked());
@@ -314,7 +291,6 @@ void BasicTab::setFolderInfo(MenuFolderInfo *folderInfo)
     _onlyShowInKdeCB->setChecked( false );
     _hiddenEntryCB->setChecked( false );
     _uidCB->setChecked(false);
-    _keyEdit->clearKeySequence();
 
     enableWidgets(false, folderInfo->hidden);
     blockSignals(false);
@@ -332,9 +308,6 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
        _descriptionEdit->clear();
        _commentEdit->clear();
        _iconButton->setIcon( QString() );
-
-       // key binding part
-       _keyEdit->clearKeySequence();
 
        _execEdit->lineEdit()->clear();
        _systrayCB->setChecked(false);
@@ -361,15 +334,6 @@ void BasicTab::setEntryInfo(MenuEntryInfo *entryInfo)
     _commentEdit->setText(df->readComment());
     _commentEdit->setCursorPosition(0);
     _iconButton->setIcon(df->readIcon());
-
-    // key binding part
-    if( KHotKeys::present())
-    {
-        if ( !entryInfo->shortcut().isEmpty() )
-            _keyEdit->setKeySequence( entryInfo->shortcut().primary() );
-        else
-            _keyEdit->clearKeySequence();
-    }
 
     QString temp = df->desktopGroup().readEntry("Exec");
     if (temp.endsWith(QLatin1String(" -tray")))
@@ -513,25 +477,6 @@ void BasicTab::slotExecSelected()
     if (!path.startsWith('\''))
         _execEdit->lineEdit()->setText(KShell::quoteArg(path));
 }
-
-void BasicTab::slotCapturedKeySequence(const QKeySequence& seq)
-{
-    if (signalsBlocked())
-       return;
-    KShortcut cut(seq, QKeySequence());
-    if (_menuEntryInfo->isShortcutAvailable( cut ) && KHotKeys::present() )
-    {
-       _menuEntryInfo->setShortcut( cut );
-    }
-    else
-    {
-       // We will not assign the shortcut so reset the visible key sequence
-       _keyEdit->setKeySequence(QKeySequence());
-    }
-    if (_menuEntryInfo)
-       emit changed( _menuEntryInfo );
-}
-
 
 void BasicTab::updateHiddenEntry( bool show )
 {

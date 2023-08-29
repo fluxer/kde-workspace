@@ -130,6 +130,8 @@ private Q_SLOTS:
     void wallpaperCheckInTimeout();
     void relocatePanels();
     void executeCommands(const QList < QVariant > & commands);
+    void captureDesktop();
+    void captureCurrentWindow();
 
 private:
     DesktopCorona *m_corona;

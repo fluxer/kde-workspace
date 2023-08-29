@@ -134,7 +134,6 @@ public:
 public Q_SLOTS:
     void currentDataChanged(MenuFolderInfo *folderInfo);
     void currentDataChanged(MenuEntryInfo *entryInfo);
-    void findServiceShortcut(const KShortcut&, KService::Ptr &);
 
 Q_SIGNALS:
     void entrySelected(MenuFolderInfo *folderInfo);

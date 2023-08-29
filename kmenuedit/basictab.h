@@ -50,7 +50,6 @@ public:
 Q_SIGNALS:
     void changed( MenuFolderInfo * );
     void changed( MenuEntryInfo * );
-    void findServiceShortcut(const KShortcut&, KService::Ptr &);
 
 public Q_SLOTS:
     void setFolderInfo(MenuFolderInfo *folderInfo);
@@ -62,7 +61,6 @@ protected Q_SLOTS:
     void systraycb_clicked();
     void termcb_clicked();
     void uidcb_clicked();
-    void slotCapturedKeySequence(const QKeySequence&);
     void slotExecSelected();
     void onlyshowcb_clicked();
     void hiddenentrycb_clicked();
@@ -74,12 +72,11 @@ protected:
     KLineEdit    *_nameEdit;
     KLineEdit *_commentEdit;
     KLineEdit   *_descriptionEdit;
-    KKeySequenceWidget *_keyEdit;
     KUrlRequester *_execEdit, *_pathEdit;
     KLineEdit    *_termOptEdit, *_uidEdit;
     QCheckBox    *_terminalCB, *_uidCB, *_launchCB, *_systrayCB, *_onlyShowInKdeCB, *_hiddenEntryCB;
     KIconButton  *_iconButton;
-    QGroupBox    *_path_group, *_term_group, *_uid_group, *general_group_keybind;
+    QGroupBox    *_path_group, *_term_group, *_uid_group;
     QLabel *_termOptLabel, *_uidLabel, *_pathLabel, *_nameLabel, *_commentLabel, *_execLabel;
     QLabel      *_descriptionLabel;
 

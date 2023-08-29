@@ -119,9 +119,6 @@ public:
     // Save menu and all its entries and submenus
     void save(MenuFile *);
 
-    // Search service by shortcut
-    KService::Ptr findServiceShortcut(const KShortcut&);
-
     // Set whether the entry is in active use (as opposed to in the clipboard/deleted)
     void setInUse(bool inUse);
 
@@ -145,7 +142,7 @@ class MenuEntryInfo : public MenuInfo
 public:
     explicit MenuEntryInfo(const KService::Ptr &_service, KDesktopFile *_df = 0)
      : service(_service), m_desktopFile(_df),
-       shortcutLoaded(false), shortcutDirty(false), dirty(_df != 0), hidden(false)
+       dirty(_df != 0), hidden(false)
     {
        caption = service->name();
        description = service->genericName();
@@ -160,10 +157,6 @@ public:
     QString menuId() const { return service->menuId(); }
 
     QString file() const { return service->entryPath(); }
-
-    KShortcut shortcut();
-    void setShortcut(const KShortcut &_shortcut);
-    bool isShortcutAvailable(const KShortcut &_shortcut);
 
     void setDirty();
 
@@ -183,9 +176,6 @@ public:
     QString icon;
     KService::Ptr service;
     KDesktopFile *m_desktopFile;
-    KShortcut shortCut;
-    bool shortcutLoaded;
-    bool shortcutDirty;
     bool dirty;
     bool hidden;
 };
