@@ -44,11 +44,14 @@
 
 #include <QDir>
 
-K_PLUGIN_FACTORY(SolidUiServerFactory,
-                 registerPlugin<SolidUiServer>();
-    )
+K_PLUGIN_FACTORY(SolidUiServerFactory, registerPlugin<SolidUiServer>();)
 K_EXPORT_PLUGIN(SolidUiServerFactory("soliduiserver"))
 
+static void kNotifyError(const Solid::ErrorType error, const bool unmount)
+{
+    const QString title = (unmount ? i18n("Unmount error") : i18n("Mount error"));
+    KNotification::event("soliduiserver/mounterror", title, Solid::errorString(error));
+}
 
 SolidUiServer::SolidUiServer(QObject* parent, const QList<QVariant>&)
     : KDEDModule(parent)
@@ -137,10 +140,11 @@ int SolidUiServer::mountDevice(const QString &device, const QString &mountpoint,
     if (mountreply == KAuthorization::NoError) {
         return int(Solid::ErrorType::NoError);
     }
-    KNotification::event("soliduiserver/mounterror");
     if (mountreply == KAuthorization::AuthorizationError) {
+        kNotifyError(Solid::ErrorType::UnauthorizedOperation, false);
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
+    kNotifyError(Solid::ErrorType::OperationFailed, false);
     return int(Solid::ErrorType::OperationFailed);
 }
 
@@ -156,10 +160,11 @@ int SolidUiServer::unmountDevice(const QString &mountpoint)
     if (unmountreply == KAuthorization::NoError) {
         return int(Solid::ErrorType::NoError);
     }
-    KNotification::event("soliduiserver/mounterror");
     if (unmountreply == KAuthorization::AuthorizationError) {
+        kNotifyError(Solid::ErrorType::UnauthorizedOperation, true);
         return int(Solid::ErrorType::UnauthorizedOperation);
     }
+    kNotifyError(Solid::ErrorType::OperationFailed, true);
     return int(Solid::ErrorType::OperationFailed);
 }
 
@@ -170,11 +175,13 @@ int SolidUiServer::mountUdi(const QString &udi)
     Solid::Block *block = device.as<Solid::Block>();
     if (!storagevolume || !block) {
         kWarning() << "invalid storage device" << udi;
+        kNotifyError(Solid::ErrorType::InvalidOption, false);
         return int(Solid::ErrorType::InvalidOption);
     } else if (storagevolume->fsType() == "zfs_member") {
         // create pool on USB stick, put some bad stuff on it, set mount point to / and watch it
         // unfold when mounted
         kWarning() << "storage device is insecure" << udi;
+        kNotifyError(Solid::ErrorType::Insecure, false);
         return int(Solid::ErrorType::Insecure);
     }
 
@@ -203,8 +210,10 @@ int SolidUiServer::mountUdi(const QString &udi)
         // qDebug() << "cryptopen" << cryptopenreply;
 
         if (cryptopenreply == KAuthorization::AuthorizationError) {
+            kNotifyError(Solid::ErrorType::UnauthorizedOperation, false);
             return int(Solid::ErrorType::UnauthorizedOperation);
         } else if (cryptopenreply != KAuthorization::NoError) {
+            kNotifyError(Solid::ErrorType::OperationFailed, false);
             return int(Solid::ErrorType::OperationFailed);
         }
 
@@ -229,6 +238,7 @@ int SolidUiServer::mountUdi(const QString &udi)
                 "org.kde.soliduiserver.mountunmounthelper", "cryptclose", cryptclosearguments
             );
         }
+        kNotifyError(Solid::ErrorType::OperationFailed, false);
         return int(Solid::ErrorType::OperationFailed);
     }
 
@@ -250,7 +260,7 @@ int SolidUiServer::unmountUdi(const QString &udi)
     Solid::StorageVolume *storagevolume = device.as<Solid::StorageVolume>();
     if (!storagevolume || !storageaccess) {
         kWarning() << "invalid storage device" << udi;
-        KNotification::event("soliduiserver/mounterror");
+        kNotifyError(Solid::ErrorType::InvalidOption, true);
         return int(Solid::ErrorType::InvalidOption);
     }
 
@@ -274,10 +284,10 @@ int SolidUiServer::unmountUdi(const QString &udi)
         // qDebug() << "cryptclose" << cryptclosereply;
 
         if (cryptclosereply == KAuthorization::AuthorizationError) {
-            KNotification::event("soliduiserver/mounterror");
+            kNotifyError(Solid::ErrorType::UnauthorizedOperation, true);
             return int(Solid::ErrorType::UnauthorizedOperation);
         } else if (cryptclosereply != KAuthorization::NoError) {
-            KNotification::event("soliduiserver/mounterror");
+            kNotifyError(Solid::ErrorType::OperationFailed, true);
             return int(Solid::ErrorType::OperationFailed);
         }
     }
