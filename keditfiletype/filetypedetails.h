@@ -43,9 +43,9 @@ class KServiceListWidget;
  */
 class FileTypeDetails : public QWidget
 {
-  Q_OBJECT
+    Q_OBJECT
 public:
-  FileTypeDetails(QWidget *parent = 0);
+    FileTypeDetails(QWidget *parent = 0);
 
     /**
      * Set a non-gui "mimetype data" to work on,
@@ -59,21 +59,21 @@ public:
     void refresh();
 
 protected:
-  void updateRemoveButton();
-  void updateAskSave();
+    void updateRemoveButton();
+    void updateAskSave();
 
 Q_SIGNALS:
-  void embedMajor(const QString &major, bool &embed); // To adjust whether major type is being embedded
-  void changed(bool);
+    void embedMajor(const QString &major, bool &embed); // To adjust whether major type is being embedded
+    void changed(bool);
 
 protected Q_SLOTS:
-  void updateIcon(const QString &icon);
-  void updateDescription(const QString &desc);
-  void addExtension();
-  void removeExtension();
-  void enableExtButtons();
-  void slotAutoEmbedClicked(int button);
-  void slotAskSaveToggled(bool);
+    void updateIcon(const QString &icon);
+    void updateDescription(const QString &desc);
+    void addExtension();
+    void removeExtension();
+    void enableExtButtons();
+    void slotAutoEmbedClicked(int button);
+    void slotAskSaveToggled(bool);
 
 private:
     MimeTypeData* m_mimeTypeData;
@@ -85,19 +85,18 @@ private:
 
     // First tab - General
     KIconButton* iconButton;
-    QLabel* iconLabel; // if icon cannot be changed
 
-  QListWidget *extensionLB;
-  KPushButton *addExtButton, *removeExtButton;
-  KLineEdit *description;
-  KServiceListWidget *serviceListWidget;
+    QListWidget *extensionLB;
+    KPushButton *addExtButton, *removeExtButton;
+    KLineEdit *description;
+    KServiceListWidget *serviceListWidget;
 
-  // Second tab - Embedding
-  QGroupBox *m_autoEmbedBox;
-  QButtonGroup *m_autoEmbedGroup;
-  KServiceListWidget *embedServiceListWidget;
-  QCheckBox *m_chkAskSave;
-  QRadioButton *m_rbGroupSettings;
+    // Second tab - Embedding
+    QGroupBox *m_autoEmbedBox;
+    QButtonGroup *m_autoEmbedGroup;
+    KServiceListWidget *embedServiceListWidget;
+    QCheckBox *m_chkAskSave;
+    QRadioButton *m_rbGroupSettings;
 };
 
 #endif

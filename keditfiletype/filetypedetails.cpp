@@ -69,7 +69,6 @@ FileTypeDetails::FileTypeDetails( QWidget * parent )
   iconButton->setWhatsThis( i18n("This button displays the icon associated"
                                 " with the selected file type. Click on it to choose a different icon.") );
   iconButton->setFixedSize(70, 70);
-  iconLabel = 0;
   hBox->addWidget(iconButton);
 
   QGroupBox *gb = new QGroupBox(i18n("Filename Patterns"), firstWidget);
@@ -321,10 +320,7 @@ void FileTypeDetails::setMimeTypeData( MimeTypeData * mimeTypeData, TypesListIte
   m_item = item; // can be 0
   Q_ASSERT(mimeTypeData);
   m_mimeTypeLabel->setText(i18n("File type %1", mimeTypeData->name()));
-  if (iconButton)
-      iconButton->setIcon(mimeTypeData->icon());
-  else
-      iconLabel->setPixmap(DesktopIcon(mimeTypeData->icon()));
+  iconButton->setIcon(mimeTypeData->icon());
   description->setText(mimeTypeData->comment());
   m_rbGroupSettings->setText( i18n("Use settings for '%1' group", mimeTypeData->majorType() ) );
   extensionLB->clear();
