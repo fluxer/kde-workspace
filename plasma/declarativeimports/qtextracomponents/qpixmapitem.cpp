@@ -69,12 +69,12 @@ bool QPixmapItem::smooth() const
 
 int QPixmapItem::nativeWidth() const
 {
-    return m_pixmap.size().width();
+    return m_pixmap.width();
 }
 
 int QPixmapItem::nativeHeight() const
 {
-    return m_pixmap.size().height();
+    return m_pixmap.height();
 }
 
 QPixmapItem::FillMode QPixmapItem::fillMode() const

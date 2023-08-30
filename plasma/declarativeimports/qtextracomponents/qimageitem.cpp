@@ -69,12 +69,12 @@ bool QImageItem::smooth() const
 
 int QImageItem::nativeWidth() const
 {
-    return m_image.size().width();
+    return m_image.width();
 }
 
 int QImageItem::nativeHeight() const
 {
-    return m_image.size().height();
+    return m_image.height();
 }
 
 QImageItem::FillMode QImageItem::fillMode() const
