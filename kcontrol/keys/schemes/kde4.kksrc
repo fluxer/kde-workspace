@@ -87,21 +87,20 @@ Uses Win Modifier=true
 [klipper][Global Shortcuts]
 clipboard_action=Meta+Ctrl+X
 repeat_action=Meta+Ctrl+R
-show_klipper_popup=Meta+Ctrl+V
+show-on-mouse-pos=Meta+Ctrl+V
 
 [krunner][Global Shortcuts]
-Halt Without Confirmation=none
-Lock Session=Meta+ScrollLock
-Log Out Without Confirmation=none
-Log Out=Meta+Esc
-Reboot Without Confirmation=none
 Run Command=Meta+Return; Alt+F2
 Show System Activity=Meta+Ctrl+Pause
 
+[ksmserver][Global Shortcuts]
+Halt Without Confirmation=none
+Log Out Without Confirmation=none
+Log Out=Meta+Esc
+Reboot Without Confirmation=none
+
 [kwin][Global Shortcuts]
-Desktop Screenshot to Clipboard=Meta+Print
 Kill Window=Meta+Ctrl+Del
-Mouse Emulation=none
 Switch One Desktop Down=none
 Switch One Desktop Up=none
 Switch One Desktop to the Left=none

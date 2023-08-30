@@ -91,21 +91,20 @@ Uses Win Modifier=false
 [klipper][Global Shortcuts]
 clipboard_action=none
 repeat_action=none
-show_klipper_popup=none
+show-on-mouse-pos=none
 
 [krunner][Global Shortcuts]
-Halt Without Confirmation=none
-Lock Session=none
-Log Out Without Confirmation=none
-Log Out=none
-Reboot Without Confirmation=none
 Run Command=none
 Show System Activity=Ctrl+Alt+Del
 
+[ksmserver][Global Shortcuts]
+Halt Without Confirmation=none
+Log Out Without Confirmation=none
+Log Out=none
+Reboot Without Confirmation=none
+
 [kwin][Global Shortcuts]
-Desktop Screenshot to Clipboard=Ctrl+Print
 Kill Window=none
-Mouse Emulation=none
 Switch One Desktop Down=none
 Switch One Desktop Up=none
 Switch One Desktop to the Left=none
