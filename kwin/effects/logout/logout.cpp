@@ -45,16 +45,6 @@ LogoutEffect::LogoutEffect()
     logoutAtom = XInternAtom(display(), "_KDE_LOGGING_OUT", False);
     effects->registerPropertyType(logoutAtom, true);
 
-    // Block KSMServer's effect
-    char net_wm_cm_name[100];
-    ::memset(net_wm_cm_name, '\0', sizeof(net_wm_cm_name) * sizeof(char));
-    sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen(display()));
-    Atom net_wm_cm = XInternAtom(display(), net_wm_cm_name, False);
-    Window sel = XGetSelectionOwner(display(), net_wm_cm);
-    Atom hack = XInternAtom(display(), "_KWIN_LOGOUT_EFFECT", False);
-    XChangeProperty(display(), sel, hack, hack, 8, PropModeReplace, (unsigned char*)&hack, 1);
-    // the atom is not removed when effect is destroyed, this is temporary anyway
-
     reconfigure(ReconfigureAll);
     connect(effects, SIGNAL(windowAdded(KWin::EffectWindow*)), this, SLOT(slotWindowAdded(KWin::EffectWindow*)));
     connect(effects, SIGNAL(windowClosed(KWin::EffectWindow*)), this, SLOT(slotWindowClosed(KWin::EffectWindow*)));
@@ -97,11 +87,12 @@ void LogoutEffect::paintWindow(EffectWindow* w, int mask, QRegion region, Window
                 data.multiplyBrightness((1.0 - progress * 0.3));
             }
         }
-        if (w == logoutWindow ||
-                ignoredWindows.contains(w))   // HACK: All windows past the first ignored one should not be
-            //       blurred as it affects the stacking order.
-            // All following windows are on top of the logout window and should not be altered either
+        if (w == logoutWindow || ignoredWindows.contains(w)) {
+            // HACK: All windows past the first ignored one should not be blurred as it affects the
+            // stacking order. All following windows are on top of the logout window and should not
+            // be altered either
             logoutWindowPassed = true;
+        }
     }
     effects->paintWindow(w, mask, region, data);
 }

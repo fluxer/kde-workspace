@@ -61,40 +61,18 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 void KSMShutdownFeedback::start()
 {
     if( KWindowSystem::compositingActive()) {
-        // HACK do properly
+        // Announce that the user MAY be logging out (Intended for the compositor)
         Display* dpy = QX11Info::display();
-        char net_wm_cm_name[ 100 ];
-        sprintf( net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen( dpy ));
-        Atom net_wm_cm = XInternAtom( dpy, net_wm_cm_name, False );
-        Window sel = XGetSelectionOwner( dpy, net_wm_cm );
-        Atom hack = XInternAtom( dpy, "_KWIN_LOGOUT_EFFECT", False );
-        bool wmsupport = false;
-        if( sel != None ) {
-            KXErrorHandler handler;
-            int cnt;
-            Atom* props = XListProperties( dpy, sel, &cnt );
-            if( !handler.error( false ) && props != NULL && qFind( props, props + cnt, hack ) != props + cnt )
-                wmsupport = true;
-            if( props != NULL )
-                XFree( props );
-        }
-        if( wmsupport ) {
-            // Announce that the user MAY be logging out (Intended for the compositor)
-            Atom announce = XInternAtom(dpy, "_KDE_LOGGING_OUT", False);
-            unsigned char dummy = 0;
-            XChangeProperty(dpy, QX11Info::appRootWindow(), announce, announce, 8, PropModeReplace,
-                &dummy, 1);
-
-            // Don't show our own effect
-            return;
-        }
+        Atom announce = XInternAtom(dpy, "_KDE_LOGGING_OUT", False);
+        unsigned char dummy = 0;
+        XChangeProperty(dpy, QX11Info::appRootWindow(), announce, announce, 8, PropModeReplace, &dummy, 1);
     }
 }
 
 void KSMShutdownFeedback::stop()
 {
     if( KWindowSystem::compositingActive()) {
-        // We are no longer logging out, announce (Intended for the compositor)
+        // No longer logging out, announce (Intended for the compositor)
         Display* dpy = QX11Info::display();
         Atom announce = XInternAtom(dpy, "_KDE_LOGGING_OUT", False);
         XDeleteProperty(QX11Info::display(), QX11Info::appRootWindow(), announce);
