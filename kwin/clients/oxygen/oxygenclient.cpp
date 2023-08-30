@@ -1690,7 +1690,7 @@ namespace Oxygen
 
         if( widget() != event->source() ) setForceActive( true );
 
-        const long source = QString( groupData->data( tabDragMimeType() ) ).toLong();
+        const long source = groupData->data( tabDragMimeType() ).toLong();
         const int clickedIndex( tabIndexAt( point, true ) );
         if( clickedIndex < 0 ) tab_A_behind_B( source, tabId(_itemData.count()-1) );
         else tab_A_before_B( source, tabId(clickedIndex) );

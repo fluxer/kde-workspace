@@ -178,8 +178,8 @@ int main(int argc, char ** argv)
 
   FileTypeDialog dlg( mimeTypeData );
   if( args->isSet( "parent" )) {
-    bool ok;
-    long id = QString(args->getOption("parent")).toLong(&ok);
+    bool ok = false;
+    long id = args->getOption("parent").toLong(&ok);
     if (ok)
       KWindowSystem::setMainWindow( &dlg, (WId)id );
   }
