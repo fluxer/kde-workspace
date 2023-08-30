@@ -101,9 +101,9 @@ void CalendarApplet::paintIcon()
 
     QFont font = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
     p.setPen(Plasma::Theme::defaultTheme()->color(Plasma::Theme::ButtonTextColor));
-    font.setPixelSize(icon.size().height() / 2);
+    font.setPixelSize(icon.height() / 2);
     p.setFont(font);
-    p.drawText(icon.rect().adjusted(0, icon.size().height()/4, 0, 0), Qt::AlignCenter,
+    p.drawText(icon.rect().adjusted(0, icon.height()/4, 0, 0), Qt::AlignCenter,
                QString::number(m_calendarWidget->date().day()));
     m_theme->resize();
     p.end();
