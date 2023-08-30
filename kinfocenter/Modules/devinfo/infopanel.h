@@ -23,19 +23,18 @@
 #ifndef INFOPANEL
 #define INFOPANEL
 
-// QT
+// Katie
 #include <QWidget>
 #include <QGroupBox>
 #include <QLabel>
-
-//Solid
-#include <solid/device.h>
-#include <solid/deviceinterface.h>
 
 //KDE
 #include <kicon.h>
 #include <kdebug.h>
 #include <klocale.h>
+#include <kpixmapwidget.h>
+#include <solid/device.h>
+#include <solid/deviceinterface.h>
 
 //Local
 #include "qvlistlayout.h"
@@ -63,7 +62,7 @@ class InfoPanel : public QGroupBox
     void removeItems(QWidget *);
     void setDefaultText();
     
-    QLabel *setDevicesIcon(const QIcon &);
+    KPixmapWidget *setDevicesIcon(const QIcon &);
     QVBoxLayout *setAlignedLayout(QWidget *parent, const int & = 0);
     
     QWidget *top;

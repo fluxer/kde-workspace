@@ -23,13 +23,14 @@
 #ifndef DEFAULTBOXWIDGET
 #define DEFAULTBOXWIDGET
 
-//QT
+// Katie
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
 
-//KDE
+// KDE
 #include <KIcon>
+#include <KPixmapWidget>
 
 class DefaultBoxWidget : public QGroupBox
 {
@@ -48,7 +49,7 @@ class DefaultBoxWidget : public QGroupBox
     void createDisplay(); 
     
     QGridLayout *m_layout;
-    QLabel *m_iconLabel;
+    KPixmapWidget *m_iconWidget;
     
     QLabel *m_info0Label;
     QLabel *m_info0NameLabel;

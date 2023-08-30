@@ -52,21 +52,48 @@
 
 static const int ThemeNameRole = Qt::UserRole + 1;
 
+static void loadPreview(KPixmapWidget *widget, KIconTheme& icontheme, const QStringList& iconnames)
+{
+    const int size = qMin(48, icontheme.defaultSize(KIconLoader::Desktop));
+    const QStringList iconthemenames = QStringList()
+        << icontheme.internalName()
+        << icontheme.inherits();
+    foreach(const QString &iconthemename, iconthemenames) {
+        foreach(const QString &name, iconnames) {
+            KIconTheme kicontheme(iconthemename);
+            QString icon = kicontheme.iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
+            if (!icon.isEmpty()) {
+                widget->setPixmap(QPixmap(icon).scaled(size, size));
+                return;
+            }
+            icon = kicontheme.iconPath(QString("%1.svg").arg(name), size, KIconLoader::MatchBest);
+            if (icon.isEmpty() ) {
+                icon = kicontheme.iconPath(QString("%1.svgz").arg(name), size, KIconLoader::MatchBest);
+            }
+            if (!icon.isEmpty()) {
+                widget->setPixmap(QPixmap(icon).scaled(size, size));
+                return;
+            }
+        }
+    }
+    widget->setPixmap(QPixmap());
+}
+
 IconThemesConfig::IconThemesConfig(const KComponentData &inst, QWidget *parent)
     : KCModule(inst, parent)
 {
     QVBoxLayout *topLayout = new QVBoxLayout(this);
 
-    QFrame *m_preview=new QFrame(this);
+    QFrame *m_preview = new QFrame(this);
     m_preview->setMinimumHeight(80);
 
-    QHBoxLayout *lh2=new QHBoxLayout( m_preview );
+    QHBoxLayout *lh2 = new QHBoxLayout( m_preview );
     lh2->setSpacing(0);
-    m_previewExec=new QLabel(m_preview);
+    m_previewExec = new KPixmapWidget(m_preview);
     m_previewExec->setPixmap(DesktopIcon("system-run"));
-    m_previewFolder=new QLabel(m_preview);
+    m_previewFolder = new KPixmapWidget(m_preview);
     m_previewFolder->setPixmap(DesktopIcon("folder"));
-    m_previewDocument=new QLabel(m_preview);
+    m_previewDocument=new KPixmapWidget(m_preview);
     m_previewDocument->setPixmap(DesktopIcon("document"));
 
     lh2->addStretch(10);
@@ -362,33 +389,6 @@ void IconThemesConfig::updateRemoveButton()
         }
     }
     m_removeButton->setEnabled(enabled);
-}
-
-void loadPreview(QLabel *label, KIconTheme& icontheme, const QStringList& iconnames)
-{
-    const int size = qMin(48, icontheme.defaultSize(KIconLoader::Desktop));
-    const QStringList iconthemenames = QStringList()
-        << icontheme.internalName()
-        << icontheme.inherits();
-    foreach(const QString &iconthemename, iconthemenames) {
-        foreach(const QString &name, iconnames) {
-            KIconTheme kicontheme(iconthemename);
-            QString icon = kicontheme.iconPath(QString("%1.png").arg(name), size, KIconLoader::MatchBest);
-            if (!icon.isEmpty()) {
-                label->setPixmap(QPixmap(icon).scaled(size, size));
-                return;
-            }
-            icon = kicontheme.iconPath(QString("%1.svg").arg(name), size, KIconLoader::MatchBest);
-            if (icon.isEmpty() ) {
-                icon = kicontheme.iconPath(QString("%1.svgz").arg(name), size, KIconLoader::MatchBest);
-            }
-            if (!icon.isEmpty()) {
-                label->setPixmap(QPixmap(icon).scaled(size, size));
-                return;
-            }
-        }
-    }
-    label->setPixmap(QPixmap());
 }
 
 void IconThemesConfig::themeSelected(QTreeWidgetItem *item)

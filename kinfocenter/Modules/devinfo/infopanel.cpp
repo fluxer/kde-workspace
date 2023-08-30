@@ -102,12 +102,12 @@ void InfoPanel::setBottomInfo(QVListLayout *lay)
   setBottomWidgetLayout(lay);
 }
 
-QLabel *InfoPanel::setDevicesIcon(const QIcon &deviceIcon) 
+KPixmapWidget *InfoPanel::setDevicesIcon(const QIcon &deviceIcon)
 { 
-  QLabel *iconLabel = new QLabel();
+  KPixmapWidget *iconWidget = new KPixmapWidget();
 
-  iconLabel->setPixmap(deviceIcon.pixmap(QSize(70,50)));
-  return iconLabel;
+  iconWidget->setPixmap(deviceIcon.pixmap(QSize(70,50)));
+  return iconWidget;
 }
  
 void InfoPanel::setTopInfo(const QIcon &deviceIcon, Solid::Device *device) 

@@ -32,14 +32,15 @@
 #include <QPixmap>
 #include <QLabel>
 #include <QEvent>
+#include <QStackedWidget>
 #include <KStatusBar>
 #include <KVBox>
+#include <KPixmapWidget>
 
 class KConfigBase;
 class KSqueezedTextLabel;
 class KateViewManager;
 class KateViewSpace;
-#include <QStackedWidget>
 
 class KateVSStatusBar : public KStatusBar
 {
@@ -83,7 +84,7 @@ class KateVSStatusBar : public KStatusBar
   private:
     QLabel* m_lineColLabel;
     QLabel* m_charsLabel;
-    QLabel* m_modifiedLabel;
+    KPixmapWidget* m_modifiedWidget;
     QLabel* m_insertModeLabel;
     QLabel* m_selectModeLabel;
     QLabel* m_encodingLabel;

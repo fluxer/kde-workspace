@@ -40,7 +40,7 @@ QIconItem::~QIconItem()
 
 void QIconItem::setIcon(const QVariant &icon)
 {
-    if(icon.canConvert<QIcon>()) {
+    if (icon.canConvert<QIcon>()) {
         m_icon = icon.value<QIcon>();
     } else if(icon.canConvert<QString>()) {
         m_icon = KIcon(icon.toString());

@@ -18,10 +18,8 @@
  *******************************************************************************/
 
 #include "tooltipmanager.h"
-
 #include "kcmtreeitem.h"
 #include "sidepanel.h"
-
 #include "ktooltip.h"
 
 #include <QRect>
@@ -41,6 +39,7 @@
 
 #include <KIcon>
 #include <KColorScheme>
+#include <KPixmapWidget>
 
 class ToolTipManager::Private
 {
@@ -219,13 +218,13 @@ QLayout * ToolTipManager::generateToolTipLine( const QModelIndex & item, QWidget
     
     // Get icon
     KIcon icon( menuItem->icon() );
-    QLabel * iconLabel = new QLabel( toolTip );
-    iconLabel->setPixmap( icon.pixmap(iconSize) );
-    iconLabel->setMaximumSize( iconSize );
+    KPixmapWidget * iconWidget = new KPixmapWidget( toolTip );
+    iconWidget->setPixmap( icon.pixmap(iconSize) );
+    iconWidget->setMaximumSize( iconSize );
     
     // Generate layout
     QHBoxLayout * layout = new QHBoxLayout();
-    layout->addWidget( iconLabel );
+    layout->addWidget( iconWidget );
     layout->addWidget( textLabel );
     
     return layout;

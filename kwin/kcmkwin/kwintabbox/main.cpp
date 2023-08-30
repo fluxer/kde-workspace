@@ -19,17 +19,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************/
 #include "main.h"
 
-// Qt
-#include <QtDBus/QtDBus>
+// Katie
+#include <QDBusMessage>
+#include <QDBusConnection>
 #include <QDesktopWidget>
 #include <QVBoxLayout>
-#include <QtCore/qdebug.h>
+#include <QDebug>
 
 // KDE
 #include <KAction>
 #include <KActionCollection>
 #include <KCModuleProxy>
-//#include <KLocalizedString>
 #include <KPluginFactory>
 #include <KPluginInfo>
 #include <KPluginLoader>

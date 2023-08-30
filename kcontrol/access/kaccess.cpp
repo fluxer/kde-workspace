@@ -20,10 +20,11 @@
 #include <KGlobal>
 #include <KLocale>
 #include <KUrl>
-#include <netwm.h>
 #include <KShortcut>
-#include <kwindowsystem.h>
+#include <KWindowSystem>
+#include <KPixmapWidget>
 #include <kkeyserver.h>
+#include <netwm.h>
 
 #include <X11/XKBlib.h>
 #define XK_MISCELLANY
@@ -595,13 +596,13 @@ void KAccessApp::createDialogContents() {
       QHBoxLayout * lay = new QHBoxLayout(contents);
       lay->setSpacing(KDialog::spacingHint());
 
-      QLabel *label1 = new QLabel( contents);
+      KPixmapWidget *pixmap1 = new KPixmapWidget( contents);
       QPixmap pixmap = KIconLoader::global()->loadIcon("dialog-warning", KIconLoader::NoGroup, KIconLoader::SizeMedium, KIconLoader::DefaultState, QStringList(), 0, true);
       if (pixmap.isNull())
          pixmap = QMessageBox::standardIcon(QMessageBox::Warning);
-      label1->setPixmap(pixmap);
+      pixmap1->setPixmap(pixmap);
 
-      lay->addWidget( label1, 0, Qt::AlignCenter );
+      lay->addWidget( pixmap1, 0, Qt::AlignCenter );
       lay->addSpacing(KDialog::spacingHint());
 
       QVBoxLayout * vlay = new QVBoxLayout();

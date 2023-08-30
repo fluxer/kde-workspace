@@ -289,11 +289,11 @@ KateVSStatusBar::KateVSStatusBar ( KateViewSpace *parent)
   addWidget( m_charsLabel, 0 );
   m_charsLabel->installEventFilter( this );
 
-  m_modifiedLabel = new QLabel( this );
-  m_modifiedLabel->setFixedSize( 16, 16 );
-  addWidget( m_modifiedLabel, 0 );
-  m_modifiedLabel->setAlignment( Qt::AlignCenter );
-  m_modifiedLabel->installEventFilter( this );
+  m_modifiedWidget = new KPixmapWidget( this );
+  m_modifiedWidget->setFixedSize( 16, 16 );
+  addWidget( m_modifiedWidget, 0 );
+  m_modifiedWidget->setAlignment( Qt::AlignCenter );
+  m_modifiedWidget->installEventFilter( this );
 
   m_selectModeLabel = new QLabel( i18n(" LINE "), this );
   addWidget( m_selectModeLabel, 0 );
@@ -430,7 +430,7 @@ void KateVSStatusBar::modifiedChanged()
 
     bool modOnHD = info && info->modifiedOnDisc;
 
-    m_modifiedLabel->setPixmap(
+    m_modifiedWidget->setPixmap(
       mod ?
       info && modOnHD ?
       m_modmodPm :

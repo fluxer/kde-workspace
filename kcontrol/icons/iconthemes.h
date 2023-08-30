@@ -21,8 +21,8 @@
 
 #include <kcmodule.h>
 #include <kpushbutton.h>
+#include <kpixmapwidget.h>
 
-#include <QLabel>
 #include <QStringList>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
@@ -59,9 +59,9 @@ private:
     QTreeWidget *m_iconThemes;
     KPushButton *m_removeButton;
 
-    QLabel *m_previewExec;
-    QLabel *m_previewFolder;
-    QLabel *m_previewDocument;
+    KPixmapWidget *m_previewExec;
+    KPixmapWidget *m_previewFolder;
+    KPixmapWidget *m_previewDocument;
     QTreeWidgetItem *m_defaultTheme;
     bool m_bChanged;
 };

@@ -23,14 +23,15 @@
 #ifndef PROGRESSBOXWIDGET
 #define PROGRESSBOXWIDGET
 
-//QT
+// Katie
 #include <QFrame>
 #include <QGridLayout>
 #include <QLabel>
 #include <QProgressBar>
 
-//KDE
+// KDE
 #include <KIcon>
+#include <KPixmapWidget>
 
 class ProgressBoxWidget : public QFrame
 {
@@ -49,7 +50,7 @@ class ProgressBoxWidget : public QFrame
     void createDisplay(); 
     
     QGridLayout *m_layout;
-    QLabel *m_iconLabel;
+    KPixmapWidget *m_iconWidget;
     
     QLabel *m_info0Label;
     QLabel *m_info0NameLabel;
