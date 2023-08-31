@@ -23,7 +23,6 @@
 #include <kiconloader.h>
 #include <kdeversion.h>
 #include <klocale.h>
-#include <kapplication.h>
 
 #include <iostream>
 #include <stdio.h>
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
         const QString icon = KIconLoader::global()->iconPath(iconName, iconGroup, true);
         if (!icon.isEmpty()) {
             const QByteArray iconBytes = icon.toLatin1();
-            printf("%s\n", iconBytes.constData());
+            ::printf("%s\n", iconBytes.constData());
         } else {
             const QByteArray iconNameBytes = iconName.toLatin1();
             std::cerr << "Icon '" << iconNameBytes.constData() << "' not found" << std::endl;
