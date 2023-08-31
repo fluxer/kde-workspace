@@ -43,8 +43,6 @@
 #include <KActionCollection>
 #include <KToolInvocation>
 
-#include <ksmserver_interface.h>
-
 #include <Plasma/AbstractToolBox>
 #include <Plasma/Containment>
 #include <Plasma/Dialog>
@@ -115,11 +113,9 @@ PlasmaApp::PlasmaApp()
       m_corona(0),
       m_panelHidden(0),
       m_mapper(new QSignalMapper(this)),
-      m_startupSuspendWaitCount(0),
       m_unlockCorona(false)
 {
     kDebug() << "!!{} STARTUP TIME" << QTime().msecsTo(QTime::currentTime()) << "plasma app ctor start" << "(line:" << __LINE__ << ")";
-    suspendStartup(true);
 
     KGlobal::locale()->insertCatalog("libplasma");
     KGlobal::locale()->insertCatalog("plasmagenericshell");
@@ -593,51 +589,11 @@ DesktopCorona* PlasmaApp::corona(bool createIfMissing)
         m_corona = c;
         c->setItemIndexMethod(QGraphicsScene::NoIndex);
         c->initializeLayout();
-        foreach (Plasma::Containment *containment, c->containments()) {
-            if (containment->screen() != -1 && containment->wallpaper()) {
-                ++m_startupSuspendWaitCount;
-                connect(containment->wallpaper(), SIGNAL(update(QRectF)), this, SLOT(wallpaperCheckedIn()));
-            }
-        }
 
-        QTimer::singleShot(5000, this, SLOT(wallpaperCheckInTimeout()));
-        kDebug() << " ------------------------------------------>" << t.elapsed() << m_startupSuspendWaitCount;
+        kDebug() << " ------------------------------------------>" << t.elapsed();
     }
 
     return m_corona;
-}
-
-void PlasmaApp::wallpaperCheckInTimeout()
-{
-    if (m_startupSuspendWaitCount > 0) {
-        m_startupSuspendWaitCount = 0;
-        suspendStartup(false);
-    }
-}
-
-void PlasmaApp::wallpaperCheckedIn()
-{
-    if (m_startupSuspendWaitCount < 1) {
-        return;
-    }
-
-    --m_startupSuspendWaitCount;
-    if (m_startupSuspendWaitCount < 1) {
-        m_startupSuspendWaitCount = 0;
-        suspendStartup(false);
-    }
-}
-
-void PlasmaApp::suspendStartup(bool suspend)
-{
-    org::kde::KSMServerInterface ksmserver("org.kde.ksmserver", "/KSMServer", QDBusConnection::sessionBus());
-
-    const QString startupID("workspace desktop");
-    if (suspend) {
-        ksmserver.suspendStartup(startupID);
-    } else {
-        ksmserver.resumeStartup(startupID);
-    }
 }
 
 bool PlasmaApp::isPanelContainment(Plasma::Containment *containment)

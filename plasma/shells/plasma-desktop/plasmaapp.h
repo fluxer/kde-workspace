@@ -60,7 +60,6 @@ public:
 
     static PlasmaApp *self();
 
-    void suspendStartup(bool completed);
     DesktopCorona *corona(bool createIfMissing = true);
 
     /**
@@ -126,8 +125,6 @@ private Q_SLOTS:
     void screenAdded(const DesktopTracker::Screen &screen);
     void configureContainment(Plasma::Containment*);
     void setWmClass(WId id);
-    void wallpaperCheckedIn();
-    void wallpaperCheckInTimeout();
     void relocatePanels();
     void executeCommands(const QList < QVariant > & commands);
     void captureDesktop();
@@ -150,7 +147,6 @@ private:
     int m_panelHidden;
     QSignalMapper *m_mapper;
     QHash<int, QWeakPointer<ControllerWindow> > m_widgetExplorers;
-    int m_startupSuspendWaitCount;
     bool m_unlockCorona;
 };
 

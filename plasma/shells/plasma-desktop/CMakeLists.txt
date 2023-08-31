@@ -26,9 +26,6 @@ set(plasma_SRCS
 set(plasmaapp_dbusXML dbus/org.kde.plasma.App.xml)
 qt4_add_dbus_adaptor(plasma_SRCS ${plasmaapp_dbusXML} plasmaapp.h PlasmaApp)
 
-set(ksmserver_xml ${CMAKE_SOURCE_DIR}/ksmserver/org.kde.KSMServerInterface.xml)
-qt4_add_dbus_interface(plasma_SRCS ${ksmserver_xml} ksmserver_interface)
-
 add_executable(plasma-desktop ${plasma_SRCS})
 
 target_link_libraries(plasma-desktop
