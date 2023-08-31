@@ -52,8 +52,7 @@
 KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     : QObject(),
     m_process(nullptr),
-    m_error(false),
-    m_cookie(new KDESu::KDESuPrivate::KCookie())
+    m_error(false)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -102,13 +101,13 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
                 KStandardDirs dirs;
                 file = dirs.findResource("config", file);
                 if (file.isEmpty()) {
-                    kWarning() << "Config file not found: " << file << "\n";
+                    kError() << "Config file not found: " << file;
                     exit(1);
                 }
             }
             QFileInfo fi(file);
             if (!fi.exists()) {
-                kWarning() << "File does not exist: " << file << "\n";
+                kError() << "File does not exist: " << file;
                 exit(1);
             }
             if (fi.isWritable()) {
@@ -138,7 +137,11 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     // 'man xauth' for more info on xauth cookies.
     m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
-    QByteArray disp = m_cookie->display();
+    QByteArray disp = qgetenv("DISPLAY");
+    if (disp.isEmpty()) {
+        kError() << "$DISPLAY is not set.";
+        exit(1);
+    }
 
     // Create two processes, one for each xauth call
     QProcess xauth_ext;
@@ -276,7 +279,6 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
 KdeSudo::~KdeSudo()
 {
     delete m_dialog;
-    delete m_cookie;
     if (m_process) {
         m_process->terminate();
         m_process->waitForFinished(3000);
