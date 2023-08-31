@@ -612,6 +612,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
         qWarning("KSMServer: could not register XSM protocol: %s", errormsg);
     }
 
+    ::memset(errormsg, 0, sizeof(errormsg) * sizeof(char));
     if (!IceListenForConnections (&numTransports, &listenObjs,
                                   256, errormsg))
     {
