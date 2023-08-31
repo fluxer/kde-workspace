@@ -8,7 +8,6 @@ endif()
 
 set(konq_LIB_SRCS
    konq_popupmenu.cpp       # used by konqueror, kfind, folderview, kickoff
-   konq_popupmenuplugin.cpp # for KonqPopupMenu and its plugins
    konq_dndpopupmenuplugin.cpp # for KonqDndPopupMenu and its plugins
    konq_copytomenu.cpp         # used by dolphin, KonqPopupMenu
    konq_operations.cpp         # used by dolphin and konqueror
@@ -44,7 +43,6 @@ generate_export_header(konq)
 install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/konq_export.h
     konq_popupmenu.h # used by folderview
-    konq_popupmenuplugin.h
     konq_dndpopupmenuplugin.h
     # konq_copytomenu.h - anyone needs it?
     konq_operations.h

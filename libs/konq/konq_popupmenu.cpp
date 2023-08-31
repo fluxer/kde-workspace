@@ -19,8 +19,6 @@
 */
 
 #include "konq_popupmenu.h"
-#include <kfileitemlistproperties.h>
-#include "konq_popupmenuplugin.h"
 #include "konq_copytomenu.h"
 #include "kfileitemactions.h"
 #include "kabstractfileitemactionplugin.h"
@@ -28,6 +26,7 @@
 #include "knewfilemenu.h"
 #include "konq_operations.h"
 
+#include <kfileitemlistproperties.h>
 #include <klocale.h>
 #include <kbookmarkmanager.h>
 #include <kbookmarkdialog.h>
