@@ -85,10 +85,6 @@ KCMNotification::KCMNotification(QWidget *parent, const QVariantList &args)
     m_layout->addWidget(m_notificationswidget, 1, 0, 1, 2);
 }
 
-KCMNotification::~KCMNotification()
-{
-}
-
 void KCMNotification::load()
 {
     const int kdeindex = m_notificationsbox->findData(s_kdenotification);
