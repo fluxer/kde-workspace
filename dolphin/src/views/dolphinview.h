@@ -23,7 +23,6 @@
 
 #include "dolphinprivate_export.h"
 
-#include <kparts/part.h>
 #include <KFileItem>
 #include <KFileItemDelegate>
 #include <kio/fileundomanager.h>
@@ -773,7 +772,6 @@ private:
     // For unit tests
     friend class TestBase;
     friend class DolphinDetailsViewTest;
-    friend class DolphinPart;                   // Accesses m_model
 };
 
 /// Allow using DolphinView::Mode in QVariant

@@ -567,13 +567,9 @@ class KATEPARTINTERFACES_EXPORT KateView : public KTextEditor::View,
   public:
     void slotTextInserted ( KTextEditor::View *view, const KTextEditor::Cursor &position, const QString &text);
 
-  protected:
-    void contextMenuEvent( QContextMenuEvent* );
-
   private Q_SLOTS:
     void slotGotFocus();
     void slotLostFocus();
-    void slotDropEventPass( QDropEvent* ev );
     void slotSaveCanceled( const QString& error );
     void slotConfigDialog ();
 

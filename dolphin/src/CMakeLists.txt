@@ -96,35 +96,6 @@ install(
     DESTINATION ${KDE4_LIB_INSTALL_DIR}
 )
 
-##########################################
-
-set(dolphinpart_SRCS
-    dolphinpart.cpp
-    dolphinpart_ext.cpp
-)
-
-kde4_add_plugin(dolphinpart ${dolphinpart_SRCS})
-
-target_link_libraries(dolphinpart
-    KDE4::kparts
-    KDE4::kfile
-    dolphinprivate
-    konq
-)
-
-install(
-    TARGETS dolphinpart
-    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
-)
-
-install(
-    FILES dolphinpart.rc
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/dolphinpart
-)
-install(
-    FILES dolphinpart.desktop
-    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
-)
 install(
     FILES views/versioncontrol/fileviewversioncontrolplugin.desktop
     DESTINATION ${KDE4_SERVICETYPES_INSTALL_DIR}

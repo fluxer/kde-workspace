@@ -33,7 +33,6 @@
 #include <KMenu>
 #include <KActionCollection>
 #include <KFileItem>
-#include <KParts/BrowserExtension>
 #include <KBookmarkManager>
 #include <Solid/Device>
 #include <Solid/StorageAccess>
@@ -59,37 +58,7 @@ class ContextMenuFactory::Private
 {
 public:
     Private()
-            : applet(0) {
-    }
-
-    QAction *advancedActionsMenu(const QString& url) const {
-        KUrl kUrl(url);
-        KActionCollection actionCollection((QObject*)0);
-        KFileItemList items;
-        const QString mimeType = KMimeType::findByUrl(kUrl, 0, false, true)->name();
-        items << KFileItem(url, mimeType, KFileItem::Unknown);
-        KParts::BrowserExtension::PopupFlags browserFlags = KParts::BrowserExtension::DefaultPopupItems;
-        if (items.first().isLocalFile()) {
-            browserFlags |= KParts::BrowserExtension::ShowProperties;
-        }
-        KParts::BrowserExtension::ActionGroupMap actionGroupMap;
-        return 0;
-        // ### TODO: remove kdebase-apps dependency
-#if 0
-        KonqPopupMenu *menu = new KonqPopupMenu(items, kUrl, actionCollection,
-                                                0, 0, browserFlags,
-                                                0, KBookmarkManager::userBookmarksManager(), actionGroupMap);
-
-        if (!menu->isEmpty()) {
-            QAction *action = menu->menuAction();
-            action->setText(i18n("Advanced"));
-            action->setIcon(KIcon("list-add"));
-            return action;
-        } else {
-            delete menu;
-            return 0;
-        }
-#endif
+        : applet(0) {
     }
 
     QMap<QAbstractItemView*, QList<QAction*> > viewActions;
@@ -212,11 +181,6 @@ void ContextMenuFactory::showContextMenu(QAbstractItemView *view,
         // advanced item actions
         advancedSeparator->setSeparator(true);
         actions << advancedSeparator;
-    }
-
-    QAction *advanced = d->advancedActionsMenu(url);
-    if (advanced) {
-        actions << advanced;
     }
 
     // device actions

@@ -31,7 +31,6 @@
 #include "katerenderer.h"
 #include "katedocument.h"
 #include "kateundomanager.h"
-#include "katedocumenthelpers.h"
 #include "kateglobal.h"
 #include "katehighlight.h"
 #include "katehighlightmenu.h"
@@ -330,12 +329,6 @@ void KateView::setupConnections()
 
   connect( m_doc, SIGNAL(annotationModelChanged(KTextEditor::AnnotationModel*,KTextEditor::AnnotationModel*)),
            m_viewInternal->m_leftBorder, SLOT(annotationModelChanged(KTextEditor::AnnotationModel*,KTextEditor::AnnotationModel*)) );
-
-  if ( m_doc->browserView() )
-  {
-    connect( this, SIGNAL(dropEventPass(QDropEvent*)),
-             this, SLOT(slotDropEventPass(QDropEvent*)) );
-  }
 }
 
 void KateView::setupActions()
@@ -902,7 +895,7 @@ void KateView::setupEditActions()
   m_editActions << a;
 
 
-  // anders: shortcuts doing any changes should not be created in browserextension
+  // anders: shortcuts doing any changes should not be created in part
   if ( !m_doc->readOnly() )
   {
     a = ac->addAction("transpose_char");
@@ -1192,26 +1185,6 @@ void KateView::slotUpdateUndo()
 
   m_editUndo->setEnabled(m_doc->isReadWrite() && m_doc->undoCount() > 0);
   m_editRedo->setEnabled(m_doc->isReadWrite() && m_doc->redoCount() > 0);
-}
-
-void KateView::slotDropEventPass( QDropEvent * ev )
-{
-  const KUrl::List lstDragURLs=KUrl::List::fromMimeData(ev->mimeData());
-  bool ok = !lstDragURLs.isEmpty();
-
-  KParts::BrowserExtension * ext = KParts::BrowserExtension::childObject( doc() );
-  if ( ok && ext )
-    emit ext->openUrlRequest( lstDragURLs.first() );
-}
-
-void KateView::contextMenuEvent( QContextMenuEvent *ev )
-{
-  if ( !m_doc || !m_doc->browserExtension()  )
-    return;
-  KParts::OpenUrlArguments args;
-  args.setMimeType( QLatin1String("text/plain") );
-  emit m_doc->browserExtension()->popupMenu( ev->globalPos(), m_doc->url(), S_IFREG, args );
-  ev->accept();
 }
 
 bool KateView::setCursorPositionInternal( const KTextEditor::Cursor& position, uint tabwidth, bool calledExternally )

@@ -2159,15 +2159,16 @@ void FolderView::showContextMenu(QWidget *widget, const QPoint &pos, const QMode
         editActions.append(m_actionCollection.action("del"));
     }
 
-    KParts::BrowserExtension::ActionGroupMap actionGroups;
+    KonqPopupMenu::ActionGroupMap actionGroups;
     actionGroups.insert("editactions", editActions);
 
-    KParts::BrowserExtension::PopupFlags flags = KParts::BrowserExtension::ShowProperties;
-    flags |= KParts::BrowserExtension::ShowUrlOperations;
+    KonqPopupMenu::PopupFlags flags = KonqPopupMenu::ShowNewWindow;
+    flags |= KonqPopupMenu::ShowProperties;
+    flags |= KonqPopupMenu::ShowUrlOperations;
 
     // m_newMenu can be NULL here but KonqPopupMenu does handle this.
     KonqPopupMenu *contextMenu = new KonqPopupMenu(items, m_url, m_actionCollection, m_newMenu,
-                                                   KonqPopupMenu::ShowNewWindow, flags, widget,
+                                                   flags, widget,
                                                    KBookmarkManager::userBookmarksManager(),
                                                    actionGroups);
 

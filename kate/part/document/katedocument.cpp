@@ -32,7 +32,6 @@
 #include "kateview.h"
 #include "kateautoindent.h"
 #include "katetextline.h"
-#include "katedocumenthelpers.h"
 #include "katehighlighthelpers.h"
 #include "kateprinter.h"
 #include "katerenderer.h"
@@ -105,17 +104,16 @@ inline bool isBracket     ( const QChar& c ) { return isStartBracket( c ) || isE
 // KateDocument Constructor
 //
 KateDocument::KateDocument ( QWidget *parentWidget, QObject *parent, const QVariantList &args)
-: KateDocument (true, false, true, parentWidget, parent)
+: KateDocument (true, true, parentWidget, parent)
 {
   Q_UNUSED(args);
 }
 
-KateDocument::KateDocument ( bool bSingleViewMode, bool bBrowserView,
+KateDocument::KateDocument ( bool bSingleViewMode,
                              bool bReadOnly, QWidget *parentWidget,
                              QObject *parent)
 : KTextEditor::Document (parent),
   m_bSingleViewMode(bSingleViewMode),
-  m_bBrowserView(bBrowserView),
   m_bReadOnly(bReadOnly),
   m_activeView(0),
   editSessionNumber(0),
@@ -166,8 +164,6 @@ KateDocument::KateDocument ( bool bSingleViewMode, bool bBrowserView,
 
   // swap file
   m_swapfile = new Kate::SwapFile(this);
-
-  new KateBrowserExtension( this ); // deleted by QObject memory management
 
   // important, fill in the config into the indenter we use...
   m_indenter->updateConfig ();

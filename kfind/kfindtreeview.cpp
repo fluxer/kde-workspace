@@ -577,7 +577,7 @@ void KFindTreeView::contextMenuRequested( const QPoint & p)
         }
     }
     
-    KParts::BrowserExtension::PopupFlags flags = KParts::BrowserExtension::ShowProperties; // | KParts::BrowserExtension::ShowUrlOperations;
+    KonqPopupMenu::PopupFlags flags = KonqPopupMenu::ShowProperties; // | KonqPopupMenu::ShowUrlOperations;
     
     QList<QAction*> editActions;
     editActions.append(m_actionCollection->action("file_open"));
@@ -586,7 +586,7 @@ void KFindTreeView::contextMenuRequested( const QPoint & p)
     editActions.append(m_actionCollection->action("del"));
     editActions.append(m_actionCollection->action("trash"));
     
-    KParts::BrowserExtension::ActionGroupMap actionGroups;
+    KonqPopupMenu::ActionGroupMap actionGroups;
     actionGroups.insert("editactions", editActions);
     
     if( m_contextMenu )
@@ -595,7 +595,7 @@ void KFindTreeView::contextMenuRequested( const QPoint & p)
         delete m_contextMenu;
         m_contextMenu = 0;
     }
-    m_contextMenu = new KonqPopupMenu( fileList, KUrl(), *m_actionCollection, new KNewFileMenu( m_actionCollection, "new_menu", this), 0, flags, this, 0, actionGroups);
+    m_contextMenu = new KonqPopupMenu( fileList, KUrl(), *m_actionCollection, new KNewFileMenu( m_actionCollection, "new_menu", this), flags, this, 0, actionGroups);
 
     m_contextMenu->exec( this->mapToGlobal( p ) );
 }
