@@ -79,20 +79,24 @@ static bool standaloneDialog(const KWindowInfo *info, const QList<KWindowInfo*> 
 
 void KWindowListMenu::init()
 {
-  int numberOfDesktops = KWindowSystem::numberOfDesktops();
-  int currentDesktop = KWindowSystem::currentDesktop();
-  WId activeWindow = KWindowSystem::activeWindow();
+    int numberOfDesktops = KWindowSystem::numberOfDesktops();
+    int currentDesktop = KWindowSystem::currentDesktop();
+    WId activeWindow = KWindowSystem::activeWindow();
 
-  // Make sure the popup is not too wide, otherwise clicking in the middle of kdesktop
-  // wouldn't leave any place for the popup, and release would activate some menu entry.
-  int maxwidth = qApp->desktop()->screenGeometry( this ).width() / 2 - 100;
+    // Make sure the popup is not too wide, otherwise clicking in the middle of kdesktop
+    // wouldn't leave any place for the popup, and release would activate some menu entry.
+    int maxwidth = qApp->desktop()->screenGeometry(this).width() / 2 - 100;
 
-  clear();
+    clear();
 
-  QAction* unclutter = addAction( i18nc("Action that reorganizes the windows to try to have them less cluttered", "Unclutter Windows"),
-                              this, SLOT(slotUnclutterWindows()) );
-  QAction* cascade = addAction( i18nc("Action that reorganizes the windows so that they are in cascade", "Cascade Windows"),
-                            this, SLOT(slotCascadeWindows()) );
+    QAction* unclutter = addAction(
+        i18nc("Action that reorganizes the windows to try to have them less cluttered", "Unclutter Windows"),
+        this, SLOT(slotUnclutterWindows())
+    );
+    QAction* cascade = addAction(
+        i18nc("Action that reorganizes the windows so that they are in cascade", "Cascade Windows"),
+        this, SLOT(slotCascadeWindows())
+    );
 
     // if there is only one desktop showing titles would not be possible, so put a separator in
     if (numberOfDesktops == 1) {
