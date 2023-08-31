@@ -39,37 +39,42 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include "moc_kwindowlistmenu.cpp"
 #include "kwin_interface.h"
 
-static bool compareKWinWindowInfo( KWindowInfo* firstInfo, KWindowInfo* secondInfo )
+static bool compareKWinWindowInfo(KWindowInfo *firstInfo, KWindowInfo *secondInfo)
 {
-  QString firstTitle, secondTitle;
+    QString firstTitle, secondTitle;
 
-  if ( firstInfo )
-    firstTitle = firstInfo->visibleNameWithState().toLower();
+    if (firstInfo) {
+        firstTitle = firstInfo->visibleNameWithState().toLower();
+    }
 
-  if ( secondInfo )
-    secondTitle = secondInfo->visibleNameWithState().toLower();
+    if (secondInfo) {
+        secondTitle = secondInfo->visibleNameWithState().toLower();
+    }
 
-  return firstTitle.compare( secondTitle ) >= 0;
+    return (firstTitle.compare(secondTitle) >= 0);
 }
 
-KWindowListMenu::KWindowListMenu( QWidget *parent )
-  : KMenu( parent )
+KWindowListMenu::KWindowListMenu(QWidget *parent)
+    : KMenu(parent)
 {
 }
 
-static bool standaloneDialog( const KWindowInfo* info, const QList<KWindowInfo*>& list )
+static bool standaloneDialog(const KWindowInfo *info, const QList<KWindowInfo*> &list)
 {
 #ifdef Q_WS_X11
-  WId group = info->groupLeader();
+    WId group = info->groupLeader();
 
-  if ( group == 0 )
-    return info->transientFor() == QX11Info::appRootWindow();
+    if (group == 0) {
+        return info->transientFor() == QX11Info::appRootWindow();
+    }
 
-  foreach ( KWindowInfo* info, list )
-    if ( info->groupLeader() == group )
-      return false;
+    foreach (KWindowInfo *info, list) {
+        if (info->groupLeader() == group) {
+            return false;
+        }
+    }
 #endif
-  return true;
+    return true;
 }
 
 void KWindowListMenu::init()
@@ -89,87 +94,100 @@ void KWindowListMenu::init()
   QAction* cascade = addAction( i18nc("Action that reorganizes the windows so that they are in cascade", "Cascade Windows"),
                             this, SLOT(slotCascadeWindows()) );
 
-  // if we only have one desktop we won't be showing titles, so put a separator in
-  if ( numberOfDesktops == 1 )
-    addSeparator();
-
-  QList<KWindowInfo> windows;
-  foreach ( WId id, KWindowSystem::windows() )
-    windows.append( KWindowSystem::windowInfo( id, NET::WMDesktop ) );
-
-  bool showAllDesktopsGroup = ( numberOfDesktops > 1 );
-
-  int i = 0;
-  for ( int j = 1; j <= numberOfDesktops + (showAllDesktopsGroup ? 1 : 0); j++ ) {
-    bool onAllDesktops = ( j > numberOfDesktops );
-    int items = 0;
-
-    // KDE4 porting - huh? didn't know you could set an item checked before it's created?
-    //if (!activeWindow && d == cd)
-        //setItemChecked(1000 + d, true);
-
-    QList<KWindowInfo*> list;
-
-    foreach (const KWindowInfo &wi, windows) {
-      if ( (wi.desktop() == j) || (onAllDesktops && wi.onAllDesktops())
-           || (!showAllDesktopsGroup && wi.onAllDesktops()) ) {
-        list.append( new KWindowInfo( wi.win(),
-                         NET::WMVisibleName | NET::WMState | NET::XAWMState | NET::WMWindowType,
-                         NET::WM2GroupLeader | NET::WM2TransientFor ) );
-      }
+    // if there is only one desktop showing titles would not be possible, so put a separator in
+    if (numberOfDesktops == 1) {
+        addSeparator();
     }
 
-    qStableSort( list.begin(), list.end(), compareKWinWindowInfo );
+    QList<KWindowInfo> windows;
+    foreach (WId id, KWindowSystem::windows() ) {
+        windows.append(KWindowSystem::windowInfo(id, NET::WMDesktop));
+    }
 
-    foreach ( KWindowInfo* info, list ) {
-      ++i;
-      QString itemText = fontMetrics().elidedText(info->visibleNameWithState(), Qt::ElideMiddle, maxwidth);
+    bool showAllDesktopsGroup = (numberOfDesktops > 1);
 
-      NET::WindowType windowType = info->windowType( NET::NormalMask | NET::DesktopMask
-          | NET::DockMask | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
-          | NET::UtilityMask | NET::SplashMask );
+    int i = 0;
+    for (int j = 1; j <= numberOfDesktops + (showAllDesktopsGroup ? 1 : 0); j++ ) {
+        bool onAllDesktops = (j > numberOfDesktops);
+        int items = 0;
 
-      if ( (windowType == NET::Normal || windowType == NET::Unknown
-              || (windowType == NET::Dialog && standaloneDialog( info, list )))
-              && !(info->state() & NET::SkipTaskbar) ) {
+        // KDE4 porting - huh? didn't know you could set an item checked before it's created?
+        // if (!activeWindow && d == cd)
+        //     setItemChecked(1000 + d, true);
 
-        QPixmap pm = KWindowSystem::icon( info->win(), 16, 16, true );
-        items++;
+        QList<KWindowInfo*> list;
 
-        // ok, we have items on this desktop, let's show the title
-        if ( items == 1 && numberOfDesktops > 1 ) {
-          if( !onAllDesktops )
-              addTitle( KWindowSystem::desktopName( j ) );
-          else
-              addTitle( i18n( "On All Desktops" ) );
+        foreach (const KWindowInfo &wi, windows) {
+            if ( (wi.desktop() == j) || (onAllDesktops && wi.onAllDesktops())
+                || (!showAllDesktopsGroup && wi.onAllDesktops()))
+            {
+                list.append(
+                    new KWindowInfo(
+                        wi.win(),
+                        NET::WMVisibleName | NET::WMState | NET::XAWMState | NET::WMWindowType,
+                        NET::WM2GroupLeader | NET::WM2TransientFor
+                    )
+                );
+            }
         }
 
-        // Avoid creating unwanted accelerators.
-        itemText.replace( '&', QLatin1String( "&&" ));
+        qStableSort(list.begin(), list.end(), compareKWinWindowInfo);
 
-        QAction* action = addAction( pm, itemText, this, SLOT( slotForceActiveWindow() ) );
-        action->setData( qulonglong(quintptr(info->win())) );
+        foreach (KWindowInfo *info, list) {
+            ++i;
+            QString itemText = fontMetrics().elidedText(info->visibleNameWithState(), Qt::ElideMiddle, maxwidth);
 
-        if ( info->win() == activeWindow )
-          action->setChecked( true );
-      }
+            NET::WindowType windowType = info->windowType(
+                NET::NormalMask | NET::DesktopMask
+                | NET::DockMask | NET::ToolbarMask | NET::MenuMask | NET::DialogMask
+                | NET::UtilityMask | NET::SplashMask
+            );
+
+            if ((windowType == NET::Normal || windowType == NET::Unknown
+                || (windowType == NET::Dialog && standaloneDialog(info, list)))
+                && !(info->state() & NET::SkipTaskbar))
+            {
+                QPixmap pm = KWindowSystem::icon(info->win(), 16, 16, true);
+                items++;
+
+                // ok, we have items on this desktop, let's show the title
+                if (items == 1 && numberOfDesktops > 1) {
+                    if (!onAllDesktops) {
+                        addTitle(KWindowSystem::desktopName(j));
+                    } else {
+                        addTitle(i18n("On All Desktops"));
+                    }
+                }
+
+                // Avoid creating unwanted accelerators.
+                itemText.replace('&', QLatin1String("&&"));
+
+                QAction* action = addAction(pm, itemText, this, SLOT(slotForceActiveWindow()));
+                action->setData(qulonglong(quintptr(info->win())) );
+
+                if (info->win() == activeWindow) {
+                    action->setChecked(true);
+                }
+            }
+        }
+
+        if (j == currentDesktop) {
+            unclutter->setEnabled(items > 0);
+            cascade->setEnabled(items > 0);
+        }
+
+        qDeleteAll(list);
     }
 
-    if ( j == currentDesktop ) {
-      unclutter->setEnabled( items > 0 );
-      cascade->setEnabled( items > 0 );
+    // no windows?
+    if (i == 0) {
+        if (numberOfDesktops > 1) {
+            // because we don't have any titles, nor a separator
+            addSeparator();
+        }
+
+        addAction(i18n("No Windows"))->setEnabled(false);
     }
-
-    qDeleteAll( list );
-  }
-
-  // no windows?
-  if ( i == 0 ) {
-    if ( numberOfDesktops > 1 )
-      addSeparator(); // because we don't have any titles, nor a separator
-
-    addAction( i18n( "No Windows" ) )->setEnabled( false );
-  }
 }
 
 bool KWindowListMenu::canChangePlacement()
@@ -184,28 +202,29 @@ bool KWindowListMenu::canChangePlacement()
 // called after popup().
 void KWindowListMenu::selectActiveWindow()
 {
-    foreach (QAction* action, actions())
+    foreach (QAction* action, actions()) {
         if (action->isChecked()) {
             setActiveAction(action);
             break;
         }
+    }
 }
 
 void KWindowListMenu::slotForceActiveWindow()
 {
     QAction* window = qobject_cast<QAction*>(sender());
-    if (!window || !window->data().canConvert(QVariant::ULongLong))
+    if (!window || !window->data().canConvert(QVariant::ULongLong)) {
         return;
-
+    }
     KWindowSystem::forceActiveWindow((WId)window->data().toULongLong());
 }
 
 void KWindowListMenu::slotSetCurrentDesktop()
 {
     QAction* window = qobject_cast<QAction*>(sender());
-    if (!window || !window->data().canConvert(QVariant::UInt))
+    if (!window || !window->data().canConvert(QVariant::UInt)) {
         return;
-
+    }
     KWindowSystem::setCurrentDesktop(window->data().toUInt());
 }
 
@@ -220,4 +239,3 @@ void KWindowListMenu::slotCascadeWindows()
     org::kde::KWin kwin("org.kde.kwin", "/KWin", QDBusConnection::sessionBus());
     kwin.cascadeDesktop();
 }
-
