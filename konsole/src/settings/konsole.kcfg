@@ -28,7 +28,7 @@
     <entry name="ShowTerminalSizeHint" type="Bool">
       <label>Show hint for terminal size after resizing</label>
       <tooltip>Show terminal size in columns and lines in the center of window after resizing</tooltip>
-      <default>true</default>
+      <default>false</default>
     </entry>
     <entry name="SaveGeometryOnExit" type="Bool">
       <label>Use current window size on next startup</label>
