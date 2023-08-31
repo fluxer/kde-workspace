@@ -29,11 +29,6 @@ int main()
     if (dpy == NULL) {
         return 2;
     }
-    Atom atom = XInternAtom(dpy, "_KDE_RUNNING", False);
-    if (XGetSelectionOwner(dpy, atom) != None) {
-        XCloseDisplay(dpy);
-        return 0;
-    }
     // if ksmserver is not started yet check for the X11 atom that startkde sets
     Atom type = None;
     int format = 0;
