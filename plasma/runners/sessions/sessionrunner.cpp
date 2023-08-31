@@ -235,25 +235,21 @@ void SessionRunner::run(const Plasma::RunnerContext &context, const Plasma::Quer
         return;
     }
 
-    //TODO: this message is too verbose and too technical.
     int result = KMessageBox::warningContinueCancel(
-            0,
-            i18n("<p>You have chosen to open another desktop session.<br />"
-                "The current session will be hidden "
-                "and a new login screen will be displayed.<br />"
-                "An F-key is assigned to each session; "
-                "F%1 is usually assigned to the first session, "
-                "F%2 to the second session and so on. "
-                "You can switch between sessions by pressing "
-                "Ctrl, Alt and the appropriate F-key at the same time. "
-                "Additionally, the KDE Panel and Desktop menus have "
-                "actions for switching between sessions.</p>",
-                7, 8),
-            i18n("Warning - New Session"),
-            KGuiItem(i18n("&Start New Session"), "fork"),
-            KStandardGuiItem::cancel(),
-            ":confirmNewSession",
-            KMessageBox::PlainCaption | KMessageBox::Notify);
+        nullptr,
+        i18n(
+            "<p>The current session will be hidden "
+            "and a new login screen will be displayed.<p/>"
+            "<p>Switch between sessions can be done by pressing "
+            "Ctrl, Alt and the appropriate F%1-%2 key at the same time.</p>",
+            1, 12
+        ),
+        i18n("Warning - New Session"),
+        KGuiItem(i18n("&Start New Session"), "fork"),
+        KStandardGuiItem::cancel(),
+        ":confirmNewSession",
+        KMessageBox::PlainCaption | KMessageBox::Notify
+    );
 
     if (result == KMessageBox::Cancel) {
         return;
