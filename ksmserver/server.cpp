@@ -602,7 +602,8 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
     only_local = false;
 #endif
 
-    char        errormsg[256];
+    char errormsg[256];
+    ::memset(errormsg, 0, sizeof(errormsg) * sizeof(char));
     if (!SmsInitialize ( (char*) KSMVendorString, (char*) KSMReleaseString,
                          KSMNewClientProc,
                          (SmPointer) this,
