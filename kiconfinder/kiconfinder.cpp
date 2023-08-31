@@ -51,29 +51,30 @@ int main(int argc, char *argv[])
     }
 
     QStringList iconArgs;
-    for (int i = 0; i<args->count(); i++) {
+    iconArgs.reserve(args->count());
+    for (int i = 0; i < args->count(); i++) {
         iconArgs << args->arg(i);
     }
     const QString groupArg = args->getOption("icongroup");
 
     KIconLoader::Group iconGroup;
-    if (groupArg == "none") {
+    if (groupArg == QLatin1String("none")) {
         iconGroup = KIconLoader::NoGroup;
-    } else if (groupArg == "desktop") {
+    } else if (groupArg == QLatin1String("desktop")) {
         iconGroup = KIconLoader::Desktop;
-    } else if(groupArg == "first") {
+    } else if(groupArg == QLatin1String("first")) {
         iconGroup = KIconLoader::FirstGroup;
-    } else if(groupArg == "toolbar") {
+    } else if(groupArg == QLatin1String("toolbar")) {
         iconGroup = KIconLoader::MainToolbar;
-    } else if(groupArg == "small") {
+    } else if(groupArg == QLatin1String("small")) {
         iconGroup = KIconLoader::Small;
-    } else if(groupArg == "panel") {
+    } else if(groupArg == QLatin1String("panel")) {
         iconGroup = KIconLoader::Panel;
-    } else if(groupArg == "dialog") {
+    } else if(groupArg == QLatin1String("dialog")) {
         iconGroup = KIconLoader::Dialog;
-    } else if(groupArg == "last") {
+    } else if(groupArg == QLatin1String("last")) {
         iconGroup = KIconLoader::LastGroup;
-    } else if(groupArg == "user") {
+    } else if(groupArg == QLatin1String("user")) {
         iconGroup = KIconLoader::User;
     } else {
         std::cerr << "Invalid icon group '" << groupArg.toLatin1().constData() << "," << std::endl;
@@ -82,7 +83,7 @@ int main(int argc, char *argv[])
     }
 
     int rv = 0;
-    foreach (const QString iconName, iconArgs) {
+    foreach (const QString &iconName, iconArgs) {
         const QString icon = KIconLoader::global()->iconPath(iconName, iconGroup, true);
         if (!icon.isEmpty()) {
             printf("%s\n", icon.toLatin1().constData());
