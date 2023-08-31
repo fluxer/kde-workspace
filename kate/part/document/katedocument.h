@@ -104,8 +104,8 @@ class KATEPARTINTERFACES_EXPORT KateDocument : public KTextEditor::Document,
 
   public:
     explicit KateDocument (QWidget *parentWidget, QObject *, const QVariantList &args);
-    explicit KateDocument (bool bSingleViewMode=false, bool bBrowserView=false, bool bReadOnly=false,
-                  QWidget *parentWidget = 0, QObject * = 0);
+    explicit KateDocument (bool bSingleViewMode=false, bool bReadOnly=false,
+                           QWidget *parentWidget = 0, QObject * = 0);
     ~KateDocument ();
     
     using ReadWritePart::closeUrl;
@@ -129,21 +129,17 @@ class KATEPARTINTERFACES_EXPORT KateDocument : public KTextEditor::Document,
     virtual QWidget *widget();
 
 Q_SIGNALS:
-// TODO for KDE5: move to KTE::Document
+  // TODO for KDE5: move to KTE::Document
   void readWriteChanged (KTextEditor::Document *document);
-
-    
     
   public:
     bool readOnly () const { return m_bReadOnly; }
-    bool browserView () const { return m_bBrowserView; }
     bool singleViewMode () const { return m_bSingleViewMode; }
     static bool simpleMode ();
 
   private:
     // only to make part work, don't change it !
     const bool m_bSingleViewMode;
-    const bool m_bBrowserView;
     const bool m_bReadOnly;
 
   //

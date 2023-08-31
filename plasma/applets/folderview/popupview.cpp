@@ -367,15 +367,16 @@ void PopupView::showContextMenu(QWidget *widget, const QPoint &screenPos, const 
         editActions.append(m_actionCollection.action("del"));
     }
 
-    KParts::BrowserExtension::ActionGroupMap actionGroups;
+    KonqPopupMenu::ActionGroupMap actionGroups;
     actionGroups.insert("editactions", editActions);
 
-    KParts::BrowserExtension::PopupFlags flags = KParts::BrowserExtension::ShowProperties;
-    flags |= KParts::BrowserExtension::ShowUrlOperations;
+    KonqPopupMenu::PopupFlags flags = KonqPopupMenu::ShowProperties;
+    flags |= KonqPopupMenu::ShowNewWindow;
+    flags |= KonqPopupMenu::ShowUrlOperations;
 
     // m_newMenu can be NULL here but KonqPopupMenu does handle this.
     KonqPopupMenu *contextMenu = new KonqPopupMenu(items, m_url, m_actionCollection, m_newMenu,
-                                                   KonqPopupMenu::ShowNewWindow, flags,
+                                                   flags,
                                                    QApplication::desktop(),
                                                    KBookmarkManager::userBookmarksManager(),
                                                    actionGroups);

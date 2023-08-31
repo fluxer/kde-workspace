@@ -25,6 +25,7 @@
 #include "views/zoomlevelinfo.h"
 #include <konq_operations.h>
 
+#include <QPointer>
 #include <KAction>
 #include <KActionCollection>
 #include <KActionMenu>
@@ -36,7 +37,6 @@
 #include <KToggleAction>
 #include <KPropertiesDialog>
 #include <KIcon>
-
 #include <KDebug>
 
 

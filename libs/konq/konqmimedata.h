@@ -21,8 +21,9 @@
 #define KONQMIMEDATA_H
 
 #include <konq_export.h>
-#include <kurl.h>
+
 #include <QMimeData>
+#include <kurl.h>
 
 /**
  * This class provides functions for creating and decoding clipboard/drag-n-drop data

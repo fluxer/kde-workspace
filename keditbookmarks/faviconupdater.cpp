@@ -31,7 +31,6 @@
 
 #include <kmimetype.h>
 #include <kparts/part.h>
-#include <kparts/browserextension.h>
 #include <kmimetypetrader.h>
 
 FavIconUpdater::FavIconUpdater(QObject *parent)

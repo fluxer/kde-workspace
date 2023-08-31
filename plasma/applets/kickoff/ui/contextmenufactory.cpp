@@ -58,7 +58,7 @@ class ContextMenuFactory::Private
 {
 public:
     Private()
-            : applet(0) {
+        : applet(0) {
     }
 
     QMap<QAbstractItemView*, QList<QAction*> > viewActions;
