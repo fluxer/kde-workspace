@@ -32,7 +32,6 @@
 #include "backgroundlistmodel.h"
 #include "backgrounddelegate.h"
 #include "removebuttonmanager.h"
-#include "ksmserver_interface.h"
 
 K_EXPORT_PLASMA_WALLPAPER(image, Image)
 
