@@ -609,7 +609,7 @@ KSMServer::KSMServer( const QString& windowManager, bool _only_local, bool locks
                          (SmPointer) this,
                          HostBasedAuthProc, 256, errormsg ) ) {
 
-        qWarning("KSMServer: could not register XSM protocol");
+        qWarning("KSMServer: could not register XSM protocol: %s", errormsg);
     }
 
     if (!IceListenForConnections (&numTransports, &listenObjs,
