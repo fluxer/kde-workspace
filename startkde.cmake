@@ -107,10 +107,6 @@ fi
 #     xprop -root | grep "^KDE_FULL_SESSION" >/dev/null 2>/dev/null
 #     if test $? -eq 0; then ... whatever
 #
-# Additionally there is (since KDE 3.5.7) $KDE_SESSION_UID with the uid
-# of the user running the KDE session. It should be rarely needed (e.g.
-# after sudo to prevent desktop-wide functionality in the new user's kded).
-#
 # Since KDE4 there is also KDE_SESSION_VERSION, containing the major version number.
 # Note that this didn't exist in KDE3, which can be detected by its absense and
 # the presence of KDE_FULL_SESSION.
@@ -122,15 +118,12 @@ KDE_SESSION_VERSION=4
 export KDE_SESSION_VERSION
 xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 4
 
-KDE_SESSION_UID=`id -ru`
-export KDE_SESSION_UID
-
 XDG_CURRENT_DESKTOP=KDE
 export XDG_CURRENT_DESKTOP
 
 # For session services that require X11, check for XDG_CURRENT_DESKTOP, etc.
 dbus-update-activation-environment DISPLAY XAUTHORITY XDG_CURRENT_DESKTOP \
-    KDE_FULL_SESSION KDE_SESSION_VERSION KDE_SESSION_UID
+    KDE_FULL_SESSION KDE_SESSION_VERSION
 
 # Start kcminit_startup
 kcminit_startup
@@ -160,9 +153,8 @@ unset KDE_FULL_SESSION
 xprop -root -remove KDE_FULL_SESSION
 unset KDE_SESSION_VERSION
 xprop -root -remove KDE_SESSION_VERSION
-unset KDE_SESSION_UID
 
 dbus-update-activation-environment XDG_CURRENT_DESKTOP="" \
-    KDE_FULL_SESSION="" KDE_SESSION_VERSION="" KDE_SESSION_UID=""
+    KDE_FULL_SESSION="" KDE_SESSION_VERSION=""
 
 echo 'startkde: Done.'  1>&2
