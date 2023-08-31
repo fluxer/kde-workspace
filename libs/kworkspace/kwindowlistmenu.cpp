@@ -62,13 +62,13 @@ KWindowListMenu::KWindowListMenu(QWidget *parent)
 static bool standaloneDialog(const KWindowInfo *info, const QList<KWindowInfo*> &list)
 {
 #ifdef Q_WS_X11
-    WId group = info->groupLeader();
+    const WId group = info->groupLeader();
 
     if (group == 0) {
         return info->transientFor() == QX11Info::appRootWindow();
     }
 
-    foreach (KWindowInfo *info, list) {
+    foreach (const KWindowInfo *info, list) {
         if (info->groupLeader() == group) {
             return false;
         }
@@ -100,15 +100,15 @@ void KWindowListMenu::init()
     }
 
     QList<KWindowInfo> windows;
-    foreach (WId id, KWindowSystem::windows() ) {
+    foreach (const WId id, KWindowSystem::windows()) {
         windows.append(KWindowSystem::windowInfo(id, NET::WMDesktop));
     }
 
     bool showAllDesktopsGroup = (numberOfDesktops > 1);
 
     int i = 0;
-    for (int j = 1; j <= numberOfDesktops + (showAllDesktopsGroup ? 1 : 0); j++ ) {
-        bool onAllDesktops = (j > numberOfDesktops);
+    for (int j = 1; j <= numberOfDesktops + (showAllDesktopsGroup ? 1 : 0); j++) {
+        const bool onAllDesktops = (j > numberOfDesktops);
         int items = 0;
 
         // KDE4 porting - huh? didn't know you could set an item checked before it's created?
@@ -133,7 +133,7 @@ void KWindowListMenu::init()
 
         qStableSort(list.begin(), list.end(), compareKWinWindowInfo);
 
-        foreach (KWindowInfo *info, list) {
+        foreach (const KWindowInfo *info, list) {
             ++i;
             QString itemText = fontMetrics().elidedText(info->visibleNameWithState(), Qt::ElideMiddle, maxwidth);
 
@@ -212,7 +212,7 @@ void KWindowListMenu::selectActiveWindow()
 
 void KWindowListMenu::slotForceActiveWindow()
 {
-    QAction* window = qobject_cast<QAction*>(sender());
+    const QAction* window = qobject_cast<QAction*>(sender());
     if (!window || !window->data().canConvert(QVariant::ULongLong)) {
         return;
     }
@@ -221,7 +221,7 @@ void KWindowListMenu::slotForceActiveWindow()
 
 void KWindowListMenu::slotSetCurrentDesktop()
 {
-    QAction* window = qobject_cast<QAction*>(sender());
+    const QAction* window = qobject_cast<QAction*>(sender());
     if (!window || !window->data().canConvert(QVariant::UInt)) {
         return;
     }
