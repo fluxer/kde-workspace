@@ -5,6 +5,7 @@ X-KDE-Library=ktouchpadenabler
 X-KDE-DBus-ModuleName=ktouchpadenabler
 X-KDE-Kded-autoload=true
 X-KDE-Kded-phase=1
+OnlyShowIn=KDE;
 
 Name=KDE TouchPad Enabler Daemon
 Name[ar]=مراقب تفعيل لوحة اللمس لكدي
