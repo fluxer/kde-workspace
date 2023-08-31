@@ -66,7 +66,7 @@ static void dummy_callback( SmcConn, SmPointer )
 #endif
 KRequestShutdownHelper::KRequestShutdownHelper()
     {
-#ifdef Q_WS_X11	    
+#ifdef Q_WS_X11
     SmcCallbacks calls;
     calls.save_yourself.callback = save_yourself_callback;
     calls.die.callback = dummy_callback;
@@ -137,7 +137,7 @@ KRequestShutdownHelper::~KRequestShutdownHelper()
 
 void KRequestShutdownHelper::processData()
     {
-#ifdef Q_WS_X11	    
+#ifdef Q_WS_X11
     if( conn != NULL )
         IceProcessMessages( SmcGetIceConnection( conn ), 0, 0 );
 #endif    
@@ -145,7 +145,7 @@ void KRequestShutdownHelper::processData()
 
 bool KRequestShutdownHelper::requestShutdown( ShutdownConfirm confirm )
     {
-#ifdef Q_WS_X11	    
+#ifdef Q_WS_X11
     if( conn == NULL )
         return false;
     SmcRequestSaveYourself( conn, SmSaveBoth, True, SmInteractStyleAny,

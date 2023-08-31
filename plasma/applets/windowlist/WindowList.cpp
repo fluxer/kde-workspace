@@ -56,7 +56,7 @@ void WindowList::init()
 {
     Plasma::IconWidget *icon = new Plasma::IconWidget(KIcon("preferences-system-windows"), QString(), this);
 
-    m_listMenu = new KWindowListMenu;
+    m_listMenu = new KWindowListMenu();
     m_listMenu->installEventFilter(this);
 
     registerAsDragHandle(icon);

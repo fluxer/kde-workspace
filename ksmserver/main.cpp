@@ -43,7 +43,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <klocale.h>
 #include <kglobal.h>
 #include <kconfig.h>
-#include <kselectionowner.h>
 #include <kwindowsystem.h>
 #include <kcrash.h>
 #include <QtGui/qx11info_x11.h>
@@ -200,10 +199,10 @@ int main( int argc, char* argv[] )
     KCmdLineArgs::addCmdLineOptions( options );
 
     ::unsetenv("SESSION_MANAGER");
-    KApplication *a = new KApplication();
+    KApplication app;
     fcntl(ConnectionNumber(QX11Info::display()), F_SETFD, 1);
 
-    a->setQuitOnLastWindowClosed(false); // #169486
+    app.setQuitOnLastWindowClosed(false); // #169486
 
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -231,10 +230,6 @@ int main( int argc, char* argv[] )
 
     KCrash::setFlags(KCrash::Log);
 
-    // for the KDE-already-running check in startkde
-    KSelectionOwner kde_running( "_KDE_RUNNING", 0 );
-    kde_running.claim( false );
-
     IceSetIOErrorHandler( IoErrorHandler );
 
     KConfigGroup config(KGlobal::config(), "General");
@@ -255,8 +250,5 @@ int main( int argc, char* argv[] )
         server->restoreSession( SESSION_BY_USER );
     else
         server->startDefaultSession();
-    int ret = a->exec();
-    kde_running.release(); // needs to be done before QApplication destruction
-    delete a;
-    return ret;
+    return app.exec();
 }

@@ -29,7 +29,6 @@
 #include <QtCore/QProcess>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QTextCodec>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -52,8 +51,7 @@
 KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     : QObject(),
     m_process(nullptr),
-    m_error(false),
-    m_cookie(new KDESu::KDESuPrivate::KCookie())
+    m_error(false)
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
@@ -67,10 +65,14 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     bool attach = args->isSet("attach");
 
     if (!args->isSet("c") && !args->count()) {
-        KMessageBox::information(0, i18n("No command arguments supplied!\n"
-                                         "Usage: kdesudo [-u <runas>] <command>\n"
-                                         "KdeSudo will now exit...")
-                                );
+        KMessageBox::information(
+            nullptr,
+            i18n(
+                "No command arguments supplied!\n"
+                "Usage: kdesudo [-u <runas>] <command>\n"
+                "KdeSudo will now exit..."
+            )
+        );
         exit(0);
     }
 
@@ -90,9 +92,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     // Parsins args
 
     /* Get the comment out of cli args */
-    QByteArray commentBytes = args->getOption("comment").toUtf8();
-    QTextCodec *tCodecConv = QTextCodec::codecForLocale();
-    QString comment = tCodecConv->toUnicode(commentBytes, commentBytes.size());
+    QString comment = args->getOption("comment");
 
     if (args->isSet("f")) {
         // If file is writeable, do not change uid
@@ -102,13 +102,13 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
                 KStandardDirs dirs;
                 file = dirs.findResource("config", file);
                 if (file.isEmpty()) {
-                    kWarning() << "Config file not found: " << file << "\n";
+                    kError() << "Config file not found: " << file;
                     exit(1);
                 }
             }
             QFileInfo fi(file);
             if (!fi.exists()) {
-                kWarning() << "File does not exist: " << file << "\n";
+                kError() << "File does not exist: " << file;
                 exit(1);
             }
             if (fi.isWritable()) {
@@ -138,7 +138,11 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     // 'man xauth' for more info on xauth cookies.
     m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
-    QByteArray disp = m_cookie->display();
+    const QString disp = QString::fromLocal8Bit(qgetenv("DISPLAY"));
+    if (disp.isEmpty()) {
+        kError() << "$DISPLAY is not set.";
+        exit(1);
+    }
 
     // Create two processes, one for each xauth call
     QProcess xauth_ext;
@@ -148,7 +152,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     xauth_ext.setStandardOutputProcess(&xauth_merge);
 
     // Start the first
-    xauth_ext.start("xauth", QStringList() << "extract" << "-" << QString::fromLocal8Bit(disp), QIODevice::ReadOnly);
+    xauth_ext.start("xauth", QStringList() << "extract" << "-" << disp, QIODevice::ReadOnly);
     if (!xauth_ext.waitForStarted()) {
         return;
     }
@@ -276,7 +280,6 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
 KdeSudo::~KdeSudo()
 {
     delete m_dialog;
-    delete m_cookie;
     if (m_process) {
         m_process->terminate();
         m_process->waitForFinished(3000);

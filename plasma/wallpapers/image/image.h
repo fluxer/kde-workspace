@@ -89,7 +89,6 @@ class Image : public Plasma::Wallpaper
     protected:
         void init(const KConfigGroup &config);
         void renderWallpaper(const QString& image = QString());
-        void suspendStartup(bool suspend); // for ksmserver
         void calculateGeometry();
         void setSingleImage();
         void updateWallpaperActions();

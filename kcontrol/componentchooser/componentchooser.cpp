@@ -16,7 +16,6 @@
 #include "componentchooser.h"
 #include "moc_componentchooser.cpp"
 
-#include "componentchooserbrowser.h"
 #include "componentchooseremail.h"
 #include "componentchooserfilemanager.h"
 #ifdef Q_OS_UNIX
@@ -191,11 +190,6 @@ void ComponentChooser::slotServiceSelected(QListWidgetItem* it)
     } else if (cfgType=="internal_filemanager") {
         if (!(configWidget && qobject_cast<CfgFileManager*>(configWidget))) {
             newConfigWidget = new CfgFileManager(configContainer);
-        }
-
-    } else if (cfgType=="internal_browser") {
-        if (!(configWidget && qobject_cast<CfgBrowser*>(configWidget))) {
-            newConfigWidget = new CfgBrowser(configContainer);
         }
     }
 

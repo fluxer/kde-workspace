@@ -31,7 +31,6 @@
 #include <kpassworddialog.h>
 #include <knewpassworddialog.h>
 
-#include "kcookie.h"
 /*
 * KdeSudo is the base class of the project
 *
@@ -79,7 +78,6 @@ private:
     QProcess *m_process;
     bool m_error;
     QString m_tmpName;
-    KDESu::KDESuPrivate::KCookie *m_cookie;
 
     KPasswordDialog *m_dialog;
 };

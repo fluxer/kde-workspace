@@ -35,7 +35,6 @@ class KCMNotification : public KCModule
     Q_OBJECT
 public:
     KCMNotification(QWidget *parent, const QVariantList &args);
-    ~KCMNotification();
 
     // KCModule reimplementations
 public Q_SLOTS:

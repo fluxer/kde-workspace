@@ -26,6 +26,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #define KWINDOWLISTMENU_H
 
 #include "kworkspace_export.h"
+
 #include <kmenu.h>
 
 /**
@@ -38,13 +39,13 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
 {
     Q_OBJECT
 
-  public:
+public:
     /**
      * Creates a new window list menu.
      *
      * @param parent The parent widget.
      */
-    explicit KWindowListMenu( QWidget *parent = 0 );
+    explicit KWindowListMenu(QWidget *parent = nullptr);
 
     /**
      * Initializes the menu by filling it with actions
@@ -59,7 +60,7 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
      */
     static bool canChangePlacement();
 
-  public Q_SLOTS:
+public Q_SLOTS:
     /**
      * Pre-selects the active window in the popup menu, for faster
      * keyboard navigation. Needs to be called after popup().
@@ -67,11 +68,11 @@ class KWORKSPACE_EXPORT KWindowListMenu : public KMenu
      */
     void selectActiveWindow();
 
-  protected Q_SLOTS:
+protected Q_SLOTS:
     void slotForceActiveWindow();
     void slotSetCurrentDesktop();
     void slotUnclutterWindows();
     void slotCascadeWindows();
 };
 
-#endif
+#endif // KWINDOWLISTMENU_H

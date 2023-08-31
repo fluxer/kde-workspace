@@ -153,7 +153,7 @@ FallbackProfile::FallbackProfile()
     setProperty(Environment, QStringList() << "TERM=xterm");
     setProperty(LocalTabTitleFormat, "%d : %n");
     setProperty(RemoteTabTitleFormat, "(%u) %H");
-    setProperty(ShowTerminalSizeHint, true);
+    setProperty(ShowTerminalSizeHint, false);
     setProperty(StartInCurrentSessionDir, true);
     setProperty(MenuIndex, "0");
     setProperty(SilenceSeconds, 10);
