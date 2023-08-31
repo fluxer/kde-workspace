@@ -48,77 +48,86 @@
 #include <kcmdlineargs.h>
 #include <klocale.h>
 #include <kaboutdata.h>
+
 #include <stdio.h>
+
 int main(int argc, char **argv)
 {
-	KAboutData aboutData("kreadconfig", 0, ki18n("KReadConfig"),
-		"1.0.1",
-		ki18n("Read KConfig entries - for use in shell scripts"),
-		KAboutData::License_GPL,
-		ki18n("(c) 2001 Red Hat, Inc."));
-	aboutData.addAuthor(ki18n("Bernhard Rosenkraenzer"), KLocalizedString(), "bero@redhat.com");
-	KCmdLineArgs::init(argc, argv, &aboutData);
+    KAboutData aboutData(
+        "kreadconfig", 0, ki18n("KReadConfig"),
+        "1.0.1",
+        ki18n("Read KConfig entries - for use in shell scripts"),
+        KAboutData::License_GPL,
+        ki18n("(c) 2001 Red Hat, Inc.")
+    );
+    aboutData.addAuthor(ki18n("Bernhard Rosenkraenzer"), KLocalizedString(), "bero@redhat.com");
+    KCmdLineArgs::init(argc, argv, &aboutData);
 
-	QCoreApplication app(argc, argv);
+    QCoreApplication app(argc, argv);
 
-	KCmdLineOptions options;
-	options.add("file <file>", ki18n("Use <file> instead of global config"));
-	options.add("group <group>", ki18n("Group to look in. Use repeatedly for nested groups."), "KDE");
-	options.add("key <key>", ki18n("Key to look for"));
-	options.add("default <default>", ki18n("Default value"));
-	options.add("type <type>", ki18n("Type of variable"));
-	KCmdLineArgs::addCmdLineOptions(options);
-	KCmdLineArgs *args=KCmdLineArgs::parsedArgs();
+    KCmdLineOptions options;
+    options.add("file <file>", ki18n("Use <file> instead of global config"));
+    options.add("group <group>", ki18n("Group to look in. Use repeatedly for nested groups."), "KDE");
+    options.add("key <key>", ki18n("Key to look for"));
+    options.add("default <default>", ki18n("Default value"));
+    options.add("type <type>", ki18n("Type of variable"));
+    KCmdLineArgs::addCmdLineOptions(options);
+    KCmdLineArgs *args=KCmdLineArgs::parsedArgs();
 
-	QStringList groups=args->getOptionList("group");
-	QString key=args->getOption("key");
-	QString file=args->getOption("file");
-	QString dflt=args->getOption("default");
-	QString type=args->getOption("type").toLower();
+    QStringList groups = args->getOptionList("group");
+    QString key = args->getOption("key");
+    QString file = args->getOption("file");
+    QString dflt = args->getOption("default");
+    QString type = args->getOption("type").toLower();
 
-	if (key.isNull()) {
-		KCmdLineArgs::usage();
-		return 1;
-	}
+    if (key.isNull()) {
+        KCmdLineArgs::usage();
+        return 1;
+    }
 
-	KComponentData inst(&aboutData);
-	KGlobal::config();
+    KComponentData inst(&aboutData);
+    KGlobal::config();
 
-	KConfig *konfig;
-        bool configMustDeleted = false;
-	if (file.isEmpty())
-	   konfig = KGlobal::config().data();
-	else
-        {
-	   konfig = new KConfig( file, KConfig::NoGlobals );
-           configMustDeleted=true;
-        }
-        KConfigGroup cfgGroup = konfig->group("");
-        foreach (const QString &grp, groups)
-            cfgGroup = cfgGroup.group(grp);
-	if(type=="bool") {
-		dflt=dflt.toLower();
-		bool def=(dflt=="true" || dflt=="on" || dflt=="yes" || dflt=="1");
-                bool retValue = !cfgGroup.readEntry(key, def);
-                if ( configMustDeleted )
-                    delete konfig;
-		return retValue;
-	} else if((type=="num") || (type=="int")) {
-            int retValue = cfgGroup.readEntry(key, dflt.toInt());
-            if ( configMustDeleted )
+    KConfig *konfig = nullptr;
+    bool configMustDeleted = false;
+    if (file.isEmpty()) {
+        konfig = KGlobal::config().data();
+    } else {
+        konfig = new KConfig(file, KConfig::NoGlobals);
+        configMustDeleted = true;
+    }
+
+    KConfigGroup cfgGroup = konfig->group("");
+    foreach (const QString &grp, groups) {
+        cfgGroup = cfgGroup.group(grp);
+        if (type == "bool") {
+            dflt = dflt.toLower();
+            bool def= (dflt == "true" || dflt == "on" || dflt == "yes" || dflt == "1");
+            bool retValue = !cfgGroup.readEntry(key, def);
+            if (configMustDeleted) {
                 delete konfig;
+            }
             return retValue;
-	} else if (type=="path"){
-                fprintf(stdout, "%s\n", cfgGroup.readPathEntry(key, dflt).toLocal8Bit().data());
-                if ( configMustDeleted )
-                    delete konfig;
-		return 0;
-	} else {
+        } else if (type=="num" || type == "int") {
+            int retValue = cfgGroup.readEntry(key, dflt.toInt());
+            if (configMustDeleted) {
+                delete konfig;
+            }
+            return retValue;
+        } else if (type == "path"){
+            fprintf(stdout, "%s\n", cfgGroup.readPathEntry(key, dflt).toLocal8Bit().data());
+            if (configMustDeleted) {
+                delete konfig;
+            }
+            return 0;
+        } else {
             /* Assume it's a string... */
-                fprintf(stdout, "%s\n", cfgGroup.readEntry(key, dflt).toLocal8Bit().data());
-                if ( configMustDeleted )
-                    delete konfig;
-		return 0;
-	}
+            fprintf(stdout, "%s\n", cfgGroup.readEntry(key, dflt).toLocal8Bit().data());
+            if (configMustDeleted) {
+                delete konfig;
+            }
+            return 0;
+        }
+    }
 }
 
