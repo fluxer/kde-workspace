@@ -91,7 +91,6 @@ KDisplayManager::~KDisplayManager()
     delete d;
 }
 
-#ifndef KDM_NO_SHUTDOWN
 bool KDisplayManager::canShutdown()
 {
     if (d->m_login1.isValid()) {
@@ -138,7 +137,6 @@ void KDisplayManager::shutdown(KWorkSpace::ShutdownType shutdownType,
 
     kWarning() << "Could not shutdown";
 }
-#endif // KDM_NO_SHUTDOWN
 
 bool KDisplayManager::isSwitchable()
 {
