@@ -5,7 +5,6 @@ add_subdirectory(windowmanagers)
 
 set(kcm_componentchooser_SRCS
     componentchooser.cpp
-    componentchooserbrowser.cpp
     componentchooserfilemanager.cpp
     componentchooseremail.cpp
     kcm_componentchooser.cpp
