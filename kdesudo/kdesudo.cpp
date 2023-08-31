@@ -29,7 +29,6 @@
 #include <QtCore/QProcess>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
-#include <QtCore/QTextCodec>
 
 #include <kapplication.h>
 #include <kcmdlineargs.h>
@@ -89,9 +88,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     // Parsins args
 
     /* Get the comment out of cli args */
-    QByteArray commentBytes = args->getOption("comment").toUtf8();
-    QTextCodec *tCodecConv = QTextCodec::codecForLocale();
-    QString comment = tCodecConv->toUnicode(commentBytes, commentBytes.size());
+    QString comment = args->getOption("comment");
 
     if (args->isSet("f")) {
         // If file is writeable, do not change uid
