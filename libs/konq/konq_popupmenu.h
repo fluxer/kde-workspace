@@ -50,21 +50,21 @@ public:
      * Flags set by the calling application
      */
     enum PopupFlag {
-        DefaultPopupItems = 0x0000,    /**< default value, no additional menu item */
-        ShowNavigationItems = 0x0001,  /**< show "back" and "forward" (usually done when clicking the background of the view, but not an item) */
-        ShowUp = 0x0002,               /**< show "up" (same thing, but not over e.g. HTTP). Requires ShowNavigationItems. */
-        ShowReload = 0x0004,           /**< show "reload" (usually done when clicking the background of the view, but not an item) */
-        ShowBookmark = 0x0008,         /**< show "add to bookmarks" (usually not done on the local filesystem) */
-        ShowCreateDirectory = 0x0010,  /**< show "create directory" (usually only done on the background of the view, or
-                                        *   in hierarchical views like directory trees, where the new dir would be visible) */
-        ShowTextSelectionItems=0x0020, /**< set when selecting text, for a popup that only contains text-related items. */
-        NoDeletion=0x0040,             /**< deletion, trashing and renaming not allowed (e.g. parent dir not writeable).
-                                        *  (this is only needed if the protocol itself supports deletion, unlike e.g. HTTP) */
-        IsLink = 0x0080,               /**< show "Bookmark This Link" and other link-related actions (linkactions merging group) */
-        ShowUrlOperations = 0x0100,    /**< show copy, paste, as well as cut if NoDeletion is not set. */
-        ShowProperties = 0x200,        /**< show "Properties" action (usually done by directory views) */
+        DefaultPopupItems = 0x0000,      /**< default value, no additional menu item */
+        ShowNavigationItems = 0x0001,    /**< show "back" and "forward" (usually done when clicking the background of the view, but not an item) */
+        ShowUp = 0x0002,                 /**< show "up" (same thing, but not over e.g. HTTP). Requires ShowNavigationItems. */
+        ShowReload = 0x0004,             /**< show "reload" (usually done when clicking the background of the view, but not an item) */
+        ShowBookmark = 0x0008,           /**< show "add to bookmarks" (usually not done on the local filesystem) */
+        ShowCreateDirectory = 0x0010,    /**< show "create directory" (usually only done on the background of the view, or
+                                          *   in hierarchical views like directory trees, where the new dir would be visible) */
+        ShowTextSelectionItems = 0x0020, /**< set when selecting text, for a popup that only contains text-related items. */
+        NoDeletion = 0x0040,             /**< deletion, trashing and renaming not allowed (e.g. parent dir not writeable).
+                                          *   (this is only needed if the protocol itself supports deletion, unlike e.g. HTTP) */
+        IsLink = 0x0080,                 /**< show "Bookmark This Link" and other link-related actions (linkactions merging group) */
+        ShowUrlOperations = 0x0100,      /**< show copy, paste, as well as cut if NoDeletion is not set. */
+        ShowProperties = 0x200,          /**< show "Properties" action (usually done by directory views) */
         ShowNewWindow = 0x400,
-        NoPlugins = 0x800              /**< for the unittest*/
+        NoPlugins = 0x800                /**< for the unittest */
     };
     Q_DECLARE_FLAGS(PopupFlags, PopupFlag)
 
@@ -98,7 +98,7 @@ public:
                   const KUrl& viewURL,
                   KActionCollection & actions,
                   KNewFileMenu * newMenu,
-                  PopupFlags popupFlags /*= NoFlags*/,
+                  PopupFlags popupFlags /* DefaultPopupItems */,
                   QWidget *parentWidget,
                   KBookmarkManager *manager = 0,
                   const ActionGroupMap& actionGroups = ActionGroupMap());
