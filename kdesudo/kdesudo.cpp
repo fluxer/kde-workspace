@@ -137,7 +137,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     // 'man xauth' for more info on xauth cookies.
     m_tmpName = KTemporaryFile::filePath("/tmp/kdesudo-XXXXXXXXXX-xauth");
 
-    QByteArray disp = qgetenv("DISPLAY");
+    const QString disp = QString::fromLocal8Bit(qgetenv("DISPLAY"));
     if (disp.isEmpty()) {
         kError() << "$DISPLAY is not set.";
         exit(1);
@@ -151,7 +151,7 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     xauth_ext.setStandardOutputProcess(&xauth_merge);
 
     // Start the first
-    xauth_ext.start("xauth", QStringList() << "extract" << "-" << QString::fromLocal8Bit(disp), QIODevice::ReadOnly);
+    xauth_ext.start("xauth", QStringList() << "extract" << "-" << disp, QIODevice::ReadOnly);
     if (!xauth_ext.waitForStarted()) {
         return;
     }
