@@ -100,21 +100,24 @@ int main(int argc, char **argv)
     KConfigGroup cfgGroup = konfig->group("");
     foreach (const QString &grp, groups) {
         cfgGroup = cfgGroup.group(grp);
-        if (type == "bool") {
+        if (type == QLatin1String("bool")) {
             dflt = dflt.toLower();
-            bool def= (dflt == "true" || dflt == "on" || dflt == "yes" || dflt == "1");
+            bool def = (
+                dflt == QLatin1String("true") || dflt == QLatin1String("on")
+                || dflt == QLatin1String("yes") || dflt == QLatin1String("1")
+            );
             bool retValue = !cfgGroup.readEntry(key, def);
             if (configMustDeleted) {
                 delete konfig;
             }
             return retValue;
-        } else if (type=="num" || type == "int") {
+        } else if (type == QLatin1String("num") || type == QLatin1String("int")) {
             int retValue = cfgGroup.readEntry(key, dflt.toInt());
             if (configMustDeleted) {
                 delete konfig;
             }
             return retValue;
-        } else if (type == "path"){
+        } else if (type == QLatin1String("path")) {
             fprintf(stdout, "%s\n", cfgGroup.readPathEntry(key, dflt).toLocal8Bit().data());
             if (configMustDeleted) {
                 delete konfig;

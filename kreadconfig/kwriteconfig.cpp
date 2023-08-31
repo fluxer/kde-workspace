@@ -63,7 +63,7 @@ int main(int argc, char **argv)
         KCmdLineArgs::usage();
         return 1;
     }
-    QByteArray value = args->arg(0).toLocal8Bit();
+    QString value = args->arg(0);
 
     KComponentData inst(&aboutData);
 
@@ -81,14 +81,17 @@ int main(int argc, char **argv)
             return 2;
         }
 
-        if (type == "bool") {
+        if (type == QLatin1String("bool")) {
             // For symetry with kreadconfig accept a wider range of values as true than Katie
-            bool boolvalue = (value == "true" || value == "on" || value == "yes" || value=="1");
+            bool boolvalue = (
+                value == QLatin1String("true") || value == QLatin1String("on")
+                || value == QLatin1String("yes") || value == QLatin1String("1")
+            );
             cfgGroup.writeEntry(key, boolvalue);
-        } else if (type == "path") {
-            cfgGroup.writePathEntry(key, QString::fromLocal8Bit(value));
+        } else if (type == QLatin1String("path")) {
+            cfgGroup.writePathEntry(key, value);
         } else {
-            cfgGroup.writeEntry(key, QString::fromLocal8Bit(value));
+            cfgGroup.writeEntry(key, value);
         }
         konfig->sync();
         delete konfig;
