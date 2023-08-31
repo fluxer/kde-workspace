@@ -43,8 +43,6 @@ int main(int argc, char **argv)
     aboutData.addAuthor(ki18n("Bernhard Rosenkraenzer"), ki18n("Wrote kreadconfig on which this is based"), "bero@redhat.com");
     KCmdLineArgs::init(argc, argv, &aboutData);
 
-    QCoreApplication app(argc, argv);
-
     KCmdLineOptions options;
     options.add("file <file>", ki18n("Use <file> instead of global config"));
     options.add("group <group>", ki18n("Group to look in. Use repeatedly for nested groups."), "KDE");
@@ -63,7 +61,7 @@ int main(int argc, char **argv)
         KCmdLineArgs::usage();
         return 1;
     }
-    QString value = args->arg(0);
+    const QString value = args->arg(0);
 
     KComponentData inst(&aboutData);
 
