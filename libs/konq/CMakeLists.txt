@@ -39,12 +39,6 @@ install(
 
 ########### install files ###############
 
-install(
-    FILES
-    directory_bookmarkbar.desktop
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/kbookmark
-)
-
 generate_export_header(konq)
 
 install(FILES
