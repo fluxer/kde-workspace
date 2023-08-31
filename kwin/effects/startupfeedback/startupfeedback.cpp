@@ -26,31 +26,62 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <KDebug>
 #include <KGlobal>
 #include <KStartupInfo>
+#include <KSystemEventFilter>
 
 namespace KWin
 {
 
+StartupEventNotifier::StartupEventNotifier(xcb_window_t window)
+    : QWidget(nullptr),
+    m_window(window)
+{
+    KSystemEventFilter::installEventFilter(this);
+}
+
+StartupEventNotifier::~StartupEventNotifier()
+{
+    KSystemEventFilter::removeEventFilter(this);
+}
+
+bool StartupEventNotifier::x11Event(XEvent *xevent)
+{
+    // qDebug() << Q_FUNC_INFO << xevent->type << xevent->xany.window << m_window;
+    if (xevent->type == ButtonRelease && xevent->xany.window == m_window) {
+        emit interrupt();
+        return true;
+    }
+    return false;
+}
+
+
 StartupFeedbackEffect::StartupFeedbackEffect()
     : m_startupInfo(new KStartupInfo(KStartupInfo::CleanOnCantDetect, this))
     , m_startups(0)
-    , m_active(false)
+    , m_notifier(nullptr)
     , m_type(StartupFeedbackEffect::PassiveFeedback)
     , m_cursor(Qt::WaitCursor)
 {
     reconfigure(ReconfigureAll);
 
-    connect(m_startupInfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData)));
-    connect(m_startupInfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)), SLOT(gotRemoveStartup(KStartupInfoId,KStartupInfoData)));
+    connect(
+        m_startupInfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)),
+        this, SLOT(gotNewStartup(KStartupInfoId,KStartupInfoData))
+    );
+    connect(
+        m_startupInfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)),
+        this, SLOT(gotRemoveStartup(KStartupInfoId,KStartupInfoData))
+    );
 }
 
 StartupFeedbackEffect::~StartupFeedbackEffect()
 {
+    stop();
 }
 
 void StartupFeedbackEffect::reconfigure(Effect::ReconfigureFlags flags)
 {
     Q_UNUSED(flags)
-    const bool oldactive = m_active;
+    const bool oldactive = isActive();
     if (oldactive) {
         stop();
     }
@@ -77,7 +108,7 @@ void StartupFeedbackEffect::gotNewStartup(const KStartupInfoId& id, const KStart
     Q_UNUSED(data);
 
     m_startups++;
-    if (!m_active) {
+    if (!isActive()) {
         start();
     }
 }
@@ -100,20 +131,14 @@ void StartupFeedbackEffect::start()
         return;
     }
 
-    effects->startMouseInterception(this, Qt::WaitCursor);
-    xcb_window_t interceptionwindow = effects->mouseInterceptionWindow();
-    if (interceptionwindow == XCB_WINDOW_NONE) {
-        kWarning() << "no mouse interception window";
-        effects->stopMouseInterception(this);
-        m_active = false;
-        return;
-    }
-
+    const xcb_window_t window = rootWindow();
+    m_notifier = new StartupEventNotifier(window);
+    connect(m_notifier, SIGNAL(interrupt()), this, SLOT(stop()));
     ScopedCPointer<xcb_grab_pointer_reply_t> grabPointer(
         xcb_grab_pointer_reply(
             connection(),
             xcb_grab_pointer_unchecked(
-                connection(), true, interceptionwindow,
+                connection(), true, window,
                 XCB_EVENT_MASK_BUTTON_PRESS | XCB_EVENT_MASK_BUTTON_RELEASE | XCB_EVENT_MASK_POINTER_MOTION,
                 XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC, XCB_WINDOW_NONE,
                 m_cursor.handle(), XCB_TIME_CURRENT_TIME
@@ -123,27 +148,24 @@ void StartupFeedbackEffect::start()
     );
     if (grabPointer.isNull() || grabPointer->status != XCB_GRAB_STATUS_SUCCESS) {
         kWarning() << "could not grab pointer";
-        effects->stopMouseInterception(this);
-        m_active = false;
-        return;
+        delete m_notifier;
+        m_notifier = nullptr;
     }
-
-    m_active = true;
 }
 
 void StartupFeedbackEffect::stop()
 {
     switch(m_type) {
         case StartupFeedbackEffect::PassiveFeedback: {
-            if (m_active) {
+            if (m_notifier) {
+                delete m_notifier;
+                m_notifier = nullptr;
                 xcb_ungrab_pointer(connection(), XCB_TIME_CURRENT_TIME);
-                effects->stopMouseInterception(this);
-                m_active = false;
             }
             break;
         }
         case StartupFeedbackEffect::NoFeedback: {
-            return;
+            break;
         }
         default: {
             // impossible
@@ -154,14 +176,7 @@ void StartupFeedbackEffect::stop()
 
 bool StartupFeedbackEffect::isActive() const
 {
-    return m_active;
-}
-
-void StartupFeedbackEffect::windowInputMouseEvent(QEvent* e)
-{
-    if (e->type() == QEvent::MouseButtonRelease) {
-        stop();
-    }
+    return (m_notifier != nullptr);
 }
 
 } // namespace

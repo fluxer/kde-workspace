@@ -29,6 +29,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 namespace KWin
 {
 
+class StartupEventNotifier : public QWidget
+{
+    Q_OBJECT
+public:
+    StartupEventNotifier(xcb_window_t window);
+    ~StartupEventNotifier();
+
+Q_SIGNALS:
+    void interrupt();
+
+protected:
+    bool x11Event(XEvent *xevent) final;
+
+private:
+    xcb_window_t m_window;
+};
+
 class StartupFeedbackEffect
     : public Effect
 {
@@ -39,11 +56,13 @@ public:
 
     virtual void reconfigure(ReconfigureFlags flags);
     virtual bool isActive() const;
-    virtual void windowInputMouseEvent(QEvent* e);
 
 private Q_SLOTS:
     void gotNewStartup(const KStartupInfoId& id, const KStartupInfoData& data);
     void gotRemoveStartup(const KStartupInfoId& id, const KStartupInfoData& data);
+
+    void start();
+    void stop();
 
 private:
     enum FeedbackType {
@@ -51,12 +70,9 @@ private:
         PassiveFeedback = 1
     };
 
-    void start();
-    void stop();
-
     KStartupInfo* m_startupInfo;
     int m_startups;
-    bool m_active;
+    StartupEventNotifier* m_notifier;
     FeedbackType m_type;
     QCursor m_cursor;
 };
