@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
     KComponentData inst(&aboutData);
 
-    KConfig *konfig = nullptr;
+    KConfig* konfig = nullptr;
     if (file.isEmpty()) {
         konfig = new KConfig(QString::fromLatin1("kdeglobals"), KConfig::NoGlobals);
     } else {

@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     KComponentData inst(&aboutData);
     KGlobal::config();
 
-    KConfig *konfig = nullptr;
+    KConfig* konfig = nullptr;
     bool configMustDeleted = false;
     if (file.isEmpty()) {
         konfig = KGlobal::config().data();
@@ -118,14 +118,16 @@ int main(int argc, char **argv)
             }
             return retValue;
         } else if (type == QLatin1String("path")) {
-            fprintf(stdout, "%s\n", cfgGroup.readPathEntry(key, dflt).toLocal8Bit().data());
+            const QByteArray path = cfgGroup.readPathEntry(key, dflt).toLocal8Bit();
+            fprintf(stdout, "%s\n", path.constData());
             if (configMustDeleted) {
                 delete konfig;
             }
             return 0;
         } else {
             /* Assume it's a string... */
-            fprintf(stdout, "%s\n", cfgGroup.readEntry(key, dflt).toLocal8Bit().data());
+            const QByteArray string = cfgGroup.readEntry(key, dflt).toLocal8Bit();
+            fprintf(stdout, "%s\n", string.constData());
             if (configMustDeleted) {
                 delete konfig;
             }
