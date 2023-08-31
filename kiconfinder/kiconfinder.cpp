@@ -86,9 +86,11 @@ int main(int argc, char *argv[])
     foreach (const QString &iconName, iconArgs) {
         const QString icon = KIconLoader::global()->iconPath(iconName, iconGroup, true);
         if (!icon.isEmpty()) {
-            printf("%s\n", icon.toLatin1().constData());
+            const QByteArray iconBytes = icon.toLatin1();
+            printf("%s\n", iconBytes.constData());
         } else {
-            std::cerr << "Icon '" << iconName.toLatin1().constData() << "' not found" << std::endl;
+            const QByteArray iconNameBytes = iconName.toLatin1();
+            std::cerr << "Icon '" << iconNameBytes.constData() << "' not found" << std::endl;
             rv = 1;
         }
     }
