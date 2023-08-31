@@ -65,10 +65,14 @@ KdeSudo::KdeSudo(const QString &icon, const QString &appname)
     bool attach = args->isSet("attach");
 
     if (!args->isSet("c") && !args->count()) {
-        KMessageBox::information(0, i18n("No command arguments supplied!\n"
-                                         "Usage: kdesudo [-u <runas>] <command>\n"
-                                         "KdeSudo will now exit...")
-                                );
+        KMessageBox::information(
+            nullptr,
+            i18n(
+                "No command arguments supplied!\n"
+                "Usage: kdesudo [-u <runas>] <command>\n"
+                "KdeSudo will now exit..."
+            )
+        );
         exit(0);
     }
 
