@@ -94,5 +94,8 @@ int main(int argc, char **argv)
         delete konfig;
         return 0;
     }
+
+    // Questionably, success
+    return 0;
 }
 
