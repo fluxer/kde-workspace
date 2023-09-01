@@ -17,31 +17,26 @@
     Boston, MA 02110-1301, USA.
 */
 
-#include <config-kglobalaccel.h>
-
+#include "config-X11.h"
 #include "kglobalaccel_x11.h"
-
-#include <QtGui/qwindowdefs.h>
-
-#include "kaction.h"
 #include "globalshortcutsregistry.h"
-#include "kkeyserver.h"
 
-#include <kapplication.h>
-#include <kdebug.h>
-
-#include <QtCore/QRegExp>
+#include <QRegExp>
 #include <QWidget>
-#include <QtCore/qmetaobject.h>
+#include <QMetaObject>
 #include <QMenu>
-
-#include <kxerrorhandler.h>
+#include <qwindowdefs.h>
+#include <KAction>
+#include <KApplication>
+#include <KXErrorHandler>
+#include <KDebug>
+#include <kkeyserver.h>
 
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #ifdef HAVE_XKB
-# include <X11/XKBlib.h>
+#  include <X11/XKBlib.h>
 #endif
 #include <X11/keysym.h>
 #include <fixx11h.h>
