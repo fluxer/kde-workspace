@@ -555,6 +555,8 @@ void Tasks::createConfigurationInterface(KConfigDialog *parent)
     connect(m_ui.showOnlyCurrentScreen, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(m_ui.showOnlyCurrentDesktop, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(m_ui.showOnlyMinimized, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
+
+    m_groupManager->createConfigurationInterface(parent);
 }
 
 void Tasks::dialogGroupingChanged(int index)
