@@ -75,7 +75,6 @@ Options* options;
 Atoms* atoms;
 
 int screen_number = -1;
-bool is_multihead = false;
 
 bool initting = false;
 
@@ -313,48 +312,6 @@ int main(int argc, char * argv[])
     const int pagesize = sysconf(_SC_PAGESIZE);
     mallopt(M_TRIM_THRESHOLD, 5*pagesize);
 #endif // M_TRIM_THRESHOLD
-
-    Display* dpy = XOpenDisplay(NULL);
-    if (!dpy) {
-        fprintf(stderr, "%s: FATAL ERROR while trying to open display %s\n",
-                argv[0], XDisplayName(NULL));
-        exit(1);
-    }
-
-    int number_of_screens = ScreenCount(dpy);
-
-    // multi head
-    if (number_of_screens != 1 && KGlobalSettings::isMultiHead()) {
-        KWin::is_multihead = true;
-        KWin::screen_number = DefaultScreen(dpy);
-        int pos; // Temporarily needed to reconstruct DISPLAY var if multi-head
-        QByteArray display_name = XDisplayString(dpy);
-        XCloseDisplay(dpy);
-        dpy = 0;
-
-        if ((pos = display_name.lastIndexOf('.')) != -1)
-            display_name.remove(pos, 10);   // 10 is enough to be sure we removed ".s"
-
-        QString envir;
-        for (int i = 0; i < number_of_screens; i++) {
-            // If execution doesn't pass by here, then kwin
-            // acts exactly as previously
-            if (i != KWin::screen_number && fork() == 0) {
-                KWin::screen_number = i;
-                // Break here because we are the child process, we don't
-                // want to fork() anymore
-                break;
-            }
-        }
-        // In the next statement, display_name shouldn't contain a screen
-        // number. If it had it, it was removed at the "pos" check
-        envir.sprintf("DISPLAY=%s.%d", display_name.data(), KWin::screen_number);
-
-        if (putenv(strdup(envir.toAscii()))) {
-            fprintf(stderr, "%s: WARNING: unable to set DISPLAY environment variable\n", argv[0]);
-            perror("putenv()");
-        }
-    }
 
     KAboutData aboutData(
         "kwin",                     // The program name used internally

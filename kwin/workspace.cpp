@@ -67,7 +67,6 @@ namespace KWin
 
 // main.cpp
 extern int screen_number;
-extern bool is_multihead;
 
 ColorMapper::ColorMapper(QObject *parent)
     : QObject(parent)
@@ -1046,33 +1045,6 @@ void Workspace::sendClientToDesktop(Client* c, int desk, bool dont_activate)
     updateClientArea();
 }
 
-/**
- * checks whether the X Window with the input focus is on our X11 screen
- * if the window cannot be determined or inspected, resturn depends on whether there's actually
- * more than one screen
- *
- * this is NOT in any way related to XRandR multiscreen
- *
- */
-bool Workspace::isOnCurrentHead()
-{
-    if (!is_multihead) {
-        return true;
-    }
-
-    Xcb::CurrentInput currentInput;
-    if (currentInput.window() == XCB_WINDOW_NONE) {
-        return !is_multihead;
-    }
-
-    Xcb::WindowGeometry geometry(currentInput.window());
-    if (geometry.isNull()) { // should not happen
-        return !is_multihead;
-    }
-
-    return rootWindow() == geometry->root;
-}
-
 void Workspace::sendClientToScreen(Client* c, int screen)
 {
     c->sendToScreen(screen);
@@ -1272,13 +1244,6 @@ QString Workspace::supportInformation() const
 #endif
     support.append("\nScreens\n");
     support.append(  "=======\n");
-    support.append("Multi-Head: ");
-    if (is_multihead) {
-        support.append("yes\n");
-        support.append(QString("Head: %1\n").arg(screen_number));
-    } else {
-        support.append("no\n");
-    }
     support.append("Active screen follows mouse: ");
     if (screens()->isCurrentFollowsMouse())
         support.append(" yes\n");

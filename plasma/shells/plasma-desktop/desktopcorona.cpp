@@ -168,47 +168,16 @@ void DesktopCorona::checkScreen(int screen)
 
 int DesktopCorona::numScreens() const
 {
-#ifdef Q_WS_X11
-    if (KGlobalSettings::isMultiHead()) {
-        // with multihead, we "lie" and say that there is only one screen
-        return 1;
-    }
-#endif
-
     return QApplication::desktop()->screenCount();
 }
 
 QRect DesktopCorona::screenGeometry(int id) const
 {
-#ifdef Q_WS_X11
-    if (KGlobalSettings::isMultiHead()) {
-        // with multihead, we "lie" and say that screen 0 is the default screen, in fact, we pretend
-        // we have only one screen at all
-        Display *dpy = XOpenDisplay(NULL);
-        if (dpy) {
-            id = DefaultScreen(dpy);
-            XCloseDisplay(dpy);
-        }
-    }
-#endif
-
     return QApplication::desktop()->screenGeometry(id);
 }
 
 QRegion DesktopCorona::availableScreenRegion(int id) const
 {
-#ifdef Q_WS_X11
-    if (KGlobalSettings::isMultiHead()) {
-        // with multihead, we "lie" and say that screen 0 is the default screen, in fact, we pretend
-        // we have only one screen at all
-        Display *dpy = XOpenDisplay(NULL);
-        if (dpy) {
-            id = DefaultScreen(dpy);
-            XCloseDisplay(dpy);
-        }
-    }
-#endif
-
     if (id < 0) {
         id = QApplication::desktop()->primaryScreen();
     }
@@ -270,13 +239,6 @@ QRect DesktopCorona::availableScreenRect(int id) const
 
 int DesktopCorona::screenId(const QPoint &pos) const
 {
-#ifdef Q_WS_X11
-    if (KGlobalSettings::isMultiHead()) {
-        // with multihead, we "lie" and say that there is only one screen
-        return 0;
-    }
-#endif
-
     return QApplication::desktop()->screenNumber(pos);
 }
 

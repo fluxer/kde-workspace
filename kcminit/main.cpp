@@ -36,7 +36,6 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocale.h>
-#include <ktoolinvocation.h>
 #include <kservicetypetrader.h>
 #include <kglobalsettings.h>
 
@@ -169,11 +168,6 @@ KCMInit::KCMInit( KCmdLineArgs* args )
     list = KServiceTypeTrader::self()->query( "KCModuleInit" );
 
   }
-  // Pass env. var to klauncher.
-  QString name = "KDE_MULTIHEAD";
-  QString value = KGlobalSettings::isMultiHead() ? "true" : "false";
-  KToolInvocation::setLaunchEnv(name, value);
-  setenv( name.toLatin1().constData(), value.toLatin1().constData(), 1 ); // apply effect also to itself
 
   if( startup )
   {

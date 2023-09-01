@@ -62,7 +62,6 @@ static inline int sign(int v) {
 //********************************************
 
 extern int screen_number;
-extern bool is_multihead;
 
 /*!
   Resizes the workspace after an XRANDR screen size change
@@ -272,42 +271,26 @@ QRect Workspace::clientArea(clientAreaOption opt, int screen, int desktop) const
         screen = screens()->current();
 
     QRect sarea, warea;
-
-    if (is_multihead) {
-        sarea = (!screenarea.isEmpty()
-                   && screen < screenarea[ desktop ].size()) // screens may be missing during KWin initialization or screen config changes
-                  ? screenarea[ desktop ][ screen_number ]
-                  : screens()->geometry(screen_number);
-        warea = workarea[ desktop ].isNull()
-                ? screens()->geometry(screen_number)
-                : workarea[ desktop ];
-    } else {
-        sarea = (!screenarea.isEmpty()
-                && screen < screenarea[ desktop ].size()) // screens may be missing during KWin initialization or screen config changes
-                ? screenarea[ desktop ][ screen ]
-                : screens()->geometry(screen);
-        warea = workarea[ desktop ].isNull()
-                ? QRect(0, 0, displayWidth(), displayHeight())
-                : workarea[ desktop ];
-    }
+    // screens may be missing during KWin initialization or screen config changes
+    sarea = (!screenarea.isEmpty()
+            && screen < screenarea[ desktop ].size())
+            ? screenarea[ desktop ][ screen ]
+            : screens()->geometry(screen);
+    warea = workarea[ desktop ].isNull()
+            ? QRect(0, 0, displayWidth(), displayHeight())
+            : workarea[ desktop ];
 
     switch(opt) {
     case MaximizeArea:
     case PlacementArea:
-            return sarea;
+        return sarea;
     case MaximizeFullArea:
     case FullScreenArea:
     case MovementArea:
     case ScreenArea:
-        if (is_multihead)
-            return screens()->geometry(screen_number);
-        else
-            return screens()->geometry(screen);
+        return screens()->geometry(screen);
     case WorkArea:
-        if (is_multihead)
-            return sarea;
-        else
-            return warea;
+        return warea;
     case FullArea:
         return QRect(0, 0, displayWidth(), displayHeight());
     }

@@ -112,30 +112,6 @@ void AppInterface::setTheme(const QString &name)
     Plasma::Theme::defaultTheme()->setThemeName(name);
 }
 
-bool AppInterface::multihead() const
-{
-    return KGlobalSettings::isMultiHead();
-}
-
-int AppInterface::multiheadScreen() const
-{
-    int id = -1;
-
-#ifdef Q_WS_X11
-    if (KGlobalSettings::isMultiHead()) {
-        // with multihead, we "lie" and say that screen 0 is the default screen, in fact, we pretend
-        // we have only one screen at all
-        Display *dpy = XOpenDisplay(NULL);
-        if (dpy) {
-            id = DefaultScreen(dpy);
-            XCloseDisplay(dpy);
-        }
-    }
-#endif
-
-    return id;
-}
-
 void AppInterface::lockCorona(bool locked)
 {
     m_env->corona()->setImmutability(locked ? Plasma::UserImmutable : Plasma::Mutable);
