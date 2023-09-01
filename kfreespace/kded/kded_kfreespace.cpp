@@ -42,7 +42,7 @@ KFreeSpaceModule::KFreeSpaceModule(QObject *parent, const QList<QVariant> &args)
 
     m_dirwatch = new KDirWatch(this);
     m_dirwatch->setInterval(5000);
-    const QString kfreespacercfile = KGlobal::dirs()->saveLocation("config", "kfreespacerc");
+    const QString kfreespacercfile = KStandardDirs::locateLocal("config", "kfreespacerc");
     m_dirwatch->addFile(kfreespacercfile);
     connect(m_dirwatch, SIGNAL(dirty(QString)), this, SLOT(slotInit()));
 
