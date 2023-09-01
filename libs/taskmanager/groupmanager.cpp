@@ -104,7 +104,7 @@ public:
     void unsaveLauncher(LauncherItem *launcher);
     void saveLauncherConfig();
     void saveLauncherConfig(KConfigGroup &cg);
-    QList<KUrl> readLauncherConfig(KConfigGroup &cg);
+    QList<QUrl> readLauncherConfig(KConfigGroup &cg);
     int launcherIndex(const KUrl &url);
     KConfigGroup launcherConfig(const KConfigGroup &config = KConfigGroup());
 
@@ -779,17 +779,18 @@ void GroupManager::readLauncherConfig(const KConfigGroup &cg)
         return;
     }
 
-    QList<KUrl> launchers = d->readLauncherConfig(conf);
+    QList<QUrl> launchers = d->readLauncherConfig(conf);
 
     // prevents re-writing the results out
     d->readingLauncherConfig = true;
     QSet<KUrl> urls;
-    foreach (KUrl l, launchers) {
+    foreach (QUrl l, launchers) {
         QString wmClass(l.queryItemValue("wmClass"));
         l.setQuery(QString());
 
-        if (addLauncher(l, QIcon(), QString(), QString(), wmClass)) {
-            urls << l;
+        KUrl k(l);
+        if (addLauncher(k, QIcon(), QString(), QString(), wmClass)) {
+            urls << k;
         }
     }
 
@@ -1051,14 +1052,14 @@ void GroupManagerPrivate::saveLauncherConfig(KConfigGroup &cg)
     emit q->configChanged();
 }
 
-QList<KUrl> GroupManagerPrivate::readLauncherConfig(KConfigGroup &cg)
+QList<QUrl> GroupManagerPrivate::readLauncherConfig(KConfigGroup &cg)
 {
     QStringList items = cg.readEntry("Items", QStringList());
-    QList<KUrl> details;
+    QList<QUrl> details;
 
-    foreach (QString item, items) {
+    foreach (const QString &item, items) {
         if (!item.isEmpty()) {
-            details.append(KUrl(item));
+            details.append(QUrl(item));
         }
     }
 
