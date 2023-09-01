@@ -170,7 +170,9 @@ static QByteArray contentForFile(const QString &basedir, const QFileInfo &filein
     }
 
     data.append("        <td><a href=\"");
-    data.append(QUrl::toPercentEncoding(cleanpath));
+    // NOTE: browsers produce bogus URLs for mixed (non-percentage and percentage-encoded) paths,
+    // also browsers decode percentage URLs and pass it back which for local files may be invalid
+    data.append(cleanpath.toUtf8());
     data.append("\">");
     data.append(fileinfo.fileName().toUtf8());
     data.append("</a></td>\n");
