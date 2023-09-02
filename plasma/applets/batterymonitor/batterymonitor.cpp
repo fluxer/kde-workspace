@@ -28,6 +28,7 @@
 #include <Plasma/IconWidget>
 #include <Plasma/ToolTipManager>
 #include <KIcon>
+#include <KIconLoader>
 #include <KDebug>
 
 static QString kChargeStateToString(const Solid::Battery::ChargeState state)
@@ -144,6 +145,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
         m_batterymonitor->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
 
+    const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
     foreach (const Solid::Device &batterydevice, batterydevices) {
         if (m_activeudi.isEmpty()) {
             // pick the first as active
@@ -157,6 +159,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
             this
         );
         iconwidget->setOrientation(Qt::Horizontal);
+        iconwidget->setPreferredIconSize(QSize(paneliconsize, paneliconsize));
         iconwidget->setProperty("_k_udi", batterydevice.udi());
         connect(
             iconwidget, SIGNAL(activated()),
