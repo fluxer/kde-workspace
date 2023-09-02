@@ -230,18 +230,18 @@ void KCrashModule::slotDetails()
 void KCrashModule::slotDialogFinished(const int result)
 {
     kDebug() << "Notification details result" << result;
-    if (result != QDialog::Accepted) {
-        return;
-    }
 
     KCrashDialog* kcrashdetails = qobject_cast<KCrashDialog*>(sender());
     const QString kcrashreporturl = kcrashdetails->reportUrl();
     m_dialogs.removeAll(kcrashdetails);
     kcrashdetails->deleteLater();
-    if (kcrashreporturl.startsWith(QLatin1String("mailto:"))) {
-        KToolInvocation::invokeMailer(kcrashreporturl, QString::fromLatin1("Crash report"));
-    } else {
-        KToolInvocation::invokeBrowser(kcrashreporturl);
+
+    if (result == QDialog::Accepted) {
+        if (kcrashreporturl.startsWith(QLatin1String("mailto:"))) {
+            KToolInvocation::invokeMailer(kcrashreporturl, QString::fromLatin1("Crash report"));
+        } else {
+            KToolInvocation::invokeBrowser(kcrashreporturl);
+        }
     }
 }
 
