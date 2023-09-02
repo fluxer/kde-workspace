@@ -75,7 +75,7 @@ void BatterySignalMapper::chargePercentChanged(int value)
 void BatterySignalMapper::chargeStateChanged(int newState)
 {
     QStringList chargestate;
-    chargestate << "Fully Charged" << "Charging" << "Discharging";
+    chargestate << "Unknown Charge" << "Charging" << "Discharging" << "Fully Charged";
     emit deviceChanged(signalmap[sender()], "Charge State", chargestate.at(newState));
 }
 
