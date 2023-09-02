@@ -122,6 +122,8 @@ void DeviceSignalMapManager::unmapDevice(Solid::Battery *battery)
     disconnect(battery, SIGNAL(chargePercentChanged(int,QString)), map, SLOT(chargePercentChanged(int)));
     disconnect(battery, SIGNAL(chargeStateChanged(int,QString)), map, SLOT(chargeStateChanged(int)));
     disconnect(battery, SIGNAL(plugStateChanged(bool,QString)), map, SLOT(plugStateChanged(bool)));
+    disconnect(battery, SIGNAL(powerSupplyStateChanged(bool,QString)), map, SLOT(powerSupplyStateChanged(bool)));
+    disconnect(battery, SIGNAL(capacityChanged(int,QString)), map, SLOT(capacityChanged(bool)));
 }
 
 void DeviceSignalMapManager::unmapDevice(Solid::StorageAccess *storageaccess)
