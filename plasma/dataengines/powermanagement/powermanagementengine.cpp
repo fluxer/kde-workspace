@@ -20,60 +20,35 @@
  */
 
 #include "powermanagementengine.h"
+#include "powermanagementservice.h"
 
-//solid specific includes
-#include <solid/devicenotifier.h>
-#include <solid/device.h>
-#include <solid/deviceinterface.h>
-#include <solid/battery.h>
-#include <solid/powermanagement.h>
+#include <QDBusConnectionInterface>
+#include <QDBusConnection>
+#include <QDBusMetaType>
 
 #include <KDebug>
 #include <KLocale>
 #include <KStandardDirs>
 #include <KIdleTime>
-
-#include <QtDBus/QDBusConnectionInterface>
-#include <QtDBus/QDBusError>
-#include <QtDBus/QDBusInterface>
-#include <QtDBus/QDBusMetaType>
-#include <QtDBus/QDBusReply>
-#include <QtDBus/qdbuspendingcall.h>
-
+#include <Solid/PowerManagement>
 #include <Plasma/DataContainer>
-#include "powermanagementservice.h"
 
 typedef QMap< QString, QString > StringStringMap;
 Q_DECLARE_METATYPE(StringStringMap)
 
 PowermanagementEngine::PowermanagementEngine(QObject* parent, const QVariantList& args)
-        : Plasma::DataEngine(parent, args)
-        , m_sources(basicSourceNames())
+    : Plasma::DataEngine(parent, args)
 {
-    Q_UNUSED(args)
-    qDBusRegisterMetaType< StringStringMap >();
-}
+    qDBusRegisterMetaType<StringStringMap>();
 
-PowermanagementEngine::~PowermanagementEngine()
-{}
+    m_sources << "Sleep States" << "PowerDevil";
+}
 
 void PowermanagementEngine::init()
 {
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
-            this,                              SLOT(deviceAdded(QString)));
-    connect(Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
-            this,                              SLOT(deviceRemoved(QString)));
-
     if (QDBusConnection::sessionBus().interface()->isServiceRegistered("org.freedesktop.PowerManagement")) {
         sourceRequestEvent("PowerDevil");
     }
-}
-
-QStringList PowermanagementEngine::basicSourceNames() const
-{
-    QStringList sources;
-    sources << "Battery" << "AC Adapter" << "Sleep States" << "PowerDevil";
-    return sources;
 }
 
 QStringList PowermanagementEngine::sources() const
@@ -83,68 +58,8 @@ QStringList PowermanagementEngine::sources() const
 
 bool PowermanagementEngine::sourceRequestEvent(const QString &name)
 {
-    if (name == "Battery") {
-        const QList<Solid::Device> listBattery = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
-        m_batterySources.clear();
-
-        if (listBattery.isEmpty()) {
-            setData("Battery", "Has Battery", false);
-            return true;
-        }
-
-        uint index = 0;
-        QStringList batterySources;
-
-        foreach (const Solid::Device &deviceBattery, listBattery) {
-            const Solid::Battery* battery = deviceBattery.as<Solid::Battery>();
-
-            const QString source = QString("Battery%1").arg(index++);
-
-            batterySources << source;
-            m_batterySources[deviceBattery.udi()] = source;
-
-            connect(battery, SIGNAL(chargeStateChanged(int,QString)), this,
-                    SLOT(updateBatteryChargeState(int,QString)));
-            connect(battery, SIGNAL(chargePercentChanged(int,QString)), this,
-                    SLOT(updateBatteryChargePercent(int,QString)));
-            connect(battery, SIGNAL(plugStateChanged(bool,QString)), this,
-                    SLOT(updateBatteryPlugState(bool,QString)));
-
-            // Set initial values
-            updateBatteryChargeState(battery->chargeState(), deviceBattery.udi());
-            updateBatteryChargePercent(battery->chargePercent(), deviceBattery.udi());
-            updateBatteryPlugState(battery->isPlugged(), deviceBattery.udi());
-            updateBatteryPowerSupplyState(battery->isPowerSupply(), deviceBattery.udi());
-
-            setData(source, "Vendor", deviceBattery.vendor());
-            setData(source, "Product", deviceBattery.product());
-            setData(source, "Capacity", battery->capacity());
-            setData(source, "Type", batteryType(battery));
-        }
-
-        updateBatteryNames();
-
-        setData("Battery", "Has Battery", !batterySources.isEmpty());
-        if (!batterySources.isEmpty()) {
-            setData("Battery", "Sources", batterySources);
-        }
-
-        m_sources = basicSourceNames() + batterySources;
-    } else if (name == "AC Adapter") {
-        bool isPlugged = false;
-
-        const QList<Solid::Device> list_ac = Solid::Device::listFromType(Solid::DeviceInterface::AcAdapter);
-        foreach (const Solid::Device & device_ac, list_ac) {
-            const Solid::AcAdapter* acadapter = device_ac.as<Solid::AcAdapter>();
-            isPlugged |= acadapter->isPlugged();
-            connect(acadapter, SIGNAL(plugStateChanged(bool,QString)), this,
-                    SLOT(updateAcPlugState(bool)), Qt::UniqueConnection);
-        }
-
-        updateAcPlugState(isPlugged);
-    } else if (name == "Sleep States") {
-        const QSet<Solid::PowerManagement::SleepState> sleepstates =
-                                Solid::PowerManagement::supportedSleepStates();
+    if (name == "Sleep States") {
+        const QSet<Solid::PowerManagement::SleepState> sleepstates = Solid::PowerManagement::supportedSleepStates();
         // We first set all possible sleepstates to false, then enable the ones that are available
         setData("Sleep States", "Suspend", false);
         setData("Sleep States", "Hibernate", false);
@@ -172,22 +87,6 @@ bool PowermanagementEngine::sourceRequestEvent(const QString &name)
     return true;
 }
 
-QString PowermanagementEngine::batteryType(const Solid::Battery* battery)
-{
-  switch(battery->type()) {
-      case Solid::Battery::PrimaryBattery:
-          return QLatin1String("Battery");
-      case Solid::Battery::UpsBattery:
-          return QLatin1String("Ups");
-      case Solid::Battery::UsbBattery:
-          return QLatin1String("Usb");
-      default:
-          return QLatin1String("Unknown");
-  }
-
-  return QLatin1String("Unknown");
-}
-
 bool PowermanagementEngine::updateSourceEvent(const QString &source)
 {
     if (source == "UserActivity") {
@@ -202,141 +101,7 @@ Plasma::Service* PowermanagementEngine::serviceForSource(const QString &source)
     if (source == "PowerDevil") {
         return new PowerManagementService(this);
     }
-
-    return 0;
-}
-
-void PowermanagementEngine::updateBatteryChargeState(int newState, const QString& udi)
-{
-    QString state("Unknown");
-    if (newState == Solid::Battery::FullyCharged) {
-        state = "FullyCharged";
-    } else if (newState == Solid::Battery::Charging) {
-        state = "Charging";
-    } else if (newState == Solid::Battery::Discharging) {
-        state = "Discharging";
-    }
-
-    const QString source = m_batterySources[udi];
-    setData(source, "State", state);
-}
-
-void PowermanagementEngine::updateBatteryPlugState(bool newState, const QString& udi)
-{
-    const QString source = m_batterySources[udi];
-    setData(source, "Plugged in", newState);
-}
-
-void PowermanagementEngine::updateBatteryChargePercent(int newValue, const QString& udi)
-{
-    const QString source = m_batterySources[udi];
-    setData(source, "Percent", newValue);
-}
-
-void PowermanagementEngine::updateBatteryPowerSupplyState(bool newState, const QString& udi)
-{
-    const QString source = m_batterySources[udi];
-    setData(source, "Is Power Supply", newState);
-}
-
-void PowermanagementEngine::updateBatteryNames()
-{
-    uint unnamedBatteries = 0;
-    foreach (QString source, m_batterySources) {
-        DataContainer *batteryDataContainer = containerForSource(source);
-        if (batteryDataContainer) {
-            const QString batteryVendor = batteryDataContainer->data()["Vendor"].toString();
-            const QString batteryProduct = batteryDataContainer->data()["Product"].toString();
-
-            // Don't show battery name for primary power supply batteries. They usually have cryptic serial number names.
-            const bool showBatteryName = batteryDataContainer->data()["Type"].toString() != QLatin1String("Battery") ||
-                                         !batteryDataContainer->data()["Is Power Supply"].toBool();
-
-            if (!batteryProduct.isEmpty() && batteryProduct != "Unknown Battery" && showBatteryName) {
-                if (!batteryVendor.isEmpty()) {
-                    setData(source, "Pretty Name", QString(batteryVendor + ' ' + batteryProduct));
-                } else {
-                    setData(source, "Pretty Name", batteryProduct);
-                }
-            } else {
-                ++unnamedBatteries;
-                if (unnamedBatteries > 1) {
-                    setData(source, "Pretty Name", i18nc("Placeholder is the battery number", "Battery %1", unnamedBatteries));
-                } else {
-                    setData(source, "Pretty Name", i18n("Battery"));
-                }
-            }
-        }
-    }
-}
-
-void PowermanagementEngine::updateAcPlugState(bool newState)
-{
-    setData("AC Adapter", "Plugged in", newState);
-}
-
-void PowermanagementEngine::deviceRemoved(const QString& udi)
-{
-    if (m_batterySources.contains(udi)) {
-        Solid::Device device(udi);
-        Solid::Battery* battery = device.as<Solid::Battery>();
-        if (battery)
-            battery->disconnect();
-
-        const QString source = m_batterySources[udi];
-        m_batterySources.remove(udi);
-        removeSource(source);
-
-        QStringList sourceNames(m_batterySources.values());
-        sourceNames.removeAll(source);
-        setData("Battery", "Sources", sourceNames);
-        setData("Battery", "Has Battery", !sourceNames.isEmpty());
-    }
-}
-
-void PowermanagementEngine::deviceAdded(const QString& udi)
-{
-    Solid::Device device(udi);
-    if (device.isValid()) {
-        const Solid::Battery* battery = device.as<Solid::Battery>();
-
-        if (battery) {
-            int index = 0;
-            QStringList sourceNames(m_batterySources.values());
-            while (sourceNames.contains(QString("Battery%1").arg(index))) {
-                index++;
-            }
-
-            const QString source = QString("Battery%1").arg(index);
-            sourceNames << source;
-            m_batterySources[device.udi()] = source;
-
-            connect(battery, SIGNAL(chargeStateChanged(int,QString)), this,
-                    SLOT(updateBatteryChargeState(int,QString)));
-            connect(battery, SIGNAL(chargePercentChanged(int,QString)), this,
-                    SLOT(updateBatteryChargePercent(int,QString)));
-            connect(battery, SIGNAL(plugStateChanged(bool,QString)), this,
-                    SLOT(updateBatteryPlugState(bool,QString)));
-            connect(battery, SIGNAL(powerSupplyStateChanged(bool,QString)), this,
-                    SLOT(updateBatteryPowerSupplyState(bool,QString)));
-
-            // Set initial values
-            updateBatteryChargeState(battery->chargeState(), device.udi());
-            updateBatteryChargePercent(battery->chargePercent(), device.udi());
-            updateBatteryPlugState(battery->isPlugged(), device.udi());
-            updateBatteryPowerSupplyState(battery->isPowerSupply(), device.udi());
-
-            setData(source, "Vendor", device.vendor());
-            setData(source, "Product", device.product());
-            setData(source, "Capacity", battery->capacity());
-            setData(source, "Type", batteryType(battery));
-
-            setData("Battery", "Sources", sourceNames);
-            setData("Battery", "Has Battery", !sourceNames.isEmpty());
-
-            updateBatteryNames();
-        }
-    }
+    return nullptr;
 }
 
 K_EXPORT_PLASMA_DATAENGINE(powermanagement, PowermanagementEngine)

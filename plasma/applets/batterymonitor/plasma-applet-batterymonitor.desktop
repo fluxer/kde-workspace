@@ -204,15 +204,14 @@ Keywords[zh_TW]=Power Management;Battery;System;Energy;
 Icon=battery
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet,Plasma/PopupApplet
+X-KDE-Library=plasma_applet_battery
 
-X-Plasma-API=declarativeappletscript
 X-Plasma-DefaultSize=450,300
-X-Plasma-MainScript=ui/batterymonitor.qml
 X-Plasma-NotificationArea=true
 
-X-KDE-PluginInfo-Author=Sebastian Kügler, Kai Uwe Broulik
+X-KDE-PluginInfo-Author=Ivailo Monev
 X-KDE-PluginInfo-Category=System Information
-X-KDE-PluginInfo-Email=sebas@kde.org, kde@privat.broulik.de
+X-KDE-PluginInfo-Email=xakepa10@gmail.com
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-Name=battery
 X-KDE-PluginInfo-Version=2.0

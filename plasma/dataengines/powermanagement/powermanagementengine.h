@@ -23,25 +23,16 @@
 
 #include <Plasma/DataEngine>
 
-#include <solid/battery.h>
-#include <solid/acadapter.h>
-
-#include <QtDBus/QDBusConnection>
-#include <QHash>
-
-#include <QDBusPendingCallWatcher>
-
 /**
- * This class provides runtime information about the battery and AC status
- * for use in power management Plasma applets.
+ * This class provides power management in Plasma applets.
  */
 class PowermanagementEngine : public Plasma::DataEngine
 {
     Q_OBJECT
 
 public:
-    PowermanagementEngine( QObject* parent, const QVariantList& args );
-    ~PowermanagementEngine();
+    PowermanagementEngine(QObject *parent, const QVariantList &args);
+
     QStringList sources() const;
     Plasma::Service* serviceForSource(const QString &source);
 
@@ -50,25 +41,8 @@ protected:
     bool updateSourceEvent(const QString &source);
     void init();
 
-private slots:
-    void updateBatteryChargeState(int newState, const QString& udi);
-    void updateBatteryPlugState(bool newState, const QString& udi);
-    void updateBatteryChargePercent(int newValue, const QString& udi);
-    void updateBatteryPowerSupplyState(bool newState, const QString& udi);
-    void updateAcPlugState(bool newState);
-    void updateBatteryNames();
-
-    void deviceRemoved(const QString& udi);
-    void deviceAdded(const QString& udi);
-
 private:
-    QString batteryType(const Solid::Battery *battery);
-    QStringList basicSourceNames() const;
-
     QStringList m_sources;
-
-    QHash<QString, QString> m_batterySources;  // <udi, Battery0>
 };
 
-
-#endif
+#endif // POWERMANAGEMENTENGINE_H

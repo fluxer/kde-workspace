@@ -6,9 +6,8 @@ include_directories(
 )
 
 set(calendar_SRCS
-    calendar.cpp)
-
-add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+    calendar.cpp
+)
 
 kde4_add_plugin(plasma_applet_calendar ${calendar_SRCS})
 target_link_libraries(plasma_applet_calendar
@@ -17,6 +16,15 @@ target_link_libraries(plasma_applet_calendar
     plasmaclock
 )
 
-install(TARGETS plasma_applet_calendar DESTINATION ${KDE4_PLUGIN_INSTALL_DIR})
-install(FILES plasma-applet-calendar.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR})
-install(FILES mini-calendar.svgz DESTINATION ${KDE4_DATA_INSTALL_DIR}/desktoptheme/default/calendar/)
+install(
+    TARGETS plasma_applet_calendar
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
+install(
+    FILES plasma-applet-calendar.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
+install(
+    FILES mini-calendar.svgz
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/desktoptheme/default/calendar/
+)
