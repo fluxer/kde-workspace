@@ -23,11 +23,11 @@
 #include <QTimer>
 
 #include <KGlobalSettings>
-
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 #include <Plasma/DataEngineManager>
 #include <Plasma/Theme>
+#include <Solid/Device>
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>
@@ -43,7 +43,6 @@ AppInterface::AppInterface(ScriptEngine *env)
     : QObject(env),
       m_env(env)
 {
-
 }
 
 int AppInterface::screenCount() const
@@ -131,12 +130,8 @@ void AppInterface::sleep(int ms)
 
 bool AppInterface::hasBattery() const
 {
-  Plasma::DataEngineManager *engines = Plasma::DataEngineManager::self();
-  Plasma::DataEngine *power = engines->loadEngine("powermanagement");
-
-  const QStringList batteries = power->query("Battery")["Sources"].toStringList();
-  engines->unloadEngine("powermanagement");
-  return !batteries.isEmpty();
+    const QList<Solid::Device> batteries = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
+    return !batteries.isEmpty();
 }
 
 QStringList AppInterface::knownWidgetTypes() const

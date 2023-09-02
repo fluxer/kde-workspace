@@ -41,6 +41,7 @@ target_link_libraries(plasmagenericshell PUBLIC
     KDE4::plasma
     KDE4::kdeui
     KDE4::kfile
+    KDE4::solid
     ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTUITOOLS_LIBRARY}
