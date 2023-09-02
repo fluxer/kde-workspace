@@ -18,6 +18,7 @@
 
 #include "batterymonitor.h"
 
+#include <QTimer>
 #include <QGraphicsLinearLayout>
 #include <Solid/Device>
 #include <Solid/Battery>
@@ -55,11 +56,13 @@ class BatteryMonitorWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    BatteryMonitorWidget(BatteryMonitor* batterymonitor, QGraphicsWidget *parent);
+    BatteryMonitorWidget(BatteryMonitor* batterymonitor);
     ~BatteryMonitorWidget();
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotUpdateLayout();
+
+private Q_SLOTS:
     void slotSuppressSleep(const bool suppress);
     void slotSuppressScreen(const bool suppress);
     void slotUpdateActive();
@@ -79,8 +82,8 @@ private:
     QString m_activeudi;
 };
 
-BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor, QGraphicsWidget *parent)
-    : QGraphicsWidget(parent),
+BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor)
+    : QGraphicsWidget(batterymonitor),
     m_batterymonitor(batterymonitor),
     m_layout(nullptr),
     m_suppresssleepcookie(0),
@@ -100,8 +103,6 @@ BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor, QGrap
     m_layout->addItem(m_suppressscreenbox);
     setLayout(m_layout);
 
-    slotUpdateLayout();
-
     // TODO: selective update
     connect(
         Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
@@ -115,7 +116,7 @@ BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor, QGrap
 
 BatteryMonitorWidget::~BatteryMonitorWidget()
 {
-    // do not suppress sleep and screen power management forever
+    // have to stop sleep and screen power management supression at some point
     slotSuppressSleep(false);
     slotSuppressScreen(false);
 }
@@ -282,8 +283,8 @@ BatteryMonitor::BatteryMonitor(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
     m_batterywidget(nullptr)
 {
-    setAspectRatioMode(Plasma::IgnoreAspectRatio);
     KGlobal::locale()->insertCatalog("plasma_applet_battery");
+    setAspectRatioMode(Plasma::IgnoreAspectRatio);
 }
 
 BatteryMonitor::~BatteryMonitor()
@@ -294,11 +295,17 @@ BatteryMonitor::~BatteryMonitor()
 void BatteryMonitor::init()
 {
     setPopupIcon("battery");
-
-    m_batterywidget = new BatteryMonitorWidget(this, this);
+    m_batterywidget = new BatteryMonitorWidget(this);
 }
 
-QGraphicsWidget *BatteryMonitor::graphicsWidget()
+void BatteryMonitor::constraintsEvent(Plasma::Constraints constraints)
+{
+    if (constraints & Plasma::StartupCompletedConstraint) {
+        QTimer::singleShot(1500, m_batterywidget, SLOT(slotUpdateLayout()));
+    }
+}
+
+QGraphicsWidget* BatteryMonitor::graphicsWidget()
 {
     return m_batterywidget;
 }

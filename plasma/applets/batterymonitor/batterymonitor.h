@@ -32,6 +32,7 @@ public:
 
     // Plasma::Applet reimplementation
     void init() final;
+    void constraintsEvent(Plasma::Constraints constraints) final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
 
