@@ -425,6 +425,8 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
 
         setData(name, I18N_NOOP("Plugged In"), battery->isPlugged());
         setData(name, I18N_NOOP("Type"), batterytype.at((int)battery->type()));
+        setData(name, I18N_NOOP("Is Power Supply"), battery->isPowerSupply());
+        setData(name, I18N_NOOP("Capacity"), battery->capacity());
         setData(name, I18N_NOOP("Charge Percent"), battery->chargePercent());
         setData(name, I18N_NOOP("Rechargeable"), battery->isRechargeable());
         setData(name, I18N_NOOP("Charge State"), chargestate.at((int)battery->chargeState()));
@@ -700,6 +702,7 @@ bool SolidDeviceEngine::updateSourceEvent(const QString& source)
     bool update1 = updateFreeSpace(source);
     bool update2 = updateEmblems(source);
     bool update3 = updateInUse(source);
+    // TODO: update battery state?
 
     return (update1 || update2 || update3);
 }
