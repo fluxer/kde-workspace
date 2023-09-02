@@ -174,9 +174,12 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         devicetypes << I18N_NOOP("Storage Drive");
 
         QStringList bus;
-        bus << I18N_NOOP("Ide") << I18N_NOOP("Usb") << I18N_NOOP("Ieee1394") << I18N_NOOP("Scsi") << I18N_NOOP("Sata") << I18N_NOOP("Platform");
+        bus << I18N_NOOP("Ide") << I18N_NOOP("Usb") << I18N_NOOP("Ieee1394")
+                 << I18N_NOOP("Scsi") << I18N_NOOP("Sata") << I18N_NOOP("Platform");
         QStringList drivetype;
-        drivetype << I18N_NOOP("Hard Disk") <<  I18N_NOOP("Cdrom Drive") <<  I18N_NOOP("Floppy") <<  I18N_NOOP("Tape") <<  I18N_NOOP("Compact Flash") <<  I18N_NOOP("Memory Stick") <<  I18N_NOOP("Smart Media") <<  I18N_NOOP("SdMmc");
+        drivetype << I18N_NOOP("Hard Disk") <<  I18N_NOOP("Cdrom Drive") <<  I18N_NOOP("Floppy")
+                 << I18N_NOOP("Tape") << I18N_NOOP("Compact Flash") << I18N_NOOP("Memory Stick")
+                 << I18N_NOOP("Smart Media") <<  I18N_NOOP("SdMmc");
 
         setData(name, I18N_NOOP("Bus"), bus.at((int)storagedrive->bus()));
         setData(name, I18N_NOOP("Drive Type"), drivetype.at((int)storagedrive->driveType()));
@@ -345,8 +348,8 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
                 << I18N_NOOP("DVD Plus Rewritable Duallayer") << I18N_NOOP("Blu Ray Rom") << I18N_NOOP("Blu Ray Recordable")
                 << I18N_NOOP("Blu Ray Rewritable") << I18N_NOOP("HD DVD Rom") <<  I18N_NOOP("HD DVD Recordable")
                 << I18N_NOOP("HD DVD Rewritable");
-        //+1 because the enum starts at -1
-        setData(name, I18N_NOOP("Disc Type"), disctypes.at((int)opticaldisc->discType() + 1));
+
+        setData(name, I18N_NOOP("Disc Type"), disctypes.at((int)opticaldisc->discType()));
         setData(name, I18N_NOOP("Appendable"), opticaldisc->isAppendable());
         setData(name, I18N_NOOP("Blank"), opticaldisc->isBlank());
         setData(name, I18N_NOOP("Rewritable"), opticaldisc->isRewritable());
@@ -416,12 +419,12 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         devicetypes << I18N_NOOP("Battery");
 
         QStringList batterytype;
-        batterytype << I18N_NOOP("Unknown Battery") << I18N_NOOP("PDA Battery") << I18N_NOOP("UPS Battery")
-                << I18N_NOOP("Primary Battery") << I18N_NOOP("Mouse Battery") << I18N_NOOP("Keyboard Battery")
-                << I18N_NOOP("Keyboard Mouse Battery") << I18N_NOOP("Camera Battery");
+        batterytype << I18N_NOOP("Unknown Battery") << I18N_NOOP("Primary Battery") << I18N_NOOP("UPS Battery")
+                 << I18N_NOOP("USB Battery");
 
         QStringList chargestate;
-        chargestate << I18N_NOOP("Fully Charged") << I18N_NOOP("Charging") << I18N_NOOP("Discharging");
+        chargestate << I18N_NOOP("Unknown Charge") << I18N_NOOP("Charging") << I18N_NOOP("Discharging")
+                 << I18N_NOOP("Fully Charged");
 
         setData(name, I18N_NOOP("Plugged In"), battery->isPlugged());
         setData(name, I18N_NOOP("Type"), batterytype.at((int)battery->type()));
@@ -443,7 +446,7 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
 
         QStringList buttontype;
         buttontype << I18N_NOOP("Lid Button") << I18N_NOOP("Power Button") << I18N_NOOP("Sleep Button")
-                << I18N_NOOP("Unknown Button Type");
+                << I18N_NOOP("Unknown Button Type") << I18N_NOOP("Tablet Button");
 
         setData(name, I18N_NOOP("Type"), buttontype.at((int)button->type()));
         setData(name, I18N_NOOP("Has State"), button->hasState());
