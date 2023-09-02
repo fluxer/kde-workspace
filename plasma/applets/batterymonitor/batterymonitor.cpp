@@ -192,6 +192,11 @@ void BatteryMonitorWidget::updateActiveBattery(const QString &udi)
     batterytooltip.append(i18n("Charge state: %1").arg(kChargeStateToString(batterydevice->chargeState())));
     Plasma::ToolTipContent plasmatooltipcontent(soliddevice.description(), batterytooltip, KIcon(soliddevice.icon()));
     Plasma::ToolTipManager::self()->setContent(m_batterymonitor, plasmatooltipcontent);
+
+    if (batterydevice->chargeState() == Solid::Battery::Discharging && batterydevice->chargePercent() < 30) {
+        // low battery warning
+        m_batterymonitor->setStatus(Plasma::ItemStatus::NeedsAttentionStatus);
+    }
 }
 
 void BatteryMonitorWidget::slotSuppressSleep(const bool suppress)
