@@ -23,6 +23,34 @@
 
 #include <kdirwatch.h>
 #include <knotification.h>
+#include <kdialog.h>
+#include <kvbox.h>
+#include <ktextedit.h>
+
+struct KCrashDetails
+{
+    QString kcrashappname;
+    QString kcrashapppid;
+    QByteArray kcrashbacktrace;
+    QString kcrashbugreporturl;
+};
+
+
+class KCrashDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent = nullptr);
+    ~KCrashDialog();
+
+    QString reportUrl() const;
+
+private:
+    QString m_reporturl;
+    KVBox* m_mainvbox;
+    KTextEdit* m_backtrace;
+};
+
 
 class KCrashModule: public KDEDModule
 {
@@ -36,12 +64,14 @@ public:
 private Q_SLOTS:
     void slotDirty(const QString &path);
     void slotClosed();
-    void slotReport();
+    void slotDetails();
+    void slotDialogFinished(const int result);
 
 private:
     QString m_kcrashpath;
     KDirWatch *m_dirwatch;
-    QList<KNotification*> m_notifications;
+    QMap<KNotification*,KCrashDetails> m_notifications;
+    QList<KCrashDialog*> m_dialogs;
 };
 
 #endif // KCRASH_KDED_H

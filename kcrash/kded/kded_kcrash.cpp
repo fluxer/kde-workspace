@@ -23,6 +23,7 @@
 #include <klocale.h>
 #include <kglobalsettings.h>
 #include <ktoolinvocation.h>
+#include <kurl.h>
 #include <kcrash.h>
 #include <kdebug.h>
 
@@ -34,6 +35,64 @@
 
 static const QStringList s_kcrashfilters = QStringList()
     << QString::fromLatin1("*.kcrash");
+
+KCrashDialog::KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent)
+    : KDialog(parent),
+    m_mainvbox(nullptr)
+{
+    setWindowIcon(KIcon("tools-report-bug"));
+    // do not include the application name in the title
+    setWindowTitle(
+        KDialog::makeStandardCaption(
+            i18nc(
+                "@title:window", "Crash Details for %1 (%2)",
+                kcrashdetails.kcrashappname, kcrashdetails.kcrashapppid
+            ),
+            nullptr, KDialog::NoCaptionFlags
+        )
+    );
+    setButtons(KDialog::Ok | KDialog::Close);
+    setDefaultButton(KDialog::Ok);
+    setButtonText(KDialog::Ok, i18nc("@action:button", "Report"));
+    KUrl bugreporturl(kcrashdetails.kcrashbugreporturl);
+    const QString bugreporturlprotocol = bugreporturl.protocol();
+    if (bugreporturlprotocol.isEmpty() || bugreporturlprotocol == QLatin1String("mailto")) {
+        setButtonIcon(KDialog::Ok, KIcon("internet-mail"));
+        bugreporturl.setScheme("mailto");
+    } else {
+        setButtonIcon(KDialog::Ok, KIcon("internet-web-browser"));
+    }
+    m_reporturl = bugreporturl.url();
+
+    m_mainvbox = new KVBox(this);
+    setMainWidget(m_mainvbox);
+
+    m_backtrace = new KTextEdit(m_mainvbox);
+    m_backtrace->setReadOnly(true);
+    m_backtrace->setLineWrapMode(QTextEdit::NoWrap);
+    m_backtrace->setText(
+        QString::fromLatin1(
+            kcrashdetails.kcrashbacktrace.constData(),
+            kcrashdetails.kcrashbacktrace.size()
+        )
+    );
+
+    KConfigGroup kconfiggroup(KGlobal::config(), "KCrashDialog");
+    restoreDialogSize(kconfiggroup);
+}
+
+KCrashDialog::~KCrashDialog()
+{
+    KConfigGroup kconfiggroup(KGlobal::config(), "KCrashDialog");
+    saveDialogSize(kconfiggroup);
+    KGlobal::config()->sync();
+}
+
+QString KCrashDialog::reportUrl() const
+{
+    return m_reporturl;
+}
+
 
 K_PLUGIN_FACTORY(KCrashModuleFactory, registerPlugin<KCrashModule>();)
 K_EXPORT_PLUGIN(KCrashModuleFactory("kcrash"))
@@ -56,14 +115,20 @@ KCrashModule::KCrashModule(QObject *parent, const QList<QVariant> &args)
 KCrashModule::~KCrashModule()
 {
     delete m_dirwatch;
+
     kDebug() << "Closing notifications" << m_notifications.size();
-    QMutableListIterator<KNotification*> iter(m_notifications);
+    QMutableMapIterator<KNotification*,KCrashDetails> iter(m_notifications);
     while (iter.hasNext()) {
-        KNotification* knotification = iter.next();
+        iter.next();
+        KNotification* knotification = iter.key();
         disconnect(knotification, 0, this, 0);
         knotification->close();
         iter.remove();
     }
+
+    kDebug() << "Closing dialogs" << m_dialogs.size();
+    qDeleteAll(m_dialogs);
+    m_dialogs.clear();
 }
 
 void KCrashModule::slotDirty(const QString &path)
@@ -100,21 +165,33 @@ void KCrashModule::slotDirty(const QString &path)
             kcrashappname = kcrashdata["appname"];
         }
         if (kcrashflags & KCrash::Notify) {
+            QString bugreporturl = kcrashdata["bugaddress"];
+            // special case for Katana applications
+            if (bugreporturl == QLatin1String(KDE_BUG_REPORT_EMAIL)) {
+                bugreporturl = QString::fromLatin1(KDE_BUG_REPORT_URL);
+            }
+
+            KCrashDetails kcrashdetails;
+            kcrashdetails.kcrashappname = kcrashappname;
+            kcrashdetails.kcrashapppid = kcrashdata["pid"];
+            kcrashdetails.kcrashbacktrace = kcrashbacktrace;
+            kcrashdetails.kcrashbugreporturl = bugreporturl;
+
             kDebug() << "Sending notification for" << kcrashfilepath;
             // NOTE: when the notification is closed/deleted the actions become non-operational
             KNotification* knotification = new KNotification(this);
             knotification->setEventID("kcrash/Crash");
             knotification->setFlags(KNotification::Persistent);
             knotification->setTitle(i18n("%1 crashed", kcrashappname));
-            knotification->setText(i18n("For details about the crash look into the system log."));
-            knotification->setActions(QStringList() << i18n("Report"));
-            m_notifications.append(knotification);
+            knotification->setText(i18n("To view details about the crash and report it click on the details button."));
+            knotification->setActions(QStringList() << i18n("Details"));
+            m_notifications.insert(knotification, kcrashdetails);
             connect(knotification, SIGNAL(closed()), this, SLOT(slotClosed()));
-            connect(knotification, SIGNAL(action1Activated()), this, SLOT(slotReport()));
+            connect(knotification, SIGNAL(action1Activated()), this, SLOT(slotDetails()));
             knotification->send();
         }
         if (kcrashflags & KCrash::Log) {
-            // NOTE: this goes to the system log by default
+            // NOTE: this goes to the system log by default which the user may not have access to
             kError() << kcrashappname << "crashed" << kcrashbacktrace;
         }
         if (kcrashflags & KCrash::AutoRestart) {
@@ -135,15 +212,37 @@ void KCrashModule::slotClosed()
 {
     KNotification* knotification = qobject_cast<KNotification*>(sender());
     kDebug() << "Notification closed" << knotification;
-    m_notifications.removeAll(knotification);
+    m_notifications.remove(knotification);
 }
 
-void KCrashModule::slotReport()
+void KCrashModule::slotDetails()
 {
     KNotification* knotification = qobject_cast<KNotification*>(sender());
+    kDebug() << "Notification details will be shown" << knotification;
+    const KCrashDetails kcrashdetails = m_notifications.value(knotification);
     knotification->close();
-    const QString kcrashreporturl = KDE_BUG_REPORT_URL;
-    KToolInvocation::invokeBrowser(kcrashreporturl);
+    KCrashDialog* kcrashdialog = new KCrashDialog(kcrashdetails);
+    m_dialogs.append(kcrashdialog);
+    connect(kcrashdialog, SIGNAL(finished(int)), this, SLOT(slotDialogFinished(int)));
+    kcrashdialog->show();
+}
+
+void KCrashModule::slotDialogFinished(const int result)
+{
+    kDebug() << "Notification details result" << result;
+    if (result != QDialog::Accepted) {
+        return;
+    }
+
+    KCrashDialog* kcrashdetails = qobject_cast<KCrashDialog*>(sender());
+    const QString kcrashreporturl = kcrashdetails->reportUrl();
+    m_dialogs.removeAll(kcrashdetails);
+    kcrashdetails->deleteLater();
+    if (kcrashreporturl.startsWith(QLatin1String("mailto:"))) {
+        KToolInvocation::invokeMailer(kcrashreporturl, QString::fromLatin1("Crash report"));
+    } else {
+        KToolInvocation::invokeBrowser(kcrashreporturl);
+    }
 }
 
 #include "moc_kded_kcrash.cpp"
