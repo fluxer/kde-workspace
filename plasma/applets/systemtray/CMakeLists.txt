@@ -34,6 +34,7 @@ target_link_libraries(plasma_applet_systemtray
     ${QT_QTDECLARATIVE_LIBRARIES}
     KDE4::kdeui
     KDE4::plasma
+    KDE4::solid
     ${X11_LIBRARIES}
     ${X11_Xrender_LIB}
     ${X11_Xfixes_LIB}

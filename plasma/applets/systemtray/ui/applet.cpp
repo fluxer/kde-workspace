@@ -44,11 +44,10 @@
 #include <KCategorizedSortFilterProxyModel>
 #include <KCategoryDrawer>
 #include <KKeySequenceWidget>
-
-#include <plasma/dataenginemanager.h>
 #include <Plasma/Corona>
 #include <Plasma/IconWidget>
 #include <Plasma/DeclarativeWidget>
+#include <Solid/Device>
 
 #include <inttypes.h>
 
@@ -689,15 +688,10 @@ void Applet::checkDefaultApplets()
     }
 
     if (!applets.contains("battery")) {
-        Plasma::DataEngineManager *engines = Plasma::DataEngineManager::self();
-        Plasma::DataEngine *power = engines->loadEngine("powermanagement");
-        if (power) {
-            const QStringList &batteries = power->query("Battery")["Sources"].toStringList();
-            if (!batteries.isEmpty()) {
-                s_manager->addApplet("battery", this);
-            }
+        const QList<Solid::Device> batteries = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
+        if (!batteries.isEmpty()) {
+            s_manager->addApplet("battery", this);
         }
-        engines->unloadEngine("powermanagement");
     }
 
     config().writeEntry("DefaultAppletsAdded", true);
