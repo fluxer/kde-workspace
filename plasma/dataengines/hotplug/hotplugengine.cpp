@@ -45,6 +45,7 @@ HotplugEngine::HotplugEngine(QObject* parent, const QVariantList& args)
     : Plasma::DataEngine(parent, args),
       m_dirWatch(new KDirWatch(this))
 {
+    m_dirWatch->setInterval(5000);
     QStringList folders = KGlobal::dirs()->findDirs("data", "solid/actions/");
     foreach (const QString &folder, folders) {
         m_dirWatch->addDir(folder);
