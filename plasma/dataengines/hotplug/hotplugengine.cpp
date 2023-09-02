@@ -55,7 +55,6 @@ HotplugEngine::HotplugEngine(QObject* parent, const QVariantList& args)
 
 HotplugEngine::~HotplugEngine()
 {
-
 }
 
 void HotplugEngine::init()

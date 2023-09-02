@@ -320,17 +320,20 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         if (contenttypes & Solid::OpticalDisc::Audio) {
             contenttypelist << I18N_NOOP("Audio");
         }
-        if (contenttypes & Solid::OpticalDisc::Audio) {
+        if (contenttypes & Solid::OpticalDisc::Data) {
             contenttypelist << I18N_NOOP("Data");
         }
-        if (contenttypes & Solid::OpticalDisc::Audio) {
+        if (contenttypes & Solid::OpticalDisc::VideoCd) {
             contenttypelist << I18N_NOOP("Video CD");
         }
-        if (contenttypes & Solid::OpticalDisc::Audio) {
+        if (contenttypes & Solid::OpticalDisc::SuperVideoCd) {
             contenttypelist << I18N_NOOP("Super Video CD");
         }
-        if (contenttypes & Solid::OpticalDisc::Audio) {
+        if (contenttypes & Solid::OpticalDisc::VideoDvd) {
             contenttypelist << I18N_NOOP("Video DVD");
+        }
+        if (contenttypes & Solid::OpticalDisc::VideoBluRay) {
+            contenttypelist << I18N_NOOP("Video Blu Ray");
         }
         setData(name, I18N_NOOP("Available Content"), contenttypelist);
 
