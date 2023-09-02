@@ -71,6 +71,8 @@ void DeviceSignalMapManager::mapDevice(Solid::Battery *battery, const QString &u
     connect(battery, SIGNAL(chargePercentChanged(int,QString)), map, SLOT(chargePercentChanged(int)));
     connect(battery, SIGNAL(chargeStateChanged(int,QString)), map, SLOT(chargeStateChanged(int)));
     connect(battery, SIGNAL(plugStateChanged(bool,QString)), map, SLOT(plugStateChanged(bool)));
+    connect(battery, SIGNAL(powerSupplyStateChanged(bool,QString)), map, SLOT(powerSupplyStateChanged(bool)));
+    connect(battery, SIGNAL(capacityChanged(int,QString)), map, SLOT(capacityChanged(bool)));
     map->setMapping(battery, udi);
 }
 

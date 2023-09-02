@@ -84,6 +84,16 @@ void BatterySignalMapper::plugStateChanged(bool newState)
     emit deviceChanged(signalmap[sender()], "Plugged In", newState);
 }
 
+void BatterySignalMapper::powerSupplyStateChanged(bool newState)
+{
+    emit deviceChanged(signalmap[sender()], "Is Power Supply", newState);
+}
+
+void BatterySignalMapper::capacityChanged(int newState)
+{
+    emit deviceChanged(signalmap[sender()], "Capacity", newState);
+}
+
 StorageAccessSignalMapper::StorageAccessSignalMapper(QObject *parent) : DeviceSignalMapper(parent)
 {
 }

@@ -97,6 +97,8 @@ class BatterySignalMapper : public DeviceSignalMapper
         void chargePercentChanged(int value);
         void chargeStateChanged(int newState);
         void plugStateChanged(bool newState);
+        void powerSupplyStateChanged(bool newState);
+        void capacityChanged(int newState);
 };
 
 class StorageAccessSignalMapper : public DeviceSignalMapper
