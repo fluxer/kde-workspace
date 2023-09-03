@@ -59,6 +59,9 @@ public:
     BatteryMonitorWidget(BatteryMonitor* batterymonitor);
     ~BatteryMonitorWidget();
 
+    QString activeBattery() const;
+    void setActiveBattery(const QString &udi);
+
 public Q_SLOTS:
     void slotUpdateLayout();
 
@@ -69,8 +72,6 @@ private Q_SLOTS:
     void slotUpdateIcon(const int state,const QString &udi);
 
 private:
-    void updateActiveBattery(const QString &udi);
-
     BatteryMonitor* m_batterymonitor;
     QGraphicsLinearLayout* m_layout;
     int m_suppresssleepcookie;
@@ -79,7 +80,7 @@ private:
     Plasma::CheckBox* m_suppressscreenbox;
     Plasma::Separator* m_separator;
     QList<Plasma::IconWidget*> m_iconwidgets;
-    QString m_activeudi;
+    QString m_activebattery;
 };
 
 BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor)
@@ -121,6 +122,34 @@ BatteryMonitorWidget::~BatteryMonitorWidget()
     slotSuppressScreen(false);
 }
 
+QString BatteryMonitorWidget::activeBattery() const
+{
+    return m_activebattery;
+}
+
+void BatteryMonitorWidget::setActiveBattery(const QString &udi)
+{
+    m_activebattery = udi;
+    const Solid::Device soliddevice(udi);
+    const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
+    if (batterydevice) {
+        m_batterymonitor->setPopupIcon(soliddevice.icon());
+
+        QString batterytooltip;
+        batterytooltip.append(i18n("Charge percent: %1%<br/>").arg(batterydevice->chargePercent()));
+        batterytooltip.append(i18n("Charge state: %1").arg(kChargeStateToString(batterydevice->chargeState())));
+        Plasma::ToolTipContent plasmatooltipcontent(soliddevice.description(), batterytooltip, KIcon(soliddevice.icon()));
+        Plasma::ToolTipManager::self()->setContent(m_batterymonitor, plasmatooltipcontent);
+
+        if (batterydevice->chargeState() == Solid::Battery::Discharging && batterydevice->chargePercent() < 30) {
+            // low battery warning
+            m_batterymonitor->setStatus(Plasma::ItemStatus::NeedsAttentionStatus);
+        }
+
+        emit m_batterymonitor->configNeedsSaving();
+    }
+}
+
 void BatteryMonitorWidget::slotUpdateLayout()
 {
     foreach (Plasma::IconWidget* iconwidget, m_iconwidgets) {
@@ -135,23 +164,20 @@ void BatteryMonitorWidget::slotUpdateLayout()
     }
 
     QList<Solid::Device> batterydevices = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
-    const bool hasbatteries = batterydevices.size() > 0;
-    if (hasbatteries) {
+    if (batterydevices.size() > 0) {
         m_separator = new Plasma::Separator(this);
         m_separator->setOrientation(Qt::Horizontal);
         m_layout->addItem(m_separator);
         m_batterymonitor->setStatus(Plasma::ItemStatus::ActiveStatus);
     } else {
-        m_activeudi.clear();
         m_batterymonitor->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
 
     const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
     foreach (const Solid::Device &batterydevice, batterydevices) {
-        if (m_activeudi.isEmpty()) {
+        if (m_activebattery.isEmpty()) {
             // pick the first as active
-            // TODO: store in config and restore it?
-            m_activeudi = batterydevice.udi();
+            m_activebattery = batterydevice.udi();
         }
 
         const Solid::Battery* battery = batterydevice.as<Solid::Battery>();
@@ -178,28 +204,8 @@ void BatteryMonitorWidget::slotUpdateLayout()
         );
     }
 
-    if (hasbatteries) {
-        updateActiveBattery(m_activeudi);
-    }
-}
-
-void BatteryMonitorWidget::updateActiveBattery(const QString &udi)
-{
-    m_activeudi = udi;
-    const Solid::Device soliddevice(udi);
-    m_batterymonitor->setPopupIcon(soliddevice.icon());
-
-    const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
-    Q_ASSERT(batterydevice);
-    QString batterytooltip;
-    batterytooltip.append(i18n("Charge percent: %1%<br/>").arg(batterydevice->chargePercent()));
-    batterytooltip.append(i18n("Charge state: %1").arg(kChargeStateToString(batterydevice->chargeState())));
-    Plasma::ToolTipContent plasmatooltipcontent(soliddevice.description(), batterytooltip, KIcon(soliddevice.icon()));
-    Plasma::ToolTipManager::self()->setContent(m_batterymonitor, plasmatooltipcontent);
-
-    if (batterydevice->chargeState() == Solid::Battery::Discharging && batterydevice->chargePercent() < 30) {
-        // low battery warning
-        m_batterymonitor->setStatus(Plasma::ItemStatus::NeedsAttentionStatus);
+    if (!m_activebattery.isEmpty()) {
+        setActiveBattery(m_activebattery);
     }
 }
 
@@ -258,7 +264,7 @@ void BatteryMonitorWidget::slotUpdateActive()
     Plasma::IconWidget* iconwidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString iconwdigetudi = iconwidget->property("_k_udi").toString();
     Q_ASSERT(!iconwdigetudi.isEmpty());
-    updateActiveBattery(iconwdigetudi);
+    setActiveBattery(iconwdigetudi);
     m_batterymonitor->hidePopup();
 }
 
@@ -271,8 +277,8 @@ void BatteryMonitorWidget::slotUpdateIcon(const int state,const QString &udi)
         if (iconwdigetudi == udi) {
             const Solid::Device soliddevice(udi);
             iconwidget->setIcon(KIcon(soliddevice.icon()));
-            if (iconwdigetudi == m_activeudi) {
-                updateActiveBattery(m_activeudi);
+            if (iconwdigetudi == m_activebattery) {
+                setActiveBattery(m_activebattery);
             }
         }
     }
@@ -284,7 +290,7 @@ BatteryMonitor::BatteryMonitor(QObject *parent, const QVariantList &args)
     m_batterywidget(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_battery");
-    setAspectRatioMode(Plasma::IgnoreAspectRatio);
+    setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
 }
 
 BatteryMonitor::~BatteryMonitor()
@@ -296,6 +302,27 @@ void BatteryMonitor::init()
 {
     setPopupIcon("battery");
     m_batterywidget = new BatteryMonitorWidget(this);
+    configChanged();
+}
+
+QGraphicsWidget* BatteryMonitor::graphicsWidget()
+{
+    return m_batterywidget;
+}
+
+void BatteryMonitor::configChanged()
+{
+    KConfigGroup configgroup = config();
+    const QString activebattery = configgroup.readEntry("activeBattery", QString());
+    if (!activebattery.isEmpty()) {
+        m_batterywidget->setActiveBattery(activebattery);
+    }
+}
+
+void BatteryMonitor::saveState(KConfigGroup &group) const
+{
+    group.writeEntry("activeBattery", m_batterywidget->activeBattery());
+    Plasma::PopupApplet::saveState(group);
 }
 
 void BatteryMonitor::constraintsEvent(Plasma::Constraints constraints)
@@ -303,11 +330,6 @@ void BatteryMonitor::constraintsEvent(Plasma::Constraints constraints)
     if (constraints & Plasma::StartupCompletedConstraint) {
         QTimer::singleShot(1500, m_batterywidget, SLOT(slotUpdateLayout()));
     }
-}
-
-QGraphicsWidget* BatteryMonitor::graphicsWidget()
-{
-    return m_batterywidget;
 }
 
 #include "moc_batterymonitor.cpp"

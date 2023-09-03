@@ -32,9 +32,15 @@ public:
 
     // Plasma::Applet reimplementation
     void init() final;
-    void constraintsEvent(Plasma::Constraints constraints) final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
+
+    // Plasma::Applet reimplementations
+public Q_SLOTS:
+    void configChanged();
+protected:
+    void saveState(KConfigGroup &group) const final;
+    void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
     friend BatteryMonitorWidget;
