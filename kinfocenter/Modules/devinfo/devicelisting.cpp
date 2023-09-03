@@ -100,6 +100,8 @@ QTreeWidgetItem *DeviceListing::createListItems(const Solid::DeviceInterface::Ty
             return new SolVideoDevice(type);
         case Solid::DeviceInterface::Graphic:
             return new SolGraphicDevice(type);
+        case Solid::DeviceInterface::Input:
+            return new SolInputDevice(type);
         default:
             return new SolDevice(type,i18nc("unknown device type", "Unknown"));
     }
@@ -118,7 +120,8 @@ void DeviceListing::populateListing(const show showStatus)
     Solid::DeviceInterface::AcAdapter,
     Solid::DeviceInterface::PortableMediaPlayer,
     Solid::DeviceInterface::Camera,
-    Solid::DeviceInterface::Graphic
+    Solid::DeviceInterface::Graphic,
+    Solid::DeviceInterface::Input
   };
   
   clear();

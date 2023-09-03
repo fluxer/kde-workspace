@@ -30,7 +30,6 @@ class QVListLayout;
 
 class SolProcessorDevice : public SolDevice
 {
-  
   public:
     SolProcessorDevice(const Solid::DeviceInterface::Type &);
     SolProcessorDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -44,7 +43,6 @@ class SolProcessorDevice : public SolDevice
 
 class SolStorageDevice : public SolDevice
 {
-  
   public:   
     enum storageChildren { CREATECHILDREN , NOCHILDREN };
     
@@ -59,7 +57,6 @@ class SolStorageDevice : public SolDevice
 
 class SolNetworkDevice : public SolDevice
 {
-  
   public:
     SolNetworkDevice(const Solid::DeviceInterface::Type &);
     SolNetworkDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -74,7 +71,6 @@ class SolNetworkDevice : public SolDevice
 
 class SolVolumeDevice : public SolDevice 
 {
-
   public:
     SolVolumeDevice(const Solid::DeviceInterface::Type &);
     SolVolumeDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -86,7 +82,6 @@ class SolVolumeDevice : public SolDevice
 
 class SolAudioDevice : public SolDevice 
 {
-
   public:
     SolAudioDevice(const Solid::DeviceInterface::Type &);
     SolAudioDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -107,7 +102,6 @@ class SolAudioDevice : public SolDevice
 
 class SolButtonDevice : public SolDevice 
 {
-
   public:
     SolButtonDevice(const Solid::DeviceInterface::Type &);
     SolButtonDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -120,7 +114,6 @@ class SolButtonDevice : public SolDevice
 
 class SolMediaPlayerDevice : public SolDevice 
 {
-
   public:
     SolMediaPlayerDevice(const Solid::DeviceInterface::Type &);
     SolMediaPlayerDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -132,7 +125,6 @@ class SolMediaPlayerDevice : public SolDevice
 
 class SolCameraDevice : public SolDevice 
 {
-
   public:
     SolCameraDevice(const Solid::DeviceInterface::Type &);
     SolCameraDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -144,7 +136,6 @@ class SolCameraDevice : public SolDevice
 
 class SolBatteryDevice : public SolDevice 
 {
-
   public:
     SolBatteryDevice(const Solid::DeviceInterface::Type &);
     SolBatteryDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -156,7 +147,6 @@ class SolBatteryDevice : public SolDevice
 
 class SolAcAdapterDevice : public SolDevice 
 {
-
   public:
     SolAcAdapterDevice(const Solid::DeviceInterface::Type &);
     SolAcAdapterDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -168,7 +158,6 @@ class SolAcAdapterDevice : public SolDevice
 
 class SolVideoDevice : public SolDevice 
 {
-
   public:
     SolVideoDevice(const Solid::DeviceInterface::Type &);
     SolVideoDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -180,7 +169,6 @@ class SolVideoDevice : public SolDevice
 
 class SolGraphicDevice : public SolDevice
 {
-
   public:
     SolGraphicDevice(const Solid::DeviceInterface::Type &);
     SolGraphicDevice(QTreeWidgetItem *, const Solid::Device &);
@@ -190,5 +178,16 @@ class SolGraphicDevice : public SolDevice
     void setDefaultListing(const Solid::DeviceInterface::Type &);
 };
 
+class SolInputDevice : public SolDevice
+{
+
+  public:
+    SolInputDevice(const Solid::DeviceInterface::Type &);
+    SolInputDevice(QTreeWidgetItem *, const Solid::Device &);
+    QVListLayout *infoPanelLayout();
+    
+  private:
+    void setDefaultListing(const Solid::DeviceInterface::Type &);
+};
 
 #endif //SOLDEVICETYPES

@@ -808,3 +808,55 @@ QVListLayout *SolGraphicDevice::infoPanelLayout()
   deviceInfoLayout->applyQListToLayout(labels);
   return deviceInfoLayout;
 }
+
+// Input
+SolInputDevice::SolInputDevice(QTreeWidgetItem *parent, const Solid::Device &device) :
+  SolDevice(parent, device)
+{
+  deviceTypeHolder = Solid::DeviceInterface::Video;
+}
+
+SolInputDevice::SolInputDevice(const Solid::DeviceInterface::Type &type) :
+  SolDevice(type)
+{
+  deviceTypeHolder = Solid::DeviceInterface::Video;
+  
+  setDeviceIcon(KIcon("input-gaming"));
+  setDeviceText(i18n("Input"));
+  setDefaultListing(type);
+}
+
+void SolInputDevice::setDefaultListing(const Solid::DeviceInterface::Type &type)
+{
+  createDeviceChildren<SolInputDevice>(this,QString(),type);
+}
+
+QVListLayout *SolInputDevice::infoPanelLayout()
+{
+  QStringList labels;
+  const Solid::Input *inputdev = interface<const Solid::Input>();
+
+  if(!inputdev) return NULL;
+  deviceInfoLayout = new QVListLayout();
+
+  QString type;
+  switch (inputdev->inputType()) 
+  {
+    case Solid::Input::Mouse:
+      type = i18n("Mouse"); break;
+    case Solid::Input::Keyboard:
+      type = i18n("Keyboard"); break;
+    case Solid::Input::Joystick:
+      type = i18n("Joystick"); break;
+    default:
+      type = i18nc("unknown input type", "Unknown");
+  }
+
+  labels << i18n("Driver: ")
+  << inputdev->driver()
+  << i18n("Input Type: ")
+  << type;
+  
+  deviceInfoLayout->applyQListToLayout(labels);
+  return deviceInfoLayout;
+}

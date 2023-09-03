@@ -43,6 +43,7 @@
 #include <solid/audiointerface.h>
 #include <solid/video.h>
 #include <solid/graphic.h>
+#include <solid/input.h>
 
 class DeviceSignalMapper : public QSignalMapper
 {

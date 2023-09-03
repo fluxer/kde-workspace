@@ -521,6 +521,22 @@ bool SolidDeviceEngine::populateDeviceData(const QString &name)
         setData(name, I18N_NOOP("Driver"), graphic->driver());
     }
 
+    if (device.is<Solid::Input>()) {
+        Solid::Input *input = device.as<Solid::Input>();
+        if (!input) {
+            return false;
+        }
+
+        devicetypes << I18N_NOOP("Input");
+
+        QStringList inputtype;
+        inputtype << I18N_NOOP("Unknown Input") << I18N_NOOP("Mouse") << I18N_NOOP("Keyboard")
+                << I18N_NOOP("Joystick");
+
+        setData(name, I18N_NOOP("Input Type"), inputtype.at((int)input->inputType()));
+        setData(name, I18N_NOOP("Driver"), input->driver());
+    }
+
     int index = Solid::DeviceInterface::staticMetaObject.indexOfEnumerator("Type");
     QMetaEnum typeEnum = Solid::DeviceInterface::staticMetaObject.enumerator(index);
     for (int i = typeEnum.keyCount() - 1 ; i > 0; i--) {

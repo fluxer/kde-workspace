@@ -36,7 +36,8 @@ Solid::DeviceInterface::Type SolidHelper::deviceType(const Solid::Device *dev)
     Solid::DeviceInterface::PortableMediaPlayer,
     Solid::DeviceInterface::Camera,
     Solid::DeviceInterface::StorageVolume,
-    Solid::DeviceInterface::Graphic
+    Solid::DeviceInterface::Graphic,
+    Solid::DeviceInterface::Input
   };
   
   for(unsigned int i=0;i<(sizeof(needHardware)/sizeof(Solid::DeviceInterface::Type));i++) { 

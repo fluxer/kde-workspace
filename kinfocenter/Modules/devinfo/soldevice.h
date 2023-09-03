@@ -43,6 +43,7 @@
 #include <solid/acadapter.h>
 #include <solid/video.h>
 #include <solid/graphic.h>
+#include <solid/input.h>
 #include <solid/predicate.h>
 
 //KDE

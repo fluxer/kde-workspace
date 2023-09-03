@@ -43,8 +43,9 @@
 #include <Solid/OpticalDrive>
 #include <Solid/StorageVolume>
 #include <Solid/OpticalDisc>
-#include <solid/video.h>
-#include <solid/graphic.h>
+#include <Solid/Video>
+#include <Solid/Graphic>
+#include <Solid/Input>
 
 static SolidActionData * actData = 0;
 
@@ -181,6 +182,7 @@ QList<QMetaObject> SolidActionData::fillInterfaceList()
     interfaces.append( Solid::OpticalDisc::staticMetaObject );
     interfaces.append( Solid::Video::staticMetaObject );
     interfaces.append( Solid::Graphic::staticMetaObject );
+    interfaces.append( Solid::Input::staticMetaObject );
     return interfaces;
 }
 
