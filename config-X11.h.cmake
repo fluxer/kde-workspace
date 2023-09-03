@@ -13,14 +13,8 @@
 /* Define to 1 if you have Xcursor */
 #cmakedefine HAVE_XCURSOR 1
 
-/* Define if you have the xf86misc extension */
-#cmakedefine HAVE_XF86MISC 1
-
 /* Define if you have the XFixes extension */
 #cmakedefine HAVE_XFIXES 1
-
-/* Define if you have the XTest extension */
-#cmakedefine HAVE_XTEST 1
 
 /* Define if you have the XSync extension */
 #cmakedefine HAVE_XSYNC 1

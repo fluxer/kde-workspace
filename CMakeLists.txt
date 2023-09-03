@@ -24,54 +24,50 @@ set_package_properties(Sudo PROPERTIES
     PURPOSE "Needed for kdesudo to operate"
 )
 
-if(Q_WS_X11)
-    find_package(XCB REQUIRED)
-    set_package_properties(XCB PROPERTIES
-        DESCRIPTION "X protocol C-language Binding"
-        URL "http://xcb.freedesktop.org"
-        TYPE REQUIRED
-    )
+find_package(XCB)
+set_package_properties(XCB PROPERTIES
+    DESCRIPTION "X protocol C-language Binding"
+    URL "http://xcb.freedesktop.org"
+    TYPE REQUIRED
+)
 
-    find_package(X11_XCB)
-    set_package_properties(X11_XCB
-        PROPERTIES DESCRIPTION "XCB X11 protocol client library"
-        TYPE REQUIRED
-    )
+find_package(X11_XCB)
+set_package_properties(X11_XCB
+    PROPERTIES DESCRIPTION "XCB X11 protocol client library"
+    TYPE REQUIRED
+)
 
-    find_package(X11)
-    set_package_properties(X11 PROPERTIES
-        DESCRIPTION "X11 libraries"
-        URL "http://www.x.org"
-        TYPE REQUIRED
-    )
+find_package(X11)
+set_package_properties(X11 PROPERTIES
+    DESCRIPTION "X11 libraries"
+    URL "http://www.x.org"
+    TYPE REQUIRED
+)
 
-    add_feature_info("libXTest" X11_XTest_FOUND "The X11 Testing Resource extension library is useful for automated testing of X clients")
-    add_feature_info("libXcomposite" X11_Xcomposite_FOUND "The X11 Composite extension library may be used by Plasma and KWin")
-    add_feature_info("libxf86misc" X11_xf86misc_FOUND "The X11 miscellaneous library may be used by keyboard KCM") # TODO: unused?
-    add_feature_info("libXSync" X11_XSync_FOUND "The X11 synchronization may be used by KWin")
-    add_feature_info("libXinput" X11_Xinput_FOUND "The X11 XINPUT extension library may be used by keyboard KCM")
-    add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
-    add_feature_info("libXext" X11_dpms_FOUND "The X extensions library may be used by kscreensaver")
+add_feature_info("libXcomposite" X11_Xcomposite_FOUND "The X11 Composite extension library may be used by Plasma and KWin")
+add_feature_info("libXSync" X11_XSync_FOUND "The X11 synchronization may be used by KWin")
+add_feature_info("libXinput" X11_Xinput_FOUND "The X11 XINPUT extension library may be used by touchpad handler")
+add_feature_info("libXRes" X11_XRes_FOUND "The X Resource library may be used by ksysguard")
+add_feature_info("libXext" X11_dpms_FOUND "The X extensions library may be used by kscreensaver")
 
-    if(NOT X11_Xau_FOUND)
-        message(FATAL_ERROR "The X11 authorization extension library was not found. Required for authorization in kworkspace library")
-    endif()
-    if(NOT X11_Xdamage_FOUND)
-        message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin")
-    endif()
-    if(NOT X11_Xrender_FOUND)
-        message(FATAL_ERROR " The X Rendering extension client library was not found. Required for XRender Compositing backend in KWin")
-    endif()
-    if(NOT X11_Xfixes_FOUND)
-        message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin")
-    endif()
-    if(NOT X11_Xrandr_FOUND)
-        message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support")
-    endif()
-    if(NOT X11_Xcursor_FOUND)
-        message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin")
-    endif()
-endif(Q_WS_X11)
+if(NOT X11_Xau_FOUND)
+    message(FATAL_ERROR "The X11 authorization extension library was not found. Required for authorization in kworkspace library")
+endif()
+if(NOT X11_Xdamage_FOUND)
+    message(FATAL_ERROR "The X11 damaged region extension library was not found. Required for compositing support in KWin")
+endif()
+if(NOT X11_Xrender_FOUND)
+    message(FATAL_ERROR " The X Rendering extension client library was not found. Required for XRender Compositing backend in KWin")
+endif()
+if(NOT X11_Xfixes_FOUND)
+    message(FATAL_ERROR "The X11 miscellaneous 'fixes' extension library was not found. Required for XRender Compositing backend in KWin")
+endif()
+if(NOT X11_Xrandr_FOUND)
+    message(FATAL_ERROR "The X11 RandR extension library was not found. Required for Multi Screen Support")
+endif()
+if(NOT X11_Xcursor_FOUND)
+    message(FATAL_ERROR "The X11 cursor management library was not found. Required for desktop effects support in KWin")
+endif()
 
 kde4_optional_find_package(OpenGL)
 set_package_properties(OpenGL PROPERTIES
