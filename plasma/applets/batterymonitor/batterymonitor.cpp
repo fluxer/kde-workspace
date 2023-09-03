@@ -32,6 +32,7 @@
 #include <KIconLoader>
 #include <KDebug>
 
+static const int s_svgiconsize = 256;
 static const QString s_suppressreason = QString::fromLatin1("battery monitor");
 
 static QString kChargeStateToString(const Solid::Battery::ChargeState state)
@@ -54,6 +55,21 @@ static QString kChargeStateToString(const Solid::Battery::ChargeState state)
     return QString();
 }
 
+static QString kChargePercentToElement(const int percent)
+{
+    if (percent >= 80) {
+        return QString::fromLatin1("Fill100");
+    } else if (percent >= 60) {
+        return QString::fromLatin1("Fill80");
+    } else if (percent >= 40) {
+        return QString::fromLatin1("Fill60");
+    } else if (percent >= 20) {
+        return QString::fromLatin1("Fill40");
+    }
+    return QString::fromLatin1("Fill20");
+}
+
+
 class BatteryMonitorWidget : public QGraphicsWidget
 {
     Q_OBJECT
@@ -63,6 +79,8 @@ public:
 
     QString activeBattery() const;
     void setActiveBattery(const QString &udi);
+    QIcon batteryUnavailableIcon();
+    QIcon batteryIcon(const Solid::Battery *batterydevice, const QString &fallback);
 
 public Q_SLOTS:
     void slotUpdateLayout();
@@ -135,12 +153,15 @@ void BatteryMonitorWidget::setActiveBattery(const QString &udi)
     const Solid::Device soliddevice(udi);
     const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
     if (batterydevice) {
-        m_batterymonitor->setPopupIcon(soliddevice.icon());
+        m_batterymonitor->setPopupIcon(batteryIcon(batterydevice, soliddevice.icon()));
 
         QString batterytooltip;
         batterytooltip.append(i18n("Charge percent: %1%<br/>").arg(batterydevice->chargePercent()));
         batterytooltip.append(i18n("Charge state: %1").arg(kChargeStateToString(batterydevice->chargeState())));
-        Plasma::ToolTipContent plasmatooltipcontent(soliddevice.description(), batterytooltip, KIcon(soliddevice.icon()));
+        Plasma::ToolTipContent plasmatooltipcontent = Plasma::ToolTipContent(
+            soliddevice.description(), batterytooltip,
+            batteryIcon(batterydevice, soliddevice.icon())
+        );
         Plasma::ToolTipManager::self()->setContent(m_batterymonitor, plasmatooltipcontent);
 
         if (batterydevice->chargeState() == Solid::Battery::Discharging && batterydevice->chargePercent() < 30) {
@@ -150,6 +171,47 @@ void BatteryMonitorWidget::setActiveBattery(const QString &udi)
 
         emit m_batterymonitor->configNeedsSaving();
     }
+}
+
+QIcon BatteryMonitorWidget::batteryIcon(const Solid::Battery *batterydevice, const QString &fallback)
+{
+    QIcon result;
+    Plasma::Svg plasmasvg(this);
+    plasmasvg.setImagePath("icons/battery");
+    plasmasvg.setContainsMultipleImages(true);
+    if (plasmasvg.isValid()) {
+        QPixmap iconpixmap(s_svgiconsize, s_svgiconsize);
+        iconpixmap.fill(Qt::transparent);
+        QPainter iconpainter(&iconpixmap);
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), "Battery");
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), kChargePercentToElement(batterydevice->chargePercent()));
+        if (batterydevice->chargeState() == Solid::Battery::Charging) {
+            plasmasvg.paint(&iconpainter, iconpixmap.rect(), "AcAdapter");
+        }
+        result = QIcon(iconpixmap);
+    } else {
+        result = KIcon(fallback);
+    }
+    return result;
+}
+
+QIcon BatteryMonitorWidget::batteryUnavailableIcon()
+{
+    QIcon result;
+    Plasma::Svg plasmasvg(this);
+    plasmasvg.setImagePath("icons/battery");
+    plasmasvg.setContainsMultipleImages(true);
+    if (plasmasvg.isValid()) {
+        QPixmap iconpixmap(s_svgiconsize, s_svgiconsize);
+        iconpixmap.fill(Qt::transparent);
+        QPainter iconpainter(&iconpixmap);
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), "Battery");
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), "Unavailable");
+        result = QIcon(iconpixmap);
+    } else {
+        result = KIcon("battery");
+    }
+    return result;
 }
 
 void BatteryMonitorWidget::slotUpdateLayout()
@@ -173,6 +235,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
         m_batterymonitor->setStatus(Plasma::ItemStatus::ActiveStatus);
     } else {
         m_batterymonitor->setStatus(Plasma::ItemStatus::PassiveStatus);
+        m_batterymonitor->setPopupIcon(batteryUnavailableIcon());
     }
 
     const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
@@ -184,7 +247,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
 
         const Solid::Battery* battery = batterydevice.as<Solid::Battery>();
         Plasma::IconWidget* iconwidget = new Plasma::IconWidget(
-            KIcon(batterydevice.icon()), batterydevice.description(),
+            batteryIcon(battery, batterydevice.icon()), batterydevice.description(),
             this
         );
         iconwidget->setOrientation(Qt::Horizontal);
@@ -276,7 +339,9 @@ void BatteryMonitorWidget::slotUpdateIcon(const int state, const QString &udi)
         Q_ASSERT(!iconwidgetudi.isEmpty());
         if (iconwidgetudi == udi) {
             const Solid::Device soliddevice(udi);
-            iconwidget->setIcon(KIcon(soliddevice.icon()));
+            const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
+            Q_ASSERT(batterydevice);
+            iconwidget->setIcon(batteryIcon(batterydevice, soliddevice.icon()));
             if (iconwidgetudi == m_activebattery) {
                 setActiveBattery(m_activebattery);
             }
@@ -300,8 +365,8 @@ BatteryMonitor::~BatteryMonitor()
 
 void BatteryMonitor::init()
 {
-    setPopupIcon("battery");
     m_batterywidget = new BatteryMonitorWidget(this);
+    setPopupIcon(m_batterywidget->batteryUnavailableIcon());
     configChanged();
 }
 
