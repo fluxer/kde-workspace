@@ -101,6 +101,8 @@ private:
     Plasma::Separator* m_separator;
     QList<Plasma::IconWidget*> m_iconwidgets;
     QString m_activebattery;
+    // references to the devices for the signals
+    QList<Solid::Device> m_batterydevices;
 };
 
 BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor)
@@ -227,8 +229,8 @@ void BatteryMonitorWidget::slotUpdateLayout()
         m_separator = nullptr;
     }
 
-    const QList<Solid::Device> batterydevices = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
-    if (batterydevices.size() > 0) {
+    m_batterydevices = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
+    if (m_batterydevices.size() > 0) {
         m_separator = new Plasma::Separator(this);
         m_separator->setOrientation(Qt::Horizontal);
         m_layout->addItem(m_separator);
@@ -239,7 +241,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
     }
 
     const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
-    foreach (const Solid::Device &batterydevice, batterydevices) {
+    foreach (const Solid::Device &batterydevice, m_batterydevices) {
         if (m_activebattery.isEmpty()) {
             // pick the first as active
             m_activebattery = batterydevice.udi();
