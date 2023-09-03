@@ -32,6 +32,8 @@
 #include <KIconLoader>
 #include <KDebug>
 
+static const QString s_suppressreason = QString::fromLatin1("battery monitor");
+
 static QString kChargeStateToString(const Solid::Battery::ChargeState state)
 {
     switch (state) {
@@ -69,7 +71,7 @@ private Q_SLOTS:
     void slotSuppressSleep(const bool suppress);
     void slotSuppressScreen(const bool suppress);
     void slotUpdateActive();
-    void slotUpdateIcon(const int state,const QString &udi);
+    void slotUpdateIcon(const int state, const QString &udi);
 
 private:
     BatteryMonitor* m_batterymonitor;
@@ -163,7 +165,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
         m_separator = nullptr;
     }
 
-    QList<Solid::Device> batterydevices = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
+    const QList<Solid::Device> batterydevices = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
     if (batterydevices.size() > 0) {
         m_separator = new Plasma::Separator(this);
         m_separator->setOrientation(Qt::Horizontal);
@@ -212,7 +214,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
 void BatteryMonitorWidget::slotSuppressSleep(const bool suppress)
 {
     if (suppress) {
-        m_suppresssleepcookie = Solid::PowerManagement::beginSuppressingSleep(QString::fromLatin1("battery monitor"));
+        m_suppresssleepcookie = Solid::PowerManagement::beginSuppressingSleep(s_suppressreason);
         if (m_suppresssleepcookie <= 0) {
             kWarning() << "could not suppress sleep";
             m_batterymonitor->showMessage(
@@ -236,9 +238,7 @@ void BatteryMonitorWidget::slotSuppressSleep(const bool suppress)
 void BatteryMonitorWidget::slotSuppressScreen(const bool suppress)
 {
     if (suppress) {
-        m_suppressscreencookie = Solid::PowerManagement::beginSuppressingScreenPowerManagement(
-            QString::fromLatin1("battery monitor")
-        );
+        m_suppressscreencookie = Solid::PowerManagement::beginSuppressingScreenPowerManagement(s_suppressreason);
         if (m_suppressscreencookie <= 0) {
             kWarning() << "could not suppress screen";
             m_batterymonitor->showMessage(
@@ -249,7 +249,7 @@ void BatteryMonitorWidget::slotSuppressScreen(const bool suppress)
             m_suppressscreenbox->setChecked(false);
         }
     } else if (m_suppressscreencookie > 0) {
-        bool suppressresult = Solid::PowerManagement::stopSuppressingScreenPowerManagement(m_suppressscreencookie);
+        const bool suppressresult = Solid::PowerManagement::stopSuppressingScreenPowerManagement(m_suppressscreencookie);
         if (!suppressresult) {
             kWarning() << "could not stop screen suppress";
             m_suppressscreenbox->setChecked(true);
@@ -262,22 +262,22 @@ void BatteryMonitorWidget::slotSuppressScreen(const bool suppress)
 void BatteryMonitorWidget::slotUpdateActive()
 {
     Plasma::IconWidget* iconwidget = qobject_cast<Plasma::IconWidget*>(sender());
-    const QString iconwdigetudi = iconwidget->property("_k_udi").toString();
-    Q_ASSERT(!iconwdigetudi.isEmpty());
-    setActiveBattery(iconwdigetudi);
+    const QString iconwidgetudi = iconwidget->property("_k_udi").toString();
+    Q_ASSERT(!iconwidgetudi.isEmpty());
+    setActiveBattery(iconwidgetudi);
     m_batterymonitor->hidePopup();
 }
 
-void BatteryMonitorWidget::slotUpdateIcon(const int state,const QString &udi)
+void BatteryMonitorWidget::slotUpdateIcon(const int state, const QString &udi)
 {
     Q_UNUSED(state);
     foreach (Plasma::IconWidget* iconwidget, m_iconwidgets) {
-        const QString iconwdigetudi = iconwidget->property("_k_udi").toString();
-        Q_ASSERT(!iconwdigetudi.isEmpty());
-        if (iconwdigetudi == udi) {
+        const QString iconwidgetudi = iconwidget->property("_k_udi").toString();
+        Q_ASSERT(!iconwidgetudi.isEmpty());
+        if (iconwidgetudi == udi) {
             const Solid::Device soliddevice(udi);
             iconwidget->setIcon(KIcon(soliddevice.icon()));
-            if (iconwdigetudi == m_activebattery) {
+            if (iconwidgetudi == m_activebattery) {
                 setActiveBattery(m_activebattery);
             }
         }
@@ -315,7 +315,12 @@ void BatteryMonitor::configChanged()
     KConfigGroup configgroup = config();
     const QString activebattery = configgroup.readEntry("activeBattery", QString());
     if (!activebattery.isEmpty()) {
-        m_batterywidget->setActiveBattery(activebattery);
+        const Solid::Device soliddevice(activebattery);
+        const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
+        // if the battery device is not valid then the first battery will be picked instead
+        if (batterydevice) {
+            m_batterywidget->setActiveBattery(activebattery);
+        }
     }
 }
 
