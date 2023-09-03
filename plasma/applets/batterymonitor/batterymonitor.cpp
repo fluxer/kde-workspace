@@ -240,6 +240,13 @@ void BatteryMonitorWidget::slotUpdateLayout()
         m_batterymonitor->setPopupIcon(batteryUnavailableIcon());
     }
 
+    const Solid::Device soliddevice(m_activebattery);
+    const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
+    // if the battery device is not valid then the first battery will be picked instead
+    if (!batterydevice) {
+        m_activebattery.clear();
+    }
+
     const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
     foreach (const Solid::Device &batterydevice, m_batterydevices) {
         if (m_activebattery.isEmpty()) {
@@ -382,12 +389,7 @@ void BatteryMonitor::configChanged()
     KConfigGroup configgroup = config();
     const QString activebattery = configgroup.readEntry("activeBattery", QString());
     if (!activebattery.isEmpty()) {
-        const Solid::Device soliddevice(activebattery);
-        const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
-        // if the battery device is not valid then the first battery will be picked instead
-        if (batterydevice) {
-            m_batterywidget->setActiveBattery(activebattery);
-        }
+        m_batterywidget->setActiveBattery(activebattery);
     }
 }
 
