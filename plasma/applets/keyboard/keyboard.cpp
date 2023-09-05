@@ -37,6 +37,7 @@ KeyboardApplet::KeyboardApplet(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_keyboard");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
+    setStatus(Plasma::ItemStatus::PassiveStatus);
 }
 
 KeyboardApplet::~KeyboardApplet()
@@ -150,7 +151,8 @@ void KeyboardApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void KeyboardApplet::slotLayoutChanged()
 {
-    const KKeyboardType activelayout = m_keyboardlayout->layouts().first();
+    const QList<KKeyboardType> layouts = m_keyboardlayout->layouts();
+    const KKeyboardType activelayout = layouts.first();
     const QString layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
     const QString flag = KStandardDirs::locate(
         "locale",
@@ -164,6 +166,12 @@ void KeyboardApplet::slotLayoutChanged()
         KIcon(flag)
     );
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltipcontent);
+
+    if (layouts.size() > 1) {
+        setStatus(Plasma::ItemStatus::ActiveStatus);
+    } else {
+        setStatus(Plasma::ItemStatus::PassiveStatus);
+    }
 
     update();
 }
