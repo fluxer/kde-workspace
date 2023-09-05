@@ -16,33 +16,29 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-//own
+// own
 #include "devicewrapper.h"
 
-//Qt
+// Katie
 #include <QAction>
 #include <QTimer>
 #include <QtDBus/QDBusInterface>
 #include <QtDBus/QDBusReply>
-
-//Solid
-#include <Solid/Device>
-#include <Solid/StorageVolume>
-#include <Solid/StorageAccess>
-#include <Solid/OpticalDrive>
-#include <Solid/OpticalDisc>
 
 //KDE
 #include <KIcon>
 #include <KMessageBox>
 #include <KStandardDirs>
 #include <kdesktopfileactions.h>
-
-//Plasma
+#include <Solid/Device>
+#include <Solid/StorageVolume>
+#include <Solid/StorageAccess>
+#include <Solid/OpticalDrive>
+#include <Solid/OpticalDisc>
 #include <Plasma/DataEngine>
 
-DeviceWrapper::DeviceWrapper(const QString& udi)
-  : m_device(udi),
+DeviceWrapper::DeviceWrapper(const QString &udi)
+    : m_device(udi),
     m_isStorageAccess(false),
     m_isAccessible(false),
     m_isEncryptedContainer(false)
@@ -61,12 +57,12 @@ void DeviceWrapper::dataUpdated(const QString &source, Plasma::DataEngine::Data 
     if (data.isEmpty()) {
         return;
     }
+
     if (data["text"].isValid()) {
         m_actionIds.clear();
         foreach (const QString &desktop, data["predicateFiles"].toStringList()) {
             QString filePath = KStandardDirs::locate("data", "solid/actions/" + desktop);
             QList<KServiceAction> services = KDesktopFileActions::userDefinedServices(filePath, true);
-
             foreach (KServiceAction serviceAction, services) {
                 QString actionId = id()+'_'+desktop+'_'+serviceAction.name();
                 m_actionIds << actionId;
@@ -99,35 +95,43 @@ void DeviceWrapper::dataUpdated(const QString &source, Plasma::DataEngine::Data 
     emit refreshMatch(m_udi);
 }
 
-QString DeviceWrapper::id() const {
+QString DeviceWrapper::id() const
+{
      return m_udi;
 }
 
-Solid::Device DeviceWrapper::device() const {
+Solid::Device DeviceWrapper::device() const
+{
     return m_device;
 }
 
-KIcon DeviceWrapper::icon() const {
+KIcon DeviceWrapper::icon() const
+{
     return KIcon(m_iconName, NULL, m_emblems);
 }
 
-bool DeviceWrapper::isStorageAccess() const {
+bool DeviceWrapper::isStorageAccess() const
+{
     return m_isStorageAccess;
 }
 
-bool DeviceWrapper::isAccessible() const {
+bool DeviceWrapper::isAccessible() const
+{
     return m_isAccessible;
 }
 
-bool DeviceWrapper::isEncryptedContainer() const {
+bool DeviceWrapper::isEncryptedContainer() const
+{
     return m_isEncryptedContainer;
 }
 
-bool DeviceWrapper::isOpticalDisc() const {
+bool DeviceWrapper::isOpticalDisc() const
+{
     return m_isOpticalDisc;
 }
 
-QString DeviceWrapper::description() const {
+QString DeviceWrapper::description() const
+{
     return m_description;
 }
 
@@ -136,8 +140,8 @@ void DeviceWrapper::setForceEject(bool force)
     m_forceEject = force;
 }
 
-QString DeviceWrapper::defaultAction() const {
-
+QString DeviceWrapper::defaultAction() const
+{
     QString actionString;
 
     if (m_isOpticalDisc && m_forceEject) {
@@ -151,18 +155,22 @@ QString DeviceWrapper::defaultAction() const {
             }
         } else {
             if (!m_isAccessible) {
-                actionString = i18nc("Unlock the encrypted container; will ask for a password; partitions inside will appear as they had been plugged in","Unlock the container");
+                actionString = i18nc(
+                    "Unlock the encrypted container; will ask for a password; partitions inside will appear as they had been plugged in","Unlock the container"
+                );
             } else {
-                actionString = i18nc("Close the encrypted container; partitions inside will disappear as they had been unplugged", "Lock the container");
+                actionString = i18nc(
+                    "Close the encrypted container; partitions inside will disappear as they had been unplugged", "Lock the container"
+                );
             }
         }
     } else {
-            actionString = i18n("Eject medium");
+        actionString = i18n("Eject medium");
     }
     return actionString;
 }
 
-void DeviceWrapper::runAction(QAction * action)
+void DeviceWrapper::runAction(QAction *action)
 {
     if (action) {
         QString desktopAction = action->data().toString();

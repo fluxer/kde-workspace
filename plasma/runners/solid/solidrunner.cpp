@@ -35,9 +35,9 @@
 
 using namespace Plasma;
 
-SolidRunner::SolidRunner(QObject* parent, const QVariantList& args)
+SolidRunner::SolidRunner(QObject *parent, const QVariantList &args)
     : AbstractRunner(parent, args),
-      m_deviceList()
+    m_deviceList()
 {
     Q_UNUSED(args)
     setObjectName( QLatin1String("Solid" ));
@@ -46,20 +46,42 @@ SolidRunner::SolidRunner(QObject* parent, const QVariantList& args)
 
     addSyntax(Plasma::RunnerSyntax(":q:", i18n("Finds devices whose name match :q:")));
 
-    setDefaultSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "device"),
-                                   i18n("Lists all devices and allows them to be mounted, unmounted or ejected.")));
-    addSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "mount"),
-                                   i18n("Lists all devices which can be mounted, and allows them to be mounted.")));
-    addSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "unlock"),
-                                   i18n("Lists all encrypted devices which can be unlocked, and allows them to be unlocked.")));
-    addSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "unmount"),
-                                   i18n("Lists all devices which can be unmounted, and allows them to be unmounted.")));
-    addSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "lock"),
-                                   i18n("Lists all encrypted devices which can be locked, and allows them to be locked.")));
-
-    addSyntax(Plasma::RunnerSyntax(i18nc("Note this is a KRunner keyword", "eject"),
-                                   i18n("Lists all devices which can be ejected, and allows them to be ejected.")));
-
+    setDefaultSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "device"),
+            i18n("Lists all devices and allows them to be mounted, unmounted or ejected.")
+        )
+    );
+    addSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "mount"),
+            i18n("Lists all devices which can be mounted, and allows them to be mounted.")
+        )
+    );
+    addSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "unlock"),
+            i18n("Lists all encrypted devices which can be unlocked, and allows them to be unlocked.")
+        )
+    );
+    addSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "unmount"),
+            i18n("Lists all devices which can be unmounted, and allows them to be unmounted.")
+        )
+    );
+    addSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "lock"),
+            i18n("Lists all encrypted devices which can be locked, and allows them to be locked.")
+        )
+    );
+    addSyntax(
+        Plasma::RunnerSyntax(
+            i18nc("Note this is a KRunner keyword", "eject"),
+            i18n("Lists all devices which can be ejected, and allows them to be ejected.")
+        )
+    );
 }
 
 SolidRunner::~SolidRunner()
@@ -68,19 +90,22 @@ SolidRunner::~SolidRunner()
 
 void SolidRunner::init()
 {
+    m_hotplugEngine = dataEngine("hotplug");
+    m_solidDeviceEngine = dataEngine("soliddevice");
 
-  m_hotplugEngine = dataEngine("hotplug");
-  m_solidDeviceEngine = dataEngine("soliddevice");
-
-  //connect to engine when a device is plugged
-  connect(m_hotplugEngine, SIGNAL(sourceAdded(QString)),
-          this, SLOT(onSourceAdded(QString)));
-  connect(m_hotplugEngine, SIGNAL(sourceRemoved(QString)),
-          this, SLOT(onSourceRemoved(QString)));
-  fillPreviousDevices();
+    // connect to engine when a device is plugged
+    connect(
+        m_hotplugEngine, SIGNAL(sourceAdded(QString)),
+        this, SLOT(onSourceAdded(QString))
+    );
+    connect(
+        m_hotplugEngine, SIGNAL(sourceRemoved(QString)),
+        this, SLOT(onSourceRemoved(QString))
+    );
+    fillPreviousDevices();
 }
 
-void SolidRunner::cleanActionsForDevice(DeviceWrapper * dev)
+void SolidRunner::cleanActionsForDevice(DeviceWrapper *dev)
 {
     const QStringList actionIds = dev->actionIds();
     if (!actionIds.isEmpty()) {
@@ -93,12 +118,11 @@ void SolidRunner::cleanActionsForDevice(DeviceWrapper * dev)
 QList<QAction*> SolidRunner::actionsForMatch(const Plasma::QueryMatch &match)
 {
     QList<QAction*> actions;
-
     DeviceWrapper* dev = m_deviceList.value(match.data().toString());
     if (dev) {
         QStringList actionIds = dev->actionIds();
         if (!actionIds.isEmpty()) {
-            foreach (const QString& id, actionIds) {
+            foreach (const QString &id, actionIds) {
                 actions << action(id);
             }
         }
@@ -106,7 +130,7 @@ QList<QAction*> SolidRunner::actionsForMatch(const Plasma::QueryMatch &match)
     return actions;
 }
 
-void SolidRunner::match(Plasma::RunnerContext& context)
+void SolidRunner::match(Plasma::RunnerContext &context)
 {
     m_currentContext = context;
     createOrUpdateMatches(m_deviceList.keys());
@@ -114,12 +138,11 @@ void SolidRunner::match(Plasma::RunnerContext& context)
 
 void SolidRunner::createOrUpdateMatches(const QStringList &udiList)
 {
-    const QString term = m_currentContext.query();
-
     if (!m_currentContext.isValid()) {
         return;
     }
 
+    const QString term = m_currentContext.query();
     if (!m_currentContext.singleRunnerQueryMode() && (term.length() < 3)) {
         return;
     }
@@ -176,8 +199,8 @@ void SolidRunner::createOrUpdateMatches(const QStringList &udiList)
         deviceDescription = keywords[0];
     }
 
-    foreach (const QString& udi,  udiList) {
-        DeviceWrapper * dev = m_deviceList.value(udi);
+    foreach (const QString &udi,  udiList) {
+        DeviceWrapper* dev = m_deviceList.value(udi);
         if ((deviceDescription.isEmpty() && showDevices) || dev->description().contains(deviceDescription, Qt::CaseInsensitive)) {
             // This is getting quite messy indeed
             if (((!onlyEncrypted) || (onlyEncrypted && dev->isEncryptedContainer())) &&
@@ -204,7 +227,7 @@ void SolidRunner::createOrUpdateMatches(const QStringList &udiList)
     }
 }
 
-Plasma::QueryMatch SolidRunner::deviceMatch(DeviceWrapper * device)
+Plasma::QueryMatch SolidRunner::deviceMatch(DeviceWrapper *device)
 {
     Plasma::QueryMatch match(this);
     match.setId(device->id());
@@ -214,17 +237,16 @@ Plasma::QueryMatch SolidRunner::deviceMatch(DeviceWrapper * device)
 
     match.setSubtext(device->defaultAction());
 
-    //Put them in order such that the last added device is on top.
-    match.setRelevance(0.5+0.1*qreal(m_udiOrderedList.indexOf(device->id()))/qreal(m_udiOrderedList.count()));
+    // Order such that the last added device is on top.
+    match.setRelevance(0.5+0.1 * qreal(m_udiOrderedList.indexOf(device->id())) / qreal(m_udiOrderedList.count()));
 
     return match;
 }
 
-void SolidRunner::run(const Plasma::RunnerContext& context, const Plasma::QueryMatch& match)
+void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context)
-
-    DeviceWrapper *device = m_deviceList.value(match.data().toString());
+    DeviceWrapper* device = m_deviceList.value(match.data().toString());
     if (device) {
         device->runAction(match.selectedAction());
     }
@@ -252,10 +274,15 @@ void SolidRunner::refreshMatch(QString &id)
 
 void SolidRunner::onSourceAdded(const QString &name)
 {
-    DeviceWrapper * device = new DeviceWrapper(name);
-    connect(device, SIGNAL(registerAction(QString&,QString,QString,QString)),
-            this,  SLOT(registerAction(QString&,QString,QString,QString)));
-    connect(device, SIGNAL(refreshMatch(QString&)), this, SLOT(refreshMatch(QString&)));
+    DeviceWrapper* device = new DeviceWrapper(name);
+    connect(
+        device, SIGNAL(registerAction(QString&,QString,QString,QString)),
+        this,  SLOT(registerAction(QString&,QString,QString,QString))
+    );
+    connect(
+        device, SIGNAL(refreshMatch(QString&)),
+        this, SLOT(refreshMatch(QString&))
+    );
 
     m_deviceList.insert(name, device);
     m_udiOrderedList << name;
@@ -265,20 +292,20 @@ void SolidRunner::onSourceAdded(const QString &name)
 
 void SolidRunner::onSourceRemoved(const QString &name)
 {
-    DeviceWrapper * device = m_deviceList.value(name);
+    DeviceWrapper* device = m_deviceList.value(name);
     if (device) {
-            m_hotplugEngine->disconnectSource(name, device);
-            m_solidDeviceEngine->disconnectSource(name, device);
-            disconnect(device, 0, this, 0);
-            cleanActionsForDevice(device);
-            m_deviceList.remove(name);
-            m_udiOrderedList.removeAll(name);
-            if (m_currentContext.isValid()) {
-                QueryMatch match(this);
-                match.setId(device->id());
-                m_currentContext.removeMatch(match.id());
-            }
-            delete device;
+        m_hotplugEngine->disconnectSource(name, device);
+        m_solidDeviceEngine->disconnectSource(name, device);
+        disconnect(device, 0, this, 0);
+        cleanActionsForDevice(device);
+        m_deviceList.remove(name);
+        m_udiOrderedList.removeAll(name);
+        if (m_currentContext.isValid()) {
+            QueryMatch match(this);
+            match.setId(device->id());
+            m_currentContext.removeMatch(match.id());
+        }
+        delete device;
     }
 }
 

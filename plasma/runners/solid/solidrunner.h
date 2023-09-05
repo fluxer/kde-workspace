@@ -32,43 +32,39 @@ class DeviceWrapper;
 class SolidRunner : public Plasma::AbstractRunner
 {
     Q_OBJECT
+public:
+    SolidRunner(QObject* parent, const QVariantList &args);
+    ~SolidRunner();
 
-    public:
-        SolidRunner(QObject* parent, const QVariantList &args);
-        ~SolidRunner();
+    virtual void match(Plasma::RunnerContext &context);
+    virtual void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match);
 
-        virtual void match(Plasma::RunnerContext& context);
-        virtual void run(const Plasma::RunnerContext& context, const Plasma::QueryMatch& match);
+protected:
+    QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
 
+protected Q_SLOTS:
+    void init();
+    void onSourceAdded(const QString &name);
+    void onSourceRemoved(const QString &name);
 
-    protected:
-        QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match);
+private Q_SLOTS:
+    void registerAction(QString &id, QString icon, QString text, QString desktop);
+    void refreshMatch(QString &id);
 
-    protected slots:
+private:
+    void fillPreviousDevices();
+    void cleanActionsForDevice(DeviceWrapper *);
+    void createOrUpdateMatches(const QStringList &udiList);
 
-        void init();
-        void onSourceAdded(const QString &name);
-        void onSourceRemoved(const QString &name);
-   
-    private slots:
-        void registerAction(QString &id, QString icon, QString text, QString desktop);
-        void refreshMatch(QString &id);
+    Plasma::QueryMatch deviceMatch(DeviceWrapper *device);
 
-    private:
+    Plasma::DataEngine* m_hotplugEngine;
+    Plasma::DataEngine* m_solidDeviceEngine;
 
-        void fillPreviousDevices();
-        void cleanActionsForDevice(DeviceWrapper *);
-        void createOrUpdateMatches(const QStringList &udiList);
-
-        Plasma::QueryMatch deviceMatch(DeviceWrapper * device);
-
-        Plasma::DataEngine *m_hotplugEngine;
-        Plasma::DataEngine *m_solidDeviceEngine;
-
-        QHash<QString, DeviceWrapper*> m_deviceList;
-        QStringList m_udiOrderedList;
-        Plasma::DataEngineManager* m_engineManager;
-        Plasma::RunnerContext m_currentContext;
+    QHash<QString, DeviceWrapper*> m_deviceList;
+    QStringList m_udiOrderedList;
+    Plasma::DataEngineManager* m_engineManager;
+    Plasma::RunnerContext m_currentContext;
 };
 
 K_EXPORT_PLASMA_RUNNER(solid, SolidRunner)
