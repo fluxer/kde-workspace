@@ -64,7 +64,7 @@ static QList<KKeyboardType> kLayoutsFromConfig()
     return result;
 }
 
-void kFillTreeFromLayouts(QTreeWidget *treewidget, const QList<KKeyboardType> &layouts)
+static void kFillTreeFromLayouts(QTreeWidget *treewidget, const QList<KKeyboardType> &layouts)
 {
     treewidget->clear();
     int itemcounter = 0;
@@ -80,7 +80,7 @@ void kFillTreeFromLayouts(QTreeWidget *treewidget, const QList<KKeyboardType> &l
     }
 }
 
-QList<KKeyboardType> kGetLayoutsFromTree(QTreeWidget *treewidget, const QByteArray &model)
+static QList<KKeyboardType> kGetLayoutsFromTree(QTreeWidget *treewidget, const QByteArray &model)
 {
     QList<KKeyboardType> result;
     for (int i = 0; i < treewidget->topLevelItemCount(); i++) {
@@ -94,8 +94,13 @@ QList<KKeyboardType> kGetLayoutsFromTree(QTreeWidget *treewidget, const QByteArr
     return result;
 }
 
-void kcm_keyboard_apply_config()
+static void kApplyKeyboardConfig()
 {
+    const QList<KKeyboardType> layouts = kLayoutsFromConfig();
+    if (layouts.size() > 0) {
+        KKeyboardLayout().setLayouts(layouts);
+    }
+
     KConfig kconfig("kcminputrc", KConfig::NoGlobals);
     KConfigGroup kconfiggroup(&kconfig, "Keyboard");
     const float repeatdelay = kconfiggroup.readEntry("RepeatDelay", s_defaultrepeatdelay);
@@ -119,18 +124,13 @@ void kcm_keyboard_apply_config()
         kError() << "Failed to set keyboard repeat controls";
     }
     XkbFreeKeyboard(xkbkeyboard, 0, true);
-
-    const QList<KKeyboardType> layouts = kLayoutsFromConfig();
-    if (layouts.size() > 0) {
-        KKeyboardLayout().setLayouts(layouts);
-    }
 }
 
 extern "C"
 {
     Q_DECL_EXPORT void kcminit_keyboard()
     {
-        kcm_keyboard_apply_config();
+        kApplyKeyboardConfig();
     }
 }
 
@@ -358,7 +358,7 @@ void KCMKeyboard::save()
     kconfiggroup.writeEntry("LayoutsVariants", layoutsvariants);
     kconfig.sync();
 
-    kcm_keyboard_apply_config();
+    kApplyKeyboardConfig();
 
     emit changed(false);
 }
