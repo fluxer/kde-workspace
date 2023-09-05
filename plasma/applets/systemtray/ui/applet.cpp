@@ -687,6 +687,10 @@ void Applet::checkDefaultApplets()
         s_manager->addApplet("org.kde.notifications", this);
     }
 
+    if (!applets.contains("keyboard")) {
+        s_manager->addApplet("keyboard", this);
+    }
+
     if (!applets.contains("battery")) {
         const QList<Solid::Device> batteries = Solid::Device::listFromType(Solid::DeviceInterface::Battery);
         if (!batteries.isEmpty()) {
