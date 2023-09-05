@@ -171,6 +171,7 @@ KCMKeyboardDialog::KCMKeyboardDialog(QWidget *parent)
     m_widget = new QWidget(this);
     m_layout = new QGridLayout(m_widget);
 
+    // TODO: do not add layouts and variants already in the tree
     m_layoutslabel = new QLabel(m_widget);
     m_layoutslabel->setText(i18n("Layout:"));
     m_layout->addWidget(m_layoutslabel, 0, 0);
@@ -198,9 +199,7 @@ KCMKeyboardDialog::KCMKeyboardDialog(QWidget *parent)
 
     setMainWidget(m_widget);
 
-    updateWidgets();
-
-    setInitialSize(QSize(300, 300));
+    setInitialSize(QSize(100, 200));
     KConfigGroup kconfiggroup(KGlobal::config(), "KCMKeyboardDialog");
     restoreDialogSize(kconfiggroup);
 }
@@ -220,11 +219,7 @@ KKeyboardType KCMKeyboardDialog::keyboardType() const
 void KCMKeyboardDialog::setKeyboardType(const KKeyboardType &layout)
 {
     m_keyboardtype = layout;
-    updateWidgets();
-}
-
-void KCMKeyboardDialog::updateWidgets()
-{
+    m_variantsbox->blockSignals(true);
     const int layoutindex = m_layoutsbox->findData(m_keyboardtype.layout);
     if (layoutindex >= 0) {
         m_layoutsbox->setCurrentIndex(layoutindex);
@@ -237,6 +232,7 @@ void KCMKeyboardDialog::updateWidgets()
     } else {
         kWarning() << "Could not find the keyboard variant" << m_keyboardtype.variant;
     }
+    m_variantsbox->blockSignals(false);
 }
 
 void KCMKeyboardDialog::slotLayoutIndexChanged(const int index)
@@ -445,6 +441,7 @@ KCMKeyboard::KCMKeyboard(QWidget *parent, const QVariantList &args)
 
 KCMKeyboard::~KCMKeyboard()
 {
+    // FIXME: spacers are leaked
 }
 
 void KCMKeyboard::load()
@@ -540,17 +537,14 @@ void KCMKeyboard::slotItemSelectionChanged()
     }
 
     const int selectedrow = selectedlayouts.at(0)->data(0, Qt::UserRole + 1).toInt();
-    if (selectedrow > 0) {
-        m_layoutsupbutton->setEnabled(true);
-    }
-    if (selectedrow != m_layoutstree->topLevelItemCount()) {
-        m_layoutsdownbutton->setEnabled(true);
-    }
+    m_layoutsupbutton->setEnabled(selectedrow > 0);
+    m_layoutsdownbutton->setEnabled((selectedrow + 1) < m_layoutstree->topLevelItemCount());
 }
 
 void KCMKeyboard::slotAddPressed()
 {
     KCMKeyboardDialog keyboarddialog(this);
+    keyboarddialog.setKeyboardType(KKeyboardLayout::defaultLayout());
     if (keyboarddialog.exec() != QDialog::Accepted) {
         return;
     }
