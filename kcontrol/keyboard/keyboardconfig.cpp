@@ -27,7 +27,7 @@
 #include <kicon.h>
 #include <klocale.h>
 #include <kaboutdata.h>
-#include <kmessagebox.h>
+#include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 
@@ -125,6 +125,138 @@ static void kApplyKeyboardConfig()
     }
     XkbFreeKeyboard(xkbkeyboard, 0, true);
 }
+
+class KCMKeyboardDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    KCMKeyboardDialog(QWidget *parent);
+    ~KCMKeyboardDialog();
+
+    KKeyboardType keyboardType() const;
+    void setKeyboardType(const KKeyboardType &layout);
+
+Q_SIGNALS:
+    void save();
+
+private Q_SLOTS:
+    void slotLayoutIndexChanged(const int index);
+    void slotVariantIndexChanged(const int index);
+
+private:
+    void updateWidgets();
+
+    KKeyboardType m_keyboardtype;
+    QWidget* m_widget;
+    QGridLayout* m_layout;
+    QLabel* m_layoutslabel;
+    QComboBox* m_layoutsbox;
+    QLabel* m_variantslabel;
+    QComboBox* m_variantsbox;
+};
+
+KCMKeyboardDialog::KCMKeyboardDialog(QWidget *parent)
+    : KDialog(parent),
+    m_keyboardtype(KKeyboardLayout::defaultLayout()),
+    m_widget(nullptr),
+    m_layout(nullptr),
+    m_layoutslabel(nullptr),
+    m_layoutsbox(nullptr),
+    m_variantslabel(nullptr),
+    m_variantsbox(nullptr)
+{
+    setCaption(i18n("Keyboard Layout"));
+    setButtons(KDialog::Ok | KDialog::Cancel);
+
+    m_widget = new QWidget(this);
+    m_layout = new QGridLayout(m_widget);
+
+    m_layoutslabel = new QLabel(m_widget);
+    m_layoutslabel->setText(i18n("Layout:"));
+    m_layout->addWidget(m_layoutslabel, 0, 0);
+    m_layoutsbox = new QComboBox(m_widget);
+    m_layoutsbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    foreach (const QByteArray &layoutlayout, KKeyboardLayout::layoutNames()) {
+        m_layoutsbox->addItem(KKeyboardLayout::layoutDescription(layoutlayout), layoutlayout);
+    }
+    connect(
+        m_layoutsbox, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotLayoutIndexChanged(int))
+    );
+    m_layout->addWidget(m_layoutsbox, 0, 1);
+
+    m_variantslabel = new QLabel(m_widget);
+    m_variantslabel->setText(i18n("Variant:"));
+    m_layout->addWidget(m_variantslabel, 1, 0);
+    m_variantsbox = new QComboBox(m_widget);
+    m_variantsbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    connect(
+        m_variantsbox, SIGNAL(currentIndexChanged(int)),
+        this, SLOT(slotVariantIndexChanged(int))
+    );
+    m_layout->addWidget(m_variantsbox, 1, 1);
+
+    setMainWidget(m_widget);
+
+    updateWidgets();
+
+    setInitialSize(QSize(300, 300));
+    KConfigGroup kconfiggroup(KGlobal::config(), "KCMKeyboardDialog");
+    restoreDialogSize(kconfiggroup);
+}
+
+KCMKeyboardDialog::~KCMKeyboardDialog()
+{
+    KConfigGroup kconfiggroup(KGlobal::config(), "KCMKeyboardDialog");
+    saveDialogSize(kconfiggroup);
+    KGlobal::config()->sync();
+}
+
+KKeyboardType KCMKeyboardDialog::keyboardType() const
+{
+    return m_keyboardtype;
+}
+
+void KCMKeyboardDialog::setKeyboardType(const KKeyboardType &layout)
+{
+    m_keyboardtype = layout;
+    updateWidgets();
+}
+
+void KCMKeyboardDialog::updateWidgets()
+{
+    const int layoutindex = m_layoutsbox->findData(m_keyboardtype.layout);
+    if (layoutindex >= 0) {
+        m_layoutsbox->setCurrentIndex(layoutindex);
+    } else {
+        kWarning() << "Could not find the keyboard layout" << m_keyboardtype.layout;
+    }
+    const int variantindex = m_variantsbox->findData(m_keyboardtype.variant);
+    if (variantindex >= 0) {
+        m_variantsbox->setCurrentIndex(variantindex);
+    } else {
+        kWarning() << "Could not find the keyboard variant" << m_keyboardtype.variant;
+    }
+}
+
+void KCMKeyboardDialog::slotLayoutIndexChanged(const int index)
+{
+    m_variantsbox->clear();
+    const QByteArray layoutlayout = m_layoutsbox->itemData(index).toByteArray();
+    // add "None"
+    m_variantsbox->addItem(KKeyboardLayout::variantDescription(layoutlayout, QByteArray()), QByteArray());
+    foreach (const QByteArray &layoutvariant, KKeyboardLayout::variantNames(layoutlayout)) {
+        m_variantsbox->addItem(KKeyboardLayout::variantDescription(layoutlayout, layoutvariant), layoutvariant);
+    }
+    m_keyboardtype.layout = layoutlayout;
+}
+
+void KCMKeyboardDialog::slotVariantIndexChanged(const int index)
+{
+    const QByteArray layoutvariant = m_variantsbox->itemData(index).toByteArray();
+    m_keyboardtype.variant = layoutvariant;
+}
+
 
 extern "C"
 {
@@ -418,14 +550,33 @@ void KCMKeyboard::slotItemSelectionChanged()
 
 void KCMKeyboard::slotAddPressed()
 {
-    // TODO:
-    KMessageBox::error(nullptr, "NOT IMPLEMENTED");
+    KCMKeyboardDialog keyboarddialog(this);
+    if (keyboarddialog.exec() != QDialog::Accepted) {
+        return;
+    }
+    QList<KKeyboardType> layouts = kGetLayoutsFromTree(m_layoutstree, m_layoutmodel);
+    layouts.append(keyboarddialog.keyboardType());
+    kFillTreeFromLayouts(m_layoutstree, layouts);
+    emit changed(true);
 }
 
 void KCMKeyboard::slotEditPressed()
 {
-    // TODO:
-    KMessageBox::error(nullptr, "NOT IMPLEMENTED");
+    QList<QTreeWidgetItem*> selectedlayouts = m_layoutstree->selectedItems();
+    if (selectedlayouts.size() == 0) {
+        return;
+    }
+    const int selectedrow = selectedlayouts.at(0)->data(0, Qt::UserRole + 1).toInt();
+    QList<KKeyboardType> layouts = kGetLayoutsFromTree(m_layoutstree, m_layoutmodel);
+    KCMKeyboardDialog keyboarddialog(this);
+    keyboarddialog.setKeyboardType(layouts.at(selectedrow));
+    if (keyboarddialog.exec() != QDialog::Accepted) {
+        return;
+    }
+    layouts.removeAt(selectedrow);
+    layouts.insert(selectedrow, keyboarddialog.keyboardType());
+    kFillTreeFromLayouts(m_layoutstree, layouts);
+    emit changed(true);
 }
 
 void KCMKeyboard::slotRemovePressed()
@@ -468,3 +619,4 @@ void KCMKeyboard::slotDownPressed()
 }
 
 #include "moc_keyboardconfig.cpp"
+#include "keyboardconfig.moc"
