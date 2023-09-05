@@ -39,10 +39,7 @@ SolidRunner::SolidRunner(QObject *parent, const QVariantList &args)
     : AbstractRunner(parent, args),
     m_deviceList()
 {
-    Q_UNUSED(args)
-    setObjectName( QLatin1String("Solid" ));
-
-    m_engineManager = Plasma::DataEngineManager::self();
+    setObjectName(QLatin1String("Solid" ));
 
     addSyntax(Plasma::RunnerSyntax(":q:", i18n("Finds devices whose name match :q:")));
 

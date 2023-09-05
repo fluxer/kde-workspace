@@ -23,7 +23,6 @@
 
 namespace Plasma {
     class DataEngine;
-    class DataEngineManager;
     class RunnerContext;
 }
 
@@ -63,7 +62,6 @@ private:
 
     QHash<QString, DeviceWrapper*> m_deviceList;
     QStringList m_udiOrderedList;
-    Plasma::DataEngineManager* m_engineManager;
     Plasma::RunnerContext m_currentContext;
 };
 
