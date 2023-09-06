@@ -42,7 +42,6 @@ KeyboardApplet::KeyboardApplet(QObject *parent, const QVariantList &args)
 
 KeyboardApplet::~KeyboardApplet()
 {
-    delete m_spacer;
 }
 
 void KeyboardApplet::init()
@@ -123,9 +122,7 @@ void KeyboardApplet::createConfigurationInterface(KConfigDialog *parent)
         m_indicatorbox->setCurrentIndex(0);
     }
     widgetlayout->addWidget(m_indicatorbox);
-    if (!m_spacer) {
-        m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    }
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
     widgetlayout->addSpacerItem(m_spacer);
     widget->setLayout(widgetlayout);
     parent->addPage(widget, i18n("Indicator"), "applications-graphics");
