@@ -144,8 +144,6 @@ private Q_SLOTS:
     void slotVariantIndexChanged(const int index);
 
 private:
-    void updateWidgets();
-
     KKeyboardType m_keyboardtype;
     QWidget* m_widget;
     QGridLayout* m_layout;
@@ -441,7 +439,6 @@ KCMKeyboard::KCMKeyboard(QWidget *parent, const QVariantList &args)
 
 KCMKeyboard::~KCMKeyboard()
 {
-    // FIXME: spacers are leaked
 }
 
 void KCMKeyboard::load()
