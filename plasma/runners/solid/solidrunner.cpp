@@ -70,7 +70,7 @@ static void kSolidEjectUDI(const QString &solidudi)
     Solid::Device soliddevice(solidudi);
     Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
     if (!solidopticaldrive) {
-        kWarning() << "not optical driver" << solidudi;
+        kWarning() << "not optical drive" << solidudi;
         return;
     }
     solidopticaldrive->eject();
@@ -310,7 +310,7 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
                     kSolidMountUDI(solidudi);
                 }
             } else {
-                kWarning() << "not optical driver and not storage access" << solidudi;
+                kWarning() << "not optical drive and not storage access" << solidudi;
             }
             break;
         }
@@ -346,14 +346,22 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
 QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
 {
     QList<Solid::Device> result;
+    // filter duplicates that are Solid::StorageVolume-castable (e.g. Solid::OpticalDrive)
+    QStringList uniqueudis;
     Solid::Predicate solidpredicate(Solid::DeviceInterface::StorageVolume);
+    solidpredicate |= Solid::Predicate(Solid::DeviceInterface::OpticalDrive);
     const QList<Solid::Device> soliddevices = Solid::Device::listFromQuery(solidpredicate);
     foreach (const Solid::Device &soliddevice, soliddevices) {
+        if (uniqueudis.contains(soliddevice.udi())) {
+            continue;
+        }
         const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
         if (!solidstoragevolume || solidstoragevolume->isIgnored()) {
             continue;
         }
-        if (m_onlyremovable) {
+        const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+        // optical drives are not removable storage
+        if (!solidopticaldrive && m_onlyremovable) {
             const Solid::StorageDrive *solidstoragedrive = soliddevice.as<Solid::StorageDrive>();
             if (!solidstoragedrive || !solidstoragedrive->isRemovable()) {
                 continue;
@@ -367,6 +375,7 @@ QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
             }
         }
         result.append(soliddevice);
+        uniqueudis.append(soliddevice.udi());
     }
     return result;
 }
