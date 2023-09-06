@@ -136,9 +136,6 @@ public:
     KKeyboardType keyboardType() const;
     void setKeyboardType(const KKeyboardType &layout);
 
-Q_SIGNALS:
-    void save();
-
 private Q_SLOTS:
     void slotLayoutIndexChanged(const int index);
     void slotVariantIndexChanged(const int index);
