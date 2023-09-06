@@ -38,10 +38,12 @@ KeyboardApplet::KeyboardApplet(QObject *parent, const QVariantList &args)
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
     setStatus(Plasma::ItemStatus::PassiveStatus);
-}
 
-KeyboardApplet::~KeyboardApplet()
-{
+    m_keyboardlayout = new KKeyboardLayout(this);
+    connect(
+        m_keyboardlayout, SIGNAL(layoutChanged()),
+        this, SLOT(slotLayoutChanged())
+    );
 }
 
 void KeyboardApplet::init()
@@ -49,12 +51,6 @@ void KeyboardApplet::init()
     KConfigGroup configgroup = config();
     m_showflag = configgroup.readEntry("showFlag", false);
     m_showtext = configgroup.readEntry("showText", true);
-
-    m_keyboardlayout = new KKeyboardLayout(this);
-    connect(
-        m_keyboardlayout, SIGNAL(layoutChanged()),
-        this, SLOT(slotLayoutChanged())
-    );
 
     setGlobalShortcut(KShortcut(Qt::ALT+Qt::CTRL+Qt::Key_K));
     connect(

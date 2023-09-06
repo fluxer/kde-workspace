@@ -31,7 +31,6 @@ class KeyboardApplet : public Plasma::Applet
     Q_OBJECT
 public:
     KeyboardApplet(QObject *parent, const QVariantList &args);
-    ~KeyboardApplet();
 
     // Plasma::Applet reimplementations
     void init() final;

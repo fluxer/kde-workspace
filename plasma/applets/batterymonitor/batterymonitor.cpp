@@ -365,6 +365,8 @@ BatteryMonitor::BatteryMonitor(QObject *parent, const QVariantList &args)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_battery");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
+    m_batterywidget = new BatteryMonitorWidget(this);
+    setPopupIcon(m_batterywidget->batteryUnavailableIcon());
 }
 
 BatteryMonitor::~BatteryMonitor()
@@ -374,9 +376,8 @@ BatteryMonitor::~BatteryMonitor()
 
 void BatteryMonitor::init()
 {
-    m_batterywidget = new BatteryMonitorWidget(this);
-    setPopupIcon(m_batterywidget->batteryUnavailableIcon());
     configChanged();
+    QTimer::singleShot(500, m_batterywidget, SLOT(slotUpdateLayout()));
 }
 
 QGraphicsWidget* BatteryMonitor::graphicsWidget()
@@ -397,13 +398,6 @@ void BatteryMonitor::saveState(KConfigGroup &group) const
 {
     group.writeEntry("activeBattery", m_batterywidget->activeBattery());
     Plasma::PopupApplet::saveState(group);
-}
-
-void BatteryMonitor::constraintsEvent(Plasma::Constraints constraints)
-{
-    if (constraints & Plasma::StartupCompletedConstraint) {
-        QTimer::singleShot(1500, m_batterywidget, SLOT(slotUpdateLayout()));
-    }
 }
 
 #include "moc_batterymonitor.cpp"

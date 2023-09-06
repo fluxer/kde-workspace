@@ -40,7 +40,6 @@ public Q_SLOTS:
     void configChanged();
 protected:
     void saveState(KConfigGroup &group) const final;
-    void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
     friend BatteryMonitorWidget;
