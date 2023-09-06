@@ -1,45 +1,124 @@
-/***************************************************************************
- *   Copyright 2009 by Jacopo De Simoi <wilderkde@gmail.com>               *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
- *   This program is distributed in the hope that it will be useful,       *
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
- *   GNU General Public License for more details.                          *
- *                                                                         *
- *   You should have received a copy of the GNU General Public License     *
- *   along with this program; if not, write to the                         *
- *   Free Software Foundation, Inc.,                                       *
- *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
- ***************************************************************************/
+/*  This file is part of the KDE project
+    Copyright (C) 2023 Ivailo Monev <xakepa10@gmail.com>
 
-//own
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2, as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
 #include "solidrunner.h"
-#include "devicewrapper.h"
 
-//Qt
-#include <QAction>
-
-//KDE
 #include <KIcon>
+#include <KToolInvocation>
+#include <KShell>
+#include <KStandardDirs>
+#include <KDesktopFile>
+#include <kdesktopfileactions.h>
+#include <KDebug>
+#include <Solid/Predicate>
+#include <Solid/StorageVolume>
+#include <Solid/StorageDrive>
+#include <Solid/StorageAccess>
+#include <Solid/OpticalDrive>
+#include <Solid/Block>
 
-//Plasma
-#include <Plasma/Plasma>
-#include <Plasma/DataEngineManager>
+static const QChar s_actionidseparator = QChar::fromLatin1('#');
 
-//Solid
-#include <Solid/Device>
+static QString kSolidUDI(const QString &matchid)
+{
+    // I did not added that to the match ID but it is there
+    if (matchid.startsWith(QLatin1String("solid_"))) {
+        return matchid.mid(6, matchid.size() - 6);
+    }
+    return matchid;
+}
 
-using namespace Plasma;
+static void kSolidMountUDI(const QString &solidudi)
+{
+    Solid::Device soliddevice(solidudi);
+    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    if (!solidstorageacces) {
+        kWarning() << "not storage access" << solidudi;
+        return;
+    }
+    solidstorageacces->setup();
+}
+
+static void kSolidUnmountUDI(const QString &solidudi)
+{
+    Solid::Device soliddevice(solidudi);
+    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    if (!solidstorageacces) {
+        kWarning() << "not storage access" << solidudi;
+        return;
+    }
+    solidstorageacces->teardown();
+}
+
+static void kSolidEjectUDI(const QString &solidudi)
+{
+    Solid::Device soliddevice(solidudi);
+    Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+    if (!solidopticaldrive) {
+        kWarning() << "not optical driver" << solidudi;
+        return;
+    }
+    solidopticaldrive->eject();
+}
+
+// simplified version of KMacroExpander
+static QStringList kSolidActionCommand(const QString &command, const QString &solidudi)
+{
+    Solid::Device soliddevice(solidudi);
+    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    if (solidstorageacces && !solidstorageacces->isAccessible()) {
+        kSolidMountUDI(solidudi);
+    }
+
+    QString actioncommand = command;
+    if (actioncommand.contains(QLatin1String("%f")) || actioncommand.contains(QLatin1String("%F"))) {
+        if (!solidstorageacces) {
+            kWarning() << "device is not storage access" << soliddevice.udi();
+        } else {
+            const QString devicefilepath = solidstorageacces->filePath();
+            actioncommand = actioncommand.replace(QLatin1String("%f"), devicefilepath);
+            actioncommand = actioncommand.replace(QLatin1String("%F"), devicefilepath);
+        }
+    }
+    if (actioncommand.contains(QLatin1String("%d")) || actioncommand.contains(QLatin1String("%D"))) {
+        const Solid::Block* solidblock = soliddevice.as<Solid::Block>();
+        if (!solidblock) {
+            kWarning() << "device is not block" << soliddevice.udi();
+        } else {
+            const QString devicedevice = solidblock->device();
+            actioncommand = actioncommand.replace(QLatin1String("%d"), devicedevice);
+            actioncommand = actioncommand.replace(QLatin1String("%D"), devicedevice);
+        }
+    }
+    if (actioncommand.contains(QLatin1String("%i")) || actioncommand.contains(QLatin1String("%I"))) {
+        const QString deviceudi = soliddevice.udi();
+        actioncommand = actioncommand.replace(QLatin1String("%i"), deviceudi);
+        actioncommand = actioncommand.replace(QLatin1String("%I"), deviceudi);
+    }
+    return KShell::splitArgs(actioncommand);
+}
 
 SolidRunner::SolidRunner(QObject *parent, const QVariantList &args)
     : AbstractRunner(parent, args),
-    m_deviceList()
+    // TODO: option for it?
+    m_onlyremovable(true)
 {
-    setObjectName(QLatin1String("Solid" ));
+    setObjectName(QLatin1String("Solid"));
 
     addSyntax(Plasma::RunnerSyntax(":q:", i18n("Finds devices whose name match :q:")));
 
@@ -81,236 +160,252 @@ SolidRunner::SolidRunner(QObject *parent, const QVariantList &args)
     );
 }
 
-SolidRunner::~SolidRunner()
-{
-}
-
-void SolidRunner::init()
-{
-    m_hotplugEngine = dataEngine("hotplug");
-    m_solidDeviceEngine = dataEngine("soliddevice");
-
-    // connect to engine when a device is plugged
-    connect(
-        m_hotplugEngine, SIGNAL(sourceAdded(QString)),
-        this, SLOT(onSourceAdded(QString))
-    );
-    connect(
-        m_hotplugEngine, SIGNAL(sourceRemoved(QString)),
-        this, SLOT(onSourceRemoved(QString))
-    );
-    fillPreviousDevices();
-}
-
-void SolidRunner::cleanActionsForDevice(DeviceWrapper *dev)
-{
-    const QStringList actionIds = dev->actionIds();
-    if (!actionIds.isEmpty()) {
-        foreach (const QString& id, actionIds) {
-            removeAction(id);
-        }
-    }
-}
-
 QList<QAction*> SolidRunner::actionsForMatch(const Plasma::QueryMatch &match)
 {
-    QList<QAction*> actions;
-    DeviceWrapper* dev = m_deviceList.value(match.data().toString());
-    if (dev) {
-        QStringList actionIds = dev->actionIds();
-        if (!actionIds.isEmpty()) {
-            foreach (const QString &id, actionIds) {
-                actions << action(id);
+    QList<QAction*> result;
+    const Solid::Device soliddevice(kSolidUDI(match.id()));
+    const QStringList solidactions = KGlobal::dirs()->findAllResources("data", "solid/actions/");
+    foreach (const QString &solidaction, solidactions) {
+        KDesktopFile kdestopfile(solidaction);
+        const QString solidpredicatestring = kdestopfile.desktopGroup().readEntry("X-KDE-Solid-Predicate");
+        const Solid::Predicate solidpredicate = Solid::Predicate::fromString(solidpredicatestring);
+        if (solidpredicate.matches(soliddevice)) {
+            const QList<KServiceAction> kserviceactions = KDesktopFileActions::userDefinedServices(solidaction, true);
+            foreach (const KServiceAction &kserviceaction, kserviceactions) {
+                const QString actionname = kserviceaction.name();
+                if (actionname.contains(s_actionidseparator)) {
+                    kWarning() << "action name contains separator" << s_actionidseparator << actionname;
+                    continue;
+                }
+                QString actionid = actionname;
+                actionid.append(s_actionidseparator);
+                actionid.append(solidaction);
+                QAction* matchaction = addAction(actionid, KIcon(kserviceaction.icon()), kserviceaction.text());
+                matchaction->setData(actionid);
+                result.append(matchaction);
             }
         }
     }
-    return actions;
+    return result;
 }
 
 void SolidRunner::match(Plasma::RunnerContext &context)
 {
-    m_currentContext = context;
-    createOrUpdateMatches(m_deviceList.keys());
-}
-
-void SolidRunner::createOrUpdateMatches(const QStringList &udiList)
-{
-    if (!m_currentContext.isValid()) {
+    if (!context.isValid()) {
         return;
     }
 
-    const QString term = m_currentContext.query();
-    if (!m_currentContext.singleRunnerQueryMode() && (term.length() < 3)) {
-        return;
-    }
-    QList<Plasma::QueryMatch> matches;
-
-    // keyword match: when term starts with "device" we list all devices
-    QStringList keywords = term.split(" ");
-    QString deviceDescription;
-    bool onlyMounted = false;
-    bool onlyMountable = false;
-    bool onlyEncrypted = false;
-    bool onlyOptical = false;
-    bool forceEject = false;
-    bool showDevices = false;
-    if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "device"), Qt::CaseInsensitive) ||
-        keywords[0].startsWith(QLatin1String("device"), Qt::CaseInsensitive)) {
-        showDevices = true;
-        keywords.removeFirst();
-    }
-
-    if (!keywords.isEmpty()) {
-        if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "mount"), Qt::CaseInsensitive) ||
-            keywords[0].startsWith(QLatin1String("mount"), Qt::CaseInsensitive)) {
-            showDevices = true;
-            onlyMountable = true;
-            keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unmount"), Qt::CaseInsensitive) ||
-            keywords[0].startsWith(QLatin1String("unmount"), Qt::CaseInsensitive)) {
-            showDevices = true;
-            onlyMounted = true;
-            keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "eject"), Qt::CaseInsensitive) ||
-            keywords[0].startsWith(QLatin1String("eject"), Qt::CaseInsensitive)) {
-            showDevices = true;
-            onlyOptical = true;
-            forceEject = true;
-            keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "unlock"), Qt::CaseInsensitive) ||
-            keywords[0].startsWith(QLatin1String("unlock"), Qt::CaseInsensitive)) {
-            showDevices = true;
-            onlyMountable = true;
-            onlyEncrypted = true;
-            keywords.removeFirst();
-        } else if (keywords[0].startsWith(i18nc("Note this is a KRunner keyword", "lock"), Qt::CaseInsensitive) ||
-            keywords[0].startsWith(QLatin1String("lock"), Qt::CaseInsensitive)) {
-            showDevices = true;
-            onlyMounted = true;
-            onlyEncrypted = true;
-            keywords.removeFirst();
+    const QString term = context.query();
+    if (term.startsWith(i18nc("Note this is a KRunner keyword", "device"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("device"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchDevice);
         }
-    }
-
-    if (!keywords.isEmpty()) {
-        deviceDescription = keywords[0];
-    }
-
-    foreach (const QString &udi,  udiList) {
-        DeviceWrapper* dev = m_deviceList.value(udi);
-        if ((deviceDescription.isEmpty() && showDevices) || dev->description().contains(deviceDescription, Qt::CaseInsensitive)) {
-            // This is getting quite messy indeed
-            if (((!onlyEncrypted) || (onlyEncrypted && dev->isEncryptedContainer())) &&
-                ((!onlyOptical) || (onlyOptical && dev->isOpticalDisc())) &&
-                ((onlyMounted && dev->isAccessible()) ||
-                 (onlyMountable && dev->isStorageAccess() && !dev->isAccessible()) ||
-                 (!onlyMounted && !onlyMountable))) {
-                dev->setForceEject(forceEject);
-                Plasma::QueryMatch match = deviceMatch(dev);
-                if (dev->description().compare(deviceDescription, Qt::CaseInsensitive)) {
-                    match.setType(Plasma::QueryMatch::ExactMatch);
-                } else if (deviceDescription.isEmpty()) {
-                    match.setType(Plasma::QueryMatch::PossibleMatch);
-                } else {
-                    match.setType(Plasma::QueryMatch::CompletionMatch);
-                }
-                matches << match;
+    } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "mount"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("mount"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+            if (!solidstorageaccess || solidstorageaccess->isAccessible()) {
+                continue;
             }
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchMount);
+        }
+    } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "unmount"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("unmount"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+            if (!solidstorageaccess || !solidstorageaccess->isAccessible()) {
+                continue;
+            }
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchUnmount);
+        }
+    } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "eject"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("eject"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+            if (!solidopticaldrive) {
+                continue;
+            }
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchEject);
+        }
+    } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "unlock"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("unlock"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+            if (!solidstorageaccess || !solidstorageaccess->isAccessible()) {
+                continue;
+            }
+            const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
+            if (!solidstoragevolume || solidstoragevolume->usage() != Solid::StorageVolume::Encrypted) {
+                continue;
+            }
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchUnlock);
+        }
+    } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "lock"), Qt::CaseInsensitive) ||
+        term.startsWith(QLatin1String("lock"), Qt::CaseInsensitive)) {
+        const QList<Solid::Device> soliddevices = solidDevices(term);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+            if (!solidstorageaccess || solidstorageaccess->isAccessible()) {
+                continue;
+            }
+            const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
+            if (!solidstoragevolume || solidstoragevolume->usage() != Solid::StorageVolume::Encrypted) {
+                continue;
+            }
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchLock);
         }
     }
-
-    if (!matches.isEmpty()) {
-        m_currentContext.addMatches(term, matches);
-    }
-}
-
-Plasma::QueryMatch SolidRunner::deviceMatch(DeviceWrapper *device)
-{
-    Plasma::QueryMatch match(this);
-    match.setId(device->id());
-    match.setData(device->id());
-    match.setIcon(device->icon());
-    match.setText(device->description());
-
-    match.setSubtext(device->defaultAction());
-
-    // Order such that the last added device is on top.
-    match.setRelevance(0.5+0.1 * qreal(m_udiOrderedList.indexOf(device->id())) / qreal(m_udiOrderedList.count()));
-
-    return match;
 }
 
 void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
-    Q_UNUSED(context)
-    DeviceWrapper* device = m_deviceList.value(match.data().toString());
-    if (device) {
-        device->runAction(match.selectedAction());
-    }
-}
-
-void SolidRunner::registerAction(QString &id, QString icon, QString text, QString desktop)
-{
-    QAction* action = addAction(id, KIcon(icon), text);
-    action->setData(desktop);
-}
-
-void SolidRunner::refreshMatch(QString &id)
-{
-    if (!m_currentContext.isValid()) {
+    QAction* action = match.selectedAction();
+    if (action) {
+        const QString actionid = action->data().toString();
+        const int actionseparatorindex = actionid.indexOf(s_actionidseparator);
+        if (actionseparatorindex <= 0) {
+            kWarning() << "invalid solid runner action ID" << actionid;
+            return;
+        }
+        const QString actionname = actionid.mid(0, actionseparatorindex);
+        const QString actionfilepath = actionid.mid(actionseparatorindex + 1, actionid.size() - actionseparatorindex - 1);
+        const QList<KServiceAction> kserviceactions = KDesktopFileActions::userDefinedServices(actionfilepath, true);
+        foreach (const KServiceAction &kserviceaction, kserviceactions) {
+            if (kserviceaction.name() == actionname) {
+                QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), kSolidUDI(match.id()));
+                if (actioncommand.size() == 0) {
+                    kWarning() << "invalid action command" << actionname << "in" << actionfilepath;
+                    return;
+                }
+                const QString actionexe = actioncommand.takeFirst();
+                const int actionresult = KToolInvocation::kdeinitExec(actionexe, actioncommand);
+                if (actionresult != 0) {
+                    kWarning() << "could not execute action for" << actionname << "in" << actionfilepath << actionresult;
+                }
+                return;
+            }
+        }
+        kWarning() << "could not find action for" << actionname << "in" << actionfilepath;
         return;
     }
-
-    QueryMatch match(this);
-    match.setId(id);
-    m_currentContext.removeMatch(match.id());
-    QStringList deviceList;
-    deviceList << id;
-    createOrUpdateMatches(deviceList);
-}
-
-void SolidRunner::onSourceAdded(const QString &name)
-{
-    DeviceWrapper* device = new DeviceWrapper(name);
-    connect(
-        device, SIGNAL(registerAction(QString&,QString,QString,QString)),
-        this,  SLOT(registerAction(QString&,QString,QString,QString))
-    );
-    connect(
-        device, SIGNAL(refreshMatch(QString&)),
-        this, SLOT(refreshMatch(QString&))
-    );
-
-    m_deviceList.insert(name, device);
-    m_udiOrderedList << name;
-    m_hotplugEngine->connectSource(name, device);
-    m_solidDeviceEngine->connectSource(name, device);
-}
-
-void SolidRunner::onSourceRemoved(const QString &name)
-{
-    DeviceWrapper* device = m_deviceList.value(name);
-    if (device) {
-        m_hotplugEngine->disconnectSource(name, device);
-        m_solidDeviceEngine->disconnectSource(name, device);
-        disconnect(device, 0, this, 0);
-        cleanActionsForDevice(device);
-        m_deviceList.remove(name);
-        m_udiOrderedList.removeAll(name);
-        if (m_currentContext.isValid()) {
-            QueryMatch match(this);
-            match.setId(device->id());
-            m_currentContext.removeMatch(match.id());
+    const int matchtype = static_cast<int>(match.data().toInt());
+    switch (matchtype) {
+        case SolidRunner::MatchDevice: {
+            const QString solidudi = kSolidUDI(match.id());
+            Solid::Device soliddevice(solidudi);
+            const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+            const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+            if (solidopticaldrive) {
+                kSolidEjectUDI(solidudi);
+            } else if (solidstorageaccess) {
+                if (solidstorageaccess->isAccessible()) {
+                    kSolidUnmountUDI(solidudi);
+                } else {
+                    kSolidMountUDI(solidudi);
+                }
+            } else {
+                kWarning() << "not optical driver and not storage access" << solidudi;
+            }
+            break;
         }
-        delete device;
+        case SolidRunner::MatchMount: {
+            kSolidMountUDI(kSolidUDI(match.id()));
+            break;
+        }
+        case SolidRunner::MatchUnmount: {
+            kSolidUnmountUDI(kSolidUDI(match.id()));
+            break;
+        }
+        case SolidRunner::MatchEject: {
+            kSolidEjectUDI(kSolidUDI(match.id()));
+            break;
+        }
+        case SolidRunner::MatchUnlock: {
+            // same as mounting
+            kSolidMountUDI(kSolidUDI(match.id()));
+            break;
+        }
+        case SolidRunner::MatchLock: {
+            // same as unmounting
+            kSolidUnmountUDI(kSolidUDI(match.id()));
+            break;
+        }
+        default: {
+            kWarning() << "invalid match type" << matchtype;
+            break;
+        }
     }
 }
 
-void SolidRunner::fillPreviousDevices()
+QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
 {
-    foreach (const QString &source, m_hotplugEngine->sources()) {
-        onSourceAdded(source);
+    QList<Solid::Device> result;
+    Solid::Predicate solidpredicate(Solid::DeviceInterface::StorageVolume);
+    const QList<Solid::Device> soliddevices = Solid::Device::listFromQuery(solidpredicate);
+    foreach (const Solid::Device &soliddevice, soliddevices) {
+        const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
+        if (!solidstoragevolume || solidstoragevolume->isIgnored()) {
+            continue;
+        }
+        if (m_onlyremovable) {
+            const Solid::StorageDrive *solidstoragedrive = soliddevice.as<Solid::StorageDrive>();
+            if (!solidstoragedrive || !solidstoragedrive->isRemovable()) {
+                continue;
+            }
+        }
+        const int indexofspace = term.indexOf(QLatin1Char(' '));
+        if (indexofspace > 0) {
+            const QString termsearch = term.mid(indexofspace + 1, term.size() - indexofspace - 1);
+            if (!soliddevice.description().contains(termsearch, Qt::CaseInsensitive)) {
+                continue;
+            }
+        }
+        result.append(soliddevice);
     }
+    return result;
+}
+
+void SolidRunner::addDeviceMatch(const QString &term, Plasma::RunnerContext &context,
+                                 const Solid::Device &soliddevice, const SolidMatchType solidmatchtype)
+{
+    Plasma::QueryMatch match(this);
+    match.setType(Plasma::QueryMatch::PossibleMatch);
+    match.setId(soliddevice.udi());
+    match.setData(static_cast<int>(solidmatchtype));
+    match.setIcon(KIcon(soliddevice.icon()));
+    match.setText(soliddevice.description());
+    const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+    const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+    if (solidopticaldrive) {
+        match.setSubtext(i18n("Eject medium"));
+    } else if (solidstorageaccess) {
+        const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
+        const bool encrypted = (solidstoragevolume && solidstoragevolume->usage() == Solid::StorageVolume::Encrypted);
+        if (solidstorageaccess->isAccessible()) {
+            if (encrypted) {
+                match.setSubtext(
+                    i18nc("Close the encrypted container; partitions inside will disappear as they had been unplugged", "Lock the container")
+                );
+            } else {
+                match.setSubtext(i18n("Unmount the device"));
+            }
+        } else {
+            if (encrypted) {
+                match.setSubtext(
+                    i18nc("Unlock the encrypted container; will ask for a password; partitions inside will appear as they had been plugged in","Unlock the container")
+                );
+            } else {
+                match.setSubtext(i18n("Mount the device"));
+            }
+        }
+    }
+    context.addMatch(term, match);
 }
 
 #include "moc_solidrunner.cpp"
