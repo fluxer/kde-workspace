@@ -36,7 +36,7 @@ static const QChar s_actionidseparator = QChar::fromLatin1('#');
 
 static QString kSolidUDI(const QString &matchid)
 {
-    // I did not added that to the match ID but it is there
+    // I did not add that to the match ID but it is there
     if (matchid.startsWith(QLatin1String("solid_"))) {
         return matchid.mid(6, matchid.size() - 6);
     }
@@ -198,13 +198,13 @@ void SolidRunner::match(Plasma::RunnerContext &context)
     const QString term = context.query();
     if (term.startsWith(i18nc("Note this is a KRunner keyword", "device"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("device"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchDevice);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             addDeviceMatch(term, context, soliddevice, SolidRunner::MatchDevice);
         }
     } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "mount"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("mount"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchMount);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
             if (!solidstorageaccess || solidstorageaccess->isAccessible()) {
@@ -214,7 +214,7 @@ void SolidRunner::match(Plasma::RunnerContext &context)
         }
     } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "unmount"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("unmount"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchUnmount);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
             if (!solidstorageaccess || !solidstorageaccess->isAccessible()) {
@@ -224,7 +224,7 @@ void SolidRunner::match(Plasma::RunnerContext &context)
         }
     } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "eject"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("eject"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchEject);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
             if (!solidopticaldrive) {
@@ -234,7 +234,7 @@ void SolidRunner::match(Plasma::RunnerContext &context)
         }
     } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "unlock"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("unlock"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchUnlock);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
             if (!solidstorageaccess || !solidstorageaccess->isAccessible()) {
@@ -248,7 +248,7 @@ void SolidRunner::match(Plasma::RunnerContext &context)
         }
     } else if (term.startsWith(i18nc("Note this is a KRunner keyword", "lock"), Qt::CaseInsensitive) ||
         term.startsWith(QLatin1String("lock"), Qt::CaseInsensitive)) {
-        const QList<Solid::Device> soliddevices = solidDevices(term);
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchLock);
         foreach (const Solid::Device &soliddevice, soliddevices) {
             const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
             if (!solidstorageaccess || solidstorageaccess->isAccessible()) {
@@ -259,6 +259,11 @@ void SolidRunner::match(Plasma::RunnerContext &context)
                 continue;
             }
             addDeviceMatch(term, context, soliddevice, SolidRunner::MatchLock);
+        }
+    } else if (term.size() >= 3) {
+        const QList<Solid::Device> soliddevices = solidDevices(term, SolidRunner::MatchAny);
+        foreach (const Solid::Device &soliddevice, soliddevices) {
+            addDeviceMatch(term, context, soliddevice, SolidRunner::MatchAny);
         }
     }
 }
@@ -296,6 +301,7 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
     }
     const int matchtype = static_cast<int>(match.data().toInt());
     switch (matchtype) {
+        case SolidRunner::MatchAny:
         case SolidRunner::MatchDevice: {
             const QString solidudi = kSolidUDI(match.id());
             Solid::Device soliddevice(solidudi);
@@ -343,7 +349,7 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
     }
 }
 
-QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
+QList<Solid::Device> SolidRunner::solidDevices(const QString &term, const SolidMatchType solidmatchtype) const
 {
     QList<Solid::Device> result;
     // filter duplicates that are Solid::StorageVolume-castable (e.g. Solid::OpticalDrive)
@@ -355,6 +361,7 @@ QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
         if (uniqueudis.contains(soliddevice.udi())) {
             continue;
         }
+        uniqueudis.append(soliddevice.udi());
         const Solid::StorageVolume *solidstoragevolume = soliddevice.as<Solid::StorageVolume>();
         if (!solidstoragevolume || solidstoragevolume->isIgnored()) {
             continue;
@@ -367,15 +374,20 @@ QList<Solid::Device> SolidRunner::solidDevices(const QString &term) const
                 continue;
             }
         }
-        const int indexofspace = term.indexOf(QLatin1Char(' '));
-        if (indexofspace > 0) {
-            const QString termsearch = term.mid(indexofspace + 1, term.size() - indexofspace - 1);
-            if (!soliddevice.description().contains(termsearch, Qt::CaseInsensitive)) {
+        if (solidmatchtype == SolidRunner::MatchAny) {
+            if (!soliddevice.description().contains(term, Qt::CaseInsensitive)) {
                 continue;
+            }
+        } else {
+            const int indexofspace = term.indexOf(QLatin1Char(' '));
+            if (indexofspace > 0) {
+                const QString termsearch = term.mid(indexofspace + 1, term.size() - indexofspace - 1);
+                if (!soliddevice.description().contains(termsearch, Qt::CaseInsensitive)) {
+                    continue;
+                }
             }
         }
         result.append(soliddevice);
-        uniqueudis.append(soliddevice.udi());
     }
     return result;
 }

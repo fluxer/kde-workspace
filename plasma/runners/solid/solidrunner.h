@@ -28,12 +28,13 @@ class SolidRunner : public Plasma::AbstractRunner
     Q_OBJECT
 public:
     enum SolidMatchType {
-        MatchDevice = 0,
-        MatchMount = 1,
-        MatchUnmount = 2,
-        MatchEject = 3,
-        MatchUnlock = 4,
-        MatchLock = 5
+        MatchAny = 0,
+        MatchDevice = 1,
+        MatchMount = 2,
+        MatchUnmount = 3,
+        MatchEject = 4,
+        MatchUnlock = 5,
+        MatchLock = 6
     };
 
     SolidRunner(QObject *parent, const QVariantList &args);
@@ -45,7 +46,7 @@ protected:
     QList<QAction*> actionsForMatch(const Plasma::QueryMatch &match) final;
 
 private:
-    QList<Solid::Device> solidDevices(const QString &term) const;
+    QList<Solid::Device> solidDevices(const QString &term, const SolidMatchType solidmatchtype) const;
     void addDeviceMatch(const QString &term, Plasma::RunnerContext &context,
                         const Solid::Device &soliddevice, const SolidMatchType solidmatchtype);
 
