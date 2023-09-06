@@ -20,7 +20,6 @@
 
 #include <QHeaderView>
 #include <QX11Info>
-#include <kdebug.h>
 #include <kconfiggroup.h>
 #include <kkeyboardlayout.h>
 #include <kstandarddirs.h>
@@ -30,6 +29,7 @@
 #include <kdialog.h>
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
+#include <kdebug.h>
 
 #include <X11/Xlib.h>
 #include <X11/XKBlib.h>
@@ -130,7 +130,7 @@ class KCMKeyboardDialog : public KDialog
 {
     Q_OBJECT
 public:
-    KCMKeyboardDialog(QWidget *parent);
+    KCMKeyboardDialog(const QList<KKeyboardType> &filter, QWidget *parent);
     ~KCMKeyboardDialog();
 
     KKeyboardType keyboardType() const;
@@ -141,6 +141,9 @@ private Q_SLOTS:
     void slotVariantIndexChanged(const int index);
 
 private:
+    bool filterLayout(const QByteArray &layout, const QByteArray &variant) const;
+
+    QList<KKeyboardType> m_filter;
     KKeyboardType m_keyboardtype;
     QWidget* m_widget;
     QGridLayout* m_layout;
@@ -150,8 +153,9 @@ private:
     QComboBox* m_variantsbox;
 };
 
-KCMKeyboardDialog::KCMKeyboardDialog(QWidget *parent)
+KCMKeyboardDialog::KCMKeyboardDialog(const QList<KKeyboardType> &filter, QWidget *parent)
     : KDialog(parent),
+    m_filter(filter),
     m_keyboardtype(KKeyboardLayout::defaultLayout()),
     m_widget(nullptr),
     m_layout(nullptr),
@@ -166,7 +170,6 @@ KCMKeyboardDialog::KCMKeyboardDialog(QWidget *parent)
     m_widget = new QWidget(this);
     m_layout = new QGridLayout(m_widget);
 
-    // TODO: do not add layouts and variants already in the tree
     m_layoutslabel = new QLabel(m_widget);
     m_layoutslabel->setText(i18n("Layout:"));
     m_layout->addWidget(m_layoutslabel, 0, 0);
@@ -230,6 +233,16 @@ void KCMKeyboardDialog::setKeyboardType(const KKeyboardType &layout)
     m_variantsbox->blockSignals(false);
 }
 
+bool KCMKeyboardDialog::filterLayout(const QByteArray &layout, const QByteArray &variant) const
+{
+    foreach (const KKeyboardType &filter, m_filter) {
+        if (filter.layout == layout && filter.variant == variant) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void KCMKeyboardDialog::slotLayoutIndexChanged(const int index)
 {
     m_variantsbox->clear();
@@ -239,12 +252,14 @@ void KCMKeyboardDialog::slotLayoutIndexChanged(const int index)
     foreach (const QByteArray &layoutvariant, KKeyboardLayout::variantNames(layoutlayout)) {
         m_variantsbox->addItem(KKeyboardLayout::variantDescription(layoutlayout, layoutvariant), layoutvariant);
     }
+    enableButtonOk(!filterLayout(layoutlayout, m_keyboardtype.variant));
     m_keyboardtype.layout = layoutlayout;
 }
 
 void KCMKeyboardDialog::slotVariantIndexChanged(const int index)
 {
     const QByteArray layoutvariant = m_variantsbox->itemData(index).toByteArray();
+    enableButtonOk(!filterLayout(m_keyboardtype.layout, layoutvariant));
     m_keyboardtype.variant = layoutvariant;
 }
 
@@ -533,12 +548,12 @@ void KCMKeyboard::slotItemSelectionChanged()
 
 void KCMKeyboard::slotAddPressed()
 {
-    KCMKeyboardDialog keyboarddialog(this);
+    QList<KKeyboardType> layouts = kGetLayoutsFromTree(m_layoutstree, m_layoutmodel);
+    KCMKeyboardDialog keyboarddialog(layouts, this);
     keyboarddialog.setKeyboardType(KKeyboardLayout::defaultLayout());
     if (keyboarddialog.exec() != QDialog::Accepted) {
         return;
     }
-    QList<KKeyboardType> layouts = kGetLayoutsFromTree(m_layoutstree, m_layoutmodel);
     layouts.append(keyboarddialog.keyboardType());
     kFillTreeFromLayouts(m_layoutstree, layouts);
     emit changed(true);
@@ -552,12 +567,13 @@ void KCMKeyboard::slotEditPressed()
     }
     const int selectedrow = selectedlayouts.at(0)->data(0, Qt::UserRole + 1).toInt();
     QList<KKeyboardType> layouts = kGetLayoutsFromTree(m_layoutstree, m_layoutmodel);
-    KCMKeyboardDialog keyboarddialog(this);
-    keyboarddialog.setKeyboardType(layouts.at(selectedrow));
+    const KKeyboardType currentlayout = layouts.at(selectedrow);
+    layouts.removeAt(selectedrow);
+    KCMKeyboardDialog keyboarddialog(layouts, this);
+    keyboarddialog.setKeyboardType(currentlayout);
     if (keyboarddialog.exec() != QDialog::Accepted) {
         return;
     }
-    layouts.removeAt(selectedrow);
     layouts.insert(selectedrow, keyboarddialog.keyboardType());
     kFillTreeFromLayouts(m_layoutstree, layouts);
     emit changed(true);
