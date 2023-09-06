@@ -1,10 +1,22 @@
-project(devicenotifier)
+project(plasma-applet-devicenotifier)
 
-install(DIRECTORY package/
-        DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/plasmoids/notifier)
+set(devicenotifier_SRCS
+    devicenotifier.cpp
+)
 
-install(FILES package/metadata.desktop
-        DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
-        RENAME plasma-applet-devicenotifier.desktop)
+kde4_add_plugin(plasma_applet_devicenotifier ${devicenotifier_SRCS})
+target_link_libraries(plasma_applet_devicenotifier
+    KDE4::plasma
+    KDE4::solid
+    KDE4::kio
+)
 
-install(FILES test-predicate-openinwindow.desktop DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions )
+install(
+    TARGETS plasma_applet_devicenotifier
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
+
+install(
+    FILES plasma-applet-devicenotifier.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)

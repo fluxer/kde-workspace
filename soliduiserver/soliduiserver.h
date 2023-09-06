@@ -1,30 +1,28 @@
-/* This file is part of the KDE Project
-   Copyright (c) 2005 Jean-Remy Falleri <jr.falleri@laposte.net>
-   Copyright (c) 2005-2007 Kevin Ottens <ervin@kde.org>
+/*  This file is part of the KDE project
+    Copyright (C) 2021 Ivailo Monev <xakepa10@gmail.com>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License version 2 as published by the Free Software Foundation.
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2, as published by the Free Software Foundation.
 
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-   Boston, MA 02110-1301, USA.
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
 */
 
 #ifndef SOLIDUISERVER_H
 #define SOLIDUISERVER_H
 
+#include "soliduidialog.h"
+
 #include <kdedmodule.h>
-
-#include <QMap>
-
-class DeviceActionsDialog;
+#include <solid/device.h>
 
 class SolidUiServer : public KDEDModule
 {
@@ -33,12 +31,9 @@ class SolidUiServer : public KDEDModule
 
 public:
     SolidUiServer(QObject* parent, const QList<QVariant>&);
-    virtual ~SolidUiServer();
+    ~SolidUiServer();
 
 public Q_SLOTS:
-    Q_SCRIPTABLE void showActionsDialog(const QString &udi,
-                                        const QStringList &desktopFiles);
-
     Q_SCRIPTABLE int mountDevice(const QString &device, const QString &mountpoint, bool readonly = false);
     Q_SCRIPTABLE int unmountDevice(const QString &mountpoint);
 
@@ -48,9 +43,15 @@ public Q_SLOTS:
     Q_SCRIPTABLE QString errorString(const int error);
 
 private Q_SLOTS:
-    void onActionDialogFinished();
+    void slotDeviceAdded(const QString &udi);
+    void slotDeviceRemoved(const QString &udi);
+    void slotDialogFinished();
 
 private:
-    QMap<QString, DeviceActionsDialog*> m_udiToActionsDialog;
+    void handleActions(const Solid::Device &soliddevice, const bool added);
+
+    QList<Solid::Device> m_soliddevices;
+    QList<SolidUiDialog*> m_soliddialogs;
 };
-#endif
+
+#endif // SOLIDUISERVER_H

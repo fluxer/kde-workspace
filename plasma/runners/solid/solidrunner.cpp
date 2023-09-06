@@ -17,6 +17,7 @@
 */
 
 #include "solidrunner.h"
+#include "soliduiserver_common.h"
 
 #include <KIcon>
 #include <KToolInvocation>
@@ -41,76 +42,6 @@ static QString kSolidUDI(const QString &matchid)
         return matchid.mid(6, matchid.size() - 6);
     }
     return matchid;
-}
-
-static void kSolidMountUDI(const QString &solidudi)
-{
-    Solid::Device soliddevice(solidudi);
-    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
-    if (!solidstorageacces) {
-        kWarning() << "not storage access" << solidudi;
-        return;
-    }
-    solidstorageacces->setup();
-}
-
-static void kSolidUnmountUDI(const QString &solidudi)
-{
-    Solid::Device soliddevice(solidudi);
-    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
-    if (!solidstorageacces) {
-        kWarning() << "not storage access" << solidudi;
-        return;
-    }
-    solidstorageacces->teardown();
-}
-
-static void kSolidEjectUDI(const QString &solidudi)
-{
-    Solid::Device soliddevice(solidudi);
-    Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
-    if (!solidopticaldrive) {
-        kWarning() << "not optical drive" << solidudi;
-        return;
-    }
-    solidopticaldrive->eject();
-}
-
-// simplified version of KMacroExpander specialized for solid actions
-static QStringList kSolidActionCommand(const QString &command, const QString &solidudi)
-{
-    Solid::Device soliddevice(solidudi);
-    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
-    if (solidstorageacces && !solidstorageacces->isAccessible()) {
-        kSolidMountUDI(solidudi);
-    }
-
-    QString actioncommand = command;
-    if (actioncommand.contains(QLatin1String("%f")) || actioncommand.contains(QLatin1String("%F"))) {
-        if (!solidstorageacces) {
-            kWarning() << "device is not storage access" << soliddevice.udi();
-        } else {
-            const QString devicefilepath = solidstorageacces->filePath();
-            actioncommand = actioncommand.replace(QLatin1String("%f"), devicefilepath);
-            actioncommand = actioncommand.replace(QLatin1String("%F"), devicefilepath);
-        }
-    }
-    if (actioncommand.contains(QLatin1String("%d")) || actioncommand.contains(QLatin1String("%D"))) {
-        const Solid::Block* solidblock = soliddevice.as<Solid::Block>();
-        if (!solidblock) {
-            kWarning() << "device is not block" << soliddevice.udi();
-        } else {
-            const QString devicedevice = solidblock->device();
-            actioncommand = actioncommand.replace(QLatin1String("%d"), devicedevice);
-            actioncommand = actioncommand.replace(QLatin1String("%D"), devicedevice);
-        }
-    }
-    if (actioncommand.contains(QLatin1String("%i")) || actioncommand.contains(QLatin1String("%I"))) {
-        const QString deviceudi = soliddevice.udi();
-        actioncommand = actioncommand.replace(QLatin1String("%i"), deviceudi);
-        actioncommand = actioncommand.replace(QLatin1String("%I"), deviceudi);
-    }
-    return KShell::splitArgs(actioncommand);
 }
 
 SolidRunner::SolidRunner(QObject *parent, const QVariantList &args)

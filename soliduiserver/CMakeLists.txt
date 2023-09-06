@@ -1,3 +1,5 @@
+add_subdirectory(actions)
+
 ########### next target ###############
 
 set(soliduiserver_helper_srcs
@@ -11,11 +13,7 @@ target_link_libraries(soliduiserver_helper PUBLIC KDE4::kdecore)
 
 set(kded_soliduiserver_SRCS
    soliduiserver.cpp
-   deviceactionsdialog.cpp
-   deviceaction.cpp
-   devicenothingaction.cpp
-   deviceserviceaction.cpp
-   deviceactionsdialogview.ui
+   soliduidialog.cpp
 )
 
 kde4_add_plugin(kded_soliduiserver ${kded_soliduiserver_SRCS})

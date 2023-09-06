@@ -154,16 +154,14 @@ Comment[zh_TW]=通知與存取新裝置
 Icon=device-notifier
 Type=Service
 X-KDE-ServiceTypes=Plasma/Applet,Plasma/PopupApplet
+X-KDE-Library=plasma_applet_devicenotifier
 
-X-Plasma-API=declarativeappletscript
-X-Plasma-MainScript=ui/devicenotifier.qml
-X-Plasma-DefaultSize=290,340
 X-Plasma-NotificationArea=true
-X-Plasma-ConfigPlugins=solid-actions,device_automounter_kcm
+X-Plasma-ConfigPlugins=solidactions
 
-X-KDE-PluginInfo-Author=Viranch Mehta, Jacopo De Simoi
-X-KDE-PluginInfo-Email=wilderkde@gmail.com
-X-KDE-PluginInfo-Name=notifier
+X-KDE-PluginInfo-Author=Ivailo Monev
+X-KDE-PluginInfo-Email=xakepa10@gmail.com
+X-KDE-PluginInfo-Name=devicenotifier
 X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=
 X-KDE-PluginInfo-Category=System Information
