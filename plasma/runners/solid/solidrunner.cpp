@@ -76,7 +76,7 @@ static void kSolidEjectUDI(const QString &solidudi)
     solidopticaldrive->eject();
 }
 
-// simplified version of KMacroExpander
+// simplified version of KMacroExpander specialized for solid actions
 static QStringList kSolidActionCommand(const QString &command, const QString &solidudi)
 {
     Solid::Device soliddevice(solidudi);
