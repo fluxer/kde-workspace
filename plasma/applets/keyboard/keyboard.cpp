@@ -97,11 +97,12 @@ void KeyboardApplet::paintInterface(QPainter *painter,
             const QPixmap textpixmap = Plasma::PaintUtils::shadowText(layoutlayout, font, Qt::black, Qt::white, QPoint(), 3);
             painter->drawPixmap(contentsRect, textpixmap);
         } else {
-            Plasma::Svg svg = Plasma::Svg(this);
-            svg.setImagePath("widgets/labeltexture");
-            svg.setContainsMultipleImages(true);
-            const QPixmap textpixmap = Plasma::PaintUtils::texturedText(layoutlayout, font, &svg);
+            Plasma::Svg* svg = new Plasma::Svg(this);
+            svg->setImagePath("widgets/labeltexture");
+            svg->setContainsMultipleImages(true);
+            const QPixmap textpixmap = Plasma::PaintUtils::texturedText(layoutlayout, font, svg);
             painter->drawPixmap(contentsRect, textpixmap);
+            delete svg;
         }
     }
 }
