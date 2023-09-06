@@ -41,7 +41,6 @@ class KCMKeyboard : public KCModule
     Q_OBJECT
 public:
     KCMKeyboard(QWidget *parent, const QVariantList &args);
-    ~KCMKeyboard();
 
     // KCModule reimplementations
 public Q_SLOTS:

@@ -434,10 +434,6 @@ KCMKeyboard::KCMKeyboard(QWidget *parent, const QVariantList &args)
     m_layoutbuttonsbox->layout()->addItem(m_layoutsbuttonsspacer2);
 }
 
-KCMKeyboard::~KCMKeyboard()
-{
-}
-
 void KCMKeyboard::load()
 {
     KConfig kconfig("kcminputrc", KConfig::NoGlobals);
