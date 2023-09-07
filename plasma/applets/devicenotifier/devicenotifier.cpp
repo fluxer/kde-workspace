@@ -104,6 +104,10 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
         Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
         this, SLOT(slotUpdateLayout())
     );
+    connect(
+        Solid::DeviceNotifier::instance(), SIGNAL(contentChanged(QString,bool)),
+        this, SLOT(slotUpdateLayout())
+    );
 }
 
 DeviceNotifierWidget::~DeviceNotifierWidget()
@@ -126,8 +130,10 @@ void DeviceNotifierWidget::slotUpdateLayout()
             const Solid::StorageDrive *solidstoragedrive = soliddevice.as<Solid::StorageDrive>();
             if (!solidstoragedrive || !solidstoragedrive->isRemovable()) {
                 soliditer.remove();
+                continue;
             }
         }
+        // qDebug() << Q_FUNC_INFO << soliddevice.udi() << solidstoragevolume->usage();
     }
 
     m_freetimer->stop();
@@ -140,7 +146,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     adjustSize();
 
     m_soliddevices = soliddevices;
-    if (soliddevices.isEmpty()) {
+    if (m_soliddevices.isEmpty()) {
         m_title->show();
         m_devicenotifier->setStatus(Plasma::ItemStatus::PassiveStatus);
         return;
