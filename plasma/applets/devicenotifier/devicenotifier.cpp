@@ -135,6 +135,8 @@ void DeviceNotifierWidget::slotUpdateLayout()
     }
     qDeleteAll(m_frames);
     m_frames.clear();
+    // ensures that the widget does not expand after items removal
+    adjustSize();
 
     m_soliddevices = soliddevices;
     if (soliddevices.isEmpty()) {
@@ -193,11 +195,13 @@ void DeviceNotifierWidget::slotUpdateLayout()
             this, SLOT(slotCheckEmblem(bool,QString))
         );
     }
+
     // the minimum space for 2 items, more or less
     QSizeF minimumsize = m_frames.first()->minimumSize();
     minimumsize.setWidth(minimumsize.width() * 1.5);
     minimumsize.setHeight(minimumsize.height() * 2);
     m_devicenotifier->setMinimumSize(minimumsize);
+
     slotCheckFreeSpace();
     m_freetimer->start();
 }
