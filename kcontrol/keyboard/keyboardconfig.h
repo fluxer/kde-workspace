@@ -56,9 +56,11 @@ private Q_SLOTS:
     void slotRemovePressed();
     void slotUpPressed();
     void slotDownPressed();
+    void slotAdvancedPressed();
 
 private:
     QByteArray m_layoutmodel;
+    QByteArray m_layoutoptions;
     QVBoxLayout* m_layout;
 
     QGroupBox* m_repeatgroup;
@@ -72,13 +74,13 @@ private:
     QComboBox* m_layoutsmodelbox;
     QTreeWidget* m_layoutstree;
     KHBox* m_layoutbuttonsbox;
-    QSpacerItem* m_layoutsbuttonsspacer;
     QPushButton* m_layoutsaddbutton;
     QPushButton* m_layoutseditbutton;
     QPushButton* m_layoutsremovebutton;
     QPushButton* m_layoutsupbutton;
     QPushButton* m_layoutsdownbutton;
-    QSpacerItem* m_layoutsbuttonsspacer2;
+    QSpacerItem* m_layoutsbuttonsspacer;
+    QPushButton* m_layoutsavdancedbutton;
 };
 
-#endif // kkeyboardconfig
+#endif // KEYBOARDCONFIG_H

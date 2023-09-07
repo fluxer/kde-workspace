@@ -2,6 +2,8 @@
 
 set(keyboardconfig_SRCS 
     keyboardconfig.cpp
+    keyboardlayoutdialog.cpp
+    keyboardoptionsdialog.cpp
 )
 
 kde4_add_plugin(kcm_keyboard ${keyboardconfig_SRCS})
