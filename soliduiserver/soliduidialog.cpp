@@ -51,7 +51,9 @@ SolidUiDialog::SolidUiDialog(const Solid::Device &soliddevice,
     m_devicepixmap->setPixmap(deviceicon.pixmap(dialogiconsize));
     m_mainlayout->addWidget(m_devicepixmap, 0, 0);
     m_devicelabel = new QLabel(m_mainwidget);
-    m_devicelabel->setText(m_soliddevice.description());
+    m_devicelabel->setTextFormat(Qt::RichText);
+    m_devicelabel->setWordWrap(false);
+    m_devicelabel->setText(i18n("A new device has been detected.<br/><b>What do you want to do?</b>"));
     m_devicelabel->setAlignment(Qt::AlignCenter);
     m_devicelabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     m_mainlayout->addWidget(m_devicelabel, 0, 1);
