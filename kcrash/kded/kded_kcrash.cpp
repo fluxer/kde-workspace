@@ -43,12 +43,9 @@ KCrashDialog::KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent)
     setWindowIcon(KIcon("tools-report-bug"));
     // do not include the application name in the title
     setWindowTitle(
-        KDialog::makeStandardCaption(
-            i18nc(
-                "@title:window", "Crash Details for %1 (%2)",
-                kcrashdetails.kcrashappname, kcrashdetails.kcrashapppid
-            ),
-            nullptr, KDialog::NoCaptionFlags
+        i18nc(
+            "@title:window", "Crash Details for %1 (%2)",
+            kcrashdetails.kcrashappname, kcrashdetails.kcrashapppid
         )
     );
     setButtons(KDialog::Ok | KDialog::Close);
