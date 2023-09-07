@@ -197,7 +197,7 @@ KCMKeyboardDialog::KCMKeyboardDialog(const QList<KKeyboardType> &filter, QWidget
 
     setMainWidget(m_widget);
 
-    setInitialSize(QSize(100, 200));
+    adjustSize();
     KConfigGroup kconfiggroup(KGlobal::config(), "KCMKeyboardDialog");
     restoreDialogSize(kconfiggroup);
 }
