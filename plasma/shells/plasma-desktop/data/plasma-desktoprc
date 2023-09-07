@@ -69,7 +69,7 @@ zvalue=0
 [Containments][1][Applets][5][Configuration][Applets][8]
 geometry=0,0,24,24
 immutability=1
-plugin=notifier
+plugin=devicenotifier
 zvalue=0
 
 [Containments][1][Applets][5][Configuration][Applets][8][PopupApplet]

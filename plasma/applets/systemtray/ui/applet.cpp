@@ -679,8 +679,8 @@ void Applet::checkDefaultApplets()
     // TODO: applets configuration is not saved
     QStringList applets = s_manager->applets(this);
 
-    if (!applets.contains("notifier")) {
-        s_manager->addApplet("notifier", this);
+    if (!applets.contains("devicenotifier")) {
+        s_manager->addApplet("devicenotifier", this);
     }
 
     if (!applets.contains("org.kde.notifications")) {
