@@ -38,6 +38,7 @@
 #include <Solid/StorageVolume>
 #include <Solid/StorageDrive>
 #include <Solid/StorageAccess>
+#include <Solid/OpticalDrive>
 #include <KIcon>
 #include <KRun>
 #include <KDiskFreeSpaceInfo>
@@ -64,7 +65,7 @@ private Q_SLOTS:
     void slotCheckFreeSpace();
     void slotCheckEmblem(const bool accessible, const QString &udi);
     void slotIconActivated();
-    void slotUnmountActivated();
+    void slotRemoveActivated();
 
 private:
     DeviceNotifier* m_devicenotifier;
@@ -150,6 +151,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
     foreach (const Solid::Device &soliddevice, m_soliddevices) {
         const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+        const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
         Plasma::Frame* frame = new Plasma::Frame(this);
         frame->setProperty("_k_udi", soliddevice.udi());
         QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
@@ -158,6 +160,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         iconwidget->setOrientation(Qt::Horizontal);
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
         iconwidget->setText(soliddevice.description());
+        iconwidget->setToolTip(i18n("Click to access this device from other applications."));
         iconwidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
         iconwidget->setProperty("_k_udi", soliddevice.udi());
         connect(
@@ -167,18 +170,25 @@ void DeviceNotifierWidget::slotUpdateLayout()
         framelayout->addItem(iconwidget, 0, 0, 1, 1);
         frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
 
-        Plasma::IconWidget* unmountwidget = new Plasma::IconWidget(frame);
-        unmountwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-        unmountwidget->setIcon(KIcon("media-eject"));
-        unmountwidget->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-        unmountwidget->setVisible(solidstorageaccess->isAccessible());
-        unmountwidget->setProperty("_k_udi", soliddevice.udi());
-        connect(
-            unmountwidget, SIGNAL(activated()),
-            this, SLOT(slotUnmountActivated())
+        Plasma::IconWidget* removewidget = new Plasma::IconWidget(frame);
+        removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+        removewidget->setIcon(KIcon("media-eject"));
+        removewidget->setToolTip(
+            solidopticaldrive ? i18n("Click to eject this disc.") : i18n("Click to safely remove this device.")
         );
-        framelayout->addItem(unmountwidget, 0, 1, 1, 1);
-        frame->setProperty("_k_unmountwidget", QVariant::fromValue(unmountwidget));
+        removewidget->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+        if (solidopticaldrive) {
+            removewidget->setVisible(true);
+        } else {
+            removewidget->setVisible(solidstorageaccess ? solidstorageaccess->isAccessible() : false);
+        }
+        removewidget->setProperty("_k_udi", soliddevice.udi());
+        connect(
+            removewidget, SIGNAL(activated()),
+            this, SLOT(slotRemoveActivated())
+        );
+        framelayout->addItem(removewidget, 0, 1, 1, 1);
+        frame->setProperty("_k_removewidget", QVariant::fromValue(removewidget));
 
         Plasma::Meter* meter = new Plasma::Meter(frame);
         meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
@@ -190,10 +200,12 @@ void DeviceNotifierWidget::slotUpdateLayout()
         m_layout->addItem(frame);
         m_frames.append(frame);
 
-        connect(
-            solidstorageaccess, SIGNAL(accessibilityChanged(bool,QString)),
-            this, SLOT(slotCheckEmblem(bool,QString))
-        );
+        if (solidstorageaccess) {
+            connect(
+                solidstorageaccess, SIGNAL(accessibilityChanged(bool,QString)),
+                this, SLOT(slotCheckEmblem(bool,QString))
+            );
+        }
     }
 
     // the minimum space for 2 items, more or less
@@ -244,12 +256,13 @@ void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString 
             continue;
         }
         const Solid::Device soliddevice(solidudi);
+        const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
 
         Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
 
-        Plasma::IconWidget* unmountwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_unmountwidget"));
-        unmountwidget->setVisible(accessible);
+        Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_removewidget"));
+        removewidget->setVisible(accessible || solidopticaldrive);
     }
 }
 
@@ -273,11 +286,16 @@ void DeviceNotifierWidget::slotIconActivated()
     }
 }
 
-void DeviceNotifierWidget::slotUnmountActivated()
+void DeviceNotifierWidget::slotRemoveActivated()
 {
-    const Plasma::IconWidget* unmountwidget = qobject_cast<Plasma::IconWidget*>(sender());
-    const QString solidudi = unmountwidget->property("_k_udi").toString();
+    const Plasma::IconWidget* removewidget = qobject_cast<Plasma::IconWidget*>(sender());
+    const QString solidudi = removewidget->property("_k_udi").toString();
     Solid::Device soliddevice(solidudi);
+    Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+    if (solidopticaldrive) {
+        solidopticaldrive->eject();
+        return;
+    }
     Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
     if (!solidstorageacces) {
         kWarning() << "not storage access" << solidudi;
@@ -328,7 +346,7 @@ void DeviceNotifier::createConfigurationInterface(KConfigDialog *parent)
     QWidget* widget = new QWidget();
     QVBoxLayout* widgetlayout = new QVBoxLayout(widget);
     m_removablebox = new QCheckBox(widget);
-    m_removablebox->setText(i18n("Show removable only"));
+    m_removablebox->setText(i18n("Removable devices only"));
     m_removablebox->setChecked(m_devicenotifierwidget->onlyremovable);
     widgetlayout->addWidget(m_removablebox);
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
