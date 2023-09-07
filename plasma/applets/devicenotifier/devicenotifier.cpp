@@ -61,7 +61,8 @@ public Q_SLOTS:
     void slotUpdateLayout();
 
 private Q_SLOTS:
-    void slotCheckSpaceAndEmblems();
+    void slotCheckFreeSpace();
+    void slotCheckEmblem(const bool accessible, const QString &udi);
     void slotIconActivated();
 
 private:
@@ -70,6 +71,7 @@ private:
     Plasma::Label* m_title;
     QList<Plasma::Frame*> m_frames;
     QTimer* m_freetimer;
+    QList<Solid::Device> m_soliddevices;
 };
 
 DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
@@ -90,7 +92,7 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
     m_freetimer->setInterval(s_freetimeout);
     connect(
         m_freetimer, SIGNAL(timeout()),
-        this, SLOT(slotCheckSpaceAndEmblems())
+        this, SLOT(slotCheckFreeSpace())
     );
     connect(
         Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
@@ -132,6 +134,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     qDeleteAll(m_frames);
     m_frames.clear();
 
+    m_soliddevices = soliddevices;
     if (soliddevices.isEmpty()) {
         m_title->show();
         m_devicenotifier->setStatus(Plasma::ItemStatus::PassiveStatus);
@@ -141,7 +144,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     m_freetimer->stop();
     m_title->hide();
     m_devicenotifier->setStatus(Plasma::ItemStatus::ActiveStatus);
-    foreach (const Solid::Device &soliddevice, soliddevices) {
+    foreach (const Solid::Device &soliddevice, m_soliddevices) {
         Plasma::Frame* frame = new Plasma::Frame(this);
         frame->setProperty("_k_udi", soliddevice.udi());
         QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
@@ -167,17 +170,23 @@ void DeviceNotifierWidget::slotUpdateLayout()
         frame->setLayout(framelayout);
         m_layout->addItem(frame);
         m_frames.append(frame);
+
+        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+        connect(
+            solidstorageaccess, SIGNAL(accessibilityChanged(bool,QString)),
+            this, SLOT(slotCheckEmblem(bool,QString))
+        );
     }
     // the minimum space for 2 items, more or less
     QSizeF minimumsize = m_frames.first()->minimumSize();
     minimumsize.setWidth(minimumsize.width() * 1.5);
     minimumsize.setHeight(minimumsize.height() * 2);
     m_devicenotifier->setMinimumSize(minimumsize);
-    slotCheckSpaceAndEmblems();
+    slotCheckFreeSpace();
     m_freetimer->start();
 }
 
-void DeviceNotifierWidget::slotCheckSpaceAndEmblems()
+void DeviceNotifierWidget::slotCheckFreeSpace()
 {
     foreach (const Plasma::Frame* frame, m_frames) {
         const QString solidudi = frame->property("_k_udi").toString();
@@ -204,6 +213,18 @@ void DeviceNotifierWidget::slotCheckSpaceAndEmblems()
         } else {
             kWarning() << "no mountpoint and no device path for" << solidudi;
         }
+    }
+}
+
+void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString &udi)
+{
+    Q_UNUSED(accessible);
+    foreach (const Plasma::Frame* frame, m_frames) {
+        const QString solidudi = frame->property("_k_udi").toString();
+        if (solidudi != udi) {
+            continue;
+        }
+        const Solid::Device soliddevice(solidudi);
 
         Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
@@ -238,7 +259,7 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_devicenotifier");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setPopupIcon("device-notifier");
-    setMinimumSize(100, 50);
+    setMinimumSize(100, 150);
     setPreferredSize(290, 340);
 
     m_plasmascrollwidget = new Plasma::ScrollWidget(this);
