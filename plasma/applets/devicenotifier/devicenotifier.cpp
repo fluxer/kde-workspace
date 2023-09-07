@@ -78,7 +78,7 @@ private:
 
 DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
     : QGraphicsWidget(devicenotifier),
-    onlyremovable(true), // TODO: option for it
+    onlyremovable(true),
     m_devicenotifier(devicenotifier),
     m_layout(nullptr),
     m_title(nullptr)
