@@ -64,6 +64,7 @@ private Q_SLOTS:
     void slotCheckFreeSpace();
     void slotCheckEmblem(const bool accessible, const QString &udi);
     void slotIconActivated();
+    void slotUnmountActivated();
 
 private:
     DeviceNotifier* m_devicenotifier;
@@ -76,7 +77,7 @@ private:
 
 DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
     : QGraphicsWidget(devicenotifier),
-    onlyremovable(false), // TODO: option for it
+    onlyremovable(true), // TODO: option for it
     m_devicenotifier(devicenotifier),
     m_layout(nullptr),
     m_title(nullptr)
@@ -144,10 +145,13 @@ void DeviceNotifierWidget::slotUpdateLayout()
     m_freetimer->stop();
     m_title->hide();
     m_devicenotifier->setStatus(Plasma::ItemStatus::ActiveStatus);
+    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
     foreach (const Solid::Device &soliddevice, m_soliddevices) {
+        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
         Plasma::Frame* frame = new Plasma::Frame(this);
         frame->setProperty("_k_udi", soliddevice.udi());
         QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
+
         Plasma::IconWidget* iconwidget = new Plasma::IconWidget(frame);
         iconwidget->setOrientation(Qt::Horizontal);
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
@@ -158,20 +162,32 @@ void DeviceNotifierWidget::slotUpdateLayout()
             iconwidget, SIGNAL(activated()),
             this, SLOT(slotIconActivated())
         );
-        framelayout->addItem(iconwidget, 0, 0);
+        framelayout->addItem(iconwidget, 0, 0, 1, 1);
         frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
+
+        Plasma::IconWidget* unmountwidget = new Plasma::IconWidget(frame);
+        unmountwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+        unmountwidget->setIcon(KIcon("media-eject"));
+        unmountwidget->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+        unmountwidget->setVisible(solidstorageaccess->isAccessible());
+        unmountwidget->setProperty("_k_udi", soliddevice.udi());
+        connect(
+            unmountwidget, SIGNAL(activated()),
+            this, SLOT(slotUnmountActivated())
+        );
+        framelayout->addItem(unmountwidget, 0, 1, 1, 1);
+        frame->setProperty("_k_unmountwidget", QVariant::fromValue(unmountwidget));
 
         Plasma::Meter* meter = new Plasma::Meter(frame);
         meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
         meter->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
-        framelayout->addItem(meter, 1, 0);
+        framelayout->addItem(meter, 1, 0, 1, 2);
         frame->setProperty("_k_meter", QVariant::fromValue(meter));
 
         frame->setLayout(framelayout);
         m_layout->addItem(frame);
         m_frames.append(frame);
 
-        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
         connect(
             solidstorageaccess, SIGNAL(accessibilityChanged(bool,QString)),
             this, SLOT(slotCheckEmblem(bool,QString))
@@ -218,7 +234,6 @@ void DeviceNotifierWidget::slotCheckFreeSpace()
 
 void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString &udi)
 {
-    Q_UNUSED(accessible);
     foreach (const Plasma::Frame* frame, m_frames) {
         const QString solidudi = frame->property("_k_udi").toString();
         if (solidudi != udi) {
@@ -228,6 +243,9 @@ void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString 
 
         Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
+
+        Plasma::IconWidget* unmountwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_unmountwidget"));
+        unmountwidget->setVisible(accessible);
     }
 }
 
@@ -249,6 +267,19 @@ void DeviceNotifierWidget::slotIconActivated()
     if (!mountpoint.isEmpty()) {
         KRun::runUrl(KUrl(mountpoint), "inode/directory", nullptr);
     }
+}
+
+void DeviceNotifierWidget::slotUnmountActivated()
+{
+    const Plasma::IconWidget* unmountwidget = qobject_cast<Plasma::IconWidget*>(sender());
+    const QString solidudi = unmountwidget->property("_k_udi").toString();
+    Solid::Device soliddevice(solidudi);
+    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    if (!solidstorageacces) {
+        kWarning() << "not storage access" << solidudi;
+        return;
+    }
+    solidstorageacces->teardown();
 }
 
 DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
