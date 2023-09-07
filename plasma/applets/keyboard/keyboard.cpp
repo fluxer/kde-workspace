@@ -127,6 +127,7 @@ void KeyboardApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_indicatorbox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
 }
+
 void KeyboardApplet::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {

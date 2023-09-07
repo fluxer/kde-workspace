@@ -157,7 +157,6 @@ X-KDE-ServiceTypes=Plasma/Applet,Plasma/PopupApplet
 X-KDE-Library=plasma_applet_devicenotifier
 
 X-Plasma-NotificationArea=true
-X-Plasma-ConfigPlugins=solidactions
 
 X-KDE-PluginInfo-Author=Ivailo Monev
 X-KDE-PluginInfo-Email=xakepa10@gmail.com

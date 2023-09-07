@@ -129,6 +129,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         }
     }
 
+    m_freetimer->stop();
     foreach (Plasma::Frame* frame, m_frames) {
         m_layout->removeItem(frame);
     }
@@ -142,7 +143,6 @@ void DeviceNotifierWidget::slotUpdateLayout()
         return;
     }
 
-    m_freetimer->stop();
     m_title->hide();
     m_devicenotifier->setStatus(Plasma::ItemStatus::ActiveStatus);
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
@@ -289,6 +289,8 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_devicenotifier");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
+    setHasConfigurationInterface(true);
+    setStatus(Plasma::ItemStatus::PassiveStatus);
     setPopupIcon("device-notifier");
     setMinimumSize(100, 150);
     setPreferredSize(290, 340);
@@ -307,12 +309,42 @@ DeviceNotifier::~DeviceNotifier()
 
 void DeviceNotifier::init()
 {
+    KConfigGroup configgroup = config();
+    m_devicenotifierwidget->onlyremovable = configgroup.readEntry("showOnlyRemovable", true);
     QTimer::singleShot(500, m_devicenotifierwidget, SLOT(slotUpdateLayout()));
 }
 
 QGraphicsWidget* DeviceNotifier::graphicsWidget()
 {
     return m_plasmascrollwidget;
+}
+
+void DeviceNotifier::createConfigurationInterface(KConfigDialog *parent)
+{
+    QWidget* widget = new QWidget();
+    QVBoxLayout* widgetlayout = new QVBoxLayout(widget);
+    m_removablebox = new QCheckBox(widget);
+    m_removablebox->setText(i18n("Show removable only"));
+    m_removablebox->setChecked(m_devicenotifierwidget->onlyremovable);
+    widgetlayout->addWidget(m_removablebox);
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addSpacerItem(m_spacer);
+    widget->setLayout(widgetlayout);
+    parent->addPage(widget, i18n("Devices"), "device-notifier");
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_removablebox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+}
+
+void DeviceNotifier::slotConfigAccepted()
+{
+    Q_ASSERT(m_removablebox);
+    m_devicenotifierwidget->onlyremovable = m_removablebox->isChecked();
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("showOnlyRemovable", m_devicenotifierwidget->onlyremovable);
+    emit configNeedsSaving();
+    QTimer::singleShot(500, m_devicenotifierwidget, SLOT(slotUpdateLayout()));
 }
 
 #include "moc_devicenotifier.cpp"

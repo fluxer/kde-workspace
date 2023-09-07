@@ -19,6 +19,9 @@
 #ifndef DEVICENOTIFIER_H
 #define DEVICENOTIFIER_H
 
+#include <QCheckBox>
+#include <QSpacerItem>
+#include <KConfigDialog>
 #include <Plasma/ScrollWidget>
 #include <Plasma/PopupApplet>
 
@@ -35,11 +38,17 @@ public:
     void init() final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
+    void createConfigurationInterface(KConfigDialog *parent) final;
+
+private Q_SLOTS:
+    void slotConfigAccepted();
 
 private:
     friend DeviceNotifierWidget;
     Plasma::ScrollWidget *m_plasmascrollwidget;
     DeviceNotifierWidget *m_devicenotifierwidget;
+    QCheckBox* m_removablebox;
+    QSpacerItem* m_spacer;
 };
 
 K_EXPORT_PLASMA_APPLET(devicenotifier, DeviceNotifier)
