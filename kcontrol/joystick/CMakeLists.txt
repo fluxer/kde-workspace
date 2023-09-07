@@ -27,3 +27,8 @@ install(
     FILES joystick.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
+
+install(
+    FILES joystick_new.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions
+)

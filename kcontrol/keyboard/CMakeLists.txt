@@ -22,3 +22,8 @@ install(
     FILES kcm_keyboard.desktop
     DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
 )
+
+install(
+    FILES keyboard_new.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions
+)

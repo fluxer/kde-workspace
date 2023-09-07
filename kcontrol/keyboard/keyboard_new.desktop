@@ -1,0 +1,9 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=Input.inputType == 'Keyboard'
+Type=Service
+Actions=configure;
+
+[Desktop Action configure]
+Name=Configure the keyboard
+Exec=kcmshell4 kcm_keyboard
+Icon=preferences-desktop-keyboard

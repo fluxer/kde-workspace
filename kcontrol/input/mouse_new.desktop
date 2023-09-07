@@ -1,0 +1,9 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=Input.inputType == 'Mouse'
+Type=Service
+Actions=configure;
+
+[Desktop Action configure]
+Name=Configure the mouse
+Exec=kcmshell4 mouse
+Icon=preferences-desktop-mouse

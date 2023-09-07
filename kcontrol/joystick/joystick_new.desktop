@@ -1,0 +1,9 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=Input.inputType == 'Joystick'
+Type=Service
+Actions=configure;
+
+[Desktop Action configure]
+Name=Configure the joystick
+Exec=kcmshell4 joystick
+Icon=preferences-desktop-gaming

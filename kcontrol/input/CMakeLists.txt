@@ -97,11 +97,24 @@ if (X11_Xfixes_FOUND)
    target_link_libraries(kcm_cursortheme ${X11_Xfixes_LIB})
 endif (X11_Xfixes_FOUND)
 
-install(TARGETS kcm_cursortheme  DESTINATION ${KDE4_PLUGIN_INSTALL_DIR} )
-
+install(
+    TARGETS kcm_cursortheme
+    DESTINATION ${KDE4_PLUGIN_INSTALL_DIR}
+)
 
 ########### install files ###############
 
-install( FILES mouse.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
-install( FILES cursortheme.desktop  DESTINATION  ${KDE4_SERVICES_INSTALL_DIR} )
+install(
+    FILES mouse.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
 
+install(
+    FILES cursortheme.desktop
+    DESTINATION ${KDE4_SERVICES_INSTALL_DIR}
+)
+
+install(
+    FILES mouse_new.desktop
+    DESTINATION ${KDE4_DATA_INSTALL_DIR}/solid/actions
+)
