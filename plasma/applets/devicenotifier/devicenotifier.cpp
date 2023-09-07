@@ -149,6 +149,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         iconwidget->setOrientation(Qt::Horizontal);
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
         iconwidget->setText(soliddevice.description());
+        iconwidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
         iconwidget->setProperty("_k_udi", soliddevice.udi());
         connect(
             iconwidget, SIGNAL(activated()),
@@ -159,6 +160,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
         Plasma::Meter* meter = new Plasma::Meter(frame);
         meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
+        meter->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
         framelayout->addItem(meter, 1, 0);
         frame->setProperty("_k_meter", QVariant::fromValue(meter));
 
@@ -166,10 +168,10 @@ void DeviceNotifierWidget::slotUpdateLayout()
         m_layout->addItem(frame);
         m_frames.append(frame);
     }
-    QSizeF minimumsize = sizeHint(Qt::MinimumSize);
-    // margins
-    minimumsize.setWidth(minimumsize.width() + 20);
-    minimumsize.setHeight(minimumsize.height() + 20);
+    // the minimum space for 2 items, more or less
+    QSizeF minimumsize = m_frames.first()->minimumSize();
+    minimumsize.setWidth(minimumsize.width() * 1.5);
+    minimumsize.setHeight(minimumsize.height() * 2);
     m_devicenotifier->setMinimumSize(minimumsize);
     slotCheckSpaceAndEmblems();
     m_freetimer->start();
@@ -230,6 +232,7 @@ void DeviceNotifierWidget::slotIconActivated()
 
 DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
+    m_plasmascrollwidget(nullptr),
     m_devicenotifierwidget(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_devicenotifier");
@@ -237,7 +240,12 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     setPopupIcon("device-notifier");
     setMinimumSize(100, 50);
     setPreferredSize(290, 340);
+
+    m_plasmascrollwidget = new Plasma::ScrollWidget(this);
+    m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_plasmascrollwidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_devicenotifierwidget = new DeviceNotifierWidget(this);
+    m_plasmascrollwidget->setWidget(m_devicenotifierwidget);
 }
 
 DeviceNotifier::~DeviceNotifier()
@@ -252,7 +260,7 @@ void DeviceNotifier::init()
 
 QGraphicsWidget* DeviceNotifier::graphicsWidget()
 {
-    return m_devicenotifierwidget;
+    return m_plasmascrollwidget;
 }
 
 #include "moc_devicenotifier.cpp"

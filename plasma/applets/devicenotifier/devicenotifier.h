@@ -19,6 +19,7 @@
 #ifndef DEVICENOTIFIER_H
 #define DEVICENOTIFIER_H
 
+#include <Plasma/ScrollWidget>
 #include <Plasma/PopupApplet>
 
 class DeviceNotifierWidget;
@@ -37,6 +38,7 @@ public:
 
 private:
     friend DeviceNotifierWidget;
+    Plasma::ScrollWidget *m_plasmascrollwidget;
     DeviceNotifierWidget *m_devicenotifierwidget;
 };
 
