@@ -53,8 +53,7 @@ Item{
     property Item tools
 
     /**
-     * The type of transition to be used for the ToolBar when the page changes
-     * on the relevant PageStack.
+     * The type of transition to be used for the ToolBar when the page changes.
      *
      * The possible values can be one of the following:
      *
@@ -74,7 +73,7 @@ Item{
 
     /**
      * This sets the tools for the ToolBar and the transition type that will be
-     * used when the page changes on the relevant PageStack.
+     * used when the page changes.
      *
      * @param type:Item tools see tool property
      * @param type:string transition see transition property

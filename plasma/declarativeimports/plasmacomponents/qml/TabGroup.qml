@@ -49,8 +49,8 @@ import "." 0.1
  * A tabbed interface is made up of tab buttons plus content for each button. A
  * TabGroup component has, as its children, each page of content in the
  * interface. These pages can be any QML items but are typically Page
- * components for a single page of content or PageStack components when a
- * hierarchical navigation system is required for the tab content.
+ * components for a single page of content when a hierarchical navigation system
+ * is required for the tab content.
  *
  * If you use Page components for your tab content, the status property of each
  * page is updated appropriately when the current tab is changed: the current

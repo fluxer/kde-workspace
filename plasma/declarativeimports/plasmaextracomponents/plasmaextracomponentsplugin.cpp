@@ -19,7 +19,6 @@
 
 #include "plasmaextracomponentsplugin.h"
 
-#include "appbackgroundprovider_p.h"
 #include "fallbackcomponent.h"
 
 #include <QtDeclarative/qdeclarative.h>
@@ -32,7 +31,6 @@
 void PlasmaExtraComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.extras"));
-    engine->addImageProvider(QLatin1String("appbackgrounds"), new AppBackgroundProvider);
 }
 
 void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
