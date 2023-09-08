@@ -53,7 +53,7 @@ class DeviceNotifierWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    DeviceNotifierWidget(DeviceNotifier* devicenotifier);
+    DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGraphicsWidget *parent);
     ~DeviceNotifierWidget();
 
     bool onlyremovable;
@@ -76,8 +76,8 @@ private:
     QList<Solid::Device> m_soliddevices;
 };
 
-DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier)
-    : QGraphicsWidget(devicenotifier),
+DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGraphicsWidget *parent)
+    : QGraphicsWidget(parent),
     onlyremovable(true),
     m_devicenotifier(devicenotifier),
     m_layout(nullptr),
@@ -159,6 +159,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
         const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
         Plasma::Frame* frame = new Plasma::Frame(this);
+        frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         frame->setProperty("_k_udi", soliddevice.udi());
         QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
 
@@ -167,7 +168,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
         iconwidget->setText(soliddevice.description());
         iconwidget->setToolTip(i18n("Click to access this device from other applications."));
-        iconwidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
+        iconwidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         iconwidget->setProperty("_k_udi", soliddevice.udi());
         connect(
             iconwidget, SIGNAL(activated()),
@@ -182,7 +183,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
         removewidget->setToolTip(
             solidopticaldrive ? i18n("Click to eject this disc.") : i18n("Click to safely remove this device.")
         );
-        removewidget->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+        removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
         if (solidopticaldrive) {
             removewidget->setVisible(true);
         } else {
@@ -198,7 +199,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
         Plasma::Meter* meter = new Plasma::Meter(frame);
         meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
-        meter->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum));
+        meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
         framelayout->addItem(meter, 1, 0, 1, 2);
         frame->setProperty("_k_meter", QVariant::fromValue(meter));
 
@@ -216,7 +217,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
     // the minimum space for 2 items, more or less
     QSizeF minimumsize = m_frames.first()->minimumSize();
-    minimumsize.setWidth(minimumsize.width() * 1.5);
+    minimumsize.setWidth(minimumsize.width() * 1.2);
     minimumsize.setHeight(minimumsize.height() * 2);
     m_devicenotifier->setMinimumSize(minimumsize);
 
@@ -324,9 +325,9 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     setPreferredSize(290, 340);
 
     m_plasmascrollwidget = new Plasma::ScrollWidget(this);
-    m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_plasmascrollwidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    m_devicenotifierwidget = new DeviceNotifierWidget(this);
+    m_devicenotifierwidget = new DeviceNotifierWidget(this, m_plasmascrollwidget);
     m_plasmascrollwidget->setWidget(m_devicenotifierwidget);
 }
 
