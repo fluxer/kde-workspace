@@ -73,9 +73,15 @@ static void kFillTreeFromLayouts(QTreeWidget *treewidget, const QList<KKeyboardT
     treewidget->clear();
     int itemcounter = 0;
     foreach (const KKeyboardType &layout, layouts) {
+        const QString layoutstring = QString::fromLatin1(layout.layout.constData(), layout.layout.size());
+        const QString layoutflag = KStandardDirs::locate(
+            "locale",
+            QString::fromLatin1("l10n/%1/flag.png").arg(layoutstring)
+        );;
         QTreeWidgetItem* layoutitem = new QTreeWidgetItem();
         layoutitem->setData(0, Qt::UserRole, layout.layout);
         layoutitem->setData(0, Qt::UserRole + 1, itemcounter);
+        layoutitem->setIcon(0, KIcon(layoutflag));
         layoutitem->setText(0, KKeyboardLayout::layoutDescription(layout.layout));
         layoutitem->setData(1, Qt::UserRole, layout.variant);
         layoutitem->setText(1, KKeyboardLayout::variantDescription(layout.layout, layout.variant));
