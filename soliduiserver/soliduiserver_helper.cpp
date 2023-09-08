@@ -144,8 +144,8 @@ int SolidUiServerHelper::unmount(const QVariantMap &parameters)
     const QString mountpoint = parameters.value("mountpoint").toString();
 
 #ifdef Q_OS_LINUX
-    const QByteArray mountpointbytes = mountpoint.toLocal8Bit();;
-    const int umountresult = ::umount2(mountpointbytes.constData(), MNT_DETACH);
+    const QByteArray mountpointbytes = mountpoint.toLocal8Bit();
+    const int umountresult = ::umount2(mountpointbytes.constData(), 0);
     if (umountresult == 0) {
         return KAuthorization::NoError;
     }
