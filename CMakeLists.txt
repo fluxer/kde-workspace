@@ -252,6 +252,12 @@ add_feature_info(ntpdate_or_rdate
     "Set date and time automatically"
 )
 
+find_program(EJECT_EXECUTABLE NAMES eject cdcontrol cdio)
+add_feature_info(eject
+    EJECT_EXECUTABLE
+    "Eject CD and DVD devices"
+)
+
 include(ConfigureChecks.cmake)
 configure_file(config-unix.h.cmake ${CMAKE_BINARY_DIR}/config-unix.h )
 configure_file(config-X11.h.cmake ${CMAKE_BINARY_DIR}/config-X11.h )
