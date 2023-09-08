@@ -63,13 +63,10 @@ void KeyboardApplet::paintInterface(QPainter *painter,
                                     const QStyleOptionGraphicsItem *option,
                                     const QRect &contentsRect)
 {
-    const KKeyboardType activelayout = m_keyboardlayout->layouts().first();
-    const QString layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
-
     if (m_showflag && m_flagpath.isEmpty()) {
         m_flagpath = KStandardDirs::locate(
             "locale",
-            QString::fromLatin1("l10n/%1/flag.png").arg(layoutlayout)
+            QString::fromLatin1("l10n/%1/flag.png").arg(m_layoutlayout)
         );
     }
     QFont font = KGlobalSettings::smallestReadableFont();
@@ -93,7 +90,7 @@ void KeyboardApplet::paintInterface(QPainter *painter,
         if (paintflag) {
             painter->drawPixmap(
                 contentsRect,
-                Plasma::PaintUtils::shadowText(layoutlayout, font, Qt::black, Qt::white, QPoint(), 3)
+                Plasma::PaintUtils::shadowText(m_layoutlayout, font, Qt::black, Qt::white, QPoint(), 3)
             );
         } else {
             Plasma::Svg* svg = new Plasma::Svg(this);
@@ -101,7 +98,7 @@ void KeyboardApplet::paintInterface(QPainter *painter,
             svg->setContainsMultipleImages(true);
             painter->drawPixmap(
                 contentsRect,
-                Plasma::PaintUtils::texturedText(layoutlayout, font, svg)
+                Plasma::PaintUtils::texturedText(m_layoutlayout, font, svg)
             );
             delete svg;
         }
@@ -180,10 +177,10 @@ void KeyboardApplet::slotLayoutChanged()
 {
     const QList<KKeyboardType> layouts = m_keyboardlayout->layouts();
     const KKeyboardType activelayout = layouts.first();
-    const QString layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
+    m_layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
     m_flagpath = KStandardDirs::locate(
         "locale",
-        QString::fromLatin1("l10n/%1/flag.png").arg(layoutlayout)
+        QString::fromLatin1("l10n/%1/flag.png").arg(m_layoutlayout)
     );
     QString layouttooltip;
     layouttooltip.append(i18n("Model: %1<br/>", KKeyboardLayout::modelDescription(activelayout.model)));
