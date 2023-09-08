@@ -232,6 +232,15 @@ KCMKeyboard::KCMKeyboard(QWidget *parent, const QVariantList &args)
     layoutgrouplayout->addWidget(m_layoutsmodellabel, 0, 0);
     m_layoutsmodelbox = new QComboBox(m_layoutsgroup);
     m_layoutsmodelbox->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    const QString layoutmodelhelp = i18n(
+        "<p>Here you can choose a keyboard model. This setting is independent of your keyboard layout "
+        "and refers to the &quot;hardware&quot; model, i.e. the way your keyboard is manufactured.</p>"
+        "<p>Modern keyboards that come with your computer usually have two extra keys and are referred "
+        "to as &quot;104-key&quot; models, which is probably what you want if you do not know what "
+        "kind of keyboard you have.</p>"
+    );
+    m_layoutsmodelbox->setToolTip(layoutmodelhelp);
+    m_layoutsmodelbox->setWhatsThis(layoutmodelhelp);
     foreach (const QByteArray &layoutmodel, KKeyboardLayout::modelNames()) {
         m_layoutsmodelbox->addItem(KKeyboardLayout::modelDescription(layoutmodel), layoutmodel);
     }
