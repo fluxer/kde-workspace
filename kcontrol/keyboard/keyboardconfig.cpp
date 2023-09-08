@@ -248,6 +248,7 @@ KCMKeyboard::KCMKeyboard(QWidget *parent, const QVariantList &args)
         << i18n("Variant");
     m_layoutstree->setHeaderLabels(treeheaders);
     m_layoutstree->setRootIsDecorated(false);
+    m_layoutstree->header()->setMovable(false);
     m_layoutstree->header()->setStretchLastSection(false);
     m_layoutstree->header()->setResizeMode(0, QHeaderView::Stretch);
     m_layoutstree->header()->setResizeMode(1, QHeaderView::Stretch);

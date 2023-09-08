@@ -48,9 +48,10 @@ KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
         << i18n("State");
     m_optionstree->setHeaderLabels(treeheaders);
     m_optionstree->setRootIsDecorated(false);
+    m_optionstree->header()->setMovable(false);
     m_optionstree->header()->setStretchLastSection(false);
     m_optionstree->header()->setResizeMode(0, QHeaderView::Stretch);
-    m_optionstree->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    m_optionstree->header()->setResizeMode(1, QHeaderView::Interactive);
     connect(
         m_optionstree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
         this, SLOT(slotItemChanged(QTreeWidgetItem*,int))
