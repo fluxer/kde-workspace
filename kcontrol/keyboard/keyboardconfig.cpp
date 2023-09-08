@@ -499,6 +499,7 @@ void KCMKeyboard::slotAdvancedPressed()
         return;
     }
     m_layoutoptions = keyboarddialog.options();
+    emit changed(true);
 }
 
 #include "moc_keyboardconfig.cpp"

@@ -20,6 +20,7 @@
 #define KEYBOARDOPTIONSDIALOG_H
 
 #include <QGridLayout>
+#include <QTreeWidget>
 #include <kdialog.h>
 
 class KCMKeyboardOptionsDialog : public KDialog
@@ -32,10 +33,16 @@ public:
     QByteArray options() const;
     void setOptions(const QByteArray &options);
 
+private Q_SLOTS:
+    void slotItemChanged(QTreeWidgetItem*,int);
+
 private:
     QWidget* m_widget;
     QGridLayout* m_layout;
-    QByteArray m_options;
+    QTreeWidget* m_optionstree;
+    QList<QByteArray> m_options;
+    QString m_enabledi18n;
+    QString m_disabledi18n;
 };
 
 #endif // KEYBOARDOPTIONSDIALOG_H

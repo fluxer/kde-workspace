@@ -18,23 +18,46 @@
 
 #include "keyboardoptionsdialog.h"
 
+#include <QHeaderView>
 #include <klocale.h>
+#include <kkeyboardlayout.h>
 #include <kdebug.h>
+
+static const char s_optionsseparator = ',';
+static const char s_optionsgroupseparator = ':';
 
 KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
     : KDialog(parent),
     m_widget(nullptr),
-    m_layout(nullptr)
+    m_layout(nullptr),
+    m_optionstree(nullptr)
 {
     setCaption(i18n("Keyboard Options"));
     setButtons(KDialog::Ok | KDialog::Cancel);
 
+    m_enabledi18n = i18n("Enabled");
+    m_disabledi18n = i18n("Disabled");
+
     m_widget = new QWidget(this);
     m_layout = new QGridLayout(m_widget);
 
-    setMainWidget(m_widget);
+    m_optionstree = new QTreeWidget(m_widget);
+    m_optionstree->setColumnCount(2);
+    QStringList treeheaders = QStringList()
+        << i18n("Option")
+        << i18n("State");
+    m_optionstree->setHeaderLabels(treeheaders);
+    m_optionstree->setRootIsDecorated(false);
+    m_optionstree->header()->setStretchLastSection(false);
+    m_optionstree->header()->setResizeMode(0, QHeaderView::Stretch);
+    m_optionstree->header()->setResizeMode(1, QHeaderView::ResizeToContents);
+    connect(
+        m_optionstree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
+        this, SLOT(slotItemChanged(QTreeWidgetItem*,int))
+    );
+    m_layout->addWidget(m_optionstree, 0, 0);
 
-    // TODO:
+    setMainWidget(m_widget);
 
     adjustSize();
     KConfigGroup kconfiggroup(KGlobal::config(), "KCMKeyboardOptionsDialog");
@@ -50,12 +73,46 @@ KCMKeyboardOptionsDialog::~KCMKeyboardOptionsDialog()
 
 QByteArray KCMKeyboardOptionsDialog::options() const
 {
-    return m_options;
+    QByteArray result;
+    foreach (const QByteArray &option, m_options) {
+        if (!result.isEmpty()) {
+            result.append(s_optionsseparator);
+        }
+        result.append(option);
+    }
+    return result;
 }
 
 void KCMKeyboardOptionsDialog::setOptions(const QByteArray &options)
 {
-    m_options = options;
+    m_options = options.split(s_optionsseparator);
+
+    m_optionstree->clear();
+    foreach (const QByteArray &option, KKeyboardLayout::optionNames()) {
+        if (!option.contains(s_optionsgroupseparator)) {
+            continue;
+        }
+        QTreeWidgetItem* optionitem = new QTreeWidgetItem();
+        optionitem->setData(0, Qt::UserRole, option);
+        optionitem->setText(0, KKeyboardLayout::optionDescription(option));
+        const bool isoptionenabled = m_options.contains(option);
+        optionitem->setText(1, isoptionenabled ? m_enabledi18n : m_disabledi18n);
+        optionitem->setCheckState(1, isoptionenabled ? Qt::Checked : Qt::Unchecked);
+        m_optionstree->addTopLevelItem(optionitem);
+    }
+}
+
+void KCMKeyboardOptionsDialog::slotItemChanged(QTreeWidgetItem *optionitem, const int column)
+{
+    Q_UNUSED(column);
+    const bool enableoption = (optionitem->checkState(1) == Qt::Checked);
+    optionitem->setText(1, enableoption ? m_enabledi18n : m_disabledi18n);
+    const QByteArray option = optionitem->data(0, Qt::UserRole).toByteArray();
+    if (enableoption) {
+        m_options.append(option);
+    } else {
+        m_options.removeAll(option);
+    }
 }
 
 #include "moc_keyboardoptionsdialog.cpp"
