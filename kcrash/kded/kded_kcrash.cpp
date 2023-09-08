@@ -30,15 +30,55 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include <signal.h>
+
 // NOTE: keep in sync with:
 // kdelibs/kdeui/util/kcrash.cpp
 
 static const QStringList s_kcrashfilters = QStringList()
     << QString::fromLatin1("*.kcrash");
 
+static QString kSignalDescription(const int signal)
+{
+    switch (signal) {
+        // for reference:
+        // https://man7.org/linux/man-pages/man7/signal.7.html
+        case SIGSEGV: {
+            return i18n("Invalid memory reference");
+        }
+        case SIGBUS: {
+            return i18n("Bus error (bad memory access)");
+        }
+        case SIGFPE: {
+            return i18n("Floating-point exception");
+        }
+        case SIGILL: {
+            return i18n("Illegal Instruction");
+        }
+        case SIGABRT: {
+            return i18n("Abort signal from <i>abort<i>");
+        }
+    }
+    return i18n("Unknown");
+}
+
+static QString kFixURL(const QString &url)
+{
+    KUrl kurl(url);
+    const QString kurlprotocol = kurl.protocol();
+    if (kurlprotocol.isEmpty() || kurlprotocol == QLatin1String("mailto")) {
+        kurl.setScheme("mailto");
+    }
+    return kurl.url();
+}
+
 KCrashDialog::KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent)
     : KDialog(parent),
-    m_mainvbox(nullptr)
+    m_widget(nullptr),
+    m_layout(nullptr),
+    m_pixmap(nullptr),
+    m_label(nullptr),
+    m_backtrace(nullptr)
 {
     setWindowIcon(KIcon("tools-report-bug"));
     // do not include the application name in the title
@@ -51,20 +91,35 @@ KCrashDialog::KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent)
     setButtons(KDialog::Ok | KDialog::Close);
     setDefaultButton(KDialog::Ok);
     setButtonText(KDialog::Ok, i18nc("@action:button", "Report"));
-    KUrl bugreporturl(kcrashdetails.kcrashbugreporturl);
-    const QString bugreporturlprotocol = bugreporturl.protocol();
-    if (bugreporturlprotocol.isEmpty() || bugreporturlprotocol == QLatin1String("mailto")) {
+    m_reporturl = kFixURL(kcrashdetails.kcrashbugreporturl);
+    if (m_reporturl.startsWith(QLatin1String("mailto"))) {
         setButtonIcon(KDialog::Ok, KIcon("internet-mail"));
-        bugreporturl.setScheme("mailto");
     } else {
         setButtonIcon(KDialog::Ok, KIcon("internet-web-browser"));
     }
-    m_reporturl = bugreporturl.url();
 
-    m_mainvbox = new KVBox(this);
-    setMainWidget(m_mainvbox);
+    m_widget = new QWidget(this);
+    m_layout = new QGridLayout(m_widget);
 
-    m_backtrace = new KTextEdit(m_mainvbox);
+    // const int dialogiconsize = KIconLoader::global()->currentSize(KIconLoader::Dialog);
+    m_pixmap = new KPixmapWidget(m_widget);
+    m_pixmap->setPixmap(KIcon(kcrashdetails.kcrashappicon).pixmap(64));
+    m_layout->addWidget(m_pixmap, 0, 0);
+    m_label = new QLabel(m_widget);
+    m_label->setWordWrap(false);
+    m_label->setOpenExternalLinks(true);
+    m_label->setText(
+        i18n(
+            "Reason: %1<br/>Bug address: <a href=\"%2\">%3</a><br/> Homepage: <a href=\"%4\">%4</a>",
+            kSignalDescription(kcrashdetails.kcrashsignal),
+            kFixURL(kcrashdetails.kcrashbugaddress), kcrashdetails.kcrashbugaddress,
+            kFixURL(kcrashdetails.kcrashhomepage)
+        )
+    );
+    m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_layout->addWidget(m_label, 0, 1);
+
+    m_backtrace = new KTextEdit(m_widget);
     m_backtrace->setReadOnly(true);
     m_backtrace->setLineWrapMode(QTextEdit::NoWrap);
     m_backtrace->setText(
@@ -73,6 +128,9 @@ KCrashDialog::KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent)
             kcrashdetails.kcrashbacktrace.size()
         )
     );
+    m_layout->addWidget(m_backtrace, 1, 0, 1, 2);
+
+    setMainWidget(m_widget);
 
     KConfigGroup kconfiggroup(KGlobal::config(), "KCrashDialog");
     restoreDialogSize(kconfiggroup);
@@ -169,8 +227,12 @@ void KCrashModule::slotDirty(const QString &path)
             }
 
             KCrashDetails kcrashdetails;
+            kcrashdetails.kcrashsignal = kcrashsignal;
             kcrashdetails.kcrashappname = kcrashappname;
             kcrashdetails.kcrashapppid = kcrashdata["pid"];
+            kcrashdetails.kcrashappicon = kcrashdata["programicon"];
+            kcrashdetails.kcrashbugaddress = kcrashdata["bugaddress"];
+            kcrashdetails.kcrashhomepage = kcrashdata["homepage"];
             kcrashdetails.kcrashbacktrace = kcrashbacktrace;
             kcrashdetails.kcrashbugreporturl = bugreporturl;
 

@@ -21,16 +21,22 @@
 
 #include "kdedmodule.h"
 
+#include <QGridLayout>
+#include <QLabel>
 #include <kdirwatch.h>
 #include <knotification.h>
 #include <kdialog.h>
-#include <kvbox.h>
+#include <kpixmapwidget.h>
 #include <ktextedit.h>
 
 struct KCrashDetails
 {
+    int kcrashsignal;
     QString kcrashappname;
     QString kcrashapppid;
+    QString kcrashappicon;
+    QString kcrashbugaddress;
+    QString kcrashhomepage;
     QByteArray kcrashbacktrace;
     QString kcrashbugreporturl;
 };
@@ -47,7 +53,10 @@ public:
 
 private:
     QString m_reporturl;
-    KVBox* m_mainvbox;
+    QWidget* m_widget;
+    QGridLayout* m_layout;
+    KPixmapWidget* m_pixmap;
+    QLabel* m_label;
     KTextEdit* m_backtrace;
 };
 
