@@ -1,8 +1,6 @@
 add_subdirectory(applicationjobs)
 add_subdirectory(apps)
 add_subdirectory(dict)
-add_subdirectory(favicons)
-add_subdirectory(filebrowser)
 add_subdirectory(geolocation)
 add_subdirectory(mpris2)
 add_subdirectory(notifications)
