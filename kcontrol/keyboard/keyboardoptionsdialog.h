@@ -22,6 +22,7 @@
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <kdialog.h>
+#include <kmessagewidget.h>
 
 class KCMKeyboardOptionsDialog : public KDialog
 {
@@ -39,6 +40,7 @@ private Q_SLOTS:
 private:
     QWidget* m_widget;
     QGridLayout* m_layout;
+    KMessageWidget* m_optionswidget;
     QTreeWidget* m_optionstree;
     QList<QByteArray> m_options;
     QString m_enabledi18n;

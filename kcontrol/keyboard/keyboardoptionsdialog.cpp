@@ -30,6 +30,7 @@ KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
     : KDialog(parent),
     m_widget(nullptr),
     m_layout(nullptr),
+    m_optionswidget(nullptr),
     m_optionstree(nullptr)
 {
     setCaption(i18n("Keyboard Options"));
@@ -41,13 +42,27 @@ KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
     m_widget = new QWidget(this);
     m_layout = new QGridLayout(m_widget);
 
+    m_optionswidget = new KMessageWidget(m_widget);
+    m_optionswidget->setCloseButtonVisible(false);
+    m_optionswidget->setMessageType(KMessageWidget::Warning);
+    m_optionswidget->setWordWrap(true);
+    m_optionswidget->setText(
+        i18n(
+            "<warning>enabling options can have various bad effects. For example the <i>%1</i> "
+            "option does not update the XKB property on the root window meaning that programs "
+            "will not be able to detect the keyboard layout switch.</warning>",
+            KKeyboardLayout::optionDescription("grp:alt_space_toggle")
+        )
+    );
+    m_layout->addWidget(m_optionswidget, 0, 0);
+
     m_optionstree = new QTreeWidget(m_widget);
     m_optionstree->setColumnCount(2);
     QStringList treeheaders = QStringList()
         << i18n("Option")
         << i18n("State");
     m_optionstree->setHeaderLabels(treeheaders);
-    m_optionstree->setRootIsDecorated(false);
+    m_optionstree->setRootIsDecorated(true);
     m_optionstree->header()->setMovable(false);
     m_optionstree->header()->setStretchLastSection(false);
     m_optionstree->header()->setResizeMode(0, QHeaderView::Stretch);
@@ -56,7 +71,7 @@ KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
         m_optionstree, SIGNAL(itemChanged(QTreeWidgetItem*,int)),
         this, SLOT(slotItemChanged(QTreeWidgetItem*,int))
     );
-    m_layout->addWidget(m_optionstree, 0, 0);
+    m_layout->addWidget(m_optionstree, 1, 0);
 
     setMainWidget(m_widget);
 
@@ -88,29 +103,60 @@ void KCMKeyboardOptionsDialog::setOptions(const QByteArray &options)
 {
     m_options = options.split(s_optionsseparator);
 
+    m_optionstree->blockSignals(true);
     m_optionstree->clear();
-    foreach (const QByteArray &option, KKeyboardLayout::optionNames()) {
-        if (!option.contains(s_optionsgroupseparator)) {
+    QMap<QByteArray,QTreeWidgetItem*> groupitems;
+    const QList<QByteArray> layoutoptions = KKeyboardLayout::optionNames();
+    foreach (const QByteArray &option, layoutoptions) {
+        if (option.contains(s_optionsgroupseparator)) {
             continue;
         }
-        QTreeWidgetItem* optionitem = new QTreeWidgetItem();
+        QTreeWidgetItem* groupitem = new QTreeWidgetItem();
+        groupitem->setData(0, Qt::UserRole, option);
+        groupitem->setText(0, KKeyboardLayout::optionDescription(option));
+        m_optionstree->addTopLevelItem(groupitem);
+        groupitems.insert(option, groupitem);
+    }
+    foreach (const QByteArray &option, layoutoptions) {
+        const int indexofgroupseparator = option.indexOf(s_optionsgroupseparator);
+        if (indexofgroupseparator <= 0) {
+            continue;
+        }
+        const QByteArray group = option.mid(0, indexofgroupseparator);
+        QTreeWidgetItem* groupitem = groupitems.value(group);
+        Q_ASSERT(groupitem);
+        QTreeWidgetItem* optionitem = new QTreeWidgetItem(groupitem);
         optionitem->setData(0, Qt::UserRole, option);
         optionitem->setText(0, KKeyboardLayout::optionDescription(option));
         const bool isoptionenabled = m_options.contains(option);
         optionitem->setText(1, isoptionenabled ? m_enabledi18n : m_disabledi18n);
         optionitem->setCheckState(1, isoptionenabled ? Qt::Checked : Qt::Unchecked);
-        m_optionstree->addTopLevelItem(optionitem);
     }
+    QMutableMapIterator<QByteArray,QTreeWidgetItem*> iter(groupitems);
+    while (iter.hasNext()) {
+        iter.next();
+        QTreeWidgetItem* groupitem = iter.value();
+        if (groupitem->childCount() <= 0) {
+            delete groupitem;
+            iter.remove();
+        }
+    }
+    m_optionstree->blockSignals(false);
 }
 
 void KCMKeyboardOptionsDialog::slotItemChanged(QTreeWidgetItem *optionitem, const int column)
 {
     Q_UNUSED(column);
+    const QByteArray option = optionitem->data(0, Qt::UserRole).toByteArray();
+    if (!option.contains(s_optionsgroupseparator)) {
+        return;
+    }
     const bool enableoption = (optionitem->checkState(1) == Qt::Checked);
     optionitem->setText(1, enableoption ? m_enabledi18n : m_disabledi18n);
-    const QByteArray option = optionitem->data(0, Qt::UserRole).toByteArray();
     if (enableoption) {
-        m_options.append(option);
+        if (!m_options.contains(option)) {
+            m_options.append(option);
+        }
     } else {
         m_options.removeAll(option);
     }
