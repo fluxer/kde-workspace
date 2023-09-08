@@ -1,5 +1,6 @@
 [Desktop Entry]
 X-KDE-Solid-Predicate=Input.inputType == 'Mouse'
+X-KDE-Solid-When=Add
 Type=Service
 Actions=configure;
 

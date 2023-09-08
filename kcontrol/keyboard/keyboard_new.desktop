@@ -1,5 +1,6 @@
 [Desktop Entry]
 X-KDE-Solid-Predicate=Input.inputType == 'Keyboard'
+X-KDE-Solid-When=Add
 Type=Service
 Actions=configure;
 

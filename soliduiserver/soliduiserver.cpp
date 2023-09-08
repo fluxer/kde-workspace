@@ -42,14 +42,18 @@
 
 #include <QDir>
 
-K_PLUGIN_FACTORY(SolidUiServerFactory, registerPlugin<SolidUiServer>();)
-K_EXPORT_PLUGIN(SolidUiServerFactory("soliduiserver"))
+
+static const QString s_whenadd = QString::fromLatin1("Add");
+static const QString s_whenremove = QString::fromLatin1("Remove");
 
 static void kNotifyError(const Solid::ErrorType error, const bool unmount)
 {
     const QString title = (unmount ? i18n("Unmount error") : i18n("Mount error"));
     KNotification::event("soliduiserver/mounterror", title, Solid::errorString(error));
 }
+
+K_PLUGIN_FACTORY(SolidUiServerFactory, registerPlugin<SolidUiServer>();)
+K_EXPORT_PLUGIN(SolidUiServerFactory("soliduiserver"))
 
 SolidUiServer::SolidUiServer(QObject* parent, const QList<QVariant>&)
     : KDEDModule(parent)
@@ -250,22 +254,26 @@ QString SolidUiServer::errorString(const int error)
 
 void SolidUiServer::handleActions(const Solid::Device &soliddevice, const bool added)
 {
-    // TODO: check if the actions are for when device is added or removed
-    Q_UNUSED(added);
     QList<KServiceAction> kserviceactions;
     const QStringList solidactions = KGlobal::dirs()->findAllResources("data", "solid/actions/");
     foreach (const QString &solidaction, solidactions) {
         KDesktopFile kdestopfile(solidaction);
-        const QString solidpredicatestring = kdestopfile.desktopGroup().readEntry("X-KDE-Solid-Predicate");
+        KConfigGroup kconfiggroup = kdestopfile.desktopGroup();
+        const QStringList solidwhenlist = kconfiggroup.readEntry("X-KDE-Solid-When", QStringList());
+        if (!solidwhenlist.contains(added ? s_whenadd : s_whenremove)) {
+            continue;
+        }
+
+        const QString solidpredicatestring = kconfiggroup.readEntry("X-KDE-Solid-Predicate");
         const Solid::Predicate solidpredicate = Solid::Predicate::fromString(solidpredicatestring);
         if (solidpredicate.matches(soliddevice)) {
             kserviceactions.append(KDesktopFileActions::userDefinedServices(solidaction, true));
         }
     }
     if (kserviceactions.size() == 1) {
-        kExecuteAction(kserviceactions.first(), soliddevice.udi());
+        kExecuteAction(kserviceactions.first(), soliddevice.udi(), added);
     } else if (!kserviceactions.isEmpty()) {
-        SolidUiDialog* soliddialog = new SolidUiDialog(soliddevice, kserviceactions);
+        SolidUiDialog* soliddialog = new SolidUiDialog(soliddevice, kserviceactions, added);
         connect(soliddialog, SIGNAL(finished(int)), this, SLOT(slotDialogFinished()));
         m_soliddialogs.append(soliddialog);
         soliddialog->show();
@@ -285,8 +293,7 @@ void SolidUiServer::slotDeviceRemoved(const QString &udi)
     QMutableListIterator<Solid::Device> iter(m_soliddevices);
     while (iter.hasNext()) {
         Solid::Device soliddevice = iter.next();
-        // TODO: enable once add and remove are checked for, see above
-        // handleActions(soliddevice, false);
+        handleActions(soliddevice, false);
         if (soliddevice.udi() == udi) {
             iter.remove();
         }

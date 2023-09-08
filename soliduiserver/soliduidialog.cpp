@@ -26,10 +26,12 @@
 
 SolidUiDialog::SolidUiDialog(const Solid::Device &soliddevice,
                              const QList<KServiceAction> &kserviceactions,
+                             const bool mount,
                              QWidget *parent)
     : KDialog(parent),
     m_soliddevice(soliddevice),
     m_serviceactions(kserviceactions),
+    m_mount(mount),
     m_mainwidget(nullptr),
     m_mainlayout(nullptr),
     m_devicepixmap(nullptr),
@@ -111,7 +113,7 @@ void SolidUiDialog::slotOkClicked()
     const QListWidgetItem* selecteditem = selecteditems.first();
     const int kserviceactionindex = selecteditem->data(Qt::UserRole).toInt();
     Q_ASSERT(kserviceactionindex >= 0 && kserviceactionindex < m_serviceactions.size());
-    kExecuteAction(m_serviceactions.at(kserviceactionindex), m_soliddevice.udi());
+    kExecuteAction(m_serviceactions.at(kserviceactionindex), m_soliddevice.udi(), m_mount);
 }
 
 #include "moc_soliduidialog.cpp"

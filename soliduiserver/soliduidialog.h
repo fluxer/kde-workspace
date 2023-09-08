@@ -33,6 +33,7 @@ class SolidUiDialog : public KDialog
 public:
     SolidUiDialog(const Solid::Device &soliddevce,
                   const QList<KServiceAction> &kserviceactions,
+                  const bool mount,
                   QWidget *parent = nullptr);
     ~SolidUiDialog();
 
@@ -43,6 +44,7 @@ private Q_SLOTS:
 private:
     Solid::Device m_soliddevice;
     QList<KServiceAction> m_serviceactions;
+    bool m_mount;
     QWidget* m_mainwidget;
     QGridLayout* m_mainlayout;
     KPixmapWidget* m_devicepixmap;

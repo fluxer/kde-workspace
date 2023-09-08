@@ -34,6 +34,7 @@
 #include <Solid/Block>
 
 static const QChar s_actionidseparator = QChar::fromLatin1('#');
+static const QString s_whensearch = QString::fromLatin1("Search");
 
 static QString kSolidUDI(const QString &matchid)
 {
@@ -98,7 +99,13 @@ QList<QAction*> SolidRunner::actionsForMatch(const Plasma::QueryMatch &match)
     const QStringList solidactions = KGlobal::dirs()->findAllResources("data", "solid/actions/");
     foreach (const QString &solidaction, solidactions) {
         KDesktopFile kdestopfile(solidaction);
-        const QString solidpredicatestring = kdestopfile.desktopGroup().readEntry("X-KDE-Solid-Predicate");
+        KConfigGroup kconfiggroup = kdestopfile.desktopGroup();
+        const QStringList solidwhenlist = kconfiggroup.readEntry("X-KDE-Solid-When", QStringList());
+        if (!solidwhenlist.contains(s_whensearch)) {
+            continue;
+        }
+
+        const QString solidpredicatestring = kconfiggroup.readEntry("X-KDE-Solid-Predicate");
         const Solid::Predicate solidpredicate = Solid::Predicate::fromString(solidpredicatestring);
         if (solidpredicate.matches(soliddevice)) {
             const QList<KServiceAction> kserviceactions = KDesktopFileActions::userDefinedServices(solidaction, true);
@@ -214,7 +221,7 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
         const QList<KServiceAction> kserviceactions = KDesktopFileActions::userDefinedServices(actionfilepath, true);
         foreach (const KServiceAction &kserviceaction, kserviceactions) {
             if (kserviceaction.name() == actionname) {
-                QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), kSolidUDI(match.id()));
+                QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), kSolidUDI(match.id()), true);
                 if (actioncommand.size() == 0) {
                     kWarning() << "invalid action command" << actionname << "in" << actionfilepath;
                     return;

@@ -61,11 +61,11 @@ static void kSolidEjectUDI(const QString &solidudi)
 }
 
 // simplified version of KMacroExpander specialized for solid actions
-static QStringList kSolidActionCommand(const QString &command, const QString &solidudi)
+static QStringList kSolidActionCommand(const QString &command, const QString &solidudi, const bool mount)
 {
     Solid::Device soliddevice(solidudi);
     Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
-    if (solidstorageacces && !solidstorageacces->isAccessible()) {
+    if (mount && solidstorageacces && !solidstorageacces->isAccessible()) {
         kSolidMountUDI(solidudi);
     }
 
@@ -97,9 +97,9 @@ static QStringList kSolidActionCommand(const QString &command, const QString &so
     return KShell::splitArgs(actioncommand);
 }
 
-static void kExecuteAction(const KServiceAction &kserviceaction, const QString &solidudi)
+static void kExecuteAction(const KServiceAction &kserviceaction, const QString &solidudi, const bool mount)
 {
-    QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), solidudi);
+    QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), solidudi, mount);
     if (actioncommand.size() == 0) {
         kWarning() << "invalid action command" << kserviceaction.name();
         return;
