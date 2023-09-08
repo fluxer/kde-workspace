@@ -42,6 +42,10 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent *event) final;
     void wheelEvent(QGraphicsSceneWheelEvent *event) final;
 
+protected:
+    // Plasma::Applet reimplementation
+    void constraintsEvent(Plasma::Constraints constraints) final;
+
 private Q_SLOTS:
     void slotLayoutChanged();
     void slotNextLayout();

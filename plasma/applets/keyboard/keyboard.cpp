@@ -153,6 +153,29 @@ void KeyboardApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 }
 
+void KeyboardApplet::constraintsEvent(Plasma::Constraints constraints)
+{
+    if (constraints & Plasma::FormFactorConstraint) {
+        int iconsize = 0;
+        switch (formFactor()) {
+            case Plasma::FormFactor::Planar:
+            case Plasma::FormFactor::MediaCenter:
+            case Plasma::FormFactor::Application: {
+                // desktop-like
+                iconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+                break;
+            }
+            case Plasma::FormFactor::Horizontal:
+            case Plasma::FormFactor::Vertical: {
+                // panel
+                iconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
+                break;
+            }
+        }
+        setMinimumSize(iconsize, iconsize);
+    }
+}
+
 void KeyboardApplet::slotLayoutChanged()
 {
     const QList<KKeyboardType> layouts = m_keyboardlayout->layouts();
