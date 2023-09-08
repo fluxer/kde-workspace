@@ -75,28 +75,34 @@ void KeyboardApplet::paintInterface(QPainter *painter,
     }
     QFont font = KGlobalSettings::smallestReadableFont();
     font.setBold(true);
-    font.setPointSize(qMax(font.pointSize(), contentsRect.width()));
+    font.setPointSize(qMax(font.pointSize(), contentsRect.height() / 2));
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform);
     painter->setRenderHint(QPainter::Antialiasing);
 
     if (!flag.isEmpty()) {
         painter->save();
-        const QPixmap iconpixmap = QPixmap(flag).scaled(contentsRect.size(), Qt::KeepAspectRatio);
-        painter->drawPixmap(contentsRect, iconpixmap);
+        painter->drawPixmap(
+            contentsRect,
+            QPixmap(flag).scaled(contentsRect.size(), Qt::KeepAspectRatio)
+        );
         painter->restore();
     }
 
     if (m_showtext) {
         if (!flag.isEmpty()) {
-            const QPixmap textpixmap = Plasma::PaintUtils::shadowText(layoutlayout, font, Qt::black, Qt::white, QPoint(), 3);
-            painter->drawPixmap(contentsRect, textpixmap);
+            painter->drawPixmap(
+                contentsRect,
+                Plasma::PaintUtils::shadowText(layoutlayout, font, Qt::black, Qt::white, QPoint(), 3)
+            );
         } else {
             Plasma::Svg* svg = new Plasma::Svg(this);
             svg->setImagePath("widgets/labeltexture");
             svg->setContainsMultipleImages(true);
-            const QPixmap textpixmap = Plasma::PaintUtils::texturedText(layoutlayout, font, svg);
-            painter->drawPixmap(contentsRect, textpixmap);
+            painter->drawPixmap(
+                contentsRect,
+                Plasma::PaintUtils::texturedText(layoutlayout, font, svg)
+            );
             delete svg;
         }
     }
