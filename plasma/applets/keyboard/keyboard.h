@@ -58,6 +58,7 @@ private:
     bool m_showtext;
     QComboBox* m_indicatorbox;
     QSpacerItem* m_spacer;
+    QString m_flagpath;
 };
 
 K_EXPORT_PLASMA_APPLET(keyboard, KeyboardApplet)

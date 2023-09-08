@@ -66,9 +66,8 @@ void KeyboardApplet::paintInterface(QPainter *painter,
     const KKeyboardType activelayout = m_keyboardlayout->layouts().first();
     const QString layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
 
-    QString flag;
-    if (m_showflag) {
-        flag = KStandardDirs::locate(
+    if (m_showflag && m_flagpath.isEmpty()) {
+        m_flagpath = KStandardDirs::locate(
             "locale",
             QString::fromLatin1("l10n/%1/flag.png").arg(layoutlayout)
         );
@@ -80,17 +79,18 @@ void KeyboardApplet::paintInterface(QPainter *painter,
     painter->setRenderHint(QPainter::SmoothPixmapTransform);
     painter->setRenderHint(QPainter::Antialiasing);
 
-    if (!flag.isEmpty()) {
+    const bool paintflag = (m_showflag && !m_flagpath.isEmpty());
+    if (paintflag) {
         painter->save();
         painter->drawPixmap(
             contentsRect,
-            QPixmap(flag).scaled(contentsRect.size(), Qt::KeepAspectRatio)
+            QPixmap(m_flagpath).scaled(contentsRect.size(), Qt::KeepAspectRatio)
         );
         painter->restore();
     }
 
     if (m_showtext) {
-        if (!flag.isEmpty()) {
+        if (paintflag) {
             painter->drawPixmap(
                 contentsRect,
                 Plasma::PaintUtils::shadowText(layoutlayout, font, Qt::black, Qt::white, QPoint(), 3)
@@ -181,7 +181,7 @@ void KeyboardApplet::slotLayoutChanged()
     const QList<KKeyboardType> layouts = m_keyboardlayout->layouts();
     const KKeyboardType activelayout = layouts.first();
     const QString layoutlayout = QString::fromLatin1(activelayout.layout.constData(), activelayout.layout.size());
-    const QString flag = KStandardDirs::locate(
+    m_flagpath = KStandardDirs::locate(
         "locale",
         QString::fromLatin1("l10n/%1/flag.png").arg(layoutlayout)
     );
@@ -190,7 +190,7 @@ void KeyboardApplet::slotLayoutChanged()
     layouttooltip.append(i18n("Variant: %1", KKeyboardLayout::variantDescription(activelayout.layout, activelayout.variant)));
     Plasma::ToolTipContent plasmatooltipcontent = Plasma::ToolTipContent(
         KKeyboardLayout::layoutDescription(activelayout.layout), layouttooltip,
-        KIcon(flag)
+        KIcon(m_flagpath)
     );
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltipcontent);
 
