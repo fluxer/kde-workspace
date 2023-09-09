@@ -1,5 +1,4 @@
 add_subdirectory(core)
-add_subdirectory(dirmodel)
 add_subdirectory(draganddrop)
 add_subdirectory(graphicslayouts)
 add_subdirectory(graphicswidgets)
