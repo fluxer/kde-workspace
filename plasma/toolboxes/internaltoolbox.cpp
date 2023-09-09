@@ -43,12 +43,10 @@ InternalToolBox::InternalToolBox(Plasma::Containment *parent)
       m_corner(InternalToolBox::TopRight),
       m_size(KIconLoader::SizeSmallMedium),
       m_iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall),
-      m_hidden(false),
       m_showing(false),
       m_movable(false),
       m_dragging(false),
-      m_userMoved(false),
-      m_iconic(true)
+      m_userMoved(false)
 {
     init();
 }
@@ -59,12 +57,10 @@ InternalToolBox::InternalToolBox(QObject *parent, const QVariantList &args)
       m_corner(InternalToolBox::TopRight),
       m_size(KIconLoader::SizeSmallMedium),
       m_iconSize(KIconLoader::SizeSmall, KIconLoader::SizeSmall),
-      m_hidden(false),
       m_showing(false),
       m_movable(false),
       m_dragging(false),
-      m_userMoved(false),
-      m_iconic(true)
+      m_userMoved(false)
 {
     init();
 }
@@ -158,7 +154,7 @@ void InternalToolBox::toolTriggered(bool)
 
 int InternalToolBox::size() const
 {
-    return  m_size;
+    return m_size;
 }
 
 void InternalToolBox::setSize(const int newSize)

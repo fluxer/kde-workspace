@@ -120,17 +120,11 @@ private:
     int m_size;
     QSize m_iconSize;
     QPoint m_dragStartRelative;
-    QTransform m_viewTransform;
     QList<QAction *> m_actions;
-    bool m_hidden : 1;
-    bool m_showing : 1;
-    bool m_movable : 1;
-    bool m_dragging : 1;
-    bool m_userMoved : 1;
-    bool m_iconic : 1;
+    bool m_showing;
+    bool m_movable;
+    bool m_dragging;
+    bool m_userMoved;
 };
 
-
-
 #endif // PLASMA_INTERNALTOOLBOX_P_H
-
