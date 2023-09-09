@@ -19,6 +19,9 @@
 #ifndef SOLIDUISERVER_HELPER_H
 #define SOLIDUISERVER_HELPER_H
 
+#include <QProcess>
+#include <QEventLoop>
+
 #include <kauthorization.h>
 
 class SolidUiServerHelper : public KAuthorization
@@ -26,11 +29,25 @@ class SolidUiServerHelper : public KAuthorization
     Q_OBJECT
 public:
     SolidUiServerHelper(const char* const helper, QObject *parent = nullptr);
+    ~SolidUiServerHelper();
+
 public Q_SLOTS:
     int cryptopen(const QVariantMap &parameters);
     int cryptclose(const QVariantMap &parameters);
     int mount(const QVariantMap &parameters);
     int unmount(const QVariantMap &parameters);
+
+private Q_SLOTS:
+    void slotCryptOpen();
+    void slotCryptClose();
+    void slotMount();
+    void slotUnmount();
+
+private:
+    QVariantMap m_parameters;
+    QString m_cryptbin;
+    QProcess* m_process;
+    QEventLoop* m_eventloop;
 };
 
 #endif // SOLIDUISERVER_HELPER_H

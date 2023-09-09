@@ -21,13 +21,31 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <QProcess>
+#include <QTimer>
 #include <QDir>
 #include <QCoreApplication>
 
+static const int s_waittime = 3000;
+
 SolidUiServerHelper::SolidUiServerHelper(const char* const helper, QObject *parent)
-    : KAuthorization(helper, parent)
+    : KAuthorization(helper, parent),
+    m_process(nullptr),
+    m_eventloop(nullptr)
+ {
+    m_process = new QProcess(this);
+    m_eventloop = new QEventLoop(this);
+    connect(
+        m_process, SIGNAL(finished(int)),
+        m_eventloop, SLOT(quit())
+    );
+}
+
+SolidUiServerHelper::~SolidUiServerHelper()
 {
+    m_process->terminate();
+    if (!m_process->waitForFinished(s_waittime)) {
+        m_process->kill();
+    }
 }
 
 int SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
@@ -36,29 +54,22 @@ int SolidUiServerHelper::cryptopen(const QVariantMap &parameters)
         return KAuthorization::HelperError;
     }
 
-    const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
-    if (cryptbin.isEmpty()) {
+    m_cryptbin = KStandardDirs::findRootExe("cryptsetup");
+    if (m_cryptbin.isEmpty()) {
         kWarning() << "cryptsetup is missing";
         return KAuthorization::HelperError;
     }
 
-    const QString device = parameters.value("device").toString();
-    const QString name = parameters.value("name").toString();
-    const QByteArray password = QByteArray::fromHex(parameters.value("password").toByteArray());
-    const QStringList cryptargs = QStringList() << "--batch-mode" << "--key-file=-" << "open" << device << name;
-    QProcess cryptproc;
-    cryptproc.start(cryptbin, cryptargs);
-    cryptproc.waitForStarted();
-    cryptproc.write(password);
-    cryptproc.closeWriteChannel();
-    cryptproc.waitForFinished();
+    m_parameters = parameters;
+    QTimer::singleShot(500, this, SLOT(slotCryptOpen()));
+    m_eventloop->exec();
 
-    if (cryptproc.exitCode() == 0) {
+    if (m_process->exitCode() == 0) {
         return KAuthorization::NoError;
     }
-    QString crypterror = cryptproc.readAllStandardError();
+    QString crypterror = m_process->readAllStandardError();
     if (crypterror.isEmpty()) {
-        crypterror = cryptproc.readAllStandardOutput();
+        crypterror = m_process->readAllStandardOutput();
     }
     kWarning() << crypterror;
     return KAuthorization::HelperError;
@@ -70,25 +81,22 @@ int SolidUiServerHelper::cryptclose(const QVariantMap &parameters)
         return KAuthorization::HelperError;
     }
 
-    const QString cryptbin = KStandardDirs::findRootExe("cryptsetup");
-    if (cryptbin.isEmpty()) {
+    m_cryptbin = KStandardDirs::findRootExe("cryptsetup");
+    if (m_cryptbin.isEmpty()) {
         kWarning() << "cryptsetup is missing";
         return KAuthorization::HelperError;
     }
 
-    const QString name = parameters.value("name").toString();
-    const QStringList cryptargs = QStringList() << "--batch-mode" << "close" << name;
-    QProcess cryptproc;
-    cryptproc.start(cryptbin, cryptargs);
-    cryptproc.waitForStarted();
-    cryptproc.waitForFinished();
+    m_parameters = parameters;
+    QTimer::singleShot(500, this, SLOT(slotCryptClose()));
+    m_eventloop->exec();
 
-    if (cryptproc.exitCode() == 0) {
+    if (m_process->exitCode() == 0) {
         return KAuthorization::NoError;
     }
-    QString crypterror = cryptproc.readAllStandardError();
+    QString crypterror = m_process->readAllStandardError();
     if (crypterror.isEmpty()) {
-        crypterror = cryptproc.readAllStandardOutput();
+        crypterror = m_process->readAllStandardOutput();
     }
     kWarning() << crypterror;
     return KAuthorization::HelperError;
@@ -101,30 +109,16 @@ int SolidUiServerHelper::mount(const QVariantMap &parameters)
         return KAuthorization::HelperError;
     }
 
-    const QString device = parameters.value("device").toString();
-    const QString mountpoint = parameters.value("mountpoint").toString();
-    const bool readonly = parameters.value("readonly").toBool();
-    // qDebug() << Q_FUNC_INFO << device << mountpoint << readonly;
+    m_parameters = parameters;
+    QTimer::singleShot(500, this, SLOT(slotMount()));
+    m_eventloop->exec();
 
-    QStringList mountargs = QStringList() << device << mountpoint;
-    if (readonly) {
-#if defined(Q_OS_SOLARIS)
-        mountargs << QString::fromLatin1("-oro");
-#else
-        mountargs << QString::fromLatin1("-r");
-#endif
-    }
-    QProcess mountproc;
-    mountproc.start("mount", mountargs);
-    mountproc.waitForStarted();
-    mountproc.waitForFinished();
-
-    if (mountproc.exitCode() == 0) {
+    if (m_process->exitCode() == 0) {
         return KAuthorization::NoError;
     }
-    QString mounterror = mountproc.readAllStandardError();
+    QString mounterror = m_process->readAllStandardError();
     if (mounterror.isEmpty()) {
-        mounterror = mountproc.readAllStandardOutput();
+        mounterror = m_process->readAllStandardOutput();
     }
     kWarning() << mounterror;
     return KAuthorization::HelperError;
@@ -136,22 +130,65 @@ int SolidUiServerHelper::unmount(const QVariantMap &parameters)
         return KAuthorization::HelperError;
     }
 
-    const QString mountpoint = parameters.value("mountpoint").toString();
-    const QStringList umountargs = QStringList() << mountpoint;
-    QProcess umountproc;
-    umountproc.start("umount", umountargs);
-    umountproc.waitForStarted();
-    umountproc.waitForFinished();
+    m_parameters = parameters;
+    QTimer::singleShot(500, this, SLOT(slotUnmount()));
+    m_eventloop->exec();
 
-    if (umountproc.exitCode() == 0) {
+    if (m_process->exitCode() == 0) {
         return KAuthorization::NoError;
     }
-    QString umounterror = umountproc.readAllStandardError();
+    QString umounterror = m_process->readAllStandardError();
     if (umounterror.isEmpty()) {
-        umounterror = umountproc.readAllStandardOutput();
+        umounterror = m_process->readAllStandardOutput();
     }
     kWarning() << umounterror;
     return KAuthorization::HelperError;
+}
+
+void SolidUiServerHelper::slotCryptOpen()
+{
+    Q_ASSERT(!m_cryptbin.isEmpty());
+    const QString device = m_parameters.value("device").toString();
+    const QString name = m_parameters.value("name").toString();
+    const QByteArray password = QByteArray::fromHex(m_parameters.value("password").toByteArray());
+    const QStringList cryptargs = QStringList() << "--batch-mode" << "--key-file=-" << "open" << device << name;
+    m_process->start(m_cryptbin, cryptargs);
+    m_process->waitForStarted(s_waittime);
+    m_process->write(password);
+    m_process->closeWriteChannel();
+}
+
+void SolidUiServerHelper::slotCryptClose()
+{
+    Q_ASSERT(!m_cryptbin.isEmpty());
+    const QString name = m_parameters.value("name").toString();
+    const QStringList cryptargs = QStringList() << "--batch-mode" << "close" << name;
+    m_process->start(m_cryptbin, cryptargs);
+}
+
+void SolidUiServerHelper::slotMount()
+{
+    const QString device = m_parameters.value("device").toString();
+    const QString mountpoint = m_parameters.value("mountpoint").toString();
+    const bool readonly = m_parameters.value("readonly").toBool();
+    // qDebug() << Q_FUNC_INFO << device << mountpoint << readonly;
+
+    QStringList mountargs = QStringList() << device << mountpoint;
+    if (readonly) {
+#if defined(Q_OS_SOLARIS)
+        mountargs << QString::fromLatin1("-oro");
+#else
+        mountargs << QString::fromLatin1("-r");
+#endif
+    }
+    m_process->start("mount", mountargs);
+}
+
+void SolidUiServerHelper::slotUnmount()
+{
+    const QString mountpoint = m_parameters.value("mountpoint").toString();
+    const QStringList umountargs = QStringList() << mountpoint;
+    m_process->start("umount", umountargs);
 }
 
 K_AUTH_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)
