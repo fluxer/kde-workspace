@@ -20,12 +20,23 @@
 #define SOLIDUISERVER_COMMON_H
 
 #include <kdebug.h>
+#include <kserviceaction.h>
 #include <kshell.h>
 #include <ktoolinvocation.h>
 #include <solid/device.h>
 #include <solid/block.h>
 #include <solid/storageaccess.h>
 #include <solid/opticaldrive.h>
+
+// TODO: store and update Solid::StorageAccess::filePath() reference
+struct SolidUiAction
+{
+    Solid::Device device;
+    QString devicenode;
+    QList<KServiceAction> actions;
+    QStringList when;
+};
+typedef QList<SolidUiAction> SolidUiActions;
 
 static void kSolidMountUDI(const QString &solidudi)
 {
@@ -61,7 +72,8 @@ static void kSolidEjectUDI(const QString &solidudi)
 }
 
 // simplified version of KMacroExpander specialized for solid actions
-static QStringList kSolidActionCommand(const QString &command, const Solid::Device &soliddevice, const bool mount)
+static QStringList kSolidActionCommand(const QString &command, const Solid::Device &soliddevice,
+                                       const QString &solidnode, const bool mount)
 {
     const Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
     if (mount && solidstorageacces && !solidstorageacces->isAccessible()) {
@@ -79,14 +91,8 @@ static QStringList kSolidActionCommand(const QString &command, const Solid::Devi
         }
     }
     if (actioncommand.contains(QLatin1String("%d")) || actioncommand.contains(QLatin1String("%D"))) {
-        const Solid::Block* solidblock = soliddevice.as<Solid::Block>();
-        if (!solidblock) {
-            kWarning() << "device is not block" << soliddevice.udi();
-        } else {
-            const QString devicedevice = solidblock->device();
-            actioncommand = actioncommand.replace(QLatin1String("%d"), devicedevice);
-            actioncommand = actioncommand.replace(QLatin1String("%D"), devicedevice);
-        }
+        actioncommand = actioncommand.replace(QLatin1String("%d"), solidnode);
+        actioncommand = actioncommand.replace(QLatin1String("%D"), solidnode);
     }
     if (actioncommand.contains(QLatin1String("%i")) || actioncommand.contains(QLatin1String("%I"))) {
         const QString deviceudi = soliddevice.udi();
@@ -96,9 +102,10 @@ static QStringList kSolidActionCommand(const QString &command, const Solid::Devi
     return KShell::splitArgs(actioncommand);
 }
 
-static void kExecuteAction(const KServiceAction &kserviceaction, const Solid::Device &soliddevice, const bool mount)
+static void kExecuteAction(const KServiceAction &kserviceaction, const Solid::Device &soliddevice,
+                           const QString &solidnode, const bool mount)
 {
-    QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), soliddevice, mount);
+    QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), soliddevice, solidnode, mount);
     if (actioncommand.size() == 0) {
         kWarning() << "invalid action command" << kserviceaction.name();
         return;

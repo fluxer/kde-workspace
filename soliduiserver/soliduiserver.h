@@ -50,7 +50,7 @@ private Q_SLOTS:
 private:
     void handleActions(const Solid::Device &soliddevice, const bool added);
 
-    QList<Solid::Device> m_soliddevices;
+    SolidUiActions m_solidactions;
     QList<SolidUiDialog*> m_soliddialogs;
 };
 

@@ -52,13 +52,41 @@ static void kNotifyError(const Solid::ErrorType error, const bool unmount)
     KNotification::event("soliduiserver/mounterror", title, Solid::errorString(error));
 }
 
+static SolidUiActions kSolidDeviceActions()
+{
+    SolidUiActions result;
+    const QList<Solid::Device> soliddevices = Solid::Device::allDevices();
+    foreach (const Solid::Device &soliddevice, soliddevices) {
+        const QStringList solidactions = KGlobal::dirs()->findAllResources("data", "solid/actions/");
+        foreach (const QString &solidaction, solidactions) {
+            KDesktopFile kdestopfile(solidaction);
+            KConfigGroup kconfiggroup = kdestopfile.desktopGroup();
+            const QStringList solidwhenlist = kconfiggroup.readEntry("X-KDE-Solid-When", QStringList());
+            const QString solidpredicatestring = kconfiggroup.readEntry("X-KDE-Solid-Predicate");
+            const Solid::Predicate solidpredicate = Solid::Predicate::fromString(solidpredicatestring);
+            if (solidpredicate.matches(soliddevice)) {
+                SolidUiAction solidactionstruct;
+                solidactionstruct.device = soliddevice;
+                solidactionstruct.actions = KDesktopFileActions::userDefinedServices(solidaction, true);
+                solidactionstruct.when = solidwhenlist;
+                const Solid::Block* solidblock = soliddevice.as<Solid::Block>();
+                if (solidblock) {
+                    solidactionstruct.devicenode = solidblock->device();
+                }
+                result.append(solidactionstruct);
+            }
+        }
+    }
+    return result;
+}
+
 K_PLUGIN_FACTORY(SolidUiServerFactory, registerPlugin<SolidUiServer>();)
 K_EXPORT_PLUGIN(SolidUiServerFactory("soliduiserver"))
 
 SolidUiServer::SolidUiServer(QObject* parent, const QList<QVariant>&)
     : KDEDModule(parent)
 {
-    m_soliddevices = Solid::Device::allDevices();
+    m_solidactions = kSolidDeviceActions();
     connect(
         Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
         this, SLOT(slotDeviceAdded(QString))
@@ -254,26 +282,25 @@ QString SolidUiServer::errorString(const int error)
 
 void SolidUiServer::handleActions(const Solid::Device &soliddevice, const bool added)
 {
-    QList<KServiceAction> kserviceactions;
-    const QStringList solidactions = KGlobal::dirs()->findAllResources("data", "solid/actions/");
-    foreach (const QString &solidaction, solidactions) {
-        KDesktopFile kdestopfile(solidaction);
-        KConfigGroup kconfiggroup = kdestopfile.desktopGroup();
-        const QStringList solidwhenlist = kconfiggroup.readEntry("X-KDE-Solid-When", QStringList());
+    SolidUiAction solidaction;
+    solidaction.device = soliddevice;
+    foreach (const SolidUiAction &solidactionstruct, m_solidactions) {
+        if (soliddevice.udi() != solidactionstruct.device.udi()) {
+            continue;
+        }
+        const QStringList solidwhenlist = solidactionstruct.when;
         if (!solidwhenlist.contains(added ? s_whenadd : s_whenremove)) {
             continue;
         }
 
-        const QString solidpredicatestring = kconfiggroup.readEntry("X-KDE-Solid-Predicate");
-        const Solid::Predicate solidpredicate = Solid::Predicate::fromString(solidpredicatestring);
-        if (solidpredicate.matches(soliddevice)) {
-            kserviceactions.append(KDesktopFileActions::userDefinedServices(solidaction, true));
-        }
+        solidaction.actions.append(solidactionstruct.actions);
+        // if the UDI is different so should be the device node
+        solidaction.devicenode = solidactionstruct.devicenode;
     }
-    if (kserviceactions.size() == 1) {
-        kExecuteAction(kserviceactions.first(), soliddevice, added);
-    } else if (!kserviceactions.isEmpty()) {
-        SolidUiDialog* soliddialog = new SolidUiDialog(soliddevice, kserviceactions, added);
+    if (solidaction.actions.size() == 1) {
+        kExecuteAction(solidaction.actions.first(), soliddevice, solidaction.devicenode, added);
+    } else if (!solidaction.actions.isEmpty()) {
+        SolidUiDialog* soliddialog = new SolidUiDialog(solidaction, added);
         connect(soliddialog, SIGNAL(finished(int)), this, SLOT(slotDialogFinished()));
         m_soliddialogs.append(soliddialog);
         soliddialog->show();
@@ -284,15 +311,16 @@ void SolidUiServer::handleActions(const Solid::Device &soliddevice, const bool a
 void SolidUiServer::slotDeviceAdded(const QString &udi)
 {
     Solid::Device soliddevice(udi);
-    m_soliddevices.append(soliddevice);
     handleActions(soliddevice, true);
+    m_solidactions = kSolidDeviceActions();
 }
 
 void SolidUiServer::slotDeviceRemoved(const QString &udi)
 {
-    QMutableListIterator<Solid::Device> iter(m_soliddevices);
+    QMutableListIterator<SolidUiAction> iter(m_solidactions);
     while (iter.hasNext()) {
-        Solid::Device soliddevice = iter.next();
+        SolidUiAction solidactionstruct = iter.next();
+        Solid::Device soliddevice = solidactionstruct.device;
         if (soliddevice.udi() == udi) {
             handleActions(soliddevice, false);
             iter.remove();

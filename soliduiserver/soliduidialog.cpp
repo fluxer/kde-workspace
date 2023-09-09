@@ -24,13 +24,11 @@
 #include <kglobal.h>
 #include <kconfiggroup.h>
 
-SolidUiDialog::SolidUiDialog(const Solid::Device &soliddevice,
-                             const QList<KServiceAction> &kserviceactions,
+SolidUiDialog::SolidUiDialog(const SolidUiAction &solidaction,
                              const bool mount,
                              QWidget *parent)
     : KDialog(parent),
-    m_soliddevice(soliddevice),
-    m_serviceactions(kserviceactions),
+    m_solidaction(solidaction),
     m_mount(mount),
     m_mainwidget(nullptr),
     m_mainlayout(nullptr),
@@ -38,10 +36,10 @@ SolidUiDialog::SolidUiDialog(const Solid::Device &soliddevice,
     m_devicelabel(nullptr),
     m_listwidget(nullptr)
 {
-    Q_ASSERT(kserviceactions.size() > 0);
-    const KIcon deviceicon = KIcon(m_soliddevice.icon());
+    Q_ASSERT(solidaction.actions.size() > 0);
+    const KIcon deviceicon = KIcon(solidaction.device.icon());
     setWindowIcon(deviceicon);
-    setWindowTitle(i18n("Actions for %1", m_soliddevice.description()));
+    setWindowTitle(i18n("Actions for %1", solidaction.device.description()));
     setButtons(KDialog::Ok | KDialog::Cancel);
     setDefaultButton(KDialog::Ok);
 
@@ -62,7 +60,7 @@ SolidUiDialog::SolidUiDialog(const Solid::Device &soliddevice,
 
     m_listwidget = new KListWidget(m_mainwidget);
     int itemscounter = 0;
-    foreach (const KServiceAction &kserviceaction, kserviceactions) {
+    foreach (const KServiceAction &kserviceaction, solidaction.actions) {
         QListWidgetItem* listitem = new QListWidgetItem(m_listwidget);
         listitem->setText(kserviceaction.text());
         listitem->setIcon(KIcon(kserviceaction.icon()));
@@ -112,8 +110,8 @@ void SolidUiDialog::slotOkClicked()
     }
     const QListWidgetItem* selecteditem = selecteditems.first();
     const int kserviceactionindex = selecteditem->data(Qt::UserRole).toInt();
-    Q_ASSERT(kserviceactionindex >= 0 && kserviceactionindex < m_serviceactions.size());
-    kExecuteAction(m_serviceactions.at(kserviceactionindex), m_soliddevice, m_mount);
+    Q_ASSERT(kserviceactionindex >= 0 && kserviceactionindex < solidaction.actions.size());
+    kExecuteAction(m_solidaction.actions.at(kserviceactionindex), m_solidaction.device, m_solidaction.devicenode, m_mount);
 }
 
 #include "moc_soliduidialog.cpp"

@@ -17,10 +17,19 @@ set(kded_soliduiserver_SRCS
 )
 
 kde4_add_plugin(kded_soliduiserver ${kded_soliduiserver_SRCS})
-
 target_link_libraries(kded_soliduiserver
     KDE4::solid
     KDE4::kio
+)
+
+set(solid_unmount_device_SRCS
+    solid_unmount_device.cpp
+)
+
+add_executable(solid_unmount_device ${solid_unmount_device_SRCS})
+target_link_libraries(solid_unmount_device
+    KDE4::kdecore
+    KDE4::kdeui
 )
 
 ########### install files ###############
@@ -41,7 +50,7 @@ install(
 )
 
 install(
-    TARGETS soliduiserver_helper
+    TARGETS soliduiserver_helper solid_unmount_device
     DESTINATION ${KDE4_LIBEXEC_INSTALL_DIR}
 )
 

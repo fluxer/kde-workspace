@@ -222,7 +222,12 @@ void SolidRunner::run(const Plasma::RunnerContext &context, const Plasma::QueryM
         foreach (const KServiceAction &kserviceaction, kserviceactions) {
             if (kserviceaction.name() == actionname) {
                 const Solid::Device soliddevice(kSolidUDI(match.id()));
-                QStringList actioncommand = kSolidActionCommand(kserviceaction.exec(), soliddevice, true);
+                const Solid::Block *solidblock = soliddevice.as<Solid::Block>();
+                QStringList actioncommand = kSolidActionCommand(
+                    kserviceaction.exec(), soliddevice,
+                    solidblock ? solidblock->device() : QString(),
+                    true
+                );
                 if (actioncommand.size() == 0) {
                     kWarning() << "invalid action command" << actionname << "in" << actionfilepath;
                     return;

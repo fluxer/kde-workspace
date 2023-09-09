@@ -1,0 +1,10 @@
+[Desktop Entry]
+X-KDE-Solid-Predicate=IS Block
+X-KDE-Solid-When=Remove
+Type=Service
+Actions=unmount;
+
+[Desktop Action unmount]
+Name=Unmount the device
+Exec=solid_unmount_device %d
+Icon=media-eject

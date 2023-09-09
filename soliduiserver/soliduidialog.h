@@ -19,6 +19,8 @@
 #ifndef SOLIDUIDIALOG_H
 #define SOLIDUIDIALOG_H
 
+#include "soliduiserver_common.h"
+
 #include <QGridLayout>
 #include <QLabel>
 #include <kdialog.h>
@@ -31,9 +33,7 @@ class SolidUiDialog : public KDialog
 {
     Q_OBJECT
 public:
-    SolidUiDialog(const Solid::Device &soliddevce,
-                  const QList<KServiceAction> &kserviceactions,
-                  const bool mount,
+    SolidUiDialog(const SolidUiAction &soliddevce, const bool mount,
                   QWidget *parent = nullptr);
     ~SolidUiDialog();
 
@@ -42,8 +42,7 @@ private Q_SLOTS:
     void slotOkClicked();
 
 private:
-    Solid::Device m_soliddevice;
-    QList<KServiceAction> m_serviceactions;
+    SolidUiAction m_solidaction;
     bool m_mount;
     QWidget* m_mainwidget;
     QGridLayout* m_mainlayout;
