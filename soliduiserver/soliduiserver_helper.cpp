@@ -25,11 +25,6 @@
 #include <QDir>
 #include <QCoreApplication>
 
-#ifdef Q_OS_LINUX
-#  include <sys/mount.h>
-#  include <errno.h>
-#endif
-
 SolidUiServerHelper::SolidUiServerHelper(const char* const helper, QObject *parent)
     : KAuthorization(helper, parent)
 {
@@ -142,17 +137,6 @@ int SolidUiServerHelper::unmount(const QVariantMap &parameters)
     }
 
     const QString mountpoint = parameters.value("mountpoint").toString();
-
-#ifdef Q_OS_LINUX
-    const QByteArray mountpointbytes = mountpoint.toLocal8Bit();
-    const int umountresult = ::umount2(mountpointbytes.constData(), 0);
-    if (umountresult == 0) {
-        return KAuthorization::NoError;
-    }
-    const int savederrno = errno;
-    kWarning() << qt_error_string(savederrno);
-    return KAuthorization::HelperError;
-#else
     const QStringList umountargs = QStringList() << mountpoint;
     QProcess umountproc;
     umountproc.start("umount", umountargs);
@@ -168,7 +152,6 @@ int SolidUiServerHelper::unmount(const QVariantMap &parameters)
     }
     kWarning() << umounterror;
     return KAuthorization::HelperError;
-#endif // Q_OS_LINUX
 }
 
 K_AUTH_MAIN("org.kde.soliduiserver.mountunmounthelper", SolidUiServerHelper)
