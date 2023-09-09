@@ -113,7 +113,7 @@ void SolidUiDialog::slotOkClicked()
     const QListWidgetItem* selecteditem = selecteditems.first();
     const int kserviceactionindex = selecteditem->data(Qt::UserRole).toInt();
     Q_ASSERT(kserviceactionindex >= 0 && kserviceactionindex < m_serviceactions.size());
-    kExecuteAction(m_serviceactions.at(kserviceactionindex), m_soliddevice.udi(), m_mount);
+    kExecuteAction(m_serviceactions.at(kserviceactionindex), m_soliddevice, m_mount);
 }
 
 #include "moc_soliduidialog.cpp"

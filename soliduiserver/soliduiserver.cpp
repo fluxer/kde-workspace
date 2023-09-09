@@ -271,7 +271,7 @@ void SolidUiServer::handleActions(const Solid::Device &soliddevice, const bool a
         }
     }
     if (kserviceactions.size() == 1) {
-        kExecuteAction(kserviceactions.first(), soliddevice.udi(), added);
+        kExecuteAction(kserviceactions.first(), soliddevice, added);
     } else if (!kserviceactions.isEmpty()) {
         SolidUiDialog* soliddialog = new SolidUiDialog(soliddevice, kserviceactions, added);
         connect(soliddialog, SIGNAL(finished(int)), this, SLOT(slotDialogFinished()));
