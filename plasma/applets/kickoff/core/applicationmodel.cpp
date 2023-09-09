@@ -400,39 +400,28 @@ QVariant ApplicationModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
       if (nameAfterDescription(index) && !node->genericName.isEmpty()) {
             return node->genericName;
-        } else {
-            return node->appName;
         }
-        break;
+        return node->appName;
     case Kickoff::SubTitleRole:
       if (!nameAfterDescription(index) && !node->genericName.isEmpty()) {
             return node->genericName;
-        } else {
-            return node->appName;
         }
-        break;
+        return node->appName;
     case Kickoff::UrlRole:
         if (node->isDir) {
-            return QString::fromLatin1("applications://%1").arg(node->desktopEntry);
-        } else {
-            return node->desktopEntry;
+            return QString();
         }
-        break;
+        return node->desktopEntry;
     case Kickoff::SubTitleMandatoryRole:
         return nameAfterDescription(index) && node->subTitleMandatory;
-        break;
     case Kickoff::SeparatorRole:
         return node->isSeparator;
-        break;
     case Qt::DecorationRole:
         return node->icon;
-        break;
     case Kickoff::RelPathRole:
         return node->relPath;
-        break;
     case Kickoff::IconNameRole:
         return node->iconName;
-        break;
     default:
         ;
     }
