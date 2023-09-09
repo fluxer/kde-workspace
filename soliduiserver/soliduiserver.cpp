@@ -293,8 +293,8 @@ void SolidUiServer::slotDeviceRemoved(const QString &udi)
     QMutableListIterator<Solid::Device> iter(m_soliddevices);
     while (iter.hasNext()) {
         Solid::Device soliddevice = iter.next();
-        handleActions(soliddevice, false);
         if (soliddevice.udi() == udi) {
+            handleActions(soliddevice, false);
             iter.remove();
         }
     }
