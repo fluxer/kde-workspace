@@ -20,315 +20,393 @@
 
 #include "widgetexplorer.h"
 
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
-#include <QDeclarativeComponent>
-
-#include <kaction.h>
-#include <kconfig.h>
-#include <kconfiggroup.h>
-#include <kmenu.h>
-#include <kpushbutton.h>
-#include <kservicetypetrader.h>
-#include <kstandardaction.h>
-#include <kaboutdata.h>
-#include <kaboutapplicationdialog.h>
-#include <kcomponentdata.h>
-#include <kpluginloader.h>
+#include <QApplication>
+#include <QGraphicsGridLayout>
+#include <QGraphicsLinearLayout>
+#include <QGraphicsSceneMouseEvent>
+#include <Plasma/LineEdit>
+#include <Plasma/ToolButton>
+#include <Plasma/ScrollWidget>
+#include <Plasma/Frame>
+#include <Plasma/IconWidget>
+#include <Plasma/Label>
 #include <klineedit.h>
-#include <KStandardDirs>
-#include <KWindowSystem>
-
-#include <plasma/applet.h>
-#include <plasma/corona.h>
-#include <plasma/containment.h>
-#include <plasma/package.h>
-#include <plasma/widgets/toolbutton.h>
-#include <plasma/widgets/lineedit.h>
-#include <Plasma/DeclarativeWidget>
-
-#include "kcategorizeditemsviewmodels_p.h"
-#include "plasmaappletitemmodel_p.h"
-
-using namespace KCategorizedItemsViewModels;
+#include <kpixmapwidget.h>
+#include <kicon.h>
+#include <kdebug.h>
 
 namespace Plasma
 {
 
-WidgetAction::WidgetAction(QObject *parent)
-    : QAction(parent)
+// hardcoded but ok because the widget is not resizable
+static const int s_margin = 4;
+static const QSize s_appletframesize = QSize(300, 94);
+static const QSize s_appleticonsize = QSize(80, 80);
+static const int s_filterwidth = 300;
+
+Qt::Orientation kOrientationForLocation(const Plasma::Location location)
 {
+    switch (location) {
+        case Plasma::Location::LeftEdge:
+        case Plasma::Location::RightEdge: {
+            return Qt::Vertical;
+        }
+        default: {
+            return Qt::Horizontal;
+        }
+    }
+    Q_UNREACHABLE();
 }
 
-WidgetAction::WidgetAction(const QIcon &icon, const QString &text, QObject *parent)
-    : QAction(icon, text, parent)
+class AppletIcon : public QGraphicsProxyWidget
 {
+    Q_OBJECT
+public:
+    AppletIcon(QGraphicsItem *appletFrame, const KPluginInfo &appletInfo);
+
+    void setIcon(const QString &icon);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+
+private:
+    KPixmapWidget *m_pixmapwidget;
+    KPluginInfo m_appletinfo;
+    QPointF m_dragstartpos;
+};
+
+AppletIcon::AppletIcon(QGraphicsItem *appletFrame, const KPluginInfo &appletInfo)
+    : QGraphicsProxyWidget(appletFrame),
+    m_pixmapwidget(nullptr),
+    m_appletinfo(appletInfo)
+{
+    // TODO: hover effect
+    m_pixmapwidget = new KPixmapWidget();
+    
+    m_pixmapwidget->setAttribute(Qt::WA_NoSystemBackground);
+    setWidget(m_pixmapwidget);
+}
+
+void AppletIcon::setIcon(const QString &icon)
+{
+    m_pixmapwidget->setPixmap(KIcon(icon).pixmap(size().toSize()));
+}
+
+void AppletIcon::mousePressEvent(QGraphicsSceneMouseEvent *event)
+{
+    m_dragstartpos = event->pos();
+    // don't propagate
+    event->accept();
+}
+
+void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton &&
+        (event->pos() - m_dragstartpos).manhattanLength() > KGlobalSettings::dndEventDelay())
+    {
+        QDrag* drag = new QDrag(m_pixmapwidget);
+        QMimeData* mimedata = new QMimeData();
+        mimedata->setData(QString::fromLatin1("text/x-plasmoidservicename"), m_appletinfo.pluginName().toUtf8());
+        drag->setMimeData(mimedata);
+        drag->start();
+    }
+}
+
+
+class AppletFrame : public Plasma::Frame
+{
+    Q_OBJECT
+public:
+    AppletFrame(Plasma::Frame* appletsFrame, const KPluginInfo &appletInfo);
+
+    KPluginInfo pluginInfo() const;
+    void setRunning(const bool isrunning);
+
+private:
+    KPluginInfo m_appletinfo;
+    Plasma::IconWidget* m_appletactive;
+};
+
+AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
+    : Plasma::Frame(parent),
+    m_appletinfo(appletInfo),
+    m_appletactive(nullptr)
+{
+    QGraphicsGridLayout* appletLayout = new QGraphicsGridLayout(this);
+    AppletIcon* appletIcon = new AppletIcon(this, appletInfo);
+    appletIcon->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    appletIcon->setMinimumSize(s_appleticonsize);
+    appletIcon->setMaximumSize(s_appleticonsize);
+    appletIcon->setIcon(appletInfo.icon());
+    appletLayout->addItem(appletIcon, 0, 0, 2, 1);
+
+    Plasma::Label* appletName = new Plasma::Label(this);
+    appletName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    // TODO: font update
+    QFont appletNameFont = appletName->font();
+    appletNameFont.setBold(true);
+    appletName->setFont(appletNameFont);
+    appletName->setText(appletInfo.name());
+    appletLayout->addItem(appletName, 0, 1);
+
+    // TODO: remove applet when activated
+    m_appletactive = new Plasma::IconWidget(this);
+    m_appletactive->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_appletactive->setMaximumSize(22, 22);
+    m_appletactive->setIcon(KIcon());
+    appletLayout->addItem(m_appletactive, 0, 2);
+
+    Plasma::Label* appletComment = new Plasma::Label(this);
+    appletComment->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    appletComment->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // TODO: font update
+    appletComment->setFont(KGlobalSettings::smallestReadableFont());
+    appletComment->setText(appletInfo.comment());
+    appletLayout->addItem(appletComment, 1, 1, 1, 2);
+
+    setLayout(appletLayout);
+}
+
+KPluginInfo AppletFrame::pluginInfo() const
+{
+    return m_appletinfo;
+}
+
+void AppletFrame::setRunning(const bool isrunning)
+{
+    m_appletactive->setIcon(isrunning ? KIcon("dialog-ok-apply") : KIcon());
 }
 
 class WidgetExplorerPrivate
 {
-
 public:
     WidgetExplorerPrivate(WidgetExplorer *w)
         : q(w),
-          containment(0),
-          itemModel(w),
-          filterModel(w)
+        containment(nullptr),
+        mainLayout(nullptr),
+        filterEdit(nullptr),
+        spacer(nullptr),
+        closeButton(nullptr),
+        scrollWidget(nullptr),
+        appletsFrame(nullptr),
+        appletsLayout(nullptr),
+        appletsPlaceholder(nullptr)
     {
     }
 
-    void initFilters();
     void init(Plasma::Location loc);
-    void initRunningApplets();
-    void containmentDestroyed();
-    void setLocation(Plasma::Location loc);
-    void finished();
+    void updateApplets();
+    void updateRunningApplets();
+    void filterApplets(const QString &text);
+    void updateOrientation(const Qt::Orientation orientation);
 
-    /**
-     * Tracks a new running applet
-     */
-    void appletAdded(Plasma::Applet *applet);
+    void _k_appletAdded(Plasma::Applet *applet);
+    void _k_appletRemoved(Plasma::Applet *applet);
+    void _k_containmentDestroyed();
+    void _k_immutabilityChanged(const Plasma::ImmutabilityType type);
+    void _k_textChanged(const QString &text);
+    void _k_closePressed();
 
-    /**
-     * A running applet is no more
-     */
-    void appletRemoved(Plasma::Applet *applet);
-
-    //this orientation is just for convenience, is the location that is important
-    Qt::Orientation orientation;
     Plasma::Location location;
-    WidgetExplorer *q;
-    QString application;
-    Plasma::Containment *containment;
+    WidgetExplorer* q;
+    Plasma::Containment* containment;
 
-    QHash<QString, int> runningApplets; // applet name => count
-    //extra hash so we can look up the names of deleted applets
-    QHash<Plasma::Applet *,QString> appletNames;
-    Plasma::Package *package;
-
-    PlasmaAppletItemModel itemModel;
-    KCategorizedItemsViewModels::DefaultFilterModel filterModel;
-    DefaultItemFilterProxyModel filterItemModel;
-
-    Plasma::DeclarativeWidget *declarativeWidget;
-
-    QGraphicsLinearLayout *mainLayout;
+    QGraphicsGridLayout* mainLayout;
+    Plasma::LineEdit* filterEdit;
+    QGraphicsWidget* spacer;
+    Plasma::ToolButton* closeButton;
+    Plasma::ScrollWidget* scrollWidget;
+    Plasma::Frame* appletsFrame;
+    QGraphicsLinearLayout* appletsLayout;
+    QList<AppletFrame*> appletFrames;
+    Plasma::Frame* appletsPlaceholder;
+    QMap<Plasma::Applet*,QString> runningApplets;
 };
-
-void WidgetExplorerPrivate::initFilters()
-{
-    filterModel.addFilter(i18n("All Widgets"),
-                          KCategorizedItemsViewModels::Filter(), KIcon("plasma"));
-
-    // Filters: Special
-    filterModel.addFilter(i18n("Running"),
-                          KCategorizedItemsViewModels::Filter("running", true),
-                          KIcon("dialog-ok"));
-
-    filterModel.addSeparator(i18n("Categories:"));
-
-    QSet<QString> existingCategories = itemModel.categories();
-    foreach (const QString &category, Plasma::Applet::listCategories(application)) {
-        const QString lowerCaseCat = category.toLower();
-        if (existingCategories.contains(lowerCaseCat)) {
-            const QString trans = i18n(category.toLocal8Bit());
-            filterModel.addFilter(trans,
-                                  KCategorizedItemsViewModels::Filter("category", lowerCaseCat));
-        }
-    }
-}
 
 void WidgetExplorerPrivate::init(Plasma::Location loc)
 {
     q->setFocusPolicy(Qt::StrongFocus);
 
-    //init widgets
+    const Qt::Orientation orientation = kOrientationForLocation(location);
+
     location = loc;
-    orientation = ((location == Plasma::LeftEdge || location == Plasma::RightEdge)?Qt::Vertical:Qt::Horizontal);
-    mainLayout = new QGraphicsLinearLayout(Qt::Vertical);
-    mainLayout->setContentsMargins(0, 0, 0, 0);
-    mainLayout->setSpacing(0);
+    mainLayout = new QGraphicsGridLayout(q);
+    mainLayout->setContentsMargins(s_margin, 0, s_margin, 0);
+    mainLayout->setSpacing(s_margin);
 
-    //connect
- //QObject::connect(filteringWidget, SIGNAL(closeClicked()), q, SIGNAL(closeClicked()));
+    filterEdit = new Plasma::LineEdit(q);
+    filterEdit->setClickMessage(i18n("Enter search term..."));
+    filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+    QSizeF filterEditMinimumSize = filterEdit->minimumSize();
+    filterEditMinimumSize.setWidth(s_filterwidth);
+    filterEdit->setPreferredSize(filterEditMinimumSize);
+    q->setFocusProxy(filterEdit);
+    q->connect(
+        filterEdit, SIGNAL(textChanged(QString)),
+        q, SLOT(_k_textChanged(QString))
+    );
+    mainLayout->addItem(filterEdit, 0, 0);
 
-    initRunningApplets();
+    spacer = new QGraphicsWidget(q);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    mainLayout->addItem(spacer, 0, 1);
 
-    Plasma::PackageStructure::Ptr structure = Plasma::PackageStructure::load("Plasma/Generic");
-    package = new Plasma::Package(QString(), "org.kde.desktop.widgetexplorer", structure);
+    closeButton = new Plasma::ToolButton(q);
+    closeButton->setIcon(KIcon("window-close"));
+    q->connect(
+        closeButton, SIGNAL(pressed()),
+        q, SLOT(_k_closePressed())
+    );
+    mainLayout->addItem(closeButton, 0, 2);
 
-    declarativeWidget = new Plasma::DeclarativeWidget(q);
-    declarativeWidget->setInitializationDelayed(true);
-    declarativeWidget->setQmlPath(package->filePath("mainscript"));
-    mainLayout->addItem(declarativeWidget);
+    scrollWidget = new Plasma::ScrollWidget(q);
+    scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollWidget->setOverShoot(false);
+    scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    appletsFrame = new Plasma::Frame(scrollWidget);
+    appletsFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    appletsLayout = new QGraphicsLinearLayout(orientation, appletsFrame);
+    appletsPlaceholder = new Plasma::Frame(appletsFrame);
+    appletsPlaceholder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QGraphicsLinearLayout* appletsPlaceholderLayout = new QGraphicsLinearLayout(Qt::Horizontal, appletsPlaceholder);
+    Plasma::Label* appletsPlaceholderLabel = new Plasma::Label(appletsPlaceholder);
+    appletsPlaceholderLabel->setAlignment(Qt::AlignCenter);
+    appletsPlaceholderLabel->setText(i18n("No applets found"));
+    appletsPlaceholderLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    appletsPlaceholderLayout->addItem(appletsPlaceholderLabel);
+    appletsPlaceholder->setLayout(appletsPlaceholderLayout);
+    appletsLayout->addItem(appletsPlaceholder);
+    appletsFrame->setLayout(appletsLayout);
+    scrollWidget->setWidget(appletsFrame);
+    mainLayout->addItem(scrollWidget, 1, 0, 1, 3);
 
-    if (declarativeWidget->engine()) {
-        QDeclarativeContext *ctxt = declarativeWidget->engine()->rootContext();
-        if (ctxt) {
-            filterItemModel.setSortCaseSensitivity(Qt::CaseInsensitive);
-            filterItemModel.setDynamicSortFilter(true);
-            filterItemModel.setSourceModel(&itemModel);
-            filterItemModel.sort(0);
-            ctxt->setContextProperty("widgetExplorer", q);
-        }
-    }
+    updateOrientation(orientation);
 
     q->setLayout(mainLayout);
 }
 
-void WidgetExplorerPrivate::finished()
+void WidgetExplorerPrivate::updateApplets()
 {
-    if (declarativeWidget->mainComponent()->isError()) {
-        return;
+    foreach (AppletFrame* appletFrame, appletFrames) {
+        appletsLayout->removeItem(appletFrame);
     }
+    qDeleteAll(appletFrames);
+    appletFrames.clear();
 
-    emit q->widgetsMenuActionsChanged();
-    emit q->extraActionsChanged();
-
-    return;
-    QObject::connect(declarativeWidget->rootObject(), SIGNAL(addAppletRequested(const QString &)),
-                     q, SLOT(addApplet(const QString &)));
-    QObject::connect(declarativeWidget->rootObject(), SIGNAL(closeRequested()),
-                     q, SIGNAL(closeClicked()));
-
-
-    QList<QObject *> actionList;
-    foreach (QAction *action, q->actions()) {
-        actionList << action;
-    }
-    declarativeWidget->rootObject()->setProperty("extraActions", QVariant::fromValue(actionList));
-}
-
-void WidgetExplorerPrivate::setLocation(const Plasma::Location loc)
-{
-    Qt::Orientation orient;
-    if (loc == Plasma::LeftEdge || loc == Plasma::RightEdge) {
-        orient = Qt::Vertical;
-    } else {
-        orient = Qt::Horizontal;
-    }
-
-    if (location == loc) {
-        return;
-    }
-
-    location = loc;
-
-    if (orientation == orient) {
-        return;
-    }
-
-    emit q->orientationChanged();
-}
-
-QObject *WidgetExplorer::widgetsModel() const
-{
-    return &d->filterItemModel;
-}
-
-QObject *WidgetExplorer::filterModel() const
-{
-    return &d->filterModel;
-}
-
-QList <QObject *>  WidgetExplorer::widgetsMenuActions()
-{
-    QList <QObject *> actionList;
-
-    WidgetAction *action = new WidgetAction(this);
-    action->setSeparator(true);
-    actionList << action;
-
-    return actionList;
-}
-
-QList<QObject *> WidgetExplorer::extraActions() const
-{
-    QList<QObject *> actionList;
-    foreach (QAction *action, actions()) {
-        actionList << action;
-    }
-    return actionList;
-}
-
-void WidgetExplorerPrivate::initRunningApplets()
-{
-    //get applets from corona, count them, send results to model
-    if (!containment) {
-        return;
-    }
-
-    Plasma::Corona *c = containment->corona();
-
-    //we've tried our best to get a corona
-    //we don't want just one containment, we want them all
-    if (!c) {
-        kDebug() << "can't happen";
-        return;
-    }
-
-    appletNames.clear();
-    runningApplets.clear();
-    QList<Containment*> containments = c->containments();
-    foreach (Containment *containment, containments) {
-        QObject::connect(containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)), q, SLOT(appletAdded(Plasma::Applet*)));
-        QObject::connect(containment, SIGNAL(appletRemoved(Plasma::Applet*)), q, SLOT(appletRemoved(Plasma::Applet*)));
-
-        foreach (Applet *applet, containment->applets()) {
-            runningApplets[applet->pluginName()]++;
+    bool hasapplets = false;
+    foreach (const KPluginInfo &appletInfo, Plasma::Applet::listAppletInfo()) {
+        if (appletInfo.property("NoDisplay").toBool() || appletInfo.category() == i18n("Containments")) {
+            continue;
         }
+
+        hasapplets = true;
+        AppletFrame* appletFrame = new AppletFrame(appletsFrame, appletInfo);
+        appletFrame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        appletFrame->setMinimumSize(s_appletframesize);
+        appletFrame->setMaximumSize(s_appletframesize);
+        appletsLayout->addItem(appletFrame);
+        appletFrames.append(appletFrame);
     }
 
-    //kDebug() << runningApplets;
-    itemModel.setRunningApplets(runningApplets);
+    appletsPlaceholder->setVisible(!hasapplets);
 }
 
-void WidgetExplorerPrivate::containmentDestroyed()
+void WidgetExplorerPrivate::updateRunningApplets()
 {
-    containment = 0;
+    const QStringList running = runningApplets.values();
+    foreach (AppletFrame* appletFrame, appletFrames) {
+        const QString appletPluginName = appletFrame->pluginInfo().pluginName();
+        appletFrame->setRunning(running.contains(appletPluginName));
+    }
 }
 
-void WidgetExplorerPrivate::appletAdded(Plasma::Applet *applet)
+void WidgetExplorerPrivate::filterApplets(const QString &text)
 {
-    QString name = applet->pluginName();
-
-    runningApplets[name]++;
-    appletNames.insert(applet, name);
-    itemModel.setRunningApplets(name, runningApplets[name]);
-}
-
-void WidgetExplorerPrivate::appletRemoved(Plasma::Applet *applet)
-{
-    Plasma::Applet *a = (Plasma::Applet *)applet; //don't care if it's valid, just need the address
-
-    QString name = appletNames.take(a);
-
-    int count = 0;
-    if (runningApplets.contains(name)) {
-        count = runningApplets[name] - 1;
-
-        if (count < 1) {
-            runningApplets.remove(name);
+    bool hasapplets = false;
+    foreach (AppletFrame* appletFrame, appletFrames) {
+        if (text.isEmpty()) {
+            appletFrame->setVisible(true);
+            hasapplets = true;
         } else {
-            runningApplets[name] = count;
+            const KPluginInfo appletInfo = appletFrame->pluginInfo();
+            const QString appletName = appletInfo.name();
+            const QString appletPluginName = appletInfo.pluginName();
+            const QString appletComment = appletInfo.comment();
+            if (appletName.contains(text) || appletPluginName.contains(text) || appletComment.contains(text)) {
+                appletFrame->setVisible(true);
+                hasapplets = true;
+            } else {
+                appletFrame->setVisible(false);
+            }
         }
     }
-
-    itemModel.setRunningApplets(name, count);
+    appletsPlaceholder->setVisible(!hasapplets);
+    if (hasapplets) {
+        appletsFrame->adjustSize();
+    } else {
+        appletsFrame->resize(scrollWidget->size());
+    }
 }
 
-//WidgetExplorer
+void WidgetExplorerPrivate::updateOrientation(const Qt::Orientation orientation)
+{
+    // FIXME: vertical layout is scuffed, Plasma::ScrollWidget not expanding?
+    appletsLayout->setOrientation(orientation);
+    if (orientation == Qt::Horizontal) {
+        filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        spacer->setVisible(true);
+    } else {
+        spacer->setVisible(false);
+        filterEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    }
+}
+
+void WidgetExplorerPrivate::_k_textChanged(const QString &text)
+{
+    filterApplets(text);
+}
+
+void WidgetExplorerPrivate::_k_closePressed()
+{
+    emit q->closeClicked();
+}
+
+void WidgetExplorerPrivate::_k_appletAdded(Plasma::Applet *applet)
+{
+    runningApplets.insert(applet, applet->pluginName());
+    updateRunningApplets();
+}
+
+void WidgetExplorerPrivate::_k_appletRemoved(Plasma::Applet *applet)
+{
+    runningApplets.remove(applet);
+    updateRunningApplets();
+}
+
+void WidgetExplorerPrivate::_k_containmentDestroyed()
+{
+    q->setContainment(nullptr);
+}
+
+void WidgetExplorerPrivate::_k_immutabilityChanged(const Plasma::ImmutabilityType type)
+{
+    if (type != Plasma::Mutable) {
+        emit q->closeClicked();
+    }
+}
 
 WidgetExplorer::WidgetExplorer(Plasma::Location loc, QGraphicsItem *parent)
-        :QGraphicsWidget(parent),
-        d(new WidgetExplorerPrivate(this))
+    : QGraphicsWidget(parent),
+    d(new WidgetExplorerPrivate(this))
 {
     d->init(loc);
 }
 
 WidgetExplorer::WidgetExplorer(QGraphicsItem *parent)
-        :QGraphicsWidget(parent),
-        d(new WidgetExplorerPrivate(this))
+    : QGraphicsWidget(parent),
+    d(new WidgetExplorerPrivate(this))
 {
     d->init(Plasma::BottomEdge);
 }
@@ -338,35 +416,16 @@ WidgetExplorer::~WidgetExplorer()
      delete d;
 }
 
-void WidgetExplorer::setLocation(Plasma::Location loc)
+void WidgetExplorer::setLocation(const Plasma::Location loc)
 {
-    d->setLocation(loc);
-    emit(locationChanged(loc));
+    d->location = loc;
+    d->updateOrientation(kOrientationForLocation(loc));
+    emit locationChanged(loc);
 }
 
-WidgetExplorer::Location WidgetExplorer::location()
+Plasma::Location WidgetExplorer::location() const
 {
-    return (WidgetExplorer::Location)d->location;
-}
-
-Qt::Orientation WidgetExplorer::orientation() const
-{
-    return d->orientation;
-}
-
-void WidgetExplorer::populateWidgetList(const QString &app)
-{
-    d->application = app;
-    d->itemModel.setApplication(app);
-    d->initFilters();
-
-    d->itemModel.setRunningApplets(d->runningApplets);
-
-}
-
-QString WidgetExplorer::application()
-{
-    return d->application;
+    return d->location;
 }
 
 void WidgetExplorer::setContainment(Plasma::Containment *containment)
@@ -376,149 +435,70 @@ void WidgetExplorer::setContainment(Plasma::Containment *containment)
             d->containment->disconnect(this);
         }
 
+        d->runningApplets.clear();
         d->containment = containment;
 
         if (d->containment) {
-            connect(d->containment, SIGNAL(destroyed(QObject*)), this, SLOT(containmentDestroyed()));
-            connect(d->containment, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)), this, SLOT(immutabilityChanged(Plasma::ImmutabilityType)));
+            connect(
+                d->containment, SIGNAL(destroyed(QObject*)),
+                this, SLOT(_k_containmentDestroyed())
+            );
+            connect(
+                d->containment, SIGNAL(immutabilityChanged(Plasma::ImmutabilityType)),
+                this, SLOT(_k_immutabilityChanged(Plasma::ImmutabilityType))
+            );
 
             setLocation(containment->location());
         }
 
-        d->initRunningApplets();
+        if (containment) {
+            Plasma::Corona *corona = containment->corona();
+            if (corona) {
+                QList<Containment*> containments = corona->containments();
+                foreach (Containment *containment, containments) {
+                    connect(
+                        containment, SIGNAL(appletAdded(Plasma::Applet*,QPointF)),
+                        this, SLOT(_k_appletAdded(Plasma::Applet*))
+                    );
+                    connect(
+                        containment, SIGNAL(appletRemoved(Plasma::Applet*)),
+                        this, SLOT(_k_appletRemoved(Plasma::Applet*))
+                    );
+
+                    foreach (Applet *applet, containment->applets()) {
+                        d->runningApplets.insert(applet, applet->pluginName());
+                    }
+                }
+            }
+        }
+
+        d->updateApplets();
+        d->updateRunningApplets();
+        d->filterApplets(d->filterEdit->text());
     }
 }
 
-Containment *WidgetExplorer::containment() const
+Containment* WidgetExplorer::containment() const
 {
     return d->containment;
-}
-
-Plasma::Corona *WidgetExplorer::corona() const
-{
-    if (d->containment) {
-        return d->containment->corona();
-    }
-
-    return 0;
-}
-
-void WidgetExplorer::addApplet(const QString &pluginName)
-{
-    d->containment->addApplet(pluginName);
-}
-
-void WidgetExplorer::immutabilityChanged(Plasma::ImmutabilityType type)
-{
-    if (type != Plasma::Mutable) {
-        emit closeClicked();
-    }
 }
 
 void WidgetExplorer::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
-        // have to treat escape specially, as it makes text() return " "
-        QGraphicsWidget::keyPressEvent(event);
+        emit closeClicked();
+        event->accept();
         return;
     }
-
-}
-
-bool WidgetExplorer::event(QEvent *event)
-{
-    switch (event->type()) {
-        case QEvent::ActionAdded:
-        case QEvent::ActionChanged:
-        case QEvent::ActionRemoved:
-            if (d->declarativeWidget->rootObject()) {
-                emit widgetsMenuActionsChanged();
-            }
-            break;
-        default:
-            break;
+    // if the scroll area or any other widget steals the focus the focus goes back to the filter
+    // widget
+    if (!d->filterEdit->hasFocus()) {
+        d->filterEdit->setFocus();
     }
-
-    return QGraphicsWidget::event(event);
-}
-
-void WidgetExplorer::focusInEvent(QFocusEvent* event)
-{
-    Q_UNUSED(event);
-}
-
-QPoint WidgetExplorer::tooltipPosition(QGraphicsObject *item, int tipWidth, int tipHeight)
-{
-    if (!item) {
-        return QPoint();
-    }
-
-    // Find view
-    if (!item->scene()) {
-        return QPoint();
-    }
-
-    QList<QGraphicsView*> views = item->scene()->views();
-    if (views.isEmpty()) {
-        return QPoint();
-    }
-
-    QGraphicsView *view = 0;
-    if (views.size() == 1) {
-        view = views[0];
-    } else {
-        QGraphicsView *found = 0;
-        QGraphicsView *possibleFind = 0;
-
-        foreach (QGraphicsView *v, views) {
-            if (v->sceneRect().intersects(item->sceneBoundingRect()) ||
-                v->sceneRect().contains(item->scenePos())) {
-                if (v->isActiveWindow()) {
-                    found = v;
-                } else {
-                    possibleFind = v;
-                }
-            }
-        }
-        view = found ? found : possibleFind;
-    }
-
-    if (!view) {
-        return QPoint();
-    }
-
-    // Compute tip pos
-    QRect itemRect(
-        view->mapToGlobal(view->mapFromScene(item->scenePos())),
-        item->boundingRect().size().toSize());
-    QPoint pos;
-    switch (d->location) {
-    case Plasma::LeftEdge:
-        pos.setX(itemRect.right());
-        pos.setY(itemRect.top() + (itemRect.height() - tipHeight) / 2);
-        break;
-    case Plasma::TopEdge:
-        pos.setX(itemRect.left() + (itemRect.width() - tipWidth) / 2);
-        pos.setY(itemRect.bottom());
-        break;
-    case Plasma::RightEdge:
-        pos.setX(itemRect.left() - tipWidth);
-        pos.setY(itemRect.top() + (itemRect.height() - tipHeight) / 2);
-        break;
-    case Plasma::BottomEdge:
-    default:
-        pos.setX(itemRect.left() + (itemRect.width() - tipWidth) / 2);
-        pos.setY(itemRect.top() - tipHeight);
-        break;
-    }
-
-    // Ensure tip stays within screen boundaries
-    const QRect avail = QApplication::desktop()->availableGeometry(view);
-    pos.setX(qBound(avail.left(), pos.x(), avail.right() - tipWidth));
-    pos.setY(qBound(avail.top(), pos.y(), avail.bottom() - tipHeight));
-    return pos;
+    QApplication::sendEvent(d->filterEdit->nativeWidget(), event);
 }
 
 } // namespace Plasma
 
 #include "moc_widgetexplorer.cpp"
+#include "widgetexplorer.moc"

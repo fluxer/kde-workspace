@@ -4,23 +4,6 @@ include_directories(
     ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
 
-set(appletbrowserdialog_SRCS
-    widgetsexplorer/kcategorizeditemsviewmodels.cpp
-    widgetsexplorer/plasmaappletitemmodel.cpp
-    widgetsexplorer/widgetexplorer.cpp
-)
-
-set(scripting_SRC
-    scripting/appinterface.cpp
-    scripting/applet.cpp
-    scripting/containment.cpp
-    scripting/configgroup.cpp
-    scripting/i18n.cpp
-    scripting/rect.cpp
-    scripting/scriptengine.cpp
-    scripting/widget.cpp
-)
-
 set(plasmagenericshell_LIB_SRCS
     backgrounddialog.cpp
     mouseinputbutton.cpp
@@ -29,8 +12,15 @@ set(plasmagenericshell_LIB_SRCS
     panelshadows.cpp
     toolbutton.cpp
     wallpaperpreview.cpp
-    ${scripting_SRC}
-    ${appletbrowserdialog_SRCS}
+    scripting/appinterface.cpp
+    scripting/applet.cpp
+    scripting/containment.cpp
+    scripting/configgroup.cpp
+    scripting/i18n.cpp
+    scripting/rect.cpp
+    scripting/scriptengine.cpp
+    scripting/widget.cpp
+    widgetsexplorer/widgetexplorer.cpp
     BackgroundDialog.ui
     MousePlugins.ui
 )
@@ -55,12 +45,6 @@ set_target_properties(plasmagenericshell PROPERTIES
 )
 
 generate_export_header(plasmagenericshell)
-
-install(
-    DIRECTORY widgetsexplorer/package/
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/plasma/packages/org.kde.desktop.widgetexplorer
-    PATTERN "Messages.sh" EXCLUDE
-)
 
 install(
     TARGETS plasmagenericshell
