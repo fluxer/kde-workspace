@@ -46,7 +46,6 @@
 #include "plasmaapp.h"
 #include "positioningruler.h"
 #include "toolbutton.h"
-#include "widgetsexplorer/widgetexplorer.h"
 
 class PanelController::ButtonGroup: public QFrame
 {
