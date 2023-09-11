@@ -150,6 +150,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     appletIcon->setMinimumSize(s_appleticonsize);
     appletIcon->setMaximumSize(s_appleticonsize);
     appletIcon->setIcon(appletInfo.icon());
+    appletIcon->setToolTip(i18n("Double-click or drag to add this applet."));
     connect(
         appletIcon, SIGNAL(doubleClicked()),
         this, SLOT(slotAddApplet())
@@ -168,6 +169,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     m_appletactive->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_appletactive->setMaximumSize(s_appletactiveiconsize, s_appletactiveiconsize);
     m_appletactive->setIcon(KIcon());
+    m_appletactive->setToolTip(i18n("Click to remove this applet."));
     connect(
         m_appletactive, SIGNAL(clicked()),
         this, SLOT(slotRemoveApplet())
