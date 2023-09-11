@@ -25,6 +25,7 @@
 
 static const char s_optionsseparator = ',';
 static const char s_optionsgroupseparator = ':';
+static const QLatin1String s_optionskeyplaceholder = QLatin1String("\"< >\"");
 
 KCMKeyboardOptionsDialog::KCMKeyboardOptionsDialog(QWidget *parent)
     : KDialog(parent),
@@ -122,12 +123,17 @@ void KCMKeyboardOptionsDialog::setOptions(const QByteArray &options)
         if (indexofgroupseparator <= 0) {
             continue;
         }
+        const QString optiondescription = KKeyboardLayout::optionDescription(option);
+        if (optiondescription.contains(s_optionskeyplaceholder)) {
+            // placeholder for something
+            continue;
+        }
         const QByteArray group = option.mid(0, indexofgroupseparator);
         QTreeWidgetItem* groupitem = groupitems.value(group);
         Q_ASSERT(groupitem);
         QTreeWidgetItem* optionitem = new QTreeWidgetItem(groupitem);
         optionitem->setData(0, Qt::UserRole, option);
-        optionitem->setText(0, KKeyboardLayout::optionDescription(option));
+        optionitem->setText(0, optiondescription);
         const bool isoptionenabled = m_options.contains(option);
         optionitem->setText(1, isoptionenabled ? m_enabledi18n : m_disabledi18n);
         optionitem->setCheckState(1, isoptionenabled ? Qt::Checked : Qt::Unchecked);
