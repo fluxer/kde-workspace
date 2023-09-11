@@ -44,6 +44,9 @@ static const int s_margin = 4;
 static const QSizeF s_appletframesize = QSize(300, 94);
 static const QSizeF s_appleticonsize = QSize(80, 80);
 static const int s_filterwidth = 305;
+// the default Plasma::Corona MIME type, see:
+// kdelibs/plasma/corona.cpp
+static const QString s_coronamimetype = QString::fromLatin1("text/x-plasmoidservicename");
 
 Qt::Orientation kOrientationForLocation(const Plasma::Location location)
 {
@@ -95,7 +98,7 @@ void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         // have to parent it to QWidget*..
         QDrag* drag = new QDrag(qApp->activeWindow());
         QMimeData* mimedata = new QMimeData();
-        mimedata->setData(QString::fromLatin1("text/x-plasmoidservicename"), m_appletinfo.pluginName().toUtf8());
+        mimedata->setData(s_coronamimetype, m_appletinfo.pluginName().toUtf8());
         drag->setMimeData(mimedata);
         drag->start();
     }
@@ -370,8 +373,7 @@ void WidgetExplorerPrivate::updateRunningApplets()
 {
     const QStringList running = runningApplets.values();
     foreach (AppletFrame* appletFrame, appletFrames) {
-        const QString appletPluginName = appletFrame->pluginInfo().pluginName();
-        appletFrame->setRunning(running.contains(appletPluginName));
+        appletFrame->setRunning(running.contains(appletFrame->pluginInfo().pluginName()));
     }
 }
 
