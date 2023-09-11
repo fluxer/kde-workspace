@@ -214,7 +214,7 @@ public:
 
     QGraphicsGridLayout* mainLayout;
     Plasma::LineEdit* filterEdit;
-    QGraphicsWidget* spacer;
+    Plasma::Label* spacer;
     Plasma::ToolButton* closeButton;
     Plasma::ScrollWidget* scrollWidget;
     Plasma::Frame* appletsFrame;
@@ -241,6 +241,7 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     QSizeF filterEditMinimumSize = filterEdit->minimumSize();
     filterEditMinimumSize.setWidth(s_filterwidth);
     filterEdit->setPreferredSize(filterEditMinimumSize);
+    filterEdit->setMaximumSize(filterEditMinimumSize);
     q->setFocusProxy(filterEdit);
     q->connect(
         filterEdit, SIGNAL(textChanged(QString)),
@@ -248,8 +249,9 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     );
     mainLayout->addItem(filterEdit, 0, 0);
 
-    spacer = new QGraphicsWidget(q);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    spacer = new Plasma::Label(q);
+    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    spacer->setMinimumSize(1, 1);
     mainLayout->addItem(spacer, 0, 1);
 
     closeButton = new Plasma::ToolButton(q);
@@ -413,7 +415,25 @@ WidgetExplorer::WidgetExplorer(QGraphicsItem *parent)
 
 WidgetExplorer::~WidgetExplorer()
 {
-     delete d;
+    if (d->containment) {
+        d->containment->disconnect(this);
+    }
+    foreach (AppletFrame* appletFrame, d->appletFrames) {
+        d->appletsLayout->removeItem(appletFrame);
+    }
+    qDeleteAll(d->appletFrames);
+    d->appletFrames.clear();
+    d->appletsLayout->removeItem(d->filterEdit);
+    delete d->filterEdit;
+    d->appletsLayout->removeItem(d->spacer);
+    delete d->spacer;
+    d->appletsLayout->removeItem(d->closeButton);
+    delete d->closeButton;
+    d->appletsLayout->removeItem(d->appletsPlaceholder);
+    delete d->appletsPlaceholder;
+    d->appletsLayout->removeItem(d->appletsFrame);
+    delete d->appletsFrame;
+    delete d;
 }
 
 void WidgetExplorer::setLocation(const Plasma::Location loc)
