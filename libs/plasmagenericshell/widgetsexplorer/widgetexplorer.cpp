@@ -59,39 +59,25 @@ Qt::Orientation kOrientationForLocation(const Plasma::Location location)
     Q_UNREACHABLE();
 }
 
-class AppletIcon : public QGraphicsProxyWidget
+class AppletIcon : public Plasma::IconWidget
 {
     Q_OBJECT
 public:
-    AppletIcon(QGraphicsItem *appletFrame, const KPluginInfo &appletInfo);
-
-    void setIcon(const QString &icon);
+    AppletIcon(QGraphicsItem *parent, const KPluginInfo &appletInfo);
 
 protected:
-    void mousePressEvent(QGraphicsSceneMouseEvent *event);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) final;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) final;
 
 private:
-    KPixmapWidget *m_pixmapwidget;
     KPluginInfo m_appletinfo;
     QPointF m_dragstartpos;
 };
 
-AppletIcon::AppletIcon(QGraphicsItem *appletFrame, const KPluginInfo &appletInfo)
-    : QGraphicsProxyWidget(appletFrame),
-    m_pixmapwidget(nullptr),
+AppletIcon::AppletIcon(QGraphicsItem *parent, const KPluginInfo &appletInfo)
+    : Plasma::IconWidget(parent),
     m_appletinfo(appletInfo)
 {
-    // TODO: hover effect
-    m_pixmapwidget = new KPixmapWidget();
-    
-    m_pixmapwidget->setAttribute(Qt::WA_NoSystemBackground);
-    setWidget(m_pixmapwidget);
-}
-
-void AppletIcon::setIcon(const QString &icon)
-{
-    m_pixmapwidget->setPixmap(KIcon(icon).pixmap(size().toSize()));
 }
 
 void AppletIcon::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -106,7 +92,8 @@ void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (event->buttons() & Qt::LeftButton &&
         (event->pos() - m_dragstartpos).manhattanLength() > KGlobalSettings::dndEventDelay())
     {
-        QDrag* drag = new QDrag(m_pixmapwidget);
+        // have to parent it to QWidget*..
+        QDrag* drag = new QDrag(qApp->activeWindow());
         QMimeData* mimedata = new QMimeData();
         mimedata->setData(QString::fromLatin1("text/x-plasmoidservicename"), m_appletinfo.pluginName().toUtf8());
         drag->setMimeData(mimedata);
