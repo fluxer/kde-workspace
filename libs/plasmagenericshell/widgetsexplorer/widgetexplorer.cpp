@@ -111,8 +111,14 @@ public:
     KPluginInfo pluginInfo() const;
     void setRunning(const bool isrunning);
 
+Q_SIGNALS:
+    void addApplet(const QString &applet);
+    void removeApplet(const QString &applet);
+
 private Q_SLOTS:
-    void updateFonts();
+    void slotAddApplet();
+    void slotRemoveApplet();
+    void slotUpdateFonts();
 
 private:
     KPluginInfo m_appletinfo;
@@ -134,6 +140,10 @@ AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
     appletIcon->setMinimumSize(s_appleticonsize);
     appletIcon->setMaximumSize(s_appleticonsize);
     appletIcon->setIcon(appletInfo.icon());
+    connect(
+        appletIcon, SIGNAL(doubleClicked()),
+        this, SLOT(slotAddApplet())
+    );
     appletLayout->addItem(appletIcon, 0, 0, 2, 1);
 
     m_appletname = new Plasma::Label(this);
@@ -144,11 +154,14 @@ AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
     m_appletname->setText(appletInfo.name());
     appletLayout->addItem(m_appletname, 0, 1);
 
-    // TODO: remove applet when activated
     m_appletactive = new Plasma::IconWidget(this);
     m_appletactive->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_appletactive->setMaximumSize(22, 22);
     m_appletactive->setIcon(KIcon());
+    connect(
+        m_appletactive, SIGNAL(doubleClicked()),
+        this, SLOT(slotRemoveApplet())
+    );
     appletLayout->addItem(m_appletactive, 0, 2);
 
     m_appletcomment = new Plasma::Label(this);
@@ -162,7 +175,7 @@ AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
 
     connect(
         KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()),
-        this, SLOT(updateFonts())
+        this, SLOT(slotUpdateFonts())
     );
 }
 
@@ -176,7 +189,17 @@ void AppletFrame::setRunning(const bool isrunning)
     m_appletactive->setIcon(isrunning ? KIcon("dialog-ok-apply") : KIcon());
 }
 
-void AppletFrame::updateFonts()
+void AppletFrame::slotAddApplet()
+{
+    emit addApplet(m_appletinfo.pluginName());
+}
+
+void AppletFrame::slotRemoveApplet()
+{
+    emit removeApplet(m_appletinfo.pluginName());
+}
+
+void AppletFrame::slotUpdateFonts()
 {
     QFont appletNameFont = KGlobalSettings::generalFont();
     appletNameFont.setBold(true);
@@ -213,6 +236,8 @@ public:
     void _k_immutabilityChanged(const Plasma::ImmutabilityType type);
     void _k_textChanged(const QString &text);
     void _k_closePressed();
+    void _k_addApplet(const QString &pluginName);
+    void _k_removeApplet(const QString &pluginName);
     void _k_databaseChanged(const QStringList &resources);
 
     Plasma::Location location;
@@ -320,6 +345,14 @@ void WidgetExplorerPrivate::updateApplets()
         appletFrame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         appletFrame->setMinimumSize(s_appletframesize);
         appletFrame->setPreferredSize(s_appletframesize);
+        q->connect(
+            appletFrame, SIGNAL(addApplet(QString)),
+            q, SLOT(_k_addApplet(QString))
+        );
+        q->connect(
+            appletFrame, SIGNAL(removeApplet(QString)),
+            q, SLOT(_k_removeApplet(QString))
+        );
         appletsLayout->addItem(appletFrame);
         appletFrames.append(appletFrame);
     }
@@ -384,6 +417,33 @@ void WidgetExplorerPrivate::_k_textChanged(const QString &text)
 void WidgetExplorerPrivate::_k_closePressed()
 {
     emit q->closeClicked();
+}
+
+void WidgetExplorerPrivate::_k_addApplet(const QString &pluginName)
+{
+    if (!containment) {
+        return;
+    }
+    containment->addApplet(pluginName);
+}
+
+void WidgetExplorerPrivate::_k_removeApplet(const QString &pluginName)
+{
+    if (!containment) {
+        return;
+    }
+    Plasma::Corona *corona = containment->corona();
+    if (!corona) {
+        return;
+    }
+    QList<Containment*> containments = corona->containments();
+    foreach (Containment *containment, containments) {
+        foreach (Applet *applet, containment->applets()) {
+            if (applet->pluginName() == pluginName) {
+                applet->destroy();
+            }
+        }
+    }
 }
 
 void WidgetExplorerPrivate::_k_databaseChanged(const QStringList &resources)

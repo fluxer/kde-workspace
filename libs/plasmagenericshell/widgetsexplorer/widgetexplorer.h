@@ -69,6 +69,8 @@ private:
     Q_PRIVATE_SLOT(d, void _k_immutabilityChanged(Plasma::ImmutabilityType))
     Q_PRIVATE_SLOT(d, void _k_textChanged(QString))
     Q_PRIVATE_SLOT(d, void _k_closePressed())
+    Q_PRIVATE_SLOT(d, void _k_addApplet(QString))
+    Q_PRIVATE_SLOT(d, void _k_removeApplet(QString))
     Q_PRIVATE_SLOT(d, void _k_databaseChanged(QStringList))
 
     WidgetExplorerPrivate * const d;
