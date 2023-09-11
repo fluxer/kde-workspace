@@ -168,7 +168,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     m_appletactive->setMaximumSize(22, 22);
     m_appletactive->setIcon(KIcon());
     connect(
-        m_appletactive, SIGNAL(doubleClicked()),
+        m_appletactive, SIGNAL(clicked()),
         this, SLOT(slotRemoveApplet())
     );
     appletLayout->addItem(m_appletactive, 0, 2);
