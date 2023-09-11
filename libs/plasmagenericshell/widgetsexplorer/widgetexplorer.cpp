@@ -20,6 +20,7 @@
 
 #include "widgetexplorer.h"
 
+#include <QMutex>
 #include <QApplication>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
@@ -258,6 +259,7 @@ public:
     WidgetExplorer* q;
     Plasma::Containment* containment;
 
+    QMutex mutex;
     QGraphicsGridLayout* mainLayout;
     Plasma::LineEdit* filterEdit;
     Plasma::Label* topSpacer;
@@ -365,6 +367,7 @@ void WidgetExplorerPrivate::updateApplets()
 {
     filterEdit->setEnabled(false);
 
+    QMutexLocker locker(&mutex);
     foreach (AppletFrame* appletFrame, appletFrames) {
         appletsLayout->removeItem(appletFrame);
     }
@@ -415,6 +418,7 @@ void WidgetExplorerPrivate::updateApplets()
 
 void WidgetExplorerPrivate::updateRunningApplets()
 {
+    QMutexLocker locker(&mutex);
     const QStringList running = runningApplets.values();
     foreach (AppletFrame* appletFrame, appletFrames) {
         appletFrame->setRunning(running.contains(appletFrame->pluginInfo().pluginName()));
@@ -423,6 +427,7 @@ void WidgetExplorerPrivate::updateRunningApplets()
 
 void WidgetExplorerPrivate::filterApplets(const QString &text)
 {
+    QMutexLocker locker(&mutex);
     const QString categoriesButtonText = categoriesButton->text();
     const bool allwidgets = (categoriesButtonText == i18n("All Widgets"));
     const bool onlyrunning = (categoriesButtonText == i18n("Running"));
