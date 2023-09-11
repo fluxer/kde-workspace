@@ -150,6 +150,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     appletIcon->setMinimumSize(s_appleticonsize);
     appletIcon->setMaximumSize(s_appleticonsize);
     appletIcon->setIcon(appletInfo.icon());
+    // multiple applet instances can be added thus not conditional
     appletIcon->setToolTip(i18n("Double-click or drag to add this applet."));
     connect(
         appletIcon, SIGNAL(doubleClicked()),
@@ -169,6 +170,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     m_appletactive->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     m_appletactive->setMaximumSize(s_appletactiveiconsize, s_appletactiveiconsize);
     m_appletactive->setIcon(KIcon());
+    // all applet instances are removed
     m_appletactive->setToolTip(i18n("Click to remove this applet."));
     connect(
         m_appletactive, SIGNAL(clicked()),
@@ -273,7 +275,7 @@ public:
     QGraphicsWidget* appletsWidget;
     QGraphicsLinearLayout* appletsLayout;
     QList<AppletFrame*> appletFrames;
-    Plasma::Frame* appletsPlaceholder;
+    Plasma::Label* appletsPlaceholder;
     QMap<Plasma::Applet*,QString> runningApplets;
 };
 
@@ -341,16 +343,10 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     appletsWidget = new QGraphicsWidget(scrollWidget);
     appletsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     appletsLayout = new QGraphicsLinearLayout(orientation, appletsWidget);
-    appletsPlaceholder = new Plasma::Frame(appletsWidget);
-    appletsPlaceholder->setFrameShadow(Plasma::Frame::Sunken);
+    appletsPlaceholder = new Plasma::Label(appletsWidget);
     appletsPlaceholder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    QGraphicsLinearLayout* appletsPlaceholderLayout = new QGraphicsLinearLayout(Qt::Horizontal, appletsPlaceholder);
-    Plasma::Label* appletsPlaceholderLabel = new Plasma::Label(appletsPlaceholder);
-    appletsPlaceholderLabel->setAlignment(Qt::AlignCenter);
-    appletsPlaceholderLabel->setText(i18n("No applets found"));
-    appletsPlaceholderLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    appletsPlaceholderLayout->addItem(appletsPlaceholderLabel);
-    appletsPlaceholder->setLayout(appletsPlaceholderLayout);
+    appletsPlaceholder->setAlignment(Qt::AlignCenter);
+    appletsPlaceholder->setText(i18n("No applets found."));
     appletsLayout->addItem(appletsPlaceholder);
     appletsWidget->setLayout(appletsLayout);
     scrollWidget->setWidget(appletsWidget);
@@ -460,6 +456,11 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
         }
     }
     appletsPlaceholder->setVisible(!hasapplets);
+    appletsPlaceholder->setText(
+        // NOTE: this uses translation from:
+        // kdelibs/kdeui/findreplace/kfind.cpp
+        text.isEmpty() ? i18n("No applets found.") : i18n("<qt>No matches found for '<b>%1</b>'.</qt>", text)
+    );
     if (hasapplets) {
         appletsWidget->adjustSize();
     } else {
