@@ -225,6 +225,8 @@ public:
         mainLayout(nullptr),
         filterEdit(nullptr),
         topSpacer(nullptr),
+        categoriesButton(nullptr),
+        categoriesMenu(nullptr),
         closeButton(nullptr),
         scrollWidget(nullptr),
         appletsWidget(nullptr),
@@ -245,6 +247,9 @@ public:
     void _k_immutabilityChanged(const Plasma::ImmutabilityType type);
     void _k_textChanged(const QString &text);
     void _k_closePressed();
+    void _k_categoriesClicked();
+    void _k_menuTriggered(QAction *action);
+    void _k_menuAboutToHide();
     void _k_addApplet(const QString &pluginName);
     void _k_removeApplet(const QString &pluginName);
     void _k_databaseChanged(const QStringList &resources);
@@ -256,6 +261,8 @@ public:
     QGraphicsGridLayout* mainLayout;
     Plasma::LineEdit* filterEdit;
     Plasma::Label* topSpacer;
+    Plasma::ToolButton* categoriesButton;
+    QMenu* categoriesMenu;
     Plasma::ToolButton* closeButton;
     Plasma::ScrollWidget* scrollWidget;
     QGraphicsWidget* appletsWidget;
@@ -295,13 +302,30 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     topSpacer->setMinimumSize(1, 1);
     mainLayout->addItem(topSpacer, 0, 1);
 
+    categoriesButton = new Plasma::ToolButton(q);
+    categoriesButton->setText(i18n("All Widgets"));
+    q->connect(
+        categoriesButton, SIGNAL(clicked()),
+        q, SLOT(_k_categoriesClicked())
+    );
+    categoriesMenu = new QMenu();
+    q->connect(
+        categoriesMenu, SIGNAL(triggered(QAction*)),
+        q, SLOT(_k_menuTriggered(QAction*))
+    );
+    q->connect(
+        categoriesMenu, SIGNAL(aboutToHide()),
+        q, SLOT(_k_menuAboutToHide())
+    );
+    mainLayout->addItem(categoriesButton, 0, 2);
+
     closeButton = new Plasma::ToolButton(q);
     closeButton->setIcon(KIcon("window-close"));
     q->connect(
         closeButton, SIGNAL(pressed()),
         q, SLOT(_k_closePressed())
     );
-    mainLayout->addItem(closeButton, 0, 2);
+    mainLayout->addItem(closeButton, 0, 3);
 
     scrollWidget = new Plasma::ScrollWidget(q);
     scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -324,7 +348,7 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     appletsLayout->addItem(appletsPlaceholder);
     appletsWidget->setLayout(appletsLayout);
     scrollWidget->setWidget(appletsWidget);
-    mainLayout->addItem(scrollWidget, 1, 0, 1, 3);
+    mainLayout->addItem(scrollWidget, 1, 0, 1, 4);
 
     updateOrientation(orientation);
 
@@ -346,10 +370,15 @@ void WidgetExplorerPrivate::updateApplets()
     qDeleteAll(appletFrames);
     appletFrames.clear();
 
+    QStringList appletCategories;
     bool hasapplets = false;
     foreach (const KPluginInfo &appletInfo, Plasma::Applet::listAppletInfo()) {
-        if (appletInfo.property("NoDisplay").toBool() || appletInfo.category() == i18n("Containments")) {
+        const QString appletCategory = appletInfo.category();
+        if (appletInfo.property("NoDisplay").toBool() || appletCategory == i18n("Containments")) {
             continue;
+        }
+        if (!appletCategory.isEmpty() && !appletCategories.contains(appletCategory)) {
+            appletCategories.append(appletCategory);
         }
 
         hasapplets = true;
@@ -370,6 +399,15 @@ void WidgetExplorerPrivate::updateApplets()
     }
 
     appletsPlaceholder->setVisible(!hasapplets);
+
+    categoriesMenu->clear();
+    categoriesMenu->addAction(i18n("All Widgets"));
+    categoriesMenu->addAction(i18n("Running"));
+    categoriesMenu->addSeparator();
+    foreach (const QString &appletCategory, appletCategories) {
+        categoriesMenu->addAction(appletCategory);
+    }
+
     filterEdit->setEnabled(true);
 }
 
@@ -383,22 +421,32 @@ void WidgetExplorerPrivate::updateRunningApplets()
 
 void WidgetExplorerPrivate::filterApplets(const QString &text)
 {
+    const QString categoriesButtonText = categoriesButton->text();
+    const bool allwidgets = (categoriesButtonText == i18n("All Widgets"));
+    const bool onlyrunning = (categoriesButtonText == i18n("Running"));
+    const QStringList running = runningApplets.values();
     bool hasapplets = false;
     foreach (AppletFrame* appletFrame, appletFrames) {
-        if (text.isEmpty()) {
-            appletFrame->setVisible(true);
-            hasapplets = true;
-        } else {
-            const KPluginInfo appletInfo = appletFrame->pluginInfo();
+        appletFrame->setVisible(false);
+        const KPluginInfo appletInfo = appletFrame->pluginInfo();
+        const QString appletPluginName = appletInfo.pluginName();
+        if (onlyrunning && !running.contains(appletPluginName)) {
+            continue;
+        }
+        const QString appletCategory = appletInfo.category();
+        if (!onlyrunning && !allwidgets && categoriesButtonText != appletCategory) {
+            continue;
+        }
+        if (!text.isEmpty()) {
             const QString appletName = appletInfo.name();
-            const QString appletPluginName = appletInfo.pluginName();
             const QString appletComment = appletInfo.comment();
             if (appletName.contains(text) || appletPluginName.contains(text) || appletComment.contains(text)) {
                 appletFrame->setVisible(true);
                 hasapplets = true;
-            } else {
-                appletFrame->setVisible(false);
             }
+        } else {
+            appletFrame->setVisible(true);
+            hasapplets = true;
         }
     }
     appletsPlaceholder->setVisible(!hasapplets);
@@ -412,18 +460,43 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
 void WidgetExplorerPrivate::updateOrientation(const Qt::Orientation orientation)
 {
     appletsLayout->setOrientation(orientation);
+    topSpacer->setVisible(false);
+    mainLayout->removeItem(topSpacer);
+    categoriesButton->setVisible(false);
+    mainLayout->removeItem(categoriesButton);
     if (orientation == Qt::Horizontal) {
         filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
+        mainLayout->addItem(topSpacer, 0, 1);
         topSpacer->setVisible(true);
+        mainLayout->addItem(categoriesButton, 0, 2);
+        categoriesButton->setVisible(true);
     } else {
-        topSpacer->setVisible(false);
         filterEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        // TODO: put the categories button bellow the filter and close button
     }
 }
 
 void WidgetExplorerPrivate::_k_textChanged(const QString &text)
 {
     filterApplets(text);
+}
+
+void WidgetExplorerPrivate::_k_categoriesClicked()
+{
+    categoriesButton->setDown(true);
+    categoriesMenu->exec(QCursor::pos());
+}
+
+void WidgetExplorerPrivate::_k_menuTriggered(QAction *action)
+{
+    categoriesButton->setText(action->text());
+    categoriesButton->setDown(false);
+    filterApplets(filterEdit->text());
+}
+
+void WidgetExplorerPrivate::_k_menuAboutToHide()
+{
+    categoriesButton->setDown(false);
 }
 
 void WidgetExplorerPrivate::_k_closePressed()
@@ -520,6 +593,9 @@ WidgetExplorer::~WidgetExplorer()
     delete d->filterEdit;
     d->mainLayout->removeItem(d->topSpacer);
     delete d->topSpacer;
+    d->mainLayout->removeItem(d->categoriesButton);
+    delete d->categoriesButton;
+    delete d->categoriesMenu;
     d->mainLayout->removeItem(d->closeButton);
     delete d->closeButton;
     delete d->appletsWidget;
