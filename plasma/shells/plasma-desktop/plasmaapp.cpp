@@ -54,14 +54,12 @@
 
 #include "appadaptor.h"
 #include "controllerwindow.h"
-#include "checkbox.h"
 #include "desktopcorona.h"
 #include "desktopview.h"
 #include "interactiveconsole.h"
 #include "panelshadows.h"
 #include "panelview.h"
 #include "toolbutton.h"
-#include "klistconfirmationdialog.h"
 
 #ifdef Q_WS_X11
 #include <X11/Xlib.h>

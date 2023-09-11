@@ -7,7 +7,6 @@ include_directories(
 set(plasma_SRCS
     scripting/desktopscriptengine.cpp
     scripting/panel.cpp
-    checkbox.cpp
     controllerwindow.cpp
     desktopcorona.cpp
     desktopview.cpp
@@ -20,7 +19,6 @@ set(plasma_SRCS
     panelappletoverlay.cpp
     plasmaapp.cpp
     positioningruler.cpp
-    klistconfirmationdialog.cpp
 )
 
 set(plasmaapp_dbusXML dbus/org.kde.plasma.App.xml)
