@@ -215,7 +215,7 @@ public:
         containment(nullptr),
         mainLayout(nullptr),
         filterEdit(nullptr),
-        spacer(nullptr),
+        topSpacer(nullptr),
         closeButton(nullptr),
         scrollWidget(nullptr),
         appletsFrame(nullptr),
@@ -246,7 +246,7 @@ public:
 
     QGraphicsGridLayout* mainLayout;
     Plasma::LineEdit* filterEdit;
-    Plasma::Label* spacer;
+    Plasma::Label* topSpacer;
     Plasma::ToolButton* closeButton;
     Plasma::ScrollWidget* scrollWidget;
     Plasma::Frame* appletsFrame;
@@ -281,10 +281,10 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     );
     mainLayout->addItem(filterEdit, 0, 0);
 
-    spacer = new Plasma::Label(q);
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    spacer->setMinimumSize(1, 1);
-    mainLayout->addItem(spacer, 0, 1);
+    topSpacer = new Plasma::Label(q);
+    topSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    topSpacer->setMinimumSize(1, 1);
+    mainLayout->addItem(topSpacer, 0, 1);
 
     closeButton = new Plasma::ToolButton(q);
     closeButton->setIcon(KIcon("window-close"));
@@ -402,9 +402,9 @@ void WidgetExplorerPrivate::updateOrientation(const Qt::Orientation orientation)
     appletsLayout->setOrientation(orientation);
     if (orientation == Qt::Horizontal) {
         filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
-        spacer->setVisible(true);
+        topSpacer->setVisible(true);
     } else {
-        spacer->setVisible(false);
+        topSpacer->setVisible(false);
         filterEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     }
 }
@@ -502,15 +502,14 @@ WidgetExplorer::~WidgetExplorer()
     }
     qDeleteAll(d->appletFrames);
     d->appletFrames.clear();
-    d->appletsLayout->removeItem(d->filterEdit);
-    delete d->filterEdit;
-    d->appletsLayout->removeItem(d->spacer);
-    delete d->spacer;
-    d->appletsLayout->removeItem(d->closeButton);
-    delete d->closeButton;
     d->appletsLayout->removeItem(d->appletsPlaceholder);
     delete d->appletsPlaceholder;
-    d->appletsLayout->removeItem(d->appletsFrame);
+    d->mainLayout->removeItem(d->filterEdit);
+    delete d->filterEdit;
+    d->mainLayout->removeItem(d->topSpacer);
+    delete d->topSpacer;
+    d->mainLayout->removeItem(d->closeButton);
+    delete d->closeButton;
     delete d->appletsFrame;
     delete d;
 }
