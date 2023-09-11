@@ -372,9 +372,10 @@ void WidgetExplorerPrivate::updateApplets()
 
     QStringList appletCategories;
     bool hasapplets = false;
+    const QString containmentsCategory = i18n("Containments");
     foreach (const KPluginInfo &appletInfo, Plasma::Applet::listAppletInfo()) {
         const QString appletCategory = appletInfo.category();
-        if (appletInfo.property("NoDisplay").toBool() || appletCategory == i18n("Containments")) {
+        if (appletInfo.property("NoDisplay").toBool() || appletCategory == containmentsCategory) {
             continue;
         }
         if (!appletCategory.isEmpty() && !appletCategories.contains(appletCategory)) {
