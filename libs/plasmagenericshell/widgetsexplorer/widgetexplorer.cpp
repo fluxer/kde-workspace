@@ -45,6 +45,7 @@ static const QSizeF s_appletframesize = QSize(300, 94);
 static const QSizeF s_appleticonsize = QSize(80, 80);
 static const int s_filterwidth = 305;
 static const int s_dragpixmapsize = 64;
+static const int s_appletactiveiconsize = 22;
 // the default Plasma::Corona MIME type, see:
 // kdelibs/plasma/corona.cpp
 static const QString s_coronamimetype = QString::fromLatin1("text/x-plasmoidservicename");
@@ -165,7 +166,7 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
 
     m_appletactive = new Plasma::IconWidget(this);
     m_appletactive->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    m_appletactive->setMaximumSize(22, 22);
+    m_appletactive->setMaximumSize(s_appletactiveiconsize, s_appletactiveiconsize);
     m_appletactive->setIcon(KIcon());
     connect(
         m_appletactive, SIGNAL(clicked()),
