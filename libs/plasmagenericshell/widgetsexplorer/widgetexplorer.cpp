@@ -31,7 +31,6 @@
 #include <Plasma/IconWidget>
 #include <Plasma/Label>
 #include <klineedit.h>
-#include <kpixmapwidget.h>
 #include <ksycoca.h>
 #include <kicon.h>
 #include <kdebug.h>
@@ -215,6 +214,7 @@ void AppletFrame::slotUpdateFonts()
     m_appletname->setFont(appletNameFont);
     m_appletcomment->setFont(KGlobalSettings::smallestReadableFont());
 }
+
 
 class WidgetExplorerPrivate
 {
