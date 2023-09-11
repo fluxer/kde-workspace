@@ -41,8 +41,8 @@ namespace Plasma
 
 // hardcoded but ok because the widget is not resizable
 static const int s_margin = 4;
-static const QSizeF s_appletframesize = QSize(300, 94);
-static const QSizeF s_appleticonsize = QSize(80, 80);
+static const QSizeF s_appletframesize = QSize(300, 100);
+static const QSizeF s_appleticonsize = QSize(86, 86);
 static const int s_filterwidth = 305;
 static const int s_dragpixmapsize = 64;
 static const int s_appletactiveiconsize = 22;
@@ -283,7 +283,7 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
 
     location = loc;
     mainLayout = new QGraphicsGridLayout(q);
-    mainLayout->setContentsMargins(s_margin, 0, s_margin, 0);
+    mainLayout->setContentsMargins(s_margin, s_margin, s_margin, s_margin);
     mainLayout->setSpacing(s_margin);
 
     filterEdit = new Plasma::LineEdit(q);
