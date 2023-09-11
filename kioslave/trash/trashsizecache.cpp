@@ -31,10 +31,7 @@
 
 #include <QtCore/QDir>
 
-static QString kTrashLock()
-{
-    return KGlobal::dirs()->saveLocation("tmp") + QLatin1String( "trash" );
-}
+static QString s_trahslockname = QString::fromLatin1( "trash" );
 
 TrashSizeCache::TrashSizeCache( const QString &path )
     : mTrashSizeCachePath( path + QDir::separator() + QString::fromLatin1( "metadata" ) ),
@@ -52,7 +49,7 @@ void TrashSizeCache::initialize()
 
 void TrashSizeCache::add( qulonglong value )
 {
-    KLockFile lock( kTrashLock() );
+    KLockFile lock( s_trahslockname );
     lock.lock();
 
     KConfig config( mTrashSizeCachePath );
@@ -67,7 +64,7 @@ void TrashSizeCache::add( qulonglong value )
 
 void TrashSizeCache::remove( qulonglong value )
 {
-    KLockFile lock( kTrashLock() );
+    KLockFile lock( s_trahslockname );
     lock.lock();
 
     KConfig config( mTrashSizeCachePath );
@@ -82,7 +79,7 @@ void TrashSizeCache::remove( qulonglong value )
 
 void TrashSizeCache::clear()
 {
-    KLockFile lock( kTrashLock() );
+    KLockFile lock( s_trahslockname );
     lock.lock();
 
     KConfig config( mTrashSizeCachePath );
@@ -99,7 +96,7 @@ qulonglong TrashSizeCache::size() const
 
 qulonglong TrashSizeCache::currentSize( bool doLocking ) const
 {
-    KLockFile lock( kTrashLock() );
+    KLockFile lock( s_trahslockname );
 
     if ( doLocking ) {
         lock.lock();
