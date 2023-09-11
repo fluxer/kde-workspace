@@ -44,6 +44,7 @@ static const int s_margin = 4;
 static const QSizeF s_appletframesize = QSize(300, 94);
 static const QSizeF s_appleticonsize = QSize(80, 80);
 static const int s_filterwidth = 305;
+static const int s_dragpixmapsize = 64;
 // the default Plasma::Corona MIME type, see:
 // kdelibs/plasma/corona.cpp
 static const QString s_coronamimetype = QString::fromLatin1("text/x-plasmoidservicename");
@@ -100,7 +101,10 @@ void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         QMimeData* mimedata = new QMimeData();
         mimedata->setData(s_coronamimetype, m_appletinfo.pluginName().toUtf8());
         drag->setMimeData(mimedata);
-        drag->start();
+        drag->setPixmap(KIcon(m_appletinfo.icon()).pixmap(s_dragpixmapsize));
+        static const int halfdragpixmapsize = (s_dragpixmapsize / 2);
+        drag->setHotSpot(QPoint(halfdragpixmapsize, halfdragpixmapsize));
+        drag->exec();
     }
 }
 
