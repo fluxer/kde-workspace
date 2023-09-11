@@ -43,7 +43,7 @@ namespace Plasma
 static const int s_margin = 4;
 static const QSize s_appletframesize = QSize(300, 94);
 static const QSize s_appleticonsize = QSize(80, 80);
-static const int s_filterwidth = 300;
+static const int s_filterwidth = 305;
 
 Qt::Orientation kOrientationForLocation(const Plasma::Location location)
 {
@@ -242,7 +242,7 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
     QSizeF filterEditMinimumSize = filterEdit->minimumSize();
     filterEditMinimumSize.setWidth(s_filterwidth);
-    filterEdit->setPreferredSize(filterEditMinimumSize);
+    filterEdit->setMinimumSize(filterEditMinimumSize);
     filterEdit->setMaximumSize(filterEditMinimumSize);
     q->setFocusProxy(filterEdit);
     q->connect(
@@ -312,9 +312,9 @@ void WidgetExplorerPrivate::updateApplets()
 
         hasapplets = true;
         AppletFrame* appletFrame = new AppletFrame(appletsFrame, appletInfo);
-        appletFrame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        appletFrame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         appletFrame->setMinimumSize(s_appletframesize);
-        appletFrame->setMaximumSize(s_appletframesize);
+        appletFrame->setPreferredSize(s_appletframesize);
         appletsLayout->addItem(appletFrame);
         appletFrames.append(appletFrame);
     }
