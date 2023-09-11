@@ -124,15 +124,22 @@ public:
     KPluginInfo pluginInfo() const;
     void setRunning(const bool isrunning);
 
+private Q_SLOTS:
+    void updateFonts();
+
 private:
     KPluginInfo m_appletinfo;
+    Plasma::Label* m_appletname;
     Plasma::IconWidget* m_appletactive;
+    Plasma::Label* m_appletcomment;
 };
 
 AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
     : Plasma::Frame(parent),
     m_appletinfo(appletInfo),
-    m_appletactive(nullptr)
+    m_appletname(nullptr),
+    m_appletactive(nullptr),
+    m_appletcomment(nullptr)
 {
     QGraphicsGridLayout* appletLayout = new QGraphicsGridLayout(this);
     AppletIcon* appletIcon = new AppletIcon(this, appletInfo);
@@ -142,14 +149,13 @@ AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
     appletIcon->setIcon(appletInfo.icon());
     appletLayout->addItem(appletIcon, 0, 0, 2, 1);
 
-    Plasma::Label* appletName = new Plasma::Label(this);
-    appletName->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    // TODO: font update
-    QFont appletNameFont = appletName->font();
+    m_appletname = new Plasma::Label(this);
+    m_appletname->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    QFont appletNameFont = KGlobalSettings::generalFont();
     appletNameFont.setBold(true);
-    appletName->setFont(appletNameFont);
-    appletName->setText(appletInfo.name());
-    appletLayout->addItem(appletName, 0, 1);
+    m_appletname->setFont(appletNameFont);
+    m_appletname->setText(appletInfo.name());
+    appletLayout->addItem(m_appletname, 0, 1);
 
     // TODO: remove applet when activated
     m_appletactive = new Plasma::IconWidget(this);
@@ -158,15 +164,19 @@ AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
     m_appletactive->setIcon(KIcon());
     appletLayout->addItem(m_appletactive, 0, 2);
 
-    Plasma::Label* appletComment = new Plasma::Label(this);
-    appletComment->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    appletComment->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    // TODO: font update
-    appletComment->setFont(KGlobalSettings::smallestReadableFont());
-    appletComment->setText(appletInfo.comment());
-    appletLayout->addItem(appletComment, 1, 1, 1, 2);
+    m_appletcomment = new Plasma::Label(this);
+    m_appletcomment->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    m_appletcomment->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_appletcomment->setFont(KGlobalSettings::smallestReadableFont());
+    m_appletcomment->setText(appletInfo.comment());
+    appletLayout->addItem(m_appletcomment, 1, 1, 1, 2);
 
     setLayout(appletLayout);
+
+    connect(
+        KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()),
+        this, SLOT(updateFonts())
+    );
 }
 
 KPluginInfo AppletFrame::pluginInfo() const
@@ -177,6 +187,14 @@ KPluginInfo AppletFrame::pluginInfo() const
 void AppletFrame::setRunning(const bool isrunning)
 {
     m_appletactive->setIcon(isrunning ? KIcon("dialog-ok-apply") : KIcon());
+}
+
+void AppletFrame::updateFonts()
+{
+    QFont appletNameFont = KGlobalSettings::generalFont();
+    appletNameFont.setBold(true);
+    m_appletname->setFont(appletNameFont);
+    m_appletcomment->setFont(KGlobalSettings::smallestReadableFont());
 }
 
 class WidgetExplorerPrivate
@@ -361,7 +379,6 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
 
 void WidgetExplorerPrivate::updateOrientation(const Qt::Orientation orientation)
 {
-    // FIXME: vertical layout is scuffed, Plasma::ScrollWidget not expanding?
     appletsLayout->setOrientation(orientation);
     if (orientation == Qt::Horizontal) {
         filterEdit->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
