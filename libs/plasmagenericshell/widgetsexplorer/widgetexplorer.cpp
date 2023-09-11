@@ -41,8 +41,8 @@ namespace Plasma
 
 // hardcoded but ok because the widget is not resizable
 static const int s_margin = 4;
-static const QSize s_appletframesize = QSize(300, 94);
-static const QSize s_appleticonsize = QSize(80, 80);
+static const QSizeF s_appletframesize = QSize(300, 94);
+static const QSizeF s_appleticonsize = QSize(80, 80);
 static const int s_filterwidth = 305;
 
 Qt::Orientation kOrientationForLocation(const Plasma::Location location)
@@ -106,7 +106,7 @@ class AppletFrame : public Plasma::Frame
 {
     Q_OBJECT
 public:
-    AppletFrame(Plasma::Frame* appletsFrame, const KPluginInfo &appletInfo);
+    AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo);
 
     KPluginInfo pluginInfo() const;
     void setRunning(const bool isrunning);
@@ -127,13 +127,15 @@ private:
     Plasma::Label* m_appletcomment;
 };
 
-AppletFrame::AppletFrame(Plasma::Frame *parent, const KPluginInfo &appletInfo)
+AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     : Plasma::Frame(parent),
     m_appletinfo(appletInfo),
     m_appletname(nullptr),
     m_appletactive(nullptr),
     m_appletcomment(nullptr)
 {
+    setFrameShadow(Plasma::Frame::Sunken);
+
     QGraphicsGridLayout* appletLayout = new QGraphicsGridLayout(this);
     AppletIcon* appletIcon = new AppletIcon(this, appletInfo);
     appletIcon->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -218,7 +220,7 @@ public:
         topSpacer(nullptr),
         closeButton(nullptr),
         scrollWidget(nullptr),
-        appletsFrame(nullptr),
+        appletsWidget(nullptr),
         appletsLayout(nullptr),
         appletsPlaceholder(nullptr)
     {
@@ -249,7 +251,7 @@ public:
     Plasma::Label* topSpacer;
     Plasma::ToolButton* closeButton;
     Plasma::ScrollWidget* scrollWidget;
-    Plasma::Frame* appletsFrame;
+    QGraphicsWidget* appletsWidget;
     QGraphicsLinearLayout* appletsLayout;
     QList<AppletFrame*> appletFrames;
     Plasma::Frame* appletsPlaceholder;
@@ -299,10 +301,11 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     scrollWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollWidget->setOverShoot(false);
     scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    appletsFrame = new Plasma::Frame(scrollWidget);
-    appletsFrame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    appletsLayout = new QGraphicsLinearLayout(orientation, appletsFrame);
-    appletsPlaceholder = new Plasma::Frame(appletsFrame);
+    appletsWidget = new QGraphicsWidget(scrollWidget);
+    appletsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    appletsLayout = new QGraphicsLinearLayout(orientation, appletsWidget);
+    appletsPlaceholder = new Plasma::Frame(appletsWidget);
+    appletsPlaceholder->setFrameShadow(Plasma::Frame::Sunken);
     appletsPlaceholder->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     QGraphicsLinearLayout* appletsPlaceholderLayout = new QGraphicsLinearLayout(Qt::Horizontal, appletsPlaceholder);
     Plasma::Label* appletsPlaceholderLabel = new Plasma::Label(appletsPlaceholder);
@@ -312,8 +315,8 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     appletsPlaceholderLayout->addItem(appletsPlaceholderLabel);
     appletsPlaceholder->setLayout(appletsPlaceholderLayout);
     appletsLayout->addItem(appletsPlaceholder);
-    appletsFrame->setLayout(appletsLayout);
-    scrollWidget->setWidget(appletsFrame);
+    appletsWidget->setLayout(appletsLayout);
+    scrollWidget->setWidget(appletsWidget);
     mainLayout->addItem(scrollWidget, 1, 0, 1, 3);
 
     updateOrientation(orientation);
@@ -341,7 +344,7 @@ void WidgetExplorerPrivate::updateApplets()
         }
 
         hasapplets = true;
-        AppletFrame* appletFrame = new AppletFrame(appletsFrame, appletInfo);
+        AppletFrame* appletFrame = new AppletFrame(appletsWidget, appletInfo);
         appletFrame->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
         appletFrame->setMinimumSize(s_appletframesize);
         appletFrame->setPreferredSize(s_appletframesize);
@@ -391,9 +394,9 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
     }
     appletsPlaceholder->setVisible(!hasapplets);
     if (hasapplets) {
-        appletsFrame->adjustSize();
+        appletsWidget->adjustSize();
     } else {
-        appletsFrame->resize(scrollWidget->size());
+        appletsWidget->resize(scrollWidget->size());
     }
 }
 
@@ -510,7 +513,7 @@ WidgetExplorer::~WidgetExplorer()
     delete d->topSpacer;
     d->mainLayout->removeItem(d->closeButton);
     delete d->closeButton;
-    delete d->appletsFrame;
+    delete d->appletsWidget;
     delete d;
 }
 
