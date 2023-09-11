@@ -331,6 +331,8 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
 
 void WidgetExplorerPrivate::updateApplets()
 {
+    filterEdit->setEnabled(false);
+
     foreach (AppletFrame* appletFrame, appletFrames) {
         appletsLayout->removeItem(appletFrame);
     }
@@ -361,6 +363,7 @@ void WidgetExplorerPrivate::updateApplets()
     }
 
     appletsPlaceholder->setVisible(!hasapplets);
+    filterEdit->setEnabled(true);
 }
 
 void WidgetExplorerPrivate::updateRunningApplets()
