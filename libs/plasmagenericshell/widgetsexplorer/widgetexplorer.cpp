@@ -551,12 +551,14 @@ void WidgetExplorerPrivate::_k_appletAdded(Plasma::Applet *applet)
 {
     runningApplets.insert(applet, applet->pluginName());
     updateRunningApplets();
+    filterApplets(filterEdit->text());
 }
 
 void WidgetExplorerPrivate::_k_appletRemoved(Plasma::Applet *applet)
 {
     runningApplets.remove(applet);
     updateRunningApplets();
+    filterApplets(filterEdit->text());
 }
 
 void WidgetExplorerPrivate::_k_containmentDestroyed()
