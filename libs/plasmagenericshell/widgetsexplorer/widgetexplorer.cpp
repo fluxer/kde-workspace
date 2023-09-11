@@ -331,6 +331,7 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     scrollWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     scrollWidget->setOverShoot(false);
+    scrollWidget->setOverflowBordersVisible(false);
     scrollWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     appletsWidget = new QGraphicsWidget(scrollWidget);
     appletsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
