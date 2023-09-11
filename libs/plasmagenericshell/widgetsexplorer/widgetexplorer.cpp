@@ -32,6 +32,7 @@
 #include <Plasma/Label>
 #include <klineedit.h>
 #include <kpixmapwidget.h>
+#include <ksycoca.h>
 #include <kicon.h>
 #include <kdebug.h>
 
@@ -207,6 +208,7 @@ public:
     void _k_immutabilityChanged(const Plasma::ImmutabilityType type);
     void _k_textChanged(const QString &text);
     void _k_closePressed();
+    void _k_databaseChanged(const QStringList &resources);
 
     Plasma::Location location;
     WidgetExplorer* q;
@@ -287,6 +289,11 @@ void WidgetExplorerPrivate::init(Plasma::Location loc)
     updateOrientation(orientation);
 
     q->setLayout(mainLayout);
+
+    q->connect(
+        KSycoca::self(), SIGNAL(databaseChanged(QStringList)),
+        q, SLOT(_k_databaseChanged(QStringList))
+    );
 }
 
 void WidgetExplorerPrivate::updateApplets()
@@ -373,6 +380,14 @@ void WidgetExplorerPrivate::_k_textChanged(const QString &text)
 void WidgetExplorerPrivate::_k_closePressed()
 {
     emit q->closeClicked();
+}
+
+void WidgetExplorerPrivate::_k_databaseChanged(const QStringList &resources)
+{
+    if (resources.contains("services")) {
+        updateApplets();
+        filterApplets(filterEdit->text());
+    }
 }
 
 void WidgetExplorerPrivate::_k_appletAdded(Plasma::Applet *applet)
