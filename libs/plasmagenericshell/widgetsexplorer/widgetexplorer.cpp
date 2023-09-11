@@ -195,7 +195,7 @@ KPluginInfo AppletFrame::pluginInfo() const
 
 void AppletFrame::setRunning(const bool isrunning)
 {
-    m_appletactive->setIcon(isrunning ? KIcon("dialog-ok-apply") : KIcon());
+    m_appletactive->setIcon(isrunning ? KIcon("edit-delete") : KIcon());
 }
 
 void AppletFrame::slotAddApplet()
