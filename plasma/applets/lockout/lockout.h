@@ -56,7 +56,6 @@ private Q_SLOTS:
 
 private:
     void updateWidgets();
-    void updateOrientation();
     void updateSizes();
 
     QGraphicsLinearLayout* m_layout;
@@ -72,6 +71,12 @@ private:
     bool m_showtoram;
     bool m_showtodisk;
     bool m_showhybrid;
+    bool m_confirmlock;
+    bool m_confirmswitch;
+    bool m_confirmshutdown;
+    bool m_confirmtoram;
+    bool m_confirmtodisk;
+    bool m_confirmhybrid;
     KMessageWidget* m_buttonsmessage;
     QCheckBox* m_lockbox;
     QCheckBox* m_switchbox;
@@ -80,6 +85,13 @@ private:
     QCheckBox* m_todiskbox;
     QCheckBox* m_hybridbox;
     QSpacerItem* m_spacer;
+    QCheckBox* m_lockconfirmbox;
+    QCheckBox* m_switchconfirmbox;
+    QCheckBox* m_shutdownconfirmbox;
+    QCheckBox* m_toramconfirmbox;
+    QCheckBox* m_todiskconfirmbox;
+    QCheckBox* m_hybridconfirmbox;
+    QSpacerItem* m_spacer2;
     QDBusServiceWatcher* m_screensaverwatcher;
 };
 

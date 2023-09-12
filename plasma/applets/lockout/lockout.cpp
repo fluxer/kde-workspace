@@ -22,8 +22,11 @@
 
 #include <QVBoxLayout>
 #include <QDBusInterface>
+#include <QApplication>
+#include <QGraphicsGridLayout>
 #include <Plasma/Svg>
-#include <Plasma/ToolTipManager>
+#include <Plasma/Dialog>
+#include <Plasma/PushButton>
 #include <Solid/PowerManagement>
 #include <KDebug>
 
@@ -35,9 +38,94 @@ static const bool s_showshutdown = true;
 static const bool s_showtoram = true;
 static const bool s_showtodisk = true;
 static const bool s_showhybrid = true;
+static const bool s_confirmlock = true;
+static const bool s_confirmswitch = true;
+static const bool s_confirmshutdown = true;
+static const bool s_confirmtoram = true;
+static const bool s_confirmtodisk = true;
+static const bool s_confirmhybrid = true;
 static const QString s_screensaver = QString::fromLatin1("org.freedesktop.ScreenSaver");
 
-// TODO: confirmation dialog
+class LockoutDialog : public Plasma::Dialog
+{
+    Q_OBJECT
+public:
+    LockoutDialog(const QString &icon, const QString &text, QWidget *parent = nullptr);
+
+    bool result() const;
+
+private Q_SLOTS:
+    void slotYes();
+    void slotCancel();
+
+private:
+    QGraphicsScene* m_scene;
+    QGraphicsWidget* m_widget;
+    QGraphicsGridLayout* m_layout;
+    Plasma::IconWidget* m_iconwidget;
+    Plasma::PushButton* m_yesbutton;
+    Plasma::PushButton* m_cancelbutton;
+    bool m_result;
+};
+
+LockoutDialog::LockoutDialog(const QString &icon, const QString &text, QWidget *parent)
+    : Plasma::Dialog(parent),
+    m_scene(nullptr),
+    m_widget(nullptr),
+    m_layout(nullptr),
+    m_iconwidget(nullptr),
+    m_yesbutton(nullptr),
+    m_cancelbutton(nullptr),
+    m_result(false)
+{
+    m_scene = new QGraphicsScene(this);
+    m_widget = new QGraphicsWidget();
+    m_scene->addItem(m_widget);
+
+    m_layout = new QGraphicsGridLayout(m_widget);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_iconwidget = new Plasma::IconWidget(m_widget);
+    m_iconwidget->setIcon(icon);
+    m_iconwidget->setText(text);
+    m_layout->addItem(m_iconwidget, 0, 0, 1, 2);
+    m_yesbutton = new Plasma::PushButton(m_widget);
+    m_yesbutton->setIcon(KIcon("dialog-ok"));
+    m_yesbutton->setText(i18n("Yes"));
+    connect(
+        m_yesbutton, SIGNAL(clicked()),
+        this, SLOT(slotYes())
+    );
+    m_layout->addItem(m_yesbutton, 1, 0, 1, 1);
+    m_cancelbutton = new Plasma::PushButton(m_widget);
+    m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+    m_cancelbutton->setText(i18n("Cancel"));
+    connect(
+        m_cancelbutton, SIGNAL(clicked()),
+        this, SLOT(slotCancel())
+    );
+    m_layout->addItem(m_cancelbutton, 1, 1, 1, 1);
+    m_widget->setLayout(m_layout);
+
+    setGraphicsWidget(m_widget);
+}
+
+bool LockoutDialog::result() const
+{
+    return m_result;
+}
+
+void LockoutDialog::slotYes()
+{
+    m_result = true;
+    close();
+}
+
+void LockoutDialog::slotCancel()
+{
+    m_result = false;
+    close();
+}
+
 
 LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
@@ -54,6 +142,12 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     m_showtoram(s_showtoram),
     m_showtodisk(s_showtodisk),
     m_showhybrid(s_showhybrid),
+    m_confirmlock(s_confirmlock),
+    m_confirmswitch(s_confirmswitch),
+    m_confirmshutdown(s_confirmshutdown),
+    m_confirmtoram(s_confirmtoram),
+    m_confirmtodisk(s_confirmtodisk),
+    m_confirmhybrid(s_confirmhybrid),
     m_buttonsmessage(nullptr),
     m_lockbox(nullptr),
     m_switchbox(nullptr),
@@ -139,6 +233,12 @@ void LockoutApplet::init()
     m_showtoram = configgroup.readEntry("showToRamButton", s_showtoram);
     m_showtodisk = configgroup.readEntry("showToDiskButton", s_showtodisk);
     m_showhybrid = configgroup.readEntry("showHybridButton", s_showhybrid);
+    m_confirmlock = configgroup.readEntry("confirmLockButton", s_confirmlock);
+    m_confirmswitch = configgroup.readEntry("confirmSwitchButton", s_confirmswitch);
+    m_confirmshutdown = configgroup.readEntry("confirmShutdownButton", s_confirmshutdown);
+    m_confirmtoram = configgroup.readEntry("confirmToRamButton", s_confirmtoram);
+    m_confirmtodisk = configgroup.readEntry("confirmToDiskButton", s_confirmtodisk);
+    m_confirmhybrid = configgroup.readEntry("confirmHybridButton", s_confirmhybrid);
 
     slotUpdateButtons();
 
@@ -205,6 +305,37 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     // insert-button is 16x16 only
     parent->addPage(widget, i18n("Buttons"), "applications-graphics");
 
+    widget = new QWidget();
+    widgetlayout = new QVBoxLayout(widget);
+    m_lockconfirmbox = new QCheckBox(widget);
+    m_lockconfirmbox->setText(i18n("Confirm the “Lock” action"));
+    m_lockconfirmbox->setChecked(m_confirmlock);
+    widgetlayout->addWidget(m_lockconfirmbox);
+    m_switchconfirmbox = new QCheckBox(widget);
+    m_switchconfirmbox->setText(i18n("Confirm the “Switch” action"));
+    m_switchconfirmbox->setChecked(m_confirmswitch);
+    widgetlayout->addWidget(m_switchconfirmbox);
+    m_shutdownconfirmbox = new QCheckBox(widget);
+    m_shutdownconfirmbox->setText(i18n("Confirm the “Shutdown” action"));
+    m_shutdownconfirmbox->setChecked(m_confirmshutdown);
+    widgetlayout->addWidget(m_shutdownconfirmbox);
+    m_toramconfirmbox = new QCheckBox(widget);
+    m_toramconfirmbox->setText(i18n("Confirm the “Suspend to RAM” action"));
+    m_toramconfirmbox->setChecked(m_confirmtoram);
+    widgetlayout->addWidget(m_toramconfirmbox);
+    m_todiskconfirmbox = new QCheckBox(widget);
+    m_todiskconfirmbox->setText(i18n("Confirm the “Suspend to Disk” action"));
+    m_todiskconfirmbox->setChecked(m_confirmtodisk);
+    widgetlayout->addWidget(m_todiskconfirmbox);
+    m_hybridconfirmbox = new QCheckBox(widget);
+    m_hybridconfirmbox->setText(i18n("Confirm the “Hybrid Suspend” action"));
+    m_hybridconfirmbox->setChecked(m_confirmhybrid);
+    widgetlayout->addWidget(m_hybridconfirmbox);
+    m_spacer2 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addSpacerItem(m_spacer2);
+    widget->setLayout(widgetlayout);
+    parent->addPage(widget, i18n("Confirmation"), "task-accepted");
+
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_lockbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
@@ -213,40 +344,12 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(m_torambox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_todiskbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_hybridbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-}
-
-void LockoutApplet::updateOrientation()
-{
-    switch (formFactor()) {
-        case Plasma::FormFactor::Horizontal: {
-            m_layout->setOrientation(Qt::Horizontal);
-            m_layout->setSpacing(0);
-            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-            updateSizes();
-            return;
-        }
-        case Plasma::FormFactor::Vertical: {
-            m_layout->setOrientation(Qt::Vertical);
-            m_layout->setSpacing(0);
-            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-            updateSizes();
-            return;
-        }
-        default: {
-            m_layout->setSpacing(s_spacing);
-            break;
-        }
-    }
-
-    const QSizeF appletsize = size();
-    if (appletsize.width() >= appletsize.height()) {
-        m_layout->setOrientation(Qt::Horizontal);
-        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    } else {
-        m_layout->setOrientation(Qt::Vertical);
-        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-    }
-    updateSizes();
+    connect(m_lockconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_switchconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_shutdownconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_toramconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_todiskconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_hybridconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void LockoutApplet::updateSizes()
@@ -322,7 +425,36 @@ void LockoutApplet::updateSizes()
 void LockoutApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::SizeConstraint || constraints & Plasma::FormFactorConstraint) {
-        updateOrientation();
+        switch (formFactor()) {
+            case Plasma::FormFactor::Horizontal: {
+                m_layout->setOrientation(Qt::Horizontal);
+                m_layout->setSpacing(0);
+                setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                updateSizes();
+                return;
+            }
+            case Plasma::FormFactor::Vertical: {
+                m_layout->setOrientation(Qt::Vertical);
+                m_layout->setSpacing(0);
+                setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+                updateSizes();
+                return;
+            }
+            default: {
+                m_layout->setSpacing(s_spacing);
+                break;
+            }
+        }
+
+        const QSizeF appletsize = size();
+        if (appletsize.width() >= appletsize.height()) {
+            m_layout->setOrientation(Qt::Horizontal);
+            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        } else {
+            m_layout->setOrientation(Qt::Vertical);
+            setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        }
+        updateSizes();
     }
 }
 
@@ -366,6 +498,18 @@ void LockoutApplet::slotScreensaverUnregistered(const QString &service)
 
 void LockoutApplet::slotLock()
 {
+    // TODO: confirmation
+#if 0
+    qDebug() << Q_FUNC_INFO;
+    LockoutDialog lockoutdialog(
+        QString::fromLatin1("system-lock-screen"),
+        i18n("Are you sure?")
+    );
+    lockoutdialog.show();
+    while (lockoutdialog.isVisible()) {
+        QApplication::processEvents();
+    }
+#else
     QDBusInterface screensaver(
         s_screensaver, "/ScreenSaver", s_screensaver,
         QDBusConnection::sessionBus()
@@ -373,10 +517,12 @@ void LockoutApplet::slotLock()
     if (screensaver.isValid()) {
         screensaver.call("Lock");
     }
+#endif
 }
 
 void LockoutApplet::slotSwitch()
 {
+    // TODO: confirmation
     KDisplayManager kdisplaymanager;
     kdisplaymanager.newSession();
 }
@@ -384,21 +530,28 @@ void LockoutApplet::slotSwitch()
 void LockoutApplet::slotShutdown()
 {
     // NOTE: KDisplayManager::shutdown() does not involve the session manager
-    KWorkSpace::requestShutDown();
+    if (m_confirmshutdown) {
+        KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmNo);
+        return;
+    }
+    KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmYes);
 }
 
 void LockoutApplet::slotToRam()
 {
+    // TODO: confirmation
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
 }
 
 void LockoutApplet::slotToDisk()
 {
+    // TODO: confirmation
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
 }
 
 void LockoutApplet::slotHybrid()
 {
+    // TODO: confirmation
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
 }
 
@@ -410,6 +563,12 @@ void LockoutApplet::slotConfigAccepted()
     m_showtoram = m_torambox->isChecked();
     m_showtodisk = m_todiskbox->isChecked();
     m_showhybrid = m_hybridbox->isChecked();
+    m_confirmlock = m_lockconfirmbox->isChecked();
+    m_confirmswitch = m_switchconfirmbox->isChecked();
+    m_confirmshutdown = m_shutdownconfirmbox->isChecked();
+    m_confirmtoram = m_toramconfirmbox->isChecked();
+    m_confirmtodisk = m_todiskconfirmbox->isChecked();
+    m_confirmhybrid = m_hybridconfirmbox->isChecked();
 
     slotUpdateButtons();
 
@@ -420,8 +579,15 @@ void LockoutApplet::slotConfigAccepted()
     configgroup.writeEntry("showToRamButton", m_showtoram);
     configgroup.writeEntry("showToDiskButton", m_showtodisk);
     configgroup.writeEntry("showHybridButton", m_showhybrid);
+    configgroup.writeEntry("confirmLockButton", m_confirmlock);
+    configgroup.writeEntry("confirmSwitchButton", m_confirmswitch);
+    configgroup.writeEntry("confirmShutdownButton", m_confirmshutdown);
+    configgroup.writeEntry("confirmToRamButton", m_confirmtoram);
+    configgroup.writeEntry("confirmToDiskButton", m_confirmtodisk);
+    configgroup.writeEntry("confirmHybridButton", m_confirmhybrid);
 
     emit configNeedsSaving();
 }
 
 #include "moc_lockout.cpp"
+#include "lockout.moc"
