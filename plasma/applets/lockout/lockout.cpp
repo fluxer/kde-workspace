@@ -217,16 +217,20 @@ void LockoutApplet::updateOrientation()
     switch (formFactor()) {
         case Plasma::FormFactor::Horizontal: {
             m_layout->setOrientation(Qt::Horizontal);
+            m_layout->setSpacing(0);
             return;
         }
         case Plasma::FormFactor::Vertical: {
             m_layout->setOrientation(Qt::Vertical);
+            m_layout->setSpacing(0);
             return;
         }
         default: {
+            m_layout->setSpacing(4);
             break;
         }
     }
+
     const QSizeF appletsize = size();
     if (appletsize.width() >= appletsize.height()) {
         m_layout->setOrientation(Qt::Horizontal);
