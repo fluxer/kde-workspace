@@ -1,5 +1,5 @@
 add_subdirectory(icon)
-add_subdirectory(lock_logout)
+add_subdirectory(lockout)
 add_subdirectory(panelspacer)
 add_subdirectory(analog-clock)
 add_subdirectory(batterymonitor)
