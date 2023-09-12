@@ -206,6 +206,10 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_lockbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_switchbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_shutdownbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_torambox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_todiskbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_hybridbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void LockoutApplet::updateOrientation()
@@ -310,6 +314,15 @@ void LockoutApplet::slotHybrid()
 
 void LockoutApplet::slotConfigAccepted()
 {
+    m_showlock = m_lockbox->isChecked();
+    m_showswitch = m_switchbox->isChecked();
+    m_showshutdown = m_shutdownbox->isChecked();
+    m_showtoram = m_torambox->isChecked();
+    m_showtodisk = m_todiskbox->isChecked();
+    m_showhybrid = m_hybridbox->isChecked();
+
+    slotUpdateButtons();
+
     KConfigGroup configgroup = config();
     configgroup.writeEntry("showLockButton", m_showlock);
     configgroup.writeEntry("showSwitchButton", m_showswitch);
@@ -317,6 +330,7 @@ void LockoutApplet::slotConfigAccepted()
     configgroup.writeEntry("showToRamButton", m_showtoram);
     configgroup.writeEntry("showToDiskButton", m_showtodisk);
     configgroup.writeEntry("showHybridButton", m_showhybrid);
+
     emit configNeedsSaving();
 }
 
