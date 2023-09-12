@@ -15,13 +15,10 @@ ProgressBar 0.1 ProgressBar.qml
 QueryDialog 0.1 QueryDialog.qml
 ScrollBar 0.1 ScrollBar.qml
 SectionScroller 0.1 SectionScroller.qml
-SelectionDialog 0.1 SelectionDialog.qml
 Sheet 0.1 Sheet.qml
 TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
 TabGroup 0.1 TabGroup.qml
-TextArea 0.1 TextArea.qml
-TextField 0.1 TextField.qml
 ToolBar 0.1 ToolBar.qml
 ToolBarLayout 0.1 ToolBarLayout.qml
 ToolButton 0.1 ToolButton.qml
