@@ -567,10 +567,10 @@ void LockoutApplet::slotShutdown()
 {
     // NOTE: KDisplayManager::shutdown() does not involve the session manager
     if (m_confirmshutdown) {
-        KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmNo);
+        KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmYes);
         return;
     }
-    KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmYes);
+    KWorkSpace::requestShutDown(KWorkSpace::ShutdownConfirmNo);
 }
 
 void LockoutApplet::slotToRam()
