@@ -114,7 +114,7 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
     m_yesbutton->setIcon(KIcon("dialog-ok"));
     m_yesbutton->setText(i18n("Yes"));
     connect(
-        m_yesbutton, SIGNAL(clicked()),
+        m_yesbutton, SIGNAL(pressed()),
         this, SLOT(slotYes())
     );
     m_layout->addItem(m_yesbutton, 3, 0, 1, 1);
@@ -122,7 +122,7 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
     m_nobutton->setIcon(KIcon("dialog-cancel"));
     m_nobutton->setText(i18n("No"));
     connect(
-        m_nobutton, SIGNAL(clicked()),
+        m_nobutton, SIGNAL(pressed()),
         this, SLOT(slotNo())
     );
     m_layout->addItem(m_nobutton, 3, 1, 1, 1);
@@ -130,6 +130,9 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
 
     m_scene->addItem(m_widget);
     setGraphicsWidget(m_widget);
+
+    // default to yes like KDialog defaults to KDialog::Ok
+    m_yesbutton->setFocus();
 
     m_eventloop = new QEventLoop(this);
 }
