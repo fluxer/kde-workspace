@@ -128,6 +128,7 @@ void LockoutApplet::init()
         this, SLOT(slotHybrid())
     );
     m_layout->addItem(m_hybridwidget);
+    setLayout(m_layout);
 
     KConfigGroup configgroup = config();
     m_showlock = configgroup.readEntry("showLockButton", s_showlock);
