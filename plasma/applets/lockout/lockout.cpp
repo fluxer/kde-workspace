@@ -168,7 +168,7 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     m_buttonsmessage->setWordWrap(true);
     m_buttonsmessage->setText(
         i18n(
-            "If a button is not visible that is because what it does <b>is not supported on the current host</b>."
+            "If a button is not enabled that is because what it does <b>is not supported on the current host</b>."
         )
     );
     widgetlayout->addWidget(m_buttonsmessage);
@@ -252,16 +252,22 @@ void LockoutApplet::slotUpdateButtons()
         s_screensaver, "/ScreenSaver", s_screensaver,
         QDBusConnection::sessionBus()
     );
-    m_lockwidget->setVisible(m_showlock && screensaver.isValid());
+    m_lockwidget->setVisible(m_showlock);
+    m_lockwidget->setEnabled(screensaver.isValid());
     // no signals for these
     KDisplayManager kdisplaymanager;
-    m_switchwidget->setVisible(m_showswitch && kdisplaymanager.isSwitchable());
-    m_shutdownwidget->setVisible(m_showshutdown && KWorkSpace::canShutDown());
+    m_switchwidget->setVisible(m_showswitch);
+    m_switchwidget->setEnabled(kdisplaymanager.isSwitchable());
+    m_shutdownwidget->setVisible(m_showshutdown);
+    m_shutdownwidget->setEnabled(KWorkSpace::canShutDown());
 
     QSet<Solid::PowerManagement::SleepState> sleepstates = Solid::PowerManagement::supportedSleepStates();
-    m_toramwidget->setVisible(m_showtoram && sleepstates.contains(Solid::PowerManagement::SuspendState));
-    m_todiskwidget->setVisible(m_showtodisk && sleepstates.contains(Solid::PowerManagement::HibernateState));
-    m_hybridwidget->setVisible(m_showhybrid && sleepstates.contains(Solid::PowerManagement::HybridSuspendState));
+    m_toramwidget->setVisible(m_showtoram);
+    m_toramwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::SuspendState));
+    m_todiskwidget->setVisible(m_showtodisk);
+    m_todiskwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HibernateState));
+    m_hybridwidget->setVisible(m_showhybrid);
+    m_hybridwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HybridSuspendState));
 }
 
 void LockoutApplet::slotScreensaverRegistered(const QString &service)
