@@ -50,7 +50,7 @@ static const int s_appletactiveiconsize = 22;
 // kdelibs/plasma/corona.cpp
 static const QString s_coronamimetype = QString::fromLatin1("text/x-plasmoidservicename");
 
-Qt::Orientation kOrientationForLocation(const Plasma::Location location)
+static Qt::Orientation kOrientationForLocation(const Plasma::Location location)
 {
     switch (location) {
         case Plasma::Location::LeftEdge:
@@ -62,6 +62,22 @@ Qt::Orientation kOrientationForLocation(const Plasma::Location location)
         }
     }
     Q_UNREACHABLE();
+}
+
+// similar to Plasma::Applet::view(), the important thing is to get a window (preferably active
+// one)
+static QGraphicsView* kSceneWindow(QGraphicsScene *scene)
+{
+    if (!scene) {
+        kWarning() << "No AppletIcon scene";
+        return nullptr;
+    }
+    foreach (QGraphicsView *view, scene->views()) {
+        if (view->isActiveWindow()) {
+            return view;
+        }
+    }
+    return nullptr;
 }
 
 class AppletIcon : public Plasma::IconWidget
@@ -97,8 +113,8 @@ void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     if (event->buttons() & Qt::LeftButton &&
         (event->pos() - m_dragstartpos).manhattanLength() > KGlobalSettings::dndEventDelay())
     {
-        // have to parent it to QWidget*..
-        QDrag* drag = new QDrag(qApp->activeWindow());
+        QGraphicsView* sceneview = kSceneWindow(scene());
+        QDrag* drag = new QDrag(sceneview ? sceneview : qApp->activeWindow());
         QMimeData* mimedata = new QMimeData();
         mimedata->setData(s_coronamimetype, m_appletinfo.pluginName().toUtf8());
         drag->setMimeData(mimedata);
