@@ -8,7 +8,6 @@ set(plasmacomponents_SRCS
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
-    units.cpp
     ../core/declarativeitemcontainer.cpp
 )
 
@@ -28,7 +27,13 @@ target_link_libraries(plasmacomponentsplugin
     KDE4::plasma
 )
 
-install(TARGETS plasmacomponentsplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
+install(
+    TARGETS plasmacomponentsplugin
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/components
+)
 
-install(DIRECTORY qml/ DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/components)
+install(
+    DIRECTORY qml/
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/components
+)
 
