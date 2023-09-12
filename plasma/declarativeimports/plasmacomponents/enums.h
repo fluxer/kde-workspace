@@ -38,21 +38,6 @@ public:
     };
 };
 
-class PageOrientation : public QObject
-{
-    Q_OBJECT
-    Q_ENUMS(Orientation)
-
-public:
-    enum Orientation {
-        Automatic,
-        LockPortrait,
-        LockLandscape,
-        LockPrevious,
-        Manual
-    };
-};
-
 class PageStatus : public QObject
 {
     Q_OBJECT
