@@ -119,7 +119,7 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
     );
     m_layout->addItem(m_yesbutton, 3, 0, 1, 1);
     m_nobutton = new Plasma::PushButton(m_widget);
-    m_nobutton->setIcon(KIcon("dialog-cancel"));
+    m_nobutton->setIcon(KIcon("process-stop"));
     m_nobutton->setText(i18n("No"));
     connect(
         m_nobutton, SIGNAL(pressed()),
