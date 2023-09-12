@@ -15,6 +15,4 @@ Sheet 0.1 Sheet.qml
 TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
 TabGroup 0.1 TabGroup.qml
-ToolBar 0.1 ToolBar.qml
-ToolBarLayout 0.1 ToolBarLayout.qml
 ToolButton 0.1 ToolButton.qml
