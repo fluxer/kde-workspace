@@ -66,11 +66,14 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_lockout");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
+    setPreferredSize(40, 110);
 }
 
 void LockoutApplet::init()
 {
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(4);
 
     m_lockwidget = new Plasma::IconWidget(this);
     m_lockwidget->setIcon("system-lock-screen");
