@@ -100,6 +100,8 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_iconwidget = new Plasma::IconWidget(m_widget);
     m_iconwidget->setOrientation(Qt::Horizontal);
+    // disable hover effect
+    m_iconwidget->setAcceptHoverEvents(false);
     m_layout->addItem(m_iconwidget, 0, 0, 1, 2);
     m_separator = new Plasma::Separator(m_widget);
     m_layout->addItem(m_separator, 1, 0, 1, 2);
