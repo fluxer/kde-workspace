@@ -90,8 +90,6 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_eventloop(nullptr),
     m_result(false)
 {
-    KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
-
     m_scene = new QGraphicsScene(this);
     m_widget = new QGraphicsWidget();
     m_widget->setMinimumSize(280, 130);
@@ -149,6 +147,7 @@ void LockoutDialog::setup(const QString &icon, const QString &title, const QStri
 bool LockoutDialog::exec()
 {
     m_result = false;
+    KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
     show();
     if (m_eventloop) {
         m_eventloop->exit(1);
