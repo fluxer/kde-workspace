@@ -27,13 +27,14 @@
 #include <Solid/PowerManagement>
 #include <KDebug>
 
+// standard issue margin/spacing
+static const int s_spacing = 4;
 static const bool s_showlock = true;
 static const bool s_showswitch = true;
 static const bool s_showshutdown = true;
 static const bool s_showtoram = true;
 static const bool s_showtodisk = true;
 static const bool s_showhybrid = true;
-
 static const QString s_screensaver = QString::fromLatin1("org.freedesktop.ScreenSaver");
 
 // TODO: confirmation dialog
@@ -67,13 +68,14 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
     setPreferredSize(40, 110);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void LockoutApplet::init()
 {
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(4);
+    m_layout->setSpacing(s_spacing);
 
     m_lockwidget = new Plasma::IconWidget(this);
     m_lockwidget->setIcon("system-lock-screen");
@@ -219,15 +221,19 @@ void LockoutApplet::updateOrientation()
         case Plasma::FormFactor::Horizontal: {
             m_layout->setOrientation(Qt::Horizontal);
             m_layout->setSpacing(0);
+            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            updateSizes();
             return;
         }
         case Plasma::FormFactor::Vertical: {
             m_layout->setOrientation(Qt::Vertical);
             m_layout->setSpacing(0);
+            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            updateSizes();
             return;
         }
         default: {
-            m_layout->setSpacing(4);
+            m_layout->setSpacing(s_spacing);
             break;
         }
     }
@@ -235,8 +241,63 @@ void LockoutApplet::updateOrientation()
     const QSizeF appletsize = size();
     if (appletsize.width() >= appletsize.height()) {
         m_layout->setOrientation(Qt::Horizontal);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     } else {
         m_layout->setOrientation(Qt::Vertical);
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+    }
+    updateSizes();
+}
+
+void LockoutApplet::updateSizes()
+{
+    int visiblebuttons = 0;
+    // even panels do not get bellow that
+    QSizeF basesize = QSizeF(10, 10);
+    if (m_showlock) {
+        basesize = m_lockwidget->preferredSize();
+        visiblebuttons++;
+    }
+    if (m_showswitch) {
+        basesize = m_switchwidget->preferredSize();
+        visiblebuttons++;
+    }
+    if (m_showshutdown) {
+        basesize = m_shutdownwidget->preferredSize();
+        visiblebuttons++;
+    }
+    if (m_showtoram) {
+        basesize = m_toramwidget->preferredSize();
+        visiblebuttons++;
+    }
+    if (m_showtodisk) {
+        basesize = m_todiskwidget->preferredSize();
+        visiblebuttons++;
+    }
+    if (m_showhybrid) {
+        basesize = m_hybridwidget->preferredSize();
+        visiblebuttons++;
+    }
+    // no buttons at all?
+    if (visiblebuttons == 0) {
+        visiblebuttons++;
+    }
+
+    switch (m_layout->orientation()) {
+        case Qt::Horizontal: {
+            basesize.setWidth(basesize.width() * visiblebuttons);
+            setPreferredSize(basesize);
+            setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+            emit sizeHintChanged(Qt::PreferredSize);
+            break;
+        }
+        case Qt::Vertical: {
+            basesize.setHeight(basesize.height() * visiblebuttons);
+            setPreferredSize(basesize);
+            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            emit sizeHintChanged(Qt::PreferredSize);
+            break;
+        }
     }
 }
 

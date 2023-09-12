@@ -57,6 +57,7 @@ private Q_SLOTS:
 private:
     void updateWidgets();
     void updateOrientation();
+    void updateSizes();
 
     QGraphicsLinearLayout* m_layout;
     Plasma::IconWidget* m_lockwidget;
@@ -65,14 +66,12 @@ private:
     Plasma::IconWidget* m_toramwidget;
     Plasma::IconWidget* m_todiskwidget;
     Plasma::IconWidget* m_hybridwidget;
-
     bool m_showlock;
     bool m_showswitch;
     bool m_showshutdown;
     bool m_showtoram;
     bool m_showtodisk;
     bool m_showhybrid;
-
     KMessageWidget* m_buttonsmessage;
     QCheckBox* m_lockbox;
     QCheckBox* m_switchbox;
@@ -81,7 +80,6 @@ private:
     QCheckBox* m_todiskbox;
     QCheckBox* m_hybridbox;
     QSpacerItem* m_spacer;
-
     QDBusServiceWatcher* m_screensaverwatcher;
 };
 
