@@ -30,6 +30,7 @@
 #include <Plasma/Separator>
 #include <Plasma/PushButton>
 #include <Solid/PowerManagement>
+#include <KWindowSystem>
 #include <KDebug>
 
 // standard issue margin/spacing
@@ -89,6 +90,8 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
     m_eventloop(nullptr),
     m_result(false)
 {
+    KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
+
     m_scene = new QGraphicsScene(this);
     m_widget = new QGraphicsWidget();
     m_widget->setMinimumSize(280, 130);
