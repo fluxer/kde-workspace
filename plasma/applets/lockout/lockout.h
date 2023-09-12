@@ -28,11 +28,14 @@
 #include <KConfigDialog>
 #include <KMessageWidget>
 
+class LockoutDialog;
+
 class LockoutApplet : public Plasma::Applet
 {
     Q_OBJECT
 public:
     LockoutApplet(QObject *parent, const QVariantList &args);
+    ~LockoutApplet();
 
     // Plasma::Applet reimplementations
     void init() final;
@@ -93,6 +96,7 @@ private:
     QCheckBox* m_hybridconfirmbox;
     QSpacerItem* m_spacer2;
     QDBusServiceWatcher* m_screensaverwatcher;
+    LockoutDialog* m_dialog;
 };
 
 K_EXPORT_PLASMA_APPLET(lockout, LockoutApplet)

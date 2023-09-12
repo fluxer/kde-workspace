@@ -53,11 +53,12 @@ class LockoutDialog : public Plasma::Dialog
 {
     Q_OBJECT
 public:
-    LockoutDialog(const QString &icon, const QString &title,
-                  const QString &text, QWidget *parent = nullptr);
+    LockoutDialog(QWidget *parent = nullptr);
     ~LockoutDialog();
 
+    void setup(const QString &icon, const QString &title, const QString &text);
     bool exec();
+    void interrupt();
 
 private Q_SLOTS:
     void slotYes();
@@ -76,8 +77,7 @@ private:
     bool m_result;
 };
 
-LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
-                             const QString &text, QWidget *parent)
+LockoutDialog::LockoutDialog(QWidget *parent)
     : Plasma::Dialog(parent, Qt::Dialog),
     m_scene(nullptr),
     m_widget(nullptr),
@@ -99,14 +99,11 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
     m_layout = new QGraphicsGridLayout(m_widget);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_iconwidget = new Plasma::IconWidget(m_widget);
-    m_iconwidget->setIcon(icon);
-    m_iconwidget->setText(title);
     m_iconwidget->setOrientation(Qt::Horizontal);
     m_layout->addItem(m_iconwidget, 0, 0, 1, 2);
     m_separator = new Plasma::Separator(m_widget);
     m_layout->addItem(m_separator, 1, 0, 1, 2);
     m_label = new Plasma::Label(m_widget);
-    m_label->setText(text);
     m_label->setAlignment(Qt::AlignCenter);
     m_label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addItem(m_label, 2, 0, 1, 2);
@@ -133,8 +130,6 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
 
     // default to yes like KDialog defaults to KDialog::Ok
     m_yesbutton->setFocus();
-
-    m_eventloop = new QEventLoop(this);
 }
 
 LockoutDialog::~LockoutDialog()
@@ -142,24 +137,45 @@ LockoutDialog::~LockoutDialog()
     delete m_widget;
 }
 
+void LockoutDialog::setup(const QString &icon, const QString &title, const QString &text)
+{
+    m_iconwidget->setIcon(icon);
+    m_iconwidget->setText(title);
+    m_label->setText(text);
+}
+
 bool LockoutDialog::exec()
 {
+    m_result = false;
     show();
-    m_eventloop->exec();
-    return m_result;
+    if (m_eventloop) {
+        m_eventloop->exit(1);
+        m_eventloop->deleteLater();
+    }
+    m_eventloop = new QEventLoop(this);
+    return (m_eventloop->exec() == 0);
+}
+
+void LockoutDialog::interrupt()
+{
+    if (!m_eventloop) {
+        return;
+    }
+    m_eventloop->exit(1);
 }
 
 void LockoutDialog::slotYes()
 {
     m_result = true;
-    m_eventloop->quit();
+    Q_ASSERT(m_eventloop);
+    m_eventloop->exit(0);
     close();
 }
 
 void LockoutDialog::slotNo()
 {
-    m_result = false;
-    m_eventloop->quit();
+    Q_ASSERT(m_eventloop);
+    m_eventloop->exit(1);
     close();
 }
 
@@ -193,13 +209,21 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     m_todiskbox(nullptr),
     m_hybridbox(nullptr),
     m_spacer(nullptr),
-    m_screensaverwatcher(nullptr)
+    m_screensaverwatcher(nullptr),
+    m_dialog(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_lockout");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
     setPreferredSize(40, 110);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+}
+
+LockoutApplet::~LockoutApplet()
+{
+    if (m_dialog) {
+        m_dialog->interrupt();
+    }
 }
 
 void LockoutApplet::init()
@@ -536,12 +560,17 @@ void LockoutApplet::slotScreensaverUnregistered(const QString &service)
 void LockoutApplet::slotLock()
 {
     if (m_confirmlock) {
-        LockoutDialog lockoutdialog(
+        if (!m_dialog) {
+            m_dialog = new LockoutDialog();
+        } else {
+            m_dialog->interrupt();
+        }
+        m_dialog->setup(
             QString::fromLatin1("system-lock-screen"),
             i18n("Lock"),
             i18n("Do you want to lock?")
         );
-        if (!lockoutdialog.exec()) {
+        if (!m_dialog->exec()) {
             return;
         }
     }
@@ -557,12 +586,17 @@ void LockoutApplet::slotLock()
 void LockoutApplet::slotSwitch()
 {
     if (m_confirmswitch) {
-        LockoutDialog lockoutdialog(
+        if (!m_dialog) {
+            m_dialog = new LockoutDialog();
+        } else {
+            m_dialog->interrupt();
+        }
+        m_dialog->setup(
             QString::fromLatin1("system-switch-user"),
             i18n("Switch"),
             i18n("Do you want to switch to different user?")
         );
-        if (!lockoutdialog.exec()) {
+        if (!m_dialog->exec()) {
             return;
         }
     }
@@ -583,12 +617,17 @@ void LockoutApplet::slotShutdown()
 void LockoutApplet::slotToRam()
 {
     if (m_confirmtoram) {
-        LockoutDialog lockoutdialog(
+        if (!m_dialog) {
+            m_dialog = new LockoutDialog();
+        } else {
+            m_dialog->interrupt();
+        }
+        m_dialog->setup(
             QString::fromLatin1("system-suspend"),
             i18n("Suspend"),
             i18n("Do you want to suspend to RAM?")
         );
-        if (!lockoutdialog.exec()) {
+        if (!m_dialog->exec()) {
             return;
         }
     }
@@ -598,12 +637,17 @@ void LockoutApplet::slotToRam()
 void LockoutApplet::slotToDisk()
 {
     if (m_confirmtodisk) {
-        LockoutDialog lockoutdialog(
+        if (!m_dialog) {
+            m_dialog = new LockoutDialog();
+        } else {
+            m_dialog->interrupt();
+        }
+        m_dialog->setup(
             QString::fromLatin1("system-suspend-hibernate"),
             i18n("Hibernate"),
             i18n("Do you want to suspend to disk?")
         );
-        if (!lockoutdialog.exec()) {
+        if (!m_dialog->exec()) {
             return;
         }
     }
@@ -613,12 +657,17 @@ void LockoutApplet::slotToDisk()
 void LockoutApplet::slotHybrid()
 {
     if (m_confirmhybrid) {
-        LockoutDialog lockoutdialog(
+        if (!m_dialog) {
+            m_dialog = new LockoutDialog();
+        } else {
+            m_dialog->interrupt();
+        }
+        m_dialog->setup(
             QString::fromLatin1("system-suspend"),
             i18n("Hybrid Suspend"),
             i18n("Do you want to hybrid suspend?")
         );
-        if (!lockoutdialog.exec()) {
+        if (!m_dialog->exec()) {
             return;
         }
     }
