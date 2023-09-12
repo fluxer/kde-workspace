@@ -139,8 +139,6 @@ LockoutDialog::LockoutDialog(const QString &icon, const QString &title,
 
 LockoutDialog::~LockoutDialog()
 {
-    m_scene->removeItem(m_widget);
-    delete m_scene;
     delete m_widget;
 }
 
