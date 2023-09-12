@@ -105,7 +105,9 @@ void AppletIcon::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         drag->setPixmap(KIcon(m_appletinfo.icon()).pixmap(s_dragpixmapsize));
         static const int halfdragpixmapsize = (s_dragpixmapsize / 2);
         drag->setHotSpot(QPoint(halfdragpixmapsize, halfdragpixmapsize));
+        setPressed(true);
         drag->exec();
+        setPressed(false);
     }
 }
 
@@ -130,6 +132,7 @@ private Q_SLOTS:
 
 private:
     KPluginInfo m_appletinfo;
+    AppletIcon* m_appleticon;
     Plasma::Label* m_appletname;
     Plasma::IconWidget* m_appletactive;
     Plasma::Label* m_appletcomment;
@@ -138,6 +141,7 @@ private:
 AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     : Plasma::Frame(parent),
     m_appletinfo(appletInfo),
+    m_appleticon(nullptr),
     m_appletname(nullptr),
     m_appletactive(nullptr),
     m_appletcomment(nullptr)
@@ -145,18 +149,18 @@ AppletFrame::AppletFrame(QGraphicsWidget *parent, const KPluginInfo &appletInfo)
     setFrameShadow(Plasma::Frame::Sunken);
 
     QGraphicsGridLayout* appletLayout = new QGraphicsGridLayout(this);
-    AppletIcon* appletIcon = new AppletIcon(this, appletInfo);
-    appletIcon->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    appletIcon->setMinimumSize(s_appleticonsize);
-    appletIcon->setMaximumSize(s_appleticonsize);
-    appletIcon->setIcon(appletInfo.icon());
+    m_appleticon = new AppletIcon(this, appletInfo);
+    m_appleticon->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    m_appleticon->setMinimumSize(s_appleticonsize);
+    m_appleticon->setMaximumSize(s_appleticonsize);
+    m_appleticon->setIcon(appletInfo.icon());
     // multiple applet instances can be added thus not conditional
-    appletIcon->setToolTip(i18n("Double-click or drag to add this applet."));
+    m_appleticon->setToolTip(i18n("Double-click or drag to add this applet."));
     connect(
-        appletIcon, SIGNAL(doubleClicked()),
+        m_appleticon, SIGNAL(doubleClicked()),
         this, SLOT(slotAddApplet())
     );
-    appletLayout->addItem(appletIcon, 0, 0, 2, 1);
+    appletLayout->addItem(m_appleticon, 0, 0, 2, 1);
 
     m_appletname = new Plasma::Label(this);
     m_appletname->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -205,11 +209,13 @@ void AppletFrame::setRunning(const bool isrunning)
 
 void AppletFrame::slotAddApplet()
 {
+    m_appleticon->setPressed(false);
     emit addApplet(m_appletinfo.pluginName());
 }
 
 void AppletFrame::slotRemoveApplet()
 {
+    m_appletactive->setPressed(false);
     emit removeApplet(m_appletinfo.pluginName());
 }
 
