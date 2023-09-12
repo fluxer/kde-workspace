@@ -445,16 +445,13 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
         if (onlyrunning && !running.contains(appletPluginName)) {
             continue;
         }
-        const QString appletCategory = appletInfo.category();
-        if (!onlyrunning && !allwidgets && categoriesButtonText != appletCategory) {
+        if (!onlyrunning && !allwidgets && categoriesButtonText != appletInfo.category()) {
             continue;
         }
         if (!text.isEmpty()) {
-            const QString appletName = appletInfo.name();
-            const QString appletComment = appletInfo.comment();
-            if (appletName.contains(text, Qt::CaseInsensitive)
+            if (appletInfo.name().contains(text, Qt::CaseInsensitive)
                 || appletPluginName.contains(text, Qt::CaseInsensitive)
-                || appletComment.contains(text, Qt::CaseInsensitive))
+                || appletInfo.comment().contains(text, Qt::CaseInsensitive))
             {
                 appletFrame->setVisible(true);
                 hasapplets = true;
