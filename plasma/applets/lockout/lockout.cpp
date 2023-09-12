@@ -259,23 +259,33 @@ void LockoutApplet::updateSizes()
         visiblebuttons++;
     }
     if (m_showswitch) {
-        basesize = m_switchwidget->preferredSize();
+        if (basesize.isNull()) {
+            basesize = m_switchwidget->preferredSize();
+        }
         visiblebuttons++;
     }
     if (m_showshutdown) {
-        basesize = m_shutdownwidget->preferredSize();
+        if (basesize.isNull()) {
+            basesize = m_shutdownwidget->preferredSize();
+        }
         visiblebuttons++;
     }
     if (m_showtoram) {
-        basesize = m_toramwidget->preferredSize();
+        if (basesize.isNull()) {
+            basesize = m_toramwidget->preferredSize();
+        }
         visiblebuttons++;
     }
     if (m_showtodisk) {
-        basesize = m_todiskwidget->preferredSize();
+        if (basesize.isNull()) {
+            basesize = m_todiskwidget->preferredSize();
+        }
         visiblebuttons++;
     }
     if (m_showhybrid) {
-        basesize = m_hybridwidget->preferredSize();
+        if (basesize.isNull()) {
+            basesize = m_hybridwidget->preferredSize();
+        }
         visiblebuttons++;
     }
     // no buttons at all?
@@ -283,8 +293,13 @@ void LockoutApplet::updateSizes()
         visiblebuttons++;
     }
 
+    // for non-panel expand to the widget height/width depending on the orientation
+    const bool addspacing = (m_layout->spacing() != 0);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
+            if (addspacing) {
+                basesize.setHeight(size().height());
+            }
             basesize.setWidth(basesize.width() * visiblebuttons);
             setPreferredSize(basesize);
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
@@ -292,6 +307,9 @@ void LockoutApplet::updateSizes()
             break;
         }
         case Qt::Vertical: {
+            if (addspacing) {
+                basesize.setWidth(size().width());
+            }
             basesize.setHeight(basesize.height() * visiblebuttons);
             setPreferredSize(basesize);
             setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
