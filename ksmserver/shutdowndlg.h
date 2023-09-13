@@ -25,20 +25,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #ifndef SHUTDOWNDLG_H
 #define SHUTDOWNDLG_H
 
-#include <QDialog>
-#include <QPushButton>
-#include <QMenu>
+#include <QGraphicsScene>
+#include <QGraphicsWidget>
+#include <QGraphicsGridLayout>
+#include <QEventLoop>
 #include <QTimer>
-#include <QTimeLine>
-#include <QLabel>
-#include <QDeclarativeView>
+#include <Plasma/Dialog>
+#include <Plasma/Label>
+#include <Plasma/Separator>
+#include <Plasma/IconWidget>
+#include <Plasma/PushButton>
 #include <kworkspace/kworkspace.h>
-
-namespace Plasma
-{
-    class Svg;
-    class FrameSvg;
-}
 
 // The methods that make the desktop gray if compositor is active.
 class KSMShutdownFeedback
@@ -49,30 +46,46 @@ public:
 };
 
 // The confirmation dialog
-class KSMShutdownDlg : public QDialog
+class KSMShutdownDlg : public Plasma::Dialog
 {
     Q_OBJECT
-
 public:
-    static bool confirmShutdown(
-            bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype, const QString& theme );
-    bool eventFilter( QObject* watched, QEvent* event );
+    static bool confirmShutdown(bool maysd, bool choose, KWorkSpace::ShutdownType &sdtype);
 
 public Q_SLOTS:
     void slotLogout();
     void slotHalt();
     void slotReboot();
-    void slotSuspend(int);
-    void slotLockScreen();
+    void slotOk();
     void slotCancel();
+    void slotTimeout();
 
 protected:
-    void resizeEvent(QResizeEvent *e);
+    // Plasma::Dialog reimplementations
+    void hideEvent(QHideEvent *event) final;
+    bool eventFilter(QObject *watched, QEvent *event) final;
 
 private:
-    KSMShutdownDlg( QWidget* parent, bool maysd, bool choose, KWorkSpace::ShutdownType sdtype, const QString& theme );
+    KSMShutdownDlg(QWidget *parent, bool maysd, bool choose, KWorkSpace::ShutdownType sdtype);
+    ~KSMShutdownDlg();
+
+    bool execDialog();
+    void interrupt();
+
+    QGraphicsScene* m_scene;
+    QGraphicsWidget* m_widget;
+    QGraphicsGridLayout* m_layout;
+    Plasma::Label* m_titlelabel;
+    Plasma::Separator* m_separator;
+    Plasma::IconWidget* m_logoutwidget;
+    Plasma::IconWidget* m_rebootwidget;
+    Plasma::IconWidget* m_haltwidget;
+    Plasma::PushButton* m_okbutton;
+    Plasma::PushButton* m_cancelbutton;
+    QEventLoop* m_eventloop;
+    QTimer* m_timer;
+    int m_second;
     KWorkSpace::ShutdownType m_shutdownType;
-    QDeclarativeView* m_view;
 };
 
-#endif
+#endif // SHUTDOWNDLG_H

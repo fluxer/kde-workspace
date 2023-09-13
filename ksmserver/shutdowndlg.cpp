@@ -25,42 +25,22 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #include "config-workspace.h"
 #include "shutdowndlg.h"
-#include "plasma/framesvg.h"
-#include "plasma/theme.h"
+#include "kworkspace/kdisplaymanager.h"
 
-#include <stdio.h>
-
-#include <QApplication>
-#include <QDesktopWidget>
-#include <QTimer>
-#include <QFile>
-#include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusMessage>
-#include <QtDBus/QDBusPendingCall>
-#include <QDeclarativeView>
-#include <QDeclarativeContext>
-#include <QDeclarativeEngine>
-#include <QDeclarativePropertyMap>
-
-#include <kdialog.h>
-#include <kiconloader.h>
+#include <QX11Info>
 #include <klocale.h>
-#include <kuser.h>
-#include <kjob.h>
-#include <Solid/PowerManagement>
 #include <kwindowsystem.h>
-#include <netwm.h>
-#include <KStandardDirs>
-#include <kdeclarative.h>
-#include <kxerrorhandler.h>
+#include <kdialog.h>
 
-#include <kworkspace/kdisplaymanager.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
-#include "moc_shutdowndlg.cpp"
+static const int s_timeout = 10; // 30secs
+static const QSizeF s_iconsize = QSizeF(64, 64);
 
 void KSMShutdownFeedback::start()
 {
-    if( KWindowSystem::compositingActive()) {
+    if (KWindowSystem::compositingActive()) {
         // Announce that the user MAY be logging out (Intended for the compositor)
         Display* dpy = QX11Info::display();
         Atom announce = XInternAtom(dpy, "_KDE_LOGGING_OUT", False);
@@ -71,7 +51,7 @@ void KSMShutdownFeedback::start()
 
 void KSMShutdownFeedback::stop()
 {
-    if( KWindowSystem::compositingActive()) {
+    if (KWindowSystem::compositingActive()) {
         // No longer logging out, announce (Intended for the compositor)
         Display* dpy = QX11Info::display();
         Atom announce = XInternAtom(dpy, "_KDE_LOGGING_OUT", False);
@@ -79,170 +59,289 @@ void KSMShutdownFeedback::stop()
     }
 }
 
-////////////
-
-Q_DECLARE_METATYPE(Solid::PowerManagement::SleepState)
-
-KSMShutdownDlg::KSMShutdownDlg( QWidget* parent,
-                                bool maysd, bool choose, KWorkSpace::ShutdownType sdtype,
-                                const QString& theme)
-  : QDialog( parent, Qt::Popup ) //krazy:exclude=qclasses
-    // this is a WType_Popup on purpose. Do not change that! Not
-    // having a popup here has severe side effects.
+KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
+                               bool maysd, bool choose, KWorkSpace::ShutdownType sdtype)
+    : Plasma::Dialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint),
+    m_scene(nullptr),
+    m_widget(nullptr),
+    m_layout(nullptr),
+    m_titlelabel(nullptr),
+    m_separator(nullptr),
+    m_logoutwidget(nullptr),
+    m_rebootwidget(nullptr),
+    m_haltwidget(nullptr),
+    m_okbutton(nullptr),
+    m_cancelbutton(nullptr),
+    m_eventloop(nullptr),
+    m_timer(nullptr),
+    m_second(s_timeout),
+    m_shutdownType(sdtype)
 {
-    KSMShutdownFeedback::start(); // make the screen gray
+    // make the screen gray
+    KSMShutdownFeedback::start();
 
-    KDialog::centerOnScreen(this, -3);
+    m_scene = new QGraphicsScene(this);
+    m_widget = new QGraphicsWidget();
+    m_widget->setMinimumSize(280, 130);
 
-    //kDebug() << "Creating QML view";
-    m_view = new QDeclarativeView(this);
-    QDeclarativeContext *context = m_view->rootContext();
-    context->setContextProperty("maysd", maysd);
-    context->setContextProperty("choose", choose);
-    context->setContextProperty("sdtype", sdtype);
+    m_layout = new QGraphicsGridLayout(m_widget);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(4);
 
-    QDeclarativePropertyMap *mapShutdownType = new QDeclarativePropertyMap(this);
-    mapShutdownType->insert("ShutdownTypeDefault", QVariant::fromValue((int)KWorkSpace::ShutdownTypeDefault));
-    mapShutdownType->insert("ShutdownTypeNone", QVariant::fromValue((int)KWorkSpace::ShutdownTypeNone));
-    mapShutdownType->insert("ShutdownTypeReboot", QVariant::fromValue((int)KWorkSpace::ShutdownTypeReboot));
-    mapShutdownType->insert("ShutdownTypeHalt", QVariant::fromValue((int)KWorkSpace::ShutdownTypeHalt));
-    mapShutdownType->insert("ShutdownTypeLogout", QVariant::fromValue((int)KWorkSpace::ShutdownTypeLogout));
-    context->setContextProperty("ShutdownType", mapShutdownType);
+    if (!choose) {
+        m_titlelabel = new Plasma::Label(m_widget);
+        m_titlelabel->setAlignment(Qt::AlignCenter);
+        m_titlelabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_layout->addItem(m_titlelabel, 0, 0, 1, 2);
 
-    QDeclarativePropertyMap *mapSpdMethods = new QDeclarativePropertyMap(this);
-    QSet<Solid::PowerManagement::SleepState> spdMethods = Solid::PowerManagement::supportedSleepStates();
-    mapSpdMethods->insert("SuspendState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::SuspendState)));
-    mapSpdMethods->insert("HibernateState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::HibernateState)));
-    mapSpdMethods->insert("HybridSuspendState", QVariant::fromValue(spdMethods.contains(Solid::PowerManagement::HybridSuspendState)));
-    context->setContextProperty("spdMethods", mapSpdMethods);
+        switch (m_shutdownType) {
+            case KWorkSpace::ShutdownTypeReboot: {
+                m_titlelabel->setText(
+                    i18np("Restarting computer in 1 second.", "Restarting computer in %1 seconds.", m_second)
+                );
+                break;
+            }
+            case KWorkSpace::ShutdownTypeHalt: {
+                m_titlelabel->setText(
+                    i18np("Turning off computer in 1 second.", "Turning off computer in %1 seconds.", m_second)
+                );
+                break;
+            }
+            default: {
+                m_titlelabel->setText(
+                    i18np("Logging out in 1 second.", "Logging out in %1 seconds.", m_second)
+                );
+                break;
+            }
+        }
 
-    setModal( true );
+        m_okbutton = new Plasma::PushButton(m_widget);
+        m_okbutton->setText(i18n("Ok"));
+        m_okbutton->setIcon(KIcon("dialog-ok"));
+        connect(
+            m_okbutton, SIGNAL(released()),
+            this, SLOT(slotOk())
+        );
+        m_layout->addItem(m_okbutton, 1, 0, 1, 1);
 
-    // window stuff
-    m_view->setFrameShape(QFrame::NoFrame);
-    m_view->setWindowFlags(Qt::X11BypassWindowManagerHint);
-    m_view->setAttribute(Qt::WA_TranslucentBackground);
-    setAttribute(Qt::WA_TranslucentBackground);
-    setStyleSheet("background:transparent;");
-    QPalette pal = m_view->palette();
-    pal.setColor(backgroundRole(), Qt::transparent);
-    m_view->setPalette(pal);
-    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    // engine stuff
-    KDeclarative kdeclarative;
-    kdeclarative.setDeclarativeEngine(m_view->engine());
-    kdeclarative.initialize();
-    kdeclarative.setupBindings();
-    m_view->installEventFilter(this);
+        m_cancelbutton = new Plasma::PushButton(m_widget);
+        m_cancelbutton->setText(i18n("Cancel"));
+        m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+        connect(
+            m_cancelbutton, SIGNAL(released()),
+            this, SLOT(slotCancel())
+        );
+        m_layout->addItem(m_cancelbutton, 1, 1, 1, 1);
 
-    QString fileName = KStandardDirs::locate("data", QString("ksmserver/themes/%1/main.qml").arg(theme));
-    if (QFile::exists(fileName)) {
-        //kDebug() << "Using QML theme" << fileName;
-        m_view->setSource(QUrl::fromLocalFile(fileName));
-    }
-    QGraphicsObject *rootObject = m_view->rootObject();
-    connect(rootObject, SIGNAL(logoutRequested()), SLOT(slotLogout()));
-    connect(rootObject, SIGNAL(haltRequested()), SLOT(slotHalt()));
-    connect(rootObject, SIGNAL(suspendRequested(int)), SLOT(slotSuspend(int)) );
-    connect(rootObject, SIGNAL(rebootRequested()), SLOT(slotReboot()));
-    connect(rootObject, SIGNAL(cancelRequested()), SLOT(slotCancel()));
-    connect(rootObject, SIGNAL(lockScreenRequested()), SLOT(slotLockScreen()));
-    m_view->show();
-    m_view->setFocus();
-    adjustSize();
-}
-
-bool KSMShutdownDlg::eventFilter ( QObject * watched, QEvent * event )
-{
-    if (watched == m_view && event->type() == QEvent::Resize) {
-        adjustSize();
-    }
-    return QDialog::eventFilter(watched, event);
-}
-
-void KSMShutdownDlg::resizeEvent(QResizeEvent *e)
-{
-    QDialog::resizeEvent( e );
-
-    if( KWindowSystem::compositingActive()) {
-        clearMask();
+        m_timer = new QTimer(this);
+        m_timer->setInterval(1000);
+        connect(
+            m_timer, SIGNAL(timeout()),
+            this, SLOT(slotTimeout())
+        );
+        m_timer->start();
     } else {
-        setMask(m_view->mask());
+        int buttonscount = 0;
+
+        m_titlelabel = new Plasma::Label(m_widget);
+        m_titlelabel->setAlignment(Qt::AlignCenter);
+        m_titlelabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_titlelabel->setText(i18n("Choose"));
+        m_separator = new Plasma::Separator(m_widget);
+
+        m_logoutwidget = new Plasma::IconWidget(m_widget);
+        m_logoutwidget->setToolTip(i18n("Logout"));
+        m_logoutwidget->setPreferredIconSize(s_iconsize);
+        m_logoutwidget->setIcon(KIcon("system-log-out"));
+        connect(
+            m_logoutwidget, SIGNAL(clicked()),
+            this, SLOT(slotLogout())
+        );
+        m_layout->addItem(m_logoutwidget, 2, buttonscount);
+        buttonscount++;
+
+        if (maysd) {
+            m_rebootwidget = new Plasma::IconWidget(m_widget);
+            m_rebootwidget->setToolTip(i18n("Restart Computer"));
+            m_rebootwidget->setPreferredIconSize(s_iconsize);
+            m_rebootwidget->setIcon(KIcon("system-reboot"));
+            connect(
+                m_rebootwidget, SIGNAL(clicked()),
+                this, SLOT(slotReboot())
+            );
+            m_layout->addItem(m_rebootwidget, 2, buttonscount);
+            buttonscount++;
+
+            m_haltwidget = new Plasma::IconWidget(m_widget);
+            m_haltwidget->setToolTip(i18n("Halt Computer"));
+            m_haltwidget->setPreferredIconSize(s_iconsize);
+            m_haltwidget->setIcon(KIcon("system-shutdown"));
+            connect(
+                m_haltwidget, SIGNAL(clicked()),
+                this, SLOT(slotHalt())
+            );
+            m_layout->addItem(m_haltwidget, 2, buttonscount);
+            buttonscount++;
+        }
+
+        m_cancelbutton = new Plasma::PushButton(m_widget);
+        m_cancelbutton->setText(i18n("Cancel"));
+        m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+        connect(
+            m_cancelbutton, SIGNAL(released()),
+            this, SLOT(slotCancel())
+        );
+        m_layout->addItem(m_cancelbutton, 3, 0, 1, buttonscount);
+
+        m_layout->addItem(m_titlelabel, 0, 0, 1, buttonscount);
+        m_layout->addItem(m_separator, 1, 0, 1, buttonscount);
     }
 
+    m_widget->setLayout(m_layout);
+
+    m_scene->addItem(m_widget);
+    setGraphicsWidget(m_widget);
+
+    setFocus(Qt::ActiveWindowFocusReason);
+    m_scene->installEventFilter(this);
+
+    if (!choose) {
+        m_cancelbutton->setFocus();
+    } else if (sdtype == KWorkSpace::ShutdownTypeNone && m_logoutwidget) {
+        m_logoutwidget->setFocus();
+    } else if (sdtype == KWorkSpace::ShutdownTypeReboot && m_rebootwidget) {
+        m_rebootwidget->setFocus();
+    } else if (sdtype == KWorkSpace::ShutdownTypeHalt && m_haltwidget) {
+        m_haltwidget->setFocus();
+    }
+
+    adjustSize();
     KDialog::centerOnScreen(this, -3);
+}
+
+KSMShutdownDlg::~KSMShutdownDlg()
+{
+    // make the screen become normal again
+    KSMShutdownFeedback::stop();
+    // delete m_widget;
+}
+
+void KSMShutdownDlg::hideEvent(QHideEvent *event)
+{
+    interrupt();
+    Plasma::Dialog::hideEvent(event);
+}
+
+bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == m_scene && event->type() == QEvent::WindowDeactivate) {
+        interrupt();
+    }
+    return Plasma::Dialog::eventFilter(watched, event);
 }
 
 void KSMShutdownDlg::slotLogout()
 {
     m_shutdownType = KWorkSpace::ShutdownTypeNone;
-    accept();
+    m_eventloop->exit(0);
 }
 
 void KSMShutdownDlg::slotReboot()
 {
     m_shutdownType = KWorkSpace::ShutdownTypeReboot;
-    accept();
-}
-
-void KSMShutdownDlg::slotLockScreen()
-{
-    QDBusMessage call = QDBusMessage::createMethodCall("org.freedesktop.ScreenSaver",
-                                                       "/ScreenSaver",
-                                                       "org.freedesktop.ScreenSaver",
-                                                       "Lock");
-    QDBusConnection::sessionBus().asyncCall(call);
-    reject();
+    m_eventloop->exit(0);
 }
 
 void KSMShutdownDlg::slotHalt()
 {
     m_shutdownType = KWorkSpace::ShutdownTypeHalt;
-    accept();
+    m_eventloop->exit(0);
 }
 
-void KSMShutdownDlg::slotSuspend(int spdMethod)
+void KSMShutdownDlg::slotOk()
 {
-    switch (spdMethod) {
-        case Solid::PowerManagement::SuspendState:
-            Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
-            break;
-        case Solid::PowerManagement::HibernateState:
-            Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
-            break;
-        case Solid::PowerManagement::HybridSuspendState:
-            Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
-            break;
-    }
-    reject();
+    m_second = 1;
 }
 
 void KSMShutdownDlg::slotCancel()
 {
-    KSMShutdownFeedback::stop(); // make the screen become normal again
-    reject();
+    interrupt();
 }
 
-bool KSMShutdownDlg::confirmShutdown(
-        bool maysd, bool choose, KWorkSpace::ShutdownType& sdtype,
-        const QString& theme)
+void KSMShutdownDlg::interrupt()
 {
-    KSMShutdownDlg* l = new KSMShutdownDlg(0,
-                                           //KSMShutdownFeedback::self(),
-                                           maysd, choose, sdtype, theme);
+    if (!m_eventloop) {
+        return;
+    }
+    m_eventloop->exit(1);
+    m_eventloop->deleteLater();
+    m_eventloop = nullptr;
+}
+
+void KSMShutdownDlg::slotTimeout()
+{
+    switch (m_shutdownType) {
+        case KWorkSpace::ShutdownTypeReboot: {
+            m_titlelabel->setText(
+                i18np("Restarting computer in 1 second.", "Restarting computer in %1 seconds.", m_second)
+            );
+            m_second--;
+            if (m_second <= 0) {
+                slotReboot();
+            }
+            break;
+        }
+        case KWorkSpace::ShutdownTypeHalt: {
+            m_titlelabel->setText(
+                i18np("Turning off computer in 1 second.", "Turning off computer in %1 seconds.", m_second)
+            );
+            m_second--;
+            if (m_second <= 0) {
+                slotHalt();
+            }
+            break;
+        }
+        default: {
+            m_titlelabel->setText(
+                i18np("Logging out in 1 second.", "Logging out in %1 seconds.", m_second)
+            );
+            m_second--;
+            if (m_second <= 0) {
+                slotLogout();
+            }
+            break;
+        }
+    }
+}
+
+bool KSMShutdownDlg::execDialog()
+{
+    KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
+    show();
+    Q_ASSERT(!m_eventloop);
+    m_eventloop = new QEventLoop(this);
+    return (m_eventloop->exec() == 0);
+}
+
+bool KSMShutdownDlg::confirmShutdown(bool maysd, bool choose, KWorkSpace::ShutdownType &sdtype)
+{
+    KSMShutdownDlg* dialog = new KSMShutdownDlg(nullptr, maysd, choose, sdtype);
+
     // NOTE: KWin logout effect expects class hint values to be ksmserver
     XClassHint classHint;
     classHint.res_name = const_cast<char*>("ksmserver");
     classHint.res_class = const_cast<char*>("ksmserver");
-    XSetClassHint(QX11Info::display(), l->winId(), &classHint);
+    XSetClassHint(QX11Info::display(), dialog->winId(), &classHint);
 
-    l->setWindowRole("logoutdialog");
+    dialog->setWindowRole("logoutdialog");
 
-    bool result = l->exec();
-    sdtype = l->m_shutdownType;
+    bool result = dialog->execDialog();
+    sdtype = dialog->m_shutdownType;
+    qDebug() << Q_FUNC_INFO << result << sdtype;
 
-    delete l;
+    delete dialog;
 
     return result;
 }
+
+#include "moc_shutdowndlg.cpp"
