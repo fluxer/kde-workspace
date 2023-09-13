@@ -55,6 +55,7 @@ private Q_SLOTS:
     void slotToRam();
     void slotToDisk();
     void slotHybrid();
+    void slotCheckButtons();
     void slotConfigAccepted();
 
 private:

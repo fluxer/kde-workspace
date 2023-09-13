@@ -380,6 +380,21 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     // insert-button is 16x16 only
     parent->addPage(widget, i18n("Buttons"), "applications-graphics");
 
+    slotCheckButtons();
+
+    connect(m_lockbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_lockbox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+    connect(m_switchbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_switchbox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+    connect(m_shutdownbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_shutdownbox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+    connect(m_torambox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_torambox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+    connect(m_todiskbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_todiskbox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+    connect(m_hybridbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_hybridbox, SIGNAL(stateChanged(int)), this, SLOT(slotCheckButtons()));
+
     widget = new QWidget();
     widgetlayout = new QVBoxLayout(widget);
     m_lockconfirmbox = new QCheckBox(widget);
@@ -411,26 +426,21 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     widget->setLayout(widgetlayout);
     parent->addPage(widget, i18n("Confirmation"), "task-accepted");
 
-    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
-    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
-    connect(m_lockbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_switchbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_shutdownbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_torambox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_todiskbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_hybridbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_lockconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_switchconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_shutdownconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_toramconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_todiskconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
     connect(m_hybridconfirmbox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
 }
 
 void LockoutApplet::updateSizes()
 {
     int visiblebuttons = 0;
-    QSizeF basesize = s_basesize;
+    QSizeF basesize;
     if (m_showlock) {
         basesize = m_lockwidget->preferredSize();
         visiblebuttons++;
@@ -465,10 +475,10 @@ void LockoutApplet::updateSizes()
         }
         visiblebuttons++;
     }
-    // no buttons at all?
-    if (visiblebuttons == 0) {
-        visiblebuttons++;
+    if (basesize.isNull()) {
+        basesize = s_basesize;
     }
+    Q_ASSERT(visiblebuttons > 0);
 
     // for non-panel expand to the widget size depending on the orientation
     const bool hasspacing = (m_layout->spacing() != 0);
@@ -680,6 +690,63 @@ void LockoutApplet::slotHybrid()
         }
     }
     Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
+}
+
+void LockoutApplet::slotCheckButtons()
+{
+    int checkedcount = 0;
+    if (m_lockbox->isChecked()) {
+        checkedcount++;
+    }
+    if (m_switchbox->isChecked()) {
+        checkedcount++;
+    }
+    if (m_shutdownbox->isChecked()) {
+        checkedcount++;
+    }
+    if (m_torambox->isChecked()) {
+        checkedcount++;
+    }
+    if (m_todiskbox->isChecked()) {
+        checkedcount++;
+    }
+    if (m_hybridbox->isChecked()) {
+        checkedcount++;
+    }
+
+    if (checkedcount > 1) {
+        m_lockbox->setEnabled(true);
+        m_switchbox->setEnabled(true);
+        m_shutdownbox->setEnabled(true);
+        m_torambox->setEnabled(true);
+        m_todiskbox->setEnabled(true);
+        m_hybridbox->setEnabled(true);
+        return;
+    }
+
+    if (m_lockbox->isChecked()) {
+        m_lockbox->setEnabled(false);
+        return;
+    }
+    if (m_switchbox->isChecked()) {
+        m_switchbox->setEnabled(false);
+        return;
+    }
+    if (m_shutdownbox->isChecked()) {
+        m_shutdownbox->setEnabled(false);
+        return;
+    }
+    if (m_torambox->isChecked()) {
+        m_torambox->setEnabled(false);
+        return;
+    }
+    if (m_todiskbox->isChecked()) {
+        m_todiskbox->setEnabled(false);
+        return;
+    }
+    if (m_hybridbox->isChecked()) {
+        m_hybridbox->setEnabled(false);
+    }
 }
 
 void LockoutApplet::slotConfigAccepted()
