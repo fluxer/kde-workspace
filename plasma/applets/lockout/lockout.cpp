@@ -470,10 +470,10 @@ void LockoutApplet::updateSizes()
     }
 
     // for non-panel expand to the widget height/width depending on the orientation
-    const bool addspacing = (m_layout->spacing() != 0);
+    const bool hasspacing = (m_layout->spacing() != 0);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
-            if (addspacing) {
+            if (hasspacing) {
                 basesize.setHeight(size().height());
             }
             basesize.setWidth(basesize.width() * visiblebuttons);
@@ -483,7 +483,7 @@ void LockoutApplet::updateSizes()
             break;
         }
         case Qt::Vertical: {
-            if (addspacing) {
+            if (hasspacing) {
                 basesize.setWidth(size().width());
             }
             basesize.setHeight(basesize.height() * visiblebuttons);
