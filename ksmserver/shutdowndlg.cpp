@@ -35,7 +35,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-static const int s_timeout = 10; // 30secs
+static const int s_timeout = 10; // 10secs
 static const QSizeF s_iconsize = QSizeF(64, 64);
 
 void KSMShutdownFeedback::start()
