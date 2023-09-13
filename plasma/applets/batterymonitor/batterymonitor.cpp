@@ -260,7 +260,7 @@ void BatteryMonitorWidget::slotUpdateLayout()
             this
         );
         iconwidget->setOrientation(Qt::Horizontal);
-        iconwidget->setPreferredIconSize(QSize(paneliconsize, paneliconsize));
+        iconwidget->setPreferredIconSize(QSizeF(paneliconsize, paneliconsize));
         iconwidget->setProperty("_k_udi", batterydevice.udi());
         connect(
             iconwidget, SIGNAL(activated()),
