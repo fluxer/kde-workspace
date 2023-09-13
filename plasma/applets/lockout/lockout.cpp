@@ -80,7 +80,6 @@ private:
     Plasma::PushButton* m_yesbutton;
     Plasma::PushButton* m_nobutton;
     QEventLoop* m_eventloop;
-    bool m_result;
 };
 
 LockoutDialog::LockoutDialog(QWidget *parent)
@@ -93,8 +92,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_label(nullptr),
     m_yesbutton(nullptr),
     m_nobutton(nullptr),
-    m_eventloop(nullptr),
-    m_result(false)
+    m_eventloop(nullptr)
 {
     m_scene = new QGraphicsScene(this);
     m_widget = new QGraphicsWidget();
@@ -151,7 +149,6 @@ void LockoutDialog::setup(const QString &icon, const QString &title, const QStri
 
 bool LockoutDialog::exec()
 {
-    m_result = false;
     KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
     // default to yes like KDialog defaults to KDialog::Ok
     m_yesbutton->setFocus();
@@ -181,7 +178,6 @@ void LockoutDialog::hideEvent(QHideEvent *event)
 
 void LockoutDialog::slotYes()
 {
-    m_result = true;
     Q_ASSERT(m_eventloop);
     m_eventloop->exit(0);
     delete m_eventloop;
