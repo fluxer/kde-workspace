@@ -35,6 +35,8 @@
 
 // standard issue margin/spacing
 static const int s_spacing = 4;
+// even panels do not get bellow that
+static const QSizeF s_basesize = QSizeF(10, 10);
 static const bool s_showlock = true;
 static const bool s_showswitch = true;
 static const bool s_showshutdown = true;
@@ -428,8 +430,7 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
 void LockoutApplet::updateSizes()
 {
     int visiblebuttons = 0;
-    // even panels do not get bellow that
-    QSizeF basesize = QSizeF(10, 10);
+    QSizeF basesize = s_basesize;
     if (m_showlock) {
         basesize = m_lockwidget->preferredSize();
         visiblebuttons++;
@@ -469,30 +470,23 @@ void LockoutApplet::updateSizes()
         visiblebuttons++;
     }
 
-    // for non-panel expand to the widget height/width depending on the orientation
+    // for non-panel expand to the widget size depending on the orientation
     const bool hasspacing = (m_layout->spacing() != 0);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
-            if (hasspacing) {
-                basesize.setHeight(size().height());
-            }
             basesize.setWidth(basesize.width() * visiblebuttons);
-            setPreferredSize(basesize);
+            setPreferredSize(hasspacing ? basesize.expandedTo(size()) : basesize);
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-            emit sizeHintChanged(Qt::PreferredSize);
             break;
         }
         case Qt::Vertical: {
-            if (hasspacing) {
-                basesize.setWidth(size().width());
-            }
             basesize.setHeight(basesize.height() * visiblebuttons);
-            setPreferredSize(basesize);
+            setPreferredSize(hasspacing ? basesize.expandedTo(size()) : basesize);
             setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-            emit sizeHintChanged(Qt::PreferredSize);
             break;
         }
     }
+    emit sizeHintChanged(Qt::PreferredSize);
 }
 
 void LockoutApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -553,14 +547,13 @@ void LockoutApplet::slotUpdateButtons()
     m_todiskwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HibernateState));
     m_hybridwidget->setVisible(m_showhybrid);
     m_hybridwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HybridSuspendState));
-
-    updateSizes();
 }
 
 void LockoutApplet::slotScreensaverRegistered(const QString &service)
 {
     if (service == s_screensaver) {
         slotUpdateButtons();
+        updateSizes();
     }
 }
 
@@ -568,6 +561,7 @@ void LockoutApplet::slotScreensaverUnregistered(const QString &service)
 {
     if (service == s_screensaver) {
         slotUpdateButtons();
+        updateSizes();
     }
 }
 
@@ -704,6 +698,7 @@ void LockoutApplet::slotConfigAccepted()
     m_confirmhybrid = m_hybridconfirmbox->isChecked();
 
     slotUpdateButtons();
+    updateSizes();
 
     KConfigGroup configgroup = config();
     configgroup.writeEntry("showLockButton", m_showlock);
