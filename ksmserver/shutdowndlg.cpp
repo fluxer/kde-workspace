@@ -116,7 +116,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         }
 
         m_okbutton = new Plasma::PushButton(m_widget);
-        m_okbutton->setText(i18n("Ok"));
+        m_okbutton->setText(i18n("&OK"));
         m_okbutton->setIcon(KIcon("dialog-ok"));
         connect(
             m_okbutton, SIGNAL(released()),
@@ -125,7 +125,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_layout->addItem(m_okbutton, 1, 0, 1, 1);
 
         m_cancelbutton = new Plasma::PushButton(m_widget);
-        m_cancelbutton->setText(i18n("Cancel"));
+        m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
         connect(
             m_cancelbutton, SIGNAL(released()),
@@ -185,7 +185,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         }
 
         m_cancelbutton = new Plasma::PushButton(m_widget);
-        m_cancelbutton->setText(i18n("Cancel"));
+        m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
         connect(
             m_cancelbutton, SIGNAL(released()),
