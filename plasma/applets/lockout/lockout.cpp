@@ -133,9 +133,6 @@ LockoutDialog::LockoutDialog(QWidget *parent)
 
     m_scene->addItem(m_widget);
     setGraphicsWidget(m_widget);
-
-    // default to yes like KDialog defaults to KDialog::Ok
-    m_yesbutton->setFocus();
 }
 
 LockoutDialog::~LockoutDialog()
@@ -154,6 +151,8 @@ bool LockoutDialog::exec()
 {
     m_result = false;
     KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
+    // default to yes like KDialog defaults to KDialog::Ok
+    m_yesbutton->setFocus();
     show();
     if (m_eventloop) {
         m_eventloop->exit(1);
@@ -183,6 +182,8 @@ void LockoutDialog::slotYes()
     m_result = true;
     Q_ASSERT(m_eventloop);
     m_eventloop->exit(0);
+    delete m_eventloop;
+    m_eventloop = nullptr;
     close();
 }
 
@@ -190,6 +191,8 @@ void LockoutDialog::slotNo()
 {
     Q_ASSERT(m_eventloop);
     m_eventloop->exit(1);
+    delete m_eventloop;
+    m_eventloop = nullptr;
     close();
 }
 
