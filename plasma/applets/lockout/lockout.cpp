@@ -232,7 +232,7 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_lockout");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
-    setPreferredSize(40, 110);
+    setPreferredSize(110, 40);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
@@ -442,59 +442,36 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
 
 void LockoutApplet::updateSizes()
 {
-    int visiblebuttons = 0;
-    QSizeF basesize;
+    QSizeF preferredsize;
     if (m_showlock) {
-        basesize = m_lockwidget->preferredSize();
-        visiblebuttons++;
+        preferredsize = m_lockwidget->preferredSize();
     }
     if (m_showswitch) {
-        if (basesize.isNull()) {
-            basesize = m_switchwidget->preferredSize();
-        }
-        visiblebuttons++;
+        preferredsize += m_switchwidget->preferredSize();
     }
     if (m_showshutdown) {
-        if (basesize.isNull()) {
-            basesize = m_shutdownwidget->preferredSize();
-        }
-        visiblebuttons++;
+        preferredsize += m_shutdownwidget->preferredSize();
     }
     if (m_showtoram) {
-        if (basesize.isNull()) {
-            basesize = m_toramwidget->preferredSize();
-        }
-        visiblebuttons++;
+        preferredsize += m_toramwidget->preferredSize();
     }
     if (m_showtodisk) {
-        if (basesize.isNull()) {
-            basesize = m_todiskwidget->preferredSize();
-        }
-        visiblebuttons++;
+        preferredsize += m_todiskwidget->preferredSize();
     }
     if (m_showhybrid) {
-        if (basesize.isNull()) {
-            basesize = m_hybridwidget->preferredSize();
-        }
-        visiblebuttons++;
+        preferredsize += m_hybridwidget->preferredSize();
     }
-    if (basesize.isNull()) {
-        basesize = s_basesize;
+    if (preferredsize.isNull()) {
+        preferredsize = s_basesize;
     }
-    Q_ASSERT(visiblebuttons > 0);
 
-    // for non-panel expand to the widget size depending on the orientation
-    const bool hasspacing = (m_layout->spacing() != 0);
+    setPreferredSize(preferredsize);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
-            basesize.setWidth(basesize.width() * visiblebuttons);
-            setPreferredSize(hasspacing ? basesize.expandedTo(size()) : basesize);
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
             break;
         }
         case Qt::Vertical: {
-            basesize.setHeight(basesize.height() * visiblebuttons);
-            setPreferredSize(hasspacing ? basesize.expandedTo(size()) : basesize);
             setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
             break;
         }
@@ -504,6 +481,8 @@ void LockoutApplet::updateSizes()
 
 void LockoutApplet::constraintsEvent(Plasma::Constraints constraints)
 {
+    // perfect size finder
+    // qDebug() << Q_FUNC_INFO << size();
     if (constraints & Plasma::SizeConstraint || constraints & Plasma::FormFactorConstraint) {
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
