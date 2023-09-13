@@ -117,7 +117,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_yesbutton->setIcon(KIcon("dialog-ok"));
     m_yesbutton->setText(i18n("Yes"));
     connect(
-        m_yesbutton, SIGNAL(pressed()),
+        m_yesbutton, SIGNAL(released()),
         this, SLOT(slotYes())
     );
     m_layout->addItem(m_yesbutton, 3, 0, 1, 1);
@@ -125,7 +125,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_nobutton->setIcon(KIcon("process-stop"));
     m_nobutton->setText(i18n("No"));
     connect(
-        m_nobutton, SIGNAL(pressed()),
+        m_nobutton, SIGNAL(released()),
         this, SLOT(slotNo())
     );
     m_layout->addItem(m_nobutton, 3, 1, 1, 1);
