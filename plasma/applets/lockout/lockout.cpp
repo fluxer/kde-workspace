@@ -60,6 +60,10 @@ public:
     bool exec();
     void interrupt();
 
+protected:
+    // Plasma::Dialog reimplementation
+    void hideEvent(QHideEvent *event) final;
+
 private Q_SLOTS:
     void slotYes();
     void slotNo();
@@ -163,6 +167,13 @@ void LockoutDialog::interrupt()
         return;
     }
     m_eventloop->exit(1);
+}
+
+// for when closed by means other than clicking a button
+void LockoutDialog::hideEvent(QHideEvent *event)
+{
+    interrupt();
+    Plasma::Dialog::hideEvent(event);
 }
 
 void LockoutDialog::slotYes()
