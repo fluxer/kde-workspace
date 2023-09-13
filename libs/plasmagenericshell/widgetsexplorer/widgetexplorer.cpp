@@ -711,8 +711,18 @@ void WidgetExplorer::keyPressEvent(QKeyEvent *event)
         event->accept();
         return;
     }
+    // arrow keys go to the scroll widget
+    switch (event->key()) {
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Up:
+        case Qt::Key_Down: {
+            QApplication::sendEvent(d->scrollWidget, event);
+            return;
+        }
+    }
     // if the scroll area or any other widget steals the focus the focus goes back to the filter
-    // widget
+    // widget tho
     if (!d->filterEdit->hasFocus()) {
         d->filterEdit->setFocus();
     }
