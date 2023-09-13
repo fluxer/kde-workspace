@@ -337,7 +337,6 @@ bool KSMShutdownDlg::confirmShutdown(bool maysd, bool choose, KWorkSpace::Shutdo
 
     bool result = dialog->execDialog();
     sdtype = dialog->m_shutdownType;
-    qDebug() << Q_FUNC_INFO << result << sdtype;
 
     delete dialog;
 
