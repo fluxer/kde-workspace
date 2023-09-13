@@ -1,2 +1,2 @@
 #!/bin/bash
-$XGETTEXT *.cpp themes/*/*.qml -o $podir/ksmserver.pot
+$XGETTEXT *.cpp -o $podir/ksmserver.pot

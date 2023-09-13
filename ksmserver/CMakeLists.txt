@@ -4,7 +4,6 @@ add_definitions(-DKDE_DEFAULT_DEBUG_AREA=1218)
 
 include_directories(
    ${CMAKE_SOURCE_DIR}/libs
-   ${KDECLARATIVE_INCLUDE_DIR}
    # for kworkspace_export.h
    ${CMAKE_BINARY_DIR}/libs/kworkspace
 )
@@ -48,7 +47,6 @@ target_link_libraries(ksmserver
     KDE4::kdeui
     KDE4::kio
     KDE4::solid
-    KDE4::kdeclarative
     ${QT_QTDECLARATIVE_LIBRARY}
     ${X11_LIBRARIES}
     kworkspace
@@ -78,8 +76,4 @@ install(
 install(
     FILES org.kde.KSMServerInterface.xml
     DESTINATION ${KDE4_DBUS_INTERFACES_INSTALL_DIR}
-)
-install(
-    DIRECTORY themes/
-    DESTINATION ${KDE4_DATA_INSTALL_DIR}/ksmserver/themes
 )
