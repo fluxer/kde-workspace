@@ -113,7 +113,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_layout->addItem(m_label, 2, 0, 1, 2);
     m_yesbutton = new Plasma::PushButton(m_widget);
     m_yesbutton->setIcon(KIcon("dialog-ok"));
-    m_yesbutton->setText(i18n("Yes"));
+    m_yesbutton->setText(i18n("&Yes"));
     connect(
         m_yesbutton, SIGNAL(released()),
         this, SLOT(slotYes())
@@ -121,7 +121,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_layout->addItem(m_yesbutton, 3, 0, 1, 1);
     m_nobutton = new Plasma::PushButton(m_widget);
     m_nobutton->setIcon(KIcon("process-stop"));
-    m_nobutton->setText(i18n("No"));
+    m_nobutton->setText(i18n("&No"));
     connect(
         m_nobutton, SIGNAL(released()),
         this, SLOT(slotNo())
