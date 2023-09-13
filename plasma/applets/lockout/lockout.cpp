@@ -553,6 +553,8 @@ void LockoutApplet::slotUpdateButtons()
     m_todiskwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HibernateState));
     m_hybridwidget->setVisible(m_showhybrid);
     m_hybridwidget->setEnabled(sleepstates.contains(Solid::PowerManagement::HybridSuspendState));
+
+    updateSizes();
 }
 
 void LockoutApplet::slotScreensaverRegistered(const QString &service)
