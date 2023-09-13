@@ -142,6 +142,8 @@ LockoutDialog::~LockoutDialog()
 
 void LockoutDialog::setup(const QString &icon, const QString &title, const QString &text)
 {
+    // force-update before showing
+    m_iconwidget->setIcon(KIcon());
     m_iconwidget->setIcon(icon);
     m_iconwidget->setText(title);
     m_label->setText(text);
