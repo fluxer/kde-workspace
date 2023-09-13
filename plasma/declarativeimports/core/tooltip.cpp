@@ -177,14 +177,12 @@ void ToolTipProxy::updateToolTip()
         }
 
         case QVariant::Icon: {
-            QIcon icon = m_image.value<QIcon>();
-            data.setImage(icon);
+            data.setImage(m_image.value<QIcon>());
             break;
         }
 
         case QVariant::Pixmap: {
-            QPixmap pixmap = m_image.value<QPixmap>();
-            data.setImage(pixmap);
+            data.setImage(m_image.value<QPixmap>());
             break;
         }
 
