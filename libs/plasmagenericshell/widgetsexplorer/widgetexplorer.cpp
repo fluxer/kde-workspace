@@ -39,7 +39,7 @@
 namespace Plasma
 {
 
-// hardcoded but ok because the widget is not resizable
+// hardcoded but ok because the widget is not resizable, that implies issue with big font sizes tho
 static const int s_margin = 4;
 static const QSizeF s_appletframesize = QSize(300, 100);
 static const QSizeF s_appleticonsize = QSize(86, 86);
