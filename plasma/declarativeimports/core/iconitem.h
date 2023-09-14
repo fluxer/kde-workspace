@@ -86,7 +86,6 @@ private:
     QIcon m_icon;
     Plasma::Svg *m_svgIcon;
     QPixmap m_pixmapIcon;
-    QImage m_imageIcon;
     //this contains the raw variant it was passed
     QVariant m_source;
 

@@ -14,7 +14,7 @@ set(corebindings_SRCS
     tooltip.cpp
     dataenginebindings.cpp
     iconitem.cpp
-    )
+)
 
 include_directories(
     ${CMAKE_SOURCE_DIR}
@@ -31,8 +31,15 @@ target_link_libraries(corebindingsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
 )
 
-install(TARGETS corebindingsplugin DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
-install(FILES qmldir DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/core)
+install(
+    TARGETS corebindingsplugin
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/core
+)
+
+install(
+    FILES qmldir
+    DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/core
+)
 
 if(ENABLE_TESTING)
     add_subdirectory(tests)
