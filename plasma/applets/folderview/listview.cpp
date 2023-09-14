@@ -21,12 +21,11 @@
 #include "listview.h"
 
 #include <QApplication>
-#include <QGraphicsView>
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
 #include <QItemSelectionModel>
 #include <QPainter>
-#include <QtGui/qstyleoption.h>
+#include <QGraphicsView>
+#include <QGraphicsSceneHoverEvent>
+#include <QStyleOptionViewItem>
 
 #include <KDirModel>
 #include <KStringHandler>
