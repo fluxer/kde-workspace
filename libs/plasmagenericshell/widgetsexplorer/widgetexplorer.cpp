@@ -598,7 +598,7 @@ void WidgetExplorerPrivate::_k_immutabilityChanged(const Plasma::ImmutabilityTyp
     }
 }
 
-WidgetExplorer::WidgetExplorer(Plasma::Location loc, QGraphicsItem *parent)
+WidgetExplorer::WidgetExplorer(const Plasma::Location loc, QGraphicsItem *parent)
     : QGraphicsWidget(parent),
     d(new WidgetExplorerPrivate(this))
 {

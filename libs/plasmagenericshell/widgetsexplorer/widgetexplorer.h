@@ -39,7 +39,7 @@ class PLASMAGENERICSHELL_EXPORT WidgetExplorer : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    explicit WidgetExplorer(Plasma::Location loc, QGraphicsItem *parent = nullptr);
+    explicit WidgetExplorer(const Plasma::Location loc, QGraphicsItem *parent = nullptr);
     explicit WidgetExplorer(QGraphicsItem *parent = nullptr);
     ~WidgetExplorer();
 
