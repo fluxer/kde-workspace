@@ -66,10 +66,10 @@ static Qt::Orientation kOrientationForLocation(const Plasma::Location location)
 
 // similar to Plasma::Applet::view(), the important thing is to get a window (preferably active
 // one)
-static QGraphicsView* kSceneWindow(QGraphicsScene *scene)
+static QGraphicsView* kSceneWindow(const QGraphicsScene *scene)
 {
     if (!scene) {
-        kWarning() << "No AppletIcon scene";
+        kWarning() << "No WidgetExplorer scene";
         return nullptr;
     }
     foreach (QGraphicsView *view, scene->views()) {
