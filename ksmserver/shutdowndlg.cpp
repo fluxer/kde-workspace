@@ -118,6 +118,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_okbutton = new Plasma::PushButton(m_widget);
         m_okbutton->setText(i18n("&OK"));
         m_okbutton->setIcon(KIcon("dialog-ok"));
+        m_okbutton->setFocusPolicy(Qt::StrongFocus);
+        m_okbutton->installEventFilter(this);
         connect(
             m_okbutton, SIGNAL(released()),
             this, SLOT(slotOk())
@@ -127,6 +129,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_cancelbutton = new Plasma::PushButton(m_widget);
         m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+        m_cancelbutton->setFocusPolicy(Qt::StrongFocus);
+        m_cancelbutton->installEventFilter(this);
         connect(
             m_cancelbutton, SIGNAL(released()),
             this, SLOT(slotCancel())
@@ -153,6 +157,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_logoutwidget->setToolTip(i18n("Logout"));
         m_logoutwidget->setPreferredIconSize(s_iconsize);
         m_logoutwidget->setIcon(KIcon("system-log-out"));
+        m_logoutwidget->setFocusPolicy(Qt::StrongFocus);
+        m_logoutwidget->installEventFilter(this);
         connect(
             m_logoutwidget, SIGNAL(clicked()),
             this, SLOT(slotLogout())
@@ -165,6 +171,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             m_rebootwidget->setToolTip(i18n("Restart Computer"));
             m_rebootwidget->setPreferredIconSize(s_iconsize);
             m_rebootwidget->setIcon(KIcon("system-reboot"));
+            m_rebootwidget->setFocusPolicy(Qt::StrongFocus);
+            m_rebootwidget->installEventFilter(this);
             connect(
                 m_rebootwidget, SIGNAL(clicked()),
                 this, SLOT(slotReboot())
@@ -176,6 +184,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             m_haltwidget->setToolTip(i18n("Halt Computer"));
             m_haltwidget->setPreferredIconSize(s_iconsize);
             m_haltwidget->setIcon(KIcon("system-shutdown"));
+            m_haltwidget->setFocusPolicy(Qt::StrongFocus);
+            m_haltwidget->installEventFilter(this);
             connect(
                 m_haltwidget, SIGNAL(clicked()),
                 this, SLOT(slotHalt())
@@ -187,6 +197,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_cancelbutton = new Plasma::PushButton(m_widget);
         m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+        m_cancelbutton->setFocusPolicy(Qt::StrongFocus);
+        m_cancelbutton->installEventFilter(this);
         connect(
             m_cancelbutton, SIGNAL(released()),
             this, SLOT(slotCancel())
@@ -236,6 +248,18 @@ bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_scene && event->type() == QEvent::WindowDeactivate) {
         interrupt();
+    } else if (m_timer) {
+        ; // nada
+    } else if (watched == m_logoutwidget && event->type() == QEvent::FocusIn) {
+        m_titlelabel->setText(i18n("Logout"));
+    } else if (watched == m_rebootwidget && event->type() == QEvent::FocusIn) {
+        m_titlelabel->setText(i18n("Restart Computer"));
+    } else if (watched == m_haltwidget && event->type() == QEvent::FocusIn) {
+        m_titlelabel->setText(i18n("Halt Computer"));
+    } else if (watched == m_okbutton && event->type() == QEvent::FocusIn) {
+        m_titlelabel->setText(i18n("OK"));
+    } else if (watched == m_cancelbutton && event->type() == QEvent::FocusIn) {
+        m_titlelabel->setText(i18n("Cancel"));
     }
     return Plasma::Dialog::eventFilter(watched, event);
 }
@@ -266,16 +290,6 @@ void KSMShutdownDlg::slotOk()
 void KSMShutdownDlg::slotCancel()
 {
     interrupt();
-}
-
-void KSMShutdownDlg::interrupt()
-{
-    if (!m_eventloop) {
-        return;
-    }
-    m_eventloop->exit(1);
-    m_eventloop->deleteLater();
-    m_eventloop = nullptr;
 }
 
 void KSMShutdownDlg::slotTimeout()
@@ -321,6 +335,16 @@ bool KSMShutdownDlg::execDialog()
     Q_ASSERT(!m_eventloop);
     m_eventloop = new QEventLoop(this);
     return (m_eventloop->exec() == 0);
+}
+
+void KSMShutdownDlg::interrupt()
+{
+    if (!m_eventloop) {
+        return;
+    }
+    m_eventloop->exit(1);
+    m_eventloop->deleteLater();
+    m_eventloop = nullptr;
 }
 
 bool KSMShutdownDlg::confirmShutdown(bool maysd, bool choose, KWorkSpace::ShutdownType &sdtype)
