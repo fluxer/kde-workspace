@@ -105,6 +105,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
 
     m_layout = new QGraphicsGridLayout(m_widget);
     m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(4);
     m_iconwidget = new Plasma::IconWidget(m_widget);
     m_iconwidget->setOrientation(Qt::Horizontal);
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
@@ -136,10 +137,13 @@ LockoutDialog::LockoutDialog(QWidget *parent)
         this, SLOT(slotNo())
     );
     m_layout->addItem(m_nobutton, 3, 1, 1, 1);
+    m_layout->setRowMaximumHeight(3, m_nobutton->preferredSize().height() + m_layout->horizontalSpacing());
     m_widget->setLayout(m_layout);
 
     m_scene->addItem(m_widget);
     setGraphicsWidget(m_widget);
+
+    adjustSize();
 }
 
 LockoutDialog::~LockoutDialog()
