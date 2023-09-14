@@ -343,7 +343,7 @@ void KSMShutdownDlg::slotTimeout()
 bool KSMShutdownDlg::execDialog()
 {
     KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
-    show();
+    animatedShow(Plasma::locationToDirection(Plasma::Location::Desktop));
     Q_ASSERT(!m_eventloop);
     m_eventloop = new QEventLoop(this);
     return (m_eventloop->exec() == 0);
