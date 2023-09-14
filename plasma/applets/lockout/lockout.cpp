@@ -156,7 +156,8 @@ bool LockoutDialog::exec()
     KWindowSystem::setState(winId(), NET::SkipPager | NET::SkipTaskbar);
     // default to yes like KDialog defaults to KDialog::Ok
     m_yesbutton->setFocus();
-    show();
+    // NOTE: this also animates hide
+    animatedShow(Plasma::locationToDirection(Plasma::Location::Desktop));
     if (m_eventloop) {
         m_eventloop->exit(1);
         m_eventloop->deleteLater();
