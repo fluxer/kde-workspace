@@ -45,7 +45,6 @@ public:
 
 private:
     QString m_text;
-    QPixmap m_divider;
     bool m_drawShadow;
 };
 
