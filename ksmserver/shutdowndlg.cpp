@@ -43,7 +43,6 @@ static const QSizeF s_nochooseminumumsize = QSizeF(280, 80);
 static bool kSwitchTitleEvent(QEvent *event)
 {
     switch (event->type()) {
-        case QEvent::FocusIn:
         case QEvent::HoverEnter:
         case QEvent::GraphicsSceneHoverEnter: {
             return true;
@@ -53,28 +52,6 @@ static bool kSwitchTitleEvent(QEvent *event)
         }
     }
     Q_UNREACHABLE();
-}
-
-static bool kAcceptKeyEvent(QEvent *event)
-{
-    if (event->type() == QEvent::KeyRelease) {
-        QKeyEvent* keyevent = static_cast<QKeyEvent*>(event);
-        Q_ASSERT(keyevent);
-        if (keyevent->modifiers() != Qt::NoModifier || keyevent->count() != 1) {
-            // single key only
-            return false;
-        }
-        switch (keyevent->key()) {
-            case Qt::Key_Space:
-            case Qt::Key_Return: {
-                return true;
-            }
-            default: {
-                return false;
-            }
-        }
-    }
-    return false;
 }
 
 void KSMShutdownFeedback::start()
@@ -159,7 +136,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_okbutton->setText(i18n("&OK"));
         m_okbutton->setIcon(KIcon("dialog-ok"));
         m_okbutton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        m_okbutton->setFocusPolicy(Qt::StrongFocus);
         m_okbutton->installEventFilter(this);
         connect(
             m_okbutton, SIGNAL(released()),
@@ -171,7 +147,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
         m_cancelbutton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        m_cancelbutton->setFocusPolicy(Qt::StrongFocus);
         m_cancelbutton->installEventFilter(this);
         connect(
             m_cancelbutton, SIGNAL(released()),
@@ -202,7 +177,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_logoutwidget = new Plasma::IconWidget(m_widget);
         m_logoutwidget->setPreferredIconSize(s_iconsize);
         m_logoutwidget->setIcon(KIcon("system-log-out"));
-        m_logoutwidget->setFocusPolicy(Qt::StrongFocus);
         m_logoutwidget->installEventFilter(this);
         connect(
             m_logoutwidget, SIGNAL(clicked()),
@@ -215,7 +189,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             m_rebootwidget = new Plasma::IconWidget(m_widget);
             m_rebootwidget->setPreferredIconSize(s_iconsize);
             m_rebootwidget->setIcon(KIcon("system-reboot"));
-            m_rebootwidget->setFocusPolicy(Qt::StrongFocus);
             m_rebootwidget->installEventFilter(this);
             connect(
                 m_rebootwidget, SIGNAL(clicked()),
@@ -227,7 +200,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             m_haltwidget = new Plasma::IconWidget(m_widget);
             m_haltwidget->setPreferredIconSize(s_iconsize);
             m_haltwidget->setIcon(KIcon("system-shutdown"));
-            m_haltwidget->setFocusPolicy(Qt::StrongFocus);
             m_haltwidget->installEventFilter(this);
             connect(
                 m_haltwidget, SIGNAL(clicked()),
@@ -240,7 +212,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_cancelbutton = new Plasma::PushButton(m_widget);
         m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
-        m_cancelbutton->setFocusPolicy(Qt::StrongFocus);
         m_cancelbutton->installEventFilter(this);
         connect(
             m_cancelbutton, SIGNAL(released()),
@@ -288,7 +259,6 @@ void KSMShutdownDlg::hideEvent(QHideEvent *event)
     Plasma::Dialog::hideEvent(event);
 }
 
-// TODO: hover effect on focus change
 bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_scene && event->type() == QEvent::WindowDeactivate) {
@@ -303,16 +273,6 @@ bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
         m_titlelabel->setText(i18n("OK"));
     } else if (!m_timer && watched == m_cancelbutton && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Cancel"));
-    // totally not a hack - key events for icons!
-    } else if (watched == m_logoutwidget && kAcceptKeyEvent(event)) {
-        QMetaObject::invokeMethod(m_logoutwidget, "clicked", Qt::QueuedConnection);
-        return true;
-    } else if (watched == m_rebootwidget && kAcceptKeyEvent(event)) {
-        QMetaObject::invokeMethod(m_rebootwidget, "clicked", Qt::QueuedConnection);
-        return true;
-    } else if (watched == m_haltwidget && kAcceptKeyEvent(event)) {
-        QMetaObject::invokeMethod(m_haltwidget, "clicked", Qt::QueuedConnection);
-        return true;
     }
     return Plasma::Dialog::eventFilter(watched, event);
 }
