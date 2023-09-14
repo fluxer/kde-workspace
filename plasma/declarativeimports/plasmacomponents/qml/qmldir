@@ -10,7 +10,6 @@ ListItem 0.1 ListItem.qml
 ProgressBar 0.1 ProgressBar.qml
 ScrollBar 0.1 ScrollBar.qml
 SectionScroller 0.1 SectionScroller.qml
-Sheet 0.1 Sheet.qml
 TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
 TabGroup 0.1 TabGroup.qml

@@ -18,24 +18,19 @@
  */
 
 #include "plasmacomponentsplugin.h"
+#include "qrangemodel.h"
+#include "enums.h"
+#include "qmenu.h"
+#include "qmenuitem.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeItem>
 
-#include "qrangemodel.h"
-
 #include <KSharedConfig>
 #include <KDebug>
 #include <KGlobal>
-
-#include <kdeclarative.h>
-
-#include "enums.h"
-#include "qmenu.h"
-#include "qmenuitem.h"
-#include "fullscreensheet.h"
 
 Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 
@@ -90,14 +85,8 @@ void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    //platform specific c++ components
-    const QString target = KDeclarative::componentsTarget();
-    if (target == KDeclarative::defaultComponentsTarget()) {
-        qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
-        qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
-    } else {
-        qmlRegisterType<FullScreenSheet>(uri, 0, 1, "Sheet");
-    }
+    qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
+    qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
 
     qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
 

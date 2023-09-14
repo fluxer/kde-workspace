@@ -1,8 +1,6 @@
 project(plasmacomponents)
 
 set(plasmacomponents_SRCS
-    fullscreensheet.cpp
-    fullscreenwindow.cpp
     plasmacomponentsplugin.cpp
     qrangemodel.cpp
     enums.cpp
@@ -23,7 +21,6 @@ target_link_libraries(plasmacomponentsplugin
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     KDE4::kdeui
-    KDE4::kdeclarative
     KDE4::plasma
 )
 
