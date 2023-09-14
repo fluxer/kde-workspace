@@ -90,8 +90,6 @@ private:
     //this contains the raw variant it was passed
     QVariant m_source;
 
-    QSizeF m_implicitSize;
-
     bool m_smooth;
     bool m_active;
 
