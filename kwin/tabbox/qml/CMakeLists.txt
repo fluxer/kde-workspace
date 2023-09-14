@@ -8,7 +8,6 @@ install( DIRECTORY clients/present_windows  DESTINATION ${KDE4_DATA_INSTALL_DIR}
 install( DIRECTORY clients/small_icons  DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/tabbox )
 install( DIRECTORY clients/text         DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/tabbox )
 install( DIRECTORY clients/thumbnails   DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/tabbox )
-install( DIRECTORY clients/window_strip DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/tabbox )
 
 install( DIRECTORY desktops/informative DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/desktoptabbox )
 install( DIRECTORY desktops/previews DESTINATION ${KDE4_DATA_INSTALL_DIR}/kwin/desktoptabbox )
@@ -21,7 +20,6 @@ install( FILES clients/present_windows/metadata.desktop  DESTINATION ${KDE4_SERV
 install( FILES clients/small_icons/metadata.desktop  DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_window_switcher_small_icons.desktop )
 install( FILES clients/text/metadata.desktop         DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_window_switcher_text.desktop )
 install( FILES clients/thumbnails/metadata.desktop   DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_window_switcher_thumbnails.desktop )
-install( FILES clients/window_strip/metadata.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_window_switcher_window_strip.desktop )
 
 install( FILES desktops/informative/metadata.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_desktop_switcher_informative.desktop )
 install( FILES desktops/previews/metadata.desktop DESTINATION ${KDE4_SERVICES_INSTALL_DIR}/kwin RENAME kwin4_desktop_switcher_previews.desktop )
