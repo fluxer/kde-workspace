@@ -37,6 +37,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 static const int s_timeout = 10; // 10secs
 static const QSizeF s_iconsize = QSizeF(64, 64);
+static const QSizeF s_chooseminumumsize = QSizeF(280, 130);
+static const QSizeF s_nochooseminumumsize = QSizeF(280, 80);
 
 static bool kSwitchTitleEvent(QEvent *event)
 {
@@ -97,13 +99,14 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
 
     m_scene = new QGraphicsScene(this);
     m_widget = new QGraphicsWidget();
-    m_widget->setMinimumSize(280, 130);
 
     m_layout = new QGraphicsGridLayout(m_widget);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(4);
 
     if (!choose) {
+        m_widget->setMinimumSize(s_nochooseminumumsize);
+
         m_titlelabel = new Plasma::Label(m_widget);
         m_titlelabel->setAlignment(Qt::AlignCenter);
         m_titlelabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -133,6 +136,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_okbutton = new Plasma::PushButton(m_widget);
         m_okbutton->setText(i18n("&OK"));
         m_okbutton->setIcon(KIcon("dialog-ok"));
+        m_okbutton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         m_okbutton->setFocusPolicy(Qt::StrongFocus);
         m_okbutton->installEventFilter(this);
         connect(
@@ -144,6 +148,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_cancelbutton = new Plasma::PushButton(m_widget);
         m_cancelbutton->setText(i18n("&Cancel"));
         m_cancelbutton->setIcon(KIcon("dialog-cancel"));
+        m_cancelbutton->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         m_cancelbutton->setFocusPolicy(Qt::StrongFocus);
         m_cancelbutton->installEventFilter(this);
         connect(
@@ -151,6 +156,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             this, SLOT(slotCancel())
         );
         m_layout->addItem(m_cancelbutton, 1, 1, 1, 1);
+        m_layout->setRowMaximumHeight(1, m_cancelbutton->preferredSize().height() + m_layout->verticalSpacing());
 
         m_timer = new QTimer(this);
         m_timer->setInterval(1000);
@@ -160,6 +166,8 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         );
         m_timer->start();
     } else {
+        m_widget->setMinimumSize(s_chooseminumumsize);
+
         int buttonscount = 0;
 
         m_titlelabel = new Plasma::Label(m_widget);
@@ -216,6 +224,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             this, SLOT(slotCancel())
         );
         m_layout->addItem(m_cancelbutton, 3, 0, 1, buttonscount);
+        m_layout->setRowMaximumHeight(3, m_cancelbutton->preferredSize().height() + m_layout->horizontalSpacing());
 
         m_layout->addItem(m_titlelabel, 0, 0, 1, buttonscount);
         m_layout->addItem(m_separator, 1, 0, 1, buttonscount);
