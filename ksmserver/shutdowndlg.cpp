@@ -38,6 +38,21 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 static const int s_timeout = 10; // 10secs
 static const QSizeF s_iconsize = QSizeF(64, 64);
 
+static bool kSwitchTitleEvent(QEvent *event)
+{
+    switch (event->type()) {
+        case QEvent::FocusIn:
+        case QEvent::HoverEnter:
+        case QEvent::GraphicsSceneHoverEnter: {
+            return true;
+        }
+        default: {
+            return false;
+        }
+    }
+    Q_UNREACHABLE();
+}
+
 void KSMShutdownFeedback::start()
 {
     if (KWindowSystem::compositingActive()) {
@@ -154,7 +169,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_separator = new Plasma::Separator(m_widget);
 
         m_logoutwidget = new Plasma::IconWidget(m_widget);
-        m_logoutwidget->setToolTip(i18n("Logout"));
         m_logoutwidget->setPreferredIconSize(s_iconsize);
         m_logoutwidget->setIcon(KIcon("system-log-out"));
         m_logoutwidget->setFocusPolicy(Qt::StrongFocus);
@@ -168,7 +182,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
 
         if (maysd) {
             m_rebootwidget = new Plasma::IconWidget(m_widget);
-            m_rebootwidget->setToolTip(i18n("Restart Computer"));
             m_rebootwidget->setPreferredIconSize(s_iconsize);
             m_rebootwidget->setIcon(KIcon("system-reboot"));
             m_rebootwidget->setFocusPolicy(Qt::StrongFocus);
@@ -181,7 +194,6 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
             buttonscount++;
 
             m_haltwidget = new Plasma::IconWidget(m_widget);
-            m_haltwidget->setToolTip(i18n("Halt Computer"));
             m_haltwidget->setPreferredIconSize(s_iconsize);
             m_haltwidget->setIcon(KIcon("system-shutdown"));
             m_haltwidget->setFocusPolicy(Qt::StrongFocus);
@@ -250,15 +262,15 @@ bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
         interrupt();
     } else if (m_timer) {
         ; // nada
-    } else if (watched == m_logoutwidget && event->type() == QEvent::FocusIn) {
+    } else if (watched == m_logoutwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Logout"));
-    } else if (watched == m_rebootwidget && event->type() == QEvent::FocusIn) {
+    } else if (watched == m_rebootwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Restart Computer"));
-    } else if (watched == m_haltwidget && event->type() == QEvent::FocusIn) {
+    } else if (watched == m_haltwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Halt Computer"));
-    } else if (watched == m_okbutton && event->type() == QEvent::FocusIn) {
+    } else if (watched == m_okbutton && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("OK"));
-    } else if (watched == m_cancelbutton && event->type() == QEvent::FocusIn) {
+    } else if (watched == m_cancelbutton && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Cancel"));
     }
     return Plasma::Dialog::eventFilter(watched, event);
