@@ -158,6 +158,7 @@ KSMShutdownDlg::KSMShutdownDlg(QWidget* parent,
         m_layout->addItem(m_cancelbutton, 1, 1, 1, 1);
         m_layout->setRowMaximumHeight(1, m_cancelbutton->preferredSize().height() + m_layout->verticalSpacing());
 
+        slotTimeout();
         m_timer = new QTimer(this);
         m_timer->setInterval(1000);
         connect(
@@ -321,7 +322,7 @@ void KSMShutdownDlg::slotTimeout()
                 i18np("Restarting computer in 1 second.", "Restarting computer in %1 seconds.", m_second)
             );
             m_second--;
-            if (m_second <= 0) {
+            if (m_second <= -1) {
                 slotReboot();
             }
             break;
@@ -331,7 +332,7 @@ void KSMShutdownDlg::slotTimeout()
                 i18np("Turning off computer in 1 second.", "Turning off computer in %1 seconds.", m_second)
             );
             m_second--;
-            if (m_second <= 0) {
+            if (m_second <= -1) {
                 slotHalt();
             }
             break;
@@ -341,7 +342,7 @@ void KSMShutdownDlg::slotTimeout()
                 i18np("Logging out in 1 second.", "Logging out in %1 seconds.", m_second)
             );
             m_second--;
-            if (m_second <= 0) {
+            if (m_second <= -1) {
                 slotLogout();
             }
             break;
