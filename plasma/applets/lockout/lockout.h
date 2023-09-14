@@ -34,6 +34,16 @@ class LockoutApplet : public Plasma::Applet
 {
     Q_OBJECT
 public:
+    enum DoWhat {
+        DoNothing = 0,
+        DoLock = 1,
+        DoSwitch = 2,
+        // shutdown is asked for by ksmserver
+        DoToRam = 3,
+        DoToDisk = 4,
+        DoHybrid = 5
+    };
+
     LockoutApplet(QObject *parent, const QVariantList &args);
     ~LockoutApplet();
 
@@ -55,6 +65,7 @@ private Q_SLOTS:
     void slotToRam();
     void slotToDisk();
     void slotHybrid();
+    void slotDoIt();
     void slotCheckButtons();
     void slotConfigAccepted();
 
@@ -98,6 +109,7 @@ private:
     QSpacerItem* m_spacer2;
     QDBusServiceWatcher* m_screensaverwatcher;
     LockoutDialog* m_dialog;
+    LockoutApplet::DoWhat m_dowhat;
 };
 
 K_EXPORT_PLASMA_APPLET(lockout, LockoutApplet)

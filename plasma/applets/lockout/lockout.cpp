@@ -23,6 +23,7 @@
 #include <QVBoxLayout>
 #include <QDBusInterface>
 #include <QEventLoop>
+#include <QTimer>
 #include <QGraphicsGridLayout>
 #include <Plasma/Svg>
 #include <Plasma/Dialog>
@@ -50,6 +51,10 @@ static const bool s_confirmtoram = true;
 static const bool s_confirmtodisk = true;
 static const bool s_confirmhybrid = true;
 static const QString s_screensaver = QString::fromLatin1("org.freedesktop.ScreenSaver");
+// delay for the dialog animation to complete. the animation duration is 250ms but the delay here
+// is intentionally 500ms, see:
+// kwin/effects/slide/slide.cpp
+static const int s_dodelay = 500;
 
 class LockoutDialog : public Plasma::Dialog
 {
@@ -113,7 +118,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_layout->addItem(m_separator, 1, 0, 1, 2);
     m_label = new Plasma::Label(m_widget);
     m_label->setAlignment(Qt::AlignCenter);
-    m_label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_layout->addItem(m_label, 2, 0, 1, 2);
     m_yesbutton = new Plasma::PushButton(m_widget);
     m_yesbutton->setIcon(KIcon("dialog-ok"));
@@ -230,7 +235,8 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     m_hybridbox(nullptr),
     m_spacer(nullptr),
     m_screensaverwatcher(nullptr),
-    m_dialog(nullptr)
+    m_dialog(nullptr),
+    m_dowhat(LockoutApplet::DoNothing)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_lockout");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
@@ -562,6 +568,11 @@ void LockoutApplet::slotScreensaverUnregistered(const QString &service)
 
 void LockoutApplet::slotLock()
 {
+    if (m_dowhat != LockoutApplet::DoNothing) {
+        // disallow another action while there is one queued
+        return;
+    }
+
     if (m_confirmlock) {
         if (!m_dialog) {
             m_dialog = new LockoutDialog();
@@ -577,17 +588,17 @@ void LockoutApplet::slotLock()
             return;
         }
     }
-    QDBusInterface screensaver(
-        s_screensaver, "/ScreenSaver", s_screensaver,
-        QDBusConnection::sessionBus()
-    );
-    if (screensaver.isValid()) {
-        screensaver.call("Lock");
-    }
+
+    m_dowhat = LockoutApplet::DoLock;
+    QTimer::singleShot(s_dodelay, this, SLOT(slotDoIt()));
 }
 
 void LockoutApplet::slotSwitch()
 {
+    if (m_dowhat != LockoutApplet::DoNothing) {
+        return;
+    }
+
     if (m_confirmswitch) {
         if (!m_dialog) {
             m_dialog = new LockoutDialog();
@@ -603,8 +614,9 @@ void LockoutApplet::slotSwitch()
             return;
         }
     }
-    KDisplayManager kdisplaymanager;
-    kdisplaymanager.newSession();
+
+    m_dowhat = LockoutApplet::DoSwitch;
+    QTimer::singleShot(s_dodelay, this, SLOT(slotDoIt()));
 }
 
 void LockoutApplet::slotShutdown()
@@ -619,6 +631,10 @@ void LockoutApplet::slotShutdown()
 
 void LockoutApplet::slotToRam()
 {
+    if (m_dowhat != LockoutApplet::DoNothing) {
+        return;
+    }
+
     if (m_confirmtoram) {
         if (!m_dialog) {
             m_dialog = new LockoutDialog();
@@ -634,11 +650,17 @@ void LockoutApplet::slotToRam()
             return;
         }
     }
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
+
+    m_dowhat = LockoutApplet::DoToRam;
+    QTimer::singleShot(s_dodelay, this, SLOT(slotDoIt()));
 }
 
 void LockoutApplet::slotToDisk()
 {
+    if (m_dowhat != LockoutApplet::DoNothing) {
+        return;
+    }
+
     if (m_confirmtodisk) {
         if (!m_dialog) {
             m_dialog = new LockoutDialog();
@@ -654,11 +676,17 @@ void LockoutApplet::slotToDisk()
             return;
         }
     }
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
+
+    m_dowhat = LockoutApplet::DoToDisk;
+    QTimer::singleShot(s_dodelay, this, SLOT(slotDoIt()));
 }
 
 void LockoutApplet::slotHybrid()
 {
+    if (m_dowhat != LockoutApplet::DoNothing) {
+        return;
+    }
+
     if (m_confirmhybrid) {
         if (!m_dialog) {
             m_dialog = new LockoutDialog();
@@ -674,7 +702,47 @@ void LockoutApplet::slotHybrid()
             return;
         }
     }
-    Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
+
+    m_dowhat = LockoutApplet::DoHybrid;
+    QTimer::singleShot(s_dodelay, this, SLOT(slotDoIt()));
+}
+
+void LockoutApplet::slotDoIt()
+{
+    switch (m_dowhat) {
+        case LockoutApplet::DoLock: {
+            m_dowhat = LockoutApplet::DoNothing;
+            QDBusInterface screensaver(
+                s_screensaver, "/ScreenSaver", s_screensaver,
+                QDBusConnection::sessionBus()
+            );
+            if (screensaver.isValid()) {
+                screensaver.call("Lock");
+            }
+            break;
+        }
+        case LockoutApplet::DoSwitch: {
+            m_dowhat = LockoutApplet::DoNothing;
+            KDisplayManager kdisplaymanager;
+            kdisplaymanager.newSession();
+            break;
+        }
+        case LockoutApplet::DoToRam: {
+            m_dowhat = LockoutApplet::DoNothing;
+            Solid::PowerManagement::requestSleep(Solid::PowerManagement::SuspendState);
+            break;
+        }
+        case LockoutApplet::DoToDisk: {
+            m_dowhat = LockoutApplet::DoNothing;
+            Solid::PowerManagement::requestSleep(Solid::PowerManagement::HibernateState);
+            break;
+        }
+        case LockoutApplet::DoHybrid: {
+            m_dowhat = LockoutApplet::DoNothing;
+            Solid::PowerManagement::requestSleep(Solid::PowerManagement::HybridSuspendState);
+            break;
+        }
+    }
 }
 
 void LockoutApplet::slotCheckButtons()
