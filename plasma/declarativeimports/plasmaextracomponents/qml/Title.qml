@@ -31,8 +31,6 @@ import org.kde.plasma.components 0.1
  * [...]
  * Column {
  *     PlasmaExtras.Title { text: "Fruit sweetness on the rise" }
- *     PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
- *     PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
  *   [...]
  * }
  * @endcode

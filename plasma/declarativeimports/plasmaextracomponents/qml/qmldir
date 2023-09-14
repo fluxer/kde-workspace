@@ -1,6 +1,4 @@
 plugin plasmaextracomponentsplugin
 
-Heading 0.1 Heading.qml
-Paragraph 0.1 Paragraph.qml
 ScrollArea 0.1 ScrollArea.qml
 Title 0.1 Title.qml
