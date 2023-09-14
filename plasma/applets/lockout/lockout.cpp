@@ -106,6 +106,8 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_iconwidget->setPreferredIconSize(QSizeF(smalliconsize, smalliconsize));
     // disable hover effect
     m_iconwidget->setAcceptHoverEvents(false);
+    // disable mouse click and such
+    m_iconwidget->setAcceptedMouseButtons(Qt::NoButton);
     m_layout->addItem(m_iconwidget, 0, 0, 1, 2);
     m_separator = new Plasma::Separator(m_widget);
     m_layout->addItem(m_separator, 1, 0, 1, 2);
