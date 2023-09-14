@@ -55,6 +55,28 @@ static bool kSwitchTitleEvent(QEvent *event)
     Q_UNREACHABLE();
 }
 
+static bool kAcceptKeyEvent(QEvent *event)
+{
+    if (event->type() == QEvent::KeyRelease) {
+        QKeyEvent* keyevent = static_cast<QKeyEvent*>(event);
+        Q_ASSERT(keyevent);
+        if (keyevent->modifiers() != Qt::NoModifier || keyevent->count() != 1) {
+            // single key only
+            return false;
+        }
+        switch (keyevent->key()) {
+            case Qt::Key_Space:
+            case Qt::Key_Return: {
+                return true;
+            }
+            default: {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
 void KSMShutdownFeedback::start()
 {
     if (KWindowSystem::compositingActive()) {
@@ -266,22 +288,31 @@ void KSMShutdownDlg::hideEvent(QHideEvent *event)
     Plasma::Dialog::hideEvent(event);
 }
 
+// TODO: hover effect on focus change
 bool KSMShutdownDlg::eventFilter(QObject *watched, QEvent *event)
 {
     if (watched == m_scene && event->type() == QEvent::WindowDeactivate) {
         interrupt();
-    } else if (m_timer) {
-        ; // nada
-    } else if (watched == m_logoutwidget && kSwitchTitleEvent(event)) {
+    } else if (!m_timer && watched == m_logoutwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Logout"));
-    } else if (watched == m_rebootwidget && kSwitchTitleEvent(event)) {
+    } else if (!m_timer && watched == m_rebootwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Restart Computer"));
-    } else if (watched == m_haltwidget && kSwitchTitleEvent(event)) {
+    } else if (!m_timer && watched == m_haltwidget && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Halt Computer"));
-    } else if (watched == m_okbutton && kSwitchTitleEvent(event)) {
+    } else if (!m_timer && watched == m_okbutton && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("OK"));
-    } else if (watched == m_cancelbutton && kSwitchTitleEvent(event)) {
+    } else if (!m_timer && watched == m_cancelbutton && kSwitchTitleEvent(event)) {
         m_titlelabel->setText(i18n("Cancel"));
+    // totally not a hack - key events for icons!
+    } else if (watched == m_logoutwidget && kAcceptKeyEvent(event)) {
+        QMetaObject::invokeMethod(m_logoutwidget, "clicked", Qt::QueuedConnection);
+        return true;
+    } else if (watched == m_rebootwidget && kAcceptKeyEvent(event)) {
+        QMetaObject::invokeMethod(m_rebootwidget, "clicked", Qt::QueuedConnection);
+        return true;
+    } else if (watched == m_haltwidget && kAcceptKeyEvent(event)) {
+        QMetaObject::invokeMethod(m_haltwidget, "clicked", Qt::QueuedConnection);
+        return true;
     }
     return Plasma::Dialog::eventFilter(watched, event);
 }
@@ -306,7 +337,7 @@ void KSMShutdownDlg::slotHalt()
 
 void KSMShutdownDlg::slotOk()
 {
-    m_second = 1;
+    m_second = 0;
 }
 
 void KSMShutdownDlg::slotCancel()
