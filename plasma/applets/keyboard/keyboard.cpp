@@ -26,6 +26,22 @@
 #include <KStandardDirs>
 #include <KDebug>
 
+static bool kIsPanel(const Plasma::FormFactor formfactor)
+{
+    switch (formfactor) {
+        case Plasma::FormFactor::Horizontal:
+        case Plasma::FormFactor::Vertical: {
+            // panel
+            return true;
+        }
+        default: {
+            // desktop-like
+            return false;
+        }
+    }
+    Q_UNREACHABLE();
+}
+
 KeyboardApplet::KeyboardApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
     m_keyboardlayout(nullptr),
@@ -71,7 +87,11 @@ void KeyboardApplet::paintInterface(QPainter *painter,
     }
     QFont font = KGlobalSettings::smallestReadableFont();
     font.setBold(true);
-    font.setPointSize(qMax(font.pointSize(), contentsRect.height() / 2));
+    if (kIsPanel(formFactor())) {
+        font.setPointSize(font.pointSize() * 2);
+    } else {
+        font.setPointSize(qMax(font.pointSize(), contentsRect.height() / 2));
+    }
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform);
     painter->setRenderHint(QPainter::Antialiasing);
@@ -154,20 +174,10 @@ void KeyboardApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::FormFactorConstraint) {
         int iconsize = 0;
-        switch (formFactor()) {
-            case Plasma::FormFactor::Planar:
-            case Plasma::FormFactor::MediaCenter:
-            case Plasma::FormFactor::Application: {
-                // desktop-like
-                iconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-                break;
-            }
-            case Plasma::FormFactor::Horizontal:
-            case Plasma::FormFactor::Vertical: {
-                // panel
-                iconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
-                break;
-            }
+        if (kIsPanel(formFactor())) {
+            iconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
+        } else {
+            iconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
         }
         setMinimumSize(iconsize, iconsize);
     }
