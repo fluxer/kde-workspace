@@ -190,7 +190,7 @@ void LockoutDialog::slotYes()
 {
     Q_ASSERT(m_eventloop);
     m_eventloop->exit(0);
-    delete m_eventloop;
+    m_eventloop->deleteLater();
     m_eventloop = nullptr;
     close();
 }
@@ -199,7 +199,7 @@ void LockoutDialog::slotNo()
 {
     Q_ASSERT(m_eventloop);
     m_eventloop->exit(1);
-    delete m_eventloop;
+    m_eventloop->deleteLater();
     m_eventloop = nullptr;
     close();
 }
