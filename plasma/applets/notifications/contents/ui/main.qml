@@ -22,7 +22,6 @@ import QtQuick 1.1
 import org.kde.plasma.core 0.1 as PlasmaCore
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.qtextracomponents 0.1
-import org.kde.plasma.extras 0.1 as PlasmaExtras
 import org.kde.locale 0.1 as KLocale
 
 import "uiproperties.js" as UiProperties
@@ -110,7 +109,7 @@ MouseEventListener {
 
     hoverEnabled: !UiProperties.touchInput
 
-    PlasmaExtras.ScrollArea {
+    PlasmaComponents.ScrollArea {
         id: mainScrollArea
         anchors.fill: parent
         implicitWidth: theme.defaultFont.mSize.width * 40

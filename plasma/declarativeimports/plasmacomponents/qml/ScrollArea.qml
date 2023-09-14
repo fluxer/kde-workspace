@@ -18,7 +18,6 @@
 */
 
 import QtQuick 1.1
-import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.plasma.core 0.1 as PlasmaCore
 
 /**
@@ -126,7 +125,7 @@ Item {
     }
     Component {
         id: verticalScrollBarComponent
-        PlasmaComponents.ScrollBar {
+        ScrollBar {
             flickableItem: root.flickableItem
             orientation: Qt.Vertical
             property bool isScrollBar: true
@@ -143,7 +142,7 @@ Item {
     }
     Component {
         id: horizontalScrollBarComponent
-        PlasmaComponents.ScrollBar {
+        ScrollBar {
             flickableItem: root.flickableItem
             orientation: Qt.Horizontal
             z: root.flickableItem.z + 1
@@ -159,7 +158,7 @@ Item {
     }
     Component {
         id: sectionScrollerComponent
-        PlasmaComponents.SectionScroller {
+        SectionScroller {
             listView: root.flickableItem
             property bool isScrollBar: false
             z: root.flickableItem.z + 1

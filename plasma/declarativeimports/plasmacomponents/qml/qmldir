@@ -15,3 +15,5 @@ TabBar 0.1 TabBar.qml
 TabButton 0.1 TabButton.qml
 TabGroup 0.1 TabGroup.qml
 ToolButton 0.1 ToolButton.qml
+ScrollArea 0.1 ScrollArea.qml
+Title 0.1 Title.qml
