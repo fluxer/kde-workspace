@@ -23,7 +23,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ******************************************************************/
 
-#include "config-workspace.h"
 #include "shutdowndlg.h"
 #include "kworkspace/kdisplaymanager.h"
 

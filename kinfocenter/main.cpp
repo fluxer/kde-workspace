@@ -26,7 +26,6 @@
 //KDE
 #include <kaboutdata.h>
 #include <kcmdlineargs.h>
-#include <config-workspace.h>
 
 KicApp::KicApp() : KApplication()
 {

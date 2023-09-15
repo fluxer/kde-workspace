@@ -18,6 +18,8 @@
  ***************************************************************************/
 
 #include "statusnotifierwatcher.h"
+#include "statusnotifierwatcheradaptor.h"
+#include "statusnotifieritem_interface.h"
 
 #include <QDBusConnection>
 #include <QDBusServiceWatcher>
@@ -28,11 +30,6 @@
 #include <kpluginfactory.h>
 #include <kpluginloader.h>
 #include <kdeversion.h>
-
-#include "statusnotifierwatcheradaptor.h"
-#include "statusnotifieritem_interface.h"
-#include <config-workspace.h>
-
 
 static inline KAboutData aboutData()
 {
