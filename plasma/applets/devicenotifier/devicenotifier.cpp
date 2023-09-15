@@ -48,7 +48,6 @@ Q_DECLARE_METATYPE(Plasma::Meter*)
 
 static const int s_freetimeout = 3000; // 3secs
 // the minimum space for 2 items, more or less
-static const QSizeF s_minimumsize = QSizeF(290, 184);
 static const QSizeF s_preferredsize = QSizeF(290, 340);
 
 class DeviceNotifierWidget : public QGraphicsWidget
@@ -317,7 +316,6 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     setHasConfigurationInterface(true);
     setStatus(Plasma::ItemStatus::PassiveStatus);
     setPopupIcon("device-notifier");
-    setMinimumSize(s_minimumsize);
     setPreferredSize(s_preferredsize);
 
     m_plasmascrollwidget = new Plasma::ScrollWidget(this);
@@ -362,24 +360,12 @@ void DeviceNotifier::createConfigurationInterface(KConfigDialog *parent)
     connect(m_removablebox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
 }
 
-void DeviceNotifier::constraintsEvent(Plasma::Constraints constraints)
+QSizeF DeviceNotifier::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (constraints & Plasma::FormFactorConstraint) {
-        switch (formFactor()) {
-            case Plasma::FormFactor::Horizontal:
-            case Plasma::FormFactor::Vertical: {
-                setMinimumSize(10, 10);
-                const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
-                setPreferredSize(QSizeF(paneliconsize, paneliconsize));
-                break;
-            }
-            default: {
-                setMinimumSize(s_minimumsize);
-                setPreferredSize(s_preferredsize);
-                break;
-            }
-        }
+    if (m_plasmascrollwidget && which == Qt::PreferredSize) {
+        return m_plasmascrollwidget->preferredSize();
     }
+    return Plasma::PopupApplet::sizeHint(which, constraint);
 }
 
 void DeviceNotifier::slotConfigAccepted()

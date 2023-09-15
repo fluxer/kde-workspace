@@ -424,5 +424,13 @@ void BatteryMonitor::saveState(KConfigGroup &group) const
     Plasma::PopupApplet::saveState(group);
 }
 
+QSizeF BatteryMonitor::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (m_batterywidget && which == Qt::PreferredSize) {
+        return m_batterywidget->preferredSize();
+    }
+    return Plasma::PopupApplet::sizeHint(which, constraint);
+}
+
 #include "moc_batterymonitor.cpp"
 #include "batterymonitor.moc"
