@@ -310,9 +310,9 @@ void SolidUiServer::handleActions(const Solid::Device &soliddevice, const bool a
 
 void SolidUiServer::slotDeviceAdded(const QString &udi)
 {
+    m_solidactions = kSolidDeviceActions();
     Solid::Device soliddevice(udi);
     handleActions(soliddevice, true);
-    m_solidactions = kSolidDeviceActions();
 }
 
 void SolidUiServer::slotDeviceRemoved(const QString &udi)
