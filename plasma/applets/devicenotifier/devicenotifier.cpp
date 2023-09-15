@@ -47,6 +47,9 @@ Q_DECLARE_METATYPE(Plasma::IconWidget*)
 Q_DECLARE_METATYPE(Plasma::Meter*)
 
 static const int s_freetimeout = 3000; // 3secs
+// the minimum space for 2 items, more or less
+static const QSizeF s_minimumsize = QSizeF(290, 184);
+static const QSizeF s_preferredsize = QSizeF(290, 340);
 
 class DeviceNotifierWidget : public QGraphicsWidget
 {
@@ -211,12 +214,6 @@ void DeviceNotifierWidget::slotUpdateLayout()
         }
     }
 
-    // the minimum space for 2 items, more or less
-    QSizeF minimumsize = m_frames.first()->minimumSize();
-    minimumsize.setWidth(minimumsize.width() * 1.2);
-    minimumsize.setHeight(minimumsize.height() * 2);
-    m_devicenotifier->setMinimumSize(minimumsize);
-
     locker.unlock();
     slotCheckFreeSpace();
     m_freetimer->start();
@@ -319,8 +316,8 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     setHasConfigurationInterface(true);
     setStatus(Plasma::ItemStatus::PassiveStatus);
     setPopupIcon("device-notifier");
-    setMinimumSize(100, 150);
-    setPreferredSize(290, 340);
+    setMinimumSize(s_minimumsize);
+    setPreferredSize(s_preferredsize);
 
     m_plasmascrollwidget = new Plasma::ScrollWidget(this);
     m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -362,6 +359,26 @@ void DeviceNotifier::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_removablebox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
+}
+
+void DeviceNotifier::constraintsEvent(Plasma::Constraints constraints)
+{
+    if (constraints & Plasma::FormFactorConstraint) {
+        switch (formFactor()) {
+            case Plasma::FormFactor::Horizontal:
+            case Plasma::FormFactor::Vertical: {
+                setMinimumSize(10, 10);
+                const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
+                setPreferredSize(QSizeF(paneliconsize, paneliconsize));
+                break;
+            }
+            default: {
+                setMinimumSize(s_minimumsize);
+                setPreferredSize(s_preferredsize);
+                break;
+            }
+        }
+    }
 }
 
 void DeviceNotifier::slotConfigAccepted()

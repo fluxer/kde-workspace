@@ -40,6 +40,10 @@ public:
     QGraphicsWidget* graphicsWidget() final;
     void createConfigurationInterface(KConfigDialog *parent) final;
 
+protected:
+    // Plasma::Applet reimplementation
+    void constraintsEvent(Plasma::Constraints constraints) final;
+
 private Q_SLOTS:
     void slotConfigAccepted();
 
