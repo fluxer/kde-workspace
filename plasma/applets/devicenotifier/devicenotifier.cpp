@@ -18,9 +18,8 @@
 
 #include "devicenotifier.h"
 
+#include <QMutex>
 #include <QTimer>
-#include <QEventLoop>
-#include <QCoreApplication>
 #include <QGraphicsGridLayout>
 #include <QGraphicsLinearLayout>
 #include <QGridLayout>
@@ -54,7 +53,6 @@ class DeviceNotifierWidget : public QGraphicsWidget
     Q_OBJECT
 public:
     DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGraphicsWidget *parent);
-    ~DeviceNotifierWidget();
 
     bool onlyremovable;
 
@@ -68,6 +66,7 @@ private Q_SLOTS:
     void slotRemoveActivated();
 
 private:
+    QMutex m_mutex;
     DeviceNotifier* m_devicenotifier;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_title;
@@ -110,10 +109,6 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGrap
     );
 }
 
-DeviceNotifierWidget::~DeviceNotifierWidget()
-{
-}
-
 void DeviceNotifierWidget::slotUpdateLayout()
 {
     Solid::Predicate solidpredicate(Solid::DeviceInterface::StorageVolume);
@@ -137,6 +132,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     }
 
     m_freetimer->stop();
+    QMutexLocker locker(&m_mutex);
     foreach (Plasma::Frame* frame, m_frames) {
         m_layout->removeItem(frame);
     }
@@ -221,6 +217,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
     minimumsize.setHeight(minimumsize.height() * 2);
     m_devicenotifier->setMinimumSize(minimumsize);
 
+    locker.unlock();
     slotCheckFreeSpace();
     m_freetimer->start();
 }
@@ -257,6 +254,7 @@ void DeviceNotifierWidget::slotCheckFreeSpace()
 
 void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString &udi)
 {
+    QMutexLocker locker(&m_mutex);
     foreach (const Plasma::Frame* frame, m_frames) {
         const QString solidudi = frame->property("_k_udi").toString();
         if (solidudi != udi) {
