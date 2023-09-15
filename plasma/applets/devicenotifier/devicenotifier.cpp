@@ -221,6 +221,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
 void DeviceNotifierWidget::slotCheckFreeSpace()
 {
+    QMutexLocker locker(&m_mutex);
     foreach (const Plasma::Frame* frame, m_frames) {
         const QString solidudi = frame->property("_k_udi").toString();
         const Solid::Device soliddevice(solidudi);
