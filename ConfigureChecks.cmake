@@ -3,17 +3,6 @@ include(CheckTypeSize)
 include(CheckSymbolExists)
 include(CheckLibraryExists)
 
-find_program(some_x_program NAMES iceauth xrdb xterm)
-if (NOT some_x_program)
-    set(some_x_program ${CMAKE_INSTALL_PREFIX}/bin/xrdb)
-    message("Warning: Could not determine X binary directory. Assuming ${CMAKE_INSTALL_PREFIX}/bin.")
-endif (NOT some_x_program)
-get_filename_component(proto_xbindir "${some_x_program}" PATH)
-get_filename_component(xbindir "${proto_xbindir}" ABSOLUTE)
-get_filename_component(xrootdir "${xbindir}" PATH)
-set(XLIBDIR "${xrootdir}/lib/X11")
-set(XKBDIR "${xrootdir}/share/X11")
-
 check_function_exists(nice HAVE_NICE)
 check_include_files(malloc.h HAVE_MALLOC_H)
 kde4_bool_to_01(FONTCONFIG_FOUND HAVE_FONTCONFIG) # kcontrol/fonts

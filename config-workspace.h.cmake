@@ -12,17 +12,8 @@
 /* KDE's configuration directory */
 #define KDE_CONFDIR "${KDE4_CONFIG_INSTALL_DIR}"
 
-/* KDE's static data directory */
-#define KDE_DATADIR "${KDE4_DATA_INSTALL_DIR}"
-
 /* KDE's static libraries directory */
 #define KDE_LIBDIR "${KDE4_LIB_INSTALL_DIR}"
 
 /* KDE's system configuration directory */
 #define KDE_SYSCONFDIR "${KDE4_SYSCONF_INSTALL_DIR}"
-
-/* X libraries directory */
-#cmakedefine XLIBDIR "${XLIBDIR}"
-
-/* xkb resources directory */
-#cmakedefine XKBDIR "${XKBDIR}"
