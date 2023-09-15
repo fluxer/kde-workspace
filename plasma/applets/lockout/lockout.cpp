@@ -108,8 +108,10 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     m_layout->setSpacing(4);
     m_iconwidget = new Plasma::IconWidget(m_widget);
     m_iconwidget->setOrientation(Qt::Horizontal);
-    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
-    m_iconwidget->setPreferredIconSize(QSizeF(smalliconsize, smalliconsize));
+    // NOTE: setPreferredIconSize() does not ensure the icon size is always the same
+    const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
+    m_iconwidget->setMinimumIconSize(QSizeF(paneliconsize, paneliconsize));
+    m_iconwidget->setMaximumIconSize(QSizeF(paneliconsize, paneliconsize));
     // disable hover effect
     m_iconwidget->setAcceptHoverEvents(false);
     // disable mouse click and such
