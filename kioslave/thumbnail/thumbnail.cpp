@@ -19,10 +19,7 @@
 */
 
 #include "thumbnail.h"
-
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
+#include "config-unix.h" // For HAVE_NICE
 
 #include <QBuffer>
 #include <QFile>
@@ -53,11 +50,12 @@
 #include <kdemacros.h>
 #include <kiconeffect.h>
 #include <krandom.h>
-
-#include <config-workspace.h> // For HAVE_NICE
 #include <kio/thumbcreator.h>
 #include <kconfiggroup.h>
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include <iostream>
 
 // Recognized metadata entries:
