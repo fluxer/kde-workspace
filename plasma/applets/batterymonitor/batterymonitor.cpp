@@ -289,11 +289,16 @@ void BatteryMonitorWidget::slotUpdateLayout()
 
 void BatteryMonitorWidget::slotDeviceAdded(const QString &udi)
 {
+    // TODO: enable once battery events are not busted
+#if 0
     const Solid::Device soliddevice(udi);
     const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
     if (batterydevice) {
         slotUpdateLayout();
     }
+#else
+    slotUpdateLayout();
+#endif
 }
 
 void BatteryMonitorWidget::slotDeviceRemoved(const QString &udi)
