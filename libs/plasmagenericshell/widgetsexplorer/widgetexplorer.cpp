@@ -483,11 +483,7 @@ void WidgetExplorerPrivate::filterApplets(const QString &text)
         // kdelibs/kdeui/findreplace/kfind.cpp
         text.isEmpty() ? i18n("No applets found.") : i18n("<qt>No matches found for '<b>%1</b>'.</qt>", text)
     );
-    if (hasapplets) {
-        appletsWidget->adjustSize();
-    } else {
-        appletsWidget->resize(scrollWidget->size());
-    }
+    appletsWidget->adjustSize();
 }
 
 void WidgetExplorerPrivate::updateOrientation(const Qt::Orientation orientation)
