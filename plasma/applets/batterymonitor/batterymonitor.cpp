@@ -18,6 +18,7 @@
 
 #include "batterymonitor.h"
 
+#include <QMutex>
 #include <QTimer>
 #include <QGraphicsLinearLayout>
 #include <Solid/Device>
@@ -84,6 +85,8 @@ public:
 
 public Q_SLOTS:
     void slotUpdateLayout();
+    void slotDeviceAdded(const QString &udi);
+    void slotDeviceRemoved(const QString &udi);
 
 private Q_SLOTS:
     void slotSuppressSleep(const bool suppress);
@@ -92,6 +95,7 @@ private Q_SLOTS:
     void slotUpdateIcon(const int state, const QString &udi);
 
 private:
+    QMutex m_mutex;
     BatteryMonitor* m_batterymonitor;
     QGraphicsLinearLayout* m_layout;
     int m_suppresssleepcookie;
@@ -126,14 +130,13 @@ BatteryMonitorWidget::BatteryMonitorWidget(BatteryMonitor* batterymonitor)
     m_layout->addItem(m_suppressscreenbox);
     setLayout(m_layout);
 
-    // TODO: selective update
     connect(
         Solid::DeviceNotifier::instance(), SIGNAL(deviceAdded(QString)),
-        this, SLOT(slotUpdateLayout())
+        this, SLOT(slotDeviceAdded(QString))
     );
     connect(
         Solid::DeviceNotifier::instance(), SIGNAL(deviceRemoved(QString)),
-        this, SLOT(slotUpdateLayout())
+        this, SLOT(slotDeviceRemoved(QString))
     );
 }
 
@@ -218,6 +221,7 @@ QIcon BatteryMonitorWidget::batteryUnavailableIcon()
 
 void BatteryMonitorWidget::slotUpdateLayout()
 {
+    QMutexLocker locker(&m_mutex);
     foreach (Plasma::IconWidget* iconwidget, m_iconwidgets) {
         m_layout->removeItem(iconwidget);
     }
@@ -283,6 +287,25 @@ void BatteryMonitorWidget::slotUpdateLayout()
     }
 }
 
+void BatteryMonitorWidget::slotDeviceAdded(const QString &udi)
+{
+    const Solid::Device soliddevice(udi);
+    const Solid::Battery* batterydevice = soliddevice.as<Solid::Battery>();
+    if (batterydevice) {
+        slotUpdateLayout();
+    }
+}
+
+void BatteryMonitorWidget::slotDeviceRemoved(const QString &udi)
+{
+    foreach (const Solid::Device &batterydevice, m_batterydevices) {
+        if (batterydevice.udi() == udi) {
+            slotUpdateLayout();
+            break;
+        }
+    }
+}
+
 void BatteryMonitorWidget::slotSuppressSleep(const bool suppress)
 {
     if (suppress) {
@@ -343,6 +366,7 @@ void BatteryMonitorWidget::slotUpdateActive()
 void BatteryMonitorWidget::slotUpdateIcon(const int state, const QString &udi)
 {
     Q_UNUSED(state);
+    QMutexLocker locker(&m_mutex);
     foreach (Plasma::IconWidget* iconwidget, m_iconwidgets) {
         const QString iconwidgetudi = iconwidget->property("_k_udi").toString();
         Q_ASSERT(!iconwidgetudi.isEmpty());
