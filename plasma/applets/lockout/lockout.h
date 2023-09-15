@@ -70,7 +70,6 @@ private Q_SLOTS:
     void slotConfigAccepted();
 
 private:
-    void updateWidgets();
     void updateSizes();
 
     QGraphicsLinearLayout* m_layout;
