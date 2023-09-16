@@ -71,7 +71,7 @@ private:
     QMutex m_mutex;
     DeviceNotifier* m_devicenotifier;
     QGraphicsLinearLayout* m_layout;
-    Plasma::Label* m_title;
+    Plasma::Label* m_label;
     QList<Plasma::Frame*> m_frames;
     QTimer* m_freetimer;
     QList<Solid::Device> m_soliddevices;
@@ -82,13 +82,14 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGrap
     onlyremovable(true),
     m_devicenotifier(devicenotifier),
     m_layout(nullptr),
-    m_title(nullptr)
+    m_label(nullptr)
 {
     m_layout = new QGraphicsLinearLayout(Qt::Vertical, this);
-    m_title = new Plasma::Label(this);
-    m_title->setText(i18n("No devices available"));
-    m_title->setAlignment(Qt::AlignCenter);
-    m_layout->addItem(m_title);
+    m_label = new Plasma::Label(this);
+    m_label->setText(i18n("No devices available"));
+    m_label->setAlignment(Qt::AlignCenter);
+    m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_layout->addItem(m_label);
     setLayout(m_layout);
 
     m_freetimer = new QTimer(this);
@@ -145,12 +146,12 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
     m_soliddevices = soliddevices;
     if (m_soliddevices.isEmpty()) {
-        m_title->show();
+        m_label->show();
         m_devicenotifier->setStatus(Plasma::ItemStatus::PassiveStatus);
         return;
     }
 
-    m_title->hide();
+    m_label->hide();
     m_devicenotifier->setStatus(Plasma::ItemStatus::ActiveStatus);
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
     foreach (const Solid::Device &soliddevice, m_soliddevices) {
