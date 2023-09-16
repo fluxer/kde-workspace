@@ -40,10 +40,6 @@ public:
     QGraphicsWidget* graphicsWidget() final;
     void createConfigurationInterface(KConfigDialog *parent) final;
 
-protected:
-    // Plasma::PopupApplet reimplementation
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const final;
-
 private Q_SLOTS:
     void slotConfigAccepted();
 

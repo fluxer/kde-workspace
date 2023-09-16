@@ -316,7 +316,6 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     setHasConfigurationInterface(true);
     setStatus(Plasma::ItemStatus::PassiveStatus);
     setPopupIcon("device-notifier");
-    setPreferredSize(s_preferredsize);
 
     m_plasmascrollwidget = new Plasma::ScrollWidget(this);
     m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -360,14 +359,6 @@ void DeviceNotifier::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_removablebox, SIGNAL(stateChanged(int)), parent, SLOT(settingsModified()));
-}
-
-QSizeF DeviceNotifier::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    if (m_plasmascrollwidget && which == Qt::PreferredSize) {
-        return m_plasmascrollwidget->preferredSize();
-    }
-    return Plasma::PopupApplet::sizeHint(which, constraint);
 }
 
 void DeviceNotifier::slotConfigAccepted()

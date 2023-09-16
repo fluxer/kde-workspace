@@ -40,8 +40,6 @@ public Q_SLOTS:
     void configChanged();
 protected:
     void saveState(KConfigGroup &group) const final;
-    // Plasma::PopupApplet reimplementations
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const final;
 
 private:
     friend BatteryMonitorWidget;
