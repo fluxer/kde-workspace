@@ -79,7 +79,7 @@ DialogWidth=302
 [Containments][1][Applets][5][Configuration][Applets][9]
 geometry=0,0,24,24
 immutability=1
-plugin=org.kde.notifications
+plugin=notifications
 zvalue=0
 
 [Containments][1][Applets][5][Configuration][Applets][9][PopupApplet]

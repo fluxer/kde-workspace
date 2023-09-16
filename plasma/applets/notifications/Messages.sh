@@ -1,5 +1,4 @@
 #!/bin/bash
 $EXTRACTRC `find . -name \*.rc -o -name \*.ui -o -name \*.kcfg` >> rc.cpp
-$XGETTEXT `find . -name \*.qml` -L Java -o $podir/plasma_applet_org.kde.notifications.pot
-$XGETTEXT rc.cpp -jo $podir/plasma_applet_org.kde.notifications.pot
+$XGETTEXT `find . -name \*.js -o -name \*.qml -o -name \*.cpp` -o $podir/plasma_applet_notifications.pot
 rm -f rc.cpp

@@ -683,8 +683,8 @@ void Applet::checkDefaultApplets()
         s_manager->addApplet("devicenotifier", this);
     }
 
-    if (!applets.contains("org.kde.notifications")) {
-        s_manager->addApplet("org.kde.notifications", this);
+    if (!applets.contains("notifications")) {
+        s_manager->addApplet("notifications", this);
     }
 
     if (!applets.contains("keyboard")) {

@@ -1,6 +1,5 @@
 project(batterymonitor)
 
-
 set(batterymonitor_SRCS
     batterymonitor.cpp
 )
