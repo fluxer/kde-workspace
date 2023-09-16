@@ -263,7 +263,7 @@ public:
     {
     }
 
-    void init(Plasma::Location loc);
+    void init(const Plasma::Location loc);
     void updateApplets();
     void updateRunningApplets();
     void filterApplets(const QString &text);
@@ -301,7 +301,7 @@ public:
     QMap<Plasma::Applet*,QString> runningApplets;
 };
 
-void WidgetExplorerPrivate::init(Plasma::Location loc)
+void WidgetExplorerPrivate::init(const Plasma::Location loc)
 {
     q->setFocusPolicy(Qt::StrongFocus);
 
