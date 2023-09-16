@@ -86,7 +86,7 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGrap
 {
     m_layout = new QGraphicsLinearLayout(Qt::Vertical, this);
     m_title = new Plasma::Label(this);
-    m_title->setText(i18n("No Devices Available"));
+    m_title->setText(i18n("No devices available"));
     m_title->setAlignment(Qt::AlignCenter);
     m_layout->addItem(m_title);
     setLayout(m_layout);
