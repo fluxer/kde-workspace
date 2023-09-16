@@ -139,7 +139,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
         this, SLOT(slotNo())
     );
     m_layout->addItem(m_nobutton, 3, 1, 1, 1);
-    m_layout->setRowMaximumHeight(3, m_nobutton->preferredSize().height() + m_layout->horizontalSpacing());
+    m_layout->setRowMaximumHeight(3, m_nobutton->preferredSize().height() + m_layout->verticalSpacing());
     m_widget->setLayout(m_layout);
 
     m_scene->addItem(m_widget);
