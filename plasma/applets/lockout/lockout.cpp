@@ -147,6 +147,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
     setGraphicsWidget(m_widget);
 
     adjustSize();
+    KDialog::centerOnScreen(this, -3);
 }
 
 LockoutDialog::~LockoutDialog()
