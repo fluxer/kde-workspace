@@ -48,7 +48,7 @@ Q_DECLARE_METATYPE(Plasma::Meter*)
 
 static const int s_freetimeout = 3000; // 3secs
 // the minimum space for 2 items, more or less
-static const QSizeF s_preferredsize = QSizeF(290, 140);
+static const QSizeF s_minimumsize = QSizeF(290, 140);
 
 class DeviceNotifierWidget : public QGraphicsWidget
 {
@@ -321,7 +321,7 @@ DeviceNotifier::DeviceNotifier(QObject *parent, const QVariantList &args)
     m_plasmascrollwidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     m_plasmascrollwidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     // ensures the scroll area does not shrink bellow the preferred size
-    m_plasmascrollwidget->setMinimumSize(s_preferredsize);
+    m_plasmascrollwidget->setMinimumSize(s_minimumsize);
     m_devicenotifierwidget = new DeviceNotifierWidget(this, m_plasmascrollwidget);
     m_plasmascrollwidget->setWidget(m_devicenotifierwidget);
 }
