@@ -134,7 +134,7 @@ void ApplicationsWidget::sourceAdded(const QString &name)
     adjustSize();
 
     emit countChanged();
-    emit newNotification();
+    emit ping();
     locker.unlock();
     m_dataengine->connectSource(name, this);
 }
@@ -227,6 +227,7 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 configurewidget->setProperty("_k_apprealname", data.value("appRealName"));
             }
             frame->adjustSize();
+            emit ping();
             break;
         }
     }

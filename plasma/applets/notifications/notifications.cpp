@@ -58,8 +58,8 @@ public:
 
 private Q_SLOTS:
     void slotCountChanged();
-    void slotNewJobNotification();
-    void slotNewApplicationNotification();
+    void slotJobPing();
+    void slotApplicationPing();
 
 private:
     NotificationsApplet* m_notifications;
@@ -87,8 +87,8 @@ NotificationsWidget::NotificationsWidget(NotificationsApplet* notifications)
         this, SLOT(slotCountChanged())
     );
     connect(
-        m_jobswidget, SIGNAL(newNotification()),
-        this, SLOT(slotNewJobNotification())
+        m_jobswidget, SIGNAL(ping()),
+        this, SLOT(slotJobPing())
     );
     m_jobsscrollwidget->setWidget(m_jobswidget);
     addTab(KIcon("services"), i18n("Jobs"), m_jobsscrollwidget);
@@ -101,8 +101,8 @@ NotificationsWidget::NotificationsWidget(NotificationsApplet* notifications)
         this, SLOT(slotCountChanged())
     );
     connect(
-        m_applicationswidget, SIGNAL(newNotification()),
-        this, SLOT(slotNewApplicationNotification())
+        m_applicationswidget, SIGNAL(ping()),
+        this, SLOT(slotApplicationPing())
     );
     m_applicationsscrollwidget->setWidget(m_applicationswidget);
     addTab(KIcon("dialog-information"), i18n("Notifications"), m_applicationsscrollwidget);
@@ -126,7 +126,7 @@ void NotificationsWidget::slotCountChanged()
     }
 }
 
-void NotificationsWidget::slotNewJobNotification()
+void NotificationsWidget::slotJobPing()
 {
     // if the popup was shown before the signal it is probably because it is being interacted with
     // so no automatic tab switching in that case
@@ -137,7 +137,7 @@ void NotificationsWidget::slotNewJobNotification()
     }
 }
 
-void NotificationsWidget::slotNewApplicationNotification()
+void NotificationsWidget::slotApplicationPing()
 {
     const bool waspopupshowing = m_notifications->isPopupShowing();
     m_notifications->showPopup(s_popuptimeout);

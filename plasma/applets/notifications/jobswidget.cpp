@@ -143,7 +143,7 @@ void JobsWidget::sourceAdded(const QString &name)
     adjustSize();
 
     emit countChanged();
-    emit newNotification();
+    emit ping();
     locker.unlock();
     m_dataengine->connectSource(name, this);
 }
@@ -232,6 +232,8 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                     openwidget->setVisible(true);
                 }
             }
+            frame->adjustSize();
+            emit ping();
             break;
         }
     }
