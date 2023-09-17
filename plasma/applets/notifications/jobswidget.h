@@ -19,6 +19,7 @@
 #ifndef JOBSWIDGET_H
 #define JOBSWIDGET_H
 
+#include <QMutex>
 #include <QGraphicsWidget>
 #include <QGraphicsLinearLayout>
 #include <Plasma/Label>
@@ -39,12 +40,13 @@ public:
 Q_SIGNALS:
     int countChanged();
 
-
 private Q_SLOTS:
     void sourceAdded(const QString &name);
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
+    void slotRemoveActivated();
 
 private:
+    QMutex m_mutex;
     NotificationsWidget *m_notificationswidget;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_label;

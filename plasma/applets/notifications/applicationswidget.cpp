@@ -264,7 +264,8 @@ void ApplicationsWidget::slotConfigureActivated()
 {
     const Plasma::IconWidget* configurewidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString frameapprealname = configurewidget->property("_k_apprealname").toString();
-    // same thing the notifications service does
+    // same thing the notifications service does except without going the data engine meaning
+    // faster
     KNotificationConfigWidget::configure(frameapprealname, nullptr);
 }
 
