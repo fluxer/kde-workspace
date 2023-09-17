@@ -24,9 +24,25 @@
 #include <QGraphicsLinearLayout>
 #include <Plasma/Label>
 #include <Plasma/Frame>
+#include <Plasma/IconWidget>
+#include <Plasma/Meter>
 #include <Plasma/DataEngine>
 
 class NotificationsWidget;
+
+class JobFrame : public Plasma::Frame
+{
+    Q_OBJECT
+public:
+    explicit JobFrame(const QString &name, QGraphicsWidget *parent);
+
+    Plasma::IconWidget* iconwidget;
+    Plasma::Label* label;
+    Plasma::IconWidget* removewidget;
+    Plasma::IconWidget* openwidget;
+    Plasma::Meter* meter;
+    QString name;
+};
 
 class JobsWidget : public QGraphicsWidget
 {
@@ -41,18 +57,20 @@ Q_SIGNALS:
     int countChanged();
     void ping();
 
+public Q_SLOTS:
+    void slotRemoveActivated();
+    void slotOpenActivated();
+
 private Q_SLOTS:
     void sourceAdded(const QString &name);
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
-    void slotRemoveActivated();
-    void slotOpenActivated();
 
 private:
     QMutex m_mutex;
     NotificationsWidget *m_notificationswidget;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_label;
-    QList<Plasma::Frame*> m_frames;
+    QList<JobFrame*> m_frames;
     Plasma::DataEngine *m_dataengine;
 };
 

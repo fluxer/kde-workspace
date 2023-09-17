@@ -21,15 +21,69 @@
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
 #include <Plasma/Service>
-#include <Plasma/IconWidget>
-#include <Plasma/PushButton>
 #include <KIconLoader>
 #include <KIcon>
 #include <KNotificationConfigWidget>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(Plasma::IconWidget*)
-Q_DECLARE_METATYPE(Plasma::Label*)
+ApplicationFrame::ApplicationFrame(const QString &_name, QGraphicsWidget *parent)
+    : Plasma::Frame(parent),
+    iconwidget(nullptr),
+    label(nullptr),
+    removewidget(nullptr),
+    configurewidget(nullptr),
+    name(_name)
+{
+    ApplicationsWidget* applicationswidget = qobject_cast<ApplicationsWidget*>(parent);
+
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);
+
+    iconwidget = new Plasma::IconWidget(this);
+    iconwidget->setAcceptHoverEvents(false);
+    iconwidget->setAcceptedMouseButtons(Qt::NoButton);
+    iconwidget->setIcon(KIcon("dialog-information"));
+    const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+    const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
+    iconwidget->setPreferredIconSize(desktopiconsizef);
+    iconwidget->setMinimumSize(desktopiconsizef);
+    iconwidget->setMaximumSize(desktopiconsizef);
+    iconwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    framelayout->addItem(iconwidget, 0, 0, 2, 1);
+
+    label = new Plasma::Label(this);
+    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    label->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    framelayout->addItem(label, 0, 1, 3, 1);
+
+    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
+    removewidget = new Plasma::IconWidget(this);
+    removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    removewidget->setIcon(KIcon("dialog-close"));
+    removewidget->setToolTip(i18n("Click to remove this notification."));
+    removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    connect(
+        removewidget, SIGNAL(activated()),
+        applicationswidget, SLOT(slotRemoveActivated())
+    );
+    framelayout->addItem(removewidget, 0, 2, 1, 1);
+
+    configurewidget = new Plasma::IconWidget(this);
+    configurewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    configurewidget->setIcon(KIcon("configure"));
+    configurewidget->setToolTip(i18n("Click to configure this notification."));
+    configurewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    configurewidget->setVisible(false);
+    connect(
+        configurewidget, SIGNAL(activated()),
+        applicationswidget, SLOT(slotConfigureActivated())
+    );
+    framelayout->addItem(configurewidget, 1, 2, 1, 1);
+
+    setLayout(framelayout);
+}
+
 
 ApplicationsWidget::ApplicationsWidget(QGraphicsItem *parent, NotificationsWidget *notificationswidget)
     : QGraphicsWidget(parent),
@@ -76,58 +130,7 @@ void ApplicationsWidget::sourceAdded(const QString &name)
 {
     // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
-    Plasma::Frame* frame = new Plasma::Frame(this);
-    frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    frame->setProperty("_k_name", name);
-
-    QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
-
-    Plasma::IconWidget* iconwidget = new Plasma::IconWidget(frame);
-    iconwidget->setAcceptHoverEvents(false);
-    iconwidget->setAcceptedMouseButtons(Qt::NoButton);
-    iconwidget->setIcon(KIcon("dialog-information"));
-    const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-    const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
-    iconwidget->setPreferredIconSize(desktopiconsizef);
-    iconwidget->setMinimumSize(desktopiconsizef);
-    iconwidget->setMaximumSize(desktopiconsizef);
-    iconwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    framelayout->addItem(iconwidget, 0, 0, 2, 1);
-    frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
-
-    Plasma::Label* bodylabel = new Plasma::Label(frame);
-    bodylabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    bodylabel->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
-    framelayout->addItem(bodylabel, 0, 1, 3, 1);
-    frame->setProperty("_k_bodylabel", QVariant::fromValue(bodylabel));
-
-    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
-    Plasma::IconWidget* removewidget = new Plasma::IconWidget(frame);
-    removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-    removewidget->setIcon(KIcon("dialog-close"));
-    removewidget->setToolTip(i18n("Click to remove this notification."));
-    removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    connect(
-        removewidget, SIGNAL(activated()),
-        this, SLOT(slotRemoveActivated())
-    );
-    framelayout->addItem(removewidget, 0, 2, 1, 1);
-    frame->setProperty("_k_removewidget", QVariant::fromValue(removewidget));
-
-    Plasma::IconWidget* configurewidget = new Plasma::IconWidget(frame);
-    configurewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-    configurewidget->setIcon(KIcon("configure"));
-    configurewidget->setToolTip(i18n("Click to configure this notification."));
-    configurewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    configurewidget->setVisible(false);
-    connect(
-        configurewidget, SIGNAL(activated()),
-        this, SLOT(slotConfigureActivated())
-    );
-    framelayout->addItem(configurewidget, 1, 2, 1, 1);
-    frame->setProperty("_k_configurewidget", QVariant::fromValue(configurewidget));
-
-    frame->setLayout(framelayout);
+    ApplicationFrame* frame = new ApplicationFrame(name, this);
     m_frames.append(frame);
     m_label->setVisible(false);
     m_layout->insertItem(0, frame);
@@ -158,13 +161,11 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
     )
 #endif
     QMutexLocker locker(&m_mutex);
-    foreach (Plasma::Frame* frame, m_frames) {
-        const QString framename = frame->property("_k_name").toString();
-        if (framename == name) {
-            Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
+    foreach (ApplicationFrame* frame, m_frames) {
+        if (frame->name == name) {
             const QString appicon = data.value("appIcon").toString();
             if (!appicon.isEmpty()) {
-                iconwidget->setIcon(appicon);
+                frame->iconwidget->setIcon(appicon);
             }
             const QStringList actions = data.value("actions").toStringList();
             // qDebug() << Q_FUNC_INFO << actions;
@@ -200,7 +201,6 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
 
                 Plasma::PushButton* actionbutton = new Plasma::PushButton(frame);
                 actionbutton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-                actionbutton->setProperty("_k_name", framename);
                 actionbutton->setProperty("_k_actionid", actionid);
                 actionbutton->setText(actionname);
                 connect(
@@ -218,13 +218,11 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 framelayout->addItem(buttonslayout, 3, 0, 1, 3);
                 framelayout->setAlignment(buttonslayout, Qt::AlignCenter);
             }
-            Plasma::Label* label = qvariant_cast<Plasma::Label*>(frame->property("_k_bodylabel"));
-            label->setText(data.value("body").toString());
-            Plasma::IconWidget* configurewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_configurewidget"));
+            frame->label->setText(data.value("body").toString());
             const bool configurable = data.value("configurable").toBool();
-            configurewidget->setVisible(configurable);
+            frame->configurewidget->setVisible(configurable);
             if (configurable) {
-                configurewidget->setProperty("_k_apprealname", data.value("appRealName"));
+                frame->configurewidget->setProperty("_k_apprealname", data.value("appRealName"));
             }
             frame->adjustSize();
             emit ping();
@@ -237,16 +235,15 @@ void ApplicationsWidget::slotRemoveActivated()
 {
     QMutexLocker locker(&m_mutex);
     const Plasma::IconWidget* removewidget = qobject_cast<Plasma::IconWidget*>(sender());
-    Plasma::Frame* removeframe = qobject_cast<Plasma::Frame*>(removewidget->parentObject());
-    Q_ASSERT(removeframe != nullptr);
-    QMutableListIterator<Plasma::Frame*> iter(m_frames);
+    ApplicationFrame* applicationframe = qobject_cast<ApplicationFrame*>(removewidget->parentObject());
+    Q_ASSERT(applicationframe != nullptr);
+    QMutableListIterator<ApplicationFrame*> iter(m_frames);
     while (iter.hasNext()) {
-        Plasma::Frame* frame = iter.next();
-        if (frame == removeframe) {
-            const QString framename = removeframe->property("_k_name").toString();
-            Plasma::Service* plasmaservice = m_dataengine->serviceForSource(framename);
+        ApplicationFrame* frame = iter.next();
+        if (frame == applicationframe) {
+            Plasma::Service* plasmaservice = m_dataengine->serviceForSource(applicationframe->name);
             if (!plasmaservice) {
-                kWarning() << "Could not get service for" << framename;
+                kWarning() << "Could not get service for" << applicationframe->name;
             } else {
                 const QVariantMap plasmaserviceargs = plasmaservice->operationParameters("userClosed");
                 (void)plasmaservice->startOperationCall("userClosed", plasmaserviceargs);
@@ -275,11 +272,11 @@ void ApplicationsWidget::slotActionClicked()
 {
     QMutexLocker locker(&m_mutex);
     const Plasma::PushButton* actionbutton = qobject_cast<Plasma::PushButton*>(sender());
-    const QString framename = actionbutton->property("_k_name").toString();
+    ApplicationFrame* actionframe = qobject_cast<ApplicationFrame*>(actionbutton->parentObject());
     const QString actionid = actionbutton->property("_k_actionid").toString();
-    Plasma::Service* plasmaservice = m_dataengine->serviceForSource(framename);
+    Plasma::Service* plasmaservice = m_dataengine->serviceForSource(actionframe->name);
     if (!plasmaservice) {
-        kWarning() << "Could not get service for" << framename;
+        kWarning() << "Could not get service for" << actionframe->name;
     } else {
         QVariantMap plasmaserviceargs = plasmaservice->operationParameters("invokeAction");
         plasmaserviceargs["actionId"] = actionid;
@@ -287,10 +284,8 @@ void ApplicationsWidget::slotActionClicked()
     }
 
     // remove notification too (compat)
-    Plasma::Frame* actionframe = qobject_cast<Plasma::Frame*>(actionbutton->parentObject());
     Q_ASSERT(actionframe != nullptr);
-    Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(actionframe->property("_k_removewidget"));
-    QMetaObject::invokeMethod(removewidget, "activated", Qt::QueuedConnection);
+    QMetaObject::invokeMethod(actionframe->removewidget, "activated", Qt::QueuedConnection);
 }
 
 #include "moc_applicationswidget.cpp"

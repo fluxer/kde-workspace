@@ -20,16 +20,78 @@
 
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
-#include <Plasma/IconWidget>
-#include <Plasma/Meter>
 #include <KRun>
 #include <KIconLoader>
 #include <KIcon>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(Plasma::IconWidget*)
-Q_DECLARE_METATYPE(Plasma::Label*)
-Q_DECLARE_METATYPE(Plasma::Meter*)
+JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
+    : Plasma::Frame(parent),
+    iconwidget(nullptr),
+    label(nullptr),
+    removewidget(nullptr),
+    openwidget(nullptr),
+    meter(nullptr),
+    name(_name)
+{
+    JobsWidget* jobswidget = qobject_cast<JobsWidget*>(parent);
+
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);
+
+    iconwidget = new Plasma::IconWidget(this);
+    iconwidget->setAcceptHoverEvents(false);
+    iconwidget->setAcceptedMouseButtons(Qt::NoButton);
+    iconwidget->setIcon(KIcon("services"));
+    const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+    const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
+    iconwidget->setPreferredIconSize(desktopiconsizef);
+    iconwidget->setMinimumSize(desktopiconsizef);
+    iconwidget->setMaximumSize(desktopiconsizef);
+    iconwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    framelayout->addItem(iconwidget, 0, 0, 2, 1);
+
+    label = new Plasma::Label(this);
+    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    framelayout->addItem(label, 0, 1, 3, 1);
+
+    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
+    removewidget = new Plasma::IconWidget(this);
+    removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    removewidget->setIcon(KIcon("dialog-close"));
+    removewidget->setToolTip(i18n("Click to remove this job notification."));
+    removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    removewidget->setVisible(false);
+    connect(
+        removewidget, SIGNAL(activated()),
+        jobswidget, SLOT(slotRemoveActivated())
+    );
+    framelayout->addItem(removewidget, 0, 2, 1, 1);
+
+    openwidget = new Plasma::IconWidget(this);
+    openwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    openwidget->setIcon(KIcon("system-file-manager"));
+    openwidget->setToolTip(i18n("Click to open the destination of the job."));
+    openwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    openwidget->setVisible(false);
+    connect(
+        openwidget, SIGNAL(activated()),
+        jobswidget, SLOT(slotOpenActivated())
+    );
+    framelayout->addItem(openwidget, 1, 2, 1, 1);
+
+    meter = new Plasma::Meter(this);
+    meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
+    meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    meter->setMinimum(0);
+    meter->setMaximum(100);
+    meter->setVisible(false);
+    framelayout->addItem(meter, 4, 0, 1, 3);
+
+    setLayout(framelayout);
+}
+
 
 JobsWidget::JobsWidget(QGraphicsItem *parent, NotificationsWidget *notificationswidget)
     : QGraphicsWidget(parent),
@@ -75,68 +137,7 @@ void JobsWidget::sourceAdded(const QString &name)
 {
     // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
-    Plasma::Frame* frame = new Plasma::Frame(this);
-    frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    frame->setProperty("_k_name", name);
-
-    QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
-
-    Plasma::IconWidget* iconwidget = new Plasma::IconWidget(frame);
-    iconwidget->setAcceptHoverEvents(false);
-    iconwidget->setAcceptedMouseButtons(Qt::NoButton);
-    iconwidget->setIcon(KIcon("services"));
-    const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
-    const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
-    iconwidget->setPreferredIconSize(desktopiconsizef);
-    iconwidget->setMinimumSize(desktopiconsizef);
-    iconwidget->setMaximumSize(desktopiconsizef);
-    iconwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    framelayout->addItem(iconwidget, 0, 0, 2, 1);
-    frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
-
-    Plasma::Label* label = new Plasma::Label(frame);
-    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    framelayout->addItem(label, 0, 1, 3, 1);
-    frame->setProperty("_k_label", QVariant::fromValue(label));
-
-    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
-    Plasma::IconWidget* removewidget = new Plasma::IconWidget(frame);
-    removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-    removewidget->setIcon(KIcon("dialog-close"));
-    removewidget->setToolTip(i18n("Click to remove this job notification."));
-    removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    removewidget->setVisible(false);
-    connect(
-        removewidget, SIGNAL(activated()),
-        this, SLOT(slotRemoveActivated())
-    );
-    framelayout->addItem(removewidget, 0, 2, 1, 1);
-    frame->setProperty("_k_removewidget", QVariant::fromValue(removewidget));
-
-    Plasma::IconWidget* openwidget = new Plasma::IconWidget(frame);
-    openwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-    openwidget->setIcon(KIcon("system-file-manager"));
-    openwidget->setToolTip(i18n("Click to open the destination of the job."));
-    openwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    openwidget->setVisible(false);
-    connect(
-        openwidget, SIGNAL(activated()),
-        this, SLOT(slotOpenActivated())
-    );
-    framelayout->addItem(openwidget, 1, 2, 1, 1);
-    frame->setProperty("_k_openwidget", QVariant::fromValue(openwidget));
-
-    Plasma::Meter* meter = new Plasma::Meter(frame);
-    meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
-    meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-    meter->setMinimum(0);
-    meter->setMaximum(100);
-    meter->setVisible(false);
-    framelayout->addItem(meter, 4, 0, 1, 3);
-    frame->setProperty("_k_meter", QVariant::fromValue(meter));
-
-    frame->setLayout(framelayout);
+    JobFrame* frame = new JobFrame(name, this);
     m_frames.append(frame);
     m_label->setVisible(false);
     m_layout->insertItem(0, frame);
@@ -180,21 +181,19 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
     )
 #endif
     QMutexLocker locker(&m_mutex);
-    foreach (Plasma::Frame* frame, m_frames) {
-        const QString framename = frame->property("_k_name").toString();
+    foreach (JobFrame* frame, m_frames) {
+        const QString framename = frame->name;
         if (framename == name) {
             const QString infomessage = data.value("infoMessage").toString();
             frame->setText(infomessage);
-            Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
             const QString appiconname = data.value("appIconName").toString();
             if (!appiconname.isEmpty()) {
-                iconwidget->setIcon(appiconname);
+                frame->iconwidget->setIcon(appiconname);
             }
             const QString labelname0 = data.value("labelName0").toString();
             const QString labelname1 = data.value("labelName1").toString();
-            Plasma::Label* label = qvariant_cast<Plasma::Label*>(frame->property("_k_label"));
             if (!labelname0.isEmpty() && !labelname1.isEmpty()) {
-                label->setText(
+                frame->label->setText(
                     i18n(
                         "<p><b>%1:</b> <i>%2</i></p><p><b>%3:</b> <i>%4</i></p>",
                         labelname0, data.value("label0").toString(),
@@ -202,14 +201,14 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                     )
                 );
             } else if (!labelname0.isEmpty()) {
-                label->setText(
+                frame->label->setText(
                     i18n(
                         "<b>%1:</b> <i>%2</i>",
                         labelname0, data.value("label0").toString()
                     )
                 );
             } else if (!labelname1.isEmpty()) {
-                label->setText(
+                frame->label->setText(
                     i18n(
                         "<b>%1:</b> <i>%2</i>",
                         labelname1, data.value("label1").toString()
@@ -218,18 +217,15 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
             }
             const uint percentage = data.value("percentage").toUInt();
             if (percentage > 0) {
-                Plasma::Meter* meter = qvariant_cast<Plasma::Meter*>(frame->property("_k_meter"));
-                meter->setVisible(true);
-                meter->setValue(percentage);
+                frame->meter->setVisible(true);
+                frame->meter->setValue(percentage);
             }
             const QByteArray state = data.value("state").toByteArray();
             if (state == "stopped") {
-                Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_removewidget"));
-                removewidget->setVisible(true);
-                Plasma::IconWidget* openwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_openwidget"));
+                frame->removewidget->setVisible(true);
                 const QString desturl = data.value("destUrl").toString();
                 if (!desturl.isEmpty()) {
-                    openwidget->setVisible(true);
+                    frame->openwidget->setVisible(true);
                 }
             }
             frame->adjustSize();
@@ -243,12 +239,12 @@ void JobsWidget::slotRemoveActivated()
 {
     QMutexLocker locker(&m_mutex);
     const Plasma::IconWidget* removewidget = qobject_cast<Plasma::IconWidget*>(sender());
-    Plasma::Frame* removeframe = qobject_cast<Plasma::Frame*>(removewidget->parentObject());
-    Q_ASSERT(removeframe != nullptr);
-    QMutableListIterator<Plasma::Frame*> iter(m_frames);
+    JobFrame* jobframe = qobject_cast<JobFrame*>(removewidget->parentObject());
+    Q_ASSERT(jobframe != nullptr);
+    QMutableListIterator<JobFrame*> iter(m_frames);
     while (iter.hasNext()) {
-        Plasma::Frame* frame = iter.next();
-        if (frame == removeframe) {
+        JobFrame* frame = iter.next();
+        if (frame == jobframe) {
             m_layout->removeItem(frame);
             frame->deleteLater();
             iter.remove();

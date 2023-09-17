@@ -24,9 +24,25 @@
 #include <QGraphicsLinearLayout>
 #include <Plasma/Label>
 #include <Plasma/Frame>
+#include <Plasma/IconWidget>
+#include <Plasma/PushButton>
 #include <Plasma/DataEngine>
 
 class NotificationsWidget;
+
+class ApplicationFrame : public Plasma::Frame
+{
+    Q_OBJECT
+public:
+    explicit ApplicationFrame(const QString &name, QGraphicsWidget *parent);
+
+    Plasma::IconWidget* iconwidget;
+    Plasma::Label* label;
+    Plasma::IconWidget* removewidget;
+    Plasma::IconWidget* configurewidget;
+    QString name;
+};
+
 
 class ApplicationsWidget : public QGraphicsWidget
 {
@@ -41,19 +57,21 @@ Q_SIGNALS:
     int countChanged();
     void ping();
 
-private Q_SLOTS:
-    void sourceAdded(const QString &name);
-    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
+public Q_SLOTS:
     void slotRemoveActivated();
     void slotConfigureActivated();
     void slotActionClicked();
+
+private Q_SLOTS:
+    void sourceAdded(const QString &name);
+    void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
 
 private:
     QMutex m_mutex;
     NotificationsWidget *m_notificationswidget;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_label;
-    QList<Plasma::Frame*> m_frames;
+    QList<ApplicationFrame*> m_frames;
     Plasma::DataEngine *m_dataengine;
 };
 
