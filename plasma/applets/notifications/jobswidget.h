@@ -45,6 +45,7 @@ private Q_SLOTS:
     void sourceAdded(const QString &name);
     void dataUpdated(const QString &name, const Plasma::DataEngine::Data &data);
     void slotRemoveActivated();
+    void slotFontChanged();
 
 private:
     QMutex m_mutex;

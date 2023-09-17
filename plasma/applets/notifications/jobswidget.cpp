@@ -56,6 +56,10 @@ JobsWidget::JobsWidget(QGraphicsItem *parent, NotificationsWidget *notifications
         m_dataengine, SIGNAL(sourceAdded(QString)),
         this, SLOT(sourceAdded(QString))
     );
+    connect(
+        KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()),
+        this, SLOT(slotFontChanged())
+    );
 }
 
 JobsWidget::~JobsWidget()
@@ -76,6 +80,9 @@ void JobsWidget::sourceAdded(const QString &name)
     QMutexLocker locker(&m_mutex);
     Plasma::Frame* frame = new Plasma::Frame(this);
     frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    QFont framefont = KGlobalSettings::generalFont();
+    framefont.setBold(true);
+    frame->setFont(framefont);
     frame->setProperty("_k_name", name);
 
     QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
@@ -93,17 +100,11 @@ void JobsWidget::sourceAdded(const QString &name)
     framelayout->addItem(iconwidget, 0, 0, 2, 1);
     frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
 
-    Plasma::Label* label0 = new Plasma::Label(frame);
-    label0->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    label0->setAlignment(Qt::AlignLeft | Qt::AlignHCenter);
-    framelayout->addItem(label0, 0, 1, 1, 1);
-    frame->setProperty("_k_label0", QVariant::fromValue(label0));
-
-    Plasma::Label* label1 = new Plasma::Label(frame);
-    label1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    label1->setAlignment(Qt::AlignLeft | Qt::AlignHCenter);
-    framelayout->addItem(label1, 1, 1, 1, 1);
-    frame->setProperty("_k_label1", QVariant::fromValue(label1));
+    Plasma::Label* label = new Plasma::Label(frame);
+    label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    framelayout->addItem(label, 0, 1, 2, 1);
+    frame->setProperty("_k_label", QVariant::fromValue(label));
 
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
     Plasma::IconWidget* removewidget = new Plasma::IconWidget(frame);
@@ -182,20 +183,28 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 iconwidget->setIcon(appiconname);
             }
             const QString labelname0 = data.value("labelName0").toString();
-            if (!labelname0.isEmpty()) {
-                Plasma::Label* label0 = qvariant_cast<Plasma::Label*>(frame->property("_k_label0"));
-                label0->setText(
+            const QString labelname1 = data.value("labelName1").toString();
+            Plasma::Label* label = qvariant_cast<Plasma::Label*>(frame->property("_k_label"));
+            if (!labelname0.isEmpty() && !labelname1.isEmpty()) {
+                label->setText(
                     i18n(
-                        "%1: %2", labelname0, data.value("label0").toString()
+                        "<p><b>%1:</b> <i>%2</i></p><p><b>%3:</b> <i>%4</i></p>",
+                        labelname0, data.value("label0").toString(),
+                        labelname1, data.value("label1").toString()
                     )
                 );
-            }
-            const QString labelname1 = data.value("labelName1").toString();
-            if (!labelname1.isEmpty()) {
-                Plasma::Label* label1 = qvariant_cast<Plasma::Label*>(frame->property("_k_label1"));
-                label1->setText(
+            } else if (!labelname0.isEmpty()) {
+                label->setText(
                     i18n(
-                        "%1: %2", labelname1, data.value("label1").toString()
+                        "<b>%1:</b> <i>%2</i>",
+                        labelname0, data.value("label0").toString()
+                    )
+                );
+            } else if (!labelname1.isEmpty()) {
+                label->setText(
+                    i18n(
+                        "<b>%1:</b> <i>%2</i>",
+                        labelname1, data.value("label1").toString()
                     )
                 );
             }
@@ -230,6 +239,16 @@ void JobsWidget::slotRemoveActivated()
     m_label->setVisible(m_frames.size() <= 0);
     adjustSize();
     emit countChanged();
+}
+
+void JobsWidget::slotFontChanged()
+{
+    QMutexLocker locker(&m_mutex);
+    foreach (Plasma::Frame* frame, m_frames) {
+        QFont framefont = KGlobalSettings::generalFont();
+        framefont.setBold(true);
+        frame->setFont(framefont);
+    }
 }
 
 #include "moc_jobswidget.cpp"

@@ -189,7 +189,6 @@ void NotificationsApplet::constraintsEvent(Plasma::Constraints constraints)
     }
 }
 
-
 K_EXPORT_PLASMA_APPLET(notifications, NotificationsApplet)
 
 #include "moc_notifications.cpp"
