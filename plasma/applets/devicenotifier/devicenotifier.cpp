@@ -288,6 +288,7 @@ void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString 
 
         frame->iconwidget->setIcon(KIcon(frame->soliddevice.icon(), KIconLoader::global(), frame->soliddevice.emblems()));
         frame->removewidget->setVisible(accessible || solidopticaldrive);
+        break;
     }
 }
 
