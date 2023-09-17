@@ -38,12 +38,14 @@
 #include <Solid/StorageDrive>
 #include <Solid/StorageAccess>
 #include <Solid/OpticalDrive>
+#include <Solid/PowerManagement>
 #include <KIcon>
 #include <KRun>
 #include <KDiskFreeSpaceInfo>
 #include <KDebug>
 
 static const int s_freetimeout = 3000; // 3secs
+static const int s_conservativefreetimeout = 10000; // 10secs
 // the minimum space for 2 items, more or less
 static const QSizeF s_minimumsize = QSizeF(290, 140);
 
@@ -64,6 +66,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void slotCheckFreeSpace();
+    void slotConserveResourcesChanged(bool conserve);
     void slotCheckEmblem(const bool accessible, const QString &udi);
 
 private:
@@ -177,6 +180,10 @@ DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGrap
         Solid::DeviceNotifier::instance(), SIGNAL(contentChanged(QString,bool)),
         this, SLOT(slotUpdateLayout())
     );
+    connect(
+        Solid::PowerManagement::notifier(), SIGNAL(appShouldConserveResourcesChanged(bool)),
+        this, SLOT(slotConserveResourcesChanged(bool))
+    );
 }
 
 void DeviceNotifierWidget::slotUpdateLayout()
@@ -263,6 +270,11 @@ void DeviceNotifierWidget::slotCheckFreeSpace()
             kWarning() << "no mountpoint and no device path for" << frame->soliddevice.udi();
         }
     }
+}
+
+void DeviceNotifierWidget::slotConserveResourcesChanged(const bool conserve)
+{
+    m_freetimer->setInterval(conserve ? s_conservativefreetimeout : s_freetimeout);
 }
 
 void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString &udi)
