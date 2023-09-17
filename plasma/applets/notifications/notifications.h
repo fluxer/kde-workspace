@@ -33,6 +33,10 @@ public:
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
 
+protected:
+    // Plasma::Applet reimplementation
+    void constraintsEvent(Plasma::Constraints constraints) final;
+
 private:
     friend NotificationsWidget;
     NotificationsWidget *m_notificationswidget;

@@ -20,6 +20,8 @@
 #include "jobswidget.h"
 #include "applicationswidget.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
 #include <Plasma/TabBar>
 #include <Plasma/ScrollWidget>
 #include <KIcon>
@@ -163,6 +165,30 @@ QGraphicsWidget* NotificationsApplet::graphicsWidget()
 {
     return m_notificationswidget;
 }
+
+void NotificationsApplet::constraintsEvent(Plasma::Constraints constraints)
+{
+    if (constraints & Plasma::FormFactorConstraint) {
+        switch (formFactor()) {
+            case Plasma::FormFactor::Horizontal:
+            case Plasma::FormFactor::Vertical: {
+                // HACK: limit the widget size to 2-times less than that of the desktop because
+                // Plasma::TabBar sets its maximum size to QWIDGETSIZE_MAX which is more than what
+                // can fit on panel, see:
+                // kdelibs/plasma/widgets/tabbar.cpp
+                const QSize desktopsize = qApp->desktop()->size();
+                m_notificationswidget->setMaximumSize(desktopsize / 2);
+                break;
+            }
+            default: {
+                // back to the Plasma::TabBar maximum on form factor switch
+                m_notificationswidget->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
+                break;
+            }
+        }
+    }
+}
+
 
 K_EXPORT_PLASMA_APPLET(notifications, NotificationsApplet)
 
