@@ -43,12 +43,11 @@
 #include <KDiskFreeSpaceInfo>
 #include <KDebug>
 
-Q_DECLARE_METATYPE(Plasma::IconWidget*)
-Q_DECLARE_METATYPE(Plasma::Meter*)
-
 static const int s_freetimeout = 3000; // 3secs
 // the minimum space for 2 items, more or less
 static const QSizeF s_minimumsize = QSizeF(290, 140);
+
+class DeviceFrame;
 
 class DeviceNotifierWidget : public QGraphicsWidget
 {
@@ -60,22 +59,90 @@ public:
 
 public Q_SLOTS:
     void slotUpdateLayout();
+    void slotIconActivated();
+    void slotRemoveActivated();
 
 private Q_SLOTS:
     void slotCheckFreeSpace();
     void slotCheckEmblem(const bool accessible, const QString &udi);
-    void slotIconActivated();
-    void slotRemoveActivated();
 
 private:
     QMutex m_mutex;
     DeviceNotifier* m_devicenotifier;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_label;
-    QList<Plasma::Frame*> m_frames;
+    QList<DeviceFrame*> m_frames;
     QTimer* m_freetimer;
     QList<Solid::Device> m_soliddevices;
 };
+
+
+class DeviceFrame : public Plasma::Frame
+{
+    Q_OBJECT
+public:
+    explicit DeviceFrame(const Solid::Device &soliddevice, QGraphicsWidget *parent);
+
+    Plasma::IconWidget* iconwidget;
+    Plasma::IconWidget* removewidget;
+    Plasma::Meter* meter;
+    Solid::Device soliddevice;
+};
+
+DeviceFrame::DeviceFrame(const Solid::Device &_soliddevice, QGraphicsWidget *parent)
+    : Plasma::Frame(parent),
+    iconwidget(nullptr),
+    removewidget(nullptr),
+    meter(nullptr),
+    soliddevice(_soliddevice)
+{
+    DeviceNotifierWidget* devicenotifierwidget = qobject_cast<DeviceNotifierWidget*>(parent);
+    const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+    const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+
+    setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+
+    QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);
+
+    iconwidget = new Plasma::IconWidget(this);
+    iconwidget->setOrientation(Qt::Horizontal);
+    iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
+    iconwidget->setText(soliddevice.description());
+    iconwidget->setToolTip(i18n("Click to access this device from other applications."));
+    iconwidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    connect(
+        iconwidget, SIGNAL(activated()),
+        devicenotifierwidget, SLOT(slotIconActivated())
+    );
+    framelayout->addItem(iconwidget, 0, 0, 1, 1);
+
+    removewidget = new Plasma::IconWidget(this);
+    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
+    removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    removewidget->setIcon(KIcon("media-eject"));
+    removewidget->setToolTip(
+        solidopticaldrive ? i18n("Click to eject this disc.") : i18n("Click to safely remove this device.")
+    );
+    removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    if (solidopticaldrive) {
+        removewidget->setVisible(true);
+    } else {
+        removewidget->setVisible(solidstorageaccess ? solidstorageaccess->isAccessible() : false);
+    }
+    connect(
+        removewidget, SIGNAL(activated()),
+        devicenotifierwidget, SLOT(slotRemoveActivated())
+    );
+    framelayout->addItem(removewidget, 0, 1, 1, 1);
+
+    meter = new Plasma::Meter(this);
+    meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
+    meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    framelayout->addItem(meter, 1, 0, 1, 2);
+
+    setLayout(framelayout);
+}
+
 
 DeviceNotifierWidget::DeviceNotifierWidget(DeviceNotifier* devicenotifier, QGraphicsWidget *parent)
     : QGraphicsWidget(parent),
@@ -136,7 +203,7 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
     m_freetimer->stop();
     QMutexLocker locker(&m_mutex);
-    foreach (Plasma::Frame* frame, m_frames) {
+    foreach (DeviceFrame* frame, m_frames) {
         m_layout->removeItem(frame);
     }
     qDeleteAll(m_frames);
@@ -153,59 +220,11 @@ void DeviceNotifierWidget::slotUpdateLayout()
 
     m_label->hide();
     m_devicenotifier->setStatus(Plasma::ItemStatus::ActiveStatus);
-    const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
     foreach (const Solid::Device &soliddevice, m_soliddevices) {
-        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
-        const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
-        Plasma::Frame* frame = new Plasma::Frame(this);
-        frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        frame->setProperty("_k_udi", soliddevice.udi());
-        QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
-
-        Plasma::IconWidget* iconwidget = new Plasma::IconWidget(frame);
-        iconwidget->setOrientation(Qt::Horizontal);
-        iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
-        iconwidget->setText(soliddevice.description());
-        iconwidget->setToolTip(i18n("Click to access this device from other applications."));
-        iconwidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-        iconwidget->setProperty("_k_udi", soliddevice.udi());
-        connect(
-            iconwidget, SIGNAL(activated()),
-            this, SLOT(slotIconActivated())
-        );
-        framelayout->addItem(iconwidget, 0, 0, 1, 1);
-        frame->setProperty("_k_iconwidget", QVariant::fromValue(iconwidget));
-
-        Plasma::IconWidget* removewidget = new Plasma::IconWidget(frame);
-        removewidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-        removewidget->setIcon(KIcon("media-eject"));
-        removewidget->setToolTip(
-            solidopticaldrive ? i18n("Click to eject this disc.") : i18n("Click to safely remove this device.")
-        );
-        removewidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        if (solidopticaldrive) {
-            removewidget->setVisible(true);
-        } else {
-            removewidget->setVisible(solidstorageaccess ? solidstorageaccess->isAccessible() : false);
-        }
-        removewidget->setProperty("_k_udi", soliddevice.udi());
-        connect(
-            removewidget, SIGNAL(activated()),
-            this, SLOT(slotRemoveActivated())
-        );
-        framelayout->addItem(removewidget, 0, 1, 1, 1);
-        frame->setProperty("_k_removewidget", QVariant::fromValue(removewidget));
-
-        Plasma::Meter* meter = new Plasma::Meter(frame);
-        meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
-        meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
-        framelayout->addItem(meter, 1, 0, 1, 2);
-        frame->setProperty("_k_meter", QVariant::fromValue(meter));
-
-        frame->setLayout(framelayout);
+        DeviceFrame* frame = new DeviceFrame(soliddevice, this);
         m_layout->addItem(frame);
         m_frames.append(frame);
-
+        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
         if (solidstorageaccess) {
             connect(
                 solidstorageaccess, SIGNAL(accessibilityChanged(bool,QString)),
@@ -222,30 +241,26 @@ void DeviceNotifierWidget::slotUpdateLayout()
 void DeviceNotifierWidget::slotCheckFreeSpace()
 {
     QMutexLocker locker(&m_mutex);
-    foreach (const Plasma::Frame* frame, m_frames) {
-        const QString solidudi = frame->property("_k_udi").toString();
-        const Solid::Device soliddevice(solidudi);
-
-        const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
+    foreach (const DeviceFrame* frame, m_frames) {
+        const Solid::StorageAccess *solidstorageaccess = frame->soliddevice.as<Solid::StorageAccess>();
         QString devicepath;
         // using the mountpoint is slightly more reliable
         if (solidstorageaccess) {
             devicepath = solidstorageaccess->filePath();
         }
         if (devicepath.isEmpty()) {
-            const Solid::Block *solidblock = soliddevice.as<Solid::Block>();
+            const Solid::Block *solidblock = frame->soliddevice.as<Solid::Block>();
             if (solidblock) {
                 devicepath = solidblock->device();
             }
         }
         if (!devicepath.isEmpty()) {
             const KDiskFreeSpaceInfo kfreespaceinfo = KDiskFreeSpaceInfo::freeSpaceInfo(devicepath);
-            Plasma::Meter* meter = qvariant_cast<Plasma::Meter*>(frame->property("_k_meter"));
-            meter->setMaximum(qMax(kfreespaceinfo.size() / 1024, KIO::filesize_t(100)));
-            meter->setValue(kfreespaceinfo.used() / 1024);
-            // qDebug() << Q_FUNC_INFO << solidudi << kfreespaceinfo.size() << kfreespaceinfo.used();
+            frame->meter->setMaximum(qMax(kfreespaceinfo.size() / 1024, KIO::filesize_t(100)));
+            frame->meter->setValue(kfreespaceinfo.used() / 1024);
+            // qDebug() << Q_FUNC_INFO << frame->soliddevice.udi() << kfreespaceinfo.size() << kfreespaceinfo.used();
         } else {
-            kWarning() << "no mountpoint and no device path for" << solidudi;
+            kWarning() << "no mountpoint and no device path for" << frame->soliddevice.udi();
         }
     }
 }
@@ -253,30 +268,24 @@ void DeviceNotifierWidget::slotCheckFreeSpace()
 void DeviceNotifierWidget::slotCheckEmblem(const bool accessible, const QString &udi)
 {
     QMutexLocker locker(&m_mutex);
-    foreach (const Plasma::Frame* frame, m_frames) {
-        const QString solidudi = frame->property("_k_udi").toString();
-        if (solidudi != udi) {
+    foreach (const DeviceFrame* frame, m_frames) {
+        if (frame->soliddevice.udi() != udi) {
             continue;
         }
-        const Solid::Device soliddevice(solidudi);
-        const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+        const Solid::OpticalDrive *solidopticaldrive = frame->soliddevice.as<Solid::OpticalDrive>();
 
-        Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
-        iconwidget->setIcon(KIcon(soliddevice.icon(), KIconLoader::global(), soliddevice.emblems()));
-
-        Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_removewidget"));
-        removewidget->setVisible(accessible || solidopticaldrive);
+        frame->iconwidget->setIcon(KIcon(frame->soliddevice.icon(), KIconLoader::global(), frame->soliddevice.emblems()));
+        frame->removewidget->setVisible(accessible || solidopticaldrive);
     }
 }
 
 void DeviceNotifierWidget::slotIconActivated()
 {
     const Plasma::IconWidget* iconwidget = qobject_cast<Plasma::IconWidget*>(sender());
-    const QString solidudi = iconwidget->property("_k_udi").toString();
-    Solid::Device soliddevice(solidudi);
-    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    DeviceFrame* deviceframe = qobject_cast<DeviceFrame*>(iconwidget->parentObject());
+    Solid::StorageAccess* solidstorageacces = deviceframe->soliddevice.as<Solid::StorageAccess>();
     if (!solidstorageacces) {
-        kWarning() << "not storage access" << solidudi;
+        kWarning() << "not storage access" << deviceframe->soliddevice.udi();
         return;
     }
     QString mountpoint = solidstorageacces->filePath();
@@ -292,16 +301,15 @@ void DeviceNotifierWidget::slotIconActivated()
 void DeviceNotifierWidget::slotRemoveActivated()
 {
     const Plasma::IconWidget* removewidget = qobject_cast<Plasma::IconWidget*>(sender());
-    const QString solidudi = removewidget->property("_k_udi").toString();
-    Solid::Device soliddevice(solidudi);
-    Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
+    DeviceFrame* deviceframe = qobject_cast<DeviceFrame*>(removewidget->parentObject());
+    Solid::OpticalDrive *solidopticaldrive = deviceframe->soliddevice.as<Solid::OpticalDrive>();
     if (solidopticaldrive) {
         solidopticaldrive->eject();
         return;
     }
-    Solid::StorageAccess* solidstorageacces = soliddevice.as<Solid::StorageAccess>();
+    Solid::StorageAccess* solidstorageacces = deviceframe->soliddevice.as<Solid::StorageAccess>();
     if (!solidstorageacces) {
-        kWarning() << "not storage access" << solidudi;
+        kWarning() << "not storage access" << deviceframe->soliddevice.udi();
         return;
     }
     solidstorageacces->teardown();
