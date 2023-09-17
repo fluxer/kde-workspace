@@ -29,6 +29,7 @@
 
 static const QSizeF s_minimumsize = QSizeF(290, 140);
 static const int s_svgiconsize = 256;
+static const uint s_popuptimeout = 3000; // 3secs
 
 static QIcon kNotificationIcon(QObject *parent, const bool active)
 {
@@ -130,7 +131,7 @@ void NotificationsWidget::slotNewJobNotification()
     // if the popup was shown before the signal it is probably because it is being interacted with
     // so no automatic tab switching in that case
     const bool waspopupshowing = m_notifications->isPopupShowing();
-    m_notifications->showPopup();
+    m_notifications->showPopup(s_popuptimeout);
     if (!waspopupshowing) {
         setCurrentIndex(0);
     }
@@ -139,7 +140,7 @@ void NotificationsWidget::slotNewJobNotification()
 void NotificationsWidget::slotNewApplicationNotification()
 {
     const bool waspopupshowing = m_notifications->isPopupShowing();
-    m_notifications->showPopup();
+    m_notifications->showPopup(s_popuptimeout);
     if (!waspopupshowing) {
         setCurrentIndex(1);
     }
@@ -152,6 +153,7 @@ NotificationsApplet::NotificationsApplet(QObject *parent, const QVariantList &ar
 {
     KGlobal::locale()->insertCatalog("plasma_applet_notifications");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
+    setPassivePopup(true);
     m_notificationswidget = new NotificationsWidget(this);
     setPopupIcon(kNotificationIcon(this, false));
 }
