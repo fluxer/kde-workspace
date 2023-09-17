@@ -225,6 +225,7 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 frame->configurewidget->setProperty("_k_apprealname", data.value("appRealName"));
             }
             frame->adjustSize();
+            locker.unlock();
             emit ping();
             break;
         }
@@ -256,13 +257,16 @@ void ApplicationsWidget::slotRemoveActivated()
     }
     m_label->setVisible(m_frames.size() <= 0);
     adjustSize();
+    locker.unlock();
     emit countChanged();
 }
 
 void ApplicationsWidget::slotConfigureActivated()
 {
+    QMutexLocker locker(&m_mutex);
     const Plasma::IconWidget* configurewidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString frameapprealname = configurewidget->property("_k_apprealname").toString();
+    locker.unlock();
     // same thing the notifications service does except without going the data engine meaning
     // faster
     KNotificationConfigWidget::configure(frameapprealname, nullptr);

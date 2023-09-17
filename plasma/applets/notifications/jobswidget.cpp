@@ -182,8 +182,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
 #endif
     QMutexLocker locker(&m_mutex);
     foreach (JobFrame* frame, m_frames) {
-        const QString framename = frame->name;
-        if (framename == name) {
+        if (frame->name == name) {
             const QString infomessage = data.value("infoMessage").toString();
             frame->setText(infomessage);
             const QString appiconname = data.value("appIconName").toString();
@@ -229,6 +228,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 }
             }
             frame->adjustSize();
+            locker.unlock();
             emit ping();
             break;
         }
@@ -253,6 +253,7 @@ void JobsWidget::slotRemoveActivated()
     }
     m_label->setVisible(m_frames.size() <= 0);
     adjustSize();
+    locker.unlock();
     emit countChanged();
 }
 
@@ -261,6 +262,7 @@ void JobsWidget::slotOpenActivated()
     QMutexLocker locker(&m_mutex);
     const Plasma::IconWidget* openwidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString desturl = openwidget->property("_k_desturl").toString();
+    locker.unlock();
     KRun::runUrl(KUrl(desturl), "inode/directory", nullptr);
 }
 
