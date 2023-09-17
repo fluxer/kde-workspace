@@ -134,6 +134,7 @@ void ApplicationsWidget::sourceAdded(const QString &name)
     adjustSize();
 
     emit countChanged();
+    emit newNotification();
     locker.unlock();
     m_dataengine->connectSource(name, this);
 }

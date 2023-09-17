@@ -134,6 +134,7 @@ void JobsWidget::sourceAdded(const QString &name)
     adjustSize();
 
     emit countChanged();
+    emit newNotification();
     locker.unlock();
     m_dataengine->connectSource(name, this);
 }
@@ -173,6 +174,8 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
     foreach (Plasma::Frame* frame, m_frames) {
         const QString framename = frame->property("_k_name").toString();
         if (framename == name) {
+            const QString infomessage = data.value("infoMessage").toString();
+            frame->setText(infomessage);
             Plasma::IconWidget* iconwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_iconwidget"));
             const QString appiconname = data.value("appIconName").toString();
             if (!appiconname.isEmpty()) {

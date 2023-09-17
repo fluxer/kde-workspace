@@ -39,6 +39,7 @@ public:
 
 Q_SIGNALS:
     int countChanged();
+    void newNotification();
 
 private Q_SLOTS:
     void sourceAdded(const QString &name);
