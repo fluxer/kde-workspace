@@ -176,7 +176,8 @@ void NotificationsApplet::constraintsEvent(Plasma::Constraints constraints)
             case Plasma::FormFactor::Vertical: {
                 // HACK: limit the widget size to 2-times less than that of the desktop because
                 // Plasma::TabBar sets its maximum size to QWIDGETSIZE_MAX which is more than what
-                // can fit on panel, see:
+                // can fit on panel and for some reason hints do not have effect on the widget size
+                // when it is in a panel, see:
                 // kdelibs/plasma/widgets/tabbar.cpp
                 const QSize desktopsize = qApp->desktop()->size();
                 m_notificationswidget->setMaximumSize(desktopsize / 2);
