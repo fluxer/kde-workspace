@@ -22,6 +22,7 @@
 #include <Plasma/DataEngineManager>
 #include <Plasma/IconWidget>
 #include <Plasma/Meter>
+#include <KRun>
 #include <KIconLoader>
 #include <KIcon>
 #include <KDebug>
@@ -56,10 +57,6 @@ JobsWidget::JobsWidget(QGraphicsItem *parent, NotificationsWidget *notifications
         m_dataengine, SIGNAL(sourceAdded(QString)),
         this, SLOT(sourceAdded(QString))
     );
-    connect(
-        KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()),
-        this, SLOT(slotFontChanged())
-    );
 }
 
 JobsWidget::~JobsWidget()
@@ -80,9 +77,6 @@ void JobsWidget::sourceAdded(const QString &name)
     QMutexLocker locker(&m_mutex);
     Plasma::Frame* frame = new Plasma::Frame(this);
     frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    QFont framefont = KGlobalSettings::generalFont();
-    framefont.setBold(true);
-    frame->setFont(framefont);
     frame->setProperty("_k_name", name);
 
     QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
@@ -103,7 +97,7 @@ void JobsWidget::sourceAdded(const QString &name)
     Plasma::Label* label = new Plasma::Label(frame);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    framelayout->addItem(label, 0, 1, 2, 1);
+    framelayout->addItem(label, 0, 1, 3, 1);
     frame->setProperty("_k_label", QVariant::fromValue(label));
 
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
@@ -120,12 +114,26 @@ void JobsWidget::sourceAdded(const QString &name)
     framelayout->addItem(removewidget, 0, 2, 1, 1);
     frame->setProperty("_k_removewidget", QVariant::fromValue(removewidget));
 
+    Plasma::IconWidget* openwidget = new Plasma::IconWidget(frame);
+    openwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    openwidget->setIcon(KIcon("system-file-manager"));
+    openwidget->setToolTip(i18n("Click to open the destination of the job."));
+    openwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    openwidget->setVisible(false);
+    connect(
+        openwidget, SIGNAL(activated()),
+        this, SLOT(slotOpenActivated())
+    );
+    framelayout->addItem(openwidget, 1, 2, 1, 1);
+    frame->setProperty("_k_openwidget", QVariant::fromValue(openwidget));
+
     Plasma::Meter* meter = new Plasma::Meter(frame);
     meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
     meter->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
     meter->setMinimum(0);
     meter->setMaximum(100);
-    framelayout->addItem(meter, 3, 0, 1, 3);
+    meter->setVisible(false);
+    framelayout->addItem(meter, 4, 0, 1, 3);
     frame->setProperty("_k_meter", QVariant::fromValue(meter));
 
     frame->setLayout(framelayout);
@@ -208,12 +216,21 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                     )
                 );
             }
-            Plasma::Meter* meter = qvariant_cast<Plasma::Meter*>(frame->property("_k_meter"));
-            meter->setValue(data.value("percentage").toUInt());
+            const uint percentage = data.value("percentage").toUInt();
+            if (percentage > 0) {
+                Plasma::Meter* meter = qvariant_cast<Plasma::Meter*>(frame->property("_k_meter"));
+                meter->setVisible(true);
+                meter->setValue(percentage);
+            }
             const QByteArray state = data.value("state").toByteArray();
             if (state == "stopped") {
                 Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_removewidget"));
                 removewidget->setVisible(true);
+                Plasma::IconWidget* openwidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_openwidget"));
+                const QString desturl = data.value("destUrl").toString();
+                if (!desturl.isEmpty()) {
+                    openwidget->setVisible(true);
+                }
             }
             break;
         }
@@ -241,14 +258,12 @@ void JobsWidget::slotRemoveActivated()
     emit countChanged();
 }
 
-void JobsWidget::slotFontChanged()
+void JobsWidget::slotOpenActivated()
 {
     QMutexLocker locker(&m_mutex);
-    foreach (Plasma::Frame* frame, m_frames) {
-        QFont framefont = KGlobalSettings::generalFont();
-        framefont.setBold(true);
-        frame->setFont(framefont);
-    }
+    const Plasma::IconWidget* openwidget = qobject_cast<Plasma::IconWidget*>(sender());
+    const QString desturl = openwidget->property("_k_desturl").toString();
+    KRun::runUrl(KUrl(desturl), "inode/directory", nullptr);
 }
 
 #include "moc_jobswidget.cpp"
