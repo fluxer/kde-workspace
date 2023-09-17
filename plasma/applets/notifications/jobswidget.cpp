@@ -167,7 +167,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
         ( "speed" ,  QVariant(QString, "76,0 MiB/s") )
         ( "labelName0" ,  QVariant(QString, "Източник") )
         ( "labelName1" ,  QVariant(QString, "Местоназначение") )
-    ) 
+    )
 #endif
     QMutexLocker locker(&m_mutex);
     foreach (Plasma::Frame* frame, m_frames) {
@@ -197,9 +197,9 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 );
             }
             Plasma::Meter* meter = qvariant_cast<Plasma::Meter*>(frame->property("_k_meter"));
-            const uint percentage = data.value("percentage").toUInt();
-            meter->setValue(percentage);
-            if (percentage >= 100) {
+            meter->setValue(data.value("percentage").toUInt());
+            const QByteArray state = data.value("state").toByteArray();
+            if (state == "stopped") {
                 Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(frame->property("_k_removewidget"));
                 removewidget->setVisible(true);
             }
