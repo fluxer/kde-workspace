@@ -58,7 +58,7 @@ JobsWidget::~JobsWidget()
 
 int JobsWidget::count() const
 {
-    return 0;
+    return m_frames.size();
 }
 
 void JobsWidget::sourceAdded(const QString &name)

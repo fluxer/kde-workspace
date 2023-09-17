@@ -20,8 +20,10 @@
 
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
+#include <Plasma/Service>
 #include <Plasma/IconWidget>
-#include <Plasma/ToolButton>
+#include <Plasma/PushButton>
+#include <KIconLoader>
 #include <KIcon>
 #include <KNotificationConfigWidget>
 #include <KDebug>
@@ -171,28 +173,32 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
             // row insertation starts at 0, count is +1
             if (framelayout->rowCount() >= 4) {
                 buttonslayout = static_cast<QGraphicsLinearLayout*>(framelayout->itemAt(3, 0));
-            }
-            if (buttonslayout) {
-                // remove buttons in case of notification update
-                QList<Plasma::ToolButton*> actionbuttons;
+                // redo the buttons layout in case of notification update
+                QList<Plasma::PushButton*> actionbuttons;
                 for (int i = 0; i < buttonslayout->count(); i++) {
-                    Plasma::ToolButton* actionbutton = static_cast<Plasma::ToolButton*>(buttonslayout->itemAt(i));
-                    actionbuttons.append(actionbutton);
+                    Plasma::PushButton* actionbutton = static_cast<Plasma::PushButton*>(buttonslayout->itemAt(i));
+                    if (actionbutton) {
+                        actionbuttons.append(actionbutton);
+                    }
                     buttonslayout->removeAt(i);
                 }
                 qDeleteAll(actionbuttons);
                 actionbuttons.clear();
+                framelayout->removeItem(buttonslayout);
+                delete buttonslayout;
+                buttonslayout = nullptr;
             }
             for (int i = 0; i < actions.size(); i++) {
                 const QString actionid = actions[i];
                 i++;
-                const QString actionname = actions[i];
+                const QString actionname = (i < actions.size() ? actions.at(i) : QString());
                 if (actionid.isEmpty() || actionname.isEmpty()) {
                     kWarning() << "Empty action ID or name" << actionid << actionname;
                     continue;
                 }
 
-                Plasma::ToolButton* actionbutton = new Plasma::ToolButton(frame);
+                Plasma::PushButton* actionbutton = new Plasma::PushButton(frame);
+                actionbutton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
                 actionbutton->setProperty("_k_name", framename);
                 actionbutton->setProperty("_k_actionid", actionid);
                 actionbutton->setText(actionname);
@@ -202,10 +208,12 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 );
                 if (!buttonslayout) {
                     buttonslayout = new QGraphicsLinearLayout(Qt::Horizontal, framelayout);
+                    buttonslayout->addStretch();
                 }
                 buttonslayout->addItem(actionbutton);
             }
             if (buttonslayout) {
+                buttonslayout->addStretch();
                 framelayout->addItem(buttonslayout, 3, 0, 1, 3);
                 framelayout->setAlignment(buttonslayout, Qt::AlignCenter);
             }
@@ -256,12 +264,14 @@ void ApplicationsWidget::slotConfigureActivated()
 {
     const Plasma::IconWidget* configurewidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString frameapprealname = configurewidget->property("_k_apprealname").toString();
+    // same thing the notifications service does
     KNotificationConfigWidget::configure(frameapprealname, nullptr);
 }
 
 void ApplicationsWidget::slotActionClicked()
 {
-    const Plasma::ToolButton* actionbutton = qobject_cast<Plasma::ToolButton*>(sender());
+    QMutexLocker locker(&m_mutex);
+    const Plasma::PushButton* actionbutton = qobject_cast<Plasma::PushButton*>(sender());
     const QString framename = actionbutton->property("_k_name").toString();
     const QString actionid = actionbutton->property("_k_actionid").toString();
     Plasma::Service* plasmaservice = m_dataengine->serviceForSource(framename);
@@ -272,7 +282,12 @@ void ApplicationsWidget::slotActionClicked()
         plasmaserviceargs["actionId"] = actionid;
         (void)plasmaservice->startOperationCall("invokeAction", plasmaserviceargs);
     }
-    // TODO: remove notification too
+
+    // remove notification too (compat)
+    Plasma::Frame* actionframe = qobject_cast<Plasma::Frame*>(actionbutton->parentObject());
+    Q_ASSERT(actionframe != nullptr);
+    Plasma::IconWidget* removewidget = qvariant_cast<Plasma::IconWidget*>(actionframe->property("_k_removewidget"));
+    QMetaObject::invokeMethod(removewidget, "activated", Qt::QueuedConnection);
 }
 
 #include "moc_applicationswidget.cpp"

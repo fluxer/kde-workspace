@@ -25,7 +25,6 @@
 #include <Plasma/Label>
 #include <Plasma/Frame>
 #include <Plasma/DataEngine>
-#include <KIconLoader>
 
 class NotificationsWidget;
 

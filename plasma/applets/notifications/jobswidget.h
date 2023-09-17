@@ -22,6 +22,7 @@
 #include <QGraphicsWidget>
 #include <QGraphicsLinearLayout>
 #include <Plasma/Label>
+#include <Plasma/Frame>
 #include <Plasma/DataEngine>
 
 class NotificationsWidget;
@@ -47,6 +48,7 @@ private:
     NotificationsWidget *m_notificationswidget;
     QGraphicsLinearLayout* m_layout;
     Plasma::Label* m_label;
+    QList<Plasma::Frame*> m_frames;
     Plasma::DataEngine *m_dataengine;
 };
 

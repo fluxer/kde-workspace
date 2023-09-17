@@ -26,6 +26,25 @@
 #include <KDebug>
 
 static const QSizeF s_minimumsize = QSizeF(290, 140);
+static const int s_svgiconsize = 256;
+
+static QIcon kNotificationIcon(QObject *parent, const bool active)
+{
+    QIcon result;
+    Plasma::Svg plasmasvg(parent);
+    plasmasvg.setImagePath("icons/notification");
+    plasmasvg.setContainsMultipleImages(true);
+    if (plasmasvg.isValid()) {
+        QPixmap iconpixmap(s_svgiconsize, s_svgiconsize);
+        iconpixmap.fill(Qt::transparent);
+        QPainter iconpainter(&iconpixmap);
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), active ? "notification-active" : "notification-disabled");
+        result = QIcon(iconpixmap);
+    } else {
+        result = KIcon("preferences-desktop-notification");
+    }
+    return result;
+}
 
 class NotificationsWidget : public Plasma::TabBar
 {
@@ -86,8 +105,10 @@ void NotificationsWidget::slotCountChanged()
 {
     const int totalcount = (m_jobswidget->count() + m_applicationswidget->count());
     if (totalcount > 0) {
+        m_notifications->setPopupIcon(kNotificationIcon(m_notifications, true));
         m_notifications->setStatus(Plasma::ItemStatus::ActiveStatus);
     } else {
+        m_notifications->setPopupIcon(kNotificationIcon(m_notifications, false));
         m_notifications->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
 }
@@ -100,7 +121,7 @@ NotificationsApplet::NotificationsApplet(QObject *parent, const QVariantList &ar
     KGlobal::locale()->insertCatalog("plasma_applet_notifications");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     m_notificationswidget = new NotificationsWidget(this);
-    setPopupIcon("preferences-desktop-notification");
+    setPopupIcon(kNotificationIcon(this, false));
 }
 
 NotificationsApplet::~NotificationsApplet()
