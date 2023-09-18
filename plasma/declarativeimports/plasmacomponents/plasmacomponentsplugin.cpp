@@ -18,10 +18,7 @@
  */
 
 #include "plasmacomponentsplugin.h"
-#include "qrangemodel.h"
 #include "enums.h"
-#include "qmenu.h"
-#include "qmenuitem.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
@@ -34,63 +31,10 @@
 
 Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 
-class BKSingleton
-{
-public:
-   EngineBookKeeping self;
-};
-K_GLOBAL_STATIC(BKSingleton, privateBKSelf)
-
-EngineBookKeeping::EngineBookKeeping()
-{
-}
-
-EngineBookKeeping *EngineBookKeeping::self()
-{
-    return &privateBKSelf->self;
-}
-
-QDeclarativeEngine *EngineBookKeeping::engine() const
-{
-    //for components creation, any engine will do, as long is valid
-    if (m_engines.isEmpty()) {
-        kWarning() << "No engines found, this should never happen";
-        return 0;
-    } else {
-        return m_engines.values().first();
-    }
-}
-
-void EngineBookKeeping::insertEngine(QDeclarativeEngine *engine)
-{
-    connect(engine, SIGNAL(destroyed(QObject *)),
-            this, SLOT(engineDestroyed(QObject *)));
-    m_engines.insert(engine);
-}
-
-void EngineBookKeeping::engineDestroyed(QObject *deleted)
-{
-    m_engines.remove(static_cast<QDeclarativeEngine *>(deleted));
-}
-
-
-
-void PlasmaComponentsPlugin::initializeEngine(QDeclarativeEngine *engine, const char *uri)
-{
-    QDeclarativeExtensionPlugin::initializeEngine(engine, uri);
-    EngineBookKeeping::self()->insertEngine(engine);
-}
-
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
 
-    qmlRegisterType<QMenuProxy>(uri, 0, 1, "Menu");
-    qmlRegisterType<QMenuItem>(uri, 0, 1, "MenuItem");
-
-    qmlRegisterType<Plasma::QRangeModel>(uri, 0, 1, "RangeModel");
-
-    qmlRegisterUncreatableType<DialogStatus>(uri, 0, 1, "DialogStatus", "");
     qmlRegisterUncreatableType<PageStatus>(uri, 0, 1, "PageStatus", "");
 }
 

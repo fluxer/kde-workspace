@@ -2,10 +2,7 @@ project(plasmacomponents)
 
 set(plasmacomponents_SRCS
     plasmacomponentsplugin.cpp
-    qrangemodel.cpp
     enums.cpp
-    qmenu.cpp
-    qmenuitem.cpp
     ../core/declarativeitemcontainer.cpp
 )
 

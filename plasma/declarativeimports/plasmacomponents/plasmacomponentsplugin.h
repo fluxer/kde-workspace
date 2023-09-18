@@ -25,32 +25,12 @@
 
 #include <QDeclarativeEngine>
 #include <QDeclarativeItem>
-class PlasmaComponentsPlugin;
-
-class EngineBookKeeping : public QObject
-{
-    Q_OBJECT
-
-public:
-    EngineBookKeeping();
-    static EngineBookKeeping *self();
-
-    void insertEngine(QDeclarativeEngine *engine);
-    QDeclarativeEngine *engine() const;
-
-private Q_SLOTS:
-    void engineDestroyed(QObject *deleted);
-
-private:
-    QSet <QDeclarativeEngine*> m_engines;
-};
 
 class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
 {
     Q_OBJECT
 
 public:
-    void initializeEngine(QDeclarativeEngine *engine, const char *uri);
     void registerTypes(const char *uri);
 };
 

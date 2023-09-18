@@ -24,20 +24,6 @@
 
 #include <QtDeclarative/qdeclarative.h>
 
-class DialogStatus : public QObject
-{
-    Q_OBJECT
-    Q_ENUMS(Status)
-
-public:
-    enum Status {
-        Opening,
-        Open,
-        Closing,
-        Closed
-    };
-};
-
 class PageStatus : public QObject
 {
     Q_OBJECT
