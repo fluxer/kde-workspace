@@ -345,7 +345,6 @@ void CalculatorAppletWidget::slotPlus()
     slotClear();
 }
 
-
 void CalculatorAppletWidget::slot1()
 {
     m_label->setText(kAddNumber(m_label->text(), 1));
@@ -370,21 +369,25 @@ void CalculatorAppletWidget::slotEqual()
         case CalculatorAppletWidget::OperatorDiv: {
             const qreal currentnumber = m_label->text().toFloat();
             m_label->setText(QString::number(m_savednumber / currentnumber));
+            m_operator = CalculatorAppletWidget::OperatorNone;
             break;
         }
         case CalculatorAppletWidget::OperatorMul: {
             const qreal currentnumber = m_label->text().toFloat();
             m_label->setText(QString::number(m_savednumber * currentnumber));
+            m_operator = CalculatorAppletWidget::OperatorNone;
             break;
         }
         case CalculatorAppletWidget::OperatorMinus: {
             const qreal currentnumber = m_label->text().toFloat();
             m_label->setText(QString::number(m_savednumber - currentnumber));
+            m_operator = CalculatorAppletWidget::OperatorNone;
             break;
         }
         case CalculatorAppletWidget::OperatorPlus: {
             const qreal currentnumber = m_label->text().toFloat();
             m_label->setText(QString::number(m_savednumber + currentnumber));
+            m_operator = CalculatorAppletWidget::OperatorNone;
             break;
         }
     }
