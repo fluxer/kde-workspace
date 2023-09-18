@@ -36,6 +36,7 @@ ApplicationFrame::ApplicationFrame(const QString &_name, QGraphicsWidget *parent
 {
     ApplicationsWidget* applicationswidget = qobject_cast<ApplicationsWidget*>(parent);
 
+    setFrameShadow(Plasma::Frame::Sunken);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);

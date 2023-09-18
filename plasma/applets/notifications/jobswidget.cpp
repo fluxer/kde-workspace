@@ -36,6 +36,7 @@ JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
 {
     JobsWidget* jobswidget = qobject_cast<JobsWidget*>(parent);
 
+    setFrameShadow(Plasma::Frame::Sunken);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);
 

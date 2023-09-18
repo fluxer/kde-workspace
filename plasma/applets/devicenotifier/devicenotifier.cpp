@@ -103,6 +103,7 @@ DeviceFrame::DeviceFrame(const Solid::Device &_soliddevice, QGraphicsWidget *par
     const Solid::StorageAccess *solidstorageaccess = soliddevice.as<Solid::StorageAccess>();
     const Solid::OpticalDrive *solidopticaldrive = soliddevice.as<Solid::OpticalDrive>();
 
+    setFrameShadow(Plasma::Frame::Sunken);
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(this);
