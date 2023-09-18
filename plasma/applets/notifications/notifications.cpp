@@ -41,7 +41,7 @@ static QIcon kNotificationIcon(QObject *parent, const bool active)
         QPixmap iconpixmap(s_svgiconsize, s_svgiconsize);
         iconpixmap.fill(Qt::transparent);
         QPainter iconpainter(&iconpixmap);
-        plasmasvg.paint(&iconpainter, iconpixmap.rect(), active ? "notification-active" : "notification-disabled");
+        plasmasvg.paint(&iconpainter, iconpixmap.rect(), active ? "notification-inactive" : "notification-disabled");
         result = QIcon(iconpixmap);
     } else {
         result = KIcon("preferences-desktop-notification");
