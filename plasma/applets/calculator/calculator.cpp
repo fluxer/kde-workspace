@@ -36,6 +36,14 @@ static QString kAddNumber(const QString &string, const ushort number)
     return string + QString::number(number);
 }
 
+static QFont kLabelFont()
+{
+    QFont labelfont = KGlobalSettings::generalFont();
+    labelfont.setBold(true);
+    labelfont.setPointSize(labelfont.pointSize() * 2);
+    return labelfont;
+}
+
 class CalculatorAppletWidget : public QGraphicsWidget
 {
     Q_OBJECT
@@ -69,6 +77,7 @@ private Q_SLOTS:
     void slotEqual();
     void slot0();
     void slotDec();
+    void slotUpdateFonts();
 
 private:
     QGraphicsGridLayout* m_layout;
@@ -131,10 +140,7 @@ CalculatorAppletWidget::CalculatorAppletWidget(QGraphicsWidget *parent)
     m_frame->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     m_framelayout = new QGraphicsLinearLayout(Qt::Horizontal, m_frame);
     m_label = new Plasma::Label(m_frame);
-    QFont labelfont = KGlobalSettings::generalFont();
-    labelfont.setBold(true);
-    labelfont.setPointSize(labelfont.pointSize() * 2);
-    m_label->setFont(labelfont);
+    m_label->setFont(kLabelFont());
     m_label->setText(QString::fromLatin1("0"));
     m_label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     m_label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -275,6 +281,11 @@ CalculatorAppletWidget::CalculatorAppletWidget(QGraphicsWidget *parent)
     setLayout(m_layout);
 
     adjustSize();
+
+    connect(
+        KGlobalSettings::self(), SIGNAL(kdisplayFontChanged()),
+        this, SLOT(slotUpdateFonts())
+    );
 }
 
 void CalculatorAppletWidget::slotClear()
@@ -407,6 +418,11 @@ void CalculatorAppletWidget::slotDec()
         return;
     }
     m_label->setText(currenttext + s_decimal);
+}
+
+void CalculatorAppletWidget::slotUpdateFonts()
+{
+    m_label->setFont(kLabelFont());
 }
 
 
