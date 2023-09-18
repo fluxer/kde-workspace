@@ -26,6 +26,8 @@
 #include <Plasma/ToolTipManager>
 #include <KDebug>
 
+static const QString s_decimal = QString::fromLatin1(".");
+
 static QString kAddNumber(const QString &string, const ushort number)
 {
     if (string == QString::fromLatin1("0")) {
@@ -400,7 +402,11 @@ void CalculatorAppletWidget::slot0()
 
 void CalculatorAppletWidget::slotDec()
 {
-    m_label->setText(m_label->text() + QString::fromLatin1("."));
+    const QString currenttext = m_label->text();
+    if (currenttext.contains(s_decimal)) {
+        return;
+    }
+    m_label->setText(currenttext + s_decimal);
 }
 
 
