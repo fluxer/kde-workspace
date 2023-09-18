@@ -27,6 +27,27 @@
 #include <KNotificationConfigWidget>
 #include <KDebug>
 
+static void kClearButtons(QGraphicsGridLayout *framelayout)
+{
+    // row insertation starts at 0, count is +1
+    if (framelayout->rowCount() >= 4) {
+        QGraphicsLinearLayout* buttonslayout = static_cast<QGraphicsLinearLayout*>(framelayout->itemAt(3, 0));
+        // redo the buttons layout in case of notification update
+        QList<Plasma::PushButton*> actionbuttons;
+        for (int i = 0; i < buttonslayout->count(); i++) {
+            Plasma::PushButton* actionbutton = static_cast<Plasma::PushButton*>(buttonslayout->itemAt(i));
+            if (actionbutton) {
+                actionbuttons.append(actionbutton);
+            }
+            buttonslayout->removeAt(i);
+        }
+        qDeleteAll(actionbuttons);
+        actionbuttons.clear();
+        framelayout->removeItem(buttonslayout);
+        delete buttonslayout;
+    }
+}
+
 ApplicationFrame::ApplicationFrame(const QString &_name, QGraphicsWidget *parent)
     : Plasma::Frame(parent),
     iconwidget(nullptr),
@@ -173,25 +194,8 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
             // qDebug() << Q_FUNC_INFO << actions;
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
+            kClearButtons(framelayout);
             QGraphicsLinearLayout* buttonslayout = nullptr;
-            // row insertation starts at 0, count is +1
-            if (framelayout->rowCount() >= 4) {
-                buttonslayout = static_cast<QGraphicsLinearLayout*>(framelayout->itemAt(3, 0));
-                // redo the buttons layout in case of notification update
-                QList<Plasma::PushButton*> actionbuttons;
-                for (int i = 0; i < buttonslayout->count(); i++) {
-                    Plasma::PushButton* actionbutton = static_cast<Plasma::PushButton*>(buttonslayout->itemAt(i));
-                    if (actionbutton) {
-                        actionbuttons.append(actionbutton);
-                    }
-                    buttonslayout->removeAt(i);
-                }
-                qDeleteAll(actionbuttons);
-                actionbuttons.clear();
-                framelayout->removeItem(buttonslayout);
-                delete buttonslayout;
-                buttonslayout = nullptr;
-            }
             for (int i = 0; i < actions.size(); i++) {
                 const QString actionid = actions[i];
                 i++;
@@ -254,6 +258,9 @@ void ApplicationsWidget::slotRemoveActivated()
                 (void)plasmaservice->startOperationCall("userClosed", plasmaserviceargs);
             }
             m_layout->removeItem(frame);
+            QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
+            Q_ASSERT(framelayout != nullptr);
+            kClearButtons(framelayout);
             frame->deleteLater();
             iter.remove();
             break;
@@ -292,7 +299,7 @@ void ApplicationsWidget::slotActionReleased()
         plasmaserviceargs["actionId"] = actionid;
         (void)plasmaservice->startOperationCall("invokeAction", plasmaserviceargs);
     }
-
+    locker.unlock();
     // remove notification too (compat)
     QTimer::singleShot(200, actionframe->removewidget, SIGNAL(activated()));
 }
