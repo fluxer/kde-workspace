@@ -102,16 +102,11 @@ void JobFrame::animateRemove()
     disconnect(removewidget, 0, jobswidget, 0);
     disconnect(openwidget, 0, jobswidget, 0);
 
-    connect(animation, SIGNAL(finished()), this, SLOT(slotAnimationFinished()));
+    connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
     animation->setTargetWidget(this);
     animation->setProperty("startOpacity", 1.0);
     animation->setProperty("targetOpacity", 0.0);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void JobFrame::slotAnimationFinished()
-{
-    deleteLater();
 }
 
 

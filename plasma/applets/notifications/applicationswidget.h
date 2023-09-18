@@ -43,9 +43,6 @@ public:
     QString name;
 
     void animateRemove();
-
-private Q_SLOTS:
-    void slotAnimationFinished();
 };
 
 

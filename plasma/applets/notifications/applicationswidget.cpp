@@ -116,16 +116,11 @@ void ApplicationFrame::animateRemove()
     disconnect(removewidget, 0, applicationswidget, 0);
     disconnect(configurewidget, 0, applicationswidget, 0);
 
-    connect(animation, SIGNAL(finished()), this, SLOT(slotAnimationFinished()));
+    connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
     animation->setTargetWidget(this);
     animation->setProperty("startOpacity", 1.0);
     animation->setProperty("targetOpacity", 0.0);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void ApplicationFrame::slotAnimationFinished()
-{
-    deleteLater();
 }
 
 
