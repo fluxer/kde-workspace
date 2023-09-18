@@ -75,6 +75,8 @@ NotificationsWidget::NotificationsWidget(NotificationsApplet* notifications)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumSize(s_minimumsize);
+    // makes it truly passive popup
+    setWindowFlags(windowFlags() | Qt::X11BypassWindowManagerHint);
 
     m_jobsscrollwidget = new Plasma::ScrollWidget(this);
     m_jobsscrollwidget->setMinimumSize(s_minimumsize);
