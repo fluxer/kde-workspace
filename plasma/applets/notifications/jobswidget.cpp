@@ -245,6 +245,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 frame->removewidget->setVisible(true);
                 const QString desturl = data.value("destUrl").toString();
                 if (!desturl.isEmpty()) {
+                    frame->openwidget->setProperty("_k_desturl", desturl);
                     frame->openwidget->setVisible(true);
                 }
             }
