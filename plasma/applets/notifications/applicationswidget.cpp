@@ -269,8 +269,8 @@ void ApplicationsWidget::slotConfigureActivated()
     const Plasma::IconWidget* configurewidget = qobject_cast<Plasma::IconWidget*>(sender());
     const QString frameapprealname = configurewidget->property("_k_apprealname").toString();
     locker.unlock();
-    // same thing the notifications service does except without going the data engine meaning
-    // faster
+    // same thing the notifications service does except without going trought the data engine
+    // meaning faster
     KNotificationConfigWidget::configure(frameapprealname, nullptr);
 }
 
@@ -279,6 +279,7 @@ void ApplicationsWidget::slotActionClicked()
     QMutexLocker locker(&m_mutex);
     const Plasma::PushButton* actionbutton = qobject_cast<Plasma::PushButton*>(sender());
     ApplicationFrame* actionframe = qobject_cast<ApplicationFrame*>(actionbutton->parentObject());
+    Q_ASSERT(actionframe != nullptr);
     const QString actionid = actionbutton->property("_k_actionid").toString();
     Plasma::Service* plasmaservice = m_dataengine->serviceForSource(actionframe->name);
     if (!plasmaservice) {
@@ -290,7 +291,6 @@ void ApplicationsWidget::slotActionClicked()
     }
 
     // remove notification too (compat)
-    Q_ASSERT(actionframe != nullptr);
     QMetaObject::invokeMethod(actionframe->removewidget, "activated", Qt::QueuedConnection);
 }
 
