@@ -60,7 +60,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotRemoveActivated();
     void slotConfigureActivated();
-    void slotActionClicked();
+    void slotActionReleased();
 
 private Q_SLOTS:
     void sourceAdded(const QString &name);

@@ -206,8 +206,8 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 actionbutton->setProperty("_k_actionid", actionid);
                 actionbutton->setText(actionname);
                 connect(
-                    actionbutton, SIGNAL(clicked()),
-                    this, SLOT(slotActionClicked())
+                    actionbutton, SIGNAL(released()),
+                    this, SLOT(slotActionReleased())
                 );
                 if (!buttonslayout) {
                     buttonslayout = new QGraphicsLinearLayout(Qt::Horizontal, framelayout);
@@ -275,7 +275,7 @@ void ApplicationsWidget::slotConfigureActivated()
     KNotificationConfigWidget::configure(frameapprealname, nullptr);
 }
 
-void ApplicationsWidget::slotActionClicked()
+void ApplicationsWidget::slotActionReleased()
 {
     QMutexLocker locker(&m_mutex);
     const Plasma::PushButton* actionbutton = qobject_cast<Plasma::PushButton*>(sender());
