@@ -38,8 +38,8 @@ public:
 
     Plasma::IconWidget* iconwidget;
     Plasma::Label* label;
-    Plasma::IconWidget* removewidget;
-    Plasma::IconWidget* multiwidget;
+    Plasma::IconWidget* iconwidget0;
+    Plasma::IconWidget* iconwidget1;
     Plasma::Meter* meter;
     QString name;
 
@@ -61,8 +61,8 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void slotFrameDestroyed();
-    void slotRemoveActivated();
-    void slotMultiActivated();
+    void slotIcon0Activated();
+    void slotIcon1Activated();
 
 private Q_SLOTS:
     void sourceAdded(const QString &name);
