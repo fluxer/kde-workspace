@@ -226,6 +226,7 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 frame->configurewidget->setProperty("_k_apprealname", data.value("appRealName"));
             }
             frame->adjustSize();
+            adjustSize();
             locker.unlock();
             emit ping();
             break;

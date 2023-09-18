@@ -229,6 +229,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 }
             }
             frame->adjustSize();
+            adjustSize();
             locker.unlock();
             emit ping();
             break;
