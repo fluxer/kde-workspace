@@ -18,6 +18,7 @@
 
 #include "applicationswidget.h"
 
+#include <QTimer>
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
 #include <Plasma/Service>
@@ -291,7 +292,7 @@ void ApplicationsWidget::slotActionClicked()
     }
 
     // remove notification too (compat)
-    QMetaObject::invokeMethod(actionframe->removewidget, "activated", Qt::QueuedConnection);
+    QTimer::singleShot(200, actionframe->removewidget, SIGNAL(activated()));
 }
 
 #include "moc_applicationswidget.cpp"
