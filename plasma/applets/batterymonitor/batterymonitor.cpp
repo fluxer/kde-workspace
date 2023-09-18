@@ -383,6 +383,7 @@ void BatteryMonitorWidget::slotUpdateIcon(const int state, const QString &udi)
             if (iconwidgetudi == m_activebattery) {
                 setActiveBattery(m_activebattery);
             }
+            break;
         }
     }
 }
