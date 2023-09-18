@@ -54,7 +54,6 @@ class NotificationsWidget : public Plasma::TabBar
     Q_OBJECT
 public:
     NotificationsWidget(NotificationsApplet* notifications);
-    ~NotificationsWidget();
 
 private Q_SLOTS:
     void slotCountChanged();
@@ -108,10 +107,6 @@ NotificationsWidget::NotificationsWidget(NotificationsApplet* notifications)
     addTab(KIcon("dialog-information"), i18n("Notifications"), m_applicationsscrollwidget);
 
     m_notifications->setStatus(Plasma::ItemStatus::PassiveStatus);
-}
-
-NotificationsWidget::~NotificationsWidget()
-{
 }
 
 void NotificationsWidget::slotCountChanged()

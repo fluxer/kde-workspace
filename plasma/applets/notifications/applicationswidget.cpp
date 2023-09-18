@@ -285,7 +285,6 @@ void ApplicationsWidget::slotRemoveActivated()
                 (void)plasmaservice->startOperationCall("userClosed", plasmaserviceargs);
             }
             m_dataengine->disconnectSource(applicationframe->name, this);
-            // m_layout->removeItem(frame);
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
             kClearButtons(framelayout);
