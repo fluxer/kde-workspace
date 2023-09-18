@@ -130,18 +130,16 @@ void NotificationsWidget::slotJobPing()
 {
     // if the popup was shown before the signal it is probably because it is being interacted with
     // so no automatic tab switching in that case
-    const bool waspopupshowing = m_notifications->isPopupShowing();
-    m_notifications->showPopup(s_popuptimeout);
-    if (!waspopupshowing) {
+    if (!m_notifications->isPopupShowing()) {
+        m_notifications->showPopup(s_popuptimeout);
         setCurrentIndex(0);
     }
 }
 
 void NotificationsWidget::slotApplicationPing()
 {
-    const bool waspopupshowing = m_notifications->isPopupShowing();
-    m_notifications->showPopup(s_popuptimeout);
-    if (!waspopupshowing) {
+    if (!m_notifications->isPopupShowing()) {
+        m_notifications->showPopup(s_popuptimeout);
         setCurrentIndex(1);
     }
 }
