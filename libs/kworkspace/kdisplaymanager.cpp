@@ -204,45 +204,51 @@ void KDisplayManager::newSession()
         return;
     }
 
-    QDBusInterface dmiface(
-        QString::fromLatin1("org.freedesktop.DisplayManager"),
-        QString::fromLatin1("/org/freedesktop/DisplayManager"),
-        QString::fromLatin1("org.freedesktop.DisplayManager"),
-        QDBusConnection::systemBus()
-    );
-    if (dmiface.isValid()) {
-        const QString username = KUser().loginName();
-        const QList<QDBusObjectPath> dmsessions = qvariant_cast<QList<QDBusObjectPath>>(dmiface.property("Sessions"));
-        // qDebug() << Q_FUNC_INFO << dmiface.property("Sessions");
-        foreach (const QDBusObjectPath &dmsessionobj, dmsessions) {
-            QDBusInterface dmsessioniface(
-                QString::fromLatin1("org.freedesktop.DisplayManager"),
-                dmsessionobj.path(),
-                QString::fromLatin1("org.freedesktop.DisplayManager.Session"),
-                QDBusConnection::systemBus()
-            );
-            if (!dmsessioniface.isValid()) {
-                kWarning() << "Display manager session interface is not valid";
-                continue;
-            }
-            const QString dmusername = dmsessioniface.property("UserName").toString();
-            // qDebug() << Q_FUNC_INFO << dmusername << username;
-            if (dmusername == username) {
-                dmsessioniface.asyncCall("SwitchToGreeter");
-                return;
+    const QByteArray dmseatbytes = qgetenv("XDG_SEAT_PATH");
+    QString dmseat = QString::fromLocal8Bit(dmseatbytes.constData(), dmseatbytes.size());
+    if (dmseat.isEmpty()) {
+        QDBusInterface dmiface(
+            QString::fromLatin1("org.freedesktop.DisplayManager"),
+            QString::fromLatin1("/org/freedesktop/DisplayManager"),
+            QString::fromLatin1("org.freedesktop.DisplayManager"),
+            QDBusConnection::systemBus()
+        );
+        if (dmiface.isValid()) {
+            const QString username = KUser().loginName();
+            const QList<QDBusObjectPath> dmsessions = qvariant_cast<QList<QDBusObjectPath>>(dmiface.property("Sessions"));
+            // qDebug() << Q_FUNC_INFO << dmiface.property("Sessions");
+            foreach (const QDBusObjectPath &dmsessionobj, dmsessions) {
+                QDBusInterface dmsessioniface(
+                    QString::fromLatin1("org.freedesktop.DisplayManager"),
+                    dmsessionobj.path(),
+                    QString::fromLatin1("org.freedesktop.DisplayManager.Session"),
+                    QDBusConnection::systemBus()
+                );
+                if (!dmsessioniface.isValid()) {
+                    kWarning() << "Display manager session interface is not valid";
+                    continue;
+                }
+                const QString dmusername = dmsessioniface.property("UserName").toString();
+                // qDebug() << Q_FUNC_INFO << dmusername << username;
+                if (dmusername == username) {
+                    const QDBusObjectPath dmsessionseat = qvariant_cast<QDBusObjectPath>(dmsessioniface.property("Seat"));
+                    dmseat = dmsessionseat.path();
+                    break;
+                }
             }
         }
     }
-
-    QDBusInterface lightdmiface(
-        "org.freedesktop.DisplayManager",
-        qgetenv("XDG_SEAT_PATH"),
-        "org.freedesktop.DisplayManager.Seat",
-        QDBusConnection::systemBus()
-    );
-    if (lightdmiface.isValid()) {
-        lightdmiface.asyncCall("SwitchToGreeter");
-        return;
+    if (!dmseat.isEmpty()) {
+        QDBusInterface lightdmiface(
+            "org.freedesktop.DisplayManager",
+            dmseat,
+            "org.freedesktop.DisplayManager.Seat",
+            QDBusConnection::systemBus()
+        );
+        if (lightdmiface.isValid()) {
+            lightdmiface.asyncCall("SwitchToGreeter");
+            return;
+        }
     }
 
     kWarning() << "No way to start new session";
