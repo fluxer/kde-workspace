@@ -31,7 +31,7 @@ JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
     iconwidget(nullptr),
     label(nullptr),
     removewidget(nullptr),
-    openwidget(nullptr),
+    multiwidget(nullptr),
     meter(nullptr),
     name(_name)
 {
@@ -71,17 +71,18 @@ JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
     );
     framelayout->addItem(removewidget, 0, 2, 1, 1);
 
-    openwidget = new Plasma::IconWidget(this);
-    openwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
-    openwidget->setIcon(KIcon("system-file-manager"));
-    openwidget->setToolTip(i18n("Click to open the destination of the job."));
-    openwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    openwidget->setVisible(false);
+    multiwidget = new Plasma::IconWidget(this);
+    multiwidget->setMaximumIconSize(QSize(smalliconsize, smalliconsize));
+    // TODO: the icon is suitable but too similar to "dialog-close"
+    multiwidget->setIcon(KIcon("task-reject"));
+    multiwidget->setToolTip(i18n("Click to stop the job."));
+    multiwidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    multiwidget->setVisible(false);
     connect(
-        openwidget, SIGNAL(activated()),
-        jobswidget, SLOT(slotOpenActivated())
+        multiwidget, SIGNAL(activated()),
+        jobswidget, SLOT(slotMultiActivated())
     );
-    framelayout->addItem(openwidget, 1, 2, 1, 1);
+    framelayout->addItem(multiwidget, 1, 2, 1, 1);
 
     meter = new Plasma::Meter(this);
     meter->setMeterType(Plasma::Meter::BarMeterHorizontal);
@@ -100,7 +101,7 @@ void JobFrame::animateRemove()
     Q_ASSERT(animation != nullptr);
     JobsWidget* jobswidget = qobject_cast<JobsWidget*>(parentObject());
     disconnect(removewidget, 0, jobswidget, 0);
-    disconnect(openwidget, 0, jobswidget, 0);
+    disconnect(multiwidget, 0, jobswidget, 0);
 
     connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
     animation->setTargetWidget(this);
@@ -240,13 +241,31 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                 frame->meter->setValue(percentage);
             }
             const QByteArray state = data.value("state").toByteArray();
+            const bool killable = data.value("killable").toBool();
             if (state == "stopped") {
                 frame->removewidget->setVisible(true);
+                frame->multiwidget->setVisible(true);
                 const QString desturl = data.value("destUrl").toString();
                 if (!desturl.isEmpty()) {
-                    frame->openwidget->setProperty("_k_desturl", desturl);
-                    frame->openwidget->setVisible(true);
+                    frame->multiwidget->setProperty("_k_desturl", desturl);
+                    frame->multiwidget->setIcon(KIcon("system-file-manager"));
+                    frame->multiwidget->setToolTip(i18n("Click to open the destination of the job."));
+                } else {
+                    frame->multiwidget->setAcceptHoverEvents(false);
+                    frame->multiwidget->setAcceptedMouseButtons(Qt::NoButton);
+                    frame->multiwidget->setIcon(KIcon("task-complete"));
+                    frame->multiwidget->setToolTip(i18n("The job has completed."));
                 }
+            } else if (killable) {
+                frame->multiwidget->setVisible(true);
+            }
+            // error overrides everything the multi-widget does
+            const QString error = data.value("error").toString();
+            if (!error.isEmpty()) {
+                frame->multiwidget->setAcceptHoverEvents(false);
+                frame->multiwidget->setAcceptedMouseButtons(Qt::NoButton);
+                frame->multiwidget->setIcon(KIcon("task-attention"));
+                frame->multiwidget->setToolTip(error);
             }
             frame->adjustSize();
             adjustSize();
@@ -280,13 +299,26 @@ void JobsWidget::slotRemoveActivated()
     }
 }
 
-void JobsWidget::slotOpenActivated()
+void JobsWidget::slotMultiActivated()
 {
     QMutexLocker locker(&m_mutex);
-    const Plasma::IconWidget* openwidget = qobject_cast<Plasma::IconWidget*>(sender());
-    const QString desturl = openwidget->property("_k_desturl").toString();
-    locker.unlock();
-    KRun::runUrl(KUrl(desturl), "inode/directory", nullptr);
+    const Plasma::IconWidget* multiwidget = qobject_cast<Plasma::IconWidget*>(sender());
+    const QString desturl = multiwidget->property("_k_desturl").toString();
+    if (desturl.isEmpty()) {
+        JobFrame* jobframe = qobject_cast<JobFrame*>(multiwidget->parentObject());
+        Q_ASSERT(jobframe != nullptr);
+        Plasma::Service* plasmaservice = m_dataengine->serviceForSource(jobframe->name);
+        if (!plasmaservice) {
+            kWarning() << "Could not get service for" << jobframe->name;
+        } else {
+            plasmaservice->setParent(this);
+            QVariantMap plasmaserviceargs = plasmaservice->operationParameters("stop");
+            (void)plasmaservice->startOperationCall("stop", plasmaserviceargs);
+        }
+    } else {
+        locker.unlock();
+        KRun::runUrl(KUrl(desturl), "inode/directory", nullptr);
+    }
 }
 
 #include "moc_jobswidget.cpp"
