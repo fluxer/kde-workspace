@@ -58,7 +58,6 @@ public:
 
 Q_SIGNALS:
     int countChanged();
-    void ping();
 
 public Q_SLOTS:
     void slotFrameDestroyed();
