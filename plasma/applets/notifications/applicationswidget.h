@@ -41,6 +41,11 @@ public:
     Plasma::IconWidget* removewidget;
     Plasma::IconWidget* configurewidget;
     QString name;
+
+    void animateRemove();
+
+private Q_SLOTS:
+    void slotAnimationFinished();
 };
 
 
@@ -58,6 +63,7 @@ Q_SIGNALS:
     void ping();
 
 public Q_SLOTS:
+    void slotFrameDestroyed();
     void slotRemoveActivated();
     void slotConfigureActivated();
     void slotActionReleased();

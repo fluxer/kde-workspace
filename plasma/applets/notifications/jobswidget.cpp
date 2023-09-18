@@ -20,6 +20,7 @@
 
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
+#include <Plasma/Animation>
 #include <KRun>
 #include <KIconLoader>
 #include <KIcon>
@@ -93,6 +94,26 @@ JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
     setLayout(framelayout);
 }
 
+void JobFrame::animateRemove()
+{
+    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
+    Q_ASSERT(animation != nullptr);
+    JobsWidget* jobswidget = qobject_cast<JobsWidget*>(parentObject());
+    disconnect(removewidget, 0, jobswidget, 0);
+    disconnect(openwidget, 0, jobswidget, 0);
+
+    connect(animation, SIGNAL(finished()), this, SLOT(slotAnimationFinished()));
+    animation->setTargetWidget(this);
+    animation->setProperty("startOpacity", 1.0);
+    animation->setProperty("targetOpacity", 0.0);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void JobFrame::slotAnimationFinished()
+{
+    deleteLater();
+}
+
 
 JobsWidget::JobsWidget(QGraphicsItem *parent, NotificationsWidget *notificationswidget)
     : QGraphicsWidget(parent),
@@ -139,6 +160,10 @@ void JobsWidget::sourceAdded(const QString &name)
     // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
     JobFrame* frame = new JobFrame(name, this);
+    connect(
+        frame, SIGNAL(destroyed()),
+        this, SLOT(slotFrameDestroyed())
+    );
     m_frames.append(frame);
     m_label->setVisible(false);
     m_layout->insertItem(0, frame);
@@ -237,6 +262,13 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
     }
 }
 
+void JobsWidget::slotFrameDestroyed()
+{
+    m_label->setVisible(m_frames.size() <= 0);
+    adjustSize();
+    emit countChanged();
+}
+
 void JobsWidget::slotRemoveActivated()
 {
     QMutexLocker locker(&m_mutex);
@@ -247,16 +279,13 @@ void JobsWidget::slotRemoveActivated()
     while (iter.hasNext()) {
         JobFrame* frame = iter.next();
         if (frame == jobframe) {
-            m_layout->removeItem(frame);
-            frame->deleteLater();
+            m_dataengine->disconnectSource(frame->name, this);
+            // m_layout->removeItem(frame);
+            frame->animateRemove();
             iter.remove();
             break;
         }
     }
-    m_label->setVisible(m_frames.size() <= 0);
-    adjustSize();
-    locker.unlock();
-    emit countChanged();
 }
 
 void JobsWidget::slotOpenActivated()

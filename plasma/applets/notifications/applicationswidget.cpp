@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QGraphicsGridLayout>
 #include <Plasma/DataEngineManager>
+#include <Plasma/Animation>
 #include <Plasma/Service>
 #include <KIconLoader>
 #include <KIcon>
@@ -107,6 +108,26 @@ ApplicationFrame::ApplicationFrame(const QString &_name, QGraphicsWidget *parent
     setLayout(framelayout);
 }
 
+void ApplicationFrame::animateRemove()
+{
+    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
+    Q_ASSERT(animation != nullptr);
+    ApplicationsWidget* applicationswidget = qobject_cast<ApplicationsWidget*>(parentObject());
+    disconnect(removewidget, 0, applicationswidget, 0);
+    disconnect(configurewidget, 0, applicationswidget, 0);
+
+    connect(animation, SIGNAL(finished()), this, SLOT(slotAnimationFinished()));
+    animation->setTargetWidget(this);
+    animation->setProperty("startOpacity", 1.0);
+    animation->setProperty("targetOpacity", 0.0);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void ApplicationFrame::slotAnimationFinished()
+{
+    deleteLater();
+}
+
 
 ApplicationsWidget::ApplicationsWidget(QGraphicsItem *parent, NotificationsWidget *notificationswidget)
     : QGraphicsWidget(parent),
@@ -154,6 +175,10 @@ void ApplicationsWidget::sourceAdded(const QString &name)
     // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
     ApplicationFrame* frame = new ApplicationFrame(name, this);
+    connect(
+        frame, SIGNAL(destroyed()),
+        this, SLOT(slotFrameDestroyed())
+    );
     m_frames.append(frame);
     m_label->setVisible(false);
     m_layout->insertItem(0, frame);
@@ -239,6 +264,13 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
     }
 }
 
+void ApplicationsWidget::slotFrameDestroyed()
+{
+    m_label->setVisible(m_frames.size() <= 0);
+    adjustSize();
+    emit countChanged();
+}
+
 void ApplicationsWidget::slotRemoveActivated()
 {
     QMutexLocker locker(&m_mutex);
@@ -257,19 +289,16 @@ void ApplicationsWidget::slotRemoveActivated()
                 const QVariantMap plasmaserviceargs = plasmaservice->operationParameters("userClosed");
                 (void)plasmaservice->startOperationCall("userClosed", plasmaserviceargs);
             }
-            m_layout->removeItem(frame);
+            m_dataengine->disconnectSource(applicationframe->name, this);
+            // m_layout->removeItem(frame);
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
             kClearButtons(framelayout);
-            frame->deleteLater();
+            frame->animateRemove();
             iter.remove();
             break;
         }
     }
-    m_label->setVisible(m_frames.size() <= 0);
-    adjustSize();
-    locker.unlock();
-    emit countChanged();
 }
 
 void ApplicationsWidget::slotConfigureActivated()

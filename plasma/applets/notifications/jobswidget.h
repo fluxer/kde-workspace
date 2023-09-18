@@ -42,7 +42,12 @@ public:
     Plasma::IconWidget* openwidget;
     Plasma::Meter* meter;
     QString name;
+
+    void animateRemove();
+private Q_SLOTS:
+    void slotAnimationFinished();
 };
+
 
 class JobsWidget : public QGraphicsWidget
 {
@@ -58,6 +63,7 @@ Q_SIGNALS:
     void ping();
 
 public Q_SLOTS:
+    void slotFrameDestroyed();
     void slotRemoveActivated();
     void slotOpenActivated();
 
