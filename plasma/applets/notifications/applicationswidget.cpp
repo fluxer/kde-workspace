@@ -249,6 +249,7 @@ void ApplicationsWidget::slotRemoveActivated()
             if (!plasmaservice) {
                 kWarning() << "Could not get service for" << applicationframe->name;
             } else {
+                plasmaservice->setParent(this);
                 const QVariantMap plasmaserviceargs = plasmaservice->operationParameters("userClosed");
                 (void)plasmaservice->startOperationCall("userClosed", plasmaserviceargs);
             }
@@ -286,6 +287,7 @@ void ApplicationsWidget::slotActionReleased()
     if (!plasmaservice) {
         kWarning() << "Could not get service for" << actionframe->name;
     } else {
+        plasmaservice->setParent(this);
         QVariantMap plasmaserviceargs = plasmaservice->operationParameters("invokeAction");
         plasmaserviceargs["actionId"] = actionid;
         (void)plasmaservice->startOperationCall("invokeAction", plasmaserviceargs);
