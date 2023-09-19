@@ -21,45 +21,8 @@
 
 #include "kdedmodule.h"
 
-#include <QGridLayout>
-#include <QLabel>
 #include <kdirwatch.h>
 #include <knotification.h>
-#include <kdialog.h>
-#include <kpixmapwidget.h>
-#include <ktextedit.h>
-
-struct KCrashDetails
-{
-    int kcrashsignal;
-    QString kcrashappname;
-    QString kcrashapppid;
-    QString kcrashappicon;
-    QString kcrashbugaddress;
-    QString kcrashhomepage;
-    QByteArray kcrashbacktrace;
-    QString kcrashbugreporturl;
-};
-
-
-class KCrashDialog : public KDialog
-{
-    Q_OBJECT
-public:
-    KCrashDialog(const KCrashDetails &kcrashdetails, QWidget *parent = nullptr);
-    ~KCrashDialog();
-
-    QString reportUrl() const;
-
-private:
-    QString m_reporturl;
-    QWidget* m_widget;
-    QGridLayout* m_layout;
-    KPixmapWidget* m_pixmap;
-    QLabel* m_label;
-    KTextEdit* m_backtrace;
-};
-
 
 class KCrashModule: public KDEDModule
 {
@@ -73,14 +36,12 @@ public:
 private Q_SLOTS:
     void slotDirty(const QString &path);
     void slotClosed();
-    void slotDetails();
-    void slotDialogFinished(const int result);
+    void slotReport();
 
 private:
     QString m_kcrashpath;
     KDirWatch *m_dirwatch;
-    QMap<KNotification*,KCrashDetails> m_notifications;
-    QList<KCrashDialog*> m_dialogs;
+    QList<KNotification*> m_notifications;
 };
 
 #endif // KCRASH_KDED_H
