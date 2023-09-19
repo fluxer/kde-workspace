@@ -79,6 +79,7 @@ ApplicationFrame::ApplicationFrame(const QString &_name, QGraphicsWidget *parent
     label = new Plasma::Label(this);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     label->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+    label->nativeWidget()->setOpenExternalLinks(true);
     framelayout->addItem(label, 0, 1, 3, 1);
 
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);

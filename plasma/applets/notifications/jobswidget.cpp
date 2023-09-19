@@ -56,6 +56,7 @@ JobFrame::JobFrame(const QString &_name, QGraphicsWidget *parent)
     label = new Plasma::Label(this);
     label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     label->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    label->nativeWidget()->setOpenExternalLinks(true);
     framelayout->addItem(label, 0, 1, 3, 1);
 
     const int smalliconsize = KIconLoader::global()->currentSize(KIconLoader::Small);
