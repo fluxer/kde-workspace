@@ -37,27 +37,7 @@
 // for reference:
 // https://specifications.freedesktop.org/notification-spec/notification-spec-latest.html
 
-NotificationsEngine::NotificationsEngine( QObject* parent, const QVariantList& args )
-    : Plasma::DataEngine( parent, args ), m_nextId( 1 )
-{
-    new NotificationsAdaptor(this);
-
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.registerService( "org.freedesktop.Notifications" );
-    dbus.registerObject( "/org/freedesktop/Notifications", this );
-}
-
-NotificationsEngine::~NotificationsEngine()
-{
-    QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.unregisterService( "org.freedesktop.Notifications" );
-}
-
-void NotificationsEngine::init()
-{
-}
-
-inline void copyLineRGB32(QRgb* dst, const char* src, int width)
+static void copyLineRGB32(QRgb* dst, const char* src, int width)
 {
     const char* end = src + width * 3;
     for (; src != end; ++dst, src+=3) {
@@ -65,7 +45,7 @@ inline void copyLineRGB32(QRgb* dst, const char* src, int width)
     }
 }
 
-inline void copyLineARGB32(QRgb* dst, const char* src, int width)
+static void copyLineARGB32(QRgb* dst, const char* src, int width)
 {
     const char* end = src + width * 4;
     for (; src != end; ++dst, src+=4) {
@@ -139,8 +119,27 @@ static QString findImageForSpecImagePath(const QString &_path)
         KUrl url(path);
         path = url.toLocalFile();
     }
-    return KIconLoader::global()->iconPath(path, -KIconLoader::SizeHuge,
-                                           true /* canReturnNull */);
+    return KIconLoader::global()->iconPath(
+        path, -KIconLoader::SizeHuge,
+        true /* canReturnNull */
+    );
+}
+
+NotificationsEngine::NotificationsEngine(QObject *parent, const QVariantList &args)
+    : Plasma::DataEngine(parent, args),
+    m_nextId(1)
+{
+    new NotificationsAdaptor(this);
+
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.registerService( "org.freedesktop.Notifications" );
+    dbus.registerObject( "/org/freedesktop/Notifications", this );
+}
+
+NotificationsEngine::~NotificationsEngine()
+{
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.unregisterService("org.freedesktop.Notifications");
 }
 
 uint NotificationsEngine::Notify(const QString &app_name, uint replaces_id,
@@ -273,12 +272,11 @@ QStringList NotificationsEngine::GetCapabilities()
         << "body-hyperlinks"
         << "body-markup"
         << "icon-static"
-        << "actions"
-        ;
+        << "actions";
 }
 
 // FIXME: Signature is ugly
-QString NotificationsEngine::GetServerInformation(QString& vendor, QString& version, QString& specVersion)
+QString NotificationsEngine::GetServerInformation(QString &vendor, QString &version, QString &specVersion)
 {
     vendor = "KDE";
     version = KDE_VERSION_STRING;
@@ -286,7 +284,8 @@ QString NotificationsEngine::GetServerInformation(QString& vendor, QString& vers
     return "Plasma";
 }
 
-int NotificationsEngine::createNotification(const QString &appName, const QString &appIcon, const QString &summary, const QString &body, int timeout, bool configurable, const QString &appRealName)
+int NotificationsEngine::createNotification(const QString &appName, const QString &appIcon, const QString &summary,
+                                            const QString &body, int timeout, bool configurable, const QString &appRealName)
 {
     const QString source = QString("notification %1").arg(++m_nextId);
     Plasma::DataEngine::Data notificationData;

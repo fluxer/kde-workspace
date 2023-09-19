@@ -34,26 +34,27 @@ class NotificationsEngine : public Plasma::DataEngine
     Q_OBJECT
 
 public:
-    NotificationsEngine( QObject* parent, const QVariantList& args );
+    NotificationsEngine(QObject* parent, const QVariantList &args);
     ~NotificationsEngine();
-
-    virtual void init();
 
     /**
      *  This function implements part of Notifications DBus interface.
      *  Once called, will add notification source to the engine
      */
-    uint Notify(const QString &app_name, uint replaces_id, const QString &app_icon, const QString &summary, const QString &body, const QStringList &actions, const QVariantMap &hints, int timeout);
+    uint Notify(const QString &app_name, uint replaces_id, const QString &app_icon,
+                const QString &summary, const QString &body, const QStringList &actions,
+                const QVariantMap &hints, int timeout);
 
-    void CloseNotification( uint id );
+    void CloseNotification(uint id);
 
-    Plasma::Service* serviceForSource(const QString& source);
+    Plasma::Service* serviceForSource(const QString &source);
 
     QStringList GetCapabilities();
 
-    QString GetServerInformation(QString& vendor, QString& version, QString& specVersion);
+    QString GetServerInformation(QString &vendor, QString &version, QString &specVersion);
 
-    int createNotification(const QString &appName, const QString &appIcon, const QString &summary, const QString &body, int timeout, bool configurable, const QString &appRealName);
+    int createNotification(const QString &appName, const QString &appIcon, const QString &summary,
+                           const QString &body, int timeout, bool configurable, const QString &appRealName);
 
     void configureNotification(const QString &appName);
 
@@ -61,8 +62,8 @@ public Q_SLOTS:
     void userClosedNotification(uint id);
 
 signals:
-    void NotificationClosed( uint id, uint reason );
-    void ActionInvoked( uint id, const QString& actionKey );
+    void NotificationClosed(uint id, uint reason);
+    void ActionInvoked(uint id, const QString &actionKey);
 
 protected:
     void timerEvent(QTimerEvent *event);
