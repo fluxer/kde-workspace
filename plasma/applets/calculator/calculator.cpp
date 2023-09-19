@@ -27,10 +27,11 @@
 #include <KDebug>
 
 static const QString s_decimal = QString::fromLatin1(".");
+static const QLatin1String s_zero = QLatin1String("0");
 
 static QString kAddNumber(const QString &string, const ushort number)
 {
-    if (string == QString::fromLatin1("0")) {
+    if (string == s_zero) {
         return QString::number(number);
     }
     return string + QString::number(number);
@@ -295,6 +296,9 @@ void CalculatorAppletWidget::slotClear()
 
 void CalculatorAppletWidget::slotDiv()
 {
+    if (m_label->text() == s_zero) {
+        return;
+    }
     m_savednumber = m_label->text().toFloat();
     m_operator = CalculatorAppletWidget::OperatorDiv;
     slotClear();
@@ -302,6 +306,9 @@ void CalculatorAppletWidget::slotDiv()
 
 void CalculatorAppletWidget::slotMul()
 {
+    if (m_label->text() == s_zero) {
+        return;
+    }
     m_savednumber = m_label->text().toFloat();
     m_operator = CalculatorAppletWidget::OperatorMul;
     slotClear();
@@ -331,6 +338,9 @@ void CalculatorAppletWidget::slot9()
 
 void CalculatorAppletWidget::slotMinus()
 {
+    if (m_label->text() == s_zero) {
+        return;
+    }
     m_savednumber = m_label->text().toFloat();
     m_operator = CalculatorAppletWidget::OperatorMinus;
     slotClear();
@@ -353,6 +363,9 @@ void CalculatorAppletWidget::slot6()
 
 void CalculatorAppletWidget::slotPlus()
 {
+    if (m_label->text() == s_zero) {
+        return;
+    }
     m_savednumber = m_label->text().toFloat();
     m_operator = CalculatorAppletWidget::OperatorPlus;
     slotClear();
