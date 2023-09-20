@@ -177,7 +177,7 @@ void KeyboardApplet::constraintsEvent(Plasma::Constraints constraints)
         if (kIsPanel(formFactor())) {
             iconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
         } else {
-            iconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+            iconsize = (KIconLoader::global()->currentSize(KIconLoader::Desktop) * 2);
         }
         setMinimumSize(iconsize, iconsize);
     }
