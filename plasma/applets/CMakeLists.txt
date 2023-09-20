@@ -19,3 +19,7 @@ add_subdirectory(folderview)
 add_subdirectory(tasks)
 add_subdirectory(windowlist)
 add_subdirectory(pager)
+
+if (ALSA_FOUND)
+    add_subdirectory(mixer)
+endif()

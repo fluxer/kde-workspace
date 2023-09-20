@@ -698,6 +698,10 @@ void Applet::checkDefaultApplets()
         }
     }
 
+    if (!applets.contains("mixer")) {
+        s_manager->addApplet("mixer", this);
+    }
+
     config().writeEntry("DefaultAppletsAdded", true);
 }
 

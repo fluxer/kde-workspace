@@ -204,6 +204,13 @@ set_package_properties(LibGit2 PROPERTIES
     PURPOSE "Needed for the Dolphin Git plugin"
 )
 
+kde4_optional_find_package(ALSA)
+set_package_properties(ALSA PROPERTIES
+    DESCRIPTION "Advanced Linux Sound Architecture"
+    URL "https://alsa-project.org/wiki/Main_Page"
+    PURPOSE "Needed for Plasma mixer applet"
+)
+
 find_program(WRESTOOL_EXECUTABLE wrestool)
 add_feature_info(wrestool
     WRESTOOL_EXECUTABLE

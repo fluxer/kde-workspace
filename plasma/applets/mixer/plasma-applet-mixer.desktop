@@ -1,0 +1,20 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Mixer
+Comment=Sound Mixer
+
+Type=Service
+Icon=audio-card
+X-KDE-ParentApp=
+X-KDE-PluginInfo-Author=Ivailo Monev
+X-KDE-PluginInfo-Category=System Information
+X-KDE-PluginInfo-Email=xakepa10@gmail.com
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-Name=mixer
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=
+X-KDE-ServiceTypes=Plasma/PopupApplet,Plasma/Applet
+X-KDE-Library=plasma_applet_mixer
+X-Plasma-DefaultSize=290,140
+X-Plasma-RequiredExtensions=Unused
+X-Plasma-NotificationArea=true
