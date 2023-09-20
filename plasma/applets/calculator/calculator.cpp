@@ -135,6 +135,7 @@ CalculatorAppletWidget::CalculatorAppletWidget(QGraphicsWidget *parent)
     m_operator(CalculatorAppletWidget::OperatorNone)
 {
     m_layout = new QGraphicsGridLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     m_frame = new Plasma::Frame(this);
     m_frame->setFrameShadow(Plasma::Frame::Sunken);
