@@ -1,5 +1,0 @@
-ClassName=Settings
-File=ktouchpadenabler.kcfg
-Mutators=true
-NameSpace=ktouchpadenabler
-Singleton=true

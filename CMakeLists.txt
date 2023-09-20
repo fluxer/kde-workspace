@@ -289,10 +289,6 @@ add_subdirectory(kmenuedit)
 add_subdirectory(krunner)
 add_subdirectory(kinfocenter)
 
-if(Q_WS_X11 AND X11_Xinput_FOUND)
-    add_subdirectory(ktouchpadenabler)
-endif(Q_WS_X11 AND X11_Xinput_FOUND)
-
 add_subdirectory(kcminit)
 
 if (LightDM_FOUND)
