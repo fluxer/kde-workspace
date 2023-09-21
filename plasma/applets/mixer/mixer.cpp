@@ -555,16 +555,14 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
         alsacard++;
     }
 
-    if (m_tabwidgets.size() > 0) {
-        m_mixer->setStatus(Plasma::ItemStatus::ActiveStatus);
-    } else {
-        m_mixer->setFailedToLaunch(true, i18n("No sound cards found"));
-        m_mixer->setStatus(Plasma::ItemStatus::PassiveStatus);
-    }
     setTabBarShown(m_tabwidgets.size() > 1);
     setCurrentIndex(0);
     if (m_tabwidgets.size() > 0) {
+        m_mixer->setStatus(Plasma::ItemStatus::ActiveStatus);
         m_mixer->setPopupIcon(m_tabwidgets.first()->mainVolumeIcon());
+    } else {
+        m_mixer->setFailedToLaunch(true, i18n("No sound cards found"));
+        m_mixer->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
     connect(
         this, SIGNAL(currentChanged(int)),
