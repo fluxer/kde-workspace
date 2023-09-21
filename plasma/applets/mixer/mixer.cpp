@@ -105,9 +105,10 @@ static bool kIsMasterChannel(const QString &alsaelementname)
     return alsaelementname.contains(QLatin1String("master"), Qt::CaseInsensitive);
 }
 
-static QString kIconForChannel(const QString &alsaelementname)
+// for reference:
+// alsa-lib/src/control/hcontrol.c
+static QString kIconForElement(const QString &alsaelementname)
 {
-    // TODO: more icons
     if (kIsMasterChannel(alsaelementname)) {
         return QString::fromLatin1("mixer-master");
     }
@@ -117,8 +118,32 @@ static QString kIconForChannel(const QString &alsaelementname)
     if (alsaelementname.contains(QLatin1String("pcm"), Qt::CaseInsensitive)) {
         return QString::fromLatin1("mixer-pcm");
     }
-    if (alsaelementname.contains(QLatin1String("ac97"), Qt::CaseInsensitive)) {
-        return QString::fromLatin1("mixer-ac97");
+    if (alsaelementname.contains(QLatin1String("video"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-video");
+    }
+    if (alsaelementname.contains(QLatin1String("pc speaker"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-pc-speaker");
+    }
+    if (alsaelementname.contains(QLatin1String("mic"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-microphone");
+    }
+    if (alsaelementname.contains(QLatin1String("cd"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-cd");
+    }
+    if (alsaelementname.contains(QLatin1String("front"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-front");
+    }
+    if (alsaelementname.contains(QLatin1String("center"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-surround-center");
+    }
+    if (alsaelementname.contains(QLatin1String("surround"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-surround");
+    }
+    if (alsaelementname.contains(QLatin1String("lfe"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-lfe");
+    }
+    if (alsaelementname.contains(QLatin1String("headphone"), Qt::CaseInsensitive)) {
+        return QString::fromLatin1("mixer-headset");
     }
     return QString::fromLatin1("mixer-line");
 }
@@ -311,7 +336,7 @@ bool MixerTabWidget::setup(const int alsacard, const QByteArray &alsacardname)
             columncounter++;
         }
         Plasma::IconWidget* iconwidget = new Plasma::IconWidget(frame);
-        iconwidget->setIcon(kIconForChannel(alsaelementname));
+        iconwidget->setIcon(kIconForElement(alsaelementname));
         iconwidget->setToolTip(alsaelementname);
         iconwidget->setAcceptHoverEvents(false);
         iconwidget->setMinimumIconSize(smalliconsizef);
