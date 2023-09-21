@@ -492,11 +492,12 @@ int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask
 {
     MixerTabWidget* mixertabwidget = static_cast<MixerTabWidget*>(snd_mixer_elem_get_callback_private(alsaelement));
     Q_ASSERT(mixertabwidget != nullptr);
+    const uint alsaeventelementindex = snd_mixer_selem_get_index(alsaelement);
+    const QString alsaeventelementname = QString::fromLocal8Bit(snd_mixer_selem_get_name(alsaelement));
     foreach (Plasma::Slider *slider, mixertabwidget->sliders) {
         const uint alsaelementindex = slider->property("_k_index").toUInt();
         const QString alsaelementname = slider->property("_k_name").toString();
-        if (snd_mixer_selem_get_index(alsaelement) == alsaelementindex
-            && QString::fromLocal8Bit(snd_mixer_selem_get_name(alsaelement)) == alsaelementname) {
+        if (alsaeventelementindex == alsaelementindex && alsaeventelementname == alsaelementname) {
             const int alsaelementchannel = slider->property("_k_channel").toInt();
             const bool alsahascapture = snd_mixer_selem_has_capture_volume(alsaelement);
             long alsavolumemin = 0;
