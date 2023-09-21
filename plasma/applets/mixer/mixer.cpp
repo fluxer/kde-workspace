@@ -677,7 +677,9 @@ void MixerWidget::slotSetup()
         m_mixer->setPopupIcon(firstmixertabwidget->mainVolumeIcon());
         Plasma::ToolTipManager::self()->setContent(m_mixer, firstmixertabwidget->toolTipContent());
     } else {
-        // TODO: label
+        Plasma::Label* label = new Plasma::Label(this);
+        label->setText(i18n("<center>No sound cards found</center>"));
+        addTab(QString::fromLatin1("nocards"), label);
         m_mixer->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
     connect(
