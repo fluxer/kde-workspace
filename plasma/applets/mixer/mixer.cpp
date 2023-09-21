@@ -530,7 +530,7 @@ public:
     void increaseVolume();
 
 public Q_SLOTS:
-    void slotUnhack();
+    void slotSetup();
 
 protected:
     // QGraphicsWidget reimplementation
@@ -542,18 +542,47 @@ private Q_SLOTS:
 
 private:
     MixerApplet* m_mixer;
-    bool m_hintshack;
     QList<MixerTabWidget*> m_tabwidgets;
 };
 
 MixerWidget::MixerWidget(MixerApplet* mixer)
     : Plasma::TabBar(mixer),
-    m_mixer(mixer),
-    m_hintshack(true)
+    m_mixer(mixer)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumSize(s_minimumsize);
+}
 
+void MixerWidget::decreaseVolume()
+{
+    if (m_tabwidgets.size() < 1) {
+        return;
+    }
+    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
+    mixertabwidget->decreaseVolume();
+}
+
+void MixerWidget::increaseVolume()
+{
+    if (m_tabwidgets.size() < 1) {
+        return;
+    }
+    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
+    mixertabwidget->increaseVolume();
+}
+
+QSizeF MixerWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    // because Plasma::TabBar minimum size is bogus when there is nothing in it a hardcoded minimum
+    // size is returned, when there are tabs the size hint is decided by Plasma::TabBar::sizeHint()
+    if (m_tabwidgets.isEmpty() && which == Qt::MinimumSize) {
+        return s_minimumsize;
+    }
+    return Plasma::TabBar::sizeHint(which, constraint);
+}
+
+void MixerWidget::slotSetup()
+{
     QStringList uniquemixers;
     int alsacard = s_defaultsoundcard;
     while (true) {
@@ -631,40 +660,6 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
     );
 }
 
-void MixerWidget::decreaseVolume()
-{
-    if (m_tabwidgets.size() < 1) {
-        return;
-    }
-    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
-    mixertabwidget->decreaseVolume();
-}
-
-void MixerWidget::increaseVolume()
-{
-    if (m_tabwidgets.size() < 1) {
-        return;
-    }
-    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
-    mixertabwidget->increaseVolume();
-}
-
-void MixerWidget::slotUnhack()
-{
-    m_hintshack = false;
-}
-
-QSizeF MixerWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    // HACK: because Plasma::TabBar minimum size is bogus during initialization when there is nothing
-    // in it a hardcoded minimum size is returned, after that it is up to Plasma::TabBar and its
-    // child items to return something sensible (hint: that may not happen)
-    if (m_hintshack && which == Qt::MinimumSize) {
-        return s_minimumsize * 1.3;
-    }
-    return Plasma::TabBar::sizeHint(which, constraint);
-}
-
 void MixerWidget::slotMainVolumeChanged()
 {
     MixerTabWidget* mixertabwidget = qobject_cast<MixerTabWidget*>(sender());
@@ -688,7 +683,7 @@ MixerApplet::MixerApplet(QObject *parent, const QVariantList &args)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_mixer");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
-    setPopupIcon(s_defaultpopupicon);
+    setPopupIcon(kMixerIcon(this, 0));
 
     m_mixerwidget = new MixerWidget(this);
 }
@@ -696,6 +691,11 @@ MixerApplet::MixerApplet(QObject *parent, const QVariantList &args)
 MixerApplet::~MixerApplet()
 {
     delete m_mixerwidget;
+}
+
+void MixerApplet::init()
+{
+    QTimer::singleShot(500, m_mixerwidget, SLOT(slotSetup()));
 }
 
 QGraphicsWidget* MixerApplet::graphicsWidget()
@@ -733,9 +733,6 @@ void MixerApplet::constraintsEvent(Plasma::Constraints constraints)
                 break;
             }
         }
-    }
-    if (constraints & Plasma::StartupCompletedConstraint) {
-        QTimer::singleShot(500, m_mixerwidget, SLOT(slotUnhack()));
     }
 }
 

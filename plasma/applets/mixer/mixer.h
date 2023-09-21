@@ -31,6 +31,8 @@ public:
     MixerApplet(QObject *parent, const QVariantList &args);
     ~MixerApplet();
 
+    // Plasma::Applet reimplementation
+    void init() final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
     // QGraphicsWidget reimplementation
