@@ -27,6 +27,7 @@
 #include <Plasma/Label>
 #include <Plasma/Slider>
 #include <Plasma/IconWidget>
+#include <Plasma/SignalPlotter>
 #include <Plasma/ToolTipManager>
 #include <KIconLoader>
 #include <KIcon>
@@ -34,12 +35,16 @@
 
 #include <alsa/asoundlib.h>
 
+// NOTE: experimental
+#define MIXER_CAPTURE 1
+
 static const QSizeF s_minimumsize = QSizeF(290, 140);
 static const QSizeF s_minimumslidersize = QSizeF(10, 70);
 static const int s_svgiconsize = 256;
 static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
 static const int s_defaultsoundcard = -1;
 static const int s_alsapollinterval = 250;
+static const int s_alsapcmbuffersize = 256;
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
 {
@@ -202,7 +207,7 @@ public:
     MixerTabWidget(const bool isdefault, const QString &alsamixername, Plasma::TabBar *tabbar);
     ~MixerTabWidget();
 
-    bool setup(const int cardnumber, const QByteArray &cardname);
+    bool setup(const QByteArray &cardname);
      // can't be const because Plasma::Svg requires non-const parent
     QIcon mainVolumeIcon();
     Plasma::ToolTipContent toolTipContent() const;
@@ -222,17 +227,21 @@ private Q_SLOTS:
 private:
     QGraphicsLinearLayout* m_layout;
     snd_mixer_t* m_alsamixer;
-    QString m_mainelement;
+    snd_pcm_t* m_alsapcm;
     QTimer* m_timer;
+    Plasma::SignalPlotter* m_signalplotter;
     bool m_isdefault;
     QString m_alsamixername;
+    QString m_mainelement;
 };
 
 MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixername, Plasma::TabBar *tabbar)
     : QGraphicsWidget(tabbar),
     m_layout(nullptr),
     m_alsamixer(nullptr),
+    m_alsapcm(nullptr),
     m_timer(nullptr),
+    m_signalplotter(nullptr),
     m_isdefault(isdefault),
     m_alsamixername(alsamixername)
 {
@@ -248,12 +257,15 @@ MixerTabWidget::~MixerTabWidget()
     if (m_timer) {
         m_timer->stop();
     }
+    if (m_alsapcm) {
+        snd_pcm_close(m_alsapcm);
+    }
     if (m_alsamixer) {
         snd_mixer_close(m_alsamixer);
     }
 }
 
-bool MixerTabWidget::setup(const int alsacard, const QByteArray &alsacardname)
+bool MixerTabWidget::setup(const QByteArray &alsacardname)
 {
     Q_ASSERT(m_alsamixer == nullptr);
     int alsaresult = snd_mixer_open(&m_alsamixer, 0);
@@ -379,8 +391,52 @@ bool MixerTabWidget::setup(const int alsacard, const QByteArray &alsacardname)
     kDebug() << "Main element is" << m_mainelement;
     m_layout->addStretch();
 
-    adjustSize();
     if (hasvalidelement) {
+#if MIXER_CAPTURE
+        alsaresult = snd_pcm_open(&m_alsapcm, alsacardname.constData(), SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK);
+        if (alsaresult != 0) {
+            kWarning() << "Could not open PCM" << snd_strerror(alsaresult);
+            m_alsapcm = nullptr;
+        } else {
+            kDebug() << "Opened PCM" << alsacardname;
+        }
+        if (m_alsapcm) {
+            alsaresult = snd_spcm_init(
+                m_alsapcm,
+                44100, // rate
+                1, // channels
+                SND_PCM_FORMAT_FLOAT,
+                SND_PCM_SUBFORMAT_STD,
+                SND_SPCM_LATENCY_STANDARD,
+                SND_PCM_ACCESS_RW_INTERLEAVED,
+                SND_SPCM_XRUN_STOP
+            );
+            if (alsaresult != 0) {
+                kWarning() << "Could not init PCM" << snd_strerror(alsaresult);
+                snd_pcm_close(m_alsapcm);
+                m_alsapcm = nullptr;
+            }
+        }
+        if (m_alsapcm) {
+            alsaresult = snd_pcm_prepare(m_alsapcm);
+            if (alsaresult != 0) {
+                kWarning() << "Could not prepare PCM" << snd_strerror(alsaresult);
+                snd_pcm_close(m_alsapcm);
+                m_alsapcm = nullptr;
+            }
+        }
+        if (m_alsapcm) {
+            m_signalplotter = new Plasma::SignalPlotter(this);
+            m_signalplotter->setShowTopBar(false);
+            m_signalplotter->setShowLabels(false);
+            m_signalplotter->setShowVerticalLines(false);
+            m_signalplotter->setShowHorizontalLines(false);
+            m_signalplotter->setUseAutoRange(true);
+            m_signalplotter->addPlot(Qt::blue);
+            m_layout->addItem(m_signalplotter);
+        }
+#endif
+
         m_timer = new QTimer(this);
         m_timer->setInterval(s_alsapollinterval);
         m_timer->setSingleShot(false);
@@ -390,6 +446,9 @@ bool MixerTabWidget::setup(const int alsacard, const QByteArray &alsacardname)
         );
         m_timer->start();
     }
+
+    adjustSize();
+
     return hasvalidelement;
 }
 
@@ -510,6 +569,37 @@ void MixerTabWidget::slotTimeout()
         return;
     }
     snd_mixer_handle_events(m_alsamixer);
+#if MIXER_CAPTURE
+    if (m_alsapcm) {
+        switch (snd_pcm_state(m_alsapcm)) {
+            case SND_PCM_STATE_PREPARED:
+            case SND_PCM_STATE_RUNNING: {
+                float alsapcmbuffer[s_alsapcmbuffersize];
+                ::memset(alsapcmbuffer, 0, sizeof(alsapcmbuffer));
+                const int alsaresult = snd_pcm_readi(m_alsapcm, alsapcmbuffer, s_alsapcmbuffersize);
+                if (alsaresult < 1) {
+                    kWarning() << "Could not read PCM data" << snd_strerror(alsaresult);
+                    snd_pcm_recover(m_alsapcm, alsaresult, 1);
+                    break;
+                }
+                QList<double> alsasamples;
+                for (int i = 0; i < s_alsapcmbuffersize; i++) {
+                    alsasamples.append(double(alsapcmbuffer[i]));
+                }
+                // qDebug() << Q_FUNC_INFO << alsasamples;
+                m_signalplotter->addSample(alsasamples);
+                break;
+            }
+            case SND_PCM_STATE_XRUN: {
+                kWarning() << "PCM xrun" << m_alsamixername;
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
+#endif
 }
 
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask)
@@ -645,7 +735,7 @@ void MixerWidget::slotSetup()
         uniquemixers.append(alsamixername);
 
         MixerTabWidget* mixertabwidget = new MixerTabWidget(isdefault, alsamixername, this);
-        if (mixertabwidget->setup(alsacard, alsacardname)) {
+        if (mixertabwidget->setup(alsacardname)) {
             if (isdefault) {
                 // default sound card goes to the front
                 insertTab(0, KIcon("mixer-pcm-default"), alsamixername, mixertabwidget);
