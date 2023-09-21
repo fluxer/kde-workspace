@@ -37,6 +37,7 @@ static const QSizeF s_minimumsize = QSizeF(290, 140);
 static const QSizeF s_minimumslidersize = QSizeF(10, 70);
 static const int s_svgiconsize = 256;
 static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
+static const int s_defaultsoundcard = -1;
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
 {
@@ -494,7 +495,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
     setMinimumSize(s_minimumsize);
 
     QStringList uniquemixers;
-    int alsacard = -1;
+    int alsacard = s_defaultsoundcard;
     while (true) {
         int alsaresult = snd_card_next(&alsacard);
         if (alsaresult != 0) {
@@ -502,7 +503,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
             break;
         }
 
-        const QByteArray alsacardname = (alsacard == -1 ? "default" : "hw:" + QByteArray::number(alsacard));
+        const QByteArray alsacardname = (alsacard == s_defaultsoundcard ? "default" : "hw:" + QByteArray::number(alsacard));
         snd_ctl_t *alsactl = nullptr;
         alsaresult = snd_ctl_open(&alsactl, alsacardname.constData(), SND_CTL_NONBLOCK);
         if (alsaresult != 0) {
@@ -523,7 +524,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
         snd_ctl_close(alsactl);
         if (uniquemixers.contains(alsamixername)) {
             // default may be duplicate
-            if (alsacard == -1) {
+            if (alsacard == s_defaultsoundcard) {
                 break;
             }
             alsacard++;
@@ -533,12 +534,12 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
 
         MixerTabWidget* mixertabwidget = new MixerTabWidget(this);
         if (mixertabwidget->setup(alsacard, alsacardname)) {
-            if (alsacard == -1) {
+            if (alsacard == s_defaultsoundcard) {
                 // default sound card goes to the front
-                insertTab(0, alsamixername, mixertabwidget);
+                insertTab(0, KIcon("mixer-pcm-default"), alsamixername, mixertabwidget);
                 m_tabwidgets.prepend(mixertabwidget);
             } else {
-                addTab(alsamixername, mixertabwidget);
+                addTab(KIcon("mixer-pcm"), alsamixername, mixertabwidget);
                 m_tabwidgets.append(mixertabwidget);
             }
             connect(
@@ -549,7 +550,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
             delete mixertabwidget;
         }
 
-        if (alsacard == -1) {
+        if (alsacard == s_defaultsoundcard) {
             break;
         }
         alsacard++;
