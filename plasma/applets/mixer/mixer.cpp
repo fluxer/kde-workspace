@@ -493,6 +493,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumSize(s_minimumsize);
 
+    QStringList uniquemixers;
     int alsacard = -1;
     while (true) {
         int alsaresult = snd_card_next(&alsacard);
@@ -520,6 +521,15 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
 
         const QString alsamixername = QString::fromLocal8Bit(snd_ctl_card_info_get_mixername(alsacardinfo));
         snd_ctl_close(alsactl);
+        if (uniquemixers.contains(alsamixername)) {
+            // default may be duplicate
+            if (alsacard == -1) {
+                break;
+            }
+            alsacard++;
+            continue;
+        }
+        uniquemixers.append(alsamixername);
 
         MixerTabWidget* mixertabwidget = new MixerTabWidget(this);
         if (mixertabwidget->setup(alsacard, alsacardname)) {
