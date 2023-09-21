@@ -131,8 +131,8 @@ NotificationsApplet::NotificationsApplet(QObject *parent, const QVariantList &ar
     KGlobal::locale()->insertCatalog("plasma_applet_notifications");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setPassivePopup(true);
-    m_notificationswidget = new NotificationsWidget(this);
     setPopupIcon(kNotificationIcon(this, false));
+    m_notificationswidget = new NotificationsWidget(this);
 }
 
 NotificationsApplet::~NotificationsApplet()
