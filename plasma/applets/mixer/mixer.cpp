@@ -326,7 +326,6 @@ bool MixerTabWidget::setup(const int alsacard, const QByteArray &alsacardname)
             slider->setProperty("_k_index", alsaelementindex);
             slider->setProperty("_k_name", alsaelementname);
             slider->setProperty("_k_channel", int(alsaelementchannel));
-            slider->setProperty("_k_capture", alsahascapture);
             slider->setOrientation(Qt::Vertical);
             slider->setRange(int(alsavolumemin), int(alsavolumemax));
             slider->setValue(int(alsavolume));
@@ -448,15 +447,18 @@ void MixerTabWidget::slotSliderMovedOrChanged(const int value)
     Plasma::Slider* slider = qobject_cast<Plasma::Slider*>(sender());
     Q_ASSERT(slider != nullptr);
     const uint alsaelementindex = slider->property("_k_index").toUInt();
+    const QString alsaelementname = slider->property("_k_name").toString();
     const int alsaelementchannel = slider->property("_k_channel").toInt();
-    const bool alsahascapture = slider->property("_k_capture").toBool();
     snd_mixer_elem_t *alsaelement = snd_mixer_first_elem(m_alsamixer);
     for (; alsaelement; alsaelement = snd_mixer_elem_next(alsaelement)) {
         if (snd_mixer_elem_empty(alsaelement)) {
             continue;
         }
-        if (snd_mixer_selem_get_index(alsaelement) == alsaelementindex) {
+        const uint alsaiterelementindex = snd_mixer_selem_get_index(alsaelement);
+        const QString alsaiterelementname = QString::fromLocal8Bit(snd_mixer_selem_get_name(alsaelement));
+        if (alsaiterelementindex == alsaelementindex && alsaiterelementname == alsaelementname) {
             kDebug() << "Changing" << alsaelementindex << "volume to" << value;
+            const bool alsahascapture = snd_mixer_selem_has_capture_volume(alsaelement);
             if (alsahascapture) {
                 const int alsaresult = snd_mixer_selem_set_capture_volume(alsaelement, snd_mixer_selem_channel_id_t(alsaelementchannel), long(value));
                 if (alsaresult != 0) {
