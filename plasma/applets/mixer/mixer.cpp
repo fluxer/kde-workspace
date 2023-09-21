@@ -27,6 +27,7 @@
 #include <Plasma/Label>
 #include <Plasma/Slider>
 #include <Plasma/IconWidget>
+#include <Plasma/ToolTipManager>
 #include <KIconLoader>
 #include <KIcon>
 #include <KDebug>
@@ -198,11 +199,13 @@ class MixerTabWidget : public QGraphicsWidget
 {
     Q_OBJECT
 public:
-    MixerTabWidget(Plasma::TabBar *tabbar);
+    MixerTabWidget(const bool isdefault, const QString &alsamixername, Plasma::TabBar *tabbar);
     ~MixerTabWidget();
 
     bool setup(const int cardnumber, const QByteArray &cardname);
+     // can't be const because Plasma::Svg requires non-const parent
     QIcon mainVolumeIcon();
+    Plasma::ToolTipContent toolTipContent() const;
     void decreaseVolume();
     void increaseVolume();
 
@@ -221,13 +224,17 @@ private:
     snd_mixer_t* m_alsamixer;
     QString m_mainelement;
     QTimer* m_timer;
+    bool m_isdefault;
+    QString m_alsamixername;
 };
 
-MixerTabWidget::MixerTabWidget(Plasma::TabBar *tabbar)
+MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixername, Plasma::TabBar *tabbar)
     : QGraphicsWidget(tabbar),
     m_layout(nullptr),
     m_alsamixer(nullptr),
-    m_timer(nullptr)
+    m_timer(nullptr),
+    m_isdefault(isdefault),
+    m_alsamixername(alsamixername)
 {
     setMinimumSize(s_minimumsize);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -422,6 +429,21 @@ QIcon MixerTabWidget::mainVolumeIcon()
     return KIcon(s_defaultpopupicon);
 }
 
+Plasma::ToolTipContent MixerTabWidget::toolTipContent() const
+{
+    Plasma::ToolTipContent result;
+    const char* const tooltipiconname = (m_isdefault ? "mixer-pcm-default" : "mixer-pcm");
+    result.setImage(
+        KIconLoader::global()->loadIcon(
+            QString::fromLatin1(tooltipiconname),
+            KIconLoader::Dialog
+        )
+    );
+    result.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_alsamixername));
+    result.setSubText(QString::fromLatin1("<center>%1</center>").arg(m_mainelement));
+    return result;
+}
+
 void MixerTabWidget::decreaseVolume()
 {
     foreach (Plasma::Slider *slider, sliders) {
@@ -592,7 +614,8 @@ void MixerWidget::slotSetup()
             break;
         }
 
-        const QByteArray alsacardname = (alsacard == s_defaultsoundcard ? "default" : "hw:" + QByteArray::number(alsacard));
+        const bool isdefault = (alsacard == s_defaultsoundcard);
+        const QByteArray alsacardname = (isdefault ? "default" : "hw:" + QByteArray::number(alsacard));
         snd_ctl_t *alsactl = nullptr;
         alsaresult = snd_ctl_open(&alsactl, alsacardname.constData(), SND_CTL_NONBLOCK);
         if (alsaresult != 0) {
@@ -611,9 +634,9 @@ void MixerWidget::slotSetup()
 
         const QString alsamixername = QString::fromLocal8Bit(snd_ctl_card_info_get_mixername(alsacardinfo));
         snd_ctl_close(alsactl);
+        // default may be duplicate
         if (uniquemixers.contains(alsamixername)) {
-            // default may be duplicate
-            if (alsacard == s_defaultsoundcard) {
+            if (isdefault) {
                 break;
             }
             alsacard++;
@@ -621,9 +644,9 @@ void MixerWidget::slotSetup()
         }
         uniquemixers.append(alsamixername);
 
-        MixerTabWidget* mixertabwidget = new MixerTabWidget(this);
+        MixerTabWidget* mixertabwidget = new MixerTabWidget(isdefault, alsamixername, this);
         if (mixertabwidget->setup(alsacard, alsacardname)) {
-            if (alsacard == s_defaultsoundcard) {
+            if (isdefault) {
                 // default sound card goes to the front
                 insertTab(0, KIcon("mixer-pcm-default"), alsamixername, mixertabwidget);
                 m_tabwidgets.prepend(mixertabwidget);
@@ -639,7 +662,8 @@ void MixerWidget::slotSetup()
             delete mixertabwidget;
         }
 
-        if (alsacard == s_defaultsoundcard) {
+        // the loop is until -1 which happens to be the default card
+        if (isdefault) {
             break;
         }
         alsacard++;
@@ -648,8 +672,10 @@ void MixerWidget::slotSetup()
     setTabBarShown(m_tabwidgets.size() > 1);
     setCurrentIndex(0);
     if (m_tabwidgets.size() > 0) {
+        MixerTabWidget* firstmixertabwidget = m_tabwidgets.first();
         m_mixer->setStatus(Plasma::ItemStatus::ActiveStatus);
-        m_mixer->setPopupIcon(m_tabwidgets.first()->mainVolumeIcon());
+        m_mixer->setPopupIcon(firstmixertabwidget->mainVolumeIcon());
+        Plasma::ToolTipManager::self()->setContent(m_mixer, firstmixertabwidget->toolTipContent());
     } else {
         m_mixer->setFailedToLaunch(true, i18n("No sound cards found"));
         m_mixer->setStatus(Plasma::ItemStatus::PassiveStatus);
@@ -674,6 +700,7 @@ void MixerWidget::slotCurrentChanged(const int index)
     MixerTabWidget* mixertabwidget = m_tabwidgets.at(index);
     Q_ASSERT(mixertabwidget != nullptr);
     m_mixer->setPopupIcon(mixertabwidget->mainVolumeIcon());
+    Plasma::ToolTipManager::self()->setContent(m_mixer, mixertabwidget->toolTipContent());
 }
 
 
