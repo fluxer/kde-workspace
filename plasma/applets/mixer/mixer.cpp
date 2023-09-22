@@ -207,6 +207,14 @@ static QColor kDefaultVisualizerColor()
     return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 }
 
+static QGraphicsWidget* kMakeSpacer(QGraphicsWidget *parent)
+{
+    QGraphicsWidget* result = new QGraphicsWidget(parent);
+    result->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    result->setMinimumSize(1, 1);
+    return result;
+}
+
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask);
 
 class MixerTabWidget : public QGraphicsWidget
@@ -411,9 +419,7 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
         m_mainelement = alsaelementnames.first();
     }
     kDebug() << "Main element is" << m_mainelement;
-    m_spacer = new QGraphicsWidget(this);
-    m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_spacer->setMinimumSize(1, 1);
+    m_spacer = kMakeSpacer(this);
     m_layout->addItem(m_spacer);
 
     if (hasvalidelement) {
@@ -453,6 +459,8 @@ void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QCo
             m_timer->setInterval(s_alsapollinterval);
             m_timer->start();
         }
+        m_spacer = kMakeSpacer(this);
+        m_layout->addItem(m_spacer);
         return;
     }
 
@@ -520,9 +528,7 @@ void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QCo
         plotterframelayout->addItem(m_signalplotter);
         m_layout->addItem(m_plotterframe);
     } else {
-        m_spacer = new QGraphicsWidget(this);
-        m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_spacer->setMinimumSize(1, 1);
+        m_spacer = kMakeSpacer(this);
         m_layout->addItem(m_spacer);
     }
 
