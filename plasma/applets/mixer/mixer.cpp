@@ -28,6 +28,7 @@
 #include <Plasma/Label>
 #include <Plasma/Slider>
 #include <Plasma/IconWidget>
+#include <Plasma/Theme>
 #include <Plasma/SignalPlotter>
 #include <Plasma/ToolTipManager>
 #include <KIconLoader>
@@ -49,7 +50,6 @@ static const int s_alsapollinterval = 250;
 static const int s_alsavisualizerinterval = 50;
 static const int s_alsapcmbuffersize = 256;
 static const bool s_showvisualizer = true;
-static const QColor s_visualizercolor = QColor(Qt::blue);
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
 {
@@ -201,6 +201,11 @@ static QIcon kMixerIcon(QObject *parent, const int value)
         result = KIcon(s_defaultpopupicon);
     }
     return result;
+}
+
+static QColor kDefaultVisualizerColor()
+{
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor);
 }
 
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask);
@@ -861,7 +866,7 @@ MixerApplet::MixerApplet(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
     m_mixerwidget(nullptr),
     m_showvisualizer(s_showvisualizer),
-    m_visualizercolor(s_visualizercolor),
+    m_visualizercolor(kDefaultVisualizerColor()),
     m_visualizerbox(nullptr),
     m_visualizerbutton(nullptr)
 {
@@ -881,7 +886,7 @@ void MixerApplet::init()
 {
     KConfigGroup configgroup = config();
     m_showvisualizer = configgroup.readEntry("showVisualizer", s_showvisualizer);
-    m_visualizercolor = configgroup.readEntry("visualizerColor", s_visualizercolor);
+    m_visualizercolor = configgroup.readEntry("visualizerColor", kDefaultVisualizerColor());
 
     m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizercolor);
 }
@@ -895,7 +900,7 @@ void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
     m_visualizerbox->setText(i18n("Show visualizer"));
     widgetlayout->addWidget(m_visualizerbox);
     m_visualizerbutton = new KColorButton(widget);
-    m_visualizerbutton->setDefaultColor(s_visualizercolor);
+    m_visualizerbutton->setDefaultColor(kDefaultVisualizerColor());
     m_visualizerbutton->setColor(m_visualizercolor);
     widgetlayout->addWidget(m_visualizerbutton);
     
