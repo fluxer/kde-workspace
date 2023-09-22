@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Geolocation IPinfo
-Comment=Geolocation from IP address via https://ipinfo.io/.
-X-KDE-ServiceTypes=Plasma/GeolocationProvider
-X-KDE-ParentApp=geolocation
-Type=Service
-Icon=applications-internet
-X-KDE-Library=plasma-geolocation-ipinfo
-X-KDE-PluginInfo-Name=ipinfo

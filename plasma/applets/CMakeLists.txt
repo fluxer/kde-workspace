@@ -15,6 +15,7 @@ add_subdirectory(keyboard)
 add_subdirectory(kickoff)
 add_subdirectory(trash)
 add_subdirectory(folderview)
+add_subdirectory(weather)
 # task and windowlist depend on libs/taskmanager
 add_subdirectory(tasks)
 add_subdirectory(windowlist)

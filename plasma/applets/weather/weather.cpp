@@ -1,0 +1,527 @@
+/*  This file is part of the KDE project
+    Copyright (C) 2023 Ivailo Monev <xakepa10@gmail.com>
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License version 2, as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public License
+    along with this library; see the file COPYING.LIB.  If not, write to
+    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+    Boston, MA 02110-1301, USA.
+*/
+
+#include "weather.h"
+
+#include <QTimer>
+#include <QJsonDocument>
+#include <QGraphicsGridLayout>
+#include <Plasma/Frame>
+#include <Plasma/IconWidget>
+#include <Plasma/ToolTipManager>
+#include <KUnitConversion>
+#include <KSystemTimeZones>
+#include <KIO/StoredTransferJob>
+#include <KIO/Job>
+#include <KIcon>
+#include <KDebug>
+
+static const QSizeF s_minimumsize = QSizeF(290, 140);
+// for reference:
+// http://www.geoplugin.com/quickstart
+// alternatively:
+// https://location.services.mozilla.com/v1/geolocate?key=b9255e08-838f-4d4e-b270-bec2cc89719b
+// https://location.services.mozilla.com/v1/country?key=b9255e08-838f-4d4e-b270-bec2cc89719b
+static const QString s_geourl = QString::fromLatin1("http://www.geoplugin.net/json.gp");
+// for reference:
+// https://api.met.no/weatherapi/locationforecast/2.0/documentation
+// https://api.met.no/doc/ForecastJSON
+static const QString s_weatherurl = QString::fromLatin1("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%1&lon=%2");
+static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
+static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
+
+static bool kNightTime(const QDateTime &dt)
+{
+    const int month = dt.date().month();
+    const int hour = dt.time().hour();
+    if (month <= 3 || month >= 9) {
+        return (hour >= 19 || hour <= 6);
+    }
+    return (hour >= 20 || hour <= 5);
+}
+
+static void kResetIconWidget(Plasma::IconWidget *iconwidget)
+{
+    iconwidget->setIcon(KIcon(s_defaultweathericon));
+    iconwidget->setText(i18n("N/A"));
+    iconwidget->setToolTip(QString());
+}
+
+static Plasma::IconWidget* kMakeIconWidget(QGraphicsWidget *parent, const Qt::Orientation orientation)
+{
+    const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
+    const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
+    Plasma::IconWidget* result = new Plasma::IconWidget(parent);
+    result->setAcceptHoverEvents(false);
+    result->setAcceptedMouseButtons(Qt::NoButton);
+    result->setOrientation(orientation);
+    result->setPreferredIconSize(desktopiconsizef);
+    kResetIconWidget(result);
+    return result;
+}
+
+static QString kTemperatureDisplayString(const QString &temperature, const KTemperature::KTempUnit tempunit)
+{
+    if (temperature.isEmpty()) {
+        return i18n("N/A");
+    }
+    return KTemperature(temperature.toDouble(), tempunit).toString();
+}
+
+static QIcon kDisplayIcon(const QString &icon, const bool isnighttime)
+{
+    if (icon.isEmpty()) {
+        return KIcon(s_defaultweathericon);
+    } else if (icon == QLatin1String("mist")) {
+        return KIcon("weather-mist");
+    } else if (icon == QLatin1String("cloudy")) {
+        return KIcon("weather-many-clouds");
+    } else if (icon.startsWith(QLatin1String("clearsky_"))) {
+        return KIcon(isnighttime ? "weather-clear-night" : "weather-clear");
+    } else if (icon.startsWith(QLatin1String("partlycloudy_")) || icon.startsWith(QLatin1String("fair_"))) {
+        return KIcon(isnighttime ? "weather-few-clouds-night" : "weather-few-clouds");
+    } else if (icon.contains(QLatin1String("lightrain"))) {
+        return KIcon(isnighttime ? "weather-showers-scattered-night" : "weather-showers-scattered");
+    } else if (icon.contains(QLatin1String("rain"))) {
+        return KIcon(isnighttime ? "weather-showers-night" : "weather-showers");
+    } else if (icon.contains(QLatin1String("sleet"))) {
+        return KIcon("weather-hail");
+    } else if (icon.contains(QLatin1String("lightsnow"))) {
+        return KIcon("weather-snow-scattered");
+    } else if (icon.contains(QLatin1String("snow"))) {
+        return KIcon("weather-snow");
+    }
+    kWarning() << "unhandled weather icon" << icon;
+    return KIcon(s_defaultweathericon);
+}
+
+static QString kDisplayCondition(const QString &icon, const bool isnighttime)
+{
+    // TODO:
+    return icon;
+}
+
+class KWeatherData
+{
+public:
+    KWeatherData();
+    explicit KWeatherData(const KTemperature::KTempUnit tempunit);
+
+    KTemperature::KTempUnit tempunit;
+    QString daytemperature;
+    QString dayicon;
+    QString nighttemperature;
+    QString nighticon;
+};
+QDebug operator<<(QDebug s, const KWeatherData &kweatherdata)
+{
+    s.nospace() << "KWeatherData("
+        << kweatherdata.tempunit << ",\n"
+        << kweatherdata.daytemperature << ", " << kweatherdata.dayicon << ",\n"
+        << kweatherdata.nighttemperature << ", " << kweatherdata.nighticon << ",\n"
+        << ")";
+    return s.space();
+}
+
+static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData &weatherdata, const bool isnighttime)
+{
+    iconwidget->setText(
+        kTemperatureDisplayString(
+            isnighttime ? weatherdata.nighttemperature : weatherdata.daytemperature,
+            weatherdata.tempunit
+        )
+    );
+    iconwidget->setIcon(
+        kDisplayIcon(
+            isnighttime ? weatherdata.nighticon : weatherdata.dayicon,
+            isnighttime
+        )
+    );
+    iconwidget->setToolTip(
+        kDisplayCondition(
+            isnighttime ? weatherdata.nighticon : weatherdata.dayicon,
+            isnighttime
+        )
+    );
+}
+
+KWeatherData::KWeatherData()
+    : tempunit(s_defaulttempunit)
+{
+}
+
+KWeatherData::KWeatherData(const KTemperature::KTempUnit _tempunit)
+    : tempunit(_tempunit)
+{
+}
+
+class WeatherWidget : public QGraphicsWidget
+{
+    Q_OBJECT
+public:
+    WeatherWidget(WeatherApplet *weather);
+
+    void setup(const QString &source, const float latitude, const float longitude);
+
+private Q_SLOTS:
+    void slotGeoResult(KJob *kjob);
+    void slotWeatherResult(KJob *kjob);
+    void slotUpdateWidgets();
+
+private:
+    void startGeoJob();
+    void startWeatherjob(const QString &source, const float latitude, const float longitude);
+
+    WeatherApplet* m_weather;
+    QGraphicsLinearLayout* m_layout;
+    KIO::StoredTransferJob* m_geojob;
+    KIO::StoredTransferJob* m_weatherjob;
+    QVector<KWeatherData> m_weatherdata;
+    QTimer* m_timer;
+    Plasma::Frame* m_forecastframe;
+    QGraphicsGridLayout* m_forecastlayout;
+    Plasma::IconWidget* m_day0iconwidget;
+    Plasma::IconWidget* m_night0iconwidget;
+    Plasma::IconWidget* m_day1iconwidget;
+    Plasma::IconWidget* m_night1iconwidget;
+    Plasma::IconWidget* m_day2iconwidget;
+    Plasma::IconWidget* m_night2iconwidget;
+    Plasma::IconWidget* m_day3iconwidget;
+    Plasma::IconWidget* m_night3iconwidget;
+    Plasma::IconWidget* m_day4iconwidget;
+    Plasma::IconWidget* m_night4iconwidget;
+};
+
+WeatherWidget::WeatherWidget(WeatherApplet* weather)
+    : QGraphicsWidget(weather),
+    m_weather(weather),
+    m_layout(nullptr),
+    m_geojob(nullptr),
+    m_weatherjob(nullptr),
+    m_timer(nullptr),
+    m_forecastframe(nullptr),
+    m_forecastlayout(nullptr),
+    m_day0iconwidget(nullptr),
+    m_night0iconwidget(nullptr),
+    m_day1iconwidget(nullptr),
+    m_night1iconwidget(nullptr),
+    m_day2iconwidget(nullptr),
+    m_night2iconwidget(nullptr),
+    m_day3iconwidget(nullptr),
+    m_night3iconwidget(nullptr),
+    m_day4iconwidget(nullptr),
+    m_night4iconwidget(nullptr)
+{
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    setMinimumSize(s_minimumsize);
+
+    m_layout = new QGraphicsLinearLayout(Qt::Vertical, this);
+    setLayout(m_layout);
+
+    m_forecastframe = new Plasma::Frame(this);
+    m_forecastframe->setFrameShadow(Plasma::Frame::Sunken);
+    m_forecastlayout = new QGraphicsGridLayout(m_forecastframe);
+    m_forecastframe->setLayout(m_forecastlayout);
+    m_day0iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_day0iconwidget, 0, 0);
+    m_night0iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_night0iconwidget, 1, 0);
+    m_day1iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_day1iconwidget, 0, 1);
+    m_night1iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_night1iconwidget, 1, 1);
+    m_day2iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_day2iconwidget, 0, 2);
+    m_night2iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_night2iconwidget, 1, 2);
+    m_day3iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_day3iconwidget, 0, 3);
+    m_night3iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_night3iconwidget, 1, 3);
+    m_day4iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_day4iconwidget, 0, 4);
+    m_night4iconwidget = kMakeIconWidget(m_forecastframe, Qt::Vertical);
+    m_forecastlayout->addItem(m_night4iconwidget, 1, 4);
+    m_layout->addItem(m_forecastframe);
+
+    m_timer = new QTimer(this);
+    m_timer->setInterval(60000); // 1min
+    connect(
+        m_timer, SIGNAL(timeout()),
+        this, SLOT(slotUpdateWidgets())
+    );
+}
+
+void WeatherWidget::setup(const QString &source, const float latitude, const float longitude)
+{
+    m_timer->stop();
+    m_weatherdata.clear();
+    m_weatherdata.reserve(5);
+    m_weatherdata.fill(KWeatherData(s_defaulttempunit), 5);
+    m_forecastframe->setText(i18n("Unknown"));
+    kResetIconWidget(m_day0iconwidget);
+    kResetIconWidget(m_night0iconwidget);
+    kResetIconWidget(m_day1iconwidget);
+    kResetIconWidget(m_night1iconwidget);
+    kResetIconWidget(m_day2iconwidget);
+    kResetIconWidget(m_night2iconwidget);
+    kResetIconWidget(m_day3iconwidget);
+    kResetIconWidget(m_night3iconwidget);
+    kResetIconWidget(m_day4iconwidget);
+    kResetIconWidget(m_night4iconwidget);
+
+    m_weather->setBusy(true);
+    if (latitude == KTimeZone::UNKNOWN || longitude == KTimeZone::UNKNOWN) {
+        startGeoJob();
+        return;
+    }
+
+    startWeatherjob(source, latitude, longitude);
+}
+
+void WeatherWidget::startGeoJob()
+{
+    Q_ASSERT(m_geojob == nullptr);
+    const KUrl geojoburl = s_geourl;
+    kDebug() << "Starting geo job for" << geojoburl;
+    m_geojob = KIO::storedGet(
+        KUrl(geojoburl),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    m_geojob->setAutoDelete(false);
+    connect(
+        m_geojob, SIGNAL(result(KJob*)),
+        this, SLOT(slotGeoResult(KJob*))
+    );
+}
+
+void WeatherWidget::startWeatherjob(const QString &source, const float latitude, const float longitude)
+{
+    Q_ASSERT(m_weatherjob == nullptr);
+    m_forecastframe->setText(source.isEmpty() ? i18n("Unknown") : source);
+    const KUrl weatherjoburl = s_weatherurl.arg(
+        QString::number(latitude),
+        QString::number(longitude)
+    );
+    kDebug() << "Starting weather job for" << weatherjoburl;
+    m_weatherjob = KIO::storedGet(
+        KUrl(weatherjoburl),
+        KIO::NoReload, KIO::HideProgressInfo
+    );
+    m_weatherjob->setAutoDelete(false);
+    connect(
+        m_weatherjob, SIGNAL(result(KJob*)),
+        this, SLOT(slotWeatherResult(KJob*))
+    );
+}
+
+void WeatherWidget::slotGeoResult(KJob *kjob)
+{
+    m_timer->stop();
+    // the fallback is to local timezone coordinates
+    const KTimeZone ktimezone = KSystemTimeZones::local();
+    if (kjob->error() != KJob::NoError) {
+        kWarning() << "geo job error" << kjob->errorString();
+        kjob->deleteLater();
+        startWeatherjob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
+        return;
+    }
+    kDebug() << "geo job completed" << m_geojob->url();
+    const QByteArray geodata = m_geojob->data();
+    kjob->deleteLater();
+    const QJsonDocument geojson = QJsonDocument::fromJson(geodata);
+    // qDebug() << Q_FUNC_INFO << geodata;
+    if (geojson.isNull()) {
+        kWarning() << "null geo json document" << geojson.errorString();
+        startWeatherjob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
+        return;
+    }
+    const QVariantMap geomap = geojson.toVariant().toMap();
+    if (geomap.isEmpty()) {
+        kWarning() << "null weather map";
+        return;
+    }
+    const QString georegion = geomap.value("geoplugin_regionName").toString();
+    const QString geocountry = geomap.value("geoplugin_countryName").toString();
+    const float geolatitude = geomap.value("geoplugin_latitude").toFloat();
+    const float geolongitude = geomap.value("geoplugin_longitude").toFloat();
+    const QString weathersource = QString::fromLatin1("%1 (%2)").arg(georegion, geocountry);
+    startWeatherjob(weathersource, geolatitude, geolongitude);
+}
+
+void WeatherWidget::slotWeatherResult(KJob *kjob)
+{
+    if (kjob->error() != KJob::NoError) {
+        kWarning() << "weather job error" << kjob->errorString();
+        kjob->deleteLater();
+        m_weather->setBusy(false);
+        return;
+    }
+    kDebug() << "weather job completed" << m_weatherjob->url();
+    const QByteArray weatherdata = m_weatherjob->data();
+    kjob->deleteLater();
+    const QJsonDocument weatherjson = QJsonDocument::fromJson(weatherdata);
+    // qDebug() << Q_FUNC_INFO << weatherdata;
+    if (weatherjson.isNull()) {
+        kWarning() << "null weather json document" << weatherjson.errorString();
+        m_weather->setBusy(false);
+        return;
+    }
+    const QVariantMap weathermap = weatherjson.toVariant().toMap();
+    if (weathermap.isEmpty()) {
+        kWarning() << "null weather map";
+        m_weather->setBusy(false);
+        return;
+    }
+    const QVariantMap weatherpropertiesmap = weathermap.value("properties").toMap();
+    if (weatherpropertiesmap.isEmpty()) {
+        kWarning() << "null weather properties map";
+        m_weather->setBusy(false);
+        return;
+    }
+    const QVariantList weathertimeserieslist = weatherpropertiesmap.value("timeseries").toList();
+    if (weathertimeserieslist.isEmpty()) {
+        kWarning() << "null weather timeseries list";
+        m_weather->setBusy(false);
+        return;
+    }
+
+    KTemperature::KTempUnit tempunit = s_defaulttempunit;
+    const QString weathertemperatureunit = weatherpropertiesmap.value("air_temperature").toString();
+    if (!weathertemperatureunit.isEmpty()) {
+        tempunit = KTemperature(0.0, weathertemperatureunit).unitEnum();
+        if (tempunit == KTemperature::Invalid) {
+            kWarning() << "invalid weather temperature unit" << weathertemperatureunit;
+            tempunit = s_defaulttempunit;
+        }
+    }
+    m_weatherdata.fill(KWeatherData(tempunit), 5);
+
+    const QDateTime utcnow = QDateTime::currentDateTimeUtc();
+    const QDate utc0 = utcnow.date();
+    const QDate utc1 = utc0.addDays(1);
+    const QDate utc2 = utc0.addDays(2);
+    const QDate utc3 = utc0.addDays(3);
+    const QDate utc4 = utc0.addDays(4);
+    foreach (const QVariant &weathertimevariant, weathertimeserieslist) {
+        const QVariantMap weathertimemap = weathertimevariant.toMap();
+        const QString weathertimestring = weathertimemap.value("time").toString();
+        const QDateTime weatherdatetime = QDateTime::fromString(weathertimestring, Qt::ISODate).toUTC();
+        if (weatherdatetime.isNull()) {
+            kWarning() << "invalid weather time" << weathertimestring;
+            continue;
+        }
+
+        const QVariantMap weatherdatamap = weathertimemap.value("data").toMap();
+        if (weatherdatamap.isEmpty()) {
+            kWarning() << "invalid weather data" << weathertimestring;
+            continue;
+        }
+
+        const QDate weatherdate = weatherdatetime.date();
+        int weatherdataindex = -1;
+        if (weatherdate == utc0) {
+            weatherdataindex = 0;
+        } else if (weatherdate == utc1) {
+            weatherdataindex = 1;
+        } else if (weatherdate == utc2) {
+            weatherdataindex = 2;
+        } else if (weatherdate == utc3) {
+            weatherdataindex = 3;
+        } else if (weatherdate == utc4) {
+            weatherdataindex = 4;
+        }
+        // qDebug() << Q_FUNC_INFO << weatherdataindex;
+        if (weatherdataindex != -1) {
+            kDebug() << "found weather data for day number" << weatherdataindex;
+            if (kNightTime(weatherdatetime)) {
+                kDebug() << "found weather data for night" << weatherdataindex;
+                if (m_weatherdata[weatherdataindex].nighttemperature.isEmpty()) {
+                    m_weatherdata[weatherdataindex].nighttemperature = weatherdatamap.value("instant").toMap().value("details").toMap().value("air_temperature").toString();
+                }
+                if (m_weatherdata[weatherdataindex].nighticon.isEmpty()) {
+                    m_weatherdata[weatherdataindex].nighticon = weatherdatamap.value("next_12_hours").toMap().value("summary").toMap().value("symbol_code").toString();
+                }
+            } else {
+                kDebug() << "found weather data for day" << weatherdataindex;
+                if (m_weatherdata[weatherdataindex].daytemperature.isEmpty()) {
+                    m_weatherdata[weatherdataindex].daytemperature = weatherdatamap.value("instant").toMap().value("details").toMap().value("air_temperature").toString();
+                }
+                if (m_weatherdata[weatherdataindex].dayicon.isEmpty()) {
+                    m_weatherdata[weatherdataindex].dayicon = weatherdatamap.value("next_12_hours").toMap().value("summary").toMap().value("symbol_code").toString();
+                }
+            }
+        }
+        // qDebug() << Q_FUNC_INFO << weatherdatetime;
+    }
+    // qDebug() << Q_FUNC_INFO << m_weatherdata;
+    m_weather->setBusy(false);
+    slotUpdateWidgets();
+    m_timer->start();
+}
+
+void WeatherWidget::slotUpdateWidgets()
+{
+    // TODO: day change detection
+    const QDateTime utcnow = QDateTime::currentDateTimeUtc();
+    const bool isnighttime = kNightTime(utcnow);
+    // qDebug() << Q_FUNC_INFO << utcnow << isnighttime;
+    kUpdateIconWidget(m_day0iconwidget, m_weatherdata[0], false);
+    kUpdateIconWidget(m_night0iconwidget, m_weatherdata[0], true);
+    kUpdateIconWidget(m_day1iconwidget, m_weatherdata[1], false);
+    kUpdateIconWidget(m_night1iconwidget, m_weatherdata[1], true);
+    kUpdateIconWidget(m_day2iconwidget, m_weatherdata[2], false);
+    kUpdateIconWidget(m_night2iconwidget, m_weatherdata[2], true);
+    kUpdateIconWidget(m_day3iconwidget, m_weatherdata[3], false);
+    kUpdateIconWidget(m_night3iconwidget, m_weatherdata[3], true);
+    kUpdateIconWidget(m_day4iconwidget, m_weatherdata[4], false);
+    kUpdateIconWidget(m_night4iconwidget, m_weatherdata[4], true);
+    m_weather->setPopupIcon(kDisplayIcon(isnighttime ? m_weatherdata[0].nighticon : m_weatherdata[0].dayicon, isnighttime));
+}
+
+WeatherApplet::WeatherApplet(QObject *parent, const QVariantList &args)
+    : Plasma::PopupApplet(parent, args),
+    m_weatherwidget(nullptr)
+{
+    KGlobal::locale()->insertCatalog("plasma_applet_weather");
+    setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
+    setPopupIcon(s_defaultweathericon);
+
+    m_weatherwidget = new WeatherWidget(this);
+}
+
+WeatherApplet::~WeatherApplet()
+{
+    delete m_weatherwidget;
+}
+
+void WeatherApplet::init()
+{
+    // TODO: configuration
+    m_weatherwidget->setup(QString(), KTimeZone::UNKNOWN, KTimeZone::UNKNOWN);
+}
+
+QGraphicsWidget* WeatherApplet::graphicsWidget()
+{
+    return m_weatherwidget;
+}
+
+K_EXPORT_PLASMA_APPLET(weather, WeatherApplet)
+
+#include "moc_weather.cpp"
+#include "weather.moc"

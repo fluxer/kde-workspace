@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Geolocation geoPlugin
-Comment=Geolocation from IP address via http://www.geoplugin.com/.
-X-KDE-ServiceTypes=Plasma/GeolocationProvider
-X-KDE-ParentApp=geolocation
-Type=Service
-Icon=applications-internet
-X-KDE-Library=plasma-geolocation-geoplugin
-X-KDE-PluginInfo-Name=geoplugin

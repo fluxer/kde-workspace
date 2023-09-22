@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    Copyright (C) 2022 Ivailo Monev <xakepa10@gmail.com>
+    Copyright (C) 2023 Ivailo Monev <xakepa10@gmail.com>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -16,23 +16,28 @@
     Boston, MA 02110-1301, USA.
 */
 
-#ifndef GEOPLUGIN_H
-#define GEOPLUGIN_H
+#ifndef WEATHER_H
+#define WEATHER_H
 
-#include "geolocationprovider.h"
+#include <Plasma/PopupApplet>
 
-#include <KIO/Job>
+class WeatherWidget;
 
-class geoPlugin : public GeolocationProvider
+class WeatherApplet : public Plasma::PopupApplet
 {
     Q_OBJECT
 public:
-    explicit geoPlugin(QObject *parent = 0, const QVariantList &args = QVariantList());
+    WeatherApplet(QObject *parent, const QVariantList &args);
+    ~WeatherApplet();
 
-    virtual void update();
+    // Plasma::Applet reimplementations
+    void init() final;
+    // Plasma::PopupApplet reimplementation
+    QGraphicsWidget* graphicsWidget() final;
 
-protected slots:
-    void result(KJob* job);
+private:
+    friend WeatherWidget;
+    WeatherWidget *m_weatherwidget;
 };
 
-#endif // GEOPLUGIN_H
+#endif // WEATHER_H
