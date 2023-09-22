@@ -242,6 +242,7 @@ private:
     QGraphicsWidget* m_spacer;
     Plasma::Frame* m_plotterframe;
     Plasma::SignalPlotter* m_signalplotter;
+    float m_alsapcmbuffer[s_alsapcmbuffersize];
     bool m_isdefault;
     QString m_alsamixername;
     QString m_mainelement;
@@ -651,10 +652,9 @@ void MixerTabWidget::slotTimeout()
         switch (snd_pcm_state(m_alsapcm)) {
             case SND_PCM_STATE_PREPARED:
             case SND_PCM_STATE_RUNNING: {
-                float alsapcmbuffer[s_alsapcmbuffersize];
                 while (true) {
-                    ::memset(alsapcmbuffer, 0, sizeof(alsapcmbuffer));
-                    const int alsaresult = snd_pcm_readi(m_alsapcm, alsapcmbuffer, s_alsapcmbuffersize);
+                    ::memset(m_alsapcmbuffer, 0, sizeof(m_alsapcmbuffer));
+                    const int alsaresult = snd_pcm_readi(m_alsapcm, m_alsapcmbuffer, s_alsapcmbuffersize);
                     if (alsaresult < 1) {
                         kDebug() << "Could not read PCM data" << snd_strerror(alsaresult);
                         snd_pcm_recover(m_alsapcm, alsaresult, 1);
@@ -663,7 +663,7 @@ void MixerTabWidget::slotTimeout()
                     QList<double> alsapcmsamples;
                     alsapcmsamples.reserve(alsaresult);
                     for (int i = 0; i < alsaresult; i++) {
-                        alsapcmsamples.append(double(alsapcmbuffer[i]));
+                        alsapcmsamples.append(double(m_alsapcmbuffer[i]));
                     }
                     // qDebug() << Q_FUNC_INFO << alsasamples;
                     m_signalplotter->addSample(alsapcmsamples);
