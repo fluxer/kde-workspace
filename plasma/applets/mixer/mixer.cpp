@@ -36,9 +36,6 @@
 
 #include <alsa/asoundlib.h>
 
-// NOTE: experimental
-#define MIXER_CAPTURE 1
-
 static const QSizeF s_minimumsize = QSizeF(290, 140);
 static const QSizeF s_minimumslidersize = QSizeF(10, 70);
 static const QSizeF s_minimumvisualizersize = QSizeF(120, 70);
@@ -206,7 +203,7 @@ static QIcon kMixerIcon(QObject *parent, const int value)
 
 static QColor kDefaultVisualizerColor()
 {
-    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::VisitedLinkColor);
+    return Plasma::Theme::defaultTheme()->color(Plasma::Theme::TextColor);
 }
 
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask);
@@ -423,7 +420,6 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
 
 void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
 {
-#if MIXER_CAPTURE
     const bool starttimer = m_timer->isActive();
     m_timer->stop();
     if (m_alsapcm) {
@@ -513,7 +509,6 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
     // if there are no valid elements then snd_pcm_open() will probably fail anyway
     m_timer->setInterval(s_alsavisualizerinterval);
     m_timer->start();
-#endif
 }
 
 QIcon MixerTabWidget::mainVolumeIcon()
@@ -633,7 +628,6 @@ void MixerTabWidget::slotTimeout()
         snd_mixer_handle_events(m_alsamixer);
     }
 
-#if MIXER_CAPTURE
     if (m_alsapcm) {
         switch (snd_pcm_state(m_alsapcm)) {
             case SND_PCM_STATE_PREPARED:
@@ -666,7 +660,6 @@ void MixerTabWidget::slotTimeout()
             }
         }
     }
-#endif
 }
 
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask)
