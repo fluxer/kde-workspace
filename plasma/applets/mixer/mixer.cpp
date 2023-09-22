@@ -426,12 +426,24 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
             }
         }
         if (m_alsapcm) {
+            // has to be setup not to block
+            alsaresult = snd_pcm_nonblock(m_alsapcm, 1);
+            if (alsaresult != 0) {
+                kWarning() << "Could not setup PCM for non-blocking" << snd_strerror(alsaresult);
+                snd_pcm_close(m_alsapcm);
+                m_alsapcm = nullptr;
+            }
+        }
+        if (m_alsapcm) {
             m_signalplotter = new Plasma::SignalPlotter(this);
             m_signalplotter->setShowTopBar(false);
             m_signalplotter->setShowLabels(false);
             m_signalplotter->setShowVerticalLines(false);
             m_signalplotter->setShowHorizontalLines(false);
-            m_signalplotter->setUseAutoRange(true);
+            m_signalplotter->setThinFrame(false);
+            // the documented range for SND_PCM_FORMAT_FLOAT
+            m_signalplotter->setUseAutoRange(false);
+            m_signalplotter->setVerticalRange(-1.0, 1.0);
             m_signalplotter->addPlot(Qt::blue);
             m_layout->addItem(m_signalplotter);
         }
@@ -574,17 +586,30 @@ void MixerTabWidget::slotTimeout()
         switch (snd_pcm_state(m_alsapcm)) {
             case SND_PCM_STATE_PREPARED:
             case SND_PCM_STATE_RUNNING: {
-                float alsapcmbuffer[s_alsapcmbuffersize];
-                ::memset(alsapcmbuffer, 0, sizeof(alsapcmbuffer));
-                const int alsaresult = snd_pcm_readi(m_alsapcm, alsapcmbuffer, s_alsapcmbuffersize);
-                if (alsaresult < 1) {
-                    kWarning() << "Could not read PCM data" << snd_strerror(alsaresult);
-                    snd_pcm_recover(m_alsapcm, alsaresult, 1);
-                    break;
-                }
                 QList<double> alsasamples;
-                for (int i = 0; i < s_alsapcmbuffersize; i++) {
-                    alsasamples.append(double(alsapcmbuffer[i]));
+                float alsapcmbuffer[s_alsapcmbuffersize];
+                while (true) {
+                    ::memset(alsapcmbuffer, 0, sizeof(alsapcmbuffer));
+                    const int alsaresult = snd_pcm_readi(m_alsapcm, alsapcmbuffer, s_alsapcmbuffersize);
+                    if (alsaresult < 1) {
+                        kDebug() << "Could not read PCM data" << snd_strerror(alsaresult);
+                        snd_pcm_recover(m_alsapcm, alsaresult, 1);
+                        break;
+                    }
+                    QList<double> alsapcmsamples;
+                    alsapcmsamples.reserve(alsaresult);
+                    bool hasnonzero = false;
+                    for (int i = 0; i < alsaresult; i++) {
+                        const double alsapcmsample = double(alsapcmbuffer[i]);
+                        if (alsapcmsample != 0.0) {
+                            hasnonzero = true;
+                        }
+                        alsapcmsamples.append(alsapcmsample);
+                    }
+                    // if all samples are zero that means no real data but the lower limit is -1..
+                    if (hasnonzero) {
+                        alsasamples.append(alsapcmsamples);
+                    }
                 }
                 // qDebug() << Q_FUNC_INFO << alsasamples;
                 m_signalplotter->addSample(alsasamples);
