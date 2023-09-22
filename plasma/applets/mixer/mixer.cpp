@@ -45,6 +45,8 @@ static const int s_svgiconsize = 256;
 static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
 static const int s_defaultsoundcard = -1;
 static const int s_alsapollinterval = 250;
+// for butter-smooth visualization the interval is very frequent when visualization is enabled
+static const int s_alsavisualizerinterval = 50;
 static const int s_alsapcmbuffersize = 256;
 static const bool s_showvisualizer = true;
 static const QColor s_visualizercolor = QColor(Qt::blue);
@@ -255,13 +257,18 @@ MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixernam
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     setLayout(m_layout);
+
+    m_timer = new QTimer(this);
+    m_timer->setInterval(s_alsapollinterval);
+    connect(
+        m_timer, SIGNAL(timeout()),
+        this, SLOT(slotTimeout())
+    );
 }
 
 MixerTabWidget::~MixerTabWidget()
 {
-    if (m_timer) {
-        m_timer->stop();
-    }
+    m_timer->stop();
     if (m_alsapcm) {
         snd_pcm_close(m_alsapcm);
     }
@@ -398,12 +405,6 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
     m_layout->addStretch();
 
     if (hasvalidelement) {
-        m_timer = new QTimer(this);
-        m_timer->setInterval(s_alsapollinterval);
-        connect(
-            m_timer, SIGNAL(timeout()),
-            this, SLOT(slotTimeout())
-        );
         m_timer->start();
     }
 
@@ -415,10 +416,8 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
 void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
 {
 #if MIXER_CAPTURE
-    const bool starttimer = (m_timer && m_timer->isActive());
-    if (m_timer) {
-        m_timer->stop();
-    }
+    const bool starttimer = m_timer->isActive();
+    m_timer->stop();
     if (m_alsapcm) {
         snd_pcm_close(m_alsapcm);
         m_alsapcm = nullptr;
@@ -431,6 +430,8 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
 
     if (!show) {
         if (starttimer) {
+            // the inteval for when there is no visualization is different
+            m_timer->setInterval(s_alsapollinterval);
             m_timer->start();
         }
         return;
@@ -492,6 +493,7 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
     }
 
     // if there are no valid elements then snd_pcm_open() will probably fail anyway
+    m_timer->setInterval(s_alsavisualizerinterval);
     m_timer->start();
 #endif
 }
@@ -609,10 +611,10 @@ void MixerTabWidget::slotSliderMovedOrChanged(const int value)
 
 void MixerTabWidget::slotTimeout()
 {
-    if (!m_alsamixer) {
-        return;
+    if (Q_LIKELY(m_alsamixer)) {
+        snd_mixer_handle_events(m_alsamixer);
     }
-    snd_mixer_handle_events(m_alsamixer);
+
 #if MIXER_CAPTURE
     if (m_alsapcm) {
         switch (snd_pcm_state(m_alsapcm)) {
