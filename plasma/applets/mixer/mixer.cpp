@@ -891,7 +891,7 @@ void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
     m_visualizerscalebox = new KIntNumInput(widget);
     m_visualizerscalebox->setRange(1, 5);
     m_visualizerscalebox->setValue(m_visualizerscale);
-    m_visualizerscalebox->setLabel(i18n("Visualizer smooth-factor"));
+    m_visualizerscalebox->setLabel(i18n("Smooth-factor"));
     widgetlayout->addWidget(m_visualizerscalebox);
 
     m_visualizerbutton = new KColorButton(widget);
