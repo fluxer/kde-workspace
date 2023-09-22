@@ -42,10 +42,6 @@ public:
     // QGraphicsWidget reimplementation
     void wheelEvent(QGraphicsSceneWheelEvent *event) final;
 
-protected:
-    // Plasma::Applet reimplementation
-    void constraintsEvent(Plasma::Constraints constraints) final;
-
 private Q_SLOTS:
     void slotConfigAccepted();
 

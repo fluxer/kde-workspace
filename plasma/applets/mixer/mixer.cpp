@@ -20,7 +20,6 @@
 
 #include <QTimer>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QVBoxLayout>
 #include <QGraphicsGridLayout>
 #include <Plasma/TabBar>
@@ -262,7 +261,7 @@ MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixernam
     m_alsamixername(alsamixername)
 {
     setMinimumSize(s_minimumsize);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     setLayout(m_layout);
@@ -710,10 +709,6 @@ public:
     void decreaseVolume();
     void increaseVolume();
 
-protected:
-    // QGraphicsWidget reimplementation
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint = QSizeF()) const final;
-
 private Q_SLOTS:
     void slotMainVolumeChanged();
     void slotCurrentChanged(const int index);
@@ -727,7 +722,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
     : Plasma::TabBar(mixer),
     m_mixer(mixer)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setMinimumSize(s_minimumsize);
 
     QStringList uniquemixers;
@@ -838,16 +833,6 @@ void MixerWidget::increaseVolume()
     mixertabwidget->increaseVolume();
 }
 
-QSizeF MixerWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    // because Plasma::TabBar minimum size is bogus when there is nothing in it a hardcoded minimum
-    // size is returned, when there are tabs the size hint is decided by Plasma::TabBar::sizeHint()
-    if (m_tabwidgets.isEmpty() && which == Qt::MinimumSize) {
-        return s_minimumsize;
-    }
-    return Plasma::TabBar::sizeHint(which, constraint);
-}
-
 void MixerWidget::slotMainVolumeChanged()
 {
     MixerTabWidget* mixertabwidget = qobject_cast<MixerTabWidget*>(sender());
@@ -929,30 +914,6 @@ void MixerApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
         m_mixerwidget->decreaseVolume();
     } else {
         m_mixerwidget->increaseVolume();
-    }
-}
-
-void MixerApplet::constraintsEvent(Plasma::Constraints constraints)
-{
-    if (constraints & Plasma::FormFactorConstraint) {
-        switch (formFactor()) {
-            case Plasma::FormFactor::Horizontal:
-            case Plasma::FormFactor::Vertical: {
-                // HACK: limit the widget size to 2-times less than that of the desktop because
-                // Plasma::TabBar sets its maximum size to QWIDGETSIZE_MAX which is more than what
-                // can fit on panel and for some reason hints do not have effect on the widget size
-                // when it is in a panel, see:
-                // kdelibs/plasma/widgets/tabbar.cpp
-                const QSize desktopsize = qApp->desktop()->size();
-                m_mixerwidget->setMaximumSize(desktopsize / 2);
-                break;
-            }
-            default: {
-                // back to the Plasma::TabBar maximum on form factor switch
-                m_mixerwidget->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
-                break;
-            }
-        }
     }
 }
 
