@@ -42,6 +42,7 @@
 
 static const QSizeF s_minimumsize = QSizeF(290, 140);
 static const QSizeF s_minimumslidersize = QSizeF(10, 70);
+static const QSizeF s_minimumvisualizersize = QSizeF(120, 70);
 static const int s_svgiconsize = 256;
 static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
 static const int s_defaultsoundcard = -1;
@@ -240,6 +241,7 @@ private:
     snd_mixer_t* m_alsamixer;
     snd_pcm_t* m_alsapcm;
     QTimer* m_timer;
+    Plasma::Frame* m_plotterframe;
     Plasma::SignalPlotter* m_signalplotter;
     bool m_isdefault;
     QString m_alsamixername;
@@ -253,6 +255,7 @@ MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixernam
     m_alsamixer(nullptr),
     m_alsapcm(nullptr),
     m_timer(nullptr),
+    m_plotterframe(nullptr),
     m_signalplotter(nullptr),
     m_isdefault(isdefault),
     m_alsamixername(alsamixername)
@@ -431,6 +434,9 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
         m_layout->removeItem(m_signalplotter);
         m_signalplotter->deleteLater();
         m_signalplotter = nullptr;
+        m_layout->removeItem(m_plotterframe);
+        m_plotterframe->deleteLater();
+        m_plotterframe = nullptr;
     }
 
     if (!show) {
@@ -484,7 +490,13 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
         }
     }
     if (m_alsapcm) {
-        m_signalplotter = new Plasma::SignalPlotter(this);
+        m_plotterframe = new Plasma::Frame(this);
+        m_plotterframe->setFrameShadow(Plasma::Frame::Sunken);
+        m_plotterframe->setMinimumSize(s_minimumvisualizersize);
+        QGraphicsLinearLayout* plotterframelayout = new QGraphicsLinearLayout(m_plotterframe);
+        plotterframelayout->setContentsMargins(0, 0, 0, 0);
+        m_plotterframe->setLayout(plotterframelayout);
+        m_signalplotter = new Plasma::SignalPlotter(m_plotterframe);
         m_signalplotter->setShowTopBar(false);
         m_signalplotter->setShowLabels(false);
         m_signalplotter->setShowVerticalLines(false);
@@ -494,7 +506,8 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
         // the documented range for SND_PCM_FORMAT_FLOAT
         m_signalplotter->setVerticalRange(-1.0, 1.0);
         m_signalplotter->addPlot(color);
-        m_layout->addItem(m_signalplotter);
+        plotterframelayout->addItem(m_signalplotter);
+        m_layout->addItem(m_plotterframe);
     }
 
     // if there are no valid elements then snd_pcm_open() will probably fail anyway
