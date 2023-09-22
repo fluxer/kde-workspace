@@ -20,6 +20,9 @@
 #define MIXER_H
 
 #include <QGraphicsSceneWheelEvent>
+#include <QCheckBox>
+#include <KConfigDialog>
+#include <KColorButton>
 #include <Plasma/PopupApplet>
 
 class MixerWidget;
@@ -31,8 +34,9 @@ public:
     MixerApplet(QObject *parent, const QVariantList &args);
     ~MixerApplet();
 
-    // Plasma::Applet reimplementation
+    // Plasma::Applet reimplementations
     void init() final;
+    void createConfigurationInterface(KConfigDialog *parent) final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
     // QGraphicsWidget reimplementation
@@ -42,9 +46,16 @@ protected:
     // Plasma::Applet reimplementation
     void constraintsEvent(Plasma::Constraints constraints) final;
 
+private Q_SLOTS:
+    void slotConfigAccepted();
+
 private:
     friend MixerWidget;
     MixerWidget *m_mixerwidget;
+    bool m_showvisualizer;
+    QColor m_visualizercolor;
+    QCheckBox* m_visualizerbox;
+    KColorButton* m_visualizerbutton;
 };
 
 #endif // MIXER_H

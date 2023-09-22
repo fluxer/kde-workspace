@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QVBoxLayout>
 #include <QGraphicsGridLayout>
 #include <Plasma/TabBar>
 #include <Plasma/Frame>
@@ -45,6 +46,8 @@ static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
 static const int s_defaultsoundcard = -1;
 static const int s_alsapollinterval = 250;
 static const int s_alsapcmbuffersize = 256;
+static const bool s_showvisualizer = true;
+static const QColor s_visualizercolor = QColor(Qt::blue);
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
 {
@@ -208,6 +211,7 @@ public:
     ~MixerTabWidget();
 
     bool setup(const QByteArray &cardname);
+    void showVisualizer(const bool show, const QColor &color);
      // can't be const because Plasma::Svg requires non-const parent
     QIcon mainVolumeIcon();
     Plasma::ToolTipContent toolTipContent() const;
@@ -233,6 +237,7 @@ private:
     bool m_isdefault;
     QString m_alsamixername;
     QString m_mainelement;
+    QByteArray m_alsacardname;
 };
 
 MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixername, Plasma::TabBar *tabbar)
@@ -268,6 +273,7 @@ MixerTabWidget::~MixerTabWidget()
 bool MixerTabWidget::setup(const QByteArray &alsacardname)
 {
     Q_ASSERT(m_alsamixer == nullptr);
+    m_alsacardname = alsacardname;
     int alsaresult = snd_mixer_open(&m_alsamixer, 0);
     if (alsaresult != 0) {
         kWarning() << "Could not open mixer" << snd_strerror(alsaresult);
@@ -392,66 +398,8 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
     m_layout->addStretch();
 
     if (hasvalidelement) {
-#if MIXER_CAPTURE
-        alsaresult = snd_pcm_open(&m_alsapcm, alsacardname.constData(), SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK);
-        if (alsaresult != 0) {
-            kWarning() << "Could not open PCM" << snd_strerror(alsaresult);
-            m_alsapcm = nullptr;
-        } else {
-            kDebug() << "Opened PCM" << alsacardname;
-        }
-        if (m_alsapcm) {
-            alsaresult = snd_spcm_init(
-                m_alsapcm,
-                44100, // rate
-                1, // channels
-                SND_PCM_FORMAT_FLOAT,
-                SND_PCM_SUBFORMAT_STD,
-                SND_SPCM_LATENCY_STANDARD,
-                SND_PCM_ACCESS_RW_INTERLEAVED,
-                SND_SPCM_XRUN_STOP
-            );
-            if (alsaresult != 0) {
-                kWarning() << "Could not init PCM" << snd_strerror(alsaresult);
-                snd_pcm_close(m_alsapcm);
-                m_alsapcm = nullptr;
-            }
-        }
-        if (m_alsapcm) {
-            alsaresult = snd_pcm_prepare(m_alsapcm);
-            if (alsaresult != 0) {
-                kWarning() << "Could not prepare PCM" << snd_strerror(alsaresult);
-                snd_pcm_close(m_alsapcm);
-                m_alsapcm = nullptr;
-            }
-        }
-        if (m_alsapcm) {
-            // has to be setup not to block
-            alsaresult = snd_pcm_nonblock(m_alsapcm, 1);
-            if (alsaresult != 0) {
-                kWarning() << "Could not setup PCM for non-blocking" << snd_strerror(alsaresult);
-                snd_pcm_close(m_alsapcm);
-                m_alsapcm = nullptr;
-            }
-        }
-        if (m_alsapcm) {
-            m_signalplotter = new Plasma::SignalPlotter(this);
-            m_signalplotter->setShowTopBar(false);
-            m_signalplotter->setShowLabels(false);
-            m_signalplotter->setShowVerticalLines(false);
-            m_signalplotter->setShowHorizontalLines(false);
-            m_signalplotter->setThinFrame(false);
-            // the documented range for SND_PCM_FORMAT_FLOAT
-            m_signalplotter->setUseAutoRange(false);
-            m_signalplotter->setVerticalRange(-1.0, 1.0);
-            m_signalplotter->addPlot(Qt::blue);
-            m_layout->addItem(m_signalplotter);
-        }
-#endif
-
         m_timer = new QTimer(this);
         m_timer->setInterval(s_alsapollinterval);
-        m_timer->setSingleShot(false);
         connect(
             m_timer, SIGNAL(timeout()),
             this, SLOT(slotTimeout())
@@ -462,6 +410,90 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
     adjustSize();
 
     return hasvalidelement;
+}
+
+void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
+{
+#if MIXER_CAPTURE
+    const bool starttimer = (m_timer && m_timer->isActive());
+    if (m_timer) {
+        m_timer->stop();
+    }
+    if (m_alsapcm) {
+        snd_pcm_close(m_alsapcm);
+        m_alsapcm = nullptr;
+    }
+    if (m_signalplotter) {
+        m_layout->removeItem(m_signalplotter);
+        m_signalplotter->deleteLater();
+        m_signalplotter = nullptr;
+    }
+
+    if (!show) {
+        if (starttimer) {
+            m_timer->start();
+        }
+        return;
+    }
+
+    int alsaresult = snd_pcm_open(&m_alsapcm, m_alsacardname.constData(), SND_PCM_STREAM_CAPTURE, SND_PCM_NONBLOCK);
+    if (alsaresult != 0) {
+        kWarning() << "Could not open PCM" << snd_strerror(alsaresult);
+        m_alsapcm = nullptr;
+    } else {
+        kDebug() << "Opened PCM" << m_alsacardname;
+    }
+    if (m_alsapcm) {
+        alsaresult = snd_spcm_init(
+            m_alsapcm,
+            44100, // rate
+            1, // channels
+            SND_PCM_FORMAT_FLOAT,
+            SND_PCM_SUBFORMAT_STD,
+            SND_SPCM_LATENCY_STANDARD,
+            SND_PCM_ACCESS_RW_INTERLEAVED,
+            SND_SPCM_XRUN_STOP
+        );
+        if (alsaresult != 0) {
+            kWarning() << "Could not init PCM" << snd_strerror(alsaresult);
+            snd_pcm_close(m_alsapcm);
+            m_alsapcm = nullptr;
+        }
+    }
+    if (m_alsapcm) {
+        alsaresult = snd_pcm_prepare(m_alsapcm);
+        if (alsaresult != 0) {
+            kWarning() << "Could not prepare PCM" << snd_strerror(alsaresult);
+            snd_pcm_close(m_alsapcm);
+            m_alsapcm = nullptr;
+        }
+    }
+    if (m_alsapcm) {
+        // has to be setup not to block
+        alsaresult = snd_pcm_nonblock(m_alsapcm, 1);
+        if (alsaresult != 0) {
+            kWarning() << "Could not setup PCM for non-blocking" << snd_strerror(alsaresult);
+            snd_pcm_close(m_alsapcm);
+            m_alsapcm = nullptr;
+        }
+    }
+    if (m_alsapcm) {
+        m_signalplotter = new Plasma::SignalPlotter(this);
+        m_signalplotter->setShowTopBar(false);
+        m_signalplotter->setShowLabels(false);
+        m_signalplotter->setShowVerticalLines(false);
+        m_signalplotter->setShowHorizontalLines(false);
+        m_signalplotter->setThinFrame(false);
+        m_signalplotter->setUseAutoRange(false);
+        // the documented range for SND_PCM_FORMAT_FLOAT
+        m_signalplotter->setVerticalRange(-1.0, 1.0);
+        m_signalplotter->addPlot(color);
+        m_layout->addItem(m_signalplotter);
+    }
+
+    // if there are no valid elements then snd_pcm_open() will probably fail anyway
+    m_timer->start();
+#endif
 }
 
 QIcon MixerTabWidget::mainVolumeIcon()
@@ -663,11 +695,9 @@ class MixerWidget : public Plasma::TabBar
 public:
     MixerWidget(MixerApplet *mixer);
 
+    void showVisualizer(const bool show, const QColor &color);
     void decreaseVolume();
     void increaseVolume();
-
-public Q_SLOTS:
-    void slotSetup();
 
 protected:
     // QGraphicsWidget reimplementation
@@ -688,38 +718,7 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
 {
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setMinimumSize(s_minimumsize);
-}
 
-void MixerWidget::decreaseVolume()
-{
-    if (m_tabwidgets.size() < 1) {
-        return;
-    }
-    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
-    mixertabwidget->decreaseVolume();
-}
-
-void MixerWidget::increaseVolume()
-{
-    if (m_tabwidgets.size() < 1) {
-        return;
-    }
-    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
-    mixertabwidget->increaseVolume();
-}
-
-QSizeF MixerWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
-{
-    // because Plasma::TabBar minimum size is bogus when there is nothing in it a hardcoded minimum
-    // size is returned, when there are tabs the size hint is decided by Plasma::TabBar::sizeHint()
-    if (m_tabwidgets.isEmpty() && which == Qt::MinimumSize) {
-        return s_minimumsize;
-    }
-    return Plasma::TabBar::sizeHint(which, constraint);
-}
-
-void MixerWidget::slotSetup()
-{
     QStringList uniquemixers;
     int alsacard = s_defaultsoundcard;
     while (true) {
@@ -803,6 +802,41 @@ void MixerWidget::slotSetup()
     );
 }
 
+void MixerWidget::showVisualizer(const bool show, const QColor &color)
+{
+    foreach (MixerTabWidget *mixertabwidget, m_tabwidgets) {
+        mixertabwidget->showVisualizer(show, color);
+    }
+}
+
+void MixerWidget::decreaseVolume()
+{
+    if (m_tabwidgets.size() < 1) {
+        return;
+    }
+    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
+    mixertabwidget->decreaseVolume();
+}
+
+void MixerWidget::increaseVolume()
+{
+    if (m_tabwidgets.size() < 1) {
+        return;
+    }
+    MixerTabWidget* mixertabwidget = m_tabwidgets.at(currentIndex());
+    mixertabwidget->increaseVolume();
+}
+
+QSizeF MixerWidget::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    // because Plasma::TabBar minimum size is bogus when there is nothing in it a hardcoded minimum
+    // size is returned, when there are tabs the size hint is decided by Plasma::TabBar::sizeHint()
+    if (m_tabwidgets.isEmpty() && which == Qt::MinimumSize) {
+        return s_minimumsize;
+    }
+    return Plasma::TabBar::sizeHint(which, constraint);
+}
+
 void MixerWidget::slotMainVolumeChanged()
 {
     MixerTabWidget* mixertabwidget = qobject_cast<MixerTabWidget*>(sender());
@@ -823,7 +857,11 @@ void MixerWidget::slotCurrentChanged(const int index)
 
 MixerApplet::MixerApplet(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
-    m_mixerwidget(nullptr)
+    m_mixerwidget(nullptr),
+    m_showvisualizer(s_showvisualizer),
+    m_visualizercolor(s_visualizercolor),
+    m_visualizerbox(nullptr),
+    m_visualizerbutton(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_mixer");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
@@ -839,7 +877,34 @@ MixerApplet::~MixerApplet()
 
 void MixerApplet::init()
 {
-    QTimer::singleShot(500, m_mixerwidget, SLOT(slotSetup()));
+    KConfigGroup configgroup = config();
+    m_showvisualizer = configgroup.readEntry("showVisualizer", s_showvisualizer);
+    m_visualizercolor = configgroup.readEntry("visualizerColor", s_visualizercolor);
+
+    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizercolor);
+}
+
+void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
+{
+    QWidget* widget = new QWidget();
+    QVBoxLayout* widgetlayout = new QVBoxLayout(widget);
+    m_visualizerbox = new QCheckBox(widget);
+    m_visualizerbox->setChecked(m_showvisualizer);
+    m_visualizerbox->setText(i18n("Show visualizer"));
+    widgetlayout->addWidget(m_visualizerbox);
+    m_visualizerbutton = new KColorButton(widget);
+    m_visualizerbutton->setDefaultColor(s_visualizercolor);
+    m_visualizerbutton->setColor(m_visualizercolor);
+    widgetlayout->addWidget(m_visualizerbutton);
+    
+    widgetlayout->addStretch();
+    widget->setLayout(widgetlayout);
+    parent->addPage(widget, i18n("Visualizer"), "player-volume");
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_visualizerbox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
+    connect(m_visualizerbutton, SIGNAL(changed(QColor)), parent, SLOT(settingsModified()));
 }
 
 QGraphicsWidget* MixerApplet::graphicsWidget()
@@ -878,6 +943,19 @@ void MixerApplet::constraintsEvent(Plasma::Constraints constraints)
             }
         }
     }
+}
+
+void MixerApplet::slotConfigAccepted()
+{
+    Q_ASSERT(m_visualizerbox);
+    Q_ASSERT(m_visualizerbutton);
+    m_showvisualizer = m_visualizerbox->isChecked();
+    m_visualizercolor = m_visualizerbutton->color();
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("showVisualizer", m_showvisualizer);
+    configgroup.writeEntry("visualizerColor", m_visualizercolor);
+    emit configNeedsSaving();
+    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizercolor);
 }
 
 K_EXPORT_PLASMA_APPLET(mixer, MixerApplet)
