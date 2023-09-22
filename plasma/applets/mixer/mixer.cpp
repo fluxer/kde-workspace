@@ -239,6 +239,7 @@ private:
     snd_mixer_t* m_alsamixer;
     snd_pcm_t* m_alsapcm;
     QTimer* m_timer;
+    QGraphicsWidget* m_spacer;
     Plasma::Frame* m_plotterframe;
     Plasma::SignalPlotter* m_signalplotter;
     bool m_isdefault;
@@ -253,6 +254,7 @@ MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixernam
     m_alsamixer(nullptr),
     m_alsapcm(nullptr),
     m_timer(nullptr),
+    m_spacer(nullptr),
     m_plotterframe(nullptr),
     m_signalplotter(nullptr),
     m_isdefault(isdefault),
@@ -408,7 +410,10 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
         m_mainelement = alsaelementnames.first();
     }
     kDebug() << "Main element is" << m_mainelement;
-    m_layout->addStretch();
+    m_spacer = new QGraphicsWidget(this);
+    m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_spacer->setMinimumSize(1, 1);
+    m_layout->addItem(m_spacer);
 
     if (hasvalidelement) {
         m_timer->start();
@@ -426,6 +431,11 @@ void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QCo
     if (m_alsapcm) {
         snd_pcm_close(m_alsapcm);
         m_alsapcm = nullptr;
+    }
+    if (m_spacer) {
+        m_layout->removeItem(m_spacer);
+        m_spacer->deleteLater();
+        m_spacer = nullptr;
     }
     if (m_signalplotter) {
         m_layout->removeItem(m_signalplotter);
@@ -490,10 +500,12 @@ void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QCo
         m_plotterframe = new Plasma::Frame(this);
         m_plotterframe->setFrameShadow(Plasma::Frame::Sunken);
         m_plotterframe->setMinimumSize(s_minimumvisualizersize);
+        m_plotterframe->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
         QGraphicsLinearLayout* plotterframelayout = new QGraphicsLinearLayout(m_plotterframe);
         plotterframelayout->setContentsMargins(0, 0, 0, 0);
         m_plotterframe->setLayout(plotterframelayout);
         m_signalplotter = new Plasma::SignalPlotter(m_plotterframe);
+        m_signalplotter->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_signalplotter->setShowTopBar(false);
         m_signalplotter->setShowLabels(false);
         m_signalplotter->setShowVerticalLines(false);
@@ -506,6 +518,11 @@ void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QCo
         m_signalplotter->addPlot(color);
         plotterframelayout->addItem(m_signalplotter);
         m_layout->addItem(m_plotterframe);
+    } else {
+        m_spacer = new QGraphicsWidget(this);
+        m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        m_spacer->setMinimumSize(1, 1);
+        m_layout->addItem(m_spacer);
     }
 
     // if there are no valid elements then snd_pcm_open() will probably fail anyway
