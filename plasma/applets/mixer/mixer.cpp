@@ -664,6 +664,7 @@ void MixerTabWidget::slotTimeout()
     }
 }
 
+// NOTE: this is called only on external events
 int k_alsa_element_callback(snd_mixer_elem_t *alsaelement, unsigned int alsamask)
 {
     MixerTabWidget* mixertabwidget = static_cast<MixerTabWidget*>(snd_mixer_elem_get_callback_private(alsaelement));
