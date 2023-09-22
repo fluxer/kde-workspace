@@ -21,6 +21,7 @@
 
 #include <QGraphicsSceneWheelEvent>
 #include <QCheckBox>
+#include <KIntNumInput>
 #include <KConfigDialog>
 #include <KColorButton>
 #include <Plasma/PopupApplet>
@@ -49,8 +50,10 @@ private:
     friend MixerWidget;
     MixerWidget *m_mixerwidget;
     bool m_showvisualizer;
+    uint m_visualizerscale;
     QColor m_visualizercolor;
     QCheckBox* m_visualizerbox;
+    KIntNumInput* m_visualizerscalebox;
     KColorButton* m_visualizerbutton;
 };
 

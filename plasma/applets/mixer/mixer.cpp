@@ -48,6 +48,7 @@ static const int s_alsavisualizerinterval = 50;
 // deciding factor for the visualization samples frequency
 static const int s_alsapcmbuffersize = 256;
 static const bool s_showvisualizer = true;
+static const uint s_visualizerscale = 1;
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
 {
@@ -216,7 +217,7 @@ public:
     ~MixerTabWidget();
 
     bool setup(const QByteArray &cardname);
-    void showVisualizer(const bool show, const QColor &color);
+    void showVisualizer(const bool show, const uint scale, const QColor &color);
      // can't be const because Plasma::Svg requires non-const parent
     QIcon mainVolumeIcon();
     Plasma::ToolTipContent toolTipContent() const;
@@ -418,7 +419,7 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
     return hasvalidelement;
 }
 
-void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
+void MixerTabWidget::showVisualizer(const bool show, const uint scale, const QColor &color)
 {
     const bool starttimer = m_timer->isActive();
     m_timer->stop();
@@ -498,6 +499,7 @@ void MixerTabWidget::showVisualizer(const bool show, const QColor &color)
         m_signalplotter->setShowVerticalLines(false);
         m_signalplotter->setShowHorizontalLines(false);
         m_signalplotter->setThinFrame(false);
+        m_signalplotter->setHorizontalScale(scale);
         m_signalplotter->setUseAutoRange(false);
         // the documented range for SND_PCM_FORMAT_FLOAT
         m_signalplotter->setVerticalRange(-1.0, 1.0);
@@ -698,7 +700,7 @@ class MixerWidget : public Plasma::TabBar
 public:
     MixerWidget(MixerApplet *mixer);
 
-    void showVisualizer(const bool show, const QColor &color);
+    void showVisualizer(const bool show, const uint scale, const QColor &color);
     void decreaseVolume();
     void increaseVolume();
 
@@ -801,10 +803,10 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
     );
 }
 
-void MixerWidget::showVisualizer(const bool show, const QColor &color)
+void MixerWidget::showVisualizer(const bool show, const uint scale, const QColor &color)
 {
     foreach (MixerTabWidget *mixertabwidget, m_tabwidgets) {
-        mixertabwidget->showVisualizer(show, color);
+        mixertabwidget->showVisualizer(show, scale, color);
     }
 }
 
@@ -848,8 +850,10 @@ MixerApplet::MixerApplet(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
     m_mixerwidget(nullptr),
     m_showvisualizer(s_showvisualizer),
+    m_visualizerscale(s_visualizerscale),
     m_visualizercolor(kDefaultVisualizerColor()),
     m_visualizerbox(nullptr),
+    m_visualizerscalebox(nullptr),
     m_visualizerbutton(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_mixer");
@@ -868,9 +872,10 @@ void MixerApplet::init()
 {
     KConfigGroup configgroup = config();
     m_showvisualizer = configgroup.readEntry("showVisualizer", s_showvisualizer);
+    m_visualizerscale = configgroup.readEntry("visualizerScale", s_visualizerscale);
     m_visualizercolor = configgroup.readEntry("visualizerColor", kDefaultVisualizerColor());
 
-    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizercolor);
+    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizerscale, m_visualizercolor);
 }
 
 void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
@@ -881,6 +886,13 @@ void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
     m_visualizerbox->setChecked(m_showvisualizer);
     m_visualizerbox->setText(i18n("Show visualizer"));
     widgetlayout->addWidget(m_visualizerbox);
+
+    m_visualizerscalebox = new KIntNumInput(widget);
+    m_visualizerscalebox->setRange(1, 5);
+    m_visualizerscalebox->setValue(m_visualizerscale);
+    m_visualizerscalebox->setLabel(i18n("Visualizer smooth-factor"));
+    widgetlayout->addWidget(m_visualizerscalebox);
+
     m_visualizerbutton = new KColorButton(widget);
     m_visualizerbutton->setDefaultColor(kDefaultVisualizerColor());
     m_visualizerbutton->setColor(m_visualizercolor);
@@ -893,6 +905,7 @@ void MixerApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_visualizerbox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
+    connect(m_visualizerscalebox, SIGNAL(valueChanged(int)), parent, SLOT(settingsModified()));
     connect(m_visualizerbutton, SIGNAL(changed(QColor)), parent, SLOT(settingsModified()));
 }
 
@@ -913,14 +926,17 @@ void MixerApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
 void MixerApplet::slotConfigAccepted()
 {
     Q_ASSERT(m_visualizerbox);
+    Q_ASSERT(m_visualizerscalebox);
     Q_ASSERT(m_visualizerbutton);
     m_showvisualizer = m_visualizerbox->isChecked();
+    m_visualizerscale = m_visualizerscalebox->value();
     m_visualizercolor = m_visualizerbutton->color();
     KConfigGroup configgroup = config();
     configgroup.writeEntry("showVisualizer", m_showvisualizer);
+    configgroup.writeEntry("visualizerScale", m_visualizerscale);
     configgroup.writeEntry("visualizerColor", m_visualizercolor);
     emit configNeedsSaving();
-    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizercolor);
+    m_mixerwidget->showVisualizer(m_showvisualizer, m_visualizerscale, m_visualizercolor);
 }
 
 K_EXPORT_PLASMA_APPLET(mixer, MixerApplet)
