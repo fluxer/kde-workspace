@@ -47,8 +47,9 @@ static const int s_svgiconsize = 256;
 static const QString s_defaultpopupicon = QString::fromLatin1("audio-card");
 static const int s_defaultsoundcard = -1;
 static const int s_alsapollinterval = 250;
-// for butter-smooth visualization the interval is very frequent when visualization is enabled
+// for butter-smooth visualization the poll interval is very frequent when visualization is enabled
 static const int s_alsavisualizerinterval = 50;
+// deciding factor for the visualization samples frequency
 static const int s_alsapcmbuffersize = 256;
 static const bool s_showvisualizer = true;
 
@@ -638,7 +639,6 @@ void MixerTabWidget::slotTimeout()
         switch (snd_pcm_state(m_alsapcm)) {
             case SND_PCM_STATE_PREPARED:
             case SND_PCM_STATE_RUNNING: {
-                QList<double> alsasamples;
                 float alsapcmbuffer[s_alsapcmbuffersize];
                 while (true) {
                     ::memset(alsapcmbuffer, 0, sizeof(alsapcmbuffer));
@@ -650,21 +650,12 @@ void MixerTabWidget::slotTimeout()
                     }
                     QList<double> alsapcmsamples;
                     alsapcmsamples.reserve(alsaresult);
-                    bool hasnonzero = false;
                     for (int i = 0; i < alsaresult; i++) {
-                        const double alsapcmsample = double(alsapcmbuffer[i]);
-                        if (alsapcmsample != 0.0) {
-                            hasnonzero = true;
-                        }
-                        alsapcmsamples.append(alsapcmsample);
+                        alsapcmsamples.append(double(alsapcmbuffer[i]));
                     }
-                    // if all samples are zero that means no real data but the lower limit is -1..
-                    if (hasnonzero) {
-                        alsasamples.append(alsapcmsamples);
-                    }
+                    // qDebug() << Q_FUNC_INFO << alsasamples;
+                    m_signalplotter->addSample(alsapcmsamples);
                 }
-                // qDebug() << Q_FUNC_INFO << alsasamples;
-                m_signalplotter->addSample(alsasamples);
                 break;
             }
             case SND_PCM_STATE_XRUN: {
