@@ -20,11 +20,12 @@
 
 #include <QTimer>
 #include <QJsonDocument>
+#include <QGridLayout>
+#include <QLabel>
 #include <QGraphicsGridLayout>
 #include <Plasma/Frame>
 #include <Plasma/IconWidget>
 #include <Plasma/ToolTipManager>
-#include <KUnitConversion>
 #include <KSystemTimeZones>
 #include <KIO/StoredTransferJob>
 #include <KIO/Job>
@@ -75,12 +76,18 @@ static Plasma::IconWidget* kMakeIconWidget(QGraphicsWidget *parent, const Qt::Or
     return result;
 }
 
-static QString kTemperatureDisplayString(const QString &temperature, const KTemperature::KTempUnit tempunit)
+static QString kTemperatureDisplayString(const QString &temperature,
+                                         const KTemperature::KTempUnit fromunit,
+                                         const KTemperature::KTempUnit tounit)
 {
     if (temperature.isEmpty()) {
         return i18n("N/A");
     }
-    return KTemperature(temperature.toDouble(), tempunit).toString();
+    KTemperature ktemperature(temperature.toDouble(), fromunit);
+    if (fromunit == tounit) {
+        return ktemperature.toString();
+    }
+    return KTemperature(ktemperature.convertTo(tounit), tounit).toString();
 }
 
 static QIcon kDisplayIcon(const QString &icon, const bool isnighttime)
@@ -138,12 +145,13 @@ QDebug operator<<(QDebug s, const KWeatherData &kweatherdata)
     return s.space();
 }
 
-static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData &weatherdata, const bool isnighttime)
+static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData &weatherdata,
+                              const bool isnighttime, const KTemperature::KTempUnit tempunit)
 {
     iconwidget->setText(
         kTemperatureDisplayString(
             isnighttime ? weatherdata.nighttemperature : weatherdata.daytemperature,
-            weatherdata.tempunit
+            weatherdata.tempunit, tempunit
         )
     );
     iconwidget->setIcon(
@@ -176,7 +184,7 @@ class WeatherWidget : public QGraphicsWidget
 public:
     WeatherWidget(WeatherApplet *weather);
 
-    void setup(const QString &source, const float latitude, const float longitude);
+    void setup(const QString &source, const float latitude, const float longitude, const KTemperature::KTempUnit tempunit);
 
 private Q_SLOTS:
     void slotGeoResult(KJob *kjob);
@@ -189,6 +197,7 @@ private:
 
     WeatherApplet* m_weather;
     QGraphicsLinearLayout* m_layout;
+    KTemperature::KTempUnit m_tempunit;
     KIO::StoredTransferJob* m_geojob;
     KIO::StoredTransferJob* m_weatherjob;
     QVector<KWeatherData> m_weatherdata;
@@ -211,6 +220,7 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     : QGraphicsWidget(weather),
     m_weather(weather),
     m_layout(nullptr),
+    m_tempunit(s_defaulttempunit),
     m_geojob(nullptr),
     m_weatherjob(nullptr),
     m_timer(nullptr),
@@ -267,9 +277,10 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     );
 }
 
-void WeatherWidget::setup(const QString &source, const float latitude, const float longitude)
+void WeatherWidget::setup(const QString &source, const float latitude, const float longitude, const KTemperature::KTempUnit tempunit)
 {
     m_timer->stop();
+    m_tempunit = tempunit;
     m_weatherdata.clear();
     m_weatherdata.reserve(5);
     m_weatherdata.fill(KWeatherData(s_defaulttempunit), 5);
@@ -481,22 +492,29 @@ void WeatherWidget::slotUpdateWidgets()
     const QDateTime utcnow = QDateTime::currentDateTimeUtc();
     const bool isnighttime = kNightTime(utcnow);
     // qDebug() << Q_FUNC_INFO << utcnow << isnighttime;
-    kUpdateIconWidget(m_day0iconwidget, m_weatherdata[0], false);
-    kUpdateIconWidget(m_night0iconwidget, m_weatherdata[0], true);
-    kUpdateIconWidget(m_day1iconwidget, m_weatherdata[1], false);
-    kUpdateIconWidget(m_night1iconwidget, m_weatherdata[1], true);
-    kUpdateIconWidget(m_day2iconwidget, m_weatherdata[2], false);
-    kUpdateIconWidget(m_night2iconwidget, m_weatherdata[2], true);
-    kUpdateIconWidget(m_day3iconwidget, m_weatherdata[3], false);
-    kUpdateIconWidget(m_night3iconwidget, m_weatherdata[3], true);
-    kUpdateIconWidget(m_day4iconwidget, m_weatherdata[4], false);
-    kUpdateIconWidget(m_night4iconwidget, m_weatherdata[4], true);
+    kUpdateIconWidget(m_day0iconwidget, m_weatherdata[0], false, m_tempunit);
+    kUpdateIconWidget(m_night0iconwidget, m_weatherdata[0], true, m_tempunit);
+    kUpdateIconWidget(m_day1iconwidget, m_weatherdata[1], false, m_tempunit);
+    kUpdateIconWidget(m_night1iconwidget, m_weatherdata[1], true, m_tempunit);
+    kUpdateIconWidget(m_day2iconwidget, m_weatherdata[2], false, m_tempunit);
+    kUpdateIconWidget(m_night2iconwidget, m_weatherdata[2], true, m_tempunit);
+    kUpdateIconWidget(m_day3iconwidget, m_weatherdata[3], false, m_tempunit);
+    kUpdateIconWidget(m_night3iconwidget, m_weatherdata[3], true, m_tempunit);
+    kUpdateIconWidget(m_day4iconwidget, m_weatherdata[4], false, m_tempunit);
+    kUpdateIconWidget(m_night4iconwidget, m_weatherdata[4], true, m_tempunit);
     m_weather->setPopupIcon(kDisplayIcon(isnighttime ? m_weatherdata[0].nighticon : m_weatherdata[0].dayicon, isnighttime));
 }
 
 WeatherApplet::WeatherApplet(QObject *parent, const QVariantList &args)
     : Plasma::PopupApplet(parent, args),
-    m_weatherwidget(nullptr)
+    m_weatherwidget(nullptr),
+    m_tempunit(s_defaulttempunit),
+    m_tempunitbox(nullptr),
+    m_latitude(KTimeZone::UNKNOWN),
+    m_latitudeinput(nullptr),
+    m_longitude(KTimeZone::UNKNOWN),
+    m_longitudeinput(nullptr),
+    m_spacer(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_weather");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
@@ -512,13 +530,76 @@ WeatherApplet::~WeatherApplet()
 
 void WeatherApplet::init()
 {
-    // TODO: configuration
-    m_weatherwidget->setup(QString(), KTimeZone::UNKNOWN, KTimeZone::UNKNOWN);
+    KConfigGroup configgroup = config();
+    m_tempunit = static_cast<KTemperature::KTempUnit>(configgroup.readEntry("weatherTempUnit", static_cast<int>(s_defaulttempunit)));
+    m_latitude = configgroup.readEntry("weatherLatitude", KTimeZone::UNKNOWN);
+    m_longitude = configgroup.readEntry("weatherLongitude", KTimeZone::UNKNOWN);
+    QString source = configgroup.readEntry("weatherSource", QString());
+    if (source.isEmpty() && m_latitude != KTimeZone::UNKNOWN && m_longitude != KTimeZone::UNKNOWN) {
+        source = i18n("Custom");
+    }
+    m_weatherwidget->setup(QString(), m_latitude, m_longitude, m_tempunit);
+}
+
+void WeatherApplet::createConfigurationInterface(KConfigDialog *parent)
+{
+    QWidget* widget = new QWidget();
+    QGridLayout* widgetlayout = new QGridLayout(widget);
+    QLabel* tempunitlabel = new QLabel(widget);
+    tempunitlabel->setText(i18n("Temperature unit:"));
+    widgetlayout->addWidget(tempunitlabel, 0, 0);
+    m_tempunitbox = new QComboBox(widget);
+    for (int i = 0; i < KTemperature::UnitCount; i++) {
+        KTemperature::KTempUnit unit = static_cast<KTemperature::KTempUnit>(i);
+        m_tempunitbox->addItem(KTemperature::unitDescription(unit), unit);
+    }
+    m_tempunitbox->setCurrentIndex(static_cast<int>(m_tempunit));
+    widgetlayout->addWidget(m_tempunitbox, 0, 1);
+    m_latitudeinput = new KDoubleNumInput(widget);
+    m_latitudeinput->setLabel(i18n("Latitude:"));
+    m_latitudeinput->setValue(m_latitude);
+    widgetlayout->addWidget(m_latitudeinput, 1, 0, 1, 2);
+    m_longitudeinput = new KDoubleNumInput(widget);
+    m_longitudeinput->setLabel(i18n("Longitude:"));
+    m_longitudeinput->setValue(m_longitude);
+    widgetlayout->addWidget(m_longitudeinput, 2, 0, 1, 2);
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addItem(m_spacer, 3, 0, 1, 2);
+    widget->setLayout(widgetlayout);
+    parent->addPage(widget, i18n("Weather"), "weather-clear");
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_tempunitbox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_latitudeinput, SIGNAL(valueChanged(double)), parent, SLOT(settingsModified()));
+    connect(m_longitudeinput, SIGNAL(valueChanged(double)), parent, SLOT(settingsModified()));
 }
 
 QGraphicsWidget* WeatherApplet::graphicsWidget()
 {
     return m_weatherwidget;
+}
+
+void WeatherApplet::slotConfigAccepted()
+{
+    Q_ASSERT(m_tempunitbox);
+    Q_ASSERT(m_latitudeinput);
+    Q_ASSERT(m_longitudeinput);
+    const int tempindex = m_tempunitbox->currentIndex();
+    m_tempunit = static_cast<KTemperature::KTempUnit>(tempindex);
+    m_latitude = m_latitudeinput->value();
+    m_longitude = m_longitudeinput->value();
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("weatherTempUnit", tempindex);
+    configgroup.writeEntry("weatherLatitude", m_latitude);
+    configgroup.writeEntry("weatherLongitude", m_longitude);
+    // TODO: weather source when not custom
+    QString source;
+    if (m_latitude != KTimeZone::UNKNOWN && m_longitude != KTimeZone::UNKNOWN) {
+        source = i18n("Custom");
+    }
+    m_weatherwidget->setup(source, m_latitude, m_longitude, m_tempunit);
+    emit configNeedsSaving();
 }
 
 K_EXPORT_PLASMA_APPLET(weather, WeatherApplet)

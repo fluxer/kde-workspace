@@ -19,6 +19,11 @@
 #ifndef WEATHER_H
 #define WEATHER_H
 
+#include <QComboBox>
+#include <QSpacerItem>
+#include <KDoubleNumInput>
+#include <KConfigDialog>
+#include <KUnitConversion>
 #include <Plasma/PopupApplet>
 
 class WeatherWidget;
@@ -32,12 +37,23 @@ public:
 
     // Plasma::Applet reimplementations
     void init() final;
+    void createConfigurationInterface(KConfigDialog *parent) final;
     // Plasma::PopupApplet reimplementation
     QGraphicsWidget* graphicsWidget() final;
+
+private Q_SLOTS:
+    void slotConfigAccepted();
 
 private:
     friend WeatherWidget;
     WeatherWidget *m_weatherwidget;
+    KTemperature::KTempUnit m_tempunit;
+    QComboBox* m_tempunitbox;
+    float m_latitude;
+    KDoubleNumInput* m_latitudeinput;
+    float m_longitude;
+    KDoubleNumInput* m_longitudeinput;
+    QSpacerItem* m_spacer;
 };
 
 #endif // WEATHER_H
