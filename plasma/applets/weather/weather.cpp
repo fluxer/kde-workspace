@@ -193,7 +193,7 @@ private Q_SLOTS:
 
 private:
     void startGeoJob();
-    void startWeatherjob(const QString &source, const float latitude, const float longitude);
+    void startWeatherJob(const QString &source, const float latitude, const float longitude);
 
     WeatherApplet* m_weather;
     QGraphicsLinearLayout* m_layout;
@@ -302,7 +302,7 @@ void WeatherWidget::setup(const QString &source, const float latitude, const flo
         return;
     }
 
-    startWeatherjob(source, latitude, longitude);
+    startWeatherJob(source, latitude, longitude);
 }
 
 void WeatherWidget::startGeoJob()
@@ -321,7 +321,7 @@ void WeatherWidget::startGeoJob()
     );
 }
 
-void WeatherWidget::startWeatherjob(const QString &source, const float latitude, const float longitude)
+void WeatherWidget::startWeatherJob(const QString &source, const float latitude, const float longitude)
 {
     Q_ASSERT(m_weatherjob == nullptr);
     m_forecastframe->setText(source.isEmpty() ? i18n("Unknown") : source);
@@ -349,7 +349,7 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     if (kjob->error() != KJob::NoError) {
         kWarning() << "geo job error" << kjob->errorString();
         kjob->deleteLater();
-        startWeatherjob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
+        startWeatherJob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
         return;
     }
     kDebug() << "geo job completed" << m_geojob->url();
@@ -359,7 +359,7 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     // qDebug() << Q_FUNC_INFO << geodata;
     if (geojson.isNull()) {
         kWarning() << "null geo json document" << geojson.errorString();
-        startWeatherjob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
+        startWeatherJob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
         return;
     }
     const QVariantMap geomap = geojson.toVariant().toMap();
@@ -372,7 +372,7 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     const float geolatitude = geomap.value("geoplugin_latitude").toFloat();
     const float geolongitude = geomap.value("geoplugin_longitude").toFloat();
     const QString weathersource = QString::fromLatin1("%1 (%2)").arg(georegion, geocountry);
-    startWeatherjob(weathersource, geolatitude, geolongitude);
+    startWeatherJob(weathersource, geolatitude, geolongitude);
 }
 
 void WeatherWidget::slotWeatherResult(KJob *kjob)
