@@ -18,7 +18,6 @@
  */
 
 #include "plasmacomponentsplugin.h"
-#include "enums.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
@@ -34,8 +33,6 @@ Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 void PlasmaComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QLatin1String("org.kde.plasma.components"));
-
-    qmlRegisterUncreatableType<PageStatus>(uri, 0, 1, "PageStatus", "");
 }
 
 

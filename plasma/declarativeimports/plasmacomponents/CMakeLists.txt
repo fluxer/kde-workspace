@@ -2,8 +2,6 @@ project(plasmacomponents)
 
 set(plasmacomponents_SRCS
     plasmacomponentsplugin.cpp
-    enums.cpp
-    ../core/declarativeitemcontainer.cpp
 )
 
 include_directories(
