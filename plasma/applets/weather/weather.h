@@ -42,6 +42,7 @@ public:
     QGraphicsWidget* graphicsWidget() final;
 
 private Q_SLOTS:
+    void slotCheckLocation();
     void slotConfigAccepted();
 
 private:
@@ -49,6 +50,7 @@ private:
     WeatherWidget *m_weatherwidget;
     KTemperature::KTempUnit m_tempunit;
     QComboBox* m_tempunitbox;
+    QComboBox* m_locationbox;
     float m_latitude;
     KDoubleNumInput* m_latitudeinput;
     float m_longitude;
