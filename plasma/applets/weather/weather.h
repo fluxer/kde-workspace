@@ -50,6 +50,7 @@ private:
     WeatherWidget *m_weatherwidget;
     KTemperature::KTempUnit m_tempunit;
     QComboBox* m_tempunitbox;
+    QString m_location;
     QComboBox* m_locationbox;
     float m_latitude;
     KDoubleNumInput* m_latitudeinput;

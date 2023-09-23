@@ -123,7 +123,7 @@ static QString kDisplayCondition(const QString &icon, const bool isnighttime)
     return icon;
 }
 
-static QString kTranslatedZoneName(const QString &ktimezonename)
+static QString kDisplayZoneName(const QString &ktimezonename)
 {
     const QByteArray ktimezonenamebytes = ktimezonename.toUtf8();
     QString result = i18n(ktimezonenamebytes.constData());
@@ -319,10 +319,7 @@ void WeatherWidget::startGeoJob()
     Q_ASSERT(m_geojob == nullptr);
     const KUrl geojoburl = s_geourl;
     kDebug() << "Starting geo job for" << geojoburl;
-    m_geojob = KIO::storedGet(
-        KUrl(geojoburl),
-        KIO::NoReload, KIO::HideProgressInfo
-    );
+    m_geojob = KIO::storedGet(geojoburl, KIO::NoReload, KIO::HideProgressInfo);
     m_geojob->setAutoDelete(false);
     connect(
         m_geojob, SIGNAL(result(KJob*)),
@@ -339,10 +336,7 @@ void WeatherWidget::startWeatherJob(const QString &source, const float latitude,
         QString::number(longitude)
     );
     kDebug() << "Starting weather job for" << weatherjoburl;
-    m_weatherjob = KIO::storedGet(
-        KUrl(weatherjoburl),
-        KIO::NoReload, KIO::HideProgressInfo
-    );
+    m_weatherjob = KIO::storedGet(weatherjoburl, KIO::NoReload, KIO::HideProgressInfo);
     m_weatherjob->setAutoDelete(false);
     connect(
         m_weatherjob, SIGNAL(result(KJob*)),
@@ -542,11 +536,12 @@ void WeatherApplet::init()
 {
     KConfigGroup configgroup = config();
     m_tempunit = static_cast<KTemperature::KTempUnit>(configgroup.readEntry("weatherTempUnit", static_cast<int>(s_defaulttempunit)));
+    m_location = configgroup.readEntry("weatherLocation", QString());
     m_latitude = configgroup.readEntry("weatherLatitude", KTimeZone::UNKNOWN);
     m_longitude = configgroup.readEntry("weatherLongitude", KTimeZone::UNKNOWN);
-    QString source = configgroup.readEntry("weatherSource", QString());
-    if (!source.isEmpty()) {
-        source = kTranslatedZoneName(source);
+    QString source;
+    if (!m_location.isEmpty()) {
+        source = kDisplayZoneName(m_location);
     } else if (m_latitude != KTimeZone::UNKNOWN && m_longitude != KTimeZone::UNKNOWN) {
         source = i18n("Custom");
     }
@@ -577,7 +572,7 @@ void WeatherApplet::createConfigurationInterface(KConfigDialog *parent)
         if (ktimezonename == QLatin1String("UTC")) {
             continue;
         }
-        sortedzones.insert(kTranslatedZoneName(ktimezonename), ktimezonename);
+        sortedzones.insert(kDisplayZoneName(ktimezonename), ktimezonename);
     }
     m_locationbox->addItem(i18n("Automatic"));
     m_locationbox->addItem(i18n("Custom"));
@@ -602,7 +597,18 @@ void WeatherApplet::createConfigurationInterface(KConfigDialog *parent)
     widget->setLayout(widgetlayout);
     parent->addPage(widget, i18n("Weather"), "weather-clear");
 
-    // TODO: set the location index
+    if (!m_location.isEmpty()) {
+        const int locationindex = m_locationbox->findData(m_location);
+        // first is automatic, then custom and then timezones
+        if (locationindex < 2) {
+            kWarning() << "could not find location index" << m_location;
+        } else {
+            m_locationbox->setCurrentIndex(locationindex);
+        }
+    } else if (m_latitude != KTimeZone::UNKNOWN && m_longitude != KTimeZone::UNKNOWN) {
+        // custom location
+        m_locationbox->setCurrentIndex(1);
+    }
     slotCheckLocation();
 
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
@@ -649,8 +655,8 @@ void WeatherApplet::slotConfigAccepted()
     m_tempunit = static_cast<KTemperature::KTempUnit>(tempindex);
     const int locationindex = m_locationbox->currentIndex();
     QString source;
-    // the source name is saved only when it is the timezone
-    QString configsource;
+    // the location is saved only when it is timezone
+    m_location.clear();
     if (locationindex == 0) {
         source = i18n("Unknown");
         m_latitude = KTimeZone::UNKNOWN;
@@ -668,7 +674,7 @@ void WeatherApplet::slotConfigAccepted()
             }
             foundtimezone = true;
             source = m_locationbox->itemText(locationindex);
-            configsource = ktimezone.name();
+            m_location = ktimezone.name();
             m_latitude = ktimezone.latitude();
             m_longitude = ktimezone.longitude();
         }
@@ -678,9 +684,9 @@ void WeatherApplet::slotConfigAccepted()
     }
     KConfigGroup configgroup = config();
     configgroup.writeEntry("weatherTempUnit", tempindex);
+    configgroup.writeEntry("weatherLocation", m_location);
     configgroup.writeEntry("weatherLatitude", m_latitude);
     configgroup.writeEntry("weatherLongitude", m_longitude);
-    configgroup.writeEntry("weatherSource", configsource);
     m_weatherwidget->setup(source, m_latitude, m_longitude, m_tempunit);
     emit configNeedsSaving();
 }
