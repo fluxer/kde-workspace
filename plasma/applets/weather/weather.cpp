@@ -34,7 +34,7 @@
 #include <KDebug>
 #include <ksettings.h>
 
-static const QSizeF s_minimumsize = QSizeF(330, 200);
+static const QSizeF s_minimumsize = QSizeF(420, 200);
 // for reference:
 // http://www.geoplugin.com/quickstart
 // alternatively:
@@ -52,6 +52,9 @@ static const QString s_weatherapiurl = QString::fromLatin1("https://api.met.no/w
 static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
 static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
 static const QChar s_weatherdataseparator = QChar::fromLatin1('#');
+// that would be me
+static const QString s_developerurl = QString::fromLatin1("mailto:xakepa10@gmail.com");
+static const QString s_developername = QString::fromLatin1("Ivailo Monev");
 
 // NOTE: order is longest to shortest for a reason
 static const struct conditionDescriptionData {
@@ -332,7 +335,7 @@ private:
     Plasma::IconWidget* m_night3iconwidget;
     Plasma::IconWidget* m_day4iconwidget;
     Plasma::IconWidget* m_night4iconwidget;
-    Plasma::Label* m_powerbylabel;
+    Plasma::Label* m_infolabel;
 };
 
 WeatherWidget::WeatherWidget(WeatherApplet* weather)
@@ -355,7 +358,7 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     m_night3iconwidget(nullptr),
     m_day4iconwidget(nullptr),
     m_night4iconwidget(nullptr),
-    m_powerbylabel(nullptr)
+    m_infolabel(nullptr)
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setMinimumSize(s_minimumsize);
@@ -391,17 +394,18 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     m_forecastlayout->addItem(m_night4iconwidget, 1, 4);
     m_layout->addItem(m_forecastframe);
 
-    m_powerbylabel = new Plasma::Label(this);
-    m_powerbylabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    m_powerbylabel->setAlignment(Qt::AlignCenter);
-    m_powerbylabel->nativeWidget()->setOpenExternalLinks(true);
-    m_powerbylabel->setText(
+    m_infolabel = new Plasma::Label(this);
+    m_infolabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    m_infolabel->setAlignment(Qt::AlignCenter);
+    m_infolabel->setWordWrap(false);
+    m_infolabel->nativeWidget()->setOpenExternalLinks(true);
+    m_infolabel->setText(
         i18n(
-            "Powered by <a href=\"%1\">%2</a> and <a href=\"%3\">%4</a>",
-            s_geourl, s_geoname, s_weatherurl, s_weathername
+            "Powered by <a href=\"%1\">%2</a> and <a href=\"%3\">%4</a>, developed by <a href=\"%5\">%6</a>",
+            s_geourl, s_geoname, s_weatherurl, s_weathername, s_developerurl, s_developername
         )
     );
-    m_layout->addItem(m_powerbylabel);
+    m_layout->addItem(m_infolabel);
 
     m_timer = new QTimer(this);
     m_timer->setInterval(60000); // 1min

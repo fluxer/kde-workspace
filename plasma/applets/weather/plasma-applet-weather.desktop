@@ -121,6 +121,6 @@ X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=
 X-KDE-ServiceTypes=Plasma/PopupApplet,Plasma/Applet
 X-KDE-Library=plasma_applet_weather
-X-Plasma-DefaultSize=330,200
+X-Plasma-DefaultSize=420,200
 X-Plasma-RequiredExtensions=Unused
 X-Plasma-NotificationArea=true
