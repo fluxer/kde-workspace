@@ -658,8 +658,8 @@ void WeatherApplet::createConfigurationInterface(KConfigDialog *parent)
     widgetlayout->addWidget(tempunitlabel, 0, 0);
     m_tempunitbox = new QComboBox(widget);
     for (int i = 0; i < KTemperature::UnitCount; i++) {
-        KTemperature::KTempUnit unit = static_cast<KTemperature::KTempUnit>(i);
-        m_tempunitbox->addItem(KTemperature::unitDescription(unit), unit);
+        const KTemperature::KTempUnit tempunit = static_cast<KTemperature::KTempUnit>(i);
+        m_tempunitbox->addItem(KTemperature::unitDescription(tempunit), tempunit);
     }
     m_tempunitbox->setCurrentIndex(static_cast<int>(m_tempunit));
     widgetlayout->addWidget(m_tempunitbox, 0, 1);
