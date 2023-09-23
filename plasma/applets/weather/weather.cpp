@@ -713,17 +713,17 @@ void WeatherApplet::slotCheckLocation()
 {
     const int locationindex = m_locationbox->currentIndex();
     if (locationindex == 1) {
-        m_latitudeinput->setEnabled(true);
+        m_latitudeinput->setVisible(true);
         m_latitudeinput->setRange(-90.0, 90.0);
         m_latitudeinput->setValue(0.0);
-        m_longitudeinput->setEnabled(true);
+        m_longitudeinput->setVisible(true);
         m_longitudeinput->setRange(-180.0, 180.0);
         m_longitudeinput->setValue(0.0);
     } else {
-        m_latitudeinput->setEnabled(false);
+        m_latitudeinput->setVisible(false);
         m_latitudeinput->setRange(KTimeZone::UNKNOWN, KTimeZone::UNKNOWN);
         m_latitudeinput->setValue(KTimeZone::UNKNOWN);
-        m_longitudeinput->setEnabled(false);
+        m_longitudeinput->setVisible(false);
         m_longitudeinput->setRange(KTimeZone::UNKNOWN, KTimeZone::UNKNOWN);
         m_longitudeinput->setValue(KTimeZone::UNKNOWN);
     }
