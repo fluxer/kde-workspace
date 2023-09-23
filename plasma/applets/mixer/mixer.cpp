@@ -821,7 +821,10 @@ MixerWidget::MixerWidget(MixerApplet* mixer)
         Plasma::ToolTipManager::self()->setContent(m_mixer, firstmixertabwidget->toolTipContent());
     } else {
         Plasma::Label* label = new Plasma::Label(this);
-        label->setText(i18n("<center>No sound cards found</center>"));
+        label->setMinimumSize(s_minimumsize);
+        label->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        label->setAlignment(Qt::AlignCenter);
+        label->setText(i18n("No sound cards found"));
         addTab(QString::fromLatin1("nocards"), label);
         m_mixer->setStatus(Plasma::ItemStatus::PassiveStatus);
     }
