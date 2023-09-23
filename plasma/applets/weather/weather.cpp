@@ -452,7 +452,7 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     const QString geocountry = geomap.value("geoplugin_countryName").toString();
     const float geolatitude = geomap.value("geoplugin_latitude").toFloat();
     const float geolongitude = geomap.value("geoplugin_longitude").toFloat();
-    const QString weathersource = QString::fromLatin1("%1 (%2)").arg(georegion, geocountry);
+    const QString weathersource = QString::fromLatin1("%1 - %2").arg(georegion, geocountry);
     startWeatherJob(weathersource, geolatitude, geolongitude);
 }
 
