@@ -173,6 +173,9 @@ static QIcon kDisplayIcon(const QString &icon, const bool isnighttime)
 
 static QString kDisplayCondition(const QString &icon)
 {
+    if (icon.isEmpty()) {
+        return i18n("N/A");
+    }
     const QByteArray iconbytes = icon.toLatin1();
     for (int i = 0; i < conditionDescriptionTblSize; i++) {
         if (iconbytes.contains(conditionDescriptionTbl[i].condition)) {
