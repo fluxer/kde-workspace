@@ -33,7 +33,7 @@
 #include <KIcon>
 #include <KDebug>
 
-static const QSizeF s_minimumsize = QSizeF(290, 140);
+static const QSizeF s_minimumsize = QSizeF(330, 200);
 // for reference:
 // http://www.geoplugin.com/quickstart
 // alternatively:
@@ -311,6 +311,7 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     setMinimumSize(s_minimumsize);
 
     m_layout = new QGraphicsLinearLayout(Qt::Vertical, this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);
 
     m_forecastframe = new Plasma::Frame(this);
