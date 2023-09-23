@@ -1,6 +1,7 @@
 project(plasmacomponents)
 
 set(plasmacomponents_SRCS
+    declarativetabbar.cpp
     plasmacomponentsplugin.cpp
 )
 
@@ -13,6 +14,7 @@ include_directories(
 add_library(plasmacomponentsplugin SHARED ${plasmacomponents_SRCS})
 target_link_libraries(plasmacomponentsplugin
     ${QT_QTCORE_LIBRARY}
+    ${QT_QTSCRIPT_LIBRARY}
     ${QT_QTDECLARATIVE_LIBRARY}
     ${QT_QTGUI_LIBRARY}
     KDE4::kdeui

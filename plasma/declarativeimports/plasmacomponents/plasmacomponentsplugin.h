@@ -1,5 +1,7 @@
 /*
- *   Copyright 2011 by Marco Martin <mart@kde.org>
+ *   Copyright 2009 by Alan Alpert <alan.alpert@nokia.com>
+ *   Copyright 2010 by Ménard Alexis <menard@kde.org>
+ *   Copyright 2010 by Marco Martin <mart@kde.org>
 
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU Library General Public License as
@@ -25,6 +27,17 @@
 
 #include <QDeclarativeEngine>
 #include <QDeclarativeItem>
+#include <Plasma/SignalPlotter>
+
+class SignalPlotter : public Plasma::SignalPlotter
+{
+    Q_OBJECT
+
+public:
+    SignalPlotter(QGraphicsItem *parent = 0);
+    ~SignalPlotter();
+    Q_INVOKABLE void addSample(const QVariantList &samples);
+};
 
 class PlasmaComponentsPlugin : public QDeclarativeExtensionPlugin
 {

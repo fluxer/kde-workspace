@@ -22,7 +22,6 @@
  **********************************************************************************************************************/
 
 import QtQuick 1.1
-import org.kde.plasma.graphicswidgets 0.1 as PlasmaWidgets
 import org.kde.plasma.components 0.1 as PlasmaComponents
 import Private 0.1
 
@@ -84,7 +83,7 @@ MouseArea {
                 PlasmaComponents.Label {
                     id: name_item
                     anchors.verticalCenter: tray_icon.verticalCenter
-                    wrapMode: Text.NoWrap
+                    wordWrap: false
                     text: task.name
                 }
             }
