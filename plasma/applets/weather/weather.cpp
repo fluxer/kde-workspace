@@ -32,6 +32,7 @@
 #include <KIO/Job>
 #include <KIcon>
 #include <KDebug>
+#include <ksettings.h>
 
 static const QSizeF s_minimumsize = QSizeF(330, 200);
 // for reference:
@@ -50,6 +51,7 @@ static const QString s_weatherurl = QString::fromLatin1("https://www.met.no/");
 static const QString s_weatherapiurl = QString::fromLatin1("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%1&lon=%2");
 static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
 static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
+static const QChar s_weatherdataseparator = QChar::fromLatin1('#');
 
 // NOTE: order is longest to shortest for a reason
 static const struct conditionDescriptionData {
@@ -108,6 +110,15 @@ static bool kIsNightTime(const QDateTime &dt)
         return (hour >= 19 || hour <= 6);
     }
     return (hour >= 20 || hour <= 5);
+}
+
+static QString kMakeID(const KUrl &url, const QDate &day0)
+{
+    const QByteArray urlhex = url.url().toLatin1().toHex();
+    const QByteArray day0hex = day0.toString(Qt::ISODate).toLatin1().toHex();
+    QString result = QString::fromLatin1(urlhex.constData(), urlhex.size());
+    result.append(QString::fromLatin1(day0hex.constData(), day0hex.size()));
+    return result;
 }
 
 static void kResetIconWidget(Plasma::IconWidget *iconwidget)
@@ -201,21 +212,16 @@ public:
     KWeatherData();
     explicit KWeatherData(const KTemperature::KTempUnit tempunit);
 
+    bool isValid() const;
+    static KWeatherData fromString(const QString &data);
+    QString toString() const;
+
     KTemperature::KTempUnit tempunit;
     QString daytemperature;
     QString dayicon;
     QString nighttemperature;
     QString nighticon;
 };
-QDebug operator<<(QDebug s, const KWeatherData &kweatherdata)
-{
-    s.nospace() << "KWeatherData("
-        << kweatherdata.tempunit << ",\n"
-        << kweatherdata.daytemperature << ", " << kweatherdata.dayicon << ",\n"
-        << kweatherdata.nighttemperature << ", " << kweatherdata.nighticon << ",\n"
-        << ")";
-    return s.space();
-}
 
 static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData &weatherdata,
                               const bool isnighttime, const KTemperature::KTempUnit tempunit)
@@ -248,6 +254,47 @@ KWeatherData::KWeatherData(const KTemperature::KTempUnit _tempunit)
     : tempunit(_tempunit)
 {
 }
+
+bool KWeatherData::isValid() const
+{
+    // qDebug() << Q_FUNC_INFO << tempunit << daytemperature << dayicon << nighttemperature << nighticon;
+    return (
+        tempunit != KTemperature::Invalid
+        && !daytemperature.isEmpty()
+        && !dayicon.isEmpty()
+        && !nighttemperature.isEmpty()
+        && !nighticon.isEmpty()
+    );
+}
+
+KWeatherData KWeatherData::fromString(const QString &data)
+{
+    KWeatherData result;
+    const QStringList splitdata = data.split(s_weatherdataseparator);
+    if (splitdata.size() != 5) {
+        kWarning() << "invalid KWeatherData" << data;
+        return result;
+    }
+    result.tempunit = static_cast<KTemperature::KTempUnit>(splitdata.at(0).toInt());
+    result.daytemperature = splitdata.at(1);
+    result.dayicon = splitdata.at(2);
+    result.nighttemperature = splitdata.at(3);
+    result.nighticon = splitdata.at(4);
+    return result;
+}
+
+QString KWeatherData::toString() const
+{
+    QStringList result;
+    result.reserve(5);
+    result.append(QString::number(static_cast<int>(tempunit)));
+    result.append(daytemperature);
+    result.append(dayicon);
+    result.append(nighttemperature);
+    result.append(nighticon);
+    return result.join(s_weatherdataseparator);
+}
+
 
 class WeatherWidget : public QGraphicsWidget
 {
@@ -477,7 +524,8 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
         m_weather->setBusy(false);
         return;
     }
-    kDebug() << "weather job completed" << m_weatherjob->url();
+    const KUrl weatherjoburl = m_weatherjob->url();
+    kDebug() << "weather job completed" << weatherjoburl;
     const QByteArray weatherdata = m_weatherjob->data();
     m_weatherjob = nullptr;
     kjob->deleteLater();
@@ -575,6 +623,25 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
         }
         // qDebug() << Q_FUNC_INFO << weatherdatetime;
     }
+
+    // HACK: because during night data for the day may not be provided (i.e. the historical data for
+    // the day period) it is saved and restored here - it's a day-0 hack, what a thing!
+    const QString day0id = kMakeID(weatherjoburl, utc0);
+    if (m_weatherdata[0].isValid()) {
+        kDebug() << "saving day0 data for" << weatherjoburl << day0id;
+        KSettings ksettings("kweatherdata", KSettings::SimpleConfig);
+        ksettings.setString(day0id, m_weatherdata[0].toString());
+    } else {
+        kDebug() << "using cached day0 data for" << weatherjoburl << day0id;
+        KSettings ksettings("kweatherdata", KSettings::SimpleConfig);
+        const KWeatherData kweatherdata = KWeatherData::fromString(ksettings.string(day0id));
+        // check in case there is no saved data and the current data is semi-valid (night part
+        // only)
+        if (kweatherdata.isValid()) {
+            m_weatherdata[0] = kweatherdata;
+        }
+    }
+
     // qDebug() << Q_FUNC_INFO << m_weatherdata;
     m_weather->setBusy(false);
     slotUpdateWidgets();
