@@ -25,6 +25,7 @@
 #include <QGraphicsGridLayout>
 #include <Plasma/Frame>
 #include <Plasma/IconWidget>
+#include <Plasma/Label>
 #include <Plasma/ToolTipManager>
 #include <KSystemTimeZones>
 #include <KIO/StoredTransferJob>
@@ -38,11 +39,15 @@ static const QSizeF s_minimumsize = QSizeF(290, 140);
 // alternatively:
 // https://location.services.mozilla.com/v1/geolocate?key=b9255e08-838f-4d4e-b270-bec2cc89719b
 // https://location.services.mozilla.com/v1/country?key=b9255e08-838f-4d4e-b270-bec2cc89719b
-static const QString s_geourl = QString::fromLatin1("http://www.geoplugin.net/json.gp");
+static const QString s_geoname = QString::fromLatin1("geoplugin.net");
+static const QString s_geourl = QString::fromLatin1("http://www.geoplugin.net");
+static const QString s_geoapiurl = QString::fromLatin1("http://www.geoplugin.net/json.gp");
 // for reference:
 // https://api.met.no/weatherapi/locationforecast/2.0/documentation
 // https://api.met.no/doc/ForecastJSON
-static const QString s_weatherurl = QString::fromLatin1("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%1&lon=%2");
+static const QString s_weathername = QString::fromLatin1("met.no");
+static const QString s_weatherurl = QString::fromLatin1("https://www.met.no/");
+static const QString s_weatherapiurl = QString::fromLatin1("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%1&lon=%2");
 static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
 static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
 
@@ -277,6 +282,7 @@ private:
     Plasma::IconWidget* m_night3iconwidget;
     Plasma::IconWidget* m_day4iconwidget;
     Plasma::IconWidget* m_night4iconwidget;
+    Plasma::Label* m_powerbylabel;
 };
 
 WeatherWidget::WeatherWidget(WeatherApplet* weather)
@@ -298,7 +304,8 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     m_day3iconwidget(nullptr),
     m_night3iconwidget(nullptr),
     m_day4iconwidget(nullptr),
-    m_night4iconwidget(nullptr)
+    m_night4iconwidget(nullptr),
+    m_powerbylabel(nullptr)
 {
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     setMinimumSize(s_minimumsize);
@@ -308,6 +315,7 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
 
     m_forecastframe = new Plasma::Frame(this);
     m_forecastframe->setFrameShadow(Plasma::Frame::Sunken);
+    m_forecastframe->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_forecastlayout = new QGraphicsGridLayout(m_forecastframe);
     m_forecastframe->setLayout(m_forecastlayout);
     m_day0iconwidget = kMakeIconWidget(m_forecastframe);
@@ -331,6 +339,18 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     m_night4iconwidget = kMakeIconWidget(m_forecastframe);
     m_forecastlayout->addItem(m_night4iconwidget, 1, 4);
     m_layout->addItem(m_forecastframe);
+
+    m_powerbylabel = new Plasma::Label(this);
+    m_powerbylabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    m_powerbylabel->setAlignment(Qt::AlignCenter);
+    m_powerbylabel->nativeWidget()->setOpenExternalLinks(true);
+    m_powerbylabel->setText(
+        i18n(
+            "Powered by <a href=\"%1\">%2</a> and <a href=\"%3\">%4</a>",
+            s_geourl, s_geoname, s_weatherurl, s_weathername
+        )
+    );
+    m_layout->addItem(m_powerbylabel);
 
     m_timer = new QTimer(this);
     m_timer->setInterval(60000); // 1min
@@ -371,7 +391,7 @@ void WeatherWidget::setup(const QString &source, const float latitude, const flo
 void WeatherWidget::startGeoJob()
 {
     Q_ASSERT(m_geojob == nullptr);
-    const KUrl geojoburl = s_geourl;
+    const KUrl geojoburl = s_geoapiurl;
     kDebug() << "starting geo job for" << geojoburl;
     m_geojob = KIO::storedGet(geojoburl, KIO::NoReload, KIO::HideProgressInfo);
     m_geojob->setAutoDelete(false);
@@ -385,7 +405,7 @@ void WeatherWidget::startWeatherJob(const QString &source, const float latitude,
 {
     Q_ASSERT(m_weatherjob == nullptr);
     m_forecastframe->setText(source.isEmpty() ? i18n("Unknown") : source);
-    const KUrl weatherjoburl = s_weatherurl.arg(
+    const KUrl weatherjoburl = s_weatherapiurl.arg(
         QString::number(latitude),
         QString::number(longitude)
     );
