@@ -394,7 +394,12 @@ void WeatherWidget::setup(const QString &source, const float latitude, const flo
 
 void WeatherWidget::startGeoJob()
 {
-    Q_ASSERT(m_geojob == nullptr);
+    if (m_geojob) {
+        kDebug() << "killing geo job";
+        m_geojob->kill(KJob::Quietly);
+        m_geojob->deleteLater();
+        m_geojob = nullptr;
+    }
     const KUrl geojoburl = s_geoapiurl;
     kDebug() << "starting geo job for" << geojoburl;
     m_geojob = KIO::storedGet(geojoburl, KIO::NoReload, KIO::HideProgressInfo);
@@ -407,7 +412,12 @@ void WeatherWidget::startGeoJob()
 
 void WeatherWidget::startWeatherJob(const QString &source, const float latitude, const float longitude)
 {
-    Q_ASSERT(m_weatherjob == nullptr);
+    if (m_weatherjob) {
+        kDebug() << "killing weather job";
+        m_weatherjob->kill(KJob::Quietly);
+        m_weatherjob->deleteLater();
+        m_weatherjob = nullptr;
+    }
     m_forecastframe->setText(source.isEmpty() ? i18n("Unknown") : source);
     const KUrl weatherjoburl = s_weatherapiurl.arg(
         QString::number(latitude),
@@ -429,12 +439,14 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     const KTimeZone ktimezone = KSystemTimeZones::local();
     if (kjob->error() != KJob::NoError) {
         kWarning() << "geo job error" << kjob->errorString();
+        m_geojob = nullptr;
         kjob->deleteLater();
         startWeatherJob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
         return;
     }
     kDebug() << "geo job completed" << m_geojob->url();
     const QByteArray geodata = m_geojob->data();
+    m_geojob = nullptr;
     kjob->deleteLater();
     const QJsonDocument geojson = QJsonDocument::fromJson(geodata);
     // qDebug() << Q_FUNC_INFO << geodata;
@@ -460,12 +472,14 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
 {
     if (kjob->error() != KJob::NoError) {
         kWarning() << "weather job error" << kjob->errorString();
+        m_weatherjob = nullptr;
         kjob->deleteLater();
         m_weather->setBusy(false);
         return;
     }
     kDebug() << "weather job completed" << m_weatherjob->url();
     const QByteArray weatherdata = m_weatherjob->data();
+    m_weatherjob = nullptr;
     kjob->deleteLater();
     const QJsonDocument weatherjson = QJsonDocument::fromJson(weatherdata);
     // qDebug() << Q_FUNC_INFO << weatherdata;
