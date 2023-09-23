@@ -273,6 +273,7 @@ MixerTabWidget::MixerTabWidget(const bool isdefault, const QString &alsamixernam
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);
 
     m_timer = new QTimer(this);
