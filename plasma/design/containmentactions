@@ -79,8 +79,3 @@ as a dialog, to the user.
 A settings dialog is provided for the DesktopView (a second page in the same dialog as the wallpaper)
 
 This dialog allows selecting one trigger for each installed plugin.
-
-Future Work
------------
-* Current UI in shells/desktop/ needs work.
-

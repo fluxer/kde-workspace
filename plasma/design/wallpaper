@@ -43,7 +43,6 @@ Defined categories for wallpapers include:
  * Single Image
  * Slideshow
  * Animated
- * OpenGL
  * Interactive
 
 Component API
@@ -95,5 +94,4 @@ Wallpaper plugin for the Containment.
 
 Future Work
 -----------
-* Wallpapers should be ScriptEngine-able
 * Ability to define which wallpapers a Containment is compatible with?
