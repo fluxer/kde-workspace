@@ -852,10 +852,10 @@ void WeatherApplet::slotCheckLocation()
     if (locationindex == 1) {
         m_latitudeinput->setVisible(true);
         m_latitudeinput->setRange(-90.0, 90.0);
-        m_latitudeinput->setValue(0.0);
+        m_latitudeinput->setValue((!m_location.isEmpty() || m_latitude == KTimeZone::UNKNOWN) ? 0.0 : m_latitude);
         m_longitudeinput->setVisible(true);
         m_longitudeinput->setRange(-180.0, 180.0);
-        m_longitudeinput->setValue(0.0);
+        m_longitudeinput->setValue((!m_location.isEmpty() || m_longitude == KTimeZone::UNKNOWN) ? 0.0 : m_longitude);
     } else {
         m_latitudeinput->setVisible(false);
         m_latitudeinput->setRange(KTimeZone::UNKNOWN, KTimeZone::UNKNOWN);
