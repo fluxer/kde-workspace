@@ -132,7 +132,7 @@ static void kResetIconWidget(Plasma::IconWidget *iconwidget)
 {
     iconwidget->setIcon(KIcon(s_defaultweathericon));
     iconwidget->setText(i18n("N/A"));
-    iconwidget->setToolTip(QString());
+    Plasma::ToolTipManager::self()->clearContent(iconwidget);
 }
 
 static Plasma::IconWidget* kMakeIconWidget(QGraphicsWidget *parent)
@@ -140,7 +140,8 @@ static Plasma::IconWidget* kMakeIconWidget(QGraphicsWidget *parent)
     const int desktopiconsize = KIconLoader::global()->currentSize(KIconLoader::Desktop);
     const QSizeF desktopiconsizef = QSizeF(desktopiconsize, desktopiconsize);
     Plasma::IconWidget* result = new Plasma::IconWidget(parent);
-    result->setAcceptHoverEvents(false);
+    // has to accept hover events for the tooltip
+    result->setAcceptHoverEvents(true);
     result->setAcceptedMouseButtons(Qt::NoButton);
     result->setOrientation(Qt::Vertical);
     result->setPreferredIconSize(desktopiconsizef);
@@ -231,7 +232,8 @@ public:
 };
 
 static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData &weatherdata,
-                              const bool isnighttime, const KTemperature::KTempUnit tempunit)
+                              const bool isnighttime, const KTemperature::KTempUnit tempunit,
+                              const QString &dayname)
 {
     iconwidget->setText(
         kTemperatureDisplayString(
@@ -245,11 +247,16 @@ static void kUpdateIconWidget(Plasma::IconWidget *iconwidget, const KWeatherData
             isnighttime
         )
     );
-    iconwidget->setToolTip(
-        kDisplayCondition(
-            isnighttime ? weatherdata.nighticon : weatherdata.dayicon
+    Plasma::ToolTipContent plasmatooltip;
+    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(dayname));
+    plasmatooltip.setSubText(
+        QString::fromLatin1("<center>%1</center>").arg(
+            kDisplayCondition(
+                isnighttime ? weatherdata.nighticon : weatherdata.dayicon
+            )
         )
     );
+    Plasma::ToolTipManager::self()->setContent(iconwidget, plasmatooltip);
 }
 
 KWeatherData::KWeatherData()
@@ -709,16 +716,23 @@ void WeatherWidget::slotUpdateWidgets()
     const QString weathericonname = (isnighttime ? m_weatherdata[0].nighticon : m_weatherdata[0].dayicon);
     // qDebug() << Q_FUNC_INFO << localnow << isnighttime << weathericonname;
 
-    kUpdateIconWidget(m_day0iconwidget, m_weatherdata[0], false, m_tempunit);
-    kUpdateIconWidget(m_night0iconwidget, m_weatherdata[0], true, m_tempunit);
-    kUpdateIconWidget(m_day1iconwidget, m_weatherdata[1], false, m_tempunit);
-    kUpdateIconWidget(m_night1iconwidget, m_weatherdata[1], true, m_tempunit);
-    kUpdateIconWidget(m_day2iconwidget, m_weatherdata[2], false, m_tempunit);
-    kUpdateIconWidget(m_night2iconwidget, m_weatherdata[2], true, m_tempunit);
-    kUpdateIconWidget(m_day3iconwidget, m_weatherdata[3], false, m_tempunit);
-    kUpdateIconWidget(m_night3iconwidget, m_weatherdata[3], true, m_tempunit);
-    kUpdateIconWidget(m_day4iconwidget, m_weatherdata[4], false, m_tempunit);
-    kUpdateIconWidget(m_night4iconwidget, m_weatherdata[4], true, m_tempunit);
+    const QDate localnowdate = localnow.date();
+    const QLocale locale = KGlobal::locale()->toLocale();
+    const QString day0dayname = i18n("Today");
+    const QString day1dayname = locale.dayName(localnowdate.addDays(1).dayOfWeek(), QLocale::LongFormat);
+    const QString day2dayname = locale.dayName(localnowdate.addDays(2).dayOfWeek(), QLocale::LongFormat);
+    const QString day3dayname = locale.dayName(localnowdate.addDays(3).dayOfWeek(), QLocale::LongFormat);
+    const QString day4dayname = locale.dayName(localnowdate.addDays(4).dayOfWeek(), QLocale::LongFormat);
+    kUpdateIconWidget(m_day0iconwidget, m_weatherdata[0], false, m_tempunit, day0dayname);
+    kUpdateIconWidget(m_night0iconwidget, m_weatherdata[0], true, m_tempunit, day0dayname);
+    kUpdateIconWidget(m_day1iconwidget, m_weatherdata[1], false, m_tempunit, day1dayname);
+    kUpdateIconWidget(m_night1iconwidget, m_weatherdata[1], true, m_tempunit, day1dayname);
+    kUpdateIconWidget(m_day2iconwidget, m_weatherdata[2], false, m_tempunit, day2dayname);
+    kUpdateIconWidget(m_night2iconwidget, m_weatherdata[2], true, m_tempunit, day2dayname);
+    kUpdateIconWidget(m_day3iconwidget, m_weatherdata[3], false, m_tempunit, day3dayname);
+    kUpdateIconWidget(m_night3iconwidget, m_weatherdata[3], true, m_tempunit, day3dayname);
+    kUpdateIconWidget(m_day4iconwidget, m_weatherdata[4], false, m_tempunit, day4dayname);
+    kUpdateIconWidget(m_night4iconwidget, m_weatherdata[4], true, m_tempunit, day4dayname);
 
     const QIcon weathericon = kDisplayIcon(weathericonname, isnighttime);
     m_weather->setPopupIcon(weathericon);
