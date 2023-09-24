@@ -52,9 +52,11 @@ private:
     bool m_showvisualizer;
     uint m_visualizerscale;
     QColor m_visualizercolor;
+    bool m_visualizericon;
     QCheckBox* m_visualizerbox;
     KIntNumInput* m_visualizerscalebox;
     KColorButton* m_visualizerbutton;
+    QCheckBox* m_visualizericonbox;
 };
 
 #endif // MIXER_H
