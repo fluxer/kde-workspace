@@ -356,7 +356,6 @@ bool MixerTabWidget::setup(const QByteArray &alsacardname)
         Plasma::Frame* frame = new Plasma::Frame(this);
         frame->setFrameShadow(Plasma::Frame::Sunken);
         frame->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
-        // TODO: maybe elide frame text
         frame->setText(alsaelementname);
         QGraphicsGridLayout* framelayout = new QGraphicsGridLayout(frame);
         int columncounter = 0;
