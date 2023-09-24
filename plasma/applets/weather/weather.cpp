@@ -292,14 +292,17 @@ KWeatherData KWeatherData::fromString(const QString &data)
 
 QString KWeatherData::toString() const
 {
-    QStringList result;
-    result.reserve(5);
+    QString result;
     result.append(QString::number(static_cast<int>(tempunit)));
+    result.append(s_weatherdataseparator);
     result.append(daytemperature);
+    result.append(s_weatherdataseparator);
     result.append(dayicon);
+    result.append(s_weatherdataseparator);
     result.append(nighttemperature);
+    result.append(s_weatherdataseparator);
     result.append(nighticon);
-    return result.join(s_weatherdataseparator);
+    return result;
 }
 
 
