@@ -159,5 +159,4 @@ X-KDE-PluginInfo-Website=
 X-KDE-ServiceTypes=Plasma/PopupApplet,Plasma/Applet
 X-KDE-Library=plasma_applet_notifications
 X-Plasma-DefaultSize=100,100
-X-Plasma-RequiredExtensions=LaunchApp
 X-Plasma-NotificationArea=true

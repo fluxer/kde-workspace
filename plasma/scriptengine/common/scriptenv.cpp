@@ -45,8 +45,7 @@ Q_DECLARE_METATYPE(ScriptEnv*)
 
 ScriptEnv::ScriptEnv(QObject *parent, QScriptEngine *engine)
     : QObject(parent),
-      m_allowedUrls(NoUrls),
-      m_engine(engine)
+    m_engine(engine)
 {
     connect(m_engine, SIGNAL(signalHandlerException(QScriptValue)), this, SLOT(signalException()));
 
@@ -73,7 +72,6 @@ void ScriptEnv::addMainObjectProperties(QScriptValue &value)
 {
     value.setProperty("addEventListener", m_engine->newFunction(ScriptEnv::addEventListener));
     value.setProperty("removeEventListener", m_engine->newFunction(ScriptEnv::removeEventListener));
-    value.setProperty("hasExtension", m_engine->newFunction(ScriptEnv::hasExtension));
 }
 
 QScriptEngine *ScriptEnv::engine() const
@@ -144,94 +142,6 @@ bool ScriptEnv::checkForErrors(bool fatal)
     return false;
 }
 
-bool ScriptEnv::importBuiltinExtension(const QString &extension, QScriptValue &obj)
-{
-    kDebug() << extension;
-    if ("filedialog" == extension) {
-        FileDialogProxy::registerWithRuntime(m_engine);
-        return true;
-    } else if ("launchapp" == extension) {
-        m_allowedUrls |= AppLaunching;
-        obj.setProperty("runApplication", m_engine->newFunction(ScriptEnv::runApplication));
-        obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
-        registerOpenUrl(obj);
-        return true;
-    } else if ("http" == extension) {
-        m_allowedUrls |= HttpUrls;
-        registerGetUrl(obj);
-        registerOpenUrl(obj);
-        return true;
-    } else if ("networkio" == extension) {
-        m_allowedUrls |= HttpUrls | NetworkUrls;
-        registerGetUrl(obj);
-        return true;
-    } else if ("localio" == extension) {
-        m_allowedUrls |= LocalUrls;
-        registerGetUrl(obj);
-        obj.setProperty("userDataPath", m_engine->newFunction(ScriptEnv::userDataPath));
-        obj.setProperty("runCommand", m_engine->newFunction(ScriptEnv::runCommand));
-        return true;
-    } else if ("download" == extension) {
-        obj.setProperty("download", m_engine->newFunction(ScriptEnv::download));
-        return true;
-    }
-
-    return false;
-}
-
-bool ScriptEnv::importExtensions(const KPluginInfo &info, QScriptValue &obj)
-{
-    QStringList requiredExtensions = info.service()->property("X-Plasma-RequiredExtensions", QVariant::StringList).toStringList();
-    if (!requiredExtensions.isEmpty()) {
-        kDebug() << "required extensions are" << requiredExtensions;
-    }
-
-    foreach (const QString &ext, requiredExtensions) {
-        QString extension = ext.toLower();
-        if (m_extensions.contains(extension)) {
-            continue;
-        }
-
-        if (!importBuiltinExtension(extension, obj)) {
-            m_engine->importExtension(extension);
-        }
-
-        if (checkForErrors(true)) {
-            return false;
-        } else {
-            m_extensions << extension;
-        }
-    }
-
-    QStringList optionalExtensions = info.service()->property("X-Plasma-OptionalExtensions", QVariant::StringList).toStringList();
-    if (!optionalExtensions.isEmpty()) {
-        kDebug() << "optional extensions are" << optionalExtensions;
-    }
-
-    foreach (const QString &ext, optionalExtensions) {
-        QString extension = ext.toLower();
-
-        if (m_extensions.contains(extension)) {
-            continue;
-        }
-
-        if (!importBuiltinExtension(extension, obj)) {
-            m_engine->importExtension(extension);
-        }
-
-        if (!checkForErrors(false)) {
-            m_extensions << extension;
-        }
-    }
-
-    return true;
-}
-
-QSet<QString> ScriptEnv::loadedExtensions() const
-{
-    return m_extensions;
-}
-
 QScriptValue ScriptEnv::debug(QScriptContext *context, QScriptEngine *engine)
 {
     if (context->argumentCount() != 1) {
@@ -299,20 +209,6 @@ QScriptValue ScriptEnv::removeEventListener(QScriptContext *context, QScriptEngi
     }
 
     return env->removeEventListener(context->argument(0).toString(), context->argument(1));
-}
-
-QScriptValue ScriptEnv::hasExtension(QScriptContext *context, QScriptEngine *engine)
-{
-    if (context->argumentCount() < 1) {
-        return false;
-    }
-
-    ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
-    if (!env) {
-        return false;
-    }
-
-    return env->m_extensions.contains(context->argument(0).toString().toLower());
 }
 
 QScriptValue ScriptEnv::callFunction(QScriptValue &func, const QScriptValueList &args, const QScriptValue &activator)

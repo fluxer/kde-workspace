@@ -158,7 +158,6 @@ X-KDE-ServiceTypes=Plasma/Runner
 Type=Service
 Icon=system-run
 X-KDE-Library=krunner_shell
-X-Plasma-RunnerPhase=first
 X-KDE-PluginInfo-Author=Plasma Team
 X-KDE-PluginInfo-Email=plasma-devel@kde.org
 X-KDE-PluginInfo-Name=shell

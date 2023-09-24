@@ -478,10 +478,6 @@ void DeclarativeAppletScript::setupObjects()
     global.setProperty("FrameSvg", m_engine->newFunction(DeclarativeAppletScript::newPlasmaFrameSvg));
     global.setProperty("ExtenderItem", m_engine->newFunction(DeclarativeAppletScript::newPlasmaExtenderItem));
 
-    if (!m_env->importExtensions(description(), m_self)) {
-        return;
-    }
-
     registerSimpleAppletMetaTypes(m_engine);
     QTimer::singleShot(0, this, SLOT(configChanged()));
 }

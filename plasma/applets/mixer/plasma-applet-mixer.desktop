@@ -16,5 +16,4 @@ X-KDE-PluginInfo-Website=
 X-KDE-ServiceTypes=Plasma/PopupApplet,Plasma/Applet
 X-KDE-Library=plasma_applet_mixer
 X-Plasma-DefaultSize=290,140
-X-Plasma-RequiredExtensions=Unused
 X-Plasma-NotificationArea=true

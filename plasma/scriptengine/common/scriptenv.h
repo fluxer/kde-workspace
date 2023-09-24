@@ -59,9 +59,6 @@ public:
     static void registerEnums(QScriptValue &scriptValue, const QMetaObject &meta);
     bool include(const QString &path);
 
-    bool importExtensions(const KPluginInfo &info, QScriptValue &obj);
-    QSet<QString> loadedExtensions() const;
-
     bool checkForErrors(bool fatal);
 
     bool addEventListener(const QString &event, const QScriptValue &func);
@@ -79,7 +76,6 @@ Q_SIGNALS:
 private:
     void registerGetUrl(QScriptValue &obj);
     void registerOpenUrl(QScriptValue &obj);
-    bool importBuiltinExtension(const QString &extension, QScriptValue &obj);
 
     static QScriptValue debug(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue runApplication(QScriptContext *context, QScriptEngine *engine);
@@ -92,7 +88,6 @@ private:
     static QScriptValue userDataPath(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue addEventListener(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue removeEventListener(QScriptContext *context, QScriptEngine *engine);
-    static QScriptValue hasExtension(QScriptContext *context, QScriptEngine *engine);
     static QScriptValue throwNonFatalError(const QString &msg, QScriptContext *context, QScriptEngine *engine);
 
 private Q_SLOTS:
@@ -102,8 +97,6 @@ private:
     /** Call to set common properties on the global object **/
     void setupGlobalObject();
 
-    QSet<QString> m_extensions;
-    AllowedUrls m_allowedUrls;
     QScriptEngine *m_engine;
     QHash<QString, QScriptValueList> m_eventListeners;
 };

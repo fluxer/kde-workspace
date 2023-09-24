@@ -49,11 +49,6 @@ QScriptValue ScriptEnv::openUrl(QScriptContext *context, QScriptEngine *engine)
         return false;
     }
 
-    if (!(env->m_allowedUrls & AppLaunching) &&
-        !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
-        return false;
-    }
-
     new KRun(url, 0);
     return true;
 }
@@ -75,15 +70,6 @@ QScriptValue ScriptEnv::getUrl(QScriptContext *context, QScriptEngine *engine)
     ScriptEnv *env = ScriptEnv::findScriptEnv(engine);
     if (!env) {
         //kDebug() << "findScriptEnv failed";
-        return engine->undefinedValue();
-    }
-
-    if (url.isLocalFile()) {
-        if (!(env->m_allowedUrls & LocalUrls)) {
-            return engine->undefinedValue();
-        }
-    } else if (!(env->m_allowedUrls & NetworkUrls) &&
-               !((env->m_allowedUrls & HttpUrls) && (url.protocol() == "http" || url.protocol() == "https"))) {
         return engine->undefinedValue();
     }
 
