@@ -31,6 +31,10 @@ static const QLatin1String s_zero = QLatin1String("0");
 
 static QString kAddNumber(const QString &string, const ushort number)
 {
+    if (string.size() > 6) {
+        // hard-limit
+        return string;
+    }
     if (string == s_zero) {
         return QString::number(number);
     }
