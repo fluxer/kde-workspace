@@ -105,10 +105,10 @@ static const struct conditionDescriptionData {
 };
 static const qint16 conditionDescriptionTblSize = sizeof(conditionDescriptionTbl) / sizeof(conditionDescriptionData);
 
-static bool kIsNightTime(const QDateTime &dt)
+static bool kIsNightTime(const QDateTime &datetime)
 {
-    const int month = dt.date().month();
-    const int hour = dt.time().hour();
+    const int month = datetime.date().month();
+    const int hour = datetime.time().hour();
     if (month <= 3 || month >= 9) {
         return (hour >= 19 || hour <= 6);
     }
@@ -322,7 +322,11 @@ private:
 
     WeatherApplet* m_weather;
     QGraphicsLinearLayout* m_layout;
+    int m_lastupdate;
+    QString m_source;
     KTemperature::KTempUnit m_tempunit;
+    float m_latitude;
+    float m_longitude;
     KIO::StoredTransferJob* m_geojob;
     KIO::StoredTransferJob* m_weatherjob;
     QVector<KWeatherData> m_weatherdata;
@@ -346,7 +350,10 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
     : QGraphicsWidget(weather),
     m_weather(weather),
     m_layout(nullptr),
+    m_lastupdate(-1),
     m_tempunit(s_defaulttempunit),
+    m_latitude(KTimeZone::UNKNOWN),
+    m_longitude(KTimeZone::UNKNOWN),
     m_geojob(nullptr),
     m_weatherjob(nullptr),
     m_timer(nullptr),
@@ -422,7 +429,11 @@ WeatherWidget::WeatherWidget(WeatherApplet* weather)
 void WeatherWidget::setup(const QString &source, const float latitude, const float longitude, const KTemperature::KTempUnit tempunit)
 {
     m_timer->stop();
+    m_lastupdate = -1;
+    m_source = source;
     m_tempunit = tempunit;
+    m_latitude = latitude;
+    m_longitude = longitude;
     m_weatherdata.clear();
     m_weatherdata.reserve(5);
     m_weatherdata.fill(KWeatherData(s_defaulttempunit), 5);
@@ -489,7 +500,6 @@ void WeatherWidget::startWeatherJob(const QString &source, const float latitude,
 
 void WeatherWidget::slotGeoResult(KJob *kjob)
 {
-    m_timer->stop();
     // the fallback is to local timezone coordinates
     const KTimeZone ktimezone = KSystemTimeZones::local();
     if (kjob->error() != KJob::NoError) {
@@ -530,6 +540,7 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
         m_weatherjob = nullptr;
         kjob->deleteLater();
         m_weather->setBusy(false);
+        // TODO: error notification
         return;
     }
     const KUrl weatherjoburl = m_weatherjob->url();
@@ -613,6 +624,10 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
             kDebug() << "found weather data for day number" << weatherdataindex;
             if (kIsNightTime(weatherdatetime)) {
                 kDebug() << "found weather data for night" << weatherdataindex;
+                // because there may not be data for the next 12-hours in that time data the
+                // filling of the weather data picks any data for the next 12-hours because the
+                // applet is coded around the day and night cycle, this ends up being best guess
+                // (which is what the forecast is anyway)
                 if (m_weatherdata[weatherdataindex].nighttemperature.isEmpty()) {
                     m_weatherdata[weatherdataindex].nighttemperature = weatherdatamap.value("instant").toMap().value("details").toMap().value("air_temperature").toString();
                 }
@@ -651,6 +666,7 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
     }
 
     // qDebug() << Q_FUNC_INFO << m_weatherdata;
+    m_lastupdate = utc0.day();
     m_weather->setBusy(false);
     slotUpdateWidgets();
     m_timer->start();
@@ -658,8 +674,15 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
 
 void WeatherWidget::slotUpdateWidgets()
 {
-    // TODO: day change detection
     const QDateTime localnow = QDateTime::currentDateTime();
+    // day change detection
+    const int utcday = localnow.toUTC().date().day();
+    if (m_lastupdate != utcday) {
+        kDebug() << "setting up due to day change" << m_lastupdate << utcday;
+        setup(m_source, m_latitude, m_longitude, m_tempunit);
+        return;
+    }
+
     const bool isnighttime = kIsNightTime(localnow);
     const QString weathericonname = (isnighttime ? m_weatherdata[0].nighticon : m_weatherdata[0].dayicon);
     // qDebug() << Q_FUNC_INFO << localnow << isnighttime << weathericonname;
