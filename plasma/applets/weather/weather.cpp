@@ -273,6 +273,10 @@ bool KWeatherData::isValid() const
 KWeatherData KWeatherData::fromString(const QString &data)
 {
     KWeatherData result;
+    if (data.isEmpty()) {
+        // no warning for when there was no saved data
+        return result;
+    }
     const QStringList splitdata = data.split(s_weatherdataseparator);
     if (splitdata.size() != 5) {
         kWarning() << "invalid KWeatherData" << data;
