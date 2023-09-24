@@ -652,7 +652,8 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
     }
 
     // HACK: because during night data for the day may not be provided (i.e. the historical data for
-    // the day period) it is saved and restored here - it's a day-0 hack, what a thing!
+    // the day period) it is saved and restored here - it's a day-0 hack, what a thing! see
+    // "Parameters for a time period" at https://api.met.no/doc/ForecastJSON
     const QString day0id = kMakeID(weatherjoburl, utc0);
     if (m_weatherdata[0].isValid()) {
         kDebug() << "saving day0 data for" << weatherjoburl << day0id;
