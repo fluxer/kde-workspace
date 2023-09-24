@@ -166,7 +166,7 @@ static QIcon kDisplayIcon(const QString &icon, const bool isnighttime)
 {
     if (icon.isEmpty()) {
         return KIcon(s_defaultweathericon);
-    } else if (icon == QLatin1String("mist")) {
+    } else if (icon == QLatin1String("fog")) {
         return KIcon("weather-mist");
     } else if (icon == QLatin1String("cloudy")) {
         return KIcon("weather-many-clouds");
