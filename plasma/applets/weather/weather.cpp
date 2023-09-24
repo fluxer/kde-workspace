@@ -536,11 +536,12 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
 void WeatherWidget::slotWeatherResult(KJob *kjob)
 {
     if (kjob->error() != KJob::NoError) {
-        kWarning() << "weather job error" << kjob->errorString();
+        const QString kjoberror = kjob->errorString();
+        kWarning() << "weather job error" << kjoberror;
         m_weatherjob = nullptr;
         kjob->deleteLater();
         m_weather->setBusy(false);
-        // TODO: error notification
+        m_weather->showMessage(KIcon("dialog-error"), kjoberror, Plasma::MessageButton::ButtonOk);
         return;
     }
     const KUrl weatherjoburl = m_weatherjob->url();
