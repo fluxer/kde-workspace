@@ -35,6 +35,9 @@
 #include <ksettings.h>
 
 static const QSizeF s_minimumsize = QSizeF(420, 200);
+static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
+static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
+static const QChar s_weatherdataseparator = QChar::fromLatin1('#');
 // for reference:
 // http://www.geoplugin.com/quickstart
 // alternatively:
@@ -43,15 +46,16 @@ static const QSizeF s_minimumsize = QSizeF(420, 200);
 static const QString s_geoname = QString::fromLatin1("geoplugin.net");
 static const QString s_geourl = QString::fromLatin1("http://www.geoplugin.net");
 static const QString s_geoapiurl = QString::fromLatin1("http://www.geoplugin.net/json.gp");
+// the usual data length multiplied by 2
+static const int s_geomaxsize = 2000;
 // for reference:
 // https://api.met.no/weatherapi/locationforecast/2.0/documentation
 // https://api.met.no/doc/ForecastJSON
 static const QString s_weathername = QString::fromLatin1("met.no");
 static const QString s_weatherurl = QString::fromLatin1("https://www.met.no/");
 static const QString s_weatherapiurl = QString::fromLatin1("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=%1&lon=%2");
-static const QString s_defaultweathericon = QString::fromLatin1("weather-none-available");
-static const KTemperature::KTempUnit s_defaulttempunit = KTemperature::Celsius;
-static const QChar s_weatherdataseparator = QChar::fromLatin1('#');
+// the usual data length multiplied by 4
+static const int s_weathermaxsize = 160000;
 // that would be me
 static const QString s_developerurl = QString::fromLatin1("mailto:xakepa10@gmail.com");
 static const QString s_developername = QString::fromLatin1("Ivailo Monev");
@@ -516,8 +520,15 @@ void WeatherWidget::slotGeoResult(KJob *kjob)
     const QByteArray geodata = m_geojob->data();
     m_geojob = nullptr;
     kjob->deleteLater();
+    // never trust a data-feed, ever!
+    const int geodatasize = geodata.size();
+    // qDebug() << Q_FUNC_INFO << geodata << geodatasize;
+    if (geodatasize > s_geomaxsize) {
+        kWarning() << "geo data size too large, rejecting it" << geodatasize;
+        startWeatherJob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
+        return;
+    }
     const QJsonDocument geojson = QJsonDocument::fromJson(geodata);
-    // qDebug() << Q_FUNC_INFO << geodata;
     if (geojson.isNull()) {
         kWarning() << "null geo json document" << geojson.errorString();
         startWeatherJob(ktimezone.name(), ktimezone.latitude(), ktimezone.longitude());
@@ -552,8 +563,14 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
     const QByteArray weatherdata = m_weatherjob->data();
     m_weatherjob = nullptr;
     kjob->deleteLater();
+    const int weatherdatasize = weatherdata.size();
+    // qDebug() << Q_FUNC_INFO << weatherdata << weatherdatasize;
+    if (weatherdatasize > s_weathermaxsize) {
+        kWarning() << "weather data size too large, rejecting it" << weatherdatasize;
+        m_weather->setBusy(false);
+        return;
+    }
     const QJsonDocument weatherjson = QJsonDocument::fromJson(weatherdata);
-    // qDebug() << Q_FUNC_INFO << weatherdata;
     if (weatherjson.isNull()) {
         kWarning() << "null weather json document" << weatherjson.errorString();
         m_weather->setBusy(false);
