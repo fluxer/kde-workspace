@@ -603,7 +603,8 @@ void WeatherWidget::slotWeatherResult(KJob *kjob)
     }
 
     KTemperature::KTempUnit tempunit = s_defaulttempunit;
-    const QString weathertemperatureunit = weatherpropertiesmap.value("air_temperature").toString();
+    const QString weathertemperatureunit = weatherpropertiesmap.value("meta").toMap().value("units").toMap().value("air_temperature").toString();
+    // qDebug() << Q_FUNC_INFO << weathertemperatureunit << weatherpropertiesmap;
     if (!weathertemperatureunit.isEmpty()) {
         tempunit = KTemperature(0.0, weathertemperatureunit).unitEnum();
         if (tempunit == KTemperature::Invalid) {
