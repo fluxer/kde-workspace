@@ -60,6 +60,28 @@ static QFont kGetFont()
     return font;
 }
 
+static bool kHandleMouseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (event->button() == Qt::MiddleButton) {
+        NETRootInfo netrootinfo(QX11Info::display(), NET::WM2ShowingDesktop | NET::Supported);
+        if (!netrootinfo.isSupported(NET::WM2ShowingDesktop)) {
+            kWarning() << "NET::WM2ShowingDesktop is not supported";
+            return false;
+        }
+        // that is how the showdesktop does it - it tracks the state internally
+        static bool s_didshow = false;
+        if (netrootinfo.showingDesktop() || s_didshow) {
+            s_didshow = false;
+            netrootinfo.setShowingDesktop(false);
+        } else {
+            s_didshow = true;
+            netrootinfo.setShowingDesktop(true);
+        }
+        return true;
+    }
+    return false;
+}
+
 class PagerSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
@@ -77,6 +99,8 @@ protected:
     QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const final;
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) final;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) final;
+    // handled here too
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) final;
 
 private Q_SLOTS:
     void slotUpdateSvgAndToolTip();
@@ -173,6 +197,15 @@ void PagerSvg::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     update();
 }
 
+void PagerSvg::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (kHandleMouseEvent(event)) {
+        event->accept();
+        return;
+    }
+    Plasma::SvgWidget::mouseReleaseEvent(event);
+}
+
 void PagerSvg::slotUpdateSvgAndToolTip()
 {
     if (m_framesvg) {
@@ -246,6 +279,15 @@ void PagerApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
     } else {
         KWindowSystem::setCurrentDesktop(currentdesktop - 1);
     }
+}
+
+void PagerApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+    if (kHandleMouseEvent(event)) {
+        event->accept();
+        return;
+    }
+    Plasma::Applet::mouseReleaseEvent(event);
 }
 
 // NOTE: keep in sync with:

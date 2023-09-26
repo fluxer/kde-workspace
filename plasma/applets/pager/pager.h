@@ -44,6 +44,7 @@ public:
     QList<QAction*> contextualActions() final;
     // QGraphicsWidget reimplementations
     void wheelEvent(QGraphicsSceneWheelEvent *event) final;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) final;
 
 private Q_SLOTS:
     void slotUpdateLayout();
