@@ -21,8 +21,11 @@
 
 #include <QMutex>
 #include <QAction>
+#include <QComboBox>
+#include <QSpacerItem>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneWheelEvent>
+#include <KConfigDialog>
 #include <Plasma/Applet>
 
 class PagerSvg;
@@ -50,6 +53,7 @@ private Q_SLOTS:
     void slotUpdateLayout();
     void slotAddDesktop();
     void slotRemoveDesktop();
+    void slotConfigAccepted();
 
 protected:
     // Plasma::Applet reimplementation
@@ -57,6 +61,7 @@ protected:
 
 private:
     void updateSizes();
+    void updateMode();
 
     QMutex m_mutex;
     QGraphicsLinearLayout* m_layout;
@@ -65,6 +70,8 @@ private:
     QAction* m_removedesktopaction;
     QList<QAction*> m_actions;
     PagerApplet::PagerMode m_pagermode;
+    QComboBox* m_pagermodebox;
+    QSpacerItem* m_spacer;
 };
 
 K_EXPORT_PLASMA_APPLET(pager, PagerApplet)

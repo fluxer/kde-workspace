@@ -19,6 +19,8 @@
 #include "pager.h"
 
 #include <QX11Info>
+#include <QGridLayout>
+#include <QLabel>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/SvgWidget>
@@ -86,7 +88,7 @@ class PagerSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
 public:
-    PagerSvg(const int desktop, QGraphicsItem *parent = nullptr);
+    PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode,QGraphicsItem *parent = nullptr);
 
     void setup(const PagerApplet::PagerMode pagermode);
 
@@ -112,12 +114,12 @@ private:
     PagerApplet::PagerMode m_pagermode;
 };
 
-PagerSvg::PagerSvg(const int desktop, QGraphicsItem *parent)
+PagerSvg::PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_desktop(desktop),
     m_hovered(false),
     m_framesvg(nullptr),
-    m_pagermode(s_defaultpagermode)
+    m_pagermode(pagermode)
 {
     slotUpdateSvgAndToolTip();
     setAcceptHoverEvents(true);
@@ -237,7 +239,9 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_layout(nullptr),
     m_adddesktopaction(nullptr),
     m_removedesktopaction(nullptr),
-    m_pagermode(s_defaultpagermode)
+    m_pagermode(s_defaultpagermode),
+    m_pagermodebox(nullptr),
+    m_spacer(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_pager");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
@@ -248,13 +252,23 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(s_spacing);
-    
+
+    // early setup to get proper initial size
     slotUpdateLayout();
     adjustSize();
 }
 
 void PagerApplet::init()
 {
+    KConfigGroup configgroup = config();
+    PagerApplet::PagerMode oldpagermode = m_pagermode;
+    m_pagermode = static_cast<PagerApplet::PagerMode>(configgroup.readEntry("pagerMode", static_cast<int>(s_defaultpagermode)));
+
+    if (oldpagermode != m_pagermode) {
+        // layout again with the new mode for size hints to apply correct
+        slotUpdateLayout();
+    }
+
     connect(
         KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
         this, SLOT(slotUpdateLayout())
@@ -263,7 +277,25 @@ void PagerApplet::init()
 
 void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
 {
-    // TODO:
+    QWidget* widget = new QWidget();
+    QGridLayout* widgetlayout = new QGridLayout(widget);
+    QLabel* pagermodelabel = new QLabel(widget);
+    pagermodelabel->setText(i18n("Text:"));
+    widgetlayout->addWidget(pagermodelabel, 0, 0);
+    m_pagermodebox = new QComboBox(widget);
+    m_pagermodebox->addItem(i18n("Desktop number"), static_cast<int>(PagerApplet::ShowNumber));
+    m_pagermodebox->addItem(i18n("Desktop name"), static_cast<int>(PagerApplet::ShowName));
+    m_pagermodebox->setCurrentIndex(static_cast<int>(m_pagermode));
+    widgetlayout->addWidget(m_pagermodebox, 0, 1);
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addItem(m_spacer, 4, 0, 1, 2);
+    widget->setLayout(widgetlayout);
+    // doesn't look like media visualization but ok.. (that's what the clock applet uses)
+    parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_pagermodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
 }
 
 QList<QAction*> PagerApplet::contextualActions()
@@ -316,22 +348,21 @@ void PagerApplet::updateSizes()
             break;
         }
     }
-    // the width is based on the number of desktops
-    setMinimumSize(iconsize * pagersvgssize, iconsize);
-    emit sizeHintChanged(Qt::MinimumSize);
-
     setPreferredSize(preferredsize);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+            setMinimumSize(iconsize * pagersvgssize, iconsize);
             break;
         }
         case Qt::Vertical: {
             setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+            setMinimumSize(iconsize, iconsize * pagersvgssize);
             break;
         }
     }
     emit sizeHintChanged(Qt::PreferredSize);
+    emit sizeHintChanged(Qt::MinimumSize);
 }
 
 void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -379,7 +410,7 @@ void PagerApplet::slotUpdateLayout()
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
     for (int i = 0; i < numberofdesktops; i++) {
-        PagerSvg* pagersvg = new PagerSvg(i + 1, this);
+        PagerSvg* pagersvg = new PagerSvg(i + 1, m_pagermode, this);
         m_layout->addItem(pagersvg);
         m_pagersvgs.append(pagersvg);
     }
@@ -428,6 +459,17 @@ void PagerApplet::slotRemoveDesktop()
     } else {
         kWarning() << "there is only one desktop";
     }
+}
+
+void PagerApplet::slotConfigAccepted()
+{
+    Q_ASSERT(m_pagermodebox != nullptr);
+    const int pagermodeindex = m_pagermodebox->currentIndex();
+    m_pagermode = static_cast<PagerApplet::PagerMode>(pagermodeindex);
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("pagerMode", pagermodeindex);
+    slotUpdateLayout();
+    emit configNeedsSaving();
 }
 
 #include "moc_pager.cpp"
