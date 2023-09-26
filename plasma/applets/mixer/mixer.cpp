@@ -289,9 +289,9 @@ void MixerPlotter::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
     const double lastplotvalue = lastValue(0);
     const QPointF pixmappoint = QPointF((plottersize.width() / 2) - (iconsize / 2), 10);
-    if (lastplotvalue == 0.0) {
+    if (lastplotvalue <= 0.05 && lastplotvalue >= -0.05) {
         painter->drawPixmap(pixmappoint, m_plainicon.pixmap(iconsize, iconsize));
-    } else if (lastplotvalue > -0.30 && lastplotvalue < 0.30) {
+    } else if (lastplotvalue >= -0.30 && lastplotvalue <= 0.30) {
         painter->drawPixmap(pixmappoint, m_uncertainicon.pixmap(iconsize, iconsize));
     } else if (lastplotvalue > 0.0) {
         painter->drawPixmap(pixmappoint, m_smileicon.pixmap(iconsize, iconsize));
