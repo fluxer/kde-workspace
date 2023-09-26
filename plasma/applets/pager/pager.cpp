@@ -270,7 +270,7 @@ void PagerApplet::init()
     m_hidesingle = configgroup.readEntry("pagerHideSingle", s_defaulthidesingle);
 
     if (oldpagermode != m_pagermode || oldhidesingle != m_hidesingle) {
-        // layout again with the new mode for size hints to apply correct
+        // layout again with the new mode for size hints to apply correctly
         slotUpdateLayout();
     }
 
@@ -305,6 +305,7 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_pagermodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
+    connect(m_hidesinglebox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
 }
 
 QList<QAction*> PagerApplet::contextualActions()
