@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QAction>
 #include <QComboBox>
+#include <QCheckBox>
 #include <QSpacerItem>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneWheelEvent>
@@ -70,7 +71,9 @@ private:
     QAction* m_removedesktopaction;
     QList<QAction*> m_actions;
     PagerApplet::PagerMode m_pagermode;
+    bool m_hidesingle;
     QComboBox* m_pagermodebox;
+    QCheckBox* m_hidesinglebox;
     QSpacerItem* m_spacer;
 };
 

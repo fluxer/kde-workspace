@@ -37,6 +37,7 @@ static const int s_spacing = 4;
 // the applet may be hidden unless there are two virtual desktops
 static const QSizeF s_preferredsize = QSizeF(0, 0);
 static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowNumber;
+static const bool s_defaulthidesingle = true;
 
 static QString kElementPrefixForDesktop(const int desktop, const bool hovered)
 {
@@ -240,7 +241,9 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_adddesktopaction(nullptr),
     m_removedesktopaction(nullptr),
     m_pagermode(s_defaultpagermode),
+    m_hidesingle(s_defaulthidesingle),
     m_pagermodebox(nullptr),
+    m_hidesinglebox(nullptr),
     m_spacer(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_pager");
@@ -261,10 +264,12 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
 void PagerApplet::init()
 {
     KConfigGroup configgroup = config();
-    PagerApplet::PagerMode oldpagermode = m_pagermode;
+    const PagerApplet::PagerMode oldpagermode = m_pagermode;
+    const bool oldhidesingle = m_hidesingle;
     m_pagermode = static_cast<PagerApplet::PagerMode>(configgroup.readEntry("pagerMode", static_cast<int>(s_defaultpagermode)));
+    m_hidesingle = configgroup.readEntry("pagerHideSingle", s_defaulthidesingle);
 
-    if (oldpagermode != m_pagermode) {
+    if (oldpagermode != m_pagermode || oldhidesingle != m_hidesingle) {
         // layout again with the new mode for size hints to apply correct
         slotUpdateLayout();
     }
@@ -287,8 +292,12 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
     m_pagermodebox->addItem(i18n("Desktop name"), static_cast<int>(PagerApplet::ShowName));
     m_pagermodebox->setCurrentIndex(static_cast<int>(m_pagermode));
     widgetlayout->addWidget(m_pagermodebox, 0, 1);
+    m_hidesinglebox = new QCheckBox(widget);
+    m_hidesinglebox->setText(i18n("Hide when there is only one desktop"));
+    m_hidesinglebox->setChecked(m_hidesingle);
+    widgetlayout->addWidget(m_hidesinglebox, 1, 0, 1, 2);
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    widgetlayout->addItem(m_spacer, 4, 0, 1, 2);
+    widgetlayout->addItem(m_spacer, 2, 0, 1, 2);
     widget->setLayout(widgetlayout);
     // doesn't look like media visualization but ok.. (that's what the clock applet uses)
     parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
@@ -409,6 +418,13 @@ void PagerApplet::slotUpdateLayout()
     m_pagersvgs.clear();
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
+    if (m_hidesingle && numberofdesktops == 1) {
+        // the applet becomes invisible, can't even configure it and adding it to the desktop looks
+        // like nothing happens in such case. that is how the old implementation was doing it but
+        // that may change
+        adjustSize();
+        return;
+    }
     for (int i = 0; i < numberofdesktops; i++) {
         PagerSvg* pagersvg = new PagerSvg(i + 1, m_pagermode, this);
         m_layout->addItem(pagersvg);
@@ -464,10 +480,13 @@ void PagerApplet::slotRemoveDesktop()
 void PagerApplet::slotConfigAccepted()
 {
     Q_ASSERT(m_pagermodebox != nullptr);
+    Q_ASSERT(m_hidesinglebox != nullptr);
     const int pagermodeindex = m_pagermodebox->currentIndex();
     m_pagermode = static_cast<PagerApplet::PagerMode>(pagermodeindex);
+    m_hidesingle = m_hidesinglebox->isChecked();
     KConfigGroup configgroup = config();
     configgroup.writeEntry("pagerMode", pagermodeindex);
+    configgroup.writeEntry("pagerHideSingle", m_hidesingle);
     slotUpdateLayout();
     emit configNeedsSaving();
 }
