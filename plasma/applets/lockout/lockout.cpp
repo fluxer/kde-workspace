@@ -105,7 +105,7 @@ LockoutDialog::LockoutDialog(QWidget *parent)
 
     m_layout = new QGraphicsGridLayout(m_widget);
     m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(4);
+    m_layout->setSpacing(s_spacing);
     m_iconwidget = new Plasma::IconWidget(m_widget);
     m_iconwidget->setOrientation(Qt::Horizontal);
     // NOTE: setPreferredIconSize() does not ensure the icon size is always the same
@@ -249,8 +249,6 @@ LockoutApplet::LockoutApplet(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_lockout");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
-    setPreferredSize(110, 40);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 LockoutApplet::~LockoutApplet()
@@ -461,30 +459,6 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
 // plasma/applets/pager/pager.cpp
 void LockoutApplet::updateSizes()
 {
-    QSizeF preferredsize;
-    if (m_showlock) {
-        preferredsize = m_lockwidget->preferredSize();
-    }
-    if (m_showswitch) {
-        preferredsize += m_switchwidget->preferredSize();
-    }
-    if (m_showshutdown) {
-        preferredsize += m_shutdownwidget->preferredSize();
-    }
-    if (m_showtoram) {
-        preferredsize += m_toramwidget->preferredSize();
-    }
-    if (m_showtodisk) {
-        preferredsize += m_todiskwidget->preferredSize();
-    }
-    if (m_showhybrid) {
-        preferredsize += m_hybridwidget->preferredSize();
-    }
-    if (preferredsize.isNull()) {
-        preferredsize = s_basesize;
-    }
-
-    setPreferredSize(preferredsize);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);

@@ -178,12 +178,15 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QSizeF PagerSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (m_pagermode == PagerApplet::ShowName) {
-        QSizeF svgwidgethint = Plasma::SvgWidget::sizeHint(which, constraint);
-        svgwidgethint.setWidth(svgwidgethint.width() * 2);
-        return svgwidgethint;
+    QSizeF result = Plasma::SvgWidget::sizeHint(which, constraint);
+    if (result.isNull()) {
+        // scalable images don't really scale well with hints..
+        result = (size() * 0.4);
     }
-    return Plasma::SvgWidget::sizeHint(which, constraint);
+    if (m_pagermode == PagerApplet::ShowName) {
+        result.setWidth(result.width() * 2.5);
+    }
+    return result;
 }
 
 void PagerSvg::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -249,12 +252,8 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     KGlobal::locale()->insertCatalog("plasma_applet_pager");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
-    setPreferredSize(s_preferredsize);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(s_spacing);
 
     // early setup to get proper initial size
     slotUpdateLayout();
@@ -336,43 +335,17 @@ void PagerApplet::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 // plasma/applets/lockout/lockout.cpp
 void PagerApplet::updateSizes()
 {
-    QMutexLocker locker(&m_mutex);
-    const int pagersvgssize = m_pagersvgs.size();
-    QSizeF preferredsize = s_preferredsize;
-    foreach (PagerSvg *pagersvg, m_pagersvgs) {
-        preferredsize += pagersvg->preferredSize();
-    }
-    locker.unlock();
-
-    int iconsize = 0;
-    switch (formFactor()) {
-        case Plasma::FormFactor::Horizontal:
-        case Plasma::FormFactor::Vertical: {
-            // panel
-            iconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
-            break;
-        }
-        default: {
-            // desktop-like
-            iconsize = (KIconLoader::global()->currentSize(KIconLoader::Desktop) * 2);
-            break;
-        }
-    }
-    setPreferredSize(preferredsize);
     switch (m_layout->orientation()) {
         case Qt::Horizontal: {
             setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
-            setMinimumSize(iconsize * pagersvgssize, iconsize);
             break;
         }
         case Qt::Vertical: {
             setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-            setMinimumSize(iconsize, iconsize * pagersvgssize);
             break;
         }
     }
     emit sizeHintChanged(Qt::PreferredSize);
-    emit sizeHintChanged(Qt::MinimumSize);
 }
 
 void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -383,18 +356,15 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
-                m_layout->setSpacing(0);
                 updateSizes();
                 return;
             }
             case Plasma::FormFactor::Vertical: {
                 m_layout->setOrientation(Qt::Vertical);
-                m_layout->setSpacing(0);
                 updateSizes();
                 return;
             }
             default: {
-                m_layout->setSpacing(s_spacing);
                 break;
             }
         }
