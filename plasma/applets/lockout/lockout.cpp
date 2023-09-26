@@ -457,6 +457,8 @@ void LockoutApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
 }
 
+// NOTE: keep in sync with:
+// plasma/applets/pager/pager.cpp
 void LockoutApplet::updateSizes()
 {
     QSizeF preferredsize;
@@ -505,14 +507,12 @@ void LockoutApplet::constraintsEvent(Plasma::Constraints constraints)
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
                 m_layout->setSpacing(0);
-                setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
                 updateSizes();
                 return;
             }
             case Plasma::FormFactor::Vertical: {
                 m_layout->setOrientation(Qt::Vertical);
                 m_layout->setSpacing(0);
-                setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
                 updateSizes();
                 return;
             }
@@ -525,10 +525,8 @@ void LockoutApplet::constraintsEvent(Plasma::Constraints constraints)
         const QSizeF appletsize = size();
         if (appletsize.width() >= appletsize.height()) {
             m_layout->setOrientation(Qt::Horizontal);
-            setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         } else {
             m_layout->setOrientation(Qt::Vertical);
-            setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         }
         updateSizes();
     }
