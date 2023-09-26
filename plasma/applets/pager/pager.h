@@ -22,6 +22,7 @@
 #include <QMutex>
 #include <QAction>
 #include <QGraphicsLinearLayout>
+#include <QGraphicsSceneWheelEvent>
 #include <Plasma/Applet>
 
 class PagerSvg;
@@ -41,6 +42,8 @@ public:
     void init() final;
     void createConfigurationInterface(KConfigDialog *parent) final;
     QList<QAction*> contextualActions() final;
+    // QGraphicsWidget reimplementations
+    void wheelEvent(QGraphicsSceneWheelEvent *event) final;
 
 private Q_SLOTS:
     void slotUpdateLayout();

@@ -23,7 +23,7 @@
 #include <Plasma/FrameSvg>
 #include <Plasma/SvgWidget>
 #include <Plasma/Theme>
-#include <Plasma/PaintUtils>
+#include <Plasma/ToolTipManager>
 #include <KWindowSystem>
 #include <KIcon>
 #include <KIconLoader>
@@ -36,7 +36,7 @@ static const int s_spacing = 4;
 static const QSizeF s_preferredsize = QSizeF(0, 0);
 static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowNumber;
 
-static QString kElementForDesktop(const int desktop, const bool hovered)
+static QString kElementPrefixForDesktop(const int desktop, const bool hovered)
 {
     if (hovered) {
         return QString::fromLatin1("hover");
@@ -46,7 +46,14 @@ static QString kElementForDesktop(const int desktop, const bool hovered)
     return QString::fromLatin1("normal");
 }
 
-static QFont kGetFont(const int height)
+static QRectF kAdjustRect(const QRectF &rect)
+{
+    QRectF result = rect;
+    result.setWidth(result.width() - (s_spacing * 2));
+    return result;
+}
+
+static QFont kGetFont()
 {
     QFont font = KGlobalSettings::smallestReadableFont();
     font.setBold(true);
@@ -67,11 +74,12 @@ private Q_SLOTS:
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const final;
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) final;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) final;
 
 private Q_SLOTS:
-    void slotUpdateSvg();
+    void slotUpdateSvgAndToolTip();
 
 private:
     int m_desktop;
@@ -87,8 +95,7 @@ PagerSvg::PagerSvg(const int desktop, QGraphicsItem *parent)
     m_framesvg(nullptr),
     m_pagermode(s_defaultpagermode)
 {
-    // TODO: tooltip, maybe drag-n-drop
-    slotUpdateSvg();
+    slotUpdateSvgAndToolTip();
     setAcceptHoverEvents(true);
     connect(
         this, SIGNAL(clicked(Qt::MouseButton)),
@@ -104,7 +111,7 @@ PagerSvg::PagerSvg(const int desktop, QGraphicsItem *parent)
     );
     connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-        this, SLOT(slotUpdateSvg())
+        this, SLOT(slotUpdateSvgAndToolTip())
     );
 }
 
@@ -119,26 +126,37 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
     const QRectF brect = boundingRect();
-    m_framesvg->setElementPrefix(kElementForDesktop(m_desktop, m_hovered));
+    m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop, m_hovered));
     m_framesvg->resizeFrame(brect.size());
     m_framesvg->paintFrame(painter, brect);
     switch (m_pagermode) {
-        // TODO: different font size for panels
         case PagerApplet::ShowNumber: {
             painter->save();
-            painter->setFont(kGetFont(brect.height()));
-            painter->drawText(brect.toRect(), QString::number(m_desktop), QTextOption(Qt::AlignCenter));
+            painter->setFont(kGetFont());
+            painter->translate(s_spacing, 0);
+            painter->drawText(kAdjustRect(brect.toRect()), QString::number(m_desktop), QTextOption(Qt::AlignCenter));
             painter->restore();
             break;
         }
         case PagerApplet::ShowName: {
             painter->save();
-            painter->setFont(kGetFont(brect.height()));
-            painter->drawText(brect.toRect(), KWindowSystem::desktopName(m_desktop), QTextOption(Qt::AlignCenter));
+            painter->setFont(kGetFont());
+            painter->translate(s_spacing, 0);
+            painter->drawText(kAdjustRect(brect.toRect()), KWindowSystem::desktopName(m_desktop), QTextOption(Qt::AlignCenter));
             painter->restore();
             break;
         }
     }
+}
+
+QSizeF PagerSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (m_pagermode == PagerApplet::ShowName) {
+        QSizeF svgwidgethint = Plasma::SvgWidget::sizeHint(which, constraint);
+        svgwidgethint.setWidth(svgwidgethint.width() * 2);
+        return svgwidgethint;
+    }
+    return Plasma::SvgWidget::sizeHint(which, constraint);
 }
 
 void PagerSvg::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -155,7 +173,7 @@ void PagerSvg::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
     update();
 }
 
-void PagerSvg::slotUpdateSvg()
+void PagerSvg::slotUpdateSvgAndToolTip()
 {
     if (m_framesvg) {
         delete m_framesvg;
@@ -163,6 +181,9 @@ void PagerSvg::slotUpdateSvg()
     m_framesvg = new Plasma::FrameSvg(this);
     m_framesvg->setImagePath("widgets/pager");
     setSvg(m_framesvg);
+    Plasma::ToolTipContent plasmatooltip;
+    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(KWindowSystem::desktopName(m_desktop)));
+    Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
 
 void PagerSvg::slotClicked(const Qt::MouseButton button)
@@ -185,7 +206,6 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_removedesktopaction(nullptr),
     m_pagermode(s_defaultpagermode)
 {
-    // TODO: mouse wheel events
     KGlobal::locale()->insertCatalog("plasma_applet_pager");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setHasConfigurationInterface(true);
@@ -216,6 +236,16 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
 QList<QAction*> PagerApplet::contextualActions()
 {
     return m_actions;
+}
+
+void PagerApplet::wheelEvent(QGraphicsSceneWheelEvent *event)
+{
+    const int currentdesktop = KWindowSystem::currentDesktop();
+    if (event->delta() < 0) {
+        KWindowSystem::setCurrentDesktop(currentdesktop + 1);
+    } else {
+        KWindowSystem::setCurrentDesktop(currentdesktop - 1);
+    }
 }
 
 // NOTE: keep in sync with:
