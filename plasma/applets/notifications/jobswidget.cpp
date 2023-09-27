@@ -153,7 +153,6 @@ int JobsWidget::count() const
 
 void JobsWidget::sourceAdded(const QString &name)
 {
-    // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
     JobFrame* frame = new JobFrame(name, this);
     connect(
@@ -172,35 +171,6 @@ void JobsWidget::sourceAdded(const QString &name)
 
 void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
-    // qDebug() << Q_FUNC_INFO << name << data;
-#if 0
-    // sample data
-    "Job 1" QHash(
-        ("totalUnit0", QVariant(QString, "bytes") )
-        ( "processedUnit0" ,  QVariant(QString, "bytes") )
-        ( "totalUnit1" ,  QVariant(QString, "files") )
-        ( "processedUnit1" ,  QVariant(QString, "files") )
-        ( "processedAmount0" ,  QVariant(qlonglong, 320864256) )
-        ( "processedAmount1" ,  QVariant(qlonglong, 1) )
-        ( "destUrl" ,  QVariant(QString, "/home/smil3y/Downloads/magnet%3A") )
-        ( "killable" ,  QVariant(uint, 1) )
-        ( "infoMessage" ,  QVariant(QString, "Копиране") )
-        ( "percentage" ,  QVariant(uint, 95) )
-        ( "appName" ,  QVariant(QString, "Dolphin") )
-        ( "state" ,  QVariant(QString, "running") )
-        ( "totalAmount0" ,  QVariant(qlonglong, 336900096) )
-        ( "label0" ,  QVariant(QString, "/home/smil3y/Downloads/debian-11.5.0-arm64-netinst.iso") )
-        ( "eta" ,  QVariant(qlonglong, 201) )
-        ( "totalAmount1" ,  QVariant(qlonglong, 1) )
-        ( "label1" ,  QVariant(QString, "/home/smil3y/Downloads/magnet%3A/debian-11.5.0-arm64-netinst.iso") )
-        ( "appIconName" ,  QVariant(QString, "system-file-manager") )
-        ( "suspendable" ,  QVariant(uint, 2) )
-        ( "numericSpeed" ,  QVariant(qlonglong, 79691776) )
-        ( "speed" ,  QVariant(QString, "76,0 MiB/s") )
-        ( "labelName0" ,  QVariant(QString, "Източник") )
-        ( "labelName1" ,  QVariant(QString, "Местоназначение") )
-    )
-#endif
     QMutexLocker locker(&m_mutex);
     foreach (JobFrame* frame, m_frames) {
         if (frame->name == name) {
@@ -261,7 +231,7 @@ void JobsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data
                     frame->iconwidget1->setAcceptedMouseButtons(Qt::NoButton);
                 }
             }
-            // error overrides everything the iconwidget1 does
+            // error overrides everything iconwidget1 does
             const QString error = data.value("error").toString();
             if (!error.isEmpty()) {
                 frame->iconwidget1->setVisible(false);

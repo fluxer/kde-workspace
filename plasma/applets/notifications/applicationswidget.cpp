@@ -168,7 +168,6 @@ int ApplicationsWidget::count() const
 
 void ApplicationsWidget::sourceAdded(const QString &name)
 {
-    // qDebug() << Q_FUNC_INFO << name;
     QMutexLocker locker(&m_mutex);
     ApplicationFrame* frame = new ApplicationFrame(name, this);
     connect(
@@ -187,22 +186,6 @@ void ApplicationsWidget::sourceAdded(const QString &name)
 
 void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngine::Data &data)
 {
-    // qDebug() << Q_FUNC_INFO << name << data;
-#if 0
-    // sample data
-    "notification 1" QHash(
-        ("appName", QVariant(QString, "Изтегляне на файлове (KGet)") )
-        ( "body" ,  QVariant(QString, "<p>Изтеглянето на следният файл завърши:</p><p style="font-size: small;">index.html</p>") )
-        ( "appIcon" ,  QVariant(QString, "kget") )
-        ( "appRealName" ,  QVariant(QString, "kget") )
-        ( "image" ,  QVariant(QImage, ) )
-        ( "actions" ,  QVariant(QStringList, () ) )
-        ( "summary" ,  QVariant(QString, "Изтеглянето завърши") )
-        ( "expireTimeout" ,  QVariant(int, 6240) )
-        ( "id" ,  QVariant(QString, "1") )
-        ( "configurable" ,  QVariant(bool, true) )
-    )
-#endif
     QMutexLocker locker(&m_mutex);
     foreach (ApplicationFrame* frame, m_frames) {
         if (frame->name == name) {
@@ -211,7 +194,6 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
                 frame->iconwidget->setIcon(appicon);
             }
             const QStringList actions = data.value("actions").toStringList();
-            // qDebug() << Q_FUNC_INFO << actions;
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
             kClearButtons(framelayout);
