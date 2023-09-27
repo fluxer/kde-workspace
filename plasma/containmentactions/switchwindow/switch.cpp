@@ -18,11 +18,11 @@
  */
 
 #include "switch.h"
+#include "taskmanager/taskmanager.h"
 
 #include <KDebug>
 #include <KMenu>
 #include <KWindowSystem>
-#include <taskmanager/taskmanager.h>
 
 SwitchWindow::SwitchWindow(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args),

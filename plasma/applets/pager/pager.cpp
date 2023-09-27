@@ -88,13 +88,10 @@ class PagerSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
 public:
-    PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode,QGraphicsItem *parent = nullptr);
+    PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QGraphicsItem *parent = nullptr);
 
     void setup(const PagerApplet::PagerMode pagermode);
 
-private Q_SLOTS:
-    void slotClicked(const Qt::MouseButton button);
-    void slotUpdate();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
@@ -105,6 +102,8 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) final;
 
 private Q_SLOTS:
+    void slotClicked(const Qt::MouseButton button);
+    void slotUpdate();
     void slotUpdateSvgAndToolTip();
 
 private:
@@ -211,6 +210,18 @@ void PagerSvg::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Plasma::SvgWidget::mouseReleaseEvent(event);
 }
 
+void PagerSvg::slotClicked(const Qt::MouseButton button)
+{
+    if (button == Qt::LeftButton) {
+        KWindowSystem::setCurrentDesktop(m_desktop);
+    }
+}
+
+void PagerSvg::slotUpdate()
+{
+    update();
+}
+
 void PagerSvg::slotUpdateSvgAndToolTip()
 {
     if (m_framesvg) {
@@ -222,18 +233,6 @@ void PagerSvg::slotUpdateSvgAndToolTip()
     Plasma::ToolTipContent plasmatooltip;
     plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(KWindowSystem::desktopName(m_desktop)));
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
-}
-
-void PagerSvg::slotClicked(const Qt::MouseButton button)
-{
-    if (button == Qt::LeftButton) {
-        KWindowSystem::setCurrentDesktop(m_desktop);
-    }
-}
-
-void PagerSvg::slotUpdate()
-{
-    update();
 }
 
 
