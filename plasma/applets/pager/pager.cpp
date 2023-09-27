@@ -399,10 +399,13 @@ void PagerApplet::slotUpdateLayout()
     if (m_hidesingle && numberofdesktops == 1) {
         // the applet becomes invisible, can't even configure it and adding it to the desktop looks
         // like nothing happens in such case. that is how the old implementation was doing it but
-        // that may change
+        // that may change. the contents margins are changed too to ensure there are no gaps
+        // between applets (or as little as possible anyway)
+        m_layout->setContentsMargins(0, 0, 0, 0);
         adjustSize();
         return;
     }
+    m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
     for (int i = 0; i < numberofdesktops; i++) {
         PagerSvg* pagersvg = new PagerSvg(i + 1, m_pagermode, this);
         m_layout->addItem(pagersvg);
