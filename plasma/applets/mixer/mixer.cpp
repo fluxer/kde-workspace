@@ -48,7 +48,7 @@ static const int s_alsavisualizerinterval = 50;
 // deciding factor for the visualization samples frequency
 static const int s_alsapcmbuffersize = 256;
 static const bool s_showvisualizer = true;
-static const uint s_visualizerscale = 1;
+static const uint s_visualizerscale = 2;
 static const bool s_visualizericon = false;
 
 static QList<snd_mixer_selem_channel_id_t> kALSAChannelTypes(snd_mixer_elem_t *alsaelement, const bool capture)
