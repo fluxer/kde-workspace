@@ -20,6 +20,7 @@
 import QtQuick 1.1
 
 import org.kde.plasma.core 0.1 as PlasmaCore
+import org.kde.plasma.components 0.1 as PlasmaComponents
 import org.kde.qtextracomponents 0.1
 
 import Tasks 0.1 as Tasks
@@ -48,7 +49,6 @@ MouseEventListener {
     property int textWidth: label.implicitWidth
     property int pressX: -1
     property int pressY: -1
-    property Item busyIndicator
 
     hoverEnabled: true
 
@@ -162,6 +162,14 @@ MouseEventListener {
                          parent.height - (parent.height - Layout.verticalMargins() < theme.smallIconSize ?
                                           Math.min(9, Layout.verticalMargins()) : Layout.verticalMargins()))
 
+        PlasmaComponents.BusyWidget {
+            id: busyIndicator
+
+            anchors.fill: parent
+            visible: false
+            running: false
+        }
+
         PlasmaCore.IconItem {
             id: icon
 
@@ -175,8 +183,9 @@ MouseEventListener {
             source: model.DecorationRole
 
             onVisibleChanged: {
-                if (visible && busyIndicator) {
-                    busyIndicator.destroy();
+                if (visible) {
+                    busyIndicator.visible = false;
+                    busyIndicator.running = false;
                 }
             }
         }
@@ -271,8 +280,8 @@ MouseEventListener {
 
     Component.onCompleted: {
         if (model.IsStartup) {
-            busyIndicator = Qt.createQmlObject('import org.kde.plasma.components 0.1 as PlasmaComponents; ' +
-                'PlasmaComponents.BusyIndicator { anchors.fill: parent; running: true }', iconBox);
+            busyIndicator.visible = true;
+            busyIndicator.running = true;
         }
 
         if (model.hasModelChildren) {
