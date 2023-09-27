@@ -109,7 +109,6 @@ void TasksEngine::taskAdded(::TaskManager::Task *task)
         TaskSource *taskSource = new TaskSource(task, this);
         connect(task, SIGNAL(changed(::TaskManager::TaskChanges)), taskSource, SLOT(updateTask(::TaskManager::TaskChanges)));
         connect(TaskManager::TaskManager::self(), SIGNAL(desktopChanged(int)), taskSource, SLOT(updateDesktop()));
-        connect(TaskManager::TaskManager::self(), SIGNAL(activityChanged(QString)), taskSource, SLOT(updateActivity()));
         addSource(taskSource);
     }
 }
