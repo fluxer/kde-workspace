@@ -285,7 +285,7 @@ KWeatherData KWeatherData::fromString(const QString &data)
 {
     KWeatherData result;
     if (data.isEmpty()) {
-        // no warning for when there was no saved data
+        // no warning for when there is no saved data
         return result;
     }
     const QStringList splitdata = data.split(s_weatherdataseparator);
