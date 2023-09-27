@@ -25,6 +25,8 @@
 
 #include <QAction>
 #include <QTimer>
+#include <QGraphicsSceneMouseEvent>
+
 class KMenu;
 
 class SwitchWindow : public Plasma::ContainmentActions

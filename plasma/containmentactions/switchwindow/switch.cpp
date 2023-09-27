@@ -19,16 +19,10 @@
 
 #include "switch.h"
 
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
-#include <QTimer>
-
 #include <KDebug>
 #include <KMenu>
 #include <KWindowSystem>
-
-#include <Plasma/DataEngine>
-#include <Plasma/Service>
+#include <taskmanager/taskmanager.h>
 
 SwitchWindow::SwitchWindow(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args),
@@ -105,31 +99,21 @@ void SwitchWindow::contextEvent(QEvent *event)
 void SwitchWindow::makeMenu()
 {
     m_menu->clear();
-    Plasma::DataEngine *tasks = dataEngine("tasks");
-    if (!tasks->isValid()) {
-        return;
-    }
 
     QMultiHash<int, QAction*> desktops;
 
-    //make all the window actions
-    foreach (const QString &source, tasks->sources()) {
-        Plasma::DataEngine::Data window = tasks->query(source);
-        if (window.value("startup").toBool()) {
-            //kDebug() << "skipped fake task" << source;
-            continue;
-        }
-
-        QString name = window.value("visibleNameWithState").toString();
+    // make all the window actions
+    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
+        QString name = task->visibleNameWithState();
         if (name.isEmpty()) {
-            kDebug() << "failed source" << source;
+            kDebug() << "skipping task with empty name";
             continue;
         }
 
         QAction *action = new QAction(name, m_menu);
-        action->setIcon(window.value("icon").value<QIcon>());
-        action->setData(source);
-        desktops.insert(window.value("desktop").toInt(), action);
+        action->setIcon(task->icon());
+        action->setData(qlonglong(task->window()));
+        desktops.insert(task->desktop(), action);
     }
 
     //sort into menu
@@ -192,12 +176,15 @@ QList<QAction*> SwitchWindow::contextualActions()
 
 void SwitchWindow::switchTo(QAction *action)
 {
-    QString source = action->data().toString();
-    kDebug() << source;
-    Plasma::Service *service = dataEngine("tasks")->serviceForSource(source);
-    if (service) {
-        service->startOperationCall("activateRaiseOrIconify", service->operationParameters("activateRaiseOrIconify"));
+    qlonglong taskwindow = action->data().toLongLong();
+    kDebug() << "task window" << taskwindow;
+    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
+        if (qlonglong(task->window()) == taskwindow) {
+            task->activateRaiseOrIconify();
+            return;
+        }
     }
+    kWarning() << "could not find the task window";
 }
 
 void SwitchWindow::clearWindowsOrder()
