@@ -125,10 +125,12 @@ void SwitchWindow::makeMenu()
     } else {
         int numDesktops = KWindowSystem::numberOfDesktops();
         if (m_mode == AllFlat) {
-            for (int i = 1; i <= numDesktops; ++i) {
+            for (int i = 0; i <= numDesktops; ++i) {
                 if (desktops.contains(i)) {
                     QString name = KWindowSystem::desktopName(i);
-                    name = QString("%1: %2").arg(i).arg(name);
+                    if (name.isEmpty()) {
+                        name = QString::number(i);
+                    }
                     m_menu->addTitle(name);
                     m_menu->addActions(desktops.values(i));
                 }
@@ -138,13 +140,15 @@ void SwitchWindow::makeMenu()
                 m_menu->addActions(desktops.values(-1));
             }
         } else { //submenus
-            for (int i = 1; i <= numDesktops; ++i) {
+            for (int i = 0; i <= numDesktops; ++i) {
                 if (desktops.contains(i)) {
-                        QString name = KWindowSystem::desktopName(i);
-                        name = QString("%1: %2").arg(i).arg(name);
-                        KMenu *subMenu = new KMenu(name, m_menu);
-                        subMenu->addActions(desktops.values(i));
-                        m_menu->addMenu(subMenu);
+                    QString name = KWindowSystem::desktopName(i);
+                    if (name.isEmpty()) {
+                        name = QString::number(i);
+                    }
+                    KMenu *subMenu = new KMenu(name, m_menu);
+                    subMenu->addActions(desktops.values(i));
+                    m_menu->addMenu(subMenu);
                 }
             }
             if (desktops.contains(-1)) {
