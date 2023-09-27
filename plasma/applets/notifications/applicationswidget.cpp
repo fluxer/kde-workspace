@@ -33,7 +33,6 @@ static void kClearButtons(QGraphicsGridLayout *framelayout)
     // row insertation starts at 0, count is +1
     if (framelayout->rowCount() >= 4) {
         QGraphicsLinearLayout* buttonslayout = static_cast<QGraphicsLinearLayout*>(framelayout->itemAt(3, 0));
-        // redo the buttons layout in case of notification update
         QList<Plasma::PushButton*> actionbuttons;
         for (int i = 0; i < buttonslayout->count(); i++) {
             Plasma::PushButton* actionbutton = static_cast<Plasma::PushButton*>(buttonslayout->itemAt(i));
@@ -196,6 +195,7 @@ void ApplicationsWidget::dataUpdated(const QString &name, const Plasma::DataEngi
             const QStringList actions = data.value("actions").toStringList();
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
+            // redo the buttons layout in case of notification update
             kClearButtons(framelayout);
             QGraphicsLinearLayout* buttonslayout = nullptr;
             for (int i = 0; i < actions.size(); i++) {
