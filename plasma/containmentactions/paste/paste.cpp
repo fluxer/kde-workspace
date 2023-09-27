@@ -19,9 +19,7 @@
 
 #include "paste.h"
 
-#include <QtGui/qgraphicssceneevent.h>
-#include <QtGui/qgraphicssceneevent.h>
-
+#include <QGraphicsSceneMouseEvent>
 #include <KDebug>
 
 Paste::Paste(QObject *parent, const QVariantList &args)
