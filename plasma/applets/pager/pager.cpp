@@ -35,8 +35,6 @@
 
 // standard issue margin/spacing
 static const int s_spacing = 4;
-// the applet may be hidden unless there are two virtual desktops
-static const QSizeF s_preferredsize = QSizeF(0, 0);
 static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowNumber;
 static const bool s_defaulthidesingle = true;
 
