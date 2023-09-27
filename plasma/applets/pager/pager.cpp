@@ -26,6 +26,7 @@
 #include <Plasma/SvgWidget>
 #include <Plasma/Theme>
 #include <Plasma/ToolTipManager>
+#include <KCModuleInfo>
 #include <KWindowSystem>
 #include <KIcon>
 #include <KIconLoader>
@@ -247,7 +248,8 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_hidesingle(s_defaulthidesingle),
     m_pagermodebox(nullptr),
     m_hidesinglebox(nullptr),
-    m_spacer(nullptr)
+    m_spacer(nullptr),
+    m_kcmdesktopproxy(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_pager");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
@@ -301,10 +303,17 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
     // doesn't look like media visualization but ok.. (that's what the clock applet uses)
     parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
 
+    m_kcmdesktopproxy = new KCModuleProxy("desktop");
+    parent->addPage(
+        m_kcmdesktopproxy, m_kcmdesktopproxy->moduleInfo().moduleName(),
+        m_kcmdesktopproxy->moduleInfo().icon()
+    );
+
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_pagermodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     connect(m_hidesinglebox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
+    connect(m_kcmdesktopproxy, SIGNAL(changed(bool)), parent, SLOT(settingsModified()));
 }
 
 QList<QAction*> PagerApplet::contextualActions()
@@ -459,6 +468,7 @@ void PagerApplet::slotConfigAccepted()
     configgroup.writeEntry("pagerMode", pagermodeindex);
     configgroup.writeEntry("pagerHideSingle", m_hidesingle);
     slotUpdateLayout();
+    m_kcmdesktopproxy->save();
     emit configNeedsSaving();
 }
 

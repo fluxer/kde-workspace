@@ -27,6 +27,7 @@
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneWheelEvent>
 #include <KConfigDialog>
+#include <KCModuleProxy>
 #include <Plasma/Applet>
 
 class PagerSvg;
@@ -75,6 +76,7 @@ private:
     QComboBox* m_pagermodebox;
     QCheckBox* m_hidesinglebox;
     QSpacerItem* m_spacer;
+    KCModuleProxy* m_kcmdesktopproxy;
 };
 
 K_EXPORT_PLASMA_APPLET(pager, PagerApplet)
