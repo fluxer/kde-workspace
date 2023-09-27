@@ -20,15 +20,12 @@
  */
 
 #include "plasmacomponentsplugin.h"
+#include "declarativetabbar.h"
 
 #include <QtDeclarative/qdeclarative.h>
 #include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeContext>
 #include <QtDeclarative/QDeclarativeItem>
-
-#include <KSharedConfig>
-#include <KDebug>
-#include <KGlobal>
 
 #include <Plasma/BusyWidget>
 #include <Plasma/CheckBox>
@@ -54,8 +51,6 @@
 #include <Plasma/ToolButton>
 #include <Plasma/TreeView>
 #include <Plasma/CalendarWidget>
-
-#include "declarativetabbar.h"
 
 Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 
