@@ -30,8 +30,6 @@
 #include <KDebug>
 #include <KGlobal>
 
-Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
-
 #include <Plasma/BusyWidget>
 #include <Plasma/CheckBox>
 #include <Plasma/ComboBox>
@@ -58,6 +56,8 @@ Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 #include <Plasma/CalendarWidget>
 
 #include "declarativetabbar.h"
+
+Q_EXPORT_PLUGIN(PlasmaComponentsPlugin)
 
 SignalPlotter::SignalPlotter(QGraphicsItem *parent)
     : Plasma::SignalPlotter(parent)
