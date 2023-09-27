@@ -3,16 +3,11 @@ project(corebindings)
 set(corebindings_SRCS
     declarativeitemcontainer.cpp
     corebindingsplugin.cpp
-    dataengineconsumer.cpp
     theme.cpp
-    datamodel.cpp
-    datasource.cpp
-    runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp
     dialog.cpp
     tooltip.cpp
-    dataenginebindings.cpp
     iconitem.cpp
 )
 
@@ -40,7 +35,3 @@ install(
     FILES qmldir
     DESTINATION ${KDE4_IMPORTS_INSTALL_DIR}/org/kde/plasma/core
 )
-
-if(ENABLE_TESTING)
-    add_subdirectory(tests)
-endif()
