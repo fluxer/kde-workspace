@@ -16,11 +16,20 @@ add_subdirectory(kickoff)
 add_subdirectory(trash)
 add_subdirectory(folderview)
 add_subdirectory(weather)
-# task and windowlist depend on libs/taskmanager
-add_subdirectory(tasks)
-add_subdirectory(windowlist)
 add_subdirectory(pager)
 
 if (ALSA_FOUND)
     add_subdirectory(mixer)
 endif()
+
+# task and windowlist depend on libs/taskmanager
+include_directories(
+    # for kworkspace_export.h
+    ${CMAKE_BINARY_DIR}/libs
+    ${CMAKE_BINARY_DIR}/libs/kworkspace
+    ${CMAKE_SOURCE_DIR}/libs
+    ${CMAKE_SOURCE_DIR}/libs/kworkspace
+)
+
+add_subdirectory(tasks)
+add_subdirectory(windowlist)

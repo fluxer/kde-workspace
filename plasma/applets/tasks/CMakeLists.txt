@@ -1,11 +1,5 @@
 project(plasma-applet-tasks)
 
-include_directories(
-    # for taskmanager_export.h
-    ${CMAKE_BINARY_DIR}/libs
-    ${CMAKE_BINARY_DIR}/libs/taskmanager
-)
-
 set(tasks_SRCS
     tasks.cpp
 )
@@ -13,7 +7,7 @@ set(tasks_SRCS
 kde4_add_plugin(plasma_applet_tasks ${tasks_SRCS})
 target_link_libraries(plasma_applet_tasks
     KDE4::plasma
-    taskmanager
+    kworkspace
 )
 
 install(

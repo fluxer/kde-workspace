@@ -19,22 +19,16 @@
 ***********************************************************************************/
 
 #include "WindowList.h"
+#include "kworkspace/ktaskmanager.h"
 
 #include <QApplication>
-
 #include <KIcon>
 #include <KMenu>
 #include <KLocale>
 #include <KIconLoader>
 #include <KWindowSystem>
-
 #include <Plasma/IconWidget>
 #include <Plasma/ToolTipManager>
-
-#include <taskmanager/taskitem.h>
-#include <taskmanager/taskactions.h>
-#include <taskmanager/taskmanager.h>
-#include <taskmanager/groupmanager.h>
 
 K_EXPORT_PLASMA_APPLET(windowlist, WindowList)
 
@@ -126,13 +120,12 @@ bool WindowList::eventFilter(QObject *object, QEvent *event)
 
         if (menu && menu->activeAction() && menu->activeAction()->data().type() == QVariant::ULongLong) {
             QContextMenuEvent *cmEvent = static_cast<QContextMenuEvent *>(event);
-            QList<QAction*> actionList;
-            TaskManager::TaskItem item(this, TaskManager::TaskManager::self()->findTask((WId)menu->activeAction()->data().toULongLong()));
-            TaskManager::GroupManager groupManager(this);
-            TaskManager::BasicMenu taskMenu(NULL, &item, &groupManager, actionList);
-            if (taskMenu.exec(cmEvent->globalPos())) {
+            const WId taskWId = menu->activeAction()->data().toULongLong();
+            QMenu* taskMenu = KTaskManager::menuForTask(taskWId, nullptr);
+            if (taskMenu->exec(cmEvent->globalPos())) {
                 m_listMenu->hide();
             }
+            taskMenu->deleteLater();
             return true;
         }
     } else if (event->type() == QEvent::MouseButtonPress) {

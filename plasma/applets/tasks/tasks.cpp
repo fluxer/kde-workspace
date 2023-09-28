@@ -17,7 +17,7 @@
 */
 
 #include "tasks.h"
-#include "taskmanager/taskmanager.h"
+#include "kworkspace/ktaskmanager.h"
 
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -26,6 +26,7 @@
 #include <Plasma/ToolTipManager>
 #include <KWindowSystem>
 #include <KIcon>
+#include <KIconLoader>
 #include <KDebug>
 
 // standard issue margin/spacing
@@ -33,54 +34,18 @@ static const int s_spacing = 6;
 // TODO: this should be configurable
 static const int s_maximumtasksize = 200;
 
-// TODO: these task lookups are sub-optimal
-static bool kIsTaskActive(const WId taskwindow)
+static QPixmap kTaskPixmap(const KTaskManager::Task &task, const int size)
 {
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        if (task->window() == taskwindow) {
-            return task->isActive();
-        }
-    }
-    return false;
+    return KIcon(task.icon).pixmap(size);
 }
 
-static bool kDoesTaskDemandAttention(const WId taskwindow)
-{
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        if (task->window() == taskwindow) {
-            return task->demandsAttention();
-        }
-    }
-    return false;
-}
-
-static QString kTaskName(const WId taskwindow)
-{
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        if (task->window() == taskwindow) {
-            return task->name();
-        }
-    }
-    return QString::number(taskwindow);
-}
-
-static QPixmap kTaskPixmap(const WId taskwindow, const int width, const int height)
-{
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        if (task->window() == taskwindow) {
-            return task->icon(width, height);
-        }
-    }
-    return QPixmap();
-}
-
-static QString kElementPrefixForTask(const WId taskwindow, const bool hovered)
+static QString kElementPrefixForTask(const KTaskManager::Task &task, const bool hovered)
 {
     if (hovered) {
         return QString::fromLatin1("hover");
-    } else if (kIsTaskActive(taskwindow)) {
+    } else if (KTaskManager::self()->isActive(task)) {
         return QString::fromLatin1("focus");
-    } else if (kDoesTaskDemandAttention(taskwindow)) {
+    } else if (KTaskManager::self()->demandsAttention(task)) {
         return QString::fromLatin1("attention");
     }
     return QString::fromLatin1("normal");
@@ -90,30 +55,35 @@ class TasksSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
 public:
-    TasksSvg(const WId taskwindow, QGraphicsItem *parent = nullptr);
+    TasksSvg(const KTaskManager::Task &task, QGraphicsItem *parent = nullptr);
+
+    void setOrientation(const Qt::Orientation orientation);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const final;
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) final;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) final;
 
 private Q_SLOTS:
     void slotClicked(const Qt::MouseButton button);
     void slotUpdateSvgAndToolTip();
-    void slotWindowChanged(::TaskManager::Task *task);
+    void slotTaskChanged(const KTaskManager::Task &task);
 
 private:
     void updateToolTip();
 
-    WId m_taskwindow;
+    KTaskManager::Task m_task;
     bool m_hovered;
+    Qt::Orientation m_orientation;
     Plasma::FrameSvg* m_framesvg;
 };
 
-TasksSvg::TasksSvg(const WId taskwindow, QGraphicsItem *parent)
+TasksSvg::TasksSvg(const KTaskManager::Task &task, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
-    m_taskwindow(taskwindow),
+    m_task(task),
     m_hovered(false),
+    m_orientation(Qt::Horizontal),
     m_framesvg(nullptr)
 {
     slotUpdateSvgAndToolTip();
@@ -123,8 +93,8 @@ TasksSvg::TasksSvg(const WId taskwindow, QGraphicsItem *parent)
         this, SLOT(slotClicked(Qt::MouseButton))
     );
     connect(
-        TaskManager::TaskManager::self(), SIGNAL(windowChanged(::TaskManager::Task*,::TaskManager::TaskChanges)),
-        this, SLOT(slotWindowChanged(::TaskManager::Task*))
+        KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
+        this, SLOT(slotTaskChanged(KTaskManager::Task))
     );
     connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
@@ -132,6 +102,10 @@ TasksSvg::TasksSvg(const WId taskwindow, QGraphicsItem *parent)
     );
 }
 
+void TasksSvg::setOrientation(const Qt::Orientation orientation)
+{
+    m_orientation = orientation;
+}
 
 void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
@@ -140,14 +114,14 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     painter->setFont(KGlobalSettings::taskbarFont());
     const QRectF brect = boundingRect();
     const QSizeF brectsize = brect.size();
-    m_framesvg->setElementPrefix(kElementPrefixForTask(m_taskwindow, m_hovered));
+    m_framesvg->setElementPrefix(kElementPrefixForTask(m_task, m_hovered));
     m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
     // TODO: both can be optional
     const int spacingoffset = (s_spacing * 2);
     const int iconsize = qRound(qMin(brectsize.width(), brectsize.height()));
     // TODO: pixmap effect based on task state
-    QPixmap iconpixmap = kTaskPixmap(m_taskwindow, iconsize, iconsize);
+    QPixmap iconpixmap = kTaskPixmap(m_task, iconsize);
     if (!iconpixmap.isNull()) {
         iconpixmap = iconpixmap.scaled(
             iconsize - spacingoffset,
@@ -158,19 +132,15 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     if (!iconpixmap.isNull()) {
         painter->drawPixmap(QPoint(s_spacing, s_spacing), iconpixmap);
     }
-    QFontMetrics framefontmetrics(painter->font());
-    const QPoint textpoint = QPoint(
-        iconpixmap.width() + spacingoffset,
-        (brectsize.height() / 2) + (framefontmetrics.height() / 2) - (s_spacing / 2)
-    );
-    painter->drawText(
-        textpoint,
-        framefontmetrics.elidedText(
-            kTaskName(m_taskwindow),
-            Qt::ElideRight,
-            brectsize.width() - textpoint.x() - s_spacing
-        )
-    );
+}
+
+QSizeF TasksSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    if (which == Qt::PreferredSize) {
+        const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
+        return QSizeF(paneliconsize, paneliconsize);
+    }
+    return Plasma::SvgWidget::sizeHint(which, constraint);
 }
 
 void TasksSvg::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
@@ -190,8 +160,8 @@ void TasksSvg::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 void TasksSvg::updateToolTip()
 {
     Plasma::ToolTipContent plasmatooltip;
-    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(kTaskName(m_taskwindow)));
-    plasmatooltip.setWindowToPreview(m_taskwindow);
+    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_task.name));
+    plasmatooltip.setWindowToPreview(m_task.window);
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
 
@@ -199,12 +169,7 @@ void TasksSvg::slotClicked(const Qt::MouseButton button)
 {
     // TODO: context menu on right-click
     if (button == Qt::LeftButton) {
-        foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-            if (task->window() == m_taskwindow) {
-                task->activateRaiseOrIconify();
-                break;
-            }
-        }
+        KTaskManager::self()->activateRaiseOrIconify(m_task);
     }
 }
 
@@ -219,9 +184,9 @@ void TasksSvg::slotUpdateSvgAndToolTip()
     updateToolTip();
 }
 
-void TasksSvg::slotWindowChanged(::TaskManager::Task *task)
+void TasksSvg::slotTaskChanged(const KTaskManager::Task &task)
 {
-    if (task->window() == m_taskwindow) {
+    if (task.id == m_task.id) {
         updateToolTip();
         update();
     }
@@ -245,11 +210,11 @@ void TasksApplet::init()
 {
     slotUpdateLayout();
     connect(
-        TaskManager::TaskManager::self(), SIGNAL(taskAdded(::TaskManager::Task*)),
+        KTaskManager::self(), SIGNAL(taskAdded(KTaskManager::Task)),
         this, SLOT(slotUpdateLayout())
     );
     connect(
-        TaskManager::TaskManager::self(), SIGNAL(taskRemoved(::TaskManager::Task*)),
+        KTaskManager::self(), SIGNAL(taskRemoved(KTaskManager::Task)),
         this, SLOT(slotUpdateLayout())
     );
 }
@@ -271,21 +236,15 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
                 break;
             }
         }
-        updateSizes();
+        updateOrientation();
     }
 }
 
-void TasksApplet::updateSizes()
+void TasksApplet::updateOrientation()
 {
     QMutexLocker locker(&m_mutex);
-    QSizeF maximumtasksize;
-    if (m_layout->orientation() == Qt::Horizontal) {
-        maximumtasksize = QSizeF(s_maximumtasksize, QWIDGETSIZE_MAX);
-    } else {
-        maximumtasksize = QSizeF(QWIDGETSIZE_MAX, s_maximumtasksize);
-    }
     foreach (TasksSvg* taskssvg, m_taskssvgs) {
-        taskssvg->setMaximumSize(maximumtasksize);
+        taskssvg->setOrientation(m_layout->orientation());
     }
 }
 
@@ -302,12 +261,13 @@ void TasksApplet::slotUpdateLayout()
         m_layout->removeItem(m_spacer);
     }
     adjustSize();
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        TasksSvg* taskssvg = new TasksSvg(task->window(), this);
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        TasksSvg* taskssvg = new TasksSvg(task, this);
+        taskssvg->setOrientation(m_layout->orientation());
         m_layout->addItem(taskssvg);
         m_taskssvgs.append(taskssvg);
     }
-    // TODO: once the taskbar is nearly full show arrow for for items that shall be available via
+    // TODO: once the taskbar is nearly full show arrow for items that shall be available via
     // menu-like widget
     if (!m_spacer) {
         m_spacer = new QGraphicsWidget(this);

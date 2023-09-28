@@ -18,11 +18,12 @@
  */
 
 #include "switch.h"
-#include "taskmanager/taskmanager.h"
+#include "kworkspace/ktaskmanager.h"
 
-#include <KDebug>
 #include <KMenu>
 #include <KWindowSystem>
+#include <KIcon>
+#include <KDebug>
 
 SwitchWindow::SwitchWindow(QObject *parent, const QVariantList &args)
     : Plasma::ContainmentActions(parent, args),
@@ -103,17 +104,20 @@ void SwitchWindow::makeMenu()
     QMultiHash<int, QAction*> desktops;
 
     // make all the window actions
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        QString name = task->visibleNameWithState();
-        if (name.isEmpty()) {
-            kDebug() << "skipping task with empty name";
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        if (!task.startupinfo.none()) {
+            kDebug() << "skipping startup task" << task.id;
+            continue;
+        }
+        if (task.name.isEmpty()) {
+            kDebug() << "skipping task with empty name" << task.id;
             continue;
         }
 
-        QAction *action = new QAction(name, m_menu);
-        action->setIcon(task->icon());
-        action->setData(qlonglong(task->window()));
-        desktops.insert(task->desktop(), action);
+        QAction *action = new QAction(task.name, m_menu);
+        action->setIcon(KIcon(task.icon));
+        action->setData(task.id);
+        desktops.insert(task.desktop, action);
     }
 
     //sort into menu
@@ -180,11 +184,11 @@ QList<QAction*> SwitchWindow::contextualActions()
 
 void SwitchWindow::switchTo(QAction *action)
 {
-    qlonglong taskwindow = action->data().toLongLong();
-    kDebug() << "task window" << taskwindow;
-    foreach (TaskManager::Task *task, TaskManager::TaskManager::self()->tasks()) {
-        if (qlonglong(task->window()) == taskwindow) {
-            task->activateRaiseOrIconify();
+    const QByteArray taskid = action->data().toByteArray();
+    kDebug() << "task id" << taskid;
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        if (task.id == taskid) {
+            KTaskManager::self()->activateRaiseOrIconify(task);
             return;
         }
     }

@@ -3,6 +3,7 @@ set(kworkspace_LIB_SRCS
     kwindowlistmenu.cpp
     screenpreviewwidget.cpp
     kworkspace.cpp
+    ktaskmanager.cpp
 )
 
 
@@ -46,6 +47,7 @@ install(
     kdisplaymanager.h
     kwindowlistmenu.h
     kworkspace.h
+    ktaskmanager.h
     ${CMAKE_CURRENT_BINARY_DIR}/kworkspace_export.h
     DESTINATION ${KDE4_INCLUDE_INSTALL_DIR}/kworkspace
 )
