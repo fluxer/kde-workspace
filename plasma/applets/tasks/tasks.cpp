@@ -112,6 +112,7 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    painter->setRenderHint(QPainter::Antialiasing);
     painter->setFont(KGlobalSettings::taskbarFont());
     const QRectF brect = boundingRect();
     const QSizeF brectsize = brect.size();
