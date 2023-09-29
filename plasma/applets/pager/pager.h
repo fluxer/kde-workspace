@@ -55,6 +55,7 @@ private Q_SLOTS:
     void slotUpdateLayout();
     void slotAddDesktop();
     void slotRemoveDesktop();
+    void slotWindowPreviewActivated(const WId window);
     void slotConfigAccepted();
 
 protected:

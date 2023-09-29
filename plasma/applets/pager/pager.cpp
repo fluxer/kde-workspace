@@ -17,6 +17,7 @@
 */
 
 #include "pager.h"
+#include "kworkspace/ktaskmanager.h"
 
 #include <QX11Info>
 #include <QGridLayout>
@@ -232,6 +233,17 @@ void PagerSvg::slotUpdateSvgAndToolTip()
     setSvg(m_framesvg);
     Plasma::ToolTipContent plasmatooltip;
     plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(KWindowSystem::desktopName(m_desktop)));
+    QList<WId> windowstopreview;
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+        if (!kwindowinfo.isOnDesktop(m_desktop)) {
+            continue;
+        }
+        windowstopreview.append(task.window);
+    }
+    // NOTE: the limit of windows to preview is 4, perhaps add based on X11 timestamp?
+    plasmatooltip.setWindowsToPreview(windowstopreview);
+    plasmatooltip.setClickable(true);
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
 
@@ -271,6 +283,10 @@ void PagerApplet::init()
     connect(
         KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
         this, SLOT(slotUpdateLayout())
+    );
+    connect(
+        Plasma::ToolTipManager::self(), SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
+        this, SLOT(slotWindowPreviewActivated(WId))
     );
 }
 
@@ -451,6 +467,18 @@ void PagerApplet::slotRemoveDesktop()
     } else {
         kWarning() << "there is only one desktop";
     }
+}
+
+void PagerApplet::slotWindowPreviewActivated(const WId window)
+{
+    // manually hide all tooltips first
+    QMutexLocker locker(&m_mutex);
+    foreach (PagerSvg* pagersvg, m_pagersvgs) {
+        Plasma::ToolTipManager::self()->hide(pagersvg);
+    }
+    locker.unlock();
+    KWindowSystem::activateWindow(window);
+    KWindowSystem::raiseWindow(window);
 }
 
 void PagerApplet::slotConfigAccepted()

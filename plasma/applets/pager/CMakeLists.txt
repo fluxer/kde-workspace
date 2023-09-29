@@ -8,6 +8,7 @@ kde4_add_plugin(plasma_applet_pager ${pager_SRCS})
 target_link_libraries(plasma_applet_pager
     KDE4::plasma
     KDE4::kcmutils
+    kworkspace
 )
 
 install(
