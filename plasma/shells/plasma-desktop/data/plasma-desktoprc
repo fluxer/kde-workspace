@@ -32,9 +32,7 @@ zvalue=0
 
 [Containments][1][Applets][3][Configuration]
 currentDesktopSelected=0
-displayedText=2
-hideWhenSingleDesktop=true
-showWindowIcons=false
+pagerMode=1
 
 [Containments][1][Applets][3][LayoutInformation]
 Order=1

@@ -35,8 +35,7 @@
 
 // standard issue margin/spacing
 static const int s_spacing = 4;
-static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowNumber;
-static const bool s_defaulthidesingle = true;
+static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowName;
 
 static QString kElementPrefixForDesktop(const int desktop, const bool hovered)
 {
@@ -242,9 +241,7 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     m_adddesktopaction(nullptr),
     m_removedesktopaction(nullptr),
     m_pagermode(s_defaultpagermode),
-    m_hidesingle(s_defaulthidesingle),
     m_pagermodebox(nullptr),
-    m_hidesinglebox(nullptr),
     m_spacer(nullptr),
     m_kcmdesktopproxy(nullptr)
 {
@@ -263,11 +260,9 @@ void PagerApplet::init()
 {
     KConfigGroup configgroup = config();
     const PagerApplet::PagerMode oldpagermode = m_pagermode;
-    const bool oldhidesingle = m_hidesingle;
     m_pagermode = static_cast<PagerApplet::PagerMode>(configgroup.readEntry("pagerMode", static_cast<int>(s_defaultpagermode)));
-    m_hidesingle = configgroup.readEntry("pagerHideSingle", s_defaulthidesingle);
 
-    if (oldpagermode != m_pagermode || oldhidesingle != m_hidesingle) {
+    if (oldpagermode != m_pagermode) {
         // layout again with the new mode for size hints to apply correctly
         slotUpdateLayout();
     }
@@ -290,12 +285,8 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
     m_pagermodebox->addItem(i18n("Desktop name"), static_cast<int>(PagerApplet::ShowName));
     m_pagermodebox->setCurrentIndex(static_cast<int>(m_pagermode));
     widgetlayout->addWidget(m_pagermodebox, 0, 1);
-    m_hidesinglebox = new QCheckBox(widget);
-    m_hidesinglebox->setText(i18n("Hide when there is only one desktop"));
-    m_hidesinglebox->setChecked(m_hidesingle);
-    widgetlayout->addWidget(m_hidesinglebox, 1, 0, 1, 2);
     m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    widgetlayout->addItem(m_spacer, 2, 0, 1, 2);
+    widgetlayout->addItem(m_spacer, 1, 0, 1, 2);
     widget->setLayout(widgetlayout);
     // doesn't look like media visualization but ok.. (that's what the clock applet uses)
     parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
@@ -309,7 +300,6 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
     connect(m_pagermodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
-    connect(m_hidesinglebox, SIGNAL(toggled(bool)), parent, SLOT(settingsModified()));
     connect(m_kcmdesktopproxy, SIGNAL(changed(bool)), parent, SLOT(settingsModified()));
 }
 
@@ -395,15 +385,6 @@ void PagerApplet::slotUpdateLayout()
     m_pagersvgs.clear();
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
-    if (m_hidesingle && numberofdesktops == 1) {
-        // the applet becomes invisible, can't even configure it and adding it to the desktop looks
-        // like nothing happens in such case. that is how the old implementation was doing it but
-        // that may change. the contents margins are changed too to ensure there are no gaps
-        // between applets (or as little as possible anyway)
-        m_layout->setContentsMargins(0, 0, 0, 0);
-        adjustSize();
-        return;
-    }
     m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
     for (int i = 0; i < numberofdesktops; i++) {
         PagerSvg* pagersvg = new PagerSvg(i + 1, m_pagermode, this);
@@ -438,6 +419,20 @@ void PagerApplet::slotUpdateLayout()
     }
     locker.unlock();
     updateSizes();
+    // shrink or expand in panels but not otherwise, due to size hints it may happen anyway but it
+    // will not happen by adjustSize() call
+    const Plasma::FormFactor formfactor = formFactor();
+    switch (formFactor()) {
+        case Plasma::FormFactor::Planar:
+        case Plasma::FormFactor::MediaCenter:
+        case Plasma::FormFactor::Application: {
+            break;
+        }
+        default: {
+            adjustSize();
+            break;
+        }
+    }
 }
 
 void PagerApplet::slotAddDesktop()
@@ -460,13 +455,10 @@ void PagerApplet::slotRemoveDesktop()
 void PagerApplet::slotConfigAccepted()
 {
     Q_ASSERT(m_pagermodebox != nullptr);
-    Q_ASSERT(m_hidesinglebox != nullptr);
     const int pagermodeindex = m_pagermodebox->currentIndex();
     m_pagermode = static_cast<PagerApplet::PagerMode>(pagermodeindex);
-    m_hidesingle = m_hidesinglebox->isChecked();
     KConfigGroup configgroup = config();
     configgroup.writeEntry("pagerMode", pagermodeindex);
-    configgroup.writeEntry("pagerHideSingle", m_hidesingle);
     slotUpdateLayout();
     m_kcmdesktopproxy->save();
     emit configNeedsSaving();
