@@ -305,14 +305,24 @@ QList<KTaskManager::Task> KTaskManager::tasks() const
 
 bool KTaskManager::isActive(const KTaskManager::Task &task) const
 {
-    // TODO: transients
-    return (task.window == KWindowSystem::activeWindow());
+    const WId activewindow = KWindowSystem::activeWindow();
+    return (task.window == activewindow || KWindowSystem::transientFor(task.window) == activewindow);
 }
 
 bool KTaskManager::demandsAttention(const KTaskManager::Task &task) const
 {
-    // TODO: including transients
-    return false;
+    KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
+        task.window,
+        NET::WMState | NET::XAWMState
+    );
+    if (kwindowinfo.hasState(NET::DemandsAttention)) {
+        return true;
+    }
+    kwindowinfo = KWindowSystem::windowInfo(
+        KWindowSystem::transientFor(task.window),
+        NET::WMState | NET::XAWMState
+    );
+    return kwindowinfo.hasState(NET::DemandsAttention);
 }
 
 void KTaskManager::activateRaiseOrIconify(const KTaskManager::Task &task)
