@@ -19,13 +19,17 @@
 #include "ktaskmanager.h"
 
 #include <QMutex>
+#include <QX11Info>
 #include <KGlobal>
 #include <KStartupInfo>
 #include <KConfig>
 #include <KConfigGroup>
 #include <KWindowSystem>
 #include <KIconLoader>
+#include <KIcon>
+#include <KLocale>
 #include <KDebug>
+#include <netwm.h>
 
 static const WId s_nowindow = -1;
 static const int s_nodesktop = -1;
@@ -86,6 +90,106 @@ static void kUpdateTask(KTaskManager::Task &task, const bool force = false)
     task.desktop = kwindowinfo.desktop();
 }
 
+class KTaskAction : public QAction
+{
+    Q_OBJECT
+public:
+    enum KActionType {
+        ActionMinimize = 0,
+        ActionUnminimize = 1,
+        ActionMaximize = 2,
+        ActionUnmaximize = 3,
+        ActionClose = 4,
+    };
+    KTaskAction(const WId window, const KActionType type,
+                QObject *parent);
+
+private Q_SLOTS:
+    void slotMinimize();
+    void slotUnminimize();
+    void slotMaximize();
+    void slotUnmaximize();
+    void slotClose();
+
+private:
+    WId m_window;
+};
+
+KTaskAction::KTaskAction(const WId window, const KActionType type,
+                         QObject *parent)
+    : QAction(parent),
+    m_window(window)
+{
+    switch (type) {
+        // unlike the kwin decoration menu the minimize action is checked based on the window task
+        // just like maximize is
+        case KTaskAction::ActionMinimize: {
+            connect(this, SIGNAL(triggered()), this, SLOT(slotMinimize()));
+            setText(i18n("Mi&nimize"));
+            setCheckable(true);
+            setChecked(false);
+            break;
+        }
+        case KTaskAction::ActionUnminimize: {
+            connect(this, SIGNAL(triggered()), this, SLOT(slotUnminimize()));
+            setText(i18n("Mi&nimize"));
+            setCheckable(true);
+            setChecked(true);
+            break;
+        }
+        case KTaskAction::ActionMaximize: {
+            connect(this, SIGNAL(triggered()), this, SLOT(slotMaximize()));
+            setText(i18n("Ma&ximize"));
+            setCheckable(true);
+            setChecked(false);
+            break;
+        }
+        case KTaskAction::ActionUnmaximize: {
+            connect(this, SIGNAL(triggered()), this, SLOT(slotUnmaximize()));
+            setText(i18n("Ma&ximize"));
+            setCheckable(true);
+            setChecked(true);
+            break;
+        }
+        case KTaskAction::ActionClose: {
+            connect(this, SIGNAL(triggered()), this, SLOT(slotClose()));
+            setText(i18n("&Close"));
+            setIcon(KIcon("window-close"));
+            break;
+        }
+    }
+}
+
+void KTaskAction::slotMinimize()
+{
+    // using KWindowSystem for the animation
+    KWindowSystem::minimizeWindow(m_window);
+}
+
+void KTaskAction::slotUnminimize()
+{
+    // see above
+    KWindowSystem::unminimizeWindow(m_window);
+}
+
+void KTaskAction::slotMaximize()
+{
+    // this does not change the window visibility
+    KWindowSystem::setState(m_window, NET::Max);
+}
+
+void KTaskAction::slotUnmaximize()
+{
+    KWindowSystem::clearState(m_window, NET::Max);
+}
+
+void KTaskAction::slotClose()
+{
+    NETRootInfo netrootinfo(QX11Info::display(), NET::CloseWindow);
+    netrootinfo.closeWindowRequest(m_window);
+}
+
+
 class KTaskManagerPrivate : QObject
 {
     Q_OBJECT
@@ -132,7 +236,7 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
         KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent);
         emit ktaskmanager->taskAdded(task);
     }
-
+#if 0
     connect(
         m_startupinfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)),
         this, SLOT(slotNewStartup(KStartupInfoId,KStartupInfoData))
@@ -145,7 +249,7 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
         m_startupinfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)),
         this, SLOT(slotRemovedStartup(KStartupInfoId,KStartupInfoData))
     );
-
+#endif
     connect(
         KWindowSystem::self(), SIGNAL(windowAdded(WId)),
         this, SLOT(slotNewWindow(WId))
@@ -370,10 +474,55 @@ KTaskManager* KTaskManager::self()
     return globalktaskmanager;
 }
 
-QMenu* KTaskManager::menuForTask(WId windowid, QWidget *parent)
+QMenu* KTaskManager::menuForWindow(WId windowid, QWidget *parent)
 {
-    // TODO:
-    return new QMenu(parent);
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        if (task.window == windowid) {
+            return menuForTask(task, parent);
+        }
+    }
+    return nullptr;
+}
+
+QMenu* KTaskManager::menuForTask(const KTaskManager::Task &task, QWidget *parent)
+{
+    if (task.window == s_nowindow) {
+        return nullptr;
+    }
+    QMenu* result = new QMenu(parent);
+    result->setTitle(task.name);
+    result->setIcon(KIcon(task.icon));
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
+        task.window,
+        NET::WMState | NET::XAWMState,
+        NET::WM2AllowedActions
+    );
+    KTaskAction* ktaskaction = nullptr;
+    if (kwindowinfo.actionSupported(NET::ActionMinimize)) {
+        ktaskaction = new KTaskAction(
+            task.window,
+            kwindowinfo.isMinimized() ? KTaskAction::ActionUnminimize : KTaskAction::ActionMinimize,
+            result
+        );
+        result->addAction(ktaskaction);
+    }
+    if (kwindowinfo.actionSupported(NET::ActionMax)) {
+        ktaskaction = new KTaskAction(
+            task.window,
+            kwindowinfo.hasState(NET::Max) ? KTaskAction::ActionUnmaximize : KTaskAction::ActionMaximize,
+            result
+        );
+        result->addAction(ktaskaction);
+    }
+    if (kwindowinfo.actionSupported(NET::ActionClose)) {
+        result->addSeparator();
+        ktaskaction = new KTaskAction(
+            task.window,
+            KTaskAction::ActionClose, result
+        );
+        result->addAction(ktaskaction);
+    }
+    return result;
 }
 
 #include "ktaskmanager.moc"

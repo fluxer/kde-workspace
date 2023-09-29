@@ -19,6 +19,7 @@
 #include "tasks.h"
 #include "kworkspace/ktaskmanager.h"
 
+#include <QGraphicsSceneContextMenuEvent>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/SvgWidget>
@@ -61,9 +62,10 @@ public:
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
-    QSizeF sizeHint(Qt::SizeHint which, const QSizeF & constraint) const final;
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const final;
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event) final;
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) final;
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) final;
 
 private Q_SLOTS:
     void slotClicked(const Qt::MouseButton button);
@@ -117,7 +119,6 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     m_framesvg->setElementPrefix(kElementPrefixForTask(m_task, m_hovered));
     m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
-    // TODO: both can be optional
     const int spacingoffset = (s_spacing * 2);
     const int iconsize = qRound(qMin(brectsize.width(), brectsize.height()));
     // TODO: pixmap effect based on task state
@@ -167,10 +168,21 @@ void TasksSvg::updateToolTip()
 
 void TasksSvg::slotClicked(const Qt::MouseButton button)
 {
-    // TODO: context menu on right-click
     if (button == Qt::LeftButton) {
         KTaskManager::self()->activateRaiseOrIconify(m_task);
     }
+}
+
+void TasksSvg::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu* taskmenu = KTaskManager::menuForTask(m_task, nullptr);
+    if (!taskmenu) {
+        Plasma::SvgWidget::contextMenuEvent(event);
+        return;
+    }
+    event->accept();
+    taskmenu->exec(QCursor::pos());
+    taskmenu->deleteLater();
 }
 
 void TasksSvg::slotUpdateSvgAndToolTip()

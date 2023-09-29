@@ -121,11 +121,13 @@ bool WindowList::eventFilter(QObject *object, QEvent *event)
         if (menu && menu->activeAction() && menu->activeAction()->data().type() == QVariant::ULongLong) {
             QContextMenuEvent *cmEvent = static_cast<QContextMenuEvent *>(event);
             const WId taskWId = menu->activeAction()->data().toULongLong();
-            QMenu* taskMenu = KTaskManager::menuForTask(taskWId, nullptr);
-            if (taskMenu->exec(cmEvent->globalPos())) {
-                m_listMenu->hide();
+            QMenu* taskMenu = KTaskManager::menuForWindow(taskWId, nullptr);
+            if (taskMenu) {
+                if (taskMenu->exec(cmEvent->globalPos())) {
+                    m_listMenu->hide();
+                }
+                taskMenu->deleteLater();
             }
-            taskMenu->deleteLater();
             return true;
         }
     } else if (event->type() == QEvent::MouseButtonPress) {

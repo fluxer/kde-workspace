@@ -50,7 +50,8 @@ public:
     bool activateRaiseOrIconify(const KTaskManager::Task &task);
 
     static KTaskManager* self();
-    static QMenu* menuForTask(WId windowid, QWidget *parent);
+    static QMenu* menuForWindow(WId windowid, QWidget *parent);
+    static QMenu* menuForTask(const KTaskManager::Task &task, QWidget *parent);
 
 Q_SIGNALS:
     void taskAdded(const KTaskManager::Task &task);
