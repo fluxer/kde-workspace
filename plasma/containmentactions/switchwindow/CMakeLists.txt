@@ -8,7 +8,7 @@ set(switchwindow_SRCS
 kde4_add_plugin(plasma_containmentactions_switchwindow ${switchwindow_SRCS})
 target_link_libraries(plasma_containmentactions_switchwindow
     KDE4::plasma
-    taskmanager
+    kworkspace
 )
 
 install(

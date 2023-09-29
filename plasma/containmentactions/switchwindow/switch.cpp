@@ -105,10 +105,6 @@ void SwitchWindow::makeMenu()
 
     // make all the window actions
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        if (!task.startupinfo.none()) {
-            kDebug() << "skipping startup task" << task.id;
-            continue;
-        }
         if (task.name.isEmpty()) {
             kDebug() << "skipping task with empty name" << task.id;
             continue;

@@ -21,9 +21,6 @@
 #include <QMutex>
 #include <QX11Info>
 #include <KGlobal>
-#include <KStartupInfo>
-#include <KConfig>
-#include <KConfigGroup>
 #include <KWindowSystem>
 #include <KIconLoader>
 #include <KIcon>
@@ -31,27 +28,11 @@
 #include <KDebug>
 #include <netwm.h>
 
-static const WId s_nowindow = -1;
 static const int s_nodesktop = -1;
-static const int s_iconsize = 32;
-static const int s_defaultstartuptimeout = 10; // 10secs
 
 static QByteArray kGetTaskID()
 {
     return qRandomUuid();
-}
-
-static WId kFindStartupWindow(const KStartupInfoId &startupid)
-{
-    if (startupid.none()) {
-        return s_nowindow;
-    }
-    foreach (const WId window, KWindowSystem::stackingOrder()) {
-        if (KStartupInfo::windowStartupId(window) == startupid.id()) {
-            return window;
-        }
-    }
-    return s_nowindow;
 }
 
 static bool kIsTaskWindow(const WId window)
@@ -74,9 +55,6 @@ static bool kIsTaskWindow(const WId window)
 
 static void kUpdateTask(KTaskManager::Task &task, const bool force = false)
 {
-    if (task.window == s_nowindow) {
-        return;
-    }
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
         task.window,
         NET::WMVisibleName | NET::WMDesktop
@@ -199,9 +177,6 @@ public:
     QList<KTaskManager::Task> tasks;
 
 private Q_SLOTS:
-    void slotNewStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata);
-    void slotChangedStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata);
-    void slotRemovedStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata);
     void slotNewWindow(const WId window);
     void slotChangedWindow(const WId window);
     void slotRemovedWindow(const WId window);
@@ -209,19 +184,11 @@ private Q_SLOTS:
 
 private:
     QMutex m_mutex;
-    KStartupInfo* m_startupinfo;
 };
 
 KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
-    : QObject(parent),
-    m_startupinfo(nullptr)
+    : QObject(parent)
 {
-    m_startupinfo = new KStartupInfo(KStartupInfo::CleanOnCantDetect, this);
-    // TODO: startup notification via the taskbar is optional
-    KConfig kconfig("klaunchrc");
-    KConfigGroup kconfiggroup(&kconfig, "TaskbarButtonSettings");
-    m_startupinfo->setTimeout(kconfiggroup.readEntry("Timeout", s_defaultstartuptimeout));
-
     foreach (const WId window, KWindowSystem::stackingOrder()) {
         if (!kIsTaskWindow(window)) {
             continue;
@@ -236,20 +203,6 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
         KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent);
         emit ktaskmanager->taskAdded(task);
     }
-#if 0
-    connect(
-        m_startupinfo, SIGNAL(gotNewStartup(KStartupInfoId,KStartupInfoData)),
-        this, SLOT(slotNewStartup(KStartupInfoId,KStartupInfoData))
-    );
-    connect(
-        m_startupinfo, SIGNAL(gotStartupChange(KStartupInfoId,KStartupInfoData)),
-        this, SLOT(slotChangedStartup(KStartupInfoId,KStartupInfoData))
-    );
-    connect(
-        m_startupinfo, SIGNAL(gotRemoveStartup(KStartupInfoId,KStartupInfoData)),
-        this, SLOT(slotRemovedStartup(KStartupInfoId,KStartupInfoData))
-    );
-#endif
     connect(
         KWindowSystem::self(), SIGNAL(windowAdded(WId)),
         this, SLOT(slotNewWindow(WId))
@@ -268,103 +221,12 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
     );
 }
 
-void KTaskManagerPrivate::slotNewStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata)
-{
-    kDebug() << "new startup task for" << startupid.id();
-    QMutexLocker locker(&m_mutex);
-    KTaskManager::Task task;
-    task.id = kGetTaskID();
-    task.icon = startupdata.icon();
-    task.name = startupdata.name();
-    task.desktop = startupdata.desktop();
-    task.window = kFindStartupWindow(startupid);
-    task.startupinfo = startupid;
-    kUpdateTask(task);
-    tasks.append(task);
-    KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-    emit ktaskmanager->taskAdded(task);
-}
-
-void KTaskManagerPrivate::slotChangedStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata)
-{
-    QMutexLocker locker(&m_mutex);
-    QMutableListIterator<KTaskManager::Task> iter(tasks);
-    while (iter.hasNext()) {
-        KTaskManager::Task &task = iter.next();
-        if (task.startupinfo.id() == startupid.id()) {
-            kDebug() << "changed startup task for" << startupid.id();
-            // try again
-            if (task.name.isEmpty()) {
-                task.name = startupdata.name();
-            }
-            if (task.icon.isNull()) {
-                const QString startupicon = startupdata.icon();
-                if (!startupicon.isEmpty()) {
-                    task.icon = KIconLoader::global()->loadIcon(startupicon, KIconLoader::NoGroup, s_iconsize);
-                }
-            }
-            task.desktop = startupdata.desktop();
-            if (task.window == s_nowindow) {
-                task.window = kFindStartupWindow(startupid);
-            }
-            // refersh the startup info
-            task.startupinfo = startupid;
-            kUpdateTask(task);
-            KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-            emit ktaskmanager->taskChanged(task);
-            break;
-        }
-    }
-}
-
-void KTaskManagerPrivate::slotRemovedStartup(const KStartupInfoId &startupid, const KStartupInfoData &startupdata)
-{
-    Q_UNUSED(startupdata);
-    QMutexLocker locker(&m_mutex);
-    QMutableListIterator<KTaskManager::Task> iter(tasks);
-    while (iter.hasNext()) {
-        KTaskManager::Task &task = iter.next();
-        if (task.startupinfo.id() == startupid.id()) {
-            kDebug() << "removed startup task for" << startupid.id() << task.window;
-            KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-            task.startupinfo = KStartupInfoId();
-            if (task.window == s_nowindow) {
-                // no window no task
-                iter.remove();
-                emit ktaskmanager->taskRemoved(task);
-            } else {
-                // else emit update
-                kUpdateTask(task);
-                emit ktaskmanager->taskChanged(task);
-            }
-            break;
-        }
-    }
-}
-
 void KTaskManagerPrivate::slotNewWindow(const WId window)
 {
     if (!kIsTaskWindow(window)) {
         return;
     }
     QMutexLocker locker(&m_mutex);
-    KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-    const QByteArray windowstartup = KStartupInfo::windowStartupId(window);
-    if (!windowstartup.isEmpty()) {
-        QMutableListIterator<KTaskManager::Task> iter(tasks);
-        while (iter.hasNext()) {
-            KTaskManager::Task &task = iter.next();
-            if (task.startupinfo.id() == windowstartup) {
-                kDebug() << "matched changed task for" << windowstartup << window;
-                // startup change
-                task.startupinfo = KStartupInfoId();
-                task.window = window;
-                kUpdateTask(task);
-                emit ktaskmanager->taskChanged(task);
-                return;
-            }
-        }
-    }
     kDebug() << "new window task for" << window;
     KTaskManager::Task task;
     task.id = kGetTaskID();
@@ -372,6 +234,7 @@ void KTaskManagerPrivate::slotNewWindow(const WId window)
     task.desktop = s_nodesktop;
     kUpdateTask(task);
     tasks.append(task);
+    KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
     emit ktaskmanager->taskAdded(task);
 }
 
@@ -442,9 +305,6 @@ QList<KTaskManager::Task> KTaskManager::tasks() const
 
 bool KTaskManager::isActive(const KTaskManager::Task &task) const
 {
-    if (task.window == s_nowindow) {
-        return false;
-    }
     // TODO: transients
     return (task.window == KWindowSystem::activeWindow());
 }
@@ -455,18 +315,14 @@ bool KTaskManager::demandsAttention(const KTaskManager::Task &task) const
     return false;
 }
 
-bool KTaskManager::activateRaiseOrIconify(const KTaskManager::Task &task)
+void KTaskManager::activateRaiseOrIconify(const KTaskManager::Task &task)
 {
-    if (task.window == s_nowindow) {
-        return false;
-    }
     if (isActive(task)) {
         KWindowSystem::minimizeWindow(task.window);
-        return true;
+        return;
     }
     KWindowSystem::activateWindow(task.window);
     KWindowSystem::raiseWindow(task.window);
-    return true;
 }
 
 KTaskManager* KTaskManager::self()
@@ -486,9 +342,6 @@ QMenu* KTaskManager::menuForWindow(WId windowid, QWidget *parent)
 
 QMenu* KTaskManager::menuForTask(const KTaskManager::Task &task, QWidget *parent)
 {
-    if (task.window == s_nowindow) {
-        return nullptr;
-    }
     QMenu* result = new QMenu(parent);
     result->setTitle(task.name);
     result->setIcon(KIcon(task.icon));

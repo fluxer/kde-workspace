@@ -23,7 +23,6 @@
 
 #include <QObject>
 #include <QMenu>
-#include <KStartupInfo>
 
 class KTaskManagerPrivate;
 
@@ -38,7 +37,6 @@ public:
         QPixmap icon;
         int desktop;
         WId window;
-        KStartupInfoId startupinfo;
     };
 
     KTaskManager(QObject *parent = nullptr);
@@ -47,7 +45,7 @@ public:
     QList<KTaskManager::Task> tasks() const;
     bool isActive(const KTaskManager::Task &task) const;
     bool demandsAttention(const KTaskManager::Task &task) const;
-    bool activateRaiseOrIconify(const KTaskManager::Task &task);
+    void activateRaiseOrIconify(const KTaskManager::Task &task);
 
     static KTaskManager* self();
     static QMenu* menuForWindow(WId windowid, QWidget *parent);
