@@ -21,8 +21,6 @@
 
 #include <QMutex>
 #include <QAction>
-#include <QComboBox>
-#include <QCheckBox>
 #include <QSpacerItem>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneWheelEvent>
@@ -36,11 +34,6 @@ class PagerApplet : public Plasma::Applet
 {
     Q_OBJECT
 public:
-    enum PagerMode {
-        ShowNumber = 0,
-        ShowName = 1
-    };
-
     PagerApplet(QObject *parent, const QVariantList &args);
 
     // Plasma::Applet reimplementations
@@ -63,8 +56,7 @@ protected:
     void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
-    void updateSizes();
-    void updateMode();
+    void updateOrientation();
 
     QMutex m_mutex;
     QGraphicsLinearLayout* m_layout;
@@ -72,8 +64,6 @@ private:
     QAction* m_adddesktopaction;
     QAction* m_removedesktopaction;
     QList<QAction*> m_actions;
-    PagerApplet::PagerMode m_pagermode;
-    QComboBox* m_pagermodebox;
     QSpacerItem* m_spacer;
     KCModuleProxy* m_kcmdesktopproxy;
 };

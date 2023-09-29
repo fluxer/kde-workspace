@@ -22,7 +22,7 @@ if (ALSA_FOUND)
     add_subdirectory(mixer)
 endif()
 
-# task and windowlist depend on libs/taskmanager
+# task and windowlist depend on libs/kworkspace
 include_directories(
     # for kworkspace_export.h
     ${CMAKE_BINARY_DIR}/libs
@@ -31,5 +31,4 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/kworkspace
 )
 
-add_subdirectory(tasks)
 add_subdirectory(windowlist)
