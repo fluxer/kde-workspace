@@ -121,7 +121,7 @@ KTaskAction::KTaskAction(const WId window, const KActionType type,
     m_window(window)
 {
     switch (type) {
-        // unlike the kwin decoration menu the minimize action is checked based on the window task
+        // unlike the kwin decoration menu the minimize action is checked based on the window state
         // just like maximize is
         case KTaskAction::ActionMinimize: {
             connect(this, SIGNAL(triggered()), this, SLOT(slotMinimize()));

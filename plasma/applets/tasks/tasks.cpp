@@ -229,6 +229,10 @@ void TasksApplet::init()
         KTaskManager::self(), SIGNAL(taskRemoved(KTaskManager::Task)),
         this, SLOT(slotUpdateLayout())
     );
+    connect(
+        KWindowSystem::self(), SIGNAL(currentDesktopChanged(int)),
+        this, SLOT(slotUpdateLayout())
+    );
 }
 
 void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -274,6 +278,9 @@ void TasksApplet::slotUpdateLayout()
     }
     adjustSize();
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        if (task.desktop != KWindowSystem::currentDesktop()) {
+            continue;
+        }
         TasksSvg* taskssvg = new TasksSvg(task, this);
         taskssvg->setOrientation(m_layout->orientation());
         m_layout->addItem(taskssvg);
