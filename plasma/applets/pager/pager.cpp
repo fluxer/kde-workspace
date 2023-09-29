@@ -135,6 +135,10 @@ PagerSvg::PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QG
         this, SLOT(slotUpdate())
     );
     connect(
+        KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
+        this, SLOT(slotUpdateSvgAndToolTip())
+    );
+    connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
         this, SLOT(slotUpdateSvgAndToolTip())
     );
