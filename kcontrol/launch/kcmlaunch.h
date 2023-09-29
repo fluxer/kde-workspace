@@ -27,11 +27,10 @@ class KIntNumInput;
 
 class LaunchConfig : public KCModule
 {
-  Q_OBJECT
+    Q_OBJECT
+public:
 
-  public:
-
-    explicit LaunchConfig(QWidget * parent = 0, const QVariantList &list = QVariantList() );
+    explicit LaunchConfig(QWidget * parent = 0, const QVariantList &list = QVariantList());
 
     virtual ~LaunchConfig();
 
@@ -39,31 +38,14 @@ class LaunchConfig : public KCModule
     void save();
     void defaults();
 
-  protected Q_SLOTS:
-
+protected Q_SLOTS:
     void checkChanged();
     void slotBusyCursor(int);
-    void slotTaskbarButton(bool);
 
-  protected:
-
-    enum FeedbackStyle
-    {
-      BusyCursor            = 1 << 0,
-      TaskbarButton         = 1 << 1,
-
-      Default = BusyCursor | TaskbarButton
-    };
-
-
-  private:
-
-    QLabel    * lbl_cursorTimeout;
-    QLabel    * lbl_taskbarTimeout;
-    QComboBox * cb_busyCursor;
-    QCheckBox * cb_taskbarButton;
-    KIntNumInput * sb_cursorTimeout;
-    KIntNumInput * sb_taskbarTimeout;
+private:
+    QLabel* lbl_cursorTimeout;
+    QComboBox* cb_busyCursor;
+    KIntNumInput* sb_cursorTimeout;
 
 };
 
