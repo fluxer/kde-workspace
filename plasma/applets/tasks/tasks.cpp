@@ -27,23 +27,20 @@
 #include <KWindowSystem>
 #include <KIcon>
 #include <KIconLoader>
+#include <KIconEffect>
 #include <KDebug>
 
 // standard issue margin/spacing
 static const int s_spacing = 6;
 
-static QPixmap kTaskPixmap(const KTaskManager::Task &task, const int size)
-{
-    return KIcon(task.icon).pixmap(size);
-}
-
-static QString kElementPrefixForTask(const KTaskManager::Task &task, const bool hovered)
+static QString kElementPrefixForTask(const KTaskManager::Task &task, const bool hovered,
+                                     const bool isactive, const bool demandsattention)
 {
     if (hovered) {
         return QString::fromLatin1("hover");
-    } else if (KTaskManager::self()->isActive(task)) {
+    } else if (isactive) {
         return QString::fromLatin1("focus");
-    } else if (KTaskManager::self()->demandsAttention(task)) {
+    } else if (demandsattention) {
         return QString::fromLatin1("attention");
     }
     return QString::fromLatin1("normal");
@@ -110,23 +107,28 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    const bool isactive = KTaskManager::self()->isActive(m_task);
+    const bool demandsattention = KTaskManager::self()->demandsAttention(m_task);
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setFont(KGlobalSettings::taskbarFont());
     const QRectF brect = boundingRect();
     const QSizeF brectsize = brect.size();
-    m_framesvg->setElementPrefix(kElementPrefixForTask(m_task, m_hovered));
+    m_framesvg->setElementPrefix(kElementPrefixForTask(m_task, m_hovered, isactive, demandsattention));
     m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
     const int spacingoffset = (s_spacing * 2);
     const int iconsize = qRound(qMin(brectsize.width(), brectsize.height()));
-    // TODO: pixmap effect based on task state
-    QPixmap iconpixmap = kTaskPixmap(m_task, iconsize);
+    QPixmap iconpixmap = KIcon(m_task.icon).pixmap(iconsize);
     if (!iconpixmap.isNull()) {
         iconpixmap = iconpixmap.scaled(
             iconsize - spacingoffset,
             iconsize - spacingoffset,
             Qt::KeepAspectRatio, Qt::SmoothTransformation
         );
+    }
+    // gray-out unless the task is active or demands attention
+    if (!iconpixmap.isNull() && !isactive && !demandsattention) {
+        iconpixmap = KIconEffect::apply(iconpixmap, KIconEffect::ToGray, 0.5, QColor(), QColor(), true);
     }
     if (!iconpixmap.isNull()) {
         painter->drawPixmap(QPoint(s_spacing, s_spacing), iconpixmap);
