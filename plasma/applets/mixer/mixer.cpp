@@ -212,7 +212,7 @@ static QGraphicsWidget* kMakeSpacer(QGraphicsWidget *parent)
 {
     QGraphicsWidget* result = new QGraphicsWidget(parent);
     result->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    result->setMinimumSize(1, 1);
+    result->setMinimumSize(0, 0);
     return result;
 }
 

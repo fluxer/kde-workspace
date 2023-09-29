@@ -328,7 +328,7 @@ void WidgetExplorerPrivate::init(const Plasma::Location loc)
 
     topSpacer = new Plasma::Label(q);
     topSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    topSpacer->setMinimumSize(1, 1);
+    topSpacer->setMinimumSize(0, 0);
     mainLayout->addItem(topSpacer, 0, 1);
 
     categoriesButton = new Plasma::ToolButton(q);

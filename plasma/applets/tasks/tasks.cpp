@@ -116,13 +116,13 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     m_framesvg->setElementPrefix(kElementPrefixForTask(m_task, m_hovered, isactive, demandsattention));
     m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
-    const int spacingoffset = (s_spacing * 2);
+    const int spacingx2 = (s_spacing * 2);
     const int iconsize = qRound(qMin(brectsize.width(), brectsize.height()));
     QPixmap iconpixmap = KIcon(m_task.icon).pixmap(iconsize);
     if (!iconpixmap.isNull()) {
         iconpixmap = iconpixmap.scaled(
-            iconsize - spacingoffset,
-            iconsize - spacingoffset,
+            iconsize - spacingx2,
+            iconsize - spacingx2,
             Qt::KeepAspectRatio, Qt::SmoothTransformation
         );
     }
@@ -175,12 +175,8 @@ void TasksSvg::slotClicked(const Qt::MouseButton button)
 
 void TasksSvg::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
-    QMenu* taskmenu = KTaskManager::menuForTask(m_task, nullptr);
-    if (!taskmenu) {
-        Plasma::SvgWidget::contextMenuEvent(event);
-        return;
-    }
     event->accept();
+    QMenu* taskmenu = KTaskManager::menuForTask(m_task, nullptr);
     taskmenu->exec(QCursor::pos());
     taskmenu->deleteLater();
 }
@@ -305,7 +301,7 @@ void TasksApplet::slotUpdateLayout()
     if (!m_spacer) {
         m_spacer = new QGraphicsWidget(this);
         m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_spacer->setMinimumSize(1, 1);
+        m_spacer->setMinimumSize(0, 0);
     }
     m_layout->addItem(m_spacer);
 }
