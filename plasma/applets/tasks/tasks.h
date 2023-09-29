@@ -19,6 +19,8 @@
 #ifndef TASKS_H
 #define TASKS_H
 
+#include "kworkspace/ktaskmanager.h"
+
 #include <QMutex>
 #include <QGraphicsLinearLayout>
 #include <Plasma/Applet>
@@ -35,6 +37,7 @@ public:
     void init() final;
 
 private Q_SLOTS:
+    void slotTaskChanged(const KTaskManager::Task &task);
     void slotUpdateLayout();
 
 protected:
@@ -42,8 +45,6 @@ protected:
     void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
-    void updateOrientation();
-
     QMutex m_mutex;
     QGraphicsLinearLayout* m_layout;
     QGraphicsWidget* m_spacer;

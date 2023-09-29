@@ -17,7 +17,6 @@
 */
 
 #include "tasks.h"
-#include "kworkspace/ktaskmanager.h"
 
 #include <QGraphicsSceneContextMenuEvent>
 #include <Plasma/Svg>
@@ -226,6 +225,10 @@ void TasksApplet::init()
         this, SLOT(slotUpdateLayout())
     );
     connect(
+        KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
+        this, SLOT(slotTaskChanged(KTaskManager::Task))
+    );
+    connect(
         KTaskManager::self(), SIGNAL(taskRemoved(KTaskManager::Task)),
         this, SLOT(slotUpdateLayout())
     );
@@ -252,15 +255,19 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
                 break;
             }
         }
-        updateOrientation();
+        QMutexLocker locker(&m_mutex);
+        foreach (TasksSvg* taskssvg, m_taskssvgs) {
+            taskssvg->setOrientation(m_layout->orientation());
+        }
     }
 }
 
-void TasksApplet::updateOrientation()
+void TasksApplet::slotTaskChanged(const KTaskManager::Task &task)
 {
-    QMutexLocker locker(&m_mutex);
-    foreach (TasksSvg* taskssvg, m_taskssvgs) {
-        taskssvg->setOrientation(m_layout->orientation());
+    // special case for tasks moved from one virtual desktop to another
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+    if (!kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
+        slotUpdateLayout();
     }
 }
 
@@ -278,7 +285,8 @@ void TasksApplet::slotUpdateLayout()
     }
     adjustSize();
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        if (task.desktop != KWindowSystem::currentDesktop()) {
+        const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+        if (!kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
             continue;
         }
         TasksSvg* taskssvg = new TasksSvg(task, this);
