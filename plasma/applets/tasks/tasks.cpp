@@ -31,8 +31,6 @@
 
 // standard issue margin/spacing
 static const int s_spacing = 6;
-// TODO: this should be configurable
-static const int s_maximumtasksize = 200;
 
 static QPixmap kTaskPixmap(const KTaskManager::Task &task, const int size)
 {
@@ -57,7 +55,7 @@ class TasksSvg : public Plasma::SvgWidget
 public:
     TasksSvg(const KTaskManager::Task &task, QGraphicsItem *parent = nullptr);
 
-    void setOrientation(const Qt::Orientation orientation);
+    void setInPanel(const bool inpanel);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
@@ -76,7 +74,7 @@ private:
 
     KTaskManager::Task m_task;
     bool m_hovered;
-    Qt::Orientation m_orientation;
+    bool m_inpanel;
     Plasma::FrameSvg* m_framesvg;
 };
 
@@ -84,7 +82,7 @@ TasksSvg::TasksSvg(const KTaskManager::Task &task, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_task(task),
     m_hovered(false),
-    m_orientation(Qt::Horizontal),
+    m_inpanel(true),
     m_framesvg(nullptr)
 {
     slotUpdateSvgAndToolTip();
@@ -103,9 +101,9 @@ TasksSvg::TasksSvg(const KTaskManager::Task &task, QGraphicsItem *parent)
     );
 }
 
-void TasksSvg::setOrientation(const Qt::Orientation orientation)
+void TasksSvg::setInPanel(const bool inpanel)
 {
-    m_orientation = orientation;
+    m_inpanel = inpanel;
 }
 
 void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -137,7 +135,7 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QSizeF TasksSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (which == Qt::PreferredSize) {
+    if (which == Qt::PreferredSize || (!m_inpanel && which == Qt::MinimumSize)) {
         const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
         return QSizeF(paneliconsize, paneliconsize);
     }
@@ -242,6 +240,7 @@ void TasksApplet::init()
 void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::SizeConstraint || constraints & Plasma::FormFactorConstraint) {
+        bool inpanel = true;
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
@@ -253,12 +252,13 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
             }
             default: {
                 m_layout->setOrientation(Qt::Horizontal);
+                inpanel = false;
                 break;
             }
         }
         QMutexLocker locker(&m_mutex);
         foreach (TasksSvg* taskssvg, m_taskssvgs) {
-            taskssvg->setOrientation(m_layout->orientation());
+            taskssvg->setInPanel(inpanel);
         }
     }
 }
@@ -284,14 +284,17 @@ void TasksApplet::slotUpdateLayout()
     if (m_spacer) {
         m_layout->removeItem(m_spacer);
     }
-    adjustSize();
+    const bool inpanel = (
+        formFactor() == Plasma::FormFactor::Horizontal
+        || formFactor() == Plasma::FormFactor::Vertical
+    );
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
         const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
         if (!kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
             continue;
         }
         TasksSvg* taskssvg = new TasksSvg(task, this);
-        taskssvg->setOrientation(m_layout->orientation());
+        taskssvg->setInPanel(inpanel);
         m_layout->addItem(taskssvg);
         m_taskssvgs.append(taskssvg);
     }
