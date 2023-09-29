@@ -325,7 +325,7 @@ void VirtualDesktopManager::load()
         groupname.sprintf("Desktops-screen-%d", screen_number);
     }
     KConfigGroup group(m_config, groupname);
-    const int n = group.readEntry("Number", 1);
+    const int n = group.readEntry("Number", 2);
     setCount(n);
     if (m_rootInfo) {
         for (int i = 1; i <= n; i++) {
