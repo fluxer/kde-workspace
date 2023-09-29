@@ -237,16 +237,18 @@ void PagerSvg::slotUpdateSvgAndToolTip()
     setSvg(m_framesvg);
     Plasma::ToolTipContent plasmatooltip;
     plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(KWindowSystem::desktopName(m_desktop)));
-    QList<WId> windowstopreview;
+    QMultiMap<Time,WId> windowstopreview;
+    // NOTE: the limit of windows to preview is 4 which is why windows to preview are sorted
+    // based on X11 timestamp
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
         const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
         if (!kwindowinfo.isOnDesktop(m_desktop)) {
             continue;
         }
-        windowstopreview.append(task.window);
+        NETWinInfo netwininfo(QX11Info::display(), task.window, QX11Info::appRootWindow(), NET::WM2UserTime);
+        windowstopreview.insertMulti(netwininfo.userTime(), task.window);
     }
-    // NOTE: the limit of windows to preview is 4, perhaps add based on X11 timestamp?
-    plasmatooltip.setWindowsToPreview(windowstopreview);
+    plasmatooltip.setWindowsToPreview(windowstopreview.values());
     plasmatooltip.setClickable(true);
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
