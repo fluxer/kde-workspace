@@ -149,6 +149,7 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(option);
     Q_UNUSED(widget);
+    painter->setRenderHint(QPainter::Antialiasing);
     const QRectF brect = boundingRect();
     m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop, m_hovered));
     m_framesvg->resizeFrame(brect.size());
