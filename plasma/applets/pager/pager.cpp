@@ -20,7 +20,7 @@
 #include "kworkspace/ktaskmanager.h"
 
 #include <QX11Info>
-#include <QGridLayout>
+#include <Plasma/Animation>
 #include <Plasma/IconWidget>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -43,20 +43,6 @@ static QString kElementPrefixForDesktop(const int desktop)
         return QString::fromLatin1("active");
     }
     return QString::fromLatin1("normal");
-}
-
-static QRectF kAdjustRect(const QRectF &rect)
-{
-    QRectF result = rect;
-    result.setWidth(result.width() - (s_spacing * 2));
-    return result;
-}
-
-static QFont kGetFont()
-{
-    QFont font = KGlobalSettings::smallestReadableFont();
-    font.setBold(true);
-    return font;
 }
 
 static bool kHandleMouseEvent(QGraphicsSceneMouseEvent *event)
@@ -87,13 +73,15 @@ class PagerIcon : public Plasma::IconWidget
 public:
     explicit PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent);
 
-private Q_SLOTS:
-    void slotClicked();
-    void slotTaskChanged(const KTaskManager::Task &task);
-
-private:
+    QByteArray taskID() const;
+    void animatedShow();
+    void animatedRemove();
     void updateIconAndToolTip();
 
+private Q_SLOTS:
+    void slotClicked();
+
+private:
     KTaskManager::Task m_task;
 };
 
@@ -106,10 +94,32 @@ PagerIcon::PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent)
         this, SIGNAL(clicked()),
         this, SLOT(slotClicked())
     );
-    connect(
-        KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
-        this, SLOT(slotTaskChanged(KTaskManager::Task))
-    );
+}
+
+QByteArray PagerIcon::taskID() const
+{
+    return m_task.id;
+}
+
+void PagerIcon::animatedShow()
+{
+    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
+    Q_ASSERT(animation != nullptr);
+    animation->setTargetWidget(this);
+    animation->setProperty("startOpacity", 0.0);
+    animation->setProperty("targetOpacity", 1.0);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void PagerIcon::animatedRemove()
+{
+    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
+    Q_ASSERT(animation != nullptr);
+    connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
+    animation->setTargetWidget(this);
+    animation->setProperty("startOpacity", 1.0);
+    animation->setProperty("targetOpacity", 0.0);
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void PagerIcon::updateIconAndToolTip()
@@ -125,13 +135,6 @@ void PagerIcon::updateIconAndToolTip()
 void PagerIcon::slotClicked()
 {
     KTaskManager::self()->activateRaiseOrIconify(m_task);
-}
-
-void PagerIcon::slotTaskChanged(const KTaskManager::Task &task)
-{
-    if (task.id == m_task.id) {
-        updateIconAndToolTip();
-    }
 }
 
 
@@ -151,9 +154,10 @@ protected:
 private Q_SLOTS:
     void slotClicked(const Qt::MouseButton button);
     void slotUpdate();
-    void slotUpdateSvgAndToolTip();
-    void slotUpdateLayout();
+    void slotUpdateSvg();
+    void slotTaskAdded(const KTaskManager::Task &task);
     void slotTaskChanged(const KTaskManager::Task &task);
+    void slotTaskRemoved(const KTaskManager::Task &task);
 
 private:
     QMutex m_mutex;
@@ -171,13 +175,19 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
     m_layout(nullptr),
     m_spacer(nullptr)
 {
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     m_layout = new QGraphicsLinearLayout(orientation, this);
     m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
     m_layout->setSpacing(0);
 
-    slotUpdateSvgAndToolTip();
-    slotUpdateLayout();
+    slotUpdateSvg();
     setAcceptHoverEvents(true);
+
+    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+        slotTaskAdded(task);
+    }
+
     connect(
         this, SIGNAL(clicked(Qt::MouseButton)),
         this, SLOT(slotClicked(Qt::MouseButton))
@@ -187,12 +197,8 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
         this, SLOT(slotUpdate())
     );
     connect(
-        KWindowSystem::self(), SIGNAL(desktopNamesChanged()),
-        this, SLOT(slotUpdate())
-    );
-    connect(
         KTaskManager::self(), SIGNAL(taskAdded(KTaskManager::Task)),
-        this, SLOT(slotUpdateLayout())
+        this, SLOT(slotTaskAdded(KTaskManager::Task))
     );
     connect(
         KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
@@ -200,11 +206,11 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
     );
     connect(
         KTaskManager::self(), SIGNAL(taskRemoved(KTaskManager::Task)),
-        this, SLOT(slotUpdateLayout())
+        this, SLOT(slotTaskRemoved(KTaskManager::Task))
     );
     connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-        this, SLOT(slotUpdateSvgAndToolTip())
+        this, SLOT(slotUpdateSvg())
     );
 }
 
@@ -245,7 +251,7 @@ void PagerSvg::slotUpdate()
     update();
 }
 
-void PagerSvg::slotUpdateSvgAndToolTip()
+void PagerSvg::slotUpdateSvg()
 {
     if (m_framesvg) {
         delete m_framesvg;
@@ -255,26 +261,20 @@ void PagerSvg::slotUpdateSvgAndToolTip()
     setSvg(m_framesvg);
 }
 
-void PagerSvg::slotUpdateLayout()
+void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
 {
-    // TODO: this should be incremental and animated
     QMutexLocker locker(&m_mutex);
-    foreach (PagerIcon* pagericon, m_pagericons) {
-        m_layout->removeItem(pagericon);
-    }
-    qDeleteAll(m_pagericons);
-    m_pagericons.clear();
     if (m_spacer) {
         m_layout->removeItem(m_spacer);
+        delete m_spacer;
+        m_spacer = nullptr;
     }
-    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
-        if (!kwindowinfo.isOnDesktop(m_desktop)) {
-            continue;
-        }
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+    if (kwindowinfo.isOnDesktop(m_desktop)) {
         PagerIcon* pagericon = new PagerIcon(task, this);
         m_layout->addItem(pagericon);
         m_pagericons.append(pagericon);
+        pagericon->animatedShow();
     }
     // TODO: once there is no space for items, items will be available via menu-like widget (those
     // that cannot fit)
@@ -290,8 +290,35 @@ void PagerSvg::slotTaskChanged(const KTaskManager::Task &task)
 {
     // special case for tasks moved from one virtual desktop to another
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
-    if (!kwindowinfo.isOnDesktop(m_desktop) || task.desktop == m_desktop) {
-        slotUpdateLayout();
+    if (!kwindowinfo.isOnDesktop(m_desktop)) {
+        slotTaskRemoved(task);
+    } else {
+        QMutexLocker locker(&m_mutex);
+        PagerIcon* foundpagericon = nullptr;
+        foreach (PagerIcon* pagericon, m_pagericons) {
+            if (pagericon->taskID() == task.id) {
+                foundpagericon = pagericon;
+                break;
+            }
+        }
+        locker.unlock();
+        if (!foundpagericon) {
+            slotTaskAdded(task);
+        } else {
+            foundpagericon->updateIconAndToolTip();
+        }
+    }
+}
+
+void PagerSvg::slotTaskRemoved(const KTaskManager::Task &task)
+{
+    QMutexLocker locker(&m_mutex);
+    foreach (PagerIcon* pagericon, m_pagericons) {
+        if (pagericon->taskID() == task.id) {
+            m_pagericons.removeAll(pagericon);
+            pagericon->animatedRemove();
+            break;
+        }
     }
 }
 
@@ -422,7 +449,7 @@ void PagerApplet::slotUpdateLayout()
     m_pagersvgs.clear();
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
-    m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     const Qt::Orientation orientation = m_layout->orientation();
     for (int i = 0; i < numberofdesktops; i++) {
         PagerSvg* pagersvg = new PagerSvg(i + 1, orientation, this);
