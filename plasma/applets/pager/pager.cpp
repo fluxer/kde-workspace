@@ -563,9 +563,9 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
 void PagerApplet::updatePagers()
 {
     QMutexLocker locker(&m_mutex);
-    // NOTE: if the preferred size is not set the pager widgets will expand and shrink in a very
-    // weird way when task icon is added or removed (sometimes expanding, sometimes shrinking)
-    // because someone tried to make layouts and policies algorithms smart
+    // NOTE: if the preferred (or maximum) size is not set the pager widgets will expand and shrink
+    // in a very weird way when task icon is added or removed (sometimes expanding, sometimes
+    // shrinking) because someone tried to make layouts and policies algorithms smart
     QSizeF dividedappletsize = size();
     if (m_layout->orientation() == Qt::Horizontal) {
         dividedappletsize.setWidth((dividedappletsize.width() / m_pagersvgs.size()));
