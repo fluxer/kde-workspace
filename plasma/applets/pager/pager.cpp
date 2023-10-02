@@ -259,7 +259,6 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_layout = new QGraphicsLinearLayout(orientation, this);
-    m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
     m_layout->setSpacing(0);
 
     slotUpdateSvg();
@@ -350,9 +349,9 @@ void PagerSvg::slotUpdateSvg()
     m_framesvg->setImagePath("widgets/pager");
     setSvg(m_framesvg);
     if (m_pagericon) {
-        PagerApplet* pager = qobject_cast<PagerApplet*>(parentObject());
-        Q_ASSERT(pager != nullptr);
-        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pager->location()));
+        PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
+        Q_ASSERT(pagerapplet != nullptr);
+        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pagerapplet->location()));
     }
 }
 
@@ -380,10 +379,10 @@ void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
     }
     m_layout->addItem(m_spacer);
     if (!m_pagericon) {
-        PagerApplet* pager = qobject_cast<PagerApplet*>(parentObject());
-        Q_ASSERT(pager != nullptr);
+        PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
+        Q_ASSERT(pagerapplet != nullptr);
         m_pagericon = new Plasma::IconWidget(this);
-        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pager->location()));
+        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pagerapplet->location()));
         connect(
             m_pagericon, SIGNAL(clicked()),
             this, SLOT(slotShowDialog())
@@ -396,8 +395,8 @@ void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
 
 void PagerSvg::slotTaskChanged(const KTaskManager::Task &task)
 {
-    // special case for tasks moved from one virtual desktop to another, the check for showing the
-    // task on m_desktop is there because tasks may be shown on all desktops too
+    // special case for tasks moved from one virtual desktop to another, the check is done via
+    // KWindowInfo::isOnDesktop() because tasks may be shown on all desktops
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
     if (!kwindowinfo.isOnDesktop(m_desktop)) {
         slotTaskRemoved(task);
@@ -477,6 +476,8 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(s_spacing);
 
     // early setup to get proper initial size
     slotUpdateLayout();
@@ -562,16 +563,22 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
 void PagerApplet::updatePagers()
 {
     QMutexLocker locker(&m_mutex);
+    // NOTE: if the preferred size is not set the pager widgets will expand and shrink in a very
+    // weird way when task icon is added or removed (sometimes expanding, sometimes shrinking)
+    // because someone tried to make layouts and policies algorithms smart
     QSizeF dividedappletsize = size();
-    // somewhat correct
     if (m_layout->orientation() == Qt::Horizontal) {
-        dividedappletsize.setWidth(dividedappletsize.width() / m_pagersvgs.size());
+        dividedappletsize.setWidth((dividedappletsize.width() / m_pagersvgs.size()));
     } else {
-        dividedappletsize.setHeight(dividedappletsize.height() / m_pagersvgs.size());
+        dividedappletsize.setHeight((dividedappletsize.height() / m_pagersvgs.size()));
     }
     foreach (PagerSvg* pagersvg, m_pagersvgs) {
         pagersvg->setup(m_layout->orientation(), location());
-        pagersvg->setMaximumSize(dividedappletsize);
+        if (m_layout->orientation() == Qt::Horizontal) {
+            pagersvg->setPreferredWidth(dividedappletsize.width());
+        } else {
+            pagersvg->setPreferredHeight(dividedappletsize.height());
+        }
     }
 }
 
@@ -585,7 +592,6 @@ void PagerApplet::slotUpdateLayout()
     m_pagersvgs.clear();
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
-    m_layout->setContentsMargins(0, 0, 0, 0);
     const Qt::Orientation orientation = m_layout->orientation();
     for (int i = 0; i < numberofdesktops; i++) {
         PagerSvg* pagersvg = new PagerSvg(i + 1, orientation, this);
