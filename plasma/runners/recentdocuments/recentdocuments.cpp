@@ -32,7 +32,6 @@
 RecentDocuments::RecentDocuments(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args)
 {
-    Q_UNUSED(args);
     setObjectName(QLatin1String("Recent Documents"));
     addSyntax(
         Plasma::RunnerSyntax(
