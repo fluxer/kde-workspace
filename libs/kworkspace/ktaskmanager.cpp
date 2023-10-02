@@ -72,7 +72,6 @@ private Q_SLOTS:
     void slotNewWindow(const WId window);
     void slotChangedWindow(const WId window);
     void slotRemovedWindow(const WId window);
-    void slotActiveWindow();
 
 private:
     QMutex m_mutex;
@@ -105,10 +104,6 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
     connect(
         KWindowSystem::self(), SIGNAL(windowRemoved(WId)),
         this, SLOT(slotRemovedWindow(WId))
-    );
-    connect(
-        KWindowSystem::self(), SIGNAL(activeWindowChanged(WId)),
-        this, SLOT(slotActiveWindow())
     );
 }
 
@@ -157,19 +152,6 @@ void KTaskManagerPrivate::slotRemovedWindow(const WId window)
             emit ktaskmanager->taskRemoved(task);
             break;
         }
-    }
-}
-
-void KTaskManagerPrivate::slotActiveWindow()
-{
-    // the active state is not tracked so it is unknown which window became inactive
-    KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-    QMutexLocker locker(&m_mutex);
-    QMutableListIterator<KTaskManager::Task> iter(tasks);
-    while (iter.hasNext()) {
-        KTaskManager::Task &task = iter.next();
-        kUpdateTask(task);
-        emit ktaskmanager->taskChanged(task);
     }
 }
 
