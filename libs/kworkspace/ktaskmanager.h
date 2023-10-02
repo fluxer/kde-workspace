@@ -32,9 +32,7 @@ class KWORKSPACE_EXPORT KTaskManager : public QObject
 public:
     struct Task
     {
-        QByteArray id;
         QString name;
-        QPixmap icon;
         int desktop;
         WId window;
     };

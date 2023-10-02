@@ -106,13 +106,13 @@ void SwitchWindow::makeMenu()
     // make all the window actions
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
         if (task.name.isEmpty()) {
-            kDebug() << "skipping task with empty name" << task.id;
+            kDebug() << "skipping task with empty name" << task.window;
             continue;
         }
 
         QAction *action = new QAction(task.name, m_menu);
-        action->setIcon(KIcon(task.icon));
-        action->setData(task.id);
+        action->setIcon(KIcon(KWindowSystem::icon(task.window)));
+        action->setData(qlonglong(task.window));
         desktops.insert(task.desktop, action);
     }
 
@@ -180,10 +180,10 @@ QList<QAction*> SwitchWindow::contextualActions()
 
 void SwitchWindow::switchTo(QAction *action)
 {
-    const QByteArray taskid = action->data().toByteArray();
-    kDebug() << "task id" << taskid;
+    const qlonglong taskwindow = action->data().toLongLong();
+    kDebug() << "task window" << taskwindow;
     foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        if (task.id == taskid) {
+        if (task.window == taskwindow) {
             KTaskManager::self()->activateRaiseOrIconify(task);
             return;
         }

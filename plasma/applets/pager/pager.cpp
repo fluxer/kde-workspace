@@ -134,7 +134,7 @@ class PagerIcon : public Plasma::IconWidget
 public:
     explicit PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent);
 
-    QByteArray taskID() const;
+    WId taskWindow() const;
     void animatedShow();
     void animatedRemove();
     void updateIconAndToolTip();
@@ -162,9 +162,9 @@ PagerIcon::PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent)
     );
 }
 
-QByteArray PagerIcon::taskID() const
+WId PagerIcon::taskWindow() const
 {
-    return m_task.id;
+    return m_task.window;
 }
 
 void PagerIcon::animatedShow()
@@ -190,7 +190,7 @@ void PagerIcon::animatedRemove()
 
 void PagerIcon::updateIconAndToolTip()
 {
-    setIcon(m_task.icon);
+    setIcon(KWindowSystem::icon(m_task.window));
     Plasma::ToolTipContent plasmatooltip;
     plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_task.name));
     plasmatooltip.setWindowToPreview(m_task.window);
@@ -404,7 +404,7 @@ void PagerSvg::slotTaskChanged(const KTaskManager::Task &task)
         QMutexLocker locker(&m_mutex);
         PagerIcon* foundpagericon = nullptr;
         foreach (PagerIcon* pagericon, m_pagericons) {
-            if (pagericon->taskID() == task.id) {
+            if (pagericon->taskWindow() == task.window) {
                 foundpagericon = pagericon;
                 break;
             }
@@ -422,7 +422,7 @@ void PagerSvg::slotTaskRemoved(const KTaskManager::Task &task)
 {
     QMutexLocker locker(&m_mutex);
     foreach (PagerIcon* pagericon, m_pagericons) {
-        if (pagericon->taskID() == task.id) {
+        if (pagericon->taskWindow() == task.window) {
             m_pagericons.removeAll(pagericon);
             pagericon->animatedRemove();
             break;

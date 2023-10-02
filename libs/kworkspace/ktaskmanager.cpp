@@ -30,11 +30,6 @@
 
 static const int s_nodesktop = -1;
 
-static QByteArray kGetTaskID()
-{
-    return qRandomUuid();
-}
-
 static bool kIsTaskWindow(const WId window)
 {
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(window, NET::WMWindowType | NET::WMState);
@@ -59,9 +54,6 @@ static void kUpdateTask(KTaskManager::Task &task, const bool force = false)
         task.window,
         NET::WMVisibleName | NET::WMDesktop
     );
-    if (task.icon.isNull() || force) {
-        task.icon = KWindowSystem::icon(task.window);
-    }
     if (task.name.isEmpty() || force) {
         task.name = kwindowinfo.visibleName();
     }
@@ -195,7 +187,6 @@ KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
         }
         kDebug() << "adding task for" << window;
         KTaskManager::Task task;
-        task.id = kGetTaskID();
         task.window = window;
         task.desktop = s_nodesktop;
         kUpdateTask(task);
@@ -229,7 +220,6 @@ void KTaskManagerPrivate::slotNewWindow(const WId window)
     QMutexLocker locker(&m_mutex);
     kDebug() << "new window task for" << window;
     KTaskManager::Task task;
-    task.id = kGetTaskID();
     task.window = window;
     task.desktop = s_nodesktop;
     kUpdateTask(task);
@@ -354,7 +344,7 @@ QMenu* KTaskManager::menuForTask(const KTaskManager::Task &task, QWidget *parent
 {
     QMenu* result = new QMenu(parent);
     result->setTitle(task.name);
-    result->setIcon(KIcon(task.icon));
+    result->setIcon(KIcon(KWindowSystem::icon(task.window)));
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
         task.window,
         NET::WMState | NET::XAWMState,
