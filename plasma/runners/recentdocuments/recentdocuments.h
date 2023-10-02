@@ -22,24 +22,24 @@
 
 #include <Plasma/AbstractRunner>
 
-class RecentDocuments : public Plasma::AbstractRunner {
+class RecentDocuments : public Plasma::AbstractRunner
+{
     Q_OBJECT
+public:
+    RecentDocuments(QObject *parent, const QVariantList &args);
+    ~RecentDocuments();
 
-    public:
-        RecentDocuments( QObject *parent, const QVariantList& args );
-        ~RecentDocuments();
+    void match(Plasma::RunnerContext &context);
+    void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match);
 
-        void match(Plasma::RunnerContext &context);
-        void run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match);
+private Q_SLOTS:
+    QMimeData* mimeDataForMatch(const Plasma::QueryMatch *match);
 
-    private Q_SLOTS:
-        QMimeData * mimeDataForMatch(const Plasma::QueryMatch *match);
+private Q_SLOTS:
+    void loadRecentDocuments();
 
-    private Q_SLOTS:
-        void loadRecentDocuments();
-
-    private:
-        QStringList m_recentdocuments;
+private:
+    QStringList m_recentdocuments;
 };
 
 K_EXPORT_PLASMA_RUNNER(recentdocuments, RecentDocuments)

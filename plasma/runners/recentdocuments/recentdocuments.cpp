@@ -29,19 +29,26 @@
 #include <KRun>
 #include <KRecentDocument>
 
-
-RecentDocuments::RecentDocuments(QObject *parent, const QVariantList& args)
+RecentDocuments::RecentDocuments(QObject *parent, const QVariantList &args)
     : Plasma::AbstractRunner(parent, args)
 {
     Q_UNUSED(args);
-    setObjectName( QLatin1String("Recent Documents" ));
+    setObjectName(QLatin1String("Recent Documents"));
+    addSyntax(
+        Plasma::RunnerSyntax(
+            ":q:",
+            i18n("Looks for documents recently used with names matching :q:.")
+        )
+    );
 
     loadRecentDocuments();
     // listen for changes to the list of recent documents
     KDirWatch *recentDocWatch = new KDirWatch(this);
     recentDocWatch->addDir(KRecentDocument::recentDocumentDirectory());
-    connect(recentDocWatch,SIGNAL(dirty(QString)),this,SLOT(loadRecentDocuments()));
-    addSyntax(Plasma::RunnerSyntax(":q:", i18n("Looks for documents recently used with names matching :q:.")));
+    connect(
+        recentDocWatch, SIGNAL(dirty(QString)),
+        this, SLOT(loadRecentDocuments())
+    );
 }
 
 RecentDocuments::~RecentDocuments()
@@ -72,7 +79,7 @@ void RecentDocuments::match(Plasma::RunnerContext &context)
         }
 
         if (document.contains(term, Qt::CaseInsensitive)) {
-            KConfig _config( document, KConfig::SimpleConfig );
+            KConfig _config( document, KConfig::SimpleConfig);
             KConfigGroup config(&_config, "Desktop Entry" );
             Plasma::QueryMatch match(this);
             match.setType(Plasma::QueryMatch::PossibleMatch);
@@ -89,19 +96,19 @@ void RecentDocuments::match(Plasma::RunnerContext &context)
 void RecentDocuments::run(const Plasma::RunnerContext &context, const Plasma::QueryMatch &match)
 {
     Q_UNUSED(context)
-    QString url = match.data().toString();
+    const QString url = match.data().toString();
     kDebug() << "Opening Recent Document" << url;
     new KRun(url, 0);
 }
 
-QMimeData * RecentDocuments::mimeDataForMatch(const Plasma::QueryMatch * match)
+QMimeData* RecentDocuments::mimeDataForMatch(const Plasma::QueryMatch *match)
 {
-    QMimeData * result = new QMimeData();
+    QMimeData* result = new QMimeData();
+    const QString url = match->data().toString();
     QList<QUrl> urls;
-    urls << QUrl(match->data().toString());
+    urls << QUrl(url);
     result->setUrls(urls);
-
-    result->setText(match->data().toString());
+    result->setText(url);
     return result;
 }
 
