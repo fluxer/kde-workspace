@@ -46,6 +46,25 @@ static QString kElementPrefixForDesktop(const int desktop)
     return QString::fromLatin1("normal");
 }
 
+static QString kElementForLocation(const Plasma::Location location)
+{
+    switch (location) {
+        case Plasma::Location::TopEdge: {
+            return QString::fromLatin1("down-arrow");
+        }
+        case Plasma::Location::BottomEdge: {
+            return QString::fromLatin1("up-arrow");
+        }
+        case Plasma::Location::LeftEdge: {
+            return QString::fromLatin1("right-arrow");
+        }
+        case Plasma::Location::RightEdge: {
+            return QString::fromLatin1("left-arrow");
+        }
+    }
+    return QString::fromLatin1("up-arrow");
+}
+
 static bool kHandleMouseEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->button() == Qt::MiddleButton) {
@@ -199,7 +218,7 @@ class PagerSvg : public Plasma::SvgWidget
 public:
     PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphicsItem *parent = nullptr);
 
-    void setLayoutOrientation(const Qt::Orientation orientation);
+    void setup(const Qt::Orientation orientation, const Plasma::Location location);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
@@ -276,9 +295,12 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
     );
 }
 
-void PagerSvg::setLayoutOrientation(const Qt::Orientation orientation)
+void PagerSvg::setup(const Qt::Orientation orientation, const Plasma::Location location)
 {
     m_layout->setOrientation(orientation);
+    if (m_pagericon) {
+        m_pagericon->setSvg("widgets/arrows", kElementForLocation(location));
+    }
 }
 
 void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -327,6 +349,11 @@ void PagerSvg::slotUpdateSvg()
     m_framesvg = new Plasma::FrameSvg(this);
     m_framesvg->setImagePath("widgets/pager");
     setSvg(m_framesvg);
+    if (m_pagericon) {
+        PagerApplet* pager = qobject_cast<PagerApplet*>(parentObject());
+        Q_ASSERT(pager != nullptr);
+        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pager->location()));
+    }
 }
 
 void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
@@ -353,8 +380,10 @@ void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
     }
     m_layout->addItem(m_spacer);
     if (!m_pagericon) {
+        PagerApplet* pager = qobject_cast<PagerApplet*>(parentObject());
+        Q_ASSERT(pager != nullptr);
         m_pagericon = new Plasma::IconWidget(this);
-        m_pagericon->setSvg("widgets/arrows", "up-arrow");
+        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pager->location()));
         connect(
             m_pagericon, SIGNAL(clicked()),
             this, SLOT(slotShowDialog())
@@ -507,12 +536,12 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
-                updateOrientation();
+                updatePagers();
                 return;
             }
             case Plasma::FormFactor::Vertical: {
                 m_layout->setOrientation(Qt::Vertical);
-                updateOrientation();
+                updatePagers();
                 return;
             }
             default: {
@@ -526,11 +555,11 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         } else {
             m_layout->setOrientation(Qt::Vertical);
         }
-        updateOrientation();
+        updatePagers();
     }
 }
 
-void PagerApplet::updateOrientation()
+void PagerApplet::updatePagers()
 {
     QMutexLocker locker(&m_mutex);
     QSizeF dividedappletsize = size();
@@ -541,7 +570,7 @@ void PagerApplet::updateOrientation()
         dividedappletsize.setHeight(dividedappletsize.height() / m_pagersvgs.size());
     }
     foreach (PagerSvg* pagersvg, m_pagersvgs) {
-        pagersvg->setLayoutOrientation(m_layout->orientation());
+        pagersvg->setup(m_layout->orientation(), location());
         pagersvg->setMaximumSize(dividedappletsize);
     }
 }

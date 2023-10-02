@@ -55,7 +55,7 @@ protected:
     void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
-    void updateOrientation();
+    void updatePagers();
 
     QMutex m_mutex;
     QGraphicsLinearLayout* m_layout;
