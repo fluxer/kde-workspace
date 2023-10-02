@@ -41,9 +41,9 @@ public:
     ~KTaskManager();
 
     QList<KTaskManager::Task> tasks() const;
-    bool isActive(const KTaskManager::Task &task) const;
-    bool demandsAttention(const KTaskManager::Task &task) const;
-    void activateRaiseOrIconify(const KTaskManager::Task &task);
+    static bool isActive(const KTaskManager::Task &task);
+    static bool demandsAttention(const KTaskManager::Task &task);
+    static void activateRaiseOrIconify(const KTaskManager::Task &task);
 
     static KTaskManager* self();
 

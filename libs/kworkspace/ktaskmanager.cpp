@@ -175,13 +175,13 @@ QList<KTaskManager::Task> KTaskManager::tasks() const
     return d->tasks;
 }
 
-bool KTaskManager::isActive(const KTaskManager::Task &task) const
+bool KTaskManager::isActive(const KTaskManager::Task &task)
 {
     const WId activewindow = KWindowSystem::activeWindow();
     return (task.window == activewindow || KWindowSystem::transientFor(task.window) == activewindow);
 }
 
-bool KTaskManager::demandsAttention(const KTaskManager::Task &task) const
+bool KTaskManager::demandsAttention(const KTaskManager::Task &task)
 {
     KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
         task.window,
