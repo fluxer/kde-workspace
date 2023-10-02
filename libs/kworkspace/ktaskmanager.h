@@ -22,7 +22,7 @@
 #include "kworkspace_export.h"
 
 #include <QObject>
-#include <QMenu>
+#include <qwindowdefs.h>
 
 class KTaskManagerPrivate;
 
@@ -30,34 +30,29 @@ class KWORKSPACE_EXPORT KTaskManager : public QObject
 {
     Q_OBJECT
 public:
-    struct Task
-    {
-        QString name;
-        int desktop;
-        WId window;
-    };
-
     KTaskManager(QObject *parent = nullptr);
     ~KTaskManager();
 
-    QList<KTaskManager::Task> tasks() const;
-    static bool isActive(const KTaskManager::Task &task);
-    static bool demandsAttention(const KTaskManager::Task &task);
-    static void activateRaiseOrIconify(const KTaskManager::Task &task);
+    QList<WId> tasks() const;
+    static bool isActive(const WId task);
+    static bool demandsAttention(const WId task);
+    static void activateRaiseOrIconify(const WId task);
 
     static KTaskManager* self();
 
 Q_SIGNALS:
-    void taskAdded(const KTaskManager::Task &task);
-    void taskChanged(const KTaskManager::Task &task);
-    void taskRemoved(const KTaskManager::Task &task);
+    void taskAdded(const WId task);
+    void taskChanged(const WId task);
+    void taskRemoved(const WId task);
 
 private:
     friend KTaskManagerPrivate;
     Q_DISABLE_COPY(KTaskManager);
     KTaskManagerPrivate* d;
+    
+    Q_PRIVATE_SLOT(d, void _k_slotNewWindow(const WId window));
+    Q_PRIVATE_SLOT(d, void _k_slotChangedWindow(const WId window));
+    Q_PRIVATE_SLOT(d, void _k_slotRemovedWindow(const WId window));
 };
-
-Q_DECLARE_METATYPE(KTaskManager::Task);
 
 #endif // KTASKMANAGER_H

@@ -104,16 +104,21 @@ void SwitchWindow::makeMenu()
     QMultiHash<int, QAction*> desktops;
 
     // make all the window actions
-    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        if (task.name.isEmpty()) {
-            kDebug() << "skipping task with empty name" << task.window;
+    foreach (const WId task, KTaskManager::self()->tasks()) {
+        const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
+            task,
+            NET::WMVisibleName | NET::WMDesktop
+        );
+        const QString taskname = kwindowinfo.visibleName();
+        if (taskname.isEmpty()) {
+            kDebug() << "skipping task with empty name" << task;
             continue;
         }
 
-        QAction *action = new QAction(task.name, m_menu);
-        action->setIcon(KIcon(KWindowSystem::icon(task.window)));
-        action->setData(qlonglong(task.window));
-        desktops.insert(task.desktop, action);
+        QAction *action = new QAction(taskname, m_menu);
+        action->setIcon(KIcon(KWindowSystem::icon(task)));
+        action->setData(qlonglong(task));
+        desktops.insert(kwindowinfo.desktop(), action);
     }
 
     //sort into menu
@@ -180,15 +185,9 @@ QList<QAction*> SwitchWindow::contextualActions()
 
 void SwitchWindow::switchTo(QAction *action)
 {
-    const qlonglong taskwindow = action->data().toLongLong();
-    kDebug() << "task window" << taskwindow;
-    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
-        if (task.window == taskwindow) {
-            KTaskManager::self()->activateRaiseOrIconify(task);
-            return;
-        }
-    }
-    kWarning() << "could not find the task window";
+    const qlonglong task = action->data().toLongLong();
+    kDebug() << "task window" << task;
+    KTaskManager::self()->activateRaiseOrIconify(task);
 }
 
 void SwitchWindow::clearWindowsOrder()

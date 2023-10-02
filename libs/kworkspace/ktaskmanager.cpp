@@ -48,110 +48,63 @@ static bool kIsTaskWindow(const WId window)
     return true;
 }
 
-static void kUpdateTask(KTaskManager::Task &task, const bool force = false)
+class KTaskManagerPrivate
 {
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
-        task.window,
-        NET::WMVisibleName | NET::WMDesktop
-    );
-    if (task.name.isEmpty() || force) {
-        task.name = kwindowinfo.visibleName();
-    }
-    task.desktop = kwindowinfo.desktop();
-}
-
-class KTaskManagerPrivate : QObject
-{
-    Q_OBJECT
 public:
-    KTaskManagerPrivate(QObject *parent);
+    KTaskManagerPrivate(KTaskManager *ktaskmanager);
 
-    QList<KTaskManager::Task> tasks;
+    QList<WId> tasks;
 
-private Q_SLOTS:
-    void slotNewWindow(const WId window);
-    void slotChangedWindow(const WId window);
-    void slotRemovedWindow(const WId window);
+    void _k_slotNewWindow(const WId window);
+    void _k_slotChangedWindow(const WId window);
+    void _k_slotRemovedWindow(const WId window);
 
 private:
     QMutex m_mutex;
+    KTaskManager* m_taskmanager;
 };
 
-KTaskManagerPrivate::KTaskManagerPrivate(QObject *parent)
-    : QObject(parent)
+KTaskManagerPrivate::KTaskManagerPrivate(KTaskManager *ktaskmanager)
+    : m_taskmanager(ktaskmanager)
 {
     foreach (const WId window, KWindowSystem::stackingOrder()) {
         if (!kIsTaskWindow(window)) {
             continue;
         }
-        kDebug() << "adding task for" << window;
-        KTaskManager::Task task;
-        task.window = window;
-        task.desktop = s_nodesktop;
-        kUpdateTask(task);
-        tasks.append(task);
-        KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent);
-        emit ktaskmanager->taskAdded(task);
+        kDebug() << "adding task window" << window;
+        tasks.append(window);
+        emit m_taskmanager->taskAdded(window);
     }
-    connect(
-        KWindowSystem::self(), SIGNAL(windowAdded(WId)),
-        this, SLOT(slotNewWindow(WId))
-    );
-    connect(
-        KWindowSystem::self(), SIGNAL(windowChanged(WId)),
-        this, SLOT(slotChangedWindow(WId))
-    );
-    connect(
-        KWindowSystem::self(), SIGNAL(windowRemoved(WId)),
-        this, SLOT(slotRemovedWindow(WId))
-    );
 }
 
-void KTaskManagerPrivate::slotNewWindow(const WId window)
+void KTaskManagerPrivate::_k_slotNewWindow(const WId window)
 {
     if (!kIsTaskWindow(window)) {
         return;
     }
     QMutexLocker locker(&m_mutex);
-    kDebug() << "new window task for" << window;
-    KTaskManager::Task task;
-    task.window = window;
-    task.desktop = s_nodesktop;
-    kUpdateTask(task);
-    tasks.append(task);
-    KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-    emit ktaskmanager->taskAdded(task);
+    kDebug() << "new task window" << window;
+    tasks.append(window);
+    emit m_taskmanager->taskAdded(window);
 }
 
-void KTaskManagerPrivate::slotChangedWindow(const WId window)
+void KTaskManagerPrivate::_k_slotChangedWindow(const WId window)
 {
     QMutexLocker locker(&m_mutex);
-    QMutableListIterator<KTaskManager::Task> iter(tasks);
-    while (iter.hasNext()) {
-        KTaskManager::Task &task = iter.next();
-        if (task.window == window) {
-            kDebug() << "changed window task for" << window;
-            kUpdateTask(task, true);
-            KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-            emit ktaskmanager->taskChanged(task);
-            break;
-        }
+    if (tasks.contains(window)) {
+        kDebug() << "changed task window" << window;
+        emit m_taskmanager->taskChanged(window);
     }
 }
 
-void KTaskManagerPrivate::slotRemovedWindow(const WId window)
+void KTaskManagerPrivate::_k_slotRemovedWindow(const WId window)
 {
     QMutexLocker locker(&m_mutex);
-    QMutableListIterator<KTaskManager::Task> iter(tasks);
-    while (iter.hasNext()) {
-        const KTaskManager::Task task = iter.next();
-        if (task.window == window) {
-            kDebug() << "removed window task for" << window;
-            iter.remove();
-            KTaskManager* ktaskmanager = qobject_cast<KTaskManager*>(parent());
-            emit ktaskmanager->taskRemoved(task);
-            break;
-        }
+    const int indexofwindow = tasks.indexOf(window);
+    if (indexofwindow >= 0) {
+        kDebug() << "removed task window" << window;
+        tasks.removeAt(indexofwindow);
+        emit m_taskmanager->taskRemoved(window);
     }
 }
 
@@ -163,6 +116,18 @@ KTaskManager::KTaskManager(QObject *parent)
     d(nullptr)
 {
     d = new KTaskManagerPrivate(this);
+    connect(
+        KWindowSystem::self(), SIGNAL(windowAdded(WId)),
+        this, SLOT(_k_slotNewWindow(WId))
+    );
+    connect(
+        KWindowSystem::self(), SIGNAL(windowChanged(WId)),
+        this, SLOT(_k_slotChangedWindow(WId))
+    );
+    connect(
+        KWindowSystem::self(), SIGNAL(windowRemoved(WId)),
+        this, SLOT(_k_slotRemovedWindow(WId))
+    );
 }
 
 KTaskManager::~KTaskManager()
@@ -170,41 +135,41 @@ KTaskManager::~KTaskManager()
     delete d;
 }
 
-QList<KTaskManager::Task> KTaskManager::tasks() const
+QList<WId> KTaskManager::tasks() const
 {
     return d->tasks;
 }
 
-bool KTaskManager::isActive(const KTaskManager::Task &task)
+bool KTaskManager::isActive(const WId task)
 {
     const WId activewindow = KWindowSystem::activeWindow();
-    return (task.window == activewindow || KWindowSystem::transientFor(task.window) == activewindow);
+    return (task == activewindow || KWindowSystem::transientFor(task) == activewindow);
 }
 
-bool KTaskManager::demandsAttention(const KTaskManager::Task &task)
+bool KTaskManager::demandsAttention(const WId task)
 {
     KWindowInfo kwindowinfo = KWindowSystem::windowInfo(
-        task.window,
+        task,
         NET::WMState | NET::XAWMState
     );
     if (kwindowinfo.hasState(NET::DemandsAttention)) {
         return true;
     }
     kwindowinfo = KWindowSystem::windowInfo(
-        KWindowSystem::transientFor(task.window),
+        KWindowSystem::transientFor(task),
         NET::WMState | NET::XAWMState
     );
     return kwindowinfo.hasState(NET::DemandsAttention);
 }
 
-void KTaskManager::activateRaiseOrIconify(const KTaskManager::Task &task)
+void KTaskManager::activateRaiseOrIconify(const WId task)
 {
     if (isActive(task)) {
-        KWindowSystem::minimizeWindow(task.window);
+        KWindowSystem::minimizeWindow(task);
         return;
     }
-    KWindowSystem::activateWindow(task.window);
-    KWindowSystem::raiseWindow(task.window);
+    KWindowSystem::activateWindow(task);
+    KWindowSystem::raiseWindow(task);
 }
 
 KTaskManager* KTaskManager::self()
@@ -212,4 +177,4 @@ KTaskManager* KTaskManager::self()
     return globalktaskmanager;
 }
 
-#include "ktaskmanager.moc"
+#include "moc_ktaskmanager.cpp"

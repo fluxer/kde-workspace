@@ -93,13 +93,13 @@ class PagerDialog : public Plasma::Dialog
 public:
     explicit PagerDialog(QWidget *parent = nullptr);
 
-    void updateTasks(const QList<KTaskManager::Task> &tasks);
+    void updateTasks(const QList<WId> &tasks);
 
 private:
     QGraphicsScene* m_scene;
     QGraphicsWidget* m_widget;
     QGraphicsLinearLayout* m_layout;
-    QList<KTaskManager::Task> m_tasks;
+    QList<WId> m_tasks;
 };
 
 PagerDialog::PagerDialog(QWidget *parent)
@@ -121,7 +121,7 @@ PagerDialog::PagerDialog(QWidget *parent)
     setGraphicsWidget(m_widget);
 }
 
-void PagerDialog::updateTasks(const QList<KTaskManager::Task> &tasks)
+void PagerDialog::updateTasks(const QList<WId> &tasks)
 {
     // TODO:
     m_tasks = tasks;
@@ -132,7 +132,7 @@ class PagerIcon : public Plasma::IconWidget
 {
     Q_OBJECT
 public:
-    explicit PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent);
+    explicit PagerIcon(const WId task, QGraphicsItem *parent);
 
     WId taskWindow() const;
     void animatedShow();
@@ -144,10 +144,10 @@ private Q_SLOTS:
     void slotWindowPreviewActivated(const WId window);
 
 private:
-    KTaskManager::Task m_task;
+    WId m_task;
 };
 
-PagerIcon::PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent)
+PagerIcon::PagerIcon(const WId task, QGraphicsItem *parent)
     : Plasma::IconWidget(parent),
     m_task(task)
 {
@@ -164,7 +164,7 @@ PagerIcon::PagerIcon(const KTaskManager::Task &task, QGraphicsItem *parent)
 
 WId PagerIcon::taskWindow() const
 {
-    return m_task.window;
+    return m_task;
 }
 
 void PagerIcon::animatedShow()
@@ -190,10 +190,11 @@ void PagerIcon::animatedRemove()
 
 void PagerIcon::updateIconAndToolTip()
 {
-    setIcon(KWindowSystem::icon(m_task.window));
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(m_task, NET::WMVisibleName);
+    setIcon(KWindowSystem::icon(m_task));
     Plasma::ToolTipContent plasmatooltip;
-    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_task.name));
-    plasmatooltip.setWindowToPreview(m_task.window);
+    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(kwindowinfo.visibleName()));
+    plasmatooltip.setWindowToPreview(m_task);
     plasmatooltip.setClickable(true);
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
@@ -230,9 +231,9 @@ private Q_SLOTS:
     void slotClicked(const Qt::MouseButton button);
     void slotUpdate();
     void slotUpdateSvg();
-    void slotTaskAdded(const KTaskManager::Task &task);
-    void slotTaskChanged(const KTaskManager::Task &task);
-    void slotTaskRemoved(const KTaskManager::Task &task);
+    void slotTaskAdded(const WId task);
+    void slotTaskChanged(const WId task);
+    void slotTaskRemoved(const WId task);
     void slotCheckSpace();
     void slotShowDialog();
 
@@ -264,7 +265,7 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
     slotUpdateSvg();
     setAcceptHoverEvents(true);
 
-    foreach (const KTaskManager::Task &task, KTaskManager::self()->tasks()) {
+    foreach (const WId task, KTaskManager::self()->tasks()) {
         slotTaskAdded(task);
     }
 
@@ -277,16 +278,16 @@ PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphi
         this, SLOT(slotUpdate())
     );
     connect(
-        KTaskManager::self(), SIGNAL(taskAdded(KTaskManager::Task)),
-        this, SLOT(slotTaskAdded(KTaskManager::Task))
+        KTaskManager::self(), SIGNAL(taskAdded(WId)),
+        this, SLOT(slotTaskAdded(WId))
     );
     connect(
-        KTaskManager::self(), SIGNAL(taskChanged(KTaskManager::Task)),
-        this, SLOT(slotTaskChanged(KTaskManager::Task))
+        KTaskManager::self(), SIGNAL(taskChanged(WId)),
+        this, SLOT(slotTaskChanged(WId))
     );
     connect(
-        KTaskManager::self(), SIGNAL(taskRemoved(KTaskManager::Task)),
-        this, SLOT(slotTaskRemoved(KTaskManager::Task))
+        KTaskManager::self(), SIGNAL(taskRemoved(WId)),
+        this, SLOT(slotTaskRemoved(WId))
     );
     connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
@@ -355,13 +356,13 @@ void PagerSvg::slotUpdateSvg()
     }
 }
 
-void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
+void PagerSvg::slotTaskAdded(const WId task)
 {
     QMutexLocker locker(&m_mutex);
     if (m_spacer) {
         m_layout->removeItem(m_spacer);
     }
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task, NET::WMDesktop);
     if (kwindowinfo.isOnDesktop(m_desktop)) {
         PagerIcon* pagericon = new PagerIcon(task, this);
         connect(
@@ -393,18 +394,18 @@ void PagerSvg::slotTaskAdded(const KTaskManager::Task &task)
     slotCheckSpace();
 }
 
-void PagerSvg::slotTaskChanged(const KTaskManager::Task &task)
+void PagerSvg::slotTaskChanged(const WId task)
 {
     // special case for tasks moved from one virtual desktop to another, the check is done via
     // KWindowInfo::isOnDesktop() because tasks may be shown on all desktops
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task.window, NET::WMDesktop);
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task, NET::WMDesktop);
     if (!kwindowinfo.isOnDesktop(m_desktop)) {
         slotTaskRemoved(task);
     } else {
         QMutexLocker locker(&m_mutex);
         PagerIcon* foundpagericon = nullptr;
         foreach (PagerIcon* pagericon, m_pagericons) {
-            if (pagericon->taskWindow() == task.window) {
+            if (pagericon->taskWindow() == task) {
                 foundpagericon = pagericon;
                 break;
             }
@@ -418,11 +419,11 @@ void PagerSvg::slotTaskChanged(const KTaskManager::Task &task)
     }
 }
 
-void PagerSvg::slotTaskRemoved(const KTaskManager::Task &task)
+void PagerSvg::slotTaskRemoved(const WId task)
 {
     QMutexLocker locker(&m_mutex);
     foreach (PagerIcon* pagericon, m_pagericons) {
-        if (pagericon->taskWindow() == task.window) {
+        if (pagericon->taskWindow() == task) {
             m_pagericons.removeAll(pagericon);
             pagericon->animatedRemove();
             break;
