@@ -95,8 +95,6 @@ NotificationsWidget::NotificationsWidget(NotificationsApplet* notifications)
     );
     m_applicationsscrollwidget->setWidget(m_applicationswidget);
     addTab(KIcon("dialog-information"), i18n("Notifications"), m_applicationsscrollwidget);
-
-    m_notifications->setStatus(Plasma::ItemStatus::PassiveStatus);
 }
 
 void NotificationsWidget::slotCountChanged()
@@ -130,6 +128,7 @@ NotificationsApplet::NotificationsApplet(QObject *parent, const QVariantList &ar
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
     setPassivePopup(true);
     setPopupIcon(kNotificationIcon(this, false));
+    setStatus(Plasma::ItemStatus::PassiveStatus);
     m_notificationswidget = new NotificationsWidget(this);
 }
 
