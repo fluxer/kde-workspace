@@ -394,12 +394,12 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
-                updatePagers();
+                updatePolicy();
                 return;
             }
             case Plasma::FormFactor::Vertical: {
                 m_layout->setOrientation(Qt::Vertical);
-                updatePagers();
+                updatePolicy();
                 return;
             }
             default: {
@@ -413,14 +413,13 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         } else {
             m_layout->setOrientation(Qt::Vertical);
         }
-        updatePagers();
+        updatePolicy();
     }
 }
 
-void PagerApplet::updatePagers()
+void PagerApplet::updatePolicy()
 {
-    const Qt::Orientation layoutorientation = m_layout->orientation();
-    if (layoutorientation == Qt::Horizontal) {
+    if (m_layout->orientation() == Qt::Horizontal) {
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     } else {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
