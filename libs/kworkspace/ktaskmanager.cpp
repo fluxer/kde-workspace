@@ -70,7 +70,6 @@ KTaskManagerPrivate::KTaskManagerPrivate(KTaskManager *ktaskmanager)
         }
         kDebug() << "adding task window" << window;
         tasks.append(window);
-        emit m_taskmanager->taskAdded(window);
     }
 }
 
@@ -110,9 +109,8 @@ K_GLOBAL_STATIC(KTaskManager, globalktaskmanager)
 
 KTaskManager::KTaskManager(QObject *parent)
     : QObject(parent),
-    d(nullptr)
+    d(new KTaskManagerPrivate(this))
 {
-    d = new KTaskManagerPrivate(this);
     connect(
         KWindowSystem::self(), SIGNAL(windowAdded(WId)),
         this, SLOT(_k_slotNewWindow(WId))

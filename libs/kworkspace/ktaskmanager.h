@@ -48,7 +48,7 @@ Q_SIGNALS:
 private:
     friend KTaskManagerPrivate;
     Q_DISABLE_COPY(KTaskManager);
-    KTaskManagerPrivate* d;
+    KTaskManagerPrivate* const d;
     
     Q_PRIVATE_SLOT(d, void _k_slotNewWindow(const WId window));
     Q_PRIVATE_SLOT(d, void _k_slotChangedWindow(const WId window));
