@@ -31,50 +31,65 @@ plugin=pager
 zvalue=0
 
 [Containments][1][Applets][3][Configuration]
-currentDesktopSelected=0
+pagerMode=1
 
 [Containments][1][Applets][3][LayoutInformation]
 Order=1
 
 [Containments][1][Applets][4]
+geometry=112,3,710,32
+immutability=1
+plugin=tasks
+zvalue=0
+
+[Containments][1][Applets][4][Configuration]
+highlightWindows=false
+showOnlyCurrentDesktop=true
+showOnlyCurrentScreen=false
+showToolTip=true
+
+[Containments][1][Applets][4][LayoutInformation]
+Order=2
+
+[Containments][1][Applets][5]
 geometry=826,3,106,32
 immutability=1
 plugin=systemtray
 zvalue=0
 
-[Containments][1][Applets][4][Configuration][Applets][8]
+[Containments][1][Applets][5][Configuration][Applets][8]
 geometry=0,0,24,24
 immutability=1
 plugin=devicenotifier
 zvalue=0
 
-[Containments][1][Applets][4][Configuration][Applets][8][PopupApplet]
+[Containments][1][Applets][5][Configuration][Applets][8][PopupApplet]
 DialogHeight=346
 DialogWidth=302
 
-[Containments][1][Applets][4][Configuration][Applets][9]
+[Containments][1][Applets][5][Configuration][Applets][9]
 geometry=0,0,24,24
 immutability=1
 plugin=notifications
 zvalue=0
 
-[Containments][1][Applets][4][Configuration][Applets][9][PopupApplet]
+[Containments][1][Applets][5][Configuration][Applets][9][PopupApplet]
 DialogHeight=102
 DialogWidth=372
 
-[Containments][1][Applets][4][LayoutInformation]
+[Containments][1][Applets][5][LayoutInformation]
 Order=3
 
-[Containments][1][Applets][5]
+[Containments][1][Applets][6]
 geometry=936,3,64,32
 immutability=1
 plugin=digital-clock
 zvalue=0
 
-[Containments][1][Applets][5][Configuration]
+[Containments][1][Applets][6][Configuration]
 timezone=Local
 
-[Containments][1][Applets][5][LayoutInformation]
+[Containments][1][Applets][6][LayoutInformation]
 Order=4
 
 [Containments][2]

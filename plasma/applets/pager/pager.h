@@ -21,6 +21,7 @@
 
 #include <QMutex>
 #include <QAction>
+#include <QComboBox>
 #include <QSpacerItem>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsSceneWheelEvent>
@@ -34,6 +35,11 @@ class PagerApplet : public Plasma::Applet
 {
     Q_OBJECT
 public:
+    enum PagerMode {
+        ShowNumber = 0,
+        ShowName = 1
+    };
+
     PagerApplet(QObject *parent, const QVariantList &args);
 
     // Plasma::Applet reimplementations
@@ -63,6 +69,8 @@ private:
     QAction* m_adddesktopaction;
     QAction* m_removedesktopaction;
     QList<QAction*> m_actions;
+    PagerApplet::PagerMode m_pagermode;
+    QComboBox* m_pagermodebox;
     QSpacerItem* m_spacer;
     KCModuleProxy* m_kcmdesktopproxy;
 };

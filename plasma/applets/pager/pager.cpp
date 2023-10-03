@@ -17,12 +17,10 @@
 */
 
 #include "pager.h"
-#include "kworkspace/ktaskmanager.h"
 
 #include <QX11Info>
-#include <Plasma/Dialog>
-#include <Plasma/Animation>
-#include <Plasma/IconWidget>
+#include <QGridLayout>
+#include <QLabel>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
 #include <Plasma/SvgWidget>
@@ -31,38 +29,48 @@
 #include <KCModuleInfo>
 #include <KWindowSystem>
 #include <KIcon>
-#include <KIconLoader>
 #include <KDebug>
 #include <netwm.h>
 
 // standard issue margin/spacing
 static const int s_spacing = 4;
+static PagerApplet::PagerMode s_defaultpagermode = PagerApplet::ShowName;
 
-static QString kElementPrefixForDesktop(const int desktop)
+static QString kElementPrefixForDesktop(const int desktop, const bool hovered)
 {
-    if (KWindowSystem::currentDesktop() == desktop) {
+    if (hovered) {
+        return QString::fromLatin1("hover");
+    } else if (KWindowSystem::currentDesktop() == desktop) {
         return QString::fromLatin1("active");
     }
     return QString::fromLatin1("normal");
 }
 
-static QString kElementForLocation(const Plasma::Location location)
+static QRectF kAdjustRect(const QRectF &rect, const bool vertical)
 {
-    switch (location) {
-        case Plasma::Location::TopEdge: {
-            return QString::fromLatin1("down-arrow");
-        }
-        case Plasma::Location::BottomEdge: {
-            return QString::fromLatin1("up-arrow");
-        }
-        case Plasma::Location::LeftEdge: {
-            return QString::fromLatin1("right-arrow");
-        }
-        case Plasma::Location::RightEdge: {
-            return QString::fromLatin1("left-arrow");
-        }
+    QRectF result = rect;
+    if (vertical) {
+        result.setHeight(result.height() - (s_spacing * 2));
+        qreal resultx = 0.0;
+        qreal resulty = 0.0;
+        qreal resultw = 0.0;
+        qreal resulth = 0.0;
+        result.getRect(&resultx, &resulty, &resultw, &resulth);
+        result.setX(-(resultw / resulth));
+        result.setY(-resultw);
+        result.setWidth(resulth);
+        result.setHeight(resultw);
+    } else {
+        result.setWidth(result.width() - (s_spacing * 2));
     }
-    return QString::fromLatin1("up-arrow");
+    return result;
+}
+
+static QFont kGetFont()
+{
+    QFont font = KGlobalSettings::smallestReadableFont();
+    font.setBold(true);
+    return font;
 }
 
 static bool kHandleMouseEvent(QGraphicsSceneMouseEvent *event)
@@ -87,220 +95,118 @@ static bool kHandleMouseEvent(QGraphicsSceneMouseEvent *event)
     return false;
 }
 
-class PagerDialog : public Plasma::Dialog
-{
-    Q_OBJECT
-public:
-    explicit PagerDialog(QWidget *parent = nullptr);
-
-    void updateTasks(const QList<WId> &tasks);
-
-private:
-    QGraphicsScene* m_scene;
-    QGraphicsWidget* m_widget;
-    QGraphicsLinearLayout* m_layout;
-    QList<WId> m_tasks;
-};
-
-PagerDialog::PagerDialog(QWidget *parent)
-    : Plasma::Dialog(parent, Qt::Dialog | Qt::WindowStaysOnTopHint),
-    m_scene(nullptr),
-    m_widget(nullptr),
-    m_layout(nullptr)
-{
-    m_scene = new QGraphicsScene(this);
-    m_widget = new QGraphicsWidget();
-
-    m_layout = new QGraphicsLinearLayout(m_widget);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(s_spacing);
-
-    m_widget->setLayout(m_layout);
-
-    m_scene->addItem(m_widget);
-    setGraphicsWidget(m_widget);
-}
-
-void PagerDialog::updateTasks(const QList<WId> &tasks)
-{
-    // TODO:
-    m_tasks = tasks;
-}
-
-
-class PagerIcon : public Plasma::IconWidget
-{
-    Q_OBJECT
-public:
-    explicit PagerIcon(const WId task, QGraphicsItem *parent);
-
-    WId taskWindow() const;
-    void animatedShow();
-    void animatedRemove();
-    void updateIconAndToolTip();
-
-private Q_SLOTS:
-    void slotClicked();
-    void slotWindowPreviewActivated(const WId window);
-
-private:
-    WId m_task;
-};
-
-PagerIcon::PagerIcon(const WId task, QGraphicsItem *parent)
-    : Plasma::IconWidget(parent),
-    m_task(task)
-{
-    updateIconAndToolTip();
-    connect(
-        this, SIGNAL(clicked()),
-        this, SLOT(slotClicked())
-    );
-    connect(
-        Plasma::ToolTipManager::self(), SIGNAL(windowPreviewActivated(WId,Qt::MouseButtons,Qt::KeyboardModifiers,QPoint)),
-        this, SLOT(slotWindowPreviewActivated(WId))
-    );
-}
-
-WId PagerIcon::taskWindow() const
-{
-    return m_task;
-}
-
-void PagerIcon::animatedShow()
-{
-    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
-    Q_ASSERT(animation != nullptr);
-    animation->setTargetWidget(this);
-    animation->setProperty("startOpacity", 0.0);
-    animation->setProperty("targetOpacity", 1.0);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void PagerIcon::animatedRemove()
-{
-    Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
-    Q_ASSERT(animation != nullptr);
-    connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
-    animation->setTargetWidget(this);
-    animation->setProperty("startOpacity", 1.0);
-    animation->setProperty("targetOpacity", 0.0);
-    animation->start(QAbstractAnimation::DeleteWhenStopped);
-}
-
-void PagerIcon::updateIconAndToolTip()
-{
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(m_task, NET::WMVisibleName);
-    setIcon(KWindowSystem::icon(m_task));
-    Plasma::ToolTipContent plasmatooltip;
-    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(kwindowinfo.visibleName()));
-    plasmatooltip.setWindowToPreview(m_task);
-    plasmatooltip.setClickable(true);
-    Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
-}
-
-void PagerIcon::slotClicked()
-{
-    KTaskManager::activateRaiseOrIconify(m_task);
-}
-
-void PagerIcon::slotWindowPreviewActivated(const WId window)
-{
-    // manually hide the tooltip first
-    Plasma::ToolTipManager::self()->hide(this);
-    KWindowSystem::activateWindow(window);
-    KWindowSystem::raiseWindow(window);
-}
-
-
 class PagerSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
 public:
-    PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphicsItem *parent = nullptr);
+    PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QGraphicsItem *parent = nullptr);
 
-    void setup(const Qt::Orientation orientation, const Plasma::Location location);
+    void setup(const PagerApplet::PagerMode pagermode);
 
 protected:
+    QSizeF sizeHint(Qt::SizeHint which, const QSizeF &constraint) const final;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event) final;
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) final;
     // handled here too
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) final;
-    void resizeEvent(QGraphicsSceneResizeEvent *event) final;
 
 private Q_SLOTS:
     void slotClicked(const Qt::MouseButton button);
     void slotUpdate();
-    void slotUpdateSvg();
-    void slotTaskAdded(const WId task);
-    void slotTaskChanged(const WId task);
-    void slotTaskRemoved(const WId task);
-    void slotCheckSpace();
-    void slotShowDialog();
+    void slotUpdateSvgAndToolTip();
 
 private:
-    QMutex m_mutex;
     int m_desktop;
+    bool m_hovered;
     Plasma::FrameSvg* m_framesvg;
-    QGraphicsLinearLayout* m_layout;
-    QList<PagerIcon*> m_pagericons;
-    QGraphicsWidget* m_spacer;
-    Plasma::IconWidget* m_pagericon;
-    PagerDialog* m_pagerdialog;
+    PagerApplet::PagerMode m_pagermode;
 };
 
-PagerSvg::PagerSvg(const int desktop, const Qt::Orientation orientation, QGraphicsItem *parent)
+PagerSvg::PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_desktop(desktop),
+    m_hovered(false),
     m_framesvg(nullptr),
-    m_layout(nullptr),
-    m_spacer(nullptr),
-    m_pagericon(nullptr),
-    m_pagerdialog(nullptr)
+    m_pagermode(pagermode)
 {
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    m_layout = new QGraphicsLinearLayout(orientation, this);
-    m_layout->setSpacing(0);
-
-    slotUpdateSvg();
     setAcceptHoverEvents(true);
-
-    foreach (const WId task, KTaskManager::self()->tasks()) {
-        slotTaskAdded(task);
-    }
+    slotUpdateSvgAndToolTip();
 
     connect(
         this, SIGNAL(clicked(Qt::MouseButton)),
         this, SLOT(slotClicked(Qt::MouseButton))
     );
     connect(
+        KWindowSystem::self(), SIGNAL(desktopNamesChanged()),
+        this, SLOT(slotUpdate())
+    );
+    connect(
         KWindowSystem::self(), SIGNAL(currentDesktopChanged(int)),
         this, SLOT(slotUpdate())
     );
     connect(
-        KTaskManager::self(), SIGNAL(taskAdded(WId)),
-        this, SLOT(slotTaskAdded(WId))
-    );
-    connect(
-        KTaskManager::self(), SIGNAL(taskChanged(WId)),
-        this, SLOT(slotTaskChanged(WId))
-    );
-    connect(
-        KTaskManager::self(), SIGNAL(taskRemoved(WId)),
-        this, SLOT(slotTaskRemoved(WId))
-    );
-    connect(
         Plasma::Theme::defaultTheme(), SIGNAL(themeChanged()),
-        this, SLOT(slotUpdateSvg())
+        this, SLOT(slotUpdateSvgAndToolTip())
     );
 }
 
-void PagerSvg::setup(const Qt::Orientation orientation, const Plasma::Location location)
+void PagerSvg::setup(const PagerApplet::PagerMode pagermode)
 {
-    m_layout->setOrientation(orientation);
-    if (m_pagericon) {
-        m_pagericon->setSvg("widgets/arrows", kElementForLocation(location));
+    m_pagermode = pagermode;
+    update();
+}
+
+QSizeF PagerSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
+{
+    const PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
+    const Plasma::FormFactor formfactor = pagerapplet->formFactor();
+    bool inpanel = false;
+    switch (formfactor) {
+        case Plasma::FormFactor::Planar:
+        case Plasma::FormFactor::MediaCenter:
+        case Plasma::FormFactor::Application: {
+            break;
+        }
+        default: {
+            inpanel = true;
+            break;
+        }
     }
+    // the panel containment completely ignores minimum size so no hint for that
+    if (inpanel && which == Qt::MinimumSize) {
+        return Plasma::SvgWidget::sizeHint(which, constraint);
+    }
+    if (which != Qt::MaximumSize) {
+        const QSizeF currentsize = size();
+        const bool vertical = (currentsize.width() < currentsize.height());
+        // hints are based on the mode and longest text of all virtual desktops
+        qreal textwidth = 0;
+        const int numberofdesktops = KWindowSystem::numberOfDesktops();
+        QFontMetricsF fontmetricsf(kGetFont());
+        for (int i = 0; i < numberofdesktops; i++) {
+            QString desktoptext;
+            if (m_pagermode == PagerApplet::ShowNumber) {
+                desktoptext = QString::number(i);
+            } else {
+                desktoptext = KWindowSystem::desktopName(i);
+            }
+            textwidth = qMax(textwidth, fontmetricsf.width(desktoptext));
+        }
+        // worst case the text has to be on two lines
+        static const qreal widthmultiplier = 1.2;
+        static const qreal heightmultiplier = 2.4;
+        QSizeF result;
+        if (vertical) {
+            result.setWidth(fontmetricsf.height() * heightmultiplier);
+            result.setHeight(textwidth * widthmultiplier);
+        } else {
+            result.setWidth(textwidth * widthmultiplier);
+            result.setHeight(fontmetricsf.height() * heightmultiplier);
+        }
+        return result;
+    }
+    return Plasma::SvgWidget::sizeHint(which, constraint);
 }
 
 void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -309,9 +215,57 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(widget);
     painter->setRenderHint(QPainter::Antialiasing);
     const QRectF brect = boundingRect();
-    m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop));
-    m_framesvg->resizeFrame(brect.size());
+    const QSizeF brectsize = brect.size();
+    m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop, m_hovered));
+    m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
+    const bool vertical = (brectsize.width() < brectsize.height());
+    switch (m_pagermode) {
+        case PagerApplet::ShowNumber: {
+            painter->save();
+            painter->setFont(kGetFont());
+            if (vertical) {
+                painter->rotate(90);
+            }
+            painter->translate(s_spacing, 0);
+            painter->drawText(
+                kAdjustRect(brect.toRect(), vertical),
+                QString::number(m_desktop),
+                QTextOption(Qt::AlignCenter)
+            );
+            painter->restore();
+            break;
+        }
+        case PagerApplet::ShowName: {
+            painter->save();
+            painter->setFont(kGetFont());
+            if (vertical) {
+                painter->rotate(90);
+            }
+            painter->translate(s_spacing, 0);
+            painter->drawText(
+                kAdjustRect(brect.toRect(), vertical),
+                KWindowSystem::desktopName(m_desktop),
+                QTextOption(Qt::AlignCenter)
+            );
+            painter->restore();
+            break;
+        }
+    }
+}
+
+void PagerSvg::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    m_hovered = true;
+    update();
+}
+
+void PagerSvg::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+    Q_UNUSED(event);
+    m_hovered = false;
+    update();
 }
 
 void PagerSvg::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -321,12 +275,6 @@ void PagerSvg::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
     Plasma::SvgWidget::mouseReleaseEvent(event);
-}
-
-void PagerSvg::resizeEvent(QGraphicsSceneResizeEvent *event)
-{
-    Plasma::SvgWidget::resizeEvent(event);
-    slotCheckSpace();
 }
 
 void PagerSvg::slotClicked(const Qt::MouseButton button)
@@ -341,7 +289,7 @@ void PagerSvg::slotUpdate()
     update();
 }
 
-void PagerSvg::slotUpdateSvg()
+void PagerSvg::slotUpdateSvgAndToolTip()
 {
     if (m_framesvg) {
         delete m_framesvg;
@@ -349,125 +297,18 @@ void PagerSvg::slotUpdateSvg()
     m_framesvg = new Plasma::FrameSvg(this);
     m_framesvg->setImagePath("widgets/pager");
     setSvg(m_framesvg);
-    if (m_pagericon) {
-        PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
-        Q_ASSERT(pagerapplet != nullptr);
-        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pagerapplet->location()));
-    }
+    Plasma::ToolTipContent plasmatooltip;
+    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(KWindowSystem::desktopName(m_desktop)));
+    Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
-
-void PagerSvg::slotTaskAdded(const WId task)
-{
-    QMutexLocker locker(&m_mutex);
-    if (m_spacer) {
-        m_layout->removeItem(m_spacer);
-    }
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task, NET::WMDesktop);
-    if (kwindowinfo.isOnDesktop(m_desktop)) {
-        PagerIcon* pagericon = new PagerIcon(task, this);
-        connect(
-            pagericon, SIGNAL(destroyed()),
-            this, SLOT(slotCheckSpace())
-        );
-        m_pagericons.append(pagericon);
-        m_layout->addItem(pagericon);
-        pagericon->animatedShow();
-    }
-    if (!m_spacer) {
-        m_spacer = new QGraphicsWidget(this);
-        m_spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        m_spacer->setMinimumSize(0, 0);
-    }
-    m_layout->addItem(m_spacer);
-    if (!m_pagericon) {
-        PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
-        Q_ASSERT(pagerapplet != nullptr);
-        m_pagericon = new Plasma::IconWidget(this);
-        m_pagericon->setSvg("widgets/arrows", kElementForLocation(pagerapplet->location()));
-        connect(
-            m_pagericon, SIGNAL(clicked()),
-            this, SLOT(slotShowDialog())
-        );
-    }
-    m_layout->addItem(m_pagericon);
-    locker.unlock();
-    slotCheckSpace();
-}
-
-void PagerSvg::slotTaskChanged(const WId task)
-{
-    // special case for tasks moved from one virtual desktop to another, the check is done via
-    // KWindowInfo::isOnDesktop() because tasks may be shown on all desktops
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task, NET::WMDesktop);
-    if (!kwindowinfo.isOnDesktop(m_desktop)) {
-        slotTaskRemoved(task);
-    } else {
-        QMutexLocker locker(&m_mutex);
-        PagerIcon* foundpagericon = nullptr;
-        foreach (PagerIcon* pagericon, m_pagericons) {
-            if (pagericon->taskWindow() == task) {
-                foundpagericon = pagericon;
-                break;
-            }
-        }
-        locker.unlock();
-        if (!foundpagericon) {
-            slotTaskAdded(task);
-        } else {
-            foundpagericon->updateIconAndToolTip();
-        }
-    }
-}
-
-void PagerSvg::slotTaskRemoved(const WId task)
-{
-    QMutexLocker locker(&m_mutex);
-    foreach (PagerIcon* pagericon, m_pagericons) {
-        if (pagericon->taskWindow() == task) {
-            m_pagericons.removeAll(pagericon);
-            pagericon->animatedRemove();
-            break;
-        }
-    }
-}
-
-void PagerSvg::slotCheckSpace()
-{
-    // qDebug() << Q_FUNC_INFO << m_spacer->size() << size();
-    if (!m_spacer) {
-        return;
-    }
-    const QSizeF spacersize = m_spacer->size();
-    bool notenoughspace = false;
-    QMutexLocker locker(&m_mutex);
-    if (m_layout->orientation() == Qt::Horizontal) {
-        notenoughspace = (m_pagericons.size() > 0 && spacersize.width() <= m_pagericons.first()->size().width());
-    } else {
-        notenoughspace = (m_pagericons.size() > 0 && spacersize.height() <= m_pagericons.first()->size().height());
-    }
-    if (notenoughspace) {
-        if (!m_pagerdialog) {
-            m_pagerdialog = new PagerDialog();
-        }
-        // TODO: m_pagerdialog->updateTasks();
-        m_pagericon->setVisible(true);
-    } else {
-        m_pagericon->setVisible(false);
-    }
-}
-
-void PagerSvg::slotShowDialog()
-{
-    Q_ASSERT(m_pagerdialog != nullptr);
-    m_pagerdialog->show();
-}
-
 
 PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
     m_layout(nullptr),
     m_adddesktopaction(nullptr),
     m_removedesktopaction(nullptr),
+    m_pagermode(s_defaultpagermode),
+    m_pagermodebox(nullptr),
     m_spacer(nullptr),
     m_kcmdesktopproxy(nullptr)
 {
@@ -477,7 +318,7 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
-    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setContentsMargins(s_spacing, s_spacing, s_spacing, s_spacing);
     m_layout->setSpacing(s_spacing);
 
     // early setup to get proper initial size
@@ -487,6 +328,15 @@ PagerApplet::PagerApplet(QObject *parent, const QVariantList &args)
 
 void PagerApplet::init()
 {
+    KConfigGroup configgroup = config();
+    const PagerApplet::PagerMode oldpagermode = m_pagermode;
+    m_pagermode = static_cast<PagerApplet::PagerMode>(configgroup.readEntry("pagerMode", static_cast<int>(s_defaultpagermode)));
+
+    if (oldpagermode != m_pagermode) {
+        // layout again with the new mode for size hints to apply correctly
+        slotUpdateLayout();
+    }
+
     connect(
         KWindowSystem::self(), SIGNAL(numberOfDesktopsChanged(int)),
         this, SLOT(slotUpdateLayout())
@@ -495,6 +345,22 @@ void PagerApplet::init()
 
 void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
 {
+    QWidget* widget = new QWidget();
+    QGridLayout* widgetlayout = new QGridLayout(widget);
+    QLabel* pagermodelabel = new QLabel(widget);
+    pagermodelabel->setText(i18n("Text:"));
+    widgetlayout->addWidget(pagermodelabel, 0, 0);
+    m_pagermodebox = new QComboBox(widget);
+    m_pagermodebox->addItem(i18n("Desktop number"), static_cast<int>(PagerApplet::ShowNumber));
+    m_pagermodebox->addItem(i18n("Desktop name"), static_cast<int>(PagerApplet::ShowName));
+    m_pagermodebox->setCurrentIndex(static_cast<int>(m_pagermode));
+    widgetlayout->addWidget(m_pagermodebox, 0, 1);
+    m_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addItem(m_spacer, 1, 0, 1, 2);
+    widget->setLayout(widgetlayout);
+    // doesn't look like media visualization but ok.. (that's what the clock applet uses)
+    parent->addPage(widget, i18n("Appearance"), "view-media-visualization");
+
     m_kcmdesktopproxy = new KCModuleProxy("desktop");
     parent->addPage(
         m_kcmdesktopproxy, m_kcmdesktopproxy->moduleInfo().moduleName(),
@@ -503,6 +369,7 @@ void PagerApplet::createConfigurationInterface(KConfigDialog *parent)
 
     connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
     connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_pagermodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
     connect(m_kcmdesktopproxy, SIGNAL(changed(bool)), parent, SLOT(settingsModified()));
 }
 
@@ -563,23 +430,11 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
 
 void PagerApplet::updatePagers()
 {
-    QMutexLocker locker(&m_mutex);
-    // NOTE: if the preferred (or maximum) size is not set the pager widgets will expand and shrink
-    // in a very weird way when task icon is added or removed (sometimes expanding, sometimes
-    // shrinking) because someone tried to make layouts and policies algorithms smart
-    QSizeF dividedappletsize = size();
-    if (m_layout->orientation() == Qt::Horizontal) {
-        dividedappletsize.setWidth((dividedappletsize.width() / m_pagersvgs.size()));
+    const Qt::Orientation layoutorientation = m_layout->orientation();
+    if (layoutorientation == Qt::Horizontal) {
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     } else {
-        dividedappletsize.setHeight((dividedappletsize.height() / m_pagersvgs.size()));
-    }
-    foreach (PagerSvg* pagersvg, m_pagersvgs) {
-        pagersvg->setup(m_layout->orientation(), location());
-        if (m_layout->orientation() == Qt::Horizontal) {
-            pagersvg->setPreferredWidth(dividedappletsize.width());
-        } else {
-            pagersvg->setPreferredHeight(dividedappletsize.height());
-        }
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     }
 }
 
@@ -593,9 +448,8 @@ void PagerApplet::slotUpdateLayout()
     m_pagersvgs.clear();
 
     const int numberofdesktops = KWindowSystem::numberOfDesktops();
-    const Qt::Orientation orientation = m_layout->orientation();
     for (int i = 0; i < numberofdesktops; i++) {
-        PagerSvg* pagersvg = new PagerSvg(i + 1, orientation, this);
+        PagerSvg* pagersvg = new PagerSvg(i + 1, m_pagermode, this);
         m_layout->addItem(pagersvg);
         m_pagersvgs.append(pagersvg);
     }
@@ -646,6 +500,11 @@ void PagerApplet::slotRemoveDesktop()
 
 void PagerApplet::slotConfigAccepted()
 {
+    Q_ASSERT(m_pagermodebox != nullptr);
+    const int pagermodeindex = m_pagermodebox->currentIndex();
+    m_pagermode = static_cast<PagerApplet::PagerMode>(pagermodeindex);
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("pagerMode", pagermodeindex);
     slotUpdateLayout();
     m_kcmdesktopproxy->save();
     emit configNeedsSaving();
