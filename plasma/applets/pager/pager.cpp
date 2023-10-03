@@ -220,33 +220,27 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop, m_hovered));
     m_framesvg->resizeFrame(brectsize);
     m_framesvg->paintFrame(painter, brect);
-    const bool vertical = (brectsize.width() < brectsize.height());
+    QString pagertext;
     switch (m_pagermode) {
         case PagerApplet::ShowNumber: {
-            if (vertical) {
-                painter->rotate(90);
-            }
-            painter->translate(s_spacing, 0);
-            painter->drawText(
-                kAdjustRect(brect.toRect(), vertical),
-                QString::number(m_desktop),
-                QTextOption(Qt::AlignCenter)
-            );
+            pagertext = QString::number(m_desktop);
             break;
         }
         case PagerApplet::ShowName: {
-            if (vertical) {
-                painter->rotate(90);
-            }
-            painter->translate(s_spacing, 0);
-            painter->drawText(
-                kAdjustRect(brect.toRect(), vertical),
-                KWindowSystem::desktopName(m_desktop),
-                QTextOption(Qt::AlignCenter)
-            );
+            pagertext = KWindowSystem::desktopName(m_desktop);
             break;
         }
     }
+    const bool vertical = (brectsize.width() < brectsize.height());
+    if (vertical) {
+        painter->rotate(90);
+    }
+    painter->translate(s_spacing, 0);
+    painter->drawText(
+        kAdjustRect(brect, vertical),
+        pagertext,
+        QTextOption(Qt::AlignCenter)
+    );
 }
 
 void PagerSvg::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
