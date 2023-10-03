@@ -187,7 +187,7 @@ void SwitchWindow::switchTo(QAction *action)
 {
     const qlonglong task = action->data().toLongLong();
     kDebug() << "task window" << task;
-    KTaskManager::self()->activateRaiseOrIconify(task);
+    KTaskManager::activateRaiseOrIconify(task);
 }
 
 void SwitchWindow::clearWindowsOrder()

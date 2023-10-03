@@ -201,7 +201,7 @@ void PagerIcon::updateIconAndToolTip()
 
 void PagerIcon::slotClicked()
 {
-    KTaskManager::self()->activateRaiseOrIconify(m_task);
+    KTaskManager::activateRaiseOrIconify(m_task);
 }
 
 void PagerIcon::slotWindowPreviewActivated(const WId window)
