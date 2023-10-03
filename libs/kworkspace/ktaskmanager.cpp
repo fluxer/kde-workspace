@@ -22,9 +22,6 @@
 #include <QX11Info>
 #include <KGlobal>
 #include <KWindowSystem>
-#include <KIconLoader>
-#include <KIcon>
-#include <KLocale>
 #include <KDebug>
 #include <netwm.h>
 
