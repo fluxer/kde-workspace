@@ -125,6 +125,7 @@ void TasksSvg::setup(const bool inpanel)
 
 void TasksSvg::animatedShow()
 {
+    show();
     Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
     Q_ASSERT(animation != nullptr);
     animation->setTargetWidget(this);
@@ -320,10 +321,6 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
 
 void TasksApplet::slotTaskAdded(const WId task)
 {
-    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(task, NET::WMDesktop);
-    if (!kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
-        return;
-    }
     QMutexLocker locker(&m_mutex);
     m_layout->removeItem(m_spacer);
     const bool inpanel = (
@@ -333,8 +330,13 @@ void TasksApplet::slotTaskAdded(const WId task)
     TasksSvg* taskssvg = new TasksSvg(task, this);
     taskssvg->setup(inpanel);
     m_layout->addItem(taskssvg);
-    taskssvg->animatedShow();
     m_taskssvgs.append(taskssvg);
+    const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(taskssvg->task(), NET::WMDesktop);
+    if (kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
+        taskssvg->animatedShow();
+    } else {
+        taskssvg->hide();
+    }
     // TODO: once the taskbar is nearly full show arrow for items that shall be available via
     // menu-like widget
     m_layout->addItem(m_spacer);
@@ -354,24 +356,17 @@ void TasksApplet::slotTaskRemoved(const WId task)
     }
 }
 
-// TODO: maybe hide tasks instead
 void TasksApplet::slotCurrentDesktopChanged(const int desktop)
 {
     // special case for tasks moved from one virtual desktop to another
     QMutexLocker locker(&m_mutex);
-    QMutableListIterator<TasksSvg*> iter(m_taskssvgs);
-    while (iter.hasNext()) {
-        TasksSvg* taskssvg = iter.next();
+    foreach (TasksSvg* taskssvg, m_taskssvgs) {
         const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(taskssvg->task(), NET::WMDesktop);
         if (!kwindowinfo.isOnDesktop(desktop)) {
-            iter.remove();
-            m_layout->addItem(taskssvg);
-            taskssvg->deleteLater();
+            taskssvg->hide();
+        } else {
+            taskssvg->animatedShow();
         }
-    }
-    locker.unlock();
-    foreach (const WId task, KTaskManager::self()->tasks()) {
-        slotTaskAdded(task);
     }
 }
 
