@@ -214,6 +214,7 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     Q_UNUSED(option);
     Q_UNUSED(widget);
     painter->setRenderHint(QPainter::Antialiasing);
+    painter->setFont(kGetFont());
     const QRectF brect = boundingRect();
     const QSizeF brectsize = brect.size();
     m_framesvg->setElementPrefix(kElementPrefixForDesktop(m_desktop, m_hovered));
@@ -222,8 +223,6 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     const bool vertical = (brectsize.width() < brectsize.height());
     switch (m_pagermode) {
         case PagerApplet::ShowNumber: {
-            painter->save();
-            painter->setFont(kGetFont());
             if (vertical) {
                 painter->rotate(90);
             }
@@ -233,12 +232,9 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
                 QString::number(m_desktop),
                 QTextOption(Qt::AlignCenter)
             );
-            painter->restore();
             break;
         }
         case PagerApplet::ShowName: {
-            painter->save();
-            painter->setFont(kGetFont());
             if (vertical) {
                 painter->rotate(90);
             }
@@ -248,7 +244,6 @@ void PagerSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
                 KWindowSystem::desktopName(m_desktop),
                 QTextOption(Qt::AlignCenter)
             );
-            painter->restore();
             break;
         }
     }

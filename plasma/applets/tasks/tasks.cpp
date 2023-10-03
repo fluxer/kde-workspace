@@ -154,7 +154,6 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
     const bool isactive = KTaskManager::isActive(m_task);
     const bool demandsattention = KTaskManager::demandsAttention(m_task);
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setFont(KGlobalSettings::taskbarFont());
     const QRectF brect = boundingRect();
     const QSizeF brectsize = brect.size();
     m_framesvg->setElementPrefix(kElementPrefixForTask(m_hovered, isactive, demandsattention));
