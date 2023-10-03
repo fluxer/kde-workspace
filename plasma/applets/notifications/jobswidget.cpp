@@ -276,8 +276,8 @@ void JobsWidget::slotIcon0Activated()
             JobFrame* frame = iter.next();
             if (frame == jobframe) {
                 m_dataengine->disconnectSource(frame->name, this);
-                frame->animateRemove();
                 iter.remove();
+                frame->animateRemove();
                 break;
             }
         }

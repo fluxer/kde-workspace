@@ -268,8 +268,8 @@ void ApplicationsWidget::slotRemoveActivated()
             QGraphicsGridLayout* framelayout = static_cast<QGraphicsGridLayout*>(frame->layout());
             Q_ASSERT(framelayout != nullptr);
             kClearButtons(framelayout);
-            frame->animateRemove();
             iter.remove();
+            frame->animateRemove();
             break;
         }
     }
