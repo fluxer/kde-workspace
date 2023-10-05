@@ -52,7 +52,6 @@ public:
     TasksSvg(const WId task, QGraphicsItem *parent = nullptr);
 
     WId task() const;
-    void setup(const bool inpanel);
     void animatedShow();
     void animatedRemove();
 
@@ -74,7 +73,6 @@ private:
 
     WId m_task;
     bool m_hovered;
-    bool m_inpanel;
     Plasma::FrameSvg* m_framesvg;
     bool m_updatetask;
     QPixmap m_pixmap;
@@ -84,7 +82,6 @@ TasksSvg::TasksSvg(const WId task, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_task(task),
     m_hovered(false),
-    m_inpanel(true),
     m_framesvg(nullptr),
     m_updatetask(true)
 {
@@ -116,11 +113,6 @@ TasksSvg::TasksSvg(const WId task, QGraphicsItem *parent)
 WId TasksSvg::task() const
 {
     return m_task;
-}
-
-void TasksSvg::setup(const bool inpanel)
-{
-    m_inpanel = inpanel;
 }
 
 void TasksSvg::animatedShow()
@@ -181,7 +173,24 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 QSizeF TasksSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
-    if (which == Qt::PreferredSize || (!m_inpanel && which == Qt::MinimumSize)) {
+    const TasksApplet* tasksapplet = qobject_cast<TasksApplet*>(parentObject());
+    bool inpanel = false;
+    switch (tasksapplet->formFactor()) {
+        case Plasma::FormFactor::Planar:
+        case Plasma::FormFactor::MediaCenter:
+        case Plasma::FormFactor::Application: {
+            break;
+        }
+        default: {
+            inpanel = true;
+            break;
+        }
+    }
+    // the panel containment completely ignores minimum size so no hint for that
+    if (inpanel && which == Qt::MinimumSize) {
+        return Plasma::SvgWidget::sizeHint(which, constraint);
+    }
+    if (which != Qt::MaximumSize) {
         const int paneliconsize = KIconLoader::global()->currentSize(KIconLoader::Panel);
         return QSizeF(paneliconsize, paneliconsize);
     }
@@ -296,7 +305,6 @@ void TasksApplet::init()
 void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
 {
     if (constraints & Plasma::FormFactorConstraint) {
-        bool inpanel = true;
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
@@ -308,13 +316,8 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
             }
             default: {
                 m_layout->setOrientation(Qt::Horizontal);
-                inpanel = false;
                 break;
             }
-        }
-        QMutexLocker locker(&m_mutex);
-        foreach (TasksSvg* taskssvg, m_taskssvgs) {
-            taskssvg->setup(inpanel);
         }
     }
 }
@@ -323,12 +326,7 @@ void TasksApplet::slotTaskAdded(const WId task)
 {
     QMutexLocker locker(&m_mutex);
     m_layout->removeItem(m_spacer);
-    const bool inpanel = (
-        formFactor() == Plasma::FormFactor::Horizontal
-        || formFactor() == Plasma::FormFactor::Vertical
-    );
     TasksSvg* taskssvg = new TasksSvg(task, this);
-    taskssvg->setup(inpanel);
     m_layout->addItem(taskssvg);
     m_taskssvgs.append(taskssvg);
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(taskssvg->task(), NET::WMDesktop);
@@ -358,7 +356,6 @@ void TasksApplet::slotTaskRemoved(const WId task)
 
 void TasksApplet::slotCurrentDesktopChanged(const int desktop)
 {
-    // special case for tasks moved from one virtual desktop to another
     QMutexLocker locker(&m_mutex);
     foreach (TasksSvg* taskssvg, m_taskssvgs) {
         const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(taskssvg->task(), NET::WMDesktop);

@@ -160,9 +160,8 @@ void PagerSvg::setup(const PagerApplet::PagerMode pagermode)
 QSizeF PagerSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
     const PagerApplet* pagerapplet = qobject_cast<PagerApplet*>(parentObject());
-    const Plasma::FormFactor formfactor = pagerapplet->formFactor();
     bool inpanel = false;
-    switch (formfactor) {
+    switch (pagerapplet->formFactor()) {
         case Plasma::FormFactor::Planar:
         case Plasma::FormFactor::MediaCenter:
         case Plasma::FormFactor::Application: {
