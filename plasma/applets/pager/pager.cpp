@@ -196,16 +196,15 @@ QSizeF PagerSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
             }
             textwidth = qMax(textwidth, fontmetricsf.width(desktoptext));
         }
-        // worst case the text has to be on two lines
-        static const qreal widthmultiplier = 1.2;
-        static const qreal heightmultiplier = 2.4;
+        // the applet layout spacing + the text spacing + s_spacing for good measure
+        static const int spacingx4 = (s_spacing * 4);
         QSizeF result;
         if (vertical) {
-            result.setWidth(fontmetricsf.height() * heightmultiplier);
-            result.setHeight(textwidth * widthmultiplier);
+            result.setWidth(fontmetricsf.height() + spacingx4);
+            result.setHeight(textwidth + spacingx4);
         } else {
-            result.setWidth(textwidth * widthmultiplier);
-            result.setHeight(fontmetricsf.height() * heightmultiplier);
+            result.setWidth(textwidth + spacingx4);
+            result.setHeight(fontmetricsf.height() + spacingx4);
         }
         return result;
     }
