@@ -121,6 +121,10 @@ private:
     bool m_hovered;
     Plasma::FrameSvg* m_framesvg;
     PagerApplet::PagerMode m_pagermode;
+
+    // updateGeometry() is protected but size hint is based on orientation and geometry has to be
+    // updated on layout orientation change
+    friend PagerApplet;
 };
 
 PagerSvg::PagerSvg(const int desktop, const PagerApplet::PagerMode pagermode, QGraphicsItem *parent)
@@ -393,12 +397,12 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
                 m_layout->setOrientation(Qt::Horizontal);
-                updatePolicy();
+                updatePolicyAndPagers();
                 return;
             }
             case Plasma::FormFactor::Vertical: {
                 m_layout->setOrientation(Qt::Vertical);
-                updatePolicy();
+                updatePolicyAndPagers();
                 return;
             }
             default: {
@@ -412,16 +416,20 @@ void PagerApplet::constraintsEvent(Plasma::Constraints constraints)
         } else {
             m_layout->setOrientation(Qt::Vertical);
         }
-        updatePolicy();
+        updatePolicyAndPagers();
     }
 }
 
-void PagerApplet::updatePolicy()
+void PagerApplet::updatePolicyAndPagers()
 {
     if (m_layout->orientation() == Qt::Horizontal) {
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
     } else {
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    }
+    QMutexLocker locker(&m_mutex);
+    foreach (PagerSvg* pagersvg, m_pagersvgs) {
+        pagersvg->updateGeometry();
     }
 }
 

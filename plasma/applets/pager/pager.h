@@ -61,7 +61,7 @@ protected:
     void constraintsEvent(Plasma::Constraints constraints) final;
 
 private:
-    void updatePolicy();
+    void updatePolicyAndPagers();
 
     QMutex m_mutex;
     QGraphicsLinearLayout* m_layout;
