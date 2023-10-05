@@ -33,6 +33,31 @@
 // standard issue margin/spacing
 static const int s_spacing = 6;
 
+static bool kIsPanel(const Plasma::FormFactor formfactor)
+{
+    switch (formfactor) {
+        case Plasma::FormFactor::Planar:
+        case Plasma::FormFactor::MediaCenter:
+        case Plasma::FormFactor::Application: {
+            return false;
+        }
+        default: {
+            return true;
+        }
+    }
+    Q_UNREACHABLE();
+}
+
+static QSizeF kTaskSize(const QSizeF appletsize, const Plasma::FormFactor formfactor)
+{
+    qreal panelspecial = 0;
+    if (!kIsPanel(formfactor)) {
+        panelspecial = (s_spacing * 4);
+    }
+    const qreal iconsize = qMin(appletsize.width(), appletsize.height()) - panelspecial;
+    return QSizeF(iconsize, iconsize);
+}
+
 static QString kElementPrefixForTask(const bool hovered, const bool isactive, const bool demandsattention)
 {
     if (hovered) {
@@ -76,6 +101,9 @@ private:
     Plasma::FrameSvg* m_framesvg;
     bool m_updatetask;
     QPixmap m_pixmap;
+
+    // for updateGeometry()
+    friend TasksApplet;
 };
 
 TasksSvg::TasksSvg(const WId task, QGraphicsItem *parent)
@@ -174,20 +202,9 @@ void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 QSizeF TasksSvg::sizeHint(Qt::SizeHint which, const QSizeF &constraint) const
 {
     const TasksApplet* tasksapplet = qobject_cast<TasksApplet*>(parentObject());
-    bool inpanel = false;
-    switch (tasksapplet->formFactor()) {
-        case Plasma::FormFactor::Planar:
-        case Plasma::FormFactor::MediaCenter:
-        case Plasma::FormFactor::Application: {
-            break;
-        }
-        default: {
-            inpanel = true;
-            break;
-        }
-    }
+    Q_ASSERT(tasksapplet != nullptr);
     // the panel containment completely ignores minimum size so no hint for that
-    if (inpanel && which == Qt::MinimumSize) {
+    if (kIsPanel(tasksapplet->formFactor()) && which == Qt::MinimumSize) {
         return Plasma::SvgWidget::sizeHint(which, constraint);
     }
     if (which != Qt::MaximumSize) {
@@ -304,6 +321,11 @@ void TasksApplet::init()
 
 void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
 {
+    // update once
+    bool update = false;
+    if (constraints & Plasma::SizeConstraint) {
+        update = true;
+    }
     if (constraints & Plasma::FormFactorConstraint) {
         switch (formFactor()) {
             case Plasma::FormFactor::Horizontal: {
@@ -319,6 +341,20 @@ void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
                 break;
             }
         }
+        update = true;
+    }
+    if (update) {
+        updateTasks();
+    }
+}
+
+void TasksApplet::updateTasks()
+{
+    QMutexLocker locker(&m_mutex);
+    const QSizeF taskssize = kTaskSize(size(), formFactor());
+    foreach (TasksSvg* taskssvg, m_taskssvgs) {
+        taskssvg->setPreferredSize(taskssize);
+        taskssvg->updateGeometry();
     }
 }
 
@@ -329,6 +365,8 @@ void TasksApplet::slotTaskAdded(const WId task)
     TasksSvg* taskssvg = new TasksSvg(task, this);
     m_layout->addItem(taskssvg);
     m_taskssvgs.append(taskssvg);
+    taskssvg->setPreferredSize(kTaskSize(size(), formFactor()));
+    taskssvg->updateGeometry();
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(taskssvg->task(), NET::WMDesktop);
     if (kwindowinfo.isOnDesktop(KWindowSystem::currentDesktop())) {
         taskssvg->animatedShow();
