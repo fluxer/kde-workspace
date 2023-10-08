@@ -99,8 +99,8 @@ private:
     WId m_task;
     bool m_hovered;
     Plasma::FrameSvg* m_framesvg;
-    bool m_updatetask;
     QPixmap m_pixmap;
+    QString m_name;
 
     // for updateGeometry()
     friend TasksApplet;
@@ -110,8 +110,7 @@ TasksSvg::TasksSvg(const WId task, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_task(task),
     m_hovered(false),
-    m_framesvg(nullptr),
-    m_updatetask(true)
+    m_framesvg(nullptr)
 {
     updatePixmapAndToolTip();
     slotUpdateSvg();
@@ -156,9 +155,6 @@ void TasksSvg::animatedShow()
 
 void TasksSvg::animatedRemove()
 {
-    // during task removal (when the window is no more) updating the pixmap will not get a valid
-    // icon for example
-    m_updatetask = false;
     Plasma::Animation *animation = Plasma::Animator::create(Plasma::Animator::FadeAnimation);
     Q_ASSERT(animation != nullptr);
     connect(animation, SIGNAL(finished()), this, SLOT(deleteLater()));
@@ -230,13 +226,28 @@ void TasksSvg::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 
 void TasksSvg::updatePixmapAndToolTip()
 {
-    if (!m_updatetask) {
-        return;
+    // during task removal (when the window is no more) getting icon will not work
+    const QPixmap windowicon = KWindowSystem::icon(
+        m_task, -1, -1, false,
+        KWindowSystem::NETWM | KWindowSystem::WMHints | KWindowSystem::ClassHint
+    );
+    if (!windowicon.isNull()) {
+        m_pixmap = windowicon;
     }
-    m_pixmap = KWindowSystem::icon(m_task);
+    // the fallback pixmap is same as the one of KWindowSystem::icon() except that when even that
+    // is not found the "unknown" icon is used instead
+    if (m_pixmap.isNull()) {
+        m_pixmap = KIconLoader::global()->loadIcon("xorg", KIconLoader::Small);
+    }
     const KWindowInfo kwindowinfo = KWindowSystem::windowInfo(m_task, NET::WMVisibleName);
+    const QString windowname = kwindowinfo.visibleName();
+    if (!windowname.isEmpty()) {
+        m_name = windowname;
+    }
     Plasma::ToolTipContent plasmatooltip;
-    plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(kwindowinfo.visibleName()));
+    if (!m_name.isEmpty()) {
+        plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_name));
+    }
     plasmatooltip.setWindowToPreview(m_task);
     plasmatooltip.setClickable(true);
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
