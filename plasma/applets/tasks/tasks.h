@@ -22,8 +22,10 @@
 #include "kworkspace/ktaskmanager.h"
 
 #include <QMutex>
+#include <QComboBox>
 #include <QGraphicsLinearLayout>
 #include <Plasma/Applet>
+#include <KConfigDialog>
 
 class TasksSvg;
 
@@ -31,15 +33,23 @@ class TasksApplet : public Plasma::Applet
 {
     Q_OBJECT
 public:
+    enum ToolTipMode {
+        ToolTipNone = 0,
+        ToolTipPreview = 1,
+        ToolTipHighlight = 2
+    };
+
     TasksApplet(QObject *parent, const QVariantList &args);
 
     // Plasma::Applet reimplementation
     void init() final;
+    void createConfigurationInterface(KConfigDialog *parent) final;
 
 private Q_SLOTS:
     void slotTaskAdded(const WId task);
     void slotTaskRemoved(const WId task);
     void slotCurrentDesktopChanged(const int desktop);
+    void slotConfigAccepted();
 
 protected:
     // Plasma::Applet reimplementation
@@ -52,6 +62,8 @@ private:
     QGraphicsLinearLayout* m_layout;
     QGraphicsWidget* m_spacer;
     QList<TasksSvg*> m_taskssvgs;
+    TasksApplet::ToolTipMode m_tooltipmode;
+    QComboBox* m_tooltipmodebox;
 };
 
 K_EXPORT_PLASMA_APPLET(tasks, TasksApplet)

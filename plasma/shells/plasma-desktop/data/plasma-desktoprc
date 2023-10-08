@@ -43,10 +43,9 @@ plugin=tasks
 zvalue=0
 
 [Containments][1][Applets][4][Configuration]
-highlightWindows=false
+tooltipMode=1
 showOnlyCurrentDesktop=true
 showOnlyCurrentScreen=false
-showToolTip=true
 
 [Containments][1][Applets][4][LayoutInformation]
 Order=2

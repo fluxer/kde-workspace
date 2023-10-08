@@ -18,6 +18,9 @@
 
 #include "tasks.h"
 
+#include <QGridLayout>
+#include <QLabel>
+#include <QSpacerItem>
 #include <Plasma/Animation>
 #include <Plasma/Svg>
 #include <Plasma/FrameSvg>
@@ -32,6 +35,7 @@
 
 // standard issue margin/spacing
 static const int s_spacing = 6;
+static const TasksApplet::ToolTipMode s_defaultooltipmode = TasksApplet::ToolTipPreview;
 
 static bool kIsPanel(const Plasma::FormFactor formfactor)
 {
@@ -74,11 +78,13 @@ class TasksSvg : public Plasma::SvgWidget
 {
     Q_OBJECT
 public:
-    TasksSvg(const WId task, QGraphicsItem *parent = nullptr);
+    TasksSvg(const WId task, const TasksApplet::ToolTipMode tooltipmode, QGraphicsItem *parent = nullptr);
 
     WId task() const;
     void animatedShow();
     void animatedRemove();
+
+    void setup(const TasksApplet::ToolTipMode tooltipmode);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
@@ -101,16 +107,18 @@ private:
     Plasma::FrameSvg* m_framesvg;
     QPixmap m_pixmap;
     QString m_name;
+    TasksApplet::ToolTipMode m_tooltipmode;
 
     // for updateGeometry()
     friend TasksApplet;
 };
 
-TasksSvg::TasksSvg(const WId task, QGraphicsItem *parent)
+TasksSvg::TasksSvg(const WId task, const TasksApplet::ToolTipMode tooltipmode, QGraphicsItem *parent)
     : Plasma::SvgWidget(parent),
     m_task(task),
     m_hovered(false),
-    m_framesvg(nullptr)
+    m_framesvg(nullptr),
+    m_tooltipmode(tooltipmode)
 {
     updatePixmapAndToolTip();
     slotUpdateSvg();
@@ -162,6 +170,12 @@ void TasksSvg::animatedRemove()
     animation->setProperty("startOpacity", 1.0);
     animation->setProperty("targetOpacity", 0.0);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
+}
+
+void TasksSvg::setup(const TasksApplet::ToolTipMode tooltipmode)
+{
+    m_tooltipmode = tooltipmode;
+    updatePixmapAndToolTip();
 }
 
 void TasksSvg::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -248,8 +262,22 @@ void TasksSvg::updatePixmapAndToolTip()
     if (!m_name.isEmpty()) {
         plasmatooltip.setMainText(QString::fromLatin1("<center>%1</center>").arg(m_name));
     }
-    plasmatooltip.setWindowToPreview(m_task);
-    plasmatooltip.setClickable(true);
+    switch (m_tooltipmode) {
+        case TasksApplet::ToolTipNone: {
+            break;
+        }
+        case TasksApplet::ToolTipPreview: {
+            plasmatooltip.setWindowToPreview(m_task);
+            plasmatooltip.setClickable(true);
+            break;
+        }
+        case TasksApplet::ToolTipHighlight: {
+            plasmatooltip.setWindowToPreview(m_task);
+            plasmatooltip.setHighlightWindows(true);
+            plasmatooltip.setClickable(true);
+            break;
+        }
+    }
     Plasma::ToolTipManager::self()->setContent(this, plasmatooltip);
 }
 
@@ -295,10 +323,13 @@ void TasksSvg::slotUpdateSvg()
 TasksApplet::TasksApplet(QObject *parent, const QVariantList &args)
     : Plasma::Applet(parent, args),
     m_layout(nullptr),
-    m_spacer(nullptr)
+    m_spacer(nullptr),
+    m_tooltipmode(s_defaultooltipmode),
+    m_tooltipmodebox(nullptr)
 {
     KGlobal::locale()->insertCatalog("plasma_applet_tasks");
     setAspectRatioMode(Plasma::AspectRatioMode::IgnoreAspectRatio);
+    setHasConfigurationInterface(true);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     m_layout = new QGraphicsLinearLayout(Qt::Horizontal, this);
@@ -312,6 +343,9 @@ TasksApplet::TasksApplet(QObject *parent, const QVariantList &args)
 
 void TasksApplet::init()
 {
+    KConfigGroup configgroup = config();
+    m_tooltipmode = static_cast<TasksApplet::ToolTipMode>(configgroup.readEntry("tooltipMode", static_cast<int>(s_defaultooltipmode)));
+
     foreach (const WId task, KTaskManager::self()->tasks()) {
         slotTaskAdded(task);
     }
@@ -328,6 +362,30 @@ void TasksApplet::init()
         KWindowSystem::self(), SIGNAL(currentDesktopChanged(int)),
         this, SLOT(slotCurrentDesktopChanged(int))
     );
+}
+
+
+void TasksApplet::createConfigurationInterface(KConfigDialog *parent)
+{
+    QWidget* widget = new QWidget();
+    QGridLayout* widgetlayout = new QGridLayout(widget);
+    QLabel* pagermodelabel = new QLabel(widget);
+    pagermodelabel->setText(i18n("Tooltip:"));
+    widgetlayout->addWidget(pagermodelabel, 0, 0);
+    m_tooltipmodebox = new QComboBox(widget);
+    m_tooltipmodebox->addItem(i18n("Task name"), static_cast<int>(TasksApplet::ToolTipPreview));
+    m_tooltipmodebox->addItem(i18n("Task name and preview"), static_cast<int>(TasksApplet::ToolTipPreview));
+    m_tooltipmodebox->addItem(i18n("Task name, preview and highlight window"), static_cast<int>(TasksApplet::ToolTipHighlight));
+    m_tooltipmodebox->setCurrentIndex(static_cast<int>(m_tooltipmode));
+    widgetlayout->addWidget(m_tooltipmodebox, 0, 1);
+    QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    widgetlayout->addItem(spacer, 1, 0, 1, 2);
+    widget->setLayout(widgetlayout);
+    parent->addPage(widget, i18n("General"), "preferences-system-windows");
+
+    connect(parent, SIGNAL(applyClicked()), this, SLOT(slotConfigAccepted()));
+    connect(parent, SIGNAL(okClicked()), this, SLOT(slotConfigAccepted()));
+    connect(m_tooltipmodebox, SIGNAL(currentIndexChanged(int)), parent, SLOT(settingsModified()));
 }
 
 void TasksApplet::constraintsEvent(Plasma::Constraints constraints)
@@ -373,7 +431,7 @@ void TasksApplet::slotTaskAdded(const WId task)
 {
     QMutexLocker locker(&m_mutex);
     m_layout->removeItem(m_spacer);
-    TasksSvg* taskssvg = new TasksSvg(task, this);
+    TasksSvg* taskssvg = new TasksSvg(task, m_tooltipmode, this);
     m_layout->addItem(taskssvg);
     m_taskssvgs.append(taskssvg);
     taskssvg->setPreferredSize(kTaskSize(size(), formFactor()));
@@ -414,6 +472,20 @@ void TasksApplet::slotCurrentDesktopChanged(const int desktop)
             taskssvg->animatedShow();
         }
     }
+}
+
+void TasksApplet::slotConfigAccepted()
+{
+    Q_ASSERT(m_tooltipmodebox != nullptr);
+    const int tooltipmodeindex = m_tooltipmodebox->currentIndex();
+    m_tooltipmode = static_cast<TasksApplet::ToolTipMode>(tooltipmodeindex);
+    KConfigGroup configgroup = config();
+    configgroup.writeEntry("tooltipMode", tooltipmodeindex);
+    QMutexLocker locker(&m_mutex);
+    foreach (TasksSvg* taskssvg, m_taskssvgs) {
+        taskssvg->setup(m_tooltipmode);
+    }
+    emit configNeedsSaving();
 }
 
 #include "moc_tasks.cpp"
